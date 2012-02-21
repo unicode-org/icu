@@ -493,6 +493,31 @@ public:
      */
     Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * Constants for capitalization context usage types.
+     * @internal
+     */
+    enum ECapitalizationContextUsageType
+    {
+        kCapContextUsageOther,
+        kCapContextUsageMonthFormat,     /* except narrow */
+        kCapContextUsageMonthStandalone, /* except narrow */
+        kCapContextUsageMonthNarrow,
+        kCapContextUsageDayFormat,     /* except narrow */
+        kCapContextUsageDayStandalone, /* except narrow */
+        kCapContextUsageDayNarrow,
+        kCapContextUsageEraWide,
+        kCapContextUsageEraAbbrev,
+        kCapContextUsageEraNarrow,
+        kCapContextUsageZoneLong,
+        kCapContextUsageZoneShort,
+        kCapContextUsageMetazoneLong,
+        kCapContextUsageMetazoneShort,
+        kCapContextUsageTypeCount
+    };
+#endif  /* U_HIDE_INTERNAL_API */
+
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
@@ -716,6 +741,14 @@ private:
      * Localized date-time pattern characters. For example: use 'u' as 'y'.
      */
     UnicodeString   fLocalPatternChars;
+
+    /**
+     * Capitalization transforms. For each usage type, the first array element indicates
+     * whether to titlecase for uiListOrMenu context, the second indicates whether to
+     * titlecase for stand-alone context.
+     */
+     UBool fCapitalization[kCapContextUsageTypeCount][2];
+
 
 private:
     /** valid/actual locale information 

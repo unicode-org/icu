@@ -244,7 +244,8 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
       fTimeZoneFormat(NULL),
       fGMTFormatters(NULL),
       fNumberFormatters(NULL),
-      fOverrideList(NULL)
+      fOverrideList(NULL),
+      fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
 {
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
     initializeDefaultCentury();
@@ -260,7 +261,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
 {
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
@@ -280,7 +282,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
 {
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
@@ -302,7 +305,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
 {
 
     fDateOverride.setToBogus();
@@ -324,7 +328,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
 {
 
     fDateOverride.setTo(override);
@@ -349,7 +354,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
 {
 
     fDateOverride.setToBogus();
@@ -371,7 +377,8 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
 {
 
     fDateOverride.setToBogus();
@@ -394,7 +401,8 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
     fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
 {
     construct(timeStyle, dateStyle, fLocale, status);
     if(U_SUCCESS(status)) {
@@ -417,7 +425,8 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
     fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
 {
     if (U_FAILURE(status)) return;
     initializeSymbols(fLocale, initializeCalendar(NULL, fLocale, status),status);
@@ -451,7 +460,8 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
     fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL)
+    fOverrideList(NULL),
+    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
 {
     *this = other;
 }
@@ -482,6 +492,8 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
         delete fTimeZoneFormat;
     }
 
+    fDefaultCapitalizationContext = other.fDefaultCapitalizationContext;
+
     return *this;
 }
 
@@ -506,7 +518,8 @@ SimpleDateFormat::operator==(const Format& other) const
                 that->fSymbols       != NULL && // Check for pathological object
                 *fSymbols            == *that->fSymbols &&
                 fHaveDefaultCentury  == that->fHaveDefaultCentury &&
-                fDefaultCenturyStart == that->fDefaultCenturyStart);
+                fDefaultCenturyStart == that->fDefaultCenturyStart &&
+                fDefaultCapitalizationContext == that->fDefaultCapitalizationContext);
     }
     return FALSE;
 }
@@ -813,7 +826,22 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& appendTo, FieldPosition& 
 {
   UErrorCode status = U_ZERO_ERROR;
   FieldPositionOnlyHandler handler(pos);
-  return _format(cal, appendTo, handler, status);
+  return _format(cal, fDefaultCapitalizationContext, appendTo, handler, status);
+}
+
+//----------------------------------------------------------------------
+
+UnicodeString&
+SimpleDateFormat::format(Calendar& cal, const UDateFormatContextType* types, const UDateFormatContextValue* values,
+                         int32_t typesAndValuesCount, UnicodeString& appendTo, FieldPosition& pos) const
+{
+  UErrorCode status = U_ZERO_ERROR;
+  FieldPositionOnlyHandler handler(pos);
+  UDateFormatContextValue capitalizationContext = fDefaultCapitalizationContext;
+  if (types != NULL && values != NULL && typesAndValuesCount==1 && types[0]==UDAT_CAPITALIZATION) {
+    capitalizationContext = values[0];
+  }
+  return _format(cal, capitalizationContext, appendTo, handler, status);
 }
 
 //----------------------------------------------------------------------
@@ -823,14 +851,14 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& appendTo,
                          FieldPositionIterator* posIter, UErrorCode& status) const
 {
   FieldPositionIteratorHandler handler(posIter, status);
-  return _format(cal, appendTo, handler, status);
+  return _format(cal, fDefaultCapitalizationContext, appendTo, handler, status);
 }
 
 //----------------------------------------------------------------------
 
 UnicodeString&
-SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo, FieldPositionHandler& handler,
-                          UErrorCode& status) const
+SimpleDateFormat::_format(Calendar& cal, UDateFormatContextValue capitalizationContext,
+                          UnicodeString& appendTo, FieldPositionHandler& handler, UErrorCode& status) const
 {
     if ( U_FAILURE(status) ) {
        return appendTo; 
@@ -856,6 +884,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo, FieldPositionH
     UBool inQuote = FALSE;
     UChar prevCh = 0;
     int32_t count = 0;
+    int32_t fieldNum = 0;
 
     // loop through the pattern string character by character
     for (int32_t i = 0; i < fPattern.length() && U_SUCCESS(status); ++i) {
@@ -864,7 +893,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo, FieldPositionH
         // Use subFormat() to format a repeated pattern character
         // when a different pattern or non-pattern character is seen
         if (ch != prevCh && count > 0) {
-            subFormat(appendTo, prevCh, count, handler, *workCal, status);
+            subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, status);
             count = 0;
         }
         if (ch == QUOTE) {
@@ -892,7 +921,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo, FieldPositionH
 
     // Format the last item in the pattern, if any
     if (count > 0) {
-        subFormat(appendTo, prevCh, count, handler, *workCal, status);
+        subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, status);
     }
 
     if (calClone != NULL) {
@@ -1536,6 +1565,8 @@ void
 SimpleDateFormat::subFormat(UnicodeString &appendTo,
                             UChar ch,
                             int32_t count,
+                            UDateFormatContextValue capitalizationContext,
+                            int32_t fieldNum,
                             FieldPositionHandler& handler,
                             Calendar& cal,
                             UErrorCode& status) const
@@ -1552,6 +1583,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     const int32_t maxIntCount = 10;
     int32_t beginOffset = appendTo.length();
     NumberFormat *currentNumberFormat;
+    DateFormatSymbols::ECapitalizationContextUsageType capContextUsageType = DateFormatSymbols::kCapContextUsageOther;
 
     UBool isHebrewCalendar = (uprv_strcmp(cal.getType(),"hebrew") == 0);
     UBool isChineseCalendar = (uprv_strcmp(cal.getType(),"chinese") == 0);
@@ -1583,10 +1615,13 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         } else {
             if (count == 5) {
                 _appendSymbol(appendTo, value, fSymbols->fNarrowEras, fSymbols->fNarrowErasCount);
+                capContextUsageType = DateFormatSymbols::kCapContextUsageEraNarrow;
             } else if (count == 4) {
                 _appendSymbol(appendTo, value, fSymbols->fEraNames, fSymbols->fEraNamesCount);
+                capContextUsageType = DateFormatSymbols::kCapContextUsageEraWide;
             } else {
                 _appendSymbol(appendTo, value, fSymbols->fEras, fSymbols->fErasCount);
+                capContextUsageType = DateFormatSymbols::kCapContextUsageEraAbbrev;
             }
         }
         break;
@@ -1640,21 +1675,26 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                     _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneNarrowMonths, fSymbols->fStandaloneNarrowMonthsCount,
                             (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneNarrow]): NULL, status);
                 }
+                capContextUsageType = DateFormatSymbols::kCapContextUsageMonthNarrow;
             } else if (count == 4) {
                 if (patternCharIndex == UDAT_MONTH_FIELD) {
                     _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fMonths, fSymbols->fMonthsCount,
                             (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatWide]): NULL, status);
+                    capContextUsageType = DateFormatSymbols::kCapContextUsageMonthFormat;
                 } else {
                     _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneMonths, fSymbols->fStandaloneMonthsCount,
                             (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneWide]): NULL, status);
+                    capContextUsageType = DateFormatSymbols::kCapContextUsageMonthStandalone;
                 }
             } else if (count == 3) {
                 if (patternCharIndex == UDAT_MONTH_FIELD) {
                     _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fShortMonths, fSymbols->fShortMonthsCount,
                             (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternFormatAbbrev]): NULL, status);
+                    capContextUsageType = DateFormatSymbols::kCapContextUsageMonthFormat;
                 } else {
                     _appendSymbolWithMonthPattern(appendTo, value, fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount,
                             (isLeapMonth!=0)? &(fSymbols->fLeapMonthPatterns[DateFormatSymbols::kLeapMonthPatternStandaloneAbbrev]): NULL, status);
+                    capContextUsageType = DateFormatSymbols::kCapContextUsageMonthStandalone;
                 }
             } else {
                 UnicodeString monthNumber;
@@ -1709,15 +1749,19 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         }
         // fall through, do not break here
     case UDAT_DAY_OF_WEEK_FIELD:
-        if (count == 5)
+        if (count == 5) {
             _appendSymbol(appendTo, value, fSymbols->fNarrowWeekdays,
                           fSymbols->fNarrowWeekdaysCount);
-        else if (count == 4)
+            capContextUsageType = DateFormatSymbols::kCapContextUsageDayNarrow;
+        } else if (count == 4) {
             _appendSymbol(appendTo, value, fSymbols->fWeekdays,
                           fSymbols->fWeekdaysCount);
-        else
+            capContextUsageType = DateFormatSymbols::kCapContextUsageDayFormat;
+        } else {
             _appendSymbol(appendTo, value, fSymbols->fShortWeekdays,
                           fSymbols->fShortWeekdaysCount);
+            capContextUsageType = DateFormatSymbols::kCapContextUsageDayFormat;
+        }
         break;
 
     // for "ccc", write out the abbreviated day-of-the-week name
@@ -1734,15 +1778,19 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         if (U_FAILURE(status)) {
             return;
         }
-        if (count == 5)
+        if (count == 5) {
             _appendSymbol(appendTo, value, fSymbols->fStandaloneNarrowWeekdays,
                           fSymbols->fStandaloneNarrowWeekdaysCount);
-        else if (count == 4)
+            capContextUsageType = DateFormatSymbols::kCapContextUsageDayNarrow;
+        } else if (count == 4) {
             _appendSymbol(appendTo, value, fSymbols->fStandaloneWeekdays,
                           fSymbols->fStandaloneWeekdaysCount);
-        else // count == 3
+            capContextUsageType = DateFormatSymbols::kCapContextUsageDayStandalone;
+        } else { // count == 3
             _appendSymbol(appendTo, value, fSymbols->fStandaloneShortWeekdays,
                           fSymbols->fStandaloneShortWeekdaysCount);
+            capContextUsageType = DateFormatSymbols::kCapContextUsageDayStandalone;
+        }
         break;
 
     // for and "a" symbol, write out the whole AM/PM string
@@ -1778,25 +1826,31 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
                     if (count < 4) {
                         // "z", "zz", "zzz"
                         tzFormat()->format(UTZFMT_STYLE_SPECIFIC_SHORT, tz, date, zoneString);
+                        capContextUsageType = DateFormatSymbols::kCapContextUsageMetazoneShort;
                     } else {
                         // "zzzz"
                         tzFormat()->format(UTZFMT_STYLE_SPECIFIC_LONG, tz, date, zoneString);
+                        capContextUsageType = DateFormatSymbols::kCapContextUsageMetazoneLong;
                     }
                 } else if (patternCharIndex == UDAT_TIMEZONE_GENERIC_FIELD) {
                     if (count == 1) {
                         // "v"
                         tzFormat()->format(UTZFMT_STYLE_GENERIC_SHORT, tz, date, zoneString);
+                        capContextUsageType = DateFormatSymbols::kCapContextUsageMetazoneShort;
                     } else if (count == 4) {
                         // "vvvv"
                         tzFormat()->format(UTZFMT_STYLE_GENERIC_LONG, tz, date, zoneString);
+                        capContextUsageType = DateFormatSymbols::kCapContextUsageMetazoneLong;
                     }
                 } else { // patternCharIndex == UDAT_TIMEZONE_SPECIAL_FIELD
                     if (count == 1) {
                         // "V"
                         tzFormat()->format(UTZFMT_STYLE_SPECIFIC_SHORT, tz, date, zoneString);
+                        capContextUsageType = DateFormatSymbols::kCapContextUsageMetazoneShort;
                     } else if (count == 4) {
                         // "VVVV"
                         tzFormat()->format(UTZFMT_STYLE_LOCATION, tz, date, zoneString);
+                        capContextUsageType = DateFormatSymbols::kCapContextUsageZoneLong;
                     }
                 }
             }
@@ -1848,6 +1902,30 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         zeroPaddingNumber(currentNumberFormat,appendTo, value, count, maxIntCount);
         break;
     }
+    
+    if (fieldNum == 0) {
+        // first field, check to see whether we need to titlecase it
+        UBool titlecase = FALSE;
+        switch (capitalizationContext) {
+            case UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE:
+                titlecase = TRUE;
+                break;
+            case UDAT_CAPITALIZATION_UI_LIST_OR_MENU:
+            	titlecase = fSymbols->fCapitalization[capContextUsageType][0];
+            	break;
+            case UDAT_CAPITALIZATION_STANDALONE:
+            	titlecase = fSymbols->fCapitalization[capContextUsageType][1];
+            	break;
+            default:
+                // titlecase = FALSE;
+                break;
+        }
+        if (titlecase) {
+            UnicodeString firstField(appendTo, beginOffset);
+            firstField.toTitle(NULL, fLocale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
+            appendTo.replaceBetween(beginOffset, appendTo.length(), firstField);
+        }
+    } 
 
     handler.addAttribute(fgPatternIndexToDateFormatField[patternCharIndex], beginOffset, appendTo.length());
 }
@@ -3513,6 +3591,37 @@ void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
   fSymbols=NULL;
   initializeSymbols(fLocale, fCalendar, status);  // we need new symbols
   initializeDefaultCentury();  // we need a new century (possibly)
+}
+
+
+//----------------------------------------------------------------------
+
+
+void SimpleDateFormat::setDefaultContext(UDateFormatContextType type,
+                                         UDateFormatContextValue value, UErrorCode& status)
+{
+    if (U_FAILURE(status))
+        return;
+    if (type != UDAT_CAPITALIZATION) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    fDefaultCapitalizationContext = value;
+}
+
+
+//----------------------------------------------------------------------
+
+
+int32_t SimpleDateFormat::getDefaultContext(UDateFormatContextType type, UErrorCode& status) const
+{
+    if (U_FAILURE(status))
+        return 0;
+    if (type != UDAT_CAPITALIZATION) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return 0;
+    }
+    return (int32_t)fDefaultCapitalizationContext;
 }
 
 
