@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2011. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2012. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
@@ -230,7 +230,7 @@ enum ScriptCodes {
     tangScriptCode = 154,
     woleScriptCode = 155,
 /**
- * @stable ICU 49.0
+ * @stable ICU 49
  */
 
     khojScriptCode = 156,

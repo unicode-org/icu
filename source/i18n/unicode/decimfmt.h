@@ -658,13 +658,11 @@ public:
                              towards zero if equidistant */
         kRoundHalfUp,   /**< Round towards the nearest integer, or
                              away from zero if equidistant */
-#ifndef U_HIDE_DRAFT_API
         /**
           *  Return U_FORMAT_INEXACT_ERROR if number does not format exactly. 
-          *  @draft ICU 4.8 
+          *  @stable ICU 4.8 
           */
         kRoundUnnecessary
-#endif  /* U_HIDE_DRAFT_API */
     };
 
     /**
@@ -1109,7 +1107,7 @@ public:
                        Formattable& result,
                        UErrorCode& status) const;
 
-#ifndef U_HIDE_DRAFT_API
+/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Parses text from the given string as a currency amount.  Unlike
      * the parse() method, this method will attempt to parse a generic
@@ -1131,7 +1129,6 @@ public:
      */
     virtual CurrencyAmount* parseCurrency(const UnicodeString& text,
                                           ParsePosition& pos) const;
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns the decimal format symbols, which is generally not changed

@@ -570,7 +570,7 @@ public:
                         Formattable& result,
                         UErrorCode& status) const;
 
-#ifndef U_HIDE_DRAFT_API
+/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Parses text from the given string as a currency amount.  Unlike
      * the parse() method, this method will attempt to parse a generic
@@ -592,7 +592,6 @@ public:
      */
     virtual CurrencyAmount* parseCurrency(const UnicodeString& text,
                                           ParsePosition& pos) const;
-#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Return true if this format will parse numbers as integers
