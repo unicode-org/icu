@@ -23,7 +23,6 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-/* #ifndef U_HIDE_DRAFT_API -- cannot be hidden, as this API is used by other API public classes. */
 
 #include "unicode/parseerr.h"
 #include "unicode/unistr.h"
@@ -254,9 +253,6 @@ enum UMessagePatternArgType {
  */
 typedef enum UMessagePatternArgType UMessagePatternArgType;
 
-/**
- * @stable ICU 4.8
- */
 enum {
     /**
      * Return value from MessagePattern.validateArgumentName() for when

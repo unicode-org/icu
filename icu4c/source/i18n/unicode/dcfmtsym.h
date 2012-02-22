@@ -128,39 +128,39 @@ public:
          */
         kMonetaryGroupingSeparatorSymbol,
         /** One
-         * @draft ICU 4.6
+         * @stable ICU 4.6
          */
         kOneDigitSymbol,
         /** Two
-         * @draft ICU 4.6
+         * @stable ICU 4.6
          */
         kTwoDigitSymbol,
         /** Three
-         * @draft ICU 4.6
+         * @stable ICU 4.6
          */
         kThreeDigitSymbol,
         /** Four
-         * @draft ICU 4.6
+         * @stable ICU 4.6
          */
         kFourDigitSymbol,
         /** Five
-         * @draft ICU 4.6
+         * @stable ICU 4.6
          */
         kFiveDigitSymbol,
         /** Six
-         * @draft ICU 4.6
+         * @stable ICU 4.6
          */
         kSixDigitSymbol,
         /** Seven
-         * @draft ICU 4.6
+         * @stable ICU 4.6
          */
         kSevenDigitSymbol,
         /** Eight
-         * @draft ICU 4.6
+         * @stable ICU 4.6
          */
         kEightDigitSymbol,
         /** Nine
-         * @draft ICU 4.6
+         * @stable ICU 4.6
          */
         kNineDigitSymbol,
         /** count symbol constants */
