@@ -1250,16 +1250,16 @@ typedef struct {
 } TestContextItem;
 
 static const TestContextItem textContextItems[] = {
-    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_UNKNOWN,          july2008_frDefault },
-    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_MIDDLE_OF_SENTENCE, july2008_frDefault },
-    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE, july2008_frTitle },
-    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_UI_LIST_OR_MENU,  july2008_frDefault },
-    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_STANDALONE,       july2008_frTitle },
-    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_UNKNOWN,          july2008_csDefault },
-    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_MIDDLE_OF_SENTENCE, july2008_csDefault },
-    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE, july2008_csTitle },
-    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_UI_LIST_OR_MENU,  july2008_csTitle },
-    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_STANDALONE,       july2008_csDefault },
+    { "fr", skeleton_yMMMM, UDAT_CONTEXT_UNKNOWN,          july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, july2008_frTitle },
+    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,  july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_STANDALONE,       july2008_frTitle },
+    { "cs", skeleton_yMMMM, UDAT_CONTEXT_UNKNOWN,          july2008_csDefault },
+    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, july2008_csDefault },
+    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, july2008_csTitle },
+    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,  july2008_csTitle },
+    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_STANDALONE,       july2008_csDefault },
     { NULL, NULL, 0, NULL }
 };
 

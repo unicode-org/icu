@@ -3844,16 +3844,16 @@ void DateFormatTest::TestContext()
     const UDate july022008 = 1215000001979.0;
     const TestContextItem items[] = {
         //locale              pattern    capitalizationContext                      expected formatted date
-        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_UNKNOWN,               UnicodeString("juillet 2008") },
-        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_MIDDLE_OF_SENTENCE,    UnicodeString("juillet 2008") },
-        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE, UnicodeString("Juillet 2008") },
-        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_UI_LIST_OR_MENU,       UnicodeString("juillet 2008") },
-        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_STANDALONE,            UnicodeString("Juillet 2008") },
-        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_UNKNOWN,               CharsToUnicodeString("\\u010Dervenec 2008") },
-        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_MIDDLE_OF_SENTENCE,    CharsToUnicodeString("\\u010Dervenec 2008") },
-        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE, CharsToUnicodeString("\\u010Cervenec 2008") },
-        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_UI_LIST_OR_MENU,       CharsToUnicodeString("\\u010Cervenec 2008") },
-        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_STANDALONE,            CharsToUnicodeString("\\u010Dervenec 2008") },
+        { "fr", UnicodeString("MMMM y"), UDAT_CONTEXT_UNKNOWN,               UnicodeString("juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    UnicodeString("juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, UnicodeString("Juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       UnicodeString("juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_STANDALONE,            UnicodeString("Juillet 2008") },
+        { "cs", UnicodeString("LLLL y"), UDAT_CONTEXT_UNKNOWN,               CharsToUnicodeString("\\u010Dervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    CharsToUnicodeString("\\u010Dervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, CharsToUnicodeString("\\u010Cervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       CharsToUnicodeString("\\u010Cervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_STANDALONE,            CharsToUnicodeString("\\u010Dervenec 2008") },
         // terminator
         { NULL, UnicodeString(""),       (UDateFormatContextValue)0, UnicodeString("") }
     };

@@ -190,39 +190,41 @@ typedef enum UDateFormatContextType {
  *  @draft ICU 49
  */
 typedef enum UDateFormatContextValue {
-    /** Values for type (key) UDAT_CAPITALIZATION */
+       /** Values for any UDateFormatContextType (key) */
     /**
-     * UDAT_CAPITALIZATION value if the capitalization context for which a date
-     * (or date symbol) is to be formatted is unknown (this is the default if
-     * no UDAT_CAPITALIZATION value is explicitly specified).
+     * Value for any UDateFormatContextType (such as UDAT_CAPITALIZATION) if the
+     * relevant context to be used in formatting a date is unknown (this is the
+     * default value for any UDateFormatContextType when no value has been
+     * explicitly specified for that UDateFormatContextType).
      * @draft ICU 49
      */
-    UDAT_CAPITALIZATION_UNKNOWN = 0,
+    UDAT_CONTEXT_UNKNOWN = 0,
+    /** Values for type (key) UDAT_CAPITALIZATION */
     /**
      * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
      * with capitalization appropriate for the middle of a sentence.
      * @draft ICU 49
      */
-    UDAT_CAPITALIZATION_MIDDLE_OF_SENTENCE = 1,
+    UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE = 1,
     /**
      * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
      * with capitalization appropriate for the beginning of a sentence.
      * @draft ICU 49
      */
-    UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE = 2,
+    UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE = 2,
     /**
      * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
      * with capitalization appropriate for a user-interface list or menu item.
      * @draft ICU 49
      */
-    UDAT_CAPITALIZATION_UI_LIST_OR_MENU = 3,
+    UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU = 3,
     /**
      * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
      * with capitalization appropriate for stand-alone usage such as an
      * isolated name on a calendar page.
      * @draft ICU 49
      */
-    UDAT_CAPITALIZATION_STANDALONE = 4
+    UDAT_CAPITALIZATION_FOR_STANDALONE = 4
 } UDateFormatContextValue;
 
 /**
