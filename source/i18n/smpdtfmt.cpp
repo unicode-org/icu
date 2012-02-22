@@ -235,7 +235,7 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
       fTimeZoneFormat(NULL),
       fNumberFormatters(NULL),
       fOverrideList(NULL),
-      fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
+      fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
 {
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
     initializeDefaultCentury();
@@ -251,7 +251,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
+    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
 {
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
@@ -271,7 +271,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
+    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
 {
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
@@ -293,7 +293,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
+    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
 {
 
     fDateOverride.setToBogus();
@@ -315,7 +315,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
+    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
 {
 
     fDateOverride.setTo(override);
@@ -340,7 +340,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
+    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
 {
 
     fDateOverride.setToBogus();
@@ -362,7 +362,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
+    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
 {
 
     fDateOverride.setToBogus();
@@ -385,7 +385,7 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
+    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
 {
     construct(timeStyle, dateStyle, fLocale, status);
     if(U_SUCCESS(status)) {
@@ -408,7 +408,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
+    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
 {
     if (U_FAILURE(status)) return;
     initializeSymbols(fLocale, initializeCalendar(NULL, fLocale, status),status);
@@ -442,7 +442,7 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CAPITALIZATION_UNKNOWN)
+    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
 {
     *this = other;
 }
@@ -1518,13 +1518,13 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         // first field, check to see whether we need to titlecase it
         UBool titlecase = FALSE;
         switch (capitalizationContext) {
-            case UDAT_CAPITALIZATION_BEGINNING_OF_SENTENCE:
+            case UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
                 titlecase = TRUE;
                 break;
-            case UDAT_CAPITALIZATION_UI_LIST_OR_MENU:
+            case UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU:
             	titlecase = fSymbols->fCapitalization[capContextUsageType][0];
             	break;
-            case UDAT_CAPITALIZATION_STANDALONE:
+            case UDAT_CAPITALIZATION_FOR_STANDALONE:
             	titlecase = fSymbols->fCapitalization[capContextUsageType][1];
             	break;
             default:
