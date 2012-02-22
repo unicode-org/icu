@@ -118,13 +118,14 @@ public class ChineseDateFormat extends SimpleDateFormat {
      */
     protected void subFormat(StringBuffer buf,
                              char ch, int count, int beginOffset,
+                             int fieldNum, ContextValue capitalizationContext,
                              FieldPosition pos,
                              Calendar cal) {
 
         // Logic to handle 'G' for chinese calendar is moved into SimpleDateFormat,
         // and obsolete pattern char 'l' is now ignored in SimpleDateFormat, so we
         // just use its implementation
-        super.subFormat(buf, ch, count, beginOffset, pos, cal);
+        super.subFormat(buf, ch, count, beginOffset, fieldNum, capitalizationContext, pos, cal);
 
         // The following is no longer an issue for this subclass...
         // TODO: add code to set FieldPosition for 'G' and 'l' fields. This
