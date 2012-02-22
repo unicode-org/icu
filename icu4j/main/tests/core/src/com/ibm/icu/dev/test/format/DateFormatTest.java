@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
@@ -4020,6 +4021,68 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String result = simpleDateFormat.format(cal.getTime());
         if ( !result.equals("2098") ) {
             errln("FAIL: Unexpected result in two digit WOY parse.  Expected 2098, got " + result);
+        }
+    }
+
+    public void TestContext() {
+        class TestContextItem {
+            public String locale;
+            public String pattern;
+            public SimpleDateFormat.ContextValue capitalizationContext;
+            public String expectedFormat;
+             // Simple constructor
+            public TestContextItem(String loc, String pat, SimpleDateFormat.ContextValue capCtxt, String expFmt) {
+                locale = loc;
+                pattern = pat;
+                capitalizationContext = capCtxt;
+                expectedFormat = expFmt;
+            }
+        };
+        final TestContextItem[] items = {
+            new TestContextItem( "fr", "MMMM y", SimpleDateFormat.ContextValue.UNKNOWN,                             "juillet 2008" ),
+            new TestContextItem( "fr", "MMMM y", SimpleDateFormat.ContextValue.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, "juillet 2008" ),
+            new TestContextItem( "fr", "MMMM y", SimpleDateFormat.ContextValue.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "Juillet 2008" ),
+            new TestContextItem( "fr", "MMMM y", SimpleDateFormat.ContextValue.CAPITALIZATION_FOR_UI_LIST_OR_MENU,  "juillet 2008" ),
+            new TestContextItem( "fr", "MMMM y", SimpleDateFormat.ContextValue.CAPITALIZATION_FOR_STANDALONE,       "Juillet 2008" ),
+            new TestContextItem( "cs", "LLLL y", SimpleDateFormat.ContextValue.UNKNOWN,                             "\u010Dervenec 2008" ),
+            new TestContextItem( "cs", "LLLL y", SimpleDateFormat.ContextValue.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, "\u010Dervenec 2008" ),
+            new TestContextItem( "cs", "LLLL y", SimpleDateFormat.ContextValue.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "\u010Cervenec 2008" ),
+            new TestContextItem( "cs", "LLLL y", SimpleDateFormat.ContextValue.CAPITALIZATION_FOR_UI_LIST_OR_MENU,  "\u010Cervenec 2008" ),
+            new TestContextItem( "cs", "LLLL y", SimpleDateFormat.ContextValue.CAPITALIZATION_FOR_STANDALONE,       "\u010Dervenec 2008" ),
+        };
+        Calendar cal = new GregorianCalendar(2008, Calendar.JULY, 2);
+        for (TestContextItem item: items) {
+            ULocale locale = new ULocale(item.locale);
+            SimpleDateFormat sdfmt = new SimpleDateFormat(item.pattern, locale);
+
+            // first try with the format method that uses per-call values
+            Map<SimpleDateFormat.ContextType,SimpleDateFormat.ContextValue> contextValues =
+                    new HashMap<SimpleDateFormat.ContextType,SimpleDateFormat.ContextValue>();
+            contextValues.put(SimpleDateFormat.ContextType.CAPITALIZATION, item.capitalizationContext);
+            StringBuffer result1 = new StringBuffer();
+            FieldPosition fpos1 = new FieldPosition(0);
+            sdfmt.format(cal, contextValues, result1, fpos1);
+			if (result1.toString().compareTo(item.expectedFormat) != 0) {
+				errln("FAIL: format (per-call context) for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
+						", expected \"" + item.expectedFormat + "\", got \"" + result1 + "\"");
+            }
+
+            // now try setting default context & standard format call
+            sdfmt.setDefaultContext(SimpleDateFormat.ContextType.CAPITALIZATION, item.capitalizationContext);
+            StringBuffer result2 = new StringBuffer();
+            FieldPosition fpos2 = new FieldPosition(0);
+            sdfmt.format(cal, result2, fpos2);
+			if (result2.toString().compareTo(item.expectedFormat) != 0) {
+				errln("FAIL: format (default context) for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
+						", expected \"" + item.expectedFormat + "\", got \"" + result2 + "\"");
+            }
+
+            // now read back default context, make sure it is what we set
+            SimpleDateFormat.ContextValue capitalizationContext = sdfmt.getDefaultContext(SimpleDateFormat.ContextType.CAPITALIZATION);
+            if (capitalizationContext != item.capitalizationContext) {
+				errln("FAIL: getDefaultContext for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
+						", but got context " + capitalizationContext);
+            }
         }
     }
 }
