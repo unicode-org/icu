@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2240,6 +2240,25 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         int maxWeeks = gc.getActualMaximum(Calendar.WEEK_OF_YEAR);
         if (maxWeeks != 53) {
             errln("FAIL: Max week in 2009 in ISO calendar is 53, but got " + maxWeeks);
+        }
+    }
+    
+    /**
+     * Test case for ticket:9019
+     */
+    public void Test9019() {
+        GregorianCalendar cal1 = new GregorianCalendar(TimeZone.GMT_ZONE,ULocale.US);
+        GregorianCalendar cal2 = new GregorianCalendar(TimeZone.GMT_ZONE,ULocale.US);
+        cal1.clear();
+        cal2.clear();
+        cal1.set(2011,Calendar.MAY,06);
+        cal2.set(2012,Calendar.JANUARY,06);
+        cal1.setLenient(false);
+        cal1.add(Calendar.MONTH, 8);
+        if(!cal1.getTime().equals(cal2.getTime())) {
+            errln("Error: Calendar is " + cal1.getTime() + " but expected " + cal2.getTime());
+        } else {
+            logln("Pass: rolled calendar is " + cal1.getTime());
         }
     }
 }
