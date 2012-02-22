@@ -3082,8 +3082,16 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case EXTENDED_YEAR:
         case YEAR_WOY:
         case MONTH:
-            set(field, get(field) + amount);
-            pinField(DAY_OF_MONTH);
+            {
+                boolean oldLenient = isLenient();
+                setLenient(true);
+                set(field, get(field) + amount);
+                pinField(DAY_OF_MONTH);
+                if(oldLenient==false) {
+                    complete();
+                    setLenient(oldLenient);
+                }
+            }
             return;
 
         case WEEK_OF_YEAR:
