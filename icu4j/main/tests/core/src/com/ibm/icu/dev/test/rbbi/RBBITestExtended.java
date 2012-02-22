@@ -1,7 +1,7 @@
 /*
  * Created on May 5, 2004
  * 
- * Copyright (C) 2004-2010 International Business Machines Corporation and others.
+ * Copyright (C) 2004-2012 International Business Machines Corporation and others.
  * All Rights Reserved.
  *
  */
@@ -446,7 +446,7 @@ void executeTest(TestParams t) {
             break;
         }
 
-        // Check that there were we didn't miss an expected break between the last one
+        // Check that we didn't miss an expected break between the last one
         //  and this one.  (UVector returns zeros for index out of bounds.)
         for (i=prevBP-1; i>bp; i--) {
             if (t.expectedBreaks[i] != 0) {
@@ -481,7 +481,7 @@ void executeTest(TestParams t) {
     // Verify that there were no missed breaks prior to the last one found
     for (i=prevBP-1; i>=0; i--) {
         if (t.expectedBreaks[i] != 0) {
-            errln("Forward Itertion, break expected, but not found.  Pos=" + i +
+            errln("Reverse Itertion, break expected, but not found.  Pos=" + i +
                     "  File line,col= " + t.srcLine[i] + ", " + t.srcCol[i]);
          }
     }
