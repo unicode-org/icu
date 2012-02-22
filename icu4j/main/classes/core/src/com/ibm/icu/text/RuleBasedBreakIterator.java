@@ -1125,6 +1125,7 @@ public int getRuleStatusVec(int[] fillInArray) {
                     lookaheadStatus      = 0;
                     // TODO: make a standalone hard break in a rule work.
                     if (lookAheadHardBreak) {
+                        fText.setIndex(result);
                         return result;
                     }
                     // Look-ahead completed, but other rules may match further.  Continue on.

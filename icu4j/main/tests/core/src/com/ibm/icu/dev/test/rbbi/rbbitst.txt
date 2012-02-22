@@ -799,6 +799,6 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 
 <locale fi>
 <line>
-#<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
-#<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
+<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
+<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
 
