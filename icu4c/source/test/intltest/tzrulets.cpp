@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2011, International Business Machines Corporation and    *
+* Copyright (C) 2007-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -2649,7 +2649,7 @@ TimeZoneRuleTest::TestT8943(void) {
     if (U_FAILURE(status)) {
         errln("Failed to construct a RuleBasedTimeZone");
     } else {
-        int raw, dst;
+        int32_t raw, dst;
         rbtz->getOffset(1293822000000.0 /* 2010-12-31 19:00:00 UTC */, FALSE, raw, dst, status);
         if (U_FAILURE(status)) {
             errln("Error invoking getOffset");
