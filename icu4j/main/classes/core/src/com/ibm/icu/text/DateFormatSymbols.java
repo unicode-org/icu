@@ -10,7 +10,9 @@ package com.ibm.icu.text;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -26,6 +28,7 @@ import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 
 /**
  * {@icuenhanced java.text.DateFormatSymbols}.{@icu _usage_}
@@ -542,6 +545,55 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         {"EthiopicCalendar", "ethiopic"},
     };
 
+    /**
+     * {@icu} Constants for capitalization context usage types
+     * related to date formatting.
+     * @internal
+     */
+    enum CapitalizationContextUsage {
+        OTHER, 
+        MONTH_FORMAT,     /* except narrow */ 
+        MONTH_STANDALONE, /* except narrow */ 
+        MONTH_NARROW, 
+        DAY_FORMAT,     /* except narrow */ 
+        DAY_STANDALONE, /* except narrow */ 
+        DAY_NARROW, 
+        ERA_WIDE, 
+        ERA_ABBREV, 
+        ERA_NARROW, 
+        ZONE_LONG, 
+        ZONE_SHORT, 
+        METAZONE_LONG, 
+        METAZONE_SHORT
+    }
+
+    /** Map from resource key to CapitalizationContextUsage value
+     */
+    private static final Map<String, CapitalizationContextUsage> contextUsageTypeMap;
+    static {
+        contextUsageTypeMap=new HashMap<String, CapitalizationContextUsage>();
+        contextUsageTypeMap.put("month-format-except-narrow", CapitalizationContextUsage.MONTH_FORMAT);
+        contextUsageTypeMap.put("month-standalone-except-narrow", CapitalizationContextUsage.MONTH_STANDALONE);
+        contextUsageTypeMap.put("month-narrow",   CapitalizationContextUsage.MONTH_NARROW);
+        contextUsageTypeMap.put("day-format-except-narrow", CapitalizationContextUsage.DAY_FORMAT);
+        contextUsageTypeMap.put("day-standalone-except-narrow", CapitalizationContextUsage.DAY_STANDALONE);
+        contextUsageTypeMap.put("day-narrow",     CapitalizationContextUsage.DAY_NARROW);
+        contextUsageTypeMap.put("era-name",       CapitalizationContextUsage.ERA_WIDE);
+        contextUsageTypeMap.put("era-abbr",       CapitalizationContextUsage.ERA_ABBREV);
+        contextUsageTypeMap.put("era-narrow",     CapitalizationContextUsage.ERA_NARROW);
+        contextUsageTypeMap.put("zone-long",      CapitalizationContextUsage.ZONE_LONG);
+        contextUsageTypeMap.put("zone-short",     CapitalizationContextUsage.ZONE_SHORT);
+        contextUsageTypeMap.put("metazone-long",  CapitalizationContextUsage.METAZONE_LONG);
+        contextUsageTypeMap.put("metazone-short", CapitalizationContextUsage.METAZONE_SHORT);
+    }
+
+     /**
+     * Capitalization transforms. For each usage type, the first array element indicates
+     * whether to titlecase for uiListOrMenu context, the second indicates whether to
+     * titlecase for stand-alone context.
+     * @serial
+     */
+    Map<CapitalizationContextUsage,boolean[]> capitalization = null;
 
     /**
      * Returns era strings. For example: "AD" and "BC".
@@ -1134,6 +1186,8 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
         this.zoneStrings = dfs.zoneStrings; // always null at initialization time for now
         this.localPatternChars = dfs.localPatternChars;
+        
+        this.capitalization = dfs.capitalization;
 
         this.actualLocale = dfs.actualLocale;
         this.validLocale = dfs.validLocale;
@@ -1249,7 +1303,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         if (cyclicNameSetsBundle != null) {
             shortYearNames = calData.get("cyclicNameSets", "years", "format", "abbreviated").getStringArray();
         }
-
+ 
         requestedLocale = desiredLocale;
 
         ICUResourceBundle rb =
@@ -1266,6 +1320,39 @@ public class DateFormatSymbols implements Serializable, Cloneable {
         // TODO: obtain correct actual/valid locale later
         ULocale uloc = rb.getULocale();
         setLocale(uloc, uloc);
+        
+        capitalization = new HashMap<CapitalizationContextUsage,boolean[]>();
+        boolean[] noTransforms = new boolean[2];
+        noTransforms[0] = false;
+        noTransforms[1] = false;
+        CapitalizationContextUsage allUsages[] = CapitalizationContextUsage.values();
+        for (CapitalizationContextUsage usage: allUsages) {
+            capitalization.put(usage, noTransforms);
+        }
+        UResourceBundle contextTransformsBundle = null;
+        try {
+           contextTransformsBundle = (UResourceBundle)rb.getWithFallback("contextTransforms");
+        }
+        catch (MissingResourceException e) {
+            contextTransformsBundle = null; // probably redundant
+        }
+        if (contextTransformsBundle != null) {
+            UResourceBundleIterator ctIterator = contextTransformsBundle.getIterator();
+            while ( ctIterator.hasNext() ) {
+                UResourceBundle contextTransformUsage = ctIterator.next();
+                int[] intVector = contextTransformUsage.getIntVector();
+                if (intVector.length >= 2) {
+                    String usageKey = contextTransformUsage.getKey();
+                    CapitalizationContextUsage usage = contextUsageTypeMap.get(usageKey);
+                    if (usage != null) {
+                        boolean[] transforms = new boolean[2];
+                        transforms[0] = (intVector[0] != 0);
+                        transforms[1] = (intVector[1] != 0);
+                        capitalization.put(usage, transforms);
+                    }
+                }
+            }
+        }
     }
 
     private static final boolean arrayOfArrayEquals(Object[][] aa1, Object[][]aa2) {
