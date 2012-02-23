@@ -172,7 +172,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, uLocale);
-        ULocale parentLocale = rb.getULocale(); // for later
+        ULocale currentLocale = rb.getULocale(); // for later
+        String currentLocaleName = currentLocale.getBaseName();
         // Get the correct calendar type
         String calendarTypeToUse = uLocale.getKeywordValue("calendar");
         if ( calendarTypeToUse == null ) {
@@ -183,8 +184,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             calendarTypeToUse = "gregorian"; // fallback
         }
         // Get data for that calendar
-        rb = rb.getWithFallback("calendar");
-        ICUResourceBundle calTypeBundle = rb.getWithFallback(calendarTypeToUse);
+        ICUResourceBundle calBundle = rb.getWithFallback("calendar");
+        ICUResourceBundle calTypeBundle = calBundle.getWithFallback(calendarTypeToUse);
         // CLDR item formats
 
 
@@ -232,13 +233,26 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }catch(Exception e) {
         }
 
-        // ULocale parentLocale=uLocale; // now set up above with aliases resolved etc.
-        while ( (parentLocale=parentLocale.getFallback()) != null) {
-            ICUResourceBundle prb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, parentLocale);
-            prb = prb.getWithFallback("calendar");
-            ICUResourceBundle pCalTypeBundle = prb.getWithFallback(calendarTypeToUse);
+        while (currentLocaleName.length() > 0 && !currentLocaleName.equals("root")) {
+            ULocale parentLocale = null;
             try {
-                ICUResourceBundle formatBundle =  pCalTypeBundle.getWithFallback("availableFormats");
+                UResourceBundle parentNameBundle = rb.get("%%Parent");
+                String parentNameString = parentNameBundle.getString();
+                parentLocale = new ULocale(parentNameString);
+            }
+            catch (Exception e) {
+                parentLocale = currentLocale.getFallback();
+            }
+            if (parentLocale == null || parentLocale.equals(currentLocale)) {
+                break;
+            }
+            rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, parentLocale);
+            currentLocale = rb.getULocale();
+            currentLocaleName = currentLocale.getBaseName();
+            calBundle = rb.getWithFallback("calendar");
+            calTypeBundle = calBundle.getWithFallback(calendarTypeToUse);
+            try {
+                ICUResourceBundle formatBundle =  calTypeBundle.getWithFallback("availableFormats");
                 //System.out.println("available format from parent locale:"+parentLocale.getName());
                 for (int i=0; i<formatBundle.getSize(); ++i) { 
                     String formatKey = formatBundle.get(i).getKey();
