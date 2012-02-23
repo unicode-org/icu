@@ -123,16 +123,21 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      * @param c A codepoint
      */
     final boolean isFromUUseFallback(int c) {
-        return (useFallback)
-                || (UCharacter.getType(c) == UCharacter.PRIVATE_USE);
+        return (useFallback) || isUnicodePrivateUse(c);
     }
 
     /**
      * Use fallbacks from Unicode to codepage when useFallback or for private-use code points
      */
     static final boolean isFromUUseFallback(boolean iUseFallback, int c) {
-        return (iUseFallback)
-                || (UCharacter.getType(c) == UCharacter.PRIVATE_USE);
+        return (iUseFallback) || isUnicodePrivateUse(c);
+    }
+
+    private static final boolean isUnicodePrivateUse(int c) {
+        // First test for U+E000 to optimize for the most common characters.
+        return c >= 0xE000 && (c <= 0xF8FF ||
+                c >= 0xF0000 && (c <= 0xFFFFD ||
+                (c >= 0x100000 && c <= 0x10FFFD)));
     }
 
     /**
