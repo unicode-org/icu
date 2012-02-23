@@ -237,13 +237,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             ULocale parentLocale = null;
             try {
                 UResourceBundle parentNameBundle = rb.get("%%Parent");
-                String parentNameString = parentNameBundle.getString();
-                parentLocale = new ULocale(parentNameString);
-            }
-            catch (Exception e) {
+                parentLocale = new ULocale(parentNameBundle.getString());
+            } catch (Exception e) {
                 parentLocale = currentLocale.getFallback();
             }
-            if (parentLocale == null || parentLocale.equals(currentLocale)) {
+            if (parentLocale == null || parentLocale.getBaseName().equals(currentLocaleName)) {
                 break;
             }
             rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, parentLocale);

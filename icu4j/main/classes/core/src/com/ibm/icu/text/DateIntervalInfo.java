@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -364,7 +364,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         try {
             // loop through all locales to get all available skeletons'
             // interval format
-            ULocale parentLocale = locale;
+            ULocale currentLocale = locale;
             // Get the correct calendar type
             String calendarTypeToUse = locale.getKeywordValue("calendar");
             if ( calendarTypeToUse == null ) {
@@ -375,21 +375,17 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                 calendarTypeToUse = "gregorian"; // fallback
             }
             do {
-                String name = parentLocale.getName();
+                String name = currentLocale.getName();
                 if ( name.length() == 0 ) {
                     break;
                 }
 
-                ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.
-                  getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,locale);
-                rb = rb.getWithFallback("calendar");
-                ICUResourceBundle calTypeBundle = rb.getWithFallback(
-                                                              calendarTypeToUse);
-                ICUResourceBundle itvDtPtnResource =calTypeBundle.
-                                      getWithFallback("intervalFormats");
+                ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,currentLocale);
+                ICUResourceBundle calBundle = rb.getWithFallback("calendar");
+                ICUResourceBundle calTypeBundle = calBundle.getWithFallback(calendarTypeToUse);
+                ICUResourceBundle itvDtPtnResource =calTypeBundle.getWithFallback("intervalFormats");
                 // look for fallback first, since it establishes the default order
-                String fallback = itvDtPtnResource.getStringWithFallback(
-                                                          FALLBACK_STRING);
+                String fallback = itvDtPtnResource.getStringWithFallback(FALLBACK_STRING);
                 setFallbackIntervalPattern(fallback);
                 int size = itvDtPtnResource.getSize();
                 for ( int index = 0; index < size; ++index ) {
@@ -401,8 +397,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                     if ( skeleton.compareTo(FALLBACK_STRING) == 0 ) {
                         continue;
                     }
-                    ICUResourceBundle intervalPatterns =
-                        itvDtPtnResource.getWithFallback(skeleton);
+                    ICUResourceBundle intervalPatterns =itvDtPtnResource.getWithFallback(skeleton);
                     int ptnNum = intervalPatterns.getSize();
                     for ( int ptnIndex = 0; ptnIndex < ptnNum; ++ptnIndex) {
                         String key = intervalPatterns.get(ptnIndex).getKey();
@@ -428,8 +423,13 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                         }
                     }
                 }
-                parentLocale = parentLocale.getFallback();
-            } while (parentLocale != null && !parentLocale.equals(ULocale.ROOT));
+                try {
+                    UResourceBundle parentNameBundle = rb.get("%%Parent");
+                    currentLocale = new ULocale(parentNameBundle.getString());
+                } catch (MissingResourceException e) {
+                    currentLocale = currentLocale.getFallback();
+                }
+            } while (currentLocale != null && !currentLocale.getBaseName().equals("root"));
         } catch ( MissingResourceException e) {
             // ok, will fallback to {data0} - {date1}
         }
