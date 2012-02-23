@@ -1491,6 +1491,7 @@ zh_Hant{
                 yyyyMEd{"Gy/M/d（E）"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEd{"Gy年M月d日E"}
+                yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gy/M/d"}
                 yyyyQQQ{"Gy QQQ"}
             }
