@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1790,7 +1790,7 @@ public class SearchTest extends TestFmwk {
     }
 
     public void TestSupplementary() {
-        if (isICUVersionBefore(49, 1)) { // ticket#8080
+        if (isICUVersionBefore(50, 0, 1)) { // ticket#8080
             return;
         }
         int count = 0;
@@ -1803,7 +1803,7 @@ public class SearchTest extends TestFmwk {
     }
 
     public void TestSupplementaryCanonical() {
-        if (isICUVersionBefore(49, 1)) { // ticket#8080
+        if (isICUVersionBefore(50, 0, 1)) { // ticket#8080
             return;
         }
         int count = 0;
