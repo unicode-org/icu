@@ -773,6 +773,7 @@ public class SimpleDateFormat extends DateFormat {
      * @return the formatted date-time string.
      * @see DateFormat
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public StringBuffer format(Calendar cal,
                                Map<ContextType,ContextValue> contextValues,
@@ -1282,9 +1283,11 @@ public class SimpleDateFormat extends DateFormat {
                         break;
                     case CAPITALIZATION_FOR_UI_LIST_OR_MENU:
                     case CAPITALIZATION_FOR_STANDALONE:
-                        boolean[] transforms = formatData.capitalization.get(capContextUsageType);
-                        titlecase = (capitalizationContext==ContextValue.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
-                                    transforms[0]: transforms[1];
+                        if (formatData.capitalization != null) {
+                             boolean[] transforms = formatData.capitalization.get(capContextUsageType);
+                            titlecase = (capitalizationContext==ContextValue.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
+                                        transforms[0]: transforms[1];
+                        }
                         break;
                     default:
                        break;
@@ -2680,6 +2683,7 @@ public class SimpleDateFormat extends DateFormat {
      * @param type The context type for which the default value should be set. 
      * @param value The default value to set for the specified context type. 
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public void setDefaultContext(ContextType type, ContextValue value) {
         if (type == ContextType.CAPITALIZATION && value != null) {
@@ -2694,6 +2698,7 @@ public class SimpleDateFormat extends DateFormat {
      * @param type The context type for which the default value should be obtained. 
      * @return The current default value for the specified context type.
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public ContextValue getDefaultContext(ContextType type) {
         return (type == ContextType.CAPITALIZATION && defaultCapitalizationContext != null)?
