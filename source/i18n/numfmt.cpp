@@ -35,6 +35,7 @@
 #include "unicode/curramt.h"
 #include "unicode/numsys.h"
 #include "unicode/rbnf.h"
+#include "unicode/localpointer.h"
 #include "charstr.h"
 #include "winnmfmt.h"
 #include "uresimp.h"
@@ -626,26 +627,24 @@ NumberFormat::parse(const UnicodeString& text,
 CurrencyAmount* NumberFormat::parseCurrency(const UnicodeString& text,
                                             ParsePosition& pos) const {
     // Default implementation only -- subclasses should override
-    CurrencyAmount* currAmt = NULL;
+    CurrencyAmount* currAmtToReturn = NULL;
     Formattable parseResult;
     int32_t start = pos.getIndex();
     parse(text, parseResult, pos);
-    if (pos.getIndex() != start && pos.getErrorIndex() == -1) {
+    if (pos.getIndex() != start) {
         UChar curr[4];
         UErrorCode ec = U_ZERO_ERROR;
         getEffectiveCurrency(curr, ec);
         if (U_SUCCESS(ec)) {
-            currAmt = new CurrencyAmount(parseResult, curr, ec);
-            if (U_FAILURE(ec) || currAmt == NULL) {
+            LocalPointer<CurrencyAmount> currAmt(new CurrencyAmount(parseResult, curr, ec));
+            if (U_FAILURE(ec)) {
                 pos.setIndex(start); // indicate failure
-                if ( currAmt != NULL ) {
-                    delete currAmt;
-                    currAmt = NULL;
-                }
+            } else {
+                currAmtToReturn = currAmt.orphan();
             }
         }
     }
-    return currAmt;
+    return currAmtToReturn;
 }
 
 // -------------------------------------
