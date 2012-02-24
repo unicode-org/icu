@@ -159,11 +159,10 @@ NumberFormatTest::TestAPI(void)
     }
 
     ParsePosition ppos;
-    CurrencyAmount* currAmt = test->parseCurrency("",ppos);
+    LocalPointer<CurrencyAmount> currAmt(test->parseCurrency("",ppos));
     // old test for (U_FAILURE(status)) was bogus here, method does not set status!
-    if (currAmt != NULL) {
+    if (ppos.getIndex()) {
         errln("Parsed empty string as currency");
-        delete currAmt;
     }
 
     delete test;
@@ -6018,13 +6017,12 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
       NumberFormat* numFmt = NumberFormat::createInstance(locale, UNUM_CURRENCY, status);
       if (numFmt != NULL && U_SUCCESS(status)) {
           ParsePosition parsePos;
-          CurrencyAmount* currAmt = numFmt->parseCurrency(formatted, parsePos);
-          if (currAmt != NULL) {
+          LocalPointer<CurrencyAmount> currAmt(numFmt->parseCurrency(formatted, parsePos));
+          if (parsePos.getIndex() > 0) {
               double doubleVal = currAmt->getNumber().getDouble(status);
               if ( doubleVal != 1.0 ) {
                   errln("Parsed as currency value other than 1.0: " + formatted + " -> " + doubleVal);
               }
-              delete currAmt;
           } else {
               errln("Failed to parse as currency: " + formatted);
           }
@@ -6042,11 +6040,10 @@ NumberFormatTest::TestParseCurrencyInUCurr() {
       NumberFormat* numFmt = NumberFormat::createInstance(locale, UNUM_CURRENCY, status);
       if (numFmt != NULL && U_SUCCESS(status)) {
           ParsePosition parsePos;
-          CurrencyAmount* currAmt = numFmt->parseCurrency(formatted, parsePos);
-          if (currAmt != NULL) {
+          LocalPointer<CurrencyAmount> currAmt(numFmt->parseCurrency(formatted, parsePos));
+          if (parsePos.getIndex() > 0) {
               double doubleVal = currAmt->getNumber().getDouble(status);
               errln("Parsed as currency, should not have: " + formatted + " -> " + doubleVal);
-              delete currAmt;
           }
       } else {
           dataerrln("Unable to create NumberFormat. - %s", u_errorName(status));
