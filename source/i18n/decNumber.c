@@ -1,7 +1,7 @@
 /* ------------------------------------------------------------------ */
 /* Decimal Number arithmetic module                                   */
 /* ------------------------------------------------------------------ */
-/* Copyright (c) IBM Corporation, 2000-2011.  All rights reserved.    */
+/* Copyright (c) IBM Corporation, 2000-2012.  All rights reserved.    */
 /*                                                                    */
 /* This software is made available under the terms of the             */
 /* ICU License -- ICU 1.8.1 and later.                                */
@@ -1393,6 +1393,10 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberLogB(decNumber *res, const decNumber 
 /* fastpath in decLnOp.  The final division is done to the requested  */
 /* precision.                                                         */
 /* ------------------------------------------------------------------ */
+#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 U_CAPI decNumber * U_EXPORT2 uprv_decNumberLog10(decNumber *res, const decNumber *rhs,
                           decContext *set) {
   uInt status=0, ignore=0;         /* status accumulators  */
@@ -1528,6 +1532,9 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberLog10(decNumber *res, const decNumber
   #endif
   return res;
   } /* decNumberLog10  */
+#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#pragma GCC diagnostic pop
+#endif
 
 /* ------------------------------------------------------------------ */
 /* decNumberMax -- compare two Numbers and return the maximum         */
@@ -2801,6 +2808,10 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberShift(decNumber *res, const decNumber
 /* result setexp(approx, e div 2)  % fix exponent                     */
 /* end sqrt                                                           */
 /* ------------------------------------------------------------------ */
+#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 U_CAPI decNumber * U_EXPORT2 uprv_decNumberSquareRoot(decNumber *res, const decNumber *rhs,
                                 decContext *set) {
   decContext workset, approxset;   /* work contexts  */
@@ -3130,6 +3141,9 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberSquareRoot(decNumber *res, const decN
   #endif
   return res;
   } /* decNumberSquareRoot  */
+#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#pragma GCC diagnostic pop
+#endif
 
 /* ------------------------------------------------------------------ */
 /* decNumberSubtract -- subtract two Numbers                          */
@@ -5591,6 +5605,10 @@ const uShort LNnn[90]={9016,  8652,  8316,  8008,  7724,  7456,  7208,
 /* 5. The static buffers are larger than might be expected to allow   */
 /*    for calls from decNumberPower.                                  */
 /* ------------------------------------------------------------------ */
+#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+#endif
 decNumber * decLnOp(decNumber *res, const decNumber *rhs,
                     decContext *set, uInt *status) {
   uInt ignore=0;                   /* working status accumulator  */
@@ -5812,6 +5830,9 @@ decNumber * decLnOp(decNumber *res, const decNumber *rhs,
   /* [status is handled by caller]  */
   return res;
   } /* decLnOp  */
+#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#pragma GCC diagnostic pop
+#endif
 
 /* ------------------------------------------------------------------ */
 /* decQuantizeOp  -- force exponent to requested value                */
