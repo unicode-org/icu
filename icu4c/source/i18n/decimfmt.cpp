@@ -1597,7 +1597,6 @@ DecimalFormat::parse(const UnicodeString& text,
 
 CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text,
                                              ParsePosition& pos) const {
-    CurrencyAmount* currAmtToReturn = NULL;
     Formattable parseResult;
     int32_t start = pos.getIndex();
     UChar curbuf[4];
@@ -1608,10 +1607,10 @@ CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text,
         if (U_FAILURE(ec)) {
             pos.setIndex(start); // indicate failure
         } else {
-            currAmtToReturn = currAmt.orphan();
+            return currAmt.orphan();
         }
     }
-    return currAmtToReturn;
+    return NULL;
 }
 
 /**
