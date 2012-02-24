@@ -57,6 +57,6 @@ class CurrencyFormat extends MeasureFormat {
      * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
      */
     public Object parseObject(String source, ParsePosition pos) {
-        return fmt.parseCurrency((CharSequence)source, pos);
+        return fmt.parseCurrency(source, pos);
     }
 }

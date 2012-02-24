@@ -1655,6 +1655,7 @@ public class DecimalFormat extends NumberFormat {
      *  matched character. If the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public CurrencyAmount parseCurrency(CharSequence text, ParsePosition pos) {
         Currency[] currency = new Currency[1];
