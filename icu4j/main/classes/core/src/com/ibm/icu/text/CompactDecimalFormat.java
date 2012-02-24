@@ -7,6 +7,10 @@
 
 package com.ibm.icu.text;
 
+import java.io.IOException;
+import java.io.NotSerializableException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.FieldPosition;
@@ -200,6 +204,16 @@ public class CompactDecimalFormat extends DecimalFormat {
     @Override
     public Number parse(String text, ParsePosition parsePosition) {
         throw new UnsupportedOperationException();
+    }
+    
+    // DISALLOW Serialization
+    
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        throw new NotSerializableException();
+    }
+    
+    private void readObject(ObjectInputStream in) throws IOException {
+        throw new NotSerializableException();
     }
 
     /* INTERNALS */

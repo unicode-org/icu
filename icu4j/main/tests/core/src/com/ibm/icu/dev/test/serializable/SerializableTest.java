@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -655,6 +655,7 @@ public class SerializableTest extends TestFmwk.TestGroup
         
         map.put("com.ibm.icu.text.NumberFormat", new FormatTests.NumberFormatHandler());
         map.put("com.ibm.icu.text.DecimalFormat", new FormatTests.DecimalFormatHandler());
+        map.put("com.ibm.icu.text.CompactDecimalFormat", new FormatTests.CompactDecimalFormatHandler());
         map.put("com.ibm.icu.text.RuleBasedNumberFormat", new FormatTests.RuleBasedNumberFormatHandler());
         map.put("com.ibm.icu.text.CurrencyPluralInfo", new FormatTests.CurrencyPluralInfoHandler());
         map.put("com.ibm.icu.text.DecimalFormatSymbols", new FormatTests.DecimalFormatSymbolsHandler());

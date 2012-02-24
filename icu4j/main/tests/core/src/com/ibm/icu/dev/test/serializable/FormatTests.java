@@ -18,6 +18,7 @@ import com.ibm.icu.impl.TimeZoneGenericNames.GenericNameType;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.ChineseDateFormatSymbols;
+import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.CurrencyPluralInfo;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
@@ -1714,6 +1715,12 @@ public class FormatTests
         public boolean hasSameBehavior(Object a, Object b)
         {
             return a.equals(b);
+        }
+    }
+    
+    public static class CompactDecimalFormatHandler extends NumberFormatHandler {
+        public Object[] getTestObjects() {
+            return new CompactDecimalFormat[0];
         }
     }
     
