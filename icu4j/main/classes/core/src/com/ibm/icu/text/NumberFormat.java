@@ -431,6 +431,7 @@ public abstract class NumberFormat extends UFormat {
      * the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public CurrencyAmount parseCurrency(CharSequence text, ParsePosition pos) {
         ///CLOVER:OFF
