@@ -627,7 +627,6 @@ NumberFormat::parse(const UnicodeString& text,
 CurrencyAmount* NumberFormat::parseCurrency(const UnicodeString& text,
                                             ParsePosition& pos) const {
     // Default implementation only -- subclasses should override
-    CurrencyAmount* currAmtToReturn = NULL;
     Formattable parseResult;
     int32_t start = pos.getIndex();
     parse(text, parseResult, pos);
@@ -640,11 +639,11 @@ CurrencyAmount* NumberFormat::parseCurrency(const UnicodeString& text,
             if (U_FAILURE(ec)) {
                 pos.setIndex(start); // indicate failure
             } else {
-                currAmtToReturn = currAmt.orphan();
+                return currAmt.orphan();
             }
         }
     }
-    return currAmtToReturn;
+    return NULL;
 }
 
 // -------------------------------------
