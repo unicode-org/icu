@@ -55,6 +55,7 @@
 #include "unicode/plurrule.h"
 #include "unicode/utf16.h"
 #include "unicode/numsys.h"
+#include "unicode/localpointer.h"
 #include "uresimp.h"
 #include "ucurrimp.h"
 #include "charstr.h"
@@ -1596,23 +1597,21 @@ DecimalFormat::parse(const UnicodeString& text,
 
 CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text,
                                              ParsePosition& pos) const {
-    CurrencyAmount* currAmt = NULL;
+    CurrencyAmount* currAmtToReturn = NULL;
     Formattable parseResult;
     int32_t start = pos.getIndex();
     UChar curbuf[4];
     parse(text, parseResult, pos, curbuf);
-    if (pos.getIndex() != start && pos.getErrorIndex() == -1) {
+    if (pos.getIndex() != start) {
         UErrorCode ec = U_ZERO_ERROR;
-        currAmt = new CurrencyAmount(parseResult, curbuf, ec);
-        if (U_FAILURE(ec) || currAmt == NULL) {
+        LocalPointer<CurrencyAmount> currAmt(new CurrencyAmount(parseResult, curbuf, ec));
+        if (U_FAILURE(ec)) {
             pos.setIndex(start); // indicate failure
-            if ( currAmt != NULL ) {
-                delete currAmt;
-                currAmt = NULL;
-            }
+        } else {
+            currAmtToReturn = currAmt.orphan();
         }
     }
-    return currAmt;
+    return currAmtToReturn;
 }
 
 /**

@@ -24,6 +24,7 @@
 #include "unicode/fmtable.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/curramt.h"
+#include "unicode/localpointer.h"
 #include "uassert.h"
 #include "cpputils.h"
 #include "cstring.h"
@@ -323,8 +324,7 @@ parseRes(Formattable& res,
     if(U_FAILURE(*status))
         return;
     
-    int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
-    const UnicodeString src((UChar*)text, len, len);
+    const UnicodeString src((UBool)(textLength == -1), text, textLength);
     ParsePosition pp;
     
     if(parsePos != 0)
@@ -423,30 +423,25 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
     if (U_FAILURE(*status)) {
         return doubleVal;
     }
-    int32_t len = (textLength == -1 ? u_strlen(text) : textLength);
-    const UnicodeString src((UChar*)text, len, len);
+    const UnicodeString src((UBool)(textLength == -1), text, textLength);
     ParsePosition pp;
     if (parsePos != NULL) {
         pp.setIndex(*parsePos);
     }
     *status = U_PARSE_ERROR; // assume failure, reset if succeed
-    CurrencyAmount* currAmt = ((const NumberFormat*)fmt)->parseCurrency(src, pp);
+    LocalPointer<CurrencyAmount> currAmt(((const NumberFormat*)fmt)->parseCurrency(src, pp));
     if (pp.getErrorIndex() != -1) {
         if (parsePos != NULL) {
             *parsePos = pp.getErrorIndex();
-        }
-        if (currAmt != NULL) {
-            delete currAmt;
         }
     } else {
         if (parsePos != NULL) {
             *parsePos = pp.getIndex();
         }
-        if (currAmt != NULL) {
+        if (pp.getIndex() > 0) {
             *status = U_ZERO_ERROR;
             u_strcpy(currency, currAmt->getISOCurrency());
             doubleVal = currAmt->getNumber().getDouble(*status);
-            delete currAmt;
         }
     }
     return doubleVal;
