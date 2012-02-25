@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, Google, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, Google, International Business Machines Corporation and
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -41,7 +41,8 @@ import com.ibm.icu.util.ULocale;
  * NumberFormat.
  * 
  * @author markdavis
- * @internal
+ * @draft ICU 49
+ * @provisional This API might change or be removed in a future release.
  */
 public class CompactDecimalFormat extends DecimalFormat {
     private static final long serialVersionUID = 4716293295276629682L;
@@ -55,15 +56,14 @@ public class CompactDecimalFormat extends DecimalFormat {
     private final String[] currencyAffixes;
 
     /**
-     * The normal mechanism is to use NumberFormat.getCompactDecimalInstance(). This is intended only for testing.
+     * The public mechanism is NumberFormat.getCompactDecimalInstance().
      * 
      * @param locale
      *            the desired locale
      * @param style
      *            the compact style
-     * @internal
      */
-    public CompactDecimalFormat(ULocale locale, CompactStyle style) {
+    CompactDecimalFormat(ULocale locale, CompactStyle style) {
         DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(locale);
         Data data;
         while (true) {
@@ -178,21 +178,41 @@ public class CompactDecimalFormat extends DecimalFormat {
         return super.format(number, toAppendTo, pos);
     }
 
+    /**
+     * @inheritDoc
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {
         return format((double) number, toAppendTo, pos);
     }
 
+    /**
+     * @inheritDoc
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
         return format(number.doubleValue(), toAppendTo, pos);
     }
 
+    /**
+     * @inheritDoc
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public StringBuffer format(BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return format(number.doubleValue(), toAppendTo, pos);
     }
 
+    /**
+     * @inheritDoc
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
         return format(number.doubleValue(), toAppendTo, pos);
@@ -200,13 +220,15 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * Parsing is currently unsupported, and throws an UnsupportedOperationException.
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     @Override
     public Number parse(String text, ParsePosition parsePosition) {
         throw new UnsupportedOperationException();
     }
     
-    // DISALLOW Serialization
+    // DISALLOW Serialization, at least while draft
     
     private void writeObject(ObjectOutputStream out) throws IOException {
         throw new NotSerializableException();
