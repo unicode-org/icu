@@ -133,6 +133,7 @@ public:
      */
     virtual ~TimeZone();
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns the "unknown" time zone.
      * It behaves like the GMT/UTC time zone but has the
@@ -146,6 +147,7 @@ public:
      * @draft ICU 49
      */
     static const TimeZone& U_EXPORT2 getUnknown();
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * The GMT (=UTC) time zone has a raw offset of zero and does not use daylight
