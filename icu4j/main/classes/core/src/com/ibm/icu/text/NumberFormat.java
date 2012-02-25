@@ -730,24 +730,26 @@ public abstract class NumberFormat extends UFormat {
     }
 
     /**
-     * Create a CompactDecimalFormat appropriate for a locale (Mockup for what would be in NumberFormat). The result may
+     * Create a CompactDecimalFormat appropriate for a locale. The result may
      * be affected by the number system in the locale, such as ar-u-nu-latn.
      * 
      * @param locale the desired locale
      * @param style the compact style 
-     * @internal
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public static final CompactDecimalFormat getCompactDecimalInstance(ULocale locale, CompactStyle style) {
         return new CompactDecimalFormat(locale, style);
     }
 
     /**
-     * Create a CompactDecimalFormat appropriate for a locale (Mockup for what would be in NumberFormat). The result may
+     * Create a CompactDecimalFormat appropriate for a locale. The result may
      * be affected by the number system in the locale, such as ar-u-nu-latn.
      * 
      * @param locale the desired locale
      * @param style the compact style 
-     * @internal
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public static final CompactDecimalFormat getCompactDecimalInstance(Locale locale, CompactStyle style) {
         return new CompactDecimalFormat(ULocale.forLocale(locale), style);
