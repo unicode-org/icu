@@ -118,6 +118,7 @@ typedef struct UNormalizer2 UNormalizer2;  /**< C typedef for struct UNormalizer
 
 #if !UCONFIG_NO_NORMALIZATION
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Returns a UNormalizer2 instance for Unicode NFC normalization.
  * Same as unorm2_getInstance(NULL, "nfc", UNORM2_COMPOSE, pErrorCode).
@@ -187,6 +188,7 @@ unorm2_getNFKDInstance(UErrorCode *pErrorCode);
  */
 U_DRAFT const UNormalizer2 * U_EXPORT2
 unorm2_getNFKCCasefoldInstance(UErrorCode *pErrorCode);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Returns a UNormalizer2 instance which uses the specified data file
