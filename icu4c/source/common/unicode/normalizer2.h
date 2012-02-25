@@ -83,6 +83,7 @@ public:
      */
     ~Normalizer2();
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns a Normalizer2 instance for Unicode NFC normalization.
      * Same as getInstance(NULL, "nfc", UNORM2_COMPOSE, errorCode).
@@ -152,6 +153,7 @@ public:
      */
     static const Normalizer2 *
     getNFKCCasefoldInstance(UErrorCode &errorCode);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Returns a Normalizer2 instance which uses the specified data file
