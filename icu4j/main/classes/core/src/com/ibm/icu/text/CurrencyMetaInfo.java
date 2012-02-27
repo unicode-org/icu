@@ -28,6 +28,7 @@ import com.ibm.icu.util.TimeZone;
  * time, you will not return a currency whose last day of availablilty was on
  * that day, since the time you provided is after the start of the day.
  * 
+ * This class is not intended for public subclassing.
  * @draft ICU 4.4
  * @provisional This API might change or be removed in a future release.
  */
@@ -190,7 +191,7 @@ public class CurrencyMetaInfo {
          * the date on which a currency must have been in use
          * @return a filter
          * @see #withDateRange(Date, Date)
-         * @draft ICU 4.4
+         * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
         public static CurrencyFilter onDateRange(Date from, Date to) {
@@ -241,7 +242,7 @@ public class CurrencyMetaInfo {
          * @param to date before which the currency must have been in use
          * @return the filter
          * @see #onDateRange(Date, Date)
-         * @draft ICU 4.4
+         * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
         public CurrencyFilter withDateRange(Date from, Date to) {
@@ -318,13 +319,13 @@ public class CurrencyMetaInfo {
     public static final class CurrencyDigits {
         /**
          * Number of fraction digits used to display this currency.
-         * @draft ICU 4.4
+         * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
         public final int fractionDigits;
         /**
          * Rounding increment used when displaying this currency.
-         * @draft ICU 4.4
+         * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
         public final int roundingIncrement;
@@ -396,7 +397,7 @@ public class CurrencyMetaInfo {
          * Preference order of currencies being used at the same time in the region.  Lower
          * values are preferred (generally, this is a transition from an older to a newer
          * currency).  Priorities within a single country are unique.
-         * @draft ICU 4.4
+         * @draft ICU 49
          * @provisional This API might change or be removed in a future release.
          */
         public final int priority;

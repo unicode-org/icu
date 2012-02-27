@@ -13,6 +13,9 @@ import com.ibm.icu.util.ULocale;
 
 /**
  * Returns currency names localized for a locale.
+ * 
+ * This class is not intended for public subclassing.
+ * 
  * @draft ICU 4.4
  * @provisional This API might change or be removed in a future release.
  */
@@ -46,7 +49,7 @@ public abstract class CurrencyDisplayNames {
      * @param locale the locale into which to localize the names
      * @param noSubstitute if true, do not return substitute values.
      * @return a CurrencyDisplayNames
-     * @draft ICU 4.4
+     * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
     public static CurrencyDisplayNames getInstance(ULocale locale, boolean noSubstitute) {
@@ -67,7 +70,7 @@ public abstract class CurrencyDisplayNames {
      * Returns the locale used to determine how to translate the currency names.
      * This is not necessarily the same locale passed to {@link #getInstance(ULocale)}.
      * @return the display locale
-     * @draft ICU 4.4
+     * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
     public abstract ULocale getULocale();
