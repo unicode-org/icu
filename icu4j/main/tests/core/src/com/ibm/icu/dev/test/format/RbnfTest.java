@@ -14,9 +14,9 @@ import java.util.Locale;
 import java.util.Random;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.RuleBasedNumberFormat;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.text.DecimalFormatSymbols;
 
 /**
  * This does not test lenient parse mode, since testing the default implementation

@@ -10,8 +10,6 @@
 */
 package com.ibm.icu.dev.test.util;
 
-import static com.ibm.icu.impl.LocaleDisplayNamesImpl.DataTableType.LANG;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -23,14 +21,13 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.impl.LocaleDisplayNamesImpl;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.BreakIterator;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.LocaleDisplayNames;
-import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
