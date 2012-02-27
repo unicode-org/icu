@@ -1744,7 +1744,7 @@ void RBBITest::TestUnicodeFiles() {
 void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi) {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
     // TODO(andy): Match line break behavior to Unicode 6.0 and remove this time bomb.
-    UBool isICUVersionPast48 = isICUVersionAtLeast(49, 1);
+    UBool isICUVersionPast49 = isICUVersionAtLeast(50, 0);
     UBool isLineBreak = 0 == strcmp(fileName, "LineBreakTest.txt");
     UErrorCode  status = U_ZERO_ERROR;
 
@@ -1840,7 +1840,7 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
             //
             if (testString.length() > 0) {
 // TODO(andy): Remove this time bomb code. Note: Line range updated for Unicode 6.1 LineBreakTest.txt.
-if (!isLineBreak || isICUVersionPast48 || !(5066 <= lineNumber && lineNumber <= 5170)) {
+if (!isLineBreak || isICUVersionPast49 || !(5066 <= lineNumber && lineNumber <= 5170)) {
                 checkUnicodeTestCase(fileName, lineNumber, testString, &breakPositions, bi);
 }
             }
