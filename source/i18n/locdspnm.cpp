@@ -336,7 +336,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
   UnicodeString ktPattern;
   langData.get("localeDisplayPattern", "keyTypePattern", ktPattern);
   if (ktPattern.isBogus()) {
-    ktPattern = UnicodeString("{0}={1}");
+    ktPattern = UnicodeString("{0}={1}", -1, US_INV);
   }
   keyTypeFormat = new MessageFormat(ktPattern, status);
 }
