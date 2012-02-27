@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2000-2011, International Business Machines
+*   Copyright (C) 2000-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *
@@ -42,7 +42,7 @@
  *  @stable ICU 2.4
  */
 #define U_COPYRIGHT_STRING \
-  " Copyright (C) 2011, International Business Machines Corporation and others. All Rights Reserved. "
+  " Copyright (C) 2012, International Business Machines Corporation and others. All Rights Reserved. "
 
 /** The current ICU major version as an integer. 
  *  This value will change in the subsequent releases of ICU
@@ -54,13 +54,13 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.6
  */
-#define U_ICU_VERSION_MINOR_NUM 0
+#define U_ICU_VERSION_MINOR_NUM 1
 
 /** The current ICU patchlevel version as an integer.  
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION_PATCHLEVEL_NUM 2
+#define U_ICU_VERSION_PATCHLEVEL_NUM 0
 
 /** The current ICU build level version as an integer.  
  *  This value is for use by ICU clients. It defaults to 0.
@@ -109,7 +109,7 @@
  *  This value will change in the subsequent releases of ICU
  *  @stable ICU 2.4
  */
-#define U_ICU_VERSION "49.0.2"
+#define U_ICU_VERSION "49.1"
 
 /** The current ICU library major/minor version as a string without dots, for library name suffixes. 
  *  This value will change in the subsequent releases of ICU
@@ -121,7 +121,7 @@
 /** Data version in ICU4C.
  * @internal ICU 4.4 Internal Use Only
  **/
-#define U_ICU_DATA_VERSION "49.0.2"
+#define U_ICU_DATA_VERSION "49.1"
 #endif  /* U_HIDE_INTERNAL_API */
 
 /*===========================================================================

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2011, International Business Machines
+ *   Copyright (C) 2005-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -980,7 +980,7 @@ void SSearchTest::offsetTest()
     col->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
 
     for(int32_t i = 0; i < testCount; i += 1) {
-        if (!isICUVersionAtLeast(49, 1) && i>=4 && i<=6) {
+        if (!isICUVersionAtLeast(50, 0) && i>=4 && i<=6) {
             continue; // timebomb until ticket #8080 is resolved
         }
         UnicodeString ts = CharsToUnicodeString(test[i]);
