@@ -1,16 +1,12 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2012, Google, International Business Machines Corporation and    *
+ * Copyright (C) 2012-2012, Google, International Business Machines Corporation and
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
 
-import java.util.Arrays;
-import java.util.Collection;
-
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.text.Transform;
 import com.ibm.icu.util.ListFormat;
 import com.ibm.icu.util.ULocale;
 
