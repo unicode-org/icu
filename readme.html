@@ -3,9 +3,9 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 49</title>
+    <title>ReadMe for ICU 49 Release Candidate</title>
     <meta name="COPYRIGHT" content=
-    "Copyright (c) 1997-2011 IBM Corporation and others. All Rights Reserved." />
+    "Copyright (c) 1997-2012 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
     "ICU; International Components for Unicode; ICU4C; what's new; readme; read me; introduction; downloads; downloading; building; installation;" />
     <meta name="DESCRIPTION" content=
@@ -16,15 +16,13 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 49 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 49 (Release Candidate) ReadMe</h1>
 
-  	<!--<p><b>Note:</b> This is a development milestone release of ICU4C nn.
-			The contents of this document may not reflect the recent changes done
-			for ICU nn development. This milestone is intended for those wishing
-			to get an early look at ICU nn new features and API changes. It is not
-			recommended for production use.
-		</p>-->
-    <p>Last updated: 2012-Feb-26<br />
+  	<p><b>Note:</b> This is a development milestone release of ICU4C 49.
+    This milestone is intended for those wishing to get an early look at ICU 49 new features and API changes.
+    It is not recommended for production use.
+    </p>
+    <p>Last updated: 2012-Feb-27<br />
      Copyright &copy; 1997-2012 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -538,7 +536,7 @@
         "using namespace icu;" which defeats much of the purpose of the namespace.
         (This is for historical reasons: Originally, ICU4C did not use namespaces,
         and some compilers did not support them. The default "using" statement
-        preserves source code compatibility.)<br>
+        preserves source code compatibility.)<br />
         We recommend you turn this off via <code>-DU_USING_ICU_NAMESPACE=0</code>
         or by modifying unicode/uversion.h:
 <pre>Index: source/common/unicode/uversion.h
@@ -566,7 +564,7 @@
         This means that some implementation code becomes simpler and faster,
         and statically linked ICU libraries become smaller.
         (See the <a href="http://icu-project.org/apiref/icu4c/utypes_8h.html#0a33e1edf3cd23d9e9c972b63c9f7943">U_CHARSET_IS_UTF8</a>
-        API documentation for more details.)<br>
+        API documentation for more details.)<br />
         You can <code>-DU_CHARSET_IS_UTF8=1</code> or
         modify unicode/utypes.h (in ICU 4.8 and below)
         or modify unicode/platform.h (in ICU 49 and higher):
@@ -590,26 +588,27 @@
         This can lead to inadvertent construction of a <code>UnicodeString</code>
         with a single character by using an integer,
         and it can lead to inadvertent dependency on the conversion framework
-        by using a C string literal.<br>
+        by using a C string literal.<br />
         Beginning with ICU 49, you should do the following:
         <ul>
           <li>Consider marking the from-<code>UChar</code>
             and from-<code>UChar32</code> constructors explicit via
             <code>-DUNISTR_FROM_CHAR_EXPLICIT=explicit</code> or similar.</li>
           <li>Consider marking the from-<code>const char*</code> and
-            from-<code>const UChar*</code></li> constructors explicit via
+            from-<code>const UChar*</code> constructors explicit via
             <code>-DUNISTR_FROM_STRING_EXPLICIT=explicit</code> or similar.</li>
+        </ul>
         Note: The ICU test suites cannot be compiled with these settings.
       </li>
       <li><b>utf.h, utf8.h, utf16.h, utf_old.h:</b>
         By default, utypes.h (and thus almost every public ICU header)
         includes all of these header files.
         Often, none of them are needed, or only one or two of them.
-        All of utf_old.h is deprecated or obsolete.<br>
+        All of utf_old.h is deprecated or obsolete.<br />
         Beginning with ICU 49,
         you should define <code>U_NO_DEFAULT_INCLUDE_UTF_HEADERS</code> to 1
         (via -D or uconfig.h, as above)
-        and include those header files explicitly that you actually need.<br>
+        and include those header files explicitly that you actually need.<br />
         Note: The ICU test suites cannot be compiled with this setting.</li>
       <li><b>.dat file:</b> By default, the ICU data is built into
         a shared library (DLL). This is convenient because it requires no
@@ -621,7 +620,7 @@
         and modifiable (also with the icupkg tool).
         If a path is set, then single data files (e.g., .res files)
         can be copied to that location to provide new locale data
-        or conversion tables etc.<br>
+        or conversion tables etc.<br />
         The only drawback with a .dat package file is that the application
         needs to provide ICU with the file system path to the package file
         (e.g., by calling <code>u_setDataDirectory()</code>)
@@ -631,23 +630,23 @@
         <code>main()</code> takes care of such initialization.
         It may be hard if ICU is shipped with
         another shared library (such as the Xerces-C++ XML parser)
-        which does not control <code>main()</code>.<br>
+        which does not control <code>main()</code>.<br />
         See the <a href="http://userguide.icu-project.org/icudata">User Guide ICU Data</a>
-        chapter for more details.<br>
+        chapter for more details.<br />
         If possible, we recommend building the .dat package.
         Specify <code>--with-data-packaging=archive</code>
-        on the configure command line, as in<br>
-        <code>runConfigureICU Linux --with-data-packaging=archive</code><br>
+        on the configure command line, as in<br />
+        <code>runConfigureICU Linux --with-data-packaging=archive</code><br />
         (Read the configure script's output for further instructions.
         On Windows, the Visual Studio build generates both the .dat package
-        and the data DLL.)<br>
+        and the data DLL.)<br />
         Be sure to install and use the tiny stubdata library
         rather than the large data DLL.</li>
       <li><b>Static libraries:</b> It may make sense to build the ICU code
         into static libraries (.a) rather than shared libraries (.so/.dll).
         Static linking reduces the overall size of the binary by removing
-        code that is never called.<br>
-        Example configure command line:<br>
+        code that is never called.<br />
+        Example configure command line:<br />
         <code>runConfigureICU Linux --enable-static --disable-shared</code></li>
       <li><b>Out-of-source build:</b> It is usually desirable to keep the ICU
         source file tree clean and have build output files written to
@@ -670,7 +669,7 @@
         to the .dat package file can be hardcoded. ICU will automatically set
         the path to the final install location using U_ICU_DATA_DEFAULT_DIR.
         Alternatively, you can set <code>-DICU_DATA_DIR=/path/to/icu/data</code>
-        when building the ICU code. (Used by source/common/putil.c.)<br>
+        when building the ICU code. (Used by source/common/putil.c.)<br />
         Consider also setting <code>-DICU_NO_USER_DATA_OVERRIDE</code>
         if you do not want the "ICU_DATA" environment variable to be used.
         (An application can still override the data path via
@@ -690,8 +689,8 @@
         Consider not installing these header files.</li>
       <li><b>Disable renaming:</b> By default, ICU library entry point names
         have an ICU version suffix. Turn this off for a system-level installation,
-        to enable upgrading ICU without breaking applications. For example:<br>
-        <code>runConfigureICU Linux --disable-renaming</code><br>
+        to enable upgrading ICU without breaking applications. For example:<br />
+        <code>runConfigureICU Linux --disable-renaming</code><br />
         The public header files from this configuration must be installed
         for applications to include and get the correct entry point names.</li>
     </ul>
@@ -889,9 +888,9 @@
       Visual C++ compiler will not work with a bash command prompt.</li>
 
       <li>If the computer isn't set up to use Visual C++ from the command line,
-      you need to run vcvars32.bat.<br>For example:<br>"<tt>C:\Program Files\Microsoft
+      you need to run vcvars32.bat.<br />For example:<br />"<tt>C:\Program Files\Microsoft
       Visual Studio 8\VC\bin\vcvars32.bat</tt>" can be used for 32-bit builds
-      <strong>or</strong> <br>"<tt>C:\Program Files (x86)\Microsoft Visual Studio
+      <strong>or</strong> <br />"<tt>C:\Program Files (x86)\Microsoft Visual Studio
       8\VC\bin\amd64\vcvarsamd64.bat</tt>" can be used for 64-bit builds on
       Windows x64.</li>
 
@@ -1101,7 +1100,7 @@
       when using runConfigureICU. This will prevent applications that use the
       icuio library from crashing.</li>
       
-      <li>Also note that on current versions of z/OS, the <a href='http://www-01.ibm.com/support/docview.wss?uid=swg21202407&wv=1'>XPLINK version (C128) of the
+      <li>Also note that on current versions of z/OS, the <a href='http://www-01.ibm.com/support/docview.wss?uid=swg21202407&amp;wv=1'>XPLINK version (C128) of the
       C++ standard library is standard.</a> Therefore you may see an error when running
       with XPLINK disabled. To avoid this error, set the following environment variable or similar:
       	<pre><a href='http://www-01.ibm.com/support/docview.wss?uid=swg21376279'>export _CXX_PSYSIX="CEE.SCEELIB(C128N)":"CBC.SCLBSID(IOSTREAM,COMPLEX)"</a></pre>
@@ -1235,7 +1234,7 @@ CHGJOB CCSID(37)</samp>
 
       <li>Run <tt>'QSH'</tt></li>
       
-      <li>Run: <br><tt>export PATH=/QIBM/ProdData/DeveloperTools/qsh/bin:$PATH:/QOpenSys/usr/bin</tt>
+      <li>Run: <br /><tt>export PATH=/QIBM/ProdData/DeveloperTools/qsh/bin:$PATH:/QOpenSys/usr/bin</tt>
       </li>
 
       <li>Run <b><tt>gzip -d</tt></b> on the ICU source code compressed tar archive
@@ -1272,10 +1271,10 @@ CHGJOB CCSID(37)</samp>
 				<th align="left">/icu</th><td>a copy of the ICU source</td>
 			</tr>
 			<tr>
-				<th align="left">/buildA</th><td>an empty directory, it will contain ICU built for A<br>(MacOSX in this case)</td>
+				<th align="left">/buildA</th><td>an empty directory, it will contain ICU built for A<br />(MacOSX in this case)</td>
 			</tr>
 			<tr>
-				<th align="left">/buildB</th><td>an empty directory, it will contain ICU built for B<br>(HaikuOS in this case)</td>
+				<th align="left">/buildB</th><td>an empty directory, it will contain ICU built for B<br />(HaikuOS in this case)</td>
 			</tr>
 		</table>
 		
@@ -1288,7 +1287,7 @@ gnumake
 </pre>
 		</li>
 		<li>Set PATH or other variables as needed, such as CPPFLAGS.</li>
-		<li>Build ICU in /buildB<br>
+		<li>Build ICU in /buildB<br />
 			<div class="note"><b>Note:</b> "<code>--with-cross-build</code>" takes an absolute path.</div>
 <pre class="samp">cd /buildB
 sh /icu/source/configure --host=<strong>i586-pc-haiku</strong> --with-cross-build=<strong>/buildA</strong>
