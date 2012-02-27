@@ -20,15 +20,12 @@ import com.ibm.icu.util.TimeZone;
  * 
  * A note about currency dates.  The CLDR data provides data to the day,
  * inclusive.  The date information used by CurrencyInfo and CurrencyFilter
- * is represented by milliseconds, which is overly precise.  These values
- * represent the CLDR data by using the millisecond value at the very start 
- * of a day to represent that day.  Thus you must be careful when converting
- * these values to and from actual times.  For example, if you construct
- * a time representing 12 noon GMT, and query the currencies available at that
- * time, you will not return a currency whose last day of availablilty was on
- * that day, since the time you provided is after the start of the day.
+ * is represented by milliseconds, which is overly precise.  These times are 
+ * in GMT, so queries involving dates should use GMT times, but more generally
+ * you should avoid relying on time of day in queries.
  * 
  * This class is not intended for public subclassing.
+ * 
  * @draft ICU 4.4
  * @provisional This API might change or be removed in a future release.
  */
@@ -385,7 +382,7 @@ public class CurrencyMetaInfo {
 
         /**
          * Date at which the currency stopped being officially used in the region.
-         * This is midnight at the start of the last day on which the currency was used, GMT.
+         * This is one millisecond before midnight at the end of the last day on which the currency was used, GMT.
          * If there is no date, this is Long.MAX_VALUE.
          * 
          * @draft ICU 4.4
@@ -408,7 +405,7 @@ public class CurrencyMetaInfo {
          * @param region region code
          * @param code currency code
          * @param from start date in milliseconds.  This is midnight at the start of the first day on which the currency was used, GMT.
-         * @param to end date in milliseconds.  This is midnight at the start of the last day on which the currency was used, GMT.
+         * @param to end date in milliseconds.  This is one second before midnight at the end of the last day on which the currency was used, GMT.
          * @param priority priority value, 0 is highest priority, increasing values are lower
          * @draft ICU 4.4
          * @provisional This API might change or be removed in a future release.

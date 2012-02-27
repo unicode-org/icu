@@ -207,7 +207,7 @@ public class CurrencyTest extends TestFmwk {
         }
     }
     
-    // Provide better code coverage for the CurrencyDisplayNames class
+    // A real test of the CurrencyDisplayNames class.
     public void TestCurrencyDisplayNames() {
         if (!CurrencyDisplayNames.hasData()) {
             errln("hasData() should return true.");
@@ -263,7 +263,7 @@ public class CurrencyTest extends TestFmwk {
         assertNull("no fallback from unknown locale" + ln , cdn);
     }
     
-    // Provide better code coverage for the CurrencyData class
+    // Coverage-only test of CurrencyData
     public void TestCurrencyData() {
         CurrencyData.DefaultInfo info_fallback = (CurrencyData.DefaultInfo)CurrencyData.DefaultInfo.getWithFallback(true);
         if (info_fallback == null) {
@@ -324,7 +324,7 @@ public class CurrencyTest extends TestFmwk {
         }
     }
     
-    // Add a real test of CurrencyMetaInfo, the below one looks like code to exercise coverage only.
+    // A real test of CurrencyMetaInfo.
     public void testCurrencyMetaInfoRanges() {
         CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance(true);
         assertNotNull("have metainfo", metainfo);
@@ -378,7 +378,7 @@ public class CurrencyTest extends TestFmwk {
         assertEquals("millisecond is 0", 0, cal.get(GregorianCalendar.MILLISECOND));
     }
     
-    // Provide better code coverage for the CurrencyMetaInfo class
+    // Coverage-only test of the CurrencyMetaInfo class
     public void TestCurrencyMetaInfo() {
         CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance();
         if (metainfo == null) {
