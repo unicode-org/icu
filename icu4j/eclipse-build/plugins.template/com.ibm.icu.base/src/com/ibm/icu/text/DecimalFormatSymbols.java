@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -175,6 +175,20 @@ final public class DecimalFormatSymbols implements Cloneable, Serializable {
         return dfs.getDigit();
     }
         
+    /**
+     * Returns the array of characters used as digits, in order from 0 through 9
+     * @return The array
+     * @draft ICU 4.6
+     * @provisional This API might change or be removed in a future release.
+     */
+    public char[] getDigits() {
+        char [] digitArray = new char[10];
+        for ( int i = 0 ; i < 10 ; i++ ) {
+            digitArray[i] = (char) (getZeroDigit() + i);
+        }
+        return digitArray;
+    }
+    
     /**
      * Set the character used for a digit in a pattern.
      * @param digit the digit pattern character

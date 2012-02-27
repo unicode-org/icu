@@ -226,6 +226,7 @@ icu4j/eclipse-build/plugins.template/com.ibm.icu.base/.settings/org.eclipse.jdt.
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/META-INF/MANIFEST.MF -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/build.properties -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/plugin.properties -text
+icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/MessagePattern.java -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/plugin.properties -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu/META-INF/MANIFEST.MF -text
