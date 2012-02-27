@@ -343,7 +343,7 @@ ucurr_getKeywordValuesForLocale(const char* key,
                                 UBool commonlyUsed,
                                 UErrorCode* status);
 
-
+#ifndef U_HIDE_DRAFT_API
 /**
  * Returns the ISO 4217 numeric code for the currency.
  * <p>Note: If the ISO 4217 numeric code is not assigned for the currency or
@@ -355,6 +355,7 @@ ucurr_getKeywordValuesForLocale(const char* key,
  */
 U_DRAFT int32_t U_EXPORT2
 ucurr_getNumericCode(const UChar* currency);
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
