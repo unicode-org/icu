@@ -822,6 +822,7 @@ public:
      */
     UBool isLenient(void) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Sets the behavior for handling wall time repeating multiple times
      * at negative time zone offset transitions. For example, 1:30 AM on
@@ -889,6 +890,7 @@ public:
      * @draft ICU 49
      */
     UCalendarWallTimeOption getSkippedWallTimeOption(void) const;
+#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
