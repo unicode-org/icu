@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2012, Google, International Business Machines Corporation and    *
+ * Copyright (C) 2012-2012, Google, International Business Machines Corporation and
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -131,8 +131,14 @@ final public class ListFormat implements Transform<Collection<String>, String> {
     }
 
     private String format2(String pattern, Object a, Object b) {
-        // TODO: make slightly faster by using single pass.
-        return pattern.replace("{0}", a.toString()).replace("{1}", b.toString());
+        int i0 = pattern.indexOf("{0}");
+        int i1 = pattern.indexOf("{1}");
+        if (i0 < 0 || i1 < 0) {
+            throw new IllegalArgumentException("Missing {0} or {1} in pattern " + pattern);
+        }
+        return i0 < i1
+            ? pattern.substring(0, i0) + a + pattern.substring(i0+3, i1) + b + pattern.substring(i1+3)
+            : pattern.substring(0, i1) + a + pattern.substring(i1+3, i0) + b + pattern.substring(i0+3);
     }
 
     /**
