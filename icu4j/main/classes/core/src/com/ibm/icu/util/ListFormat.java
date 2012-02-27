@@ -14,7 +14,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.text.Transform;
-import com.ibm.icu.util.ULocale;
 
 /**
  * Immutable class for formatting a list, using data from CLDR (or supplied

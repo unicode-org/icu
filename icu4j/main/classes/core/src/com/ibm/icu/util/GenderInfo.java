@@ -13,8 +13,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import com.ibm.icu.util.ULocale;
-
 /**
  * Provide information about gender in locales based on data in CLDR. Currently supplies gender of lists.
  * @author markdavis

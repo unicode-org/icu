@@ -7,10 +7,8 @@ package com.ibm.icu.text;
 
 import java.io.InvalidObjectException;
 import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.util.Locale;
 
-import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
 import com.ibm.icu.util.TimeZone;
