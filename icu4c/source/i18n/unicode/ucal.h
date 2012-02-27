@@ -861,7 +861,9 @@ enum UCalendarAttribute {
    * Minimum number of days in first week
    * @stable ICU 2.0
    */
-  UCAL_MINIMAL_DAYS_IN_FIRST_WEEK,
+  UCAL_MINIMAL_DAYS_IN_FIRST_WEEK
+#ifndef U_HIDE_DRAFT_API
+  ,
   /**
    * The behavior for handling wall time repeating multiple times
    * at negative time zone offset transitions
@@ -874,6 +876,7 @@ enum UCalendarAttribute {
    * @draft ICU 49
    */
   UCAL_SKIPPED_WALL_TIME
+#endif  /* U_HIDE_DRAFT_API */
 };
 
 /** @stable ICU 2.0 */
@@ -891,7 +894,9 @@ enum UCalendarWallTimeOption {
      * UCAL_SKIPPED_WALL_TIME.
      * @draft ICU 49
      */
-    UCAL_WALLTIME_LAST,
+    UCAL_WALLTIME_LAST
+#ifndef U_HIDE_DRAFT_API
+    ,
     /**
      * An ambiguous wall time to be interpreted as the earliest.
      * This option is valid for UCAL_REPEATED_WALL_TIME and
@@ -905,6 +910,7 @@ enum UCalendarWallTimeOption {
      * @draft ICU 49
      */
     UCAL_WALLTIME_NEXT_VALID
+#endif  /* U_HIDE_DRAFT_API */
 };
 /** @draft ICU 49 */
 typedef enum UCalendarWallTimeOption UCalendarWallTimeOption;
