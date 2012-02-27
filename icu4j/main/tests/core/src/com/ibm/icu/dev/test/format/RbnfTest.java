@@ -1281,23 +1281,22 @@ public class RbnfTest extends TestFmwk {
     
     public void TestSetDecimalFormatSymbols() {
         RuleBasedNumberFormat rbnf = new RuleBasedNumberFormat(Locale.ENGLISH, RuleBasedNumberFormat.ORDINAL);
-        
+
         DecimalFormatSymbols dfs = new DecimalFormatSymbols(Locale.ENGLISH);
-        
+
         double number = 1001;
-        
-        char newSeparator = '&';
+
         String[] expected = { "1,001st", "1&001st" };
-        
+
         String result = rbnf.format(number);
         if (!result.equals(expected[0])) {
             errln("Format Error - Got: " + result + " Expected: " + expected[0]);
         }
-        
+
         /* Set new symbol for testing */
         dfs.setGroupingSeparator('&');
         rbnf.setDecimalFormatSymbols(dfs);
-        
+
         result = rbnf.format(number);
         if (!result.equals(expected[1])) {
             errln("Format Error - Got: " + result + " Expected: " + expected[1]);
