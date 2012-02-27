@@ -1,7 +1,7 @@
 /*
  * @(#)TimeZone.java    1.51 00/01/19
  *
- * Copyright (C) 1996-2011, International Business Machines
+ * Copyright (C) 1996-2012, International Business Machines
  * Corporation and others.  All Rights Reserved.
  */
 
@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.Set;
 
 import com.ibm.icu.util.ULocale.Category;
 
@@ -224,6 +225,37 @@ public class TimeZone implements Serializable, Cloneable {
      * @return the offset to add *to* GMT to get local time.
      * @stable ICU 2.0
      */
+    
+    /**
+     * {@icu} System time zone type constants used by filtering zones in
+     * {@link TimeZone#getAvailableIDs(SystemTimeZoneType, String, Integer)}
+     *
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum SystemTimeZoneType {
+        /**
+         * Any system zones.
+         * @draft ICU 4.8
+         * @provisional This API might change or be removed in a future release.
+         */
+        ANY,
+
+        /**
+         * Canonical system zones.
+         * @draft ICU 4.8
+         * @provisional This API might change or be removed in a future release.
+         */
+        CANONICAL,
+
+        /**
+         * Canonical system zones associated with actual locations.
+         * @draft ICU 4.8
+         * @provisional This API might change or be removed in a future release.
+         */
+        CANONICAL_LOCATION,
+    }
+    
     public int getOffset(int era, int year, int month, int day,
                                   int dayOfWeek, int milliseconds) {
         return timeZone.getOffset(era, year, month, day, dayOfWeek, milliseconds);
@@ -517,6 +549,26 @@ public class TimeZone implements Serializable, Cloneable {
         return TIMEZONE_JDK;
     }
 
+    /** 
+     * {@icu} Returns a set of time zone ID strings with the given filter conditions. 
+     * <p><b>Note:</b>A <code>Set</code> returned by this method is
+     * immutable.
+     * @param zoneType      The system time zone type.
+     * @param region        The ISO 3166 two-letter country code or UN M.49 three-digit area code. 
+     *                      When null, no filtering done by region. 
+     * @param rawOffset     An offset from GMT in milliseconds, ignoring the effect of daylight savings 
+     *                      time, if any. When null, no filtering done by zone offset. 
+     * @return an immutable set of system time zone IDs.
+     * @see SystemTimeZoneType
+     * 
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
+     */ 
+    public static Set<String> getAvailableIDs(SystemTimeZoneType zoneType,
+            String region, Integer rawOffset) {
+    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+    }
+    
     /**
      * Return a new String array containing all system TimeZone IDs
      * with the given raw offset from GMT.  These IDs may be passed to
@@ -706,6 +758,26 @@ public class TimeZone implements Serializable, Cloneable {
      */
     public static String getCanonicalID(String id, boolean[] isSystemID) {
         throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
+    }
+
+    /** 
+     * {@icu} Returns the region code associated with the given 
+     * system time zone ID. The region code is either ISO 3166 
+     * 2-letter country code or UN M.49 3-digit area code. 
+     * When the time zone is not associated with a specific location, 
+     * for example - "Etc/UTC", "EST5EDT", then this method returns 
+     * "001" (UN M.49 area code for World). 
+     * @param id the system time zone ID. 
+     * @return the region code associated with the given 
+     * system time zone ID. 
+     * @throws IllegalArgumentException if <code>id</code> is not a known system ID. 
+     * @see #getAvailableIDs(String) 
+     * 
+     * @draft ICU 4.8
+     * @provisional This API might change or be removed in a future release.
+     */ 
+    public static String getRegion(String id) {
+    	throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
     }
 }
 

@@ -2948,6 +2948,7 @@ icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/DateF
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/DecimalFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/DecimalFormatSymbols.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/MessageFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/MessagePattern.java -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/NumberFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/RawCollationKey.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/SimpleDateFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
