@@ -179,7 +179,7 @@ public class CompactDecimalFormat extends DecimalFormat {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
@@ -189,7 +189,7 @@ public class CompactDecimalFormat extends DecimalFormat {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
@@ -199,7 +199,7 @@ public class CompactDecimalFormat extends DecimalFormat {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
@@ -209,7 +209,7 @@ public class CompactDecimalFormat extends DecimalFormat {
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
