@@ -10093,7 +10093,7 @@ supplementalData:table(nofallback){
             86400000,
         }
         IE:intvector{
-            2,
+            1,
             4,
             7,
             0,

@@ -57,5 +57,5 @@ vai_Latn{
         zh{"Chaniĩ"}
         zu{"Zúlu"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.66.14"}
 }
