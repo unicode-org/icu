@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (C) 2005-2010, International Business Machines Corporation and *
+ * Copyright (C) 2005-2012, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ************************************************************************** *
  *
@@ -1178,9 +1178,12 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
         protected void matchInit(CharsetDetector det) 
         {
-            prev_fInputBytes = det.fInputBytes.clone();
-            byte bb[] = unshape(det.fInputBytes);
-            det.setText(bb);
+            assert prev_fInputBytes == null;
+            prev_fInputBytes = new byte[det.fInputLen];
+            System.arraycopy(det.fInputBytes, 0, prev_fInputBytes, 0, det.fInputLen);
+            byte bb[] = unshape(prev_fInputBytes);
+            System.arraycopy(bb, 0, det.fInputBytes, 0, bb.length);
+            det.fInputLen = bb.length;
         }
         
         /*
@@ -1225,8 +1228,11 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
         
         protected void matchFinish(CharsetDetector det) {
-            if (prev_fInputBytes != null)
-                det.setText(prev_fInputBytes);
+            if (prev_fInputBytes != null) {
+                System.arraycopy(prev_fInputBytes, 0, det.fInputBytes, 0, prev_fInputBytes.length);
+                det.fInputLen = prev_fInputBytes.length;
+                prev_fInputBytes = null;
+            }
         }
         
     }
