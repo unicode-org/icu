@@ -2446,7 +2446,7 @@ void SSearchTest::bmMonkeyTest(char *params)
             generateTestCase(coll, monkeys, monkeyCount, prefix,  altPrefix);
             generateTestCase(coll, monkeys, monkeyCount, suffix,  altSuffix);
             
-            if (!isICUVersionAtLeast(49, 1) && skipSet->containsSome(pattern)) {
+            if (!isICUVersionAtLeast(50, 0) && skipSet->containsSome(pattern)) {
                 continue; // timebomb until ticket #8080 is resolved
             }
 
