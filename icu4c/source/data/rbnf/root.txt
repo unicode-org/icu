@@ -10,6 +10,11 @@
  *  ICU <specials> source: <path>/xml/rbnf/root.xml
  */
 root{
+    MeasurementSystem:int{0}
+    PaperSize:intvector{
+        297,
+        210,
+    }
     RBNFRules{
         DurationRules{
             "%duration:",
