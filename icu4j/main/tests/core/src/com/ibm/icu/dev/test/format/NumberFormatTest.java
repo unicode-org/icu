@@ -1950,18 +1950,18 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     StringBuffer saw2 = new StringBuffer();
                     fmt.format(n2, saw2, pos);
                     if (!saw2.toString().equals(exp)) {
-                        errln("FAIL \"" + exp + "\" => " + n2 +
-                              " => \"" + saw2 + '"');
+                        errln("expect() format test rt, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
+                              ", FAIL \"" + exp + "\" => " + n2 + " => \"" + saw2 + '"');
                     }
                 } catch (ParseException e) {
-                    errln(e.getMessage());
+                    errln("expect() format test rt, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
+                          ", " + e.getMessage());
                     return;
                 }
             }
         } else {
-            errln("FAIL " + n + " x " +
-                  pat + " = \"" +
-                  saw + "\", expected \"" + exp + "\"");
+            errln("expect() format test, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
+                  ", FAIL " + n + " x " + pat + " = \"" + saw + "\", expected \"" + exp + "\"");
         }
     }
     // Format test
@@ -1981,17 +1981,18 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                     StringBuffer saw2 = new StringBuffer();
                     fmt.format(n2, saw2, pos);
                     if (!saw2.toString().equals(exp)) {
-                        errln("FAIL \"" + exp + "\" => " + n2 +
-                              " => \"" + saw2 + '"');
+                        errln("expect_rbnf() format test rt, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
+                              ", FAIL \"" + exp + "\" => " + n2 + " => \"" + saw2 + '"');
                     }
                 } catch (ParseException e) {
-                    errln(e.getMessage());
+                    errln("expect_rbnf() format test rt, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
+                          ", " + e.getMessage());
                     return;
                 }
             }
         } else {
-            errln("FAIL " + n + " = \"" +
-                  saw + "\", expected \"" + exp + "\"");
+            errln("expect_rbnf() format test, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
+                  ", FAIL " + n + " = \"" + saw + "\", expected \"" + exp + "\"");
         }
     }
 
@@ -2027,9 +2028,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                   pat + " = " +
                   num);
         } else {
-            errln("FAIL \"" + str + "\" x " +
-                  pat + " = " +
-                  num + ", expected " + n);
+            errln("expect() parse test, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
+                  ", FAIL \"" + str + "\" x " + pat + " = " + num + ", expected " + n);
         }
     }
 
@@ -2048,8 +2048,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             logln("Ok   \"" + str + " = " +
                   num);
         } else {
-            errln("FAIL \"" + str + " = " +
-                  num + ", expected " + n);
+            errln("expect_rbnf() parse test, locale " + fmt.getLocale(ULocale.VALID_LOCALE) +
+                  ", FAIL \"" + str + " = " + num + ", expected " + n);
         }
     }
 
