@@ -88,7 +88,7 @@ zh_Hant{
         native{"hanidec"}
         traditional{"hant"}
     }
-    Version{"2.0.65.81"}
+    Version{"2.0.66.10"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -137,6 +137,8 @@ zh_Hant{
                 yyMM{"Gyy/MM"}
                 yyMMM{"Gyy年M月"}
                 yyQ{"Gyy年第Q季度"}
+                yyyy{"Gy年"}
+                yyyyMMM{"Gy年M月"}
             }
             eras{
                 abbreviated{
@@ -624,6 +626,7 @@ zh_Hant{
                 yyQ{"yy年第Q季度"}
                 yyyy{"y年"}
                 yyyyM{"y年M月"}
+                yyyyMMMM{"y年M月"}
             }
             dayNames{
                 format{
@@ -1053,6 +1056,7 @@ zh_Hant{
             }
             availableFormats{
                 Ed{"d日（E）"}
+                Gy{"Gy年"}
                 H{"H時"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -1069,9 +1073,17 @@ zh_Hant{
                 hm{"ah:mm"}
                 hms{"ah:mm:ss"}
                 ms{"mm:ss"}
+                y{"Gy年"}
+                yM{"Gy/M"}
+                yMEd{"Gy/M/d（E）"}
+                yMMM{"Gy年M月"}
+                yMMMEd{"Gy年M月d日E"}
+                yMMMd{"Gy年M月d日"}
+                yMd{"Gy/M/d"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy/M"}
                 yyyyMMM{"Gy年M月"}
+                yyyyMMMEd{"Gy年M月d日E"}
                 yyyyMMMd{"Gy年M月d日"}
                 yyyyMd{"Gy/M/d"}
                 yyyyQ{"Gy年QQQ"}
@@ -1135,6 +1147,7 @@ zh_Hant{
                 MEd{"M/d（E）"}
                 MMM{"LLL"}
                 MMMEd{"M月d日E"}
+                MMMd{"M月d日"}
                 Md{"M/d"}
                 d{"d日"}
                 h{"ah時"}

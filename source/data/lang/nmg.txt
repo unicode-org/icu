@@ -38,7 +38,6 @@ nmg{
         my{"Kiɛl birmania"}
         ne{"Kiɛl nepal"}
         nl{"Kiɛl bóllandais"}
-        nmg{""}
         pa{"Kiɛl pɛndjabi"}
         pl{"Kiɛl pɔlɔŋe"}
         pt{"Kiɛl bó pɔ̄rtugɛ̂"}
@@ -57,5 +56,5 @@ nmg{
         zh{"Kiɛl bó chinois"}
         zu{"Zulu"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.66.10"}
 }

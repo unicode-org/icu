@@ -10,6 +10,10 @@
  *  ICU <specials> source: <path>/xml/collation/fr_CA.xml
  */
 fr_CA{
+    PaperSize:intvector{
+        279,
+        216,
+    }
     Version{"2.0.58.51"}
     collations{
         standard{

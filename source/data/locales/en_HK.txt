@@ -15,7 +15,7 @@ en_HK{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.66.10"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -35,10 +35,11 @@ en_HK{
             }
             availableFormats{
                 MMMMEd{"E d MMMM"}
-                yMEd{"E, d/M/y"}
-                yMMMEd{"E, d MMM, y"}
-                yMMMd{"d MMM, y"}
-                yMd{"d/M/y"}
+                yM{"M/y GGGGG"}
+                yMEd{"E, d/M/y GGGGG"}
+                yMMMEd{"E, d MMM, y G"}
+                yMMMd{"d MMM, y G"}
+                yMd{"d/M/y GGGGG"}
             }
         }
         gregorian{

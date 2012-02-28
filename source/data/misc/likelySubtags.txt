@@ -64,6 +64,7 @@ likelySubtags:table(nofallback){
     efi{"efi_Latn_NG"}
     el{"el_Grek_GR"}
     en{"en_Latn_US"}
+    eo{"eo_Latn_001"}
     es{"es_Latn_ES"}
     et{"et_Latn_EE"}
     eu{"eu_Latn_ES"}
@@ -98,6 +99,7 @@ likelySubtags:table(nofallback){
     ht{"ht_Latn_HT"}
     hu{"hu_Latn_HU"}
     hy{"hy_Armn_AM"}
+    ia{"ia_Latn_001"}
     id{"id_Latn_ID"}
     ig{"ig_Latn_NG"}
     ii{"ii_Yiii_CN"}

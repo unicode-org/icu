@@ -10,8 +10,13 @@
  *  ICU <specials> source: <path>/xml/collation/root.xml
  */
 root{
+    MeasurementSystem:int{0}
+    PaperSize:intvector{
+        297,
+        210,
+    }
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"2.0.63.75"}
+    Version{"2.0.66.10"}
     collations{
         default{"standard"}
         ducet{
