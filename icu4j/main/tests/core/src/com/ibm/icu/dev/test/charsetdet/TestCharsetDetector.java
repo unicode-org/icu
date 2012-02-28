@@ -723,6 +723,9 @@ public class TestCharsetDetector extends TestFmwk
           detector.setText(data2);
           CharsetMatch match2 = detector.detect();
           assertEquals("Expected ISO-8859-1, even though that isn't strictly correct", "ISO-8859-1", match2.getName());
+          // calling detect() one more time without changing the input data
+          CharsetMatch match2a = detector.detect();
+          assertEquals("[second]Expected ISO-8859-1, even though that isn't strictly correct", "ISO-8859-1", match2a.getName());
       }
   
       private static byte[] createData1()
@@ -1019,8 +1022,8 @@ public class TestCharsetDetector extends TestFmwk
       private static byte[] createData2()
       {
           return bytesFromString("0A D0 A1 CA B1 20 3B 3B 20 48 6F 75 72 28 73 29 0A D0 C7 C6 DA 20 3B 3B 20 57 " +
-          		                 "65 65 6B 28 73 29 0A B5 B1 B5 D8 20 CA B1 BC E4 20 3B 3B 20 6C 6F 63 61 6C 20 " +
-          		                 "74 69 6D 65 0A");
+                                 "65 65 6B 28 73 29 0A B5 B1 B5 D8 20 CA B1 BC E4 20 3B 3B 20 6C 6F 63 61 6C 20 " +
+                                 "74 69 6D 65 0A");
       }
   
   
