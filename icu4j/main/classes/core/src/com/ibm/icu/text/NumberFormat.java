@@ -716,15 +716,20 @@ public abstract class NumberFormat extends UFormat {
 
     /**
      * Style parameter for CompactDecimalFormat.
-     * @internal
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public enum CompactStyle {
         /**
          * Short version, like "1.2T"
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         SHORT, 
         /**
          * Longer version, like "1.2 trillion", if available. May return same result as SHORT if not.
+         * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         LONG
     }

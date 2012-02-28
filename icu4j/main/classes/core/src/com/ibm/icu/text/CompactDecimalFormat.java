@@ -164,6 +164,11 @@ public class CompactDecimalFormat extends DecimalFormat {
         this.currencyAffixes = currencyAffixes.clone();
     }
 
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
     @Override
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
         if (number < 0.0d) {
