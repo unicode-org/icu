@@ -2732,7 +2732,7 @@ icu4c/source/test/perf/collperf/collperf.vcxproj -text
 icu4c/source/test/perf/collperf/collperf.vcxproj.filters -text
 icu4c/source/test/perf/convperf/convperf.vcxproj -text
 icu4c/source/test/perf/convperf/convperf.vcxproj.filters -text
-icu4c/source/test/perf/howExpensiveIs/Makefile.in -text
+icu4c/source/test/perf/howExpensiveIs/readme.txt svneol=native#text/plain
 icu4c/source/test/perf/icuperf2report.xsl -text
 icu4c/source/test/perf/normperf/normperf.vcxproj -text
 icu4c/source/test/perf/normperf/normperf.vcxproj.filters -text
