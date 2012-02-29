@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -60,9 +60,15 @@ public class CurrencyNameTest extends TestFmwk {
                     continue;
                 }
 
+                // Note: Short term workaround for Java locale with script.
+                //       Java Locale with non-empty script cannot have variant "ICU"
+                //       because it's not well-formed as BCP 47. Because we cannot
+                //       build such Locale, we skip the check below for now.
+                boolean ignoreErrorForNow = TestUtil.hasScript(loc);
+
                 if (TestUtil.isICUExtendedLocale(loc)) {
                     if (!curSymbol.equals(curSymbolIcu)) {
-                        if (!curSymbol.equals(curSymbolIcu)) {
+                        if (!curSymbol.equals(curSymbolIcu) && !ignoreErrorForNow) {
                             errln("FAIL: Currency symbol for " + currencyCode + " by ICU is " + curSymbolIcu
                                     + ", but got " + curSymbol + " in locale " + loc);
                         }
@@ -75,7 +81,7 @@ public class CurrencyNameTest extends TestFmwk {
                     // Try explicit ICU locale (xx_yy_ICU)
                     Locale locIcu = TestUtil.toICUExtendedLocale(loc);
                     curSymbol = currency.getSymbol(locIcu);
-                    if (!curSymbol.equals(curSymbolIcu)) {
+                    if (!curSymbol.equals(curSymbolIcu) && !ignoreErrorForNow) {
                         errln("FAIL: Currency symbol for " + currencyCode + " by ICU is " + curSymbolIcu
                                 + ", but got " + curSymbol + " in locale " + locIcu);
                     }

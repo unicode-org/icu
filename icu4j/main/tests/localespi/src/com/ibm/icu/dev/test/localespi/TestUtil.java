@@ -1,12 +1,14 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.localespi;
 
 import java.util.Locale;
+
+import com.ibm.icu.util.ULocale;
 
 public class TestUtil {
 
@@ -98,5 +100,15 @@ public class TestUtil {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Check if the given Locale has script field (Java 7+)
+     * @param locale the locale
+     * @return true if the given Locale has non-empty script
+     */
+    public static boolean hasScript(Locale locale) {
+        ULocale uloc = ULocale.forLocale(locale);
+        return uloc.getScript().length() > 0;
     }
 }
