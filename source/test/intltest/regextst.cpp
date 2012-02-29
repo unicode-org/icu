@@ -573,9 +573,9 @@ void RegexTest::Basic() {
         UParseError pe;
         UErrorCode  status = U_ZERO_ERROR;
         RegexPattern *pattern;
-        pattern = RegexPattern::compile("aßx", UREGEX_CASE_INSENSITIVE, pe, status);
+        pattern = RegexPattern::compile(UNICODE_STRING_SIMPLE("a\\u00dfx").unescape(), UREGEX_CASE_INSENSITIVE, pe, status);
         RegexPatternDump(pattern);
-        RegexMatcher *m = pattern->matcher("aßxzzz", status);
+        RegexMatcher *m = pattern->matcher(UNICODE_STRING_SIMPLE("a\\u00dfxzzz").unescape(), status);
         UBool result = m->find();
         printf("result = %d\n", result);
         // REGEX_FIND("", "<0>ab<1>cc</1><2>ccc</2></0>ddd");
