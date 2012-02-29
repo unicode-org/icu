@@ -225,7 +225,6 @@ icu4j/eclipse-build/plugins.template/com.ibm.icu.base/.settings/org.eclipse.jdt.
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/META-INF/MANIFEST.MF -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/build.properties -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/plugin.properties -text
-icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/text/MessagePattern.java -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/plugin.properties -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu/META-INF/MANIFEST.MF -text
@@ -245,11 +244,6 @@ icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
-icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalFormat.java -text
-icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalFormatData.java -text
-icu4j/main/classes/core/src/com/ibm/icu/util/GenderInfo.java -text
-icu4j/main/classes/core/src/com/ibm/icu/util/ListFormat.java -text
-icu4j/main/classes/core/src/com/ibm/icu/util/ListFormatData.java -text
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
 icu4j/main/classes/currdata/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
@@ -309,7 +303,6 @@ icu4j/main/tests/core/manifest.stub -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/testmessages.properties -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/CompactDecimalFormatTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.OlsonTimeZone.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.impl.TimeZoneAdapter.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_3.6/com.ibm.icu.math.BigDecimal.dat -text
@@ -680,8 +673,6 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.8/com.ibm
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.8/com.ibm.icu.util.ULocale.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.8/com.ibm.icu.util.UResourceTypeMismatchException.dat -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/serializable/data/ICU_4.8/com.ibm.icu.util.VTimeZone.dat -text
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/GenderInfoTest.java -text
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/ListFormatTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.16.tri2 -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges1.32.tri2 -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.setRanges2.16.tri2 -text
