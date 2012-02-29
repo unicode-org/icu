@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -22,6 +22,15 @@ public class CurrencyNameProviderICU extends CurrencyNameProvider {
             return null;
         }
         return sym;
+    }
+
+    public String getDisplayName(String currencyCode, Locale locale) {
+        Currency cur = Currency.getInstance(currencyCode);
+        String name = cur.getDisplayName(locale);
+        if (name.length() == 0 || name.equals(currencyCode)) {
+            return null;
+        }
+        return name;
     }
 
     @Override
