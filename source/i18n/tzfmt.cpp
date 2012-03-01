@@ -290,6 +290,8 @@ TimeZoneFormat::TimeZoneFormat(const Locale& locale, UErrorCode& status)
         if (len > 0) {
             hourFormats = resStr;
         }
+        ures_close(zoneStringsArray);
+        ures_close(zoneBundle);
     }
 
     if (gmtPattern == NULL) {
