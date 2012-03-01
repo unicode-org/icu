@@ -3341,7 +3341,9 @@ SimpleDateFormat::tzFormat() const {
             if (fTimeZoneFormat == NULL) {
                 UErrorCode status = U_ZERO_ERROR;
                 TimeZoneFormat *tzfmt = TimeZoneFormat::createInstance(fLocale, status);
-                U_ASSERT(U_SUCCESS(status));
+                if (U_FAILURE(status)) {
+                    return NULL;
+                }
 
                 const_cast<SimpleDateFormat *>(this)->fTimeZoneFormat = tzfmt;
             }

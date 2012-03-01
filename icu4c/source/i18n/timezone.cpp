@@ -1246,6 +1246,10 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
 
     if (style == GENERIC_LOCATION || style == LONG_GENERIC || style == SHORT_GENERIC) {
         LocalPointer<TimeZoneFormat> tzfmt(TimeZoneFormat::createInstance(locale, status));
+        if (U_FAILURE(status)) {
+            result.remove();
+            return result;
+        }
         // Generic format
         switch (style) {
         case GENERIC_LOCATION:
@@ -1269,6 +1273,10 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
         }
     } else if (style == LONG_GMT || style == SHORT_GMT) {
         LocalPointer<TimeZoneFormat> tzfmt(TimeZoneFormat::createInstance(locale, status));
+        if (U_FAILURE(status)) {
+            result.remove();
+            return result;
+        }
         offset = daylight && useDaylightTime() ? getRawOffset() + getDSTSavings() : getRawOffset();
         switch (style) {
         case LONG_GMT:
@@ -1296,6 +1304,10 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
             U_ASSERT(FALSE);
         }
         LocalPointer<TimeZoneNames> tznames(TimeZoneNames::createInstance(locale, status));
+        if (U_FAILURE(status)) {
+            result.remove();
+            return result;
+        }
         UnicodeString canonicalID(ZoneMeta::getCanonicalCLDRID(*this));
         tznames->getDisplayName(canonicalID, nameType, date, result);
         if (result.isEmpty()) {
