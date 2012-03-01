@@ -374,6 +374,7 @@ public abstract class DateFormat extends UFormat {
      * corresponding to the {@link Calendar#YEAR} field.
      * This displays the cyclic year name, if available.
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public final static int YEAR_NAME_FIELD = 30;
 

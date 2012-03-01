@@ -6,7 +6,7 @@
  */
 package com.ibm.icu.util;
 
-public class ListFormatData {
+class ListFormatData {
     static void load() {
         ListFormat.add("af", "{0} en {1}", "{0}, {1}", "{0}, {1}", "{0} en {1}");
         ListFormat.add("am", "{0} እና {1}", "{0}, {1}", "{0}, {1}", "{0}, እና {1}");

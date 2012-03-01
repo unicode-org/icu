@@ -1,6 +1,6 @@
 /*
  **************************************************************************************
- * Copyright (C) 2009-2011, Google, Inc.; International Business Machines Corporation *
+ * Copyright (C) 2009-2012, Google, Inc.; International Business Machines Corporation *
  * and others. All Rights Reserved.                                                   *
  **************************************************************************************
  */
@@ -58,6 +58,7 @@ public final class LocaleData {
     /**
      * EXType for {@link #getExemplarSet(int, int)}.
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
      public static final int ES_PUNCTUATION = 4;
 

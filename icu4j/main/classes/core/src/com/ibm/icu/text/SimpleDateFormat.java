@@ -381,20 +381,25 @@ public class SimpleDateFormat extends DateFormat {
      */
     private ContextValue defaultCapitalizationContext;
 
-    /** Date format context types
-     *  @draft ICU 49
+    /**
+     * Date format context types
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public enum ContextType {
         /**
          * Type (key) for specifying the capitalization context for which a date
          * is to be formatted (possible values are in ContextValue).
          * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         CAPITALIZATION
     }
     
-    /** Values for date format context types
-     *  @draft ICU 49
+    /**
+     * Values for date format context types
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public enum ContextValue {
         /** Values for any ContextType (key) */
@@ -404,6 +409,7 @@ public class SimpleDateFormat extends DateFormat {
          * default value for any ContextType when no value has been
          * explicitly specified for that ContextType).
          * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         UNKNOWN,
         /** Values for context type (key) CAPITALIZATION */
@@ -411,18 +417,21 @@ public class SimpleDateFormat extends DateFormat {
          * CAPITALIZATION value if a date (or date symbol) is to be formatted
          * with capitalization appropriate for the middle of a sentence.
          * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
         /**
          * CAPITALIZATION value if a date (or date symbol) is to be formatted
          * with capitalization appropriate for the beginning of a sentence.
          * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE,
         /**
          * CAPITALIZATION value if a date (or date symbol) is to be formatted
          * with capitalization appropriate for a user-interface list or menu item.
          * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         CAPITALIZATION_FOR_UI_LIST_OR_MENU,
         /**
@@ -430,6 +439,7 @@ public class SimpleDateFormat extends DateFormat {
          * with capitalization appropriate for stand-alone usage such as an
          * isolated name on a calendar page.
          * @draft ICU 49
+         * @provisional This API might change or be removed in a future release.
          */
         CAPITALIZATION_FOR_STANDALONE
     }
@@ -1949,6 +1959,7 @@ public class SimpleDateFormat extends DateFormat {
      * sets the <code>cal</code> field <code>field</code> to the index
      * of the best match, if matching succeeded.
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     protected int matchString(String text, int start, int field, String[] data, String monthPattern, Calendar cal)
     {
@@ -2095,6 +2106,7 @@ public class SimpleDateFormat extends DateFormat {
      * set the appropriate field of <code>cal</code> with the parsed
      * value.
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     protected int subParse(String text, int start, char ch, int count,
                            boolean obeyCount, boolean allowNegative,
