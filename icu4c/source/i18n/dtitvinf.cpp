@@ -221,7 +221,6 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
   }
   const char *locName = locale.getName();
   char parentLocale[ULOC_FULLNAME_CAPACITY];
-  int32_t locNameLen;
   uprv_strcpy(parentLocale, locName);
   UErrorCode status = U_ZERO_ERROR;
   Hashtable skeletonSet(FALSE, status);
@@ -335,19 +334,20 @@ DateIntervalInfo::initializeData(const Locale& locale, UErrorCode& err)
     // Find the name of the appropriate parent locale (from %%Parent if present, else
     // uloc_getParent on the actual locale name)
     // (It would be nice to have a ures function that did this...)
+    int32_t locNameLen;
     const UChar * parentUName = ures_getStringByKey(rb, "%%Parent", &locNameLen, &status);
-    if (U_SUCCESS(status) && status != U_USING_FALLBACK_WARNING) {
-        u_austrncpy(parentLocale, parentUName, ULOC_FULLNAME_CAPACITY); // Should work on EBCDIC too?
+    if (U_SUCCESS(status) && status != U_USING_FALLBACK_WARNING && locNameLen < ULOC_FULLNAME_CAPACITY) {
+        u_UCharsToChars(parentUName, parentLocale, locNameLen + 1);
     } else {
         status = U_ZERO_ERROR;
-		// Get the actual name of the current locale being used
-		const char *curLocaleName=ures_getLocaleByType(rb, ULOC_ACTUAL_LOCALE, &status);
-		if ( U_FAILURE(status) ) {
-			curLocaleName = parentLocale;
-			status = U_ZERO_ERROR;
-		}
-        locNameLen = uloc_getParent(curLocaleName, parentLocale, ULOC_FULLNAME_CAPACITY, &status);
+        // Get the actual name of the current locale being used
+        const char *curLocaleName=ures_getLocaleByType(rb, ULOC_ACTUAL_LOCALE, &status);
         if ( U_FAILURE(status) ) {
+            curLocaleName = parentLocale;
+            status = U_ZERO_ERROR;
+        }
+        uloc_getParent(curLocaleName, parentLocale, ULOC_FULLNAME_CAPACITY, &status);
+        if (U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
             parentLocale[0] = 0; // just fallback to root, will cause us to stop
             status = U_ZERO_ERROR;
         }
