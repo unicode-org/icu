@@ -1,4 +1,4 @@
-# Copyright (C) 2011, International Business Machines
+# Copyright (C) 2011-2012, International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 # file name: dependencies.txt
@@ -11,7 +11,7 @@
 system_symbols:
   deps
     # C
-    PIC system_debug errno_perror malloc_functions c_strings c_string_formatting
+    PIC system_debug malloc_functions c_strings c_string_formatting
     floating_point trigonometry
     stdlib_qsort
     pthread system_locale
@@ -25,9 +25,6 @@ group: PIC
 
 group: system_debug
     __assert_fail __stack_chk_fail
-
-group: errno_perror
-    perror  # putil.cpp uprv_dl_open() calls perror("dlopen")
 
 group: malloc_functions
     free malloc realloc
@@ -449,7 +446,7 @@ group: ustring_case
 group: ucase
     ucase.o
   deps
-    utrie2
+    unistr_core utrie2
 
 group: uinit
     uinit.o
@@ -729,7 +726,7 @@ group: platform
     PIC system_debug malloc_functions c_strings c_string_formatting
     floating_point pthread system_locale
     stdio_input readlink_function dir_io
-    errno_perror dlfcn  # Move related code into icuplug.c?
+    dlfcn  # Move related code into icuplug.c?
     cplusplus
 
 # ICU i18n library ----------------------------------------------------------- #
@@ -843,7 +840,7 @@ group: regex_cnv
     regex unistr_cnv
 
 group: regex
-    regexcmp.o regexst.o regextxt.o rematch.o repattrn.o uregex.o
+    regexcmp.o regexst.o regextxt.o regeximp.o rematch.o repattrn.o uregex.o
   deps
     uniset_closure utext uvector32 uvector64 ustack
     breakiterator
