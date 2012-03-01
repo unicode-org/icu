@@ -597,7 +597,7 @@ ucol_getShortDefinitionString(const UCollator *coll,
 {
     if(U_FAILURE(*status)) return 0;
     if(coll->delegate != NULL) {
-      return ((Collator*)coll->delegate)->internalGetShortDefinitionString(locale,dst,capacity,*status);
+      return ((icu::Collator*)coll->delegate)->internalGetShortDefinitionString(locale,dst,capacity,*status);
     }
     char buffer[internalBufferSize];
     uprv_memset(buffer, 0, internalBufferSize*sizeof(char));
