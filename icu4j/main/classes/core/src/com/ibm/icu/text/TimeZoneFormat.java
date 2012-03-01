@@ -916,6 +916,22 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         return parseOffsetLocalizedGMT(text, pos, null);
     }
 
+    /**
+     * Returns a <code>TimeZone</code> by parsing the time zone string according to
+     * the parse position, the style and the parse options.
+     * 
+     * @param text the text contains a time zone string at the position.
+     * @param style the format style.
+     * @param pos the position.
+     * @param options the parse options.
+     * @param timeType The output argument for receiving the time type (standard/daylight/unknown),
+     * or specify null if the information is not necessary.
+     * @return A <code>TimeZone</code>, or null if the input could not be parsed.
+     * @see Style
+     * @see #format(Style, TimeZone, long, Output)
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
     public TimeZone parse(Style style, String text, ParsePosition pos, EnumSet<ParseOption> options, Output<TimeType> timeType) {
         if (timeType == null) {
             timeType = new Output<TimeType>(TimeType.UNKNOWN);

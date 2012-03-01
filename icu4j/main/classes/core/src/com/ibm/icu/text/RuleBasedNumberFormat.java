@@ -1365,6 +1365,7 @@ public class RuleBasedNumberFormat extends NumberFormat {
      * @param newSymbols desired DecimalFormatSymbols
      * @see DecimalFormatSymbols
      * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
      */
     public void setDecimalFormatSymbols(DecimalFormatSymbols newSymbols) {
         if (newSymbols != null) {
