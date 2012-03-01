@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -168,7 +168,7 @@ main(int argc,
         fprintf(stderr,
                 "Usage: %s [OPTIONS] [FILES]\n"
                 "\tReads the list of resource bundle source files and creates\n"
-                "\tbinary version of reosurce bundles (.res files)\n",
+                "\tbinary version of resource bundles (.res files)\n",
                 argv[0]);
         fprintf(stderr,
                 "Options:\n"
