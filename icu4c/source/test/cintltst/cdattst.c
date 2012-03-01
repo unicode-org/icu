@@ -1272,7 +1272,7 @@ static void TestContext(void) {
         UErrorCode status = U_ZERO_ERROR;
         UDateFormat* udfmt = udat_open(UDAT_NONE, UDAT_MEDIUM, textContextItemPtr->locale, NULL, 0, NULL, 0, &status);
         if ( U_FAILURE(status) ) {
-            log_err("FAIL: udat_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
+            log_data_err("FAIL: udat_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
         } else {
             UDateTimePatternGenerator* udtpg = udatpg_open(textContextItemPtr->locale, &status);
             if ( U_FAILURE(status) ) {

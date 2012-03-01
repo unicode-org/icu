@@ -109,6 +109,10 @@ TimeZoneFormatTest::TestTimeZoneRoundTrip(void) {
     for (int32_t locidx = 0; locidx < nLocales; locidx++) {
         UnicodeString localGMTString;
         SimpleDateFormat gmtFmt(UnicodeString("ZZZZ"), LOCALES[locidx], status);
+        if (U_FAILURE(status)) {
+            dataerrln("Error creating SimpleDateFormat - %s", u_errorName(status));
+            continue;
+        }
         gmtFmt.setTimeZone(*TimeZone::getGMT());
         gmtFmt.format(0.0, localGMTString);
 
