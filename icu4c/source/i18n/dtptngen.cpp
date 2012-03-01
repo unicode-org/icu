@@ -608,7 +608,6 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
 
     // add available formats
     UBool firstTimeThrough = TRUE;
-    char parentLocale[ULOC_FULLNAME_CAPACITY];
     err = U_ZERO_ERROR;
     initHashtable(err);
     while (TRUE) {
@@ -663,14 +662,15 @@ DateTimePatternGenerator::addCLDRData(const Locale& locale, UErrorCode& err) {
         // uloc_getParent on the actual locale name)
         // (It would be nice to have a ures function that did this...)
         err = U_ZERO_ERROR;
+        char parentLocale[ULOC_FULLNAME_CAPACITY];
         int32_t locNameLen;
         const UChar * parentUName = ures_getStringByKey(rb, "%%Parent", &locNameLen, &err);
-        if (U_SUCCESS(err) && err != U_USING_FALLBACK_WARNING) {
-            u_austrncpy(parentLocale, parentUName, ULOC_FULLNAME_CAPACITY); // Should work on EBCDIC too?
+        if (U_SUCCESS(err) && err != U_USING_FALLBACK_WARNING && locNameLen < ULOC_FULLNAME_CAPACITY) {
+            u_UCharsToChars(parentUName, parentLocale, locNameLen + 1);
         } else {
             err = U_ZERO_ERROR;
-            locNameLen = uloc_getParent(curLocaleName, parentLocale, ULOC_FULLNAME_CAPACITY, &err);
-            if ( U_FAILURE(err) ) {
+            uloc_getParent(curLocaleName, parentLocale, ULOC_FULLNAME_CAPACITY, &err);
+            if (U_FAILURE(err) || err == U_STRING_NOT_TERMINATED_WARNING) {
                 // just fallback to root, since we are not already there
                 parentLocale[0] = 0;
                 err = U_ZERO_ERROR;
