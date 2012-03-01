@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -12,6 +12,7 @@ import java.util.Locale;
 
 import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
 import com.ibm.icu.impl.jdkadapter.SimpleDateFormatICU;
+import com.ibm.icu.util.ULocale;
 
 public class DateFormatProviderICU extends DateFormatProvider {
 
@@ -39,7 +40,7 @@ public class DateFormatProviderICU extends DateFormatProvider {
 
     private DateFormat getInstance(int dstyle, int tstyle, Locale locale) {
         com.ibm.icu.text.DateFormat icuDfmt;
-        Locale actual = ICULocaleServiceProvider.canonicalize(locale);
+        ULocale actual = ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale);
         if (dstyle == NONE) {
             icuDfmt = com.ibm.icu.text.DateFormat.getTimeInstance(tstyle, actual);
         } else if (tstyle == NONE) {
@@ -50,17 +51,6 @@ public class DateFormatProviderICU extends DateFormatProvider {
         if (!(icuDfmt instanceof com.ibm.icu.text.SimpleDateFormat)) {
             // icuDfmt must be always SimpleDateFormat
             return null;
-        }
-
-        com.ibm.icu.text.DecimalFormatSymbols decfs = ICULocaleServiceProvider.getDecimalFormatSymbolsForLocale(actual);
-        if (decfs != null) {
-            com.ibm.icu.text.NumberFormat icuNfmt = icuDfmt.getNumberFormat();
-            if (icuNfmt instanceof com.ibm.icu.text.DecimalFormat) {
-                ((com.ibm.icu.text.DecimalFormat)icuNfmt).setDecimalFormatSymbols(decfs);
-            } else if (icuNfmt instanceof com.ibm.icu.impl.DateNumberFormat) {
-                ((com.ibm.icu.impl.DateNumberFormat)icuNfmt).setZeroDigit(decfs.getDigit());
-            }
-            icuDfmt.setNumberFormat(icuNfmt);
         }
 
         return SimpleDateFormatICU.wrap((com.ibm.icu.text.SimpleDateFormat)icuDfmt);

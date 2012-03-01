@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -108,7 +108,7 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
      */
     public void TestSetSymbols() {
         // ICU's JDK DecimalFormatSymbols implementation for de_DE locale
-        DecimalFormatSymbols decfs = DecimalFormatSymbols.getInstance(new Locale("de", "DE", "ICU"));
+        DecimalFormatSymbols decfs = DecimalFormatSymbols.getInstance(TestUtil.toICUExtendedLocale(new Locale("de", "DE")));
 
         // en_US is supported by JDK, so this is the JDK's own DecimalFormatSymbols
         Locale loc = new Locale("en", "US");

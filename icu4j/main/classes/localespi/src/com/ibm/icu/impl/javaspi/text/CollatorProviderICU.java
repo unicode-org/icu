@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,7 +18,7 @@ public class CollatorProviderICU extends CollatorProvider {
     @Override
     public Collator getInstance(Locale locale) {
         com.ibm.icu.text.Collator icuCollator = com.ibm.icu.text.Collator.getInstance(
-                ICULocaleServiceProvider.canonicalize(locale));
+                ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
         return CollatorICU.wrap(icuCollator);
     }
 

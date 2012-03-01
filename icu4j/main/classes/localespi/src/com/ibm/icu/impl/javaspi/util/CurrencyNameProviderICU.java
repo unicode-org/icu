@@ -17,7 +17,7 @@ public class CurrencyNameProviderICU extends CurrencyNameProvider {
     @Override
     public String getSymbol(String currencyCode, Locale locale) {
         Currency cur = Currency.getInstance(currencyCode);
-        String sym = cur.getSymbol(ICULocaleServiceProvider.canonicalize(locale));
+        String sym = cur.getSymbol(ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
         if (sym.length() == 0 || sym.equals(currencyCode)) {
             return null;
         }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,14 +9,17 @@ package com.ibm.icu.impl.javaspi;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import com.ibm.icu.impl.ICUResourceBundle;
-import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Builder;
 
 public class ICULocaleServiceProvider {
     private static final String SPI_PROP_FILE = "com/ibm/icu/impl/javaspi/ICULocaleServiceProviderConfig.properties";
@@ -28,7 +31,7 @@ public class ICULocaleServiceProvider {
 
     private static boolean configLoaded = false;
 
-    private static String suffix = "ICU";
+    private static String suffix = "ICU4J";
     private static boolean enableVariants = true;
     private static boolean enableIso3Lang = true;
     private static boolean useDecimalFormat = false;
@@ -42,6 +45,8 @@ public class ICULocaleServiceProvider {
         new Locale("th", "TH", "TH"),
     };
 
+    private static Map<Locale, Locale> SPECIAL_LOCALES_MAP = null;
+
     private static Locale[] LOCALES = null;
 
     public static Locale[] getAvailableLocales() {
@@ -49,18 +54,53 @@ public class ICULocaleServiceProvider {
         return Arrays.copyOf(all, all.length);
     }
 
-    public static Locale canonicalize(Locale locale) {
-        Locale result = locale;
-        String variant = locale.getVariant();
-        String suffix = getIcuSuffix();
-        if (variant.equals(suffix)) {
-            result = new Locale(locale.getLanguage(), locale.getCountry());
-        } else if (variant.endsWith(suffix)
-                && variant.charAt(variant.length() - suffix.length() - 1) == '_') {
-            variant = variant.substring(0, variant.length() - suffix.length() - 1);
-            result = new Locale(locale.getLanguage(), locale.getCountry(), variant);
+    public static ULocale toULocaleNoSpecialVariant(Locale locale) {
+        // If the given Locale has legacy ill-formed variant
+        // reserved by JDK, use the map to resolve the locale.
+        Locale spLoc = getSpecialLocalesMap().get(locale);
+        if (spLoc != null) {
+            return ULocale.forLocale(spLoc);
         }
-        return result;
+
+        // The locale may have script field on Java 7+.
+        // So we once convert it to ULocale, then strip the ICU suffix off
+        // if necessary.
+        ULocale result = ULocale.forLocale(locale);
+        String variant = result.getVariant();
+        String suffix = getIcuSuffix();
+        String variantNoSuffix = null;
+        if (variant.equals(suffix)) {
+            variantNoSuffix = "";
+        } else if (variant.endsWith(suffix) && variant.charAt(variant.length() - suffix.length() - 1) == '_') {
+            variantNoSuffix = variant.substring(0, variant.length() - suffix.length() - 1);
+        }
+        if (variantNoSuffix == null) {
+            return result;
+        }
+
+        // Strip off ICU's special suffix - cannot use Builder because
+        // original locale may have ill-formed variant
+        StringBuilder id = new StringBuilder(result.getLanguage());
+        String script = result.getScript();
+        String country = result.getCountry();
+        if (script.length() > 0) {
+            id.append('_');
+            id.append(script);
+        }
+        if (country.length() > 0 || variantNoSuffix.length() > 0) {
+            id.append('_');
+            id.append(country);
+        }
+        if (variantNoSuffix.length() > 0) {
+            id.append('_');
+            id.append(variantNoSuffix);
+        }
+        String orgID = result.getName();
+        int kwdIdx = orgID.indexOf('@');
+        if (kwdIdx >= 0) {
+            id.append(orgID.substring(kwdIdx));
+        }
+        return new ULocale(id.toString());
     }
 
     public static boolean useDecimalFormat() {
@@ -68,25 +108,20 @@ public class ICULocaleServiceProvider {
         return useDecimalFormat;
     }
 
-    private static final Locale THAI_NATIVE_DIGIT_LOCALE = new Locale("th", "TH", "TH");
-    private static final char THAI_NATIVE_ZERO = '\u0E50';
-    private static DecimalFormatSymbols THAI_NATIVE_DECIMAL_SYMBOLS = null;
-
-    /*
-     * Returns a DecimalFormatSymbols if the given locale requires
-     * non-standard symbols, more specifically, native digits used
-     * by JDK Locale th_TH_TH.  If the locale does not requre a special
-     * symbols, null is returned.
-     */
-    public static synchronized DecimalFormatSymbols getDecimalFormatSymbolsForLocale(Locale loc) {
-        if (loc.equals(THAI_NATIVE_DIGIT_LOCALE)) {
-            if (THAI_NATIVE_DECIMAL_SYMBOLS == null) {
-                THAI_NATIVE_DECIMAL_SYMBOLS = new DecimalFormatSymbols(new ULocale("th_TH"));
-                THAI_NATIVE_DECIMAL_SYMBOLS.setDigit(THAI_NATIVE_ZERO);
-            }
-            return (DecimalFormatSymbols)THAI_NATIVE_DECIMAL_SYMBOLS.clone();
+    private static synchronized Map<Locale, Locale> getSpecialLocalesMap() {
+        if (SPECIAL_LOCALES_MAP != null) {
+            return SPECIAL_LOCALES_MAP;
         }
-        return null;
+
+        Map<Locale, Locale> splocs = new HashMap<Locale, Locale>();
+        for (Locale spLoc : SPECIAL_LOCALES) {
+            String var = spLoc.getVariant();
+            if (var.length() > 0) {
+                splocs.put(new Locale(spLoc.getLanguage(), spLoc.getCountry(), var + "_" + getIcuSuffix()), spLoc);
+            }
+        }
+        SPECIAL_LOCALES_MAP = Collections.unmodifiableMap(splocs);
+        return SPECIAL_LOCALES_MAP;
     }
 
     private static synchronized Locale[] getLocales() {
@@ -99,12 +134,24 @@ public class ICULocaleServiceProvider {
 
         for (ULocale uloc : icuLocales) {
             String language = uloc.getLanguage();
-            String country = uloc.getCountry();
-            String variant = uloc.getVariant();
             if (language.length() >= 3 && !enableIso3Languages()) {
                 continue;
             }
-            addLocale(new Locale(language, country, variant), localeSet);
+            addULocale(uloc, localeSet);
+
+            if (uloc.getScript().length() > 0 && uloc.getCountry().length() > 0) {
+                // ICU's available locales do not contain language+country
+                // locales if script is available. Need to add them too.
+                Builder locBld = new Builder();
+                try {
+                    locBld.setLocale(uloc);
+                    locBld.setScript(null);
+                    ULocale ulocWithoutScript = locBld.build();
+                    addULocale(ulocWithoutScript, localeSet);
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
         }
 
         for (Locale l : SPECIAL_LOCALES) {
@@ -130,6 +177,37 @@ public class ICULocaleServiceProvider {
             }
             var.append(getIcuSuffix());
             locales.add(new Locale(language, country, var.toString()));
+        }
+    }
+
+    private static void addULocale(ULocale uloc, Set<Locale> locales) {
+        // special case - nn
+        // ULocale#toLocale on Java 6 maps "nn" to "no_NO_NY"
+        if (uloc.getLanguage().equals("nn") && uloc.getScript().length() == 0) {
+            Locale locNN = new Locale(uloc.getLanguage(), uloc.getCountry(), uloc.getVariant());
+            addLocale(locNN, locales);
+            return;
+        }
+
+        locales.add(uloc.toLocale());
+
+        if (enableIcuVariants()) {
+            // Add ICU variant
+            StringBuilder var = new StringBuilder(uloc.getVariant());
+            if (var.length() != 0) {
+                var.append("_");
+            }
+            var.append(getIcuSuffix());
+
+            Builder locBld = new Builder();
+            try {
+                locBld.setLocale(uloc);
+                locBld.setVariant(var.toString());
+                ULocale ulocWithVar = locBld.build();
+                locales.add(ulocWithVar.toLocale());
+            } catch (Exception e) {
+                // ignore
+            }
         }
     }
 
