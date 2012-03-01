@@ -92,16 +92,10 @@ public class TimeZoneNameTest extends TestFmwk {
 
         String name = tz.getDisplayName(daylight, style, loc);
 
-        // Note: Short term workaround for Java locale with script.
-        //       Java Locale with non-empty script cannot have variant "ICU"
-        //       because it's not well-formed as BCP 47. Because we cannot
-        //       build such Locale, we skip the check below for now.
-        boolean ignoreErrorForNow = TestUtil.hasScript(loc);
-
         if (TestUtil.isICUExtendedLocale(loc)) {
             // The name should be taken from ICU
             if (!name.equals(icuname)) {
-                if (warnOnly || ignoreErrorForNow) {
+                if (warnOnly) {
                     logln("WARNING: TimeZone name by ICU is " + icuname + ", but got " + name
                             + " for time zone " + tz.getID() + " in locale " + loc
                             + " (daylight=" + daylight + ", style=" + styleStr + ")");
@@ -122,7 +116,7 @@ public class TimeZoneNameTest extends TestFmwk {
             Locale icuLoc = TestUtil.toICUExtendedLocale(loc);
             name = tz.getDisplayName(daylight, style, icuLoc);
             if (!name.equals(icuname)) {
-                if (warnOnly || ignoreErrorForNow) {
+                if (warnOnly) {
                     logln("WARNING: TimeZone name by ICU is " + icuname + ", but got " + name
                             + " for time zone " + tz.getID() + " in locale " + icuLoc
                             + " (daylight=" + daylight + ", style=" + styleStr + ")");

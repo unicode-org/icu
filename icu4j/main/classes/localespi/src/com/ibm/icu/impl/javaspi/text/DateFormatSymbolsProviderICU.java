@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,7 +18,7 @@ public class DateFormatSymbolsProviderICU extends DateFormatSymbolsProvider {
     @Override
     public DateFormatSymbols getInstance(Locale locale) {
         com.ibm.icu.text.DateFormatSymbols icuDfs = com.ibm.icu.text.DateFormatSymbols.getInstance(
-                ICULocaleServiceProvider.canonicalize(locale));
+                ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
         return DateFormatSymbolsICU.wrap(icuDfs);
     }
 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,28 +18,28 @@ public class BreakIteratorProviderICU extends BreakIteratorProvider {
     @Override
     public BreakIterator getCharacterInstance(Locale locale) {
         com.ibm.icu.text.BreakIterator icuBrkItr = com.ibm.icu.text.BreakIterator.getCharacterInstance(
-                ICULocaleServiceProvider.canonicalize(locale));
+                ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
         return BreakIteratorICU.wrap(icuBrkItr);
     }
 
     @Override
     public BreakIterator getLineInstance(Locale locale) {
         com.ibm.icu.text.BreakIterator icuBrkItr = com.ibm.icu.text.BreakIterator.getLineInstance(
-                ICULocaleServiceProvider.canonicalize(locale));
+                ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
         return BreakIteratorICU.wrap(icuBrkItr);
     }
 
     @Override
     public BreakIterator getSentenceInstance(Locale locale) {
         com.ibm.icu.text.BreakIterator icuBrkItr = com.ibm.icu.text.BreakIterator.getSentenceInstance(
-                ICULocaleServiceProvider.canonicalize(locale));
+                ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
         return BreakIteratorICU.wrap(icuBrkItr);
     }
 
     @Override
     public BreakIterator getWordInstance(Locale locale) {
         com.ibm.icu.text.BreakIterator icuBrkItr = com.ibm.icu.text.BreakIterator.getWordInstance(
-                ICULocaleServiceProvider.canonicalize(locale));
+                ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
         return BreakIteratorICU.wrap(icuBrkItr);
     }
 

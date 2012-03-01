@@ -9,19 +9,43 @@ package com.ibm.icu.dev.test.localespi;
 import java.util.Locale;
 
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.ULocale.Builder;
 
 public class TestUtil {
 
-    private static final String ICU_VARIANT = "ICU";
-    private static final String ICU_VARIANT_SUFFIX = "_ICU";
+    private static final String ICU_VARIANT = "ICU4J";
+    private static final String ICU_VARIANT_SUFFIX = "_ICU4J";
 
     public static Locale toICUExtendedLocale(Locale locale) {
         if (isICUExtendedLocale(locale)) {
             return locale;
         }
+
         String variant = locale.getVariant();
         variant = variant.length() == 0 ? ICU_VARIANT : variant + ICU_VARIANT_SUFFIX;
-        return new Locale(locale.getLanguage(), locale.getCountry(), variant);
+
+        // We once convert Locale to ULocale, then update variant
+        // field. We could do this using Locale APIs, but have to
+        // use a lot of reflections, because the test code should
+        // also run on JRE 6.
+        ULocale uloc = ULocale.forLocale(locale);
+        if (uloc.getScript().length() == 0) {
+            return new Locale(locale.getLanguage(), locale.getCountry(), variant);
+        }
+
+        // For preserving JDK Locale's script, we cannot use
+        // the regular Locale constructor.
+        ULocale modUloc = null;
+        Builder locBld = new Builder();
+        try {
+            locBld.setLocale(uloc);
+            locBld.setVariant(variant);
+            modUloc = locBld.build();
+            return modUloc.toLocale();
+        } catch (Exception e) {
+            // hmm, it should not happen
+            throw new RuntimeException(e);
+        }
     }
 
     public static boolean isICUExtendedLocale(Locale locale) {
@@ -100,15 +124,5 @@ public class TestUtil {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Check if the given Locale has script field (Java 7+)
-     * @param locale the locale
-     * @return true if the given Locale has non-empty script
-     */
-    public static boolean hasScript(Locale locale) {
-        ULocale uloc = ULocale.forLocale(locale);
-        return uloc.getScript().length() > 0;
     }
 }

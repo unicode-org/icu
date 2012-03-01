@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,7 +19,7 @@ public class DecimalFormatSymbolsProviderICU extends
     @Override
     public DecimalFormatSymbols getInstance(Locale locale) {
         com.ibm.icu.text.DecimalFormatSymbols icuDecfs = com.ibm.icu.text.DecimalFormatSymbols.getInstance(
-                ICULocaleServiceProvider.canonicalize(locale));
+                ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
         return DecimalFormatSymbolsICU.wrap(icuDecfs);
     }
 
