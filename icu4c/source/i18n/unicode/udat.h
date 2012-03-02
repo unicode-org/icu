@@ -178,12 +178,14 @@ typedef enum UDateFormatStyle {
  *  @draft ICU 49
  */
 typedef enum UDateFormatContextType {
+#if !UCONFIG_NO_BREAK_ITERATION
     /**
      * Type (key) for specifying the capitalization context for which a date
      * is to be formatted (possible values are in UDateFormatContextValue).
      * @draft ICU 49
      */
     UDAT_CAPITALIZATION = 1
+#endif
 } UDateFormatContextType;
 
 /** Values for date format context types
@@ -199,6 +201,7 @@ typedef enum UDateFormatContextValue {
      * @draft ICU 49
      */
     UDAT_CONTEXT_UNKNOWN = 0,
+#if !UCONFIG_NO_BREAK_ITERATION
     /** Values for type (key) UDAT_CAPITALIZATION */
     /**
      * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
@@ -225,6 +228,7 @@ typedef enum UDateFormatContextValue {
      * @draft ICU 49
      */
     UDAT_CAPITALIZATION_FOR_STANDALONE = 4
+#endif
 } UDateFormatContextValue;
 
 /**

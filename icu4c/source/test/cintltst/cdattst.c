@@ -1251,15 +1251,19 @@ typedef struct {
 
 static const TestContextItem textContextItems[] = {
     { "fr", skeleton_yMMMM, UDAT_CONTEXT_UNKNOWN,          july2008_frDefault },
+#if !UCONFIG_NO_BREAK_ITERATION
     { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, july2008_frDefault },
     { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, july2008_frTitle },
     { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,  july2008_frDefault },
     { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_STANDALONE,       july2008_frTitle },
+#endif
     { "cs", skeleton_yMMMM, UDAT_CONTEXT_UNKNOWN,          july2008_csDefault },
+#if !UCONFIG_NO_BREAK_ITERATION
     { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, july2008_csDefault },
     { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, july2008_csTitle },
     { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,  july2008_csTitle },
     { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_STANDALONE,       july2008_csDefault },
+#endif
     { NULL, NULL, 0, NULL }
 };
 
@@ -1283,6 +1287,7 @@ static void TestContext(void) {
                 if ( U_FAILURE(status) ) {
                     log_err("FAIL: udatpg_getBestPattern for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
                 } else {
+#if !UCONFIG_NO_BREAK_ITERATION
                     udat_applyPattern(udfmt, FALSE, ubuf, len);
                     udat_setDefaultContext(udfmt, UDAT_CAPITALIZATION, textContextItemPtr->capitalizationContext, &status);
                     if ( U_FAILURE(status) ) {
@@ -1311,6 +1316,7 @@ static void TestContext(void) {
                                     textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, getContext );
                         }
                     }
+#endif
                 }
                 udatpg_close(udtpg);
             }
