@@ -1287,7 +1287,6 @@ static void TestContext(void) {
                 if ( U_FAILURE(status) ) {
                     log_err("FAIL: udatpg_getBestPattern for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
                 } else {
-#if !UCONFIG_NO_BREAK_ITERATION
                     udat_applyPattern(udfmt, FALSE, ubuf, len);
                     udat_setDefaultContext(udfmt, UDAT_CAPITALIZATION, textContextItemPtr->capitalizationContext, &status);
                     if ( U_FAILURE(status) ) {
@@ -1316,7 +1315,6 @@ static void TestContext(void) {
                                     textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, getContext );
                         }
                     }
-#endif
                 }
                 udatpg_close(udtpg);
             }
