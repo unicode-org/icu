@@ -226,6 +226,7 @@ timezoneTypes:table(nofallback){
             "America:Coral_Harbour"{"cayzs"}
             "America:Cordoba"{"arcor"}
             "America:Costa_Rica"{"crsjo"}
+            "America:Creston"{"cacfq"}
             "America:Cuiaba"{"brcgb"}
             "America:Curacao"{"ancur"}
             "America:Danmarkshavn"{"gldkshvn"}
