@@ -1480,6 +1480,11 @@ metaZones:table(nofallback){
                 "America_Central",
             }
         }
+        "America:Creston"{
+            {
+                "America_Mountain",
+            }
+        }
         "America:Cuiaba"{
             {
                 "Amazon",
@@ -2474,6 +2479,16 @@ metaZones:table(nofallback){
             {
                 "Australia_Western",
                 "2010-03-04 15:00",
+                "2011-10-27 18:00",
+            }
+            {
+                "Casey",
+                "2011-10-27 18:00",
+                "2012-02-21 17:00",
+            }
+            {
+                "Australia_Western",
+                "2012-02-21 17:00",
                 "9999-12-31 23:59",
             }
         }
