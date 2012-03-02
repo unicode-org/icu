@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and    *
+* Copyright (C) 1997-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -35,6 +35,10 @@
 
     <property name="icu4jdocs.jar.file" value="icu4j-${release.file.ver}-docs.jar"/>
 
+    <!-- API doc title -->
+    <property name="icu4j.api.doc.title" value="ICU4J ${api.doc.version} API Specification"/>
+    <property name="icu4j.api.window.title" value="ICU4J ${api.doc.version}"/>
+
     <!-- directories -->
     <property name="release.dir" value="release"/>
     <property name="doc.dir" value="doc"/>
@@ -44,6 +48,7 @@
         <or>
             <contains string="${java.version}" substring="1.6."/>
             <contains string="${java.version}" substring="1.7."/>
+            <contains string="${java.version}" substring="1.8."/>
         </or>
     </condition>
     <condition property="is.java5">
@@ -59,6 +64,12 @@
              </not>
         </condition>
     </fail>
+    <condition property="is.java7.plus">
+        <or>
+            <contains string="${java.version}" substring="1.7."/>
+            <contains string="${java.version}" substring="1.8."/>
+        </or>
+    </condition>
 
     <!-- Build environment info -->
     <property name="env.COMPUTERNAME" value="${env.HOSTNAME}"/>
@@ -622,7 +633,9 @@
     </target>
 
     <!-- doc targets -->
-    <target name="docs" depends="info, build-tools, _checkJCite" description="Build API documents">
+    <target name="docs" depends="info, build-tools, _docsJava5or6, _docsJava7plus" description="Build API documents"/>
+
+    <target name="_docsJava5or6" depends="_checkJCite" unless="is.java7.plus">
         <antcall target="_docsWithJCite"/>
         <antcall target="_docsWithoutJCite"/>
     </target>
@@ -642,19 +655,19 @@
         <pathconvert property="jcite.addl.src" refid="jcite.src.dirs"/>
     </target>
 
-    <target name="_docsWithJCite" if="jcite.libs">
+    <target name="_docsWithJCite" if="jcite.libs" unless="is.java7.plus">
         <echo message="JCite library path:             ${jcite.libs}"/>
         <echo message="JCite additional source path:   ${jcite.addl.src}"/>
         <javadoc
                 destdir="${doc.dir}"
                 nodeprecatedlist="true"
-                windowtitle="icu4j"
-                doctitle="icu4j"
+                windowtitle="${icu4j.api.window.title}"
+                doctitle="${icu4j.api.doc.title}"
                 encoding="${java.src.encoding}"
                 docencoding="UTF-8"
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
                 additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src}"
-                link="http://java.sun.com/javase/6/docs/api/"
+                link="http://docs.oracle.com/javase/7/docs/api/"
                 source="1.5"
                 stylesheetfile="stylesheet.css">
             <packageset dir="${icu4j.core.dir}/src">
@@ -679,15 +692,44 @@
         <javadoc
                 destdir="${doc.dir}"
                 nodeprecatedlist="true"
-                windowtitle="icu4j"
-                doctitle="icu4j"
+                windowtitle="${icu4j.api.window.title}"
+                doctitle="${icu4j.api.doc.title}"
                 encoding="${java.src.encoding}"
                 docencoding="UTF-8"
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
                 additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet"
-                link="http://java.sun.com/javase/6/docs/api/"
-                source="1.5"
-                stylesheetfile="stylesheet.css">
+                link="http://docs.oracle.com/javase/7/docs/api/"
+                source="1.5">
+            <packageset dir="${icu4j.core.dir}/src">
+                <include name="com/ibm/icu/lang/**"/>
+                <include name="com/ibm/icu/math/**"/>
+                <include name="com/ibm/icu/text/**"/>
+                <include name="com/ibm/icu/util/**"/>
+            </packageset>
+            <packageset dir="${icu4j.collate.dir}/src">
+                <include name="com/ibm/icu/text/**"/>
+            </packageset>
+            <packageset dir="${icu4j.translit.dir}/src">
+                <include name="com/ibm/icu/text/**"/>
+            </packageset>
+            <packageset dir="${icu4j.charset.dir}/src">
+                <include name="com/ibm/icu/charset/**"/>
+            </packageset>
+        </javadoc>
+    </target>
+
+    <target name="_docsJava7plus" if="is.java7.plus">
+        <javadoc
+                destdir="${doc.dir}"
+                nodeprecatedlist="true"
+                windowtitle="${icu4j.api.window.title}"
+                doctitle="${icu4j.api.doc.title}"
+                encoding="${java.src.encoding}"
+                docencoding="UTF-8"
+                bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
+                additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet"
+                link="http://docs.oracle.com/javase/7/docs/api/"
+                source="1.5">
             <packageset dir="${icu4j.core.dir}/src">
                 <include name="com/ibm/icu/lang/**"/>
                 <include name="com/ibm/icu/math/**"/>
