@@ -1394,6 +1394,7 @@
                 debug="on" deprecation="off">
             <include name="com/ibm/icu/impl/TimeZoneNames*.java"/>
             <include name="com/ibm/icu/lang/UCharacter.java"/>
+            <include name="com/ibm/icu/text/BreakIteratorFactory.java"/>
             <include name="com/ibm/icu/text/*Collator*.java"/>
             <include name="com/ibm/icu/text/*Format*.java"/>
             <include name="com/ibm/icu/text/UnicodeSetIterator.java"/>
@@ -1414,10 +1415,10 @@
                 encoding="${java.src.encoding}"
                 debug="on" deprecation="off"/>
 
-        <!-- Format does not require BreakIterator data -->
         <unjar src="${icu4j.data.jar}" dest="${module.bin.dir}">
             <patternset>
                 <include name="**/*.icu"/>
+                <include name="**/*.brk"/>
                 <include name="**/*.res"/>
                 <exclude name="**/translit/*.res"/>
             </patternset>
