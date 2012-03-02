@@ -4,7 +4,7 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta http-equiv="Content-Style-Type" content="text/css2">
   <title>ReadMe for ICU4J</title>
-  <meta name="COPYRIGHT" content="Copyright 2000-2011, International Business Machines Corporation and others. All Rights Reserved.">
+  <meta name="COPYRIGHT" content="Copyright 2000-2012, International Business Machines Corporation and others. All Rights Reserved.">
   <style type="text/css">
 h3.doc { background: #CCCCFF }
 h4.doc { text-decoration: underline }
@@ -13,14 +13,14 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 49 Milestone 2</h3>
-(Last Update: Dec 12, 2011)
+<h3>Read Me for ICU4J 49 RC</h3>
+(Last Update: March 2, 2012)
 <hr size="2" width="100%">
 
-<p><b>Note:</b> This is a development milestone release of ICU4J 49.
+<p><b>Note:</b> This is a release candidate of ICU4J 49.
 The contents of this document may not reflect the recent changes done
-for ICU 49 development. This milestone is inteneded for those wishing
-to get an early look at ICU 49 new features and API changes. It is not
+for ICU 49 development. This version is inteneded for those wishing
+to evaluate ICU 49 new features and API changes. It is not
 recommended for production use.
 </p>
 <p>For the most recent release, see the <a
@@ -128,10 +128,10 @@ found in ICU4J.</p>
 <h3 class="doc"><a name="changes"></a>Changes In This Release</h3>
 <h4>New features and changes</h4>
 <p>
-See the <a href="http://sites.google.com/site/icusite/download/49milestone">ICU 49 milestone download page</a> about
+See the <a href="http://sites.google.com/site/icusite/download/49">ICU 49 RC download page</a> about
 new features in this release.  The list of API changes since the previous ICU4J release
 is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-49-0-1/APIChangeReport.html">here</a>.
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-49-rc/APIChangeReport.html">here</a>.
 </p>
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
@@ -168,10 +168,13 @@ used by the ICU development team to test ICU4J.
 <table border="1">
 <tr>
   <th rowspan="2">Operating System</th>
+  <th colspan="2">JRE 7</th>
   <th colspan="2">JRE 6</th>
   <th colspan="2">JRE 5</th>
 </tr>
 <tr>
+  <th>32bit</th>
+  <th>64bit</th>
   <th>32bit</th>
   <th>64bit</th>
   <th>32bit</th>
@@ -183,11 +186,15 @@ used by the ICU development team to test ICU4J.
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
 <tr>
   <th>AIX 7.1</th>
   <td align="center">-</td>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
+  <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
@@ -197,10 +204,14 @@ used by the ICU development team to test ICU4J.
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
 <tr>
   <th>Mac OS X 10.6</th>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center">-</td>
+  <td align="center">-</td>
+  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center">-</td>
   <td align="center">-</td>
@@ -211,30 +222,40 @@ used by the ICU development team to test ICU4J.
   <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center">-</td>
 </tr>
 <tr>
   <th>Redhat Enterprise Linux 6 (x86_64)</th>
   <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-</tr>
-<tr>
-  <th>Solaris 9 (SPARC)</th>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
-  <td align="center">-</td>
-</tr>
-<tr>
-  <th>Solaris 10 (SPARC)</th>
   <td align="center" bgcolor="#CCCCFF"><em><b>Reference platform</b></em></td>
+  <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+</tr>
+<tr>
+<th>Solaris 10 (SPARC)</th>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+</tr>
+<tr>
+  <th>Solaris 11 (SPARC)</th>
+  <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
 </tr>
 <tr>
   <th>Windows XP</th>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
@@ -246,6 +267,8 @@ used by the ICU development team to test ICU4J.
   <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center">-</td>
 </tr>
 <tr>
   <th>Windows 7</th>
@@ -253,9 +276,13 @@ used by the ICU development team to test ICU4J.
   <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
+  <td align="center">-</td>
 </tr>
 <tr>
   <th>Windows 2008 Server</th>
+  <td align="center">-</td>
+  <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center">-</td>
   <td align="center" bgcolor="#DDDDFF">Regularly tested</td>
   <td align="center">-</td>
@@ -949,9 +976,9 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version 'release-21-d02'</li>
-    <li>Checkout ICU4C with tag 'milestone-49-0-2'</li>
-    <li>Checkout ICU4J with tag 'milestone-49-0-2'</li>
+    <li>Checkout or download CLDR version 'release-21-0-1-d01-icu49rc'</li>
+    <li>Checkout ICU4C with tag 'release-49-rc'</li>
+    <li>Checkout ICU4J with tag 'release-49-rc'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
@@ -963,7 +990,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 49M2 includes time zone data version 2011n, which is the latest one as of
+<p>ICU4J 49RC includes time zone data version 2012b, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
@@ -1001,7 +1028,7 @@ review all comments.</p>
 <h2>Thank you for your interest in ICU4J!</h2>
 <br>
 <hr align="center" size="2" width="100%">
-<p><I><font size="-1">Copyright &copy; 2002-2011 International Business
+<p><I><font size="-1">Copyright &copy; 2002-2012 International Business
 Machines Corporation and others. All Rights
 Reserved.<br>
 4400 North First Street, San Jos&eacute;, CA 95193, USA
