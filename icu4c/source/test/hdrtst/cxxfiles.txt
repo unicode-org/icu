@@ -1,4 +1,4 @@
-# Copyright (c) 2001-2011 International Business Machines
+# Copyright (c) 2001-2012 International Business Machines
 # Corporation and others. All Rights Reserved.
 # Begin temporary addition.
 # These are very bad "C" APIs that do not work with a C compiler and
@@ -85,6 +85,8 @@ tmunit.h
 tmutamt.h
 tmutfmt.h
 translit.h
+tzfmt.h
+tznames.h
 tzrule.h
 tztrans.h
 ucharstrie.h

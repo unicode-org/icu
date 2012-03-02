@@ -1536,8 +1536,8 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             firstField.toTitle(NULL, fLocale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
             appendTo.replaceBetween(beginOffset, appendTo.length(), firstField);
         }
+    }
 #endif
-    } 
 
     handler.addAttribute(fgPatternIndexToDateFormatField[patternCharIndex], beginOffset, appendTo.length());
 }
