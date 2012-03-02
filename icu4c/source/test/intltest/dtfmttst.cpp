@@ -3845,15 +3845,19 @@ void DateFormatTest::TestContext()
     const TestContextItem items[] = {
         //locale              pattern    capitalizationContext                      expected formatted date
         { "fr", UnicodeString("MMMM y"), UDAT_CONTEXT_UNKNOWN,               UnicodeString("juillet 2008") },
+#if !UCONFIG_NO_BREAK_ITERATION
         { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    UnicodeString("juillet 2008") },
         { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, UnicodeString("Juillet 2008") },
         { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       UnicodeString("juillet 2008") },
         { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_STANDALONE,            UnicodeString("Juillet 2008") },
+#endif
         { "cs", UnicodeString("LLLL y"), UDAT_CONTEXT_UNKNOWN,               CharsToUnicodeString("\\u010Dervenec 2008") },
+#if !UCONFIG_NO_BREAK_ITERATION
         { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    CharsToUnicodeString("\\u010Dervenec 2008") },
         { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, CharsToUnicodeString("\\u010Cervenec 2008") },
         { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       CharsToUnicodeString("\\u010Cervenec 2008") },
         { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_STANDALONE,            CharsToUnicodeString("\\u010Dervenec 2008") },
+#endif
         // terminator
         { NULL, UnicodeString(""),       (UDateFormatContextValue)0, UnicodeString("") }
     };
@@ -3871,6 +3875,7 @@ void DateFormatTest::TestContext()
            if (U_FAILURE(status)) {
                 dataerrln(UnicodeString("FAIL: Unable to create SimpleDateFormat for specified pattern with locale ") + UnicodeString(itemPtr->locale));
            } else {
+#if !UCONFIG_NO_BREAK_ITERATION
                UDateFormatContextType contextType = UDAT_CAPITALIZATION;
                UDateFormatContextValue contextValue = itemPtr->capitalizationContext;
                UnicodeString result;
@@ -3881,6 +3886,7 @@ void DateFormatTest::TestContext()
                            ", capitalizationContext " + (int)itemPtr->capitalizationContext +
                            ", expected " + itemPtr->expectedFormat + ", got " + result);
                }
+#endif
            }
            if (sdmft) {
                delete sdmft;
