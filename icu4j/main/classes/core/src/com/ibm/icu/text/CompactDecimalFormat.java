@@ -174,7 +174,7 @@ public class CompactDecimalFormat extends DecimalFormat {
         if (number < 0.0d) {
             throw new UnsupportedOperationException("CompactDecimalFormat doesn't handle negative numbers yet.");
         }
-        int integerCount = (int) Math.log10(number);
+        int integerCount = number <= 1.0d ? 0 : (int) Math.log10(number);
         int base = integerCount > 14 ? 14 : integerCount;
         number = number / divisor[base];
         setPositivePrefix(prefix[base]);
