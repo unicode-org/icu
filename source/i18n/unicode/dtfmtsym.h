@@ -718,12 +718,14 @@ private:
      */
     UnicodeString   fLocalPatternChars;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Capitalization transforms. For each usage type, the first array element indicates
      * whether to titlecase for uiListOrMenu context, the second indicates whether to
      * titlecase for stand-alone context.
      */
      UBool fCapitalization[kCapContextUsageTypeCount][2];
+#endif
 
 
 private:

@@ -3875,7 +3875,6 @@ void DateFormatTest::TestContext()
            if (U_FAILURE(status)) {
                 dataerrln(UnicodeString("FAIL: Unable to create SimpleDateFormat for specified pattern with locale ") + UnicodeString(itemPtr->locale));
            } else {
-#if !UCONFIG_NO_BREAK_ITERATION
                UDateFormatContextType contextType = UDAT_CAPITALIZATION;
                UDateFormatContextValue contextValue = itemPtr->capitalizationContext;
                UnicodeString result;
@@ -3886,7 +3885,6 @@ void DateFormatTest::TestContext()
                            ", capitalizationContext " + (int)itemPtr->capitalizationContext +
                            ", expected " + itemPtr->expectedFormat + ", got " + result);
                }
-#endif
            }
            if (sdmft) {
                delete sdmft;
