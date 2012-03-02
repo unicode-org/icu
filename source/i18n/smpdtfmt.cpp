@@ -1513,7 +1513,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         zeroPaddingNumber(currentNumberFormat,appendTo, value, count, maxIntCount);
         break;
     }
-    
+#if !UCONFIG_NO_BREAK_ITERATION
     if (fieldNum == 0) {
         // first field, check to see whether we need to titlecase it
         UBool titlecase = FALSE;
@@ -1536,6 +1536,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             firstField.toTitle(NULL, fLocale, U_TITLECASE_NO_LOWERCASE | U_TITLECASE_NO_BREAK_ADJUSTMENT);
             appendTo.replaceBetween(beginOffset, appendTo.length(), firstField);
         }
+#endif
     } 
 
     handler.addAttribute(fgPatternIndexToDateFormatField[patternCharIndex], beginOffset, appendTo.length());

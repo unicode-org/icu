@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2011, International Business Machines Corporation and
+ * Copyright (c) 1998-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -1335,7 +1335,7 @@ static const struct {
     {"ucase",                    "icu", ucase_swap},
     {"ubidi",                    "icu", ubidi_swap},
 #endif
-#if !UCONFIG_NO_NORMALIZATION
+#if !UCONFIG_NO_NORMALIZATION && !UCONFIG_ONLY_COLLATION
     {"nfc",                      "nrm", unorm2_swap},
     {"confusables",              "cfu", uspoof_swap},
 #endif
