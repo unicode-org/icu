@@ -20,6 +20,9 @@ public class CompactDecimalFormatTest extends TestFmwk {
 
     Object[][] EnglishTestData = {
             // default is 2 digits of accuracy
+            {0.0d, "0.0"},
+            {0.1d, "0.1"},
+            {1d, "1"},
             {1234, "1.2K"},
             {12345, "12K"},
             {123456, "120K"},
@@ -32,6 +35,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {1234567890123f, "1.2T"},
             {12345678901234f, "12T"},
             {123456789012345f, "120T"},
+            {12345678901234567890f, "12000000T"},
     };
     
     Object[][] JapaneseTestData = {
