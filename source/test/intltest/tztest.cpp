@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -589,7 +589,7 @@ void TimeZoneTest::TestShortZoneIDs()
     }
     kReferenceList [] =
     {
-        {"MIT", -660, FALSE},
+        {"MIT", 780, FALSE}, // Pacific/Apia +13:00 as of 2012b
         {"HST", -600, FALSE},
         {"AST", -540, TRUE},
         {"PST", -480, TRUE},
@@ -612,7 +612,7 @@ void TimeZoneTest::TestShortZoneIDs()
         {"EET", 120, TRUE},
         {"EAT", 180, FALSE},
         {"MET", 60, TRUE}, // updated 12/3/99 aliu
-        {"NET", 240, TRUE}, // updated 12/3/99 aliu
+        {"NET", 240, TRUE}, // Asia/Yerevan - no DST as of 2012b
         {"PLT", 300, FALSE}, // updated Aug 2003 aliu
         {"IST", 330, FALSE},
         {"BST", 360, FALSE},

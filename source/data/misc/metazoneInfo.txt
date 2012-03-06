@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010-2011 International Business Machines
+// * Copyright (C) 2010-2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/metazoneInfo.xml
@@ -226,6 +226,18 @@ metazoneInfo:table(nofallback){
             mz0{
                 "Africa_Southern",
                 "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "Africa:Juba"{
+            mz0{
+                "Africa_Central",
+                "1970-01-01 00:00",
+                "2000-01-15 10:00",
+            }
+            mz1{
+                "Africa_Eastern",
+                "2000-01-15 10:00",
                 "9999-12-31 23:59",
             }
         }
@@ -893,6 +905,13 @@ metazoneInfo:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "America:Creston"{
+            mz0{
+                "America_Mountain",
+                "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
         "America:Cuiaba"{
             mz0{
                 "Amazon",
@@ -1299,6 +1318,13 @@ metazoneInfo:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "America:Kralendijk"{
+            mz0{
+                "Atlantic",
+                "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
         "America:La_Paz"{
             mz0{
                 "Bolivia",
@@ -1334,6 +1360,13 @@ metazoneInfo:table(nofallback){
             mz2{
                 "America_Eastern",
                 "1974-10-27 07:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "America:Lower_Princes"{
+            mz0{
+                "Atlantic",
+                "1970-01-01 00:00",
                 "9999-12-31 23:59",
             }
         }
@@ -1754,6 +1787,11 @@ metazoneInfo:table(nofallback){
             mz3{
                 "America_Eastern",
                 "2006-10-29 07:00",
+                "2007-03-11 08:00",
+            }
+            mz4{
+                "America_Central",
+                "2007-03-11 08:00",
                 "9999-12-31 23:59",
             }
         }
@@ -2002,9 +2040,24 @@ metazoneInfo:table(nofallback){
                 "1970-01-01 00:00",
                 "2009-10-17 18:00",
             }
-            mz1 {
+            mz1{
+                "Casey",
+                "2009-10-17 18:00",
+                "2010-03-04 15:00",
+            }
+            mz2{
                 "Australia_Western",
                 "2010-03-04 15:00",
+                "2011-10-27 18:00",
+            }
+            mz3{
+                "Casey",
+                "2011-10-27 18:00",
+                "2012-02-21 17:00",
+            }
+            mz4{
+                "Australia_Western",
+                "2012-02-21 17:00",
                 "9999-12-31 23:59",
             }
         }
@@ -2118,6 +2171,11 @@ metazoneInfo:table(nofallback){
             mz0{
                 "Anadyr",
                 "1970-01-01 00:00",
+                "2010-03-27 14:00",
+            }
+            mz1{
+                "Magadan",
+                "2010-03-27 14:00",
                 "9999-12-31 23:59",
             }
         }
@@ -2358,6 +2416,18 @@ metazoneInfo:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "Asia:Hebron"{
+            mz0{
+                "Israel",
+                "1970-01-01 00:00",
+                "1995-12-31 22:00",
+            }
+            mz1{
+                "Europe_Eastern",
+                "1995-12-31 22:00",
+                "9999-12-31 23:59",
+            }
+        }
         "Asia:Hong_Kong"{
             mz0{
                 "Hong_Kong",
@@ -2411,6 +2481,11 @@ metazoneInfo:table(nofallback){
             mz0{
                 "Kamchatka",
                 "1970-01-01 00:00",
+                "2010-03-27 14:00",
+            }
+            mz1{
+                "Magadan",
+                "2010-03-27 14:00",
                 "9999-12-31 23:59",
             }
         }
@@ -2989,6 +3064,20 @@ metazoneInfo:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "CST6CDT"{
+            mz0{
+                "America_Central",
+                "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "EST5EDT"{
+            mz0{
+                "America_Eastern",
+                "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
         "Europe:Amsterdam"{
             mz0{
                 "Europe_Central",
@@ -3159,7 +3248,7 @@ metazoneInfo:table(nofallback){
             mz1{
                 "Europe_Eastern",
                 "1991-03-30 23:00",
-                "9999-12-31 23:59",
+                "2011-03-27 00:00",
             }
         }
         "Europe:Kiev"{
@@ -3252,7 +3341,7 @@ metazoneInfo:table(nofallback){
             mz1{
                 "Europe_Eastern",
                 "1991-03-30 23:00",
-                "9999-12-31 23:59",
+                "2011-03-27 00:00",
             }
         }
         "Europe:Monaco"{
@@ -3335,6 +3424,11 @@ metazoneInfo:table(nofallback){
             mz1{
                 "Samara",
                 "1991-10-20 00:00",
+                "2010-03-27 22:00",
+            }
+            mz2{
+                "Moscow",
+                "2010-03-27 22:00",
                 "9999-12-31 23:59",
             }
         }
@@ -3587,6 +3681,20 @@ metazoneInfo:table(nofallback){
         "Indian:Reunion"{
             mz0{
                 "Reunion",
+                "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "MST7MDT"{
+            mz0{
+                "America_Mountain",
+                "1970-01-01 00:00",
+                "9999-12-31 23:59",
+            }
+        }
+        "PST8PDT"{
+            mz0{
+                "America_Pacific",
                 "1970-01-01 00:00",
                 "9999-12-31 23:59",
             }
