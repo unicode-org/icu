@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1342,6 +1342,8 @@ public class TimeZoneTest extends TestFmwk
         // in Olson tzdata.
         final String[][] excluded1 = {
                 {"America/Shiprock", "America/Denver"}, // America/Shiprock is defined as a Link to America/Denver in tzdata
+                {"America/Kralendijk", "America/Curacao"},
+                {"America/Lower_Princes", "America/Curacao"},
                 {"America/Marigot", "America/Guadeloupe"},
                 {"America/St_Barthelemy", "America/Guadeloupe"},
                 {"Antarctica/South_Pole", "Antarctica/McMurdo"},
