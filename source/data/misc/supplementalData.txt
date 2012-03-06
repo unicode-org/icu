@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010-2011 International Business Machines
+// * Copyright (C) 2010-2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/supplementalData.xml
@@ -4683,6 +4683,7 @@ supplementalData:table(nofallback){
             "africa:gaborone"{"bwgbe"}
             "africa:harare"{"zwhre"}
             "africa:johannesburg"{"zajnb"}
+            "africa:juba"{"ssjub"}
             "africa:kampala"{"ugkla"}
             "africa:khartoum"{"sdkrt"}
             "africa:kigali"{"rwkgl"}
@@ -4805,7 +4806,7 @@ supplementalData:table(nofallback){
             "america:montserrat"{"msmni"}
             "america:nassau"{"bsnas"}
             "america:new_york"{"usnyc"}
-            "america:nipigon"{"cathu"}
+            "america:nipigon"{"canpg"}
             "america:nome"{"usome"}
             "america:noronha"{"brfen"}
             "america:north_dakota:beulah"{"usxul"}
@@ -10915,7 +10916,8 @@ supplementalData:table(nofallback){
             "meta:Atlantic_AN"{"America/Curacao"}
             "meta:Atlantic_AW"{"America/Aruba"}
             "meta:Atlantic_BB"{"America/Barbados"}
-            "meta:Atlantic_BM"{"America/Bermuda"}
+            "meta:Atlantic_BM"{"Atlantic/Bermuda"}
+            "meta:Atlantic_BQ"{"America/Kralendijk"}
             "meta:Atlantic_DM"{"America/Dominica"}
             "meta:Atlantic_GD"{"America/Grenada"}
             "meta:Atlantic_GL"{"America/Thule"}
@@ -10926,6 +10928,7 @@ supplementalData:table(nofallback){
             "meta:Atlantic_MQ"{"America/Martinique"}
             "meta:Atlantic_MS"{"America/Montserrat"}
             "meta:Atlantic_PR"{"America/Puerto_Rico"}
+            "meta:Atlantic_SX"{"America/Lower_Princes"}
             "meta:Atlantic_TT"{"America/Port_of_Spain"}
             "meta:Atlantic_VC"{"America/St_Vincent"}
             "meta:Atlantic_VG"{"America/Tortola"}
@@ -10946,6 +10949,7 @@ supplementalData:table(nofallback){
             "meta:British_001"{"Europe/London"}
             "meta:Brunei_001"{"Asia/Brunei"}
             "meta:Cape_Verde_001"{"Atlantic/Cape_Verde"}
+            "meta:Casey_001"{"Antarctica/Casey"}
             "meta:Chamorro_001"{"Pacific/Saipan"}
             "meta:Chamorro_GU"{"Pacific/Guam"}
             "meta:Changbai_001"{"Asia/Harbin"}
@@ -11082,6 +11086,7 @@ supplementalData:table(nofallback){
             "meta:Long_Shu_001"{"Asia/Chongqing"}
             "meta:Lord_Howe_001"{"Australia/Lord_Howe"}
             "meta:Macau_001"{"Asia/Macau"}
+            "meta:Macquarie_001"{"Antarctica/Macquarie"}
             "meta:Magadan_001"{"Asia/Magadan"}
             "meta:Malaya_001"{"Asia/Kuala_Lumpur"}
             "meta:Malaysia_001"{"Asia/Kuching"}
@@ -11167,10 +11172,10 @@ supplementalData:table(nofallback){
             "Arabian Standard Time"{"Asia/Dubai"}
             "Arabic Standard Time"{"Asia/Baghdad"}
             "Argentina Standard Time"{"America/Buenos_Aires"}
-            "Armenian Standard Time"{"Asia/Yerevan"}
             "Atlantic Standard Time"{"America/Halifax"}
             "Azerbaijan Standard Time"{"Asia/Baku"}
             "Azores Standard Time"{"Atlantic/Azores"}
+            "Bahia Standard Time"{"America/Bahia"}
             "Bangladesh Standard Time"{"Asia/Dhaka"}
             "Canada Central Standard Time"{"America/Regina"}
             "Cape Verde Standard Time"{"Atlantic/Cape_Verde"}
@@ -11188,7 +11193,7 @@ supplementalData:table(nofallback){
             "Dateline Standard Time"{"Etc/GMT+12"}
             "E. Africa Standard Time"{"Africa/Nairobi"}
             "E. Australia Standard Time"{"Australia/Brisbane"}
-            "E. Europe Standard Time"{"Europe/Minsk"}
+            "E. Europe Standard Time"{"Asia/Nicosia"}
             "E. South America Standard Time"{"America/Sao_Paulo"}
             "Eastern Standard Time"{"America/New_York"}
             "Egypt Standard Time"{"Africa/Cairo"}
@@ -11196,7 +11201,7 @@ supplementalData:table(nofallback){
             "FLE Standard Time"{"Europe/Kiev"}
             "Fiji Standard Time"{"Pacific/Fiji"}
             "GMT Standard Time"{"Europe/London"}
-            "GTB Standard Time"{"Europe/Istanbul"}
+            "GTB Standard Time"{"Europe/Bucharest"}
             "Georgian Standard Time"{"Asia/Tbilisi"}
             "Greenland Standard Time"{"America/Godthab"}
             "Greenwich Standard Time"{"Atlantic/Reykjavik"}
@@ -11205,13 +11210,10 @@ supplementalData:table(nofallback){
             "Iran Standard Time"{"Asia/Tehran"}
             "Israel Standard Time"{"Asia/Jerusalem"}
             "Jordan Standard Time"{"Asia/Amman"}
-            "Kamchatka Standard Time"{"Asia/Kamchatka"}
+            "Kaliningrad Standard Time"{"Europe/Kaliningrad"}
             "Korea Standard Time"{"Asia/Seoul"}
             "Magadan Standard Time"{"Asia/Magadan"}
             "Mauritius Standard Time"{"Indian/Mauritius"}
-            "Mexico Standard Time"{"America/Mexico_City"}
-            "Mexico Standard Time 2"{"America/Chihuahua"}
-            "Mid-Atlantic Standard Time"{"Etc/GMT+2"}
             "Middle East Standard Time"{"Asia/Beirut"}
             "Montevideo Standard Time"{"America/Montevideo"}
             "Morocco Standard Time"{"Africa/Casablanca"}
@@ -11245,6 +11247,7 @@ supplementalData:table(nofallback){
             "Tasmania Standard Time"{"Australia/Hobart"}
             "Tokyo Standard Time"{"Asia/Tokyo"}
             "Tonga Standard Time"{"Pacific/Tongatapu"}
+            "Turkey Standard Time"{"Europe/Istanbul"}
             "US Eastern Standard Time"{"America/Indianapolis"}
             "US Mountain Standard Time"{"America/Phoenix"}
             "UTC"{"Etc/GMT"}
@@ -12991,8 +12994,8 @@ supplementalData:table(nofallback){
             canonical{"Africa/Cairo"}
             territory{"EG"}
             aliases{
-                "Egypt",
                 "ART",
+                "Egypt",
             }
         }
         "Africa:Casablanca"{
@@ -13045,6 +13048,10 @@ supplementalData:table(nofallback){
         "Africa:Johannesburg"{
             canonical{"Africa/Johannesburg"}
             territory{"ZA"}
+        }
+        "Africa:Juba"{
+            canonical{"Africa/Juba"}
+            territory{"SS"}
         }
         "Africa:Kampala"{
             canonical{"Africa/Kampala"}
@@ -13165,8 +13172,8 @@ supplementalData:table(nofallback){
             canonical{"America/Anchorage"}
             territory{"US"}
             aliases{
-                "US/Alaska",
                 "AST",
+                "US/Alaska",
             }
         }
         "America:Anguilla"{
@@ -13257,6 +13264,7 @@ supplementalData:table(nofallback){
             canonical{"America/Buenos_Aires"}
             territory{"AR"}
             aliases{
+                "AGT",
                 "America/Argentina/Buenos_Aires",
             }
         }
@@ -13296,8 +13304,8 @@ supplementalData:table(nofallback){
             canonical{"America/Chicago"}
             territory{"US"}
             aliases{
-                "US/Central",
                 "CST",
+                "US/Central",
             }
         }
         "America:Chihuahua"{
@@ -13323,13 +13331,17 @@ supplementalData:table(nofallback){
             canonical{"America/Costa_Rica"}
             territory{"CR"}
         }
+        "America:Creston"{
+            canonical{"America/Creston"}
+            territory{"CA"}
+        }
         "America:Cuiaba"{
             canonical{"America/Cuiaba"}
             territory{"BR"}
         }
         "America:Curacao"{
             canonical{"America/Curacao"}
-            territory{"AN"}
+            territory{"CW"}
         }
         "America:Danmarkshavn"{
             canonical{"America/Danmarkshavn"}
@@ -13472,8 +13484,8 @@ supplementalData:table(nofallback){
             aliases{
                 "America/Fort_Wayne",
                 "America/Indiana/Indianapolis",
-                "US/East-Indiana",
                 "IET",
+                "US/East-Indiana",
             }
         }
         "America:Inuvik"{
@@ -13506,6 +13518,10 @@ supplementalData:table(nofallback){
             canonical{"America/Kentucky/Monticello"}
             territory{"US"}
         }
+        "America:Kralendijk"{
+            canonical{"America/Kralendijk"}
+            territory{"BQ"}
+        }
         "America:La_Paz"{
             canonical{"America/La_Paz"}
             territory{"BO"}
@@ -13518,9 +13534,9 @@ supplementalData:table(nofallback){
             canonical{"America/Los_Angeles"}
             territory{"US"}
             aliases{
+                "PST",
                 "US/Pacific",
                 "US/Pacific-New",
-                "PST",
             }
         }
         "America:Louisville"{
@@ -13529,6 +13545,10 @@ supplementalData:table(nofallback){
             aliases{
                 "America/Kentucky/Louisville",
             }
+        }
+        "America:Lower_Princes"{
+            canonical{"America/Lower_Princes"}
+            territory{"SX"}
         }
         "America:Maceio"{
             canonical{"America/Maceio"}
@@ -13672,17 +13692,17 @@ supplementalData:table(nofallback){
             canonical{"America/Phoenix"}
             territory{"US"}
             aliases{
-                "US/Arizona",
                 "PNT",
+                "US/Arizona",
             }
-        }
-        "America:Port_of_Spain"{
-            canonical{"America/Port_of_Spain"}
-            territory{"TT"}
         }
         "America:Port-au-Prince"{
             canonical{"America/Port-au-Prince"}
             territory{"HT"}
+        }
+        "America:Port_of_Spain"{
+            canonical{"America/Port_of_Spain"}
+            territory{"TT"}
         }
         "America:Porto_Velho"{
             canonical{"America/Porto_Velho"}
@@ -13750,8 +13770,8 @@ supplementalData:table(nofallback){
             canonical{"America/Sao_Paulo"}
             territory{"BR"}
             aliases{
-                "Brazil/East",
                 "BET",
+                "Brazil/East",
             }
         }
         "America:Scoresbysund"{
@@ -13777,8 +13797,8 @@ supplementalData:table(nofallback){
             canonical{"America/St_Johns"}
             territory{"CA"}
             aliases{
-                "Canada/Newfoundland",
                 "CNT",
+                "Canada/Newfoundland",
             }
         }
         "America:St_Kitts"{
@@ -14029,6 +14049,10 @@ supplementalData:table(nofallback){
             canonical{"Asia/Harbin"}
             territory{"CN"}
         }
+        "Asia:Hebron"{
+            canonical{"Asia/Hebron"}
+            territory{"PS"}
+        }
         "Asia:Hong_Kong"{
             canonical{"Asia/Hong_Kong"}
             territory{"HK"}
@@ -14206,8 +14230,8 @@ supplementalData:table(nofallback){
             canonical{"Asia/Shanghai"}
             territory{"CN"}
             aliases{
-                "PRC",
                 "CTT",
+                "PRC",
             }
         }
         "Asia:Singapore"{
@@ -14250,8 +14274,8 @@ supplementalData:table(nofallback){
             canonical{"Asia/Tokyo"}
             territory{"JP"}
             aliases{
-                "Japan",
                 "JST",
+                "Japan",
             }
         }
         "Asia:Ulaanbaatar"{
@@ -14363,8 +14387,8 @@ supplementalData:table(nofallback){
             canonical{"Australia/Darwin"}
             territory{"AU"}
             aliases{
-                "Australia/North",
                 "ACT",
+                "Australia/North",
             }
         }
         "Australia:Eucla"{
@@ -14407,11 +14431,19 @@ supplementalData:table(nofallback){
             canonical{"Australia/Sydney"}
             territory{"AU"}
             aliases{
+                "AET",
                 "Australia/ACT",
                 "Australia/Canberra",
                 "Australia/NSW",
-                "AET",
             }
+        }
+        "CST6CDT"{
+            canonical{"CST6CDT"}
+            territory{"001"}
+        }
+        "EST5EDT"{
+            canonical{"EST5EDT"}
+            territory{"001"}
         }
         "Etc:GMT"{
             canonical{"Etc/GMT"}
@@ -14436,64 +14468,23 @@ supplementalData:table(nofallback){
                 "Zulu",
             }
         }
-        "Etc:GMT-1"{
-            canonical{"Etc/GMT-1"}
-            territory{"001"}
-        }
-        "Etc:GMT-2"{
-            canonical{"Etc/GMT-2"}
-            territory{"001"}
-        }
-        "Etc:GMT-3"{
-            canonical{"Etc/GMT-3"}
-            territory{"001"}
-        }
-        "Etc:GMT-4"{
-            canonical{"Etc/GMT-4"}
-            territory{"001"}
-        }
-        "Etc:GMT-5"{
-            canonical{"Etc/GMT-5"}
-            territory{"001"}
-        }
-        "Etc:GMT-6"{
-            canonical{"Etc/GMT-6"}
-            territory{"001"}
-        }
-        "Etc:GMT-7"{
-            canonical{"Etc/GMT-7"}
-            territory{"001"}
-        }
-        "Etc:GMT-8"{
-            canonical{"Etc/GMT-8"}
-            territory{"001"}
-        }
-        "Etc:GMT-9"{
-            canonical{"Etc/GMT-9"}
-            territory{"001"}
-        }
-        "Etc:GMT-10"{
-            canonical{"Etc/GMT-10"}
-            territory{"001"}
-        }
-        "Etc:GMT-11"{
-            canonical{"Etc/GMT-11"}
-            territory{"001"}
-        }
-        "Etc:GMT-12"{
-            canonical{"Etc/GMT-12"}
-            territory{"001"}
-        }
-        "Etc:GMT-13"{
-            canonical{"Etc/GMT-13"}
-            territory{"001"}
-        }
-        "Etc:GMT-14"{
-            canonical{"Etc/GMT-14"}
-            territory{"001"}
-        }
         "Etc:GMT+1"{
             canonical{"Etc/GMT+1"}
+            territory{"001"}
+        }
+        "Etc:GMT+10"{
+            canonical{"Etc/GMT+10"}
+            territory{"001"}
+            aliases{
+                "HST",
+            }
+        }
+        "Etc:GMT+11"{
+            canonical{"Etc/GMT+11"}
+            territory{"001"}
+        }
+        "Etc:GMT+12"{
+            canonical{"Etc/GMT+12"}
             territory{"001"}
         }
         "Etc:GMT+2"{
@@ -14534,19 +14525,60 @@ supplementalData:table(nofallback){
             canonical{"Etc/GMT+9"}
             territory{"001"}
         }
-        "Etc:GMT+10"{
-            canonical{"Etc/GMT+10"}
-            territory{"001"}
-            aliases{
-                "HST",
-            }
-        }
-        "Etc:GMT+11"{
-            canonical{"Etc/GMT+11"}
+        "Etc:GMT-1"{
+            canonical{"Etc/GMT-1"}
             territory{"001"}
         }
-        "Etc:GMT+12"{
-            canonical{"Etc/GMT+12"}
+        "Etc:GMT-10"{
+            canonical{"Etc/GMT-10"}
+            territory{"001"}
+        }
+        "Etc:GMT-11"{
+            canonical{"Etc/GMT-11"}
+            territory{"001"}
+        }
+        "Etc:GMT-12"{
+            canonical{"Etc/GMT-12"}
+            territory{"001"}
+        }
+        "Etc:GMT-13"{
+            canonical{"Etc/GMT-13"}
+            territory{"001"}
+        }
+        "Etc:GMT-14"{
+            canonical{"Etc/GMT-14"}
+            territory{"001"}
+        }
+        "Etc:GMT-2"{
+            canonical{"Etc/GMT-2"}
+            territory{"001"}
+        }
+        "Etc:GMT-3"{
+            canonical{"Etc/GMT-3"}
+            territory{"001"}
+        }
+        "Etc:GMT-4"{
+            canonical{"Etc/GMT-4"}
+            territory{"001"}
+        }
+        "Etc:GMT-5"{
+            canonical{"Etc/GMT-5"}
+            territory{"001"}
+        }
+        "Etc:GMT-6"{
+            canonical{"Etc/GMT-6"}
+            territory{"001"}
+        }
+        "Etc:GMT-7"{
+            canonical{"Etc/GMT-7"}
+            territory{"001"}
+        }
+        "Etc:GMT-8"{
+            canonical{"Etc/GMT-8"}
+            territory{"001"}
+        }
+        "Etc:GMT-9"{
+            canonical{"Etc/GMT-9"}
             territory{"001"}
         }
         "Etc:Unknown"{
@@ -14844,6 +14876,14 @@ supplementalData:table(nofallback){
             canonical{"Indian/Reunion"}
             territory{"RE"}
         }
+        "MST7MDT"{
+            canonical{"MST7MDT"}
+            territory{"001"}
+        }
+        "PST8PDT"{
+            canonical{"PST8PDT"}
+            territory{"001"}
+        }
         "Pacific:Apia"{
             canonical{"Pacific/Apia"}
             territory{"WS"}
@@ -14855,8 +14895,8 @@ supplementalData:table(nofallback){
             canonical{"Pacific/Auckland"}
             territory{"NZ"}
             aliases{
-                "NZ",
                 "NST",
+                "NZ",
             }
         }
         "Pacific:Chatham"{
@@ -15029,22 +15069,6 @@ supplementalData:table(nofallback){
             canonical{"Pacific/Wallis"}
             territory{"WF"}
         }
-        "CST6CDT"{
-            canonical{"CST6CDT"}
-            territory{"001"}
-        }
-        "EST5EDT"{
-            canonical{"EST5EDT"}
-            territory{"001"}
-        }
-        "MST7MDT"{
-            canonical{"MST7MDT"}
-            territory{"001"}
-        }
-        "PST8PDT"{
-            canonical{"PST8PDT"}
-            territory{"001"}
-        }
         multizone{
             "001",
             "AQ",
@@ -15068,6 +15092,7 @@ supplementalData:table(nofallback){
             "MY",
             "NZ",
             "PF",
+            "PS",
             "PT",
             "RU",
             "UA",

@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2009, International Business Machines Corporation
+ * Copyright (c) 1997-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -1716,6 +1716,8 @@ void TimeZoneTest::TestCanonicalID() {
         const char *zone;
     } excluded1[] = {
         {"America/Shiprock", "America/Denver"}, // America/Shiprock is defined as a Link to America/Denver in tzdata
+        {"America/Kralendijk", "America/Curacao"},
+        {"America/Lower_Princes", "America/Curacao"},
         {"America/Marigot", "America/Guadeloupe"}, 
         {"America/St_Barthelemy", "America/Guadeloupe"},
         {"Antarctica/South_Pole", "Antarctica/McMurdo"},
