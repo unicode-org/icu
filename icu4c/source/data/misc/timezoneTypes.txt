@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2011 International Business Machines
+// * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/bcp47/*.xml
@@ -226,6 +226,7 @@ timezoneTypes:table(nofallback){
             "America:Coral_Harbour"{"cayzs"}
             "America:Cordoba"{"arcor"}
             "America:Costa_Rica"{"crsjo"}
+            "America:Creston"{"cacfq"}
             "America:Cuiaba"{"brcgb"}
             "America:Curacao"{"ancur"}
             "America:Danmarkshavn"{"gldkshvn"}
@@ -264,10 +265,12 @@ timezoneTypes:table(nofallback){
             "America:Jujuy"{"arjuj"}
             "America:Juneau"{"usjnu"}
             "America:Kentucky:Monticello"{"usmoc"}
+            "America:Kralendijk"{"bqkra"}
             "America:La_Paz"{"bolpb"}
             "America:Lima"{"pelim"}
             "America:Los_Angeles"{"uslax"}
             "America:Louisville"{"uslui"}
+            "America:Lower_Princes"{"sxphi"}
             "America:Maceio"{"brmcz"}
             "America:Managua"{"nimga"}
             "America:Manaus"{"brmao"}
