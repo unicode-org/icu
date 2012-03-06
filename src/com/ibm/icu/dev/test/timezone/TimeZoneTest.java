@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -107,7 +107,7 @@ public class TimeZoneTest extends TestFmwk
     public void TestShortZoneIDs() throws Exception {
 
         ZoneDescriptor[] JDK_116_REFERENCE_LIST = {
-            new ZoneDescriptor("MIT", -660, true), // updated to false when merging 2010j
+            new ZoneDescriptor("MIT", 780, false), // Pacific/Apia +13:00 as of 2012b
             new ZoneDescriptor("HST", -600, false),
             new ZoneDescriptor("AST", -540, true),
             new ZoneDescriptor("PST", -480, true),
@@ -133,7 +133,7 @@ public class TimeZoneTest extends TestFmwk
             // This is a standard Unix zone, so don't remap it - Liu 3Jan01
             // new ZoneDescriptor("NET", 240, false);
             // As of bug 4191164, fix NET
-            new ZoneDescriptor("NET", 240, true),
+            new ZoneDescriptor("NET", 240, false), // Asia/Yerevan - no DST as of 2012b
             // PLT behaves differently under different JDKs, so we don't check it
             // new ZoneDescriptor("PLT", 300, false), // updated Oct 2003 aliu
             new ZoneDescriptor("IST", 330, false),
