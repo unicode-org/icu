@@ -513,11 +513,11 @@ U_INTERNAL void * U_EXPORT2 uprv_maximumPtr(void *base);
 #  endif
 #endif
 
-#if U_ENABLE_DYLOAD
 /*  Dynamic Library Functions */
 
 typedef void (UVoidFunction)(void);
 
+#if U_ENABLE_DYLOAD
 /**
  * Load a library
  * @internal (ICU 4.4)
