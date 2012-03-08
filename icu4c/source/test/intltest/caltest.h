@@ -235,6 +235,8 @@ public: // package
     void TestAmbiguousWallTimeAPIs(void);
     void TestRepeatedWallTime(void);
     void TestSkippedWallTime(void);
+
+    void TestCloneLocale(void);
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
