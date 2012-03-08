@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation
+ * Copyright (c) 1997-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -17,8 +17,14 @@
 #include "dbgutil.h"
 #include "unicode/udat.h"
 #include "unicode/ustring.h"
+#include "unicode/localpointer.h"
 
 #define mkcstr(U) u_austrcpy(calloc(8, u_strlen(U) + 1), U)
+
+#define TEST_CHECK_STATUS {if (U_FAILURE(status)) {errln("%s:%d: Test failure.  status=%s", \
+                                                              __FILE__, __LINE__, u_errorName(status)); return;}}
+
+#define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: Test failure \n", __FILE__, __LINE__);};}
 
 // *****************************************************************************
 // class CalendarTest
@@ -227,6 +233,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
           if(exec) {
             logln("Test1624---"); logln("");
             Test1624();
+          }
+          break;
+        case 25:
+          name = "TestCloneLocale";
+          if(exec) {
+            logln("TestCloneLocale---"); logln("");
+            TestCloneLocale();
           }
           break;
         default: name = ""; break;
@@ -2156,6 +2169,21 @@ void CalendarTest::Test1624() {
         }
     }
     return;
+}
+
+void CalendarTest::TestCloneLocale(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  LocalPointer<Calendar>  cal(Calendar::createInstance(TimeZone::getGMT()->clone(),
+                                                       Locale::createFromName("en"), status));
+  TEST_CHECK_STATUS;
+  Locale l0 = cal->getLocale(ULOC_VALID_LOCALE, status);
+  TEST_CHECK_STATUS;
+  LocalPointer<Calendar> cal2(cal->clone());
+  Locale l = cal2->getLocale(ULOC_VALID_LOCALE, status);
+  if(l0!=l) {
+    errln("Error: cloned locale %s != original locale %s, status %s\n", l0.getName(), l.getName(), u_errorName(status));
+  }
+  TEST_CHECK_STATUS;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
