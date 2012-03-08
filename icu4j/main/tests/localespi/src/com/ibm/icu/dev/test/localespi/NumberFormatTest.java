@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.util.ULocale;
 
 public class NumberFormatTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
@@ -286,6 +287,30 @@ public class NumberFormatTest extends TestFmwk {
                     }
                 }
             }
+        }
+    }
+
+    public void TestKeywords() {
+        // ICU provider variant is appended
+        ULocale uloc0 = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@numbers=Arab;currency=EUR");
+        Locale loc = uloc0.toLocale();
+        // On Java 7+, locale extension is preserved
+        ULocale uloc = ULocale.forLocale(loc);
+        String nsType = uloc.getKeywordValue("numbers");
+        if (nsType == null) {
+            // Java 6 - skip this test
+            return;
+        }
+
+        NumberFormat jdkNfmt = NumberFormat.getCurrencyInstance(loc);
+        com.ibm.icu.text.NumberFormat icuNfmt = com.ibm.icu.text.NumberFormat.getCurrencyInstance(uloc);
+
+        final double num = 12345.67d;
+        String jdkOut = jdkNfmt.format(num);
+        String icuOut = icuNfmt.format(num);
+
+        if (!jdkOut.equals(icuOut)) {
+            errln("FAIL: JDK number format with Locale " + loc + " is " + jdkOut + ", expected: " + icuOut);
         }
     }
 }

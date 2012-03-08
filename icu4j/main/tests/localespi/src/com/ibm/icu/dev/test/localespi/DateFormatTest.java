@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,10 +8,13 @@ package com.ibm.icu.dev.test.localespi;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.jdkadapter.CalendarICU;
+import com.ibm.icu.util.ULocale;
 
 public class DateFormatTest extends TestFmwk {
 
@@ -191,6 +194,30 @@ public class DateFormatTest extends TestFmwk {
 
         if (!str1.equals(str2)) {
             errln("FAIL: ICU DateFormat returned a result different from JDK for th_TH_TH");
+        }
+    }
+
+    public void TestCalendarKeyword() {
+        // ICU provider variant is appended
+        ULocale uloc0 = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@calendar=buddhist");
+        Locale loc = uloc0.toLocale();
+        // On Java 7+, locale extension is preserved
+        ULocale uloc = ULocale.forLocale(loc);
+        String calType = uloc.getKeywordValue("calendar");
+        if (calType == null) {
+            // Java 6 - skip this test
+            return;
+        }
+
+        DateFormat jdkDfmt = DateFormat.getDateInstance(DateFormat.FULL, loc);
+        Calendar cal = jdkDfmt.getCalendar();
+        boolean isBuddhist = false;
+        if (cal instanceof CalendarICU) {
+            com.ibm.icu.util.Calendar icuCal = ((CalendarICU)cal).unwrap();
+            isBuddhist = icuCal.getType().equals("buddhist");
+        }
+        if (!isBuddhist) {
+            errln("FAIL: Calendar types is not Buddhist");
         }
     }
 }

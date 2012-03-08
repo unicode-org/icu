@@ -10,7 +10,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.text.TimeZoneNames;
+import com.ibm.icu.text.TimeZoneNames.NameType;
 import com.ibm.icu.util.ULocale;
 
 public class TimeZoneNameTest extends TestFmwk {
@@ -29,16 +30,13 @@ public class TimeZoneNameTest extends TestFmwk {
             }
 
             for (String tzid : tzids) {
-                com.ibm.icu.util.TimeZone tzIcu = com.ibm.icu.util.TimeZone.getTimeZone(tzid);
-
                 // Java does not pick up time zone names for ID/Locale from an SPI
                 // when long standard display name is not available.
 
-                String icuStdLong = getIcuDisplayName(tzIcu, false, TimeZone.LONG, loc);
+                String icuStdLong = getIcuDisplayName(tzid, false, TimeZone.LONG, loc);
                 if (icuStdLong != null) {
-                    TimeZone tz = TimeZone.getTimeZone(tzid);
-                    checkDisplayNamePair(TimeZone.SHORT, tz, tzIcu, loc, warningOnly);
-                    checkDisplayNamePair(TimeZone.LONG, tz, tzIcu, loc, warningOnly);
+                    checkDisplayNamePair(TimeZone.SHORT, tzid, loc, warningOnly);
+                    checkDisplayNamePair(TimeZone.LONG, tzid, loc, warningOnly);
                 } else {
                     logln("Localized long standard name is not available for "
                             + tzid + " in locale " + loc + " in ICU");
@@ -47,7 +45,7 @@ public class TimeZoneNameTest extends TestFmwk {
         }
     }
 
-    private void checkDisplayNamePair(int style, TimeZone tz, com.ibm.icu.util.TimeZone icuTz, Locale loc, boolean warnOnly) {
+    private void checkDisplayNamePair(int style, String tzid, Locale loc, boolean warnOnly) {
         /* Note: There are two problems here.
          * 
          * It looks Java 6 requires a TimeZoneNameProvider to return both standard name and daylight name
@@ -60,36 +58,40 @@ public class TimeZoneNameTest extends TestFmwk {
          * saving time even daylight name is requested.
          */
 
-        String icuStdName = getIcuDisplayName(icuTz, false, style, loc);
-        String icuDstName = getIcuDisplayName(icuTz, true, style, loc);
+        String icuStdName = getIcuDisplayName(tzid, false, style, loc);
+        String icuDstName = getIcuDisplayName(tzid, true, style, loc);
         if (icuStdName != null && icuDstName != null && !icuStdName.equals(icuDstName)) {
-            checkDisplayName(false, style, tz, loc, icuStdName, warnOnly);
-            checkDisplayName(true, style, tz, loc, icuDstName, warnOnly);
+            checkDisplayName(false, style, tzid, loc, icuStdName, warnOnly);
+            checkDisplayName(true, style, tzid, loc, icuDstName, warnOnly);
         }
     }
 
-    private String getIcuDisplayName(com.ibm.icu.util.TimeZone icuTz, boolean daylight, int style, Locale loc) {
-        ULocale uloc = ULocale.forLocale(loc);
-        boolean shortStyle = (style == TimeZone.SHORT);
-        String icuname = icuTz.getDisplayName(daylight,
-                (shortStyle ? com.ibm.icu.util.TimeZone.SHORT : com.ibm.icu.util.TimeZone.LONG),
-                uloc);
-        int numDigits = 0;
-        for (int i = 0; i < icuname.length(); i++) {
-            if (UCharacter.isDigit(icuname.charAt(i))) {
-                numDigits++;
+    private String getIcuDisplayName(String tzid, boolean daylight, int style, Locale loc) {
+        String icuName = null;
+        boolean[] isSystemID = new boolean[1];
+        String canonicalID = com.ibm.icu.util.TimeZone.getCanonicalID(tzid, isSystemID);
+        if (isSystemID[0]) {
+            long date = System.currentTimeMillis();
+            TimeZoneNames tznames = TimeZoneNames.getInstance(ULocale.forLocale(loc));
+            switch (style) {
+            case TimeZone.LONG:
+                icuName = daylight ?
+                        tznames.getDisplayName(canonicalID, NameType.LONG_DAYLIGHT, date) :
+                        tznames.getDisplayName(canonicalID, NameType.LONG_STANDARD, date);
+                break;
+            case TimeZone.SHORT:
+                icuName = daylight ?
+                        tznames.getDisplayName(canonicalID, NameType.SHORT_DAYLIGHT, date) :
+                        tznames.getDisplayName(canonicalID, NameType.SHORT_STANDARD, date);
+                break;
             }
         }
-        if (numDigits >= 3) {
-            // ICU does not have the localized name
-            return null;
-        }
-        return icuname;
+        return icuName;
     }
 
-    private void checkDisplayName(boolean daylight, int style, TimeZone tz, Locale loc, String icuname, boolean warnOnly) {
+    private void checkDisplayName(boolean daylight, int style,  String tzid, Locale loc, String icuname, boolean warnOnly) {
         String styleStr = (style == TimeZone.SHORT) ? "SHORT" : "LONG";
-
+        TimeZone tz = TimeZone.getTimeZone(tzid);
         String name = tz.getDisplayName(daylight, style, loc);
 
         if (TestUtil.isICUExtendedLocale(loc)) {

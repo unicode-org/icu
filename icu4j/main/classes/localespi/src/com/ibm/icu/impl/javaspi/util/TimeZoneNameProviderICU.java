@@ -7,47 +7,36 @@
 package com.ibm.icu.impl.javaspi.util;
 
 import java.util.Locale;
+import java.util.TimeZone;
 
 import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
-import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.util.TimeZone;
-import com.ibm.icu.util.ULocale;
+import com.ibm.icu.text.TimeZoneNames;
+import com.ibm.icu.text.TimeZoneNames.NameType;
 
 public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider {
 
     @Override
     public String getDisplayName(String ID, boolean daylight, int style, Locale locale) {
-        TimeZone tz = TimeZone.getFrozenTimeZone(ID);
-        ULocale actualLocale = ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale);
-        String disp = tz.getDisplayName(daylight, style, actualLocale);
-        if (disp.length() == 0) {
-            return null;
-        }
-        // This is ugly hack, but no simple solution to check if
-        // the localized name was picked up.
-        int numDigits = 0;
-        for (int i = 0; i < disp.length(); i++) {
-            char c = disp.charAt(i);
-            if (UCharacter.isDigit(c)) {
-                numDigits++;
+        String dispName = null;
+        boolean[] isSystemID = new boolean[1];
+        String canonicalID = com.ibm.icu.util.TimeZone.getCanonicalID(ID, isSystemID);
+        if (isSystemID[0]) {
+            long date = System.currentTimeMillis();
+            TimeZoneNames tznames = TimeZoneNames.getInstance(ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
+            switch (style) {
+            case TimeZone.LONG:
+                dispName = daylight ?
+                        tznames.getDisplayName(canonicalID, NameType.LONG_DAYLIGHT, date) :
+                        tznames.getDisplayName(canonicalID, NameType.LONG_STANDARD, date);
+                break;
+            case TimeZone.SHORT:
+                dispName = daylight ?
+                        tznames.getDisplayName(canonicalID, NameType.SHORT_DAYLIGHT, date) :
+                        tznames.getDisplayName(canonicalID, NameType.SHORT_STANDARD, date);
+                break;
             }
         }
-        // If there are more than 3 numbers, this code assume GMT format was used.
-        if (numDigits >= 3) {
-            return null;
-        }
-
-        if (daylight) {
-            // ICU uses standard name for daylight name when the zone does not use
-            // daylight saving time.
-
-            // This is yet another ugly hack to support the JDK's behavior
-            String stdDisp = tz.getDisplayName(false, style, actualLocale);
-            if (disp.equals(stdDisp)) {
-                return null;
-            }
-        }
-        return disp;
+        return dispName;
     }
 
     @Override

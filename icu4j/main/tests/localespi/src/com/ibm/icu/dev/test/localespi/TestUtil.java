@@ -13,7 +13,7 @@ import com.ibm.icu.util.ULocale.Builder;
 
 public class TestUtil {
 
-    private static final String ICU_VARIANT = "ICU4J";
+    static final String ICU_VARIANT = "ICU4J";
     private static final String ICU_VARIANT_SUFFIX = "_ICU4J";
 
     public static Locale toICUExtendedLocale(Locale locale) {

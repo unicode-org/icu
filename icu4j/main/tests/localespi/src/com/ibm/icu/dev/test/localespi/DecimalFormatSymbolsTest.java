@@ -11,6 +11,7 @@ import java.util.Currency;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.util.ULocale;
 
 public class DecimalFormatSymbolsTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
@@ -155,5 +156,31 @@ public class DecimalFormatSymbolsTest extends TestFmwk {
         checkEquivalence(decfs.getPercent(), decfsEnUS.getPercent(), loc, "getPercent");
         checkEquivalence(decfs.getPerMill(), decfsEnUS.getPerMill(), loc, "getPerMill");
         checkEquivalence(decfs.getZeroDigit(), decfsEnUS.getZeroDigit(), loc, "getZeroDigit");
+    }
+
+    public void TestKeywords() {
+        // ICU provider variant is appended
+        ULocale uloc0 = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@numbers=Arab;currency=EUR");
+        Locale loc = uloc0.toLocale();
+        // On Java 7+, locale extension is preserved
+        ULocale uloc = ULocale.forLocale(loc);
+        String nsType = uloc.getKeywordValue("numbers");
+        if (nsType == null) {
+            // Java 6 - skip this test
+            return;
+        }
+
+        DecimalFormatSymbols jdkDecfs = DecimalFormatSymbols.getInstance(loc);
+        com.ibm.icu.text.DecimalFormatSymbols icuDecfs = com.ibm.icu.text.DecimalFormatSymbols.getInstance(uloc);
+        // Check digit 0
+        if (jdkDecfs.getDigit() != icuDecfs.getDigit()) {
+            errln("FAIL: Different decimal digit - via JDK: " + jdkDecfs.getDigit() + ", with ICU: " + icuDecfs.getDigit());
+        }
+
+        String jdkCurrencyCode = jdkDecfs.getCurrency().getCurrencyCode();
+        String icuCurrencyCode = icuDecfs.getCurrency().getCurrencyCode();
+        if (!jdkCurrencyCode.equals(icuCurrencyCode)) {
+            errln("FAIL: Different currency code - via JDK: " + jdkCurrencyCode + ", with ICU: " + icuCurrencyCode);
+        }
     }
 }

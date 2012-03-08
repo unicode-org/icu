@@ -10,15 +10,17 @@ import java.util.Locale;
 import java.util.spi.LocaleNameProvider;
 
 import com.ibm.icu.impl.javaspi.ICULocaleServiceProvider;
-import com.ibm.icu.util.ULocale;
+import com.ibm.icu.impl.locale.AsciiUtil;
+import com.ibm.icu.text.LocaleDisplayNames;
 
 public class LocaleNameProviderICU extends LocaleNameProvider {
 
     @Override
     public String getDisplayCountry(String countryCode, Locale locale) {
-        String id = "und_" + countryCode;
-        String disp = ULocale.getDisplayCountry(id, ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
-        if (disp.length() == 0 || disp.equals(countryCode)) {
+        countryCode = AsciiUtil.toUpperString(countryCode);
+        String disp = LocaleDisplayNames.getInstance(ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale))
+                .regionDisplayName(countryCode);
+        if (disp == null || disp.length() == 0 || disp.equals(countryCode)) {
             return null;
         }
         return disp;
@@ -26,8 +28,21 @@ public class LocaleNameProviderICU extends LocaleNameProvider {
 
     @Override
     public String getDisplayLanguage(String languageCode, Locale locale) {
-        String disp = ULocale.getDisplayLanguage(languageCode, ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
-        if (disp.length() == 0 || disp.equals(languageCode)) {
+        languageCode = AsciiUtil.toLowerString(languageCode);
+        String disp = LocaleDisplayNames.getInstance(ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale))
+                .languageDisplayName(languageCode);
+        if (disp == null || disp.length() == 0 || disp.equals(languageCode)) {
+            return null;
+        }
+        return disp;
+    }
+
+    //@Override
+    public String getDisplayScript(String scriptCode, Locale locale) {
+        scriptCode = AsciiUtil.toTitleString(scriptCode);
+        String disp = LocaleDisplayNames.getInstance(ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale))
+                .scriptDisplayName(scriptCode);
+        if (disp == null || disp.length() == 0 || disp.equals(scriptCode)) {
             return null;
         }
         return disp;
@@ -35,13 +50,17 @@ public class LocaleNameProviderICU extends LocaleNameProvider {
 
     @Override
     public String getDisplayVariant(String variant, Locale locale) {
-        // ICU does not support JDK Locale variant names
-        return null;
+        variant = AsciiUtil.toUpperString(variant);
+        String disp = LocaleDisplayNames.getInstance(ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale))
+                .variantDisplayName(variant);
+        if (disp == null || disp.length() == 0 || disp.equals(variant)) {
+            return null;
+        }
+        return disp;
     }
 
     @Override
     public Locale[] getAvailableLocales() {
         return ICULocaleServiceProvider.getAvailableLocales();
     }
-
 }
