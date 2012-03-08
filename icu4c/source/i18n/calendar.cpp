@@ -783,6 +783,8 @@ Calendar::operator=(const Calendar &right)
         fWeekendCease            = right.fWeekendCease;
         fWeekendCeaseMillis      = right.fWeekendCeaseMillis;
         fNextStamp               = right.fNextStamp;
+        uprv_strcpy(validLocale, right.validLocale);
+        uprv_strcpy(actualLocale, right.actualLocale);
     }
 
     return *this;
