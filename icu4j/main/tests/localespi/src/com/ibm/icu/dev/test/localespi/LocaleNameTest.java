@@ -6,7 +6,10 @@
  */
 package com.ibm.icu.dev.test.localespi;
 
+import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.util.ULocale;
@@ -14,6 +17,18 @@ import com.ibm.icu.util.ULocale;
 public class LocaleNameTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
         new LocaleNameTest().run(args);
+    }
+
+    private static final Method GETDISPLAYSCRIPT_METHOD;
+
+    static {
+        Method mGetDisplayScript = null;
+        try {
+            mGetDisplayScript = Locale.class.getMethod("getDisplayScript", new Class[] {Locale.class});
+        } catch (Exception e) {
+            // fall through
+        }
+        GETDISPLAYSCRIPT_METHOD = mGetDisplayScript;
     }
 
     public void TestLanguageNames() {
@@ -76,6 +91,67 @@ public class LocaleNameTest extends TestFmwk {
         }
     }
 
+    public void TestScriptNames() {
+        if (GETDISPLAYSCRIPT_METHOD == null) {
+            logln("INFO: Locale#getDisplayScript(Locale) is not available.");
+            return;
+        }
+
+        Locale[] locales = Locale.getAvailableLocales();
+        for (Locale inLocale : locales) {
+            if (TestUtil.isProblematicIBMLocale(inLocale)) {
+                logln("Skipped " + inLocale);
+                continue;
+            }
+
+            ULocale inULocale = ULocale.forLocale(inLocale);
+            Locale inLocaleICU = TestUtil.toICUExtendedLocale(inLocale);
+            for (ULocale forULocale : ULocale.getAvailableLocales()) {
+                if (forULocale.getScript().length() == 0) {
+                    continue;
+                }
+                Locale forLocale = forULocale.toLocale();
+                String icuname = forULocale.getDisplayScript(inULocale);
+                if (icuname.equals(forULocale.getScript()) || icuname.length() == 0) {
+                    continue;
+                }
+
+                String name = null;
+                try {
+                    name = (String)GETDISPLAYSCRIPT_METHOD.invoke(forLocale, new Object[] {inLocale});
+                } catch (Exception e) {
+                    errln("FAIL: JDK Locale#getDisplayScript(\"" + inLocale + "\") throws exception: " + e.getMessage());
+                    continue;
+                }
+
+                if (TestUtil.isICUExtendedLocale(inLocale)) {
+                    // The name should be taken from ICU
+                    if (!name.equals(icuname)) {
+                        errln("FAIL: Script name by ICU is " + icuname + ", but got " + name
+                                + " for locale " + forLocale + " in locale " + inLocale);
+                    }
+                } else {
+                    // The name might be taken from JDK
+                    if (!name.equals(icuname)) {
+                        logln("INFO: Script name by JDK is " + name + ", but " + icuname + 
+                                " in ICU, for locale " + forLocale + " in locale " + inLocale);
+                    }
+                    // Try explicit ICU locale (xx_yy_ICU)
+                    try {
+                        name = (String)GETDISPLAYSCRIPT_METHOD.invoke(forLocale, new Object[] {inLocaleICU});
+                    } catch (Exception e) {
+                        errln("FAIL: JDK Locale#getDisplayScript(\"" + inLocaleICU + "\") throws exception: " + e.getMessage());
+                        continue;
+                    }
+                    if (!name.equals(icuname)) {
+                        errln("FAIL: Script name by ICU is " + icuname + ", but got " + name
+                                + " for locale " + forLocale + " in locale " + inLocaleICU);
+                    }
+                }
+            }
+        }
+    }
+
     public void TestCountryNames() {
         Locale[] locales = Locale.getAvailableLocales();
         for (Locale inLocale : locales) {
@@ -121,29 +197,22 @@ public class LocaleNameTest extends TestFmwk {
         }
     }
 
-
     public void TestVariantNames() {
-        // [Note]
-        // This test passed OK without any error for several reasons.
-        // When I changed ICU provider's special variant from "ICU" to
-        // "ICU4J" (#9155), this test started failing. The primary
-        // reason was mis-use of ULocale.getDisplayVariant(String, ULocale)
-        // in the test code below. The first argument should be complete
-        // locale ID, not variant only string. However, fixing this won't
-        // resolve the issue because of another ICU bug (multiple variant subtag
-        // issue #9160).
-        // 
-        // Actually, we do not have LocaleNameProvider#getDisplayVariant
-        // implementation (#9161). The current implementation always returns
-        // null. So, the test case below happened to work, but it did not
-        // check anything meaningful. For now, the test case is disabled.
-        // We'll revisit this test case when #9160 and #9161 are resolved.
-        // 2012-03-01 yoshito
-        logln("ICU does not support LocaleNameProvider#getDisplayVariant");
-        if (true) return;
+        Set<Locale> locales = new HashSet<Locale>();
+        for (Locale l : Locale.getAvailableLocales()) {
+            locales.add(l);
+        }
+        // Add some locales with variant
+        final Locale[] additionalLocales = {
+            new Locale("fr", "FR", "1694acad"),
+            new Locale("de", "DE", "1901"),
+            new Locale("en", "US", "boont"),
+            new Locale("el", "GR", "monoton"),
+        };
+        for (Locale l : additionalLocales) {
+            locales.add(l);
+        }
 
-        Locale[] locales = Locale.getAvailableLocales();
-        StringBuffer icuid = new StringBuffer();
         for (Locale inLocale : locales) {
             if (TestUtil.isProblematicIBMLocale(inLocale)) {
                 logln("Skipped " + inLocale);
@@ -153,48 +222,47 @@ public class LocaleNameTest extends TestFmwk {
             ULocale inULocale = ULocale.forLocale(inLocale);
             Locale inLocaleICU = TestUtil.toICUExtendedLocale(inLocale);
             for (Locale forLocale : locales) {
-                if (forLocale.getVariant().length() == 0) {
+                String locVar = forLocale.getVariant();
+                if (locVar.length() == 0) {
                     continue;
                 }
-                icuid.setLength(0);
-                icuid.append(forLocale.getLanguage());
-                String country = forLocale.getCountry();
-                String variant = forLocale.getVariant();
-                if (country.length() != 0) {
-                    icuid.append("_");
-                    icuid.append(country);
-                }
-                if (variant.length() != 0) {
-                    if (country.length() == 0) {
-                        icuid.append("_");
-                    }
-                    icuid.append("_");
-                    icuid.append(variant);
-                }
-                ULocale forULocale = new ULocale(icuid.toString());
-//                String icuname = ULocale.getDisplayVariant(forULocale.getVariant(), inULocale);
-                String icuname = forULocale.getDisplayVariant(inULocale);
-                if (icuname.equals(forULocale.getVariant()) || icuname.length() == 0) {
-                    continue;
-                }
+                // Note: JDK resolves a display name for each variant subtag
+                String[] locVarSubtags = locVar.split("_");
 
-                String name = forLocale.getDisplayVariant(inLocale);
-                if (TestUtil.isICUExtendedLocale(inLocale)) {
-                    // The name should be taken from ICU
-                    if (!name.equals(icuname)) {
-                        errln("FAIL: Variant name by ICU is " + icuname + ", but got " + name
-                                + " for locale " + forLocale + " in locale " + inLocale);
+                for (String locSingleVar : locVarSubtags) {
+                    if (locSingleVar.equals(TestUtil.ICU_VARIANT)) {
+                        continue;
                     }
-                } else {
-                    if (!name.equals(icuname)) {
-                        logln("INFO: Variant name by JDK is " + name + ", but " + icuname + 
-                              " in ICU, for locale " + forLocale + " in locale " + inLocale);
+                    Locale forLocaleSingleVar = new Locale(forLocale.getLanguage(), forLocale.getCountry(), locSingleVar);
+                    ULocale forULocaleSingleVar = new ULocale("und_ZZ_" + locSingleVar);
+                    String icuname = forULocaleSingleVar.getDisplayVariant(inULocale);
+                    if (icuname.equals(locSingleVar) || icuname.length() == 0) {
+                        continue;
                     }
-                    // Try explicit ICU locale (xx_yy_ICU)
-                    name = forLocale.getDisplayVariant(inLocaleICU);
-                    if (!name.equals(icuname)) {
-                        errln("FAIL: Variant name by ICU is " + icuname + ", but got " + name
-                              + " for locale " + forLocale + " in locale " + inLocaleICU);
+
+                    String name = forLocaleSingleVar.getDisplayVariant(inLocale);
+                    if (name.equalsIgnoreCase(locSingleVar)) {
+                        // ICU does not have any localized display name.
+                        // Note: ICU turns variant to upper case string, while Java does not.
+                        continue;
+                    }
+                    if (TestUtil.isICUExtendedLocale(inLocale)) {
+                        // The name should be taken from ICU
+                        if (!name.equals(icuname)) {
+                            errln("FAIL: Variant name by ICU is " + icuname + ", but got " + name
+                                    + " for locale " + forLocaleSingleVar + " in locale " + inLocale);
+                        }
+                    } else {
+                        if (!name.equals(icuname)) {
+                            logln("INFO: Variant name by JDK is " + name + ", but " + icuname + 
+                                  " in ICU, for locale " + forLocaleSingleVar + " in locale " + inLocale);
+                        }
+                        // Try explicit ICU locale (xx_yy_ICU)
+                        name = forLocaleSingleVar.getDisplayVariant(inLocaleICU);
+                        if (!name.equals(icuname)) {
+                            errln("FAIL: Variant name by ICU is " + icuname + ", but got " + name
+                                  + " for locale " + forLocaleSingleVar + " in locale " + inLocaleICU);
+                        }
                     }
                 }
             }

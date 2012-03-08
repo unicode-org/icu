@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008, International Business Machines Corporation and         *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,6 +10,7 @@ import java.text.DateFormatSymbols;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.util.ULocale;
 
 public class DateFormatSymbolsTest extends TestFmwk {
     public static void main(String[] args) throws Exception {
@@ -178,6 +179,27 @@ public class DateFormatSymbolsTest extends TestFmwk {
                 errln("FAIL: Different weekday name - index=" + i
                         + ", nn_NO:" + dow_nnNO[i] + ", no_NO_NY_ICU:" + dow_nnNO_ICU[i]);
             }
+        }
+    }
+
+    public void TestCalendarKeyword() {
+        // ICU provider variant is appended
+        ULocale uloc0 = new ULocale("en_US_" + TestUtil.ICU_VARIANT + "@calendar=japanese");
+        Locale loc = uloc0.toLocale();
+        // On Java 7+, locale extension is preserved
+        ULocale uloc = ULocale.forLocale(loc);
+        String calType = uloc.getKeywordValue("calendar");
+        if (calType == null) {
+            // Java 6 - skip this test
+            return;
+        }
+
+        DateFormatSymbols jdkDfs = DateFormatSymbols.getInstance(loc);
+        com.ibm.icu.text.DateFormatSymbols icuDfs = com.ibm.icu.text.DateFormatSymbols.getInstance(uloc);
+
+        // Check the length of era, so we can check if Japanese calendar is picked up
+        if (jdkDfs.getEras().length != icuDfs.getEras().length) {
+            errln("FAIL: Calendar keyword was ignored");
         }
     }
 }
