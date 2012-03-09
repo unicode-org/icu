@@ -314,9 +314,9 @@
     </target>
 
     <target name="secureCheck" depends="main, jar, icu4jtestsJar" description="Run the secure (applet-like) ICU4J test suite">
-        <property name="securecheck.arg" value="Charset/TestConversion/fromUnicode -n -w"/>
+        <property name="securecheck.arg" value="-n -w"/>
         <property name="securecheck.jvmarg"
-                value="${jvm_options} -Djava.security.manager -Djava.security.policy=${shared.dir}/data/security.policy -Djava.awt.headless=true -Djava.security.debug=all"/>
+                value="${jvm_options} -Djava.security.manager -Djava.security.policy=${shared.dir}/data/security.policy -Djava.awt.headless=true"/>
 
         <echo message="JVM argument:   ${securecheck.jvmarg}"/>
         <echo message="Test argument:  ${securecheck.arg}"/>
