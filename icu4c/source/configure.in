@@ -354,7 +354,7 @@ AC_SUBST(U_DEFAULT_SHOW_DRAFT)
 AC_PROG_RANLIB
 
 # look for 'ar' the proper way
-AC_CHECK_TARGET_TOOL(AR, ar, false)
+AC_CHECK_TOOL(AR, ar, false)
 
 AC_MSG_CHECKING([whether to enable renaming of symbols])
 enabled=yes
