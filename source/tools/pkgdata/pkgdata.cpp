@@ -1542,11 +1542,12 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
     if (IN_STATIC_MODE(mode)) {
         char staticLibFilePath[SMALL_BUFFER_MAX_SIZE] = "";
 
-        uprv_strcpy(staticLibFilePath, o->tmpDir);
-        uprv_strcat(staticLibFilePath, PKGDATA_FILE_SEP_STRING);
-
-        uprv_strcat(staticLibFilePath, o->entryName);
-        uprv_strcat(staticLibFilePath, LIB_EXT);
+        sprintf(staticLibFilePath, "%s%s%s%s%s",
+                o->targetDir,
+                PKGDATA_FILE_SEP_STRING,
+                (strstr(o->libName, "icudt") ? "s" : ""),
+                o->libName,
+                LIB_EXT);
 
         sprintf(cmd, "%s\"%s\" \"%s\"",
                 LIB_CMD,
