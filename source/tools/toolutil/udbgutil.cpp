@@ -341,7 +341,7 @@ U_CAPI const char *udbg_getPlatform(void)
 #if U_PLATFORM_HAS_WIN32_API
     return "Windows";
 #elif U_PLATFORM == U_PF_UNKNOWN
-    return "unknown"
+    return "unknown";
 #else
     return "Other (POSIX-like)";
 #endif
