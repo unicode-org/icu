@@ -756,6 +756,7 @@ en{
             ducet{"Default Unicode Sort Order"}
             gb2312han{"Simplified Chinese Sort Order - GB2312"}
             phonebook{"Phonebook Sort Order"}
+            phonetic{"Phonetic Sort Order"}
             pinyin{"Pinyin Sort Order"}
             reformed{"Reformed Sort Order"}
             search{"General-Purpose Search"}
@@ -863,7 +864,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.66.10"}
+    Version{"2.0.66.69"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

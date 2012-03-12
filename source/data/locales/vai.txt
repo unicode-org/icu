@@ -31,7 +31,7 @@ vai{
         }
         native{"vaii"}
     }
-    Version{"2.0.66.14"}
+    Version{"2.0.66.81"}
     calendar{
         gregorian{
             DateTimePatterns{
