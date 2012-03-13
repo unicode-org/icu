@@ -105,7 +105,8 @@ enum {
     FORCE_PREFIX,
     LIBNAME,
     QUIET,
-    WITHOUT_ASSEMBLY
+    WITHOUT_ASSEMBLY,
+    PDS_BUILD
 };
 
 /* This sets the modes that are available */
@@ -146,7 +147,8 @@ static UOption options[]={
     /*17*/    UOPTION_DEF( "force-prefix", 'f', UOPT_NO_ARG),
     /*18*/    UOPTION_DEF( "libname", 'L', UOPT_REQUIRES_ARG),
     /*19*/    UOPTION_DEF( "quiet", 'q', UOPT_NO_ARG),
-    /*20*/    UOPTION_DEF( "without-assembly", 'w', UOPT_NO_ARG)
+    /*20*/    UOPTION_DEF( "without-assembly", 'w', UOPT_NO_ARG),
+    /*21*/    UOPTION_DEF( "zos-pds-build", 'z', UOPT_NO_ARG)
 };
 
 /* This enum and the following char array should be kept in sync. */
@@ -367,6 +369,12 @@ main(int argc, char* argv[]) {
       o.quiet = TRUE;
     } else {
       o.quiet = FALSE;
+    }
+
+    if(options[PDS_BUILD].doesOccur) {
+      o.pdsbuild = TRUE;
+    } else {
+      o.pdsbuild = FALSE;
     }
 
     o.verbose   = options[VERBOSE].doesOccur;
@@ -742,7 +750,13 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
 #if U_PLATFORM != U_PF_OS400
                 if (!noVersion) {
                     /* Create symbolic links for the final library file. */
+#if U_PLATFORM == U_PF_OS390
+                    if (!o->pdsbuild) {
+                        result = pkg_createSymLinks(targetDir, noVersion);
+                    }
+#else
                     result = pkg_createSymLinks(targetDir, noVersion);
+#endif
                     if (result != 0) {
                         fprintf(stderr, "Error creating symbolic links of the data library file.\n");
                         return result;
@@ -864,6 +878,19 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
         sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s.%s",
                 libFileNames[LIB_FILE],
                 pkgDataFlags[SOBJ_EXT]);
+#elif U_PLATFROM == U_PF_OS390
+            if (o->pdsbuild) {
+                sprintf(libFileNames[LIB_FILE], "%s",
+                    libName);
+                sprintf(libFileNames[LIB_FILE_VERSION_TMP], "\"%s\"",
+                        libFileNames[LIB_FILE]);
+            } else {
+                sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s.%s",
+                        libFileNames[LIB_FILE],
+                        pkgDataFlags[LIB_EXT_ORDER][0] == '.' ? "." : "",
+                        reverseExt ? version : pkgDataFlags[SOBJ_EXT],
+                        reverseExt ? pkgDataFlags[SOBJ_EXT] : version);
+            }
 #else
         if (noVersion && !reverseExt) {
             sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s",
@@ -1518,7 +1545,15 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 
     if (result == 0) {
         /* Generate the library file. */
-        result = pkg_generateLibraryFile(targetDir, mode, buffer, cmd);
+#if U_PLATFORM == U_PF_OS390
+        if (o->pdsbuild && mode == MODE_DLL) {
+            result = pkg_generateLibraryFile("",mode, buffer, cmd);
+        } else {
+            result = pkg_generateLibraryFile(targetDir,mode, buffer, cmd);
+        }
+#else
+        result = pkg_generateLibraryFile(targetDir,mode, buffer, cmd);
+#endif
     }
 
     uprv_free(buffer);
