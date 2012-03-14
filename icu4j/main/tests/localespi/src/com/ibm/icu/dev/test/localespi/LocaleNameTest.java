@@ -230,7 +230,8 @@ public class LocaleNameTest extends TestFmwk {
                 String[] locVarSubtags = locVar.split("_");
 
                 for (String locSingleVar : locVarSubtags) {
-                    if (locSingleVar.equals(TestUtil.ICU_VARIANT)) {
+                    if (locSingleVar.equals(TestUtil.ICU_VARIANT)
+                            || locSingleVar.equals("Cyrl") || locSingleVar.equals("Latn")) { // IBM Java 6 has locales with 'variant' Cryl/Latn
                         continue;
                     }
                     Locale forLocaleSingleVar = new Locale(forLocale.getLanguage(), forLocale.getCountry(), locSingleVar);
