@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -191,7 +191,7 @@ public final class StringPrep {
         "rfc4518ci",    /* RFC4518_LDAP_CI */
     };
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static final WeakReference<StringPrep>[] CACHE = (WeakReference<StringPrep>[])new WeakReference[MAX_PROFILE+1];
 
     private static final int UNASSIGNED        = 0x0000; 
