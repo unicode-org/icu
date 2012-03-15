@@ -67,11 +67,13 @@ public class GenderInfo {
          */
         NEUTRAL, 
         /**
-         * gender(all male) = male, gender(all female) = female, otherwise gender(list) = other
+         * gender(all male) = male, gender(all female) = female, otherwise gender(list) = other.
+         * In particular, any 'other' value makes the overall gender be 'other'.
          */
         MIXED_NEUTRAL, 
         /**
-         * gender(all female) = female, otherwise gender(list) = male
+         * gender(all female) = female, otherwise gender(list) = male.
+         * In particular, any 'other' value makes the overall gender be 'male'.
          */
         MALE_TAINTS
     }
@@ -83,9 +85,7 @@ public class GenderInfo {
      */
     public static void setLocaleMapping(Map<ULocale,GenderInfo> newULocaleToListGender) {
         localeToListGender.clear();
-        for (Entry<ULocale, GenderInfo> entry : newULocaleToListGender.entrySet()) {
-            localeToListGender.put(entry.getKey(), entry.getValue());
-        }
+        localeToListGender.putAll(newULocaleToListGender);
     }
 
     /**
@@ -112,7 +112,7 @@ public class GenderInfo {
             return genders.get(0); // degenerate case
         }
         switch(style) {
-        case MIXED_NEUTRAL: // gender(all male) = male, gender(all female) = female, otherwise gender(list) = other
+        case MIXED_NEUTRAL:
             boolean hasFemale = false;
             boolean hasMale = false;
             for (Gender gender : genders) {
@@ -133,8 +133,9 @@ public class GenderInfo {
                     return Gender.OTHER;
                 }
             }
-            return hasMale ? Gender.MALE : hasFemale ? Gender.FEMALE : Gender.OTHER;
-        case MALE_TAINTS:  // gender(all female) = female, otherwise gender(list) = male
+            return hasMale ? Gender.MALE : Gender.FEMALE;
+            // Note: any OTHER would have caused a return in the loop, which always happens.
+        case MALE_TAINTS:
             for (Gender gender : genders) {
                 if (gender != Gender.FEMALE) {
                     return Gender.MALE;
