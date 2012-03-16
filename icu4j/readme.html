@@ -13,15 +13,12 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 49 RC</h3>
-(Last Update: March 2, 2012)
+<h3>Read Me for ICU4J 49.1</h3>
+(Last Update: March 16, 2012)
 <hr size="2" width="100%">
 
-<p><b>Note:</b> This is a release candidate of ICU4J 49.
-The contents of this document may not reflect the recent changes done
-for ICU 49 development. This version is inteneded for those wishing
-to evaluate ICU 49 new features and API changes. It is not
-recommended for production use.
+<p><b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
+of inherited API and introduces new API or functionality.
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -128,11 +125,34 @@ found in ICU4J.</p>
 <h3 class="doc"><a name="changes"></a>Changes In This Release</h3>
 <h4>New features and changes</h4>
 <p>
-See the <a href="http://sites.google.com/site/icusite/download/49">ICU 49 RC download page</a> about
+See the <a href="http://sites.google.com/site/icusite/download/49">ICU 49 download page</a> about
 new features in this release.  The list of API changes since the previous ICU4J release
 is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-49-rc/APIChangeReport.html">here</a>.
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-49-1/APIChangeReport.html">here</a>.
 </p>
+
+<h4>New ICU release version numbering</h4>
+<p>
+Starting this release, ICU release version numbering policy has changed to use a single
+major version field(e.g. "49") as oppose to two fields (e.g. "4.8"). The second field stays 0
+during development (e.g. "49.0.1" for ICU 49 development milestone 1) and the first official
+release within a major version is 1 (e.g. "49.1"). For the details, please refer to <a
+href="http://userguide.icu-project.org/design#TOC-Version-Numbers-in-ICU">Version Numbers
+in ICU</a>.
+</p>
+
+<h4>Locale variant for ICU4J Locale Service Provider</h4>
+<p>
+ICU4J Locale Service Provider uses a special Locale variant value for overriding Java's
+Locale service support. In this release, the default value of the special variant was
+changed to "ICU4J" (previously, it was "ICU"). For example, with JDK Locale("en", "US", "ICU4J"),
+ICU service implementation is used instead of Java's stock implementation for Locale("en", "US").
+This change had made for BCP 47 conformance. The special variant value can be changed by
+editing a properties file included in the ICU4J Locale Service Provider jar file.
+Please see the user guide page <a href="http://userguide.icu-project.org/icu4j-locale-service-provider">
+ICU4J Locale Service Provider</a> for the details.
+</p>
+
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
 The ICU projects (ICU4C and ICU4J) use the X license. The X
@@ -602,7 +622,7 @@ version 1.7 or later. It's recommended to install both the J2SE SDK and Ant
 somewhere <em>outside</em>the ICU4J directory. For example, on Linux you might install
 these in <code>/usr/local</code>.</p>
 <ul>
-  <li>Install J2SE SDK 6.0.</li>
+  <li>Install J2SE SDK 7.</li>
   <li>Install the <a href="http://ant.apache.org/"><strong>Ant</strong></a>
   build system. Ant is a portable, Java-based build system similar to
   make. ICU4J uses Ant because it introduces no other dependencies, it's
@@ -614,7 +634,7 @@ these in <code>/usr/local</code>.</p>
 extract it onto your system, set some environment variables, and add
 its bin directory to your path. For example: </p>
     <pre>
-        set JAVA_HOME=C:\jdk1.6.0
+        set JAVA_HOME=C:\jdk1.7.0
         set ANT_HOME=C:\ant
         set PATH=%PATH%;%ANT_HOME%\bin</pre>
     <p>See the current Ant documentation for details.</p>
@@ -628,19 +648,16 @@ root directory. You can give Ant options like -verbose, and you can specify
 other targets.  For example:</p>
 <blockquote>
 <pre>C:\icu4j>ant
-Buildfile: build.xml
-
 Buildfile: C:\icu4j\build.xml
 
 info:
      [echo] ----- Build Environment Information -------------------
-     [echo] Java Home:    C:\jdk1.6.0
-     [echo] Java Version: 1.6.0
+     [echo] Java Home:    C:\jdk1.7.0
+     [echo] Java Version: 1.7.0
      [echo] Ant Home:     C:\ant
-     [echo] Ant Version:  Apache Ant(TM) version 1.8.2 compiled on December 20 2
-010
+     [echo] Ant Version:  Apache Ant(TM) version 1.8.3 compiled on February 26 2012
      [echo] OS:           Windows 7
-     [echo] OS Version:   6.1 build 7601 Service Pack 1
+     [echo] OS Version:   6.1
      [echo] OS Arch:      x86
      [echo] Host:         ICUDEV
      [echo] -------------------------------------------------------
@@ -651,15 +668,15 @@ core:
      [echo] --- java compiler arguments ------------------------
      [echo] source dir:     C:\icu4j\main\classes\core/src
      [echo] output dir:     C:\icu4j\main\classes\core/out/bin
-     [echo] classpath:
+     [echo] classpath:      
      [echo] source:         1.5
      [echo] target:         1.5
      [echo] debug:          on
      [echo] encoding:       UTF-8
-     [echo] compiler arg:   -Xlint:all,-deprecation,-dep-ann
+     [echo] compiler arg:   -Xlint:all,-deprecation,-dep-ann,-options
      [echo] ----------------------------------------------------
     [mkdir] Created dir: C:\icu4j\main\classes\core\out\bin
-    [javac] Compiling 331 source files to C:\icu4j\main\classes\core\out\bin
+    [javac] Compiling 336 source files to C:\icu4j\main\classes\core\out\bin
     [javac] Note: Some input files use or override a deprecated API.
     [javac] Note: Recompile with -Xlint:deprecation for details.
 
@@ -669,14 +686,12 @@ compile:
      [copy] Copying 23 files to C:\icu4j\main\classes\core\out\bin
 
 copy-data:
-    [unjar] Expanding: C:\icu4j\main\shared\data\icudata.jar into C:\icu4j\main\
-classes\core\out\bin
+    [unjar] Expanding: C:\icu4j\main\shared\data\icudata.jar into C:\icu4j\main\classes\core\out\bin
+    [unjar] Expanding: C:\icu4j\main\shared\data\icutzdata.jar into C:\icu4j\main\classes\core\out\bin
 
 ...
 ...
 ...
-
-build:
 
 _build-localespi:
 
@@ -684,17 +699,15 @@ _build-localespi:
      [echo] --- java compiler arguments ------------------------
      [echo] source dir:     C:\icu4j\main\classes\localespi/src
      [echo] output dir:     C:\icu4j\main\classes\localespi/out/bin
-     [echo] classpath:      C:\icu4j\main\classes\core\out\lib\icu4j-core.jar;C:
-\icu4j\main\classes\collate\out\lib\icu4j-collate.jar
+     [echo] classpath:      C:\icu4j\main\classes\core\out\lib\icu4j-core.jar;C:\icu4j\main\classes\collate\out\lib\icu4j-collate.jar
      [echo] source:         1.6
      [echo] target:         1.6
      [echo] debug:          on
      [echo] encoding:       UTF-8
-     [echo] compiler arg:   -Xlint:all,-deprecation,-dep-ann
+     [echo] compiler arg:   -Xlint:all,-deprecation,-dep-ann,-options
      [echo] ----------------------------------------------------
     [mkdir] Created dir: C:\icu4j\main\classes\localespi\out\bin
     [javac] Compiling 22 source files to C:\icu4j\main\classes\localespi\out\bin
-
 
 compile:
 
@@ -706,14 +719,12 @@ copy:
 @jar:
     [mkdir] Created dir: C:\icu4j\main\classes\localespi\out\lib
      [copy] Copying 1 file to C:\icu4j\main\classes\localespi\out
-      [jar] Building jar: C:\icu4j\main\classes\localespi\out\lib\icu4j-localesp
-i.jar
+      [jar] Building jar: C:\icu4j\main\classes\localespi\out\lib\icu4j-localespi.jar
 
 jar:
 
 @src-jar:
-      [jar] Building jar: C:\icu4j\main\classes\localespi\out\lib\icu4j-localesp
-i-src.jar
+      [jar] Building jar: C:\icu4j\main\classes\localespi\out\lib\icu4j-localespi-src.jar
 
 src-jar:
 
@@ -724,7 +735,7 @@ jar:
      [copy] Copying 1 file to C:\icu4j
 
 BUILD SUCCESSFUL
-Total time: 53 seconds</pre>
+Total time: 1 minute 38 seconds</pre>
 </blockquote>
 <I>Note: The above output is an example. The numbers are likely to be different with the current version ICU4J.</I>
 <p>The following are some targets that you can provide to <b>ant</b>.
@@ -976,9 +987,9 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version 'release-21-0-1-d01-icu49rc'</li>
-    <li>Checkout ICU4C with tag 'release-49-rc'</li>
-    <li>Checkout ICU4J with tag 'release-49-rc'</li>
+    <li>Checkout or download CLDR version 'release-21-0-1'</li>
+    <li>Checkout ICU4C with tag 'release-49-1'</li>
+    <li>Checkout ICU4J with tag 'release-49-1'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
@@ -990,7 +1001,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 49RC includes time zone data version 2012b, which is the latest one as of
+<p>ICU4J 49.1 includes time zone data version 2012b, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
