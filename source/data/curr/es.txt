@@ -2073,5 +2073,5 @@ es{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.67.6"}
 }
