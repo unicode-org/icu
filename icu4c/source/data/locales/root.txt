@@ -74,7 +74,7 @@ root{
         297,
         210,
     }
-    Version{"2.0.66.10"}
+    Version{"2.0.67.6"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -1076,7 +1076,17 @@ root{
             }
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
-        islamic-civil:alias{"/LOCALE/calendar/islamic"}
+        islamic-civil{
+            AmPmMarkers:alias{"/LOCALE/calendar/islamic/AmPmMarkers"}
+            DateTimePatterns:alias{"/LOCALE/calendar/islamic/DateTimePatterns"}
+            appendItems:alias{"/LOCALE/calendar/islamic/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/islamic/availableFormats"}
+            dayNames:alias{"/LOCALE/calendar/islamic/dayNames"}
+            eras:alias{"/LOCALE/calendar/islamic/eras"}
+            intervalFormats:alias{"/LOCALE/calendar/islamic/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/islamic/monthNames"}
+            quarters:alias{"/LOCALE/calendar/islamic/quarters"}
+        }
         japanese{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns{

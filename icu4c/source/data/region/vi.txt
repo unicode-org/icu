@@ -293,5 +293,5 @@ vi{
         ZW{"Dim-ba-bu-ê"}
         ZZ{"Vùng Chưa biết hoặc không Hợp lệ"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.67.6"}
 }

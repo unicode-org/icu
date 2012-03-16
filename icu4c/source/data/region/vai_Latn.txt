@@ -237,5 +237,5 @@ vai_Latn{
         ZM{"Zambiya"}
         ZW{"Zimbabhuwe"}
     }
-    Version{"2.0.66.81"}
+    Version{"2.0.67.8"}
 }
