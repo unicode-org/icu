@@ -13,5 +13,5 @@ pa_Arab{
     Countries{
         PK{"پکستان"}
     }
-    Version{"2.0.66.81"}
+    Version{"2.0.67.8"}
 }

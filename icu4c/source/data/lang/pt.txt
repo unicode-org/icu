@@ -775,7 +775,7 @@ pt{
         VALENCIA{"valenciano"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.67.6"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Roteiro: {0}"}
