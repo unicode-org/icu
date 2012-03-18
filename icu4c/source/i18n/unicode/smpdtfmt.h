@@ -188,8 +188,9 @@ class TimeZoneFormat;
  * <code>Unicode::isDigit()</code>, will be parsed into the default century.
  * Any other numeric string, such as a one digit string, a three or more digit
  * string, or a two digit string that isn't all digits (for example, "-1"), is
- * interpreted literally.  So "01/02/3" or "01/02/003" are parsed, using the
- * same pattern, as Jan 2, 3 AD.  Likewise, "01/02/-3" is parsed as Jan 2, 4 BC.
+ * interpreted literally.  So "01/02/3" or "01/02/003" are parsed (for the
+ * Gregorian calendar), using the same pattern, as Jan 2, 3 AD.  Likewise (but
+ * only in lenient parse mode, the default) "01/02/-3" is parsed as Jan 2, 4 BC.
  *
  * <p>
  * If the year pattern has more than two 'y' characters, the year is
