@@ -580,10 +580,14 @@ udat_toCalendarDateField(UDateFormatField field);
  * and to parse dates in calls to {@link #udat_parse }.
  * @param timeStyle The style used to format times; one of UDAT_FULL, UDAT_LONG,
  * UDAT_MEDIUM, UDAT_SHORT, UDAT_DEFAULT, or UDAT_NONE (relative time styles
- * are not currently supported)
+ * are not currently supported).
  * @param dateStyle The style used to format dates; one of UDAT_FULL, UDAT_LONG,
  * UDAT_MEDIUM, UDAT_SHORT, UDAT_DEFAULT, UDAT_FULL_RELATIVE, UDAT_LONG_RELATIVE,
- * UDAT_MEDIUM_RELATIVE, UDAT_SHORT_RELATIVE, or UDAT_NONE
+ * UDAT_MEDIUM_RELATIVE, UDAT_SHORT_RELATIVE, or UDAT_NONE. As currently implemented,
+ * relative date formatting only affects a limited range of calendar days before or
+ * after the current date, based on the CLDR <field type="day">/<relative> data: For
+ * example, in English, "Yesterday", "Today", and "Tomorrow". Outside of this range,
+ * dates are formatted using the corresponding non-relative style.
  * @param locale The locale specifying the formatting conventions
  * @param tzID A timezone ID specifying the timezone to use.  If 0, use
  * the default timezone.
