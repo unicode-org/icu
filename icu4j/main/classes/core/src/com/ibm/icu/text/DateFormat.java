@@ -1034,7 +1034,7 @@ public abstract class DateFormat extends UFormat {
      * @param style the given formatting style. For example,
      * SHORT for "M/d/yy" in the US locale. As currently implemented, relative date
      * formatting only affects a limited range of calendar days before or after the
-     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * current date, based on the CLDR &lt;field type="day"&gt;/&lt;relative&gt; data: For example,
      * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
      * dates are formatted using the corresponding non-relative style.
      * @return a date formatter.
@@ -1052,7 +1052,7 @@ public abstract class DateFormat extends UFormat {
      * @param style the given formatting style. For example,
      * SHORT for "M/d/yy" in the US locale. As currently implemented, relative date
      * formatting only affects a limited range of calendar days before or after the
-     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * current date, based on the CLDR &lt;field type="day"&gt;/&lt;relative&gt; data: For example,
      * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
      * dates are formatted using the corresponding non-relative style.
      * @param aLocale the given locale.
@@ -1071,7 +1071,7 @@ public abstract class DateFormat extends UFormat {
      * @param style the given formatting style. For example,
      * SHORT for "M/d/yy" in the US locale. As currently implemented, relative date
      * formatting only affects a limited range of calendar days before or after the
-     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * current date, based on the CLDR &lt;field type="day"&gt;/&lt;relative&gt; data: For example,
      * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
      * dates are formatted using the corresponding non-relative style.
      * @param locale the given ulocale.
@@ -1102,7 +1102,7 @@ public abstract class DateFormat extends UFormat {
      * @param dateStyle the given date formatting style. For example,
      * SHORT for "M/d/yy" in the US locale. As currently implemented, relative date
      * formatting only affects a limited range of calendar days before or after the
-     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * current date, based on the CLDR &lt;field type="day"&gt;/&lt;relative&gt; data: For example,
      * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
      * dates are formatted using the corresponding non-relative style.
      * @param timeStyle the given time formatting style. For example,
@@ -1123,7 +1123,7 @@ public abstract class DateFormat extends UFormat {
      * for the given locale.
      * @param dateStyle the given date formatting style. As currently implemented, relative date
      * formatting only affects a limited range of calendar days before or after the
-     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * current date, based on the CLDR &lt;field type="day"&gt;/&lt;relative&gt; data: For example,
      * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
      * dates are formatted using the corresponding non-relative style.
      * @param timeStyle the given time formatting style. Relative time styles are not
@@ -1143,7 +1143,7 @@ public abstract class DateFormat extends UFormat {
      * for the given locale.
      * @param dateStyle the given date formatting style. As currently implemented, relative date
      * formatting only affects a limited range of calendar days before or after the
-     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * current date, based on the CLDR &lt;field type="day"&gt;/&lt;relative&gt; data: For example,
      * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
      * dates are formatted using the corresponding non-relative style.
      * @param timeStyle the given time formatting style. Relative time styles are not
