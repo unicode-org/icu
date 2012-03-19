@@ -1,0 +1,33 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2012 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ar_JO.xml
+// *
+// ***************************************************************************
+ar_JO{
+    Version{"2.0.56.95"}
+    calendar{
+        gregorian{
+            monthNames{
+                format{
+                    wide{
+                        "كانون الثاني",
+                        "شباط",
+                        "آذار",
+                        "نيسان",
+                        "أيار",
+                        "حزيران",
+                        "تموز",
+                        "آب",
+                        "أيلول",
+                        "تشرين الأول",
+                        "تشرين الثاني",
+                        "كانون الأول",
+                    }
+                }
+            }
+        }
+    }
+}
