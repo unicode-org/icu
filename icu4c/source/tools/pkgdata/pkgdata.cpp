@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2000-2011, International Business Machines
+ *   Copyright (C) 2000-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   file name:  pkgdata.c
@@ -144,7 +144,8 @@ enum {
     REVISION,
     FORCE_PREFIX,
     LIBNAME,
-    QUIET
+    QUIET,
+    PDS_BUILD
 };
 
 /* This sets the modes that are available */
@@ -184,7 +185,8 @@ static UOption options[]={
     /*16*/    UOPTION_DEF( "revision", 'r', UOPT_REQUIRES_ARG),
     /*17*/    UOPTION_DEF( "force-prefix", 'f', UOPT_NO_ARG),
     /*18*/    UOPTION_DEF( "libname", 'L', UOPT_REQUIRES_ARG),
-    /*19*/    UOPTION_DEF( "quiet", 'q', UOPT_NO_ARG)
+    /*19*/    UOPTION_DEF( "quiet", 'q', UOPT_NO_ARG),
+    /*20*/    UOPTION_DEF( "zos-pds-build", 'z', UOPT_NO_ARG)
 };
 
 enum {
@@ -246,7 +248,8 @@ const char options_help[][320]={
     "Specify a version when packaging in dll or static mode",
     "Add package to all file names if not present",
     "Library name to build (if different than package name)",
-    "Quite mode. (e.g. Do not output a readme file for static libraries)"
+    "Quite mode. (e.g. Do not output a readme file for static libraries)",
+    "Build PDS for z/OS"
 };
 
 const char  *progname = "PKGDATA";
@@ -384,6 +387,12 @@ main(int argc, char* argv[]) {
       o.quiet = TRUE;
     } else {
       o.quiet = FALSE;
+    }
+    
+    if(options[PDS_BUILD].doesOccur) {
+      o.pdsbuild = TRUE;
+    } else {
+      o.pdsbuild = FALSE;
     }
 
     o.verbose   = options[VERBOSE].doesOccur;
@@ -720,7 +729,13 @@ static int32_t pkg_executeOptions(UPKGOptions *o) {
                 }
 #ifndef OS400
                 /* Create symbolic links for the final library file. */
+#ifdef OS390
+                if (!o->pdsbuild) {
+                    result = pkg_createSymLinks(targetDir);
+                }
+#else
                 result = pkg_createSymLinks(targetDir);
+#endif
                 if (result != 0) {
                     fprintf(stderr, "Error creating symbolic links of the data library file.\n");
                     return result;
@@ -842,6 +857,19 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
             sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s.%s",
                     libFileNames[LIB_FILE],
                     pkgDataFlags[SOBJ_EXT]);
+#elif defined(OS390)
+            if (o->pdsbuild) {
+                sprintf(libFileNames[LIB_FILE], "%s",
+                    libName);
+                sprintf(libFileNames[LIB_FILE_VERSION_TMP], "\"%s\"",
+                        libFileNames[LIB_FILE]);
+            } else {
+                sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s.%s",
+                        libFileNames[LIB_FILE],
+                        pkgDataFlags[LIB_EXT_ORDER][0] == '.' ? "." : "",
+                        reverseExt ? version : pkgDataFlags[SOBJ_EXT],
+                        reverseExt ? pkgDataFlags[SOBJ_EXT] : version);
+            }
 #else
             sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s%s%s.%s",
                     libFileNames[LIB_FILE],
@@ -1449,7 +1477,15 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
 
     if (result == 0) {
         /* Generate the library file. */
-        result = pkg_generateLibraryFile(targetDir, mode, buffer, cmd);
+#ifdef OS390
+        if (o->pdsbuild && mode == MODE_DLL) {
+            result = pkg_generateLibraryFile("",mode, buffer, cmd);
+        } else {
+            result = pkg_generateLibraryFile(targetDir,mode, buffer, cmd);
+        }
+#else
+        result = pkg_generateLibraryFile(targetDir,mode, buffer, cmd);
+#endif
     }
 
     uprv_free(buffer);

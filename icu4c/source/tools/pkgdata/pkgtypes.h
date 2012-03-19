@@ -1,6 +1,6 @@
 /**************************************************************************
 *
-*   Copyright (C) 2000-2009, International Business Machines
+*   Copyright (C) 2000-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ***************************************************************************
@@ -125,6 +125,7 @@ typedef struct UPKGOptions_
   UBool      rebuild;
   UBool      verbose;
   UBool      quiet;
+  UBool      pdsbuild;     /* for building PDS in z/OS */
 } UPKGOptions;
 
 char * convertToNativePathSeparators(char *path);
