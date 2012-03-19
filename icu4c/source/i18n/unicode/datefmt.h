@@ -543,8 +543,13 @@ public:
      * Creates a date formatter with the given formatting style for the given
      * const locale.
      *
-     * @param style     The given formatting style. For example,
-     *                  SHORT for "M/d/yy" in the US locale.
+     * @param style     The given formatting style. For example, SHORT for "M/d/yy" in the
+     *                  US locale. As currently implemented, relative date formatting only
+     *                  affects a limited range of calendar days before or after the
+     *                  current date, based on the CLDR <field type="day">/<relative> data:
+     *                  For example, in English, "Yesterday", "Today", and "Tomorrow".
+     *                  Outside of this range, dates are formatted using the corresponding
+     *                  non-relative style.
      * @param aLocale   The given locale.
      * @return          A date formatter which the caller owns.
      * @stable ICU 2.0
@@ -557,7 +562,12 @@ public:
      * given locale.
      *
      * @param dateStyle The given formatting style for the date portion of the result.
-     *                  For example, SHORT for "M/d/yy" in the US locale.
+     *                  For example, SHORT for "M/d/yy" in the US locale. As currently
+     *                  implemented, relative date formatting only affects a limited range
+     *                  of calendar days before or after the current date, based on the
+     *                  CLDR <field type="day">/<relative> data: For example, in English,
+     *                  "Yesterday", "Today", and "Tomorrow". Outside of this range, dates
+     *                  are formatted using the corresponding non-relative style.
      * @param timeStyle The given formatting style for the time portion of the result.
      *                  For example, SHORT for "h:mm a" in the US locale. Relative
      *                  time styles are not currently supported.
