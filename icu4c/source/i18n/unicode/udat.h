@@ -585,7 +585,7 @@ udat_toCalendarDateField(UDateFormatField field);
  * UDAT_MEDIUM, UDAT_SHORT, UDAT_DEFAULT, UDAT_FULL_RELATIVE, UDAT_LONG_RELATIVE,
  * UDAT_MEDIUM_RELATIVE, UDAT_SHORT_RELATIVE, or UDAT_NONE. As currently implemented,
  * relative date formatting only affects a limited range of calendar days before or
- * after the current date, based on the CLDR <field type="day">/<relative> data: For
+ * after the current date, based on the CLDR &lt;field type="day"&gt;/&lt;relative&gt; data: For
  * example, in English, "Yesterday", "Today", and "Tomorrow". Outside of this range,
  * dates are formatted using the corresponding non-relative style.
  * @param locale The locale specifying the formatting conventions
