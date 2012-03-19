@@ -973,7 +973,8 @@ public abstract class DateFormat extends UFormat {
      * Returns the time formatter with the given formatting style
      * for the default <code>FORMAT</code> locale.
      * @param style the given formatting style. For example,
-     * SHORT for "h:mm a" in the US locale.
+     * SHORT for "h:mm a" in the US locale. Relative time styles are not currently
+     * supported, and behave just like the corresponding non-relative style.
      * @return a time formatter.
      * @see Category#FORMAT
      * @stable ICU 2.0
@@ -987,7 +988,8 @@ public abstract class DateFormat extends UFormat {
      * Returns the time formatter with the given formatting style
      * for the given locale.
      * @param style the given formatting style. For example,
-     * SHORT for "h:mm a" in the US locale.
+     * SHORT for "h:mm a" in the US locale. Relative time styles are not currently
+     * supported, and behave just like the corresponding non-relative style.
      * @param aLocale the given locale.
      * @return a time formatter.
      * @stable ICU 2.0
@@ -1002,7 +1004,8 @@ public abstract class DateFormat extends UFormat {
      * Returns the time formatter with the given formatting style
      * for the given locale.
      * @param style the given formatting style. For example,
-     * SHORT for "h:mm a" in the US locale.
+     * SHORT for "h:mm a" in the US locale. Relative time styles are not currently
+     * supported, and behave just like the corresponding non-relative style.
      * @param locale the given ulocale.
      * @return a time formatter.
      * @stable ICU 3.2
@@ -1029,7 +1032,11 @@ public abstract class DateFormat extends UFormat {
      * Returns the date formatter with the given formatting style
      * for the default <code>FORMAT</code> locale.
      * @param style the given formatting style. For example,
-     * SHORT for "M/d/yy" in the US locale.
+     * SHORT for "M/d/yy" in the US locale. As currently implemented, relative date
+     * formatting only affects a limited range of calendar days before or after the
+     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
+     * dates are formatted using the corresponding non-relative style.
      * @return a date formatter.
      * @see Category#FORMAT
      * @stable ICU 2.0
@@ -1043,7 +1050,11 @@ public abstract class DateFormat extends UFormat {
      * Returns the date formatter with the given formatting style
      * for the given locale.
      * @param style the given formatting style. For example,
-     * SHORT for "M/d/yy" in the US locale.
+     * SHORT for "M/d/yy" in the US locale. As currently implemented, relative date
+     * formatting only affects a limited range of calendar days before or after the
+     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
+     * dates are formatted using the corresponding non-relative style.
      * @param aLocale the given locale.
      * @return a date formatter.
      * @stable ICU 2.0
@@ -1058,7 +1069,11 @@ public abstract class DateFormat extends UFormat {
      * Returns the date formatter with the given formatting style
      * for the given locale.
      * @param style the given formatting style. For example,
-     * SHORT for "M/d/yy" in the US locale.
+     * SHORT for "M/d/yy" in the US locale. As currently implemented, relative date
+     * formatting only affects a limited range of calendar days before or after the
+     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
+     * dates are formatted using the corresponding non-relative style.
      * @param locale the given ulocale.
      * @return a date formatter.
      * @stable ICU 3.2
@@ -1085,9 +1100,14 @@ public abstract class DateFormat extends UFormat {
      * Returns the date/time formatter with the given date and time
      * formatting styles for the default <code>FORMAT</code> locale.
      * @param dateStyle the given date formatting style. For example,
-     * SHORT for "M/d/yy" in the US locale.
+     * SHORT for "M/d/yy" in the US locale. As currently implemented, relative date
+     * formatting only affects a limited range of calendar days before or after the
+     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
+     * dates are formatted using the corresponding non-relative style.
      * @param timeStyle the given time formatting style. For example,
-     * SHORT for "h:mm a" in the US locale.
+     * SHORT for "h:mm a" in the US locale. Relative time styles are not currently
+     * supported, and behave just like the corresponding non-relative style.
      * @return a date/time formatter.
      * @see Category#FORMAT
      * @stable ICU 2.0
@@ -1101,8 +1121,13 @@ public abstract class DateFormat extends UFormat {
     /**
      * Returns the date/time formatter with the given formatting styles
      * for the given locale.
-     * @param dateStyle the given date formatting style.
-     * @param timeStyle the given time formatting style.
+     * @param dateStyle the given date formatting style. As currently implemented, relative date
+     * formatting only affects a limited range of calendar days before or after the
+     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
+     * dates are formatted using the corresponding non-relative style.
+     * @param timeStyle the given time formatting style. Relative time styles are not
+     * currently supported, and behave just like the corresponding non-relative style.
      * @param aLocale the given locale.
      * @return a date/time formatter.
      * @stable ICU 2.0
@@ -1116,8 +1141,13 @@ public abstract class DateFormat extends UFormat {
     /**
      * Returns the date/time formatter with the given formatting styles
      * for the given locale.
-     * @param dateStyle the given date formatting style.
-     * @param timeStyle the given time formatting style.
+     * @param dateStyle the given date formatting style. As currently implemented, relative date
+     * formatting only affects a limited range of calendar days before or after the
+     * current date, based on the CLDR <field type="day">/<relative> data: For example,
+     * in English, "Yesterday", "Today", and "Tomorrow". Outside of this range, relative
+     * dates are formatted using the corresponding non-relative style.
+     * @param timeStyle the given time formatting style. Relative time styles are not
+     * currently supported, and behave just like the corresponding non-relative style.
      * @param locale the given ulocale.
      * @return a date/time formatter.
      * @stable ICU 3.2
