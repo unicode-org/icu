@@ -546,7 +546,7 @@ public:
      * @param style     The given formatting style. For example, SHORT for "M/d/yy" in the
      *                  US locale. As currently implemented, relative date formatting only
      *                  affects a limited range of calendar days before or after the
-     *                  current date, based on the CLDR <field type="day">/<relative> data:
+     *                  current date, based on the CLDR &lt;field type="day"&gt;/&lt;relative&gt; data:
      *                  For example, in English, "Yesterday", "Today", and "Tomorrow".
      *                  Outside of this range, dates are formatted using the corresponding
      *                  non-relative style.
@@ -565,7 +565,7 @@ public:
      *                  For example, SHORT for "M/d/yy" in the US locale. As currently
      *                  implemented, relative date formatting only affects a limited range
      *                  of calendar days before or after the current date, based on the
-     *                  CLDR <field type="day">/<relative> data: For example, in English,
+     *                  CLDR &lt;field type="day"&gt;/&lt;relative&gt; data: For example, in English,
      *                  "Yesterday", "Today", and "Tomorrow". Outside of this range, dates
      *                  are formatted using the corresponding non-relative style.
      * @param timeStyle The given formatting style for the time portion of the result.
