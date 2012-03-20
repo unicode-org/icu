@@ -1,0 +1,148 @@
+<HTML><!-- #BeginTemplate "/Templates/MainTemplate.dwt" -->
+<HEAD>
+<!-- #BeginEditable "doctitle" --> 
+<TITLE>RB Manager Tutorial - Creating Resources</TITLE>
+<!-- #EndEditable --> 
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
+<STYLE TYPE="TEXT/CSS">
+<!--
+.topicHead {  font-family: "Times New Roman", Times, serif; font-size: 14pt; font-weight: bold; text-align: center; color: #333333}
+.topicList {  font-family: Georgia, "Times New Roman", Times, serif; font-size: 9pt; color: #FF0099; list-style-image: url(../images/diamond_bullet.gif); text-decoration: none; font-weight: bold}
+.mainBlock {  font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12pt; margin-top: 5px; margin-right: 5px; margin-bottom: 5px; margin-left: 5px; padding-top: 5px; padding-right: 10px; padding-bottom: 5px; padding-left: 10px; text-align: justify}
+-->
+</STYLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" LEFTMARGIN="0" TOPMARGIN="0" MARGINWIDTH="0" MARGINHEIGHT="0">
+<TABLE WIDTH="100%" BORDER="0" CELLSPACING="0" CELLPADDING="0">
+  <TR>
+    <TD ROWSPAN="2" COLSPAN="2" BACKGROUND="../images/template_ul.gif" HEIGHT="75"><IMG SRC="../images/spacer.gif" WIDTH="280" HEIGHT="1" HSPACE="0"></TD>
+		<TD HEIGHT="15"  WIDTH="100%" BACKGROUND="../images/template_u.gif"></TD>
+	</TR>
+	<TR>
+		<TD HEIGHT="60" >
+			<CENTER><IMG SRC="../images/TitleLogo_transparent.gif" VSPACE="0"></CENTER>
+		</TD>
+	</TR>
+	<TR>
+		
+    <TD WIDTH="200" BACKGROUND="../images/template_l.gif" VALIGN="top">
+		<TABLE WIDTH="180" CELLSPACING="0" CELLPADDING="1"> 
+      	<TR>
+			<TD CLASS="topicHead">General</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../system_requirements.html">System Requirements</A></LI>
+              <LI><A HREF="../faq.html">FAQ</A></LI>
+              <LI><A HREF="../future_features.html">Future Releases</A></LI>
+              <LI CLASS="topicList"><A HREF="../future_features.html">Version 
+                History</A></LI>
+            </UL>
+			</TD>
+		</TR>
+      	<TR>
+			<TD CLASS="topicHead">RB Manager</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	        <UL>
+              <LI><A HREF="../index.html">Home</A></LI>
+              <LI><A HREF="index.html">Tutorial</A></LI>
+              <LI><A HREF="../views/index.html">Functionality and Views</A></LI>
+              <LI><A HREF="../lookandfeel.html">Look and Feel</A></LI>
+              <LI><A HREF="../menu.html">Menu Items</A></LI>
+              <LI CLASS="topicList"><A HREF="step1.html">Preferences</A></LI>
+            </UL>
+			</TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicHead">RB Reporter</TD>
+		</TR>
+		<TR>
+			<TD VALIGN="center"><IMG SRC="../images/template_line.gif"></TD>
+		</TR>
+		<TR>
+			<TD CLASS="topicList">
+	  <UL>
+              <LI><A HREF="../RBReporter.html">Home</A></LI>
+        <LI>Report Types</LI>
+              <LI><A HREF="../scanfile.html">Code Scanning</A></LI>
+            </UL>
+			</TD>
+		</TR>
+	</TABLE>
+
+      <P>&nbsp; </P>
+      </TD>
+		
+    <TD COLSPAN="2" VALIGN="top" CLASS="mainBlock"><!-- #BeginEditable "Main" --> 
+      <H3 ALIGN="CENTER">Step 2. Creating a New Resource Bundle</H3>
+      <P><B>Things to Consider</B></P>
+      <P>A resource bundle in terms of this application is a group of property 
+        files with the same base class name. For instance, the resource bundle 
+        for RB Manager includes files: <code>RBManager.properties</CODE>, <code>RBManager_de.properties</CODE>, 
+        <code>RBManger_fi.properties</CODE>, etc. In future versions of the program, 
+        RB Manager will be extended to support importing and exporting data from 
+        other language translations schemas such as the XML internationalization 
+        standard, TMX.</P>
+      <P>You can have as many Resource Bundles as you like for an application, 
+        though most teams choose to work with just one. RB Manager allows you 
+        to work on one resource bundle at a time, editing either individual translation 
+        files or groups of translation files within the bundle. When you create 
+        a resource bundle you will be creating the base class translation file 
+        for that bundle. Other files can be added at any time later. The base 
+        class translation file provides a default translation in case locales 
+        are not specified or a resource translation file does not exist for the 
+        locale that is specified.</P>
+      <P>You will have to choose a base class name for the resource bundle. That 
+        name may have no white spaces and no underscores, and it should remind 
+        you in some way of the project or function to which it is attached. You 
+        will also have to enter a name for the person or people in charge of managing 
+        the resource bundle.</P>
+      <P><B>Creating the Resource Bundle</B></P>
+      <P>From the File menu, select 'New Resource Bundle...' You will be prompted 
+        to enter the base class name. If you enter a properly formatted name, 
+        the tree display on the lower left will change to reflect the name you 
+        entered. Click on the name of your resource bundle, and make sure the 
+        'Statistics' tab is selected. You should see something like the following:</P>
+      <P><IMG SRC="../images/screenshots/new_bundle.gif" WIDTH="552" HEIGHT="385"></P>
+      <P>The only resource file you have is that of the base class. Select the 
+        '(Base Class)' node of the tree by clicking on it. You should now see 
+        the following:</P>
+      <P><IMG SRC="../images/screenshots/new_baseclass.gif" WIDTH="676" HEIGHT="511"></P>
+      <P>The fields represented here have no bearing on how the translations will 
+        work in your application, but give RBManager some metadata to better organize 
+        the file. Resource Title should be a short title that represents this 
+        file, such as 'RBTutorial Base Class'. You can enter any comment and file 
+        manager value you like. The language, country, and variant fields provide 
+        a place for listing the full name of the language, country, and variant 
+        so that you do not have to rely on two or three letter encodings. You 
+        can also leave these fields blank if they are not relevant. Once you have 
+        entered these values in, finalize them by pressing the 'Update' button.</P>
+      <P><A HREF="step1.html">Back to Step 1</A> -or- <A HREF="step3.html">Forward 
+        to Step 3</A></P>
+      <!-- #EndEditable --></TD>
+	</TR>
+	<TR>
+		<TD BACKGROUND="../images/template_ll.gif" HEIGHT="40" WIDTH="200">
+			<!-- Comment -->
+		</TD>
+		<TD WIDTH="80">
+			<!-- Comment -->
+		</TD>
+		<TD>
+			<CENTER><SPAN CLASS="Copyright">Copyright 2000-2001 International Business Machines, All Rights Reserved</SPAN></CENTER>
+		</TD>
+	</TR>
+</TABLE>
+
+</BODY>
+<!-- #EndTemplate --></HTML>
