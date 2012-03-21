@@ -285,7 +285,7 @@ if test "$ENABLE_STATIC" = "YES"; then
                 ;;
             esac
             
-            AC_LINK_IFELSE(AC_LANG_SOURCE, CHECK_STATIC_OPT_FLAG=yes, CHECK_STATIC_OPT_FLAG=no, )
+            AC_LINK_IFELSE([AC_LANG_PROGRAM([], [])], [CHECK_STATIC_OPT_FLAG=yes], [CHECK_STATIC_OPT_FLAG=no])
             AC_MSG_RESULT($CHECK_STATIC_OPT_FLAG)
             if test "$CHECK_STATIC_OPT_FLAG" = no; then
                 CPPFLAGS="${OLD_CPPFLAGS}"
