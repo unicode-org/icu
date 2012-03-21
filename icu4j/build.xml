@@ -118,6 +118,11 @@
         <delete dir="${out.dir}"/>
         <delete dir="${module.dir}"/>
 
+        <available file="eclipse-build" type="dir" property="eclipse-build.dir.present"/>
+        <antcall target="_clean.eclipse-build"/>
+    </target>
+
+    <target name="_clean.eclipse-build" if="eclipse-build.dir.present">
         <ant dir="eclipse-build" target="clean" inheritAll="false"/>
     </target>
 
@@ -435,13 +440,16 @@
                 destdir="${src.release.wrk.dir}"
                 encoding="UTF-8"
                 eol="crlf">
-            <include name="main/**/*"/>
             <include name="demos/**/*"/>
+            <include name="main/**/*"/>
+            <include name="perf-tests/**/*"/>
             <include name="samples/**/*"/>
             <include name="tools/**/*"/>
             <include name="*.html"/>
             <include name="*.xml"/>
             <include name="*.properties"/>
+            <include name="*.css"/>
+            <include name="*.stub"/>
             <exclude name="**/out/**/*"/>
             <exclude name="**/*.jar"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
@@ -475,13 +483,16 @@
                 destdir="${src.release.wrk.dir}"
                 encoding="UTF-8"
                 eol="lf">
-            <include name="main/**/*"/>
             <include name="demos/**/*"/>
+            <include name="main/**/*"/>
+            <include name="perf-tests/**/*"/>
             <include name="samples/**/*"/>
             <include name="tools/**/*"/>
             <include name="*.html"/>
             <include name="*.xml"/>
             <include name="*.properties"/>
+            <include name="*.css"/>
+            <include name="*.stub"/>
             <exclude name="**/out/**/*"/>
             <exclude name="**/*.jar"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
@@ -1729,7 +1740,7 @@
                 todir="${module.tests.dir}/com/ibm/icu/dev/data"/>
     </target>
 
-    <target name="publishToMavenRepo" depends="releaseBinaries, releaseSrcJars, releaseDocs">
+    <target name="publishToMavenRepo" depends="release">
         <!--
             Publish libraries to Maven repositories, snapshot or release depending on current
             version in pom.xml.
