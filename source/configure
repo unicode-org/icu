@@ -5266,13 +5266,24 @@ $as_echo_n "checking whether we can use static library optimization option... " 
                 ;;
             esac
 
-            if ac_fn_c_try_link "$LINENO"; then :
+            cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
   CHECK_STATIC_OPT_FLAG=yes
 else
   CHECK_STATIC_OPT_FLAG=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
-    conftest$ac_exeext
+    conftest$ac_exeext conftest.$ac_ext
             { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CHECK_STATIC_OPT_FLAG" >&5
 $as_echo "$CHECK_STATIC_OPT_FLAG" >&6; }
             if test "$CHECK_STATIC_OPT_FLAG" = no; then
