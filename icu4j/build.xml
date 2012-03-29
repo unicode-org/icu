@@ -130,7 +130,6 @@
     <target name="all" depends="info, main, tests, build-tools, tools, demos, samples, perf, jar, docs" description="Build all primary targets"/>
     <target name="main" depends="info, core, collate, charset, currdata, langdata, regiondata, translit, localespi" description="Build ICU4J runtime library classes"/>
     <target name="tests" depends="info, core-tests, charset-tests, collate-tests, packaging-tests, translit-tests, localespi-tests" description="Build ICU4J test classes"/>
-    <target name="release" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz" description="Build all ICU4J release files for distribution"/>
 
     <target name="findbugs" depends="charset-findbugs, collate-findbugs, core-findbugs, currdata-findbugs, langdata-findbugs, localespi-findbugs, regiondata-findbugs, translit-findbugs" description="Run FindBugs on all projects." />
 
@@ -389,7 +388,26 @@
     </target>
 
 
-    <!-- release targests -->
+    <!-- release targets -->
+    <target name="release" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz" description="Build all ICU4J release files for distribution">
+        <mkdir dir="${out.dir}/checksum"/>
+        <delete dir="${out.dir}/checksum" includes="**/*"/>
+
+        <checksum todir="${out.dir}/checksum" format="MD5SUM">
+            <fileset dir="${release.dir}">
+                <include name="*.jar"/>
+                <include name="*.tgz"/>
+            </fileset>
+        </checksum>
+
+        <concat destfile="${release.dir}/icu4j-${release.file.ver}.md5">
+            <fileset dir="${out.dir}/checksum" includes="*"/>
+            <filterchain>
+                <fixcrlf eol="lf"/>
+            </filterchain>
+        </concat>
+    </target>
+
     <target name="releaseBinaries" depends="icu4jJar, charset, localespi" description="Build ICU4J binary files for distribution">
         <mkdir dir="${release.dir}"/>
         <copy file="${icu4j.jar.file}" tofile="${release.dir}/${icu4j.jar.versioned.file}"/>
