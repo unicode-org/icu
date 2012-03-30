@@ -1,5 +1,5 @@
 ## pkgdataMakefile.in for ICU data
-## Copyright (c) 2008, International Business Machines Corporation and
+## Copyright (c) 2008-2012, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -20,7 +20,7 @@ all : clean
 	@echo SO=$(SO) >> $(OUTPUTFILE)
 	@echo SOBJ=$(SOBJ) >> $(OUTPUTFILE)
 	@echo A=$(A) >> $(OUTPUTFILE)
-	@echo LIBPREFIX=$(LIBPREFIX) >> $(OUTPUTFILE)
+	@echo LIBPREFIX=$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED) >> $(OUTPUTFILE)
 	@echo LIB_EXT_ORDER=$(FINAL_SO_TARGET) >> $(OUTPUTFILE)
 	@echo COMPILE="$(COMPILE.c)" >> $(OUTPUTFILE)
 	@echo LIBFLAGS="-I$(prefix)/include $(SHAREDLIBCPPFLAGS) $(SHAREDLIBCFLAGS)" >> $(OUTPUTFILE)
