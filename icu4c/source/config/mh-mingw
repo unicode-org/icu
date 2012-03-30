@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Cygwin/MinGW specific setup
-## Copyright (c) 2001-2011, International Business Machines Corporation and
+## Copyright (c) 2001-2012, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 # TODO: Finish the rest of this port. This platform port is incomplete.
@@ -55,16 +55,21 @@ LD_SONAME =
 SO = dll
 ## Non-shared intermediate object suffix
 STATIC_O = ao
+
+ifeq ($(ENABLE_SHARED),YES)
 SO_TARGET_VERSION_SUFFIX = $(SO_TARGET_VERSION_MAJOR)
+else
+SO_TARGET_VERSION_SUFFIX = 
+endif
 
 # Static library prefix and file extension
-LIBSICU = $(STATIC_PREFIX)$(ICUPREFIX)
+LIBSICU = $(LIBPREFIX)$(STATIC_PREFIX)$(ICUPREFIX)
 A = a
 
 ## An import library is needed for z/OS and MSVC
 IMPORT_LIB_EXT = .lib
 
-LIBPREFIX=
+#LIBPREFIX=
 
 # Change the stubnames so that poorly working FAT disks and installation programs can work.
 # This is also for backwards compatibility.
