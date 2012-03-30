@@ -201,6 +201,8 @@ enum {
 #if U_PLATFORM == U_PF_CYGWIN
     LIB_FILE_CYGWIN,
     LIB_FILE_CYGWIN_VERSION,
+#elif U_PLATFORM == U_PF_MINGW
+    LIB_FILE_MINGW,
 #endif
     LIB_FILENAMES_SIZE
 };
@@ -854,15 +856,28 @@ static int32_t initializePkgDataFlags(UPKGOptions *o) {
  * Depending on the configuration, the library name may either end with version number or shared object suffix.
  */
 static void createFileNames(UPKGOptions *o, const char mode, const char *version_major, const char *version, const char *libName, UBool reverseExt, UBool noVersion) {
+#if U_PLATFORM == U_PF_MINGW
+        /* MinGW does not need the library prefix when building in dll mode. */
+        if (IN_DLL_MODE(mode)) {
+            sprintf(libFileNames[LIB_FILE], "%s", libName);
+        } else {
+            sprintf(libFileNames[LIB_FILE], "%s%s",
+                    pkgDataFlags[LIBPREFIX],
+                    libName);
+        }
+#else
         sprintf(libFileNames[LIB_FILE], "%s%s",
                 pkgDataFlags[LIBPREFIX],
                 libName);
+#endif
 
         if(o->verbose) {
           fprintf(stdout, "# libFileName[LIB_FILE] = %s\n", libFileNames[LIB_FILE]);
         }
 
-#if U_PLATFORM == U_PF_CYGWIN
+#if U_PLATFORM == U_PF_MINGW
+        sprintf(libFileNames[LIB_FILE_MINGW], "%s%s.lib", pkgDataFlags[LIBPREFIX], libName);
+#elif U_PLATFORM == U_PF_CYGWIN
         sprintf(libFileNames[LIB_FILE_CYGWIN], "cyg%s.%s",
                 libName,
                 pkgDataFlags[SO_EXT]);
@@ -873,7 +888,6 @@ static void createFileNames(UPKGOptions *o, const char mode, const char *version
 
         uprv_strcat(pkgDataFlags[SO_EXT], ".");
         uprv_strcat(pkgDataFlags[SO_EXT], pkgDataFlags[A_EXT]);
-
 #elif U_PLATFORM == U_PF_OS400 || defined(_AIX)
         sprintf(libFileNames[LIB_FILE_VERSION_TMP], "%s.%s",
                 libFileNames[LIB_FILE],
@@ -1259,6 +1273,8 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
                      uprv_strlen(pkgDataFlags[RPATH_FLAGS]) + uprv_strlen(pkgDataFlags[BIR_FLAGS]) + BUFFER_PADDING_SIZE;
 #if U_PLATFORM == U_PF_CYGWIN
             length += uprv_strlen(targetDir) + uprv_strlen(libFileNames[LIB_FILE_CYGWIN_VERSION]);
+#elif U_PLATFORM == U_PF_MINGW
+            length += uprv_strlen(targetDir) + uprv_strlen(libFileNames[LIB_FILE_MINGW]);
 #endif
             if ((cmd = (char *)uprv_malloc(sizeof(char) * length)) == NULL) {
                 fprintf(stderr, "Unable to allocate memory for command.\n");
@@ -1266,13 +1282,22 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
             }
             freeCmd = TRUE;
         }
-#if U_PLATFORM == U_PF_CYGWIN
+#if U_PLATFORM == U_PF_MINGW
+        sprintf(cmd, "%s%s%s %s -o %s%s %s %s%s %s %s",
+                pkgDataFlags[GENLIB],
+                targetDir,
+                libFileNames[LIB_FILE_MINGW],
+                pkgDataFlags[LDICUDTFLAGS],
+                targetDir,
+                libFileNames[LIB_FILE_VERSION_TMP],
+#elif U_PLATFORM == U_PF_CYGWIN
         sprintf(cmd, "%s%s%s %s -o %s%s %s %s%s %s %s",
                 pkgDataFlags[GENLIB],
                 targetDir,
                 libFileNames[LIB_FILE_VERSION_TMP],
                 pkgDataFlags[LDICUDTFLAGS],
-                targetDir, libFileNames[LIB_FILE_CYGWIN_VERSION],
+                targetDir,
+                libFileNames[LIB_FILE_CYGWIN_VERSION],
 #elif U_PLATFORM == U_PF_AIX
         sprintf(cmd, "%s %s%s;%s %s -o %s%s %s %s%s %s %s",
                 RM_CMD,
@@ -1754,7 +1779,7 @@ static UPKGOptions *pkg_checkFlag(UPKGOptions *o) {
             T_FileStream_close(f);
         }
     }
-#elif U_PLATFORM == U_PF_CYGWIN
+#elif U_PLATFORM == U_PF_CYGWIN || U_PLATFORM == U_PF_MINGW
     /* Cygwin needs to change flag options. */
     char *flag = NULL;
     int32_t length = 0;
