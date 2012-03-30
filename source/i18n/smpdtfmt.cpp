@@ -438,6 +438,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 
 SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
 :   DateFormat(other),
+    fLocale(other.fLocale),
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
@@ -471,6 +472,8 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
     // TimeZoneFormat in ICU4C only depends on a locale for now
     if (fLocale != other.fLocale) {
         delete fTimeZoneFormat;
+        fTimeZoneFormat = NULL; // forces lazy instantiation with the other locale
+        fLocale = other.fLocale;
     }
 
     fDefaultCapitalizationContext = other.fDefaultCapitalizationContext;
