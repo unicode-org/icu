@@ -1602,12 +1602,21 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
     if (IN_STATIC_MODE(mode)) {
         char staticLibFilePath[SMALL_BUFFER_MAX_SIZE] = "";
 
+#ifdef CYGWINMSVC
+        sprintf(staticLibFilePath, "%s%s%s%s%s",
+                o->targetDir,
+                PKGDATA_FILE_SEP_STRING,
+                "s",
+                o->libName,
+                LIB_EXT);
+#else
         sprintf(staticLibFilePath, "%s%s%s%s%s",
                 o->targetDir,
                 PKGDATA_FILE_SEP_STRING,
                 (strstr(o->libName, "icudt") ? "s" : ""),
                 o->libName,
                 LIB_EXT);
+#endif
 
         sprintf(cmd, "%s\"%s\" \"%s\"",
                 LIB_CMD,
