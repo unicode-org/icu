@@ -470,6 +470,7 @@
             <include name="*.stub"/>
             <exclude name="**/out/**/*"/>
             <exclude name="**/*.jar"/>
+            <exclude name="**/build-local.properties"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/test/serializable/data/**/*.dat"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.*.tri2"/>
@@ -513,6 +514,7 @@
             <include name="*.stub"/>
             <exclude name="**/out/**/*"/>
             <exclude name="**/*.jar"/>
+            <exclude name="**/build-local.properties"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/data/rbbi/english.dict"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/test/serializable/data/**/*.dat"/>
             <exclude name="main/tests/core/src/com/ibm/icu/dev/test/util/Trie2Test.*.tri2"/>
