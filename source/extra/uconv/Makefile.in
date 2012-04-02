@@ -1,6 +1,6 @@
 ## ******************************************************************************
 ## *
-## *   Copyright (C) 1999-2011, International Business Machines
+## *   Copyright (C) 1999-2012, International Business Machines
 ## *   Corporation and others.  All Rights Reserved.
 ## *
 ## *******************************************************************************
@@ -57,7 +57,7 @@ UCONVMSG_LIB=dummy
 ## Static mode
 ifeq ($(UCONVMSG_MODE),static)
 DEFS += -DUCONVMSG_LINK=$(MSGNAME)
-UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(MSGNAME).$(A)
+UCONVMSG_LIB = $(RESDIR)/$(LIBPREFIX)$(STATIC_PREFIX_WHEN_USED)$(MSGNAME).$(A)
 LIBS += $(UCONVMSG_LIB)
 PKGMODE=static
 INSTALLTO=$(libdir)
