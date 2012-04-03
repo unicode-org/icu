@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -913,7 +913,8 @@ class CharsetMBCS extends CharsetICU {
 
         /* fix maxBytesPerUChar depending on outputType and options etc. */
         if (outputType == MBCS_OUTPUT_2_SISO) {
-            maxBytesPerChar = 3; /* SO+DBCS */
+            /* changed from 3 to 4 in ICU4J only. #9205 */
+            maxBytesPerChar = 4; /* SO+DBCS+SI*/
         }
 
         extIndexes = mbcsTable.extIndexes;

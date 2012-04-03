@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2011, International Business Machines Corporation and    *
+* Copyright (C) 2006-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -5656,7 +5656,7 @@ public class TestCharset extends TestFmwk {
         int[] expected = {
                 40,
                 20,
-                60,
+                80, /* changed from 60 to 80 to reflect the updates by #9205 */
                 80,
                 60
         };
@@ -5716,5 +5716,23 @@ public class TestCharset extends TestFmwk {
                 errln("IllegalArgumentException should not have been thrown when encoding: " + charsetNames[i]);
             }
         }
+    }
+    
+    /*
+     * When converting with the String method getBytes(), buffer overflow exception is thrown because
+     * of the way ICU4J is calculating the max bytes per char. This should be changed only on the ICU4J
+     * side to match what the Java method is expecting. The ICU4C size will be left unchanged.
+     * Ticket #9205
+     */
+    public void TestBufferOverflowErrorUsingJavagetBytes() {
+        String charsetName = "ibm-5035";
+        String testCase = "\u7d42";
+        
+        try {
+            testCase.getBytes(charsetName);
+        } catch (Exception ex) {
+            errln("Error calling getBytes(): " + ex);
+        }
+        
     }
 }
