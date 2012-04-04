@@ -1606,7 +1606,7 @@ static int32_t pkg_createWindowsDLL(const char mode, const char *gencFilePath, U
         sprintf(staticLibFilePath, "%s%s%s%s%s",
                 o->targetDir,
                 PKGDATA_FILE_SEP_STRING,
-                "s",
+                pkgDataFlags[LIBPREFIX],
                 o->libName,
                 LIB_EXT);
 #else
