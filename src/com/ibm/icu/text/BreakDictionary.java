@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -39,24 +39,24 @@ public class BreakDictionary {
      * @internal 
      * @deprecated This API is ICU internal only.
      */
-    public static void main(String args[])
-            throws FileNotFoundException, UnsupportedEncodingException, IOException {
-        String filename = args[0];
-
-        BreakDictionary dictionary = new BreakDictionary(new FileInputStream(filename));
-
-        PrintWriter out = null;
-
-        if(args.length >= 2) {
-            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(args[1]), "UnicodeLittle"));
-        }
-
-        dictionary.printWordList("", 0, out);
-
-        if (out != null) {
-            out.close();
-        }
-    }
+//    public static void main(String args[])
+//            throws FileNotFoundException, UnsupportedEncodingException, IOException {
+//        String filename = args[0];
+//
+//        BreakDictionary dictionary = new BreakDictionary(new FileInputStream(filename));
+//
+//        PrintWriter out = null;
+//
+//        if(args.length >= 2) {
+//            out = new PrintWriter(new OutputStreamWriter(new FileOutputStream(args[1]), "UnicodeLittle"));
+//        }
+//
+//        dictionary.printWordList("", 0, out);
+//
+//        if (out != null) {
+//            out.close();
+//        }
+//    }
 
     /** 
      * @internal 
