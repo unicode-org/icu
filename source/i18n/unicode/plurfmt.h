@@ -148,7 +148,7 @@ class U_I18N_API PluralFormat : public Format {
 public:
 
     /**
-     * Creates a new <code>PluralFormat</code> for the default locale.
+     * Creates a new cardinal-number <code>PluralFormat</code> for the default locale.
      * This locale will be used to get the set of plural rules and for standard
      * number formatting.
      * @param status  output param set to success/failure code on exit, which
@@ -158,7 +158,7 @@ public:
     PluralFormat(UErrorCode& status);
 
     /**
-     * Creates a new <code>PluralFormat</code> for a given locale.
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given locale.
      * @param locale the <code>PluralFormat</code> will be configured with
      *               rules for this locale. This locale will also be used for
      *               standard number formatting.
@@ -193,7 +193,19 @@ public:
     PluralFormat(const Locale& locale, const PluralRules& rules, UErrorCode& status);
 
     /**
-     * Creates a new <code>PluralFormat</code> for a given pattern string.
+     * Creates a new <code>PluralFormat</code> for the plural type.
+     * The standard number formatting will be done using the given locale.
+     * @param locale  the default number formatting will be done using this
+     *                locale.
+     * @param type    The plural type (e.g., cardinal or ordinal).
+     * @param status  output param set to success/failure code on exit, which
+     *                must not indicate a failure before the function call.
+     * @draft ICU 50
+     */
+    PluralFormat(const Locale& locale, UPluralType type, UErrorCode& status);
+
+    /**
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given pattern string.
      * The default locale will be used to get the set of plural rules and for
      * standard number formatting.
      * @param  pattern the pattern for this <code>PluralFormat</code>.
@@ -205,7 +217,7 @@ public:
     PluralFormat(const UnicodeString& pattern, UErrorCode& status);
 
     /**
-     * Creates a new <code>PluralFormat</code> for a given pattern string and
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given pattern string and
      * locale.
      * The locale will be used to get the set of plural rules and for
      * standard number formatting.
@@ -251,6 +263,24 @@ public:
      */
     PluralFormat(const Locale& locale,
                  const PluralRules& rules,
+                 const UnicodeString& pattern,
+                 UErrorCode& status);
+
+    /**
+     * Creates a new <code>PluralFormat</code> for a plural type, a
+     * pattern and a locale.
+     * @param locale  the <code>PluralFormat</code> will be configured with
+     *                rules for this locale. This locale will also be used for
+     *                standard number formatting.
+     * @param type    The plural type (e.g., cardinal or ordinal).
+     * @param pattern the pattern for this <code>PluralFormat</code>.
+     *                errors are returned to status if the pattern is invalid.
+     * @param status  output param set to success/failure code on exit, which
+     *                must not indicate a failure before the function call.
+     * @draft ICU 50
+     */
+    PluralFormat(const Locale& locale,
+                 UPluralType type,
                  const UnicodeString& pattern,
                  UErrorCode& status);
 
@@ -359,7 +389,7 @@ public:
      *     i.e., a pattern that was applied previously will be removed,
      *     and the NumberFormat is set to the default number format for
      *     the locale.  The resulting format behaves the same as one
-     *     constructed from {@link #PluralFormat(const Locale& locale, UErrorCode& status)}.
+     *     constructed from {@link #PluralFormat(const Locale& locale, UPLURAL_TYPE_CARDINAL, UErrorCode& status)}.
      * @param locale  the <code>locale</code> to use to configure the formatter.
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
@@ -532,7 +562,7 @@ private:
     PluralSelectorAdapter pluralRulesWrapper;
 
     PluralFormat();   // default constructor not implemented
-    void init(const PluralRules* rules, UErrorCode& status);
+    void init(const PluralRules* rules, UPluralType type, UErrorCode& status);
     /**
      * Copies dynamically allocated values (pointer fields).
      * Others are copied using their copy constructors and assignment operators.
