@@ -179,6 +179,63 @@ plurals:table(nofallback){
         zh{""}
         zu{"set2"}
     }
+    locales_ordinals{
+        af{""}
+        am{""}
+        ar{""}
+        bg{""}
+        bn{"set31"}
+        ca{"set28"}
+        cs{""}
+        da{""}
+        de{""}
+        el{""}
+        en{"set26"}
+        es{""}
+        et{""}
+        eu{""}
+        fa{""}
+        fi{""}
+        fil{"set2"}
+        fr{"set2"}
+        gl{""}
+        gu{"set30"}
+        hi{"set30"}
+        hr{""}
+        hu{"set24"}
+        id{""}
+        is{""}
+        it{"set27"}
+        iw{""}
+        ja{""}
+        kn{""}
+        ko{""}
+        lt{""}
+        lv{""}
+        ml{""}
+        mr{"set29"}
+        ms{"set2"}
+        nl{""}
+        no{""}
+        pl{""}
+        pt{""}
+        ro{"set2"}
+        ru{""}
+        sk{""}
+        sl{""}
+        sr{""}
+        sv{"set25"}
+        sw{""}
+        ta{""}
+        te{""}
+        th{""}
+        tr{""}
+        uk{""}
+        ur{""}
+        vi{"set2"}
+        zh{""}
+        zu{"set32"}
+    }
     rules{
         set1{
             few{"n mod 100 in 3..10"}
@@ -256,8 +313,49 @@ plurals:table(nofallback){
             one{"n in 1,11"}
             two{"n in 2,12"}
         }
+        set24{
+            one{"n in 1,5"}
+        }
+        set25{
+            one{"n mod 10 in 1,2 and n mod 100 not in 11,12"}
+        }
+        set26{
+            few{"n mod 10 is 3 and n mod 100 is not 13"}
+            one{"n mod 10 is 1 and n mod 100 is not 11"}
+            two{"n mod 10 is 2 and n mod 100 is not 12"}
+        }
+        set27{
+            many{"n in 11,8,80,800"}
+        }
+        set28{
+            few{"n is 4"}
+            one{"n in 1,3"}
+            two{"n is 2"}
+        }
+        set29{
+            few{"n is 4"}
+            one{"n is 1"}
+            two{"n in 2,3"}
+        }
         set3{
             one{"n in 0..1"}
+        }
+        set30{
+            few{"n is 4"}
+            many{"n is 6"}
+            one{"n is 1"}
+            two{"n in 2,3"}
+        }
+        set31{
+            few{"n is 4"}
+            many{"n is 6"}
+            one{"n in 1,5,7,8,9,10"}
+            two{"n in 2,3"}
+        }
+        set32{
+            few{"n in 2..9"}
+            many{"n in 10..19,100..199,1000..1999"}
+            one{"n is 1"}
         }
         set4{
             one{"n within 0..2 and n is not 2"}

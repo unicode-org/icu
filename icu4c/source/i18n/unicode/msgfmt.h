@@ -104,12 +104,13 @@ class NumberFormat;
  * <pre>
  * message = messageText (argument messageText)*
  * argument = noneArg | simpleArg | complexArg
- * complexArg = choiceArg | pluralArg | selectArg
+ * complexArg = choiceArg | pluralArg | ordinalArg | selectArg
  *
  * noneArg = '{' argNameOrNumber '}'
  * simpleArg = '{' argNameOrNumber ',' argType [',' argStyle] '}'
  * choiceArg = '{' argNameOrNumber ',' "choice" ',' choiceStyle '}'
  * pluralArg = '{' argNameOrNumber ',' "plural" ',' pluralStyle '}'
+ * ordinalArg = '{' argNameOrNumber ',' "plordinal" ',' pluralStyle '}'
  * selectArg = '{' argNameOrNumber ',' "select" ',' selectStyle '}'
  *
  * choiceStyle: see {@link ChoiceFormat}
@@ -892,7 +893,7 @@ private:
       */
     class U_I18N_API PluralSelectorProvider : public PluralFormat::PluralSelector {
     public:
-        PluralSelectorProvider(const Locale* loc);
+        PluralSelectorProvider(const Locale* loc, UPluralType type);
         virtual ~PluralSelectorProvider();
         virtual UnicodeString select(double number, UErrorCode& ec) const;
 
@@ -900,6 +901,7 @@ private:
     private:
         const Locale* locale;
         PluralRules* rules;
+        UPluralType type;
     };
 
     /**
@@ -938,6 +940,7 @@ private:
     UHashtable* customFormatArgStarts;
 
     PluralSelectorProvider pluralProvider;
+    PluralSelectorProvider ordinalProvider;
 
     /**
      * Method to retrieve default formats (or NULL on failure).
