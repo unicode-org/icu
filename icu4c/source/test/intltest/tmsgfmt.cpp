@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  * File TMSGFMT.CPP
@@ -64,6 +64,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(TestCompatibleApostrophe);
     TESTCASE_AUTO(testCoverage);
     TESTCASE_AUTO(TestTrimArgumentName);
+    TESTCASE_AUTO(TestOrdinalPlural);
     TESTCASE_AUTO_END;
 }
 
@@ -1810,6 +1811,36 @@ void TestMessageFormat::TestTrimArgumentName() {
     result.remove();
     assertEquals("trim-named-arg format() failed", "x 3 y",
                   m.format(&argName, args, 1, result, errorCode));
+}
+
+void TestMessageFormat::TestOrdinalPlural() {
+    IcuTestErrorCode errorCode(*this, "TestOrdinalPlural");
+    // Test plural & ordinal together,
+    // to make sure that we get the correct cached PluralSelector for each.
+    MessageFormat m(
+        "{0,plural,one{1 file}other{# files}}, "
+        "{0,plordinal,one{#st file}two{#nd file}few{#rd file}other{#th file}}",
+        Locale::getEnglish(), errorCode);
+    if (errorCode.logDataIfFailureAndReset("Unable to instantiate MessageFormat")) {
+        return;
+    }
+    Formattable args[1] = { (int32_t)21 };
+    FieldPosition ignore(0);
+    UnicodeString result;
+    assertEquals("plural-ordinal format(21) failed", "21 files, 21st file",
+                 m.format(args, 1, result, ignore, errorCode));
+
+    args[0].setLong(2);
+    assertEquals("plural-ordinal format(2) failed", "2 files, 2nd file",
+                 m.format(args, 1, result.remove(), ignore, errorCode));
+
+    args[0].setLong(1);
+    assertEquals("plural-ordinal format(1) failed", "1 file, 1st file",
+                 m.format(args, 1, result.remove(), ignore, errorCode));
+
+    args[0].setLong(3);
+    assertEquals("plural-ordinal format(3) failed", "3 files, 3rd file",
+                 m.format(args, 1, result.remove(), ignore, errorCode));
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

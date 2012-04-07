@@ -37,7 +37,7 @@ PluralFormat::PluralFormat(UErrorCode& status)
           msgPattern(status),
           numberFormat(NULL),
           offset(0) {
-    init(NULL, status);
+    init(NULL, UPLURAL_TYPE_CARDINAL, status);
 }
 
 PluralFormat::PluralFormat(const Locale& loc, UErrorCode& status)
@@ -45,7 +45,7 @@ PluralFormat::PluralFormat(const Locale& loc, UErrorCode& status)
           msgPattern(status),
           numberFormat(NULL),
           offset(0) {
-    init(NULL, status);
+    init(NULL, UPLURAL_TYPE_CARDINAL, status);
 }
 
 PluralFormat::PluralFormat(const PluralRules& rules, UErrorCode& status)
@@ -53,7 +53,7 @@ PluralFormat::PluralFormat(const PluralRules& rules, UErrorCode& status)
           msgPattern(status),
           numberFormat(NULL),
           offset(0) {
-    init(&rules, status);
+    init(&rules, UPLURAL_TYPE_COUNT, status);
 }
 
 PluralFormat::PluralFormat(const Locale& loc,
@@ -63,7 +63,17 @@ PluralFormat::PluralFormat(const Locale& loc,
           msgPattern(status),
           numberFormat(NULL),
           offset(0) {
-    init(&rules, status);
+    init(&rules, UPLURAL_TYPE_COUNT, status);
+}
+
+PluralFormat::PluralFormat(const Locale& loc,
+                           UPluralType type,
+                           UErrorCode& status)
+        : locale(loc),
+          msgPattern(status),
+          numberFormat(NULL),
+          offset(0) {
+    init(NULL, type, status);
 }
 
 PluralFormat::PluralFormat(const UnicodeString& pat,
@@ -72,7 +82,7 @@ PluralFormat::PluralFormat(const UnicodeString& pat,
           msgPattern(status),
           numberFormat(NULL),
           offset(0) {
-    init(NULL, status);
+    init(NULL, UPLURAL_TYPE_CARDINAL, status);
     applyPattern(pat, status);
 }
 
@@ -83,7 +93,7 @@ PluralFormat::PluralFormat(const Locale& loc,
           msgPattern(status),
           numberFormat(NULL),
           offset(0) {
-    init(NULL, status);
+    init(NULL, UPLURAL_TYPE_CARDINAL, status);
     applyPattern(pat, status);
 }
 
@@ -94,7 +104,7 @@ PluralFormat::PluralFormat(const PluralRules& rules,
           msgPattern(status),
           numberFormat(NULL),
           offset(0) {
-    init(&rules, status);
+    init(&rules, UPLURAL_TYPE_COUNT, status);
     applyPattern(pat, status);
 }
 
@@ -106,7 +116,19 @@ PluralFormat::PluralFormat(const Locale& loc,
           msgPattern(status),
           numberFormat(NULL),
           offset(0) {
-    init(&rules, status);
+    init(&rules, UPLURAL_TYPE_COUNT, status);
+    applyPattern(pat, status);
+}
+
+PluralFormat::PluralFormat(const Locale& loc,
+                           UPluralType type,
+                           const UnicodeString& pat,
+                           UErrorCode& status)
+        : locale(loc),
+          msgPattern(status),
+          numberFormat(NULL),
+          offset(0) {
+    init(NULL, type, status);
     applyPattern(pat, status);
 }
 
@@ -147,13 +169,13 @@ PluralFormat::~PluralFormat() {
 }
 
 void
-PluralFormat::init(const PluralRules* rules, UErrorCode& status) {
+PluralFormat::init(const PluralRules* rules, UPluralType type, UErrorCode& status) {
     if (U_FAILURE(status)) {
         return;
     }
 
     if (rules==NULL) {
-        pluralRulesWrapper.pluralRules = PluralRules::forLocale(locale, status);
+        pluralRulesWrapper.pluralRules = PluralRules::forLocale(locale, type, status);
     } else {
         pluralRulesWrapper.pluralRules = rules->clone();
         if (pluralRulesWrapper.pluralRules == NULL) {
@@ -278,7 +300,7 @@ PluralFormat::setLocale(const Locale& loc, UErrorCode& status) {
     offset = 0;
     numberFormat = NULL;
     pluralRulesWrapper.reset();
-    init(NULL, status);
+    init(NULL, UPLURAL_TYPE_CARDINAL, status);
 }
 
 void

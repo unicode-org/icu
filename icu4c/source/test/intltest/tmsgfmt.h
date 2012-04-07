@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 #ifndef _TESTMESSAGEFORMAT
@@ -114,6 +114,7 @@ public:
     void TestTurkishCasing(void);
     void testAutoQuoteApostrophe(void);
     void TestTrimArgumentName();
+    void TestOrdinalPlural();
 
     /* Provide better code coverage */
     void testCoverage(void);

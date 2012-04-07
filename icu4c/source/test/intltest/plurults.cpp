@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2011, International Business Machines Corporation and
+* Copyright (C) 2007-2012, International Business Machines Corporation and
 * others. All Rights Reserved.
 ********************************************************************************
 
@@ -15,13 +15,14 @@
 
 #include <stdlib.h> // for strtod
 #include "plurults.h"
+#include "unicode/localpointer.h"
 #include "unicode/plurrule.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof(array[0]))
 
 void setupResult(const int32_t testSource[], char result[], int32_t* max);
-UBool checkEqual(PluralRules *test, char *result, int32_t max);
-UBool testEquality(PluralRules *test);
+UBool checkEqual(const PluralRules &test, char *result, int32_t max);
+UBool testEquality(const PluralRules &test);
 
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and
@@ -30,14 +31,14 @@ UBool testEquality(PluralRules *test);
 void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
     if (exec) logln("TestSuite PluralRulesAPI");
-    switch (index) {
-        TESTCASE(0, testAPI);
-        TESTCASE(1, testGetUniqueKeywordValue);
-        TESTCASE(2, testGetSamples);
-        TESTCASE(3, testWithin);
-        TESTCASE(4, testGetAllKeywordValues);
-        default: name = ""; break;
-    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(testAPI);
+    TESTCASE_AUTO(testGetUniqueKeywordValue);
+    TESTCASE_AUTO(testGetSamples);
+    TESTCASE_AUTO(testWithin);
+    TESTCASE_AUTO(testGetAllKeywordValues);
+    TESTCASE_AUTO(testOrdinal);
+    TESTCASE_AUTO_END;
 }
 
 #define PLURAL_TEST_NUM    18
@@ -94,19 +95,17 @@ void PluralRulesTest::testAPI(/*char *par*/)
     logln("\n start default locale test case ..\n");
 
     PluralRules defRule(status);
-    PluralRules* test=new PluralRules(status);
-    PluralRules* newEnPlural= test->forLocale(Locale::getEnglish(), status);
+    LocalPointer<PluralRules> test(new PluralRules(status));
+    LocalPointer<PluralRules> newEnPlural(test->forLocale(Locale::getEnglish(), status));
     if(U_FAILURE(status)) {
         dataerrln("ERROR: Could not create PluralRules (default) - exitting");
-        delete test;
         return;
     }
 
     // ======= Test clone, assignment operator && == operator.
-    PluralRules *dupRule = defRule.clone();
+    LocalPointer<PluralRules> dupRule(defRule.clone());
     if (dupRule==NULL) {
         errln("ERROR: clone plural rules test failed!");
-        delete test;
         return;
     } else {
         if ( *dupRule != defRule ) {
@@ -118,24 +117,18 @@ void PluralRulesTest::testAPI(/*char *par*/)
         if ( *dupRule != *newEnPlural ) {
             errln("ERROR:  clone plural rules test failed!");
         }
-        delete dupRule;
     }
-
-    delete newEnPlural;
 
     // ======= Test empty plural rules
     logln("Testing Simple PluralRules");
 
-    PluralRules* empRule = test->createRules(UNICODE_STRING_SIMPLE("a:n"), status);
+    LocalPointer<PluralRules> empRule(test->createRules(UNICODE_STRING_SIMPLE("a:n"), status));
     UnicodeString key;
     for (int32_t i=0; i<10; ++i) {
         key = empRule->select(i);
         if ( key.charAt(0)!= 0x61 ) { // 'a'
             errln("ERROR:  empty plural rules test failed! - exitting");
         }
-    }
-    if (empRule!=NULL) {
-        delete empRule;
     }
 
     // ======= Test simple plural rules
@@ -145,18 +138,13 @@ void PluralRulesTest::testAPI(/*char *par*/)
     int32_t max;
 
     for (int32_t i=0; i<PLURAL_TEST_NUM-1; ++i) {
-       PluralRules *newRules = test->createRules(pluralTestData[i], status);
+       LocalPointer<PluralRules> newRules(test->createRules(pluralTestData[i], status));
        setupResult(pluralTestResult[i], result, &max);
-       if ( !checkEqual(newRules, result, max) ) {
+       if ( !checkEqual(*newRules, result, max) ) {
             errln("ERROR:  simple plural rules failed! - exitting");
-            delete test;
             return;
         }
-       if (newRules!=NULL) {
-           delete newRules;
-       }
     }
-
 
     // ======= Test complex plural rules
     logln("Testing Complex PluralRules");
@@ -179,35 +167,24 @@ void PluralRulesTest::testAPI(/*char *par*/)
        0x6F, // 'o'
        0x63  // 'c'
     };
-    PluralRules *newRules = test->createRules(complexRule, status);
-    if ( !checkEqual(newRules, cRuleResult, 12) ) {
+    LocalPointer<PluralRules> newRules(test->createRules(complexRule, status));
+    if ( !checkEqual(*newRules, cRuleResult, 12) ) {
          errln("ERROR:  complex plural rules failed! - exitting");
-         delete test;
          return;
-     }
-    if (newRules!=NULL) {
-        delete newRules;
-        newRules=NULL;
     }
-    newRules = test->createRules(complexRule2, status);
-    if ( !checkEqual(newRules, cRuleResult, 12) ) {
+    newRules.adoptInstead(test->createRules(complexRule2, status));
+    if ( !checkEqual(*newRules, cRuleResult, 12) ) {
          errln("ERROR:  complex plural rules failed! - exitting");
-         delete test;
          return;
-     }
-    if (newRules!=NULL) {
-        delete newRules;
-        newRules=NULL;
     }
 
     // ======= Test decimal fractions plural rules
     UnicodeString decimalRule= UNICODE_STRING_SIMPLE("a: n not in 0..100;");
     UnicodeString KEYWORD_A = UNICODE_STRING_SIMPLE("a");
     status = U_ZERO_ERROR;
-    newRules = test->createRules(decimalRule, status);
+    newRules.adoptInstead(test->createRules(decimalRule, status));
     if (U_FAILURE(status)) {
         dataerrln("ERROR: Could not create PluralRules for testing fractions - exitting");
-        delete test;
         return;
     }
     double fData[10] = {-100, -1, -0.0, 0, 0.1, 1, 1.999, 2.0, 100, 100.001 };
@@ -218,20 +195,12 @@ void PluralRulesTest::testAPI(/*char *par*/)
              errln("ERROR: plural rules for decimal fractions test failed!");
         }
     }
-    if (newRules!=NULL) {
-        delete newRules;
-        newRules=NULL;
-    }
-
-
 
     // ======= Test Equality
     logln("Testing Equality of PluralRules");
 
-
-    if ( !testEquality(test) ) {
+    if ( !testEquality(*test) ) {
          errln("ERROR:  complex plural rules failed! - exitting");
-         delete test;
          return;
      }
 
@@ -243,26 +212,21 @@ void PluralRulesTest::testAPI(/*char *par*/)
         errln("ERROR: getDynamicClassID() didn't return the expected value");
     }
     // ====== Test fallback to parent locale
-    PluralRules *en_UK = test->forLocale(Locale::getUK(), status);
-    PluralRules *en = test->forLocale(Locale::getEnglish(), status);
-    if (en_UK != NULL && en != NULL) {
+    LocalPointer<PluralRules> en_UK(test->forLocale(Locale::getUK(), status));
+    LocalPointer<PluralRules> en(test->forLocale(Locale::getEnglish(), status));
+    if (en_UK.isValid() && en.isValid()) {
         if ( *en_UK != *en ) {
             errln("ERROR:  test locale fallback failed!");
         }
     }
-    delete en;
-    delete en_UK;
 
-    PluralRules *zh_Hant = test->forLocale(Locale::getTaiwan(), status);
-    PluralRules *zh = test->forLocale(Locale::getChinese(), status);
-    if (zh_Hant != NULL && zh != NULL) {
+    LocalPointer<PluralRules> zh_Hant(test->forLocale(Locale::getTaiwan(), status));
+    LocalPointer<PluralRules> zh(test->forLocale(Locale::getChinese(), status));
+    if (zh_Hant.isValid() && zh.isValid()) {
         if ( *zh_Hant != *zh ) {
             errln("ERROR:  test locale fallback failed!");
         }
     }
-    delete zh_Hant;
-    delete zh;
-    delete test;
 }
 
 void setupResult(const int32_t testSource[], char result[], int32_t* max) {
@@ -280,11 +244,11 @@ void setupResult(const int32_t testSource[], char result[], int32_t* max) {
 }
 
 
-UBool checkEqual(PluralRules *test, char *result, int32_t max) {
+UBool checkEqual(const PluralRules &test, char *result, int32_t max) {
     UnicodeString key;
     UBool isEqual = TRUE;
     for (int32_t i=0; i<max; ++i) {
-        key= test->select(i);
+        key= test.select(i);
         if ( key.charAt(0)!=result[i] ) {
             isEqual = FALSE;
         }
@@ -294,7 +258,7 @@ UBool checkEqual(PluralRules *test, char *result, int32_t max) {
 
 #define MAX_EQ_ROW  2
 #define MAX_EQ_COL  5
-UBool testEquality(PluralRules *test) {
+UBool testEquality(const PluralRules &test) {
     UnicodeString testEquRules[MAX_EQ_ROW][MAX_EQ_COL] = {
         {   UNICODE_STRING_SIMPLE("a: n in 2..3"),
             UNICODE_STRING_SIMPLE("a: n is 2 or n is 3"),
@@ -318,7 +282,7 @@ UBool testEquality(PluralRules *test) {
         }
         int32_t totalRules=0;
         while((totalRules<MAX_EQ_COL) && (testEquRules[i][totalRules].length()>0) ) {
-            rules[totalRules]=test->createRules(testEquRules[i][totalRules], status);
+            rules[totalRules]=test.createRules(testEquRules[i][totalRules], status);
             totalRules++;
         }
         for (int32_t n=0; n<300 && ret ; ++n) {
@@ -569,6 +533,18 @@ PluralRulesTest::testGetAllKeywordValues() {
             rp = ep;
         }
         delete p;
+    }
+}
+
+void PluralRulesTest::testOrdinal() {
+    IcuTestErrorCode errorCode(*this, "testOrdinal");
+    LocalPointer<PluralRules> pr(PluralRules::forLocale("en", UPLURAL_TYPE_ORDINAL, errorCode));
+    if (errorCode.logIfFailureAndReset("PluralRules::forLocale(en, UPLURAL_TYPE_ORDINAL) failed")) {
+        return;
+    }
+    UnicodeString keyword = pr->select(2.);
+    if (keyword != UNICODE_STRING("two", 3)) {
+        errln("PluralRules(en-ordinal).select(2) failed");
     }
 }
 
