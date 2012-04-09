@@ -1741,15 +1741,25 @@ typedef struct {
     int32_t       dDiff;
     int32_t       HDiff;
     int32_t       mDiff;
+    int32_t       sDiff; /* 0x7FFFFFFF indicates overflow error expected */
 } TFDItem;
 
 static const UChar tzUSPacific[] = { 0x55,0x53,0x2F,0x50,0x61,0x63,0x69,0x66,0x69,0x63,0 }; /* "US/Pacific" */
+static const UChar tzGMT[] = { 0x47,0x4D,0x54,0 }; /* "GMT" */
 
 static const TFDItem tfdItems[] = {
-    /* timezone    locale   start            target             yDf MDf dDf HDf mDf  */
-    { tzUSPacific, "en_US", 1267459800000.0, 1277772600000.0,    0,  3, 27,  9, 40 }, /* 2010-Mar-01 08:10 -> 2010-Jun-28 17:50 */
-    { tzUSPacific, "en_US", 1267459800000.0, 1299089280000.0,    1,  0,  1,  1, 58 }, /* 2010-Mar-01 08:10 -> 2011-Mar-02 10:08 */
-    { NULL,        NULL,    0.0,             0.0,                0,  0,  0,  0,  0 }  /* terminator */
+    /* timezone    locale   start            target            yDf  MDf    dDf     HDf       mDf         sDf */
+    /* For these we compute the progressive difference for each field - not resetting the calendar after each call */
+    { tzUSPacific, "en_US", 1267459800000.0, 1277772600000.0,    0,   3,    27,      9,       40,          0 }, /* 2010-Mar-01 08:10 -> 2010-Jun-28 17:50 */
+    { tzUSPacific, "en_US", 1267459800000.0, 1299089280000.0,    1,   0,     1,      1,       58,          0 }, /* 2010-Mar-01 08:10 -> 2011-Mar-02 10:08 */
+    /* For these we compute the total difference for each field - resetting the calendar after each call */
+    { tzGMT,       "en_US", 0.0,             1073692800000.0,   34, 408, 12427, 298248, 17894880, 1073692800 }, /* 1970-Jan-01 00:00 -> 2004-Jan-10 00:00:00 */
+    { tzGMT,       "en_US", 0.0,             1073779200000.0,   34, 408, 12428, 298272, 17896320, 1073779200 }, /* 1970-Jan-01 00:00 -> 2004-Jan-11 00:00:00 */
+    { tzGMT,       "en_US", 0.0,             2147472000000.0,   68, 816, 24855, 596520, 35791200, 2147472000 }, /* 1970-Jan-01 00:00 -> 2038-Jan-19 00:00:00 */
+    { tzGMT,       "en_US", 0.0,             2147558400000.0,   68, 816, 24856, 596544, 35792640, 0x7FFFFFFF }, /* 1970-Jan-01 00:00 -> 2038-Jan-20 00:00:00, seconds diff overflow */
+    { tzGMT,       "en_US", 0.0,            -1073692800000.0,  -34,-408,-12427,-298248,-17894880,-1073692800 }, /* 1970-Jan-01 00:00 -> 1935-Dec-24 00:00:00 */
+    { tzGMT,       "en_US", 0.0,            -1073779200000.0,  -34,-408,-12428,-298272,-17896320,-1073779200 }, /* 1970-Jan-01 00:00 -> 1935-Dec-23 00:00:00 */
+    { NULL,        NULL,    0.0,             0.0,                0,   0,     0,      0,        0,          0 }  /* terminator */
 };
 
 void TestFieldDifference() {
@@ -1760,24 +1770,67 @@ void TestFieldDifference() {
         if (U_FAILURE(status)) {
             log_err("FAIL: for locale \"%s\", ucal_open had status %s\n", tfdItemPtr->locale, u_errorName(status) );
         } else {
-            int32_t yDf, MDf, dDf, HDf, mDf; 
-            ucal_setMillis(ucal, tfdItemPtr->start, &status);
-            yDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_YEAR, &status);
-            MDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_MONTH, &status);
-            dDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_DATE, &status);
-            HDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_HOUR, &status);
-            mDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_MINUTE, &status);
-            if (U_FAILURE(status)) {
-                log_err("FAIL: for locale \"%s\", start %.1f, target %.1f, ucal_setMillis or ucal_getFieldDifference had status %s\n",
-                        tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target, u_errorName(status) );
-            } else if ( yDf !=  tfdItemPtr->yDiff ||
-                        MDf !=  tfdItemPtr->MDiff ||
-                        dDf !=  tfdItemPtr->dDiff ||
-                        HDf !=  tfdItemPtr->HDiff ||
-                        mDf !=  tfdItemPtr->mDiff ) {
-                log_data_err("FAIL: for locale \"%s\", start %.1f, target %.1f, expected y-M-d-H-m diffs %d-%d-%d-%d-%d, got %d-%d-%d-%d-%d\n",
-                        tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target,
-                        tfdItemPtr->yDiff, tfdItemPtr->MDiff, tfdItemPtr->dDiff, tfdItemPtr->HDiff, tfdItemPtr->mDiff, yDf, MDf, dDf, HDf, mDf);
+            int32_t yDf, MDf, dDf, HDf, mDf, sDf;
+            if (tfdItemPtr->start != 0.0) {
+                ucal_setMillis(ucal, tfdItemPtr->start, &status);
+                yDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_YEAR, &status);
+                MDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_MONTH, &status);
+                dDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_DATE, &status);
+                HDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_HOUR, &status);
+                mDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_MINUTE, &status);
+                sDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_SECOND, &status);
+                if (U_FAILURE(status)) {
+                    log_err("FAIL: for locale \"%s\", start %.1f, target %.1f, ucal_setMillis or ucal_getFieldDifference had status %s\n",
+                            tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target, u_errorName(status) );
+                } else if ( yDf !=  tfdItemPtr->yDiff ||
+                            MDf !=  tfdItemPtr->MDiff ||
+                            dDf !=  tfdItemPtr->dDiff ||
+                            HDf !=  tfdItemPtr->HDiff ||
+                            mDf !=  tfdItemPtr->mDiff ||
+                            sDf !=  tfdItemPtr->sDiff ) {
+                    log_data_err("FAIL: for locale \"%s\", start %.1f, target %.1f, expected y-M-d-H-m-s progressive diffs %d-%d-%d-%d-%d-%d, got %d-%d-%d-%d-%d-%d\n",
+                            tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target,
+                            tfdItemPtr->yDiff, tfdItemPtr->MDiff, tfdItemPtr->dDiff, tfdItemPtr->HDiff, tfdItemPtr->mDiff, tfdItemPtr->sDiff,
+                            yDf, MDf, dDf, HDf, mDf, sDf);
+                }
+            } else {
+                ucal_setMillis(ucal, tfdItemPtr->start, &status);
+                yDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_YEAR, &status);
+                ucal_setMillis(ucal, tfdItemPtr->start, &status);
+                MDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_MONTH, &status);
+                ucal_setMillis(ucal, tfdItemPtr->start, &status);
+                dDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_DATE, &status);
+                ucal_setMillis(ucal, tfdItemPtr->start, &status);
+                HDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_HOUR, &status);
+                ucal_setMillis(ucal, tfdItemPtr->start, &status);
+                mDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_MINUTE, &status);
+                if (U_FAILURE(status)) {
+                    log_err("FAIL: for locale \"%s\", start %.1f, target %.1f, ucal_setMillis or ucal_getFieldDifference (y-M-d-H-m) had status %s\n",
+                            tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target, u_errorName(status) );
+                } else if ( yDf !=  tfdItemPtr->yDiff ||
+                            MDf !=  tfdItemPtr->MDiff ||
+                            dDf !=  tfdItemPtr->dDiff ||
+                            HDf !=  tfdItemPtr->HDiff ||
+                            mDf !=  tfdItemPtr->mDiff ) {
+                    log_data_err("FAIL: for locale \"%s\", start %.1f, target %.1f, expected y-M-d-H-m total diffs %d-%d-%d-%d-%d, got %d-%d-%d-%d-%d\n",
+                            tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target,
+                            tfdItemPtr->yDiff, tfdItemPtr->MDiff, tfdItemPtr->dDiff, tfdItemPtr->HDiff, tfdItemPtr->mDiff,
+                            yDf, MDf, dDf, HDf, mDf);
+                }
+                ucal_setMillis(ucal, tfdItemPtr->start, &status);
+                sDf = ucal_getFieldDifference(ucal, tfdItemPtr->target, UCAL_SECOND, &status);
+                if (tfdItemPtr->sDiff != 0x7FFFFFFF) {
+                    if (U_FAILURE(status)) {
+                        log_err("FAIL: for locale \"%s\", start %.1f, target %.1f, ucal_setMillis or ucal_getFieldDifference (seconds) had status %s\n",
+                                tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target, u_errorName(status) );
+                    } else if (sDf !=  tfdItemPtr->sDiff) {
+                        log_data_err("FAIL: for locale \"%s\", start %.1f, target %.1f, expected seconds progressive diff %d, got %d\n",
+                                tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target, tfdItemPtr->sDiff, sDf);
+                    }
+                } else if (!U_FAILURE(status)) {
+                    log_err("FAIL: for locale \"%s\", start %.1f, target %.1f, for ucal_getFieldDifference (seconds) expected overflow error, got none\n",
+                            tfdItemPtr->locale, tfdItemPtr->start, tfdItemPtr->target );
+                }
             }
             ucal_close(ucal);
         }

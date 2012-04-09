@@ -1984,22 +1984,24 @@ int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UEr
                 return max;
             } else if (ms > targetMs) {
                 break;
-            } else {
+            } else if (max < INT32_MAX) {
                 min = max;
                 max <<= 1;
                 if (max < 0) {
-                    // Field difference too large to fit into int32_t
-#if defined (U_DEBUG_CAL)
-                    fprintf(stderr, "%s:%d: ILLEGAL ARG because field %s's max too large for int32_t\n",
-                        __FILE__, __LINE__, fldName(field));
-#endif
-                    ec = U_ILLEGAL_ARGUMENT_ERROR;
+                    max = INT32_MAX;
                 }
+            } else {
+                // Field difference too large to fit into int32_t
+#if defined (U_DEBUG_CAL)
+                fprintf(stderr, "%s:%d: ILLEGAL ARG because field %s's max too large for int32_t\n",
+                    __FILE__, __LINE__, fldName(field));
+#endif
+                ec = U_ILLEGAL_ARGUMENT_ERROR;
             }
         }
         // Do a binary search
         while ((max - min) > 1 && U_SUCCESS(ec)) {
-            int32_t t = (min + max) / 2;
+            int32_t t = min + (max - min)/2; // make sure intermediate values don't exceed INT32_MAX
             setTimeInMillis(startMs, ec);
             add(field, t, ec);
             double ms = getTimeInMillis(ec);
@@ -2037,7 +2039,7 @@ int32_t Calendar::fieldDifference(UDate targetMs, UCalendarDateFields field, UEr
         }
         // Do a binary search
         while ((min - max) > 1 && U_SUCCESS(ec)) {
-            int32_t t = (min + max) / 2;
+            int32_t t = min + (max - min)/2; // make sure intermediate values don't exceed INT32_MAX
             setTimeInMillis(startMs, ec);
             add(field, t, ec);
             double ms = getTimeInMillis(ec);
