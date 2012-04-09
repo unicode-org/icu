@@ -1,6 +1,6 @@
 # ******************************************************************************
 # *
-# *   Copyright (C) 1995-2011, International Business Machines
+# *   Copyright (C) 1995-2012, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ******************************************************************************
@@ -1233,7 +1233,7 @@ ibm-833_P100-1995 { UTR22* }    ibm-833 { IBM* } x-IBM833 { JAVA* }
 ibm-834_P100-1995 { UTR22* }    ibm-834 { IBM* } x-IBM834 { JAVA* } # Korean (DBCS subset of ibm-933)
 ibm-835_P100-1995 { UTR22* }    ibm-835 { IBM* } x-IBM835 { JAVA* } # Traditional Chinese (DBCS subset of ibm-5033)
 ibm-836_P100-1995 { UTR22* }    ibm-836 { IBM* } x-IBM836 { JAVA* }
-ibm-837_P100-1995 { UTR22* }    ibm-837 { IBM* } x-IBM837 { JAVA* } # Simplified Chinese (DBCS subset of ibm-5031)
+ibm-837_P100-2011 { UTR22* }    ibm-837 { IBM* } x-IBM837 { JAVA* } # Simplified Chinese (DBCS subset of ibm-5031)
 ibm-848_P100-1999 { UTR22* }    ibm-848 { IBM* } # Cyrillic (euro update of ibm-1125)
 ibm-849_P100-1999 { UTR22* }    ibm-849 { IBM* } # Cyrillic Belarus (euro update of ibm-1131)
 ibm-859_P100-1999 { UTR22* }    ibm-859 { IBM* } x-IBM859 { JAVA* } # PC Latin 9 (w/ euro update)
