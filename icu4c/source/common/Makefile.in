@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2011, International Business Machines
+#   Copyright (C) 1999-2012, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -56,6 +56,10 @@ DYNAMICCFLAGS = $(SHAREDLIBCFLAGS)
 DYNAMICCXXFLAGS = $(SHAREDLIBCXXFLAGS)
 CFLAGS += $(LIBCFLAGS)
 CXXFLAGS += $(LIBCXXFLAGS)
+ifeq ($(OS390BATCH),1)
+CFLAGS += -WI
+CXXFLAGS += -WI
+endif
 
 CPPFLAGS += -I$(srcdir) $(LIBCPPFLAGS) $(CPPFLAGSICUUC)
 # we want DEFS here

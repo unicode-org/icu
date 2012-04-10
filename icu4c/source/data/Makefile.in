@@ -56,6 +56,10 @@ OS390LIST=$(OUTTMPDIR)/icudata390.lst
 OUTTMPDIR_390STUB=$(top_builddir)/data/out/tmp_390stub
 endif
 
+ifeq ($(OS390BATCH),1)
+CPPFLAGS += -Wc,'ros,roc'
+endif
+
 # OBJDATADIR must be a short path (with ..'s) to the data.
 
 ifeq ($(top_srcdir),..)
