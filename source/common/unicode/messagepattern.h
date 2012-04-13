@@ -252,7 +252,7 @@ enum UMessagePatternArgType {
      * with the same style parts sequence and semantics as UMSGPAT_ARG_TYPE_PLURAL.
      * @draft ICU 50
      */
-    UMSGPAT_ARG_TYPE_ORDINAL
+    UMSGPAT_ARG_TYPE_SELECTORDINAL
 };
 /**
  * @stable ICU 4.8
@@ -261,11 +261,11 @@ typedef enum UMessagePatternArgType UMessagePatternArgType;
 
 /**
  * Returns TRUE if the argument type has a plural style part sequence and semantics,
- * for example UMSGPAT_ARG_TYPE_PLURAL and UMSGPAT_ARG_TYPE_ORDINAL.
+ * for example UMSGPAT_ARG_TYPE_PLURAL and UMSGPAT_ARG_TYPE_SELECTORDINAL.
  * @draft ICU 50
  */
 #define UMSGPAT_ARG_TYPE_HAS_PLURAL_STYLE(argType) \
-    ((argType)==UMSGPAT_ARG_TYPE_PLURAL || (argType)==UMSGPAT_ARG_TYPE_ORDINAL)
+    ((argType)==UMSGPAT_ARG_TYPE_PLURAL || (argType)==UMSGPAT_ARG_TYPE_SELECTORDINAL)
 
 enum {
     /**
