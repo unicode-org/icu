@@ -1227,6 +1227,7 @@ ibm-5048_P100-1995 { UTR22* }   ibm-5048 { IBM* } # Japanese (DBCS subset of ibm
 ibm-5049_P100-1995 { UTR22* }   ibm-5049 { IBM* } # Japanese (DBCS subset of ibm-1350, JIS X212)
 ibm-5067_P100-1995 { UTR22* }   ibm-5067 { IBM* } # Korean (DBCS subset of ibm-21450)
 ibm-5104_X110-1999 { UTR22* }   ibm-5104 { IBM* } # cp1008, 8-bit Arabic (w/ euro update)
+ibm-5233_P100-2011 { UTR22* }   ibm-5233 { IBM* } # Devanagari EBCDIC, including Indian Rupee
 ibm-806_P100-1998 { UTR22* }    ibm-806 { IBM* } # Hindi (ISCII variant)
 ibm-808_P100-1999 { UTR22* }    ibm-808 { IBM* } x-IBM808 { JAVA* } # Cyrillic
 ibm-833_P100-1995 { UTR22* }    ibm-833 { IBM* } x-IBM833 { JAVA* }
