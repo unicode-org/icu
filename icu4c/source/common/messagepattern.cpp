@@ -54,7 +54,6 @@ static const UChar u_S=0x53;
 static const UChar u_T=0x54;
 static const UChar u_U=0x55;
 static const UChar u_Z=0x5A;
-static const UChar u__=0x5F;  // '_'
 static const UChar u_a=0x61;
 static const UChar u_c=0x63;
 static const UChar u_d=0x64;
@@ -618,9 +617,9 @@ MessagePattern::parseArg(int32_t index, int32_t argStartLength, int32_t nestingL
             } else if(isSelect(typeIndex)) {
                 argType=UMSGPAT_ARG_TYPE_SELECT;
             }
-        } else if(length==9) {
-            if(isOrdinal(typeIndex)) {
-                argType=UMSGPAT_ARG_TYPE_ORDINAL;
+        } else if(length==13) {
+            if(isSelect(typeIndex) && isOrdinal(typeIndex+6)) {
+                argType=UMSGPAT_ARG_TYPE_SELECTORDINAL;
             }
         }
         // change the ARG_START type from NONE to argType
@@ -1073,8 +1072,6 @@ UBool
 MessagePattern::isOrdinal(int32_t index) {
     UChar c;
     return
-        ((c=msg.charAt(index++))==u_p || c==u_P) &&
-        ((c=msg.charAt(index++))==u_l || c==u_L) &&
         ((c=msg.charAt(index++))==u_o || c==u_O) &&
         ((c=msg.charAt(index++))==u_r || c==u_R) &&
         ((c=msg.charAt(index++))==u_d || c==u_D) &&

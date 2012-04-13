@@ -1531,7 +1531,7 @@ void MessageFormat::cacheExplicitFormats(UErrorCode& status) {
         }
         case UMSGPAT_ARG_TYPE_CHOICE:
         case UMSGPAT_ARG_TYPE_PLURAL:
-        case UMSGPAT_ARG_TYPE_ORDINAL:
+        case UMSGPAT_ARG_TYPE_SELECTORDINAL:
             formattableType = Formattable::kDouble;
             break;
         case UMSGPAT_ARG_TYPE_SELECT:
