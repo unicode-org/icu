@@ -16,6 +16,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
@@ -24,12 +25,10 @@ import com.ibm.icu.util.UResourceBundle;
  */
 public class PluralRulesLoader {
     private final Map<String, PluralRules> rulesIdToRules;
-    private Map<String, String> localeIdToRulesId; // lazy init, use
-                                                   // getLocaleIdToRulesIdMap to
-                                                   // access
-    private Map<String, ULocale> rulesIdToEquivalentULocale; // lazy init, use
-                                                             // getRulesIdToEquivalentULocaleMap
-                                                             // to access
+    // lazy init, use getLocaleIdToRulesIdMap to access
+    private Map<String, String> localeIdToCardinalRulesId;
+    private Map<String, String> localeIdToOrdinalRulesId;
+    private Map<String, ULocale> rulesIdToEquivalentULocale;
 
     /**
      * Access through singleton.
@@ -42,7 +41,7 @@ public class PluralRulesLoader {
      * Returns the locales for which we have plurals data. Utility for testing.
      */
     public ULocale[] getAvailableULocales() {
-        Set<String> keys = getLocaleIdToRulesIdMap().keySet();
+        Set<String> keys = getLocaleIdToRulesIdMap(PluralType.CARDINAL).keySet();
         ULocale[] locales = new ULocale[keys.size()];
         int n = 0;
         for (Iterator<String> iter = keys.iterator(); iter.hasNext();) {
@@ -57,11 +56,11 @@ public class PluralRulesLoader {
     public ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
         if (isAvailable != null && isAvailable.length > 0) {
             String localeId = ULocale.canonicalize(locale.getBaseName());
-            Map<String, String> idMap = getLocaleIdToRulesIdMap();
+            Map<String, String> idMap = getLocaleIdToRulesIdMap(PluralType.CARDINAL);
             isAvailable[0] = idMap.containsKey(localeId);
         }
 
-        String rulesId = getRulesIdForLocale(locale);
+        String rulesId = getRulesIdForLocale(locale, PluralType.CARDINAL);
         if (rulesId == null || rulesId.trim().length() == 0) {
             return ULocale.ROOT; // ultimate fallback
         }
@@ -78,9 +77,9 @@ public class PluralRulesLoader {
     /**
      * Returns the lazily-constructed map.
      */
-    private Map<String, String> getLocaleIdToRulesIdMap() {
+    private Map<String, String> getLocaleIdToRulesIdMap(PluralType type) {
         checkBuildRulesIdMaps();
-        return localeIdToRulesId;
+        return (type == PluralType.CARDINAL) ? localeIdToCardinalRulesId : localeIdToOrdinalRulesId;
     }
 
     /**
@@ -99,39 +98,53 @@ public class PluralRulesLoader {
     private void checkBuildRulesIdMaps() {
         boolean haveMap;
         synchronized (this) {
-            haveMap = localeIdToRulesId != null;
+            haveMap = localeIdToCardinalRulesId != null;
         }
         if (!haveMap) {
-            Map<String, String> tempLocaleIdToRulesId;
+            Map<String, String> tempLocaleIdToCardinalRulesId;
+            Map<String, String> tempLocaleIdToOrdinalRulesId;
             Map<String, ULocale> tempRulesIdToEquivalentULocale;
             try {
                 UResourceBundle pluralb = getPluralBundle();
+                // Read cardinal-number rules.
                 UResourceBundle localeb = pluralb.get("locales");
-                
+
                 // sort for convenience of getAvailableULocales
-                tempLocaleIdToRulesId = new TreeMap<String, String>();
+                tempLocaleIdToCardinalRulesId = new TreeMap<String, String>();
                 // not visible
                 tempRulesIdToEquivalentULocale = new HashMap<String, ULocale>();
-                
+
                 for (int i = 0; i < localeb.getSize(); ++i) {
                     UResourceBundle b = localeb.get(i);
                     String id = b.getKey();
                     String value = b.getString().intern();
-                    tempLocaleIdToRulesId.put(id, value);
+                    tempLocaleIdToCardinalRulesId.put(id, value);
 
                     if (!tempRulesIdToEquivalentULocale.containsKey(value)) {
                         tempRulesIdToEquivalentULocale.put(value, new ULocale(id));
                     }
                 }
+
+                // Read ordinal-number rules.
+                localeb = pluralb.get("locales_ordinals");
+                tempLocaleIdToOrdinalRulesId = new TreeMap<String, String>();
+                for (int i = 0; i < localeb.getSize(); ++i) {
+                    UResourceBundle b = localeb.get(i);
+                    String id = b.getKey();
+                    String value = b.getString().intern();
+                    tempLocaleIdToOrdinalRulesId.put(id, value);
+                }
             } catch (MissingResourceException e) {
                 // dummy so we don't try again
-                tempLocaleIdToRulesId = Collections.emptyMap();
+                tempLocaleIdToCardinalRulesId = Collections.emptyMap();
+                tempLocaleIdToOrdinalRulesId = Collections.emptyMap();
                 tempRulesIdToEquivalentULocale = Collections.emptyMap();
             }
             
             synchronized(this) {
-                if (localeIdToRulesId == null) {
-                    localeIdToRulesId = tempLocaleIdToRulesId;
+                if (localeIdToCardinalRulesId == null) {
+                    localeIdToCardinalRulesId = tempLocaleIdToCardinalRulesId;
+                    localeIdToOrdinalRulesId = tempLocaleIdToOrdinalRulesId;
                     rulesIdToEquivalentULocale = tempRulesIdToEquivalentULocale;
                 }
             }
@@ -143,8 +156,8 @@ public class PluralRulesLoader {
      * rulesId, return null. The rulesId might be the empty string if the rule
      * is the default rule.
      */
-    public String getRulesIdForLocale(ULocale locale) {
-        Map<String, String> idMap = getLocaleIdToRulesIdMap();
+    public String getRulesIdForLocale(ULocale locale, PluralType type) {
+        Map<String, String> idMap = getLocaleIdToRulesIdMap(type);
         String localeId = ULocale.canonicalize(locale.getBaseName());
         String rulesId = null;
         while (null == (rulesId = idMap.get(localeId))) {
@@ -216,8 +229,8 @@ public class PluralRulesLoader {
      * Returns the plural rules for the the locale. If we don't have data,
      * com.ibm.icu.text.PluralRules.DEFAULT is returned.
      */
-    public PluralRules forLocale(ULocale locale) {
-        String rulesId = getRulesIdForLocale(locale);
+    public PluralRules forLocale(ULocale locale, PluralRules.PluralType type) {
+        String rulesId = getRulesIdForLocale(locale, type);
         if (rulesId == null || rulesId.trim().length() == 0) {
             return PluralRules.DEFAULT;
         }

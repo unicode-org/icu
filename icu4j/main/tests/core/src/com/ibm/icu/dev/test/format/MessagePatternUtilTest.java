@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011, International Business Machines
+*   Copyright (C) 2011-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2011aug12
@@ -12,6 +12,7 @@ package com.ibm.icu.dev.test.format;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import com.ibm.icu.text.MessagePattern;
 import com.ibm.icu.text.MessagePatternUtil;
@@ -64,6 +65,9 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
         }
         private ExpectComplexArgNode expectSelectArg(Object name) {
             return expectComplexArg(name, MessagePattern.ArgType.SELECT);
+        }
+        private ExpectComplexArgNode expectSelectOrdinalArg(Object name) {
+            return expectComplexArg(name, MessagePattern.ArgType.SELECTORDINAL);
         }
         private ExpectComplexArgNode expectComplexArg(Object name, MessagePattern.ArgType argType) {
             ExpectComplexArgNode complexArg = new ExpectComplexArgNode(this, name, argType);
@@ -180,9 +184,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
     private class ExpectComplexArgNode extends ExpectArgNode {
         private ExpectComplexArgNode(ExpectMessageNode parent,
                                      Object name, MessagePattern.ArgType argType) {
-            super(name,
-                  argType == MessagePattern.ArgType.CHOICE ? "choice" :
-                  argType == MessagePattern.ArgType.PLURAL ? "plural" : "select");
+            super(name, argType.toString().toLowerCase(Locale.ROOT));
             this.argType = argType;
             this.parent = parent;
         }
@@ -391,6 +393,22 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
                     expectTextThatContains("!").finishVariant().
                 finishComplexArg().
             expectTextThatContains("_z");
+        expect.checkMatches(msg);
+    }
+
+
+    public void TestSelectOrdinalArg() {
+        MessageNode msg = MessagePatternUtil.buildMessageNode(
+                "abc{num, selectordinal, offset:17 =0{null} few{fff} other {oooo}}xyz");
+        ExpectMessageNode expect = new ExpectMessageNode().
+            expectTextThatContains("abc").
+            expectSelectOrdinalArg("num").
+                expectOffset(17).
+                expectVariant("=0", 0).expectTextThatContains("null").finishVariant().
+                expectVariant("few").expectTextThatContains("fff").finishVariant().
+                expectVariant("other").expectTextThatContains("oooo").finishVariant().
+                finishComplexArg().
+            expectTextThatContains("xyz");
         expect.checkMatches(msg);
     }
 
