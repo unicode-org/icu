@@ -104,14 +104,14 @@ class NumberFormat;
  * <pre>
  * message = messageText (argument messageText)*
  * argument = noneArg | simpleArg | complexArg
- * complexArg = choiceArg | pluralArg | ordinalArg | selectArg
+ * complexArg = choiceArg | pluralArg | selectArg | selectordinalArg
  *
  * noneArg = '{' argNameOrNumber '}'
  * simpleArg = '{' argNameOrNumber ',' argType [',' argStyle] '}'
  * choiceArg = '{' argNameOrNumber ',' "choice" ',' choiceStyle '}'
  * pluralArg = '{' argNameOrNumber ',' "plural" ',' pluralStyle '}'
- * ordinalArg = '{' argNameOrNumber ',' "plordinal" ',' pluralStyle '}'
  * selectArg = '{' argNameOrNumber ',' "select" ',' selectStyle '}'
+ * selectordinalArg = '{' argNameOrNumber ',' "selectordinal" ',' pluralStyle '}'
  *
  * choiceStyle: see {@link ChoiceFormat}
  * pluralStyle: see {@link PluralFormat}

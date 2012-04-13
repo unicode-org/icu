@@ -114,7 +114,7 @@ public:
     void TestTurkishCasing(void);
     void testAutoQuoteApostrophe(void);
     void TestTrimArgumentName();
-    void TestOrdinalPlural();
+    void TestSelectOrdinal();
 
     /* Provide better code coverage */
     void testCoverage(void);
