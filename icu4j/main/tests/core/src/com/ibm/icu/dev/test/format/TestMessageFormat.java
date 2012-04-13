@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2011, International Business Machines
+* Copyright (c) 2004-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -1831,5 +1831,34 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         StringBuffer result = new StringBuffer();
         assertEquals("trim-named-arg format() failed", "x 3 y",
                      m.format(map, result, new FieldPosition(0)).toString());
+    }
+
+    public void TestSelectOrdinal() {
+        // Test plural & ordinal together,
+        // to make sure that we get the correct cached PluralSelector for each.
+        MessageFormat m = new MessageFormat(
+            "{0,plural,one{1 file}other{# files}}, " +
+            "{0,selectordinal,one{#st file}two{#nd file}few{#rd file}other{#th file}}",
+            ULocale.ENGLISH);
+        Object[] args = new Object[] { 21 };
+        FieldPosition ignore = null;
+        StringBuffer result = new StringBuffer();
+        assertEquals("plural-and-ordinal format(21)", "21 files, 21st file",
+                     m.format(args, result, ignore).toString());
+
+        args[0] = 2;
+        result.delete(0, result.length());
+        assertEquals("plural-and-ordinal format(2) failed", "2 files, 2nd file",
+                     m.format(args, result, ignore).toString());
+
+        args[0] = 1;
+        result.delete(0, result.length());
+        assertEquals("plural-and-ordinal format(1) failed", "1 file, 1st file",
+                     m.format(args, result, ignore).toString());
+
+        args[0] = 3;
+        result.delete(0, result.length());
+        assertEquals("plural-and-ordinal format(3) failed", "3 files, 3rd file",
+                     m.format(args, result, ignore).toString());
     }
 }

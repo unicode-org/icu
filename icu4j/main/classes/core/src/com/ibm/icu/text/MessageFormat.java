@@ -36,6 +36,8 @@ import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.MessagePattern.ArgType;
 import com.ibm.icu.text.MessagePattern.Part;
+import com.ibm.icu.text.PluralFormat.PluralSelector;
+import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -99,13 +101,14 @@ import com.ibm.icu.util.ULocale.Category;
  * <blockquote><pre>
  * message = messageText (argument messageText)*
  * argument = noneArg | simpleArg | complexArg
- * complexArg = choiceArg | pluralArg | selectArg
+ * complexArg = choiceArg | pluralArg | selectArg | selectordinalArg
  *
  * noneArg = '{' argNameOrNumber '}'
  * simpleArg = '{' argNameOrNumber ',' argType [',' argStyle] '}'
  * choiceArg = '{' argNameOrNumber ',' "choice" ',' choiceStyle '}'
  * pluralArg = '{' argNameOrNumber ',' "plural" ',' pluralStyle '}'
  * selectArg = '{' argNameOrNumber ',' "select" ',' selectStyle '}'
+ * selectordinalArg = '{' argNameOrNumber ',' "selectordinal" ',' pluralStyle '}'
  *
  * choiceStyle: see {@link ChoiceFormat}
  * pluralStyle: see {@link PluralFormat}
@@ -408,6 +411,7 @@ public class MessageFormat extends UFormat {
         // the locale has changed.
         stockNumberFormatter = stockDateFormatter = null;
         pluralProvider = null;
+        ordinalProvider = null;
         applyPattern(existingPattern);                              /*ibm.3550*/
     }
 
@@ -1327,11 +1331,10 @@ public class MessageFormat extends UFormat {
                 argResult = choiceResult;
                 haveArgResult = true;
                 sourceOffset = tempStatus.getIndex();
-            } else if(argType==ArgType.PLURAL || argType==ArgType.SELECT) {
+            } else if(argType.hasPluralStyle() || argType==ArgType.SELECT) {
                 // No can do!
-                throw new UnsupportedOperationException(argType==ArgType.PLURAL ?
-                        "Parsing of PluralFormat is not supported." :
-                        "Parsing of SelectFormat is not supported.");
+                throw new UnsupportedOperationException(
+                        "Parsing of plural/select/selectordinal argument is not supported.");
             } else {
                 // This should never happen.
                 throw new IllegalStateException("unexpected argType "+argType);
@@ -1441,6 +1444,7 @@ public class MessageFormat extends UFormat {
         other.stockNumberFormatter = stockNumberFormatter == null ? null : (Format) stockNumberFormatter.clone();
 
         other.pluralProvider = null;
+        other.ordinalProvider = null;
         return other;
     }
 
@@ -1560,6 +1564,7 @@ public class MessageFormat extends UFormat {
     private transient Format stockNumberFormatter;
 
     private transient PluralSelectorProvider pluralProvider;
+    private transient PluralSelectorProvider ordinalProvider;
 
     // *Important*: All fields must be declared *transient*.
     // See the longer comment above ulocale.
@@ -1697,15 +1702,24 @@ public class MessageFormat extends UFormat {
                 double number = ((Number)arg).doubleValue();
                 int subMsgStart=findChoiceSubMessage(msgPattern, i, number);
                 formatComplexSubMessage(subMsgStart, 0, args, argsMap, dest);
-            } else if(argType==ArgType.PLURAL) {
+            } else if(argType.hasPluralStyle()) {
                 if (!(arg instanceof Number)) {
                     throw new IllegalArgumentException("'" + arg + "' is not a Number");
                 }
                 double number = ((Number)arg).doubleValue();
-                if (pluralProvider == null) {
-                    pluralProvider = new PluralSelectorProvider(ulocale);
+                PluralSelector selector;
+                if(argType == ArgType.PLURAL) {
+                    if (pluralProvider == null) {
+                        pluralProvider = new PluralSelectorProvider(ulocale, PluralType.CARDINAL);
+                    }
+                    selector = pluralProvider;
+                } else {
+                    if (ordinalProvider == null) {
+                        ordinalProvider = new PluralSelectorProvider(ulocale, PluralType.ORDINAL);
+                    }
+                    selector = ordinalProvider;
                 }
-                int subMsgStart=PluralFormat.findSubMessage(msgPattern, i, pluralProvider, number);
+                int subMsgStart=PluralFormat.findSubMessage(msgPattern, i, selector, number);
                 double offset=msgPattern.getPluralOffset(i);
                 formatComplexSubMessage(subMsgStart, number-offset, args, argsMap, dest);
             } else if(argType==ArgType.SELECT) {
@@ -1940,17 +1954,19 @@ public class MessageFormat extends UFormat {
      * we do not need any PluralRules.
      */
     private static final class PluralSelectorProvider implements PluralFormat.PluralSelector {
-        public PluralSelectorProvider(ULocale loc) {
+        public PluralSelectorProvider(ULocale loc, PluralType type) {
             locale=loc;
+            this.type=type;
         }
         public String select(double number) {
             if(rules == null) {
-                rules = PluralRules.forLocale(locale);
+                rules = PluralRules.forLocale(locale, type);
             }
             return rules.select(number);
         }
         private ULocale locale;
         private PluralRules rules;
+        private PluralType type;
     }
 
     @SuppressWarnings("unchecked")

@@ -10,6 +10,7 @@
 package com.ibm.icu.text;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.PatternProps;
@@ -819,7 +820,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
          */
         CHOICE,
         /**
-         * The argument is a PluralFormat with an optional ARG_INT or ARG_DOUBLE offset
+         * The argument is a cardinal-number PluralFormat with an optional ARG_INT or ARG_DOUBLE offset
          * (e.g., offset:1)
          * and one or more (ARG_SELECTOR [explicit-value] message) tuples.
          * If the selector has an explicit value (e.g., =2), then
@@ -832,7 +833,24 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
          * The argument is a SelectFormat with one or more (ARG_SELECTOR, message) pairs.
          * @stable ICU 4.8
          */
-        SELECT
+        SELECT,
+        /**
+         * The argument is an ordinal-number PluralFormat
+         * with the same style parts sequence and semantics as {@link ArgType#PLURAL}.
+         * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
+         */
+        SELECTORDINAL;
+
+        /**
+         * @return true if the argument type has a plural style part sequence and semantics,
+         * for example {@link ArgType#PLURAL} and {@link ArgType#SELECTORDINAL}.
+         * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
+         */
+        public boolean hasPluralStyle() {
+            return this == PLURAL || this == SELECTORDINAL;
+        }
     }
 
     /**
@@ -931,7 +949,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                         aposMode==ApostropheMode.DOUBLE_REQUIRED ||
                         c=='{' || c=='}' ||
                         (parentType==ArgType.CHOICE && c=='|') ||
-                        (parentType==ArgType.PLURAL && c=='#')
+                        (parentType.hasPluralStyle() && c=='#')
                     ) {
                         // skip the quote-starting apostrophe
                         addPart(Part.Type.SKIP_SYNTAX, index-1, 1, 0);
@@ -964,7 +982,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                         needsAutoQuoting=true;
                     }
                 }
-            } else if(parentType==ArgType.PLURAL && c=='#') {
+            } else if(parentType.hasPluralStyle() && c=='#') {
                 // The unquoted # in a plural message fragment will be replaced
                 // with the (number-offset).
                 addPart(Part.Type.REPLACE_NUMBER, index-1, 1, 0);
@@ -1062,6 +1080,10 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                     argType=ArgType.PLURAL;
                 } else if(isSelect(typeIndex)) {
                     argType=ArgType.SELECT;
+                }
+            } else if(length==13) {
+                if(isSelect(typeIndex) && isOrdinal(typeIndex+6)) {
+                    argType=ArgType.SELECTORDINAL;
                 }
             }
             // change the ARG_START type from NONE to argType
@@ -1191,26 +1213,26 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                 if(eos==inMessageFormatPattern(nestingLevel)) {
                     throw new IllegalArgumentException(
                         "Bad "+
-                        (argType==ArgType.PLURAL ? "plural" : "select")+
+                        argType.toString().toLowerCase(Locale.ROOT)+
                         " pattern syntax: "+prefix(start));
                 }
                 if(!hasOther) {
                     throw new IllegalArgumentException(
                         "Missing 'other' keyword in "+
-                        (argType==ArgType.PLURAL ? "plural" : "select")+
+                        argType.toString().toLowerCase(Locale.ROOT)+
                         " pattern in \""+prefix()+"\"");
                 }
                 return index;
             }
             int selectorIndex=index;
-            if(argType==ArgType.PLURAL && msg.charAt(selectorIndex)=='=') {
+            if(argType.hasPluralStyle() && msg.charAt(selectorIndex)=='=') {
                 // explicit-value plural selector: =double
                 index=skipDouble(index+1);
                 int length=index-selectorIndex;
                 if(length==1) {
                     throw new IllegalArgumentException(
                         "Bad "+
-                        (argType==ArgType.PLURAL ? "plural" : "select")+
+                        argType.toString().toLowerCase(Locale.ROOT)+
                         " pattern syntax: "+prefix(start));
                 }
                 if(length>Part.MAX_LENGTH) {
@@ -1225,11 +1247,11 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                 if(length==0) {
                     throw new IllegalArgumentException(
                         "Bad "+
-                        (argType==ArgType.PLURAL ? "plural" : "select")+
+                        argType.toString().toLowerCase(Locale.ROOT)+
                         " pattern syntax: "+prefix(start));
                 }
                 // Note: The ':' in "offset:" is just beyond the skipIdentifier() range.
-                if( argType==ArgType.PLURAL && length==6 && index<msg.length() &&
+                if( argType.hasPluralStyle() && length==6 && index<msg.length() &&
                     msg.regionMatches(selectorIndex, "offset:", 0, 7)
                 ) {
                     // plural offset, not a selector
@@ -1270,7 +1292,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
             if(index==msg.length() || msg.charAt(index)!='{') {
                 throw new IllegalArgumentException(
                     "No message fragment after "+
-                    (argType==ArgType.PLURAL ? "plural" : "select")+
+                    argType.toString().toLowerCase(Locale.ROOT)+
                     " selector: "+prefix(selectorIndex));
             }
             index=parseMessage(index, 1, nestingLevel+1, argType);
@@ -1477,6 +1499,18 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
             ((c=msg.charAt(index++))=='e' || c=='E') &&
             ((c=msg.charAt(index++))=='c' || c=='C') &&
             ((c=msg.charAt(index))=='t' || c=='T');
+    }
+
+    private boolean isOrdinal(int index) {
+        char c;
+        return
+            ((c=msg.charAt(index++))=='o' || c=='O') &&
+            ((c=msg.charAt(index++))=='r' || c=='R') &&
+            ((c=msg.charAt(index++))=='d' || c=='D') &&
+            ((c=msg.charAt(index++))=='i' || c=='I') &&
+            ((c=msg.charAt(index++))=='n' || c=='N') &&
+            ((c=msg.charAt(index++))=='a' || c=='A') &&
+            ((c=msg.charAt(index))=='l' || c=='L');
     }
 
     /**

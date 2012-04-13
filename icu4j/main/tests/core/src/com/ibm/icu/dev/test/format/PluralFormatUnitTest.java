@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -19,6 +19,7 @@ import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -323,5 +324,19 @@ public class PluralFormatUnitTest extends TestFmwk {
                 // ok
             }
         }
+    }
+
+    public void TestOrdinalFormat() {
+        String pattern = "one{#st file}two{#nd file}few{#rd file}other{#th file}";
+        PluralFormat pf = new PluralFormat(ULocale.ENGLISH, PluralType.ORDINAL, pattern);
+        assertEquals("PluralFormat.format(321)", "321st file", pf.format(321));
+        assertEquals("PluralFormat.format(22)", "22nd file", pf.format(22));
+        assertEquals("PluralFormat.format(3)", "3rd file", pf.format(3));
+
+        // Code coverage: Use the other new-for-PluralType constructor as well.
+        pf = new PluralFormat(ULocale.ENGLISH, PluralType.ORDINAL);
+        pf.applyPattern(pattern);
+        assertEquals("PluralFormat.format(456)", "456th file", pf.format(456));
+        assertEquals("PluralFormat.format(111)", "111th file", pf.format(111));
     }
 }

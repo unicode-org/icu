@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -14,6 +14,7 @@ import java.text.ParsePosition;
 import java.util.Map;
 
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -176,29 +177,29 @@ public class PluralFormat extends UFormat {
     transient private double offset = 0;
 
     /**
-     * Creates a new <code>PluralFormat</code> for the default <code>FORMAT</code> locale.
+     * Creates a new cardinal-number <code>PluralFormat</code> for the default <code>FORMAT</code> locale.
      * This locale will be used to get the set of plural rules and for standard
      * number formatting.
      * @see Category#FORMAT
      * @stable ICU 3.8
      */
     public PluralFormat() {
-        init(null, ULocale.getDefault(Category.FORMAT));
+        init(null, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
-     * Creates a new <code>PluralFormat</code> for a given locale.
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given locale.
      * @param ulocale the <code>PluralFormat</code> will be configured with
      *        rules for this locale. This locale will also be used for standard
      *        number formatting.
      * @stable ICU 3.8
      */
     public PluralFormat(ULocale ulocale) {
-        init(null, ulocale);
+        init(null, PluralType.CARDINAL, ulocale);
     }
 
     /**
-     * Creates a new <code>PluralFormat</code> for a given set of rules.
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given set of rules.
      * The standard number formatting will be done using the default <code>FORMAT</code> locale.
      * @param rules defines the behavior of the <code>PluralFormat</code>
      *        object.
@@ -206,11 +207,11 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(PluralRules rules) {
-        init(rules, ULocale.getDefault(Category.FORMAT));
+        init(rules, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
-     * Creates a new <code>PluralFormat</code> for a given set of rules.
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given set of rules.
      * The standard number formatting will be done using the given locale.
      * @param ulocale the default number formatting will be done using this
      *        locale.
@@ -219,11 +220,24 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(ULocale ulocale, PluralRules rules) {
-        init(rules, ulocale);
+        init(rules, PluralType.CARDINAL, ulocale);
     }
 
     /**
-     * Creates a new <code>PluralFormat</code> for a given pattern string.
+     * Creates a new <code>PluralFormat</code> for the plural type.
+     * The standard number formatting will be done using the given locale.
+     * @param ulocale the default number formatting will be done using this
+     *        locale.
+     * @param type The plural type (e.g., cardinal or ordinal).
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    public PluralFormat(ULocale ulocale, PluralType type) {
+        init(null, type, ulocale);
+    }
+
+    /**
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given pattern string.
      * The default <code>FORMAT</code> locale will be used to get the set of plural rules and for
      * standard number formatting.
      * @param  pattern the pattern for this <code>PluralFormat</code>.
@@ -232,12 +246,12 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(String pattern) {
-        init(null, ULocale.getDefault(Category.FORMAT));
+        init(null, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT));
         applyPattern(pattern);
     }
 
     /**
-     * Creates a new <code>PluralFormat</code> for a given pattern string and
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given pattern string and
      * locale.
      * The locale will be used to get the set of plural rules and for
      * standard number formatting.
@@ -249,12 +263,12 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(ULocale ulocale, String pattern) {
-        init(null, ulocale);
+        init(null, PluralType.CARDINAL, ulocale);
         applyPattern(pattern);
     }
 
     /**
-     * Creates a new <code>PluralFormat</code> for a given set of rules and a
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given set of rules and a
      * pattern.
      * The standard number formatting will be done using the default <code>FORMAT</code> locale.
      * @param rules defines the behavior of the <code>PluralFormat</code>
@@ -265,12 +279,12 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(PluralRules rules, String pattern) {
-        init(rules, ULocale.getDefault(Category.FORMAT));
+        init(rules, PluralType.CARDINAL, ULocale.getDefault(Category.FORMAT));
         applyPattern(pattern);
     }
 
     /**
-     * Creates a new <code>PluralFormat</code> for a given set of rules, a
+     * Creates a new cardinal-number <code>PluralFormat</code> for a given set of rules, a
      * pattern and a locale.
      * @param ulocale the <code>PluralFormat</code> will be configured with
      *        rules for this locale. This locale will also be used for standard
@@ -282,7 +296,24 @@ public class PluralFormat extends UFormat {
      * @stable ICU 3.8
      */
     public PluralFormat(ULocale ulocale, PluralRules rules, String pattern) {
-        init(rules, ulocale);
+        init(rules, PluralType.CARDINAL, ulocale);
+        applyPattern(pattern);
+    }
+
+    /**
+     * Creates a new <code>PluralFormat</code> for a plural type, a
+     * pattern and a locale.
+     * @param ulocale the <code>PluralFormat</code> will be configured with
+     *        rules for this locale. This locale will also be used for standard
+     *        number formatting.
+     * @param type The plural type (e.g., cardinal or ordinal).
+     * @param  pattern the pattern for this <code>PluralFormat</code>.
+     * @throws IllegalArgumentException if the pattern is invalid.
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    public PluralFormat(ULocale ulocale, PluralType type, String pattern) {
+        init(null, type, ulocale);
         applyPattern(pattern);
     }
 
@@ -299,9 +330,9 @@ public class PluralFormat extends UFormat {
      *   <code>numberFormat</code>: a <code>NumberFormat</code> for the locale
      *                              <code>ulocale</code>.
      */
-    private void init(PluralRules rules, ULocale locale) {
+    private void init(PluralRules rules, PluralType type, ULocale locale) {
         ulocale = locale;
-        pluralRules = (rules == null) ? PluralRules.forLocale(ulocale)
+        pluralRules = (rules == null) ? PluralRules.forLocale(ulocale, type)
                                       : rules;
         resetPattern();
         numberFormat = NumberFormat.getInstance(ulocale);
@@ -590,7 +621,8 @@ public class PluralFormat extends UFormat {
      *     i.e., a pattern that was applied previously will be removed,
      *     and the NumberFormat is set to the default number format for
      *     the locale.  The resulting format behaves the same as one
-     *     constructed from {@link #PluralFormat(ULocale)}.
+     *     constructed from {@link #PluralFormat(ULocale, PluralType)}
+     *     with PluralType.CARDINAL.
      * @param ulocale the <code>ULocale</code> used to configure the
      *     formatter. If <code>ulocale</code> is <code>null</code>, the
      *     default <code>FORMAT</code> locale will be used.
@@ -601,7 +633,7 @@ public class PluralFormat extends UFormat {
         if (ulocale == null) {
             ulocale = ULocale.getDefault(Category.FORMAT);
         }
-        init(null, ulocale);
+        init(null, PluralType.CARDINAL, ulocale);
     }
 
     /**

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.format;
@@ -18,6 +18,7 @@ import java.util.Set;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -385,5 +386,10 @@ public class PluralRulesTest extends TestFmwk {
                  }
              }
          }
+     }
+
+     public void TestOrdinal() {
+         PluralRules pr = PluralRules.forLocale(ULocale.ENGLISH, PluralType.ORDINAL);
+         assertEquals("PluralRules(en-ordinal).select(2)", "two", pr.select(2));
      }
 }
