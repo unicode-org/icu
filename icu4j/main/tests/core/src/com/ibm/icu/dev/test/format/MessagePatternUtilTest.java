@@ -184,7 +184,7 @@ public final class MessagePatternUtilTest extends com.ibm.icu.dev.test.TestFmwk 
     private class ExpectComplexArgNode extends ExpectArgNode {
         private ExpectComplexArgNode(ExpectMessageNode parent,
                                      Object name, MessagePattern.ArgType argType) {
-            super(name, argType.toString().toLowerCase(Locale.ROOT));
+            super(name, argType.toString().toLowerCase(Locale.ENGLISH));
             this.argType = argType;
             this.parent = parent;
         }

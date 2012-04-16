@@ -1213,13 +1213,13 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                 if(eos==inMessageFormatPattern(nestingLevel)) {
                     throw new IllegalArgumentException(
                         "Bad "+
-                        argType.toString().toLowerCase(Locale.ROOT)+
+                        argType.toString().toLowerCase(Locale.ENGLISH)+
                         " pattern syntax: "+prefix(start));
                 }
                 if(!hasOther) {
                     throw new IllegalArgumentException(
                         "Missing 'other' keyword in "+
-                        argType.toString().toLowerCase(Locale.ROOT)+
+                        argType.toString().toLowerCase(Locale.ENGLISH)+
                         " pattern in \""+prefix()+"\"");
                 }
                 return index;
@@ -1232,7 +1232,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                 if(length==1) {
                     throw new IllegalArgumentException(
                         "Bad "+
-                        argType.toString().toLowerCase(Locale.ROOT)+
+                        argType.toString().toLowerCase(Locale.ENGLISH)+
                         " pattern syntax: "+prefix(start));
                 }
                 if(length>Part.MAX_LENGTH) {
@@ -1247,7 +1247,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                 if(length==0) {
                     throw new IllegalArgumentException(
                         "Bad "+
-                        argType.toString().toLowerCase(Locale.ROOT)+
+                        argType.toString().toLowerCase(Locale.ENGLISH)+
                         " pattern syntax: "+prefix(start));
                 }
                 // Note: The ':' in "offset:" is just beyond the skipIdentifier() range.
@@ -1292,7 +1292,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
             if(index==msg.length() || msg.charAt(index)!='{') {
                 throw new IllegalArgumentException(
                     "No message fragment after "+
-                    argType.toString().toLowerCase(Locale.ROOT)+
+                    argType.toString().toLowerCase(Locale.ENGLISH)+
                     " selector: "+prefix(selectorIndex));
             }
             index=parseMessage(index, 1, nestingLevel+1, argType);
