@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005-2011, International Business Machines Corporation and    *
+* Copyright (C) 2005-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -417,7 +417,7 @@ public class CharsetDetector {
     byte[]      fInputBytes =       // The text to be checked.  Markup will have been
                    new byte[kBufSize];  //   removed if appropriate.
     
-    int         fInputLen;          // Length of the byte data in fInputText.
+    int         fInputLen;          // Length of the byte data in fInputBytes.
     
     short       fByteStats[] =      // byte frequency statistics for the input text.
                    new short[256];  //   Value is percent, not absolute.
