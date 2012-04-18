@@ -627,7 +627,9 @@ public class PluralFormat extends UFormat {
      *     formatter. If <code>ulocale</code> is <code>null</code>, the
      *     default <code>FORMAT</code> locale will be used.
      * @see Category#FORMAT
-     * @stable ICU 3.8
+     * @deprecated ICU 50 This method clears the pattern and might create
+     *             a different kind of PluralRules instance;
+     *             use one of the constructors to create a new instance instead.
      */
     public void setLocale(ULocale ulocale) {
         if (ulocale == null) {
