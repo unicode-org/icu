@@ -1,4 +1,4 @@
-# Copyright (c) 1999-2007, International Business Machines Corporation and
+# Copyright (c) 1999-2012, International Business Machines Corporation and
 # others. All Rights Reserved.
 # A list of UCM's to build for core MIME/Unix/Windows encodings
 
@@ -24,5 +24,5 @@ ibm-5349_P100-1998.ucm ibm-5350_P100-1998.ucm ibm-9447_P100-2002.ucm\
 ibm-5352_P100-1998.ucm ibm-9449_P100-2002.ucm ibm-5354_P100-1998.ucm\
 ibm-1383_P110-1999.ucm ibm-1386_P100-2001.ucm gb18030.ucm\
 ibm-1373_P100-2002.ucm\
-ibm-943_P15A-2003.ucm ibm-33722_P12A_P12A-2004_U2.ucm\
+ibm-943_P15A-2003.ucm ibm-33722_P12A_P12A-2009_U2.ucm\
 ibm-970_P110_P110-2006_U2.ucm ibm-949_P11A-1999.ucm ibm-1363_P11B-1998.ucm
