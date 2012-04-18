@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and    *
+* Copyright (C) 1997-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -444,6 +444,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 
 SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
 :   DateFormat(other),
+    fLocale(other.fLocale),
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fGMTFormatters(NULL),
@@ -477,6 +478,8 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
     // TimeZoneFormat in ICU4C only depends on a locale for now
     if (fLocale != other.fLocale) {
         delete fTimeZoneFormat;
+        fTimeZoneFormat = NULL; // forces lazy instantiation with the other locale
+        fLocale = other.fLocale;
     }
 
     return *this;

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -55,6 +55,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(24,Test714)
         CASE(25,Test1684)
         CASE(26,Test5554)
+        CASE(27,Test9237)
         default: name = ""; break;
     }
 }
@@ -1459,6 +1460,40 @@ void DateFormatRegressionTest::Test5554(void)
     errln("\nError: Newfoundland Z of Jan 14, 2007 gave '" + result + "', expected '" + correct + "'");
   }
   delete sdf;
+}
+
+void DateFormatRegressionTest::Test9237(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString pattern("VVVV");
+
+    SimpleDateFormat fmt(pattern, status);  // default locale
+    SimpleDateFormat fmtDE(pattern, Locale("de_DE"), status);
+    if (U_FAILURE(status)) {
+        dataerrln("Error constructing SimpleDateFormat");
+        return;
+    }
+
+    // copy constructor
+    SimpleDateFormat fmtCopyDE(fmtDE);
+    UnicodeString resDE, resCopyDE;
+
+    fmtDE.format(0.0, resDE);
+    fmtCopyDE.format(0.0, resCopyDE);
+
+    if (resDE != resCopyDE) {
+        errln(UnicodeString("Error: different result by the copied instance - org:") + resDE + " copy:" + resCopyDE);
+    }
+
+    // test for assignment operator
+    fmt = fmtDE;
+
+    UnicodeString resAssigned;
+    fmt.format(0.0, resAssigned);
+
+    if (resDE != resAssigned) {
+        errln(UnicodeString("Error: different results by the assigned instance - org:") + resDE + " assigned:" + resAssigned);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
