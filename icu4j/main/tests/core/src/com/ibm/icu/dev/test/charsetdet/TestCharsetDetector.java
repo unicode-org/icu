@@ -1060,7 +1060,7 @@ public class TestCharsetDetector extends TestFmwk
 
 
     public void TestBut9267() {
-        // Test a long input of Lam Alef characters for CharsetRecog_IBM424_he.
+        // Test a long input of Lam Alef characters for CharsetRecog_IBM420_ar.
         // Bug 9267 was an array out of bounds problem in the unshaping code for these.
         byte [] input = new byte [7700]; 
         int i;
