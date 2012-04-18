@@ -1744,7 +1744,7 @@ void RBBITest::TestUnicodeFiles() {
 void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi) {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
     // TODO(andy): Match line break behavior to Unicode 6.0 and remove this time bomb. Ticket #7270
-    UBool isTicket7270Fixed = isICUVersionAtLeast(50, 0);
+    UBool isTicket7270Fixed = isICUVersionAtLeast(50, 1);
     UBool isLineBreak = 0 == strcmp(fileName, "LineBreakTest.txt");
     UErrorCode  status = U_ZERO_ERROR;
 

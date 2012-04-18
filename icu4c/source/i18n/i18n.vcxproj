@@ -107,7 +107,7 @@
       <AdditionalIncludeDirectories>../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>..\..\bin\icuin49.dll</OutputFile>
+      <OutputFile>..\..\bin\icuin50.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\..\..\lib\icuin.pdb</ProgramDatabaseFile>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -151,7 +151,7 @@
       <AdditionalIncludeDirectories>../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>..\..\bin\icuin49d.dll</OutputFile>
+      <OutputFile>..\..\bin\icuin50d.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\..\..\lib\icuind.pdb</ProgramDatabaseFile>
@@ -192,7 +192,7 @@
       <AdditionalIncludeDirectories>../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>..\..\bin64\icuin49.dll</OutputFile>
+      <OutputFile>..\..\bin64\icuin50.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\..\..\lib64\icuin.pdb</ProgramDatabaseFile>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -234,7 +234,7 @@
       <AdditionalIncludeDirectories>../common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Link>
-      <OutputFile>..\..\bin64\icuin49d.dll</OutputFile>
+      <OutputFile>..\..\bin64\icuin50d.dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\..\..\lib64\icuind.pdb</ProgramDatabaseFile>
