@@ -1131,6 +1131,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         //arabic shaping class, method shape/unshape
         protected static ArabicShaping as = new ArabicShaping(ArabicShaping.LETTERS_UNSHAPE);
         protected byte[] prev_fInputBytes = null;
+        protected int prev_fInputLen = 0;
 
         protected static byte[] byteMap = {
 /*                 -0           -1           -2           -3           -4           -5           -6           -7           -8           -9           -A           -B           -C           -D           -E           -F   */
@@ -1179,11 +1180,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         protected void matchInit(CharsetDetector det) 
         {
             assert prev_fInputBytes == null;
-            prev_fInputBytes = new byte[det.fInputLen];
-            System.arraycopy(det.fInputBytes, 0, prev_fInputBytes, 0, det.fInputLen);
-            byte bb[] = unshape(prev_fInputBytes);
-            System.arraycopy(bb, 0, det.fInputBytes, 0, bb.length);
-            det.fInputLen = bb.length;
+            prev_fInputBytes = det.fInputBytes;
+            prev_fInputLen = det.fInputLen;
+            det.fInputBytes = unshape(prev_fInputBytes, prev_fInputLen);
+            det.fInputLen = det.fInputBytes.length;
         }
         
         /*
@@ -1193,22 +1193,22 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
          * on CharsetICU which we try to avoid. IBM420 converter amongst different versions
          * of JDK can produce different results and therefore is also avoided.
          */
-        private byte[] unshape(byte[] inputBytes) {
-            byte resultByteArr[] = unshapeLamAlef(inputBytes);
+        private byte[] unshape(byte[] inputBytes, int inputLen) {
+            byte resultByteArr[] = unshapeLamAlef(inputBytes, inputLen);
             
-            for (int i=0; i<inputBytes.length; i++){
+            for (int i=0; i<resultByteArr.length; i++){
                 resultByteArr[i] = unshapeMap[resultByteArr[i]& 0xFF];
             }
             return resultByteArr;
         }
 
-        private byte[] unshapeLamAlef(byte[] inputBytes) {
-            ByteBuffer resultBigBuffer =  ByteBuffer.allocate(inputBytes.length*2);
+        private byte[] unshapeLamAlef(byte[] inputBytes, int inputLen) {
+            ByteBuffer resultBigBuffer =  ByteBuffer.allocate(inputLen*2);
             ByteBuffer resultBuffer;
             byte unshapedLamAlef[] = {(byte)0xb1, (byte)0x56};
 
            
-            for (int i=0; i<inputBytes.length; i++){
+            for (int i=0; i<inputLen; i++){
                 if (isLamAlef(inputBytes[i]))
                     resultBigBuffer.put(unshapedLamAlef);
                 else
@@ -1229,8 +1229,8 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         
         protected void matchFinish(CharsetDetector det) {
             if (prev_fInputBytes != null) {
-                System.arraycopy(prev_fInputBytes, 0, det.fInputBytes, 0, prev_fInputBytes.length);
-                det.fInputLen = prev_fInputBytes.length;
+                det.fInputBytes = prev_fInputBytes;
+                det.fInputLen = prev_fInputLen;
                 prev_fInputBytes = null;
             }
         }
