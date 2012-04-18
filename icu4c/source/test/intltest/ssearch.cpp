@@ -980,7 +980,7 @@ void SSearchTest::offsetTest()
     col->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
 
     for(int32_t i = 0; i < testCount; i += 1) {
-        if (!isICUVersionAtLeast(50, 0) && i>=4 && i<=6) {
+        if (!isICUVersionAtLeast(50, 1) && i>=4 && i<=6) {
             continue; // timebomb until ticket #8080 is resolved
         }
         UnicodeString ts = CharsToUnicodeString(test[i]);
