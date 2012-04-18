@@ -1204,19 +1204,18 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         private byte[] unshapeLamAlef(byte[] inputBytes, int inputLen) {
             ByteBuffer resultBigBuffer =  ByteBuffer.allocate(inputLen*2);
-            ByteBuffer resultBuffer;
             byte unshapedLamAlef[] = {(byte)0xb1, (byte)0x56};
-
-           
+         
             for (int i=0; i<inputLen; i++){
                 if (isLamAlef(inputBytes[i]))
                     resultBigBuffer.put(unshapedLamAlef);
                 else
                     resultBigBuffer.put(inputBytes[i]);
             }
-            resultBuffer = ByteBuffer.allocate(resultBigBuffer.position());
-            resultBuffer.put(resultBigBuffer.array(),0, resultBigBuffer.position());
-            return resultBuffer.array();
+            byte[] resultBuffer = new byte[resultBigBuffer.position()];
+            resultBigBuffer.position(0);
+            resultBigBuffer.get(resultBuffer);
+            return resultBuffer;
         }
         
         private boolean isLamAlef(byte b) {
