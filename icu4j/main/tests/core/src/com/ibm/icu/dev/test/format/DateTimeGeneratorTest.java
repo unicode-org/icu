@@ -569,7 +569,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         DateOrder order2 = getOrdering(style2, uLocale);
         if (!order1.hasSameOrderAs(order2)) {
             if (order1.monthLength == order2.monthLength) { // error if have same month length, different ordering
-                if (isICUVersionBefore(50, 0, 1)) { // ticket#6806
+                if (isICUVersionBefore(50, 1, 0)) { // ticket#6806
                     logln(showOrderComparison(uLocale, style1, style2, order1, order2));
                 } else {
                     errln(showOrderComparison(uLocale, style1, style2, order1, order2));
