@@ -389,11 +389,14 @@ public:
      *     i.e., a pattern that was applied previously will be removed,
      *     and the NumberFormat is set to the default number format for
      *     the locale.  The resulting format behaves the same as one
-     *     constructed from {@link #PluralFormat(const Locale& locale, UPLURAL_TYPE_CARDINAL, UErrorCode& status)}.
+     *     constructed from {@link #PluralFormat(const Locale& locale, UPluralType type, UErrorCode& status)}
+     *     with UPLURAL_TYPE_CARDINAL.
      * @param locale  the <code>locale</code> to use to configure the formatter.
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
-     * @stable ICU 4.0
+     * @deprecated ICU 50 This method clears the pattern and might create
+     *             a different kind of PluralRules instance;
+     *             use one of the constructors to create a new instance instead.
      */
     void setLocale(const Locale& locale, UErrorCode& status);
 
