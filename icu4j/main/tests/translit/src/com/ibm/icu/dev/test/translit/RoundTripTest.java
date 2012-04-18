@@ -74,16 +74,16 @@ public class RoundTripTest extends TestFmwk {
     static String HIRAGANA_ITERATION = "[\u309D\u309E]";
 
     // TODO(Mark): Fix ticket #8989, transliterate U+0970.
-    // Remove all references to beforeICU49 & minusDevAbbBefore49.
-    private boolean beforeICU49;
-    private String minusDevAbbBefore49;
+    // Remove all references to beforeICU50 & minusDevAbbBefore50.
+    private boolean beforeICU50;
+    private String minusDevAbbBefore50;
 
     @Override
     public void init() {
         // TODO(Mark): Fix ticket #8989, transliterate U+0970.
         // Remove this method?
-        beforeICU49 = isICUVersionBefore(50, 0, 1);
-        minusDevAbbBefore49 = beforeICU49 ? "-[\u0970]" : "";
+        beforeICU50 = isICUVersionBefore(50, 1, 0);
+        minusDevAbbBefore50 = beforeICU50 ? "-[\u0970]" : "";
     }
 
     //------------------------------------------------------------------
@@ -507,7 +507,7 @@ public class RoundTripTest extends TestFmwk {
         logln("Warning: TestDevanagariLatin needs to be updated to remove delete the section marked [:Age=4.1:] filter");
 
         new Test("Latin-DEVANAGARI", 50)
-        .test(latinForIndic, "[[[:Devanagari:][\u094d][\u0964\u0965]" + minusDevAbbBefore49 + "]&[:Age=4.1:]]", "[\u0965\u0904]", this, new LegalIndic());
+        .test(latinForIndic, "[[[:Devanagari:][\u094d][\u0964\u0965]" + minusDevAbbBefore50 + "]&[:Age=4.1:]]", "[\u0965\u0904]", this, new LegalIndic());
         showElapsed(start, "TestDevanagariLatin");
     }
 
@@ -892,8 +892,8 @@ public class RoundTripTest extends TestFmwk {
             // start
             // TODO(Mark): Fix ticket #8989, transliterate U+0970.
             new Test(interIndicArray[i][0], 50)
-            .test("[["+interIndicArray[i][1] + minusDevAbbBefore49 + "] &[:Age=4.1:]]",
-                    "[["+interIndicArray[i][2] + minusDevAbbBefore49 + "] &[:Age=4.1:]]",
+            .test("[["+interIndicArray[i][1] + minusDevAbbBefore50 + "] &[:Age=4.1:]]",
+                    "[["+interIndicArray[i][2] + minusDevAbbBefore50 + "] &[:Age=4.1:]]",
                     interIndicArray[i][3],
                     this, new LegalIndic());
             //end
