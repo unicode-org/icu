@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation
+ * Copyright (c) 1997-2012, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -433,12 +433,19 @@ void DateFormatRoundTripTest::test(DateFormat *fmt, const Locale &origLocale, UB
                 }
             }
 
-            if(dmatch > maxDmatch || smatch > maxSmatch) { // Special case for Japanese and Islamic (could have large negative years)
+            /*
+             * Special case for Japanese and Buddhist (could have large negative years)
+             * Also, Hebrew calendar need help handling leap month.
+             */
+            if(dmatch > maxDmatch || smatch > maxSmatch) {
               const char *type = fmt->getCalendar()->getType();
               if(!strcmp(type,"japanese")) {
                 maxSmatch = 4;
                 maxDmatch = 4;
-              }
+              } else if(!strcmp(type,"hebrew")) {
+                  maxSmatch = 3;
+                  maxDmatch = 3;
+                }
             }
 
             // Use @v to see verbose results on successful cases
