@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 #  ********************************************************************
 #  * COPYRIGHT:
-#  * Copyright (c) 2008, International Business Machines Corporation and
+#  * Copyright (c) 2008-2012, International Business Machines Corporation and
 #  * others. All Rights Reserved.
 #  ********************************************************************
 
@@ -68,7 +68,7 @@ my $dataFiles = {
 		  "TestNames_Japanese_k.txt",
 		  "TestNames_Korean.txt",
 		  "TestNames_Latin.txt",
-		  "Testnames_Russian.txt",
+		  "TestNames_Russian.txt",
 		  "TestNames_SerbianSH.txt",
 		  "TestNames_SerbianSR.txt",
 		  "TestNames_Simplified_Chinese.txt",
