@@ -116,6 +116,8 @@ typedef size_t uintptr_t;
 #   define U_TIMEZONE __timezone
 #elif U_PLATFORM_USES_ONLY_WIN32_API
 #   define U_TIMEZONE _timezone
+#elif U_PLATFORM == U_PF_BSD && !defined(__NetBSD__)
+   /* not defined */
 #elif U_PLATFORM == U_PF_OS400
    /* not defined */
 #else
