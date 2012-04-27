@@ -26,6 +26,7 @@
 #include "unicode/regex.h"
 #include "unicode/uchar.h"
 #include "unicode/ucnv.h"
+#include "unicode/uniset.h"
 #include "unicode/ustring.h"
 #include "regextst.h"
 #include "uvector.h"
@@ -126,6 +127,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
             break;
         case 20: name = "CheckInvBufSize";
             if (exec) CheckInvBufSize();
+            break;
+        case 21: name = "Bug 9283";
+            if (exec) Bug9283();
             break;
 
         default: name = "";
@@ -5183,6 +5187,34 @@ void RegexTest::Bug7029() {
     REGEX_ASSERT(numFields == 8);
     delete pMatcher;
 }
+
+// Bug 9283
+//   This test is checking for the existance of any supplemental characters that case-fold
+//   to a bmp character.  
+//
+//   At the time of this writing there are none. If any should appear in a subsequent release 
+//   of Unicode, the code in regular expressions compilation that determines the longest 
+//   posssible match for a literal string  will need to be enhanced.  
+//
+//   See file regexcmp.cpp, case URX_STRING_I in RegexCompile::maxMatchLength()
+//   for details on what to do in case of a failure of this test.
+//
+void RegexTest::Bug9283() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeSet supplementalsWithCaseFolding("[[:CWCF:]&[\\U00010000-\\U0010FFFF]]", status);
+    REGEX_CHECK_STATUS;
+    int32_t index;
+    UChar32 c;
+    for (index=0; ; index++) {
+        c = supplementalsWithCaseFolding.charAt(index);
+        if (c == -1) {
+            break;
+        }
+        UnicodeString cf = UnicodeString(c).foldCase();
+        REGEX_ASSERT(cf.length() >= 2);
+    }
+}
+
 
 void RegexTest::CheckInvBufSize() {
   if(inv_next>=INV_BUFSIZ) {
