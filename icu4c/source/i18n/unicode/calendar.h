@@ -341,7 +341,7 @@ public:
      * Gets a Calendar using the given timezone and given locale.  The TimeZone
      * is _not_ adopted; the client is still responsible for deleting it.
      *
-     * @param zoneToAdopt  The given timezone to be adopted.
+     * @param zoneToAdopt  The given timezone.
      * @param aLocale      The given locale.
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
@@ -349,7 +349,7 @@ public:
      * @return             A Calendar if created successfully. NULL otherwise.
      * @stable ICU 2.0
      */
-    static Calendar* U_EXPORT2 createInstance(const TimeZone& zoneToAdopt, const Locale& aLocale, UErrorCode& success);
+    static Calendar* U_EXPORT2 createInstance(const TimeZone& zone, const Locale& aLocale, UErrorCode& success);
 
     /**
      * Returns a list of the locales for which Calendars are installed.
