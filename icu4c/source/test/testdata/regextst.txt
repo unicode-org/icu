@@ -1141,6 +1141,11 @@
 "[\w]+"                           "  <0>abc\u200cdef\u200dghi</0>   "
 "[\w]+"                         i "  <0>abc\u200cdef\u200dghi</0>   "
 
+# Bug 9283
+#  uregex_open fails for look-behind assertion + case-insensitive
+
+"(ab)?(?<=ab)cd|ef"             i  "<0><1>ab</1>cd</0>"
+
 #  Random debugging, Temporary
 #
 #"^(?:a?b?)*$"	                  "a--"
