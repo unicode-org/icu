@@ -3577,7 +3577,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
 
             IInit_collIterate(coll, UCharOffset, noChars, &temp, status);
             if(U_FAILURE(*status)) {
-                return UCOL_NULLORDER;
+                return (uint32_t)UCOL_NULLORDER;
             }
             temp.flags &= ~UCOL_ITER_NORM;
             temp.flags |= source->flags & UCOL_FORCE_HAN_IMPLICIT;
@@ -3954,7 +3954,7 @@ uint32_t ucol_prv_getSpecialPrevCE(const UCollator *coll, UChar ch, uint32_t CE,
                     // The total size for our collation key is half of endIndex, rounded up.
                     int32_t size = (endIndex+1)/2;
                     if(!ensureCEsCapacity(source, size)) {
-                        return UCOL_NULLORDER;
+                        return (uint32_t)UCOL_NULLORDER;
                     }
                     *(source->CEpos++) = (((numTempBuf[0] << 8) | numTempBuf[1]) << UCOL_PRIMARYORDERSHIFT) | //Primary weight
                         (UCOL_BYTE_COMMON << UCOL_SECONDARYORDERSHIFT) | // Secondary weight
@@ -6060,7 +6060,7 @@ saveState:
 
     // If we are doing French, we need to store whether we have just finished the French level
     if(level == UCOL_PSK_SECONDARY && doingFrench) {
-        state[1] |= (((state[0] == 0) & UCOL_PSK_BYTE_COUNT_OR_FRENCH_DONE_MASK) << UCOL_PSK_BYTE_COUNT_OR_FRENCH_DONE_SHIFT);
+        state[1] |= (((int32_t)(state[0] == 0) & UCOL_PSK_BYTE_COUNT_OR_FRENCH_DONE_MASK) << UCOL_PSK_BYTE_COUNT_OR_FRENCH_DONE_SHIFT);
     } else {
         state[1] |= ((byteCountOrFrenchDone & UCOL_PSK_BYTE_COUNT_OR_FRENCH_DONE_MASK) << UCOL_PSK_BYTE_COUNT_OR_FRENCH_DONE_SHIFT);
     }

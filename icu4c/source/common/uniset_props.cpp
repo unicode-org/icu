@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -74,7 +74,7 @@ U_NAMESPACE_USE
 //static const UChar POSIX_OPEN[]  = { SET_OPEN,COLON,0 };  // "[:"
 static const UChar POSIX_CLOSE[] = { COLON,SET_CLOSE,0 };  // ":]"
 //static const UChar PERL_OPEN[]   = { BACKSLASH,LOWER_P,0 }; // "\\p"
-static const UChar PERL_CLOSE[]  = { CLOSE_BRACE,0 };    // "}"
+//static const UChar PERL_CLOSE[]  = { CLOSE_BRACE,0 };    // "}"
 //static const UChar NAME_OPEN[]   = { BACKSLASH,UPPER_N,0 };  // "\\N"
 static const UChar HYPHEN_RIGHT_BRACE[] = {HYPHEN,SET_CLOSE,0}; /*-]*/
 
@@ -1038,7 +1038,6 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     applyFilter(numericValueFilter, &value, UPROPS_SRC_CHAR, ec);
                     return *this;
                 }
-                break;
             case UCHAR_NAME:
                 {
                     // Must munge name, since u_charFromName() does not do
@@ -1054,7 +1053,6 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                         FAIL(ec);
                     }
                 }
-                break;
             case UCHAR_UNICODE_1_NAME:
                 // ICU 49 deprecates the Unicode_1_Name property APIs.
                 FAIL(ec);
@@ -1069,7 +1067,6 @@ UnicodeSet::applyPropertyAlias(const UnicodeString& prop,
                     applyFilter(versionFilter, &version, UPROPS_SRC_PROPSVEC, ec);
                     return *this;
                 }
-                break;
             case UCHAR_SCRIPT_EXTENSIONS:
                 v = u_getPropertyValueEnum(UCHAR_SCRIPT, vname.data());
                 if (v == UCHAR_INVALID_CODE) {

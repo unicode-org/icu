@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2011, International Business Machines                 *
+ *   Copyright (C) 1996-2012, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -306,7 +306,7 @@ void Target::setLast(int32_t last)
     bufferMin = 0;
     bufferMax = 1;
 
-    ceb[0].order      = UCOL_NULLORDER;
+    ceb[0].order      = (uint32_t)UCOL_NULLORDER;
     ceb[0].lowOffset  = last;
     ceb[0].highOffset = last;
 

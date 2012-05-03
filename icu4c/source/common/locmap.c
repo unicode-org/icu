@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1996-2011, International Business Machines
+ *   Copyright (C) 1996-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -171,13 +171,13 @@ ILCID_POSIX_SUBTABLE(az) {
 ILCID_POSIX_ELEMENT_ARRAY(0x046d, ba, ba_RU)
 ILCID_POSIX_ELEMENT_ARRAY(0x0423, be, be_BY)
 
-ILCID_POSIX_SUBTABLE(ber) {
+/*ILCID_POSIX_SUBTABLE(ber) {
     {0x5f,   "ber"},
     {0x045f, "ber_Arab_DZ"},
     {0x045f, "ber_Arab"},
     {0x085f, "ber_Latn_DZ"},
     {0x085f, "ber_Latn"}
-};
+};*/
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0402, bg, bg_BG)
 

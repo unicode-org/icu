@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -29,7 +29,6 @@
 #include "unicode/ustring.h"
 #include "unicode/uloc.h"
 
-static UBool isFormatsInitialized = FALSE;
 static UNumberFormat *gPosixNumberFormat[ULOCALEBUNDLE_NUMBERFORMAT_COUNT];
 
 U_CDECL_BEGIN
@@ -39,7 +38,6 @@ static UBool U_CALLCONV locbund_cleanup(void) {
         unum_close(gPosixNumberFormat[style]);
         gPosixNumberFormat[style] = NULL;
     }
-    isFormatsInitialized = FALSE;
     return TRUE;
 }
 U_CDECL_END

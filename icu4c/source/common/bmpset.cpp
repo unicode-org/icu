@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2007-2011, International Business Machines
+*   Copyright (C) 2007-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -107,7 +107,7 @@ static void set32x64Bits(uint32_t table[64], int32_t start, int32_t limit) {
         // limit<=0x800. If limit==0x800 then limitLead=32 and limitTrail=0.
         // In that case, bits=1<<limitLead is undefined but the bits value
         // is not used because trail<limitTrail is already false.
-        bits=1<<limitLead;
+        bits=(uint32_t)1<<((limitLead == 0x20) ? (limitLead - 1) : limitLead);
         for(trail=0; trail<limitTrail; ++trail) {
             table[trail]|=bits;
         }

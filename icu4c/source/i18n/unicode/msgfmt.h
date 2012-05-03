@@ -1073,9 +1073,16 @@ private:
     public:
         virtual UBool operator==(const Format&) const;
         virtual Format* clone() const;
+        virtual UnicodeString& format(const Formattable& obj,
+                              UnicodeString& appendTo,
+                              UErrorCode& status) const;
         virtual UnicodeString& format(const Formattable&,
                                       UnicodeString& appendTo,
                                       FieldPosition&,
+                                      UErrorCode& status) const;
+        virtual UnicodeString& format(const Formattable& obj,
+                                      UnicodeString& appendTo,
+                                      FieldPositionIterator* posIter,
                                       UErrorCode& status) const;
         virtual void parseObject(const UnicodeString&,
                                  Formattable&,

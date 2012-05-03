@@ -3099,7 +3099,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
         case URX_BACKSLASH_B:          // Test for word boundaries
             {
                 UBool success = isWordBoundary(fp->fInputIdx);
-                success ^= (opValue != 0);     // flip sense for \B
+                success ^= (UBool)(opValue != 0);     // flip sense for \B
                 if (!success) {
                     fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }
@@ -3110,7 +3110,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
         case URX_BACKSLASH_BU:          // Test for word boundaries, Unicode-style
             {
                 UBool success = isUWordBoundary(fp->fInputIdx);
-                success ^= (opValue != 0);     // flip sense for \B
+                success ^= (UBool)(opValue != 0);     // flip sense for \B
                 if (!success) {
                     fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }
@@ -3131,7 +3131,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
                 UChar32 c = UTEXT_NEXT32(fInputText);
                 int8_t ctype = u_charType(c);     // TODO:  make a unicode set for this.  Will be faster.
                 UBool success = (ctype == U_DECIMAL_DIGIT_NUMBER);
-                success ^= (opValue != 0);        // flip sense for \D
+                success ^= (UBool)(opValue != 0);        // flip sense for \D
                 if (success) {
                     fp->fInputIdx = UTEXT_GETNATIVEINDEX(fInputText);
                 } else {
@@ -4588,7 +4588,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
         case URX_BACKSLASH_B:          // Test for word boundaries
             {
                 UBool success = isChunkWordBoundary((int32_t)fp->fInputIdx);
-                success ^= (opValue != 0);     // flip sense for \B
+                success ^= (UBool)(opValue != 0);     // flip sense for \B
                 if (!success) {
                     fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }
@@ -4599,7 +4599,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
         case URX_BACKSLASH_BU:          // Test for word boundaries, Unicode-style
             {
                 UBool success = isUWordBoundary(fp->fInputIdx);
-                success ^= (opValue != 0);     // flip sense for \B
+                success ^= (UBool)(opValue != 0);     // flip sense for \B
                 if (!success) {
                     fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }
@@ -4619,7 +4619,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
                 U16_NEXT(inputBuf, fp->fInputIdx, fActiveLimit, c);
                 int8_t ctype = u_charType(c);     // TODO:  make a unicode set for this.  Will be faster.
                 UBool success = (ctype == U_DECIMAL_DIGIT_NUMBER);
-                success ^= (opValue != 0);        // flip sense for \D
+                success ^= (UBool)(opValue != 0);        // flip sense for \D
                 if (!success) {
                     fp = (REStackFrame *)fStack->popFrame(fFrameSize);
                 }

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -282,7 +282,7 @@ static const char _kCountries[]       = "Countries";
 static const char _kVariants[]        = "Variants";
 static const char _kKeys[]            = "Keys";
 static const char _kTypes[]           = "Types";
-static const char _kRootName[]        = "root";
+//static const char _kRootName[]        = "root";
 static const char _kCurrency[]        = "currency";
 static const char _kCurrencies[]      = "Currencies";
 static const char _kLocaleDisplayPattern[] = "localeDisplayPattern";
