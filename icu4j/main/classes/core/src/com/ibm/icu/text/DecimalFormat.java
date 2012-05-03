@@ -3508,6 +3508,7 @@ public class DecimalFormat extends NumberFormat {
             if (currencyPluralInfo != null) {
                 other.currencyPluralInfo = (CurrencyPluralInfo) currencyPluralInfo.clone();
             }
+            other.attributes = new ArrayList<FieldPosition>(); // #9240
 
             // TODO: We need to figure out whether we share a single copy of DigitList by
             // multiple cloned copies.  format/subformat are designed to use a single

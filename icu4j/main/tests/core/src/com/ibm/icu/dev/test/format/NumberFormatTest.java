@@ -14,6 +14,7 @@
 package com.ibm.icu.dev.test.format;
 
 import java.math.BigInteger;
+import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
@@ -2927,6 +2928,68 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             } else {
                 errln("FAIL: 1250.75 x " + locale + " => " + s +
                       ", expected " + DATA[i+3]);
+            }
+        }
+    }
+
+    /*
+     * Test case for #9240
+     * ICU4J 49.1 DecimalFormat did not clone the internal object holding
+     * formatted text attribute information properly. Therefore, DecimalFormat
+     * created by cloning may return incorrect results or may throw an exception
+     * when formatToCharacterIterator is invoked from multiple threads.
+     */
+    public void TestFormatToCharacterIteratorThread() {
+        final int COUNT = 10;
+
+        DecimalFormat fmt1 = new DecimalFormat("#0");
+        DecimalFormat fmt2 = (DecimalFormat)fmt1.clone();
+
+        int[] res1 = new int[COUNT];
+        int[] res2 = new int[COUNT];
+
+        Thread t1 = new Thread(new FormatCharItrTestThread(fmt1, 1, res1));
+        Thread t2 = new Thread(new FormatCharItrTestThread(fmt2, 100, res2));
+
+        t1.start();
+        t2.start();
+
+        try {
+            t1.join();
+            t2.join();
+        } catch (InterruptedException e) {
+            //TODO
+        }
+
+        int val1 = res1[0];
+        int val2 = res2[0];
+
+        for (int i = 0; i < COUNT; i++) {
+            if (res1[i] != val1) {
+                errln("Inconsistent first run limit in test thread 1");
+            }
+            if (res2[i] != val2) {
+                errln("Inconsistent first run limit in test thread 2");
+            }
+        }
+    }
+
+    private static class FormatCharItrTestThread implements Runnable {
+        private NumberFormat fmt;
+        private int num;
+        private int[] result;
+
+        FormatCharItrTestThread(NumberFormat fmt, int num, int[] result) {
+            this.fmt = fmt;
+            this.num = num;
+            this.result = result;
+        }
+
+        public void run() {
+            for (int i = 0; i < result.length; i++) {
+                AttributedCharacterIterator acitr = fmt.formatToCharacterIterator(num);
+                acitr.first();
+                result[i] = acitr.getRunLimit();
             }
         }
     }
