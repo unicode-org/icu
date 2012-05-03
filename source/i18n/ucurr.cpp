@@ -223,8 +223,8 @@ idForLocale(const char* locale, char* countryAndVariant, int capacity, UErrorCod
     uloc_getCountry(locale, countryAndVariant, capacity, ec);
     uloc_getVariant(locale, variant, sizeof(variant), ec);
     if (variant[0] != 0) {
-        variantType = (0 == uprv_strcmp(variant, VAR_EURO))
-                   | ((0 == uprv_strcmp(variant, VAR_PRE_EURO)) << 1);
+        variantType = (uint32_t)(0 == uprv_strcmp(variant, VAR_EURO))
+                   | ((uint32_t)(0 == uprv_strcmp(variant, VAR_PRE_EURO)) << 1);
         if (variantType)
         {
             uprv_strcat(countryAndVariant, VAR_DELIM_STR);

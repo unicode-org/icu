@@ -1012,7 +1012,7 @@ writeObjectCode(const char *filename, const char *destdir, const char *optEntryP
 
     /* deal with options, files and the entry point name */
     getArchitecture(&cpu, &bits, &makeBigEndian, optMatchArch);
-    printf("genccode: --match-arch cpu=%hu bits=%hu big-endian=%hu\n", cpu, bits, makeBigEndian);
+    printf("genccode: --match-arch cpu=%hu bits=%hu big-endian=%d\n", cpu, bits, makeBigEndian);
 #if U_PLATFORM_HAS_WIN32_API
     if(cpu==IMAGE_FILE_MACHINE_I386) {
         entryOffset=1;

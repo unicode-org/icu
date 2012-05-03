@@ -106,14 +106,6 @@ static const UChar         WORLD[] = {0x30, 0x30, 0x31, 0x00}; /* "001" */
 
 static const UChar         GMT_ID[] = {0x47, 0x4D, 0x54, 0x00}; /* "GMT" */
 static const UChar         UNKNOWN_ZONE_ID[] = {0x45, 0x74, 0x63, 0x2F, 0x55, 0x6E, 0x6B, 0x6E, 0x6F, 0x77, 0x6E, 0x00}; /* "Etc/Unknown" */
-static const UChar         Z_STR[] = {0x7A, 0x00}; /* "z" */
-static const UChar         ZZZZ_STR[] = {0x7A, 0x7A, 0x7A, 0x7A, 0x00}; /* "zzzz" */
-static const UChar         Z_UC_STR[] = {0x5A, 0x00}; /* "Z" */
-static const UChar         ZZZZ_UC_STR[] = {0x5A, 0x5A, 0x5A, 0x5A, 0x00}; /* "ZZZZ" */
-static const UChar         V_STR[] = {0x76, 0x00}; /* "v" */
-static const UChar         VVVV_STR[] = {0x76, 0x76, 0x76, 0x76, 0x00}; /* "vvvv" */
-static const UChar         V_UC_STR[] = {0x56, 0x00}; /* "V" */
-static const UChar         VVVV_UC_STR[] = {0x56, 0x56, 0x56, 0x56, 0x00}; /* "VVVV" */
 static const int32_t       GMT_ID_LENGTH = 3;
 static const int32_t       UNKNOWN_ZONE_ID_LENGTH = 11;
 

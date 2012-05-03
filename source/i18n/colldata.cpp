@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2011, International Business Machines                 *
+ *   Copyright (C) 1996-2012, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -162,7 +162,7 @@ uint32_t CEList::get(int32_t index) const
         return ces[index];
     }
 
-    return UCOL_NULLORDER;
+    return (uint32_t)UCOL_NULLORDER;
 }
 
 uint32_t &CEList::operator[](int32_t index) const

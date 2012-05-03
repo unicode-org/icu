@@ -54,8 +54,8 @@
 
 
 /* Only for 32 bit numbers. Ignore the negative sign. */
-static const char LONG_MIN_REP[] = "2147483648";
-static const char I64_MIN_REP[] = "9223372036854775808";
+//static const char LONG_MIN_REP[] = "2147483648";
+//static const char I64_MIN_REP[] = "9223372036854775808";
 
 
 U_NAMESPACE_BEGIN

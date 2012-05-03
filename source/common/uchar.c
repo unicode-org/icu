@@ -560,7 +560,7 @@ uscript_hasScript(UChar32 c, UScriptCode sc) {
     if(scriptX>=UPROPS_SCRIPT_X_WITH_OTHER) {
         scx=scriptExtensions+scx[1];
     }
-    if(sc>0x7fff) {
+    if(sc>=USCRIPT_CODE_LIMIT) {
         /* Guard against bogus input that would make us go past the Script_Extensions terminator. */
         return FALSE;
     }
@@ -603,7 +603,7 @@ uscript_getScriptExtensions(UChar32 c,
     do {
         sx=*scx++;
         if(length<capacity) {
-            scripts[length]=sx&0x7fff;
+            scripts[length]=(UScriptCode)(sx&0x7fff);
         }
         ++length;
     } while(sx<0x8000);

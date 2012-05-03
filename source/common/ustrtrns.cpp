@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 2001-2011, International Business Machines
+*   Copyright (C) 2001-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -1310,7 +1310,7 @@ u_strFromJavaModifiedUTF8WithSub(
     }
 
     /* Faster loop without ongoing checking for pSrcLimit and pDestLimit. */
-    pSrcLimit = pSrc + srcLength;
+    pSrcLimit = (pSrc == NULL) ? NULL : pSrc + srcLength;
     for(;;) {
         count = (int32_t)(pDestLimit - pDest);
         srcLength = (int32_t)(pSrcLimit - pSrc);

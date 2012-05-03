@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2011, International Business Machines
+*   Copyright (C) 2000-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -399,7 +399,7 @@ MBCSAddToUnicode(MBCSData *mbcsData,
             offset+=MBCS_ENTRY_TRANSITION_OFFSET(entry);
         } else {
             if(i<length) {
-                fprintf(stderr, "error: byte sequence too long by %d bytes, final state %hu: 0x%s (U+%x)\n",
+                fprintf(stderr, "error: byte sequence too long by %d bytes, final state %u: 0x%s (U+%x)\n",
                     (int)(length-i), state, printBytes(buffer, bytes, length), (int)c);
                 return FALSE;
             }
@@ -1064,7 +1064,7 @@ MBCSAddTable(NewConverter *cnvData, UCMTable *table, UConverterStaticData *stati
 static UBool
 transformEUC(MBCSData *mbcsData) {
     uint8_t *p8;
-    uint32_t i, value, oldLength, old3Top, new3Top;
+    uint32_t i, value, oldLength, old3Top;
     uint8_t b;
 
     oldLength=mbcsData->ucm->states.maxCharLength;
@@ -1097,7 +1097,7 @@ transformEUC(MBCSData *mbcsData) {
 
     /* modify outputType and adjust stage3Top */
     mbcsData->ucm->states.outputType=(int8_t)(MBCS_OUTPUT_3_EUC+oldLength-3);
-    mbcsData->stage3Top=new3Top=(old3Top*(oldLength-1))/oldLength;
+    mbcsData->stage3Top=(old3Top*(oldLength-1))/oldLength;
 
     /*
      * EUC-encode all byte sequences;

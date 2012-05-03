@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2012 - All Rights Reserved
  *
  */
 
@@ -197,6 +197,11 @@ LookupProcessor::LookupProcessor(const char *baseAddress,
              continue;
         }
         featureReferences += SWAPW(featureTable->lookupCount);
+    }
+
+    if (!featureTable) {
+        success = LE_INTERNAL_ERROR;
+        return;
     }
 
     if (requiredFeatureIndex != 0xFFFF) {

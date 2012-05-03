@@ -1117,13 +1117,17 @@ static int32_t pkg_installFileMode(const char *installDir, const char *srcDir, c
     }
 #ifndef U_WINDOWS_WITH_MSVC
     char buffer[SMALL_BUFFER_MAX_SIZE] = "";
+    int32_t bufferLength = 0;
 
     FileStream *f = T_FileStream_open(fileListName, "r");
     if (f != NULL) {
         for(;;) {
             if (T_FileStream_readLine(f, buffer, SMALL_BUFFER_MAX_SIZE) != NULL) {
+                bufferLength = uprv_strlen(buffer);
                 /* Remove new line character. */
-                buffer[uprv_strlen(buffer)-1] = 0;
+                if (bufferLength > 0) {
+                    buffer[bufferLength-1] = 0;
+                }
 
                 sprintf(cmd, "%s %s%s%s %s%s%s",
                         pkgDataFlags[INSTALL_CMD],
@@ -2011,6 +2015,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
     option->doesOccur = TRUE;
 
     return 0;
-#endif
+#else
     return -1;
+#endif
 }

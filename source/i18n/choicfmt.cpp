@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and    *
+* Copyright (C) 1997-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -64,8 +64,8 @@ static const UChar RIGHT_CURLY_BRACE = 0x7D;    /*}*/
 #endif
 #define INFINITY     ((UChar)0x221E)
 
-static const UChar gPositiveInfinity[] = {INFINITY, 0};
-static const UChar gNegativeInfinity[] = {MINUS, INFINITY, 0};
+//static const UChar gPositiveInfinity[] = {INFINITY, 0};
+//static const UChar gNegativeInfinity[] = {MINUS, INFINITY, 0};
 #define POSITIVE_INF_STRLEN 1
 #define NEGATIVE_INF_STRLEN 2
 

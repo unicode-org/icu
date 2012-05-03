@@ -1734,9 +1734,28 @@ Format* MessageFormat::DummyFormat::clone() const {
     return new DummyFormat();
 }
 
+UnicodeString& MessageFormat::DummyFormat::format(const Formattable& obj,
+                          UnicodeString& appendTo,
+                          UErrorCode& status) const {
+    if (U_SUCCESS(status)) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+    return appendTo;
+}
+
 UnicodeString& MessageFormat::DummyFormat::format(const Formattable&,
                           UnicodeString& appendTo,
                           FieldPosition&,
+                          UErrorCode& status) const {
+    if (U_SUCCESS(status)) {
+        status = U_UNSUPPORTED_ERROR;
+    }
+    return appendTo;
+}
+
+UnicodeString& MessageFormat::DummyFormat::format(const Formattable&,
+                          UnicodeString& appendTo,
+                          FieldPositionIterator* posIter,
                           UErrorCode& status) const {
     if (U_SUCCESS(status)) {
         status = U_UNSUPPORTED_ERROR;

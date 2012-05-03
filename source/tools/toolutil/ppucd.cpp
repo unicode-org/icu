@@ -71,7 +71,7 @@ PreparsedUCD::PreparsedUCD(const char *filename, UErrorCode &errorCode)
     }
     if(file==NULL) {
         perror("error opening preparsed UCD");
-        fprintf(stderr, "error opening preparsed UCD file %s\n", filename);
+        fprintf(stderr, "error opening preparsed UCD file %s\n", filename ? filename : "\"no file name given\"");
         errorCode=U_FILE_ACCESS_ERROR;
         return;
     }
@@ -326,6 +326,11 @@ PreparsedUCD::parseProperty(UniProps &props, const char *field, UnicodeSet &newV
                 "error in preparsed UCD: binary-property syntax '%s' "
                 "for non-binary property on line %ld\n",
                 field, (long)lineNumber);
+        errorCode=U_PARSE_ERROR;
+    } else if (prop < UCHAR_INT_START) {
+        fprintf(stderr,
+                "error in preparsed UCD: prop value is invalid: '%d' for line %ld\n",
+                prop, (long)lineNumber);
         errorCode=U_PARSE_ERROR;
     } else if(prop<UCHAR_INT_LIMIT) {
         int32_t value=pnames->getPropertyValueEnum(prop, v);
