@@ -3186,7 +3186,6 @@ int32_t Calendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t w
             // we're not possibly in the last week -must be ywoy
             return yearWoy;
         }
-        break;
 
     case UCAL_DATE:
         if((internalGet(UCAL_MONTH)==0) &&
@@ -3206,18 +3205,10 @@ int32_t Calendar::handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t w
             //within 1st week and in this month.. 
             //return yearWoy+1;
             return yearWoy;
-            break;
 
     default: // assume the year is appropriate
         return yearWoy;
-        break;
     }
-
-#if defined (U_DEBUG_CAL) 
-    fprintf(stderr, "%s:%d - forgot a return on field %s\n", __FILE__, __LINE__, fldName(bestField));
-#endif 
-
-    return yearWoy;
 }
 
 int32_t Calendar::handleGetMonthLength(int32_t extendedYear, int32_t month) const

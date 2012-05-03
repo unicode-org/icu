@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2011, International Business Machines
+*   Copyright (C) 2010-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucharstriebuilder.h
@@ -378,7 +378,7 @@ UCharsTrieBuilder::writeValueAndFinal(int32_t i, UBool isFinal) {
     int32_t length;
     if(i<0 || i>UCharsTrie::kMaxTwoUnitValue) {
         intUnits[0]=(UChar)(UCharsTrie::kThreeUnitValueLead);
-        intUnits[1]=(UChar)(i>>16);
+        intUnits[1]=(UChar)((uint32_t)i>>16);
         intUnits[2]=(UChar)i;
         length=3;
     // } else if(i<=UCharsTrie::kMaxOneUnitValue) {
@@ -402,7 +402,7 @@ UCharsTrieBuilder::writeValueAndType(UBool hasValue, int32_t value, int32_t node
     int32_t length;
     if(value<0 || value>UCharsTrie::kMaxTwoUnitNodeValue) {
         intUnits[0]=(UChar)(UCharsTrie::kThreeUnitNodeValueLead);
-        intUnits[1]=(UChar)(value>>16);
+        intUnits[1]=(UChar)((uint32_t)value>>16);
         intUnits[2]=(UChar)value;
         length=3;
     } else if(value<=UCharsTrie::kMaxOneUnitNodeValue) {

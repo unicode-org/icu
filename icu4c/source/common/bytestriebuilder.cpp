@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2011, International Business Machines
+*   Copyright (C) 2010-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  bytestriebuilder.cpp
@@ -430,9 +430,9 @@ BytesTrieBuilder::writeValueAndFinal(int32_t i, UBool isFinal) {
     int32_t length=1;
     if(i<0 || i>0xffffff) {
         intBytes[0]=(char)BytesTrie::kFiveByteValueLead;
-        intBytes[1]=(char)(i>>24);
-        intBytes[2]=(char)(i>>16);
-        intBytes[3]=(char)(i>>8);
+        intBytes[1]=(char)((uint32_t)i>>24);
+        intBytes[2]=(char)((uint32_t)i>>16);
+        intBytes[3]=(char)((uint32_t)i>>8);
         intBytes[4]=(char)i;
         length=5;
     // } else if(i<=BytesTrie::kMaxOneByteValue) {

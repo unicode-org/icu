@@ -171,9 +171,9 @@ static const char gNamesNumericTag[]="numeric";
 static const char gAmPmMarkersTag[]="AmPmMarkers";
 static const char gQuartersTag[]="quarters";
 
-static const char gZoneStringsTag[]="zoneStrings";
+// static const char gZoneStringsTag[]="zoneStrings";
 
-static const char gLocalPatternCharsTag[]="localPatternChars";
+// static const char gLocalPatternCharsTag[]="localPatternChars";
 
 static const char gContextTransformsTag[]="contextTransforms";
 

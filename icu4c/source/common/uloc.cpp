@@ -1009,7 +1009,7 @@ uloc_setKeywordValue(const char* keywordName,
         while(keywordStart[i-1] == ' ') {
             i--;
         }
-        U_ASSERT(i>=0);
+        U_ASSERT(i>=0 && i<ULOC_KEYWORD_BUFFER_LEN);
         localeKeywordNameBuffer[i] = 0;
 
         nextSeparator = uprv_strchr(nextEqualsign, ';');
@@ -1839,7 +1839,7 @@ _canonicalize(const char* localeID,
             len += _getKeywords(tmpLocaleID+1, '@', (len<nameCapacity ? name+len : NULL), nameCapacity-len,
                                 NULL, 0, NULL, TRUE, addKeyword, addValue, err);
         } else if (addKeyword != NULL) {
-            U_ASSERT(addValue != NULL);
+            U_ASSERT(addValue != NULL && len < nameCapacity);
             /* inelegant but works -- later make _getKeywords do this? */
             len += _copyCount(name+len, nameCapacity-len, "@");
             len += _copyCount(name+len, nameCapacity-len, addKeyword);

@@ -657,8 +657,10 @@ void Normalizer2Impl::decomposeAndAppend(const UChar *src, const UChar *limit,
     if(limit==NULL) {  // appendZeroCC() needs limit!=NULL
         limit=u_strchr(iter.codePointStart, 0);
     }
-    buffer.append(src, (int32_t)(iter.codePointStart-src), firstCC, prevCC, errorCode) &&
+
+    if (buffer.append(src, (int32_t)(iter.codePointStart-src), firstCC, prevCC, errorCode)) {
         buffer.appendZeroCC(iter.codePointStart, limit, errorCode);
+    }
 }
 
 // Note: hasDecompBoundary() could be implemented as aliases to

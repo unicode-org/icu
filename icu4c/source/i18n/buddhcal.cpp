@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2003-2008, International Business Machines Corporation and    *
+* Copyright (C) 2003-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -24,7 +24,7 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(BuddhistCalendar)
 
-static const int32_t kMaxEra = 0; // only 1 era
+//static const int32_t kMaxEra = 0; // only 1 era
 
 static const int32_t kBuddhistEraStart = -543;  // 544 BC (Gregorian)
 

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -644,7 +644,6 @@ addToKnownAliases(const char *alias) {
 static uint16_t
 addAlias(const char *alias, uint16_t standard, uint16_t converter, UBool defaultName) {
     uint32_t idx, idx2;
-    UBool dupFound = FALSE;
     UBool startEmptyWithoutDefault = FALSE;
     AliasList *aliasList;
 
@@ -713,7 +712,6 @@ addAlias(const char *alias, uint16_t standard, uint16_t converter, UBool default
                             GET_ALIAS_STR(converters[converter].converter),
                             GET_ALIAS_STR(converters[idx].converter));
                     }
-                    dupFound = TRUE;
                     break;
                 }
             }

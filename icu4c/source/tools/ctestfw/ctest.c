@@ -1182,7 +1182,7 @@ setTestOption ( int32_t testOption, int32_t value) {
             REPEAT_TESTS = value;
             break;
         case ICU_TRACE_OPTION:
-            ICU_TRACE = value;
+            ICU_TRACE = (UTraceLevel)value;
             break;
         default :
             break;

@@ -36,7 +36,7 @@ static const char gHourFormatTag[]= "hourFormat";
 static const UChar TZID_GMT[] = {0x0045, 0x0074, 0x0063, 0x002F, 0x0047, 0x004D, 0x0054, 0};    // Etc/GMT
 
 static const UChar DEFAULT_GMT_PATTERN[] = {0x0047, 0x004D, 0x0054, 0x007B, 0x0030, 0x007D, 0}; // GMT{0}
-static const UChar DEFAULT_GMT_ZERO[] = {0x0047, 0x004D, 0x0054, 0}; // GMT
+//static const UChar DEFAULT_GMT_ZERO[] = {0x0047, 0x004D, 0x0054, 0}; // GMT
 static const UChar DEFAULT_GMT_POSITIVE_HM[] = {0x002B, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0}; // +HH:mm
 static const UChar DEFAULT_GMT_POSITIVE_HMS[] = {0x002B, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0x003A, 0x0073, 0x0073, 0}; // +HH:mm:ss
 static const UChar DEFAULT_GMT_NEGATIVE_HM[] = {0x002D, 0x0048, 0x0048, 0x003A, 0x006D, 0x006D, 0}; // -HH:mm
@@ -1691,7 +1691,7 @@ TimeZoneFormat::parseAbuttingAsciiOffsetFields(const UnicodeString& text, ParseP
 
     U_ASSERT(maxDigits <= MAX_OFFSET_DIGITS);
 
-    int32_t digits[MAX_OFFSET_DIGITS];
+    int32_t digits[MAX_OFFSET_DIGITS] = {};
     int32_t numDigits = 0;
     int32_t idx = start;
     while (numDigits < maxDigits && idx < text.length()) {

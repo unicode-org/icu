@@ -700,11 +700,10 @@ PluralRules::getRuleFromResource(const Locale& locale, UPluralType type, UErrorC
         UErrorCode status = U_ZERO_ERROR;
         char parentLocaleName[ULOC_FULLNAME_CAPACITY];
         const char *curLocaleName=locale.getName();
-        int32_t localeNameLen=0;
         uprv_strcpy(parentLocaleName, curLocaleName);
 
-        while ((localeNameLen=uloc_getParent(parentLocaleName, parentLocaleName,
-                                       ULOC_FULLNAME_CAPACITY, &status)) > 0) {
+        while (uloc_getParent(parentLocaleName, parentLocaleName,
+                                       ULOC_FULLNAME_CAPACITY, &status) > 0) {
             resLen=0;
             s = ures_getStringByKey(locRes.getAlias(), parentLocaleName, &resLen, &status);
             if (s != NULL) {
@@ -1292,7 +1291,6 @@ RuleParser::getNextToken(const UnicodeString& ruleData,
                     return;
                  }
              }
-             break;
          default:
              status = U_UNEXPECTED_TOKEN;
              return;
