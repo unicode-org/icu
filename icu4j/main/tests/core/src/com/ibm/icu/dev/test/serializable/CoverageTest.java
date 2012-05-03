@@ -1,7 +1,7 @@
 //##header
 /*
  *******************************************************************************
- * Copyright (C) 2005-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -166,7 +166,11 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
                             
                             add(className, m, byteOut.toByteArray());
                         } else {
-                            add(className, m, null);
+                            if (!Modifier.isAbstract(m)) {
+                                errln("Missing test handler. Update the list of tests in SerializableTest.java to include a test case for " + className);
+                            } else {
+                                add(className, m, null);
+                            }
                         }
                     }
                 }
