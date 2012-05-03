@@ -558,7 +558,7 @@ public final class VersionInfo implements Comparable<VersionInfo>
         }
 
 
-        System.out.println("International Component for Unicode for Java " + icuApiVer);
+        System.out.println("International Components for Unicode for Java " + icuApiVer);
 
         System.out.println("");
         System.out.println("Implementation Version: " + ICU_VERSION.getVersionString(2, 4));
