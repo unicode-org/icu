@@ -2139,6 +2139,7 @@ public class DecimalFormat extends NumberFormat {
             boolean strictParse = isParseStrict();
             boolean strictFail = false; // did we exit with a strict parse failure?
             int lastGroup = -1; // where did we last see a grouping separator?
+            int digitStart = position; // where did the digit start?
             int gs2 = groupingSize2 == 0 ? groupingSize : groupingSize2;
 
             // equivalent grouping and decimal support
@@ -2189,8 +2190,8 @@ public class DecimalFormat extends NumberFormat {
                         // group. If there was a group separator before that, the group
                         // must == the secondary group length, else it can be <= the the
                         // secondary group length.
-                        if ((lastGroup != -1 && countCodePoints(text,lastGroup,backup) - 1 != gs2)
-                                || (lastGroup == -1 && countCodePoints(text,oldStart,position) - 1 > gs2)) {
+                        if ((lastGroup != -1 && countCodePoints(text, lastGroup, backup) - 1 != gs2)
+                                || (lastGroup == -1 && countCodePoints(text, digitStart, position) - 1 > gs2)) {
                             strictFail = true;
                             break;
                         }
@@ -2218,8 +2219,8 @@ public class DecimalFormat extends NumberFormat {
                 {
                     if (strictParse) {
                         if (backup != -1) {
-                            if ((lastGroup != -1 && countCodePoints(text,lastGroup,backup) - 1 != gs2)
-                                    || (lastGroup == -1 && countCodePoints(text,oldStart,position) - 1 > gs2)) {
+                            if ((lastGroup != -1 && countCodePoints(text, lastGroup, backup) - 1 != gs2)
+                                    || (lastGroup == -1 && countCodePoints(text, digitStart, position) - 1 > gs2)) {
                                 strictFail = true;
                                 break;
                             }
