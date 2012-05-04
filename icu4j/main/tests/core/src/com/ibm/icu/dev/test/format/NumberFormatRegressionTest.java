@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,6 +16,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.text.ParseException;
+import java.text.ParsePosition;
 import java.util.Date;
 import java.util.Locale;
 
@@ -353,5 +354,25 @@ public class NumberFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     checkNBSPPatternRT(testcase, nf);
     
     }
-    
+
+    /*
+     * Test case for #9293
+     * Parsing currency in strict mode
+     */
+    public void TestT9293() {
+        NumberFormat fmt = NumberFormat.getCurrencyInstance();
+        fmt.setParseStrict(true);
+
+        final int val = 123456;
+        String txt = fmt.format(123456);
+
+        ParsePosition pos = new ParsePosition(0);
+        Number num = fmt.parse(txt, pos);
+
+        if (pos.getErrorIndex() >= 0) {
+            errln("FAIL: Parsing " + txt + " - error index: " + pos.getErrorIndex());
+        } else if (val != num.intValue()) {
+            errln("FAIL: Parsed result: " + num + " - expected: " + val);
+        }
+    }
 }
