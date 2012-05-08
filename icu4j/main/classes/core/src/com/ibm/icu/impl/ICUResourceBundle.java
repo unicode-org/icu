@@ -1,6 +1,6 @@
 /*
  * *****************************************************************************
- * Copyright (C) 2005-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  * *****************************************************************************
  */
@@ -726,10 +726,22 @@ public  class ICUResourceBundle extends UResourceBundle {
             return nameSet;
         }
         Set<String> getFullLocaleNameSet() {
-            if (fullNameSet == null) {
-              fullNameSet = createFullLocaleNameSet(prefix, loader);
+            // When there's no prebuilt index, we iterate through the jar files
+            // and read the contents to build it.  If many threads try to read the
+            // same jar at the same time, java thrashes.  Synchronize here
+            // so that we can avoid this problem. We don't synchronize on the
+            // other methods since they don't do this.
+            //
+            // This is the common entry point for access into the code that walks
+            // through the resources, and is cached.  So it's a good place to lock
+            // access.  Locking in the URLHandler doesn't give us a common object
+            // to lock.
+            synchronized(this) {
+                if (fullNameSet == null) {
+                    fullNameSet = createFullLocaleNameSet(prefix, loader);
+                }
+                return fullNameSet;
             }
-            return fullNameSet;
         }
     }
 
