@@ -2542,6 +2542,7 @@ UCalendarDateFields Calendar::newerField(UCalendarDateFields defaultField, UCale
 
 UCalendarDateFields Calendar::resolveFields(const UFieldResolutionTable* precedenceTable) {
     int32_t bestField = UCAL_FIELD_COUNT;
+    int32_t tempBestField;
     for (int32_t g=0; precedenceTable[g][0][0] != -1 && (bestField == UCAL_FIELD_COUNT); ++g) {
         int32_t bestStamp = kUnset;
         for (int32_t l=0; precedenceTable[g][l][0] != -1; ++l) {
@@ -2559,14 +2560,26 @@ UCalendarDateFields Calendar::resolveFields(const UFieldResolutionTable* precede
             }
             // Record new maximum stamp & field no.
             if (lineStamp > bestStamp) {
-                bestStamp = lineStamp;
-                bestField = precedenceTable[g][l][0]; // First field refers to entire line
+                tempBestField = precedenceTable[g][l][0]; // First field refers to entire line
+                if (tempBestField >= kResolveRemap) {
+                    tempBestField &= (kResolveRemap-1);
+                    // This check is needed to resolve some issues with UCAL_YEAR precedence mapping
+                    if (tempBestField != UCAL_DATE || (fStamp[UCAL_WEEK_OF_MONTH] < fStamp[tempBestField])) {
+                        bestField = tempBestField;
+                    }
+                } else {
+                    bestField = tempBestField;
+                }
+
+                if (bestField == tempBestField) {
+                    bestStamp = lineStamp;
+                }
             }
 linesInGroup:
             ;
         }
     }
-    return (UCalendarDateFields)( (bestField>=kResolveRemap)?(bestField&(kResolveRemap-1)):bestField  );
+    return (UCalendarDateFields)bestField;
 }
 
 const UFieldResolutionTable Calendar::kDatePrecedence[] =
