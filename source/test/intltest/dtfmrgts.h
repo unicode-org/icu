@@ -52,6 +52,7 @@ public:
     void Test1684(void);
     void Test5554(void);
     void Test9237(void);
+    void TestParsing(void);
  };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
