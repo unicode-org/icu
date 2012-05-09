@@ -56,6 +56,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(25,Test1684)
         CASE(26,Test5554)
         CASE(27,Test9237)
+        CASE(28,TestParsing)
         default: name = ""; break;
     }
 }
@@ -1494,6 +1495,34 @@ void DateFormatRegressionTest::Test9237(void)
     if (resDE != resAssigned) {
         errln(UnicodeString("Error: different results by the assigned instance - org:") + resDE + " assigned:" + resAssigned);
     }
+}
+
+void DateFormatRegressionTest::TestParsing(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString pattern("EEE-WW-MMMM-yyyy");
+    UnicodeString text("mon-02-march-2011");
+    int32_t expectedDay = 7;
+
+    SimpleDateFormat format(pattern, status);
+    if (U_FAILURE(status)) {
+        dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
+        return;
+    }
+
+    Calendar *cal = new GregorianCalendar(status);
+    if (cal == NULL || U_FAILURE(status)) {
+        errln("Unable to create calendar - %s", u_errorName(status));
+        return;
+    }
+
+    ParsePosition pos(0);
+    format.parse(text, *cal, pos);
+
+    if (cal->get(UCAL_DAY_OF_MONTH, status) != expectedDay) {
+        errln("Parsing failed: day of month should be '7' with pattern: \"" + pattern + "\" for text: \"" + text + "\"");
+    }
+
+    delete cal;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
