@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1134,6 +1134,26 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 errln(locales[i] + ": gregorian and islamic are same: " + gregorianTwelfthMonth
                         + ", " + islamicTwelfthMonth);
             }
+        }
+    }
+    
+    public void TestParsing() {
+        String pattern = "EEE-WW-MMMM-yyyy";
+        String text = "mon-02-march-2011";
+        int expectedDay = 7;
+
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        Calendar cal = GregorianCalendar.getInstance(Locale.US);
+        ParsePosition pos = new ParsePosition(0);
+        
+        try {
+            format.parse(text, cal, pos);
+        } catch (Exception e) {
+            errln("Fail parsing:  " + e);
+        }
+
+        if (cal.get(Calendar.DAY_OF_MONTH) != expectedDay) {
+            errln("Parsing failed: day of month should be '7' with pattern: \"" + pattern + "\" for text: \"" + text + "\"");
         }
     }
 }
