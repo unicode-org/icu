@@ -1717,7 +1717,9 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                 rootRes = dataEntry->fData.rootRes;
 
                 if(dataEntry->fBogus == U_ZERO_ERROR) {
-                    uprv_strncpy(path, resPath, len);
+                    if (len > 0) {
+                        uprv_memcpy(path, resPath, len);
+                    }
                     uprv_strcpy(path+len, inKey);
                     myPath = path;
                     key = inKey;
