@@ -5654,52 +5654,58 @@ static void TestToLanguageTag(void) {
     }
 }
 
+#define FULL_LENGTH -1
 static const struct {
     const char  *bcpID;
     const char  *locID;
     int32_t     len;
 } langtag_to_locale[] = {
-    {"en",                  "en",                   2},
-    {"en-us",               "en_US",                5},
-    {"und-US",              "_US",                  6},
-    {"und-latn",            "_Latn",                8},
-    {"en-US-posix",         "en_US_POSIX",          11},
+    {"en",                  "en",                   FULL_LENGTH},
+    {"en-us",               "en_US",                FULL_LENGTH},
+    {"und-US",              "_US",                  FULL_LENGTH},
+    {"und-latn",            "_Latn",                FULL_LENGTH},
+    {"en-US-posix",         "en_US_POSIX",          FULL_LENGTH},
     {"de-de_euro",          "de",                   2},
-    {"kok-IN",              "kok_IN",               6},
+    {"kok-IN",              "kok_IN",               FULL_LENGTH},
     {"123",                 "",                     0},
     {"en_us",               "",                     0},
     {"en-latn-x",           "en_Latn",              7},
-    {"art-lojban",          "jbo",                  3},
-    {"zh-hakka",            "hak",                  3},
-    {"zh-cmn-CH",           "cmn_CH",               9},
-    {"xxx-yy",              "xxx_YY",               6},
-    {"fr-234",              "fr_234",               6},
-    {"i-default",           "en@x=i-default",      14},
+    {"art-lojban",          "jbo",                  FULL_LENGTH},
+    {"zh-hakka",            "hak",                  FULL_LENGTH},
+    {"zh-cmn-CH",           "cmn_CH",               FULL_LENGTH},
+    {"xxx-yy",              "xxx_YY",               FULL_LENGTH},
+    {"fr-234",              "fr_234",               FULL_LENGTH},
+    {"i-default",           "en@x=i-default",       FULL_LENGTH},
     {"i-test",              "",                     0},
     {"ja-jp-jp",            "ja_JP",                5},
-    {"bogus",               "bogus",                5},
+    {"bogus",               "bogus",                FULL_LENGTH},
     {"boguslang",           "",                     0},
-    {"EN-lATN-us",          "en_Latn_US",           10},
-    {"und-variant-1234",    "__VARIANT_1234",       16},
+    {"EN-lATN-us",          "en_Latn_US",           FULL_LENGTH},
+    {"und-variant-1234",    "__VARIANT_1234",       FULL_LENGTH},
     {"und-varzero-var1-vartwo", "__VARZERO",        11},
-    {"en-u-ca-gregory",     "en@calendar=gregorian",    15},
-    {"en-U-cu-USD",         "en@currency=usd",      11},
-    {"en-US-u-va-posix",    "en_US_POSIX",          16},
-    {"en-us-u-ca-gregory-va-posix", "en_US_POSIX@calendar=gregorian", 27},
-    {"en-us-posix-u-va-posix",   "en_US_POSIX@va=posix",  22},
-    {"en-us-u-va-posix2",        "en_US@va=posix2",       17},
-    {"en-us-vari1-u-va-posix",   "en_US_VARI1@va=posix",  22},
-    {"ar-x-1-2-3",          "ar@x=1-2-3",           10},
-    {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", 19},
-    {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   30},
-    {"ja-u-cu-jpy-ca-jp",   "ja@currency=jpy",      11},
-    {"en-us-u-tz-usnyc",    "en_US@timezone=America/New_York",      16},
-    {"und-a-abc-def",       "und@a=abc-def",        13},
-    {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   30},
-    {"x-elmer",             "@x=elmer",             7},
-    {"en-US-u-attr1-attr2-ca-gregory", "en_US@attribute=attr1-attr2;calendar=gregorian", 30},
+    {"en-u-ca-gregory",     "en@calendar=gregorian",    FULL_LENGTH},
+    {"en-U-cu-USD",         "en@currency=usd",      FULL_LENGTH},
+    {"en-US-u-va-posix",    "en_US_POSIX",          FULL_LENGTH},
+    {"en-us-u-ca-gregory-va-posix", "en_US_POSIX@calendar=gregorian",   FULL_LENGTH},
+    {"en-us-posix-u-va-posix",   "en_US_POSIX@va=posix",    FULL_LENGTH},
+    {"en-us-u-va-posix2",        "en_US@va=posix2",         FULL_LENGTH},
+    {"en-us-vari1-u-va-posix",   "en_US_VARI1@va=posix",    FULL_LENGTH},
+    {"ar-x-1-2-3",          "ar@x=1-2-3",           FULL_LENGTH},
+    {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", FULL_LENGTH},
+    {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   FULL_LENGTH},
+    {"ja-u-cu-jpy-ca-jp",   "ja@calendar=yes;currency=jpy;jp=yes",  FULL_LENGTH},
+    {"en-us-u-tz-usnyc",    "en_US@timezone=America/New_York",  FULL_LENGTH},
+    {"und-a-abc-def",       "und@a=abc-def",        FULL_LENGTH},
+    {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   FULL_LENGTH},
+    {"x-elmer",             "@x=elmer",             FULL_LENGTH},
+    {"en-US-u-attr1-attr2-ca-gregory", "en_US@attribute=attr1-attr2;calendar=gregorian",    FULL_LENGTH},
+    {"sr-u-kn",             "sr@colnumeric=yes",    FULL_LENGTH},
+    {"de-u-kn-co-phonebk",  "de@collation=phonebook;colnumeric=yes",    FULL_LENGTH},
+    {"en-u-attr2-attr1-kn-kb",  "en@attribute=attr1-attr2;colbackwards=yes;colnumeric=yes", FULL_LENGTH},
+    {"ja-u-ijkl-efgh-abcd-ca-japanese-xx-yyy-zzz-kn",   "ja@attribute=abcd-efgh-ijkl;calendar=japanese;colnumeric=yes;xx=yyy-zzz",  FULL_LENGTH},
+
     {"de-u-xc-xphonebk-co-phonebk-ca-buddhist-mo-very-lo-extensi-xd-that-de-should-vc-probably-xz-killthebuffer",
-     "de@calendar=buddhist;collation=phonebook;de=should;lo=extensi;mo=very;vc=probably;xc=xphonebk;xd=that", 88},
+     "de@calendar=buddhist;collation=phonebook;de=should;lo=extensi;mo=very;vc=probably;xc=xphonebk;xd=that;xz=yes", 91},
     {NULL,          NULL,           0}
 };
 
@@ -5708,10 +5714,15 @@ static void TestForLanguageTag(void) {
     int32_t i;
     UErrorCode status;
     int32_t parsedLen;
+    int32_t expParsedLen;
 
     for (i = 0; langtag_to_locale[i].bcpID != NULL; i++) {
         status = U_ZERO_ERROR;
-        locale[0] = 0;        
+        locale[0] = 0;
+        expParsedLen = langtag_to_locale[i].len;
+        if (expParsedLen == FULL_LENGTH) {
+            expParsedLen = uprv_strlen(langtag_to_locale[i].bcpID);
+        }
         uloc_forLanguageTag(langtag_to_locale[i].bcpID, locale, sizeof(locale), &parsedLen, &status);
         if (U_FAILURE(status)) {
             log_err_status(status, "Error returned by uloc_forLanguageTag for language tag [%s] - error: %s\n",
@@ -5721,9 +5732,9 @@ static void TestForLanguageTag(void) {
                 log_err("uloc_forLanguageTag returned locale [%s] for input language tag [%s] - expected: [%s]\n",
                     locale, langtag_to_locale[i].bcpID, langtag_to_locale[i].locID);
             }
-            if (parsedLen != langtag_to_locale[i].len) {
+            if (parsedLen != expParsedLen) {
                 log_err("uloc_forLanguageTag parsed length of %d for input language tag [%s] - expected parsed length: %d\n",
-                    parsedLen, langtag_to_locale[i].bcpID, langtag_to_locale[i].len);
+                    parsedLen, langtag_to_locale[i].bcpID, expParsedLen);
             }
         }
     }
