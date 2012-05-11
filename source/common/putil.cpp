@@ -1444,6 +1444,7 @@ static const char *uprv_getPOSIXIDForDefaultLocale(void)
     return posixID;
 }
 
+#if !U_CHARSET_IS_UTF8
 /* Return just the POSIX id for the default codepage, whatever happens to be in
  * it. It gets the value from LC_CTYPE and indirectly from LC_ALL and LANG.
  */
@@ -1455,6 +1456,7 @@ static const char *uprv_getPOSIXIDForDefaultCodepage(void)
     }
     return posixID;
 }
+#endif
 #endif
 
 /* NOTE: The caller should handle thread safety */
