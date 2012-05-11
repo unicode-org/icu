@@ -1,4 +1,4 @@
-# Copyright (C) 2010, International Business Machines Corporation and others.
+# Copyright (C) 2010,2012, International Business Machines Corporation and others.
 # All Rights Reserved.                  
 #
 # Commands for regenerating ICU4C locale data (.txt files) from CLDR.
@@ -81,6 +81,12 @@
 #                CLDR locales for inclusion in ICU. Update <paths> to prefer
 #                alt forms for certain paths, or to exclude certain paths; note
 #                that <paths> items can only have draft or alt attributes.
+#
+#                Note that if a language-only locale (e.g. "de") is included in
+#                <locales>, then all region sublocales for that language that
+#                are present in CLDR data (e.g. "de_AT", "de_BE", "de_CH", etc.)
+#                should also be included in <locales>, per PMC policy decision
+#                2012-05-02 (see http://bugs.icu-project.org/trac/ticket/9298).
 #
 #    icu/trunk/source/data/build.xml - If you are adding or removing break
 #                iterators, you need to update  <fileset id="brkitr" ...> under
