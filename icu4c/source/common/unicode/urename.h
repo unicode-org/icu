@@ -9,7 +9,7 @@
 *   tab size:   8 (not used)
 *   indentation:4
 *
-*   Created by: Perl script written by Vladimir Weinstein
+*   Created by: Perl script tools/genren.pl written by Vladimir Weinstein
 *
 *  Contains data for renaming ICU exports.
 *  Gets included by umachine.h
@@ -21,9 +21,13 @@
 #ifndef URENAME_H
 #define URENAME_H
 
-/* Uncomment the following line to disable renaming on platforms
-   that do not use Autoconf. */
-/* #define U_DISABLE_RENAMING 1 */
+/* U_DISABLE_RENAMING can be defined in the following ways:
+ *   - when running configure, e.g.
+ *        runConfigureICU Linux CPPFLAGS="-DU_DISABLE_RENAMING"
+ *   - by changing the default setting of U_DISABLE_RENAMING in uconfig.h
+ */
+
+#include "unicode/uconfig.h"
 
 #if !U_DISABLE_RENAMING
 
@@ -31,9 +35,6 @@
    the platform a chance to define it first.
    Normally (if utypes.h or umachine.h was included first) this will not be necessary as it will already be defined.
  */
-#ifndef U_ICU_ENTRY_POINT_RENAME
-#include "unicode/uconfig.h"
-#endif
 
 #ifndef U_ICU_ENTRY_POINT_RENAME
 #include "unicode/umachine.h"
@@ -1164,6 +1165,7 @@
 #define unum_toPattern U_ICU_ENTRY_POINT_RENAME(unum_toPattern)
 #define uplrules_close U_ICU_ENTRY_POINT_RENAME(uplrules_close)
 #define uplrules_open U_ICU_ENTRY_POINT_RENAME(uplrules_open)
+#define uplrules_openForType U_ICU_ENTRY_POINT_RENAME(uplrules_openForType)
 #define uplrules_select U_ICU_ENTRY_POINT_RENAME(uplrules_select)
 #define uplug_closeLibrary U_ICU_ENTRY_POINT_RENAME(uplug_closeLibrary)
 #define uplug_findLibrary U_ICU_ENTRY_POINT_RENAME(uplug_findLibrary)
