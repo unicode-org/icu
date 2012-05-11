@@ -3502,7 +3502,7 @@ public final class ULocale implements Serializable {
                         String bcpType = uext.getUnicodeLocaleType(bcpKey);
                         // convert to legacy key/type
                         String lkey = bcp47ToLDMLKey(bcpKey);
-                        String ltype = bcp47ToLDMLType(lkey, ((bcpType.length() == 0) ? "true" : bcpType)); // use "true" as the value of typeless keywords
+                        String ltype = bcp47ToLDMLType(lkey, ((bcpType.length() == 0) ? "yes" : bcpType)); // use "yes" as the value of typeless keywords
                         // special handling for u-va-posix, since this is a variant, not a keyword
                         if (lkey.equals("va") && ltype.equals("posix") && base.getVariant().length() == 0) {
                             id = id + "_POSIX";
@@ -3956,8 +3956,8 @@ public final class ULocale implements Serializable {
                     if (kwKey.length() != 1) {
                         // Unicode locale key
                         kwKey = bcp47ToLDMLKey(kwKey);
-                        // use "true" as the value of typeless keywords
-                        kwVal = bcp47ToLDMLType(kwKey, ((kwVal.length() == 0) ? "true" : kwVal));
+                        // use "yes" as the value of typeless keywords
+                        kwVal = bcp47ToLDMLType(kwKey, ((kwVal.length() == 0) ? "yes" : kwVal));
                     }
 
                     if (addSep) {

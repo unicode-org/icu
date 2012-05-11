@@ -3869,13 +3869,22 @@ public class ULocaleTest extends TestFmwk {
             {"ar-x-1-2-3",          "ar@x=1-2-3",           NOERROR},
             {"fr-u-nu-latn-cu-eur", "fr@currency=eur;numbers=latn", NOERROR},
             {"de-k-kext-u-co-phonebk-nu-latn",  "de@collation=phonebook;k=kext;numbers=latn",   NOERROR},
-            {"ja-u-cu-jpy-ca-jp",   "ja@calendar=true;currency=jpy;jp=true",  NOERROR},
+            {"ja-u-cu-jpy-ca-jp",   "ja@calendar=yes;currency=jpy;jp=yes",  NOERROR},
             {"en-us-u-tz-usnyc",    "en_US@timezone=America/New_York",      NOERROR},
             {"und-a-abc-def",       "@a=abc-def",           NOERROR},
             {"zh-u-ca-chinese-x-u-ca-chinese",  "zh@calendar=chinese;x=u-ca-chinese",   NOERROR},
             {"fr--FR",              "fr",                   Integer.valueOf(3)},
             {"fr-",                 "fr",                   Integer.valueOf(3)},
             {"x-elmer",             "@x=elmer",             NOERROR},
+            {"en-US-u-attr1-attr2-ca-gregory", "en_US@attribute=attr1-attr2;calendar=gregorian",    NOERROR},
+            {"sr-u-kn",             "sr@colnumeric=yes",    NOERROR},
+            {"de-u-kn-co-phonebk",  "de@collation=phonebook;colnumeric=yes",    NOERROR},
+            {"en-u-attr2-attr1-kn-kb",  "en@attribute=attr1-attr2;colbackwards=yes;colnumeric=yes", NOERROR},
+            {"ja-u-ijkl-efgh-abcd-ca-japanese-xx-yyy-zzz-kn",   "ja@attribute=abcd-efgh-ijkl;calendar=japanese;colnumeric=yes;xx=yyy-zzz",  NOERROR},
+
+            {"de-u-xc-xphonebk-co-phonebk-ca-buddhist-mo-very-lo-extensi-xd-that-de-should-vc-probably-xz-killthebuffer",
+             "de@calendar=buddhist;collation=phonebook;de=should;lo=extensi;mo=very;vc=probably;xc=xphonebk;xd=that;xz=yes", Integer.valueOf(92)},
+
         };
 
         for (int i = 0; i < langtag_to_locale.length; i++) {
