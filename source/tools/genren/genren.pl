@@ -96,7 +96,7 @@ print HEADER <<"EndOfHeaderComment";
 
 /* U_DISABLE_RENAMING can be defined in the following ways:
  *   - when running configure, e.g.
- *        runConfigureICU Linux CPPFLAGS="-DU_DISABLE_RENAMING"
+ *        runConfigureICU Linux --disable-renaming
  *   - by changing the default setting of U_DISABLE_RENAMING in uconfig.h
  */
 
