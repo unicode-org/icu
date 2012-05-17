@@ -371,8 +371,12 @@ main(int argc, char *argv[]) {
 
     /* remove items */
     if(options[OPT_REMOVE_LIST].doesOccur) {
-        listPkg=readList(NULL, options[OPT_REMOVE_LIST].value, FALSE);
-        if(listPkg!=NULL) {
+        listPkg=new Package();
+        if(listPkg==NULL) {
+            fprintf(stderr, "icupkg: not enough memory\n");
+            exit(U_MEMORY_ALLOCATION_ERROR);
+        }
+        if(!readList(NULL, options[OPT_REMOVE_LIST].value, FALSE, listPkg)) {
             pkg->removeItems(*listPkg);
             delete listPkg;
             isModified=TRUE;
@@ -389,8 +393,12 @@ main(int argc, char *argv[]) {
      */
     addListPkg=NULL;
     if(options[OPT_ADD_LIST].doesOccur) {
-        addListPkg=readList(sourcePath, options[OPT_ADD_LIST].value, TRUE);
-        if(addListPkg!=NULL) {
+        addListPkg=new Package();
+        if(addListPkg==NULL) {
+            fprintf(stderr, "icupkg: not enough memory\n");
+            exit(U_MEMORY_ALLOCATION_ERROR);
+        }
+        if(!readList(sourcePath, options[OPT_ADD_LIST].value, TRUE, addListPkg)) {
             pkg->addItems(*addListPkg);
             // delete addListPkg; deferred until after writePackage()
             isModified=TRUE;
