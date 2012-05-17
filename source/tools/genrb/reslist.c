@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2011, International Business Machines
+*   Copyright (C) 2000-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1172,6 +1172,10 @@ static void bin_close(struct SResource *binres) {
     if (binres->u.fBinaryValue.fData != NULL) {
         uprv_free(binres->u.fBinaryValue.fData);
         binres->u.fBinaryValue.fData = NULL;
+    }
+    if (binres->u.fBinaryValue.fFileName != NULL) {
+        uprv_free(binres->u.fBinaryValue.fFileName);
+        binres->u.fBinaryValue.fFileName = NULL;
     }
 }
 

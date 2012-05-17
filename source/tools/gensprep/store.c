@@ -332,6 +332,7 @@ storeMappingData(){
                 }else{
                     /* realloc */
                     UChar* newMappingData = (uint16_t*) uprv_malloc(U_SIZEOF_UCHAR * mappingDataCapacity*2);
+                    uprv_memset(newMappingData, 0, U_SIZEOF_UCHAR * mappingDataCapacity*2); /* must initialize to avoid memory check warnings */
                     if(newMappingData == NULL){
                         fprintf(stderr, "Could not realloc the mapping data!\n");
                         exit(U_MEMORY_ALLOCATION_ERROR);
@@ -650,13 +651,15 @@ generateData(const char *dataDir, const char* bundleName) {
         uhash_close(hashTable);
     }
 #endif
+
+    uprv_free(fileName);
 }
 
 #if !UCONFIG_NO_IDNA
 
 extern void
 cleanUpData(void) {
-
+    uprv_free(mappingData);
     utrie_close(sprepTrie);
     uprv_free(sprepTrie);
 }

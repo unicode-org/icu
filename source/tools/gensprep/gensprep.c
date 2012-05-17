@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2009, International Business Machines
+*   Copyright (C) 2003-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -261,6 +261,8 @@ main(int argc, char* argv[]) {
     }
 
     uprv_free(filename);
+
+    u_cleanup();
 
 #endif
 

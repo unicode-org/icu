@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2009, International Business Machines
+*   Copyright (C) 2003-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1030,8 +1030,8 @@ ucm_open() {
 U_CAPI void U_EXPORT2
 ucm_close(UCMFile *ucm) {
     if(ucm!=NULL) {
-        uprv_free(ucm->base);
-        uprv_free(ucm->ext);
+        ucm_closeTable(ucm->base);
+        ucm_closeTable(ucm->ext);
         uprv_free(ucm);
     }
 }

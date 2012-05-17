@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2011, International Business Machines
+*   Copyright (C) 2001-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -742,6 +742,11 @@ U_CFUNC void ucol_initBuffers(UColTokenParser *src, UColTokListHeader *lh, UErro
     uint32_t t[UCOL_STRENGTH_LIMIT];
 
     uprv_memset(t, 0, UCOL_STRENGTH_LIMIT*sizeof(uint32_t));
+
+    /* must initialize ranges to avoid memory check warnings */
+    for (int i = 0; i < UCOL_CE_STRENGTH_LIMIT; i++) {
+        uprv_memset(Gens[i].ranges, 0, sizeof(Gens[i].ranges));
+    }
 
     tok->toInsert = 1;
     t[tok->strength] = 1;
