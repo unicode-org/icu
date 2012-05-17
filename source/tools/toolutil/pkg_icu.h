@@ -8,6 +8,7 @@
 #define __PKG_ICU_H__
 
 #include "unicode/utypes.h"
+#include "package.h"
 
 #define U_PKG_RESERVED_CHARS "\"%&'()*+,-./:;<=>?_"
 
