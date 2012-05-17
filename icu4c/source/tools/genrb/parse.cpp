@@ -139,7 +139,7 @@ static void
 cleanupLookahead(ParseState* state)
 {
     uint32_t i;
-    for (i = 0; i < MAX_LOOKAHEAD; i++)
+    for (i = 0; i <= MAX_LOOKAHEAD; i++)
     {
         ustr_deinit(&state->lookahead[i].value);
         ustr_deinit(&state->lookahead[i].comment);
@@ -1763,6 +1763,8 @@ parseInclude(ParseState* state, char *tag, uint32_t startline, const struct UStr
 
     uBuffer = ucbuf_getBuffer(ucbuf,&len,status);
     result = string_open(state->bundle, tag, uBuffer, len, comment, status);
+
+    ucbuf_close(ucbuf);
 
     uprv_free(pTarget);
 

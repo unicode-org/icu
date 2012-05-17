@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003-2007, International Business Machines
+*   Copyright (C) 2003-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -100,6 +100,7 @@ CnvExtClose(NewConverter *cnvData) {
         utm_close(extData->fromUTableUChars);
         utm_close(extData->fromUTableValues);
         utm_close(extData->fromUBytes);
+        uprv_free(extData);
     }
 }
 

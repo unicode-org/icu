@@ -1380,6 +1380,8 @@ normal_exit:
         fclose(outfile);
     }
 
+    u_cleanup();
+
     return ret;
 }
 

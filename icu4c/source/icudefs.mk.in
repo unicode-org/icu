@@ -77,8 +77,6 @@ ICUPKGDATA_DIR = $(ICUDATA_DIR)
 endif
 endif
 endif
-# This is needed so that make -j2 doesn't complain when invoking pkgdata's make
-PKGDATA_INVOKE_OPTS = MAKEFLAGS=
 
 # These are defined here because mh-cygwin-msvc needs to override these values.
 ICUPKGDATA_INSTALL_DIR = $(DESTDIR)$(ICUPKGDATA_DIR)
@@ -259,7 +257,7 @@ LIBICUIO	= $(LLIBDIR) $(ICULIBS_IO)
 # overridden by icucross.mk
 INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)$(LIBDIR):$(top_builddir)/stubdata:$(top_builddir)/tools/ctestfw:$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
 # prefer stubdata
-PKGDATA_INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/stubdata:$(top_builddir)/tools/ctestfw:$(LIBRARY_PATH_PREFIX)$(LIBDIR):$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER) $(PKGDATA_INVOKE_OPTS)
+PKGDATA_INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(top_builddir)/stubdata:$(top_builddir)/tools/ctestfw:$(LIBRARY_PATH_PREFIX)$(LIBDIR):$$$(LDLIBRARYPATH_ENVVAR) $(LEAK_CHECKER)
 INSTALLED_INVOKE = $(LDLIBRARYPATH_ENVVAR)=$(libdir):$$$(LDLIBRARYPATH_ENVVAR)
 
 # Platform-specific setup
