@@ -217,6 +217,7 @@ static UOption options[]={
 
 extern int
 main(int argc, char* argv[]) {
+    int i, n;
     char pathBuf[512];
     FileStream *in;
     UNewDataMemory *out;
@@ -303,6 +304,15 @@ main(int argc, char* argv[]) {
     if(U_FAILURE(errorCode)) {
         fprintf(stderr, "gencnval: error finishing output file - %s\n", u_errorName(errorCode));
         exit(errorCode);
+    }
+
+    /* clean up tags */
+    for (i = 0; i < MAX_TAG_COUNT; i++) {
+        for (n = 0; n < MAX_CONV_COUNT; n++) {
+            if (tags[i].aliasList[n].aliases!=NULL) {
+                uprv_free(tags[i].aliasList[n].aliases);
+            }
+        }
     }
 
     return 0;
@@ -1052,8 +1062,9 @@ writeAliasTable(UNewDataMemory *out) {
         uprv_free(normalizedStrings);
     }
 
-    uprv_free(aliasArrLists);
+    uprv_free(uniqueAliasesToConverter);
     uprv_free(uniqueAliases);
+    uprv_free(aliasArrLists);
 }
 
 static char *

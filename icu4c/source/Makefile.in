@@ -226,7 +226,7 @@ config/icucross.mk: $(top_builddir)/icudefs.mk  $(top_builddir)/Makefile
 	@(echo 'TOOLBINDIR=$$(cross_buildroot)/bin' ;\
 	  echo 'TOOLLIBDIR=$$(cross_buildroot)/lib' ;\
 	  echo "INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(TOOLLIBDIR):$$(cross_buildroot)/stubdata:$$(cross_buildroot)/tools/ctestfw:$$$$'"$(LDLIBRARYPATH_ENVVAR)" ;\
-	  echo "PKGDATA_INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(cross_buildroot)/stubdata:$$(cross_buildroot)/tools/ctestfw:$$(TOOLLIBDIR):$$$$'"$(LDLIBRARYPATH_ENVVAR) "'$$'"(PKGDATA_INVOKE_OPTS)" ;\
+	  echo "PKGDATA_INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(cross_buildroot)/stubdata:$$(cross_buildroot)/tools/ctestfw:$$(TOOLLIBDIR):$$$$'"$(LDLIBRARYPATH_ENVVAR) " ;\
 	  echo ) >> $@
 
 
