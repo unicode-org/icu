@@ -160,7 +160,7 @@ writePackageDatFile(const char *outFilename, const char *outComment, const char 
             return U_MEMORY_ALLOCATION_ERROR;
         }
 
-        addListPkg = readList(sourcePath, addList, TRUE);
+        addListPkg = readList(sourcePath, addList, TRUE, NULL);
         if(addListPkg != NULL) {
             pkg->addItems(*addListPkg);
         } else {
