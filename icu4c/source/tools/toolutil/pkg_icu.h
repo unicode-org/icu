@@ -17,6 +17,6 @@ writePackageDatFile(const char *outFilename, const char *outComment,
                     char outType);
 
 U_CAPI icu::Package * U_EXPORT2
-readList(const char *filesPath, const char *listname, UBool readContents, Package *listPkgIn = NULL);
+readList(const char *filesPath, const char *listname, UBool readContents, icu::Package *listPkgIn);
 
 #endif
