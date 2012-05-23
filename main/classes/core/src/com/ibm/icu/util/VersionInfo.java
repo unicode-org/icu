@@ -535,20 +535,30 @@ public final class VersionInfo implements Comparable<VersionInfo>
     public static void main(String[] args) {
         String icuApiVer;
 
-        if (ICU_VERSION.getMinor() % 2 != 0) {
-            // Development mile stone
-            int major = ICU_VERSION.getMajor();
-            int minor = ICU_VERSION.getMinor() + 1;
-            if (minor >= 10) {
-                minor -= 10;
-                major++;
+        if (ICU_VERSION.getMajor() <= 4) {
+            if (ICU_VERSION.getMinor() % 2 != 0) {
+                // Development mile stone
+                int major = ICU_VERSION.getMajor();
+                int minor = ICU_VERSION.getMinor() + 1;
+                if (minor >= 10) {
+                    minor -= 10;
+                    major++;
+                }
+                icuApiVer = "" + major + "." + minor + "M" + ICU_VERSION.getMilli();
+            } else {
+                icuApiVer = ICU_VERSION.getVersionString(2, 2);
             }
-            icuApiVer = "" + major + "." + minor + "M" + ICU_VERSION.getMilli();
         } else {
-            icuApiVer = ICU_VERSION.getVersionString(2, 2);
+            if (ICU_VERSION.getMinor() == 0) {
+                // Development mile stone
+                icuApiVer = "" + ICU_VERSION.getMajor() + "M" + ICU_VERSION.getMilli();
+            } else {
+                icuApiVer = ICU_VERSION.getVersionString(2, 2);
+            }
         }
 
-        System.out.println("International Component for Unicode for Java " + icuApiVer);
+
+        System.out.println("International Components for Unicode for Java " + icuApiVer);
 
         System.out.println("");
         System.out.println("Implementation Version: " + ICU_VERSION.getVersionString(2, 4));
