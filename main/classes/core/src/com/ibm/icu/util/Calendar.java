@@ -4817,6 +4817,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             { WEEK_OF_MONTH, DOW_LOCAL },
             { DAY_OF_WEEK_IN_MONTH, DOW_LOCAL },
             { DAY_OF_YEAR },
+            { RESOLVE_REMAP | DAY_OF_MONTH, YEAR },  // if YEAR is set over YEAR_WOY use DAY_OF_MONTH
+            { RESOLVE_REMAP | WEEK_OF_YEAR, YEAR_WOY },  // if YEAR_WOY is set,  calc based on WEEK_OF_YEAR
         },
         {
             { WEEK_OF_YEAR },
@@ -4863,6 +4865,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      */
     protected int resolveFields(int[][][] precedenceTable) {
         int bestField = -1;
+        int tempBestField;
         for (int g=0; g<precedenceTable.length && bestField < 0; ++g) {
             int[][] group = precedenceTable[g];
             int bestStamp = UNSET;
@@ -4882,8 +4885,20 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 }
                 // Record new maximum stamp & field no.
                 if (lineStamp > bestStamp) {
-                    bestStamp = lineStamp;
-                    bestField = line[0]; // First field refers to entire line
+                    tempBestField = line[0]; // First field refers to entire line
+                    if (tempBestField >= RESOLVE_REMAP) {
+                        tempBestField &= (RESOLVE_REMAP-1);
+                        // This check is needed to resolve some issues with UCAL_YEAR precedence mapping
+                        if (tempBestField != DATE || (stamp[WEEK_OF_MONTH] < stamp[tempBestField])) {
+                            bestField = tempBestField;
+                        }
+                    } else {
+                        bestField = tempBestField;
+                    }
+
+                    if (bestField == tempBestField) {
+                        bestStamp = lineStamp;
+                    }
                 }
             }
         }
