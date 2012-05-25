@@ -356,7 +356,7 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
     
  
     UChar* map = NULL;
-    int16_t adjustedLen=0, i;
+    int16_t adjustedLen=0, i, j;
     uint16_t trieWord = 0;
     ValueStruct *value = NULL;
     uint32_t savedTrieWord = 0;
@@ -437,9 +437,8 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
 
     map = (UChar*) uprv_calloc(adjustedLen + 1, U_SIZEOF_UCHAR);
     
-    for (i=0; i<length;) {
-        UChar32 c = mapping[i];
-        U16_APPEND_UNSAFE(map, i, c);
+    for (i=0, j=0; i<length; i++) {
+        U16_APPEND_UNSAFE(map, j, mapping[i]);
     }
     
     value = (ValueStruct*) uprv_malloc(sizeof(ValueStruct));
