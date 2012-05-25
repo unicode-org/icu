@@ -331,7 +331,7 @@ storeMappingData(){
                 if (currentIndex > mappingDataCapacity) {
                     /* If this happens there is a bug in the computation of the mapping data size in storeMapping() */
                     fprintf(stderr, "gensprep, fatal error at %s, %d.  Aborting.\n", __FILE__, __LINE__);
-                    exit(-1);
+                    exit(U_INTERNAL_PROGRAM_ERROR);
                 }
             }
         }
@@ -356,7 +356,7 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
     
  
     UChar* map = NULL;
-    int16_t adjustedLen=0, i, j;
+    int16_t adjustedLen=0, i;
     uint16_t trieWord = 0;
     ValueStruct *value = NULL;
     uint32_t savedTrieWord = 0;
@@ -385,11 +385,7 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
 
     /* figure out the real length */ 
     for(i=0; i<length; i++){
-        if(mapping[i] > 0xFFFF){
-            adjustedLen +=2;
-        }else{
-            adjustedLen++;
-        }      
+        adjustedLen += U16_LENGTH(mapping[i]);
     }
 
     if(adjustedLen == 0){
@@ -441,13 +437,9 @@ storeMapping(uint32_t codepoint, uint32_t* mapping,int32_t length,
 
     map = (UChar*) uprv_calloc(adjustedLen + 1, U_SIZEOF_UCHAR);
     
-    for (i=0, j=0; i<length; i++) {
-        if(mapping[i] <= 0xFFFF){
-            map[j++] = (uint16_t)mapping[i];
-        }else{
-            map[j++] = U16_LEAD(mapping[i]);
-            map[j++] = U16_TRAIL(mapping[i]);
-        }
+    for (i=0; i<length;) {
+        UChar32 c = mapping[i];
+        U16_APPEND_UNSAFE(map, i, c);
     }
     
     value = (ValueStruct*) uprv_malloc(sizeof(ValueStruct));
