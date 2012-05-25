@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2011,International Business Machines
+ * Copyright (c) 2011-2012,International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -8,7 +8,9 @@
 #ifndef SIEVE_H
 #define SIEVE_H
 
+#ifndef U_LOTS_OF_TIMES
 #define U_LOTS_OF_TIMES 1000000
+#endif
 
 #include "unicode/utypes.h"
 /**
