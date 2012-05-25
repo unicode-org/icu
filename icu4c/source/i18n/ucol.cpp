@@ -6260,6 +6260,7 @@ ucol_setUpLatinOne(UCollator *coll, UErrorCode *status) {
     UCollationElements *it = ucol_openElements(coll, &ch, 1, status);
     // Check for null pointer 
     if (U_FAILURE(*status)) {
+        ucol_closeElements(it);
         return FALSE;
     }
     uprv_memset(coll->latinOneCEs, 0, sizeof(uint32_t)*coll->latinOneTableLen*3);
