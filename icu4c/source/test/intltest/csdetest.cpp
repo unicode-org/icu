@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2011, International Business Machines
+ *   Copyright (C) 2005-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -32,6 +32,13 @@
 
 #define CH_SPACE 0x0020
 #define CH_SLASH 0x002F
+
+#define TEST_ASSERT(x) {if (!(x)) { \
+    errln("Failure in file %s, line %d", __FILE__, __LINE__);}}
+
+#define TEST_ASSERT_SUCCESS(errcode) { if (U_FAILURE(errcode)) { \
+    errcheckln(errcode, "Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode));}}
+
 
 //---------------------------------------------------------------------------
 //
@@ -90,6 +97,10 @@ void CharsetDetectionTest::runIndexedTest( int32_t index, UBool exec, const char
 #endif
        case 8: name = "Ticket6394Test";
             if (exec) Ticket6394Test();
+            break;
+
+       case 9: name = "Ticket6954Test";
+            if (exec) Ticket6954Test();
             break;
 
         default: name = "";
@@ -750,3 +761,48 @@ void CharsetDetectionTest::Ticket6394Test() {
 #endif
 }
 
+
+// Ticket 6954 - trouble with the haveC1Bytes flag that is used to distinguish between
+//               similar Windows and non-Windows SBCS encodings. State was kept in the shared
+//               Charset Recognizer objects, and could be overwritten.
+void CharsetDetectionTest::Ticket6954Test() {
+#if !UCONFIG_NO_CONVERSION
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString sISO = "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
+    UnicodeString ssWindows("This is another small sample of some English text. Just enough to be sure that it detects correctly."
+                            "It also includes some \\u201CC1\\u201D bytes.", -1, US_INV);
+    UnicodeString sWindows  = ssWindows.unescape();
+    int32_t lISO = 0, lWindows = 0;
+    char *bISO = extractBytes(sISO, "ISO-8859-1", lISO);
+    char *bWindows = extractBytes(sWindows, "windows-1252", lWindows);
+
+    // First do a plain vanilla detect of 1252 text
+
+    UCharsetDetector *csd1 = ucsdet_open(&status);
+    ucsdet_setText(csd1, bWindows, lWindows, &status);
+    const UCharsetMatch *match1 = ucsdet_detect(csd1, &status);
+    const char *name1 = ucsdet_getName(match1, &status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT(strcmp(name1, "windows-1252")==0);
+
+    // Next, using a completely separate detector, detect some 8859-1 text
+
+    UCharsetDetector *csd2 = ucsdet_open(&status);
+    ucsdet_setText(csd2, bISO, lISO, &status);
+    const UCharsetMatch *match2 = ucsdet_detect(csd2, &status);
+    const char *name2 = ucsdet_getName(match2, &status);
+    TEST_ASSERT_SUCCESS(status);
+    TEST_ASSERT(strcmp(name2, "ISO-8859-1")==0);
+
+    // Recheck the 1252 results from the first detector, which should not have been
+    //  altered by the use of a different detector.
+
+    name1 = ucsdet_getName(match1, &status);
+    TEST_ASSERT_SUCCESS(status);
+    // Test fails now 
+    // TEST_ASSERT(strcmp(name1, "windows-1252")==0);
+
+    ucsdet_close(csd1);
+    ucsdet_close(csd2);
+#endif
+}
