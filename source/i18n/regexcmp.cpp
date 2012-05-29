@@ -3306,10 +3306,31 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
             }
 
         case URX_STRING_I:
-            // TODO:  Is the case-folded string the longest?
-            //        If so we can optimize this the same as URX_STRING.
-            loc++;
-            currentLen = INT32_MAX;
+            // TODO:  This code assumes that any user string that matches will be no longer
+            //        than our compiled string, with case insensitive matching.
+            //        Our compiled string has been case-folded already.
+            //
+            //        Any matching user string will have no more code points than our
+            //        compiled (folded) string.  Folding may add code points, but
+            //        not remove them.
+            //
+            //        There is a potential problem if a supplemental code point 
+            //        case-folds to a BMP code point.  In this case our compiled string
+            //        could be shorter (in code units) than a matching user string.
+            //
+            //        At this time (Unicode 6.1) there are no such characters, and this case
+            //        is not being handled.  A test, intltest regex/Bug9283, will fail if
+            //        any problematic characters are added to Unicode.
+            //
+            //        If this happens, we can make a set of the BMP chars that the
+            //        troublesome supplementals fold to, scan our string, and bump the
+            //        currentLen one extra for each that is found.
+            //
+            {
+                loc++;
+                int32_t stringLenOp = (int32_t)fRXPat->fCompiledPat->elementAti(loc);
+                currentLen = safeIncrement(currentLen, URX_VAL(stringLenOp));
+            }
             break;
 
         case URX_CTR_INIT:
