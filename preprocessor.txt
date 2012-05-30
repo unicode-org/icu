@@ -1,4 +1,4 @@
-# Copyright (C) 2007, International Business Machines Corporation and
+# Copyright (C) 2007-2012, International Business Machines Corporation and
 # others. All Rights Reserved.
 
 ## core sources
@@ -7,6 +7,7 @@ src/com/ibm/icu/impl/DateNumberFormat.java
 src/com/ibm/icu/impl/duration/BasicDurationFormat.java
 src/com/ibm/icu/impl/ICUResourceBundleImpl.java
 src/com/ibm/icu/impl/ICUResourceBundleReader.java
+src/com/ibm/icu/impl/JavaTimeZone.java
 src/com/ibm/icu/impl/PatternTokenizer.java
 src/com/ibm/icu/impl/Utility.java
 src/com/ibm/icu/lang/UCharacter.java

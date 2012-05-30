@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -113,7 +113,7 @@ public class TimeZoneOffsetLocalTest extends TestFmwk {
         // Set up TimeZone objects - OlsonTimeZone, SimpleTimeZone and RuleBasedTimeZone
         BasicTimeZone[] TESTZONES = new BasicTimeZone[3];
 
-        TESTZONES[0] = (BasicTimeZone)TimeZone.getTimeZone("America/Los_Angeles");
+        TESTZONES[0] = (BasicTimeZone)TimeZone.getTimeZone("America/Los_Angeles", 0);
         TESTZONES[1] = new SimpleTimeZone(-8*HOUR, "Simple Pacific Time",
                                             Calendar.APRIL, 1, Calendar.SUNDAY, 2*HOUR,
                                             Calendar.OCTOBER, -1, Calendar.SUNDAY, 2*HOUR);

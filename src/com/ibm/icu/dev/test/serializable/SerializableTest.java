@@ -1,7 +1,7 @@
 //##header J2SE15
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.math.BigDecimal;
@@ -579,6 +580,20 @@ public class SerializableTest extends TestFmwk.TestGroup
         }
     }
 
+    private static class JavaTimeZoneHandler implements Handler {
+        public Object[] getTestObjects() {
+            JavaTimeZone data[] = new JavaTimeZone[1];
+            data[0] = new JavaTimeZone("America/New_York");
+            return data;
+        }
+        public boolean hasSameBehavior(Object a, Object b) {
+            JavaTimeZone jtza = (JavaTimeZone) a;
+            JavaTimeZone jtzb = (JavaTimeZone) b;
+
+            return jtza.equals(jtzb);
+        }
+    }
+
     private static HashMap map = new HashMap();
     
     static {
@@ -637,6 +652,8 @@ public class SerializableTest extends TestFmwk.TestGroup
 //#endif
         map.put("com.ibm.icu.impl.duration.BasicDurationFormat", new FormatTests.BasicDurationFormatHandler());
         map.put("com.ibm.icu.impl.RelativeDateFormat", new FormatTests.RelativeDateFormatHandler());
+
+        map.put("com.ibm.icu.impl.JavaTimeZone", new JavaTimeZoneHandler());
     }
     
     public SerializableTest()

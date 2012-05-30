@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, Google, IBM and  *
+ * Copyright (C) 2007-2012, Google, IBM and  *
  * others. All Rights Reserved. *
  *******************************************************************************
  */
@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
 
+import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.ZoneMeta;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -22,6 +23,13 @@ import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
 
 public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
+
+    static final boolean isJDKTimeZone;
+
+    static {
+        String type = ICUConfig.get("com.ibm.icu.util.TimeZone.DefaultTimeZoneType", "ICU");
+        isJDKTimeZone = type.equalsIgnoreCase("JDK");        
+    }
 
     public static void main(String[] args) throws Exception {
         new TimeZoneFormatTest().run(args);
@@ -121,30 +129,52 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             int inOffset = inOffsets[0] + inOffsets[1];
                             int outOffset = outOffsets[0] + outOffsets[1];
                             if (inOffset != outOffset) {
-                                errln("Offset round trip failed; tz=" + tzids[tzidx]
-                                    + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                    + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                    + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
+                                if (isJDKTimeZone) {
+                                    logln("[JDKTZ] Offset round trip failed; tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", inOffset=" + inOffset + ", outOffset=" + outOffset);                                    
+                                } else {
+                                    errln("Offset round trip failed; tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", inOffset=" + inOffset + ", outOffset=" + outOffset);
+                                }
                             }
                         } else if (PATTERNS[patidx].equals("z") || PATTERNS[patidx].equals("zzzz")
                                 || PATTERNS[patidx].equals("v") || PATTERNS[patidx].equals("vvvv")
                                 || PATTERNS[patidx].equals("V")) {
                             // Specific or generic: raw offset must be preserved.
                             if (inOffsets[0] != outOffsets[0]) {
-                                errln("Raw offset round trip failed; tz=" + tzids[tzidx]
-                                    + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                    + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                    + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                                if (isJDKTimeZone) {
+                                    logln("[JDKTZ] Raw offset round trip failed; tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);                                    
+                                } else {
+                                    errln("Raw offset round trip failed; tz=" + tzids[tzidx]
+                                            + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                            + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                            + ", inRawOffset=" + inOffsets[0] + ", outRawOffset=" + outOffsets[0]);
+                                }
                             }
                         } else { // "VVVV"
                             // Location: time zone rule must be preserved.
                             if (!outtz.getID().equals(ZoneMeta.getCanonicalID(tzids[tzidx]))) {
                                 // Canonical ID did not match - check the rules
                                 if (!((BasicTimeZone)outtz).hasEquivalentTransitions(tz, low, high)) {
-                                    errln("Canonical round trip failed; tz=" + tzids[tzidx]
-                                        + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
-                                        + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
-                                        + ", outtz=" + outtz.getID());
+                                    if (isJDKTimeZone) {
+                                        logln("[JDKTZ] Canonical round trip failed; tz=" + tzids[tzidx]
+                                                + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                                + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                                + ", outtz=" + outtz.getID());
+                                        
+                                    } else {
+                                        errln("Canonical round trip failed; tz=" + tzids[tzidx]
+                                                + ", locale=" + LOCALES[locidx] + ", pattern=" + PATTERNS[patidx]
+                                                + ", time=" + DATES[datidx].getTime() + ", str=" + tzstr
+                                                + ", outtz=" + outtz.getID());                                        
+                                    }
                                 }
                             }
                         }
@@ -225,7 +255,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                         // Skip aliases
                         continue;
                     }
-                    BasicTimeZone tz = (BasicTimeZone)TimeZone.getTimeZone(ids[zidx]);
+                    BasicTimeZone tz = (BasicTimeZone)TimeZone.getTimeZone(ids[zidx], 0);
                     sdf.setTimeZone(tz);
 
                     long t = START_TIME;
@@ -279,7 +309,11 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                                         .append(", restime=").append(restime)
                                         .append(", diff=").append(restime - testTimes[testidx]);
                                     if (expectedRoundTrip[testidx]) {
-                                        errln("FAIL: " + msg.toString());
+                                        if (isJDKTimeZone) {
+                                            logln("[JDKTZ] " + msg.toString());                                            
+                                        } else {
+                                            errln("FAIL: " + msg.toString());
+                                        }
                                     } else if (REALLY_VERBOSE) {
                                         logln(msg.toString());
                                     }

@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -15,11 +15,11 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.impl.ICUConfig;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -40,6 +40,21 @@ public class TimeZoneTest extends TestFmwk
 {
     static final int millisPerHour = 3600000;
 
+    // TODO: We should probably read following data at runtime, so we can update
+    // the these values every release with necessary data changes.
+
+    // Some test case data is current date/tzdata version sensitive and producing errors
+    // when year/rule are changed.
+    static final int REFERENCE_YEAR = 2012;
+    static final String REFERENCE_DATA_VERSION = "2012c";
+
+    static final boolean isJDKTimeZone;
+
+    static {
+        String type = ICUConfig.get("com.ibm.icu.util.TimeZone.DefaultTimeZoneType", "ICU");
+        isJDKTimeZone = type.equalsIgnoreCase("JDK");        
+    }
+    
     public static void main(String[] args) throws Exception {
         new TimeZoneTest().run(args);
     }
@@ -106,75 +121,100 @@ public class TimeZoneTest extends TestFmwk
      */
     public void TestShortZoneIDs() throws Exception {
 
-        ZoneDescriptor[] JDK_116_REFERENCE_LIST = {
-            new ZoneDescriptor("MIT", -660, true), // updated to false when merging 2010j
-            new ZoneDescriptor("HST", -600, false),
-            new ZoneDescriptor("AST", -540, true),
-            new ZoneDescriptor("PST", -480, true),
-            new ZoneDescriptor("PNT", -420, false),
-            new ZoneDescriptor("MST", -420, false),// updated Aug 2003 aliu
-            new ZoneDescriptor("CST", -360, true),
-            new ZoneDescriptor("IET", -300, true), // updated Feb 2006 srl
-            new ZoneDescriptor("EST", -300, false),// updated Aug 2003 aliu
-            new ZoneDescriptor("PRT", -240, false),
-            new ZoneDescriptor("CNT", -210, true),
-            new ZoneDescriptor("AGT", -180, false), // updated Oct 2009 yoshito
-            new ZoneDescriptor("BET", -180, true),
-            // new ZoneDescriptor("CAT", -60, false), // Wrong:
-            // As of bug 4130885, fix CAT (Central Africa)
-            new ZoneDescriptor("CAT", 120, false), // Africa/Harare
-            new ZoneDescriptor("GMT", 0, false),
-            new ZoneDescriptor("UTC", 0, false),
-            new ZoneDescriptor("ECT", 60, true),
-            new ZoneDescriptor("ART", 120, true),
-            new ZoneDescriptor("EET", 120, true),
-            new ZoneDescriptor("EAT", 180, false),
-            // new ZoneDescriptor("MET", 210, true),
-            // This is a standard Unix zone, so don't remap it - Liu 3Jan01
-            // new ZoneDescriptor("NET", 240, false);
-            // As of bug 4191164, fix NET
-            new ZoneDescriptor("NET", 240, true),
-            // PLT behaves differently under different JDKs, so we don't check it
-            // new ZoneDescriptor("PLT", 300, false), // updated Oct 2003 aliu
-            new ZoneDescriptor("IST", 330, false),
-            new ZoneDescriptor("BST", 360, false), // updated May 2010 - no DST in year 2010+
-            new ZoneDescriptor("VST", 420, false),
-            new ZoneDescriptor("CTT", 480, false), // updated Oct 2003 aliu
-            new ZoneDescriptor("JST", 540, false),
-            new ZoneDescriptor("ACT", 570, false), // updated Oct 2003 aliu
-            new ZoneDescriptor("AET", 600, true),
-            new ZoneDescriptor("SST", 660, false),
-            // new ZoneDescriptor("NST", 720, false),
-            // As of bug 4130885, fix NST (New Zealand)
-            new ZoneDescriptor("NST", 720, true), // Pacific/Auckland
-
-            // [3Jan01 Liu] Three of these zones have been updated.
-            // The CTT and ACT zones just remap to Asia/Shanghai
-            // and Australia/Darwin.  Since those zones have changed,
-            // I have updated the table.  The MET zone used to be mapped
-            // to Asia/Tehran but since MET is a standard Unix zone named
-            // in the source data we no longer do this in icu or icu4j.
-        };
-
-        Hashtable hash = new Hashtable();
-
-        String[] ids = TimeZone.getAvailableIDs();
-        for (int i=0; i<ids.length; ++i) {
-            String id = ids[i];
-            if (id.length() == 3) {
-                hash.put(id, new ZoneDescriptor(TimeZone.getTimeZone(id)));
-            }
+        // This test case is tzdata version sensitive.
+        boolean isNonReferenceTzdataVersion = false;
+        String tzdataVer = TimeZone.getTZDataVersion();
+        if (!tzdataVer.equals(REFERENCE_DATA_VERSION)) {
+            // Note: We want to display a warning message here if
+            // REFERENCE_DATA_VERSION is out of date - so we
+            // do not forget to update the value before GA.
+            isNonReferenceTzdataVersion = true;
+            logln("Warning: Active tzdata version (" + tzdataVer +
+                    ") does not match the reference tzdata version ("
+                    + REFERENCE_DATA_VERSION + ") for this test case data.");
         }
 
-        for (int i=0; i<JDK_116_REFERENCE_LIST.length; ++i) {
-            ZoneDescriptor referenceZone = JDK_116_REFERENCE_LIST[i];
-            ZoneDescriptor currentZone = (ZoneDescriptor)hash.get(referenceZone.getID());
+        if (isJDKTimeZone) {
+            logln("Warning: Using JDK TimeZone.  Some test cases may not return expected results.");
+        }
+
+        // Note: useDaylightTime returns true if DST is observed
+        // in the time zone in the current calendar year.  The test
+        // data is valid for the date after the reference year below.
+        // If system clock is before the year, some test cases may
+        // fail.
+        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
+        cal.set(REFERENCE_YEAR, Calendar.JANUARY, 2); // day 2 in GMT
+
+        boolean isDateBeforeReferenceYear = System.currentTimeMillis() < cal.getTimeInMillis();
+        if (isDateBeforeReferenceYear) {
+            logln("Warning: Past time is set to the system clock.  Some test cases may not return expected results.");
+        }
+
+        ZoneDescriptor[] REFERENCE_LIST = {
+            new ZoneDescriptor("HST", -600, false), // Olson northamerica -10:00
+            new ZoneDescriptor("AST", -540, true),  // ICU Link - America/Anchorage
+            new ZoneDescriptor("PST", -480, true),  // ICU Link - America/Los_Angeles
+            new ZoneDescriptor("PNT", -420, false), // ICU Link - America/Phoenix
+            new ZoneDescriptor("MST", -420, false), // updated Aug 2003 aliu
+            new ZoneDescriptor("CST", -360, true),  // Olson northamerica -7:00
+            new ZoneDescriptor("IET", -300, true),  // ICU Link - America/Indiana/Indianapolis
+            new ZoneDescriptor("EST", -300, false), // Olson northamerica -5:00
+            new ZoneDescriptor("PRT", -240, false), // ICU Link - America/Puerto_Rico
+            new ZoneDescriptor("CNT", -210, true),  // ICU Link - America/St_Johns
+            new ZoneDescriptor("AGT", -180, false), // ICU Link - America/Argentina/Buenos_Aires
+            new ZoneDescriptor("BET", -180, true),  // ICU Link - America/Sao_Paulo
+            new ZoneDescriptor("GMT", 0, false),    // Olson etcetera Link - Etc/GMT
+            new ZoneDescriptor("UTC", 0, false),    // Olson etcetera 0
+            new ZoneDescriptor("ECT", 60, true),    // ICU Link - Europe/Paris
+            new ZoneDescriptor("MET", 60, true),    // Olson europe 1:00 C-Eur
+            new ZoneDescriptor("CAT", 120, false),  // ICU Link - Africa/Harare
+            new ZoneDescriptor("ART", 120, false),  // ICU Link - Africa/Cairo
+            new ZoneDescriptor("EET", 120, true),   // Olson europe 2:00 EU
+            new ZoneDescriptor("EAT", 180, false),  // ICU Link - Africa/Addis_Ababa
+            new ZoneDescriptor("NET", 240, false),  // ICU Link - Asia/Yerevan
+            new ZoneDescriptor("PLT", 300, false),  // ICU Link - Asia/Karachi
+            new ZoneDescriptor("IST", 330, false),  // ICU Link - Asia/Kolkata
+            new ZoneDescriptor("BST", 360, false),  // ICU Link - Asia/Dhaka
+            new ZoneDescriptor("VST", 420, false),  // ICU Link - Asia/Ho_Chi_Minh
+            new ZoneDescriptor("CTT", 480, false),  // ICU Link - Asia/Shanghai
+            new ZoneDescriptor("JST", 540, false),  // ICU Link - Asia/Tokyo
+            new ZoneDescriptor("ACT", 570, false),  // ICU Link - Australia/Darwin
+            new ZoneDescriptor("AET", 600, true),   // ICU Link - Australia/Sydney
+            new ZoneDescriptor("SST", 660, false),  // ICU Link - Pacific/Guadalcanal
+            new ZoneDescriptor("NST", 720, true),   // ICU Link - Pacific/Auckland
+            new ZoneDescriptor("MIT", 780, true),   // ICU Link - Pacific/Apia
+
+            new ZoneDescriptor("Etc/Unknown", 0, false),    // CLDR
+
+            new ZoneDescriptor("SystemV/AST4ADT", -240, true),
+            new ZoneDescriptor("SystemV/EST5EDT", -300, true),
+            new ZoneDescriptor("SystemV/CST6CDT", -360, true),
+            new ZoneDescriptor("SystemV/MST7MDT", -420, true),
+            new ZoneDescriptor("SystemV/PST8PDT", -480, true),
+            new ZoneDescriptor("SystemV/YST9YDT", -540, true),
+            new ZoneDescriptor("SystemV/AST4", -240, false),
+            new ZoneDescriptor("SystemV/EST5", -300, false),
+            new ZoneDescriptor("SystemV/CST6", -360, false),
+            new ZoneDescriptor("SystemV/MST7", -420, false),
+            new ZoneDescriptor("SystemV/PST8", -480, false),
+            new ZoneDescriptor("SystemV/YST9", -540, false),
+            new ZoneDescriptor("SystemV/HST10", -600, false),
+        };
+
+        for (int i=0; i<REFERENCE_LIST.length; ++i) {
+            ZoneDescriptor referenceZone = REFERENCE_LIST[i];
+            ZoneDescriptor currentZone = new ZoneDescriptor(TimeZone.getTimeZone(referenceZone.getID()));
             if (referenceZone.equals(currentZone)) {
                 logln("ok " + referenceZone);
-            }
-            else {
-                warnln("Fail: Expected " + referenceZone +
-                      "; got " + currentZone);
+            } else {
+                if (isNonReferenceTzdataVersion || isJDKTimeZone || isDateBeforeReferenceYear) {
+                    logln("Warning: Expected " + referenceZone +
+                            "; got " + currentZone);
+                } else {
+                    errln("Fail: Expected " + referenceZone +
+                            "; got " + currentZone);
+                }
             }
         }
     }
@@ -341,19 +381,33 @@ public class TimeZoneTest extends TestFmwk
                 logln(id + " -> " + zone.getID() + " " + offset);
                 String gotID = zone.getID();
                 if (exp == null && !gotID.equals("GMT")) {
-                    errln("Expected parse failure for " + id +
-                          ", got offset of " + offset +
-                          ", id " + zone.getID());
+                    if (isJDKTimeZone) {
+                        logln("[JDK time zone mode] Expected parse failure with ICU for " + id +
+                                ", got offset of " + offset +
+                                ", id " + zone.getID());
+                    } else {
+                        errln("Expected parse failure for " + id +
+                                ", got offset of " + offset +
+                                ", id " + zone.getID());
+                    }
                 }
                 // JDK 1.3 creates custom zones with the ID "Custom"
                 // JDK 1.4 creates custom zones with IDs of the form "GMT+02:00"
                 // ICU creates custom zones with IDs of the form "GMT+0200"
                 else if (exp != null && (ioffset != exp.intValue() || !(gotID.equals(expectedID)))) {
-                    errln("Expected offset of " + formatOffset(exp.intValue()) +
-                          ", id " + expectedID +
-                          ", for " + id +
-                          ", got offset of " + offset +
-                          ", id " + zone.getID());
+                    if (isJDKTimeZone) {
+                        logln("[JDK time zone mode] Expected offset of " + formatOffset(exp.intValue()) +
+                                "with ICU, id " + expectedID +
+                                ", for " + id +
+                                ", got offset of " + offset +
+                                ", id " + zone.getID());                        
+                    } else {
+                        errln("Expected offset of " + formatOffset(exp.intValue()) +
+                              ", id " + expectedID +
+                              ", for " + id +
+                              ", got offset of " + offset +
+                              ", id " + zone.getID());
+                    }
                 }
             }
         }

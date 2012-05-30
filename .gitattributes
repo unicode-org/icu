@@ -55,6 +55,7 @@ eclipseProjectMisc/initSrc.launch -text
 eclipseProjectMisc/normSrc.launch -text
 /ee.foundation.jar -text
 /preprocessor.txt -text
+src/com/ibm/icu/ICUConfig.properties -text
 src/com/ibm/icu/dev/data/rbbi/english.dict -text
 src/com/ibm/icu/dev/data/testdata.jar -text
 src/com/ibm/icu/dev/data/thai6.ucs -text

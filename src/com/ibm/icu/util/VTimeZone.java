@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -49,7 +49,7 @@ public class VTimeZone extends BasicTimeZone {
      */
     public static VTimeZone create(String tzid) {
         VTimeZone vtz = new VTimeZone();
-        vtz.tz = (BasicTimeZone)TimeZone.getTimeZone(tzid);
+        vtz.tz = (BasicTimeZone)TimeZone.getTimeZone(tzid, 0);
         vtz.olsonzid = vtz.tz.getID();
         vtz.setID(tzid);
 
