@@ -58,6 +58,10 @@
 //static const char I64_MIN_REP[] = "9223372036854775808";
 
 
+static const uint8_t DIGIT_HAVE_NONE=0;
+static const uint8_t DIGIT_HAVE_DOUBLE=1;
+static const uint8_t DIGIT_HAVE_INT64=2;
+
 U_NAMESPACE_BEGIN
 
 // -------------------------------------
@@ -73,8 +77,7 @@ DigitList::DigitList()
     fDecNumber = fStorage.getAlias();
     uprv_decNumberZero(fDecNumber);
 
-    fDouble = 0.0;
-    fHaveDouble = TRUE;
+    internalSetDouble(0.0);
 }
 
 // -------------------------------------
@@ -116,8 +119,13 @@ DigitList::operator=(const DigitList& other)
             // Avoid potential races with that happening with other.fDouble
             // while we are doing the assignment.
             Mutex mutex;
-            fDouble = other.fDouble;
-            fHaveDouble = other.fHaveDouble;
+
+            if(other.fHave==kDouble) {
+              fUnion.fDouble = other.fUnion.fDouble;
+            } else if(other.fHave==kInt64) {
+              fUnion.fInt64 = other.fUnion.fInt64;
+            }
+            fHave = other.fHave;
         }
     }
     return *this;
@@ -190,8 +198,7 @@ DigitList::clear()
 {
     uprv_decNumberZero(fDecNumber);
     uprv_decContextSetRounding(&fContext, DEC_ROUND_HALF_EVEN);
-    fDouble = 0.0;
-    fHaveDouble = TRUE;
+    internalSetDouble(0.0);
 }
 
 
@@ -278,7 +285,7 @@ DigitList::setPositive(UBool s) {
     } else {
         fDecNumber->bits |= DECNEG;
     }
-    fHaveDouble = FALSE;
+    internalClear();
 }
 // -------------------------------------
 
@@ -293,7 +300,7 @@ DigitList::setDecimalAt(int32_t d) {
         adjustedDigits = 0;
     }
     fDecNumber->exponent = d - adjustedDigits;
-    fHaveDouble = FALSE;
+    internalClear();
 }
 
 int32_t  
@@ -315,7 +322,7 @@ DigitList::setCount(int32_t c)  {
         fDecNumber->lsu[0] = 0;
     }
     fDecNumber->digits = c;
-    fHaveDouble = FALSE;
+    internalClear();
 }
 
 int32_t  
@@ -336,7 +343,7 @@ DigitList::setDigit(int32_t i, char v) {
     U_ASSERT(v>='0' && v<='9');
     v &= 0x0f;
     fDecNumber->lsu[count-i-1] = v;
-    fHaveDouble = FALSE;
+    internalClear();
 }
 
 char     
@@ -390,7 +397,7 @@ DigitList::append(char digit)
             fDecNumber->exponent--;
         }
     }
-    fHaveDouble = FALSE;
+    internalClear();
 }
 
 // -------------------------------------
@@ -409,8 +416,10 @@ DigitList::getDouble() const
     char decimalSeparator;
     {
         Mutex mutex;
-        if (fHaveDouble) {
-            return fDouble;
+        if (fHave == kDouble) {
+            return fUnion.fDouble;
+        } else if(fHave == kInt64) {
+            return (double)fUnion.fInt64;
         }
         decimalSeparator = gDecimal;
     }
@@ -438,7 +447,7 @@ DigitList::getDouble() const
             tDouble = std::numeric_limits<double>::max();
         }
         if (!isPositive()) {
-            tDouble = -fDouble;
+            tDouble = -tDouble; //this was incorrectly "-fDouble" originally.
         } 
     } else {
         MaybeStackArray<char, MAX_DBL_DIGITS+18> s;
@@ -472,8 +481,7 @@ DigitList::getDouble() const
     {
         Mutex mutex;
         DigitList *nonConstThis = const_cast<DigitList *>(this);
-        nonConstThis->fDouble = tDouble;
-        nonConstThis->fHaveDouble = TRUE;
+        nonConstThis->internalSetDouble(tDouble);
         gDecimal = decimalSeparator;
     }
     return tDouble;
@@ -511,6 +519,9 @@ int32_t DigitList::getLong() /*const*/
  *  Return zero if the number cannot be represented.
  */
 int64_t DigitList::getInt64() /*const*/ {
+    if(fHave==kInt64) {
+      return fUnion.fInt64;
+    } 
     // Truncate if non-integer.
     // Return 0 if out of range.
     // Range of in64_t is -9223372036854775808 to 9223372036854775807  (19 digits)
@@ -682,8 +693,7 @@ void
 DigitList::set(int32_t source)
 {
     set((int64_t)source);
-    fDouble = source;
-    fHaveDouble = TRUE;
+    internalSetDouble(source);
 }
 
 // -------------------------------------
@@ -699,8 +709,18 @@ DigitList::set(int64_t source)
     U_ASSERT(uprv_strlen(str) < sizeof(str));
 
     uprv_decNumberFromString(fDecNumber, str, &fContext);
-    fDouble = (double)source;
-    fHaveDouble = TRUE;
+    internalSetDouble(source);
+}
+
+/**
+ * @param maximumDigits The maximum digits to be generated.  If zero,
+ * there is no maximum -- generate all digits.
+ */
+void
+DigitList::setInteger(int64_t source)
+{
+  fDecNumber=NULL;
+  internalSetInt64(source);
 }
 
 
@@ -738,7 +758,7 @@ DigitList::set(const StringPiece &source, UErrorCode &status) {
     if ((fContext.status & DEC_Conversion_syntax) != 0) {
         status = U_DECIMAL_NUMBER_SYNTAX_ERROR;
     }
-    fHaveDouble = FALSE;
+    internalClear();
 }   
 
 /**
@@ -778,8 +798,7 @@ DigitList::set(double source)
     // Create a decNumber from the string.
     uprv_decNumberFromString(fDecNumber, rep, &fContext);
     uprv_decNumberTrim(fDecNumber);
-    fDouble = source;
-    fHaveDouble = TRUE;
+    internalSetDouble(source);
 }
 
 // -------------------------------------
@@ -800,7 +819,7 @@ DigitList::mult(const DigitList &other, UErrorCode &status) {
         ensureCapacity(requiredDigits, status);
     }
     uprv_decNumberMultiply(fDecNumber, fDecNumber, other.fDecNumber, &fContext);
-    fHaveDouble = FALSE;
+    internalClear();
 }
 
 // -------------------------------------
@@ -817,7 +836,7 @@ DigitList::div(const DigitList &other, UErrorCode &status) {
         return;
     }
     uprv_decNumberDivide(fDecNumber, fDecNumber, other.fDecNumber, &fContext);
-    fHaveDouble = FALSE;
+    internalClear();
 }
 
 // -------------------------------------
@@ -867,7 +886,7 @@ DigitList::round(int32_t maximumDigits)
     uprv_decNumberPlus(fDecNumber, fDecNumber, &fContext);
     fContext.digits = savedDigits;
     uprv_decNumberTrim(fDecNumber);
-    fHaveDouble = FALSE;
+    internalClear();
 }
 
 
@@ -884,7 +903,7 @@ DigitList::roundFixedPoint(int32_t maximumFractionDigits) {
     
     uprv_decNumberQuantize(fDecNumber, fDecNumber, &scale, &fContext);
     trim();
-    fHaveDouble = FALSE;
+    internalClear();
 }
 
 // -------------------------------------
@@ -900,6 +919,12 @@ UBool
 DigitList::isZero() const
 {
     return decNumberIsZero(fDecNumber);
+}
+
+
+
+void * U_EXPORT2 DigitList::operator new(size_t size, void *stack, EStackMode mode) U_NO_THROW {
+  return stack;
 }
 
 

@@ -9,7 +9,7 @@
 #include "unicode/utimer.h"
 #include "udbgutil.h"
 #include "unicode/ustring.h"
-
+#include "unicode/decimfmt.h"
 void runTests(void);
 
 #ifndef ITERATIONS
@@ -187,7 +187,7 @@ public:
   }
 protected:
   virtual UNumberFormat* initFmt() {
-    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), 1, "en_US", 0, &setupStatus);
+    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, "en_US", 0, &setupStatus);
   }
   virtual const char *getClassName() {
     return "NumTest";
@@ -287,7 +287,7 @@ public:
   }
 protected:
   virtual UNumberFormat* initFmt() {
-    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), 1, "en_US", 0, &setupStatus);
+    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, "en_US", 0, &setupStatus);
   }
   virtual const char *getClassName() {
     return "NumFmtTest";
@@ -364,7 +364,7 @@ public:
   }
 protected:
   virtual UNumberFormat* initFmt() {
-    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), 1, "en_US", 0, &setupStatus);
+    return unum_open(UNUM_PATTERN_DECIMAL, fPat.getTerminatedBuffer(), -1, "en_US", 0, &setupStatus);
   }
   virtual const char *getClassName() {
     return "NumFmtInt64Test";
@@ -417,6 +417,88 @@ public:
 };
 
 #define DO_NumFmtInt64Test(p,n,x) { NumFmtInt64Test t(p,n,x,__FILE__,__LINE__); runTestOn(t); }
+
+
+class NumFmtStringPieceTest : public HowExpensiveTest {
+private:
+  const StringPiece &fExpect;
+  UNumberFormat *fFmt;
+  UnicodeString fPat;
+  UnicodeString fString;
+  const UChar *fStr;
+  int32_t fLen;
+  const char *fFile;
+  int fLine;
+  const char *fCPat;
+  const char *fCStr;
+  char name[100];
+public:
+  virtual const char *getName() {
+    if(name[0]==0) {
+      sprintf(name,"%s:p=|%s|,str=|%s|,sp=|%s|",getClassName(),fCPat,fCStr, fExpect.data());
+    }
+    return name;
+  }
+protected:
+  virtual UNumberFormat* initFmt() {
+    DecimalFormat *d = new DecimalFormat(setupStatus);
+    UParseError pe;
+    d->applyPattern(fPat, pe, setupStatus);
+    return (UNumberFormat*) d;
+  }
+  virtual const char *getClassName() {
+    return "NumFmtStringPieceTest";
+  }
+public:
+  NumFmtStringPieceTest(const char *pat, const char *num, const StringPiece& expect, const char *FILE, int LINE) 
+    : HowExpensiveTest("(n/a)",FILE, LINE),
+      fExpect(expect),
+      fFmt(0),
+      fPat(pat, -1, US_INV),
+      fString(num,-1,US_INV),
+      fStr(fString.getTerminatedBuffer()),
+      fLen(u_strlen(fStr)),
+      fFile(FILE),
+      fLine(LINE),
+      fCPat(pat),
+      fCStr(num)
+  {
+    name[0]=0;
+  }
+  void warmup() {
+    fFmt = initFmt();
+    UnicodeString buf;
+    if(U_SUCCESS(setupStatus)) {
+      buf.remove();
+      ((const DecimalFormat*)fFmt)->format(fExpect, buf, NULL, setupStatus);
+      if(!U_SUCCESS(setupStatus) 
+         || fString!=buf
+         ) {
+        char strBuf[200];
+        u_strToUTF8(strBuf,200,NULL,buf.getTerminatedBuffer(),buf.length()+1,&setupStatus);
+        printf("%s:%d: warmup() %s got %s (len %d) expected %s (len %d), err %s\n", 
+               fFile,fLine,getName(),strBuf,buf.length(),fCStr,fLen, u_errorName(setupStatus));
+        setupStatus = U_INTERNAL_PROGRAM_ERROR;
+      }
+    }
+  }
+    
+  int32_t run() {
+    int32_t trial;
+    int i;
+    UnicodeString buf;
+    if(U_SUCCESS(setupStatus)) {
+      for(i=0;i<U_LOTS_OF_TIMES;i++){
+        buf.remove();
+        ((const DecimalFormat*)fFmt)->format(fExpect, buf, NULL, setupStatus);
+      }
+    }
+    return i;
+  }
+  virtual ~NumFmtStringPieceTest(){}
+};
+
+#define DO_NumFmtStringPieceTest(p,n,x) { NumFmtStringPieceTest t(p,n,x,__FILE__,__LINE__); runTestOn(t); }
 
 // TODO: move, scope.
 static UChar pattern[] = { 0x23 }; // '#'
@@ -489,6 +571,23 @@ void runTests() {
 #ifndef SKIP_NUMFORMAT_TESTS
   // format tests
   { 
+    
+    DO_NumFmtInt64Test("0000","0001",1);
+    DO_NumFmtInt64Test("0000","0000",0);
+    StringPiece sp3456("3456");
+    DO_NumFmtStringPieceTest("0000","3456",sp3456);
+    DO_NumFmtStringPieceTest("#","3456",sp3456);
+    StringPiece sp3("3");
+    DO_NumFmtStringPieceTest("0000","0003",sp3);
+    DO_NumFmtStringPieceTest("#","3",sp3);
+    StringPiece spn3("-3");
+    DO_NumFmtStringPieceTest("0000","-0003",spn3);
+    DO_NumFmtStringPieceTest("#","-3",spn3);
+    StringPiece spPI("123.456");
+    DO_NumFmtStringPieceTest("#.0000","123.4560",spPI);
+    DO_NumFmtStringPieceTest("#.00","123.46",spPI);
+    
+#if 1
     DO_NumFmtTest("#","0",0.0);
     DO_NumFmtTest("#","12345",12345);
     DO_NumFmtTest("#","-2",-2);
