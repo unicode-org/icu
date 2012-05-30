@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -28,6 +28,10 @@
 #include <string.h>
 #include "unicode/utypes.h"
 #include "unicode/localpointer.h"
+
+#if U_DEBUG && defined(UPRV_MALLOC_COUNT)
+#include <stdio.h>
+#endif
 
 #define uprv_memcpy(dst, src, size) U_STANDARD_CPP_NAMESPACE memcpy(dst, src, size)
 #define uprv_memmove(dst, src, size) U_STANDARD_CPP_NAMESPACE memmove(dst, src, size)
@@ -331,6 +335,9 @@ private:
 template<typename T, int32_t stackCapacity>
 inline T *MaybeStackArray<T, stackCapacity>::resize(int32_t newCapacity, int32_t length) {
     if(newCapacity>0) {
+#if U_DEBUG && defined(UPRV_MALLOC_COUNT)
+      ::fprintf(::stderr,"MaybeStacArray (resize) alloc %d * %lu\n", newCapacity,sizeof(T));
+#endif
         T *p=(T *)uprv_malloc(newCapacity*sizeof(T));
         if(p!=NULL) {
             if(length>0) {
@@ -365,6 +372,9 @@ inline T *MaybeStackArray<T, stackCapacity>::orphanOrClone(int32_t length, int32
             length=capacity;
         }
         p=(T *)uprv_malloc(length*sizeof(T));
+#if U_DEBUG && defined(UPRV_MALLOC_COUNT)
+      ::fprintf(::stderr,"MaybeStacArray (orphan) alloc %d * %lu\n", length,sizeof(T));
+#endif
         if(p==NULL) {
             return NULL;
         }
@@ -501,6 +511,9 @@ template<typename H, typename T, int32_t stackCapacity>
 inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::resize(int32_t newCapacity,
                                                                 int32_t length) {
     if(newCapacity>=0) {
+#if U_DEBUG && defined(UPRV_MALLOC_COUNT)
+      ::fprintf(::stderr,"MaybeStackHeaderAndArray alloc %d + %d * %ul\n", sizeof(H),newCapacity,sizeof(T));
+#endif
         H *p=(H *)uprv_malloc(sizeof(H)+newCapacity*sizeof(T));
         if(p!=NULL) {
             if(length<0) {
@@ -537,6 +550,9 @@ inline H *MaybeStackHeaderAndArray<H, T, stackCapacity>::orphanOrClone(int32_t l
         } else if(length>capacity) {
             length=capacity;
         }
+#if U_DEBUG && defined(UPRV_MALLOC_COUNT)
+      ::fprintf(::stderr,"MaybeStackHeaderAndArray (orphan) alloc %ul + %d * %lu\n", sizeof(H),length,sizeof(T));
+#endif
         p=(H *)uprv_malloc(sizeof(H)+length*sizeof(T));
         if(p==NULL) {
             return NULL;

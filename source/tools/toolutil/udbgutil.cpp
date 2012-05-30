@@ -11,6 +11,7 @@
 #include "putilimp.h"
 #include "unicode/ulocdata.h"
 #include "unicode/ucnv.h"
+
 /*
 To add a new enum type 
       (For example: UShoeSize  with values USHOE_WIDE=0, USHOE_REGULAR, USHOE_NARROW, USHOE_COUNT)
@@ -509,7 +510,9 @@ static USystemParams systemParams[] = {
 #if defined (CYGWINMSVC)
   { "build.cygwinmsvc", paramInteger, "b", 1},
 #endif
-
+  { "uconfig.internal_digitlist", paramInteger, "b", UCONFIG_INTERNAL_DIGITLIST},
+  { "uconfig.have_parseallinput", paramInteger, "b", UCONFIG_HAVE_PARSEALLINPUT},
+  { "uconfig.format_fastpaths_49",paramInteger, "b", UCONFIG_FORMAT_FASTPATHS_49},
 
 
 };
