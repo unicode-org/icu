@@ -118,6 +118,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(52,TestAvailableNumberingSystems);
         CASE(53,TestRoundingPattern);
         CASE(54,Test9087);
+        CASE(55,TestFormatFastpaths);
         default: name = ""; break;
     }
 }
@@ -6571,4 +6572,21 @@ NumberFormatTest::Test9087(void)
 
     unum_close(fmt);
 }
+
+#include "dcfmtimp.h"
+
+void NumberFormatTest::TestFormatFastpaths() {
+#if UCONFIG_FORMAT_FASTPATHS_49
+  logln("Sizeof DecimalFormat = %d, Sizeof DecimalFormatInternal=%d, UNUM_DECIMALFORMAT_INTERNAL_SIZE=%d\n",
+        sizeof(DecimalFormat), sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE);
+  if(UNUM_DECIMALFORMAT_INTERNAL_SIZE < sizeof(DecimalFormatInternal)) {
+    errln("Error: sizeof(DecimalFormatInternal)=%d but UNUM_DECIMALFORMAT_INTERNAL_SIZE is only %d. Increase the #define?\n", sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE);
+  } else if(UNUM_DECIMALFORMAT_INTERNAL_SIZE > (sizeof(DecimalFormatInternal)+16)) {
+    infoln("Note: sizeof(DecimalFormatInternal)=%d but UNUM_DECIMALFORMAT_INTERNAL_SIZE is %d. Decrease the #define? sizeof(DecimalFormat)=%d\n", sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE, sizeof(DecimalFormat));
+  }
+#else
+  infoln("NOTE: UCONFIG_FORMAT_FASTPATHS not set, test skipped.");
+#endif  
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */

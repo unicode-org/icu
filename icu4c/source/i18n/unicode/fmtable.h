@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -605,6 +605,14 @@ public:
      */
     DigitList *getDigitList() const { return fDecimalNum;}
 
+#if UCONFIG_INTERNAL_DIGITLIST
+    /**
+     *  @internal
+     */
+    DigitList *getInternalDigitList();
+#endif
+
+
     /**
      *  Adopt, and set value from, a DigitList
      *     Internal Function, do not use.
@@ -641,7 +649,12 @@ private:
     } fValue;
 
     CharString           *fDecimalStr;
+
     DigitList            *fDecimalNum;
+
+#if UCONFIG_INTERNAL_DIGITLIST
+    char                fStackData[128]; // must be big enough for DigitList
+#endif
 
     Type                fType;
     UnicodeString       fBogus; // Bogus string when it's needed.

@@ -1888,32 +1888,32 @@ static void TestTextAttributeCrash(void) {
     unum_close(nf);
 }
 
-static void TestNBSPPatternRtNum(const char *testcase, UNumberFormat *nf, double myNumber) {
+static void TestNBSPPatternRtNum(const char *testcase, int line, UNumberFormat *nf, double myNumber) {
     UErrorCode status = U_ZERO_ERROR;
     UChar myString[20];
     char tmpbuf[200];
     double aNumber = -1.0;
     unum_formatDouble(nf, myNumber, myString, 20, NULL, &status);
-    log_verbose("%s: formatted %.2f into %s\n", testcase, myNumber, u_austrcpy(tmpbuf, myString));
+    log_verbose("%s:%d: formatted %.2f into %s\n", testcase, line, myNumber, u_austrcpy(tmpbuf, myString));
     if(U_FAILURE(status)) {
-        log_err("%s: failed format of %.2g with %s\n", testcase, myNumber, u_errorName(status));
+      log_err("%s:%d: failed format of %.2g with %s\n", testcase, line, myNumber, u_errorName(status));
         return;
     }
     aNumber = unum_parse(nf, myString, -1, NULL, &status);
     if(U_FAILURE(status)) {
-        log_err("%s: failed parse with %s\n", testcase, u_errorName(status));
+      log_err("%s:%d: failed parse with %s\n", testcase, line, u_errorName(status));
         return;
     }
     if(uprv_fabs(aNumber-myNumber)>.001) {
-        log_err("FAIL: %s: formatted %.2f, parsed into %.2f\n", testcase, myNumber, aNumber);
+      log_err("FAIL: %s:%d formatted %.2f, parsed into %.2f\n", testcase, line, myNumber, aNumber);
     } else {
-        log_verbose("PASS: %s: formatted %.2f, parsed into %.2f\n", testcase, myNumber, aNumber);
+      log_verbose("PASS: %s:%d formatted %.2f, parsed into %.2f\n", testcase, line, myNumber, aNumber);
     }
 }
 
 static void TestNBSPPatternRT(const char *testcase, UNumberFormat *nf) {
-    TestNBSPPatternRtNum(testcase, nf, 12345.);
-    TestNBSPPatternRtNum(testcase, nf, -12345.);
+  TestNBSPPatternRtNum(testcase, __LINE__, nf, 12345.);
+  TestNBSPPatternRtNum(testcase, __LINE__, nf, -12345.);
 }
 
 static void TestNBSPInPattern(void) {
@@ -1925,7 +1925,7 @@ static void TestNBSPInPattern(void) {
     testcase="ar_AE UNUM_CURRENCY";
     nf  = unum_open(UNUM_CURRENCY, NULL, -1, "ar_AE", NULL, &status);
     if(U_FAILURE(status) || nf == NULL) {
-        log_data_err("%s: unum_open failed with %s (Are you missing data?)\n", testcase, u_errorName(status));
+      log_data_err("%s:%d: %s: unum_open failed with %s (Are you missing data?)\n", __FILE__, __LINE__, testcase, u_errorName(status));
         return;
     }
     TestNBSPPatternRT(testcase, nf);
