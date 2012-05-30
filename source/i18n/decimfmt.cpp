@@ -1078,7 +1078,7 @@ DecimalFormat::_format(int64_t number,
   printf("fastpath? [%d]\n", number);
 #endif
     
-  if( data.fFastpathStatus==kFastpathYES ) {
+  if( data.fFastpathStatus==kFastpathYES) {
 
 #define kZero 0x0030
     const int32_t MAX_IDX = MAX_DIGITS+2;
@@ -1087,14 +1087,17 @@ DecimalFormat::_format(int64_t number,
     outputStr[--destIdx] = 0;  // term
 
     int64_t  n = number;
-    if (number < 0) {   // Negative numbers are slightly larger than a postive
-      //outputStr[--destIdx] = (char)(-(n % 10) + kZero);
-        n *= -1;
+    if (number < 1) {
+      // Negative numbers are slightly larger than positive
+      // output the first digit (or the leading zero)
+      outputStr[--destIdx] = (-(n % 10) + kZero);
+      n /= -10;
     }
-    do { 
+    // get any remaining digits
+    while (n > 0) {
       outputStr[--destIdx] = (n % 10) + kZero;
       n /= 10;
-    } while (n > 0);
+    }
     
 
         // Slide the number to the start of the output str
