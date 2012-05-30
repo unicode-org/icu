@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -109,6 +109,7 @@ public:
     virtual UBool setNoErrMsg( UBool no_err_msg = TRUE );
     virtual UBool setQuick( UBool quick = TRUE );
     virtual UBool setLeaks( UBool leaks = TRUE );
+    virtual UBool setNotime( UBool no_time = TRUE );
     virtual UBool setWarnOnMissingData( UBool warn_on_missing_data = TRUE );
     virtual int32_t setThreadCount( int32_t count = 1);
 
@@ -244,6 +245,7 @@ protected:
     UBool       quick;
     UBool       leaks;
     UBool       warn_on_missing_data;
+    UBool       no_time;
     int32_t     threadCount;
 
 private:
