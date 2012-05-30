@@ -6663,7 +6663,7 @@ void NumberFormatTest::TestFormatFastpaths() {
   {
     UErrorCode status=U_ZERO_ERROR;
     DecimalFormat df(UnicodeString("0000000000000000000",""),status);
-    int64_t long_number = -9223372036854775807L;
+    int64_t long_number = U_INT64_MIN + 1;
     UnicodeString expect = "-9223372036854775807";
     UnicodeString result;
     FieldPosition pos;
