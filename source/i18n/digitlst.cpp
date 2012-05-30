@@ -698,8 +698,7 @@ DigitList::set(int32_t source)
 
 // -------------------------------------
 /**
- * @param maximumDigits The maximum digits to be generated.  If zero,
- * there is no maximum -- generate all digits.
+ * Set an int64, via decnumber
  */
 void
 DigitList::set(int64_t source)
@@ -713,8 +712,7 @@ DigitList::set(int64_t source)
 }
 
 /**
- * @param maximumDigits The maximum digits to be generated.  If zero,
- * there is no maximum -- generate all digits.
+ * Set an int64, with no decnumber
  */
 void
 DigitList::setInteger(int64_t source)
