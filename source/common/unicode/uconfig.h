@@ -404,4 +404,38 @@
 #   define UCONFIG_NO_SERVICE 0
 #endif
 
+/**
+ * \def UCONFIG_INTERNAL_DIGITLIST
+ * This switch turns on the fast but binary-incompatible Formattable class with an internal DigitList
+ *
+ * @internal
+ */
+#ifndef UCONFIG_INTERNAL_DIGITLIST
+#   define UCONFIG_INTERNAL_DIGITLIST 0
+#endif
+
+
+
+
+/**
+ * \def UCONFIG_HAVE_PARSEALLINPUT
+ * This switch turns on the "parse all input" attribute. Binary incompatible.
+ *
+ * @internal
+ */
+#ifndef UCONFIG_HAVE_PARSEALLINPUT
+#   define UCONFIG_HAVE_PARSEALLINPUT 0
+#endif
+
+
+/**
+ * \def UCONFIG_HAVE_PARSEALLINPUT
+ * This switch turns on other formatting fastpaths. Binary incompatible in object DecimalFormat and DecimalFormatSymbols
+ *
+ * @internal
+ */
+#ifndef UCONFIG_FORMAT_FASTPATHS_49
+#   define UCONFIG_FORMAT_FASTPATHS_49 0
+#endif
+
 #endif
