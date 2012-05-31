@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-* Copyright (c) 1997-2011, International Business Machines
+* Copyright (c) 1997-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -15,7 +15,7 @@
 #   define WIN32_LEAN_AND_MEAN
 #   include <windows.h>
 #else
-#   if U_PLATFORM == U_PF_OS390
+#   if U_PLATFORM == U_PF_OS390 && !defined(__UU)
 #     define __UU  /* Universal Unix - for struct timeval */
 #   endif
 #   include <time.h>
