@@ -65,7 +65,8 @@
  *
  * Do not use ptrdiff_t since it is signed. size_t is unsigned.
  */
-#if !defined(__intptr_t_defined) && !defined(UINTPTR_MAX)
+/* TODO: This check fails on some z environments. Filed a ticket #9357 for this. */
+#if !defined(__intptr_t_defined) && !defined(UINTPTR_MAX) && (U_PLATFORM != U_PF_OS390)
 typedef size_t uintptr_t;
 #endif
 
