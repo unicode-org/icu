@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2006, International Business Machines
+ *   Copyright (C) 2005-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -10,6 +10,7 @@
 #if !UCONFIG_NO_CONVERSION
 
 #include "csrucode.h"
+#include "csmatch.h"
 
 U_NAMESPACE_BEGIN
 
@@ -28,16 +29,18 @@ const char *CharsetRecog_UTF_16_BE::getName() const
     return "UTF-16BE";
 }
 
-int32_t CharsetRecog_UTF_16_BE::match(InputText* textIn)
+UBool CharsetRecog_UTF_16_BE::match(InputText* textIn, CharsetMatch *results) const
 {
     const uint8_t *input = textIn->fRawInput;
+    int32_t confidence = 0;
 
     if (input[0] == 0xFE && input[1] == 0xFF) {
-        return 100;
+        confidence = 100;
     }
 
     // TODO: Do some statastics to check for unsigned UTF-16BE
-    return 0;
+    results->set(textIn, this, confidence);
+    return (confidence > 0);
 }
 
 CharsetRecog_UTF_16_LE::~CharsetRecog_UTF_16_LE()
@@ -50,16 +53,18 @@ const char *CharsetRecog_UTF_16_LE::getName() const
     return "UTF-16LE";
 }
 
-int32_t CharsetRecog_UTF_16_LE::match(InputText* textIn)
+UBool CharsetRecog_UTF_16_LE::match(InputText* textIn, CharsetMatch *results) const
 {
     const uint8_t *input = textIn->fRawInput;
+    int32_t confidence = 0;
 
     if (input[0] == 0xFF && input[1] == 0xFE && (input[2] != 0x00 || input[3] != 0x00)) {
-        return 100;
+        confidence = 100;
     }
 
     // TODO: Do some statastics to check for unsigned UTF-16LE
-    return 0;
+    results->set(textIn, this, confidence);
+    return (confidence > 0);
 }
 
 CharsetRecog_UTF_32::~CharsetRecog_UTF_32()
@@ -67,7 +72,7 @@ CharsetRecog_UTF_32::~CharsetRecog_UTF_32()
     // nothing to do
 }
 
-int32_t CharsetRecog_UTF_32::match(InputText* textIn)
+UBool CharsetRecog_UTF_32::match(InputText* textIn, CharsetMatch *results) const
 {
     const uint8_t *input = textIn->fRawInput;
     int32_t limit = (textIn->fRawLength / 4) * 4;
@@ -106,7 +111,8 @@ int32_t CharsetRecog_UTF_32::match(InputText* textIn)
         confidence = 25;
     }
 
-    return confidence;
+    results->set(textIn, this, confidence);
+    return (confidence > 0);
 }
 
 CharsetRecog_UTF_32_BE::~CharsetRecog_UTF_32_BE()
