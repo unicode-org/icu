@@ -17,7 +17,7 @@ U_NAMESPACE_BEGIN
 enum EDecimalFormatFastpathStatus {
   kFastpathNO = 0,
   kFastpathYES = 1,
-  kFastpathUNKNOWN = 2, /* not yet set */
+  kFastpathUNKNOWN = 2 /* not yet set */
 };
 
 /**
