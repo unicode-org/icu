@@ -799,10 +799,11 @@ void CharsetDetectionTest::Ticket6954Test() {
 
     name1 = ucsdet_getName(match1, &status);
     TEST_ASSERT_SUCCESS(status);
-    // Test fails now 
-    // TEST_ASSERT(strcmp(name1, "windows-1252")==0);
+    TEST_ASSERT(strcmp(name1, "windows-1252")==0);
 
     ucsdet_close(csd1);
     ucsdet_close(csd2);
+    freeBytes(bISO);
+    freeBytes(bWindows);
 #endif
 }

@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2011, International Business Machines
+ *   Copyright (C) 2005-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -89,20 +89,8 @@ void CharsetDetector::setRecognizers(UErrorCode &status)
             new CharsetRecog_UTF_32_BE(),
             new CharsetRecog_UTF_32_LE(),
 
-            new CharsetRecog_8859_1_en(),
-            new CharsetRecog_8859_1_da(),
-            new CharsetRecog_8859_1_de(),
-            new CharsetRecog_8859_1_es(),
-            new CharsetRecog_8859_1_fr(),
-            new CharsetRecog_8859_1_it(),
-            new CharsetRecog_8859_1_nl(),
-            new CharsetRecog_8859_1_no(),
-            new CharsetRecog_8859_1_pt(),
-            new CharsetRecog_8859_1_sv(),
-            new CharsetRecog_8859_2_cs(),
-            new CharsetRecog_8859_2_hu(),
-            new CharsetRecog_8859_2_pl(),
-            new CharsetRecog_8859_2_ro(),
+            new CharsetRecog_8859_1(),
+            new CharsetRecog_8859_2(),
             new CharsetRecog_8859_5_ru(),
             new CharsetRecog_8859_6_ar(),
             new CharsetRecog_8859_7_el(),
@@ -263,10 +251,8 @@ const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound,
         status = U_MISSING_RESOURCE_ERROR;// TODO:  Need to set proper status code for input text not set
 
         return NULL;
-    } else if(fFreshTextSet) {
+    } else if (fFreshTextSet) {
         CharsetRecognizer *csr;
-        int32_t            detectResults;
-        int32_t            confidence;
         int32_t            i;
 
         textIn->MungeInput(fStripTags);
@@ -276,46 +262,14 @@ const CharsetMatch * const *CharsetDetector::detectAll(int32_t &maxMatchesFound,
         resultCount = 0;
         for (i = 0; i < fCSRecognizers_size; i += 1) {
             csr = fCSRecognizers[i];
-            detectResults = csr->match(textIn);
-            confidence = detectResults;
-
-            if (confidence > 0)  {
-                resultArray[resultCount++]->set(textIn, csr, confidence);
+            if (csr->match(textIn, resultArray[resultCount])) {
+                resultCount++;
             }
         }
 
-        for(i = resultCount; i < fCSRecognizers_size; i += 1) {
-            resultArray[i]->set(textIn, 0, 0);
+        if (resultCount > 1) {
+            uprv_sortArray(resultArray, resultCount, sizeof resultArray[0], charsetMatchComparator, NULL, TRUE, &status);
         }
-
-        uprv_sortArray(resultArray, resultCount, sizeof resultArray[0], charsetMatchComparator, NULL, TRUE, &status);
-
-        // Remove duplicate charsets from the results.
-        // Simple minded, brute force approach - check each entry against all that follow.
-        // The first entry of any duplicated set is the one that should be kept because it will
-        // be the one with the highest confidence rating.
-        //   (Duplicate matches have different languages, only the charset is the same)
-        // Because the resultArray contains preallocated CharsetMatch objects, they aren't actually
-        // deleted, just reordered, with the unwanted duplicates placed after the good results.
-        int32_t j, k;
-        for (i=0; i<resultCount; i++) {
-            const char *charSetName = resultArray[i]->getName();
-            for (j=i+1; j<resultCount; ) {
-                if (uprv_strcmp(charSetName, resultArray[j]->getName()) != 0) {
-                    // Not a duplicate.
-                    j++;
-                } else {
-                    // Duplicate entry at index j.  
-                    CharsetMatch *duplicate = resultArray[j];
-                    for (k=j; k<resultCount-1; k++) {
-                        resultArray[k] = resultArray[k+1];
-                    }
-                    resultCount--;
-                    resultArray[resultCount] = duplicate;
-                }
-            }
-        }
-
         fFreshTextSet = FALSE;
     }
 
