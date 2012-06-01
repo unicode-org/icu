@@ -1575,7 +1575,7 @@ static int32_t pkg_createWithoutAssemblyCode(UPKGOptions *o, const char *targetD
     if (result == 0) {
         /* Generate the library file. */
 #if U_PLATFORM == U_PF_OS390
-        if (o->pdsbuild && IN_MODE_DLL(mode)) {
+        if (o->pdsbuild && IN_DLL_MODE(mode)) {
             result = pkg_generateLibraryFile("",mode, buffer, cmd);
         } else {
             result = pkg_generateLibraryFile(targetDir,mode, buffer, cmd);
