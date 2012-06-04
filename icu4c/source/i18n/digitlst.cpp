@@ -462,21 +462,21 @@ DigitList::getDouble() const
             DigitList numToConvert(*this);
             numToConvert.reduce();    // Removes any trailing zeros, so that digit count is good.
             numToConvert.round(MAX_DBL_DIGITS+3);
-            uprv_decNumberToString(numToConvert.fDecNumber, s);
+            uprv_decNumberToString(numToConvert.fDecNumber, s.getAlias());
             // TODO:  how many extra digits should be included for an accurate conversion?
         } else {
-            uprv_decNumberToString(this->fDecNumber, s);
+            uprv_decNumberToString(this->fDecNumber, s.getAlias());
         }
         U_ASSERT(uprv_strlen(&s[0]) < MAX_DBL_DIGITS+18);
         
         if (decimalSeparator != '.') {
-            char *decimalPt = strchr(s, '.');
+            char *decimalPt = strchr(s.getAlias(), '.');
             if (decimalPt != NULL) {
                 *decimalPt = decimalSeparator;
             }
         }
         char *end = NULL;
-        tDouble = uprv_strtod(s, &end);
+        tDouble = uprv_strtod(s.getAlias(), &end);
     }
     {
         Mutex mutex;

@@ -251,12 +251,15 @@ public:
      * @return getAlias()+getCapacity()
      */
     T *getArrayLimit() const { return getAlias()+capacity; }
+    // No "operator T *() const" because that can make
+    // expressions like mbs[index] ambiguous for some compilers.
     /**
-     * Access without ownership change. Same as getAlias().
-     * A class instance can be used directly in expressions that take a T *.
-     * @return the array pointer
+     * Array item access (const).
+     * No index bounds check.
+     * @param i array index
+     * @return reference to the array item
      */
-    operator T *() const { return ptr; }
+    const T &operator[](ptrdiff_t i) const { return ptr[i]; }
     /**
      * Array item access (writable).
      * No index bounds check.

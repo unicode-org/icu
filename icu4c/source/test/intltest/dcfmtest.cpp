@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2011, International Business Machines Corporation and
+ * Copyright (c) 2002-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -112,7 +112,7 @@ InvariantStringPiece::InvariantStringPiece(const UnicodeString &s) {
     }
     // Buffer size is len+1 so that s.extract() will nul-terminate the string.
     s.extract(0, len, buf.getAlias(), len+1, US_INV);
-    this->set(buf, len);
+    this->set(buf.getAlias(), len);
 }
 
 
@@ -138,7 +138,7 @@ UnicodeStringPiece::UnicodeStringPiece(const UnicodeString &s) {
         capacity = requiredCapacity;
         s.extract(0, len, buf.getAlias(), capacity);
     }
-    this->set(buf, requiredCapacity - 1);
+    this->set(buf.getAlias(), requiredCapacity - 1);
 }
 
 
