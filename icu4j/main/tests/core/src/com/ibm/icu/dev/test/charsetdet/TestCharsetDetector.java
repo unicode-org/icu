@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
+import java.util.HashSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -1104,7 +1105,30 @@ public class TestCharsetDetector extends TestFmwk
 
         name1 = match1.getName();
         assertEquals("Wrong charset name after running a second charset detector", "windows-1252", name1);
-
+    }
+    
+    public void TestBug6889() {
+        // Verify that CharsetDetector.detectAll() does not return the same encoding multiple times.
+        String text =
+            "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
+        byte[] textBytes;
+        try {
+            textBytes = text.getBytes("ISO-8859-1");
+        }
+        catch (Exception e) {
+            fail("Unexpected exception " + e.toString());
+            return;
+        }
+        
+        CharsetDetector det = new CharsetDetector();
+        det.setText(textBytes);
+        CharsetMatch matches[] = det.detectAll();
+        
+        HashSet<String> detectedEncodings = new HashSet<String>();
+        for (CharsetMatch m: matches) {
+            assertTrue("Charset " + m.getName() + " encountered before",
+                        detectedEncodings.add(m.getName()));
+        }   
     }
 
       
