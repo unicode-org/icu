@@ -37,6 +37,7 @@ import com.ibm.icu.util.TimeZoneTransition;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.VTimeZone;
+import com.ibm.icu.util.VersionInfo;
 
 /**
  * @test 1.22 99/09/21
@@ -48,13 +49,14 @@ public class TimeZoneTest extends TestFmwk
 {
     static final int millisPerHour = 3600000;
 
-    // TODO: We should probably read following data at runtime, so we can update
-    // the these values every release with necessary data changes.
-
     // Some test case data is current date/tzdata version sensitive and producing errors
-    // when year/rule are changed.
-    static final int REFERENCE_YEAR = 2009;
-    static final String REFERENCE_DATA_VERSION = "2009d";
+    // when year/rule are changed. Although we want to keep our eyes on test failures
+    // caused by tzdata changes while development, keep maintaining test data in maintenance
+    // stream is a little bit hassle. ICU 49 or later versions are using minor version field
+    // to indicate a development build (0) or official release build (others). For development
+    // builds, a test failure triggers an error, while release builds only report them in
+    // verbose mode with logln.
+    static final boolean isDevelopmentBuild = (VersionInfo.ICU_VERSION.getMinor() == 0);
 
     public static void main(String[] args) throws Exception {
         new TimeZoneTest().run(args);
@@ -122,19 +124,6 @@ public class TimeZoneTest extends TestFmwk
      */
     public void TestShortZoneIDs() throws Exception {
 
-        // This test case is tzdata version sensitive.
-        boolean isNonReferenceTzdataVersion = false;
-        String tzdataVer = TimeZone.getTZDataVersion();
-        if (!tzdataVer.equals(REFERENCE_DATA_VERSION)) {
-            // Note: We want to display a warning message here if
-            // REFERENCE_DATA_VERSION is out of date - so we
-            // do not forget to update the value before GA.
-            isNonReferenceTzdataVersion = true;
-            logln("Warning: Active tzdata version (" + tzdataVer +
-                    ") does not match the reference tzdata version ("
-                    + REFERENCE_DATA_VERSION + ") for this test case data.");
-        }
-
         // Note: If the default TimeZone type is JDK, some time zones
         // may differ from the test data below.  For example, "MST" on
         // IBM JRE is an alias of "America/Denver" for supporting Java 1.1
@@ -151,7 +140,9 @@ public class TimeZoneTest extends TestFmwk
         // If system clock is before the year, some test cases may
         // fail.
         GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
-        cal.set(REFERENCE_YEAR, Calendar.JANUARY, 2); // day 2 in GMT
+        // day 2 in this year in GMT
+        cal.set(Calendar.MONTH, Calendar.JANUARY);
+        cal.set(Calendar.DAY_OF_MONTH, 2);
 
         boolean isDateBeforeReferenceYear = System.currentTimeMillis() < cal.getTimeInMillis();
         if (isDateBeforeReferenceYear) {
@@ -159,40 +150,41 @@ public class TimeZoneTest extends TestFmwk
         }
 
         ZoneDescriptor[] REFERENCE_LIST = {
-            new ZoneDescriptor("MIT", -660, false),
-            new ZoneDescriptor("HST", -600, false),
-            new ZoneDescriptor("AST", -540, true),
-            new ZoneDescriptor("PST", -480, true),
-            new ZoneDescriptor("PNT", -420, false),
-            new ZoneDescriptor("MST", -420, false),// updated Aug 2003 aliu
-            new ZoneDescriptor("CST", -360, true),
-            new ZoneDescriptor("IET", -300, true), // updated Feb 2006 srl
-            new ZoneDescriptor("EST", -300, false),// updated Aug 2003 aliu
-            new ZoneDescriptor("PRT", -240, false),
-            new ZoneDescriptor("CNT", -210, true),
-            new ZoneDescriptor("AGT", -180, true), // updated by tzdata 2007k
-            new ZoneDescriptor("BET", -180, true),
-            new ZoneDescriptor("GMT", 0, false),
-            new ZoneDescriptor("UTC", 0, false),
-            new ZoneDescriptor("ECT", 60, true),
-            new ZoneDescriptor("MET", 60, true),
-            new ZoneDescriptor("CAT", 120, false), // Africa/Harare
-            new ZoneDescriptor("ART", 120, true),
-            new ZoneDescriptor("EET", 120, true),
-            new ZoneDescriptor("EAT", 180, false),
-            new ZoneDescriptor("NET", 240, true),
-            new ZoneDescriptor("PLT", 300, false), // updated by tzdata 2008c - no DST after 2008
-            new ZoneDescriptor("IST", 330, false),
-            new ZoneDescriptor("BST", 360, false),
-            new ZoneDescriptor("VST", 420, false),
-            new ZoneDescriptor("CTT", 480, false), // updated Oct 2003 aliu
-            new ZoneDescriptor("JST", 540, false),
-            new ZoneDescriptor("ACT", 570, false), // updated Oct 2003 aliu
-            new ZoneDescriptor("AET", 600, true),
-            new ZoneDescriptor("SST", 660, false),
-            new ZoneDescriptor("NST", 720, true), // Pacific/Auckland
+            new ZoneDescriptor("HST", -600, false), // Olson northamerica -10:00
+            new ZoneDescriptor("AST", -540, true),  // ICU Link - America/Anchorage
+            new ZoneDescriptor("PST", -480, true),  // ICU Link - America/Los_Angeles
+            new ZoneDescriptor("PNT", -420, false), // ICU Link - America/Phoenix
+            new ZoneDescriptor("MST", -420, false), // updated Aug 2003 aliu
+            new ZoneDescriptor("CST", -360, true),  // Olson northamerica -7:00
+            new ZoneDescriptor("IET", -300, true),  // ICU Link - America/Indiana/Indianapolis
+            new ZoneDescriptor("EST", -300, false), // Olson northamerica -5:00
+            new ZoneDescriptor("PRT", -240, false), // ICU Link - America/Puerto_Rico
+            new ZoneDescriptor("CNT", -210, true),  // ICU Link - America/St_Johns
+            new ZoneDescriptor("AGT", -180, false), // ICU Link - America/Argentina/Buenos_Aires
+            new ZoneDescriptor("BET", -180, true),  // ICU Link - America/Sao_Paulo
+            new ZoneDescriptor("GMT", 0, false),    // Olson etcetera Link - Etc/GMT
+            new ZoneDescriptor("UTC", 0, false),    // Olson etcetera 0
+            new ZoneDescriptor("ECT", 60, true),    // ICU Link - Europe/Paris
+            new ZoneDescriptor("MET", 60, true),    // Olson europe 1:00 C-Eur
+            new ZoneDescriptor("CAT", 120, false),  // ICU Link - Africa/Harare
+            new ZoneDescriptor("ART", 120, false),  // ICU Link - Africa/Cairo
+            new ZoneDescriptor("EET", 120, true),   // Olson europe 2:00 EU
+            new ZoneDescriptor("EAT", 180, false),  // ICU Link - Africa/Addis_Ababa
+            new ZoneDescriptor("NET", 240, false),  // ICU Link - Asia/Yerevan
+            new ZoneDescriptor("PLT", 300, false),  // ICU Link - Asia/Karachi
+            new ZoneDescriptor("IST", 330, false),  // ICU Link - Asia/Kolkata
+            new ZoneDescriptor("BST", 360, false),  // ICU Link - Asia/Dhaka
+            new ZoneDescriptor("VST", 420, false),  // ICU Link - Asia/Ho_Chi_Minh
+            new ZoneDescriptor("CTT", 480, false),  // ICU Link - Asia/Shanghai
+            new ZoneDescriptor("JST", 540, false),  // ICU Link - Asia/Tokyo
+            new ZoneDescriptor("ACT", 570, false),  // ICU Link - Australia/Darwin
+            new ZoneDescriptor("AET", 600, true),   // ICU Link - Australia/Sydney
+            new ZoneDescriptor("SST", 660, false),  // ICU Link - Pacific/Guadalcanal
+            new ZoneDescriptor("NST", 720, true),   // ICU Link - Pacific/Auckland
+            new ZoneDescriptor("MIT", 780, true),   // ICU Link - Pacific/Apia
 
-            new ZoneDescriptor("Etc/Unknown", 0, false),
+            new ZoneDescriptor("Etc/Unknown", 0, false),    // CLDR
+
             new ZoneDescriptor("SystemV/AST4ADT", -240, true),
             new ZoneDescriptor("SystemV/EST5EDT", -300, true),
             new ZoneDescriptor("SystemV/CST6CDT", -360, true),
@@ -215,7 +207,7 @@ public class TimeZoneTest extends TestFmwk
                 logln("ok " + referenceZone);
             }
             else {
-                if (isNonReferenceTzdataVersion
+                if (!isDevelopmentBuild
                         || isJDKTimeZone || isDateBeforeReferenceYear) {
                     logln("Warning: Expected " + referenceZone +
                             "; got " + currentZone);
@@ -1701,23 +1693,26 @@ public class TimeZoneTest extends TestFmwk
             // Southern Hemisphere, all data from meta:Australia_Western
             {"Australia/Perth",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+08:00"/*"AWST"*/},
             {"Australia/Perth",     "en",   Boolean.FALSE,  TZLONG,     "Australian Western Standard Time"},
-            {"Australia/Perth",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+09:00"/*"AWDT"*/},
+            // Note: Perth does not observe DST currently. When display name is missing,
+            // the localized GMT format with the current offset is used even daylight name was
+            // requested. See #9350.
+            {"Australia/Perth",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+08:00"/*"AWDT"*/},
             {"Australia/Perth",     "en",   Boolean.TRUE,   TZLONG,     "Australian Western Daylight Time"},
 
             {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZSHORT,    "GMT-03:00"/*"BRT"*/},
-            {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZLONG,     "Brasilia Time"},
+            {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZLONG,     "Brasilia Standard Time"},
             {"America/Sao_Paulo",   "en",   Boolean.TRUE,   TZSHORT,    "GMT-02:00"/*"BRST"*/},
             {"America/Sao_Paulo",   "en",   Boolean.TRUE,   TZLONG,     "Brasilia Summer Time"},
 
             // No Summer Time, but had it before 1983.
             {"Pacific/Honolulu",    "en",   Boolean.FALSE,  TZSHORT,    "HST"},
             {"Pacific/Honolulu",    "en",   Boolean.FALSE,  TZLONG,     "Hawaii-Aleutian Standard Time"},
-            {"Pacific/Honolulu",    "en",   Boolean.TRUE,   TZSHORT,    "HST"},
-            {"Pacific/Honolulu",    "en",   Boolean.TRUE,   TZLONG,     "Hawaii-Aleutian Standard Time"},
+            {"Pacific/Honolulu",    "en",   Boolean.TRUE,   TZSHORT,    "HDT"},
+            {"Pacific/Honolulu",    "en",   Boolean.TRUE,   TZLONG,     "Hawaii-Aleutian Daylight Time"},
 
             // Northern, has Summer, not commonly used.
             {"Europe/Helsinki",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+02:00"/*"EET"*/},
-            {"Europe/Helsinki",     "en",   Boolean.FALSE,  TZLONG,     "Eastern European Time"},
+            {"Europe/Helsinki",     "en",   Boolean.FALSE,  TZLONG,     "Eastern European Standard Time"},
             {"Europe/Helsinki",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+03:00"/*"EEST"*/},
             {"Europe/Helsinki",     "en",   Boolean.TRUE,   TZLONG,     "Eastern European Summer Time"},
 
@@ -1727,11 +1722,6 @@ public class TimeZoneTest extends TestFmwk
             {"Europe/London",       "en",   Boolean.TRUE,   TZLONG,     "British Summer Time"},
         };
 
-        boolean isReferenceYear = true;
-        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
-        if (cal.get(Calendar.YEAR) != REFERENCE_YEAR) {
-            isReferenceYear = false;
-        }
         boolean isICUTimeZone = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_ICU);
 
         boolean sawAnError = false;
@@ -1741,7 +1731,7 @@ public class TimeZoneTest extends TestFmwk
             String displayName = zone.getDisplayName(((Boolean)zoneDisplayTestData[testNum][2]).booleanValue(),
                     ((Integer)zoneDisplayTestData[testNum][3]).intValue());
             if (!displayName.equals(zoneDisplayTestData[testNum][4])) {
-                if (isReferenceYear
+                if (isDevelopmentBuild
                         && (isICUTimeZone || !((Boolean)zoneDisplayTestData[testNum][2]).booleanValue())) {
                     sawAnError = true;
                     errln("Incorrect time zone display name.  zone = "
