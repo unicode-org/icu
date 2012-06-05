@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2011, International Business Machines
+* Copyright (c) 2003-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -571,7 +571,7 @@ UBool OlsonTimeZone::useDaylightTime() const {
     // Return TRUE if DST is observed at any time during the current
     // year.
     for (int16_t i = 0; i < transitionCount(); ++i) {
-        double transition = transitionTime(i);
+        double transition = transitionTimeInSeconds(i);
         if (transition >= limit) {
             break;
         }
