@@ -199,7 +199,7 @@ public class TestCharsetDetector extends TestFmwk
         det.setText(bWindows);
         m = det.detect();
         
-        if (m.getName() != "windows-1252") {
+        if (!m.getName().equals("windows-1252")) {
             errln("Text with C1 bytes not correctly detected as windows-1252.");
             return;
         }
@@ -207,7 +207,7 @@ public class TestCharsetDetector extends TestFmwk
         det.setText(bISO);
         m = det.detect();
         
-        if (m.getName() != "ISO-8859-1") {
+        if (!m.getName().equals("ISO-8859-1")) {
             errln("Text without C1 bytes not correctly detected as ISO-8859-1.");
         }
     }
@@ -1059,7 +1059,7 @@ public class TestCharsetDetector extends TestFmwk
       //
 
 
-    public void TestBut9267() {
+    public void TestBug9267() {
         // Test a long input of Lam Alef characters for CharsetRecog_IBM420_ar.
         // Bug 9267 was an array out of bounds problem in the unshaping code for these.
         byte [] input = new byte [7700]; 
@@ -1070,7 +1070,42 @@ public class TestCharsetDetector extends TestFmwk
         CharsetDetector det = new CharsetDetector();
         det.setText(input);
         det.detect();
-    }    
+    }
+    
+    public void TestBug6954 () throws Exception {
+        // Ticket 6954 - trouble with the haveC1Bytes flag that is used to distinguish between
+        //  similar Windows and non-Windows SBCS encodings. State was kept in the shared
+        //  Charset Recognizer objects, and could be overwritten.
+        String sISO = "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
+        String sWindows = "This is another small sample of some English text. Just enough to be sure that it detects correctly."
+                        + "It also includes some \u201CC1\u201D bytes.";
+
+        byte[] bISO     = sISO.getBytes("ISO-8859-1");
+        byte[] bWindows = sWindows.getBytes("windows-1252");
+
+        // First do a plain vanilla detect of 1252 text
+
+        CharsetDetector csd1 = new CharsetDetector();
+        csd1.setText(bWindows);
+        CharsetMatch match1 = csd1.detect();
+        String name1 = match1.getName();
+        assertEquals("Initial detection of charset", "windows-1252", name1);
+
+        // Next, using a completely separate detector, detect some 8859-1 text
+
+        CharsetDetector csd2 = new CharsetDetector();
+        csd2.setText(bISO);
+        CharsetMatch match2 = csd2.detect();
+        String name2 = match2.getName();
+        assertEquals("Initial use of second detector", "ISO-8859-1", name2);
+        
+        // Recheck the 1252 results from the first detector, which should not have been
+        //  altered by the use of a different detector.
+
+        name1 = match1.getName();
+        assertEquals("Wrong charset name after running a second charset detector", "windows-1252", name1);
+
+    }
 
       
 }

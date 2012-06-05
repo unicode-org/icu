@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005 - 2011, International Business Machines Corporation and  *
+* Copyright (C) 2005 - 2012, International Business Machines Corporation and  *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -18,7 +18,7 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
     /* (non-Javadoc)
      * @see com.ibm.icu.text.CharsetRecognizer#match(com.ibm.icu.text.CharsetDetector)
      */
-    int match(CharsetDetector det) {
+    CharsetMatch match(CharsetDetector det) {
         boolean     hasBOM = false;
         int         numValid = 0;
         int         numInvalid = 0;
@@ -91,7 +91,7 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
             // Probably corruput utf-8 data.  Valid sequences aren't likely by chance.
             confidence = 25;
         }
-        return confidence;
+        return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
     }
 
 }
