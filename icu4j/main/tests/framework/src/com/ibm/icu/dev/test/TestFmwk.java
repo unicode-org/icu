@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1800,8 +1800,18 @@ public class TestFmwk extends AbstractTestLog {
                 "!=", true);
     }
 
+    protected void fail() {
+        fail("");
+    }
+    
     protected void fail(String message) {
-        errln(message);
+        if (message == null) {
+            message = "";            
+        }
+        if (!message.equals("")) {
+            message = ": " + message;
+        }
+        errln(sourceLocation() + message);
     }
 
     private boolean handleAssert(boolean result, String message,
