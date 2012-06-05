@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -22,7 +22,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
     /* (non-Javadoc)
      * @see com.ibm.icu.text.CharsetRecognizer#match(com.ibm.icu.text.CharsetDetector)
      */
-    abstract int match(CharsetDetector det);
+    abstract CharsetMatch match(CharsetDetector det);
     
     static class CharsetRecog_UTF_16_BE extends CharsetRecog_Unicode
     {
@@ -31,16 +31,17 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
             return "UTF-16BE";
         }
         
-        int match(CharsetDetector det)
+        CharsetMatch match(CharsetDetector det)
         {
             byte[] input = det.fRawInput;
             
             if (input.length>=2 && ((input[0] & 0xFF) == 0xFE && (input[1] & 0xFF) == 0xFF)) {
-                return 100;
+                int confidence = 100;
+                return new CharsetMatch(det, this, confidence);
             }
             
             // TODO: Do some statistics to check for unsigned UTF-16BE
-            return 0;
+            return null;
         }
     }
     
@@ -51,7 +52,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
             return "UTF-16LE";
         }
         
-        int match(CharsetDetector det)
+        CharsetMatch match(CharsetDetector det)
         {
             byte[] input = det.fRawInput;
             
@@ -60,13 +61,14 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
                // An LE BOM is present.
                if (input.length>=4 && input[2] == 0x00 && input[3] == 0x00) {
                    // It is probably UTF-32 LE, not UTF-16
-                   return 0;
+                   return null;
                }
-               return 100;
+               int confidence = 100;
+               return new CharsetMatch(det, this, confidence);
             }        
             
             // TODO: Do some statistics to check for unsigned UTF-16LE
-            return 0;
+            return null;
         }
     }
     
@@ -76,7 +78,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
         
         abstract String getName();
         
-        int match(CharsetDetector det)
+        CharsetMatch match(CharsetDetector det)
         {
             byte[] input   = det.fRawInput;
             int limit      = (det.fRawLength / 4) * 4;
@@ -86,7 +88,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
             int confidence = 0;
             
             if (limit==0) {
-                return 0;
+                return null;
             }
             if (getChar(input, 0) == 0x0000FEFF) {
                 hasBOM = true;
@@ -118,7 +120,7 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
                 confidence = 25;
             }
             
-            return confidence;
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
     

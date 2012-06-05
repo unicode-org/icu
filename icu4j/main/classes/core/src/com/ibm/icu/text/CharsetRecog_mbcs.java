@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (C) 2005-2011, International Business Machines Corporation and *
+ * Copyright (C) 2005-2012, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ****************************************************************************
  *
@@ -221,8 +221,9 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              return true;
          }
          
-         int match(CharsetDetector det) {
-             return match(det, commonChars);
+         CharsetMatch match(CharsetDetector det) {
+             int confidence = match(det, commonChars);
+             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
          }
          
          String getName() {
@@ -286,8 +287,9 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              return true;
          }
          
-         int match(CharsetDetector det) {
-             return match(det, commonChars);
+         CharsetMatch match(CharsetDetector det) {
+             int confidence = match(det, commonChars);
+             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
          }
          
          String getName() {
@@ -396,8 +398,9 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                  return "EUC-JP";
              }
              
-             int match(CharsetDetector det) {
-                 return match(det, commonChars);
+             CharsetMatch match(CharsetDetector det) {
+                 int confidence = match(det, commonChars);
+                 return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
              }
              
              public String getLanguage()
@@ -430,8 +433,9 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
                  return "EUC-KR";
              }
              
-             int match(CharsetDetector det) {
-                 return match(det, commonChars);
+             CharsetMatch match(CharsetDetector det) {
+                 int confidence = match(det, commonChars);
+                 return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
              }
              
              public String getLanguage()
@@ -527,8 +531,9 @@ abstract class CharsetRecog_mbcs extends CharsetRecognizer {
              return "GB18030";
          }
          
-         int match(CharsetDetector det) {
-             return match(det, commonChars);
+         CharsetMatch match(CharsetDetector det) {
+             int confidence = match(det, commonChars);
+             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
          }
          
          public String getLanguage()

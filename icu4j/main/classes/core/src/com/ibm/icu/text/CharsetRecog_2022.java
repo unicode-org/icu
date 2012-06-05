@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2005 - 2010, International Business Machines Corporation and  *
+* Copyright (C) 2005 - 2012, International Business Machines Corporation and  *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -115,8 +115,9 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
             return "ISO-2022-JP";
         }
         
-        int   match(CharsetDetector det) {
-            return match(det.fInputBytes, det.fInputLen, escapeSequences);
+        CharsetMatch   match(CharsetDetector det) {
+            int confidence = match(det.fInputBytes, det.fInputLen, escapeSequences);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
 
@@ -129,10 +130,10 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
             return "ISO-2022-KR";
         }
         
-        int   match(CharsetDetector det) {
-            return match(det.fInputBytes, det.fInputLen, escapeSequences);
+        CharsetMatch   match(CharsetDetector det) {
+            int confidence =  match(det.fInputBytes, det.fInputLen, escapeSequences);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
-        
     }
 
     static class CharsetRecog_2022CN extends CharsetRecog_2022 {
@@ -154,11 +155,11 @@ abstract class CharsetRecog_2022 extends CharsetRecognizer {
             return "ISO-2022-CN";
         }
         
-        
-        int   match(CharsetDetector det) {
-            return match(det.fInputBytes, det.fInputLen, escapeSequences);
+        CharsetMatch   match(CharsetDetector det) {
+            int confidence = match(det.fInputBytes, det.fInputLen, escapeSequences);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
     
-    }
+}
 

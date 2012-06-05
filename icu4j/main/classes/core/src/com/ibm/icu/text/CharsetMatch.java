@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005-2011, International Business Machines Corporation and    *
+* Copyright (C) 2005-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -201,7 +201,7 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
      * @stable ICU 3.4
      */
     public String getName() {
-        return fRecognizer.getName();
+        return fCharsetName;
     }
     
     /**
@@ -212,7 +212,7 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
      * @stable ICU 3.4
      */
     public String getLanguage() {
-        return fRecognizer.getLanguage();
+        return fLang;
     }
 
     /**
@@ -245,7 +245,7 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
         fRecognizer = rec;
         fConfidence = conf;
         
-        // The references to the original aplication input data must be copied out
+        // The references to the original application input data must be copied out
         //   of the charset recognizer to here, in case the application resets the
         //   recognizer before using this CharsetMatch.
         if (det.fInputStream == null) {
@@ -255,6 +255,29 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
             fRawLength   = det.fRawLength;
         }
         fInputStream = det.fInputStream;
+        fCharsetName = rec.getName();
+        fLang = rec.getLanguage();
+    }
+
+    /*
+     *  Constructor.  Implementation internal
+     */
+    CharsetMatch(CharsetDetector det, CharsetRecognizer rec, int conf, String csName, String lang) {
+        fRecognizer = rec;
+        fConfidence = conf;
+        
+        // The references to the original application input data must be copied out
+        //   of the charset recognizer to here, in case the application resets the
+        //   recognizer before using this CharsetMatch.
+        if (det.fInputStream == null) {
+            // We only want the existing input byte data if it came straight from the user,
+            //   not if is just the head of a stream.
+            fRawInput    = det.fRawInput;
+            fRawLength   = det.fRawLength;
+        }
+        fInputStream = det.fInputStream;
+        fCharsetName = csName;
+        fLang = lang;
     }
 
     
@@ -269,4 +292,9 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
 
     private InputStream         fInputStream = null;  // User's input stream, or null if the user
                                                       //   gave us a byte array.
+    
+    private String              fCharsetName;         // The name of the charset this CharsetMatch
+                                                      //   represents.  Filled in by the recognizer.
+    private String              fLang;                // The language, if one was determined by
+                                                      //   the recognizer during the detect operation.
 }

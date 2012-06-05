@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005-2010, International Business Machines Corporation and    *
+* Copyright (C) 2005-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -42,12 +42,9 @@ abstract class CharsetRecognizer {
      * 
      * @param det  The CharsetDetector, which contains the input text
      *             to be checked for being in this charset.
-     * @return     Two values packed into one int  (Damn java, anyhow)
-     *             <br/>
-     *             bits 0-7:  the match confidence, ranging from 0-100
-     *             <br/>
-     *             bits 8-15: The match reason, an enum-like value.
+     * @return     A CharsetMatch object containing details of match
+     *             with this charset, or null if there was no match.
      */
-    abstract int         match(CharsetDetector det);
+    abstract CharsetMatch  match(CharsetDetector det);
 
 }

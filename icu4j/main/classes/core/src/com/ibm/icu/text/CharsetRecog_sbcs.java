@@ -21,11 +21,6 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
      */
     abstract String getName();
 
-    /* (non-Javadoc)
-     * @see com.ibm.icu.text.CharsetRecognizer#match(com.ibm.icu.text.CharsetDetector)
-     */
-    abstract int match(CharsetDetector det);
-    
     static class NGramParser
     {
 //        private static final int N_GRAM_SIZE = 3;
@@ -160,9 +155,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return (int) (rawPercent * 300.0);
         }
     }
-    
-    protected boolean haveC1Bytes = false;
-    
+        
     int match(CharsetDetector det, int[] ngrams,  byte[] byteMap)
     {
         return match (det, ngrams, byteMap, (byte)0x20);
@@ -171,13 +164,19 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
     int match(CharsetDetector det, int[] ngrams,  byte[] byteMap, byte spaceChar)
     {
         NGramParser parser = new NGramParser(ngrams, byteMap);
-        
-        haveC1Bytes = det.fC1Bytes;
-        
         return parser.parse(det, spaceChar);
     }
     
-    abstract static class CharsetRecog_8859_1 extends CharsetRecog_sbcs
+    static class NGramsPlusLang {
+        int[] fNGrams;
+        String  fLang;
+        NGramsPlusLang(String la, int [] ng) {
+            fLang   = la;
+            fNGrams = ng;
+        }
+    }
+
+    static class CharsetRecog_8859_1 extends CharsetRecog_sbcs
     {
         protected static byte[] byteMap = {
             (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, 
@@ -213,214 +212,125 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             (byte) 0xF0, (byte) 0xF1, (byte) 0xF2, (byte) 0xF3, (byte) 0xF4, (byte) 0xF5, (byte) 0xF6, (byte) 0x20, 
             (byte) 0xF8, (byte) 0xF9, (byte) 0xFA, (byte) 0xFB, (byte) 0xFC, (byte) 0xFD, (byte) 0xFE, (byte) 0xFF, 
         };
+        
+       
+        private static NGramsPlusLang[] ngrams_8859_1 = new NGramsPlusLang[] {
+            new NGramsPlusLang(
+                    "da", 
+                    new int[] {
+                            0x206166, 0x206174, 0x206465, 0x20656E, 0x206572, 0x20666F, 0x206861, 0x206920, 0x206D65, 0x206F67, 0x2070E5, 0x207369, 0x207374, 0x207469, 0x207669, 0x616620, 
+                            0x616E20, 0x616E64, 0x617220, 0x617420, 0x646520, 0x64656E, 0x646572, 0x646574, 0x652073, 0x656420, 0x656465, 0x656E20, 0x656E64, 0x657220, 0x657265, 0x657320, 
+                            0x657420, 0x666F72, 0x676520, 0x67656E, 0x676572, 0x696765, 0x696C20, 0x696E67, 0x6B6520, 0x6B6B65, 0x6C6572, 0x6C6967, 0x6C6C65, 0x6D6564, 0x6E6465, 0x6E6520, 
+                            0x6E6720, 0x6E6765, 0x6F6720, 0x6F6D20, 0x6F7220, 0x70E520, 0x722064, 0x722065, 0x722073, 0x726520, 0x737465, 0x742073, 0x746520, 0x746572, 0x74696C, 0x766572, 
+                    }),
+            new NGramsPlusLang(
+                    "de",
+                    new int[] {
+                            0x20616E, 0x206175, 0x206265, 0x206461, 0x206465, 0x206469, 0x206569, 0x206765, 0x206861, 0x20696E, 0x206D69, 0x207363, 0x207365, 0x20756E, 0x207665, 0x20766F, 
+                            0x207765, 0x207A75, 0x626572, 0x636820, 0x636865, 0x636874, 0x646173, 0x64656E, 0x646572, 0x646965, 0x652064, 0x652073, 0x65696E, 0x656974, 0x656E20, 0x657220, 
+                            0x657320, 0x67656E, 0x68656E, 0x687420, 0x696368, 0x696520, 0x696E20, 0x696E65, 0x697420, 0x6C6963, 0x6C6C65, 0x6E2061, 0x6E2064, 0x6E2073, 0x6E6420, 0x6E6465, 
+                            0x6E6520, 0x6E6720, 0x6E6765, 0x6E7465, 0x722064, 0x726465, 0x726569, 0x736368, 0x737465, 0x742064, 0x746520, 0x74656E, 0x746572, 0x756E64, 0x756E67, 0x766572,                             
+                    }),
+            new NGramsPlusLang(
+                    "en",
+                    new int[] {
+                            0x206120, 0x20616E, 0x206265, 0x20636F, 0x20666F, 0x206861, 0x206865, 0x20696E, 0x206D61, 0x206F66, 0x207072, 0x207265, 0x207361, 0x207374, 0x207468, 0x20746F, 
+                            0x207768, 0x616964, 0x616C20, 0x616E20, 0x616E64, 0x617320, 0x617420, 0x617465, 0x617469, 0x642061, 0x642074, 0x652061, 0x652073, 0x652074, 0x656420, 0x656E74, 
+                            0x657220, 0x657320, 0x666F72, 0x686174, 0x686520, 0x686572, 0x696420, 0x696E20, 0x696E67, 0x696F6E, 0x697320, 0x6E2061, 0x6E2074, 0x6E6420, 0x6E6720, 0x6E7420, 
+                            0x6F6620, 0x6F6E20, 0x6F7220, 0x726520, 0x727320, 0x732061, 0x732074, 0x736169, 0x737420, 0x742074, 0x746572, 0x746861, 0x746865, 0x74696F, 0x746F20, 0x747320, 
+                    }),
 
+            new NGramsPlusLang(
+                    "es",
+                    new int[] {
+                            0x206120, 0x206361, 0x20636F, 0x206465, 0x20656C, 0x20656E, 0x206573, 0x20696E, 0x206C61, 0x206C6F, 0x207061, 0x20706F, 0x207072, 0x207175, 0x207265, 0x207365, 
+                            0x20756E, 0x207920, 0x612063, 0x612064, 0x612065, 0x61206C, 0x612070, 0x616369, 0x61646F, 0x616C20, 0x617220, 0x617320, 0x6369F3, 0x636F6E, 0x646520, 0x64656C, 
+                            0x646F20, 0x652064, 0x652065, 0x65206C, 0x656C20, 0x656E20, 0x656E74, 0x657320, 0x657374, 0x69656E, 0x69F36E, 0x6C6120, 0x6C6F73, 0x6E2065, 0x6E7465, 0x6F2064, 
+                            0x6F2065, 0x6F6E20, 0x6F7220, 0x6F7320, 0x706172, 0x717565, 0x726120, 0x726573, 0x732064, 0x732065, 0x732070, 0x736520, 0x746520, 0x746F20, 0x756520, 0xF36E20, 
+                    }),
+                                            
+            new NGramsPlusLang(
+                    "fr",
+                    new int[] {
+                            0x206175, 0x20636F, 0x206461, 0x206465, 0x206475, 0x20656E, 0x206574, 0x206C61, 0x206C65, 0x207061, 0x20706F, 0x207072, 0x207175, 0x207365, 0x20736F, 0x20756E, 
+                            0x20E020, 0x616E74, 0x617469, 0x636520, 0x636F6E, 0x646520, 0x646573, 0x647520, 0x652061, 0x652063, 0x652064, 0x652065, 0x65206C, 0x652070, 0x652073, 0x656E20, 
+                            0x656E74, 0x657220, 0x657320, 0x657420, 0x657572, 0x696F6E, 0x697320, 0x697420, 0x6C6120, 0x6C6520, 0x6C6573, 0x6D656E, 0x6E2064, 0x6E6520, 0x6E7320, 0x6E7420, 
+                            0x6F6E20, 0x6F6E74, 0x6F7572, 0x717565, 0x72206C, 0x726520, 0x732061, 0x732064, 0x732065, 0x73206C, 0x732070, 0x742064, 0x746520, 0x74696F, 0x756520, 0x757220,
+                    }),
+
+            new NGramsPlusLang(
+                    "it",
+                    new int[] {
+                            0x20616C, 0x206368, 0x20636F, 0x206465, 0x206469, 0x206520, 0x20696C, 0x20696E, 0x206C61, 0x207065, 0x207072, 0x20756E, 0x612063, 0x612064, 0x612070, 0x612073, 
+                            0x61746F, 0x636865, 0x636F6E, 0x64656C, 0x646920, 0x652061, 0x652063, 0x652064, 0x652069, 0x65206C, 0x652070, 0x652073, 0x656C20, 0x656C6C, 0x656E74, 0x657220, 
+                            0x686520, 0x692061, 0x692063, 0x692064, 0x692073, 0x696120, 0x696C20, 0x696E20, 0x696F6E, 0x6C6120, 0x6C6520, 0x6C6920, 0x6C6C61, 0x6E6520, 0x6E6920, 0x6E6F20, 
+                            0x6E7465, 0x6F2061, 0x6F2064, 0x6F2069, 0x6F2073, 0x6F6E20, 0x6F6E65, 0x706572, 0x726120, 0x726520, 0x736920, 0x746120, 0x746520, 0x746920, 0x746F20, 0x7A696F, 
+                    }),
+                    
+            new NGramsPlusLang(
+                    "nl",
+                    new int[] {
+                            0x20616C, 0x206265, 0x206461, 0x206465, 0x206469, 0x206565, 0x20656E, 0x206765, 0x206865, 0x20696E, 0x206D61, 0x206D65, 0x206F70, 0x207465, 0x207661, 0x207665, 
+                            0x20766F, 0x207765, 0x207A69, 0x61616E, 0x616172, 0x616E20, 0x616E64, 0x617220, 0x617420, 0x636874, 0x646520, 0x64656E, 0x646572, 0x652062, 0x652076, 0x65656E, 
+                            0x656572, 0x656E20, 0x657220, 0x657273, 0x657420, 0x67656E, 0x686574, 0x696520, 0x696E20, 0x696E67, 0x697320, 0x6E2062, 0x6E2064, 0x6E2065, 0x6E2068, 0x6E206F, 
+                            0x6E2076, 0x6E6465, 0x6E6720, 0x6F6E64, 0x6F6F72, 0x6F7020, 0x6F7220, 0x736368, 0x737465, 0x742064, 0x746520, 0x74656E, 0x746572, 0x76616E, 0x766572, 0x766F6F, 
+                    }),
+                    
+            new NGramsPlusLang(
+                    "no",
+                    new int[] {
+                            0x206174, 0x206176, 0x206465, 0x20656E, 0x206572, 0x20666F, 0x206861, 0x206920, 0x206D65, 0x206F67, 0x2070E5, 0x207365, 0x20736B, 0x20736F, 0x207374, 0x207469, 
+                            0x207669, 0x20E520, 0x616E64, 0x617220, 0x617420, 0x646520, 0x64656E, 0x646574, 0x652073, 0x656420, 0x656E20, 0x656E65, 0x657220, 0x657265, 0x657420, 0x657474, 
+                            0x666F72, 0x67656E, 0x696B6B, 0x696C20, 0x696E67, 0x6B6520, 0x6B6B65, 0x6C6520, 0x6C6C65, 0x6D6564, 0x6D656E, 0x6E2073, 0x6E6520, 0x6E6720, 0x6E6765, 0x6E6E65, 
+                            0x6F6720, 0x6F6D20, 0x6F7220, 0x70E520, 0x722073, 0x726520, 0x736F6D, 0x737465, 0x742073, 0x746520, 0x74656E, 0x746572, 0x74696C, 0x747420, 0x747465, 0x766572, 
+                    }),
+                    
+            new NGramsPlusLang(
+                    "pt",
+                    new int[] {
+                            0x206120, 0x20636F, 0x206461, 0x206465, 0x20646F, 0x206520, 0x206573, 0x206D61, 0x206E6F, 0x206F20, 0x207061, 0x20706F, 0x207072, 0x207175, 0x207265, 0x207365, 
+                            0x20756D, 0x612061, 0x612063, 0x612064, 0x612070, 0x616465, 0x61646F, 0x616C20, 0x617220, 0x617261, 0x617320, 0x636F6D, 0x636F6E, 0x646120, 0x646520, 0x646F20, 
+                            0x646F73, 0x652061, 0x652064, 0x656D20, 0x656E74, 0x657320, 0x657374, 0x696120, 0x696361, 0x6D656E, 0x6E7465, 0x6E746F, 0x6F2061, 0x6F2063, 0x6F2064, 0x6F2065, 
+                            0x6F2070, 0x6F7320, 0x706172, 0x717565, 0x726120, 0x726573, 0x732061, 0x732064, 0x732065, 0x732070, 0x737461, 0x746520, 0x746F20, 0x756520, 0xE36F20, 0xE7E36F, 
+
+                    }),
+                    
+            new NGramsPlusLang(
+                    "sv",
+                    new int[] {
+                            0x206174, 0x206176, 0x206465, 0x20656E, 0x2066F6, 0x206861, 0x206920, 0x20696E, 0x206B6F, 0x206D65, 0x206F63, 0x2070E5, 0x20736B, 0x20736F, 0x207374, 0x207469, 
+                            0x207661, 0x207669, 0x20E472, 0x616465, 0x616E20, 0x616E64, 0x617220, 0x617474, 0x636820, 0x646520, 0x64656E, 0x646572, 0x646574, 0x656420, 0x656E20, 0x657220, 
+                            0x657420, 0x66F672, 0x67656E, 0x696C6C, 0x696E67, 0x6B6120, 0x6C6C20, 0x6D6564, 0x6E2073, 0x6E6120, 0x6E6465, 0x6E6720, 0x6E6765, 0x6E696E, 0x6F6368, 0x6F6D20, 
+                            0x6F6E20, 0x70E520, 0x722061, 0x722073, 0x726120, 0x736B61, 0x736F6D, 0x742073, 0x746120, 0x746520, 0x746572, 0x74696C, 0x747420, 0x766172, 0xE47220, 0xF67220, 
+                    }),
+                    
+        };
+
+        
+        public CharsetMatch match(CharsetDetector det)
+        {
+            String name = det.fC1Bytes ? "windows-1252" : "ISO-8859-1";
+            int bestConfidenceSoFar = -1;
+            String lang = null;
+            for (NGramsPlusLang ngl: ngrams_8859_1) {
+                int confidence = match(det, ngl.fNGrams, byteMap);
+                if (confidence > bestConfidenceSoFar) {
+                    bestConfidenceSoFar = confidence;
+                    lang = ngl.fLang;
+                }
+            }
+            return bestConfidenceSoFar <= 0 ? null : new CharsetMatch(det, this, bestConfidenceSoFar, name, lang);
+        }
+
+            
         public String getName()
         {
-            return haveC1Bytes? "windows-1252" : "ISO-8859-1";
+            return "ISO-8859-1";
         }
     }
 
-    static class CharsetRecog_8859_1_da extends CharsetRecog_8859_1
-    {
-        private static int[] ngrams = {
-            0x206166, 0x206174, 0x206465, 0x20656E, 0x206572, 0x20666F, 0x206861, 0x206920, 0x206D65, 0x206F67, 0x2070E5, 0x207369, 0x207374, 0x207469, 0x207669, 0x616620, 
-            0x616E20, 0x616E64, 0x617220, 0x617420, 0x646520, 0x64656E, 0x646572, 0x646574, 0x652073, 0x656420, 0x656465, 0x656E20, 0x656E64, 0x657220, 0x657265, 0x657320, 
-            0x657420, 0x666F72, 0x676520, 0x67656E, 0x676572, 0x696765, 0x696C20, 0x696E67, 0x6B6520, 0x6B6B65, 0x6C6572, 0x6C6967, 0x6C6C65, 0x6D6564, 0x6E6465, 0x6E6520, 
-            0x6E6720, 0x6E6765, 0x6F6720, 0x6F6D20, 0x6F7220, 0x70E520, 0x722064, 0x722065, 0x722073, 0x726520, 0x737465, 0x742073, 0x746520, 0x746572, 0x74696C, 0x766572, 
-        };
-
-        public String getLanguage()
-        {
-            return "da";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-
-    static class CharsetRecog_8859_1_de extends CharsetRecog_8859_1
-    {
-        private static int[] ngrams = {
-            0x20616E, 0x206175, 0x206265, 0x206461, 0x206465, 0x206469, 0x206569, 0x206765, 0x206861, 0x20696E, 0x206D69, 0x207363, 0x207365, 0x20756E, 0x207665, 0x20766F, 
-            0x207765, 0x207A75, 0x626572, 0x636820, 0x636865, 0x636874, 0x646173, 0x64656E, 0x646572, 0x646965, 0x652064, 0x652073, 0x65696E, 0x656974, 0x656E20, 0x657220, 
-            0x657320, 0x67656E, 0x68656E, 0x687420, 0x696368, 0x696520, 0x696E20, 0x696E65, 0x697420, 0x6C6963, 0x6C6C65, 0x6E2061, 0x6E2064, 0x6E2073, 0x6E6420, 0x6E6465, 
-            0x6E6520, 0x6E6720, 0x6E6765, 0x6E7465, 0x722064, 0x726465, 0x726569, 0x736368, 0x737465, 0x742064, 0x746520, 0x74656E, 0x746572, 0x756E64, 0x756E67, 0x766572, 
-        };
-
-        public String getLanguage()
-        {
-            return "de";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
     
-    static class CharsetRecog_8859_1_en extends CharsetRecog_8859_1
-    {
-        private static int[] ngrams = {
-            0x206120, 0x20616E, 0x206265, 0x20636F, 0x20666F, 0x206861, 0x206865, 0x20696E, 0x206D61, 0x206F66, 0x207072, 0x207265, 0x207361, 0x207374, 0x207468, 0x20746F, 
-            0x207768, 0x616964, 0x616C20, 0x616E20, 0x616E64, 0x617320, 0x617420, 0x617465, 0x617469, 0x642061, 0x642074, 0x652061, 0x652073, 0x652074, 0x656420, 0x656E74, 
-            0x657220, 0x657320, 0x666F72, 0x686174, 0x686520, 0x686572, 0x696420, 0x696E20, 0x696E67, 0x696F6E, 0x697320, 0x6E2061, 0x6E2074, 0x6E6420, 0x6E6720, 0x6E7420, 
-            0x6F6620, 0x6F6E20, 0x6F7220, 0x726520, 0x727320, 0x732061, 0x732074, 0x736169, 0x737420, 0x742074, 0x746572, 0x746861, 0x746865, 0x74696F, 0x746F20, 0x747320, 
-        };
-            
-        public String getLanguage()
-        {
-            return "en";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    static class CharsetRecog_8859_1_es extends CharsetRecog_8859_1
-    {
-        private static int[] ngrams = {
-            0x206120, 0x206361, 0x20636F, 0x206465, 0x20656C, 0x20656E, 0x206573, 0x20696E, 0x206C61, 0x206C6F, 0x207061, 0x20706F, 0x207072, 0x207175, 0x207265, 0x207365, 
-            0x20756E, 0x207920, 0x612063, 0x612064, 0x612065, 0x61206C, 0x612070, 0x616369, 0x61646F, 0x616C20, 0x617220, 0x617320, 0x6369F3, 0x636F6E, 0x646520, 0x64656C, 
-            0x646F20, 0x652064, 0x652065, 0x65206C, 0x656C20, 0x656E20, 0x656E74, 0x657320, 0x657374, 0x69656E, 0x69F36E, 0x6C6120, 0x6C6F73, 0x6E2065, 0x6E7465, 0x6F2064, 
-            0x6F2065, 0x6F6E20, 0x6F7220, 0x6F7320, 0x706172, 0x717565, 0x726120, 0x726573, 0x732064, 0x732065, 0x732070, 0x736520, 0x746520, 0x746F20, 0x756520, 0xF36E20, 
-        };
-            
-        public String getLanguage()
-        {
-            return "es";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    static class CharsetRecog_8859_1_fr extends CharsetRecog_8859_1
-    {
-        private static int[] ngrams = {
-            0x206175, 0x20636F, 0x206461, 0x206465, 0x206475, 0x20656E, 0x206574, 0x206C61, 0x206C65, 0x207061, 0x20706F, 0x207072, 0x207175, 0x207365, 0x20736F, 0x20756E, 
-            0x20E020, 0x616E74, 0x617469, 0x636520, 0x636F6E, 0x646520, 0x646573, 0x647520, 0x652061, 0x652063, 0x652064, 0x652065, 0x65206C, 0x652070, 0x652073, 0x656E20, 
-            0x656E74, 0x657220, 0x657320, 0x657420, 0x657572, 0x696F6E, 0x697320, 0x697420, 0x6C6120, 0x6C6520, 0x6C6573, 0x6D656E, 0x6E2064, 0x6E6520, 0x6E7320, 0x6E7420, 
-            0x6F6E20, 0x6F6E74, 0x6F7572, 0x717565, 0x72206C, 0x726520, 0x732061, 0x732064, 0x732065, 0x73206C, 0x732070, 0x742064, 0x746520, 0x74696F, 0x756520, 0x757220, 
-        };
-
-        public String getLanguage()
-        {
-            return "fr";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    static class CharsetRecog_8859_1_it extends CharsetRecog_8859_1
-    {
-        private static int[] ngrams = {
-            0x20616C, 0x206368, 0x20636F, 0x206465, 0x206469, 0x206520, 0x20696C, 0x20696E, 0x206C61, 0x207065, 0x207072, 0x20756E, 0x612063, 0x612064, 0x612070, 0x612073, 
-            0x61746F, 0x636865, 0x636F6E, 0x64656C, 0x646920, 0x652061, 0x652063, 0x652064, 0x652069, 0x65206C, 0x652070, 0x652073, 0x656C20, 0x656C6C, 0x656E74, 0x657220, 
-            0x686520, 0x692061, 0x692063, 0x692064, 0x692073, 0x696120, 0x696C20, 0x696E20, 0x696F6E, 0x6C6120, 0x6C6520, 0x6C6920, 0x6C6C61, 0x6E6520, 0x6E6920, 0x6E6F20, 
-            0x6E7465, 0x6F2061, 0x6F2064, 0x6F2069, 0x6F2073, 0x6F6E20, 0x6F6E65, 0x706572, 0x726120, 0x726520, 0x736920, 0x746120, 0x746520, 0x746920, 0x746F20, 0x7A696F, 
-        };
-
-        public String getLanguage()
-        {
-            return "it";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    static class CharsetRecog_8859_1_nl extends CharsetRecog_8859_1
-    {
-        private static int[] ngrams = {
-            0x20616C, 0x206265, 0x206461, 0x206465, 0x206469, 0x206565, 0x20656E, 0x206765, 0x206865, 0x20696E, 0x206D61, 0x206D65, 0x206F70, 0x207465, 0x207661, 0x207665, 
-            0x20766F, 0x207765, 0x207A69, 0x61616E, 0x616172, 0x616E20, 0x616E64, 0x617220, 0x617420, 0x636874, 0x646520, 0x64656E, 0x646572, 0x652062, 0x652076, 0x65656E, 
-            0x656572, 0x656E20, 0x657220, 0x657273, 0x657420, 0x67656E, 0x686574, 0x696520, 0x696E20, 0x696E67, 0x697320, 0x6E2062, 0x6E2064, 0x6E2065, 0x6E2068, 0x6E206F, 
-            0x6E2076, 0x6E6465, 0x6E6720, 0x6F6E64, 0x6F6F72, 0x6F7020, 0x6F7220, 0x736368, 0x737465, 0x742064, 0x746520, 0x74656E, 0x746572, 0x76616E, 0x766572, 0x766F6F, 
-        };
-
-        public String getLanguage()
-        {
-            return "nl";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    static class CharsetRecog_8859_1_no extends CharsetRecog_8859_1
-    {
-        private static int[] ngrams = {
-            0x206174, 0x206176, 0x206465, 0x20656E, 0x206572, 0x20666F, 0x206861, 0x206920, 0x206D65, 0x206F67, 0x2070E5, 0x207365, 0x20736B, 0x20736F, 0x207374, 0x207469, 
-            0x207669, 0x20E520, 0x616E64, 0x617220, 0x617420, 0x646520, 0x64656E, 0x646574, 0x652073, 0x656420, 0x656E20, 0x656E65, 0x657220, 0x657265, 0x657420, 0x657474, 
-            0x666F72, 0x67656E, 0x696B6B, 0x696C20, 0x696E67, 0x6B6520, 0x6B6B65, 0x6C6520, 0x6C6C65, 0x6D6564, 0x6D656E, 0x6E2073, 0x6E6520, 0x6E6720, 0x6E6765, 0x6E6E65, 
-            0x6F6720, 0x6F6D20, 0x6F7220, 0x70E520, 0x722073, 0x726520, 0x736F6D, 0x737465, 0x742073, 0x746520, 0x74656E, 0x746572, 0x74696C, 0x747420, 0x747465, 0x766572, 
-        };
-
-        public String getLanguage()
-        {
-            return "no";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    static class CharsetRecog_8859_1_pt extends CharsetRecog_8859_1
-    {
-        private static int[] ngrams = {
-            0x206120, 0x20636F, 0x206461, 0x206465, 0x20646F, 0x206520, 0x206573, 0x206D61, 0x206E6F, 0x206F20, 0x207061, 0x20706F, 0x207072, 0x207175, 0x207265, 0x207365, 
-            0x20756D, 0x612061, 0x612063, 0x612064, 0x612070, 0x616465, 0x61646F, 0x616C20, 0x617220, 0x617261, 0x617320, 0x636F6D, 0x636F6E, 0x646120, 0x646520, 0x646F20, 
-            0x646F73, 0x652061, 0x652064, 0x656D20, 0x656E74, 0x657320, 0x657374, 0x696120, 0x696361, 0x6D656E, 0x6E7465, 0x6E746F, 0x6F2061, 0x6F2063, 0x6F2064, 0x6F2065, 
-            0x6F2070, 0x6F7320, 0x706172, 0x717565, 0x726120, 0x726573, 0x732061, 0x732064, 0x732065, 0x732070, 0x737461, 0x746520, 0x746F20, 0x756520, 0xE36F20, 0xE7E36F, 
-        };
-
-        public String getLanguage()
-        {
-            return "pt";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    static class CharsetRecog_8859_1_sv extends CharsetRecog_8859_1
-    {
-        private static int[] ngrams = {
-            0x206174, 0x206176, 0x206465, 0x20656E, 0x2066F6, 0x206861, 0x206920, 0x20696E, 0x206B6F, 0x206D65, 0x206F63, 0x2070E5, 0x20736B, 0x20736F, 0x207374, 0x207469, 
-            0x207661, 0x207669, 0x20E472, 0x616465, 0x616E20, 0x616E64, 0x617220, 0x617474, 0x636820, 0x646520, 0x64656E, 0x646572, 0x646574, 0x656420, 0x656E20, 0x657220, 
-            0x657420, 0x66F672, 0x67656E, 0x696C6C, 0x696E67, 0x6B6120, 0x6C6C20, 0x6D6564, 0x6E2073, 0x6E6120, 0x6E6465, 0x6E6720, 0x6E6765, 0x6E696E, 0x6F6368, 0x6F6D20, 
-            0x6F6E20, 0x70E520, 0x722061, 0x722073, 0x726120, 0x736B61, 0x736F6D, 0x742073, 0x746120, 0x746520, 0x746572, 0x74696C, 0x747420, 0x766172, 0xE47220, 0xF67220, 
-        };
-
-        public String getLanguage()
-        {
-            return "sv";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    abstract static class CharsetRecog_8859_2 extends CharsetRecog_sbcs
+    static class CharsetRecog_8859_2 extends CharsetRecog_sbcs
     {
         protected static byte[] byteMap = {
             (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, (byte) 0x20, 
@@ -457,91 +367,63 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             (byte) 0xF8, (byte) 0xF9, (byte) 0xFA, (byte) 0xFB, (byte) 0xFC, (byte) 0xFD, (byte) 0xFE, (byte) 0x20, 
         };
 
+        private static NGramsPlusLang[] ngrams_8859_2 = new NGramsPlusLang[] {
+            new NGramsPlusLang(
+                    "cs", 
+                    new int[] {
+                            0x206120, 0x206279, 0x20646F, 0x206A65, 0x206E61, 0x206E65, 0x206F20, 0x206F64, 0x20706F, 0x207072, 0x2070F8, 0x20726F, 0x207365, 0x20736F, 0x207374, 0x20746F, 
+                            0x207620, 0x207679, 0x207A61, 0x612070, 0x636520, 0x636820, 0x652070, 0x652073, 0x652076, 0x656D20, 0x656EED, 0x686F20, 0x686F64, 0x697374, 0x6A6520, 0x6B7465, 
+                            0x6C6520, 0x6C6920, 0x6E6120, 0x6EE920, 0x6EEC20, 0x6EED20, 0x6F2070, 0x6F646E, 0x6F6A69, 0x6F7374, 0x6F7520, 0x6F7661, 0x706F64, 0x706F6A, 0x70726F, 0x70F865, 
+                            0x736520, 0x736F75, 0x737461, 0x737469, 0x73746E, 0x746572, 0x746EED, 0x746F20, 0x752070, 0xBE6520, 0xE16EED, 0xE9686F, 0xED2070, 0xED2073, 0xED6D20, 0xF86564, 
+                    }),
+            new NGramsPlusLang(
+                    "hu", 
+                    new int[] {
+                            0x206120, 0x20617A, 0x206265, 0x206567, 0x20656C, 0x206665, 0x206861, 0x20686F, 0x206973, 0x206B65, 0x206B69, 0x206BF6, 0x206C65, 0x206D61, 0x206D65, 0x206D69, 
+                            0x206E65, 0x20737A, 0x207465, 0x20E973, 0x612061, 0x61206B, 0x61206D, 0x612073, 0x616B20, 0x616E20, 0x617A20, 0x62616E, 0x62656E, 0x656779, 0x656B20, 0x656C20, 
+                            0x656C65, 0x656D20, 0x656E20, 0x657265, 0x657420, 0x657465, 0x657474, 0x677920, 0x686F67, 0x696E74, 0x697320, 0x6B2061, 0x6BF67A, 0x6D6567, 0x6D696E, 0x6E2061, 
+                            0x6E616B, 0x6E656B, 0x6E656D, 0x6E7420, 0x6F6779, 0x732061, 0x737A65, 0x737A74, 0x737AE1, 0x73E967, 0x742061, 0x747420, 0x74E173, 0x7A6572, 0xE16E20, 0xE97320, 
+                    }),
+            new NGramsPlusLang(
+                    "pl", 
+                    new int[] {
+                            0x20637A, 0x20646F, 0x206920, 0x206A65, 0x206B6F, 0x206D61, 0x206D69, 0x206E61, 0x206E69, 0x206F64, 0x20706F, 0x207072, 0x207369, 0x207720, 0x207769, 0x207779, 
+                            0x207A20, 0x207A61, 0x612070, 0x612077, 0x616E69, 0x636820, 0x637A65, 0x637A79, 0x646F20, 0x647A69, 0x652070, 0x652073, 0x652077, 0x65207A, 0x65676F, 0x656A20, 
+                            0x656D20, 0x656E69, 0x676F20, 0x696120, 0x696520, 0x69656A, 0x6B6120, 0x6B6920, 0x6B6965, 0x6D6965, 0x6E6120, 0x6E6961, 0x6E6965, 0x6F2070, 0x6F7761, 0x6F7769, 
+                            0x706F6C, 0x707261, 0x70726F, 0x70727A, 0x727A65, 0x727A79, 0x7369EA, 0x736B69, 0x737461, 0x776965, 0x796368, 0x796D20, 0x7A6520, 0x7A6965, 0x7A7920, 0xF37720, 
+                    }),
+            new NGramsPlusLang(
+                    "ro", 
+                    new int[] {
+                            0x206120, 0x206163, 0x206361, 0x206365, 0x20636F, 0x206375, 0x206465, 0x206469, 0x206C61, 0x206D61, 0x207065, 0x207072, 0x207365, 0x2073E3, 0x20756E, 0x20BA69, 
+                            0x20EE6E, 0x612063, 0x612064, 0x617265, 0x617420, 0x617465, 0x617520, 0x636172, 0x636F6E, 0x637520, 0x63E320, 0x646520, 0x652061, 0x652063, 0x652064, 0x652070, 
+                            0x652073, 0x656120, 0x656920, 0x656C65, 0x656E74, 0x657374, 0x692061, 0x692063, 0x692064, 0x692070, 0x696520, 0x696920, 0x696E20, 0x6C6120, 0x6C6520, 0x6C6F72, 
+                            0x6C7569, 0x6E6520, 0x6E7472, 0x6F7220, 0x70656E, 0x726520, 0x726561, 0x727520, 0x73E320, 0x746520, 0x747275, 0x74E320, 0x756920, 0x756C20, 0xBA6920, 0xEE6E20, 
+                    })
+        };
+
+        public CharsetMatch match(CharsetDetector det)
+        {
+            String name = det.fC1Bytes ? "windows-1250" : "ISO-8859-2";
+            int bestConfidenceSoFar = -1;
+            String lang = null;
+            for (NGramsPlusLang ngl: ngrams_8859_2) {
+                int confidence = match(det, ngl.fNGrams, byteMap);
+                if (confidence > bestConfidenceSoFar) {
+                    bestConfidenceSoFar = confidence;
+                    lang = ngl.fLang;
+                }
+            }
+            return bestConfidenceSoFar <= 0 ? null : new CharsetMatch(det, this, bestConfidenceSoFar, name, lang);
+        }
+
         public String getName()
         {
-            return haveC1Bytes? "windows-1250" : "ISO-8859-2";
+            return "ISO-8859-2";
         }
+
     }
     
-    static class CharsetRecog_8859_2_cs extends CharsetRecog_8859_2
-    {
-        private static int[] ngrams = {
-            0x206120, 0x206279, 0x20646F, 0x206A65, 0x206E61, 0x206E65, 0x206F20, 0x206F64, 0x20706F, 0x207072, 0x2070F8, 0x20726F, 0x207365, 0x20736F, 0x207374, 0x20746F, 
-            0x207620, 0x207679, 0x207A61, 0x612070, 0x636520, 0x636820, 0x652070, 0x652073, 0x652076, 0x656D20, 0x656EED, 0x686F20, 0x686F64, 0x697374, 0x6A6520, 0x6B7465, 
-            0x6C6520, 0x6C6920, 0x6E6120, 0x6EE920, 0x6EEC20, 0x6EED20, 0x6F2070, 0x6F646E, 0x6F6A69, 0x6F7374, 0x6F7520, 0x6F7661, 0x706F64, 0x706F6A, 0x70726F, 0x70F865, 
-            0x736520, 0x736F75, 0x737461, 0x737469, 0x73746E, 0x746572, 0x746EED, 0x746F20, 0x752070, 0xBE6520, 0xE16EED, 0xE9686F, 0xED2070, 0xED2073, 0xED6D20, 0xF86564, 
-        };
-
-        public String getLanguage()
-        {
-            return "cs";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    static class CharsetRecog_8859_2_hu extends CharsetRecog_8859_2
-    {
-        private static int[] ngrams = {
-            0x206120, 0x20617A, 0x206265, 0x206567, 0x20656C, 0x206665, 0x206861, 0x20686F, 0x206973, 0x206B65, 0x206B69, 0x206BF6, 0x206C65, 0x206D61, 0x206D65, 0x206D69, 
-            0x206E65, 0x20737A, 0x207465, 0x20E973, 0x612061, 0x61206B, 0x61206D, 0x612073, 0x616B20, 0x616E20, 0x617A20, 0x62616E, 0x62656E, 0x656779, 0x656B20, 0x656C20, 
-            0x656C65, 0x656D20, 0x656E20, 0x657265, 0x657420, 0x657465, 0x657474, 0x677920, 0x686F67, 0x696E74, 0x697320, 0x6B2061, 0x6BF67A, 0x6D6567, 0x6D696E, 0x6E2061, 
-            0x6E616B, 0x6E656B, 0x6E656D, 0x6E7420, 0x6F6779, 0x732061, 0x737A65, 0x737A74, 0x737AE1, 0x73E967, 0x742061, 0x747420, 0x74E173, 0x7A6572, 0xE16E20, 0xE97320, 
-        };
-
-        public String getLanguage()
-        {
-            return "hu";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    static class CharsetRecog_8859_2_pl extends CharsetRecog_8859_2
-    {
-        private static int[] ngrams = {
-            0x20637A, 0x20646F, 0x206920, 0x206A65, 0x206B6F, 0x206D61, 0x206D69, 0x206E61, 0x206E69, 0x206F64, 0x20706F, 0x207072, 0x207369, 0x207720, 0x207769, 0x207779, 
-            0x207A20, 0x207A61, 0x612070, 0x612077, 0x616E69, 0x636820, 0x637A65, 0x637A79, 0x646F20, 0x647A69, 0x652070, 0x652073, 0x652077, 0x65207A, 0x65676F, 0x656A20, 
-            0x656D20, 0x656E69, 0x676F20, 0x696120, 0x696520, 0x69656A, 0x6B6120, 0x6B6920, 0x6B6965, 0x6D6965, 0x6E6120, 0x6E6961, 0x6E6965, 0x6F2070, 0x6F7761, 0x6F7769, 
-            0x706F6C, 0x707261, 0x70726F, 0x70727A, 0x727A65, 0x727A79, 0x7369EA, 0x736B69, 0x737461, 0x776965, 0x796368, 0x796D20, 0x7A6520, 0x7A6965, 0x7A7920, 0xF37720, 
-        };
-
-        public String getLanguage()
-        {
-            return "pl";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
-    
-    static class CharsetRecog_8859_2_ro extends CharsetRecog_8859_2
-    {
-        private static int[] ngrams = {
-            0x206120, 0x206163, 0x206361, 0x206365, 0x20636F, 0x206375, 0x206465, 0x206469, 0x206C61, 0x206D61, 0x207065, 0x207072, 0x207365, 0x2073E3, 0x20756E, 0x20BA69, 
-            0x20EE6E, 0x612063, 0x612064, 0x617265, 0x617420, 0x617465, 0x617520, 0x636172, 0x636F6E, 0x637520, 0x63E320, 0x646520, 0x652061, 0x652063, 0x652064, 0x652070, 
-            0x652073, 0x656120, 0x656920, 0x656C65, 0x656E74, 0x657374, 0x692061, 0x692063, 0x692064, 0x692070, 0x696520, 0x696920, 0x696E20, 0x6C6120, 0x6C6520, 0x6C6F72, 
-            0x6C7569, 0x6E6520, 0x6E7472, 0x6F7220, 0x70656E, 0x726520, 0x726561, 0x727520, 0x73E320, 0x746520, 0x747275, 0x74E320, 0x756920, 0x756C20, 0xBA6920, 0xEE6E20, 
-        };
-
-        public String getLanguage()
-        {
-            return "ro";
-        }
-        
-        public int match(CharsetDetector det)
-        {
-            return match(det, ngrams, byteMap);
-        }
-    }
     
     abstract static class CharsetRecog_8859_5 extends CharsetRecog_sbcs
     {
@@ -600,9 +482,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return "ru";
         }
         
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap);
+            int confidence = match(det, ngrams, byteMap);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
     
@@ -663,9 +546,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return "ar";
         }
         
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap);
+            int confidence = match(det, ngrams, byteMap);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
     
@@ -708,7 +592,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         public String getName()
         {
-            return haveC1Bytes? "windows-1253" : "ISO-8859-7";
+            return "ISO-8859-7";
         }
     }
     
@@ -726,9 +610,11 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return "el";
         }
         
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap);
+            String name = det.fC1Bytes ?  "windows-1253" : "ISO-8859-7";
+            int confidence = match(det, ngrams, byteMap);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence, name, "el");
         }
     }
     
@@ -771,7 +657,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         public String getName()
         {
-            return haveC1Bytes? "windows-1255" : "ISO-8859-8";
+            return "ISO-8859-8";
         }
     }
     
@@ -786,7 +672,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         public String getName()
         {
-            return haveC1Bytes? "windows-1255" : /*"ISO-8859-8-I"*/ "ISO-8859-8";
+            // return "ISO-8859-8-I";
+            // ICU4C returns ISO-8859-8-I
+            // Ticket #9364 to resolve the difference.
+            return "ISO-8859-8";
         }
 
         public String getLanguage()
@@ -794,9 +683,13 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return "he";
         }
         
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap);
+            // ICU4C returns ISO-8859-8-I
+            // Ticket #9364 to resolve the difference.
+            String name = det.fC1Bytes ? "windows-1255" : "ISO-8859-8";
+            int confidence = match(det, ngrams, byteMap);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence, name, "he");
         }
     }
     
@@ -814,9 +707,12 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return "he";
         }
         
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap);
+            String name = det.fC1Bytes ? "windows-1255" : "ISO-8859-8";
+            int confidence = match(det, ngrams, byteMap);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence, name, "he");
+
         }
     }
     
@@ -859,7 +755,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         public String getName()
         {
-            return haveC1Bytes? "windows-1254" : "ISO-8859-9";
+            return "ISO-8859-9";
         }
     }
     
@@ -877,9 +773,11 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return "tr";
         }
         
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap);
+            String name = det.fC1Bytes ? "windows-1254" : "ISO-8859-9";
+            int confidence = match(det, ngrams, byteMap);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence, name, "tr");
         }
     }
     
@@ -937,9 +835,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return "ru";
         }
         
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap);
+            int confidence = match(det, ngrams, byteMap);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
     
@@ -997,9 +896,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return "ar";
         }
         
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap);
+            int confidence = match(det, ngrams, byteMap);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
         
@@ -1057,9 +957,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return "ru";
         }
         
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap);
+            int confidence = match(det, ngrams, byteMap);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
     
@@ -1102,9 +1003,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             0x514540, 0x514671, 0x515155, 0x515540, 0x515740, 0x516840, 0x517140, 0x544041, 0x544045, 0x544140, 0x544540, 0x554041, 0x554042, 0x554045, 0x554054, 0x554056, 
             0x554069, 0x564540, 0x574045, 0x584540, 0x585140, 0x585155, 0x625440, 0x684045, 0x685155, 0x695440, 0x714041, 0x714042, 0x714045, 0x714054, 0x714056, 0x714069, 
         };
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap, (byte)0x40);
+            int confidence = match(det, ngrams, byteMap, (byte)0x40);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
     static class CharsetRecog_IBM424_he_ltr extends CharsetRecog_IBM424_he 
@@ -1120,9 +1022,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             0x555151, 0x555158, 0x555168, 0x564045, 0x564055, 0x564071, 0x564240, 0x564540, 0x624540, 0x694045, 0x694055, 0x694071, 0x694540, 0x714140, 0x714540, 0x714651
 
         };
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
-            return match(det, ngrams, byteMap, (byte)0x40);
+            int confidence = match(det, ngrams, byteMap, (byte)0x40);
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
     }
     
@@ -1248,12 +1151,12 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         {
             return "IBM420_rtl";
         }
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
             matchInit(det);
-            int result =  match(det, ngrams, byteMap, (byte)0x40);
+            int confidence =  match(det, ngrams, byteMap, (byte)0x40);
             matchFinish(det);
-            return result;
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
         
     }
@@ -1270,12 +1173,12 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         {
             return "IBM420_ltr";
         }
-        public int match(CharsetDetector det)
+        public CharsetMatch match(CharsetDetector det)
         {
             matchInit(det);
-            int result = match(det, ngrams, byteMap, (byte)0x40);
+            int confidence = match(det, ngrams, byteMap, (byte)0x40);
             matchFinish(det);
-            return result;
+            return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
         
     }
