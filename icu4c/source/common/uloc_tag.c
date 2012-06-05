@@ -310,20 +310,6 @@ _isPrivateuseVariantSubtag(const char* s, int32_t len) {
 }
 
 static UBool
-_isAttributeSubtag(const char* s, int32_t len) {
-    /*
-     * attribute     = 3*8alphanum
-     */
-    if (len < 0) {
-        len = (int32_t)uprv_strlen(s);
-    }
-    if (len >= 3 && len <= 8 && _isAlphaNumericString(s, len)) {
-        return TRUE;
-    }
-    return FALSE;
-}
-
-static UBool
 _isExtensionSingleton(const char* s, int32_t len) {
     /*
      * extension     = singleton 1*("-" (2*8alphanum))
