@@ -1,6 +1,6 @@
 ## -*-makefile-*-
 ## Aix-specific setup (for Visual Age 5+)
-## Copyright (c) 1999-2009, International Business Machines Corporation and
+## Copyright (c) 1999-2012, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Commands to generate dependency files
@@ -62,7 +62,7 @@ LD_RPATH_PRE=
 LDLIBRARYPATH_ENVVAR = LIBPATH
 
 # The following is for Makefile.inc's use.
-ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
+#ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
 
 # this one is for icudefs.mk's use
 ifeq ($(ENABLE_SHARED),YES)

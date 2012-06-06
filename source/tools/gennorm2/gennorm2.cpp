@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2010, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -150,7 +150,7 @@ main(int argc, char* argv[]) {
     }
 
     // prepare the filename beginning with the source dir
-    U_STD_NSQ string filename(options[SOURCEDIR].value);
+    std::string filename(options[SOURCEDIR].value);
     int32_t pathLength=filename.length();
     if( pathLength>0 &&
         filename[pathLength-1]!=U_FILE_SEP_CHAR &&

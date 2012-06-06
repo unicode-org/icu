@@ -1,5 +1,5 @@
 ## -*-makefile-*-
-## Copyright (c) 2003-2009 IBM, Ken Foskey, and others. All rights reserved.
+## Copyright (c) 2003-2012 IBM, Ken Foskey, and others. All rights reserved.
 ##
 ## Aix-specific setup (for gcc)
 ##
@@ -53,7 +53,7 @@ SHARED_OBJECT = $(notdir $(FINAL_SO_TARGET:.$(SO)=.$(SOBJ)))
 SHARED_OBJECT_NO_VERSION = $(basename $(SO_TARGET)).$(SOBJ)
 
 # The following is for Makefile.inc's use.
-ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
+#ICULIBSUFFIX_VERSION = $(LIB_VERSION_MAJOR)
 
 # this one is for icudefs.mk's use
 ifeq ($(ENABLE_SHARED),YES)
