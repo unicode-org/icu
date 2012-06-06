@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -1816,16 +1816,18 @@ public:
    * Replace the characters in this UnicodeString
    * with the characters from <code>srcText</code>.
    *
-   * This function works the same for all strings except for ones that
-   * are readonly aliases.
+   * This function works the same as the assignment operator
+   * for all strings except for ones that are readonly aliases.
+   *
    * Starting with ICU 2.4, the assignment operator and the copy constructor
    * allocate a new buffer and copy the buffer contents even for readonly aliases.
    * This function implements the old, more efficient but less safe behavior
    * of making this string also a readonly alias to the same buffer.
+   *
    * The fastCopyFrom function must be used only if it is known that the lifetime of
    * this UnicodeString is at least as long as the lifetime of the aliased buffer
    * including its contents, for example for strings from resource bundles
-   * or aliases to string contents.
+   * or aliases to string constants.
    *
    * @param src The text containing the characters to replace.
    * @return a reference to this
@@ -1931,7 +1933,10 @@ public:
    * When the string is modified, then the buffer is first copied into
    * newly allocated memory.
    * The aliased buffer is never modified.
-   * In an assignment to another UnicodeString, the text will be aliased again,
+   *
+   * In an assignment to another UnicodeString, when using the copy constructor
+   * or the assignment operator, the text will be copied.
+   * When using fastCopyFrom(), the text will be aliased again,
    * so that both strings then alias the same readonly-text.
    *
    * @param isTerminated specifies if <code>text</code> is <code>NUL</code>-terminated.
@@ -2907,7 +2912,10 @@ public:
    * When the string is modified, then the buffer is first copied into
    * newly allocated memory.
    * The aliased buffer is never modified.
-   * In an assignment to another UnicodeString, the text will be aliased again,
+   *
+   * In an assignment to another UnicodeString, when using the copy constructor
+   * or the assignment operator, the text will be copied.
+   * When using fastCopyFrom(), the text will be aliased again,
    * so that both strings then alias the same readonly-text.
    *
    * @param isTerminated specifies if <code>text</code> is <code>NUL</code>-terminated.
