@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2011, International Business Machines Corporation and
+ * Copyright (c) 1999-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -32,6 +32,7 @@
 #include "unicode/uloc.h"
 #include "unicode/locid.h"
 #include "putilimp.h"
+#include "intltest.h"
 
 #include <stdio.h>
 #include <string.h>

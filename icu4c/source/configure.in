@@ -465,20 +465,9 @@ fi
 AC_SUBST(U_HAVE_STD_STRING)
 AC_LANG_POP([C++])
 
+# Always build ICU with multi-threading support.
 threads=true
-
-# Enable/disable threads
-AC_ARG_ENABLE(threads,
-	[  --enable-threads        build ICU with thread safety [default=yes]],
-	[case "${enableval}" in
-		yes) threads=true ;;
-		no)  threads=false ;;
-		*) AC_MSG_ERROR(bad value ${enableval} for --enable-threads) ;;
-		esac], 
-	threads=true)
-ICU_CONDITIONAL(THREADS, test "$threads" = true)
-
-ICU_USE_THREADS=0
+ICU_USE_THREADS=1
 OLD_LIBS=${LIBS}
 
 if test $threads = true; then
@@ -544,8 +533,6 @@ if test $threads = true; then
     ;;
   esac
 fi
-
-AC_SUBST(ICU_USE_THREADS)
 
 AC_ARG_ENABLE(weak-threads,
 	[  --enable-weak-threads   weakly reference the threading library [default=no]],
@@ -1199,14 +1186,9 @@ fi
 # Now that we're done using CPPFLAGS etc. for tests, we can change it
 # for build.
 
-if test $ICU_USE_THREADS -ne 0
-then
-    CPPFLAGS="$CPPFLAGS \$(THREADSCPPFLAGS)"
-    CFLAGS="$CFLAGS \$(THREADSCFLAGS)"
-    CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
-else
-    CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DICU_USE_THREADS=0"
-fi
+CPPFLAGS="$CPPFLAGS \$(THREADSCPPFLAGS)"
+CFLAGS="$CFLAGS \$(THREADSCFLAGS)"
+CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
 
 AC_SUBST(LIBCFLAGS)
 AC_SUBST(LIBCXXFLAGS)
@@ -1288,12 +1270,6 @@ AC_OUTPUT
 echo 
 echo "ICU for C/C++ $VERSION is ready to be built."
 echo "=== Important Notes: ==="
-
-if test $ICU_USE_THREADS = 0; then
-  echo
-  echo  "** ICU was configured without mutex or thread support. Multithread-safe operation will not be tested. If this is unexpected, then run configure with --enable-threads=yes or check the messages [above] to see why thread support was not found." 1>&6
-  echo
-fi
 
 echo "Data Packaging: $datapackaging"
 echo " This means: $datapackaging_msg"
