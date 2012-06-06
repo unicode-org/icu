@@ -15,6 +15,23 @@
 #include "unicode/fmtable.h"
 #include "unicode/testlog.h"
 
+/**
+ * \def ICU_USE_THREADS
+ *
+ * Enables multi-threaded testing. Moved here from uconfig.h.
+ * Default: enabled
+ *
+ * This switched used to allow thread support (use of mutexes) to be compiled out of ICU.
+ */
+#ifdef ICU_USE_THREADS
+    /* Use the predefined value. */
+#elif defined(APP_NO_THREADS)
+    /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
+#   define ICU_USE_THREADS 0
+#else
+#   define ICU_USE_THREADS 1
+#endif
+
 U_NAMESPACE_USE
 
 #if U_PLATFORM == U_PF_OS390

@@ -82,25 +82,6 @@
 #endif
 
 /**
- * \def ICU_USE_THREADS
- *
- * Allows thread support (use of mutexes) to be compiled out of ICU.
- * Default: use threads.
- *
- * Even with thread support compiled out, applications may override the
- * (empty) mutex implementation with the u_setMutexFunctions() functions.
- * @internal
- */
-#ifdef ICU_USE_THREADS
-    /* Use the predefined value. */
-#elif defined(APP_NO_THREADS)
-    /* APP_NO_THREADS is an old symbol. We'll honour it if present. */
-#   define ICU_USE_THREADS 0
-#else
-#   define ICU_USE_THREADS 1
-#endif
-
-/**
  * \def U_DISABLE_RENAMING
  * Determines whether to disable renaming or not.
  * @internal
