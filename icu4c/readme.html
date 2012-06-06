@@ -24,7 +24,7 @@
     It is not recommended for production use.
     </p>
     -->
-    <p>Last updated: 2012-Mar-19<br />
+    <p>Last updated: 2012-Jun-05<br />
      Copyright &copy; 1997-2012 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -220,6 +220,15 @@
     For more news about
     this release, see the <a href="http://site.icu-project.org/download/">ICU
     download page</a>.</p>
+
+    <h3>Threading support cannot be removed</h3>
+    <p>ICU4C 50 drops the --enable-threads/--disable-threads option
+    and the uconfig.h <code>ICU_USE_THREADS</code> switch.
+    ICU4C 50 and higher is always built with multi-threading support.</p>
+
+    <p>If you need to disable multi-threading, then call
+    <code>u_setMutexFunctions()</code> and <code>u_setAtomicIncDecFunctions()</code>
+    with empty implementation functions.</p>
 
     <h3>C++ namespace support required</h3>
     <p>ICU4C 49 requires C++ namespace support.
@@ -939,9 +948,6 @@
 
     <ul>
       <li><tt>--disable-renaming</tt></li>
-
-      <li><tt>--disable-threading</tt> (This flag does disable threading in ICU,
-      but the resulting ICU library will still be linked with MSVC's multithread DLL)</li>
 
       <li><tt>--enable-tracing</tt></li>
 

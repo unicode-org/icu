@@ -643,8 +643,6 @@ U_HAVE_INTTYPES_H
 GENCCODE_ASSEMBLY
 HAVE_MMAP
 LIB_THREAD
-ICU_USE_THREADS
-THREADS_TRUE
 U_HAVE_STD_STRING
 ENABLE_RPATH
 U_ENABLE_DYLOAD
@@ -752,7 +750,6 @@ enable_renaming
 enable_tracing
 enable_dyload
 enable_rpath
-enable_threads
 enable_weak_threads
 enable_extras
 enable_icuio
@@ -1399,7 +1396,6 @@ Optional Features:
   --enable-tracing        enable function and data tracing default=no
   --disable-dyload        disable dynamic loading default=no
   --enable-rpath          use rpath when linking default is only if necessary
-  --enable-threads        build ICU with thread safety default=yes
   --enable-weak-threads   weakly reference the threading library default=no
   --enable-extras         build ICU extras default=yes
   --enable-icuio          build ICU's icuio library default=yes
@@ -5813,28 +5809,9 @@ ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
+# Always build ICU with multi-threading support.
 threads=true
-
-# Enable/disable threads
-# Check whether --enable-threads was given.
-if test "${enable_threads+set}" = set; then :
-  enableval=$enable_threads; case "${enableval}" in
-		yes) threads=true ;;
-		no)  threads=false ;;
-		*) as_fn_error $? "bad value ${enableval} for --enable-threads" "$LINENO" 5 ;;
-		esac
-else
-  threads=true
-fi
-
-
-if test "$threads" = true; then
-  THREADS_TRUE=
-else
-  THREADS_TRUE='#'
-fi
-
-ICU_USE_THREADS=0
+ICU_USE_THREADS=1
 OLD_LIBS=${LIBS}
 
 if test $threads = true; then
@@ -7493,14 +7470,9 @@ fi
 # Now that we're done using CPPFLAGS etc. for tests, we can change it
 # for build.
 
-if test $ICU_USE_THREADS -ne 0
-then
-    CPPFLAGS="$CPPFLAGS \$(THREADSCPPFLAGS)"
-    CFLAGS="$CFLAGS \$(THREADSCFLAGS)"
-    CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
-else
-    CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DICU_USE_THREADS=0"
-fi
+CPPFLAGS="$CPPFLAGS \$(THREADSCPPFLAGS)"
+CFLAGS="$CFLAGS \$(THREADSCFLAGS)"
+CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
 
 
 
@@ -8758,12 +8730,6 @@ fi
 echo
 echo "ICU for C/C++ $VERSION is ready to be built."
 echo "=== Important Notes: ==="
-
-if test $ICU_USE_THREADS = 0; then
-  echo
-  echo  "** ICU was configured without mutex or thread support. Multithread-safe operation will not be tested. If this is unexpected, then run configure with --enable-threads=yes or check the messages above to see why thread support was not found." 1>&6
-  echo
-fi
 
 echo "Data Packaging: $datapackaging"
 echo " This means: $datapackaging_msg"

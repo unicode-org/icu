@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -36,10 +36,10 @@
 #   undef POSIX
 #endif
 
-#if defined(POSIX) && (ICU_USE_THREADS==1)
+#if defined(POSIX)
 # include <pthread.h> /* must be first, so that we get the multithread versions of things. */
 
-#endif /* POSIX && (ICU_USE_THREADS==1) */
+#endif /* POSIX */
 
 #if U_PLATFORM_HAS_WIN32_API
 # define WIN32_LEAN_AND_MEAN
@@ -85,18 +85,7 @@
  */
 
 
-#if (ICU_USE_THREADS == 0)
-#define MUTEX_TYPE void *
-#define PLATFORM_MUTEX_INIT(m) 
-#define PLATFORM_MUTEX_LOCK(m) 
-#define PLATFORM_MUTEX_UNLOCK(m) 
-#define PLATFORM_MUTEX_DESTROY(m) 
-#define PLATFORM_MUTEX_INITIALIZER NULL
-#define SYNC_COMPARE_AND_SWAP(dest, oldval, newval) \
-            mutexed_compare_and_swap(dest, newval, oldval)
-
-
-#elif U_PLATFORM_HAS_WIN32_API
+#if U_PLATFORM_HAS_WIN32_API
 #define MUTEX_TYPE CRITICAL_SECTION
 #define PLATFORM_MUTEX_INIT(m) InitializeCriticalSection(m)
 #define PLATFORM_MUTEX_LOCK(m) EnterCriticalSection(m)
@@ -489,10 +478,7 @@ umtx_atomic_inc(int32_t *p)  {
     if (pIncFn) {
         retVal = (*pIncFn)(gIncDecContext, p);
     } else {
-        #if !ICU_USE_THREADS
-            /* ICU thread support compiled out. */
-            retVal = ++(*p);
-        #elif U_PLATFORM_HAS_WIN32_API
+        #if U_PLATFORM_HAS_WIN32_API
             retVal = InterlockedIncrement((LONG*)p);
         #elif defined(USE_MAC_OS_ATOMIC_INCREMENT)
             retVal = OSAtomicIncrement32Barrier(p);
@@ -516,10 +502,7 @@ umtx_atomic_dec(int32_t *p) {
     if (pDecFn) {
         retVal = (*pDecFn)(gIncDecContext, p);
     } else {
-        #if !ICU_USE_THREADS
-            /* ICU thread support compiled out. */
-            retVal = --(*p);
-        #elif U_PLATFORM_HAS_WIN32_API
+        #if U_PLATFORM_HAS_WIN32_API
             retVal = InterlockedDecrement((LONG*)p);
         #elif defined(USE_MAC_OS_ATOMIC_INCREMENT)
             retVal = OSAtomicDecrement32Barrier(p);

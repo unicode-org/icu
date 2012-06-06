@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -51,9 +51,7 @@
 #endif
 
 #ifndef UMTX_FULL_BARRIER
-# if !ICU_USE_THREADS
-#  define UMTX_FULL_BARRIER
-# elif U_HAVE_GCC_ATOMICS
+# if U_HAVE_GCC_ATOMICS
 #  define UMTX_FULL_BARRIER __sync_synchronize();
 # elif defined(_MSC_VER) && _MSC_VER >= 1500
     /* From MSVC intrin.h. Use _ReadWriteBarrier() only on MSVC 9 and higher. */
