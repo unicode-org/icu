@@ -7,12 +7,12 @@
 package com.ibm.icu.dev.test.util;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.util.ListFormat;
+import com.ibm.icu.util.ListFormatter;
 import com.ibm.icu.util.ULocale;
 
-public class ListFormatTest extends TestFmwk {
+public class ListFormatterTest extends TestFmwk {
     public static void main(String[] args) {
-        new ListFormatTest().run(args);
+        new ListFormatterTest().run(args);
     }
     
     String[] HardcodedTestData = {
@@ -25,7 +25,7 @@ public class ListFormatTest extends TestFmwk {
     };
 
     public void TestBasic() {
-        ListFormat formatter = new ListFormat("{0} and {1}", "{0}; {1}", "{0}, {1}", "{0}, and {1}");
+        ListFormatter formatter = new ListFormatter("{0} and {1}", "{0}; {1}", "{0}, {1}", "{0}, and {1}");
         checkData(formatter, HardcodedTestData);
     }
     
@@ -39,8 +39,8 @@ public class ListFormatTest extends TestFmwk {
     };
     
     public void TestEnglish() {
-        checkData(ListFormat.getInstance(ULocale.ENGLISH), EnglishTestData);
-        checkData(ListFormat.getInstance(ULocale.US), EnglishTestData);
+        checkData(ListFormatter.getInstance(ULocale.ENGLISH), EnglishTestData);
+        checkData(ListFormatter.getInstance(ULocale.US), EnglishTestData);
     }
     
     String[] JapaneseTestData = {
@@ -53,7 +53,7 @@ public class ListFormatTest extends TestFmwk {
     };
 
     public void TestJapanese() {
-        checkData(ListFormat.getInstance(ULocale.JAPANESE), JapaneseTestData);
+        checkData(ListFormatter.getInstance(ULocale.JAPANESE), JapaneseTestData);
     }
     
     String[] RootTestData = {
@@ -66,12 +66,12 @@ public class ListFormatTest extends TestFmwk {
     };
 
     public void TestSpecial() {
-        checkData(ListFormat.getInstance(ULocale.ROOT), RootTestData);
-        checkData(ListFormat.getInstance(new ULocale("xxx")), RootTestData);
+        checkData(ListFormatter.getInstance(ULocale.ROOT), RootTestData);
+        checkData(ListFormatter.getInstance(new ULocale("xxx")), RootTestData);
     }
 
 
-    public void checkData(ListFormat listFormat, String[] strings) {
+    public void checkData(ListFormatter listFormat, String[] strings) {
         assertEquals("0", strings[0], listFormat.format());
         assertEquals("1", strings[1], listFormat.format("A"));
         assertEquals("2", strings[2], listFormat.format("A", "B"));

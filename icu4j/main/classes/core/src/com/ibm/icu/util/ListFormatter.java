@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  * Copyright (C) 2012-2012, Google, International Business Machines Corporation and
- * others. All Rights Reserved.                                                *
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.util;
@@ -13,24 +13,23 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
-import com.ibm.icu.text.Transform;
-
 /**
  * Immutable class for formatting a list, using data from CLDR (or supplied
  * separately). The class is not subclassable.
  * 
  * @author markdavis
- * @internal
+ * @draft ICU 50
+ * @provisional This API might change or be removed in a future release.
  */
-final public class ListFormat implements Transform<Collection<String>, String> {
+final public class ListFormatter {
     private final String two;
     private final String start;
     private final String middle;
     private final String end;
 
     /**
-     * Create a ListFormatter from component strings, with definitions as in
-     * LDML.
+     * <b>Internal:</b> Create a ListFormatter from component strings,
+     * with definitions as in LDML.
      * 
      * @param two
      *            string for two items, containing {0} for the first, and {1}
@@ -46,7 +45,7 @@ final public class ListFormat implements Transform<Collection<String>, String> {
      *            first part of the list, and {1} for the last item.
      * @internal
      */
-    public ListFormat(String two, String start, String middle, String end) {
+    public ListFormatter(String two, String start, String middle, String end) {
         this.two = two;
         this.start = start;
         this.middle = middle;
@@ -59,13 +58,14 @@ final public class ListFormat implements Transform<Collection<String>, String> {
      * @param locale
      *            the locale in question.
      * @return ListFormatter
-     * @internal
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
-    public static ListFormat getInstance(ULocale locale) {
+    public static ListFormatter getInstance(ULocale locale) {
         // These can be cached, since they are read-only
         // poor-man's locale lookup, for hardcoded data
         while (true) {
-            ListFormat data = localeToData.get(locale);
+            ListFormatter data = localeToData.get(locale);
             if (data != null) {
                 return data;
             }
@@ -81,9 +81,10 @@ final public class ListFormat implements Transform<Collection<String>, String> {
      * @param locale
      *            the locale in question.
      * @return ListFormatter
-     * @internal
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
-    public static ListFormat getInstance(Locale locale) {
+    public static ListFormatter getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale));
     }
 
@@ -93,19 +94,21 @@ final public class ListFormat implements Transform<Collection<String>, String> {
      * @param items
      *            items to format. The toString() method is called on each.
      * @return items formatted into a string
-     * @internal
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public String format(Object... items) {
         return format(Arrays.asList(items));
     }
 
     /**
-     * Format a collation of objects. The toString() method is called on each.
+     * Format a collection of objects. The toString() method is called on each.
      * 
      * @param items
      *            items to format. The toString() method is called on each.
      * @return items formatted into a string
-     * @internal
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public String format(Collection<Object> items) {
         // TODO optimize this for the common case that the patterns are all of the
@@ -140,23 +143,16 @@ final public class ListFormat implements Transform<Collection<String>, String> {
             : pattern.substring(0, i1) + a + pattern.substring(i1+3, i0) + b + pattern.substring(i0+3);
     }
 
-    /**
-     * @internal
-     */
-    public String transform(Collection<String> source) {
-        return format(source);
-    }
-
     /** JUST FOR DEVELOPMENT */
     // For use with the hard-coded data
     // TODO Replace by use of RB
     // Verify in building that all of the patterns contain {0}, {1}.
 
-    static Map<ULocale, ListFormat> localeToData = new HashMap<ULocale, ListFormat>();
+    static Map<ULocale, ListFormatter> localeToData = new HashMap<ULocale, ListFormatter>();
     static void add(String locale, String...data) {
-        localeToData.put(new ULocale(locale), new ListFormat(data[0], data[1], data[2], data[3]));
+        localeToData.put(new ULocale(locale), new ListFormatter(data[0], data[1], data[2], data[3]));
     }
     static {
-        ListFormatData.load();
+        ListFormatterData.load();
     }
 }
