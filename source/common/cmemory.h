@@ -33,8 +33,31 @@
 #include <stdio.h>
 #endif
 
+#if U_DEBUG
+
+/*
+ * The C++ standard requires that the source pointer for memcpy() & memmove()
+ * is valid, not NULL, and not at the end of an allocated memory block.
+ * In debug mode, we read one byte from the source point to verify that it's
+ * a valid, readable pointer.
+ */
+
+U_CAPI void uprv_checkValidMemory(const void *p, size_t n);
+
+#define uprv_memcpy(dst, src, size) ( \
+    uprv_checkValidMemory(src, 1), \
+    U_STANDARD_CPP_NAMESPACE memcpy(dst, src, size))
+#define uprv_memmove(dst, src, size) ( \
+    uprv_checkValidMemory(src, 1), \
+    U_STANDARD_CPP_NAMESPACE memmove(dst, src, size))
+
+#else
+
 #define uprv_memcpy(dst, src, size) U_STANDARD_CPP_NAMESPACE memcpy(dst, src, size)
 #define uprv_memmove(dst, src, size) U_STANDARD_CPP_NAMESPACE memmove(dst, src, size)
+
+#endif  /* U_DEBUG */
+
 #define uprv_memset(buffer, mark, size) U_STANDARD_CPP_NAMESPACE memset(buffer, mark, size)
 #define uprv_memcmp(buffer1, buffer2, size) U_STANDARD_CPP_NAMESPACE memcmp(buffer1, buffer2,size)
 
