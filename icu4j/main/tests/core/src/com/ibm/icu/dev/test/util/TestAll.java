@@ -31,7 +31,7 @@ public class TestAll extends TestGroup {
             "Trie2Test",
             "LocaleDataTest",
             "GenderInfoTest",
-            "ListFormatTest",
+            "ListFormatterTest",
             "ULocaleTest",
             "LocaleAliasTest",
             "DebugUtilitiesTest",
