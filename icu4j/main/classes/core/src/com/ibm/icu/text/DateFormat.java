@@ -26,115 +26,112 @@ import com.ibm.icu.util.ULocale.Category;
 
 /**
  * {@icuenhanced java.text.DateFormat}.{@icu _usage_}
- *
- * <p>DateFormat is an abstract class for date/time formatting subclasses which
- * formats and parses dates or time in a language-independent manner.
- * The date/time formatting subclass, such as SimpleDateFormat, allows for
- * formatting (i.e., date -> text), parsing (text -> date), and
- * normalization.  The date is represented as a <code>Date</code> object or
- * as the milliseconds since January 1, 1970, 00:00:00 GMT.
- *
- * <p>DateFormat helps you to format and parse dates for any locale.
- * Your code can be completely independent of the locale conventions for
- * months, days of the week, or even the calendar format: lunar vs. solar. It
- * provides many class methods for obtaining default date/time
- * formatters based on the default for a given locale and a number of formatting
- * styles or arbitrary "skeletons". 
- *<ol><li>The formatting styles include FULL, LONG, MEDIUM, and SHORT. More
- * detail and examples of using these styles are provided in the method
- * descriptions.
- * <li>The formatting styles only cover a fraction of the necessary usage. You often need to have just
- * certain combinations of fields, like Month and Year, but have it to be formatted appropriate to a given locale.
- * This is done using the (misnamed) getPatternInstance() method, supplying a skeleton.
- * There are a number of constants that have common pre-defined skeletons, such as {@link #MINUTE_SECOND} 
- * for something like "13:45" or {@link #YEAR_ABBR_MONTH} for something like "Sept 2012".
+ * 
+ * <p>
+ * DateFormat is an abstract class for date/time formatting subclasses which formats and parses dates or time in a
+ * language-independent manner. The date/time formatting subclass, such as SimpleDateFormat, allows for formatting
+ * (i.e., date -> text), parsing (text -> date), and normalization. The date is represented as a <code>Date</code>
+ * object or as the milliseconds since January 1, 1970, 00:00:00 GMT.
+ * 
+ * <p>
+ * DateFormat helps you to format and parse dates for any locale. Your code can be completely independent of the locale
+ * conventions for months, days of the week, or even the calendar format: lunar vs. solar. It provides many class
+ * methods for obtaining default date/time formatters based on the default for a given locale and a number of formatting
+ * styles or arbitrary "skeletons".
+ * <ol>
+ * <li>The formatting styles include FULL, LONG, MEDIUM, and SHORT. More detail and examples of using these styles are
+ * provided in the method descriptions.
+ * <li>The formatting styles only cover a fraction of the necessary usage. You often need to have just certain
+ * combinations of fields, like Month and Year, but have it to be formatted appropriate to a given locale. This is done
+ * using the (misnamed) getPatternInstance() method, supplying a skeleton. There are a number of constants that have
+ * common pre-defined skeletons, such as {@link #MINUTE_SECOND} for something like "13:45" or {@link #YEAR_ABBR_MONTH}
+ * for something like "Sept 2012".
  * </ol>
- *
- * <p>To format a date for the current Locale, use one of the
- * static factory methods:
+ * 
+ * <p>
+ * To format a date for the current Locale, use one of the static factory methods:
+ * 
  * <pre>
- *  myString = DateFormat.getDateInstance().format(myDate);
- *  myString = DateFormat.getPatternInstance(DateFormat.YEAR_ABBR_MONTH).format(myDate);
+ * myString = DateFormat.getDateInstance().format(myDate);
+ * myString = DateFormat.getPatternInstance(DateFormat.YEAR_ABBR_MONTH).format(myDate);
  * </pre>
- * <p>If you are formatting multiple numbers, it is
- * more efficient to get the format and use it multiple times so that
- * the system doesn't have to fetch the information about the local
- * language and country conventions multiple times.
+ * <p>
+ * If you are formatting multiple numbers, it is more efficient to get the format and use it multiple times so that the
+ * system doesn't have to fetch the information about the local language and country conventions multiple times.
+ * 
  * <pre>
- *  DateFormat df = DateFormat.getDateInstance();
- *  for (int i = 0; i < a.length; ++i) {
- *    output.println(df.format(myDate[i]) + "; ");
- *  }
+ * DateFormat df = DateFormat.getDateInstance();
+ * for (int i = 0; i &lt; a.length; ++i) {
+ *     output.println(df.format(myDate[i]) + &quot;; &quot;);
+ * }
  * </pre>
- * <p>To format a number for a different Locale, specify it in the
- * call to getDateInstance().
+ * <p>
+ * To format a number for a different Locale, specify it in the call to getDateInstance().
+ * 
  * <pre>
- *  DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
+ * DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
  * </pre>
- * <p>You can use a DateFormat to parse also.
+ * <p>
+ * You can use a DateFormat to parse also.
+ * 
  * <pre>
- *  myDate = df.parse(myString);
+ * myDate = df.parse(myString);
  * </pre>
- * <p>There are many static factory methods available. 
- * Use getDateInstance to get the normal date format for that country.
- * Use getTimeInstance to get the time format for that country.
- * Use getDateTimeInstance to get a date and time format. You can pass in
- * different options to these factory methods to control the length of the
- * result; from SHORT to MEDIUM to LONG to FULL. The exact result depends
- * on the locale, but generally:
- * <ul><li>SHORT is completely numeric, such as 12.13.52 or 3:30pm
+ * <p>
+ * There are many static factory methods available. Use getDateInstance to get the normal date format for that country.
+ * Use getTimeInstance to get the time format for that country. Use getDateTimeInstance to get a date and time format.
+ * You can pass in different options to these factory methods to control the length of the result; from SHORT to MEDIUM
+ * to LONG to FULL. The exact result depends on the locale, but generally:
+ * <ul>
+ * <li>SHORT is completely numeric, such as 12.13.52 or 3:30pm
  * <li>MEDIUM is longer, such as Jan 12, 1952
  * <li>LONG is longer, such as January 12, 1952 or 3:30:32pm
- * <li>FULL is pretty completely specified, such as
- * Tuesday, April 12, 1952 AD or 3:30:42pm PST.
+ * <li>FULL is pretty completely specified, such as Tuesday, April 12, 1952 AD or 3:30:42pm PST.
  * </ul>
  * 
- * <p>Use getPatternInstance to format with a skeleton. 
- * Typically this is with a predefined skeleton, like {@link #YEAR_ABBR_MONTH} for something like "Sept 2012".
- * If you don't want to use one of the predefined skeletons, you can supply your own. The skeletons are 
- * like the patterns in SimpleDateFormat, except they:
- * <ol><li>only keep the field pattern letter and ignores all other parts
- *    in a pattern, such as space, punctuations, and string literals.
+ * <p>
+ * Use getPatternInstance to format with a skeleton. Typically this is with a predefined skeleton, like
+ * {@link #YEAR_ABBR_MONTH} for something like "Sept 2012". If you don't want to use one of the predefined skeletons,
+ * you can supply your own. The skeletons are like the patterns in SimpleDateFormat, except they:
+ * <ol>
+ * <li>only keep the field pattern letter and  all other parts in a pattern, such as space, punctuation, and
+ * string literals.
  * <li>are independent of the order of fields.
- * <li>ignore certain differences in the field's pattern letter length:<ol>
- * <li>For those non-digit calendar fields, the pattern letter length is
- *    important, such as MMM, MMMM, and MMMMM; E and EEEE,
- *    and the field's pattern letter length is honored.
- * <li>For the digit calendar fields,  such as M or MM, d or dd, yy or yyyy,
- *    the field pattern length is ignored and the best match, which is
- *    defined in date time patterns, will be returned without honor
- *    the field pattern letter length in skeleton.
- * </ol></ol>
- *
- * <p>You can also set the time zone on the format if you wish.
- * If you want even more control over the format or parsing,
- * (or want to give your users more control),
- * you can try casting the DateFormat you get from the factory methods
- * to a SimpleDateFormat. This will work for the majority
- * of countries; just remember to put it in a try block in case you
+ * <li>ignore certain differences in the field's pattern letter length:
+ * <ol>
+ * <li>For those non-digit calendar fields, the pattern letter length is important, such as MMM, MMMM, and MMMMM; E and
+ * EEEE, and the field's pattern letter length is honored.
+ * <li>For the digit calendar fields, such as M or MM, d or dd, yy or yyyy, the field pattern length is ignored and the
+ * best match, which is defined in date time patterns, will be returned without honor the field pattern letter length in
+ * skeleton.
+ * </ol>
+ * </ol>
+ * 
+ * <p>
+ * You can also set the time zone on the format if you wish. If you want even more control over the format or parsing,
+ * (or want to give your users more control), you can try casting the DateFormat you get from the factory methods to a
+ * SimpleDateFormat. This will work for the majority of countries; just remember to put it in a try block in case you
  * encounter an unusual one.
- *
- * <p>You can also use forms of the parse and format methods with
- * ParsePosition and FieldPosition to
- * allow you to
- * <ul><li>progressively parse through pieces of a string.
- * <li>align any particular field, or find out where it is for selection
- * on the screen.
+ * 
+ * <p>
+ * You can also use forms of the parse and format methods with ParsePosition and FieldPosition to allow you to
+ * <ul>
+ * <li>progressively parse through pieces of a string.
+ * <li>align any particular field, or find out where it is for selection on the screen.
  * </ul>
- *
+ * 
  * <h4>Synchronization</h4>
- *
- * Date formats are not synchronized. It is recommended to create separate
- * format instances for each thread. If multiple threads access a format
- * concurrently, it must be synchronized externally.
- *
- * @see          UFormat
- * @see          NumberFormat
- * @see          SimpleDateFormat
- * @see          com.ibm.icu.util.Calendar
- * @see          com.ibm.icu.util.GregorianCalendar
- * @see          com.ibm.icu.util.TimeZone
- * @author       Mark Davis, Chen-Lieh Huang, Alan Liu
+ * 
+ * Date formats are not synchronized. It is recommended to create separate format instances for each thread. If multiple
+ * threads access a format concurrently, it must be synchronized externally.
+ * 
+ * @see UFormat
+ * @see NumberFormat
+ * @see SimpleDateFormat
+ * @see com.ibm.icu.util.Calendar
+ * @see com.ibm.icu.util.GregorianCalendar
+ * @see com.ibm.icu.util.TimeZone
+ * @author Mark Davis, Chen-Lieh Huang, Alan Liu
  * @stable ICU 2.0
  */
 public abstract class DateFormat extends UFormat {
