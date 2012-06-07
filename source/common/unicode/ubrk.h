@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and others.
+* Copyright (C) 1996-2012, International Business Machines Corporation and others.
 * All Rights Reserved.
 ******************************************************************************
 */
@@ -342,7 +342,7 @@ U_STABLE int32_t U_EXPORT2
 ubrk_current(const UBreakIterator *bi);
 
 /**
- * Determine the text boundary following the current text boundary.
+ * Advance the iterator to the boundary following the current boundary.
  *
  * @param bi The break iterator to use.
  * @return The character index of the next text boundary, or UBRK_DONE
@@ -354,7 +354,7 @@ U_STABLE int32_t U_EXPORT2
 ubrk_next(UBreakIterator *bi);
 
 /**
- * Determine the text boundary preceding the current text boundary.
+ * Set the iterator position to the boundary preceding the current boundary.
  *
  * @param bi The break iterator to use.
  * @return The character index of the preceding text boundary, or UBRK_DONE
@@ -366,7 +366,7 @@ U_STABLE int32_t U_EXPORT2
 ubrk_previous(UBreakIterator *bi);
 
 /**
- * Determine the index of the first character in the text being scanned.
+ * Set the iterator position to the index of the first character in the text being scanned.
  * This is not always the same as index 0 of the text.
  * @param bi The break iterator to use.
  * @return The character index of the first character in the text being scanned.
@@ -377,8 +377,7 @@ U_STABLE int32_t U_EXPORT2
 ubrk_first(UBreakIterator *bi);
 
 /**
- * Determine the index immediately <EM>beyond</EM> the last character in the text being
- * scanned.
+ * Set the iterator position to the index immediately <EM>beyond</EM> the last character in the text being scanned.
  * This is not the same as the last character.
  * @param bi The break iterator to use.
  * @return The character offset immediately <EM>beyond</EM> the last character in the
@@ -390,8 +389,8 @@ U_STABLE int32_t U_EXPORT2
 ubrk_last(UBreakIterator *bi);
 
 /**
- * Determine the text boundary preceding the specified offset.
- * The value returned is always smaller than offset, or UBRK_DONE.
+ * Set the iterator position to the first boundary preceding the specified offset.
+ * The new position is always smaller than offset, or UBRK_DONE.
  * @param bi The break iterator to use.
  * @param offset The offset to begin scanning.
  * @return The text boundary preceding offset, or UBRK_DONE.
@@ -403,7 +402,7 @@ ubrk_preceding(UBreakIterator *bi,
            int32_t offset);
 
 /**
- * Determine the text boundary following the specified offset.
+ * Advance the iterator to the first boundary following the specified offset.
  * The value returned is always greater than offset, or UBRK_DONE.
  * @param bi The break iterator to use.
  * @param offset The offset to begin scanning.
