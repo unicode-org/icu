@@ -134,21 +134,6 @@ public class TimeZoneTest extends TestFmwk
             logln("Warning: Using JDK TimeZone.  Some test cases may not return expected results.");
         }
 
-        // Note: useDaylightTime returns true if DST is observed
-        // in the time zone in the current calendar year.  The test
-        // data is valid for the date after the reference year below.
-        // If system clock is before the year, some test cases may
-        // fail.
-        GregorianCalendar cal = new GregorianCalendar(TimeZone.getTimeZone("Etc/GMT"));
-        // day 2 in this year in GMT
-        cal.set(Calendar.MONTH, Calendar.JANUARY);
-        cal.set(Calendar.DAY_OF_MONTH, 2);
-
-        boolean isDateBeforeReferenceYear = System.currentTimeMillis() < cal.getTimeInMillis();
-        if (isDateBeforeReferenceYear) {
-            logln("Warning: Past time is set to the system clock.  Some test cases may not return expected results.");
-        }
-
         ZoneDescriptor[] REFERENCE_LIST = {
             new ZoneDescriptor("HST", -600, false), // Olson northamerica -10:00
             new ZoneDescriptor("AST", -540, true),  // ICU Link - America/Anchorage
@@ -207,8 +192,7 @@ public class TimeZoneTest extends TestFmwk
                 logln("ok " + referenceZone);
             }
             else {
-                if (!isDevelopmentBuild
-                        || isJDKTimeZone || isDateBeforeReferenceYear) {
+                if (!isDevelopmentBuild || isJDKTimeZone) {
                     logln("Warning: Expected " + referenceZone +
                             "; got " + currentZone);
                 } else {
