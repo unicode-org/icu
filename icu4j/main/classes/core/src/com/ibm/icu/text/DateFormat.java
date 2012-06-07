@@ -34,20 +34,27 @@ import com.ibm.icu.util.ULocale.Category;
  * normalization.  The date is represented as a <code>Date</code> object or
  * as the milliseconds since January 1, 1970, 00:00:00 GMT.
  *
- * <p>DateFormat provides many class methods for obtaining default date/time
- * formatters based on the default or a given locale and a number of formatting
- * styles. The formatting styles include FULL, LONG, MEDIUM, and SHORT. More
- * detail and examples of using these styles are provided in the method
- * descriptions.
- *
  * <p>DateFormat helps you to format and parse dates for any locale.
  * Your code can be completely independent of the locale conventions for
- * months, days of the week, or even the calendar format: lunar vs. solar.
+ * months, days of the week, or even the calendar format: lunar vs. solar. It
+ * provides many class methods for obtaining default date/time
+ * formatters based on the default for a given locale and a number of formatting
+ * styles or arbitrary "skeletons". 
+ *<ol><li>The formatting styles include FULL, LONG, MEDIUM, and SHORT. More
+ * detail and examples of using these styles are provided in the method
+ * descriptions.
+ * <li>The formatting styles only cover a fraction of the necessary usage. You often need to have just
+ * certain combinations of fields, like Month and Year, but have it to be formatted appropriate to a given locale.
+ * This is done using the (misnamed) getPatternInstance() method, supplying a skeleton.
+ * There are a number of constants that have common pre-defined skeletons, such as {@link #MINUTE_SECOND} 
+ * for something like "13:45" or {@link #YEAR_ABBR_MONTH} for something like "Sept 2012".
+ * </ol>
  *
  * <p>To format a date for the current Locale, use one of the
  * static factory methods:
  * <pre>
  *  myString = DateFormat.getDateInstance().format(myDate);
+ *  myString = DateFormat.getPatternInstance(DateFormat.YEAR_ABBR_MONTH).format(myDate);
  * </pre>
  * <p>If you are formatting multiple numbers, it is
  * more efficient to get the format and use it multiple times so that
@@ -68,8 +75,8 @@ import com.ibm.icu.util.ULocale.Category;
  * <pre>
  *  myDate = df.parse(myString);
  * </pre>
- * <p>Use getDateInstance to get the normal date format for that country.
- * There are other static factory methods available.
+ * <p>There are many static factory methods available. 
+ * Use getDateInstance to get the normal date format for that country.
  * Use getTimeInstance to get the time format for that country.
  * Use getDateTimeInstance to get a date and time format. You can pass in
  * different options to these factory methods to control the length of the
@@ -81,6 +88,23 @@ import com.ibm.icu.util.ULocale.Category;
  * <li>FULL is pretty completely specified, such as
  * Tuesday, April 12, 1952 AD or 3:30:42pm PST.
  * </ul>
+ * 
+ * <p>Use getPatternInstance to format with a skeleton. 
+ * Typically this is with a predefined skeleton, like {@link #YEAR_ABBR_MONTH} for something like "Sept 2012".
+ * If you don't want to use one of the predefined skeletons, you can supply your own. The skeletons are 
+ * like the patterns in SimpleDateFormat, except they:
+ * <ol><li>only keep the field pattern letter and ignores all other parts
+ *    in a pattern, such as space, punctuations, and string literals.
+ * <li>are independent of the order of fields.
+ * <li>ignore certain differences in the field's pattern letter length:<ol>
+ * <li>For those non-digit calendar fields, the pattern letter length is
+ *    important, such as MMM, MMMM, and MMMMM; E and EEEE,
+ *    and the field's pattern letter length is honored.
+ * <li>For the digit calendar fields,  such as M or MM, d or dd, yy or yyyy,
+ *    the field pattern length is ignored and the best match, which is
+ *    defined in date time patterns, will be returned without honor
+ *    the field pattern letter length in skeleton.
+ * </ol></ol>
  *
  * <p>You can also set the time zone on the format if you wish.
  * If you want even more control over the format or parsing,
@@ -724,74 +748,51 @@ public abstract class DateFormat extends UFormat {
      */
     public static final int RELATIVE_DEFAULT = RELATIVE | DEFAULT;
 
-    /* Below are pre-defined skeletons
-     *
-     * <P>
-     * A skeleton
-     * <ul>
-     * <li>
-     * 1. only keeps the field pattern letter and ignores all other parts
-     *    in a pattern, such as space, punctuations, and string literals.
-     * <li>
-     * 2. hides the order of fields.
-     * <li>
-     * 3. might hide a field's pattern letter length.
-     *
-     *    For those non-digit calendar fields, the pattern letter length is
-     *    important, such as MMM, MMMM, and MMMMM; E and EEEE,
-     *    and the field's pattern letter length is honored.
-     *
-     *    For the digit calendar fields,  such as M or MM, d or dd, yy or yyyy,
-     *    the field pattern length is ignored and the best match, which is
-     *    defined in date time patterns, will be returned without honor
-     *    the field pattern letter length in skeleton.
-     * </ul>
-     */
     /**
-     * {@icu} Constant for date pattern with minute and second.
+     * {@icu} Constant for date skeleton with minute and second.
      * @stable ICU 4.0
      */
     public static final String MINUTE_SECOND = "ms";
 
     /**
-     * {@icu} Constant for date pattern with hour and minute in 24-hour presentation.
+     * {@icu} Constant for date skeleton with hour and minute in 24-hour presentation.
      * @stable ICU 4.0
      */
     public static final String HOUR24_MINUTE = "Hm";
 
     /**
-     * {@icu} Constant for date pattern with hour, minute, and second in
+     * {@icu} Constant for date skeleton with hour, minute, and second in
      * 24-hour presentation.
      * @stable ICU 4.0
      */
     public static final String HOUR24_MINUTE_SECOND = "Hms";
 
     /**
-     * {@icu} Constant for date pattern with hour, minute, and second.
+     * {@icu} Constant for date skeleton with hour, minute, and second.
      * @stable ICU 4.0
      */
     public static final String HOUR_MINUTE_SECOND = "hms";
 
     /**
-     * {@icu} Constant for date pattern with standalone month.
+     * {@icu} Constant for date skeleton with standalone month.
      * @stable ICU 4.0
      */
     public static final String STANDALONE_MONTH = "LLLL";
 
     /**
-     * {@icu} Constant for date pattern with standalone abbreviated month.
+     * {@icu} Constant for date skeleton with standalone abbreviated month.
      * @stable ICU 4.0
      */
     public static final String ABBR_STANDALONE_MONTH = "LLL";
 
     /**
-     * {@icu} Constant for date pattern with year and quarter.
+     * {@icu} Constant for date skeleton with year and quarter.
      * @stable ICU 4.0
      */
     public static final String YEAR_QUARTER = "yQQQ";
 
     /**
-     * {@icu} Constant for date pattern with year and abbreviated quarter.
+     * {@icu} Constant for date skeleton with year and abbreviated quarter.
      * @stable ICU 4.0
      */
     public static final String YEAR_ABBR_QUARTER = "yQ";
@@ -801,158 +802,158 @@ public abstract class DateFormat extends UFormat {
      * Users are encouraged to use them in date interval format factory methods.
      */
     /**
-     * {@icu} Constant for date pattern with hour and minute.
+     * {@icu} Constant for date skeleton with hour and minute.
      * @stable ICU 4.0
      */
     public static final String HOUR_MINUTE = "hm";
 
     /**
-     * {@icu} Constant for date pattern with year.
+     * {@icu} Constant for date skeleton with year.
      * @stable ICU 4.0
      */
     public static final String YEAR = "y";
 
     /**
-     * {@icu} Constant for date pattern with day.
+     * {@icu} Constant for date skeleton with day.
      * @stable ICU 4.0
      */
     public static final String DAY = "d";
 
     /**
-     * {@icu} Constant for date pattern with numeric month, weekday, and day.
+     * {@icu} Constant for date skeleton with numeric month, weekday, and day.
      * @stable ICU 4.0
      */
     public static final String NUM_MONTH_WEEKDAY_DAY = "MEd";
 
     /**
-     * {@icu} Constant for date pattern with year and numeric month.
+     * {@icu} Constant for date skeleton with year and numeric month.
      * @stable ICU 4.0
      */
     public static final String YEAR_NUM_MONTH = "yM";
 
     /**
-     * {@icu} Constant for date pattern with numeric month and day.
+     * {@icu} Constant for date skeleton with numeric month and day.
      * @stable ICU 4.0
      */
     public static final String NUM_MONTH_DAY = "Md";
 
     /**
-     * {@icu} Constant for date pattern with year, numeric month, weekday, and day.
+     * {@icu} Constant for date skeleton with year, numeric month, weekday, and day.
      * @stable ICU 4.0
      */
     public static final String YEAR_NUM_MONTH_WEEKDAY_DAY = "yMEd";
 
     /**
-     * {@icu} Constant for date pattern with abbreviated month, weekday, and day.
+     * {@icu} Constant for date skeleton with abbreviated month, weekday, and day.
      * @stable ICU 4.0
      */
     public static final String ABBR_MONTH_WEEKDAY_DAY = "MMMEd";
 
     /**
-     * {@icu} Constant for date pattern with year and month.
+     * {@icu} Constant for date skeleton with year and month.
      * @stable ICU 4.0
      */
     public static final String YEAR_MONTH = "yMMMM";
 
     /**
-     * {@icu} Constant for date pattern with year and abbreviated month.
+     * {@icu} Constant for date skeleton with year and abbreviated month.
      * @stable ICU 4.0
      */
     public static final String YEAR_ABBR_MONTH = "yMMM";
 
     /**
-     * {@icu} Constant for date pattern having month and day.
+     * {@icu} Constant for date skeleton with long month and day.
      * @stable ICU 4.0
      */
     public static final String MONTH_DAY = "MMMMd";
 
     /**
-     * {@icu} Constant for date pattern with abbreviated month and day.
+     * {@icu} Constant for date skeleton with abbreviated month and day.
      * @stable ICU 4.0
      */
     public static final String ABBR_MONTH_DAY = "MMMd";
 
     /**
-     * {@icu} Constant for date pattern with month, weekday, and day.
+     * {@icu} Constant for date skeleton with month, weekday, and day.
      * @stable ICU 4.0
      */
     public static final String MONTH_WEEKDAY_DAY = "MMMMEEEEd";
 
     /**
-     * {@icu} Constant for date pattern with year, abbreviated month, weekday,
+     * {@icu} Constant for date skeleton with year, abbreviated month, weekday,
      * and day.
      * @stable ICU 4.0
      */
     public static final String YEAR_ABBR_MONTH_WEEKDAY_DAY = "yMMMEd";
 
     /**
-     * {@icu} Constant for date pattern with year, month, weekday, and day.
+     * {@icu} Constant for date skeleton with year, month, weekday, and day.
      * @stable ICU 4.0
      */
     public static final String YEAR_MONTH_WEEKDAY_DAY = "yMMMMEEEEd";
 
     /**
-     * {@icu} Constant for date pattern with year, month, and day.
+     * {@icu} Constant for date skeleton with year, month, and day.
      * @stable ICU 4.0
      */
     public static final String YEAR_MONTH_DAY = "yMMMMd";
 
     /**
-     * {@icu} Constant for date pattern with year, abbreviated month, and day.
+     * {@icu} Constant for date skeleton with year, abbreviated month, and day.
      * @stable ICU 4.0
      */
     public static final String YEAR_ABBR_MONTH_DAY = "yMMMd";
 
     /**
-     * {@icu} Constant for date pattern with year, numeric month, and day.
+     * {@icu} Constant for date skeleton with year, numeric month, and day.
      * @stable ICU 4.0
      */
     public static final String YEAR_NUM_MONTH_DAY = "yMd";
 
     /**
-     * {@icu} Constant for date pattern with numeric month.
+     * {@icu} Constant for date skeleton with numeric month.
      * @stable ICU 4.0
      */
     public static final String NUM_MONTH = "M";
 
     /**
-     * {@icu} Constant for date pattern with abbreviated month.
+     * {@icu} Constant for date skeleton with abbreviated month.
      * @stable ICU 4.0
      */
     public static final String ABBR_MONTH = "MMM";
 
     /**
-     * {@icu} Constant for date pattern with month.
+     * {@icu} Constant for date skeleton with month.
      * @stable ICU 4.0
      */
     public static final String MONTH = "MMMM";
 
     /**
-     * {@icu} Constant for date pattern with hour, minute, and generic timezone.
+     * {@icu} Constant for date skeleton with hour, minute, and generic timezone.
      * @stable ICU 4.0
      */
     public static final String HOUR_MINUTE_GENERIC_TZ = "hmv";
 
     /**
-     * {@icu} Constant for date pattern with hour, minute, and timezone.
+     * {@icu} Constant for date skeleton with hour, minute, and timezone.
      * @stable ICU 4.0
      */
     public static final String HOUR_MINUTE_TZ = "hmz";
 
     /**
-     * {@icu} Constant for date pattern with hour.
+     * {@icu} Constant for date skeleton with hour.
      * @stable ICU 4.0
      */
     public static final String HOUR = "h";
 
     /**
-     * {@icu} Constant for date pattern with hour and generic timezone.
+     * {@icu} Constant for date skeleton with hour and generic timezone.
      * @stable ICU 4.0
      */
     public static final String HOUR_GENERIC_TZ = "hv";
 
     /**
-     * {@icu} Constant for date pattern with hour and timezone.
+     * {@icu} Constant for date skeleton with hour and timezone.
      * @stable ICU 4.0
      */
     public static final String HOUR_TZ = "hz";
@@ -1553,27 +1554,23 @@ public abstract class DateFormat extends UFormat {
      * {@icu} Convenience overload.
      * @stable ICU 4.0
      */
-    public final static DateFormat getPatternInstance(String pattern) {
-        return getPatternInstance(pattern, ULocale.getDefault(Category.FORMAT));
+    public final static DateFormat getPatternInstance(String skeleton) {
+        return getPatternInstance(skeleton, ULocale.getDefault(Category.FORMAT));
     }
 
     /**
      * {@icu} Convenience overload.
      * @stable ICU 4.0
      */
-    public final static DateFormat getPatternInstance(String pattern, Locale locale) {
-        return getPatternInstance(pattern, ULocale.forLocale(locale));
+    public final static DateFormat getPatternInstance(String skeleton, Locale locale) {
+        return getPatternInstance(skeleton, ULocale.forLocale(locale));
     }
 
     /**
      * {@icu} Returns a {@link DateFormat} object that can be used to format dates and times in
      * the given locale.
-     * <p>
-     * <b>Note:</b> When this functionality is moved into the core JDK, this method
-     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
-     * <p>
      *
-     * @param pattern The pattern that selects the fields to be formatted. (Uses the
+     * @param skeleton The skeleton that selects the fields to be formatted. (Uses the
      *              {@link DateTimePatternGenerator}.) This can be {@link DateFormat#ABBR_MONTH},
      *              {@link DateFormat#MONTH_WEEKDAY_DAY}, etc.
      *
@@ -1581,9 +1578,9 @@ public abstract class DateFormat extends UFormat {
      *
      * @stable ICU 4.0
      */
-    public final static DateFormat getPatternInstance(String pattern, ULocale locale) {
+    public final static DateFormat getPatternInstance(String skeleton, ULocale locale) {
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
-        final String bestPattern = generator.getBestPattern(pattern);
+        final String bestPattern = generator.getBestPattern(skeleton);
         return new SimpleDateFormat(bestPattern, locale);
     }
 
@@ -1591,20 +1588,17 @@ public abstract class DateFormat extends UFormat {
      * {@icu} Convenience overload.
      * @stable ICU 4.0
      */
-    public final static DateFormat getPatternInstance(Calendar cal, String pattern, Locale locale) {
-        return getPatternInstance(cal, pattern, ULocale.forLocale(locale));
+    public final static DateFormat getPatternInstance(Calendar cal, String skeleton, Locale locale) {
+        return getPatternInstance(cal, skeleton, ULocale.forLocale(locale));
     }
 
     /**
      * {@icu} Creates a {@link DateFormat} object that can be used to format dates and
      * times in the calendar system specified by <code>cal</code>.
      *
-     * <p><b>Note:</b> When this functionality is moved into the core JDK, this method
-     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
-     *
      * @param cal   The calendar system for which a date/time format is desired.
      *
-     * @param pattern The pattern that selects the fields to be formatted. (Uses the
+     * @param skeleton The skeleton that selects the fields to be formatted. (Uses the
      *              {@link DateTimePatternGenerator}.)  This can be
      *              {@link DateFormat#ABBR_MONTH}, {@link DateFormat#MONTH_WEEKDAY_DAY},
      *              etc.
@@ -1614,9 +1608,9 @@ public abstract class DateFormat extends UFormat {
      * @stable ICU 4.0
      */
     public final static DateFormat getPatternInstance(
-        Calendar cal, String pattern, ULocale locale) {
+        Calendar cal, String skeleton, ULocale locale) {
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
-        final String bestPattern = generator.getBestPattern(pattern);
+        final String bestPattern = generator.getBestPattern(skeleton);
         SimpleDateFormat format = new SimpleDateFormat(bestPattern, locale);
         format.setCalendar(cal);
         return format;
