@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -243,11 +243,10 @@ public abstract class BreakIterator implements Cloneable
     public static final int DONE = -1;
 
     /**
-     * Return the first boundary position.  This is always the beginning
+     * Set the iterator to the first boundary position.  This is always the beginning
      * index of the text this iterator iterates over.  For example, if
      * the iterator iterates over a whole string, this function will
-     * always return 0.  This function also updates the iteration position
-     * to point to the beginning of the text.
+     * always return 0.
      * @return The character offset of the beginning of the stretch of text
      * being broken.
      * @stable ICU 2.0
@@ -255,11 +254,10 @@ public abstract class BreakIterator implements Cloneable
     public abstract int first();
 
     /**
-     * Return the last boundary position.  This is always the "past-the-end"
+     * Set the iterator to the last boundary position.  This is always the "past-the-end"
      * index of the text this iterator iterates over.  For example, if the
      * iterator iterates over a whole string (call it "text"), this function
-     * will always return text.length().  This function also updated the
-     * iteration position to point to the end of the text.
+     * will always return text.length().
      * @return The character offset of the end of the stretch of text
      * being broken.
      * @stable ICU 2.0
@@ -267,9 +265,10 @@ public abstract class BreakIterator implements Cloneable
     public abstract int last();
 
     /**
-     * Advances the specified number of steps forward in the text (a negative
-     * number, therefore, advances backwards).  If this causes the iterator
-     * to advance off either end of the text, this function returns DONE;
+     * Move the iterator by the specified number of steps in the text.
+     * A positive number moves the iterator forward; a negative number
+     * moves the iterator backwards. If this causes the iterator
+     * to move off either end of the text, this function returns DONE;
      * otherwise, this function returns the position of the appropriate
      * boundary.  Calling this function is equivalent to calling next() or
      * previous() n times.
@@ -296,7 +295,7 @@ public abstract class BreakIterator implements Cloneable
     public abstract int next();
 
     /**
-     * Advances the iterator backward one boundary.  The current iteration
+     * Move the iterator backward one boundary.  The current iteration
      * position is updated to point to the last boundary position before
      * the current position, and this is also the value that is returned.  If
      * the current position is equal to the value returned by first(), or to
@@ -347,7 +346,7 @@ public abstract class BreakIterator implements Cloneable
     }
 
     /**
-     * Return true if the specfied position is a boundary position.  If the
+     * Return true if the specified position is a boundary position.  If the
      * function returns true, the current iteration position is set to the
      * specified position; if the function returns false, the current
      * iteration position is set as though following() had been called.
