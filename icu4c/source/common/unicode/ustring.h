@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2010, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -146,8 +146,8 @@ u_strcat(UChar     *dst,
  * If <code>n&lt;=0</code> then dst is not modified.
  *
  * @param dst The destination string.
- * @param src The source string.
- * @param n The maximum number of characters to append.
+ * @param src The source string (can be NULL/invalid if n<=0).
+ * @param n The maximum number of characters to append; no-op if <=0.
  * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
@@ -550,9 +550,9 @@ u_strCaseCompare(const UChar *s1, int32_t length1,
  * Compare two ustrings for bitwise equality. 
  * Compares at most <code>n</code> characters.
  *
- * @param ucs1 A string to compare.
- * @param ucs2 A string to compare.
- * @param n The maximum number of characters to compare.
+ * @param ucs1 A string to compare (can be NULL/invalid if n<=0).
+ * @param ucs2 A string to compare (can be NULL/invalid if n<=0).
+ * @param n The maximum number of characters to compare; always returns 0 if n<=0.
  * @return 0 if <code>s1</code> and <code>s2</code> are bitwise equal; a negative
  * value if <code>s1</code> is bitwise less than <code>s2</code>; a positive
  * value if <code>s1</code> is bitwise greater than <code>s2</code>.
@@ -667,8 +667,8 @@ u_strcpy(UChar     *dst,
  * if the length of <code>src</code> is less than <code>n</code>.
  *
  * @param dst The destination string.
- * @param src The source string.
- * @param n The maximum number of characters to copy.
+ * @param src The source string (can be NULL/invalid if n<=0).
+ * @param n The maximum number of characters to copy; no-op if <=0.
  * @return A pointer to <code>dst</code>.
  * @stable ICU 2.0
  */
@@ -742,8 +742,8 @@ U_STABLE char* U_EXPORT2 u_austrncpy(char *dst,
 /**
  * Synonym for memcpy(), but with UChars only.
  * @param dest The destination string
- * @param src The source string
- * @param count The number of characters to copy
+ * @param src The source string (can be NULL/invalid if count<=0)
+ * @param count The number of characters to copy; no-op if <=0
  * @return A pointer to <code>dest</code>
  * @stable ICU 2.0
  */
@@ -753,8 +753,8 @@ u_memcpy(UChar *dest, const UChar *src, int32_t count);
 /**
  * Synonym for memmove(), but with UChars only.
  * @param dest The destination string
- * @param src The source string
- * @param count The number of characters to move
+ * @param src The source string (can be NULL/invalid if count<=0)
+ * @param count The number of characters to move; no-op if <=0
  * @return A pointer to <code>dest</code>
  * @stable ICU 2.0
  */
