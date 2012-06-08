@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2008-2011, International Business Machines Corporation and
+ * Copyright (c) 2008-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -25,7 +25,8 @@ void TimeUnitTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
     switch (index) {
         TESTCASE(0, testBasic);
         TESTCASE(1, testAPI);
-        TESTCASE(2, testGreek);
+        TESTCASE(2, testGreekWithFallback);
+        TESTCASE(3, testGreekWithSanitization);
         default: name = ""; break;
     }
 }
@@ -208,7 +209,7 @@ void TimeUnitTest::testAPI() {
  * to long unit names for a locale where the locale data does not 
  * provide short unit names. As of CLDR 1.9, Greek is one such language.
  */
-void TimeUnitTest::testGreek() {
+void TimeUnitTest::testGreekWithFallback() {
     UErrorCode status = U_ZERO_ERROR;
 
     const char* locales[] = {"el-GR", "el"};
@@ -322,5 +323,24 @@ void TimeUnitTest::testGreek() {
         }
     }
 }
+
+// Test bug9042
+void TimeUnitTest::testGreekWithSanitization() {
+    
+    UErrorCode status = U_ZERO_ERROR;
+    Locale elLoc("el");
+    NumberFormat* numberFmt = NumberFormat::createInstance(Locale("el"), status);
+    if (!assertSuccess("NumberFormat::createInstance for el locale", status)) return;
+    numberFmt->setMaximumFractionDigits(1);
+
+    TimeUnitFormat* timeUnitFormat = new TimeUnitFormat(elLoc, status);
+    if (!assertSuccess("TimeUnitFormat::TimeUnitFormat for el locale", status)) return;
+
+    timeUnitFormat->setNumberFormat(*numberFmt, status);
+
+    delete numberFmt;
+    delete timeUnitFormat;
+}
+
 
 #endif
