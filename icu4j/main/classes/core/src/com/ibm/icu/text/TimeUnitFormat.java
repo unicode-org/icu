@@ -1,6 +1,6 @@
 /*
  **************************************************************************
- * Copyright (C) 2008-2011, Google, International Business Machines
+ * Copyright (C) 2008-2012, Google, International Business Machines
  * Corporation and others. All Rights Reserved.
  **************************************************************************
  */
@@ -333,14 +333,15 @@ public class TimeUnitFormat extends MeasureFormat {
         pluralRules = PluralRules.forLocale(locale);
         timeUnitToCountToPatterns = new HashMap<TimeUnit, Map<String, Object[]>>();
 
-        setup("units", timeUnitToCountToPatterns, FULL_NAME);
-        setup("unitsShort", timeUnitToCountToPatterns, ABBREVIATED_NAME);
+        Set<String> pluralKeywords = pluralRules.getKeywords();
+        setup("units", timeUnitToCountToPatterns, FULL_NAME, pluralKeywords);
+        setup("unitsShort", timeUnitToCountToPatterns, ABBREVIATED_NAME, pluralKeywords);
         isReady = true;
     }
 
 
     private void setup(String resourceKey, Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns,
-                       int style) {
+                       int style, Set<String> pluralKeywords) {
         // fill timeUnitToCountToPatterns from resource file
         try {
             ICUResourceBundle resource = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
@@ -375,6 +376,8 @@ public class TimeUnitFormat extends MeasureFormat {
                 } 
                 for ( int pluralIndex = 0; pluralIndex < count; ++pluralIndex) {
                     String pluralCount = oneUnitRes.get(pluralIndex).getKey();
+                    if (!pluralKeywords.contains(pluralCount))
+                        continue;
                     String pattern = oneUnitRes.get(pluralIndex).getString();
                     final MessageFormat messageFormat = new MessageFormat(pattern, locale);
                     if (format != null) {

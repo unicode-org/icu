@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -181,6 +181,25 @@ public class TimeUnitTest extends TestFmwk {
             }
         }
     }
+
+    /**
+     * @bug9042 
+     * Performs tests for Greek.
+     * This tests that if the plural count listed in time unit format does not 
+     * match those in the plural rules for the locale, those plural count in 
+     * time unit format will be ingored and subsequently, fall back will kick in 
+     * which is tested above. 
+     * Without data sanitization, setNumberFormat() would crash. 
+     * As of CLDR shiped in ICU4.8, Greek is one such language. 
+     */ 
+    public void TestGreekWithSanitization() {
+        ULocale loc = new ULocale("el");
+        NumberFormat numfmt = NumberFormat.getInstance(loc);
+        TimeUnitFormat tuf = new TimeUnitFormat(loc);
+        tuf.parseObject("", new ParsePosition(0));
+        tuf.setNumberFormat(numfmt);        
+    }
+
 
     private void formatParsing(TimeUnitFormat format) {
         final TimeUnit[] values = TimeUnit.values();
