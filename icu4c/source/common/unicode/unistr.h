@@ -1825,7 +1825,7 @@ public:
    * of making this string also a readonly alias to the same buffer.
    *
    * The fastCopyFrom function must be used only if it is known that the lifetime of
-   * this UnicodeString is at least as long as the lifetime of the aliased buffer
+   * this UnicodeString does not exceed the lifetime of the aliased buffer
    * including its contents, for example for strings from resource bundles
    * or aliases to string constants.
    *
