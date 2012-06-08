@@ -93,8 +93,11 @@ public:
                   int32_t length,
                   UErrorCode &errorCode);
     UBool ensureCapacityForOneMore(int32_t oldLength, UErrorCode &errorCode);
-    UBool memEquals(const MessagePatternList<T, stackCapacity> &other, int32_t length) const {
-        return 0==uprv_memcmp(a.getAlias(), other.a.getAlias(), length*sizeof(T));
+    UBool equals(const MessagePatternList<T, stackCapacity> &other, int32_t length) const {
+        for(int32_t i=0; i<length; ++i) {
+            if(a[i]!=other.a[i]) { return FALSE; }
+        }
+        return TRUE;
     }
 
     MaybeStackArray<T, stackCapacity> a;
@@ -314,7 +317,7 @@ MessagePattern::operator==(const MessagePattern &other) const {
         msg==other.msg &&
         // parts.equals(o.parts)
         partsLength==other.partsLength &&
-        (partsLength==0 || partsList->memEquals(*other.partsList, partsLength));
+        (partsLength==0 || partsList->equals(*other.partsList, partsLength));
     // No need to compare numericValues if msg and parts are the same.
 }
 
