@@ -24,6 +24,7 @@
 #include "unicode/measfmt.h"
 #include "unicode/numfmt.h"
 #include "unicode/plurrule.h"
+#include "uvector.h"
 
 /**
  * Constants for various styles.
@@ -229,7 +230,8 @@ private:
     void initDataMembers(UErrorCode& status);
 
     // initialize fTimeUnitToCountToPatterns from current locale's resource.
-    void readFromCurrentLocale(UTimeUnitFormatStyle style, const char* key, UErrorCode& status);
+    void readFromCurrentLocale(UTimeUnitFormatStyle style, const char* key, const UVector& pluralCounts,
+                               UErrorCode& status);
 
     // check completeness of fTimeUnitToCountToPatterns against all time units,
     // and all plural rules, fill in fallback as necessary.
