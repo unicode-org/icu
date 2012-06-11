@@ -719,6 +719,7 @@ CLEAN : GODATA
 	-@erase "*.cnv"
 	-@erase "*.icu"
 	-@erase "*.mak"
+	-@erase "*.nrm"
 	-@erase "*.res"
 	-@erase "*.spp"
 	-@erase "*.txt"
