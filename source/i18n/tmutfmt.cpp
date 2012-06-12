@@ -400,6 +400,7 @@ TimeUnitFormat::setup(UErrorCode& err) {
     checkConsistency(UTMUTFMT_FULL_STYLE, gUnitsTag, err);
     readFromCurrentLocale(UTMUTFMT_ABBREVIATED_STYLE, gShortUnitsTag, pluralCounts, err);
     checkConsistency(UTMUTFMT_ABBREVIATED_STYLE, gShortUnitsTag, err);
+    delete keywords;
 }
 
 
