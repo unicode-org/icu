@@ -304,6 +304,8 @@ UTF-16,version=2
 #
 # For details about email headers see RFC 2047.
 UTF-7 { IANA* MIME* WINDOWS }   windows-65000 { WINDOWS* }
+                                unicode-1-1-utf-7
+                                unicode-2-0-utf-7
 
 # UTF-EBCDIC doesn't exist in ICU, but the aliases are here for reference.
 #UTF-EBCDIC ibm-1210 { IBM* } ibm-1211 { IBM }
