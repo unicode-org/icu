@@ -13,7 +13,6 @@ import java.util.Locale;
 
 import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.impl.CalendarCache;
-import com.ibm.icu.text.ChineseDateFormat;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -77,7 +76,6 @@ import com.ibm.icu.util.ULocale.Category;
  * {@link com.ibm.icu.util.Calendar#getInstance(ULocale)} passing in a <code>ULocale</code>
  * with the tag <code>"@calendar=chinese"</code>.</p>
  *
- * @see com.ibm.icu.text.ChineseDateFormat
  * @see com.ibm.icu.util.Calendar
  * @author Alan Liu
  * @stable ICU 2.8
@@ -478,23 +476,18 @@ public class ChineseCalendar extends Calendar {
     }
 
     /**
-     * Framework method to create a calendar-specific DateFormat object
-     * using the the given pattern.  This method is responsible for
-     * creating the calendar- specific DateFormat and DateFormatSymbols
-     * objects as needed.
-     * @param pattern The date formatting pattern
-     * @param override The override string.  A numbering system override string can take one of the following forms:
-     *     1). If just a numbering system name is specified, it applies to all numeric fields in the date format pattern.
-     *     2). To specify an alternate numbering system on a field by field basis, use the field letters from the pattern
-     *         followed by an = sign, followed by the numbering system name.  For example, to specify that just the year
-     *         be formatted using Hebrew digits, use the override "y=hebr".  Multiple overrides can be specified in a single
-     *         string by separating them with a semi-colon. For example, the override string "m=thai;y=deva" would format using
-     *         Thai digits for the month and Devanagari digits for the year.
-     * @param locale The locale
+     * {@inheritDoc}
+     * 
      * @stable ICU 4.2
      */
     protected DateFormat handleGetDateFormat(String pattern, String override, ULocale locale) {
-        return new ChineseDateFormat(pattern, override, locale);
+        // Note: ICU 50 or later versions no longer use ChineseDateFormat.
+        // The super class's handleGetDateFormat will create an instance of
+        // SimpleDateFormat which supports Chinese calendar date formatting
+        // since ICU 49.
+
+        //return new ChineseDateFormat(pattern, override, locale);
+        return super.handleGetDateFormat(pattern, override, locale);
     }
 
     /**
