@@ -350,7 +350,7 @@ getToUnicodeValue(CnvExtData *extData, UCMTable *table, UCMapping *m) {
 
         /* allocate it and put its length and index into the value */
         value=
-            (((uint32_t)m->uLen+UCNV_EXT_TO_U_LENGTH_OFFSET)<<UCNV_EXT_TO_U_LENGTH_SHIFT)|
+            (((uint32_t)u16Length+UCNV_EXT_TO_U_LENGTH_OFFSET)<<UCNV_EXT_TO_U_LENGTH_SHIFT)|
             ((uint32_t)utm_countItems(extData->toUUChars));
         u=utm_allocN(extData->toUUChars, u16Length);
 
