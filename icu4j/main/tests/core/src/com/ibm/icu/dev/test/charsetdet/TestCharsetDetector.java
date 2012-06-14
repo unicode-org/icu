@@ -177,10 +177,6 @@ public class TestCharsetDetector extends TestFmwk
         if(confidence != 100){
             errln("Did not get the expected confidence level " + confidence);
         }
-        int matchType = m.getMatchType();
-        if(matchType != 0){
-            errln("Did not get the expected matchType level " + matchType);
-        }
     }
     
     public void TestC1Bytes() throws Exception

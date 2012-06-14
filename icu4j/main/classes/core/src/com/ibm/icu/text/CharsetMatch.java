@@ -131,59 +131,6 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
     public int getConfidence() {
         return fConfidence;
     }
-    
-
-    /**
-     * Bit flag indicating the match is based on the the encoding scheme.
-     *
-     * @see #getMatchType
-     * @stable ICU 3.4
-     */
-    static public final int ENCODING_SCHEME    = 1;
-    
-    /**
-     * Bit flag indicating the match is based on the presence of a BOM.
-     * 
-     * @see #getMatchType
-     * @stable ICU 3.4
-     */
-    static public final int BOM                = 2;
-    
-    /**
-     * Bit flag indicating he match is based on the declared encoding.
-     * 
-     * @see #getMatchType
-     * @stable ICU 3.4
-     */
-    static public final int DECLARED_ENCODING  = 4;
-    
-    /**
-     * Bit flag indicating the match is based on language statistics.
-     *
-     * @see #getMatchType
-     * @stable ICU 3.4
-     */
-    static public final int LANG_STATISTICS    = 8;
-    
-    /**
-     * Return flags indicating what it was about the input data 
-     * that caused this charset to be considered as a possible match.
-     * The result is a bitfield containing zero or more of the flags
-     * ENCODING_SCHEME, BOM, DECLARED_ENCODING, and LANG_STATISTICS.
-     * A result of zero means no information is available.
-     * <p>
-     * Note: currently, this method always returns zero.
-     * <p>
-     *
-     * @return the type of match found for this charset.
-     *
-     * @draft ICU 3.4
-     * @provisional This API might change or be removed in a future release.
-     */
-    public int getMatchType() {
-//      TODO: create a list of enum-like constants for common combinations of types of matches.
-        return 0;
-    }
 
     /**
      * Get the name of the detected charset.  
