@@ -695,6 +695,15 @@ conversion:table(nofallback) {
           :int{1}, :int{0}, "", "?", :bin{""}
         }
 
+        // test mapping to sequence of multiple Unicode characters which includes nonBMP (ticket #9235)
+        {
+          "*test3",
+          :bin{ 05070001020e050501020c06 },
+          "\x05\U00101234\U00050005\u00c4\u00c4\U00101234\x05\x06",
+          :intvector{ 0, 1, 1, 1, 1, 7, 7, 7, 7, 7, 11 },
+          :int{1}, :int{0}, "", "?", :bin{""}
+        }
+
         // normal conversions
         {
           "UTF-16LE",
