@@ -32,7 +32,7 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      * Package-private array that ChineseDateFormat needs to be able to
      * read.
      */
-    String isLeapMonth[]; // Do NOT add =null initializer
+    String[] isLeapMonth;
 
     /**
      * Construct a ChineseDateFormatSymbols for the default <code>FORMAT</code> locale.
@@ -95,18 +95,26 @@ public class ChineseDateFormatSymbols extends DateFormatSymbols {
      */
     protected void initializeData(ULocale loc, CalendarData calData) {
         super.initializeData(loc, calData);
-        // The old way, obsolete:
-        //isLeapMonth = calData.getStringArray("isLeapMonth");
-        // The new way to fake this for backward compatibility (no longer used to format/parse):
-        isLeapMonth = new String[2];
-        isLeapMonth[0] = "";
-        isLeapMonth[1] = (leapMonthPatterns != null)? leapMonthPatterns[DT_LEAP_MONTH_PATTERN_FORMAT_WIDE].replace("{0}", ""): "";
+        initializeIsLeapMonth();
     }
 
     void initializeData(DateFormatSymbols dfs) {
         super.initializeData(dfs);
         if (dfs instanceof ChineseDateFormatSymbols) {
+            // read-only array, no need to clone
             this.isLeapMonth = ((ChineseDateFormatSymbols)dfs).isLeapMonth;
+        } else {
+            initializeIsLeapMonth();
         }
+    }
+
+    private void initializeIsLeapMonth() {
+        // The old way, obsolete:
+        //isLeapMonth = calData.getStringArray("isLeapMonth");
+        // The new way to fake this for backward compatibility (no longer used to format/parse):
+
+        isLeapMonth = new String[2];
+        isLeapMonth[0] = "";
+        isLeapMonth[1] = (leapMonthPatterns != null)? leapMonthPatterns[DT_LEAP_MONTH_PATTERN_FORMAT_WIDE].replace("{0}", ""): "";
     }
 }
