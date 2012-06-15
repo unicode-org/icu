@@ -1148,8 +1148,11 @@ public class DateFormatSymbols implements Serializable, Cloneable {
             // Initialize data from scratch put a clone of this instance into the cache
             CalendarData calData = new CalendarData(desiredLocale, type);
             initializeData(desiredLocale, calData);
-            dfs = (DateFormatSymbols)this.clone();
-            DFSCACHE.put(key, dfs);
+            // Do not cache subclass instances
+            if (this.getClass().getName().equals("com.ibm.icu.text.DateFormatSymbols")) {
+                dfs = (DateFormatSymbols)this.clone();
+                DFSCACHE.put(key, dfs);
+            }
         } else {
             initializeData(dfs);
         }
