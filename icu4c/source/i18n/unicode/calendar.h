@@ -86,11 +86,12 @@ class BasicTimeZone;
  * and calendar style (for example, Japanese-Gregorian, Japanese-Traditional).
  *
  * <p>
- * When computing a <code>UDate</code> from time fields, two special circumstances
+ * When computing a <code>UDate</code> from time fields, some special circumstances
  * may arise: there may be insufficient information to compute the
  * <code>UDate</code> (such as only year and month but no day in the month),
- * or there may be inconsistent information (such as "Tuesday, July 15, 1996"
- * -- July 15, 1996 is actually a Monday).
+ * there may be inconsistent information (such as "Tuesday, July 15, 1996"
+ * -- July 15, 1996 is actually a Monday), or the input time might be ambiguous
+ * because of time zone transition.
  *
  * <p>
  * <strong>Insufficient information.</strong> The calendar will use default
@@ -123,6 +124,26 @@ class BasicTimeZone;
  * AM_PM + HOUR
  * </pre>
  * \htmlonly</blockquote>\endhtmlonly
+ *
+ * <p>
+ * <strong>Ambiguous Wall Clock Time.</strong> When time offset from UTC has
+ * changed, it produces ambiguous time slot around the transition. For example,
+ * many US locations observe daylight saving time. On the date switching to daylight
+ * saving time in US, wall clock time jumps from 1:00 AM (standard) to 2:00 AM
+ * (daylight). Therefore, wall clock time from 1:00 AM to 1:59 AM do not exist on
+ * the date. When the input wall time fall into this missing time slot, the ICU
+ * Calendar resolves the time using the UTC offset before the transition by default.
+ * In this example, 1:30 AM is interpreted as 1:30 AM standard time (non-exist),
+ * so the final result will be 2:30 AM daylight time.
+ * 
+ * <p>On the date switching back to standard time, wall clock time is moved back one
+ * hour at 2:00 AM. So wall clock time from 1:00 AM to 1:59 AM occur twice. In this
+ * case, the ICU Calendar resolves the time using the UTC offset after the transition
+ * by default. For example, 1:30 AM on the date is resolved as 1:30 AM standard time.
+ *
+ * <p>Ambiguous wall clock time resolution behaviors can be customized by Calendar APIs
+ * {@link #setRepeatedWallTimeOption} and {@link #setSkippedWallTimeOption}.
+ * These methods are available in ICU 49 or later versions.
  *
  * <p>
  * <strong>Note:</strong> for some non-Gregorian calendars, different
