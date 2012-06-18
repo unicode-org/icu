@@ -1,5 +1,4 @@
-﻿
-# Note: Please make sure that this utf-8 file contains a BOM.
+﻿# Note: Please make sure that this utf-8 file contains a BOM.
 #   Copyright (c) 2011-2012, International Business Machines Corporation and
 #   others. All Rights Reserved.
 #
@@ -64,6 +63,7 @@ format 00.##E0 default "1234567"  "12.35E5"
 format 00.##E0 default "1234567E111"  "12.35E116"
 format 00.##E0 default "-1234567E111"  "-12.35E116"
 
+format 0005 default "1234" "1235"
 
 #
 #  Rounding Modes
