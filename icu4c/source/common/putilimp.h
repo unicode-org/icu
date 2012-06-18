@@ -113,6 +113,8 @@ typedef size_t uintptr_t;
 
 #ifdef U_TIMEZONE
     /* Use the predefined value. */
+#elif U_PLATFORM == U_PF_ANDROID
+#   define U_TIMEZONE timezone
 #elif U_PLATFORM_IS_LINUX_BASED
 #   define U_TIMEZONE __timezone
 #elif U_PLATFORM_USES_ONLY_WIN32_API
