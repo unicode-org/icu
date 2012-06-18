@@ -280,6 +280,15 @@ void DecimalFormatTest::DataDrivenTests() {
                            formatLineMat.group(2, status),    // rounding mode
                            formatLineMat.group(3, status),    // input decimal number
                            formatLineMat.group(4, status),    // expected formatted result
+                           kFormattable,
+                           status);
+
+            execFormatTest(lineNum,
+                           formatLineMat.group(1, status),    // Pattern
+                           formatLineMat.group(2, status),    // rounding mode
+                           formatLineMat.group(3, status),    // input decimal number
+                           formatLineMat.group(4, status),    // expected formatted result
+                           kStringPiece,
                            status);
             continue;
         }
@@ -368,6 +377,7 @@ void DecimalFormatTest::execFormatTest(int32_t lineNum,
                            const UnicodeString &round,       // rounding mode
                            const UnicodeString &input,       // input decimal number
                            const UnicodeString &expected,    // expected formatted result
+                           EFormatInputType inType,          // input number type
                            UErrorCode &status) {
     if (U_FAILURE(status)) {
         return;
@@ -404,31 +414,42 @@ void DecimalFormatTest::execFormatTest(int32_t lineNum,
         errln("file dcfmtest.txt, line %d: Bad rounding mode \"%s\"",
                 lineNum, UnicodeStringPiece(round).data());
     }
-    
+
+    const char *typeStr;
     UnicodeString result;
     UnicodeStringPiece spInput(input);
-    //fmtr.format(spInput, result, NULL, status);
 
-    Formattable fmtbl;
-    fmtbl.setDecimalNumber(spInput, status);
-    //NumberFormat &nfmtr = fmtr;
-    fmtr.format(fmtbl, result, NULL, status);
+    switch (inType) {
+    case kFormattable:
+        {
+            typeStr = "Formattable";
+            Formattable fmtbl;
+            fmtbl.setDecimalNumber(spInput, status);
+            fmtr.format(fmtbl, result, NULL, status);
+        }
+        break;
+    case kStringPiece:
+        typeStr = "StringPiece";
+        fmtr.format(spInput, result, NULL, status);
+        break;
+    }
 
     if ((status == U_FORMAT_INEXACT_ERROR) && (result == "") && (expected == "Inexact")) {
         // Test succeeded.
         status = U_ZERO_ERROR;
         return;
     }
+
     if (U_FAILURE(status)) {
-        errln("file dcfmtest.txt, line %d: format() returned %s.",
-            lineNum, u_errorName(status));
+        errln("[%s] file dcfmtest.txt, line %d: format() returned %s.",
+            typeStr, lineNum, u_errorName(status));
         status = U_ZERO_ERROR;
         return;
     }
     
     if (result != expected) {
-        errln("file dcfmtest.txt, line %d: expected \"%s\", got \"%s\"",
-            lineNum, UnicodeStringPiece(expected).data(), UnicodeStringPiece(result).data());
+        errln("[%s] file dcfmtest.txt, line %d: expected \"%s\", got \"%s\"",
+            typeStr, lineNum, UnicodeStringPiece(expected).data(), UnicodeStringPiece(result).data());
     }
 }
 
