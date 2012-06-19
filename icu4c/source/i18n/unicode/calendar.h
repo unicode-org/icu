@@ -362,7 +362,7 @@ public:
      * Gets a Calendar using the given timezone and given locale.  The TimeZone
      * is _not_ adopted; the client is still responsible for deleting it.
      *
-     * @param zoneToAdopt  The given timezone.
+     * @param zone         The given timezone.
      * @param aLocale      The given locale.
      * @param success      Indicates the success/failure of Calendar creation. Filled in
      *                     with U_ZERO_ERROR if created successfully, set to a failure result
