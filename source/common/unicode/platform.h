@@ -352,6 +352,9 @@
 #elif defined(_PA_RISC1_0) || defined(_PA_RISC1_1) || defined(_PA_RISC2_0)
     /* HPPA do not appear to predefine any endianness macros. */
 #   define U_IS_BIG_ENDIAN 1
+#elif defined(sparc) || defined(__sparc) || defined(__sparc__)
+    /* Some sparc based systems (e.g. Linux) do not predefine any endianness macros. */
+#   define U_IS_BIG_ENDIAN 1
 #else
 #   define U_IS_BIG_ENDIAN 0
 #endif
