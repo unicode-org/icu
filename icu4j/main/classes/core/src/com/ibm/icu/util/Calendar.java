@@ -2637,6 +2637,18 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * must be adjusted so that the result is 2/29/96 rather than the invalid
      * 2/31/96.
      * <p>
+     * Rolling up always means rolling forward in time (unless
+     * the limit of the field is reached, in which case it may pin or wrap), so for the
+     * Gregorian calendar, starting with 100 BC and rolling the year up results in 99 BC.
+     * When eras have a definite beginning and end (as in the Chinese calendar, or as in
+     * most eras in the Japanese calendar) then rolling the year past either limit of the
+     * era will cause the year to wrap around. When eras only have a limit at one end,
+     * then attempting to roll the year past that limit will result in pinning the year
+     * at that limit. Note that for most calendars in which era 0 years move forward in
+     * time (such as Buddhist, Hebrew, or Islamic), it is possible for add or roll to
+     * result in negative years for era 0 (that is the only way to represent years before
+     * the calendar epoch in such calendars).
+     * <p>
      * <b>Note:</b> Calling <tt>roll(field, true)</tt> N times is <em>not</em>
      * necessarily equivalent to calling <tt>roll(field, N)</tt>.  For example,
      * imagine that you start with the date Gregorian date January 31, 1995.  If you call
@@ -2684,6 +2696,18 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * for the Gregorian date 1/31/96 by +1, the {@link #DAY_OF_MONTH DAY_OF_MONTH} field
      * must be adjusted so that the result is 2/29/96 rather than the invalid
      * 2/31/96.
+     * <p>
+     * Rolling by a positive value always means rolling forward in time (unless
+     * the limit of the field is reached, in which case it may pin or wrap), so for the
+     * Gregorian calendar, starting with 100 BC and rolling the year by + 1 results in 99 BC.
+     * When eras have a definite beginning and end (as in the Chinese calendar, or as in
+     * most eras in the Japanese calendar) then rolling the year past either limit of the
+     * era will cause the year to wrap around. When eras only have a limit at one end,
+     * then attempting to roll the year past that limit will result in pinning the year
+     * at that limit. Note that for most calendars in which era 0 years move forward in
+     * time (such as Buddhist, Hebrew, or Islamic), it is possible for add or roll to
+     * result in negative years for era 0 (that is the only way to represent years before
+     * the calendar epoch in such calendars).
      * <p>
      * {@icunote} the ICU implementation of this method is able to roll
      * all fields except for {@link #ERA ERA}, {@link #DST_OFFSET DST_OFFSET},
@@ -2806,6 +2830,44 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
         case YEAR:
         case YEAR_WOY:
+            // * If era==0 and years go backwards in time, change sign of amount.
+            // * Until we have new API per #9393, we temporarily hardcode knowledge of
+            //   which calendars have era 0 years that go backwards.
+            {
+                boolean era0WithYearsThatGoBackwards = false;
+                int era = get(ERA);
+                if (era == 0) {
+                    String calType = getType();
+                    if (calType.equals("gregorian") || calType.equals("roc") || calType.equals("coptic")) {
+                        amount = -amount;
+                        era0WithYearsThatGoBackwards = true;
+                    }
+                }
+                int newYear = internalGet(field) + amount;
+                if (era > 0 || newYear >= 1) {
+                    int maxYear = getActualMaximum(field);
+                    if (maxYear < 32768) {
+                        // this era has real bounds, roll should wrap years
+                        if (newYear < 1) {
+                            newYear = maxYear - ((-newYear) % maxYear);
+                        } else if (newYear > maxYear) {
+                            newYear = ((newYear - 1) % maxYear) + 1;
+                        }
+                    // else era is unbounded, just pin low year instead of wrapping
+                    } else if (newYear < 1) {
+                        newYear = 1;
+                    }
+                // else we are in era 0 with newYear < 1;
+                // calendars with years that go backwards must pin the year value at 0,
+                // other calendars can have years < 0 in era 0
+                } else if (era0WithYearsThatGoBackwards) {
+                    newYear = 1;
+                }
+                set(field, newYear);
+                pinField(MONTH);
+                pinField(DAY_OF_MONTH);
+                return;
+            }
         case EXTENDED_YEAR:
             // Rolling the year can involve pinning the DAY_OF_MONTH.
             set(field, internalGet(field) + amount);
@@ -3024,6 +3086,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * must be adjusted so that the result is 2/29/96 rather than the invalid
      * 2/31/96.
      * <p>
+     * Adding a positive value always means moving forward in time, so for the Gregorian
+     * calendar, starting with 100 BC and adding +1 to year results in 99 BC (even though
+     * this actually reduces the numeric value of the field itself).
+     * <p>
      * {@icunote} The ICU implementation of this method is able to add to
      * all fields except for {@link #ERA ERA}, {@link #DST_OFFSET DST_OFFSET},
      * and {@link #ZONE_OFFSET ZONE_OFFSET}.  Subclasses may, of course, add support for
@@ -3099,8 +3165,25 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             return;
 
         case YEAR:
-        case EXTENDED_YEAR:
         case YEAR_WOY:
+            // * If era=0 and years go backwards in time, change sign of amount.
+            // * Until we have new API per #9393, we temporarily hardcode knowledge of
+            //   which calendars have era 0 years that go backwards.
+            // * Note that for YEAR (but not YEAR_WOY) we could instead handle
+            //   this by applying the amount to the EXTENDED_YEAR field; but since
+            //   we would still need to handle YEAR_WOY as below, might as well
+            //   also handle YEAR the same way.
+            {
+                int era = get(ERA);
+                if (era == 0) {
+                    String calType = getType();
+                    if (calType.equals("gregorian") || calType.equals("roc") || calType.equals("coptic")) {
+                        amount = -amount;
+                    }
+                }
+            }
+            // Fall through into standard handling
+        case EXTENDED_YEAR:
         case MONTH:
             {
                 boolean oldLenient = isLenient();
