@@ -1365,4 +1365,164 @@ public class IBMCalendarTest extends CalendarTest {
         }
     }
 
+    public void TestAddRollEra0AndEraBounds() {
+        final String[] localeIDs = {
+            // calendars with non-modern era 0 that goes backwards, max era == 1
+            "en@calendar=gregorian",
+            "en@calendar=roc",
+            "en@calendar=coptic",
+            // calendars with non-modern era 0 that goes forwards, max era > 1
+            "en@calendar=japanese",
+            "en@calendar=chinese",
+            // calendars with non-modern era 0 that goes forwards, max era == 1
+            "en@calendar=ethiopic",
+            // calendars with only one era  = 0, forwards
+            "en@calendar=buddhist",
+            "en@calendar=hebrew",
+            "en@calendar=islamic",
+            "en@calendar=indian",
+            //"en@calendar=persian", // no persian calendar in ICU4J yet
+            "en@calendar=ethiopic-amete-alem",
+        };
+        TimeZone zoneGMT = TimeZone.getFrozenTimeZone("GMT");
+        for (String localeID : localeIDs) {
+            Calendar ucalTest = Calendar.getInstance(zoneGMT, new ULocale(localeID));
+            String calType = ucalTest.getType();
+            boolean era0YearsGoBackwards = (calType.equals("gregorian") || calType.equals("roc") || calType.equals("coptic"));
+            int yrBefore, yrAfter, yrMax, eraAfter, eraMax, eraNow;
+            
+            ucalTest.clear();
+            ucalTest.set(Calendar.YEAR, 2);
+            ucalTest.set(Calendar.ERA, 0);
+            yrBefore = ucalTest.get(Calendar.YEAR);
+            ucalTest.add(Calendar.YEAR, 1);
+            yrAfter = ucalTest.get(Calendar.YEAR);
+            if ( (era0YearsGoBackwards && yrAfter>yrBefore) || (!era0YearsGoBackwards && yrAfter<yrBefore) ) {
+                errln("Fail: era 0 add 1 year does not move forward in time for " + localeID);
+            }
+
+            ucalTest.clear();
+            ucalTest.set(Calendar.YEAR, 2);
+            ucalTest.set(Calendar.ERA, 0);
+            yrBefore = ucalTest.get(Calendar.YEAR);
+            ucalTest.roll(Calendar.YEAR, 1);
+            yrAfter = ucalTest.get(Calendar.YEAR);
+            if ( (era0YearsGoBackwards && yrAfter>yrBefore) || (!era0YearsGoBackwards && yrAfter<yrBefore) ) {
+                errln("Fail: era 0 roll 1 year does not move forward in time for " + localeID);
+            }
+
+            ucalTest.clear();
+            ucalTest.set(Calendar.YEAR, 1);
+            ucalTest.set(Calendar.ERA, 0);
+            if (era0YearsGoBackwards) {
+                ucalTest.roll(Calendar.YEAR, 1);
+                yrAfter = ucalTest.get(Calendar.YEAR);
+                eraAfter = ucalTest.get(Calendar.ERA);
+                if (eraAfter != 0 || yrAfter != 1) {
+                    errln("Fail: era 0 roll 1 year from year 1 does not stay within era or pin to year 1 for "
+                            + localeID + " (get era " + eraAfter + " year " + yrAfter + ")");
+                }
+            } else {
+                // roll backward in time to where era 0 years go negative, except for the Chinese
+                // calendar, which uses negative eras instead of having years outside the range 1-60
+                ucalTest.roll(Calendar.YEAR, -2);
+                yrAfter = ucalTest.get(Calendar.YEAR);
+                eraAfter = ucalTest.get(Calendar.ERA);
+                if ( !calType.equals("chinese") && (eraAfter != 0 || yrAfter != -1) ) {
+                    errln("Fail: era 0 roll -2 years from year 1 does not stay within era or produce year -1 for "
+                            + localeID + " (get era " + eraAfter + " year " + yrAfter + ")");
+                }
+            }
+
+            ucalTest.clear();
+            ucalTest.set(Calendar.YEAR, 1);
+            ucalTest.set(Calendar.ERA, 0);
+            eraMax = ucalTest.getMaximum(Calendar.ERA);
+            if (eraMax > 0) {
+                // try similar tests for era 1 (if calendar has it), in which years always go forward
+
+                ucalTest.clear();
+                ucalTest.set(Calendar.YEAR, 2);
+                ucalTest.set(Calendar.ERA, 1);
+                yrBefore = ucalTest.get(Calendar.YEAR);
+                ucalTest.add(Calendar.YEAR, 1);
+                yrAfter = ucalTest.get(Calendar.YEAR);
+                if ( yrAfter<yrBefore ) {
+                    errln("Fail: era 1 add 1 year does not move forward in time for " + localeID);
+                }
+    
+                ucalTest.clear();
+                ucalTest.set(Calendar.YEAR, 2);
+                ucalTest.set(Calendar.ERA, 1);
+                yrBefore = ucalTest.get(Calendar.YEAR);
+                ucalTest.roll(Calendar.YEAR, 1);
+                yrAfter = ucalTest.get(Calendar.YEAR);
+                if ( yrAfter<yrBefore ) {
+                    errln("Fail: era 1 roll 1 year does not move forward in time for " + localeID);
+                }
+
+                ucalTest.clear();
+                ucalTest.set(Calendar.YEAR, 1);
+                ucalTest.set(Calendar.ERA, 1);
+                yrMax = ucalTest.getActualMaximum(Calendar.YEAR);
+                ucalTest.roll(Calendar.YEAR, -1); // roll down which should pin or wrap to end
+                yrAfter = ucalTest.get(Calendar.YEAR);
+                eraAfter = ucalTest.get(Calendar.ERA);
+                // if yrMax is reasonable we should wrap to that, else we should pin at yr 1
+                if (yrMax >= 32768) {
+                    if (eraAfter != 1 || yrAfter != 1) {
+                        errln("Fail: era 1 roll -1 year from year 1 does not stay within era or pin to year 1 for "
+                                + localeID + " (get era " + eraAfter + " year " + yrAfter + ")");
+                    }
+                } else if (eraAfter != 1 || yrAfter != yrMax) {
+                    errln("Fail: era 1 roll -1 year from year 1 does not stay within era or wrap to year "
+                            + yrMax + " for " + localeID + " (get era " + eraAfter + " year " + yrAfter + ")");
+                } else {
+                    ucalTest.roll(Calendar.YEAR, 1); // now roll up which should wrap to beginning
+                    yrAfter = ucalTest.get(Calendar.YEAR);
+                    eraAfter = ucalTest.get(Calendar.ERA);
+                    if (eraAfter != 1 || yrAfter != 1) {
+                        errln("Fail: era 1 roll 1 year from year " + yrMax +
+                                " does not stay within era or wrap to year 1 for "
+                                + localeID + " (get era " + eraAfter + " year " + yrAfter + ")");
+                    }
+                }
+                
+                // if current era  > 1, try the same roll tests for current era
+                ucalTest.setTime(new Date());
+                eraNow = ucalTest.get(Calendar.ERA);
+                if (eraNow > 1) {
+                    ucalTest.clear();
+                    ucalTest.set(Calendar.YEAR, 1);
+                    ucalTest.set(Calendar.ERA, eraNow);
+                    yrMax = ucalTest.getActualMaximum(Calendar.YEAR); // max year value for this era
+                    ucalTest.roll(Calendar.YEAR, -1);
+                    yrAfter = ucalTest.get(Calendar.YEAR);
+                    eraAfter = ucalTest.get(Calendar.ERA);
+                    // if yrMax is reasonable we should wrap to that, else we should pin at yr 1
+                    if (yrMax >= 32768) {
+                        if (eraAfter != eraNow || yrAfter != 1) {
+                            errln("Fail: era " + eraNow +
+                                    " roll -1 year from year 1 does not stay within era or pin to year 1 for "
+                                    + localeID + " (get era " + eraAfter + " year " + yrAfter + ")");
+                        }
+                    } else if (eraAfter != eraNow || yrAfter != yrMax) {
+                        errln("Fail: era " + eraNow +
+                                " roll -1 year from year 1 does not stay within era or wrap to year " + yrMax
+                                + " for " + localeID + " (get era " + eraAfter + " year " + yrAfter + ")");
+                    } else {
+                        ucalTest.roll(Calendar.YEAR, 1); // now roll up which should wrap to beginning
+                        yrAfter = ucalTest.get(Calendar.YEAR);
+                        eraAfter = ucalTest.get(Calendar.ERA);
+                        if (eraAfter != eraNow || yrAfter != 1) {
+                            errln("Fail: era " + eraNow + " roll 1 year from year " + yrMax +
+                                    " does not stay within era or wrap to year 1 for "
+                                    + localeID + " (get era " + eraAfter + " year " + yrAfter + ")");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
