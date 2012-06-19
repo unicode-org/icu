@@ -1600,6 +1600,45 @@ void Calendar::roll(UCalendarDateFields field, int32_t amount, UErrorCode& statu
 
     case UCAL_YEAR:
     case UCAL_YEAR_WOY:
+        {
+            // * If era==0 and years go backwards in time, change sign of amount.
+            // * Until we have new API per #9393, we temporarily hardcode knowledge of
+            //   which calendars have era 0 years that go backwards.
+            UBool era0WithYearsThatGoBackwards = FALSE;
+            int32_t era = get(UCAL_ERA, status);
+            if (era == 0) {
+                const char * calType = getType();
+                if ( uprv_strcmp(calType,"gregorian")==0 || uprv_strcmp(calType,"roc")==0 || uprv_strcmp(calType,"coptic")==0 ) {
+                    amount = -amount;
+                    era0WithYearsThatGoBackwards = TRUE;
+                }
+            }
+            int32_t newYear = internalGet(field) + amount;
+            if (era > 0 || newYear >= 1) {
+                int32_t maxYear = getActualMaximum(field, status);
+                if (maxYear < 32768) {
+                    // this era has real bounds, roll should wrap years
+                    if (newYear < 1) {
+                        newYear = maxYear - ((-newYear) % maxYear);
+                    } else if (newYear > maxYear) {
+                        newYear = ((newYear - 1) % maxYear) + 1;
+                    }
+                // else era is unbounded, just pin low year instead of wrapping
+                } else if (newYear < 1) {
+                    newYear = 1;
+                }
+            // else we are in era 0 with newYear < 1;
+            // calendars with years that go backwards must pin the year value at 0,
+            // other calendars can have years < 0 in era 0
+            } else if (era0WithYearsThatGoBackwards) {
+                newYear = 1;
+            }
+            set(field, newYear);
+            pinField(UCAL_MONTH,status);
+            pinField(UCAL_DAY_OF_MONTH,status);
+            return;
+        }
+
     case UCAL_EXTENDED_YEAR:
         // Rolling the year can involve pinning the DAY_OF_MONTH.
         set(field, internalGet(field) + amount);
@@ -1861,8 +1900,25 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
         return;
 
     case UCAL_YEAR:
-    case UCAL_EXTENDED_YEAR:
     case UCAL_YEAR_WOY:
+      {
+        // * If era=0 and years go backwards in time, change sign of amount.
+        // * Until we have new API per #9393, we temporarily hardcode knowledge of
+        //   which calendars have era 0 years that go backwards.
+        // * Note that for UCAL_YEAR (but not UCAL_YEAR_WOY) we could instead handle
+        //   this by applying the amount to the UCAL_EXTENDED_YEAR field; but since
+        //   we would still need to handle UCAL_YEAR_WOY as below, might as well
+        //   also handle UCAL_YEAR the same way.
+        int32_t era = get(UCAL_ERA, status);
+        if (era == 0) {
+          const char * calType = getType();
+          if ( uprv_strcmp(calType,"gregorian")==0 || uprv_strcmp(calType,"roc")==0 || uprv_strcmp(calType,"coptic")==0 ) {
+            amount = -amount;
+          }
+        }
+      }
+      // Fall through into normal handling
+    case UCAL_EXTENDED_YEAR:
     case UCAL_MONTH:
       {
         UBool oldLenient = isLenient();
