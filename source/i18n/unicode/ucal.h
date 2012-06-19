@@ -1064,6 +1064,9 @@ ucal_equivalentTo(const UCalendar*  cal1,
 /**
  * Add a specified signed amount to a particular field in a UCalendar.
  * This can modify more significant fields in the calendar.
+ * Adding a positive value always means moving forward in time, so for the Gregorian calendar,
+ * starting with 100 BC and adding +1 to year results in 99 BC (even though this actually reduces
+ * the numeric value of the field itself).
  * @param cal The UCalendar to which to add.
  * @param field The field to which to add the signed value; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
  * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
@@ -1085,6 +1088,15 @@ ucal_add(UCalendar*           cal,
 /**
  * Add a specified signed amount to a particular field in a UCalendar.
  * This will not modify more significant fields in the calendar.
+ * Rolling by a positive value always means moving forward in time (unless the limit of the
+ * field is reached, in which case it may pin or wrap), so for Gregorian calendar,
+ * starting with 100 BC and rolling the year by +1 results in 99 BC.
+ * When eras have a definite beginning and end (as in the Chinese calendar, or as in most eras in the
+ * Japanese calendar) then rolling the year past either limit of the era will cause the year to wrap around.
+ * When eras only have a limit at one end, then attempting to roll the year past that limit will result in
+ * pinning the year at that limit. Note that for most calendars in which era 0 years move forward in time
+ * (such as Buddhist, Hebrew, or Islamic), it is possible for add or roll to result in negative years for
+ * era 0 (that is the only way to represent years before the calendar epoch).
  * @param cal The UCalendar to which to add.
  * @param field The field to which to add the signed value; one of UCAL_ERA, UCAL_YEAR, UCAL_MONTH,
  * UCAL_WEEK_OF_YEAR, UCAL_WEEK_OF_MONTH, UCAL_DATE, UCAL_DAY_OF_YEAR, UCAL_DAY_OF_WEEK,
