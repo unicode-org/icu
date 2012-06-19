@@ -527,6 +527,9 @@ public:
      * the month or Calendar::MONTH field, other fields like date might conflict and
      * need to be changed. For instance, adding 1 month on the date 01/31/96 will result
      * in 02/29/96.
+     * Adding a positive value always means moving forward in time, so for the Gregorian calendar,
+     * starting with 100 BC and adding +1 to year results in 99 BC (even though this actually reduces
+     * the numeric value of the field itself).
      *
      * @param field   Specifies which date field to modify.
      * @param amount  The amount of time to be added to the field, in the natural unit
@@ -546,6 +549,9 @@ public:
      * the month or Calendar::MONTH field, other fields like date might conflict and
      * need to be changed. For instance, adding 1 month on the date 01/31/96 will result
      * in 02/29/96.
+     * Adding a positive value always means moving forward in time, so for the Gregorian calendar,
+     * starting with 100 BC and adding +1 to year results in 99 BC (even though this actually reduces
+     * the numeric value of the field itself).
      *
      * @param field   Specifies which date field to modify.
      * @param amount  The amount of time to be added to the field, in the natural unit
@@ -567,10 +573,19 @@ public:
      * value returned by getMaximum(Calendar::YEAR). When rolling on the month or
      * Calendar::MONTH field, other fields like date might conflict and, need to be
      * changed. For instance, rolling the month up on the date 01/31/96 will result in
-     * 02/29/96. Rolling up always means rolling forward in time; e.g., rolling the year
-     * up on "100 BC" will result in "99 BC", for Gregorian calendar. When rolling on the
-     * hour-in-day or Calendar::HOUR_OF_DAY field, it will roll the hour value in the range
-     * between 0 and 23, which is zero-based.
+     * 02/29/96. Rolling up always means rolling forward in time (unless the limit of the
+     * field is reached, in which case it may pin or wrap), so for Gregorian calendar,
+     * starting with 100 BC and rolling the year up results in 99 BC.
+     * When eras have a definite beginning and end (as in the Chinese calendar, or as in
+     * most eras in the Japanese calendar) then rolling the year past either limit of the
+     * era will cause the year to wrap around. When eras only have a limit at one end,
+     * then attempting to roll the year past that limit will result in pinning the year
+     * at that limit. Note that for most calendars in which era 0 years move forward in
+     * time (such as Buddhist, Hebrew, or Islamic), it is possible for add or roll to
+     * result in negative years for era 0 (that is the only way to represent years before
+     * the calendar epoch).
+     * When rolling on the hour-in-day or Calendar::HOUR_OF_DAY field, it will roll the
+     * hour value in the range between 0 and 23, which is zero-based.
      * <P>
      * NOTE: Do not use this method -- use roll(EDateFields, int, UErrorCode&) instead.
      *
@@ -593,10 +608,19 @@ public:
      * value returned by getMaximum(Calendar::YEAR). When rolling on the month or
      * Calendar::MONTH field, other fields like date might conflict and, need to be
      * changed. For instance, rolling the month up on the date 01/31/96 will result in
-     * 02/29/96. Rolling up always means rolling forward in time; e.g., rolling the year
-     * up on "100 BC" will result in "99 BC", for Gregorian calendar. When rolling on the
-     * hour-in-day or Calendar::HOUR_OF_DAY field, it will roll the hour value in the range
-     * between 0 and 23, which is zero-based.
+     * 02/29/96. Rolling up always means rolling forward in time (unless the limit of the
+     * field is reached, in which case it may pin or wrap), so for Gregorian calendar,
+     * starting with 100 BC and rolling the year up results in 99 BC.
+     * When eras have a definite beginning and end (as in the Chinese calendar, or as in
+     * most eras in the Japanese calendar) then rolling the year past either limit of the
+     * era will cause the year to wrap around. When eras only have a limit at one end,
+     * then attempting to roll the year past that limit will result in pinning the year
+     * at that limit. Note that for most calendars in which era 0 years move forward in
+     * time (such as Buddhist, Hebrew, or Islamic), it is possible for add or roll to
+     * result in negative years for era 0 (that is the only way to represent years before
+     * the calendar epoch).
+     * When rolling on the hour-in-day or Calendar::HOUR_OF_DAY field, it will roll the
+     * hour value in the range between 0 and 23, which is zero-based.
      * <P>
      * NOTE: Do not use this method -- use roll(UCalendarDateFields, int, UErrorCode&) instead.
      *
@@ -616,10 +640,19 @@ public:
      * roll(Calendar::DATE, +1, status). When rolling on the month or
      * Calendar::MONTH field, other fields like date might conflict and, need to be
      * changed. For instance, rolling the month up on the date 01/31/96 will result in
-     * 02/29/96.  Rolling by a positive value always means rolling forward in time;
-     * e.g., rolling the year by +1 on "100 BC" will result in "99 BC", for Gregorian
-     * calendar. When rolling on the hour-in-day or Calendar::HOUR_OF_DAY field, it will
-     * roll the hour value in the range between 0 and 23, which is zero-based.
+     * 02/29/96. Rolling by a positive value always means rolling forward in time (unless
+     * the limit of the field is reached, in which case it may pin or wrap), so for
+     * Gregorian calendar, starting with 100 BC and rolling the year by + 1 results in 99 BC.
+     * When eras have a definite beginning and end (as in the Chinese calendar, or as in
+     * most eras in the Japanese calendar) then rolling the year past either limit of the
+     * era will cause the year to wrap around. When eras only have a limit at one end,
+     * then attempting to roll the year past that limit will result in pinning the year
+     * at that limit. Note that for most calendars in which era 0 years move forward in
+     * time (such as Buddhist, Hebrew, or Islamic), it is possible for add or roll to
+     * result in negative years for era 0 (that is the only way to represent years before
+     * the calendar epoch).
+     * When rolling on the hour-in-day or Calendar::HOUR_OF_DAY field, it will roll the
+     * hour value in the range between 0 and 23, which is zero-based.
      * <P>
      * The only difference between roll() and add() is that roll() does not change
      * the value of more significant fields when it reaches the minimum or maximum
@@ -640,10 +673,19 @@ public:
      * roll(Calendar::DATE, +1, status). When rolling on the month or
      * Calendar::MONTH field, other fields like date might conflict and, need to be
      * changed. For instance, rolling the month up on the date 01/31/96 will result in
-     * 02/29/96.  Rolling by a positive value always means rolling forward in time;
-     * e.g., rolling the year by +1 on "100 BC" will result in "99 BC", for Gregorian
-     * calendar. When rolling on the hour-in-day or Calendar::HOUR_OF_DAY field, it will
-     * roll the hour value in the range between 0 and 23, which is zero-based.
+     * 02/29/96. Rolling by a positive value always means rolling forward in time (unless
+     * the limit of the field is reached, in which case it may pin or wrap), so for
+     * Gregorian calendar, starting with 100 BC and rolling the year by + 1 results in 99 BC.
+     * When eras have a definite beginning and end (as in the Chinese calendar, or as in
+     * most eras in the Japanese calendar) then rolling the year past either limit of the
+     * era will cause the year to wrap around. When eras only have a limit at one end,
+     * then attempting to roll the year past that limit will result in pinning the year
+     * at that limit. Note that for most calendars in which era 0 years move forward in
+     * time (such as Buddhist, Hebrew, or Islamic), it is possible for add or roll to
+     * result in negative years for era 0 (that is the only way to represent years before
+     * the calendar epoch).
+     * When rolling on the hour-in-day or Calendar::HOUR_OF_DAY field, it will roll the
+     * hour value in the range between 0 and 23, which is zero-based.
      * <P>
      * The only difference between roll() and add() is that roll() does not change
      * the value of more significant fields when it reaches the minimum or maximum
