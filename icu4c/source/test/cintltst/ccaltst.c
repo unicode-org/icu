@@ -32,6 +32,7 @@
 
 void TestGregorianChange(void);
 void TestFieldDifference(void);
+void TestAddRollEra0AndEraBounds(void);
 
 void addCalTest(TestNode** root);
 
@@ -50,6 +51,7 @@ void addCalTest(TestNode** root)
     addTest(root, &TestWeekend, "tsformat/ccaltst/TestWeekend");
     addTest(root, &TestFieldDifference, "tsformat/ccaltst/TestFieldDifference");
     addTest(root, &TestAmbiguousWallTime, "tsformat/ccaltst/TestAmbiguousWallTime");
+    addTest(root, &TestAddRollEra0AndEraBounds, "tsformat/ccaltst/TestAddRollEra0AndEraBounds");
 }
 
 /* "GMT" */
@@ -1655,46 +1657,46 @@ static void TestWeekend() {
         log_data_err("Unable to create UDateFormat - %s\n", u_errorName(fmtStatus));
         return;
     }
-	for (count = sizeof(testDates)/sizeof(testDates[0]); count-- > 0; ++testDatesPtr) {
+    for (count = sizeof(testDates)/sizeof(testDates[0]); count-- > 0; ++testDatesPtr) {
         UErrorCode status = U_ZERO_ERROR;
-		UCalendar * cal = ucal_open(NULL, 0, testDatesPtr->locale, UCAL_GREGORIAN, &status);
-		log_verbose("locale: %s\n", testDatesPtr->locale);
-		if (U_SUCCESS(status)) {
-			const TestWeekendDates * weekendDatesPtr = testDatesPtr->dates;
-			for (subCount = testDatesPtr->numDates; subCount--; ++weekendDatesPtr) {
-				UDate dateToTest;
-				UBool isWeekend;
-				char  fmtDateBytes[kFormattedDateMax] = "<could not format test date>"; /* initialize for failure */
+        UCalendar * cal = ucal_open(NULL, 0, testDatesPtr->locale, UCAL_GREGORIAN, &status);
+        log_verbose("locale: %s\n", testDatesPtr->locale);
+        if (U_SUCCESS(status)) {
+            const TestWeekendDates * weekendDatesPtr = testDatesPtr->dates;
+            for (subCount = testDatesPtr->numDates; subCount--; ++weekendDatesPtr) {
+                UDate dateToTest;
+                UBool isWeekend;
+                char  fmtDateBytes[kFormattedDateMax] = "<could not format test date>"; /* initialize for failure */
 
-				ucal_clear(cal);
-				ucal_setDateTime(cal, weekendDatesPtr->year, weekendDatesPtr->month, weekendDatesPtr->day,
-								 weekendDatesPtr->hour, 0, 0, &status);
-				dateToTest = ucal_getMillis(cal, &status) + weekendDatesPtr->millisecOffset;
-				isWeekend = ucal_isWeekend(cal, dateToTest, &status);
-				if (U_SUCCESS(fmtStatus)) {
-				    UChar fmtDate[kFormattedDateMax];
-				    (void)udat_format(fmt, dateToTest, fmtDate, kFormattedDateMax, NULL, &fmtStatus);
-				    if (U_SUCCESS(fmtStatus)) {
-						u_austrncpy(fmtDateBytes, fmtDate, kFormattedDateMax);
-						fmtDateBytes[kFormattedDateMax-1] = 0;
-				    } else {
-				    	fmtStatus = U_ZERO_ERROR;
-				    }
-				}
-				if ( U_FAILURE(status) ) {
-					log_err("FAIL: locale %s date %s isWeekend() status %s\n", testDatesPtr->locale, fmtDateBytes, u_errorName(status) );
-					status = U_ZERO_ERROR;
-				} else if ( (isWeekend!=0) != (weekendDatesPtr->isWeekend!=0) ) {
-					log_err("FAIL: locale %s date %s isWeekend %d, expected the opposite\n", testDatesPtr->locale, fmtDateBytes, isWeekend );
-				} else {
-					log_verbose("OK:   locale %s date %s isWeekend %d\n", testDatesPtr->locale, fmtDateBytes, isWeekend );
-				}
-			}
-			ucal_close(cal);
-		} else {
-			log_data_err("FAIL: ucal_open for locale %s failed: %s - (Are you missing data?)\n", testDatesPtr->locale, u_errorName(status) );
-		}
-	}
+                ucal_clear(cal);
+                ucal_setDateTime(cal, weekendDatesPtr->year, weekendDatesPtr->month, weekendDatesPtr->day,
+                                 weekendDatesPtr->hour, 0, 0, &status);
+                dateToTest = ucal_getMillis(cal, &status) + weekendDatesPtr->millisecOffset;
+                isWeekend = ucal_isWeekend(cal, dateToTest, &status);
+                if (U_SUCCESS(fmtStatus)) {
+                    UChar fmtDate[kFormattedDateMax];
+                    (void)udat_format(fmt, dateToTest, fmtDate, kFormattedDateMax, NULL, &fmtStatus);
+                    if (U_SUCCESS(fmtStatus)) {
+                        u_austrncpy(fmtDateBytes, fmtDate, kFormattedDateMax);
+                        fmtDateBytes[kFormattedDateMax-1] = 0;
+                    } else {
+                        fmtStatus = U_ZERO_ERROR;
+                    }
+                }
+                if ( U_FAILURE(status) ) {
+                    log_err("FAIL: locale %s date %s isWeekend() status %s\n", testDatesPtr->locale, fmtDateBytes, u_errorName(status) );
+                    status = U_ZERO_ERROR;
+                } else if ( (isWeekend!=0) != (weekendDatesPtr->isWeekend!=0) ) {
+                    log_err("FAIL: locale %s date %s isWeekend %d, expected the opposite\n", testDatesPtr->locale, fmtDateBytes, isWeekend );
+                } else {
+                    log_verbose("OK:   locale %s date %s isWeekend %d\n", testDatesPtr->locale, fmtDateBytes, isWeekend );
+                }
+            }
+            ucal_close(cal);
+        } else {
+            log_data_err("FAIL: ucal_open for locale %s failed: %s - (Are you missing data?)\n", testDatesPtr->locale, u_errorName(status) );
+        }
+    }
     if (U_SUCCESS(fmtStatus)) {
         udat_close(fmt);
     }
@@ -1712,12 +1714,12 @@ static void TestWeekend() {
                     transition = ucal_getWeekendTransition(cal, daysOfWeekPtr->dayOfWeek, &status); 
                 }
                 if ( U_FAILURE(status) ) {
-					log_err("FAIL: locale %s DOW %d getDayOfWeekType() status %s\n", testDaysPtr->locale, daysOfWeekPtr->dayOfWeek, u_errorName(status) );
-					status = U_ZERO_ERROR;
+                    log_err("FAIL: locale %s DOW %d getDayOfWeekType() status %s\n", testDaysPtr->locale, daysOfWeekPtr->dayOfWeek, u_errorName(status) );
+                    status = U_ZERO_ERROR;
                 } else if ( dayType != daysOfWeekPtr->dayType || transition != daysOfWeekPtr->transition ) {
-					log_err("FAIL: locale %s DOW %d type %d, expected %d\n", testDaysPtr->locale, daysOfWeekPtr->dayOfWeek, dayType, daysOfWeekPtr->dayType );
+                    log_err("FAIL: locale %s DOW %d type %d, expected %d\n", testDaysPtr->locale, daysOfWeekPtr->dayOfWeek, dayType, daysOfWeekPtr->dayType );
                 } else {
-					log_verbose("OK:   locale %s DOW %d type %d\n", testDaysPtr->locale, daysOfWeekPtr->dayOfWeek, dayType );
+                    log_verbose("OK:   locale %s DOW %d type %d\n", testDaysPtr->locale, daysOfWeekPtr->dayOfWeek, dayType );
                 }
             }
             ucal_close(cal);
@@ -1935,6 +1937,223 @@ void TestAmbiguousWallTime() {
     }
 
     ucal_close(ucal);
+}
+
+/**
+ * TestAddRollEra0AndEraBounds, for #9226
+ */
+ 
+ typedef struct {
+     const char * locale;
+     UBool era0YearsGoBackwards; /* until we have API to get this, per #9393 */
+ } EraTestItem;
+
+static const EraTestItem eraTestItems[] = {
+    /* calendars with non-modern era 0 that goes backwards, max era == 1 */
+    { "en@calendar=gregorian", TRUE },
+    { "en@calendar=roc", TRUE },
+    { "en@calendar=coptic", TRUE },
+    /* calendars with non-modern era 0 that goes forwards, max era > 1 */
+    { "en@calendar=japanese", FALSE },
+    { "en@calendar=chinese", FALSE },
+    /* calendars with non-modern era 0 that goes forwards, max era == 1 */
+    { "en@calendar=ethiopic", FALSE },
+    /* calendars with only one era  = 0, forwards */
+    { "en@calendar=buddhist", FALSE },
+    { "en@calendar=hebrew", FALSE },
+    { "en@calendar=islamic", FALSE },
+    { "en@calendar=indian", FALSE },
+    { "en@calendar=persian", FALSE },
+    { "en@calendar=ethiopic-amete-alem", FALSE },
+    { NULL, FALSE }
+};
+
+static const UChar zoneGMT[] = { 0x47,0x4D,0x54,0 };
+
+void TestAddRollEra0AndEraBounds() {
+    const EraTestItem * eraTestItemPtr;
+    for (eraTestItemPtr = eraTestItems; eraTestItemPtr->locale != NULL; eraTestItemPtr++) {
+        UErrorCode status = U_ZERO_ERROR;
+        UCalendar *ucalTest = ucal_open(zoneGMT, -1, eraTestItemPtr->locale, UCAL_DEFAULT, &status);
+        if ( U_SUCCESS(status) ) {
+            int32_t yrBefore, yrAfter, yrMax, eraAfter, eraMax, eraNow;
+
+            status = U_ZERO_ERROR;
+            ucal_clear(ucalTest);
+            ucal_set(ucalTest, UCAL_YEAR, 2);
+            ucal_set(ucalTest, UCAL_ERA, 0);
+            yrBefore = ucal_get(ucalTest, UCAL_YEAR, &status);
+            ucal_add(ucalTest, UCAL_YEAR, 1, &status);
+            yrAfter = ucal_get(ucalTest, UCAL_YEAR, &status);
+            if (U_FAILURE(status)) {
+                log_err("FAIL: set era 0 year 2 then add 1 year and get year for %s, error %s\n",
+                        eraTestItemPtr->locale, u_errorName(status));
+            } else if ( (eraTestItemPtr->era0YearsGoBackwards && yrAfter>yrBefore) ||
+                        (!eraTestItemPtr->era0YearsGoBackwards && yrAfter<yrBefore) ) {
+                log_err("FAIL: era 0 add 1 year does not move forward in time for %s\n", eraTestItemPtr->locale);
+            }
+            
+            status = U_ZERO_ERROR;
+            ucal_clear(ucalTest);
+            ucal_set(ucalTest, UCAL_YEAR, 2);
+            ucal_set(ucalTest, UCAL_ERA, 0);
+            yrBefore = ucal_get(ucalTest, UCAL_YEAR, &status);
+            ucal_roll(ucalTest, UCAL_YEAR, 1, &status);
+            yrAfter = ucal_get(ucalTest, UCAL_YEAR, &status);
+            if (U_FAILURE(status)) {
+                log_err("FAIL: set era 0 year 2 then roll 1 year and get year for %s, error %s\n",
+                        eraTestItemPtr->locale, u_errorName(status));
+            } else if ( (eraTestItemPtr->era0YearsGoBackwards && yrAfter>yrBefore) ||
+                        (!eraTestItemPtr->era0YearsGoBackwards && yrAfter<yrBefore) ) {
+                log_err("FAIL: era 0 roll 1 year does not move forward in time for %s\n", eraTestItemPtr->locale);
+            }
+            
+            status = U_ZERO_ERROR;
+            ucal_clear(ucalTest);
+            ucal_set(ucalTest, UCAL_YEAR, 1);
+            ucal_set(ucalTest, UCAL_ERA, 0);
+            if (eraTestItemPtr->era0YearsGoBackwards) {
+                ucal_roll(ucalTest, UCAL_YEAR, 1, &status); /* roll forward in time to era 0 boundary */
+                yrAfter = ucal_get(ucalTest, UCAL_YEAR, &status);
+                eraAfter = ucal_get(ucalTest, UCAL_ERA, &status);
+                if (U_FAILURE(status)) {
+                    log_err("FAIL: set era 0 year 1 then roll 1 year and get year,era for %s, error %s\n",
+                            eraTestItemPtr->locale, u_errorName(status));
+                /* all calendars with era0YearsGoBackwards have "unbounded" era0 year values, so we should pin at yr 1 */
+                } else if (eraAfter != 0 || yrAfter != 1) {
+                    log_err("FAIL: era 0 roll 1 year from year 1 does not stay within era or pin to year 1 for %s (get era %d year %d)\n",
+                            eraTestItemPtr->locale, eraAfter, yrAfter);
+                }
+            } else {
+                /* roll backward in time to where era 0 years go negative, except for the Chinese
+                   calendar, which uses negative eras instead of having years outside the range 1-60 */
+                const char * calType = ucal_getType(ucalTest, &status);
+                ucal_roll(ucalTest, UCAL_YEAR, -2, &status);
+                yrAfter = ucal_get(ucalTest, UCAL_YEAR, &status);
+                eraAfter = ucal_get(ucalTest, UCAL_ERA, &status);
+                if (U_FAILURE(status)) {
+                    log_err("FAIL: set era 0 year 1 then roll -2 years and get year,era for %s, error %s\n",
+                            eraTestItemPtr->locale, u_errorName(status));
+                } else if ( uprv_strcmp(calType,"chinese")!=0 && (eraAfter != 0 || yrAfter != -1) ) {
+                    log_err("FAIL: era 0 roll -2 years from year 1 does not stay within era or produce year -1 for %s (get era %d year %d)\n",
+                            eraTestItemPtr->locale, eraAfter, yrAfter);
+                }
+            }
+            
+            status = U_ZERO_ERROR;
+            ucal_clear(ucalTest);
+            ucal_set(ucalTest, UCAL_YEAR, 1);
+            ucal_set(ucalTest, UCAL_ERA, 0);
+            eraMax = ucal_getLimit(ucalTest, UCAL_ERA, UCAL_MAXIMUM, &status);
+            if ( U_SUCCESS(status) && eraMax > 0 ) {
+                /* try similar tests for era 1 (if calendar has it), in which years always go forward */
+                status = U_ZERO_ERROR;
+                ucal_clear(ucalTest);
+                ucal_set(ucalTest, UCAL_YEAR, 2);
+                ucal_set(ucalTest, UCAL_ERA, 1);
+                yrBefore = ucal_get(ucalTest, UCAL_YEAR, &status);
+                ucal_add(ucalTest, UCAL_YEAR, 1, &status);
+                yrAfter = ucal_get(ucalTest, UCAL_YEAR, &status);
+                if (U_FAILURE(status)) {
+                    log_err("FAIL: set era 1 year 2 then add 1 year and get year for %s, error %s\n",
+                            eraTestItemPtr->locale, u_errorName(status));
+                } else if ( yrAfter<yrBefore ) {
+                    log_err("FAIL: era 1 add 1 year does not move forward in time for %s\n", eraTestItemPtr->locale);
+                }
+                
+                status = U_ZERO_ERROR;
+                ucal_clear(ucalTest);
+                ucal_set(ucalTest, UCAL_YEAR, 2);
+                ucal_set(ucalTest, UCAL_ERA, 1);
+                yrBefore = ucal_get(ucalTest, UCAL_YEAR, &status);
+                ucal_roll(ucalTest, UCAL_YEAR, 1, &status);
+                yrAfter = ucal_get(ucalTest, UCAL_YEAR, &status);
+                if (U_FAILURE(status)) {
+                    log_err("FAIL: set era 1 year 2 then roll 1 year and get year for %s, error %s\n",
+                            eraTestItemPtr->locale, u_errorName(status));
+                } else if ( yrAfter<yrBefore ) {
+                    log_err("FAIL: era 1 roll 1 year does not move forward in time for %s\n", eraTestItemPtr->locale);
+                }
+                
+                status = U_ZERO_ERROR;
+                ucal_clear(ucalTest);
+                ucal_set(ucalTest, UCAL_YEAR, 1);
+                ucal_set(ucalTest, UCAL_ERA, 1);
+                yrMax = ucal_getLimit(ucalTest, UCAL_YEAR, UCAL_ACTUAL_MAXIMUM, &status); /* max year value for era 1 */
+                ucal_roll(ucalTest, UCAL_YEAR, -1, &status); /* roll down which should pin or wrap to end */
+                yrAfter = ucal_get(ucalTest, UCAL_YEAR, &status);
+                eraAfter = ucal_get(ucalTest, UCAL_ERA, &status);
+                if (U_FAILURE(status)) {
+                    log_err("FAIL: set era 1 year 1 then roll -1 year and get year,era for %s, error %s\n",
+                            eraTestItemPtr->locale, u_errorName(status));
+                /* if yrMax is reasonable we should wrap to that, else we should pin at yr 1 */
+                } else if (yrMax >= 32768) {
+                    if (eraAfter != 1 || yrAfter != 1) {
+                        log_err("FAIL: era 1 roll -1 year from year 1 does not stay within era or pin to year 1 for %s (get era %d year %d)\n",
+                                eraTestItemPtr->locale, eraAfter, yrAfter);
+                    }
+                } else if (eraAfter != 1 || yrAfter != yrMax) {
+                    log_err("FAIL: era 1 roll -1 year from year 1 does not stay within era or wrap to year %d for %s (get era %d year %d)\n",
+                            yrMax, eraTestItemPtr->locale, eraAfter, yrAfter);
+                } else {
+                    /* now roll up which should wrap to beginning */
+                    ucal_roll(ucalTest, UCAL_YEAR, 1, &status); /* now roll up which should wrap to beginning */
+                    yrAfter = ucal_get(ucalTest, UCAL_YEAR, &status);
+                    eraAfter = ucal_get(ucalTest, UCAL_ERA, &status);
+                    if (U_FAILURE(status)) {
+                        log_err("FAIL: era 1 roll 1 year from end and get year,era for %s, error %s\n",
+                                eraTestItemPtr->locale, u_errorName(status));
+                    } else if (eraAfter != 1 || yrAfter != 1) {
+                        log_err("FAIL: era 1 roll 1 year from year %d does not stay within era or wrap to year 1 for %s (get era %d year %d)\n",
+                                yrMax, eraTestItemPtr->locale, eraAfter, yrAfter);
+                    }
+                }
+
+                /* if current era  > 1, try the same roll tests for current era */
+                ucal_setMillis(ucalTest, ucal_getNow(), &status);
+                eraNow = ucal_get(ucalTest, UCAL_ERA, &status);
+                if ( U_SUCCESS(status) && eraNow > 1 ) {
+                    status = U_ZERO_ERROR;
+                    ucal_clear(ucalTest);
+                    ucal_set(ucalTest, UCAL_YEAR, 1);
+                    ucal_set(ucalTest, UCAL_ERA, eraNow);
+                    yrMax = ucal_getLimit(ucalTest, UCAL_YEAR, UCAL_ACTUAL_MAXIMUM, &status); /* max year value for this era */
+                    ucal_roll(ucalTest, UCAL_YEAR, -1, &status);
+                    yrAfter = ucal_get(ucalTest, UCAL_YEAR, &status);
+                    eraAfter = ucal_get(ucalTest, UCAL_ERA, &status);
+                    if (U_FAILURE(status)) {
+                        log_err("FAIL: set era %d year 1 then roll -1 year and get year,era for %s, error %s\n",
+                                eraNow, eraTestItemPtr->locale, u_errorName(status));
+                    /* if yrMax is reasonable we should wrap to that, else we should pin at yr 1 */
+                    } else if (yrMax >= 32768) {
+                        if (eraAfter != eraNow || yrAfter != 1) {
+                            log_err("FAIL: era %d roll -1 year from year 1 does not stay within era or pin to year 1 for %s (get era %d year %d)\n",
+                                    eraNow, eraTestItemPtr->locale, eraAfter, yrAfter);
+                        }
+                    } else if (eraAfter != eraNow || yrAfter != yrMax) {
+                        log_err("FAIL: era %d roll -1 year from year 1 does not stay within era or wrap to year %d for %s (get era %d year %d)\n",
+                                eraNow, yrMax, eraTestItemPtr->locale, eraAfter, yrAfter);
+                    } else {
+                        /* now roll up which should wrap to beginning */
+                        ucal_roll(ucalTest, UCAL_YEAR, 1, &status); /* now roll up which should wrap to beginning */
+                        yrAfter = ucal_get(ucalTest, UCAL_YEAR, &status);
+                        eraAfter = ucal_get(ucalTest, UCAL_ERA, &status);
+                        if (U_FAILURE(status)) {
+                            log_err("FAIL: era %d roll 1 year from end and get year,era for %s, error %s\n",
+                                    eraNow, eraTestItemPtr->locale, u_errorName(status));
+                        } else if (eraAfter != eraNow || yrAfter != 1) {
+                            log_err("FAIL: era %d roll 1 year from year %d does not stay within era or wrap to year 1 for %s (get era %d year %d)\n",
+                                    eraNow, yrMax, eraTestItemPtr->locale, eraAfter, yrAfter);
+                        }
+                    }
+                }
+            }
+
+            ucal_close(ucalTest);
+        } else {
+            log_data_err("FAIL: ucal_open fails for zone GMT, locale %s, UCAL_DEFAULT\n", eraTestItemPtr->locale);
+        }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
