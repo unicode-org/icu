@@ -19,7 +19,7 @@
 U_NAMESPACE_BEGIN
 
 CharsetMatch::CharsetMatch()
-  : csr(NULL), textIn(NULL), confidence(0), fCharsetName(NULL), fLang(NULL)
+  : textIn(NULL), confidence(0), fCharsetName(NULL), fLang(NULL)
 {
     // nothing else to do.
 }
@@ -28,16 +28,15 @@ void CharsetMatch::set(InputText *input, const CharsetRecognizer *cr, int32_t co
                        const char *csName, const char *lang)
 {
     textIn = input;
-    csr = cr;
     confidence = conf; 
     fCharsetName = csName;
     fLang = lang;
-    if (csr != NULL) {
+    if (cr != NULL) {
         if (fCharsetName == NULL) {
-            fCharsetName = csr->getName();
+            fCharsetName = cr->getName();
         }
         if (fLang == NULL) {
-            fLang = csr->getLanguage();
+            fLang = cr->getLanguage();
         }
     }
 }
