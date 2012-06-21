@@ -31,7 +31,6 @@ class CharsetRecognizer;
 class CharsetMatch : public UMemory
 {
  private:
-    const CharsetRecognizer *csr;
     InputText               *textIn;
     int32_t                  confidence;
     const char              *fCharsetName;
