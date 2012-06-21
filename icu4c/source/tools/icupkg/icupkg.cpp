@@ -376,7 +376,7 @@ main(int argc, char *argv[]) {
             fprintf(stderr, "icupkg: not enough memory\n");
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
-        if(!readList(NULL, options[OPT_REMOVE_LIST].value, FALSE, listPkg)) {
+        if(readList(NULL, options[OPT_REMOVE_LIST].value, FALSE, listPkg)) {
             pkg->removeItems(*listPkg);
             delete listPkg;
             isModified=TRUE;
@@ -398,7 +398,7 @@ main(int argc, char *argv[]) {
             fprintf(stderr, "icupkg: not enough memory\n");
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
-        if(!readList(sourcePath, options[OPT_ADD_LIST].value, TRUE, addListPkg)) {
+        if(readList(sourcePath, options[OPT_ADD_LIST].value, TRUE, addListPkg)) {
             pkg->addItems(*addListPkg);
             // delete addListPkg; deferred until after writePackage()
             isModified=TRUE;
@@ -415,7 +415,7 @@ main(int argc, char *argv[]) {
             fprintf(stderr, "icupkg: not enough memory\n");
             exit(U_MEMORY_ALLOCATION_ERROR);
         }
-        if(!readList(NULL, options[OPT_EXTRACT_LIST].value, FALSE, listPkg)) {
+        if(readList(NULL, options[OPT_EXTRACT_LIST].value, FALSE, listPkg)) {
             pkg->extractItems(destPath, *listPkg, outType);
             delete listPkg;
         } else {
