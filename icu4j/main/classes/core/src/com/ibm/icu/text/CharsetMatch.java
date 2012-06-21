@@ -189,7 +189,6 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
      *  Constructor.  Implementation internal
      */
     CharsetMatch(CharsetDetector det, CharsetRecognizer rec, int conf) {
-        fRecognizer = rec;
         fConfidence = conf;
         
         // The references to the original application input data must be copied out
@@ -210,7 +209,6 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
      *  Constructor.  Implementation internal
      */
     CharsetMatch(CharsetDetector det, CharsetRecognizer rec, int conf, String csName, String lang) {
-        fRecognizer = rec;
         fConfidence = conf;
         
         // The references to the original application input data must be copied out
@@ -232,7 +230,6 @@ public class CharsetMatch implements Comparable<CharsetMatch> {
     //   Private Data
     //
     private int                 fConfidence;
-    private CharsetRecognizer   fRecognizer;
     private byte[]              fRawInput = null;     // Original, untouched input bytes.
                                                       //  If user gave us a byte array, this is it.
     private int                 fRawLength;           // Length of data in fRawInput array.
