@@ -3128,6 +3128,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #roll(int, int)
      * @stable ICU 2.0
      */
+    @SuppressWarnings("fallthrough")
     public void add(int field, int amount) {
 
         if (amount == 0) {
