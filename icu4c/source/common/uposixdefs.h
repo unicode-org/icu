@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2012, International Business Machines
+*   Copyright (C) 2011-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  uposixdefs.h
@@ -52,7 +52,7 @@
  *
  * z/OS needs this definition for timeval and to get usleep.
  */
-#if !defined(_XOPEN_SOURCE_EXTENDED) && (defined(__IBMC__) || defined(__IBMCPP__))
+#if !defined(_XOPEN_SOURCE_EXTENDED)
 #   define _XOPEN_SOURCE_EXTENDED 1
 #endif
 
