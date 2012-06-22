@@ -544,7 +544,7 @@ void PluralRulesTest::testOrdinal() {
     }
     UnicodeString keyword = pr->select(2.);
     if (keyword != UNICODE_STRING("two", 3)) {
-        errln("PluralRules(en-ordinal).select(2) failed");
+        dataerrln("PluralRules(en-ordinal).select(2) failed");
     }
 }
 
