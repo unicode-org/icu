@@ -330,7 +330,7 @@ void TimeUnitTest::testGreekWithSanitization() {
     UErrorCode status = U_ZERO_ERROR;
     Locale elLoc("el");
     NumberFormat* numberFmt = NumberFormat::createInstance(Locale("el"), status);
-    if (!assertSuccess("NumberFormat::createInstance for el locale", status)) return;
+    if (!assertSuccess("NumberFormat::createInstance for el locale", status, TRUE)) return;
     numberFmt->setMaximumFractionDigits(1);
 
     TimeUnitFormat* timeUnitFormat = new TimeUnitFormat(elLoc, status);

@@ -584,7 +584,7 @@ PluralFormatTest::ordinalFormatTest(void) {
     IcuTestErrorCode errorCode(*this, "ordinalFormatTest");
     UnicodeString pattern("one{#st file}two{#nd file}few{#rd file}other{#th file}");
     PluralFormat pf(Locale::getEnglish(), UPLURAL_TYPE_ORDINAL, pattern, errorCode);
-    if (errorCode.logIfFailureAndReset("PluralFormat(en, UPLURAL_TYPE_ORDINAL, pattern) failed")) {
+    if (errorCode.logDataIfFailureAndReset("PluralFormat(en, UPLURAL_TYPE_ORDINAL, pattern) failed")) {
       return;
     }
     UnicodeString result = pf.format(321, errorCode);
