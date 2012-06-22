@@ -104,7 +104,7 @@ static void TestOrdinalRules() {
     U_STRING_INIT(two, "two", 3);
     length = uplrules_select(upr, 2., keyword, 8, &errorCode);
     if (U_FAILURE(errorCode) || u_strCompare(keyword, length, two, 3, FALSE) != 0) {
-        log_err("uplrules_select(en-ordinal, 2) failed - %s\n", u_errorName(errorCode));
+        log_data_err("uplrules_select(en-ordinal, 2) failed - %s\n", u_errorName(errorCode));
     }
     uplrules_close(upr);
 }

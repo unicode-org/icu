@@ -37,7 +37,8 @@
     errln("Failure in file %s, line %d", __FILE__, __LINE__);}}
 
 #define TEST_ASSERT_SUCCESS(errcode) { if (U_FAILURE(errcode)) { \
-    errcheckln(errcode, "Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode));}}
+    errcheckln(errcode, "Failure in file %s, line %d, status = \"%s\"", __FILE__, __LINE__, u_errorName(errcode));\
+    return;}}
 
 
 //---------------------------------------------------------------------------

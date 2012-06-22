@@ -1828,19 +1828,21 @@ void TestMessageFormat::TestSelectOrdinal() {
     FieldPosition ignore(0);
     UnicodeString result;
     assertEquals("plural-and-ordinal format(21) failed", "21 files, 21st file",
-                 m.format(args, 1, result, ignore, errorCode));
+                 m.format(args, 1, result, ignore, errorCode), TRUE);
 
     args[0].setLong(2);
     assertEquals("plural-and-ordinal format(2) failed", "2 files, 2nd file",
-                 m.format(args, 1, result.remove(), ignore, errorCode));
+                 m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
 
     args[0].setLong(1);
     assertEquals("plural-and-ordinal format(1) failed", "1 file, 1st file",
-                 m.format(args, 1, result.remove(), ignore, errorCode));
+                 m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
 
     args[0].setLong(3);
     assertEquals("plural-and-ordinal format(3) failed", "3 files, 3rd file",
-                 m.format(args, 1, result.remove(), ignore, errorCode));
+                 m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
+
+    errorCode.logDataIfFailureAndReset("");
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

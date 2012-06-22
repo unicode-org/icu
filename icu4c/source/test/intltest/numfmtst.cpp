@@ -6598,7 +6598,7 @@ void NumberFormatTest::TestFormatFastpaths() {
     FieldPosition pos;
     df.format(long_number, result, pos);
     if(U_FAILURE(status)||expect!=result) {
-      errln("FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),""));
+      errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),""));
     } else {
       logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),""));
     }
@@ -6617,7 +6617,7 @@ void NumberFormatTest::TestFormatFastpaths() {
     FieldPosition pos;
     df.format(long_number, result, pos);
     if(U_FAILURE(status)||expect!=result) {
-      errln("FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
+      errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
     } else {
       logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
     }
@@ -6636,7 +6636,7 @@ void NumberFormatTest::TestFormatFastpaths() {
     FieldPosition pos;
     df.format(long_number, result, pos);
     if(U_FAILURE(status)||expect!=result) {
-      errln("FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
+      errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
     } else {
       logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
     }
@@ -6655,7 +6655,7 @@ void NumberFormatTest::TestFormatFastpaths() {
     FieldPosition pos;
     df.format(long_number, result, pos);
     if(U_FAILURE(status)||expect!=result) {
-      errln("FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
+      errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
     } else {
       logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
     }
@@ -6669,7 +6669,7 @@ void NumberFormatTest::TestFormatFastpaths() {
     FieldPosition pos;
     df.format(long_number, result, pos);
     if(U_FAILURE(status)||expect!=result) {
-      errln("FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
+      errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
     } else {
       logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
     }

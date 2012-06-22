@@ -919,7 +919,7 @@ void TimeZoneTest::TestShortZoneIDs()
                       " but it should be " +
                       ((kReferenceList[i].daylight)?"TRUE":"FALSE"));
             } else {
-                errln("FAIL: Time Zone " + itsID + " use daylight is " +
+                dataerrln("FAIL: Time Zone " + itsID + " use daylight is " +
                       (usesDaylight?"TRUE":"FALSE") +
                       " but it should be " +
                       ((kReferenceList[i].daylight)?"TRUE":"FALSE"));
@@ -935,7 +935,7 @@ void TimeZoneTest::TestShortZoneIDs()
                       offsetInMinutes +
                       " but it should be " + kReferenceList[i].offset);
             } else {
-                errln("FAIL: Time Zone " + itsID + " raw offset is " +
+                dataerrln("FAIL: Time Zone " + itsID + " raw offset is " +
                       offsetInMinutes +
                       " but it should be " + kReferenceList[i].offset);
             }
