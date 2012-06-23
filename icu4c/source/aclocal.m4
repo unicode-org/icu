@@ -454,8 +454,7 @@ AC_DEFUN(AC_CHECK_STRICT_COMPILE,
         then
             case "${host}" in
             *-*-solaris*)
-                CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long"
-                CFLAGS="$CFLAGS -std=c99";;
+                CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
             *-*-hpux*)
                 echo "# Note: We are not using '-ansi' with HP/UX GCC because int64_t broke, see <http://bugs.icu-project.org/trac/ticket/8493>"
                 CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
