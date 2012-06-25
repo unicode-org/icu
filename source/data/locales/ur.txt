@@ -1,0 +1,363 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2012 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/ur.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/ur.xml
+ */
+ur{
+    AuxExemplarCharacters{"[]"}
+    ExemplarCharacters{
+        "[ا أ آ ب پ ت ٹ ث ج چ ح خ د ڈ ذ ر ڑ ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن ں و ؤ ہ"
+        " ھ ء ی ئ ے ٻ ة ٺ ټ ٽ ه ي]"
+    }
+    LocaleScript{
+        "Arab",
+    }
+    NumberElements{
+        default{"latn"}
+        latn{
+            patterns{
+                currencyFormat{"¤#,##0.00"}
+                decimalFormat{"#,##0.###"}
+                percentFormat{"#,##0%"}
+                scientificFormat{"#E0"}
+            }
+            symbols{
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+            }
+        }
+        native{"arabext"}
+    }
+    Version{"2.0.65.46"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "دن",
+                "رات",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE؍ d؍ MMMM y",
+                "d؍ MMMM y",
+                "d؍ MMM y",
+                "d/M/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    wide{
+                        "اتوار",
+                        "پير",
+                        "منگل",
+                        "بده",
+                        "جمعرات",
+                        "جمعہ",
+                        "ہفتہ",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "ق م",
+                    "عيسوی سن",
+                }
+                wide{
+                    "قبل مسيح",
+                    "عيسوی سن",
+                }
+            }
+            fields{
+                day{
+                    dn{"دن"}
+                    relative{
+                        "-1"{"کل"}
+                        "-2"{"گزشتہ پرسوں"}
+                        "0"{"آج"}
+                        "1"{"کل"}
+                        "2"{"آنے والا پرسوں"}
+                    }
+                }
+                dayperiod{
+                    dn{"رات/صبح"}
+                }
+                era{
+                    dn{"عہد"}
+                }
+                hour{
+                    dn{"گھنٹہ"}
+                }
+                minute{
+                    dn{"منٹ"}
+                }
+                month{
+                    dn{"مہینہ"}
+                    relative{
+                        "-1"{"پچھلے مہینہ"}
+                        "0"{"اس مہینہ"}
+                        "1"{"اگلے مہینہ"}
+                    }
+                }
+                second{
+                    dn{"سیکنڈ"}
+                }
+                week{
+                    dn{"ہفتہ"}
+                    relative{
+                        "-1"{"پچھلے ہفتہ"}
+                        "0"{"اس ہفتہ"}
+                        "1"{"اگلے ہفتہ"}
+                    }
+                }
+                weekday{
+                    dn{"ہفتے کا دن"}
+                }
+                year{
+                    dn{"سال"}
+                    relative{
+                        "-1"{"پچھلے سال"}
+                        "0"{"اس سال"}
+                        "1"{"اگلے سال"}
+                    }
+                }
+                zone{
+                    dn{"منطقۂ وقت"}
+                }
+            }
+            monthNames{
+                format{
+                    wide{
+                        "جنوری",
+                        "فروری",
+                        "مارچ",
+                        "اپريل",
+                        "مئ",
+                        "جون",
+                        "جولائ",
+                        "اگست",
+                        "ستمبر",
+                        "اکتوبر",
+                        "نومبر",
+                        "دسمبر",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    wide{
+                        "پہلی سہ ماہی",
+                        "دوسری سہ ماہی",
+                        "تيسری سہ ماہی",
+                        "چوتهی سہ ماہی",
+                    }
+                }
+            }
+        }
+        islamic{
+            monthNames{
+                format{
+                    wide{
+                        "محرم",
+                        "صفر",
+                        "ر بيع الاول",
+                        "ر بيع الثانی",
+                        "جمادی الاول",
+                        "جمادی الثانی",
+                        "رجب",
+                        "شعبان",
+                        "رمضان",
+                        "شوال",
+                        "Dhuʻl-Qiʻdah",
+                        "Dhuʻl-Hijjah",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"‘"}
+        alternateQuotationStart{"’"}
+        quotationEnd{"“"}
+        quotationStart{"”"}
+    }
+    layout{
+        characters{"right-to-left"}
+        lines{"top-to-bottom"}
+    }
+    listPattern{
+        standard{
+            2{"{0} اور {1}"}
+            end{"{0}، اور {1}"}
+            middle{"{0}، {1}"}
+            start{"{0}، {1}"}
+        }
+    }
+    measurementSystemNames{
+        UK{"سلطنت متحدہ"}
+        US{"ریاستہائے متحدہ"}
+        metric{"پیمانہ"}
+    }
+    units{
+        day{
+            0{"0 دن"}
+            1{"1 دن"}
+            other{"{0} دن"}
+        }
+        day-future{
+            0{"0 دن میں"}
+            1{"1 دن میں"}
+            other{"{0} دن میں"}
+        }
+        day-past{
+            0{"0 دن پہلے"}
+            1{"1 دن پہلے"}
+            other{"{0} دن پہلے"}
+        }
+        hour{
+            0{"0 گھنٹے"}
+            1{"1 گھنٹہ"}
+            other{"{0} گھنٹے"}
+        }
+        hour-future{
+            0{"0 گھنٹے میں"}
+            1{"1 گھنٹہ میں"}
+            other{"{0} گھنٹے میں"}
+        }
+        hour-past{
+            0{"0 گھنٹے پہلے"}
+            1{"1 گھنٹہ پہلے"}
+            other{"{0} گھنٹے پہلے"}
+        }
+        minute{
+            0{"0 منٹ"}
+            1{"1 منٹ"}
+            other{"{0} منٹ"}
+        }
+        minute-future{
+            0{"0 منٹ میں"}
+            1{"1 منٹ میں"}
+            other{"{0} منٹ میں"}
+        }
+        minute-past{
+            0{"0 منٹ پہلے"}
+            1{"1 منٹ پہلے"}
+            other{"{0} منٹ پہلے"}
+        }
+        month{
+            0{"0 مہینے"}
+            1{"1 مہینہ"}
+            other{"{0} مہینے"}
+        }
+        month-future{
+            0{"0 مہینے میں"}
+            1{"1 مہینہ میں"}
+            other{"{0} مہینے میں"}
+        }
+        month-past{
+            0{"0 مہینے پہلے"}
+            1{"1 مہینہ پہلے"}
+            other{"{0} مہینے پہلے"}
+        }
+        second{
+            0{"0 سیکنڈ"}
+            1{"1 سیکنڈ"}
+            other{"{0} سیکنڈ"}
+        }
+        second-future{
+            0{"0 سیکنڈ میں"}
+            1{"1 سیکنڈ میں"}
+            other{"{0} سیکنڈ میں"}
+        }
+        second-past{
+            0{"0 سیکنڈ پہلے"}
+            1{"1 سیکنڈ پہلے"}
+            other{"{0} سیکنڈ پہلے"}
+        }
+        week{
+            0{"0 ہفتے"}
+            1{"1 ہفتہ"}
+            other{"{0} ہفتے"}
+        }
+        week-future{
+            0{"0 ہفتے میں"}
+            1{"1 ہفتہ میں"}
+            other{"{0} ہفتے میں"}
+        }
+        week-past{
+            0{"0 ہفتے پہلے"}
+            1{"1 ہفتہ پہلے"}
+            other{"{0} ہفتے پہلے"}
+        }
+        year{
+            0{"0 سال"}
+            1{"1 سال"}
+            other{"{0} سال"}
+        }
+        year-future{
+            0{"0 سال میں"}
+            1{"1 سال میں"}
+            other{"{0} سال میں"}
+        }
+        year-past{
+            0{"0 سال پہلے"}
+            1{"1 سال پہلے"}
+            other{"{0} سال پہلے"}
+        }
+    }
+    unitsShort{
+        day{
+            0{"0 دن"}
+            1{"1 دن"}
+            other{"{0} دن"}
+        }
+        hour{
+            0{"0 گھنٹے"}
+            1{"1 گھنٹہ"}
+            other{"{0} گھنٹے"}
+        }
+        minute{
+            0{"0 منٹ"}
+            1{"1 منٹ"}
+            other{"{0} منٹ"}
+        }
+        month{
+            0{"0 مہینے"}
+            1{"1 مہینہ"}
+            other{"{0} مہینے"}
+        }
+        second{
+            0{"0 سیکنڈ"}
+            1{"1 سیکنڈ"}
+            other{"{0} سیکنڈ"}
+        }
+        week{
+            0{"0 ہفتے"}
+            1{"1 ہفتہ"}
+            other{"{0} ہفتے"}
+        }
+        year{
+            0{"0 سال"}
+            1{"1 سال"}
+            other{"{0} سال"}
+        }
+    }
+}

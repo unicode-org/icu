@@ -1,0 +1,526 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2012 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/mr.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/mr.xml
+ */
+mr{
+    AuxExemplarCharacters{"[\u200C\u200D]"}
+    ExemplarCharacters{
+        "[\u093C ० १ २ ३ ४ ५ ६ ७ ८ ९ ॐ \u0902 \u0901 ः अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क "
+        "ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त थ द ध न प फ ब भ म य र ल व श ष स ह ळ ऽ ा ि ी "
+        "\u0941 \u0942 \u0943 \u0944 \u0945 \u0947 \u0948 ॉ ो ौ \u094D]"
+    }
+    ExemplarCharactersCurrency{"[र \u0941]"}
+    ExemplarCharactersIndex{
+        "[\u200D ॐ \u0902 ः अ आ इ ई उ ऊ ऋ ऌ ए ऐ ऑ ओ औ क ख ग घ ङ च छ ज झ ञ ट ठ ड ढ ण त"
+        " थ द ध न प फ ब भ म य र ल व श ष स ह ळ ऽ \u0945 \u094D]"
+    }
+    LocaleScript{
+        "Deva",
+    }
+    NumberElements{
+        default{"latn"}
+        latn{
+            patterns{
+                currencyFormat{"¤ #,##,##0.00"}
+                decimalFormat{"#,##,##0.###"}
+                percentFormat{"#,##,##0%"}
+            }
+            symbols{
+                exponential{"पू"}
+                nan{"नान"}
+            }
+        }
+        native{"deva"}
+    }
+    Version{"2.0.65.46"}
+    calendar{
+        gregorian{
+            AmPmMarkers{
+                "म.पू.",
+                "म.नं.",
+            }
+            DateTimePatterns{
+                "h-mm-ss a zzzz",
+                "h-mm-ss a z",
+                "h-mm-ss a",
+                "h-mm a",
+                "EEEE d MMMM y",
+                "d MMMM y",
+                "d MMM y",
+                "d-M-yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E d"}
+                Hm{"H-mm"}
+                Hms{"H-mm-ss"}
+                M{"M"}
+                MEd{"E, d/M"}
+                MMMEd{"E, d MMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"dd-MM"}
+                Md{"d/M"}
+                yM{"M/y"}
+                yMEd{"E, d/M/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, d MMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d/M/y"}
+                yQ{"Q y"}
+                yQQQ{"QQQ y"}
+                yyQ{"Q yy"}
+                yyyyMM{"MM-yyyy"}
+                yyyyMMMM{"MMMM y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "रवि",
+                        "सोम",
+                        "मंगळ",
+                        "बुध",
+                        "गुरु",
+                        "शुक्र",
+                        "शनि",
+                    }
+                    wide{
+                        "रविवार",
+                        "सोमवार",
+                        "मंगळवार",
+                        "बुधवार",
+                        "गुरुवार",
+                        "शुक्रवार",
+                        "शनिवार",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "रवि",
+                        "सोम",
+                        "मंगळ",
+                        "बुध",
+                        "गुरु",
+                        "शुक्र",
+                        "शनि",
+                    }
+                    narrow{
+                        "र",
+                        "सो",
+                        "मं",
+                        "बु",
+                        "गु",
+                        "शु",
+                        "श",
+                    }
+                    wide{
+                        "रविवार",
+                        "सोमवार",
+                        "मंगळवार",
+                        "बुधवार",
+                        "गुरुवार",
+                        "शुक्रवार",
+                        "शनिवार",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "ईसापूर्व",
+                    "सन",
+                }
+                wide{
+                    "ईसवीसनपूर्व",
+                    "ईसवीसन",
+                }
+            }
+            fields{
+                day{
+                    dn{"दिवस"}
+                    relative{
+                        "-1"{"काल"}
+                        "-2"{"परवा"}
+                        "0"{"आज"}
+                        "1"{"उद्या"}
+                        "2"{"परवा"}
+                    }
+                }
+                dayperiod{
+                    dn{"AM/PM"}
+                }
+                era{
+                    dn{"युग"}
+                }
+                hour{
+                    dn{"तास"}
+                }
+                minute{
+                    dn{"मिनिट"}
+                }
+                month{
+                    dn{"महिना"}
+                    relative{
+                        "-1"{"मागील महिना"}
+                        "0"{"हा महिना"}
+                        "1"{"पुढील महिना"}
+                    }
+                }
+                second{
+                    dn{"सेकंद"}
+                }
+                week{
+                    dn{"आठव़डा"}
+                    relative{
+                        "-1"{"मागील आठवडा"}
+                        "0"{"हा आठवडा"}
+                        "1"{"पुढील आठवडा"}
+                    }
+                }
+                weekday{
+                    dn{"आठवड्याचा दिवस"}
+                }
+                year{
+                    dn{"वर्ष"}
+                    relative{
+                        "-1"{"मागील वर्ष"}
+                        "0"{"या वर्षी"}
+                        "1"{"पुढील वर्ष"}
+                    }
+                }
+                zone{
+                    dn{"झोन"}
+                }
+            }
+            intervalFormats{
+                MEd{
+                    M{"E, d/M - E, d/M"}
+                    d{"E, d/M - E, d/M"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"E, d MMM - E, d MMM"}
+                    d{"E, d MMM - E, d MMM"}
+                }
+                MMMd{
+                    M{"d MMM - d MMM"}
+                    d{"d-d MMM"}
+                }
+                Md{
+                    M{"d/M - d/M"}
+                    d{"d/M - d/M"}
+                }
+                yM{
+                    M{"M/yy – M/yy"}
+                    y{"M/yy – M/yy"}
+                }
+                yMEd{
+                    M{"E, d/M/yy - E, d/M/yy"}
+                    d{"E, d/M/yy - E, d/M/yy"}
+                    y{"E, d/M/yy - E, d/M/yy"}
+                }
+                yMMM{
+                    M{"MMM–MMM y"}
+                    y{"MMM y - MMM y"}
+                }
+                yMMMEd{
+                    M{"E, d MMM - E, d MMM y"}
+                    d{"E, d MMM y - E, d MMM y"}
+                    y{"E, d MMM y - E, d MMM y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM y"}
+                    d{"d-d MMM y"}
+                    y{"d MMM y - d MMM y"}
+                }
+                yMd{
+                    M{"d/M/yy - d/M/yy"}
+                    d{"d/M/yy - d/M/yy"}
+                    y{"d/M/yy - d/M/yy"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "जाने",
+                        "फेब्रु",
+                        "मार्च",
+                        "एप्रि",
+                        "मे",
+                        "जून",
+                        "जुलै",
+                        "ऑग",
+                        "सेप्टें",
+                        "ऑक्टोबर",
+                        "नोव्हें",
+                        "डिसें",
+                    }
+                    wide{
+                        "जानेवारी",
+                        "फेब्रुवारी",
+                        "मार्च",
+                        "एप्रिल",
+                        "मे",
+                        "जून",
+                        "जुलै",
+                        "ऑगस्ट",
+                        "सप्टेंबर",
+                        "ऑक्टोबर",
+                        "नोव्हेंबर",
+                        "डिसेंबर",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "जाने",
+                        "फेब्रु",
+                        "मार्च",
+                        "एप्रि",
+                        "मे",
+                        "जून",
+                        "जुलै",
+                        "ऑग",
+                        "सेप्टें",
+                        "ऑक्टोबर",
+                        "नोव्हें",
+                        "डिसें",
+                    }
+                    narrow{
+                        "जा",
+                        "फे",
+                        "मा",
+                        "ए",
+                        "मे",
+                        "जू",
+                        "जु",
+                        "ऑ",
+                        "स",
+                        "ऑ",
+                        "नो",
+                        "डि",
+                    }
+                    wide{
+                        "जानेवारी",
+                        "फेब्रुवारी",
+                        "मार्च",
+                        "एप्रिल",
+                        "मे",
+                        "जून",
+                        "जुलै",
+                        "ऑगस्ट",
+                        "सप्टेंबर",
+                        "ऑक्टोबर",
+                        "नोव्हेंबर",
+                        "डिसेंबर",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "ति 1",
+                        "2 री तिमाही",
+                        "ति 3",
+                        "ति 4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "प्रथम तिमाही",
+                        "द्वितीय तिमाही",
+                        "तृतीय तिमाही",
+                        "चतुर्थ तिमाही",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ति 1",
+                        "ति 2",
+                        "ति 3",
+                        "ति 4",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    listPattern{
+        standard{
+            2{"{0} आणि {1}"}
+            end{"{0} आणि {1}"}
+        }
+    }
+    measurementSystemNames{
+        UK{"यूके"}
+        metric{"मेट्रिक"}
+    }
+    units{
+        day{
+            0{"0 दिवस"}
+            1{"1 दिवस"}
+            other{"{0} दिवस"}
+        }
+        day-future{
+            0{"0 दिवसांत"}
+            1{"1 दिवसात"}
+            other{"{0} दिवसांत"}
+        }
+        day-past{
+            0{"0 दिवसांपूर्वी"}
+            1{"1 दिवसापूर्वी"}
+            other{"{0} दिवसांपूर्वी"}
+        }
+        hour{
+            0{"0 तास"}
+            1{"1 तास"}
+            other{"{0} तास"}
+        }
+        hour-future{
+            0{"0 तासांत"}
+            1{"1 तासात"}
+            other{"{0} तासांत"}
+        }
+        hour-past{
+            0{"0 तासांपूर्वी"}
+            1{"1 तासापूर्वी"}
+            other{"{0} तासांपूर्वी"}
+        }
+        minute{
+            0{"0 मिनिटे"}
+            1{"1 मिनिट"}
+            other{"{0} मिनिटे"}
+        }
+        minute-future{
+            0{"0 मिनिटांत"}
+            1{"1 मिनिटात"}
+            other{"{0} मिनिटांत"}
+        }
+        minute-past{
+            0{"0 मिनिटांपूर्वी"}
+            1{"1 मिनिटापूर्वी"}
+            other{"{0} मिनिटांपूर्वी"}
+        }
+        month{
+            0{"0 महिने"}
+            1{"1 महिना"}
+            other{"{0} महिने"}
+        }
+        month-future{
+            0{"0 महिन्यांत"}
+            1{"1 महिन्यात"}
+            other{"{0} महिन्यांत"}
+        }
+        month-past{
+            0{"0 महिन्यांपूर्वी"}
+            1{"1 महिन्यापूर्वी"}
+            other{"{0} महिन्यांपूर्वी"}
+        }
+        second{
+            0{"0 सेकंद"}
+            1{"1 सेकंद"}
+            other{"{0} सेकंद"}
+        }
+        second-future{
+            0{"0 सेकंदांत"}
+            1{"1 सेकंदात"}
+            other{"{0} सेकंदांत"}
+        }
+        second-past{
+            0{"0 सेकंदांपूर्वी"}
+            1{"1 सेकंदापूर्वी"}
+            other{"{0} सेकंदांपूर्वी"}
+        }
+        week{
+            0{"0 आठवडे"}
+            1{"1 आठवडा"}
+            other{"{0} आठवडे"}
+        }
+        week-future{
+            0{"0 आठवड्यांत"}
+            1{"1 आठवड्यात"}
+            other{"{0} आठवड्यांत"}
+        }
+        week-past{
+            0{"0 आठवड्यांपूर्वी"}
+            1{"1 आठवड्या पूर्वी"}
+            other{"{0} आठवड्यांपूर्वी"}
+        }
+        year{
+            0{"0 वर्षे"}
+            1{"1 वर्ष"}
+            other{"{0} वर्षे"}
+        }
+        year-future{
+            0{"10 वर्षांमध्ये"}
+            1{"1 वर्षात"}
+            other{"{0} वर्षांमध्ये"}
+        }
+        year-past{
+            0{"0 वर्षांपूर्वी"}
+            1{"1 वर्षापूर्वी"}
+            other{"{0} वर्षांपूर्वी"}
+        }
+    }
+    unitsShort{
+        day{
+            0{"0 दिवस"}
+            1{"1 दिवस"}
+            other{"{0} दिवस"}
+        }
+        hour{
+            0{"0 तास"}
+            1{"1 तास"}
+            other{"{0} तास"}
+        }
+        minute{
+            0{"0 मि"}
+            1{"1 मि"}
+            other{"{0} मि"}
+        }
+        month{
+            0{"0 महिने"}
+            1{"1 महिना"}
+            other{"{0} महिने"}
+        }
+        second{
+            0{"0 से"}
+            1{"1 सेकंद"}
+            other{"{0} से"}
+        }
+        week{
+            0{"0 आठवडे"}
+            1{"1 आ"}
+            other{"{0} आ"}
+        }
+        year{
+            0{"0 वर्षे"}
+            1{"1 वर्ष"}
+            other{"{0} वर्षे"}
+        }
+    }
+}

@@ -1,0 +1,475 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2012 International Business Machines
+// * Corporation and others.  All Rights Reserved.
+// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
+// * Source File:<path>/common/main/eu.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/eu.xml
+ */
+eu{
+    AuxExemplarCharacters{"[]"}
+    ExemplarCharacters{"[a b c ç d e f g h i j k l m n ñ o p q r s t u v w x y z]"}
+    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
+    ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        latn{
+            patterns{
+                currencyFormat{"#,##0.00 ¤"}
+                decimalFormat{"#,##0.###"}
+                scientificFormat{"#E0"}
+            }
+            symbols{
+                decimal{","}
+                exponential{"E"}
+                group{"."}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+            }
+        }
+    }
+    Version{"2.0.65.46"}
+    calendar{
+        buddhist{
+            eras{
+                abbreviated{
+                    "BG",
+                }
+            }
+        }
+        gregorian{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, y'eko' MMMM'ren' dd'a'",
+                "y'eko' MMM'ren' dd'a'",
+                "y MMM d",
+                "yyyy-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MEd{"E, M/d"}
+                MMMEd{"E, MMM d"}
+                Md{"M/d"}
+                d{"d"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMd{"MMM d, y"}
+                yMd{"M/d/y"}
+                yQ{"Q y"}
+                yQQQ{"QQQ y"}
+                yyQ{"Q yy"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ig",
+                        "al",
+                        "as",
+                        "az",
+                        "og",
+                        "or",
+                        "lr",
+                    }
+                    narrow{
+                        "I",
+                        "M",
+                        "A",
+                        "A",
+                        "A",
+                        "O",
+                        "I",
+                    }
+                    wide{
+                        "igandea",
+                        "astelehena",
+                        "asteartea",
+                        "asteazkena",
+                        "osteguna",
+                        "ostirala",
+                        "larunbata",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "I",
+                        "M",
+                        "A",
+                        "L",
+                        "A",
+                        "O",
+                        "I",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "K.a.",
+                    "K.o.",
+                }
+            }
+            fields{
+                day{
+                    dn{"Eguna"}
+                    relative{
+                        "-1"{"Atzo"}
+                        "-2"{"Herenegun"}
+                        "0"{"Gaur"}
+                        "1"{"Bihar"}
+                        "2"{"Etzi"}
+                    }
+                }
+                dayperiod{
+                    dn{"AM//PM"}
+                }
+                era{
+                    dn{"Aroa"}
+                }
+                hour{
+                    dn{"Ordua"}
+                }
+                minute{
+                    dn{"Minutuak"}
+                }
+                month{
+                    dn{"Hilabetea"}
+                    relative{
+                        "-1"{"Aurreko hilabetea"}
+                        "0"{"Gauden hilabetea"}
+                        "1"{"Hurrengo hilabetea"}
+                    }
+                }
+                second{
+                    dn{"Segundoak"}
+                }
+                week{
+                    dn{"Astea"}
+                    relative{
+                        "-1"{"Aurreko astea"}
+                        "0"{"Aste hau"}
+                        "1"{"Hurrengo astea"}
+                    }
+                }
+                weekday{
+                    dn{"Asteguna"}
+                }
+                year{
+                    dn{"Urtea"}
+                    relative{
+                        "-1"{"Aurreko urtea"}
+                        "0"{"Aurten"}
+                        "1"{"Hurrengo urtea"}
+                    }
+                }
+                zone{
+                    dn{"Ordu-eremua"}
+                }
+            }
+            intervalFormats{
+                MEd{
+                    M{"E, M/d – E, M/d"}
+                    d{"E, M/d – E, M/d"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"E, MMM d – E, MMM d"}
+                    d{"E, MMM d – E, MMM d"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"M/d – M/d"}
+                    d{"M/d – M/d"}
+                }
+                hm{
+                    a{":h:mm a – h:mm a"}
+                }
+                yM{
+                    M{"M/yy – M/yy"}
+                    y{"M/yy – M/yy"}
+                }
+                yMEd{
+                    M{"E, M/d/yy – E, M/d/yy"}
+                    d{"E, M/d/yy – E, M/d/yy"}
+                    y{"E, M/d/yy – E, M/d/yy"}
+                }
+                yMMM{
+                    M{"MMM–MMM y"}
+                    y{"MMM y – MMM y"}
+                }
+                yMMMEd{
+                    M{"E, MMM d – E, MMM d, y"}
+                    d{"E, MMM d – E, MMM d, y"}
+                    y{"E, MMM d, y – E, MMM d, y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"MMM d – MMM d, y"}
+                    d{"MMM d–d, y"}
+                    y{"MMM d, y – MMM d, y"}
+                }
+                yMd{
+                    M{"M/d/yy – M/d/yy"}
+                    d{"M/d/yy – M/d/yy"}
+                    y{"M/d/yy – M/d/yy"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "urt",
+                        "ots",
+                        "mar",
+                        "api",
+                        "mai",
+                        "eka",
+                        "uzt",
+                        "abu",
+                        "ira",
+                        "urr",
+                        "aza",
+                        "abe",
+                    }
+                    wide{
+                        "urtarrila",
+                        "otsaila",
+                        "martxoa",
+                        "apirila",
+                        "maiatza",
+                        "ekaina",
+                        "uztaila",
+                        "abuztua",
+                        "iraila",
+                        "urria",
+                        "azaroa",
+                        "abendua",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "U",
+                        "O",
+                        "M",
+                        "A",
+                        "M",
+                        "E",
+                        "U",
+                        "A",
+                        "I",
+                        "U",
+                        "A",
+                        "A",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1Hh",
+                        "2Hh",
+                        "3Hh",
+                        "4Hh",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "1. hiruhilekoa",
+                        "2. hiruhilekoa",
+                        "3. hiruhilekoa",
+                        "4. hiruhilekoa",
+                    }
+                }
+            }
+        }
+        roc{
+            eras{
+                abbreviated{
+                    "R.O.C. aurretik",
+                    "R.O.C.",
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"»"}
+        alternateQuotationStart{"«"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    listPattern{
+        standard{
+            2{"{0} eta {1}"}
+            end{"{0} eta {1}"}
+        }
+    }
+    measurementSystemNames{
+        US{"US"}
+        metric{"Metriko"}
+    }
+    units{
+        day{
+            one{"{0} eguna"}
+            other{"{0} egun"}
+        }
+        day-future{
+            0{"0 egun barru"}
+            1{"1 egun barru"}
+            other{"{0} egun barru"}
+        }
+        day-past{
+            0{"Duela 0 egun"}
+            1{"Duela 1 egun"}
+            other{"Duela {0} egun"}
+        }
+        hour{
+            one{"{0} ordua"}
+            other{"{0} h"}
+        }
+        hour-future{
+            0{"0 ordu barru"}
+            1{"1 ordu barru"}
+            other{"{0} ordu barru"}
+        }
+        hour-past{
+            0{"Duela 0 ordu"}
+            1{"Duela ordubete"}
+            other{"Duela {0} ordu"}
+        }
+        minute{
+            one{"{0} minutu"}
+            other{"{0} minutu"}
+        }
+        minute-future{
+            0{"0 minutu barru"}
+            1{"1 minutu barru"}
+            other{"{0} minutu barru"}
+        }
+        minute-past{
+            0{"Duela 0 minutu"}
+            1{"Duela 1 minutu"}
+            other{"Duela {0} minutu"}
+        }
+        month{
+            0{"0 hilabete"}
+            1{"1 hilabete"}
+            one{"{0} hilea"}
+            other{"{0} hilabete"}
+        }
+        month-future{
+            0{"0 hilabete barru"}
+            1{"1 hilabete barru"}
+            other{"{0} hilabete barru"}
+        }
+        month-past{
+            0{"Duela 0 hilabete"}
+            1{"Duela 1 hilabete"}
+            other{"Duela {0} hilabete"}
+        }
+        second{
+            one{"{0} segundo"}
+            other{"{0} s"}
+        }
+        second-future{
+            0{"0 segundo barru"}
+            1{"1 segundo barru"}
+            other{"{0} segundo barru"}
+        }
+        second-past{
+            0{"Duela 0 segundo"}
+            1{"Duela 1 segundo"}
+            other{"Duela {0} segundo"}
+        }
+        week{
+            one{"{0} aste"}
+            other{"{0} aste"}
+        }
+        week-future{
+            0{"0 aste barru"}
+            1{"1 aste barru"}
+            other{"{0} aste barru"}
+        }
+        week-past{
+            0{"Duela 0 aste"}
+            1{"Duela 1 aste"}
+            other{"Duela {0} aste"}
+        }
+        year{
+            one{"{0} urtea"}
+            other{"{0} urte"}
+        }
+        year-future{
+            0{"0 urte barru"}
+            1{"1 urte barru"}
+            other{"{0} urte barru"}
+        }
+        year-past{
+            0{"Duela 0 urte"}
+            1{"Duela 1 urte"}
+            other{"Duela {0} urte"}
+        }
+    }
+    unitsShort{
+        day{
+            0{"0 egun"}
+            1{"1 egun"}
+            other{"{0} egun"}
+        }
+        hour{
+            1{"1 ordu"}
+            other{"{0} ordu"}
+        }
+        minute{
+            1{"1 minutu"}
+            other{"{0} minutu"}
+        }
+        month{
+            0{"0 hilabete"}
+            1{"1 hilabete"}
+            other{"{0} hilabete"}
+        }
+        second{
+            0{"0 seg."}
+            1{"1 seg."}
+            other{"{0} seg."}
+        }
+        week{
+            0{"0 aste"}
+            1{"1 aste"}
+            other{"{0} aste"}
+        }
+        year{
+            0{"0 urte"}
+            1{"1 urte"}
+            other{"{0} urte"}
+        }
+    }
+}
