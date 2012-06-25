@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 49</title>
+    <title>ReadMe for ICU 50</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2012 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -16,15 +16,14 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 49 ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 50 (DRAFT - M1) ReadMe</h1>
 
-  	<!--
-  	<p><b>Note:</b> This is a development milestone release of ICU4C 49.
-    This milestone is intended for those wishing to get an early look at ICU 49 new features and API changes.
+    <p><b>Note:</b> This is a development milestone release of ICU4C 50.
+    This milestone is intended for those wishing to get an early look at ICU 50 new features and API changes.
     It is not recommended for production use.
     </p>
-    -->
-    <p>Last updated: 2012-Jun-05<br />
+
+    <p>Last updated: 2012-Jun-25<br />
      Copyright &copy; 1997-2012 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -217,9 +216,12 @@
 
     <p>The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>.
-    For more news about
-    this release, see the <a href="http://site.icu-project.org/download/">ICU
-    download page</a>.</p>
+    For more news about this release, see the
+    <!--
+    <a href="http://site.icu-project.org/download/">ICU download page</a>.
+    -->
+    <a href="http://site.icu-project.org/download/50milestone">ICU milestone download page</a>.
+    </p>
 
     <h3>Threading support cannot be removed</h3>
     <p>ICU4C 50 drops the --enable-threads/--disable-threads option
@@ -229,35 +231,6 @@
     <p>If you need to disable multi-threading, then call
     <code>u_setMutexFunctions()</code> and <code>u_setAtomicIncDecFunctions()</code>
     with empty implementation functions.</p>
-
-    <h3>C++ namespace support required</h3>
-    <p>ICU4C 49 requires C++ namespace support.
-    As a result, for example, rather than <code>U_NAMESPACE_QUALIFIER UnicodeString</code>
-    you can now simply write <code>icu::UnicodeString</code>.</p>
-
-    <h3>One shared platform.h</h3>
-    <p>ICU4C 49 does not generate any source code files via autoconf any more.
-    Instead, platform.h itself is now a normal source header file,
-    and determines platform-specific settings via <code>#if ...</code> etc.</p>
-
-    <p>(See the <a href="http://userguide.icu-project.org/howtouseicu">User Guide How To Use ICU chapter</a>.)</p>
-
-    <p>As a result, it is easier to cross-compile ICU4C and/or use different build systems.
-    No more headers are <code>#include</code>d from the build-output directory,
-    and all platforms use the same set of source code files.</p>
-
-    <p>However, it is likely that ICU4C 49 will not compile on some platforms
-    (non-POSIX and/or older/unusual compilers etc.) that the ICU team did not test.
-    As a temporary workaround, any platform-dependent macro for which <code>platform.h</code>
-    does not determine the correct value can be predefined via <code>CPPFLAGS</code>
-    or by adding an explicit <code>#define ...</code> into <code>platform.h</code>
-    before it first tests that macro.</p>
-
-    <p>Please submit a bug ticket per platform with details about your compiler,
-    its version and its predefined macros.
-    (For example, preprocessing an empty source file with gcc's <code>-dM</code> option
-    outputs all of gcc's predefined macros: <code>gcc -E -dM -x c /dev/null | sort</code>)
-    A patch to fix the problem would be welcome too!</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
