@@ -24,7 +24,6 @@
 #include "unicode/measfmt.h"
 #include "unicode/numfmt.h"
 #include "unicode/plurrule.h"
-#include "uvector.h"
 
 /**
  * Constants for various styles.
@@ -46,7 +45,7 @@ typedef enum UTimeUnitFormatStyle UTimeUnitFormatStyle; /**< @stable ICU 4.8 */
 U_NAMESPACE_BEGIN
 
 class Hashtable;
-
+class UVector;
 
 /**
  * Format or parse a TimeUnitAmount, using plural rules for the units where available.

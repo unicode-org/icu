@@ -11,6 +11,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "uvector.h"
 #include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
