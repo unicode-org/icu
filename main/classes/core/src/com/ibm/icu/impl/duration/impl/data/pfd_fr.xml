@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+******************************************************************************
+* Copyright (C) 2007-2008 International Business Machines Corporation and        *
+* others. All Rights Reserved.                                               *
+******************************************************************************
+-->
+<DataRecord>
+    <pl>PLURAL</pl>
+    <pluralNameTable>
+        <pluralNameList>
+            <pluralName>ans</pluralName>
+            <pluralName>an</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>mois</pluralName>
+            <pluralName>mois</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>semaines</pluralName>
+            <pluralName>semaine</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>jours</pluralName>
+            <pluralName>jour</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>heures</pluralName>
+            <pluralName>heure</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>minutes</pluralName>
+            <pluralName>minute</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>secondes</pluralName>
+            <pluralName>seconde</pluralName>
+        </pluralNameList>
+        <pluralNameList>
+            <pluralName>millisecondes</pluralName>
+            <pluralName>milliseconde</pluralName>
+        </pluralNameList>
+    </pluralNameTable>
+    <halvesList>
+        <halves>½</halves>
+        <halves>½</halves>
+    </halvesList>
+    <requiresDigitSeparator>false</requiresDigitSeparator>
+    <countSep> </countSep>
+    <shortUnitSep> </shortUnitSep>
+    <unitSepList>
+        <unitSep>, </unitSep>
+        <unitSep> et </unitSep>
+        <unitSep>, </unitSep>
+        <unitSep> et </unitSep>
+    </unitSepList>
+    <numberSystem>DEFAULT</numberSystem>
+    <zero>0</zero>
+    <decimalSep>.</decimalSep>
+    <omitSingularCount>false</omitSingularCount>
+    <omitDualCount>false</omitDualCount>
+    <zeroHandling>ZSINGULAR</zeroHandling>
+    <decimalHandling>DPLURAL</decimalHandling>
+    <fractionHandling>FSINGULAR_PLURAL</fractionHandling>
+    <allowZero>true</allowZero>
+    <weeksAloneOnly>false</weeksAloneOnly>
+    <useMilliseconds>YES</useMilliseconds>
+    <ScopeDataList>
+        <ScopeData>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>il y a </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>dans </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>moins de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>il y a moins de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>dans moins de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>plus de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>il y a plus de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+        <ScopeData>
+            <prefix>dans plus de </prefix>
+            <requiresDigitPrefix>false</requiresDigitPrefix>
+        </ScopeData>
+    </ScopeDataList>
+</DataRecord>
