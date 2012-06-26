@@ -621,7 +621,7 @@ public class PluralFormat extends UFormat {
      *     i.e., a pattern that was applied previously will be removed,
      *     and the NumberFormat is set to the default number format for
      *     the locale.  The resulting format behaves the same as one
-     *     constructed from {@link #PluralFormat(ULocale, PluralType)}
+     *     constructed from {@link #PluralFormat(ULocale, PluralRules.PluralType)}
      *     with PluralType.CARDINAL.
      * @param ulocale the <code>ULocale</code> used to configure the
      *     formatter. If <code>ulocale</code> is <code>null</code>, the
