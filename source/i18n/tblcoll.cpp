@@ -54,7 +54,7 @@
  * 01/29/01     synwee      Modified into a C++ wrapper calling C APIs (ucol.h)
  */
 
-#include <typeinfo>  // for 'typeid' to work
+#include "utypeinfo.h"  // for 'typeid' to work
 
 #include "unicode/utypes.h"
 

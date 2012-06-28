@@ -9,7 +9,7 @@
 *   01/12/2000  Madhu        Updated for changed API and added new tests
 ************************************************************************/
 
-#include <typeinfo>  // for 'typeid' to work
+#include "utypeinfo.h"  // for 'typeid' to work
 
 #include "unicode/utypes.h"
 

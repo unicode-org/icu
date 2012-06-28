@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2011, International Business Machines
+* Copyright (c) 2002-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -8,7 +8,7 @@
 * Since: ICU 2.4
 **********************************************************************
 */
-#include <typeinfo>  // for 'typeid' to work 
+#include "utypeinfo.h"  // for 'typeid' to work 
 
 #include "unicode/ustring.h"
 #include "unicode/strenum.h"
