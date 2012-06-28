@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2011, International Business Machines
+*   Copyright (C) 2010-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  stringtriebuilder.cpp
@@ -12,7 +12,7 @@
 *   created by: Markus W. Scherer
 */
 
-#include <typeinfo>  // for 'typeid' to work
+#include "utypeinfo.h"  // for 'typeid' to work
 #include "unicode/utypes.h"
 #include "unicode/stringtriebuilder.h"
 #include "uassert.h"

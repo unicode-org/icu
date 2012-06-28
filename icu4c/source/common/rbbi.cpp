@@ -10,7 +10,7 @@
 //                   class RuleBasedBreakIterator
 //
 
-#include <typeinfo>  // for 'typeid' to work
+#include "utypeinfo.h"  // for 'typeid' to work
 
 #include "unicode/utypes.h"
 
