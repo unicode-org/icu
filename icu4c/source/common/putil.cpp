@@ -649,7 +649,14 @@ uprv_timezone()
     t2 = mktime(&tmrec);                 /* GMT (or UTC) in seconds*/
     tdiff = t2 - t1;
     /* imitate NT behaviour, which returns same timezone offset to GMT for
-       winter and summer*/
+       winter and summer.
+       This does not work on all platforms. For instance, on glibc on Linux
+       and on Mac OS 10.5, tdiff calculated above remains the same
+       regardless of whether DST is in effect or not. However, U_TIMEZONE
+       is defined on those platforms and this code is not reached so that
+       we can leave this alone. If there's a platform behaving
+       like glibc that uses this code, we need to add platform-dependent
+       preprocessor here. */
     if (dst_checked)
         tdiff += 3600;
     return tdiff;
