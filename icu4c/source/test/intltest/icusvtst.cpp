@@ -1,11 +1,11 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and
+ * Copyright (C) 2001-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
 
-#include <typeinfo>  // for 'typeid' to work
+#include "utypeinfo.h"  // for 'typeid' to work
 
 #include "unicode/utypes.h"
 
