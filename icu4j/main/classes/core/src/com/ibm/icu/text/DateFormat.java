@@ -94,7 +94,7 @@ import com.ibm.icu.util.ULocale.Category;
  * {@link #YEAR_ABBR_MONTH} for something like "Sept 2012". If you don't want to use one of the predefined skeletons,
  * you can supply your own. The skeletons are like the patterns in SimpleDateFormat, except they:
  * <ol>
- * <li>only keep the field pattern letter and  all other parts in a pattern, such as space, punctuation, and
+ * <li>only keep the field pattern letter and ignore all other parts in a pattern, such as space, punctuation, and
  * string literals.
  * <li>are independent of the order of fields.
  * <li>ignore certain differences in the field's pattern letter length:
