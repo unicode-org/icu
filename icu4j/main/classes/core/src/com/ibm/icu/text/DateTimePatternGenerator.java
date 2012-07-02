@@ -86,6 +86,8 @@ import com.ibm.icu.util.UResourceBundle;
  * @stable ICU 3.6
  */
 public class DateTimePatternGenerator implements Freezable<DateTimePatternGenerator>, Cloneable {
+    private static final boolean DEBUG = false;
+
     // debugging flags
     //static boolean SHOW_DISTANCE = false;
     // TODO add hack to fix months for CJK, as per bug ticket 1099
@@ -284,6 +286,22 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         result.freeze();
         DTPNG_CACHE.put(localeKey, result);
         return result;
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public char getDefaultHourFormatChar() {
+        return defaultHourFormatChar;
+    }
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public void setDefaultHourFormatChar(char defaultHourFormatChar) {
+        this.defaultHourFormatChar = defaultHourFormatChar;
     }
 
     private static void hackTimes(DateTimePatternGenerator result, PatternInfo returnInfo, String hackPattern) {
@@ -495,7 +513,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return addPatternWithSkeleton(pattern, null, override, returnInfo);
     }
 
-    /*
+    /**
      * addPatternWithSkeleton:
      * If skeletonToUse is specified, then an availableFormats entry is being added. In this case:
      * 1. We pass that skeleton to DateTimeMatcher().set instead of having it derive a skeleton from the pattern.
@@ -506,8 +524,10 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * derived (i.e. entries derived from the standard date/time patters for the specified locale).
      * 3. When adding the pattern (skeleton2pattern.put, basePattern_pattern.put), we set a field to indicate that the added
      * entry had a specified skeleton.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    private DateTimePatternGenerator addPatternWithSkeleton(String pattern, String skeletonToUse, boolean override, PatternInfo returnInfo) {
+    public DateTimePatternGenerator addPatternWithSkeleton(String pattern, String skeletonToUse, boolean override, PatternInfo returnInfo) {
         checkFrozen();
         DateTimeMatcher matcher;
         if (skeletonToUse == null) {
@@ -531,6 +551,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         returnInfo.status = PatternInfo.OK;
         returnInfo.conflictingPattern = "";
         PatternWithSkeletonFlag patWithSkelFlag = new PatternWithSkeletonFlag(pattern,skeletonToUse != null);
+        if (DEBUG) {
+            System.out.println(matcher + " => " + patWithSkelFlag);
+        }
         skeleton2pattern.put(matcher, patWithSkelFlag);
         basePattern_pattern.put(basePattern, patWithSkelFlag);
         return this;
@@ -557,6 +580,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @param pattern Input pattern, such as "dd/MMM"
      * @return skeleton, such as "MMMdd"
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String getSkeletonAllowingDuplicates(String pattern) {
         synchronized (this) { // synchronized since a getter must be thread-safe
@@ -1536,6 +1560,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         public PatternWithSkeletonFlag(String pat, boolean skelSpecified) {
             pattern = pat;
             skeletonWasSpecified = skelSpecified;
+        }
+        public String toString() {
+            return pattern + "," + skeletonWasSpecified;
         }
     }
     private TreeMap<DateTimeMatcher, PatternWithSkeletonFlag> skeleton2pattern = new TreeMap<DateTimeMatcher, PatternWithSkeletonFlag>(); // items are in priority order
