@@ -131,7 +131,7 @@
 #   include <android/api-level.h>
 #elif defined(linux) || defined(__linux__) || defined(__linux)
 #   define U_PLATFORM U_PF_LINUX
-#elif defined(BSD) || defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__NetBSD__) || defined(__OpenBSD__)
+#elif defined(BSD) || defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__MirBSD__)
 #   define U_PLATFORM U_PF_BSD
 #elif defined(sun) || defined(__sun)
     /* Check defined(__SVR4) || defined(__svr4__) to distinguish Solaris from SunOS? */
@@ -268,6 +268,9 @@
 #elif U_PLATFORM == U_PF_SOLARIS
     /* Solaris has inttypes.h but not stdint.h. */
 #   define U_HAVE_STDINT_H 0
+#elif U_PLATFORM == U_PF_AIX && !defined(_AIX51)
+    /* AIX <= 4.3 has inttypes.h but not stdint.h. */
+#   define U_HAVE_STDINT_H 0
 #else
 #   define U_HAVE_STDINT_H 1
 #endif
@@ -282,6 +285,9 @@
     /* Use the predefined value. */
 #elif U_PLATFORM == U_PF_SOLARIS
     /* Solaris has inttypes.h but not stdint.h. */
+#   define U_HAVE_INTTYPES_H 1
+#elif U_PLATFORM == U_PF_AIX && !defined(_AIX51)
+    /* AIX <= 4.3 has inttypes.h but not stdint.h. */
 #   define U_HAVE_INTTYPES_H 1
 #else
     /* Most platforms have both inttypes.h and stdint.h, or neither. */
