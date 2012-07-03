@@ -268,8 +268,8 @@
 #elif U_PLATFORM == U_PF_SOLARIS
     /* Solaris has inttypes.h but not stdint.h. */
 #   define U_HAVE_STDINT_H 0
-#elif U_PLATFORM == U_PF_AIX && !defined(_AIX51)
-    /* AIX <= 4.3 has inttypes.h but not stdint.h. */
+#elif U_PLATFORM == U_PF_AIX && !defined(_AIX51) && defined(_POWER)
+    /* PPC AIX <= 4.3 has inttypes.h but not stdint.h. */
 #   define U_HAVE_STDINT_H 0
 #else
 #   define U_HAVE_STDINT_H 1
@@ -286,8 +286,8 @@
 #elif U_PLATFORM == U_PF_SOLARIS
     /* Solaris has inttypes.h but not stdint.h. */
 #   define U_HAVE_INTTYPES_H 1
-#elif U_PLATFORM == U_PF_AIX && !defined(_AIX51)
-    /* AIX <= 4.3 has inttypes.h but not stdint.h. */
+#elif U_PLATFORM == U_PF_AIX && !defined(_AIX51) && defined(_POWER)
+    /* PPC AIX <= 4.3 has inttypes.h but not stdint.h. */
 #   define U_HAVE_INTTYPES_H 1
 #else
     /* Most platforms have both inttypes.h and stdint.h, or neither. */
