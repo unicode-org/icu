@@ -1140,7 +1140,7 @@ static const uint16_t lookupTable[][2]={
     targetUniChar = toUnicodeTable[(sourceChar)] ;                                       \
     /* is the code point valid in current script? */                                     \
     if(sourceChar> ASCII_END &&                                                          \
-            (validityTable[(targetUniChar & 0x00FF)] & data->currentMaskToUnicode)==0){    \
+            (validityTable[(targetUniChar & 0x7F)] & data->currentMaskToUnicode)==0){    \
         /* Vocallic RR is assigne in ISCII Telugu and Unicode */                         \
         if(data->currentDeltaToUnicode!=(TELUGU_DELTA) ||                                \
                     targetUniChar!=VOCALLIC_RR){                                         \
