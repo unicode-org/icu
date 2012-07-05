@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -174,8 +175,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, uLocale);
-        ULocale currentLocale = rb.getULocale(); // for later
-        String currentLocaleName = currentLocale.getBaseName();
         // Get the correct calendar type
         String calendarTypeToUse = uLocale.getKeywordValue("calendar");
         if ( calendarTypeToUse == null ) {
@@ -200,7 +199,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 String value = formatBundle.getString();
                 result.setAppendItemFormat(getAppendFormatNumber(formatName), value);
             }
-        }catch(Exception e) {
+        }catch(MissingResourceException e) {
         }
 
         // CLDR item names (hmm, do we need aliases in root for all non-gregorian calendars?)
@@ -216,57 +215,38 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     result.setAppendItemName(i, value);
                 }
             }
-        }catch(Exception e) {
+        }catch(MissingResourceException e) {
         }
 
         // set the AvailableFormat in CLDR
+        ICUResourceBundle availFormatsBundle = null;
         try {
-            ICUResourceBundle formatBundle =  calTypeBundle.getWithFallback("availableFormats");
-            //System.out.println("available format from current locale:"+uLocale.getName());
-            for (int i=0; i<formatBundle.getSize(); ++i) { 
-                String formatKey = formatBundle.get(i).getKey();
-                String formatValue = formatBundle.get(i).getString();
-                //System.out.println(" availableFormat:"+formatValue);
-                result.setAvailableFormat(formatKey);
-                // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
-                // but not a previous availableFormats entry:
-                result.addPatternWithSkeleton(formatValue, formatKey, true, returnInfo);
-            } 
-        }catch(Exception e) {
+            availFormatsBundle = calTypeBundle.getWithFallback("availableFormats");
+        } catch (MissingResourceException e) {
+            // fall through
         }
 
-        while (currentLocaleName.length() > 0 && !currentLocaleName.equals("root")) {
-            ULocale parentLocale = null;
-            try {
-                UResourceBundle parentNameBundle = rb.get("%%Parent");
-                parentLocale = new ULocale(parentNameBundle.getString());
-            } catch (Exception e) {
-                parentLocale = currentLocale.getFallback();
+        while (availFormatsBundle != null) {
+            for (int i = 0; i < availFormatsBundle.getSize(); i++) {
+                String formatKey = availFormatsBundle.get(i).getKey();
+
+                if (!result.isAvailableFormatSet(formatKey)) {
+                    result.setAvailableFormat(formatKey);
+                    // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
+                    // but not a previous availableFormats entry:
+                    String formatValue = availFormatsBundle.get(i).getString();
+                    result.addPatternWithSkeleton(formatValue, formatKey, true, returnInfo);
+                }
             }
-            if (parentLocale == null || parentLocale.getBaseName().equals(currentLocaleName)) {
+
+            ICUResourceBundle pbundle = (ICUResourceBundle)availFormatsBundle.getParent();
+            if (pbundle == null) {
                 break;
             }
-            rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, parentLocale);
-            currentLocale = rb.getULocale();
-            currentLocaleName = currentLocale.getBaseName();
-            calBundle = rb.getWithFallback("calendar");
-            calTypeBundle = calBundle.getWithFallback(calendarTypeToUse);
             try {
-                ICUResourceBundle formatBundle =  calTypeBundle.getWithFallback("availableFormats");
-                //System.out.println("available format from parent locale:"+parentLocale.getName());
-                for (int i=0; i<formatBundle.getSize(); ++i) { 
-                    String formatKey = formatBundle.get(i).getKey();
-                    String formatValue = formatBundle.get(i).getString();
-                    //System.out.println(" availableFormat:"+formatValue);
-                    if (!result.isAvailableFormatSet(formatKey)) {
-                        result.setAvailableFormat(formatKey);
-                        // Add pattern with its associated skeleton. Override any duplicate derived from std patterns,
-                        // but not a previous availableFormats entry:
-                        result.addPatternWithSkeleton(formatValue, formatKey, true, returnInfo);
-                        //System.out.println(" availableFormat:"+formatValue);
-                    }
-                } 
-            }catch(Exception e) {
+                availFormatsBundle = pbundle.getWithFallback("calendar/" + calendarTypeToUse + "/availableFormats");
+            } catch (MissingResourceException e) {
+                availFormatsBundle = null;
             }
         }
 
@@ -1834,39 +1814,39 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return result.toString();
     }
 
-    static private String[] CLDR_FIELD_APPEND = {
+    private static final String[] CLDR_FIELD_APPEND = {
         "Era", "Year", "Quarter", "Month", "Week", "*", "Day-Of-Week", 
         "Day", "*", "*", "*", 
         "Hour", "Minute", "Second", "*", "Timezone"
     };
 
-    static private String[] CLDR_FIELD_NAME = {
+    private static final String[] CLDR_FIELD_NAME = {
         "era", "year", "*", "month", "week", "*", "weekday", 
         "day", "*", "*", "dayperiod", 
         "hour", "minute", "second", "*", "zone"
     };
 
-    static private String[] FIELD_NAME = {
+    private static final String[] FIELD_NAME = {
         "Era", "Year", "Quarter", "Month", "Week_in_Year", "Week_in_Month", "Weekday", 
         "Day", "Day_Of_Year", "Day_of_Week_in_Month", "Dayperiod", 
         "Hour", "Minute", "Second", "Fractional_Second", "Zone"
     };
 
 
-    static private String[] CANONICAL_ITEMS = {
+    private static final String[] CANONICAL_ITEMS = {
         "G", "y", "Q", "M", "w", "W", "E", 
         "d", "D", "F", 
         "H", "m", "s", "S", "v"
     };
 
-    static private Set<String> CANONICAL_SET = new HashSet<String>(Arrays.asList(CANONICAL_ITEMS));
+    private static final Set<String> CANONICAL_SET = new HashSet<String>(Arrays.asList(CANONICAL_ITEMS));
     private Set<String> cldrAvailableFormatKeys = new HashSet<String>(20);
 
-    static final private int 
+    private static final int 
     DATE_MASK = (1<<DAYPERIOD) - 1,
     TIME_MASK = (1<<TYPE_LIMIT) - 1 - DATE_MASK;
 
-    static final private int // numbers are chosen to express 'distance'
+    private static final int // numbers are chosen to express 'distance'
     DELTA = 0x10,
     NUMERIC = 0x100,
     NONE = 0,
@@ -1894,7 +1874,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @param strict TODO
      * @return
      */
-    static private int getCanonicalIndex(String s, boolean strict) {
+    private static int getCanonicalIndex(String s, boolean strict) {
         int len = s.length();
         if (len == 0) {
             return -1;
@@ -1918,7 +1898,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return strict ? -1 : bestRow;
     }
 
-    static private int[][] types = {
+    private static final int[][] types = {
         // the order here makes a difference only when searching for single field.
         // format is:
         // pattern character, main type, weight, min length, weight
