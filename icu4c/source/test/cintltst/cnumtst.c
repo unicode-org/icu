@@ -41,6 +41,8 @@ static void TestNBSPInPattern(void);
 static void TestInt64Parse(void);
 static void TestParseCurrency(void);
 
+static void TestMaxInt(void);
+
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
 void addNumForTest(TestNode** root)
@@ -60,6 +62,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestParseZero);
     TESTCASE(TestParseCurrency);
     TESTCASE(TestCloneWithRBNF);
+    TESTCASE(TestMaxInt);
 }
 
 /** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
@@ -2028,4 +2031,45 @@ static void TestCloneWithRBNF(void) {
         log_data_err("Result from cloned formatter not identical to the original. Original: %s Cloned: %s - (Are you missing data?)",u_austrcpy(temp1, buffer),u_austrcpy(temp2,buffer_cloned));
     }
 }
+
+static void TestMaxInt(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  UChar pattern_hash[] = { 0x23, 0x00 }; /* "#" */
+  UChar result1[1024] = { 0 }, result2[1024] = { 0 };
+  int32_t len1, len2;
+  UChar expect[] = { 0x0039, 0x0037, 0 };
+  UNumberFormat *fmt = unum_open(
+                  UNUM_PATTERN_DECIMAL,      /* style         */
+                  &pattern_hash[0],          /* pattern       */
+                  u_strlen(pattern_hash),    /* patternLength */
+                  0,
+                  0,                         /* parseErr      */
+                  &status);
+    if(U_FAILURE(status) || fmt == NULL) {
+      log_data_err("%s:%d: %s: unum_open failed with %s (Are you missing data?)\n", __FILE__, __LINE__, "TestMaxInt", u_errorName(status));
+        return;
+    }
+
+  unum_setAttribute(fmt, UNUM_MAX_INTEGER_DIGITS, 2);
+
+  status = U_ZERO_ERROR;
+  /* #1 */
+  len1 = unum_formatInt64(fmt, 1997, result1, 1024, NULL, &status);
+  result1[len1]=0;
+  if(U_FAILURE(status) || u_strcmp(expect, result1)) {
+    log_err("unum_formatInt64 Expected %s but got %s status %s\n", austrdup(expect), austrdup(result1), u_errorName(status));
+  }
+
+  status = U_ZERO_ERROR;
+  /* #2 */
+  len2 = unum_formatDouble(fmt, 1997.0, result2, 1024, NULL, &status);
+  result2[len2]=0;
+  if(U_FAILURE(status) || u_strcmp(expect, result2)) {
+    log_err("unum_formatDouble Expected %s but got %s status %s\n", austrdup(expect), austrdup(result2), u_errorName(status));
+  }
+
+  unum_close(fmt);
+
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
