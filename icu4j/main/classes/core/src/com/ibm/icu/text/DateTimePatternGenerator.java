@@ -355,7 +355,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return -1;
     }*/
 
-    private static int getAppendFormatNumber(String string) {
+    /**
+     * @internal CLDR
+     * @deprecated This API is ICU internal only.
+     */
+    public static int getAppendFormatNumber(String string) {
         for (int i = 0; i < CLDR_FIELD_APPEND.length; ++i) {
             if (CLDR_FIELD_APPEND[i].equals(string)) return i;
         }
@@ -520,7 +524,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         if (previousPatternWithSameBase != null) {
             returnInfo.status = PatternInfo.BASE_CONFLICT;
             returnInfo.conflictingPattern = previousPatternWithSameBase.pattern;
-            if (!override || (skeletonToUse != null && previousPatternWithSameBase.skeletonWasSpecified)) return this;
+            if (!override || (skeletonToUse != null && previousPatternWithSameBase.skeletonWasSpecified)) {
+                return this;
+            }
         }
         PatternWithSkeletonFlag previousValue = skeleton2pattern.get(matcher);
         if (previousValue != null) {

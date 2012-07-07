@@ -313,8 +313,9 @@ public class DateIntervalFormat extends UFormat {
     
    
     /*
-     * default constructor 
+     * default constructor; private because we don't want anyone to use 
      */
+    @SuppressWarnings("unused")
     private DateIntervalFormat() {
     }
 
@@ -327,9 +328,11 @@ public class DateIntervalFormat extends UFormat {
      * has a pattern in it.
      * the DateIntervalInfo provides the interval patterns.
      *
-     * @param locale    the locale of this date interval formatter.
-     * @param dtitvinf  the DateIntervalInfo object to be adopted.
      * @param skeleton  the skeleton of the date formatter
+     * @param dtItvInfo  the DateIntervalInfo object to be adopted.
+     * @param generator  will be used for matching
+     * @param simpleDateFormat will be used for formatting
+     * 
      * @internal
      * @deprecated This API is ICU internal only.
      */
