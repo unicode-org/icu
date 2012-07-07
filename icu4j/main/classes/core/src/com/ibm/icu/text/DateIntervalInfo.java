@@ -8,11 +8,15 @@
 package com.ibm.icu.text;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.MissingResourceException;
+import java.util.Set;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -20,9 +24,9 @@ import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
+import com.ibm.icu.util.Region;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
-
 
 /**
  * DateIntervalInfo is a public class for encapsulating localizable
@@ -946,5 +950,17 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      */
     public int hashCode() {
         return fIntervalPatterns.hashCode();
+    }
+    
+    /**
+     * @internal CLDR
+     * @deprecated This API is ICU internal only.
+     */
+    public Map<String,Set<String>> getPatterns() {
+        LinkedHashMap<String,Set<String>> result = new LinkedHashMap<String,Set<String>>();
+        for (Entry<String, Map<String, PatternInfo>> entry : fIntervalPatterns.entrySet()) {
+            result.put(entry.getKey(), new LinkedHashSet<String>(entry.getValue().keySet()));
+        }
+        return result;
     }
 }// end class DateIntervalInfo
