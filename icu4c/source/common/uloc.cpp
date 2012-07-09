@@ -1700,8 +1700,8 @@ _canonicalize(const char* localeID,
                 len+=cntrySize;
             }
             if(_isIDSeparator(*tmpLocaleID)) {
-                /* If there is something else, then we add the _  if we found country before.*/
-                if (cntrySize > 0 ) {
+                /* If there is something else, then we add the _  if we found country before. */
+                if (cntrySize >= 0 && ! _isIDSeparator(*(tmpLocaleID+1)) ) {
                     ++fieldCount;
                     if(len<nameCapacity) {
                         name[len]='_';
