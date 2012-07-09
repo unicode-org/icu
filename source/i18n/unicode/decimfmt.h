@@ -2109,10 +2109,12 @@ private:
 
     UnicodeString& _format(int64_t number,
                            UnicodeString& appendTo,
-                           FieldPositionHandler& handler) const;
+                           FieldPositionHandler& handler,
+                           UErrorCode &status) const;
     UnicodeString& _format(double number,
                            UnicodeString& appendTo,
-                           FieldPositionHandler& handler) const;
+                           FieldPositionHandler& handler,
+                           UErrorCode &status) const;
     UnicodeString& _format(const DigitList &number,
                            UnicodeString& appendTo,
                            FieldPositionHandler& handler,
