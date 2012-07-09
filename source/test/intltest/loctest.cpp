@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -2154,9 +2154,9 @@ void LocaleTest::TestCanonicalization(void)
         { "qz-qz@Euro", "qz_QZ@Euro", "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
         // NOTE: uloc_getName() works on en-BOONT, but Locale() parser considers it BOGUS
         // TODO: unify this behavior
-        { "en-BOONT", "en_BOONT", "en_BOONT" }, /* registered name */
-        { "de-1901", "de_1901", "de_1901" }, /* registered name */
-        { "de-1906", "de_1906", "de_1906" }, /* registered name */
+        { "en-BOONT", "en__BOONT", "en__BOONT" }, /* registered name */
+        { "de-1901", "de__1901", "de__1901" }, /* registered name */
+        { "de-1906", "de__1906", "de__1906" }, /* registered name */
         { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_Cyrl_RS" }, /* .NET name */
         { "sr-SP-Latn", "sr_SP_LATN", "sr_Latn_RS" }, /* .NET name */
         { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_Cyrl_RS" }, /* Linux name */
