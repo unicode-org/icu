@@ -398,10 +398,10 @@ static void TestPrefixes() {
         {"i-hakka", "", "MX", "", "I-hakka_MX", "i-hakka_MX", NULL},
         {"x-klingon", "", "US", "SANJOSE", "X-KLINGON_us_SANJOSE", "x-klingon_US_SANJOSE", NULL},
         
-        {"zh", "Hans", "", "PINYIN", "zh-Hans-pinyin", "zh_Hans_PINYIN", "zh_Hans@collation=pinyin"},
-        {"hy", "", "", "AREVMDA", "hy_AREVMDA", "hy_AREVMDA", NULL},
+        {"zh", "Hans", "", "PINYIN", "zh-Hans-pinyin", "zh_Hans__PINYIN", "zh_Hans@collation=pinyin"},
+        {"hy", "", "", "AREVMDA", "hy_AREVMDA", "hy__AREVMDA", NULL},
         
-        {"de", "", "", "1901", "de-1901", "de_1901", NULL},
+        {"de", "", "", "1901", "de-1901", "de__1901", NULL},
         {"mr", "", "", "", "mr.utf8", "mr.utf8", "mr"},
         {"de", "", "TV", "", "de-tv.koi8r", "de_TV.koi8r", "de_TV"},
         {"x-piglatin", "", "ML", "", "x-piglatin_ML.MBE", "x-piglatin_ML.MBE", "x-piglatin_ML"},  /* Multibyte English */
@@ -1939,9 +1939,9 @@ static void TestCanonicalization(void)
         { "no@ny", "no@ny", "no__NY" /* not: "nn" [alan ICU3.0] */ }, /* POSIX ID */
         { "no-no.utf32@B", "no_NO.utf32@B", "no_NO_B" /* not: "nb_NO_B" [alan ICU3.0] */ }, /* POSIX ID */
         { "qz-qz@Euro", "qz_QZ@Euro", "qz_QZ@currency=EUR" }, /* qz-qz uses private use iso codes */
-        { "en-BOONT", "en_BOONT", "en_BOONT" }, /* registered name */
-        { "de-1901", "de_1901", "de_1901" }, /* registered name */
-        { "de-1906", "de_1906", "de_1906" }, /* registered name */
+        { "en-BOONT", "en__BOONT", "en__BOONT" }, /* registered name */
+        { "de-1901", "de__1901", "de__1901" }, /* registered name */
+        { "de-1906", "de__1906", "de__1906" }, /* registered name */
         { "sr-SP-Cyrl", "sr_SP_CYRL", "sr_Cyrl_RS" }, /* .NET name */
         { "sr-SP-Latn", "sr_SP_LATN", "sr_Latn_RS" }, /* .NET name */
         { "sr_YU_CYRILLIC", "sr_YU_CYRILLIC", "sr_Cyrl_RS" }, /* Linux name */
