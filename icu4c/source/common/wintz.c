@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2011, International Business Machines
+*   Copyright (C) 2005-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -14,7 +14,6 @@
 #if U_PLATFORM_HAS_WIN32_API
 
 #include "wintz.h"
-
 #include "cmemory.h"
 #include "cstring.h"
 
@@ -29,7 +28,7 @@
 #   define NOMCX
 #include <windows.h>
 
-#define MAX_LENGTH_ID 32
+#define MAX_LENGTH_ID 40
 
 /* The layout of the Tzi value in the registry */
 typedef struct
@@ -257,6 +256,8 @@ uprv_detectWindowsTimeZone() {
     char tmpid[MAX_LENGTH_ID];
     int32_t apiStdLength = 0;
     int32_t len;
+	int id;
+	char ISOcode[3]; //2 letter iso code 
 
     LONG result;
     TZI tziKey;
@@ -282,6 +283,9 @@ uprv_detectWindowsTimeZone() {
     u_austrncpy(apiStdName, apiStd, apiStdLength);
 
     tmpid[0] = 0;
+		
+	id = GetUserGeoID(GEOCLASS_NATION);
+	GetGeoInfo(id,GEO_ISO2,ISOcode,3,0);
 
     bundle = ures_openDirect(NULL, "windowsZones", &status);
     ures_getByKey(bundle, "mapTimezones", bundle, &status);
@@ -305,7 +309,14 @@ uprv_detectWindowsTimeZone() {
             tziKey.daylightBias = tziReg.daylightBias;
 
             if (uprv_memcmp((char *)&tziKey, (char*)&tziReg, sizeof(tziKey)) == 0) {
-                const UChar* icuTZ = ures_getStringByKey(winTZ, "001", &len, &status);
+				const UChar* icuTZ = ures_getStringByKey(winTZ, ISOcode, &len, &status);
+
+				if (icuTZ==NULL) {
+					//fallback to default "001" and reset status
+					status = U_ZERO_ERROR;
+					icuTZ = ures_getStringByKey(winTZ, "001", &len, &status);
+				}
+
                 if (U_SUCCESS(status)) {
                     /* Get the standard name from the registry key to compare with
                        the one from Windows API call. */
@@ -322,8 +333,15 @@ uprv_detectWindowsTimeZone() {
                      * the current time zone information)
                      */
                     if (idFound || tmpid[0] == 0) {
-                        uprv_memset(tmpid, 0, sizeof(tmpid));
-                        u_austrncpy(tmpid, icuTZ, len);
+						//if icuTZ has more than one city, take only the first (i.e. terminate icuTZ at first space)
+						int index=0;
+						while (! (*icuTZ == '\0' || *icuTZ ==' ')) {
+							tmpid[index++]=*icuTZ++;
+						}
+						tmpid[index]='\0';					
+
+                        //uprv_memset(tmpid, 0, sizeof(tmpid));
+                        //u_austrncpy(tmpid, icuTZ, len);
                     }
                 }
             }
@@ -346,8 +364,8 @@ uprv_detectWindowsTimeZone() {
     }
 
     ures_close(bundle);
-
-    return icuid;
+    
+	return icuid;
 }
 
 #endif /* U_PLATFORM_HAS_WIN32_API */
