@@ -181,17 +181,27 @@ public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collect
     }
 
     public Set<V> removeAll(K key) {
-        return data.remove(key);
+        try {
+            return data.remove(key);
+        } catch (NullPointerException e) {
+            return null; // data doesn't allow null, eg ConcurrentHashMap
+        }
     }
 
     public boolean remove(K key, V value) {
-        Set<V> set = data.get(key);
-        if (set == null) return false;
-        boolean result = set.remove(value);
-        if (set.size() == 0) {
-            data.remove(key);
+        try {
+            Set<V> set = data.get(key);
+            if (set == null) {
+                return false;
+            }
+            boolean result = set.remove(value);
+            if (set.size() == 0) {
+                data.remove(key);
+            }
+            return result;
+        } catch (NullPointerException e) {
+            return false; // data doesn't allow null, eg ConcurrentHashMap
         }
-        return result;
     }
 
     public int size() {
@@ -286,16 +296,20 @@ public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collect
     public boolean removeAll(Relation<K, V> toBeRemoved) {
         boolean result = false;
         for (K key : toBeRemoved.keySet()) {
-            Set<V> values = toBeRemoved.getAll(key);
-            if (values != null) {
-                result |= removeAll(key, values);
+            try {
+                Set<V> values = toBeRemoved.getAll(key);
+                if (values != null) {
+                    result |= removeAll(key, values);
+                }
+            } catch (NullPointerException e) {
+                // data doesn't allow null, eg ConcurrentHashMap
             }
         }
         return result;
     }
 
     public Set<V> removeAll(K... keys) {
-        return data.remove(Arrays.asList(keys));
+        return removeAll(Arrays.asList(keys));
     }
 
     public boolean removeAll(K key, Iterable<V> toBeRemoved) {
@@ -309,9 +323,13 @@ public class Relation<K, V> implements Freezable { // TODO: add , Map<K, Collect
     public Set<V> removeAll(Collection<K> toBeRemoved) {
         Set<V> result = new LinkedHashSet();
         for (K key : toBeRemoved) {
-            final Set<V> removals = data.remove(key);
-            if (removals != null) {
-                result.addAll(removals);
+            try {
+                final Set<V> removals = data.remove(key);
+                if (removals != null) {
+                    result.addAll(removals);
+                }
+            } catch (NullPointerException e) {
+                // data doesn't allow null, eg ConcurrentHashMap
             }
         }
         return result;
