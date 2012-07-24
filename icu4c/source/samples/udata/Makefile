@@ -1,4 +1,4 @@
-# Copyright (c) 2000-2010 IBM, Inc. and others
+# Copyright (c) 2000-2012 IBM, Inc. and others
 # udata sample code
 # Usage:
 #  - configure, build, install ICU
@@ -56,10 +56,10 @@ distclean clean:
 # Can change this to LINK.c if it is a C only program
 # Can add more libraries here. 
 $(TARGET1): $(OBJECTS1)
-	$(CC) -o $@ $^ $(LDFLAGS)
+	$(CXX) -o $@ $(LDFLAGS)
 
 $(TARGET2): $(OBJECTS2)
-	$(CC) -o $@ $^ $(LDFLAGS)
+	$(CXX) -o $@ $(LDFLAGS) -licui18n -licuuc
 
 # Make check: simply runs the sample, logged to a file
 check: $(TARGET1) $(TARGET2)
