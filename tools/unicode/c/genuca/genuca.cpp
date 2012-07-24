@@ -459,7 +459,7 @@ static void writeOutInverseData(InverseUCATableHeader *data,
 
     UDataInfo invUcaInfo;
     uprv_memcpy(&invUcaInfo, &invUcaDataInfo, sizeof(UDataInfo));
-    u_getUnicodeVersion(invUcaInfo.dataVersion);
+    uprv_memcpy(invUcaInfo.dataVersion, UCAVersion, U_MAX_VERSION_LENGTH);
 
     pData=udata_create(outputDir, INVC_DATA_TYPE, INVC_DATA_NAME, &invUcaInfo,
                        copyright, status);
@@ -704,9 +704,10 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                 char ucd[U_MAX_VERSION_STRING_LENGTH];
                 u_versionToString(UCAVersion, uca);
                 u_versionToString(UCDVersion, ucd);
-                fprintf(stderr, "error: UCA version %s != UCD version %s (temporarily change the FractionalUCA.txt UCA version during Unicode version upgrade)\n", uca, ucd);
-                *status = U_INVALID_FORMAT_ERROR;
-                return NULL;
+                // Warning, not error, to permit bootstrapping during a version upgrade.
+                fprintf(stderr, "warning: UCA version %s != UCD version %s (temporarily change the FractionalUCA.txt UCA version during Unicode version upgrade)\n", uca, ucd);
+                // *status = U_INVALID_FORMAT_ERROR;
+                // return NULL;
               }
             } else if (what_to_do == READLEADBYTETOSCRIPTS) { //vt[cnt].what_to_do == READLEADBYTETOSCRIPTS
                 pointer = buffer + vtLen;
@@ -1072,7 +1073,7 @@ void writeOutData(UCATableHeader *data,
     long dataLength;
     UDataInfo ucaInfo;
     uprv_memcpy(&ucaInfo, &ucaDataInfo, sizeof(UDataInfo));
-    u_getUnicodeVersion(ucaInfo.dataVersion);
+    uprv_memcpy(ucaInfo.dataVersion, UCAVersion, U_MAX_VERSION_LENGTH);
 
     pData=udata_create(outputDir, UCA_DATA_TYPE, UCA_DATA_NAME, &ucaInfo,
                        copyright, status);
