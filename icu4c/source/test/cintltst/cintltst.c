@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -41,9 +41,17 @@
 #   include <console.h>
 #endif
 
+#define CTST_MAX_ALLOC 8192
+/* Array used as a queue */
+static void * ctst_allocated_stuff[CTST_MAX_ALLOC] = {0};
+static int ctst_allocated = 0;
+static UBool ctst_free = FALSE;
+static int ctst_allocated_total = 0;
+
 #define CTST_LEAK_CHECK 1
+
 #ifdef CTST_LEAK_CHECK
-U_CFUNC void ctst_freeAll(void);
+static void ctst_freeAll(void);
 #endif
 
 static char* _testDataPath=NULL;
@@ -210,6 +218,10 @@ int main(int argc, const char* const argv[])
         ctst_freeAll();
         /* To check for leaks */
         u_cleanup(); /* nuke the hashtable.. so that any still-open cnvs are leaked */
+        
+        if(getTestOption(VERBOSITY_OPTION) && ctst_allocated_total>0) {
+          fprintf(stderr,"ctst_freeAll():  cleaned up after %d allocations (queue of %d)\n", ctst_allocated_total, CTST_MAX_ALLOC);
+        }
 #ifdef URES_DEBUG
         if(ures_dumpCacheContents()) {
           fprintf(stderr, "Error: After final u_cleanup, RB cache was not empty.\n");
@@ -612,13 +624,9 @@ U_CFUNC void ctest_resetTimeZone(void) {
 #endif
 }
 
-#define CTST_MAX_ALLOC 8192
-/* Array used as a queue */
-static void * ctst_allocated_stuff[CTST_MAX_ALLOC] = {0};
-static int ctst_allocated = 0;
-static UBool ctst_free = FALSE;
 
 void *ctst_malloc(size_t size) {
+  ctst_allocated_total++;
     if(ctst_allocated >= CTST_MAX_ALLOC - 1) {
         ctst_allocated = 0;
         ctst_free = TRUE;
@@ -630,14 +638,14 @@ void *ctst_malloc(size_t size) {
 }
 
 #ifdef CTST_LEAK_CHECK
-void ctst_freeAll() {
+static void ctst_freeAll() {
     int i;
-    if(ctst_free == 0) {
+    if(ctst_free == FALSE) { /* only free up to the allocated mark */
         for(i=0; i<ctst_allocated; i++) {
             free(ctst_allocated_stuff[i]);
             ctst_allocated_stuff[i] = NULL;
         }
-    } else {
+    } else { /* free all */
         for(i=0; i<CTST_MAX_ALLOC; i++) {
             free(ctst_allocated_stuff[i]);
             ctst_allocated_stuff[i] = NULL;
