@@ -2029,10 +2029,13 @@ def main():
     for (basename, path, parser) in files:
       print "Parsing %s" % basename
       value = _files[basename]
+      # Unicode data files are in UTF-8.
+      charset = "UTF-8"
       if basename == "NamesList.txt":
-        in_file = codecs.open(path, "r", "ISO-8859-1")
-      else:
-        in_file = open(path, "r")
+        # The NamesList used to be in Latin-1 before Unicode 6.2.
+        numeric_ucd_version = [int(field) for field in _ucd_version.split('.')]
+        if numeric_ucd_version < [6, 2]: charset = "ISO-8859-1"
+      in_file = codecs.open(path, "r", charset)
       with in_file:
         parser(in_file)
   _null_or_defaults = _null_values.copy()
