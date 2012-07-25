@@ -241,7 +241,7 @@ public abstract class Collator implements Comparator<Object>, Freezable<Collator
          * A special reordering code that is used to specify the default reordering codes for a locale.
          * @stable ICU 4.8
          */
-        public final static int DEFAULT          = 1;
+        public final static int DEFAULT          = -1;  // == UScript.INVALID_CODE
         /**
          * A special reordering code that is used to specify no reordering codes.
          * @stable ICU 4.8

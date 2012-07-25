@@ -13,8 +13,8 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 50 Milestone 1</h3>
-(Last Update: June 25, 2012)
+<h3>Read Me for ICU4J 50 Milestone 2</h3>
+(Last Update: July 25, 2012)
 <hr size="2" width="100%">
 
 <p><b>Note:</b> This is a development milestone release of ICU4J 50.
@@ -127,6 +127,13 @@ found in ICU4J.</p>
 
 <h3 class="doc"><a name="changes"></a>Changes In This Release</h3>
 <h4>New features and changes</h4>
+<p>We changed the numeric value of
+  <code>static final Collator.ReorderCodes.DEFAULT</code> from +1 to -1
+  so that it does not collide with a valid UScript code (<code>UScript.INHERITED</code>),
+  and to make it match <code>UScript.INVALID_CODE</code> and C/C++ <code>UCOL_REORDER_CODE_DEFAULT</code>,
+  as had been intended.
+  Programs using <code>Collator.ReorderCodes.DEFAULT</code> must be recompiled.</p>
+
 <p>
 See the <a href="http://sites.google.com/site/icusite/download/50milestone">ICU 50 milestone download page</a>
 about new features in this release.  The list of API changes since the previous ICU4J release is available
