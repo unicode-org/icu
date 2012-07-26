@@ -258,7 +258,7 @@ uprv_detectWindowsTimeZone() {
     int32_t len;
     int id;
     int errorCode;
-    char ISOcode[3]; //2 letter iso code 
+    char ISOcode[3]; /* 2 letter iso code */
 
     LONG result;
     TZI tziKey;
@@ -310,12 +310,12 @@ uprv_detectWindowsTimeZone() {
             tziKey.daylightBias = tziReg.daylightBias;
 
             if (uprv_memcmp((char *)&tziKey, (char*)&tziReg, sizeof(tziKey)) == 0) {
-            const UChar* icuTZ;
+                const UChar* icuTZ = NULL;
                 if (errorCode != 0) {
                     icuTZ = ures_getStringByKey(winTZ, ISOcode, &len, &status);
                 }
                 if (errorCode==0 || icuTZ==NULL) {
-                    //fallback to default "001" and reset status
+                    /* fallback to default "001" and reset status */
                     status = U_ZERO_ERROR;
                     icuTZ = ures_getStringByKey(winTZ, "001", &len, &status);
                 }
@@ -336,7 +336,7 @@ uprv_detectWindowsTimeZone() {
                      * the current time zone information)
                      */
                     if (idFound || tmpid[0] == 0) {
-                        //if icuTZ has more than one city, take only the first (i.e. terminate icuTZ at first space)
+                        /* if icuTZ has more than one city, take only the first (i.e. terminate icuTZ at first space) */
                         int index=0;
                         while (! (*icuTZ == '\0' || *icuTZ ==' ')) {
                             tmpid[index++]=*icuTZ++;
