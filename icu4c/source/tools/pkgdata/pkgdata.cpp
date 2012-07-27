@@ -1965,28 +1965,20 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
       p = popen(cmdBuf, "r");
     }
 
-    if(p == NULL) {
+    if(p == NULL || (n = fread(buf, 1, 511, p)) <= 0) {
       if(verbose) {
         fprintf(stdout, "# Calling icu-config: %s\n", cmd);
       }
-      p = popen(cmd, "r");      
-    }
+      pclose(p);
 
-    if(p == NULL)
-    {
-        fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n", progname);
-        return -1;
+      p = popen(cmd, "r");
+      if(p == NULL || (n = fread(buf, 1, 511, p)) <= 0) {
+          fprintf(stderr, "%s: icu-config: No icu-config found. (fix PATH or use -O option)\n", progname);
+          return -1;
+      }
     }
-
-    n = fread(buf, 1, 511, p);
 
     pclose(p);
-
-    if(n<=0)
-    {
-        fprintf(stderr,"%s: icu-config: Could not read from icu-config. (fix PATH or use -O option)\n", progname);
-        return -1;
-    }
 
     for (int32_t length = strlen(buf) - 1; length >= 0; length--) {
         if (buf[length] == '\n' || buf[length] == ' ') {
