@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ca.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ca.xml
 // *
 // ***************************************************************************
 /**
@@ -28,7 +28,7 @@ ca{
             "afgani afganès",
         }
         ALK{
-            "ALK" /** ===  */,
+            "ALK",
             "lek albanès (1946-1965)",
         }
         ALL{
@@ -355,10 +355,7 @@ ca{
             "₧",
             "pesseta espanyola",
             {
-                /**
-                 * Duplicated from NumberPatterns resource
-                 */
-                "#,##0.00 ¤",
+                "¤ #,##0;-¤ #,##0",
                 ",",
                 ".",
             }
@@ -484,7 +481,7 @@ ca{
             "lliura israeliana",
         }
         ILR{
-            "ILR" /** ===  */,
+            "ILR",
             "xéquel israelià",
         }
         ILS{
@@ -504,7 +501,7 @@ ca{
             "rial iranià",
         }
         ISJ{
-            "ISJ" /** ===  */,
+            "ISJ",
             "corona islandesa antiga",
         }
         ISK{

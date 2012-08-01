@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/te.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/te.xml
 // *
 // ***************************************************************************
 /**
@@ -41,8 +41,8 @@ te{
     calendar{
         gregorian{
             AmPmMarkers{
-                "ఉ",
-                "సా",
+                "పూర్వాహ్నం",
+                "అపరాహ్నం",
             }
             DateTimePatterns{
                 "h:mm:ss a zzzz",

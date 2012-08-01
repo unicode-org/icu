@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/hr.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/hr.xml
 // *
 // ***************************************************************************
 /**
@@ -232,7 +232,7 @@ hr{
             "čileanski pezo",
         }
         CNX{
-            "CNX" /** ===  */,
+            "CNX",
             "kineski narodni dolar",
         }
         CNY{
@@ -456,7 +456,7 @@ hr{
             "izraelska funta",
         }
         ILR{
-            "ILR" /** ===  */,
+            "ILR",
             "stari izraelski šekel",
         }
         ILS{
@@ -476,7 +476,7 @@ hr{
             "iranski rijal",
         }
         ISJ{
-            "ISJ" /** ===  */,
+            "ISJ",
             "stara islandska kruna",
         }
         ISK{

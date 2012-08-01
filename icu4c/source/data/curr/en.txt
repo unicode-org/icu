@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/en.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/en.xml
 // *
 // ***************************************************************************
 /**
@@ -28,7 +28,7 @@ en{
             "Afghan Afghani",
         }
         ALK{
-            "ALK" /** ===  */,
+            "ALK",
             "Albanian Lek (1946-1965)",
         }
         ALL{
@@ -268,7 +268,7 @@ en{
             "Chilean Peso",
         }
         CNX{
-            "CNX" /** ===  */,
+            "CNX",
             "Chinese People’s Bank Dollar",
         }
         CNY{
@@ -492,7 +492,7 @@ en{
             "Israeli Pound",
         }
         ILR{
-            "ILR" /** ===  */,
+            "ILR",
             "Israeli Sheqel (1980-1985)",
         }
         ILS{
@@ -512,7 +512,7 @@ en{
             "Iranian Rial",
         }
         ISJ{
-            "ISJ" /** ===  */,
+            "ISJ",
             "Icelandic Króna (1918-1981)",
         }
         ISK{
@@ -700,7 +700,7 @@ en{
             "Mauritian Rupee",
         }
         MVP{
-            "MVP" /** ===  */,
+            "MVP",
             "Maldivian Rupee",
         }
         MVR{
@@ -912,7 +912,7 @@ en{
             "Surinamese Guilder",
         }
         SSP{
-            "SSP" /** ===  */,
+            "SSP",
             "South Sudanese Pound",
         }
         STD{
@@ -1124,7 +1124,7 @@ en{
             "RINET Funds",
         }
         XSU{
-            "XSU" /** ===  */,
+            "XSU",
             "Sucre",
         }
         XTS{
@@ -1132,7 +1132,7 @@ en{
             "Testing Currency Code",
         }
         XUA{
-            "XUA" /** ===  */,
+            "XUA",
             "ADB Unit of Account",
         }
         XXX{
