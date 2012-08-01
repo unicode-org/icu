@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/bs.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/bs.xml
 // *
 // ***************************************************************************
 /**
@@ -310,46 +310,7 @@ bs{
         }
     }
     unitsShort{
-        day{
-            few{"{0} dana"}
-            many{"{0} dana"}
-            one{"{0} dan"}
-            other{"{0} dan"}
-        }
-        hour{
-            few{"{0} sata"}
-            many{"{0} sati"}
-            one{"{0} sat"}
-            other{"{0} sat"}
-        }
-        minute{
-            few{"{0} min"}
-            many{"{0} min"}
-            one{"{0} min"}
-            other{"{0} min"}
-        }
-        month{
-            few{"{0} mes"}
-            many{"{0} mes"}
-            one{"{0} mes"}
-            other{"{0} mes"}
-        }
-        second{
-            few{"{0} sek"}
-            many{"{0} sek"}
-            one{"{0} sek"}
-            other{"{0} sek"}
-        }
-        week{
-            few{"{0} ned"}
-            many{"{0} ned"}
-            one{"{0} ned"}
-            other{"{0} ned"}
-        }
         year{
-            few{"{0} god"}
-            many{"{0} god"}
-            one{"{0} god"}
             other{"{0} god"}
         }
     }
