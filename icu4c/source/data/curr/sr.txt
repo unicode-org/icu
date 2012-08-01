@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/sr.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/sr.xml
 // *
 // ***************************************************************************
 /**
@@ -452,7 +452,7 @@ sr{
             "Израелска фунта",
         }
         ILR{
-            "ILR" /** ===  */,
+            "ILR",
             "стари израелски шекели",
         }
         ILS{
@@ -472,7 +472,7 @@ sr{
             "Ирански риал",
         }
         ISJ{
-            "ISJ" /** ===  */,
+            "ISJ",
             "стара исландска круна",
         }
         ISK{

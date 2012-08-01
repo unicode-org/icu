@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/en_BE.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/en_BE.xml
 // *
 // ***************************************************************************
 en_BE{
@@ -12,10 +12,7 @@ en_BE{
             "BEF",
             "Belgian Franc",
             {
-                /**
-                 * Duplicated from NumberPatterns resource
-                 */
-                "#,##0.00 ¤",
+                "#,##0.00 ¤;-#,##0.00 ¤",
                 ",",
                 ".",
             }

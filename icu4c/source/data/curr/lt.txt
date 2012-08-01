@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/lt.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/lt.xml
 // *
 // ***************************************************************************
 /**
@@ -28,7 +28,7 @@ lt{
             "Afganis",
         }
         ALK{
-            "ALK" /** ===  */,
+            "ALK",
             "Senasis albanų lekë",
         }
         ALL{
@@ -268,7 +268,7 @@ lt{
             "Čilės pesas",
         }
         CNX{
-            "CNX" /** ===  */,
+            "CNX",
             "Kinijos \"People\" banko doleriai",
         }
         CNY{
@@ -492,7 +492,7 @@ lt{
             "Izraelio svaras",
         }
         ILR{
-            "ILR" /** ===  */,
+            "ILR",
             "Senieji izraeliečių sheqels",
         }
         ILS{
@@ -512,7 +512,7 @@ lt{
             "Irano rialas",
         }
         ISJ{
-            "ISJ" /** ===  */,
+            "ISJ",
             "Senosios islandų krónur",
         }
         ISK{

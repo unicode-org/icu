@@ -2,53 +2,49 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/supplementalData.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/supplementalData.xml
 // *
 // ***************************************************************************
 supplementalData:table(nofallback){
-    /**
-     * Map from ISO 3166 country codes to ISO 4217 currency codes
-     * NOTE: This is not true locale data; it exists only in ROOT
-     */
     CurrencyMap{
         AD{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"ESP"}
-                from:intvector{ /** 1873-01-01  */
+                from:intvector{
                     -713,
                     1332542048,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"ESP"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1960-01-01  */
+                from:intvector{
                     -74,
                     -2086527392,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
             }
             {
-                id{"ADP"}
-                from:intvector{ /** 1936-01-01  */
+                from:intvector{
                     -250,
                     740284000,
                 }
-                to:intvector{ /** 2001-12-31  */
+                id{"ADP"}
+                to:intvector{
                     228,
                     1647376512,
                 }
@@ -56,28 +52,28 @@ supplementalData:table(nofallback){
         }
         AE{
             {
-                id{"AED"}
-                from:intvector{ /** 1973-05-19  */
+                from:intvector{
                     22,
                     1760619488,
                 }
+                id{"AED"}
             }
         }
         AF{
             {
-                id{"AFN"}
-                from:intvector{ /** 2002-10-07  */
+                from:intvector{
                     235,
                     1044885440,
                 }
+                id{"AFN"}
             }
             {
-                id{"AFA"}
-                from:intvector{ /** 1927-03-14  */
+                from:intvector{
                     -316,
                     1334645536,
                 }
-                to:intvector{ /** 2002-12-31  */
+                id{"AFA"}
+                to:intvector{
                     235,
                     -1176361856,
                 }
@@ -85,37 +81,37 @@ supplementalData:table(nofallback){
         }
         AG{
             {
-                id{"XCD"}
-                from:intvector{ /** 1965-10-06  */
+                from:intvector{
                     -37,
                     1579989952,
                 }
+                id{"XCD"}
             }
         }
         AI{
             {
-                id{"XCD"}
-                from:intvector{ /** 1965-10-06  */
+                from:intvector{
                     -37,
                     1579989952,
                 }
+                id{"XCD"}
             }
         }
         AL{
             {
-                id{"ALL"}
-                from:intvector{ /** 1965-08-16  */
+                from:intvector{
                     -37,
                     -1851097344,
                 }
+                id{"ALL"}
             }
             {
-                id{"ALK"}
-                from:intvector{ /** 1946-11-01  */
+                from:intvector{
                     -177,
                     -1467495904,
                 }
-                to:intvector{ /** 1965-08-16  */
+                id{"ALK"}
+                to:intvector{
                     -37,
                     -1851097344,
                 }
@@ -123,30 +119,30 @@ supplementalData:table(nofallback){
         }
         AM{
             {
-                id{"AMD"}
-                from:intvector{ /** 1993-11-22  */
+                from:intvector{
                     169,
                     1811986976,
                 }
+                id{"AMD"}
             }
             {
-                id{"RUR"}
-                from:intvector{ /** 1991-12-25  */
+                from:intvector{
                     154,
                     -957610880,
                 }
-                to:intvector{ /** 1993-11-22  */
+                id{"RUR"}
+                to:intvector{
                     169,
                     1811986976,
                 }
             }
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1991-12-25  */
+                id{"SUR"}
+                to:intvector{
                     154,
                     -957610880,
                 }
@@ -154,50 +150,50 @@ supplementalData:table(nofallback){
         }
         AN{
             {
-                id{"ANG"}
-                from:intvector{ /** 1940-05-10  */
+                from:intvector{
                     -221,
                     -1100494880,
                 }
+                id{"ANG"}
             }
         }
         AO{
             {
-                id{"AOA"}
-                from:intvector{ /** 1999-12-13  */
+                from:intvector{
                     213,
                     1358285952,
                 }
+                id{"AOA"}
             }
             {
-                id{"AOR"}
-                from:intvector{ /** 1995-07-01  */
+                from:intvector{
                     183,
                     -1355162464,
                 }
-                to:intvector{ /** 2000-02-01  */
+                id{"AOR"}
+                to:intvector{
                     220,
                     1792114880,
                 }
             }
             {
-                id{"AON"}
-                from:intvector{ /** 1990-09-25  */
+                from:intvector{
                     147,
                     1865947488,
                 }
-                to:intvector{ /** 2000-02-01  */
+                id{"AON"}
+                to:intvector{
                     220,
                     1792114880,
                 }
             }
             {
-                id{"AOK"}
-                from:intvector{ /** 1977-01-08  */
+                from:intvector{
                     51,
                     -1808639392,
                 }
-                to:intvector{ /** 1991-03-01  */
+                id{"AOK"}
+                to:intvector{
                     154,
                     1263216416,
                 }
@@ -205,61 +201,61 @@ supplementalData:table(nofallback){
         }
         AQ{
             {
-                id{"XXX"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"XXX"}
             }
         }
         AR{
             {
-                id{"ARS"}
-                from:intvector{ /** 1992-01-01  */
+                from:intvector{
                     161,
                     -1560641952,
                 }
+                id{"ARS"}
             }
             {
-                id{"ARA"}
-                from:intvector{ /** 1985-06-14  */
+                from:intvector{
                     110,
                     2062757440,
                 }
-                to:intvector{ /** 1992-01-01  */
+                id{"ARA"}
+                to:intvector{
                     161,
                     -1560641952,
                 }
             }
             {
-                id{"ARP"}
-                from:intvector{ /** 1983-06-01  */
+                from:intvector{
                     95,
                     -2089300416,
                 }
-                to:intvector{ /** 1985-06-14  */
+                id{"ARP"}
+                to:intvector{
                     110,
                     2062757440,
                 }
             }
             {
-                id{"ARL"}
-                from:intvector{ /** 1970-01-01  */
+                from:intvector{
                     0,
                     60000,
                 }
-                to:intvector{ /** 1983-06-01  */
+                id{"ARL"}
+                to:intvector{
                     95,
                     -2089300416,
                 }
             }
             {
-                id{"ARM"}
-                from:intvector{ /** 1881-11-05  */
+                from:intvector{
                     -654,
                     736471584,
                 }
-                to:intvector{ /** 1970-01-01  */
+                id{"ARM"}
+                to:intvector{
                     0,
                     60000,
                 }
@@ -267,28 +263,28 @@ supplementalData:table(nofallback){
         }
         AS{
             {
-                id{"USD"}
-                from:intvector{ /** 1904-07-16  */
+                from:intvector{
                     -485,
                     1510758560,
                 }
+                id{"USD"}
             }
         }
         AT{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"ATS"}
-                from:intvector{ /** 1947-12-04  */
+                from:intvector{
                     -169,
                     262993024,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"ATS"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
@@ -296,28 +292,28 @@ supplementalData:table(nofallback){
         }
         AU{
             {
-                id{"AUD"}
-                from:intvector{ /** 1966-02-14  */
+                from:intvector{
                     -30,
                     -553028416,
                 }
+                id{"AUD"}
             }
         }
         AW{
             {
-                id{"AWG"}
-                from:intvector{ /** 1986-01-01  */
+                from:intvector{
                     117,
                     -1884480928,
                 }
+                id{"AWG"}
             }
             {
-                id{"ANG"}
-                from:intvector{ /** 1940-05-10  */
+                from:intvector{
                     -221,
                     -1100494880,
                 }
-                to:intvector{ /** 1986-01-01  */
+                id{"ANG"}
+                to:intvector{
                     117,
                     -1884480928,
                 }
@@ -325,50 +321,50 @@ supplementalData:table(nofallback){
         }
         AX{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
         }
         AZ{
             {
-                id{"AZN"}
-                from:intvector{ /** 2006-01-01  */
+                from:intvector{
                     264,
                     -2092673440,
                 }
+                id{"AZN"}
             }
             {
-                id{"AZM"}
-                from:intvector{ /** 1993-11-22  */
+                from:intvector{
                     169,
                     1811986976,
                 }
-                to:intvector{ /** 2006-12-31  */
+                id{"AZM"}
+                to:intvector{
                     265,
                     499986560,
                 }
             }
             {
-                id{"RUR"}
-                from:intvector{ /** 1991-12-25  */
+                from:intvector{
                     154,
                     -957610880,
                 }
-                to:intvector{ /** 1994-01-01  */
+                id{"RUR"}
+                to:intvector{
                     176,
                     1468215904,
                 }
             }
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1991-12-25  */
+                id{"SUR"}
+                to:intvector{
                     154,
                     -957610880,
                 }
@@ -376,63 +372,63 @@ supplementalData:table(nofallback){
         }
         BA{
             {
-                id{"BAM"}
-                from:intvector{ /** 1995-01-01  */
+                from:intvector{
                     183,
                     -1355522464,
                 }
+                id{"BAM"}
             }
             {
-                id{"BAN"}
-                from:intvector{ /** 1994-08-15  */
+                from:intvector{
                     176,
                     -1616731392,
                 }
-                to:intvector{ /** 1997-07-01  */
+                id{"BAN"}
+                to:intvector{
                     198,
                     1673695392,
                 }
             }
             {
-                id{"BAD"}
-                from:intvector{ /** 1992-07-01  */
+                from:intvector{
                     161,
                     -1560281952,
                 }
-                to:intvector{ /** 1994-08-15  */
+                id{"BAD"}
+                to:intvector{
                     176,
                     -1616731392,
                 }
             }
             {
-                id{"YUR"}
-                from:intvector{ /** 1992-07-01  */
+                from:intvector{
                     161,
                     -1560281952,
                 }
-                to:intvector{ /** 1993-10-01  */
+                id{"YUR"}
+                to:intvector{
                     168,
                     -2473024,
                 }
             }
             {
-                id{"YUN"}
-                from:intvector{ /** 1990-01-01  */
+                from:intvector{
                     146,
                     -208132512,
                 }
-                to:intvector{ /** 1992-07-01  */
+                id{"YUN"}
+                to:intvector{
                     161,
                     -1560281952,
                 }
             }
             {
-                id{"YUD"}
-                from:intvector{ /** 1966-01-01  */
+                from:intvector{
                     -30,
                     -1676288416,
                 }
-                to:intvector{ /** 1990-01-01  */
+                id{"YUD"}
+                to:intvector{
                     146,
                     -208132512,
                 }
@@ -440,19 +436,19 @@ supplementalData:table(nofallback){
         }
         BB{
             {
-                id{"BBD"}
-                from:intvector{ /** 1973-12-03  */
+                from:intvector{
                     22,
                     378639488,
                 }
+                id{"BBD"}
             }
             {
-                id{"XCD"}
-                from:intvector{ /** 1965-10-06  */
+                from:intvector{
                     -37,
                     1579989952,
                 }
-                to:intvector{ /** 1973-12-03  */
+                id{"XCD"}
+                to:intvector{
                     22,
                     378639488,
                 }
@@ -460,30 +456,30 @@ supplementalData:table(nofallback){
         }
         BD{
             {
-                id{"BDT"}
-                from:intvector{ /** 1972-01-01  */
+                from:intvector{
                     14,
                     -1352449440,
                 }
+                id{"BDT"}
             }
             {
-                id{"PKR"}
-                from:intvector{ /** 1948-04-01  */
+                from:intvector{
                     -162,
                     1474541952,
                 }
-                to:intvector{ /** 1972-01-01  */
+                id{"PKR"}
+                to:intvector{
                     14,
                     -1352449440,
                 }
             }
             {
-                id{"INR"}
-                from:intvector{ /** 1835-08-17  */
+                from:intvector{
                     -992,
                     1779237632,
                 }
-                to:intvector{ /** 1948-04-01  */
+                id{"INR"}
+                to:intvector{
                     -162,
                     1474541952,
                 }
@@ -491,95 +487,95 @@ supplementalData:table(nofallback){
         }
         BE{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"BEF"}
-                from:intvector{ /** 1831-02-07  */
+                from:intvector{
                     -1022,
                     -761470784,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"BEF"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
             }
             {
-                id{"NLG"}
-                from:intvector{ /** 1816-12-15  */
+                from:intvector{
                     -1132,
                     -1008868224,
                 }
-                to:intvector{ /** 1831-02-07  */
+                id{"NLG"}
+                to:intvector{
                     -1022,
                     -761470784,
                 }
             }
             {
-                id{"BEL"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"BEL"}
             }
             {
-                id{"BEC"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"BEC"}
             }
         }
         BF{
             {
-                id{"XOF"}
-                from:intvector{ /** 1984-08-04  */
+                from:intvector{
                     102,
                     -358751488,
                 }
+                id{"XOF"}
             }
         }
         BG{
             {
-                id{"BGN"}
-                from:intvector{ /** 1999-07-05  */
+                from:intvector{
                     213,
                     666785952,
                 }
+                id{"BGN"}
             }
             {
-                id{"BGL"}
-                from:intvector{ /** 1962-01-01  */
+                from:intvector{
                     -59,
                     942330464,
                 }
-                to:intvector{ /** 1999-07-05  */
+                id{"BGL"}
+                to:intvector{
                     213,
                     666785952,
                 }
             }
             {
-                id{"BGM"}
-                from:intvector{ /** 1952-05-12  */
+                from:intvector{
                     -133,
                     -193616928,
                 }
-                to:intvector{ /** 1962-01-01  */
+                id{"BGM"}
+                to:intvector{
                     -59,
                     942330464,
                 }
             }
             {
-                id{"BGO"}
-                from:intvector{ /** 1879-07-08  */
+                from:intvector{
                     -669,
                     -2033426272,
                 }
-                to:intvector{ /** 1952-05-12  */
+                id{"BGO"}
+                to:intvector{
                     -133,
                     -193616928,
                 }
@@ -587,46 +583,46 @@ supplementalData:table(nofallback){
         }
         BH{
             {
-                id{"BHD"}
-                from:intvector{ /** 1965-10-16  */
+                from:intvector{
                     -37,
                     -1850977344,
                 }
+                id{"BHD"}
             }
         }
         BI{
             {
-                id{"BIF"}
-                from:intvector{ /** 1964-05-19  */
+                from:intvector{
                     -44,
                     1145261024,
                 }
+                id{"BIF"}
             }
         }
         BJ{
             {
-                id{"XOF"}
-                from:intvector{ /** 1975-11-30  */
+                from:intvector{
                     37,
                     1358870048,
                 }
+                id{"XOF"}
             }
         }
         BL{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1960-01-01  */
+                from:intvector{
                     -74,
                     -2086527392,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
@@ -634,28 +630,28 @@ supplementalData:table(nofallback){
         }
         BM{
             {
-                id{"BMD"}
-                from:intvector{ /** 1970-02-06  */
+                from:intvector{
                     0,
                     432120000,
                 }
+                id{"BMD"}
             }
         }
         BN{
             {
-                id{"BND"}
-                from:intvector{ /** 1967-06-12  */
+                from:intvector{
                     -22,
                     745640512,
                 }
+                id{"BND"}
             }
             {
-                id{"MYR"}
-                from:intvector{ /** 1963-09-16  */
+                from:intvector{
                     -52,
                     -584927904,
                 }
-                to:intvector{ /** 1967-06-12  */
+                id{"MYR"}
+                to:intvector{
                     -22,
                     745640512,
                 }
@@ -663,112 +659,112 @@ supplementalData:table(nofallback){
         }
         BO{
             {
-                id{"BOB"}
-                from:intvector{ /** 1987-01-01  */
+                from:intvector{
                     124,
                     -413252000,
                 }
+                id{"BOB"}
             }
             {
-                id{"BOP"}
-                from:intvector{ /** 1963-01-01  */
+                from:intvector{
                     -52,
                     -1881407904,
                 }
-                to:intvector{ /** 1986-12-31  */
+                id{"BOP"}
+                to:intvector{
                     118,
                     708179072,
                 }
             }
             {
-                id{"BOL"}
-                from:intvector{ /** 1863-06-23  */
+                from:intvector{
                     -786,
                     1147054656,
                 }
-                to:intvector{ /** 1963-01-01  */
+                id{"BOL"}
+                to:intvector{
                     -52,
                     -1881407904,
                 }
             }
             {
-                id{"BOV"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"BOV"}
             }
         }
         BR{
             {
-                id{"BRL"}
-                from:intvector{ /** 1994-07-01  */
+                from:intvector{
                     176,
                     1468575904,
                 }
+                id{"BRL"}
             }
             {
-                id{"BRR"}
-                from:intvector{ /** 1993-08-01  */
+                from:intvector{
                     168,
                     -2593024,
                 }
-                to:intvector{ /** 1994-07-01  */
+                id{"BRR"}
+                to:intvector{
                     176,
                     1468575904,
                 }
             }
             {
-                id{"BRE"}
-                from:intvector{ /** 1990-03-16  */
+                from:intvector{
                     147,
                     1087987488,
                 }
-                to:intvector{ /** 1993-08-01  */
+                id{"BRE"}
+                to:intvector{
                     168,
                     -2593024,
                 }
             }
             {
-                id{"BRN"}
-                from:intvector{ /** 1989-01-15  */
+                from:intvector{
                     139,
                     -469761440,
                 }
-                to:intvector{ /** 1990-03-16  */
+                id{"BRN"}
+                to:intvector{
                     147,
                     1087987488,
                 }
             }
             {
-                id{"BRC"}
-                from:intvector{ /** 1986-02-28  */
+                from:intvector{
                     118,
                     448379072,
                 }
-                to:intvector{ /** 1989-01-15  */
+                id{"BRC"}
+                to:intvector{
                     139,
                     -469761440,
                 }
             }
             {
-                id{"BRB"}
-                from:intvector{ /** 1967-02-13  */
+                from:intvector{
                     -22,
                     831800512,
                 }
-                to:intvector{ /** 1986-02-28  */
+                id{"BRB"}
+                to:intvector{
                     118,
                     448379072,
                 }
             }
             {
-                id{"BRZ"}
-                from:intvector{ /** 1942-11-01  */
+                from:intvector{
                     -206,
                     1151122976,
                 }
-                to:intvector{ /** 1967-02-13  */
+                id{"BRZ"}
+                to:intvector{
                     -22,
                     831800512,
                 }
@@ -776,37 +772,37 @@ supplementalData:table(nofallback){
         }
         BS{
             {
-                id{"BSD"}
-                from:intvector{ /** 1966-05-25  */
+                from:intvector{
                     -29,
                     397551584,
                 }
+                id{"BSD"}
             }
         }
         BT{
             {
-                id{"BTN"}
-                from:intvector{ /** 1974-04-16  */
+                from:intvector{
                     29,
                     -1322378880,
                 }
+                id{"BTN"}
             }
             {
-                id{"INR"}
-                from:intvector{ /** 1907-01-01  */
+                from:intvector{
                     -463,
                     419518048,
                 }
+                id{"INR"}
             }
         }
         BU{
             {
-                id{"BUK"}
-                from:intvector{ /** 1952-07-01  */
+                from:intvector{
                     -133,
                     -1143896928,
                 }
-                to:intvector{ /** 1989-06-18  */
+                id{"BUK"}
+                to:intvector{
                     139,
                     -210261440,
                 }
@@ -814,28 +810,28 @@ supplementalData:table(nofallback){
         }
         BV{
             {
-                id{"NOK"}
-                from:intvector{ /** 1905-06-07  */
+                from:intvector{
                     -478,
                     -2004239808,
                 }
+                id{"NOK"}
             }
         }
         BW{
             {
-                id{"BWP"}
-                from:intvector{ /** 1976-08-23  */
+                from:intvector{
                     44,
                     -2069848320,
                 }
+                id{"BWP"}
             }
             {
-                id{"ZAR"}
-                from:intvector{ /** 1961-02-14  */
+                from:intvector{
                     -66,
                     594361536,
                 }
-                to:intvector{ /** 1976-08-23  */
+                id{"ZAR"}
+                to:intvector{
                     44,
                     -2069848320,
                 }
@@ -843,41 +839,41 @@ supplementalData:table(nofallback){
         }
         BY{
             {
-                id{"BYR"}
-                from:intvector{ /** 2000-01-01  */
+                from:intvector{
                     220,
                     1792054880,
                 }
+                id{"BYR"}
             }
             {
-                id{"BYB"}
-                from:intvector{ /** 1994-08-01  */
+                from:intvector{
                     176,
                     1468635904,
                 }
-                to:intvector{ /** 2000-12-31  */
+                id{"BYB"}
+                to:intvector{
                     221,
                     89747584,
                 }
             }
             {
-                id{"RUR"}
-                from:intvector{ /** 1991-12-25  */
+                from:intvector{
                     154,
                     -957610880,
                 }
-                to:intvector{ /** 1994-11-08  */
+                id{"RUR"}
+                to:intvector{
                     176,
                     2073615904,
                 }
             }
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1991-12-25  */
+                id{"SUR"}
+                to:intvector{
                     154,
                     -957610880,
                 }
@@ -885,57 +881,57 @@ supplementalData:table(nofallback){
         }
         BZ{
             {
-                id{"BZD"}
-                from:intvector{ /** 1974-01-01  */
+                from:intvector{
                     29,
                     1676408416,
                 }
+                id{"BZD"}
             }
         }
         CA{
             {
-                id{"CAD"}
-                from:intvector{ /** 1858-01-01  */
+                from:intvector{
                     -823,
                     393344608,
                 }
+                id{"CAD"}
             }
         }
         CC{
             {
-                id{"AUD"}
-                from:intvector{ /** 1966-02-14  */
+                from:intvector{
                     -30,
                     -553028416,
                 }
+                id{"AUD"}
             }
         }
         CD{
             {
-                id{"CDF"}
-                from:intvector{ /** 1998-07-01  */
+                from:intvector{
                     205,
                     -1150042976,
                 }
+                id{"CDF"}
             }
             {
-                id{"ZRN"}
-                from:intvector{ /** 1993-11-01  */
+                from:intvector{
                     168,
                     -2413024,
                 }
-                to:intvector{ /** 1998-07-01  */
+                id{"ZRN"}
+                to:intvector{
                     205,
                     -1150042976,
                 }
             }
             {
-                id{"ZRZ"}
-                from:intvector{ /** 1971-10-27  */
+                from:intvector{
                     7,
                     -576738368,
                 }
-                to:intvector{ /** 1993-11-01  */
+                id{"ZRZ"}
+                to:intvector{
                     168,
                     -2413024,
                 }
@@ -943,170 +939,170 @@ supplementalData:table(nofallback){
         }
         CF{
             {
-                id{"XAF"}
-                from:intvector{ /** 1993-01-01  */
+                from:intvector{
                     168,
                     -3013024,
                 }
+                id{"XAF"}
             }
         }
         CG{
             {
-                id{"XAF"}
-                from:intvector{ /** 1993-01-01  */
+                from:intvector{
                     168,
                     -3013024,
                 }
+                id{"XAF"}
             }
         }
         CH{
             {
-                id{"CHF"}
-                from:intvector{ /** 1799-03-17  */
+                from:intvector{
                     -1257,
                     -336896224,
                 }
+                id{"CHF"}
             }
             {
+                from:intvector{
+                    58993,
+                    351827072,
+                }
                 id{"CHE"}
-                from:intvector{ /** 9999-12-31  */
-                    58993,
-                    351827072,
-                }
             }
             {
-                id{"CHW"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"CHW"}
             }
         }
         CI{
             {
-                id{"XOF"}
-                from:intvector{ /** 1958-12-04  */
+                from:intvector{
                     -89,
                     -474157952,
                 }
+                id{"XOF"}
             }
         }
         CK{
             {
-                id{"NZD"}
-                from:intvector{ /** 1967-07-10  */
+                from:intvector{
                     -22,
                     572900512,
                 }
+                id{"NZD"}
             }
         }
         CL{
             {
-                id{"CLP"}
-                from:intvector{ /** 1975-09-29  */
+                from:intvector{
                     37,
                     1272350048,
                 }
+                id{"CLP"}
             }
             {
-                id{"CLE"}
-                from:intvector{ /** 1960-01-01  */
+                from:intvector{
                     -74,
                     -2086527392,
                 }
-                to:intvector{ /** 1975-09-29  */
+                id{"CLE"}
+                to:intvector{
                     37,
                     1272350048,
                 }
             }
             {
-                id{"CLF"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"CLF"}
             }
         }
         CM{
             {
-                id{"XAF"}
-                from:intvector{ /** 1973-04-01  */
+                from:intvector{
                     22,
                     205359488,
                 }
+                id{"XAF"}
             }
         }
         CN{
             {
-                id{"CNY"}
-                from:intvector{ /** 1953-03-01  */
+                from:intvector{
                     -125,
                     413492000,
                 }
+                id{"CNY"}
             }
             {
-                id{"CNX"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"CNX"}
             }
         }
         CO{
             {
-                id{"COP"}
-                from:intvector{ /** 1905-01-01  */
+                from:intvector{
                     -478,
                     1772027488,
                 }
+                id{"COP"}
             }
             {
-                id{"COU"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"COU"}
             }
         }
         CR{
             {
-                id{"CRC"}
-                from:intvector{ /** 1896-10-26  */
+                from:intvector{
                     -544,
                     -891358272,
                 }
+                id{"CRC"}
             }
         }
         CS{
             {
-                id{"CSD"}
-                from:intvector{ /** 2002-05-15  */
+                from:intvector{
                     235,
                     1735785440,
                 }
-                to:intvector{ /** 2006-06-03  */
+                id{"CSD"}
+                to:intvector{
                     264,
                     -1919573440,
                 }
             }
             {
-                id{"EUR"}
-                from:intvector{ /** 2003-02-04  */
+                from:intvector{
                     242,
                     -2038532928,
                 }
-                to:intvector{ /** 2006-06-03  */
+                id{"EUR"}
+                to:intvector{
                     264,
                     -1919573440,
                 }
             }
             {
-                id{"YUM"}
-                from:intvector{ /** 1994-01-24  */
+                from:intvector{
                     176,
                     -839551392,
                 }
-                to:intvector{ /** 2002-05-15  */
+                id{"YUM"}
+                to:intvector{
                     235,
                     1735785440,
                 }
@@ -1114,26 +1110,26 @@ supplementalData:table(nofallback){
         }
         CU{
             {
-                id{"CUC"}
-                from:intvector{ /** 1994-01-01  */
+                from:intvector{
                     176,
                     1468215904,
                 }
+                id{"CUC"}
             }
             {
-                id{"CUP"}
-                from:intvector{ /** 1859-01-01  */
+                from:intvector{
                     -816,
                     1864573536,
                 }
+                id{"CUP"}
             }
             {
-                id{"USD"}
-                from:intvector{ /** 1899-01-01  */
+                from:intvector{
                     -522,
                     1448188512,
                 }
-                to:intvector{ /** 1959-01-01  */
+                id{"USD"}
+                to:intvector{
                     -81,
                     737210976,
                 }
@@ -1141,19 +1137,19 @@ supplementalData:table(nofallback){
         }
         CV{
             {
-                id{"CVE"}
-                from:intvector{ /** 1914-01-01  */
+                from:intvector{
                     -412,
                     -1993981344,
                 }
+                id{"CVE"}
             }
             {
-                id{"PTE"}
-                from:intvector{ /** 1911-05-22  */
+                from:intvector{
                     -434,
                     -384460832,
                 }
-                to:intvector{ /** 1975-07-05  */
+                id{"PTE"}
+                to:intvector{
                     36,
                     -801369952,
                 }
@@ -1161,28 +1157,28 @@ supplementalData:table(nofallback){
         }
         CX{
             {
-                id{"AUD"}
-                from:intvector{ /** 1966-02-14  */
+                from:intvector{
                     -30,
                     -553028416,
                 }
+                id{"AUD"}
             }
         }
         CY{
             {
-                id{"EUR"}
-                from:intvector{ /** 2008-01-01  */
+                from:intvector{
                     279,
                     849784416,
                 }
+                id{"EUR"}
             }
             {
-                id{"CYP"}
-                from:intvector{ /** 1914-09-10  */
+                from:intvector{
                     -412,
                     -1215901344,
                 }
-                to:intvector{ /** 2008-01-31  */
+                id{"CYP"}
+                to:intvector{
                     279,
                     -853182880,
                 }
@@ -1190,19 +1186,19 @@ supplementalData:table(nofallback){
         }
         CZ{
             {
-                id{"CZK"}
-                from:intvector{ /** 1993-01-01  */
+                from:intvector{
                     168,
                     -3013024,
                 }
+                id{"CZK"}
             }
             {
-                id{"CSK"}
-                from:intvector{ /** 1953-06-01  */
+                from:intvector{
                     -125,
                     413672000,
                 }
-                to:intvector{ /** 1993-03-01  */
+                id{"CSK"}
+                to:intvector{
                     168,
                     -2893024,
                 }
@@ -1210,12 +1206,12 @@ supplementalData:table(nofallback){
         }
         DD{
             {
-                id{"DDM"}
-                from:intvector{ /** 1948-07-20  */
+                from:intvector{
                     -162,
                     -1178645344,
                 }
-                to:intvector{ /** 1990-10-02  */
+                id{"DDM"}
+                to:intvector{
                     146,
                     -121192512,
                 }
@@ -1223,19 +1219,19 @@ supplementalData:table(nofallback){
         }
         DE{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"DEM"}
-                from:intvector{ /** 1948-06-20  */
+                from:intvector{
                     -162,
                     -1178705344,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"DEM"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
@@ -1243,46 +1239,46 @@ supplementalData:table(nofallback){
         }
         DJ{
             {
-                id{"DJF"}
-                from:intvector{ /** 1977-06-27  */
+                from:intvector{
                     51,
                     -166739392,
                 }
+                id{"DJF"}
             }
         }
         DK{
             {
-                id{"DKK"}
-                from:intvector{ /** 1873-05-27  */
+                from:intvector{
                     -713,
                     -715785248,
                 }
+                id{"DKK"}
             }
         }
         DM{
             {
-                id{"XCD"}
-                from:intvector{ /** 1965-10-06  */
+                from:intvector{
                     -37,
                     1579989952,
                 }
+                id{"XCD"}
             }
         }
         DO{
             {
-                id{"DOP"}
-                from:intvector{ /** 1947-10-01  */
+                from:intvector{
                     -169,
                     3673024,
                 }
+                id{"DOP"}
             }
             {
-                id{"USD"}
-                from:intvector{ /** 1905-06-21  */
+                from:intvector{
                     -478,
                     -794639808,
                 }
-                to:intvector{ /** 1947-10-01  */
+                id{"USD"}
+                to:intvector{
                     -169,
                     3673024,
                 }
@@ -1290,66 +1286,66 @@ supplementalData:table(nofallback){
         }
         DZ{
             {
-                id{"DZD"}
-                from:intvector{ /** 1964-04-01  */
+                from:intvector{
                     -45,
                     -409998976,
                 }
+                id{"DZD"}
             }
         }
         EC{
             {
-                id{"USD"}
-                from:intvector{ /** 2000-10-02  */
+                from:intvector{
                     220,
                     1878994880,
                 }
+                id{"USD"}
             }
             {
-                id{"ECS"}
-                from:intvector{ /** 1884-04-01  */
+                from:intvector{
                     -632,
                     509171072,
                 }
-                to:intvector{ /** 2000-10-02  */
+                id{"ECS"}
+                to:intvector{
                     220,
                     1878994880,
                 }
             }
             {
-                id{"ECV"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"ECV"}
             }
         }
         EE{
             {
-                id{"EUR"}
-                from:intvector{ /** 2011-01-01  */
+                from:intvector{
                     301,
                     1054903904,
                 }
+                id{"EUR"}
             }
             {
-                id{"EEK"}
-                from:intvector{ /** 1992-06-21  */
+                from:intvector{
                     162,
                     167658048,
                 }
-                to:intvector{ /** 2010-12-31  */
+                id{"EEK"}
+                to:intvector{
                     294,
                     -2118632320,
                 }
             }
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1992-06-20  */
+                id{"SUR"}
+                to:intvector{
                     162,
                     81258048,
                 }
@@ -1357,37 +1353,37 @@ supplementalData:table(nofallback){
         }
         EG{
             {
-                id{"EGP"}
-                from:intvector{ /** 1885-11-14  */
+                from:intvector{
                     -625,
                     -1104547296,
                 }
+                id{"EGP"}
             }
         }
         EH{
             {
-                id{"MAD"}
-                from:intvector{ /** 1976-02-26  */
+                from:intvector{
                     44,
                     -1811008320,
                 }
+                id{"MAD"}
             }
         }
         ER{
             {
-                id{"ERN"}
-                from:intvector{ /** 1997-11-08  */
+                from:intvector{
                     198,
                     -2016231904,
                 }
+                id{"ERN"}
             }
             {
-                id{"ETB"}
-                from:intvector{ /** 1993-05-24  */
+                from:intvector{
                     169,
                     1984426976,
                 }
-                to:intvector{ /** 1997-11-08  */
+                id{"ETB"}
+                to:intvector{
                     198,
                     -2016231904,
                 }
@@ -1395,62 +1391,71 @@ supplementalData:table(nofallback){
         }
         ES{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"ESP"}
-                from:intvector{ /** 1868-10-19  */
+                from:intvector{
                     -750,
                     -345695296,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"ESP"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
             }
             {
-                id{"ESA"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"ESA"}
             }
             {
-                id{"ESB"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"ESB"}
             }
         }
         ET{
             {
-                id{"ETB"}
-                from:intvector{ /** 1976-09-15  */
+                from:intvector{
                     44,
                     1533978976,
                 }
+                id{"ETB"}
+            }
+        }
+        EU{
+            {
+                from:intvector{
+                    213,
+                    320825952,
+                }
+                id{"EUR"}
             }
         }
         FI{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FIM"}
-                from:intvector{ /** 1963-01-01  */
+                from:intvector{
                     -52,
                     -1881407904,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"FIM"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
@@ -1458,37 +1463,37 @@ supplementalData:table(nofallback){
         }
         FJ{
             {
-                id{"FJD"}
-                from:intvector{ /** 1969-01-13  */
+                from:intvector{
                     -8,
                     -434368928,
                 }
+                id{"FJD"}
             }
         }
         FK{
             {
-                id{"FKP"}
-                from:intvector{ /** 1901-01-01  */
+                from:intvector{
                     -507,
                     95679072,
                 }
+                id{"FKP"}
             }
         }
         FM{
             {
-                id{"USD"}
-                from:intvector{ /** 1944-01-01  */
+                from:intvector{
                     -192,
                     -201986464,
                 }
+                id{"USD"}
             }
             {
-                id{"JPY"}
-                from:intvector{ /** 1914-10-03  */
+                from:intvector{
                     -412,
                     -1820641344,
                 }
-                to:intvector{ /** 1944-01-01  */
+                id{"JPY"}
+                to:intvector{
                     -192,
                     -201986464,
                 }
@@ -1496,28 +1501,28 @@ supplementalData:table(nofallback){
         }
         FO{
             {
-                id{"DKK"}
-                from:intvector{ /** 1948-01-01  */
+                from:intvector{
                     -162,
                     1474361952,
                 }
+                id{"DKK"}
             }
         }
         FR{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1960-01-01  */
+                from:intvector{
                     -74,
                     -2086527392,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
@@ -1525,68 +1530,68 @@ supplementalData:table(nofallback){
         }
         GA{
             {
-                id{"XAF"}
-                from:intvector{ /** 1993-01-01  */
+                from:intvector{
                     168,
                     -3013024,
                 }
+                id{"XAF"}
             }
         }
         GB{
             {
-                id{"GBP"}
-                from:intvector{ /** 1694-07-27  */
+                from:intvector{
                     -2028,
                     -1492871008,
                 }
+                id{"GBP"}
             }
         }
         GD{
             {
-                id{"XCD"}
-                from:intvector{ /** 1967-02-27  */
+                from:intvector{
                     -22,
                     2041400512,
                 }
+                id{"XCD"}
             }
         }
         GE{
             {
-                id{"GEL"}
-                from:intvector{ /** 1995-09-23  */
+                from:intvector{
                     184,
                     545757536,
                 }
+                id{"GEL"}
             }
             {
-                id{"GEK"}
-                from:intvector{ /** 1993-04-05  */
+                from:intvector{
                     169,
                     342766976,
                 }
-                to:intvector{ /** 1995-09-25  */
+                id{"GEK"}
+                to:intvector{
                     184,
                     718557536,
                 }
             }
             {
-                id{"RUR"}
-                from:intvector{ /** 1991-12-25  */
+                from:intvector{
                     154,
                     -957610880,
                 }
-                to:intvector{ /** 1993-06-11  */
+                id{"RUR"}
+                to:intvector{
                     169,
                     861286976,
                 }
             }
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1991-12-25  */
+                id{"SUR"}
+                to:intvector{
                     154,
                     -957610880,
                 }
@@ -1594,19 +1599,19 @@ supplementalData:table(nofallback){
         }
         GF{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1960-01-01  */
+                from:intvector{
                     -74,
                     -2086527392,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
@@ -1614,28 +1619,28 @@ supplementalData:table(nofallback){
         }
         GG{
             {
-                id{"GBP"}
-                from:intvector{ /** 1830-01-01  */
+                from:intvector{
                     -1029,
                     1543807584,
                 }
+                id{"GBP"}
             }
         }
         GH{
             {
-                id{"GHS"}
-                from:intvector{ /** 2007-07-03  */
+                from:intvector{
                     271,
                     -448284512,
                 }
+                id{"GHS"}
             }
             {
-                id{"GHC"}
-                from:intvector{ /** 1979-03-09  */
+                from:intvector{
                     66,
                     1220338464,
                 }
-                to:intvector{ /** 2007-12-31  */
+                id{"GHC"}
+                to:intvector{
                     272,
                     1971215488,
                 }
@@ -1643,46 +1648,46 @@ supplementalData:table(nofallback){
         }
         GI{
             {
-                id{"GIP"}
-                from:intvector{ /** 1713-01-01  */
+                from:intvector{
                     -1889,
                     -1210485152,
                 }
+                id{"GIP"}
             }
         }
         GL{
             {
-                id{"DKK"}
-                from:intvector{ /** 1873-05-27  */
+                from:intvector{
                     -713,
                     -715785248,
                 }
+                id{"DKK"}
             }
         }
         GM{
             {
-                id{"GMD"}
-                from:intvector{ /** 1971-07-01  */
+                from:intvector{
                     7,
                     1471648928,
                 }
+                id{"GMD"}
             }
         }
         GN{
             {
-                id{"GNF"}
-                from:intvector{ /** 1986-01-06  */
+                from:intvector{
                     117,
                     -1452480928,
                 }
+                id{"GNF"}
             }
             {
-                id{"GNS"}
-                from:intvector{ /** 1972-10-02  */
+                from:intvector{
                     14,
                     -1265509440,
                 }
-                to:intvector{ /** 1986-01-06  */
+                id{"GNS"}
+                to:intvector{
                     117,
                     -1452480928,
                 }
@@ -1690,19 +1695,19 @@ supplementalData:table(nofallback){
         }
         GP{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1960-01-01  */
+                from:intvector{
                     -74,
                     -2086527392,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
@@ -1710,19 +1715,19 @@ supplementalData:table(nofallback){
         }
         GQ{
             {
-                id{"XAF"}
-                from:intvector{ /** 1993-01-01  */
+                from:intvector{
                     168,
                     -3013024,
                 }
+                id{"XAF"}
             }
             {
-                id{"GQE"}
-                from:intvector{ /** 1975-07-07  */
+                from:intvector{
                     36,
                     -628569952,
                 }
-                to:intvector{ /** 1986-06-01  */
+                id{"GQE"}
+                to:intvector{
                     117,
                     -1884180928,
                 }
@@ -1730,19 +1735,19 @@ supplementalData:table(nofallback){
         }
         GR{
             {
-                id{"EUR"}
-                from:intvector{ /** 2001-01-01  */
+                from:intvector{
                     227,
                     -945283488,
                 }
+                id{"EUR"}
             }
             {
-                id{"GRD"}
-                from:intvector{ /** 1954-05-01  */
+                from:intvector{
                     -118,
                     1884840928,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"GRD"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
@@ -1750,57 +1755,57 @@ supplementalData:table(nofallback){
         }
         GS{
             {
-                id{"GBP"}
-                from:intvector{ /** 1908-01-01  */
+                from:intvector{
                     -456,
                     1890746976,
                 }
+                id{"GBP"}
             }
         }
         GT{
             {
-                id{"GTQ"}
-                from:intvector{ /** 1925-05-27  */
+                from:intvector{
                     -331,
                     -484492320,
                 }
+                id{"GTQ"}
             }
         }
         GU{
             {
-                id{"USD"}
-                from:intvector{ /** 1944-08-21  */
+                from:intvector{
                     -191,
                     1526433536,
                 }
+                id{"USD"}
             }
         }
         GW{
             {
-                id{"XOF"}
-                from:intvector{ /** 1997-03-31  */
+                from:intvector{
                     198,
                     -29511904,
                 }
+                id{"XOF"}
             }
             {
-                id{"GWP"}
-                from:intvector{ /** 1976-02-28  */
+                from:intvector{
                     44,
                     -1638208320,
                 }
-                to:intvector{ /** 1997-03-31  */
+                id{"GWP"}
+                to:intvector{
                     198,
                     -29511904,
                 }
             }
             {
-                id{"GWE"}
-                from:intvector{ /** 1914-01-01  */
+                from:intvector{
                     -412,
                     -1993981344,
                 }
-                to:intvector{ /** 1976-02-28  */
+                id{"GWE"}
+                to:intvector{
                     44,
                     -1638208320,
                 }
@@ -1808,77 +1813,77 @@ supplementalData:table(nofallback){
         }
         GY{
             {
-                id{"GYD"}
-                from:intvector{ /** 1966-05-26  */
+                from:intvector{
                     -29,
                     483951584,
                 }
+                id{"GYD"}
             }
         }
         HK{
             {
-                id{"HKD"}
-                from:intvector{ /** 1895-02-02  */
+                from:intvector{
                     -552,
                     -141699904,
                 }
+                id{"HKD"}
             }
         }
         HM{
             {
-                id{"AUD"}
-                from:intvector{ /** 1967-02-16  */
+                from:intvector{
                     -22,
                     1091000512,
                 }
+                id{"AUD"}
             }
         }
         HN{
             {
-                id{"HNL"}
-                from:intvector{ /** 1926-04-03  */
+                from:intvector{
                     -324,
                     -1086923392,
                 }
+                id{"HNL"}
             }
         }
         HR{
             {
-                id{"HRK"}
-                from:intvector{ /** 1994-05-30  */
+                from:intvector{
                     176,
                     -320911392,
                 }
+                id{"HRK"}
             }
             {
-                id{"HRD"}
-                from:intvector{ /** 1991-12-23  */
+                from:intvector{
                     154,
                     -1130410880,
                 }
-                to:intvector{ /** 1995-01-01  */
+                id{"HRD"}
+                to:intvector{
                     183,
                     -1355522464,
                 }
             }
             {
-                id{"YUN"}
-                from:intvector{ /** 1990-01-01  */
+                from:intvector{
                     146,
                     -208132512,
                 }
-                to:intvector{ /** 1991-12-23  */
+                id{"YUN"}
+                to:intvector{
                     154,
                     -1130410880,
                 }
             }
             {
-                id{"YUD"}
-                from:intvector{ /** 1966-01-01  */
+                from:intvector{
                     -30,
                     -1676288416,
                 }
-                to:intvector{ /** 1990-01-01  */
+                id{"YUD"}
+                to:intvector{
                     146,
                     -208132512,
                 }
@@ -1886,64 +1891,64 @@ supplementalData:table(nofallback){
         }
         HT{
             {
-                id{"HTG"}
-                from:intvector{ /** 1872-08-26  */
+                from:intvector{
                     -720,
                     1935333120,
                 }
+                id{"HTG"}
             }
             {
-                id{"USD"}
-                from:intvector{ /** 1915  */
+                from:intvector{
                     -405,
                     -522812416,
                 }
+                id{"USD"}
             }
         }
         HU{
             {
-                id{"HUF"}
-                from:intvector{ /** 1946-07-23  */
+                from:intvector{
                     -176,
                     433064096,
                 }
+                id{"HUF"}
             }
         }
         ID{
             {
-                id{"IDR"}
-                from:intvector{ /** 1965-12-13  */
+                from:intvector{
                     -37,
                     -2110057344,
                 }
+                id{"IDR"}
             }
         }
         IE{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"IEP"}
-                from:intvector{ /** 1922-01-01  */
+                from:intvector{
                     -353,
                     1358715488,
                 }
-                to:intvector{ /** 2002-02-09  */
+                id{"IEP"}
+                to:intvector{
                     235,
                     1217205440,
                 }
             }
             {
-                id{"GBP"}
-                from:intvector{ /** 1800-01-01  */
+                from:intvector{
                     -1250,
                     -248187296,
                 }
-                to:intvector{ /** 1922-01-01  */
+                id{"GBP"}
+                to:intvector{
                     -353,
                     1358715488,
                 }
@@ -1951,30 +1956,30 @@ supplementalData:table(nofallback){
         }
         IL{
             {
-                id{"ILS"}
-                from:intvector{ /** 1985-09-04  */
+                from:intvector{
                     110,
                     1198937440,
                 }
+                id{"ILS"}
             }
             {
-                id{"ILR"}
-                from:intvector{ /** 1980-02-22  */
+                from:intvector{
                     73,
                     -480259904,
                 }
-                to:intvector{ /** 1985-09-04  */
+                id{"ILR"}
+                to:intvector{
                     110,
                     1198937440,
                 }
             }
             {
-                id{"ILP"}
-                from:intvector{ /** 1948-08-16  */
+                from:intvector{
                     -162,
                     -1524185344,
                 }
-                to:intvector{ /** 1980-02-22  */
+                id{"ILP"}
+                to:intvector{
                     73,
                     -480259904,
                 }
@@ -1982,64 +1987,64 @@ supplementalData:table(nofallback){
         }
         IM{
             {
-                id{"GBP"}
-                from:intvector{ /** 1840-01-03  */
+                from:intvector{
                     -956,
                     -578172320,
                 }
+                id{"GBP"}
             }
         }
         IN{
             {
-                id{"INR"}
-                from:intvector{ /** 1835-08-17  */
+                from:intvector{
                     -992,
                     1779237632,
                 }
+                id{"INR"}
             }
         }
         IO{
             {
-                id{"USD"}
-                from:intvector{ /** 1965-11-08  */
+                from:intvector{
                     -37,
                     1752849952,
                 }
+                id{"USD"}
             }
             {
-                id{"GBP"}
-                from:intvector{ /** 1965-11-08  */
+                from:intvector{
                     -37,
                     1752849952,
                 }
+                id{"GBP"}
             }
         }
         IQ{
             {
+                from:intvector{
+                    -287,
+                    -851913344,
+                }
                 id{"IQD"}
-                from:intvector{ /** 1931-04-19  */
-                    -287,
-                    -851913344,
-                }
             }
             {
+                from:intvector{
+                    -368,
+                    -805542368,
+                }
                 id{"EGP"}
-                from:intvector{ /** 1920-11-11  */
-                    -368,
-                    -805542368,
-                }
-                to:intvector{ /** 1931-04-19  */
+                to:intvector{
                     -287,
                     -851913344,
                 }
             }
             {
-                id{"INR"}
-                from:intvector{ /** 1920-11-11  */
+                from:intvector{
                     -368,
                     -805542368,
                 }
-                to:intvector{ /** 1931-04-19  */
+                id{"INR"}
+                to:intvector{
                     -287,
                     -851913344,
                 }
@@ -2047,39 +2052,39 @@ supplementalData:table(nofallback){
         }
         IR{
             {
-                id{"IRR"}
-                from:intvector{ /** 1932-05-13  */
+                from:intvector{
                     -279,
                     100975584,
                 }
+                id{"IRR"}
             }
         }
         IS{
             {
-                id{"ISK"}
-                from:intvector{ /** 1981-01-01  */
+                from:intvector{
                     80,
                     -737090976,
                 }
+                id{"ISK"}
             }
             {
-                id{"ISJ"}
-                from:intvector{ /** 1918-12-01  */
+                from:intvector{
                     -383,
                     -316972928,
                 }
-                to:intvector{ /** 1981-01-01  */
+                id{"ISJ"}
+                to:intvector{
                     80,
                     -737090976,
                 }
             }
             {
-                id{"DKK"}
-                from:intvector{ /** 1873-05-27  */
+                from:intvector{
                     -713,
                     -715785248,
                 }
-                to:intvector{ /** 1918-12-01  */
+                id{"DKK"}
+                to:intvector{
                     -383,
                     -316972928,
                 }
@@ -2087,19 +2092,19 @@ supplementalData:table(nofallback){
         }
         IT{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"ITL"}
-                from:intvector{ /** 1862-08-24  */
+                from:intvector{
                     -794,
                     -237654272,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"ITL"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
@@ -2107,75 +2112,75 @@ supplementalData:table(nofallback){
         }
         JE{
             {
-                id{"GBP"}
-                from:intvector{ /** 1837-01-01  */
+                from:intvector{
                     -978,
                     -869691808,
                 }
+                id{"GBP"}
             }
         }
         JM{
             {
-                id{"JMD"}
-                from:intvector{ /** 1969-09-08  */
+                from:intvector{
                     -8,
                     -865888928,
                 }
+                id{"JMD"}
             }
         }
         JO{
             {
-                id{"JOD"}
-                from:intvector{ /** 1950-07-01  */
+                from:intvector{
                     -147,
                     208612512,
                 }
+                id{"JOD"}
             }
         }
         JP{
             {
-                id{"JPY"}
-                from:intvector{ /** 1871-06-01  */
+                from:intvector{
                     -728,
                     -1696015808,
                 }
+                id{"JPY"}
             }
         }
         KE{
             {
-                id{"KES"}
-                from:intvector{ /** 1966-09-14  */
+                from:intvector{
                     -30,
                     -552608416,
                 }
+                id{"KES"}
             }
         }
         KG{
             {
-                id{"KGS"}
-                from:intvector{ /** 1993-05-10  */
+                from:intvector{
                     169,
                     774826976,
                 }
+                id{"KGS"}
             }
             {
-                id{"RUR"}
-                from:intvector{ /** 1991-12-25  */
+                from:intvector{
                     154,
                     -957610880,
                 }
-                to:intvector{ /** 1993-05-10  */
+                id{"RUR"}
+                to:intvector{
                     169,
                     774826976,
                 }
             }
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1991-12-25  */
+                id{"SUR"}
+                to:intvector{
                     154,
                     -957610880,
                 }
@@ -2183,75 +2188,75 @@ supplementalData:table(nofallback){
         }
         KH{
             {
-                id{"KHR"}
-                from:intvector{ /** 1980-03-20  */
+                from:intvector{
                     73,
                     -652999904,
                 }
+                id{"KHR"}
             }
         }
         KI{
             {
-                id{"AUD"}
-                from:intvector{ /** 1966-02-14  */
+                from:intvector{
                     -30,
                     -553028416,
                 }
+                id{"AUD"}
             }
         }
         KM{
             {
-                id{"KMF"}
-                from:intvector{ /** 1975-07-06  */
+                from:intvector{
                     36,
                     -714969952,
                 }
+                id{"KMF"}
             }
         }
         KN{
             {
-                id{"XCD"}
-                from:intvector{ /** 1965-10-06  */
+                from:intvector{
                     -37,
                     1579989952,
                 }
+                id{"XCD"}
             }
         }
         KP{
             {
-                id{"KPW"}
-                from:intvector{ /** 1959-04-17  */
+                from:intvector{
                     -81,
                     2119790976,
                 }
+                id{"KPW"}
             }
         }
         KR{
             {
-                id{"KRW"}
-                from:intvector{ /** 1962-06-10  */
+                from:intvector{
                     -59,
                     1720230464,
                 }
+                id{"KRW"}
             }
             {
-                id{"KRH"}
-                from:intvector{ /** 1953-02-15  */
+                from:intvector{
                     -125,
                     1623032000,
                 }
-                to:intvector{ /** 1962-06-10  */
+                id{"KRH"}
+                to:intvector{
                     -59,
                     1720230464,
                 }
             }
             {
-                id{"KRO"}
-                from:intvector{ /** 1945-08-15  */
+                from:intvector{
                     -184,
                     -1729304832,
                 }
-                to:intvector{ /** 1953-02-15  */
+                id{"KRO"}
+                to:intvector{
                     -125,
                     1623032000,
                 }
@@ -2259,28 +2264,28 @@ supplementalData:table(nofallback){
         }
         KW{
             {
-                id{"KWD"}
-                from:intvector{ /** 1961-04-01  */
+                from:intvector{
                     -67,
                     -528718464,
                 }
+                id{"KWD"}
             }
         }
         KY{
             {
-                id{"KYD"}
-                from:intvector{ /** 1971-01-01  */
+                from:intvector{
                     7,
                     1471288928,
                 }
+                id{"KYD"}
             }
             {
-                id{"JMD"}
-                from:intvector{ /** 1969-09-08  */
+                from:intvector{
                     -8,
                     -865888928,
                 }
-                to:intvector{ /** 1971-01-01  */
+                id{"JMD"}
+                to:intvector{
                     7,
                     1471288928,
                 }
@@ -2288,109 +2293,109 @@ supplementalData:table(nofallback){
         }
         KZ{
             {
-                id{"KZT"}
-                from:intvector{ /** 1993-11-05  */
+                from:intvector{
                     169,
                     343186976,
                 }
+                id{"KZT"}
             }
         }
         LA{
             {
-                id{"LAK"}
-                from:intvector{ /** 1979-12-10  */
+                from:intvector{
                     66,
                     1307278464,
                 }
+                id{"LAK"}
             }
         }
         LB{
             {
-                id{"LBP"}
-                from:intvector{ /** 1948-02-02  */
+                from:intvector{
                     -162,
                     1560821952,
                 }
+                id{"LBP"}
             }
         }
         LC{
             {
-                id{"XCD"}
-                from:intvector{ /** 1965-10-06  */
+                from:intvector{
                     -37,
                     1579989952,
                 }
+                id{"XCD"}
             }
         }
         LI{
             {
-                id{"CHF"}
-                from:intvector{ /** 1921-02-01  */
+                from:intvector{
                     -361,
                     -112453440,
                 }
+                id{"CHF"}
             }
         }
         LK{
             {
-                id{"LKR"}
-                from:intvector{ /** 1978-05-22  */
+                from:intvector{
                     59,
                     872429536,
                 }
+                id{"LKR"}
             }
         }
         LR{
             {
-                id{"LRD"}
-                from:intvector{ /** 1944-01-01  */
+                from:intvector{
                     -192,
                     -201986464,
                 }
+                id{"LRD"}
             }
         }
         LS{
             {
-                id{"ZAR"}
-                from:intvector{ /** 1961-02-14  */
+                from:intvector{
                     -66,
                     594361536,
                 }
+                id{"ZAR"}
             }
             {
-                id{"LSL"}
-                from:intvector{ /** 1980-01-22  */
+                from:intvector{
                     73,
                     -480319904,
                 }
+                id{"LSL"}
             }
         }
         LT{
             {
-                id{"LTL"}
-                from:intvector{ /** 1993-06-25  */
+                from:intvector{
                     169,
                     2070886976,
                 }
+                id{"LTL"}
             }
             {
-                id{"LTT"}
-                from:intvector{ /** 1992-10-01  */
+                from:intvector{
                     161,
                     -1560101952,
                 }
-                to:intvector{ /** 1993-06-25  */
+                id{"LTT"}
+                to:intvector{
                     169,
                     2070886976,
                 }
             }
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1992-10-01  */
+                id{"SUR"}
+                to:intvector{
                     161,
                     -1560101952,
                 }
@@ -2398,64 +2403,64 @@ supplementalData:table(nofallback){
         }
         LU{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"LUF"}
-                from:intvector{ /** 1944-09-4  */
+                from:intvector{
                     -191,
                     57693536,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"LUF"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
             }
             {
-                id{"LUC"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"LUC"}
             }
             {
-                id{"LUL"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"LUL"}
             }
         }
         LV{
             {
-                id{"LVL"}
-                from:intvector{ /** 1993-06-28  */
+                from:intvector{
                     169,
                     -1964880320,
                 }
+                id{"LVL"}
             }
             {
-                id{"LVR"}
-                from:intvector{ /** 1992-05-07  */
+                from:intvector{
                     161,
                     -1042001952,
                 }
-                to:intvector{ /** 1993-10-17  */
+                id{"LVR"}
+                to:intvector{
                     169,
                     1379926976,
                 }
             }
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1992-07-20  */
+                id{"SUR"}
+                to:intvector{
                     162,
                     81318048,
                 }
@@ -2463,28 +2468,28 @@ supplementalData:table(nofallback){
         }
         LY{
             {
-                id{"LYD"}
-                from:intvector{ /** 1971-09-01  */
+                from:intvector{
                     7,
                     1471768928,
                 }
+                id{"LYD"}
             }
         }
         MA{
             {
-                id{"MAD"}
-                from:intvector{ /** 1959-10-17  */
+                from:intvector{
                     -81,
                     2120150976,
                 }
+                id{"MAD"}
             }
             {
-                id{"MAF"}
-                from:intvector{ /** 1881-01-01  */
+                from:intvector{
                     -654,
                     390271584,
                 }
-                to:intvector{ /** 1959-10-17  */
+                id{"MAF"}
+                to:intvector{
                     -81,
                     2120150976,
                 }
@@ -2492,30 +2497,30 @@ supplementalData:table(nofallback){
         }
         MC{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1960-01-01  */
+                from:intvector{
                     -74,
                     -2086527392,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
             }
             {
-                id{"MCF"}
-                from:intvector{ /** 1960-01-01  */
+                from:intvector{
                     -74,
                     -2086527392,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"MCF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
@@ -2523,19 +2528,19 @@ supplementalData:table(nofallback){
         }
         MD{
             {
-                id{"MDL"}
-                from:intvector{ /** 1993-11-29  */
+                from:intvector{
                     169,
                     -1878180320,
                 }
+                id{"MDL"}
             }
             {
-                id{"MDC"}
-                from:intvector{ /** 1992-06-01  */
+                from:intvector{
                     161,
                     -1560341952,
                 }
-                to:intvector{ /** 1993-11-29  */
+                id{"MDC"}
+                to:intvector{
                     169,
                     -1878180320,
                 }
@@ -2543,30 +2548,30 @@ supplementalData:table(nofallback){
         }
         ME{
             {
-                id{"EUR"}
-                from:intvector{ /** 2002-01-01  */
+                from:intvector{
                     235,
                     525945440,
                 }
+                id{"EUR"}
             }
             {
-                id{"DEM"}
-                from:intvector{ /** 1999-10-02  */
+                from:intvector{
                     213,
                     407765952,
                 }
-                to:intvector{ /** 2002-05-15  */
+                id{"DEM"}
+                to:intvector{
                     235,
                     1735785440,
                 }
             }
             {
-                id{"YUM"}
-                from:intvector{ /** 1994-01-24  */
+                from:intvector{
                     176,
                     -839551392,
                 }
-                to:intvector{ /** 2002-05-15  */
+                id{"YUM"}
+                to:intvector{
                     235,
                     1735785440,
                 }
@@ -2574,19 +2579,19 @@ supplementalData:table(nofallback){
         }
         MF{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1960-01-01  */
+                from:intvector{
                     -74,
                     -2086527392,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
@@ -2594,19 +2599,19 @@ supplementalData:table(nofallback){
         }
         MG{
             {
-                id{"MGA"}
-                from:intvector{ /** 1983-11-01  */
+                from:intvector{
                     95,
                     -2089000416,
                 }
+                id{"MGA"}
             }
             {
-                id{"MGF"}
-                from:intvector{ /** 1963-07-01  */
+                from:intvector{
                     -52,
                     -1881047904,
                 }
-                to:intvector{ /** 2004-12-31  */
+                id{"MGF"}
+                to:intvector{
                     250,
                     1766096000,
                 }
@@ -2614,28 +2619,28 @@ supplementalData:table(nofallback){
         }
         MH{
             {
-                id{"USD"}
-                from:intvector{ /** 1944-01-01  */
+                from:intvector{
                     -192,
                     -201986464,
                 }
+                id{"USD"}
             }
         }
         MK{
             {
-                id{"MKD"}
-                from:intvector{ /** 1993-05-20  */
+                from:intvector{
                     169,
                     1638826976,
                 }
+                id{"MKD"}
             }
             {
-                id{"MKN"}
-                from:intvector{ /** 1992-04-26  */
+                from:intvector{
                     162,
                     599538048,
                 }
-                to:intvector{ /** 1993-05-20  */
+                id{"MKN"}
+                to:intvector{
                     169,
                     1638826976,
                 }
@@ -2643,30 +2648,30 @@ supplementalData:table(nofallback){
         }
         ML{
             {
-                id{"XOF"}
-                from:intvector{ /** 1984-06-01  */
+                from:intvector{
                     102,
                     -618071488,
                 }
+                id{"XOF"}
             }
             {
-                id{"MLF"}
-                from:intvector{ /** 1962-07-02  */
+                from:intvector{
                     -59,
                     1029090464,
                 }
-                to:intvector{ /** 1984-08-31  */
+                id{"MLF"}
+                to:intvector{
                     103,
                     1974048512,
                 }
             }
             {
-                id{"XOF"}
-                from:intvector{ /** 1958-11-24  */
+                from:intvector{
                     -88,
                     1253782048,
                 }
-                to:intvector{ /** 1962-07-02  */
+                id{"XOF"}
+                to:intvector{
                     -59,
                     1029090464,
                 }
@@ -2674,19 +2679,19 @@ supplementalData:table(nofallback){
         }
         MM{
             {
-                id{"MMK"}
-                from:intvector{ /** 1989-06-18  */
+                from:intvector{
                     139,
                     -210261440,
                 }
+                id{"MMK"}
             }
             {
-                id{"BUK"}
-                from:intvector{ /** 1952-07-01  */
+                from:intvector{
                     -133,
                     -1143896928,
                 }
-                to:intvector{ /** 1989-06-18  */
+                id{"BUK"}
+                to:intvector{
                     139,
                     -210261440,
                 }
@@ -2694,46 +2699,46 @@ supplementalData:table(nofallback){
         }
         MN{
             {
-                id{"MNT"}
-                from:intvector{ /** 1915-03-01  */
+                from:intvector{
                     -405,
                     -522632416,
                 }
+                id{"MNT"}
             }
         }
         MO{
             {
-                id{"MOP"}
-                from:intvector{ /** 1901-01-01  */
+                from:intvector{
                     -507,
                     95679072,
                 }
+                id{"MOP"}
             }
         }
         MP{
             {
-                id{"USD"}
-                from:intvector{ /** 1944-01-01  */
+                from:intvector{
                     -192,
                     -201986464,
                 }
+                id{"USD"}
             }
         }
         MQ{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1960-01-01  */
+                from:intvector{
                     -74,
                     -2086527392,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
@@ -2741,19 +2746,19 @@ supplementalData:table(nofallback){
         }
         MR{
             {
-                id{"MRO"}
-                from:intvector{ /** 1973-06-29  */
+                from:intvector{
                     22,
                     -1670287808,
                 }
+                id{"MRO"}
             }
             {
-                id{"XOF"}
-                from:intvector{ /** 1958-11-28  */
+                from:intvector{
                     -88,
                     1599382048,
                 }
-                to:intvector{ /** 1973-06-29  */
+                id{"XOF"}
+                to:intvector{
                     22,
                     -1670287808,
                 }
@@ -2761,39 +2766,39 @@ supplementalData:table(nofallback){
         }
         MS{
             {
-                id{"XCD"}
-                from:intvector{ /** 1967-02-27  */
+                from:intvector{
                     -22,
                     2041400512,
                 }
+                id{"XCD"}
             }
         }
         MT{
             {
-                id{"EUR"}
-                from:intvector{ /** 2008-01-01  */
+                from:intvector{
                     279,
                     849784416,
                 }
+                id{"EUR"}
             }
             {
-                id{"MTL"}
-                from:intvector{ /** 1968-06-07  */
+                from:intvector{
                     -15,
                     1784869440,
                 }
-                to:intvector{ /** 2008-01-31  */
+                id{"MTL"}
+                to:intvector{
                     279,
                     -853182880,
                 }
             }
             {
-                id{"MTP"}
-                from:intvector{ /** 1914-08-13  */
+                from:intvector{
                     -412,
                     -956761344,
                 }
-                to:intvector{ /** 1968-06-07  */
+                id{"MTP"}
+                to:intvector{
                     -15,
                     1784869440,
                 }
@@ -2801,28 +2806,28 @@ supplementalData:table(nofallback){
         }
         MU{
             {
-                id{"MUR"}
-                from:intvector{ /** 1934-04-01  */
+                from:intvector{
                     -265,
                     2092973440,
                 }
+                id{"MUR"}
             }
         }
         MV{
             {
-                id{"MVR"}
-                from:intvector{ /** 1981-07-01  */
+                from:intvector{
                     80,
                     -736730976,
                 }
+                id{"MVR"}
             }
             {
-                id{"MVP"}
-                from:intvector{ /** 1947-01-01  */
+                from:intvector{
                     -169,
                     3133024,
                 }
-                to:intvector{ /** 1981-07-01  */
+                id{"MVP"}
+                to:intvector{
                     80,
                     -736730976,
                 }
@@ -2830,75 +2835,75 @@ supplementalData:table(nofallback){
         }
         MW{
             {
-                id{"MWK"}
-                from:intvector{ /** 1971-02-15  */
+                from:intvector{
                     7,
                     -1614018368,
                 }
+                id{"MWK"}
             }
         }
         MX{
             {
-                id{"MXN"}
-                from:intvector{ /** 1993-01-01  */
+                from:intvector{
                     168,
                     -3013024,
                 }
+                id{"MXN"}
             }
             {
-                id{"MXP"}
-                from:intvector{ /** 1822-01-01  */
+                from:intvector{
                     -1088,
                     -1808889248,
                 }
-                to:intvector{ /** 1992-12-31  */
+                id{"MXP"}
+                to:intvector{
                     162,
                     1032018048,
                 }
             }
             {
-                id{"MXV"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"MXV"}
             }
         }
         MY{
             {
-                id{"MYR"}
-                from:intvector{ /** 1963-09-16  */
+                from:intvector{
                     -52,
                     -584927904,
                 }
+                id{"MYR"}
             }
         }
         MZ{
             {
-                id{"MZN"}
-                from:intvector{ /** 2006-07-01  */
+                from:intvector{
                     264,
                     -2092313440,
                 }
+                id{"MZN"}
             }
             {
-                id{"MZM"}
-                from:intvector{ /** 1980-06-16  */
+                from:intvector{
                     73,
                     -998419904,
                 }
-                to:intvector{ /** 2006-12-31  */
+                id{"MZM"}
+                to:intvector{
                     265,
                     499986560,
                 }
             }
             {
-                id{"MZE"}
-                from:intvector{ /** 1975-06-25  */
+                from:intvector{
                     37,
                     926570048,
                 }
-                to:intvector{ /** 1980-06-16  */
+                id{"MZE"}
+                to:intvector{
                     73,
                     -998419904,
                 }
@@ -2906,19 +2911,19 @@ supplementalData:table(nofallback){
         }
         NA{
             {
-                id{"NAD"}
-                from:intvector{ /** 1993-01-01  */
+                from:intvector{
                     168,
                     -3013024,
                 }
+                id{"NAD"}
             }
             {
-                id{"ZAR"}
-                from:intvector{ /** 1961-02-14  */
+                from:intvector{
                     -66,
                     594361536,
                 }
-                to:intvector{ /** 1993-01-01  */
+                id{"ZAR"}
+                to:intvector{
                     168,
                     -3013024,
                 }
@@ -2926,55 +2931,55 @@ supplementalData:table(nofallback){
         }
         NC{
             {
-                id{"XPF"}
-                from:intvector{ /** 1985-01-01  */
+                from:intvector{
                     110,
                     939257440,
                 }
+                id{"XPF"}
             }
         }
         NE{
             {
-                id{"XOF"}
-                from:intvector{ /** 1958-12-19  */
+                from:intvector{
                     -88,
                     821842048,
                 }
+                id{"XOF"}
             }
         }
         NF{
             {
-                id{"AUD"}
-                from:intvector{ /** 1966-02-14  */
+                from:intvector{
                     -30,
                     -553028416,
                 }
+                id{"AUD"}
             }
         }
         NG{
             {
-                id{"NGN"}
-                from:intvector{ /** 1973-01-01  */
+                from:intvector{
                     22,
                     205179488,
                 }
+                id{"NGN"}
             }
         }
         NI{
             {
-                id{"NIO"}
-                from:intvector{ /** 1991-04-30  */
+                from:intvector{
                     154,
                     -526090880,
                 }
+                id{"NIO"}
             }
             {
-                id{"NIC"}
-                from:intvector{ /** 1988-02-15  */
+                from:intvector{
                     132,
                     -2027330368,
                 }
-                to:intvector{ /** 1991-04-30  */
+                id{"NIC"}
+                to:intvector{
                     154,
                     -526090880,
                 }
@@ -2982,19 +2987,19 @@ supplementalData:table(nofallback){
         }
         NL{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"NLG"}
-                from:intvector{ /** 1813-01-01  */
+                from:intvector{
                     -1154,
                     1957119584,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"NLG"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
@@ -3002,19 +3007,19 @@ supplementalData:table(nofallback){
         }
         NO{
             {
-                id{"NOK"}
-                from:intvector{ /** 1905-06-07  */
+                from:intvector{
                     -478,
                     -2004239808,
                 }
+                id{"NOK"}
             }
             {
-                id{"SEK"}
-                from:intvector{ /** 1873-05-27  */
+                from:intvector{
                     -713,
                     -715785248,
                 }
-                to:intvector{ /** 1905-06-07  */
+                id{"SEK"}
+                to:intvector{
                     -478,
                     -2004239808,
                 }
@@ -3022,19 +3027,19 @@ supplementalData:table(nofallback){
         }
         NP{
             {
-                id{"NPR"}
-                from:intvector{ /** 1933-01-01  */
+                from:intvector{
                     -272,
                     621564512,
                 }
+                id{"NPR"}
             }
             {
-                id{"INR"}
-                from:intvector{ /** 1870-01-01  */
+                from:intvector{
                     -735,
                     1127422560,
                 }
-                to:intvector{ /** 1966-10-17  */
+                id{"INR"}
+                to:intvector{
                     -30,
                     -293348416,
                 }
@@ -3042,82 +3047,82 @@ supplementalData:table(nofallback){
         }
         NR{
             {
-                id{"AUD"}
-                from:intvector{ /** 1966-02-14  */
+                from:intvector{
                     -30,
                     -553028416,
                 }
+                id{"AUD"}
             }
         }
         NU{
             {
-                id{"NZD"}
-                from:intvector{ /** 1967-07-10  */
+                from:intvector{
                     -22,
                     572900512,
                 }
+                id{"NZD"}
             }
         }
         NZ{
             {
-                id{"NZD"}
-                from:intvector{ /** 1967-07-10  */
+                from:intvector{
                     -22,
                     572900512,
                 }
+                id{"NZD"}
             }
         }
         OM{
             {
-                id{"OMR"}
-                from:intvector{ /** 1972-11-11  */
+                from:intvector{
                     14,
                     -487849440,
                 }
+                id{"OMR"}
             }
         }
         PA{
             {
-                id{"PAB"}
-                from:intvector{ /** 1903-11-04  */
+                from:intvector{
                     -493,
                     -997030368,
                 }
+                id{"PAB"}
             }
             {
-                id{"USD"}
-                from:intvector{ /** 1903-11-18  */
+                from:intvector{
                     -492,
                     212569632,
                 }
+                id{"USD"}
             }
         }
         PE{
             {
-                id{"PEN"}
-                from:intvector{ /** 1991-07-01  */
+                from:intvector{
                     154,
                     1263456416,
                 }
+                id{"PEN"}
             }
             {
-                id{"PEI"}
-                from:intvector{ /** 1985-02-01  */
+                from:intvector{
                     110,
                     939317440,
                 }
-                to:intvector{ /** 1991-07-01  */
+                id{"PEI"}
+                to:intvector{
                     154,
                     1263456416,
                 }
             }
             {
-                id{"PES"}
-                from:intvector{ /** 1863-02-14  */
+                from:intvector{
                     -786,
                     369214656,
                 }
-                to:intvector{ /** 1985-02-01  */
+                id{"PES"}
+                to:intvector{
                     110,
                     939317440,
                 }
@@ -3125,28 +3130,28 @@ supplementalData:table(nofallback){
         }
         PF{
             {
-                id{"XPF"}
-                from:intvector{ /** 1945-12-26  */
+                from:intvector{
                     -184,
                     -778664832,
                 }
+                id{"XPF"}
             }
         }
         PG{
             {
-                id{"PGK"}
-                from:intvector{ /** 1975-09-16  */
+                from:intvector{
                     37,
                     149150048,
                 }
+                id{"PGK"}
             }
             {
-                id{"AUD"}
-                from:intvector{ /** 1966-02-14  */
+                from:intvector{
                     -30,
                     -553028416,
                 }
-                to:intvector{ /** 1975-09-16  */
+                id{"AUD"}
+                to:intvector{
                     37,
                     149150048,
                 }
@@ -3154,28 +3159,28 @@ supplementalData:table(nofallback){
         }
         PH{
             {
-                id{"PHP"}
-                from:intvector{ /** 1946-07-04  */
+                from:intvector{
                     -177,
                     -1208535904,
                 }
+                id{"PHP"}
             }
         }
         PK{
             {
-                id{"PKR"}
-                from:intvector{ /** 1948-04-01  */
+                from:intvector{
                     -162,
                     1474541952,
                 }
+                id{"PKR"}
             }
             {
-                id{"INR"}
-                from:intvector{ /** 1835-08-17  */
+                from:intvector{
                     -992,
                     1779237632,
                 }
-                to:intvector{ /** 1947-08-15  */
+                id{"INR"}
+                to:intvector{
                     -169,
                     1213153024,
                 }
@@ -3183,19 +3188,19 @@ supplementalData:table(nofallback){
         }
         PL{
             {
-                id{"PLN"}
-                from:intvector{ /** 1995-01-01  */
+                from:intvector{
                     183,
                     -1355522464,
                 }
+                id{"PLN"}
             }
             {
-                id{"PLZ"}
-                from:intvector{ /** 1950-10-28  */
+                from:intvector{
                     -147,
                     -1753374784,
                 }
-                to:intvector{ /** 1994-12-31  */
+                id{"PLZ"}
+                to:intvector{
                     176,
                     -234091392,
                 }
@@ -3203,19 +3208,19 @@ supplementalData:table(nofallback){
         }
         PM{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1972-12-21  */
+                from:intvector{
                     15,
                     376210560,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
@@ -3223,28 +3228,28 @@ supplementalData:table(nofallback){
         }
         PN{
             {
-                id{"NZD"}
-                from:intvector{ /** 1969-01-13  */
+                from:intvector{
                     -8,
                     -434368928,
                 }
+                id{"NZD"}
             }
         }
         PR{
             {
-                id{"USD"}
-                from:intvector{ /** 1898-12-10  */
+                from:intvector{
                     -529,
                     755219584,
                 }
+                id{"USD"}
             }
             {
-                id{"ESP"}
-                from:intvector{ /** 1800-01-01  */
+                from:intvector{
                     -1250,
                     -248187296,
                 }
-                to:intvector{ /** 1898-12-10  */
+                id{"ESP"}
+                to:intvector{
                     -529,
                     755219584,
                 }
@@ -3252,37 +3257,37 @@ supplementalData:table(nofallback){
         }
         PS{
             {
-                id{"JOD"}
-                from:intvector{ /** 1996-02-12  */
+                from:intvector{
                     191,
                     1066166464,
                 }
+                id{"JOD"}
             }
             {
-                id{"ILS"}
-                from:intvector{ /** 1985-09-04  */
+                from:intvector{
                     110,
                     1198937440,
                 }
+                id{"ILS"}
             }
             {
-                id{"ILP"}
-                from:intvector{ /** 1967-06  */
+                from:intvector{
                     -23,
                     -204759488,
                 }
-                to:intvector{ /** 1980-02-22  */
+                id{"ILP"}
+                to:intvector{
                     73,
                     -480259904,
                 }
             }
             {
-                id{"JOD"}
-                from:intvector{ /** 1950-07-01  */
+                from:intvector{
                     -147,
                     208612512,
                 }
-                to:intvector{ /** 1967-06-01  */
+                id{"JOD"}
+                to:intvector{
                     -23,
                     -204759488,
                 }
@@ -3290,19 +3295,19 @@ supplementalData:table(nofallback){
         }
         PT{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"PTE"}
-                from:intvector{ /** 1911-05-22  */
+                from:intvector{
                     -434,
                     -384460832,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"PTE"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
@@ -3310,55 +3315,46 @@ supplementalData:table(nofallback){
         }
         PW{
             {
-                id{"USD"}
-                from:intvector{ /** 1944-01-01  */
+                from:intvector{
                     -192,
                     -201986464,
                 }
+                id{"USD"}
             }
         }
         PY{
             {
-                id{"PYG"}
-                from:intvector{ /** 1943-11-01  */
+                from:intvector{
                     -199,
                     -1672615392,
                 }
+                id{"PYG"}
             }
         }
         QA{
             {
-                id{"QAR"}
-                from:intvector{ /** 1973-05-19  */
+                from:intvector{
                     22,
                     1760619488,
                 }
-            }
-        }
-        EU{
-            {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
-                    213,
-                    320825952,
-                }
+                id{"QAR"}
             }
         }
         RE{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1975-01-01  */
+                from:intvector{
                     36,
                     -1147329952,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
@@ -3366,19 +3362,19 @@ supplementalData:table(nofallback){
         }
         RO{
             {
-                id{"RON"}
-                from:intvector{ /** 2005-07-01  */
+                from:intvector{
                     257,
                     731424928,
                 }
+                id{"RON"}
             }
             {
-                id{"ROL"}
-                from:intvector{ /** 1952-01-28  */
+                from:intvector{
                     -132,
                     1188543072,
                 }
-                to:intvector{ /** 2006-12-31  */
+                id{"ROL"}
+                to:intvector{
                     265,
                     499986560,
                 }
@@ -3386,30 +3382,30 @@ supplementalData:table(nofallback){
         }
         RS{
             {
-                id{"RSD"}
-                from:intvector{ /** 2006-10-25  */
+                from:intvector{
                     264,
                     -18533440,
                 }
+                id{"RSD"}
             }
             {
-                id{"CSD"}
-                from:intvector{ /** 2002-05-15  */
+                from:intvector{
                     235,
                     1735785440,
                 }
-                to:intvector{ /** 2006-10-25  */
+                id{"CSD"}
+                to:intvector{
                     264,
                     -18533440,
                 }
             }
             {
-                id{"YUM"}
-                from:intvector{ /** 1994-01-24  */
+                from:intvector{
                     176,
                     -839551392,
                 }
-                to:intvector{ /** 2002-05-15  */
+                id{"YUM"}
+                to:intvector{
                     235,
                     1735785440,
                 }
@@ -3417,19 +3413,19 @@ supplementalData:table(nofallback){
         }
         RU{
             {
-                id{"RUB"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"RUB"}
             }
             {
-                id{"RUR"}
-                from:intvector{ /** 1991-12-25  */
+                from:intvector{
                     154,
                     -957610880,
                 }
-                to:intvector{ /** 1998-12-31  */
+                id{"RUR"}
+                to:intvector{
                     206,
                     1442257024,
                 }
@@ -3437,37 +3433,37 @@ supplementalData:table(nofallback){
         }
         RW{
             {
-                id{"RWF"}
-                from:intvector{ /** 1964-05-19  */
+                from:intvector{
                     -44,
                     1145261024,
                 }
+                id{"RWF"}
             }
         }
         SA{
             {
-                id{"SAR"}
-                from:intvector{ /** 1952-10-22  */
+                from:intvector{
                     -132,
                     670683072,
                 }
+                id{"SAR"}
             }
         }
         SB{
             {
-                id{"SBD"}
-                from:intvector{ /** 1977-10-24  */
+                from:intvector{
                     51,
                     -425699392,
                 }
+                id{"SBD"}
             }
             {
-                id{"AUD"}
-                from:intvector{ /** 1966-02-14  */
+                from:intvector{
                     -30,
                     -553028416,
                 }
-                to:intvector{ /** 1978-06-30  */
+                id{"AUD"}
+                to:intvector{
                     59,
                     1563689536,
                 }
@@ -3475,61 +3471,61 @@ supplementalData:table(nofallback){
         }
         SC{
             {
-                id{"SCR"}
-                from:intvector{ /** 1903-11-01  */
+                from:intvector{
                     -493,
                     -1256230368,
                 }
+                id{"SCR"}
             }
         }
         SD{
             {
-                id{"SDG"}
-                from:intvector{ /** 2007-01-10  */
+                from:intvector{
                     272,
                     156155488,
                 }
+                id{"SDG"}
             }
             {
-                id{"SDD"}
-                from:intvector{ /** 1992-06-08  */
+                from:intvector{
                     161,
                     -955541952,
                 }
-                to:intvector{ /** 2007-06-30  */
+                id{"SDD"}
+                to:intvector{
                     272,
                     1884455488,
                 }
             }
             {
-                id{"SDP"}
-                from:intvector{ /** 1957-04-08  */
+                from:intvector{
                     -96,
                     -1600266880,
                 }
-                to:intvector{ /** 1998-06-01  */
+                id{"SDP"}
+                to:intvector{
                     205,
                     -1150102976,
                 }
             }
             {
-                id{"EGP"}
-                from:intvector{ /** 1889-01-19  */
+                from:intvector{
                     -595,
                     1003201120,
                 }
-                to:intvector{ /** 1958-01-01  */
+                id{"EGP"}
+                to:intvector{
                     -89,
                     -734017952,
                 }
             }
             {
-                id{"GBP"}
-                from:intvector{ /** 1889-01-19  */
+                from:intvector{
                     -595,
                     1003201120,
                 }
-                to:intvector{ /** 1958-01-01  */
+                id{"GBP"}
+                to:intvector{
                     -89,
                     -734017952,
                 }
@@ -3537,28 +3533,28 @@ supplementalData:table(nofallback){
         }
         SE{
             {
-                id{"SEK"}
-                from:intvector{ /** 1873-05-27  */
+                from:intvector{
                     -713,
                     -715785248,
                 }
+                id{"SEK"}
             }
         }
         SG{
             {
-                id{"SGD"}
-                from:intvector{ /** 1967-06-12  */
+                from:intvector{
                     -22,
                     745640512,
                 }
+                id{"SGD"}
             }
             {
-                id{"MYR"}
-                from:intvector{ /** 1963-09-16  */
+                from:intvector{
                     -52,
                     -584927904,
                 }
-                to:intvector{ /** 1967-06-12  */
+                id{"MYR"}
+                to:intvector{
                     -22,
                     745640512,
                 }
@@ -3566,28 +3562,28 @@ supplementalData:table(nofallback){
         }
         SH{
             {
-                id{"SHP"}
-                from:intvector{ /** 1917-02-15  */
+                from:intvector{
                     -390,
                     -579201856,
                 }
+                id{"SHP"}
             }
         }
         SI{
             {
-                id{"EUR"}
-                from:intvector{ /** 2007-01-01  */
+                from:intvector{
                     271,
                     -621444512,
                 }
+                id{"EUR"}
             }
             {
-                id{"SIT"}
-                from:intvector{ /** 1992-10-07  */
+                from:intvector{
                     161,
                     -1041701952,
                 }
-                to:intvector{ /** 2007-01-14  */
+                id{"SIT"}
+                to:intvector{
                     272,
                     501755488,
                 }
@@ -3595,39 +3591,39 @@ supplementalData:table(nofallback){
         }
         SJ{
             {
-                id{"NOK"}
-                from:intvector{ /** 1905-06-07  */
+                from:intvector{
                     -478,
                     -2004239808,
                 }
+                id{"NOK"}
             }
         }
         SK{
             {
-                id{"EUR"}
-                from:intvector{ /** 2009-01-01  */
+                from:intvector{
                     286,
                     -1887553952,
                 }
+                id{"EUR"}
             }
             {
-                id{"SKK"}
-                from:intvector{ /** 1992-12-31  */
+                from:intvector{
                     162,
                     1032018048,
                 }
-                to:intvector{ /** 2009-01-01  */
+                id{"SKK"}
+                to:intvector{
                     286,
                     -1887553952,
                 }
             }
             {
-                id{"CSK"}
-                from:intvector{ /** 1953-06-01  */
+                from:intvector{
                     -125,
                     413672000,
                 }
-                to:intvector{ /** 1992-12-31  */
+                id{"CSK"}
+                to:intvector{
                     162,
                     1032018048,
                 }
@@ -3635,19 +3631,19 @@ supplementalData:table(nofallback){
         }
         SL{
             {
-                id{"SLL"}
-                from:intvector{ /** 1964-08-04  */
+                from:intvector{
                     -45,
                     -150558976,
                 }
+                id{"SLL"}
             }
             {
-                id{"GBP"}
-                from:intvector{ /** 1808-11-30  */
+                from:intvector{
                     -1190,
                     1229342240,
                 }
-                to:intvector{ /** 1966-02-04  */
+                id{"GBP"}
+                to:intvector{
                     -30,
                     -1417028416,
                 }
@@ -3655,19 +3651,19 @@ supplementalData:table(nofallback){
         }
         SM{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"ITL"}
-                from:intvector{ /** 1865-12-23  */
+                from:intvector{
                     -772,
                     -118694784,
                 }
-                to:intvector{ /** 2001-02-28  */
+                id{"ITL"}
+                to:intvector{
                     228,
                     1387576512,
                 }
@@ -3675,48 +3671,48 @@ supplementalData:table(nofallback){
         }
         SN{
             {
-                id{"XOF"}
-                from:intvector{ /** 1959-04-04  */
+                from:intvector{
                     -81,
                     996590976,
                 }
+                id{"XOF"}
             }
         }
         SO{
             {
-                id{"SOS"}
-                from:intvector{ /** 1960-07-01  */
+                from:intvector{
                     -74,
                     -2086167392,
                 }
+                id{"SOS"}
             }
         }
         SR{
             {
-                id{"SRD"}
-                from:intvector{ /** 2004-01-01  */
+                from:intvector{
                     249,
                     -826564000,
                 }
+                id{"SRD"}
             }
             {
-                id{"SRG"}
-                from:intvector{ /** 1940-05-10  */
+                from:intvector{
                     -221,
                     -1100494880,
                 }
-                to:intvector{ /** 2003-12-31  */
+                id{"SRG"}
+                to:intvector{
                     243,
                     294867072,
                 }
             }
             {
-                id{"NLG"}
-                from:intvector{ /** 1815-11-20  */
+                from:intvector{
                     -1139,
                     -2048157152,
                 }
-                to:intvector{ /** 1940-05-10  */
+                id{"NLG"}
+                to:intvector{
                     -221,
                     -1100494880,
                 }
@@ -3724,19 +3720,19 @@ supplementalData:table(nofallback){
         }
         SS{
             {
-                id{"SSP"}
-                from:intvector{ /** 2011-07-18  */
+                from:intvector{
                     301,
                     -1770903392,
                 }
+                id{"SSP"}
             }
             {
-                id{"SDG"}
-                from:intvector{ /** 2007-01-10  */
+                from:intvector{
                     272,
                     156155488,
                 }
-                to:intvector{ /** 2011-09-01  */
+                id{"SDG"}
+                to:intvector{
                     301,
                     1055383904,
                 }
@@ -3744,21 +3740,21 @@ supplementalData:table(nofallback){
         }
         ST{
             {
-                id{"STD"}
-                from:intvector{ /** 1977-09-08  */
+                from:intvector{
                     51,
                     -1808159392,
                 }
+                id{"STD"}
             }
         }
         SU{
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1991-12-25  */
+                id{"SUR"}
+                to:intvector{
                     154,
                     -957610880,
                 }
@@ -3766,19 +3762,19 @@ supplementalData:table(nofallback){
         }
         SV{
             {
-                id{"USD"}
-                from:intvector{ /** 2001-01-01  */
+                from:intvector{
                     227,
                     -945283488,
                 }
+                id{"USD"}
             }
             {
-                id{"SVC"}
-                from:intvector{ /** 1919-11-11  */
+                from:intvector{
                     -375,
                     2018196000,
                 }
-                to:intvector{ /** 2001-01-01  */
+                id{"SVC"}
+                to:intvector{
                     227,
                     -945283488,
                 }
@@ -3786,55 +3782,55 @@ supplementalData:table(nofallback){
         }
         SY{
             {
-                id{"SYP"}
-                from:intvector{ /** 1948-01-01  */
+                from:intvector{
                     -162,
                     1474361952,
                 }
+                id{"SYP"}
             }
         }
         SZ{
             {
-                id{"SZL"}
-                from:intvector{ /** 1974-09-06  */
+                from:intvector{
                     29,
                     2108888416,
                 }
+                id{"SZL"}
             }
         }
         TC{
             {
-                id{"USD"}
-                from:intvector{ /** 1969-09-08  */
+                from:intvector{
                     -8,
                     -865888928,
                 }
+                id{"USD"}
             }
         }
         TD{
             {
-                id{"XAF"}
-                from:intvector{ /** 1993-01-01  */
+                from:intvector{
                     168,
                     -3013024,
                 }
+                id{"XAF"}
             }
         }
         TF{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1959-01-01  */
+                from:intvector{
                     -81,
                     737210976,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
@@ -3842,48 +3838,48 @@ supplementalData:table(nofallback){
         }
         TG{
             {
-                id{"XOF"}
-                from:intvector{ /** 1958-11-28  */
+                from:intvector{
                     -88,
                     1599382048,
                 }
+                id{"XOF"}
             }
         }
         TH{
             {
-                id{"THB"}
-                from:intvector{ /** 1928-04-15  */
+                from:intvector{
                     -309,
                     -1402632832,
                 }
+                id{"THB"}
             }
         }
         TJ{
             {
-                id{"TJS"}
-                from:intvector{ /** 2000-10-26  */
+                from:intvector{
                     220,
                     -342372416,
                 }
+                id{"TJS"}
             }
             {
-                id{"TJR"}
-                from:intvector{ /** 1995-05-10  */
+                from:intvector{
                     183,
                     -577682464,
                 }
-                to:intvector{ /** 2000-10-25  */
+                id{"TJR"}
+                to:intvector{
                     220,
                     -428772416,
                 }
             }
             {
-                id{"RUR"}
-                from:intvector{ /** 1991-12-25  */
+                from:intvector{
                     154,
                     -957610880,
                 }
-                to:intvector{ /** 1995-05-10  */
+                id{"RUR"}
+                to:intvector{
                     183,
                     -577682464,
                 }
@@ -3891,39 +3887,39 @@ supplementalData:table(nofallback){
         }
         TK{
             {
-                id{"NZD"}
-                from:intvector{ /** 1967-07-10  */
+                from:intvector{
                     -22,
                     572900512,
                 }
+                id{"NZD"}
             }
         }
         TL{
             {
-                id{"USD"}
-                from:intvector{ /** 1999-10-20  */
+                from:intvector{
                     213,
                     1962965952,
                 }
+                id{"USD"}
             }
             {
-                id{"TPE"}
-                from:intvector{ /** 1959-01-02  */
+                from:intvector{
                     -81,
                     823610976,
                 }
-                to:intvector{ /** 2002-05-20  */
+                id{"TPE"}
+                to:intvector{
                     235,
                     -2127181856,
                 }
             }
             {
-                id{"IDR"}
-                from:intvector{ /** 1975-12-07  */
+                from:intvector{
                     36,
                     -628269952,
                 }
-                to:intvector{ /** 2002-05-20  */
+                id{"IDR"}
+                to:intvector{
                     235,
                     -2127181856,
                 }
@@ -3931,41 +3927,41 @@ supplementalData:table(nofallback){
         }
         TM{
             {
-                id{"TMT"}
-                from:intvector{ /** 2009-01-01  */
+                from:intvector{
                     286,
                     -1887553952,
                 }
+                id{"TMT"}
             }
             {
-                id{"TMM"}
-                from:intvector{ /** 1993-11-01  */
+                from:intvector{
                     168,
                     -2413024,
                 }
-                to:intvector{ /** 2009-01-01  */
+                id{"TMM"}
+                to:intvector{
                     286,
                     -1887553952,
                 }
             }
             {
-                id{"RUR"}
-                from:intvector{ /** 1991-12-25  */
+                from:intvector{
                     154,
                     -957610880,
                 }
-                to:intvector{ /** 1993-11-01  */
+                id{"RUR"}
+                to:intvector{
                     168,
                     -2413024,
                 }
             }
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1991-12-25  */
+                id{"SUR"}
+                to:intvector{
                     154,
                     -957610880,
                 }
@@ -3973,41 +3969,41 @@ supplementalData:table(nofallback){
         }
         TN{
             {
-                id{"TND"}
-                from:intvector{ /** 1958-11-01  */
+                from:intvector{
                     -89,
                     -733417952,
                 }
+                id{"TND"}
             }
         }
         TO{
             {
-                id{"TOP"}
-                from:intvector{ /** 1966-02-14  */
+                from:intvector{
                     -30,
                     -553028416,
                 }
+                id{"TOP"}
             }
         }
         TP{
             {
-                id{"TPE"}
-                from:intvector{ /** 1959-01-02  */
+                from:intvector{
                     -81,
                     823610976,
                 }
-                to:intvector{ /** 2002-05-20  */
+                id{"TPE"}
+                to:intvector{
                     235,
                     -2127181856,
                 }
             }
             {
-                id{"IDR"}
-                from:intvector{ /** 1975-12-07  */
+                from:intvector{
                     36,
                     -628269952,
                 }
-                to:intvector{ /** 2002-05-20  */
+                id{"IDR"}
+                to:intvector{
                     235,
                     -2127181856,
                 }
@@ -4015,19 +4011,19 @@ supplementalData:table(nofallback){
         }
         TR{
             {
-                id{"TRY"}
-                from:intvector{ /** 2005-01-01  */
+                from:intvector{
                     257,
                     731064928,
                 }
+                id{"TRY"}
             }
             {
-                id{"TRL"}
-                from:intvector{ /** 1922-11-01  */
+                from:intvector{
                     -353,
                     1359315488,
                 }
-                to:intvector{ /** 2005-12-31  */
+                id{"TRL"}
+                to:intvector{
                     257,
                     -971242368,
                 }
@@ -4035,77 +4031,77 @@ supplementalData:table(nofallback){
         }
         TT{
             {
-                id{"TTD"}
-                from:intvector{ /** 1964-01-01  */
+                from:intvector{
                     -45,
                     -410178976,
                 }
+                id{"TTD"}
             }
         }
         TV{
             {
-                id{"AUD"}
-                from:intvector{ /** 1966-02-14  */
+                from:intvector{
                     -30,
                     -553028416,
                 }
+                id{"AUD"}
             }
         }
         TW{
             {
-                id{"TWD"}
-                from:intvector{ /** 1949-06-15  */
+                from:intvector{
                     -155,
                     -53076416,
                 }
+                id{"TWD"}
             }
         }
         TZ{
             {
-                id{"TZS"}
-                from:intvector{ /** 1966-06-14  */
+                from:intvector{
                     -30,
                     -552788416,
                 }
+                id{"TZS"}
             }
         }
         UA{
             {
-                id{"UAH"}
-                from:intvector{ /** 1996-09-02  */
+                from:intvector{
                     191,
                     202586464,
                 }
+                id{"UAH"}
             }
             {
-                id{"UAK"}
-                from:intvector{ /** 1992-11-13  */
+                from:intvector{
                     161,
                     -523241952,
                 }
-                to:intvector{ /** 1993-10-17  */
+                id{"UAK"}
+                to:intvector{
                     169,
                     1379926976,
                 }
             }
             {
-                id{"RUR"}
-                from:intvector{ /** 1991-12-25  */
+                from:intvector{
                     154,
                     -957610880,
                 }
-                to:intvector{ /** 1992-11-13  */
+                id{"RUR"}
+                to:intvector{
                     161,
                     -523241952,
                 }
             }
             {
-                id{"SUR"}
-                from:intvector{ /** 1961-01-01  */
+                from:intvector{
                     -67,
                     -528898464,
                 }
-                to:intvector{ /** 1991-12-25  */
+                id{"SUR"}
+                to:intvector{
                     154,
                     -957610880,
                 }
@@ -4113,19 +4109,19 @@ supplementalData:table(nofallback){
         }
         UG{
             {
-                id{"UGX"}
-                from:intvector{ /** 1987-05-15  */
+                from:intvector{
                     125,
                     796588000,
                 }
+                id{"UGX"}
             }
             {
-                id{"UGS"}
-                from:intvector{ /** 1966-08-15  */
+                from:intvector{
                     -30,
                     -466268416,
                 }
-                to:intvector{ /** 1987-05-15  */
+                id{"UGS"}
+                to:intvector{
                     125,
                     796588000,
                 }
@@ -4133,87 +4129,87 @@ supplementalData:table(nofallback){
         }
         UM{
             {
-                id{"USD"}
-                from:intvector{ /** 1944-01-01  */
+                from:intvector{
                     -192,
                     -201986464,
                 }
+                id{"USD"}
             }
         }
         US{
             {
-                id{"USD"}
-                from:intvector{ /** 1792-01-01  */
+                from:intvector{
                     -1308,
                     694083168,
                 }
+                id{"USD"}
             }
             {
+                from:intvector{
+                    58993,
+                    351827072,
+                }
                 id{"USN"}
-                from:intvector{ /** 9999-12-31  */
-                    58993,
-                    351827072,
-                }
             }
             {
-                id{"USS"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"USS"}
             }
         }
         UY{
             {
-                id{"UYU"}
-                from:intvector{ /** 1993-03-01  */
+                from:intvector{
                     168,
                     -2893024,
                 }
+                id{"UYU"}
             }
             {
-                id{"UYP"}
-                from:intvector{ /** 1975-07-01  */
+                from:intvector{
                     36,
                     -1146969952,
                 }
-                to:intvector{ /** 1993-03-01  */
+                id{"UYP"}
+                to:intvector{
                     168,
                     -2893024,
                 }
             }
             {
-                id{"UYI"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"UYI"}
             }
         }
         UZ{
             {
-                id{"UZS"}
-                from:intvector{ /** 1994-07-01  */
+                from:intvector{
                     176,
                     1468575904,
                 }
+                id{"UZS"}
             }
         }
         VA{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"ITL"}
-                from:intvector{ /** 1870-10-19  */
+                from:intvector{
                     -735,
                     -1611804736,
                 }
-                to:intvector{ /** 2002-02-28  */
+                id{"ITL"}
+                to:intvector{
                     235,
                     -1436161856,
                 }
@@ -4221,28 +4217,28 @@ supplementalData:table(nofallback){
         }
         VC{
             {
-                id{"XCD"}
-                from:intvector{ /** 1965-10-06  */
+                from:intvector{
                     -37,
                     1579989952,
                 }
+                id{"XCD"}
             }
         }
         VE{
             {
-                id{"VEF"}
-                from:intvector{ /** 2008-01-01  */
+                from:intvector{
                     279,
                     849784416,
                 }
+                id{"VEF"}
             }
             {
-                id{"VEB"}
-                from:intvector{ /** 1871-05-11  */
+                from:intvector{
                     -728,
                     -832075808,
                 }
-                to:intvector{ /** 2008-06-30  */
+                id{"VEB"}
+                to:intvector{
                     279,
                     -939282880,
                 }
@@ -4250,19 +4246,19 @@ supplementalData:table(nofallback){
         }
         VG{
             {
-                id{"USD"}
-                from:intvector{ /** 1833-01-01  */
+                from:intvector{
                     -1007,
                     1748927072,
                 }
+                id{"USD"}
             }
             {
-                id{"GBP"}
-                from:intvector{ /** 1833-01-01  */
+                from:intvector{
                     -1007,
                     1748927072,
                 }
-                to:intvector{ /** 1959-01-01  */
+                id{"GBP"}
+                to:intvector{
                     -81,
                     737210976,
                 }
@@ -4270,28 +4266,28 @@ supplementalData:table(nofallback){
         }
         VI{
             {
-                id{"USD"}
-                from:intvector{ /** 1837-01-01  */
+                from:intvector{
                     -978,
                     -869691808,
                 }
+                id{"USD"}
             }
         }
         VN{
             {
-                id{"VND"}
-                from:intvector{ /** 1985-09-14  */
+                from:intvector{
                     110,
                     2062937440,
                 }
+                id{"VND"}
             }
             {
-                id{"VNN"}
-                from:intvector{ /** 1978-05-03  */
+                from:intvector{
                     58,
                     -769170464,
                 }
-                to:intvector{ /** 1985-09-14  */
+                id{"VNN"}
+                to:intvector{
                     110,
                     2062937440,
                 }
@@ -4299,79 +4295,79 @@ supplementalData:table(nofallback){
         }
         VU{
             {
-                id{"VUV"}
-                from:intvector{ /** 1981-01-01  */
+                from:intvector{
                     80,
                     -737090976,
                 }
+                id{"VUV"}
             }
         }
         WF{
             {
-                id{"XPF"}
-                from:intvector{ /** 1961-07-30  */
+                from:intvector{
                     -66,
                     1977061536,
                 }
+                id{"XPF"}
             }
         }
         WS{
             {
-                id{"WST"}
-                from:intvector{ /** 1967-07-10  */
+                from:intvector{
                     -22,
                     572900512,
                 }
-            }
-        }
-        YE{
-            {
-                id{"YER"}
-                from:intvector{ /** 1990-05-22  */
-                    147,
-                    1606507488,
-                }
+                id{"WST"}
             }
         }
         YD{
             {
-                id{"YDD"}
-                from:intvector{ /** 1965-04-01  */
+                from:intvector{
                     -37,
                     1147629952,
                 }
-                to:intvector{ /** 1996-01-01  */
+                id{"YDD"}
+                to:intvector{
                     191,
                     115706464,
                 }
             }
         }
+        YE{
+            {
+                from:intvector{
+                    147,
+                    1606507488,
+                }
+                id{"YER"}
+            }
+        }
         YT{
             {
-                id{"EUR"}
-                from:intvector{ /** 1999-01-01  */
+                from:intvector{
                     213,
                     320825952,
                 }
+                id{"EUR"}
             }
             {
-                id{"FRF"}
-                from:intvector{ /** 1976-02-23  */
+                from:intvector{
                     44,
                     -2070208320,
                 }
-                to:intvector{ /** 2002-02-17  */
+                id{"FRF"}
+                to:intvector{
                     235,
                     1908405440,
                 }
             }
             {
-                id{"KMF"}
-                from:intvector{ /** 1975-01-01  */
+                from:intvector{
                     36,
                     -1147329952,
                 }
-                to:intvector{ /** 1976-02-23  */
+                id{"KMF"}
+                to:intvector{
                     44,
                     -2070208320,
                 }
@@ -4379,34 +4375,34 @@ supplementalData:table(nofallback){
         }
         YU{
             {
-                id{"YUM"}
-                from:intvector{ /** 1994-01-24  */
+                from:intvector{
                     176,
                     -839551392,
                 }
-                to:intvector{ /** 2002-05-15  */
+                id{"YUM"}
+                to:intvector{
                     235,
                     1735785440,
                 }
             }
             {
-                id{"YUN"}
-                from:intvector{ /** 1990-01-01  */
+                from:intvector{
                     146,
                     -208132512,
                 }
-                to:intvector{ /** 1992-07-24  */
+                id{"YUN"}
+                to:intvector{
                     162,
                     426918048,
                 }
             }
             {
-                id{"YUD"}
-                from:intvector{ /** 1966-01-01  */
+                from:intvector{
                     -30,
                     -1676288416,
                 }
-                to:intvector{ /** 1990-01-01  */
+                id{"YUD"}
+                to:intvector{
                     146,
                     -208132512,
                 }
@@ -4414,48 +4410,48 @@ supplementalData:table(nofallback){
         }
         ZA{
             {
-                id{"ZAR"}
-                from:intvector{ /** 1961-02-14  */
+                from:intvector{
                     -66,
                     594361536,
                 }
+                id{"ZAR"}
             }
             {
-                id{"ZAL"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"ZAL"}
             }
         }
         ZM{
             {
-                id{"ZMK"}
-                from:intvector{ /** 1968-01-16  */
+                from:intvector{
                     -15,
                     -1732797856,
                 }
+                id{"ZMK"}
             }
         }
         ZR{
             {
-                id{"ZRN"}
-                from:intvector{ /** 1993-11-01  */
+                from:intvector{
                     168,
                     -2413024,
                 }
-                to:intvector{ /** 1998-07  */
+                id{"ZRN"}
+                to:intvector{
                     205,
                     -1150042976,
                 }
             }
             {
-                id{"ZRZ"}
-                from:intvector{ /** 1971-10-27  */
+                from:intvector{
                     7,
                     -576738368,
                 }
-                to:intvector{ /** 1993-11-01  */
+                id{"ZRZ"}
+                to:intvector{
                     168,
                     -2413024,
                 }
@@ -4463,52 +4459,52 @@ supplementalData:table(nofallback){
         }
         ZW{
             {
-                id{"USD"}
-                from:intvector{ /** 2009-04-12  */
+                from:intvector{
                     286,
                     -936973952,
                 }
+                id{"USD"}
             }
             {
-                id{"ZWL"}
-                from:intvector{ /** 2009-02-02  */
+                from:intvector{
                     286,
                     -1801093952,
                 }
-                to:intvector{ /** 2009-04-12  */
+                id{"ZWL"}
+                to:intvector{
                     286,
                     -936973952,
                 }
             }
             {
-                id{"ZWR"}
-                from:intvector{ /** 2008-08-01  */
+                from:intvector{
                     279,
                     850204416,
                 }
-                to:intvector{ /** 2009-02-02  */
+                id{"ZWR"}
+                to:intvector{
                     286,
                     -1801093952,
                 }
             }
             {
-                id{"ZWD"}
-                from:intvector{ /** 1980-04-18  */
+                from:intvector{
                     73,
                     -825739904,
                 }
-                to:intvector{ /** 2008-08-01  */
+                id{"ZWD"}
+                to:intvector{
                     279,
                     850204416,
                 }
             }
             {
-                id{"RHD"}
-                from:intvector{ /** 1970-02-17  */
+                from:intvector{
                     0,
                     1382520000,
                 }
-                to:intvector{ /** 1980-04-18  */
+                id{"RHD"}
+                to:intvector{
                     73,
                     -825739904,
                 }
@@ -4516,136 +4512,126 @@ supplementalData:table(nofallback){
         }
         ZZ{
             {
+                from:intvector{
+                    58993,
+                    351827072,
+                }
                 id{"XAG"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XAU"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XBA"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XBB"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XBC"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XBD"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XDR"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XEU"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XFO"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XFU"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XPD"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XPT"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XRE"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XSU"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XTS"}
-                from:intvector{ /** 9999-12-31  */
+            }
+            {
+                from:intvector{
                     58993,
                     351827072,
                 }
-            }
-            {
                 id{"XUA"}
-                from:intvector{ /** 9999-12-31  */
-                    58993,
-                    351827072,
-                }
             }
             {
-                id{"XXX"}
-                from:intvector{ /** 9999-12-31  */
+                from:intvector{
                     58993,
                     351827072,
                 }
+                id{"XXX"}
             }
         }
     }
-    /**
-     * Currency metadata.  Unlike the "Currencies" element, this is
-     * NOT true locale data.  It exists only in root.  The two
-     * integers are the fraction digits for each currency, and the
-     * rounding increment.  The fraction digits must be an integer
-     * from 0..9.  If there is no rounding, the rounding incrementis 
-     * zero.  Otherwise the rounding increment is given in units of
-     * 10^(-fraction_digits).  The special tag "DEFAULT" gives the
-     * meta data for all currencies not otherwise listed.
-     */
     CurrencyMeta{
         ADP:intvector{
             0,

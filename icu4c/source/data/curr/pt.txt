@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/pt.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/pt.xml
 // *
 // ***************************************************************************
 /**
@@ -28,7 +28,7 @@ pt{
             "Afegane",
         }
         ALK{
-            "ALK" /** ===  */,
+            "ALK",
             "Lek Albanês (1946-1965)",
         }
         ALL{
@@ -268,7 +268,7 @@ pt{
             "Peso chileno",
         }
         CNX{
-            "CNX" /** ===  */,
+            "CNX",
             "Dólar do Banco Popular da China",
         }
         CNY{
@@ -492,7 +492,7 @@ pt{
             "Libra israelita",
         }
         ILR{
-            "ILR" /** ===  */,
+            "ILR",
             "Sheqel antigo israelita",
         }
         ILS{
@@ -512,7 +512,7 @@ pt{
             "Rial iraniano",
         }
         ISJ{
-            "ISJ" /** ===  */,
+            "ISJ",
             "Coroa antiga islandesa",
         }
         ISK{

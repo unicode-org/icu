@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/rm.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/rm.xml
 // *
 // ***************************************************************************
 /**
@@ -28,7 +28,7 @@ rm{
             "afghani",
         }
         ALK{
-            "ALK" /** ===  */,
+            "ALK",
             "lek albanais (1947–1961)",
         }
         ALL{
@@ -484,7 +484,7 @@ rm{
             "glivra israeliana",
         }
         ILR{
-            "ILR" /** ===  */,
+            "ILR",
             "vegl sheqel israelian",
         }
         ILS{
@@ -504,7 +504,7 @@ rm{
             "rial iranais",
         }
         ISJ{
-            "ISJ" /** ===  */,
+            "ISJ",
             "veglia cruna islandaisa",
         }
         ISK{
@@ -692,7 +692,7 @@ rm{
             "rupia dal Mauritius",
         }
         MVP{
-            "MVP" /** ===  */,
+            "MVP",
             "rupia da las Maledivas",
         }
         MVR{

@@ -2,8 +2,8 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/main/ee.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ee.xml
 // *
 // ***************************************************************************
 /**
@@ -28,7 +28,7 @@ ee{
             "afghanistanga afghani",
         }
         ALK{
-            "ALK" /** ===  */,
+            "ALK",
             "albaniaga lek (1946-1965)",
         }
         ALL{
@@ -268,7 +268,7 @@ ee{
             "tsilega peso",
         }
         CNX{
-            "CNX" /** ===  */,
+            "CNX",
             "tsainatɔwo ƒe gadzraɖoƒe dollar",
         }
         CNY{
@@ -492,7 +492,7 @@ ee{
             "israelga pound",
         }
         ILR{
-            "ILR" /** ===  */,
+            "ILR",
             "israelga sheqel (1980-1985)",
         }
         ILS{
@@ -512,7 +512,7 @@ ee{
             "iranga rial",
         }
         ISJ{
-            "ISJ" /** ===  */,
+            "ISJ",
             "aiselandga króna (1918-1981)",
         }
         ISK{
