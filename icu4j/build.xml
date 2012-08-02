@@ -1856,4 +1856,10 @@
             <attach file="${maven.release.dir}/${maven.icu4jdocs.jar.file}.asc" classifier="javadoc" type="jar.asc"/>
         </deploy>
     </target>
+
+    <target name="continuous-build" description="Run performance tests for continuous build">
+    	<exec dir="./perf-tests" executable="perl">
+    	    <arg value="perftests.pl" />
+        </exec>
+    </target>
 </project>
