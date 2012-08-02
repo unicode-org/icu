@@ -9,7 +9,14 @@ use XML::LibXML;
 # Assume we are running within the icu4j root directory
 use lib 'src/com/ibm/icu/dev/test/perf';
 use Dataset;
-my $CLASSPATH="../icu4j.jar:../tools/misc/out/lib/icu4j-tools.jar:out/bin";
+my $OS=$^O;
+
+my $CLASSPATH;
+if ($OS eq "linux" || $OS eq "darwin") {
+	$CLASSPATH="../icu4j.jar:../tools/misc/out/lib/icu4j-tools.jar:out/bin";
+} else {
+	$CLASSPATH="../icu4j.jar;../tools/misc/out/lib/icu4j-tools.jar;out/bin";
+}
 #---------------------------------------------------------------------
 
 # Methods to be tested.  Each pair represents a test method and
