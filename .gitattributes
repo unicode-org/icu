@@ -766,6 +766,7 @@ icu4j/main/tests/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/translit/translit-tests-build.launch -text
 icu4j/manifest.stub -text
+icu4j/perf-tests/README.txt -text
 icu4j/perf-tests/data/icuperf2report.xsl -text
 icu4j/perf-tests/perftests.pl -text
 icu4j/samples/build.properties -text
