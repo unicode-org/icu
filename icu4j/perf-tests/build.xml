@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2011, International Business Machines Corporation and    *
+* Copyright (C) 2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -60,4 +60,10 @@
     <target name="jar" depends="compile, copy, @jar" description="Create the project's jar file"/>
 
     <target name="src-jar" depends="@src-jar" description="Create the project's source jar file"/>
+
+	<target name="continuous-build" description="Run performance tests for continuous build">
+    	<exec dir="." executable="perl">
+    	    <arg value="perftests.pl" />
+        </exec>
+    </target>
 </project>

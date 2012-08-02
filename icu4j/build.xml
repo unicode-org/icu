@@ -1857,9 +1857,4 @@
         </deploy>
     </target>
 
-    <target name="continuous-build" description="Run performance tests for continuous build">
-    	<exec dir="./perf-tests" executable="perl">
-    	    <arg value="perftests.pl" />
-        </exec>
-    </target>
 </project>
