@@ -62,7 +62,8 @@
     <target name="src-jar" depends="@src-jar" description="Create the project's source jar file"/>
 
 	<target name="continuous-build" description="Run performance tests for continuous build">
-    	<exec dir="." executable="perl">
+	<property name="perl" value="perl" />
+    	<exec executable="${perl}">
     	    <arg value="perftests.pl" />
         </exec>
     </target>
