@@ -767,7 +767,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                         }
                 }
             } else if (what_to_do == READSCRIPTTOLEADBYTES) { //vt[cnt].what_to_do == READSCRIPTTOLEADBYTES
-                uint16_t leadByteArray[100];
+                uint16_t leadByteArray[256];
                 uint32_t leadByteArrayCount = 0;
                 char scriptName[100];
 
