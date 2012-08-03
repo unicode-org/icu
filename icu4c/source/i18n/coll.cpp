@@ -870,7 +870,7 @@ Collator::setStrength(ECollationStrength newStrength) {
     setAttribute(UCOL_STRENGTH, (UColAttributeValue)newStrength, intStatus);
 }
 
-int32_t U_EXPORT2 
+int32_t
 Collator::getReorderCodes(int32_t* /* dest*/,
                           int32_t /* destCapacity*/,
                           UErrorCode& status) const
@@ -881,7 +881,7 @@ Collator::getReorderCodes(int32_t* /* dest*/,
     return 0;
 }
 
-void U_EXPORT2 
+void
 Collator::setReorderCodes(const int32_t* /* reorderCodes */,
                           int32_t /* reorderCodesLength */,
                           UErrorCode& status)
