@@ -8,7 +8,9 @@
 // ***************************************************************************
 supplementalData:table(nofallback){
     calendarPreferenceData{
-        001{"gregorian"}
+        001{
+            "gregorian",
+        }
         AE{
             "gregorian",
             "islamic",
