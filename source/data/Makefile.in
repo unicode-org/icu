@@ -513,12 +513,6 @@ $(BUILDDIR)/%.spp: $(SPREPSRCDIR)/%.txt $(TOOLBINDIR)/gensprep$(TOOLEXEEXT) $(BU
 ####################################################    BRK
 # BRK FILES
 
-#thaidict.brk: $(SRCDATADIR)/thaidict.brk
-#	$(RMV) $@ && ln -s $(BUILDDIR) $@
-
-#khmerdict.brk: $(SRCDATADIR)/khmerdict.brk
-#	$(RMV) $@ && ln -s $(BUILDDIR) $@
-
 $(BRKBLDDIR)/%.brk: $(BRKSRCDIR)/%.txt $(TOOLBINDIR)/genbrk$(TOOLEXEEXT) $(DAT_FILES)
 	$(INVOKE) $(TOOLBINDIR)/genbrk -c -i $(BUILDDIR) -r $< -o $@
 
@@ -668,7 +662,7 @@ $(COLLATION_INDEX_FILE): $(SRCLISTDEPS)
 	echo "}" >> $@;
 
 ### brk res
-$(BRKBLDDIR)/%.res: $(BRKSRCDIR)/%.txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(BRK_FILES) $(DAT_FILES)
+$(BRKBLDDIR)/%.res: $(BRKSRCDIR)/%.txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT) $(BRK_FILES) $(CTD_FILES) $(DAT_FILES)
 	$(INVOKE) $(TOOLBINDIR)/genrb $(GENRBOPTS) -i $(BUILDDIR) -s $(BRKSRCDIR) -d $(BRKBLDDIR) $(<F)
 
 $(BRKBLDDIR)/$(INDEX_NAME).res: $(OUTTMPDIR)/$(BREAK_TREE)/$(INDEX_NAME).txt $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
