@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -491,14 +491,14 @@ void
 backAndForth(UCollationElements *iter)
 {
     /* Run through the iterator forwards and stick it into an array */
-    int32_t index, o;
+    int32_t idx, o;
     UErrorCode status = U_ZERO_ERROR;
     int32_t orderLength = 0;
     OrderAndOffset *orders = getOrders(iter, &orderLength);
 
 
     /* Now go through it backwards and make sure we get the same values */
-    index = orderLength;
+    idx = orderLength;
     ucol_reset(iter);
 
     /* synwee : changed */
@@ -508,39 +508,39 @@ backAndForth(UCollationElements *iter)
 #endif
         ucol_getOffset(iter);
 
-      index -= 1;
-      if (o != orders[index].order) {
+      idx -= 1;
+      if (o != orders[idx].order) {
         if (o == 0)
-          index ++;
+          idx ++;
         else {
-          while (index > 0 && orders[-- index].order == 0) {
+          while (idx > 0 && orders[-- idx].order == 0) {
             /* nothing... */
           }
 
-          if (o != orders[index].order) {
-              log_err("Mismatched order at index %d: 0x%8.8X vs. 0x%8.8X\n", index,
-                orders[index].order, o);
+          if (o != orders[idx].order) {
+              log_err("Mismatched order at index %d: 0x%8.8X vs. 0x%8.8X\n", idx,
+                orders[idx].order, o);
             goto bail;
           }
         }
       }
 
 #if TEST_OFFSETS
-      if (offset != orders[index].offset) {
-        log_err("Mismatched offset at index %d: %d vs. %d\n", index,
-            orders[index].offset, offset);
+      if (offset != orders[idx].offset) {
+        log_err("Mismatched offset at index %d: %d vs. %d\n", idx,
+            orders[idx].offset, offset);
         goto bail;
       }
 #endif
 
     }
 
-    while (index != 0 && orders[index - 1].order == 0) {
-      index -= 1;
+    while (idx != 0 && orders[idx - 1].order == 0) {
+      idx -= 1;
     }
 
-    if (index != 0) {
-        log_err("Didn't get back to beginning - index is %d\n", index);
+    if (idx != 0) {
+        log_err("Didn't get back to beginning - index is %d\n", idx);
 
         ucol_reset(iter);
         log_err("\nnext: ");

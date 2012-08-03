@@ -6494,9 +6494,9 @@ static void TestHaniReorderWithOtherRules(void)
     const char* strRules[] = {
         "[reorder Hani] &b<a"
     };
-    const int32_t apiRules[] = {
+    /*const int32_t apiRules[] = {
         USCRIPT_HAN
-    };
+    };*/
 
     const static OneTestCase privateUseCharacterStrings[] = {
         { {0x4e00}, {0x0041}, UCOL_LESS },
@@ -6559,7 +6559,6 @@ static void TestReorderWithNumericCollation()
     int32_t fortyThreeP_sortKey_reorder_Length;
     UCollationResult collResult;
     UCollationResult collResultReorder;
-    int i;
 
     log_verbose("Testing reordering with and without numeric collation\n");
 

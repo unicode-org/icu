@@ -614,7 +614,7 @@ void TestSafeClone() {
     UCollator * someClonedCollators [CLONETEST_COLLATOR_COUNT];
     UCollator * col;
     UErrorCode err = U_ZERO_ERROR;
-    int8_t index = 6;    /* Leave this here to test buffer alingment in memory*/
+    int8_t idx = 6;    /* Leave this here to test buffer alingment in memory*/
     uint8_t buffer [CLONETEST_COLLATOR_COUNT] [U_COL_SAFECLONE_BUFFERSIZE];
     int32_t bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
     const char sampleRuleChars[] = "&Z < CH";
@@ -635,8 +635,8 @@ void TestSafeClone() {
     someCollators[2] = ucol_open("ja_JP", &err);
     someCollators[3] = ucol_openRules(sampleRule, -1, UCOL_ON, UCOL_TERTIARY, NULL, &err);
     if(U_FAILURE(err)) {
-        for (index = 0; index < CLONETEST_COLLATOR_COUNT; index++) {
-            ucol_close(someCollators[index]);
+        for (idx = 0; idx < CLONETEST_COLLATOR_COUNT; idx++) {
+            ucol_close(someCollators[idx]);
         }
         log_data_err("Couldn't open one or more collators\n");
         return;
@@ -724,45 +724,45 @@ void TestSafeClone() {
 
     /* change orig & clone & make sure they are independent */
 
-    for (index = 0; index < CLONETEST_COLLATOR_COUNT; index++)
+    for (idx = 0; idx < CLONETEST_COLLATOR_COUNT; idx++)
     {
-        ucol_setStrength(someCollators[index], UCOL_IDENTICAL);
+        ucol_setStrength(someCollators[idx], UCOL_IDENTICAL);
         bufferSize = 1;
         err = U_ZERO_ERROR;
-        ucol_close(ucol_safeClone(someCollators[index], buffer[index], &bufferSize, &err));
+        ucol_close(ucol_safeClone(someCollators[idx], buffer[idx], &bufferSize, &err));
         if (err != U_SAFECLONE_ALLOCATED_WARNING) {
-            log_err("FAIL: collator number %d was not allocated.\n", index);
-            log_err("FAIL: status of Collator[%d] is %d  (hex: %x).\n", index, err, err);
+            log_err("FAIL: collator number %d was not allocated.\n", idx);
+            log_err("FAIL: status of Collator[%d] is %d  (hex: %x).\n", idx, err, err);
         }
 
         bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
         err = U_ZERO_ERROR;
-        someClonedCollators[index] = ucol_safeClone(someCollators[index], buffer[index], &bufferSize, &err);
-        if (someClonedCollators[index] == NULL
-            || someClonedCollators[index] < (UCollator *)buffer[index]
-            || someClonedCollators[index] > (UCollator *)(buffer[index]+(U_COL_SAFECLONE_BUFFERSIZE-1)))
+        someClonedCollators[idx] = ucol_safeClone(someCollators[idx], buffer[idx], &bufferSize, &err);
+        if (someClonedCollators[idx] == NULL
+            || someClonedCollators[idx] < (UCollator *)buffer[idx]
+            || someClonedCollators[idx] > (UCollator *)(buffer[idx]+(U_COL_SAFECLONE_BUFFERSIZE-1)))
         {
             log_err("FAIL: Cloned collator didn't use provided buffer.\n");
             return;
         }
-        if (!ucol_equals(someClonedCollators[index], someCollators[index])) {
-            log_err("FAIL: Cloned collator is not equal to original at index = %d.\n", index);
+        if (!ucol_equals(someClonedCollators[idx], someCollators[idx])) {
+            log_err("FAIL: Cloned collator is not equal to original at index = %d.\n", idx);
         }
 
         /* Check the usability */
-        ucol_setStrength(someCollators[index], UCOL_PRIMARY);
-        ucol_setAttribute(someCollators[index], UCOL_CASE_LEVEL, UCOL_OFF, &err);
+        ucol_setStrength(someCollators[idx], UCOL_PRIMARY);
+        ucol_setAttribute(someCollators[idx], UCOL_CASE_LEVEL, UCOL_OFF, &err);
 
-        doAssert( (ucol_equal(someCollators[index], test1, u_strlen(test1), test2, u_strlen(test2))), "Result should be \"abcda\" == \"abCda\"");
+        doAssert( (ucol_equal(someCollators[idx], test1, u_strlen(test1), test2, u_strlen(test2))), "Result should be \"abcda\" == \"abCda\"");
 
         /* Close the original to make sure that the clone is usable. */
-        ucol_close(someCollators[index]);
+        ucol_close(someCollators[idx]);
 
-        ucol_setStrength(someClonedCollators[index], UCOL_TERTIARY);
-        ucol_setAttribute(someClonedCollators[index], UCOL_CASE_LEVEL, UCOL_OFF, &err);
-        doAssert( (ucol_greater(someClonedCollators[index], test1, u_strlen(test1), test2, u_strlen(test2))), "Result should be \"abCda\" >>> \"abcda\" ");
+        ucol_setStrength(someClonedCollators[idx], UCOL_TERTIARY);
+        ucol_setAttribute(someClonedCollators[idx], UCOL_CASE_LEVEL, UCOL_OFF, &err);
+        doAssert( (ucol_greater(someClonedCollators[idx], test1, u_strlen(test1), test2, u_strlen(test2))), "Result should be \"abCda\" >>> \"abcda\" ");
 
-        ucol_close(someClonedCollators[index]);
+        ucol_close(someClonedCollators[idx]);
     }
 }
 
