@@ -32,6 +32,19 @@ zu{
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000000000{
+                        other{"0.0B"}
+                    }
+                    10000000000{
+                        other{"000B"}
+                    }
+                    100000000000{
+                        other{"000B"}
+                    }
+                }
+            }
             symbols{
                 decimal{","}
                 group{" "}

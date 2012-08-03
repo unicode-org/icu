@@ -29,6 +29,46 @@ fr{
                 percentFormat{"#,##0 %"}
                 scientificFormat{"#E0"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{"0000"}
+                    }
+                    10000{
+                        other{"00000"}
+                    }
+                    100000{
+                        other{"000000"}
+                    }
+                    1000000{
+                        other{"0.0 M"}
+                    }
+                    10000000{
+                        other{"00 M"}
+                    }
+                    100000000{
+                        other{"000 M"}
+                    }
+                    1000000000{
+                        other{"0.0 Md"}
+                    }
+                    10000000000{
+                        other{"00 Mds"}
+                    }
+                    100000000000{
+                        other{"000 Mds"}
+                    }
+                    1000000000000{
+                        other{"0.0 Bn"}
+                    }
+                    10000000000000{
+                        other{"00 Bn"}
+                    }
+                    100000000000000{
+                        other{"000 Bn"}
+                    }
+                }
+            }
             symbols{
                 decimal{","}
                 exponential{"E"}
