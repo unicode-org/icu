@@ -28,6 +28,46 @@ cs{
                 percentFormat{"#,##0 %"}
                 scientificFormat{"#E0"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{"0.0 tis'.'"}
+                    }
+                    10000{
+                        other{"00 tis'.'"}
+                    }
+                    100000{
+                        other{"000 tis'.'"}
+                    }
+                    1000000{
+                        other{"0.0 mil'.'"}
+                    }
+                    10000000{
+                        other{"00 mil'.'"}
+                    }
+                    100000000{
+                        other{"000 mil'.'"}
+                    }
+                    1000000000{
+                        other{"0.0 mld'.'"}
+                    }
+                    10000000000{
+                        other{"00 mld'.'"}
+                    }
+                    100000000000{
+                        other{"000 mld'.'"}
+                    }
+                    1000000000000{
+                        other{"0.0 bil'.'"}
+                    }
+                    10000000000000{
+                        other{"00 bil'.'"}
+                    }
+                    100000000000000{
+                        other{"000 bil'.'"}
+                    }
+                }
+            }
             symbols{
                 decimal{","}
                 exponential{"E"}

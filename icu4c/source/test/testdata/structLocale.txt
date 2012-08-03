@@ -4465,6 +4465,46 @@ structLocale:table(nofallback){
                 percentFormat{""}
                 scientificFormat{""}
             }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{""}
+                    }
+                    10000{
+                        other{""}
+                    }
+                    100000{
+                        other{""}
+                    }
+                    1000000{
+                        other{""}
+                    }
+                    10000000{
+                        other{""}
+                    }
+                    100000000{
+                        other{""}
+                    }
+                    1000000000{
+                        other{""}
+                    }
+                    10000000000{
+                        other{""}
+                    }
+                    100000000000{
+                        other{""}
+                    }
+                    1000000000000{
+                        other{""}
+                    }
+                    10000000000000{
+                        other{""}
+                    }
+                    100000000000000{
+                        other{""}
+                    }
+                }
+            }
             symbols{
                 decimal{""}
                 exponential{""}
@@ -4806,6 +4846,46 @@ structLocale:table(nofallback){
                 decimalFormat{""}
                 percentFormat{""}
                 scientificFormat{""}
+            }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{""}
+                    }
+                    10000{
+                        other{""}
+                    }
+                    100000{
+                        other{""}
+                    }
+                    1000000{
+                        other{""}
+                    }
+                    10000000{
+                        other{""}
+                    }
+                    100000000{
+                        other{""}
+                    }
+                    1000000000{
+                        other{""}
+                    }
+                    10000000000{
+                        other{""}
+                    }
+                    100000000000{
+                        other{""}
+                    }
+                    1000000000000{
+                        other{""}
+                    }
+                    10000000000000{
+                        other{""}
+                    }
+                    100000000000000{
+                        other{""}
+                    }
+                }
             }
             symbols{
                 decimal{""}

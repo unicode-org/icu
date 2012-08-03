@@ -24,6 +24,37 @@ ee{
             patterns{
                 currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
             }
+            patternsShort{
+                decimalFormat{
+                    100000{
+                        other{"00K"}
+                    }
+                    10000000{
+                        other{"0M"}
+                    }
+                    100000000{
+                        other{"00M"}
+                    }
+                    1000000000{
+                        other{"0.000M"}
+                    }
+                    10000000000{
+                        other{"00000M"}
+                    }
+                    100000000000{
+                        other{"0000M"}
+                    }
+                    1000000000000{
+                        other{"0.0B"}
+                    }
+                    10000000000000{
+                        other{"0B"}
+                    }
+                    100000000000000{
+                        other{"00B"}
+                    }
+                }
+            }
             symbols{
                 nan{"mnn"}
             }

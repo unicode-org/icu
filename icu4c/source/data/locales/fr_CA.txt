@@ -12,6 +12,19 @@ fr_CA{
             patterns{
                 currencyFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000000000{
+                        other{"0.0B"}
+                    }
+                    10000000000{
+                        other{"00B"}
+                    }
+                    100000000000{
+                        other{"000B"}
+                    }
+                }
+            }
         }
     }
     PaperSize:intvector{

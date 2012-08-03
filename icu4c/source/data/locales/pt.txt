@@ -28,6 +28,46 @@ pt{
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{"0.0 mil"}
+                    }
+                    10000{
+                        other{"00 mil"}
+                    }
+                    100000{
+                        other{"000 mil"}
+                    }
+                    1000000{
+                        other{"0.0 mi"}
+                    }
+                    10000000{
+                        other{"00 mi"}
+                    }
+                    100000000{
+                        other{"000 mi"}
+                    }
+                    1000000000{
+                        other{"0.0 bi"}
+                    }
+                    10000000000{
+                        other{"00 bi"}
+                    }
+                    100000000000{
+                        other{"000 bi"}
+                    }
+                    1000000000000{
+                        other{"0.0 tri"}
+                    }
+                    10000000000000{
+                        other{"00 tri"}
+                    }
+                    100000000000000{
+                        other{"000 tri"}
+                    }
+                }
+            }
             symbols{
                 decimal{","}
                 exponential{"E"}
