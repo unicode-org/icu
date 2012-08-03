@@ -21,6 +21,46 @@ sw{
             patterns{
                 currencyFormat{"#,##0.00 ¤"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{"elfu 0.0"}
+                    }
+                    10000{
+                        other{"elfu 00"}
+                    }
+                    100000{
+                        other{"laki0.0"}
+                    }
+                    1000000{
+                        other{"M0.0"}
+                    }
+                    10000000{
+                        other{"M00"}
+                    }
+                    100000000{
+                        other{"M000"}
+                    }
+                    1000000000{
+                        other{"B0.0"}
+                    }
+                    10000000000{
+                        other{"B00"}
+                    }
+                    100000000000{
+                        other{"B000"}
+                    }
+                    1000000000000{
+                        other{"T0.0"}
+                    }
+                    10000000000000{
+                        other{"T00"}
+                    }
+                    100000000000000{
+                        other{"T000"}
+                    }
+                }
+            }
         }
     }
     Version{"2.0.65.46"}

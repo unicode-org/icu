@@ -26,6 +26,46 @@ lv{
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{"0.0 K"}
+                    }
+                    10000{
+                        other{"00 K"}
+                    }
+                    100000{
+                        other{"000 K"}
+                    }
+                    1000000{
+                        other{"0.0 M"}
+                    }
+                    10000000{
+                        other{"00 M"}
+                    }
+                    100000000{
+                        other{"000 M"}
+                    }
+                    1000000000{
+                        other{"0.0 G"}
+                    }
+                    10000000000{
+                        other{"00 G"}
+                    }
+                    100000000000{
+                        other{"000 G"}
+                    }
+                    1000000000000{
+                        other{"0.0 T"}
+                    }
+                    10000000000000{
+                        other{"00 T"}
+                    }
+                    100000000000000{
+                        other{"000 T"}
+                    }
+                }
+            }
             symbols{
                 decimal{","}
                 exponential{"E"}

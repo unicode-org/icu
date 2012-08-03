@@ -13,6 +13,46 @@ pt_PT{
             patterns{
                 currencyFormat{"#,##0.00 ¤"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{"0000"}
+                    }
+                    10000{
+                        other{"00000"}
+                    }
+                    100000{
+                        other{"000000"}
+                    }
+                    1000000{
+                        other{"0.0 Mi"}
+                    }
+                    10000000{
+                        other{"00 Mi"}
+                    }
+                    100000000{
+                        other{"000 Mi"}
+                    }
+                    1000000000{
+                        other{"0.0 MM"}
+                    }
+                    10000000000{
+                        other{"00 MM"}
+                    }
+                    100000000000{
+                        other{"000 MM"}
+                    }
+                    1000000000000{
+                        other{"0.0 Bi"}
+                    }
+                    10000000000000{
+                        other{"00 Bi"}
+                    }
+                    100000000000000{
+                        other{"000 Bi"}
+                    }
+                }
+            }
             symbols{
                 group{" "}
             }

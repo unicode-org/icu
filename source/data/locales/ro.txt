@@ -25,6 +25,46 @@ ro{
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{"0.0 mii"}
+                    }
+                    10000{
+                        other{"00 mii"}
+                    }
+                    100000{
+                        other{"000 mii"}
+                    }
+                    1000000{
+                        other{"0.0 mil'.'"}
+                    }
+                    10000000{
+                        other{"00 mil'.'"}
+                    }
+                    100000000{
+                        other{"000 mil'.'"}
+                    }
+                    1000000000{
+                        other{"0.0 mld'.'"}
+                    }
+                    10000000000{
+                        other{"00 mld'.'"}
+                    }
+                    100000000000{
+                        other{"000 mld'.'"}
+                    }
+                    1000000000000{
+                        other{"0.0 bln'.'"}
+                    }
+                    10000000000000{
+                        other{"00 bln'.'"}
+                    }
+                    100000000000000{
+                        other{"000 bln'.'"}
+                    }
+                }
+            }
             symbols{
                 decimal{","}
                 exponential{"E"}

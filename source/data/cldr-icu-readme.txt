@@ -203,11 +203,14 @@ make check 2>&1 | tee /tmp/icu4c-newData-makeCheck.txt
 
 # 9. Investigate each test case failure. The first run processing new CLDR data
 # from the Survey Tool can result in thousands of failures (in many cases, one
-# CLDR data fix can resolve hundres of test failures). If the error is caused
+# CLDR data fix can resolve hundreds of test failures). If the error is caused
 # by bad CLDR data, then file a CLDR bug, fix the data, and regenerate from
 # step 5a. If the data is OK but the testcase needs to be updated because the
 # data has legitimately changed, then update the testcase. You will check in
 # the updated testcases along with the new ICU data at the end of this process.
+# Note that if the new data has any differences in structure, you will have to
+# update test/testdata/structLocale.txt or /tsutil/cldrtest/TestLocaleStructure
+# may fail.
 # Repeat steps 5-8 until there are no errors.
 
 # 10. Now run the make check tests in exhaustive mode:

@@ -26,6 +26,46 @@ de{
                 percentFormat{"#,##0 %"}
                 scientificFormat{"#E0"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{"0000"}
+                    }
+                    10000{
+                        other{"00000"}
+                    }
+                    100000{
+                        other{"000000"}
+                    }
+                    1000000{
+                        other{"0.0 Mio"}
+                    }
+                    10000000{
+                        other{"00 Mio"}
+                    }
+                    100000000{
+                        other{"000 Mio"}
+                    }
+                    1000000000{
+                        other{"0.0 Mrd"}
+                    }
+                    10000000000{
+                        other{"00 Mrd"}
+                    }
+                    100000000000{
+                        other{"000 Mrd"}
+                    }
+                    1000000000000{
+                        other{"0.0 B"}
+                    }
+                    10000000000000{
+                        other{"00 B"}
+                    }
+                    100000000000000{
+                        other{"000 B"}
+                    }
+                }
+            }
             symbols{
                 decimal{","}
                 exponential{"E"}

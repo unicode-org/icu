@@ -21,6 +21,46 @@ am{
             patterns{
                 currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
             }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        other{"0.0K"}
+                    }
+                    10000{
+                        other{"00K"}
+                    }
+                    100000{
+                        other{"000ኪባ"}
+                    }
+                    1000000{
+                        other{"0.0 ሜትር"}
+                    }
+                    10000000{
+                        other{"00 ሜትር"}
+                    }
+                    100000000{
+                        other{"000 ሜትር"}
+                    }
+                    1000000000{
+                        other{"0.0G"}
+                    }
+                    10000000000{
+                        other{"00G"}
+                    }
+                    100000000000{
+                        other{"000G"}
+                    }
+                    1000000000000{
+                        other{"0.0T"}
+                    }
+                    10000000000000{
+                        other{"00T"}
+                    }
+                    100000000000000{
+                        other{"000T"}
+                    }
+                }
+            }
         }
         native{"latn"}
         traditional{"ethi"}
