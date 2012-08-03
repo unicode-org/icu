@@ -6653,6 +6653,7 @@ static void TestImportRulesDeWithPhonebook(void)
   doTestOneTestCase(importTests, LEN(importTests), importRules, LEN(importRules));
 }
 
+#if 0
 static void TestImportRulesFiWithEor(void)
 {
   /* DUCET. */
@@ -6719,6 +6720,7 @@ static void TestImportRulesFiWithEor(void)
   /* doTestOneTestCase(fiEorTests, LEN(fiEorTests), fiEorRules, LEN(fiEorRules)); */
 
 }
+#endif
 
 #if 0
 /*
@@ -7157,8 +7159,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestHaniReorderWithOtherRules);
     TEST(TestMultipleReorder);
     TEST(TestReorderingAcrossCloning);
-    /* test for ticket 8814 - disabled until resolved */
-    /*TEST(TestReorderWithNumericCollation);*/
+    TEST(TestReorderWithNumericCollation);
     
     TEST(TestCaseLevelBufferOverflow);
 }
