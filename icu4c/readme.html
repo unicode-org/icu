@@ -23,7 +23,7 @@
     It is not recommended for production use.
     </p>
 
-    <p>Last updated: 2012-Jun-25<br />
+    <p>Last updated: 2012-Aug-03<br />
      Copyright &copy; 1997-2012 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -231,6 +231,27 @@
     <p>If you need to disable multi-threading, then call
     <code>u_setMutexFunctions()</code> and <code>u_setAtomicIncDecFunctions()</code>
     with empty implementation functions.</p>
+
+    <h3>C++ Collator subclassing-API breaking changes</h3>
+    <p>We have made some changes to the C++ Collator API for ICU 50
+    that will make it easier to use and implement the Collator but
+    which are incompatible for subclasses.
+    If there are subclasses, they will have to be modified as well.
+    It will be easy to adapt subclass source code, if there is any.
+    We think it is unlikely (or at least rare) that users write subclasses of the C++ Collator,
+    given the number of virtual methods and the complexities of a collation implementation.</p>
+
+    <p>For details see the email "ICU4C C++ Collator subclassing-API breaking changes"
+    sent on 2012-jul-25 to the icu-design and icu-support
+    <a href="http://site.icu-project.org/contacts">mailing lists</a>,
+    and <a href="http://bugs.icu-project.org/trac/ticket/9346">ICU ticket #9346</a>,
+    including the <a href="http://bugs.icu-project.org/trac/review/9346">changes for that ticket</a>.</p>
+
+    <p>In particular, the <code>class TestCollator</code> in
+    <a href="http://bugs.icu-project.org/trac/browser/icu/trunk/source/test/intltest/apicoll.cpp"><code>source/test/intltest/apicoll.cpp</code></a>
+    illustrates how a subclass needs to be changed.
+    However, note that the TestCollator was also simplified slightly;
+    not all changes made there were strictly required for the API signature changes.</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
