@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 //===============================================================================
@@ -1902,32 +1902,7 @@ class TestCollator  : public Collator
 public:
     virtual Collator* clone(void) const;
 
-    // dang, markus says we can't use 'using' in ICU.  I hate doing this for
-    // deprecated methods...
-
-    // using Collator::compare;
-
-    virtual EComparisonResult compare(const UnicodeString& source, 
-                                      const UnicodeString& target) const
-    {
-        return Collator::compare(source, target);
-    }
-
-    virtual EComparisonResult compare(const UnicodeString& source,
-                                      const UnicodeString& target,
-                                      int32_t length) const
-    {
-        return Collator::compare(source, target, length);
-    }
-
-    virtual EComparisonResult compare(const UChar* source, 
-                                      int32_t sourceLength, 
-                                      const UChar* target, 
-                                      int32_t targetLength) const
-    {
-        return Collator::compare(source, sourceLength, target, targetLength);
-    }
-
+    using Collator::compare;
 
     virtual UCollationResult compare(const UnicodeString& source, 
                                       const UnicodeString& target,
@@ -1949,8 +1924,7 @@ public:
                                           CollationKey& key,
                                           UErrorCode& status) const;
     virtual int32_t hashCode(void) const;
-    virtual const Locale getLocale(ULocDataLocaleType type, 
-                                   UErrorCode& status) const;
+    virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
     virtual ECollationStrength getStrength(void) const;
     virtual void setStrength(ECollationStrength newStrength);
     virtual UClassID getDynamicClassID(void) const;
@@ -1958,35 +1932,39 @@ public:
     virtual void setAttribute(UColAttribute attr, UColAttributeValue value, 
                               UErrorCode &status);
     virtual UColAttributeValue getAttribute(UColAttribute attr, 
-                                            UErrorCode &status);
+                                            UErrorCode &status) const;
     virtual uint32_t setVariableTop(const UChar *varTop, int32_t len, 
                                     UErrorCode &status);
-    virtual uint32_t setVariableTop(const UnicodeString varTop, 
+    virtual uint32_t setVariableTop(const UnicodeString &varTop, 
                                     UErrorCode &status);
-    virtual void setVariableTop(const uint32_t varTop, UErrorCode &status);
+    virtual void setVariableTop(uint32_t varTop, UErrorCode &status);
     virtual uint32_t getVariableTop(UErrorCode &status) const;
-    virtual Collator* safeClone(void);
+    virtual Collator* safeClone(void) const;
     virtual int32_t getSortKey(const UnicodeString& source,
                             uint8_t* result,
                             int32_t resultLength) const;
     virtual int32_t getSortKey(const UChar*source, int32_t sourceLength,
                              uint8_t*result, int32_t resultLength) const;
     virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
-    virtual UBool operator!=(const Collator& other) const;
+    virtual UBool operator==(const Collator& other) const;
+    // Collator::operator!= calls !Collator::operator== which works for all subclasses.
     virtual void setLocales(const Locale& requestedLocale, const Locale& validLocale, const Locale& actualLocale);
     TestCollator() : Collator() {};
     TestCollator(UCollationStrength collationStrength, 
            UNormalizationMode decompositionMode) : Collator(collationStrength, decompositionMode) {};
 };
 
-inline UBool TestCollator::operator!=(const Collator& other) const {
-    return Collator::operator!=(other);
-}
+inline UBool TestCollator::operator==(const Collator& other) const {
+    // TestCollator has no fields, so we test for identity.
+    return this == &other;
 
-#define returnEComparisonResult(data) \
-    if (data < 0) return Collator::LESS;\
-    if (data > 0) return Collator::GREATER;\
-    return Collator::EQUAL;
+    // Normally, subclasses should do something like the following:
+    //    if (this == &other) { return TRUE; }
+    //    if (!Collator::operator==(other)) { return FALSE; }  // not the same class
+    //
+    //    const TestCollator &o = (const TestCollator&)other;
+    //    (compare this vs. o's subclass fields)
+}
 
 Collator* TestCollator::clone() const
 {
@@ -2072,8 +2050,7 @@ int32_t TestCollator::hashCode() const
     return 0;
 }
 
-const Locale TestCollator::getLocale(ULocDataLocaleType type, 
-                                     UErrorCode& status) const
+Locale TestCollator::getLocale(ULocDataLocaleType type, UErrorCode& status) const
 {
     // api not used, this is to make the compiler happy
     if (U_FAILURE(status)) {
@@ -2115,7 +2092,7 @@ void TestCollator::setAttribute(UColAttribute attr, UColAttributeValue value,
 }
 
 UColAttributeValue TestCollator::getAttribute(UColAttribute attr, 
-                                              UErrorCode &status)
+                                              UErrorCode &status) const
 {
     // api not used, this is to make the compiler happy
     if (U_FAILURE(status) || attr == UCOL_ATTRIBUTE_COUNT) {
@@ -2134,7 +2111,7 @@ uint32_t TestCollator::setVariableTop(const UChar *varTop, int32_t len,
     return 0;
 }
 
-uint32_t TestCollator::setVariableTop(const UnicodeString varTop, 
+uint32_t TestCollator::setVariableTop(const UnicodeString &varTop, 
                                   UErrorCode &status)
 {
     // api not used, this is to make the compiler happy
@@ -2144,7 +2121,7 @@ uint32_t TestCollator::setVariableTop(const UnicodeString varTop,
     return 0;
 }
 
-void TestCollator::setVariableTop(const uint32_t varTop, UErrorCode &status)
+void TestCollator::setVariableTop(uint32_t varTop, UErrorCode &status)
 {
     // api not used, this is to make the compiler happy
     if (U_SUCCESS(status) && varTop == 0) {
@@ -2162,7 +2139,7 @@ uint32_t TestCollator::getVariableTop(UErrorCode &status) const
     return (uint32_t)(0xFFFFFFFFu);
 }
 
-Collator* TestCollator::safeClone(void)
+Collator* TestCollator::safeClone(void) const
 {
     return new TestCollator();
 }
@@ -2182,7 +2159,7 @@ void CollationAPITest::TestSubclass()
 {
     TestCollator col1;
     TestCollator col2;
-    doAssert(col1 != col2, "2 instance of TestCollator should be different");
+    doAssert(col1 != col2, "2 instances of TestCollator should be different");
     if (col1.hashCode() != col2.hashCode()) {
         errln("Every TestCollator has the same hashcode");
     }
