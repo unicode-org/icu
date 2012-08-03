@@ -31,6 +31,7 @@
 #include "uparse.h"
 #include "sprpimpl.h"
 
+#include "unicode/uclean.h"
 #include "unicode/udata.h"
 #include "unicode/utypes.h"
 #include "unicode/putil.h"

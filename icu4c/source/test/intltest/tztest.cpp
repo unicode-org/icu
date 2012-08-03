@@ -836,8 +836,6 @@ TimeZoneTest::checkContainsAll(StringEnumeration *s1, const char *name1,
  */
 void TimeZoneTest::TestShortZoneIDs()
 {
-    UErrorCode status = U_ZERO_ERROR;
-
     int32_t i;
     // Create a small struct to hold the array
     struct

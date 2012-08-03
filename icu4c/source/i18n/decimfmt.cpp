@@ -2682,7 +2682,6 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
                                           const UnicodeString& input,
                                           int32_t pos,
                                           UBool lenient) {
-    UErrorCode status = U_ZERO_ERROR;
     int32_t start = pos;
     UChar32 affixChar = affix.char32At(0);
     int32_t affixLength = affix.length();

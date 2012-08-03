@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -1700,7 +1700,7 @@ static void TestConvertSafeClone()
     UChar *pUCharTargetLimit = uniCharBuffer + sizeof(uniCharBuffer)/sizeof(*uniCharBuffer);
     const UChar * pUniBuffer;
     const UChar *uniBufferLimit = uniBuffer + sizeof(uniBuffer)/sizeof(*uniBuffer);
-    int32_t index, j;
+    int32_t idx, j;
 
     err = U_ZERO_ERROR;
     cnv = ucnv_open(names[0], &err);
@@ -1787,22 +1787,22 @@ static void TestConvertSafeClone()
     /* Do these cloned converters work at all - shuffle UChars to chars & back again..*/
 
     for(j = 0; j < LENGTHOF(bufferSizes); ++j) {
-        for (index = 0; index < LENGTHOF(names); index++)
+        for (idx = 0; idx < LENGTHOF(names); idx++)
         {
             err = U_ZERO_ERROR;
-            cnv = ucnv_open(names[index], &err);
+            cnv = ucnv_open(names[idx], &err);
             if(U_FAILURE(err)) {
-                log_data_err("ucnv_open(\"%s\") failed - %s\n", names[index], u_errorName(err));
+                log_data_err("ucnv_open(\"%s\") failed - %s\n", names[idx], u_errorName(err));
                 continue;
             }
 
             if(j == 0) {
                 /* preflight to get maxBufferSize */
-                actualSizes[index] = 0;
-                ucnv_safeClone(cnv, NULL, &actualSizes[index], &err);
-                if(actualSizes[index] > maxBufferSize) {
-                    maxBufferSize = actualSizes[index];
-                    maxName = names[index];
+                actualSizes[idx] = 0;
+                ucnv_safeClone(cnv, NULL, &actualSizes[idx], &err);
+                if(actualSizes[idx] > maxBufferSize) {
+                    maxBufferSize = actualSizes[idx];
+                    maxName = names[idx];
                 }
             }
 
@@ -1814,10 +1814,10 @@ static void TestConvertSafeClone()
             /* close the original immediately to make sure that the clone works by itself */
             ucnv_close(cnv);
 
-            if( actualSizes[index] <= (bufferSizes[j] - (int32_t)sizeof(UAlignedMemory)) &&
+            if( actualSizes[idx] <= (bufferSizes[j] - (int32_t)sizeof(UAlignedMemory)) &&
                 err == U_SAFECLONE_ALLOCATED_WARNING
             ) {
-                log_err("ucnv_safeClone(%s) did a heap clone although the buffer was large enough\n", names[index]);
+                log_err("ucnv_safeClone(%s) did a heap clone although the buffer was large enough\n", names[idx]);
             }
 
             /* check if the clone function overwrote any bytes that it is not supposed to touch */
@@ -1827,13 +1827,13 @@ static void TestConvertSafeClone()
                     containsAnyOtherByte(buffer[1]+bufferSize, (int32_t)(sizeof(buffer)-(sizeof(buffer[0])+bufferSize)), 0xaa)
                 ) {
                     log_err("cloning %s in a stack buffer overwrote bytes outside the bufferSize %d (requested %d)\n",
-                        names[index], bufferSize, bufferSizes[j]);
+                        names[idx], bufferSize, bufferSizes[j]);
                 }
             } else {
                 /* heap-allocated the clone */
                 if(containsAnyOtherByte(buffer[0], (int32_t)sizeof(buffer), 0xaa)) {
                     log_err("cloning %s used the heap (bufferSize %d, requested %d) but overwrote stack buffer bytes\n",
-                        names[index], bufferSize, bufferSizes[j]);
+                        names[idx], bufferSize, bufferSizes[j]);
                 }
             }
 

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -499,7 +499,7 @@ u_printf_u(const UChar *patternSpecification,
  * @draft ICU 49
  */
 U_DRAFT UFILE * U_EXPORT2
-u_get_stdout();
+u_get_stdout(void);
 
 /**
  * Write formatted data to a UFILE.

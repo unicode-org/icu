@@ -182,7 +182,7 @@ MessagePattern::init(UErrorCode &errorCode) {
 }
 
 MessagePattern::MessagePattern(const MessagePattern &other)
-        : aposMode(other.aposMode), msg(other.msg),
+        : UObject(other), aposMode(other.aposMode), msg(other.msg),
           partsList(NULL), parts(NULL), partsLength(0),
           numericValuesList(NULL), numericValues(NULL), numericValuesLength(0),
           hasArgNames(other.hasArgNames), hasArgNumbers(other.hasArgNumbers),
