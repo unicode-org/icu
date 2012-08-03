@@ -7,11 +7,6 @@
 
   <xsl:template match="/perfTestResults">
     <report category="test">
-      <!-- For now, include ICU type and version in a comment. -->
-      <xsl:comment>
-        icu4<xsl:value-of select="@icu"/>-<xsl:value-of select="@version"/>
-      </xsl:comment>
-
       <xsl:for-each select="perfTestResult">
         <xsl:element name="test">
           <xsl:attribute name="duration">
@@ -23,7 +18,7 @@
           </xsl:attribute>
           <xsl:attribute name="fixture">
           </xsl:attribute>
-          <xsl:attribute name="file">source/test/perf</xsl:attribute>
+          <xsl:attribute name="file">/perf-tests</xsl:attribute>
           <xsl:attribute name="stdout">
             iterations: <xsl:value-of select="@iterations"/>
           </xsl:attribute>
