@@ -669,6 +669,7 @@ icu4c/source/tools/gencfu/Makefile
 icu4c/source/tools/gencfu/Release
 icu4c/source/tools/gencfu/debug
 icu4c/source/tools/gencfu/gencfu
+icu4c/source/tools/gencfu/gencfu.1
 icu4c/source/tools/gencfu/gencfu.exe
 icu4c/source/tools/gencfu/gencfu.vcproj.*.*.user
 icu4c/source/tools/gencfu/release

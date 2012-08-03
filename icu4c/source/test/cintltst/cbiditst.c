@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*   file name:  cbiditst.cpp
@@ -3593,7 +3593,7 @@ testReorderingMode(void) {
     int tc, mode, option, level;
     uint32_t optionValue, optionBack;
     UBiDiReorderingMode modeValue, modeBack;
-    int32_t srcLen, destLen, index;
+    int32_t srcLen, destLen, idx;
     const char *expectedChars;
     UBool testOK = TRUE;
 
@@ -3651,13 +3651,13 @@ testReorderingMode(void) {
                     }
 
                     if (modes[mode].value == UBIDI_REORDER_INVERSE_NUMBERS_AS_L) {
-                        index = -1;
+                        idx = -1;
                         expectedChars = inverseBasic(pBiDi2, srcChars, srcLen,
                                 options[option].value, paraLevels[level], destChars);
                     }
                     else {
-                        index = outIndices[tc][mode][option][level];
-                        expectedChars = textOut[index];
+                        idx = outIndices[tc][mode][option][level];
+                        expectedChars = textOut[idx];
                     }
                     if (!assertStringsEqual(expectedChars, destChars, srcChars,
                                 modes[mode].description,
@@ -3666,7 +3666,7 @@ testReorderingMode(void) {
                         testOK = FALSE;
                     }
                     if (options[option].value == UBIDI_OPTION_INSERT_MARKS &&
-                             !assertRoundTrip(pBiDi3, tc, index, srcChars,
+                             !assertRoundTrip(pBiDi3, tc, idx, srcChars,
                                               destChars, dest, destLen,
                                               mode, option, paraLevels[level])) {
                         testOK = FALSE;
@@ -3677,7 +3677,7 @@ testReorderingMode(void) {
                                 paraLevels[level])) {
                         testOK = FALSE;
                     }
-                    else if (index > -1 && !checkMaps(pBiDi, index, srcChars,
+                    else if (idx > -1 && !checkMaps(pBiDi, idx, srcChars,
                             destChars, modes[mode].description,
                             options[option].description, paraLevels[level],
                             TRUE)) {
@@ -3967,7 +3967,7 @@ checkMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
     int32_t actualLogicalMap[MAX_MAP_LENGTH];
     int32_t actualVisualMap[MAX_MAP_LENGTH];
     int32_t getIndexMap[MAX_MAP_LENGTH];
-    int32_t i, srcLen, resLen, index;
+    int32_t i, srcLen, resLen, idx;
     const int32_t *expectedLogicalMap, *expectedVisualMap;
     UErrorCode rc = U_ZERO_ERROR;
     UBool testOK = TRUE;
@@ -4037,9 +4037,9 @@ checkMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
         testOK = FALSE;
     }
     for (i = 0; i < srcLen; i++) {
-        index = ubidi_getVisualIndex(pBiDi, i, &rc);
+        idx = ubidi_getVisualIndex(pBiDi, i, &rc);
         assertSuccessful("ubidi_getVisualIndex", &rc);
-        getIndexMap[i] = index;
+        getIndexMap[i] = idx;
     }
     if (memcmp(actualLogicalMap, getIndexMap, srcLen * sizeof(int32_t))) {
         char actChars[MAX_MAP_LENGTH];
@@ -4066,9 +4066,9 @@ checkMaps(UBiDi *pBiDi, int32_t stringIndex, const char *src, const char *dest,
         testOK = FALSE;
     }
     for (i = 0; i < resLen; i++) {
-        index = ubidi_getLogicalIndex(pBiDi, i, &rc);
+        idx = ubidi_getLogicalIndex(pBiDi, i, &rc);
         assertSuccessful("ubidi_getLogicalIndex", &rc);
-        getIndexMap[i] = index;
+        getIndexMap[i] = idx;
     }
     if (memcmp(actualVisualMap, getIndexMap, resLen * sizeof(int32_t))) {
         char actChars[MAX_MAP_LENGTH];

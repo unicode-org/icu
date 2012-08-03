@@ -1734,7 +1734,7 @@ Format* MessageFormat::DummyFormat::clone() const {
     return new DummyFormat();
 }
 
-UnicodeString& MessageFormat::DummyFormat::format(const Formattable& obj,
+UnicodeString& MessageFormat::DummyFormat::format(const Formattable&,
                           UnicodeString& appendTo,
                           UErrorCode& status) const {
     if (U_SUCCESS(status)) {
@@ -1755,7 +1755,7 @@ UnicodeString& MessageFormat::DummyFormat::format(const Formattable&,
 
 UnicodeString& MessageFormat::DummyFormat::format(const Formattable&,
                           UnicodeString& appendTo,
-                          FieldPositionIterator* posIter,
+                          FieldPositionIterator*,
                           UErrorCode& status) const {
     if (U_SUCCESS(status)) {
         status = U_UNSUPPORTED_ERROR;

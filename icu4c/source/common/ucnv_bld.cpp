@@ -1,7 +1,7 @@
 /*
  ********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1996-2011, International Business Machines Corporation and
+ * Copyright (c) 1996-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -1297,13 +1297,15 @@ ucnv_getDefaultName() {
 #endif
 }
 
+#if U_CHARSET_IS_UTF8
+U_CAPI void U_EXPORT2 ucnv_setDefaultName(const char *) {}
+#else
 /*
 This function is not thread safe, and it can't be thread safe.
 See internalSetName or the API reference for details.
 */
 U_CAPI void U_EXPORT2
 ucnv_setDefaultName(const char *converterName) {
-#if !U_CHARSET_IS_UTF8
     if(converterName==NULL) {
         /* reset to the default codepage */
         gDefaultConverterName=NULL;
@@ -1329,8 +1331,8 @@ ucnv_setDefaultName(const char *converterName) {
         /* reset the converter cache */
         u_flushDefaultConverter();
     }
-#endif
 }
+#endif
 
 /* data swapping ------------------------------------------------------------ */
 

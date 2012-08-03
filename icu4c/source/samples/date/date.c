@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -252,10 +252,10 @@ date(UDate when,
 
   if( format != NULL ) {
     if(!strcmp(format,FORMAT_MILLIS)) {
-      printf("%.0lf\n", when);
+      printf("%.0f\n", when);
       return;
     } else if(!strcmp(format, FORMAT_SECONDS)) {
-      printf("%.3lf\n", when/1000.0);
+      printf("%.3f\n", when/1000.0);
       return;
     }
   }
