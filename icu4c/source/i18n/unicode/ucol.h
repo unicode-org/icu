@@ -238,10 +238,12 @@ typedef UColAttributeValue UCollationStrength;
  * @stable ICU 2.0
  */
 typedef enum {
-     /** Attribute for direction of secondary weights - used in French.
+     /** Attribute for direction of secondary weights - used in Canadian French.
       * Acceptable values are UCOL_ON, which results in secondary weights
       * being considered backwards and UCOL_OFF which treats secondary
-      * weights in the order they appear.*/
+      * weights in the order they appear.
+      * @stable ICU 2.0
+      */
      UCOL_FRENCH_COLLATION, 
      /** Attribute for handling variable elements.
       * Acceptable values are UCOL_NON_IGNORABLE (default)
@@ -250,14 +252,18 @@ typedef enum {
       * and UCOL_SHIFTED which causes codepoints with primary 
       * weights that are equal or below the variable top value
       * to be ignored on primary level and moved to the quaternary 
-      * level.*/
+      * level.
+      * @stable ICU 2.0
+      */
      UCOL_ALTERNATE_HANDLING, 
      /** Controls the ordering of upper and lower case letters.
       * Acceptable values are UCOL_OFF (default), which orders
       * upper and lower case letters in accordance to their tertiary
       * weights, UCOL_UPPER_FIRST which forces upper case letters to 
       * sort before lower case letters, and UCOL_LOWER_FIRST which does 
-      * the opposite. */
+      * the opposite.
+      * @stable ICU 2.0
+      */
      UCOL_CASE_FIRST, 
      /** Controls whether an extra case level (positioned before the third
       * level) is generated or not. Acceptable values are UCOL_OFF (default), 
@@ -265,7 +271,9 @@ typedef enum {
       * level to be generated. Contents of the case level are affected by
       * the value of UCOL_CASE_FIRST attribute. A simple way to ignore 
       * accent differences in a string is to set the strength to UCOL_PRIMARY
-      * and enable case level. */
+      * and enable case level.
+      * @stable ICU 2.0
+      */
      UCOL_CASE_LEVEL,
      /** Controls whether the normalization check and necessary normalizations
       * are performed. When set to UCOL_OFF (default) no normalization check
@@ -273,9 +281,13 @@ typedef enum {
       * input data is in so-called FCD form (see users manual for more info).
       * When set to UCOL_ON, an incremental check is performed to see whether
       * the input data is in the FCD form. If the data is not in the FCD form,
-      * incremental NFD normalization is performed. */
+      * incremental NFD normalization is performed.
+      * @stable ICU 2.0
+      */
      UCOL_NORMALIZATION_MODE, 
-     /** An alias for UCOL_NORMALIZATION_MODE attribute */
+     /** An alias for UCOL_NORMALIZATION_MODE attribute.
+      * @stable ICU 2.0
+      */
      UCOL_DECOMPOSITION_MODE = UCOL_NORMALIZATION_MODE,
      /** The strength attribute. Can be either UCOL_PRIMARY, UCOL_SECONDARY,
       * UCOL_TERTIARY, UCOL_QUATERNARY or UCOL_IDENTICAL. The usual strength
@@ -286,11 +298,20 @@ typedef enum {
       * UCOL_HIRAGANA_QUATERNARY mode to on. Otherwise, quaternary level
       * is affected only by the number of non ignorable code points in
       * the string. Identical strength is rarely useful, as it amounts 
-      * to codepoints of the NFD form of the string. */
+      * to codepoints of the NFD form of the string.
+      * @stable ICU 2.0
+      */
      UCOL_STRENGTH,  
      /** When turned on, this attribute positions Hiragana before all  
       * non-ignorables on quaternary level This is a sneaky way to produce JIS
-      * sort order */
+      * sort order.
+      *
+      * This attribute is an implementation detail of the CLDR Japanese tailoring.
+      * The implementation might change to use a different mechanism
+      * to achieve the same Japanese sort order.
+      * Since ICU 50, this attribute is not settable any more via API functions.
+      * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
+      */
      UCOL_HIRAGANA_QUATERNARY_MODE,
      /** When turned on, this attribute generates a collation key
       * for the numeric value of substrings of digits.
@@ -298,8 +319,14 @@ typedef enum {
       * digit substring that can be treated as a single collation element is
       * 254 digits (not counting leading zeros). If a digit substring is
       * longer than that, the digits beyond the limit will be treated as a
-      * separate digit substring associated with a separate collation element. */
+      * separate digit substring associated with a separate collation element.
+      * @stable ICU 2.8
+      */
      UCOL_NUMERIC_COLLATION, 
+     /**
+      * The number of UColAttribute constants.
+      * @stable ICU 2.0
+      */
      UCOL_ATTRIBUTE_COUNT
 } UColAttribute;
 
