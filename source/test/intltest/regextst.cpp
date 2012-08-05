@@ -309,7 +309,7 @@ void RegexTest::assertUTextInvariant(const char *expected, UText *actual, const 
 
 #define INV_BUFSIZ 2048 /* increase this if too small */
 
-static int32_t inv_next=0;
+static int64_t inv_next=0;
 
 #if U_CHARSET_FAMILY!=U_ASCII_FAMILY
 static char inv_buf[INV_BUFSIZ];
