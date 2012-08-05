@@ -6539,7 +6539,7 @@ static void TestMultipleReorder(void)
 /*
  * Test that covers issue reported in ticket 8814
  */
-static void TestReorderWithNumericCollation()
+static void TestReorderWithNumericCollation(void)
 {
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
