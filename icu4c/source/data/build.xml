@@ -423,13 +423,12 @@
     </target>
 
     <target name="keyTypeData" depends="init,setup" description="builds keyTypeData.txt and timezoneTypes.txt from bcp47/*.xml">
-        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" noArgs="true">
-            <!-- launch the tool and generate the data after reading the config file -->
+        <cldr-build toolName="org.unicode.cldr.icu.NewLdml2IcuConverter" noArgs="true">
             <run>
                 <args>
                     <arg name="-s" value="${env.CLDR_DIR}/common/bcp47" />
-                    <arg name="-k" value="${env.CLDR_DIR}/common/bcp47" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
+                    <arg name="-t" value="keyTypeData"/>
                 </args>
             </run>
         </cldr-build>
