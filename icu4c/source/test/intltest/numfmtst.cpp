@@ -6378,6 +6378,11 @@ void NumberFormatTest::TestDecimal() {
         }
     }
     
+#if U_PLATFORM != U_PF_CYGWIN || defined(CYGWINMSVC)
+    /*
+     * This test fails on Cygwin (1.7.16) using GCC because of a rounding issue with strtod().
+     * See #9463
+     */
     {
         // Check that a parse returns a decimal number with full accuracy
         UErrorCode status = U_ZERO_ERROR;
@@ -6395,6 +6400,7 @@ void NumberFormatTest::TestDecimal() {
             delete fmtr;
         }
     }
+#endif
 
 }
 
