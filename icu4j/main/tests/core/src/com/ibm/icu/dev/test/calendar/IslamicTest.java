@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -276,5 +276,21 @@ public class IslamicTest extends CalendarTest {
         civilCalendar.setCivil(true);
         return civilCalendar;
     }
+    private static IslamicCalendar newIslamic() {
+        IslamicCalendar civilCalendar = new IslamicCalendar();
+        civilCalendar.setCivil(false);
+        return civilCalendar;
+    }
+
+    private void verifyType(Calendar c, String expectType) {
+        String theType = c.getType();
+        if(!theType.equals(expectType)) {
+            errln("Expected calendar to be type " + expectType + " but instead it is " + theType);
+        }
+    }
     
+    public void Test8822() {
+        verifyType(newIslamic(),"islamic");
+        verifyType(newCivil(),"islamic-civil");
+    }
 }

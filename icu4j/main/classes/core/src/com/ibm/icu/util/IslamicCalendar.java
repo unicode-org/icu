@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -653,7 +653,11 @@ public class IslamicCalendar extends Calendar {
      * @stable ICU 3.8
      */
     public String getType() {
-        return "islamic";
+        if(civil) {
+            return "islamic-civil";
+        } else {
+            return "islamic";
+        }
     }
 
     /*

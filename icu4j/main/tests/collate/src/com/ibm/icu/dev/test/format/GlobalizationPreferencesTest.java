@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -679,8 +679,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         gp1.setCalendar(ical);
         cal = gp1.getCalendar();
         calType = cal.getType();
-        if (!calType.equals("islamic")) {
-            errln("FAIL: Calendar type afte clone is " + calType + " Expected: islamic");
+        if (!calType.equals("islamic-civil")) { // default constructed IslamicCalendar is islamic-civil
+            errln("FAIL: Calendar type afte clone is " + calType + " Expected: islamic-civil");
         }
     }
 
