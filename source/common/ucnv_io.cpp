@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -854,13 +854,13 @@ ucnv_openStandardNames(const char *convName,
         if (listOffset < gMainTable.taggedAliasListsSize) {
             UAliasContext *myContext;
 
-            myEnum = reinterpret_cast<UEnumeration *>(uprv_malloc(sizeof(UEnumeration)));
+            myEnum = static_cast<UEnumeration *>(uprv_malloc(sizeof(UEnumeration)));
             if (myEnum == NULL) {
                 *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
             }
             uprv_memcpy(myEnum, &gEnumAliases, sizeof(UEnumeration));
-            myContext = reinterpret_cast<UAliasContext *>(uprv_malloc(sizeof(UAliasContext)));
+            myContext = static_cast<UAliasContext *>(uprv_malloc(sizeof(UAliasContext)));
             if (myContext == NULL) {
                 *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
                 uprv_free(myEnum);
@@ -1071,13 +1071,13 @@ ucnv_openAllNames(UErrorCode *pErrorCode) {
     if (haveAliasData(pErrorCode)) {
         uint16_t *myContext;
 
-        myEnum = reinterpret_cast<UEnumeration *>(uprv_malloc(sizeof(UEnumeration)));
+        myEnum = static_cast<UEnumeration *>(uprv_malloc(sizeof(UEnumeration)));
         if (myEnum == NULL) {
             *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
             return NULL;
         }
         uprv_memcpy(myEnum, &gEnumAllConverters, sizeof(UEnumeration));
-        myContext = reinterpret_cast<uint16_t *>(uprv_malloc(sizeof(uint16_t)));
+        myContext = static_cast<uint16_t *>(uprv_malloc(sizeof(uint16_t)));
         if (myContext == NULL) {
             *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
             uprv_free(myEnum);
