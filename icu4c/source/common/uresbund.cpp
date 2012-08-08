@@ -2326,7 +2326,7 @@ ures_openAvailableLocales(const char *path, UErrorCode *status)
     if(U_FAILURE(*status)) {
         return NULL;
     }
-    myContext = reinterpret_cast<ULocalesContext *>(uprv_malloc(sizeof(ULocalesContext)));
+    myContext = static_cast<ULocalesContext *>(uprv_malloc(sizeof(ULocalesContext)));
     en =  (UEnumeration *)uprv_malloc(sizeof(UEnumeration));
     if(!en || !myContext) {
         *status = U_MEMORY_ALLOCATION_ERROR;
