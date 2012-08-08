@@ -2109,7 +2109,7 @@ u_getVersion(UVersionInfo versionArray) {
 
 #if U_ENABLE_DYLOAD
  
-#if HAVE_DLOPEN && !U_PLATFORM_HAS_WIN32_API
+#if HAVE_DLOPEN && !U_PLATFORM_USES_ONLY_WIN32_API
 
 #if HAVE_DLFCN_H
 
@@ -2190,7 +2190,7 @@ uprv_dlsym_func(void *lib, const char* sym, UErrorCode *status) {
 
 #endif
 
-#elif U_PLATFORM_HAS_WIN32_API
+#elif U_PLATFORM_USES_ONLY_WIN32_API
 
 U_INTERNAL void * U_EXPORT2
 uprv_dl_open(const char *libName, UErrorCode *status) {
