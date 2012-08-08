@@ -270,8 +270,8 @@ public:
     virtual UBool operator!=(const Collator& other) const;
 
     /**
-     * Makes a shallow copy of the current object.
-     * @return a copy of this object
+     * Makes a copy of this object.
+     * @return a copy of this object, owned by the caller
      * @stable ICU 2.0
      */
     virtual Collator* clone(void) const = 0;
@@ -933,13 +933,14 @@ public:
      */
     virtual UnicodeSet *getTailoredSet(UErrorCode &status) const;
 
-
     /**
-     * Thread safe cloning operation
-     * @return pointer to the new clone, user should remove it.
-     * @stable ICU 2.2
+     * Same as clone().
+     * The base class implementation simply calls clone().
+     * @return a copy of this object, owned by the caller
+     * @see clone()
+     * @deprecated ICU 50 no need to have two methods for cloning
      */
-    virtual Collator* safeClone(void) const = 0;
+    virtual Collator* safeClone(void) const;
 
     /**
      * Get the sort key as an array of bytes from an UnicodeString.
