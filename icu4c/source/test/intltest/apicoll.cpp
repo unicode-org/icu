@@ -1939,7 +1939,6 @@ public:
                                     UErrorCode &status);
     virtual void setVariableTop(uint32_t varTop, UErrorCode &status);
     virtual uint32_t getVariableTop(UErrorCode &status) const;
-    virtual Collator* safeClone(void) const;
     virtual int32_t getSortKey(const UnicodeString& source,
                             uint8_t* result,
                             int32_t resultLength) const;
@@ -2137,11 +2136,6 @@ uint32_t TestCollator::getVariableTop(UErrorCode &status) const
         return 0;
     }
     return (uint32_t)(0xFFFFFFFFu);
-}
-
-Collator* TestCollator::safeClone(void) const
-{
-    return new TestCollator();
 }
 
 UnicodeSet * TestCollator::getTailoredSet(UErrorCode &status) const
