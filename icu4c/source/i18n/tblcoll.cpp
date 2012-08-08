@@ -206,32 +206,33 @@ UBool RuleBasedCollator::operator==(const Collator& that) const
 // aliasing, not write-through
 RuleBasedCollator& RuleBasedCollator::operator=(const RuleBasedCollator& that)
 {
-    if (this != &that)
-    {
-        if (dataIsOwned)
-        {
-            ucol_close(ucollator);
-        }
+    if (this == &that) { return *this; }
 
-        urulestring.truncate(0); // empty the rule string
-        dataIsOwned = TRUE;
-        isWriteThroughAlias = FALSE;
+    UErrorCode intStatus = U_ZERO_ERROR;
+    int32_t buffersize = U_COL_SAFECLONE_BUFFERSIZE;
+    UCollator *ucol = ucol_safeClone(that.ucollator, NULL, &buffersize, &intStatus);
+    if (U_FAILURE(intStatus)) { return *this; }
 
-        UErrorCode intStatus = U_ZERO_ERROR;
-        int32_t buffersize = U_COL_SAFECLONE_BUFFERSIZE;
-        ucollator = ucol_safeClone(that.ucollator, NULL, &buffersize,
-                                        &intStatus);
-        if (U_SUCCESS(intStatus)) {
-            setRuleStringFromCollator();
-        }
+    if (dataIsOwned) {
+        ucol_close(ucollator);
     }
+    ucollator = ucol;
+    dataIsOwned = TRUE;
+    isWriteThroughAlias = FALSE;
+    setRuleStringFromCollator();
     return *this;
 }
 
 // aliasing, not write-through
 Collator* RuleBasedCollator::clone() const
 {
-    return new RuleBasedCollator(*this);
+    RuleBasedCollator* coll = new RuleBasedCollator(*this);
+    // There is a small chance that the internal ucol_safeClone() call fails.
+    if (coll != NULL && coll->ucollator == NULL) {
+        delete coll;
+        return NULL;
+    }
+    return coll;
 }
 
 
@@ -518,29 +519,6 @@ void RuleBasedCollator::setVariableTop(uint32_t varTop, UErrorCode &status) {
 uint32_t RuleBasedCollator::getVariableTop(UErrorCode &status) const {
   return ucol_getVariableTop(ucollator, &status);
 }
-
-Collator* RuleBasedCollator::safeClone(void) const
-{
-    UErrorCode intStatus = U_ZERO_ERROR;
-    int32_t buffersize = U_COL_SAFECLONE_BUFFERSIZE;
-    UCollator *ucol = ucol_safeClone(ucollator, NULL, &buffersize,
-                                    &intStatus);
-    if (U_FAILURE(intStatus)) {
-        return NULL;
-    }
-
-    RuleBasedCollator *result = new RuleBasedCollator();
-    // Null pointer check
-    if (result != NULL) {
-        result->ucollator = ucol;
-        result->dataIsOwned = TRUE;
-        result->isWriteThroughAlias = FALSE;
-        result->setRuleStringFromCollator();
-    }
-
-    return result;
-}
-
 
 int32_t RuleBasedCollator::getSortKey(const UnicodeString& source,
                                          uint8_t *result, int32_t resultLength)

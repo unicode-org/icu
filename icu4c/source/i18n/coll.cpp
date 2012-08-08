@@ -425,6 +425,11 @@ Collator::createInstance(const Locale &loc,
 }
 #endif
 
+Collator *
+Collator::safeClone() const {
+    return clone();
+}
+
 // implement deprecated, previously abstract method
 Collator::EComparisonResult Collator::compare(const UnicodeString& source, 
                                     const UnicodeString& target) const
