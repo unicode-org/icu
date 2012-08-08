@@ -75,9 +75,9 @@ MIDDLE_SO_TARGET= $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
 ## Versioned libraries rules
 
 %.$(SO_TARGET_VERSION_MAJOR).$(SO): %.$(SO_TARGET_VERSION).$(SO)
-	ln -sf ${<F} $@
+	$(RM) $@ && ln -s ${<F} $@
 %.$(SO): %.$(SO_TARGET_VERSION_MAJOR).$(SO)
-	ln -sf ${*F}.$(SO_TARGET_VERSION).$(SO) $@
+	$(RM) $@ && ln -s ${*F}.$(SO_TARGET_VERSION).$(SO) $@
 
 # tzcode option
 TZORIG_EXTRA_CFLAGS=-DSTD_INSPIRED
