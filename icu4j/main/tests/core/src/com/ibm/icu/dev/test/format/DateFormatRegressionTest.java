@@ -1089,6 +1089,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                 HUNGARIAN, ITALIAN, HEBREW, JAPANESE, KOREAN, POLISH, PORTUGUESE, RUSSIAN, TURKISH,
                 CHINESE_SIMPLIFIED, CHINESE_TRADITIONAL };
 
+        String[] islamicCivilTwelfthMonthLocalized = new String[locales.length];
         String[] islamicTwelfthMonthLocalized = new String[locales.length];
         String[] gregorianTwelfthMonthLocalized = new String[locales.length];
 
@@ -1097,7 +1098,19 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             Locale locale = locales[i];
 
             // Islamic
-            com.ibm.icu.util.Calendar islamicCalendar = new com.ibm.icu.util.IslamicCalendar(locale);
+            com.ibm.icu.util.Calendar islamicCivilCalendar = new com.ibm.icu.util.IslamicCalendar(locale);
+            com.ibm.icu.text.SimpleDateFormat islamicCivilDateFormat = (com.ibm.icu.text.SimpleDateFormat) islamicCivilCalendar
+                    .getDateTimeFormat(com.ibm.icu.text.DateFormat.FULL, -1, locale);
+            com.ibm.icu.text.DateFormatSymbols islamicCivilDateFormatSymbols = islamicCivilDateFormat
+                    .getDateFormatSymbols();
+
+            String[] shortMonthsCivil = islamicCivilDateFormatSymbols.getShortMonths();
+            String twelfthMonthLocalizedCivil = shortMonthsCivil[11];
+
+            islamicCivilTwelfthMonthLocalized[i] = twelfthMonthLocalizedCivil;
+            
+            com.ibm.icu.util.IslamicCalendar islamicCalendar = new com.ibm.icu.util.IslamicCalendar(locale);
+            islamicCalendar.setCivil(false);
             com.ibm.icu.text.SimpleDateFormat islamicDateFormat = (com.ibm.icu.text.SimpleDateFormat) islamicCalendar
                     .getDateTimeFormat(com.ibm.icu.text.DateFormat.FULL, -1, locale);
             com.ibm.icu.text.DateFormatSymbols islamicDateFormatSymbols = islamicDateFormat
@@ -1123,16 +1136,41 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
         }
 
+        boolean skipIn8822 =  isICUVersionBefore(50, 0, 2);
+        if(skipIn8822) {
+            logln("Note: some tests timebombed to go off by 50m2");
+        }
+
         // Compare
         for (int i = 0; i < locales.length; i++) {
 
             String gregorianTwelfthMonth = gregorianTwelfthMonthLocalized[i];
+            String islamicCivilTwelfthMonth = islamicCivilTwelfthMonthLocalized[i];
             String islamicTwelfthMonth = islamicTwelfthMonthLocalized[i];
 
-            logln(locales[i] + ": " + gregorianTwelfthMonth + ", " + islamicTwelfthMonth);
+            logln(locales[i] + ": g:" + gregorianTwelfthMonth + ", ic:" + islamicCivilTwelfthMonth + ", i:"+islamicTwelfthMonth);
             if (gregorianTwelfthMonth.equalsIgnoreCase(islamicTwelfthMonth)) {
                 errln(locales[i] + ": gregorian and islamic are same: " + gregorianTwelfthMonth
                         + ", " + islamicTwelfthMonth);
+            }
+
+            if (gregorianTwelfthMonth.equalsIgnoreCase(islamicCivilTwelfthMonth)) {
+                if(!skipIn8822) {
+                    errln(locales[i] + ": gregorian and islamic-civil are same: " + gregorianTwelfthMonth
+                          + ", " + islamicCivilTwelfthMonth);
+                } else {
+                    logln(locales[i] + ": gregorian and islamic-civil are same: " + gregorianTwelfthMonth
+                          + ", " + islamicCivilTwelfthMonth + " (TIMEBOMBED until ICU 50.0.2)");
+                }
+            }
+            if (!islamicTwelfthMonth.equalsIgnoreCase(islamicCivilTwelfthMonth)) {
+                if(!skipIn8822) {
+                    errln(locales[i] + ": islamic-civil and islamic are NOT same: " + islamicCivilTwelfthMonth
+                          + ", " + islamicTwelfthMonth);
+                } else {
+                    logln(locales[i] + ": islamic-civil and islamic are NOT same: " + islamicCivilTwelfthMonth
+                          + ", " + islamicTwelfthMonth + " (TIMEBOMBED until 50.0.2)");
+                }
             }
         }
     }

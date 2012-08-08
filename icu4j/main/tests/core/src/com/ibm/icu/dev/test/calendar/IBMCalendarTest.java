@@ -979,9 +979,7 @@ public class IBMCalendarTest extends CalendarTest {
             logln("df type: " + df.getClass().getName() + " loc: " + df.getLocale(ULocale.VALID_LOCALE));
 
             Calendar cal = df.getCalendar();
-            // todo, what about variants of calendars, we have a type for islamic-civil, should we also have a type
-            // for variants of other calendars?
-            assertEquals("calendar types", cal.getType(), calTypes[i].equals("islamic-civil") ? "islamic" : calTypes[i]);
+            assertEquals("calendar types", cal.getType(), calTypes[i]);
             DateFormat df2 = cal.getDateTimeFormat(DateFormat.FULL, DateFormat.FULL, ULocale.US);
             logln("df2 type: " + df2.getClass().getName() + " loc: " + df2.getLocale(ULocale.VALID_LOCALE));
             assertEquals("format results", df.format(time), df2.format(time));
