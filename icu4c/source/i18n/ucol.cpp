@@ -305,7 +305,7 @@ void collIterate::appendOffset(int32_t offset, UErrorCode &errorCode) {
     U_ASSERT(length >= offsetBufferSize || offsetStore != NULL);
     if(length >= offsetBufferSize) {
         int32_t newCapacity = 2 * offsetBufferSize + UCOL_EXPAND_CE_BUFFER_SIZE;
-        int32_t *newBuffer = reinterpret_cast<int32_t *>(uprv_malloc(newCapacity * 4));
+        int32_t *newBuffer = static_cast<int32_t *>(uprv_malloc(newCapacity * 4));
         if(newBuffer == NULL) {
             errorCode = U_MEMORY_ALLOCATION_ERROR;
             return;

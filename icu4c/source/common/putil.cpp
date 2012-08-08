@@ -1511,7 +1511,7 @@ The leftmost codepage (.xxx) wins.
 
     if ((p = uprv_strchr(posixID, '.')) != NULL) {
         /* assume new locale can't be larger than old one? */
-        correctedPOSIXLocale = reinterpret_cast<char *>(uprv_malloc(uprv_strlen(posixID)+1));
+        correctedPOSIXLocale = static_cast<char *>(uprv_malloc(uprv_strlen(posixID)+1));
         /* Exit on memory allocation error. */
         if (correctedPOSIXLocale == NULL) {
             return NULL;
@@ -1528,7 +1528,7 @@ The leftmost codepage (.xxx) wins.
     /* Note that we scan the *uncorrected* ID. */
     if ((p = uprv_strrchr(posixID, '@')) != NULL) {
         if (correctedPOSIXLocale == NULL) {
-            correctedPOSIXLocale = reinterpret_cast<char *>(uprv_malloc(uprv_strlen(posixID)+1));
+            correctedPOSIXLocale = static_cast<char *>(uprv_malloc(uprv_strlen(posixID)+1));
             /* Exit on memory allocation error. */
             if (correctedPOSIXLocale == NULL) {
                 return NULL;

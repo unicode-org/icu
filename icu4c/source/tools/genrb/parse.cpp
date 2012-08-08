@@ -262,7 +262,7 @@ static char *getInvariantString(ParseState* state, uint32_t *line, struct UStrin
         return NULL;
     }
 
-    result = reinterpret_cast<char *>(uprv_malloc(count+1));
+    result = static_cast<char *>(uprv_malloc(count+1));
 
     if (result == NULL)
     {
@@ -1477,7 +1477,7 @@ parseBinary(ParseState* state, char *tag, uint32_t startline, const struct UStri
     count = (uint32_t)uprv_strlen(string);
     if (count > 0){
         if((count % 2)==0){
-            value = reinterpret_cast<uint8_t *>(uprv_malloc(sizeof(uint8_t) * count));
+            value = static_cast<uint8_t *>(uprv_malloc(sizeof(uint8_t) * count));
 
             if (value == NULL)
             {

@@ -1525,7 +1525,7 @@ uloc_openKeywordList(const char *keywordList, int32_t keywordListSize, UErrorCod
         return NULL;
     }
     uprv_memcpy(result, &gKeywordsEnum, sizeof(UEnumeration));
-    myContext = reinterpret_cast<UKeywordsContext *>(uprv_malloc(sizeof(UKeywordsContext)));
+    myContext = static_cast<UKeywordsContext *>(uprv_malloc(sizeof(UKeywordsContext)));
     if (myContext == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         uprv_free(result);
@@ -2330,7 +2330,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         }
         if(n>=jSize) {
             if(j==smallBuffer) {  /* overflowed the small buffer. */
-                j = reinterpret_cast<_acceptLangItem *>(uprv_malloc(sizeof(j[0])*(jSize*2)));
+                j = static_cast<_acceptLangItem *>(uprv_malloc(sizeof(j[0])*(jSize*2)));
                 if(j!=NULL) {
                     uprv_memcpy(j,smallBuffer,sizeof(j[0])*jSize);
                 }
@@ -2338,7 +2338,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
                 fprintf(stderr,"malloced at size %d\n", jSize);
 #endif
             } else {
-                j = reinterpret_cast<_acceptLangItem *>(uprv_realloc(j, sizeof(j[0])*jSize*2));
+                j = static_cast<_acceptLangItem *>(uprv_realloc(j, sizeof(j[0])*jSize*2));
 #if defined(ULOC_DEBUG)
                 fprintf(stderr,"re-alloced at size %d\n", jSize);
 #endif
@@ -2360,7 +2360,7 @@ uloc_acceptLanguageFromHTTP(char *result, int32_t resultAvailable, UAcceptResult
         }
         return -1;
     }
-    strs = reinterpret_cast<char **>(uprv_malloc((size_t)(sizeof(strs[0])*n)));
+    strs = static_cast<char **>(uprv_malloc((size_t)(sizeof(strs[0])*n)));
     /* Check for null pointer */
     if (strs == NULL) {
         uprv_free(j); /* Free to avoid memory leak */
@@ -2405,7 +2405,7 @@ uloc_acceptLanguage(char *result, int32_t resultAvailable,
     if(U_FAILURE(*status)) {
         return -1;
     }
-    fallbackList = reinterpret_cast<char **>(uprv_malloc((size_t)(sizeof(fallbackList[0])*acceptListCount)));
+    fallbackList = static_cast<char **>(uprv_malloc((size_t)(sizeof(fallbackList[0])*acceptListCount)));
     if(fallbackList==NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         return -1;

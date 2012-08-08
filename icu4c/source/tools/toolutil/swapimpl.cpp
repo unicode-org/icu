@@ -84,7 +84,7 @@ upname_swap(const UDataSwapper *ds,
     /* check data format and format version */
     const UDataInfo *pInfo=
         reinterpret_cast<const UDataInfo *>(
-            reinterpret_cast<const char *>(inData)+4);
+            static_cast<const char *>(inData)+4);
     if(!(
         pInfo->dataFormat[0]==0x70 &&   /* dataFormat="pnam" */
         pInfo->dataFormat[1]==0x6e &&
@@ -100,8 +100,8 @@ upname_swap(const UDataSwapper *ds,
         return 0;
     }
 
-    const uint8_t *inBytes=reinterpret_cast<const uint8_t *>(inData)+headerSize;
-    uint8_t *outBytes=reinterpret_cast<uint8_t *>(outData)+headerSize;
+    const uint8_t *inBytes=static_cast<const uint8_t *>(inData)+headerSize;
+    uint8_t *outBytes=static_cast<uint8_t *>(outData)+headerSize;
 
     if(length>=0) {
         length-=headerSize;
