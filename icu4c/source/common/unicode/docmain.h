@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  *  FILE NAME: DOCMAIN.h
@@ -69,7 +69,7 @@
  *   <tr>
  *     <td>Strings and Character Iteration</td>
  *     <td>ustring.h, utf8.h, utf16.h, UText, UCharIterator</td>
- *     <td>UnicodeString, CharacterIterator, Appendable, StringPiece, ByteSink</td>
+ *     <td>icu::UnicodeString, icu::CharacterIterator, icu::Appendable, icu::StringPiece,icu::ByteSink</td>
  *   </tr>
  *   <tr>
  *     <td>Unicode Character<br>Properties and Names</td>
@@ -79,12 +79,12 @@
  *   <tr>
  *     <td>Sets of Unicode Code Points and Strings</td>
  *     <td>uset.h</td>
- *     <td>UnicodeSet</td>
+ *     <td>icu::UnicodeSet</td>
  *   </tr>
  *   <tr>
  *     <td>Maps from Strings to Integer Values</td>
  *     <td>(no C API)</td>
- *     <td>BytesTrie, UCharsTrie</td>
+ *     <td>icu::BytesTrie, icu::UCharsTrie</td>
  *   </tr>
  *   <tr>
  *     <td>Codepage Conversion</td>
@@ -99,47 +99,47 @@
  *   <tr>
  *     <td>Locales </td>
  *     <td>uloc.h</a></td>
- *     <td>Locale</td>
+ *     <td>icu::Locale</td>
  *   </tr>
  *   <tr>
  *     <td>Resource Bundles</td>
  *     <td>ures.h</td>
- *     <td>ResourceBundle</td>
+ *     <td>icu::ResourceBundle</td>
  *   </tr>
  *   <tr>
  *     <td>Normalization</td>
  *     <td>unorm2.h</td>
- *     <td>Normalizer2</td>
+ *     <td>icu::Normalizer2</td>
  *   </tr>
  *   <tr>
  *     <td>Calendars</td>
  *     <td>ucal.h</td>
- *     <td>Calendar</td>
+ *     <td>icu::Calendar</td>
  *   </tr>
  *   <tr>
  *     <td>Date and Time Formatting</td>
  *     <td>udat.h</td>
- *     <td>DateFormat</td>
+ *     <td>icu::DateFormat</td>
  *   </tr>
  *   <tr>
  *     <td>Message Formatting</td>
  *     <td>umsg.h</td>
- *     <td>MessageFormat</td>
+ *     <td>icu::MessageFormat</td>
  *   </tr>
  *   <tr>
  *     <td>Number Formatting</td>
  *     <td>unum.h</td>
- *     <td>NumberFormat</td>
+ *     <td>icu::NumberFormat</td>
  *   </tr>
  *   <tr>
  *     <td>Number Spellout<br>(Rule Based Number Formatting)</td>
  *     <td>unum.h<br>(use UNUM_SPELLOUT)</td>
- *     <td>RuleBasedNumberFormat</td>
+ *     <td>icu::RuleBasedNumberFormat</td>
  *   </tr>
  *   <tr>
  *     <td>Text Transformation<br>(Transliteration)</td>
  *     <td>utrans.h</td>
- *     <td>Transliterator</td>
+ *     <td>icu::Transliterator</td>
  *   </tr>
  *   <tr>
  *     <td>Bidirectional Algorithm</td>
@@ -154,27 +154,27 @@
  *   <tr>
  *     <td>Collation</td>
  *     <td>ucol.h</td>
- *     <td>Collator</td>
+ *     <td>icu::Collator</td>
  *   </tr>
  *   <tr>
  *     <td>String Searching</td>
  *     <td>usearch.h</td>
- *     <td>StringSearch</td>
+ *     <td>icu::StringSearch</td>
  *   </tr>
  *   <tr>
  *     <td>Index Characters/<br>Bucketing for Sorted Lists</td>
  *     <td>(no C API)</td>
- *     <td>AlphabeticIndex</td>
+ *     <td>icu::AlphabeticIndex</td>
  *   </tr>
  *   <tr>
  *     <td>Text Boundary Analysis<br>(Break Iteration)</td>
  *     <td>ubrk.h</td>
- *     <td>BreakIterator</td>
+ *     <td>icu::BreakIterator</td>
  *   </tr>
  *   <tr>
  *     <td>Regular Expressions</td>
  *     <td>uregex.h</td>
- *     <td>RegexPattern, RegexMatcher</td>
+ *     <td>icu::RegexPattern, icu::RegexMatcher</td>
  *   </tr>
  *   <tr>
  *     <td>StringPrep</td>
@@ -199,7 +199,7 @@
  *   <tr>
  *     <td>Layout Engine/Complex Text Layout</td>
  *     <td>loengine.h</td>
- *     <td>LayoutEngine, ParagraphLayout</td>
+ *     <td>icu::LayoutEngine,icu::ParagraphLayout</td>
  *   </tr>
  *   <tr>
  *     <td>ICU I/O</td>
