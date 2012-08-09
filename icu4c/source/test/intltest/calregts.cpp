@@ -87,6 +87,7 @@ CalendarRegressionTest::runIndexedTest( int32_t index, UBool exec, const char* &
         CASE(47,TestT8057);
         CASE(48,TestT8596);
         CASE(49,Test9019);
+        CASE(50,TestT9452);
     default: name = ""; break;
     }
 }
@@ -2896,6 +2897,49 @@ void CalendarRegressionTest::TestT8596(void) {
     }
 
     delete gc;
+}
+
+// Test case for ticket 9452
+// Calendar addition fall onto the missing date - 2011-12-30 in Samoa
+void CalendarRegressionTest::TestT9452(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    GregorianCalendar cal(TimeZone::createTimeZone("Pacific/Apia"), status);
+    failure(status, "initializing GregorianCalendar");
+
+    SimpleDateFormat sdf(UnicodeString("y-MM-dd'T'HH:mm:ssZZZZZ"), status);
+    failure(status, "initializing SimpleDateFormat");
+    sdf.setCalendar(cal);
+
+    UnicodeString dstr;
+
+    // Set date to 2011-12-29 00:00
+    cal.clear();
+    cal.set(2011, UCAL_DECEMBER, 29, 0, 0, 0);
+
+    UDate d = cal.getTime(status);
+    failure(status, "getTime for initial date");
+    sdf.format(d, dstr);
+    logln(UnicodeString("Initial date: ") + dstr);
+
+    // Add 1 day
+    cal.add(UCAL_DATE, 1, status);
+    failure(status, "add 1 day");
+    d = cal.getTime(status);
+    failure(status, "getTime after +1 day");
+    dstr.remove();
+    sdf.format(d, dstr);
+    logln(UnicodeString("+1 day: ") + dstr);
+    assertEquals("Add 1 day", UnicodeString("2011-12-31T00:00:00+14:00"), dstr);
+
+    // Subtract 1 day
+    cal.add(UCAL_DATE, -1, status);
+    failure(status, "subtract 1 day");
+    d = cal.getTime(status);
+    failure(status, "getTime after -1 day");
+    dstr.remove();
+    sdf.format(d, dstr);
+    logln(UnicodeString("-1 day: ") + dstr);
+    assertEquals("Subtract 1 day", UnicodeString("2011-12-29T00:00:00-10:00"), dstr);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
