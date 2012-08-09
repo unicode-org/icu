@@ -2005,10 +2005,19 @@ void Calendar::add(UCalendarDateFields field, int32_t amount, UErrorCode& status
             // danger of adjusting into a different day. To avoid
             // this we make the adjustment only if it actually
             // maintains the hour.
-            double t = internalGetTime();
-            setTimeInMillis(t + prevOffset - newOffset, status);
-            if (get(UCAL_HOUR_OF_DAY, status) != hour) {
-                setTimeInMillis(t, status);
+
+            // When the difference of the previous UTC offset and
+            // the new UTC offset exceeds 1 full day, we do not want
+            // to roll over/back the date. For now, this only happens
+            // in Samoa (Pacific/Apia) on Dec 30, 2011. See ticket:9452.
+            int32_t adjAmount = prevOffset - newOffset;
+            adjAmount = adjAmount >= 0 ? adjAmount % (int32_t)kOneDay : -(-adjAmount % (int32_t)kOneDay);
+            if (adjAmount != 0) {
+                double t = internalGetTime();
+                setTimeInMillis(t + adjAmount, status);
+                if (get(UCAL_HOUR_OF_DAY, status) != hour) {
+                    setTimeInMillis(t, status);
+                }
             }
         }
     } 
