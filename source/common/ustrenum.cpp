@@ -270,6 +270,22 @@ ucharstrenum_count(UEnumeration* en,
     return ((UCharStringEnumeration*)en)->count;
 }
 
+static const UChar* U_CALLCONV
+ucharstrenum_unext(UEnumeration* en,
+                  int32_t* resultLength,
+                  UErrorCode* /*ec*/) {
+    UCharStringEnumeration *e = (UCharStringEnumeration*) en;
+    if (e->index >= e->count) {
+        return NULL;
+    }
+    const UChar* result = ((const UChar**)e->uenum.context)[e->index++];
+    if (resultLength) {
+        *resultLength = (int32_t)u_strlen(result);
+    }
+    return result;
+}
+
+
 static const char* U_CALLCONV
 ucharstrenum_next(UEnumeration* en,
                   int32_t* resultLength,
@@ -301,10 +317,20 @@ static const UEnumeration UCHARSTRENUM_VT = {
     ucharstrenum_reset
 };
 
+static const UEnumeration UCHARSTRENUM_U_VT = {
+    NULL,
+    NULL, // store StringEnumeration pointer here
+    ucharstrenum_close,
+    ucharstrenum_count,
+    ucharstrenum_unext,
+    uenum_nextDefault,
+    ucharstrenum_reset
+};
+
 U_CDECL_END
 
 U_CAPI UEnumeration* U_EXPORT2
-uenum_openCharStringsEnumeration(const char* const* strings, int32_t count,
+uenum_openCharStringsEnumeration(const char* const strings[], int32_t count,
                                  UErrorCode* ec) {
     UCharStringEnumeration* result = NULL;
     if (U_SUCCESS(*ec) && count >= 0 && (count == 0 || strings != 0)) {
@@ -322,4 +348,24 @@ uenum_openCharStringsEnumeration(const char* const* strings, int32_t count,
     return (UEnumeration*) result;
 }
 
+U_CAPI UEnumeration* U_EXPORT2
+uenum_openUCharStringsEnumeration(const UChar* const strings[], int32_t count,
+                                 UErrorCode* ec) {
+    UCharStringEnumeration* result = NULL;
+    if (U_SUCCESS(*ec) && count >= 0 && (count == 0 || strings != 0)) {
+        result = (UCharStringEnumeration*) uprv_malloc(sizeof(UCharStringEnumeration));
+        if (result == NULL) {
+            *ec = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            U_ASSERT((char*)result==(char*)(&result->uenum));
+            uprv_memcpy(result, &UCHARSTRENUM_U_VT, sizeof(UCHARSTRENUM_U_VT));
+            result->uenum.context = (void*)strings;
+            result->index = 0;
+            result->count = count;
+        }
+    }
+    return (UEnumeration*) result;
+}
 
+
+// end C Wrapper
