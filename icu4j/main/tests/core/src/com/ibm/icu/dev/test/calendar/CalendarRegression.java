@@ -2261,6 +2261,40 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             logln("Pass: rolled calendar is " + cal1.getTime());
         }
     }
+
+    /**
+     * Test case for ticket 9452
+     * Calendar addition fall onto the missing date - 2011-12-30 in Samoa
+     */
+    public void TestT9452() {
+        TimeZone samoaTZ = TimeZone.getTimeZone("Pacific/Apia");
+        GregorianCalendar cal = new GregorianCalendar(samoaTZ);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZZZZZ");
+        sdf.setTimeZone(samoaTZ);
+
+        // Set date to 2011-12-29 00:00
+        cal.clear();
+        cal.set(2011, Calendar.DECEMBER, 29, 0, 0, 0);
+
+        Date d = cal.getTime();
+        String dstr = sdf.format(d);
+        logln("Initial date: " + dstr);
+
+        // Add 1 day
+        cal.add(Calendar.DATE, 1);
+        d = cal.getTime();
+        dstr = sdf.format(d);
+        logln("+1 day: " + dstr);
+        assertEquals("Add 1 day", "2011-12-31T00:00:00+14:00", dstr);
+
+        // Subtract 1 day
+        cal.add(Calendar.DATE, -1);
+        d = cal.getTime();
+        dstr = sdf.format(d);
+        logln("-1 day: " + dstr);
+        assertEquals("Subtract 1 day", "2011-12-29T00:00:00-10:00", dstr);
+    }
 }
 
 //eof

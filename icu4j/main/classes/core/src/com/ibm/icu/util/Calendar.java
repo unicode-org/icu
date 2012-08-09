@@ -3265,10 +3265,18 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 // danger of adjusting into a different day. To avoid
                 // this we make the adjustment only if it actually
                 // maintains the hour.
-                long t = time;
-                setTimeInMillis(time + prevOffset - newOffset);
-                if (get(HOUR_OF_DAY) != hour) {
-                    setTimeInMillis(t);
+
+                // When the difference of the previous UTC offset and
+                // the new UTC offset exceeds 1 full day, we do not want
+                // to roll over/back the date. For now, this only happens
+                // in Samoa (Pacific/Apia) on Dec 30, 2011. See ticket:9452.
+                long adjAmount = (prevOffset - newOffset) % ONE_DAY;
+                if (adjAmount != 0) {
+                    long t = time;
+                    setTimeInMillis(time + adjAmount);
+                    if (get(HOUR_OF_DAY) != hour) {
+                        setTimeInMillis(t);
+                    }
                 }
             }
         }
