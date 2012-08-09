@@ -51,11 +51,9 @@ STATIC_O = ao
 # Make sure that both the static and dynamic intermediate objects
 # get dependency checking
 ifneq ($(ENABLE_STATIC),)
-ifneq ($(ENABLE_DYNAMIC),)
 	STATIC_DEPENDENCY_FILE=" $*.$(STATIC_O)"
+endif
 	DYNAMIC_DEPENDENCY_FILE=" $*.o"
-endif
-endif
 
 ## Override Versioned target for a shared library.
 FINAL_SO_TARGET=  $(basename $(SO_TARGET)).$(SO_TARGET_VERSION).$(SO)
@@ -63,14 +61,14 @@ MIDDLE_SO_TARGET= $(basename $(SO_TARGET)).$(SO_TARGET_VERSION_MAJOR).$(SO)
 
 ## Compilation and dependency rules
 %.$(STATIC_O): $(srcdir)/%.c
-	$(SILENT_COMPILE)$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -MMD -MT "$*.d$(DYNAMIC_DEPENDENCY_FILE)" -o $@ $<
+	$(SILENT_COMPILE)$(strip $(COMPILE.c) $(STATICCPPFLAGS) $(STATICCFLAGS)) -MMD -MT "$*.d"$(DYNAMIC_DEPENDENCY_FILE) -o $@ $<
 %.o: $(srcdir)/%.c
-	$(SILENT_COMPILE)$(strip $(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS)) -MMD -MT "$*.d$(STATIC_DEPENDENCY_FILE)" -o $@ $<
+	$(SILENT_COMPILE)$(strip $(COMPILE.c) $(DYNAMICCPPFLAGS) $(DYNAMICCFLAGS)) -MMD -MT "$*.d"$(STATIC_DEPENDENCY_FILE) -o $@ $<
 
 %.$(STATIC_O): $(srcdir)/%.cpp
-	$(SILENT_COMPILE)$(strip $(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS)) -MMD -MT "$*.d$(DYNAMIC_DEPENDENCY_FILE)" -o $@ $<
+	$(SILENT_COMPILE)$(strip $(COMPILE.cc) $(STATICCPPFLAGS) $(STATICCXXFLAGS)) -MMD -MT "$*.d"$(DYNAMIC_DEPENDENCY_FILE)$(STATIC_DEPENDENCY_FILE) -o $@ $<
 %.o: $(srcdir)/%.cpp
-	$(SILENT_COMPILE)$(strip $(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS)) -MMD -MT "$*.d$(STATIC_DEPENDENCY_FILE)" -o $@ $<
+	$(SILENT_COMPILE)$(strip $(COMPILE.cc) $(DYNAMICCPPFLAGS) $(DYNAMICCXXFLAGS)) -MMD -MT "$*.d"$(DYNAMIC_DEPENDENCY_FILE)$(STATIC_DEPENDENCY_FILE) -o $@ $<
 
 ## Versioned libraries rules
 
