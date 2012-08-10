@@ -62,16 +62,16 @@ U_CAPI void uprv_checkValidMemory(const void *p, size_t n);
 #define uprv_memcmp(buffer1, buffer2, size) U_STANDARD_CPP_NAMESPACE memcmp(buffer1, buffer2,size)
 
 U_CAPI void * U_EXPORT2
-uprv_malloc(size_t s);
+uprv_malloc(size_t s) U_MALLOC_ATTR U_ALLOC_SIZE_ATTR(1);
 
 U_CAPI void * U_EXPORT2
-uprv_realloc(void *mem, size_t size);
+uprv_realloc(void *mem, size_t size) U_ALLOC_SIZE_ATTR(2);
 
 U_CAPI void U_EXPORT2
 uprv_free(void *mem);
 
 U_CAPI void * U_EXPORT2
-uprv_calloc(size_t num, size_t size);
+uprv_calloc(size_t num, size_t size) U_MALLOC_ATTR U_ALLOC_SIZE_ATTR2(1,2);
 
 /**
  * This should align the memory properly on any machine.

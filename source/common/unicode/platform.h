@@ -392,6 +392,35 @@
 #   define U_HAVE_DEBUG_LOCATION_NEW 0
 #endif
 
+/* Compatibility with non clang compilers */
+#ifndef __has_attribute
+#    define __has_attribute(x) 0
+#endif
+
+/**
+ * \def U_MALLOC_ATTR
+ * Attribute to mark functions as malloc-like
+ * @internal
+ */
+#if defined(__GNUC__) && __GNUC__>=3
+#    define U_MALLOC_ATTR __attribute__ ((__malloc__))
+#else
+#    define U_MALLOC_ATTR
+#endif
+
+/**
+ * \def U_ALLOC_SIZE_ATTR
+ * Attribute to specify the size of the allocated buffer for malloc-like functions
+ * @internal
+ */
+#if (defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 3))) || __has_attribute(alloc_size)
+#   define U_ALLOC_SIZE_ATTR(X) __attribute__ ((alloc_size(X)))
+#   define U_ALLOC_SIZE_ATTR2(X,Y) __attribute__ ((alloc_size(X,Y)))
+#else
+#   define U_ALLOC_SIZE_ATTR(X)
+#   define U_ALLOC_SIZE_ATTR2(X,Y)
+#endif
+
 /** @} */
 
 /*===========================================================================*/
