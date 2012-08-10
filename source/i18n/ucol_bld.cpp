@@ -37,6 +37,8 @@
 #include "cmemory.h"
 #include "cstring.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 static const InverseUCATableHeader* _staticInvUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
 
@@ -1393,13 +1395,12 @@ ucol_initInverseUCA(UErrorCode *status)
 /* This is the data that is used for non-script reordering codes. These _must_ be kept
  * in order that they are to be applied as defaults and in synch with the UColReorderCode enum.
  */
-static const char* ReorderingTokenNames[] = {
+static const char * const ReorderingTokenNames[] = {
     "SPACE",
     "PUNCT",
     "SYMBOL",
     "CURRENCY",
-    "DIGIT",
-    NULL
+    "DIGIT"
 };
 
 static void toUpper(const char* src, char* dst, uint32_t length) {
@@ -1413,7 +1414,7 @@ U_INTERNAL int32_t U_EXPORT2
 ucol_findReorderingEntry(const char* name) {
     char buffer[32];
     toUpper(name, buffer, 32);
-    for (uint32_t entry = 0; ReorderingTokenNames[entry] != NULL; entry++) {
+    for (uint32_t entry = 0; entry < LENGTHOF(ReorderingTokenNames); entry++) {
         if (uprv_strcmp(buffer, ReorderingTokenNames[entry]) == 0) {
             return entry + UCOL_REORDER_CODE_FIRST;
         }

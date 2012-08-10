@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 2003-2010, International Business Machines
+ *   Copyright (C) 2003-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -46,13 +46,13 @@ static UHashtable *SHARED_DATA_HASHTABLE = NULL;
 static UMTX usprepMutex = NULL;
 
 /* format version of spp file */
-static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
+//static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
 
 /* the Unicode version of the sprep data */
 static UVersionInfo dataVersion={ 0, 0, 0, 0 };
 
 /* Profile names must be aligned to UStringPrepProfileType */
-static const char *PROFILE_NAMES[] = {
+static const char * const PROFILE_NAMES[] = {
     "rfc3491",      /* USPREP_RFC3491_NAMEPREP */
     "rfc3530cs",    /* USPREP_RFC3530_NFS4_CS_PREP */
     "rfc3530csci",  /* USPREP_RFC3530_NFS4_CS_PREP_CI */
@@ -86,7 +86,7 @@ isSPrepAcceptable(void * /* context */,
         pInfo->formatVersion[2]==UTRIE_SHIFT &&
         pInfo->formatVersion[3]==UTRIE_INDEX_SHIFT
     ) {
-        uprv_memcpy(formatVersion, pInfo->formatVersion, 4);
+        //uprv_memcpy(formatVersion, pInfo->formatVersion, 4);
         uprv_memcpy(dataVersion, pInfo->dataVersion, 4);
         return TRUE;
     } else {
