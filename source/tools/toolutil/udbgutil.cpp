@@ -468,7 +468,7 @@ STRING_PARAM(paramConverterDefault, ucnv_getDefaultName())
 STRING_PARAM(paramTimezoneVersion, ucal_getTZDataVersion(status))
 #endif
 
-static USystemParams systemParams[] = {
+static const USystemParams systemParams[] = {
   { "copyright",    paramStatic, U_COPYRIGHT_STRING,0 },
   { "product",      paramStatic, "icu4c",0 },
   { "product.full", paramStatic, "International Components for Unicode for C/C++",0 },

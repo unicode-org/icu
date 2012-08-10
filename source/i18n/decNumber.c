@@ -210,7 +210,7 @@ const uByte d2utable[DECMAXD2U+1]=D2UTABLE;
 #define BIGEVEN (Int)0x80000002
 #define BIGODD  (Int)0x80000003
 
-static Unit uarrone[1]={1};   /* Unit array of 1, used for incrementing  */
+static const Unit uarrone[1]={1};   /* Unit array of 1, used for incrementing  */
 
 /* Granularity-dependent code */
 #if DECDPUN<=4
