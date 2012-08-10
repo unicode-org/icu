@@ -1164,7 +1164,7 @@ uint8_t *CharsetRecog_IBM420_ar::unshapeLamAlef(const uint8_t *inputBytes, int32
     
     if (bigBuffer != NULL) {
         int32_t bufferIndex;
-        uint8_t unshapedLamAlef[] = { 0xb1, 0x56 };
+        static const uint8_t unshapedLamAlef[] = { 0xb1, 0x56 };
         
         for (int32_t i = bufferIndex = 0; i < inputBytesLength; i++) {
             if (isLamAlef(inputBytes[i])) {
@@ -1199,7 +1199,7 @@ void CharsetRecog_IBM420_ar::matchFinish(InputText *textIn) {
 }
 
 UBool CharsetRecog_IBM420_ar::isLamAlef(uint8_t b) {
-    uint8_t shapedLamAlef[] = {
+    static const uint8_t shapedLamAlef[] = {
         0xb2, 0xb3, 0xb4, 0xb5, 0xb7, 0xb8 
     };
     

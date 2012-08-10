@@ -861,7 +861,7 @@ UVector *AlphabeticIndex::firstStringsInScript(Collator *ruleBasedCollator, UErr
 //  Character constants copied from corresponding declaration in ICU4J.
 //  See main/classes/collate/src/com/ibm/icu/text/AlphabeticIndex.java
 
-static UChar HACK_FIRST_CHARS_IN_SCRIPTS[] =  { 0x61, 0, 0x03B1, 0,
+static const UChar HACK_FIRST_CHARS_IN_SCRIPTS[] =  { 0x61, 0, 0x03B1, 0,
             0x2C81, 0, 0x0430, 0, 0x2C30, 0, 0x10D0, 0, 0x0561, 0, 0x05D0, 0, 0xD802, 0xDD00, 0, 0x0800, 0, 0x0621, 0, 0x0710, 0,
             0x0780, 0, 0x07CA, 0, 0x2D30, 0, 0x1200, 0, 0x0950, 0, 0x0985, 0, 0x0A74, 0, 0x0AD0, 0, 0x0B05, 0, 0x0BD0, 0,
             0x0C05, 0, 0x0C85, 0, 0x0D05, 0, 0x0D85, 0,

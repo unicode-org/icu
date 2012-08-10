@@ -17,6 +17,8 @@
 #include "ulocimp.h"
 #include "uassert.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 /* struct holding a single variant */
 typedef struct VariantListEntry {
     const char              *variant;
@@ -62,19 +64,19 @@ typedef struct ULanguageTag {
 #define ISALPHA(c) uprv_isASCIILetter(c)
 #define ISNUMERIC(c) ((c)>='0' && (c)<='9')
 
-static const char* EMPTY = "";
-static const char* LANG_UND = "und";
-static const char* PRIVATEUSE_KEY = "x";
-static const char* _POSIX = "_POSIX";
-static const char* POSIX_KEY = "va";
-static const char* POSIX_VALUE = "posix";
-static const char* LOCALE_ATTRIBUTE_KEY = "attribute";
-static const char* PRIVUSE_VARIANT_PREFIX = "lvariant";
-static const char* LOCALE_TYPE_YES = "yes";
+static const char EMPTY[] = "";
+static const char LANG_UND[] = "und";
+static const char PRIVATEUSE_KEY[] = "x";
+static const char _POSIX[] = "_POSIX";
+static const char POSIX_KEY[] = "va";
+static const char POSIX_VALUE[] = "posix";
+static const char LOCALE_ATTRIBUTE_KEY[] = "attribute";
+static const char PRIVUSE_VARIANT_PREFIX[] = "lvariant";
+static const char LOCALE_TYPE_YES[] = "yes";
 
 #define LANG_UND_LEN 3
 
-static const char* GRANDFATHERED[] = {
+static const char* const GRANDFATHERED[] = {
 /*  grandfathered   preferred */
     "art-lojban",   "jbo",
     "cel-gaulish",  "xtg-x-cel-gaulish",
@@ -105,12 +107,11 @@ static const char* GRANDFATHERED[] = {
     NULL,           NULL
 };
 
-static const char* DEPRECATEDLANGS[] = {
+static const char DEPRECATEDLANGS[][4] = {
 /*  deprecated  new */
     "iw",       "he",
     "ji",       "yi",
-    "in",       "id",
-    NULL,       NULL
+    "in",       "id"
 };
 
 /*
@@ -1028,7 +1029,7 @@ _appendLanguageToLanguageTag(const char* localeID, char* appendAt, int32_t capac
         reslen += LANG_UND_LEN;
     } else {
         /* resolve deprecated */
-        for (i = 0; DEPRECATEDLANGS[i] != NULL; i += 2) {
+        for (i = 0; i < LENGTHOF(DEPRECATEDLANGS); i += 2) {
             if (uprv_compareInvCharsAsAscii(buf, DEPRECATEDLANGS[i]) == 0) {
                 uprv_strcpy(buf, DEPRECATEDLANGS[i + 1]);
                 len = (int32_t)uprv_strlen(buf);
