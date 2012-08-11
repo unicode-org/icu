@@ -148,8 +148,9 @@ for(;@ARGV; shift(@ARGV)) {
             ($_, $address, $type) = split(/\|/);
             chop $qtype;
         } elsif ($mode =~ /Mach-O/) {
-            if(/^(?:[0-9a-fA-F]){8} ([A-Z]) (?:_)?(.*)$/) {
-                ($_, $type) = ($2, $1);
+            ($address, $type, $_) = split(/ /);
+            if(/^_(.*)$/) {
+                $_ = $1;
             } else {
                 next;
             }

@@ -185,7 +185,7 @@
 
 /* Constants */
 /* Public lookup table used by the D2U macro  */
-const uByte d2utable[DECMAXD2U+1]=D2UTABLE;
+static const uByte d2utable[DECMAXD2U+1]=D2UTABLE;
 
 #define DECVERB     1              /* set to 1 for verbose DECCHECK  */
 #define powers      DECPOWERS      /* old internal name  */
@@ -211,6 +211,18 @@ const uByte d2utable[DECMAXD2U+1]=D2UTABLE;
 #define BIGODD  (Int)0x80000003
 
 static const Unit uarrone[1]={1};   /* Unit array of 1, used for incrementing  */
+
+/* ------------------------------------------------------------------ */
+/* round-for-reround digits                                           */
+/* ------------------------------------------------------------------ */
+static const uByte DECSTICKYTAB[10]={1,1,2,3,4,6,6,7,8,9}; /* used if sticky */
+
+/* ------------------------------------------------------------------ */
+/* Powers of ten (powers[n]==10**n, 0<=n<=9)                          */
+/* ------------------------------------------------------------------ */
+static const uInt DECPOWERS[10]={1, 10, 100, 1000, 10000, 100000, 1000000,
+                          10000000, 100000000, 1000000000};
+
 
 /* Granularity-dependent code */
 #if DECDPUN<=4

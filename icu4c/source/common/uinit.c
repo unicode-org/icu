@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2011, International Business Machines                   *
+* Copyright (C) 2001-2012, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -24,22 +24,9 @@
 #include "umutex.h"
 #include "utracimp.h"
 
-/*
- * ICU Initialization Function. Need not be called.
- */
-U_CAPI void U_EXPORT2
-u_init(UErrorCode *status) {
-    UTRACE_ENTRY_OC(UTRACE_U_INIT);
-    /* initialize plugins */
-    uplug_init(status);
-
-    umtx_lock(&gICUInitMutex);
-    if (gICUInitialized || U_FAILURE(*status)) {
-        umtx_unlock(&gICUInitMutex);
-        UTRACE_EXIT_STATUS(*status);
-        return;
-    }
-
+static void U_CALLCONV
+initData(UErrorCode *status)
+{
     /*
      * 2005-may-02
      *
@@ -55,8 +42,18 @@ u_init(UErrorCode *status) {
 #if !UCONFIG_NO_CONVERSION
     ucnv_io_countKnownConverters(status);
 #endif
+}
 
-    gICUInitialized = TRUE;    /* TODO:  don't set if U_FAILURE? */
-    umtx_unlock(&gICUInitMutex);
+/*
+ * ICU Initialization Function. Need not be called.
+ */
+U_CAPI void U_EXPORT2
+u_init(UErrorCode *status) {
+    UTRACE_ENTRY_OC(UTRACE_U_INIT);
+
+    /* initialize plugins */
+    uplug_init(status);
+    ucln_mutexedInit(initData, status);
+
     UTRACE_EXIT_STATUS(*status);
 }
