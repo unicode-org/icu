@@ -287,7 +287,41 @@ int32_t StringList::size() const
 }
 
 
-U_CFUNC void deleteStringList(void *obj);
+U_CDECL_BEGIN
+static void U_CALLCONV
+deleteStringList(void *obj)
+{
+    StringList *strings = (StringList *) obj;
+
+    delete strings;
+}
+static void U_CALLCONV
+deleteCEList(void *obj)
+{
+    CEList *list = (CEList *) obj;
+
+    delete list;
+}
+
+static void U_CALLCONV
+deleteUnicodeStringKey(void *obj)
+{
+    UnicodeString *key = (UnicodeString *) obj;
+
+    delete key;
+}
+
+static void U_CALLCONV
+deleteChars(void * /*obj*/)
+{
+    // char *chars = (char *) obj;
+    // All the key strings are owned by the
+    // CollData objects and don't need to
+    // be freed here.
+  //DELETE_ARRAY(chars);
+}
+
+U_CDECL_END
 
 class CEToStringsMap : public UMemory
 {
@@ -356,16 +390,6 @@ void CEToStringsMap::putStringList(uint32_t ce, StringList *stringList, UErrorCo
     uhash_iput(map, ce, (void *) stringList, &status);
 }
 
-U_CFUNC void deleteStringList(void *obj)
-{
-    StringList *strings = (StringList *) obj;
-
-    delete strings;
-}
-
-U_CFUNC void deleteCEList(void *obj);
-U_CFUNC void deleteUnicodeStringKey(void *obj);
-
 class StringToCEsMap : public UMemory
 {
 public:
@@ -417,20 +441,6 @@ const CEList *StringToCEsMap::get(const UnicodeString *string)
     return (const CEList *) uhash_get(map, string);
 }
 
-U_CFUNC void deleteCEList(void *obj)
-{
-    CEList *list = (CEList *) obj;
-
-    delete list;
-}
-
-U_CFUNC void deleteUnicodeStringKey(void *obj)
-{
-    UnicodeString *key = (UnicodeString *) obj;
-
-    delete key;
-}
-
 class CollDataCacheEntry : public UMemory
 {
 public:
@@ -472,21 +482,15 @@ private:
 };
 static UMTX lock;
 
-U_CFUNC void deleteChars(void * /*obj*/)
-{
-    // char *chars = (char *) obj;
-    // All the key strings are owned by the
-    // CollData objects and don't need to
-    // be freed here.
-  //DELETE_ARRAY(chars);
-}
-
-U_CFUNC void deleteCollDataCacheEntry(void *obj)
+U_CDECL_BEGIN
+static void U_CALLCONV
+deleteCollDataCacheEntry(void *obj)
 {
     CollDataCacheEntry *entry = (CollDataCacheEntry *) obj;
 
     delete entry;
 }
+U_CDECL_END
 
 CollDataCache::CollDataCache(UErrorCode &status)
     : cache(NULL)

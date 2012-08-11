@@ -23,7 +23,7 @@
 
 /* U_DISABLE_RENAMING can be defined in the following ways:
  *   - when running configure, e.g.
- *        runConfigureICU Linux CPPFLAGS="-DU_DISABLE_RENAMING"
+ *        runConfigureICU Linux --disable-renaming
  *   - by changing the default setting of U_DISABLE_RENAMING in uconfig.h
  */
 
@@ -53,8 +53,6 @@
 
 /* C exports renaming data */
 
-#define DECPOWERS U_ICU_ENTRY_POINT_RENAME(DECPOWERS)
-#define DECSTICKYTAB U_ICU_ENTRY_POINT_RENAME(DECSTICKYTAB)
 #define T_CString_int64ToString U_ICU_ENTRY_POINT_RENAME(T_CString_int64ToString)
 #define T_CString_integerToString U_ICU_ENTRY_POINT_RENAME(T_CString_integerToString)
 #define T_CString_stringToInteger U_ICU_ENTRY_POINT_RENAME(T_CString_stringToInteger)
@@ -113,14 +111,6 @@
 #define bms_setTargetString U_ICU_ENTRY_POINT_RENAME(bms_setTargetString)
 #define cmemory_cleanup U_ICU_ENTRY_POINT_RENAME(cmemory_cleanup)
 #define cmemory_inUse U_ICU_ENTRY_POINT_RENAME(cmemory_inUse)
-#define d2utable U_ICU_ENTRY_POINT_RENAME(d2utable)
-#define deleteCEList U_ICU_ENTRY_POINT_RENAME(deleteCEList)
-#define deleteChars U_ICU_ENTRY_POINT_RENAME(deleteChars)
-#define deleteCollDataCacheEntry U_ICU_ENTRY_POINT_RENAME(deleteCollDataCacheEntry)
-#define deleteStringList U_ICU_ENTRY_POINT_RENAME(deleteStringList)
-#define deleteUnicodeStringKey U_ICU_ENTRY_POINT_RENAME(deleteUnicodeStringKey)
-#define gICUInitMutex U_ICU_ENTRY_POINT_RENAME(gICUInitMutex)
-#define gICUInitialized U_ICU_ENTRY_POINT_RENAME(gICUInitialized)
 #define izrule_clone U_ICU_ENTRY_POINT_RENAME(izrule_clone)
 #define izrule_close U_ICU_ENTRY_POINT_RENAME(izrule_close)
 #define izrule_equals U_ICU_ENTRY_POINT_RENAME(izrule_equals)
@@ -592,6 +582,7 @@
 #define ucln_i18n_registerCleanup U_ICU_ENTRY_POINT_RENAME(ucln_i18n_registerCleanup)
 #define ucln_io_registerCleanup U_ICU_ENTRY_POINT_RENAME(ucln_io_registerCleanup)
 #define ucln_lib_cleanup U_ICU_ENTRY_POINT_RENAME(ucln_lib_cleanup)
+#define ucln_mutexedInit U_ICU_ENTRY_POINT_RENAME(ucln_mutexedInit)
 #define ucln_registerCleanup U_ICU_ENTRY_POINT_RENAME(ucln_registerCleanup)
 #define ucnv_MBCSFromUChar32 U_ICU_ENTRY_POINT_RENAME(ucnv_MBCSFromUChar32)
 #define ucnv_MBCSFromUnicodeWithOffsets U_ICU_ENTRY_POINT_RENAME(ucnv_MBCSFromUnicodeWithOffsets)
@@ -720,7 +711,6 @@
 #define ucol_findReorderingEntry U_ICU_ENTRY_POINT_RENAME(ucol_findReorderingEntry)
 #define ucol_forceHanImplicit U_ICU_ENTRY_POINT_RENAME(ucol_forceHanImplicit)
 #define ucol_forgetUCA U_ICU_ENTRY_POINT_RENAME(ucol_forgetUCA)
-#define ucol_freeOffsetBuffer U_ICU_ENTRY_POINT_RENAME(ucol_freeOffsetBuffer)
 #define ucol_getAttribute U_ICU_ENTRY_POINT_RENAME(ucol_getAttribute)
 #define ucol_getAttributeOrDefault U_ICU_ENTRY_POINT_RENAME(ucol_getAttributeOrDefault)
 #define ucol_getAvailable U_ICU_ENTRY_POINT_RENAME(ucol_getAvailable)
@@ -807,7 +797,6 @@
 #define ucol_tok_assembleTokenList U_ICU_ENTRY_POINT_RENAME(ucol_tok_assembleTokenList)
 #define ucol_tok_closeTokenList U_ICU_ENTRY_POINT_RENAME(ucol_tok_closeTokenList)
 #define ucol_tok_getNextArgument U_ICU_ENTRY_POINT_RENAME(ucol_tok_getNextArgument)
-#define ucol_tok_getRulesFromBundle U_ICU_ENTRY_POINT_RENAME(ucol_tok_getRulesFromBundle)
 #define ucol_tok_initTokenList U_ICU_ENTRY_POINT_RENAME(ucol_tok_initTokenList)
 #define ucol_tok_parseNextToken U_ICU_ENTRY_POINT_RENAME(ucol_tok_parseNextToken)
 #define ucol_updateInternalState U_ICU_ENTRY_POINT_RENAME(ucol_updateInternalState)
@@ -919,6 +908,7 @@
 #define uenum_nextDefault U_ICU_ENTRY_POINT_RENAME(uenum_nextDefault)
 #define uenum_openCharStringsEnumeration U_ICU_ENTRY_POINT_RENAME(uenum_openCharStringsEnumeration)
 #define uenum_openFromStringEnumeration U_ICU_ENTRY_POINT_RENAME(uenum_openFromStringEnumeration)
+#define uenum_openUCharStringsEnumeration U_ICU_ENTRY_POINT_RENAME(uenum_openUCharStringsEnumeration)
 #define uenum_reset U_ICU_ENTRY_POINT_RENAME(uenum_reset)
 #define uenum_unext U_ICU_ENTRY_POINT_RENAME(uenum_unext)
 #define uenum_unextDefault U_ICU_ENTRY_POINT_RENAME(uenum_unextDefault)
@@ -1313,7 +1303,6 @@
 #define uprv_fmod U_ICU_ENTRY_POINT_RENAME(uprv_fmod)
 #define uprv_free U_ICU_ENTRY_POINT_RENAME(uprv_free)
 #define uprv_getCharNameCharacters U_ICU_ENTRY_POINT_RENAME(uprv_getCharNameCharacters)
-#define uprv_getDefaultCodepage U_ICU_ENTRY_POINT_RENAME(uprv_getDefaultCodepage)
 #define uprv_getDefaultLocaleID U_ICU_ENTRY_POINT_RENAME(uprv_getDefaultLocaleID)
 #define uprv_getInfinity U_ICU_ENTRY_POINT_RENAME(uprv_getInfinity)
 #define uprv_getMaxCharNameLength U_ICU_ENTRY_POINT_RENAME(uprv_getMaxCharNameLength)

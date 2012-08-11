@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-* Copyright (C) 2001-2011, International Business Machines
+* Copyright (C) 2001-2012, International Business Machines
 *                Corporation and others. All Rights Reserved.
 *
 ******************************************************************************
@@ -69,6 +69,7 @@ typedef enum ECleanupLibraryType {
  */
 U_CDECL_BEGIN
 typedef UBool U_CALLCONV cleanupFunc(void);
+typedef void U_CALLCONV initFunc(UErrorCode *);
 U_CDECL_END
 
 /**
@@ -87,11 +88,6 @@ U_CAPI void U_EXPORT2 ucln_registerCleanup(ECleanupLibraryType type,
 U_CAPI void U_EXPORT2 ucln_cleanupOne(ECleanupLibraryType type);
 
 /* ucln_cmn.c variables shared with uinit.c */
-U_CDECL_BEGIN
-
-extern UBool gICUInitialized;
-extern UMTX  gICUInitMutex;
-
-U_CDECL_END
+U_CFUNC UBool ucln_mutexedInit(initFunc *func, UErrorCode *status);
 
 #endif
