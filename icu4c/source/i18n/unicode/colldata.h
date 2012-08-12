@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1996-2011, International Business Machines                 *
+ *   Copyright (C) 1996-2012, International Business Machines                 *
  *   Corporation and others.  All Rights Reserved.                            *
  ******************************************************************************
  */
@@ -440,8 +440,6 @@ private:
 
     char keyBuffer[KEY_BUFFER_SIZE];
     char *key;
-
-    static CollDataCache *collDataCache;
 
     uint32_t minHan;
     uint32_t maxHan;

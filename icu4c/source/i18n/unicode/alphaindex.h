@@ -695,29 +695,7 @@ private:
      ELangType      langType_;        // The language type, simplified Chinese, Traditional Chinese,
                                       //  or not Chinese (Normal).  Part of the Pinyin support
 
-     typedef const UChar PinyinLookup[24][3];
-     static PinyinLookup   HACK_PINYIN_LOOKUP_SHORT;
-     static PinyinLookup   HACK_PINYIN_LOOKUP_LONG;
-     
-     // These will be lazily set to the short or long tables based on which
-     //   Chinese collation has been configured into the ICU library.
-     static PinyinLookup   *HACK_PINYIN_LOOKUP;
-     static const UChar    *PINYIN_LOWER_BOUNDS;
-
-
-
      int32_t    recordCounter_;         // Counts Records created.  For minting record serial numbers.
-
-// Constants.  Lazily initialized the first time an AlphabeticIndex object is created.
-
-     static UnicodeSet *ALPHABETIC;
-     static UnicodeSet *CORE_LATIN;
-     static UnicodeSet *ETHIOPIC;
-     static UnicodeSet *HANGUL;
-     static UnicodeSet *IGNORE_SCRIPTS;
-     static UnicodeSet *TO_TRY;
-     static UnicodeSet *UNIHAN;
-     static const UnicodeString *EMPTY_STRING;
 
 };
 
