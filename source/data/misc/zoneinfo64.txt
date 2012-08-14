@@ -3,9 +3,9 @@
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Mon Aug 13 15:19:08 2012
+// Build date: Tue Aug 14 09:42:16 2012
 // Olson source: ftp://elsie.nci.nih.gov/pub/
-// Olson version: 2012d
+// Olson version: 2012e
 // ICU version: 50.0.1
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
@@ -13,7 +13,7 @@
 //---------------------------------------------------------
 
 zoneinfo64:table(nofallback) {
- TZVersion { "2012d" }
+ TZVersion { "2012e" }
  Zones:array { 
   /* ACT */ :int { 345 } //Z#0
   /* AET */ :int { 357 } //Z#1
@@ -2805,8 +2805,8 @@ zoneinfo64:table(nofallback) {
   } //Z#545
   /* Pacific/Fakaofo */ :table {
     transPre32:intvector { -1, 2117555592 }
-    trans:intvector { 1325239200 }
-    typeOffsets:intvector { -41096, 0, -36000, 0, 50400, 0 }
+    trans:intvector { 1325242800 }
+    typeOffsets:intvector { -41096, 0, -39600, 0, 46800, 0 }
     typeMap:bin { "0102" }
   } //Z#546
   /* Pacific/Fiji */ :table {
