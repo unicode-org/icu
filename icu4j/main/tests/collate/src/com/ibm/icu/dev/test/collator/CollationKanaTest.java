@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -172,8 +172,7 @@ public class CollationKanaTest extends TestFmwk{
         int result;
         String string1 = new String(tmp1);
         String string2 = new String(tmp2);
-        RuleBasedCollator rb = (RuleBasedCollator)Collator.getInstance(ULocale.JAPAN);
-        rb.setHiraganaQuaternary(true);
+        RuleBasedCollator rb = (RuleBasedCollator)Collator.getInstance(ULocale.JAPANESE);
         rb.setStrength(Collator.QUATERNARY);
         rb.setAlternateHandlingShifted(false);
         
