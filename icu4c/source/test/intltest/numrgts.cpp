@@ -29,10 +29,10 @@ public:
   
     virtual UnicodeString& format(    double            number, 
                     UnicodeString&        toAppendTo, 
-                    FieldPosition&        pos,
+                    FieldPositionIterator* posIter,
                     UErrorCode& status) const
     {
-        return NumberFormat::format(number, toAppendTo, pos, status);
+        return NumberFormat::format(number, toAppendTo, posIter, status);
     }
 
     /* Just keep this here to make some of the compilers happy */
