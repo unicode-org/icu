@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -17,12 +17,6 @@
 *   07/19/99    stephen     Fixed to use ucnv's default codepage.
 ******************************************************************************
 */
-
-/*
- * Defines _XOPEN_SOURCE for access to POSIX functions.
- * Must be before any other #includes.
- */
-#include "uposixdefs.h"
 
 #include "locmap.h"
 #include "unicode/ustdio.h"

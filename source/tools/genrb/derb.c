@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -54,7 +54,7 @@ static UConverter *defaultConverter = 0;
 
 static const int32_t indentsize = 4;
 static int32_t truncsize = DERB_DEFAULT_TRUNC;
-static UBool trunc = FALSE;
+static UBool truncate = FALSE;
 
 static const char *getEncodingName(const char *encoding);
 static void reportError(const char *pname, UErrorCode *status, const char *when);
@@ -152,14 +152,14 @@ main(int argc, char* argv[]) {
     }
 
     if(options[4].doesOccur) {
-        trunc = TRUE;
+        truncate = TRUE;
         if(options[4].value != NULL) {
             truncsize = atoi(options[4].value); /* user defined printable size */
         } else {
             truncsize = DERB_DEFAULT_TRUNC; /* we'll use default omitting size */
         }
     } else {
-        trunc = FALSE;
+        truncate = FALSE;
     }
 
     if(options[5].doesOccur) {
@@ -473,7 +473,7 @@ static void printOutAlias(FILE *out,  UConverter *converter, UResourceBundle *pa
     int32_t len = 0;
     const UChar* thestr = res_getAlias(&(parent->fResData), r, &len);
     UChar *string = quotedString(thestr);
-    if(trunc && len > truncsize) {
+    if(truncate && len > truncsize) {
         char msg[128];
         printIndent(out, converter, indent);
         sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
@@ -517,7 +517,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
             UChar *string = quotedString(thestr);
 
             /* TODO: String truncation */
-            if(trunc && len > truncsize) {
+            if(truncate && len > truncsize) {
                 char msg[128];
                 printIndent(out, converter, indent);
                 sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",
@@ -576,7 +576,7 @@ static void printOutBundle(FILE *out, UConverter *converter, UResourceBundle *re
         {
             int32_t len = 0;
             const int8_t *data = (const int8_t *)ures_getBinary(resource, &len, status);
-            if(trunc && len > truncsize) {
+            if(truncate && len > truncsize) {
                 char msg[128];
                 printIndent(out, converter, indent);
                 sprintf(msg, "// WARNING: this resource, size %li is truncated to %li\n",

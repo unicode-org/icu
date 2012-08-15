@@ -120,9 +120,11 @@ AC_SUBST(ENABLE_RELEASE)
 : ${CFLAGS=""}
 : ${CXXFLAGS=""}
 
-# Checks for programs
+# Checks for compilers
 AC_PROG_CC
-AC_PROG_CXX
+# Make sure that we try clang++ first, which provides C++11 support.
+# The g++ compiler is less likely to support C++11.
+AC_PROG_CXX([clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe FCC KCC RCC])
 
 # Ensure that if CXXFLAGS/CFLAGS were not set when calling configure, set it correctly based on (enable/disable) debug or release option
 # The release mode use is the default one for autoconf
@@ -276,7 +278,7 @@ if test "$ENABLE_STATIC" = "YES"; then
             
             case "${host}" in
             *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
-                if test "$ac_cv_c_compiler_gnu" = yes; then
+                if test "$GCC" = yes; then
                     CPPFLAGS="${CPPFLAGS} -ffunction-sections -fdata-sections"
                     LDFLAGS="${LDFLAGS} -Wl,--gc-sections"
                 fi
@@ -676,13 +678,10 @@ AC_CACHE_VAL(ac_cv_namespace_ok,
     using namespace x_version;
     ], [f();])],[ac_cv_namespace_ok=yes],[ac_cv_namespace_ok=no])] )
 AC_MSG_RESULT($ac_cv_namespace_ok)
-U_HAVE_NAMESPACE=1
 if test $ac_cv_namespace_ok = no
 then
     AC_MSG_ERROR(Namespace support is required to build ICU.)
-    U_HAVE_NAMESPACE=0
 fi
-AC_SUBST(U_HAVE_NAMESPACE)
 
 AC_MSG_CHECKING([for properly overriding new and delete])
 U_OVERRIDE_CXX_ALLOCATION=0
@@ -905,7 +904,7 @@ CHECK_UTF16_STRING_RESULT="unknown"
 
 case "${host}" in
 *-*-aix*|powerpc64-*-linux*)
-    if test "$ac_cv_c_compiler_gnu" = no; then
+    if test "$GCC" = no; then
         OLD_CFLAGS="${CFLAGS}"
         OLD_CXXFLAGS="${CXXFLAGS}"
         CFLAGS="${CFLAGS} -qutf"
@@ -920,7 +919,7 @@ case "${host}" in
     fi
     ;;
 *-*-solaris*)
-    if test "$ac_cv_c_compiler_gnu" = no; then
+    if test "$GCC" = no; then
         OLD_CFLAGS="${CFLAGS}"
         OLD_CXXFLAGS="${CXXFLAGS}"
         CFLAGS="${CFLAGS} -xustr=ascii_utf16_ushort"
@@ -943,7 +942,7 @@ case "${host}" in
     fi
     ;;
 *-*-hpux*)
-    if test "$ac_cv_c_compiler_gnu" = no; then
+    if test "$GCC" = no; then
         # The option will be detected at compile time without additional compiler options.
         CHECK_UTF16_STRING_RESULT="available"
     fi
@@ -957,37 +956,40 @@ case "${host}" in
 esac
 
 # GCC >= 4.4 supports UTF16 string literals. The CFLAGS and CXXFLAGS may change in the future.
-# Since we have to use a different standard, if strict is enable, don't enable UTF16 string literals.
-U_CHECK_GNUC_UTF16_STRING=0
-if test "$ac_use_strict_options" = no && test "$CHECK_UTF16_STRING_RESULT" = "unknown"; then
-    if test "$ac_cv_c_compiler_gnu" = yes; then
+if test "$CHECK_UTF16_STRING_RESULT" = "unknown"; then
+    if test "$GCC" = yes; then
         OLD_CFLAGS="${CFLAGS}"
-        OLD_CXXFLAGS="${CXXFLAGS}"
-        CFLAGS="${CFLAGS} -std=gnu99 -D_GCC_"
-        CXXFLAGS="${CXXFLAGS} -std=c++0x"
+        CFLAGS="${CFLAGS} -std=gnu99"
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 4)
-#ifdef _GCC_
-typedef __CHAR16_TYPE__ char16_t;
-#endif
-char16_t test[] = u"This is a UTF16 literal string.";
-#else
-GCC IS TOO OLD!
-#endif
-        ]], [[]])],[U_CHECK_UTF16_STRING=1],[U_CHECK_UTF16_STRING=0])
-        if test "$U_CHECK_UTF16_STRING" = 1; then
-            CHECK_UTF16_STRING_RESULT="available";
-            U_CHECK_GNUC_UTF16_STRING=1
+static const char16_t test[] = u"This is a UTF16 literal string.";
+        ]], [[]])],[CC_UTF16_STRING=1],[CC_UTF16_STRING=0])
+        if test "$CC_UTF16_STRING" = 1; then
+            CHECK_UTF16_STRING_RESULT="C only";
         else
             CFLAGS="${OLD_CFLAGS}"
+        fi
+    fi
+    if test "$GXX" = yes; then
+        OLD_CXXFLAGS="${CXXFLAGS}"
+        # -Wno-return-type-c-linkage is desired so that stable ICU API is not warned about.
+        CXXFLAGS="${CXXFLAGS} -std=c++11"
+        AC_LANG_PUSH([C++])
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
+static const char16_t test[] = u"This is a UTF16 literal string.";
+        ]], [[]])],[CXX_UTF16_STRING=1],[CXX_UTF16_STRING=0])
+        AC_LANG_POP([C++])
+        if test "$CXX_UTF16_STRING" = 1; then
+            if test "$CC_UTF16_STRING" = 1; then
+                CHECK_UTF16_STRING_RESULT="available";
+            else
+                CHECK_UTF16_STRING_RESULT="C++ only";
+            fi
+        else
             CXXFLAGS="${OLD_CXXFLAGS}"
         fi
     fi
 fi
-AC_SUBST(U_CHECK_GNUC_UTF16_STRING)
-
 AC_MSG_RESULT($CHECK_UTF16_STRING_RESULT)
-AC_SUBST(U_CHECK_UTF16_STRING)
 
 # Enable/disable extras
 AC_ARG_ENABLE(extras,

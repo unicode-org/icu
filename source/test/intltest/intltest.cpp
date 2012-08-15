@@ -653,7 +653,7 @@ UBool IntlTest::runTest( char* name, char* par, char *baseName )
 }
 
 // call individual tests, to be overriden to call implementations
-void IntlTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
+void IntlTest::runIndexedTest( int32_t /*index*/, UBool /*exec*/, const char* & /*name*/, char* /*par*/ )
 {
     // to be overriden by a method like:
     /*
@@ -664,7 +664,6 @@ void IntlTest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
     }
     */
     this->errln("*** runIndexedTest needs to be overriden! ***");
-    name = ""; exec = exec; index = index; par = par;
 }
 
 
