@@ -4,7 +4,7 @@
  * others. All Rights Reserved.
  *******************************************************************************
  */
-package com.ibm.icu.util;
+package com.ibm.icu.text;
 
 class ListFormatterData {
     static void load() {

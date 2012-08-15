@@ -4,7 +4,7 @@
  * others. All Rights Reserved.
  *******************************************************************************
  */
-package com.ibm.icu.util;
+package com.ibm.icu.text;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,11 +13,13 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+import com.ibm.icu.util.ULocale;
+
 /**
  * Immutable class for formatting a list, using data from CLDR (or supplied
  * separately). The class is not subclassable.
  * 
- * @author markdavis
+ * @author Mark Davis
  * @draft ICU 50
  * @provisional This API might change or be removed in a future release.
  */
@@ -86,6 +88,17 @@ final public class ListFormatter {
      */
     public static ListFormatter getInstance(Locale locale) {
         return getInstance(ULocale.forLocale(locale));
+    }
+
+    /**
+     * Create a list formatter that is appropriate for the default FORMAT locale.
+     * 
+     * @return ListFormatter
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static ListFormatter getInstance() {
+        return getInstance(ULocale.getDefault(ULocale.Category.FORMAT));
     }
 
     /**

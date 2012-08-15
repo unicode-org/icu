@@ -28,6 +28,7 @@ public class TestAll extends TestGroup {
                   "TestAll$TimeUnitFormat",
                   "com.ibm.icu.dev.test.format.BigNumberFormatTest",
                   "DataDrivenFormatTest",
+                  "ListFormatterTest",
                   "TestAll$PluralFormat",
                   "TestAll$MessageFormat",
                   "TestAll$SelectFormat"

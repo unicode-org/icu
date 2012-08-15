@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.util;
@@ -31,7 +31,6 @@ public class TestAll extends TestGroup {
             "Trie2Test",
             "LocaleDataTest",
             "GenderInfoTest",
-            "ListFormatterTest",
             "ULocaleTest",
             "LocaleAliasTest",
             "DebugUtilitiesTest",
@@ -45,5 +44,3 @@ public class TestAll extends TestGroup {
 
     public static final String CLASS_TARGET_NAME = "Util";
 }
-
-
