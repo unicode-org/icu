@@ -4674,7 +4674,7 @@ static void TestBeforeTightening(void) {
 
 }
 
-#if 0
+/*
 &m < a
 &[before 1] a < x <<< X << q <<< Q < z
 assert: m <<< M < x <<< X << q <<< Q < z < a < n
@@ -4732,7 +4732,7 @@ assert:  x <<< X << q <<< Q << m <<< \u24DC <<< M < z < n
 
 &[before 3] \u24DC <<< x <<< X << q <<< Q < z
 assert: m <<< x <<< X <<< \u24DC <<< M  << q <<< Q < z < n
-#endif
+*/
 
 
 #if 0

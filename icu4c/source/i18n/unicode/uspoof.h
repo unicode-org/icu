@@ -847,7 +847,7 @@ uspoof_getSkeletonUTF8(const USpoofChecker *sc,
   *                
   * @stable ICU 4.2
   */   
-U_STABLE icu::UnicodeString & U_EXPORT2
+U_I18N_API icu::UnicodeString & U_EXPORT2
 uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
                                 uint32_t type,
                                 const icu::UnicodeString &s,

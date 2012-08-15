@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (c) 1999-2011, International Business Machines Corporation and
+# Copyright (c) 1999-2012, International Business Machines Corporation and
 # others. All Rights Reserved.
 
 # runConfigureICU: This script will run the "configure" script for the appropriate platform
@@ -227,8 +227,6 @@ case $platform in
     Linux*)
         THE_OS="Linux"
         THE_COMP="the GNU C++"
-        CC=gcc; export CC
-        CXX=g++; export CXX
         DEBUG_CFLAGS='-g -O0'
         DEBUG_CXFLAGS='-g -O0'
         ;;

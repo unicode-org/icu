@@ -621,8 +621,6 @@ pkgicudatadir
 LAYOUT_TRUE
 ICUIO_TRUE
 EXTRAS_TRUE
-U_CHECK_UTF16_STRING
-U_CHECK_GNUC_UTF16_STRING
 U_HAVE_WCSCPY
 U_HAVE_WCHAR_H
 U_TIMEZONE
@@ -634,7 +632,6 @@ U_HAVE_TZSET
 U_HAVE_POPEN
 U_HAVE_PLACEMENT_NEW
 U_OVERRIDE_CXX_ALLOCATION
-U_HAVE_NAMESPACE
 U_NL_LANGINFO_CODESET
 U_HAVE_NL_LANGINFO_CODESET
 U_IS_BIG_ENDIAN
@@ -2742,7 +2739,7 @@ $as_echo "$enabled" >&6; }
 : ${CFLAGS=""}
 : ${CXXFLAGS=""}
 
-# Checks for programs
+# Checks for compilers
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3533,6 +3530,8 @@ ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+# Make sure that we try clang++ first, which provides C++11 support.
+# The g++ compiler is less likely to support C++11.
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3543,7 +3542,7 @@ if test -z "$CXX"; then
     CXX=$CCC
   else
     if test -n "$ac_tool_prefix"; then
-  for ac_prog in g++ c++ gpp aCC CC cxx cc++ cl.exe FCC KCC RCC xlC_r xlC
+  for ac_prog in clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe FCC KCC RCC
   do
     # Extract the first word of "$ac_tool_prefix$ac_prog", so it can be a program name with args.
 set dummy $ac_tool_prefix$ac_prog; ac_word=$2
@@ -3587,7 +3586,7 @@ fi
 fi
 if test -z "$CXX"; then
   ac_ct_CXX=$CXX
-  for ac_prog in g++ c++ gpp aCC CC cxx cc++ cl.exe FCC KCC RCC xlC_r xlC
+  for ac_prog in clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe FCC KCC RCC
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -4257,15 +4256,9 @@ $as_echo "$ac_use_strict_options" >&6; }
     then
         if test "$GCC" = yes
         then
-            case "${host}" in
-            *-*-solaris*)
-                CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
-            *-*-hpux*)
-                echo "# Note: We are not using '-ansi' with HP/UX GCC because int64_t broke, see <http://bugs.icu-project.org/trac/ticket/8493>"
-                CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
-            *)
-                CFLAGS="$CFLAGS -Wall -ansi -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -Wno-long-long";;
-            esac
+            # Do not use -ansi. It limits us to C90, and it breaks some platforms.
+            # We use -std=c99 to disable the gnu99 defaults and its associated warnings
+            CFLAGS="$CFLAGS -Wall -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
         else
             case "${host}" in
             *-*-cygwin)
@@ -4277,7 +4270,7 @@ $as_echo "$ac_use_strict_options" >&6; }
         fi
         if test "$GXX" = yes
         then
-            CXXFLAGS="$CXXFLAGS -W -Wall -ansi -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
+            CXXFLAGS="$CXXFLAGS -W -Wall -pedantic -Wpointer-arith -Wwrite-strings -Wno-long-long"
         else
             case "${host}" in
             *-*-cygwin)
@@ -5248,7 +5241,7 @@ $as_echo_n "checking whether we can use static library optimization option... " 
 
             case "${host}" in
             *-linux*|i*86-*-*bsd*|i*86-pc-gnu)
-                if test "$ac_cv_c_compiler_gnu" = yes; then
+                if test "$GCC" = yes; then
                     CPPFLAGS="${CPPFLAGS} -ffunction-sections -fdata-sections"
                     LDFLAGS="${LDFLAGS} -Wl,--gc-sections"
                 fi
@@ -6503,13 +6496,10 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_namespace_ok" >&5
 $as_echo "$ac_cv_namespace_ok" >&6; }
-U_HAVE_NAMESPACE=1
 if test $ac_cv_namespace_ok = no
 then
     as_fn_error $? "Namespace support is required to build ICU." "$LINENO" 5
-    U_HAVE_NAMESPACE=0
 fi
-
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking for properly overriding new and delete" >&5
 $as_echo_n "checking for properly overriding new and delete... " >&6; }
@@ -7091,7 +7081,7 @@ CHECK_UTF16_STRING_RESULT="unknown"
 
 case "${host}" in
 *-*-aix*|powerpc64-*-linux*)
-    if test "$ac_cv_c_compiler_gnu" = no; then
+    if test "$GCC" = no; then
         OLD_CFLAGS="${CFLAGS}"
         OLD_CXXFLAGS="${CXXFLAGS}"
         CFLAGS="${CFLAGS} -qutf"
@@ -7122,7 +7112,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     fi
     ;;
 *-*-solaris*)
-    if test "$ac_cv_c_compiler_gnu" = no; then
+    if test "$GCC" = no; then
         OLD_CFLAGS="${CFLAGS}"
         OLD_CXXFLAGS="${CXXFLAGS}"
         CFLAGS="${CFLAGS} -xustr=ascii_utf16_ushort"
@@ -7161,7 +7151,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     fi
     ;;
 *-*-hpux*)
-    if test "$ac_cv_c_compiler_gnu" = no; then
+    if test "$GCC" = no; then
         # The option will be detected at compile time without additional compiler options.
         CHECK_UTF16_STRING_RESULT="available"
     fi
@@ -7175,25 +7165,14 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 esac
 
 # GCC >= 4.4 supports UTF16 string literals. The CFLAGS and CXXFLAGS may change in the future.
-# Since we have to use a different standard, if strict is enable, don't enable UTF16 string literals.
-U_CHECK_GNUC_UTF16_STRING=0
-if test "$ac_use_strict_options" = no && test "$CHECK_UTF16_STRING_RESULT" = "unknown"; then
-    if test "$ac_cv_c_compiler_gnu" = yes; then
+if test "$CHECK_UTF16_STRING_RESULT" = "unknown"; then
+    if test "$GCC" = yes; then
         OLD_CFLAGS="${CFLAGS}"
-        OLD_CXXFLAGS="${CXXFLAGS}"
-        CFLAGS="${CFLAGS} -std=gnu99 -D_GCC_"
-        CXXFLAGS="${CXXFLAGS} -std=c++0x"
+        CFLAGS="${CFLAGS} -std=gnu99"
         cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-#if __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 4)
-#ifdef _GCC_
-typedef __CHAR16_TYPE__ char16_t;
-#endif
-char16_t test[] = u"This is a UTF16 literal string.";
-#else
-GCC IS TOO OLD!
-#endif
+static const char16_t test[] = u"This is a UTF16 literal string.";
 
 int
 main ()
@@ -7204,25 +7183,65 @@ main ()
 }
 _ACEOF
 if ac_fn_c_try_compile "$LINENO"; then :
-  U_CHECK_UTF16_STRING=1
+  CC_UTF16_STRING=1
 else
-  U_CHECK_UTF16_STRING=0
+  CC_UTF16_STRING=0
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-        if test "$U_CHECK_UTF16_STRING" = 1; then
-            CHECK_UTF16_STRING_RESULT="available";
-            U_CHECK_GNUC_UTF16_STRING=1
+        if test "$CC_UTF16_STRING" = 1; then
+            CHECK_UTF16_STRING_RESULT="C only";
         else
             CFLAGS="${OLD_CFLAGS}"
+        fi
+    fi
+    if test "$GXX" = yes; then
+        OLD_CXXFLAGS="${CXXFLAGS}"
+        # -Wno-return-type-c-linkage is desired so that stable ICU API is not warned about.
+        CXXFLAGS="${CXXFLAGS} -std=c++11"
+        ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+        cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+static const char16_t test[] = u"This is a UTF16 literal string.";
+
+int
+main ()
+{
+
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_cxx_try_compile "$LINENO"; then :
+  CXX_UTF16_STRING=1
+else
+  CXX_UTF16_STRING=0
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+        ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+        if test "$CXX_UTF16_STRING" = 1; then
+            if test "$CC_UTF16_STRING" = 1; then
+                CHECK_UTF16_STRING_RESULT="available";
+            else
+                CHECK_UTF16_STRING_RESULT="C++ only";
+            fi
+        else
             CXXFLAGS="${OLD_CXXFLAGS}"
         fi
     fi
 fi
-
-
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: $CHECK_UTF16_STRING_RESULT" >&5
 $as_echo "$CHECK_UTF16_STRING_RESULT" >&6; }
-
 
 # Enable/disable extras
 # Check whether --enable-extras was given.
