@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2011, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2002-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -830,8 +830,8 @@ public class CollationAPITest extends TestFmwk {
             errln("Setting french collation failed");
         }
         collator.setHiraganaQuaternary(!hquart);
-        if (collator.isHiraganaQuaternary() == hquart) {
-            errln("Setting hiragana quartenary failed");
+        if (collator.isHiraganaQuaternary() != hquart) {
+            errln("Setting hiragana quartenary worked but should be a no-op since ICU 50");
         }
         collator.setLowerCaseFirst(!lowercase);
         if (collator.isLowerCaseFirst() == lowercase) {

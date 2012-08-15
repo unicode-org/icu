@@ -327,37 +327,41 @@ public final class RuleBasedCollator extends Collator {
      * Sets the Hiragana Quaternary mode to be on or off. When the Hiragana Quaternary mode is turned on, the collator
      * positions Hiragana characters before all non-ignorable characters in QUATERNARY strength. This is to produce a
      * correct JIS collation order, distinguishing between Katakana and Hiragana characters.
+     *
+     * This attribute is an implementation detail of the CLDR Japanese tailoring.
+     * The implementation might change to use a different mechanism
+     * to achieve the same Japanese sort order.
+     * Since ICU 50, this attribute is not settable any more via API functions.
      * 
      * @param flag
      *            true if Hiragana Quaternary mode is to be on, false otherwise
      * @see #setHiraganaQuaternaryDefault
      * @see #isHiraganaQuaternary
-     * @stable ICU 2.8
+     * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
      */
     public void setHiraganaQuaternary(boolean flag) {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify frozen object");
         }
-
-        m_isHiragana4_ = flag;
-        updateInternalState();
     }
 
     /**
      * Sets the Hiragana Quaternary mode to the initial mode set during construction of the RuleBasedCollator. See
      * setHiraganaQuaternary(boolean) for more details.
+     *
+     * This attribute is an implementation detail of the CLDR Japanese tailoring.
+     * The implementation might change to use a different mechanism
+     * to achieve the same Japanese sort order.
+     * Since ICU 50, this attribute is not settable any more via API functions.
      * 
      * @see #setHiraganaQuaternary(boolean)
      * @see #isHiraganaQuaternary
-     * @stable ICU 2.8
+     * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
      */
     public void setHiraganaQuaternaryDefault() {
         if (isFrozen()) {
             throw new UnsupportedOperationException("Attempt to modify frozen object");
         }
-
-        m_isHiragana4_ = m_defaultIsHiragana4_;
-        updateInternalState();
     }
 
     /**
@@ -1187,11 +1191,16 @@ public final class RuleBasedCollator extends Collator {
 
     /**
      * Checks if the Hiragana Quaternary mode is set on. See setHiraganaQuaternary(boolean) for more details.
+     *
+     * This attribute is an implementation detail of the CLDR Japanese tailoring.
+     * The implementation might change to use a different mechanism
+     * to achieve the same Japanese sort order.
+     * Since ICU 50, this attribute is not settable any more via API functions.
      * 
      * @return flag true if Hiragana Quaternary mode is on, false otherwise
      * @see #setHiraganaQuaternaryDefault
      * @see #setHiraganaQuaternary(boolean)
-     * @stable ICU 2.8
+     * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
      */
     public boolean isHiraganaQuaternary() {
         return m_isHiragana4_;
