@@ -1,13 +1,15 @@
 /*
  *******************************************************************************
  * Copyright (C) 2012-2012, Google, International Business Machines Corporation and
- * others. All Rights Reserved.                                                *
+ * others. All Rights Reserved.
  *******************************************************************************
  */
-package com.ibm.icu.dev.test.util;
+package com.ibm.icu.dev.test.format;
+
+import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.util.ListFormatter;
+import com.ibm.icu.text.ListFormatter;
 import com.ibm.icu.util.ULocale;
 
 public class ListFormatterTest extends TestFmwk {
@@ -41,6 +43,12 @@ public class ListFormatterTest extends TestFmwk {
     public void TestEnglish() {
         checkData(ListFormatter.getInstance(ULocale.ENGLISH), EnglishTestData);
         checkData(ListFormatter.getInstance(ULocale.US), EnglishTestData);
+        // Redundant tests for code coverage.
+        checkData(ListFormatter.getInstance(Locale.ENGLISH), EnglishTestData);
+        ULocale defaultLocale = ULocale.getDefault(ULocale.Category.FORMAT);
+        if (defaultLocale.equals(ULocale.ENGLISH) || defaultLocale.equals(ULocale.US)) {
+            checkData(ListFormatter.getInstance(), EnglishTestData);
+        }
     }
     
     String[] JapaneseTestData = {
