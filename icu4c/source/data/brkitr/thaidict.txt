@@ -1,5 +1,5 @@
-﻿	Copyright (c) 2006 International Business Machines Corporation,
-	Apple Computer, Inc., and others. All Rights Reserved.
+﻿  #  	Copyright (c) 2006-2012 International Business Machines Corporation,
+  #  	Apple Computer, Inc., and others. All Rights Reserved.
 กก
 กกขนาก
 กกช้าง
@@ -5400,7 +5400,7 @@
 ดิ้นรน
 ดิ้ว
 ดี
-ดี.ซี.
+ #   ดี.ซี. -- TODO: why does this have full stop in it?
 ดีกรี
 ดีงู
 ดีฉัน
@@ -15972,8 +15972,8 @@
 วิ่งเปี้ยว
 วิ่น
 วี
-วี.ดี.
-วี.ไอ.พี.
+ #   วี.ดี.  #   TODO: why do these have full stops?
+ #   วี.ไอ.พี.
 วีค
 วีจิ
 วีชนี
@@ -16357,9 +16357,9 @@
 ษัษฐ
 ษัษฐี
 ษิโณทก
-ส.ธรนินทร์
-ส.ธรรมภักดี
-ส.นิยม
+ #   ส.ธรนินทร์ -- TODO: why do these have full stops?
+ #   ส.ธรรมภักดี
+ #   ส.นิยม
 สก
 สกฏ
 สกฏภาร
@@ -23311,7 +23311,7 @@
 เห่า
 เห้งเจีย
 เอ
-เอ.ยู.เอ.
+ #   เอ.ยู.เอ. -- TODO: why do we have a full stop?
 เอก
 เอกจิต
 เอกฉันท์

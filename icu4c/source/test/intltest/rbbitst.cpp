@@ -33,10 +33,11 @@
 #include <string.h>
 #include "uvector.h"
 #include "uvectr32.h"
-#include "triedict.h"
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "unicode/numfmt.h"
+#include "unicode/uscript.h"
 
 #define TEST_ASSERT(x) {if (!(x)) { \
     errln("Failure in file %s, line %d", __FILE__, __LINE__);}}
@@ -111,8 +112,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
 #endif
 
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_FILE_IO
-        case 16:  name = "TestMonkey";
-            if(exec)  TestMonkey(params);                      break;
+        case 16:  
+            name = "TestMonkey"; if(exec)  TestMonkey(params); break;
 #else
         case 16:
              name = "skip";                                    break;
@@ -130,8 +131,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             break;
         case 19: name = "TestDebug";
             if(exec) TestDebug();                              break;
-        case 20: name = "TestTrieDict";
-            if(exec) TestTrieDict();                           break;
+        case 20: name = "skip";
+            break;
 
 #if !UCONFIG_NO_FILE_IO
         case 21: name = "TestBug5775";
@@ -427,227 +428,6 @@ void RBBITest::TestBug3818() {
     }
     delete bi;
 }
-
-
-void RBBITest::TestTrieDict() {
-    UErrorCode      status  = U_ZERO_ERROR;
-
-    //
-    //  Open and read the test data file.
-    //
-    const char *testDataDirectory = IntlTest::getSourceTestData(status);
-    char testFileName[1000];
-    if (testDataDirectory == NULL || strlen(testDataDirectory) + strlen("riwords.txt") + 10 >= sizeof(testFileName)) {
-        errln("Can't open test data.  Path too long.");
-        return;
-    }
-    strcpy(testFileName, testDataDirectory);
-    strcat(testFileName, "riwords.txt");
-
-    // Items needing deleting at the end
-    MutableTrieDictionary *mutableDict = NULL;
-    CompactTrieDictionary *compactDict = NULL;
-    UnicodeSet            *breaks      = NULL;
-    UChar                 *testFile    = NULL;
-    StringEnumeration     *enumer1     = NULL;
-    StringEnumeration     *enumer2     = NULL;
-    MutableTrieDictionary *mutable2    = NULL;
-    StringEnumeration     *cloneEnum   = NULL;
-    CompactTrieDictionary *compact2    = NULL;
-
-
-    const UnicodeString *originalWord = NULL;
-    const UnicodeString *cloneWord    = NULL;
-    UChar *current;
-    UChar *word;
-    UChar uc;
-    int32_t wordLen;
-    int32_t wordCount;
-    int32_t testCount;
-
-    int    len;
-    testFile = ReadAndConvertFile(testFileName, len, NULL, status);
-    if (U_FAILURE(status)) {
-        goto cleanup; /* something went wrong, error already output */
-    }
-
-    mutableDict = new MutableTrieDictionary(0x0E1C, status);
-    if (U_FAILURE(status)) {
-        errln("Error creating MutableTrieDictionary: %s\n", u_errorName(status));
-        goto cleanup;
-    }
-
-    breaks = new UnicodeSet;
-    breaks->add(0x000A);     // Line Feed
-    breaks->add(0x000D);     // Carriage Return
-    breaks->add(0x2028);     // Line Separator
-    breaks->add(0x2029);     // Paragraph Separator
-
-    // Now add each non-comment line of the file as a word.
-    current = testFile;
-    word = current;
-    uc = *current++;
-    wordLen = 0;
-    wordCount = 0;
-
-    while (uc) {
-        if (uc == 0x0023) {     // #comment line, skip
-            while (uc && !breaks->contains(uc)) {
-                uc = *current++;
-            }
-        }
-        else while (uc && !breaks->contains(uc)) {
-            ++wordLen;
-            uc = *current++;
-        }
-        if (wordLen > 0) {
-            mutableDict->addWord(word, wordLen, status);
-            if (U_FAILURE(status)) {
-                errln("Could not add word to mutable dictionary; status %s\n", u_errorName(status));
-                goto cleanup;
-            }
-            wordCount += 1;
-        }
-
-        // Find beginning of next line
-        while (uc && breaks->contains(uc)) {
-            uc = *current++;
-        }
-        word = current-1;
-        wordLen = 0;
-    }
-
-    if (wordCount < 50) {
-        errln("Word count (%d) unreasonably small\n", wordCount);
-        goto cleanup;
-    }
-
-    enumer1 = mutableDict->openWords(status);
-    if (U_FAILURE(status)) {
-        errln("Could not open mutable dictionary enumerator: %s\n", u_errorName(status));
-        goto cleanup;
-    }
-
-    testCount = 0;
-    if (wordCount != (testCount = enumer1->count(status))) {
-        errln("MutableTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
-            testCount, wordCount, u_errorName(status));
-        goto cleanup;
-    }
-
-    // Now compact it
-    compactDict = new CompactTrieDictionary(*mutableDict, status);
-    if (U_FAILURE(status)) {
-        errln("Failed to create CompactTrieDictionary: %s\n", u_errorName(status));
-        goto cleanup;
-    }
-
-    enumer2 = compactDict->openWords(status);
-    if (U_FAILURE(status)) {
-        errln("Could not open compact trie dictionary enumerator: %s\n", u_errorName(status));
-        goto cleanup;
-    }
-
-    if (wordCount != (testCount = enumer2->count(status))) {
-        errln("CompactTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
-            testCount, wordCount, u_errorName(status));
-        goto cleanup;
-    }
-
-    if (typeid(*enumer1) == typeid(*enumer2)) {
-        errln("CompactTrieEnumeration and MutableTrieEnumeration typeids are the same");
-    }
-    delete enumer1;
-    enumer1 = NULL;
-    delete enumer2;
-    enumer2 = NULL;
-
-    // Now un-compact it
-    mutable2 = compactDict->cloneMutable(status);
-    if (U_FAILURE(status)) {
-        errln("Could not clone CompactTrieDictionary to MutableTrieDictionary: %s\n", u_errorName(status));
-        goto cleanup;
-    }
-
-    cloneEnum = mutable2->openWords(status);
-    if (U_FAILURE(status)) {
-        errln("Could not create cloned mutable enumerator: %s\n", u_errorName(status));
-        goto cleanup;
-    }
-
-    if (wordCount != (testCount = cloneEnum->count(status))) {
-        errln("Cloned MutableTrieDictionary word count (%d) differs from file word count (%d), with status %s\n",
-            testCount, wordCount, u_errorName(status));
-        goto cleanup;
-    }
-
-    // Compact original dictionary to clone. Note that we can only compare the same kind of
-    // dictionary as the order of the enumerators is not guaranteed to be the same between
-    // different kinds
-    enumer1 = mutableDict->openWords(status);
-    if (U_FAILURE(status)) {
-        errln("Could not re-open mutable dictionary enumerator: %s\n", u_errorName(status));
-        goto cleanup;
-     }
-
-    originalWord = enumer1->snext(status);
-    cloneWord = cloneEnum->snext(status);
-    while (U_SUCCESS(status) && originalWord != NULL && cloneWord != NULL) {
-        if (*originalWord != *cloneWord) {
-            errln("Original and cloned MutableTrieDictionary word mismatch\n");
-            goto cleanup;
-        }
-        originalWord = enumer1->snext(status);
-        cloneWord = cloneEnum->snext(status);
-    }
-
-    if (U_FAILURE(status)) {
-        errln("Enumeration failed: %s\n", u_errorName(status));
-        goto cleanup;
-    }
-
-    if (originalWord != cloneWord) {
-        errln("Original and cloned MutableTrieDictionary ended enumeration at different points\n");
-        goto cleanup;
-    }
-
-    // Test the data copying constructor for CompactTrieDict, and the data access APIs.
-    compact2 = new CompactTrieDictionary(compactDict->data(), status);
-    if (U_FAILURE(status)) {
-        errln("CompactTrieDictionary(const void *,...) failed\n");
-        goto cleanup;
-    }
-
-    if (compact2->dataSize() == 0) {
-        errln("CompactTrieDictionary->dataSize() == 0\n");
-        goto cleanup;
-    }
-
-    // Now count the words via the second dictionary
-    delete enumer1;
-    enumer1 = compact2->openWords(status);
-    if (U_FAILURE(status)) {
-        errln("Could not open compact trie dictionary 2 enumerator: %s\n", u_errorName(status));
-        goto cleanup;
-    }
-
-    if (wordCount != (testCount = enumer1->count(status))) {
-        errln("CompactTrieDictionary 2 word count (%d) differs from file word count (%d), with status %s\n",
-            testCount, wordCount, u_errorName(status));
-        goto cleanup;
-    }
-
-cleanup:
-    delete compactDict;
-    delete mutableDict;
-    delete breaks;
-    delete[] testFile;
-    delete enumer1;
-    delete mutable2;
-    delete cloneEnum;
-    delete compact2;
-}
-
 
 //----------------------------------------------------------------------------
 //
@@ -2215,6 +1995,8 @@ private:
     UnicodeSet  *fNewlineSet;
     UnicodeSet  *fKatakanaSet;
     UnicodeSet  *fALetterSet;
+    // TODO(jungshik): Do we still need this change? 
+    // UnicodeSet  *fALetterSet; // matches ALetterPlus in word.txt
     UnicodeSet  *fMidNumLetSet;
     UnicodeSet  *fMidLetterSet;
     UnicodeSet  *fMidNumSet;
@@ -2223,6 +2005,7 @@ private:
     UnicodeSet  *fOtherSet;
     UnicodeSet  *fExtendSet;
     UnicodeSet  *fExtendNumLetSet;
+    UnicodeSet  *fDictionaryCjkSet;
 
     RegexMatcher  *fMatcher;
 
@@ -2239,11 +2022,25 @@ RBBIWordMonkey::RBBIWordMonkey()
     fCRSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = CR}]"),           status);
     fLFSet           = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = LF}]"),           status);
     fNewlineSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Newline}]"),      status);
-    fALetterSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ALetter}]"),      status);
+    fDictionaryCjkSet= new UnicodeSet("[[\\uac00-\\ud7a3][:Han:][:Hiragana:][:Katakana:]]", status);
+    // Exclude Hangul syllables from ALetterSet during testing.
+    // Leave CJK dictionary characters out from the monkey tests!
+#if 0 
+    fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}"
+                                      "[\\p{Line_Break = Complex_Context}"
+                                      "-\\p{Grapheme_Cluster_Break = Extend}"
+                                      "-\\p{Grapheme_Cluster_Break = Control}"
+                                      "]]",
+                                      status);
+#endif
+    fALetterSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ALetter}]"), status);
+    fALetterSet->removeAll(*fDictionaryCjkSet);
     fKatakanaSet     = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Katakana}]"),     status);
     fMidNumLetSet    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidNumLet}]"),    status);
     fMidLetterSet    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidLetter}]"),    status);
     fMidNumSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = MidNum}]"),       status);
+    // TODO: this set used to contain [\\uff10-\\uff19] (fullwidth digits), but this breaks the test
+    // we should figure out why
     fNumericSet      = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Numeric}]"),      status);
     fFormatSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Format}]"),       status);
     fExtendNumLetSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ExtendNumLet}]"), status);
@@ -2268,13 +2065,14 @@ RBBIWordMonkey::RBBIWordMonkey()
     fOtherSet->removeAll(*fFormatSet);
     fOtherSet->removeAll(*fExtendSet);
     // Inhibit dictionary characters from being tested at all.
+    fOtherSet->removeAll(*fDictionaryCjkSet);
     fOtherSet->removeAll(UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{LineBreak = Complex_Context}]"), status));
 
     fSets->addElement(fCRSet,        status);
     fSets->addElement(fLFSet,        status);
     fSets->addElement(fNewlineSet,   status);
     fSets->addElement(fALetterSet,   status);
-    fSets->addElement(fKatakanaSet,  status);
+    //fSets->addElement(fKatakanaSet,  status); //TODO: work out how to test katakana
     fSets->addElement(fMidLetterSet, status);
     fSets->addElement(fMidNumLetSet, status);
     fSets->addElement(fMidNumSet,    status);
@@ -3547,6 +3345,7 @@ static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr,
     for (i = bi->last(); i != BreakIterator::DONE; i = bi->previous()) {
         count --;
         if (forward[count] != i) {
+            printStringBreaks(ustr, expected, expectedcount);
             test->errln("happy break test previous() failed: expected %d but got %d",
                         forward[count], i);
             break;
@@ -3580,23 +3379,25 @@ void RBBITest::TestWordBreaks(void)
     UErrorCode    status = U_ZERO_ERROR;
     // BreakIterator  *bi = BreakIterator::createCharacterInstance(locale, status);
     BreakIterator *bi = BreakIterator::createWordInstance(locale, status);
+    // Replaced any C+J characters in a row with a random sequence of characters
+    // of the same length to make our C+J segmentation not get in the way.
     static const char *strlist[] =
     {
     "\\U000e0032\\u0097\\u0f94\\uc2d8\\u05f4\\U000e0031\\u060d",
-    "\\U000e0037\\u4666\\u1202\\u003a\\U000e0031\\u064d\\u0bea\\u591c\\U000e0040\\u003b",
+    "\\U000e0037\\u2666\\u1202\\u003a\\U000e0031\\u064d\\u0bea\\u091c\\U000e0040\\u003b",
     "\\u0589\\u3e99\\U0001d7f3\\U000e0074\\u1810\\u200e\\U000e004b\\u0027\\U000e0061\\u003a",
     "\\u398c\\U000104a5\\U0001d173\\u102d\\u002e\\uca3b\\u002e\\u002c\\u5622",
-    "\\u90ca\\u3588\\u009c\\u0953\\u194b",
+    "\\uac00\\u3588\\u009c\\u0953\\u194b",
     "\\u200e\\U000e0072\\u0a4b\\U000e003f\\ufd2b\\u2027\\u002e\\u002e",
     "\\u0602\\u2019\\ua191\\U000e0063\\u0a4c\\u003a\\ub4b5\\u003a\\u827f\\u002e",
-    "\\u7f1f\\uc634\\u65f8\\u0944\\u04f2\\uacdf\\u1f9c\\u05f4\\u002e",
+    "\\u2f1f\\u1634\\u05f8\\u0944\\u04f2\\u0cdf\\u1f9c\\u05f4\\u002e",
     "\\U000e0042\\u002e\\u0fb8\\u09ef\\u0ed1\\u2044",
     "\\u003b\\u024a\\u102e\\U000e0071\\u0600",
     "\\u2027\\U000e0067\\u0a47\\u00b7",
     "\\u1fcd\\u002c\\u07aa\\u0027\\u11b0",
     "\\u002c\\U000e003c\\U0001d7f4\\u003a\\u0c6f\\u0027",
     "\\u0589\\U000e006e\\u0a42\\U000104a5",
-    "\\u4f66\\ub523\\u003a\\uacae\\U000e0047\\u003a",
+    "\\u0f66\\u2523\\u003a\\u0cae\\U000e0047\\u003a",
     "\\u003a\\u0f21\\u0668\\u0dab\\u003a\\u0655\\u00b7",
     "\\u0027\\u11af\\U000e0057\\u0602",
     "\\U0001d7f2\\U000e007\\u0004\\u0589",
@@ -3608,7 +3409,7 @@ void RBBITest::TestWordBreaks(void)
     "\\u0be8\\u002e\\u0c68\\u066e\\u136d\\ufc99\\u59e7",
     "\\u0233\\U000e0020\\u0a69\\u0d6a",
     "\\u206f\\u0741\\ub3ab\\u2019\\ubcac\\u2019",
-    "\\u58f4\\U000e0049\\u20e7\\u2027",
+    "\\u18f4\\U000e0049\\u20e7\\u2027",
     "\\ub315\\U0001d7e5\\U000e0073\\u0c47\\u06f2\\u0c6a\\u0037\\u10fe",
     "\\ua183\\u102d\\u0bec\\u003a",
     "\\u17e8\\u06e7\\u002e\\u096d\\u003b",
@@ -3618,7 +3419,7 @@ void RBBITest::TestWordBreaks(void)
     "\\U000e005d\\u2044\\u0731\\u0650\\u0061",
     "\\u003a\\u0664\\u00b7\\u1fba",
     "\\u003b\\u0027\\u00b7\\u47a3",
-    "\\u2027\\U000e0067\\u0a42\\u00b7\\ubddf\\uc26c\\u003a\\u4186\\u041b",
+    "\\u2027\\U000e0067\\u0a42\\u00b7\\u4edf\\uc26c\\u003a\\u4186\\u041b",
     "\\u0027\\u003a\\U0001d70f\\U0001d7df\\ubf4a\\U0001d7f5\\U0001d177\\u003a\\u0e51\\u1058\\U000e0058\\u00b7\\u0673",
     "\\uc30d\\u002e\\U000e002c\\u0c48\\u003a\\ub5a1\\u0661\\u002c",
     };
@@ -3673,12 +3474,12 @@ void RBBITest::TestWordBoundary(void)
     "\\U0001d7f2\\U000e007d\\u0004\\u0589",
     "\\u82ab\\u17e8\\u0736\\u2019\\U0001d64d",
     "\\u0e01\\ub55c\\u0a68\\U000e0037\\u0cd6\\u002c\\ub959",
-    "\\U000e0065\\u302c\\uc986\\u09ee\\U000e0068",
+    "\\U000e0065\\u302c\\u09ee\\U000e0068",
     "\\u0be8\\u002e\\u0c68\\u066e\\u136d\\ufc99\\u59e7",
     "\\u0233\\U000e0020\\u0a69\\u0d6a",
     "\\u206f\\u0741\\ub3ab\\u2019\\ubcac\\u2019",
     "\\u58f4\\U000e0049\\u20e7\\u2027",
-    "\\ub315\\U0001d7e5\\U000e0073\\u0c47\\u06f2\\u0c6a\\u0037\\u10fe",
+    "\\U0001d7e5\\U000e0073\\u0c47\\u06f2\\u0c6a\\u0037\\u10fe",
     "\\ua183\\u102d\\u0bec\\u003a",
     "\\u17e8\\u06e7\\u002e\\u096d\\u003b",
     "\\u003a\\u0e57\\u0fad\\u002e",

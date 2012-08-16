@@ -1615,10 +1615,12 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
                             int32_t endPos,
                             UBool reverse) {
     // Reset the old break cache first.
-    uint32_t dictionaryCount = fDictionaryCharCount;
     reset();
 
-    if (dictionaryCount <= 1 || (endPos - startPos) <= 1) {
+    // note: code segment below assumes that dictionary chars are in the 
+    // startPos-endPos range
+    // value returned should be next character in sequence
+    if ((endPos - startPos) <= 1) {
         return (reverse ? startPos : endPos);
     }
     
@@ -1771,7 +1773,7 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
             // proposed break by one of the breaks we found. Use following() and
             // preceding() to do the work. They should never recurse in this case.
             if (reverse) {
-                return preceding(endPos - 1);
+                return preceding(endPos);
             }
             else {
                 return following(startPos);
@@ -1861,7 +1863,7 @@ getLanguageBreakEngineFromFactory(UChar32 c, int32_t breakType)
 //-------------------------------------------------------------------------------
 //
 //  getLanguageBreakEngine  Find an appropriate LanguageBreakEngine for the
-//                          the characer c.
+//                          the character c.
 //
 //-------------------------------------------------------------------------------
 const LanguageBreakEngine *

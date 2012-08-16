@@ -1236,11 +1236,9 @@ static const struct {
     }
 };
 
-/* Unfortunately, trie dictionaries are in a C++ header */
-int32_t
-triedict_swap(const UDataSwapper *ds,
-            const void *inData, int32_t length, void *outData,
-            UErrorCode *pErrorCode);
+/* Unfortunately, dictionaries are in a C++ header */
+U_CAPI int32_t U_EXPORT2
+udict_swap(const UDataSwapper *ds, const void *inData, int32_t length, void *outData, UErrorCode *pErrorCode);
 
 /* test cases for maximum data swapping code coverage */
 static const struct {
@@ -1305,7 +1303,7 @@ static const struct {
 
 #if !UCONFIG_NO_BREAK_ITERATION
     {"char",                     "brk", ubrk_swap},
-    {"thaidict",                 "ctd", triedict_swap},
+    {"thaidict",                 "dict",udict_swap},
 #endif
 
 #if 0
@@ -1658,7 +1656,7 @@ TestSwapData() {
             nm=swapCases[i].name+1;
             uprv_strcpy(name, "testdata");
         } else if (uprv_strcmp(swapCases[i].type, "brk")==0
-            || uprv_strcmp(swapCases[i].type, "ctd")==0) {
+            || uprv_strcmp(swapCases[i].type, "dict")==0) {
             pkg=U_ICUDATA_BRKITR;
             nm=swapCases[i].name;
             uprv_strcpy(name, U_ICUDATA_BRKITR);
