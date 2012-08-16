@@ -248,7 +248,7 @@
     <ClCompile Include="rbbisetb.cpp" />
     <ClCompile Include="rbbistbl.cpp" />
     <ClCompile Include="rbbitblb.cpp" />
-    <ClCompile Include="triedict.cpp" />
+    <ClCompile Include="dictionarydata.cpp" />
     <ClCompile Include="ubrk.cpp" />
     <ClCompile Include="ucol_swp.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\i18n;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -520,7 +520,7 @@
     <ClInclude Include="rbbiscan.h" />
     <ClInclude Include="rbbisetb.h" />
     <ClInclude Include="rbbitblb.h" />
-    <ClInclude Include="triedict.h" />
+    <ClInclude Include="dictionarydata.h" />
     <CustomBuild Include="unicode\ubrk.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>

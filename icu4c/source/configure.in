@@ -1229,7 +1229,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		tools/genccode/Makefile \
 		tools/gencmn/Makefile \
 		tools/gencnval/Makefile \
-		tools/genctd/Makefile \
+		tools/gendict/Makefile \
 		tools/gentest/Makefile \
 		tools/gennorm2/Makefile \
 		tools/genbrk/Makefile \

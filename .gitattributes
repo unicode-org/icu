@@ -187,8 +187,8 @@ icu4c/source/tools/gencmn/gencmn.vcxproj -text
 icu4c/source/tools/gencmn/gencmn.vcxproj.filters -text
 icu4c/source/tools/gencnval/gencnval.vcxproj -text
 icu4c/source/tools/gencnval/gencnval.vcxproj.filters -text
-icu4c/source/tools/genctd/genctd.vcxproj -text
-icu4c/source/tools/genctd/genctd.vcxproj.filters -text
+icu4c/source/tools/gendict/gendict.vcxproj -text
+icu4c/source/tools/gendict/gendict.vcxproj.filters -text
 icu4c/source/tools/gennorm2/gennorm2.vcxproj -text
 icu4c/source/tools/genrb/derb.vcxproj -text
 icu4c/source/tools/genrb/derb.vcxproj.filters -text

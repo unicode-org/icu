@@ -236,7 +236,7 @@ CNV_FILES_SPECIAL=$(UCM_SOURCE_SPECIAL:.ucm=.cnv)
 !IF EXISTS("$(ICUSRCDATA)\$(ICUBRK)\brklocal.mk")
 !INCLUDE "$(ICUSRCDATA)\$(ICUBRK)\brklocal.mk"
 BRK_SOURCE=$(BRK_SOURCE) $(BRK_SOURCE_LOCAL)
-BRK_CTD_SOURCE=$(BRK_CTD_SOURCE) $(BRK_CTD_SOURCE_LOCAL)
+BRK_DICT_SOURCE=$(BRK_DICT_SOURCE) $(BRK_DICT_SOURCE_LOCAL)
 BRK_RES_SOURCE=$(BRK_RES_SOURCE) $(BRK_RES_SOURCE_LOCAL)
 !ELSE
 !MESSAGE Information: cannot find "brklocal.mk". Not building user-additional break iterator files.
@@ -252,10 +252,10 @@ BRK_FILES=$(ICUBRK)\$(BRK_SOURCE:.txt =.brk brkitr\)
 BRK_FILES=$(BRK_FILES:.txt=.brk)
 BRK_FILES=$(BRK_FILES:brkitr\ =brkitr\)
 
-!IFDEF BRK_CTD_SOURCE
-BRK_CTD_FILES = $(ICUBRK)\$(BRK_CTD_SOURCE:.txt =.ctd brkitr\)
-BRK_CTD_FILES = $(BRK_CTD_FILES:.txt=.ctd)
-BRK_CTD_FILES = $(BRK_CTD_FILES:brkitr\ =)
+!IFDEF BRK_DICT_SOURCE
+BRK_DICT_FILES = $(ICUBRK)\$(BRK_DICT_SOURCE):.txt=.dict brkitr\)
+BRK_DICT_FILES = $(BRK_DICT_FILES:.txt=.dict)
+BRK_DICT_FILES = $(BRK_DICT_FILES:brkitr\ =)
 !ENDIF
 
 !IFDEF BRK_RES_SOURCE
@@ -360,6 +360,9 @@ ZONE_SOURCE=$(ZONE_SOURCE) $(ZONE_SOURCE_LOCAL)
 !MESSAGE Warning: cannot find "zone\resfiles.mk"
 !ENDIF
 
+BRK_DICT_FILES = $(ICUBRK)\$(BRK_DICT_SOURCE):.txt=.dict brkitr\)
+BRK_DICT_FILES = $(BRK_DICT_FILES:.txt=.dict)
+BRK_DICT_FILES = $(BRK_DICT_FILES:brkitr\ =)
 !IFDEF ZONE_SOURCE
 ZONE_FILES = zone\root.txt $(ZONE_ALIAS_SOURCE) $(ZONE_SOURCE)
 ZONE_RES_FILES = $(ZONE_FILES:.txt =.res zone\)
@@ -602,7 +605,7 @@ icu4j-data-install :
 	copy "$(ICUTMP)\$(ICUPKG).dat" "$(ICUOUT)\$(U_ICUDATA_NAME)$(U_ICUDATA_ENDIAN_SUFFIX).dat"
 	-@erase "$(ICUTMP)\$(ICUPKG).dat"
 !ELSE
-"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) $(CNV_FILES_SPECIAL) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\nfc.nrm" "$(ICUBLD_PKG)\nfkc.nrm" "$(ICUBLD_PKG)\nfkc_cf.nrm" "$(ICUBLD_PKG)\uts46.nrm" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu" "$(ICUBLD_PKG)\$(ICUCOL)\invuca.icu" $(CURR_RES_FILES) $(LANG_RES_FILES) $(REGION_RES_FILES) $(ZONE_RES_FILES) $(BRK_FILES) $(BRK_CTD_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES) $(SPREP_FILES) "$(ICUBLD_PKG)\confusables.cfu"
+"$(ICU_LIB_TARGET)" : $(COMMON_ICUDATA_DEPENDENCIES) $(CNV_FILES) $(CNV_FILES_SPECIAL) "$(ICUBLD_PKG)\unames.icu" "$(ICUBLD_PKG)\cnvalias.icu" "$(ICUBLD_PKG)\nfc.nrm" "$(ICUBLD_PKG)\nfkc.nrm" "$(ICUBLD_PKG)\nfkc_cf.nrm" "$(ICUBLD_PKG)\uts46.nrm" "$(ICUBLD_PKG)\$(ICUCOL)\ucadata.icu" "$(ICUBLD_PKG)\$(ICUCOL)\invuca.icu" $(CURR_RES_FILES) $(LANG_RES_FILES) $(REGION_RES_FILES) $(ZONE_RES_FILES) $(BRK_FILES) $(BRK_DICT_FILES) $(BRK_RES_FILES) $(COL_COL_FILES) $(RBNF_RES_FILES) $(TRANSLIT_RES_FILES) $(ALL_RES) $(SPREP_FILES) "$(ICUBLD_PKG)\confusables.cfu"
 	@echo Building icu data
 	cd "$(ICUBLD_PKG)"
 	"$(ICUPBIN)\pkgdata" $(COMMON_ICUDATA_ARGUMENTS) <<"$(ICUTMP)\icudata.lst"
@@ -637,7 +640,7 @@ $(TRANSLIT_RES_FILES:.res =.res
 )
 $(BRK_FILES:.brk =.brk
 )
-$(BRK_CTD_FILES:.ctd =.ctd
+$(BRK_DICT_FILES:.dict=.dict
 )
 $(BRK_RES_FILES:.res =.res
 )
@@ -696,7 +699,6 @@ CLEAN : GODATA
 	-@erase "zone\*.txt"
 	@cd "$(ICUBLD_PKG)\$(ICUBRK)"
 	-@erase "*.brk"
-	-@erase "*.ctd"
 	-@erase "*.res"
 	-@erase "*.txt"
 	@cd "$(ICUBLD_PKG)\$(ICUCOL)"
@@ -735,10 +737,10 @@ CLEAN : GODATA
 	@echo Creating $@
 	@"$(ICUTOOLS)\genbrk\$(CFG)\genbrk" -c -r $< -o $@ -d"$(ICUBLD_PKG)" -i "$(ICUBLD_PKG)"
 
-# RBBI .ctd file generation.
-{$(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)}.txt.ctd:
-	@echo Creating $@
-	@"$(ICUTOOLS)\genctd\$(CFG)\genctd" -c -o $@ -d"$(ICUBLD_PKG)" -i "$(ICUBLD_PKG)" $<
+#RBBI .dict file generation.
+{$(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)}.txt.dict:
+    @echo Creating $@
+    @"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --uchars -i "$(ICUBLD_PKG)" $< $(ICUBLD_PKG)\$@
 
 !IFNDEF ICUDATA_SOURCE_ARCHIVE
 # Rule for creating converters
