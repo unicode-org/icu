@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -112,7 +112,7 @@ U_CAPI UChar32 U_EXPORT2
 utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, UBool strict) {
     int32_t i=*pi;
     uint8_t count=U8_COUNT_TRAIL_BYTES(c);
-    U_ASSERT(count >= 0 && count <= 5); /* U8_COUNT_TRAIL_BYTES returns value 0...5 */
+    U_ASSERT(count <= 5); /* U8_COUNT_TRAIL_BYTES returns value 0...5 */
     if((i)+count<=(length)) {
         uint8_t trail, illegal=0;
 
