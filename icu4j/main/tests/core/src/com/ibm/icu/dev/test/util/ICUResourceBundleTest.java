@@ -475,18 +475,6 @@ public final class ICUResourceBundleTest extends TestFmwk {
             }
         }
         {
-            rb = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
-            sub = rb.get("boundaries");
-            String word = sub.getString("word");
-
-            if(word.equals("word_ja.brk")){
-                logln("Got the expected output for boundaries/word");
-            }else{
-                errln("Did not get the expected type for boundaries/word");
-            }
-
-        }
-        {
             UResourceBundle rb1 = (UResourceBundle)UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","testaliases",testLoader);
             if(rb1!=rb){
                 errln("Caching of the resource bundle failed");

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -90,28 +90,20 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
      *             pre-compiled break rules.  The resource bundle name is "boundaries".
      *             The value for each key will be the rules to be used for the
      *             specified locale - "word" -> "word_th" for Thai, for example.
-     *  DICTIONARY_POSSIBLE indexes in the same way, and indicates whether a
-     *             dictionary is a possibility for that type of break.  This is just
-     *             an optimization to avoid a resource lookup where no dictionary is
-     *             ever possible.
      */
     private static final String[] KIND_NAMES = {
             "grapheme", "word", "line", "sentence", "title"
-        };
-    private static final boolean[] DICTIONARY_POSSIBLE = {
-            false,      true,  true,   false,     false
     };
 
 
     private static BreakIterator createBreakInstance(ULocale locale, int kind) {
 
-        BreakIterator    iter       = null;
-        ICUResourceBundle rb        = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME, locale);
+        RuleBasedBreakIterator    iter = null;
+        ICUResourceBundle rb           = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BRKITR_BASE_NAME, locale);
         
         //
-        //  Get the binary rules.  These are needed for both normal RulesBasedBreakIterators
-        //                         and for Dictionary iterators.
-        //
+        //  Get the binary rules.
+        // 
         InputStream      ruleStream = null;
         try {
             String         typeKey       = KIND_NAMES[kind];
@@ -122,51 +114,22 @@ final class BreakIteratorFactory extends BreakIterator.BreakIteratorServiceShim 
         catch (Exception e) {
             throw new MissingResourceException(e.toString(),"","");
         }
- 
-        //
-        //  Check whether a dictionary exists, and create a DBBI iterator is
-        //   one does.
-        //
-        if (DICTIONARY_POSSIBLE[kind]) {
-            // This type of break iterator could potentially use a dictionary.
-            //
-            try {
-                if (locale.getLanguage().equals("th")){
-                    // If the language is Thai, load the thai compact trie dictionary.
-                    String dictType = "Thai";
-                    String dictFileName = rb.getStringWithFallback("dictionaries/" + dictType);
-                    dictFileName = ICUResourceBundle.ICU_BUNDLE +ICUResourceBundle.ICU_BRKITR_NAME+ "/" + dictFileName;
-                    InputStream is = ICUData.getStream(dictFileName);
-                    iter = new ThaiBreakIterator(ruleStream, is);
-                }
-            } catch (MissingResourceException e) {
-                //  Couldn't find a dictionary.
-                //  This is normal, and will occur whenever creating a word or line
-                //  break iterator for a locale that does not have a BreakDictionaryData
-                //  resource - meaning for all but Thai.
-                //  Fall through to creating a normal RulebasedBreakIterator.
-            } catch (IOException e) {
-                Assert.fail(e);
-            }
-         }
 
-        if (iter == null) {
-            //
-            // Create a normal RuleBasedBreakIterator.
-            //    We have determined that this is not supposed to be a dictionary iterator.
-            //
-            try {
-                iter = RuleBasedBreakIterator.getInstanceFromCompiledRules(ruleStream);
-            }
-            catch (IOException e) {
-                // Shouldn't be possible to get here.
-                // If it happens, the compiled rules are probably corrupted in some way.
-                Assert.fail(e);
-           }
+        //
+        // Create a normal RuleBasedBreakIterator.
+        //
+        try {
+            iter = RuleBasedBreakIterator.getInstanceFromCompiledRules(ruleStream);
+        }
+        catch (IOException e) {
+            // Shouldn't be possible to get here.
+            // If it happens, the compiled rules are probably corrupted in some way.
+            Assert.fail(e);
         }
         // TODO: Determine valid and actual locale correctly.
         ULocale uloc = ULocale.forLocale(rb.getLocale());
         iter.setLocale(uloc, uloc);
+        iter.setBreakType(kind);
         
         return iter;
 

@@ -33,9 +33,8 @@
 
 
 #   Temp debugging tests 
-<locale en>
 <line>
-<data>•Hello, •World.•</data>
+<data>•\ufffc•\u30e3\u000c<100>\u1b39\u300a\u002f\u203a\u200b•\ufffc•\uaf64•\udcfb•</data>
 
 ########################################################################################
 #
@@ -171,14 +170,20 @@
 <data>•abc<200>\U0001D800•def<200>\U0001D3FF• •</data>
 
 # Hiragana & Katakana stay together, but separates from each other and Latin.
-<data>•abc<200>\N{HIRAGANA LETTER SMALL A}<300>\N{HIRAGANA LETTER VU}\N{COMBINING ACUTE ACCENT}<300>\N{HIRAGANA ITERATION MARK}<300>\N{KATAKANA LETTER SMALL A}\N{KATAKANA ITERATION MARK}\N{HALFWIDTH KATAKANA LETTER WO}\N{HALFWIDTH KATAKANA LETTER N}<300>def<200>#•</data>
+# *** what to do about theoretical combos of chars? i.e. hiragana + accent
+#<data>•abc<200>\N{HIRAGANA LETTER SMALL A}<400>\N{HIRAGANA LETTER VU}\N{COMBINING ACUTE ACCENT}<400>\N{HIRAGANA ITERATION MARK}<400>\N{KATAKANA LETTER SMALL A}\N{KATAKANA ITERATION MARK}\N{HALFWIDTH KATAKANA LETTER WO}\N{HALFWIDTH KATAKANA LETTER N}<400>def<200>#•</data>
+
+# test normalization/dictionary handling of halfwidth katakana: same dictionary phrase in fullwidth and halfwidth
+<data>•芽キャベツ<400>芽キャﾍﾞツ<400></data>
+
+# Testing of word boundary for dictionary word containing both kanji and kana
+<data>•中だるみ<400>蔵王の森<400>ウ離島<400></data>
 
 # Words with interior formatting characters
 <data>•def\N{COMBINING ACUTE ACCENT}\N{SYRIAC ABBREVIATION MARK}ghi<200> •</data>
     
 # to test for bug #4097779
 <data>•aa\N{COMBINING GRAVE ACCENT}a<200> •</data>
-
 
 #      to test for bug #4098467
 #      What follows is a string of Korean characters (I found it in the Yellow Pages
@@ -188,9 +193,14 @@
 #      precomposed syllables...
 <data>•\uc0c1\ud56d<200> •\ud55c\uc778<200> •\uc5f0\ud569<200> •\uc7a5\ub85c\uad50\ud68c<200> •\u1109\u1161\u11bc\u1112\u1161\u11bc<200> •\u1112\u1161\u11ab\u110b\u1175\u11ab<200> •\u110b\u1167\u11ab\u1112\u1161\u11b8<200> •\u110c\u1161\u11bc\u1105\u1169\u1100\u116d\u1112\u116c<200> •</data>
 
-<data>•abc<200>\u4e01<400>\u4e02<400>\u3005<200>\u4e03<400>\u4e03<400>abc<200> •</data>
+# more Korean tests (Jamo not tested here, not counted as dictionary characters)
+# Disable them now because we don't include a Korean dictionary.
+#<data>•\ud55c\uad6d<200>\ub300\ud559\uad50<200>\uc790\uc5f0<200>\uacfc\ud559<200>\ub300\ud559<200>\ubb3c\ub9ac\ud559\uacfc<200></data>
+#<data>•\ud604\uc7ac<200>\ub294<200> •\uac80\ucc30<200>\uc774<200> •\ubd84\uc2dd<200>\ud68c\uacc4<200>\ubb38\uc81c<200>\ub97c<200> •\uc870\uc0ac<200>\ud560<200> •\uac00\ub2a5\uc131<200>\uc740<200> •\uc5c6\ub2e4<200>\u002e•</data>
+#<data>•abc<200>\u4e01<400>\u4e02<400>\u3005<400>\u4e03\u4e03<400>abc<200> •</data>
 
-<data>•\u06c9\uc799\ufffa<200></data>
+<data>•\u06c9<200>\uc799<200>\ufffa•</data>
+
 
 #      
 #      Try some words from other scripts.
@@ -507,8 +517,7 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 <data>•\uc0c1•\ud56d •\ud55c•\uc778 •\uc5f0•\ud569 •\uc7a5•\ub85c•\uad50•\ud68c•</data>
 
 #      conjoining jamo...
-#      TODO:  rules update needed
-#<data>•\u1109\u1161\u11bc•\u1112\u1161\u11bc •\u1112\u1161\u11ab•\u110b\u1175\u11ab #•\u110b\u1167\u11ab•\u1112\u1161\u11b8 •\u110c\u1161\u11bc•\u1105\u1169•\u1100\u116d•\u1112\u116c•</data>
+<data>•\u1109\u1161\u11bc•\u1112\u1161\u11bc •\u1112\u1161\u11ab•\u110b\u1175\u11ab •\u110b\u1167\u11ab•\u1112\u1161\u11b8 •\u110c\u1161\u11bc•\u1105\u1169•\u1100\u116d•\u1112\u116c•</data>
 
 #      to test for bug #4117554: Fullwidth .!? should be treated as postJwrd
 <data>•\u4e01\uff0e•\u4e02\uff01•\u4e03\uff1f•</data>
@@ -572,17 +581,17 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 # Test data originally from the test code source file
 #      // @suwit -- Thai sample data from GVT Guideline
 #
-#<data>•\u0E2B\u0E19\u0E36\u0E48\u0E07<200>\u0E04\u0E33<200>\u0E44\u0E17\u0E22<200>\
-#\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16<200>\u0E1B\u0E23\u0E30\u0E01\u0E2D\u0E1A<200>\
-#\u0E14\u0E49\u0E27\u0E22<200>\u0e2b\u0e25\u0e32\u0e22<200>\
-#\u0e1e\u0e22\u0e32\u0e07\u0e04\u0e4c<200></data>
-#
-## Test data originally from http://bugs.icu-project.org/trac/search?q=r30327
-#<data>•กู<200> •กิน<200>กุ้ง<200> •ปิ้่<200>งอ<200>ยู่<200>ใน<200>ถ้ำ<200></data>
-#
-#<data>•\u0E01\u0E39<200>\u0020•\u0E01\u0E34\u0E19<200>\u0E01\u0E38\u0E49\u0E07<200>\
-#\u0020•\u0E1B\u0E34\u0E49\u0E48<200>\u0E07\u0E2D<200>\u0E22\u0E39\u0E48<200>\
-#\u0E43\u0E19<200>\u0E16\u0E49\u0E33<200></data>
+<data>•\u0E2B\u0E19\u0E36\u0E48\u0E07<200>\u0E04\u0E33<200>\u0E44\u0E17\u0E22<200>\
+\u0E2A\u0E32\u0E21\u0E32\u0E23\u0E16<200>\u0E1B\u0E23\u0E30\u0E01\u0E2D\u0E1A<200>\
+\u0E14\u0E49\u0E27\u0E22<200>\u0e2b\u0e25\u0e32\u0e22<200>\
+\u0e1e\u0e22\u0e32\u0e07\u0e04\u0e4c<200></data>
+
+# Test data originally from http://bugs.icu-project.org/trac/search?q=r30327
+<data>•กู<200> •กิน<200>กุ้ง<200> •ปิ้่<200>งอ<200>ยู่<200>ใน<200>ถ้ำ<200></data>
+
+<data>•\u0E01\u0E39<200>\u0020•\u0E01\u0E34\u0E19<200>\u0E01\u0E38\u0E49\u0E07<200>\
+\u0020•\u0E1B\u0E34\u0E49\u0E48<200>\u0E07\u0E2D<200>\u0E22\u0E39\u0E48<200>\
+\u0E43\u0E19<200>\u0E16\u0E49\u0E33<200></data>
 
 <line>
 <data>•0E01\u0E39\u0020•\u0E01\u0E34\u0E19•\u0E01\u0E38\u0E49\u0E07\
@@ -619,22 +628,22 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 #   @suwit -- Test Arabic numerals, Thai numerals, Punctuation and English characters start
 #
 <line>
-#<data>•\u0E1B\u0E35•\
-#\u0E1E\u0E38\u0E17\u0E18\u0E28\u0E31\u0E01\u0E23\u0E32\u0E0A •\
-#2545 •\
-#\u0E40\u0E1B\u0E47\u0E19•\
-#\u0E1B\u0E35•\
-#\u0E09\u0E25\u0E2D\u0E07•\
-#\u0E04\u0E23\u0E1A•\
-#\u0E23\u0E2D\u0E1A •\
-#\"\u0E52\u0E52\u0E50 •\
-#\u0E1b\u0E35\" •\
-#\u0E02\u0E2d\u0E07•\
-#\u0E01\u0E23\u0E38\u0E07•\
-#\u0E23\u0E31\u0E15\u0E19\u0E42\u0E01\u0E2A\u0E34\u0E19\u0E17\u0E23\u0E4C •\
-#(\u0E01\u0E23\u0E38\u0E07\u0E40\u0E17\u0E1e\u0E2F•\
-#\u0E2B\u0E23\u0E37\u0E2D •\
-#Bangkok)•</data>
+<data>•\u0E1B\u0E35•\
+\u0E1E\u0E38\u0E17\u0E18•\u0E28\u0E31\u0E01\u0E23\u0E32\u0E0A •\
+2545 •\
+\u0E40\u0E1B\u0E47\u0E19•\
+\u0E1B\u0E35•\
+\u0E09\u0E25\u0E2D\u0E07•\
+\u0E04\u0E23\u0E1A•\
+\u0E23\u0E2D\u0E1A •\
+\"\u0E52\u0E52\u0E50 •\
+\u0E1b\u0E35\" •\
+\u0E02\u0E2d\u0E07•\
+\u0E01\u0E23\u0E38\u0E07•\
+\u0E23\u0E31\u0E15\u0E19•\u0E42\u0E01•\u0E2A\u0E34•\u0E19\u0E17\u0E23\u0E4C •\
+(\u0E01\u0E23\u0E38\u0E07\u0E40\u0E17\u0E1e\u0E2F\
+\u0E2B\u0E23\u0E37\u0E2D •\
+Bangkok)•</data>
 
 # Data originally from RBBITest::TestMaiyamok()
 #   The Thai maiyamok character is a shorthand symbol that means "repeat the previous
@@ -652,58 +661,6 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 \u0e22\u0e07•\
 \u0e43\u0e2b\u0e21\u0e48•</data>
 
-
-
-##########################################################################################
-#
-#   Khmer Tests
-#
-##########################################################################################
-
-# Test data originally from http://bugs.icu-project.org/trac/search?q=r30327
-#  from the file testdata/wordsegments.txt
-<locale th>
-<word>
-
-#<data>•តើ<200>លោក<200>មក<200>ពី<200>ប្រទេស<200>ណា<200></data>
-#<data>•សណ្ដូក<200>ក<200>បណ្ដែត<200>ខ្លួន<200></data>
-#<data>•ពណ៌ស<200>ម្ដេច<200>ថា<200>ខ្មៅ<200></data>
-##ប្រយោគ|ពី|របៀប|រួបរួម|និង|ភាព|ផ្សេងគ្នា|ដែល|អាច|ចូល<200></data>
-#<data>•ប្រយោគ<200>ពី<200>របៀប<200>ដែល<200>និង<200>ភាព<200>ផ្សេងគ្នា<200>ដែល<200>អាច<200>ចូល<200></data>
-##ប្រយោគ|ពី|របៀប|ជា|មួយ|និង|ភាព|ផ្សេងគ្នា|ដែល|អាច|ចូល<200></data>
-#<data>•សូម<200>ចំណាយពេល<200>បន្តិច<200>ដើម្បី<200>អធិស្ឋាន<200>អរព្រះគុណ<200>ដល់<200>ព្រះអង្គ<200></data>
-#<data>•ការ<200>ថោកទាប<200>បរិប្បូណ៌<200>ដោយ<200></data>
-#<data>•ប្រើប្រាស់<200>ស្អាត<200>ទាំង<200>ចិត្ត<200>សិស្ស<200>នោះ<200></data>
-#<data>•បើ<200>អ្នក<200>ប្រព្រឺត្ត<200>អំពើអាក្រក់<200>មុខ<200>ជា<200>មាន<200></data>
-#<data>•ប្រដាប់<200>ប្រដា<200>រ<200>រៀនសូត្រ<200>បន្ទប់<200>រៀន<200></data>
-#<data>•ដើរតួ<200>មនុស្សគ<200>ឥត<200>បញ្ចេញ<200>យោបល់<200>សោះ<200>ឡើយ<200></data>
-#<data>•មិន<200>អាច<200>ឲ្យ<200>យើង<200>ធ្វើ<200>កសិកម្ម<200>បាន<200>ឡើយ<200></data>
-#<data>•បន្ត<200>សេចក្ត<200>ទៅទៀត<200></data>
-#<data>•ក្រុម<200>ប៉ូលិស<200>បណ្តាក់<200>គ្នា<200></data>
-#<data>•គ្មាន<200>សុខ<200>សំរាន្ត<200>ដង<200>ណា<200></data>
-#<data>•បាន<200>សុខភាព<200>បរិប្បូណ៌<200></data>
-#<data>•ជា<200>មេចោរ<200>ខ្ញុំ<200>នឹង<200>ស្លាប់<200>ទៅវិញ<200>ជា<200>មេចោរ<200></data>
-#<data>•ឯ<200>ការ<200>វាយ<200>ផ្ចាល<200>ដែល<200>នាំ<200></data>
-#<data>•គេ<200>ដឹក<200>ទៅ<200>សំឡាប់<200></data>
-##អ្នក|ដែល|ជា|មន្ត្រី|ធំ|លើ|គាត់|ទេ<200></data>
-#<data>•យក<200>ទៅ<200>សម្លាប់ចោល<200>ស្ងាត់<200></data>
-#<data>•ត្រូវ<200>បាន<200>គេ<200>សម្លាប់<200></data>
-#<data>•នៅក្នុង<200>ស្រុក<200>ខ្ល<200>ងហ្ស៊ុន<200></data>
-
-
-#
-#  Jitterbug 3671 Test Case
-#
-#<data>•สวัสดี<200>ครับ<200>สบาย<200>ดี<200>ไหม<200> •ครับ<200></data>
-
-#
-#  Trac ticket 5595 Test Case
-#<data>•บท<200>ที่๑พายุ<200>ไซโคลน<200>โด<200>โรธี<200>อาศัย<200>อยู่<200>ท่ามกลาง<200>\
-#ทุ่งใหญ่<200>ใน<200>แคนซัส<200>กับ<200>ลุง<200>เฮ<200>นรี<200>ชาวไร่<200>และ<200>ป้า<200>เอ็ม<200>\
-#ภรรยา<200>ชาวไร่<200>บ้าน<200>ของ<200>พวก<200>เขา<200>หลัง<200>เล็ก<200>เพราะ<200>ไม้<200>\
-#สร้าง<200>บ้าน<200>ต้อง<200>ขน<200>มา<200>ด้วย<200>เกวียน<200>เป็น<200>ระยะ<200>ทาง<200>หลาย<200>\
-#ไมล์<200></data>
-
 ####################################################################################
 #
 #  Tailored (locale specific) breaking.
@@ -714,7 +671,7 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 
 <locale ja>
 <line>
-<data>•\u3041•\u3043•\u3045•\u31f1•</data>
+<data>•\u3041\u3043\u3045\u31f1•</data>
 <locale en>
 <line>
 <data>•\u3041\u3043\u3045\u31f1•</data>
@@ -722,19 +679,20 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 # The following data was originally in RBBITest::TestJapaneseWordBreak()
 <locale ja>
 <word>
-<data>•\u4ECA\u65E5<400>\u306F\u3044\u3044<300>\u5929\u6C17<400>\u3067\u3059\u306D<300>\u3002•\u000D\u000A•</data>
+<data>•\u4ECA\u65E5<400>\u306F<400>\u3044\u3044<400>\u5929\u6C17<400>\u3067\u3059<400>\u306D<400>\u3002•\u000D\u000A•</data>
 
 # UBreakIteratorType UBRK_WORD, Locale "ja"
 # Don't break in runs of hiragana or runs of ideograph, where the latter includes \u3005 \u3007 \u303B (cldrbug #2009).
 # \u79C1\u9054\u306B\u4E00\u3007\u3007\u3007\u306E\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF\u304C\u3042\u308B\u3002\u5948\u3005\u306F\u30EF\u30FC\u30C9\u3067\u3042\u308B\u3002
+# modified to work with dbbi code - should verify
 
 <locale ja>
 <word>
-<data>•私達<400>に<300>一〇〇〇<400>の<300>コンピュータ<300>がある<300>。<0>奈々<400>は<300>ワード<300>である<300>。•</data>
+<data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈<400>々<400>は<400>ワ<400>ー<400>ドで<400>あ<400>る<400>。•</data>
 
 <locale root>
 <word>
-<data>•私<400>達<400>に<300>一<400>〇<400>〇<400>〇<400>の<300>コンピュータ<300>が<300>あ<300>る<300>。<0>奈<400>々<200>は<300>ワード<300>で<300>あ<300>る<300>。•</data>
+<data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈<400>々<400>は<400>ワ<400>ー<400>ドで<400>あ<400>る<400>。•</data>
 
 # UBreakIteratorType UBRK_SENTENCE, Locale "el"
 # Add break after Greek question mark (cldrbug #2069).

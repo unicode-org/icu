@@ -732,6 +732,11 @@ s     */
 
         BreakIteratorCache cache = new BreakIteratorCache(where, result);
         iterCache[kind] = new SoftReference<BreakIteratorCache>(cache);
+        if (result instanceof RuleBasedBreakIterator) {
+            RuleBasedBreakIterator rbbi = (RuleBasedBreakIterator)result;
+            rbbi.setBreakType(kind);
+        }
+
         return result;
     }
 

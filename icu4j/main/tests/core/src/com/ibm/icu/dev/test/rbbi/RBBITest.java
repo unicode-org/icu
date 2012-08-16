@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * Copyright (C) 1996-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -20,7 +20,6 @@ import java.util.List;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.DictionaryBasedBreakIterator;
 import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.util.ULocale;
 
@@ -584,7 +583,7 @@ public class RBBITest extends TestFmwk {
            errln("Incorrect following position.");
        }
        int []fillInArray = new int[2];
-       if (((DictionaryBasedBreakIterator)brk).getRuleStatusVec(fillInArray) != 1 || fillInArray[0] != 0) {
+       if (((RuleBasedBreakIterator)brk).getRuleStatusVec(fillInArray) != 1 || fillInArray[0] != 0) {
            errln("Error: Since getRuleStatusVec is not supported in DictionaryBasedBreakIterator, it should return 1 and fillInArray[0] == 0.");
        }
    }
@@ -663,11 +662,6 @@ public class RBBITest extends TestFmwk {
         final String posxWordText     = "Can't have breaks in xx:yy or struct.field for CS-types.";
         final int[]  posxWordTOffsets = { 5, 6, 10, 11, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30, 36, 37, 42, 43, 46, 47, 49, 50, 55, 56 };
         final int[]  posxWordROffsets = { 5, 6, 10, 11, 17, 18, 20, 21,         26, 27, 29, 30,         42, 43, 46, 47, 49, 50, 55, 56 };
-        // KIND_WORD "ja"
-        final String jaWordText     = "\u79C1\u9054\u306B\u4E00\u3007\u3007\u3007\u306E\u30B3\u30F3\u30D4\u30E5\u30FC\u30BF" +
-                                      "\u304C\u3042\u308B\u3002\u5948\u3005\u306F\u30EF\u30FC\u30C9\u3067\u3042\u308B\u3002";
-        final int[]  jaWordTOffsets = {    2, 3,          7, 8, 14,         17, 18,     20, 21, 24,         27, 28 };
-        final int[]  jaWordROffsets = { 1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 24, 25, 26, 27, 28 };
         // KIND_SENTENCE "el"
         final String elSentText     = "\u0391\u03B2, \u03B3\u03B4; \u0395 \u03B6\u03B7\u037E \u0398 \u03B9\u03BA. " +
                                       "\u039B\u03BC \u03BD\u03BE! \u039F\u03C0, \u03A1\u03C2? \u03A3";
@@ -688,8 +682,6 @@ public class RBBITest extends TestFmwk {
         final TBItem[] tests = {
             new TBItem( BreakIterator.KIND_WORD,      new ULocale("en_US_POSIX"), posxWordText, posxWordTOffsets ),
             new TBItem( BreakIterator.KIND_WORD,      ULocale.ROOT,               posxWordText, posxWordROffsets ),
-            new TBItem( BreakIterator.KIND_WORD,      new ULocale("ja"),          jaWordText,   jaWordTOffsets   ),
-            new TBItem( BreakIterator.KIND_WORD,      ULocale.ROOT,               jaWordText,   jaWordROffsets   ),
             new TBItem( BreakIterator.KIND_SENTENCE,  new ULocale("el"),          elSentText,   elSentTOffsets   ),
             new TBItem( BreakIterator.KIND_SENTENCE,  ULocale.ROOT,               elSentText,   elSentROffsets   ),
             new TBItem( BreakIterator.KIND_CHARACTER, new ULocale("th"),          thCharText,   thCharTOffsets   ),
