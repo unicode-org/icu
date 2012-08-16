@@ -51,7 +51,6 @@ static class TestParams {
 
 
 public void TestExtended() {
-
     TestParams     tp = new TestParams();
 
 
@@ -434,6 +433,7 @@ void executeTest(TestParams t) {
        }
     }
 
+    
     //
     //  Run the iterator backwards, verify that the same breaks are found.
     //

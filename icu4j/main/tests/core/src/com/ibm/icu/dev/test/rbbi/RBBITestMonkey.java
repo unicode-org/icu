@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2011 International Business Machines Corporation and
+ * Copyright (C) 2003-2012 International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -264,15 +264,19 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet                fExtendSet;
         UnicodeSet                fExtendNumLetSet;
         UnicodeSet                fOtherSet;
+        
+        UnicodeSet                fDictionaryCjkSet;
 
         
         RBBIWordMonkey() {
             fCharProperty    = UProperty.WORD_BREAK;
 
+            fDictionaryCjkSet= new UnicodeSet("[[\\uac00-\\ud7a3][:Han:][:Hiragana:][:Katakana:]]");
             fCRSet           = new UnicodeSet("[\\p{Word_Break = CR}]");
             fLFSet           = new UnicodeSet("[\\p{Word_Break = LF}]");
             fNewlineSet      = new UnicodeSet("[\\p{Word_Break = Newline}]");
             fALetterSet      = new UnicodeSet("[\\p{Word_Break = ALetter}]");
+            fALetterSet.removeAll(fDictionaryCjkSet);
             fKatakanaSet     = new UnicodeSet("[\\p{Word_Break = Katakana}]");
             fMidNumLetSet    = new UnicodeSet("[\\p{Word_Break = MidNumLet}]");
             fMidLetterSet    = new UnicodeSet("[\\p{Word_Break = MidLetter}]");
@@ -297,13 +301,14 @@ public class RBBITestMonkey extends TestFmwk {
             fOtherSet.removeAll(fExtendNumLetSet);
             // Inhibit dictionary characters from being tested at all.
             fOtherSet.removeAll(new UnicodeSet("[\\p{LineBreak = Complex_Context}]"));
+            fOtherSet.removeAll(fDictionaryCjkSet);
 
             fSets            = new ArrayList();
             fSets.add(fCRSet);
             fSets.add(fLFSet);
             fSets.add(fNewlineSet);
             fSets.add(fALetterSet);
-            fSets.add(fKatakanaSet);
+            //fSets.add(fKatakanaSet); // TODO: work out how to test katakana
             fSets.add(fMidLetterSet);
             fSets.add(fMidNumLetSet);
             fSets.add(fMidNumSet);
@@ -1484,7 +1489,6 @@ public class RBBITestMonkey extends TestFmwk {
     /**
      * return the index of the next code point in the input text.
      * @param i the preceding index
-     * @return
      */
     static int  nextCP(StringBuffer s, int i) {
         if (i == -1) {

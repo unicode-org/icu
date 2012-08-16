@@ -1583,7 +1583,7 @@
                 <include name="**/pnames.icu"/>
                 <include name="**/*.res"/>
                 <include name="**/*.brk"/>
-                <include name="**/*.ctd"/>
+                <include name="**/*.dict"/>
                 <include name="**/*.nrm"/>
                 <exclude name="**/coll/*.res"/>
                 <exclude name="**/translit/*.res"/>
@@ -1676,7 +1676,7 @@
                 <include name="**/unames.icu"/>
                 <include name="**/pnames.icu"/>
                 <include name="**/*.brk"/>
-                <include name="**/*.ctd"/>
+                <include name="**/*.dict"/>
                 <include name="**/*.nrm"/>
                 <include name="**/brkitr/*.res"/>
                 <include name="**/translit/*.res"/>

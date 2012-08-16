@@ -1,20 +1,20 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2012, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.text;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.CharacterIterator;
 import java.util.Stack;
 
-import com.ibm.icu.impl.Assert;
+import com.ibm.icu.lang.UCharacter;
+import com.ibm.icu.lang.UProperty;
+import com.ibm.icu.lang.UScript;
 
-class ThaiBreakIterator extends DictionaryBasedBreakIterator {
-
+public class ThaiBreakEngine implements LanguageBreakEngine {
     /* Helper class for improving readability of the Thai word break
      * algorithm.
      */
@@ -25,7 +25,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
         //list of word candidate lengths, in increasing length order
         private int lengths[];
         private int count[];    // Count of candidates
-        private int prefix;     // The longeset match with a dictionary word
+        private int prefix;     // The longest match with a dictionary word
         private int offset;     // Offset in the text of these candidates
         private int mark;       // The preferred candidate's offset
         private int current;    // The candidate we're currently looking at
@@ -38,7 +38,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
         }
 
         // Fill the list of candidates if needed, select the longest, and return the number found
-        public int candidates(CharacterIterator fIter, BreakCTDictionary dict, int rangeEnd) {
+        public int candidates(CharacterIterator fIter, DictionaryMatcher dict, int rangeEnd) {
             int start = fIter.getIndex();
             if (start != offset) {
                 offset = start;
@@ -62,7 +62,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
             return lengths[mark];
         }
 
-        // Backup from the current candidate to the next shorter one; rreturn true if that exists
+        // Backup from the current candidate to the next shorter one; return true if that exists
         // and point the text after it
         public boolean backUp(CharacterIterator fIter) {
             if (current > 0) {
@@ -82,14 +82,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
             mark = current;
         }
     }
-
-    private static UnicodeSet fThaiWordSet;
-    private static UnicodeSet fEndWordSet;
-    private static UnicodeSet fBeginWordSet;
-    private static UnicodeSet fSuffixSet;
-    private static UnicodeSet fMarkSet;
-    private BreakCTDictionary fDictionary;
-
+    
     // Constants for ThaiBreakIterator
     // How many words in a row are "good enough"?
     private static final byte THAI_LOOKAHEAD = 3;
@@ -104,9 +97,14 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
     private static final char THAI_MAIYAMOK = 0x0E46;
     // Minimum word size
     private static final byte THAI_MIN_WORD = 2;
-    // Minimum number of characters for two words
-    //private final int THAI_MIN_WORD_SPAN = THAI_MIN_WORD * 2;
-
+    
+    private DictionaryMatcher fDictionary;
+    private static UnicodeSet fThaiWordSet;
+    private static UnicodeSet fEndWordSet;
+    private static UnicodeSet fBeginWordSet;
+    private static UnicodeSet fSuffixSet;
+    private static UnicodeSet fMarkSet;
+    
     static {
         // Initialize UnicodeSets
         fThaiWordSet = new UnicodeSet();
@@ -141,73 +139,28 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
         fBeginWordSet.freeze();
         fSuffixSet.freeze();
     }
-
-    public ThaiBreakIterator(InputStream ruleStream, InputStream dictionaryStream) throws IOException {
-        super(ruleStream);
-        // Initialize diciontary
-        fDictionary = new BreakCTDictionary(dictionaryStream);
+    
+    public ThaiBreakEngine() throws IOException {
+        // Initialize dictionary
+        fDictionary = DictionaryData.loadDictionaryFor("Thai");
     }
 
-    /**
-     * This is the implementation function for next().
-     */
-    protected int handleNext() {
-        CharacterIterator text = getText();
-
-        // if there are no cached break positions, or if we've just moved
-        // off the end of the range covered by the cache, we have to dump
-        // and possibly regenerate the cache
-        if (cachedBreakPositions == null || positionInCache == cachedBreakPositions.length - 1) {
-
-            // start by using the inherited handleNext() to find a tentative return
-            // value.   dictionaryCharCount tells us how many dictionary characters
-            // we passed over on our way to the tentative return value
-            int startPos = text.getIndex();
-            fDictionaryCharCount = 0;
-            int result = super.handleNext();
-
-            // if we passed over more than one dictionary character, then we use
-            // divideUpDictionaryRange() to regenerate the cached break positions
-            // for the new range
-            if (fDictionaryCharCount > 1 && result - startPos > 1) {
-                divideUpDictionaryRange(startPos, result);
-            }
-
-            // otherwise, the value we got back from the inherited fuction
-            // is our return value, and we can dump the cache
-            else {
-                cachedBreakPositions = null;
-                return result;
-            }
+    public boolean handles(int c, int breakType) {
+        if (breakType == BreakIterator.KIND_WORD || breakType == BreakIterator.KIND_LINE) {
+            int script = UCharacter.getIntPropertyValue(c, UProperty.SCRIPT);
+            return (script == UScript.THAI);
         }
-        // if the cache of break positions has been regenerated (or existed all
-        // along), then just advance to the next break position in the cache
-        // and return it
-        if (cachedBreakPositions != null) {
-            ++positionInCache;
-            text.setIndex(cachedBreakPositions[positionInCache]);
-            return cachedBreakPositions[positionInCache];
-        }
-        Assert.assrt(false);
-        return -9999;   // SHOULD NEVER GET HERE!
+        return false;
     }
 
-    /**
-     * Divide up a range of known dictionary characters.
-     *
-     * @param rangeStart The start of the range of dictionary characters
-     * @param rangeEnd The end of the range of dictionary characters
-     * @return The number of breaks found
-     */
-    private int divideUpDictionaryRange(int rangeStart, int rangeEnd) {
+    public int findBreaks(CharacterIterator fIter, int rangeStart, int rangeEnd, boolean reverse, int breakType,
+            Stack<Integer> foundBreaks) {
         if ((rangeEnd - rangeStart) < THAI_MIN_WORD) {
-            return 0;  // Not enough chacters for word
+            return 0;  // Not enough characters for word
         }
-        CharacterIterator fIter = getText();
         int wordsFound = 0;
         int wordLength;
         int current;
-        Stack<Integer> foundBreaks = new Stack<Integer>();
         PossibleWord words[] = new PossibleWord[THAI_LOOKAHEAD];
         for (int i = 0; i < THAI_LOOKAHEAD; i++) {
             words[i] = new PossibleWord();
@@ -228,7 +181,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
                 wordsFound += 1;
             }
 
-            // If there was more than one, see which one can take use forward the most words
+            // If there was more than one, see which one can take us forward the most words
             else if (candidates > 1) {
                 boolean foundBest = false;
                 // If we're already at the end of the range, we're done
@@ -259,9 +212,10 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
                         }
                     } while (words[wordsFound%THAI_LOOKAHEAD].backUp(fIter) && !foundBest);
                 }
-                /* foundBest: */wordLength = words[wordsFound%THAI_LOOKAHEAD].acceptMarked(fIter);
+                wordLength = words[wordsFound%THAI_LOOKAHEAD].acceptMarked(fIter);
                 wordsFound += 1;
             }
+
             // We come here after having either found a word or not. We look ahead to the
             // next word. If it's not a dictionary word, we will combine it with the word we
             // just found (if there is one), but only if the preceding word does not exceed
@@ -291,8 +245,8 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
                             // two characters after uc were not 0x0E4C THANTHAKHAT before
                             // checking the dictionary. That is just a performance filter,
                             // but it's not clear it's faster than checking the trie
-                            int candidate = words[(wordsFound+1)%THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
-                            fIter.setIndex(current+wordLength+chars);
+                            int candidate = words[(wordsFound + 1) %THAI_LOOKAHEAD].candidates(fIter, fDictionary, rangeEnd);
+                            fIter.setIndex(current + wordLength + chars);
                             if (candidate > 0) {
                                 break;
                             }
@@ -300,7 +254,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
                         pc = uc;
                     }
 
-                    // Bump the word cound if there wasn't already one
+                    // Bump the word count if there wasn't already one
                     if (wordLength <= 0) {
                         wordsFound += 1;
                     }
@@ -351,13 +305,13 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
                         }
                     }
                 } else {
-                    fIter.setIndex(current+wordLength);
+                    fIter.setIndex(current + wordLength);
                 }
             }
 
             // Did we find a word on this iteration? If so, push it on the break stack
             if (wordLength > 0) {
-                foundBreaks.push(Integer.valueOf(current+wordLength));
+                foundBreaks.push(Integer.valueOf(current + wordLength));
             }
         }
 
@@ -367,16 +321,7 @@ class ThaiBreakIterator extends DictionaryBasedBreakIterator {
             wordsFound -= 1;
         }
 
-        // Store the break points in cachedBreakPositions.
-        cachedBreakPositions = new int[foundBreaks.size() + 2];
-        cachedBreakPositions[0] = rangeStart;
-        int i;
-        for (i = 0; i < foundBreaks.size(); i++) {
-            cachedBreakPositions[i + 1] = foundBreaks.elementAt(i).intValue();
-        }
-        cachedBreakPositions[i + 1] = rangeEnd;
-        positionInCache = 0;
-
         return wordsFound;
     }
+
 }

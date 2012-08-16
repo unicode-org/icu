@@ -104,23 +104,6 @@ public class ULocaleTest extends TestFmwk {
     }
     */
 
-    public void TestBreakIterator() {
-        checkService("ja_JP_OSAKA", new ServiceFacade() {
-                public Object create(ULocale req) {
-                    return BreakIterator.getWordInstance(req);
-                }
-            }, null, new Registrar() {
-                    public Object register(ULocale loc, Object prototype) {
-                        return BreakIterator.registerInstance(
-                                                              (BreakIterator) prototype,
-                                                              loc, BreakIterator.KIND_WORD);
-                    }
-                    public boolean unregister(Object key) {
-                        return BreakIterator.unregister(key);
-                    }
-                });
-    }
-
     public void TestDateFormat() {
         checkService("de_CH_ZURICH", new ServiceFacade() {
                 public Object create(ULocale req) {
