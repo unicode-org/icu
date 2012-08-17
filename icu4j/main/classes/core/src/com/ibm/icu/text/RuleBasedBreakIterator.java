@@ -15,7 +15,7 @@ import java.text.CharacterIterator;
 import java.util.Collections;
 import java.util.Set;
 import java.util.Stack;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashSet;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUDebug;
@@ -322,7 +322,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      */
     private boolean fUseDictionary = true;
     
-    private final Set<LanguageBreakEngine> fBreakEngines = Collections.newSetFromMap(new ConcurrentHashMap<LanguageBreakEngine, Boolean>());
+    private final Set<LanguageBreakEngine> fBreakEngines = Collections.synchronizedSet(new HashSet<LanguageBreakEngine>());
 
     /*
      * ICU debug argument name for RBBI
