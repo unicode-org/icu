@@ -1052,7 +1052,6 @@ void RBBIAPITest::TestRoundtripRules() {
     RoundtripRule("line");
     RoundtripRule("char");
     if (!quick) {
-        RoundtripRule("word_ja");
         RoundtripRule("word_POSIX");
     }
 }
