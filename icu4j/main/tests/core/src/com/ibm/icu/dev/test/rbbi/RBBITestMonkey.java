@@ -300,7 +300,8 @@ public class RBBITestMonkey extends TestFmwk {
             fOtherSet.removeAll(fExtendSet);
             fOtherSet.removeAll(fExtendNumLetSet);
             // Inhibit dictionary characters from being tested at all.
-            fOtherSet.removeAll(new UnicodeSet("[\\p{LineBreak = Complex_Context}]"));
+            // remove surrogates so as to not generate higher CJK characters
+            fOtherSet.removeAll(new UnicodeSet("[[\\p{LineBreak = Complex_Context}][:Line_Break=Surrogate:]]"));
             fOtherSet.removeAll(fDictionaryCjkSet);
 
             fSets            = new ArrayList();
@@ -613,7 +614,6 @@ public class RBBITestMonkey extends TestFmwk {
             fSets.add(fWJ);
             fSets.add(fSA);
             fSets.add(fSG);
-            
         }
         
         void setText(StringBuffer s) {

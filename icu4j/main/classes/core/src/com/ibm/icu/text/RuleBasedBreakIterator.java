@@ -1036,12 +1036,21 @@ public class RuleBasedBreakIterator extends BreakIterator {
             case UScript.KATAKANA:
             case UScript.HIRAGANA:
             case UScript.HAN:
-                if (getBreakType() == KIND_WORD)
+                if (getBreakType() == KIND_WORD) {
                     eng = new CjkBreakEngine(false);
+                }
+                else {
+                    fUnhandledBreakEngine.handleChar(c, getBreakType());
+                    eng = fUnhandledBreakEngine;
+                }
                 break;
             case UScript.HANGUL:
-                if (getBreakType() == KIND_WORD)
+                if (getBreakType() == KIND_WORD) {
                     eng = new CjkBreakEngine(true);
+                } else {
+                    fUnhandledBreakEngine.handleChar(c, getBreakType());
+                    eng = fUnhandledBreakEngine;
+                }
                 break;
             default:
                 fUnhandledBreakEngine.handleChar(c, getBreakType());
