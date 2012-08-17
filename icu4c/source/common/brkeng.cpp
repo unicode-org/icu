@@ -291,7 +291,7 @@ ICULanguageBreakFactory::loadDictionaryMatcherFor(UScriptCode script, int32_t /*
         int len = 0;
         if (extStart != NULL) {
             len = (int)(extStart - dictfname);
-            u_UCharsToChars(extStart+1, ext, sizeof(ext)); // null-terminates the buffer
+            u_UCharsToChars(extStart+1, ext, sizeof(ext)-1); // null-terminates the buffer
             u_UCharsToChars(dictfname, dictnbuf, len);
         }
         dictnbuf[len] = '\0'; // null-terminate

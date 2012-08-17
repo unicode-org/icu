@@ -17,6 +17,9 @@
 
 U_NAMESPACE_BEGIN
 
+const int32_t DictionaryData::TRIE_TYPE_BYTES;
+const int32_t DictionaryData::TRIE_TYPE_UCHARS;
+
 UCharsDictionaryMatcher::~UCharsDictionaryMatcher() {
     udata_close(file);
 }
