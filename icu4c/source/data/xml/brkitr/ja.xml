@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!--
- Copyright (c) 2006-2011 International Business Machines Corporation and others. All rights reserved.
+ Copyright (c) 2006-2012 International Business Machines Corporation and others. All rights reserved.
 -->
 <!DOCTYPE ldml SYSTEM "http://www.unicode.org/repos/cldr/trunk/common/dtd/ldml.dtd"
 [
@@ -17,7 +17,6 @@
     <special xmlns:icu="http://www.icu-project.org/">
         <icu:breakIteratorData>
             <icu:boundaries>
-                <icu:word icu:dependency="word_ja.brk"/>
                 <icu:line icu:dependency="line_ja.brk"/>
             </icu:boundaries>
         </icu:breakIteratorData>
