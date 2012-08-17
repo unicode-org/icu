@@ -45,7 +45,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 7 .
+The following is a description of format version 7.1 .
 
 Data contents:
 
@@ -155,6 +155,8 @@ Encoding of numeric type and value in the 10-bit ntv field:
     0xb0..0x1df     fraction    ((ntv>>4)-12) / ((ntv&0xf)+1) = -1..17 / 1..16
     0x1e0..0x2ff    large int   ((ntv>>5)-14) * 10^((ntv&0x1f)+2) = (1..9)*(10^2..10^33)
                     (only one significant decimal digit)
+    0x300..0x323    base-60 (sexagesimal) integer (new in format version 7.1)
+                                ((ntv>>2)-0xbf) * 60^((ntv&3)+1) = (1..9)*(60^1..60^4)
 
 --- Additional properties (new in format version 2.1) ---
 
@@ -234,6 +236,14 @@ than a script code.
 
 Change from UTrie to UTrie2.
 
+--- Changes in format version 7.1 ---
+
+Unicode 6.2 adds sexagesimal (base-60) numeric values:
+    cp;12432;na=CUNEIFORM NUMERIC SIGN SHAR2 TIMES GAL PLUS DISH;nv=216000
+    cp;12433;na=CUNEIFORM NUMERIC SIGN SHAR2 TIMES GAL PLUS MIN;nv=432000
+
+The encoding of numeric values was extended to handle such values.
+
 ----------------------------------------------------------------------------- */
 
 U_NAMESPACE_USE
@@ -249,8 +259,8 @@ static UDataInfo dataInfo={
     0,
 
     { 0x55, 0x50, 0x72, 0x6f },                 /* dataFormat="UPro" */
-    { 7, 0, 0, 0 },                             /* formatVersion */
-    { 6, 0, 0, 0 }                              /* dataVersion */
+    { 7, 1, 0, 0 },                             /* formatVersion */
+    { 6, 2, 0, 0 }                              /* dataVersion */
 };
 
 class CorePropsBuilder : public PropsBuilder {
@@ -301,6 +311,7 @@ CorePropsBuilder::setUnicodeVersion(const UVersionInfo version) {
 // For nt=U_NT_NUMERIC.
 static int32_t
 encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
+    const char *original;
     /* get a possible minus sign */
     UBool isNegative;
     if(*s=='-') {
@@ -322,15 +333,16 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
     } else {
         /* normal number parsing */
         unsigned long ul=uprv_strtoul(s, &numberLimit, 10);
-        if(ul>0x7fffffff) {
+        if(s==numberLimit || (*numberLimit!=0 && *numberLimit!='/') || ul>0x7fffffff) {
             ntv=-1;
         } else {
             value=(int32_t)ul;
         }
-        if(s<numberLimit && *numberLimit=='/') {
+        if(ntv>=0 && *numberLimit=='/') {
             /* fractional value, get the denominator */
-            ul=uprv_strtoul(numberLimit+1, &numberLimit, 10);
-            if(ul==0 || ul>0x7fffffff) {
+            s=numberLimit+1;
+            ul=uprv_strtoul(s, &numberLimit, 10);
+            if(s==numberLimit || *numberLimit!=0 || ul==0 || ul>0x7fffffff) {
                 ntv=-1;
             } else {
                 den=(int32_t)ul;
@@ -359,22 +371,41 @@ encodeNumericValue(UChar32 start, const char *s, UErrorCode &errorCode) {
                     mant/=10;
                     ++exp;
                 }
+                // Note: value<=0x7fffffff guarantees exp<=33
                 if(mant<=9) {
                     ntv=((mant+14)<<5)+(exp-2);
+                } else {
+                    // Try sexagesimal (base 60) numbers.
+                    mant=value;
+                    exp=0;
+                    while((mant%60)==0) {
+                        mant/=60;
+                        ++exp;
+                    }
+                    if(mant<=9 && exp<=4) {
+                        ntv=((mant+0xbf)<<2)+(exp-1);
+                    } else {
+                        ntv=-1;
+                    }
                 }
             }
         } else if(2<=exp && exp<=33 && 1<=value && value<=9) {
             /* large, single-significant-digit integer */
             ntv=((value+14)<<5)+(exp-2);
+        } else {
+            ntv=-1;
         }
-    } else if(exp==0) {
-        if(-1<=value && value<=17 && 1<=den && den<=16) {
-            /* fraction */
-            ntv=((value+12)<<4)+(den-1);
-        }
+    } else if(exp==0 && -1<=value && value<=17 && 1<=den && den<=16) {
+        /* fraction */
+        ntv=((value+12)<<4)+(den-1);
+    } else if(exp==0 && value==-1 && den==0) {
+        /* -1 parsed with den=0, encoded as pseudo-fraction -1/1 */
+        ntv=((value+12)<<4);
+    } else {
+        ntv=-1;
     }
     if(ntv<0 || *numberLimit!=0) {
-        fprintf(stderr, "genprops error: unable to encode numeric value nv=%s\n", s);
+        fprintf(stderr, "genprops error: unable to encode numeric value nv=%s\n", original);
         errorCode=U_ILLEGAL_ARGUMENT_ERROR;
     }
     return ntv;

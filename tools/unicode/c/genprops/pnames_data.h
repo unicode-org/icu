@@ -258,7 +258,7 @@ static const Value VALUES_blk[221] = {
     Value(UBLOCK_TAKRI, "Takri Takri"),
 };
 
-static const Value VALUES_ccc[56] = {
+static const Value VALUES_ccc[57] = {
     Value(0, "NR Not_Reordered"),
     Value(1, "OV Overlay"),
     Value(7, "NK Nukta"),
@@ -299,7 +299,8 @@ static const Value VALUES_ccc[56] = {
     Value(122, "CCC122 CCC122"),
     Value(129, "CCC129 CCC129"),
     Value(130, "CCC130 CCC130"),
-    Value(132, "CCC133 CCC133"),
+    Value(132, "CCC132 CCC132"),
+    Value(133, "CCC133 CCC133"),
     Value(200, "ATBL Attached_Below_Left"),
     Value(202, "ATB Attached_Below"),
     Value(214, "ATA Attached_Above"),
@@ -490,7 +491,7 @@ static const Value VALUES_lb[40] = {
     Value(U_LB_CLOSE_PARENTHESIS, "CP Close_Parenthesis"),
     Value(U_LB_CONDITIONAL_JAPANESE_STARTER, "CJ Conditional_Japanese_Starter"),
     Value(U_LB_HEBREW_LETTER, "HL Hebrew_Letter"),
-    Value(U_LB_ZERO_WIDTH_JOINER, "ZJ Zero_Width_Joiner"),
+    Value(U_LB_REGIONAL_INDICATOR, "RI Regional_Indicator"),
 };
 
 static const Value VALUES_nt[4] = {
@@ -693,7 +694,7 @@ static const Value VALUES_NFKC_QC[3] = {
     Value(UNORM_MAYBE, "M Maybe"),
 };
 
-static const Value VALUES_lccc[56] = {
+static const Value VALUES_lccc[57] = {
     Value(0, "NR Not_Reordered"),
     Value(1, "OV Overlay"),
     Value(7, "NK Nukta"),
@@ -734,7 +735,8 @@ static const Value VALUES_lccc[56] = {
     Value(122, "CCC122 CCC122"),
     Value(129, "CCC129 CCC129"),
     Value(130, "CCC130 CCC130"),
-    Value(132, "CCC133 CCC133"),
+    Value(132, "CCC132 CCC132"),
+    Value(133, "CCC133 CCC133"),
     Value(200, "ATBL Attached_Below_Left"),
     Value(202, "ATB Attached_Below"),
     Value(214, "ATA Attached_Above"),
@@ -752,7 +754,7 @@ static const Value VALUES_lccc[56] = {
     Value(240, "IS Iota_Subscript"),
 };
 
-static const Value VALUES_tccc[56] = {
+static const Value VALUES_tccc[57] = {
     Value(0, "NR Not_Reordered"),
     Value(1, "OV Overlay"),
     Value(7, "NK Nukta"),
@@ -793,7 +795,8 @@ static const Value VALUES_tccc[56] = {
     Value(122, "CCC122 CCC122"),
     Value(129, "CCC129 CCC129"),
     Value(130, "CCC130 CCC130"),
-    Value(132, "CCC133 CCC133"),
+    Value(132, "CCC132 CCC132"),
+    Value(133, "CCC133 CCC133"),
     Value(200, "ATBL Attached_Below_Left"),
     Value(202, "ATB Attached_Below"),
     Value(214, "ATA Attached_Above"),
@@ -811,7 +814,7 @@ static const Value VALUES_tccc[56] = {
     Value(240, "IS Iota_Subscript"),
 };
 
-static const Value VALUES_GCB[14] = {
+static const Value VALUES_GCB[13] = {
     Value(U_GCB_OTHER, "XX Other"),
     Value(U_GCB_CONTROL, "CN Control"),
     Value(U_GCB_CR, "CR CR"),
@@ -824,8 +827,7 @@ static const Value VALUES_GCB[14] = {
     Value(U_GCB_V, "V V"),
     Value(U_GCB_SPACING_MARK, "SM SpacingMark"),
     Value(U_GCB_PREPEND, "PP Prepend"),
-    Value(U_GCB_AFTER_JOINER, "AJ After_Joiner"),
-    Value(U_GCB_JOINER, "J Joiner"),
+    Value(U_GCB_REGIONAL_INDICATOR, "RI Regional_Indicator"),
 };
 
 static const Value VALUES_SB[15] = {
@@ -846,7 +848,7 @@ static const Value VALUES_SB[15] = {
     Value(U_SB_SCONTINUE, "SC SContinue"),
 };
 
-static const Value VALUES_WB[15] = {
+static const Value VALUES_WB[14] = {
     Value(U_WB_OTHER, "XX Other"),
     Value(U_WB_ALETTER, "LE ALetter"),
     Value(U_WB_FORMAT, "FO Format"),
@@ -860,8 +862,7 @@ static const Value VALUES_WB[15] = {
     Value(U_WB_LF, "LF LF"),
     Value(U_WB_MIDNUMLET, "MB MidNumLet"),
     Value(U_WB_NEWLINE, "NL Newline"),
-    Value(U_WB_AFTER_JOINER, "AJ After_Joiner"),
-    Value(U_WB_JOINER, "J Joiner"),
+    Value(U_WB_REGIONAL_INDICATOR, "RI Regional_Indicator"),
 };
 
 static const Value VALUES_gcm[38] = {
@@ -965,7 +966,7 @@ static const Property PROPERTIES[94] = {
     Property(UCHAR_CHANGES_WHEN_NFKC_CASEFOLDED, "CWKCF Changes_When_NFKC_Casefolded"),
     Property(UCHAR_BIDI_CLASS, "bc Bidi_Class", VALUES_bc, 19),
     Property(UCHAR_BLOCK, "blk Block", VALUES_blk, 221),
-    Property(UCHAR_CANONICAL_COMBINING_CLASS, "ccc Canonical_Combining_Class", VALUES_ccc, 56),
+    Property(UCHAR_CANONICAL_COMBINING_CLASS, "ccc Canonical_Combining_Class", VALUES_ccc, 57),
     Property(UCHAR_DECOMPOSITION_TYPE, "dt Decomposition_Type", VALUES_dt, 18),
     Property(UCHAR_EAST_ASIAN_WIDTH, "ea East_Asian_Width", VALUES_ea, 6),
     Property(UCHAR_GENERAL_CATEGORY, "gc General_Category", VALUES_gc, 30),
@@ -979,11 +980,11 @@ static const Property PROPERTIES[94] = {
     Property(UCHAR_NFKD_QUICK_CHECK, "NFKD_QC NFKD_Quick_Check", VALUES_NFKD_QC, 2),
     Property(UCHAR_NFC_QUICK_CHECK, "NFC_QC NFC_Quick_Check", VALUES_NFC_QC, 3),
     Property(UCHAR_NFKC_QUICK_CHECK, "NFKC_QC NFKC_Quick_Check", VALUES_NFKC_QC, 3),
-    Property(UCHAR_LEAD_CANONICAL_COMBINING_CLASS, "lccc Lead_Canonical_Combining_Class", VALUES_lccc, 56),
-    Property(UCHAR_TRAIL_CANONICAL_COMBINING_CLASS, "tccc Trail_Canonical_Combining_Class", VALUES_tccc, 56),
-    Property(UCHAR_GRAPHEME_CLUSTER_BREAK, "GCB Grapheme_Cluster_Break", VALUES_GCB, 14),
+    Property(UCHAR_LEAD_CANONICAL_COMBINING_CLASS, "lccc Lead_Canonical_Combining_Class", VALUES_lccc, 57),
+    Property(UCHAR_TRAIL_CANONICAL_COMBINING_CLASS, "tccc Trail_Canonical_Combining_Class", VALUES_tccc, 57),
+    Property(UCHAR_GRAPHEME_CLUSTER_BREAK, "GCB Grapheme_Cluster_Break", VALUES_GCB, 13),
     Property(UCHAR_SENTENCE_BREAK, "SB Sentence_Break", VALUES_SB, 15),
-    Property(UCHAR_WORD_BREAK, "WB Word_Break", VALUES_WB, 15),
+    Property(UCHAR_WORD_BREAK, "WB Word_Break", VALUES_WB, 14),
     Property(UCHAR_GENERAL_CATEGORY_MASK, "gcm General_Category_Mask", VALUES_gcm, 38),
     Property(UCHAR_NUMERIC_VALUE, "nv Numeric_Value"),
     Property(UCHAR_AGE, "age Age"),
