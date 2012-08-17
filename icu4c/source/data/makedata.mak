@@ -253,9 +253,9 @@ BRK_FILES=$(BRK_FILES:.txt=.brk)
 BRK_FILES=$(BRK_FILES:brkitr\ =brkitr\)
 
 !IFDEF BRK_DICT_SOURCE
-BRK_DICT_FILES = $(ICUBRK)\$(BRK_DICT_SOURCE):.txt=.dict brkitr\)
+BRK_DICT_FILES = $(ICUBRK)\$(BRK_DICT_SOURCE:.txt =.dict brkitr\)
 BRK_DICT_FILES = $(BRK_DICT_FILES:.txt=.dict)
-BRK_DICT_FILES = $(BRK_DICT_FILES:brkitr\ =)
+BRK_DICT_FILES = $(BRK_DICT_FILES:brkitr\ =brkitr\)
 !ENDIF
 
 !IFDEF BRK_RES_SOURCE
@@ -360,9 +360,6 @@ ZONE_SOURCE=$(ZONE_SOURCE) $(ZONE_SOURCE_LOCAL)
 !MESSAGE Warning: cannot find "zone\resfiles.mk"
 !ENDIF
 
-BRK_DICT_FILES = $(ICUBRK)\$(BRK_DICT_SOURCE):.txt=.dict brkitr\)
-BRK_DICT_FILES = $(BRK_DICT_FILES:.txt=.dict)
-BRK_DICT_FILES = $(BRK_DICT_FILES:brkitr\ =)
 !IFDEF ZONE_SOURCE
 ZONE_FILES = zone\root.txt $(ZONE_ALIAS_SOURCE) $(ZONE_SOURCE)
 ZONE_RES_FILES = $(ZONE_FILES:.txt =.res zone\)
@@ -640,7 +637,7 @@ $(TRANSLIT_RES_FILES:.res =.res
 )
 $(BRK_FILES:.brk =.brk
 )
-$(BRK_DICT_FILES:.dict=.dict
+$(BRK_DICT_FILES:.dict =.dict
 )
 $(BRK_RES_FILES:.res =.res
 )
@@ -740,7 +737,15 @@ CLEAN : GODATA
 #RBBI .dict file generation.
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)}.txt.dict:
     @echo Creating $@
-    @"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --uchars -i "$(ICUBLD_PKG)" $< $(ICUBLD_PKG)\$@
+    @"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --uchars $<  $(ICUBLD_PKG)\$@
+
+$(ICUBRK)\thaidict.dict:
+	@echo Creating $(ICUBRK)\thaidict.dict
+	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0xe00 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\thaidict.txt $(ICUBLD_PKG)\$(ICUBRK)\thaidict.dict
+
+$(ICUBRK)\khmerdict.dict:
+	@echo Creating $(ICUBRK)\khmerdict.dict
+	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0x1780 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\khmerdict.txt $(ICUBLD_PKG)\$(ICUBRK)\khmerdict.dict
 
 !IFNDEF ICUDATA_SOURCE_ARCHIVE
 # Rule for creating converters

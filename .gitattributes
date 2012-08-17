@@ -27,7 +27,6 @@ icu4c/source/data/brkitr/thaidict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/title.txt svneol=native#text/plain
 icu4c/source/data/brkitr/word.txt svneol=native#text/plain
 icu4c/source/data/brkitr/word_POSIX.txt svneol=native#text/plain
-icu4c/source/data/brkitr/word_ja.txt svneol=native#text/plain
 icu4c/source/data/build.xml svneol=native#text/xml
 icu4c/source/data/cldr-icu-readme.txt svneol=native#text/plain
 icu4c/source/data/coll/af.txt svneol=native#text/plain%3Bcharset%3Dutf-8

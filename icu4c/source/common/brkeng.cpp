@@ -288,10 +288,15 @@ ICULanguageBreakFactory::loadDictionaryMatcherFor(UScriptCode script, int32_t /*
     }
     if (U_SUCCESS(status) && dictfname) {
         UChar *extStart = u_strchr(dictfname, 0x002e);
+        int32_t extLen = u_strlen(extStart+1);
+        if (extLen > sizeof(ext) - 1) {
+            ures_close(b);
+            return NULL;
+        }
         int len = 0;
         if (extStart != NULL) {
             len = (int)(extStart - dictfname);
-            u_UCharsToChars(extStart+1, ext, sizeof(ext)-1); // null-terminates the buffer
+            u_UCharsToChars(extStart+1, ext, extLen); // null-terminates the buffer
             u_UCharsToChars(dictfname, dictnbuf, len);
         }
         dictnbuf[len] = '\0'; // null-terminate
