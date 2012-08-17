@@ -271,7 +271,7 @@ public class RBBITestMonkey extends TestFmwk {
         RBBIWordMonkey() {
             fCharProperty    = UProperty.WORD_BREAK;
 
-            fDictionaryCjkSet= new UnicodeSet("[[\\uac00-\\ud7a3][:Han:][:Hiragana:][:Katakana:]]");
+            fDictionaryCjkSet= new UnicodeSet("[[:Script=Hangul:][:Han:][:Hiragana:][:Katakana:]]");
             fCRSet           = new UnicodeSet("[\\p{Word_Break = CR}]");
             fLFSet           = new UnicodeSet("[\\p{Word_Break = LF}]");
             fNewlineSet      = new UnicodeSet("[\\p{Word_Break = Newline}]");
