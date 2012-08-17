@@ -35,13 +35,17 @@ subdir = .
 @TESTS_TRUE@TEST = test
 @SAMPLES_TRUE@SAMPLE = samples
 
+## pkgconfig setup. Always have uc and i18n. Others are optional.
+ALL_PKGCONFIG_SUFFIX=uc i18n
+@LAYOUT_TRUE@ALL_PKGCONFIG_SUFFIX+= le lx
+@ICUIO_TRUE@ALL_PKGCONFIG_SUFFIX+= io
+
 DOXYGEN = @DOXYGEN@
 DOCZIP = icu-docs.zip
 
 ## Files to remove for 'make clean'
 CLEANFILES = *~
 
-ALL_PKGCONFIG_SUFFIX=uc i18n io le lx
 ALL_PKGCONFIG_FILES=$(ALL_PKGCONFIG_SUFFIX:%=$(top_builddir)/config/icu-%.pc)
 
 ## Files built (autoconfed) and installed
