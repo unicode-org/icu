@@ -709,6 +709,17 @@ icu4c/source/tools/gencnval/gencnval.vcproj.*.*.user
 icu4c/source/tools/gencnval/release
 icu4c/source/tools/gencnval/x64
 icu4c/source/tools/gencnval/x86
+icu4c/source/tools/gendict/*.1
+icu4c/source/tools/gendict/*.d
+icu4c/source/tools/gendict/*.o
+icu4c/source/tools/gendict/*.pdb
+icu4c/source/tools/gendict/*.plg
+icu4c/source/tools/gendict/*.vcxproj.user
+icu4c/source/tools/gendict/Debug
+icu4c/source/tools/gendict/Makefile
+icu4c/source/tools/gendict/Release
+icu4c/source/tools/gendict/x64
+icu4c/source/tools/gendict/x86
 icu4c/source/tools/gennorm2/*.d
 icu4c/source/tools/gennorm2/*.o
 icu4c/source/tools/gennorm2/*.pdb
