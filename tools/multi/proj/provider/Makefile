@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2010-2011 IBM Corporation and Others, All Rights Reserved.
+# Copyright (C) 2010-2012 IBM Corporation and Others, All Rights Reserved.
 #
 all: glurens ii plugs testprog
 
@@ -31,8 +31,7 @@ PROVIDER=provider
 LIBPROVIDER=lib$(PROVIDER).a
 
 #libs: $(ICU_TARBALLS_VERS:%=$(OUT)/%/lib/$(LIBPROVIDER))
-PLUGLIB=$(shell echo $(PROVIDER_TARGET)  | tr '.' '_' )
-PLUGLIB_MAJ=$(shell echo $(PROVIDER_TARGET) | cut -d. -f1-2 | tr -d '.' )
+
 PLUGLIB_INST=$(C_INS)/r$(PLUGLIB)
 PLUGLIB_ICU_CONFIG=$(PLUGLIB_INST)/bin/icu-config
 #PLUGLIB_SO=$(shell $(PLUGLIB_ICU_CONFIG) --so 2>/dev/null )
@@ -114,7 +113,8 @@ ICU_CONFIG_CC=--cc $(ICU_CONFIG_COMMON) --cflags
 ICU_CONFIG_CXX=--cxx $(ICU_CONFIG_COMMON) --cxxflags
 
 include Makefile.local
-
+PLUGLIB=$(shell echo $(PROVIDER_TARGET)  | tr '.' '_' )
+PLUGLIB_MAJ=$(shell  ./icu2symver.sh $(PLUGLIB))
 
 ## @build All installed ICUs
 ii: $(GLOUT_ICU)
@@ -203,7 +203,10 @@ TESTPROG=coldiff datediff
 
 testprog: $(PLUGLIB:%=$(OUT)/%/bin/$(TESTPROG)) 
 
-check: all testprog $(OUT)/icuplugins$(PLUGLIB_MAJ).txt
+check-icu2symver:
+	./check-icu2symver.sh
+
+check: check-icu2symver all testprog $(OUT)/icuplugins$(PLUGLIB_MAJ).txt
 	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib $(PLUGLIB_INST)/bin/icuinfo || ( echo "ICU broken." ; /bin/false )
 	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib $(PLUGLIB_INST)/bin/icuinfo -L || ( echo "Plugin broken." ; /bin/false )
 	@for prog in $(TESTPROG) ; \
@@ -243,20 +246,9 @@ $(OUT)/%/lib/$(LIBPROVIDER):  $(GLOUT)/%/obj-$(OK)
 glurens: $(GLUREN_ICU)
 
 # build single gluren.h 
-$(BUILD)/%/$(GLUREN_H): $(BUILD)/%/ok Makefile
+$(BUILD)/%/$(GLUREN_H): $(BUILD)/%/ok Makefile makegluren.sh
 	-mkdir -p $(BUILD)/$*/$(GLUREN)
-	cat $(GLUE)/gluren-top.h > $@
-	echo "#define GLUREN_VER" $* >> $@
-	echo "#define GLUREN_TINY" $(shell echo $* | cut -d_ -f1-2) >> $@
-	echo >> $@
-	echo '/* old style (<4.4)*/' >> $@
-	grep "^#define.*$(shell echo $* | cut -d_ -f1-2)$$" $(SRC)/$*/$(SOURCE)/common/unicode/urename.h   | fgrep -v '*' | \
-		sed -e "s@^#define \([^ ]*\) \([^ ]*\)@#define OICU_\1 \2@" >> $@
-	echo '/* new style (4.4+) */' >> $@
-	fgrep " U_ICU_ENTRY_POINT_RENAME(" $(SRC)/$*/$(SOURCE)/common/unicode/urename.h | \
-		sed -e "s@^#define \([^ ]*\) .*@#define OICU_\1 \1_$(shell echo $* | cut -d_ -f1-2 | tr -d '_')@" >> $@
-	cat $(GLUE)/gluren-bottom.h >> $@
-
+	env SRC="$(SRC)" SOURCE="$(SOURCE)" GLUE="$(GLUE)" ./makegluren.sh $@ $*
 
 $(BUILD)/%/config/$(ICU_CONFIG): $(BUILD)/%/config/$(ICU_CONFIG_ORIG) icu-config.sed $(BUILD)/%/ok 
 	sed -f icu-config.sed < $(BUILD)/$*/config/$(ICU_CONFIG_ORIG) >  $(BUILD)/$*/config/$(ICU_CONFIG) && chmod a+rx  $(BUILD)/$*/config/$(ICU_CONFIG)
