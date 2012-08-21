@@ -109,10 +109,14 @@ doc: doc/html/index.html
 
 doc-searchengine: Doxyfile $(wildcard ./common/unicode/platform.h $(srcdir)/common/unicode/*.h $(srcdir)/i18n/unicode/*.h $(srcdir)/layout/unicode/*.h $(srcdir)/io/unicode/*.h)
 	sed < Doxyfile -e 's%[^#]*SEARCHENGINE.*%SEARCHENGINE=YES%' | $(DOXYGEN) -
+	@echo adding links from non-namespaced class files
+	find doc/html -name 'classicu_1_1*' -print | sed -e 's%^\(.*class\)icu_1_1\(.*\)$$%ln & \1\2%' | sh
 	@echo Docs created - WARNING, probably contains non-GPL .js files
 
 doc/html/index.html: Doxyfile $(wildcard ./common/unicode/platform.h $(srcdir)/common/unicode/*.h $(srcdir)/i18n/unicode/*.h $(srcdir)/layout/unicode/*.h $(srcdir)/io/unicode/*.h)
 	$(DOXYGEN)
+	@echo adding links from non-namespaced class files
+	find doc/html -name 'classicu_1_1*' -print | sed -e 's%^\(.*class\)icu_1_1\(.*\)$$%ln & \1\2%' | sh
 
 Doxyfile: $(srcdir)/Doxyfile.in
 	CONFIG_FILES=$@ CONFIG_HEADERS= $(SHELL) ./config.status
