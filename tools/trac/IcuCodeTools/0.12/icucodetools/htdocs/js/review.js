@@ -4,7 +4,7 @@
      var cst = document.getElementById("changesettable");
      var trs=cst.getElementsByTagName("tr");
      for( i=1 ; i < trs.length ; i++ ) {
-        var sec = trs[i].getElementsByTagName('td')[0];
+	var sec = trs[i].getElementsByTagName('td')[1]; // [0] is 'author', [1] is section.
         var brk = sec.getElementsByTagName('a');
         for(j=0;j<brk.length;j++) {
            var bri = brk[j];
