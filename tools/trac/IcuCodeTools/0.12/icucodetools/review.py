@@ -240,6 +240,7 @@ class ReviewModule(Component):
             revcount = revcount + 1
             revision = {}
             revision['rev'] =  tag.a(rev, req.href.changeset(rev))
+            revision['author'] = chgset.author
             revision['num'] =  rev
             revision['comment'] =  message #wiki_to_oneliner( message, self.env, db, shorten=False )
             rbranches = revision['branches'] = []

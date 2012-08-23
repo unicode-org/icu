@@ -27,6 +27,7 @@
     <thead>
       <tr>
 	<th>r</th>
+	<th>author</th>
 	<th>section(s)</th>
 	<th>comment</th>
       </tr>
@@ -37,6 +38,9 @@
 	  <th>
 	    <a href="${href.changeset(rev.num)}">r${rev.num}</a>
 	  </th>
+	  <td>
+	    ${rev.author}
+	  </td>
 	  <td>
 	    <!-- sections -->
 	    <py:for each="branch in rev.branches">
