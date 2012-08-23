@@ -1936,6 +1936,12 @@ public class CollationMiscTest extends TestFmwk {
                                   "\u0663\u0662",
                                   "\u0663\u0663"
         };
+        
+        //Additional tests to cover bug reported in #9476
+        String lastDigitDifferent[]={"2004","2005",
+                                     "110005", "110006",
+                                     "11005", "11006",
+                                     "100000000005","100000000006"};
 
         // Open our collator.
         RuleBasedCollator coll
@@ -1963,6 +1969,13 @@ public class CollationMiscTest extends TestFmwk {
                                      preZeroTestStrings[j],0);
             }
         }
+        
+        //Testing that the behavior reported in #9476 is fixed
+        //We expect comparisons between adjacent pairs will result in -1
+        for (int i=0; i < lastDigitDifferent.length -1; i=i+2 ) {
+            CollationTest.doTest(this, coll, lastDigitDifferent[i], lastDigitDifferent[i+1], -1);
+        }
+        
 
         //cover setNumericCollationDefault, getNumericCollation
         assertTrue("The Numeric Collation setting is on", coll.getNumericCollation());

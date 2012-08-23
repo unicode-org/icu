@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and    *
+* Copyright (C) 1996-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1928,6 +1928,11 @@ public final class CollationElementIterator
                         // We drop the collation value into the buffer so if 
                         // we need to do a "front patch" we don't have to 
                         // check to see if we're hitting the last element.
+                        
+                        if (trailingZeroIndex != 0) {
+                            trailingZeroIndex = 0;
+                        }
+                        
                         collateVal = digVal * 10;
                         m_utilStringBuffer_.setCharAt((digIndx >>> 1) + 2, 
                                                 (char)((collateVal << 1) + 6));
@@ -1973,7 +1978,8 @@ public final class CollationElementIterator
             }
         
             int endIndex = trailingZeroIndex != 0 ? trailingZeroIndex 
-                                             : (digIndx >>> 1) + 2;              
+                                             : (digIndx >>> 1) + 2;   
+         
             if (digIndx % 2 != 0){
                 // We missed a value. Since digIndx isn't even, stuck too many 
                 // values into the buffer (this is what we get for padding the 
