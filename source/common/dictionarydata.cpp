@@ -17,8 +17,10 @@
 
 U_NAMESPACE_BEGIN
 
+#ifndef CYGWINMSVC /* On Cygwin/MSVC, the error redefinition of symbols occurs.*/
 const int32_t DictionaryData::TRIE_TYPE_BYTES;
 const int32_t DictionaryData::TRIE_TYPE_UCHARS;
+#endif
 
 UCharsDictionaryMatcher::~UCharsDictionaryMatcher() {
     udata_close(file);
