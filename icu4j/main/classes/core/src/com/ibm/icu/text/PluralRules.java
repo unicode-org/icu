@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -28,12 +28,19 @@ import com.ibm.icu.util.ULocale;
 
 /**
  * <p>Defines rules for mapping non-negative numeric values onto a small set of
- * keywords. Serializable so can be used in formatters, which are
- * serializable. Rules are constructed from a text description, consisting
+ * keywords.
+ *
+ * <p>Rules are constructed from a text description, consisting
  * of a series of keywords and conditions.  The {@link #select} method
  * examines each condition in order and returns the keyword for the
  * first condition that matches the number.  If none match,
  * {@link #KEYWORD_OTHER} is returned.</p>
+ *
+ * <p>A PluralRules object is immutable.
+ * It contains caches for sample values, but those are synchronized.
+ *
+ * <p>PluralRules is Serializable so that it can be used in formatters, which are
+ * serializable.
  *
  * <p>For more information, details, and tips for writing rules, see the
  * <a href="http://www.unicode.org/draft/reports/tr35/tr35.html#Language_Plural_Rules">LDML spec,
@@ -1099,7 +1106,7 @@ public class PluralRules implements Serializable {
     }
 
     /**
-     * Return tif rhs is equal to this.
+     * Returns true if rhs is equal to this.
      * @param rhs the PluralRules to compare to.
      * @return true if this and rhs are equal.
      * @stable ICU 3.8
