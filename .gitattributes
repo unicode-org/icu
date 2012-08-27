@@ -3224,8 +3224,8 @@ icu4j/main/classes/core/src/com/ibm/icu/text/CharsetRecognizer.java svneol=nativ
 icu4j/main/classes/core/src/com/ibm/icu/text/ChineseDateFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ChineseDateFormatSymbols.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/CjkBreakEngine.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalDataCache.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalFormatData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ComposedCharIter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/CurrencyDisplayNames.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/CurrencyFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
