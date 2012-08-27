@@ -13,7 +13,7 @@ import com.ibm.icu.text.NumberFormat.CompactStyle;
 import com.ibm.icu.util.ULocale;
 
 public class CompactDecimalFormatTest extends TestFmwk {
-    
+
     public static void main(String[] args) {
         new CompactDecimalFormatTest().run(args);
     }
@@ -37,7 +37,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {123456789012345f, "120T"},
             {12345678901234567890f, "12000000T"},
     };
-    
+
     Object[][] JapaneseTestData = {
             {1234, "1200"},
             {12345, "1.2万"},
@@ -53,6 +53,21 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {123456789012345f, "120兆"},
     };
 
+    Object[][] SwahiliTestData = {
+            {1234, "elfu\u00a01.2"},
+            {12345, "elfu\u00a012"},
+            {123456, "laki1.2"},
+            {1234567, "M1.2"},
+            {12345678, "M12"},
+            {123456789, "M120"},
+            {1234567890, "B1.2"},
+            {12345678901f, "B12"},
+            {123456789012f, "B120"},
+            {1234567890123f, "T1.2"},
+            {12345678901234f, "T12"},
+            {12345678901234567890f, "T12000000"},
+    };
+
     public void TestEnglish() {
         checkLocale(ULocale.ENGLISH, EnglishTestData);
     }
@@ -66,10 +81,14 @@ public class CompactDecimalFormatTest extends TestFmwk {
         checkLocale(ULocale.forLanguageTag("ja-DE"), JapaneseTestData);
     }
 
+    public void TestSwahili() {
+        checkLocale(ULocale.forLanguageTag("sw"), SwahiliTestData);
+    }
+
     public void checkLocale(ULocale locale, Object[][] testData) {
         CompactDecimalFormat cdf = NumberFormat.getCompactDecimalInstance(locale, CompactStyle.SHORT);
         for (Object[] row : testData) {
-            assertEquals(locale + " (" + locale.getDisplayName(locale) + ")", row[1], cdf.format((Number) row[0]));
+            assertEquals(locale + " (" + locale.getDisplayName(locale) + ")", row[1], cdf.format(row[0]));
         }
     }
 }

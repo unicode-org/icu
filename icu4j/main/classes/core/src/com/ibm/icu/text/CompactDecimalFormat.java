@@ -39,7 +39,7 @@ import com.ibm.icu.util.ULocale;
  * <p>
  * Note that important methods, like setting the number of decimals, will be moved up from DecimalFormat to
  * NumberFormat.
- * 
+ *
  * @author markdavis
  * @draft ICU 49
  * @provisional This API might change or be removed in a future release.
@@ -49,6 +49,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     private static final int MINIMUM_ARRAY_LENGTH = 15;
     private static final int POSITIVE_PREFIX = 0, POSITIVE_SUFFIX = 1, AFFIX_SIZE = 2;
+    private static final CompactDecimalDataCache cache = new CompactDecimalDataCache();
 
     private final String[] prefix;
     private final String[] suffix;
@@ -57,7 +58,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * The public mechanism is NumberFormat.getCompactDecimalInstance().
-     * 
+     *
      * @param locale
      *            the desired locale
      * @param style
@@ -65,17 +66,11 @@ public class CompactDecimalFormat extends DecimalFormat {
      */
     CompactDecimalFormat(ULocale locale, CompactStyle style) {
         DecimalFormat format = (DecimalFormat) NumberFormat.getInstance(locale);
-        Data data;
-        while (true) {
-            data = localeToData.get(locale);
-            if (data != null) {
-                break;
-            }
-            locale = locale.equals(zhTW) ? ULocale.TRADITIONAL_CHINESE : locale.getFallback();
-        }
+        CompactDecimalDataCache.Data data = cache.get(locale);
         this.prefix = data.prefixes;
         this.suffix = data.suffixes;
         this.divisor = data.divisors;
+        // TODO fix to consider plural form when choosing a prefix or suffix.
         applyPattern(format.toPattern());
         setDecimalFormatSymbols(format.getDecimalFormatSymbols());
         setMaximumSignificantDigits(2); // default significant digits
@@ -94,7 +89,7 @@ public class CompactDecimalFormat extends DecimalFormat {
      * parallel, and provide the information for each power of 10. When formatting a value, the correct power of 10 is
      * found, then the value is divided by the divisor, and the prefix and suffix are set (using
      * setPositivePrefix/Suffix).
-     * 
+     *
      * @param pattern
      *            A number format pattern. Note that the prefix and suffix are discarded, and the decimals are
      *            overridden by default.
@@ -232,20 +227,20 @@ public class CompactDecimalFormat extends DecimalFormat {
     public Number parse(String text, ParsePosition parsePosition) {
         throw new UnsupportedOperationException();
     }
-    
+
     // DISALLOW Serialization, at least while draft
-    
+
     private void writeObject(ObjectOutputStream out) throws IOException {
         throw new NotSerializableException();
     }
-    
+
     private void readObject(ObjectInputStream in) throws IOException {
         throw new NotSerializableException();
     }
 
     /* INTERNALS */
 
-    private static ULocale zhTW = new ULocale("zh_TW");
+
 
     private void recordError(Collection<String> creationErrors, String errorMessage) {
         if (creationErrors == null) {
@@ -253,29 +248,4 @@ public class CompactDecimalFormat extends DecimalFormat {
         }
         creationErrors.add(errorMessage);
     }
-
-    /** JUST FOR DEVELOPMENT */
-    // For use with the hard-coded data
-    static class Data {
-        public Data(long[] divisors, String[] prefixes, String[] suffixes) {
-            this.divisors = divisors;
-            this.prefixes = prefixes;
-            this.suffixes = suffixes;
-        }
-
-        long[] divisors;
-        String[] prefixes;
-        String[] suffixes;
-    }
-
-    static Map<ULocale, Data> localeToData = new HashMap<ULocale, Data>();
-
-    static void add(String locale, long[] ls, String[] prefixes, String[] suffixes) {
-        localeToData.put(new ULocale(locale), new Data(ls, prefixes, suffixes));
-    }
-
-    static {
-        CompactDecimalFormatData.load();
-    }
-
 }
