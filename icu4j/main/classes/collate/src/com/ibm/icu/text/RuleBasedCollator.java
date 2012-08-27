@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -809,9 +809,10 @@ public final class RuleBasedCollator extends Collator {
     // public getters --------------------------------------------------------
 
     /**
-     * Gets the collation rules for this RuleBasedCollator. Equivalent to String getRules(RuleOption.FULL_RULES).
+     * Gets the collation tailoring rules for this RuleBasedCollator.
+     * Equivalent to String getRules(false).
      * 
-     * @return returns the collation rules
+     * @return the collation tailoring rules
      * @see #getRules(boolean)
      * @stable ICU 2.8
      */
