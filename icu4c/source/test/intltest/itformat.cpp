@@ -1,6 +1,6 @@
 /********************************************************************
- * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines
+ * COPYRIGHT:
+ * Copyright (c) 1997-2012, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -55,6 +55,7 @@
 #include "tufmtts.h"        // TimeUnitTest
 #include "locnmtst.h"       // LocaleDisplayNamesTest
 #include "dcfmtest.h"       // DecimalFormatTest
+#include "listformattertest.h"  // ListFormatterTest
 
 #define TESTCLASS(id, TestClass)          \
     case id:                              \
@@ -131,6 +132,7 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
         TESTCLASS(41,DecimalFormatTest);
 #endif
+        TESTCLASS(42,ListFormatterTest);
 
         default: name = ""; break; //needed to end loop
     }
