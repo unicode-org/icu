@@ -3670,4 +3670,12 @@ public class CollationMiscTest extends TestFmwk {
         myClone = myClone.cloneAsThawed();
         assertFalse("Clone not thawed as expected.", myClone.isFrozen());        
     }
+
+    // Test case for Ticket#9409
+    // Unknown collation type should be ignored, without printing stack trace
+    public void TestUnknownCollationKeyword() {
+        Collator coll1 = Collator.getInstance(new ULocale("en_US@collation=bogus"));
+        Collator coll2 = Collator.getInstance(new ULocale("en_US"));
+        assertEquals("Unknown collation keyword 'bogus' should be ignored", coll1, coll2);
+    }
 }

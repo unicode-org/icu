@@ -2058,65 +2058,73 @@ public final class RuleBasedCollator extends Collator {
      */
     RuleBasedCollator(ULocale locale) {
         checkUCA();
-        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
-                ICUResourceBundle.ICU_COLLATION_BASE_NAME, locale);
-        if (rb != null) {
-            try {
+        try {
+            ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(
+                    ICUResourceBundle.ICU_COLLATION_BASE_NAME, locale);
+            if (rb != null) {
+                ICUResourceBundle elements = null;
+
                 // Use keywords, if supplied for lookup
                 String collkey = locale.getKeywordValue("collation");
-                if (collkey == null) {
+                if (collkey != null) {
+                    try {
+                        elements = rb.getWithFallback("collations/" + collkey);
+                    } catch (MissingResourceException e) {
+                        // fall through
+                    }
+                }
+                if (elements == null) {
+                    // either collation keyword was not supplied or
+                    // the keyword was valid - use default collation for the locale
+
+                    // collations/default should always give a string back
+                    // keyword for the real collation data
                     collkey = rb.getStringWithFallback("collations/default");
+                    elements = rb.getWithFallback("collations/" + collkey);
                 }
 
-                // collations/default will always give a string back
-                // keyword for the real collation data
-                // if "collations/collkey" will return null if collkey == null
-                ICUResourceBundle elements = rb.getWithFallback("collations/" + collkey);
-                if (elements != null) {
-                    // TODO: Determine actual & valid locale correctly
-                    ULocale uloc = rb.getULocale();
-                    setLocale(uloc, uloc);
+                // TODO: Determine actual & valid locale correctly
+                ULocale uloc = rb.getULocale();
+                setLocale(uloc, uloc);
 
-                    m_rules_ = elements.getString("Sequence");
-                    ByteBuffer buf = elements.get("%%CollationBin").getBinary();
-                    // %%CollationBin
-                    if (buf != null) {
-                        // m_rules_ = (String)rules[1][1];
-                        CollatorReader.initRBC(this, buf);
-                        /*
-                         * BufferedInputStream input = new BufferedInputStream( new ByteArrayInputStream(map)); /*
-                         * CollatorReader reader = new CollatorReader(input, false); if (map.length >
-                         * MIN_BINARY_DATA_SIZE_) { reader.read(this, null); } else { reader.readHeader(this);
-                         * reader.readOptions(this); // duplicating UCA_'s data setWithUCATables(); }
-                         */
-                        // at this point, we have read in the collator
-                        // now we need to check whether the binary image has
-                        // the right UCA and other versions
-                        if (!m_UCA_version_.equals(UCA_.m_UCA_version_) || !m_UCD_version_.equals(UCA_.m_UCD_version_)) {
-                            init(m_rules_);
-                            return;
-                        }
-                        try {
-                            UResourceBundle reorderRes = elements.get("%%ReorderCodes");
-                            if (reorderRes != null) {
-                                int[] reorderCodes = reorderRes.getIntVector();
-                                setReorderCodes(reorderCodes);
-                                m_defaultReorderCodes_ = reorderCodes.clone();
-                            }
-                        } catch (MissingResourceException e) {
-                            // ignore
-                        }
-                        init();
-                        return;
-                    } else {
+                m_rules_ = elements.getString("Sequence");
+                ByteBuffer buf = elements.get("%%CollationBin").getBinary();
+                // %%CollationBin
+                if (buf != null) {
+                    // m_rules_ = (String)rules[1][1];
+                    CollatorReader.initRBC(this, buf);
+                    /*
+                     * BufferedInputStream input = new BufferedInputStream( new ByteArrayInputStream(map)); /*
+                     * CollatorReader reader = new CollatorReader(input, false); if (map.length >
+                     * MIN_BINARY_DATA_SIZE_) { reader.read(this, null); } else { reader.readHeader(this);
+                     * reader.readOptions(this); // duplicating UCA_'s data setWithUCATables(); }
+                     */
+                    // at this point, we have read in the collator
+                    // now we need to check whether the binary image has
+                    // the right UCA and other versions
+                    if (!m_UCA_version_.equals(UCA_.m_UCA_version_) || !m_UCD_version_.equals(UCA_.m_UCD_version_)) {
                         init(m_rules_);
                         return;
                     }
+                    try {
+                        UResourceBundle reorderRes = elements.get("%%ReorderCodes");
+                        if (reorderRes != null) {
+                            int[] reorderCodes = reorderRes.getIntVector();
+                            setReorderCodes(reorderCodes);
+                            m_defaultReorderCodes_ = reorderCodes.clone();
+                        }
+                    } catch (MissingResourceException e) {
+                        // ignore
+                    }
+                    init();
+                    return;
+                } else {
+                    init(m_rules_);
+                    return;
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-                // if failed use UCA.
             }
+        } catch (Exception e) {
+            // fallthrough
         }
         setWithUCAData();
     }
