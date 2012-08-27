@@ -13,12 +13,16 @@ import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
 
+import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.ULocale;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * Immutable class for formatting a list, using data from CLDR (or supplied
  * separately). The class is not subclassable.
- * 
+ *
  * @author Mark Davis
  * @draft ICU 50
  * @provisional This API might change or be removed in a future release.
@@ -32,7 +36,7 @@ final public class ListFormatter {
     /**
      * <b>Internal:</b> Create a ListFormatter from component strings,
      * with definitions as in LDML.
-     * 
+     *
      * @param two
      *            string for two items, containing {0} for the first, and {1}
      *            for the second.
@@ -56,7 +60,7 @@ final public class ListFormatter {
 
     /**
      * Create a list formatter that is appropriate for a locale.
-     * 
+     *
      * @param locale
      *            the locale in question.
      * @return ListFormatter
@@ -64,22 +68,14 @@ final public class ListFormatter {
      * @provisional This API might change or be removed in a future release.
      */
     public static ListFormatter getInstance(ULocale locale) {
-        // These can be cached, since they are read-only
-        // poor-man's locale lookup, for hardcoded data
-        while (true) {
-            ListFormatter data = localeToData.get(locale);
-            if (data != null) {
-                return data;
-            }
-            locale = locale.equals(zhTW) ? ULocale.TRADITIONAL_CHINESE : locale.getFallback();
-            if (locale == null) return localeToData.get(ULocale.ROOT);
-        }
+      return cache.get(locale);
     }
+
     private static ULocale zhTW = new ULocale("zh_TW");
 
     /**
      * Create a list formatter that is appropriate for a locale.
-     * 
+     *
      * @param locale
      *            the locale in question.
      * @return ListFormatter
@@ -92,7 +88,7 @@ final public class ListFormatter {
 
     /**
      * Create a list formatter that is appropriate for the default FORMAT locale.
-     * 
+     *
      * @return ListFormatter
      * @draft ICU 50
      * @provisional This API might change or be removed in a future release.
@@ -103,7 +99,7 @@ final public class ListFormatter {
 
     /**
      * Format a list of objects.
-     * 
+     *
      * @param items
      *            items to format. The toString() method is called on each.
      * @return items formatted into a string
@@ -116,7 +112,7 @@ final public class ListFormatter {
 
     /**
      * Format a collection of objects. The toString() method is called on each.
-     * 
+     *
      * @param items
      *            items to format. The toString() method is called on each.
      * @return items formatted into a string
@@ -165,7 +161,30 @@ final public class ListFormatter {
     static void add(String locale, String...data) {
         localeToData.put(new ULocale(locale), new ListFormatter(data[0], data[1], data[2], data[3]));
     }
-    static {
-        ListFormatterData.load();
+
+    private static class Cache {
+        private final ICUCache<ULocale, ListFormatter> cache =
+            new SimpleCache<ULocale, ListFormatter>();
+
+        public ListFormatter get(ULocale locale) {
+            ListFormatter result = cache.get(locale);
+            if (result == null) {
+                result = load(locale);
+                cache.put(locale, result);
+            }
+            return result;
+        }
+
+        private static ListFormatter load(ULocale ulocale) {
+            ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
+                    getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
+            return new ListFormatter(
+                r.getWithFallback("listPattern/standard/2").getString(),
+                r.getWithFallback("listPattern/standard/start").getString(),
+                r.getWithFallback("listPattern/standard/middle").getString(),
+                r.getWithFallback("listPattern/standard/end").getString());
+        }
     }
+
+    static Cache cache = new Cache();
 }
