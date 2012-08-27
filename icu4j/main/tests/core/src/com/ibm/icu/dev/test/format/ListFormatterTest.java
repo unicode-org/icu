@@ -16,7 +16,7 @@ public class ListFormatterTest extends TestFmwk {
     public static void main(String[] args) {
         new ListFormatterTest().run(args);
     }
-    
+
     String[] HardcodedTestData = {
             "",
             "A",
@@ -30,7 +30,7 @@ public class ListFormatterTest extends TestFmwk {
         ListFormatter formatter = new ListFormatter("{0} and {1}", "{0}; {1}", "{0}, {1}", "{0}, and {1}");
         checkData(formatter, HardcodedTestData);
     }
-    
+
     String[] EnglishTestData = {
             "",
             "A",
@@ -39,18 +39,17 @@ public class ListFormatterTest extends TestFmwk {
             "A, B, C, and D",
             "A, B, C, D, and E"
     };
-    
+
     public void TestEnglish() {
         checkData(ListFormatter.getInstance(ULocale.ENGLISH), EnglishTestData);
         checkData(ListFormatter.getInstance(ULocale.US), EnglishTestData);
         // Redundant tests for code coverage.
         checkData(ListFormatter.getInstance(Locale.ENGLISH), EnglishTestData);
-        ULocale defaultLocale = ULocale.getDefault(ULocale.Category.FORMAT);
-        if (defaultLocale.equals(ULocale.ENGLISH) || defaultLocale.equals(ULocale.US)) {
+        if (isDefaultLocaleEnglishLike()) {
             checkData(ListFormatter.getInstance(), EnglishTestData);
         }
     }
-    
+
     String[] JapaneseTestData = {
             "",
             "A",
@@ -63,7 +62,7 @@ public class ListFormatterTest extends TestFmwk {
     public void TestJapanese() {
         checkData(ListFormatter.getInstance(ULocale.JAPANESE), JapaneseTestData);
     }
-    
+
     String[] RootTestData = {
             "",
             "A",
@@ -75,9 +74,10 @@ public class ListFormatterTest extends TestFmwk {
 
     public void TestSpecial() {
         checkData(ListFormatter.getInstance(ULocale.ROOT), RootTestData);
-        checkData(ListFormatter.getInstance(new ULocale("xxx")), RootTestData);
+        if (isDefaultLocaleEnglishLike()) {
+          checkData(ListFormatter.getInstance(new ULocale("xxx")), EnglishTestData);
+        }
     }
-
 
     public void checkData(ListFormatter listFormat, String[] strings) {
         assertEquals("0", strings[0], listFormat.format());
@@ -86,5 +86,10 @@ public class ListFormatterTest extends TestFmwk {
         assertEquals("3", strings[3], listFormat.format("A", "B", "C"));
         assertEquals("4", strings[4], listFormat.format("A", "B", "C", "D"));
         assertEquals("5", strings[5], listFormat.format("A", "B", "C", "D", "E"));
+    }
+
+    private boolean isDefaultLocaleEnglishLike() {
+        ULocale defaultLocale = ULocale.getDefault(ULocale.Category.FORMAT);
+        return defaultLocale.equals(ULocale.ENGLISH) || defaultLocale.equals(ULocale.US);
     }
 }
