@@ -1433,6 +1433,14 @@ public class IBMCalendarTest extends CalendarTest {
             }
 
             ucalTest.clear();
+            {
+                int eraMin = ucalTest.getMinimum(Calendar.ERA);
+                if (eraMin != 0 && calType.compareTo("chinese") != 0) {
+                    errln("Fail: getMinimum returns minimum era " + eraMin + " (should be 0) for calType " + calType);
+                }
+            }
+
+            ucalTest.clear();
             ucalTest.set(Calendar.YEAR, 1);
             ucalTest.set(Calendar.ERA, 0);
             eraMax = ucalTest.getMaximum(Calendar.ERA);
