@@ -1405,7 +1405,7 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberLogB(decNumber *res, const decNumber 
 /* fastpath in decLnOp.  The final division is done to the requested  */
 /* precision.                                                         */
 /* ------------------------------------------------------------------ */
-#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#if defined(__clang__) || U_GCC_MAJOR_MINOR >= 406
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
 #endif
@@ -1544,7 +1544,7 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberLog10(decNumber *res, const decNumber
   #endif
   return res;
   } /* decNumberLog10  */
-#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#if defined(__clang__) || U_GCC_MAJOR_MINOR >= 406
 #pragma GCC diagnostic pop
 #endif
 
@@ -2820,7 +2820,7 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberShift(decNumber *res, const decNumber
 /* result setexp(approx, e div 2)  % fix exponent                     */
 /* end sqrt                                                           */
 /* ------------------------------------------------------------------ */
-#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#if defined(__clang__) || U_GCC_MAJOR_MINOR >= 406
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
 #endif
@@ -3153,7 +3153,7 @@ U_CAPI decNumber * U_EXPORT2 uprv_decNumberSquareRoot(decNumber *res, const decN
   #endif
   return res;
   } /* decNumberSquareRoot  */
-#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#if defined(__clang__) || U_GCC_MAJOR_MINOR >= 406
 #pragma GCC diagnostic pop
 #endif
 
@@ -5617,7 +5617,7 @@ static const uShort LNnn[90]={9016,  8652,  8316,  8008,  7724,  7456,  7208,
 /* 5. The static buffers are larger than might be expected to allow   */
 /*    for calls from decNumberPower.                                  */
 /* ------------------------------------------------------------------ */
-#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#if defined(__clang__) || U_GCC_MAJOR_MINOR >= 406
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Warray-bounds"
 #endif
@@ -5842,7 +5842,7 @@ decNumber * decLnOp(decNumber *res, const decNumber *rhs,
   /* [status is handled by caller]  */
   return res;
   } /* decLnOp  */
-#if defined(__clang__) || (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 406))
+#if defined(__clang__) || U_GCC_MAJOR_MINOR >= 406
 #pragma GCC diagnostic pop
 #endif
 

@@ -89,7 +89,7 @@
  *  This is used for GCC specific attributes
  * @internal
  */
-#if defined(__GNUC__) && (__GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 2))
+#if U_GCC_MAJOR_MINOR >= 302
 #    define U_ATTRIBUTE_DEPRECATED __attribute__ ((deprecated))
 /**
  * \def U_ATTRIBUTE_DEPRECATED
