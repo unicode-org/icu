@@ -455,7 +455,7 @@ static void TestCalendar()
         if ( U_SUCCESS(status) ) {
             const char * calType = ucal_getType(caldef, &status);
             if ( U_SUCCESS(status) && calType != NULL ) {
-                if ( strcmp( calType, ucalGetTypeTestPtr->expectedResult ) != 0 ) {
+                if ( uprv_strcmp( calType, ucalGetTypeTestPtr->expectedResult ) != 0 ) {
                     log_err("FAIL: ucal_open %s type %d does not return %s calendar\n", localeToDisplay,
                                                 ucalGetTypeTestPtr->calType, ucalGetTypeTestPtr->expectedResult);
                 }
@@ -2040,6 +2040,16 @@ void TestAddRollEra0AndEraBounds() {
                 }
             }
             
+            status = U_ZERO_ERROR;
+            ucal_clear(ucalTest);
+            {
+                int32_t eraMin = ucal_getLimit(ucalTest, UCAL_ERA, UCAL_MINIMUM, &status);
+                const char * calType = ucal_getType(ucalTest, &status);
+                if (eraMin != 0 && uprv_strcmp(calType, "chinese") != 0) {
+                    log_err("FAIL: ucal_getLimit returns minimum era %d (should be 0) for calType %s, error %s\n", eraMin, calType, u_errorName(status));
+                }
+            }
+
             status = U_ZERO_ERROR;
             ucal_clear(ucalTest);
             ucal_set(ucalTest, UCAL_YEAR, 1);
