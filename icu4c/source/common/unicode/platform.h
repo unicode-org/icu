@@ -337,6 +337,22 @@
 /*===========================================================================*/
 
 /**
+ * \def U_GCC_MAJOR_MINOR
+ * Indicates whether the compiler is gcc (test for != 0),
+ * and if so, contains its major (times 100) and minor version numbers.
+ * If the compiler is not gcc, then U_GCC_MAJOR_MINOR == 0.
+ *
+ * For example, for testing for whether we have gcc, and whether it's 4.6 or higher,
+ * use "#if U_GCC_MAJOR_MINOR >= 406".
+ * @internal
+ */
+#ifdef __GNUC__
+#   define U_GCC_MAJOR_MINOR (__GNUC__ * 100 + __GNUC_MINOR__)
+#else
+#   define U_GCC_MAJOR_MINOR 0
+#endif
+
+/**
  * \def U_IS_BIG_ENDIAN
  * Determines the endianness of the platform.
  * @internal
