@@ -1154,10 +1154,12 @@ u_strToTitle(UChar *dest, int32_t destCapacity,
 #endif
 
 /**
- * Case-fold the characters in a string.
+ * Case-folds the characters in a string.
+ *
  * Case-folding is locale-independent and not context-sensitive,
  * but there is an option for whether to include or exclude mappings for dotted I
- * and dotless i that are marked with 'I' in CaseFolding.txt.
+ * and dotless i that are marked with 'T' in CaseFolding.txt.
+ *
  * The result may be longer or shorter than the original.
  * The source string and the destination buffer are allowed to overlap.
  *
