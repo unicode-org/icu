@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -2379,40 +2379,25 @@ public final class UTF16 {
         // public data member ------------------------------------------------
 
         /**
-         * <p>
          * Option value for case folding comparison:
-         * </p>
-         * <p>
-         * Comparison is case insensitive, strings are folded using default mappings defined in
+         *
+         * <p>Comparison is case insensitive, strings are folded using default mappings defined in
          * Unicode data file CaseFolding.txt, before comparison.
-         * </p>
          * 
          * @stable ICU 2.4
          */
         public static final int FOLD_CASE_DEFAULT = 0;
 
         /**
-         * <p>
-         * Option value for case folding comparison:
-         * </p>
-         * <p>
-         * Comparison is case insensitive, strings are folded using modified mappings defined in
+         * Option value for case folding:
+         * Use the modified set of mappings provided in CaseFolding.txt to handle dotted I
+         * and dotless i appropriately for Turkic languages (tr, az).
+         *
+         * <p>Comparison is case insensitive, strings are folded using modified mappings defined in
          * Unicode data file CaseFolding.txt, before comparison.
-         * </p>
-         * <p>
-         * The modified set of mappings is provided in a Unicode data file CaseFolding.txt to handle
-         * dotted I and dotless i appropriately for Turkic languages (tr, az).
-         * </p>
-         * <p>
-         * Before Unicode 3.2, CaseFolding.txt contains mappings marked with 'I' that are to be
-         * included for default mappings and excluded for the Turkic-specific mappings.
-         * </p>
-         * <p>
-         * Unicode 3.2 CaseFolding.txt instead contains mappings marked with 'T' that are to be
-         * excluded for default mappings and included for the Turkic-specific mappings.
-         * </p>
          * 
          * @stable ICU 2.4
+         * @see com.ibm.icu.lang.UCharacter#FOLD_CASE_EXCLUDE_SPECIAL_I
          */
         public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 1;
 

@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2011, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2000-2012, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.text;
@@ -469,14 +469,16 @@ public final class Normalizer implements Cloneable {
      * @stable ICU 2.8
      */
     public static final int COMPARE_CODE_POINT_ORDER = 0x8000;
-    
+
     /** 
-     * Option value for case folding: exclude the mappings for dotted I 
-     * and dotless i marked with 'I' in CaseFolding.txt. 
+     * Option value for case folding:
+     * Use the modified set of mappings provided in CaseFolding.txt to handle dotted I
+     * and dotless i appropriately for Turkic languages (tr, az).
+     * @see UCharacter#FOLD_CASE_EXCLUDE_SPECIAL_I
      * @stable ICU 2.8
      */
     public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = UCharacter.FOLD_CASE_EXCLUDE_SPECIAL_I;
-    
+
     /**
      * Lowest-order bit number of compare() options bits corresponding to
      * normalization options bits.
