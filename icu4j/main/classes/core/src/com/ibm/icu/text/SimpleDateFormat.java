@@ -283,6 +283,10 @@ public class SimpleDateFormat extends DateFormat {
         -1, 20, -1,  70, -1, 10, 0, 20, -1,  10, 0, -1, -1, -1, -1, -1
     };
 
+    // When calendar uses hebr numbering (i.e. he@calendar=hebrew),
+    // offset the years within the current millenium down to 1-999
+    private static final int HEBREW_CAL_CUR_MILLENIUM_START_YEAR = 5000;
+    private static final int HEBREW_CAL_CUR_MILLENIUM_END_YEAR = 6000;
 
     /**
      * The version of the serialized data on the stream.  Possible values:
@@ -1061,6 +1065,10 @@ public class SimpleDateFormat extends DateFormat {
             // else fall through to numeric year handling, do not break here 
         case 1: // 'y' - YEAR
         case 18: // 'Y' - YEAR_WOY
+            if ( override != null && (override.compareTo("hebr") == 0 || override.indexOf("y=hebr") >= 0) &&
+                    value > HEBREW_CAL_CUR_MILLENIUM_START_YEAR && value < HEBREW_CAL_CUR_MILLENIUM_END_YEAR ) {
+                value -= HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
+            }
             /* According to the specification, if the number of pattern letters ('y') is 2,
              * the year is truncated to 2 digits; otherwise it is interpreted as a number.
              * But the original code process 'y', 'yy', 'yyy' in the same way. and process
@@ -2236,7 +2244,9 @@ public class SimpleDateFormat extends DateFormat {
                 // is treated literally:  "2250", "-1", "1", "002".
                 /* 'yy' is the only special case, 'y' is interpreted as number. [Richard/GCL]*/
                 /* Skip this for Chinese calendar, moved from ChineseDateFormat */
-                if (count == 2 && (pos.getIndex() - start) == 2 && !cal.getType().equals("chinese")
+                if ( override != null && (override.compareTo("hebr") == 0 || override.indexOf("y=hebr") >= 0) && value < 1000 ) {
+                    value += HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
+                } else if (count == 2 && (pos.getIndex() - start) == 2 && !cal.getType().equals("chinese")
                     && UCharacter.isDigit(text.charAt(start))
                     && UCharacter.isDigit(text.charAt(start+1)))
                     {
