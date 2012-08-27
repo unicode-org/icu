@@ -86,9 +86,10 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCASE(46,TestParsePosition);
         TESTCASE(47,TestMonthPatterns);
         TESTCASE(48,TestContext);
+        TESTCASE(49,TestNonGregoFmtParse);
         /*
-        TESTCASE(49,TestRelativeError);
-        TESTCASE(50,TestRelativeOther);
+        TESTCASE(50,TestRelativeError);
+        TESTCASE(51,TestRelativeOther);
         */
         default: name = ""; break;
     }
@@ -3893,6 +3894,86 @@ void DateFormatTest::TestContext()
     }
     if (cal) {
         delete cal;
+    }
+}
+
+// test item for a particular locale + calendar and date format
+typedef struct {
+    int32_t year;
+    int32_t month;
+    int32_t day;
+    int32_t hour;
+    int32_t minute;
+    UnicodeString formattedDate;
+} CalAndFmtTestItem;
+
+// test item giving locale + calendar, date format, and CalAndFmtTestItems
+typedef struct {
+    const char * locale; // with calendar
+    DateFormat::EStyle style;
+    const CalAndFmtTestItem *caftItems;
+} TestNonGregoItem;
+
+void DateFormatTest::TestNonGregoFmtParse()
+{
+    // test items for he@calendar=hebrew, long date format
+    const CalAndFmtTestItem cafti_he_hebrew_long[] = {
+        { 4999, 12, 29, 12, 0, CharsToUnicodeString("\\u05DB\\u05F4\\u05D8 \\u05D1\\u05D0\\u05DC\\u05D5\\u05DC \\u05D3\\u05F3\\u05EA\\u05EA\\u05E7\\u05E6\\u05F4\\u05D8") },
+        { 5100,  0,  1, 12, 0, CharsToUnicodeString("\\u05D0\\u05F3 \\u05D1\\u05EA\\u05E9\\u05E8\\u05D9 \\u05E7\\u05F3") },
+        { 5774,  5,  1, 12, 0, CharsToUnicodeString("\\u05D0\\u05F3 \\u05D1\\u05D0\\u05D3\\u05E8 \\u05D0\\u05F3 \\u05EA\\u05E9\\u05E2\\u05F4\\u05D3") },
+        { 5999, 12, 29, 12, 0, CharsToUnicodeString("\\u05DB\\u05F4\\u05D8 \\u05D1\\u05D0\\u05DC\\u05D5\\u05DC \\u05EA\\u05EA\\u05E7\\u05E6\\u05F4\\u05D8") },
+        { 6100,  0,  1, 12, 0, CharsToUnicodeString("\\u05D0\\u05F3 \\u05D1\\u05EA\\u05E9\\u05E8\\u05D9 \\u05D5\\u05F3\\u05E7\\u05F3") },
+        {    0,  0,  0,  0, 0, UnicodeString("") } // terminator
+    };
+    // overal test items
+    const TestNonGregoItem items[] = {
+        { "he@calendar=hebrew", DateFormat::kLong, cafti_he_hebrew_long },
+        { NULL, DateFormat::kNone, NULL } // terminator
+    };
+    const TestNonGregoItem * itemPtr;
+    for (itemPtr = items; itemPtr->locale != NULL; itemPtr++) {
+        Locale locale = Locale::createFromName(itemPtr->locale);
+        DateFormat * dfmt = DateFormat::createDateInstance(itemPtr->style, locale);
+        if (dfmt == NULL) {
+            dataerrln("DateFormat::createDateInstance fails for locale %s", itemPtr->locale);
+        } else {
+            Calendar * cal = (dfmt->getCalendar())->clone();
+            if (cal == NULL) {
+                dataerrln("(DateFormat::getCalendar)->clone() fails for locale %s", itemPtr->locale);
+            } else {
+                const CalAndFmtTestItem * caftItemPtr;
+                for (caftItemPtr = itemPtr->caftItems; caftItemPtr->year != 0; caftItemPtr++) {
+                    cal->clear();
+                    cal->set(UCAL_YEAR,   caftItemPtr->year);
+                    cal->set(UCAL_MONTH,  caftItemPtr->month);
+                    cal->set(UCAL_DATE,   caftItemPtr->day);
+                    cal->set(UCAL_HOUR_OF_DAY, caftItemPtr->hour);
+                    cal->set(UCAL_MINUTE, caftItemPtr->minute);
+                    UnicodeString result;
+                    FieldPosition fpos(0);
+                    dfmt->format(*cal, result, fpos);
+                    if ( result.compare(caftItemPtr->formattedDate) != 0 ) {
+                        errln( UnicodeString("FAIL: date format for locale ") + UnicodeString(itemPtr->locale) + ", style " + itemPtr->style +
+                                ", expected \"" + caftItemPtr->formattedDate + "\", got \"" + result + "\"");
+                    } else {
+                        // formatted OK, try parse
+                        ParsePosition ppos(0);
+                        dfmt->parse(result, *cal, ppos);
+                        UErrorCode status = U_ZERO_ERROR;
+                        int32_t year = cal->get(UCAL_YEAR, status);
+                        int32_t month = cal->get(UCAL_MONTH, status);
+                        int32_t day = cal->get(UCAL_DATE, status);
+                        if ( U_FAILURE(status) || ppos.getIndex() < result.length() || year != caftItemPtr->year || month != caftItemPtr->month || day != caftItemPtr->day ) {
+                            errln( UnicodeString("FAIL: date parse for locale ") + UnicodeString(itemPtr->locale) + ", style " + itemPtr->style +
+                                ", string \"" + result + "\", expected " + caftItemPtr->year +"-"+caftItemPtr->month+"-"+caftItemPtr->day + ", got pos " +
+                                ppos.getIndex() + " " + year +"-"+month+"-"+day + " status " + UnicodeString(u_errorName(status)) );
+                        }
+                    }
+                }
+                delete cal;
+            }
+            delete dfmt;
+        }
     }
 }
 
