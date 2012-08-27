@@ -21,7 +21,19 @@
 
     <property name="icu4jdemos.jar.file" value="icu4jdemos.jar"/>
 
-    <!-- icu4j release files -->
+    <!-- icu4j API doc jar file -->
+    <property name="icu4jdocs.jar.file" value="icu4j-docs.jar"/>
+
+    <!-- icu4j src jar files -->
+    <property name="icu4j-src.jar.file" value="icu4j-src.jar"/>
+    <property name="icu4j-charset-src.jar.file" value="icu4j-charset-src.jar"/>
+    <property name="icu4j-localespi-src.jar.file" value="icu4j-localespi-src.jar"/>
+
+    <!-- icu4j source package archive files -->
+    <property name="icu4jsrc.zip.file" value="icu4j.zip"/>
+    <property name="icu4jsrc.tgz.file" value="icu4j.tgz"/>
+
+    <!-- icu4j versioned release files -->
     <property name="icu4j.jar.versioned.file" value="icu4j-${release.file.ver}.jar"/>
     <property name="icu4j-charset.jar.versioned.file" value="icu4j-charset-${release.file.ver}.jar"/>
     <property name="icu4j-localespi.jar.versioned.file" value="icu4j-localespi-${release.file.ver}.jar"/>
@@ -30,8 +42,10 @@
     <property name="icu4j-charset-src.jar.versioned.file" value="icu4j-charset-${release.file.ver}-src.jar"/>
     <property name="icu4j-localespi-src.jar.versioned.file" value="icu4j-localespi-${release.file.ver}-src.jar"/>
 
-    <property name="icu4jsrc.zip.file" value="icu4j-${release.file.ver}.zip"/>
-    <property name="icu4jsrc.tgz.file" value="icu4j-${release.file.ver}.tgz"/>
+    <property name="icu4jdocs.jar.versioned.file" value="icu4j-${release.file.ver}-docs.jar"/>
+
+    <!-- <property name="icu4jsrc.zip.versioned.file" value="icu4j-${release.file.ver}.zip"/> -->
+    <property name="icu4jsrc.tgz.versioned.file" value="icu4j-${release.file.ver}.tgz"/>
 
     <property name="icu4jdocs.jar.file" value="icu4j-${release.file.ver}-docs.jar"/>
 
@@ -389,7 +403,25 @@
 
 
     <!-- release targets -->
-    <target name="release" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz" description="Build all ICU4J release files for distribution">
+    <target name="releaseVer" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz"
+            description="Build all ICU4J release files for distribution with versioned file names">
+        <!-- binaries -->
+        <move file="${release.dir}/${icu4j.jar.file}" tofile="${release.dir}/${icu4j.jar.versioned.file}"/>
+        <move file="${release.dir}/${icu4j-charset.jar.file}" tofile="${release.dir}/${icu4j-charset.jar.versioned.file}"/>
+        <move file="${release.dir}/${icu4j-localespi.jar.file}" tofile="${release.dir}/${icu4j-localespi.jar.versioned.file}"/>
+
+        <!-- source jars -->
+        <move file="${release.dir}/${icu4j-src.jar.file}" tofile="${release.dir}/${icu4j-src.jar.versioned.file}"/>
+        <move file="${release.dir}/${icu4j-charset-src.jar.file}" tofile="${release.dir}/${icu4j-charset-src.jar.versioned.file}"/>
+        <move file="${release.dir}/${icu4j-localespi-src.jar.file}" tofile="${release.dir}/${icu4j-localespi-src.jar.versioned.file}"/>
+
+        <!-- docs -->
+        <move file="${release.dir}/${icu4jdocs.jar.file}" tofile="${release.dir}/${icu4jdocs.jar.versioned.file}"/>
+
+        <!-- package archive -->
+        <move file="${release.dir}/${icu4jsrc.tgz.file}" tofile="${release.dir}/${icu4jsrc.tgz.versioned.file}"/>
+
+        <!-- md5 checksum file -->
         <mkdir dir="${out.dir}/checksum"/>
         <delete dir="${out.dir}/checksum" includes="**/*"/>
 
@@ -408,17 +440,36 @@
         </concat>
     </target>
 
+    <target name="release" depends="info, releaseBinaries, releaseSrcJars, releaseDocs, releaseSourceArchiveTgz" description="Build all ICU4J release files for distribution">
+        <mkdir dir="${out.dir}/checksum"/>
+        <delete dir="${out.dir}/checksum" includes="**/*"/>
+
+        <checksum todir="${out.dir}/checksum" format="MD5SUM">
+            <fileset dir="${release.dir}">
+                <include name="*.jar"/>
+                <include name="*.tgz"/>
+            </fileset>
+        </checksum>
+
+        <concat destfile="${release.dir}/icu4j.md5">
+            <fileset dir="${out.dir}/checksum" includes="*"/>
+            <filterchain>
+                <fixcrlf eol="lf"/>
+            </filterchain>
+        </concat>
+    </target>
+
     <target name="releaseBinaries" depends="icu4jJar, charset, localespi" description="Build ICU4J binary files for distribution">
         <mkdir dir="${release.dir}"/>
-        <copy file="${icu4j.jar.file}" tofile="${release.dir}/${icu4j.jar.versioned.file}"/>
-        <copy file="${icu4j.charset.jar}" tofile="${release.dir}/${icu4j-charset.jar.versioned.file}"/>
-        <copy file="${icu4j.localespi.jar}" tofile="${release.dir}/${icu4j-localespi.jar.versioned.file}"/>
+        <copy file="${icu4j.jar.file}" tofile="${release.dir}/${icu4j.jar.file}"/>
+        <copy file="${icu4j.charset.jar}" tofile="${release.dir}/${icu4j-charset.jar.file}"/>
+        <copy file="${icu4j.localespi.jar}" tofile="${release.dir}/${icu4j-localespi.jar.file}"/>
     </target>
 
     <target name="releaseSrcJars" description="Build ICU4J src jar files for distribution">
         <!-- icu4j src-jar -->
         <mkdir dir="${release.dir}"/>
-        <jar jarfile="${release.dir}/${icu4j-src.jar.versioned.file}"
+        <jar jarfile="${release.dir}/${icu4j-src.jar.file}"
                 compress="true">
             <fileset dir="${icu4j.core.dir}/${src.dir}" includes="**/*.java"/>
             <fileset dir="${icu4j.collate.dir}/${src.dir}" includes="**/*.java"/>
@@ -436,8 +487,8 @@
         <ant dir="${icu4j.charset.dir}" target="src-jar" inheritAll="false"/>
         <ant dir="${icu4j.localespi.dir}" target="src-jar" inheritAll="false"/>
 
-        <copy file="${icu4j.charset.dir}/${out.dir}/lib/icu4j-charset-src.jar" tofile="${release.dir}/${icu4j-charset-src.jar.versioned.file}"/>
-        <copy file="${icu4j.localespi.dir}/${out.dir}/lib/icu4j-localespi-src.jar" tofile="${release.dir}/${icu4j-localespi-src.jar.versioned.file}"/>
+        <copy file="${icu4j.charset.dir}/${out.dir}/lib/${icu4j-charset-src.jar.file}" tofile="${release.dir}/${icu4j-charset-src.jar.file}"/>
+        <copy file="${icu4j.localespi.dir}/${out.dir}/lib/${icu4j-localespi-src.jar.file}" tofile="${release.dir}/${icu4j-localespi-src.jar.file}"/>
     </target>
 
 
