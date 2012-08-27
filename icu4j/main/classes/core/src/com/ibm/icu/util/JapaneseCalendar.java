@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2010,2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -607,7 +607,7 @@ public class JapaneseCalendar extends GregorianCalendar {
         switch (field) {
         case ERA:
             if (limitType == MINIMUM || limitType == GREATEST_MINIMUM) {
-                return 1;
+                return 0;
             }
             return CURRENT_ERA;
         case YEAR:
