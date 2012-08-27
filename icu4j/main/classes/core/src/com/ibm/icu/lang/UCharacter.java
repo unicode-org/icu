@@ -1,8 +1,8 @@
 //##header
 /**
 *******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2012, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -4881,10 +4881,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * http://www.icu-project.org/userguide/posix.html#case_mappings
      *
      * @param ch             the character to be converted
-     * @param defaultmapping Indicates if all mappings defined in
-     *                       CaseFolding.txt is to be used, otherwise the
-     *                       mappings for dotted I  and dotless i marked with
-     *                       'I' in CaseFolding.txt will be skipped.
+     * @param defaultmapping Indicates whether the default mappings defined in
+     *                       CaseFolding.txt are to be used, otherwise the
+     *                       mappings for dotted I and dotless i marked with
+     *                       'T' in CaseFolding.txt are included.
      * @return               the case folding equivalent of the character, if
      *                       any; otherwise the character itself.
      * @see                  #foldCase(String, boolean)
@@ -4902,10 +4902,10 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      * For "simple" single-code point mappings use the API
      * foldCase(int ch, boolean defaultmapping).
      * @param str            the String to be converted
-     * @param defaultmapping Indicates if all mappings defined in
-     *                       CaseFolding.txt is to be used, otherwise the
+     * @param defaultmapping Indicates whether the default mappings defined in
+     *                       CaseFolding.txt are to be used, otherwise the
      *                       mappings for dotted I and dotless i marked with
-     *                       'I' in CaseFolding.txt will be skipped.
+     *                       'T' in CaseFolding.txt are included.
      * @return               the case folding equivalent of the character, if
      *                       any; otherwise the character itself.
      * @see                  #foldCase(int, boolean)
@@ -4922,8 +4922,18 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
      */
     public static final int FOLD_CASE_DEFAULT    =      0x0000;
     /**
-     * {@icu} Option value for case folding: exclude the mappings for dotted I
-     * and dotless i marked with 'I' in CaseFolding.txt.
+     * {@icu} Option value for case folding:
+     * Use the modified set of mappings provided in CaseFolding.txt to handle dotted I
+     * and dotless i appropriately for Turkic languages (tr, az).
+     *
+     * <p>Before Unicode 3.2, CaseFolding.txt contains mappings marked with 'I' that
+     * are to be included for default mappings and
+     * excluded for the Turkic-specific mappings.
+     *
+     * <p>Unicode 3.2 CaseFolding.txt instead contains mappings marked with 'T' that
+     * are to be excluded for default mappings and
+     * included for the Turkic-specific mappings.
+     *
      * @stable ICU 2.6
      */
     public static final int FOLD_CASE_EXCLUDE_SPECIAL_I = 0x0001;
