@@ -179,6 +179,8 @@ public: // package
 
     void TestContext(void);
 
+    void TestNonGregoFmtParse(void);
+
 public:
     /**
      * Test host-specific formatting.
