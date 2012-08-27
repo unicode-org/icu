@@ -3997,6 +3997,78 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
     
+    public void TestNonGregoFmtParse() {
+        class CalAndFmtTestItem {
+            public int year;
+            public int month;
+            public int day;
+            public int hour;
+            public int minute;
+            public String formattedDate;
+             // Simple constructor
+            public CalAndFmtTestItem(int yr, int mo, int da, int hr, int mi, String fd) {
+                year = yr;
+                month = mo;
+                day = da;
+                hour = hr;
+                minute = mi;
+                formattedDate = fd;
+            }
+        };
+        // test items for he@calendar=hebrew, long date format
+        final CalAndFmtTestItem[] cafti_he_hebrew_long = {
+            //                       yr  mo  da  hr  mi  formattedDate
+            new CalAndFmtTestItem( 4999, 12, 29, 12,  0, "\u05DB\u05F4\u05D8 \u05D1\u05D0\u05DC\u05D5\u05DC \u05D3\u05F3\u05EA\u05EA\u05E7\u05E6\u05F4\u05D8" ),
+            new CalAndFmtTestItem( 5100,  0,  1, 12,  0, "\u05D0\u05F3 \u05D1\u05EA\u05E9\u05E8\u05D9 \u05E7\u05F3" ),
+            new CalAndFmtTestItem( 5774,  5,  1, 12,  0, "\u05D0\u05F3 \u05D1\u05D0\u05D3\u05E8 \u05D0\u05F3 \u05EA\u05E9\u05E2\u05F4\u05D3" ),
+            new CalAndFmtTestItem( 5999, 12, 29, 12,  0, "\u05DB\u05F4\u05D8 \u05D1\u05D0\u05DC\u05D5\u05DC \u05EA\u05EA\u05E7\u05E6\u05F4\u05D8" ),
+            new CalAndFmtTestItem( 6100,  0,  1, 12,  0, "\u05D0\u05F3 \u05D1\u05EA\u05E9\u05E8\u05D9 \u05D5\u05F3\u05E7\u05F3" ),
+        };
+        class TestNonGregoItem {
+            public String locale;
+            public int style;
+            public CalAndFmtTestItem[] caftItems;
+             // Simple constructor
+            public TestNonGregoItem(String loc, int styl, CalAndFmtTestItem[] items) {
+                locale = loc;
+                style = styl;
+                caftItems = items;
+            }
+        };
+        final TestNonGregoItem[] items = {
+            new TestNonGregoItem( "he@calendar=hebrew", DateFormat.LONG, cafti_he_hebrew_long ),
+        };
+        for (TestNonGregoItem item: items) {
+            ULocale locale = new ULocale(item.locale);
+            DateFormat dfmt = DateFormat.getDateInstance(item.style, locale);
+            Calendar cal = dfmt.getCalendar();
+
+            for (CalAndFmtTestItem caftItem: item.caftItems) {
+                cal.clear();
+                cal.set(caftItem.year, caftItem.month, caftItem.day, caftItem.hour, caftItem.minute, 0);
+                StringBuffer result = new StringBuffer();
+                FieldPosition fpos = new FieldPosition(0);
+                dfmt.format(cal, result, fpos);
+                if (result.toString().compareTo(caftItem.formattedDate) != 0) {
+                    errln("FAIL: date format for locale " + item.locale +  ", style " + item.style +
+                            ", expected \"" + caftItem.formattedDate + "\", got \"" + result + "\"");
+                } else {
+                    // formatted OK, try parse
+                    ParsePosition ppos = new ParsePosition(0);
+                    dfmt.parse(result.toString(), cal, ppos);
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH);
+                    int day = cal.get(Calendar.DATE);
+                    if ( ppos.getIndex() < result.length() || year != caftItem.year || month != caftItem.month || day != caftItem.day) {
+                        errln("FAIL: date parse for locale " + item.locale +  ", style " + item.style +
+                                ", string \"" + result + "\", expected " + caftItem.year+"-"+caftItem.month+"-"+caftItem.day +
+                                ", got pos " + ppos.getIndex() + " "+year+"-"+month+"-"+day );
+                    }
+                }
+            }
+        }
+    }
+
     public void TestTwoDigitWOY() { // See ICU Ticket #8514
         String dateText = new String("98MON01");
         
@@ -4062,9 +4134,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             StringBuffer result1 = new StringBuffer();
             FieldPosition fpos1 = new FieldPosition(0);
             sdfmt.format(cal, contextValues, result1, fpos1);
-			if (result1.toString().compareTo(item.expectedFormat) != 0) {
-				errln("FAIL: format (per-call context) for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
-						", expected \"" + item.expectedFormat + "\", got \"" + result1 + "\"");
+            if (result1.toString().compareTo(item.expectedFormat) != 0) {
+                errln("FAIL: format (per-call context) for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
+                        ", expected \"" + item.expectedFormat + "\", got \"" + result1 + "\"");
             }
 
             // now try setting default context & standard format call
@@ -4072,16 +4144,16 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             StringBuffer result2 = new StringBuffer();
             FieldPosition fpos2 = new FieldPosition(0);
             sdfmt.format(cal, result2, fpos2);
-			if (result2.toString().compareTo(item.expectedFormat) != 0) {
-				errln("FAIL: format (default context) for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
-						", expected \"" + item.expectedFormat + "\", got \"" + result2 + "\"");
+            if (result2.toString().compareTo(item.expectedFormat) != 0) {
+                errln("FAIL: format (default context) for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
+                        ", expected \"" + item.expectedFormat + "\", got \"" + result2 + "\"");
             }
 
             // now read back default context, make sure it is what we set
             SimpleDateFormat.ContextValue capitalizationContext = sdfmt.getDefaultContext(SimpleDateFormat.ContextType.CAPITALIZATION);
             if (capitalizationContext != item.capitalizationContext) {
-				errln("FAIL: getDefaultContext for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
-						", but got context " + capitalizationContext);
+                errln("FAIL: getDefaultContext for locale " + item.locale +  ", capitalizationContext " + item.capitalizationContext +
+                        ", but got context " + capitalizationContext);
             }
         }
     }
