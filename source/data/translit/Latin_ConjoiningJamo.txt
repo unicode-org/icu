@@ -186,7 +186,7 @@ $jamoMedial {g} ↔ $Gf;
 $jamoMedial {h} ↔ $Hf;
 $jamoMedial {j} ↔ $Jf;
 $jamoMedial {k} ↔ $Kf;
-$jamoMedial {lb} ↔ $LB; $jamoMedial {lg} ↔ $LG;
+$jamoMedial {lb} ↔ $LB;  $jamoMedial {lg} ↔ $LG;
 $jamoMedial {lh} ↔ $LH;
 $jamoMedial {lm} ↔ $LM;
 $jamoMedial {lp} ↔ $LP;

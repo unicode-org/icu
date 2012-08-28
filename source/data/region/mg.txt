@@ -56,7 +56,6 @@ mg{
         CN{"Sina"}
         CO{"Kôlômbia"}
         CR{"Kosta Rikà"}
-        CS{"Serbia sy Montenegro"}
         CU{"Kiobà"}
         CV{"Nosy Cap-Vert"}
         CY{"Sypra"}
@@ -238,5 +237,5 @@ mg{
         ZM{"Zambia"}
         ZW{"Zimbaboe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
 }

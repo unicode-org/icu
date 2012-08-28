@@ -93,7 +93,6 @@ pt{
         CO{"Colômbia"}
         CP{"Ilha de Clipperton"}
         CR{"Costa Rica"}
-        CS{"Sérvia e Montenegro"}
         CU{"Cuba"}
         CV{"Cabo Verde"}
         CX{"Ilhas Natal"}
@@ -140,7 +139,7 @@ pt{
         GU{"Guam"}
         GW{"Guiné Bissau"}
         GY{"Guiana"}
-        HK{"Hong Kong, Região Admin. Especial da China"}
+        HK{"Hong Kong, RAE da China"}
         HM{"Ilha Heard e Ilhas McDonald"}
         HN{"Honduras"}
         HR{"Croácia"}
@@ -172,7 +171,7 @@ pt{
         KW{"Kuwait"}
         KY{"Ilhas Caiman"}
         KZ{"Casaquistão"}
-        LA{"República Popular Democrática do Laos"}
+        LA{"Laos"}
         LB{"Líbano"}
         LC{"Santa Lúcia"}
         LI{"Liechtenstein"}
@@ -194,7 +193,7 @@ pt{
         ML{"Mali"}
         MM{"Mianmar [Birmânia]"}
         MN{"Mongólia"}
-        MO{"Macau, Região Admin. Especial da China"}
+        MO{"Macau, RAE da China"}
         MP{"Ilhas Marianas do Norte"}
         MQ{"Martinica"}
         MR{"Mauritânia"}
@@ -227,7 +226,7 @@ pt{
         PK{"Paquistão"}
         PL{"Polônia"}
         PM{"Saint Pierre e Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Ilhas Pitcairn"}
         PR{"Porto Rico"}
         PS{"Territórios palestinos"}
         PT{"Portugal"}
@@ -255,8 +254,10 @@ pt{
         SN{"Senegal"}
         SO{"Somália"}
         SR{"Suriname"}
+        SS{"Sudão do Sul"}
         ST{"São Tomé e Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Síria"}
         SZ{"Suazilândia"}
         TA{"Tristão da Cunha"}
@@ -278,7 +279,7 @@ pt{
         TZ{"Tanzânia"}
         UA{"Ucrânia"}
         UG{"Uganda"}
-        UM{"Ilhas Menores Distantes dos Estados Unidos"}
+        UM{"Ilhas Distantes dos EUA"}
         US{"Estados Unidos"}
         UY{"Uruguai"}
         UZ{"Uzbequistão"}
@@ -296,7 +297,7 @@ pt{
         ZA{"África do Sul"}
         ZM{"Zâmbia"}
         ZW{"Zimbábue"}
-        ZZ{"Região desconhecida ou inválida"}
+        ZZ{"Região desconhecida"}
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.99"}
 }

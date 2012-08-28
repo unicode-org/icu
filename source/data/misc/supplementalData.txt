@@ -192,7 +192,7 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
     }
-    cldrVersion{"21.0"}
+    cldrVersion{"22.0"}
     codeMappings{
         {
             "AA",
@@ -1778,6 +1778,7 @@ supplementalData:table(nofallback){
         agq{
             primary{
                 scripts{"Latn"}
+                territories{"CM"}
             }
         }
         aii{
@@ -1989,6 +1990,7 @@ supplementalData:table(nofallback){
         bas{
             primary{
                 scripts{"Latn"}
+                territories{"CM"}
             }
         }
         bax{
@@ -2229,6 +2231,12 @@ supplementalData:table(nofallback){
             primary{
                 scripts{"Latn"}
                 territories{"BA"}
+            }
+        }
+        bss{
+            primary{
+                scripts{"Latn"}
+                territories{"CM"}
             }
         }
         btv{
@@ -2615,6 +2623,7 @@ supplementalData:table(nofallback){
         dua{
             primary{
                 scripts{"Latn"}
+                territories{"CM"}
             }
         }
         dv{
@@ -2882,6 +2891,7 @@ supplementalData:table(nofallback){
         ewo{
             primary{
                 scripts{"Latn"}
+                territories{"CM"}
             }
         }
         fa{
@@ -3527,6 +3537,12 @@ supplementalData:table(nofallback){
                 territories{"JP"}
             }
         }
+        jgo{
+            primary{
+                scripts{"Latn"}
+                territories{"CM"}
+            }
+        }
         jmc{
             primary{
                 scripts{"Latn"}
@@ -3627,6 +3643,12 @@ supplementalData:table(nofallback){
                 territories{"CV"}
             }
         }
+        ken{
+            primary{
+                scripts{"Latn"}
+                territories{"CM"}
+            }
+        }
         kfo{
             primary{
                 scripts{"Latn"}
@@ -3706,6 +3728,12 @@ supplementalData:table(nofallback){
             secondary{
                 scripts{"Arab"}
                 territories{"CN"}
+            }
+        }
+        kkj{
+            primary{
+                scripts{"Latn"}
+                territories{"CM"}
             }
         }
         kl{
@@ -3860,6 +3888,7 @@ supplementalData:table(nofallback){
         ksf{
             primary{
                 scripts{"Latn"}
+                territories{"CM"}
             }
         }
         ksh{
@@ -4255,6 +4284,12 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
+        mgo{
+            primary{
+                scripts{"Latn"}
+                territories{"CM"}
+            }
+        }
         mh{
             primary{
                 scripts{"Latn"}
@@ -4383,6 +4418,7 @@ supplementalData:table(nofallback){
         mua{
             primary{
                 scripts{"Latn"}
+                territories{"CM"}
             }
         }
         mup{
@@ -4536,12 +4572,19 @@ supplementalData:table(nofallback){
         nmg{
             primary{
                 scripts{"Latn"}
+                territories{"CM"}
             }
         }
         nn{
             primary{
                 scripts{"Latn"}
                 territories{"NO"}
+            }
+        }
+        nnh{
+            primary{
+                scripts{"Latn"}
+                territories{"CM"}
             }
         }
         no{
@@ -5117,10 +5160,13 @@ supplementalData:table(nofallback){
         }
         shi{
             primary{
-                scripts{"Arab"}
+                scripts{"Tfng"}
             }
             secondary{
-                scripts{"Tfng"}
+                scripts{
+                    "Arab",
+                    "Latn",
+                }
                 territories{"MA"}
             }
         }
@@ -5979,6 +6025,7 @@ supplementalData:table(nofallback){
         yav{
             primary{
                 scripts{"Latn"}
+                territories{"CM"}
             }
         }
         yi{
@@ -7261,6 +7308,11 @@ supplementalData:table(nofallback){
                 code{"597"}
             }
         }
+        SS{
+            {
+                code{"211"}
+            }
+        }
         ST{
             {
                 code{"239"}
@@ -7459,22 +7511,22 @@ supplementalData:table(nofallback){
     }
     territoryContainment{
         001{
-            "002",
-            "009",
             "019",
-            "142",
+            "002",
             "150",
+            "142",
+            "009",
         }
         002{
-            "011",
-            "014",
             "015",
+            "011",
             "017",
+            "014",
             "018",
         }
         003{
-            "013",
             "021",
+            "013",
             "029",
         }
         005{
@@ -7709,11 +7761,11 @@ supplementalData:table(nofallback){
             "WS",
         }
         142{
-            "030",
-            "035",
-            "143",
             "145",
+            "143",
+            "030",
             "034",
+            "035",
         }
         143{
             "TM",
@@ -7743,10 +7795,10 @@ supplementalData:table(nofallback){
             "YE",
         }
         150{
-            "039",
-            "151",
             "154",
             "155",
+            "151",
+            "039",
         }
         151{
             "BG",
@@ -7771,7 +7823,6 @@ supplementalData:table(nofallback){
             "FO",
             "GB",
             "IE",
-            "IM",
             "IS",
             "LT",
             "LV",
@@ -7791,9 +7842,9 @@ supplementalData:table(nofallback){
             "NL",
         }
         419{
-            "005",
             "013",
             "029",
+            "005",
         }
         EU{
             "AT",

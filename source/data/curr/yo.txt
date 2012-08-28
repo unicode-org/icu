@@ -20,7 +20,7 @@ yo{
             "Wansa ti Orílẹ́ède Àngólà",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dọla ti Orílẹ́ède Ástràlìá",
         }
         BHD{
@@ -232,5 +232,5 @@ yo{
             "Dọla ti Orílẹ́ède Siibabuwe",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

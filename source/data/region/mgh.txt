@@ -25,7 +25,6 @@ mgh{
         CL{"Uchile"}
         CN{"Uchina"}
         CO{"Ukolombia"}
-        CS{"Usiera Leoni"}
         CU{"Ukuba"}
         CY{"Ukuprosi"}
         CZ{"Ucheki"}
@@ -150,5 +149,5 @@ mgh{
         ZM{"Uzambia"}
         ZW{"Uzimbabwe"}
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.75.53"}
 }

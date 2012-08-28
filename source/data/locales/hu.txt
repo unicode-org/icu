@@ -29,45 +29,86 @@ hu{
             patterns{
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
+                percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
+            }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        other{"0 ezer"}
+                    }
+                    10000{
+                        other{"00 ezer"}
+                    }
+                    100000{
+                        other{"000 ezer"}
+                    }
+                    1000000{
+                        other{"0 millió"}
+                    }
+                    10000000{
+                        other{"00 millió"}
+                    }
+                    100000000{
+                        other{"000 millió"}
+                    }
+                    1000000000{
+                        other{"0 milliárd"}
+                    }
+                    10000000000{
+                        other{"00 milliárd"}
+                    }
+                    100000000000{
+                        other{"000 milliárd"}
+                    }
+                    1000000000000{
+                        other{"0 billió"}
+                    }
+                    10000000000000{
+                        other{"00 billió"}
+                    }
+                    100000000000000{
+                        other{"000 billió"}
+                    }
+                }
             }
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0.0 e"}
+                        other{"0 E"}
                     }
                     10000{
-                        other{"00 e"}
+                        other{"00 E"}
                     }
                     100000{
-                        other{"000 e"}
+                        other{"000 E"}
                     }
                     1000000{
-                        other{"0.0 m"}
+                        other{"0 M"}
                     }
                     10000000{
-                        other{"00 m"}
+                        other{"00 M"}
                     }
                     100000000{
-                        other{"000 m"}
+                        other{"000 M"}
                     }
                     1000000000{
-                        other{"0.0 mrd"}
+                        other{"0 Mrd"}
                     }
                     10000000000{
-                        other{"00 mrd"}
+                        other{"00 Mrd"}
                     }
                     100000000000{
-                        other{"000 mrd"}
+                        other{"000 Mrd"}
                     }
                     1000000000000{
-                        other{"0.0 b"}
+                        other{"0 B"}
                     }
                     10000000000000{
-                        other{"00 b"}
+                        other{"00 B"}
                     }
                     100000000000000{
-                        other{"000 b"}
+                        other{"000 B"}
                     }
                 }
             }
@@ -85,7 +126,7 @@ hu{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             availableFormats{
@@ -338,12 +379,14 @@ hu{
                 hm{"a h:mm"}
                 hms{"a h:mm:ss"}
                 mmss{"mm:ss"}
+                ms{"mm:ss"}
                 yM{"y.M."}
                 yMEd{"yyyy.MM.dd., E"}
                 yMMM{"y. MMM"}
                 yMMMEd{"y. MMM d., E"}
                 yMMMd{"y. MMM d."}
                 yMd{"yyyy.MM.dd."}
+                yQ{"y. Q"}
                 yQQQ{"y. QQQ"}
                 yyQ{"yy/Q"}
                 yyyyMM{"yyyy.MM"}
@@ -397,6 +440,15 @@ hu{
                         "Cs",
                         "P",
                         "Sz",
+                    }
+                    short{
+                        "V",
+                        "H",
+                        "K",
+                        "Sze",
+                        "Cs",
+                        "P",
+                        "Szo",
                     }
                     wide{
                         "vasárnap",
@@ -477,27 +529,23 @@ hu{
                     }
                 }
                 zone{
-                    dn{"zóna"}
+                    dn{"időzóna"}
                 }
             }
             intervalFormats{
                 H{
                     H{"H-H"}
-                    a{"HH-HH"}
                 }
                 Hm{
                     H{"H:mm-H:mm"}
-                    a{"HH:mm-HH:mm"}
                     m{"H:mm-H:mm"}
                 }
                 Hmv{
                     H{"H:mm-H:mm v"}
-                    a{"HH:mm-HH:mm v"}
                     m{"H:mm-H:mm v"}
                 }
                 Hv{
                     H{"H-H v"}
-                    a{"HH-HH v"}
                 }
                 M{
                     M{"M-M."}
@@ -526,22 +574,22 @@ hu{
                 }
                 fallback{"{0} - {1}"}
                 h{
-                    a{"a h - a h"}
-                    h{"h a - h a"}
+                    a{"a h – a h"}
+                    h{"a h–h"}
                 }
                 hm{
-                    a{"a h:mm - a h:mm"}
-                    h{"h:mm-h:mm a"}
-                    m{"h:mm-h:mm a"}
+                    a{"a h:mm – a h:mm"}
+                    h{"a h:mm–h:mm"}
+                    m{"a h:mm–h:mm"}
                 }
                 hmv{
-                    a{"a h:mm - a h:mm v"}
-                    h{"h:mm-h:mm a v"}
-                    m{"h:mm-h:mm a v"}
+                    a{"a h:mm – a h:mm v"}
+                    h{"a h:mm–h:mm v"}
+                    m{"a h:mm–h:mm v"}
                 }
                 hv{
-                    a{"a h - a h v"}
-                    h{"h-h a v"}
+                    a{"a h – a h v"}
+                    h{"a h–h v"}
                 }
                 y{
                     y{"y-y"}
@@ -696,6 +744,12 @@ hu{
                         "N2",
                         "N3",
                         "N4",
+                    }
+                    narrow{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
                     }
                     wide{
                         "1. negyedév",
@@ -894,19 +948,19 @@ hu{
             }
             monthNames{
                 format{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "8",
-                        "9",
-                        "10",
-                        "11",
-                        "12",
+                    abbreviated{
+                        "Moh.",
+                        "Saf.",
+                        "Rébi I",
+                        "Rébi II",
+                        "Dsem. I",
+                        "Dsem. II",
+                        "Red.",
+                        "Sab.",
+                        "Ram.",
+                        "Sev.",
+                        "Dsül k.",
+                        "Dsül h.",
                     }
                     wide{
                         "Moharrem",
@@ -924,19 +978,19 @@ hu{
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "Muh.",
-                        "Saf.",
-                        "Rab. I",
-                        "Rab. II",
-                        "Jum. I",
-                        "Jum. II",
-                        "Raj.",
-                        "Sha.",
-                        "Ram.",
-                        "Shaw.",
-                        "Dsül-Q.",
-                        "Dsül-H.",
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
                     }
                     wide{
                         "Moharrem",
@@ -1049,6 +1103,8 @@ hu{
         standard{
             2{"{0} és {1}"}
             end{"{0} és {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
@@ -1061,91 +1117,63 @@ hu{
             other{"{0} nap"}
         }
         day-future{
-            0{"0 nap múlva"}
-            1{"1 nap múlva"}
             other{"{0} nap múlva"}
         }
         day-past{
-            0{"0 napja"}
-            1{"1 napja"}
-            other{"{0} nappal ezelőtt"}
+            other{"{0} napja"}
         }
         hour{
             other{"{0} óra"}
         }
         hour-future{
-            0{"0 óra múlva"}
-            1{"1 óra múlva"}
             other{"{0} óra múlva"}
         }
         hour-past{
-            0{"0 órája"}
-            1{"1 órája"}
             other{"{0} órával ezelőtt"}
         }
         minute{
             other{"{0} perc"}
         }
         minute-future{
-            0{"0 perc múlva"}
-            1{"1 perc múlva"}
             other{"{0} perc múlva"}
         }
         minute-past{
-            0{"0 perce"}
-            1{"1 perce"}
             other{"{0} perccel ezelőtt"}
         }
         month{
             other{"{0} hónap"}
         }
         month-future{
-            0{"0 hónap múlva"}
-            1{"1 hónap múlva"}
             other{"{0} hónap múlva"}
         }
         month-past{
-            0{"0 hónapja"}
-            1{"1 hónapja"}
             other{"{0} hónappal ezelőtt"}
         }
         second{
             other{"{0} másodperc"}
         }
         second-future{
-            0{"0 másodperc múlva"}
-            1{"1 másodperc múlva"}
             other{"{0} másodperc múlva"}
         }
         second-past{
-            0{"0 másodperce"}
-            1{"1 másodperce"}
             other{"{0} másodperccel ezelőtt"}
         }
         week{
             other{"{0} hét"}
         }
         week-future{
-            0{"0 hét múlva"}
-            1{"1 hét múlva"}
             other{"{0} hét múlva"}
         }
         week-past{
-            0{"0 hete"}
-            1{"1 hete"}
             other{"{0} héttel ezelőtt"}
         }
         year{
             other{"{0} év"}
         }
         year-future{
-            0{"0 év múlva"}
-            1{"1 év múlva"}
             other{"{0} év múlva"}
         }
         year-past{
-            0{"0 éve"}
-            1{"1 éve"}
             other{"{0} évvel ezelőtt"}
         }
     }

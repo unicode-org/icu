@@ -91,7 +91,6 @@ bs{
         CN{"Kina"}
         CO{"Kolumbija"}
         CR{"Kostarika"}
-        CS{"Srbija i Crna Gora"}
         CU{"Kuba"}
         CV{"Kape Verde"}
         CX{"Božićna Ostrva"}
@@ -292,5 +291,5 @@ bs{
         ZW{"Zimbabve"}
         ZZ{"Nepoznata ili nevažeća oblast"}
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.75.99"}
 }

@@ -163,12 +163,15 @@ fr{
             "80/20: quatre-vingt>%%cents-o>;",
             "100: cent>%%cents-o>;",
             "200: <%spellout-cardinal-masculine<-cent>%%cents-o>;",
-            "1000: mill->%%mille-o>;",
-            "2000: <%spellout-cardinal-masculine<-mill->%%mille-o>;",
-            "2001: 1,000,000 <%spellout-cardinal-masculine<-million->%%cents-o>;",
+            "1000: mill>%%mille-o>;",
+            "2000: <%spellout-cardinal-masculine<-mill>%%mille-o>;",
+            "2001: <%spellout-cardinal-masculine<-million>%%cents-o>;",
             "1000000000: <%spellout-cardinal-masculine<-milliard->%%cents-o>;",
+            "1000000001: <%spellout-cardinal-masculine<-milliard>%%cents-o>;",
             "1000000000000: <%spellout-cardinal-masculine<-billion->%%cents-o>;",
+            "1000000000001: <%spellout-cardinal-masculine<-billion>%%cents-o>;",
             "1000000000000000: <%spellout-cardinal-masculine<-billiard->%%cents-o>;",
+            "1000000000000001: <%spellout-cardinal-masculine<-billiard>%%cents-o>;",
             "1000000000000000000: =#,##0=;",
             "%spellout-ordinal-masculine:",
             "-x: moins >>;",
@@ -184,5 +187,5 @@ fr{
             "2: =%%spellout-ordinal=;",
         }
     }
-    Version{"2.0.59.35"}
+    Version{"2.0.75.37"}
 }

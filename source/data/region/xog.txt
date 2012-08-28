@@ -56,7 +56,6 @@ xog{
         CN{"Cayina"}
         CO{"Kolombya"}
         CR{"Kosita Rika"}
-        CS{"Seribya ni Monteneguro"}
         CU{"Cuba"}
         CV{"Ebizinga bya Kepu Veredi"}
         CY{"Sipuriya"}
@@ -237,5 +236,5 @@ xog{
         ZM{"Zambya"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

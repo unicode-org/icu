@@ -10,9 +10,11 @@
  *  ICU <specials> source: <path>/xml/main/eu.xml
  */
 eu{
-    AuxExemplarCharacters{"[]"}
+    AuxExemplarCharacters{
+        "[á à ă â å ä ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ú ù ŭ û ü ū ÿ"
+        "]"
+    }
     ExemplarCharacters{"[a b c ç d e f g h i j k l m n ñ o p q r s t u v w x y z]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     LocaleScript{
         "Latn",
@@ -20,54 +22,119 @@ eu{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 decimalFormat{"#,##0.###"}
+                percentFormat{"% #,##0"}
                 scientificFormat{"#E0"}
+            }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 mila"}
+                        other{"0 mila"}
+                    }
+                    10000{
+                        one{"00 mila"}
+                        other{"00 mila"}
+                    }
+                    100000{
+                        one{"000 mila"}
+                        other{"000 mila"}
+                    }
+                    1000000{
+                        one{"0 milioi"}
+                        other{"0 milioi"}
+                    }
+                    10000000{
+                        one{"00 milioi"}
+                        other{"00 milioi"}
+                    }
+                    100000000{
+                        one{"000 milioi"}
+                        other{"000 milioi"}
+                    }
+                    1000000000{
+                        one{"0 mila milioi"}
+                        other{"0 mila milioi"}
+                    }
+                    10000000000{
+                        one{"00 mila milioi"}
+                        other{"00 mila milioi"}
+                    }
+                    100000000000{
+                        one{"000 mila milioi"}
+                        other{"000 mila milioi"}
+                    }
+                    1000000000000{
+                        one{"0 bilioi"}
+                        other{"0 bilioi"}
+                    }
+                    10000000000000{
+                        one{"00 bilioi"}
+                        other{"00 bilioi"}
+                    }
+                    100000000000000{
+                        one{"000 bilioi"}
+                        other{"000 bilioi"}
+                    }
+                }
             }
             patternsShort{
                 decimalFormat{
                     1000{
+                        one{"0000"}
                         other{"0000"}
                     }
                     10000{
+                        one{"00000"}
                         other{"00000"}
                     }
                     100000{
+                        one{"000000"}
                         other{"000000"}
                     }
                     1000000{
-                        other{"0.0 M"}
+                        one{"0 M"}
+                        other{"0 M"}
                     }
                     10000000{
+                        one{"00 M"}
                         other{"00 M"}
                     }
                     100000000{
+                        one{"000 M"}
                         other{"000 M"}
                     }
                     1000000000{
+                        one{"0000 M"}
                         other{"0000 M"}
                     }
                     10000000000{
+                        one{"00k M"}
                         other{"00k M"}
                     }
                     100000000000{
+                        one{"000k M"}
                         other{"000k M"}
                     }
                     1000000000000{
-                        other{"0.0 B"}
+                        one{"0 B"}
+                        other{"0 B"}
                     }
                     10000000000000{
+                        one{"00 B"}
                         other{"00 B"}
                     }
                     100000000000000{
+                        one{"000 B"}
                         other{"000 B"}
                     }
                 }
             }
             symbols{
-                decimal{","}
+                decimal{"."}
                 exponential{"E"}
-                group{"."}
+                group{","}
                 infinity{"∞"}
                 list{";"}
                 minusSign{"-"}
@@ -78,7 +145,7 @@ eu{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             eras{
@@ -88,13 +155,17 @@ eu{
             }
         }
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, y'eko' MMMM'ren' dd'a'",
-                "y'eko' MMM'ren' dd'a'",
+                "EEEE, y MMMM dd",
+                "y MMMM d",
                 "y MMM d",
                 "yyyy-MM-dd",
                 "{1} {0}",
@@ -104,16 +175,27 @@ eu{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"d E"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
                 MEd{"E, M/d"}
+                MMM{"LLL"}
                 MMMEd{"E, MMM d"}
+                MMMd{"MMM d"}
                 Md{"M/d"}
                 d{"d"}
-                yM{"M/y"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"y-M"}
                 yMEd{"E, M/d/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMd{"MMM d, y"}
-                yMd{"M/d/y"}
+                yMd{"y-M-d"}
                 yQ{"Q y"}
                 yQQQ{"QQQ y"}
                 yyQ{"Q yy"}
@@ -138,6 +220,15 @@ eu{
                         "O",
                         "I",
                     }
+                    short{
+                        "ig.",
+                        "al.",
+                        "ar.",
+                        "az.",
+                        "og.",
+                        "or.",
+                        "lr.",
+                    }
                     wide{
                         "igandea",
                         "astelehena",
@@ -157,6 +248,15 @@ eu{
                         "A",
                         "O",
                         "I",
+                    }
+                    short{
+                        "ig.",
+                        "al.",
+                        "ar.",
+                        "az.",
+                        "og.",
+                        "or.",
+                        "lr.",
                     }
                 }
             }
@@ -224,6 +324,23 @@ eu{
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"M–M"}
+                }
                 MEd{
                     M{"E, M/d – E, M/d"}
                     d{"E, M/d – E, M/d"}
@@ -243,8 +360,30 @@ eu{
                     M{"M/d – M/d"}
                     d{"M/d – M/d"}
                 }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
                 hm{
                     a{":h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y–y"}
                 }
                 yM{
                     M{"M/yy – M/yy"}
@@ -348,6 +487,14 @@ eu{
                         "4. hiruhilekoa",
                     }
                 }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                }
             }
         }
         roc{
@@ -369,10 +516,13 @@ eu{
         standard{
             2{"{0} eta {1}"}
             end{"{0} eta {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
-        US{"US"}
+        UK{"EBko sistema"}
+        US{"AEBetako sistema"}
         metric{"Metriko"}
     }
     units{
@@ -381,13 +531,11 @@ eu{
             other{"{0} egun"}
         }
         day-future{
-            0{"0 egun barru"}
-            1{"1 egun barru"}
+            one{"{0} egun barru"}
             other{"{0} egun barru"}
         }
         day-past{
-            0{"Duela 0 egun"}
-            1{"Duela 1 egun"}
+            one{"Duela {0} egun"}
             other{"Duela {0} egun"}
         }
         hour{
@@ -395,13 +543,11 @@ eu{
             other{"{0} h"}
         }
         hour-future{
-            0{"0 ordu barru"}
-            1{"1 ordu barru"}
+            one{"{0} ordu barru"}
             other{"{0} ordu barru"}
         }
         hour-past{
-            0{"Duela 0 ordu"}
-            1{"Duela ordubete"}
+            one{"Duela {0} ordubete"}
             other{"Duela {0} ordu"}
         }
         minute{
@@ -409,29 +555,23 @@ eu{
             other{"{0} minutu"}
         }
         minute-future{
-            0{"0 minutu barru"}
-            1{"1 minutu barru"}
+            one{"{0} minutu barru"}
             other{"{0} minutu barru"}
         }
         minute-past{
-            0{"Duela 0 minutu"}
-            1{"Duela 1 minutu"}
+            one{"Duela {0} minutu"}
             other{"Duela {0} minutu"}
         }
         month{
-            0{"0 hilabete"}
-            1{"1 hilabete"}
-            one{"{0} hilea"}
+            one{"{0} hilabete"}
             other{"{0} hilabete"}
         }
         month-future{
-            0{"0 hilabete barru"}
-            1{"1 hilabete barru"}
+            one{"{0} hilabete barru"}
             other{"{0} hilabete barru"}
         }
         month-past{
-            0{"Duela 0 hilabete"}
-            1{"Duela 1 hilabete"}
+            one{"Duela {0} hilabete"}
             other{"Duela {0} hilabete"}
         }
         second{
@@ -439,13 +579,11 @@ eu{
             other{"{0} s"}
         }
         second-future{
-            0{"0 segundo barru"}
-            1{"1 segundo barru"}
+            one{"{0} segundo barru"}
             other{"{0} segundo barru"}
         }
         second-past{
-            0{"Duela 0 segundo"}
-            1{"Duela 1 segundo"}
+            one{"Duela {0} segundo"}
             other{"Duela {0} segundo"}
         }
         week{
@@ -453,13 +591,11 @@ eu{
             other{"{0} aste"}
         }
         week-future{
-            0{"0 aste barru"}
-            1{"1 aste barru"}
+            one{"{0} aste barru"}
             other{"{0} aste barru"}
         }
         week-past{
-            0{"Duela 0 aste"}
-            1{"Duela 1 aste"}
+            one{"Duela {0} aste"}
             other{"Duela {0} aste"}
         }
         year{
@@ -467,48 +603,41 @@ eu{
             other{"{0} urte"}
         }
         year-future{
-            0{"0 urte barru"}
-            1{"1 urte barru"}
+            one{"{0} urte barru"}
             other{"{0} urte barru"}
         }
         year-past{
-            0{"Duela 0 urte"}
-            1{"Duela 1 urte"}
+            one{"Duela {0} urte"}
             other{"Duela {0} urte"}
         }
     }
     unitsShort{
         day{
-            0{"0 egun"}
-            1{"1 egun"}
+            one{"{0} egun"}
             other{"{0} egun"}
         }
         hour{
-            1{"1 ordu"}
+            one{"{0} ordu"}
             other{"{0} ordu"}
         }
         minute{
-            1{"1 minutu"}
+            one{"{0} minutu"}
             other{"{0} minutu"}
         }
         month{
-            0{"0 hilabete"}
-            1{"1 hilabete"}
+            one{"{0} hilabete"}
             other{"{0} hilabete"}
         }
         second{
-            0{"0 seg."}
-            1{"1 seg."}
+            one{"{0} seg."}
             other{"{0} seg."}
         }
         week{
-            0{"0 aste"}
-            1{"1 aste"}
+            one{"{0} aste"}
             other{"{0} aste"}
         }
         year{
-            0{"0 urte"}
-            1{"1 urte"}
+            one{"{0} urte"}
             other{"{0} urte"}
         }
     }

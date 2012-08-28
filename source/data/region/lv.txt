@@ -21,15 +21,15 @@ lv{
         014{"Austrumāfrika"}
         015{"Ziemeļāfrika"}
         017{"Vidusāfrika"}
-        018{"Āfrikas dienvidi"}
+        018{"Dienvidāfrika"}
         019{"Amerika"}
-        021{"Amerikas ziemeļi"}
+        021{"Ziemeļamerika — ASV, Kanāda un Grenlande"}
         029{"Karību jūras reģions"}
         030{"Austrumāzija"}
         034{"Dienvidāzija"}
         035{"Centrālaustrumāzija"}
         039{"Dienvideiropa"}
-        053{"Austrālija un Jaunzēlande"}
+        053{"Austrālāzija"}
         054{"Melanēzija"}
         057{"Mikronēzijas reģions"}
         061{"Polinēzija"}
@@ -72,6 +72,7 @@ lv{
         BM{"Bermudu salas"}
         BN{"Bruneja"}
         BO{"Bolīvija"}
+        BQ{"Nīderlandes Karību salas"}
         BR{"Brazīlija"}
         BS{"Bahamu salas"}
         BT{"Butāna"}
@@ -93,9 +94,9 @@ lv{
         CO{"Kolumbija"}
         CP{"Klipertona sala"}
         CR{"Kostarika"}
-        CS{"Serbija un Melnkalne"}
         CU{"Kuba"}
         CV{"Kaboverde"}
+        CW{"Kirasao"}
         CX{"Ziemsvētku sala"}
         CY{"Kipra"}
         CZ{"Čehija"}
@@ -106,7 +107,7 @@ lv{
         DM{"Dominika"}
         DO{"Dominikānas Republika"}
         DZ{"Alžīrija"}
-        EA{"Seūta un Meliļa"}
+        EA{"Seūta un Melilja"}
         EC{"Ekvadora"}
         EE{"Igaunija"}
         EG{"Ēģipte"}
@@ -162,7 +163,7 @@ lv{
         JO{"Jordānija"}
         JP{"Japāna"}
         KE{"Kenija"}
-        KG{"Kirgīzija"}
+        KG{"Kirgizstāna"}
         KH{"Kambodža"}
         KI{"Kiribati"}
         KM{"Komoru salas"}
@@ -255,8 +256,10 @@ lv{
         SN{"Senegāla"}
         SO{"Somālija"}
         SR{"Surinama"}
+        SS{"Dienvidsudāna"}
         ST{"Santome un Prinsipi"}
         SV{"Salvadora"}
+        SX{"Sintmārtena"}
         SY{"Sīrija"}
         SZ{"Svazilenda"}
         TA{"Tristana da Kuņas salas"}
@@ -296,7 +299,7 @@ lv{
         ZA{"Dienvidāfrikas Republika"}
         ZM{"Zambija"}
         ZW{"Zimbabve"}
-        ZZ{"nezināms vai nederīgs reģions"}
+        ZZ{"nezināms reģions"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

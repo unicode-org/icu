@@ -55,7 +55,6 @@ bas{
         CN{"Kinà"}
         CO{"Kɔ̀lɔmbìà"}
         CR{"Kòstà Rikà"}
-        CS{"Sɛ̀rbî nì Mɔ̀ntènegrò"}
         CU{"Kubà"}
         CV{"Kabwɛ᷆r"}
         CY{"Kiprò"}
@@ -235,5 +234,5 @@ bas{
         ZM{"Zàmbià"}
         ZW{"Zìmbàbwê"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

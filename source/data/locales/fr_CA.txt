@@ -7,31 +7,11 @@
 // *
 // ***************************************************************************
 fr_CA{
-    NumberElements{
-        latn{
-            patterns{
-                currencyFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
-            }
-            patternsShort{
-                decimalFormat{
-                    1000000000{
-                        other{"0.0B"}
-                    }
-                    10000000000{
-                        other{"00B"}
-                    }
-                    100000000000{
-                        other{"000B"}
-                    }
-                }
-            }
-        }
-    }
     PaperSize:intvector{
         279,
         216,
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -200,8 +180,6 @@ fr_CA{
             other{"Il y a {0} mois"}
         }
         second-future{
-            0{"Dans 0 seconde"}
-            1{"Dans 1 seconde"}
             one{"Dans {0} seconde"}
             other{"Dans {0} secondes"}
         }
@@ -224,6 +202,12 @@ fr_CA{
         year-past{
             one{"Il y a {0} an"}
             other{"Il y a {0} ans"}
+        }
+    }
+    unitsShort{
+        minute{
+            one{"{0} min"}
+            other{"{0} min"}
         }
     }
 }

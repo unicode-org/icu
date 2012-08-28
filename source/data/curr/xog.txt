@@ -20,7 +20,7 @@ xog{
             "Kwanza y'Angola",
         }
         AUD{
-            "AU$",
+            "A$",
             "Doola y'Awusiturelya",
         }
         BHD{
@@ -228,5 +228,5 @@ xog{
             "Doola ey'eZimbabwe",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

@@ -72,7 +72,7 @@ sr_Latn{
             "Austrijski šiling",
         }
         AUD{
-            "AU$",
+            "A$",
             "Australijski dolar",
         }
         AWG{
@@ -1116,9 +1116,10 @@ sr_Latn{
             other{"Avganistanski avgan (AFA)"}
         }
         AFN{
-            few{"Avganistanska avgana"}
-            one{"Avganistanski avgan"}
-            other{"Avganistanski avgan"}
+            few{"avganistanska avgana"}
+            many{"avganistanskih avgana"}
+            one{"avganistanski avgan"}
+            other{"avganistanski avgan"}
         }
         ALL{
             few{"Albanska leka"}
@@ -1274,6 +1275,7 @@ sr_Latn{
             few{"burundska franka"}
             many{"burundskih franaka"}
             one{"burundski franak"}
+            other{"burundskih franaka"}
         }
         BMD{
             few{"bermudska dolara"}
@@ -1447,6 +1449,7 @@ sr_Latn{
             few{"kostarikanska kolona"}
             many{"kostarikanskih kolona"}
             one{"kostarikanski kolon"}
+            other{"kostarikanskih kolona"}
         }
         CSD{
             few{"stara srpska dinara"}
@@ -1974,6 +1977,7 @@ sr_Latn{
             few{"madagaskarska franka"}
             many{"madagaskarskih franaka"}
             one{"madagaskarski franak"}
+            other{"madagaskarskih franaka"}
         }
         MKD{
             few{"makedonska denara"}
@@ -2720,5 +2724,5 @@ sr_Latn{
             other{"zimbabvejski dolari"}
         }
     }
-    Version{"2.0.66.10"}
+    Version{"2.0.75.99"}
 }

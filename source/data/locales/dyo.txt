@@ -29,7 +29,7 @@ dyo{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.79"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -134,9 +134,6 @@ dyo{
                 }
                 week{
                     dn{"Lóokuŋ"}
-                }
-                weekday{
-                    dn{"Funak"}
                 }
                 year{
                     dn{"Emit"}

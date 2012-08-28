@@ -56,7 +56,6 @@ mfe{
         CN{"Lasinn"}
         CO{"Kolonbi"}
         CR{"Costa Rica"}
-        CS{"Serbi-ek-Montenegro"}
         CU{"Cuba"}
         CV{"Kap-Ver"}
         CY{"Cyprus"}
@@ -238,5 +237,5 @@ mfe{
         ZM{"Zambi"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.74.65"}
 }

@@ -12,12 +12,12 @@
 ewo{
     AuxExemplarCharacters{"[c j q x]"}
     ExemplarCharacters{
-        "[a á à â ǎ b d {dz} e é è ê ě ǝ {ǝ\u0301} {ǝ\u0300} {ǝ\u0302} {ǝ\u030C} ɛ {ɛ"
+        "[a á à â ǎ b d {dz} e é è ê ě ə {ə\u0301} {ə\u0300} {ə\u0302} {ə\u030C} ɛ {ɛ"
         "\u0301} {ɛ\u0300} {ɛ\u0302} {ɛ\u030C} f g h i í ì î ǐ k {kp} l m n ń ǹ {ng} "
         "{nk} ŋ o ó ò ô ǒ ɔ {ɔ\u0301} {ɔ\u0300} {ɔ\u0302} {ɔ\u030C} p r s t {ts} u ú "
         "ù û ǔ v w y z]"
     }
-    ExemplarCharactersIndex{"[A B D E Ǝ Ɛ F G H I K L M N Ŋ O Ɔ P R S T U V W Y Z]"}
+    ExemplarCharactersIndex{"[A B D E Ə Ɛ F G H I K L M N Ŋ O Ɔ P R S T U V W Y Z]"}
     LocaleScript{
         "Latn",
     }
@@ -34,12 +34,12 @@ ewo{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
     calendar{
         gregorian{
             AmPmMarkers{
                 "kíkíríg",
-                "ngǝgógǝle",
+                "ngəgógəle",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -94,9 +94,9 @@ ewo{
                     wide{
                         "sɔ́ndɔ",
                         "mɔ́ndi",
-                        "sɔ́ndɔ mǝlú mǝ́bɛ̌",
-                        "sɔ́ndɔ mǝlú mǝ́lɛ́",
-                        "sɔ́ndɔ mǝlú mǝ́nyi",
+                        "sɔ́ndɔ məlú mə́bɛ̌",
+                        "sɔ́ndɔ məlú mə́lɛ́",
+                        "sɔ́ndɔ məlú mə́nyi",
                         "fúladé",
                         "séradé",
                     }
@@ -133,7 +133,7 @@ ewo{
                     }
                 }
                 dayperiod{
-                    dn{"Kírí / Ngǝgógǝle"}
+                    dn{"Kírí / Ngəgógəle"}
                 }
                 era{
                     dn{"Abǒg"}
@@ -148,7 +148,7 @@ ewo{
                     dn{"Ngɔn"}
                 }
                 second{
-                    dn{"Akábǝga"}
+                    dn{"Akábəga"}
                 }
                 week{
                     dn{"Sɔ́ndɔ"}
@@ -185,7 +185,7 @@ ewo{
                         "ngɔn lála",
                         "ngɔn nyina",
                         "ngɔn tána",
-                        "ngɔn samǝna",
+                        "ngɔn saməna",
                         "ngɔn zamgbála",
                         "ngɔn mwom",
                         "ngɔn ebulú",

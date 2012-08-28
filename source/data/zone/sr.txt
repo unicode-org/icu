@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sr.xml
  */
 sr{
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиџан"}
@@ -395,6 +395,9 @@ sr{
         }
         "America:Louisville"{
             ec{"Луивиле"}
+        }
+        "America:Lower_Princes"{
+            ec{"Лоуер Принсиз Квортер"}
         }
         "America:Maceio"{
             ec{"Масејо"}
@@ -1226,6 +1229,9 @@ sr{
             lg{"Акре време"}
             ls{"Акре стандардно време"}
         }
+        "meta:Afghanistan"{
+            ls{"Авганистан"}
+        }
         "meta:Africa_Central"{
             ls{"Централно-афричко време"}
         }
@@ -1616,11 +1622,6 @@ sr{
         "meta:Kazakhstan_Western"{
             ls{"Западно-казахстанско време"}
         }
-        "meta:Kizilorda"{
-            ld{"Кизилорда летње рачунање времена"}
-            lg{"Кизилорда време"}
-            ls{"Кизилорда стандардно време"}
-        }
         "meta:Korea"{
             ld{"Корејско летње рачунање времена"}
             lg{"Кореја време"}
@@ -1758,6 +1759,9 @@ sr{
             lg{"Пакистан време"}
             ls{"Пакистан стандардно време"}
         }
+        "meta:Palau"{
+            ls{"Палау"}
+        }
         "meta:Papua_New_Guinea"{
             ls{"Папуа Нова Гвинеја време"}
         }
@@ -1780,9 +1784,9 @@ sr{
             ls{"Феникс острва време"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Пјер и Микелон летње рачунање вемена"}
-            lg{"Пјер и Микелон време"}
-            ls{"Пјер и Микелон стандардно време"}
+            ld{"Сен Пјер и Микелон летње рачунање вемена"}
+            lg{"Сен Пјер и Микелон време"}
+            ls{"Сен Пјер и Микелон стандардно време"}
         }
         "meta:Pitcairn"{
             ls{"Питкерн време"}
@@ -1960,6 +1964,7 @@ sr{
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Време у земљи: {1} ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HHmm;-HHmm"}
         regionFormat{"Време у земљи: {0}"}
     }

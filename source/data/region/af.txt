@@ -29,7 +29,7 @@ af{
         034{"Suid-Asië"}
         035{"Suidoos-Asië"}
         039{"Suid-Europa"}
-        053{"Australië en Nieu-Seeland"}
+        053{"Australasië"}
         054{"Melanesië"}
         057{"Mikronesiese streek"}
         061{"Polinesië"}
@@ -72,6 +72,7 @@ af{
         BM{"Bermuda"}
         BN{"Broenei"}
         BO{"Bolivië"}
+        BQ{"Karibiese Nederland"}
         BR{"Brasilië"}
         BS{"Bahamas"}
         BT{"Bhoetan"}
@@ -93,9 +94,9 @@ af{
         CO{"Kolombië"}
         CP{"Clipperton-eiland"}
         CR{"Costa Rica"}
-        CS{"Serwië en Montenegro"}
         CU{"Kuba"}
         CV{"Kaap Verde"}
+        CW{"Curaçao"}
         CX{"Kerseiland"}
         CY{"Ciprus"}
         CZ{"Tjeggiese Republiek"}
@@ -255,8 +256,10 @@ af{
         SN{"Senegal"}
         SO{"Somalië"}
         SR{"Suriname"}
+        SS{"Suid-Soedan"}
         ST{"Sao Tome en Principe"}
         SV{"Salvador"}
+        SX{"Sint Maarten"}
         SY{"Sirië"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
@@ -298,5 +301,5 @@ af{
         ZW{"Zimbabwe"}
         ZZ{"Onbekend gebied"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

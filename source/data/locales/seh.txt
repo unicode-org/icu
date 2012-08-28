@@ -29,7 +29,7 @@ seh{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.79"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -140,9 +140,6 @@ seh{
                 }
                 second{
                     dn{"Segundo"}
-                }
-                weekday{
-                    dn{"Ntsiku"}
                 }
                 year{
                     dn{"Chaka"}

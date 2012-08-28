@@ -11,11 +11,12 @@
  */
 lt{
     AuxExemplarCharacters{
-        "[{i\u0307\u0301} {i\u0307\u0300} {i\u0307\u0303} {i\u0307} {į\u0307} {j"
-        "\u0307} q w x]"
+        "[á à ã {ą\u0301} {ą\u0303} é è ẽ {ę\u0301} {ę\u0303} {ė\u0301} {ė\u0303} {i"
+        "\u0307\u0301}í {i\u0307\u0300}ì {i\u0307\u0303}ĩ {į\u0301}{į\u0307\u0301} {į"
+        "\u0303}{į\u0307\u0303} {j\u0303}{j\u0307\u0303} {l\u0303} {m\u0303} ñ ó ò õ "
+        "q {r\u0303} ú ù ũ {ų\u0301} {ų\u0303} {ū\u0301} {ū\u0303} w x]"
     }
     ExemplarCharacters{"[a ą b c č d e ę ė f g h i į y j k l m n o p r s š t u ų ū v z ž]"}
-    ExemplarCharactersCurrency{"[a ą b c č d e ę ė f g h i į y j k l m n o p r s š t u ų ū v z ž]"}
     ExemplarCharactersIndex{"[A Ą B C Č D E Ę Ė F G H I Į Y J K L M N O P R S Š T U Ų Ū V Z Ž]"}
     LocaleScript{
         "Latn",
@@ -26,64 +27,152 @@ lt{
             patterns{
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
-                percentFormat{"#,##0 %"}
+                percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
+            }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        few{"0 tūkstančiai"}
+                        one{"0 tūkstantis"}
+                        other{"0 tūkstančių"}
+                    }
+                    10000{
+                        few{"00 tūkstančiai"}
+                        one{"00 tūkstantis"}
+                        other{"00 tūkstančių"}
+                    }
+                    100000{
+                        few{"000 tūkstančiai"}
+                        one{"000 tūkstantis"}
+                        other{"000 tūkstančių"}
+                    }
+                    1000000{
+                        few{"0 milijonai"}
+                        one{"0 milijonas"}
+                        other{"0 milijonų"}
+                    }
+                    10000000{
+                        few{"00 milijonai"}
+                        one{"00 milijonas"}
+                        other{"00 milijonų"}
+                    }
+                    100000000{
+                        few{"000 milijonai"}
+                        one{"000 milijonas"}
+                        other{"000 milijonų"}
+                    }
+                    1000000000{
+                        few{"0 milijardai"}
+                        one{"0 milijardas"}
+                        other{"0 milijardų"}
+                    }
+                    10000000000{
+                        few{"00 milijardai"}
+                        one{"00 milijardas"}
+                        other{"00 milijardų"}
+                    }
+                    100000000000{
+                        few{"000 milijardai"}
+                        one{"000 milijardas"}
+                        other{"000 milijardų"}
+                    }
+                    1000000000000{
+                        few{"0 trilijonai"}
+                        one{"0 trilijonas"}
+                        other{"0 trilijonų"}
+                    }
+                    10000000000000{
+                        few{"00 trilijonai"}
+                        one{"00 trilijonas"}
+                        other{"00 trilijonų"}
+                    }
+                    100000000000000{
+                        few{"000 trilijonai"}
+                        one{"000 trilijonas"}
+                        other{"000 trilijonų"}
+                    }
+                }
             }
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0.0 K"}
+                        few{"0 K"}
+                        one{"0 K"}
+                        other{"0 K"}
                     }
                     10000{
+                        few{"00 K"}
+                        one{"00 K"}
                         other{"00 K"}
                     }
                     100000{
+                        few{"000 K"}
+                        one{"000 K"}
                         other{"000 K"}
                     }
                     1000000{
-                        other{"0.0 M"}
+                        few{"0 M"}
+                        one{"0 M"}
+                        other{"0 M"}
                     }
                     10000000{
+                        few{"00 M"}
+                        one{"00 M"}
                         other{"00 M"}
                     }
                     100000000{
+                        few{"000 M"}
+                        one{"000 M"}
                         other{"000 M"}
                     }
                     1000000000{
-                        other{"0.0 G"}
+                        few{"0 G"}
+                        one{"0 G"}
+                        other{"0 G"}
                     }
                     10000000000{
+                        few{"00 G"}
+                        one{"00 G"}
                         other{"00 G"}
                     }
                     100000000000{
+                        few{"000 G"}
+                        one{"000 G"}
                         other{"000 G"}
                     }
                     1000000000000{
-                        other{"0.0 T"}
+                        few{"0 T"}
+                        one{"0 T"}
+                        other{"0 T"}
                     }
                     10000000000000{
+                        few{"00 T"}
+                        one{"00 T"}
                         other{"00 T"}
                     }
                     100000000000000{
+                        few{"000 T"}
+                        one{"000 T"}
                         other{"000 T"}
                     }
                 }
             }
             symbols{
-                decimal{"."}
-                exponential{"×10^"}
-                group{","}
+                decimal{","}
+                exponential{"E"}
+                group{" "}
                 infinity{"∞"}
                 list{";"}
-                minusSign{"−"}
-                nan{"¤¤¤"}
+                minusSign{"–"}
+                nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
                 plusSign{"+"}
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -100,6 +189,144 @@ lt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                ms{"mm:ss"}
+            }
+        }
+        chinese{
+            monthNames{
+                format{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                    wide{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                    }
+                }
+            }
+        }
+        coptic{
+            monthNames{
+                format{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "8",
+                        "9",
+                        "10",
+                        "11",
+                        "12",
+                        "13",
+                    }
+                }
             }
         }
         gregorian{
@@ -123,32 +350,45 @@ lt{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"E, d"}
+                H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
+                M{"LL"}
                 MEd{"M-d, E"}
+                MMM{"LLL"}
                 MMMEd{"MMM d, E"}
+                MMMd{"MMM d"}
                 MMMdd{"MMM-dd"}
                 MMdd{"MM.dd"}
+                Md{"MM-d"}
+                d{"d"}
                 h{"hh a"}
                 hm{"hh:mm a"}
                 hms{"hh:mm:ss a"}
-                yMEd{"y-M-d E"}
-                yMMMEd{"y MMM d, E"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"y-MM"}
+                yMEd{"E, y-MM-d"}
+                yMMM{"MMM, y"}
+                yMMMEd{"E, MMM d, y"}
                 yMMMd{"y MMM d"}
                 yMd{"y-M-d"}
+                yQ{"y Q"}
+                yQQQ{"y QQQ"}
                 yyQ{"Q yy"}
                 yyyyMM{"yyyy.MM"}
             }
             dayNames{
                 format{
                     abbreviated{
-                        "Sk",
-                        "Pr",
-                        "An",
-                        "Tr",
-                        "Kt",
-                        "Pn",
-                        "Št",
+                        "sk",
+                        "pr",
+                        "an",
+                        "tr",
+                        "kt",
+                        "pn",
+                        "št",
                     }
                     narrow{
                         "S",
@@ -158,6 +398,15 @@ lt{
                         "K",
                         "P",
                         "Š",
+                    }
+                    short{
+                        "Sk",
+                        "Pr",
+                        "An",
+                        "Tr",
+                        "Kt",
+                        "Pn",
+                        "Št",
                     }
                     wide{
                         "sekmadienis",
@@ -171,13 +420,13 @@ lt{
                 }
                 stand-alone{
                     abbreviated{
-                        "Sk",
-                        "Pr",
-                        "An",
-                        "Tr",
-                        "Kt",
-                        "Pn",
-                        "Št",
+                        "sk",
+                        "pr",
+                        "an",
+                        "tr",
+                        "kt",
+                        "pn",
+                        "št",
                     }
                     narrow{
                         "S",
@@ -187,6 +436,15 @@ lt{
                         "K",
                         "P",
                         "Š",
+                    }
+                    short{
+                        "Sk",
+                        "Pr",
+                        "An",
+                        "Tr",
+                        "Kt",
+                        "Pn",
+                        "Št",
                     }
                     wide{
                         "sekmadienis",
@@ -201,6 +459,10 @@ lt{
             }
             eras{
                 abbreviated{
+                    "pr. Kr.",
+                    "po Kr.",
+                }
+                narrow{
                     "pr. Kr.",
                     "po Kr.",
                 }
@@ -221,7 +483,7 @@ lt{
                     }
                 }
                 dayperiod{
-                    dn{"dienos metas"}
+                    dn{"iki pietų / po pietų"}
                 }
                 era{
                     dn{"era"}
@@ -235,9 +497,9 @@ lt{
                 month{
                     dn{"mėnuo"}
                     relative{
-                        "-1"{"Praėjusį mėnesį"}
-                        "0"{"Šį mėnesį"}
-                        "1"{"Kitą mėnesį"}
+                        "-1"{"praėjusį mėnesį"}
+                        "0"{"šį mėnesį"}
+                        "1"{"kitą mėnesį"}
                     }
                 }
                 second{
@@ -246,9 +508,9 @@ lt{
                 week{
                     dn{"savaitė"}
                     relative{
-                        "-1"{"Praėjusią savaitę"}
-                        "0"{"Šią savaitę"}
-                        "1"{"Kitą savaitę"}
+                        "-1"{"praėjusią savaitę"}
+                        "0"{"šią savaitę"}
+                        "1"{"kitą savaitę"}
                     }
                 }
                 weekday{
@@ -257,9 +519,9 @@ lt{
                 year{
                     dn{"metai"}
                     relative{
-                        "-1"{"Praėjusiais metais"}
-                        "0"{"Šiais metais"}
-                        "1"{"Kitais metais"}
+                        "-1"{"praėjusiais metais"}
+                        "0"{"šiais metais"}
+                        "1"{"kitais metais"}
                     }
                 }
                 zone{
@@ -312,10 +574,12 @@ lt{
                     h{"h–h a"}
                 }
                 hm{
+                    a{"hh:mm a–hh:mm a"}
                     h{"h:mm–h:mm a"}
                     m{"h:mm–h:mm a"}
                 }
                 hmv{
+                    a{"hh:mm a–hh:mm a v"}
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
                 }
@@ -346,6 +610,7 @@ lt{
                 }
                 yMMMM{
                     M{"yyyy-MM– MM"}
+                    y{"MMMM, y–MMMM, y"}
                 }
                 yMMMd{
                     M{"yyyy-MM-dd – MM-d"}
@@ -361,18 +626,18 @@ lt{
             monthNames{
                 format{
                     abbreviated{
-                        "Saus.",
-                        "Vas",
-                        "Kov.",
-                        "Bal.",
-                        "Geg.",
-                        "Bir.",
-                        "Liep.",
-                        "Rugp.",
-                        "Rugs.",
-                        "Spal.",
-                        "Lapkr.",
-                        "Gruod.",
+                        "saus.",
+                        "vas.",
+                        "kov.",
+                        "bal.",
+                        "geg.",
+                        "birž.",
+                        "liep.",
+                        "rugp.",
+                        "rugs.",
+                        "spal.",
+                        "lapkr.",
+                        "gruod.",
                     }
                     narrow{
                         "S",
@@ -389,7 +654,7 @@ lt{
                         "G",
                     }
                     wide{
-                        "sausio",
+                        "sausis",
                         "vasaris",
                         "kovas",
                         "balandis",
@@ -405,18 +670,18 @@ lt{
                 }
                 stand-alone{
                     abbreviated{
-                        "Saus.",
-                        "Vas.",
-                        "Kov.",
-                        "Bal.",
-                        "Geg.",
-                        "Bir.",
-                        "Liep.",
-                        "Rugp.",
-                        "Rugs.",
-                        "Spal.",
-                        "Lapkr.",
-                        "Gruod.",
+                        "saus.",
+                        "vas.",
+                        "kov.",
+                        "bal.",
+                        "geg.",
+                        "birž.",
+                        "liep.",
+                        "rugp.",
+                        "rugs.",
+                        "spal.",
+                        "lapkr.",
+                        "gruod.",
                     }
                     narrow{
                         "S",
@@ -433,18 +698,18 @@ lt{
                         "G",
                     }
                     wide{
-                        "Sausis",
-                        "Vasaris",
-                        "Kovas",
-                        "Balandis",
-                        "Gegužė",
-                        "Birželis",
-                        "Liepa",
-                        "Rugpjūtis",
-                        "Rugsėjis",
-                        "Spalis",
-                        "Lapkritis",
-                        "Gruodis",
+                        "sausis",
+                        "vasaris",
+                        "kovas",
+                        "balandis",
+                        "gegužė",
+                        "birželis",
+                        "liepa",
+                        "rugpjūtis",
+                        "rugsėjis",
+                        "spalis",
+                        "lapkritis",
+                        "gruodis",
                     }
                 }
             }
@@ -454,13 +719,13 @@ lt{
                         "I k.",
                         "II k.",
                         "III k.",
-                        "IV ketv.",
+                        "IV k.",
                     }
                     narrow{
-                        "I",
-                        "II",
+                        "1",
+                        "2",
                         "3",
-                        "IV",
+                        "4",
                     }
                     wide{
                         "I ketvirtis",
@@ -477,10 +742,10 @@ lt{
                         "IV ketv.",
                     }
                     narrow{
-                        "I",
-                        "II",
+                        "1",
+                        "2",
                         "3",
-                        "IV",
+                        "4",
                     }
                     wide{
                         "I ketvirtis",
@@ -493,8 +758,8 @@ lt{
         }
     }
     delimiters{
-        alternateQuotationEnd{"‘"}
-        alternateQuotationStart{"‚"}
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"„"}
         quotationEnd{"“"}
         quotationStart{"„"}
     }
@@ -502,12 +767,14 @@ lt{
         standard{
             2{"{0} ir {1}"}
             end{"{0} ir {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
-        UK{"Nemetrinė JK matavimo sistema"}
+        UK{"nemetrinė JK matavimo sistema"}
         US{"JAV"}
-        metric{"Metrinė"}
+        metric{"metrinė"}
     }
     units{
         day{
@@ -516,35 +783,27 @@ lt{
             other{"{0} dienų"}
         }
         day-future{
-            0{"po 0 dienų"}
-            1{"po 1 dienos"}
-            few{"po {0} dienos"}
-            one{"po {0} dieną"}
+            few{"po {0} dienų"}
+            one{"po {0} dienos"}
             other{"po {0} dienų"}
         }
         day-past{
-            0{"prieš 0 dienų"}
-            1{"prieš 1 dieną"}
-            few{"prieš {0} dienos"}
+            few{"prieš {0} dienas"}
             one{"prieš {0} dieną"}
             other{"prieš {0} dienų"}
         }
         hour{
             few{"{0} valandos"}
-            one{"{0} valandą"}
+            one{"{0} valanda"}
             other{"{0} valandų"}
         }
         hour-future{
-            0{"po 0 valandų"}
-            1{"po 1 valandos"}
-            few{"po {0} valandos"}
-            one{"po {0} valandą"}
+            few{"po {0} valandų"}
+            one{"po {0} valandos"}
             other{"po {0} valandų"}
         }
         hour-past{
-            0{"prieš 0 valandų"}
-            1{"prieš 1 valandą"}
-            few{"prieš {0} valandos"}
+            few{"prieš {0} valandas"}
             one{"prieš {0} valandą"}
             other{"prieš {0} valandų"}
         }
@@ -554,54 +813,42 @@ lt{
             other{"{0} minučių"}
         }
         minute-future{
-            0{"po 0 minučių"}
-            1{"po 1 minutės"}
-            few{"po {0} minutės"}
-            one{"po {0} minutę"}
+            few{"po {0} minučių"}
+            one{"po {0} minutės"}
             other{"po {0} minučių"}
         }
         minute-past{
-            0{"prieš 0 minučių"}
-            1{"prieš 1 minutę"}
-            few{"prieš {0} minutės"}
+            few{"prieš {0} minutes"}
             one{"prieš {0} minutę"}
             other{"prieš {0} minučių"}
         }
         month{
             few{"{0} mėnesiai"}
-            one{"{0} mėnesio"}
+            one{"{0} mėnuo"}
             other{"{0} mėnesių"}
         }
         month-future{
-            0{"po 0 mėnesių"}
-            1{"po 1 mėnesio"}
-            few{"po {0} mėnesį"}
+            few{"po {0} mėnesių"}
             one{"po {0} mėnesio"}
             other{"po {0} mėnesių"}
         }
         month-past{
-            0{"prieš 0 mėnesių"}
-            1{"prieš 1 mėnesį"}
-            few{"prieš {0} mėnesį"}
-            one{"prieš {0} mėnesio"}
+            few{"prieš {0} mėnesius"}
+            one{"prieš {0} mėnesį"}
             other{"prieš {0} mėnesių"}
         }
         second{
             few{"{0} sekundės"}
-            one{"{0} sekundę"}
+            one{"{0} sekundė"}
             other{"{0} sekundžių"}
         }
         second-future{
-            0{"po 0 sekundžių"}
-            1{"po 1 sekundės"}
-            few{"po {0} sekundės"}
-            one{"po {0} sekundę"}
+            few{"po {0} sekundžių"}
+            one{"po {0} sekundės"}
             other{"po {0} sekundžių"}
         }
         second-past{
-            0{"prieš 0 sekundžių"}
-            1{"prieš 1 sekundę"}
-            few{"prieš {0} sekundės"}
+            few{"prieš {0} sekundes"}
             one{"prieš {0} sekundę"}
             other{"prieš {0} sekundžių"}
         }
@@ -611,16 +858,12 @@ lt{
             other{"{0} savaičių"}
         }
         week-future{
-            0{"po 0 savaičių"}
-            1{"po 1 savaitės"}
-            few{"po {0} savaitės"}
-            one{"po {0} savaitę"}
+            few{"po {0} savaičių"}
+            one{"po {0} savaitės"}
             other{"po {0} savaičių"}
         }
         week-past{
-            0{"prieš 0 savaičių"}
-            1{"prieš 1 savaitę"}
-            few{"prieš {0} savaitės"}
+            few{"prieš {0} savaites"}
             one{"prieš {0} savaitę"}
             other{"prieš {0} savaičių"}
         }
@@ -630,16 +873,12 @@ lt{
             other{"{0} metų"}
         }
         year-future{
-            0{"po 0 metų"}
-            1{"po 1 metų"}
-            few{"po {0} metai"}
-            one{"po {0} metus"}
+            few{"po {0} metų"}
+            one{"po {0} metų"}
             other{"po {0} metų"}
         }
         year-past{
-            0{"prieš 0 metų"}
-            1{"prieš 1 metus"}
-            few{"prieš {0} metai"}
+            few{"prieš {0} metus"}
             one{"prieš {0} metus"}
             other{"prieš {0} metų"}
         }

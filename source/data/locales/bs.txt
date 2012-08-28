@@ -23,7 +23,7 @@ bs{
             }
         }
     }
-    Version{"2.0.64.72"}
+    Version{"2.0.75.99"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -311,6 +311,9 @@ bs{
     }
     unitsShort{
         year{
+            few{"{0} god"}
+            many{"{0} god"}
+            one{"{0} god"}
             other{"{0} god"}
         }
     }

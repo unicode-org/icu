@@ -7,13 +7,25 @@
 // *
 // ***************************************************************************
 fr_CA{
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     zoneStrings{
+        "Africa:Ndjamena"{
+            ec{"Ndjamena"}
+        }
+        "America:Barbados"{
+            ec{"Barbade (La)"}
+        }
         "America:Cayman"{
             ec{"Îles Caïmans"}
         }
         "America:Godthab"{
             ec{"Nuuk"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, Dakota du Nord"}
+        }
+        "America:Port_of_Spain"{
+            ec{"Port-d'Espagne"}
         }
         "America:St_Kitts"{
             ec{"Saint-Christophe-et-Niévès"}
@@ -76,6 +88,9 @@ fr_CA{
             sd{"HAP"}
             sg{"HP"}
             ss{"HNP"}
+        }
+        "meta:Indonesia_Eastern"{
+            ls{"heure de l’Est indonésien"}
         }
         "meta:Newfoundland"{
             sd{"HAT"}

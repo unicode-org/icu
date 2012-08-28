@@ -10,14 +10,8 @@
  *  ICU <specials> source: <path>/xml/main/nb.xml
  */
 nb{
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     zoneStrings{
-        "Africa:Abidjan"{
-            ec{"Abidjan"}
-        }
-        "Africa:Accra"{
-            ec{"Accra"}
-        }
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
         }
@@ -27,134 +21,23 @@ nb{
         "Africa:Asmera"{
             ec{"Asmara"}
         }
-        "Africa:Bangui"{
-            ec{"Bangui"}
-        }
-        "Africa:Banjul"{
-            ec{"Banjul"}
-        }
-        "Africa:Bissau"{
-            ec{"Bissau"}
-        }
-        "Africa:Blantyre"{
-            ec{"Blantyre"}
-        }
-        "Africa:Brazzaville"{
-            ec{"Brazzaville"}
-        }
-        "Africa:Bujumbura"{
-            ec{"Bujumbura"}
-        }
         "Africa:Cairo"{
             ec{"Kairo"}
-        }
-        "Africa:Casablanca"{
-            ec{"Casablanca"}
-        }
-        "Africa:Conakry"{
-            ec{"Conakry"}
-        }
-        "Africa:Dakar"{
-            ec{"Dakar"}
         }
         "Africa:Dar_es_Salaam"{
             ec{"Dar-es-Salaam"}
         }
-        "Africa:Djibouti"{
-            ec{"Djibouti"}
-        }
-        "Africa:Douala"{
-            ec{"Douala"}
-        }
         "Africa:El_Aaiun"{
             ec{"El Aaiún"}
-        }
-        "Africa:Freetown"{
-            ec{"Freetown"}
-        }
-        "Africa:Gaborone"{
-            ec{"Gaborone"}
-        }
-        "Africa:Harare"{
-            ec{"Harare"}
-        }
-        "Africa:Johannesburg"{
-            ec{"Johannesburg"}
-        }
-        "Africa:Kampala"{
-            ec{"Kampala"}
-        }
-        "Africa:Khartoum"{
-            ec{"Khartoum"}
-        }
-        "Africa:Kigali"{
-            ec{"Kigali"}
-        }
-        "Africa:Kinshasa"{
-            ec{"Kinshasa"}
-        }
-        "Africa:Lagos"{
-            ec{"Lagos"}
-        }
-        "Africa:Libreville"{
-            ec{"Libreville"}
         }
         "Africa:Lome"{
             ec{"Lomé"}
         }
-        "Africa:Luanda"{
-            ec{"Luanda"}
-        }
-        "Africa:Lubumbashi"{
-            ec{"Lubumbashi"}
-        }
-        "Africa:Lusaka"{
-            ec{"Lusaka"}
-        }
-        "Africa:Malabo"{
-            ec{"Malabo"}
-        }
-        "Africa:Maputo"{
-            ec{"Maputo"}
-        }
-        "Africa:Maseru"{
-            ec{"Maseru"}
-        }
-        "Africa:Mbabane"{
-            ec{"Mbabane"}
-        }
-        "Africa:Mogadishu"{
-            ec{"Mogadishu"}
-        }
-        "Africa:Monrovia"{
-            ec{"Monrovia"}
-        }
-        "Africa:Nairobi"{
-            ec{"Nairobi"}
-        }
         "Africa:Ndjamena"{
             ec{"N'Djamena"}
         }
-        "Africa:Nouakchott"{
-            ec{"Nouakchott"}
-        }
-        "Africa:Ouagadougou"{
-            ec{"Ouagadougou"}
-        }
-        "Africa:Porto-Novo"{
-            ec{"Porto Novo"}
-        }
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
-        }
-        "America:Adak"{
-            ec{"Adak"}
-        }
-        "America:Anchorage"{
-            ec{"Alaska"}
-        }
-        "America:Anguilla"{
-            ec{"Anguilla"}
         }
         "America:Araguaina"{
             ec{"Araguaína"}
@@ -165,44 +48,17 @@ nb{
         "America:Asuncion"{
             ec{"Asunción"}
         }
-        "America:Barbados"{
-            ec{"Barbados"}
-        }
         "America:Belem"{
             ec{"Belém"}
-        }
-        "America:Blanc-Sablon"{
-            ec{"Blanc-Sablon"}
-        }
-        "America:Boa_Vista"{
-            ec{"Boa Vista"}
         }
         "America:Bogota"{
             ec{"Bogotá"}
         }
-        "America:Boise"{
-            ec{"Boise"}
-        }
-        "America:Buenos_Aires"{
-            ec{"Buenos Aires"}
-        }
-        "America:Cambridge_Bay"{
-            ec{"Cambridge Bay"}
-        }
-        "America:Campo_Grande"{
-            ec{"Campo Grande"}
-        }
-        "America:Cancun"{
-            ec{"Cancun"}
-        }
-        "America:Cayenne"{
-            ec{"Cayenne"}
-        }
         "America:Cayman"{
             ec{"Caymanøyene"}
         }
-        "America:Chicago"{
-            ec{"Chicago"}
+        "America:Coral_Harbour"{
+            ec{"Atikokan"}
         }
         "America:Cordoba"{
             ec{"Córdoba"}
@@ -213,32 +69,35 @@ nb{
         "America:Curacao"{
             ec{"Curaçao"}
         }
-        "America:Danmarkshavn"{
-            ec{"Danmarkshavn"}
-        }
-        "America:Dawson"{
-            ec{"Dawson"}
-        }
-        "America:Denver"{
-            ec{"Denver"}
-        }
-        "America:Detroit"{
-            ec{"Detroit"}
-        }
-        "America:Dominica"{
-            ec{"Dominica"}
-        }
-        "America:Edmonton"{
-            ec{"Edmonton"}
-        }
-        "America:Eirunepe"{
-            ec{"Eirunepe"}
-        }
-        "America:El_Salvador"{
-            ec{"Salvador"}
-        }
         "America:Godthab"{
             ec{"Godthåb"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Knox, Indiana"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo, Indiana"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg, Indiana"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tell City, Indiana"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes, Indiana"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
+        }
+        "America:Lower_Princes"{
+            ec{"Lower Prince's Quarter"}
         }
         "America:Maceio"{
             ec{"Maceió"}
@@ -264,14 +123,11 @@ nb{
         "America:Sao_Paulo"{
             ec{"São Paulo"}
         }
-        "America:Shiprock"{
-            ec{"Shiprock"}
-        }
         "America:St_Barthelemy"{
-            ec{"Saint-Barthélemy"}
+            ec{"Saint Barthélemy"}
         }
         "America:St_Johns"{
-            ec{"St. Johns"}
+            ec{"St John's"}
         }
         "America:St_Kitts"{
             ec{"St. Kitts"}
@@ -288,32 +144,11 @@ nb{
         "America:Tortola"{
             ec{"Tórtola"}
         }
-        "America:Vancouver"{
-            ec{"Vancouver"}
-        }
-        "Antarctica:Davis"{
-            ec{"Davis"}
-        }
         "Antarctica:DumontDUrville"{
-            ec{"Dumont D'Urville"}
+            ec{"Dumont d’Urville"}
         }
         "Antarctica:South_Pole"{
-            ec{"Sydpolen"}
-        }
-        "Asia:Aden"{
-            ec{"Aden"}
-        }
-        "Asia:Almaty"{
-            ec{"Almaty"}
-        }
-        "Asia:Amman"{
-            ec{"Amman"}
-        }
-        "Asia:Anadyr"{
-            ec{"Anadyr"}
-        }
-        "Asia:Aqtau"{
-            ec{"Aqtau"}
+            ec{"Sørpolen"}
         }
         "Asia:Aqtobe"{
             ec{"Aqtöbe"}
@@ -324,15 +159,6 @@ nb{
         "Asia:Baghdad"{
             ec{"Bagdad"}
         }
-        "Asia:Bahrain"{
-            ec{"Bahrain"}
-        }
-        "Asia:Baku"{
-            ec{"Baku"}
-        }
-        "Asia:Beirut"{
-            ec{"Beirut"}
-        }
         "Asia:Bishkek"{
             ec{"Bisjkek"}
         }
@@ -342,17 +168,8 @@ nb{
         "Asia:Choibalsan"{
             ec{"Choybalsan"}
         }
-        "Asia:Colombo"{
-            ec{"Colombo"}
-        }
         "Asia:Damascus"{
             ec{"Damaskus"}
-        }
-        "Asia:Dili"{
-            ec{"Dili"}
-        }
-        "Asia:Dubai"{
-            ec{"Dubai"}
         }
         "Asia:Dushanbe"{
             ec{"Dusjanbe"}
@@ -429,41 +246,14 @@ nb{
         "Atlantic:St_Helena"{
             ec{"St. Helena"}
         }
-        "Australia:Adelaide"{
-            ec{"Adelaide"}
-        }
-        "Australia:Brisbane"{
-            ec{"Brisbane"}
-        }
-        "Australia:Broken_Hill"{
-            ec{"Broken Hill"}
-        }
-        "Australia:Currie"{
-            ec{"Currie"}
-        }
-        "Australia:Darwin"{
-            ec{"Darwin"}
-        }
         "Etc:Unknown"{
-            ec{"Ukjent"}
-        }
-        "Europe:Amsterdam"{
-            ec{"Amsterdam"}
-        }
-        "Europe:Andorra"{
-            ec{"Andorra"}
+            ec{"ukjent by"}
         }
         "Europe:Athens"{
             ec{"Athen"}
         }
         "Europe:Belgrade"{
             ec{"Beograd"}
-        }
-        "Europe:Berlin"{
-            ec{"Berlin"}
-        }
-        "Europe:Bratislava"{
-            ec{"Bratislava"}
         }
         "Europe:Brussels"{
             ec{"Brussel"}
@@ -475,7 +265,7 @@ nb{
             ec{"København"}
         }
         "Europe:Dublin"{
-            ec{"Dublin"}
+            ld{"irsk sommertid"}
         }
         "Europe:Helsinki"{
             ec{"Helsingfors"}
@@ -485,6 +275,9 @@ nb{
         }
         "Europe:Lisbon"{
             ec{"Lisboa"}
+        }
+        "Europe:London"{
+            ld{"britisk sommertid"}
         }
         "Europe:Luxembourg"{
             ec{"Luxemburg"}
@@ -519,12 +312,6 @@ nb{
         "Europe:Zurich"{
             ec{"Zürich"}
         }
-        "Indian:Antananarivo"{
-            ec{"Antananarivo"}
-        }
-        "Indian:Chagos"{
-            ec{"Chagos"}
-        }
         "Indian:Christmas"{
             ec{"Christmasøya"}
         }
@@ -540,26 +327,8 @@ nb{
         "Indian:Reunion"{
             ec{"Réunion"}
         }
-        "Pacific:Apia"{
-            ec{"Apia"}
-        }
-        "Pacific:Chatham"{
-            ec{"Chatham"}
-        }
         "Pacific:Easter"{
             ec{"Påskeøya"}
-        }
-        "Pacific:Efate"{
-            ec{"Efate"}
-        }
-        "Pacific:Enderbury"{
-            ec{"Enderbury"}
-        }
-        "Pacific:Fakaofo"{
-            ec{"Fakaofo"}
-        }
-        "Pacific:Funafuti"{
-            ec{"Funafuti"}
         }
         "Pacific:Galapagos"{
             ec{"Galápagos"}
@@ -569,6 +338,9 @@ nb{
         }
         "Pacific:Ponape"{
             ec{"Pohnpei"}
+        }
+        "Pacific:Truk"{
+            ec{"Chuuk"}
         }
         "meta:Acre"{
             ld{"Acre sommertid"}
@@ -675,9 +447,9 @@ nb{
             ls{"kinesisk standardtid"}
         }
         "meta:Choibalsan"{
-            ld{"Mongolsk (Tsjoibalsan) sommertid"}
-            lg{"Mongolsk (Tsjoibalsan) tid"}
-            ls{"Mongolsk (Tsjoibalsan) tid"}
+            ld{"sommertid for Tsjojbalsan"}
+            lg{"tidssone for Tsjojbalsan"}
+            ls{"normaltid for Tsjojbalsan"}
         }
         "meta:Europe_Central"{
             ld{"sentraleuropeisk sommertid"}
@@ -712,9 +484,9 @@ nb{
             ls{"Hong Kong-normaltid"}
         }
         "meta:Hovd"{
-            ld{"Mongolsk (Khovd) sommertid"}
-            lg{"Mongolsk (Khovd) tid"}
-            ls{"Mongolsk (Khovd) normaltid"}
+            ld{"sommertid for Khovd"}
+            lg{"tidssone for Khovd"}
+            ls{"normaltid for Khovd"}
         }
         "meta:India"{
             ls{"indisk standardtid"}
@@ -848,6 +620,7 @@ nb{
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Tidssone for {1} ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Tidssone for {0}"}
     }

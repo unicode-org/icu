@@ -9,7 +9,7 @@
 #
 :: NFC () ;
 :: Lower () ;
-eoai → eo\u032Faj ; # eg. leoaică → /leo\u032Fajkə/, not /le\u032Fo\u032Faikə/
+eoai → eo\u032Faj ;  # eg. leoaică → /leo\u032Fajkə/, not /le\u032Fo\u032Faikə/
 eai → e\u032Faj ;
 eau → e\u032Faw ;
 eoa → e\u032Fo\u032Fa ;

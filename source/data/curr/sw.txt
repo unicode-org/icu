@@ -40,7 +40,7 @@ sw{
             "Peso ya Ajentina",
         }
         AUD{
-            "AU$",
+            "A$",
             "dola ya Australia",
         }
         AWG{
@@ -277,7 +277,7 @@ sw{
         }
         ISK{
             "ISK",
-            "Króna ya Iceland",
+            "Krona ya Isilandi",
         }
         JMD{
             "JMD",
@@ -415,6 +415,10 @@ sw{
             "MZM",
             "metikali ya Msumbiji",
         }
+        MZN{
+            "MZN",
+            "Metikali ya Msumbiji",
+        }
         NAD{
             "NAD",
             "dola ya Namibia",
@@ -425,7 +429,7 @@ sw{
         }
         NIO{
             "NIO",
-            "Córdoba ya Nikaragua",
+            "Kodoba ya Nikaragua",
         }
         NOK{
             "NOK",
@@ -474,6 +478,10 @@ sw{
         QAR{
             "QAR",
             "Rial ya Katari",
+        }
+        RON{
+            "RON",
+            "Leu ya Romania",
         }
         RSD{
             "RSD",
@@ -530,6 +538,10 @@ sw{
         SRD{
             "SRD",
             "Dola ya Suriname",
+        }
+        SSP{
+            "SSP",
+            "Pauni ya Sudani Kusini",
         }
         STD{
             "STD",
@@ -652,5 +664,9 @@ sw{
             "dola ya Zimbabwe",
         }
     }
-    Version{"2.0.65.46"}
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+    }
+    Version{"2.0.75.94"}
 }

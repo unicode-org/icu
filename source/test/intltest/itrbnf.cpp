@@ -1396,7 +1396,7 @@ IntlTestRBNF::TestItalianSpellout()
             { "73", "settanta\\u00ADtr\\u00E9" },
             { "88", "ottant\\u00ADotto" },
             { "100", "cento" },
-            { "101", "cent\\u00ADuno" },
+            { "101", "cento\\u00ADuno" },
             { "103", "cento\\u00ADtr\\u00E9" },
             { "106", "cento\\u00ADsei" },
             { "108", "cent\\u00ADotto" },
@@ -1441,7 +1441,7 @@ IntlTestRBNF::TestPortugueseSpellout()
             { "108", "cento e oito" },
             { "127", "cento e vinte e sete" },
             { "181", "cento e oitenta e um" },
-            { "200", "duzcentos" },
+            { "200", "duzentos" },
             { "579", "quinhentos e setenta e nove" },
             { "1,000", "mil" },
             { "2,000", "dois mil" },
@@ -1449,7 +1449,7 @@ IntlTestRBNF::TestPortugueseSpellout()
             { "4,567", "quatro mil e quinhentos e sessenta e sete" },
             { "15,943", "quinze mil e novecentos e quarenta e tr\\u00EAs" },
             { "-36", "menos trinta e seis" },
-            { "234.567", "duzcentos e trinta e quatro v\\u00EDrgula cinco seis sete" },
+            { "234.567", "duzentos e trinta e quatro v\\u00EDrgula cinco seis sete" },
             { NULL, NULL}
         };
         
@@ -1563,11 +1563,11 @@ IntlTestRBNF::TestSwedishSpellout()
         doTest(formatter, testDataDefault, TRUE);
 
           static const char* testDataNeutrum[][2] = {
-              { "101", "ett\\u00adhundra\\u00aden" },
-              { "1,001", "ettusen en" },
-              { "1,101", "ettusen ett\\u00adhundra\\u00aden" },
-              { "10,001", "tio\\u00adtusen en" },
-              { "21,001", "tjugo\\u00aden\\u00adtusen en" },
+              { "101", "ett\\u00adhundra\\u00adett" },
+              { "1,001", "et\\u00adtusen ett" },
+              { "1,101", "et\\u00adtusen ett\\u00adhundra\\u00adett" },
+              { "10,001", "tio\\u00adtusen ett" },
+              { "21,001", "tjugo\\u00adet\\u00adtusen ett" },
               { NULL, NULL }
           };
   

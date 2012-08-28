@@ -20,7 +20,7 @@ ln{
             "Kwanza ya Angóla",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dolarɛ ya Ositali",
         }
         BHD{
@@ -232,5 +232,5 @@ ln{
             "Dolarɛ ya Zimbabwɛ",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

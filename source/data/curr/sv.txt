@@ -156,11 +156,11 @@ sv{
             "burundisk franc",
         }
         BMD{
-            "BMD",
+            "BM$",
             "Bermuda-dollar",
         }
         BND{
-            "BND",
+            "BN$",
             "Brunei-dollar",
         }
         BOB{
@@ -192,7 +192,7 @@ sv{
             "brasiliansk cruzeiro (1990-1993)",
         }
         BRL{
-            "R$",
+            "BR$",
             "brasiliansk real",
         }
         BRN{
@@ -208,7 +208,7 @@ sv{
             "brasiliansk cruzeiro (1942-1967)",
         }
         BSD{
-            "BSD",
+            "BS$",
             "Bahamas-dollar",
         }
         BTN{
@@ -232,11 +232,11 @@ sv{
             "vitrysk rubel",
         }
         BZD{
-            "BZD",
+            "BZ$",
             "belizisk dollar",
         }
         CAD{
-            "CA$",
+            "CAN$",
             "kanadensisk dollar",
         }
         CDF{
@@ -328,7 +328,7 @@ sv{
             "djiboutisk franc",
         }
         DKK{
-            "DKK",
+            "Dkr",
             "dansk krona",
         }
         DOP{
@@ -352,7 +352,7 @@ sv{
             "estnisk krona",
         }
         EGP{
-            "EGP",
+            "EG£",
             "egyptiskt pund",
         }
         ERN{
@@ -396,7 +396,7 @@ sv{
             "fransk franc",
         }
         GBP{
-            "£",
+            "GB£",
             "brittiskt pund sterling",
         }
         GEK{
@@ -452,7 +452,7 @@ sv{
             "Guinea-Bissau-peso",
         }
         GYD{
-            "GYD",
+            "GY$",
             "guyanansk dollar",
         }
         HKD{
@@ -516,7 +516,7 @@ sv{
             "isländsk gammal krona",
         }
         ISK{
-            "ISK",
+            "Ikr",
             "isländsk krona",
         }
         ITL{
@@ -524,7 +524,7 @@ sv{
             "italiensk lira",
         }
         JMD{
-            "JMD",
+            "JM$",
             "Jamaica-dollar",
         }
         JOD{
@@ -552,7 +552,7 @@ sv{
             "komorisk franc",
         }
         KPW{
-            "KPW",
+            "NK₩",
             "nordkoreansk won",
         }
         KRH{
@@ -564,7 +564,7 @@ sv{
             "sydkoreansk won (1945-1953)",
         }
         KRW{
-            "₩",
+            "SK₩",
             "sydkoreansk won",
         }
         KWD{
@@ -825,7 +825,7 @@ sv{
         }
         ROL{
             "ROL",
-            "gammal rumänsk leu",
+            "rumänsk leu (1952-2005)",
         }
         RON{
             "RON",
@@ -907,6 +907,10 @@ sv{
             "SRG",
             "surinamesisk gulden",
         }
+        SSP{
+            "SSP",
+            "sydsudanskt pund",
+        }
         STD{
             "STD",
             "São Tomé och Príncipe-dobra",
@@ -928,7 +932,7 @@ sv{
             "swaziländsk lilangeni",
         }
         THB{
-            "฿",
+            "TH฿",
             "thailändsk baht",
         }
         TJR{
@@ -972,7 +976,7 @@ sv{
             "Trinidad och Tobago-dollar",
         }
         TWD{
-            "NT$",
+            "TW$",
             "taiwanesisk ny dollar",
         }
         TZS{
@@ -1025,14 +1029,14 @@ sv{
         }
         VEB{
             "VEB",
-            "venezuelansk bolivar",
+            "venezuelansk bolivar (1871-2008)",
         }
         VEF{
             "VEF",
-            "venezuelansk bolivar fuerte",
+            "venezuelansk bolivar",
         }
         VND{
-            "₫",
+            "VN₫",
             "vietnamesisk dong",
         }
         VNN{
@@ -1222,7 +1226,7 @@ sv{
             other{"angolanska kwanza (1977-1990)"}
         }
         AON{
-            one{"angolansk kwanza (1990-1995)"}
+            one{"angolansk kwanza (1990-2000)"}
             other{"angolanska nya kwanza (1990-2000)"}
         }
         AOR{
@@ -1258,8 +1262,8 @@ sv{
             other{"australiska dollar"}
         }
         AWG{
-            one{"Aruba-gulden"}
-            other{"Aruba-gulden"}
+            one{"Aruba-florin"}
+            other{"Aruba-floriner"}
         }
         AZM{
             one{"azerbajdzjansk manat (1993-2006)"}
@@ -1267,6 +1271,7 @@ sv{
         }
         AZN{
             one{"azerbajdzjansk manat"}
+            other{"azerbajdzjansk manat"}
         }
         BAD{
             one{"bosnisk-hercegovinsk dinar"}
@@ -1318,6 +1323,7 @@ sv{
         }
         BHD{
             one{"Bahrain-dinar"}
+            other{"Bahrain-dinar"}
         }
         BIF{
             one{"burundisk franc"}
@@ -1401,6 +1407,7 @@ sv{
         }
         BZD{
             one{"belizisk dollar"}
+            other{"belizisk dollar"}
         }
         CAD{
             one{"kanadensisk dollar"}
@@ -1992,7 +1999,7 @@ sv{
         }
         ROL{
             one{"rumänsk leu (1952-2005)"}
-            other{"gamla rumänska leu"}
+            other{"rumänska leu (1952-2005)"}
         }
         RON{
             one{"rumänsk leu"}
@@ -2073,6 +2080,10 @@ sv{
         SRG{
             one{"Surinam-gulden"}
             other{"Surinam-gulden"}
+        }
+        SSP{
+            one{"sydsudanskt pund"}
+            other{"sydsudanska pund"}
         }
         STD{
             one{"São Tomé och Príncipe-dobra"}
@@ -2163,16 +2174,20 @@ sv{
             other{"ugandiska shilling"}
         }
         USD{
+            one{"US-dollar"}
             other{"US-dollar"}
         }
         USN{
+            one{"US-dollar (nästa dag)"}
             other{"US-dollar (nästa dag)"}
         }
         USS{
+            one{"US-dollar (samma dag)"}
             other{"US-dollar (samma dag)"}
         }
         UYI{
-            other{"uruguayanska peso en unidades indexadas"}
+            one{"uruguayansk peso en unidades indexadas"}
+            other{"uruguayanska pesos en unidades indexadas"}
         }
         UYP{
             one{"uruguayansk peso (1975-1993)"}
@@ -2187,12 +2202,12 @@ sv{
             other{"uzbekiska sum"}
         }
         VEB{
-            one{"venezuelansk bolivar"}
-            other{"venezuelanska bolivar"}
+            one{"venezuelansk bolivar (1871-2008)"}
+            other{"venezuelanska bolivar (1871-2008)"}
         }
         VEF{
-            one{"venezuelansk bolivar fuerte"}
-            other{"venezuelanska bolivar fuerte"}
+            one{"venezuelansk bolivar"}
+            other{"venezuelanska bolivar"}
         }
         VND{
             one{"vietnamesisk dong"}
@@ -2347,5 +2362,5 @@ sv{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

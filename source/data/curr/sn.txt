@@ -20,7 +20,7 @@ sn{
             "Kwanza ye Angola",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dora re Australia",
         }
         BHD{
@@ -232,5 +232,5 @@ sn{
             "Dora re Zimbabwe",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
 }

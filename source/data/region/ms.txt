@@ -29,7 +29,7 @@ ms{
         034{"Asia Selatan"}
         035{"Asia Tenggara"}
         039{"Eropah Selatan"}
-        053{"Australia dan New Zealand"}
+        053{"Australasia"}
         054{"Melanesia"}
         057{"Wilayah Mikronesia"}
         061{"Polinesia"}
@@ -72,6 +72,7 @@ ms{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"Caribbean Belanda"}
         BR{"Brazil"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -83,7 +84,7 @@ ms{
         CC{"Cocos [Keeling] Islands"}
         CD{"Congo - Kinshasa"}
         CF{"Republik Afrika Tengah"}
-        CG{"Congo"}
+        CG{"Congo - Brazzaville"}
         CH{"Switzerland"}
         CI{"Côte d’Ivoire"}
         CK{"Cook Islands"}
@@ -93,9 +94,9 @@ ms{
         CO{"Colombia"}
         CP{"Pulau Clipperton"}
         CR{"Kosta Rika"}
-        CS{"Serbia dan Montenegro"}
         CU{"Cuba"}
         CV{"Cape Verde"}
+        CW{"Curacao"}
         CX{"Christmas Island"}
         CY{"Kibris"}
         CZ{"Republik Czech"}
@@ -140,7 +141,7 @@ ms{
         GU{"Guam"}
         GW{"Guinea Bissau"}
         GY{"Guyana"}
-        HK{"Hong Kong S.A.R., China"}
+        HK{"Hong Kong SAR China"}
         HM{"Heard Island and McDonald Islands"}
         HN{"Honduras"}
         HR{"Croatia"}
@@ -192,7 +193,7 @@ ms{
         MH{"Kepulauan Marshall"}
         MK{"Macedonia"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar [Burma]"}
         MN{"Mongolia"}
         MO{"Macau SAR China"}
         MP{"Northern Mariana Islands"}
@@ -221,15 +222,15 @@ ms{
         OM{"Oman"}
         PA{"Panama"}
         PE{"Peru"}
-        PF{"French Polynesia"}
+        PF{"Polinesia Perancis"}
         PG{"Papua New Guinea"}
         PH{"Filipina"}
         PK{"Pakistan"}
         PL{"Poland"}
         PM{"Saint Pierre and Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Kepulauan Pitcairn"}
         PR{"Puerto Rico"}
-        PS{"Palestinian Territory"}
+        PS{"Wilayah Palestin"}
         PT{"Feringgi"}
         PW{"Palau"}
         PY{"Paraguay"}
@@ -255,8 +256,10 @@ ms{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
-        ST{"Sao Tome dan Principe"}
+        SS{"Sudan Selatan"}
+        ST{"São Tomé dan Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syria"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
@@ -282,7 +285,7 @@ ms{
         US{"Amerika Syarikat"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
-        VA{"Vatican"}
+        VA{"Kota Vatican"}
         VC{"Saint Vincent dan Grenadines"}
         VE{"Venezuela"}
         VG{"British Virgin Islands"}
@@ -298,5 +301,5 @@ ms{
         ZW{"Zimbabwe"}
         ZZ{"Wilayah Tidak Diketahui"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

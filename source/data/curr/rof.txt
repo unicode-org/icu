@@ -20,7 +20,7 @@ rof{
             "heleri sa Angola",
         }
         AUD{
-            "AU$",
+            "A$",
             "heleri sa Australia",
         }
         BHD{
@@ -228,5 +228,5 @@ rof{
             "heleri sa Zimbabwe",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.94"}
 }

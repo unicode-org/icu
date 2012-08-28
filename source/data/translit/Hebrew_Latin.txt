@@ -29,7 +29,7 @@ $letterAfter = [:M:]* [:L:] ;
 ל ↔ l ;
 מ ↔ m } $letterAfter;
 ם ↔ m ;
-נ ↔ n } $letterAfter;
+נ ↔ n  } $letterAfter;
 ן ↔ n ;
 ס ↔ s ;
 ע ↔ ʻ ;
@@ -37,7 +37,7 @@ $letterAfter = [:M:]* [:L:] ;
 ף ↔ p ;
 ק ↔ q ;
 ר ↔ r ;
-װ → | וו; # HEBREW LIGATURE YIDDISH DOUBLE VAV
+װ → |  וו; # HEBREW LIGATURE YIDDISH DOUBLE VAV
 ױ → | וי; # HEBREW LIGATURE YIDDISH VAV YOD
 ײ → | יי ; # HEBREW LIGATURE YIDDISH DOUBLE YOD
 \u05BC ↔ \u0307 ; # dagesh just goes to overdot for now
@@ -45,23 +45,23 @@ $letterAfter = [:M:]* [:L:] ;
 \u05C2 ↔ \u0302 ; # sin dot -→ s
 $above = [^[:ccc=0:][:ccc=230:]]*;
 ‎\u05B2‎ → à ;
-‎\u05B2‎ $1← a ($above) \u0300;
+‎\u05B2‎ $1← a ($above)  \u0300;
 ‎\u05B8‎ → á ;
-‎\u05B8‎ $1 ← a ($above) \u0301;
+‎\u05B8‎  $1 ← a ($above)  \u0301;
 ‎\u05B1‎ → è ;
-‎\u05B1‎ $1 ← e ($above) \u0300;
+‎\u05B1‎  $1 ← e ($above)  \u0300;
 ‎\u05B5‎ → é ;
-‎\u05B5‎ $1 ← e ($above) \u0301;
+‎\u05B5‎  $1 ← e ($above)   \u0301;
 ‎\u05B0‎ → e \u0306 ;
-‎\u05B0‎ $1 ← e ($above) \u0306;
+‎\u05B0‎  $1 ← e ($above)   \u0306;
 ‎\u05B9‎ → ò ;
-‎\u05B9‎ $1 ← o ($above) \u0300;
+‎\u05B9‎  $1 ← o ($above)   \u0300;
 \u05B4 ↔ i ;
 \u05BB ↔ u ;
 \u05B7 ↔ a ;
 \u05B6 ↔ e ;
 \u05B3 ↔ o ;
-\u05BF ↔ \u0304 ;
+\u05BF ↔   \u0304 ;
 ק ← c ;
 פ ← f } $letterAfter;
 ף ← f ;
@@ -70,4 +70,4 @@ $above = [^[:ccc=0:][:ccc=230:]]*;
 כס ← x ;
 :: (lower);
 :: nfc (nfd) ;
-:: ([[:Latin:] [:^ccc=0:] [ʻ-ʼ\u0300-\u0302\u0307\u030C\u0327\u0331\u0340-\u0341 \u0304 ]]);
+:: ([[:Latin:] [:^ccc=0:] [ʻ-ʼ\u0300-\u0302\u0307\u030C\u0327\u0331\u0340-\u0341    \u0304 ]]);

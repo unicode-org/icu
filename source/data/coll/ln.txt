@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/ln.xml
  */
 ln{
-    Version{"2.0.66.69"}
+    Version{"2.0.76.11"}
     collations{
         phonetic{
             Sequence{
@@ -26,11 +26,11 @@ ln{
                 "&S<sh<<<sH<<<Sh<<<SH"
                 "&T<ts<<<tS<<<Ts<<<TS"
             }
-            Version{"21.0"}
+            Version{"22.0"}
         }
         standard{
             Sequence{"&E<ɛ<<<Ɛ&O<<ɔ<<<Ɔ"}
-            Version{"21.0"}
+            Version{"22.0"}
         }
     }
 }

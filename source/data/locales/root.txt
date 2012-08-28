@@ -12,7 +12,6 @@
 root{
     AuxExemplarCharacters{"[]"}
     ExemplarCharacters{"[]"}
-    ExemplarCharactersCurrency{"[a b c č d e f g h i j k l ł m n o º p q r s t u v w x y z]"}
     ExemplarCharactersPunctuation{"[\- , ; \: ! ? . ( ) \[ \] \{ \}]"}
     LocaleScript{
         "Zyyy",
@@ -58,7 +57,7 @@ root{
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0.0K"}
+                        other{"0K"}
                     }
                     10000{
                         other{"00K"}
@@ -67,7 +66,7 @@ root{
                         other{"000K"}
                     }
                     1000000{
-                        other{"0.0M"}
+                        other{"0M"}
                     }
                     10000000{
                         other{"00M"}
@@ -76,7 +75,7 @@ root{
                         other{"000M"}
                     }
                     1000000000{
-                        other{"0.0G"}
+                        other{"0G"}
                     }
                     10000000000{
                         other{"00G"}
@@ -85,7 +84,7 @@ root{
                         other{"000G"}
                     }
                     1000000000000{
-                        other{"0.0T"}
+                        other{"0T"}
                     }
                     10000000000000{
                         other{"00T"}
@@ -114,7 +113,7 @@ root{
         297,
         210,
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.94"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -332,7 +331,12 @@ root{
                         wide:alias{"/LOCALE/calendar/chinese/cyclicNameSets/years/format/abbreviated"}
                     }
                 }
-                zodiacs:alias{"/LOCALE/calendar/chinese/cyclicNameSets/dayParts"}
+                zodiacs{
+                    format{
+                        narrow:alias{"/LOCALE/calendar/chinese/cyclicNameSets/zodiacs/format/abbreviated"}
+                        wide:alias{"/LOCALE/calendar/chinese/cyclicNameSets/zodiacs/format/abbreviated"}
+                    }
+                }
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             intervalFormats{
@@ -698,6 +702,7 @@ root{
                     abbreviated:alias{"/LOCALE/calendar/gregorian/dayNames/format/wide"}
                     default{"wide"}
                     narrow:alias{"/LOCALE/calendar/gregorian/dayNames/stand-alone/narrow"}
+                    short:alias{"/LOCALE/calendar/gregorian/dayNames/format/abbreviated"}
                     wide{
                         "1",
                         "2",
@@ -719,6 +724,7 @@ root{
                         "6",
                         "7",
                     }
+                    short:alias{"/LOCALE/calendar/gregorian/dayNames/format/short"}
                     wide:alias{"/LOCALE/calendar/gregorian/dayNames/format/wide"}
                 }
             }
@@ -773,21 +779,17 @@ root{
             intervalFormats{
                 H{
                     H{"HH–HH"}
-                    a{"HH–HH"}
                 }
                 Hm{
                     H{"HH:mm–HH:mm"}
-                    a{"HH:mm–HH:mm"}
                     m{"HH:mm–HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm–HH:mm v"}
-                    a{"HH:mm–HH:mm v"}
                     m{"HH:mm–HH:mm v"}
                 }
                 Hv{
                     H{"HH–HH v"}
-                    a{"HH–HH v"}
                 }
                 M{
                     M{"M–M"}
@@ -1349,11 +1351,11 @@ root{
                     "Kōkoku (1340-1346)",
                     "Shōhei (1346-1370)",
                     "Kentoku (1370-1372)",
-                    "Bunchũ (1372-1375)",
+                    "Bunchū (1372-1375)",
                     "Tenju (1375-1379)",
                     "Kōryaku (1379-1381)",
                     "Kōwa (1381-1384)",
-                    "Genchũ (1384-1392)",
+                    "Genchū (1384-1392)",
                     "Meitoku (1384-1387)",
                     "Kakei (1387-1389)",
                     "Kōō (1389-1390)",

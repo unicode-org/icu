@@ -11,16 +11,29 @@
  */
 gl{
     Keys{
-        calendar{"calendario"}
-        collation{"orde alfabética"}
-        currency{"moeda"}
+        calendar{"Calendario"}
+        colAlternate{"Ignorar clasificación de símbolos"}
+        colBackwards{"Clasificación de acentos invertida"}
+        colCaseFirst{"Orde de maiúsculas/minúsculas"}
+        colCaseLevel{"Clasificación que distingue entre maiúsculas e minúsculas"}
+        colHiraganaQuaternary{"Clasificación Kana"}
+        colNormalization{"Clasificación normalizada"}
+        colNumeric{"Clasificación numérica"}
+        colStrength{"Forza de clasificación"}
+        collation{"Orde de clasificación"}
+        currency{"Moeda"}
         numbers{"Números"}
+        timezone{"Fuso horario"}
+        va{"Variante local"}
+        variableTop{"Clasificar como símbolos"}
         x{"Uso privado"}
     }
     Languages{
         ab{"abkhazo"}
+        ach{"Acoli"}
         af{"afrikaans"}
         afa{"lingua afro-asiática"}
+        ak{"Akán"}
         alg{"lingua algonquina"}
         am{"amárico"}
         an{"aragonés"}
@@ -35,16 +48,20 @@ gl{
         az{"azerbaiano"}
         bat{"lingua báltica"}
         be{"bielorruso"}
+        bem{"Bemba"}
         bg{"búlgaro"}
-        bh{"bihariano"}
+        bh{"Bihariano"}
         bn{"bengalí"}
         bo{"tibetano"}
-        br{"bretón"}
+        br{"Bretón"}
         bs{"bosnio"}
         ca{"catalán"}
         cai{"lingua india centroamericana"}
         cau{"lingua caucásica"}
         cel{"lingua céltica"}
+        chr{"Cheroqui"}
+        ckb{"Kurdo soraní"}
+        co{"Corso"}
         cs{"checo"}
         cu{"eslavo eclesiástico"}
         cy{"galés"}
@@ -54,6 +71,7 @@ gl{
         de_CH{"alto alemán suízo"}
         dv{"divehi"}
         dz{"dzongkha"}
+        ee{"Ewé"}
         efi{"ibibio"}
         egy{"exipcio antigo"}
         el{"grego"}
@@ -79,6 +97,7 @@ gl{
         fr_CH{"francés suízo"}
         fy{"frisón"}
         ga{"irlandés"}
+        gaa{"Ga"}
         gd{"gaélico escocés"}
         gem{"lingua xermánica"}
         gl{"galego"}
@@ -94,7 +113,7 @@ gl{
         ht{"haitiano"}
         hu{"húngaro"}
         hy{"armenio"}
-        ia{"interlingua"}
+        ia{"Interlingua"}
         id{"indonesio"}
         ig{"ibo"}
         inc{"lingua índica"}
@@ -104,6 +123,7 @@ gl{
         ja{"xaponés"}
         jv{"xavanés"}
         ka{"xeorxiano"}
+        kg{"Congolés"}
         kk{"casaco"}
         km{"cambodiano"}
         kn{"kannada"}
@@ -113,10 +133,14 @@ gl{
         ky{"kyrgiz"}
         la{"latín"}
         lb{"luxemburgués"}
+        lg{"Ganda"}
         ln{"lingala"}
         lo{"laotiano"}
+        loz{"Lozi"}
         lt{"lituano"}
+        lua{"Luba-Lulua"}
         lv{"letón"}
+        mfe{"Crioulo mauritano"}
         mg{"malgaxe"}
         mi{"maorí"}
         mis{"lingua miscelánea"}
@@ -136,9 +160,12 @@ gl{
         nl_BE{"flamenco"}
         nn{"noruegués nynorsk"}
         no{"noruegués"}
+        nso{"Sesotho sa leboa"}
         nub{"lingua nubia"}
         ny{"chewa"}
-        oc{"occitano"}
+        nyn{"Nyankole"}
+        oc{"Occitano"}
+        om{"Oromo"}
         or{"oriya"}
         os{"osetio"}
         pa{"punjabi"}
@@ -147,7 +174,7 @@ gl{
         ps{"paxtún"}
         pt{"portugués"}
         pt_BR{"portugués brasileiro"}
-        pt_PT{"portugués ibérico"}
+        pt_PT{"Portugués europeo"}
         qu{"quechua"}
         rm{"romanche"}
         rn{"rundi"}
@@ -186,13 +213,14 @@ gl{
         ti{"tigriña"}
         tk{"turcomano"}
         tl{"tagalo"}
-        tlh{"clingon"}
+        tlh{"Clingon"}
         tn{"tswana"}
-        to{"tongano"}
+        to{"tonganés"}
         tpi{"tok pisin"}
         tr{"turco"}
         ts{"xitsonga"}
         tt{"tártaro"}
+        tum{"Tumbuka"}
         tut{"lingua altaica"}
         ty{"tahitiano"}
         ug{"uigur"}
@@ -204,7 +232,7 @@ gl{
         vi{"vietnamita"}
         wo{"wólof"}
         xh{"xhosa"}
-        yi{"yiddish"}
+        yi{"Yiddish"}
         yo{"ioruba"}
         zh{"chinés"}
         zh_Hans{"chinés simplificado"}
@@ -253,9 +281,9 @@ gl{
         Thai{"Tailandés"}
         Tibt{"Tibetano"}
         Zsym{"Símbolos"}
-        Zxxx{"non escrita"}
+        Zxxx{"Non escrita"}
         Zyyy{"Común"}
-        Zzzz{"escritura descoñecida"}
+        Zzzz{"Escritura descoñecida"}
     }
     Scripts%stand-alone{
         Hans{"Han simplificado"}
@@ -268,7 +296,7 @@ gl{
             coptic{"Calendario cóptico"}
             ethiopic{"Calendario etíope"}
             ethiopic-amete-alem{"Calendario Amete Alem etíope"}
-            gregorian{"calendario gregoriano"}
+            gregorian{"Calendario gregoriano"}
             hebrew{"calendario hebreo"}
             indian{"Calendario nacional indio"}
             islamic{"calendario islámico"}
@@ -283,9 +311,11 @@ gl{
             ducet{"Criterio de ordenación Unicode predeterminado"}
             gb2312han{"orde chinesa simplificada - GB2312"}
             phonebook{"orde da guía telefónica"}
+            phonetic{"Orde de clasificación fonética"}
             pinyin{"orde pinyin"}
             reformed{"Criterio de ordenación reformado"}
             search{"Busca de uso xeral"}
+            searchjl{"Clasificar por consonante inicial hangul"}
             stroke{"orde polo número de trazos"}
             traditional{"orde tradicional"}
             unihan{"Criterio de ordenación radical-trazo"}
@@ -298,6 +328,7 @@ gl{
             beng{"Díxitos bengalís"}
             deva{"Díxitos devanagari"}
             ethi{"Números etíopes"}
+            finance{"Números financeiros"}
             fullwide{"Díxitos de ancho completo"}
             geor{"Números xeorxianos"}
             grek{"Números gregos"}
@@ -319,16 +350,20 @@ gl{
             mlym{"Díxitos malabares"}
             mong{"Díxitos mongoles"}
             mymr{"Díxitos birmanos"}
+            native{"Díxitos orixinais"}
             orya{"Díxitos oriya"}
             roman{"Números romanos"}
             romanlow{"Números romanos en minúsculas"}
             taml{"Números támil"}
+            tamldec{"Díxitos do támil"}
             telu{"Díxitos do telugú"}
             thai{"Díxitos tailandeses"}
             tibt{"Díxitos tibetanos"}
+            traditional{"Numeros tradicionais"}
+            vaii{"Díxitos Vai"}
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}

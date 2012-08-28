@@ -20,7 +20,7 @@ lg{
             "Kwanza ey'Angola",
         }
         AUD{
-            "AU$",
+            "A$",
             "Doola ey'Awusiturelya",
         }
         BHD{
@@ -232,5 +232,5 @@ lg{
             "Doola ey'eZimbabwe",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

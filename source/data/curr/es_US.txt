@@ -17,5 +17,5 @@ es_US{
             "dólar estadounidense",
         }
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.74.64"}
 }

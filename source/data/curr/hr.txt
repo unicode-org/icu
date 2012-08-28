@@ -72,7 +72,7 @@ hr{
             "austrijski šiling",
         }
         AUD{
-            "AU$",
+            "A$",
             "australski dolar",
         }
         AWG{
@@ -164,7 +164,7 @@ hr{
             "brazilski cruzeiro (1990.-1993.)",
         }
         BRL{
-            "R$",
+            "BRL",
             "brazilski real",
         }
         BRN{
@@ -204,7 +204,7 @@ hr{
             "belizeanski dolar",
         }
         CAD{
-            "CA$",
+            "CAD",
             "kanadski dolar",
         }
         CDF{
@@ -433,7 +433,7 @@ hr{
         }
         HRK{
             "kn",
-            "kuna",
+            "hrvatska kuna",
         }
         HTG{
             "HTG",
@@ -464,7 +464,7 @@ hr{
             "novi izraelski šekel",
         }
         INR{
-            "₹",
+            "INR",
             "indijska rupija",
         }
         IQD{
@@ -652,7 +652,7 @@ hr{
             "malavijska kvača",
         }
         MXN{
-            "MX$",
+            "MXN",
             "meksički pezo",
         }
         MXP{
@@ -677,7 +677,7 @@ hr{
         }
         MZN{
             "MZN",
-            "mozambijski metikal",
+            "mozambički metikal",
         }
         NAD{
             "NAD",
@@ -773,7 +773,7 @@ hr{
         }
         RON{
             "RON",
-            "rumunjski lev",
+            "rumunjski leu",
         }
         RSD{
             "RSD",
@@ -851,6 +851,10 @@ hr{
             "SRG",
             "surinamski gulden",
         }
+        SSP{
+            "SSP",
+            "južnosudanska funta",
+        }
         STD{
             "STD",
             "dobra Svetog Tome i Principa",
@@ -872,7 +876,7 @@ hr{
             "svazi lilangeni",
         }
         THB{
-            "฿",
+            "THB",
             "tajlandski bat",
         }
         TJR{
@@ -1065,7 +1069,7 @@ hr{
         }
         XXX{
             "XXX",
-            "nepoznata ili nevažeća valuta",
+            "nepoznata valuta",
         }
         YDD{
             "YDD",
@@ -1122,12 +1126,15 @@ hr{
     }
     CurrencyPlurals{
         ADP{
+            few{"andorske pezete"}
             many{"andorskih pezeta"}
+            one{"andorska pezeta"}
             other{"andorskih pezeta"}
         }
         AED{
             few{"UAE dirhama"}
             many{"UAE dirhama"}
+            one{"UAE diram"}
             other{"UAE dirhama"}
         }
         AFA{
@@ -1235,6 +1242,7 @@ hr{
         BAD{
             few{"bosansko-hercegovačka dinara"}
             many{"bosansko-hercegovačkih dinara"}
+            one{"bosansko-hercegovački dinar"}
             other{"bosansko-hercegovačkih dinara"}
         }
         BAM{
@@ -1366,6 +1374,7 @@ hr{
         BSD{
             few{"bahamska dolara"}
             many{"bahamskih dolara"}
+            one{"bahamski dolar"}
             other{"bahamskih dolara"}
         }
         BTN{
@@ -1741,10 +1750,10 @@ hr{
             other{"hrvatskih dinara"}
         }
         HRK{
-            few{"kune"}
-            many{"kuna"}
-            one{"kuna"}
-            other{"kuna"}
+            few{"hrvatske kune"}
+            many{"hrvatskih kuna"}
+            one{"hrvatska kuna"}
+            other{"hrvatskih kuna"}
         }
         HTG{
             few{"haićanska gourda"}
@@ -1875,6 +1884,7 @@ hr{
         KRW{
             few{"južnokorejska wona"}
             many{"južnokorejskih wona"}
+            one{"južnokorejski won"}
             other{"južnokorejskih wona"}
         }
         KWD{
@@ -2369,6 +2379,12 @@ hr{
             one{"surinamski gulden"}
             other{"surinamskih guldena"}
         }
+        SSP{
+            few{"južnosudanske funte"}
+            many{"južnosudanskih funti"}
+            one{"južnosudanska funta"}
+            other{"južnosudanskih funti"}
+        }
         STD{
             few{"dobra Svetog Tome i Principa"}
             many{"dobra Svetog Tome i Principa"}
@@ -2688,10 +2704,10 @@ hr{
             other{"ispitnih kodova valute"}
         }
         XXX{
-            few{"nepoznate ili nevažeće valute"}
-            many{"nepoznatih ili nevažećih valuta"}
-            one{"nepoznata ili nevažeća valuta"}
-            other{"nevažećih ili nepoznatih valuta"}
+            few{"nepoznata valuta"}
+            many{"nepoznata valuta"}
+            one{"nepoznata valuta"}
+            other{"nepoznata valuta"}
         }
         YDD{
             few{"jemenska dinara"}
@@ -2778,5 +2794,5 @@ hr{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

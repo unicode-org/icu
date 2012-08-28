@@ -93,7 +93,6 @@ ee{
         CO{"Kolombia nutome"}
         CP{"Klipaton ƒudomekpo nutome"}
         CR{"Kosta Rika nutome"}
-        CS{"Serbia kple Montenegro nutome"}
         CU{"Kuba nutome"}
         CV{"Kape Verde nutome"}
         CX{"Kristmas ƒudomekpo nutome"}
@@ -297,5 +296,5 @@ ee{
         ZW{"Zimbabwe nutome"}
         ZZ{"nutome manya"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

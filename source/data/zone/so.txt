@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/so.xml
  */
 so{
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
     zoneStrings{
         "Etc:Unknown"{
             ec{"Far aan la aqoon amase aan saxnayn"}

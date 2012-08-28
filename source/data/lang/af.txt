@@ -12,13 +12,25 @@
 af{
     Keys{
         calendar{"Kalender"}
-        collation{"Insortering"}
+        colAlternate{"Ignoreer simboolsortering"}
+        colBackwards{"Omgekeerde aksentsortering"}
+        colCaseFirst{"Hoofletters/kleinletters-sortering"}
+        colCaseLevel{"Kassensitiewe sortering"}
+        colHiraganaQuaternary{"Kana-sortering"}
+        colNormalization{"Genormaliseerde sortering"}
+        colNumeric{"Numeriese sortering"}
+        colStrength{"Sorteringssterkte"}
+        collation{"Sorteervolgorde"}
         currency{"Geldeenheid"}
         numbers{"Nommers"}
+        timezone{"Tydsone"}
+        va{"Lokaalvariant"}
+        variableTop{"Sorteer as simbole"}
         x{"Privaat gebruik"}
     }
     Languages{
         ab{"Abkasies"}
+        ach{"Akoli"}
         af{"Afrikaans"}
         afa{"Ander Afro-Asiaties"}
         ak{"Akan"}
@@ -30,12 +42,18 @@ af{
         ay{"Aymara"}
         az{"Azerbeidjaans"}
         be{"Wit-Russies"}
+        bem{"Bemba"}
         bg{"Bulgaars"}
+        bh{"Bihari"}
         bn{"Bengaals"}
         bo{"Tibettaans"}
+        br{"Bretons"}
         bs{"Bosnies"}
         ca{"Katalaans"}
         cel{"Keltiese taal"}
+        chr{"Cherokees"}
+        ckb{"Sorani Koerdies"}
+        co{"Korsikaans"}
         cs{"Tsjeggies"}
         cy{"Wallies"}
         da{"Deens"}
@@ -44,6 +62,7 @@ af{
         de_CH{"Switserse hoog-Duits"}
         dv{"Divehi"}
         dz{"Dzongkha"}
+        ee{"Ewe"}
         efi{"Efik"}
         egy{"Antieke Egipties"}
         el{"Grieks"}
@@ -55,7 +74,7 @@ af{
         eo{"Esperanto"}
         es{"Spaans"}
         es_419{"Latyns-Amerikaanse Spaans"}
-        es_ES{"Iberiese Spaans"}
+        es_ES{"Europese Spaans"}
         et{"Estnies"}
         eu{"Baskies"}
         fa{"Persies"}
@@ -68,6 +87,7 @@ af{
         fr_CH{"Switserse Frans"}
         fy{"Wes-Fries"}
         ga{"Iers"}
+        gaa{"Gaa"}
         gd{"Skotse Gallies"}
         gem{"Germaanse taal"}
         gl{"Galisies"}
@@ -84,6 +104,7 @@ af{
         ht{"Haïtiaans"}
         hu{"Hongaars"}
         hy{"Armeens"}
+        ia{"Interlingua"}
         id{"Indonesies"}
         ig{"Igbo"}
         ine{"Indo-Europese taal"}
@@ -92,6 +113,7 @@ af{
         ja{"Japannees"}
         jv{"Javaans"}
         ka{"Georgies"}
+        kg{"Kongolees"}
         kk{"Kazak"}
         km{"Khmer"}
         kn{"Kannada"}
@@ -101,10 +123,14 @@ af{
         ky{"Kirgisies"}
         la{"Latyn"}
         lb{"Luxemburgs"}
+        lg{"Ganda"}
         ln{"Lingaals"}
         lo{"Lao"}
+        loz{"Lozi"}
         lt{"Litaus"}
+        lua{"Luba-Lulua"}
         lv{"Letties"}
+        mfe{"Morisjen"}
         mg{"Malgassies"}
         mi{"Maori"}
         mk{"Masedonies"}
@@ -124,6 +150,9 @@ af{
         nr{"Suid-Ndebele"}
         nso{"Noord-Sotho"}
         ny{"Nyanja"}
+        nyn{"Nyankole"}
+        oc{"Oksitaans"}
+        om{"Oromo"}
         or{"Oriya"}
         os{"Osseties"}
         pa{"Pandjabi"}
@@ -131,7 +160,7 @@ af{
         ps{"Pasjto"}
         pt{"Portugees"}
         pt_BR{"Brasiliaanse Portugees"}
-        pt_PT{"Iberiese Portugees"}
+        pt_PT{"Europese Portugees"}
         qu{"Quechua"}
         rm{"Reto-Romaans"}
         rn{"Rundi"}
@@ -163,12 +192,14 @@ af{
         th{"Thais"}
         ti{"Tigrinya"}
         tk{"Turkmeens"}
+        tlh{"Klingon"}
         tn{"Tswana"}
-        to{"Tonga"}
+        to{"Tongaans"}
         tpi{"Tok Pisin"}
         tr{"Turks"}
         ts{"Tsonga"}
         tt{"Tataars"}
+        tum{"Toemboeka"}
         ty{"Tahities"}
         ug{"Uighur"}
         uk{"Oekraïens"}
@@ -179,6 +210,7 @@ af{
         vi{"Viëtnamees"}
         wo{"Wolof"}
         xh{"Xhosa"}
+        yi{"Jiddisj"}
         yo{"Yoruba"}
         zh{"Sjinees"}
         zh_Hans{"Vereenvoudigde Chinees"}
@@ -256,9 +288,11 @@ af{
             ducet{"Verstek Unicode-sorteervolgorde"}
             gb2312han{"Vereenvoudigde Chinese sorteervolgorde - GB2312"}
             phonebook{"Foonboek-sorteervolgorde"}
+            phonetic{"Fonetiese sorteerorde"}
             pinyin{"Pinyin-sorteervolgorde"}
             reformed{"Gereformeerde sorteervolgorde"}
             search{"Algemenedoel-soektog"}
+            searchjl{"Soek volgens Hangul-beginkonsonant"}
             stroke{"Slag-sorteervolgorde"}
             traditional{"Tradisionele sorteervolgorde"}
             unihan{"Radikale-slag-sorteervolgorde"}
@@ -271,6 +305,7 @@ af{
             beng{"Bengaalse syfers"}
             deva{"Devanagari syfers"}
             ethi{"Ethiopiese syfers"}
+            finance{"Finansiële syfers"}
             fullwide{"Vollewydte-syfers"}
             geor{"Georgiese syfers"}
             grek{"Griekse syfers"}
@@ -292,6 +327,7 @@ af{
             mlym{"Malabaarse syfers"}
             mong{"Mongoliese syfers"}
             mymr{"Mianmar-syfers"}
+            native{"Inheemse syfers"}
             orya{"Oriya-syfers"}
             roman{"Romeinse syfers"}
             romanlow{"Romeinse kleinletter-syfers"}
@@ -299,15 +335,18 @@ af{
             telu{"Telugu-syfers"}
             thai{"Thaise syfers"}
             tibt{"Tibettaanse syfers"}
+            traditional{"Tradisionele syfers"}
+            vaii{"Vai-syfers"}
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Skrif: {0}"}
         territory{"Omgewing: {0}"}
     }
     localeDisplayPattern{
+        pattern{"{0} ({1})"}
         separator{","}
     }
 }

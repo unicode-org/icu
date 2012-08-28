@@ -56,7 +56,6 @@ kam{
         CN{"Kyaina"}
         CO{"Kolombia"}
         CR{"Kostarika"}
-        CS{"Serbia na Montenegro"}
         CU{"Kuba"}
         CV{"Kepuvede"}
         CY{"Kuprosi"}
@@ -238,5 +237,5 @@ kam{
         ZM{"Nzambia"}
         ZW{"Nzimbambwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

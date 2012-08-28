@@ -55,7 +55,6 @@ ksb{
         CN{"China"}
         CO{"Kolombia"}
         CR{"Kostalika"}
-        CS{"Selbia na Monteneglo"}
         CU{"Kuba"}
         CV{"Kepuvede"}
         CY{"Kuplosi"}
@@ -237,5 +236,5 @@ ksb{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

@@ -12,25 +12,44 @@
 zu{
     Keys{
         calendar{"Ikhalenda"}
-        collation{"i-Collation"}
+        colAlternate{"Ziba Ukuhlelwa Kwezimpawu"}
+        colBackwards{"Ukuhlelwa Kwendlela Yokubiza Okuhlehlisiwe"}
+        colCaseFirst{"Ukuhlelwa Ngokwezinhlamvu Ezinkulu/Ezincane"}
+        colCaseLevel{"Ukuhlelwa Okuncike Ezinkinobhweni"}
+        colHiraganaQuaternary{"Ukuhlela ngokwe-Kana"}
+        colNormalization{"Ukuhlelwa Okulinganisiwe"}
+        colNumeric{"Ukuhlelwa Ngezinombolo"}
+        colStrength{"Amandla Okuhlelwa"}
+        collation{"Uhlelo lokuhlunga"}
         currency{"Ikharensi"}
         numbers{"Izinombolo"}
+        timezone{"Izoni yesikhathi:"}
+        va{"Okokwehlukanisa Kwasendaweni"}
+        variableTop{"Hlela Njengezimpawu"}
         x{"i-Private-Use"}
     }
     Languages{
         ab{"isi-Abkhazian"}
+        ach{"Isi-Acoli"}
         af{"isiBhunu"}
+        ak{"I-Akan"}
         am{"isi-Amharic"}
         ar{"isi-Alabhu"}
         as{"isi-Assamese"}
         ay{"isi-Aymara"}
         az{"isi-Azerbaijani"}
         be{"isi-Belarusian"}
+        bem{"Isi-Bemba"}
         bg{"isi-Bulgari"}
+        bh{"IsiBhihari"}
         bn{"isi-Bengali"}
         bo{"isi-Tibetan"}
+        br{"Isi-Breton"}
         bs{"isi-Bosnian"}
         ca{"isi-Catalan"}
+        chr{"Isi-Cherokee"}
+        ckb{"Isi-Sorani Kurdish"}
+        co{"isi-Corsican"}
         cs{"isi-Czech"}
         cy{"isi-Welsh"}
         da{"isi-Danish"}
@@ -39,6 +58,7 @@ zu{
         de_CH{"isi-Swiss High German"}
         dv{"isi-Divehi"}
         dz{"isi-Dzongkha"}
+        ee{"Isi-Ewe"}
         efi{"isi-Efik"}
         el{"isi-Greek"}
         en{"isiNgisi"}
@@ -49,7 +69,7 @@ zu{
         eo{"isi-Esperanto"}
         es{"isiSpeyini"}
         es_419{"isi-Latin American Spanish"}
-        es_ES{"isi-Iberian Spanish"}
+        es_ES{"Isipenishi saseYurophu"}
         et{"isi-Estonia"}
         eu{"isi-Basque"}
         fa{"isi-Persian"}
@@ -62,6 +82,7 @@ zu{
         fr_CH{"isi-Swiss French"}
         fy{"isi-Western Frisian"}
         ga{"isi-Irish"}
+        gaa{"Isi-Ga"}
         gd{"i-Scottish Gaelic"}
         gl{"isi-Galicia"}
         gn{"isi-Guarani"}
@@ -75,6 +96,7 @@ zu{
         ht{"isi-Haitian"}
         hu{"isi-Hungarian"}
         hy{"isi-Armenia"}
+        ia{"Izilimi ezihlangene"}
         id{"isi-Indonesian"}
         ig{"isi-Igbo"}
         is{"isi-Icelandic"}
@@ -82,6 +104,7 @@ zu{
         ja{"isi-Japanese"}
         jv{"isi-Javanese"}
         ka{"isi-Georgian"}
+        kg{"Isi-Kongo"}
         kk{"isi-Kazakh"}
         km{"isi-Khmer"}
         kn{"isi-Kannada"}
@@ -91,10 +114,14 @@ zu{
         ky{"isi-Kirghiz"}
         la{"isi-Latin"}
         lb{"isi-Luxembourgish"}
+        lg{"Isi-Ganda"}
         ln{"isi-Lingala"}
         lo{"i-Lao"}
+        loz{"Isi-Lozi"}
         lt{"isi-Lithuanian"}
+        lua{"Isi-Luba-Lulua"}
         lv{"isi-Latvia"}
+        mfe{"Isi-Morisyen"}
         mg{"isi-Malagasy"}
         mi{"isi-Maori"}
         mk{"isi-Macedonia"}
@@ -112,6 +139,9 @@ zu{
         nn{"i-Norwegian Nynorsk"}
         nso{"isi-Northern Sotho"}
         ny{"isi-Nyanja"}
+        nyn{"Isi-Nyankole"}
+        oc{"Isi-Osithani"}
+        om{"Isi-Oromo"}
         or{"isi-Oriya"}
         os{"isi-Ossetic"}
         pa{"isi-Punjabi"}
@@ -119,7 +149,7 @@ zu{
         ps{"isi-Pashto"}
         pt{"isi-Portuguese"}
         pt_BR{"isi-Brazillian Portuguese"}
-        pt_PT{"isi-Iberian Portuguese"}
+        pt_PT{"Isiputukezi saseYurophu"}
         qu{"isi-Quechua"}
         rm{"isi-Romansh"}
         rn{"isi-Rundi"}
@@ -150,12 +180,14 @@ zu{
         th{"isi-Thai"}
         ti{"isi-Tigrinya"}
         tk{"isi-Turkmen"}
+        tlh{"Isi-Klingon"}
         tn{"isi-Tswana"}
-        to{"isi-Tonga"}
+        to{"Isi-Tongan"}
         tpi{"isi-Tok Pisin"}
         tr{"isi-Turkish"}
         ts{"isi-Tsonga"}
         tt{"isi-Tatar"}
+        tum{"Isi-Tumbuka"}
         ty{"isi-Tahitian"}
         ug{"isi-Uighur"}
         uk{"isi-Ukrainian"}
@@ -166,6 +198,7 @@ zu{
         vi{"isi-Vietnamese"}
         wo{"isi-Wolof"}
         xh{"isiXhosa"}
+        yi{"Isi-Yidish"}
         yo{"isi-Yoruba"}
         zh{"isi-Chinese"}
         zh_Hans{"isi-Sipmlified Chinese"}
@@ -243,9 +276,11 @@ zu{
             ducet{"Ukuhlunga okuzenzakalelayo kwe-Unicode"}
             gb2312han{"Ukuhlunga kwe-Simplified Chinese - GB2312"}
             phonebook{"Ukuhlunga kwebhuku lefoni"}
+            phonetic{"Hlela Ngokwefonetiki"}
             pinyin{"Ukuhlunga nge-Pinyin"}
             reformed{"Ukuhlunga okwenziwe kabusha"}
             search{"Usesho olujwayelekile"}
+            searchjl{"Sesha nge-Hangul Ongwaqa Basekuqaleni"}
             stroke{"Ukuhlunga kwe-Stroke"}
             traditional{"Ukuhlunga ngokisiko"}
             unihan{"Ukuhlunga kwe-Radical-Stroke"}
@@ -258,6 +293,7 @@ zu{
             beng{"i-Bengali Digits"}
             deva{"i-Devanagari Digits"}
             ethi{"i-Ethiopic Numerals"}
+            finance{"Izinombolo Zezomnotho"}
             fullwide{"i-Full Width Digits"}
             geor{"i-Georgian Numerals"}
             grek{"i-Greek Numerals"}
@@ -279,6 +315,7 @@ zu{
             mlym{"i-Malayalam Digits"}
             mong{"i-Mongolian Digits"}
             mymr{"i-Myanmar Digits"}
+            native{"Izinkinobho Zasendaweni"}
             orya{"i-Oriya Digits"}
             roman{"i-Roman Numerals"}
             romanlow{"i-Roman Lowercase Numerals"}
@@ -286,10 +323,13 @@ zu{
             telu{"i-Telegu Digits"}
             thai{"i-Thai Digits"}
             tibt{"i-Tibetan Digits"}
+            traditional{"Izinombolo Ezijwayelekile"}
+            vaii{"Izinhlazu Zezinombolo ze-Vai"}
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.94"}
     localeDisplayPattern{
+        pattern{"{0} ({1})"}
         separator{","}
     }
 }

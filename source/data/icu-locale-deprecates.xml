@@ -1,13 +1,15 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2009-2011, International Business Machines Corporation and    *
+* Copyright (C) 2009-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
 -->
 <deprecates>
     <alias from="az_AZ" to="az_Latn_AZ"/>
+    <alias from="bs_BA" to="bs_Latn_BA" />
+    <alias from="en_NH" to="en_VU"/>
     <alias from="en_RH" to="en_ZW"/>
     <alias from="ha_GH" to="ha_Latn_GH"/>
     <alias from="ha_NE" to="ha_Latn_NE"/>
@@ -18,6 +20,7 @@
     <alias from="iw_IL" to="he_IL"/>
     <alias from="ja_JP_TRADITIONAL" to="ja_JP@calendar=japanese" xpath="//ldml/dates/calendars/default[@type='japanese']"/>
     <alias from="kk_KZ" to="kk_Cyrl_KZ" />
+    <alias from="ks_IN" to="ks_Arab_IN" />
     <alias from="mo" to="ro_MD"/>
     <alias from="no_NO" to="nb_NO"/>
     <alias from="no_NO_NY" to="nn_NO"/>

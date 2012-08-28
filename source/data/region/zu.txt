@@ -29,7 +29,7 @@ zu{
         034{"e-Southern Asia"}
         035{"e-South-Eastern Asia"}
         039{"e-Southern Europe"}
-        053{"i-Australia ne-New Zealand"}
+        053{"I-Australasia"}
         054{"i-Melanesia"}
         057{"e-Micronesian Region"}
         061{"i-Polynesia"}
@@ -72,6 +72,7 @@ zu{
         BM{"i-Bermuda"}
         BN{"i-Brunei"}
         BO{"i-Bolivia"}
+        BQ{"I-Caribbean Netherlands"}
         BR{"i-Brazil"}
         BS{"i-Bahamas"}
         BT{"i-Bhutan"}
@@ -95,6 +96,7 @@ zu{
         CR{"i-Costa Rica"}
         CU{"i-Cuba"}
         CV{"i-Cape Verde"}
+        CW{"I-Curaçao"}
         CX{"i-Christmas Island"}
         CY{"i-Cyprus"}
         CZ{"i-Czech Republic"}
@@ -254,8 +256,10 @@ zu{
         SN{"i-Senegal"}
         SO{"i-Somalia"}
         SR{"i-Suriname"}
+        SS{"Iningizimu Sudan"}
         ST{"i-São Tomé kanye ne-Príncipe"}
         SV{"i-El Salvador"}
+        SX{"I-Sint Maarten"}
         SY{"i-Syria"}
         SZ{"i-Swaziland"}
         TA{"i-Tristan da Cunha"}
@@ -297,5 +301,5 @@ zu{
         ZW{"i-Zimbabwe"}
         ZZ{"Isifunda esingaziwa"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.94"}
 }

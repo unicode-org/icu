@@ -91,7 +91,6 @@ gsw{
         CN{"Chiina"}
         CO{"Kolumbie"}
         CR{"Coschta Rica"}
-        CS{"Särbie und Monteneegro"}
         CU{"Kuba"}
         CV{"Kap Verde"}
         CX{"Wienachts-Insle"}
@@ -292,5 +291,5 @@ gsw{
         ZW{"Simbabwe"}
         ZZ{"Unbekannti oder ungültigi Regioon"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

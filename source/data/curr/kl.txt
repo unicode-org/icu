@@ -15,6 +15,16 @@ kl{
             "kr",
             "DKK",
         }
+        EUR{
+            "€",
+            "euro",
+        }
     }
-    Version{"2.0.65.46"}
+    CurrencyPlurals{
+        EUR{
+            one{"euro"}
+            other{"euro"}
+        }
+    }
+    Version{"2.0.75.99"}
 }

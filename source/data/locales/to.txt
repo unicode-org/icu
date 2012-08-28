@@ -14,13 +14,21 @@ to{
         "[à ă â å ä æ b c ç d è ĕ ê ë g ì ĭ î ï j ñ ò ŏ ô ö ø œ q r ù ŭ û ü w x y ÿ z"
         "]"
     }
-    ExemplarCharacters{"[a ā e ē f h ʻ i ī k l m n {ng} o ō p s t u ū v]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
-    ExemplarCharactersIndex{"[A Ā B C D E Ē F G H ʻ I Ī J K L M N O Ō P Q R S T U Ū V W X Y Z]"}
+    ExemplarCharacters{"[a á ā e é ē f h i í ī k l m n {ng} o ó ō p s t u ú ū v ʻ]"}
+    ExemplarCharactersIndex{"[A E F H I K L M N {NG} O P S T U V ʻ]"}
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.65.46"}
+    NumberElements{
+        latn{
+            patterns{
+                currencyFormat{"¤ #,##0.00"}
+                decimalFormat{"#0.###"}
+                percentFormat{"‎#0%"}
+            }
+        }
+    }
+    Version{"2.0.75.99"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -81,6 +89,15 @@ to{
                         "Fal",
                         "Tok",
                     }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "P",
+                        "T",
+                        "F",
+                        "T",
+                    }
                     wide{
                         "Sāpate",
                         "Mōnite",
@@ -92,6 +109,15 @@ to{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Sāp",
+                        "Mōn",
+                        "Tūs",
+                        "Pul",
+                        "Tuʻa",
+                        "Fal",
+                        "Tok",
+                    }
                     narrow{
                         "S",
                         "M",
@@ -100,6 +126,15 @@ to{
                         "T",
                         "F",
                         "T",
+                    }
+                    wide{
+                        "Sāpate",
+                        "Mōnite",
+                        "Tūsite",
+                        "Pulelulu",
+                        "Tuʻapulelulu",
+                        "Falaite",
+                        "Tokonaki",
                     }
                 }
             }
@@ -256,6 +291,20 @@ to{
                         "Nōv",
                         "Tīs",
                     }
+                    narrow{
+                        "S",
+                        "F",
+                        "M",
+                        "E",
+                        "M",
+                        "S",
+                        "S",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "T",
+                    }
                     wide{
                         "Sānuali",
                         "Fēpueli",
@@ -272,6 +321,20 @@ to{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Sān",
+                        "Fēp",
+                        "Maʻa",
+                        "ʻEpe",
+                        "Mē",
+                        "Sun",
+                        "Siu",
+                        "ʻAok",
+                        "Sep",
+                        "ʻOka",
+                        "Nōv",
+                        "Tīs",
+                    }
                     narrow{
                         "S",
                         "F",
@@ -285,6 +348,20 @@ to{
                         "O",
                         "N",
                         "T",
+                    }
+                    wide{
+                        "Sānuali",
+                        "Fēpueli",
+                        "Maʻasi",
+                        "ʻEpeleli",
+                        "Mē",
+                        "Sune",
+                        "Siulai",
+                        "ʻAokosi",
+                        "Sepitema",
+                        "ʻOkatopa",
+                        "Nōvema",
+                        "Tīsema",
                     }
                 }
             }
@@ -304,6 +381,12 @@ to{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
                     wide{
                         "kuata 1",
                         "kuata 2",

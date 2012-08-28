@@ -43,7 +43,6 @@ sq{
         CN{"Kinë"}
         CO{"Kolumbi"}
         CR{"Kosta Rika"}
-        CS{"Serbië en Montenegro"}
         CU{"Kubë"}
         CV{"Kap Verde"}
         CY{"Qipro"}
@@ -169,5 +168,5 @@ sq{
         ZW{"Zimbabve"}
         ZZ{"Rajon i panjohur"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.85"}
 }

@@ -12,7 +12,6 @@
 de{
     AuxExemplarCharacters{"[á à ă â å ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ú ù ŭ û ū ÿ]"}
     ExemplarCharacters{"[a ä b c d e f g h i j k l m n o ö p q r s ß t u ü v w x y z]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ‚ \" “ „ « » ( ) \[ \] \{ \} § @ * / \& #]"}
     LocaleScript{
@@ -26,43 +25,103 @@ de{
                 percentFormat{"#,##0 %"}
                 scientificFormat{"#E0"}
             }
-            patternsShort{
+            patternsLong{
                 decimalFormat{
                     1000{
-                        other{"0000"}
+                        one{"0 Tausend"}
+                        other{"0 Tausend"}
                     }
                     10000{
+                        one{"00 Tausend"}
+                        other{"00 Tausend"}
+                    }
+                    100000{
+                        one{"000 Tausend"}
+                        other{"000 Tausend"}
+                    }
+                    1000000{
+                        one{"0 Million"}
+                        other{"0 Millionen"}
+                    }
+                    10000000{
+                        one{"00 Millionen"}
+                        other{"00 Millionen"}
+                    }
+                    100000000{
+                        one{"000 Millionen"}
+                        other{"000 Millionen"}
+                    }
+                    1000000000{
+                        one{"0 Milliarde"}
+                        other{"0 Milliarden"}
+                    }
+                    10000000000{
+                        one{"00 Milliarden"}
+                        other{"00 Milliarden"}
+                    }
+                    100000000000{
+                        one{"000 Milliarden"}
+                        other{"000 Milliarden"}
+                    }
+                    1000000000000{
+                        one{"0 Billion"}
+                        other{"0 Billionen"}
+                    }
+                    10000000000000{
+                        one{"00 Billionen"}
+                        other{"00 Billionen"}
+                    }
+                    100000000000000{
+                        one{"000 Billionen"}
+                        other{"000 Billionen"}
+                    }
+                }
+            }
+            patternsShort{
+                decimalFormat{
+                    10000{
+                        one{"00000"}
                         other{"00000"}
                     }
                     100000{
+                        one{"000000"}
                         other{"000000"}
                     }
                     1000000{
-                        other{"0.0 Mio"}
+                        one{"0 Mio"}
+                        other{"0 Mio"}
                     }
                     10000000{
+                        one{"00 Mio"}
                         other{"00 Mio"}
                     }
                     100000000{
+                        one{"000 Mio"}
                         other{"000 Mio"}
                     }
                     1000000000{
-                        other{"0.0 Mrd"}
+                        one{"0 Mrd"}
+                        other{"0 Mrd"}
                     }
                     10000000000{
+                        one{"00 Mrd"}
                         other{"00 Mrd"}
                     }
                     100000000000{
+                        one{"000 Mrd"}
                         other{"000 Mrd"}
                     }
                     1000000000000{
-                        other{"0.0 B"}
+                        one{"0 Bio"}
+                        other{"0 Bio"}
                     }
                     10000000000000{
-                        other{"00 B"}
+                        one{"00 Bio"}
+                        other{"00 Bio"}
                     }
                     100000000000000{
-                        other{"000 B"}
+                        one{"000 Bio"}
+                        other{"000 Bio"}
                     }
                 }
             }
@@ -80,7 +139,7 @@ de{
             }
         }
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -169,6 +228,7 @@ de{
                 MMdd{"dd.MM."}
                 Md{"d.M."}
                 d{"d"}
+                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
@@ -192,6 +252,24 @@ de{
             dayNames{
                 format{
                     abbreviated{
+                        "So.",
+                        "Mo.",
+                        "Di.",
+                        "Mi.",
+                        "Do.",
+                        "Fr.",
+                        "Sa.",
+                    }
+                    narrow{
+                        "S",
+                        "M",
+                        "D",
+                        "M",
+                        "D",
+                        "F",
+                        "S",
+                    }
+                    short{
                         "So.",
                         "Mo.",
                         "Di.",
@@ -228,6 +306,24 @@ de{
                         "D",
                         "F",
                         "S",
+                    }
+                    short{
+                        "So.",
+                        "Mo.",
+                        "Di.",
+                        "Mi.",
+                        "Do.",
+                        "Fr.",
+                        "Sa.",
+                    }
+                    wide{
+                        "Sonntag",
+                        "Montag",
+                        "Dienstag",
+                        "Mittwoch",
+                        "Donnerstag",
+                        "Freitag",
+                        "Samstag",
                     }
                 }
             }
@@ -301,21 +397,17 @@ de{
             intervalFormats{
                 H{
                     H{"HH-HH 'Uhr'"}
-                    a{"HH-HH 'Uhr'"}
                 }
                 Hm{
                     H{"HH:mm-HH:mm"}
-                    a{"HH:mm-HH:mm"}
                     m{"HH:mm-HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm-HH:mm v"}
-                    a{"HH:mm-HH:mm v"}
                     m{"HH:mm-HH:mm v"}
                 }
                 Hv{
                     H{"HH-HH 'Uhr' v"}
-                    a{"HH-HH 'Uhr' v"}
                 }
                 M{
                     M{"M.-M."}
@@ -403,18 +495,32 @@ de{
             monthNames{
                 format{
                     abbreviated{
-                        "Jan",
-                        "Feb",
-                        "Mär",
-                        "Apr",
+                        "Jan.",
+                        "Feb.",
+                        "Mär.",
+                        "Apr.",
                         "Mai",
-                        "Jun",
-                        "Jul",
-                        "Aug",
-                        "Sep",
-                        "Okt",
-                        "Nov",
-                        "Dez",
+                        "Juni",
+                        "Juli",
+                        "Aug.",
+                        "Sep.",
+                        "Okt.",
+                        "Nov.",
+                        "Dez.",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                     wide{
                         "Januar",
@@ -460,10 +566,44 @@ de{
                         "N",
                         "D",
                     }
+                    wide{
+                        "Januar",
+                        "Februar",
+                        "März",
+                        "April",
+                        "Mai",
+                        "Juni",
+                        "Juli",
+                        "August",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "Dezember",
+                    }
                 }
             }
             quarters{
                 format{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "1. Quartal",
+                        "2. Quartal",
+                        "3. Quartal",
+                        "4. Quartal",
+                    }
+                }
+                stand-alone{
                     abbreviated{
                         "Q1",
                         "Q2",
@@ -645,10 +785,13 @@ de{
         standard{
             2{"{0} und {1}"}
             end{"{0} und {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
-        US{"Angloamerikanisch"}
+        UK{"Englisches Einheitensystem"}
+        US{"Angloamerikanisches Einheitsystem"}
         metric{"Metrisch"}
     }
     units{
@@ -657,14 +800,10 @@ de{
             other{"{0} Tage"}
         }
         day-future{
-            0{"In 0 Tagen"}
-            1{"In 1 Tag"}
             one{"In {0} Tag"}
             other{"In {0} Tagen"}
         }
         day-past{
-            0{"Vor 0 Tagen"}
-            1{"Vor 1 Tag"}
             one{"Vor {0} Tag"}
             other{"Vor {0} Tagen"}
         }
@@ -673,14 +812,10 @@ de{
             other{"{0} Stunden"}
         }
         hour-future{
-            0{"In 0 Stunden"}
-            1{"In 1 Stunde"}
             one{"In {0} Stunde"}
             other{"In {0} Stunden"}
         }
         hour-past{
-            0{"Vor 0 Stunden"}
-            1{"Vor 1 Stunde"}
             one{"Vor {0} Stunde"}
             other{"Vor {0} Stunden"}
         }
@@ -689,14 +824,10 @@ de{
             other{"{0} Minuten"}
         }
         minute-future{
-            0{"In 0 Minuten"}
-            1{"In 1 Minute"}
             one{"In {0} Minute"}
             other{"In {0} Minuten"}
         }
         minute-past{
-            0{"Vor 0 Minuten"}
-            1{"Vor 1 Minute"}
             one{"Vor {0} Minute"}
             other{"Vor {0} Minuten"}
         }
@@ -705,14 +836,10 @@ de{
             other{"{0} Monate"}
         }
         month-future{
-            0{"In 0 Monaten"}
-            1{"In 1 Monat"}
             one{"In {0} Monat"}
             other{"In {0} Monaten"}
         }
         month-past{
-            0{"Vor 0 Monaten"}
-            1{"Vor 1 Monat"}
             one{"Vor {0} Monat"}
             other{"Vor {0} Monaten"}
         }
@@ -721,14 +848,10 @@ de{
             other{"{0} Sekunden"}
         }
         second-future{
-            0{"In 0 Sekunden"}
-            1{"In 1 Sekunde"}
             one{"In {0} Sekunde"}
             other{"In {0} Sekunden"}
         }
         second-past{
-            0{"Vor 0 Sekunden"}
-            1{"Vor 1 Sekunde"}
             one{"Vor {0} Sekunde"}
             other{"Vor {0} Sekunden"}
         }
@@ -737,14 +860,10 @@ de{
             other{"{0} Wochen"}
         }
         week-future{
-            0{"In 0 Wochen"}
-            1{"In 1 Woche"}
             one{"In {0} Woche"}
             other{"In {0} Wochen"}
         }
         week-past{
-            0{"Vor 0 Wochen"}
-            1{"Vor 1 Woche"}
             one{"Vor {0} Woche"}
             other{"Vor {0} Wochen"}
         }
@@ -753,14 +872,10 @@ de{
             other{"{0} Jahre"}
         }
         year-future{
-            0{"In 0 Jahren"}
-            1{"In 1 Jahr"}
             one{"In {0} Jahr"}
             other{"In {0} Jahren"}
         }
         year-past{
-            0{"Vor 0 Jahren"}
-            1{"Vor 1 Jahr"}
             one{"Vor {0} Jahr"}
             other{"Vor {0} Jahren"}
         }

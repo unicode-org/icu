@@ -20,7 +20,7 @@ ksb{
             "kwanza ya Angola",
         }
         AUD{
-            "AU$",
+            "A$",
             "dola ya Austlalia",
         }
         BHD{
@@ -232,5 +232,5 @@ ksb{
             "dola ya Zimbabwe",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

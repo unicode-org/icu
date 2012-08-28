@@ -56,7 +56,6 @@ tzm{
         CN{"Ṣṣin"}
         CO{"Kulumbya"}
         CR{"Kusṭa Rika"}
-        CS{"Ṣiṛbya d Muntinigru"}
         CU{"kuba"}
         CV{"Tigzirin n Iɣf Uzegzaw"}
         CY{"Qubrus"}
@@ -238,5 +237,5 @@ tzm{
         ZM{"Zambya"}
         ZW{"Zimbabwi"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

@@ -29,7 +29,7 @@ hr{
         034{"Južna Azija"}
         035{"Jugoistočna Azija"}
         039{"Južna Europa"}
-        053{"Australija i Novi Zeland"}
+        053{"Australazija"}
         054{"Melanezija"}
         057{"Mikronezki oblast"}
         061{"Polinezija"}
@@ -57,7 +57,7 @@ hr{
         AT{"Austrija"}
         AU{"Australija"}
         AW{"Aruba"}
-        AX{"Alandski otoci"}
+        AX{"Otoci Aland"}
         AZ{"Azerbajdžan"}
         BA{"Bosna i Hercegovina"}
         BB{"Barbados"}
@@ -72,6 +72,7 @@ hr{
         BM{"Bermuda"}
         BN{"Brunej"}
         BO{"Bolivija"}
+        BQ{"Karipski otoci Nizozemske"}
         BR{"Brazil"}
         BS{"Bahami"}
         BT{"Butan"}
@@ -80,12 +81,12 @@ hr{
         BY{"Bjelorusija"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Kokosovi Otoci"}
+        CC{"Kokosovi [Keeling] Otoci"}
         CD{"Demokratska Republika Kongo"}
         CF{"Srednjoafrička Republika"}
         CG{"Kongo - Brazzaville"}
         CH{"Švicarska"}
-        CI{"Obala Bjelokosti"}
+        CI{"Bjelokosna Obala"}
         CK{"Kukovi Otoci"}
         CL{"Čile"}
         CM{"Kamerun"}
@@ -93,9 +94,9 @@ hr{
         CO{"Kolumbija"}
         CP{"Otok Clipperton"}
         CR{"Kostarika"}
-        CS{"Srbija i Crna Gora"}
         CU{"Kuba"}
         CV{"Zeleni Rt"}
+        CW{"Curaçao"}
         CX{"Božićni Otok"}
         CY{"Cipar"}
         CZ{"Češka Republika"}
@@ -140,7 +141,7 @@ hr{
         GU{"Guam"}
         GW{"Gvineja Bisau"}
         GY{"Gvajana"}
-        HK{"Hong Kong S.A.R. Kine"}
+        HK{"Kinesko Posebno Upravno Područje Hong Kong"}
         HM{"Otok Heard i Otoci McDonald"}
         HN{"Honduras"}
         HR{"Hrvatska"}
@@ -192,9 +193,9 @@ hr{
         MH{"Maršalovi Otoci"}
         MK{"Makedonija"}
         ML{"Mali"}
-        MM{"Mijanma"}
+        MM{"Mijanmar [Burma]"}
         MN{"Mongolija"}
-        MO{"Makao S.A.R. Kine"}
+        MO{"Kinesko Posebno Upravno Područje Makao"}
         MP{"Sjeverni Marijanski Otoci"}
         MQ{"Martinik"}
         MR{"Mauritanija"}
@@ -226,8 +227,8 @@ hr{
         PH{"Filipini"}
         PK{"Pakistan"}
         PL{"Poljska"}
-        PM{"Sveti Petar i Miguel"}
-        PN{"Pitcairn"}
+        PM{"Sveti Petar i Mikelon"}
+        PN{"Otoci Pitcairn"}
         PR{"Portoriko"}
         PS{"Palestinsko Područje"}
         PT{"Portugal"}
@@ -255,8 +256,10 @@ hr{
         SN{"Senegal"}
         SO{"Somalija"}
         SR{"Surinam"}
+        SS{"Južni Sudan"}
         ST{"Sveti Toma i Prinsipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Sirija"}
         SZ{"Svazi"}
         TA{"Tristan da Cunha"}
@@ -296,7 +299,7 @@ hr{
         ZA{"Južnoafrička Republika"}
         ZM{"Zambija"}
         ZW{"Zimbabve"}
-        ZZ{"nepoznata ili nevažeća oblast"}
+        ZZ{"nepoznato područje"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

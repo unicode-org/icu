@@ -19,7 +19,7 @@ en_ZA{
             }
         }
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.75.60"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -31,11 +31,11 @@ en_ZA{
                 "dd MMMM y",
                 "dd MMM y",
                 "yyyy/MM/dd",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1} 'at' {0}",
+                "{1} 'at' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 MEd{"E MM/dd"}
