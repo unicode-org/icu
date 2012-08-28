@@ -167,6 +167,9 @@ void ListFormatter::addDataToHash(
 
 const ListFormatData* ListFormatter::getListFormatData(
         const Locale& locale, UErrorCode& errorCode) {
+    if (U_FAILURE(errorCode)) {
+        return NULL;
+    }
     {
         Mutex m(&listFormatterMutex);
         if (listPatternHash == NULL) {
@@ -285,7 +288,7 @@ UnicodeString& ListFormatter::format(const UnicodeString items[], int32_t nItems
  * originalString.
  */
 void ListFormatter::addNewString(const UnicodeString& pat, UnicodeString& originalString,
-    const UnicodeString& nextString, UErrorCode& errorCode) const {
+                                 const UnicodeString& nextString, UErrorCode& errorCode) const {
     if (U_FAILURE(errorCode)) {
         return;
     }
