@@ -846,11 +846,11 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
                              UBool* isAvailable, UErrorCode* status);
 
 /**
- * Get the collation rules from a UCollator.
+ * Get the collation tailoring rules from a UCollator.
  * The rules will follow the rule syntax.
  * @param coll The UCollator to query.
  * @param length 
- * @return The collation rules.
+ * @return The collation tailoring rules.
  * @stable ICU 2.0
  */
 U_STABLE const UChar* U_EXPORT2 
