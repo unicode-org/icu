@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -387,6 +387,7 @@
     <ClCompile Include="convtest.cpp" />
     <ClCompile Include="csdetest.cpp" />
     <ClCompile Include="bidiconf.cpp" />
+    <ClCompile Include="listformattertest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h" />
@@ -511,6 +512,7 @@
     <ClInclude Include="trnserr.h" />
     <ClInclude Include="convtest.h" />
     <ClInclude Include="csdetest.h" />
+    <ClInclude Include="listformattertest.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\common\common.vcxproj">
