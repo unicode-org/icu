@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2012, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -808,7 +808,7 @@ public final class UCharacterProperty
         } else if(ntv<NTV_LARGE_START_) {
             /* fraction */
             return -2;
-        } else if(ntv<NTV_RESERVED_START_) {
+        } else if(ntv<NTV_BASE60_START_) {
             /* large, single-significant-digit integer */
             int mant=(ntv>>5)-14;
             int exp=(ntv&0x1f)+2;
@@ -821,6 +821,30 @@ public final class UCharacterProperty
             } else {
                 return -2;
             }
+        } else if(ntv<NTV_RESERVED_START_) {
+            /* sexagesimal (base 60) integer */
+            int numValue=(ntv>>2)-0xbf;
+            int exp=(ntv&3)+1;
+
+            switch(exp) {
+            case 4:
+                numValue*=60*60*60*60;
+                break;
+            case 3:
+                numValue*=60*60*60;
+                break;
+            case 2:
+                numValue*=60*60;
+                break;
+            case 1:
+                numValue*=60;
+                break;
+            case 0:
+            default:
+                break;
+            }
+
+            return numValue;
         } else {
             /* reserved */
             return -2;
@@ -847,7 +871,7 @@ public final class UCharacterProperty
             int numerator=(ntv>>4)-12;
             int denominator=(ntv&0xf)+1;
             return (double)numerator/denominator;
-        } else if(ntv<NTV_RESERVED_START_) {
+        } else if(ntv<NTV_BASE60_START_) {
             /* large, single-significant-digit integer */
             double numValue;
             int mant=(ntv>>5)-14;
@@ -868,6 +892,30 @@ public final class UCharacterProperty
                 break;
             case 1:
                 numValue*=10.;
+                break;
+            case 0:
+            default:
+                break;
+            }
+
+            return numValue;
+        } else if(ntv<NTV_RESERVED_START_) {
+            /* sexagesimal (base 60) integer */
+            int numValue=(ntv>>2)-0xbf;
+            int exp=(ntv&3)+1;
+
+            switch(exp) {
+            case 4:
+                numValue*=60*60*60*60;
+                break;
+            case 3:
+                numValue*=60*60*60;
+                break;
+            case 2:
+                numValue*=60*60;
+                break;
+            case 1:
+                numValue*=60;
                 break;
             case 0:
             default:
@@ -948,13 +996,29 @@ public final class UCharacterProperty
         return props >> NUMERIC_TYPE_VALUE_SHIFT_;
     }
     /* constants for the storage form of numeric types and values */
+    /** No numeric value. */
     private static final int NTV_NONE_ = 0;
+    /** Decimal digits: nv=0..9 */
     private static final int NTV_DECIMAL_START_ = 1;
+    /** Other digits: nv=0..9 */
     private static final int NTV_DIGIT_START_ = 11;
+    /** Small integers: nv=0..154 */
     private static final int NTV_NUMERIC_START_ = 21;
+    /** Fractions: ((ntv>>4)-12) / ((ntv&0xf)+1) = -1..17 / 1..16 */
     private static final int NTV_FRACTION_START_ = 0xb0;
+    /**
+     * Large integers:
+     * ((ntv>>5)-14) * 10^((ntv&0x1f)+2) = (1..9)*(10^2..10^33)
+     * (only one significant decimal digit)
+     */
     private static final int NTV_LARGE_START_ = 0x1e0;
-    private static final int NTV_RESERVED_START_ = 0x300;
+    /**
+     * Sexagesimal numbers:
+     * ((ntv>>2)-0xbf) * 60^((ntv&3)+1) = (1..9)*(60^1..60^4)
+     */
+    private static final int NTV_BASE60_START_=0x300;
+    /** No numeric value (yet). */
+    private static final int NTV_RESERVED_START_ = NTV_BASE60_START_ + 36;  // 0x300+9*4=0x324
 
     private static final int ntvGetType(int ntv) {
         return

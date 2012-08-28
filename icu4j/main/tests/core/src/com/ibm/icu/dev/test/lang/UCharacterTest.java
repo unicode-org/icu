@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2012, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -46,7 +46,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * ICU4J data version number
     */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance("6.1.0.0");
+    private final VersionInfo VERSION_ = VersionInfo.getInstance("6.2.0.0");
 
     // constructor ===================================================
 
@@ -2221,6 +2221,14 @@ public final class UCharacterTest extends TestFmwk
     {
         // see UnicodeData.txt, DerivedNumericValues.txt
         double values[][] = {
+            // Code point, numeric type, numeric value.
+            // If a fourth value is specified, it is the getNumericValue().
+            // Otherwise it is expected to be the same as the getUnicodeNumericValue(),
+            // where UCharacter.NO_NUMERIC_VALUE is turned into -1.
+            // getNumericValue() returns -2 if the code point has a value
+            // which is not a non-negative integer. (This is mostly auto-converted to -2.)
+            { 0x12456, UCharacter.NumericType.NUMERIC, -1. },
+            { 0x12457, UCharacter.NumericType.NUMERIC, -1. },
             { 0x0F33, UCharacter.NumericType.NUMERIC, -1./2. },
             { 0x0C66, UCharacter.NumericType.DECIMAL, 0 },
             { 0x96f6, UCharacter.NumericType.NUMERIC, 0 },
@@ -2265,10 +2273,12 @@ public final class UCharacterTest extends TestFmwk
             { 0x2181, UCharacter.NumericType.NUMERIC, 5000. },
             { 0x137C, UCharacter.NumericType.NUMERIC, 10000. },
             { 0x4e07, UCharacter.NumericType.NUMERIC, 10000. },
+            { 0x12432, UCharacter.NumericType.NUMERIC, 216000. },
+            { 0x12433, UCharacter.NumericType.NUMERIC, 432000. },
             { 0x4ebf, UCharacter.NumericType.NUMERIC, 100000000. },
             { 0x5146, UCharacter.NumericType.NUMERIC, 1000000000000. },
             { -1, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
-            { 0x61, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
+            { 0x61, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE, 10. },
             { 0x3000, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
             { 0xfffe, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
             { 0x10301, UCharacter.NumericType.NONE, UCharacter.NO_NUMERIC_VALUE },
@@ -2288,8 +2298,31 @@ public final class UCharacterTest extends TestFmwk
                        + ") = " + type + " should be " + (int)values[i][1]);
             }
             if (0.000001 <= Math.abs(nv - values[i][2])) {
-                errln("UCharacter.getNumericValue(\\u" + Utility.hex(c, 4)
+                errln("UCharacter.getUnicodeNumericValue(\\u" + Utility.hex(c, 4)
                         + ") = " + nv + " should be " + values[i][2]);
+            }
+
+            // Test getNumericValue() as well.
+            // It can only return the subset of numeric values that are
+            // non-negative and fit into an int.
+            int expectedInt;
+            if (values[i].length == 3) {
+                if (values[i][2] == UCharacter.NO_NUMERIC_VALUE) {
+                    expectedInt = -1;
+                } else {
+                    expectedInt = (int)values[i][2];
+                    if (expectedInt < 0 || expectedInt != values[i][2]) {
+                        // The numeric value is not a non-negative integer.
+                        expectedInt = -2;
+                    }
+                }
+            } else {
+                expectedInt = (int)values[i][3];
+            }
+            int nvInt = UCharacter.getNumericValue(c);
+            if (nvInt != expectedInt) {
+                errln("UCharacter.getNumericValue(\\u" + Utility.hex(c, 4)
+                        + ") = " + nvInt + " should be " + expectedInt);
             }
         }
     }

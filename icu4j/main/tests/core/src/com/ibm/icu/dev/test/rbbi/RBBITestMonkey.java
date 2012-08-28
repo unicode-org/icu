@@ -57,12 +57,12 @@ public class RBBITestMonkey extends TestFmwk {
         // Set the test text on which subsequent calls to next() will operate
         abstract  void   setText(StringBuffer text);
 
-        // Find the next break postion, starting from the specified position.
+        // Find the next break position, starting from the specified position.
         // Return -1 after reaching end of string.
         abstract   int   next(int i);
         
         // A Character Property, one of the constants defined in class UProperty.
-        //   The value fo this property will be displayed for the characters
+        //   The value of this property will be displayed for the characters
         //    near any test failure.  
         int   fCharProperty;
     }
@@ -78,6 +78,7 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet                fCRLFSet;
         UnicodeSet                fControlSet;
         UnicodeSet                fExtendSet;
+        UnicodeSet                fRegionalIndicatorSet;
         UnicodeSet                fPrependSet;
         UnicodeSet                fSpacingSet;
         UnicodeSet                fLSet;
@@ -97,6 +98,7 @@ public class RBBITestMonkey extends TestFmwk {
         fCRLFSet    = new UnicodeSet("[\\r\\n]");
         fControlSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Control}]");
         fExtendSet  = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Extend}]");
+        fRegionalIndicatorSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Regional_Indicator}]");
         fPrependSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = Prepend}]");
         fSpacingSet = new UnicodeSet("[\\p{Grapheme_Cluster_Break = SpacingMark}]");
         fLSet       = new UnicodeSet("[\\p{Grapheme_Cluster_Break = L}]");
@@ -117,6 +119,7 @@ public class RBBITestMonkey extends TestFmwk {
         fSets.add(fCRLFSet);
         fSets.add(fControlSet);
         fSets.add(fExtendSet);
+        fSets.add(fRegionalIndicatorSet);
         if (!fPrependSet.isEmpty()) {
             fSets.add(fPrependSet);
         }
@@ -215,11 +218,16 @@ public class RBBITestMonkey extends TestFmwk {
                 continue;
             }
     
+            // Rule (GB8a)   Regional_Indicator x Regional_Indicator
+            if (fRegionalIndicatorSet.contains(c1) && fRegionalIndicatorSet.contains(c2)) {
+                continue;
+            }
+            
             // Rule (GB9)    Numeric x ALetter
             if (fExtendSet.contains(c2))  {
                 continue;
             }
-    
+            
             // Rule (GB9a)   x  SpacingMark
             if (fSpacingSet.contains(c2)) {
                 continue;
@@ -263,6 +271,7 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet                fFormatSet;
         UnicodeSet                fExtendSet;
         UnicodeSet                fExtendNumLetSet;
+        UnicodeSet                fRegionalIndicatorSet;
         UnicodeSet                fOtherSet;
         
         UnicodeSet                fDictionaryCjkSet;
@@ -285,6 +294,7 @@ public class RBBITestMonkey extends TestFmwk {
             fFormatSet       = new UnicodeSet("[\\p{Word_Break = Format}]");
             fExtendNumLetSet = new UnicodeSet("[\\p{Word_Break = ExtendNumLet}]");
             fExtendSet       = new UnicodeSet("[\\p{Word_Break = Extend}]");
+            fRegionalIndicatorSet = new UnicodeSet("[\\p{Word_Break = Regional_Indicator}]");
 
             fOtherSet        = new UnicodeSet();
             fOtherSet.complement();
@@ -299,6 +309,7 @@ public class RBBITestMonkey extends TestFmwk {
             fOtherSet.removeAll(fFormatSet);
             fOtherSet.removeAll(fExtendSet);
             fOtherSet.removeAll(fExtendNumLetSet);
+            fOtherSet.removeAll(fRegionalIndicatorSet);
             // Inhibit dictionary characters from being tested at all.
             // remove surrogates so as to not generate higher CJK characters
             fOtherSet.removeAll(new UnicodeSet("[[\\p{LineBreak = Complex_Context}][:Line_Break=Surrogate:]]"));
@@ -317,6 +328,7 @@ public class RBBITestMonkey extends TestFmwk {
             fSets.add(fFormatSet);
             fSets.add(fExtendSet);
             fSets.add(fExtendNumLetSet);
+            fSets.add(fRegionalIndicatorSet);
             fSets.add(fOtherSet);
         }
         
@@ -354,7 +366,7 @@ public class RBBITestMonkey extends TestFmwk {
                 p1 = p2;  c1 = c2;
                 p2 = p3;  c2 = c3;
                 
-                // Advancd p3 by    X(Extend | Format)*   Rule 4
+                // Advance p3 by    X(Extend | Format)*   Rule 4
                 //    But do not advance over Extend & Format following a new line. (Unicode 5.1 change)
                 do {
                     p3 = moveIndex32(fText, p3, 1);
@@ -467,7 +479,13 @@ public class RBBITestMonkey extends TestFmwk {
                         fKatakanaSet.contains(c2) || fExtendNumLetSet.contains(c2))) {
                     continue;
                 }
-               
+                
+                // Rule 13c   Do not break between Regional Indicators. 
+                //            Regional_Indicator  ×   Regional_Indicator
+                if (fRegionalIndicatorSet.contains(c1) && fRegionalIndicatorSet.contains(c2)) {
+                    continue;
+                }
+                
                 // Rule 14.  Break found here.
                 break;
             }
@@ -519,6 +537,7 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet  fJT;
         UnicodeSet  fH2;
         UnicodeSet  fH3;
+        UnicodeSet  fRI;
         UnicodeSet  fXX;
         
         StringBuffer  fText;
@@ -567,6 +586,7 @@ public class RBBITestMonkey extends TestFmwk {
             fH2    = new UnicodeSet("[\\p{Line_break=H2}]");
             fH3    = new UnicodeSet("[\\p{Line_break=H3}]");
             fSG    = new UnicodeSet("[\\ud800-\\udfff]");
+            fRI    = new UnicodeSet("[\\p{Line_break=RI}]");
             fXX    = new UnicodeSet("[\\p{Line_break=XX}]");
 
             
@@ -614,6 +634,7 @@ public class RBBITestMonkey extends TestFmwk {
             fSets.add(fWJ);
             fSets.add(fSA);
             fSets.add(fSG);
+            fSets.add(fRI);
         }
         
         void setText(StringBuffer s) {
@@ -982,7 +1003,11 @@ public class RBBITestMonkey extends TestFmwk {
                     continue;
                 }
 
-              
+                // LB 30a   Do not break between regional indicators.  RI × RI
+                if (fRI.contains(prevChar) && fRI.contains(thisChar)) {
+                    continue;
+                }
+                
                 // LB 31    Break everywhere else
                 break;            
             }
