@@ -3792,6 +3792,8 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     // Constants
     //-------------------------------------------------------------------------
 
+    private static final int FIELD_DIFF_MAX_INT = 2147483647;
+
     /**
      * {@icu} Returns the difference between the given time and the time this
      * calendar object is set to.  If this calendar is set
@@ -3865,17 +3867,20 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                     return max;
                 } else if (ms > targetMs) {
                     break;
-                } else {
+                } else if (max < FIELD_DIFF_MAX_INT) {
+                    min = max;
                     max <<= 1;
                     if (max < 0) {
-                        // Field difference too large to fit into int
-                        throw new RuntimeException();
+                        max = FIELD_DIFF_MAX_INT;
                     }
+                } else {
+                    // Field difference too large to fit into int
+                    throw new RuntimeException();
                 }
             }
             // Do a binary search
             while ((max - min) > 1) {
-                int t = (min + max) / 2;
+                int t = min + (max - min)/2; // make sure intermediate values don't exceed FIELD_DIFF_MAX_INT
                 setTimeInMillis(startMs);
                 add(field, t);
                 long ms = getTimeInMillis();
@@ -3907,6 +3912,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
                 } else if (ms < targetMs) {
                     break;
                 } else {
+                    min = max;
                     max <<= 1;
                     if (max == 0) {
                         // Field difference too large to fit into int
@@ -3916,7 +3922,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             }
             // Do a binary search
             while ((min - max) > 1) {
-                int t = (min + max) / 2;
+                int t = min + (max - min)/2; // make sure intermediate values don't exceed FIELD_DIFF_MAX_INT
                 setTimeInMillis(startMs);
                 add(field, t);
                 long ms = getTimeInMillis();
