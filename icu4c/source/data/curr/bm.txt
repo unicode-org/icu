@@ -20,7 +20,7 @@ bm{
             "angola Kwanza",
         }
         AUD{
-            "AU$",
+            "A$",
             "ositirali Dolar",
         }
         BHD{
@@ -232,5 +232,5 @@ bm{
             "zimbabuwe Dolar",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.61"}
 }

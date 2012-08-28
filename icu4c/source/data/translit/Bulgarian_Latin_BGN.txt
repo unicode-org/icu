@@ -17,7 +17,7 @@ $lowerVowels = [аеиоуъюяѫѣ] ;
 $vowels = [$upperVowels $lowerVowels] ;
 $lower = [$lowerConsonants $lowerVowels] ;
 $bulgarian = [ $lower $upperConsonants $upperVowels ] ;
-$wordBoundary = [^[:L:][:M:][:N:]] ;
+$wordBoundary =  [^[:L:][:M:][:N:]] ;
 А → A ; # CYRILLIC CAPITAL LETTER A
 а → a ; # CYRILLIC SMALL LETTER A
 Б → B ; # CYRILLIC CAPITAL LETTER BE
@@ -84,7 +84,7 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 щ → sht ; # CYRILLIC SMALL LETTER SHCHA
 Ъ → Ŭ ; # CYRILLIC CAPITAL LETTER HARD SIGN
 ъ → ŭ ; # CYRILLIC SMALL LETTER HARD SIGN
-$bulgarian { [Ъъ] } $wordBoundary > ;
+$bulgarian { [Ъъ]  } $wordBoundary > ;
 Ь → ’ ; # CYRILLIC CAPITAL LETTER SOFT SIGN
 ь → ’ ; # CYRILLIC SMALL LETTER SOFT SIGN
 Ю} $lower → Yu ; # CYRILLIC CAPITAL LETTER YU

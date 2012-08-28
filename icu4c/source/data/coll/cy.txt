@@ -23,7 +23,7 @@ cy{
                 "&R<rh<<<Rh<<<RH"
                 "&T<th<<<Th<<<TH"
             }
-            Version{"21.0"}
+            Version{"22.0"}
         }
     }
 }

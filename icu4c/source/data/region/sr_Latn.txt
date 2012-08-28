@@ -91,7 +91,6 @@ sr_Latn{
         CN{"Kina"}
         CO{"Kolumbija"}
         CR{"Kostarika"}
-        CS{"Srbija i Crna Gora"}
         CU{"Kuba"}
         CV{"Kape Verde"}
         CX{"Božićna Ostrva"}
@@ -292,5 +291,5 @@ sr_Latn{
         ZW{"Zimbabve"}
         ZZ{"Nepoznat ili nevažeći region"}
     }
-    Version{"2.0.66.10"}
+    Version{"2.0.75.99"}
 }

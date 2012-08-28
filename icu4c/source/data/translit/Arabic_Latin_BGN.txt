@@ -11,8 +11,8 @@
 :: NFKD (NFC) ;
 $alef = ’;
 $ayin = ‘;
-$disambig = \u0331 ;
-$wordBoundary = [^[:L:][:M:][:N:]] ;
+$disambig =  \u0331 ;
+$wordBoundary =  [^[:L:][:M:][:N:]] ;
 [:Nd:]{٫}[:Nd:] ↔ [:Nd:]{','}[:Nd:] ; # ARABIC DECIMAL SEPARATOR
 [:Nd:]{٬}[:Nd:] ↔ [:Nd:]{'.'}[:Nd:] ; # ARABIC THOUSANDS SEPARATOR
 ٫ ↔ ',' $disambig ; # ARABIC DECIMAL SEPARATOR
@@ -72,9 +72,9 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 ه\u0651 → hh ; # ARABIC LETTER HEH + SHADDA
 و\u0651 → ww ; # ARABIC LETTER WAW + SHADDA
 ى\u0651 → yy ; # ARABIC LETTER YEH + SHADDA
-$wordBoundary{ء → ; # ARABIC LETTER HAMZA
+$wordBoundary{ء →  ; # ARABIC LETTER HAMZA
 ء → $alef ; # ARABIC LETTER HAMZA
-$wordBoundary{ا → ; # ARABIC LETTER ALEF
+$wordBoundary{ا →  ; # ARABIC LETTER ALEF
 ٱ → $alef ; # ARABIC LETTER ALEF WASLA
 $wordBoundary{آ → ā ; # ARABIC LETTER ALEF WITH MADDA ABOVE
 آ → $alef ā ; # ARABIC LETTER ALEF WITH MADDA ABOVE
@@ -116,7 +116,7 @@ $wordBoundary{آ → ā ; # ARABIC LETTER ALEF WITH MADDA ABOVE
 \u0650 → i ; # ARABIC KASRA
 \u064Fو → ū ; # ARABIC DAMMA + WAW
 \u064F → u ; # ARABIC DAMMA
-\u0652 → ; # ARABIC SUKUN
+\u0652 →  ; # ARABIC SUKUN
 \u064B → aⁿ ; # ARABIC FATHATAN
 \u064D → iⁿ ; # ARABIC KASRATAN
 \u064C → uⁿ ; # ARABIC DAMMATAN

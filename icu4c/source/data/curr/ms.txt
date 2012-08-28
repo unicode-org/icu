@@ -40,7 +40,7 @@ ms{
             "Peso Argentina",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dolar Australia",
         }
         AWG{
@@ -403,6 +403,10 @@ ms{
             "RM",
             "Ringgit Malaysia",
         }
+        MZN{
+            "MZN",
+            "Metikal Mozambique",
+        }
         NAD{
             "NAD",
             "Dolar Namibia",
@@ -463,6 +467,10 @@ ms{
             "QAR",
             "Rial Qatar",
         }
+        RON{
+            "RON",
+            "Leu Romania",
+        }
         RSD{
             "RSD",
             "Dinar Serbia",
@@ -514,6 +522,10 @@ ms{
         SRD{
             "SRD",
             "Dolar Surinam",
+        }
+        SSP{
+            "SSP",
+            "Paun Sudan selatan",
         }
         STD{
             "STD",
@@ -632,5 +644,8 @@ ms{
             "Kwacha Zambia",
         }
     }
-    Version{"2.0.65.46"}
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
+    Version{"2.0.75.99"}
 }

@@ -12,7 +12,6 @@
 lv{
     AuxExemplarCharacters{"[q w x y]"}
     ExemplarCharacters{"[a ā b c č d e ē f g ģ h i ī j k ķ l ļ m n ņ o p r s š t u ū v z ž]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C Č D E F G Ģ H I J K Ķ L Ļ M N Ņ O P Q R S Š T U V W X Y Z Ž]"}
     ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ’ ‚ \" “ ” „ ( ) \[ \] § @ * / \& # † ‡ ′ ″]"}
     LocaleScript{
@@ -21,48 +20,136 @@ lv{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 tūkstotis"}
+                        other{"0 tūkstoši"}
+                        zero{"0 tūkstoši"}
+                    }
+                    10000{
+                        one{"00 tūkstotis"}
+                        other{"00 tūkstoši"}
+                        zero{"00 tūkstoši"}
+                    }
+                    100000{
+                        one{"000 tūkstotis"}
+                        other{"000 tūkstoši"}
+                        zero{"000 tūkstoši"}
+                    }
+                    1000000{
+                        one{"0 miljons"}
+                        other{"0 miljoni"}
+                        zero{"0 miljoni"}
+                    }
+                    10000000{
+                        one{"00 miljons"}
+                        other{"00 miljoni"}
+                        zero{"00 miljoni"}
+                    }
+                    100000000{
+                        one{"000 miljons"}
+                        other{"000 miljoni"}
+                        zero{"000 miljoni"}
+                    }
+                    1000000000{
+                        one{"0 miljards"}
+                        other{"0 miljardi"}
+                        zero{"0 miljardi"}
+                    }
+                    10000000000{
+                        one{"00 miljards"}
+                        other{"00 miljardi"}
+                        zero{"00 miljardi"}
+                    }
+                    100000000000{
+                        one{"000 miljards"}
+                        other{"000 miljardi"}
+                        zero{"000 miljardi"}
+                    }
+                    1000000000000{
+                        one{"0 trilj'.'"}
+                        other{"0 trilj'.'"}
+                        zero{"0 trilj'.'"}
+                    }
+                    10000000000000{
+                        one{"00 trilj'.'"}
+                        other{"00 trilj'.'"}
+                        zero{"00 trilj'.'"}
+                    }
+                    100000000000000{
+                        one{"000 trilj'.'"}
+                        other{"000 trilj'.'"}
+                        zero{"000 trilj'.'"}
+                    }
+                }
+            }
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0.0 K"}
+                        one{"0 tūkst'.'"}
+                        other{"0 tūkst'.'"}
+                        zero{"0 tūkst'.'"}
                     }
                     10000{
-                        other{"00 K"}
+                        one{"00 tūkst'.'"}
+                        other{"00 tūkst'.'"}
+                        zero{"00 tūkst'.'"}
                     }
                     100000{
-                        other{"000 K"}
+                        one{"000 tūkst'.'"}
+                        other{"000 tūkst'.'"}
+                        zero{"000 tūkst'.'"}
                     }
                     1000000{
-                        other{"0.0 M"}
+                        one{"0 milj'.'"}
+                        other{"0 milj'.'"}
+                        zero{"0 milj'.'"}
                     }
                     10000000{
-                        other{"00 M"}
+                        one{"00 milj'.'"}
+                        other{"00 milj'.'"}
+                        zero{"00 milj'.'"}
                     }
                     100000000{
-                        other{"000 M"}
+                        one{"000 milj'.'"}
+                        other{"000 milj'.'"}
+                        zero{"000 milj'.'"}
                     }
                     1000000000{
-                        other{"0.0 G"}
+                        one{"0 md"}
+                        other{"0 md"}
+                        zero{"0 md"}
                     }
                     10000000000{
-                        other{"00 G"}
+                        one{"00 md"}
+                        other{"00 md"}
+                        zero{"00 md"}
                     }
                     100000000000{
-                        other{"000 G"}
+                        one{"000 md"}
+                        other{"000 md"}
+                        zero{"000 md"}
                     }
                     1000000000000{
-                        other{"0.0 T"}
+                        one{"0 trilj'.'"}
+                        other{"0 trilj'.'"}
+                        zero{"0 trilj'.'"}
                     }
                     10000000000000{
-                        other{"00 T"}
+                        one{"00 trilj'.'"}
+                        other{"00 trilj'.'"}
+                        zero{"00 trilj'.'"}
                     }
                     100000000000000{
-                        other{"000 T"}
+                        one{"000 trilj'.'"}
+                        other{"000 trilj'.'"}
+                        zero{"000 trilj'.'"}
                     }
                 }
             }
@@ -72,7 +159,7 @@ lv{
                 group{" "}
                 infinity{"∞"}
                 list{";"}
-                minusSign{"−"}
+                minusSign{"-"}
                 nan{"nav skaitlis"}
                 perMille{"‰"}
                 percentSign{"%"}
@@ -80,7 +167,7 @@ lv{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -123,10 +210,12 @@ lv{
                 ms{"mm:ss"}
                 y{"y. 'g'."}
                 yM{"MM.yyyy."}
-                yMEd{"E, dd.MM.yyyy."}
+                yMEd{"E, d.M.y."}
                 yMMM{"yyyy. 'g'. MMM"}
-                yMMMEd{"E, yyyy. 'g'. dd. MMM"}
+                yMMMEd{"E, y. 'g'. d. MMM"}
                 yMMMM{"y. 'g'. MMMM"}
+                yMMMd{"y. 'g'. d. MMM"}
+                yMd{"d.M.y."}
                 yQ{"Q yyyy"}
                 yQQQ{"y QQQ"}
                 yyQ{"Q yy"}
@@ -135,6 +224,24 @@ lv{
             dayNames{
                 format{
                     abbreviated{
+                        "Sv",
+                        "Pr",
+                        "Ot",
+                        "Tr",
+                        "Ce",
+                        "Pk",
+                        "Se",
+                    }
+                    narrow{
+                        "S",
+                        "P",
+                        "O",
+                        "T",
+                        "C",
+                        "P",
+                        "S",
+                    }
+                    short{
                         "Sv",
                         "Pr",
                         "Ot",
@@ -154,6 +261,15 @@ lv{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "Sv",
+                        "Pr",
+                        "Ot",
+                        "Tr",
+                        "Ce",
+                        "Pk",
+                        "Se",
+                    }
                     narrow{
                         "S",
                         "P",
@@ -162,6 +278,24 @@ lv{
                         "C",
                         "P",
                         "S",
+                    }
+                    short{
+                        "Sv",
+                        "P",
+                        "O",
+                        "T",
+                        "C",
+                        "Pk",
+                        "S",
+                    }
+                    wide{
+                        "Svētdiena",
+                        "Pirmdiena",
+                        "Otrdiena",
+                        "Trešdiena",
+                        "Ceturtdiena",
+                        "Piektdiena",
+                        "Sestdiena",
                     }
                 }
             }
@@ -177,7 +311,7 @@ lv{
             }
             fields{
                 day{
-                    dn{"diena"}
+                    dn{"Diena"}
                     relative{
                         "-1"{"vakar"}
                         "-2"{"aizvakar"}
@@ -187,10 +321,10 @@ lv{
                     }
                 }
                 dayperiod{
-                    dn{"Dayperiod"}
+                    dn{"Pirmspusd./pēcpusd."}
                 }
                 era{
-                    dn{"ēra"}
+                    dn{"Ēra"}
                 }
                 hour{
                     dn{"Stundas"}
@@ -229,23 +363,23 @@ lv{
                     }
                 }
                 zone{
-                    dn{"Josla"}
+                    dn{"Laika josla"}
                 }
             }
             intervalFormats{
                 H{
-                    H{"HH-HH"}
+                    H{"HH–HH"}
                 }
                 Hm{
-                    H{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
-                    H{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
                 }
                 Hv{
-                    H{"HH-HH v"}
+                    H{"HH–HH v"}
                 }
                 M{
                     M{"MM.–MM."}
@@ -275,21 +409,21 @@ lv{
                 fallback{"{0} - {1}"}
                 h{
                     a{"h a – h a"}
-                    h{"h-h a"}
+                    h{"h–h a"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
-                    h{"h:mm-h:mm a"}
-                    m{"h:mm-h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
                 hmv{
                     a{"h:mm a – h:mm a v"}
-                    h{"h:mm-h:mm a v"}
-                    m{"h:mm-h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
                 }
                 hv{
                     a{"h a – h a v"}
-                    h{"h-h a v"}
+                    h{"h–h a v"}
                 }
                 y{
                     y{"y.–y."}
@@ -343,6 +477,20 @@ lv{
                         "nov.",
                         "dec.",
                     }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
+                    }
                     wide{
                         "janvāris",
                         "februāris",
@@ -360,18 +508,18 @@ lv{
                 }
                 stand-alone{
                     abbreviated{
-                        "janv.",
-                        "febr.",
-                        "marts",
-                        "apr.",
-                        "maijs",
-                        "jūn.",
-                        "jūl.",
-                        "aug.",
-                        "sept.",
-                        "okt.",
-                        "nov.",
-                        "dec.",
+                        "Janv.",
+                        "Febr.",
+                        "Marts",
+                        "Apr.",
+                        "Maijs",
+                        "Jūn.",
+                        "Jūl.",
+                        "Aug.",
+                        "Sept.",
+                        "Okt.",
+                        "Nov.",
+                        "Dec.",
                     }
                     narrow{
                         "J",
@@ -386,6 +534,20 @@ lv{
                         "O",
                         "N",
                         "D",
+                    }
+                    wide{
+                        "Janvāris",
+                        "Februāris",
+                        "Marts",
+                        "Aprīlis",
+                        "Maijs",
+                        "Jūnijs",
+                        "Jūlijs",
+                        "Augusts",
+                        "Septembris",
+                        "Oktobris",
+                        "Novembris",
+                        "Decembris",
                     }
                 }
             }
@@ -411,11 +573,23 @@ lv{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "C1",
+                        "C2",
+                        "C3",
+                        "C4",
+                    }
                     narrow{
                         "1.",
                         "2.",
                         "3.",
                         "4.",
+                    }
+                    wide{
+                        "1. ceturksnis",
+                        "2. ceturksnis",
+                        "3. ceturksnis",
+                        "4. ceturksnis",
                     }
                 }
             }
@@ -464,19 +638,21 @@ lv{
         }
     }
     delimiters{
-        alternateQuotationEnd{"“"}
-        alternateQuotationStart{"„"}
-        quotationEnd{"»"}
-        quotationStart{"«"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
     listPattern{
         standard{
             2{"{0} un {1}"}
             end{"{0} un {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
-        UK{"Angļu"}
+        UK{"angļu"}
         US{"amerikāņu"}
         metric{"metriskā"}
     }
@@ -487,15 +663,11 @@ lv{
             zero{"{0} diennaktis"}
         }
         day-future{
-            0{"Pēc 0 dienām"}
-            1{"Pēc 1 dienas"}
             one{"Pēc {0} dienas"}
             other{"Pēc {0} dienām"}
             zero{"Pēc {0} dienām"}
         }
         day-past{
-            0{"Pirms 0 dienām"}
-            1{"Pirms 1 dienas"}
             one{"Pirms {0} dienas"}
             other{"Pirms {0} dienām"}
             zero{"Pirms {0} dienām"}
@@ -506,15 +678,11 @@ lv{
             zero{"{0} stundas"}
         }
         hour-future{
-            0{"Pēc 0 stundām"}
-            1{"Pēc 1 stundas"}
             one{"Pēc {0} stundas"}
             other{"Pēc {0} stundām"}
             zero{"Pēc {0} stundām"}
         }
         hour-past{
-            0{"Pirms 0 stundām"}
-            1{"Pirms 1 stundas"}
             one{"Pirms {0} stundas"}
             other{"Pirms {0} stundām"}
             zero{"Pirms {0} stundām"}
@@ -525,15 +693,11 @@ lv{
             zero{"{0} minūtes"}
         }
         minute-future{
-            0{"Pēc 0 minūtēm"}
-            1{"Pēc 1 minūtes"}
             one{"Pēc {0} minūtes"}
             other{"Pēc {0} minūtēm"}
             zero{"Pēc {0} minūtēm"}
         }
         minute-past{
-            0{"Pirms 0 minūtēm"}
-            1{"Pirms 1 minūtes"}
             one{"Pirms {0} minūtes"}
             other{"Pirms {0} minūtēm"}
             zero{"Pirms {0} minūtēm"}
@@ -544,15 +708,11 @@ lv{
             zero{"{0} mēneši"}
         }
         month-future{
-            0{"Pēc 0 mēnešiem"}
-            1{"Pēc 1 mēneša"}
             one{"Pēc {0} mēneša"}
             other{"Pēc {0} mēnešiem"}
             zero{"Pēc {0} mēnešiem"}
         }
         month-past{
-            0{"Pirms 0 mēnešiem"}
-            1{"Pirms 1 mēneša"}
             one{"Pirms {0} mēneša"}
             other{"Pirms {0} mēnešiem"}
             zero{"Pirms {0} mēnešiem"}
@@ -563,15 +723,11 @@ lv{
             zero{"{0} sekundes"}
         }
         second-future{
-            0{"Pēc 0 sekundēm"}
-            1{"Pēc 1 sekundes"}
             one{"Pēc {0} sekundes"}
             other{"Pēc {0} sekundēm"}
             zero{"Pēc {0} sekundēm"}
         }
         second-past{
-            0{"Pirms 0 sekundēm"}
-            1{"Pirms 1 sekundes"}
             one{"Pirms {0} sekundes"}
             other{"Pirms {0} sekundēm"}
             zero{"Pirms {0} sekundēm"}
@@ -582,15 +738,11 @@ lv{
             zero{"{0} nedēļas"}
         }
         week-future{
-            0{"Pēc 0 nedēļām"}
-            1{"Pēc 1 nedēļas"}
             one{"Pēc {0} nedēļas"}
             other{"Pēc {0} nedēļām"}
             zero{"Pēc {0} nedēļām"}
         }
         week-past{
-            0{"Pirms 0 nedēļām"}
-            1{"Pirms 1 nedēļas"}
             one{"Pirms {0} nedēļas"}
             other{"Pirms {0} nedēļām"}
             zero{"Pirms {0} nedēļām"}
@@ -601,15 +753,11 @@ lv{
             zero{"{0} gadi"}
         }
         year-future{
-            0{"Pēc 0 gadiem"}
-            1{"Pēc 1 gada"}
             one{"Pēc {0} gada"}
             other{"Pēc {0} gadiem"}
             zero{"Pēc {0} gadiem"}
         }
         year-past{
-            0{"Pirms 0 gadiem"}
-            1{"Pirms 1 gada"}
             one{"Pirms {0} gada"}
             other{"Pirms {0} gadiem"}
             zero{"Pirms {0} gadiem"}

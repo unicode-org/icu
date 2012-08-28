@@ -42,7 +42,7 @@ ii{
             islamic{"ꑳꌦꇂꑍꉖ"}
         }
     }
-    Version{"2.0.64.43"}
+    Version{"2.0.74.65"}
     codePatterns{
         language{"ꅇꉙ: {0}"}
         script{"ꇇꁱ: {0}"}

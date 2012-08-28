@@ -12,9 +12,20 @@
 sl{
     Keys{
         calendar{"koledar"}
+        colAlternate{"Razvrščanje s prezrtimi znaki"}
+        colBackwards{"Razvrščanje z obratnimi naglasi"}
+        colCaseFirst{"Razvrščanje velike črke/male črke"}
+        colCaseLevel{"Razvrščanje, občutljivo na velike/male črke"}
+        colHiraganaQuaternary{"Razvrščanje kana"}
+        colNormalization{"Normalizirano razvrščanje"}
+        colNumeric{"Številsko razvrščanje"}
+        colStrength{"Moč razvrščanja"}
         collation{"razvrščanje"}
         currency{"valuta"}
         numbers{"Številke"}
+        timezone{"Časovni pas"}
+        va{"Različica območnih nastavitev"}
+        variableTop{"Razvrščanje kot simboli"}
         x{"Private-Use"}
     }
     Languages{
@@ -100,6 +111,7 @@ sl{
         chp{"čipevščina"}
         chr{"čerokeščina"}
         chy{"čejenščina"}
+        ckb{"soranska kurdščina"}
         cmc{"camski jezik"}
         co{"korziščina"}
         cop{"koptščina"}
@@ -297,6 +309,7 @@ sl{
         mdf{"mokšavščina"}
         mdr{"mandarščina"}
         men{"mende"}
+        mfe{"morisjenščina"}
         mg{"malagaščina"}
         mga{"srednja irščina"}
         mh{"marshallovščina"}
@@ -661,9 +674,11 @@ sl{
             ducet{"Privzeto razvrščanje Unicode"}
             gb2312han{"razvrščanje po sistemu poenostavljene kitajščine - GB2312"}
             phonebook{"razvrščanje po abecedi"}
+            phonetic{"Fonetično razvrščanje"}
             pinyin{"razvrščanje po sistemu pinjin"}
             reformed{"Reformirano razvrščanje"}
             search{"Splošno iskanje"}
+            searchjl{"Iskanje po začetnem soglasniku hangul"}
             stroke{"razvrščanje po zaporedju pisanja pismenk"}
             traditional{"razvrščanje po tradicionalnem sistemu"}
             unihan{"Razvrščanje koren-poteza"}
@@ -676,6 +691,7 @@ sl{
             beng{"Bengalske števke"}
             deva{"Devangarske števke"}
             ethi{"Etiopijske številke"}
+            finance{"Finančne številke"}
             fullwide{"Števke polne širine"}
             geor{"Gruzijske številke"}
             grek{"Grške številke"}
@@ -697,6 +713,7 @@ sl{
             mlym{"Malajalamske števke"}
             mong{"Mongolske števke"}
             mymr{"Mjanmarske števke"}
+            native{"Domače števke"}
             orya{"Orijske števke"}
             roman{"Rimske številke"}
             romanlow{"Rimske male številke"}
@@ -704,6 +721,8 @@ sl{
             telu{"Teluške števke"}
             thai{"Tajske števke"}
             tibt{"Tibetanske števke"}
+            traditional{"Tradicionalne številke"}
+            vaii{"Številke vai"}
         }
     }
     Variants{
@@ -736,9 +755,10 @@ sl{
         VALENCIA{"valencijski pravopis"}
         WADEGILE{"romanizacija Wade-Giles"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     codePatterns{
         language{"Jezik: {0}"}
+        script{"{0}"}
         territory{"Regija: {0}"}
     }
     localeDisplayPattern{

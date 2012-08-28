@@ -9,8 +9,8 @@
 #
 :: [АБВГҒДЕӘЖЗИЫКҜЛМНОӨПРСТУҮФХҺЧҸШЙЭЮЯабвгғдеәжзиыкҝлмноөпрстуүфхһчҹш’йэюя] ;
 :: NFD (NFC) ;
-$prime = ’ ;
-$wordBoundary = [^[:L:][:M:][:N:]] ;
+$prime  = ’ ;
+$wordBoundary =  [^[:L:][:M:][:N:]] ;
 $upperConsonants = [БВГҒДЖЗЈКҜЛМНПРСТФХҺЧҸШЙ] ;
 $lowerConsonants = [бвгғджзјкҝлмнпрстфхһчҹш’й] ;
 $consonants = [$upperConsonants $lowerConsonants] ;
@@ -88,7 +88,7 @@ $lower = [$lowerConsonants $lowerVowels] ;
 э → ė ; # CYRILLIC SMALL LETTER SOFT SIGN
 Ю} $lower → Yu\u0307 ; # CYRILLIC CAPITAL LETTER YU
 Ю → YU\u0307 ; # CYRILLIC CAPITAL LETTER YU
-ю → yu\u0307 ; # CYRILLIC SMALL LETTER YU
+ю → yu\u0307 ;  # CYRILLIC SMALL LETTER YU
 Я} $lower → Yȧ ; # CYRILLIC CAPITAL LETTER YA
 Я → YȦ ; # CYRILLIC CAPITAL LETTER YA
 я → yȧ ; # CYRILLIC SMALL LETTER YA

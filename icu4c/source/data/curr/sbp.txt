@@ -20,7 +20,7 @@ sbp{
             "Ihela ya Angola",
         }
         AUD{
-            "AU$",
+            "A$",
             "Ihela ya Awusitilaliya",
         }
         BHD{
@@ -228,5 +228,5 @@ sbp{
             "Ihela ya Simbabwe",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

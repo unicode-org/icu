@@ -14,7 +14,7 @@ te{
     collations{
         standard{
             Sequence{" [normalization on ]&ఔ<ఁ<ం<ః"}
-            Version{"21.0"}
+            Version{"22.0"}
         }
     }
 }

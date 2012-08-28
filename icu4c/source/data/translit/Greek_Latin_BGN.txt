@@ -16,7 +16,7 @@ $upperVowels = [ΑΕΗΙΟΥΩ] ;
 $lowerVowels = [αεηιουω] ;
 $vowels = [$upperVowels $lowerVowels] ;
 $lower = [$lowerConsonants $lowerVowels] ;
-$wordBoundary = [^[:L:][:M:][:N:]] ;
+$wordBoundary =  [^[:L:][:M:][:N:]] ;
 [ἈἉᾼᾈᾉ] → Α ; # GREEK CAPITAL LETTER ALPHA
 [ἀἁᾳᾀᾁ] → α ; # GREEK SMALL LETTER ALPHA
 [ἊἋἌἍἎἏᾊᾋᾌᾍᾎᾏᾺΆ] → Ά ; # GREEK CAPITAL LETTER ALPHA WITH TONOS
@@ -106,11 +106,11 @@ $wordBoundary{γκ → g ; # GREEK SMALL LETTER GAMMA + SMALL KAPPA
 γ}[αοω [$lowerConsonants - [γξχ]]] → g ; # GREEK SMALL LETTER GAMMA
 γ}ου → g ; # GREEK SMALL LETTER GAMMA
 Γ}[ΑΕΟΥ]Ι → Y ; # GREEK CAPITAL LETTER GAMMA
-Γ}[ΕΗΙΥ] → Y ; # GREEK CAPITAL LETTER GAMMA
+Γ}[ΕΗΙΥ]  → Y ; # GREEK CAPITAL LETTER GAMMA
 Γ}[αεου]ι → Y ; # GREEK CAPITAL LETTER GAMMA
-Γ}[εηιυ] → Y ; # GREEK CAPITAL LETTER GAMMA
+Γ}[εηιυ]  → Y ; # GREEK CAPITAL LETTER GAMMA
 γ}[αεου]ι → y ; # GREEK SMALL LETTER GAMMA
-γ}[εηιυ] → y ; # GREEK SMALL LETTER GAMMA
+γ}[εηιυ]  → y ; # GREEK SMALL LETTER GAMMA
 Γ}[ΞΧ] → N ; # GREEK CAPITAL LETTER GAMMA
 Γ}[ξχ] → N ; # GREEK CAPITAL LETTER GAMMA
 γ}[ξχ] → n ; # GREEK SMALL LETTER GAMMA

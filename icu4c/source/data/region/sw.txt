@@ -29,7 +29,7 @@ sw{
         034{"Asia ya Kusini"}
         035{"Asia ya Kusini Mashariki"}
         039{"Ulaya ya Kusini"}
-        053{"Australia na New Zealand"}
+        053{"Australasia"}
         054{"Melanesia"}
         057{"Eneo la Mikronesia"}
         061{"Polynesia"}
@@ -68,10 +68,11 @@ sw{
         BH{"Bahareni"}
         BI{"Burundi"}
         BJ{"Benini"}
-        BL{"Saint Barthélemy"}
+        BL{"Santabathelemi"}
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"Uholanzi ya Karibiani"}
         BR{"Brazili"}
         BS{"Bahama"}
         BT{"Butani"}
@@ -93,9 +94,9 @@ sw{
         CO{"Kolombia"}
         CP{"Kisiwa cha Clipperton"}
         CR{"Kostarika"}
-        CS{"Serbia na Montenegro"}
         CU{"Kuba"}
         CV{"Kepuvede"}
+        CW{"Kurakao"}
         CX{"Kisiwa cha Krismasi"}
         CY{"Kuprosi"}
         CZ{"Jamhuri ya Cheki"}
@@ -255,8 +256,10 @@ sw{
         SN{"Senegali"}
         SO{"Somalia"}
         SR{"Surinamu"}
+        SS{"Sudani Kusini"}
         ST{"Sao Tome na Principe"}
         SV{"Elsavado"}
+        SX{"Santamatini"}
         SY{"Siria"}
         SZ{"Uswazi"}
         TA{"Tristan da Cunha"}
@@ -298,5 +301,5 @@ sw{
         ZW{"Zimbabwe"}
         ZZ{"Eneo lisilojulikana"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.94"}
 }

@@ -11,7 +11,7 @@ $soften = [ptťkcčsš$] ;
 :: NFC () ;
 :: Lower () ;
 ch → x ;
-dž } $soften → t \u0361 ʃ ; # affricate indicated by ligature tie
+dž } $soften → t \u0361 ʃ ;  # affricate indicated by ligature tie
 dz } $soften → t \u0361 s ;
 dž → d \u0361 ʒ ;
 dz → d \u0361 z ;
@@ -20,8 +20,8 @@ a → a ;
 ä → ɛ ;
 b } $soften → p ;
 b → b ;
-c → t \u0361 s; # affricate indicated by ligature tie
-č → t \u0361 ʃ; # affricate indicated by ligature tie
+c → t \u0361 s;  # affricate indicated by ligature tie
+č → t \u0361 ʃ;  # affricate indicated by ligature tie
 d } [ie] → ɟ ;
 d } $soften → t ;
 d → d ;
@@ -63,7 +63,7 @@ u → u ;
 ú → uː ;
 vz } $soften → fs ;
 v } $soften → f ;
-[ $] { v } ' ' $soften → f ; # v as preposition
+[ $] { v } ' ' $soften → f ;  # v as preposition
 v → v ;
 w → v ;
 x → ks ;

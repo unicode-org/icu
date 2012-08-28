@@ -11,13 +11,13 @@
  */
 br{
     Countries{
-        001{"bed"}
+        001{"Bed"}
         002{"Afrika"}
-        003{"Norzh Amerika"}
-        005{"Su Amerika"}
+        003{"Norzhamerika"}
+        005{"Suamerika"}
         009{"Oseania"}
         011{"Afrika ar Cʼhornôg"}
-        013{"Kreiz Amerika"}
+        013{"Kreizamerika"}
         014{"Afrika ar Reter"}
         015{"Afrika an Norzh"}
         017{"Afrika ar Cʼhreiz"}
@@ -29,7 +29,7 @@ br{
         034{"Azia ar Su"}
         035{"Azia ar Gevred"}
         039{"Europa ar Su"}
-        053{"Aostralia ha Zeland-Nevez"}
+        053{"Aostralazia"}
         054{"Melanezia"}
         057{"Rannved Mikronezia"}
         061{"Polinezia"}
@@ -72,6 +72,7 @@ br{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"Antilhez nederlandat"}
         BR{"Brazil"}
         BS{"Bahamas"}
         BT{"Bhoutan"}
@@ -95,6 +96,7 @@ br{
         CR{"Costa Rica"}
         CU{"Kuba"}
         CV{"Kab Glas"}
+        CW{"Curaçao"}
         CX{"Enez Christmas"}
         CY{"Kiprenez"}
         CZ{"Republik Tchek"}
@@ -254,8 +256,10 @@ br{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
+        SS{"Su Soudan"}
         ST{"São Tomé ha Príncipe"}
         SV{"Salvador"}
+        SX{"Sint Maarten"}
         SY{"Siria"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
@@ -297,5 +301,5 @@ br{
         ZW{"Zimbabwe"}
         ZZ{"Rannved dianav"}
     }
-    Version{"2.0.64.44"}
+    Version{"2.0.75.99"}
 }

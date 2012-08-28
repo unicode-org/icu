@@ -40,7 +40,7 @@ fil{
             "Argentine Peso",
         }
         AUD{
-            "AU$",
+            "A$",
             "Australian Dollar",
         }
         AWG{
@@ -129,7 +129,7 @@ fil{
         }
         CNY{
             "CN¥",
-            "Yuan Renminbi",
+            "Chinese Yuan",
         }
         COP{
             "COP",
@@ -415,6 +415,10 @@ fil{
             "MYR",
             "Malaysian Ringgit",
         }
+        MZN{
+            "MZN",
+            "Mozambican Metical",
+        }
         NAD{
             "NAD",
             "Namibian Dollar",
@@ -539,9 +543,13 @@ fil{
             "SRD",
             "Surinamese Dollar",
         }
+        SSP{
+            "SSP",
+            "South Sudanese Pound",
+        }
         STD{
             "STD",
-            "São Tomé and Príncipe Dobra",
+            "Sao Tome and Principe Dobra",
         }
         SYP{
             "SYP",
@@ -643,6 +651,10 @@ fil{
             "CFPF",
             "CFP Franc",
         }
+        XXX{
+            "XXX",
+            "Hindi Kilalang Pera",
+        }
         YER{
             "YER",
             "Yemeni Rial",
@@ -656,9 +668,27 @@ fil{
             "Zambian Kwacha",
         }
     }
+    CurrencyPlurals{
+        BRL{
+            one{"Brazillian real"}
+            other{"Brazilian Real"}
+        }
+        MZN{
+            one{"Mozambican Metical"}
+            other{"Mozambican meticals"}
+        }
+        SSP{
+            one{"South Sudanese Pound"}
+            other{"South Sudanese Pound"}
+        }
+        XXX{
+            one{"Hindi Kilalang Pera"}
+            other{"Hindi Kilalang Pera"}
+        }
+    }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

@@ -118,7 +118,7 @@ static const char * const LANGUAGES[] = {
     "hit", "hmn", "ho",  "hr",  "hsb", "hsn", "ht",  "hu",  "hup", "hy",  "hz",
     "ia",  "iba", "id",  "ie",  "ig",  "ii",  "ijo", "ik",
     "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",
-    "iu",  "ja",  "jbo", "jmc", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",
+    "iu",  "ja",  "jbo", "jgo", "jmc", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",
     "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kde", "kea", "kfo", "kg",  "kha", "khi",
     "kho", "khq", "ki",  "kj",  "kk",  "kl",  "kln", "km",  "kmb", "kn",
     "ko",  "kok", "kos", "kpe", "kr",  "krc", "krl", "kro", "kru", "ks", "ksb", "ksf",
@@ -126,7 +126,7 @@ static const char * const LANGUAGES[] = {
     "lah", "lam", "lb",  "lez", "lg",  "li",  "ln",  "lo",  "lol",
     "loz", "lt",  "lu",  "lua", "lui", "lun", "luo", "lus", "luy",
     "lv",  "mad", "mag", "mai", "mak", "man", "map", "mas",
-    "mdf", "mdr", "men", "mer", "mfe", "mg",  "mga", "mgh", "mh",  "mi",  "mic", "min",
+    "mdf", "mdr", "men", "mer", "mfe", "mg",  "mga", "mgh", "mgo", "mh",  "mi",  "mic", "min",
     "mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",
     "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mua", "mul", "mun",
     "mus", "mwl", "mwr", "my",  "myn", "myv", "na",  "nah", "nai", "nan", "nap", "naq",
@@ -226,8 +226,8 @@ static const char * const LANGUAGES_3[] = {
     "ina", "iba", "ind", "ile", "ibo", "iii", "ijo", "ipk",
 /*  "ilo", "inc", "ine", "inh", "io",  "ira", "iro", "is",  "it",      */
     "ilo", "inc", "ine", "inh", "ido", "ira", "iro", "isl", "ita",
-/*  "iu",  "ja",  "jbo", "jmc", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",   */
-    "iku", "jpn", "jbo", "jmc", "jpr", "jrb", "jav", "kat", "kaa", "kab",
+/*  "iu",  "ja",  "jbo", "jgo", "jmc", "jpr", "jrb", "jv",  "ka",  "kaa", "kab",   */
+    "iku", "jpn", "jbo", "jgo", "jmc", "jpr", "jrb", "jav", "kat", "kaa", "kab",
 /*  "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kde", "kea", "kfo", "kg",  "kha", "khi",*/
     "kac", "kaj", "kam", "kar", "kaw", "kbd", "kcg", "kde", "kea", "kfo", "kg",  "kha", "khi",
 /*  "kho", "khq", "ki",  "kj",  "kk",  "kl",  "kln", "km",  "kmb", "kn",     */
@@ -242,8 +242,8 @@ static const char * const LANGUAGES_3[] = {
     "loz", "lit", "lub", "lua", "lui", "lun", "luo", "lus", "luy",
 /*  "lv",  "mad", "mag", "mai", "mak", "man", "map", "mas",    */
     "lav", "mad", "mag", "mai", "mak", "man", "map", "mas",
-/*  "mdf", "mdr", "men", "mer", "mfe", "mg",  "mga", "mgh", "mh",  "mi",  "mic", "min",    */
-    "mdf", "mdr", "men", "mer", "mfe", "mlg", "mga", "mgh", "mah", "mri", "mic", "min",
+/*  "mdf", "mdr", "men", "mer", "mfe", "mg",  "mga", "mgh", "mgo", "mh",  "mi",  "mic", "min",    */
+    "mdf", "mdr", "men", "mer", "mfe", "mlg", "mga", "mgh", "mgo", "mah", "mri", "mic", "min",
 /*  "mis", "mk",  "mkh", "ml",  "mn",  "mnc", "mni", "mno",    */
     "mis", "mkd", "mkh", "mal", "mon", "mnc", "mni", "mno",
 /*  "mo",  "moh", "mos", "mr",  "ms",  "mt",  "mua", "mul", "mun",    */

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ja.xml
  */
 ja{
-    Version{"2.0.66.10"}
+    Version{"2.0.75.99"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"アビジャン"}
@@ -142,7 +142,7 @@ ja{
             ec{"ンジャメナ"}
         }
         "Africa:Niamey"{
-            ec{"ニアメー"}
+            ec{"ニアメ"}
         }
         "Africa:Nouakchott"{
             ec{"ヌアクショット"}
@@ -199,7 +199,7 @@ ja{
             ec{"トゥクマン"}
         }
         "America:Argentina:Ushuaia"{
-            ec{"ウスアイア"}
+            ec{"ウシュアイア"}
         }
         "America:Aruba"{
             ec{"アルバ"}
@@ -396,6 +396,9 @@ ja{
         "America:Louisville"{
             ec{"ルイビル"}
         }
+        "America:Lower_Princes"{
+            ec{"ローワー・プリンセズ・クウォーター"}
+        }
         "America:Maceio"{
             ec{"マセイオ"}
         }
@@ -409,7 +412,7 @@ ja{
             ec{"マリゴ"}
         }
         "America:Martinique"{
-            ec{"マルチニーク"}
+            ec{"マルティニーク"}
         }
         "America:Mazatlan"{
             ec{"マサトラン"}
@@ -427,7 +430,7 @@ ja{
             ec{"メキシコシティー"}
         }
         "America:Miquelon"{
-            ec{"ミクロン"}
+            ec{"ミクロン島"}
         }
         "America:Moncton"{
             ec{"モンクトン"}
@@ -505,7 +508,7 @@ ja{
             ec{"レジャイナ"}
         }
         "America:Resolute"{
-            ec{"レソリュート"}
+            ec{"レゾリュート"}
         }
         "America:Rio_Branco"{
             ec{"リオブランコ"}
@@ -529,7 +532,7 @@ ja{
             ec{"シップロック"}
         }
         "America:St_Barthelemy"{
-            ec{"サン・バルテルミ"}
+            ec{"サン・バルテルミー"}
         }
         "America:St_Johns"{
             ec{"セントジョンズ"}
@@ -613,7 +616,7 @@ ja{
             ec{"ボストーク基地"}
         }
         "Arctic:Longyearbyen"{
-            ec{"ロングイヤービーエン"}
+            ec{"ロングイェールビーン"}
         }
         "Asia:Aden"{
             ec{"アデン"}
@@ -775,7 +778,7 @@ ja{
             ec{"カタール"}
         }
         "Asia:Qyzylorda"{
-            ec{"キジルオルダ"}
+            ec{"クズロルダ"}
         }
         "Asia:Rangoon"{
             ec{"ラングーン"}
@@ -906,6 +909,51 @@ ja{
         "Australia:Sydney"{
             ec{"シドニー"}
         }
+        "Etc:GMT"{
+            ec{"グリニッジ標準時[GMT]"}
+        }
+        "Etc:GMT-1"{
+            ec{"グリニッジ標準時[GMT]-1"}
+        }
+        "Etc:GMT-10"{
+            ec{"グリニッジ標準時[GMT]-10"}
+        }
+        "Etc:GMT-11"{
+            ec{"グリニッジ標準時[GMT]-11"}
+        }
+        "Etc:GMT-12"{
+            ec{"グリニッジ標準時[GMT]-12"}
+        }
+        "Etc:GMT-13"{
+            ec{"グリニッジ標準時[GMT]-13"}
+        }
+        "Etc:GMT-14"{
+            ec{"グリニッジ標準時[GMT]-14"}
+        }
+        "Etc:GMT-2"{
+            ec{"グリニッジ標準時[GMT]-2"}
+        }
+        "Etc:GMT-3"{
+            ec{"グリニッジ標準時[GMT]-3"}
+        }
+        "Etc:GMT-4"{
+            ec{"グリニッジ標準時[GMT]-4"}
+        }
+        "Etc:GMT-5"{
+            ec{"グリニッジ標準時[GMT]-5"}
+        }
+        "Etc:GMT-6"{
+            ec{"グリニッジ標準時[GMT]-6"}
+        }
+        "Etc:GMT-7"{
+            ec{"グリニッジ標準時[GMT]-7"}
+        }
+        "Etc:GMT-8"{
+            ec{"グリニッジ標準時[GMT]-8"}
+        }
+        "Etc:GMT-9"{
+            ec{"グリニッジ標準時[GMT]-9"}
+        }
         "Etc:Unknown"{
             ec{"地域不明"}
         }
@@ -944,6 +992,7 @@ ja{
         }
         "Europe:Dublin"{
             ec{"ダブリン"}
+            ld{"アイルランド夏時間"}
         }
         "Europe:Gibraltar"{
             ec{"ジブラルタル"}
@@ -977,6 +1026,7 @@ ja{
         }
         "Europe:London"{
             ec{"ロンドン"}
+            ld{"英国夏時間"}
         }
         "Europe:Luxembourg"{
             ec{"ルクセンブルグ"}
@@ -1090,7 +1140,7 @@ ja{
             ec{"コモロ"}
         }
         "Indian:Kerguelen"{
-            ec{"ケルゲレン"}
+            ec{"ケルゲレン諸島"}
         }
         "Indian:Mahe"{
             ec{"マヘ"}
@@ -1168,7 +1218,7 @@ ja{
             ec{"マルキーズ"}
         }
         "Pacific:Midway"{
-            ec{"ミッドウェー"}
+            ec{"ミッドウェー島"}
         }
         "Pacific:Nauru"{
             ec{"ナウル"}
@@ -1192,7 +1242,7 @@ ja{
             ec{"ピトケアン諸島"}
         }
         "Pacific:Ponape"{
-            ec{"ポナペ"}
+            ec{"ポンペイ島"}
         }
         "Pacific:Port_Moresby"{
             ec{"ポートモレスビー"}
@@ -1227,7 +1277,7 @@ ja{
             ls{"アクレ標準時"}
         }
         "meta:Afghanistan"{
-            ls{"アフガニスタン標準時"}
+            ls{"アフガニスタン時間"}
         }
         "meta:Africa_Central"{
             ls{"中央アフリカ時間"}
@@ -1254,9 +1304,9 @@ ja{
             ls{"アラスカ標準時"}
         }
         "meta:Alaska_Hawaii"{
-            ld{"アラスカ−ハワイ夏時間"}
-            lg{"アラスカ−ハワイ時間"}
-            ls{"アラスカ−ハワイ標準時"}
+            ld{"アラスカ・ハワイ夏時間"}
+            lg{"アラスカ・ハワイ時間"}
+            ls{"アラスカ・ハワイ標準時"}
         }
         "meta:Almaty"{
             ld{"アルマトイ夏時間"}
@@ -1289,9 +1339,9 @@ ja{
             ls{"アメリカ太平洋標準時"}
         }
         "meta:Anadyr"{
-            ld{"アナジル夏時間"}
-            lg{"アナジル時間"}
-            ls{"アナジル標準時"}
+            ld{"アナディリ夏時間"}
+            lg{"アナディリ時間"}
+            ls{"アナディリ標準時"}
         }
         "meta:Aqtau"{
             ld{"アクタウ夏時間"}
@@ -1304,9 +1354,9 @@ ja{
             ls{"アクトベ標準時"}
         }
         "meta:Arabian"{
-            ld{"アラブ夏時間"}
-            lg{"アラブ時間"}
-            ls{"アラブ標準時"}
+            ld{"アラビア夏時間"}
+            lg{"アラビア時間"}
+            ls{"アラビア標準時"}
         }
         "meta:Argentina"{
             ld{"アルゼンチン夏時間"}
@@ -1314,9 +1364,9 @@ ja{
             ls{"アルゼンチン標準時"}
         }
         "meta:Argentina_Western"{
-            ld{"アルゼンチン西部夏時間"}
-            lg{"アルゼンチン西部時間"}
-            ls{"アルゼンチン西部標準時"}
+            ld{"西部アルゼンチン夏時間"}
+            lg{"西部アルゼンチン時間"}
+            ls{"西部アルゼンチン標準時"}
         }
         "meta:Armenia"{
             ld{"アルメニア夏時間"}
@@ -1379,10 +1429,10 @@ ja{
             ls{"ベーリング標準時"}
         }
         "meta:Bhutan"{
-            ls{"ブータン標準時"}
+            ls{"ブータン時間"}
         }
         "meta:Bolivia"{
-            ls{"ボリビア標準時"}
+            ls{"ボリビア時間"}
         }
         "meta:Borneo"{
             ld{"ボルネオ夏時間"}
@@ -1395,7 +1445,7 @@ ja{
             ls{"ブラジリア標準時"}
         }
         "meta:Brunei"{
-            ls{"ブルネイ・ダルサラーム標準時"}
+            ls{"ブルネイ・ダルサラーム時間"}
         }
         "meta:Cape_Verde"{
             ld{"カーボベルデ夏時間"}
@@ -1406,7 +1456,12 @@ ja{
             ls{"チャモロ時間"}
         }
         "meta:Changbai"{
-            ls{"チャンバイ標準時"}
+            ls{"チャンバイ時間"}
+        }
+        "meta:Chatham"{
+            ld{"チャタム夏時間"}
+            lg{"チャタム時間"}
+            ls{"チャタム標準時"}
         }
         "meta:Chile"{
             ld{"チリ夏時間"}
@@ -1424,15 +1479,20 @@ ja{
             ls{"チョイバルサン標準時"}
         }
         "meta:Christmas"{
-            ls{"クリスマス島標準時"}
+            ls{"クリスマス島時間"}
         }
         "meta:Cocos"{
-            ls{"ココス諸島標準時"}
+            ls{"ココス諸島時間"}
         }
         "meta:Colombia"{
             ld{"コロンビア夏時間"}
             lg{"コロンビア時間"}
             ls{"コロンビア標準時"}
+        }
+        "meta:Cook"{
+            ld{"クック諸島夏時間"}
+            lg{"クック諸島時間"}
+            ls{"クック諸島標準時"}
         }
         "meta:Cuba"{
             ld{"キューバ夏時間"}
@@ -1440,7 +1500,7 @@ ja{
             ls{"キューバ標準時"}
         }
         "meta:Dacca"{
-            ls{"ダッカ標準時"}
+            ls{"ダッカ時間"}
         }
         "meta:Davis"{
             ls{"デービス基地時間"}
@@ -1457,10 +1517,15 @@ ja{
             ls{"オランダ領ギアナ標準時"}
         }
         "meta:East_Timor"{
-            ls{"東ティモール標準時"}
+            ls{"東ティモール時間"}
+        }
+        "meta:Easter"{
+            ld{"イースター島夏時間"}
+            lg{"イースター島時間"}
+            ls{"イースター島標準時"}
         }
         "meta:Ecuador"{
-            ls{"エクアドル標準時"}
+            ls{"エクアドル時間"}
         }
         "meta:Europe_Central"{
             ld{"中央ヨーロッパ夏時間"}
@@ -1482,11 +1547,16 @@ ja{
             lg{"フォークランド諸島時間"}
             ls{"フォークランド諸島標準時"}
         }
+        "meta:Fiji"{
+            ld{"フィジー夏時間"}
+            lg{"フィジー時間"}
+            ls{"フィジー標準時"}
+        }
         "meta:French_Guiana"{
-            ls{"仏領ギアナ標準時"}
+            ls{"仏領ギアナ時間"}
         }
         "meta:French_Southern"{
-            ls{"フランス領南方・南極地域標準時"}
+            ls{"仏領南方南極時間"}
         }
         "meta:Frunze"{
             ld{"フルンゼ夏時間"}
@@ -1496,10 +1566,19 @@ ja{
         "meta:GMT"{
             ls{"グリニッジ標準時"}
         }
+        "meta:Galapagos"{
+            ls{"ガラパゴス時間"}
+        }
+        "meta:Gambier"{
+            ls{"ガンビエ諸島時間"}
+        }
         "meta:Georgia"{
             ld{"グルジア夏時間"}
             lg{"グルジア時間"}
             ls{"グルジア標準時"}
+        }
+        "meta:Gilbert_Islands"{
+            ls{"ギルバート諸島時間"}
         }
         "meta:Greenland_Central"{
             ld{"グリーンランド中部夏時間"}
@@ -1517,18 +1596,18 @@ ja{
             ls{"グリーンランド西部標準時"}
         }
         "meta:Guam"{
-            ls{"グアム標準時"}
+            ls{"グアム時間"}
         }
         "meta:Gulf"{
             ls{"湾岸時間"}
         }
         "meta:Guyana"{
-            ls{"ギアナ標準時"}
+            ls{"ガイアナ時間"}
         }
         "meta:Hawaii_Aleutian"{
-            ld{"ハワイ−アリューシャン夏時間"}
-            lg{"ハワイ アリューシャン時間"}
-            ls{"ハワイ−アリューシャン標準時"}
+            ld{"ハワイ・アリューシャン夏時間"}
+            lg{"ハワイ・アリューシャン時間"}
+            ls{"ハワイ・アリューシャン標準時"}
         }
         "meta:Hong_Kong"{
             ld{"香港夏時間"}
@@ -1536,18 +1615,18 @@ ja{
             ls{"香港標準時"}
         }
         "meta:Hovd"{
-            ld{"ホブト夏時間"}
-            lg{"ホブト時間"}
-            ls{"ホブト標準時"}
+            ld{"ホブド夏時間"}
+            lg{"ホブド時間"}
+            ls{"ホブド標準時"}
         }
         "meta:India"{
-            ls{"インド標準時"}
+            ls{"インド時間"}
         }
         "meta:Indian_Ocean"{
-            ls{"英領インド洋地域標準時"}
+            ls{"インド洋時間"}
         }
         "meta:Indochina"{
-            ls{"インドシナ標準時"}
+            ls{"インドシナ時間"}
         }
         "meta:Indonesia_Central"{
             ls{"インドネシア中部時間"}
@@ -1578,29 +1657,38 @@ ja{
             lg{"日本時間"}
             ls{"日本標準時"}
             sd{"JDT"}
+            sg{"∅∅∅"}
             ss{"JST"}
         }
         "meta:Kamchatka"{
-            ld{"ペトロパブロフスク カムチャツキー夏時間"}
-            lg{"ペトロパブロフスク カムチャツキー時間"}
-            ls{"ペトロパブロフスク カムチャツキー標準時"}
+            ld{"ペトロパブロフスク・カムチャツキー夏時間"}
+            lg{"ペトロパブロフスク・カムチャツキー時間"}
+            ls{"ペトロパブロフスク・カムチャツキー標準時"}
         }
         "meta:Karachi"{
-            ls{"カラチ標準時"}
+            ls{"カラチ時間"}
         }
         "meta:Kashgar"{
-            ls{"カシュガル標準時"}
+            ls{"カシュガル時間"}
         }
         "meta:Kazakhstan_Eastern"{
-            ls{"カザフスタン東部時間"}
+            ls{"東カザフスタン時間"}
         }
         "meta:Kazakhstan_Western"{
-            ls{"カザフスタン西部時間"}
+            ls{"西カザフスタン時間"}
+        }
+        "meta:Kizilorda"{
+            ld{"キジロルダ夏時間"}
+            lg{"キジロルダ時間"}
+            ls{"キジロルダ標準時"}
         }
         "meta:Korea"{
             ld{"韓国夏時間"}
             lg{"韓国時間"}
             ls{"韓国標準時"}
+        }
+        "meta:Kosrae"{
+            ls{"コスラエ時間"}
         }
         "meta:Krasnoyarsk"{
             ld{"クラスノヤルスク夏時間"}
@@ -1612,21 +1700,50 @@ ja{
             lg{"クイビシェフ時間"}
             ls{"クイビシェフ標準時"}
         }
+        "meta:Kwajalein"{
+            ls{"クェゼリン時間"}
+        }
+        "meta:Kyrgystan"{
+            ls{"キルギスタン時間"}
+        }
+        "meta:Lanka"{
+            ls{"ランカ時間"}
+        }
+        "meta:Line_Islands"{
+            ls{"ライン諸島時間"}
+        }
         "meta:Lord_Howe"{
             ld{"ロードハウ夏時間"}
             lg{"ロードハウ時間"}
             ls{"ロードハウ標準時"}
         }
+        "meta:Macau"{
+            ld{"マカオ夏時間"}
+            lg{"マカオ時間"}
+            ls{"マカオ標準時"}
+        }
         "meta:Macquarie"{
-            ls{"マッコーリー時間"}
+            ls{"マッコーリー島時間"}
         }
         "meta:Magadan"{
             ld{"マガダン夏時間"}
             lg{"マガダン時間"}
             ls{"マガダン標準時"}
         }
+        "meta:Malaya"{
+            ls{"マラヤ時間"}
+        }
+        "meta:Malaysia"{
+            ls{"マレーシア時間"}
+        }
         "meta:Maldives"{
-            ls{"モルディブ標準時"}
+            ls{"モルディブ時間"}
+        }
+        "meta:Marquesas"{
+            ls{"マルキーズ時間"}
+        }
+        "meta:Marshall_Islands"{
+            ls{"マーシャル諸島時間"}
         }
         "meta:Mauritius"{
             ld{"モーリシャス夏時間"}
@@ -1646,28 +1763,64 @@ ja{
             lg{"モスクワ時間"}
             ls{"モスクワ標準時"}
         }
+        "meta:Myanmar"{
+            ls{"ミャンマー時間"}
+        }
+        "meta:Nauru"{
+            ls{"ナウル時間"}
+        }
+        "meta:Nepal"{
+            ls{"ネパール時間"}
+        }
+        "meta:New_Caledonia"{
+            ld{"ニューカレドニア夏時間"}
+            lg{"ニューカレドニア時間"}
+            ls{"ニューカレドニア標準時"}
+        }
+        "meta:New_Zealand"{
+            ld{"ニュージーランド夏時間"}
+            lg{"ニュージーランド時間"}
+            ls{"ニュージーランド標準時"}
+        }
         "meta:Newfoundland"{
-            ld{"ニューファンドランド島夏時間"}
-            lg{"ニューファンドランド島時間"}
-            ls{"ニューファンドランド島標準時"}
+            ld{"ニューファンドランド夏時間"}
+            lg{"ニューファンドランド時間"}
+            ls{"ニューファンドランド標準時"}
+        }
+        "meta:Niue"{
+            ls{"ニウエ時間"}
         }
         "meta:Norfolk"{
-            ls{"ノーフォーク諸島時間"}
+            ls{"ノーフォーク島時間"}
         }
         "meta:Noronha"{
-            ld{"フェルナンド ド ノローニャ夏時間"}
-            lg{"フェルナンド ド ノローニャ時間"}
-            ls{"フェルナンド ド ノローニャ標準時"}
+            ld{"フェルナンド・デ・ノローニャ夏時間"}
+            lg{"フェルナンド・デ・ノローニャ時間"}
+            ls{"フェルナンド・デ・ノローニャ標準時"}
+        }
+        "meta:North_Mariana"{
+            ls{"北マリアナ諸島時間"}
         }
         "meta:Novosibirsk"{
-            ld{"ノボシビルスク夏時間"}
-            lg{"ノボシビルスク時間"}
-            ls{"ノボシビルスク標準時"}
+            ld{"ノヴォシビルスク夏時間"}
+            lg{"ノヴォシビルスク時間"}
+            ls{"ノヴォシビルスク標準時"}
         }
         "meta:Omsk"{
             ld{"オムスク夏時間"}
             lg{"オムスク時間"}
             ls{"オムスク標準時"}
+        }
+        "meta:Pakistan"{
+            ld{"パキスタン夏時間"}
+            lg{"パキスタン時間"}
+            ls{"パキスタン標準時"}
+        }
+        "meta:Palau"{
+            ls{"パラオ時間"}
+        }
+        "meta:Papua_New_Guinea"{
+            ls{"パプアニューギニア時間"}
         }
         "meta:Paraguay"{
             ld{"パラグアイ夏時間"}
@@ -1679,11 +1832,35 @@ ja{
             lg{"ペルー時間"}
             ls{"ペルー標準時"}
         }
+        "meta:Philippines"{
+            ld{"フィリピン夏時間"}
+            lg{"フィリピン時間"}
+            ls{"フィリピン標準時"}
+        }
+        "meta:Phoenix_Islands"{
+            ls{"フェニックス諸島時間"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"サンピエール・ミクロン夏時間"}
+            lg{"サンピエール・ミクロン時間"}
+            ls{"サンピエール・ミクロン標準時"}
+        }
+        "meta:Pitcairn"{
+            ls{"ピトケアン時間"}
+        }
+        "meta:Ponape"{
+            ls{"ポナペ時間"}
+        }
+        "meta:Qyzylorda"{
+            ld{"クズロルダ夏時間"}
+            lg{"クズロルダ時間"}
+            ls{"クズロルダ標準時"}
+        }
         "meta:Reunion"{
-            ls{"レユニオン標準時"}
+            ls{"レユニオン時間"}
         }
         "meta:Rothera"{
-            ls{"ロゼラ研究基地時間"}
+            ls{"ロゼラ基地時間"}
         }
         "meta:Sakhalin"{
             ld{"サハリン夏時間"}
@@ -1695,30 +1872,107 @@ ja{
             lg{"サマラ時間"}
             ls{"サマラ標準時"}
         }
+        "meta:Samarkand"{
+            ld{"サマルカンド夏時間"}
+            lg{"サマルカンド時間"}
+            ls{"サマルカンド標準時"}
+        }
+        "meta:Samoa"{
+            ls{"サモア時間"}
+        }
         "meta:Seychelles"{
-            ls{"セーシェル標準時"}
+            ls{"セーシェル時間"}
+        }
+        "meta:Shevchenko"{
+            ld{"シェフチェンコ夏時間"}
+            lg{"シェフチェンコ時間"}
+            ls{"シェフチェンコ標準時"}
+        }
+        "meta:Singapore"{
+            ls{"シンガポール時間"}
+        }
+        "meta:Solomon"{
+            ls{"ソロモン諸島時間"}
         }
         "meta:South_Georgia"{
-            ls{"サウスジョージア標準時"}
+            ls{"サウスジョージア時間"}
         }
         "meta:Suriname"{
-            ls{"スリナム標準時"}
+            ls{"スリナム時間"}
         }
         "meta:Syowa"{
             ls{"昭和基地時間"}
+        }
+        "meta:Tahiti"{
+            ls{"タヒチ時間"}
+        }
+        "meta:Taipei"{
+            ld{"台北夏時間"}
+            lg{"台北時間"}
+            ls{"台北標準時"}
+        }
+        "meta:Tajikistan"{
+            ls{"タジキスタン時間"}
+        }
+        "meta:Tashkent"{
+            ld{"タシュケント夏時間"}
+            lg{"タシュケント時間"}
+            ls{"タシュケント標準時"}
+        }
+        "meta:Tbilisi"{
+            ld{"トビリシ夏時間"}
+            lg{"トビリシ時間"}
+            ls{"トビリシ標準時"}
+        }
+        "meta:Tokelau"{
+            ls{"トケラウ時間"}
+        }
+        "meta:Tonga"{
+            ld{"トンガ夏時間"}
+            lg{"トンガ時間"}
+            ls{"トンガ標準時"}
+        }
+        "meta:Truk"{
+            ls{"チューク時間"}
         }
         "meta:Turkey"{
             ld{"トルコ夏時間"}
             lg{"トルコ時間"}
             ls{"トルコ標準時"}
         }
+        "meta:Turkmenistan"{
+            ld{"トルクメニスタン夏時間"}
+            lg{"トルクメニスタン時間"}
+            ls{"トルクメニスタン標準時"}
+        }
+        "meta:Tuvalu"{
+            ls{"ツバル時間"}
+        }
+        "meta:Uralsk"{
+            ld{"オラル夏時間"}
+            lg{"オラル時間"}
+            ls{"オラル標準時"}
+        }
         "meta:Uruguay"{
             ld{"ウルグアイ夏時間"}
             lg{"ウルグアイ時間"}
             ls{"ウルグアイ標準時"}
         }
+        "meta:Urumqi"{
+            ls{"ウルムチ時間"}
+        }
+        "meta:Uzbekistan"{
+            ld{"ウズベキスタン夏時間"}
+            lg{"ウズベキスタン時間"}
+            ls{"ウズベキスタン標準時"}
+        }
+        "meta:Vanuatu"{
+            ld{"バヌアツ夏時間"}
+            lg{"バヌアツ時間"}
+            ls{"バヌアツ標準時"}
+        }
         "meta:Venezuela"{
-            ls{"ベネズエラ標準時"}
+            ls{"ベネズエラ時間"}
         }
         "meta:Vladivostok"{
             ld{"ウラジオストク夏時間"}
@@ -1728,10 +1982,16 @@ ja{
         "meta:Volgograd"{
             ld{"ボルゴグラード夏時間"}
             lg{"ボルゴグラード時間"}
-            ls{"ボルゴグラード標準時"}
+            ls{"ヴォルゴグラード標準時"}
         }
         "meta:Vostok"{
             ls{"ボストーク基地時間"}
+        }
+        "meta:Wake"{
+            ls{"ウェーク島時間"}
+        }
+        "meta:Wallis"{
+            ls{"ウォリス・フツナ時間"}
         }
         "meta:Yakutsk"{
             ld{"ヤクーツク夏時間"}
@@ -1743,6 +2003,11 @@ ja{
             lg{"エカテリンブルグ時間"}
             ls{"エカテリンブルグ標準時"}
         }
+        "meta:Yerevan"{
+            ld{"エレバン夏時間"}
+            lg{"エレバン時間"}
+            ls{"エレバン標準時"}
+        }
         "meta:Yukon"{
             ld{"ユーコン夏時間"}
             lg{"ユーコン時間"}
@@ -1751,6 +2016,7 @@ ja{
         fallbackFormat{"{1}（{0}）"}
         fallbackRegionFormat{"{1}時間（{0}）"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}時間"}
     }

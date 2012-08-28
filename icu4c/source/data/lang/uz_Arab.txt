@@ -13,7 +13,7 @@ uz_Arab{
     Languages{
         fa{"دری"}
         ps{"پشتو"}
-        uz{"اۉزبېک"}
+        uz{"اوزبیک"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.76.36"}
 }

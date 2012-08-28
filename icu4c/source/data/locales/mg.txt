@@ -23,7 +23,7 @@ mg{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -140,14 +140,8 @@ mg{
                 week{
                     dn{"Herinandro"}
                 }
-                weekday{
-                    dn{"Andro"}
-                }
                 year{
                     dn{"Taona"}
-                }
-                zone{
-                    dn{"Ora"}
                 }
             }
             monthNames{

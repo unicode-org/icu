@@ -7,8 +7,17 @@
 // *
 // ***************************************************************************
 es_419{
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     zoneStrings{
+        "America:Coral_Harbour"{
+            ec{"Atikokan"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
+        }
         "meta:America_Central"{
             sd{"CDT"}
             sg{"CT"}

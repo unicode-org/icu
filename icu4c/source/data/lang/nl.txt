@@ -12,9 +12,20 @@
 nl{
     Keys{
         calendar{"Kalender"}
-        collation{"Volgorde"}
+        colAlternate{"Sorteren van symbolen negeren"}
+        colBackwards{"Omgekeerd sorteren op accenten"}
+        colCaseFirst{"Indelen op hoofdletters/kleine letters"}
+        colCaseLevel{"Hoofdlettergevoelig sorteren"}
+        colHiraganaQuaternary{"Kana sorteren"}
+        colNormalization{"Genormaliseerd sorteren"}
+        colNumeric{"Numeriek sorteren"}
+        colStrength{"Sorteervoorrang"}
+        collation{"Sorteervolgorde"}
         currency{"Valuta"}
         numbers{"Cijfers"}
+        timezone{"Tijdzone"}
+        va{"Landvariant"}
+        variableTop{"Sorteren als symbolen"}
         x{"Privégebruik"}
     }
     Languages{
@@ -28,6 +39,7 @@ nl{
         af{"Afrikaans"}
         afa{"Afro-Aziatische taal"}
         afh{"Afrihili"}
+        agq{"Aghem"}
         ain{"Ainu"}
         ak{"Akan"}
         akk{"Akkadisch"}
@@ -60,16 +72,20 @@ nl{
         ban{"Balinees"}
         bas{"Basa"}
         bat{"Baltische taal"}
+        bax{"Bamun"}
+        bbj{"Ghomala"}
         be{"Wit-Russisch"}
         bej{"Beja"}
         bem{"Bemba"}
         ber{"Berber"}
+        bfd{"Bafut"}
         bg{"Bulgaars"}
         bh{"Bihari"}
         bho{"Bhojpuri"}
         bi{"Bislama"}
         bik{"Bikol"}
         bin{"Bini"}
+        bkm{"Kom"}
         bla{"Siksika"}
         bm{"Bambara"}
         bn{"Bengalees"}
@@ -77,20 +93,26 @@ nl{
         bo{"Tibetaans"}
         br{"Bretons"}
         bra{"Braj"}
+        brx{"Bodo"}
         bs{"Bosnisch"}
+        bss{"Akoose"}
         btk{"Batak"}
         bua{"Buriat"}
         bug{"Buginees"}
+        bum{"Bulu"}
         byn{"Blin"}
+        byv{"Medumba"}
         ca{"Catalaans"}
         cad{"Caddo"}
         cai{"Midden-Amerikaans Indiaanse taal"}
         car{"Caribisch"}
         cau{"Kaukasische taal"}
+        cay{"Cayuga"}
         cch{"Atsam"}
         ce{"Tsjetsjeens"}
         ceb{"Cebuano"}
         cel{"Keltische taal"}
+        cgg{"Chiga"}
         ch{"Chamorro"}
         chb{"Chibcha"}
         chg{"Chagatai"}
@@ -101,6 +123,7 @@ nl{
         chp{"Chipewyan"}
         chr{"Cherokee"}
         chy{"Cheyenne"}
+        ckb{"Soranî"}
         cmc{"Chamische taal"}
         co{"Corsicaans"}
         cop{"Koptisch"}
@@ -119,6 +142,7 @@ nl{
         da{"Deens"}
         dak{"Dakota"}
         dar{"Dargwa"}
+        dav{"Taita"}
         day{"Dajak"}
         de{"Duits"}
         de_AT{"Oostenrijks Duits"}
@@ -127,14 +151,17 @@ nl{
         den{"Slave"}
         dgr{"Dogrib"}
         din{"Dinka"}
+        dje{"Zarma"}
         doi{"Dogri"}
         dra{"Dravidische taal"}
         dsb{"Nedersorbisch"}
         dua{"Duala"}
         dum{"Middelnederlands"}
         dv{"Divehi"}
+        dyo{"Jola-Fonyi"}
         dyu{"Dyula"}
         dz{"Dzongkha"}
+        dzg{"Dazaga"}
         ee{"Ewe"}
         efi{"Efik"}
         egy{"Oudegyptisch"}
@@ -150,7 +177,7 @@ nl{
         eo{"Esperanto"}
         es{"Spaans"}
         es_419{"Latijns-Amerikaans Spaans"}
-        es_ES{"Iberisch Spaans"}
+        es_ES{"Europees Spaans"}
         et{"Estlands"}
         eu{"Baskisch"}
         ewo{"Ewondo"}
@@ -159,7 +186,7 @@ nl{
         fat{"Fanti"}
         ff{"Fulah"}
         fi{"Fins"}
-        fil{"Filippijns"}
+        fil{"Filipijns"}
         fiu{"Fins-Oegrische taal"}
         fj{"Fijisch"}
         fo{"Faeröers"}
@@ -183,7 +210,7 @@ nl{
         gil{"Gilbertees"}
         gl{"Galicisch"}
         gmh{"Middelhoogduits"}
-        gn{"Guarani"}
+        gn{"Guaraní"}
         goh{"Oudhoogduits"}
         gon{"Gondi"}
         gor{"Gorontalo"}
@@ -192,6 +219,7 @@ nl{
         grc{"Oudgrieks"}
         gsw{"Zwitsers Duits"}
         gu{"Gujarati"}
+        guz{"Gusii"}
         gv{"Manx"}
         gwi{"Gwichʼin"}
         ha{"Hausa"}
@@ -213,6 +241,7 @@ nl{
         hz{"Herero"}
         ia{"Interlingua"}
         iba{"Iban"}
+        ibb{"Ibibio"}
         id{"Indonesisch"}
         ie{"Interlingue"}
         ig{"Igbo"}
@@ -231,6 +260,7 @@ nl{
         iu{"Inuktitut"}
         ja{"Japans"}
         jbo{"Lojban"}
+        jmc{"Machame"}
         jpr{"Judeo-Perzisch"}
         jrb{"Judeo-Arabisch"}
         jv{"Javaans"}
@@ -243,17 +273,22 @@ nl{
         kar{"Karen"}
         kaw{"Kawi"}
         kbd{"Kabardisch"}
+        kbl{"Kanembu"}
         kcg{"Tyap"}
+        kde{"Makonde"}
         kea{"Kabuverdianu"}
         kfo{"Koro"}
         kg{"Kongo"}
         kha{"Khasi"}
         khi{"Khoisan-taal"}
         kho{"Khotanees"}
+        khq{"Koyra Chiini"}
         ki{"Kikuyu"}
         kj{"Kuanyama"}
         kk{"Kazachs"}
+        kkj{"Kako"}
         kl{"Groenlands"}
+        kln{"Kalenjin"}
         km{"Khmer"}
         kmb{"Kimbundu"}
         kn{"Kannada"}
@@ -267,6 +302,9 @@ nl{
         kro{"Kru"}
         kru{"Kurukh"}
         ks{"Kasjmiri"}
+        ksb{"Shambala"}
+        ksf{"Bafia"}
+        ksh{"Kölsch"}
         ku{"Koerdisch"}
         kum{"Koemuks"}
         kut{"Kutenai"}
@@ -275,6 +313,7 @@ nl{
         ky{"Kirgizisch"}
         la{"Latijn"}
         lad{"Ladino"}
+        lag{"Langi"}
         lah{"Lahnda"}
         lam{"Lamba"}
         lb{"Luxemburgs"}
@@ -292,19 +331,25 @@ nl{
         lun{"Lunda"}
         luo{"Luo"}
         lus{"Lushai"}
+        luy{"Luyia"}
         lv{"Letlands"}
         mad{"Madurees"}
+        maf{"Mafa"}
         mag{"Magahi"}
         mai{"Maithili"}
         mak{"Makassaars"}
         man{"Mandingo"}
         map{"Austronesisch"}
         mas{"Masai"}
+        mde{"Maba"}
         mdf{"Moksha"}
         mdr{"Mandar"}
         men{"Mende"}
+        mer{"Meru"}
+        mfe{"Morisyen"}
         mg{"Malagasisch"}
         mga{"Middeliers"}
+        mgh{"Makhuwa-Meetto"}
         mh{"Marshallees"}
         mi{"Maori"}
         mic{"Mi'kmaq"}
@@ -323,18 +368,21 @@ nl{
         mr{"Marathi"}
         ms{"Maleis"}
         mt{"Maltees"}
+        mua{"Mundang"}
         mul{"Meerdere talen"}
         mun{"Munda-taal"}
         mus{"Creek"}
         mwl{"Mirandees"}
         mwr{"Marwari"}
         my{"Birmees"}
+        mye{"Myene"}
         myn{"Mayan-taal"}
         myv{"Erzja"}
         na{"Nauruaans"}
         nah{"Nahuatl"}
         nai{"Noord-Amerikaans Indiaanse taal"}
         nap{"Napolitaans"}
+        naq{"Nama"}
         nb{"Noors - Bokmål"}
         nd{"Noord-Ndbele"}
         nds{"Laagduits"}
@@ -346,7 +394,9 @@ nl{
         niu{"Niueaans"}
         nl{"Nederlands"}
         nl_BE{"Vlaams"}
+        nmg{"Kwasio"}
         nn{"Noors - Nynorsk"}
+        nnh{"Ngiemboon"}
         no{"Noors"}
         nog{"Nogai"}
         non{"Oudnoors"}
@@ -354,6 +404,7 @@ nl{
         nr{"Zuid-Ndbele"}
         nso{"Noord-Sotho"}
         nub{"Nubische taal"}
+        nus{"Nuer"}
         nv{"Navajo"}
         nwc{"Klassiek Newari"}
         ny{"Nyanja"}
@@ -364,7 +415,7 @@ nl{
         oc{"Occitaans"}
         oj{"Ojibwa"}
         om{"Oromo"}
-        or{"Oriya"}
+        or{"Odia"}
         os{"Ossetisch"}
         osa{"Osage"}
         ota{"Ottomaans-Turks"}
@@ -387,7 +438,7 @@ nl{
         ps{"Pasjtoe"}
         pt{"Portugees"}
         pt_BR{"Braziliaans Portugees"}
-        pt_PT{"Iberisch Portugees"}
+        pt_PT{"Europees Portugees"}
         qu{"Quechua"}
         raj{"Rajasthani"}
         rap{"Rapanui"}
@@ -396,31 +447,41 @@ nl{
         rn{"Kirundi"}
         ro{"Roemeens"}
         roa{"Romaanse taal"}
+        rof{"Rombo"}
         rom{"Romani"}
         root{"Root"}
         ru{"Russisch"}
         rup{"Aromaniaans"}
         rw{"Kinyarwanda"}
+        rwk{"Rwa"}
         sa{"Sanskriet"}
         sad{"Sandawe"}
         sah{"Jakoets"}
         sai{"Zuid-Amerikaans Indiaanse taal"}
         sal{"Salishan-taal"}
         sam{"Samaritaans-Aramees"}
+        saq{"Samburu"}
         sas{"Sasak"}
         sat{"Santali"}
+        sba{"Ngambay"}
+        sbp{"Sangu"}
         sc{"Sardinisch"}
         scn{"Siciliaans"}
         sco{"Schots"}
         sd{"Sindhi"}
         se{"Noord-Samisch"}
+        see{"Seneca"}
+        seh{"Sena"}
         sel{"Selkup"}
         sem{"Semitische taal"}
+        ses{"Koyraboro Senni"}
         sg{"Sango"}
         sga{"Oudiers"}
         sgn{"Gebarentaal"}
         sh{"Servokroatisch"}
+        shi{"Tachelhit"}
         shn{"Shan"}
+        shu{"Tsjadisch Arabisch"}
         si{"Singalees"}
         sid{"Sidamo"}
         sio{"Siouaanse talen"}
@@ -445,6 +506,7 @@ nl{
         srr{"Serer"}
         ss{"Swazi"}
         ssa{"Nilo-Saharaanse taal"}
+        ssy{"Saho"}
         st{"Zuid-Sotho"}
         su{"Soendanees"}
         suk{"Sukuma"}
@@ -453,12 +515,14 @@ nl{
         sv{"Zweeds"}
         sw{"Swahili"}
         swb{"Shimaore"}
+        swc{"Congo Swahili"}
         syc{"Klassiek Syrisch"}
-        syr{"Syriac"}
+        syr{"Syrisch"}
         ta{"Tamil"}
         tai{"Tai-taal"}
-        te{"Teloegoe"}
+        te{"Telugu"}
         tem{"Timne"}
+        teo{"Teso"}
         ter{"Tereno"}
         tet{"Tetun"}
         tg{"Tadzjieks"}
@@ -477,6 +541,7 @@ nl{
         tog{"Nyasa Tonga"}
         tpi{"Tok Pisin"}
         tr{"Turks"}
+        trv{"Taroko"}
         ts{"Tsonga"}
         tsi{"Tsimshian"}
         tt{"Tataars"}
@@ -485,8 +550,10 @@ nl{
         tut{"Altaïsche taal"}
         tvl{"Tuvaluaans"}
         tw{"Twi"}
+        twq{"Tasawaq"}
         ty{"Tahitisch"}
         tyv{"Tuvinisch"}
+        tzm{"Tamazight (Centraal-Marokko)"}
         udm{"Oedmoerts"}
         ug{"Oeigoers"}
         uga{"Oegaritisch"}
@@ -500,7 +567,9 @@ nl{
         vi{"Vietnamees"}
         vo{"Volapük"}
         vot{"Votisch"}
+        vun{"Vunjo"}
         wa{"Waals"}
+        wae{"Walser"}
         wak{"Wakashan-taal"}
         wal{"Walamo"}
         war{"Waray"}
@@ -509,8 +578,11 @@ nl{
         wo{"Wolof"}
         xal{"Kalmyk"}
         xh{"Xhosa"}
+        xog{"Soga"}
         yao{"Yao"}
         yap{"Yapees"}
+        yav{"Yangben"}
+        ybb{"Yemba"}
         yi{"Jiddisch"}
         yo{"Yoruba"}
         ypk{"Yupik-talen"}
@@ -571,8 +643,8 @@ nl{
         Hang{"Hangul"}
         Hani{"Han"}
         Hano{"Hanunoo"}
-        Hans{"Vereenvoudigd Han"}
-        Hant{"Traditioneel Han"}
+        Hans{"Vereenvoudigd"}
+        Hant{"Traditioneel"}
         Hebr{"Hebreeuws"}
         Hira{"Hiragana"}
         Hmng{"Pahawh Hmong"}
@@ -613,7 +685,7 @@ nl{
         Ogam{"Ogham"}
         Olck{"Ol Chiki"}
         Orkh{"Orkhon"}
-        Orya{"Oriya"}
+        Orya{"Odia"}
         Osma{"Osmanya"}
         Perm{"Oudpermisch"}
         Phag{"Phags-pa"}
@@ -659,9 +731,9 @@ nl{
         Zinh{"Overgeërfd"}
         Zmth{"Wiskundige notatie"}
         Zsym{"Symbolen"}
-        Zxxx{"Code voor ongeschreven talen"}
+        Zxxx{"Ongeschreven"}
         Zyyy{"Algemeen"}
-        Zzzz{"Code voor ongecodeerde schriftsystemen"}
+        Zzzz{"Onbekend schriftsysteem"}
     }
     Scripts%stand-alone{
         Hans{"Vereenvoudigd Chinees"}
@@ -689,9 +761,11 @@ nl{
             ducet{"Standaard Unicode-sorteervolgorde"}
             gb2312han{"Vereenvoudigd-Chinese sorteervolgorde - GB2312"}
             phonebook{"Telefoonboeksorteervolgorde"}
+            phonetic{"Fonetische sorteervolgorde"}
             pinyin{"Pinyinvolgorde"}
             reformed{"Herziene sorteervolgorde"}
             search{"Algemeen zoeken"}
+            searchjl{"Zoeken op eerste Hangul-medeklinker"}
             stroke{"Streeksorteervolgorde"}
             traditional{"Traditionele sorteervolgorde"}
             unihan{"Sorteervolgorde radicalen/strepen"}
@@ -704,6 +778,7 @@ nl{
             beng{"Bengaalse cijfers"}
             deva{"Devanagari cijfers"}
             ethi{"Ethiopische cijfers"}
+            finance{"Financiële cijfers"}
             fullwide{"Cijfers met volledige breedte"}
             geor{"Georgische cijfers"}
             grek{"Griekse cijfers"}
@@ -725,13 +800,17 @@ nl{
             mlym{"Malayalam cijfers"}
             mong{"Mongoolse cijfers"}
             mymr{"Myanmarese cijfers"}
+            native{"Binnenlandse cijfers"}
             orya{"Oriya cijfers"}
             roman{"Romeinse cijfers"}
             romanlow{"Kleine Romeinse cijfers"}
-            taml{"Tamil cijfers"}
+            taml{"Traditionele Tamil cijfers"}
+            tamldec{"Tamil cijfers"}
             telu{"Telugu cijfers"}
             thai{"Thaise cijfers"}
             tibt{"Tibetaanse cijfers"}
+            traditional{"Traditionele cijfers"}
+            vaii{"Vai-cijfers"}
         }
     }
     Variants{
@@ -789,13 +868,14 @@ nl{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Schrift: {0}"}
         territory{"Regio: {0}"}
     }
     localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
         separator{", "}
     }

@@ -2,16 +2,13 @@
 // *
 // * Copyright (C) 2012 International Business Machines
 // * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/icu-config.xml & build.xml
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/ar_EH.xml
 // *
 // ***************************************************************************
-/**
- * validSubLocale of "bs"
- */
-bs_BA{
-    /**
-     * so genrb doesn't issue warnings
-     */
-    ___{""}
+ar_EH{
+    NumberElements{
+        default{"latn"}
+    }
+    Version{"2.0.75.99"}
 }

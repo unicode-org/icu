@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh_Hant.xml
  */
 zh_Hant{
-    Version{"2.0.66.10"}
+    Version{"2.0.76.33"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿必尚"}
@@ -205,7 +205,7 @@ zh_Hant{
             ec{"阿魯巴"}
         }
         "America:Asuncion"{
-            ec{"巴拉圭"}
+            ec{"亞松森"}
         }
         "America:Bahia"{
             ec{"巴伊阿"}
@@ -274,7 +274,7 @@ zh_Hant{
             ec{"古雅巴"}
         }
         "America:Curacao"{
-            ec{"荷屬安地列斯"}
+            ec{"庫拉索"}
         }
         "America:Danmarkshavn"{
             ec{"丹馬沙文"}
@@ -395,6 +395,9 @@ zh_Hant{
         }
         "America:Louisville"{
             ec{"路易斯維爾"}
+        }
+        "America:Lower_Princes"{
+            ec{"下太子區"}
         }
         "America:Maceio"{
             ec{"馬瑟歐"}
@@ -906,6 +909,9 @@ zh_Hant{
         "Australia:Sydney"{
             ec{"雪梨"}
         }
+        "Etc:GMT"{
+            ec{"格林威治標準時間"}
+        }
         "Etc:Unknown"{
             ec{"未知地區"}
         }
@@ -944,6 +950,7 @@ zh_Hant{
         }
         "Europe:Dublin"{
             ec{"都柏林"}
+            ld{"愛爾蘭夏令時間"}
         }
         "Europe:Gibraltar"{
             ec{"直布羅陀"}
@@ -977,6 +984,7 @@ zh_Hant{
         }
         "Europe:London"{
             ec{"倫敦"}
+            ld{"英國夏令時間"}
         }
         "Europe:Luxembourg"{
             ec{"盧森堡"}
@@ -1402,6 +1410,9 @@ zh_Hant{
             lg{"維德角時間"}
             ls{"維德角標準時間"}
         }
+        "meta:Casey"{
+            ls{"凱西站時間"}
+        }
         "meta:Chamorro"{
             ls{"查莫洛時間"}
         }
@@ -1619,10 +1630,10 @@ zh_Hant{
             ls{"喀什時間"}
         }
         "meta:Kazakhstan_Eastern"{
-            ls{"東哈薩克標準時間"}
+            ls{"東哈薩克時間"}
         }
         "meta:Kazakhstan_Western"{
-            ls{"西哈薩克標準時間"}
+            ls{"西哈薩克時間"}
         }
         "meta:Kizilorda"{
             ld{"吉力羅達夏令時間"}
@@ -1745,8 +1756,8 @@ zh_Hant{
         }
         "meta:Noronha"{
             ld{"諾倫哈夏令時間"}
-            lg{"諾拉哈時間"}
-            ls{"費南多諾羅尼亞時間"}
+            lg{"費南多諾羅尼亞島時間"}
+            ls{"費南多諾羅尼亞島標準時間"}
         }
         "meta:North_Mariana"{
             ls{"北馬里亞納群島時間"}
@@ -1791,7 +1802,7 @@ zh_Hant{
             ls{"鳳凰群島時間"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"聖皮埃爾和密克隆群島日光節約時間"}
+            ld{"聖皮埃爾和密克隆群島夏令時間"}
             lg{"聖皮埃爾和密克隆群島時間"}
             ls{"聖皮埃爾和密克隆群島標準時間"}
         }
@@ -1862,7 +1873,7 @@ zh_Hant{
             ls{"大溪地時間"}
         }
         "meta:Taipei"{
-            ld{"中原夏令時間"}
+            ld{"台北夏令時間"}
             lg{"台北時間"}
             ls{"台北標準時間"}
         }
@@ -1956,7 +1967,7 @@ zh_Hant{
         "meta:Yekaterinburg"{
             ld{"凱薩琳堡夏令時間"}
             lg{"葉卡捷琳堡時間"}
-            ls{"凱薩琳堡標準時間"}
+            ls{"葉卡捷琳堡標準時間"}
         }
         "meta:Yerevan"{
             ld{"葉里溫夏令時間"}

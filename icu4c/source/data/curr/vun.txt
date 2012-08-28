@@ -20,7 +20,7 @@ vun{
             "Kwanza ya Angola",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dola ya Australia",
         }
         BHD{
@@ -232,5 +232,5 @@ vun{
             "Dola ya Zimbabwe",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.79"}
 }

@@ -134,7 +134,7 @@ void DateFormatRegressionTest::Test4052408(void)
     str = fmt->format(dt, str);
     logln(str);
     
-    if(str != "5/3/97 8:55 AM")
+    if(str != "5/3/97, 8:55 AM")
         errln("Fail: Test broken; Want 5/3/97 8:55 AM Got " + str);   
     
     UnicodeString expected[] = {

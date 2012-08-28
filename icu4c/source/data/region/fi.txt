@@ -29,7 +29,7 @@ fi{
         034{"Etelä-Aasia"}
         035{"Kaakkois-Aasia"}
         039{"Etelä-Eurooppa"}
-        053{"Australia ja Uusi-Seelanti"}
+        053{"Australaasia"}
         054{"Melanesia"}
         057{"Mikronesia"}
         061{"Polynesia"}
@@ -72,6 +72,7 @@ fi{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"Karibian Alankomaat"}
         BR{"Brasilia"}
         BS{"Bahama"}
         BT{"Bhutan"}
@@ -80,7 +81,7 @@ fi{
         BY{"Valko-Venäjä"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Kookossaaret"}
+        CC{"Kookossaaret [Keelingsaaret]"}
         CD{"Kongon demokraattinen tasavalta"}
         CF{"Keski-Afrikan tasavalta"}
         CG{"Kongon tasavalta"}
@@ -93,9 +94,9 @@ fi{
         CO{"Kolumbia"}
         CP{"Clippertoninsaari"}
         CR{"Costa Rica"}
-        CS{"Serbia ja Montenegro"}
         CU{"Kuuba"}
         CV{"Kap Verde"}
+        CW{"Curaçao"}
         CX{"Joulusaari"}
         CY{"Kypros"}
         CZ{"Tšekki"}
@@ -114,6 +115,7 @@ fi{
         ER{"Eritrea"}
         ES{"Espanja"}
         ET{"Etiopia"}
+        EU{"Euroopan unioni"}
         FI{"Suomi"}
         FJ{"Fidži"}
         FK{"Falklandinsaaret"}
@@ -254,8 +256,10 @@ fi{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
+        SS{"Etelä-Sudan"}
         ST{"São Tomé ja Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syyria"}
         SZ{"Swazimaa"}
         TA{"Tristan da Cunha"}
@@ -295,7 +299,7 @@ fi{
         ZA{"Etelä-Afrikka"}
         ZM{"Sambia"}
         ZW{"Zimbabwe"}
-        ZZ{"tuntematon tai virheellinen alue"}
+        ZZ{"tuntematon alue"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.76.14"}
 }

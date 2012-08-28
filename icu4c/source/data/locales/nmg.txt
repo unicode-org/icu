@@ -33,7 +33,7 @@ nmg{
             }
         }
     }
-    Version{"2.0.66.10"}
+    Version{"2.0.74.79"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -151,9 +151,6 @@ nmg{
                 }
                 week{
                     dn{"Sɔ́ndɔ"}
-                }
-                weekday{
-                    dn{"Duö"}
                 }
                 year{
                     dn{"Mbvu"}

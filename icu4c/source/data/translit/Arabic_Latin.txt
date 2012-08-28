@@ -9,9 +9,9 @@
 #
 :: [[:Arabic:][:block=ARABIC:][‎ⁿ،؛؟ـ\u064B-\u0655٠-٬۰-۹﷼ښ]] ;
 :: NFKD (NFC);
-$disambig = \u0331 ;
-$disambig2 = \u0330 ;
-$under = \u0323 ;
+$disambig =  \u0331 ;
+$disambig2 =  \u0330 ;
+$under =  \u0323 ;
 $descender = ˌ;
 $notAbove = [[:^ccc=0:]&[:^ccc=230:]];
 [:Nd:]{٫}[:Nd:] ↔ [:Nd:]{','}[:Nd:] ; # ARABIC DECIMAL SEPARATOR
@@ -90,11 +90,11 @@ $notAbove = [[:^ccc=0:]&[:^ccc=230:]];
 \u064E ↔ a ; # ARABIC FATHA
 \u064F ↔ u ; # ARABIC DAMMA
 \u0650 ↔ i ; # ARABIC KASRA
-\u0651 ↔ \u0303 ; # ARABIC SHADDA
-\u0652 ↔ \u030A ; # ARABIC SUKUN
-\u0653 ↔ \u0302 ; # ARABIC MADDAH ABOVE
-\u0654 ↔ \u0309 ; # ARABIC HAMZA ABOVE
-\u0655 ↔ \u0339 ; # ARABIC HAMZA BELOW
+\u0651 ↔   \u0303 ; # ARABIC SHADDA
+\u0652 ↔   \u030A ; # ARABIC SUKUN
+\u0653 ↔  \u0302 ; # ARABIC MADDAH ABOVE
+\u0654 ↔  \u0309 ; # ARABIC HAMZA ABOVE
+\u0655 ↔  \u0339 ; # ARABIC HAMZA BELOW
 پ ↔ p ; # ARABIC LETTER PEH
 چ ↔ c h $disambig ; # ARABIC LETTER TCHEH
 ڤ ↔ v ; # ARABIC LETTER VEH

@@ -28,6 +28,13 @@ zh_Hans_SG{
             "NIO",
             "尼加拉瓜科多巴",
         }
+        XAG{
+            "XAG",
+            "白银",
+        }
     }
-    Version{"2.0.64.65"}
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
+    Version{"2.0.75.99"}
 }

@@ -12,9 +12,20 @@
 de{
     Keys{
         calendar{"Kalender"}
+        colAlternate{"Sortierung ohne Symbole"}
+        colBackwards{"Umgekehrte Sortierung von Akzenten"}
+        colCaseFirst{"Sortierung nach Groß- bzw. Kleinbuchstaben"}
+        colCaseLevel{"Sortierung nach Groß- oder Kleinschreibung"}
+        colHiraganaQuaternary{"Kana-Sortierung"}
+        colNormalization{"Normierte Sortierung"}
+        colNumeric{"Sortierung nach Zahlen"}
+        colStrength{"Sortierstärke"}
         collation{"Sortierung"}
         currency{"Währung"}
         numbers{"Zahlen"}
+        timezone{"Zeitzone"}
+        va{"Lokale Variante"}
+        variableTop{"Nach Symbolen sortieren"}
         x{"Privatnutzung"}
     }
     Languages{
@@ -101,6 +112,7 @@ de{
         chp{"Chipewyan"}
         chr{"Cherokee"}
         chy{"Cheyenne"}
+        ckb{"Sorani"}
         cmc{"Cham-Sprache"}
         co{"Korsisch"}
         cop{"Koptisch"}
@@ -151,7 +163,7 @@ de{
         eo{"Esperanto"}
         es{"Spanisch"}
         es_419{"Lateinamerikanisches Spanisch"}
-        es_ES{"Iberisches Spanisch"}
+        es_ES{"Europäisches Spanisch"}
         et{"Estnisch"}
         eu{"Baskisch"}
         ewo{"Ewondo"}
@@ -173,7 +185,7 @@ de{
         frr{"Nordfriesisch"}
         frs{"Ostfriesisch"}
         fur{"Friulisch"}
-        fy{"Friesisch"}
+        fy{"Westfriesisch"}
         ga{"Irisch"}
         gaa{"Ga-Sprache"}
         gay{"Gayo"}
@@ -305,6 +317,7 @@ de{
         mdf{"Moksha"}
         mdr{"Mandaresisch"}
         men{"Mende-Sprache"}
+        mfe{"Morisyen"}
         mg{"Malagassi-Sprache"}
         mga{"Mittelirisch"}
         mh{"Marschallesisch"}
@@ -389,7 +402,7 @@ de{
         ps{"Paschtu"}
         pt{"Portugiesisch"}
         pt_BR{"Brasilianisches Portugiesisch"}
-        pt_PT{"Iberisches Portugiesisch"}
+        pt_PT{"Europäisches Portugiesisch"}
         qu{"Quechua"}
         raj{"Rajasthani"}
         rap{"Osterinsel-Sprache"}
@@ -653,6 +666,7 @@ de{
         Xsux{"Sumerisch-akkadische Keilschrift"}
         Yiii{"Yi"}
         Zinh{"Geerbter Schriftwert"}
+        Zsym{"Symbole"}
         Zxxx{"Schriftlos"}
         Zyyy{"Unbestimmt"}
         Zzzz{"Uncodierte Schrift"}
@@ -680,12 +694,14 @@ de{
         collation{
             big5han{"Traditionelles Chinesisch - Big5"}
             dictionary{"Lexikographische Sortierreihenfolge"}
-            ducet{"Unicode-Sortierregeln"}
+            ducet{"Unicode-Sortierung"}
             gb2312han{"Vereinfachtes Chinesisch - GB2312"}
-            phonebook{"Telefonbuch-Sortierregeln"}
+            phonebook{"Telefonbuch-Sortierung"}
+            phonetic{"Sortierung nach Phonetik"}
             pinyin{"Pinyin-Sortierregeln"}
             reformed{"Reformierte Sortierreihenfolge"}
             search{"Allgemeine Suche"}
+            searchjl{"Suche nach Anfangsbuchstaben des koreanischen Alphabets"}
             stroke{"Strichfolge"}
             traditional{"Traditionelle Sortierregeln"}
             unihan{"Radikal-Strich-Sortierregeln"}
@@ -698,6 +714,7 @@ de{
             beng{"Bengalische Ziffern"}
             deva{"Devanagari-Ziffern"}
             ethi{"Äthiopische Ziffern"}
+            finance{"Finanzzahlen"}
             fullwide{"Vollbreite Ziffern"}
             geor{"Georgische Ziffern"}
             grek{"Griechische Ziffern"}
@@ -719,13 +736,17 @@ de{
             mlym{"Malayalam-Ziffern"}
             mong{"Mongolische Ziffern"}
             mymr{"Myanmar-Ziffern"}
+            native{"Native Ziffern"}
             orya{"Oriya-Ziffern"}
             roman{"Römische Ziffern"}
             romanlow{"Römische Ziffern in Kleinschrift"}
             taml{"Tamilische Ziffern"}
+            tamldec{"Tamil-Ziffern"}
             telu{"Telugu-Ziffern"}
             thai{"Thai-Ziffern"}
             tibt{"Tibetische Ziffern"}
+            traditional{"Traditionelle Zahlen"}
+            vaii{"Vai-Ziffern"}
         }
     }
     Variants{
@@ -763,13 +784,14 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.99"}
     codePatterns{
         language{"Sprache: {0}"}
         script{"Schrift: {0}"}
         territory{"Region: {0}"}
     }
     localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
         separator{", "}
     }

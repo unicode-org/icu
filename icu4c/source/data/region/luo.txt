@@ -56,7 +56,6 @@ luo{
         CN{"China"}
         CO{"Colombia"}
         CR{"Costa Rica"}
-        CS{"Serbia gi Montenegro"}
         CU{"Cuba"}
         CV{"Cape Verde Islands"}
         CY{"Cyprus"}
@@ -238,5 +237,5 @@ luo{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

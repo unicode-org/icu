@@ -20,7 +20,7 @@ ksf{
             "mɔni mǝ á angóla",
         }
         AUD{
-            "AU$",
+            "A$",
             "mɔni mǝ á ɔstralí",
         }
         BHD{
@@ -228,5 +228,5 @@ ksf{
             "mɔni mǝ á zimbabwɛ́",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

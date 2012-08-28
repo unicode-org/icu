@@ -12,8 +12,8 @@
 nb{
     AuxExemplarCharacters{"[á ǎ ã č ç đ è ê í ń ñ ŋ š ŧ ü ž ä ö]"}
     ExemplarCharacters{"[a à b c d e é f g h i j k l m n o ó ò ô p q r s t u v w x y z æ ø å]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å]"}
+    ExemplarCharactersPunctuation{"[\- – , ; \: ! ? . ' \" « » ( ) \[ \] \{ \} § @ * / \\]"}
     LocaleScript{
         "Latn",
     }
@@ -25,42 +25,106 @@ nb{
                 percentFormat{"#,##0 %"}
                 scientificFormat{"#E0"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 tusen"}
+                        other{"0 tusen"}
+                    }
+                    10000{
+                        one{"00 tusen"}
+                        other{"00 tusen"}
+                    }
+                    100000{
+                        one{"000 tusen"}
+                        other{"000 tusen"}
+                    }
+                    1000000{
+                        one{"0 million"}
+                        other{"0 millioner"}
+                    }
+                    10000000{
+                        one{"00 million"}
+                        other{"00 millioner"}
+                    }
+                    100000000{
+                        one{"000 million"}
+                        other{"000 millioner"}
+                    }
+                    1000000000{
+                        one{"0 milliard"}
+                        other{"0 milliarder"}
+                    }
+                    10000000000{
+                        one{"00 milliard"}
+                        other{"00 milliarder"}
+                    }
+                    100000000000{
+                        one{"000 milliard"}
+                        other{"000 milliarder"}
+                    }
+                    1000000000000{
+                        one{"0 billion"}
+                        other{"0 billioner"}
+                    }
+                    10000000000000{
+                        one{"00 billion"}
+                        other{"00 billioner"}
+                    }
+                    100000000000000{
+                        one{"000 billion"}
+                        other{"000 billioner"}
+                    }
+                }
+            }
             patternsShort{
                 decimalFormat{
                     1000{
+                        one{"0000"}
                         other{"0000"}
                     }
                     10000{
+                        one{"00000"}
                         other{"00000"}
                     }
                     100000{
+                        one{"000000"}
                         other{"000000"}
                     }
                     1000000{
-                        other{"0.0 mill"}
+                        one{"0 mill"}
+                        other{"0 mill"}
                     }
                     10000000{
+                        one{"00 mill"}
                         other{"00 mill"}
                     }
                     100000000{
+                        one{"000 mill"}
                         other{"000 mill"}
                     }
                     1000000000{
-                        other{"0.0 mrd"}
+                        one{"0 mrd"}
+                        other{"0 mrd"}
                     }
                     10000000000{
+                        one{"00 mrd"}
                         other{"00 mrd"}
                     }
                     100000000000{
+                        one{"000 mrd"}
                         other{"000 mrd"}
                     }
                     1000000000000{
-                        other{"0.0 bill"}
+                        one{"0 bill"}
+                        other{"0 bill"}
                     }
                     10000000000000{
+                        one{"00 bill"}
                         other{"00 bill"}
                     }
                     100000000000000{
+                        one{"000 bill"}
                         other{"000 bill"}
                     }
                 }
@@ -79,7 +143,7 @@ nb{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -151,6 +215,7 @@ nb{
             }
             availableFormats{
                 Ed{"E d."}
+                H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -161,12 +226,13 @@ nb{
                 MMdd{"d.M."}
                 Md{"d.M."}
                 d{"d."}
+                h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm.ss"}
                 y{"y"}
                 yM{"M y"}
-                yMEd{"E d.M.yyyy"}
+                yMEd{"E d.MM.y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E d. MMM y"}
                 yMMMd{"d. MMM y"}
@@ -199,6 +265,15 @@ nb{
                         "F",
                         "L",
                     }
+                    short{
+                        "sø.",
+                        "ma.",
+                        "ti.",
+                        "on.",
+                        "to.",
+                        "fr.",
+                        "lø.",
+                    }
                     wide{
                         "søndag",
                         "mandag",
@@ -228,6 +303,15 @@ nb{
                         "F",
                         "L",
                     }
+                    short{
+                        "sø.",
+                        "ma.",
+                        "ti.",
+                        "on.",
+                        "to.",
+                        "fr.",
+                        "lø.",
+                    }
                     wide{
                         "søndag",
                         "mandag",
@@ -241,6 +325,10 @@ nb{
             }
             eras{
                 abbreviated{
+                    "f.Kr.",
+                    "e.Kr.",
+                }
+                narrow{
                     "f.Kr.",
                     "e.Kr.",
                 }
@@ -307,15 +395,19 @@ nb{
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
                 Hm{
                     H{"HH:mm–HH:mm"}
-                    a{"HH:mm–HH:mm"}
                     m{"HH:mm–HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm–HH:mm v"}
-                    a{"HH:mm–HH:mm v"}
                     m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
                 }
                 M{
                     M{"M.–M."}
@@ -515,6 +607,12 @@ nb{
                         "K3",
                         "K4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "1. kvartal",
                         "2. kvartal",
@@ -680,6 +778,8 @@ nb{
         standard{
             2{"{0} og {1}"}
             end{"{0} og {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
@@ -693,14 +793,10 @@ nb{
             other{"{0} dager"}
         }
         day-future{
-            0{"om 0 dager"}
-            1{"om 1 dag"}
             one{"om {0} dag"}
             other{"om {0} dager"}
         }
         day-past{
-            0{"0 dager siden"}
-            1{"1 dag siden"}
             one{"for {0} dag siden"}
             other{"{0} dager siden"}
         }
@@ -709,14 +805,11 @@ nb{
             other{"{0} timer"}
         }
         hour-future{
-            0{"om 0 timer"}
-            1{"om 1 time"}
             one{"om {0} time"}
             other{"om {0} timer"}
         }
         hour-past{
-            0{"0 timer siden"}
-            1{"1 time siden"}
+            one{"for {0} time siden"}
             other{"{0} timer siden"}
         }
         minute{
@@ -724,14 +817,11 @@ nb{
             other{"{0} minutter"}
         }
         minute-future{
-            0{"om 0 minutter"}
-            1{"om 1 minutt"}
             one{"om {0} minutt"}
             other{"om {0} minutter"}
         }
         minute-past{
-            0{"0 minutter siden"}
-            1{"1 minutt siden"}
+            one{"for {0} minutt siden"}
             other{"{0} minutter siden"}
         }
         month{
@@ -739,14 +829,11 @@ nb{
             other{"{0} måneder"}
         }
         month-future{
-            0{"om 0 måneder"}
-            1{"om 1 måned"}
             one{"om {0} måned"}
             other{"om {0} måneder"}
         }
         month-past{
-            0{"0 måneder siden"}
-            1{"1 måned siden"}
+            one{"for {0} måned siden"}
             other{"{0} måneder siden"}
         }
         second{
@@ -754,14 +841,11 @@ nb{
             other{"{0} sekunder"}
         }
         second-future{
-            0{"om 0 sekunder"}
-            1{"om 1 sekund"}
             one{"om {0} sekund"}
             other{"om {0} sekunder"}
         }
         second-past{
-            0{"0 sekunder siden"}
-            1{"1 sekund siden"}
+            one{"for {0} sekund siden"}
             other{"{0} sekunder siden"}
         }
         week{
@@ -769,14 +853,11 @@ nb{
             other{"{0} uker"}
         }
         week-future{
-            0{"om 0 uker"}
-            1{"om 1 uke"}
             one{"om {0} uke"}
             other{"om {0} uker"}
         }
         week-past{
-            0{"0 uker siden"}
-            1{"1 uke siden"}
+            one{"for {0} uke siden"}
             other{"{0} uker siden"}
         }
         year{
@@ -784,14 +865,11 @@ nb{
             other{"{0} år"}
         }
         year-future{
-            0{"om 0 år"}
-            1{"om 1 år"}
             one{"om {0} år"}
             other{"om {0} år"}
         }
         year-past{
-            0{"0 år siden"}
-            1{"1 år siden"}
+            one{"for {0} år siden"}
             other{"{0} år siden"}
         }
     }

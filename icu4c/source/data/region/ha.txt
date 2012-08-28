@@ -56,7 +56,6 @@ ha{
         CN{"Caina, Sin"}
         CO{"Kolambiya"}
         CR{"Kwasta Rika"}
-        CS{"Sarbiya Da Mantanegiro"}
         CU{"Kyuba"}
         CV{"Tsibiran Kap Barde"}
         CY{"Sifurus"}
@@ -238,5 +237,5 @@ ha{
         ZM{"Zambiya"}
         ZW{"Zimbabuwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.94"}
 }

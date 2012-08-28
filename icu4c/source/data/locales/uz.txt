@@ -15,7 +15,7 @@ uz{
     LocaleScript{
         "Cyrl",
     }
-    Version{"2.0.59.12"}
+    Version{"2.0.74.65"}
     calendar{
         gregorian{
             dayNames{

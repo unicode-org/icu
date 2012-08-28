@@ -20,7 +20,7 @@ kab{
             "Akwanza n Ungula",
         }
         AUD{
-            "AU$",
+            "A$",
             "Adular n Lusṭrali",
         }
         BHD{
@@ -228,5 +228,5 @@ kab{
             "Adular Azimbabwi",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

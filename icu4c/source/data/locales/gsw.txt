@@ -12,7 +12,6 @@
 gsw{
     AuxExemplarCharacters{"[á à ă â å ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ú ù ŭ û ū ÿ]"}
     ExemplarCharacters{"[a ä b c d e f g h i j k l m n o ö p q r s t u ü v w x y z]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     LocaleScript{
         "Latn",
     }
@@ -38,7 +37,7 @@ gsw{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -201,21 +200,17 @@ gsw{
             intervalFormats{
                 H{
                     H{"HH-HH"}
-                    a{"HH-HH"}
                 }
                 Hm{
                     H{"HH:mm-HH:mm"}
-                    a{"HH:mm-HH:mm"}
                     m{"HH:mm-HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm-HH:mm v"}
-                    a{"HH:mm-HH:mm v"}
                     m{"HH:mm-HH:mm v"}
                 }
                 Hv{
                     H{"HH-HH v"}
-                    a{"HH-HH v"}
                 }
                 M{
                     M{"M.-M."}

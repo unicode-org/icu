@@ -23,7 +23,7 @@ nd{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -115,12 +115,6 @@ nd{
                         "0"{"Lamuhla"}
                         "1"{"Kusasa"}
                     }
-                }
-                dayperiod{
-                    dn{"Ilanga"}
-                }
-                era{
-                    dn{"Umnyaka"}
                 }
                 hour{
                     dn{"Ihola"}

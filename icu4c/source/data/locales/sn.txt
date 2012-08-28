@@ -23,7 +23,7 @@ sn{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -115,9 +115,6 @@ sn{
                         "0"{"Nhasi"}
                         "1"{"Mangwana"}
                     }
-                }
-                dayperiod{
-                    dn{"Zuva"}
                 }
                 era{
                     dn{"Mukore"}

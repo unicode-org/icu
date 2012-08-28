@@ -12,55 +12,170 @@
 pl{
     AuxExemplarCharacters{"[å q v x]"}
     ExemplarCharacters{"[a ą b c ć d e ę f g h i j k l ł m n ń o ó p r s ś t u w y z ź ż]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A Ą B C Ć D E Ę F G H I J K L Ł M N Ń O Ó P Q R S Ś T U V W X Y Z Ź Ż]"}
+    ExemplarCharactersPunctuation{
+        "[\- ‐ – — , ; \: ! ? . … ' \" ” „ « » ( ) \[ \] \{ \} § @ * / \& # % † ‡ ′ ″"
+        " ° ~]"
+    }
     LocaleScript{
         "Latn",
     }
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        few{"0 tysiące"}
+                        many{"0 tysięcy"}
+                        one{"0 tysiąc"}
+                        other{"0 tysiąca"}
+                    }
+                    10000{
+                        few{"00 tysiące"}
+                        many{"00 tysięcy"}
+                        one{"00 tysiąc"}
+                        other{"00 tysiąca"}
+                    }
+                    100000{
+                        few{"000 tysiące"}
+                        many{"000 tysięcy"}
+                        one{"000 tysiąc"}
+                        other{"000 tysiąca"}
+                    }
+                    1000000{
+                        few{"0 miliony"}
+                        many{"0 milionów"}
+                        one{"0 milion"}
+                        other{"0 miliona"}
+                    }
+                    10000000{
+                        few{"00 miliony"}
+                        many{"00 milionów"}
+                        one{"00 milion"}
+                        other{"00 miliona"}
+                    }
+                    100000000{
+                        few{"000 miliony"}
+                        many{"000 milionów"}
+                        one{"000 milion"}
+                        other{"000 miliona"}
+                    }
+                    1000000000{
+                        few{"0 miliardy"}
+                        many{"0 miliardów"}
+                        one{"0 miliard"}
+                        other{"0 miliarda"}
+                    }
+                    10000000000{
+                        few{"00 miliardy"}
+                        many{"00 miliardów"}
+                        one{"00 miliard"}
+                        other{"00 miliarda"}
+                    }
+                    100000000000{
+                        few{"000 miliardy"}
+                        many{"000 miliardów"}
+                        one{"000 miliard"}
+                        other{"000 miliarda"}
+                    }
+                    1000000000000{
+                        few{"0 biliony"}
+                        many{"0 bilionów"}
+                        one{"0 bilion"}
+                        other{"0 biliona"}
+                    }
+                    10000000000000{
+                        few{"00 biliony"}
+                        many{"00 bilionów"}
+                        one{"00 bilion"}
+                        other{"00 biliona"}
+                    }
+                    100000000000000{
+                        few{"000 biliony"}
+                        many{"000 bilionów"}
+                        one{"000 bilion"}
+                        other{"000 biliona"}
+                    }
+                }
+            }
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0000"}
+                        few{"0 tys'.'"}
+                        many{"0 tys'.'"}
+                        one{"0 tys'.'"}
+                        other{"0 tys'.'"}
                     }
                     10000{
+                        few{"00 tys'.'"}
+                        many{"00 tys'.'"}
+                        one{"00 tys'.'"}
                         other{"00 tys'.'"}
                     }
                     100000{
+                        few{"000 tys'.'"}
+                        many{"000 tys'.'"}
+                        one{"000 tys'.'"}
                         other{"000 tys'.'"}
                     }
                     1000000{
-                        other{"0.0 mln"}
+                        few{"0 mln"}
+                        many{"0 mln"}
+                        one{"0 mln"}
+                        other{"0 mln"}
                     }
                     10000000{
+                        few{"00 mln"}
+                        many{"00 mln"}
+                        one{"00 mln"}
                         other{"00 mln"}
                     }
                     100000000{
+                        few{"000 mln"}
+                        many{"000 mln"}
+                        one{"000 mln"}
                         other{"000 mln"}
                     }
                     1000000000{
-                        other{"0.0 mld"}
+                        few{"0 mld"}
+                        many{"0 mld"}
+                        one{"0 mld"}
+                        other{"0 mld"}
                     }
                     10000000000{
+                        few{"00 mld"}
+                        many{"00 mld"}
+                        one{"00 mld"}
                         other{"00 mld"}
                     }
                     100000000000{
+                        few{"000 mld"}
+                        many{"000 mld"}
+                        one{"000 mld"}
                         other{"000 mld"}
                     }
                     1000000000000{
-                        other{"0.0 bln"}
+                        few{"0 bln"}
+                        many{"0 bln"}
+                        one{"0 bln"}
+                        other{"0 bln"}
                     }
                     10000000000000{
+                        few{"00 bln"}
+                        many{"00 bln"}
+                        one{"00 bln"}
                         other{"00 bln"}
                     }
                     100000000000000{
+                        few{"000 bln"}
+                        many{"000 bln"}
+                        one{"000 bln"}
                         other{"000 bln"}
                     }
                 }
@@ -79,7 +194,7 @@ pl{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -91,11 +206,11 @@ pl{
                 "d MMMM, y G",
                 "d MMM y G",
                 "dd.MM.yyyy G",
+                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -345,14 +460,15 @@ pl{
                 "d MMMM y",
                 "d MMM y",
                 "dd.MM.yyyy",
+                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 Ed{"E, d"}
+                H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -376,10 +492,10 @@ pl{
                 yMMMM{"LLLL y"}
                 yMMMd{"d MMM y"}
                 yMd{"d.MM.yyyy"}
-                yQ{"yyyy Q"}
-                yQQQ{"y QQQ"}
-                yyMMM{"LLL yy"}
-                yyQ{"Q yy"}
+                yQ{"QQQ y"}
+                yQQQ{"QQQ y"}
+                yyMMM{"LLLL yy"}
+                yyQ{"QQQ yy"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"LLLL y"}
             }
@@ -402,6 +518,15 @@ pl{
                         "C",
                         "P",
                         "S",
+                    }
+                    short{
+                        "niedz.",
+                        "pon.",
+                        "wt.",
+                        "śr.",
+                        "czw.",
+                        "pt.",
+                        "sob.",
                     }
                     wide{
                         "niedziela",
@@ -431,6 +556,15 @@ pl{
                         "C",
                         "P",
                         "S",
+                    }
+                    short{
+                        "niedz.",
+                        "pon.",
+                        "wt.",
+                        "śr.",
+                        "czw.",
+                        "pt.",
+                        "sob.",
                     }
                     wide{
                         "niedziela",
@@ -512,78 +646,74 @@ pl{
             }
             intervalFormats{
                 H{
-                    H{"HH-HH"}
-                    a{"HH-HH"}
+                    H{"HH–HH"}
                 }
                 Hm{
-                    H{"HH:mm-HH:mm"}
-                    a{"HH:mm-HH:mm"}
-                    m{"HH:mm-HH:mm"}
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
-                    H{"HH:mm-HH:mm v"}
-                    a{"HH:mm-HH:mm v"}
-                    m{"HH:mm-HH:mm v"}
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
                 }
                 Hv{
-                    H{"HH-HH v"}
-                    a{"HH-HH v"}
+                    H{"HH–HH v"}
                 }
                 M{
-                    M{"M-M"}
+                    M{"MM-MM"}
                 }
                 MEd{
-                    M{"E, dd.MM - E, dd.MM"}
-                    d{"E, dd.MM - E, dd.MM"}
+                    M{"E, dd.MM – E, dd.MM"}
+                    d{"E, dd.MM – E, dd.MM"}
                 }
                 MMM{
-                    M{"LLL-LLL"}
+                    M{"LLL–LLL"}
                 }
                 MMMEd{
                     M{"E, d MMM - E, d MMM"}
-                    d{"E, MM-d – E, MM-d"}
+                    d{"E, d MMM – E, d MMM"}
                 }
                 MMMd{
                     M{"d MMM - d MMM"}
                     d{"d-d MMM"}
                 }
                 Md{
-                    M{"dd.MM-dd.MM"}
-                    d{"dd.MM-dd.MM"}
+                    M{"dd.MM–dd.MM"}
+                    d{"dd.MM–dd.MM"}
                 }
                 d{
-                    d{"d-d"}
+                    d{"d–d"}
                 }
-                fallback{"{0} - {1}"}
+                fallback{"{0} – {1}"}
                 h{
-                    a{"h a - h a"}
-                    h{"h-h a"}
+                    a{"h a – h a"}
+                    h{"h–h a"}
                 }
                 hm{
-                    a{"h:mm a - h:mm a"}
-                    h{"h:mm-h:mm a"}
-                    m{"h:mm-h:mm a"}
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
                 }
                 hmv{
-                    a{"h:mm a - h:mm a v"}
-                    h{"h:mm-h:mm a v"}
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
                     m{"h:mm-h:mm a v"}
                 }
                 hv{
-                    a{"h a - h a v"}
-                    h{"h-h a v"}
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y–y"}
                 }
                 yM{
-                    M{"MM.yy-MM.yy"}
-                    y{"MM.yy-MM.yy"}
+                    M{"MM.yyyy - MM.yyyy"}
+                    y{"MM.yyyy - MM.yyyy"}
                 }
                 yMEd{
                     M{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
                     d{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
-                    y{"E, dd-MM-yyyy-E, dd-MM-yyyy"}
+                    y{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
                 }
                 yMMM{
                     M{"LLL-LLL y"}
@@ -605,7 +735,7 @@ pl{
                 }
                 yMd{
                     M{"dd.MM-dd.MM.yyyy"}
-                    d{"dd-dd.MM.yy"}
+                    d{"dd-dd.MM.yyyy"}
                     y{"dd.MM.yyyy-dd.MM.yyyy"}
                 }
             }
@@ -726,6 +856,12 @@ pl{
                         "2 kw.",
                         "3 kw.",
                         "4 kw.",
+                    }
+                    narrow{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
                     }
                     wide{
                         "I kwartał",
@@ -882,11 +1018,11 @@ pl{
                 "d MMMM, y G",
                 "d MMM y G",
                 "dd.MM.yyyy G",
+                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -1140,11 +1276,11 @@ pl{
                 "d MMMM, y G",
                 "d MMM y G",
                 "dd.MM.yyyy G",
+                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -1197,6 +1333,8 @@ pl{
         standard{
             2{"{0} i {1}"}
             end{"{0} i {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
@@ -1206,215 +1344,174 @@ pl{
     }
     units{
         day{
-            0{"0 dni"}
-            1{"1 dzień"}
             few{"{0} dni"}
             many{"{0} dni"}
             one{"{0} dzień"}
-            other{"{0} dni"}
+            other{"{0} dnia"}
         }
         day-future{
-            0{"Za 0 dni"}
-            1{"Za 1 dzień"}
             few{"Za {0} dni"}
-            many{"In {0} days"}
-            other{"Za {0} dni"}
+            many{"Za {0} dni"}
+            one{"Za {0} dzień"}
+            other{"Za {0} dnia"}
         }
         day-past{
-            0{"0 dni temu"}
-            1{"1 dzień temu"}
             few{"{0} dni temu"}
-            many{"{0} days ago"}
-            other{"{0} dni temu"}
+            many{"{0} dni temu"}
+            one{"{0} dzień temu"}
+            other{"{0} dnia temu"}
         }
         hour{
-            0{"0 godzin"}
-            1{"1 godzina"}
             few{"{0} godziny"}
             many{"{0} godzin"}
             one{"{0} godzina"}
             other{"{0} godzin"}
         }
         hour-future{
-            0{"Za 0 godzin"}
-            1{"Za 1 godzinę"}
             few{"Za {0} godziny"}
-            many{"In {0} hours"}
-            other{"Za {0} godzin"}
+            many{"Za {0} godzin"}
+            one{"Za {0} godzinę"}
+            other{"Za {0} godziny"}
         }
         hour-past{
-            0{"0 godzin temu"}
-            1{"1 godzinę temu"}
             few{"{0} godziny temu"}
-            many{"{0} hours ao"}
-            other{"{0} godzin temu"}
+            many{"{0} godzin temu"}
+            one{"{0} godzinę temu"}
+            other{"{0} godziny temu"}
         }
         minute{
-            0{"0 minut"}
-            1{"1 minuta"}
             few{"{0} minuty"}
             many{"{0} minut"}
             one{"{0} minuta"}
-            other{"{0} minut"}
+            other{"{0} minuty"}
         }
         minute-future{
-            0{"Za 0 minut"}
-            1{"Za 1 minutę"}
             few{"Za {0} minuty"}
-            many{"In {0} minutes"}
-            other{"Za {0} minut"}
+            many{"Za {0} minut"}
+            one{"Za {0} minutę"}
+            other{"Za {0} minuty"}
         }
         minute-past{
-            0{"0 minut temu"}
-            1{"1 minutę temu"}
             few{"{0} minuty temu"}
-            many{"{0} minutes ago"}
-            other{"{0} minut temu"}
+            many{"{0} minut temu"}
+            one{"{0} minutę temu"}
+            other{"{0} minuty temu"}
         }
         month{
-            0{"0 miesięcy"}
-            1{"1 miesiąc"}
             few{"{0} miesiące"}
             many{"{0} miesięcy"}
             one{"{0} miesiąc"}
-            other{"{0} miesięcy"}
+            other{"{0} miesiąca"}
         }
         month-future{
-            0{"Za 0 miesięcy"}
-            1{"Za 1 miesiąc"}
             few{"Za {0} miesiące"}
-            many{"In {0} months"}
-            other{"Za {0} miesięcy"}
+            many{"Za {0} miesięcy"}
+            one{"Za {0} miesiąc"}
+            other{"Za {0} miesiąca"}
         }
         month-past{
-            0{"0 miesięcy temu"}
-            1{"1 miesiąc temu"}
             few{"{0} miesiące temu"}
-            many{"{0} months ago"}
-            other{"{0} miesięcy temu"}
+            many{"{0} miesięcy temu"}
+            one{"{0} miesiąc temu"}
+            other{"{0} miesiąca temu"}
         }
         second{
-            0{"0 sekund"}
-            1{"1 sekunda"}
             few{"{0} sekundy"}
             many{"{0} sekund"}
             one{"{0} sekunda"}
             other{"{0} sekund"}
         }
         second-future{
-            0{"Za 0 sekund"}
-            1{"Za 1 sekundę"}
             few{"Za {0} sekundy"}
-            many{"In {0} seconds"}
-            other{"Za {0} sekund"}
+            many{"Za {0} sekund"}
+            one{"Za {0} sekundę"}
+            other{"Za {0} sekundy"}
         }
         second-past{
-            0{"0 sekund temu"}
-            1{"1 sekundę temu"}
             few{"{0} sekundy temu"}
-            many{"{0} seconds ago"}
-            other{"{0} sekund temu"}
+            many{"{0} sekund temu"}
+            one{"{0} sekundę temu"}
+            other{"{0} sekundy temu"}
         }
         week{
-            0{"0 tygodni"}
-            1{"1 tydzień"}
             few{"{0} tygodnie"}
             many{"{0} tygodni"}
             one{"{0} tydzień"}
-            other{"{0} tygodni"}
+            other{"{0} tygodnia"}
         }
         week-future{
-            0{"Za 0 tygodni"}
-            1{"Za 1 tydzień"}
             few{"Za {0} tygodnie"}
-            many{"In {0} weeks"}
-            other{"Za {0} tygodni"}
+            many{"Za {0} tygodni"}
+            one{"Za {0} tydzień"}
+            other{"Za {0} tygodnia"}
         }
         week-past{
-            0{"0 tygodni temu"}
-            1{"1 tydzień temu"}
             few{"{0} tygodnie temu"}
-            many{"{0} weeks ago"}
-            other{"{0} tygodni temu"}
+            many{"{0} tygodni temu"}
+            one{"{0} tydzień temu"}
+            other{"{0} tygodnia temu"}
         }
         year{
-            0{"0 lat"}
-            1{"1 rok"}
             few{"{0} lata"}
             many{"{0} lat"}
             one{"{0} rok"}
             other{"{0} roku"}
         }
         year-future{
-            0{"Za 0 lat"}
-            1{"Za 1 rok"}
             few{"Za {0} lata"}
-            many{"In {0} years"}
-            other{"Za {0} lat"}
+            many{"Za {0} lat"}
+            one{"Za {0} rok"}
+            other{"Za {0} roku"}
         }
         year-past{
-            0{"0 lat temu"}
-            1{"1 rok temu"}
             few{"{0} lata temu"}
-            many{"{0} years ago"}
-            other{"{0} lat temu"}
+            many{"{0} lat temu"}
+            one{"{0} rok temu"}
+            other{"{0} roku temu"}
         }
     }
     unitsShort{
         day{
-            0{"0 dni"}
-            1{"1 dzień"}
             few{"{0} dni"}
             many{"{0} dni"}
             one{"{0} dzień"}
-            other{"{0} dni"}
+            other{"{0} dnia"}
         }
         hour{
-            0{"0 godz."}
-            1{"1 godz."}
             few{"{0} godz."}
             many{"{0} godz."}
             one{"{0} godz."}
             other{"{0} godz."}
         }
         minute{
-            0{"0 min"}
-            1{"1 min"}
-            few{"{0} min"}
+            few{"{0} min."}
             many{"{0} min."}
             one{"{0} min."}
-            other{"{0} min"}
+            other{"{0} min."}
         }
         month{
-            0{"0 mies."}
-            1{"1 mies."}
             few{"{0} mies."}
             many{"{0} mies."}
             one{"{0} mies."}
             other{"{0} mies."}
         }
         second{
-            0{"0 s"}
-            1{"1 s"}
             few{"{0} sek."}
             many{"{0} sek."}
             one{"{0} sek."}
-            other{"{0} s"}
+            other{"{0} sek."}
         }
         week{
-            0{"0 tyg."}
-            1{"1 tydz."}
             few{"{0} tyg."}
             many{"{0} tyg."}
             one{"{0} tydz."}
             other{"{0} tyg."}
         }
         year{
-            0{"0 lat"}
-            1{"1 rok"}
             few{"{0} lata"}
             many{"{0} lat"}
             one{"{0} rok"}
+            other{"{0} roku"}
         }
     }
 }

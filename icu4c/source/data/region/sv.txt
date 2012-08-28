@@ -26,10 +26,10 @@ sv{
         021{"norra Amerika"}
         029{"Karibien"}
         030{"Östasien"}
-        034{"södra Asien"}
+        034{"Sydasien"}
         035{"Sydostasien"}
         039{"Sydeuropa"}
-        053{"Australien och Nya Zeeland"}
+        053{"Australasien"}
         054{"Melanesien"}
         057{"Mikronesiska öarna"}
         061{"Polynesien"}
@@ -72,6 +72,7 @@ sv{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"Karibiska Nederländerna"}
         BR{"Brasilien"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -93,9 +94,9 @@ sv{
         CO{"Colombia"}
         CP{"Clippertonön"}
         CR{"Costa Rica"}
-        CS{"Serbien och Montenegro"}
         CU{"Kuba"}
         CV{"Kap Verde"}
+        CW{"Curaçao"}
         CX{"Julön"}
         CY{"Cypern"}
         CZ{"Tjeckien"}
@@ -227,7 +228,7 @@ sv{
         PK{"Pakistan"}
         PL{"Polen"}
         PM{"S:t Pierre och Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Pitcairnöarna"}
         PR{"Puerto Rico"}
         PS{"Palestinska territoriet"}
         PT{"Portugal"}
@@ -255,6 +256,7 @@ sv{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
+        SS{"Sydsudan"}
         ST{"São Tomé och Príncipe"}
         SV{"El Salvador"}
         SY{"Syrien"}
@@ -296,7 +298,7 @@ sv{
         ZA{"Sydafrika"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
-        ZZ{"okänd eller ogiltig regionkod"}
+        ZZ{"okänd region"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

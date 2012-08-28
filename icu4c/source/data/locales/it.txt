@@ -12,7 +12,6 @@
 it{
     AuxExemplarCharacters{"[í ï ú]"}
     ExemplarCharacters{"[a à b c d e é è f g h i ì j k l m n o ó ò p q r s t u ù v w x y z]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{"[\- — , ; \: ! ? . … “ ” ( ) \[ \] \{ \} @ /]"}
     LocaleScript{
@@ -26,58 +25,125 @@ it{
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 migliaio"}
+                        other{"0 migliaia"}
+                    }
+                    10000{
+                        one{"00 migliaia"}
+                        other{"00 migliaia"}
+                    }
+                    100000{
+                        one{"000 migliaia"}
+                        other{"000 migliaia"}
+                    }
+                    1000000{
+                        one{"0 milione"}
+                        other{"0 milioni"}
+                    }
+                    10000000{
+                        one{"00 milioni"}
+                        other{"00 milioni"}
+                    }
+                    100000000{
+                        one{"000 milioni"}
+                        other{"000 milioni"}
+                    }
+                    1000000000{
+                        one{"0 miliardi"}
+                        other{"0 miliardi"}
+                    }
+                    10000000000{
+                        one{"00 miliardi"}
+                        other{"00 miliardi"}
+                    }
+                    100000000000{
+                        one{"000 miliardi"}
+                        other{"000 miliardi"}
+                    }
+                    1000000000000{
+                        one{"0 bilione"}
+                        other{"0 bilioni"}
+                    }
+                    10000000000000{
+                        one{"00 bilioni"}
+                        other{"00 bilioni"}
+                    }
+                    100000000000000{
+                        one{"000 bilioni"}
+                        other{"000 bilioni"}
+                    }
+                }
+            }
             patternsShort{
                 decimalFormat{
                     1000{
+                        one{"0000"}
                         other{"0000"}
                     }
                     10000{
+                        one{"00000"}
                         other{"00000"}
                     }
                     100000{
+                        one{"000000"}
                         other{"000000"}
                     }
                     1000000{
-                        other{"0.0 M"}
+                        one{"0 M"}
+                        other{"0 M"}
                     }
                     10000000{
+                        one{"00 M"}
                         other{"00 M"}
                     }
                     100000000{
+                        one{"000 M"}
                         other{"000 M"}
                     }
                     1000000000{
-                        other{"0.0 Md"}
+                        one{"0 Md"}
+                        other{"0 Md"}
                     }
                     10000000000{
+                        one{"00 Md"}
                         other{"00 Md"}
                     }
                     100000000000{
+                        one{"000 Md"}
                         other{"000 Md"}
                     }
                     1000000000000{
-                        other{"0.0 B"}
+                        one{"0 B"}
+                        other{"0 B"}
                     }
                     10000000000000{
+                        one{"00 B"}
                         other{"00 B"}
                     }
                     100000000000000{
+                        one{"000 B"}
                         other{"000 B"}
                     }
                 }
             }
             symbols{
                 decimal{","}
+                exponential{"E"}
                 group{"."}
                 infinity{"∞"}
+                list{";"}
                 minusSign{"-"}
+                nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
                 plusSign{"+"}
             }
         }
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -135,8 +201,8 @@ it{
         }
         gregorian{
             AmPmMarkers{
-                "m.",
-                "p.",
+                "AM",
+                "PM",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -155,6 +221,7 @@ it{
             }
             availableFormats{
                 Ed{"E d"}
+                H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -172,7 +239,7 @@ it{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"E, d/M/y"}
+                yMEd{"E d/M/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMd{"d MMM y"}
@@ -187,6 +254,15 @@ it{
             dayNames{
                 format{
                     abbreviated{
+                        "dom",
+                        "lun",
+                        "mar",
+                        "mer",
+                        "gio",
+                        "ven",
+                        "sab",
+                    }
+                    short{
                         "dom",
                         "lun",
                         "mar",
@@ -214,6 +290,15 @@ it{
                         "G",
                         "V",
                         "S",
+                    }
+                    short{
+                        "dom",
+                        "lun",
+                        "mar",
+                        "mer",
+                        "gio",
+                        "ven",
+                        "sab",
                     }
                     wide{
                         "Domenica",
@@ -296,21 +381,17 @@ it{
             intervalFormats{
                 H{
                     H{"HH-HH"}
-                    a{"HH-HH"}
                 }
                 Hm{
                     H{"HH:mm-HH:mm"}
-                    a{"HH:mm-HH:mm"}
                     m{"HH:mm-HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm-HH:mm v"}
-                    a{"HH:mm-HH:mm v"}
                     m{"HH:mm-HH:mm v"}
                 }
                 Hv{
                     H{"HH-HH v"}
-                    a{"HH-HH v"}
                 }
                 M{
                     M{"M-M"}
@@ -510,11 +591,17 @@ it{
                         "T3",
                         "T4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
-                        "1º trimestre",
-                        "2º trimestre",
-                        "3º trimestre",
-                        "4º trimestre",
+                        "Primo trimestre",
+                        "Secondo trimestre",
+                        "Terzo trimestre",
+                        "Quarto trimestre",
                     }
                 }
             }
@@ -700,6 +787,8 @@ it{
         standard{
             2{"{0} e {1}"}
             end{"{0}, e {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
@@ -713,12 +802,10 @@ it{
             other{"{0} giorni"}
         }
         day-future{
-            0{"tra 0 giorni"}
             one{"tra {0} giorno"}
             other{"tra {0} giorni"}
         }
         day-past{
-            0{"0 giorni fa"}
             one{"{0} giorno fa"}
             other{"{0} giorni fa"}
         }
@@ -727,12 +814,10 @@ it{
             other{"{0} ore"}
         }
         hour-future{
-            0{"tra 0 ore"}
             one{"tra {0} ora"}
             other{"tra {0} ore"}
         }
         hour-past{
-            0{"0 ore fa"}
             one{"{0} ora fa"}
             other{"{0} ore fa"}
         }
@@ -741,12 +826,10 @@ it{
             other{"{0} minuti"}
         }
         minute-future{
-            0{"tra 0 minuti"}
             one{"tra {0} minuto"}
             other{"tra {0} minuti"}
         }
         minute-past{
-            0{"0 minuti fa"}
             one{"{0} minuto fa"}
             other{"{0} minuti fa"}
         }
@@ -755,12 +838,10 @@ it{
             other{"{0} mesi"}
         }
         month-future{
-            0{"tra 0 mesi"}
             one{"tra {0} mese"}
             other{"tra {0} mesi"}
         }
         month-past{
-            0{"0 mesi fa"}
             one{"{0} mese fa"}
             other{"{0} mesi fa"}
         }
@@ -769,12 +850,10 @@ it{
             other{"{0} secondi"}
         }
         second-future{
-            0{"tra 0 secondi"}
             one{"tra {0} secondo"}
             other{"tra {0} secondi"}
         }
         second-past{
-            0{"0 secondi fa"}
             one{"{0} secondo fa"}
             other{"{0} secondi fa"}
         }
@@ -783,12 +862,10 @@ it{
             other{"{0} settimane"}
         }
         week-future{
-            0{"tra 0 settimane"}
             one{"tra {0} settimana"}
             other{"tra {0} settimane"}
         }
         week-past{
-            0{"0 settimane fa"}
             one{"{0} settimana fa"}
             other{"{0} settimane fa"}
         }
@@ -797,12 +874,10 @@ it{
             other{"{0} anni"}
         }
         year-future{
-            0{"tra 0 anni"}
             one{"tra {0} anno"}
             other{"tra {0} anni"}
         }
         year-past{
-            0{"0 anni fa"}
             one{"{0} anno fa"}
             other{"{0} anni fa"}
         }

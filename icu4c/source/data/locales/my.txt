@@ -16,7 +16,6 @@ my{
         " ဧ ဩ ဪ ာ ါ \u102D \u102E \u102F \u1030 ေ \u1032 \u1036 ဿ ျ ြ \u103D \u103E "
         "\u1039 \u103A \u1037 း]"
     }
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[က ခ ဂ ဃ င စ ဆ ဇ ဈ ဉ ည ဋ ဌ ဍ ဎ ဏ တ ထ ဒ ဓ န ပ ဖ ဗ ဘ မ ယ ရ လ ဝ သ ဟ ဠ အ]"}
     LocaleScript{
         "Mymr",
@@ -43,7 +42,7 @@ my{
         }
         native{"mymr"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.94"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -171,21 +170,17 @@ my{
             intervalFormats{
                 H{
                     H{"HH-HH"}
-                    a{"HH-HH"}
                 }
                 Hm{
                     H{"HH:mm-HH:mm"}
-                    a{"HH:mm-HH:mm"}
                     m{"HH:mm-HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm-HH:mm v"}
-                    a{"HH:mm-HH:mm v"}
                     m{"HH:mm-HH:mm v"}
                 }
                 Hv{
                     H{"HH-HH v"}
-                    a{"HH-HH v"}
                 }
                 M{
                     M{"M-M"}

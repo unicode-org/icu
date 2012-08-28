@@ -22,7 +22,7 @@ haw{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.85"}
     calendar{
         gregorian{
             dayNames{
@@ -87,24 +87,31 @@ haw{
     }
     units{
         day{
+            one{"{0} lā"}
             other{"{0} lā"}
         }
         hour{
+            one{"{0} hola"}
             other{"{0} hola"}
         }
         minute{
+            one{"{0} minuke"}
             other{"{0} minuke"}
         }
         month{
+            one{"{0} mahina"}
             other{"{0} mahina"}
         }
         second{
+            one{"{0} kekona"}
             other{"{0} kekona"}
         }
         week{
+            one{"{0} pule"}
             other{"{0} pule"}
         }
         year{
+            one{"{0} makahiki"}
             other{"{0} makahiki"}
         }
     }

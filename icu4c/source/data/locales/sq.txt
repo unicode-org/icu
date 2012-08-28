@@ -33,7 +33,7 @@ sq{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.85"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -198,6 +198,7 @@ sq{
         }
         hour{
             one{"{0} orë"}
+            other{"{0} orë"}
         }
         minute{
             one{"{0} minutë"}
@@ -205,6 +206,7 @@ sq{
         }
         month{
             one{"{0} muaj"}
+            other{"{0} muaj"}
         }
         second{
             one{"{0} sekondë"}
@@ -212,6 +214,7 @@ sq{
         }
         week{
             one{"{0} javë"}
+            other{"{0} javë"}
         }
         year{
             one{"{0} vit"}

@@ -41,7 +41,7 @@ fr{
         154{"Europe septentrionale"}
         155{"Europe occidentale"}
         419{"Amérique latine"}
-        AC{"Île de l'Ascension"}
+        AC{"Île de l’Ascension"}
         AD{"Andorre"}
         AE{"Émirats arabes unis"}
         AF{"Afghanistan"}
@@ -72,6 +72,7 @@ fr{
         BM{"Bermudes"}
         BN{"Brunéi Darussalam"}
         BO{"Bolivie"}
+        BQ{"Pays-Bas caribéens"}
         BR{"Brésil"}
         BS{"Bahamas"}
         BT{"Bhoutan"}
@@ -80,7 +81,7 @@ fr{
         BY{"Bélarus"}
         BZ{"Belize"}
         CA{"Canada"}
-        CC{"Îles Cocos - Keeling"}
+        CC{"Îles Cocos [Keeling]"}
         CD{"République démocratique du Congo"}
         CF{"République centrafricaine"}
         CG{"Congo-Brazzaville"}
@@ -93,9 +94,9 @@ fr{
         CO{"Colombie"}
         CP{"Île Clipperton"}
         CR{"Costa Rica"}
-        CS{"Serbie-et-Monténégro"}
         CU{"Cuba"}
         CV{"Cap-Vert"}
+        CW{"Curaçao"}
         CX{"Île Christmas"}
         CY{"Chypre"}
         CZ{"République tchèque"}
@@ -135,7 +136,7 @@ fr{
         GP{"Guadeloupe"}
         GQ{"Guinée équatoriale"}
         GR{"Grèce"}
-        GS{"Géorgie du Sud et les îles Sandwich du Sud"}
+        GS{"Géorgie du Sud et les Îles Sandwich du Sud"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinée-Bissau"}
@@ -187,7 +188,7 @@ fr{
         MC{"Monaco"}
         MD{"Moldavie"}
         ME{"Monténégro"}
-        MF{"Saint-Martin"}
+        MF{"Saint-Martin [partie française]"}
         MG{"Madagascar"}
         MH{"Îles Marshall"}
         MK{"Macédoine"}
@@ -255,8 +256,10 @@ fr{
         SN{"Sénégal"}
         SO{"Somalie"}
         SR{"Suriname"}
-        ST{"Sao Tomé-et-Principe"}
+        SS{"Soudan du Sud"}
+        ST{"Sao Tomé-et-Príncipe"}
         SV{"El Salvador"}
+        SX{"Saint-Martin [partie néerlandaise]"}
         SY{"Syrie"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
@@ -278,7 +281,7 @@ fr{
         TZ{"Tanzanie"}
         UA{"Ukraine"}
         UG{"Ouganda"}
-        UM{"Îles Mineures Éloignées des États-Unis"}
+        UM{"Îles éloignées des États-Unis"}
         US{"États-Unis"}
         UY{"Uruguay"}
         UZ{"Ouzbékistan"}
@@ -298,5 +301,5 @@ fr{
         ZW{"Zimbabwe"}
         ZZ{"région indéterminée"}
     }
-    Version{"2.0.66.10"}
+    Version{"2.0.76.53"}
 }

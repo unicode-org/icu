@@ -11,12 +11,12 @@
  */
 root{
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"2.0.66.10"}
+    Version{"2.0.76.11"}
     collations{
         default{"standard"}
         ducet{
             Sequence{" [normalization on ]"}
-            Version{"21.0"}
+            Version{"22.0"}
         }
         search{
             Sequence{
@@ -67,11 +67,11 @@ root{
                 "&ᅮᅴᅵ=ᅰ"
                 "&ᅮᅵ=ᅱ"
             }
-            Version{"21.0"}
+            Version{"22.0"}
         }
         standard{
             Sequence{""}
-            Version{"21.0"}
+            Version{"22.0"}
         }
     }
     depends:process(dependency){"ucadata.icu"}

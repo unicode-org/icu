@@ -10,11 +10,10 @@
  *  ICU <specials> source: <path>/xml/main/shi.xml
  */
 shi{
-    AuxExemplarCharacters{"[o p v]"}
-    ExemplarCharacters{"[a b c d ḍ e ɛ f g {gʷ} ɣ h ḥ i j k {kʷ} l m n q r ṛ s ṣ t ṭ u w x y z]"}
-    ExemplarCharactersIndex{"[A B C D Ḍ E Ɛ F G {Gʷ} Ɣ H Ḥ I J K {Kʷ} L M N Q R Ṛ S Ṣ T Ṭ U W X Y Z]"}
+    ExemplarCharacters{"[ⴰ ⴱ ⴳ {ⴳⵯ} ⴷ ⴹ ⴻ ⴼ ⴽ {ⴽⵯ} ⵀ ⵃ ⵄ ⵅ ⵇ ⵉ ⵊ ⵍ ⵎ ⵏ ⵓ ⵔ ⵕ ⵖ ⵙ ⵚ ⵛ ⵜ ⵟ ⵡ ⵢ ⵣ ⵥ]"}
+    ExemplarCharactersIndex{"[ⴰ ⴱ ⴳ ⴷ ⴹ ⴻ ⴼ ⴽ ⵀ ⵃ ⵄ ⵅ ⵇ ⵉ ⵊ ⵍ ⵎ ⵏ ⵓ ⵔ ⵕ ⵖ ⵙ ⵚ ⵛ ⵜ ⵟ ⵡ ⵢ ⵣ ⵥ]"}
     LocaleScript{
-        "Latn",
+        "Tfng",
     }
     NumberElements{
         latn{
@@ -27,12 +26,12 @@ shi{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.56"}
     calendar{
         gregorian{
             AmPmMarkers{
-                "tifawt",
-                "tadggʷat",
+                "ⵜⵉⴼⴰⵡⵜ",
+                "ⵜⴰⴷⴳⴳⵯⴰⵜ",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -67,142 +66,142 @@ shi{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
-                yQ{"'ak'Q y"}
+                yQ{"ⴰⴽQ y"}
                 yQQQ{"QQQ y"}
             }
             dayNames{
                 format{
                     abbreviated{
-                        "asa",
-                        "ayn",
-                        "asi",
-                        "akṛ",
-                        "akw",
-                        "asim",
-                        "asiḍ",
+                        "ⴰⵙⴰ",
+                        "ⴰⵢⵏ",
+                        "ⴰⵙⵉ",
+                        "ⴰⴽⵕ",
+                        "ⴰⴽⵡ",
+                        "ⴰⵙⵉⵎ",
+                        "ⴰⵙⵉⴹ",
                     }
                     wide{
-                        "asamas",
-                        "aynas",
-                        "asinas",
-                        "akṛas",
-                        "akwas",
-                        "asimwas",
-                        "asiḍyas",
+                        "ⴰⵙⴰⵎⴰⵙ",
+                        "ⴰⵢⵏⴰⵙ",
+                        "ⴰⵙⵉⵏⴰⵙ",
+                        "ⴰⴽⵕⴰⵙ",
+                        "ⴰⴽⵡⴰⵙ",
+                        "ⵙⵉⵎⵡⴰⵙ",
+                        "ⴰⵙⵉⴹⵢⴰⵙ",
                     }
                 }
             }
             eras{
                 abbreviated{
-                    "daɛ",
-                    "dfɛ",
+                    "ⴷⴰⵄ",
+                    "ⴷⴼⵄ",
                 }
                 wide{
-                    "dat n ɛisa",
-                    "dffir n ɛisa",
+                    "ⴷⴰⵜ ⵏ ⵄⵉⵙⴰ",
+                    "ⴷⴼⴼⵉⵔ ⵏ ⵄⵉⵙⴰ",
                 }
             }
             fields{
                 day{
-                    dn{"ass"}
+                    dn{"ⴰⵙⵙ"}
                     relative{
-                        "-1"{"iḍlli"}
-                        "0"{"assa"}
-                        "1"{"askka"}
+                        "-1"{"ⵉⴹⵍⵍⵉ"}
+                        "0"{"ⴰⵙⵙⴰ"}
+                        "1"{"ⴰⵙⴽⴽⴰ"}
                     }
                 }
                 dayperiod{
-                    dn{"tizi g wass: tifawt / tadggʷat"}
+                    dn{"ⵜⵉⵣⵉ ⴳ ⵡⴰⵙⵙ: ⵜⵉⴼⴰⵡⵜ/ⵜⴰⴷⴳⴳⵯⴰⵜ"}
                 }
                 era{
-                    dn{"tasut"}
+                    dn{"ⵜⴰⵙⵓⵜ"}
                 }
                 hour{
-                    dn{"tasragt"}
+                    dn{"ⵜⴰⵙⵔⴰⴳⵜ"}
                 }
                 minute{
-                    dn{"tusdidt"}
+                    dn{"ⵜⵓⵙⴷⵉⴷⵜ"}
                 }
                 month{
-                    dn{"ayyur"}
+                    dn{"ⴰⵢⵢⵓⵔ"}
                 }
                 second{
-                    dn{"tasint"}
+                    dn{"ⵜⴰⵙⵉⵏⵜ"}
                 }
                 week{
-                    dn{"imalass"}
+                    dn{"ⵉⵎⴰⵍⴰⵙⵙ"}
                 }
                 weekday{
-                    dn{"ass g imalass"}
+                    dn{"ⴰⵙⵙ ⴳ ⵉⵎⴰⵍⴰⵙⵙ"}
                 }
                 year{
-                    dn{"asggʷas"}
+                    dn{"ⴰⵙⴳⴳⵯⴰⵙ"}
                 }
                 zone{
-                    dn{"akud n ugmmaḍ"}
+                    dn{"ⴰⴽⵓⴷ ⵏ ⵓⴳⵎⵎⴰⴹ"}
                 }
             }
             monthNames{
                 format{
                     abbreviated{
-                        "inn",
-                        "bṛa",
-                        "maṛ",
-                        "ibr",
-                        "may",
-                        "yun",
-                        "yul",
-                        "ɣuc",
-                        "cut",
-                        "ktu",
-                        "nuw",
-                        "duj",
+                        "ⵉⵏⵏ",
+                        "ⴱⵕⴰ",
+                        "ⵎⴰⵕ",
+                        "ⵉⴱⵔ",
+                        "ⵎⴰⵢ",
+                        "ⵢⵓⵏ",
+                        "ⵢⵓⵍ",
+                        "ⵖⵓⵛ",
+                        "ⵛⵓⵜ",
+                        "ⴽⵜⵓ",
+                        "ⵏⵓⵡ",
+                        "ⴷⵓⵊ",
                     }
                     wide{
-                        "innayr",
-                        "bṛayṛ",
-                        "maṛṣ",
-                        "ibrir",
-                        "mayyu",
-                        "yunyu",
-                        "yulyuz",
-                        "ɣuct",
-                        "cutanbir",
-                        "ktubr",
-                        "nuwanbir",
-                        "dujanbir",
+                        "ⵉⵏⵏⴰⵢⵔ",
+                        "ⴱⵕⴰⵢⵕ",
+                        "ⵎⴰⵕⵚ",
+                        "ⵉⴱⵔⵉⵔ",
+                        "ⵎⴰⵢⵢⵓ",
+                        "ⵢⵓⵏⵢⵓ",
+                        "ⵢⵓⵍⵢⵓⵣ",
+                        "ⵖⵓⵛⵜ",
+                        "ⵛⵓⵜⴰⵏⴱⵉⵔ",
+                        "ⴽⵜⵓⴱⵔ",
+                        "ⵏⵓⵡⴰⵏⴱⵉⵔ",
+                        "ⴷⵓⵊⴰⵏⴱⵉⵔ",
                     }
                 }
                 stand-alone{
                     narrow{
-                        "i",
-                        "b",
-                        "m",
-                        "i",
-                        "m",
-                        "y",
-                        "y",
-                        "ɣ",
-                        "c",
-                        "k",
-                        "n",
-                        "d",
+                        "ⵉ",
+                        "ⴱ",
+                        "ⵎ",
+                        "ⵉ",
+                        "ⵎ",
+                        "ⵢ",
+                        "ⵢ",
+                        "ⵖ",
+                        "ⵛ",
+                        "ⴽ",
+                        "ⵏ",
+                        "ⴷ",
                     }
                 }
             }
             quarters{
                 format{
                     abbreviated{
-                        "ak 1",
-                        "ak 2",
-                        "ak 3",
-                        "ak 4",
+                        "ⴰⴽ 1",
+                        "ⴰⴽ 2",
+                        "ⴰⴽ 3",
+                        "ⴰⴽ 4",
                     }
                     wide{
-                        "akṛaḍyur 1",
-                        "akṛaḍyur 2",
-                        "akṛaḍyur 3",
-                        "akṛaḍyur 4",
+                        "ⴰⴽⵕⴰⴹⵢⵓⵔ 1",
+                        "ⴰⴽⵕⴰⴹⵢⵓⵔ 2",
+                        "ⴰⴽⵕⴰⴹⵢⵓⵔ 3",
+                        "ⴰⴽⵕⴰⴹⵢⵓⵔ 4",
                     }
                 }
             }

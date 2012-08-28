@@ -23,7 +23,7 @@ bm{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.61"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -142,9 +142,6 @@ bm{
                 week{
                     dn{"dɔgɔkun"}
                 }
-                weekday{
-                    dn{"don"}
-                }
                 year{
                     dn{"san"}
                 }
@@ -157,7 +154,7 @@ bm{
                     abbreviated{
                         "zan",
                         "feb",
-                        "nar",
+                        "mar",
                         "awi",
                         "mɛ",
                         "zuw",

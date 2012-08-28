@@ -12,7 +12,7 @@
 $aspirate = ’;
 $apostrophe = ’;
 $vowels = [ᅡᅢᅣᅤᅥᅦᅧᅨᅩᅪᅫᅬᅭᅮᅯᅰᅱᅲᅳᅴᅵ] ;
-$wordBoundary = [^[:L:][:M:][:N:]] ;
+$wordBoundary =  [^[:L:][:M:][:N:]] ;
 ᆨᄀ → kk ; # HANGUL JONGSEONG KIYEOK + CHOSEONG KIYEOK
 ᆨᄂ → ngn ; # HANGUL JONGSEONG KIYEOK + CHOSEONG NIEUN
 ᆨᄃ → kt ; # HANGUL JONGSEONG KIYEOK + CHOSEONG TIKEUT
@@ -153,7 +153,7 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 [$vowels]ᄆ → m ; # HANGUL JONGSEONG KIYEOK + CHOSEONG MIEUM
 [$vowels]ᄇ → b ; # HANGUL JONGSEONG KIYEOK + CHOSEONG PIEUP
 [$vowels]ᄉ → s ; # HANGUL JONGSEONG KIYEOK + CHOSEONG SIOS
-[$vowels]ᄋ → ; # HANGUL JONGSEONG KIYEOK + CHOSEONG IEUNG
+[$vowels]ᄋ →  ; # HANGUL JONGSEONG KIYEOK + CHOSEONG IEUNG
 [$vowels]ᄌ → j ; # HANGUL JONGSEONG KIYEOK + CHOSEONG CIEUC
 [$vowels]ᄎ → ch $aspirate ; # HANGUL JONGSEONG KIYEOK + CHOSEONG CHIEUCH
 [$vowels]ᄏ → k $aspirate ; # HANGUL JONGSEONG KIYEOK + CHOSEONG KHIEUKH
@@ -229,7 +229,7 @@ $wordBoundary{ᄅ → n ; # HANGUL CHOSEONG RIEUL
 $wordBoundary{ᄆ → m ; # HANGUL CHOSEONG MIEUM
 $wordBoundary{ᄇ → p ; # HANGUL CHOSEONG PIEUP
 $wordBoundary{ᄉ → s ; # HANGUL CHOSEONG SIOS
-$wordBoundary{ᄋ → ; # HANGUL CHOSEONG IEUNG
+$wordBoundary{ᄋ →  ; # HANGUL CHOSEONG IEUNG
 $wordBoundary{ᄌ → ch ; # HANGUL CHOSEONG CIEUC
 $wordBoundary{ᄎ → ch $aspirate ; # HANGUL CHOSEONG CHIEUCH
 $wordBoundary{ᄏ → k $aspirate ; # HANGUL CHOSEONG KHIEUKH

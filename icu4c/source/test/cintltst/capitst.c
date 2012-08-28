@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2012 International Business Machines
+ * Copyright (c) 1997-2012, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -2301,19 +2301,19 @@ static void TestGetKeywordValuesForLocale(void) {
             { "de_DE",          "standard", "phonebook", "search", "ducet", NULL, NULL, NULL, NULL },
             { "de_Latn_DE",     "standard", "phonebook", "search", "ducet", NULL, NULL, NULL, NULL },
 #if INCLUDE_UNIHAN_COLLATION
-            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
-            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
-            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
-            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "ducet", "search" },
-            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "unihan", "ducet", "search" },
-            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "unihan", "ducet", "search" },
+            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "unihan", "ducet", "search" },
+            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "unihan", "ducet", "search" },
+            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "unihan", "ducet", "search" },
+            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "unihan", "ducet", "search" },
+            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "unihan", "ducet", "search" },
+            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "unihan", "ducet", "search" },
 #else
-            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "search", NULL },
-            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "search", NULL },
-            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "search", NULL },
-            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "ducet", "search", NULL },
-            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "ducet", "search", NULL },
-            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "ducet", "search", NULL },
+            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "ducet", "search", NULL },
+            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "ducet", "search", NULL },
+            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "ducet", "search", NULL },
+            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "ducet", "search", NULL },
+            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "ducet", "search", NULL },
+            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "ducet", "search", NULL },
 #endif
             { "es_ES",          "standard", "search", "traditional", "ducet", NULL, NULL, NULL, NULL },
             { "es__TRADITIONAL","traditional", "search", "standard", "ducet", NULL, NULL, NULL, NULL },
@@ -2322,9 +2322,9 @@ static void TestGetKeywordValuesForLocale(void) {
             { "zzz@collation=xxx",          "standard", "ducet", "search", NULL, NULL, NULL, NULL, NULL }
     };
 #if INCLUDE_UNIHAN_COLLATION
-    const int32_t expectedLength[PREFERRED_SIZE] = { 3, 3, 3, 4, 4, 8, 8, 8, 8, 8, 8, 4, 4, 3, 4, 3 };
+    const int32_t expectedLength[PREFERRED_SIZE] = { 3, 3, 3, 4, 4, 9, 9, 9, 9, 9, 9, 4, 4, 3, 4, 3 };
 #else
-    const int32_t expectedLength[PREFERRED_SIZE] = { 3, 3, 3, 4, 4, 7, 7, 7, 7, 7, 7, 4, 4, 3, 4, 3 };
+    const int32_t expectedLength[PREFERRED_SIZE] = { 3, 3, 3, 4, 4, 8, 8, 8, 8, 8, 8, 4, 4, 3, 4, 3 };
 #endif
 
     UErrorCode status = U_ZERO_ERROR;

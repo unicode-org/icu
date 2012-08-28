@@ -93,7 +93,6 @@ nn{
         CO{"Colombia"}
         CP{"Clippertonøya"}
         CR{"Costa Rica"}
-        CS{"Serbia og Montenegro"}
         CU{"Cuba"}
         CV{"Kapp Verde"}
         CX{"Christmasøya"}
@@ -298,5 +297,5 @@ nn{
         ZW{"Zimbabwe"}
         ZZ{"ukjent område"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

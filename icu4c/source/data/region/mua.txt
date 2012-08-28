@@ -56,7 +56,6 @@ mua{
         CN{"syiŋ"}
         CO{"kolombiya"}
         CR{"kosta Rika"}
-        CS{"Serbiya ne Montenegro"}
         CU{"Kuba"}
         CV{"kap ma laŋne"}
         CY{"Syipriya"}
@@ -238,5 +237,5 @@ mua{
         ZM{"Zambiya"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
 }

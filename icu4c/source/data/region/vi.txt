@@ -18,7 +18,7 @@ vi{
         009{"Châu Đại Dương"}
         011{"Tây Phi"}
         013{"Trung Mỹ"}
-        014{"Đông Phí"}
+        014{"Đông Phi"}
         015{"Bắc Phi"}
         017{"Trung Phi"}
         018{"Miền Nam Châu Phi"}
@@ -44,111 +44,112 @@ vi{
         AC{"Đảo Ascension"}
         AD{"Andorra"}
         AE{"Các Tiểu Vương quốc A-rập Thống nhất"}
-        AF{"Áp-ga-ni-xtan"}
-        AG{"An-ti-gu-a và Ba-bu-đa"}
+        AF{"Afghanistan"}
+        AG{"Antigua và Barbuda"}
         AI{"Anguilla"}
-        AL{"An-ba-ni"}
-        AM{"Ác-mê-ni-a"}
+        AL{"Albani"}
+        AM{"Armenia"}
         AN{"Tây Ấn Hà Lan"}
-        AO{"Ăng-gô-la"}
+        AO{"Angola"}
         AQ{"Nam Cực"}
-        AR{"Ác-hen-ti-na"}
+        AR{"Argentina"}
         AS{"Đảo Somoa thuộc Mỹ"}
         AT{"Áo"}
         AU{"Úc"}
         AW{"Aruba"}
         AX{"Quần đảo Aland"}
-        AZ{"Ai-déc-bai-gian"}
+        AZ{"Azerbaijan"}
         BA{"Bô-xni-a Héc-xê-gô-vi-na"}
-        BB{"Bác-ba-đốt"}
-        BD{"Băng-la-đét"}
+        BB{"Barbados"}
+        BD{"Bangladesh"}
         BE{"Bỉ"}
-        BF{"Buốc-ki-na Pha-xô"}
-        BG{"Bun-ga-ri"}
-        BH{"Ba-ren"}
-        BI{"Bu-run-đi"}
-        BJ{"Bê-nanh"}
+        BF{"Burkina Faso"}
+        BG{"Bungari"}
+        BH{"Bahrain"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BL{"Saint Barthélemy"}
         BM{"Bermuda"}
-        BN{"Bru-nây"}
-        BO{"Bô-li-vi-a"}
+        BN{"Brunei"}
+        BO{"Bolivia"}
         BR{"Bra-xin"}
-        BS{"Ba-ha-ma"}
-        BT{"Bu-tan (Bhutan)"}
-        BV{"Đảo Bouvet (Na Uy)"}
-        BW{"Bốt-xoa-na"}
-        BY{"Bê-la-rút"}
+        BS{"Bahamas"}
+        BT{"Bhutan"}
+        BV{"Đảo Bouvet"}
+        BW{"Botswana"}
+        BY{"Belarus"}
         BZ{"Bê-li-xê"}
         CA{"Ca-na-đa"}
         CC{"Quần đảo Cocos"}
-        CD{"Cộng hoà dân chủ Côngô"}
+        CD{"Congo - Kinshasa"}
         CF{"Cộng hòa Trung Phi"}
         CG{"Công-gô"}
         CH{"Thụy Sĩ"}
         CI{"Bờ Biển Ngà"}
         CK{"Quần Đảo Cook"}
-        CL{"Chi-lê"}
+        CL{"Chile"}
         CM{"Ca-mơ-run"}
         CN{"Trung Quốc"}
-        CO{"Cô-lôm-bi-a"}
+        CO{"Colombia"}
         CP{"Đảo Clipperton"}
         CR{"Cốt-xta Ri-ca"}
-        CS{"Séc-bia"}
         CU{"Cu Ba"}
-        CV{"Cáp-ve"}
+        CV{"Cape Verde"}
+        CW{"Curaçao"}
         CX{"Đảo Giáng Sinh"}
         CY{"Síp"}
         CZ{"Cộng hòa Séc"}
         DE{"Đức"}
         DG{"Diego Garcia"}
-        DJ{"Gi-bu-ti"}
+        DJ{"Djibouti"}
         DK{"Đan Mạch"}
         DM{"Dominica"}
-        DO{"Cộng hoà Đô-mi-ni-ca"}
-        DZ{"An-giê-ri"}
+        DO{"Cộng hòa Dominica"}
+        DZ{"Algeria"}
         EA{"Ceuta và Melilla"}
-        EC{"Ê-cu-a-đo"}
-        EE{"E-xtô-ni-a"}
+        EC{"Ecuador"}
+        EE{"Estonia"}
         EG{"Ai Cập"}
         EH{"Tây Sahara"}
-        ER{"Ê-ri-tơ-rê-a"}
+        ER{"Eritrea"}
         ES{"Tây Ban Nha"}
-        ET{"Ê-ti-ô-pi-a"}
+        ET{"Ethiopia"}
         EU{"Liên Minh Châu Âu"}
         FI{"Phần Lan"}
-        FJ{"Phi-gi"}
+        FJ{"Fiji"}
         FK{"Quần Đảo Falkland"}
-        FM{"Mi-crô-nê-xi-a"}
+        FM{"Micronesia"}
         FO{"Quần Đảo Faroe"}
         FR{"Pháp"}
-        GA{"Ga-bông"}
+        GA{"Gabon"}
         GB{"Vương quốc Anh"}
-        GD{"Grê-na-đa"}
-        GE{"Gru-di-a"}
+        GD{"Grenada"}
+        GE{"Georgia"}
         GF{"Quiana thuộc Pháp"}
         GG{"Guernsey"}
-        GH{"Gha-na"}
+        GH{"Ghana"}
         GI{"Gibraltar"}
         GL{"Băng Đảo"}
-        GM{"Găm-bi-a"}
-        GN{"Ghi-nê"}
+        GM{"Gambia"}
+        GN{"Guinea"}
         GP{"Guadeloupe"}
-        GQ{"Ghi-nê Xích-đạo"}
+        GQ{"Guinea Xích Đạo"}
         GR{"Hy Lạp"}
         GS{"Quần đảo Nam Georgia và Nam Sandwich"}
         GT{"Goa-tê-ma-la"}
-        GU{"Đảo Gu-am"}
-        GW{"Ghi-nê Bít-xao"}
-        GY{"Guy-a-na"}
+        GU{"Guam"}
+        GW{"Guinea-Bissau"}
+        GY{"Guyana"}
         HK{"Đặc khu hành chính Hồng Kông thuộc CHND Trung Hoa"}
         HM{"Đảo Heard và Quần đảo McDonald"}
         HN{"Hôn-đu-rát"}
-        HR{"Crô-a-ti-a"}
-        HT{"Ha-i-ti"}
-        HU{"Hung-ga-ri"}
+        HR{"Croatia"}
+        HT{"Haiti"}
+        HU{"Hungari"}
         IC{"Quần đảo Canary"}
-        ID{"Nam Dương"}
+        ID{"Indonesia"}
         IE{"Ai-len"}
-        IL{"I-xra-en"}
+        IL{"Israel"}
         IM{"Đảo Man"}
         IN{"Ấn Độ"}
         IO{"Thuộc địa Anh tại Ấn Độ Dương"}
@@ -157,71 +158,73 @@ vi{
         IS{"Ai-xơ-len"}
         IT{"Ý"}
         JE{"Jersey"}
-        JM{"Ha-mai-ca"}
-        JO{"Gióc-đa-ni"}
+        JM{"Jamaica"}
+        JO{"Jordan"}
         JP{"Nhật Bản"}
-        KE{"Kê-ni-a"}
-        KG{"Cư-rơ-gư-xtan"}
+        KE{"Kenya"}
+        KG{"Kyrgyzstan"}
         KH{"Campuchia"}
-        KI{"Ki-ri-ba-ti"}
-        KM{"Cô-mô"}
-        KN{"Xan-kít và Nê-vi"}
+        KI{"Kiribati"}
+        KM{"Comoros"}
+        KN{"Saint Kitts và Nevis"}
         KP{"Bắc Triều Tiên"}
         KR{"Hàn Quốc"}
         KW{"Cô-oét"}
         KY{"Quần Đảo Cayman"}
-        KZ{"Ka-dắc-xtan"}
+        KZ{"Kazakhstan"}
         LA{"Lào"}
         LB{"Li-băng"}
-        LC{"Xan Lu-xi"}
-        LI{"Lich-ten-xtên"}
-        LK{"Xri Lan-ca"}
-        LR{"Li-bê-ri-a"}
-        LS{"Lê-xô-thô"}
-        LT{"Li-tu-a-ni-a"}
-        LU{"Lúc-xăm-bua"}
-        LV{"Lát-vi-a"}
+        LC{"Saint Lucia"}
+        LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
+        LR{"LIberia"}
+        LS{"Lesotho"}
+        LT{"Lithuania"}
+        LU{"Luxembourg"}
+        LV{"Latvia"}
         LY{"Li-bi"}
         MA{"Ma-rốc"}
-        MC{"Mô-na-cô"}
-        MD{"Môn-đô-va"}
+        MC{"Monaco"}
+        MD{"Moldova"}
         ME{"Montenegro"}
-        MG{"Ma-đa-gát-xca"}
-        MH{"Quần đảo Mác-san"}
-        MK{"Ma-xê-đô-ni-a"}
-        ML{"Ma-li"}
-        MM{"Mi-an-ma"}
+        MF{"Saint Martin"}
+        MG{"Madagascar"}
+        MH{"Quần đảo Marshall"}
+        MK{"Macedonia"}
+        ML{"Mali"}
+        MM{"Myanmar [Miến Điện]"}
         MN{"Mông Cổ"}
         MO{"Đặc khu hành chính Macao thuộc CHND Trung Hoa"}
         MP{"Quần Đảo Bắc Mariana"}
-        MR{"Mô-ri-ta-ni"}
+        MQ{"Martinique"}
+        MR{"Mauritania"}
         MS{"Montserrat"}
-        MT{"Man-ta"}
-        MU{"Mô-ri-xơ"}
-        MV{"Man-đi-vơ"}
-        MW{"Ma-la-uy"}
+        MT{"Malta"}
+        MU{"Mauritius"}
+        MV{"Maldives"}
+        MW{"Malawi"}
         MX{"Mê-hi-cô"}
-        MY{"Ma-lay-xi-a"}
-        MZ{"Mô-dăm-bích"}
-        NA{"Nam-mi-bi-a"}
+        MY{"Malaysia"}
+        MZ{"Mozambique"}
+        NA{"Namibia"}
         NC{"New Caledonia"}
-        NE{"Ni-giê"}
+        NE{"Niger"}
         NF{"Đảo Norfolk"}
-        NG{"Ni-giê-ri-a"}
-        NI{"Ni-ca-ra-goa"}
+        NG{"Nigeria"}
+        NI{"Nicaragua"}
         NL{"Hà Lan"}
         NO{"Na Uy"}
-        NP{"Nê-pan"}
+        NP{"Nepal"}
         NR{"Nauru"}
         NU{"Niue"}
-        NZ{"Niu Di-lân"}
-        OM{"Ô-man"}
+        NZ{"New Zealand"}
+        OM{"Oman"}
         PA{"Pa-na-ma"}
-        PE{"Pê-ru"}
+        PE{"Peru"}
         PF{"Polynesia thuộc Pháp"}
-        PG{"Pa-pu-a Niu Ghi-nê"}
-        PH{"Phi-lip-pin"}
-        PK{"Pa-ki-xtan"}
+        PG{"Papua New Guinea"}
+        PH{"Philippin"}
+        PK{"Pakistan"}
         PL{"Ba Lan"}
         PM{"Saint Pierre và Miquelon"}
         PN{"Quần đảo Pitcairn"}
@@ -229,69 +232,73 @@ vi{
         PS{"Lãnh thổ Palestine"}
         PT{"Bồ Đào Nha"}
         PW{"Palau"}
-        PY{"Pa-ra-goay"}
-        QA{"Ca-ta"}
+        PY{"Paraguay"}
+        QA{"Qatar"}
         QO{"Vùng xa xôi thuộc Châu Đại Dương"}
-        RO{"Ru-ma-ni"}
-        RS{"Xéc-bi"}
+        RE{"Réunion"}
+        RO{"Romania"}
+        RS{"Serbia"}
         RU{"Nga"}
-        RW{"Ru-an-đa"}
+        RW{"Rwanda"}
         SA{"A-rập Xê-út"}
-        SB{"Quần đảo Xô-lô-mông"}
-        SC{"Xây-sen"}
+        SB{"Quần đảo Solomon"}
+        SC{"Seychelles"}
         SD{"Xu-đăng"}
         SE{"Thụy Điển"}
-        SG{"Xin-ga-po"}
+        SG{"Singapore"}
         SH{"Saint Helena"}
-        SI{"Xlô-ven-ni-a"}
+        SI{"Slovenia"}
         SJ{"Svalbard và Jan Mayen"}
-        SK{"Xlô-va-ki-a"}
-        SL{"Xi-ê-ra Lê-ôn"}
-        SM{"Xan Ma-ri-nô"}
-        SN{"Xê-nê-gan"}
-        SO{"Xô-ma-li"}
-        SR{"Xu-ri-nam"}
-        ST{"Xao Tô-mê và Prin-xi-pê"}
-        SV{"En-san-va-đo"}
-        SY{"Xi-ri"}
-        SZ{"Xoa-di-len"}
+        SK{"Slovakia"}
+        SL{"Sierra Leone"}
+        SM{"San Marino"}
+        SN{"Senegal"}
+        SO{"Somali"}
+        SR{"Suriname"}
+        SS{"Nam Sudan"}
+        ST{"São Tomé và Príncipe"}
+        SV{"El Salvador"}
+        SX{"Sint Maarten"}
+        SY{"Syria"}
+        SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
         TC{"Quần Đảo Turk và Caicos"}
-        TD{"Sát"}
+        TD{"Chad"}
         TF{"Thuộc Địa Nam của Pháp"}
-        TG{"Tô-gô"}
+        TG{"Togo"}
         TH{"Thái Lan"}
-        TJ{"Tát-gi-ki-xtan"}
+        TJ{"Tajikistan"}
         TK{"Tokelau"}
         TL{"Đông Ti-mo"}
-        TM{"Tuốc-mê-ni-xtan"}
+        TM{"Turkmenistan"}
         TN{"Tuy-ni-di"}
-        TO{"Tông-ga"}
+        TO{"Tonga"}
         TR{"Thổ Nhĩ Kỳ"}
-        TT{"Tri-ni-đát và Tô-ba-gô"}
-        TV{"Tu-va-lu"}
+        TT{"Trinidad và Tobago"}
+        TV{"Tuvalu"}
         TW{"Đài Loan"}
-        TZ{"Tan-da-ni-a"}
-        UA{"U-crai-na"}
-        UG{"U-gan-đa"}
+        TZ{"Tanzania"}
+        UA{"Ukraina"}
+        UG{"Uganda"}
         UM{"Các đảo nhỏ xa trung tâm thuộc Mỹ"}
         US{"Hoa Kỳ"}
-        UY{"U-ru-goay"}
-        UZ{"U-dơ-bê-ki-xtan"}
+        UY{"Uruguay"}
+        UZ{"Uzbekistan"}
         VA{"Va-ti-căng"}
-        VC{"Xan Vin-xen và Grê-na-din"}
-        VE{"Vê-nê-zu-ê-la"}
-        VG{"Đảo Virgin, thuộc Anh"}
-        VI{"Quần đảo Virgin, Mỹ"}
+        VC{"Saint Vincent và Grenadines"}
+        VE{"Venezuela"}
+        VG{"Quần đảo Virgin thuộc Anh"}
+        VI{"Quần đảo Virgin thuộc Mỹ"}
         VN{"Việt Nam"}
-        VU{"Va-nu-a-tu"}
+        VU{"Vanuatu"}
         WF{"Wallis và Futuna"}
-        WS{"Xa-moa"}
-        YE{"Y-ê-men"}
+        WS{"Samoa"}
+        YE{"Yemen"}
+        YT{"Mayotte"}
         ZA{"Nam Phi"}
-        ZM{"Dăm-bi-a"}
-        ZW{"Dim-ba-bu-ê"}
+        ZM{"Zambia"}
+        ZW{"Zimbabwe"}
         ZZ{"Vùng Chưa biết hoặc không Hợp lệ"}
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.99"}
 }

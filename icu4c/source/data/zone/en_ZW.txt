@@ -7,8 +7,13 @@
 // *
 // ***************************************************************************
 en_ZW{
-    Version{"2.0.65.46"}
+    Version{"2.0.75.60"}
     zoneStrings{
+        "Pacific:Honolulu"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
         "meta:Africa_Central"{
             ss{"CAT"}
         }
@@ -22,6 +27,41 @@ en_ZW{
             sd{"WAST"}
             sg{"WAT"}
             ss{"WAT"}
+        }
+        "meta:Alaska"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
+        "meta:America_Central"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
+        "meta:America_Eastern"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
+        "meta:America_Mountain"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
+        "meta:America_Pacific"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
+        "meta:Atlantic"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
+        }
+        "meta:Hawaii_Aleutian"{
+            sd{"∅∅∅"}
+            sg{"∅∅∅"}
+            ss{"∅∅∅"}
         }
     }
 }

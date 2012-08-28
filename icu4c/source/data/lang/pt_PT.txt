@@ -8,82 +8,160 @@
 // ***************************************************************************
 pt_PT{
     Keys{
-        calendar{"calendário"}
-        collation{"ordenação"}
-        currency{"moeda"}
+        colAlternate{"Ignorar Ordenação de Símbolos"}
+        colBackwards{"Ordenação de Acentos Invertida"}
+        colCaseFirst{"Disposição de Maiúsculas/Minúsculas"}
+        colCaseLevel{"Ordenação Sensível a Maiúsculas e Minúsculas"}
+        colHiraganaQuaternary{"Ordenação Kana"}
+        colNormalization{"Ordenação Normalizada"}
+        colNumeric{"Ordenação Numérica"}
+        colStrength{"Força da Ordenação"}
+        timezone{"Fuso Horário"}
+        va{"Variante Local"}
+        variableTop{"Ordenar Como Símbolos"}
         x{"Utilização Privada"}
     }
     Languages{
+        ach{"Acoli"}
         af{"afrikaans"}
+        agq{"aghem"}
+        ak{"Akan"}
         art{"idioma artifical"}
+        asa{"asu"}
         awa{"Awadhi"}
         bai{"bamileke Languages"}
+        bax{"bamun"}
+        bbj{"ghomala"}
+        bem{"Bemba"}
+        bez{"bena"}
+        bfd{"bafut"}
+        bh{"Biari"}
+        bkm{"kom"}
+        br{"Bretão"}
+        bss{"akoose"}
         bug{"Buginese"}
+        bum{"bulu"}
+        byv{"medumba"}
+        cay{"cayuga"}
         ce{"chechene"}
         cel{"idioma céltico"}
+        cgg{"chiga"}
         chn{"jargão chinook"}
+        chr{"Cherokee"}
+        co{"Corso"}
         cpe{"crioulo ou pidgin do inglês"}
         cpf{"crioulo ou pidgin do francês"}
         cpp{"crioulo ou pidgin do português"}
         cs{"checo"}
         cus{"idioma cuchita"}
-        de_CH{"Alto Alemão Suíço"}
+        dav{"taita"}
+        dje{"zarma"}
         dra{"idioma dravítico"}
+        dyo{"jola-fonyi"}
         dyu{"diula"}
+        dzg{"dazaga"}
+        ee{"Ewe"}
         egy{"egípcio clássico"}
-        en_GB{"Inglês Britânico"}
-        en_US{"Inglês (EUA)"}
         enm{"inglês medieval"}
         et{"estónio"}
         fiu{"idioma ugro-finês"}
         frm{"francês medieval"}
         frs{"frísio oriental"}
+        fy{"frísico ocidental"}
+        gaa{"Ga"}
         gmh{"alemão medieval alto"}
         grc{"grego clássico"}
-        gsw{"alemão da Suíça"}
-        hi{"Hindi"}
+        guz{"gusii"}
+        ha{"haúça"}
+        hi{"hindi"}
         hsb{"sorbiano superior"}
         hy{"arménio"}
+        ia{"Interlíngua"}
         iba{"Iban"}
+        ibb{"ibibio"}
         ig{"igbo"}
         ik{"Inupiaq"}
-        jv{"jv"}
+        jmc{"machame"}
+        kbl{"kanembu"}
+        kde{"makonde"}
+        kg{"Conguês"}
         khi{"khoisan"}
+        khq{"koyra chiini"}
+        kkj{"kako"}
+        kln{"kalenjin"}
+        kn{"canarim"}
+        ks{"caxemirense"}
+        ksb{"shambala"}
+        ksf{"bafia"}
+        lag{"langi"}
         lez{"lezghiano"}
+        lg{"Ganda"}
+        luy{"luyia"}
+        maf{"mafa"}
+        mde{"maba"}
+        mer{"meru"}
         mga{"irlandês, medieval (900-1200)"}
+        mgh{"makhuwa-meetto"}
         mk{"macedónio"}
+        mua{"mundang"}
+        mye{"myene"}
         nah{"Nauatle"}
+        naq{"nama"}
+        nb{"norueguês bokmål"}
         nds{"baixo alemão"}
         nic{"nigeriano - cordofano"}
-        nl_BE{"Flamengo"}
+        nmg{"kwasio"}
+        nn{"norueguês nynorsk"}
+        nnh{"ngiemboon"}
         non{"norse, old"}
+        nus{"nuer"}
+        nyn{"Nyankole"}
         oc{"provençal"}
+        om{"Oromo"}
         os{"ossético"}
         peo{"persa arcaico (aprox. 600-400 a.C.)"}
         pl{"polaco"}
         pra{"idioma prácito"}
         pro{"provençal, arcaico (até 1500)"}
-        pt_PT{"português europeu"}
-        rm{"Romanche"}
+        ps{"pastó"}
         rom{"romanês"}
+        root{"root"}
+        sah{"sakha"}
         sai{"idioma indígeno sul-americano"}
         sal{"salishan languages"}
+        saq{"samburu"}
+        sba{"ngambay"}
+        sbp{"sangu"}
+        see{"seneca"}
+        seh{"sena"}
+        ses{"koyraboro senni"}
         sgn{"linguages de sinais"}
+        shi{"tachelhit"}
+        shu{"árabe do Chade"}
         ssa{"idioma nilo-sariano"}
+        ssy{"saho"}
         swb{"língua comoriana"}
-        ta{"Tâmil"}
+        swc{"suaili do Congo"}
         tai{"idioma tailândes"}
+        teo{"teso"}
         tet{"Tétum"}
         tg{"tajique"}
+        ti{"tigre"}
+        tlh{"Klingon"}
         to{"tonga"}
         tog{"toganês"}
+        trv{"taroko"}
+        tum{"Tumbuka"}
+        twq{"tasawaq"}
         tyv{"tuviniano"}
+        tzm{"tamazight de Marrocos Central"}
+        und{"idioma desconhecido"}
+        vun{"vunjo"}
         wen{"idioma sórbio"}
-        zh_Hans{"Chinês Simplificado"}
-        zh_Hant{"Chinês Tradicional"}
-    }
-    LanguagesShort{
-        az{"Azerbaijano"}
+        xog{"soga"}
+        yav{"yangben"}
+        ybb{"yemba"}
+        yi{"Iídiche"}
     }
     Scripts{
         Armn{"arménio"}
@@ -91,20 +169,17 @@ pt_PT{
         Egyd{"egípcio demótico"}
         Egyh{"egípcio hierático"}
         Inds{"indus"}
-        Laoo{"Lao"}
         Lina{"linear A"}
         Linb{"linear B"}
         Sylo{"siloti nagri"}
         Tale{"tai le"}
-        Taml{"tamil"}
         Telu{"telugu"}
         Xsux{"cuneiforme sumero-acadiano"}
         Zxxx{"não escrito"}
-        Zzzz{"inválido ou desconhecido"}
     }
     Scripts%stand-alone{
-        Hans{"Han Simplificado"}
-        Hant{"Han Tradicional"}
+        Hans{"han simplificado"}
+        Hant{"han tradicional"}
     }
     Types{
         calendar{
@@ -116,23 +191,22 @@ pt_PT{
         }
         collation{
             dictionary{"Ordenação do Dicionário"}
-            ducet{"Ordenação Unicode Predefinida"}
             phonebook{"Ordem da Lista Telefónica"}
+            phonetic{"Sequência de Ordenação Fonética"}
             pinyin{"Ordem do Chinês Simplificado Pinyin"}
             reformed{"Reforma da Ordenação"}
-            search{"Pesquisa por Objectivo/Geral"}
+            searchjl{"Pesquisar Por Consoante Inicial Hangul"}
             stroke{"Ordem por traços"}
             traditional{"Ordem tradicional"}
             unihan{"Ordem por radical e traços"}
         }
         numbers{
-            arab{"Algarismos Árabe/Índico"}
-            arabext{"Algarismos Árabe/Índico Expandidos"}
             armn{"Algarismos Arménios"}
             armnlow{"Numeração Arménia Minúscula"}
             beng{"Algarismos Bengalis"}
             deva{"Algarismos Devanágaris"}
             ethi{"Numeração Etíope"}
+            finance{"Algarismos Financeiros"}
             fullwide{"Algarismos de Largura Completa"}
             geor{"Numeração Georgiana"}
             grek{"Numeração Grega"}
@@ -153,6 +227,7 @@ pt_PT{
             mlym{"Algarismos Malaiala"}
             mong{"Algarismos Mongóis"}
             mymr{"Algarismos de Mianmar"}
+            native{"Dígitos Nativos"}
             orya{"Algarismos Oriá"}
             roman{"Numeração Romana"}
             romanlow{"Numeração Romana Minúscula"}
@@ -160,6 +235,8 @@ pt_PT{
             telu{"Algarismos de Telugu"}
             thai{"Algarismos Tailandeses"}
             tibt{"Algarismos Tibetanos"}
+            traditional{"Algarismos Tradicionais"}
+            vaii{"Dígitos Vai"}
         }
     }
     Variants{
@@ -177,5 +254,10 @@ pt_PT{
         SOLBA{"dialecto stolvizza/solbica"}
         WADEGILE{"Romanização Wade-Giles"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
+    codePatterns{
+        language{"Idioma: {0}"}
+        script{"Escrita: {0}"}
+        territory{"Região: {0}"}
+    }
 }

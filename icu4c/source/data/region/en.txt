@@ -29,11 +29,10 @@ en{
         034{"Southern Asia"}
         035{"South-Eastern Asia"}
         039{"Southern Europe"}
-        053{"Australia and New Zealand"}
+        053{"Australasia"}
         054{"Melanesia"}
         057{"Micronesian Region"}
         061{"Polynesia"}
-        062{"South-Central Asia"}
         142{"Asia"}
         143{"Central Asia"}
         145{"Western Asia"}
@@ -41,10 +40,7 @@ en{
         151{"Eastern Europe"}
         154{"Northern Europe"}
         155{"Western Europe"}
-        172{"Commonwealth of Independent States"}
-        200{"Czechoslovakia"}
         419{"Latin America"}
-        830{"Channel Islands"}
         AC{"Ascension Island"}
         AD{"Andorra"}
         AE{"United Arab Emirates"}
@@ -76,7 +72,7 @@ en{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
-        BQ{"Bonaire, Sint Eustatius, and Saba"}
+        BQ{"Caribbean Netherlands"}
         BR{"Brazil"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -98,7 +94,6 @@ en{
         CO{"Colombia"}
         CP{"Clipperton Island"}
         CR{"Costa Rica"}
-        CS{"Serbia and Montenegro"}
         CU{"Cuba"}
         CV{"Cape Verde"}
         CW{"Curaçao"}
@@ -286,7 +281,7 @@ en{
         TZ{"Tanzania"}
         UA{"Ukraine"}
         UG{"Uganda"}
-        UM{"U.S. Minor Outlying Islands"}
+        UM{"U.S. Outlying Islands"}
         US{"United States"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -306,5 +301,5 @@ en{
         ZW{"Zimbabwe"}
         ZZ{"Unknown Region"}
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.94"}
 }

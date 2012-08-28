@@ -56,7 +56,6 @@ ki{
         CN{"Caina"}
         CO{"Kolombia"}
         CR{"Kostarika"}
-        CS{"Serbia na Montenegro"}
         CU{"Kiumba"}
         CV{"Kepuvede"}
         CY{"Kuprosi"}
@@ -238,5 +237,5 @@ ki{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
 }

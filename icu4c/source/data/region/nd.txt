@@ -56,7 +56,6 @@ nd{
         CN{"China"}
         CO{"Kholombiya"}
         CR{"Khosta Rikha"}
-        CS{"Serbia and Montenegro"}
         CU{"Cuba"}
         CV{"Cape Verde Islands"}
         CY{"Cyprus"}
@@ -238,5 +237,5 @@ nd{
         ZM{"Zambiya"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
 }

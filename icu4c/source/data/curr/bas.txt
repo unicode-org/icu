@@ -20,7 +20,7 @@ bas{
             "Kwànza àŋgolà",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dɔ̀lâr òstralìà",
         }
         BHD{
@@ -232,5 +232,5 @@ bas{
             "Dɔ̀lâr sìmbàbwê",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

@@ -56,7 +56,6 @@ naq{
         CN{"Chinab"}
         CO{"Colombiab"}
         CR{"Costa Rica"}
-        CS{"Serbiab tsî Montenegrob"}
         CU{"Cubab"}
         CV{"Cape Verde Islands"}
         CY{"Cyprus"}
@@ -238,5 +237,5 @@ naq{
         ZM{"Zambiab"}
         ZW{"Zimbabweb"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
 }

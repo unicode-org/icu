@@ -55,7 +55,6 @@ asa{
         CN{"China"}
         CO{"Kolombia"}
         CR{"Kothtarika"}
-        CS{"Therbia na Montenegro"}
         CU{"Kuba"}
         CV{"Kepuvede"}
         CY{"Kuprothi"}
@@ -236,5 +235,5 @@ asa{
         ZM{"Dhambia"}
         ZW{"Dhimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

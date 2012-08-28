@@ -19,7 +19,7 @@ cy{
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -59,6 +59,15 @@ cy{
                         "Iau",
                         "Gwen",
                         "Sad",
+                    }
+                    narrow{
+                        "S",
+                        "L",
+                        "M",
+                        "M",
+                        "I",
+                        "G",
+                        "S",
                     }
                     wide{
                         "Dydd Sul",
@@ -160,7 +169,7 @@ cy{
                 }
                 MMMd{
                     M{"d MMM – d MMM"}
-                    d{"MMM d–d"}
+                    d{"d–d MMM"}
                 }
                 Md{
                     M{"d/M – d/M"}
@@ -210,8 +219,8 @@ cy{
                     y{"E, d MMM, y - E, d MMM, y"}
                 }
                 yMMMM{
-                    M{"yyyy-MM – MM"}
-                    y{"yyyy-MM – yyyy-MM"}
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
                     M{"d MMM - d MMM, y"}
@@ -240,6 +249,20 @@ cy{
                         "Tach",
                         "Rhag",
                     }
+                    narrow{
+                        "I",
+                        "C",
+                        "M",
+                        "E",
+                        "M",
+                        "M",
+                        "G",
+                        "A",
+                        "M",
+                        "H",
+                        "T",
+                        "R",
+                    }
                     wide{
                         "Ionawr",
                         "Chwefror",
@@ -247,7 +270,7 @@ cy{
                         "Ebrill",
                         "Mai",
                         "Mehefin",
-                        "Gorffenaf",
+                        "Gorffennaf",
                         "Awst",
                         "Medi",
                         "Hydref",

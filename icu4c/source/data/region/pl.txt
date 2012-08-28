@@ -29,7 +29,7 @@ pl{
         034{"Azja Południowa"}
         035{"Azja Południowo-Wschodnia"}
         039{"Europa Południowa"}
-        053{"Australia i Nowa Zelandia"}
+        053{"Australazja"}
         054{"Melanezja"}
         057{"Mikronezja"}
         061{"Polinezja"}
@@ -68,10 +68,11 @@ pl{
         BH{"Bahrajn"}
         BI{"Burundi"}
         BJ{"Benin"}
-        BL{"Saint Barthélemy"}
+        BL{"Saint-Barthélemy"}
         BM{"Bermudy"}
         BN{"Brunei Darussalam"}
         BO{"Boliwia"}
+        BQ{"Niderlandy Karaibskie"}
         BR{"Brazylia"}
         BS{"Bahamy"}
         BT{"Bhutan"}
@@ -93,9 +94,9 @@ pl{
         CO{"Kolumbia"}
         CP{"Clipperton"}
         CR{"Kostaryka"}
-        CS{"Serbia i Czarnogóra"}
         CU{"Kuba"}
         CV{"Republika Zielonego Przylądka"}
+        CW{"Curaçao"}
         CX{"Wyspa Bożego Narodzenia"}
         CY{"Cypr"}
         CZ{"Czechy"}
@@ -187,7 +188,7 @@ pl{
         MC{"Monako"}
         MD{"Mołdawia"}
         ME{"Czarnogóra"}
-        MF{"Sint Maarten"}
+        MF{"Saint-Martin"}
         MG{"Madagaskar"}
         MH{"Wyspy Marshalla"}
         MK{"Macedonia"}
@@ -255,8 +256,10 @@ pl{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
+        SS{"Sudan Południowy"}
         ST{"Wyspy Świętego Tomasza i Książęca"}
         SV{"Salwador"}
+        SX{"*Sint Maarten"}
         SY{"Syria"}
         SZ{"Suazi"}
         TA{"Tristan da Cunha"}
@@ -296,7 +299,7 @@ pl{
         ZA{"Republika Południowej Afryki"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
-        ZZ{"Nieznany lub nieprawidłowy region"}
+        ZZ{"Nieznany region"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

@@ -22,7 +22,7 @@ ebu{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -120,9 +120,6 @@ ebu{
                         "0"{"Ũmũnthĩ"}
                         "1"{"Rũciũ"}
                     }
-                }
-                dayperiod{
-                    dn{"Mũthenya"}
                 }
                 era{
                     dn{"Ivinda"}

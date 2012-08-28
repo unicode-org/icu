@@ -15,7 +15,7 @@ lag{
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.74.65"}
     calendar{
         gregorian{
             AmPmMarkers{

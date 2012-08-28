@@ -12,14 +12,14 @@ es_PR{
         279,
         216,
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.74.74"}
     calendar{
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
                 "MM/dd/yyyy",

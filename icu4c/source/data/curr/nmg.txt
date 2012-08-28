@@ -20,7 +20,7 @@ nmg{
             "Mɔn Angola",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dɔ́llɔ Ɔstralia",
         }
         BHD{
@@ -232,5 +232,5 @@ nmg{
             "Dɔ́llɔ Zimbabwǝ (1980-2008)",
         }
     }
-    Version{"2.0.66.10"}
+    Version{"2.0.74.79"}
 }

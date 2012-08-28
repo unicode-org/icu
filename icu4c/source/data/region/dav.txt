@@ -56,7 +56,6 @@ dav{
         CN{"China"}
         CO{"Kolombia"}
         CR{"Kostarika"}
-        CS{"Serbia na Montenegro"}
         CU{"Kuba"}
         CV{"Kepuvede"}
         CY{"Kuprosi"}
@@ -238,5 +237,5 @@ dav{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.79"}
 }

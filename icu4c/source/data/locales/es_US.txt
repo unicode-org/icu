@@ -13,7 +13,7 @@ es_US{
         279,
         216,
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.74.64"}
     calendar{
         gregorian{
             DateTimePatterns{

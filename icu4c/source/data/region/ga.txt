@@ -74,7 +74,6 @@ ga{
         CN{"An tSín"}
         CO{"An Cholóim"}
         CR{"Cósta Ríce"}
-        CS{"An tSeirbia agus Montainéagró"}
         CU{"Cúba"}
         CV{"An Rinn Ghlas"}
         CX{"Oileán na Nollag"}
@@ -274,5 +273,5 @@ ga{
         ZW{"An tSiombáib"}
         ZZ{"Réigiún Anaithnid nó Neamhbhailí"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.74"}
 }

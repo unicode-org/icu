@@ -20,7 +20,7 @@ mua{
             "solai Angola",
         }
         AUD{
-            "AU$",
+            "A$",
             "solai Australya",
         }
         BHD{
@@ -232,5 +232,5 @@ mua{
             "Solai Zimbabwe",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
 }

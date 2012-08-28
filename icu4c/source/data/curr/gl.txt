@@ -48,7 +48,7 @@ gl{
             "Peso arxentino",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dólar australiano",
         }
         AWG{
@@ -255,7 +255,7 @@ gl{
             "₧",
             "Peseta española",
             {
-                "#,##0 ¤;-#,##0 ¤",
+                "#,##0.00 ¤",
                 ",",
                 ".",
             }
@@ -532,6 +532,10 @@ gl{
             "MYR",
             "Ringgit malaio",
         }
+        MZN{
+            "MZN",
+            "Metical de Mozambique",
+        }
         NAD{
             "NAD",
             "Dólar namibio",
@@ -612,6 +616,10 @@ gl{
             "QAR",
             "Rial qatarí",
         }
+        RON{
+            "RON",
+            "Leu romanés",
+        }
         RSD{
             "RSD",
             "Dinar serbio",
@@ -667,6 +675,10 @@ gl{
         SRD{
             "SRD",
             "Dólar surinamés",
+        }
+        SSP{
+            "SSP",
+            "Libra sursudanesa",
         }
         STD{
             "STD",
@@ -942,6 +954,10 @@ gl{
             one{"peso mexicano"}
             other{"pesos mexicanos"}
         }
+        MZN{
+            one{"metical de Mozambique"}
+            other{"meticais de Mozambique"}
+        }
         PTE{
             one{"escudo portugués"}
             other{"escudos portugueses"}
@@ -950,9 +966,17 @@ gl{
             one{"Guaraní paraguaio"}
             other{"Guaranís paraguaios"}
         }
+        RON{
+            one{"leu romanés"}
+            other{"lei romanés"}
+        }
         RUB{
             one{"rublo ruso"}
             other{"rublos rusos"}
+        }
+        SSP{
+            one{"libra sursudanesa"}
+            other{"libras sursudanesa"}
         }
         SUR{
             one{"rublo soviético"}
@@ -987,5 +1011,5 @@ gl{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

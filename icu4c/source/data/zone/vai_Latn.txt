@@ -10,5 +10,5 @@
  *  ICU <specials> source: <path>/xml/main/vai_Latn.xml
  */
 vai_Latn{
-    Version{"2.0.67.8"}
+    Version{"2.0.74.65"}
 }

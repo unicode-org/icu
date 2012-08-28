@@ -13,5 +13,5 @@ es_PE{
             "nuevo sol peruano",
         }
     }
-    Version{"2.0.58.84"}
+    Version{"2.0.74.65"}
 }

@@ -601,7 +601,7 @@ lt{
         }
         LTL{
             "Lt",
-            "Litas",
+            "Lietuvos litas",
         }
         LTT{
             "LTT",
@@ -829,7 +829,7 @@ lt{
         }
         RON{
             "RON",
-            "Naujoji Rumunijos lėja",
+            "Rumunijos lėja",
         }
         RSD{
             "RSD",
@@ -906,6 +906,10 @@ lt{
         SRG{
             "SRG",
             "Surimano guldenas",
+        }
+        SSP{
+            "SSP",
+            "Pietų Sudano svaras",
         }
         STD{
             "STD",
@@ -996,7 +1000,7 @@ lt{
             "Ugandos šilingas",
         }
         USD{
-            "US$",
+            "$",
             "JAV doleris",
         }
         USN{
@@ -1121,7 +1125,7 @@ lt{
         }
         XXX{
             "XXX",
-            "Nežinoma valiuta",
+            "nežinoma arba neteisinga valiuta",
         }
         YDD{
             "YDD",
@@ -1409,7 +1413,7 @@ lt{
         BRL{
             few{"Brazilijos realai"}
             one{"Brazilijos realas"}
-            other{"Brazilijos realai"}
+            other{"Brazilijos realų"}
         }
         BRN{
             few{"Brazilijos naujieji kruzadai"}
@@ -1507,9 +1511,9 @@ lt{
             other{"Kinijos \"People\" banko doleriai"}
         }
         CNY{
-            few{"Kinijos juanis"}
+            few{"Kinijos juaniai"}
             one{"Kinijos juanis"}
-            other{"Kinijos juaniai"}
+            other{"Kinijos juanių"}
         }
         COP{
             few{"Kolumbijos pesas"}
@@ -1639,6 +1643,7 @@ lt{
         EUR{
             few{"eurai"}
             one{"euras"}
+            other{"eurų"}
         }
         FIM{
             few{"Suomijos markės"}
@@ -1793,7 +1798,7 @@ lt{
         INR{
             few{"Indijos rupijos"}
             one{"Indijos rupija"}
-            other{"Indijos rupijos"}
+            other{"Indijos rupijų"}
         }
         IQD{
             few{"Irako dinarai"}
@@ -1853,7 +1858,7 @@ lt{
         KMF{
             few{"Komoro frankai"}
             one{"Komoro frankas"}
-            other{"Komoro frankai"}
+            other{"Komoro frankų"}
         }
         KPW{
             few{"Šiaurės Korėjos vonas"}
@@ -2300,6 +2305,11 @@ lt{
             one{"Surimano guldenas"}
             other{"Surimano guldenai"}
         }
+        SSP{
+            few{"SSP"}
+            one{"SSP"}
+            other{"SSP"}
+        }
         STD{
             few{"Sao Tomės ir Principės dobros"}
             one{"Sao Tomės ir Principės dobra"}
@@ -2561,9 +2571,9 @@ lt{
             other{"Tikrinamas valiutos kodas"}
         }
         XXX{
-            few{"Nežinoma arba neteisinga valiuta"}
-            one{"Nežinoma arba neteisinga valiuta"}
-            other{"Nežinoma arba neteisinga valiuta"}
+            few{"(nežinoma arba neteisinga valiuta)"}
+            one{"(nežinoma arba neteisinga valiuta)"}
+            other{"(nežinoma arba neteisinga valiuta)"}
         }
         YDD{
             few{"Yemeni dinarai"}
@@ -2641,5 +2651,5 @@ lt{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

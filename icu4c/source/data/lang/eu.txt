@@ -11,43 +11,61 @@
  */
 eu{
     Keys{
-        calendar{"egutegia"}
-        collation{"alfabetoa"}
-        currency{"moneta"}
+        calendar{"Egutegia"}
+        colAlternate{"Egin ez ikusi ikurren ordenari"}
+        colBackwards{"Azentuen alderantzizko ordena"}
+        colCaseFirst{"Maiuskula/Minuskula ordena"}
+        colCaseLevel{"Maiuskulak eta minuskulak bereizten dituen ordena"}
+        colHiraganaQuaternary{"Kana ordena"}
+        colNormalization{"Araututako ordena"}
+        colNumeric{"Zenbakizko ordena"}
+        colStrength{"Ordenaren sendotasuna"}
+        collation{"Ordenatzeko irizpidea"}
+        currency{"Moneta"}
         numbers{"Zenbakiak"}
+        timezone{"Ordu-zona"}
+        va{"Eskualdeko ezarpenen aldaera"}
+        variableTop{"Ordenatu ikur gisa"}
         x{"Erabilera pribatua"}
     }
     Languages{
         ab{"abkhazera"}
+        ach{"Acholiera"}
         af{"afrikaans"}
+        ak{"Akanera"}
         am{"amharikera"}
         ar{"arabiera"}
         as{"assamera"}
         ay{"aimara"}
         az{"azerbaijanera"}
         be{"bielorrusiera"}
+        bem{"Bembera"}
         bg{"bulgariera"}
-        bh{"bihariera"}
+        bh{"Bihariera"}
         bn{"bengalera"}
         bo{"tibetera"}
-        br{"bretoiera"}
+        br{"Bretoiera"}
         bs{"bosniera"}
         ca{"katalana"}
+        chr{"Txerokiera"}
+        ckb{"Soraniera"}
+        co{"Korsikera"}
         cs{"txekiera"}
         cy{"galesera"}
         da{"daniera"}
         de{"alemana"}
-        de_CH{"suitzako aleman garaia"}
+        de_CH{"aleman garaia (Suitza)"}
         dv{"divehiera"}
         dz{"dzongkha"}
+        ee{"Eweera"}
         efi{"efikera"}
         el{"greziera"}
         en{"ingelesa"}
         en_US{"ingelesa (AEB)"}
         eo{"esperantoa"}
         es{"gaztelania"}
-        es_419{"latinoamerikako espainiera"}
-        es_ES{"espainiera iberiarra"}
+        es_419{"espainiera (Latinoamerika)"}
+        es_ES{"espainiera (Europa)"}
         et{"estoniera"}
         eu{"euskara"}
         fa{"pertsiera"}
@@ -58,6 +76,7 @@ eu{
         fr{"frantsesa"}
         fy{"frisiera"}
         ga{"gaelikoa"}
+        gaa{"Ga"}
         gd{"eskoziako gaelikoa"}
         gl{"galiziera"}
         gn{"guaraniera"}
@@ -71,7 +90,7 @@ eu{
         ht{"haitiera"}
         hu{"hungariera"}
         hy{"armeniera"}
-        ia{"interlingua"}
+        ia{"Interlingua"}
         id{"indonesiera"}
         ie{"interlingue"}
         ig{"igboera"}
@@ -80,6 +99,7 @@ eu{
         ja{"japoniera"}
         jv{"javera"}
         ka{"georgiera"}
+        kg{"Kikongoa"}
         kk{"kazakhera"}
         km{"khemerera"}
         kn{"kannada"}
@@ -89,10 +109,14 @@ eu{
         ky{"kirgizera"}
         la{"latina"}
         lb{"luxenburgera"}
+        lg{"Gandera"}
         ln{"lingala"}
         lo{"laosera"}
+        loz{"Loziera"}
         lt{"lituaniera"}
+        lua{"Luba-lulua"}
         lv{"letoniera"}
+        mfe{"Mauritaniako kreolera"}
         mg{"malgaxea"}
         mi{"maoriera"}
         mk{"mazedoniera"}
@@ -103,7 +127,7 @@ eu{
         mt{"maltera"}
         mul{"hizkuntza anitzak"}
         my{"burmatarra"}
-        nb{"norvegiako bokmala"}
+        nb{"bokmala (Norvegia)"}
         nd{"iparraldeko ndebeleera"}
         ne{"nepalera"}
         nl{"nederlandera"}
@@ -112,14 +136,16 @@ eu{
         no{"norvegiera"}
         nso{"pediera"}
         ny{"nyanja"}
-        oc{"okzitaniera"}
+        nyn{"Ankolera"}
+        oc{"Okzitaniera"}
+        om{"Oromoera"}
         or{"oriya"}
         os{"osetiera"}
         pa{"punjabera"}
         pl{"poloniera"}
         ps{"paxtuera"}
         pt{"portugesa"}
-        pt_PT{"portugesa (Potugal)"}
+        pt_PT{"portugesa (Europa)"}
         qu{"quechuera"}
         rm{"erromantxera"}
         rn{"rundiera"}
@@ -152,13 +178,14 @@ eu{
         ti{"tigrinya"}
         tk{"turkmeniera"}
         tl{"tagalog"}
-        tlh{"klingonera"}
+        tlh{"Klingonera"}
         tn{"tswanera"}
-        to{"tonga"}
+        to{"tongera"}
         tpi{"tok pisina"}
         tr{"turkiera"}
         ts{"tsongera"}
         tt{"tatarera"}
+        tum{"Tumbukera"}
         tw{"twia"}
         ty{"tahitiera"}
         ug{"uigurrera"}
@@ -170,13 +197,13 @@ eu{
         vi{"vietnamera"}
         wo{"wolofera"}
         xh{"xhosa"}
-        yi{"yiddishera"}
+        yi{"Jiddisha"}
         yo{"yorubera"}
         zh{"txinera"}
         zh_Hans{"txinera (soildua)"}
         zh_Hant{"txinera (tradizionala)"}
         zu{"zuluera"}
-        zxx{"Ez dago eduki linguistikorik"}
+        zxx{"ez dago eduki linguistikorik"}
     }
     LanguagesShort{
         az{"azerbaijanera"}
@@ -248,9 +275,11 @@ eu{
             ducet{"Unicode hurrenkera lehenetsia"}
             gb2312han{"Txinera sinplifikatuaren alfabetoa -GB2312"}
             phonebook{"Telefonoen zerrenda"}
+            phonetic{"Ordenatzeko irizpide fonetikoa"}
             pinyin{"Pinyin hurrenkera"}
             reformed{"Erreformaren araberako hurrenkera"}
             search{"Asmo orokorreko bilaketa"}
+            searchjl{"Bilatu hangularen lehen kontsonantearen arabera"}
             stroke{"Tarteen araberako hurrenkera"}
             traditional{"Tradizionala"}
             unihan{"Radical trazuen hurrenkera"}
@@ -263,6 +292,7 @@ eu{
             beng{"Digitu bengalarrak"}
             deva{"Digitu devanagariarrak"}
             ethi{"Zenbaki etiopiarrak"}
+            finance{"Finantza-zenbakiak"}
             fullwide{"Zabalera osoko digituak"}
             geor{"Zenbaki georgiarrak"}
             grek{"Zenbaki greziarrak"}
@@ -284,6 +314,7 @@ eu{
             mlym{"Digitu malayalamarrak"}
             mong{"Digitu mongoliarrak"}
             mymr{"Digitu myanmarrak"}
+            native{"Zenbaki-sistema"}
             orya{"Digitu oriyarrak"}
             roman{"Zenbaki erromatarrak"}
             romanlow{"Zenbaki erromatarrak minuskulaz"}
@@ -291,6 +322,8 @@ eu{
             telu{"Digitu teluguarrak"}
             thai{"Digitu thailandiarrak"}
             tibt{"Digitu tibetarrak"}
+            traditional{"Zenbaki tradizionalak"}
+            vaii{"Vai digituak"}
         }
     }
     Variants{
@@ -300,7 +333,7 @@ eu{
         SCOTLAND{"ESKOZIAR INGELESA"}
         VALENCIA{"VALENTZIERA"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}
