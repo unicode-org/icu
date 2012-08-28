@@ -381,9 +381,8 @@ public:
     virtual Locale getLocale(ULocDataLocaleType type, UErrorCode& status) const;
 
     /**
-     * Gets the table-based rules for the collation object.
-     * @return returns the collation rules that the table collation object was
-     *         created from.
+     * Gets the tailoring rules for this collator.
+     * @return the collation tailoring from which this collator was created
      * @stable ICU 2.0
      */
     const UnicodeString& getRules(void) const;
