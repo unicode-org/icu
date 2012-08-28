@@ -1890,7 +1890,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
 
                 DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT, loc),
                 "DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.SHORT, loc)",
-                "Thursday, April 5, 2001 5:43 PM",
+                "Thursday, April 5, 2001 at 5:43 PM",
 
                 DateFormat.getDateInstance(cal, DateFormat.SHORT, loc),
                 "DateFormat.getDateInstance(cal, DateFormat.SHORT, loc)",
@@ -1902,15 +1902,15 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
 
                 DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.SHORT, loc),
                 "DateFormat.getDateTimeInstance(cal, DateFormat.FULL, DateFormat.SHORT, loc)",
-                "Thursday, April 5, 2001 5:43 PM",
+                "Thursday, April 5, 2001 at 5:43 PM",
             
                 cal.getDateTimeFormat(DateFormat.SHORT, DateFormat.FULL, loc),
                 "cal.getDateTimeFormat(DateFormat.SHORT, DateFormat.FULL, loc)",
-                "4/5/01 5:43:53 PM Pacific Daylight Time",
+                "4/5/01, 5:43:53 PM Pacific Daylight Time",
 
                 cal.getDateTimeFormat(DateFormat.FULL, DateFormat.SHORT, loc),
                 "cal.getDateTimeFormat(DateFormat.FULL, DateFormat.SHORT, loc)",
-                "Thursday, April 5, 2001 5:43 PM",
+                "Thursday, April 5, 2001 at 5:43 PM",
             };
             for (int i=0; i<DATA.length; i+=3) {
                 DateFormat df = (DateFormat) DATA[i];

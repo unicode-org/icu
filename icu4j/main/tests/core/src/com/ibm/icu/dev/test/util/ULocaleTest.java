@@ -1276,18 +1276,18 @@ public class ULocaleTest extends TestFmwk {
         h[0].put("gregorian", "Gregorian Calendar" );
 
         //display in S-Chinese
-        h[1].put("collation", "\u5BF9\u7167");
+        h[1].put("collation", "\u6392\u5E8F\u987A\u5E8F");
         h[1].put("calendar", "\u65E5\u5386");
         h[1].put("currency", "\u8D27\u5E01");
-        h[1].put("direct", "direct"); // Direct sort order is deprecated in CLDR
+        h[1].put("direct", "\u76F4\u63A5"); // Direct sort order is deprecated in CLDR
         h[1].put("phonebook", "\u7535\u8BDD\u7C3F\u987A\u5E8F");
-        h[1].put("pinyin", "\u62FC\u97F3\u987a\u5e8f");
+        h[1].put("pinyin", "\u62FC\u97F3\u6392\u5E8F");
         h[1].put("stroke", "\u7B14\u5212\u987A\u5E8F");
-        h[1].put("traditional", "\u4F20\u7EDF\u5386\u6CD5");
+        h[1].put("traditional", "\u4F20\u7EDF\u6392\u5E8F\u987A\u5E8F");
         h[1].put("japanese", "\u65E5\u672C\u65E5\u5386");
         h[1].put("buddhist", "\u4F5B\u6559\u65E5\u5386");
         h[1].put("islamic", "\u4F0A\u65AF\u5170\u65E5\u5386");
-        h[1].put("islamic-civil", "\u4F0A\u65AF\u5170\u5E0C\u5409\u6765\u5386");
+        h[1].put("islamic-civil", "\u4F0A\u65AF\u5170\u5E0C\u5409\u6765\u65E5\u5386");
         h[1].put("hebrew", "\u5E0C\u4F2F\u6765\u65E5\u5386");
         h[1].put("chinese", "\u519C\u5386");
         h[1].put("gregorian", "\u516C\u5386");
@@ -2941,8 +2941,8 @@ public class ULocaleTest extends TestFmwk {
                 "si"
             }, {
                 "und_Syrc",
-                "en_Syrc_US",
-                "en_Syrc"
+                "syr_Syrc_145",
+                "syr_Syrc_145"
             }, {
                 "und_TD",
                 "fr_Latn_TD",

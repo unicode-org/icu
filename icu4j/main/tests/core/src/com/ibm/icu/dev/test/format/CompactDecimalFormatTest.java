@@ -73,12 +73,14 @@ public class CompactDecimalFormatTest extends TestFmwk {
     }
 
     public void TestJapanese() {
-        checkLocale(ULocale.JAPANESE, JapaneseTestData);
+//         checkLocale(ULocale.JAPANESE, JapaneseTestData); Not decided yet by CLDR TC.
+         checkLocale(ULocale.JAPANESE, EnglishTestData);
     }
 
     public void TestJapaneseGermany() {
         // check fallback.
-        checkLocale(ULocale.forLanguageTag("ja-DE"), JapaneseTestData);
+//        checkLocale(ULocale.forLanguageTag("ja-DE"), JapaneseTestData); Not decided yet by CLDR TC.
+        checkLocale(ULocale.forLanguageTag("ja-DE"), EnglishTestData);
     }
 
     public void TestSwahili() {

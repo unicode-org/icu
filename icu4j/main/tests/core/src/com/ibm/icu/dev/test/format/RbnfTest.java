@@ -649,11 +649,11 @@ public class RbnfTest extends TestFmwk {
         doTest(formatter, testDataDefault, true);
 
         String[][] testDataNeutrum = {
-            { "101", "ett\u00adhundra\u00aden" },
-            { "1,001", "ettusen en" },
-            { "1,101", "ettusen ett\u00adhundra\u00aden" },
-            { "10,001", "tio\u00adtusen en" },
-            { "21,001", "tjugo\u00aden\u00adtusen en" }
+            { "101", "ett\u00adhundra\u00adett" },
+            { "1,001", "et\u00adtusen ett" },
+            { "1,101", "et\u00adtusen ett\u00adhundra\u00adett" },
+            { "10,001", "tio\u00adtusen ett" },
+            { "21,001", "tjugo\u00adet\u00adtusen ett" }
         };
 
         formatter.setDefaultRuleSet("%spellout-cardinal-neutre");
