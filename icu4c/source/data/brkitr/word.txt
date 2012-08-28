@@ -6,7 +6,7 @@
 #
 # ICU Word Break Rules
 #      See Unicode Standard Annex #29.
-#      These rules are based on UAX #29 Revision 19 for Unicode Version 6.1
+#      These rules are based on UAX #29 Revision 20 for Unicode Version 6.2
 #
 # Note:  Updates to word.txt will usually need to be merged into
 #        word_POSIX.txt and word_ja.txt also.
@@ -38,6 +38,7 @@ $MidLetter    = [\p{Word_Break = MidLetter}];
 $MidNum       = [\p{Word_Break = MidNum}];
 $Numeric      = [\p{Word_Break = Numeric}];
 $ExtendNumLet = [\p{Word_Break = ExtendNumLet}];
+$Regional_Indicator = [\p{Word_Break = Regional_Indicator}];
 
 
 #   Dictionary character set, for triggering language-based break engines. Currently
@@ -68,6 +69,7 @@ $MidLetterEx    = $MidLetter    ($Extend |  $Format)*;
 $MidNumEx       = $MidNum       ($Extend |  $Format)*;
 $NumericEx      = $Numeric      ($Extend |  $Format)*;
 $ExtendNumLetEx = $ExtendNumLet ($Extend |  $Format)*;
+$Regional_IndicatorEx = $Regional_Indicator ($Extend |  $Format)*;
 
 $Ideographic    = [\p{Ideographic}];
 $HiraganaEx     = $Hiragana     ($Extend |  $Format)*;
@@ -138,6 +140,10 @@ $ExtendNumLetEx $ALetterEx  {200};    #  (13b)
 $ExtendNumLetEx $NumericEx  {100};    #  (13b)
 $ExtendNumLetEx $KatakanaEx {400};    #  (13b)
 
+# rule 13c
+
+$Regional_IndicatorEx $Regional_IndicatorEx;
+
 # special handling for CJK characters: chain for later dictionary segmentation
 $HangulSyllable $HangulSyllable {200};
 $KanaKanji $KanaKanji {400}; # different rule status if both kana and kanji found 
@@ -147,14 +153,15 @@ $KanaKanji $KanaKanji {400}; # different rule status if both kana and kanji foun
 
 !!reverse;
 
-$BackALetterEx     = ($Format | $Extend)* $ALetterPlus;
-$BackMidNumLetEx   = ($Format | $Extend)* $MidNumLet;
-$BackNumericEx     = ($Format | $Extend)* $Numeric;
-$BackMidNumEx      = ($Format | $Extend)* $MidNum;
-$BackMidLetterEx   = ($Format | $Extend)* $MidLetter;
-$BackKatakanaEx    = ($Format | $Extend)* $Katakana;
-$BackHiraganaEx    = ($Format | $Extend)* $Hiragana;
-$BackExtendNumLetEx= ($Format | $Extend)* $ExtendNumLet;
+$BackALetterEx            = ($Format | $Extend)* $ALetterPlus;
+$BackMidNumLetEx          = ($Format | $Extend)* $MidNumLet;
+$BackNumericEx            = ($Format | $Extend)* $Numeric;
+$BackMidNumEx             = ($Format | $Extend)* $MidNum;
+$BackMidLetterEx          = ($Format | $Extend)* $MidLetter;
+$BackKatakanaEx           = ($Format | $Extend)* $Katakana;
+$BackHiraganaEx           = ($Format | $Extend)* $Hiragana;
+$BackExtendNumLetEx       = ($Format | $Extend)* $ExtendNumLet;
+$BackRegional_IndicatorEx = ($Format | $Extend)* $Regional_Indicator;
 
 # rule 3
 $LF $CR;
@@ -195,6 +202,10 @@ $BackKatakanaEx $BackKatakanaEx;
 #
 $BackExtendNumLetEx ($BackALetterEx | $BackNumericEx | $BackKatakanaEx | $BackExtendNumLetEx);
 ($BackALetterEx | $BackNumericEx | $BackKatakanaEx) $BackExtendNumLetEx; 
+
+# rule 13c
+
+$BackRegional_IndicatorEx $BackRegional_IndicatorEx;
 
 # special handling for CJK characters: chain for later dictionary segmentation
 $HangulSyllable $HangulSyllable;

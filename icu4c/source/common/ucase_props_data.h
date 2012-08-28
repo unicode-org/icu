@@ -11,7 +11,7 @@
 #   error This file must be #included from ucase.cpp only.
 #endif
 
-static const UVersionInfo ucase_props_dataVersion={6,1,0,0};
+static const UVersionInfo ucase_props_dataVersion={6,2,0,0};
 
 static const int32_t ucase_props_indexes[UCASE_IX_TOP]={0x10,0x5908,0x4bb8,0x516,0x172,0,0,0,0,0,0,0,0,0,0,3};
 

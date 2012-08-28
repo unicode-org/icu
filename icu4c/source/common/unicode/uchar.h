@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "6.1"
+#define U_UNICODE_VERSION "6.2"
 
 /**
  * \file
@@ -1650,7 +1650,8 @@ typedef enum UGraphemeClusterBreak {
     U_GCB_V = 9,                /*[V]*/
     U_GCB_SPACING_MARK = 10,    /*[SM]*/ /* from here on: new in Unicode 5.1/ICU 4.0 */
     U_GCB_PREPEND = 11,         /*[PP]*/
-    U_GCB_COUNT = 12
+    U_GCB_REGIONAL_INDICATOR = 12,  /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
+    U_GCB_COUNT = 13
 } UGraphemeClusterBreak;
 
 /**
@@ -1680,7 +1681,8 @@ typedef enum UWordBreakValues {
     U_WB_LF = 10,               /*[LF]*/
     U_WB_MIDNUMLET =11,         /*[MB]*/
     U_WB_NEWLINE =12,           /*[NL]*/
-    U_WB_COUNT = 13
+    U_WB_REGIONAL_INDICATOR = 13,   /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
+    U_WB_COUNT = 14
 } UWordBreakValues;
 
 /**
@@ -1768,7 +1770,8 @@ typedef enum ULineBreak {
     U_LB_CLOSE_PARENTHESIS = 36, /*[CP]*/ /* new in Unicode 5.2/ICU 4.4 */
     U_LB_CONDITIONAL_JAPANESE_STARTER = 37,/*[CJ]*/ /* new in Unicode 6.1/ICU 49 */
     U_LB_HEBREW_LETTER = 38,     /*[HL]*/ /* new in Unicode 6.1/ICU 49 */
-    U_LB_COUNT = 39
+    U_LB_REGIONAL_INDICATOR = 39,/*[RI]*/ /* new in Unicode 6.2/ICU 50 */
+    U_LB_COUNT = 40
 } ULineBreak;
 
 /**
