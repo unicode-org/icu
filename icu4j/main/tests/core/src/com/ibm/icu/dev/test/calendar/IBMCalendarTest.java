@@ -1363,6 +1363,111 @@ public class IBMCalendarTest extends CalendarTest {
         }
     }
 
+    public void TestFieldDifference() {
+        class TFDItem {
+            public String tzname;
+            public String locale;
+            public long start;
+            public long target;
+            public boolean progressive; // true to compute progressive difference for each field, false to reset calendar after each call
+            int yDiff;
+            int MDiff;
+            int dDiff;
+            int HDiff;
+            int mDiff;
+            int sDiff; // 0x7FFFFFFF indicates overflow error expected
+             // Simple constructor
+            public TFDItem(String tz, String loc, long st, long tg, boolean prg, int yD, int MD, int dD, int HD, int mD, int sD ) {
+                tzname = tz;
+                locale = loc;
+                start = st;
+                target = tg;
+                progressive = prg;
+                yDiff = yD;
+                MDiff = MD;
+                dDiff = dD;
+                HDiff = HD;
+                mDiff = mD;
+                sDiff = sD;
+            }
+        };
+        final TFDItem[] tfdItems = {
+            //           timezobe      locale        start            target            prog   yDf  MDf    dDf     HDf       mDf         sDf
+            // For these we compute the progressive difference for each field - not resetting the calendar after each call
+            new TFDItem( "US/Pacific", "en_US",        1267459800000L,  1277772600000L, true,    0,   3,    27,      9,       40,          0 ), // 2010-Mar-01 08:10 -> 2010-Jun-28 17:50
+            new TFDItem( "US/Pacific", "en_US",        1267459800000L,  1299089280000L, true,    1,   0,     1,      1,       58,          0 ), // 2010-Mar-01 08:10 -> 2011-Mar-02 10:08
+            // For these we compute the total difference for each field - resetting the calendar after each call
+            new TFDItem( "GMT",        "en_US",        0,               1073692800000L, false,  34, 408, 12427, 298248, 17894880, 1073692800 ), // 1970-Jan-01 00:00 -> 2004-Jan-10 00:00
+            new TFDItem( "GMT",        "en_US",        0,               1073779200000L, false,  34, 408, 12428, 298272, 17896320, 1073779200 ), // 1970-Jan-01 00:00 -> 2004-Jan-11 00:00
+            new TFDItem( "GMT",        "en_US",        0,               2147472000000L, false,  68, 816, 24855, 596520, 35791200, 2147472000 ), // 1970-Jan-01 00:00 -> 2038-Jan-19 00:00
+//          new TFDItem( "GMT",        "en_US",        0,               2147558400000L, false,  68, 816, 24856, 596544, 35792640, 0x7FFFFFFF ), // 1970-Jan-01 00:00 -> 2038-Jan-20 00:00, seconds overflow => exception in ICU4J
+            new TFDItem( "GMT",        "en_US",        0,              -1073692800000L, false, -34,-408,-12427,-298248,-17894880,-1073692800 ), // 1970-Jan-01 00:00 -> 1935-Dec-24 00:00
+            new TFDItem( "GMT",        "en_US",        0,              -1073779200000L, false, -34,-408,-12428,-298272,-17896320,-1073779200 ), // 1970-Jan-01 00:00 -> 1935-Dec-23 00:00
+            // check fwd/backward on either side of era boundary and across era boundary
+            new TFDItem( "GMT",        "en_US",      -61978089600000L,-61820409600000L, false,   4,  59,  1825,  43800,  2628000,  157680000 ), // CE   5-Dec-31 00:00 -> CE  10-Dec-30 00:00
+            new TFDItem( "GMT",        "en_US",      -61820409600000L,-61978089600000L, false,  -4, -59, -1825, -43800, -2628000, -157680000 ), // CE  10-Dec-30 00:00 -> CE   5-Dec-31 00:00
+            new TFDItem( "GMT",        "en_US",      -62451129600000L,-62293449600000L, false,   4,  59,  1825,  43800,  2628000,  157680000 ), // BCE 10-Jan-04 00:00 -> BCE  5-Jan-03 00:00
+            new TFDItem( "GMT",        "en_US",      -62293449600000L,-62451129600000L, false,  -4, -59, -1825, -43800, -2628000, -157680000 ), // BCE  5-Jan-03 00:00 -> BCE 10-Jan-04 00:00
+            new TFDItem( "GMT",        "en_US",      -62293449600000L,-61978089600000L, false,   9, 119,  3650,  87600,  5256000,  315360000 ), // BCE  5-Jan-03 00:00 -> CE   5-Dec-31 00:00
+            new TFDItem( "GMT",        "en_US",      -61978089600000L,-62293449600000L, false,  -9,-119, -3650, -87600, -5256000, -315360000 ), // CE   5-Dec-31 00:00 -> BCE  5-Jan-03 00:00
+            new TFDItem( "GMT", "en@calendar=roc",    -1672704000000L, -1515024000000L, false,   4,  59,  1825,  43800,  2628000,  157680000 ), // MG   5-Dec-30 00:00 -> MG  10-Dec-29 00:00
+            new TFDItem( "GMT", "en@calendar=roc",    -1515024000000L, -1672704000000L, false,  -4, -59, -1825, -43800, -2628000, -157680000 ), // MG  10-Dec-29 00:00 -> MG   5-Dec-30 00:00
+            new TFDItem( "GMT", "en@calendar=roc",    -2145744000000L, -1988064000000L, false,   4,  59,  1825,  43800,  2628000,  157680000 ), // BMG 10-Jan-03 00:00 -> BMG  5-Jan-02 00:00
+            new TFDItem( "GMT", "en@calendar=roc",    -1988064000000L, -2145744000000L, false,  -4, -59, -1825, -43800, -2628000, -157680000 ), // BMG  5-Jan-02 00:00 -> BMG 10-Jan-03 00:00
+            new TFDItem( "GMT", "en@calendar=roc",    -1988064000000L, -1672704000000L, false,   9, 119,  3650,  87600,  5256000,  315360000 ), // BMG  5-Jan-02 00:00 -> MG   5-Dec-30 00:00
+            new TFDItem( "GMT", "en@calendar=roc",    -1672704000000L, -1988064000000L, false,  -9,-119, -3650, -87600, -5256000, -315360000 ), // MG   5-Dec-30 00:00 -> BMG  5-Jan-02 00:00
+            new TFDItem( "GMT", "en@calendar=coptic",-53026531200000L,-52868851200000L, false,   4,  64,  1825,  43800,  2628000,  157680000 ), // Er1  5-Nas-05 00:00 -> Er1 10-Nas-04 00:00
+            new TFDItem( "GMT", "en@calendar=coptic",-52868851200000L,-53026531200000L, false,  -4, -64, -1825, -43800, -2628000, -157680000 ), // Er1 10-Nas-04 00:00 -> Er1  5-Nas-05 00:00
+            new TFDItem( "GMT", "en@calendar=coptic",-53499571200000L,-53341891200000L, false,   4,  64,  1825,  43800,  2628000,  157680000 ), // Er0 10-Tou-04 00:00 -> Er0  5-Tou-02 00:00
+            new TFDItem( "GMT", "en@calendar=coptic",-53341891200000L,-53499571200000L, false,  -4, -64, -1825, -43800, -2628000, -157680000 ), // Er0  5-Tou-02 00:00 -> Er0 10-Tou-04 00:00
+            new TFDItem( "GMT", "en@calendar=coptic",-53341891200000L,-53026531200000L, false,   9, 129,  3650,  87600,  5256000,  315360000 ), // Er0  5-Tou-02 00:00 -> Er1  5-Nas-05 00:00
+            new TFDItem( "GMT", "en@calendar=coptic",-53026531200000L,-53341891200000L, false,  -9,-129, -3650, -87600, -5256000, -315360000 ), // Er1  5-Nas-05 00:00 -> Er0  5-Tou-02 00:00
+        };
+        for (TFDItem tfdItem: tfdItems) {
+            TimeZone timezone = TimeZone.getFrozenTimeZone(tfdItem.tzname);
+            Calendar ucal = Calendar.getInstance(timezone, new ULocale(tfdItem.locale));
+            ucal.setTimeInMillis(tfdItem.target);
+            Date targetDate = ucal.getTime();
+            int yDf, MDf, dDf, HDf, mDf, sDf;
+            if (tfdItem.progressive) {
+                ucal.setTimeInMillis(tfdItem.start);
+                yDf = ucal.fieldDifference(targetDate, YEAR);
+                MDf = ucal.fieldDifference(targetDate, MONTH);
+                dDf = ucal.fieldDifference(targetDate, DATE);
+                HDf = ucal.fieldDifference(targetDate, HOUR);
+                mDf = ucal.fieldDifference(targetDate, MINUTE);
+                sDf = ucal.fieldDifference(targetDate, SECOND);
+                if ( yDf != tfdItem.yDiff || MDf != tfdItem.MDiff || dDf != tfdItem.dDiff || HDf != tfdItem.HDiff || mDf != tfdItem.mDiff || sDf != tfdItem.sDiff ) {
+                    errln("Fail: for locale \"" + tfdItem.locale + "\", start " + tfdItem.start + ", target " +  tfdItem.target + ", expected y-M-d-H-m-s progressive diffs " +
+                            tfdItem.yDiff +","+ tfdItem.MDiff +","+ tfdItem.dDiff +","+ tfdItem.HDiff +","+ tfdItem.mDiff +","+ tfdItem.sDiff + ", got " +
+                            yDf +","+ MDf +","+ dDf +","+ HDf +","+ mDf +","+ sDf);
+                }
+            } else {
+                ucal.setTimeInMillis(tfdItem.start);
+                yDf = ucal.fieldDifference(targetDate, YEAR);
+                ucal.setTimeInMillis(tfdItem.start);
+                MDf = ucal.fieldDifference(targetDate, MONTH);
+                ucal.setTimeInMillis(tfdItem.start);
+                dDf = ucal.fieldDifference(targetDate, DATE);
+                ucal.setTimeInMillis(tfdItem.start);
+                HDf = ucal.fieldDifference(targetDate, HOUR);
+                ucal.setTimeInMillis(tfdItem.start);
+                mDf = ucal.fieldDifference(targetDate, MINUTE);
+                if ( yDf != tfdItem.yDiff || MDf != tfdItem.MDiff || dDf != tfdItem.dDiff || HDf != tfdItem.HDiff || mDf != tfdItem.mDiff ) {
+                    errln("Fail: for locale \"" + tfdItem.locale + "\", start " + tfdItem.start + ", target " +  tfdItem.target + ", expected y-M-d-H-m total diffs " +
+                            tfdItem.yDiff +","+ tfdItem.MDiff +","+ tfdItem.dDiff +","+ tfdItem.HDiff +","+ tfdItem.mDiff + ", got " +
+                            yDf +","+ MDf +","+ dDf +","+ HDf +","+ mDf);
+                }
+                ucal.setTimeInMillis(tfdItem.start);
+                sDf = ucal.fieldDifference(targetDate, SECOND);
+                if ( sDf != 0x7FFFFFFF && sDf != tfdItem.sDiff ) {
+                    errln("Fail: for locale \"" + tfdItem.locale + "\", start " + tfdItem.start + ", target " +  tfdItem.target + ", expected seconds total diffs " +
+                            tfdItem.sDiff + ", got " + sDf);
+                }
+            }
+        }
+    }
+
     public void TestAddRollEra0AndEraBounds() {
         final String[] localeIDs = {
             // calendars with non-modern era 0 that goes backwards, max era == 1
