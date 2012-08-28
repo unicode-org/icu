@@ -56,7 +56,6 @@ kab{
         CN{"Lacin"}
         CO{"Kulumbi"}
         CR{"Kusta Rika"}
-        CS{"Sirbya d Muntinigru"}
         CU{"Kuba"}
         CV{"Tigzirin n yixef azegzaw"}
         CY{"Cipr"}
@@ -238,5 +237,5 @@ kab{
         ZM{"Zambya"}
         ZW{"Zimbabwi"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

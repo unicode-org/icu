@@ -56,7 +56,6 @@ ksf{
         CN{"cín"}
         CO{"kolɔmbí"}
         CR{"kɔstaríka"}
-        CS{"sɛrbí ri mɔntǝnɛgro"}
         CU{"kuba"}
         CV{"kapvɛr"}
         CY{"cíprɛ"}
@@ -238,5 +237,5 @@ ksf{
         ZM{"zambí"}
         ZW{"zimbabwɛ́"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

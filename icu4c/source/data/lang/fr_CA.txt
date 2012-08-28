@@ -8,11 +8,28 @@
 // ***************************************************************************
 fr_CA{
     Keys{
+        calendar{"Calendrier"}
+        currency{"Devise"}
         numbers{"Chiffres"}
+    }
+    Languages{
+        es_ES{"espagnol ibérique"}
+        pt_PT{"portugais ibérique"}
+        si{"singhalais"}
+        to{"tongan"}
+        ug{"ouïgour"}
+        und{"indéterminé"}
+    }
+    Scripts{
+        Hans{"idéogrammes han simplifiés"}
+        Hant{"idéogrammes han traditionnels"}
     }
     Types{
         calendar{
             ethiopic-amete-alem{"Calendrier éthiopien de l'An de grâce"}
+            gregorian{"Calendrier grégorien"}
+            islamic{"Calendrier musulman"}
+            islamic-civil{"Calendrier civil musulman"}
             persian{"Calendrier perse"}
         }
         collation{
@@ -40,6 +57,7 @@ fr_CA{
             hans{"Chiffres chinois simplifiés"}
             hansfin{"Chiffres monétaires chinois simplifiés"}
             hant{"Chiffres chinois traditionnels"}
+            hantfin{"Chiffres financiers en chinois traditionnel"}
             hebr{"Chiffre hébreux"}
             jpanfin{"Chiffres monétaires japonais"}
             khmr{"Chiffres khmer"}
@@ -58,5 +76,5 @@ fr_CA{
             tibt{"Chiffres tibétains"}
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

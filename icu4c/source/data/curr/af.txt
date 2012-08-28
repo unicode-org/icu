@@ -40,7 +40,7 @@ af{
             "Argentynse peso",
         }
         AUD{
-            "AU$",
+            "A$",
             "Australiese dollar",
         }
         AWG{
@@ -483,6 +483,10 @@ af{
             "QAR",
             "Katarese rial",
         }
+        RON{
+            "RON",
+            "Roemeense leu",
+        }
         RSD{
             "RSD",
             "Serbiese dinar",
@@ -538,6 +542,10 @@ af{
         SRD{
             "SRD",
             "Surinaamse dollar",
+        }
+        SSP{
+            "SSP",
+            "Suid-Soedanese pond",
         }
         STD{
             "STD",
@@ -664,5 +672,23 @@ af{
             "Zimbabwiese dollar",
         }
     }
-    Version{"2.0.65.46"}
+    CurrencyPlurals{
+        EUR{
+            one{"EUR"}
+            other{"EUR"}
+        }
+        RON{
+            one{"Roemeense leu"}
+            other{"Roemeense leu"}
+        }
+        SSP{
+            one{"Suid-Soedanese pond"}
+            other{"Suid-Soedanese pond"}
+        }
+    }
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+    }
+    Version{"2.0.75.99"}
 }

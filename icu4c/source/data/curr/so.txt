@@ -40,5 +40,5 @@ so{
             "Doollar maraykan",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

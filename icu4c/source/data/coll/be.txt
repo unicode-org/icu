@@ -14,7 +14,7 @@ be{
     collations{
         standard{
             Sequence{"[suppressContractions [АаӘәГгЕеЖжЗзІіОоӨөКкЧчЫыЭэѴѵ] ]&Е<ё<<<Ё"}
-            Version{"21.0"}
+            Version{"22.0"}
         }
     }
 }

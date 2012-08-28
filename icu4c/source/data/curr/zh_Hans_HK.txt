@@ -24,6 +24,10 @@ zh_Hans_HK{
             "$",
             "港元",
         }
+        HNL{
+            "HNL",
+            "洪都拉斯拉伦皮拉",
+        }
         KYD{
             "KYD",
             "开曼群岛元",
@@ -44,6 +48,13 @@ zh_Hans_HK{
             "UAH",
             "乌克兰赫夫纳",
         }
+        XAG{
+            "XAG",
+            "白银",
+        }
     }
-    Version{"2.0.64.65"}
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
+    Version{"2.0.75.99"}
 }

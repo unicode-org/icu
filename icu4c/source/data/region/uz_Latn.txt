@@ -11,7 +11,7 @@
  */
 uz_Latn{
     Countries{
-        AF{"Afgʼoniston"}
+        AF{"Afgʻoniston"}
         BR{"Braziliya"}
         CN{"Xitoy"}
         DE{"Olmoniya"}
@@ -21,8 +21,8 @@ uz_Latn{
         IT{"Italiya"}
         JP{"Yaponiya"}
         RU{"Rossiya"}
-        US{"Qoʼshma Shtatlar"}
-        UZ{"Oʼzbekiston"}
+        US{"Qoʻshma Shtatlar"}
+        UZ{"Oʻzbekiston"}
     }
-    Version{"2.0.58.82"}
+    Version{"2.0.74.98"}
 }

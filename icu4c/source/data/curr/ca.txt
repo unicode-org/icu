@@ -67,6 +67,10 @@ ca{
             "ARL",
             "peso ley argentí (1970-1983)",
         }
+        ARM{
+            "ARM",
+            "peso argentí (1981-1970)",
+        }
         ARP{
             "ARP",
             "peso argentí (1983-1985)",
@@ -188,7 +192,7 @@ ca{
             "cruzeiro brasiler (1990-1993)",
         }
         BRL{
-            "R$",
+            "BRL",
             "real brasiler",
         }
         BRN{
@@ -198,6 +202,10 @@ ca{
         BRR{
             "BRR",
             "cruzeiro brasiler",
+        }
+        BRZ{
+            "BRZ",
+            "antic cruzeiro brasiler",
         }
         BSD{
             "BSD",
@@ -247,6 +255,10 @@ ca{
             "CHW",
             "franc WIR",
         }
+        CLE{
+            "CLE",
+            "escut xilè",
+        }
         CLF{
             "CLF",
             "unidad de fomento xilena",
@@ -256,7 +268,7 @@ ca{
             "peso xilè",
         }
         CNY{
-            "CN¥",
+            "¥",
             "iuan renmimbi xinès",
         }
         COP{
@@ -355,7 +367,7 @@ ca{
             "₧",
             "pesseta espanyola",
             {
-                "¤ #,##0;-¤ #,##0",
+                "¤ #,##0.00",
                 ",",
                 ".",
             }
@@ -544,6 +556,14 @@ ca{
             "KPW",
             "won nord-coreà",
         }
+        KRH{
+            "KRH",
+            "hwan sud-coreà (1953-1962)",
+        }
+        KRO{
+            "KRO",
+            "antic won sud-coreà",
+        }
         KRW{
             "₩",
             "won sud-coreà",
@@ -620,6 +640,14 @@ ca{
             "MAF",
             "franc marroquí",
         }
+        MCF{
+            "MCF",
+            "franc monegasc",
+        }
+        MDC{
+            "MDC",
+            "cupó moldau",
+        }
         MDL{
             "MDL",
             "leu moldau",
@@ -681,7 +709,7 @@ ca{
             "kwacha malawià",
         }
         MXN{
-            "MX$",
+            "MXN",
             "peso mexicà",
         }
         MXP{
@@ -1021,7 +1049,7 @@ ca{
             "tala samoà",
         }
         XAF{
-            "FCFA",
+            "XAF",
             "franc CFA BEAC",
         }
         XAG{
@@ -1049,7 +1077,7 @@ ca{
             "unitat de compte europea (XBD)",
         }
         XCD{
-            "EC$",
+            "XCD",
             "dòlar del Carib Oriental",
         }
         XDR{
@@ -1069,7 +1097,7 @@ ca{
             "franc UIC francès",
         }
         XOF{
-            "CFA",
+            "XOF",
             "franc CFA BCEAO",
         }
         XPD{
@@ -1077,7 +1105,7 @@ ca{
             "pal·ladi",
         }
         XPF{
-            "CFPF",
+            "XPF",
             "franc CFP",
         }
         XPT{
@@ -1115,6 +1143,10 @@ ca{
         YUN{
             "YUN",
             "dinar convertible iugoslau",
+        }
+        YUR{
+            "YUR",
+            "dinar iugoslau reformat (1992-1993)",
         }
         ZAL{
             "ZAL",
@@ -1205,6 +1237,10 @@ ca{
         ARL{
             one{"peso ley argentí (1970-1983)"}
             other{"pesos ley argentins (1970-1983)"}
+        }
+        ARM{
+            one{"peso argentí moneda nacional"}
+            other{"pesos argentins moneda nacional"}
         }
         ARP{
             one{"peso argentí (1983-1985)"}
@@ -1338,6 +1374,10 @@ ca{
             one{"cruzeiro brasiler"}
             other{"cruzeiros brasilers"}
         }
+        BRZ{
+            one{"antic cruzeiro brasiler"}
+            other{"antics cruzeiros brasilers"}
+        }
         BSD{
             one{"dòlar de les Bahames"}
             other{"dòlars de les Bahames"}
@@ -1386,6 +1426,10 @@ ca{
             one{"franc WIR"}
             other{"francs WIR"}
         }
+        CLE{
+            one{"escudo xilè"}
+            other{"escudos xilens"}
+        }
         CLF{
             one{"unidad de fomento xilena"}
             other{"unidades de fomento xilenes"}
@@ -1393,6 +1437,10 @@ ca{
         CLP{
             one{"peso xilè"}
             other{"pesos xilens"}
+        }
+        CNX{
+            one{"dòlar del Banc Popular Xinès"}
+            other{"dòlars del Banc Popular Xinès"}
         }
         CNY{
             one{"iuan xinès"}
@@ -1678,6 +1726,14 @@ ca{
             one{"won nord-coreà"}
             other{"wons nord-coreans"}
         }
+        KRH{
+            one{"hwan sud-coreà"}
+            other{"hwans sud-coreans"}
+        }
+        KRO{
+            one{"antic won sud-coreà"}
+            other{"antics wons sud-coreans"}
+        }
         KRW{
             one{"won sud-coreà"}
             other{"wons sud-coreans"}
@@ -1753,6 +1809,14 @@ ca{
         MAF{
             one{"franc marroquí"}
             other{"francs marroquins"}
+        }
+        MCF{
+            one{"franc monegasc"}
+            other{"francs monegascos"}
+        }
+        MDC{
+            one{"cupó moldau"}
+            other{"cupons moldaus"}
         }
         MDL{
             one{"leu moldau"}
@@ -2014,6 +2078,10 @@ ca{
             one{"florí de Surinam"}
             other{"florins de Surinam"}
         }
+        SSP{
+            one{"lliura del Sudan del Sud"}
+            other{"lliures del Sudan del Sud"}
+        }
         STD{
             one{"dobra de São Tomé i Príncipe"}
             other{"dobras de São Tomé i Príncipe"}
@@ -2250,6 +2318,10 @@ ca{
             one{"dinar convertible iugoslau"}
             other{"dinars convertibles iugoslaus"}
         }
+        YUR{
+            one{"dinar reformat iugoslau"}
+            other{"dinars reformats iugoslaus"}
+        }
         ZAL{
             one{"rand sud-africà (financer)"}
             other{"rands sud-africans (financers)"}
@@ -2287,5 +2359,5 @@ ca{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

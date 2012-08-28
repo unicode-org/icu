@@ -20,7 +20,7 @@ agq{
             "Kwanzà è Àŋgolà",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dɔlà e Ùsɨ̀tɛ̀lɛlìa",
         }
         BHD{
@@ -228,5 +228,5 @@ agq{
             "Dɔlà è Zìmbagbɛ̀",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

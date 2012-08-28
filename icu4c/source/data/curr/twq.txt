@@ -20,7 +20,7 @@ twq{
             "Angoola Kwanza",
         }
         AUD{
-            "AU$",
+            "A$",
             "Ostraali Dollar",
         }
         BHD{
@@ -232,5 +232,5 @@ twq{
             "Zimbabwe Dollar",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.53"}
 }

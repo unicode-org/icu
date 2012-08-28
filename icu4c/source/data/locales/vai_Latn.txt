@@ -33,7 +33,7 @@ vai_Latn{
         }
         native{"vaii"}
     }
-    Version{"2.0.67.8"}
+    Version{"2.0.74.65"}
     calendar{
         gregorian{
             DateTimePatterns{

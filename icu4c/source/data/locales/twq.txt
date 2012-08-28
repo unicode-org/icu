@@ -11,7 +11,7 @@
  */
 twq{
     AuxExemplarCharacters{"[v]"}
-    ExemplarCharacters{"[a ã b c d e ẽ f g h i j k l m n ŋ ɲ o õ p q r s š t u w x y z ž ]"}
+    ExemplarCharacters{"[a ã b c d e ẽ f g h i j k l m n ɲ ŋ o õ p q r s š t u w x y z ž]"}
     LocaleScript{
         "Latn",
     }
@@ -28,9 +28,13 @@ twq{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.53"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "Subbaahi",
+                "Zaarikay b",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -142,9 +146,6 @@ twq{
                 }
                 week{
                     dn{"Hebu"}
-                }
-                weekday{
-                    dn{"Zaari"}
                 }
                 year{
                     dn{"Jiiri"}

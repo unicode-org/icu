@@ -23,7 +23,7 @@ teo{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.79"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -140,9 +140,6 @@ teo{
                 }
                 week{
                     dn{"Ewiki"}
-                }
-                weekday{
-                    dn{"Aparan"}
                 }
                 year{
                     dn{"Ekan"}

@@ -56,7 +56,6 @@ lag{
         CN{"Chíina"}
         CO{"Kolómbia"}
         CR{"Kósita Rɨ́ɨka"}
-        CS{"Sebíia na Montégiro"}
         CU{"Kyúuba"}
         CV{"Kepuvéede"}
         CY{"Kupuróosi"}
@@ -238,5 +237,5 @@ lag{
         ZM{"Sámbia"}
         ZW{"Simbáabwe"}
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.74.65"}
 }

@@ -56,7 +56,6 @@ so{
         CN{"Shiinaha"}
         CO{"Kolombiya"}
         CR{"Kosta Riika"}
-        CS{"serbiya iyo Monteneegro"}
         CU{"Kuuba"}
         CV{"Cape Verde Islands"}
         CY{"Qubrus"}
@@ -239,5 +238,5 @@ so{
         ZW{"Simbaabwe"}
         ZZ{"Far aan la aqoon amase aan saxnayn"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

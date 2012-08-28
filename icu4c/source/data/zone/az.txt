@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/az.xml
  */
 az{
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Seuta"}
@@ -475,39 +475,39 @@ az{
             ec{"veyk"}
         }
         "meta:Europe_Central"{
-            ld{"Orta Avropa/yay"}
-            lg{"Orta Avropa"}
-            ls{"Orta Avropa"}
+            ld{"Orta Avropa yay vaxtı"}
+            lg{"Orta Avropa vaxtı"}
+            ls{"Orta Avropa standart vaxtı"}
         }
         "meta:Europe_Eastern"{
-            ld{"Şərq Avropa/yay"}
-            lg{"Şərq Avropa"}
-            ls{"Şərq Avropa"}
+            ld{"Şərq Avropa yay vaxtı"}
+            lg{"Şərq Avropa vaxtı"}
+            ls{"Şərq Avropa standart vaxtı"}
         }
         "meta:Kuybyshev"{
-            ld{"Kuybuşev/yay"}
-            lg{"Kuybuşev"}
-            ls{"Kuybuşev"}
+            ld{"Kuybuşev yay vaxtı"}
+            lg{"Kuybuşev vaxtı"}
+            ls{"Kuybuşev standart vaxtı"}
         }
         "meta:Moscow"{
-            ld{"Moskva/yay"}
-            lg{"Moskva"}
-            ls{"Moskva/standart"}
+            ld{"Moskva yay vaxtı"}
+            lg{"Moskva vaxtı"}
+            ls{"Moskva standart vaxtı"}
         }
         "meta:Samara"{
-            ld{"Samara/yay"}
-            lg{"Samara"}
-            ls{"Samara"}
+            ld{"Samara yay vaxtı"}
+            lg{"Samara vaxtı"}
+            ls{"Samara standart vaxtı"}
         }
         "meta:Turkey"{
-            ld{"Türkiya/yay"}
-            lg{"Türkiya"}
-            ls{"Türkiya"}
+            ld{"Türkiya yay vaxtı"}
+            lg{"Türkiya vaxtı"}
+            ls{"Türkiya standart vaxtı"}
         }
         "meta:Volgograd"{
-            ld{"Volqoqrad/yay"}
-            lg{"Volqoqrad"}
-            ls{"Volqoqrad"}
+            ld{"Volqoqrad yay vaxtı"}
+            lg{"Volqoqrad vaxtı"}
+            ls{"Volqoqrad standart vaxtı"}
         }
     }
 }

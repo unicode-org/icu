@@ -56,7 +56,6 @@ rn{
         CN{"Ubushinwa"}
         CO{"Kolombiya"}
         CR{"Kositarika"}
-        CS{"Seribiya na Montenegoro"}
         CU{"Kiba"}
         CV{"Ibirwa bya Kapuveri"}
         CY{"Izinga rya Shipure"}
@@ -238,5 +237,5 @@ rn{
         ZM{"Zambiya"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

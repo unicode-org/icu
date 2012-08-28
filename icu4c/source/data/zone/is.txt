@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/is.xml
  */
 is{
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Algeirsborg"}
@@ -27,23 +27,17 @@ is{
         "Africa:Johannesburg"{
             ec{"Jóhannesarborg"}
         }
-        "Africa:Monrovia"{
-            ec{"Monrovia"}
+        "Africa:Sao_Tome"{
+            ec{"Saó Tóme"}
         }
         "Africa:Tunis"{
             ec{"Túnis"}
         }
-        "America:Anguilla"{
-            ec{"Anguilla"}
-        }
         "America:Aruba"{
             ec{"Arúba"}
         }
-        "America:Barbados"{
-            ec{"Barbados"}
-        }
-        "America:Belize"{
-            ec{"Belize"}
+        "America:Asuncion"{
+            ec{"Asunción"}
         }
         "America:Cancun"{
             ec{"Kankún"}
@@ -54,11 +48,8 @@ is{
         "America:Dominica"{
             ec{"Dóminíka"}
         }
-        "America:El_Salvador"{
-            ec{"El Salvador"}
-        }
         "America:Godthab"{
-            ec{"Godthåb"}
+            ec{"Nuuk"}
         }
         "America:Guadeloupe"{
             ec{"Gvadelúp"}
@@ -66,14 +57,11 @@ is{
         "America:Guatemala"{
             ec{"Gvatemala"}
         }
-        "America:Guyana"{
-            ec{"Guyana"}
-        }
         "America:Jamaica"{
             ec{"Jamaíka"}
         }
-        "America:Martinique"{
-            ec{"Martinique"}
+        "America:Lower_Princes"{
+            ec{"Lower Prince's Quarter"}
         }
         "America:Mexico_City"{
             ec{"Mexíkóborg"}
@@ -83,6 +71,12 @@ is{
         }
         "America:Regina"{
             ec{"Regína"}
+        }
+        "America:St_Barthelemy"{
+            ec{"Saint Barthélemy"}
+        }
+        "America:St_Johns"{
+            ec{"St. John’s"}
         }
         "America:St_Kitts"{
             ec{"St. Kitts"}
@@ -97,16 +91,13 @@ is{
             ec{"St. Vincent"}
         }
         "Antarctica:DumontDUrville"{
-            ec{"Dumont D'Urville"}
+            ec{"Dumont d’Urville"}
         }
         "Antarctica:South_Pole"{
             ec{"Suðurpóllinn"}
         }
         "Asia:Baghdad"{
             ec{"Bagdad"}
-        }
-        "Asia:Bahrain"{
-            ec{"Bahrain"}
         }
         "Asia:Beirut"{
             ec{"Beirút"}
@@ -126,23 +117,11 @@ is{
         "Asia:Kuwait"{
             ec{"Kúveit"}
         }
-        "Asia:Macau"{
-            ec{"Macau"}
-        }
-        "Asia:Pyongyang"{
-            ec{"Pyongyang"}
-        }
         "Asia:Qatar"{
             ec{"Katar"}
         }
-        "Asia:Seoul"{
-            ec{"Seoul"}
-        }
-        "Asia:Singapore"{
-            ec{"Singapore"}
-        }
-        "Asia:Tehran"{
-            ec{"Tehran"}
+        "Asia:Saigon"{
+            ec{"Ho Chi Minh-borg"}
         }
         "Asia:Tokyo"{
             ec{"Tókýó"}
@@ -175,7 +154,7 @@ is{
             ec{"St. Helena"}
         }
         "Etc:Unknown"{
-            ec{"óþekkt"}
+            ec{"Óþekkt borg"}
         }
         "Europe:Athens"{
             ec{"Aþena"}
@@ -249,6 +228,9 @@ is{
         "Indian:Mauritius"{
             ec{"Máritíus"}
         }
+        "Indian:Reunion"{
+            ec{"Réunion"}
+        }
         "Pacific:Easter"{
             ec{"Páskaeyja"}
         }
@@ -264,11 +246,25 @@ is{
         "Pacific:Nauru"{
             ec{"Nárú"}
         }
-        "Pacific:Niue"{
-            ec{"Niue"}
-        }
         "Pacific:Palau"{
             ec{"Palá"}
+        }
+        "meta:Afghanistan"{
+            ls{"Afganistantími"}
+        }
+        "meta:Africa_Central"{
+            ls{"Mið-Afríkutími"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Austur-Afríkutími"}
+        }
+        "meta:Africa_Southern"{
+            ls{"Staðaltími í Suður-Afríku"}
+        }
+        "meta:Africa_Western"{
+            ld{"Sumartími í Vestur-Afríku"}
+            lg{"Vestur-Afríkutími"}
+            ls{"Staðaltími í Vestur-Afríku"}
         }
         "meta:Alaska"{
             ld{"Sumartími í Alaska"}
@@ -277,7 +273,7 @@ is{
         }
         "meta:Amazon"{
             ld{"Sumartími á Amasónsvæðinu"}
-            lg{"Tími á Amasónsvæðinu"}
+            lg{"Amasontími"}
             ls{"Staðaltími á Amasónsvæðinu"}
         }
         "meta:America_Central"{
@@ -305,15 +301,25 @@ is{
             lg{"Tími í Anadyr"}
             ls{"Staðaltími í Anadyr"}
         }
+        "meta:Arabian"{
+            ld{"Sumartími í Arabíu"}
+            lg{"Arabíutími"}
+            ls{"Staðaltími í Arabíu"}
+        }
         "meta:Argentina"{
             ld{"Sumartími í Argentínu"}
-            lg{"Tími í Argentínu"}
+            lg{"Argentínutími"}
             ls{"Staðaltími í Argentínu"}
         }
         "meta:Argentina_Western"{
             ld{"Sumartími í Vestur-Argentínu"}
-            lg{"Tími í Vestur-Argentínu"}
+            lg{"Vestur-Argentínutími"}
             ls{"Staðaltími í Vestur-Argentínu"}
+        }
+        "meta:Armenia"{
+            ld{"Sumartími í Armeníu"}
+            lg{"Armeníutími"}
+            ls{"Staðaltími í Armeníu"}
         }
         "meta:Atlantic"{
             ld{"Sumartími á Atlantshafssvæðinu"}
@@ -340,49 +346,217 @@ is{
             lg{"Tími í Vestur-Ástralíu"}
             ls{"Staðaltími í Vestur-Ástralíu"}
         }
+        "meta:Azerbaijan"{
+            ld{"Sumartími í Aserbaídsjan"}
+            lg{"Aserbaídsjantími"}
+            ls{"Staðaltími í Aserbaídsjan"}
+        }
+        "meta:Azores"{
+            ld{"Sumartími á Asóreyjum"}
+            lg{"Asóreyjatími"}
+            ls{"Staðaltími á Asóreyjum"}
+        }
+        "meta:Bangladesh"{
+            ld{"Sumartími í Bangladess"}
+            lg{"Bangladesstími"}
+            ls{"Staðaltími í Bangladess"}
+        }
+        "meta:Bhutan"{
+            ls{"Bútantími"}
+        }
+        "meta:Bolivia"{
+            ls{"Bólivíutími"}
+        }
         "meta:Brasilia"{
             ld{"Sumartími í Brasilíu"}
-            lg{"Tími í Brasilíu"}
-            ls{"Tími í Brasilíu"}
+            lg{"Brasilíutími"}
+            ls{"Staðaltími í Brasilíu"}
+        }
+        "meta:Brunei"{
+            ls{"Brunei-tími"}
+        }
+        "meta:Cape_Verde"{
+            ld{"Sumartími á Grænhöfðaeyjum"}
+            lg{"Grænhöfðaeyjatími"}
+            ls{"Staðaltími á Grænhöfðaeyjum"}
+        }
+        "meta:Chamorro"{
+            ls{"Chamorro-staðaltími"}
+        }
+        "meta:Chatham"{
+            ld{"Chatham-sumartími"}
+            lg{"Chatham-tími"}
+            ls{"Chatham-staðaltími"}
+        }
+        "meta:Chile"{
+            ld{"Sumartími í Chile"}
+            lg{"Chile-tími"}
+            ls{"Staðaltími í Chile"}
+        }
+        "meta:China"{
+            ld{"Sumartími í Kína"}
+            lg{"Kínatími"}
+            ls{"Staðaltími í Kína"}
         }
         "meta:Choibalsan"{
             ld{"Sumartími í Choibalsan"}
             lg{"Tími í Choibalsan"}
             ls{"Staðaltími í Choibalsan"}
         }
+        "meta:Christmas"{
+            ls{"Jólaeyjartími"}
+        }
+        "meta:Cocos"{
+            ls{"Kókoseyjatími"}
+        }
+        "meta:Colombia"{
+            ld{"Sumartími í Kólumbíu"}
+            lg{"Kólumbíutími"}
+            ls{"Staðaltími í Kólumbíu"}
+        }
+        "meta:Cook"{
+            ld{"Hálfsumartími á Cooks-eyjum"}
+            lg{"Cooks-eyjatími"}
+            ls{"Staðaltími á Cooks-eyjum"}
+        }
+        "meta:Cuba"{
+            ld{"Sumartími á Kúbu"}
+            lg{"Kúbutími"}
+            ls{"Staðaltími á Kúbu"}
+        }
+        "meta:Davis"{
+            ls{"Davis-tími"}
+        }
+        "meta:DumontDUrville"{
+            ls{"Tími á Dumont-d’Urville"}
+        }
+        "meta:East_Timor"{
+            ls{"Tími á Tímor-Leste"}
+        }
+        "meta:Easter"{
+            ld{"Sumartími á Páskaeyju"}
+            lg{"Páskaeyjutími"}
+            ls{"Staðaltími á Páskaeyju"}
+        }
+        "meta:Ecuador"{
+            ls{"Ekvadortími"}
+        }
         "meta:Europe_Central"{
-            ld{"Sumartími Mið-Evrópu"}
+            ld{"Sumartími í Mið-Evrópu"}
             lg{"Mið-Evróputími"}
-            ls{"Staðaltími Mið-Evrópu"}
+            ls{"Staðaltími í Mið-Evrópu"}
         }
         "meta:Europe_Eastern"{
-            ld{"Sumartími Austur-Evrópu"}
+            ld{"Sumartími í Austur-Evrópu"}
             lg{"Austur-Evróputími"}
-            ls{"Staðaltími Austur-Evrópu"}
+            ls{"Staðaltími í Austur-Evrópu"}
+        }
+        "meta:Europe_Western"{
+            ld{"Sumartími í Vestur-Evrópu"}
+            lg{"Vestur-Evróputími"}
+            ls{"Staðaltími í Vestur-Evrópu"}
+        }
+        "meta:Falkland"{
+            ld{"Sumartími á Falklandseyjum"}
+            lg{"Falklandseyjatími"}
+            ls{"Staðaltími á Falklandseyjum"}
+        }
+        "meta:Fiji"{
+            ld{"Sumartími á Fídjíeyjum"}
+            lg{"Fídjíeyjatími"}
+            ls{"Staðaltími á Fídjíeyjum"}
+        }
+        "meta:French_Guiana"{
+            ls{"Tími í Frönsku Gvæjana"}
+        }
+        "meta:French_Southern"{
+            ls{"Tími á frönsku suðurhafssvæðum og Suðurskautslandssvæði"}
+        }
+        "meta:GMT"{
+            ls{"Greenwich-tími"}
+        }
+        "meta:Galapagos"{
+            ls{"Galapagos-tími"}
+        }
+        "meta:Gambier"{
+            ls{"Gambier-tími"}
+        }
+        "meta:Georgia"{
+            ld{"Sumartími í Georgíu"}
+            lg{"Georgíutími"}
+            ls{"Staðaltími í Georgíu"}
+        }
+        "meta:Gilbert_Islands"{
+            ls{"Gilberteyjatími"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"Sumartími á Austur-Grænlandi"}
+            lg{"Austur-Grænlandstími"}
+            ls{"Staðaltími á Austur-Grænlandi"}
+        }
+        "meta:Greenland_Western"{
+            ld{"Sumartími á Vestur-Grænlandi"}
+            lg{"Vestur-Grænlandstími"}
+            ls{"Staðaltími á Vestur-Grænlandi"}
+        }
+        "meta:Gulf"{
+            ls{"Staðaltími við Persaflóa"}
+        }
+        "meta:Guyana"{
+            ls{"Gvæjanatími"}
         }
         "meta:Hawaii_Aleutian"{
-            ld{"Sumartími á Hawaí og Aleútaeyjum"}
-            lg{"Tími á Hawaí og Aleútaeyjum"}
+            ld{"Sumartími á Hawaii og Aleútaeyjum"}
+            lg{"Tími á Hawaii og Aleútaeyjum"}
             ls{"Staðaltími á Hawaí og Aleútaeyjum"}
+        }
+        "meta:Hong_Kong"{
+            ld{"Sumartími í Hong Kong"}
+            lg{"Hong Kong-tími"}
+            ls{"Staðaltími í Hong Kong"}
         }
         "meta:Hovd"{
             ld{"Sumartími í Hovd"}
             lg{"Tími í Hovd"}
             ls{"Staðaltími í Hovd"}
         }
+        "meta:India"{
+            ls{"Staðaltími á Indlandi"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"Indlandshafstími"}
+        }
+        "meta:Indochina"{
+            ls{"Indókínatími"}
+        }
         "meta:Indonesia_Central"{
-            lg{"Tími í Mið-Indónesíu"}
+            ls{"Mið-Indónesíutími"}
         }
         "meta:Indonesia_Eastern"{
-            lg{"Tími í Austur-Indónesíu"}
+            ls{"Austur-Indónesíutími"}
         }
         "meta:Indonesia_Western"{
-            lg{"Tími í Vestur-Indónesíu"}
+            ls{"Vestur-Indónesíutími"}
+        }
+        "meta:Iran"{
+            ld{"Sumartími í Íran"}
+            lg{"Íranstími"}
+            ls{"Staðaltími í Íran"}
         }
         "meta:Irkutsk"{
             ld{"Sumartími í Irkutsk"}
             lg{"Tími í Irkutsk"}
-            ls{"Staðaltími í Irkutsk"}
+            ls{"Staðaltími í Irkútsk"}
+        }
+        "meta:Israel"{
+            ld{"Sumartími í Ísrael"}
+            lg{"Ísraelstími"}
+            ls{"Staðaltími í Ísrael"}
+        }
+        "meta:Japan"{
+            ld{"Sumartími í Japan"}
+            lg{"Japanstími"}
+            ls{"Staðaltími í Japan"}
         }
         "meta:Kamchatka"{
             ld{"Sumartími í Petropavlovsk-Kamchatski"}
@@ -395,10 +569,24 @@ is{
         "meta:Kazakhstan_Western"{
             ls{"Tími í Vestur-Kasakstan"}
         }
+        "meta:Korea"{
+            ld{"Sumartími í Kóreu"}
+            lg{"Kóreutími"}
+            ls{"Staðaltími í Kóreu"}
+        }
+        "meta:Kosrae"{
+            ls{"Kosrae-tími"}
+        }
         "meta:Krasnoyarsk"{
             ld{"Sumartími í Krasnoyarsk"}
             lg{"Tími í Krasnoyarsk"}
-            ls{"Staðaltími í Krasnoyarsk"}
+            ls{"Staðaltími í Krasnojarsk"}
+        }
+        "meta:Kyrgystan"{
+            ls{"Kirgisistantími"}
+        }
+        "meta:Line_Islands"{
+            ls{"Línueyjatími"}
         }
         "meta:Lord_Howe"{
             ld{"Sumartími á Lord Howe-eyju"}
@@ -406,12 +594,32 @@ is{
             ls{"Staðaltími á Lord Howe-eyju"}
         }
         "meta:Macquarie"{
-            ls{"Tími í Macquarie"}
+            ls{"Macquarie-eyjartími"}
         }
         "meta:Magadan"{
             ld{"Sumartími í Magadan"}
             lg{"Tími í Magadan"}
             ls{"Staðaltími í Magadan"}
+        }
+        "meta:Malaysia"{
+            ls{"Malasíutími"}
+        }
+        "meta:Maldives"{
+            ls{"Maldíveyjatími"}
+        }
+        "meta:Marquesas"{
+            ls{"Tími á Markgreifafrúreyjum"}
+        }
+        "meta:Marshall_Islands"{
+            ls{"Marshall-eyjatími"}
+        }
+        "meta:Mauritius"{
+            ld{"Sumartími á Máritíus"}
+            lg{"Máritíustími"}
+            ls{"Staðaltími á Máritíus"}
+        }
+        "meta:Mawson"{
+            ls{"Mawson-tími"}
         }
         "meta:Mongolia"{
             ld{"Sumartími í Úlan Bator"}
@@ -423,10 +631,35 @@ is{
             lg{"Tími í Moskvu"}
             ls{"Staðaltími í Moskvu"}
         }
+        "meta:Myanmar"{
+            ls{"Búrmatími"}
+        }
+        "meta:Nauru"{
+            ls{"Nárútími"}
+        }
+        "meta:Nepal"{
+            ls{"Nepaltími"}
+        }
+        "meta:New_Caledonia"{
+            ld{"Sumartími í Nýju-Kaledóníu"}
+            lg{"Tími í Nýju-Kaledóníu"}
+            ls{"Staðaltími í Nýju-Kaledóníu"}
+        }
+        "meta:New_Zealand"{
+            ld{"Sumartími á Nýja-Sjálandi"}
+            lg{"Nýja-Sjálandstími"}
+            ls{"Staðaltími á Nýja-Sjálandi"}
+        }
         "meta:Newfoundland"{
             ld{"Sumartími á Nýfundnalandi"}
             lg{"Tími á Nýfundnalandi"}
             ls{"Staðaltími á Nýfundnalandi"}
+        }
+        "meta:Niue"{
+            ls{"Niue-tími"}
+        }
+        "meta:Norfolk"{
+            ls{"Norfolk-eyjatími"}
         }
         "meta:Noronha"{
             ld{"Sumartími í Fernando de Noronha"}
@@ -443,15 +676,130 @@ is{
             lg{"Tími í Omsk"}
             ls{"Staðaltími í Omsk"}
         }
+        "meta:Pakistan"{
+            ld{"Sumartími í Pakistan"}
+            lg{"Pakistantími"}
+            ls{"Staðaltími í Pakistan"}
+        }
+        "meta:Palau"{
+            ls{"Palátími"}
+        }
+        "meta:Papua_New_Guinea"{
+            ls{"Tími á Papúa Nýju-Gíneu"}
+        }
+        "meta:Paraguay"{
+            ld{"Sumartími í Paragvæ"}
+            lg{"Paragvætími"}
+            ls{"Staðaltími í Paragvæ"}
+        }
+        "meta:Peru"{
+            ld{"Sumartími í Perú"}
+            lg{"Perútími"}
+            ls{"Staðaltími í Perú"}
+        }
+        "meta:Philippines"{
+            ld{"Sumartími á Filippseyjum"}
+            lg{"Filippseyjatími"}
+            ls{"Staðaltími á Filippseyjum"}
+        }
+        "meta:Phoenix_Islands"{
+            ls{"Fönixeyjatími"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"Sumartími á Sankti Pierre og Miquelon"}
+            lg{"Tími á Sankti Pierre og Miquelon"}
+            ls{"Staðaltími á Sankti Pierre og Miquelon"}
+        }
+        "meta:Pitcairn"{
+            ls{"Pitcairn-tími"}
+        }
+        "meta:Ponape"{
+            ls{"Ponape-tími"}
+        }
+        "meta:Reunion"{
+            ls{"Reunion-tími"}
+        }
+        "meta:Rothera"{
+            ls{"Rothera-tími"}
+        }
         "meta:Sakhalin"{
             ld{"Sumartími í Sakhalin"}
             lg{"Tími í Sakhalin"}
-            ls{"Staðaltími í Sakhalin"}
+            ls{"Staðaltími á Sakhalin"}
         }
         "meta:Samara"{
             ld{"Sumartími í Samara"}
             lg{"Tími í Samara"}
             ls{"Staðaltími í Samara"}
+        }
+        "meta:Samoa"{
+            ls{"Staðaltími á Samóa"}
+        }
+        "meta:Seychelles"{
+            ls{"Seychelles-eyjatími"}
+        }
+        "meta:Singapore"{
+            ls{"Staðaltími í Singapúr"}
+        }
+        "meta:Solomon"{
+            ls{"Salómonseyjatími"}
+        }
+        "meta:South_Georgia"{
+            ls{"Suður-Georgíutími"}
+        }
+        "meta:Suriname"{
+            ls{"Súrinamtími"}
+        }
+        "meta:Syowa"{
+            ls{"Syowa-tími"}
+        }
+        "meta:Tahiti"{
+            ls{"Tahítítími"}
+        }
+        "meta:Taipei"{
+            ld{"Sumartími í Taipei"}
+            lg{"Taipei-tími"}
+            ls{"Staðaltími í Taipei"}
+        }
+        "meta:Tajikistan"{
+            ls{"Tadsjíkistantími"}
+        }
+        "meta:Tokelau"{
+            ls{"Tókelátími"}
+        }
+        "meta:Tonga"{
+            ld{"Sumartími á Tonga"}
+            lg{"Tongatími"}
+            ls{"Staðaltími á Tonga"}
+        }
+        "meta:Truk"{
+            ls{"Chuuk-tími"}
+        }
+        "meta:Turkmenistan"{
+            ld{"Sumartími í Túrkmenistan"}
+            lg{"Túrkmenistantími"}
+            ls{"Staðaltími í Túrkmenistan"}
+        }
+        "meta:Tuvalu"{
+            ls{"Túvalútími"}
+        }
+        "meta:Uruguay"{
+            ld{"Sumartími í Úrúgvæ"}
+            lg{"Úrúgvætími"}
+            ls{"Staðaltími í Úrúgvæ"}
+        }
+        "meta:Uzbekistan"{
+            ld{"Sumartími í Úsbekistan"}
+            lg{"Úsbekistantími"}
+            ls{"Staðaltími í Úsbekistan"}
+        }
+        "meta:Vanuatu"{
+            ld{"Sumartími í Vanúatú"}
+            lg{"Vanúatútími"}
+            ls{"Staðaltími í Vanúatú"}
+        }
+        "meta:Venezuela"{
+            ls{"Venesúelatími"}
         }
         "meta:Vladivostok"{
             ld{"Sumartími í Vladivostok"}
@@ -463,18 +811,29 @@ is{
             lg{"Tími í Volgograd"}
             ls{"Staðaltími í Volgograd"}
         }
+        "meta:Vostok"{
+            ls{"Vostok-tími"}
+        }
+        "meta:Wake"{
+            ls{"Wake-eyjartími"}
+        }
+        "meta:Wallis"{
+            ls{"Tími á Wallis- og Fútúnaeyjum"}
+        }
         "meta:Yakutsk"{
             ld{"Sumartími í Yakutsk"}
             lg{"Tími í Yakutsk"}
-            ls{"Staðaltími í Yakutsk"}
+            ls{"Staðaltími í Jakútsk"}
         }
         "meta:Yekaterinburg"{
             ld{"Sumartími í Yekaterinburg"}
             lg{"Tími í Yekaterinburg"}
-            ls{"Staðaltími í Yekaterinburg"}
+            ls{"Staðaltími í Jekaterínborg"}
         }
+        fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"{1}Tími ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;−HH:mm"}
         regionFormat{"{0} Tími"}
     }

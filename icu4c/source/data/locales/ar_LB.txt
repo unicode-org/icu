@@ -7,7 +7,15 @@
 // *
 // ***************************************************************************
 ar_LB{
-    Version{"2.0.56.95"}
+    NumberElements{
+        latn{
+            symbols{
+                decimal{","}
+                group{"."}
+            }
+        }
+    }
+    Version{"2.0.75.99"}
     calendar{
         gregorian{
             monthNames{

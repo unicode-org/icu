@@ -20,7 +20,7 @@ lag{
             "Kwáanza ya Angóola",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dóola ya Ausitereelía",
         }
         BHD{
@@ -228,5 +228,5 @@ lag{
             "Dóola ya Simbáabwe",
         }
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.74.65"}
 }

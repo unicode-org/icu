@@ -20,7 +20,7 @@ ha{
             "Kuɗin Angola",
         }
         AUD{
-            "AU$",
+            "A$",
             "Dalar Ostareliya",
         }
         BHD{
@@ -228,5 +228,5 @@ ha{
             "Dalar zimbabuwe",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.94"}
 }

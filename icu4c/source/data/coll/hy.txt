@@ -14,7 +14,7 @@ hy{
     collations{
         standard{
             Sequence{"&ք<և<<<Եւ"}
-            Version{"21.0"}
+            Version{"22.0"}
         }
     }
 }

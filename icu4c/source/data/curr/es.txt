@@ -839,6 +839,10 @@ es{
             "SRG",
             "florín surinamés",
         }
+        SSP{
+            "SSP",
+            "libra sursudanesa",
+        }
         STD{
             "STD",
             "dobra de Santo Tomé y Príncipe",
@@ -1302,7 +1306,7 @@ es{
             other{"pesos chilenos"}
         }
         CNY{
-            one{"yuan renminbi chino"}
+            one{"yuan chino"}
             other{"yuanes chinos"}
         }
         COP{
@@ -1865,6 +1869,10 @@ es{
             one{"dólar surinamés"}
             other{"dólares surinameses"}
         }
+        SSP{
+            one{"libra sursudanesa"}
+            other{"libras sursudanesas"}
+        }
         STD{
             one{"dobra de Santo Tomé y Príncipe"}
             other{"dobras de Santo Tomé y Príncipe"}
@@ -2071,7 +2079,8 @@ es{
         }
     }
     CurrencyUnitPatterns{
+        one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.99"}
 }

@@ -17,7 +17,7 @@ $lowerVowels = [աեէըիոևօւ] ;
 $vowels = [$upperVowels $lowerVowels] ;
 $lower = [$lowerConsonants $lowerVowels] ;
 $aspirate = ’ ;
-$wordBoundary = [^[:L:][:M:][:N:]] ;
+$wordBoundary =  [^[:L:][:M:][:N:]] ;
 $wordBoundary{ԵՒ}$wordBoundary → YEV ; # ARMENIAN CAPITAL ECH + CAPITAL YIWN
 $wordBoundary{ԵՒ → YEV ; # ARMENIAN CAPITAL ECH + CAPITAL YIWN
 $vowels{ԵՒ → YEV ; # ARMENIAN CAPITAL ECH + CAPITAL YIWN
@@ -33,7 +33,7 @@ $vowels{եւ → yev ; # ARMENIAN SMALL ECH + SMALL YIWN
 $wordBoundary{և}$wordBoundary → yev ; # ARMENIAN SMALL LIGATURE ECH YIWN
 $wordBoundary{և → yev ; # ARMENIAN SMALL LIGATURE ECH YIWN
 $vowels{և → yev ; # ARMENIAN SMALL LIGATURE ECH YIWN
-և → ev ; # ARMENIAN SMALL LIGATURE ECH YIWN
+և →  ev ; # ARMENIAN SMALL LIGATURE ECH YIWN
 Ա → A ; # ARMENIAN CAPITAL LETTER AYB
 ա → a ; # ARMENIAN SMALL LETTER AYB
 Բ → B ; # ARMENIAN CAPITAL LETTER BEN
@@ -100,9 +100,9 @@ $wordBoundary{ե → ye ; # ARMENIAN SMALL LETTER ECH
 ով → ov ;
 $wordBoundary{Ո}$lower → Vo ; # ARMENIAN CAPITAL LETTER VO
 $wordBoundary{Ո → VO ; # ARMENIAN CAPITAL LETTER VO
-Ո → O ; # ARMENIAN CAPITAL LETTER ECH
+Ո →  O ; # ARMENIAN CAPITAL LETTER ECH
 $wordBoundary{ո → vo ; # ARMENIAN SMALL LETTER VO
-ո → o ; # ARMENIAN SMALL LETTER VO
+ո →  o ; # ARMENIAN SMALL LETTER VO
 Չ} $lower → Ch $aspirate ; # ARMENIAN CAPITAL LETTER CHA
 Չ → CH $aspirate ; # ARMENIAN CAPITAL LETTER CHA
 չ → ch $aspirate ; # ARMENIAN SMALL LETTER CHA

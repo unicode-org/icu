@@ -72,6 +72,7 @@ sl{
         BM{"Bermudi"}
         BN{"Brunej"}
         BO{"Bolivija"}
+        BQ{"Nizozemski Karibi"}
         BR{"Brazilija"}
         BS{"Bahami"}
         BT{"Butan"}
@@ -93,9 +94,9 @@ sl{
         CO{"Kolumbija"}
         CP{"Otok Clipperton"}
         CR{"Kostarika"}
-        CS{"Srbija in Črna gora"}
         CU{"Kuba"}
         CV{"Zelenortski otoki"}
+        CW{"Curaçao"}
         CX{"Božični otok"}
         CY{"Ciper"}
         CZ{"Češka"}
@@ -255,8 +256,10 @@ sl{
         SN{"Senegal"}
         SO{"Somalija"}
         SR{"Surinam"}
+        SS{"Južni Sudan"}
         ST{"Sao Tome in Principe"}
         SV{"Salvador"}
+        SX{"Sint Maarten"}
         SY{"Sirija"}
         SZ{"Svazi"}
         TA{"Tristan da Cunha"}
@@ -298,5 +301,5 @@ sl{
         ZW{"Zimbabve"}
         ZZ{"Neznano ali neveljavno območje"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

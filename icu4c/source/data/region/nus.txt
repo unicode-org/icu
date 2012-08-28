@@ -63,5 +63,5 @@ nus{
         TD{"Ca̱d"}
         VG{"Burutic dhuɔ̱ɔ̱l be̱rgin"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

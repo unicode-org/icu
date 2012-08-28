@@ -56,7 +56,7 @@ is{
             "Austurrískur skildingur",
         }
         AUD{
-            "AU$",
+            "A$",
             "Ástralskur dalur",
         }
         AWG{
@@ -89,7 +89,7 @@ is{
         }
         BGN{
             "BGN",
-            "Lef, nýtt",
+            "Búlgarskt lít",
         }
         BHD{
             "BHD",
@@ -213,7 +213,7 @@ is{
         }
         DJF{
             "DJF",
-            "Djibouti Franc",
+            "Djíbútískur franki",
         }
         DKK{
             "DKK",
@@ -301,7 +301,7 @@ is{
         }
         GTQ{
             "GTQ",
-            "Guatemala Quetzal",
+            "Gvatemalskur kvesali",
         }
         GWE{
             "GWE",
@@ -317,7 +317,7 @@ is{
         }
         HNL{
             "HNL",
-            "Hoduras Lempira",
+            "Hondúrísk lempíra",
         }
         HRK{
             "HRK",
@@ -345,7 +345,7 @@ is{
         }
         ILS{
             "₪",
-            "Sikill",
+            "Nýr ísraelskur sikill",
         }
         INR{
             "₹",
@@ -437,7 +437,7 @@ is{
         }
         LTL{
             "LTL",
-            "Lít",
+            "Litháískt lít",
         }
         LTT{
             "LTT",
@@ -501,7 +501,7 @@ is{
         }
         MRO{
             "MRO",
-            "Mauritania Ouguiya",
+            "Máritönsk úgía",
         }
         MTL{
             "MTL",
@@ -543,13 +543,17 @@ is{
             "MZE",
             "Mósambískur skúti",
         }
+        MZN{
+            "MZN",
+            "Mósambískt metikal",
+        }
         NAD{
             "NAD",
             "Namibískur dalur",
         }
         NGN{
             "NGN",
-            "Nigerian Naira",
+            "Nígerísk næra",
         }
         NIO{
             "NIO",
@@ -618,6 +622,10 @@ is{
         ROL{
             "ROL",
             "Rúmenskt lei",
+        }
+        RON{
+            "RON",
+            "Rúmenskt leu",
         }
         RSD{
             "RSD",
@@ -695,9 +703,13 @@ is{
             "SRG",
             "Suriname Guilder",
         }
+        SSP{
+            "SSP",
+            "Suðursúdanskt pund",
+        }
         STD{
             "STD",
-            "Sao Tome and Principe Dobra",
+            "Saó Tóme og Prinsípe dóbra",
         }
         SUR{
             "SUR",
@@ -749,11 +761,11 @@ is{
         }
         TRL{
             "TRL",
-            "Tyrknesk líra",
+            "Tyrknesk líra (1922-2005)",
         }
         TRY{
             "TRY",
-            "Ný tyrknesk líra",
+            "Tyrknesk líra",
         }
         TTD{
             "TTD",
@@ -849,7 +861,7 @@ is{
         }
         XXX{
             "XXX",
-            "Óþekktur eða ógildur gjaldeyrir",
+            "Óþekktur gjaldmiðill",
         }
         YDD{
             "YDD",
@@ -881,10 +893,62 @@ is{
         }
     }
     CurrencyPlurals{
+        CZK{
+            one{"tékknesk króna"}
+            other{"tékkneskar krónur"}
+        }
+        DKK{
+            one{"dönsk króna"}
+            other{"danskar krónur"}
+        }
+        EUR{
+            one{"evra"}
+            other{"evrur"}
+        }
+        GTQ{
+            one{"gvatemalskur kvesali"}
+            other{"gvatemalskir kvesalar"}
+        }
+        ISK{
+            one{"íslensk króna"}
+            other{"íslenskar krónur"}
+        }
+        MRO{
+            one{"Máritönsk úgía"}
+            other{"máritanskar úgíur"}
+        }
+        MZN{
+            one{"Mósambískt metikal"}
+            other{"Mósambískt metikal"}
+        }
+        NOK{
+            one{"norsk króna"}
+            other{"norskar krónur"}
+        }
+        SEK{
+            one{"sænsk króna"}
+            other{"sænskar krónur"}
+        }
+        SSP{
+            one{"Suðursúdanskt pund"}
+            other{"Suðursúdanskt pund"}
+        }
+        THB{
+            one{"tælenskt bat"}
+            other{"tælensk böt"}
+        }
+        TRY{
+            one{"Tyrknesk líra"}
+            other{"Tyrknesk líra"}
+        }
         XXX{
-            one{"óþekktur eða ógildur gjaldeyrir"}
-            other{"óþekktur eða ógildur gjaldeyrir"}
+            one{"(óþekktur gjaldmiðill)"}
+            other{"(óþektur gjaldmiðill)"}
         }
     }
-    Version{"2.0.65.46"}
+    CurrencyUnitPatterns{
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+    }
+    Version{"2.0.75.99"}
 }

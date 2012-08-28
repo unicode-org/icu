@@ -24,9 +24,13 @@ mgh{
             }
         }
     }
-    Version{"2.0.64.50"}
+    Version{"2.0.75.53"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "wichishu",
+                "mchochil'l",
+            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -117,9 +121,6 @@ mgh{
                         "0"{"lel'lo"}
                         "1"{"me'llo"}
                     }
-                }
-                dayperiod{
-                    dn{"nihuku"}
                 }
                 era{
                     dn{"kal'lai"}

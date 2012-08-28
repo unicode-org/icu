@@ -16,7 +16,7 @@ yav{
             "kuansa wu angolá",
         }
         AUD{
-            "AU$",
+            "A$",
             "toláal wu ostalalí",
         }
         BHD{
@@ -104,5 +104,5 @@ yav{
             "́faláŋɛ u kɔmɔ́ɔl",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

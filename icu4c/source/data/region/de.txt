@@ -72,6 +72,7 @@ de{
         BM{"Bermuda"}
         BN{"Brunei Darussalam"}
         BO{"Bolivien"}
+        BQ{"Karibische Niederlande"}
         BR{"Brasilien"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -93,9 +94,9 @@ de{
         CO{"Kolumbien"}
         CP{"Clipperton-Insel"}
         CR{"Costa Rica"}
-        CS{"Serbien und Montenegro"}
         CU{"Kuba"}
         CV{"Kap Verde"}
+        CW{"Curaçao"}
         CX{"Weihnachtsinsel"}
         CY{"Zypern"}
         CZ{"Tschechische Republik"}
@@ -227,7 +228,7 @@ de{
         PK{"Pakistan"}
         PL{"Polen"}
         PM{"St. Pierre und Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Pitcairninseln"}
         PR{"Puerto Rico"}
         PS{"Palästinensische Autonomiegebiete"}
         PT{"Portugal"}
@@ -255,8 +256,10 @@ de{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Suriname"}
+        SS{"Südsudan"}
         ST{"São Tomé und Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syrien"}
         SZ{"Swasiland"}
         TA{"Tristan da Cunha"}
@@ -298,5 +301,5 @@ de{
         ZW{"Simbabwe"}
         ZZ{"Unbekannte Region"}
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.99"}
 }

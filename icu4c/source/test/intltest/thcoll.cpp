@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1999-2009, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -150,11 +150,9 @@ void CollationThaiTest::TestDictionary(void) {
         }
 
         if (lastWord.length() > 0) {
-            // line enabled for j2720 
-            doTest(coll, lastWord, word, Collator::LESS);
             int32_t result = coll->compare(lastWord, word);
 
-            if (result >= 0) {
+            if (result > 0) {
                 failed++;
                 if (MAX_FAILURES_TO_SHOW < 0 || failed <= MAX_FAILURES_TO_SHOW) {
                     UnicodeString str;
@@ -216,11 +214,11 @@ void CollationThaiTest::TestCornerCases(void) {
         "\\u0e01\\u0e32\\u0e01\\u0e49\\u0e32",   "<",    "\\u0e01\\u0e48\\u0e32\\u0e01\\u0e49\\u0e32",
 
         // Hyphens and other punctuation follow whitespace but come before letters
-        "\\u0e01\\u0e32",                        "<",    "\\u0e01\\u0e32-",
+        "\\u0e01\\u0e32",                        "=",    "\\u0e01\\u0e32-",
         "\\u0e01\\u0e32-",                       "<",    "\\u0e01\\u0e32\\u0e01\\u0e32",
 
         // Doubler follows an indentical word without the doubler
-        "\\u0e01\\u0e32",                        "<",    "\\u0e01\\u0e32\\u0e46",
+        "\\u0e01\\u0e32",                        "=",    "\\u0e01\\u0e32\\u0e46",
         "\\u0e01\\u0e32\\u0e46",                 "<",    "\\u0e01\\u0e32\\u0e01\\u0e32",
 
 

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/tr.xml
  */
 tr{
-    Version{"2.0.63.65"}
+    Version{"2.0.76.11"}
     collations{
         search{
             Sequence{
@@ -68,7 +68,7 @@ tr{
                 "&S<ş<<<Ş"
                 "&U<ü<<<Ü"
             }
-            Version{"21.0"}
+            Version{"22.0"}
         }
         standard{
             Sequence{
@@ -80,7 +80,7 @@ tr{
                 "&S<ş<<<Ş"
                 "&U<ü<<<Ü"
             }
-            Version{"21.0"}
+            Version{"22.0"}
         }
     }
 }

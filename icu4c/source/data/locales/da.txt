@@ -12,7 +12,6 @@
 da{
     AuxExemplarCharacters{"[á é è ê ë ü ä ö]"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z æ ø å]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å]"}
     ExemplarCharactersPunctuation{"[\- ‐ – , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] § @ * / \& # † ′ ″]"}
     LocaleScript{
@@ -26,42 +25,106 @@ da{
                 percentFormat{"#,##0 %"}
                 scientificFormat{"#E0"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 tusind"}
+                        other{"0 tusind"}
+                    }
+                    10000{
+                        one{"00 tusind"}
+                        other{"00 tusind"}
+                    }
+                    100000{
+                        one{"000 tusind"}
+                        other{"000 tusind"}
+                    }
+                    1000000{
+                        one{"0 million"}
+                        other{"0 millioner"}
+                    }
+                    10000000{
+                        one{"00 millioner"}
+                        other{"00 millioner"}
+                    }
+                    100000000{
+                        one{"000 millioner"}
+                        other{"000 millioner"}
+                    }
+                    1000000000{
+                        one{"0 milliard"}
+                        other{"0 milliarder"}
+                    }
+                    10000000000{
+                        one{"00 milliarder"}
+                        other{"00 milliarder"}
+                    }
+                    100000000000{
+                        one{"000 milliarder"}
+                        other{"000 milliarder"}
+                    }
+                    1000000000000{
+                        one{"0 billion"}
+                        other{"0 billioner"}
+                    }
+                    10000000000000{
+                        one{"00 billioner"}
+                        other{"00 billioner"}
+                    }
+                    100000000000000{
+                        one{"000 billioner"}
+                        other{"000 billioner"}
+                    }
+                }
+            }
             patternsShort{
                 decimalFormat{
                     1000{
+                        one{"0000"}
                         other{"0000"}
                     }
                     10000{
+                        one{"00000"}
                         other{"00000"}
                     }
                     100000{
+                        one{"000000"}
                         other{"000000"}
                     }
                     1000000{
-                        other{"0.0 mio"}
+                        one{"0 mio"}
+                        other{"0 mio"}
                     }
                     10000000{
+                        one{"00 mio"}
                         other{"00 mio"}
                     }
                     100000000{
+                        one{"000 mio"}
                         other{"000 mio"}
                     }
                     1000000000{
-                        other{"0.0 mia"}
+                        one{"0 mia"}
+                        other{"0 mia"}
                     }
                     10000000000{
+                        one{"00 mia"}
                         other{"00 mia"}
                     }
                     100000000000{
+                        one{"000 mia"}
                         other{"000 mia"}
                     }
                     1000000000000{
-                        other{"0.0 bill"}
+                        one{"0 bill"}
+                        other{"0 bill"}
                     }
                     10000000000000{
+                        one{"00 bill"}
                         other{"00 bill"}
                     }
                     100000000000000{
+                        one{"000 bill"}
                         other{"000 bill"}
                     }
                 }
@@ -80,7 +143,7 @@ da{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.76.4"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -105,7 +168,7 @@ da{
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}
                 M{"M"}
-                MEd{"E. d/M"}
+                MEd{"E d/M"}
                 MMM{"MMM"}
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E d. MMMM"}
@@ -118,9 +181,9 @@ da{
                 ms{"mm.ss"}
                 y{"y G"}
                 yM{"M/y G"}
-                yMEd{"E. d/M/y G"}
+                yMEd{"E d/M/y G"}
                 yMMM{"MMM y G"}
-                yMMMEd{"E. d. MMM y G"}
+                yMMMEd{"E d. MMM y G"}
                 yMMMd{"d. MMM y G"}
                 yMd{"d/M/y G"}
                 yQ{"Q y G"}
@@ -135,8 +198,8 @@ da{
         }
         gregorian{
             AmPmMarkers{
-                "f.m.",
-                "e.m.",
+                "AM",
+                "PM",
             }
             DateTimePatterns{
                 "HH.mm.ss zzzz",
@@ -154,12 +217,12 @@ da{
                 "{1} {0}",
             }
             availableFormats{
-                Ed{"E d."}
+                Ed{"E 'd'. d."}
                 H{"HH"}
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}
                 M{"M"}
-                MEd{"E. d/M"}
+                MEd{"E d/M"}
                 MMM{"MMM"}
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E d. MMMM"}
@@ -167,14 +230,15 @@ da{
                 MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d."}
+                h{"h a"}
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}
                 ms{"mm.ss"}
                 y{"y"}
                 yM{"M/y"}
-                yMEd{"E. d/M/y"}
+                yMEd{"E d/M/y"}
                 yMMM{"MMM y"}
-                yMMMEd{"E. d. MMM y"}
+                yMMMEd{"E d. MMM y"}
                 yMMMd{"d. MMM y"}
                 yMd{"d/M/y"}
                 yQ{"Q yyyy"}
@@ -189,13 +253,31 @@ da{
             dayNames{
                 format{
                     abbreviated{
-                        "søn",
-                        "man",
-                        "tir",
-                        "ons",
-                        "tor",
-                        "fre",
-                        "lør",
+                        "søn.",
+                        "man.",
+                        "tir.",
+                        "ons.",
+                        "tor.",
+                        "fre.",
+                        "lør.",
+                    }
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "O",
+                        "T",
+                        "F",
+                        "L",
+                    }
+                    short{
+                        "sø",
+                        "ma",
+                        "ti",
+                        "on",
+                        "to",
+                        "fr",
+                        "lø",
                     }
                     wide{
                         "søndag",
@@ -208,6 +290,15 @@ da{
                     }
                 }
                 stand-alone{
+                    abbreviated{
+                        "søn",
+                        "man",
+                        "tir",
+                        "ons",
+                        "tor",
+                        "fre",
+                        "lør",
+                    }
                     narrow{
                         "S",
                         "M",
@@ -216,6 +307,24 @@ da{
                         "T",
                         "F",
                         "L",
+                    }
+                    short{
+                        "sø",
+                        "ma",
+                        "ti",
+                        "on",
+                        "to",
+                        "fr",
+                        "lø",
+                    }
+                    wide{
+                        "søndag",
+                        "mandag",
+                        "tirsdag",
+                        "onsdag",
+                        "torsdag",
+                        "fredag",
+                        "lørdag",
                     }
                 }
             }
@@ -255,9 +364,9 @@ da{
                 month{
                     dn{"måned"}
                     relative{
-                        "-1"{"Sidste måned"}
-                        "0"{"Denne måned"}
-                        "1"{"Næste måned"}
+                        "-1"{"sidste måned"}
+                        "0"{"denne måned"}
+                        "1"{"næste måned"}
                     }
                 }
                 second{
@@ -266,9 +375,9 @@ da{
                 week{
                     dn{"uge"}
                     relative{
-                        "-1"{"Sidste uge"}
-                        "0"{"Denne uge"}
-                        "1"{"Næste uge"}
+                        "-1"{"sidste uge"}
+                        "0"{"denne uge"}
+                        "1"{"næste uge"}
                     }
                 }
                 weekday{
@@ -277,9 +386,9 @@ da{
                 year{
                     dn{"år"}
                     relative{
-                        "-1"{"Sidste år"}
-                        "0"{"I år"}
-                        "1"{"Næste år"}
+                        "-1"{"sidste år"}
+                        "0"{"i år"}
+                        "1"{"næste år"}
                     }
                 }
                 zone{
@@ -288,101 +397,97 @@ da{
             }
             intervalFormats{
                 H{
-                    H{"HH-HH"}
-                    a{"HH-HH"}
+                    H{"HH–HH"}
                 }
                 Hm{
-                    H{"HH.mm-HH.mm"}
-                    a{"HH.mm-HH.mm"}
-                    m{"HH.mm-HH.mm"}
+                    H{"HH.mm–HH.mm"}
+                    m{"HH.mm–HH.mm"}
                 }
                 Hmv{
-                    H{"HH.mm-HH.mm v"}
-                    a{"HH.mm-HH.mm v"}
-                    m{"HH.mm-HH.mm v"}
+                    H{"HH.mm–HH.mm v"}
+                    m{"HH.mm–HH.mm v"}
                 }
                 Hv{
-                    H{"HH-HH v"}
-                    a{"HH-HH v"}
+                    H{"HH–HH v"}
                 }
                 M{
-                    M{"M-M"}
+                    M{"M–M"}
                 }
                 MEd{
-                    M{"E dd/MM - E dd/MM"}
-                    d{"E dd/MM - E dd/MM"}
+                    M{"E dd/MM – E dd/MM"}
+                    d{"E dd/MM – E dd/MM"}
                 }
                 MMM{
-                    M{"MMM-MMM"}
+                    M{"MMM–MMM"}
                 }
                 MMMEd{
-                    M{"E 'den' d. MMM - E 'den' d. MMM"}
-                    d{"E 'den' d. - E 'den' d. MMM"}
+                    M{"E 'den' d. MMM – E 'den' d. MMM"}
+                    d{"E 'den' d. – E 'den' d. MMM"}
                 }
                 MMMd{
-                    M{"d. MMM - d. MMM"}
-                    d{"d.-d. MMM"}
+                    M{"d. MMM – d. MMM"}
+                    d{"d.–d. MMM"}
                 }
                 Md{
-                    M{"dd/MM - dd/MM"}
-                    d{"dd/MM - dd/MM"}
+                    M{"dd/MM – dd/MM"}
+                    d{"dd/MM – dd/MM"}
                 }
                 d{
-                    d{"d.-d."}
+                    d{"d.–d."}
                 }
-                fallback{"{0} - {1}"}
+                fallback{"{0} – {1}"}
                 h{
-                    a{"h a - h a"}
-                    h{"h-h a"}
+                    a{"h a – h a"}
+                    h{"h–h a"}
                 }
                 hm{
-                    a{"h.mm a - h.mm a"}
-                    h{"h.mm-h.mm a"}
-                    m{"h.mm-h.mm a"}
+                    a{"h.mm a – h.mm a"}
+                    h{"h.mm–h.mm a"}
+                    m{"h.mm–h.mm a"}
                 }
                 hmv{
-                    a{"h.mm a - h.mm a v"}
-                    h{"h.mm-h.mm a v"}
-                    m{"h.mm-h.mm a v"}
+                    a{"h.mm a – h.mm a v"}
+                    h{"h.mm–h.mm a v"}
+                    m{"h.mm–h.mm a v"}
                 }
                 hv{
-                    a{"h a - h a v"}
-                    h{"h-h a v"}
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y–y"}
                 }
                 yM{
-                    M{"MM/yyyy - MM/yyyy"}
-                    y{"MM/yyyy - MM/yyyy"}
+                    M{"MM/yyyy – MM/yyyy"}
+                    y{"MM/yyyy – MM/yyyy"}
                 }
                 yMEd{
-                    M{"E dd/MM/yy - E dd/MM/yy"}
-                    d{"E dd/MM/yy - E dd/MM/yy"}
-                    y{"E dd/MM/yy - E dd/MM/yy"}
+                    M{"E dd/MM/yy – E dd/MM/yy"}
+                    d{"E dd/MM/yy – E dd/MM/yy"}
+                    y{"E dd/MM/yy – E dd/MM/yy"}
                 }
                 yMMM{
-                    M{"MMM-MMM y"}
-                    y{"MMM y - MMM y"}
+                    M{"MMM–MMM y"}
+                    y{"MMM y – MMM y"}
                 }
                 yMMMEd{
-                    M{"E 'den' d. MMM - E 'den' d. MMM y"}
-                    d{"E 'den' d. - E 'den' d. MMM y"}
-                    y{"E 'den' d. MMM y - E 'den' d. MMM y"}
+                    M{"E 'den' d. MMM – E 'den' d. MMM y"}
+                    d{"E 'den' d. – E 'den' d. MMM y"}
+                    y{"E 'den' d. MMM y – E 'den' d. MMM y"}
                 }
                 yMMMM{
-                    M{"MMMM-MMMM y"}
-                    y{"MMMM y - MMMM y"}
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
-                    M{"d. MMM - d. MMM y"}
-                    d{"d.-d. MMM y"}
-                    y{"d. MMM y - d. MMM y"}
+                    M{"d. MMM – d. MMM y"}
+                    d{"d.–d. MMM y"}
+                    y{"d. MMM y – d. MMM y"}
                 }
                 yMd{
-                    M{"dd/MM/yy - dd/MM/yy"}
-                    d{"dd/MM/yy - dd/MM/yy"}
-                    y{"dd/MM/yy - dd/MM/yy"}
+                    M{"dd/MM/yy – dd/MM/yy"}
+                    d{"dd/MM/yy – dd/MM/yy"}
+                    y{"dd/MM/yy – dd/MM/yy"}
                 }
             }
             monthNames{
@@ -400,6 +505,20 @@ da{
                         "okt.",
                         "nov.",
                         "dec.",
+                    }
+                    narrow{
+                        "J",
+                        "F",
+                        "M",
+                        "A",
+                        "M",
+                        "J",
+                        "J",
+                        "A",
+                        "S",
+                        "O",
+                        "N",
+                        "D",
                     }
                     wide{
                         "januar",
@@ -445,10 +564,44 @@ da{
                         "N",
                         "D",
                     }
+                    wide{
+                        "januar",
+                        "februar",
+                        "marts",
+                        "april",
+                        "maj",
+                        "juni",
+                        "juli",
+                        "august",
+                        "september",
+                        "oktober",
+                        "november",
+                        "december",
+                    }
                 }
             }
             quarters{
                 format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
+                    }
+                }
+                stand-alone{
                     abbreviated{
                         "K1",
                         "K2",
@@ -492,7 +645,7 @@ da{
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}
                 M{"M"}
-                MEd{"E. d/M"}
+                MEd{"E d/M"}
                 MMM{"MMM"}
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E d. MMMM"}
@@ -508,9 +661,9 @@ da{
                 yyQ{"Q. 'kvartal' y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y G"}
-                yyyyMEd{"E. d/M/y G"}
+                yyyyMEd{"E d/M/y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E. d. MMM y G"}
+                yyyyMMMEd{"E d. MMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d/M/y G"}
                 yyyyQ{"Q y G"}
@@ -540,7 +693,7 @@ da{
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}
                 M{"M"}
-                MEd{"E. d/M"}
+                MEd{"E d/M"}
                 MMM{"MMM"}
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E d. MMMM"}
@@ -557,10 +710,10 @@ da{
                 yyQ{"Q. 'kvartal' y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
-                yyyyMEd{"E. d/M/y GGGGG"}
+                yyyyMEd{"E d/M/y GGGGG"}
                 yyyyMM{"MM/y GGGGG"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E. d. MMM y G"}
+                yyyyMMMEd{"E d. MMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
                 yyyyQ{"Q y G"}
@@ -590,7 +743,7 @@ da{
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}
                 M{"M"}
-                MEd{"E. d/M"}
+                MEd{"E d/M"}
                 MMM{"MMM"}
                 MMMEd{"E d. MMM"}
                 MMMMEd{"E d. MMMM"}
@@ -607,10 +760,10 @@ da{
                 yyQ{"Q. 'kvartal' y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
-                yyyyMEd{"E. d/M/y GGGGG"}
+                yyyyMEd{"E d/M/y GGGGG"}
                 yyyyMM{"MM/y GGGGG"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E. d. MMM y G"}
+                yyyyMMMEd{"E d. MMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
                 yyyyQ{"Q y G"}
@@ -619,15 +772,17 @@ da{
         }
     }
     delimiters{
-        alternateQuotationEnd{"‹"}
-        alternateQuotationStart{"›"}
-        quotationEnd{"«"}
-        quotationStart{"»"}
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
     }
     listPattern{
         standard{
             2{"{0} og {1}"}
             end{"{0} og {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
@@ -641,13 +796,11 @@ da{
             other{"{0} dage"}
         }
         day-future{
-            0{"Om 0 dage"}
-            1{"Om 1 dag"}
-            other{"Om {0} dage"}
+            one{"om {0} dag"}
+            other{"om {0} dage"}
         }
         day-past{
-            0{"0 dage siden"}
-            1{"1 dag siden"}
+            one{"{0} dag siden"}
             other{"{0} dage siden"}
         }
         hour{
@@ -655,13 +808,11 @@ da{
             other{"{0} timer"}
         }
         hour-future{
-            0{"Om 0 timer"}
-            1{"Om 1 time"}
-            other{"Om {0} timer"}
+            one{"om {0} time"}
+            other{"om {0} timer"}
         }
         hour-past{
-            0{"0 timer siden"}
-            1{"1 time siden"}
+            one{"{0} time siden"}
             other{"{0} timer siden"}
         }
         minute{
@@ -669,13 +820,11 @@ da{
             other{"{0} minutter"}
         }
         minute-future{
-            0{"Om 0 minutter"}
-            1{"Om 1 minut"}
-            other{"Om {0} minutter"}
+            one{"om {0} minut"}
+            other{"om {0} minutter"}
         }
         minute-past{
-            0{"0 minutter siden"}
-            1{"1 minut siden"}
+            one{"{0} minut siden"}
             other{"{0} minutter siden"}
         }
         month{
@@ -683,13 +832,11 @@ da{
             other{"{0} måneder"}
         }
         month-future{
-            0{"Om 0 måneder"}
-            1{"Om 1 måned"}
-            other{"Om {0} måneder"}
+            one{"om {0} måned"}
+            other{"om {0} måneder"}
         }
         month-past{
-            0{"0 måneder siden"}
-            1{"1 måned siden"}
+            one{"{0} måned siden"}
             other{"{0} måneder siden"}
         }
         second{
@@ -697,13 +844,11 @@ da{
             other{"{0} sekunder"}
         }
         second-future{
-            0{"Om 0 sekunder"}
-            1{"Om 1 sekund"}
-            other{"Om {0} sekunder"}
+            one{"om {0} sekund"}
+            other{"om {0} sekunder"}
         }
         second-past{
-            0{"0 sekunder siden"}
-            1{"1 sekund siden"}
+            one{"{0} sekund siden"}
             other{"{0} sekunder siden"}
         }
         week{
@@ -711,13 +856,11 @@ da{
             other{"{0} uger"}
         }
         week-future{
-            0{"Om 0 uger"}
-            1{"om 1 uge"}
-            other{"Om {0} uger"}
+            one{"om {0} uge"}
+            other{"om {0} uger"}
         }
         week-past{
-            0{"0 uger siden"}
-            1{"1 uge siden"}
+            one{"{0} uge siden"}
             other{"{0} uger siden"}
         }
         year{
@@ -725,13 +868,11 @@ da{
             other{"{0} år"}
         }
         year-future{
-            0{"Om 0 år"}
-            1{"Om 1 år"}
-            other{"Om {0} år"}
+            one{"om {0} år"}
+            other{"om {0} år"}
         }
         year-past{
-            0{"0 år siden"}
-            1{"1 år siden"}
+            one{"{0} år siden"}
             other{"{0} år siden"}
         }
     }

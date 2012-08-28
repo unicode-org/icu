@@ -72,7 +72,7 @@ az{
             "Avstriya şilingi",
         }
         AUD{
-            "AU$",
+            "A$",
             "Avstraliya dolları",
         }
         AWG{
@@ -1736,5 +1736,5 @@ az{
             other{"Zimbabve dolları (1980-2008)"}
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

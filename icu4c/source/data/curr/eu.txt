@@ -40,7 +40,7 @@ eu{
             "Argentinako pesoa",
         }
         AUD{
-            "AU$",
+            "A$",
             "Australiako dolarra",
         }
         AWG{
@@ -89,7 +89,7 @@ eu{
         }
         BRL{
             "R$",
-            "Brasiliako erreala",
+            "Brasilgo erreala",
         }
         BSD{
             "BSD",
@@ -183,7 +183,7 @@ eu{
             "₧",
             "ESP",
             {
-                "¤ #,##0;-¤ #,##0",
+                "¤ #,##0.00",
                 ",",
                 ".",
             }
@@ -412,6 +412,10 @@ eu{
             "MYR",
             "Malaysiako ringgita",
         }
+        MZN{
+            "MZN",
+            "Metical (Mozambike)",
+        }
         NAD{
             "NAD",
             "Namibiako dolarra",
@@ -472,6 +476,10 @@ eu{
             "QAR",
             "Qatareko riala",
         }
+        RON{
+            "RON",
+            "Leu (Errumania)",
+        }
         RSD{
             "RSD",
             "Serbiako dinarra",
@@ -523,6 +531,10 @@ eu{
         SRD{
             "SRD",
             "Surinameko dolarra",
+        }
+        SSP{
+            "SSP",
+            "Hego Sudango libera",
         }
         STD{
             "STD",
@@ -641,9 +653,155 @@ eu{
             "Zambiako kwacha",
         }
     }
+    CurrencyPlurals{
+        ARS{
+            one{"Argentinako peso"}
+            other{"Argentinako peso"}
+        }
+        AWG{
+            one{"Arubeko florin"}
+            other{"Arubeko florin"}
+        }
+        BBD{
+            one{"Barbadosetako dolar"}
+            other{"Barbadosetako dolar"}
+        }
+        BMD{
+            one{"Bermudetako dolar"}
+            other{"Bermudetako dolar"}
+        }
+        BOB{
+            one{"Boliviako boliviano"}
+            other{"Boliviako boliviano"}
+        }
+        BRL{
+            one{"Brasilgo erreal"}
+            other{"Brasilgo erreal"}
+        }
+        BSD{
+            one{"Bahametako dolar"}
+            other{"Bahametako dolar"}
+        }
+        BZD{
+            one{"Belizeko dolar"}
+            other{"Belizeko dolar"}
+        }
+        CAD{
+            one{"Kanadako dolar"}
+            other{"Kanadako dolar"}
+        }
+        CLP{
+            one{"Txileko peso"}
+            other{"Txileko peso"}
+        }
+        COP{
+            one{"Kolonbiako peso"}
+            other{"Kolonbiako peso"}
+        }
+        CRC{
+            one{"Costa Ricako colon"}
+            other{"Costa Ricako colon"}
+        }
+        CUC{
+            one{"Kubako peso trukakor"}
+            other{"Kubako peso trukakor"}
+        }
+        CUP{
+            one{"Kubako peso"}
+            other{"Kubako peso"}
+        }
+        CVE{
+            one{"Cabo Verdeko ezkutu"}
+            other{"Cabo Verdeko ezkutu"}
+        }
+        DOP{
+            one{"Dominikar Errepublikako peso"}
+            other{"Dominikar Errepublikako peso"}
+        }
+        DZD{
+            one{"Algeriako dinar"}
+            other{"Algeriako dinar"}
+        }
+        GTQ{
+            one{"Guatemalako quetzal"}
+            other{"Guatemalako quetzal"}
+        }
+        GYD{
+            one{"Guyanako dolar"}
+            other{"Guyanako dolar"}
+        }
+        HTG{
+            one{"Haitiko gourde"}
+            other{"Haitiko gourde"}
+        }
+        JMD{
+            one{"Jamaikako dolar"}
+            other{"Jamaikako dolar"}
+        }
+        KYD{
+            one{"Kaiman uharteetako dolar"}
+            other{"Kaiman uharteetako dolar"}
+        }
+        LYD{
+            one{"Libiako dinar"}
+            other{"Libiako dinar"}
+        }
+        MAD{
+            one{"Marokoko dirham"}
+            other{"Marokoko dirham"}
+        }
+        MXN{
+            one{"Mexikoko peso"}
+            other{"Mexikoko peso"}
+        }
+        PEN{
+            one{"Peruko sol berri"}
+            other{"Peruko sol berri"}
+        }
+        PYG{
+            one{"Paraguaiko guarani"}
+            other{"Paraguaiko guarani"}
+        }
+        SRD{
+            one{"Surinameko dolar"}
+            other{"Surinameko dolar"}
+        }
+        SSP{
+            one{"Hego Sudango libera"}
+            other{"Hego Sudango libera"}
+        }
+        TND{
+            one{"Tunisiako dinar"}
+            other{"Tunisiako dinar"}
+        }
+        TTD{
+            one{"Trinidadeko eta Tobagoko dolar"}
+            other{"Trinidadeko eta Tobagoko dolar"}
+        }
+        USD{
+            one{"AEBetako dolar"}
+            other{"AEBetako dolar"}
+        }
+        UYU{
+            one{"Uruguaiko peso"}
+            other{"Uruguaiko peso"}
+        }
+        VEF{
+            one{"Venezuelako bolivar"}
+            other{"Venezuelako bolivar"}
+        }
+        XCD{
+            one{"Karibe ekialdeko dolar"}
+            other{"Karibe ekialdeko dolar"}
+        }
+        XOF{
+            one{"Afrika ekialdeko franko BCEAO"}
+            other{"Afrika ekialdeko franko BCEAO"}
+        }
+    }
     CurrencyUnitPatterns{
         one{"{0}{1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

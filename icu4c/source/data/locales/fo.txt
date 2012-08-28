@@ -20,6 +20,7 @@ fo{
         latn{
             patterns{
                 currencyFormat{"¤#,##0.00;¤-#,##0.00"}
+                percentFormat{"#,##0 %"}
             }
             symbols{
                 decimal{","}
@@ -27,7 +28,7 @@ fo{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.94"}
     calendar{
         gregorian{
             DateTimePatterns{

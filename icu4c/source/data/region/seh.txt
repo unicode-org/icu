@@ -56,7 +56,6 @@ seh{
         CN{"China"}
         CO{"Colômbia"}
         CR{"Costa Rica"}
-        CS{"Sérvia e Montenegro"}
         CU{"Cuba"}
         CV{"Cabo Verde"}
         CY{"Chipre"}
@@ -237,5 +236,5 @@ seh{
         ZM{"Zâmbia"}
         ZW{"Zimbábue"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.79"}
 }

@@ -23,7 +23,7 @@ dav{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.79"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -142,9 +142,6 @@ dav{
                 }
                 week{
                     dn{"Juma"}
-                }
-                weekday{
-                    dn{"Ituku"}
                 }
                 year{
                     dn{"Mwaka"}

@@ -11,7 +11,7 @@
  */
 is{
     Countries{
-        001{"heimur"}
+        001{"Heimurinn"}
         002{"Afríka"}
         003{"Norður-Ameríka"}
         005{"Suður-Ameríka"}
@@ -26,10 +26,10 @@ is{
         021{"Ameríka norðan Mexikó"}
         029{"Karabíska hafið"}
         030{"Austur-Asía"}
-        034{"suðurhluti Asíu"}
+        034{"Suður-Asía"}
         035{"Suðaustur-Asía"}
         039{"Suður-Evrópa"}
-        053{"Ástralía og Nýja-Sjáland"}
+        053{"Ástralasía"}
         054{"Melanesía"}
         057{"Míkrónesía"}
         061{"Pólýnesía"}
@@ -72,6 +72,7 @@ is{
         BM{"Bermúdaeyjar"}
         BN{"Brúnei"}
         BO{"Bólivía"}
+        BQ{"Karíbahafshluti Hollands"}
         BR{"Brasilía"}
         BS{"Bahamaeyjar"}
         BT{"Bútan"}
@@ -81,9 +82,9 @@ is{
         BZ{"Belís"}
         CA{"Kanada"}
         CC{"Kókoseyjar"}
-        CD{"Austur-Kongó"}
+        CD{"Kongó-Kinshasa"}
         CF{"Mið-Afríkulýðveldið"}
-        CG{"Vestur-Kongó"}
+        CG{"Kongó-Brazzaville"}
         CH{"Sviss"}
         CI{"Fílabeinsströndin"}
         CK{"Cookseyjar"}
@@ -93,9 +94,9 @@ is{
         CO{"Kólumbía"}
         CP{"Clipperton-eyja"}
         CR{"Kostaríka"}
-        CS{"Serbía og Svartfjallaland"}
         CU{"Kúba"}
         CV{"Grænhöfðaeyjar"}
+        CW{"Curacao"}
         CX{"Jólaey"}
         CY{"Kýpur"}
         CZ{"Tékkland"}
@@ -140,7 +141,7 @@ is{
         GU{"Gvam"}
         GW{"Gínea-Bissá"}
         GY{"Gvæjana"}
-        HK{"Hong Kong"}
+        HK{"Sjálfstjórnarsvæðið Hong Kong"}
         HM{"Heard og McDonaldseyjar"}
         HN{"Hondúras"}
         HR{"Króatía"}
@@ -192,9 +193,9 @@ is{
         MH{"Marshalleyjar"}
         MK{"Makedónía"}
         ML{"Malí"}
-        MM{"Mjanmar"}
+        MM{"Mjanmar [Búrma]"}
         MN{"Mongólía"}
-        MO{"Makaó"}
+        MO{"Sjálfstjórnarsvæðið Makaó"}
         MP{"Norður-Maríanaeyjar"}
         MQ{"Martiník"}
         MR{"Máritanía"}
@@ -227,9 +228,9 @@ is{
         PK{"Pakistan"}
         PL{"Pólland"}
         PM{"Sankti Pierre og Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Pitcairneyjar"}
         PR{"Púertó Ríkó"}
-        PS{"Palestína"}
+        PS{"Heimastjórnarsvæði Palestínumanna"}
         PT{"Portúgal"}
         PW{"Palá"}
         PY{"Paragvæ"}
@@ -255,8 +256,10 @@ is{
         SN{"Senegal"}
         SO{"Sómalía"}
         SR{"Súrínam"}
+        SS{"Suður-Súdan"}
         ST{"Saó Tóme og Prinsípe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Sýrland"}
         SZ{"Svasíland"}
         TA{"Tristan da Cunha"}
@@ -267,7 +270,7 @@ is{
         TH{"Taíland"}
         TJ{"Tadsjikistan"}
         TK{"Tókelá"}
-        TL{"Austur-Tímor"}
+        TL{"Tímor-Leste"}
         TM{"Túrkmenistan"}
         TN{"Túnis"}
         TO{"Tonga"}
@@ -296,7 +299,7 @@ is{
         ZA{"Suður-Afríka"}
         ZM{"Sambía"}
         ZW{"Simbabve"}
-        ZZ{"Óþekkt eða ógilt svæði"}
+        ZZ{"Óþekkt svæði"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

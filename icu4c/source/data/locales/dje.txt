@@ -29,7 +29,7 @@ dje{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.79"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -147,9 +147,6 @@ dje{
                 }
                 week{
                     dn{"Hebu"}
-                }
-                weekday{
-                    dn{"Zaari"}
                 }
                 year{
                     dn{"Jiiri"}

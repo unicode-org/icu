@@ -23,7 +23,7 @@ pa_Arab{
         default{"arabext"}
         native{"arabext"}
     }
-    Version{"2.0.67.8"}
+    Version{"2.0.74.65"}
     calendar{
         gregorian{
             DateTimePatterns{

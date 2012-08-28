@@ -23,7 +23,7 @@ naq{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.80"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -115,9 +115,7 @@ naq{
                 day{
                     dn{"Tsees"}
                     relative{
-                        "-1"{"ǁAri"}
                         "0"{"Neetsee"}
-                        "1"{"ǁAri"}
                     }
                 }
                 dayperiod{

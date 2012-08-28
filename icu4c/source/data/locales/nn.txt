@@ -12,7 +12,6 @@
 nn{
     AuxExemplarCharacters{"[á ǎ č ç đ è ê ń ñ ŋ š ŧ ü ž ä ö]"}
     ExemplarCharacters{"[a à b c d e é f g h i j k l m n o ó ò ô p q r s t u v w x y z æ ø å]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å]"}
     LocaleScript{
         "Latn",
@@ -39,7 +38,7 @@ nn{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -69,7 +68,7 @@ nn{
                 MMMEd{"E d. MMM"}
                 MMMMd{"d. MMMM"}
                 MMMd{"d. MMM"}
-                MMdd{"dd.MM"}
+                MMdd{"d.M."}
                 Md{"d.M."}
                 d{"d."}
                 hm{"h:mm a"}

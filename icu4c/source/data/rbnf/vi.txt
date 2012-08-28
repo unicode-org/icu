@@ -66,5 +66,5 @@ vi{
             "5: th\u1EE9 =%spellout-cardinal=;",
         }
     }
-    Version{"2.0.63.74"}
+    Version{"2.0.73.63"}
 }

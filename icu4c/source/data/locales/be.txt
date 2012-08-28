@@ -12,7 +12,6 @@
 be{
     AuxExemplarCharacters{"[]"}
     ExemplarCharacters{"[а б в г д {дж} {дз} е ё ж з і й к л м н о п р с т у ў ф х ц ч ш ы ь э ю я]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[А Б В Г Д Е Ж З І Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Ы Э Ю Я]"}
     LocaleScript{
         "Cyrl",
@@ -31,7 +30,7 @@ be{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.94"}
     calendar{
         buddhist{
             DateTimePatterns{

@@ -56,7 +56,6 @@ lg{
         CN{"Cayina"}
         CO{"Kolombya"}
         CR{"Kosita Rika"}
-        CS{"Seribya ne Monteneguro"}
         CU{"Cuba"}
         CV{"Bizinga by'e Kepu Veredi"}
         CY{"Sipuriya"}
@@ -238,5 +237,5 @@ lg{
         ZM{"Zambya"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

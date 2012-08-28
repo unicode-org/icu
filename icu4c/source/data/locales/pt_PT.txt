@@ -13,68 +13,133 @@ pt_PT{
             patterns{
                 currencyFormat{"#,##0.00 ¤"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 mil"}
+                        other{"0 mil"}
+                    }
+                    10000{
+                        one{"00 mil"}
+                        other{"00 mil"}
+                    }
+                    100000{
+                        one{"000 mil"}
+                        other{"000 mil"}
+                    }
+                    1000000{
+                        one{"0 milhão"}
+                        other{"0 milhões"}
+                    }
+                    10000000{
+                        one{"00 milhões"}
+                        other{"00 milhões"}
+                    }
+                    100000000{
+                        one{"000 milhões"}
+                        other{"000 milhões"}
+                    }
+                    1000000000{
+                        one{"0 mil milhões"}
+                        other{"0 mil milhões"}
+                    }
+                    10000000000{
+                        one{"00 mil milhões"}
+                        other{"00 mil milhões"}
+                    }
+                    100000000000{
+                        one{"000 mil milhões"}
+                        other{"000 mil milhões"}
+                    }
+                    1000000000000{
+                        one{"0 biliões"}
+                        other{"0 biliões"}
+                    }
+                    10000000000000{
+                        one{"00 biliões"}
+                        other{"00 biliões"}
+                    }
+                    100000000000000{
+                        one{"000 biliões"}
+                        other{"000 biliões"}
+                    }
+                }
+            }
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0000"}
+                        one{"0 mil"}
+                        other{"0 mil"}
                     }
                     10000{
-                        other{"00000"}
+                        one{"00 mil"}
+                        other{"00 mil"}
                     }
                     100000{
-                        other{"000000"}
+                        one{"000 mil"}
+                        other{"000 mil"}
                     }
                     1000000{
-                        other{"0.0 Mi"}
+                        one{"0 mi"}
+                        other{"0 mi"}
                     }
                     10000000{
-                        other{"00 Mi"}
+                        one{"00 mi"}
+                        other{"00 mi"}
                     }
                     100000000{
-                        other{"000 Mi"}
+                        one{"000 mi"}
+                        other{"000 mi"}
                     }
                     1000000000{
-                        other{"0.0 MM"}
+                        one{"0 MM"}
+                        other{"0 MM"}
                     }
                     10000000000{
+                        one{"00 MM"}
                         other{"00 MM"}
                     }
                     100000000000{
+                        one{"000 MM"}
                         other{"000 MM"}
                     }
                     1000000000000{
-                        other{"0.0 Bi"}
+                        one{"0 Bi"}
+                        other{"0 Bi"}
                     }
                     10000000000000{
+                        one{"00 Bi"}
                         other{"00 Bi"}
                     }
                     100000000000000{
+                        one{"000 Bi"}
                         other{"000 Bi"}
                     }
                 }
             }
             symbols{
+                decimal{","}
                 group{" "}
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
                 "dd/MM/yyyy G",
                 "d/M/y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1} às {0}",
+                "{1} às {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 yQ{"QQQ 'de' y G"}
@@ -84,48 +149,87 @@ pt_PT{
         }
         gregorian{
             AmPmMarkers{
-                "a.m.",
-                "p.m.",
+                "AM",
+                "PM",
             }
             DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
                 "dd/MM/yyyy",
                 "dd/MM/yy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1} às {0}",
+                "{1} às {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
+                Ed{"E, d"}
+                H{"HH"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, dd/MM"}
+                MMM{"LLL"}
                 MMMEd{"E, d/MM"}
                 MMMMEd{"E, d 'de' MMMM"}
                 MMMMd{"d 'de' MMMM"}
                 MMMd{"d/MM"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm:ss"}
+                y{"y"}
+                yM{"MM/yyyy"}
+                yMEd{"E, dd/MM/yyyy"}
                 yMMM{"MM/y"}
                 yMMMEd{"E, d/MM/y"}
                 yMMMM{"MMMM 'de' y"}
                 yMMMMEd{"E, d 'de' MMMM 'de' y"}
                 yMMMMd{"d 'de' MMMM 'de' y"}
                 yMMMd{"d/MM/y"}
+                yMd{"dd/MM/yyyy"}
                 yQ{"QQQ 'de' yyyy"}
                 yQQQ{"QQQ 'de' y"}
+                yyMM{"MM/yy"}
                 yyMMM{"MM/yy"}
                 yyMMMEd{"E, d/MM/yy"}
                 yyMMMd{"d/MM/yy"}
                 yyQ{"QQQ 'de' yy"}
+                yyyyMM{"MM/yyyy"}
+                yyyyMMM{"MMM 'de' y"}
             }
             dayNames{
                 format{
+                    short{
+                        "Do",
+                        "Sg",
+                        "Te",
+                        "Qu",
+                        "Qi",
+                        "Sx",
+                        "Sb",
+                    }
+                    wide{
+                        "Domingo",
+                        "Segunda-feira",
+                        "Terça-feira",
+                        "Quarta-feira",
+                        "Quinta-feira",
+                        "Sexta-feira",
+                        "Sábado",
+                    }
+                }
+                stand-alone{
                     wide{
                         "Domingo",
                         "Segunda-feira",
@@ -138,44 +242,57 @@ pt_PT{
                 }
             }
             fields{
-                month{
-                    relative{
-                        "-1"{"Último mês"}
-                    }
-                }
-                week{
-                    relative{
-                        "-1"{"Última semana"}
-                    }
-                }
-                year{
-                    relative{
-                        "-1"{"Último ano"}
-                    }
+                zone{
+                    dn{"Fuso horário"}
                 }
             }
             intervalFormats{
                 H{
-                    a{"H-H"}
+                    H{"HH'h' - HH'h'"}
                 }
                 Hm{
                     H{"HH:mm–HH:mm"}
-                    a{"H:mm–H:mm"}
-                    m{"H:mm–H:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
-                    H{"H:mm–H:mm v"}
-                    a{"HH:mm–HH:mm v"}
+                    H{"HH:mm–HH:mm v"}
                     m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH - HH v"}
+                }
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, dd/MM - E, dd/MM"}
+                    d{"E, dd/MM - E, dd/MM"}
                 }
                 MMM{
                     M{"MMM-MMM"}
                 }
+                MMMEd{
+                    M{"E, d 'de' MMM - E, d 'de' MMM"}
+                    d{"E, d - E, d 'de' MMM"}
+                }
+                MMMd{
+                    M{"d 'de' MMM - d 'de' MMM"}
+                    d{"d-d 'de' MMM"}
+                }
+                Md{
+                    M{"dd/MM - dd/MM"}
+                    d{"dd/MM - dd/MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
                 h{
                     a{"h a - h a"}
                     h{"h-h a"}
                 }
                 hm{
+                    a{"h:mm a – h:mm a"}
                     h{"h:mm - h:mm a"}
                     m{"h:mm–h:mm a"}
                 }
@@ -184,15 +301,78 @@ pt_PT{
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
                 }
+                hv{
+                    a{"h a - h a v"}
+                    h{"h - h a v"}
+                }
                 y{
                     y{"y-y"}
                 }
+                yM{
+                    M{"MM/yy - MM/yy"}
+                    y{"MM/yy - MM/yy"}
+                }
+                yMEd{
+                    M{"E, dd/MM/yy - E, dd/MM/yy"}
+                    d{"E, dd/MM/yy - E, dd/MM/yy"}
+                    y{"E, dd/MM/yy - E, dd/MM/yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM 'de' y"}
+                    y{"MMM 'de' y - MMM 'de' y"}
+                }
+                yMMMEd{
+                    M{"E, d 'de' MMM - E, d 'de' MMM 'de' y"}
+                    d{"E, d - E, d 'de' MMM 'de' y"}
+                    y{"E, d 'de' MMM 'de' y - E, d 'de' MMM 'de' y"}
+                }
                 yMMMM{
-                    y{"MMMM 'de' y – MMMM 'de' y"}
+                    M{"MMMM-MMMM 'de' y"}
+                    y{"MMMM 'de' y - MMMM 'de' y"}
+                }
+                yMMMd{
+                    M{"d 'de' MMM - d 'de' MMM 'de' y"}
+                    d{"d-d 'de' MMM 'de' y"}
+                    y{"d 'de' MMM 'de' y - d 'de' MMM 'de' y"}
+                }
+                yMd{
+                    M{"dd/MM/yy - dd/MM/yy"}
+                    d{"dd/MM/yy - dd/MM/yy"}
+                    y{"dd/MM/yy - dd/MM/yy"}
                 }
             }
             monthNames{
                 format{
+                    abbreviated{
+                        "Jan",
+                        "Fev",
+                        "Mar",
+                        "Abr",
+                        "Mai",
+                        "Jun",
+                        "Jul",
+                        "Ago",
+                        "Set",
+                        "Out",
+                        "Nov",
+                        "Dez",
+                    }
+                    wide{
+                        "Janeiro",
+                        "Fevereiro",
+                        "Março",
+                        "Abril",
+                        "Maio",
+                        "Junho",
+                        "Julho",
+                        "Agosto",
+                        "Setembro",
+                        "Outubro",
+                        "Novembro",
+                        "Dezembro",
+                    }
+                }
+                stand-alone{
                     abbreviated{
                         "Jan",
                         "Fev",
@@ -236,19 +416,19 @@ pt_PT{
         }
         islamic{
             DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
                 "dd/MM/yyyy G",
                 "d/M/y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1} às {0}",
+                "{1} às {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 yQ{"QQQ 'de' y G"}
@@ -258,8 +438,8 @@ pt_PT{
         }
         japanese{
             DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
@@ -280,19 +460,19 @@ pt_PT{
         }
         roc{
             DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
                 "dd/MM/yyyy G",
                 "d/M/y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1} às {0}",
+                "{1} às {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 yQ{"QQQ 'de' y G"}
@@ -308,7 +488,20 @@ pt_PT{
         quotationStart{"«"}
     }
     measurementSystemNames{
+        UK{"Reino Unido"}
         US{"Estados Unidos"}
         metric{"Métrico"}
+    }
+    units{
+        second{
+            one{"{0} segundo"}
+            other{"{0} segundos"}
+        }
+    }
+    unitsShort{
+        second{
+            one{"{0} s"}
+            other{"{0} s"}
+        }
     }
 }

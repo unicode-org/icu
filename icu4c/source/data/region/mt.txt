@@ -88,7 +88,6 @@ mt{
         CN{"Ċina"}
         CO{"Kolumbja"}
         CR{"Kosta Rika"}
-        CS{"Serbja u Montenegro"}
         CU{"Kuba"}
         CV{"Kape Verde"}
         CX{"Christmas Island"}
@@ -283,5 +282,5 @@ mt{
         ZW{"Żimbabwe"}
         ZZ{"Reġjun Mhux Magħruf jew Mhux Validu"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

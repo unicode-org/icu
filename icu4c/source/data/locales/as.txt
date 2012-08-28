@@ -20,7 +20,7 @@ as{
         "Beng",
     }
     NumberElements{
-        default{"latn"}
+        default{"beng"}
         latn{
             patterns{
                 currencyFormat{"¤ #,##,##0.00"}
@@ -30,7 +30,7 @@ as{
         }
         native{"beng"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
     calendar{
         gregorian{
             AmPmMarkers{

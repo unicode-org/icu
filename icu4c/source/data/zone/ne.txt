@@ -10,19 +10,172 @@
  *  ICU <specials> source: <path>/xml/main/ne.xml
  */
 ne{
-    Version{"2.0.64.72"}
+    Version{"2.0.75.99"}
     zoneStrings{
+        "Africa:Abidjan"{
+            ec{"अविड्जान"}
+        }
+        "Africa:Accra"{
+            ec{"अक्रा"}
+        }
+        "Africa:Addis_Ababa"{
+            ec{"एड्डिस आबाबा"}
+        }
+        "Africa:Algiers"{
+            ec{"अल्जियर्स"}
+        }
+        "Africa:Asmera"{
+            ec{"आस्मारा"}
+        }
+        "Africa:Bamako"{
+            ec{"बोमाको"}
+        }
+        "Africa:Bangui"{
+            ec{"बाङ्गुवी"}
+        }
+        "Africa:Banjul"{
+            ec{"बन्जुल"}
+        }
+        "Africa:Bissau"{
+            ec{"बिसाउ"}
+        }
+        "Africa:Blantyre"{
+            ec{"ब्लान्टायर"}
+        }
+        "Africa:Brazzaville"{
+            ec{"ब्राजाभिल्ले"}
+        }
+        "Africa:Bujumbura"{
+            ec{"बुजुम्बुरा"}
+        }
+        "Africa:Cairo"{
+            ec{"काइरो"}
+        }
+        "Africa:Casablanca"{
+            ec{"कासाब्लान्का"}
+        }
         "Africa:Ceuta"{
             ec{"सेउटा"}
+        }
+        "Africa:Conakry"{
+            ec{"कोनाक्री"}
+        }
+        "Africa:Dakar"{
+            ec{"डाकार"}
+        }
+        "Africa:Dar_es_Salaam"{
+            ec{"डार एस् सलाम"}
+        }
+        "Africa:Djibouti"{
+            ec{"जिबौंटी"}
+        }
+        "Africa:Douala"{
+            ec{"डोउआला"}
+        }
+        "Africa:El_Aaiun"{
+            ec{"एल् आइयुन"}
+        }
+        "Africa:Freetown"{
+            ec{"फ्रिटाउन"}
+        }
+        "Africa:Gaborone"{
+            ec{"गावोरोन"}
+        }
+        "Africa:Harare"{
+            ec{"हरारे"}
+        }
+        "Africa:Johannesburg"{
+            ec{"जोहानेसवर्ग"}
+        }
+        "Africa:Kampala"{
+            ec{"काम्पाला"}
+        }
+        "Africa:Khartoum"{
+            ec{"खार्टउम"}
+        }
+        "Africa:Kigali"{
+            ec{"किगाली"}
         }
         "Africa:Kinshasa"{
             ec{"किन्शासा"}
         }
+        "Africa:Lagos"{
+            ec{"लागोस"}
+        }
+        "Africa:Libreville"{
+            ec{"लिब्रेभिल्ले"}
+        }
+        "Africa:Lome"{
+            ec{"लोम"}
+        }
+        "Africa:Luanda"{
+            ec{"ल्वान्डा"}
+        }
         "Africa:Lubumbashi"{
             ec{"लुबुम्बासी"}
         }
+        "Africa:Lusaka"{
+            ec{"लुसाका"}
+        }
+        "Africa:Malabo"{
+            ec{"मालाबो"}
+        }
+        "Africa:Maputo"{
+            ec{"मापुतो"}
+        }
+        "Africa:Maseru"{
+            ec{"मासेरू"}
+        }
+        "Africa:Mbabane"{
+            ec{"एमबाबेन"}
+        }
+        "Africa:Mogadishu"{
+            ec{"मोगाडिशु"}
+        }
+        "Africa:Monrovia"{
+            ec{"मोन्रोभिया"}
+        }
+        "Africa:Nairobi"{
+            ec{"नाइरोबी"}
+        }
+        "Africa:Ndjamena"{
+            ec{"एन्‌जामेना"}
+        }
+        "Africa:Niamey"{
+            ec{"नायमे"}
+        }
+        "Africa:Nouakchott"{
+            ec{"नोउआकचोट"}
+        }
+        "Africa:Ouagadougou"{
+            ec{"औआगाडौगौ"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"पोर्टो-नोभो"}
+        }
+        "Africa:Sao_Tome"{
+            ec{"साओ टोमे"}
+        }
+        "Africa:Tripoli"{
+            ec{"त्रिपोली"}
+        }
+        "Africa:Tunis"{
+            ec{"टुनिस"}
+        }
+        "Africa:Windhoek"{
+            ec{"विन्डहोएक"}
+        }
         "America:Adak"{
             ec{"आडाक"}
+        }
+        "America:Anchorage"{
+            ec{"एङ्कोरेज"}
+        }
+        "America:Anguilla"{
+            ec{"एङ्ग्विल्ला"}
+        }
+        "America:Antigua"{
+            ec{"एण्टिगुवा"}
         }
         "America:Araguaina"{
             ec{"आरागुवाना"}
@@ -32,6 +185,9 @@ ne{
         }
         "America:Argentina:Rio_Gallegos"{
             ec{"रियो ग्यालेगोस"}
+        }
+        "America:Argentina:Salta"{
+            ec{"साल्टा"}
         }
         "America:Argentina:San_Juan"{
             ec{"सान जुवान"}
@@ -45,17 +201,32 @@ ne{
         "America:Argentina:Ushuaia"{
             ec{"उशुआइआ"}
         }
+        "America:Aruba"{
+            ec{"एरूवा"}
+        }
+        "America:Asuncion"{
+            ec{"असन्सियन"}
+        }
         "America:Bahia"{
             ec{"बाहिया"}
         }
+        "America:Barbados"{
+            ec{"वार्वाडोस्"}
+        }
         "America:Belem"{
             ec{"बेलेम"}
+        }
+        "America:Belize"{
+            ec{"वेलिज"}
         }
         "America:Blanc-Sablon"{
             ec{"ब्लान्क-साब्लोन"}
         }
         "America:Boa_Vista"{
             ec{"बोआ भिष्टा"}
+        }
+        "America:Bogota"{
+            ec{"बोगोटा"}
         }
         "America:Boise"{
             ec{"बोइज"}
@@ -72,8 +243,17 @@ ne{
         "America:Cancun"{
             ec{"कानकुन"}
         }
+        "America:Caracas"{
+            ec{"काराकास"}
+        }
         "America:Catamarca"{
             ec{"कातामार्का"}
+        }
+        "America:Cayenne"{
+            ec{"कायेन्ने"}
+        }
+        "America:Cayman"{
+            ec{"केम्यान"}
         }
         "America:Chicago"{
             ec{"चिकागो"}
@@ -87,8 +267,14 @@ ne{
         "America:Cordoba"{
             ec{"कोरडोवा"}
         }
+        "America:Costa_Rica"{
+            ec{"कोष्टरिका"}
+        }
         "America:Cuiaba"{
             ec{"क्युइआबा"}
+        }
+        "America:Curacao"{
+            ec{"कुराकाओ"}
         }
         "America:Danmarkshavn"{
             ec{"डान्मार्कशाभन"}
@@ -105,11 +291,17 @@ ne{
         "America:Detroit"{
             ec{"डिट्रोइट"}
         }
+        "America:Dominica"{
+            ec{"डोमिनिका"}
+        }
         "America:Edmonton"{
             ec{"एड्मोन्टन"}
         }
         "America:Eirunepe"{
             ec{"आइरनेपे"}
+        }
+        "America:El_Salvador"{
+            ec{"एल् साल्भाडोर"}
         }
         "America:Fortaleza"{
             ec{"फोर्टालेजा"}
@@ -117,11 +309,35 @@ ne{
         "America:Glace_Bay"{
             ec{"ग्लेस बे"}
         }
+        "America:Godthab"{
+            ec{"गड्थाब"}
+        }
         "America:Goose_Bay"{
             ec{"गुज बे"}
         }
+        "America:Grand_Turk"{
+            ec{"ग्रान्ड टर्क"}
+        }
+        "America:Grenada"{
+            ec{"ग्रेनाडा"}
+        }
+        "America:Guadeloupe"{
+            ec{"ग्वाडेलुप"}
+        }
+        "America:Guatemala"{
+            ec{"ग्वाटेमाला"}
+        }
+        "America:Guayaquil"{
+            ec{"गुयाक्विल"}
+        }
+        "America:Guyana"{
+            ec{"गुयाना"}
+        }
         "America:Halifax"{
             ec{"हालेफाक्स"}
+        }
+        "America:Havana"{
+            ec{"हाभाना"}
         }
         "America:Hermosillo"{
             ec{"हेर्मोसिल्लो"}
@@ -156,6 +372,9 @@ ne{
         "America:Iqaluit"{
             ec{"इक्वालुइट"}
         }
+        "America:Jamaica"{
+            ec{"जमाइका"}
+        }
         "America:Jujuy"{
             ec{"जुजु"}
         }
@@ -165,17 +384,35 @@ ne{
         "America:Kentucky:Monticello"{
             ec{"मोन्टिसेल्लो,केन्टकी"}
         }
+        "America:La_Paz"{
+            ec{"ला पाज"}
+        }
+        "America:Lima"{
+            ec{"लिमा"}
+        }
         "America:Los_Angeles"{
             ec{"लस् एन्जेलस"}
         }
         "America:Louisville"{
             ec{"लुइसभिल्ले"}
         }
+        "America:Lower_Princes"{
+            ec{"लोअर प्रिन्स्स क्वार्टर"}
+        }
         "America:Maceio"{
             ec{"मासेइओ"}
         }
+        "America:Managua"{
+            ec{"मानागुवा"}
+        }
         "America:Manaus"{
             ec{"मानाउस"}
+        }
+        "America:Marigot"{
+            ec{"म्यारिगट"}
+        }
+        "America:Martinique"{
+            ec{"मार्टिनिक"}
         }
         "America:Mazatlan"{
             ec{"माजाट्लान"}
@@ -192,14 +429,26 @@ ne{
         "America:Mexico_City"{
             ec{"मेक्सिको सिटी"}
         }
+        "America:Miquelon"{
+            ec{"मिक्विलन"}
+        }
         "America:Moncton"{
             ec{"मोन्कटन"}
         }
         "America:Monterrey"{
             ec{"मोन्टेर्रे"}
         }
+        "America:Montevideo"{
+            ec{"मोन्टेभिडियो"}
+        }
         "America:Montreal"{
             ec{"मोन्ट्रिल"}
+        }
+        "America:Montserrat"{
+            ec{"मन्टसेर्राट"}
+        }
+        "America:Nassau"{
+            ec{"नास्साउ"}
         }
         "America:New_York"{
             ec{"न्युयोर्क"}
@@ -213,20 +462,38 @@ ne{
         "America:Noronha"{
             ec{"नोरोन्हा"}
         }
+        "America:North_Dakota:Beulah"{
+            ec{"बेलुआ, उत्तर डोकोटा"}
+        }
         "America:North_Dakota:Center"{
             ec{"उत्तर डाकोटा, केन्द्र"}
         }
         "America:North_Dakota:New_Salem"{
             ec{"नयाँ सालेम, उत्तर डाकोटा"}
         }
+        "America:Panama"{
+            ec{"पानामा"}
+        }
         "America:Pangnirtung"{
             ec{"पाङ्निरतुङ"}
+        }
+        "America:Paramaribo"{
+            ec{"पारामारिवो"}
         }
         "America:Phoenix"{
             ec{"फोनिक्स"}
         }
+        "America:Port-au-Prince"{
+            ec{"पोर्ट-अउ-प्रिन्स"}
+        }
+        "America:Port_of_Spain"{
+            ec{"पोर्ट अफ् स्पेन"}
+        }
         "America:Porto_Velho"{
             ec{"पोर्टो भेल्हो"}
+        }
+        "America:Puerto_Rico"{
+            ec{"प्युर्टो रिको"}
         }
         "America:Rainy_River"{
             ec{"रेनिरिभर"}
@@ -246,6 +513,15 @@ ne{
         "America:Rio_Branco"{
             ec{"रियो ब्रान्को"}
         }
+        "America:Santarem"{
+            ec{"सान्टारेम"}
+        }
+        "America:Santiago"{
+            ec{"सान्टिआगो"}
+        }
+        "America:Santo_Domingo"{
+            ec{"सान्टो डोमिन्गो"}
+        }
         "America:Sao_Paulo"{
             ec{"साओ पाउलो"}
         }
@@ -255,11 +531,29 @@ ne{
         "America:Shiprock"{
             ec{"शिपरक"}
         }
+        "America:St_Barthelemy"{
+            ec{"सेन्ट बार्थेलेमी"}
+        }
         "America:St_Johns"{
             ec{"सेन्ट जोन्स"}
         }
+        "America:St_Kitts"{
+            ec{"सेन्ट् किट्स"}
+        }
+        "America:St_Lucia"{
+            ec{"सेन्ट लुसिया"}
+        }
+        "America:St_Thomas"{
+            ec{"सेन्ट थोमस"}
+        }
+        "America:St_Vincent"{
+            ec{"सेन्ट भिन्सेन्ट"}
+        }
         "America:Swift_Current"{
             ec{"स्विफ्ट करेण्ट"}
+        }
+        "America:Tegucigalpa"{
+            ec{"टेगुसिगाल्पा"}
         }
         "America:Thule"{
             ec{"थुले"}
@@ -272,6 +566,9 @@ ne{
         }
         "America:Toronto"{
             ec{"टोरोण्टो"}
+        }
+        "America:Tortola"{
+            ec{"टार्टोला"}
         }
         "America:Vancouver"{
             ec{"भ्यानकोभर"}
@@ -318,6 +615,9 @@ ne{
         "Antarctica:Vostok"{
             ec{"भास्टोक"}
         }
+        "Arctic:Longyearbyen"{
+            ec{"लङयिअरबाइएन"}
+        }
         "Asia:Almaty"{
             ec{"आल्माटी"}
         }
@@ -330,11 +630,32 @@ ne{
         "Asia:Aqtobe"{
             ec{"आक्टोब"}
         }
+        "Asia:Baghdad"{
+            ec{"बगदाद"}
+        }
+        "Asia:Bangkok"{
+            ec{"बैंकक"}
+        }
+        "Asia:Brunei"{
+            ec{"ब्रुनाइ"}
+        }
+        "Asia:Calcutta"{
+            ec{"कोलकाता"}
+        }
         "Asia:Choibalsan"{
             ec{"चोइबाल्सान"}
         }
         "Asia:Chongqing"{
             ec{"चोङकिङ"}
+        }
+        "Asia:Colombo"{
+            ec{"कोलम्बो"}
+        }
+        "Asia:Dhaka"{
+            ec{"ढाका"}
+        }
+        "Asia:Dubai"{
+            ec{"दुबई"}
         }
         "Asia:Harbin"{
             ec{"हार्विन"}
@@ -354,8 +675,14 @@ ne{
         "Asia:Kamchatka"{
             ec{"कामचट्का"}
         }
+        "Asia:Karachi"{
+            ec{"कराची"}
+        }
         "Asia:Kashgar"{
             ec{"काश्गर"}
+        }
+        "Asia:Katmandu"{
+            ec{"काठमाण्डौं"}
         }
         "Asia:Krasnoyarsk"{
             ec{"क्रास्नोयार्स्क"}
@@ -368,6 +695,9 @@ ne{
         }
         "Asia:Makassar"{
             ec{"माकास्सार"}
+        }
+        "Asia:Manila"{
+            ec{"मनिला"}
         }
         "Asia:Novosibirsk"{
             ec{"नोबोसिबिर्स्क"}
@@ -384,11 +714,20 @@ ne{
         "Asia:Qyzylorda"{
             ec{"किजिलोर्डा"}
         }
+        "Asia:Saigon"{
+            ec{"हो ची मिन्ह"}
+        }
         "Asia:Sakhalin"{
             ec{"साखालिन"}
         }
         "Asia:Samarkand"{
             ec{"समारकण्ड"}
+        }
+        "Asia:Singapore"{
+            ec{"सिंगापुर"}
+        }
+        "Asia:Thimphu"{
+            ec{"थिम्पु"}
         }
         "Asia:Ulaanbaatar"{
             ec{"उलानबटार"}
@@ -408,11 +747,32 @@ ne{
         "Atlantic:Azores"{
             ec{"आजोर्स"}
         }
+        "Atlantic:Bermuda"{
+            ec{"बर्मुडा"}
+        }
         "Atlantic:Canary"{
             ec{"क्यानारी"}
         }
+        "Atlantic:Cape_Verde"{
+            ec{"केप भर्डे"}
+        }
+        "Atlantic:Faeroe"{
+            ec{"फारोइ"}
+        }
         "Atlantic:Madeira"{
             ec{"माडेइरा"}
+        }
+        "Atlantic:Reykjavik"{
+            ec{"रेक्जाभिक"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"दक्षिण जर्जिया"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"सेन्ट हेलेना"}
+        }
+        "Atlantic:Stanley"{
+            ec{"स्टान्ले"}
         }
         "Australia:Adelaide"{
             ec{"एडेलेड"}
@@ -450,8 +810,104 @@ ne{
         "Australia:Sydney"{
             ec{"सिड्नी"}
         }
+        "Etc:GMT"{
+            ec{"जीएम्‌टी"}
+        }
+        "Etc:GMT-1"{
+            ec{"जीएम्‌टी-१"}
+        }
+        "Etc:GMT-10"{
+            ec{"जीएम्‌टी-१०"}
+        }
+        "Etc:GMT-11"{
+            ec{"जीएम्‌टी-११"}
+        }
+        "Etc:GMT-12"{
+            ec{"जीएम्‌टी-१२"}
+        }
+        "Etc:GMT-13"{
+            ec{"जीएम्‌टी-१३"}
+        }
+        "Etc:GMT-14"{
+            ec{"जीएम्‌टी-१४"}
+        }
+        "Etc:GMT-2"{
+            ec{"जीएम्‌टी-२"}
+        }
+        "Etc:GMT-3"{
+            ec{"जीएम्‌टी-३"}
+        }
+        "Etc:GMT-4"{
+            ec{"जीएम्‌टी-४"}
+        }
+        "Etc:GMT-5"{
+            ec{"जीएम्‌टी-५"}
+        }
+        "Etc:GMT-6"{
+            ec{"जीएम्‌टी-६"}
+        }
+        "Etc:GMT-7"{
+            ec{"जीएम्‌टी-७"}
+        }
+        "Etc:GMT-8"{
+            ec{"जीएम्‌टी-८"}
+        }
+        "Etc:GMT-9"{
+            ec{"जीएम्‌टी-९"}
+        }
         "Etc:Unknown"{
-            ec{"अज्ञात"}
+            ec{"अज्ञात सिटी"}
+        }
+        "Europe:Amsterdam"{
+            ec{"एम्स्ट्र्डम"}
+        }
+        "Europe:Andorra"{
+            ec{"आन्डोर्रा"}
+        }
+        "Europe:Athens"{
+            ec{"एथेन्स"}
+        }
+        "Europe:Belgrade"{
+            ec{"बेलग्रेड"}
+        }
+        "Europe:Berlin"{
+            ec{"बर्लिन"}
+        }
+        "Europe:Bratislava"{
+            ec{"ब्राटिस्लाभा"}
+        }
+        "Europe:Brussels"{
+            ec{"ब्रसेल्स"}
+        }
+        "Europe:Bucharest"{
+            ec{"वुचारेस्ट"}
+        }
+        "Europe:Budapest"{
+            ec{"बुडापेस्ट"}
+        }
+        "Europe:Chisinau"{
+            ec{"चिसिनाउ"}
+        }
+        "Europe:Copenhagen"{
+            ec{"कोपेनह्यागन"}
+        }
+        "Europe:Dublin"{
+            ec{"डब्लिन"}
+        }
+        "Europe:Gibraltar"{
+            ec{"जिब्राल्टार"}
+        }
+        "Europe:Guernsey"{
+            ec{"गुएर्नसे"}
+        }
+        "Europe:Helsinki"{
+            ec{"हेल्सिन्की"}
+        }
+        "Europe:Isle_of_Man"{
+            ec{"इजल अफ् म्यान"}
+        }
+        "Europe:Jersey"{
+            ec{"जर्सी"}
         }
         "Europe:Kaliningrad"{
             ec{"कालिनिनग्राद"}
@@ -459,23 +915,128 @@ ne{
         "Europe:Kiev"{
             ec{"किभ"}
         }
+        "Europe:Lisbon"{
+            ec{"लिस्बोन"}
+        }
+        "Europe:London"{
+            ec{"लण्डन"}
+        }
+        "Europe:Luxembourg"{
+            ec{"लक्जेम्वर्ग"}
+        }
+        "Europe:Madrid"{
+            ec{"म्याड्रिड"}
+        }
+        "Europe:Malta"{
+            ec{"माल्टा"}
+        }
+        "Europe:Mariehamn"{
+            ec{"म्यारिह्याम्न"}
+        }
+        "Europe:Minsk"{
+            ec{"मिन्स्क"}
+        }
+        "Europe:Monaco"{
+            ec{"मोनाको"}
+        }
         "Europe:Moscow"{
             ec{"मस्को"}
+        }
+        "Europe:Oslo"{
+            ec{"ओस्लो"}
+        }
+        "Europe:Paris"{
+            ec{"प्यारिस"}
+        }
+        "Europe:Prague"{
+            ec{"प्राग"}
+        }
+        "Europe:Riga"{
+            ec{"रिगा"}
+        }
+        "Europe:Rome"{
+            ec{"रोम"}
         }
         "Europe:Samara"{
             ec{"सामारा"}
         }
+        "Europe:Sarajevo"{
+            ec{"साराजेभो"}
+        }
         "Europe:Simferopol"{
             ec{"सिम्फेरोपोल"}
+        }
+        "Europe:Sofia"{
+            ec{"सोफिया"}
+        }
+        "Europe:Stockholm"{
+            ec{"स्टकहोल्म"}
+        }
+        "Europe:Tallinn"{
+            ec{"ताल्लिन"}
+        }
+        "Europe:Tirane"{
+            ec{"टिराने"}
         }
         "Europe:Uzhgorod"{
             ec{"उझगोरद"}
         }
+        "Europe:Vaduz"{
+            ec{"भाडुज"}
+        }
+        "Europe:Vienna"{
+            ec{"भियना"}
+        }
+        "Europe:Vilnius"{
+            ec{"भिल्निअस"}
+        }
         "Europe:Volgograd"{
             ec{"भोल्गोग्राद"}
         }
+        "Europe:Warsaw"{
+            ec{"वारसअ"}
+        }
+        "Europe:Zagreb"{
+            ec{"जाग्रेब"}
+        }
         "Europe:Zaporozhye"{
             ec{"जापोरोझ्ये"}
+        }
+        "Europe:Zurich"{
+            ec{"जुरिक"}
+        }
+        "Indian:Antananarivo"{
+            ec{"अन्टानारिभो"}
+        }
+        "Indian:Chagos"{
+            ec{"चागोस"}
+        }
+        "Indian:Christmas"{
+            ec{"ख्रिस्टमस"}
+        }
+        "Indian:Cocos"{
+            ec{"कोकोस"}
+        }
+        "Indian:Comoro"{
+            ec{"कोमोरो"}
+        }
+        "Indian:Kerguelen"{
+            ec{"केर्गुएलेन"}
+        }
+        "Indian:Mahe"{
+            ec{"माहे"}
+        }
+        "Indian:Maldives"{
+            ec{"माल्दिभ्स"}
+        }
+        "Indian:Mauritius"{
+            ec{"मउरिटिअस"}
+        }
+        "Indian:Mayotte"{
+            ec{"मायोट्टे"}
+        }
+        "Indian:Reunion"{
+            ec{"रियुनियन"}
         }
         "Pacific:Chatham"{
             ec{"चाथाम"}
@@ -486,11 +1047,17 @@ ne{
         "Pacific:Enderbury"{
             ec{"एन्डरबरी"}
         }
+        "Pacific:Fiji"{
+            ec{"फिजी"}
+        }
         "Pacific:Galapagos"{
             ec{"गलापागोस"}
         }
         "Pacific:Gambier"{
             ec{"ग्याम्बियर"}
+        }
+        "Pacific:Guam"{
+            ec{"गुवाम"}
         }
         "Pacific:Honolulu"{
             ec{"होनोलुलु"}

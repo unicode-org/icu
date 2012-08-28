@@ -72,6 +72,7 @@ fil{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
+        BQ{"Caribbean Netherlands"}
         BR{"Brazil"}
         BS{"Bahamas"}
         BT{"Bhutan"}
@@ -95,6 +96,7 @@ fil{
         CR{"Costa Rica"}
         CU{"Cuba"}
         CV{"Cape Verde"}
+        CW{"Curacao"}
         CX{"Christmas Island"}
         CY{"Cyprus"}
         CZ{"Czech Republic"}
@@ -191,7 +193,7 @@ fil{
         MH{"Marshall Islands"}
         MK{"Macedonia"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar [Burma]"}
         MN{"Mongolia"}
         MO{"Macau SAR China"}
         MP{"Northern Mariana Islands"}
@@ -254,8 +256,10 @@ fil{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Suriname"}
+        SS{"South Sudan"}
         ST{"Sao Tome and Principe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syria"}
         SZ{"Swaziland"}
         TA{"Tristan de Cunha"}
@@ -277,7 +281,7 @@ fil{
         TZ{"Tanzania"}
         UA{"Ukraine"}
         UG{"Uganda"}
-        UM{"Mga Minor Outlying Island ng Estados Unidos"}
+        UM{"U.S. Outlying Islands"}
         US{"Estados Unidos"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -297,5 +301,5 @@ fil{
         ZW{"Zimbabwe"}
         ZZ{"Hindi kilala o Hindi wastong Rehiyon"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

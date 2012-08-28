@@ -32,7 +32,7 @@ sr_Latn{
             }
         }
     }
-    Version{"2.0.66.10"}
+    Version{"2.0.75.99"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -180,21 +180,17 @@ sr_Latn{
             intervalFormats{
                 H{
                     H{"HH-HH"}
-                    a{"HH-HH"}
                 }
                 Hm{
                     H{"HH.mm-HH.mm"}
-                    a{"HH.mm-HH.mm"}
                     m{"HH.mm-HH.mm"}
                 }
                 Hmv{
                     H{"HH.mm-HH.mm v"}
-                    a{"HH.mm-HH.mm v"}
                     m{"HH.mm-HH.mm v"}
                 }
                 Hv{
                     H{"HH-HH v"}
-                    a{"HH-HH v"}
                 }
                 M{
                     M{"M-M"}
@@ -408,11 +404,6 @@ sr_Latn{
             many{"{0} godina"}
             one{"{0} godina"}
             other{"{0} godina"}
-        }
-    }
-    unitsShort{
-        year{
-            other{"{0} god"}
         }
     }
 }

@@ -8,7 +8,7 @@
 # Generated from CLDR 
 #
 $word_boundary = [-\ $] ;
-$vowel = [aeiouw] ; # Vowels and glides
+$vowel = [aeiouw] ;       # Vowels and glides
 $not_vowel = [^$vowel] ;
 [ǎə] → | a ;
 e\u032F → | e ;
@@ -69,7 +69,7 @@ le → レ ;
 li → リ ;
 lo → ロ ;
 lu → ル ;
-l → ル ;
+l →  ル ;
 ma → マ ;
 me → メ ;
 mi → ミ ;

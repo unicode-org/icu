@@ -13,5 +13,5 @@ tzm_Latn{
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.57.98"}
+    Version{"2.0.74.65"}
 }

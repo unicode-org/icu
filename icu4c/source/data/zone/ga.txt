@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ga.xml
  */
 ga{
-    Version{"2.0.65.46"}
+    Version{"2.0.74.74"}
     zoneStrings{
         "Europe:Dublin"{
             ec{"Baile Átha Cliath"}

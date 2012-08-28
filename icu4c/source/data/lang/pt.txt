@@ -12,9 +12,20 @@
 pt{
     Keys{
         calendar{"Calendário"}
+        colAlternate{"Ignorar classificação de símbolos"}
+        colBackwards{"Classificação reversa de acentos"}
+        colCaseFirst{"Ordem de maiúsculas/minúsculas"}
+        colCaseLevel{"Ordem com diferenciação de maiúsculas e minúsculas"}
+        colHiraganaQuaternary{"Classificação kana"}
+        colNormalization{"Classificação normalizada"}
+        colNumeric{"Classificação numérica"}
+        colStrength{"Intensidade da classificação"}
         collation{"Ordenação"}
         currency{"Moeda"}
         numbers{"Números"}
+        timezone{"Fuso horário"}
+        va{"Variante de localidade"}
+        variableTop{"Classificar como símbolos"}
         x{"Uso privado"}
     }
     Languages{
@@ -103,6 +114,7 @@ pt{
         chp{"chipewyan"}
         chr{"cherokee"}
         chy{"cheiene"}
+        ckb{"Sorâni curdo"}
         cmc{"idioma chamic"}
         co{"córsico"}
         cop{"copta"}
@@ -153,7 +165,7 @@ pt{
         eo{"esperanto"}
         es{"espanhol"}
         es_419{"espanhol latino-americano"}
-        es_ES{"espanhol ibérico"}
+        es_ES{"espanhol europeu"}
         et{"estoniano"}
         eu{"basco"}
         ewo{"ewondo"}
@@ -306,6 +318,7 @@ pt{
         mdf{"mocsa"}
         mdr{"mandar"}
         men{"mende"}
+        mfe{"Morisyen"}
         mg{"malgaxe"}
         mga{"irlandês médio"}
         mh{"marshalês"}
@@ -390,12 +403,12 @@ pt{
         ps{"pashto"}
         pt{"português"}
         pt_BR{"português do Brasil"}
-        pt_PT{"português ibérico"}
+        pt_PT{"português europeu"}
         qu{"quíchua"}
         raj{"rajastani"}
         rap{"rapanui"}
         rar{"rarotongano"}
-        rm{"reto-romano"}
+        rm{"romanche"}
         rn{"rundi"}
         ro{"romeno"}
         roa{"idioma românico"}
@@ -666,7 +679,11 @@ pt{
         Zsym{"zsym"}
         Zxxx{"ágrafo"}
         Zyyy{"comum"}
-        Zzzz{"escrita desconhecida ou inválida"}
+        Zzzz{"escrita desconhecida"}
+    }
+    Scripts%stand-alone{
+        Hans{"Hän simplificado"}
+        Hant{"Hän tradicional"}
     }
     Types{
         calendar{
@@ -690,9 +707,11 @@ pt{
             ducet{"Ordem padrão do Unicode"}
             gb2312han{"Ordem do Chinês Simplificado - GB2312"}
             phonebook{"Ordem de Lista Telefônica"}
+            phonetic{"Ordem de classificação fonética"}
             pinyin{"Ordem Pin-yin"}
             reformed{"Ordem reformulada"}
             search{"Pesquisa de uso geral"}
+            searchjl{"Pesquisar por consonante inicial hangul"}
             stroke{"Ordem dos Traços"}
             traditional{"Ordem Tradicional"}
             unihan{"Ordem por Radical-Traços"}
@@ -705,6 +724,7 @@ pt{
             beng{"Algarismos Bengali"}
             deva{"Algarismos Devanagari"}
             ethi{"Algarismos etiópicos"}
+            finance{"Numerais financeiros"}
             fullwide{"Algarismos em extensão total"}
             geor{"Algarismos georgianos"}
             grek{"Algarismos gregos"}
@@ -726,13 +746,17 @@ pt{
             mlym{"Algarismos Malayalam"}
             mong{"Algarismos mongóis"}
             mymr{"Algarismos Myanmar"}
+            native{"Dígitos nativos"}
             orya{"Algarismos Oriya"}
             roman{"Algarismos romanos"}
             romanlow{"Algarismos romanos minúsculos"}
             taml{"Algarismos Tâmil"}
+            tamldec{"Algarismos Tâmil"}
             telu{"Algarismos Telugu"}
             thai{"Algarismos tailandeses"}
             tibt{"Algarismos tibetanos"}
+            traditional{"Numerais tradicionais"}
+            vaii{"Dígitos vai"}
         }
     }
     Variants{
@@ -775,13 +799,14 @@ pt{
         VALENCIA{"valenciano"}
         WADEGILE{"romanização Wade-Giles"}
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.99"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Roteiro: {0}"}
         territory{"Região: {0}"}
     }
     localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
         separator{", "}
     }

@@ -56,7 +56,6 @@ mer{
         CN{"China"}
         CO{"Kolombia"}
         CR{"Kostarika"}
-        CS{"Sabia na Montenegoro"}
         CU{"Kiuba"}
         CV{"Kepuvede"}
         CY{"Caipurasi"}
@@ -238,5 +237,5 @@ mer{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

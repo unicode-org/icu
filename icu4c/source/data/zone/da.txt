@@ -10,28 +10,64 @@
  *  ICU <specials> source: <path>/xml/main/da.xml
  */
 da{
-    Version{"2.0.65.46"}
+    Version{"2.0.76.4"}
     zoneStrings{
         "Africa:Addis_Ababa"{
-            ec{"Addis Ababa"}
+            ec{"Addis Abeba"}
         }
         "Africa:Algiers"{
             ec{"Algier"}
         }
-        "Africa:Sao_Tome"{
-            ec{"Sao Tome"}
+        "Africa:Asmera"{
+            ec{"Asmara"}
         }
-        "America:Anchorage"{
-            ec{"Alaska"}
-        }
-        "America:El_Salvador"{
-            ec{"Salvador"}
+        "America:Coral_Harbour"{
+            ec{"Atikokan"}
         }
         "America:Godthab"{
             ec{"Nuuk"}
         }
+        "America:Indiana:Knox"{
+            ec{"Knox, Indiana"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo, Indiana"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg, Indiana"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tell City, Indiana"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes, Indiana"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
+        }
+        "America:Lower_Princes"{
+            ec{"Lower Prince's Quarter"}
+        }
+        "America:North_Dakota:Beulah"{
+            ec{"Beulah, North Dakota"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center, North Dakota"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, North Dakota"}
+        }
+        "America:St_Barthelemy"{
+            ec{"St. Barthelemy"}
+        }
         "America:St_Johns"{
-            ec{"St. Johns"}
+            ec{"St. John's"}
         }
         "America:St_Kitts"{
             ec{"St. Kitts"}
@@ -51,8 +87,17 @@ da{
         "Antarctica:South_Pole"{
             ec{"Sydpolen"}
         }
+        "Asia:Calcutta"{
+            ec{"Kolkata"}
+        }
+        "Asia:Damascus"{
+            ec{"Damaskus"}
+        }
         "Asia:Hong_Kong"{
             ec{"Hongkong"}
+        }
+        "Asia:Katmandu"{
+            ec{"Kathmandu"}
         }
         "Asia:Macau"{
             ec{"Macao"}
@@ -81,8 +126,11 @@ da{
         "Atlantic:Faeroe"{
             ec{"Færøerne"}
         }
+        "Atlantic:St_Helena"{
+            ec{"St. Helena"}
+        }
         "Etc:Unknown"{
-            ec{"Ukendt"}
+            ec{"Ukendt by"}
         }
         "Europe:Athens"{
             ec{"Athen"}
@@ -96,11 +144,20 @@ da{
         "Europe:Copenhagen"{
             ec{"København"}
         }
+        "Europe:Dublin"{
+            ld{"Irsk sommertid"}
+        }
         "Europe:Lisbon"{
             ec{"Lissabon"}
         }
+        "Europe:London"{
+            ld{"Britisk sommertid"}
+        }
         "Europe:Moscow"{
             ec{"Moskva"}
+        }
+        "Europe:Prague"{
+            ec{"Prag"}
         }
         "Europe:Rome"{
             ec{"Rom"}
@@ -123,11 +180,14 @@ da{
         "Indian:Maldives"{
             ec{"Maldiverne"}
         }
-        "Indian:Reunion"{
-            ec{"Réunion"}
-        }
         "Pacific:Easter"{
             ec{"Påskeøen"}
+        }
+        "Pacific:Ponape"{
+            ec{"Pohnpei"}
+        }
+        "Pacific:Truk"{
+            ec{"Chuuk"}
         }
         "meta:Acre"{
             ld{"Acre-sommertid"}
@@ -375,7 +435,7 @@ da{
             ls{"Hollandsk Guiana-tid"}
         }
         "meta:East_Timor"{
-            ls{"Østtimor-normaltid"}
+            ls{"Østtimor-tid"}
         }
         "meta:Easter"{
             ld{"Påskeøen-sommertid"}
@@ -429,6 +489,9 @@ da{
             ld{"Frunze-sommertid"}
             lg{"Frunze-tid"}
             ls{"Frunze-normaltid"}
+        }
+        "meta:GMT"{
+            ls{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Galapagos-tid"}
@@ -490,7 +553,7 @@ da{
             ls{"Indiske Ocean-normaltid"}
         }
         "meta:Indochina"{
-            ls{"Indokinesisk normaltid"}
+            ls{"Indokina-tid"}
         }
         "meta:Indonesia_Central"{
             ls{"Centralindonesisk tid"}
@@ -705,9 +768,9 @@ da{
             ls{"Phoenixøen-tid"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Pierre- og Miquelon-sommertid"}
-            lg{"Pierre- og Miquelon-tid"}
-            ls{"Pierre- og Miquelon-normaltid"}
+            ld{"Saint Pierre- og Miquelon-sommertid"}
+            lg{"Saint Pierre- og Miquelon-tid"}
+            ls{"Saint Pierre- og Miquelon-normaltid"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairn-tid"}
@@ -883,9 +946,10 @@ da{
             ls{"Yukon-normaltid"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} tid ({0})"}
+        fallbackRegionFormat{"Tidszone for {1} ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH.mm;-HH.mm"}
-        regionFormat{"{0} tid"}
+        regionFormat{"Tidszone for {0}"}
     }
 }

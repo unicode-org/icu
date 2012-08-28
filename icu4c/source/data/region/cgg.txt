@@ -56,7 +56,6 @@ cgg{
         CN{"China"}
         CO{"Korombiya"}
         CR{"Kositarika"}
-        CS{"Saabiya na Monteneguro"}
         CU{"Cuba"}
         CV{"Ebizinga bya Kepuvade"}
         CY{"Saipurasi"}
@@ -236,5 +235,5 @@ cgg{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

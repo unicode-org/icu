@@ -111,6 +111,10 @@ kea{
             "IDR",
             "Rupia indoneziu",
         }
+        ILS{
+            "₪",
+            "ILS",
+        }
         INR{
             "₹",
             "Rupia indianu",
@@ -182,6 +186,10 @@ kea{
         NOK{
             "NOK",
             "Kuroa norueges",
+        }
+        NZD{
+            "NZ$",
+            "NZD",
         }
         PLN{
             "PLN",
@@ -263,17 +271,29 @@ kea{
             "US$",
             "Dola merkanu",
         }
+        VND{
+            "₫",
+            "VND",
+        }
         XAF{
             "FCFA",
             "Franku CFA BEAC",
+        }
+        XCD{
+            "EC$",
+            "XCD",
         }
         XOF{
             "CFA",
             "Franku CFA BCEAO",
         }
+        XPF{
+            "CFPF",
+            "XPF",
+        }
         XXX{
             "XXX",
-            "mueda diskonxedu",
+            "Mueda diskonxedu",
         }
         ZAR{
             "ZAR",
@@ -288,5 +308,8 @@ kea{
             "Dola di Zimbabue",
         }
     }
-    Version{"2.0.65.46"}
+    CurrencyUnitPatterns{
+        other{"{0} {1}"}
+    }
+    Version{"2.0.75.99"}
 }

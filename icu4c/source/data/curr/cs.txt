@@ -89,7 +89,7 @@ cs{
         }
         AZN{
             "AZN",
-            "Ázerbajdžánský manat",
+            "ázerbájdžánský manat",
         }
         BAD{
             "BAD",
@@ -229,7 +229,7 @@ cs{
         }
         CUC{
             "CUC",
-            "Kubánské konvertibilní peso",
+            "kubánské konvertibilní peso",
         }
         CUP{
             "CUP",
@@ -361,7 +361,7 @@ cs{
         }
         GWP{
             "GWP",
-            "guinea-bissauské peso",
+            "guinejsko-bissauské peso",
         }
         GYD{
             "GYD",
@@ -753,7 +753,7 @@ cs{
         }
         SDG{
             "SDG",
-            "Súdánská libra",
+            "súdánská libra",
         }
         SDP{
             "SDP",
@@ -789,11 +789,15 @@ cs{
         }
         SRD{
             "SRD",
-            "Surinamský dolar",
+            "surinamský dolar",
         }
         SRG{
             "SRG",
             "surinamský zlatý",
+        }
+        SSP{
+            "SSP",
+            "jihosúdánská libra",
         }
         STD{
             "STD",
@@ -1807,6 +1811,11 @@ cs{
             one{"mexické stříbrné peso (1861-1992)"}
             other{"mexických stříbrných pes (1861-1992)"}
         }
+        MXV{
+            few{"mexické investiční jednotky"}
+            one{"mexická investiční jednotka"}
+            other{"mexických investičních jednotek"}
+        }
         MYR{
             few{"malajsijské ringgity"}
             one{"malajsijský ringgit"}
@@ -2037,6 +2046,11 @@ cs{
             one{"surinamský zlatý"}
             other{"surinamských zlatých"}
         }
+        SSP{
+            few{"jihosúdánské libry"}
+            one{"jihosúdánská libra"}
+            other{"jihosúdánských liber"}
+        }
         STD{
             few{"svatotomášské dobry"}
             one{"svatotomášská dobra"}
@@ -2252,6 +2266,11 @@ cs{
             one{"kód zvlášť vyhrazený pro testovací účely"}
             other{"kódů zvlášť vyhrazených pro testovací účely"}
         }
+        XXX{
+            few{"neznámá měna"}
+            one{"neznámá měna"}
+            other{"neznámá měna"}
+        }
         YDD{
             few{"jemenské dináry"}
             one{"jemenský dinár"}
@@ -2323,5 +2342,5 @@ cs{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.76.5"}
 }

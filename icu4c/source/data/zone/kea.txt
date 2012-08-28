@@ -10,8 +10,11 @@
  *  ICU <specials> source: <path>/xml/main/kea.xml
  */
 kea{
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     zoneStrings{
+        "America:Blanc-Sablon"{
+            ec{"Blank-Sablon"}
+        }
         "Etc:Unknown"{
             ec{"Sidadi Diskonxedu"}
         }
@@ -69,7 +72,11 @@ kea{
             lg{"Ora di Europa Osidental"}
             ls{"Ora Padrãu di Europa Osidental"}
         }
+        fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Ora di {1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
+        hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Ora di {0}"}
     }
 }

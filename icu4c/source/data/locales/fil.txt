@@ -12,7 +12,6 @@
 fil{
     AuxExemplarCharacters{"[á à â é è ê í ì î ó ò ô ú ù û]"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n ñ {ng} o p q r s t u v w x y z]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     LocaleScript{
         "Latn",
@@ -20,47 +19,111 @@ fil{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤ #,##0.00"}
+                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        one{"0 libo"}
+                        other{"0 (na) libo"}
+                    }
+                    10000{
+                        one{"00 libo"}
+                        other{"00 (na) libo"}
+                    }
+                    100000{
+                        one{"000 libo"}
+                        other{"000 (na) libo"}
+                    }
+                    1000000{
+                        one{"0 milyon"}
+                        other{"0 (na) milyon"}
+                    }
+                    10000000{
+                        one{"00 milyon"}
+                        other{"00 (na) milyon"}
+                    }
+                    100000000{
+                        one{"000 milyon"}
+                        other{"000 (na) milyon"}
+                    }
+                    1000000000{
+                        one{"0 bilyon"}
+                        other{"0 (na) bilyon"}
+                    }
+                    10000000000{
+                        one{"00 bilyon"}
+                        other{"00 (na) bilyon"}
+                    }
+                    100000000000{
+                        one{"000 bilyon"}
+                        other{"000 (na) bilyon"}
+                    }
+                    1000000000000{
+                        one{"0 trilyon"}
+                        other{"0 (na) trilyon"}
+                    }
+                    10000000000000{
+                        one{"00 trilyon"}
+                        other{"00 (na) trilyon"}
+                    }
+                    100000000000000{
+                        one{"000 trilyon"}
+                        other{"000 (na) trilyon"}
+                    }
+                }
+            }
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0.0K"}
+                        one{"0K"}
+                        other{"0K"}
                     }
                     10000{
+                        one{"00K"}
                         other{"00K"}
                     }
                     100000{
+                        one{"000K"}
                         other{"000K"}
                     }
                     1000000{
-                        other{"0.0M"}
+                        one{"0M"}
+                        other{"0M"}
                     }
                     10000000{
+                        one{"00M"}
                         other{"00M"}
                     }
                     100000000{
+                        one{"000M"}
                         other{"000M"}
                     }
                     1000000000{
-                        other{"0.0B"}
+                        one{"0B"}
+                        other{"0B"}
                     }
                     10000000000{
+                        one{"00B"}
                         other{"00B"}
                     }
                     100000000000{
+                        one{"000B"}
                         other{"000B"}
                     }
                     1000000000000{
-                        other{"0.0T"}
+                        one{"0T"}
+                        other{"0T"}
                     }
                     10000000000000{
+                        one{"00T"}
                         other{"00T"}
                     }
                     100000000000000{
+                        one{"000T"}
                         other{"000T"}
                     }
                 }
@@ -79,9 +142,13 @@ fil{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -98,6 +165,11 @@ fil{
                 "{1} {0}",
             }
             availableFormats{
+                Ed{"d E"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
                 MEd{"E, M-d"}
                 MMM{"LLL"}
                 MMMEd{"E MMM d"}
@@ -106,18 +178,21 @@ fil{
                 MMMd{"MMM d"}
                 Md{"M-d"}
                 d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"yyyy-M"}
-                yMEd{"E, yyyy-M-d"}
-                yMMM{"y MMM"}
-                yMMMEd{"E, y MMM d"}
-                yMMMM{"y MMMM"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMM{"MMMM y"}
                 yMMMd{"MMM d, y"}
                 yMd{"M/d/y"}
                 yQ{"Q y"}
                 yQQQ{"y QQQ"}
-                yyMM{"yy-MM"}
+                yyMM{"MM-yy"}
                 yyMMM{"MMM yy"}
             }
             dayNames{
@@ -129,6 +204,15 @@ fil{
                         "Mye",
                         "Huw",
                         "Bye",
+                        "Sab",
+                    }
+                    short{
+                        "Li",
+                        "Lu",
+                        "Ma",
+                        "Mi",
+                        "Hu",
+                        "Bi",
                         "Sab",
                     }
                     wide{
@@ -160,6 +244,15 @@ fil{
                         "B",
                         "S",
                     }
+                    short{
+                        "Li",
+                        "Lu",
+                        "Ma",
+                        "Mi",
+                        "Hu",
+                        "Bi",
+                        "Sab",
+                    }
                 }
             }
             eras{
@@ -172,10 +265,10 @@ fil{
                 day{
                     dn{"Araw"}
                     relative{
-                        "-1"{"Yesterday"}
+                        "-1"{"Kahapon"}
                         "-2"{"Araw bago ang kahapon"}
-                        "0"{"Today"}
-                        "1"{"Tomorrow"}
+                        "0"{"Ngayon"}
+                        "1"{"Bukas"}
                         "2"{"Araw pagkatapos ng kahapon"}
                     }
                 }
@@ -226,6 +319,23 @@ fil{
                 }
             }
             intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"M–M"}
+                }
                 MEd{
                     M{"E, M/d – E, M/d"}
                     d{"E, M/d – E, M/d"}
@@ -244,6 +354,31 @@ fil{
                 Md{
                     M{"M/d – M/d"}
                     d{"M/d – M/d"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y–y"}
                 }
                 yM{
                     M{"M/yy – M/yy"}
@@ -354,6 +489,12 @@ fil{
                         "Q3",
                         "Q4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "ika-1 sangkapat",
                         "ika-2 quarter",
@@ -374,9 +515,12 @@ fil{
         standard{
             2{"{0} at {1}"}
             end{"{0} at {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
+        UK{"UK"}
         US{"US"}
         metric{"Metric"}
     }
@@ -386,13 +530,11 @@ fil{
             other{"{0} araw"}
         }
         day-future{
-            0{"Sa 0 na araw"}
-            1{"Sa 1 araw"}
+            one{"Sa {0} araw"}
             other{"Sa {0} (na) araw"}
         }
         day-past{
-            0{"Nakalipas na 0 araw"}
-            1{"Nakalipas na 1 araw"}
+            one{"Nakalipas na {0} araw"}
             other{"Nakalipas na {0} (na) araw"}
         }
         hour{
@@ -400,13 +542,11 @@ fil{
             other{"{0} oras"}
         }
         hour-future{
-            0{"Sa 0 oras"}
-            1{"Sa 1 oras"}
+            one{"Sa {0} oras"}
             other{"Sa {0} (na) oras"}
         }
         hour-past{
-            0{"Nakalipas na 0 oras"}
-            1{"Nakalipas na 1 oras"}
+            one{"Nakalipas na {0} oras"}
             other{"Nakalipas na {0} (na) oras"}
         }
         minute{
@@ -414,13 +554,11 @@ fil{
             other{"{0} minuto"}
         }
         minute-future{
-            0{"Sa 0 minuto"}
-            1{"Sa 1 minuto"}
+            one{"Sa {0} minuto"}
             other{"Sa {0} (na) minuto"}
         }
         minute-past{
-            0{"Nakalipas na 0 na minuto"}
-            1{"Nakalipas na 1 minuto"}
+            one{"Nakalipas na {0} minuto"}
             other{"Nakalipas na {0} (na) minuto"}
         }
         month{
@@ -428,13 +566,11 @@ fil{
             other{"{0} buwan"}
         }
         month-future{
-            0{"Sa 0 na buwan"}
-            1{"Sa 1 buwan"}
+            one{"Sa {0} buwan"}
             other{"Sa {0} (na) buwan"}
         }
         month-past{
-            0{"Nakalipas na 0 buwan"}
-            1{"Nakalipas na 1 buwan"}
+            one{"Nakalipas na {0} buwan"}
             other{"Nakalipas na {0} (na) buwan"}
         }
         second{
@@ -442,13 +578,11 @@ fil{
             other{"{0} segundo"}
         }
         second-future{
-            0{"Sa 0 segundo"}
-            1{"Sa 1 segundo"}
+            one{"Sa {0} segundo"}
             other{"Sa {0} (na) segundo"}
         }
         second-past{
-            0{"Nakalipas na 0 segundo"}
-            1{"Nakalipas na 1 segundo"}
+            one{"Nakalipas na {0} segundo"}
             other{"Nakalipas na {0} (na) segundo"}
         }
         week{
@@ -456,13 +590,11 @@ fil{
             other{"{0} linggo"}
         }
         week-future{
-            0{"Sa 0 linggo"}
-            1{"Sa 1 linggo"}
+            one{"Sa {0} linggo"}
             other{"Sa {0} (na) linggo"}
         }
         week-past{
-            0{"Nakalipas na 0 na linggo"}
-            1{"Nakalipas na 1 linggo"}
+            one{"Nakalipas na {0} na linggo"}
             other{"Nakalipas na {0} (na) linggo"}
         }
         year{
@@ -470,13 +602,11 @@ fil{
             other{"{0} taon"}
         }
         year-future{
-            0{"Sa 0 na taon"}
-            1{"Sa 1 taon"}
+            one{"Sa {0} taon"}
             other{"Sa {0} (na) taon"}
         }
         year-past{
-            0{"Nakalipas na 0 taon"}
-            1{"Nakalipas na 1 taon"}
+            one{"Nakalipas na {0} taon"}
             other{"Nakalipas na {0} (na) taon"}
         }
     }

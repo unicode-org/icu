@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/en.xml
  */
 en{
-    Version{"2.0.67.6"}
+    Version{"2.0.75.94"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -592,7 +592,7 @@ en{
             ls{"Niue Time"}
         }
         "meta:Norfolk"{
-            ls{"Norfolk Islands Time"}
+            ls{"Norfolk Island Time"}
         }
         "meta:Noronha"{
             ld{"Fernando de Noronha Summer Time"}
@@ -642,9 +642,9 @@ en{
             ls{"Phoenix Islands Time"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Pierre and Miquelon Daylight Time"}
-            lg{"Pierre and Miquelon Time"}
-            ls{"Pierre and Miquelon Standard Time"}
+            ld{"Saint Pierre and Miquelon Daylight Time"}
+            lg{"Saint Pierre and Miquelon Time"}
+            ls{"Saint Pierre and Miquelon Standard Time"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairn Time"}

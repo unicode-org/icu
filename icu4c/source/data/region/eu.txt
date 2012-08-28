@@ -57,7 +57,7 @@ eu{
         AT{"Austria"}
         AU{"Australia"}
         AW{"Aruba"}
-        AX{"Aland Uharteak"}
+        AX{"Aland uharteak"}
         AZ{"Azerbaijan"}
         BA{"Bosnia-Herzegovina"}
         BB{"Barbados"}
@@ -72,6 +72,7 @@ eu{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolibia"}
+        BQ{"Karibeko Holanda"}
         BR{"Brasil"}
         BS{"Bahamak"}
         BT{"Bhutan"}
@@ -80,10 +81,10 @@ eu{
         BY{"Bielorrusia"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Cocos uharteak"}
+        CC{"Cocos [Keeling] uharteak"}
         CD{"Kongoko Errepublika Demokratikoa"}
         CF{"Afrika Erdiko Errepublika"}
-        CG{"Kongo"}
+        CG{"Kongo (Brazzaville)"}
         CH{"Suitza"}
         CI{"Boli Kosta"}
         CK{"Cook uharteak"}
@@ -91,14 +92,16 @@ eu{
         CM{"Kamerun"}
         CN{"Txina"}
         CO{"Kolonbia"}
+        CP{"Clipperton uhartea"}
         CR{"Costa Rica"}
-        CS{"Serbia eta Montenegro"}
         CU{"Kuba"}
         CV{"Cabo Verde"}
+        CW{"Curaçao"}
         CX{"Christmas uhartea"}
         CY{"Zipre"}
         CZ{"Txekiar errepublika"}
         DE{"Alemania"}
+        DG{"Diego Garcia"}
         DJ{"Djibuti"}
         DK{"Danimarka"}
         DM{"Dominika"}
@@ -138,6 +141,7 @@ eu{
         GU{"Guam"}
         GW{"Ginea-Bissau"}
         GY{"Guyana"}
+        HK{"Hong Kong AEB Txina"}
         HM{"Heard eta McDonald Uharteak"}
         HN{"Honduras"}
         HR{"Kroazia"}
@@ -189,7 +193,7 @@ eu{
         MH{"Marshall uharteak"}
         MK{"Mazedonia"}
         ML{"Mali"}
-        MM{"Birmania"}
+        MM{"Myanmar"}
         MN{"Mongolia"}
         MO{"Makau"}
         MP{"Iparraldeko Mariana uharteak"}
@@ -226,7 +230,7 @@ eu{
         PM{"Saint-Pierre eta Mikelune"}
         PN{"Pitcairn uharteak"}
         PR{"Puerto Rico"}
-        PS{"Palestina"}
+        PS{"Palestinako Lurraldeak"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguai"}
@@ -252,10 +256,13 @@ eu{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
+        SS{"Hego Sudan"}
         ST{"Sao Tome eta Principe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Siria"}
         SZ{"Swazilandia"}
+        TA{"Tristan da Cunha"}
         TC{"Turk eta Caicos uharteak"}
         TD{"Txad"}
         TF{"Frantziaren Lurralde Australak"}
@@ -292,6 +299,7 @@ eu{
         ZA{"Hegoafrika"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
+        ZZ{"Eskualde ezezaguna"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

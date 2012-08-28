@@ -56,7 +56,6 @@ bm{
         CN{"Siniwajamana"}
         CO{"Kolombi"}
         CR{"Kɔsitarika"}
-        CS{"Serbi-ni-Mɔntenegro"}
         CU{"Kuba"}
         CV{"Capivɛrdi"}
         CY{"Cipri"}
@@ -238,5 +237,5 @@ bm{
         ZM{"Zanbi"}
         ZW{"Zimbabuwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.61"}
 }

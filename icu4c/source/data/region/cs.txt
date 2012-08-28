@@ -29,7 +29,7 @@ cs{
         034{"Jižní Asie"}
         035{"Jihovýchodní Asie"}
         039{"Jižní Evropa"}
-        053{"Austrálie a Nový Zéland"}
+        053{"Australasie"}
         054{"Melanésie"}
         057{"Mikronésie oblast"}
         061{"Polynésie"}
@@ -72,6 +72,7 @@ cs{
         BM{"Bermudy"}
         BN{"Brunej"}
         BO{"Bolívie"}
+        BQ{"Karibské Nizozemsko"}
         BR{"Brazílie"}
         BS{"Bahamy"}
         BT{"Bhútán"}
@@ -93,14 +94,14 @@ cs{
         CO{"Kolumbie"}
         CP{"Clippertonův ostrov"}
         CR{"Kostarika"}
-        CS{"Srbsko a Černá Hora"}
         CU{"Kuba"}
         CV{"Kapverdy"}
+        CW{"Curaçao"}
         CX{"Vánoční ostrovy"}
         CY{"Kypr"}
         CZ{"Česká republika"}
         DE{"Německo"}
-        DG{"Diego Garcia"}
+        DG{"Diego García"}
         DJ{"Džibutsko"}
         DK{"Dánsko"}
         DM{"Dominika"}
@@ -140,7 +141,7 @@ cs{
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
-        HK{"Hongkong - zvláštní administrativní oblast Číny"}
+        HK{"Hongkong - ZAO Číny"}
         HM{"Heardův ostrov a McDonaldovy ostrovy"}
         HN{"Honduras"}
         HR{"Chorvatsko"}
@@ -194,7 +195,7 @@ cs{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolsko"}
-        MO{"Macao - zvláštní administrativní oblast Číny"}
+        MO{"Macao - ZAO Číny"}
         MP{"Severní Mariany"}
         MQ{"Martinik"}
         MR{"Mauritánie"}
@@ -255,8 +256,10 @@ cs{
         SN{"Senegal"}
         SO{"Somálsko"}
         SR{"Surinam"}
-        ST{"Svatý Tomáš"}
+        SS{"Jižní Súdán"}
+        ST{"Svatý Tomáš a Princův ostrov"}
         SV{"Salvador"}
+        SX{"Sint Maarten"}
         SY{"Sýrie"}
         SZ{"Svazijsko"}
         TA{"Tristan da Cunha"}
@@ -296,7 +299,7 @@ cs{
         ZA{"Jihoafrická republika"}
         ZM{"Zambie"}
         ZW{"Zimbabwe"}
-        ZZ{"Neznámá nebo neplatná oblast"}
+        ZZ{"Neznámá oblast"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.76.5"}
 }

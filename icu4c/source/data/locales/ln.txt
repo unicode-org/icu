@@ -35,7 +35,7 @@ ln{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -128,9 +128,9 @@ ln{
                 day{
                     dn{"Mokɔlɔ"}
                     relative{
-                        "-1"{"Lóbí"}
+                        "-1"{"Lóbi elékí"}
                         "0"{"Lɛlɔ́"}
-                        "1"{"Lóbí"}
+                        "1"{"Lóbi ekoyâ"}
                     }
                 }
                 dayperiod{

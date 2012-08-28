@@ -14,7 +14,7 @@ zh_Hant_HK{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             availableFormats{
@@ -73,21 +73,15 @@ zh_Hant_HK{
     }
     units{
         day-future{
-            0{"0 日後"}
-            1{"1 日後"}
             other{"{0} 日後"}
         }
         day-past{
-            0{"0 日前"}
-            1{"1 日前"}
             other{"{0} 日前"}
         }
         hour{
             other{"{0}時"}
         }
         month-past{
-            0{"0 月前"}
-            1{"1 月前"}
             other{"{0} 月前"}
         }
         week{

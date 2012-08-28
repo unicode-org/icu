@@ -65,7 +65,7 @@ tr{
         }
         ARS{
             "ARS",
-            "Arjantin Pezosu",
+            "Arjantin Pesosu",
         }
         ATS{
             "ATS",
@@ -121,7 +121,7 @@ tr{
         }
         BGN{
             "BGN",
-            "Yeni Bulgar Levası",
+            "Bulgar Levası",
         }
         BHD{
             "BHD",
@@ -229,7 +229,7 @@ tr{
         }
         CLP{
             "CLP",
-            "Şili Pezosu",
+            "Şili Pesosu",
         }
         CNY{
             "CN¥",
@@ -237,7 +237,7 @@ tr{
         }
         COP{
             "COP",
-            "Kolombiya Pezosu",
+            "Kolombiya Pesosu",
         }
         COU{
             "COU",
@@ -257,11 +257,11 @@ tr{
         }
         CUC{
             "CUC",
-            "Konvertibl Küba Pezosu",
+            "Konvertibl Küba Pesosu",
         }
         CUP{
             "CUP",
-            "Küba Pezosu",
+            "Küba Pesosu",
         }
         CVE{
             "CVE",
@@ -293,7 +293,7 @@ tr{
         }
         DOP{
             "DOP",
-            "Dominik Pezosu",
+            "Dominik Pesosu",
         }
         DZD{
             "DZD",
@@ -401,7 +401,7 @@ tr{
         }
         GTQ{
             "GTQ",
-            "Guatemala Ketzali",
+            "Guatemala Quetzalı",
         }
         GWE{
             "GWE",
@@ -493,7 +493,7 @@ tr{
         }
         KGS{
             "KGS",
-            "Kırgız Somu",
+            "Kırgızistan Somu",
         }
         KHR{
             "KHR",
@@ -609,11 +609,11 @@ tr{
         }
         MNT{
             "MNT",
-            "Moğol Tugriki",
+            "Moğolistan Tugriki",
         }
         MOP{
             "MOP",
-            "Makao Patacası",
+            "Makao Patakası",
         }
         MRO{
             "MRO",
@@ -633,7 +633,7 @@ tr{
         }
         MVR{
             "MVR",
-            "Maldiv Adaları Rufiyaa",
+            "Maldiv Rufiyaası",
         }
         MWK{
             "MWK",
@@ -653,7 +653,7 @@ tr{
         }
         MYR{
             "MYR",
-            "Malezya Ringiti",
+            "Malezya Ringgiti",
         }
         MZE{
             "MZE",
@@ -677,11 +677,11 @@ tr{
         }
         NIC{
             "NIC",
-            "Nikaragua Kordobası",
+            "Nikaragua Kordobası (1988-1991)",
         }
         NIO{
             "NIO",
-            "Nikaragua Kordobası (Oro)",
+            "Nikaragua Kordobası",
         }
         NLG{
             "NLG",
@@ -713,7 +713,7 @@ tr{
         }
         PEN{
             "PEN",
-            "Yeni Peru Solu",
+            "Peru Nuevo Solü",
         }
         PES{
             "PES",
@@ -725,7 +725,7 @@ tr{
         }
         PHP{
             "PHP",
-            "Filipinler Pezosu",
+            "Filipinler Pesosu",
         }
         PKR{
             "PKR",
@@ -789,7 +789,7 @@ tr{
         }
         SCR{
             "SCR",
-            "Seyşel Rupisi",
+            "Seyşeller Rupisi",
         }
         SDD{
             "SDD",
@@ -839,9 +839,13 @@ tr{
             "SRG",
             "Surinam Guldeni",
         }
+        SSP{
+            "SSP",
+            "Güney Sudan Lirası",
+        }
         STD{
             "STD",
-            "Sao Tome ve Principe Dobrası",
+            "São Tomé ve Príncipe Dobrası",
         }
         SUR{
             "SUR",
@@ -873,11 +877,11 @@ tr{
         }
         TMM{
             "TMM",
-            "Türkmenistan Manatı",
+            "Türkmenistan Manatı (1993-2009)",
         }
         TMT{
             "TMT",
-            "Yeni Türkmenistan Manatı",
+            "Türkmenistan Manatı",
         }
         TND{
             "TND",
@@ -949,7 +953,7 @@ tr{
         }
         UYU{
             "UYU",
-            "Uruguay Pezosu (Uruguayo)",
+            "Uruguay Pesosu",
         }
         UZS{
             "UZS",
@@ -957,11 +961,11 @@ tr{
         }
         VEB{
             "VEB",
-            "Venezuela Bolivarı",
+            "Venezuela Bolivarı (1871-2008)",
         }
         VEF{
             "VEF",
-            "Güçlü Venezuela Bolivarı",
+            "Venezuela Bolivarı",
         }
         VND{
             "₫",
@@ -973,7 +977,7 @@ tr{
         }
         WST{
             "WST",
-            "Batı Samoa Talası",
+            "Samoa Talası",
         }
         XAF{
             "FCFA",
@@ -1103,5 +1107,5 @@ tr{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

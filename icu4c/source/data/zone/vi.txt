@@ -10,100 +10,52 @@
  *  ICU <specials> source: <path>/xml/main/vi.xml
  */
 vi{
-    Version{"2.0.67.6"}
+    Version{"2.0.75.99"}
     zoneStrings{
-        "Africa:Abidjan"{
-            ec{"Abidjan"}
+        "Africa:Asmera"{
+            ec{"Asmara"}
         }
-        "Africa:Accra"{
-            ec{"Accra"}
+        "America:Coral_Harbour"{
+            ec{"Atikokan"}
         }
-        "Africa:Addis_Ababa"{
-            ec{"Addis Ababa"}
+        "America:Indiana:Knox"{
+            ec{"Knox, Indiana"}
         }
-        "Africa:Algiers"{
-            ec{"Algiers"}
+        "America:Indiana:Marengo"{
+            ec{"Marengo, Indiana"}
         }
-        "Africa:Bangui"{
-            ec{"Bangui"}
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg, Indiana"}
         }
-        "Africa:Banjul"{
-            ec{"Banjul"}
+        "America:Indiana:Tell_City"{
+            ec{"Tell City, Indiana"}
         }
-        "Africa:Bissau"{
-            ec{"Bissau"}
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
         }
-        "Africa:Blantyre"{
-            ec{"Blantyre"}
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes, Indiana"}
         }
-        "Africa:Djibouti"{
-            ec{"Djibouti"}
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
         }
-        "America:Adak"{
-            ec{"Adak"}
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
         }
-        "America:Anchorage"{
-            ec{"Anchorage"}
-        }
-        "America:Anguilla"{
-            ec{"Anguilla"}
-        }
-        "America:Antigua"{
-            ec{"Antigua"}
-        }
-        "America:Araguaina"{
-            ec{"Araguaina"}
-        }
-        "America:Aruba"{
-            ec{"Aruba"}
-        }
-        "America:Asuncion"{
-            ec{"Asuncion"}
-        }
-        "America:Bahia"{
-            ec{"Bahia"}
-        }
-        "America:Barbados"{
-            ec{"Barbados"}
-        }
-        "America:Belem"{
-            ec{"Belem"}
-        }
-        "America:Belize"{
-            ec{"Belize"}
-        }
-        "America:Blanc-Sablon"{
-            ec{"Blanc-Sablon"}
-        }
-        "America:Boa_Vista"{
-            ec{"Boa Vista"}
-        }
-        "America:Costa_Rica"{
-            ec{"Costa Rica"}
-        }
-        "America:Dominica"{
-            ec{"Dominica"}
-        }
-        "America:El_Salvador"{
-            ec{"El Salvador"}
-        }
-        "America:Grenada"{
-            ec{"Grenada"}
-        }
-        "America:Guatemala"{
-            ec{"Guatemala"}
-        }
-        "America:Guyana"{
-            ec{"Guyana"}
-        }
-        "America:Jamaica"{
-            ec{"Jamaica"}
+        "America:Lower_Princes"{
+            ec{"Lower Prince's Quarter"}
         }
         "America:North_Dakota:Beulah"{
             ec{"Beulah, Bắc Dakota"}
         }
-        "America:Panama"{
-            ec{"Panama"}
+        "America:North_Dakota:Center"{
+            ec{"Center, Bắc Dakota"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, Bắc Dakota"}
+        }
+        "America:St_Johns"{
+            ec{"St. John’s"}
         }
         "America:St_Kitts"{
             ec{"St. Kitts"}
@@ -120,131 +72,77 @@ vi{
         "Antarctica:DumontDUrville"{
             ec{"Dumont D'Urville"}
         }
-        "Asia:Aden"{
-            ec{"Aden"}
+        "Asia:Calcutta"{
+            ec{"Kolkata"}
         }
-        "Asia:Almaty"{
-            ec{"Almaty"}
+        "Asia:Chongqing"{
+            ec{"Trùng Khánh"}
         }
-        "Asia:Amman"{
-            ec{"Amman"}
-        }
-        "Asia:Anadyr"{
-            ec{"Anadyr"}
-        }
-        "Asia:Aqtau"{
-            ec{"Aqtau"}
-        }
-        "Asia:Aqtobe"{
-            ec{"Aqtobe"}
-        }
-        "Asia:Ashgabat"{
-            ec{"Ashgabat"}
-        }
-        "Asia:Baghdad"{
-            ec{"Baghdad"}
-        }
-        "Asia:Bahrain"{
-            ec{"Bahrain"}
-        }
-        "Asia:Baku"{
-            ec{"Baku"}
-        }
-        "Asia:Bangkok"{
-            ec{"Bangkok"}
-        }
-        "Asia:Beirut"{
-            ec{"Beirut"}
-        }
-        "Asia:Bishkek"{
-            ec{"Bishkek"}
+        "Asia:Harbin"{
+            ec{"Cáp Nhĩ Tân"}
         }
         "Asia:Hong_Kong"{
             ec{"Hồng Kông"}
         }
-        "Asia:Kuwait"{
-            ec{"Kuwait"}
+        "Asia:Kashgar"{
+            ec{"Khách Thập"}
         }
-        "Asia:Qatar"{
-            ec{"Qatar"}
+        "Asia:Katmandu"{
+            ec{"Kathmandu"}
+        }
+        "Asia:Macau"{
+            ec{"Ma Cao"}
+        }
+        "Asia:Pyongyang"{
+            ec{"Bình Nhưỡng"}
         }
         "Asia:Saigon"{
             ec{"TP Hồ Chí Minh"}
         }
-        "Asia:Singapore"{
-            ec{"Singapore"}
+        "Asia:Shanghai"{
+            ec{"Thượng Hải"}
         }
         "Asia:Taipei"{
             ec{"Đài Bắc"}
         }
+        "Asia:Urumqi"{
+            ec{"Ô Lỗ Mộc Tề"}
+        }
         "Asia:Vientiane"{
             ec{"Viêng Chăn"}
         }
-        "Atlantic:Azores"{
-            ec{"Azores"}
-        }
-        "Atlantic:Bermuda"{
-            ec{"Bermuda"}
-        }
-        "Atlantic:Canary"{
-            ec{"Canary"}
-        }
-        "Atlantic:Cape_Verde"{
-            ec{"Cape Verde"}
+        "Atlantic:Faeroe"{
+            ec{"Faroe"}
         }
         "Atlantic:South_Georgia"{
             ec{"Nam Georgia"}
         }
-        "Australia:Adelaide"{
-            ec{"Adelaide"}
+        "Atlantic:St_Helena"{
+            ec{"St. Helena"}
         }
         "Etc:Unknown"{
             ec{"Không rõ"}
         }
-        "Europe:Amsterdam"{
-            ec{"Amsterdam"}
+        "Europe:Dublin"{
+            ld{"Giờ Mùa Hè Ai-len"}
         }
-        "Europe:Andorra"{
-            ec{"Andorra"}
+        "Europe:Isle_of_Man"{
+            ec{"Đảo Man"}
         }
-        "Europe:Athens"{
-            ec{"Athens"}
+        "Europe:London"{
+            ld{"Giờ Mùa Hè Anh"}
         }
-        "Europe:Belgrade"{
-            ec{"Belgrade"}
+        "Europe:Moscow"{
+            ec{"Mát-xcơ-va"}
         }
-        "Europe:Berlin"{
-            ec{"Berlin"}
+        "Europe:Prague"{
+            ec{"Praha"}
         }
-        "Europe:Luxembourg"{
-            ec{"Luxembourg"}
+        "Pacific:Ponape"{
+            ec{"Pohnpei"}
         }
-        "Europe:Malta"{
-            ec{"Malta"}
-        }
-        "Europe:Monaco"{
-            ec{"Monaco"}
-        }
-        "Indian:Antananarivo"{
-            ec{"Antananarivo"}
-        }
-        "Indian:Maldives"{
-            ec{"Maldives"}
-        }
-        "Indian:Mauritius"{
-            ec{"Mauritius"}
-        }
-        "Pacific:Apia"{
-            ec{"Apia"}
-        }
-        "Pacific:Fiji"{
-            ec{"Fiji"}
-        }
-        "Pacific:Nauru"{
-            ec{"Nauru"}
-        }
-        "Pacific:Palau"{
-            ec{"Palau"}
+        "Pacific:Truk"{
+            ec{"Chuuk"}
         }
         "meta:Acre"{
             ld{"Giờ Mùa Hè Acre"}
@@ -330,7 +228,7 @@ vi{
         }
         "meta:Arabian"{
             ld{"Giờ Mùa Hè A-rập"}
-            lg{"Giờ A-rập"}
+            lg{"Giờ Ả Rập"}
             ls{"Giờ Chuẩn A-rập"}
         }
         "meta:Argentina"{
@@ -675,13 +573,27 @@ vi{
         "meta:Kwajalein"{
             ls{"Giờ Kwajalein"}
         }
+        "meta:Kyrgystan"{
+            ls{"Giờ Kyrgystan"}
+        }
+        "meta:Lanka"{
+            ls{"Giờ Lanka"}
+        }
         "meta:Line_Islands"{
             ls{"Giờ Quần Đảo Line"}
+        }
+        "meta:Long_Shu"{
+            ls{"Giờ Long-Shu"}
         }
         "meta:Lord_Howe"{
             ld{"Giờ Mùa Hè Lord Howe"}
             lg{"Giờ Lord Howe"}
             ls{"Giờ Chuẩn Lord Howe"}
+        }
+        "meta:Macau"{
+            ld{"Giờ Mùa Hè Ma Cao"}
+            lg{"Giờ Ma Cao"}
+            ls{"Giờ Chuẩn Ma Cao"}
         }
         "meta:Macquarie"{
             ls{"Giờ Macquarie"}
@@ -690,6 +602,12 @@ vi{
             ld{"Giờ mùa hè Magadan"}
             lg{"Giờ Magadan"}
             ls{"Giờ Chuẩn Magadan"}
+        }
+        "meta:Malaya"{
+            ls{"Giờ Malaya"}
+        }
+        "meta:Malaysia"{
+            ls{"Giờ Malaysia"}
         }
         "meta:Maldives"{
             ls{"Giờ Maldives"}
@@ -717,6 +635,9 @@ vi{
             ld{"Giờ Mùa Hè Matxcơva"}
             lg{"Giờ Matxcơva"}
             ls{"Giờ Chuẩn Matxcơva"}
+        }
+        "meta:Myanmar"{
+            ls{"Giờ Myanmar"}
         }
         "meta:Nauru"{
             ls{"Giờ Nauru"}
@@ -760,6 +681,11 @@ vi{
             lg{"Giờ Omsk"}
             ls{"Giờ chuẩn Omsk"}
         }
+        "meta:Pakistan"{
+            ld{"Giờ Mùa Hè Pakistan"}
+            lg{"Giờ Pakistan"}
+            ls{"Giờ Chuẩn Pakistan"}
+        }
         "meta:Palau"{
             ls{"Giờ Palau"}
         }
@@ -776,19 +702,29 @@ vi{
             lg{"Giờ Peru"}
             ls{"Giờ Chuẩn Peru"}
         }
+        "meta:Philippines"{
+            ld{"Giờ Mùa Hè Philippin"}
+            lg{"Giờ Philippin"}
+            ls{"Giờ Chuẩn Philippin"}
+        }
         "meta:Phoenix_Islands"{
             ls{"Giờ Quần Đảo Phoenix"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Giờ Mùa Hè Pierre và Miquelon"}
-            lg{"Giờ Pierre và Miquelon"}
-            ls{"Giờ Chuẩn Pierre và Miquelon"}
+            ld{"Giờ Mùa Hè Saint Pierre và Miquelon"}
+            lg{"Giờ Saint Pierre và Miquelon"}
+            ls{"Giờ Chuẩn Saint Pierre và Miquelon"}
         }
         "meta:Pitcairn"{
             ls{"Giờ Pitcairn"}
         }
         "meta:Ponape"{
             ls{"Giờ Ponape"}
+        }
+        "meta:Qyzylorda"{
+            ld{"Giờ Mùa Hè Qyzylorda"}
+            lg{"Giờ Qyzylorda"}
+            ls{"Giờ Chuẩn Qyzylorda"}
         }
         "meta:Reunion"{
             ls{"Giờ Reunion"}
@@ -806,11 +742,24 @@ vi{
             lg{"Giờ Samara"}
             ls{"Giờ Chuẩn Samara"}
         }
+        "meta:Samarkand"{
+            ld{"Giờ Mùa Hè Samarkand"}
+            lg{"Giờ Samarkand"}
+            ls{"Giờ Chuẩn Samarkand"}
+        }
         "meta:Samoa"{
             ls{"Giờ Chuẩn Samoa"}
         }
         "meta:Seychelles"{
             ls{"Giờ Seychelles"}
+        }
+        "meta:Shevchenko"{
+            ld{"Giờ Mùa Hè Shevchenko"}
+            lg{"Giờ Shevchenko"}
+            ls{"Giờ Chuẩn Shevchenko"}
+        }
+        "meta:Singapore"{
+            ls{"Giờ Chuẩn Singapo"}
         }
         "meta:Solomon"{
             ls{"Giờ Quần Đảo Solomon"}
@@ -821,11 +770,34 @@ vi{
         "meta:Suriname"{
             ls{"Giờ Suriname"}
         }
+        "meta:Sverdlovsk"{
+            ld{"Giờ Mùa Hè Sverdlovsk"}
+            lg{"Giờ Sverdlovsk"}
+            ls{"Giờ Chuẩn Sverdlovsk"}
+        }
         "meta:Syowa"{
             ls{"Giờ Syowa"}
         }
         "meta:Tahiti"{
             ls{"Giờ Tahiti"}
+        }
+        "meta:Taipei"{
+            ld{"Giờ Mùa Hè Đài Bắc"}
+            lg{"Giờ Đài Bắc"}
+            ls{"Giờ Chuẩn Đài Bắc"}
+        }
+        "meta:Tajikistan"{
+            ls{"Giờ Tajikistan"}
+        }
+        "meta:Tashkent"{
+            ld{"Giờ Mùa Hè Tashkent"}
+            lg{"Giờ Tashkent"}
+            ls{"Giờ Chuẩn Tashkent"}
+        }
+        "meta:Tbilisi"{
+            ld{"Giờ Mùa Hè Tbilisi"}
+            lg{"Giờ Tbilisi"}
+            ls{"Giờ Chuẩn Tbilisi"}
         }
         "meta:Tokelau"{
             ls{"Giờ Tokelau"}
@@ -843,13 +815,31 @@ vi{
             lg{"Giờ Thổ Nhĩ Kỳ"}
             ls{"Giờ Chuẩn Thổ Nhĩ Kỳ"}
         }
+        "meta:Turkmenistan"{
+            ld{"Giờ Mùa Hè Turkmenistan"}
+            lg{"Giờ Turkmenistan"}
+            ls{"Giờ Chuẩn Turkmenistan"}
+        }
         "meta:Tuvalu"{
             ls{"Giờ Tuvalu"}
+        }
+        "meta:Uralsk"{
+            ld{"Giờ Mùa Hè Ural'sk"}
+            lg{"Giờ Ural'sk"}
+            ls{"Giờ Chuẩn Ural'sk"}
         }
         "meta:Uruguay"{
             ld{"Giờ Mùa Hè Uruguay"}
             lg{"Giờ Uruguay"}
             ls{"Giờ Chuẩn Uruguay"}
+        }
+        "meta:Urumqi"{
+            ls{"Giờ Urumqi"}
+        }
+        "meta:Uzbekistan"{
+            ld{"Giờ Mùa Hè Uzbekistan"}
+            lg{"Giờ Uzbekistan"}
+            ls{"Giờ Chuẩn Uzbekistan"}
         }
         "meta:Vanuatu"{
             ld{"Giờ Mùa Hè Vanuatu"}
@@ -888,6 +878,11 @@ vi{
             lg{"Giờ Yekaterinburg"}
             ls{"Giờ Chuẩn Yekaterinburg"}
         }
+        "meta:Yerevan"{
+            ld{"Giờ Mùa Hè Yerevan"}
+            lg{"Giờ Yerevan"}
+            ls{"Giờ Chuẩn Yerevan"}
+        }
         "meta:Yukon"{
             ld{"Giờ Mùa Hè Yukon"}
             lg{"Giờ Yukon"}
@@ -896,6 +891,7 @@ vi{
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Giờ {1} ({0})"}
         gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Giờ {0}"}
     }

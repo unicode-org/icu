@@ -84,7 +84,7 @@ ee{
             "ɔstriaga schilling",
         }
         AUD{
-            "AU$",
+            "A$",
             "australiaga dollar",
         }
         AWG{
@@ -2297,5 +2297,5 @@ ee{
     CurrencyUnitPatterns{
         other{"{1} {0}"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

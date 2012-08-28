@@ -56,7 +56,6 @@ ln{
         CN{"Sinɛ"}
         CO{"Kolombi"}
         CR{"Kositarika"}
-        CS{"Serebi mpé Monténegro"}
         CU{"Kiba"}
         CV{"Bisanga bya Kapevɛrɛ"}
         CY{"Sípɛlɛ"}
@@ -237,5 +236,5 @@ ln{
         ZM{"Zambi"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

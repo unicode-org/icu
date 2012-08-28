@@ -29,7 +29,7 @@ es{
         034{"Asia meridional"}
         035{"Sudeste asiático"}
         039{"Europa meridional"}
-        053{"Australia y Nueva Zelanda"}
+        053{"Australasia"}
         054{"Melanesia"}
         057{"Micronesia [057]"}
         061{"Polinesia"}
@@ -72,6 +72,7 @@ es{
         BM{"Bermudas"}
         BN{"Brunéi"}
         BO{"Bolivia"}
+        BQ{"Caribe neerlandés"}
         BR{"Brasil"}
         BS{"Bahamas"}
         BT{"Bután"}
@@ -93,9 +94,9 @@ es{
         CO{"Colombia"}
         CP{"Isla Clipperton"}
         CR{"Costa Rica"}
-        CS{"Serbia y Montenegro"}
         CU{"Cuba"}
         CV{"Cabo Verde"}
+        CW{"Curazao"}
         CX{"Isla Christmas"}
         CY{"Chipre"}
         CZ{"República Checa"}
@@ -258,8 +259,10 @@ es{
         SN{"Senegal"}
         SO{"Somalia"}
         SR{"Surinam"}
+        SS{"Sudán del Sur"}
         ST{"Santo Tomé y Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Siria"}
         SZ{"Suazilandia"}
         TA{"Tristán da Cunha"}
@@ -301,5 +304,5 @@ es{
         ZW{"Zimbabue"}
         ZZ{"Región desconocida"}
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.99"}
 }

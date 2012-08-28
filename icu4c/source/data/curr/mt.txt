@@ -24,5 +24,13 @@ mt{
             "Munita Mhux Magħruf jew Mhux Validu",
         }
     }
-    Version{"2.0.65.46"}
+    CurrencyPlurals{
+        XXX{
+            few{"Munita Mhux Magħruf jew Mhux Validu"}
+            many{"Munita Mhux Magħruf jew Mhux Validu"}
+            one{"Munita Mhux Magħruf jew Mhux Validu"}
+            other{"Munita Mhux Magħruf jew Mhux Validu"}
+        }
+    }
+    Version{"2.0.75.99"}
 }

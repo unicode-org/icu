@@ -56,7 +56,6 @@ khq{
         CN{"Šiin"}
         CO{"Kolombi"}
         CR{"Kosta rika"}
-        CS{"Serbi nda Montenegro"}
         CU{"Kuuba"}
         CV{"Kapuver gungey"}
         CY{"Šiipur"}
@@ -238,5 +237,5 @@ khq{
         ZM{"Zambi"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.79"}
 }

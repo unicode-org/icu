@@ -8,7 +8,7 @@
 # Generated from CLDR 
 #
 $word_boundary = [-\ $];
-$vowel = [aeijouw]; # Vowels and glides
+$vowel = [aeijouw];       # Vowels and glides
 $not_vowel = [^$vowel];
 ð → | d;
 ɣ → | g;
@@ -29,18 +29,18 @@ uu → u ;
 [^dgktx] { ei\u032F → e ;
 [^-\ .$] { eu\u032F → eu ;
 [^-\ .$] { ou\u032F → o;
-[^j] { ui → wi ;
-[^$word_boundary] { m } [bp] → n; # GB/T 17693.5-2009, 5.3.2
-s[θs] → s; # GB/T 17693.5-2009, 5.3.4
-[^ʧ] { jo → io; # GB/T 17693.5-2009 表 1, 注 7
+[^j]     { ui → wi ;
+[^$word_boundary] { m } [bp] → n;  # GB/T 17693.5-2009, 5.3.2
+s[θs] → s;               # GB/T 17693.5-2009, 5.3.4
+[^ʧ] { jo → io;          # GB/T 17693.5-2009 表 1, 注 7
 ::Null;
-j } an $not_vowel → i ; # GB/T 17693.5-2009 表 1, 注 8
+j } an $not_vowel → i ;  # GB/T 17693.5-2009 表 1, 注 8
 [g.$] { wai\u032F → wai ;
 wai\u032F → uai\u032F ;
 [g.$] { wau\u032F → wau ;
 wau\u032F → uau\u032F ;
 jau\u032F → iau\u032F ;
-[^jw] { ao } [^n] → au\u032F ;
+[^jw] { ao } [^n]     → au\u032F ;
 [^jw] { ao } n $vowel → au\u032F ;
 ::Null;
 '.' → ;
@@ -66,9 +66,9 @@ bun } $not_vowel → 本 ;
 bu → 布 ;
 bwan } $not_vowel → 布安 ;
 bwa → 布阿 ;
-bwen } $not_vowel → 布恩 ; # Should be be 本, per GB/T 17693.5-2009 表 1.
+bwen } $not_vowel → 布恩 ;  # Should be be 本, per GB/T 17693.5-2009 表 1.
 bwe → 布埃 ;
-bwin } $not_vowel → 布因 ; # Nonstandard, but fits observed data.
+bwin } $not_vowel → 布因 ;  # Nonstandard, but fits observed data.
 bwi → 布伊 ;
 bwo → 博 ;
 b → 布 ;
@@ -164,7 +164,7 @@ gon } $not_vowel → 贡 ;
 go → 戈 ;
 gun } $not_vowel → 贡 ;
 gu → 古 ;
-gwan } [$] → 古安 ; # Nonstandard, but fits observed data.
+gwan } [$] → 古安 ;        # Nonstandard, but fits observed data.
 gwan } $not_vowel → 关 ;
 gwa → 瓜 ;
 gwen } $not_vowel → 古恩 ;
@@ -280,7 +280,7 @@ mwan } $not_vowel → 穆安 ;
 mwa → 穆阿 ;
 mwen } $not_vowel → 门 ;
 mwe → 穆埃 ;
-mwin } $not_vowel → 穆因 ; # Nonstandard, but fits observed data.
+mwin } $not_vowel → 穆因 ;  # Nonstandard, but fits observed data.
 mwi → 穆伊 ;
 mwo → 莫 ;
 m → 姆 ;
@@ -421,7 +421,7 @@ tsu → 楚 ;
 ts → 茨 ;
 tun } $not_vowel → 通 ;
 tu → 图 ;
-twan } $not_vowel → 图安 ;
+twan } $not_vowel → 图安	;
 twa → 图阿 ;
 twen } $not_vowel → 通 ;
 twe → 图埃 ;
@@ -444,7 +444,7 @@ t → 特 ;
 ʧju → 丘 ;
 ʧon } $not_vowel → 琼 ;
 ʧo → 乔 ;
-ʧun } $not_vowel → 琼 ; # Should be 春, per GB/T 17693.5-2009 表 1.
+ʧun } $not_vowel → 琼 ;  # Should be 春, per GB/T 17693.5-2009 表 1.
 ʧu → 丘 ;
 ʧwan } $not_vowel → 丘安 ;
 ʧwa → 丘阿 ;
@@ -461,7 +461,7 @@ wen } $not_vowel → 温 ;
 we → 韦 ;
 win } $not_vowel → 温 ;
 wi → 维 ;
-won } $not_vowel → 翁 ; # Unseen.
+won } $not_vowel → 翁 ;  # Unseen.
 wo → 沃 ;
 xai\u032F → 海 ;
 xan } $not_vowel → 汉 ;

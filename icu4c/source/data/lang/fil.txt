@@ -11,47 +11,65 @@
  */
 fil{
     Keys{
-        calendar{"Calendar"}
-        collation{"Collation"}
+        calendar{"Kalendaryo"}
+        colAlternate{"Pag-uuri-uri ng Mga Ignore Symbol"}
+        colBackwards{"Pag-uuri-uri ng Baliktad na Accent"}
+        colCaseFirst{"Uppercase/Lowercase na Pagsusunud-sunod"}
+        colCaseLevel{"Case Sensitive na Pag-uuri-uri"}
+        colHiraganaQuaternary{"Pag-uuri-uri ng Kana"}
+        colNormalization{"Normalized na Pag-uuri-uri"}
+        colNumeric{"Numeric na Pag-uuri-uri"}
+        colStrength{"Lakas ng Pag-uuri-uri"}
+        collation{"Ayos ng Pag-uuri-uri"}
         currency{"Pera"}
         numbers{"Mga Numero"}
+        timezone{"Time Zone"}
+        va{"Lokal na Variant"}
+        variableTop{"Pag-uri-uriin Bilang Mga Simbolo"}
         x{"Pribadong Paggamit"}
     }
     Languages{
         ab{"Abkhazian"}
+        ach{"Acoli"}
         af{"Afrikaans"}
+        ak{"Akan"}
         am{"Amharic"}
         ar{"Arabic"}
         as{"Assamese"}
         ay{"Aymara"}
         az{"Azerbaijani"}
         be{"Belarusian"}
+        bem{"Bemba"}
         bg{"Bulgarian"}
         bh{"Bihari"}
-        bn{"Bengali; Bangla"}
+        bn{"Bengali"}
         bo{"Tibetan"}
         br{"Breton"}
         bs{"Bosnian"}
         ca{"Catalan"}
+        chr{"Cherokee"}
+        ckb{"Sorani Kurdish"}
+        co{"Corsican"}
         cs{"Czech"}
         cy{"Welsh"}
         da{"Danish"}
-        de{"Aleman"}
+        de{"German"}
         de_AT{"Austrian German"}
         de_CH{"Swiss High German"}
         dv{"Divehi"}
         dz{"Dzongkha"}
+        ee{"Ewe"}
         efi{"Efik"}
         el{"Griyego"}
         en{"Ingles"}
         en_AU{"Ingles sa Australia"}
-        en_CA{"Canadian English"}
+        en_CA{"Ingles sa Canada"}
         en_GB{"Ingles (UK)"}
         en_US{"Ingles sa U.S."}
         eo{"Esperanto"}
         es{"Espanyol"}
         es_419{"Espanyol sa Latin America"}
-        es_ES{"Espanyol sa Iberia"}
+        es_ES{"European Spanish"}
         et{"Estonian"}
         eu{"Basque"}
         fa{"Persian"}
@@ -64,6 +82,7 @@ fil{
         fr_CH{"Swiss French"}
         fy{"Western Frisian"}
         ga{"Irish"}
+        gaa{"Ga"}
         gd{"Scots Gaelic"}
         gl{"Galician"}
         gn{"Guarani"}
@@ -86,6 +105,7 @@ fil{
         ja{"Japanese"}
         jv{"Javanese"}
         ka{"Georgian"}
+        kg{"Kongo"}
         kk{"Kazakh"}
         km{"Khmer"}
         kn{"Kannada"}
@@ -95,10 +115,14 @@ fil{
         ky{"Kirghiz"}
         la{"Latin"}
         lb{"Luxembourgish"}
+        lg{"Ganda"}
         ln{"Lingala"}
         lo{"Lao"}
+        loz{"Lozi"}
         lt{"Lithuanian"}
+        lua{"Luba-Lulua"}
         lv{"Latvian"}
+        mfe{"Morisyen"}
         mg{"Malagasy"}
         mi{"Maori"}
         mk{"Macedonian"}
@@ -108,16 +132,18 @@ fil{
         ms{"Malay"}
         mt{"Maltese"}
         my{"Burmese"}
-        nb{"Norwegian Bokmål"}
+        nb{"Norwegian Bokmal"}
         nd{"North Ndebele"}
         ne{"Nepali"}
-        nl{"Olandes"}
+        nl{"Dutch"}
         nl_BE{"Flemish"}
         nn{"Norwegian Nynorsk"}
         no{"Norwegian"}
         nso{"Northern Sotho"}
         ny{"Nyanja"}
+        nyn{"Nyankole"}
         oc{"Occitan"}
+        om{"Oromo"}
         or{"Oriya"}
         os{"Ossetic"}
         pa{"Punjabi"}
@@ -125,7 +151,7 @@ fil{
         ps{"Pashto"}
         pt{"Portuges"}
         pt_BR{"Portuges sa Brazil"}
-        pt_PT{"Portuges sa Iberia"}
+        pt_PT{"European Portuguese"}
         qu{"Quechua"}
         rm{"Rhaeto-Romance"}
         rn{"Rundi"}
@@ -160,20 +186,23 @@ fil{
         tk{"Turkmen"}
         tlh{"Klingon"}
         tn{"Tswana"}
-        to{"Tonga"}
+        to{"Tongan"}
         tpi{"Tok Pisin"}
         tr{"Turkish"}
         ts{"Tsonga"}
         tt{"Tatar"}
+        tum{"Tumbuka"}
         ty{"Tahitian"}
         ug{"Uighur"}
         uk{"Ukranian"}
+        und{"Hindi Kilalang Wika"}
         ur{"Urdu"}
         uz{"Uzbek"}
         ve{"Venda"}
         vi{"Vietnamese"}
         wo{"Wolof"}
         xh{"Xhosa"}
+        yi{"Yiddish"}
         yo{"Yoruba"}
         yue{"Cantonese"}
         zh{"Chinese"}
@@ -252,9 +281,11 @@ fil{
             ducet{"Default na Pagkakasunud-sunod ng Pag-uuri ng Unicode"}
             gb2312han{"Pagkakasunud-sunod ng Pag-uuri ng Pinasimpleng Chinese - GB2312"}
             phonebook{"Pagkakasunud-sunod ng Pag-uuri ng Phonebook"}
+            phonetic{"Phonetic na Ayos ng Pag-uuri-uri"}
             pinyin{"Pagkakasunud-sunod ng Pag-uuri ng Pinyin"}
             reformed{"Pagkakasunud-sunod ng Pag-uuri ng Na-reform"}
             search{"Paghahanap na Layuning Pangkalahatan"}
+            searchjl{"Maghanap Ayon sa Unang Katinig ng Hangul"}
             stroke{"Pagkakasunud-sunod ng Pag-uuri ng Stroke"}
             traditional{"Tradisyunal na Pagkakasunud-sunod ng Pag-uuri"}
             unihan{"Pagkakasunud-sunod ng Pag-uuri ng Radical-Stroke"}
@@ -267,6 +298,7 @@ fil{
             beng{"Bengali Digits"}
             deva{"Devanagari Digits"}
             ethi{"Ethiopic Numerals"}
+            finance{"Mga Pampinansyang Numeral"}
             fullwide{"Full Width Digits"}
             geor{"Georgian Numerals"}
             grek{"Greek Numerals"}
@@ -288,6 +320,7 @@ fil{
             mlym{"Malayalam Digits"}
             mong{"Mongolian Digits"}
             mymr{"Myanmar Digits"}
+            native{"Mga Native na Digit"}
             orya{"Oriya Digits"}
             roman{"Roman Numerals"}
             romanlow{"Roman Lowercase Numerals"}
@@ -295,19 +328,22 @@ fil{
             telu{"Telugu Digits"}
             thai{"Thai Digits"}
             tibt{"Tibetan Digits"}
+            traditional{"Mga Tradisyunal na Numeral"}
+            vaii{"Mga Vai na Digit"}
         }
     }
     Variants{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}
         territory{"{0}"}
     }
     localeDisplayPattern{
+        pattern{"{0} ({1})"}
         separator{","}
     }
 }

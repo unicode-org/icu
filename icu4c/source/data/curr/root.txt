@@ -12,7 +12,7 @@
 root{
     Currencies{
         AUD{
-            "AU$",
+            "A$",
             "AUD",
         }
         BRL{
@@ -99,7 +99,7 @@ root{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.67.6"}
+    Version{"2.0.75.94"}
     currencySpacing{
         afterCurrency{
             currencyMatch{"[:letter:]"}

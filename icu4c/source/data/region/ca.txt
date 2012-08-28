@@ -72,6 +72,7 @@ ca{
         BM{"Bermudes"}
         BN{"Brunei"}
         BO{"Bolívia"}
+        BQ{"Carib Neerlandès"}
         BR{"Brasil"}
         BS{"Bahames"}
         BT{"Bhutan"}
@@ -93,9 +94,9 @@ ca{
         CO{"Colòmbia"}
         CP{"Illa Clipperton"}
         CR{"Costa Rica"}
-        CS{"Sèrbia i Montenegro"}
         CU{"Cuba"}
         CV{"Cap Verd"}
+        CW{"Curaçao"}
         CX{"Illa Christmas"}
         CY{"Xipre"}
         CZ{"República Txeca"}
@@ -140,7 +141,7 @@ ca{
         GU{"Guam"}
         GW{"Guinea Bissau"}
         GY{"Guyana"}
-        HK{"Regió administrativa especial xinesa de Hong Kong"}
+        HK{"Regió adm. especial xinesa de Hong Kong"}
         HM{"Illa Heard i Illes McDonald"}
         HN{"Hondures"}
         HR{"Croàcia"}
@@ -226,7 +227,7 @@ ca{
         PH{"Filipines"}
         PK{"Pakistan"}
         PL{"Polònia"}
-        PM{"Saint Pierre i Miquelon"}
+        PM{"Saint-Pierre-et-Miquelon"}
         PN{"Illes Pitcairn"}
         PR{"Puerto Rico"}
         PS{"Palestina"}
@@ -255,8 +256,10 @@ ca{
         SN{"Senegal"}
         SO{"Somàlia"}
         SR{"Surinam"}
+        SS{"Sudan del Sud"}
         ST{"São Tomé i Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Síria"}
         SZ{"Swazilàndia"}
         TA{"Tristão da Cunha"}
@@ -296,7 +299,7 @@ ca{
         ZA{"República de Sud-àfrica"}
         ZM{"Zàmbia"}
         ZW{"Zimbabwe"}
-        ZZ{"Regió desconeguda o no vàlida"}
+        ZZ{"Regió desconeguda"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
 }

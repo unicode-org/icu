@@ -56,7 +56,6 @@ kln{
         CN{"Emetab China"}
         CO{"Emetab Colombia"}
         CR{"Emetab Costa Rica"}
-        CS{"Emetab Serbia and Montenegro"}
         CU{"Emetab Cuba"}
         CV{"Ikwembeyotab Cape Verde"}
         CY{"Emetab Cyprus"}
@@ -238,5 +237,5 @@ kln{
         ZM{"Emetab Zambia"}
         ZW{"Emetab Zimbabwe"}
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.74.65"}
 }

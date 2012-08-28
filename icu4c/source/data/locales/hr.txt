@@ -12,11 +12,11 @@
 hr{
     AuxExemplarCharacters{"[q w x y]"}
     ExemplarCharacters{"[a b c č ć d {dž} đ e f g h i j k l {lj} m n {nj} o p r s š t u v z ž]"}
-    ExemplarCharactersCurrency{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{
         "[A B C Č Ć D {DŽ} Đ E F G H I J K L {LJ} M N {NJ} O P Q R S Š T U V W X Y Z "
         "Ž]"
     }
+    ExemplarCharactersPunctuation{"[‐ – — , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] @ * / ′ ″]"}
     LocaleScript{
         "Latn",
     }
@@ -24,54 +24,177 @@ hr{
         latn{
             patterns{
                 currencyFormat{"#,##0.00 ¤"}
+                decimalFormat{"#,##0.###"}
+                percentFormat{"#,##0%"}
+                scientificFormat{"#E0"}
+            }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        few{"0000"}
+                        many{"0000"}
+                        one{"0000"}
+                        other{"0000"}
+                    }
+                    10000{
+                        few{"00,000"}
+                        many{"00,000"}
+                        one{"00,000"}
+                        other{"00,000"}
+                    }
+                    100000{
+                        few{",000,000"}
+                        many{",000,000"}
+                        one{",000,000"}
+                        other{",000,000"}
+                    }
+                    1000000{
+                        few{"0 milijuna"}
+                        many{"0 milijuna"}
+                        one{"0 milijun"}
+                        other{"0 milijuna"}
+                    }
+                    10000000{
+                        few{"00 milijuna"}
+                        many{"00 milijuna"}
+                        one{"00 milijun"}
+                        other{"00 milijuna"}
+                    }
+                    100000000{
+                        few{"000 milijuna"}
+                        many{"000 milijuna"}
+                        one{"000 milijun"}
+                        other{"000 milijuna"}
+                    }
+                    1000000000{
+                        few{"0 milijarde"}
+                        many{"0 milijarda"}
+                        one{"0 milijarda"}
+                        other{"0 milijarda"}
+                    }
+                    10000000000{
+                        few{"00 milijarde"}
+                        many{"00 milijarda"}
+                        one{"00 milijarda"}
+                        other{"00 milijarda"}
+                    }
+                    100000000000{
+                        few{"000 milijarde"}
+                        many{"000 milijarda"}
+                        one{"000 milijarda"}
+                        other{"000 milijarda"}
+                    }
+                    1000000000000{
+                        few{"0 bilijuna"}
+                        many{"0 bilijuna"}
+                        one{"0 bilijun"}
+                        other{"0 bilijuna"}
+                    }
+                    10000000000000{
+                        few{"00 bilijuna"}
+                        many{"00 bilijuna"}
+                        one{"00 bilijuna"}
+                        other{"00 bilijuna"}
+                    }
+                    100000000000000{
+                        few{"000 bilijuna"}
+                        many{"000 bilijuna"}
+                        one{"000 bilijuna"}
+                        other{"000 bilijuna"}
+                    }
+                }
             }
             patternsShort{
                 decimalFormat{
                     1000{
+                        few{"0000"}
+                        many{"0000"}
+                        one{"0000"}
                         other{"0000"}
                     }
                     10000{
+                        few{"00000"}
+                        many{"00000"}
+                        one{"00000"}
                         other{"00000"}
                     }
                     100000{
+                        few{"000000"}
+                        many{"000000"}
+                        one{"000000"}
                         other{"000000"}
                     }
                     1000000{
-                        other{"0.0 mil'.'"}
+                        few{"0 mil'.'"}
+                        many{"0 mil'.'"}
+                        one{"0 mil'.'"}
+                        other{"0 mil'.'"}
                     }
                     10000000{
+                        few{"00 mil'.'"}
+                        many{"00 mil'.'"}
+                        one{"00 mil'.'"}
                         other{"00 mil'.'"}
                     }
                     100000000{
+                        few{"000 mil'.'"}
+                        many{"000 mil'.'"}
+                        one{"000 mil'.'"}
                         other{"000 mil'.'"}
                     }
                     1000000000{
-                        other{"0.0 mlr"}
+                        few{"0 mlr'.'"}
+                        many{"0 mlr'.'"}
+                        one{"0 mlr'.'"}
+                        other{"0 mlr'.'"}
                     }
                     10000000000{
-                        other{"00 mlr"}
+                        few{"00 mlr'.'"}
+                        many{"00 mlr'.'"}
+                        one{"00 mlr'.'"}
+                        other{"00 mlr'.'"}
                     }
                     100000000000{
-                        other{"000 mlr"}
+                        few{"000 mlr'.'"}
+                        many{"000 mlr'.'"}
+                        one{"000 mlr'.'"}
+                        other{"000 mlr'.'"}
                     }
                     1000000000000{
-                        other{"0.0 bil'.'"}
+                        few{"0 bil'.'"}
+                        many{"0 bil'.'"}
+                        one{"0 bil'.'"}
+                        other{"0 bil'.'"}
                     }
                     10000000000000{
+                        few{"00 bil'.'"}
+                        many{"00 bil'.'"}
+                        one{"00 bil'.'"}
                         other{"00 bil'.'"}
                     }
                     100000000000000{
+                        few{"000 bil'.'"}
+                        many{"000 bil'.'"}
+                        one{"000 bil'.'"}
                         other{"000 bil'.'"}
                     }
                 }
             }
             symbols{
                 decimal{","}
+                exponential{"E"}
                 group{"."}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.75.99"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -183,6 +306,15 @@ hr{
                         "P",
                         "S",
                     }
+                    short{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sri",
+                        "čet",
+                        "pet",
+                        "sub",
+                    }
                     wide{
                         "nedjelja",
                         "ponedjeljak",
@@ -211,6 +343,15 @@ hr{
                         "č",
                         "p",
                         "s",
+                    }
+                    short{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sri",
+                        "čet",
+                        "pet",
+                        "sub",
                     }
                     wide{
                         "nedjelja",
@@ -291,27 +432,23 @@ hr{
                     }
                 }
                 zone{
-                    dn{"zona"}
+                    dn{"vremenska zona"}
                 }
             }
             intervalFormats{
                 H{
                     H{"HH - HH'h'"}
-                    a{"HH - HH'h'"}
                 }
                 Hm{
                     H{"HH:mm-HH:mm"}
-                    a{"HH:mm-HH:mm"}
                     m{"HH:mm-HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm-HH:mm v"}
-                    a{"HH:mm-HH:mm v"}
                     m{"HH:mm-HH:mm v"}
                 }
                 Hv{
                     H{"HH - HH 'h' v"}
-                    a{"HH - HH 'h' v"}
                 }
                 M{
                     M{"MM. - MM."}
@@ -579,9 +716,13 @@ hr{
             availableFormats{
                 Ed{"E, d."}
                 Gy{"y. G"}
+                M{"L."}
                 MEd{"E, d. M."}
+                MMM{"LLL"}
                 MMMEd{"E, d. MMM"}
+                MMMd{"d. MMM"}
                 Md{"d. M."}
+                d{"d."}
                 y{"y. G"}
                 yyyy{"y. G"}
                 yyyyM{"M. y. G"}
@@ -633,12 +774,14 @@ hr{
         standard{
             2{"{0} i {1}"}
             end{"{0} i {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
         }
     }
     measurementSystemNames{
         UK{"imperijalni sustav"}
         US{"američki sustav"}
-        metric{"metrički"}
+        metric{"metrički sustav"}
     }
     units{
         day{
@@ -648,42 +791,34 @@ hr{
             other{"{0} dan"}
         }
         day-future{
-            0{"za 0 dana"}
-            1{"za 1 dan"}
             few{"za {0} dana"}
             many{"za {0} dana"}
             one{"za {0} dan"}
             other{"za {0} dana"}
         }
         day-past{
-            0{"prije 0 dana"}
-            1{"prije 1 dana"}
             few{"prije {0} dana"}
             many{"prije {0} dana"}
             one{"prije {0} dan"}
-            other{"Prije ovoliko dana: {0}"}
+            other{"prije {0} dana"}
         }
         hour{
             few{"{0} sata"}
             many{"{0} sati"}
             one{"{0} sat"}
-            other{"{0} sat"}
+            other{"{0} sata"}
         }
         hour-future{
-            0{"za 0 sati"}
-            1{"za 1 sat"}
             few{"za {0} sata"}
             many{"za {0} sati"}
             one{"za {0} sat"}
-            other{"Za {0} sati"}
+            other{"za {0} sati"}
         }
         hour-past{
-            0{"prije 0 sati"}
-            1{"prije 1 h"}
             few{"prije {0} sata"}
             many{"prije {0} sati"}
             one{"prije {0} sat"}
-            other{"Prije {0} sati"}
+            other{"prije {0} sati"}
         }
         minute{
             few{"{0} minute"}
@@ -692,20 +827,16 @@ hr{
             other{"{0} minuta"}
         }
         minute-future{
-            0{"za 0 minuta"}
-            1{"za 1 min"}
             few{"za {0} minute"}
             many{"za {0} minuta"}
             one{"za {0} minutu"}
-            other{"Za {0} minuta"}
+            other{"za {0} minuta"}
         }
         minute-past{
-            0{"prije 0 minuta"}
-            1{"prije 1 minutu"}
             few{"prije {0} minute"}
             many{"prije {0} minuta"}
             one{"prije {0} minutu"}
-            other{"Prije {0} minuta"}
+            other{"prije {0} minuta"}
         }
         month{
             few{"{0} mjeseca"}
@@ -714,16 +845,12 @@ hr{
             other{"{0} mjesec"}
         }
         month-future{
-            0{"za 0 mjeseci"}
-            1{"za 1 mjesec"}
             few{"za {0} mjeseca"}
             many{"za {0} mjeseci"}
             one{"za {0} mjesec"}
             other{"za sljedeći broj mjeseci: {0}"}
         }
         month-past{
-            0{"prije 0 mjeseci"}
-            1{"prije 1 mjeseca"}
             few{"prije {0} mjeseca"}
             many{"prije {0} mjeseci"}
             one{"prije {0} mjesec"}
@@ -736,16 +863,12 @@ hr{
             other{"{0} sekunda"}
         }
         second-future{
-            0{"za 0 sekundi"}
-            1{"za 1 sekundu"}
             few{"za {0} sekunde"}
             many{"za {0} sekundi"}
             one{"za {0} sekundu"}
             other{"za {0} sekundi"}
         }
         second-past{
-            0{"prije 0 sekundi"}
-            1{"prije 1 sekundu"}
             few{"prije {0} sekunde"}
             many{"prije {0} sekundi"}
             one{"prije {0} sekundu"}
@@ -758,16 +881,12 @@ hr{
             other{"{0} tjedan"}
         }
         week-future{
-            0{"za 0 tjedana"}
-            1{"za 1 tjedan"}
             few{"za {0} tjedna"}
             many{"za {0} tjedana"}
             one{"za {0} tjedan"}
             other{"za sljedeći broj tjedana: {0}"}
         }
         week-past{
-            0{"prije 0 tjedana"}
-            1{"prije 1 tjedna"}
             few{"prije {0} tjedna"}
             many{"prije {0} tjedana"}
             one{"prije {0} tjedan"}
@@ -780,16 +899,12 @@ hr{
             other{"{0} godina"}
         }
         year-future{
-            0{"za 0 g."}
-            1{"za 1 godinu"}
             few{"za {0} godine"}
             many{"za {0} godina"}
             one{"za {0} godinu"}
             other{"za {0} godina"}
         }
         year-past{
-            0{"prije 0 godina"}
-            1{"prije 1 godine"}
             few{"prije {0} godine"}
             many{"prije {0} godina"}
             one{"prije {0} godinu"}
