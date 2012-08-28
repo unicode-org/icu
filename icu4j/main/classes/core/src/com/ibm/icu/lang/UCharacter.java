@@ -2756,10 +2756,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 4.0
          */
         public static final int PREPEND = 11;
+        /** @stable ICU 50 */
+        public static final int REGIONAL_INDICATOR = 12;  /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
         /**
          * @stable ICU 3.4
          */
-        public static final int COUNT = 12;
+        public static final int COUNT = 13;
     }
 
     /**
@@ -2820,10 +2822,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 4.0
          */
         public static final int NEWLINE = 12;
+        /** @stable ICU 50 */
+        public static final int REGIONAL_INDICATOR = 13;  /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
         /**
          * @stable ICU 4.0
          */
-        public static final int COUNT = 13;
+        public static final int COUNT = 14;
     }
 
     /**
@@ -3061,10 +3065,12 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int CONDITIONAL_JAPANESE_STARTER = 37;  /*[CJ]*/ /* new in Unicode 6.1/ICU 49 */
         /** @stable ICU 49 */
         public static final int HEBREW_LETTER = 38;  /*[HL]*/ /* new in Unicode 6.1/ICU 49 */
+        /** @stable ICU 50 */
+        public static final int REGIONAL_INDICATOR = 39;  /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
         /**
          * @stable ICU 2.4
          */
-        public static final int COUNT = 39;
+        public static final int COUNT = 40;
     }
 
     /**
