@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -437,6 +437,7 @@
     <ClCompile Include="ustrtrns.cpp" />
     <ClCompile Include="utext.cpp" />
     <ClCompile Include="utf_impl.c" />
+    <ClCompile Include="listformatter.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="unicode\ubidi.h">
@@ -1659,6 +1660,20 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
     <CustomBuild Include="unicode\utf_old.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="unicode\listformatter.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
