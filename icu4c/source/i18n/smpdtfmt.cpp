@@ -1749,7 +1749,8 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
                 if (s == -pos-1) {
                     // era not present, in special cases allow this to continue
-                    s++;
+                    // from the position where the era was expected
+                    s = pos;
 
                     if (i+1 < fPattern.length()) {
                         // move to next pattern character
