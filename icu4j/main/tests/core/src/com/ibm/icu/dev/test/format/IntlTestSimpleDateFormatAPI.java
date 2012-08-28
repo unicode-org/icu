@@ -1,6 +1,6 @@
 /*****************************************************************************************
  * (C) Copyright Taligent, Inc. 1996, 1997 - All Rights Reserved
- * (C) Copyright IBM Corp. 1996-2010 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1996-2012 - All Rights Reserved
  *
  *   The original version of this source code and documentation is copyrighted and
  * owned by Taligent, Inc., a wholly-owned subsidiary of IBM. These materials are
@@ -89,7 +89,7 @@ public class IntlTestSimpleDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 
         logln("Testing parse()");
 
-        String text = new String("02/03/76 2:50 AM, CST");
+        String text = new String("02/03/76, 2:50 AM, CST");
         Date result1 = new Date();
         Date result2 = new Date();
         ParsePosition pos= new ParsePosition(0);

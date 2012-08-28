@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2010, International Business Machines
+ *   Copyright (C) 1996-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -115,7 +115,7 @@ public class IntlTestDateFormatAPI extends com.ibm.icu.dev.test.TestFmwk
 
         logln("Testing parse()");
 
-        String text = new String("02/03/76 2:50 AM, CST");
+        String text = new String("02/03/76, 2:50 AM, CST");
         Object result1 = new Date();
         Date result2 = new Date();
         Date result3 = new Date();

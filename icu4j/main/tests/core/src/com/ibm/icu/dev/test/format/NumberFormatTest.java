@@ -482,12 +482,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             {"en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollar"},
             {"en_US", "1234.56", "USD", "$1,234.56", "USD1,234.56", "1,234.56 US dollars"},
             {"en_US", "-1234.56", "USD", "($1,234.56)", "(USD1,234.56)", "-1,234.56 US dollars"},
-            {"zh_CN", "1", "USD", "US$1.00", "USD1.00", "1.00 \u7F8E\u5143"}, 
-            {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD1,234.56", "1,234.56 \u7F8E\u5143"},
-            //{"zh_CN", "1", "CHY", "CHY1.00", "CHY1.00", "1.00 CHY"},
-            //{"zh_CN", "1234.56", "CHY", "CHY1,234.56", "CHY1,234.56", "1,234.56 CHY"},
-            {"zh_CN", "1", "CNY", "\uFFE51.00", "CNY1.00", "1.00 \u4EBA\u6C11\u5E01"},
-            {"zh_CN", "1234.56", "CNY", "\uFFE51,234.56", "CNY1,234.56", "1,234.56 \u4EBA\u6C11\u5E01"}, 
+            {"zh_CN", "1", "USD", "US$1.00", "USD1.00", "1.00\u7F8E\u5143"}, 
+            {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD1,234.56", "1,234.56\u7F8E\u5143"},
+            {"zh_CN", "1", "CNY", "\uFFE51.00", "CNY1.00", "1.00\u4EBA\u6C11\u5E01"},
+            {"zh_CN", "1234.56", "CNY", "\uFFE51,234.56", "CNY1,234.56", "1,234.56\u4EBA\u6C11\u5E01"}, 
             {"ru_RU", "1", "RUB", "1,00\u00A0\u0440\u0443\u0431.", "1,00\u00A0RUB", "1,00 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0439 \u0440\u0443\u0431\u043B\u044C"},
             {"ru_RU", "2", "RUB", "2,00\u00A0\u0440\u0443\u0431.", "2,00\u00A0RUB", "2,00 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u044F"},
             {"ru_RU", "5", "RUB", "5,00\u00A0\u0440\u0443\u0431.", "5,00\u00A0RUB", "5,00 \u0440\u043E\u0441\u0441\u0438\u0439\u0441\u043A\u0438\u0445 \u0440\u0443\u0431\u043B\u0435\u0439"},
@@ -1382,7 +1380,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 new TestNumberingSystemItem( "ta_IN@numbers=finance",     1234.567, false, "1,234.567" ), // fall back to default per TR35
                 new TestNumberingSystemItem( "zh_TW@numbers=native",      1234.567, false, "\u4e00,\u4e8c\u4e09\u56db.\u4e94\u516d\u4e03" ),
                 new TestNumberingSystemItem( "zh_TW@numbers=traditional", 1234.567, true,  "\u4E00\u5343\u4E8C\u767E\u4E09\u5341\u56DB\u9EDE\u4E94\u516D\u4E03" ),
-                new TestNumberingSystemItem( "zh_TW@numbers=finance",     1234.567, true,  "\u58F9\u4EDF\u8CB3\u4F70\u53C4\u62FE\u8086\u9EDE\u4F0D\u9678\u67D2" )
+                new TestNumberingSystemItem( "zh_TW@numbers=finance",     1234.567, true,  "\u58F9\u4EDF\u8CB3\u4F70\u53C3\u62FE\u8086\u9EDE\u4F0D\u9678\u67D2" )
         };
         
         

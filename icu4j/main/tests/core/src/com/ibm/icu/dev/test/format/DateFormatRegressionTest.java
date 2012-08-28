@@ -95,8 +95,8 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         String str = fmt.format(dt);
         logln(str);
         
-        if (!str.equals("5/3/97 8:55 AM"))
-            errln("Fail: Test broken; Want 5/3/97 8:55 AM Got " + str);
+        if (!str.equals("5/3/97, 8:55 AM"))
+            errln("Fail: Test broken; Want 5/3/97, 8:55 AM Got " + str);
     
         String expected[] = {
             "", //"ERA_FIELD",
@@ -1136,9 +1136,9 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
         }
 
-        boolean skipIn8822 =  isICUVersionBefore(50, 0, 2);
+        boolean skipIn8822 =  isICUVersionBefore(50, 1, 0);
         if(skipIn8822) {
-            logln("Note: some tests timebombed to go off by 50m2");
+            logln("Note: some tests timebombed to go off by 50.1");
         }
 
         // Compare
@@ -1150,8 +1150,13 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
             logln(locales[i] + ": g:" + gregorianTwelfthMonth + ", ic:" + islamicCivilTwelfthMonth + ", i:"+islamicTwelfthMonth);
             if (gregorianTwelfthMonth.equalsIgnoreCase(islamicTwelfthMonth)) {
-                errln(locales[i] + ": gregorian and islamic are same: " + gregorianTwelfthMonth
-                        + ", " + islamicTwelfthMonth);
+                if(!skipIn8822) {
+                    errln(locales[i] + ": gregorian and islamic are same: " + gregorianTwelfthMonth
+                          + ", " + islamicTwelfthMonth);
+                } else {
+                    logln(locales[i] + ": gregorian and islamic are same: " + gregorianTwelfthMonth
+                          + ", " + islamicTwelfthMonth + " (TIMEBOMBED until ICU 50.1)");
+                }
             }
 
             if (gregorianTwelfthMonth.equalsIgnoreCase(islamicCivilTwelfthMonth)) {
@@ -1160,7 +1165,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                           + ", " + islamicCivilTwelfthMonth);
                 } else {
                     logln(locales[i] + ": gregorian and islamic-civil are same: " + gregorianTwelfthMonth
-                          + ", " + islamicCivilTwelfthMonth + " (TIMEBOMBED until ICU 50.0.2)");
+                          + ", " + islamicCivilTwelfthMonth + " (TIMEBOMBED until ICU 50.1)");
                 }
             }
             if (!islamicTwelfthMonth.equalsIgnoreCase(islamicCivilTwelfthMonth)) {
@@ -1169,7 +1174,7 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
                           + ", " + islamicTwelfthMonth);
                 } else {
                     logln(locales[i] + ": islamic-civil and islamic are NOT same: " + islamicCivilTwelfthMonth
-                          + ", " + islamicTwelfthMonth + " (TIMEBOMBED until 50.0.2)");
+                          + ", " + islamicTwelfthMonth + " (TIMEBOMBED until 50.1)");
                 }
             }
         }
