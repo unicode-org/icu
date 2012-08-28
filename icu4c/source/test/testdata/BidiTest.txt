@@ -1,4 +1,4 @@
-# BidiTest-6.1.0.txt
+# BidiTest-6.2.0.txt
 # Date: 2010-10-06, 03:47:43 GMT [MD]
 #
 # Unicode Character Database
@@ -219542,3 +219542,5 @@ AN NSM NSM NSM; 7
 #Count:	478
 
 #Total Count:	216357
+
+# EOF

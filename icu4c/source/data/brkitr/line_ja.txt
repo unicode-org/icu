@@ -1,11 +1,11 @@
-# Copyright (c) 2002-2011  International Business Machines Corporation and
+# Copyright (c) 2002-2012  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  file:  line_ja.txt
 #
 #         Line Breaking Rules
 #         Implement default line breaking as defined by 
-#         Unicode Standard Annex #14 Revision 28 for Unicode 6.1
+#         Unicode Standard Annex #14 Revision 29 for Unicode 6.2
 #         http://www.unicode.org/reports/tr14/
 #
 #         TODO:  Rule LB 8 remains as it was in Unicode 5.2
@@ -88,6 +88,7 @@ $OP = [:LineBreak =  Open_Punctuation:];
 $PO = [:LineBreak =  Postfix_Numeric:];
 $PR = [:LineBreak =  Prefix_Numeric:];
 $QU = [:LineBreak =  Quotation:];
+$RI = [:LineBreak =  Regional_Indicator:];
 $SA = [:LineBreak =  Complex_Context:];
 $SG = [:LineBreak =  Surrogate:];
 $SP = [:LineBreak =  Space:];
@@ -139,6 +140,7 @@ $OPcm = $OP $CM*;
 $POcm = $PO $CM*;
 $PRcm = $PR $CM*;
 $QUcm = $QU $CM*;
+$RIcm = $RI $CM*;
 $SYcm = $SY $CM*;
 $WJcm = $WJ $CM*;
 
@@ -173,6 +175,7 @@ $OP $CM+;
 $PO $CM+;
 $PR $CM+;
 $QU $CM+;
+$RI $CM+;
 $SY $CM+;
 $WJ $CM+;
 
@@ -392,6 +395,8 @@ $IScm ($ALcm | $HLcm);
 $CM+ $OPcm;         # The $CM+ is from rule 10, an unattached CM is treated as AL.          
 $CPcm ($ALcm | $HLcm | $NUcm);
 
+# LB 30a  Do not break between regional indicators.
+$RIcm $RIcm;
 
 #
 #  Reverse Rules.
@@ -424,6 +429,7 @@ $CM+ $OP;
 $CM+ $PO;
 $CM+ $PR;
 $CM+ $QU;
+$CM+ $RI;
 $CM+ $SY;
 $CM+ $WJ;
 $CM+;
@@ -611,6 +617,8 @@ $CM* ($ALPlus | $HL) $CM* $IS;
 $CM* $OP $CM* ($ALPlus | $HL | $NU);
 $CM* ($ALPlus | $HL | $NU) $CM* $CP;
 
+# LB 30a
+$CM* $RI $CM* $RI;
 
 ## -------------------------------------------------
 
