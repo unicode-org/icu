@@ -409,7 +409,7 @@ u_getNumericValue(UChar32 c) {
         int32_t numerator=(ntv>>4)-12;
         int32_t denominator=(ntv&0xf)+1;
         return (double)numerator/denominator;
-    } else if(ntv<UPROPS_NTV_RESERVED_START) {
+    } else if(ntv<UPROPS_NTV_BASE60_START) {
         /* large, single-significant-digit integer */
         double numValue;
         int32_t mant=(ntv>>5)-14;
@@ -430,6 +430,30 @@ u_getNumericValue(UChar32 c) {
             break;
         case 1:
             numValue*=10.;
+            break;
+        case 0:
+        default:
+            break;
+        }
+
+        return numValue;
+    } else if(ntv<UPROPS_NTV_RESERVED_START) {
+        /* sexagesimal (base 60) integer */
+        int32_t numValue=(ntv>>2)-0xbf;
+        int32_t exp=(ntv&3)+1;
+
+        switch(exp) {
+        case 4:
+            numValue*=60*60*60*60;
+            break;
+        case 3:
+            numValue*=60*60*60;
+            break;
+        case 2:
+            numValue*=60*60;
+            break;
+        case 1:
+            numValue*=60;
             break;
         case 0:
         default:

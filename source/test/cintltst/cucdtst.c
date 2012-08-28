@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -2781,6 +2781,8 @@ TestNumericProperties(void) {
         int32_t type;
         double numValue;
     } values[]={
+        { 0x12456, U_NT_NUMERIC, -1. },
+        { 0x12457, U_NT_NUMERIC, -1. },
         { 0x0F33, U_NT_NUMERIC, -1./2. },
         { 0x0C66, U_NT_DECIMAL, 0 },
         { 0x96f6, U_NT_NUMERIC, 0 },
@@ -2825,6 +2827,8 @@ TestNumericProperties(void) {
         { 0x2181, U_NT_NUMERIC, 5000. },
         { 0x137C, U_NT_NUMERIC, 10000. },
         { 0x4e07, U_NT_NUMERIC, 10000. },
+        { 0x12432, U_NT_NUMERIC, 216000. },
+        { 0x12433, U_NT_NUMERIC, 432000. },
         { 0x4ebf, U_NT_NUMERIC, 100000000. },
         { 0x5146, U_NT_NUMERIC, 1000000000000. },
         { -1, U_NT_NONE, U_NO_NUMERIC_VALUE },

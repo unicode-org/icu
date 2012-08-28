@@ -1524,7 +1524,7 @@ void RBBITest::TestUnicodeFiles() {
 void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *bi) {
 #if !UCONFIG_NO_REGULAR_EXPRESSIONS
     // TODO(andy): Match line break behavior to Unicode 6.0 and remove this time bomb. Ticket #7270
-    UBool isTicket7270Fixed = isICUVersionAtLeast(50, 1);
+    UBool isTicket7270Fixed = isICUVersionAtLeast(52, 1);
     UBool isLineBreak = 0 == strcmp(fileName, "LineBreakTest.txt");
     UErrorCode  status = U_ZERO_ERROR;
 
@@ -1619,8 +1619,16 @@ void RBBITest::runUnicodeTestData(const char *fileName, RuleBasedBreakIterator *
             //   If the line from the file contained test data, run the test now.
             //
             if (testString.length() > 0) {
-// TODO(andy): Remove this time bomb code. Note: Line range updated for Unicode 6.1 LineBreakTest.txt.
-if (!isLineBreak || isTicket7270Fixed || !(5066 <= lineNumber && lineNumber <= 5170)) {
+// TODO(andy): Remove this time bomb code. Note: Failing line numbers may change when updating to new Unicode data.
+//             Rule 8 
+//                ZW SP* <break>
+//             is not yet implemented.
+if (!(isLineBreak && !isTicket7270Fixed && (5198 == lineNumber || 
+                                            5202 == lineNumber ||
+                                            5214 == lineNumber ||
+                                            5246 == lineNumber ||
+                                            5298 == lineNumber ||
+                                            5302 == lineNumber ))) {
                 checkUnicodeTestCase(fileName, lineNumber, testString, &breakPositions, bi);
 }
             }
@@ -1783,6 +1791,7 @@ private:
     UnicodeSet  *fCRLFSet;
     UnicodeSet  *fControlSet;
     UnicodeSet  *fExtendSet;
+    UnicodeSet  *fRegionalIndicatorSet;
     UnicodeSet  *fPrependSet;
     UnicodeSet  *fSpacingSet;
     UnicodeSet  *fLSet;
@@ -1805,6 +1814,7 @@ RBBICharMonkey::RBBICharMonkey() {
     fCRLFSet    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\r\\n]"), status);
     fControlSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = Control}]"), status);
     fExtendSet  = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = Extend}]"), status);
+    fRegionalIndicatorSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = Regional_Indicator}]"), status);
     fPrependSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = Prepend}]"), status);
     fSpacingSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = SpacingMark}]"), status);
     fLSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Grapheme_Cluster_Break = L}]"), status);
@@ -1824,6 +1834,7 @@ RBBICharMonkey::RBBICharMonkey() {
     fSets->addElement(fCRLFSet,    status);
     fSets->addElement(fControlSet, status);
     fSets->addElement(fExtendSet,  status);
+    fSets->addElement(fRegionalIndicatorSet, status);
     if (!fPrependSet->isEmpty()) {
         fSets->addElement(fPrependSet, status);
     }
@@ -1928,6 +1939,11 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
             continue;
         }
 
+        // Rule (GB8a)    Regional_Indicator x Regional_Indicator
+        if (fRegionalIndicatorSet->contains(c1) && fRegionalIndicatorSet->contains(c2)) {
+            continue;
+        }
+
         // Rule (GB9)    Numeric x ALetter
         if (fExtendSet->contains(c2))  {
             continue;
@@ -1963,6 +1979,7 @@ RBBICharMonkey::~RBBICharMonkey() {
     delete fCRLFSet;
     delete fControlSet;
     delete fExtendSet;
+    delete fRegionalIndicatorSet;
     delete fPrependSet;
     delete fSpacingSet;
     delete fLSet;
@@ -2005,6 +2022,7 @@ private:
     UnicodeSet  *fOtherSet;
     UnicodeSet  *fExtendSet;
     UnicodeSet  *fExtendNumLetSet;
+    UnicodeSet  *fRegionalIndicatorSet;
     UnicodeSet  *fDictionaryCjkSet;
 
     RegexMatcher  *fMatcher;
@@ -2045,6 +2063,7 @@ RBBIWordMonkey::RBBIWordMonkey()
     fFormatSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Format}]"),       status);
     fExtendNumLetSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = ExtendNumLet}]"), status);
     fExtendSet       = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Extend}]"),       status);
+    fRegionalIndicatorSet =  new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Word_Break = Regional_Indicator}]"), status);
 
     fOtherSet        = new UnicodeSet();
     if(U_FAILURE(status)) {
@@ -2064,6 +2083,7 @@ RBBIWordMonkey::RBBIWordMonkey()
     fOtherSet->removeAll(*fExtendNumLetSet);
     fOtherSet->removeAll(*fFormatSet);
     fOtherSet->removeAll(*fExtendSet);
+    fOtherSet->removeAll(*fRegionalIndicatorSet);
     // Inhibit dictionary characters from being tested at all.
     fOtherSet->removeAll(*fDictionaryCjkSet);
     fOtherSet->removeAll(UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{LineBreak = Complex_Context}]"), status));
@@ -2081,6 +2101,7 @@ RBBIWordMonkey::RBBIWordMonkey()
     fSets->addElement(fExtendSet,    status);
     fSets->addElement(fOtherSet,     status);
     fSets->addElement(fExtendNumLetSet, status);
+    fSets->addElement(fRegionalIndicatorSet, status);
 
     if (U_FAILURE(status)) {
         deferredStatus = status;
@@ -2223,14 +2244,19 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
              fKatakanaSet->contains(c1) || fExtendNumLetSet->contains(c1)) &&
              fExtendNumLetSet->contains(c2)) {
                 continue;
-             }
+        }
 
         // Rule 13b
         if (fExtendNumLetSet->contains(c1) &&
                 (fALetterSet->contains(c2) || fNumericSet->contains(c2) ||
                 fKatakanaSet->contains(c2)))  {
                 continue;
-             }
+        }
+
+        // Rule 13c
+        if (fRegionalIndicatorSet->contains(c1) && fRegionalIndicatorSet->contains(c2)) {
+            continue;
+        }
 
         // Rule 14.  Break found here.
         break;
@@ -2260,6 +2286,7 @@ RBBIWordMonkey::~RBBIWordMonkey() {
     delete fFormatSet;
     delete fExtendSet;
     delete fExtendNumLetSet;
+    delete fRegionalIndicatorSet;
     delete fOtherSet;
 }
 
@@ -2643,6 +2670,7 @@ private:
     UnicodeSet  *fCJ;
     UnicodeSet  *fHL;
     UnicodeSet  *fID;
+    UnicodeSet  *fRI;
     UnicodeSet  *fSA;
     UnicodeSet  *fXX;
 
@@ -2698,6 +2726,7 @@ RBBILineMonkey::RBBILineMonkey()
     fCJ    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=CJ}]"), status);
     fHL    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=HL}]"), status);
     fID    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=ID}]"), status);
+    fRI    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=RI}]"), status);
     fSA    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=SA}]"), status);
     fSG    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\ud800-\\udfff]"), status);
     fXX    = new UnicodeSet(UNICODE_STRING_SIMPLE("[\\p{Line_break=XX}]"), status);
@@ -2752,6 +2781,7 @@ RBBILineMonkey::RBBILineMonkey()
     fSets->addElement(fHL, status);
     fSets->addElement(fID, status);
     fSets->addElement(fWJ, status);
+    fSets->addElement(fRI, status);
     fSets->addElement(fSA, status);
     fSets->addElement(fSG, status);
 
@@ -3200,6 +3230,12 @@ int32_t RBBILineMonkey::next(int32_t startPos) {
             continue;
         }
 
+        // LB30a  Do not break between regional indicators.
+        //        RI x RI
+        if (fRI->contains(prevChar) && fRI->contains(thisChar)) {
+            continue;
+        }
+
         // LB 31    Break everywhere else
         break;
 
@@ -3253,6 +3289,7 @@ RBBILineMonkey::~RBBILineMonkey() {
     delete fCJ;
     delete fHL;
     delete fID;
+    delete fRI;
     delete fSA;
     delete fSG;
     delete fXX;
