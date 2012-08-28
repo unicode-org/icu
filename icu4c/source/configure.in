@@ -121,10 +121,10 @@ AC_SUBST(ENABLE_RELEASE)
 : ${CXXFLAGS=""}
 
 # Checks for compilers
-AC_PROG_CC
+AC_PROG_CC([clang gcc cc c99 c89 xlc_r xlc cl.exe icc])
 # Make sure that we try clang++ first, which provides C++11 support.
 # The g++ compiler is less likely to support C++11.
-AC_PROG_CXX([clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe FCC KCC RCC])
+AC_PROG_CXX([clang++ g++ c++ gpp xlC_r xlC aCC CC cxx cc++ cl.exe icc FCC KCC RCC])
 
 # Ensure that if CXXFLAGS/CFLAGS were not set when calling configure, set it correctly based on (enable/disable) debug or release option
 # The release mode use is the default one for autoconf
