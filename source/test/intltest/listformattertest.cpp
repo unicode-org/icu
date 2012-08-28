@@ -69,7 +69,7 @@ void ListFormatterTest::TestLocaleFallback() {
         for(int j = 1; j < 4; ++j) {
             Locale in(testData[i][j-1]);
             Locale out;
-            UErrorCode errorCode;
+            UErrorCode errorCode = U_ZERO_ERROR;
             ListFormatter::getFallbackLocale(in, out, errorCode);
             if (U_FAILURE(errorCode)) {
                 errln("Error in getLocaleFallback: %s", u_errorName(errorCode));
