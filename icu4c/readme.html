@@ -232,6 +232,21 @@
     <code>u_setMutexFunctions()</code> and <code>u_setAtomicIncDecFunctions()</code>
     with empty implementation functions.</p>
 
+    <h3>The default compilers have changed</h3>
+    <p>ICU has changed the compilers chosen by default. If the clang and clang++ compilers
+    are available, those will be used instead of gcc and g++. If the clang compilers
+    are not available, then gcc and g++ will be used just as before. The clang++ compiler
+    provides C++11 support and some optimizations that are helpful to ICU. The API
+    remains the same between these two sets of compilers, but ICU can internally leverage
+    language features and optimizations that are available in clang++.</p>
+
+    <p>If you need to force ICU to compile with gcc and g++, then you can use the following
+    from the command line in the source directory:</p>
+
+<pre>
+<samp>./configure CC=gcc CXX=g++ CFLAGS=-O3 CXXFLAGS=-O3</samp>
+</pre>
+
     <h3>C++ Collator subclassing-API breaking changes</h3>
     <p>We have made some changes to the C++ Collator API for ICU 50
     that will make it easier to use and implement the Collator but
