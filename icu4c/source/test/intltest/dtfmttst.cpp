@@ -3673,6 +3673,8 @@ void DateFormatTest::TestParsePosition() {
         {"vvvv a h:mm:ss", "", "Pacific Time AM 10:21:45", ""},
         {"HH:mm v M/d", "111", "14:15 PT 8/10", " 12345"},
         {"'time zone:' VVVV 'date:' yyyy-MM-dd", "xxxx", "time zone: United States Time (Los Angeles) date: 2010-02-25", "xxxx"},
+        {"yG", "", "2012AD", ""},
+        {"yG", "", "2012", "x"},
         {0, 0, 0, 0},
     };
 
