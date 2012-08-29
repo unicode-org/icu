@@ -223,14 +223,19 @@
     <a href="http://site.icu-project.org/download/50milestone">ICU milestone download page</a>.
     </p>
 
-    <h3>Threading support cannot be removed</h3>
-    <p>ICU4C 50 drops the --enable-threads/--disable-threads option
+    <h3>Thread safety support cannot be removed</h3>
+    <p>ICU4C 50 dropped support for the --enable-threads/--disable-threads configure option
     and the uconfig.h <code>ICU_USE_THREADS</code> switch.
-    ICU4C 50 and higher is always built with multi-threading support.</p>
+    ICU4C 50 and higher is always built with multi-threading safety support.
+    ICU4C has never created threads in its libraries.</p>
 
-    <p>If you need to disable multi-threading, then call
+    <p>If you need to prevent ICU from using thread safe mutexes when your application does
+    not create threads, then you can use the --enable-weak-threads configure option.
+    The --enable-weak-threads configure option will cause ICU to weakly reference the
+    pthread mutex functions, and the stub implementations in the C runtime will be used.
+    If this configure option does not work on your platform, then you can call
     <code>u_setMutexFunctions()</code> and <code>u_setAtomicIncDecFunctions()</code>
-    with empty implementation functions.</p>
+    with your own empty implementations.</p>
 
     <h3>The default compilers have changed</h3>
     <p>ICU has changed the compilers chosen by default. If the clang and clang++ compilers
@@ -962,8 +967,6 @@
 
       <li><tt>--enable-rpath</tt></li>
 
-      <li><tt>--with-iostream</tt></li>
-
       <li><tt>--enable-static</tt> (Requires that U_STATIC_IMPLEMENTATION be
       defined in user code that links against ICU's static libraries.)</li>
 
@@ -1110,17 +1113,18 @@
       XPLINK. The XPLINK option, which is available for z/OS 1.2 and later,
       requires the PTF PQ69418 to build XPLINK enabled binaries.</li>
 
-      <li>Currently in ICU 3.0, there is an issue with building on z/OS without
-      XPLINK and with the C++ iostream. By default, the iostream library on z/OS
-      is XPLINK enabled. If you are not building an XPLINK enabled version of
-      ICU, you should use the <code>--with-iostream=old</code> configure option
-      when using runConfigureICU. This will prevent applications that use the
-      icuio library from crashing.</li>
-      
-      <li>Also note that on current versions of z/OS, the <a href='http://www-01.ibm.com/support/docview.wss?uid=swg21202407&amp;wv=1'>XPLINK version (C128) of the
-      C++ standard library is standard.</a> Therefore you may see an error when running
-      with XPLINK disabled. To avoid this error, set the following environment variable or similar:
-      	<pre><a href='http://www-01.ibm.com/support/docview.wss?uid=swg21376279'>export _CXX_PSYSIX="CEE.SCEELIB(C128N)":"CBC.SCLBSID(IOSTREAM,COMPLEX)"</a></pre>
+      <li>ICU requires XPLINK for the icuio library. If you want to use the
+      rest of ICU without XPLINK, then you must use the --disable-icuio
+      configure option.</a>
+
+      <li>The latest versions of z/OS use <a
+      href="http://www.ibm.com/support/docview.wss?uid=swg21202407&amp">XPLINK
+      version (C128) of the C++ standard library</a> by default. You may see <a
+      href="http://www.ibm.com/support/docview.wss?uid=swg21376279">an
+      error</a> when running with XPLINK disabled. To avoid this error,
+      set the following environment variable or similar:
+
+<pre><samp>export _CXX_PSYSIX="CEE.SCEELIB(C128N)":"CBC.SCLBSID(IOSTREAM,COMPLEX)"</samp></pre>
       </li>
       
 
@@ -1515,16 +1519,12 @@ gnumake</pre>
     "ImportantNotesHPUX">Using ICU in a Multithreaded Environment on
     HP-UX</a></h4>
 
-    <p>If you are building ICU with a newer aCC compiler and you are planning on
-    using the older &lt;iostream.h&gt; instead of the newer &lt;iostream&gt;, you
-    will need to use a special configure flag before building ICU. By default,
-    the aCC <a href="http://docs.hp.com/en/1405/options.htm#optioncap-AA">-AA</a>
-    flag is used on HP-UX when the compiler supports that option in order to make
-    ICU thread safe with RogueWave and other libraries using the 2.0 Standard C++
-    library. Your applications that use ICU will also need to use the <a href=
-    "http://docs.hp.com/en/1405/options.htm#optioncap-AA">-AA</a> compiler flag.
-    To turn off this behavior in ICU, you will need to use the --with-iostream=old
-    configure option when you first use runConfigureICU.</p>
+    <p>When ICU is built with aCC on HP-UX, the <a
+    href="http://h21007.www2.hp.com/portal/site/dspp/menuitem.863c3e4cbcdc3f3515b49c108973a801?ciid=eb08b3f1eee02110b3f1eee02110275d6e10RCRD">-AA</a>
+    compiler flag is used. It is required in order to use the latest
+    &lt;iostream&gt; API in a thread safe manner. This compiler flag affects the
+    version of the C++ library being used. Your applications will also need to
+    be compiled with -AA in order to use ICU.</p>
 
     <h4><a name="ImportantNotesSolaris" href="#ImportantNotesSolaris" id=
     "ImportantNotesSolaris">Using ICU in a Multithreaded Environment on
@@ -1702,9 +1702,7 @@ gnumake</pre>
           <li>U_EXPORT and U_IMPORT for specifying dynamic library import and
           export</li>
 
-          <li>&lt;iostream&gt; usability</li>
-
-          <li>Thread safety usability</li>
+          <li>String handling support for the char16_t and wchar_t types.</li>
         </ul>
         <br />
       </li>
