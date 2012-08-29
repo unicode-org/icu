@@ -176,8 +176,7 @@ void UCAConformanceTest::testConformance(const Collator *coll)
         return;
     }
     uint32_t skipFlags = 0;
-    // TODO: remove const_cast when merging to trunk
-    if(const_cast<Collator *>(coll)->getAttribute(UCOL_ALTERNATE_HANDLING, status) == UCOL_SHIFTED) {
+    if(coll->getAttribute(UCOL_ALTERNATE_HANDLING, status) == UCOL_SHIFTED) {
         skipFlags |= IS_SHIFTED;
     }
     if(coll == rbUCA) {
