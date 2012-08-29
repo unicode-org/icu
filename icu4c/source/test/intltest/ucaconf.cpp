@@ -232,7 +232,7 @@ void UCAConformanceTest::testConformance(const Collator *coll)
             }
 
             if(cmpres != normalizeResult(skres)) {
-                errln("Difference between ucol_strcoll (%d) and sortkey compare (%d) on line %i",
+                errln("Difference between coll->compare (%d) and sortkey compare (%d) on line %i",
                       cmpres, skres, line);
                 errln("  Previous data line %s", oldLineB);
                 errln("  Current data line  %s", lineB);

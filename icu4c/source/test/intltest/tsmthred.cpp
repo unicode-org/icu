@@ -134,7 +134,7 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
 #include "unicode/choicfmt.h"
 #include "unicode/msgfmt.h"
 #include "unicode/locid.h"
-#include "unicode/ucol.h"
+#include "unicode/coll.h"
 #include "unicode/calendar.h"
 #include "ucaconf.h"
 
@@ -860,7 +860,7 @@ normalizeResult(int32_t result) {
 class CollatorThreadTest : public ThreadWithStatus
 {
 private: 
-    const UCollator *coll;
+    const Collator *coll;
     const Line *lines;
     int32_t noLines;
     UBool isAtLeastUCA62;
@@ -872,7 +872,7 @@ public:
         isAtLeastUCA62(TRUE)
     {
     };
-    void setCollator(UCollator *c, Line *l, int32_t nl, UBool atLeastUCA62)
+    void setCollator(Collator *c, Line *l, int32_t nl, UBool atLeastUCA62)
     {
         coll = c;
         lines = l;
@@ -891,12 +891,12 @@ public:
 
             if(skipLineBecauseOfBug(lines[i].buff, lines[i].buflen)) { continue; }
 
-            int32_t resLen = ucol_getSortKey(coll, lines[i].buff, lines[i].buflen, newSk, 1024);
+            int32_t resLen = coll->getSortKey(lines[i].buff, lines[i].buflen, newSk, 1024);
 
             if(oldSk != NULL) {
                 int32_t skres = strcmp((char *)oldSk, (char *)newSk);
-                int32_t cmpres = ucol_strcoll(coll, lines[prev].buff, lines[prev].buflen, lines[i].buff, lines[i].buflen);
-                int32_t cmpres2 = ucol_strcoll(coll, lines[i].buff, lines[i].buflen, lines[prev].buff, lines[prev].buflen);
+                int32_t cmpres = coll->compare(lines[prev].buff, lines[prev].buflen, lines[i].buff, lines[i].buflen);
+                int32_t cmpres2 = coll->compare(lines[i].buff, lines[i].buflen, lines[prev].buff, lines[prev].buflen);
 
                 if(cmpres != -cmpres2) {
                     error("Compare result not symmetrical on line " + (i + 1));
@@ -904,7 +904,7 @@ public:
                 }
 
                 if(cmpres != normalizeResult(skres)) {
-                    error(UnicodeString("Difference between ucol_strcoll and sortkey compare on line ") + (i + 1));
+                    error(UnicodeString("Difference between coll->compare and sortkey compare on line ") + (i + 1));
                     break;
                 }
 
@@ -990,8 +990,8 @@ void MultithreadTest::TestCollators()
         }
     }
 
-    Line *lines = new Line[200000];
-    memset(lines, 0, sizeof(Line)*200000);
+    LocalArray<Line> lines(new Line[200000]);
+    memset(lines.getAlias(), 0, sizeof(Line)*200000);
     int32_t lineNum = 0;
 
     UChar bufferU[1024];
@@ -1022,16 +1022,16 @@ void MultithreadTest::TestCollators()
     u_getUnicodeVersion(uniVersion);
     UBool isAtLeastUCA62 = uprv_memcmp(uniVersion, v62, 4) >= 0;
 
-    UCollator *coll = ucol_open("root", &status);
+    LocalPointer<Collator> coll(Collator::createInstance(Locale::getRoot(), status));
     if(U_FAILURE(status)) {
         errcheckln(status, "Couldn't open UCA collator");
         return;
     }
-    ucol_setAttribute(coll, UCOL_NORMALIZATION_MODE, UCOL_ON, &status);
-    ucol_setAttribute(coll, UCOL_CASE_FIRST, UCOL_OFF, &status);
-    ucol_setAttribute(coll, UCOL_CASE_LEVEL, UCOL_OFF, &status);
-    ucol_setAttribute(coll, UCOL_STRENGTH, isAtLeastUCA62 ? UCOL_IDENTICAL : UCOL_TERTIARY, &status);
-    ucol_setAttribute(coll, UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, &status);
+    coll->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
+    coll->setAttribute(UCOL_CASE_FIRST, UCOL_OFF, status);
+    coll->setAttribute(UCOL_CASE_LEVEL, UCOL_OFF, status);
+    coll->setAttribute(UCOL_STRENGTH, isAtLeastUCA62 ? UCOL_IDENTICAL : UCOL_TERTIARY, status);
+    coll->setAttribute(UCOL_ALTERNATE_HANDLING, UCOL_NON_IGNORABLE, status);
 
     int32_t noSpawned = 0;
     int32_t spawnResult = 0;
@@ -1041,7 +1041,7 @@ void MultithreadTest::TestCollators()
     int32_t j = 0;
     for(j = 0; j < kCollatorThreadThreads; j++) {
         //logln("Setting collator %i", j);
-        tests[j].setCollator(coll, lines, lineNum, isAtLeastUCA62);
+        tests[j].setCollator(coll.getAlias(), lines.getAlias(), lineNum, isAtLeastUCA62);
     }
     for(j = 0; j < kCollatorThreadThreads; j++) {
         log("%i ", j);
@@ -1094,12 +1094,6 @@ void MultithreadTest::TestCollators()
                 errln("There were errors.");
                 SimpleThread::errorFunc();
             }
-            ucol_close(coll);
-            //for(i = 0; i < lineNum; i++) {
-            //delete[] lines[i].buff;
-            //}
-            delete[] lines;
-
             return;
         }
 
@@ -1107,7 +1101,6 @@ void MultithreadTest::TestCollators()
     }
     errln("patience exceeded. ");
     SimpleThread::errorFunc();
-    ucol_close(coll);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
