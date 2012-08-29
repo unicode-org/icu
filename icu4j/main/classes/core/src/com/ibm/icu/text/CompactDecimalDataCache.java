@@ -72,7 +72,7 @@ class CompactDecimalDataCache {
         for (int i = 0; i < size; i++) {
             populateData((ICUResourceBundle) r.get(i), result);
         }
-        fillInMissingAndFixRedundant(result);
+        fillInMissing(result);
         return result;
     }
 
@@ -87,7 +87,10 @@ class CompactDecimalDataCache {
             return;
         }
         ICUResourceBundle other = (ICUResourceBundle) divisorData.get("other");
-        populatePrefixSuffix(other.getString(), thisIndex, result);
+        int numZeros = populatePrefixSuffix(other.getString(), thisIndex, result);
+        for (int i = 1; i < numZeros; i++) {
+            divisor /= 10;
+        }
         result.divisors[thisIndex] = divisor;
     }
 
@@ -97,53 +100,35 @@ class CompactDecimalDataCache {
      * @param template the number template, e.g 000K
      * @param idx the index to store the extracted prefix and suffix
      * @param result Data object modified in-place here.
+     * @return number of zeros found before any decimal point in template.
      */
-    private static void populatePrefixSuffix(String template, int idx, Data result) {
+    private static int populatePrefixSuffix(String template, int idx, Data result) {
         int firstIdx = template.indexOf("0");
         int lastIdx = template.lastIndexOf("0");
         result.prefixes[idx] = template.substring(0, firstIdx);
         result.suffixes[idx] = template.substring(lastIdx + 1);
+        
+        // Calculate number of zeros before decimal point.
+        int i = firstIdx + 1;
+        while (i <= lastIdx && template.charAt(i) == '0') {
+            i++;
+        }
+        return i - firstIdx;
     }
 
     /**
      * After reading information from resource bundle into a Data object, there
-     * is no guarantee that every index of the arrays will be filled. Moreover,
-     * the resource bundle may contain redundant information. After reading
-     * the resource for english, we may end up with:
-     * <pre>
-     * index divisor prefix suffix
-     * 0     <none>  <none> <none>
-     * 1     <none>  <none> <none>
-     * 2     <none>  <none> <none>
-     * 3     1000           K
-     * 4     10000          K
-     * 5     100000         K
-     * 6     1000000        M
-     * ...
-     * </pre>
-     * The 10000 and 100000 are redundant. In fact, this data will cause CompactDecimalFormatter
-     * to format 12345 as 1.2K instead of 12K.  Moreover, no data was populated for
-     * indexes 0, 1, or 2. What we want is something like this:
-     * <pre>
-     * index divisor prefix suffix
-     * 0     1
-     * 1     1
-     * 2     1
-     * 3     1000           K
-     * 4     1000           K
-     * 5     1000           K
-     * 6     1000000        M
-     * ...
-     * </pre>
-     * This function walks through the arrays filling in missing data and replacing
-     * redundant data.  If prefix is missing for an index, we fill in that index
-     * with the values from the previous index. If prefix and suffix for an index
-     * are the same as the previous index, we consider that redundant data and we
-     * replace the divisor with the one from the previous index.
+     * is no guarantee that every index of the arrays will be filled. 
+     * 
+     * This function walks through the arrays filling in indexes with missing
+     * data from the previous index. If the first indexes are missing data,
+     * they are assumed to have no prefixes or suffixes and a divisor of 1.
+     * We assume an index has missing data if the corresponding element in the
+     * prefixes array is null.
      *
      * @param result this instance is fixed in-place.
      */
-    private static void fillInMissingAndFixRedundant(Data result) {
+    private static void fillInMissing(Data result) {
         // Initially we assume that previous divisor is 1 with no prefix or suffix.
         long lastDivisor = 1L;
         String lastPrefix = "";
@@ -153,8 +138,6 @@ class CompactDecimalDataCache {
                 result.divisors[i] = lastDivisor;
                 result.prefixes[i] = lastPrefix;
                 result.suffixes[i] = lastSuffix;
-            } else if (result.prefixes[i].equals(lastPrefix) && result.suffixes[i].equals(lastSuffix)) {
-                result.divisors[i] = lastDivisor;
             } else {
                 lastDivisor = result.divisors[i];
                 lastPrefix = result.prefixes[i];
