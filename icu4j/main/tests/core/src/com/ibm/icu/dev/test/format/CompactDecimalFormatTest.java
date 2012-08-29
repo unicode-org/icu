@@ -37,6 +37,21 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {123456789012345f, "120T"},
             {12345678901234567890f, "12000000T"},
     };
+    
+    Object[][] SerbianTestData = {
+            {1234, "1200"},
+            {12345, "12 хиљ"},
+            {123456, "120 хиљ"},
+            {1234567, "1,2 мил"},
+            {12345678, "12 мил"},
+            {123456789, "120 мил"},
+            {1234567890, "1,2 млрд"},
+            {12345678901f, "12 млрд"},
+            {123456789012f, "120 млрд"},
+            {1234567890123f, "1,2 бил"},
+            {12345678901234f, "12 бил"},
+            {123456789012345f, "120 бил"},
+    };
 
     Object[][] JapaneseTestData = {
             {1234, "1200"},
@@ -70,6 +85,10 @@ public class CompactDecimalFormatTest extends TestFmwk {
 
     public void TestEnglish() {
         checkLocale(ULocale.ENGLISH, EnglishTestData);
+    }
+    
+    public void TestSerbian() {
+        checkLocale(ULocale.forLanguageTag("sr"), SerbianTestData);
     }
 
     public void TestJapanese() {
