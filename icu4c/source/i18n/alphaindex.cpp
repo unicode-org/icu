@@ -63,19 +63,8 @@ alphaIndex_deleteRecord(void *obj) {
 }
 
 
-typedef const UChar PinyinLookup[24][3];
- 
-static const Normalizer2 *nfkdNormalizer;
-static UBool indexCharactersAreInitialized = FALSE;
-static UnicodeSet *ALPHABETIC;
-static UnicodeSet *HANGUL;
-static UnicodeSet *ETHIOPIC;
-static UnicodeSet *CORE_LATIN;
-static UnicodeSet *IGNORE_SCRIPTS;
-static UnicodeSet *TO_TRY;
-static UnicodeSet *UNIHAN;
-static const UnicodeString *EMPTY_STRING;
 
+static const Normalizer2 *nfkdNormalizer;
 
 //
 //  Append the contents of a UnicodeSet to a UVector of UnicodeStrings.
@@ -616,6 +605,7 @@ void AlphabeticIndex::init(UErrorCode &status) {
 }
 
 
+static  UBool  indexCharactersAreInitialized = FALSE;
 
 //  Index Characters Clean up function.  Delete statically allocated constant stuff.
 U_CDECL_BEGIN
@@ -646,6 +636,15 @@ void AlphabeticIndex::staticCleanup() {
     indexCharactersAreInitialized = FALSE;
 }
 
+
+UnicodeSet *AlphabeticIndex::ALPHABETIC;
+UnicodeSet *AlphabeticIndex::HANGUL;
+UnicodeSet *AlphabeticIndex::ETHIOPIC;
+UnicodeSet *AlphabeticIndex::CORE_LATIN;
+UnicodeSet *AlphabeticIndex::IGNORE_SCRIPTS;
+UnicodeSet *AlphabeticIndex::TO_TRY;
+UnicodeSet *AlphabeticIndex::UNIHAN;
+const UnicodeString *AlphabeticIndex::EMPTY_STRING;
 
 //
 //  staticInit()    One-time initialization of constants.
@@ -952,7 +951,7 @@ static const UChar PINYIN_LOWER_BOUNDS_SHORT[] = {      // "\u0101bcd\u0113fghjk
 
 // Pinyin lookup tables copied, pasted (and reformatted) from the ICU4J code.
 
-static const PinyinLookup HACK_PINYIN_LOOKUP_SHORT = {
+AlphabeticIndex::PinyinLookup AlphabeticIndex::HACK_PINYIN_LOOKUP_SHORT = {
         {(UChar)0,      (UChar)0, (UChar)0}, // A 
         {(UChar)0x516B, (UChar)0, (UChar)0}, // B 
         {(UChar)0x5693, (UChar)0, (UChar)0}, // C 
@@ -983,7 +982,7 @@ static const UChar PINYIN_LOWER_BOUNDS_LONG[] = {   // "\u0101bcd\u0113fghjkl\u1
             0x0101, 0x62, 0x63, 0x64, 0x0113, 0x66, 0x67, 0x68, 0x6A, 0x6B, /*l*/0x6C, 0x1E3F, 0x0144, 0x014D,
             /*p*/0x70, 0x71, 0x72, 0x73, 0x74, /*w*/0x77, 0x78, 0x79, 0x7A};
 
-static const PinyinLookup HACK_PINYIN_LOOKUP_LONG = {
+AlphabeticIndex::PinyinLookup AlphabeticIndex::HACK_PINYIN_LOOKUP_LONG = {
         {(UChar)0,      (UChar)0,      (UChar)0}, // A
         {(UChar)0x516B, (UChar)0,      (UChar)0}, // b 
         {(UChar)0xD863, (UChar)0xDEAD, (UChar)0}, // c 
@@ -1023,8 +1022,8 @@ static const PinyinLookup HACK_PINYIN_LOOKUP_LONG = {
 //
 //  This whole arrangement is temporary.
 //
-static const PinyinLookup *HACK_PINYIN_LOOKUP  = NULL;
-static const UChar  *PINYIN_LOWER_BOUNDS = NULL;
+AlphabeticIndex::PinyinLookup *AlphabeticIndex::HACK_PINYIN_LOOKUP  = NULL;
+const UChar  *AlphabeticIndex::PINYIN_LOWER_BOUNDS = NULL;
 
 void AlphabeticIndex::initPinyinBounds(const Collator *col, UErrorCode &status) {
     {
