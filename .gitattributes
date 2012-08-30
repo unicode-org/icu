@@ -3549,7 +3549,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/CharsetRecognizer.java svneol=nativ
 icu4j/main/classes/core/src/com/ibm/icu/text/ChineseDateFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ChineseDateFormatSymbols.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/CjkBreakEngine.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalDataCache.java -text
+icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalDataCache.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ComposedCharIter.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/CurrencyDisplayNames.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4662,7 +4662,7 @@ icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/UnicodeTransform.java sv
 icu4j/main/tests/translit/src/com/ibm/icu/dev/test/util/Visitor.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/translit-tests-build.launch -text
 icu4j/manifest.stub -text
-icu4j/perf-tests/README.txt -text
+icu4j/perf-tests/README.txt svneol=native#text/plain
 icu4j/perf-tests/data/collation/TestNames_Asian.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/data/collation/TestNames_Chinese.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/data/collation/TestNames_Japanese.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4685,7 +4685,6 @@ icu4j/perf-tests/data/conversion/japanese.txt svneol=native#text/plain%3Bcharset
 icu4j/perf-tests/data/conversion/korean.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/data/conversion/s-chinese.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/data/icuperf2report.xsl -text
-icu4j/perf-tests/perftests.pl -text
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/BreakIteratorPerformanceTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/CollationPerformanceTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/ConverterPerformanceTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
