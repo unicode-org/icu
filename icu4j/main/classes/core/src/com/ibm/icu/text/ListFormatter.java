@@ -147,9 +147,11 @@ final public class ListFormatter {
         if (i0 < 0 || i1 < 0) {
             throw new IllegalArgumentException("Missing {0} or {1} in pattern " + pattern);
         }
-        return i0 < i1
-            ? pattern.substring(0, i0) + a + pattern.substring(i0+3, i1) + b + pattern.substring(i1+3)
-            : pattern.substring(0, i1) + a + pattern.substring(i1+3, i0) + b + pattern.substring(i0+3);
+        if (i0 < i1) {
+            return pattern.substring(0, i0) + a + pattern.substring(i0+3, i1) + b + pattern.substring(i1+3);
+        } else {
+            return pattern.substring(0, i1) + b + pattern.substring(i1+3, i0) + a + pattern.substring(i0+3);
+        }
     }
 
     /** JUST FOR DEVELOPMENT */
