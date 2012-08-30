@@ -1,4 +1,4 @@
-# LineBreakTest-6.2.0.txt
+﻿# LineBreakTest-6.2.0.txt
 # Date: 2012-08-22, 12:41:17 GMT [MD]
 #
 # Unicode Character Database
