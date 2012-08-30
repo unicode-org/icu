@@ -4272,8 +4272,6 @@ ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
 
 U_NAMESPACE_BEGIN
 
-static uint8_t lastResortByte_ = 0;
-
 class SortKeyByteSink : public ByteSink {
 public:
     static const uint32_t FILL_ORIGINAL_BUFFER = 1;
@@ -4345,6 +4343,8 @@ private:
         capacity_ = 0;
     }
 
+    static uint8_t lastResortByte_;  // last-resort return value from LastByte()
+
     char *ownedBuffer_;
     char *buffer_;
     int32_t capacity_;
@@ -4352,6 +4352,8 @@ private:
     UBool fill_;
     UBool grow_;
 };
+
+uint8_t SortKeyByteSink::lastResortByte_ = 0;
 
 SortKeyByteSink::~SortKeyByteSink() {
     uprv_free(ownedBuffer_);

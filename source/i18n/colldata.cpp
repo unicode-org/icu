@@ -1038,7 +1038,7 @@ void CollData::close(CollData *collData)
     cache->unref(collData);
 }
 
-static CollDataCache *collDataCache = NULL;
+CollDataCache *CollData::collDataCache = NULL;
 
 CollDataCache *CollData::getCollDataCache()
 {
