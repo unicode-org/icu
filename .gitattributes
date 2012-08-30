@@ -244,7 +244,6 @@ icu4j/main/classes/core/.project -text
 icu4j/main/classes/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
-icu4j/main/classes/core/src/com/ibm/icu/text/CompactDecimalDataCache.java -text
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text
 icu4j/main/classes/currdata/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/currdata/.settings/org.eclipse.jdt.core.prefs -text
@@ -766,9 +765,7 @@ icu4j/main/tests/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/translit/translit-tests-build.launch -text
 icu4j/manifest.stub -text
-icu4j/perf-tests/README.txt -text
 icu4j/perf-tests/data/icuperf2report.xsl -text
-icu4j/perf-tests/perftests.pl -text
 icu4j/samples/build.properties -text
 icu4j/samples/manifest.stub -text
 icu4j/tools/build/.settings/org.eclipse.core.resources.prefs -text
