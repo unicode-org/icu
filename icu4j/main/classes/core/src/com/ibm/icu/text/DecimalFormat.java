@@ -1851,9 +1851,9 @@ public class DecimalFormat extends NumberFormat {
         tmpPos = new ParsePosition(origPos);
         tmpDigitList = new DigitList();
         int savedCurrencySignCount = currencySignCount;
-        // set currencySignCount to 0 so that compareAffix function will fall to
+        // set currencySignCount to -1 so that compareAffix function will fall to
         // compareSimpleAffix path, not compareComplexAffix path.
-        currencySignCount = 0;
+        currencySignCount = -1;
         boolean result = subparse(text, tmpPos, tmpDigitList, tmpStatus, currency,
                                   negativePrefix, negativeSuffix, positivePrefix, positiveSuffix,
                                   Currency.SYMBOL_NAME);
@@ -2123,8 +2123,8 @@ public class DecimalFormat extends NumberFormat {
 
             digits.decimalAt = digits.count = 0;
             char [] digitSymbols = symbols.getDigitsLocal();
-            char decimal = currencySignCount > 0 ? symbols.getMonetaryDecimalSeparator() : symbols
-                    .getDecimalSeparator();
+            char decimal = currencySignCount == 0 ? symbols.getDecimalSeparator()
+                    : symbols.getMonetaryDecimalSeparator();
             char grouping = symbols.getGroupingSeparator();
 
             String exponentSep = symbols.getExponentSeparator();
