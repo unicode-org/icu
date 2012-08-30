@@ -63,6 +63,20 @@ public class ListFormatterTest extends TestFmwk {
         checkData(ListFormatter.getInstance(ULocale.JAPANESE), JapaneseTestData);
     }
 
+    String[] outOfOrderTestData = {
+            "",
+            "A",
+            "B after A",
+            "C in the last after B after the first A",
+            "D in the last after C after B after the first A",
+            "E in the last after D after C after B after the first A"
+    };
+    public void TestPatternOutOfOrder() {
+        ListFormatter formatter = new ListFormatter("{1} after {0}", "{1} after the first {0}", "{1} after {0}",
+                                                    "{1} in the last after {0}");
+        checkData(formatter, outOfOrderTestData);
+    }
+
     String[] RootTestData = {
             "",
             "A",
