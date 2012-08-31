@@ -6,13 +6,15 @@
  */
 package com.ibm.icu.text;
 
+import static com.ibm.icu.impl.CharacterIteration.DONE32;
+import static com.ibm.icu.impl.CharacterIteration.current32;
+import static com.ibm.icu.impl.CharacterIteration.next32;
+
 import java.io.IOException;
 import java.text.CharacterIterator;
 import java.util.Stack;
 
 import com.ibm.icu.impl.Assert;
-
-import static com.ibm.icu.impl.CharacterIteration.*;
 
 public class CjkBreakEngine implements LanguageBreakEngine {
     private static final UnicodeSet fHangulWordSet = new UnicodeSet();

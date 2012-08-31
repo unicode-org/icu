@@ -6,13 +6,13 @@
  */
 package com.ibm.icu.text;
 
+import static com.ibm.icu.impl.CharacterIteration.DONE32;
+
 import java.text.CharacterIterator;
 import java.util.Stack;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
-
-import static com.ibm.icu.impl.CharacterIteration.*;
 
 public final class UnhandledBreakEngine implements LanguageBreakEngine {
     // TODO: Use two arrays of UnicodeSet, one with all frozen sets, one with unfrozen.

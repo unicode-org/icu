@@ -8,7 +8,6 @@
 package com.ibm.icu.text;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -24,7 +23,6 @@ import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Freezable;
-import com.ibm.icu.util.Region;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 
