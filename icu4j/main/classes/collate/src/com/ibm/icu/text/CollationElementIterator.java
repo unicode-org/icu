@@ -1929,11 +1929,15 @@ public final class CollationElementIterator
                         // we need to do a "front patch" we don't have to 
                         // check to see if we're hitting the last element.
                         
-                        if (trailingZeroIndex != 0) {
+                        collateVal = digVal * 10;
+                        if (collateVal == 0) {
+                            if (trailingZeroIndex != 0) {
+                                trailingZeroIndex = (digIndx >>> 1) + 2;
+                            }
+                        } else {
                             trailingZeroIndex = 0;
                         }
                         
-                        collateVal = digVal * 10;
                         m_utilStringBuffer_.setCharAt((digIndx >>> 1) + 2, 
                                                 (char)((collateVal << 1) + 6));
                     }
