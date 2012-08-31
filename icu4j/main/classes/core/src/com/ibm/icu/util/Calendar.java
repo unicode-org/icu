@@ -3792,7 +3792,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     // Constants
     //-------------------------------------------------------------------------
 
-    private static final int FIELD_DIFF_MAX_INT = 2147483647;
+    private static final int FIELD_DIFF_MAX_INT = Integer.MAX_VALUE;    // 2147483647
 
     /**
      * {@icu} Returns the difference between the given time and the time this
