@@ -6,6 +6,12 @@
  */
 package com.ibm.icu.text;
 
+import static com.ibm.icu.impl.CharacterIteration.DONE32;
+import static com.ibm.icu.impl.CharacterIteration.current32;
+import static com.ibm.icu.impl.CharacterIteration.next32;
+import static com.ibm.icu.impl.CharacterIteration.nextTrail32;
+import static com.ibm.icu.impl.CharacterIteration.previous32;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,17 +19,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.CharacterIterator;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
-import java.util.HashSet;
 
 import com.ibm.icu.impl.Assert;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
-
-import static com.ibm.icu.impl.CharacterIteration.*;
 
 /**
  * Rule Based Break Iterator 
