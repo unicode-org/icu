@@ -4607,21 +4607,7 @@ supplementalData:table(nofallback){
                     58993,
                     351827072,
                 }
-                id{"XSU"}
-            }
-            {
-                from:intvector{
-                    58993,
-                    351827072,
-                }
                 id{"XTS"}
-            }
-            {
-                from:intvector{
-                    58993,
-                    351827072,
-                }
-                id{"XUA"}
             }
             {
                 from:intvector{

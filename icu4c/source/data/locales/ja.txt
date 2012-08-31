@@ -103,7 +103,7 @@ ja{
                         other{"000万"}
                     }
                     10000000{
-                        other{"0,000万"}
+                        other{"0000万"}
                     }
                     100000000{
                         other{"0億"}
@@ -115,7 +115,7 @@ ja{
                         other{"000億"}
                     }
                     100000000000{
-                        other{"0,000億"}
+                        other{"0000億"}
                     }
                     1000000000000{
                         other{"0兆"}
@@ -131,40 +131,40 @@ ja{
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0K"}
+                        other{"0千"}
                     }
                     10000{
-                        other{"00K"}
+                        other{"0万"}
                     }
                     100000{
-                        other{"000K"}
+                        other{"00万"}
                     }
                     1000000{
-                        other{"0M"}
+                        other{"000万"}
                     }
                     10000000{
-                        other{"00M"}
+                        other{"0000万"}
                     }
                     100000000{
-                        other{"000M"}
+                        other{"0億"}
                     }
                     1000000000{
-                        other{"0B"}
+                        other{"00億"}
                     }
                     10000000000{
-                        other{"00B"}
+                        other{"000億"}
                     }
                     100000000000{
-                        other{"000B"}
+                        other{"0000億"}
                     }
                     1000000000000{
-                        other{"0T"}
+                        other{"0兆"}
                     }
                     10000000000000{
-                        other{"00T"}
+                        other{"00兆"}
                     }
                     100000000000000{
-                        other{"000T"}
+                        other{"000兆"}
                     }
                 }
             }
@@ -184,7 +184,7 @@ ja{
         native{"latn"}
         traditional{"jpan"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.76.70"}
     calendar{
         buddhist{
             DateTimePatterns{
