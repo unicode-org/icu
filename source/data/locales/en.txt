@@ -146,7 +146,7 @@ en{
             }
         }
     }
-    Version{"2.0.75.94"}
+    Version{"2.0.76.64"}
     calendar{
         buddhist{
             DateTimePatterns{
