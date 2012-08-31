@@ -39,43 +39,43 @@ public class CompactDecimalFormatTest extends TestFmwk {
     };
     
     Object[][] SerbianTestData = {
-            {1234, "1200"},
-            {12345, "12 хиљ"},
-            {123456, "120 хиљ"},
-            {1234567, "1,2 мил"},
-            {12345678, "12 мил"},
-            {123456789, "120 мил"},
-            {1234567890, "1,2 млрд"},
-            {12345678901f, "12 млрд"},
-            {123456789012f, "120 млрд"},
-            {1234567890123f, "1,2 бил"},
-            {12345678901234f, "12 бил"},
-            {123456789012345f, "120 бил"},
+            {1234f, "1200"},
+            {12345f, "12\u00a0\u0445\u0438\u0459"},
+            {123456f, "120\u00a0\u0445\u0438\u0459"},
+            {1234567f, "1,2\u00a0\u043c\u0438\u043b"},
+            {12345678f, "12\u00a0\u043c\u0438\u043b"},
+            {123456789f, "120\u00a0\u043c\u0438\u043b"},
+            {1234567890f, "1,2\u00a0\u043c\u043b\u0440\u0434"},
+            {12345678901f, "12\u00a0\u043c\u043b\u0440\u0434"},
+            {123456789012f, "120\u00a0\u043c\u043b\u0440\u0434"},
+            {1234567890123f, "1,2\u00a0\u0431\u0438\u043b"},
+            {12345678901234f, "12\u00a0\u0431\u0438\u043b"},
+            {123456789012345f, "120\u00a0\u0431\u0438\u043b"},
     };
 
     Object[][] JapaneseTestData = {
-            {1234, "1200"},
-            {12345, "1.2万"},
-            {123456, "12万"},
-            {1234567, "120万"},
-            {12345678, "1200万"},
-            {123456789, "1.2億"},
-            {1234567890, "12億"},
-            {12345678901f, "120億"},
-            {123456789012f, "1200億"},
-            {1234567890123f, "1.2兆"},
-            {12345678901234f, "12兆"},
-            {123456789012345f, "120兆"},
+            {1234f, "1.2\u5343"},
+            {12345f, "1.2\u4E07"},
+            {123456f, "12\u4E07"},
+            {1234567f, "120\u4E07"},
+            {12345678f, "1200\u4E07"},
+            {123456789f, "1.2\u5104"},
+            {1234567890f, "12\u5104"},
+            {12345678901f, "120\u5104"},
+            {123456789012f, "1200\u5104"},
+            {1234567890123f, "1.2\u5146"},
+            {12345678901234f, "12\u5146"},
+            {123456789012345f, "120\u5146"},
     };
 
     Object[][] SwahiliTestData = {
-            {1234, "elfu\u00a01.2"},
-            {12345, "elfu\u00a012"},
-            {123456, "laki1.2"},
-            {1234567, "M1.2"},
-            {12345678, "M12"},
-            {123456789, "M120"},
-            {1234567890, "B1.2"},
+            {1234f, "elfu\u00a01.2"},
+            {12345f, "elfu\u00a012"},
+            {123456f, "laki1.2"},
+            {1234567f, "M1.2"},
+            {12345678f, "M12"},
+            {123456789f, "M120"},
+            {1234567890f, "B1.2"},
             {12345678901f, "B12"},
             {123456789012f, "B120"},
             {1234567890123f, "T1.2"},
@@ -92,14 +92,12 @@ public class CompactDecimalFormatTest extends TestFmwk {
     }
 
     public void TestJapanese() {
-//         checkLocale(ULocale.JAPANESE, JapaneseTestData); Not decided yet by CLDR TC.
-         checkLocale(ULocale.JAPANESE, EnglishTestData);
+         checkLocale(ULocale.JAPANESE, JapaneseTestData);
     }
 
     public void TestJapaneseGermany() {
         // check fallback.
-//        checkLocale(ULocale.forLanguageTag("ja-DE"), JapaneseTestData); Not decided yet by CLDR TC.
-        checkLocale(ULocale.forLanguageTag("ja-DE"), EnglishTestData);
+        checkLocale(ULocale.forLanguageTag("ja-DE"), JapaneseTestData);
     }
 
     public void TestSwahili() {
