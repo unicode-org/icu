@@ -253,7 +253,7 @@ class CjkBreakEngine : public DictionaryBreakEngine {
  
 /** 
  * <p>KhmerBreakEngine is a kind of DictionaryBreakEngine that uses a 
- * TrieWordDictionary and heuristics to determine Khmer-specific breaks.</p> 
+ * DictionaryMatcher and heuristics to determine Khmer-specific breaks.</p> 
  * 
  * <p>After it is constructed a KhmerBreakEngine may be shared between 
  * threads without synchronization.</p> 
@@ -276,7 +276,7 @@ class KhmerBreakEngine : public DictionaryBreakEngine {
   /** 
    * <p>Default constructor.</p> 
    * 
-   * @param adoptDictionary A TrieWordDictionary to adopt. Deleted when the 
+   * @param adoptDictionary A DictionaryMatcher to adopt. Deleted when the 
    * engine is deleted. 
    */ 
   KhmerBreakEngine(DictionaryMatcher *adoptDictionary, UErrorCode &status); 
