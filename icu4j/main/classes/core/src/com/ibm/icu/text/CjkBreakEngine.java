@@ -16,7 +16,7 @@ import java.util.Stack;
 
 import com.ibm.icu.impl.Assert;
 
-public class CjkBreakEngine implements LanguageBreakEngine {
+class CjkBreakEngine implements LanguageBreakEngine {
     private static final UnicodeSet fHangulWordSet = new UnicodeSet();
     private static final UnicodeSet fHanWordSet = new UnicodeSet();
     private static final UnicodeSet fKatakanaWordSet = new UnicodeSet();

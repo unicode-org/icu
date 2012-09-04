@@ -14,7 +14,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
 
-public class ThaiBreakEngine implements LanguageBreakEngine {
+class ThaiBreakEngine implements LanguageBreakEngine {
     /* Helper class for improving readability of the Thai word break
      * algorithm.
      */
