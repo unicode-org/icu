@@ -22,6 +22,9 @@ const int32_t DictionaryData::TRIE_TYPE_BYTES;
 const int32_t DictionaryData::TRIE_TYPE_UCHARS;
 #endif
 
+DictionaryMatcher::~DictionaryMatcher() {
+}
+
 UCharsDictionaryMatcher::~UCharsDictionaryMatcher() {
     udata_close(file);
 }
