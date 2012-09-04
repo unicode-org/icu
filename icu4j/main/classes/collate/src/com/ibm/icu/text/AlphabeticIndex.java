@@ -390,7 +390,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     /**
      * Determine the best labels to use. This is based on the exemplars, but we also process to make sure that they are unique,
      * and sort differently, and that the overall list is small enough.
-     * @return 
      */
     private ArrayList<String> initLabels() {
         UnicodeSet exemplars = new UnicodeSet(initialLabels);
@@ -455,7 +454,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * This method is called to get the index exemplars. Normally these come from the locale directly,
      * but if they aren't available, we have to synthesize them.
      * @param locale
-     * @return
      */
     private UnicodeSet getIndexExemplars(ULocale locale) {
         UnicodeSet exemplars;

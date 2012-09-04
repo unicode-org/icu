@@ -1635,13 +1635,12 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
 
     /**
      * @param foundMask
-     * @return
      */
     private int getTopBitNumber(int foundMask) {
         int i = 0;
         while (foundMask != 0) {
             foundMask >>>= 1;
-    ++i;
+            ++i;
         }
         return i-1;
     }
@@ -1878,7 +1877,6 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * Get the canonical index, or return -1 if illegal.
      * @param s
      * @param strict TODO
-     * @return
      */
     private static int getCanonicalIndex(String s, boolean strict) {
         int len = s.length();
