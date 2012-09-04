@@ -61,13 +61,15 @@ public:
  * Wrapper class around generic dictionaries, implementing matches().
  * getType() should return a TRIE_TYPE_??? constant from DictionaryData.
  * 
- * All implementations of this interface must be threadsafe if they are to be used inside of the
+ * All implementations of this interface must be thread-safe if they are to be used inside of the
  * dictionary-based break iteration code.
  */
-class U_COMMON_API DictionaryMatcher {
+class U_COMMON_API DictionaryMatcher : public UMemory {
 public:
+    virtual ~DictionaryMatcher();
     // this should emulate CompactTrieDictionary::matches()
-    virtual int32_t matches(UText *text, int32_t maxLength, int32_t *lengths, int &count, int limit, int32_t *values = NULL) const = 0;
+    virtual int32_t matches(UText *text, int32_t maxLength, int32_t *lengths, int &count,
+                            int limit, int32_t *values = NULL) const = 0;
     /** @return DictionaryData::TRIE_TYPE_XYZ */
     virtual int32_t getType() const = 0;
 };
@@ -78,8 +80,9 @@ public:
     // constructs a new UCharsDictionaryMatcher.
     // The UDataMemory * will be closed on this object's destruction.
     UCharsDictionaryMatcher(const UChar *c, UDataMemory *f) : characters(c), file(f) { }
-    ~UCharsDictionaryMatcher();
-    virtual int32_t matches(UText *text, int32_t maxLength, int32_t *lengths, int &count, int limit, int32_t *values = NULL) const;
+    virtual ~UCharsDictionaryMatcher();
+    virtual int32_t matches(UText *text, int32_t maxLength, int32_t *lengths, int &count,
+                            int limit, int32_t *values = NULL) const;
     virtual int32_t getType() const;
 private:
     const UChar *characters;
@@ -92,9 +95,11 @@ public:
     // constructs a new BytesTrieDictionaryMatcher
     // the transform constant should be the constant read from the file, not a masked version!
     // the UDataMemory * fed in here will be closed on this object's destruction
-    BytesDictionaryMatcher(const char *c, int32_t t, UDataMemory *f) : characters(c), transformConstant(t), file(f) { }
-    ~BytesDictionaryMatcher();
-    virtual int32_t matches(UText *text, int32_t maxLength, int32_t *lengths, int &count, int limit, int32_t *values = NULL) const;
+    BytesDictionaryMatcher(const char *c, int32_t t, UDataMemory *f)
+            : characters(c), transformConstant(t), file(f) { }
+    virtual ~BytesDictionaryMatcher();
+    virtual int32_t matches(UText *text, int32_t maxLength, int32_t *lengths, int &count,
+                            int limit, int32_t *values = NULL) const;
     virtual int32_t getType() const;
 private:
     UChar32 transform(UChar32 c) const;

@@ -37,7 +37,7 @@ group: c_strings
     memcmp memcpy memmove memset
     # Additional symbols in an optimized build.
     __strcpy_chk __strncpy_chk __strcat_chk __strncat_chk
-    __rawmemchr __memcpy_chk __memmove_chk
+    __rawmemchr __memcpy_chk __memmove_chk __memset_chk
 
 group: c_string_formatting
     atoi atol strtod strtol strtoul
@@ -136,6 +136,7 @@ library: common
     ucasemap ucasemap_titlecase_brkiter script_runs
     uprops ubidi_props ucase uscript
     ubidi ushape
+    listformatter
     resourcebundle service_registration resbund_cnv ures_cnv icudataver ucat
     loclikely
     conversion converter_selector ucnv_set ucnvdisp
@@ -164,12 +165,13 @@ group: breakiterator
     brkiter.o brkeng.o ubrk.o
     rbbi.o rbbinode.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o
     rbbidata.o rbbirb.o
-    triedict.o dictbe.o
+    dictionarydata.o dictbe.o
   deps
     resourcebundle service_registration
     schriter utext uniset_core uniset_props
     uhash ustack utrie
-    uvector32  # for triedict.o
+    ucharstrie bytestrie
+    normlzr  # for dictbe.o, should switch to Normalizer2
 
 group: unormcmp  # unorm_compare()
     unormcmp.o
@@ -490,6 +492,11 @@ group: service_registration
   deps
     locale_display_names resourcebundle
     hashtable uvector
+
+group: listformatter
+    listformatter.o
+  deps
+    resourcebundle
 
 group: ucat  # message-catalog-like API
     ucat.o
