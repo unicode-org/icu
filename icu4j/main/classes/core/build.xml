@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009-2011, International Business Machines Corporation and    *
+* Copyright (C) 2009-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -34,6 +34,8 @@
     <target name="copy-data" description="Extract pre-built ICU core data files and copy them to the project's binary directory">
         <unjar src="${icu4j.data.jar}" dest="${bin.dir}">
             <patternset>
+                <exclude name="META-INF"/>
+                <exclude name="META-INF/**/*"/>
                 <exclude name="${icu4j.data.path}/coll/**"/>
                 <exclude name="${icu4j.data.path}/curr/**"/>
                 <exclude name="${icu4j.data.path}/lang/**"/>
@@ -45,7 +47,8 @@
         </unjar>
         <unjar src="${icu4j.tzdata.jar}" dest="${bin.dir}">
             <patternset>
-                <include name="**/*.res" />
+                <exclude name="META-INF"/>
+                <exclude name="META-INF/**/*"/>
             </patternset>
         </unjar>
 

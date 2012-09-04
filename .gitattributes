@@ -3218,6 +3218,7 @@ icu4j/eclipse-build/misc/about_icu.html svneol=native#text/html
 icu4j/eclipse-build/misc/about_icu_base.html svneol=native#text/html
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base.tests/.classpath -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base.tests/.project -text
+icu4j/eclipse-build/plugins.template/com.ibm.icu.base.tests/.settings/org.eclipse.core.resources.prefs -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base.tests/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base.tests/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base.tests/META-INF/MANIFEST.MF -text
@@ -3239,6 +3240,7 @@ icu4j/eclipse-build/plugins.template/com.ibm.icu.base.tests/src/com/ibm/icu/test
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base.tests/src/com/ibm/icu/tests/ULocaleTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/.classpath -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/.project -text
+icu4j/eclipse-build/plugins.template/com.ibm.icu.base/.settings/org.eclipse.core.resources.prefs -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/META-INF/MANIFEST.MF -text
@@ -3287,9 +3289,11 @@ icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/util/Illfo
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/util/TimeZone.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/util/ULocale.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/eclipse-build/plugins.template/com.ibm.icu.base/src/com/ibm/icu/util/VersionInfo.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/.settings/org.eclipse.core.resources.prefs -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/META-INF/MANIFEST.MF -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/plugin.properties -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu.tests/src/com/ibm/icu/tests/UnitTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/eclipse-build/plugins.template/com.ibm.icu/.settings/org.eclipse.core.resources.prefs -text
 icu4j/eclipse-build/plugins.template/com.ibm.icu/META-INF/MANIFEST.MF -text
 icu4j/main/classes/charset/.classpath -text
 icu4j/main/classes/charset/.project -text
