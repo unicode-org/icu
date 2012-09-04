@@ -853,7 +853,6 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      *         <code>CoderResult.UNDERFLOW</code> if there is a problem, or
      *         <code>null</code> if there isn't.
      * @see #handleSurrogates(CharBuffer, char)
-     * @see #handleSurrogates(CharBuffer, int, char)
      * @see #handleSurrogates(char[], int, int, char)
      */
     final CoderResult handleSurrogates(CharBuffer source, char lead) {
@@ -895,7 +894,6 @@ public abstract class CharsetEncoderICU extends CharsetEncoder {
      *         <code>CoderResult.UNDERFLOW</code> if there is a problem, or <code>null</code> if
      *         there isn't.
      * @see #handleSurrogates(CharBuffer, char)
-     * @see #handleSurrogates(CharBuffer, int, char)
      * @see #handleSurrogates(char[], int, int, char)
      */
     final CoderResult handleSurrogates(char[] sourceArray, int sourceIndex,

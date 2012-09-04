@@ -525,7 +525,6 @@ public class MessageFormat extends UFormat {
     /**
      * Returns the part index of the next ARG_START after partIndex, or -1 if there is none more.
      * @param partIndex Part index of the previous ARG_START (initially 0).
-     * @return
      */
     private int nextTopLevelArgStart(int partIndex) {
         if (partIndex != 0) {
