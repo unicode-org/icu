@@ -14,7 +14,7 @@ import java.util.Stack;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
 
-public final class UnhandledBreakEngine implements LanguageBreakEngine {
+final class UnhandledBreakEngine implements LanguageBreakEngine {
     // TODO: Use two arrays of UnicodeSet, one with all frozen sets, one with unfrozen.
     // in handleChar(), update the unfrozen version, clone, freeze, replace the frozen one.
     private final UnicodeSet[] fHandled = new UnicodeSet[BreakIterator.KIND_TITLE + 1];
