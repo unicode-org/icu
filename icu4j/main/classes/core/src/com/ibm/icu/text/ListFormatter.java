@@ -71,8 +71,6 @@ final public class ListFormatter {
       return cache.get(locale);
     }
 
-    private static ULocale zhTW = new ULocale("zh_TW");
-
     /**
      * Create a list formatter that is appropriate for a locale.
      *
