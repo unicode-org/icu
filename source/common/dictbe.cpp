@@ -771,6 +771,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *text,
     }
 
     UnicodeString inputString(charString.elems(), inputLength);
+    // TODO: Use Normalizer2.
     UNormalizationMode norm_mode = UNORM_NFKC;
     UBool isNormalized =
         Normalizer::quickCheck(inputString, norm_mode, status) == UNORM_YES ||
