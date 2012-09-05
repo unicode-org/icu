@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2006-2011, International Business Machines
+ * Copyright (c) 2006-2012, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Created on 2006-7-24 ?
@@ -16,6 +16,8 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.TreeMap;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -104,6 +106,28 @@ public class StableAPI {
     private File reportXsl;
     private File resultFile;
     
+
+    static Map<String,Set<String>> simplifications = new TreeMap<String,Set<String>>();
+    
+    static void addSimplification(String prototype0, String prototype) {
+        Set<String> s = simplifications.get(prototype);
+        if(s==null) {
+            s = new TreeSet<String>();
+            simplifications.put(prototype, s);
+        }
+        s.add(prototype0);
+    }
+
+    static Set<String> getChangedSimplifications() {
+        Set<String> output = new TreeSet<String>();
+        for(Map.Entry<String,Set<String>> e : simplifications.entrySet()) {
+            if(e.getValue().size()>1) {
+                output.add(e.getKey());
+            }
+        }
+        return output;
+    }
+
     
     final private static String nul = "None"; 
 
@@ -134,6 +158,17 @@ public class StableAPI {
         
         this.reportSelectedFun(fullList);
         System.out.println("Done. Please check " + this.resultFile);
+
+        Set<String> changedSimp = getChangedSimplifications();
+        if(!changedSimp.isEmpty()) {
+            System.out.println("--- changed simplifications ---");
+            for(String k : changedSimp) {
+                System.out.println(k);
+                for(String s : simplifications.get(k)) {
+                    System.out.println("\t"+s);
+                }
+            }
+        }
     }
 
 
@@ -468,6 +503,9 @@ public class StableAPI {
             f.version = trimICU(getAttr(n, "version"));
             f.file = getAttr(n, "file");
             f.purifyPrototype();
+            
+            f.simplifyPrototype();
+
             if(f.file == null) {
             	f.file = "{null}";
             } else {
@@ -488,6 +526,24 @@ public class StableAPI {
             return str;
         }
         
+
+        static private String replList[] = {  "[ ]*\\([ ]*void[ ]*\\)[ ]*",   "()",  // cleanup
+                                              " , ", ", ",                // cleanup
+                                              "[ ]*=[ ]*0[ ]*$", "=0",      // cleanup pure virtual
+                                              "\\)[ ]*const", ") const",  // This just cleans up the spacing.
+
+                                              "^const [ ]*", "const ", // cleanup
+                                              //"([,)])[ ]*const [ ]*", "\1",  // TODO: notify about this difference, separately - remove const from param
+            						};
+
+        /**
+         * these are noted as deltas.
+         */
+        static private String simplifyList[] = { 
+            "[ ]*=[ ]*0[ ]*$", "",      // remove pure virtual - TODO: notify about this difference, separately
+            "\\)[ ]*const[ ]*$", ")",  // TODO: notify about this difference, separately - remove const from function type
+        };
+
         /**
          * Special cases:
          * 
@@ -497,16 +553,13 @@ public class StableAPI {
          */
         private void purifyPrototype(){
             //refer to 'umachine.h'
-            String statusList[] = {"U_CAPI", "U_STABLE", "U_DRAFT", "U_DEPRECATED", "U_OBSOLETE", "U_INTERNAL", "virtual", "U_EXPORT2"};
+            String statusList[] = {"U_CAPI", "U_STABLE", "U_DRAFT", "U_DEPRECATED", "U_OBSOLETE", "U_INTERNAL", "virtual", "U_EXPORT2", "U_I18N_API", "U_COMMON_API" };
             for (int i = 0; i < statusList.length; i++) {
                 String s = statusList[i];
                 prototype = prototype.replaceAll(s,"");
                 prototype = prototype.trim();
             }
             
-            String replList[] = {  "[ ]*\\([ ]*void[ ]*\\)[ ]*",   "()",
-            				       " , ", ", ",
-            						};
             for (int i = 0; i < replList.length; i+= 2) {
                 prototype = prototype.replaceAll(replList[i+0],replList[i+1]);
             }
@@ -582,6 +635,16 @@ public class StableAPI {
             
           //  System.err.println(prototype+" -> " + out.toString());
             prototype = out.toString();
+        }
+
+        private void simplifyPrototype() {
+            final String prototype0 = prototype;
+            for (int i = 0; i < simplifyList.length; i+= 2) {
+                prototype = prototype.replaceAll(simplifyList[i+0],simplifyList[i+1]);
+            }
+            if(!prototype0.equals(prototype)) {
+                addSimplification(prototype0, prototype);
+            }
         }
 //        private Element toXml(Document doc){
 //            Element  ele = doc.createElement("func");
@@ -768,9 +831,9 @@ public class StableAPI {
         DOMSource rightIndex = new DOMSource(getDocument(new File(rightDir,INDEX_XML)));
         DOMResult rightResult = new DOMResult();
         transformer.setParameter(DOC_FOLDER, rightDir);
-        System.err.println("abdToLoad "+dumpXsltFile.toString());
+        System.err.println("Loading: "+dumpXsltFile.toString());
         transformer.transform(rightIndex, rightResult);
-        System.err.println("dnlToLoad "+dumpXsltFile.toString());
+        System.err.println("   .. loaded: "+dumpXsltFile.toString());
         Node rightList = (Node)xpath.evaluate(expression, rightResult.getNode(), XPathConstants.NODE);
         if(rightList==null) {
         	throw new InternalError("getFullList("+dumpXsltFile.toString()+") returned a null right "+expression);
