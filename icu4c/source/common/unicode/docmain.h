@@ -72,7 +72,7 @@
  *     <td>icu::UnicodeString, icu::CharacterIterator, icu::Appendable, icu::StringPiece,icu::ByteSink</td>
  *   </tr>
  *   <tr>
- *     <td>Unicode Character<br>Properties and Names</td>
+ *     <td>Unicode Character<br/>Properties and Names</td>
  *     <td>uchar.h, uscript.h</td>
  *     <td>C API</td>
  *   </tr>
@@ -93,7 +93,7 @@
  *   </tr>
  *   <tr>
  *     <td>Unicode Text Compression</td>
- *     <td>ucnv.h<br>(encoding name "SCSU" or "BOCU-1")</td>
+ *     <td>ucnv.h<br/>(encoding name "SCSU" or "BOCU-1")</td>
  *     <td>C API</td>
  *   </tr>
  *   <tr>
@@ -132,12 +132,12 @@
  *     <td>icu::NumberFormat</td>
  *   </tr>
  *   <tr>
- *     <td>Number Spellout<br>(Rule Based Number Formatting)</td>
- *     <td>unum.h<br>(use UNUM_SPELLOUT)</td>
+ *     <td>Number Spellout<br/>(Rule Based Number Formatting)</td>
+ *     <td>unum.h<br/>(use UNUM_SPELLOUT)</td>
  *     <td>icu::RuleBasedNumberFormat</td>
  *   </tr>
  *   <tr>
- *     <td>Text Transformation<br>(Transliteration)</td>
+ *     <td>Text Transformation<br/>(Transliteration)</td>
  *     <td>utrans.h</td>
  *     <td>icu::Transliterator</td>
  *   </tr>
@@ -162,12 +162,12 @@
  *     <td>icu::StringSearch</td>
  *   </tr>
  *   <tr>
- *     <td>Index Characters/<br>Bucketing for Sorted Lists</td>
+ *     <td>Index Characters/<br/>Bucketing for Sorted Lists</td>
  *     <td>(no C API)</td>
  *     <td>icu::AlphabeticIndex</td>
  *   </tr>
  *   <tr>
- *     <td>Text Boundary Analysis<br>(Break Iteration)</td>
+ *     <td>Text Boundary Analysis<br/>(Break Iteration)</td>
  *     <td>ubrk.h</td>
  *     <td>icu::BreakIterator</td>
  *   </tr>
@@ -182,7 +182,7 @@
  *     <td>C API</td>
  *   </tr>
  *   <tr>
- *     <td>International Domain Names in Applications:<br>
+ *     <td>International Domain Names in Applications:<br/>
  *         UTS #46 in C/C++, IDNA2003 only via C API</td>
  *     <td>uidna.h</td>
  *     <td>idna.h</td>
