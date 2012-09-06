@@ -4860,6 +4860,7 @@ tools/release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCFunc_xml.xslt -text
 tools/release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc_xml.xslt -text
 tools/release/java/src/com/ibm/icu/dev/tools/docs/genreport_xml.xslt -text
 tools/scripts/icurun -text
+tools/scripts/reticket -text
 tools/trac/IcuCodeTools/0.11/icucodetools/__init__.py -text
 tools/trac/IcuCodeTools/0.11/icucodetools/dcut.py -text
 tools/trac/IcuCodeTools/0.11/icucodetools/htdocs/css/icuxtn.css -text svneol=unset#text/css
