@@ -1123,9 +1123,17 @@ en{
             "XRE",
             "RINET Funds",
         }
+        XSU{
+            "XSU",
+            "Sucre",
+        }
         XTS{
             "XTS",
             "Testing Currency Code",
+        }
+        XUA{
+            "XUA",
+            "ADB Unit of Account",
         }
         XXX{
             "XXX",
@@ -2301,9 +2309,17 @@ en{
             one{"RINET Funds unit"}
             other{"RINET Funds units"}
         }
+        XSU{
+            one{"Sucre"}
+            other{"Sucres"}
+        }
         XTS{
             one{"Testing Currency unit"}
             other{"Testing Currency units"}
+        }
+        XUA{
+            one{"ADB unit of account"}
+            other{"ADB units of account"}
         }
         XXX{
             one{"(unknown unit of currency)"}
@@ -2370,5 +2386,5 @@ en{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.76.64"}
+    Version{"2.0.76.85"}
 }

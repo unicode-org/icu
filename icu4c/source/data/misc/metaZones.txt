@@ -343,7 +343,6 @@ metaZones:table(nofallback){
             GM{"Africa/Banjul"}
             GN{"Africa/Conakry"}
             IE{"Europe/Dublin"}
-            LR{"Africa/Monrovia"}
             ML{"Africa/Bamako"}
             MR{"Africa/Nouakchott"}
             SH{"Atlantic/St_Helena"}
