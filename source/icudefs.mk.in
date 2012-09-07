@@ -172,11 +172,6 @@ LINK.cc=      $(CXX) $(CXXFLAGS) $(LDFLAGS)
 SHLIB.c=      $(CC) $(CFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
 SHLIB.cc=     $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
 
-# Do not show the large compiling arguments by default.
-ifndef VERBOSE
-    SILENT_COMPILE=@echo Compiling $< &&
-endif
-
 # Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
 
