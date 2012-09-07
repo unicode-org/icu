@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -1797,7 +1797,7 @@ _canonicalize(const char* localeID,
                 int32_t variantLen = _deleteVariant(variant, uprv_min(variantSize, (nameCapacity-len)), variantToCompare, n);
                 len -= variantLen;
                 if (variantLen > 0) {
-                    if (name[len-1] == '_') { /* delete trailing '_' */
+                    if (len>0 && name[len-1] == '_') { /* delete trailing '_' */
                         --len;
                     }
                     addKeyword = VARIANT_MAP[j].keyword;
@@ -1805,7 +1805,7 @@ _canonicalize(const char* localeID,
                     break;
                 }
             }
-            if (name[len-1] == '_') { /* delete trailing '_' */
+            if (len>0 && len <= nameCapacity && name[len-1] == '_') { /* delete trailing '_' */
                 --len;
             }
         }
