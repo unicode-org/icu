@@ -343,6 +343,20 @@ U_CAPI const char *udbg_getPlatform(void)
     return "Windows";
 #elif U_PLATFORM == U_PF_UNKNOWN
     return "unknown";
+#elif U_PLATFORM == U_PF_DARWIN
+    return "Darwin";
+#elif U_PLATFORM == U_PF_QNX
+    return "QNX";
+#elif U_PLATFORM == U_PF_LINUX
+    return "Linux";
+#elif U_PLATFORM == U_PF_ANDROID
+    return "Android";
+#elif U_PLATFORM == U_PF_CLASSIC_MACOS
+    return "MacOS (Classic)";
+#elif U_PLATFORM == U_PF_OS390
+    return "IBM z";
+#elif U_PLATFORM == U_PF_OS400
+    return "IBM i";
 #else
     return "Other (POSIX-like)";
 #endif
