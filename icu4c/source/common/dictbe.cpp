@@ -644,6 +644,7 @@ foundBest:
     return wordsFound;
 }
 
+#if !UCONFIG_NO_NORMALIZATION
 /*
  ******************************************************************
  * CjkBreakEngine
@@ -933,6 +934,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *text,
     utext_close(&normalizedText);
     return numBreaks;
 }
+#endif
 
 U_NAMESPACE_END
 

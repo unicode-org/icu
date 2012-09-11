@@ -231,7 +231,9 @@ ICULanguageBreakFactory::loadEngineFor(UChar32 c, int32_t breakType) {
             case USCRIPT_KHMER:
                 engine = new KhmerBreakEngine(m, status);
                 break;
-                
+
+#if !UCONFIG_NO_NORMALIZATION
+                // CJK not available w/o normalization
             case USCRIPT_HANGUL:
                 engine = new CjkBreakEngine(m, kKorean, status);
                 break;
@@ -255,6 +257,8 @@ ICULanguageBreakFactory::loadEngineFor(UChar32 c, int32_t breakType) {
                 break;
             }
 #endif
+#endif
+
             default:
                 break;
             }

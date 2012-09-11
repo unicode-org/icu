@@ -15,6 +15,8 @@
 #include "unicode/udata.h"
 #include "cmemory.h"
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 U_NAMESPACE_BEGIN
 
 #ifndef CYGWINMSVC /* On Cygwin/MSVC, the error redefinition of symbols occurs.*/
@@ -223,4 +225,4 @@ udict_swap(const UDataSwapper *ds, const void *inData, int32_t length,
     }
     return headerSize + size;
 }
-
+#endif
