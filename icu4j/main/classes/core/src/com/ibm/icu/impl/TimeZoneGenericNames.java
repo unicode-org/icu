@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011, International Business Machines Corporation and         *
+ * Copyright (C) 2011-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -76,11 +76,12 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
      * Format pattern enum used for composing location and partial location names
      */
     public enum Pattern {
-        // The format pattern such as "{0} Time", where {0} is the country. 
+        // The format pattern such as "{0} Time", where {0} is the country or city. 
         REGION_FORMAT("regionFormat", "({0})"),
 
+        // Note: FALLBACK_REGION_FORMAT is no longer used since ICU 50/CLDR 22.1
         // The format pattern such as "{1} Time ({0})", where {1} is the country and {0} is a city.
-        FALLBACK_REGION_FORMAT("fallbackRegionFormat", "{1} ({0})"),
+        //FALLBACK_REGION_FORMAT("fallbackRegionFormat", "{1} ({0})"),
 
         // The format pattern such as "{1} ({0})", where {1} is the metazone, and {0} is the country or city.
         FALLBACK_FORMAT("fallbackFormat", "{1} ({0})");
@@ -235,13 +236,16 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
         if (countryCode != null) {
             String country = getLocaleDisplayNames().regionDisplayName(countryCode);
             if (ZoneMeta.getSingleCountry(canonicalTzID) != null) {
-                // If the zone is only one zone in the country, do not add city
+                // If this is only the single zone in the country, use the country name
                 name = formatPattern(Pattern.REGION_FORMAT, country);
             } else {
+                // If there are multiple zones including this in the country,
+                // use the exemplar city name
+
                 // getExemplarLocationName should return non-empty String
                 // if the time zone is associated with a location
                 String city = _tznames.getExemplarLocationName(canonicalTzID);
-                name = formatPattern(Pattern.FALLBACK_REGION_FORMAT, city, country);
+                name = formatPattern(Pattern.REGION_FORMAT, city);
             }
         }
 
