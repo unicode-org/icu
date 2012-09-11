@@ -97,6 +97,8 @@ static UDataInfo dataInfo = {
     { 0, 0, 0, 0 }                  /* data version */
 };
 
+#if !UCONFIG_NO_BREAK_ITERATION
+
 // A wrapper for both BytesTrieBuilder and UCharsTrieBuilder.
 // may want to put this somewhere in ICU, as it could be useful outside
 // of this tool?
@@ -199,6 +201,7 @@ public:
         return (int32_t)(transformType | transformConstant); 
     }
 };
+#endif
 
 static const UChar LINEFEED_CHARACTER = 0x000A;
 static const UChar CARRIAGE_RETURN_CHARACTER = 0x000D;
@@ -274,19 +277,21 @@ int  main(int argc, char **argv) {
     IcuToolErrorCode status("gendict/main()");
 
 #if UCONFIG_NO_BREAK_ITERATION || UCONFIG_NO_FILE_IO
+    const char* outDir=NULL;
 
     UNewDataMemory *pData;
     char msg[1024];
+    UErrorCode tempstatus = U_ZERO_ERROR;
 
     /* write message with just the name */ // potential for a buffer overflow here...
     sprintf(msg, "gendict writes dummy %s because of UCONFIG_NO_BREAK_ITERATION and/or UCONFIG_NO_FILE_IO, see uconfig.h", outFileName);
     fprintf(stderr, "%s\n", msg);
 
     /* write the dummy data file */
-    pData = udata_create(outDir, NULL, outFileName, &dataInfo, NULL, &status);
+    pData = udata_create(outDir, NULL, outFileName, &dataInfo, NULL, &tempstatus);
     udata_writeBlock(pData, msg, strlen(msg));
-    udata_finish(pData, &status);
-    return (int)status;
+    udata_finish(pData, &tempstatus);
+    return (int)tempstatus;
 
 #else
     //  Read in the dictionary source file
