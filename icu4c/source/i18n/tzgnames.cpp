@@ -288,7 +288,6 @@ private:
     UHashtable* fPartialLocationNamesMap;
 
     MessageFormat* fRegionFormat;
-    MessageFormat* fFallbackRegionFormat;
     MessageFormat* fFallbackFormat;
 
     LocaleDisplayNames* fLocaleDisplayNames;
@@ -336,7 +335,6 @@ TZGNCore::TZGNCore(const Locale& locale, UErrorCode& status)
   fLocationNamesMap(NULL),
   fPartialLocationNamesMap(NULL),
   fRegionFormat(NULL),
-  fFallbackRegionFormat(NULL),
   fFallbackFormat(NULL),
   fLocaleDisplayNames(NULL),
   fStringPool(status),
@@ -391,10 +389,6 @@ TZGNCore::initialize(const Locale& locale, UErrorCode& status) {
 
     fRegionFormat = new MessageFormat(rpat, status);
     if (fRegionFormat == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
-    fFallbackRegionFormat = new MessageFormat(frpat, status);
-    if (fFallbackRegionFormat == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
     fFallbackFormat = new MessageFormat(fpat, status);
@@ -457,9 +451,6 @@ void
 TZGNCore::cleanup() {
     if (fRegionFormat != NULL) {
         delete fRegionFormat;
-    }
-    if (fFallbackRegionFormat != NULL) {
-        delete fFallbackRegionFormat;
     }
     if (fFallbackFormat != NULL) {
         delete fFallbackFormat;
@@ -577,22 +568,25 @@ TZGNCore::getGenericLocationName(const UnicodeString& tzCanonicalID) {
         // Format
         FieldPosition fpos;
         if (isSingleCountry) {
-            // If the zone is only one zone in the country, do not add city
+            // If this is only the single zone in the country, use the country name
             Formattable param[] = {
                 Formattable(country)
             };
             fRegionFormat->format(param, 1, name, fpos, status);
         } else {
+            // If there are multiple zones including this in the country,
+            // use the exemplar city name
+
             // getExemplarLocationName should retur non-empty string
             // if the time zone is associated with a region
+
             UnicodeString city;
             fTimeZoneNames->getExemplarLocationName(tzCanonicalID, city);
 
-            Formattable params[] = {
+            Formattable param[] = {
                 Formattable(city),
-                Formattable(country)
             };
-            fFallbackRegionFormat->format(params, 2, name, fpos, status);
+            fRegionFormat->format(param, 1, name, fpos, status);
         }
         if (U_FAILURE(status)) {
             return NULL;
