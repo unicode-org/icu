@@ -9,7 +9,11 @@
  *   12/11/2000    Ram        Creation.
  */
 
-/* This file contains documentation for Doxygen and doesnot have
+/**
+ * \file
+ * \brief (Non API- contains Doxygen definitions)
+ *
+ * This file contains documentation for Doxygen and doesnot have
  * any significance with respect to C or C++ API
  */
 

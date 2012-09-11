@@ -410,7 +410,7 @@
 
 
 /**
- * \def UCONFIG_HAVE_PARSEALLINPUT
+ * \def UCONFIG_FORMAT_FASTPATHS_49
  * This switch turns on other formatting fastpaths. Binary incompatible in object DecimalFormat and DecimalFormatSymbols
  *
  * @internal

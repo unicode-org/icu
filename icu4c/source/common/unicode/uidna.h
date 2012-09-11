@@ -174,7 +174,7 @@ U_NAMESPACE_END
  * \endcode
  * @stable ICU 4.6
  */
-struct UIDNAInfo {
+typedef struct UIDNAInfo {
     /** sizeof(UIDNAInfo) @stable ICU 4.6 */
     int16_t size;
     /**
@@ -192,8 +192,7 @@ struct UIDNAInfo {
     uint32_t errors;
     int32_t reservedI2;  /**< Reserved field, do not use. @internal */
     int32_t reservedI3;  /**< Reserved field, do not use. @internal */
-};
-typedef struct UIDNAInfo UIDNAInfo;
+} UIDNAInfo;
 
 /**
  * Static initializer for a UIDNAInfo struct.
