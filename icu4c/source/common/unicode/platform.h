@@ -36,7 +36,7 @@
  * and/or from other macros that are predefined by the compiler
  * or defined in standard (POSIX or platform or compiler) headers.
  *
- * As a temporary workaround, you can add an explicit #define for some macros
+ * As a temporary workaround, you can add an explicit <code>#define</code> for some macros
  * before it is first tested, or add an equivalent -D macro definition
  * to the compiler's command line.
  *
@@ -49,6 +49,19 @@
  * (You can provide an actual empty .c file rather than /dev/null.
  * <code>-x c++</code> is for C++.)
  */
+
+/**
+ * Define some things so that they can be documented.
+ * @internal
+ */
+#ifdef U_IN_DOXYGEN
+/*
+ * Problem: "platform.h:335: warning: documentation for unknown define U_HAVE_STD_STRING found." means that U_HAVE_STD_STRING is not documented.
+ * Solution: #define any defines for non @internal API here, so that they are visible in the docs.  If you just set PREDEFINED in Doxyfile.in,  they won't be documented.
+ */
+
+/* None for now. */
+#endif
 
 /**
  * \def U_PLATFORM

@@ -12,27 +12,36 @@
 *   Created by: Vladimir Weinstein
 *   Updated by: Steven R. Loomis
 *
-*  Gets included by uversion.h and other files.
-*
-* IMPORTANT: When updating version, the following things need to be done:
-* source/common/unicode/uvernum.h - this file: update major, minor,
-*        patchlevel, suffix, version, short version constants, namespace,
-*                    renaming macro, and copyright
-*
-* The following files need to be updated as well, which can be done
-*  by running the UNIX makefile target 'update-windows-makefiles' in icu/source.
-*
-*
-* source/common/common.vcproj - update 'Output file name' on the link tab so
-*                   that it contains the new major/minor combination
-* source/i18n/i18n.vcproj - same as for the common.vcproj
-* source/layout/layout.vcproj - same as for the common.vcproj
-* source/layoutex/layoutex.vcproj - same
-* source/stubdata/stubdata.vcproj - same as for the common.vcproj
-* source/io/io.vcproj - same as for the common.vcproj
-* source/data/makedata.mak - change U_ICUDATA_NAME so that it contains
-*                            the new major/minor combination and the Unicode version.
 */
+
+/**
+ * \file
+ * \brief C API: definitions of ICU version numbers
+ * 
+ * This file is included by uversion.h and other files. This file contains only 
+ * macros and definitions. The actual version numbers are defined here.
+ */
+
+ /*
+  * IMPORTANT: When updating version, the following things need to be done:
+  * source/common/unicode/uvernum.h - this file: update major, minor,
+  *        patchlevel, suffix, version, short version constants, namespace,
+  *                    renaming macro, and copyright
+  *
+  * The following files need to be updated as well, which can be done
+  *  by running the UNIX makefile target 'update-windows-makefiles' in icu/source.
+  *
+  *
+  * source/common/common.vcproj - update 'Output file name' on the link tab so
+  *                   that it contains the new major/minor combination
+  * source/i18n/i18n.vcproj - same as for the common.vcproj
+  * source/layout/layout.vcproj - same as for the common.vcproj
+  * source/layoutex/layoutex.vcproj - same
+  * source/stubdata/stubdata.vcproj - same as for the common.vcproj
+  * source/io/io.vcproj - same as for the common.vcproj
+  * source/data/makedata.mak - change U_ICUDATA_NAME so that it contains
+  *                            the new major/minor combination and the Unicode version.
+  */
 
 #ifndef UVERNUM_H
 #define UVERNUM_H

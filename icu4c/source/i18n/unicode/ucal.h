@@ -122,7 +122,7 @@
  * <p>
  * The date or time format strings are not part of the definition of a
  * calendar, as those must be modifiable or overridable by the user at
- * runtime. Use {@link DateFormat}
+ * runtime. Use {@link icu::DateFormat}
  * to format dates.
  *
  * <p>

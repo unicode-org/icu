@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010, International Business Machines Corporation and       * 
+*   Copyright (C) 2010-2012, International Business Machines Corporation and       * 
 *   others.  All Rights Reserved.                                             *
 *******************************************************************************
 */
@@ -10,7 +10,7 @@
 
 /**
  * \file
- * \brief C++ API: Provides display names of Locale ids and their components.
+ * \brief C API: Provides display names of Locale ids and their components.
  */
 
 #include "unicode/utypes.h"
