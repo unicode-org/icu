@@ -330,6 +330,7 @@ public:
      * @param offset The offset from GMT(UTC) in milliseconds.
      * @param result Recevies the RFC822 style GMT(UTC) offset format.
      * @return A reference to the result.
+     * @param status Receives the status
      * @see #parseOffsetRFC822
      * @internal ICU 49 technology preview
      */
@@ -339,7 +340,8 @@ public:
      * Returns the ISO 8601 style time zone string for the given offset.
      * For example, "-08:00" and "Z".
      * @param offset The offset from GMT(UTC) in milliseconds.
-     * @param result Recevies the ISO 8601 style GMT(UTC) offset format.
+     * @param result Receives the ISO 8601 style GMT(UTC) offset format.
+     * @param status Receives the status
      * @return A reference to the result.
      * @see #parseOffsetISO8601
      * @internal ICU 49 technology preview
@@ -356,6 +358,7 @@ public:
      * <li>GMT zero format (e.g. "GMT" - see {@link #getGMTZeroFormat})
      * </ul>
      * @param offset the offset from GMT(UTC) in milliseconds.
+     * @param status Receives the status
      * @param result Receives the localized GMT format string.
      * @return A reference to the result.
      * @see #parseOffsetLocalizedGMT

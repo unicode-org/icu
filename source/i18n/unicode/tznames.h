@@ -319,7 +319,6 @@ public:
         /**
          * Returns the match length of a match at the specified index.
          * @param idx The index
-         * @param status Receives the status
          * @return The match length. If the specified idx is out of range,
          *      it returns 0.
          * @internal ICU 49 technology preview
@@ -339,7 +338,6 @@ public:
          * Gets the metazone ID of a match at the specified index.
          * @param idx The index
          * @param mzID Receives the metazone ID
-         * @param status Receives the status.
          * @return TRUE if the meta zone ID was set to mzID.
          * @internal ICU 49 technology preview
          */

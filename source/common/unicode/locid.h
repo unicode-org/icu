@@ -41,6 +41,8 @@
  * \brief C++ API: Locale ID object.
  */
 
+U_NAMESPACE_BEGIN
+
 /**
  * A <code>Locale</code> object represents a specific geographical, political,
  * or cultural region. An operation that requires a <code>Locale</code> to perform
@@ -177,7 +179,6 @@
  * @stable ICU 2.0
  * @see ResourceBundle
  */
-U_NAMESPACE_BEGIN
 class U_COMMON_API Locale : public UObject {
 public:
     /** Useful constant for the Root locale. @stable ICU 4.4 */

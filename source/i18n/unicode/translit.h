@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999-2011, International Business Machines
+* Copyright (C) 1999-2012, International Business Machines
 * Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -497,8 +497,7 @@ public:
      * for details.
      * @param text the buffer holding transliterated and
      * untransliterated text
-     * @param index an array of three integers.  See {@link
-     * #transliterate(Replaceable&, UTransPosition&, const UnicodeString&, UErrorCode&) const }.
+     * @param index an array of three integers.  See {@link #transliterate(Replaceable&, UTransPosition&, const UnicodeString*, UErrorCode&) const }.
      * @param status    Output param to filled in with a success or an error.
      * @see #transliterate(Replaceable, int[], String)
      * @stable ICU 2.0

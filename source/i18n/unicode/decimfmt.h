@@ -40,7 +40,7 @@
 #include "unicode/curramt.h"
 
 /**
- * \def UNUM_DECIMFORMAT_INTERNAL_SIZE
+ * \def UNUM_DECIMALFORMAT_INTERNAL_SIZE
  * @internal
  */
 #if UCONFIG_FORMAT_FASTPATHS_49

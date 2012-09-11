@@ -262,7 +262,7 @@ public:
 
     /**
      * Returns true if "other" is not the same as "this".
-     * Calls !Collator::operator==(other) which works for all subclasses.
+     * Calls ! operator==(const Collator&) const which works for all subclasses.
      * @param other Collator object to be compared
      * @return TRUE if other is not the same as this.
      * @stable ICU 2.0
