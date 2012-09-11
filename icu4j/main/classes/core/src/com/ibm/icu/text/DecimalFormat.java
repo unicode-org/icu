@@ -770,8 +770,50 @@ public class DecimalFormat extends NumberFormat {
      * {@inheritDoc}
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(double number, StringBuffer result, FieldPosition fieldPosition) {
         return format(number, result, fieldPosition, false);
+    }
+
+    // See if number is negative.
+    // usage: isNegative(multiply(numberToBeFormatted));
+    private boolean isNegative(double number) {
+        // Detecting whether a double is negative is easy with the exception of the value
+        // -0.0. This is a double which has a zero mantissa (and exponent), but a negative
+        // sign bit. It is semantically distinct from a zero with a positive sign bit, and
+        // this distinction is important to certain kinds of computations. However, it's a
+        // little tricky to detect, since (-0.0 == 0.0) and !(-0.0 < 0.0). How then, you
+        // may ask, does it behave distinctly from +0.0? Well, 1/(-0.0) ==
+        // -Infinity. Proper detection of -0.0 is needed to deal with the issues raised by
+        // bugs 4106658, 4106667, and 4147706. Liu 7/6/98.
+        return (number < 0.0) || (number == 0.0 && 1 / number < 0.0);
+    }
+
+    // Rounds the number and strips of the negative sign.
+    // usage: round(multiply(numberToBeFormatted))
+    private double round(double number) {
+        boolean isNegative = isNegative(number);
+        if (isNegative)
+            number = -number;
+
+        // Apply rounding after multiplier
+        if (roundingDouble > 0.0) {
+            // number = roundingDouble
+            //    * round(number / roundingDouble, roundingMode, isNegative);
+            return round(
+                number, roundingDouble, roundingDoubleReciprocal, roundingMode,
+                isNegative);
+        }
+        return number;
+    }
+
+    // Multiplies given number by multipler (if there is one) returning the new
+    // number. If there is no multiplier, returns the number passed in unchanged.
+    private double multiply(double number) {
+        if (multiplier != 1) {
+            return number * multiplier;
+        }
+        return number;
     }
 
     // [Spark/CDL] The actual method to format number. If boolean value
@@ -805,31 +847,11 @@ public class DecimalFormat extends NumberFormat {
             return result;
         }
 
-        // Do this BEFORE checking to see if value is infinite or negative!
-        if (multiplier != 1)
-            number *= multiplier;
-
-
-        // Detecting whether a double is negative is easy with the exception of the value
-        // -0.0. This is a double which has a zero mantissa (and exponent), but a negative
-        // sign bit. It is semantically distinct from a zero with a positive sign bit, and
-        // this distinction is important to certain kinds of computations. However, it's a
-        // little tricky to detect, since (-0.0 == 0.0) and !(-0.0 < 0.0). How then, you
-        // may ask, does it behave distinctly from +0.0? Well, 1/(-0.0) ==
-        // -Infinity. Proper detection of -0.0 is needed to deal with the issues raised by
-        // bugs 4106658, 4106667, and 4147706. Liu 7/6/98.
-        boolean isNegative = (number < 0.0) || (number == 0.0 && 1 / number < 0.0);
-        if (isNegative)
-            number = -number;
-
-        // Apply rounding after multiplier
-        if (roundingDouble > 0.0) {
-            // number = roundingDouble
-            //    * round(number / roundingDouble, roundingMode, isNegative);
-            double newNumber = round(number, roundingDouble, roundingDoubleReciprocal, roundingMode,
-                                     isNegative);
-            number = newNumber;
-        }
+        // Do this BEFORE checking to see if value is negative or infinite and
+        // before rounding.
+        number = multiply(number);
+        boolean isNegative = isNegative(number);
+        number = round(number);
 
         if (Double.isInfinite(number)) {
             int prefixLen = appendAffix(result, isNegative, true, parseAttr);
@@ -865,6 +887,32 @@ public class DecimalFormat extends NumberFormat {
                           !areSignificantDigitsUsed());
             return subformat(number, result, fieldPosition, isNegative, false, parseAttr);
         }
+    }
+
+    /**
+     * This is a special function used by the CompactDecimalFormat subclass.
+     * It completes only the rounding portion of the formatting and returns
+     * the resulting double. CompactDecimalFormat uses the result to compute
+     * the plural form to use.
+     *
+     * @param number The number to format.
+     * @return The number rounded to the correct number of significant digits
+     * with negative sign stripped off.
+     * @internal
+     * @deprecated
+     */
+    @Deprecated
+    double adjustNumberAsInFormatting(double number) {
+        if (Double.isNaN(number)) {
+            return number;
+        }
+        number = round(multiply(number));
+        if (Double.isInfinite(number)) {
+            return number;
+        }
+        DigitList dl = new DigitList();
+        dl.set(number, precision(false), false);
+        return dl.getDouble();
     }
 
     /**
@@ -966,6 +1014,7 @@ public class DecimalFormat extends NumberFormat {
      * @stable ICU 2.0
      */
     // [Spark/CDL] Delegate to format_long_StringBuffer_FieldPosition_boolean
+    @Override
     public StringBuffer format(long number, StringBuffer result, FieldPosition fieldPosition) {
         return format(number, result, fieldPosition, false);
     }
@@ -1020,6 +1069,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(BigInteger number, StringBuffer result,
                                FieldPosition fieldPosition) {
         return format(number, result, fieldPosition, false);
@@ -1051,6 +1101,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(java.math.BigDecimal number, StringBuffer result,
                                FieldPosition fieldPosition) {
         return format(number, result, fieldPosition, false);
@@ -1080,6 +1131,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(BigDecimal number, StringBuffer result,
                                FieldPosition fieldPosition) {
          // This method is just a copy of the corresponding java.math.BigDecimal method
@@ -1211,7 +1263,7 @@ public class DecimalFormat extends NumberFormat {
 
         int i;
         char [] digits = symbols.getDigitsLocal();
-        
+
         char grouping = currencySignCount > 0 ? symbols.getMonetaryGroupingSeparator() :
             symbols.getGroupingSeparator();
         char decimal = currencySignCount > 0 ? symbols.getMonetaryDecimalSeparator() :
@@ -1638,6 +1690,7 @@ public class DecimalFormat extends NumberFormat {
      * <code>null</code> if the parse failed
      * @stable ICU 2.0
      */
+    @Override
     public Number parse(String text, ParsePosition parsePosition) {
         return (Number) parse(text, parsePosition, null);
     }
@@ -1657,6 +1710,7 @@ public class DecimalFormat extends NumberFormat {
      * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
      */
+    @Override
     public CurrencyAmount parseCurrency(CharSequence text, ParsePosition pos) {
         Currency[] currency = new Currency[1];
         return (CurrencyAmount) parse(text.toString(), pos, currency);
@@ -2180,7 +2234,7 @@ public class DecimalFormat extends NumberFormat {
                             break;
                     }
                 }
-                    
+
 
 
                 if (digit == 0) {
@@ -2457,7 +2511,7 @@ public class DecimalFormat extends NumberFormat {
         return true;
     }
 
-    // Utility method used to count the number of codepoints 
+    // Utility method used to count the number of codepoints
     private int countCodePoints(String str,int start, int end) {
         int count = 0;
         int index = start;
@@ -3069,6 +3123,7 @@ public class DecimalFormat extends NumberFormat {
      * @see java.math.BigDecimal
      * @stable ICU 2.0
      */
+    @Override
     public int getRoundingMode() {
         return roundingMode;
     }
@@ -3086,6 +3141,7 @@ public class DecimalFormat extends NumberFormat {
      * @see java.math.BigDecimal
      * @stable ICU 2.0
      */
+    @Override
     public void setRoundingMode(int roundingMode) {
         if (roundingMode < BigDecimal.ROUND_UP || roundingMode > BigDecimal.ROUND_UNNECESSARY) {
             throw new IllegalArgumentException("Invalid rounding mode: " + roundingMode);
@@ -3094,7 +3150,7 @@ public class DecimalFormat extends NumberFormat {
         this.roundingMode = roundingMode;
 
         if (getRoundingIncrement() == null) {
-            setRoundingIncrement(Math.pow(10.0, (double) -getMaximumFractionDigits()));
+            setRoundingIncrement(Math.pow(10.0, -getMaximumFractionDigits()));
         }
     }
 
@@ -3501,6 +3557,7 @@ public class DecimalFormat extends NumberFormat {
      * Overrides clone.
      * @stable ICU 2.0
      */
+    @Override
     public Object clone() {
         try {
             DecimalFormat other = (DecimalFormat) super.clone();
@@ -3524,6 +3581,7 @@ public class DecimalFormat extends NumberFormat {
      * Overrides equals.
      * @stable ICU 2.0
      */
+    @Override
     public boolean equals(Object obj) {
         if (obj == null)
             return false;
@@ -3604,6 +3662,7 @@ public class DecimalFormat extends NumberFormat {
      * Overrides hashCode.
      * @stable ICU 2.0
      */
+    @Override
     public int hashCode() {
         return super.hashCode() * 37 + positivePrefix.hashCode();
         // just enough fields for a reasonable distribution
@@ -3896,6 +3955,7 @@ public class DecimalFormat extends NumberFormat {
      *
      * @stable ICU 3.6
      */
+    @Override
     public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
         if (!(obj instanceof Number))
             throw new IllegalArgumentException();
@@ -4742,6 +4802,7 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#setMaximumIntegerDigits
      * @stable ICU 2.0
      */
+    @Override
     public void setMaximumIntegerDigits(int newValue) {
         super.setMaximumIntegerDigits(Math.min(newValue, DOUBLE_INTEGER_DIGITS));
     }
@@ -4753,6 +4814,7 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#setMinimumIntegerDigits
      * @stable ICU 2.0
      */
+    @Override
     public void setMinimumIntegerDigits(int newValue) {
         super.setMinimumIntegerDigits(Math.min(newValue, DOUBLE_INTEGER_DIGITS));
     }
@@ -4853,6 +4915,7 @@ public class DecimalFormat extends NumberFormat {
      * @param theCurrency new currency object to use. Must not be null.
      * @stable ICU 2.2
      */
+    @Override
     public void setCurrency(Currency theCurrency) {
         // If we are a currency format, then modify our affixes to
         // encode the currency symbol for the given currency in our
@@ -4890,6 +4953,8 @@ public class DecimalFormat extends NumberFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
+    @Override
     protected Currency getEffectiveCurrency() {
         Currency c = getCurrency();
         if (c == null) {
@@ -4905,6 +4970,7 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#setMaximumFractionDigits
      * @stable ICU 2.0
      */
+    @Override
     public void setMaximumFractionDigits(int newValue) {
         super.setMaximumFractionDigits(Math.min(newValue, DOUBLE_FRACTION_DIGITS));
     }
@@ -4916,6 +4982,7 @@ public class DecimalFormat extends NumberFormat {
      * @see NumberFormat#setMinimumFractionDigits
      * @stable ICU 2.0
      */
+    @Override
     public void setMinimumFractionDigits(int newValue) {
         super.setMinimumFractionDigits(Math.min(newValue, DOUBLE_FRACTION_DIGITS));
     }
@@ -5514,7 +5581,7 @@ public class DecimalFormat extends NumberFormat {
         private String posPrefixPatternForCurrency = null;
         // positive suffix pattern
         private String posSuffixPatternForCurrency = null;
-        private int patternType;
+        private final int patternType;
 
         public AffixForCurrency(String negPrefix, String negSuffix, String posPrefix,
                                 String posSuffix, int type) {

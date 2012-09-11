@@ -37,35 +37,57 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {123456789012345f, "120T"},
             {12345678901234567890f, "12000000T"},
     };
-    
-    Object[][] SerbianTestData = {
-            {1234f, "1200"},
-            {12345f, "12\u00a0\u0445\u0438\u0459"},
-            {123456f, "120\u00a0\u0445\u0438\u0459"},
-            {1234567f, "1,2\u00a0\u043c\u0438\u043b"},
-            {12345678f, "12\u00a0\u043c\u0438\u043b"},
-            {123456789f, "120\u00a0\u043c\u0438\u043b"},
-            {1234567890f, "1,2\u00a0\u043c\u043b\u0440\u0434"},
-            {12345678901f, "12\u00a0\u043c\u043b\u0440\u0434"},
-            {123456789012f, "120\u00a0\u043c\u043b\u0440\u0434"},
-            {1234567890123f, "1,2\u00a0\u0431\u0438\u043b"},
-            {12345678901234f, "12\u00a0\u0431\u0438\u043b"},
-            {123456789012345f, "120\u00a0\u0431\u0438\u043b"},
+
+    Object[][] SerbianTestDataShort = {
+            {1234, "1200"},
+            {12345, "12K"},
+            {20789, "21\u00a0хиљ"},
+            {123456, "120\u00a0хиљ"},
+            {1234567, "1,2\u00a0мил"},
+            {12345678, "12\u00a0мил"},
+            {123456789, "120\u00a0мил"},
+            {1234567890, "1,2\u00a0млрд"},
+            {12345678901f, "12\u00a0млрд"},
+            {123456789012f, "120\u00a0млрд"},
+            {1234567890123f, "1,2\u00a0бил"},
+            {12345678901234f, "12\u00a0бил"},
+            {123456789012345f, "120\u00a0бил"},
+            {1234567890123456f, "1200\u00a0бил"},
     };
 
-    Object[][] JapaneseTestData = {
-            {1234f, "1.2\u5343"},
-            {12345f, "1.2\u4E07"},
-            {123456f, "12\u4E07"},
-            {1234567f, "120\u4E07"},
-            {12345678f, "1200\u4E07"},
-            {123456789f, "1.2\u5104"},
-            {1234567890f, "12\u5104"},
-            {12345678901f, "120\u5104"},
-            {123456789012f, "1200\u5104"},
-            {1234567890123f, "1.2\u5146"},
-            {12345678901234f, "12\u5146"},
-            {123456789012345f, "120\u5146"},
+    Object[][] SerbianTestDataLong = {
+            {1234, "1,2 хиљада"},
+            {12345, "12 хиљада"},
+            {21789, "22 хиљаде"},
+            {123456, "120 хиљада"},
+            {999999, "1 милион"},
+            {1234567, "1,2 милиона"},
+            {12345678, "12 милиона"},
+            {123456789, "120 милиона"},
+            {1234567890, "1,2 милијарди"},
+            {12345678901f, "12 милијарди"},
+            {20890123456f, "21 милијарда"},
+            {21890123456f, "22 милијарде"},
+            {123456789012f, "120 милијарди"},
+            {1234567890123f, "1,2 трилиона"},
+            {12345678901234f, "12 трилиона"},
+            {123456789012345f, "120 трилиона"},
+            {1234567890123456f, "1200 трилиона"},
+    };
+
+   Object[][] JapaneseTestData = {
+            {1234f, "1.2千"},
+            {12345f, "1.2万"},
+            {123456f, "12万"},
+            {1234567f, "120万"},
+            {12345678f, "1200万"},
+            {123456789f, "1.2億"},
+            {1234567890f, "12億"},
+            {12345678901f, "120億"},
+            {123456789012f, "1200億"},
+            {1234567890123f, "1.2兆"},
+            {12345678901234f, "12兆"},
+            {123456789012345f, "120兆"},
     };
 
     Object[][] SwahiliTestData = {
@@ -83,29 +105,28 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {12345678901234567890f, "T12000000"},
     };
 
-    public void TestEnglish() {
-        checkLocale(ULocale.ENGLISH, EnglishTestData);
-    }
-    
-    public void TestSerbian() {
-        checkLocale(ULocale.forLanguageTag("sr"), SerbianTestData);
+    public void TestEnglishShort() {
+        checkLocale(ULocale.ENGLISH, CompactStyle.SHORT, EnglishTestData);
     }
 
-    public void TestJapanese() {
-         checkLocale(ULocale.JAPANESE, JapaneseTestData);
+    public void TestSerbianShort() {
+        checkLocale(ULocale.forLanguageTag("sr"), CompactStyle.SHORT, SerbianTestDataShort);
     }
 
-    public void TestJapaneseGermany() {
-        // check fallback.
-        checkLocale(ULocale.forLanguageTag("ja-DE"), JapaneseTestData);
+    public void TestSerbianLong() {
+        checkLocale(ULocale.forLanguageTag("sr"), CompactStyle.LONG, SerbianTestDataLong);
     }
 
-    public void TestSwahili() {
-        checkLocale(ULocale.forLanguageTag("sw"), SwahiliTestData);
+    public void TestJapaneseShort() {
+         checkLocale(ULocale.JAPANESE, CompactStyle.SHORT, JapaneseTestData);
     }
 
-    public void checkLocale(ULocale locale, Object[][] testData) {
-        CompactDecimalFormat cdf = NumberFormat.getCompactDecimalInstance(locale, CompactStyle.SHORT);
+    public void TestSwahiliShort() {
+        checkLocale(ULocale.forLanguageTag("sw"), CompactStyle.SHORT, SwahiliTestData);
+    }
+
+    public void checkLocale(ULocale locale, CompactStyle style, Object[][] testData) {
+        CompactDecimalFormat cdf = NumberFormat.getCompactDecimalInstance(locale, style);
         for (Object[] row : testData) {
             assertEquals(locale + " (" + locale.getDisplayName(locale) + ")", row[1], cdf.format(row[0]));
         }
