@@ -186,6 +186,8 @@ class ThaiBreakEngine : public DictionaryBreakEngine {
 
 };
 
+#if !UCONFIG_NO_NORMALIZATION
+
 /*******************************************************************
  * CjkBreakEngine
  */
@@ -246,6 +248,8 @@ class CjkBreakEngine : public DictionaryBreakEngine {
           UStack &foundBreaks ) const;
 
 };
+
+#endif
 
 /******************************************************************* 
  * KhmerBreakEngine 
