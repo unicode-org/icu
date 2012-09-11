@@ -172,6 +172,22 @@ LINK.cc=      $(CXX) $(CXXFLAGS) $(LDFLAGS)
 SHLIB.c=      $(CC) $(CFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
 SHLIB.cc=     $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
 
+# Do not show the large compiling arguments by default.
+# To use:
+# change
+#    $(CC) -o foo
+# to
+#    $(call SILENT_COMPILE,$(CC) -o foo)
+ifndef VERBOSE
+    SILENT_COMPILE=@echo "	$(notdir $(firstword $(1)))	... " $< && $(1) || \
+			( echo "*** Failed compilation command follows: ----------------------------------------------------------" ; \
+			  echo "$(1)" ; \
+		          echo "--- ( rebuild with \"$(MAKE) VERBOSE=1 $(MAKECMDGOALS)\" to show all parameters ) --------" ; \
+			false )
+else
+    SILENT_COMPILE=$(1)
+endif
+
 # Environment variable to set a runtime search path
 LDLIBRARYPATH_ENVVAR = LD_LIBRARY_PATH
 
