@@ -154,7 +154,9 @@ clean-recursive-with-twist:
 	$(MAKE) clean-recursive LOCAL_SUBDIRS='$(CLEAN_FIRST_SUBDIRS) $(filter-out $(CLEAN_FIRST_SUBDIRS),$(LOCAL_SUBDIRS))'
 
 all-local: $(srcdir)/configure $(LOCAL_BUILT_FILES) $(INSTALLED_BUILT_FILES)
-
+ifndef VERBOSE
+	@echo "Note: rebuild with \"$(MAKE) VERBOSE=1 $(MAKECMDGOALS)\" to show all compiler parameters."
+endif
 install-local: install-icu install-manx
 
 install-icu: $(INSTALLED_BUILT_FILES)
