@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2009-2011, International Business Machines Corporation and
+ * Copyright (c) 2009-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -147,17 +147,20 @@ static void TestUSpoofCAPI(void) {
     f = fopen(fileName, "rb");
     TEST_ASSERT_NE(f, NULL);
     confusables = malloc(3000000);
+    if (f != NULL) {
     confusablesLength = fread(confusables, 1, 3000000, f);
     fclose(f);
+    }
 
-    
     strcpy(fileName, dataSrcDir);
     strcat(fileName, U_FILE_SEP_STRING "unidata" U_FILE_SEP_STRING "confusablesWholeScript.txt");
     f = fopen(fileName, "rb");
     TEST_ASSERT_NE(f, NULL);
     confusablesWholeScript = malloc(1000000);
+    if (f != NULL) {
     confusablesWholeScriptLength = fread(confusablesWholeScript, 1, 1000000, f);
     fclose(f);
+    }
 
     rsc = uspoof_openFromSource(confusables, confusablesLength,
                                               confusablesWholeScript, confusablesWholeScriptLength,
