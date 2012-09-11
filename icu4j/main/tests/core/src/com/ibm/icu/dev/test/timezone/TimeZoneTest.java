@@ -362,8 +362,8 @@ public class TimeZoneTest extends TestFmwk
             // V and VVVV
             Boolean.FALSE, new Integer(TimeZone.SHORT_COMMONLY_USED), "PST",
             Boolean.TRUE,  new Integer(TimeZone.SHORT_COMMONLY_USED), "PDT",
-            Boolean.FALSE, new Integer(TimeZone.GENERIC_LOCATION),  "United States Time (Los Angeles)",
-            Boolean.TRUE,  new Integer(TimeZone.GENERIC_LOCATION),  "United States Time (Los Angeles)",
+            Boolean.FALSE, new Integer(TimeZone.GENERIC_LOCATION),  "Los Angeles Time",
+            Boolean.TRUE,  new Integer(TimeZone.GENERIC_LOCATION),  "Los Angeles Time",
         };
 
         for (int i=0; i<DATA.length; i+=3) {
@@ -414,7 +414,7 @@ public class TimeZoneTest extends TestFmwk
         }
         // dlf - we will use generic time, or if unavailable, GMT for standard time in the zone 
         //     - we now (3.4.1) have localizations for this zone, so change test string
-        else if(!name.equals("\u0126in ta\u2019 Stati Uniti (Los Angeles)") &&
+        else if(!name.equals("\u0126in ta\u2019 Los Angeles") &&
             !name.equals("GMT-08:00") &&
             !name.equals("GMT-8:00") &&
             !name.equals("GMT-0800") &&

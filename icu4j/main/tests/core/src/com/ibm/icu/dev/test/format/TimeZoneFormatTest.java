@@ -216,7 +216,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         if (TEST_ALL || getInclusion() > 5) {
             startYear = 1900;
         } else {
-            startYear = 1990;
+//            startYear = 1990;
+            startYear = 1900;
         }
 
         Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -258,7 +259,8 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             };
         } else {
             LOCALES = new ULocale[] {
-                new ULocale("en"),
+//                new ULocale("en"),
+                new ULocale("el"),
             };
         }
 
