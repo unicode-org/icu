@@ -1254,7 +1254,7 @@ el{
             ec{"Σάιπαν"}
         }
         "Pacific:Tahiti"{
-            ec{"Αϊτή"}
+            ec{"Ταϊτή"}
         }
         "Pacific:Tarawa"{
             ec{"Ταράουα"}

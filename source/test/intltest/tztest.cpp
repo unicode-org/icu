@@ -1418,8 +1418,8 @@ TimeZoneTest::TestDisplayName()
 
         {FALSE, TimeZone::SHORT_COMMONLY_USED, "PST"},
         {TRUE,  TimeZone::SHORT_COMMONLY_USED, "PDT"},
-        {FALSE, TimeZone::GENERIC_LOCATION,  "United States Time (Los Angeles)"},
-        {TRUE,  TimeZone::GENERIC_LOCATION,  "United States Time (Los Angeles)"},
+        {FALSE, TimeZone::GENERIC_LOCATION,  "Los Angeles Time"},
+        {TRUE,  TimeZone::GENERIC_LOCATION,  "Los Angeles Time"},
 
         {FALSE, TimeZone::LONG, ""}
     };

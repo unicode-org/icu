@@ -169,7 +169,7 @@ hi{
             ec{"अडक"}
         }
         "America:Anchorage"{
-            ec{"अलास्का"}
+            ec{"एंकरेज"}
         }
         "America:Anguilla"{
             ec{"एंगिला"}
