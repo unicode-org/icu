@@ -173,6 +173,32 @@ void ListFormatterTest::TestZulu() {
     CheckFourCases("zu", one, two, three, four, results);
 }
 
+void ListFormatterTest::TestOutOfOrderPatterns() {
+    UnicodeString results[4] = {
+        one,
+        two + " after " + one,
+        three + " in the last after " + two + " after the first " + one,
+        four + " in the last after " + three + " after " + two + " after the first " + one
+    };
+
+    UErrorCode errorCode = U_ZERO_ERROR;
+    ListFormatData data("{1} after {0}", "{1} after the first {0}",
+                        "{1} after {0}", "{1} in the last after {0}");
+    ListFormatter formatter(data);
+
+    UnicodeString input1[] = {one};
+    CheckFormatting(&formatter, input1, 1, results[0]);
+
+    UnicodeString input2[] = {one, two};
+    CheckFormatting(&formatter, input2, 2, results[1]);
+
+    UnicodeString input3[] = {one, two, three};
+    CheckFormatting(&formatter, input3, 3, results[2]);
+
+    UnicodeString input4[] = {one, two, three, four};
+    CheckFormatting(&formatter, input4, 4, results[3]);
+}
+
 void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
                                        const char* &name, char* /*par */) {
     switch(index) {
@@ -184,6 +210,7 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
         case 5: name = "TestMalayalam"; if (exec) TestMalayalam(); break;
         case 6: name = "TestZulu"; if (exec) TestZulu(); break;
         case 7: name = "TestLocaleFallback"; if (exec) TestLocaleFallback(); break;
+        case 8: name = "TestOutOfOrderPatterns"; if (exec) TestLocaleFallback(); break;
 
         default: name = ""; break;
     }
