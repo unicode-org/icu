@@ -24,13 +24,6 @@
 
 U_NAMESPACE_BEGIN
 
-struct ListFormatData : public UMemory {
-    UnicodeString twoPattern;
-    UnicodeString startPattern;
-    UnicodeString middlePattern;
-    UnicodeString endPattern;
-};
-
 static Hashtable* listPatternHash = NULL;
 static UMTX listFormatterMutex = NULL;
 static UChar FIRST_PARAMETER[] = { 0x7b, 0x30, 0x7d };  // "{0}"
@@ -153,15 +146,16 @@ void ListFormatter::addDataToHash(
         return;
     }
     UnicodeString key(locale, -1, US_INV);
-    ListFormatData* value = new ListFormatData();
+    ListFormatData* value = new ListFormatData(
+        UnicodeString(two, -1, US_INV).unescape(),
+        UnicodeString(start, -1, US_INV).unescape(),
+        UnicodeString(middle, -1, US_INV).unescape(),
+        UnicodeString(end, -1, US_INV).unescape());
+
     if (value == NULL) {
         errorCode = U_MEMORY_ALLOCATION_ERROR;
         return;
     }
-    value->twoPattern = UnicodeString(two, -1, US_INV).unescape();
-    value->startPattern = UnicodeString(start, -1, US_INV).unescape();
-    value->middlePattern = UnicodeString(middle, -1, US_INV).unescape();
-    value->endPattern = UnicodeString(end, -1, US_INV).unescape();
     listPatternHash->put(key, value, errorCode);
 }
 
@@ -197,7 +191,7 @@ ListFormatter* ListFormatter::createInstance(const Locale& locale, UErrorCode& e
             return NULL;
         }
         if (listFormatData != NULL) {
-            ListFormatter* p = new ListFormatter(tempLocale, listFormatData);
+            ListFormatter* p = new ListFormatter(*listFormatData);
             if (p == NULL) {
                 errorCode = U_MEMORY_ALLOCATION_ERROR;
                 return NULL;
@@ -217,8 +211,7 @@ ListFormatter* ListFormatter::createInstance(const Locale& locale, UErrorCode& e
     }
 }
 
-ListFormatter::ListFormatter(const Locale& listFormatterLocale, const ListFormatData* listFormatterData)
-        : locale(listFormatterLocale), data(listFormatterData) {
+ListFormatter::ListFormatter(const ListFormatData& listFormatterData) : data(listFormatterData) {
 }
 
 ListFormatter::~ListFormatter() {}
@@ -267,14 +260,14 @@ UnicodeString& ListFormatter::format(const UnicodeString items[], int32_t nItems
     if (nItems > 0) {
         UnicodeString newString = items[0];
         if (nItems == 2) {
-            addNewString(data->twoPattern, newString, items[1], errorCode);
+            addNewString(data.twoPattern, newString, items[1], errorCode);
         } else if (nItems > 2) {
-            addNewString(data->startPattern, newString, items[1], errorCode);
+            addNewString(data.startPattern, newString, items[1], errorCode);
             int i;
             for (i = 2; i < nItems - 1; ++i) {
-                addNewString(data->middlePattern, newString, items[i], errorCode);
+                addNewString(data.middlePattern, newString, items[i], errorCode);
             }
-            addNewString(data->endPattern, newString, items[nItems - 1], errorCode);
+            addNewString(data.endPattern, newString, items[nItems - 1], errorCode);
         }
         if (U_SUCCESS(errorCode)) {
             appendTo += newString;

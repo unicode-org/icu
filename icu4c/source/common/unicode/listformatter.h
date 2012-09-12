@@ -27,7 +27,16 @@ U_NAMESPACE_BEGIN
 class Hashtable;
 
 /** @internal */
-class ListFormatData;
+struct ListFormatData : public UMemory {
+    UnicodeString twoPattern;
+    UnicodeString startPattern;
+    UnicodeString middlePattern;
+    UnicodeString endPattern;
+
+  ListFormatData(const UnicodeString& two, const UnicodeString& start, const UnicodeString& middle, const UnicodeString& end) :
+      twoPattern(two), startPattern(start), middlePattern(middle), endPattern(end) {}
+};
+
 
 /**
  * \file
@@ -99,13 +108,17 @@ class U_COMMON_API ListFormatter : public UObject{
      */
     static void getFallbackLocale(const Locale& in, Locale& out, UErrorCode& errorCode);
 
+    /**
+     * @internal constructor made public for testing.
+     */
+    ListFormatter(const ListFormatData& listFormatterData);
+
   private:
     static void initializeHash(UErrorCode& errorCode);
     static void addDataToHash(const char* locale, const char* two, const char* start, const char* middle, const char* end, UErrorCode& errorCode);
     static const ListFormatData* getListFormatData(const Locale& locale, UErrorCode& errorCode);
 
     ListFormatter();
-    ListFormatter(const Locale& listFormatterLocale, const ListFormatData* listFormatterData);
     ListFormatter(const ListFormatter&);
 
     ListFormatter& operator = (const ListFormatter&);
@@ -113,8 +126,7 @@ class U_COMMON_API ListFormatter : public UObject{
                       const UnicodeString& newString, UErrorCode& errorCode) const;
     virtual UClassID getDynamicClassID() const;
 
-    Locale locale;
-    const ListFormatData* data;
+    const ListFormatData& data;
 };
 
 U_NAMESPACE_END
