@@ -35,6 +35,7 @@ class ListFormatterTest : public IntlTest {
     void TestRussian();
     void TestMalayalam();
     void TestZulu();
+    void TestOutOfOrderPatterns();
 
   private:
     void CheckFormatting(const ListFormatter* formatter, UnicodeString data[], int32_t data_size, const UnicodeString& expected_result);
