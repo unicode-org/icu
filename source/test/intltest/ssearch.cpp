@@ -2422,6 +2422,8 @@ void SSearchTest::bmMonkeyTest(char *params)
         if(isICUVersionBefore(51, 0)) {
             // Time bomb until ticket #9490 is fixed.
             skipSet.add(0x12327);
+            skipSet.add(0x1311b);
+            skipSet.add(0x1200d);
         }
         skipSet.freeze();
         // TODO: try alternate prefix and suffix too?
