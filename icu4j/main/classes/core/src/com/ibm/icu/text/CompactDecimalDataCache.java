@@ -136,6 +136,9 @@ class CompactDecimalDataCache {
         } else {
             r = r.getWithFallback(resourcePath);
         }
+        if (r == null) {
+            return null;
+        }
         int size = r.getSize();
         Data result = new Data(
                 new long[MAX_DIGITS],

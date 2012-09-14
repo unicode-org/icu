@@ -108,6 +108,13 @@ public class CompactDecimalFormatTest extends TestFmwk {
     public void TestEnglishShort() {
         checkLocale(ULocale.ENGLISH, CompactStyle.SHORT, EnglishTestData);
     }
+    
+    public void TestNoLongStyleInCLDR() {
+        NumberFormat cdf =
+                NumberFormat.getCompactDecimalInstance(
+                        ULocale.forLanguageTag("ar_EG"), CompactStyle.LONG);
+        assertEquals("Missing PatternsLong", "5K", cdf.format(5000));
+    }
 
     public void TestSerbianShort() {
         checkLocale(ULocale.forLanguageTag("sr"), CompactStyle.SHORT, SerbianTestDataShort);
