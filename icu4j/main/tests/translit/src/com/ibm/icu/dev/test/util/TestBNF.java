@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2009, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,6 +8,10 @@ package com.ibm.icu.dev.test.util;
 
 import java.util.Random;
 
+import com.ibm.icu.dev.util.BNF;
+import com.ibm.icu.dev.util.Pick;
+import com.ibm.icu.dev.util.Quoter;
+import com.ibm.icu.dev.util.Tokenizer;
 import com.ibm.icu.text.UnicodeSet;
 
 public class TestBNF {

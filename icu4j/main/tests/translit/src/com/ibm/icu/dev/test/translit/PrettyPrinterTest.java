@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2009, Google, International Business Machines
+ * Copyright (c) 2009-2012, Google, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -10,7 +10,7 @@ import java.text.Collator;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.util.PrettyPrinter;
+import com.ibm.icu.dev.util.PrettyPrinter;
 import com.ibm.icu.text.UnicodeSet;
 
 public class PrettyPrinterTest extends TestFmwk {

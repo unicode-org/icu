@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2009-2011, Google, International Business Machines
+ * Copyright (c) 2009-2012, Google, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Mark Davis
@@ -32,13 +32,13 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.ibm.icu.dev.test.util.BagFormatter;
-import com.ibm.icu.dev.test.util.Tabber.HTMLTabber;
-import com.ibm.icu.dev.test.util.TransliteratorUtilities;
-import com.ibm.icu.dev.test.util.UnicodeMap;
-import com.ibm.icu.dev.test.util.UnicodeMap.Composer;
-import com.ibm.icu.dev.test.util.UnicodeMapIterator;
-import com.ibm.icu.dev.test.util.XEquivalenceClass.SetMaker;
+import com.ibm.icu.dev.util.BagFormatter;
+import com.ibm.icu.dev.util.Tabber.HTMLTabber;
+import com.ibm.icu.dev.util.TransliteratorUtilities;
+import com.ibm.icu.dev.util.UnicodeMap;
+import com.ibm.icu.dev.util.UnicodeMap.Composer;
+import com.ibm.icu.dev.util.UnicodeMapIterator;
+import com.ibm.icu.dev.util.XEquivalenceClass.SetMaker;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R2;
 import com.ibm.icu.impl.Utility;
