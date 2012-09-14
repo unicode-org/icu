@@ -1,7 +1,7 @@
 @echo off
 REM  ********************************************************************
 REM  * COPYRIGHT:
-REM  * Copyright (c) 2010-2011, International Business Machines Corporation
+REM  * Copyright (c) 2010-2012, International Business Machines Corporation
 REM  * and others. All Rights Reserved.
 REM  ********************************************************************
 
@@ -22,11 +22,10 @@ set ICU_OPATH=%PATH%
 
 set ICU_ICUDIR="%~f0"\..\..\..
 
-
-set ICU_BINDIR=%ICU_ICUDIR%\bin
-
 if "%ICU_ARCH%" == "x64" (
-set ICU_BINDIR=%ICU_ICUDIR%\bin64
+set ICU_BINDIR=%~f0\..\..\..\bin64
+) else (
+set ICU_BINDIR=%~f0\..\..\..\bin
 )
 
 set PATH=%ICU_BINDIR%;%PATH%
