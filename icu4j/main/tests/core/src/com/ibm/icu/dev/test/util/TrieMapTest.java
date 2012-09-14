@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011, Google, International Business Machines Corporation and
+ * Copyright (C) 2011-2012, Google, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -18,6 +18,7 @@ import java.util.TreeMap;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.util.TrieMap.Style;
+import com.ibm.icu.dev.util.Timer;
 import com.ibm.icu.impl.Row;
 import com.ibm.icu.impl.Row.R3;
 import com.ibm.icu.impl.Utility;

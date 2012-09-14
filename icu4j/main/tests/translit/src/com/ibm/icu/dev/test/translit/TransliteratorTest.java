@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,7 +17,7 @@ import java.util.Map.Entry;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
-import com.ibm.icu.dev.test.util.UnicodeMap;
+import com.ibm.icu.dev.util.UnicodeMap;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.UtilityExtensions;
 import com.ibm.icu.lang.CharSequences;

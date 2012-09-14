@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011, International Business Machines Corporation and         *
+ * Copyright (C) 2011-2012, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,10 +9,10 @@ package com.ibm.icu.dev.test.translit;
 import java.util.List;
 
 import com.ibm.icu.dev.test.TestFmwk;
-import com.ibm.icu.dev.test.util.ICUPropertyFactory;
-import com.ibm.icu.dev.test.util.UnicodeProperty;
-import com.ibm.icu.dev.test.util.UnicodeProperty.Factory;
-import com.ibm.icu.dev.test.util.UnicodePropertySymbolTable;
+import com.ibm.icu.dev.util.ICUPropertyFactory;
+import com.ibm.icu.dev.util.UnicodeProperty;
+import com.ibm.icu.dev.util.UnicodeProperty.Factory;
+import com.ibm.icu.dev.util.UnicodePropertySymbolTable;
 import com.ibm.icu.text.UnicodeSet;
 
 /**
