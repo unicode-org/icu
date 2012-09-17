@@ -2287,6 +2287,7 @@ RBBIWordMonkey::~RBBIWordMonkey() {
     delete fExtendSet;
     delete fExtendNumLetSet;
     delete fRegionalIndicatorSet;
+    delete fDictionaryCjkSet;
     delete fOtherSet;
 }
 

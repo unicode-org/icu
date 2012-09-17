@@ -53,6 +53,8 @@ void ListFormatterTest::CheckFourCases(const char* locale_string, UnicodeString 
 
     UnicodeString input4[] = {one, two, three, four};
     CheckFormatting(formatter, input4, 4, results[3]);
+
+    delete formatter;
 }
 
 
