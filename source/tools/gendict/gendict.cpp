@@ -44,6 +44,7 @@ static int elapsedTime() {
 
 #if U_PLATFORM_IMPLEMENTS_POSIX && !U_PLATFORM_HAS_WIN32_API
 #include <signal.h>
+#include <unistd.h>
 
 const char *wToolname="gendict";
 const char *wOutname="(some file)";
@@ -54,6 +55,7 @@ const int nextSeconds = 15; /* seconds between notices*/
 static void alarm_fn(int /*n*/) {
   printf("%s: still writing\t%s (%ds)\t...\n",    wToolname, wOutname, elapsedTime());
   
+  signal(SIGALRM, &alarm_fn);
   alarm(nextSeconds); // reset the alarm
 }
 
