@@ -6,6 +6,9 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import java.text.AttributedCharacterIterator;
+import java.text.CharacterIterator;
+
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CompactDecimalFormat;
 import com.ibm.icu.text.NumberFormat;
@@ -105,10 +108,21 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {12345678901234567890f, "T12000000"},
     };
 
+    public void TestCharacterIterator() {
+        CompactDecimalFormat cdf =
+                NumberFormat.getCompactDecimalInstance(ULocale.ENGLISH, CompactStyle.SHORT);
+        AttributedCharacterIterator iter = cdf.formatToCharacterIterator(12346);
+        assertEquals("CharacterIterator", "12K", iterToString(iter));
+        iter = cdf.formatToCharacterIterator(12346);
+        assertEquals("Attributes", iter.getAttribute(NumberFormat.Field.INTEGER), NumberFormat.Field.INTEGER);
+        assertEquals("Attributes", 0, iter.getRunStart());
+        assertEquals("Attributes", 2, iter.getRunLimit());
+    }
+
     public void TestEnglishShort() {
         checkLocale(ULocale.ENGLISH, CompactStyle.SHORT, EnglishTestData);
     }
-    
+
     public void TestNoLongStyleInCLDR() {
         NumberFormat cdf =
                 NumberFormat.getCompactDecimalInstance(
@@ -137,5 +151,13 @@ public class CompactDecimalFormatTest extends TestFmwk {
         for (Object[] row : testData) {
             assertEquals(locale + " (" + locale.getDisplayName(locale) + ")", row[1], cdf.format(row[0]));
         }
+    }
+
+    private static String iterToString(CharacterIterator iter) {
+        StringBuilder builder = new StringBuilder();
+        for (char c = iter.current(); c != CharacterIterator.DONE; c = iter.next()) {
+            builder.append(c);
+        }
+        return builder.toString();
     }
 }

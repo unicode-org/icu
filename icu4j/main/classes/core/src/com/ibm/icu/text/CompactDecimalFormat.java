@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Collection;
@@ -171,23 +172,23 @@ public class CompactDecimalFormat extends DecimalFormat {
      */
     @Override
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
-        if (number < 0.0d) {
-            throw new UnsupportedOperationException("CompactDecimalFormat doesn't handle negative numbers yet.");
-        }
-        // We do this here so that the prefix or suffix we choose is always consistent
-        // with the rounding we do. This way, 999999 -> 1M instead of 1000K.
-        number = adjustNumberAsInFormatting(number);
-        int base = number <= 1.0d ? 0 : (int) Math.log10(number);
-        if (base >= CompactDecimalDataCache.MAX_DIGITS) {
-            base = CompactDecimalDataCache.MAX_DIGITS - 1;
-        }
-        number = number / divisor[base];
-        String pluralVariant = getPluralForm(number);
-        setPositivePrefix(CompactDecimalDataCache.getPrefixOrSuffix(prefix, pluralVariant, base));
-        setPositiveSuffix(CompactDecimalDataCache.getPrefixOrSuffix(suffix, pluralVariant, base));
-        setCurrency(null);
-
+        number = configure(number);
         return super.format(number, toAppendTo, pos);
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    @Override
+    public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
+        if (!(obj instanceof Number)) {
+            throw new IllegalArgumentException();
+        }
+        Number number = (Number) obj;
+        double newNumber = configure(number.doubleValue());
+        return super.formatToCharacterIterator(newNumber);
     }
 
     /**
@@ -252,7 +253,24 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /* INTERNALS */
 
-
+    private double configure(double number) {
+        if (number < 0.0d) {
+            throw new UnsupportedOperationException("CompactDecimalFormat doesn't handle negative numbers yet.");
+        }
+        // We do this here so that the prefix or suffix we choose is always consistent
+        // with the rounding we do. This way, 999999 -> 1M instead of 1000K.
+        number = adjustNumberAsInFormatting(number);
+        int base = number <= 1.0d ? 0 : (int) Math.log10(number);
+        if (base >= CompactDecimalDataCache.MAX_DIGITS) {
+            base = CompactDecimalDataCache.MAX_DIGITS - 1;
+        }
+        number /= divisor[base];
+        String pluralVariant = getPluralForm(number);
+        setPositivePrefix(CompactDecimalDataCache.getPrefixOrSuffix(prefix, pluralVariant, base));
+        setPositiveSuffix(CompactDecimalDataCache.getPrefixOrSuffix(suffix, pluralVariant, base));
+        setCurrency(null);
+        return number;
+    }
 
     private void recordError(Collection<String> creationErrors, String errorMessage) {
         if (creationErrors == null) {
