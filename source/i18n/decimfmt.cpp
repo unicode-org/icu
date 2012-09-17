@@ -187,9 +187,6 @@ U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2) {
 
 U_CDECL_END
 
-
-//#define FMT_DEBUG
-
 #ifdef FMT_DEBUG
 #include <stdio.h>
 static void _debugout(const char *f, int l, const UnicodeString& s) {
@@ -1011,9 +1008,12 @@ void DecimalFormat::handleChanged() {
 
   data.fFastpathStatus = kFastpathNO;
 
-  if (fGroupingSize!=0) {
-    debug("No fastpath: fGroupingSize!=0"); // TODO: revisit, should handle ex. up to 999 if groupingsize is 3.
-  } else if(fGroupingSize2!=0) {
+  if (fGroupingSize!=0 && isGroupingUsed()) {
+    debug("No fastpath: fGroupingSize!=0 and grouping is used");
+#ifdef FMT_DEBUG
+    printf("groupingsize=%d\n", fGroupingSize);
+#endif
+  } else if(fGroupingSize2!=0 && isGroupingUsed()) {
     debug("No fastpath: fGroupingSize2!=0");
   } else if(fUseExponentialNotation) {
     debug("No fastpath: fUseExponentialNotation");
@@ -1109,7 +1109,7 @@ DecimalFormat::_format(int64_t number,
         // Slide the number to the start of the output str
     U_ASSERT(destIdx >= 0);
     int32_t length = MAX_IDX - destIdx -1;
-    int32_t prefixLen = appendAffix(appendTo, number, handler, number<0, TRUE);
+    /*int32_t prefixLen = */ appendAffix(appendTo, number, handler, number<0, TRUE);
     int32_t maxIntDig = getMaximumIntegerDigits();
     int32_t destlength = length<=maxIntDig?length:maxIntDig; // dest length pinned to max int digits
 
@@ -1129,7 +1129,7 @@ DecimalFormat::_format(int64_t number,
                     destlength);
     handler.addAttribute(kIntegerField, intBegin, appendTo.length());
 
-    int32_t suffixLen = appendAffix(appendTo, number, handler, number<0, FALSE);
+    /*int32_t suffixLen =*/ appendAffix(appendTo, number, handler, number<0, FALSE);
 
     //outputStr[length]=0;
     
@@ -1869,11 +1869,7 @@ void DecimalFormat::parse(const UnicodeString& text,
     // status is used to record whether a number is infinite.
     UBool status[fgStatusLength];
 
-#if UCONFIG_INTERNAL_DIGITLIST
     DigitList *digits = result.getInternalDigitList(); // get one from the stack buffer
-#else
-    DigitList *digits = new DigitList;
-#endif
     if (digits == NULL) {
         return;    // no way to report error from here.
     }
@@ -1881,9 +1877,6 @@ void DecimalFormat::parse(const UnicodeString& text,
     if (fCurrencySignCount > fgCurrencySignCountZero) {
         if (!parseForCurrency(text, parsePosition, *digits,
                               status, currency)) {
-#if !UCONFIG_INTERNAL_DIGITLIST
-          delete digits;
-#endif
           return;
         }
     } else {
@@ -1894,9 +1887,6 @@ void DecimalFormat::parse(const UnicodeString& text,
                       parsePosition, *digits, status, currency)) {
             debug("!subparse(...) - rewind");
             parsePosition.setIndex(startIdx);
-#if !UCONFIG_INTERNAL_DIGITLIST
-            delete digits;
-#endif
             return;
         }
     }
@@ -1905,9 +1895,6 @@ void DecimalFormat::parse(const UnicodeString& text,
     if (status[fgStatusInfinite]) {
         double inf = uprv_getInfinity();
         result.setDouble(digits->isPositive() ? inf : -inf);
-#if !UCONFIG_INTERNAL_DIGITLIST
-        delete digits;
-#endif
         // TODO:  set the dl to infinity, and let it fall into the code below.
     }
 
@@ -2100,7 +2087,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
     DBGAPPD(posPrefix);
     DBGAPPD(posSuffix);
     debugout(s);
-    printf("currencyParsing=%d, fFormatWidth=%d, text.length=%d negPrefLen=%d\n", currencyParsing, fFormatWidth, text.length(),  negPrefix!=NULL?negPrefix->length():-1);
+    printf("currencyParsing=%d, fFormatWidth=%d, isParseIntegerOnly=%c text.length=%d negPrefLen=%d\n", currencyParsing, fFormatWidth, (isParseIntegerOnly())?'Y':'N', text.length(),  negPrefix!=NULL?negPrefix->length():-1);
 #endif
 
     UBool fastParseOk = false; /* TRUE iff fast parse is OK */
@@ -2117,7 +2104,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
             fFormatWidth==0 &&
             //       (negPrefix!=NULL&&negPrefix->isEmpty()) ||
             text.length()>0 &&
-            text.length()<20 &&
+            text.length()<32 &&
             (posPrefix==NULL||posPrefix->isEmpty()) &&
             (posSuffix==NULL||posSuffix->isEmpty()) &&
             //            (negPrefix==NULL||negPrefix->isEmpty()) &&
@@ -2131,9 +2118,11 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
       UChar32 ch = text.char32At(j);
       const UnicodeString *decimalString = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
       UChar32 decimalChar = 0;
+      UBool intOnly = FALSE;
       int32_t decimalCount = decimalString->countChar32(0,3);
       if(isParseIntegerOnly()) {
         decimalChar = 0; // not allowed
+        intOnly = TRUE;
       } else if(decimalCount==1) {
         decimalChar = decimalString->char32At(0);
       } else if(decimalCount==0) {
@@ -2165,6 +2154,8 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
           parsedNum.append((char)('.'), err);
           decimalChar=0; // no more decimals.
           fastParseHadDecimal=TRUE;
+        } else if(intOnly && !u_isdigit(ch)) {
+          break; // hit a non-integer. (fall through if integer, to slow parse)
         } else {
           digitCount=-1; // fail
           break;
@@ -2172,7 +2163,9 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
         j+=U16_LENGTH(ch);
         ch = text.char32At(j); // for next  
       }
-      if(j==l && (digitCount>0)) {
+      if(
+         ((j==l)||intOnly)
+         && (digitCount>0)) {
 #ifdef FMT_DEBUG
         printf("PP -> %d, good = [%s]  digitcount=%d, fGroupingSize=%d fGroupingSize2=%d!\n", j, parsedNum.data(), digitCount, fGroupingSize, fGroupingSize2);
 #endif
@@ -2194,6 +2187,15 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
 #endif
         parsedNum.clear();
       }
+    } else {
+#ifdef FMT_DEBUG
+      printf("Could not fastpath parse. ");
+      printf("fFormatWidth=%d ", fFormatWidth);
+      printf("text.length()=%d ", text.length());
+      printf("posPrefix=%p posSuffix=%p ", posPrefix, posSuffix);
+
+      printf("\n");
+#endif
     }
 
   if(!fastParseOk 
@@ -2587,7 +2589,13 @@ printf("PP -> %d, SLOW = [%s]!    pp=%d, os=%d, err=%s\n", position, parsedNum.d
         return FALSE;
     }
 #endif
-    digits.set(parsedNum.toStringPiece(), err);
+    // uint32_t bits = (fastParseOk?kFastpathOk:0) |
+    //   (fastParseHadDecimal?0:kNoDecimal);
+    //printf("FPOK=%d, FPHD=%d, bits=%08X\n", fastParseOk, fastParseHadDecimal, bits);
+    digits.set(parsedNum.toStringPiece(),
+               err,
+               0//bits
+               );
 
     if (U_FAILURE(err)) {
 #ifdef FMT_DEBUG

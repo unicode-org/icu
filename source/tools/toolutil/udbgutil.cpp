@@ -524,7 +524,7 @@ static const USystemParams systemParams[] = {
 #if defined (CYGWINMSVC)
   { "build.cygwinmsvc", paramInteger, "b", 1},
 #endif
-  { "uconfig.internal_digitlist", paramInteger, "b", UCONFIG_INTERNAL_DIGITLIST},
+  { "uconfig.internal_digitlist", paramInteger, "b", 1}, /* always 1 */
   { "uconfig.have_parseallinput", paramInteger, "b", UCONFIG_HAVE_PARSEALLINPUT},
   { "uconfig.format_fastpaths_49",paramInteger, "b", UCONFIG_FORMAT_FASTPATHS_49},
 
