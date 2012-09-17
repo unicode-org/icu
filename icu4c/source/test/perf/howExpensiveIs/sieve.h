@@ -21,11 +21,11 @@ U_INTERNAL double uprv_calcSieveTime(void);
 /**
  * Calculate the mean time, with margin of error
  * @param times array of times (modified/sorted)
- * @param timeCount length of array
+ * @param timeCount length of array - on return, how many remain after throwing out outliers
  * @param marginOfError out parameter: gives +/- margin of err at 95% confidence
  * @return the mean time, or negative if error/imprecision.
  */
-U_INTERNAL double uprv_getMeanTime(double *times, uint32_t timeCount, double *marginOfError);
+U_INTERNAL double uprv_getMeanTime(double *times, uint32_t *timeCount, double *marginOfError);
 
 /**
  * Get the standardized sieve time. (Doesn't recalculate if already computed.
