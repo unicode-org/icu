@@ -732,29 +732,56 @@ DigitList::setInteger(int64_t source)
  * be acceptable for a public API.
  */
 void
-DigitList::set(const StringPiece &source, UErrorCode &status) {
+DigitList::set(const StringPiece &source, UErrorCode &status, uint32_t /*fastpathBits*/) {
     if (U_FAILURE(status)) {
         return;
     }
 
-    // Figure out a max number of digits to use during the conversion, and
-    // resize the number up if necessary.
-    int32_t numDigits = source.length();
-    if (numDigits > fContext.digits) {
+#if 0    
+    if(fastpathBits==(kFastpathOk|kNoDecimal)) {
+      int32_t size = source.size();
+      const char *data = source.data();
+      int64_t r = 0;
+      int64_t m = 1;
+      // fast parse
+      while(size>0) {
+        char ch = data[--size];
+        if(ch=='+') {
+          break;
+        } else if(ch=='-') {
+          r = -r;
+          break;
+        } else {
+          int64_t d = ch-'0';
+          //printf("CH[%d]=%c, %d, *=%d\n", size,ch, (int)d, (int)m);
+          r+=(d)*m;
+          m *= 10;
+        }
+      }
+      //printf("R=%d\n", r);
+      set(r);
+    } else
+#endif
+        {
+      // Figure out a max number of digits to use during the conversion, and
+      // resize the number up if necessary.
+      int32_t numDigits = source.length();
+      if (numDigits > fContext.digits) {
         // fContext.digits == fStorage.getCapacity()
         decNumber *t = fStorage.resize(numDigits, fStorage.getCapacity());
         if (t == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
+          status = U_MEMORY_ALLOCATION_ERROR;
+          return;
         }
         fDecNumber = t;
         fContext.digits = numDigits;
-    }
+      }
 
-    fContext.status = 0;
-    uprv_decNumberFromString(fDecNumber, source.data(), &fContext);
-    if ((fContext.status & DEC_Conversion_syntax) != 0) {
+      fContext.status = 0;
+      uprv_decNumberFromString(fDecNumber, source.data(), &fContext);
+      if ((fContext.status & DEC_Conversion_syntax) != 0) {
         status = U_DECIMAL_NUMBER_SYNTAX_ERROR;
+      }
     }
     internalClear();
 }   
