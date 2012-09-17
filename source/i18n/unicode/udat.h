@@ -167,16 +167,9 @@ typedef enum UDateFormatStyle {
     
     /** No style */
     UDAT_NONE = -1,
+    /** for internal API use only */
+    UDAT_IGNORE = -2
 
-    /**
-     * Use the pattern given in the parameter to udat_open
-     * @see udat_open
-     * @draft ICU 50
-     */
-    UDAT_PATTERN = -2,
-
-    /** @internal alias to UDAT_PATTERN */
-    UDAT_IGNORE = UDAT_PATTERN,
 } UDateFormatStyle;
 
 /* Cannot use #ifndef U_HIDE_DRAFT_API for UDateFormatContextType and UDateFormatContextValue
@@ -588,12 +581,9 @@ udat_toCalendarDateField(UDateFormatField field);
  * @param timeStyle The style used to format times; one of UDAT_FULL, UDAT_LONG,
  * UDAT_MEDIUM, UDAT_SHORT, UDAT_DEFAULT, or UDAT_NONE (relative time styles
  * are not currently supported).
- * When the pattern parameter is used, pass in UDAT_PATTERN for both timeStyle and dateStyle.
  * @param dateStyle The style used to format dates; one of UDAT_FULL, UDAT_LONG,
  * UDAT_MEDIUM, UDAT_SHORT, UDAT_DEFAULT, UDAT_FULL_RELATIVE, UDAT_LONG_RELATIVE,
- * UDAT_MEDIUM_RELATIVE, UDAT_SHORT_RELATIVE, or UDAT_NONE.
- * When the pattern parameter is used, pass in UDAT_PATTERN for both timeStyle and dateStyle.
- * As currently implemented,
+ * UDAT_MEDIUM_RELATIVE, UDAT_SHORT_RELATIVE, or UDAT_NONE. As currently implemented,
  * relative date formatting only affects a limited range of calendar days before or
  * after the current date, based on the CLDR &lt;field type="day"&gt;/&lt;relative&gt; data: For
  * example, in English, "Yesterday", "Today", and "Tomorrow". Outside of this range,

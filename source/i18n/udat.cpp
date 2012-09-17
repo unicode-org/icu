@@ -138,7 +138,7 @@ udat_open(UDateFormatStyle  timeStyle,
         return (UDateFormat*)fmt;
       } // else fall through.
     }
-    if(timeStyle != UDAT_PATTERN) {
+    if(timeStyle != UDAT_IGNORE) {
         if(locale == 0) {
             fmt = DateFormat::createDateTimeInstance((DateFormat::EStyle)dateStyle,
                 (DateFormat::EStyle)timeStyle);
