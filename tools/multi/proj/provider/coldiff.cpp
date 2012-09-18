@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -164,7 +164,11 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
     }
 
     if(diffs==0) {
+#if (U_ICU_VERSION_MAJOR_NUM < 49)
+      printf("ERROR: 0 differences found between platforms. ICU " U_ICU_VERSION " does not support collator plugins properly (not until 49)\n");
+#else
       printf("ERROR: 0 differences found between platforms.. are the platforms installed? Try 'icuinfo -L'\n");
+#endif
       return 1;
     } else {
       printf("%d differences found among provider versions!\n", diffs);

@@ -9,19 +9,22 @@ VER=$1
 shift
 
 TINY=`./icu2symver.sh $VER`
+OLDSYM=`./icu2symver.sh --pre44sym $VER`
 
 echo "$0: Building ${OUT} for ${TINY} ------- " >&2
+echo "oldsym = ${OLDSYM}"
 #set -x 
-
+URENAME=${SRC}/${VER}/${SOURCE}/common/unicode/urename.h
 (
     cat ${GLUE}/gluren-top.h
+    echo "/* Generated from ${URENAME} by ${0} */"
     echo "#define GLUREN_VER" ${TINY}
     echo "#define GLUREN_TINY" ${TINY}
     echo
     echo '/* old style (<4.4)*/'
-    grep "^#define.*${TINY}$" ${SRC}/${VER}/${SOURCE}/common/unicode/urename.h   | fgrep -v '*' | sed -e "s@^#define \([^ ]*\) \([^ ]*\)@#define OICU_\1 \2@"
+    grep "^#define.*${OLDSYM}$" ${URENAME}   | fgrep -v '*' | sed -e "s@^#define \([^ ]*\) \([^ ]*\)@#define OICU_\1 \2@"
     echo '/* new style (4.4+) */'
-    fgrep " U_ICU_ENTRY_POINT_RENAME(" ${SRC}/${VER}/${SOURCE}/common/unicode/urename.h | sed -e "s@^#define \([^ ]*\) .*@#define OICU_\1 \1_${TINY}@"
+    fgrep " U_ICU_ENTRY_POINT_RENAME(" ${URENAME} | sed -e "s@^#define \([^ ]*\) .*@#define OICU_\1 \1_${TINY}@"
     cat ${GLUE}/gluren-bottom.h
 ) |
     cat > ${OUT}

@@ -98,7 +98,7 @@ MAKE_INSTALL_XTRA_OPTS=$(MAKE_XTRA_OPTS)
 
 # Munged source names: list of C++, O etc files for Frontend
 PARTSUFF=_fe
-GL_FE_CXX=$(shell cd $(GLUE) ; ls *$(PARTSUFF).cpp)
+GL_FE_CXX=$(notdir $(wildcard $(GLUE)/*$(PARTSUFF).cpp))
 GL_FE_FILES=$(GL_FE_CXX:%.cpp=$(GLUE)/%.cpp)
 GL_FE_O=$(GL_FE_CPP:%.cpp=%.o)
 GL_PARTS=$(GL_FE_CXX:%$(PARTSUFF).cpp=%)
@@ -146,6 +146,9 @@ $(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG) $(GL_FE_F
 # for each version..  build all OTHER FE files
 # TODO: check is unnecessary, not permitted.
 # TODO: change to depend instead of for list. 
+	@echo GL_PARTS=$(GL_PARTS)
+	@echo GL_FE_CXX=$(GL_FE_CXX)
+	@echo PARTSUFF=$(PARTSUFF)
 	@for ver in $(PLUGLIB_AVAILABLE) ; \
 	do \
 		echo building $$ver for $(PLUGLIB) ; \
@@ -249,6 +252,7 @@ glurens: $(GLUREN_ICU)
 $(BUILD)/%/$(GLUREN_H): $(BUILD)/%/ok Makefile makegluren.sh
 	-mkdir -p $(BUILD)/$*/$(GLUREN)
 	env SRC="$(SRC)" SOURCE="$(SOURCE)" GLUE="$(GLUE)" ./makegluren.sh $@ $*
+	@fgrep -q OICU_ $@ || ( echo "Error: $@: no OICU_ symbols found. Removing gluren.h " ; rm -f $@ ; exit 1)
 
 $(BUILD)/%/config/$(ICU_CONFIG): $(BUILD)/%/config/$(ICU_CONFIG_ORIG) icu-config.sed $(BUILD)/%/ok 
 	sed -f icu-config.sed < $(BUILD)/$*/config/$(ICU_CONFIG_ORIG) >  $(BUILD)/$*/config/$(ICU_CONFIG) && chmod a+rx  $(BUILD)/$*/config/$(ICU_CONFIG)
@@ -302,7 +306,7 @@ info help:
 	@echo "Available plugins: $(PROVIDER_AVAILABLE) ($(PLUGLIB_AVAILABLE))"
 	@echo "Available keywords:"
 	@for ver in $(PROVIDER_AVAILABLE); do \
-		echo "   ...@provider=icu"`echo $$ver | cut -d. -f1-2 | tr -d .`; \
+		echo "   ...@provider=icu"`echo $$ver | ./icu2symver.sh`; \
 	done
 	@echo "Plugin library will be $(PLUGLIB_NAME)"
 	@echo
@@ -314,7 +318,10 @@ $(OUT)/$(PLUGLIB)/provider_version.h: Makefile.local Makefile
 	@echo "/* Generated file. */" > $@
 	@echo "const char *provider_version[] = {" >> $@
 	@for ver in $(PROVIDER_AVAILABLE); do \
-		echo '"'`echo $$ver | cut -d. -f1-2 | tr -d .`'",' >> $@ ; \
+		echo VER $$ver ; \
+		sym=`echo $$ver | ./icu2symver.sh` ; \
+		echo SYM $$sym ; \
+		echo "\"$$sym\"",  >> $@ ; \
 	done
 	@echo " }; " >> $@
 	@echo "#define PROVIDER_COUNT (sizeof(provider_version)/sizeof(provider_version[0]))" >> $@
