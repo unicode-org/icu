@@ -21,7 +21,7 @@ the provider interface).  As of this writing, 49, 4.8.1.1, 4.6.x, 4.4.x, 4.2.0.1
 
 1c. Copy the ICUs (named as they were downloaded) into the ../../packages/ directory relative to this readme.
 
-2a. Copy the file "Makefile-local.sample" into a new file "Makefile.local".
+2a. Copy the file "Makefile.local-sample" into a new file "Makefile.local".
 
 2b. Edit the Makefile.local to modify the PROVIDER_TARGET and
 PROVIDER_AVAILABLE settings.
@@ -75,5 +75,36 @@ Date Formats opened (udat_open) will also load a different date
 format, but only through 'udat_open'.
 
 
+
+
+---------------------------
+THEORY (INTERNAL USE ONLY!)
+
+For discussion:  assume TARGET 50.0.2 and PROVIDER 4.0.1
+
+i. GENERAL
+
+ The "front end" for each module (date, collator, ..)  is built once for the target version, and the "back end" glue is built once for each provider version.  (TODO: fix wording here.)
+
+ The oicu.h header, combined with the generated gluren.h, provides a "renamed" symbol such as (literally) OICU_ucol_strcoll which is #defined  to some specific version, such as ucol_strcoll_4_0.  So, you can call the OICU_ version meaning "Old ICU". Thus, you have the ICU 4.0 function defined as an extern, by its explicit name, within the ICU 50 space. 
+
+ The icuglue/glver.h header file contains multiple calls to, for example, GLUE_VER(4_0_1)  GLUE_VER(49_1_2) ...   
+ A module can redefine GLUE_VER  in order to do some "each-version" process.  Thus, glver.h can be #included multiple times..
+
+ Generally, a locale such as en_US@sp=icu40  will refer to an ICU 4.0  provider.
+
+ There are lots of version-specific #ifdefs used to deal with the vagaries of a decade of ICU changes.
+
+ii. COLLATORS
+
+ For each back end, there's an icu_50::Collator class named, say, glueCollator4_0_1 which is implemented in the TARGET space. However, each function of this class, such as "compare", is implemented by calling, for example,  OICU_ucol_strcoll.  As noted above, this is directly calling ucol_strcoll_4_0. This is where the cross-version calls happen.  Such glue code must be very careful not to, for example,  call ucol_open_4_0 and pass the result to ucol_close_50 ! 
+
+ The FE builds a CollatorFactory subclass, VersionCollatorFactory.  It registers a collator for every localeid it can support. This is done by calling each glueCollator* subclass's static ::countAvailable and appendAvailable functions directly. 
+
+ The plugin simply registers and unregisters the VCF. Such collators are available to both C++ and C API, including the shortstring interface, using the _PICU## short string tag.
+
+iii. DATE FORMATTERS
+
+ Date formatters work in a similar fashion to collators.  DateFormat subclasses are registered which are implemented in terms of OICU_udat_* functions. A "DateFormatOpener" (factory equivalent) is registered to allow udat_open to process correctly. C++ date format registration is not addressed as of this writing.
 
 

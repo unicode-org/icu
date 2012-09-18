@@ -90,10 +90,10 @@ GLUE_SYM ( DateFormat ) :: create(UDateFormatStyle  timeStyle,
                                                     const UChar       *pattern,
                                                     int32_t           patternLength,
                                                     UErrorCode        *status,
-                                                    const Locale &loc, const char */*ver*/) {
+                                  const Locale &loc, const char */*ver*/) {
   // TODO: save version
-  char locBuf[200];
-  char kwvBuf[200];
+  //char locBuf[200];
+  //char kwvBuf[200];
   UDateFormat * uc =  OICU_udat_open( timeStyle, dateStyle, locale,
                                       tzID,
                                       tzIDLength,
@@ -185,6 +185,11 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION( GLUE_SYM( DateFormat ) )
 #else
 /** ==================================== The following code runs inside the 'provider' version (i.e. current ICU) ========== **/
 
+#if (U_ICU_VERSION_MAJOR_NUM < 49)
+#define DATE_PROVIDER_UNSUPPORTED
+#endif
+
+#ifndef DATE_PROVIDER_UNSUPPORTED
 // define Collator_XX
 #include "icuglue/glver.h"
 
@@ -323,6 +328,20 @@ void date_provider_register(UErrorCode &status) {
 void date_provider_unregister(UErrorCode &status) {
   udat_unregisterOpener(versionDateFormatOpener, &status);
 }
+
+#else
+
+/* no op- this ICU doesn't support date providers */
+
+void date_provider_register(UErrorCode &) {
+  // not supported
+}
+
+void date_provider_unregister(UErrorCode &) {
+  // not supported
+}
+
+#endif
 
 /* Plugin- only ICU 4.4+ */
 #if (U_ICU_VERSION_MAJOR_NUM > 4) || ((U_ICU_VERSION_MAJOR_NUM==4)&&(U_ICU_VERSION_MINOR_NUM>3))

@@ -19,8 +19,27 @@
 #include <stdio.h>
 #include "unicode/ustring.h"
 
+#if COLL_FE_DEBUG
+#define debugfprintf(x) fprintf x
+#else
+#define debugfprintf(x)
+#endif
 
-
+/*
+ * Before ICU 50.0.2 (50m2) - there was a different collator signature.
+ * see: ticket:9460 ticket:9346
+ */
+#if (U_ICU_VERSION_MAJOR_NUM < 50) || ((U_ICU_VERSION_MAJOR_NUM==50)&&(U_ICU_VERSION_MINOR_NUM==0)&&(U_ICU_VERSION_PATCHLEVEL_NUM<2))
+#define PRE_50_0_2_COLLATOR
+#define CONST_BEFORE_50_0_2 const
+#define CONST_AFTER_50_0_2 
+#define REF_AFTER_50_0_2
+#else
+/* "current" API */
+#define CONST_BEFORE_50_0_2
+#define CONST_AFTER_50_0_2 const
+#define REF_AFTER_50_0_2 &
+#endif
 
 /**
  * Macro to define the Collator_glue_4_2 class 
@@ -40,17 +59,17 @@
     virtual CollationKey& getCollationKey(const UnicodeString&, CollationKey&, UErrorCode&) const; \
     virtual CollationKey& getCollationKey(const UChar*, int32_t, CollationKey&, UErrorCode&) const; \
     virtual int32_t hashCode() const;                                   \
-    virtual const Locale getLocale(ULocDataLocaleType, UErrorCode&) const; \
+    virtual CONST_BEFORE_50_0_2 Locale getLocale(ULocDataLocaleType, UErrorCode&) const; \
     virtual ECollationStrength getStrength() const;                     \
     virtual void setStrength(ECollationStrength);                       \
     virtual void getVersion(uint8_t*) const;                            \
-    virtual void setAttribute(UColAttribute, UColAttributeValue, UErrorCode&); \
-    virtual UColAttributeValue getAttribute(UColAttribute, UErrorCode&); \
+    virtual void setAttribute(UColAttribute, UColAttributeValue, UErrorCode&) ; \
+    virtual UColAttributeValue getAttribute(UColAttribute, UErrorCode&) CONST_AFTER_50_0_2; \
     virtual uint32_t setVariableTop(const UChar*, int32_t, UErrorCode&); \
-    virtual uint32_t setVariableTop(UnicodeString, UErrorCode&);        \
+    virtual uint32_t setVariableTop(const UnicodeString REF_AFTER_50_0_2, UErrorCode&);        \
     virtual void setVariableTop(uint32_t, UErrorCode&);                 \
     virtual uint32_t getVariableTop(UErrorCode&) const;                 \
-    virtual Collator* safeClone();                                      \
+    virtual Collator* safeClone() CONST_AFTER_50_0_2 ;                                      \
     virtual int32_t getSortKey(const UnicodeString&, uint8_t*, int32_t) const; \
     virtual int32_t getSortKey(const UChar*, int32_t, uint8_t*, int32_t) const; \
   public: static int32_t countAvailable();                              \
@@ -209,7 +228,7 @@ int32_t GLUE_SYM ( Collator ) :: hashCode() const  {
 }
 
 
-const Locale GLUE_SYM ( Collator ) :: getLocale(ULocDataLocaleType, UErrorCode&) const  {
+CONST_BEFORE_50_0_2 Locale GLUE_SYM ( Collator ) :: getLocale(ULocDataLocaleType, UErrorCode&) const  {
     return Locale();
 }
 
@@ -229,11 +248,11 @@ void GLUE_SYM ( Collator ) :: getVersion(uint8_t*) const  {
 }
 
 
-void GLUE_SYM ( Collator ) :: setAttribute(UColAttribute, UColAttributeValue, UErrorCode&)  {
+void GLUE_SYM ( Collator ) :: setAttribute(UColAttribute, UColAttributeValue, UErrorCode&) {
 }
 
 
-UColAttributeValue GLUE_SYM ( Collator ) :: getAttribute(UColAttribute, UErrorCode&)  {
+UColAttributeValue GLUE_SYM ( Collator ) :: getAttribute(UColAttribute, UErrorCode&) CONST_AFTER_50_0_2 {
 return (UColAttributeValue)0;
 }
 
@@ -243,7 +262,7 @@ return 0;
 }
 
 
-uint32_t GLUE_SYM ( Collator ) :: setVariableTop(UnicodeString, UErrorCode&)  {
+uint32_t GLUE_SYM ( Collator ) :: setVariableTop(const UnicodeString REF_AFTER_50_0_2, UErrorCode&)  {
 return 0;
 }
 
@@ -257,7 +276,7 @@ return 0;
 }
 
 
-Collator* GLUE_SYM ( Collator ) :: safeClone()  {
+Collator* GLUE_SYM ( Collator ) :: safeClone() CONST_AFTER_50_0_2 {
     return clone();
 }
 
@@ -292,8 +311,8 @@ int32_t GLUE_SYM (Collator ) ::  internalGetShortDefinitionString(const char *lo
     char *p = buffer+strlen(buffer);
     strncat(p,"_PICU",5);
     p +=5 ;
-    *(p++) = ICUGLUE_VER_STR[0];
-    *(p++) = ICUGLUE_VER_STR[2];
+    CPY_VERSTR(p, ICUGLUE_VER_STR);
+    p +=2;
     if(remainCap>0) {
       *(p++)=0;
     }
@@ -319,14 +338,21 @@ int32_t GLUE_SYM ( Collator ) :: appendAvailable(UnicodeString* strs, int32_t i,
     for(int j=0;j<avail;j++) {
          strs[i+j].append(OICU_ucol_getAvailable(j));
          strs[i+j].append("@sp=icu");
-         strs[i+j].append( ICUGLUE_VER_STR[0] );  // X_y
-         strs[i+j].append( ICUGLUE_VER_STR[2] );  // x_Y
+         
+         if(IS_OLD_VERSTR(ICUGLUE_VER_STR)) {
+           strs[i+j].append( ICUGLUE_VER_STR[OLD_VERSTR_MAJ] );  // X_y
+           strs[i+j].append( ICUGLUE_VER_STR[OLD_VERSTR_MIN] );  // x_Y
+         } else {
+           strs[i+j].append( ICUGLUE_VER_STR[NEW_VERSTR_MAJ] );  // Xy_
+           strs[i+j].append( ICUGLUE_VER_STR[NEW_VERSTR_MIN] );  // xY_
+         }
+
 #if COLL_FE_DEBUG
          { 
             char foo[999];
             const UChar *ss = strs[i+j].getTerminatedBuffer();
             u_austrcpy(foo, ss);
-            //            fprintf(stderr,  "VCF " ICUGLUE_VER_STR " appending [%d+%d=%d] <<%s>>\n", i, j, i+j, foo);
+            debugfprintf((stderr,  "VCF " ICUGLUE_VER_STR " appending [%d+%d=%d] <<%s>>\n", i, j, i+j, foo));
         }
 #endif
     }
@@ -380,7 +406,15 @@ Collator *VersionCollatorFactory::createCollator(const Locale &loc) {
 #if defined(GLUE_VER)
 #undef GLUE_VER
 #endif
-#define GLUE_VER(x) /*printf("%c/%c|%c/%c\n", icuver[0],(#x)[0],icuver[1],(#x)[2]);*/  if(icuver[0]== (#x)[0] && icuver[1]==(#x)[2]) { Collator *c = glue ## Collator ## x :: create(loc, icuver); /*fprintf(stderr, "VCF::CC %s -> %p\n", loc.getName(), c);*/ return c; }
+
+#define GLUE_VER(x) \
+    debugfprintf((stderr,"%c/%c|%c/%c\n", icuver[0],(#x)[0],icuver[1],(#x)[2]));  \
+    if(CMP_VERSTR(icuver, (#x))) {                                      \
+      Collator *c = glue ## Collator ## x :: create(loc, icuver); \
+      debugfprintf((stderr, "VCF::CC %s -> %p\n", loc.getName(), c)); \
+      return c; \
+    }
+
 #include "icuglue/glver.h"
 #if COLL_FE_DEBUG
     fprintf(stderr,  "VCF:CC %s failed\n", loc.getName());

@@ -39,6 +39,10 @@ void setup(UErrorCode &status) {
 }
 
 int main(int /* argc*/ , const char * /*argv*/ []) {
+#if (U_ICU_VERSION_MAJOR_NUM < 49)
+  fprintf(stderr, "Warning: ICU %s doesn't support date providers. Need at least 49.\n",  U_ICU_VERSION );
+  return 0;
+#else
     UErrorCode status = U_ZERO_ERROR;
     int diffs = 0;
     int gbaddiffs =0;
@@ -48,7 +52,7 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
 
     int expected = PROVIDER_COUNT;
 
-    for(int s=0;s<sizeof(styles)/sizeof(styles[0]);s++) {
+    for(uint32_t s=0;s<sizeof(styles)/sizeof(styles[0]);s++) {
       for(int l=0;l<LOCALE_COUNT;l++) {
         printf("\n");
         UChar oldChars[200];
@@ -123,4 +127,5 @@ int main(int /* argc*/ , const char * /*argv*/ []) {
     printf("Success!\n");
     
     return 0;
+#endif
 }
