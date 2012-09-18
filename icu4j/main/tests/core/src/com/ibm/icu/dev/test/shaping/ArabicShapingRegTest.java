@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -126,7 +126,12 @@ public class ArabicShapingRegTest extends TestFmwk {
         "\u0628\u0653\u0631\u0653\u0639\u0020" +
         "\u0628\u0654\u0631\u0654\u0639\u0020" +
         "\u0628\u0655\u0631\u0655\u0639\u0020";
-
+    
+    private static final String tashkeelShaddaRTL=
+            "\u0634\u0651\u0645\u0652\u0633";
+    private static final String tashkeelShaddaLTR=
+            "\u0633\u0652\u0645\u0651\u0634";
+    
     private static final String logicalUnshape =
         "\u0020\u0020\u0020\uFE8D\uFEF5\u0020\uFEE5\u0020\uFE8D\uFEF7\u0020" +
         "\uFED7\uFEFC\u0020\uFEE1\u0020\uFE8D\uFEDF\uFECC\uFEAE\uFE91\uFEF4" +
@@ -235,7 +240,26 @@ public class ArabicShapingRegTest extends TestFmwk {
                           "\ufe8f\u0653\ufeae\u0653\ufecb\u0020" +
                           "\ufe8f\u0654\ufeae\u0654\ufecb\u0020" +
                           "\ufe8f\u0655\ufeae\u0655\ufecb\u0020"),
-
+        
+        TestData.standard(tashkeelShaddaRTL,
+                                 ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_BEGIN |ArabicShaping.TEXT_DIRECTION_VISUAL_RTL ,
+                                  "\u0020\ufeb7\ufe7d\ufee4\ufeb2"),
+       TestData.standard(tashkeelShaddaRTL,                                                                                           
+                                 ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_END|ArabicShaping.TEXT_DIRECTION_VISUAL_RTL ,                          
+                                  "\ufeb7\ufe7d\ufee4\ufeb2\u0020"),  
+       TestData.standard(tashkeelShaddaRTL,                                                                                                                      
+                                ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_RESIZE|ArabicShaping.TEXT_DIRECTION_VISUAL_RTL ,                           
+                                 "\ufeb7\ufe7d\ufee4\ufeb2"),  
+                                 
+       TestData.standard(tashkeelShaddaLTR,                                                                                                                     
+                                ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_BEGIN |ArabicShaping.TEXT_DIRECTION_VISUAL_LTR , 
+                                 "\u0020\ufeb2\ufee4\ufe7d\ufeb7"), 
+       TestData.standard(tashkeelShaddaLTR,                                                                                                                     
+                                ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_END |ArabicShaping.TEXT_DIRECTION_VISUAL_LTR , 
+                                 "\ufeb2\ufee4\ufe7d\ufeb7\u0020"), 
+       TestData.standard(tashkeelShaddaLTR,                                                                                                                     
+                                ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_RESIZE |ArabicShaping.TEXT_DIRECTION_VISUAL_LTR , 
+                                "\ufeb2\ufee4\ufe7d\ufeb7"),                         
         /* logical unshape */
         TestData.standard(logicalUnshape,
                           LETTERS_UNSHAPE | TEXT_DIRECTION_LOGICAL | LENGTH_FIXED_SPACES_NEAR,
