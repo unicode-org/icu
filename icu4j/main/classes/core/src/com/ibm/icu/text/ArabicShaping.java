@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -569,6 +569,7 @@ public final class ArabicShaping {
     private static final char LAM_CHAR      = '\u0644';
     private static final char SPACE_CHAR    = '\u0020';
     private static final char SHADDA_CHAR   = '\uFE7C';
+    private static final char SHADDA06_CHAR = '\u0651'; 
     private static final char TATWEEL_CHAR  = '\u0640';
     private static final char SHADDA_TATWEEL_CHAR = '\uFE7D';
     private static final char NEW_TAIL_CHAR = '\uFE73';
@@ -1756,12 +1757,16 @@ public final class ArabicShaping {
                           (lastLink & LAMTYPE) == LAMTYPE)) {
         
                         shape = 1;
+                      
+                    } else if(tashkeelFlag == 2 && dest[i] == SHADDA06_CHAR){
+                    	shape = 1;
+                     
                     } else {
                         shape = 0;
                     }
                 }
                 if (flag == 2) {
-                    if (tashkeelFlag == 2) {
+                    if (tashkeelFlag == 2 && dest[i] != SHADDA06_CHAR) { 
                         dest[i] = TASHKEEL_SPACE_SUB;
                         tashkeel_found = true;
                     }
