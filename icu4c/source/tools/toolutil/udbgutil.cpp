@@ -140,7 +140,7 @@ static const Field names_UDateFormatStyle[] =
     /*
      *  negative enums.. leave out for now.
         FIELD_NAME_STR( LEN_UDAT, UDAT_NONE ),
-        FIELD_NAME_STR( LEN_UDAT, UDAT_IGNORE ),
+        FIELD_NAME_STR( LEN_UDAT, UDAT_PATTERN ),
      */
 };
 
