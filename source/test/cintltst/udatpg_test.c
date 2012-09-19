@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2007-2010, International Business Machines
+*   Copyright (C) 2007-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -325,7 +325,7 @@ static void TestBuilder() {
     /* get a pattern for an abbreviated month and day */
     length = udatpg_getBestPattern(generator, skeleton, 4,
                                    pattern, patternCapacity, &status);
-    formatter = udat_open(UDAT_IGNORE, UDAT_DEFAULT, locale, timeZoneGMT, -1,
+    formatter = udat_open(UDAT_PATTERN, UDAT_PATTERN, locale, timeZoneGMT, -1,
                           pattern, length, &status);
     if (formatter==NULL) {
         log_err("Failed to initialize the UDateFormat of the sample code in Userguide.\n");

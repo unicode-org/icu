@@ -250,7 +250,7 @@ static void TestDateFormat()
     status=U_ZERO_ERROR;
     log_verbose("\nTesting the udat_openPattern with a specified pattern\n");
     /*for french locale */
-    fr_pat=udat_open(UDAT_IGNORE, UDAT_IGNORE,"fr_FR",NULL,0,temp, u_strlen(temp), &status);
+    fr_pat=udat_open(UDAT_PATTERN, UDAT_PATTERN,"fr_FR",NULL,0,temp, u_strlen(temp), &status);
     if(U_FAILURE(status))
     {
         log_err("FAIL: Error in creating a date format using udat_openPattern \n %s\n", 
