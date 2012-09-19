@@ -436,7 +436,7 @@ print_month(UCalendar *c,
     /* ========== Generate the header containing the month and year */
     
     /* Open a formatter with a month and year only pattern */
-    dfmt = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pat, len,status);
+    dfmt = udat_open(UDAT_PATTERN,UDAT_PATTERN,NULL,NULL,0,pat, len,status);
     
     /* Format the date */
     udat_format(dfmt, ucal_getMillis(c, status), s, BUF_SIZE, 0, status);
@@ -559,7 +559,7 @@ print_year(UCalendar *c,
     /* ========== Generate the header containing the year (only) */
     
     /* Open a formatter with a month and year only pattern */
-    dfmt = udat_open(UDAT_IGNORE,UDAT_IGNORE,NULL,NULL,0,pat, len, status);
+    dfmt = udat_open(UDAT_PATTERN,UDAT_PATTERN,NULL,NULL,0,pat, len, status);
     
     /* Format the date */
     udat_format(dfmt, ucal_getMillis(left_cal, status), s, BUF_SIZE, 0, status);
