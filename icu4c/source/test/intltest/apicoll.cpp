@@ -559,7 +559,7 @@ CollationAPITest::TestCollationKey(/* char* par */)
     // bogus key returned here
     key1Status = U_ILLEGAL_ARGUMENT_ERROR;
     col->getCollationKey(NULL, 0, sortk1, key1Status);
-    doAssert(sortk1.getByteArray(length) == NULL && length == 0,
+    doAssert(sortk1.isBogus() && (sortk1.getByteArray(length), length) == 0,
         "Error code should return bogus collation key");
 
     key1Status = U_ZERO_ERROR;
