@@ -427,29 +427,11 @@ CollationKey& RuleBasedCollator::getCollationKey(const UChar* source,
         return sortkey.reset();
     }
 
-    uint8_t *result;
-    int32_t resultCapacity;
-    if (sortkey.fCapacity >= (sourceLen * 3)) {
-        // Try to reuse the CollationKey.fBytes.
-        result = sortkey.fBytes;
-        resultCapacity = sortkey.fCapacity;
-    } else {
-        result = NULL;
-        resultCapacity = 0;
-    }
-    int32_t resultLen = ucol_getSortKeyWithAllocation(ucollator, source, sourceLen,
-                                                      result, resultCapacity, &status);
+    int32_t resultLen = ucol_getCollationKey(ucollator, source, sourceLen, sortkey, status);
 
     if (U_SUCCESS(status)) {
-        if (result == sortkey.fBytes) {
-            sortkey.setLength(resultLen);
-        } else {
-            sortkey.adopt(result, resultCapacity, resultLen);
-        }
+        sortkey.setLength(resultLen);
     } else {
-        if (result != sortkey.fBytes) {
-            uprv_free(result);
-        }
         sortkey.setToBogus();
     }
     return sortkey;

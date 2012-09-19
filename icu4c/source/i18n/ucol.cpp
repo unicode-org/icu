@@ -4274,94 +4274,63 @@ U_NAMESPACE_BEGIN
 
 class SortKeyByteSink : public ByteSink {
 public:
-    static const uint32_t FILL_ORIGINAL_BUFFER = 1;
-    static const uint32_t DONT_GROW = 2;
-    SortKeyByteSink(char *dest, int32_t destCapacity, uint32_t flags=0)
-            : ownedBuffer_(NULL), buffer_(dest), capacity_(destCapacity),
-              appended_(0),
-              fill_(flags & FILL_ORIGINAL_BUFFER),
-              grow_((flags & DONT_GROW) == 0) {
-        if (buffer_ == NULL || capacity_ < 0) {
-            buffer_ = reinterpret_cast<char *>(&lastResortByte_);
+    SortKeyByteSink(char *dest, int32_t destCapacity)
+            : buffer_(dest), capacity_(destCapacity),
+              appended_(0) {
+        if (buffer_ == NULL) {
+            capacity_ = 0;
+        } else if(capacity_ < 0) {
+            buffer_ = NULL;
             capacity_ = 0;
         }
     }
-    virtual ~SortKeyByteSink();
 
     virtual void Append(const char *bytes, int32_t n);
-    void Append(const uint8_t *bytes, int32_t n) { Append(reinterpret_cast<const char *>(bytes), n); }
-    void Append(uint8_t b) {
-        if (appended_ < capacity_) {
-            buffer_[appended_++] = (char)b;
-        } else {
-            Append(&b, 1);
+    void Append(uint32_t b) {
+        if (appended_ < capacity_ || Resize(1, appended_)) {
+            buffer_[appended_] = (char)b;
         }
+        ++appended_;
     }
-    void Append(uint8_t b1, uint8_t b2) {
+    void Append(uint32_t b1, uint32_t b2) {
         int32_t a2 = appended_ + 2;
-        if (a2 <= capacity_) {
+        if (a2 <= capacity_ || Resize(2, appended_)) {
             buffer_[appended_] = (char)b1;
             buffer_[appended_ + 1] = (char)b2;
-            appended_ = a2;
-        } else {
-            char bytes[2] = { (char)b1, (char)b2 };
-            Append(bytes, 2);
+        } else if(appended_ < capacity_) {
+            buffer_[appended_] = (char)b1;
         }
+        appended_ = a2;
     }
-    void Append(const SortKeyByteSink &other) { Append(other.buffer_, other.appended_); }
     virtual char *GetAppendBuffer(int32_t min_capacity,
                                   int32_t desired_capacity_hint,
                                   char *scratch, int32_t scratch_capacity,
                                   int32_t *result_capacity);
     int32_t NumberOfBytesAppended() const { return appended_; }
-    uint8_t &LastByte() {
-        if (buffer_ != NULL && appended_ > 0) {
-            return reinterpret_cast<uint8_t *>(buffer_)[appended_ - 1];
-        } else {
-            return lastResortByte_;
-        }
-    }
-    uint8_t *GetLastFewBytes(int32_t n) {
-        if (buffer_ != NULL && appended_ >= n) {
-            return reinterpret_cast<uint8_t *>(buffer_) + appended_ - n;
-        } else {
-            return NULL;
-        }
-    }
-    char *GetBuffer() { return buffer_; }
-    uint8_t *GetUnsignedBuffer() { return reinterpret_cast<uint8_t *>(buffer_); }
-    uint8_t *OrphanUnsignedBuffer(int32_t &orphanedCapacity);
-    UBool IsOk() const { return buffer_ != NULL; }  // otherwise out-of-memory
+    /** @return FALSE if memory allocation failed */
+    UBool IsOk() const { return buffer_ != NULL; }
 
-private:
-    SortKeyByteSink(const SortKeyByteSink &); // copy constructor not implemented
-    SortKeyByteSink &operator=(const SortKeyByteSink &); // assignment operator not implemented
+protected:
+    virtual void AppendBeyondCapacity(const char *bytes, int32_t n, int32_t length) = 0;
+    virtual UBool Resize(int32_t appendCapacity, int32_t length) = 0;
 
-    UBool Resize(int32_t appendCapacity, int32_t length);
     void SetNotOk() {
         buffer_ = NULL;
         capacity_ = 0;
     }
 
-    static uint8_t lastResortByte_;  // last-resort return value from LastByte()
-
-    char *ownedBuffer_;
     char *buffer_;
     int32_t capacity_;
     int32_t appended_;
-    UBool fill_;
-    UBool grow_;
+
+private:
+    SortKeyByteSink(const SortKeyByteSink &); // copy constructor not implemented
+    SortKeyByteSink &operator=(const SortKeyByteSink &); // assignment operator not implemented
 };
-
-uint8_t SortKeyByteSink::lastResortByte_ = 0;
-
-SortKeyByteSink::~SortKeyByteSink() {
-    uprv_free(ownedBuffer_);
-}
 
 void
 SortKeyByteSink::Append(const char *bytes, int32_t n) {
-    if (n <= 0) {
+    if (n <= 0 || bytes == NULL) {
         return;
     }
     int32_t length = appended_;
@@ -4369,37 +4338,12 @@ SortKeyByteSink::Append(const char *bytes, int32_t n) {
     if ((buffer_ + length) == bytes) {
         return;  // the caller used GetAppendBuffer() and wrote the bytes already
     }
-    if (buffer_ == NULL) {
-        return;  // allocation failed before already
-    }
     int32_t available = capacity_ - length;
-    if (bytes == NULL) {
-        // assume that the caller failed to allocate memory
-        if (fill_) {
-            if (n > available) {
-                n = available;
-            }
-            uprv_memset(buffer_, 0, n);
-        }
-        SetNotOk();  // propagate the out-of-memory error
-        return;
+    if (n <= available) {
+        uprv_memcpy(buffer_ + length, bytes, n);
+    } else {
+        AppendBeyondCapacity(bytes, n, length);
     }
-    if (n > available) {
-        if (fill_ && available > 0) {
-            // Fill the original buffer completely.
-            uprv_memcpy(buffer_ + length, bytes, available);
-            bytes += available;
-            length += available;
-            n -= available;
-            available = 0;
-        }
-        fill_ = FALSE;
-        if (!Resize(n, length)) {
-            SetNotOk();
-            return;
-        }
-    }
-    uprv_memcpy(buffer_ + length, bytes, n);
 }
 
 char *
@@ -4425,53 +4369,142 @@ SortKeyByteSink::GetAppendBuffer(int32_t min_capacity,
     }
 }
 
+class FixedSortKeyByteSink : public SortKeyByteSink {
+public:
+    FixedSortKeyByteSink(char *dest, int32_t destCapacity)
+            : SortKeyByteSink(dest, destCapacity) {}
+
+private:
+    virtual void AppendBeyondCapacity(const char *bytes, int32_t n, int32_t length);
+    virtual UBool Resize(int32_t appendCapacity, int32_t length);
+};
+
+void
+FixedSortKeyByteSink::AppendBeyondCapacity(const char *bytes, int32_t /*n*/, int32_t length) {
+    // buffer_ != NULL && bytes != NULL && n > 0 && appended_ > capacity_
+    // Fill the buffer completely.
+    int32_t available = capacity_ - length;
+    if (available > 0) {
+        uprv_memcpy(buffer_ + length, bytes, available);
+    }
+}
+
 UBool
-SortKeyByteSink::Resize(int32_t appendCapacity, int32_t length) {
-    if (!grow_) {
-        return FALSE;
+FixedSortKeyByteSink::Resize(int32_t /*appendCapacity*/, int32_t /*length*/) {
+    return FALSE;
+}
+
+class CollationKeyByteSink : public SortKeyByteSink {
+public:
+    CollationKeyByteSink(CollationKey &key)
+            : SortKeyByteSink(reinterpret_cast<char *>(key.getBytes()), key.getCapacity()),
+              key_(key) {}
+
+private:
+    virtual void AppendBeyondCapacity(const char *bytes, int32_t n, int32_t length);
+    virtual UBool Resize(int32_t appendCapacity, int32_t length);
+
+    CollationKey &key_;
+};
+
+void
+CollationKeyByteSink::AppendBeyondCapacity(const char *bytes, int32_t n, int32_t length) {
+    // buffer_ != NULL && bytes != NULL && n > 0 && appended_ > capacity_
+    if (Resize(n, length)) {
+        uprv_memcpy(buffer_ + length, bytes, n);
+    }
+}
+
+UBool
+CollationKeyByteSink::Resize(int32_t appendCapacity, int32_t length) {
+    if (buffer_ == NULL) {
+        return FALSE;  // allocation failed before already
     }
     int32_t newCapacity = 2 * capacity_;
     int32_t altCapacity = length + 2 * appendCapacity;
     if (newCapacity < altCapacity) {
         newCapacity = altCapacity;
     }
-    if (newCapacity < 1024) {
-        newCapacity = 1024;
+    if (newCapacity < 200) {
+        newCapacity = 200;
     }
-    char *newBuffer = (char *)uprv_malloc(newCapacity);
+    uint8_t *newBuffer = key_.reallocate(newCapacity, length);
     if (newBuffer == NULL) {
+        SetNotOk();
         return FALSE;
     }
-    uprv_memcpy(newBuffer, buffer_, length);
-    uprv_free(ownedBuffer_);
-    ownedBuffer_ = buffer_ = newBuffer;
+    buffer_ = reinterpret_cast<char *>(newBuffer);
     capacity_ = newCapacity;
     return TRUE;
 }
 
-uint8_t *
-SortKeyByteSink::OrphanUnsignedBuffer(int32_t &orphanedCapacity) {
-    if (buffer_ == NULL || appended_ == 0) {
-        orphanedCapacity = 0;
-        return NULL;
+/**
+ * uint8_t byte buffer, similar to CharString but simpler.
+ */
+class SortKeyLevel : public UMemory {
+public:
+    SortKeyLevel() : len(0), ok(TRUE) {}
+    ~SortKeyLevel() {}
+
+    /** @return FALSE if memory allocation failed */
+    UBool isOk() const { return ok; }
+    UBool isEmpty() const { return len == 0; }
+    int32_t length() const { return len; }
+    const uint8_t *data() const { return buffer.getAlias(); }
+    uint8_t operator[](int32_t index) const { return buffer[index]; }
+
+    void appendByte(uint32_t b);
+
+    void appendTo(ByteSink &sink) const {
+        sink.Append(reinterpret_cast<const char *>(buffer.getAlias()), len);
     }
-    if (ownedBuffer_ != NULL) {
-        // orphan & forget the ownedBuffer_
-        uint8_t *returnBuffer = reinterpret_cast<uint8_t *>(ownedBuffer_);
-        ownedBuffer_ = buffer_ = NULL;
-        orphanedCapacity = capacity_;
-        capacity_ = appended_ = 0;
-        return returnBuffer;
+
+    uint8_t &lastByte() {
+        U_ASSERT(len > 0);
+        return buffer[len - 1];
     }
-    // clone the buffer_
-    uint8_t *newBuffer = (uint8_t *)uprv_malloc(appended_);
-    if (newBuffer == NULL) {
-        orphanedCapacity = 0;
-        return NULL;
+
+    uint8_t *getLastFewBytes(int32_t n) {
+        if (ok && len >= n) {
+            return buffer.getAlias() + len - n;
+        } else {
+            return NULL;
+        }
     }
-    uprv_memcpy(newBuffer, buffer_, appended_);
-    orphanedCapacity = appended_;
-    return newBuffer;
+
+private:
+    MaybeStackArray<uint8_t, 40> buffer;
+    int32_t len;
+    UBool ok;
+
+    UBool ensureCapacity(int32_t appendCapacity);
+
+    SortKeyLevel(const SortKeyLevel &other); // forbid copying of this class
+    SortKeyLevel &operator=(const SortKeyLevel &other); // forbid copying of this class
+};
+
+void SortKeyLevel::appendByte(uint32_t b) {
+    if(len < buffer.getCapacity() || ensureCapacity(1)) {
+        buffer[len++] = (uint8_t)b;
+    }
+}
+
+UBool SortKeyLevel::ensureCapacity(int32_t appendCapacity) {
+    if(!ok) {
+        return FALSE;
+    }
+    int32_t newCapacity = 2 * buffer.getCapacity();
+    int32_t altCapacity = len + 2 * appendCapacity;
+    if (newCapacity < altCapacity) {
+        newCapacity = altCapacity;
+    }
+    if (newCapacity < 200) {
+        newCapacity = 200;
+    }
+    if(buffer.resize(newCapacity, len)==NULL) {
+        return ok = FALSE;
+    }
+    return TRUE;
 }
 
 U_NAMESPACE_END
@@ -4507,33 +4540,31 @@ ucol_getSortKey(const    UCollator    *coll,
         /*ucol_calcSortKey(...);*/
         /*ucol_calcSortKeySimpleTertiary(...);*/
 
-        SortKeyByteSink sink(reinterpret_cast<char *>(result), resultLength,
-                             SortKeyByteSink::FILL_ORIGINAL_BUFFER | SortKeyByteSink::DONT_GROW);
+        uint8_t noDest[1] = { 0 };
+        if(result == NULL) {
+            // Distinguish pure preflighting from an allocation error.
+            result = noDest;
+            resultLength = 0;
+        }
+        FixedSortKeyByteSink sink(reinterpret_cast<char *>(result), resultLength);
         coll->sortKeyGen(coll, source, sourceLength, sink, &status);
-        keySize = sink.NumberOfBytesAppended();
+        if(U_SUCCESS(status)) {
+            keySize = sink.NumberOfBytesAppended();
+        }
     }
     UTRACE_DATA2(UTRACE_VERBOSE, "Sort Key = %vb", result, keySize);
     UTRACE_EXIT_STATUS(status);
     return keySize;
 }
 
-/* this function is called by the C++ API for sortkey generation */
 U_CFUNC int32_t
-ucol_getSortKeyWithAllocation(const UCollator *coll,
-                              const UChar *source, int32_t sourceLength,
-                              uint8_t *&result, int32_t &resultCapacity,
-                              UErrorCode *pErrorCode) {
-    SortKeyByteSink sink(reinterpret_cast<char *>(result), resultCapacity);
-    coll->sortKeyGen(coll, source, sourceLength, sink, pErrorCode);
-    int32_t resultLen = sink.NumberOfBytesAppended();
-    if (U_SUCCESS(*pErrorCode)) {
-        if (!sink.IsOk()) {
-            *pErrorCode = U_MEMORY_ALLOCATION_ERROR;
-        } else if (result != sink.GetUnsignedBuffer()) {
-            result = sink.OrphanUnsignedBuffer(resultCapacity);
-        }
-    }
-    return resultLen;
+ucol_getCollationKey(const UCollator *coll,
+                     const UChar *source, int32_t sourceLength,
+                     CollationKey &key,
+                     UErrorCode &errorCode) {
+    CollationKeyByteSink sink(key);
+    coll->sortKeyGen(coll, source, sourceLength, sink, &errorCode);
+    return sink.NumberOfBytesAppended();
 }
 
 // Is this primary weight compressible?
@@ -4545,16 +4576,16 @@ isCompressible(const UCollator * /*coll*/, uint8_t primary1) {
 }
 
 static
-inline void doCaseShift(SortKeyByteSink &cases, uint32_t &caseShift) {
+inline void doCaseShift(SortKeyLevel &cases, uint32_t &caseShift) {
     if (caseShift  == 0) {
-        cases.Append(UCOL_CASE_BYTE_START);
+        cases.appendByte(UCOL_CASE_BYTE_START);
         caseShift = UCOL_CASE_SHIFT_START;
     }
 }
 
 // Packs the secondary buffer when processing French locale.
 static void
-packFrench(uint8_t *secondaries, int32_t secsize, SortKeyByteSink &result) {
+packFrench(const uint8_t *secondaries, int32_t secsize, SortKeyByteSink &result) {
     secondaries += secsize;  // We read the secondary-level bytes back to front.
     uint8_t secondary;
     int32_t count2 = 0;
@@ -4569,16 +4600,16 @@ packFrench(uint8_t *secondaries, int32_t secsize, SortKeyByteSink &result) {
             if (count2 > 0) {
                 if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
                     while (count2 > UCOL_TOP_COUNT2) {
-                        result.Append((uint8_t)(UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2));
+                        result.Append(UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2);
                         count2 -= (uint32_t)UCOL_TOP_COUNT2;
                     }
-                    result.Append((uint8_t)(UCOL_COMMON_TOP2 - (count2-1)));
+                    result.Append(UCOL_COMMON_TOP2 - (count2-1));
                 } else {
                     while (count2 > UCOL_BOT_COUNT2) {
-                        result.Append((uint8_t)(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2));
+                        result.Append(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2);
                         count2 -= (uint32_t)UCOL_BOT_COUNT2;
                     }
-                    result.Append((uint8_t)(UCOL_COMMON_BOT2 + (count2-1)));
+                    result.Append(UCOL_COMMON_BOT2 + (count2-1));
                 }
                 count2 = 0;
             }
@@ -4587,10 +4618,10 @@ packFrench(uint8_t *secondaries, int32_t secsize, SortKeyByteSink &result) {
     }
     if (count2 > 0) {
         while (count2 > UCOL_BOT_COUNT2) {
-            result.Append((uint8_t)(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2));
+            result.Append(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2);
             count2 -= (uint32_t)UCOL_BOT_COUNT2;
         }
-        result.Append((uint8_t)(UCOL_COMMON_BOT2 + (count2-1)));
+        result.Append(UCOL_COMMON_BOT2 + (count2-1));
     }
 }
 
@@ -4608,15 +4639,11 @@ ucol_calcSortKey(const    UCollator    *coll,
         return;
     }
 
-    /* Stack allocated buffers for buffers we use */
-    char second[UCOL_SECONDARY_MAX_BUFFER], tert[UCOL_TERTIARY_MAX_BUFFER];
-    char caseB[UCOL_CASE_MAX_BUFFER], quad[UCOL_QUAD_MAX_BUFFER];
-
     SortKeyByteSink &primaries = result;
-    SortKeyByteSink secondaries(second, LENGTHOF(second));
-    SortKeyByteSink tertiaries(tert, LENGTHOF(tert));
-    SortKeyByteSink cases(caseB, LENGTHOF(caseB));
-    SortKeyByteSink quads(quad, LENGTHOF(quad));
+    SortKeyLevel secondaries;
+    SortKeyLevel tertiaries;
+    SortKeyLevel cases;
+    SortKeyLevel quads;
 
     UnicodeString normSource;
 
@@ -4735,19 +4762,19 @@ ucol_calcSortKey(const    UCollator    *coll,
             if(compareQuad == 0) {
                 if(count4 > 0) {
                     while (count4 > UCOL_BOT_COUNT4) {
-                        quads.Append((uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4));
+                        quads.appendByte(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
                         count4 -= UCOL_BOT_COUNT4;
                     }
-                    quads.Append((uint8_t)(UCOL_COMMON_BOT4 + (count4-1)));
+                    quads.appendByte(UCOL_COMMON_BOT4 + (count4-1));
                     count4 = 0;
                 }
                 /* We are dealing with a variable and we're treating them as shifted */
                 /* This is a shifted ignorable */
                 if(primary1 != 0) { /* we need to check this since we could be in continuation */
-                    quads.Append(primary1);
+                    quads.appendByte(primary1);
                 }
                 if(primary2 != 0) {
-                    quads.Append(primary2);
+                    quads.appendByte(primary2);
                 }
             }
             wasShifted = TRUE;
@@ -4762,7 +4789,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                         primaries.Append(primary2);
                     } else {
                         if(leadPrimary != 0) {
-                            primaries.Append((uint8_t)((primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN));
+                            primaries.Append((primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN);
                         }
                         if(primary2 == UCOL_IGNORABLE) {
                             /* one byter, not compressed */
@@ -4794,20 +4821,20 @@ ucol_calcSortKey(const    UCollator    *coll,
                         if (count2 > 0) {
                             if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
                                 while (count2 > UCOL_TOP_COUNT2) {
-                                    secondaries.Append((uint8_t)(UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2));
+                                    secondaries.appendByte(UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2);
                                     count2 -= (uint32_t)UCOL_TOP_COUNT2;
                                 }
-                                secondaries.Append((uint8_t)(UCOL_COMMON_TOP2 - (count2-1)));
+                                secondaries.appendByte(UCOL_COMMON_TOP2 - (count2-1));
                             } else {
                                 while (count2 > UCOL_BOT_COUNT2) {
-                                    secondaries.Append((uint8_t)(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2));
+                                    secondaries.appendByte(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2);
                                     count2 -= (uint32_t)UCOL_BOT_COUNT2;
                                 }
-                                secondaries.Append((uint8_t)(UCOL_COMMON_BOT2 + (count2-1)));
+                                secondaries.appendByte(UCOL_COMMON_BOT2 + (count2-1));
                             }
                             count2 = 0;
                         }
-                        secondaries.Append(secondary);
+                        secondaries.appendByte(secondary);
                     }
                 } else {
                     /* Do the special handling for French secondaries */
@@ -4815,7 +4842,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                     /* abc1c2c3de with french secondaries need to be edc1c2c3ba NOT edc3c2c1ba */
                     if(notIsContinuation) {
                         if (lastSecondaryLength > 1) {
-                            uint8_t *frenchStartPtr = secondaries.GetLastFewBytes(lastSecondaryLength);
+                            uint8_t *frenchStartPtr = secondaries.getLastFewBytes(lastSecondaryLength);
                             if (frenchStartPtr != NULL) {
                                 /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
                                 uint8_t *frenchEndPtr = frenchStartPtr + lastSecondaryLength - 1;
@@ -4826,7 +4853,7 @@ ucol_calcSortKey(const    UCollator    *coll,
                     } else {
                         ++lastSecondaryLength;
                     }
-                    secondaries.Append(secondary);
+                    secondaries.appendByte(secondary);
                 }
             }
 
@@ -4841,21 +4868,21 @@ ucol_calcSortKey(const    UCollator    *coll,
                     if(tertiary != 0) {
                         if(coll->caseFirst == UCOL_UPPER_FIRST) {
                             if((caseBits & 0xC0) == 0) {
-                                cases.LastByte() |= 1 << (--caseShift);
+                                cases.lastByte() |= 1 << (--caseShift);
                             } else {
-                                cases.LastByte() |= 0 << (--caseShift);
+                                cases.lastByte() |= 0 << (--caseShift);
                                 /* second bit */
                                 doCaseShift(cases, caseShift);
-                                cases.LastByte() |= ((caseBits>>6)&1) << (--caseShift);
+                                cases.lastByte() |= ((caseBits>>6)&1) << (--caseShift);
                             }
                         } else {
                             if((caseBits & 0xC0) == 0) {
-                                cases.LastByte() |= 0 << (--caseShift);
+                                cases.lastByte() |= 0 << (--caseShift);
                             } else {
-                                cases.LastByte() |= 1 << (--caseShift);
+                                cases.lastByte() |= 1 << (--caseShift);
                                 /* second bit */
                                 doCaseShift(cases, caseShift);
-                                cases.LastByte() |= ((caseBits>>7)&1) << (--caseShift);
+                                cases.lastByte() |= ((caseBits>>7)&1) << (--caseShift);
                             }
                         }
                     }
@@ -4881,20 +4908,20 @@ ucol_calcSortKey(const    UCollator    *coll,
                     if (count3 > 0) {
                         if ((tertiary > tertiaryCommon)) {
                             while (count3 > coll->tertiaryTopCount) {
-                                tertiaries.Append((uint8_t)(tertiaryTop - coll->tertiaryTopCount));
+                                tertiaries.appendByte(tertiaryTop - coll->tertiaryTopCount);
                                 count3 -= (uint32_t)coll->tertiaryTopCount;
                             }
-                            tertiaries.Append((uint8_t)(tertiaryTop - (count3-1)));
+                            tertiaries.appendByte(tertiaryTop - (count3-1));
                         } else {
                             while (count3 > coll->tertiaryBottomCount) {
-                                tertiaries.Append((uint8_t)(tertiaryBottom + coll->tertiaryBottomCount));
+                                tertiaries.appendByte(tertiaryBottom + coll->tertiaryBottomCount);
                                 count3 -= (uint32_t)coll->tertiaryBottomCount;
                             }
-                            tertiaries.Append((uint8_t)(tertiaryBottom + (count3-1)));
+                            tertiaries.appendByte(tertiaryBottom + (count3-1));
                         }
                         count3 = 0;
                     }
-                    tertiaries.Append(tertiary);
+                    tertiaries.appendByte(tertiary);
                 }
             }
 
@@ -4902,13 +4929,13 @@ ucol_calcSortKey(const    UCollator    *coll,
                 if(s.flags & UCOL_WAS_HIRAGANA) { // This was Hiragana and we need to note it
                     if(count4>0) { // Close this part
                         while (count4 > UCOL_BOT_COUNT4) {
-                            quads.Append((uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4));
+                            quads.appendByte(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
                             count4 -= UCOL_BOT_COUNT4;
                         }
-                        quads.Append((uint8_t)(UCOL_COMMON_BOT4 + (count4-1)));
+                        quads.appendByte(UCOL_COMMON_BOT4 + (count4-1));
                         count4 = 0;
                     }
-                    quads.Append(UCOL_HIRAGANA_QUAD); // Add the Hiragana
+                    quads.appendByte(UCOL_HIRAGANA_QUAD); // Add the Hiragana
                 } else { // This wasn't Hiragana, so we can continue adding stuff
                     count4++;
                 }
@@ -4919,68 +4946,74 @@ ucol_calcSortKey(const    UCollator    *coll,
     /* Here, we are generally done with processing */
     /* bailing out would not be too productive */
 
+    UBool ok = TRUE;
     if(U_SUCCESS(*status)) {
         /* we have done all the CE's, now let's put them together to form a key */
         if(compareSec == 0) {
             if (count2 > 0) {
                 while (count2 > UCOL_BOT_COUNT2) {
-                    secondaries.Append((uint8_t)(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2));
+                    secondaries.appendByte(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2);
                     count2 -= (uint32_t)UCOL_BOT_COUNT2;
                 }
-                secondaries.Append((uint8_t)(UCOL_COMMON_BOT2 + (count2-1)));
+                secondaries.appendByte(UCOL_COMMON_BOT2 + (count2-1));
             }
             result.Append(UCOL_LEVELTERMINATOR);
-            if(!isFrenchSec || !secondaries.IsOk()) {
-                result.Append(secondaries);
+            if(!secondaries.isOk()) {
+                ok = FALSE;
+            } else if(!isFrenchSec) {
+                secondaries.appendTo(result);
             } else {
                 // If there are any unresolved continuation secondaries,
                 // reverse them here so that we can reverse the whole secondary thing.
                 if (lastSecondaryLength > 1) {
-                    uint8_t *frenchStartPtr = secondaries.GetLastFewBytes(lastSecondaryLength);
+                    uint8_t *frenchStartPtr = secondaries.getLastFewBytes(lastSecondaryLength);
                     if (frenchStartPtr != NULL) {
                         /* reverse secondaries from frenchStartPtr up to frenchEndPtr */
                         uint8_t *frenchEndPtr = frenchStartPtr + lastSecondaryLength - 1;
                         uprv_ucol_reverse_buffer(uint8_t, frenchStartPtr, frenchEndPtr);
                     }
                 }
-                packFrench(secondaries.GetUnsignedBuffer(), secondaries.NumberOfBytesAppended(), result);
+                packFrench(secondaries.data(), secondaries.length(), result);
             }
         }
 
         if(doCase) {
+            ok &= cases.isOk();
             result.Append(UCOL_LEVELTERMINATOR);
-            result.Append(cases);
+            cases.appendTo(result);
         }
 
         if(compareTer == 0) {
             if (count3 > 0) {
                 if (coll->tertiaryCommon != UCOL_COMMON_BOT3) {
                     while (count3 >= coll->tertiaryTopCount) {
-                        tertiaries.Append((uint8_t)(tertiaryTop - coll->tertiaryTopCount));
+                        tertiaries.appendByte(tertiaryTop - coll->tertiaryTopCount);
                         count3 -= (uint32_t)coll->tertiaryTopCount;
                     }
-                    tertiaries.Append((uint8_t)(tertiaryTop - count3));
+                    tertiaries.appendByte(tertiaryTop - count3);
                 } else {
                     while (count3 > coll->tertiaryBottomCount) {
-                        tertiaries.Append((uint8_t)(tertiaryBottom + coll->tertiaryBottomCount));
+                        tertiaries.appendByte(tertiaryBottom + coll->tertiaryBottomCount);
                         count3 -= (uint32_t)coll->tertiaryBottomCount;
                     }
-                    tertiaries.Append((uint8_t)(tertiaryBottom + (count3-1)));
+                    tertiaries.appendByte(tertiaryBottom + (count3-1));
                 }
             }
+            ok &= tertiaries.isOk();
             result.Append(UCOL_LEVELTERMINATOR);
-            result.Append(tertiaries);
+            tertiaries.appendTo(result);
 
             if(compareQuad == 0/*qShifted == TRUE*/) {
                 if(count4 > 0) {
                     while (count4 > UCOL_BOT_COUNT4) {
-                        quads.Append((uint8_t)(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4));
+                        quads.appendByte(UCOL_COMMON_BOT4 + UCOL_BOT_COUNT4);
                         count4 -= UCOL_BOT_COUNT4;
                     }
-                    quads.Append((uint8_t)(UCOL_COMMON_BOT4 + (count4-1)));
+                    quads.appendByte(UCOL_COMMON_BOT4 + (count4-1));
                 }
+                ok &= quads.isOk();
                 result.Append(UCOL_LEVELTERMINATOR);
-                result.Append(quads);
+                quads.appendTo(result);
             }
 
             if(compareIdent) {
@@ -4993,6 +5026,9 @@ ucol_calcSortKey(const    UCollator    *coll,
 
     /* To avoid memory leak, free the offset buffer if necessary. */
     ucol_freeOffsetBuffer(&s);
+
+    ok &= result.IsOk();
+    if(!ok && U_SUCCESS(*status)) { *status = U_MEMORY_ALLOCATION_ERROR; }
 }
 
 
@@ -5009,12 +5045,9 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
         return;
     }
 
-    /* Stack allocated buffers for buffers we use */
-    char second[UCOL_SECONDARY_MAX_BUFFER], tert[UCOL_TERTIARY_MAX_BUFFER];
-
     SortKeyByteSink &primaries = result;
-    SortKeyByteSink secondaries(second, LENGTHOF(second));
-    SortKeyByteSink tertiaries(tert, LENGTHOF(tert));
+    SortKeyLevel secondaries;
+    SortKeyLevel tertiaries;
 
     UnicodeString normSource;
 
@@ -5096,7 +5129,7 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                     primaries.Append(primary2);
                 } else {
                     if(leadPrimary != 0) {
-                        primaries.Append((uint8_t)((primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN));
+                        primaries.Append((primary1 > leadPrimary) ? UCOL_BYTE_UNSHIFTED_MAX : UCOL_BYTE_UNSHIFTED_MIN);
                     }
                     if(primary2 == UCOL_IGNORABLE) {
                         /* one byter, not compressed */
@@ -5127,20 +5160,20 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                 if (count2 > 0) {
                     if (secondary > UCOL_COMMON2) { // not necessary for 4th level.
                         while (count2 > UCOL_TOP_COUNT2) {
-                            secondaries.Append((uint8_t)(UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2));
+                            secondaries.appendByte(UCOL_COMMON_TOP2 - UCOL_TOP_COUNT2);
                             count2 -= (uint32_t)UCOL_TOP_COUNT2;
                         }
-                        secondaries.Append((uint8_t)(UCOL_COMMON_TOP2 - (count2-1)));
+                        secondaries.appendByte(UCOL_COMMON_TOP2 - (count2-1));
                     } else {
                         while (count2 > UCOL_BOT_COUNT2) {
-                            secondaries.Append((uint8_t)(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2));
+                            secondaries.appendByte(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2);
                             count2 -= (uint32_t)UCOL_BOT_COUNT2;
                         }
-                        secondaries.Append((uint8_t)(UCOL_COMMON_BOT2 + (count2-1)));
+                        secondaries.appendByte(UCOL_COMMON_BOT2 + (count2-1));
                     }
                     count2 = 0;
                 }
-                secondaries.Append(secondary);
+                secondaries.appendByte(secondary);
             }
         }
 
@@ -5162,53 +5195,56 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
                 if (count3 > 0) {
                     if ((tertiary > tertiaryCommon)) {
                         while (count3 > coll->tertiaryTopCount) {
-                            tertiaries.Append((uint8_t)(tertiaryTop - coll->tertiaryTopCount));
+                            tertiaries.appendByte(tertiaryTop - coll->tertiaryTopCount);
                             count3 -= (uint32_t)coll->tertiaryTopCount;
                         }
-                        tertiaries.Append((uint8_t)(tertiaryTop - (count3-1)));
+                        tertiaries.appendByte(tertiaryTop - (count3-1));
                     } else {
                         while (count3 > coll->tertiaryBottomCount) {
-                            tertiaries.Append((uint8_t)(tertiaryBottom + coll->tertiaryBottomCount));
+                            tertiaries.appendByte(tertiaryBottom + coll->tertiaryBottomCount);
                             count3 -= (uint32_t)coll->tertiaryBottomCount;
                         }
-                        tertiaries.Append((uint8_t)(tertiaryBottom + (count3-1)));
+                        tertiaries.appendByte(tertiaryBottom + (count3-1));
                     }
                     count3 = 0;
                 }
-                tertiaries.Append(tertiary);
+                tertiaries.appendByte(tertiary);
             }
         }
     }
 
+    UBool ok = TRUE;
     if(U_SUCCESS(*status)) {
         /* we have done all the CE's, now let's put them together to form a key */
         if (count2 > 0) {
             while (count2 > UCOL_BOT_COUNT2) {
-                secondaries.Append((uint8_t)(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2));
+                secondaries.appendByte(UCOL_COMMON_BOT2 + UCOL_BOT_COUNT2);
                 count2 -= (uint32_t)UCOL_BOT_COUNT2;
             }
-            secondaries.Append((uint8_t)(UCOL_COMMON_BOT2 + (count2-1)));
+            secondaries.appendByte(UCOL_COMMON_BOT2 + (count2-1));
         }
+        ok &= secondaries.isOk();
         result.Append(UCOL_LEVELTERMINATOR);
-        result.Append(secondaries);
+        secondaries.appendTo(result);
 
         if (count3 > 0) {
             if (coll->tertiaryCommon != UCOL_COMMON3_NORMAL) {
                 while (count3 >= coll->tertiaryTopCount) {
-                    tertiaries.Append((uint8_t)(tertiaryTop - coll->tertiaryTopCount));
+                    tertiaries.appendByte(tertiaryTop - coll->tertiaryTopCount);
                     count3 -= (uint32_t)coll->tertiaryTopCount;
                 }
-                tertiaries.Append((uint8_t)(tertiaryTop - count3));
+                tertiaries.appendByte(tertiaryTop - count3);
             } else {
                 while (count3 > coll->tertiaryBottomCount) {
-                    tertiaries.Append((uint8_t)(tertiaryBottom + coll->tertiaryBottomCount));
+                    tertiaries.appendByte(tertiaryBottom + coll->tertiaryBottomCount);
                     count3 -= (uint32_t)coll->tertiaryBottomCount;
                 }
-                tertiaries.Append((uint8_t)(tertiaryBottom + (count3-1)));
+                tertiaries.appendByte(tertiaryBottom + (count3-1));
             }
         }
+        ok &= tertiaries.isOk();
         result.Append(UCOL_LEVELTERMINATOR);
-        result.Append(tertiaries);
+        tertiaries.appendTo(result);
 
         result.Append(0);
     }
@@ -5216,9 +5252,8 @@ ucol_calcSortKeySimpleTertiary(const    UCollator    *coll,
     /* To avoid memory leak, free the offset buffer if necessary. */
     ucol_freeOffsetBuffer(&s);
 
-    if (U_SUCCESS(*status) && !result.IsOk()) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    }
+    ok &= result.IsOk();
+    if(!ok && U_SUCCESS(*status)) { *status = U_MEMORY_ALLOCATION_ERROR; }
 }
 
 static inline
