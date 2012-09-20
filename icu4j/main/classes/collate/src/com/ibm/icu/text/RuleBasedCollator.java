@@ -824,6 +824,12 @@ public final class RuleBasedCollator extends Collator {
      * Returns current rules. The argument defines whether full rules (UCA + tailored) rules are returned or just the
      * tailoring.
      * 
+     * <p>The "UCA rules" are an <i>approximation</i> of the root collator's sort order.
+     * They are almost never used or useful at runtime and can be removed from the data.
+     * See <a href="http://userguide.icu-project.org/collation/customization#TOC-Building-on-Existing-Locales">User Guide:
+     * Collation Customization, Building on Existing Locales</a>
+     *
+     * <p>{@link #getRules()} should normally be used instead.
      * @param fullrules
      *            true if the rules that defines the full set of collation order is required, otherwise false for
      *            returning only the tailored rules
@@ -2076,7 +2082,7 @@ public final class RuleBasedCollator extends Collator {
                 }
                 if (elements == null) {
                     // either collation keyword was not supplied or
-                    // the keyword was valid - use default collation for the locale
+                    // the keyword was invalid - use default collation for the locale
 
                     // collations/default should always give a string back
                     // keyword for the real collation data
