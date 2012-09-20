@@ -457,9 +457,13 @@ public:
     /**
      * Returns current rules. Delta defines whether full rules are returned or
      * just the tailoring.
+     *
+     * getRules(void) should normally be used instead.
+     * See http://userguide.icu-project.org/collation/customization#TOC-Building-on-Existing-Locales
      * @param delta one of UCOL_TAILORING_ONLY, UCOL_FULL_RULES.
      * @param buffer UnicodeString to store the result rules
      * @stable ICU 2.2
+     * @see UCOL_FULL_RULES
      */
     void getRules(UColRuleOption delta, UnicodeString &buffer);
 
