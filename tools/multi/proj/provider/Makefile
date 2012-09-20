@@ -7,6 +7,7 @@ all: glurens ii plugs testprog
 PLUG_EXTRA_DEPS=
 UNAME=$(shell uname)
 
+SOBJ=ao
 ifeq ($(UNAME),Linux)
 LIBPATH_VAR=LD_LIBRARY_PATH
 PLUG_EXTRA_LDFLAGS=-fPIC
@@ -20,8 +21,16 @@ PLUG_EXTRA_LDFLAGS=-exported_symbols_list $(GLUE_EXPORT) -dynamiclib -dynamic
 PLUG_EXTRA_DEPS+=$(GLUE_EXPORT)
 PLUGLIB_SO=dylib
 else
+ifeq ($(UNAME),AIX)
+LIBPATH_VAR=LIBPATH
+#PLUG_EXTRA_LDFLAGS=-exported_symbols_list $(GLUE_EXPORT) -dynamiclib -dynamic
+PLUG_EXTRA_DEPS+=$(GLUE_EXPORT)
+PLUGLIB_SO=a
+SOBJ=o
+else
 $(warning **********************************)
 $(warning this script may not know how to handle your $(UNAME) system)
+endif
 endif
 endif
 
@@ -40,7 +49,7 @@ PLUGLIB_NAME=libicuprov.$(PLUGLIB_MAJ).$(PLUGLIB_SO)
 #GLOUT_ICU=$(ICU_TARBALLS_VERS:%=$(GLOUT)/%/$(OK))
 PLUGLIB_AVAILABLE=$(shell echo $(PROVIDER_AVAILABLE) | tr '.' '_')
 PLUGLIB_AVAILABLE_DATA=$(PLUGLIB_AVAILABLE:%=$(BUILD)/%/data/out/tmp/*.o)
-PLUGLIB_AVAILABLE_STATICS=$(PLUGLIB_AVAILABLE:%=$(BUILD)/%/[ci]*/*.ao)
+PLUGLIB_AVAILABLE_STATICS=$(PLUGLIB_AVAILABLE:%=$(BUILD)/%/[ci]*/*.$(SOBJ))
 PLUGLIB_OUTLIBS=$(PLUGLIB:%=$(OUT)/%/lib/$(PLUGLIB_NAME))
 
 
@@ -113,6 +122,7 @@ ICU_CONFIG_CC=--cc $(ICU_CONFIG_COMMON) --cflags
 ICU_CONFIG_CXX=--cxx $(ICU_CONFIG_COMMON) --cxxflags
 
 include Makefile.local
+
 PLUGLIB=$(shell echo $(PROVIDER_TARGET)  | tr '.' '_' )
 PLUGLIB_MAJ=$(shell  ./icu2symver.sh $(PLUGLIB))
 
@@ -270,7 +280,7 @@ $(SRC)/%/ok: $(ICUS)/icu4c-%-src.tgz
 	-[ -d $(SRC)/$* ] && rm -rf $(SRC)/$*
 	@echo "Unpacking" $*
 	mkdir -p $(SRC)/$*
-	( cd $(SRC)/$* && tar xfpz $(TOP)/$(ICUS)/icu4c-$*-src.tgz )
+	( cd $(SRC)/$* && gunzip -d < $(TOP)/$(ICUS)/icu4c-$*-src.tgz | tar xvfp - )
 	@echo Should patch $* here
 	touch $@
 
@@ -286,16 +296,16 @@ $(BUILD)/%/config.status: $(SRC)/%/ok
 $(BUILD)/%/ok: $(BUILD)/%/config.status
 	@echo "Building" $*
 	( $(MAKE)  $(MOPTS) -C $(BUILD)/$* all $(MAKE_XTRA_OPTS) )
-	@if [ ! -f $(BUILD)/$*/common/putil.ao ]; \
+	@if [ ! -f $(BUILD)/$*/common/putil.$(SOBJ) ]; \
 	then \
 		echo re-unpacking $(BUILD)/$*/common ; \
 		( cd $(BUILD)/$*/common && ar xf ../lib/libsicuuc.a || echo could not unpack ../lib/libsicuuc.a ) ; \
 		echo re-unpacking $(BUILD)/$*/i18n ; \
 		( cd $(BUILD)/$*/i18n && ar xf ../lib/libsicui18n.a || echo could not unpack ../lib/libsicui18n.a ) ; \
 	fi
-	@if [ ! -f $(BUILD)/$*/common/putil.ao ]; \
+	@if [ ! -f $(BUILD)/$*/common/putil.$(SOBJ) ]; \
 	then \
-		echo ERROR: still could not find $(BUILD)/$*/common/putil.ao - build may fail.; \
+		echo ERROR: still could not find $(BUILD)/$*/common/putil.$(SOBJ) - build may fail.; \
 	fi
 	-rm -f $(BUILD)/$*/i18n/uregex*.* $(BUILD)/$*/i18n/uspoof*.*o*
 	touch $@

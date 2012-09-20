@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright (C) 2010-2012 IBM Corporation and Others, All Rights Reserved.
 
 if [ $# -eq 1 ];
