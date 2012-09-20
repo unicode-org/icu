@@ -515,7 +515,7 @@ public:
      * @param status the error code status.
      * @return the collation key of the string based on the collation rules.
      * @see CollationKey#compare
-     * @deprecated ICU 2.8 Use getSortKey(...) instead
+     * @stable ICU 2.0
      */
     virtual CollationKey& getCollationKey(const UnicodeString&  source,
                                           CollationKey& key,
@@ -535,7 +535,7 @@ public:
      * @param status the error code status.
      * @return the collation key of the string based on the collation rules.
      * @see CollationKey#compare
-     * @deprecated ICU 2.8 Use getSortKey(...) instead
+     * @stable ICU 2.0
      */
     virtual CollationKey& getCollationKey(const UChar*source,
                                           int32_t sourceLength,
