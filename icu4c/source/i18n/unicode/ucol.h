@@ -334,9 +334,19 @@ typedef enum {
  *  @stable ICU 2.0
  */
 typedef enum {
-  /** Retrieve tailoring only */
+  /**
+   * Retrieves the tailoring rules only.
+   * Same as calling the version of getRules() without UColRuleOption.
+   * @stable ICU 2.0
+   */
   UCOL_TAILORING_ONLY, 
-  /** Retrieve UCA rules and tailoring */
+  /**
+   * Retrieves the "UCA rules" concatenated with the tailoring rules.
+   * The "UCA rules" are an <i>approximation</i> of the root collator's sort order.
+   * They are almost never used or useful at runtime and can be removed from the data.
+   * See http://userguide.icu-project.org/collation/customization#TOC-Building-on-Existing-Locales
+   * @stable ICU 2.0
+   */
   UCOL_FULL_RULES 
 } UColRuleOption ;
 
@@ -1193,12 +1203,16 @@ ucol_safeClone(const UCollator *coll,
  * Returns current rules. Delta defines whether full rules are returned or just the tailoring. 
  * Returns number of UChars needed to store rules. If buffer is NULL or bufferLen is not enough 
  * to store rules, will store up to available space.
+ *
+ * ucol_getRules() should normally be used instead.
+ * See http://userguide.icu-project.org/collation/customization#TOC-Building-on-Existing-Locales
  * @param coll collator to get the rules from
  * @param delta one of UCOL_TAILORING_ONLY, UCOL_FULL_RULES. 
  * @param buffer buffer to store the result in. If NULL, you'll get no rules.
- * @param bufferLen lenght of buffer to store rules in. If less then needed you'll get only the part that fits in.
+ * @param bufferLen length of buffer to store rules in. If less than needed you'll get only the part that fits in.
  * @return current rules
  * @stable ICU 2.0
+ * @see UCOL_FULL_RULES
  */
 U_STABLE int32_t U_EXPORT2 
 ucol_getRulesEx(const UCollator *coll, UColRuleOption delta, UChar *buffer, int32_t bufferLen);
