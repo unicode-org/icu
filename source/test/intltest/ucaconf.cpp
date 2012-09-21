@@ -157,9 +157,9 @@ skipLineBecauseOfBug(const UChar *s, int32_t length, uint32_t flags) {
     if((flags & IS_SHIFTED) != 0 && length >= 2 && s[0] == 0xfffe) {
         return TRUE;
     }
-    // TODO: Fix UCARules.txt, ICU ticket #9514.
+    // TODO: Fix tailoring builder, ICU ticket #9593.
     UChar c;
-    if((flags & FROM_RULES) != 0 && length >= 2 && 0xec0 <= (c = s[0]) && c <= 0xec4) {
+    if((flags & FROM_RULES) != 0 && length >= 2 && ((c = s[1]) == 0xedc || c == 0xedd)) {
         return TRUE;
     }
     return FALSE;
