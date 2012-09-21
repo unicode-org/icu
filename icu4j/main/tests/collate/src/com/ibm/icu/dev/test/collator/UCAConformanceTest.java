@@ -198,8 +198,8 @@ public class UCAConformanceTest extends TestFmwk {
         if((flags & FROM_RULES) != 0 && 0xac00 <= (c = s.charAt(0)) && c <= 0xd7a3) {
             return true;
         }
-        // TODO: Fix UCARules.txt.
-        if((flags & FROM_RULES) != 0 && s.length() >= 2 && 0xec0 <= (c = s.charAt(0)) && c <= 0xec4) {
+        // TODO: Fix tailoring builder, ICU ticket #9593.
+        if((flags & FROM_RULES) != 0 && s.length() >= 2 && ((c = s.charAt(1)) == 0xedc || c == 0xedd)) {
             return true;
         }
         return false;
