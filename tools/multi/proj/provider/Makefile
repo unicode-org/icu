@@ -123,6 +123,14 @@ ICU_CONFIG_CXX=--cxx $(ICU_CONFIG_COMMON) --cxxflags
 
 include Makefile.local
 
+
+# Usage:  $(call SILENT_COMPILE,logfile,cmd)
+ifndef VERBOSE
+	LOG_COMPILE=echo build with VERBOSE=1 to unhide compile ;  ($(2) 2>&1 > $(1) || (echo "Compile failed, see logfile in $(1) for details." ;false))
+else
+	LOG_COMPILE=$(2) 2>&1 | tee $(1)
+endif
+
 PLUGLIB=$(shell echo $(PROVIDER_TARGET)  | tr '.' '_' )
 PLUGLIB_MAJ=$(shell  ./icu2symver.sh $(PLUGLIB))
 
@@ -143,11 +151,13 @@ $(ALLDIRS):
 
 # Build r$(PLUGLIB) from ../../c
 $(PLUGLIB_ICU_CONFIG):
-	$(MAKE) -C ../../c ICUVERS=$(PLUGLIB) ricus
+	@echo ICU $(PLUGLIB) "(plugin) building..."
+	$(call LOG_COMPILE,../../c/ricus$(PLUGLIB).log,$(MAKE) -C ../../c ICUVERS=$(PLUGLIB) ricus)
 
 # build the glue objects for TARGET
 # used to be %/* instead of $(PLUGLIB) - now, wire it down to pluglib.
 $(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG) $(GL_FE_FILES)
+	@echo ICU $* "(plugin) building glue.."
 	-mkdir $(GLOUT)/$(PLUGLIB)
 #	$(shell $(BUILD)/$(PLUGLIB)/config/$(ICU_CONFIG) $(ICU_CONFIG_CC)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$(PLUGLIB) -o $(GLOUT)/$(PLUGLIB)/gl_be_c_$(PLUGLIB).o $(GL_BE_C:%.c=$(GLUE)/%.c)
 #	$(shell $(BUILD)/$(PLUGLIB)/config/$(ICU_CONFIG) $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$(PLUGLIB) -o $(GLOUT)/$(PLUGLIB)/gl_be_cxx_$(PLUGLIB).o $(GL_BE_CXX:%.cpp=$(GLUE)/%.cpp)
@@ -156,9 +166,9 @@ $(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG) $(GL_FE_F
 # for each version..  build all OTHER FE files
 # TODO: check is unnecessary, not permitted.
 # TODO: change to depend instead of for list. 
-	@echo GL_PARTS=$(GL_PARTS)
-	@echo GL_FE_CXX=$(GL_FE_CXX)
-	@echo PARTSUFF=$(PARTSUFF)
+#	@echo GL_PARTS=$(GL_PARTS)
+#	@echo GL_FE_CXX=$(GL_FE_CXX)
+#	@echo PARTSUFF=$(PARTSUFF)
 	@for ver in $(PLUGLIB_AVAILABLE) ; \
 	do \
 		echo building $$ver for $(PLUGLIB) ; \
@@ -267,26 +277,26 @@ $(BUILD)/%/$(GLUREN_H): $(BUILD)/%/ok Makefile makegluren.sh
 $(BUILD)/%/config/$(ICU_CONFIG): $(BUILD)/%/config/$(ICU_CONFIG_ORIG) icu-config.sed $(BUILD)/%/ok 
 	sed -f icu-config.sed < $(BUILD)/$*/config/$(ICU_CONFIG_ORIG) >  $(BUILD)/$*/config/$(ICU_CONFIG) && chmod a+rx  $(BUILD)/$*/config/$(ICU_CONFIG)
 
-# smiling now.
 # perform installation
 $(INST)/%/ok: $(BUILD)/%/ok
+	echo ICU $* "(backend) installing..."
 	echo "INST " "[" $* "]"
 	mkdir -p $(INST)/$*
-	-$(MAKE) $(MOPTS) -C $(BUILD)/$* install $(MAKE_INSTALL_XTRA_OPTS) 
+	-$(call LOG_COMPILE,$(BUILD)$*/ok.log,$(MAKE) $(MOPTS) -C $(BUILD)/$* install $(MAKE_INSTALL_XTRA_OPTS))
 	touch $@
 
 # unpack ICU and patch
 $(SRC)/%/ok: $(ICUS)/icu4c-%-src.tgz
 	-[ -d $(SRC)/$* ] && rm -rf $(SRC)/$*
-	@echo "Unpacking" $*
+	@echo ICU $* "(backend) unpacking..."
 	mkdir -p $(SRC)/$*
-	( cd $(SRC)/$* && gunzip -d < $(TOP)/$(ICUS)/icu4c-$*-src.tgz | tar xvfp - )
+	$(call LOG_COMPILE,$(SRC)/$*/unpack.log,( cd $(SRC)/$* && gunzip -d < $(TOP)/$(ICUS)/icu4c-$*-src.tgz | tar xvfp - ))
 	@echo Should patch $* here
 	touch $@
 
 # config 
 $(BUILD)/%/config.status: $(SRC)/%/ok
-	@echo "Configging" $*
+	@echo ICU $* "(backend) configuring..."
 	-[ -d $(BUILD)/$* ] && rm -rf $(BUILD)/$*
 	mkdir -p $(BUILD)/$*
 	( cd $(BUILD)/$* && env CFLAGS="$(CFLAGS) $(PBLD_EXTRA_FLAGS)" CXXFLAGS="$(CXXFLAGS) $(PBLD_EXTRA_FLAGS)" $(shell $(SUPERCONF) $(TOP)/$(SRC)/$*/$(SOURCE) $*) $(CONFIGURE_OPTS) --srcdir=$(TOP)/$(SRC)/$*/$(SOURCE) --prefix=$(TOP)/$(INST)/$* )
@@ -294,8 +304,8 @@ $(BUILD)/%/config.status: $(SRC)/%/ok
 # build 
 # note: regex had renaming problems, and spoof depends on regex. Nuke them.
 $(BUILD)/%/ok: $(BUILD)/%/config.status
-	@echo "Building" $*
-	( $(MAKE)  $(MOPTS) -C $(BUILD)/$* all $(MAKE_XTRA_OPTS) )
+	@echo ICU $* "(backend) building.."
+	$(call LOG_COMPILE,$(BUILD)/$*/ok2.log,( $(MAKE)  $(MOPTS) -C $(BUILD)/$* all $(MAKE_XTRA_OPTS) ))
 	@if [ ! -f $(BUILD)/$*/common/putil.$(SOBJ) ]; \
 	then \
 		echo re-unpacking $(BUILD)/$*/common ; \
