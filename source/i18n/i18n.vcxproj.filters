@@ -777,6 +777,12 @@
     <ClInclude Include="numsys_impl.h">
       <Filter>formatting</Filter>
     </ClInclude>
+    <ClInclude Include="dcfmtimp.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="selfmtimpl.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="i18n.rc">

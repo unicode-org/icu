@@ -578,7 +578,9 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="dcfmtimp.h" />
     <ClInclude Include="numsys_impl.h" />
+    <ClInclude Include="selfmtimpl.h" />
     <ClInclude Include="tzgnames.h" />
     <ClInclude Include="tznames_impl.h" />
     <ClInclude Include="ucol_bld.h" />
