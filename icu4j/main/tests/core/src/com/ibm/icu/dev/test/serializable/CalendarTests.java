@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2007, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -14,6 +14,7 @@ import com.ibm.icu.util.BuddhistCalendar;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ChineseCalendar;
 import com.ibm.icu.util.CopticCalendar;
+import com.ibm.icu.util.DangiCalendar;
 import com.ibm.icu.util.EthiopicCalendar;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.HebrewCalendar;
@@ -22,6 +23,7 @@ import com.ibm.icu.util.IslamicCalendar;
 import com.ibm.icu.util.JapaneseCalendar;
 import com.ibm.icu.util.TaiwanCalendar;
 import com.ibm.icu.util.TimeZone;
+import com.ibm.icu.util.ULocale;
 
 /**
  * @author emader
@@ -104,6 +106,22 @@ public class CalendarTests
             
             for (int i = 0; i < locales.length; i += 1) {
                 calendars[i] = new CopticCalendar(ast, locales[i]);
+            }
+            
+            return calendars; 
+        }
+    }
+
+    static class DangiCalendarHandler extends CalendarHandler
+    {
+        public Object[] getTestObjects()
+        {
+            Locale locales[] = SerializableTest.getLocales();
+            TimeZone kst = TimeZone.getTimeZone("Asia/Seoul");
+            DangiCalendar calendars[] = new DangiCalendar[locales.length];
+            
+            for (int i = 0; i < locales.length; i += 1) {
+                calendars[i] = new DangiCalendar(kst, ULocale.forLocale(locales[i]));
             }
             
             return calendars; 

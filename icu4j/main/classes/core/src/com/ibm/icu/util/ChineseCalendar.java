@@ -102,6 +102,17 @@ public class ChineseCalendar extends Calendar {
     // usage will be to have one instance of ChineseCalendar at a time.
  
     /**
+     * The start year of this Chinese calendar instance. 
+     */
+    private int epochYear;
+
+    /**
+     * The zone used for the astronomical calculation of this Chinese
+     * calendar instance.
+     */
+    private TimeZone zoneAstro;
+
+    /**
      * We have one instance per object, and we don't synchronize it because
      * Calendar doesn't support multithreaded execution in the first place.
      */
@@ -135,8 +146,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 2.8
      */
     public ChineseCalendar() {
-        super();
-        setTimeInMillis(System.currentTimeMillis());
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINESE_EPOCH_YEAR, CHINA_ZONE);
     }
 
     /**
@@ -146,7 +156,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(Date date) {
-        super();
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINESE_EPOCH_YEAR, CHINA_ZONE);
         setTime(date);
     }
 
@@ -164,19 +174,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(int year, int month, int isLeapMonth, int date) {
-        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
-
-        // We need to set the current time once to initialize the ChineseCalendar's
-        // ERA field to be the current era.
-        setTimeInMillis(System.currentTimeMillis());
-        // Then we need to clean up time fields
-        this.set(MILLISECONDS_IN_DAY, 0);
-
-        // Then set the given field values.
-        this.set(YEAR, year);
-        this.set(MONTH, month);
-        this.set(IS_LEAP_MONTH, isLeapMonth);
-        this.set(DATE, date);
+        this(year, month, isLeapMonth, date, 0, 0, 0);
     }
 
     /**
@@ -201,12 +199,12 @@ public class ChineseCalendar extends Calendar {
     public ChineseCalendar(int year, int month, int isLeapMonth, int date, int hour,
                              int minute, int second)
     {
-        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT));
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINESE_EPOCH_YEAR, CHINA_ZONE);
 
-        // We need to set the current time once to initialize the ChineseCalendar's
-        // ERA field to be the current era.
-        setTimeInMillis(System.currentTimeMillis());
-        // Then set 0 to millisecond field
+        // The current time is set at this point, so ERA field is already
+        // set to the current era.
+
+        // Then we need to clean up time fields
         this.set(MILLISECOND, 0);
 
         // Then, set the given field values.
@@ -235,21 +233,7 @@ public class ChineseCalendar extends Calendar {
      */ 
     public ChineseCalendar(int era, int year, int month, int isLeapMonth, int date) 
     { 
-        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT)); 
-
-        // We need to set the current time once to initialize the ChineseCalendar's 
-        // ERA field to be the current era. 
-        setTimeInMillis(System.currentTimeMillis()); 
-
-        // Then we need to clean up time fields 
-        this.set(MILLISECONDS_IN_DAY, 0); 
-
-        // Then set the given field values. 
-        this.set(ERA, era); 
-        this.set(YEAR, year); 
-        this.set(MONTH, month); 
-        this.set(IS_LEAP_MONTH, isLeapMonth); 
-        this.set(DATE, date); 
+        this(era, year, month, isLeapMonth, 0, 0, 0);
     } 
   
     /** 
@@ -275,13 +259,9 @@ public class ChineseCalendar extends Calendar {
     public ChineseCalendar(int era, int year, int month, int isLeapMonth, int date, int hour, 
                            int minute, int second) 
     { 
-        super(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT)); 
+        this(TimeZone.getDefault(), ULocale.getDefault(Category.FORMAT), CHINESE_EPOCH_YEAR, CHINA_ZONE);
 
-        // We need to set the current time once to initialize the ChineseCalendar's 
-        // ERA field to be the current era. 
-        setTimeInMillis(System.currentTimeMillis()); 
-
-        // Then set 0 to millisecond field 
+        // Set 0 to millisecond field 
         this.set(MILLISECOND, 0); 
 
         // Then, set the given field values. 
@@ -302,8 +282,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(Locale aLocale) {
-        this(TimeZone.getDefault(), aLocale);
-        setTimeInMillis(System.currentTimeMillis());
+        this(TimeZone.getDefault(), ULocale.forLocale(aLocale), CHINESE_EPOCH_YEAR, CHINA_ZONE);
     }
 
     /**
@@ -314,8 +293,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(TimeZone zone) {
-        super(zone, ULocale.getDefault(Category.FORMAT));
-        setTimeInMillis(System.currentTimeMillis());
+        this(zone, ULocale.getDefault(Category.FORMAT), CHINESE_EPOCH_YEAR, CHINA_ZONE);
     }
 
     /**
@@ -326,8 +304,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 2.8
      */
     public ChineseCalendar(TimeZone zone, Locale aLocale) {
-        super(zone, aLocale);
-        setTimeInMillis(System.currentTimeMillis());
+        this(zone, ULocale.forLocale(aLocale), CHINESE_EPOCH_YEAR, CHINA_ZONE);
     }
 
     /**
@@ -338,8 +315,7 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 4.0
      */
     public ChineseCalendar(ULocale locale) {
-        this(TimeZone.getDefault(), locale);
-        setTimeInMillis(System.currentTimeMillis());
+        this(TimeZone.getDefault(), locale, CHINESE_EPOCH_YEAR, CHINA_ZONE);
     }
 
     /**
@@ -350,7 +326,20 @@ public class ChineseCalendar extends Calendar {
      * @stable ICU 3.2
      */
     public ChineseCalendar(TimeZone zone, ULocale locale) {
+        this(zone, locale, CHINESE_EPOCH_YEAR, CHINA_ZONE);
+    }
+
+    /**
+     * Construct a <code>ChineseCalenar</code> based on the current time
+     * with the given time zone, the locale, the epoch year and the time zone
+     * used for astronomical calculation.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected ChineseCalendar(TimeZone zone, ULocale locale, int epochYear, TimeZone zoneAstroCalc) {
         super(zone, locale);
+        this.epochYear = epochYear;
+        this.zoneAstro = zoneAstroCalc;
         setTimeInMillis(System.currentTimeMillis());
     }
 
@@ -455,7 +444,8 @@ public class ChineseCalendar extends Calendar {
             year = internalGet(EXTENDED_YEAR, 1); // Default to year 1
         } else {
             int cycle = internalGet(ERA, 1) - 1; // 0-based cycle
-            year = cycle * 60 + internalGet(YEAR, 1);
+            // adjust to the instance specific epoch
+            year = cycle * 60 + internalGet(YEAR, 1) - (epochYear - CHINESE_EPOCH_YEAR);
         }
         return year;
     }
@@ -652,11 +642,11 @@ public class ChineseCalendar extends Calendar {
     private static final int CHINESE_EPOCH_YEAR = -2636; // Gregorian year
 
     /**
-     * The offset from GMT in milliseconds at which we perform astronomical
-     * computations.  Some sources use a different historically accurate
+     * The time zone used for performing astronomical computations.
+     * Some sources use a different historically accurate
      * offset of GMT+7:45:40 for years before 1929; we do not do this.
      */
-    private static final long CHINA_OFFSET = 8*ONE_HOUR;
+    private static final TimeZone CHINA_ZONE = new SimpleTimeZone(8 * ONE_HOUR, "CHINA_ZONE").freeze();
 
     /**
      * Value to be added or subtracted from the local days of a new moon to
@@ -667,20 +657,28 @@ public class ChineseCalendar extends Calendar {
 
     /**
      * Convert local days to UTC epoch milliseconds.
-     * @param days days after January 1, 1970 0:00 Asia/Shanghai
+     * This is not an accurate conversion in terms that getTimezoneOffset 
+     * takes the milliseconds in GMT (not local time).  In theory, more 
+     * accurate algorithm can be implemented but practically we do not need 
+     * to go through that complication as long as the historically timezone 
+     * changes did not happen around the 'tricky' new moon (new moon around 
+     * the midnight). 
+     *  
+     * @param days days after January 1, 1970 0:00 in the astronomical base zone
      * @return milliseconds after January 1, 1970 0:00 GMT
      */
-    private static final long daysToMillis(int days) {
-        return (days * ONE_DAY) - CHINA_OFFSET;
+    private final long daysToMillis(int days) {
+        long millis = days * ONE_DAY;
+        return millis - zoneAstro.getOffset(millis);
     }
 
     /**
      * Convert UTC epoch milliseconds to local days.
      * @param millis milliseconds after January 1, 1970 0:00 GMT
-     * @return days after January 1, 1970 0:00 Asia/Shanghai
+     * @return days days after January 1, 1970 0:00 in the astronomical base zone
      */
-    private static final int millisToDays(long millis) {
-        return (int) floorDivide(millis + CHINA_OFFSET, ONE_DAY);
+    private final int millisToDays(long millis) {
+        return (int) floorDivide(millis + zoneAstro.getOffset(millis), ONE_DAY);
     }
 
     //------------------------------------------------------------------
@@ -787,9 +785,9 @@ public class ChineseCalendar extends Calendar {
     /**
      * Return true if there is a leap month on or after month newMoon1 and
      * at or before month newMoon2.
-     * @param newMoon1 days after January 1, 1970 0:00 Asia/Shanghai of a
+     * @param newMoon1 days after January 1, 1970 0:00 astronomical base zone of a
      * new moon
-     * @param newMoon2 days after January 1, 1970 0:00 Asia/Shanghai of a
+     * @param newMoon2 days after January 1, 1970 0:00 astronomical base zone of a
      * new moon
      */
     private boolean isLeapMonthBetween(int newMoon1, int newMoon2) {
@@ -841,7 +839,7 @@ public class ChineseCalendar extends Calendar {
      * <code>handleComputeMonthStart()</code>.
      *
      * <p>As a side effect, this method sets {@link #isLeapYear}.
-     * @param days days after January 1, 1970 0:00 Asia/Shanghai of the
+     * @param days days after January 1, 1970 0:00 astronomical base zone of the
      * date to compute fields for
      * @param gyear the Gregorian year of the given date
      * @param gmonth the Gregorian month of the given date
@@ -891,18 +889,21 @@ public class ChineseCalendar extends Calendar {
 
         if (setAllFields) {
 
-            int year = gyear - CHINESE_EPOCH_YEAR;
+            // Extended year and cycle year is based on the epoch year
+            int extended_year = gyear - epochYear;
+            int cycle_year = gyear - CHINESE_EPOCH_YEAR;
             if (month < 11 ||
                 gmonth >= JULY) {
-                year++;
+                extended_year++;
+                cycle_year++;
             }
             int dayOfMonth = days - thisMoon + 1;
 
-            internalSet(EXTENDED_YEAR, year);
+            internalSet(EXTENDED_YEAR, extended_year);
 
             // 0->0,60  1->1,1  60->1,60  61->2,1  etc.
             int[] yearOfCycle = new int[1];
-            int cycle = floorDivide(year-1, 60, yearOfCycle);
+            int cycle = floorDivide(cycle_year-1, 60, yearOfCycle);
             internalSet(ERA, cycle+1);
             internalSet(YEAR, yearOfCycle[0]+1);
 
@@ -927,7 +928,7 @@ public class ChineseCalendar extends Calendar {
     /**
      * Return the Chinese new year of the given Gregorian year.
      * @param gyear a Gregorian year
-     * @return days after January 1, 1970 0:00 Asia/Shanghai of the
+     * @return days after January 1, 1970 0:00 astronomical base zone of the
      * Chinese new year of the given year (this will be a new moon)
      */
     private int newYear(int gyear) {
@@ -977,7 +978,7 @@ public class ChineseCalendar extends Calendar {
             month = rem[0];
         }
 
-        int gyear = eyear + CHINESE_EPOCH_YEAR - 1; // Gregorian year
+        int gyear = eyear + epochYear - 1; // Gregorian year
         int newYear = newYear(gyear);
         int newMoon = newMoonNear(newYear + month * 29, true);
         
@@ -1022,8 +1023,11 @@ public class ChineseCalendar extends Calendar {
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException
     {
+        epochYear = CHINESE_EPOCH_YEAR;
+        zoneAstro = CHINA_ZONE;
+
         stream.defaultReadObject();
-        
+
         /* set up the transient caches... */
         astro = new CalendarAstronomer();
         winterSolsticeCache = new CalendarCache();
