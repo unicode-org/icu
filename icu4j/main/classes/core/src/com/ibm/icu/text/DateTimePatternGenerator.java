@@ -184,6 +184,12 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         if ( calendarTypeToUse == null ) {
             calendarTypeToUse = "gregorian"; // fallback
         }
+
+        // TODO: Until CLDR supports "dangi" calendar type
+        if (calendarTypeToUse.equalsIgnoreCase("dangi")) {
+            calendarTypeToUse = "chinese";
+        }
+
         // Get data for that calendar
         ICUResourceBundle calBundle = rb.getWithFallback("calendar");
         ICUResourceBundle calTypeBundle = calBundle.getWithFallback(calendarTypeToUse);

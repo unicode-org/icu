@@ -3391,6 +3391,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 new ULocale("en@calendar=islamic"),
                 new ULocale("ja_JP@calendar=japanese"),
                 new ULocale("zh_Hans_CN@calendar=bogus"),
+                new ULocale("ko_KR@calendar=dangi"),
         };
 
         SimpleDateFormat[] formatters = new SimpleDateFormat[5];
