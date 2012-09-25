@@ -454,6 +454,9 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="localsvc.h" />
+    <ClInclude Include="msvcres.h" />
+    <ClInclude Include="propname_data.h" />
     <ClInclude Include="ubidi_props.h" />
     <ClInclude Include="ubidiimp.h" />
     <CustomBuild Include="unicode\ushape.h">
@@ -536,7 +539,10 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="ubidi_props_data.h" />
     <ClInclude Include="ubrkimpl.h" />
+    <ClInclude Include="ucase_props_data.h" />
+    <ClInclude Include="uchar_props_data.h" />
     <ClInclude Include="ucol_data.h" />
     <ClInclude Include="ucol_swp.h" />
     <ClInclude Include="hash.h" />
@@ -578,6 +584,7 @@
     <ClInclude Include="utrie.h" />
     <ClInclude Include="utrie2.h" />
     <ClInclude Include="utrie2_impl.h" />
+    <ClInclude Include="utypeinfo.h" />
     <ClInclude Include="uvector.h" />
     <ClInclude Include="uvectr32.h" />
     <ClInclude Include="uvectr64.h" />
