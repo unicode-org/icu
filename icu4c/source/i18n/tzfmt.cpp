@@ -452,11 +452,11 @@ TimeZoneFormat::setTimeZoneNames(const TimeZoneNames &tznames) {
 }
 
 void
-TimeZoneFormat::setDefaultParseOptions(int32_t flags) {
+TimeZoneFormat::setDefaultParseOptions(uint32_t flags) {
     fDefParseOptionFlags = flags;
 }
 
-int32_t
+uint32_t
 TimeZoneFormat::getDefaultParseOptions(void) const {
     return fDefParseOptionFlags;
 }
