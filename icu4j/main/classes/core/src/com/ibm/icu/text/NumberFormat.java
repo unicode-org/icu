@@ -230,6 +230,7 @@ public abstract class NumberFormat extends UFormat {
      * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
      * @stable ICU 2.0
      */
+    @Override
     public StringBuffer format(Object number,
                                StringBuffer toAppendTo,
                                FieldPosition pos) {
@@ -258,6 +259,7 @@ public abstract class NumberFormat extends UFormat {
      * @see java.text.NumberFormat#parseObject(String, ParsePosition)
      * @stable ICU 2.0
      */
+    @Override
     public final Object parseObject(String source,
                                     ParsePosition parsePosition) {
         return parse(source, parsePosition);
@@ -714,53 +716,6 @@ public abstract class NumberFormat extends UFormat {
         return getInstance(inLocale, SCIENTIFICSTYLE);
     }
 
-    /**
-     * Style parameter for CompactDecimalFormat.
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
-     */
-    public enum CompactStyle {
-        /**
-         * Short version, like "1.2T"
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
-         */
-        SHORT, 
-        /**
-         * Longer version, like "1.2 trillion", if available. May return same result as SHORT if not.
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
-         */
-        LONG
-    }
-
-    /**
-     * Create a CompactDecimalFormat appropriate for a locale. The result may
-     * be affected by the number system in the locale, such as ar-u-nu-latn.
-     * 
-     * @param locale the desired locale
-     * @param style the compact style 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final CompactDecimalFormat getCompactDecimalInstance(ULocale locale, CompactStyle style) {
-        return new CompactDecimalFormat(locale, style);
-    }
-
-    /**
-     * Create a CompactDecimalFormat appropriate for a locale. The result may
-     * be affected by the number system in the locale, such as ar-u-nu-latn.
-     * 
-     * @param locale the desired locale
-     * @param style the compact style 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final CompactDecimalFormat getCompactDecimalInstance(Locale locale, CompactStyle style) {
-        return new CompactDecimalFormat(ULocale.forLocale(locale), style);
-    }
-
-
     // ===== Factory stuff =====
     /**
      * A NumberFormatFactory is used to register new number formats.  The factory
@@ -914,6 +869,7 @@ public abstract class NumberFormat extends UFormat {
          * {@inheritDoc}
          * @stable ICU 2.6
          */
+        @Override
         public final boolean visible() {
             return visible;
         }
@@ -922,6 +878,7 @@ public abstract class NumberFormat extends UFormat {
          * {@inheritDoc}
          * @stable ICU 2.6
          */
+        @Override
         public final Set<String> getSupportedLocaleNames() {
             return localeNames;
         }
@@ -1025,6 +982,7 @@ public abstract class NumberFormat extends UFormat {
      * Overrides hashCode.
      * @stable ICU 2.0
      */
+    @Override
     public int hashCode() {
         return maximumIntegerDigits * 37 + maxFractionDigits;
         // just enough fields for a reasonable distribution
@@ -1039,6 +997,7 @@ public abstract class NumberFormat extends UFormat {
      * @return true if the object is equal to this.
      * @stable ICU 2.0
      */
+    @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;
         if (this == obj)
@@ -1059,6 +1018,7 @@ public abstract class NumberFormat extends UFormat {
      * Overrides clone.
      * @stable ICU 2.0
      */
+    @Override
     public Object clone() {
         NumberFormat other = (NumberFormat) super.clone();
         return other;
@@ -1247,6 +1207,7 @@ public abstract class NumberFormat extends UFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
+    @Deprecated
     protected Currency getEffectiveCurrency() {
         Currency c = getCurrency();
         if (c == null) {
@@ -1410,6 +1371,7 @@ public abstract class NumberFormat extends UFormat {
      * @return the pattern
      * @deprecated ICU 3.4 subclassers should override getPattern(ULocale, int) instead of this method.
      */
+    @Deprecated
     protected static String getPattern(Locale forLocale, int choice) {
         return getPattern(ULocale.forLocale(forLocale), choice);
     }
@@ -1469,19 +1431,19 @@ public abstract class NumberFormat extends UFormat {
         int entry = (choice == INTEGERSTYLE) ? NUMBERSTYLE :
                 ((choice == ISOCURRENCYSTYLE || choice == PLURALCURRENCYSTYLE)?
                 CURRENCYSTYLE : choice); //[Richard/GCL]
-        
+
         ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.
         getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, forLocale);
         String[] numberPatternKeys = { "decimalFormat", "currencyFormat", "percentFormat", "scientificFormat" };
         NumberingSystem ns = NumberingSystem.getInstance(forLocale);
-        
+
         String result = null;
         try {
             result = rb.getStringWithFallback("NumberElements/" + ns.getName() + "/patterns/"+numberPatternKeys[entry]);
         } catch ( MissingResourceException ex ) {
             result = rb.getStringWithFallback("NumberElements/latn/patterns/"+numberPatternKeys[entry]);
         }
-        
+
         return result;
     }
 
@@ -1817,6 +1779,7 @@ public abstract class NumberFormat extends UFormat {
          * NumberFormat.Field values
          * @stable ICU 3.6
          */
+        @Override
         protected Object readResolve() throws InvalidObjectException {
             if (this.getName().equals(INTEGER.getName()))
                 return INTEGER;
