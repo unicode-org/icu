@@ -107,6 +107,23 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {12345678901234f, "T12"},
             {12345678901234567890f, "T12000000"},
     };
+    
+    Object[][] CsTestDataShort = {
+            {1000, "1\u00a0tis."},
+            {1500, "1,5\u00a0tis."},
+            {5000, "5\u00a0tis."},
+            {23000, "23\u00a0tis."},
+            {127123, "130\u00a0tis."},
+            {1271234, "1,3\u00a0mil."},
+            {12712345, "13\u00a0mil."},
+            {127123456, "130\u00a0mil."},
+            {1271234567f, "1,3\u00a0mld."},
+            {12712345678f, "13\u00a0mld."},
+            {127123456789f, "130\u00a0mld."},
+            {1271234567890f, "1,3\u00a0bil."},
+            {12712345678901f, "13\u00a0bil."},
+            {127123456789012f, "130\u00a0bil."},
+    };
 
     public void TestCharacterIterator() {
         CompactDecimalFormat cdf =
@@ -128,6 +145,10 @@ public class CompactDecimalFormatTest extends TestFmwk {
                 CompactDecimalFormat.getInstance(
                         ULocale.forLanguageTag("ar"), CompactStyle.LONG);
         assertEquals("Arabic Long", "٥٫٣ ألف", cdf.format(5300));
+    }
+    
+    public void TestCsShort() {
+        checkLocale(ULocale.forLanguageTag("cs"), CompactStyle.SHORT, CsTestDataShort);
     }
 
     public void TestSerbianShort() {
