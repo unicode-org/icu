@@ -689,14 +689,28 @@ DecimalFormat::DecimalFormat(const DecimalFormat &source) :
 //------------------------------------------------------------------------------
 // assignment operator
 
-static void _copy_us_ptr(UnicodeString** pdest, const UnicodeString* source) {
-    if (source == NULL) {
+template <class T>
+static void _copy_ptr(T** pdest, const T* source) {
+    if (source != NULL && *pdest != NULL) {
+        **pdest = *source;
+    } else if (*pdest != NULL) {
         delete *pdest;
         *pdest = NULL;
-    } else if (*pdest == NULL) {
-        *pdest = new UnicodeString(*source);
+    } else if (source != NULL) {
+        *pdest = new T(*source);
+    }
+    // Both source and pdest are null, don't need to do anything.
+}
+
+template <class T>
+static void _clone_ptr(T** pdest, const T* source) {
+    if (*pdest != NULL) {
+      delete *pdest;
+    }
+    if (source == NULL) {
+      *pdest = NULL;
     } else {
-        **pdest  = *source;
+      *pdest = static_cast<T*>(source->clone());
     }
 }
 
@@ -709,27 +723,18 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
         fPositiveSuffix = rhs.fPositiveSuffix;
         fNegativePrefix = rhs.fNegativePrefix;
         fNegativeSuffix = rhs.fNegativeSuffix;
-        _copy_us_ptr(&fPosPrefixPattern, rhs.fPosPrefixPattern);
-        _copy_us_ptr(&fPosSuffixPattern, rhs.fPosSuffixPattern);
-        _copy_us_ptr(&fNegPrefixPattern, rhs.fNegPrefixPattern);
-        _copy_us_ptr(&fNegSuffixPattern, rhs.fNegSuffixPattern);
-        if (rhs.fCurrencyChoice == 0) {
-            delete fCurrencyChoice;
-            fCurrencyChoice = 0;
-        } else {
-            fCurrencyChoice = (ChoiceFormat*) rhs.fCurrencyChoice->clone();
-        }
+        _copy_ptr(&fPosPrefixPattern, rhs.fPosPrefixPattern);
+        _copy_ptr(&fPosSuffixPattern, rhs.fPosSuffixPattern);
+        _copy_ptr(&fNegPrefixPattern, rhs.fNegPrefixPattern);
+        _copy_ptr(&fNegSuffixPattern, rhs.fNegSuffixPattern);
+        _clone_ptr(&fCurrencyChoice, rhs.fCurrencyChoice);
         setRoundingIncrement(rhs.getRoundingIncrement());
         fRoundingMode = rhs.fRoundingMode;
         setMultiplier(rhs.getMultiplier());
         fGroupingSize = rhs.fGroupingSize;
         fGroupingSize2 = rhs.fGroupingSize2;
         fDecimalSeparatorAlwaysShown = rhs.fDecimalSeparatorAlwaysShown;
-        if(fSymbols == NULL) {
-            fSymbols = new DecimalFormatSymbols(*rhs.fSymbols);
-        } else {
-            *fSymbols = *rhs.fSymbols;
-        }
+        _copy_ptr(&fSymbols, rhs.fSymbols);
         fUseExponentialNotation = rhs.fUseExponentialNotation;
         fExponentSignAlwaysShown = rhs.fExponentSignAlwaysShown;
         /*Bertrand A. D. Update 98.03.17*/
@@ -748,26 +753,23 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
         fFormatPattern = rhs.fFormatPattern;
         fStyle = rhs.fStyle;
         fCurrencySignCount = rhs.fCurrencySignCount;
-        if (rhs.fCurrencyPluralInfo) {
-            delete fCurrencyPluralInfo;
-            fCurrencyPluralInfo = rhs.fCurrencyPluralInfo->clone();
-        }
+        _clone_ptr(&fCurrencyPluralInfo, rhs.fCurrencyPluralInfo);
+        deleteHashForAffixPattern();
         if (rhs.fAffixPatternsForCurrency) {
             UErrorCode status = U_ZERO_ERROR;
-            deleteHashForAffixPattern();
             fAffixPatternsForCurrency = initHashForAffixPattern(status);
             copyHashForAffixPattern(rhs.fAffixPatternsForCurrency,
                                     fAffixPatternsForCurrency, status);
         }
+        deleteHashForAffix(fAffixesForCurrency);
         if (rhs.fAffixesForCurrency) {
             UErrorCode status = U_ZERO_ERROR;
-            deleteHashForAffix(fAffixesForCurrency);
             fAffixesForCurrency = initHashForAffixPattern(status);
             copyHashForAffix(rhs.fAffixesForCurrency, fAffixesForCurrency, status);
         }
+        deleteHashForAffix(fPluralAffixesForCurrency);
         if (rhs.fPluralAffixesForCurrency) {
             UErrorCode status = U_ZERO_ERROR;
-            deleteHashForAffix(fPluralAffixesForCurrency);
             fPluralAffixesForCurrency = initHashForAffixPattern(status);
             copyHashForAffix(rhs.fPluralAffixesForCurrency, fPluralAffixesForCurrency, status);
         }
@@ -4930,7 +4932,7 @@ DecimalFormat::applyPatternWithoutExpandAffix(const UnicodeString& pattern,
     if (fNegPrefixPattern == NULL ||
         (*fNegPrefixPattern == *fPosPrefixPattern
          && *fNegSuffixPattern == *fPosSuffixPattern)) {
-        _copy_us_ptr(&fNegSuffixPattern, fPosSuffixPattern);
+        _copy_ptr(&fNegSuffixPattern, fPosSuffixPattern);
         if (fNegPrefixPattern == NULL) {
             fNegPrefixPattern = new UnicodeString();
             /* test for NULL */
