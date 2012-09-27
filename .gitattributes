@@ -1733,6 +1733,8 @@ icu4c/source/data/makedata.vcxproj -text
 icu4c/source/data/makedata.vcxproj.filters -text
 icu4c/source/data/mappings/convrtrs.txt svneol=native#text/plain
 icu4c/source/data/misc/currencyNumericCodes.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/misc/dayPeriods.txt svneol=native#text/plain
+icu4c/source/data/misc/genderList.txt svneol=native#text/plain
 icu4c/source/data/misc/icustd.txt svneol=native#text/plain
 icu4c/source/data/misc/icuver.txt svneol=native#text/plain
 icu4c/source/data/misc/keyTypeData.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1741,6 +1743,7 @@ icu4c/source/data/misc/metaZones.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/metadata.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/numberingSystems.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/plurals.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/misc/postalCodeData.txt svneol=native#text/plain
 icu4c/source/data/misc/supplementalData.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/timezoneTypes.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/windowsZones.txt svneol=native#text/plain%3Bcharset%3Dutf-8
