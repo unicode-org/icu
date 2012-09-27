@@ -269,9 +269,9 @@ class CompactDecimalDataCache {
                 " in " + localeAndStyle(locale, style));
         }
         savePrefixOrSuffix(
-                template.substring(0, firstIdx), pluralVariant, idx, result.prefixes);
+                fixQuotes(template.substring(0, firstIdx)), pluralVariant, idx, result.prefixes);
         savePrefixOrSuffix(
-                template.substring(lastIdx + 1), pluralVariant, idx, result.suffixes);
+                fixQuotes(template.substring(lastIdx + 1)), pluralVariant, idx, result.suffixes);
 
         // Calculate number of zeros before decimal point.
         int i = firstIdx + 1;
@@ -281,6 +281,9 @@ class CompactDecimalDataCache {
         return i - firstIdx;
     }
 
+    private static String fixQuotes(String prefixOrSuffix) {
+        return prefixOrSuffix.replace("'.'", ".");
+    }
 
     /**
      * Returns locale and style. Used to form useful messages in thrown
