@@ -1011,7 +1011,12 @@
       <li>Type <tt>"gmake"</tt> (or "make" if GNU make is the default make on
       your platform) to compile the libraries and all the data files. The proper
       name of the GNU make command is printed at the end of the configuration
-      run, as in "You must use gmake to compile ICU".</li>
+      run, as in "You must use gmake to compile ICU".
+        <br/>
+      Note that the compilation command output may be simplified on your platform.  If this is the case, you will see just:
+      <blockquote><tt style='background-color: #ddd; font-size: small'>gcc ... stubdata.c</tt></blockquote> rather than <blockquote><tt style='background-color: #ddd; font-size: small'>gcc  -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -D_REENTRANT -I../common -DU_ATTRIBUTE_DEPRECATED= -O2 -Wall -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -c -DPIC -fPIC -o stubdata.o stubdata.c</tt></blockquote>.  <br/>
+      If you need to see the whole compilation line,  use <tt>"gmake VERBOSE=1"</tt>.  The full compilation line will print if an error occurs.<p>
+      </li>
 
       <li>Optionally, type <tt>"gmake check"</tt> to run the test suite, which
       checks for ICU's functionality integrity (See <a href=

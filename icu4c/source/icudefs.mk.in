@@ -172,6 +172,9 @@ LINK.cc=      $(CXX) $(CXXFLAGS) $(LDFLAGS)
 SHLIB.c=      $(CC) $(CFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
 SHLIB.cc=     $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
 
+# ICU_MSG
+ICU_MSG=@echo "   $(1)	"
+
 # Do not show the large compiling arguments by default.
 # To use:
 # change
@@ -179,7 +182,7 @@ SHLIB.cc=     $(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS)
 # to
 #    $(call SILENT_COMPILE,$(CC) -o foo)
 ifndef VERBOSE
-    SILENT_COMPILE=@echo "	$(notdir $(firstword $(1)))	... " $< && $(1) || \
+    SILENT_COMPILE=$(call ICU_MSG,$(notdir $(firstword $(1)))) "... " $< && $(1) || \
 			( echo "*** Failed compilation command follows: ----------------------------------------------------------" ; \
 			  echo "$(1)" ; \
 		          echo "--- ( rebuild with \"$(MAKE) VERBOSE=1 $(MAKECMDGOALS)\" to show all parameters ) --------" ; \
