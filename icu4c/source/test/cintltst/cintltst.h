@@ -22,6 +22,12 @@ The main root for C API tests
 #include "unicode/utypes.h"
 #include "unicode/putil.h"
 #include "unicode/ctest.h"
+
+#if U_NO_DEFAULT_INCLUDE_UTF_HEADERS
+/* deprecated  - make tests pass with U_NO_DEFAULT_INCLUDE_UTF_HEADERS */
+#include "unicode/utf_old.h" 
+#endif
+
 #include <stdlib.h>
 
 #ifndef U_USE_DEPRECATED_API

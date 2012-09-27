@@ -26,6 +26,7 @@
 #include <unicode/translit.h>
 #include <unicode/uset.h>
 #include <unicode/uclean.h>
+#include <unicode/utf16.h>
 
 #include <stdio.h>
 #include <errno.h>
