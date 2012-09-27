@@ -123,11 +123,11 @@ public class CompactDecimalFormatTest extends TestFmwk {
         checkLocale(ULocale.ENGLISH, CompactStyle.SHORT, EnglishTestData);
     }
 
-    public void TestNoLongStyleInCLDR() {
+    public void TestArabicLongStyle() {
         NumberFormat cdf =
                 NumberFormat.getCompactDecimalInstance(
-                        ULocale.forLanguageTag("ar_EG"), CompactStyle.LONG);
-        assertEquals("Missing PatternsLong", "5K", cdf.format(5000));
+                        ULocale.forLanguageTag("ar"), CompactStyle.LONG);
+        assertEquals("Arabic Long", "٥٫٣ ألف", cdf.format(5300));
     }
 
     public void TestSerbianShort() {

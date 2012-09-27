@@ -29,6 +29,8 @@ class CompactDecimalDataCache {
      * less than 10^15.
      */
     static final int MAX_DIGITS = 15;
+    
+    private static final String LATIN_NUMBERING_SYSTEM = "latn";
 
     private final ICUCache<ULocale, DataBundle> cache =
             new SimpleCache<ULocale, DataBundle>();
@@ -109,8 +111,18 @@ class CompactDecimalDataCache {
         ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
                 getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
         String numberingSystemName = ns.getName();
-        Data shortData = loadWithStyle(r, numberingSystemName, ulocale, "patternsShort", false);
-        Data longData = loadWithStyle(r, numberingSystemName, ulocale, "patternsLong", true);
+        Data shortData = null;
+        Data longData = null;
+        if (!LATIN_NUMBERING_SYSTEM.equals(numberingSystemName)) {
+            shortData = loadWithStyle(r, numberingSystemName, ulocale, "patternsShort", true);
+            longData = loadWithStyle(r, numberingSystemName, ulocale, "patternsLong", true);
+        }
+        if (shortData == null) {
+          shortData = loadWithStyle(r, LATIN_NUMBERING_SYSTEM, ulocale, "patternsShort", false);
+        }
+        if (longData == null) {
+          longData = loadWithStyle(r, LATIN_NUMBERING_SYSTEM, ulocale, "patternsLong", true);
+        }
         if (longData == null) {
             longData = shortData;
         }
