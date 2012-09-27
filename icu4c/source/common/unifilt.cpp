@@ -23,14 +23,11 @@ UnicodeMatcher::~UnicodeMatcher() {}
 UnicodeFilter::~UnicodeFilter() {}
 
 /**
- * UnicodeFunctor API.  Cast 'this' to a UnicodeMatcher* pointer
- * and return the pointer.
+ * UnicodeFunctor API.
+ *   Note that UnicodeMatcher is a base class of UnicodeFilter.
  */
 UnicodeMatcher* UnicodeFilter::toMatcher() const {
-  UnicodeFilter  *nonconst_this = const_cast<UnicodeFilter *>(this);
-  UnicodeMatcher *nonconst_base = static_cast<UnicodeMatcher *>(nonconst_this);
-  
-  return nonconst_base;
+  return const_cast<UnicodeFilter *>(this);
 }
 
 void UnicodeFilter::setData(const TransliterationRuleData*) {}

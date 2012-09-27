@@ -93,10 +93,7 @@ UnicodeFunctor* StringReplacer::clone() const {
  * Implement UnicodeFunctor
  */
 UnicodeReplacer* StringReplacer::toReplacer() const {
-  StringReplacer  *nonconst_this = const_cast<StringReplacer *>(this);
-  UnicodeReplacer *nonconst_base = static_cast<UnicodeReplacer *>(nonconst_this);
-  
-  return nonconst_base;
+  return const_cast<StringReplacer *>(this);
 }
 
 /**
