@@ -78,7 +78,8 @@ import com.ibm.icu.util.UResourceBundle;
  * normal number format. Use <code>getIntegerInstance</code> to get an
  * integer number format. Use <code>getCurrencyInstance</code> to get the
  * currency number format. And use <code>getPercentInstance</code> to get a
- * format for displaying percentages. With this format, a fraction like
+ * format for displaying percentages. Some factory methods are found within
+ * subclasses of NumberFormat. With this format, a fraction like
  * 0.53 is displayed as 53%.
  *
  * <p>
