@@ -7,6 +7,9 @@
 #    - CLDR (the source of most of the data, and some Java tools)
 #    - ICU4J  (used by the conversion tools)
 #    - ICU4C  (the destination for the new data, and the source for some of it)
+#             (Either check out ICU4C from Subversion, or download the additional 
+#              icu4c-*-data.zip file so that the icu/source/data/ directory is fully
+#              populated.)
 #
 # For an official CLDR data integration into ICU, these should be clean, freshly
 # checked-out. For released CLDR sources, an alternative to checking out sources
