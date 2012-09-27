@@ -279,7 +279,7 @@ U_CAPI int32_t U_EXPORT2
 ucol_keyHashCode(const uint8_t *key, 
                        int32_t  length)
 {
-    return computeHashCode(key, length);
+    return icu::computeHashCode(key, length);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
