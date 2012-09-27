@@ -18,6 +18,7 @@ import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import com.ibm.icu.text.CompactDecimalDataCache.Data;
@@ -60,6 +61,52 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     // null if created internally using explicit prefixes and suffixes.
     private final PluralRules pluralRules;
+
+    /**
+     * Style parameter for CompactDecimalFormat.
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum CompactStyle {
+        /**
+         * Short version, like "1.2T"
+         * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
+         */
+        SHORT,
+        /**
+         * Longer version, like "1.2 trillion", if available. May return same result as SHORT if not.
+         * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
+         */
+        LONG
+    }
+
+    /**
+     * Create a CompactDecimalFormat appropriate for a locale. The result may
+     * be affected by the number system in the locale, such as ar-u-nu-latn.
+     *
+     * @param locale the desired locale
+     * @param style the compact style
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static CompactDecimalFormat getCompactDecimalInstance(ULocale locale, CompactStyle style) {
+        return new CompactDecimalFormat(locale, style);
+    }
+
+    /**
+     * Create a CompactDecimalFormat appropriate for a locale. The result may
+     * be affected by the number system in the locale, such as ar-u-nu-latn.
+     *
+     * @param locale the desired locale
+     * @param style the compact style
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static CompactDecimalFormat getCompactDecimalInstance(Locale locale, CompactStyle style) {
+        return new CompactDecimalFormat(ULocale.forLocale(locale), style);
+    }
 
     /**
      * The public mechanism is NumberFormat.getCompactDecimalInstance().
