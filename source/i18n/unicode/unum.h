@@ -667,7 +667,7 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
 
 /**
  * Set the pattern used by a UNumberFormat.  This can only be used
- * on a DecimalFormat, other formats return U_ILLEGAL_ARGUMENT_ERROR
+ * on a DecimalFormat, other formats return U_UNSUPPORTED_ERROR
  * in the status.
  * @param format The formatter to set.
  * @param localized TRUE if the pattern is localized, FALSE otherwise.
@@ -899,7 +899,7 @@ typedef enum UNumberFormatTextAttribute {
 /**
 * Get a text attribute associated with a UNumberFormat.
 * An example of a text attribute is the suffix for positive numbers.  If the formatter
-* does not understand the attributre, U_UNSUPPORTED_ERROR is returned as the status.
+* does not understand the attribute, U_UNSUPPORTED_ERROR is returned as the status.
 * Rule-based formatters only understand UNUM_DEFAULT_RULESET and UNUM_PUBLIC_RULESETS.
 * @param fmt The formatter to query.
 * @param tag The attribute to query; one of UNUM_POSITIVE_PREFIX, UNUM_POSITIVE_SUFFIX,
