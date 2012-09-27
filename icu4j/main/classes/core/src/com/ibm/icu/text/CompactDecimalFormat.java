@@ -91,7 +91,7 @@ public class CompactDecimalFormat extends DecimalFormat {
      * @draft ICU 50
      * @provisional This API might change or be removed in a future release.
      */
-    public static CompactDecimalFormat getCompactDecimalInstance(ULocale locale, CompactStyle style) {
+    public static CompactDecimalFormat getInstance(ULocale locale, CompactStyle style) {
         return new CompactDecimalFormat(locale, style);
     }
 
@@ -104,12 +104,12 @@ public class CompactDecimalFormat extends DecimalFormat {
      * @draft ICU 50
      * @provisional This API might change or be removed in a future release.
      */
-    public static CompactDecimalFormat getCompactDecimalInstance(Locale locale, CompactStyle style) {
+    public static CompactDecimalFormat getInstance(Locale locale, CompactStyle style) {
         return new CompactDecimalFormat(ULocale.forLocale(locale), style);
     }
 
     /**
-     * The public mechanism is NumberFormat.getCompactDecimalInstance().
+     * The public mechanism is CompactDecimalFormat.getInstance().
      *
      * @param locale
      *            the desired locale
