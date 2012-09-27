@@ -20,6 +20,7 @@
 #include "unicode/ucharstrie.h"
 #include "unicode/bytestrie.h"
 #include "unicode/ucnv.h"
+#include "unicode/utf16.h"
 
 #include "charstr.h"
 #include "dictionarydata.h"

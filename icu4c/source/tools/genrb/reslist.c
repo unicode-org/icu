@@ -27,7 +27,7 @@
 #include "uelement.h"
 #include "uinvchar.h"
 #include "ustr_imp.h"
-
+#include "unicode/utf16.h"
 /*
  * Align binary data at a 16-byte offset from the start of the resource bundle,
  * to be safe for any data type it may contain.

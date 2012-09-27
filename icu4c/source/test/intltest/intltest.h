@@ -15,13 +15,19 @@
 #include "unicode/fmtable.h"
 #include "unicode/testlog.h"
 
+
+#if U_NO_DEFAULT_INCLUDE_UTF_HEADERS
+/* deprecated  - make tests pass with U_NO_DEFAULT_INCLUDE_UTF_HEADERS */
+#include "unicode/utf_old.h" 
+#endif
+
 /**
  * \def ICU_USE_THREADS
  *
  * Enables multi-threaded testing. Moved here from uconfig.h.
  * Default: enabled
  *
- * This switched used to allow thread support (use of mutexes) to be compiled out of ICU.
+ * This switch used to allow thread support (use of mutexes) to be compiled out of ICU.
  */
 #ifdef ICU_USE_THREADS
     /* Use the predefined value. */
