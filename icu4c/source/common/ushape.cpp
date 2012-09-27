@@ -71,6 +71,7 @@
 #define SHADDA_CHAR        0xFE7C
 #define TATWEEL_CHAR       0x0640
 #define SHADDA_TATWEEL_CHAR  0xFE7D
+#define SHADDA06_CHAR      0x0651
 
 #define SHAPE_MODE   0
 #define DESHAPE_MODE 1
@@ -1294,14 +1295,15 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
                     if( (nextLink&ALEFTYPE) == ALEFTYPE && (lastLink&LAMTYPE) == LAMTYPE ) {
                         Shape = 0;
                     }
-                }
-                else {
+                } else if(tashkeelFlag == 2 && dest[i] == SHADDA06_CHAR){
+				    Shape = 1;
+                } else {
                     Shape = 0;
                 }
             }
             if ((dest[i] ^ 0x0600) < 0x100) {
                 if ( isTashkeelChar(dest[i]) ){
-                    if (tashkeelFlag == 2){
+					if (tashkeelFlag == 2  && dest[i] != SHADDA06_CHAR){
                         dest[i] = TASHKEEL_SPACE_SUB;
                         tashkeelFound  = 1;
                     } else {
