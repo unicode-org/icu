@@ -66,6 +66,8 @@ static void doLOGICALArabicDeShapingTest(void);
 
 static void doArabicShapingTestForBug5421(void);
 
+static void doArabicShapingTestForBug8703(void);
+
 static void testReorder(void);
 
 static void testFailureRecovery(void);
@@ -131,6 +133,8 @@ addComplexTest(TestNode** root) {
     addTest(root, doLOGICALArabicDeShapingTest, "complex/arabic-shaping/unshaping");
     addTest(root, doArabicShapingTestForBug5421, "complex/arabic-shaping/bug-5421");
     addTest(root, doTailTest, "complex/arabic-shaping/tailtest");
+	addTest(root, doArabicShapingTestForBug8703, "complex/arabic-shaping/bug-8703");
+	
 }
 
 static void
@@ -2883,6 +2887,137 @@ doArabicShapingTestForBug5421(void) {
     if(U_FAILURE(errorCode) || length!=LENGTHOF(untouched_presentation_r) || memcmp(dest, untouched_presentation_r, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(untouched_presentation_r)\n");
     }
+}
+
+static void
+doArabicShapingTestForBug8703(void) {
+    static const UChar
+    letters_source1[]={
+        0x0634,0x0651,0x0645,0x0652,0x0633
+	}, letters_source2[]={
+        0x0634,0x0651,0x0645,0x0652,0x0633 
+	}, letters_source3[]={
+        0x0634,0x0651,0x0645,0x0652,0x0633 
+	}, letters_source4[]={
+        0x0634,0x0651,0x0645,0x0652,0x0633 
+	}, letters_source5[]={
+        0x0633,0x0652,0x0645,0x0651,0x0634
+	}, letters_source6[]={
+        0x0633,0x0652,0x0645,0x0651,0x0634 
+	}, letters_source7[]={
+        0x0633,0x0652,0x0645,0x0651,0x0634
+	}, letters_source8[]={
+        0x0633,0x0652,0x0645,0x0651,0x0634
+    }, letters_dest1[]={
+        0x0020,0xFEB7,0xFE7D,0xFEE4,0xFEB2 
+    }, letters_dest2[]={
+        0xFEB7,0xFE7D,0xFEE4,0xFEB2,0x0020
+    }, letters_dest3[]={
+        0xFEB7,0xFE7D,0xFEE4,0xFEB2
+    }, letters_dest4[]={
+        0xFEB7,0xFE7D,0xFEE4,0x0640,0xFEB2
+    }, letters_dest5[]={
+        0x0020,0xFEB2,0xFEE4,0xFE7D,0xFEB7 
+    }, letters_dest6[]={
+        0xFEB2,0xFEE4,0xFE7D,0xFEB7,0x0020
+    }, letters_dest7[]={
+        0xFEB2,0xFEE4,0xFE7D,0xFEB7
+    }, letters_dest8[]={
+        0xFEB2,0x0640,0xFEE4,0xFE7D,0xFEB7
+    };
+
+    UChar dest[20];
+    UErrorCode errorCode;
+    int32_t length;
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(letters_source1, LENGTHOF(letters_source1),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_RTL | U_SHAPE_TASHKEEL_BEGIN | U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(letters_dest1) || memcmp(dest, letters_dest1, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(letters_source1)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(letters_source2, LENGTHOF(letters_source2),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_RTL | U_SHAPE_TASHKEEL_END | U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(letters_dest2) || memcmp(dest, letters_dest2, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(letters_source2)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(letters_source3, LENGTHOF(letters_source3),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_RTL | U_SHAPE_TASHKEEL_RESIZE | U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(letters_dest3) || memcmp(dest, letters_dest3, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(letters_source3)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(letters_source4, LENGTHOF(letters_source4),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_RTL | U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL | U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(letters_dest4) || memcmp(dest, letters_dest4, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(letters_source4)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(letters_source5, LENGTHOF(letters_source5),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR | U_SHAPE_TASHKEEL_BEGIN | U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(letters_dest5) || memcmp(dest, letters_dest5, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(letters_source5)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(letters_source6, LENGTHOF(letters_source6),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR | U_SHAPE_TASHKEEL_END | U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(letters_dest6) || memcmp(dest, letters_dest6, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(letters_source6)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(letters_source7, LENGTHOF(letters_source7),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR | U_SHAPE_TASHKEEL_RESIZE | U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(letters_dest7) || memcmp(dest, letters_dest7, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(letters_source7)\n");
+    }
+
+    errorCode=U_ZERO_ERROR;
+
+    length=u_shapeArabic(letters_source8, LENGTHOF(letters_source8),
+                         dest, LENGTHOF(dest),
+                         U_SHAPE_TEXT_DIRECTION_VISUAL_LTR | U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL | U_SHAPE_LETTERS_SHAPE,
+                         &errorCode);
+
+    if(U_FAILURE(errorCode) || length!=LENGTHOF(letters_dest8) || memcmp(dest, letters_dest8, length*U_SIZEOF_UCHAR)!=0) {
+        log_err("failure in u_shapeArabic(letters_source8)\n");
+    }
+	
 }
 
 /* helpers ------------------------------------------------------------------ */
