@@ -232,8 +232,12 @@ typedef enum UDateFormatContextValue {
      * isolated name on a calendar page.
      * @draft ICU 49
      */
-    UDAT_CAPITALIZATION_FOR_STANDALONE = 4
+    UDAT_CAPITALIZATION_FOR_STANDALONE = 4,
 #endif
+    /**
+     * @internal
+     */
+    UDAT_CONTEXT_DEFAULT = UDAT_CONTEXT_UNKNOWN
 } UDateFormatContextValue;
 
 /**
