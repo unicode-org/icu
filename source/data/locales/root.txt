@@ -560,6 +560,18 @@ root{
             }
             quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
+        dangi{
+            AmPmMarkers:alias{"/LOCALE/calendar/chinese/AmPmMarkers"}
+            DateTimePatterns:alias{"/LOCALE/calendar/chinese/DateTimePatterns"}
+            appendItems:alias{"/LOCALE/calendar/chinese/appendItems"}
+            availableFormats:alias{"/LOCALE/calendar/chinese/availableFormats"}
+            cyclicNameSets:alias{"/LOCALE/calendar/chinese/cyclicNameSets"}
+            dayNames:alias{"/LOCALE/calendar/chinese/dayNames"}
+            intervalFormats:alias{"/LOCALE/calendar/chinese/intervalFormats"}
+            monthNames:alias{"/LOCALE/calendar/chinese/monthNames"}
+            monthPatterns:alias{"/LOCALE/calendar/chinese/monthPatterns"}
+            quarters:alias{"/LOCALE/calendar/chinese/quarters"}
+        }
         default{"gregorian"}
         ethiopic{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
