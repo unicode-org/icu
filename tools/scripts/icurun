@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Copyright (C) 2011 IBM Corporation and Others. All Rights Reserved.
+# Copyright (C) 2011-2012 IBM Corporation and Others. All Rights Reserved.
 #
 # This is designed for building and running single-source-file ICU programs.
 #
@@ -159,7 +159,7 @@ then
     ICU_CONFIG_OPTS=--noverify
     LINKOPTS="--ldflags-libsonly --ldflags-system --ldflags-icuio"
     OURLIBPATH=${IN_SOURCE}/lib:${IN_SOURCE}/stubdata:${IN_SOURCE}/tools/ctestfw
-    SRC_OPTS="-I${top_srcdir}/common -I${top_srcdir}/i18n -I${top_srcdir}/tools/ctestfw -I${top_srcdir}/tools/toolutil -I${IN_SOURCE}/common -L${IN_SOURCE}/lib -L${IN_SOURCE}/stubdata -L${IN_SOURCE}/tools/ctestfw"
+    SRC_OPTS="-I${top_srcdir}/common -I${top_srcdir}/i18n  -I${top_srcdir}/io -I${top_srcdir}/tools/ctestfw -I${top_srcdir}/tools/toolutil -I${IN_SOURCE}/common -L${IN_SOURCE}/lib -L${IN_SOURCE}/stubdata -L${IN_SOURCE}/tools/ctestfw"
     INVOKE=`${ICU_CONFIG} ${ICU_CONFIG_OPTS} --invoke`:"${OURLIBPATH}"
 else
     # no cppflags for in-source
@@ -199,6 +199,6 @@ case "${FILE}" in
      ;;
 esac
 
-echo "# ${COMP}" -o "${OUT}" "${FILE}" "${XTRA_OPTS}"
+echo "# ${COMP}" "${SRC_OPTS}" -o "${OUT}" "${FILE}" "${XTRA_OPTS}"
 ( ${COMP} ${SRC_OPTS} -o "${OUT}" "${FILE}" ${XTRA_OPTS} || (rm -f "${OUT}" ; exit 1) )  && ( echo "# ${INVOKE} ./${OUT}" ; "${SHELL}" -c "${INVOKE} ./${OUT}" "$@")
 
