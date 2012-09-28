@@ -9,7 +9,7 @@
 #      These rules are based on UAX #29 Revision 20 for Unicode Version 6.2
 #
 # Note:  Updates to word.txt will usually need to be merged into
-#        word_POSIX.txt and word_ja.txt also.
+#        word_POSIX.txt also.
 
 ##############################################################################
 #
