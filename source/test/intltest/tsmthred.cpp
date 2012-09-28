@@ -26,6 +26,8 @@
 #include "putilimp.h"
 #include "intltest.h"
 #include "tsmthred.h"
+#include "unicode/ushape.h"
+
 
 #if U_PLATFORM_USES_ONLY_WIN32_API
     /* Prefer native Windows APIs even if POSIX is implemented (i.e., on Cygwin). */
@@ -36,6 +38,8 @@
 #   undef POSIX
 #endif
 
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 /* Needed by z/OS to get usleep */
 #if U_PLATFORM == U_PF_OS390
 #define __DOT1 1
@@ -184,6 +188,14 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
         }
         break;
 
+	case 5:
+        name = "TestArabicShapingThreads"; 
+        if (exec) {
+            TestArabicShapingThreads();
+        }
+        break;
+		
+
     default:
         name = "";
         break; //needed to end loop
@@ -201,6 +213,7 @@ void MultithreadTest::runIndexedTest( int32_t index, UBool exec,
 //
 //-----------------------------------------------------------------------------------
 #define THREADTEST_NRTHREADS 8
+#define ARABICSHAPE_THREADTEST 30
 
 class TestThreadsThread : public SimpleThread
 {
@@ -212,6 +225,75 @@ public:
     }
 private:
     char *fWhatToChange;
+};
+//-----------------------------------------------------------------------------------
+//
+//   TestArabicShapeThreads -- see if calls to u_shapeArabic in many threads works successfully
+//
+//   Set up N threads pointing at N chars. When they are started, they will make calls to doTailTest which tests
+//   u_shapeArabic, if the calls are successful it will the set * chars. 
+//   At the end we make sure all threads managed to run u_shapeArabic successfully.
+//   This is a unit test for ticket 9473
+//
+//-----------------------------------------------------------------------------------
+class TestArabicShapeThreads : public SimpleThread 
+{
+public:
+    TestArabicShapeThreads(char* whatToChange) { fWhatToChange = whatToChange;}
+    virtual void run() { 
+	    if(doTailTest()==TRUE)
+			*fWhatToChange = '*';             
+    }
+private:
+    char *fWhatToChange;
+	
+	UBool doTailTest(void) {
+  static const UChar src[] = { 0x0020, 0x0633, 0 };
+  static const UChar dst_old[] = { 0xFEB1, 0x200B,0 };
+  static const UChar dst_new[] = { 0xFEB1, 0xFE73,0 };
+  UChar dst[3] = { 0x0000, 0x0000,0 };
+  int32_t length;
+  UErrorCode status;
+  IntlTest inteltst =  IntlTest();
+ 
+  status = U_ZERO_ERROR;
+  length = u_shapeArabic(src, -1, dst, LENGTHOF(dst),
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_SEEN_TWOCELL_NEAR, &status);
+  if(U_FAILURE(status)) {
+	   inteltst.errln("Fail: status %s\n", u_errorName(status)); 
+	return FALSE;
+  } else if(length!=2) {
+    inteltst.errln("Fail: len %d expected 3\n", length);
+	return FALSE;
+  } else if(u_strncmp(dst,dst_old,LENGTHOF(dst))) {
+    inteltst.errln("Fail: got U+%04X U+%04X expected U+%04X U+%04X\n",
+            dst[0],dst[1],dst_old[0],dst_old[1]);
+	return FALSE;
+  }
+
+
+  //"Trying new tail
+  status = U_ZERO_ERROR;
+  length = u_shapeArabic(src, -1, dst, LENGTHOF(dst),
+                         U_SHAPE_LETTERS_SHAPE|U_SHAPE_SEEN_TWOCELL_NEAR|U_SHAPE_TAIL_NEW_UNICODE, &status);
+  if(U_FAILURE(status)) {
+    inteltst.errln("Fail: status %s\n", u_errorName(status)); 
+	return FALSE;
+  } else if(length!=2) {
+    inteltst.errln("Fail: len %d expected 3\n", length);
+	return FALSE;
+  } else if(u_strncmp(dst,dst_new,LENGTHOF(dst))) {
+    inteltst.errln("Fail: got U+%04X U+%04X expected U+%04X U+%04X\n",
+            dst[0],dst[1],dst_new[0],dst_new[1]);
+	return FALSE;
+  } 
+  
+  
+  return TRUE;
+  
+}
+	
+
 };
 
 void MultithreadTest::TestThreads()
@@ -284,6 +366,78 @@ void MultithreadTest::TestThreads()
 }
 
 
+void MultithreadTest::TestArabicShapingThreads()
+{
+    char threadTestChars[ARABICSHAPE_THREADTEST + 1];
+    SimpleThread *threads[ARABICSHAPE_THREADTEST];
+    int32_t numThreadsStarted = 0;
+
+    int32_t i;
+    
+    for(i=0;i<ARABICSHAPE_THREADTEST;i++)
+    {
+        threadTestChars[i] = ' ';
+        threads[i] = new TestArabicShapeThreads(&threadTestChars[i]);
+    }
+    threadTestChars[ARABICSHAPE_THREADTEST] = '\0';
+
+    logln("-> do TestArabicShapingThreads <- Firing off threads.. ");
+    for(i=0;i<ARABICSHAPE_THREADTEST;i++)
+    {
+        if (threads[i]->start() != 0) {
+            errln("Error starting thread %d", i);
+        }
+        else {
+            numThreadsStarted++;
+        }
+        //SimpleThread::sleep(100);
+        logln(" Subthread started.");
+    }
+
+    logln("Waiting for threads to be set..");
+    if (numThreadsStarted == 0) {
+        errln("No threads could be started for testing!");
+        return;
+    }
+
+    int32_t patience = 100; // seconds to wait
+
+    while(patience--)
+    {
+        int32_t count = 0;
+        umtx_lock(NULL);
+        for(i=0;i<ARABICSHAPE_THREADTEST;i++)
+        {
+            if(threadTestChars[i] == '*')
+            {
+                count++;
+            }
+        }
+        umtx_unlock(NULL);
+        
+        if(count == ARABICSHAPE_THREADTEST)
+        {
+            logln("->TestArabicShapingThreads <- Got all threads! cya");
+            for(i=0;i<ARABICSHAPE_THREADTEST;i++)
+            {
+                delete threads[i];
+            }
+            return;
+        }
+
+        logln("-> TestArabicShapingThreads <- Waiting..");
+        SimpleThread::sleep(500);
+    }
+
+    errln("-> TestArabicShapingThreads <- PATIENCE EXCEEDED!! Still missing some.");
+    for(i=0;i<ARABICSHAPE_THREADTEST;i++)
+    {
+        delete threads[i];
+    }
+	
+}
+
+ 
 //-----------------------------------------------------------------------
 //
 //  TestMutex  - a simple (non-stress) test to verify that ICU mutexes
