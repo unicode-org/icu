@@ -34,10 +34,6 @@ public class CalendarData {
             fMainType = "gregorian";
             fFallbackType = null;
         } else {
-            // TODO: Until CLDR supports "dangi" calendar type
-            if (type.equalsIgnoreCase("dangi")) {
-                type = "chinese";
-            }
             fMainType = type;
             fFallbackType = "gregorian";
         }

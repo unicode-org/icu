@@ -3504,12 +3504,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         }
         private static PatternData make(Calendar cal, ULocale loc) {
             // First, try to get a pattern from PATTERN_CACHE
-            String key = loc.toString() + cal.getType();
+            String calType = cal.getType();
+            String key = loc.getBaseName() + "+" + calType;
             PatternData patternData = PATTERN_CACHE.get(key);
             if (patternData == null) {
                 // Cache missed.  Get one from bundle
                 try {
-                    CalendarData calData = new CalendarData(loc, cal.getType());
+                    CalendarData calData = new CalendarData(loc, calType);
                     patternData = new PatternData(calData.getDateTimePatterns(),
                                                   calData.getOverrides());
                 } catch (MissingResourceException e) {

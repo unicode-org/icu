@@ -1142,7 +1142,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     // We may need to deescalate this API to @internal.
     protected void initializeData(ULocale desiredLocale, String type)
     {
-        String key = desiredLocale.toString() + "+" + type;
+        String key = desiredLocale.getBaseName() + "+" + type;
         DateFormatSymbols dfs = DFSCACHE.get(key);
         if (dfs == null) {
             // Initialize data from scratch put a clone of this instance into the cache
