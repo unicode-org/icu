@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+
+import com.ibm.icu.impl.ICUCache;
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.impl.SimpleCache;
 
 /**
  * Provide information about gender in locales based on data in CLDR. Currently supplies gender of lists.
@@ -22,7 +27,7 @@ public class GenderInfo {
     private final ListGenderStyle style; // set based on locale
 
     /**
-     * Gender: OTHER means either the information is unavailable, or the person has declined to state MALE or FEMALE. 
+     * Gender: OTHER means either the information is unavailable, or the person has declined to state MALE or FEMALE.
      * @internal
      */
     public enum Gender {MALE, FEMALE, OTHER}
@@ -33,18 +38,7 @@ public class GenderInfo {
      * @internal
      */
     public static GenderInfo getInstance(ULocale uLocale) {
-        // These can be cached, since they are read-only
-        // poor-man's locale lookup, for hardcoded data
-        while (true) {
-            GenderInfo data = localeToListGender.get(uLocale);
-            if (data != null) {
-                return data;
-            }
-            uLocale = uLocale.getFallback();
-            if (uLocale == null) {
-                return neutral;
-            }
-        }
+        return genderInfoCache.get(uLocale);
     }
 
     /**
@@ -64,27 +58,34 @@ public class GenderInfo {
         /**
          * Always OTHER (if more than one)
          */
-        NEUTRAL, 
+        NEUTRAL,
         /**
          * gender(all male) = male, gender(all female) = female, otherwise gender(list) = other.
          * In particular, any 'other' value makes the overall gender be 'other'.
          */
-        MIXED_NEUTRAL, 
+        MIXED_NEUTRAL,
         /**
          * gender(all female) = female, otherwise gender(list) = male.
          * In particular, any 'other' value makes the overall gender be 'male'.
          */
-        MALE_TAINTS
-    }
+        MALE_TAINTS;
 
-    /**
-     * Reset the data used for mapping locales to styles. Only for use in CLDR and in testing!
-     * @param newULocaleToListGender replacement data, copied internally for safety.
-     * @internal
-     */
-    public static void setLocaleMapping(Map<ULocale,GenderInfo> newULocaleToListGender) {
-        localeToListGender.clear();
-        localeToListGender.putAll(newULocaleToListGender);
+        private static Map<String, ListGenderStyle> fromNameMap =
+            new HashMap<String, ListGenderStyle>(3);
+
+        static {
+            fromNameMap.put("neutral", NEUTRAL);
+            fromNameMap.put("maleTaints", MALE_TAINTS);
+            fromNameMap.put("mixedNeutral", MIXED_NEUTRAL);
+        }
+
+        public static ListGenderStyle fromName(String name) {
+            ListGenderStyle result = fromNameMap.get(name);
+            if (result == null) {
+                throw new IllegalArgumentException("Unknown gender style name: " + name);
+            }
+            return result;
+        }
     }
 
     /**
@@ -122,7 +123,7 @@ public class GenderInfo {
                     }
                     hasFemale = true;
                     break;
-                case MALE: 
+                case MALE:
                     if (hasFemale) {
                         return Gender.OTHER;
                     }
@@ -142,10 +143,10 @@ public class GenderInfo {
             }
             return Gender.FEMALE;
         default:
-            return Gender.OTHER; 
+            return Gender.OTHER;
         }
     }
-    
+
     /**
      * Only for testing and use with CLDR.
      * @param genderStyle gender style
@@ -154,21 +155,44 @@ public class GenderInfo {
     public GenderInfo(ListGenderStyle genderStyle) {
         style = genderStyle;
     }
-    
+
     private static GenderInfo neutral = new GenderInfo(ListGenderStyle.NEUTRAL);
 
-    // TODO Get this data from a resource bundle generated from CLDR. 
-    // For now, hard coded.
+    private static class Cache {
+        private final ICUCache<ULocale, GenderInfo> cache =
+            new SimpleCache<ULocale, GenderInfo>();
 
-    private static Map<ULocale,GenderInfo> localeToListGender = new HashMap<ULocale,GenderInfo>();
-    static {
-        GenderInfo taints = new GenderInfo(ListGenderStyle.MALE_TAINTS);
-        for (String locale : Arrays.asList("ar", "ca", "cs", "hr", "es", "fr", "he", "hi", "it", "lt", "lv", "mr", "nl", "pl", "pt", "ro", "ru", "sk", "sl", "sr", "uk", "ur", "zh")) {
-            localeToListGender.put(new ULocale(locale), taints);
+        public GenderInfo get(ULocale locale) {
+            GenderInfo result = cache.get(locale);
+            if (result == null) {
+                result = load(locale);
+                if (result == null) {
+                    ULocale fallback = locale.getFallback();
+
+                    // We call get() recursively so that we can leverage the cache
+                    // for all fallback locales too. If we get to the root locale,
+                    // and find no resource assume that list gender style is NEUTRAL.
+                    result = fallback == null ? neutral : get(fallback);
+                }
+                cache.put(locale, result);
+            }
+            return result;
         }
-        GenderInfo mixed = new GenderInfo(ListGenderStyle.MIXED_NEUTRAL);
-        for (String locale : Arrays.asList("el", "is")) {
-            localeToListGender.put(new ULocale(locale), mixed);
+
+        private static GenderInfo load(ULocale ulocale) {
+            UResourceBundle rb = UResourceBundle.getBundleInstance(
+                    ICUResourceBundle.ICU_BASE_NAME,
+                    "genderList",
+                    ICUResourceBundle.ICU_DATA_CLASS_LOADER, true);
+            UResourceBundle genderList = rb.get("genderList");
+            try {
+                return new GenderInfo(
+                        ListGenderStyle.fromName(genderList.getString(ulocale.toString())));
+            } catch (MissingResourceException mre) {
+                return null;
+            }
         }
     }
+
+    private static Cache genderInfoCache = new Cache();
 }
