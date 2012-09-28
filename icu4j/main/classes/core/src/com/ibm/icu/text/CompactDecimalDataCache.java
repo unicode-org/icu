@@ -268,10 +268,19 @@ class CompactDecimalDataCache {
                 "' for variant '" +pluralVariant + "' for 10^" + idx +
                 " in " + localeAndStyle(locale, style));
         }
+        String prefix = fixQuotes(template.substring(0, firstIdx));
+        String suffix = fixQuotes(template.substring(lastIdx + 1));
         savePrefixOrSuffix(
-                fixQuotes(template.substring(0, firstIdx)), pluralVariant, idx, result.prefixes);
+                prefix, pluralVariant, idx, result.prefixes);
         savePrefixOrSuffix(
-                fixQuotes(template.substring(lastIdx + 1)), pluralVariant, idx, result.suffixes);
+                suffix, pluralVariant, idx, result.suffixes);
+        
+        // If there is effectively no prefix or suffix, ignore the actual
+        // number of 0's and act as if the number of 0's matches the size
+        // of the number
+        if (prefix.trim().length() == 0 && suffix.trim().length() == 0) {
+          return idx + 1;
+        }
 
         // Calculate number of zeros before decimal point.
         int i = firstIdx + 1;
