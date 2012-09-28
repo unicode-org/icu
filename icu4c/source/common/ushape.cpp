@@ -76,12 +76,14 @@
 #define SHAPE_MODE   0
 #define DESHAPE_MODE 1
 
-static UChar tailChar = OLD_TAIL_CHAR;
-static uint32_t uShapeLamalefBegin = U_SHAPE_LAMALEF_BEGIN;
-static uint32_t uShapeLamalefEnd    = U_SHAPE_LAMALEF_END;
-static uint32_t uShapeTashkeelBegin = U_SHAPE_TASHKEEL_BEGIN;
-static uint32_t uShapeTashkeelEnd = U_SHAPE_TASHKEEL_END;
-static int spacesRelativeToTextBeginEnd = 0;
+struct uShapeVariables {
+	     UChar tailChar;
+	     uint32_t uShapeLamalefBegin;
+		 uint32_t uShapeLamalefEnd;
+		 uint32_t uShapeTashkeelBegin;
+		 uint32_t uShapeTashkeelEnd;
+	     int spacesRelativeToTextBeginEnd; 
+	    };
 
 static const uint8_t tailFamilyIsolatedFinal[] = {
     /* FEB1 */ 1,
@@ -703,7 +705,7 @@ static int32_t
 handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
                     int32_t destSize,
                     uint32_t options,
-                    UErrorCode *pErrorCode ) {
+                    UErrorCode *pErrorCode,struct uShapeVariables shapeVars ) {
 
     int32_t i = 0, j = 0;
     int32_t count = 0;
@@ -778,12 +780,12 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
     tashkeelOption = 0;
 
     if (shapingMode == 0) {
-        if ( ((options&U_SHAPE_LAMALEF_MASK) == uShapeLamalefBegin) ||
+        if ( ((options&U_SHAPE_LAMALEF_MASK) == shapeVars.uShapeLamalefBegin) ||
               (((options&U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_AUTO )
-              && (spacesRelativeToTextBeginEnd==1)) ) {
+              && (shapeVars.spacesRelativeToTextBeginEnd==1)) ) {
             lamAlefOption = 1;
         }
-        if ( (options&U_SHAPE_TASHKEEL_MASK) == uShapeTashkeelBegin ) {
+        if ( (options&U_SHAPE_TASHKEEL_MASK) == shapeVars.uShapeTashkeelBegin ) {
             tashkeelOption = 1;
         }
     }
@@ -825,12 +827,12 @@ handleGeneratedSpaces(UChar *dest, int32_t sourceLength,
     tashkeelOption = 0;
 
     if (shapingMode == 0) {
-        if ( ((options&U_SHAPE_LAMALEF_MASK) == uShapeLamalefEnd) ||
+        if ( ((options&U_SHAPE_LAMALEF_MASK) == shapeVars.uShapeLamalefEnd) ||
               (((options&U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_AUTO )
-              && (spacesRelativeToTextBeginEnd==0)) ) {
+              && (shapeVars.spacesRelativeToTextBeginEnd==0)) ) {
             lamAlefOption = 1;
         }
-        if ( (options&U_SHAPE_TASHKEEL_MASK) == uShapeTashkeelEnd ){
+        if ( (options&U_SHAPE_TASHKEEL_MASK) == shapeVars.uShapeTashkeelEnd ){
             tashkeelOption = 1;
         }
     }
@@ -1015,7 +1017,7 @@ expandCompositCharAtEnd(UChar *dest, int32_t sourceLength, int32_t destSize,UErr
 
 static int32_t
 expandCompositCharAtNear(UChar *dest, int32_t sourceLength, int32_t destSize,UErrorCode *pErrorCode,
-                         int yehHamzaOption, int seenTailOption, int lamAlefOption) {
+                         int yehHamzaOption, int seenTailOption, int lamAlefOption, struct uShapeVariables shapeVars) {
     int32_t      i = 0;
 
 
@@ -1024,7 +1026,7 @@ expandCompositCharAtNear(UChar *dest, int32_t sourceLength, int32_t destSize,UEr
     for(i = 0 ;i<=sourceLength-1;i++) {
             if (seenTailOption && isSeenTailFamilyChar(dest[i])) {
                 if ((i>0) && (dest[i-1] == SPACE_CHAR) ) {
-                    dest[i-1] = tailChar;
+                    dest[i-1] = shapeVars.tailChar;
                 }else {
                     *pErrorCode=U_NO_SPACE_AVAILABLE;
                 }
@@ -1069,7 +1071,7 @@ expandCompositCharAtNear(UChar *dest, int32_t sourceLength, int32_t destSize,UEr
 static int32_t
 expandCompositChar(UChar *dest, int32_t sourceLength,
               int32_t destSize,uint32_t options,
-              UErrorCode *pErrorCode, int shapingMode) {
+              UErrorCode *pErrorCode, int shapingMode,struct uShapeVariables shapeVars) {
 
     int32_t      i = 0,j = 0;
 
@@ -1081,7 +1083,7 @@ expandCompositChar(UChar *dest, int32_t sourceLength,
     if (shapingMode == 1){
         if ( (options&U_SHAPE_LAMALEF_MASK) == U_SHAPE_LAMALEF_AUTO){
 
-            if(spacesRelativeToTextBeginEnd == 0) {
+            if(shapeVars.spacesRelativeToTextBeginEnd == 0) {
                 destSize = expandCompositCharAtEnd(dest, sourceLength, destSize, pErrorCode);
 
                 if(*pErrorCode == U_NO_SPACE_AVAILABLE) {
@@ -1100,19 +1102,19 @@ expandCompositChar(UChar *dest, int32_t sourceLength,
             if(*pErrorCode == U_NO_SPACE_AVAILABLE) {
                 *pErrorCode = U_ZERO_ERROR;
                 destSize = expandCompositCharAtNear(dest, sourceLength, destSize, pErrorCode, yehHamzaOption,
-                                                seenTailOption, 1);
+                                                seenTailOption, 1,shapeVars);
             }
         }
     }
 
     if (shapingMode == 1){
-        if ( (options&U_SHAPE_LAMALEF_MASK) == uShapeLamalefEnd){
+        if ( (options&U_SHAPE_LAMALEF_MASK) == shapeVars.uShapeLamalefEnd){
             destSize = expandCompositCharAtEnd(dest, sourceLength, destSize, pErrorCode);
         }
     }
 
     if (shapingMode == 1){
-        if ( (options&U_SHAPE_LAMALEF_MASK) == uShapeLamalefBegin){
+        if ( (options&U_SHAPE_LAMALEF_MASK) == shapeVars.uShapeLamalefBegin){
             destSize = expandCompositCharAtBegin(dest, sourceLength, destSize, pErrorCode);
         }
     }
@@ -1134,7 +1136,7 @@ expandCompositChar(UChar *dest, int32_t sourceLength,
 
     if (yehHamzaOption || seenTailOption || lamAlefOption){
         destSize = expandCompositCharAtNear(dest, sourceLength, destSize, pErrorCode, yehHamzaOption,
-                                            seenTailOption,lamAlefOption);
+                                            seenTailOption,lamAlefOption,shapeVars);
     }
 
 
@@ -1183,7 +1185,7 @@ static int32_t
 shapeUnicode(UChar *dest, int32_t sourceLength,
              int32_t destSize,uint32_t options,
              UErrorCode *pErrorCode,
-             int tashkeelFlag) {
+             int tashkeelFlag, struct uShapeVariables shapeVars) {
 
     int32_t          i, iend;
     int32_t          step;
@@ -1337,11 +1339,11 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
     }
     destSize = sourceLength;
     if ( (lamalef_found != 0 ) || (tashkeelFound  != 0) ){
-        destSize = handleGeneratedSpaces(dest,sourceLength,destSize,options,pErrorCode);
+        destSize = handleGeneratedSpaces(dest,sourceLength,destSize,options,pErrorCode, shapeVars);
     }
 
     if ( (seenfamFound != 0) || (yehhamzaFound != 0) ) {
-        destSize = expandCompositChar(dest, sourceLength,destSize,options,pErrorCode, SHAPE_MODE);
+        destSize = expandCompositChar(dest, sourceLength,destSize,options,pErrorCode, SHAPE_MODE,shapeVars);
     }
     return destSize;
 }
@@ -1354,7 +1356,7 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
 static int32_t
 deShapeUnicode(UChar *dest, int32_t sourceLength,
                int32_t destSize,uint32_t options,
-               UErrorCode *pErrorCode) {
+               UErrorCode *pErrorCode, struct uShapeVariables shapeVars) {
     int32_t i = 0;
     int32_t lamalef_found = 0;
     int32_t yehHamzaComposeEnabled = 0;
@@ -1393,7 +1395,7 @@ deShapeUnicode(UChar *dest, int32_t sourceLength,
 
    destSize = sourceLength;
    if (lamalef_found != 0){
-          destSize = expandCompositChar(dest,sourceLength,destSize,options,pErrorCode,DESHAPE_MODE);
+          destSize = expandCompositChar(dest,sourceLength,destSize,options,pErrorCode,DESHAPE_MODE, shapeVars);
    }
    return destSize;
 }
@@ -1411,12 +1413,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
               UErrorCode *pErrorCode) {
 
     int32_t destLength;
-
-    spacesRelativeToTextBeginEnd = 0;
-    uShapeLamalefBegin = U_SHAPE_LAMALEF_BEGIN;
-    uShapeLamalefEnd = U_SHAPE_LAMALEF_END;
-    uShapeTashkeelBegin = U_SHAPE_TASHKEEL_BEGIN;
-    uShapeTashkeelEnd = U_SHAPE_TASHKEEL_END;
+	struct  uShapeVariables shapeVars = { OLD_TAIL_CHAR,U_SHAPE_LAMALEF_BEGIN,U_SHAPE_LAMALEF_END,U_SHAPE_TASHKEEL_BEGIN,U_SHAPE_TASHKEEL_END,0}; 
 
     /* usual error checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -1479,9 +1476,9 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
     /* Does Options contain the new Seen Tail Unicode code point option */
     if ( (options&U_SHAPE_TAIL_TYPE_MASK) == U_SHAPE_TAIL_NEW_UNICODE){
-        tailChar = NEW_TAIL_CHAR;
+        shapeVars.tailChar = NEW_TAIL_CHAR;
     }else {
-        tailChar = OLD_TAIL_CHAR;
+        shapeVars.tailChar = OLD_TAIL_CHAR;
     }
 
     if((options&U_SHAPE_LETTERS_MASK)!=U_SHAPE_LETTERS_NOOP) {
@@ -1579,12 +1576,11 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
 
         if((options&U_SHAPE_TEXT_DIRECTION_MASK) == U_SHAPE_TEXT_DIRECTION_VISUAL_LTR) {
             if((options&U_SHAPE_SPACES_RELATIVE_TO_TEXT_MASK) == U_SHAPE_SPACES_RELATIVE_TO_TEXT_BEGIN_END) {
-                spacesRelativeToTextBeginEnd = 1;
-                uShapeLamalefBegin = U_SHAPE_LAMALEF_END;
-                uShapeLamalefEnd = U_SHAPE_LAMALEF_BEGIN;
-
-                uShapeTashkeelBegin = U_SHAPE_TASHKEEL_END;
-                uShapeTashkeelEnd = U_SHAPE_TASHKEEL_BEGIN;
+                shapeVars.spacesRelativeToTextBeginEnd = 1;
+                shapeVars.uShapeLamalefBegin = U_SHAPE_LAMALEF_END;
+                shapeVars.uShapeLamalefEnd = U_SHAPE_LAMALEF_BEGIN;
+                shapeVars.uShapeTashkeelBegin = U_SHAPE_TASHKEEL_END;
+                shapeVars.uShapeTashkeelEnd = U_SHAPE_TASHKEEL_BEGIN;
             }
         }
 
@@ -1593,10 +1589,10 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
              if( (options&U_SHAPE_TASHKEEL_MASK)> 0
                  && ((options&U_SHAPE_TASHKEEL_MASK) !=U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL)) {
                 /* Call the shaping function with tashkeel flag == 2 for removal of tashkeel */
-                destLength = shapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode,2);
+                destLength = shapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode,2,shapeVars);
              }else {
                 /* default Call the shaping function with tashkeel flag == 1 */
-                destLength = shapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode,1);
+                destLength = shapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode,1,shapeVars);
 
                 /*After shaping text check if user wants to remove tashkeel and replace it with tatweel*/
                 if( (options&U_SHAPE_TASHKEEL_MASK) == U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL){
@@ -1606,12 +1602,12 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
             break;
         case U_SHAPE_LETTERS_SHAPE_TASHKEEL_ISOLATED :
             /* Call the shaping function with tashkeel flag == 0 */
-            destLength = shapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode,0);
+            destLength = shapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode,0,shapeVars);
             break;
 
         case U_SHAPE_LETTERS_UNSHAPE :
             /* Call the deshaping function */
-            destLength = deShapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode);
+            destLength = deShapeUnicode(tempbuffer,sourceLength,destCapacity,options,pErrorCode,shapeVars);
             break;
         default :
             /* will never occur because of validity checks above */
