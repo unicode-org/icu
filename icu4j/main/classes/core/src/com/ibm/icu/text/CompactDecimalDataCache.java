@@ -81,6 +81,12 @@ class CompactDecimalDataCache {
             this.longData = longData;
         }
     }
+    
+    private static enum QuoteState {
+        OUTSIDE,   // Outside single quote
+        INSIDE_EMPTY,  // Just inside single quote
+        INSIDE_FULL   // Inside single quote along with characters
+    }
 
 
     /**
@@ -291,7 +297,33 @@ class CompactDecimalDataCache {
     }
 
     private static String fixQuotes(String prefixOrSuffix) {
-        return prefixOrSuffix.replace("'.'", ".");
+        StringBuilder result = new StringBuilder();
+        int len = prefixOrSuffix.length();
+        QuoteState state = QuoteState.OUTSIDE;
+        for (int idx = 0; idx < len; idx++) {
+            char ch = prefixOrSuffix.charAt(idx);
+            if (ch == '\'') {
+                if (state == QuoteState.INSIDE_EMPTY) {
+                    result.append('\'');
+                }
+            } else {
+                result.append(ch);
+            }
+            
+            // Update state
+            switch (state) {
+            case OUTSIDE:
+                state = ch == '\'' ? QuoteState.INSIDE_EMPTY : QuoteState.OUTSIDE;
+                break;
+            case INSIDE_EMPTY:
+            case INSIDE_FULL:
+                state = ch == '\'' ? QuoteState.OUTSIDE : QuoteState.INSIDE_FULL;
+                break;
+            default:
+                throw new IllegalStateException();
+            }
+        }
+        return result.toString();  
     }
 
     /**
