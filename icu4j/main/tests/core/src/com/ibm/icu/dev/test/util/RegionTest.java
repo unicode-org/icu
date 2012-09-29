@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2011, International Business Machines
+ * Copyright (c) 2011-2012, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: John Emmons
@@ -349,7 +349,7 @@ public class RegionTest extends TestFmwk {
         
         for (String [] rd : knownRegions ) {
             try {
-               Region r = Region.get(rd[0]);
+               Region r = Region.getInstance(rd[0]);
                int n = r.getNumericCode();
                int e = Integer.valueOf(rd[1]).intValue();
                if ( n != e ) {
@@ -361,57 +361,58 @@ public class RegionTest extends TestFmwk {
                        errln("Parent for " + r.toString() + " should have been NULL.  Got: " + c.toString());
                    }
                } else {
-                   Region p = Region.get(rd[2]);                   
+                   Region p = Region.getInstance(rd[2]);                   
                    if ( !p.equals(c)) {
                        errln("Expected parent of region " + r.toString() + " was " + p.toString() + ". Got: " + ( c == null ? "NULL" : c.toString()) );
                    }
                }
-               if (!r.isOfType(Region.RegionType.valueOf(rd[3]))) {
+               if (r.getType() != Region.RegionType.valueOf(rd[3])) {
                    errln("Expected region " + r.toString() + " to be of type " + rd[3] + ". Got:" + r.getType().toString());
                }
                int nc = Integer.valueOf(rd[1]).intValue();
                if ( nc > 0 ) {
-                   Region ncRegion = Region.get(nc);
+                   Region ncRegion = Region.getInstance(nc);
                    if ( !ncRegion.equals(r) && nc != 891 ) { // 891 is special case - CS and YU both deprecated codes for region 891
                        errln("Creating region " + r.toString() + " by its numeric code returned a different region. Got: " + ncRegion.toString());
                    }
                }
             } catch (IllegalArgumentException ex ) {
-               errln("Known region " + rd[0] + "was not recognized.");
+               errln("Known region " + rd[0] + " was not recognized.");
             }
         }
     }
     
     public void TestBadArguments() {
         try {
-            Region.get(null);
+            Region.getInstance(null);
             errln("Calling Region.get(null) should have thrown a NullPointerException, but didn't.");
         } catch ( NullPointerException ex ) {
             // Do nothing - we're supposed to get here.
         }
         try {
-            Region.get("BOGUS");
+            Region.getInstance("BOGUS");
             errln("Calling Region.get(BOGUS) should have thrown a IllegalArgumentException, but didn't.");
         } catch ( IllegalArgumentException ex ) {
             // Do nothing - we're supposed to get here.
         }
         try {
-            Region.get(-123);
+            Region.getInstance(-123);
             errln("Calling Region.get(-123) should have thrown a IllegalArgumentException, but didn't.");
         } catch ( IllegalArgumentException ex ) {
             // Do nothing - we're supposed to get here.
         }
     }
-    public void TestAvailableRegions() {
+
+    public void TestAvailableTerritories() {
         // Test to make sure that the set of territories contained in World and the set of all available
         // territories are one and the same.
         Set<Region> availableTerritories = Region.getAvailable(RegionType.TERRITORY);
-        Region world = Region.get("001");
-        Set<Region> containedInWorld = world.getContainedTerritories();
+        Region world = Region.getInstance("001");
+        Set<Region> containedInWorld = world.getContainedRegions(RegionType.TERRITORY);
         if ( !availableTerritories.equals(containedInWorld) ) {
             errln("Available territories and all territories contained in world should be the same set." +
-            	  "Available = " + availableTerritories.toString() + 
-            	  " : Contained in World = " + containedInWorld.toString());
+                  "Available = " + availableTerritories.toString() + 
+                  " : Contained in World = " + containedInWorld.toString());
         }
     }
 }
