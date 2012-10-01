@@ -131,7 +131,55 @@ public class ArabicShapingRegTest extends TestFmwk {
             "\u0634\u0651\u0645\u0652\u0633";
     private static final String tashkeelShaddaLTR=
             "\u0633\u0652\u0645\u0651\u0634";
-    
+
+    private static final String ArMathSym =
+        "\uD83B\uDE00\uD83B\uDE01\uD83B\uDE02\uD83B\uDE03\u0020" + 
+        "\uD83B\uDE24\uD83B\uDE05\uD83B\uDE06\u0020" +
+        "\uD83B\uDE07\uD83B\uDE08\uD83B\uDE09\u0020" +
+        "\uD83B\uDE0A\uD83B\uDE0B\uD83B\uDE0C\uD83B\uDE0D\u0020" + 
+        "\uD83B\uDE0E\uD83B\uDE0F\uD83B\uDE10\uD83B\uDE11\u0020" +
+        "\uD83B\uDE12\uD83B\uDE13\uD83B\uDE14\uD83B\uDE15\u0020" +
+        "\uD83B\uDE16\uD83B\uDE17\uD83B\uDE18\u0020" +
+        "\uD83B\uDE19\uD83B\uDE1A\uD83B\uDE1B";
+
+    private static final String ArMathSymLooped =
+        "\uD83B\uDE80\uD83B\uDE81\uD83B\uDE82\uD83B\uDE83\u0020" +
+        "\uD83B\uDE84\uD83B\uDE85\uD83B\uDE86\u0020" +
+        "\uD83B\uDE87\uD83B\uDE88\uD83B\uDE89\u0020" +
+        "\uD83B\uDE8B\uD83B\uDE8C\uD83B\uDE8D\u0020" +
+        "\uD83B\uDE8E\uD83B\uDE8F\uD83B\uDE90\uD83B\uDE91\u0020" + 
+        "\uD83B\uDE92\uD83B\uDE93\uD83B\uDE94\uD83B\uDE95\u0020" +
+        "\uD83B\uDE96\uD83B\uDE97\uD83B\uDE98\u0020" +
+        "\uD83B\uDE99\uD83B\uDE9A\uD83B\uDE9B";
+
+    private static final String ArMathSymDoubleStruck =
+        "\uD83B\uDEA1\uD83B\uDEA2\uD83B\uDEA3\u0020" +
+        "\uD83B\uDEA5\uD83B\uDEA6\u0020" +
+        "\uD83B\uDEA7\uD83B\uDEA8\uD83B\uDEA9\u0020" + 
+        "\uD83B\uDEAB\uD83B\uDEAC\uD83B\uDEAD\u0020" +
+        "\uD83B\uDEAE\uD83B\uDEAF\uD83B\uDEB0\uD83B\uDEB1\u0020" + 
+        "\uD83B\uDEB2\uD83B\uDEB3\uD83B\uDEB4\uD83B\uDEB5\u0020" +
+        "\uD83B\uDEB6\uD83B\uDEB7\uD83B\uDEB8\u0020" +
+        "\uD83B\uDEB9\uD83B\uDEBA\uD83B\uDEBB";
+
+    private static final String ArMathSymInitial =
+        "\uD83B\uDE21\uD83B\uDE22\u0020" +
+        "\uD83B\uDE27\uD83B\uDE29\u0020" +
+        "\uD83B\uDE2A\uD83B\uDE2B\uD83B\uDE2C\uD83B\uDE2D\u0020" + 
+        "\uD83B\uDE2E\uD83B\uDE2F\uD83B\uDE30\uD83B\uDE31\u0020" +
+        "\uD83B\uDE32\uD83B\uDE34\uD83B\uDE35\u0020" +
+        "\uD83B\uDE36\uD83B\uDE37\u0020" +
+        "\uD83B\uDE39\uD83B\uDE3B";
+
+    private static final String ArMathSymTailed =
+        "\uD83B\uDE42\uD83B\uDE47\uD83B\uDE49\uD83B\uDE4B\u0020" +
+        "\uD83B\uDE4D\uD83B\uDE4E\uD83B\uDE4F\u0020" +
+        "\uD83B\uDE51\uD83B\uDE52\uD83B\uDE54\uD83B\uDE57\u0020" + 
+        "\uD83B\uDE59\uD83B\uDE5B\uD83B\uDE5D\uD83B\uDE5F";
+
+    private static final String ArMathSymStretched =
+        "\uD83B\uDE21\u0633\uD83B\uDE62\u0647";
+
     private static final String logicalUnshape =
         "\u0020\u0020\u0020\uFE8D\uFEF5\u0020\uFEE5\u0020\uFE8D\uFEF7\u0020" +
         "\uFED7\uFEFC\u0020\uFEE1\u0020\uFE8D\uFEDF\uFECC\uFEAE\uFE91\uFEF4" +
@@ -259,7 +307,58 @@ public class ArabicShapingRegTest extends TestFmwk {
                                  "\ufeb2\ufee4\ufe7d\ufeb7\u0020"), 
        TestData.standard(tashkeelShaddaLTR,                                                                                                                     
                                 ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_RESIZE |ArabicShaping.TEXT_DIRECTION_VISUAL_LTR , 
-                                "\ufeb2\ufee4\ufe7d\ufeb7"),                         
+                                "\ufeb2\ufee4\ufe7d\ufeb7"),
+
+        TestData.standard(ArMathSym,
+                          ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_BEGIN |ArabicShaping.TEXT_DIRECTION_VISUAL_RTL ,
+                          "\uD83B\uDE00\uD83B\uDE01\uD83B\uDE02\uD83B\uDE03\u0020" +
+                          "\uD83B\uDE24\uD83B\uDE05\uD83B\uDE06\u0020" +
+                          "\uD83B\uDE07\uD83B\uDE08\uD83B\uDE09\u0020" +
+                          "\uD83B\uDE0A\uD83B\uDE0B\uD83B\uDE0C\uD83B\uDE0D\u0020" +
+                          "\uD83B\uDE0E\uD83B\uDE0F\uD83B\uDE10\uD83B\uDE11\u0020" +
+                          "\uD83B\uDE12\uD83B\uDE13\uD83B\uDE14\uD83B\uDE15\u0020" +
+                          "\uD83B\uDE16\uD83B\uDE17\uD83B\uDE18\u0020" +
+                          "\uD83B\uDE19\uD83B\uDE1A\uD83B\uDE1B"),
+        TestData.standard(ArMathSymLooped,
+                          ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_END|ArabicShaping.TEXT_DIRECTION_VISUAL_RTL ,
+                          "\uD83B\uDE80\uD83B\uDE81\uD83B\uDE82\uD83B\uDE83\u0020" +
+                          "\uD83B\uDE84\uD83B\uDE85\uD83B\uDE86\u0020" +
+                          "\uD83B\uDE87\uD83B\uDE88\uD83B\uDE89\u0020" +
+                          "\uD83B\uDE8B\uD83B\uDE8C\uD83B\uDE8D\u0020" +
+                          "\uD83B\uDE8E\uD83B\uDE8F\uD83B\uDE90\uD83B\uDE91\u0020" +
+                          "\uD83B\uDE92\uD83B\uDE93\uD83B\uDE94\uD83B\uDE95\u0020" +
+                          "\uD83B\uDE96\uD83B\uDE97\uD83B\uDE98\u0020" +
+                          "\uD83B\uDE99\uD83B\uDE9A\uD83B\uDE9B"),  
+        TestData.standard(ArMathSymDoubleStruck,
+                          ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_RESIZE|ArabicShaping.TEXT_DIRECTION_VISUAL_RTL ,
+                          "\uD83B\uDEA1\uD83B\uDEA2\uD83B\uDEA3\u0020" +
+                          "\uD83B\uDEA5\uD83B\uDEA6\u0020" +
+                          "\uD83B\uDEA7\uD83B\uDEA8\uD83B\uDEA9\u0020" +
+                          "\uD83B\uDEAB\uD83B\uDEAC\uD83B\uDEAD\u0020" +
+                          "\uD83B\uDEAE\uD83B\uDEAF\uD83B\uDEB0\uD83B\uDEB1\u0020" +
+                          "\uD83B\uDEB2\uD83B\uDEB3\uD83B\uDEB4\uD83B\uDEB5\u0020" +
+                          "\uD83B\uDEB6\uD83B\uDEB7\uD83B\uDEB8\u0020" +
+                          "\uD83B\uDEB9\uD83B\uDEBA\uD83B\uDEBB"),  
+
+        TestData.standard(ArMathSymInitial,
+                          ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_BEGIN |ArabicShaping.TEXT_DIRECTION_VISUAL_LTR , 
+                          "\uD83B\uDE21\uD83B\uDE22\u0020" +
+                          "\uD83B\uDE27\uD83B\uDE29\u0020" +
+                          "\uD83B\uDE2A\uD83B\uDE2B\uD83B\uDE2C\uD83B\uDE2D\u0020" +
+                          "\uD83B\uDE2E\uD83B\uDE2F\uD83B\uDE30\uD83B\uDE31\u0020" +
+                          "\uD83B\uDE32\uD83B\uDE34\uD83B\uDE35\u0020" +
+                          "\uD83B\uDE36\uD83B\uDE37\u0020" +
+                          "\uD83B\uDE39\uD83B\uDE3B"), 
+        TestData.standard(ArMathSymTailed,
+                          ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_END |ArabicShaping.TEXT_DIRECTION_VISUAL_LTR , 
+                          "\uD83B\uDE42\uD83B\uDE47\uD83B\uDE49\uD83B\uDE4B\u0020" +
+                          "\uD83B\uDE4D\uD83B\uDE4E\uD83B\uDE4F\u0020" +
+                          "\uD83B\uDE51\uD83B\uDE52\uD83B\uDE54\uD83B\uDE57\u0020" +
+                          "\uD83B\uDE59\uD83B\uDE5B\uD83B\uDE5D\uD83B\uDE5F"), 
+        TestData.standard(ArMathSymStretched,
+                          ArabicShaping.LETTERS_SHAPE|ArabicShaping.TASHKEEL_RESIZE |ArabicShaping.TEXT_DIRECTION_VISUAL_LTR , 
+                          "\uD83B\uDE21\uFEB1\uD83B\uDE62\uFEE9"),
+
         /* logical unshape */
         TestData.standard(logicalUnshape,
                           LETTERS_UNSHAPE | TEXT_DIRECTION_LOGICAL | LENGTH_FIXED_SPACES_NEAR,
