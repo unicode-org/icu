@@ -916,6 +916,23 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
+      * This is a special function used by the CompactDecimalFormat subclass
+      * to determine if the number to be formatted is negative.
+      *
+      * @param number The number to format.
+      * @return True if number is negative.
+      * @internal
+      * @deprecated
+      */
+     @Deprecated
+     boolean isNumberNegative(double number) {
+         if (Double.isNaN(number)) {
+             return false;
+         }
+         return isNegative(multiply(number));
+     }
+
+    /**
      * Round a double value to the nearest multiple of the given rounding increment,
      * according to the given mode. This is equivalent to rounding value/roundingInc to
      * the nearest integer, according to the given mode, and returning that integer *
@@ -3957,24 +3974,30 @@ public class DecimalFormat extends NumberFormat {
      */
     @Override
     public AttributedCharacterIterator formatToCharacterIterator(Object obj) {
+      return formatToCharacterIterator(obj, NULL_UNIT);
+    }
+
+    // TODO: implement
+    protected AttributedCharacterIterator formatToCharacterIterator(Object obj, Unit unit) {
         if (!(obj instanceof Number))
             throw new IllegalArgumentException();
         Number number = (Number) obj;
-        StringBuffer text = null;
+        StringBuffer text = new StringBuffer();
+        unit.writePrefix(text);
         attributes.clear();
         if (obj instanceof BigInteger) {
-            text = format((BigInteger) number, new StringBuffer(), new FieldPosition(0), true);
+            format((BigInteger) number, text, new FieldPosition(0), true);
         } else if (obj instanceof java.math.BigDecimal) {
-            text = format((java.math.BigDecimal) number, new StringBuffer(), new FieldPosition(0)
+            format((java.math.BigDecimal) number, text, new FieldPosition(0)
                           , true);
         } else if (obj instanceof Double) {
-            text = format(number.doubleValue(), new StringBuffer(), new FieldPosition(0), true);
+            format(number.doubleValue(), text, new FieldPosition(0), true);
         } else if (obj instanceof Integer || obj instanceof Long) {
-            text = format(number.longValue(), new StringBuffer(), new FieldPosition(0), true);
+            format(number.longValue(), text, new FieldPosition(0), true);
         } else {
             throw new IllegalArgumentException();
         }
-
+        unit.writeSuffix(text);
         AttributedString as = new AttributedString(text.toString());
 
         // add NumberFormat field attributes to the AttributedString
@@ -5624,6 +5647,33 @@ public class DecimalFormat extends NumberFormat {
 
     // Information needed for DecimalFormat to format/parse currency plural.
     private CurrencyPluralInfo currencyPluralInfo = null;
+
+    /**
+     * Unit is an immutable class for the textual representation of a unit, in
+     * particular its prefix and suffix.
+     *
+     * @author rocketman
+     *
+     */
+    static class Unit {
+        private final String prefix;
+        private final String suffix;
+
+        public Unit(String prefix, String suffix) {
+            this.prefix = prefix;
+            this.suffix = suffix;
+        }
+
+        public void writeSuffix(StringBuffer toAppendTo) {
+            toAppendTo.append(suffix);
+        }
+
+        public void writePrefix(StringBuffer toAppendTo) {
+            toAppendTo.append(prefix);
+        }
+    }
+
+    static final Unit NULL_UNIT = new Unit("", "");
 }
 
 // eof

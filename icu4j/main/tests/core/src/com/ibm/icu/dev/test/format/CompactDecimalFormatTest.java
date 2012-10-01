@@ -8,6 +8,7 @@ package com.ibm.icu.dev.test.format;
 
 import java.text.AttributedCharacterIterator;
 import java.text.CharacterIterator;
+import java.text.FieldPosition;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CompactDecimalFormat;
@@ -78,6 +79,26 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {1234567890123456f, "1200 трилиона"},
     };
 
+    Object[][] SerbianTestDataLongNegative = {
+            {-1234, "-1,2 хиљада"},
+            {-12345, "-12 хиљада"},
+            {-21789, "-22 хиљаде"},
+            {-123456, "-120 хиљада"},
+            {-999999, "-1 милион"},
+            {-1234567, "-1,2 милиона"},
+            {-12345678, "-12 милиона"},
+            {-123456789, "-120 милиона"},
+            {-1234567890, "-1,2 милијарди"},
+            {-12345678901f, "-12 милијарди"},
+            {-20890123456f, "-21 милијарда"},
+            {-21890123456f, "-22 милијарде"},
+            {-123456789012f, "-120 милијарди"},
+            {-1234567890123f, "-1,2 трилиона"},
+            {-12345678901234f, "-12 трилиона"},
+            {-123456789012345f, "-120 трилиона"},
+            {-1234567890123456f, "-1200 трилиона"},
+    };
+
    Object[][] JapaneseTestData = {
             {1234f, "1.2千"},
             {12345f, "1.2万"},
@@ -131,14 +152,32 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {5184, "5200"},
     };
 
+    Object[][] SwahiliTestDataNegative = {
+            {-1234f, "elfu\u00a0-1.2"},
+            {-12345f, "elfu\u00a0-12"},
+            {-123456f, "laki-1.2"},
+            {-1234567f, "M-1.2"},
+            {-12345678f, "M-12"},
+            {-123456789f, "M-120"},
+            {-1234567890f, "B-1.2"},
+            {-12345678901f, "B-12"},
+            {-123456789012f, "B-120"},
+            {-1234567890123f, "T-1.2"},
+            {-12345678901234f, "T-12"},
+            {-12345678901234567890f, "T-12000000"},
+    };
+
+    // TODO: Write a test for negative numbers in arabic.
+
     public void TestCharacterIterator() {
         CompactDecimalFormat cdf =
-                CompactDecimalFormat.getInstance(ULocale.ENGLISH, CompactStyle.SHORT);
-        AttributedCharacterIterator iter = cdf.formatToCharacterIterator(12346);
-        assertEquals("CharacterIterator", "12K", iterToString(iter));
-        iter = cdf.formatToCharacterIterator(12346);
-        assertEquals("Attributes", iter.getAttribute(NumberFormat.Field.INTEGER), NumberFormat.Field.INTEGER);
-        assertEquals("Attributes", 0, iter.getRunStart());
+            CompactDecimalFormat.getInstance(ULocale.forLanguageTag("sw"), CompactStyle.SHORT);
+        AttributedCharacterIterator iter = cdf.formatToCharacterIterator(1234567);
+        assertEquals("CharacterIterator", "M1.2", iterToString(iter));
+        iter = cdf.formatToCharacterIterator(1234567);
+        iter.setIndex(1);
+        assertEquals("Attributes", NumberFormat.Field.INTEGER, iter.getAttribute(NumberFormat.Field.INTEGER));
+        assertEquals("Attributes", 1, iter.getRunStart());
         assertEquals("Attributes", 2, iter.getRunLimit());
     }
 
@@ -150,7 +189,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
         NumberFormat cdf =
                 CompactDecimalFormat.getInstance(
                         ULocale.forLanguageTag("ar"), CompactStyle.LONG);
-        assertEquals("Arabic Long", "٥٫٣ ألف", cdf.format(5300));
+        assertEquals("Arabic Long", "\u0665\u066B\u0663- \u0623\u0644\u0641", cdf.format(-5300));
     }
     
     public void TestCsShort() {
@@ -174,12 +213,31 @@ public class CompactDecimalFormatTest extends TestFmwk {
         checkLocale(ULocale.forLanguageTag("sr"), CompactStyle.LONG, SerbianTestDataLong);
     }
 
+    public void TestSerbianLongNegative() {
+        checkLocale(ULocale.forLanguageTag("sr"), CompactStyle.LONG, SerbianTestDataLongNegative);
+    }
+
     public void TestJapaneseShort() {
          checkLocale(ULocale.JAPANESE, CompactStyle.SHORT, JapaneseTestData);
     }
 
     public void TestSwahiliShort() {
         checkLocale(ULocale.forLanguageTag("sw"), CompactStyle.SHORT, SwahiliTestData);
+    }
+
+    public void TestSwahiliShortNegative() {
+        checkLocale(ULocale.forLanguageTag("sw"), CompactStyle.SHORT, SwahiliTestDataNegative);
+    }
+
+    public void TestFieldPosition() {
+        CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(
+                ULocale.forLanguageTag("sw"), CompactStyle.SHORT);
+        FieldPosition fp = new FieldPosition(0);
+        StringBuffer sb = new StringBuffer();
+        cdf.format(1234567f, sb, fp);
+        assertEquals("fp string", "M1.2", sb.toString());
+        assertEquals("fp start", 1, fp.getBeginIndex());
+        assertEquals("fp end", 2, fp.getEndIndex());
     }
 
     public void checkLocale(ULocale locale, CompactStyle style, Object[][] testData) {
