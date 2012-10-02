@@ -341,9 +341,11 @@ public class OlsonTimeZone extends BasicTimeZone {
     public boolean observesDaylightTime() {
         long current = System.currentTimeMillis();
 
-        if (finalZone != null && current >= finalStartMillis) {
+        if (finalZone != null) {
             if (finalZone.useDaylightTime()) {
                 return true;
+            } else if (current >= finalStartMillis) {
+                return false;
             }
         }
 
