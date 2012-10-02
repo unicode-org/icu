@@ -27,7 +27,7 @@ status(U_ZERO_ERROR)
 {
     UCA = (RuleBasedCollator *)Collator::createInstance(Locale::getRoot(), status);
     if(U_FAILURE(status)) {
-        errln("ERROR - UCAConformanceTest: Unable to open UCA collator!");
+        dataerrln("Error - UCAConformanceTest: Unable to open UCA collator! - %s", u_errorName(status));
     }
 
     const char *srcDir = IntlTest::getSourceTestData(status);
@@ -48,7 +48,9 @@ UCAConformanceTest::~UCAConformanceTest()
 {
     delete UCA;
     delete rbUCA;
-    fclose(testFile);
+    if (testFile) {
+        fclose(testFile);
+    }
 }
 
 void UCAConformanceTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par */)
@@ -68,10 +70,15 @@ void UCAConformanceTest::initRbUCA()
 {
     if(!rbUCA) {
         UnicodeString ucarules;
-        UCA->getRules(UCOL_FULL_RULES, ucarules);
-        rbUCA = new RuleBasedCollator(ucarules, status);
-        if (U_FAILURE(status)) {
-            errln("Failure creating UCA rule-based collator: %s", u_errorName(status));
+        if (UCA) {
+            UCA->getRules(UCOL_FULL_RULES, ucarules);
+            rbUCA = new RuleBasedCollator(ucarules, status);
+            if (U_FAILURE(status)) {
+                dataerrln("Failure creating UCA rule-based collator: %s", u_errorName(status));
+                return;
+            }
+        } else {
+            dataerrln("Failure creating UCA rule-based collator: %s", u_errorName(status));
             return;
         }
     }
@@ -277,12 +284,20 @@ void UCAConformanceTest::testConformance(const Collator *coll)
 }
 
 void UCAConformanceTest::TestTableNonIgnorable(/* par */) {
+    if (U_FAILURE(status)) {
+        dataerrln("Error running UCA Conformance Test: %s", u_errorName(status));
+        return;
+    }
     setCollNonIgnorable(UCA);
     openTestFile("NON_IGNORABLE");
     testConformance(UCA);
 }
 
 void UCAConformanceTest::TestTableShifted(/* par */) {
+    if (U_FAILURE(status)) {
+        dataerrln("Error running UCA Conformance Test: %s", u_errorName(status));
+        return;
+    }
     setCollShifted(UCA);
     openTestFile("SHIFTED");
     testConformance(UCA);
