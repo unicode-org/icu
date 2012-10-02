@@ -2917,29 +2917,30 @@ void CalendarRegressionTest::TestT9452(void) {
     cal.set(2011, UCAL_DECEMBER, 29, 0, 0, 0);
 
     UDate d = cal.getTime(status);
-    failure(status, "getTime for initial date");
-    sdf.format(d, dstr);
-    logln(UnicodeString("Initial date: ") + dstr);
+    if (!failure(status, "getTime for initial date")) {
+        sdf.format(d, dstr);
+        logln(UnicodeString("Initial date: ") + dstr);
 
-    // Add 1 day
-    cal.add(UCAL_DATE, 1, status);
-    failure(status, "add 1 day");
-    d = cal.getTime(status);
-    failure(status, "getTime after +1 day");
-    dstr.remove();
-    sdf.format(d, dstr);
-    logln(UnicodeString("+1 day: ") + dstr);
-    assertEquals("Add 1 day", UnicodeString("2011-12-31T00:00:00+14:00"), dstr);
+        // Add 1 day
+        cal.add(UCAL_DATE, 1, status);
+        failure(status, "add 1 day");
+        d = cal.getTime(status);
+        failure(status, "getTime after +1 day");
+        dstr.remove();
+        sdf.format(d, dstr);
+        logln(UnicodeString("+1 day: ") + dstr);
+        assertEquals("Add 1 day", UnicodeString("2011-12-31T00:00:00+14:00"), dstr);
 
-    // Subtract 1 day
-    cal.add(UCAL_DATE, -1, status);
-    failure(status, "subtract 1 day");
-    d = cal.getTime(status);
-    failure(status, "getTime after -1 day");
-    dstr.remove();
-    sdf.format(d, dstr);
-    logln(UnicodeString("-1 day: ") + dstr);
-    assertEquals("Subtract 1 day", UnicodeString("2011-12-29T00:00:00-10:00"), dstr);
+        // Subtract 1 day
+        cal.add(UCAL_DATE, -1, status);
+        failure(status, "subtract 1 day");
+        d = cal.getTime(status);
+        failure(status, "getTime after -1 day");
+        dstr.remove();
+        sdf.format(d, dstr);
+        logln(UnicodeString("-1 day: ") + dstr);
+        assertEquals("Subtract 1 day", UnicodeString("2011-12-29T00:00:00-10:00"), dstr);
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
