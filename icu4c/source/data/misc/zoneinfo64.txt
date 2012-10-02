@@ -3,17 +3,17 @@
 // Corporation and others.  All Rights Reserved.
 //---------------------------------------------------------
 // Build tool: tz2icu
-// Build date: Tue Aug 14 09:42:16 2012
+// Build date: Thu Sep 13 12:37:32 2012
 // Olson source: ftp://elsie.nci.nih.gov/pub/
-// Olson version: 2012e
-// ICU version: 50.0.1
+// Olson version: 2012f
+// ICU version: 50.0.2
 //---------------------------------------------------------
 // >> !!! >>   THIS IS A MACHINE-GENERATED FILE   << !!! <<
 // >> !!! >>>            DO NOT EDIT             <<< !!! <<
 //---------------------------------------------------------
 
 zoneinfo64:table(nofallback) {
- TZVersion { "2012e" }
+ TZVersion { "2012f" }
  Zones:array { 
   /* ACT */ :int { 345 } //Z#0
   /* AET */ :int { 357 } //Z#1
@@ -2810,9 +2810,12 @@ zoneinfo64:table(nofallback) {
     typeMap:bin { "0102" }
   } //Z#546
   /* Pacific/Fiji */ :table {
-    trans:intvector { -1709985220, 909842400, 920124000, 941896800, 951573600, 1259416800, 1269698400, 1287842400, 1299333600, 1319292000, 1327154400 }
+    trans:intvector { -1709985220, 909842400, 920124000, 941896800, 951573600, 1259416800, 1269698400, 1287842400, 1299333600, 1319292000, 1327154400, 1350741600 }
     typeOffsets:intvector { 42820, 0, 43200, 0, 43200, 3600 }
-    typeMap:bin { "0102010201020102010201" }
+    typeMap:bin { "010201020102010201020102" }
+    finalRule { "Fiji" }
+    finalRaw:int { 43200 }
+    finalYear:int { 2013 }
   } //Z#547
   /* Pacific/Funafuti */ :table {
     transPre32:intvector { -1, 2117471484 }
@@ -3314,51 +3317,54 @@ zoneinfo64:table(nofallback) {
   EUAsia:intvector {
     2, -31, -1, 3600, 2, 9, -31, -1, 3600, 2, 3600
   } //_#13
+  Fiji:intvector {
+    9, 18, -1, 7200, 0, 0, 18, -1, 10800, 0, 3600
+  } //_#14
   Jordan:intvector {
     2, -31, -5, 86400, 0, 9, -31, -6, 0, 1, 3600
-  } //_#14
+  } //_#15
   LH:intvector {
     9, 1, -1, 7200, 0, 3, 1, -1, 7200, 0, 1800
-  } //_#15
+  } //_#16
   Lebanon:intvector {
     2, -31, -1, 0, 0, 9, -31, -1, 0, 0, 3600
-  } //_#16
+  } //_#17
   Mexico:intvector {
     3, 1, -1, 7200, 0, 9, -31, -1, 7200, 0, 3600
-  } //_#17
+  } //_#18
   Morocco:intvector {
     3, -30, -1, 7200, 0, 8, -30, -1, 10800, 0, 3600
-  } //_#18
+  } //_#19
   NZ:intvector {
     8, -30, -1, 7200, 1, 3, 1, -1, 7200, 1, 3600
-  } //_#19
+  } //_#20
   NZAQ:intvector {
     8, -30, -1, 7200, 1, 3, 1, -1, 7200, 1, 3600
-  } //_#20
+  } //_#21
   Namibia:intvector {
     8, 1, -1, 7200, 0, 3, 1, -1, 7200, 0, 3600
-  } //_#21
+  } //_#22
   Para:intvector {
     9, 1, -1, 0, 0, 3, 8, -1, 0, 0, 3600
-  } //_#22
+  } //_#23
   Syria:intvector {
     2, -31, -6, 0, 0, 9, -31, -6, 0, 0, 3600
-  } //_#23
+  } //_#24
   SystemV:intvector {
     3, -30, -1, 7200, 0, 9, -31, -1, 7200, 0, 3600
-  } //_#24
+  } //_#25
   TC:intvector {
     2, 8, -1, 7200, 0, 10, 1, -1, 7200, 0, 3600
-  } //_#25
+  } //_#26
   Thule:intvector {
     2, 8, -1, 7200, 0, 10, 1, -1, 7200, 0, 3600
-  } //_#26
+  } //_#27
   US:intvector {
     2, 8, -1, 7200, 0, 10, 1, -1, 7200, 0, 3600
-  } //_#27
+  } //_#28
   Uruguay:intvector {
     9, 1, -1, 7200, 0, 2, 8, -1, 7200, 0, 3600
-  } //_#28
+  } //_#29
  }
  Regions:array {
   "AU", //Z#0 ACT
