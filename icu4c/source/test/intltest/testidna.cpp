@@ -1529,7 +1529,7 @@ void TestIDNA::TestCompareReferenceImpl(){
       UErrorCode dataStatus = U_ZERO_ERROR;
       loadTestData(dataStatus);
       if(U_FAILURE(dataStatus)) {
-        errln("Couldn't load test data: %s\n", u_errorName(dataStatus)); // save us from thousands and thousands of errors
+        dataerrln("Couldn't load test data: %s\n", u_errorName(dataStatus)); // save us from thousands and thousands of errors
         return;
       }
     }
