@@ -1759,7 +1759,7 @@ public final class ArabicShaping {
                         shape = 1;
                       
                     } else if(tashkeelFlag == 2 && dest[i] == SHADDA06_CHAR){
-                    	shape = 1;
+                        shape = 1;
                      
                     } else {
                         shape = 0;
