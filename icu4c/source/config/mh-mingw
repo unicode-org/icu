@@ -41,8 +41,8 @@ LINK.c=       $(CXX) $(CXXFLAGS) $(LDFLAGS)
 LD_SOOPTIONS= -Wl,-Bsymbolic
 
 ## Commands to make a shared library
-SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS) -Wl,--enable-auto-import -Wl,--out-implib=$(dir $@)lib$(notdir $(@:$(SO_TARGET_VERSION_MAJOR).$(SO)=))$(IMPORT_LIB_EXT)#M#
-SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS) -Wl,--enable-auto-import -Wl,--out-implib=$(dir $@)lib$(notdir $(@:$(SO_TARGET_VERSION_MAJOR).$(SO)=))$(IMPORT_LIB_EXT)#M#
+SHLIB.c=	$(CC) $(CFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS) -Wl,--enable-auto-import -Wl,--out-implib=$(dir $@)$(notdir $(@:$(SO_TARGET_VERSION_MAJOR).$(SO)=))$(IMPORT_LIB_EXT)#M#
+SHLIB.cc=	$(CXX) $(CXXFLAGS) $(LDFLAGS) -shared $(LD_SOOPTIONS) -Wl,--enable-auto-import -Wl,--out-implib=$(dir $@)$(notdir $(@:$(SO_TARGET_VERSION_MAJOR).$(SO)=))$(IMPORT_LIB_EXT)#M#
 
 ## Compiler switch to embed a runtime search path
 LD_RPATH=	
@@ -69,7 +69,7 @@ A = a
 ## An import library is needed for z/OS and MSVC
 IMPORT_LIB_EXT = .lib
 
-#LIBPREFIX=
+LIBPREFIX=
 
 # Change the stubnames so that poorly working FAT disks and installation programs can work.
 # This is also for backwards compatibility.
@@ -115,7 +115,7 @@ CURR_SRCCODE_FULL_DIR=$(subst \,/,$(shell cmd /c cd))#M# for Cygwin shell
 FINAL_SO_TARGET=$(basename $(SO_TARGET))$(SO_TARGET_VERSION_MAJOR).$(SO)
 MIDDLE_SO_TARGET=$(FINAL_SO_TARGET)
 
-FINAL_IMPORT_LIB = $(dir $(SO_TARGET))lib$(notdir $(basename $(SO_TARGET)))$(IMPORT_LIB_EXT)#M#
+FINAL_IMPORT_LIB = $(dir $(SO_TARGET))$(notdir $(basename $(SO_TARGET)))$(IMPORT_LIB_EXT)#M#
 IMPORT_LIB = $(FINAL_IMPORT_LIB)#M#
 MIDDLE_IMPORT_LIB = $(FINAL_IMPORT_LIB)#M#
 
