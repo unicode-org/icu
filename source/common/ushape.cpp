@@ -77,13 +77,13 @@
 #define DESHAPE_MODE 1
 
 struct uShapeVariables {
-	     UChar tailChar;
-	     uint32_t uShapeLamalefBegin;
-		 uint32_t uShapeLamalefEnd;
-		 uint32_t uShapeTashkeelBegin;
-		 uint32_t uShapeTashkeelEnd;
-	     int spacesRelativeToTextBeginEnd; 
-	    };
+     UChar tailChar;
+     uint32_t uShapeLamalefBegin;
+     uint32_t uShapeLamalefEnd;
+     uint32_t uShapeTashkeelBegin;
+     uint32_t uShapeTashkeelEnd;
+     int spacesRelativeToTextBeginEnd;
+};
 
 static const uint8_t tailFamilyIsolatedFinal[] = {
     /* FEB1 */ 1,
@@ -1251,20 +1251,20 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
                 currLink = getLink(wLamalef);    /* LAMALEF_SPACE_SUB is added here and is replaced by spaces   */
             }                                    /* in removeLamAlefSpaces()                         */
 
-			if ((i > 0) && (dest[i-1] == SPACE_CHAR)){
-             if ( isSeenFamilyChar(dest[i])){
+            if ((i > 0) && (dest[i-1] == SPACE_CHAR)){
+                if ( isSeenFamilyChar(dest[i])) {
                     seenfamFound = 1;
                 } else if (dest[i] == YEH_HAMZA_CHAR) {
                     yehhamzaFound = 1;
                 }
-			}
-			else if(i==0){
-				if ( isSeenFamilyChar(dest[i])){
+            }
+            else if(i==0){
+                if ( isSeenFamilyChar(dest[i])){
                     seenfamFound = 1;
                 } else if (dest[i] == YEH_HAMZA_CHAR) {
                     yehhamzaFound = 1;
                 }
-			}
+            }
 
             /*
              * get the proper shape according to link ability of neighbors
@@ -1286,14 +1286,14 @@ shapeUnicode(UChar *dest, int32_t sourceLength,
                         Shape = 0;
                     }
                 } else if(tashkeelFlag == 2 && dest[i] == SHADDA06_CHAR){
-				    Shape = 1;
+                    Shape = 1;
                 } else {
                     Shape = 0;
                 }
             }
             if ((dest[i] ^ 0x0600) < 0x100) {
                 if ( isTashkeelChar(dest[i]) ){
-					if (tashkeelFlag == 2  && dest[i] != SHADDA06_CHAR){
+                    if (tashkeelFlag == 2  && dest[i] != SHADDA06_CHAR){
                         dest[i] = TASHKEEL_SPACE_SUB;
                         tashkeelFound  = 1;
                     } else {
@@ -1401,7 +1401,7 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
               UErrorCode *pErrorCode) {
 
     int32_t destLength;
-	struct  uShapeVariables shapeVars = { OLD_TAIL_CHAR,U_SHAPE_LAMALEF_BEGIN,U_SHAPE_LAMALEF_END,U_SHAPE_TASHKEEL_BEGIN,U_SHAPE_TASHKEEL_END,0}; 
+    struct  uShapeVariables shapeVars = { OLD_TAIL_CHAR,U_SHAPE_LAMALEF_BEGIN,U_SHAPE_LAMALEF_END,U_SHAPE_TASHKEEL_BEGIN,U_SHAPE_TASHKEEL_END,0};
 
     /* usual error checking */
     if(pErrorCode==NULL || U_FAILURE(*pErrorCode)) {
@@ -1425,27 +1425,27 @@ u_shapeArabic(const UChar *source, int32_t sourceLength,
         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
     }
-	/* Validate  lamalef options */
-	if(((options&U_SHAPE_LAMALEF_MASK) > 0)&&
+    /* Validate  lamalef options */
+    if(((options&U_SHAPE_LAMALEF_MASK) > 0)&&
               !(((options & U_SHAPE_LAMALEF_MASK)==U_SHAPE_LAMALEF_BEGIN) ||
                 ((options & U_SHAPE_LAMALEF_MASK)==U_SHAPE_LAMALEF_END ) ||
                 ((options & U_SHAPE_LAMALEF_MASK)==U_SHAPE_LAMALEF_RESIZE )||
                  ((options & U_SHAPE_LAMALEF_MASK)==U_SHAPE_LAMALEF_AUTO) ||
                  ((options & U_SHAPE_LAMALEF_MASK)==U_SHAPE_LAMALEF_NEAR)))
-	{
-		 *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+    {
+         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
-	}
-	/* Validate  Tashkeel options */
-	if(((options&U_SHAPE_TASHKEEL_MASK) > 0)&&
+    }
+    /* Validate  Tashkeel options */
+    if(((options&U_SHAPE_TASHKEEL_MASK) > 0)&&
                    !(((options & U_SHAPE_TASHKEEL_MASK)==U_SHAPE_TASHKEEL_BEGIN) ||
                      ((options & U_SHAPE_TASHKEEL_MASK)==U_SHAPE_TASHKEEL_END )
                     ||((options & U_SHAPE_TASHKEEL_MASK)==U_SHAPE_TASHKEEL_RESIZE )||
-					((options & U_SHAPE_TASHKEEL_MASK)==U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL)))
-	{
-		 *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
+                    ((options & U_SHAPE_TASHKEEL_MASK)==U_SHAPE_TASHKEEL_REPLACE_BY_TATWEEL)))
+    {
+         *pErrorCode=U_ILLEGAL_ARGUMENT_ERROR;
         return 0;
-	}
+    }
     /* determine the source length */
     if(sourceLength==-1) {
         sourceLength=u_strlen(source);
