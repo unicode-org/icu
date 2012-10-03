@@ -9,7 +9,9 @@
  * Modification History:
  *
  *   Date        Name        Description
- *   9/23/2003 mehran        posted to icu-design
+ *   9/23/2003   mehran      posted to icu-design
+ *   10/1/2012   roozbeh     Fixed algorithm and heavily refactored and rewrote
+ *                           based on the implementation of Gregorian
  *****************************************************************************
  */
 
@@ -18,159 +20,47 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "umutex.h"
+#include "gregoimp.h" // Math
 #include <float.h>
 
-static const int8_t monthDays[] = { 31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29 };
+static const int16_t kPersianNumDays[]
+= {0,31,62,93,124,155,186,216,246,276,306,336}; // 0-based, for day-in-year
+static const int8_t kPersianMonthLength[]
+= {31,31,31,31,31,31,30,30,30,30,30,29}; // 0-based
+static const int8_t kPersianLeapMonthLength[]
+= {31,31,31,31,31,31,30,30,30,30,30,30}; // 0-based
 
-static int32_t
-jalali_to_julian(int year, int month, int day) 
-{
-    int32_t daysNo=0;
-    int i;
-
-    year = year -475+2820;
-    month -= 1;
-
-    daysNo=(year/2820)*1029983;
-    year=year % 2820;  
-
-    daysNo+=(year/128)* 46751;
-    if((year/128)>21)
-    {
-        daysNo-=46751;
-        year=(year%128)+128;
-    }
-    else
-        year=year%128;
-
-    if(year>=29)
-    {
-        year-=29;
-        daysNo+=10592;
-    }
-
-    if(year>=66)
-    {
-        year-=66;
-        daysNo+=24106;
-    }
-    else if( year>=33)
-    {
-        daysNo+=(year/33)* 12053;
-        year=year%33;
-    }
-
-    if (year >= 5)
-    {
-        daysNo += 1826;
-        year -=5;
-    }
-    else if (year == 4)
-    {
-        daysNo += 1460;
-        year -=4;
-    }
-
-    daysNo += 1461 * (year/4);
-    year %= 4;
-    daysNo += 365 * year;
-
-    for (i = 0; i < month; i++) {
-        daysNo += monthDays[i];
-    }
-
-    daysNo += day;
-
-    return daysNo-856493;
-}
-
-static void julian_to_jalali (int32_t daysNo, int *h_y, int *h_m, int *h_d) 
-{
-    int year=0, month=0, day=0;
-    int i;
-
-    daysNo+=856493;
-    year=(daysNo/1029983)*2820;
-    daysNo=daysNo%1029983;
-
-    if((daysNo/46751)<=21)
-    {
-        year+=(daysNo/46751)* 128;
-        daysNo=daysNo%46751;
-    }
-    else
-    {
-        year+=(daysNo/46751)* 128;
-        daysNo=daysNo%46751;
-        year-=128;
-        daysNo+=46751;
-    }
-
-    if (daysNo >= 10592)
-    {
-        year+= 29;
-        daysNo -= 10592;
-    }
-
-    if(daysNo>=24106)
-    {
-        daysNo-=24106;
-        year+=66;
-    }
-
-    if(daysNo>=12053)
-    {
-        daysNo-=12053;
-        year+=33;
-    }
-
-
-    if (daysNo >= 1826)
-    {
-        year+= 5;
-        daysNo -= 1826;
-    }
-    else if (daysNo > 1095)
-    {
-        year+= 3;
-        daysNo -= 1095;
-
-    }
-
-    year +=(4 * (daysNo/1461));
-    daysNo %= 1461;
-
-    if (daysNo == 0)
-    {
-        year -= 1;
-        daysNo = 366;
-    }
-    else
-    {
-        year += daysNo/365;
-        daysNo = daysNo % 365;
-        if (daysNo == 0)
-        {
-            year -= 1;
-            daysNo = 365;
-        }
-
-    }
-
-    for (i = 0; i < 11 && daysNo > monthDays[i]; ++i) {
-        daysNo -= monthDays[i];
-    }
-
-    month = i + 1;
-
-    day = daysNo;
-
-    *h_d = day;
-    *h_m = month;
-    *h_y = year-2345;
-}
+static const int32_t kPersianCalendarLimits[UCAL_FIELD_COUNT][4] = {
+    // Minimum  Greatest     Least   Maximum
+    //           Minimum   Maximum
+    {        0,        0,        0,        0}, // ERA
+    { -5000000, -5000000,  5000000,  5000000}, // YEAR
+    {        0,        0,       11,       11}, // MONTH
+    {        1,        1,       52,       53}, // WEEK_OF_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
+    {        1,       1,        29,       31}, // DAY_OF_MONTH
+    {        1,       1,       365,      366}, // DAY_OF_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
+    {        1,       1,         5,        5}, // DAY_OF_WEEK_IN_MONTH
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MINUTE
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // SECOND
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECOND
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // ZONE_OFFSET
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DST_OFFSET
+    { -5000000, -5000000,  5000000,  5000000}, // YEAR_WOY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DOW_LOCAL
+    { -5000000, -5000000,  5000000,  5000000}, // EXTENDED_YEAR
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
+    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
+};
 
 U_NAMESPACE_BEGIN
+
+static const int32_t PERSIAN_EPOCH = 1948320;
 
 // Implementation of the PersianCalendar class
 
@@ -203,55 +93,9 @@ PersianCalendar::~PersianCalendar()
 // Minimum / Maximum access functions
 //-------------------------------------------------------------------------
 
-static const int32_t LIMITS[UCAL_FIELD_COUNT][4] = {
-    // Minimum  Greatest     Least   Maximum
-    //           Minimum   Maximum
-    {        0,        0,        0,        0}, // ERA
-    { -5000000, -5000000,  5000000,  5000000}, // YEAR
-    {        0,        0,       11,       11}, // MONTH
-    {        1,        1,       52,       53}, // WEEK_OF_YEAR
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // WEEK_OF_MONTH
-    {        1,       1,        29,       31}, // DAY_OF_MONTH
-    {        1,       1,       365,      366}, // DAY_OF_YEAR
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DAY_OF_WEEK
-    {        1,       1,         5,        5}, // DAY_OF_WEEK_IN_MONTH
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // AM_PM
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // HOUR_OF_DAY
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MINUTE
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // SECOND
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECOND
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // ZONE_OFFSET
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DST_OFFSET
-    { -5000000, -5000000,  5000000,  5000000}, // YEAR_WOY
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // DOW_LOCAL
-    { -5000000, -5000000,  5000000,  5000000}, // EXTENDED_YEAR
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // JULIAN_DAY
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // MILLISECONDS_IN_DAY
-    {/*N/A*/-1,/*N/A*/-1,/*N/A*/-1,/*N/A*/-1}, // IS_LEAP_MONTH
-};
-static const int32_t MONTH_COUNT[12][4]  = {
-    //len len2   st  st2
-    {  31,  31,   0,   0 }, // Farvardin
-    {  31,  31,  31,  31 }, // Ordibehesht
-    {  31,  31,  62,  62 }, // Khordad
-    {  31,  31,  93,  93 }, // Tir
-    {  31,  31, 124, 124 }, // Mordad
-    {  31,  31, 155, 155 }, // Shahrivar
-    {  30,  30, 186, 186 }, // Mehr
-    {  30,  30, 216, 216 }, // Aban
-    {  30,  30, 246, 246 }, // Azar
-    {  30,  30, 276, 276 }, // Dey
-    {  30,  30, 306, 306 }, // Bahman
-    {  29,  30, 336, 336 }  // Esfand
-    // len  length of month
-    // len2 length of month in a leap year
-    // st   days in year before start of month
-    // st2  days in year before month in leap year
-};
 
 int32_t PersianCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType) const {
-    return LIMITS[field][limitType];
+    return kPersianCalendarLimits[field][limitType];
 }
 
 //-------------------------------------------------------------------------
@@ -263,26 +107,28 @@ int32_t PersianCalendar::handleGetLimit(UCalendarDateFields field, ELimitType li
  */
 UBool PersianCalendar::isLeapYear(int32_t year)
 {
-    return jalali_to_julian(year+1,1,1)-jalali_to_julian(year,1,1) == 366;
+    int32_t remainder;
+    ClockMath::floorDivide(25 * year + 11, 33, remainder);
+    return (remainder < 8);
 }
     
 /**
  * Return the day # on which the given year starts.  Days are counted
- * from the Hijri epoch, origin 0.
+ * from the Persian epoch, origin 0.
  */
 int32_t PersianCalendar::yearStart(int32_t year) {
-    return handleComputeMonthStart(year,1,FALSE);
+    return handleComputeMonthStart(year,0,FALSE);
 }
     
 /**
  * Return the day # on which the given month starts.  Days are counted
- * from the Hijri epoch, origin 0.
+ * from the Persian epoch, origin 0.
  *
- * @param year  The hijri shamsi year
- * @param year  The hijri shamsi month, 0-based
+ * @param year  The Persian year
+ * @param year  The Persian month, 0-based
  */
 int32_t PersianCalendar::monthStart(int32_t year, int32_t month) const {
-    return handleComputeMonthStart(year,month,FALSE);
+    return handleComputeMonthStart(year,month,TRUE);
 }
     
 //----------------------------------------------------------------------
@@ -292,18 +138,24 @@ int32_t PersianCalendar::monthStart(int32_t year, int32_t month) const {
 /**
  * Return the length (in days) of the given month.
  *
- * @param year  The hijri shamsi year
- * @param year  The hijri shamsi month, 0-based
+ * @param year  The Persian year
+ * @param year  The Persian month, 0-based
  */
 int32_t PersianCalendar::handleGetMonthLength(int32_t extendedYear, int32_t month) const {
-    return MONTH_COUNT[month][PersianCalendar::isLeapYear(extendedYear)?1:0];
+    // If the month is out of range, adjust it into range, and
+    // modify the extended year value accordingly.
+    if (month < 0 || month > 11) {
+        extendedYear += ClockMath::floorDivide(month, 12, month);
+    }
+
+    return isLeapYear(extendedYear) ? kPersianLeapMonthLength[month] : kPersianMonthLength[month];
 }
 
 /**
  * Return the number of days in the given Persian year
  */
 int32_t PersianCalendar::handleGetYearLength(int32_t extendedYear) const {
-    return 365 + (PersianCalendar::isLeapYear(extendedYear) ? 1 : 0);
+    return isLeapYear(extendedYear) ? 366 : 365;
 }
     
 //-------------------------------------------------------------------------
@@ -311,14 +163,20 @@ int32_t PersianCalendar::handleGetYearLength(int32_t extendedYear) const {
 //-------------------------------------------------------------------------
 
 // Return JD of start of given month/year
-int32_t PersianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool useMonth) const {
+int32_t PersianCalendar::handleComputeMonthStart(int32_t eyear, int32_t month, UBool /*useMonth*/) const {
     // If the month is out of range, adjust it into range, and
     // modify the extended year value accordingly.
     if (month < 0 || month > 11) {
-        eyear += month / 12;
-        month = month % 12;
+        eyear += ClockMath::floorDivide(month, 12, month);
     }
-    return jalali_to_julian(eyear,(useMonth?month+1:1),1)-1+1947955; 
+
+    int32_t julianDay = PERSIAN_EPOCH - 1 + 365 * (eyear - 1) + ClockMath::floorDivide(8 * eyear + 21, 33);
+
+    if (month != 0) {
+        julianDay += kPersianNumDays[month];
+    }
+
+    return julianDay;
 }
 
 //-------------------------------------------------------------------------
@@ -347,18 +205,30 @@ int32_t PersianCalendar::handleGetExtendedYear() {
  * <li>EXTENDED_YEAR</ul>
  * 
  * The DAY_OF_WEEK and DOW_LOCAL fields are already set when this
- * method is called. The getGregorianXxx() methods return Gregorian
- * calendar equivalents for the given Julian day.
+ * method is called.
  */
 void PersianCalendar::handleComputeFields(int32_t julianDay, UErrorCode &/*status*/) {
-    int jy,jm,jd;        
-    julian_to_jalali(julianDay-1947955,&jy,&jm,&jd);
+    int32_t year, month, dayOfMonth, dayOfYear;
+
+    int32_t daysSinceEpoch = julianDay - PERSIAN_EPOCH;
+    year = 1 + ClockMath::floorDivide(33 * daysSinceEpoch + 3, 12053);
+
+    int32_t farvardin1 = 365 * (year - 1) + ClockMath::floorDivide(8 * year + 21, 33);
+    dayOfYear = (daysSinceEpoch - farvardin1); // 0-based
+    if (dayOfYear < 216) { // Compute 0-based month
+        month = dayOfYear / 31;
+    } else {
+        month = (dayOfYear - 6) / 30;
+    }
+    dayOfMonth = dayOfYear - kPersianNumDays[month] + 1;
+    ++dayOfYear; // Make it 1-based now
+
     internalSet(UCAL_ERA, 0);
-    internalSet(UCAL_YEAR, jy);
-    internalSet(UCAL_EXTENDED_YEAR, jy);
-    internalSet(UCAL_MONTH, jm-1);
-    internalSet(UCAL_DAY_OF_MONTH, jd);
-    internalSet(UCAL_DAY_OF_YEAR, jd + MONTH_COUNT[jm-1][2]);
+    internalSet(UCAL_YEAR, year);
+    internalSet(UCAL_EXTENDED_YEAR, year);
+    internalSet(UCAL_MONTH, month);
+    internalSet(UCAL_DAY_OF_MONTH, dayOfMonth);
+    internalSet(UCAL_DAY_OF_YEAR, dayOfYear);
 }    
 
 UBool
