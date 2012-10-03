@@ -137,9 +137,9 @@ addComplexTest(TestNode** root) {
     addTest(root, doLOGICALArabicDeShapingTest, "complex/arabic-shaping/unshaping");
     addTest(root, doArabicShapingTestForBug5421, "complex/arabic-shaping/bug-5421");
     addTest(root, doTailTest, "complex/arabic-shaping/tailtest");
-	addTest(root, doArabicShapingTestForBug8703, "complex/arabic-shaping/bug-8703");
-	addTest(root, testReorderArabicMathSymbols, "complex/bidi/bug-9024");
-	addTest(root, doArabicShapingTestForBug9024, "complex/arabic-shaping/bug-9024");
+    addTest(root, doArabicShapingTestForBug8703, "complex/arabic-shaping/bug-8703");
+    addTest(root, testReorderArabicMathSymbols, "complex/bidi/bug-9024");
+    addTest(root, doArabicShapingTestForBug9024, "complex/arabic-shaping/bug-9024");
 }
 
 static void
@@ -3027,19 +3027,19 @@ doArabicShapingTestForBug8703(void) {
     static const UChar
     letters_source1[]={
         0x0634,0x0651,0x0645,0x0652,0x0633
-	}, letters_source2[]={
+    }, letters_source2[]={
         0x0634,0x0651,0x0645,0x0652,0x0633 
-	}, letters_source3[]={
+    }, letters_source3[]={
+       0x0634,0x0651,0x0645,0x0652,0x0633
+    }, letters_source4[]={
         0x0634,0x0651,0x0645,0x0652,0x0633 
-	}, letters_source4[]={
-        0x0634,0x0651,0x0645,0x0652,0x0633 
-	}, letters_source5[]={
+    }, letters_source5[]={
         0x0633,0x0652,0x0645,0x0651,0x0634
-	}, letters_source6[]={
+    }, letters_source6[]={
         0x0633,0x0652,0x0645,0x0651,0x0634 
-	}, letters_source7[]={
+    }, letters_source7[]={
         0x0633,0x0652,0x0645,0x0651,0x0634
-	}, letters_source8[]={
+    }, letters_source8[]={
         0x0633,0x0652,0x0645,0x0651,0x0634
     }, letters_dest1[]={
         0x0020,0xFEB7,0xFE7D,0xFEE4,0xFEB2 
@@ -3150,7 +3150,6 @@ doArabicShapingTestForBug8703(void) {
     if(U_FAILURE(errorCode) || length!=LENGTHOF(letters_dest8) || memcmp(dest, letters_dest8, length*U_SIZEOF_UCHAR)!=0) {
         log_err("failure in u_shapeArabic(letters_source8)\n");
     }
-	
 }
 
 static void
