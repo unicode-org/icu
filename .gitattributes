@@ -3904,6 +3904,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestFailureRecovery.java svn
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestInverse.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestMultipleParagraphs.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestReorder.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestReorderArabicMathSymbols.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestReorderRunsOnly.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestReorderingMode.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/bidi/TestStreaming.java svneol=native#text/plain%3Bcharset%3Dutf-8
