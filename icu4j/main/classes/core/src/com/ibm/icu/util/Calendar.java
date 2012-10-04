@@ -1747,7 +1747,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     private static final int CALTYPE_JAPANESE = 1;
     private static final int CALTYPE_BUDDHIST = 2;
     private static final int CALTYPE_ROC = 3;
-    private static final int CALTYPE_PERSIAN = 4;  // not yet implemented
+    private static final int CALTYPE_PERSIAN = 4;
     private static final int CALTYPE_ISLAMIC_CIVIL = 5;
     private static final int CALTYPE_ISLAMIC = 6;
     private static final int CALTYPE_HEBREW = 7;
@@ -1874,8 +1874,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             cal = new TaiwanCalendar(zone, locale);
             break;
         case CALTYPE_PERSIAN:
-            // Not yet implemented in ICU4J
-            cal = new GregorianCalendar(zone, locale);
+            cal = new PersianCalendar(zone, locale);
             break;
         case CALTYPE_ISLAMIC_CIVIL:
             cal = new IslamicCalendar(zone, locale);
