@@ -79,6 +79,9 @@ public class GenderInfo {
             fromNameMap.put("mixedNeutral", MIXED_NEUTRAL);
         }
 
+        /**
+         * @internal
+         */
         public static ListGenderStyle fromName(String name) {
             ListGenderStyle result = fromNameMap.get(name);
             if (result == null) {

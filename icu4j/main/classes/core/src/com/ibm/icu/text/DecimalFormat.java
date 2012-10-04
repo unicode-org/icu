@@ -3977,8 +3977,7 @@ public class DecimalFormat extends NumberFormat {
       return formatToCharacterIterator(obj, NULL_UNIT);
     }
 
-    // TODO: implement
-    protected AttributedCharacterIterator formatToCharacterIterator(Object obj, Unit unit) {
+    AttributedCharacterIterator formatToCharacterIterator(Object obj, Unit unit) {
         if (!(obj instanceof Number))
             throw new IllegalArgumentException();
         Number number = (Number) obj;
