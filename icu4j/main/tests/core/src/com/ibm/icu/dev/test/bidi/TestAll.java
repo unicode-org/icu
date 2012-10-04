@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2011, International Business Machines
+*   Copyright (C) 2001-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -25,6 +25,7 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.bidi.TestBidi",
                   "com.ibm.icu.dev.test.bidi.TestInverse",
                   "com.ibm.icu.dev.test.bidi.TestReorder",
+                  "com.ibm.icu.dev.test.bidi.TestReorderArabicMathSymbols",
                   "com.ibm.icu.dev.test.bidi.TestFailureRecovery",
                   "com.ibm.icu.dev.test.bidi.TestMultipleParagraphs",
                   "com.ibm.icu.dev.test.bidi.TestReorderingMode",
