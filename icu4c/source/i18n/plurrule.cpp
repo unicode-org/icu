@@ -29,7 +29,7 @@
 U_NAMESPACE_BEGIN
 
 // shared by all instances when lazy-initializing samples
-static UMTX pluralMutex;
+static UMutex pluralMutex = U_MUTEX_INITIALIZER;
 
 #define ARRAY_SIZE(array) (int32_t)(sizeof array  / sizeof array[0])
 

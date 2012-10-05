@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -33,7 +33,7 @@ U_NAMESPACE_BEGIN
 
 // For example:
 // 
-// UMTX myMutex;
+// UMutex myMutex;
 // 
 // void Function(int arg1, int arg2)
 // {
@@ -50,17 +50,17 @@ U_NAMESPACE_BEGIN
 
 class U_COMMON_API Mutex : public UMemory {
 public:
-  inline Mutex(UMTX *mutex = NULL);
+  inline Mutex(UMutex *mutex = NULL);
   inline ~Mutex();
 
 private:
-  UMTX   *fMutex;
+  UMutex   *fMutex;
 
   Mutex(const Mutex &other); // forbid copying of this class
   Mutex &operator=(const Mutex &other); // forbid copying of this class
 };
 
-inline Mutex::Mutex(UMTX *mutex)
+inline Mutex::Mutex(UMutex *mutex)
   : fMutex(mutex)
 {
   umtx_lock(fMutex);

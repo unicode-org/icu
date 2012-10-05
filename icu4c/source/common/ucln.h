@@ -18,7 +18,6 @@
 #define __UCLN_H__
 
 #include "unicode/utypes.h"
-#include "umutex.h"
 
 /** These are the functions used to register a library's memory cleanup
  * functions.  Each library should define a single library register function

@@ -21,7 +21,6 @@
 #include "icuplugimp.h"
 #include "ucln.h"
 #include "ucnv_io.h"
-#include "umutex.h"
 #include "utracimp.h"
 
 static void U_CALLCONV

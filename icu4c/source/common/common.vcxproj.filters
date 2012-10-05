@@ -163,7 +163,7 @@
     <ClCompile Include="umath.c">
       <Filter>configuration</Filter>
     </ClCompile>
-    <ClCompile Include="umutex.c">
+    <ClCompile Include="umutex.cpp">
       <Filter>configuration</Filter>
     </ClCompile>
     <ClCompile Include="utrace.c">

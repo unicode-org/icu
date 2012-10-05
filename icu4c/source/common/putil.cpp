@@ -240,7 +240,7 @@ u_signBit(double d) {
 UDate fakeClock_t0 = 0; /** Time to start the clock from **/
 UDate fakeClock_dt = 0; /** Offset (fake time - real time) **/
 UBool fakeClock_set = FALSE; /** True if fake clock has spun up **/
-static UMTX fakeClockMutex = NULL;
+static UMutex fakeClockMutex = U_MUTEX_INTIALIZER;
 
 static UDate getUTCtime_real() {
     struct timeval posixTime;

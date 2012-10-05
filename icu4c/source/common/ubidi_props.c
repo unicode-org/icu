@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2011, International Business Machines
+*   Copyright (C) 2004-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -21,7 +21,6 @@
 #include "unicode/udata.h" /* UDataInfo */
 #include "ucmndata.h" /* DataHeader */
 #include "udatamem.h"
-#include "umutex.h"
 #include "uassert.h"
 #include "cmemory.h"
 #include "utrie2.h"

@@ -177,7 +177,7 @@ static const char gQuartersTag[]="quarters";
 
 static const char gContextTransformsTag[]="contextTransforms";
 
-static UMTX LOCK;
+static UMutex LOCK = U_MUTEX_INITIALIZER;
 
 /**
  * Jitterbug 2974: MSVC has a bug whereby new X[0] behaves badly.

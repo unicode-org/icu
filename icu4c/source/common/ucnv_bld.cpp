@@ -159,9 +159,9 @@ static struct {
 
 /*initializes some global variables */
 static UHashtable *SHARED_DATA_HASHTABLE = NULL;
-static UMTX        cnvCacheMutex = NULL;  /* Mutex for synchronizing cnv cache access. */
-                                          /*  Note:  the global mutex is used for      */
-                                          /*         reference count updates.          */
+static UMutex cnvCacheMutex = U_MUTEX_INITIALIZER;  /* Mutex for synchronizing cnv cache access. */
+                                                    /*  Note:  the global mutex is used for      */
+                                                    /*         reference count updates.          */
 
 static const char **gAvailableConverters = NULL;
 static uint16_t gAvailableConverterCount = 0;
@@ -219,9 +219,6 @@ static UBool U_CALLCONV ucnv_cleanup(void) {
     gDefaultAlgorithmicSharedData = NULL;
 #endif
 
-    umtx_destroy(&cnvCacheMutex);    /* Don't worry about destroying the mutex even  */
-                                     /*  if the hash table still exists.  The mutex  */
-                                     /*  will lazily re-init  itself if needed.      */
     return (SHARED_DATA_HASHTABLE == NULL);
 }
 

@@ -89,7 +89,7 @@ static const char RB_RULE_BASED_IDS[] = "RuleBasedTransliteratorIDs";
 /**
  * The mutex controlling access to registry object.
  */
-static UMTX registryMutex = 0;
+static UMutex registryMutex = U_MUTEX_INITIALIZER;
 
 /**
  * System transliterator registry; non-null when initialized.
@@ -1633,7 +1633,6 @@ U_CFUNC UBool utrans_transliterator_cleanup(void) {
         delete registry;
         registry = NULL;
     }
-    umtx_destroy(&registryMutex);
     return TRUE;
 }
 

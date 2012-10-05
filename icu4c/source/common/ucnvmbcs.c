@@ -54,9 +54,9 @@
 #include "ucnvmbcs.h"
 #include "ucnv_ext.h"
 #include "ucnv_cnv.h"
-#include "umutex.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "umutex.h"
 
 /* control optimizations according to the platform */
 #define MBCS_UNROLL_SINGLE_TO_BMP 1

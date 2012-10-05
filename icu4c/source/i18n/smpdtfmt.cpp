@@ -209,8 +209,7 @@ static const int32_t gFieldRangeBias[] = {
 static const int32_t HEBREW_CAL_CUR_MILLENIUM_START_YEAR = 5000;
 static const int32_t HEBREW_CAL_CUR_MILLENIUM_END_YEAR = 6000;
 
-
-static UMTX LOCK;
+static UMutex LOCK = U_MUTEX_INITIALIZER;
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(SimpleDateFormat)
 

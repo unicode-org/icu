@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2011, International Business Machines Corporation
+* Copyright (C) 2003-2012, International Business Machines Corporation
 * and others. All Rights Reserved.
 ******************************************************************************
 *
@@ -51,7 +51,7 @@ static void debug_islamcal_msg(const char *pat, ...)
 
 // --- The cache --
 // cache of months
-static UMTX astroLock = 0;  // pod bay door lock
+static UMutex astroLock = U_MUTEX_INITIALIZER;  // pod bay door lock
 static icu::CalendarCache *gMonthCache = NULL;
 static icu::CalendarAstronomer *gIslamicCalendarAstro = NULL;
 
@@ -65,7 +65,6 @@ static UBool calendar_islamic_cleanup(void) {
         delete gIslamicCalendarAstro;
         gIslamicCalendarAstro = NULL;
     }
-    umtx_destroy(&astroLock);
     return TRUE;
 }
 U_CDECL_END

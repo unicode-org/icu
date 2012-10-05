@@ -43,7 +43,7 @@ Static cache for already opened StringPrep profiles
 */
 static UHashtable *SHARED_DATA_HASHTABLE = NULL;
 
-static UMTX usprepMutex = NULL;
+static UMutex usprepMutex = U_MUTEX_INITIALIZER;
 
 /* format version of spp file */
 //static uint8_t formatVersion[4]={ 0, 0, 0, 0 };
@@ -196,9 +196,6 @@ static UBool U_CALLCONV usprep_cleanup(void){
         }
     }
 
-    umtx_destroy(&usprepMutex);             /* Don't worry about destroying the mutex even  */
-                                            /*  if the hash table still exists.  The mutex  */
-                                            /*  will lazily re-init  itself if needed.      */
     return (SHARED_DATA_HASHTABLE == NULL);
 }
 U_CDECL_END
