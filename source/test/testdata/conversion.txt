@@ -1808,6 +1808,21 @@ conversion:table(nofallback) {
           :intvector{ 0,0,0,0,0,1,2,2,2,3,3,3,3,3 },
           :int{1}, :int{0}, "", "0", ""
         }
+        // Bug #9601 direct-from-UTF-8 m:n Unicode:charset conversion.
+        {
+          "*test1bmp",
+          "uv",
+          :bin{       08 },
+          :intvector{ 0 },
+          :int{1}, :int{0}, "", "?", ""
+        }
+        {
+          "*test2",
+          "\U00101234\U00050005",
+          :bin{       0700010e05 },
+          :intvector{ 0,0,0,0,0 },
+          :int{1}, :int{0}, "", "?", ""
+        }
       }
     }
 

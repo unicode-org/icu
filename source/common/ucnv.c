@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2011, International Business Machines
+*   Copyright (C) 1998-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -2851,14 +2851,12 @@ ucnv_fromUCountPending(const UConverter* cnv, UErrorCode* status)
         return -1;
     }
 
-    if(cnv->preFromULength > 0){
+    if(cnv->preFromUFirstCP >= 0){
         return U16_LENGTH(cnv->preFromUFirstCP)+cnv->preFromULength ;
     }else if(cnv->preFromULength < 0){
         return -cnv->preFromULength ;
     }else if(cnv->fromUChar32 > 0){
         return 1;
-    }else if(cnv->preFromUFirstCP >0){
-        return U16_LENGTH(cnv->preFromUFirstCP);
     }
     return 0; 
 
