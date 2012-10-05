@@ -5122,6 +5122,7 @@ moreBytes:
                      * but then exit the loop because the extension match would
                      * have consumed the source.
                      */
+                    *pErrorCode=U_USING_DEFAULT_WARNING;
                     break;
                 } else {
                     /* a mapping was written to the target, continue */
@@ -5142,7 +5143,9 @@ moreBytes:
      * to stop before a truncated sequence.
      * If so, then collect the truncated sequence now.
      */
-    if(U_SUCCESS(*pErrorCode) && source<(sourceLimit=(uint8_t *)pToUArgs->sourceLimit)) {
+    if(U_SUCCESS(*pErrorCode) &&
+            cnv->preFromUFirstCP<0 &&
+            source<(sourceLimit=(uint8_t *)pToUArgs->sourceLimit)) {
         c=utf8->toUBytes[0]=b=*source++;
         toULength=1;
         toULimit=utf8_countTrailBytes[b]+1;
@@ -5428,6 +5431,7 @@ unassigned:
                      * but then exit the loop because the extension match would
                      * have consumed the source.
                      */
+                    *pErrorCode=U_USING_DEFAULT_WARNING;
                     break;
                 } else {
                     /* a mapping was written to the target, continue */
@@ -5449,7 +5453,9 @@ unassigned:
      * to stop before a truncated sequence.
      * If so, then collect the truncated sequence now.
      */
-    if(U_SUCCESS(*pErrorCode) && source<(sourceLimit=(uint8_t *)pToUArgs->sourceLimit)) {
+    if(U_SUCCESS(*pErrorCode) &&
+            cnv->preFromUFirstCP<0 &&
+            source<(sourceLimit=(uint8_t *)pToUArgs->sourceLimit)) {
         c=utf8->toUBytes[0]=b=*source++;
         toULength=1;
         toULimit=utf8_countTrailBytes[b]+1;
