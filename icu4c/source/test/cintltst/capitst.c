@@ -169,6 +169,42 @@ static void doAssert(int condition, const char *message)
     }
 }
 
+#define UTF8_BUF_SIZE 128
+
+static void doStrcoll(const UCollator* coll, const UChar* src, int32_t srcLen, const UChar* tgt, int32_t tgtLen,
+                    UCollationResult expected, const char *message) {
+    UErrorCode err = U_ZERO_ERROR;
+    char srcU8[UTF8_BUF_SIZE], tgtU8[UTF8_BUF_SIZE];
+    int32_t srcU8Len = -1, tgtU8Len = -1;
+    int32_t len = 0;
+
+    if (ucol_strcoll(coll, src, srcLen, tgt, tgtLen) != expected) {
+        log_err("ERROR :  %s\n", message);
+    }
+
+    u_strToUTF8(srcU8, UTF8_BUF_SIZE, &len, src, srcLen, &err);
+    if (U_FAILURE(err) || len >= UTF8_BUF_SIZE) {
+        log_err("ERROR : UTF-8 conversion error\n");
+        return;
+    }
+    if (srcLen >= 0) {
+        srcU8Len = len;
+    }
+    u_strToUTF8(tgtU8, UTF8_BUF_SIZE, &len, tgt, tgtLen, &err);
+    if (U_FAILURE(err) || len >= UTF8_BUF_SIZE) {
+        log_err("ERROR : UTF-8 conversion error\n");
+        return;
+    }
+    if (tgtLen >= 0) {
+        tgtU8Len = len;
+    }
+
+    if (ucol_strcollUTF8(coll, srcU8, srcU8Len, tgtU8, tgtU8Len, &err) != expected
+        || U_FAILURE(err)) {
+        log_err("ERROR: %s (strcollUTF8)\n", message);
+    }
+}
+
 #if 0
 /* We don't have default rules, at least not in the previous sense */
 void TestGetDefaultRules(){
@@ -233,7 +269,8 @@ void TestProperty()
     UCollator *col, *ruled;
     UChar *disName;
     int32_t len = 0;
-    UChar *source, *target;
+    UChar source[12], target[12];
+    char sourceU8[36], targetU8[36];
     int32_t tempLength;
     UErrorCode status = U_ZERO_ERROR;
     /*
@@ -279,37 +316,31 @@ void TestProperty()
               versionUCAArray[0], versionUCAArray[1], versionUCAArray[2], versionUCAArray[3]);
     }
 
-    source=(UChar*)malloc(sizeof(UChar) * 12);
-    target=(UChar*)malloc(sizeof(UChar) * 12);
-
-
     u_uastrcpy(source, "ab");
     u_uastrcpy(target, "abc");
 
-    doAssert((ucol_strcoll(col, source, u_strlen(source), target, u_strlen(target)) == UCOL_LESS), "ab < abc comparison failed");
+    doStrcoll(col, source, u_strlen(source), target, u_strlen(target), UCOL_LESS, "ab < abc comparison failed");
 
     u_uastrcpy(source, "ab");
     u_uastrcpy(target, "AB");
 
-    doAssert((ucol_strcoll(col, source, u_strlen(source), target, u_strlen(target)) == UCOL_LESS), "ab < AB comparison failed");
-/*    u_uastrcpy(source, "black-bird");
-    u_uastrcpy(target, "blackbird"); */
-    u_uastrcpy(target, "black-bird");
-    u_uastrcpy(source, "blackbird");
+    doStrcoll(col, source, u_strlen(source), target, u_strlen(target), UCOL_LESS, "ab < AB comparison failed");
 
-    doAssert((ucol_strcoll(col, source, u_strlen(source), target, u_strlen(target)) == UCOL_GREATER),
-        "black-bird > blackbird comparison failed");
+    u_uastrcpy(source, "blackbird");
+    u_uastrcpy(target, "black-bird");
+
+    doStrcoll(col, source, u_strlen(source), target, u_strlen(target), UCOL_GREATER, "black-bird > blackbird comparison failed");
+
     u_uastrcpy(source, "black bird");
     u_uastrcpy(target, "black-bird");
-    doAssert((ucol_strcoll(col, source, u_strlen(source), target, u_strlen(target)) == UCOL_LESS),
-        "black bird < black-bird comparison failed");
+
+    doStrcoll(col, source, u_strlen(source), target, u_strlen(target), UCOL_LESS, "black bird < black-bird comparison failed");
+
     u_uastrcpy(source, "Hello");
     u_uastrcpy(target, "hello");
 
-    doAssert((ucol_strcoll(col, source, u_strlen(source), target, u_strlen(target)) == UCOL_GREATER),
-        "Hello > hello comparison failed");
-    free(source);
-    free(target);
+    doStrcoll(col, source, u_strlen(source), target, u_strlen(target), UCOL_GREATER, "Hello > hello comparison failed");
+
     log_verbose("Test ucol_strcoll ends.\n");
 
     log_verbose("testing ucol_getStrength() method ...\n");

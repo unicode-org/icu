@@ -533,6 +533,33 @@ ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *target,
         int32_t            targetLength);
 
+/** 
+* Compare two strings in UTF-8. 
+* The strings will be compared using the options already specified. 
+* Note: When input string contains malformed a UTF-8 byte sequence, 
+* this function treats these bytes as REPLACEMENT CHARACTER (U+FFFD).
+* @param coll The UCollator containing the comparison rules. 
+* @param source The source UTF-8 string. 
+* @param sourceLength The length of source, or -1 if null-terminated. 
+* @param target The target UTF-8 string. 
+* @param targetLength The length of target, or -1 if null-terminated. 
+* @param status A pointer to an UErrorCode to receive any errors 
+* @return The result of comparing the strings; one of UCOL_EQUAL, 
+* UCOL_GREATER, UCOL_LESS 
+* @see ucol_greater 
+* @see ucol_greaterOrEqual 
+* @see ucol_equal 
+* @draft ICU 50 
+*/ 
+U_DRAFT UCollationResult U_EXPORT2
+ucol_strcollUTF8(
+        const UCollator *coll,
+        const char      *source,
+        int32_t         sourceLength,
+        const char      *target,
+        int32_t         targetLength,
+        UErrorCode      *status);
+
 /**
  * Determine if one string is greater than another.
  * This function is equivalent to {@link #ucol_strcoll } == UCOL_GREATER
