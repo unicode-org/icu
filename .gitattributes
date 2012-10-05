@@ -2946,6 +2946,8 @@ icu4c/source/extra/uconv/uconv.vcxproj.filters -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
 icu4c/source/i18n/regexcst.txt svneol=native#text/plain
+icu4c/source/i18n/unicode/gender.h -text
+icu4c/source/i18n/unicode/ugender.h -text
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
 icu4c/source/layout/layout.vcxproj -text
