@@ -16,8 +16,7 @@ import com.ibm.icu.util.ULocale;
  * 
  * This class is not intended for public subclassing.
  * 
- * @draft ICU 4.4
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.4
  */
 public abstract class CurrencyDisplayNames {
     /**
@@ -30,8 +29,7 @@ public abstract class CurrencyDisplayNames {
      * 
      * @param locale the locale into which to localize the names
      * @return a CurrencyDisplayNames
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static CurrencyDisplayNames getInstance(ULocale locale) {
         return CurrencyData.provider.getInstance(locale, true);
@@ -81,8 +79,7 @@ public abstract class CurrencyDisplayNames {
      * 
      * @param isoCode the three-letter ISO code.
      * @return the display name.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public abstract String getSymbol(String isoCode);
 
@@ -92,8 +89,7 @@ public abstract class CurrencyDisplayNames {
      * 
      * @param isoCode the three-letter ISO code
      * @return the display name
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public abstract String getName(String isoCode);
 
@@ -107,8 +103,7 @@ public abstract class CurrencyDisplayNames {
      * @param pluralKey the plural key, for example "one", "other"
      * @return the display name
      * @see com.ibm.icu.text.PluralRules
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public abstract String getPluralName(String isoCode, String pluralKey);
 
@@ -116,8 +111,7 @@ public abstract class CurrencyDisplayNames {
      * Returns a mapping from localized symbols and currency codes to currency codes.
      * The returned map is unmodifiable.
      * @return the map
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public abstract Map<String, String> symbolMap();
 
@@ -125,8 +119,7 @@ public abstract class CurrencyDisplayNames {
      * Returns a mapping from localized names (standard and plural) to currency codes.
      * The returned map is unmodifiable.
      * @return the map
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public abstract Map<String, String> nameMap();
 

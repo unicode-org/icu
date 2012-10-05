@@ -848,20 +848,17 @@ public interface UProperty
      * Some characters are commonly used in multiple scripts.
      * For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
      * Corresponds to UScript.hasScript and UScript.getScriptExtensions.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     public static final int SCRIPT_EXTENSIONS=0x7000;
     /**
      * First constant for Unicode properties with unusual value types.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     public static final int OTHER_PROPERTY_START=SCRIPT_EXTENSIONS;
     /**
      * One more than the last constant for Unicode properties with unusual value types.
-     * @draft ICU 4.6
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.6
      */
     public static final int OTHER_PROPERTY_LIMIT=0x7001;
 

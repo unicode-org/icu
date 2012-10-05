@@ -26,8 +26,7 @@ import com.ibm.icu.util.TimeZone;
  * 
  * This class is not intended for public subclassing.
  * 
- * @draft ICU 4.4
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 4.4
  */
 public class CurrencyMetaInfo {
     private static final CurrencyMetaInfo impl;
@@ -36,8 +35,7 @@ public class CurrencyMetaInfo {
     /**
      * Returns the unique instance of the currency meta info.
      * @return the meta info
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static CurrencyMetaInfo getInstance() {
         return impl;
@@ -75,35 +73,30 @@ public class CurrencyMetaInfo {
 
     /**
      * A filter used to select which currency info is returned.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static final class CurrencyFilter {
         /**
          * The region to filter on.  If null, accepts any region.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public final String region;
 
         /**
          * The currency to filter on.  If null, accepts any currency.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public final String currency;
 
         /**
          * The from date to filter on (as milliseconds).  Accepts any currency on or after this date.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public final long from;
 
         /**
          * The to date to filter on (as milliseconds).  Accepts any currency on or before this date.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public final long to;
 
@@ -126,8 +119,7 @@ public class CurrencyMetaInfo {
         /**
          * Returns a filter that accepts all currency data.
          * @return a filter
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public static CurrencyFilter all() {
             return ALL;
@@ -137,8 +129,7 @@ public class CurrencyMetaInfo {
          * Returns a filter that accepts all currencies in use as of the current date.
          * @return a filter
          * @see #withDate(Date)
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public static CurrencyFilter now() {
             return ALL.withDate(new Date());
@@ -149,8 +140,7 @@ public class CurrencyMetaInfo {
          * @param region the region code
          * @return a filter
          * @see #withRegion(String)
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public static CurrencyFilter onRegion(String region) {
             return ALL.withRegion(region);
@@ -161,8 +151,7 @@ public class CurrencyMetaInfo {
          * @param currency the currency code
          * @return a filter
          * @see #withCurrency(String)
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public static CurrencyFilter onCurrency(String currency) {
             return ALL.withCurrency(currency);
@@ -173,8 +162,7 @@ public class CurrencyMetaInfo {
          * @param date the date
          * @return a filter
          * @see #withDate(Date)
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public static CurrencyFilter onDate(Date date) {
             return ALL.withDate(date);
@@ -201,8 +189,7 @@ public class CurrencyMetaInfo {
          * @param region the region code
          * @return the filter
          * @see #onRegion(String)
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public CurrencyFilter withRegion(String region) {
             return new CurrencyFilter(region, this.currency, this.from, this.to);
@@ -214,8 +201,7 @@ public class CurrencyMetaInfo {
          * @param currency the currency code
          * @return the filter
          * @see #onCurrency(String)
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public CurrencyFilter withCurrency(String currency) {
             return new CurrencyFilter(this.region, currency, this.from, this.to);
@@ -226,8 +212,7 @@ public class CurrencyMetaInfo {
          * @param date the date on which the currency must have been in use
          * @return the filter
          * @see #onDate(Date)
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public CurrencyFilter withDate(Date date) {
             return new CurrencyFilter(this.region, this.currency, date, date);
@@ -247,9 +232,8 @@ public class CurrencyMetaInfo {
         }
 
         /**
-         * Overrides equals.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * {@inheritDoc}
+         * @stable ICU 4.4
          */
         @Override
         public boolean equals(Object rhs) {
@@ -261,8 +245,7 @@ public class CurrencyMetaInfo {
          * Type-safe override of {@link #equals(Object)}.
          * @param rhs the currency filter to compare to
          * @return true if the filters are equal
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public boolean equals(CurrencyFilter rhs) {
             return this == rhs || (rhs != null &&
@@ -273,9 +256,8 @@ public class CurrencyMetaInfo {
         }
 
         /**
-         * Overrides hashCode.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * {@inheritDoc}
+         * @stable ICU 4.4
          */
         @Override
         public int hashCode() {
@@ -295,8 +277,8 @@ public class CurrencyMetaInfo {
 
         /**
          * Returns a string representing the filter, for debugging.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @return A string representing the fielter.
+         * @stable ICU 4.4
          */
         @Override
         public String toString() {
@@ -310,8 +292,7 @@ public class CurrencyMetaInfo {
 
     /**
      * Represents the raw information about fraction digits and rounding increment.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static final class CurrencyDigits {
         /**
@@ -331,8 +312,7 @@ public class CurrencyMetaInfo {
          * Constructor for CurrencyDigits.
          * @param fractionDigits the fraction digits
          * @param roundingIncrement the rounding increment
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public CurrencyDigits(int fractionDigits, int roundingIncrement) {
             this.fractionDigits = fractionDigits;
@@ -341,8 +321,8 @@ public class CurrencyMetaInfo {
 
         /**
          * Returns a string representing the currency digits, for debugging.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @return A string representing the currency digits.
+         * @stable ICU 4.4
          */
         @Override
         public String toString() {
@@ -353,21 +333,18 @@ public class CurrencyMetaInfo {
     /**
      * Represents a complete currency info record listing the region, currency, from and to dates,
      * and priority.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public static final class CurrencyInfo {
         /**
          * Region code where currency is used.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public final String region;
 
         /**
          * The three-letter ISO currency code.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public final String code;
 
@@ -375,8 +352,7 @@ public class CurrencyMetaInfo {
          * Date on which the currency was first officially used in the region.  
          * This is midnight at the start of the first day on which the currency was used, GMT. 
          * If there is no date, this is Long.MIN_VALUE;
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public final long from;
 
@@ -385,8 +361,7 @@ public class CurrencyMetaInfo {
          * This is one millisecond before midnight at the end of the last day on which the currency was used, GMT.
          * If there is no date, this is Long.MAX_VALUE.
          * 
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public final long to;
 
@@ -407,8 +382,7 @@ public class CurrencyMetaInfo {
          * @param from start date in milliseconds.  This is midnight at the start of the first day on which the currency was used, GMT.
          * @param to end date in milliseconds.  This is one second before midnight at the end of the last day on which the currency was used, GMT.
          * @param priority priority value, 0 is highest priority, increasing values are lower
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 4.4
          */
         public CurrencyInfo(String region, String code, long from, long to, int priority) {
             this.region = region;
@@ -419,9 +393,9 @@ public class CurrencyMetaInfo {
         }
 
         /**
-         * Returns a string useful for debugging.
-         * @draft ICU 4.4
-         * @provisional This API might change or be removed in a future release.
+         * Returns a string representation of this object, useful for debugging.
+         * @return A string representing of this object.
+         * @stable ICU 4.4
          */
         @Override
         public String toString() {
@@ -436,8 +410,7 @@ public class CurrencyMetaInfo {
      * The returned list is unmodifiable.
      * @param filter the filter to control which currency info to return
      * @return the matching information
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public List<CurrencyInfo> currencyInfo(CurrencyFilter filter) {
         return Collections.emptyList();
@@ -450,8 +423,7 @@ public class CurrencyMetaInfo {
      * @param filter the filter to control which currencies to return.  If filter is null,
      * returns all currencies for which information is available.
      * @return the matching currency codes
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public List<String> currencies(CurrencyFilter filter) {
         return Collections.emptyList();
@@ -464,8 +436,7 @@ public class CurrencyMetaInfo {
      * @param filter the filter to control which regions to return.  If filter is null,
      * returns all regions for which information is available.
      * @return the matching region codes
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public List<String> regions(CurrencyFilter filter) {
         return Collections.emptyList();
@@ -476,8 +447,7 @@ public class CurrencyMetaInfo {
      * Returns the CurrencyDigits for the currency code.
      * @param isoCode the currency code
      * @return the CurrencyDigits
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 4.4
      */
     public CurrencyDigits currencyDigits(String isoCode) {
         return defaultDigits;
