@@ -187,7 +187,6 @@ public:
 private:
 
     Locale fLocale;
-    UMTX fLock;
 
     UResourceBundle* fZoneStrings;
 

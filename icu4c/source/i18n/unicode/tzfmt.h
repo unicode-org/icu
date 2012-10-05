@@ -141,8 +141,6 @@ typedef enum UTimeZoneFormatParseOption {
 
 U_CDECL_END
 
-typedef void *UMTX;
-
 U_NAMESPACE_BEGIN
 
 class TimeZoneGenericNames;
@@ -528,9 +526,6 @@ protected:
     TimeZoneFormat(const Locale& locale, UErrorCode& status);
 
 private:
-    /* mutex */
-    UMTX fLock;
-
     /* Locale of this object */
     Locale fLocale;
 

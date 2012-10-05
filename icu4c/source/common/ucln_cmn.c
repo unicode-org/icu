@@ -26,7 +26,7 @@
 #include "ucln_imp.h"
 
 static UBool gICUInitialized = FALSE;
-static UMTX  gICUInitMutex   = NULL;
+static UMutex  gICUInitMutex = U_MUTEX_INITIALIZER;
 
 static cleanupFunc *gCommonCleanupFunctions[UCLN_COMMON_COUNT];
 static cleanupFunc *gLibCleanupFunctions[UCLN_COMMON];
@@ -58,7 +58,6 @@ u_cleanup(void)
 
     ucln_lib_cleanup();
 
-    umtx_destroy(&gICUInitMutex);
     umtx_cleanup();
     cmemory_cleanup();       /* undo any heap functions set by u_setMemoryFunctions(). */
     gICUInitialized = FALSE;

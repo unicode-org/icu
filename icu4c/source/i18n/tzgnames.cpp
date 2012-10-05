@@ -267,6 +267,8 @@ GNameSearchHandler::getMatches(int32_t& maxMatchLen) {
     return results;
 }
 
+static UMutex gLock = U_MUTEX_INITIALIZER;
+
 class TZGNCore : public UMemory {
 public:
     TZGNCore(const Locale& locale, UErrorCode& status);
@@ -282,7 +284,6 @@ public:
 
 private:
     Locale fLocale;
-    UMTX fLock;
     const TimeZoneNames* fTimeZoneNames;
     UHashtable* fLocationNamesMap;
     UHashtable* fPartialLocationNamesMap;
@@ -330,7 +331,6 @@ private:
 // ---------------------------------------------------
 TZGNCore::TZGNCore(const Locale& locale, UErrorCode& status)
 : fLocale(locale),
-  fLock(NULL),
   fTimeZoneNames(NULL),
   fLocationNamesMap(NULL),
   fPartialLocationNamesMap(NULL),
@@ -345,7 +345,6 @@ TZGNCore::TZGNCore(const Locale& locale, UErrorCode& status)
 
 TZGNCore::~TZGNCore() {
     cleanup();
-    umtx_destroy(&fLock);
 }
 
 void
@@ -504,11 +503,11 @@ TZGNCore::getGenericLocationName(const UnicodeString& tzCanonicalID, UnicodeStri
 
     const UChar *locname = NULL;
     TZGNCore *nonConstThis = const_cast<TZGNCore *>(this);
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         locname = nonConstThis->getGenericLocationName(tzCanonicalID);
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     if (locname == NULL) {
         name.setToBogus();
@@ -769,11 +768,11 @@ TZGNCore::getPartialLocationName(const UnicodeString& tzCanonicalID,
 
     const UChar *uplname = NULL;
     TZGNCore *nonConstThis = const_cast<TZGNCore *>(this);
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         uplname = nonConstThis->getPartialLocationName(tzCanonicalID, mzID, isLong, mzDisplayName);
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     if (uplname == NULL) {
         name.setToBogus();
@@ -1042,11 +1041,11 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
 
     TZGNCore *nonConstThis = const_cast<TZGNCore *>(this);
 
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         fGNamesTrie.search(text, start, (TextTrieMapSearchResultHandler *)&handler, status);
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     if (U_FAILURE(status)) {
         return NULL;
@@ -1073,7 +1072,7 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
 
     // All names are not yet loaded into the local trie.
     // Load all available names into the trie. This could be very heavy.
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         if (!fGNamesTrieFullyLoaded) {
             StringEnumeration *tzIDs = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, NULL, NULL, status);
@@ -1095,18 +1094,18 @@ TZGNCore::findLocal(const UnicodeString& text, int32_t start, uint32_t types, UE
             }
         }
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     if (U_FAILURE(status)) {
         return NULL;
     }
 
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         // now try it again
         fGNamesTrie.search(text, start, (TextTrieMapSearchResultHandler *)&handler, status);
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     results = handler.getMatches(maxLen);
     if (results != NULL && maxLen > 0) {
@@ -1147,7 +1146,7 @@ typedef struct TZGNCoreRef {
 } TZGNCoreRef;
 
 // TZGNCore object cache handling
-static UMTX gTZGNLock = NULL;
+static UMutex gTZGNLock = U_MUTEX_INITIALIZER;
 static UHashtable *gTZGNCoreCache = NULL;
 static UBool gTZGNCoreCacheInitialized = FALSE;
 
@@ -1170,8 +1169,6 @@ U_CDECL_BEGIN
  */
 static UBool U_CALLCONV tzgnCore_cleanup(void)
 {
-    umtx_destroy(&gTZGNLock);
-
     if (gTZGNCoreCache != NULL) {
         uhash_close(gTZGNCoreCache);
         gTZGNCoreCache = NULL;

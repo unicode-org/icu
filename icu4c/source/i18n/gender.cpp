@@ -28,7 +28,7 @@
 #include "uhash.h"
 
 static UHashtable* gGenderInfoCache = NULL;
-static UMTX gGenderMetaLock = NULL;
+static UMutex gGenderMetaLock = U_MUTEX_INITIALIZER;
 static const char* gNeutralStr = "neutral";
 static const char* gMailTaintsStr = "maleTaints";
 static const char* gMixedNeutralStr = "mixedNeutral";
@@ -44,7 +44,6 @@ enum GenderStyle {
 U_CDECL_BEGIN
 
 static UBool U_CALLCONV gender_cleanup(void) {
-  umtx_destroy(&gGenderMetaLock);
   if (gGenderInfoCache != NULL) {
     uhash_close(gGenderInfoCache);
     gGenderInfoCache = NULL;

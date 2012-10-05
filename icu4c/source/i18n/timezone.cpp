@@ -109,8 +109,8 @@ static const UChar         UNKNOWN_ZONE_ID[] = {0x45, 0x74, 0x63, 0x2F, 0x55, 0x
 static const int32_t       GMT_ID_LENGTH = 3;
 static const int32_t       UNKNOWN_ZONE_ID_LENGTH = 11;
 
-static UMTX LOCK;
-static UMTX TZSET_LOCK;
+static UMutex LOCK = U_MUTEX_INITIALIZER;
+static UMutex TZSET_LOCK = U_MUTEX_INITIALIZER;
 static icu::TimeZone* DEFAULT_ZONE = NULL;
 static icu::TimeZone* _GMT = NULL;
 static icu::TimeZone* _UNKNOWN_ZONE = NULL;
@@ -152,15 +152,6 @@ static UBool U_CALLCONV timeZone_cleanup(void)
     LEN_CANONICAL_SYSTEM_LOCATION_ZONES = 0;
     uprv_free(MAP_CANONICAL_SYSTEM_LOCATION_ZONES);
     MAP_CANONICAL_SYSTEM_LOCATION_ZONES = 0;
-
-    if (LOCK) {
-        umtx_destroy(&LOCK);
-        LOCK = NULL;
-    }
-    if (TZSET_LOCK) {
-        umtx_destroy(&TZSET_LOCK);
-        TZSET_LOCK = NULL;
-    }
 
     return TRUE;
 }

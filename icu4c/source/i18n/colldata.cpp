@@ -480,7 +480,7 @@ private:
 
     UHashtable *cache;
 };
-static UMTX lock;
+static UMutex lock = U_MUTEX_INITIALIZER;
 
 U_CDECL_BEGIN
 static void U_CALLCONV

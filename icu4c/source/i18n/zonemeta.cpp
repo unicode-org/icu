@@ -27,7 +27,7 @@
 #include "uhash.h"
 #include "olsontz.h"
 
-static UMTX gZoneMetaLock = NULL;
+static UMutex gZoneMetaLock = U_MUTEX_INITIALIZER;
 
 // CLDR Canonical ID mapping table
 static UHashtable *gCanonicalIDCache = NULL;
@@ -54,8 +54,6 @@ U_CDECL_BEGIN
  */
 static UBool U_CALLCONV zoneMeta_cleanup(void)
 {
-    umtx_destroy(&gZoneMetaLock);
-
     if (gCanonicalIDCache != NULL) {
         uhash_close(gCanonicalIDCache);
         gCanonicalIDCache = NULL;

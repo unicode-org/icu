@@ -282,7 +282,7 @@ TextTrieMap::getChildNode(CharacterNode *parent, UChar c) const {
 }
 
 // Mutex for protecting the lazy creation of the Trie node structure on the first call to search().
-static UMTX TextTrieMutex;
+static UMutex TextTrieMutex = U_MUTEX_INITIALIZER;
 
 // buildTrie() - The Trie node structure is needed.  Create it from the data that was
 //               saved at the time the ZoneStringFormatter was created.  The Trie is only
@@ -837,9 +837,10 @@ deleteZNameInfo(void *obj) {
 
 U_CDECL_END
 
+static UMutex gLock = U_MUTEX_INITIALIZER;
+
 TimeZoneNamesImpl::TimeZoneNamesImpl(const Locale& locale, UErrorCode& status)
 : fLocale(locale),
-  fLock(NULL),
   fZoneStrings(NULL),
   fTZNamesMap(NULL),
   fMZNamesMap(NULL),
@@ -911,7 +912,6 @@ TimeZoneNamesImpl::loadStrings(const UnicodeString& tzCanonicalID) {
 
 TimeZoneNamesImpl::~TimeZoneNamesImpl() {
     cleanup();
-    umtx_destroy(&fLock);
 }
 
 void
@@ -1015,11 +1015,11 @@ TimeZoneNamesImpl::getMetaZoneDisplayName(const UnicodeString& mzID,
     ZNames *znames = NULL;
     TimeZoneNamesImpl *nonConstThis = const_cast<TimeZoneNamesImpl *>(this);
 
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         znames = nonConstThis->loadMetaZoneNames(mzID);
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     if (znames != NULL) {
         const UChar* s = znames->getName(type);
@@ -1040,11 +1040,11 @@ TimeZoneNamesImpl::getTimeZoneDisplayName(const UnicodeString& tzID, UTimeZoneNa
     TZNames *tznames = NULL;
     TimeZoneNamesImpl *nonConstThis = const_cast<TimeZoneNamesImpl *>(this);
 
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         tznames = nonConstThis->loadTimeZoneNames(tzID);
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     if (tznames != NULL) {
         const UChar *s = tznames->getName(type);
@@ -1061,11 +1061,11 @@ TimeZoneNamesImpl::getExemplarLocationName(const UnicodeString& tzID, UnicodeStr
     TZNames *tznames = NULL;
     TimeZoneNamesImpl *nonConstThis = const_cast<TimeZoneNamesImpl *>(this);
 
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         tznames = nonConstThis->loadTimeZoneNames(tzID);
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     if (tznames != NULL) {
         locName = tznames->getLocationName();
@@ -1246,11 +1246,11 @@ TimeZoneNamesImpl::find(const UnicodeString& text, int32_t start, uint32_t types
 
     TimeZoneNamesImpl *nonConstThis = const_cast<TimeZoneNamesImpl *>(this);
 
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         fNamesTrie.search(text, start, (TextTrieMapSearchResultHandler *)&handler, status);
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     if (U_FAILURE(status)) {
         return NULL;
@@ -1266,7 +1266,7 @@ TimeZoneNamesImpl::find(const UnicodeString& text, int32_t start, uint32_t types
     delete matches;
 
     // All names are not yet loaded into the trie
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         if (!fNamesTrieFullyLoaded) {
             const UnicodeString *id;
@@ -1290,18 +1290,18 @@ TimeZoneNamesImpl::find(const UnicodeString& text, int32_t start, uint32_t types
             }
         }
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     if (U_FAILURE(status)) {
         return NULL;
     }
 
-    umtx_lock(&nonConstThis->fLock);
+    umtx_lock(&gLock);
     {
         // now try it again
         fNamesTrie.search(text, start, (TextTrieMapSearchResultHandler *)&handler, status);
     }
-    umtx_unlock(&nonConstThis->fLock);
+    umtx_unlock(&gLock);
 
     return handler.getMatches(maxLen);
 }

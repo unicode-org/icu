@@ -139,7 +139,7 @@ static const char *gFormatKeys[UNUM_FORMAT_STYLE_COUNT] = {
 // Static hashtable cache of NumberingSystem objects used by NumberFormat
 static UHashtable * NumberingSystem_cache = NULL;
 
-static UMTX nscacheMutex = NULL;
+static UMutex nscacheMutex = U_MUTEX_INITIALIZER;
 
 #if !UCONFIG_NO_SERVICE
 static icu::ICULocaleService* gService = NULL;
