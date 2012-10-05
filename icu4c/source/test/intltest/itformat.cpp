@@ -9,6 +9,7 @@
  */
 
 #include "unicode/utypes.h"
+#include "unicode/localpointer.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -56,6 +57,8 @@
 #include "locnmtst.h"       // LocaleDisplayNamesTest
 #include "dcfmtest.h"       // DecimalFormatTest
 #include "listformattertest.h"  // ListFormatterTest
+
+extern IntlTest *createGenderInfoTest();
 
 #define TESTCLASS(id, TestClass)          \
     case id:                              \
@@ -133,7 +136,15 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
         TESTCLASS(41,DecimalFormatTest);
 #endif
         TESTCLASS(42,ListFormatterTest);
-
+        case 43:
+          name = "GenderInfoTest";
+          if (exec) {
+            logln("GenderInfoTest test---");
+            logln((UnicodeString)"");
+            LocalPointer<IntlTest> test(createGenderInfoTest());
+            callTest(*test, par);
+          }
+          break;
         default: name = ""; break; //needed to end loop
     }
     if (exec) {
