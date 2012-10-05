@@ -446,8 +446,8 @@ void MultithreadTest::TestArabicShapingThreads()
 //               platform's mutex support is at least superficially there.
 //
 //----------------------------------------------------------------------
-static UMTX    gTestMutexA = NULL;
-static UMTX    gTestMutexB = NULL;
+static UMutex    gTestMutexA = U_MUTEX_INITIALIZER;
+static UMutex    gTestMutexB = U_MUTEX_INITIALIZER;
 
 static int     gThreadsStarted = 0; 
 static int     gThreadsInMiddle = 0;
@@ -550,11 +550,6 @@ void MultithreadTest::TestMutex()
     }
 
     // All threads made it by both mutexes.
-    // Destroy the test mutexes.
-    umtx_destroy(&gTestMutexA);
-    umtx_destroy(&gTestMutexB);
-    gTestMutexA=NULL;
-    gTestMutexB=NULL;
 
     for (i=0; i<TESTMUTEX_THREAD_COUNT; i++) {
         delete threads[i];

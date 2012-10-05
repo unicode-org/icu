@@ -24,7 +24,6 @@
 #include "unicode/uscript.h"
 #include "unicode/udata.h"
 #include "uassert.h"
-#include "umutex.h"
 #include "cmemory.h"
 #include "ucln_cmn.h"
 #include "utrie2.h"

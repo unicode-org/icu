@@ -33,7 +33,7 @@ static const UChar gRiyadh8[]           = { 0x52, 0x69, 0x79, 0x61, 0x64, 0x68, 
 static const int32_t gRiyadh8Len       = 7;
 
 // TimeZoneNames object cache handling
-static UMTX gTimeZoneNamesLock = NULL;
+static UMutex gTimeZoneNamesLock = U_MUTEX_INITIALIZER;
 static UHashtable *gTimeZoneNamesCache = NULL;
 static UBool gTimeZoneNamesCacheInitialized = FALSE;
 
@@ -62,8 +62,6 @@ U_CDECL_BEGIN
  */
 static UBool U_CALLCONV timeZoneNames_cleanup(void)
 {
-    umtx_destroy(&gTimeZoneNamesLock);
-
     if (gTimeZoneNamesCache != NULL) {
         uhash_close(gTimeZoneNamesCache);
         gTimeZoneNamesCache = NULL;

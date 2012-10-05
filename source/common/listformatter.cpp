@@ -25,7 +25,7 @@
 U_NAMESPACE_BEGIN
 
 static Hashtable* listPatternHash = NULL;
-static UMTX listFormatterMutex = NULL;
+static UMutex listFormatterMutex = U_MUTEX_INITIALIZER;
 static UChar FIRST_PARAMETER[] = { 0x7b, 0x30, 0x7d };  // "{0}"
 static UChar SECOND_PARAMETER[] = { 0x7b, 0x31, 0x7d };  // "{0}"
 

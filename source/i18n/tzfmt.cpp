@@ -243,7 +243,7 @@ U_CDECL_END
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(TimeZoneFormat)
 
 TimeZoneFormat::TimeZoneFormat(const Locale& locale, UErrorCode& status) 
-: fLock(NULL),fLocale(locale), fTimeZoneNames(NULL), fTimeZoneGenericNames(NULL), fDefParseOptionFlags(0) {
+: fLocale(locale), fTimeZoneNames(NULL), fTimeZoneGenericNames(NULL), fDefParseOptionFlags(0) {
 
     for (int32_t i = 0; i <= UTZFMT_PAT_NEGATIVE_HMS; i++) {
         fGMTOffsetPatternItems[i] = NULL;
@@ -346,7 +346,6 @@ TimeZoneFormat::~TimeZoneFormat() {
     for (int32_t i = 0; i <= UTZFMT_PAT_NEGATIVE_HMS; i++) {
         delete fGMTOffsetPatternItems[i];
     }
-    umtx_destroy(&fLock);
 }
 
 TimeZoneFormat&
@@ -1005,6 +1004,8 @@ TimeZoneFormat::formatSpecific(const TimeZone& tz, UTimeZoneNameType stdType, UT
     return name;
 }
 
+static UMutex gLock = U_MUTEX_INITIALIZER;
+
 const TimeZoneGenericNames*
 TimeZoneFormat::getTimeZoneGenericNames(UErrorCode& status) const {
     if (U_FAILURE(status)) {
@@ -1015,13 +1016,13 @@ TimeZoneFormat::getTimeZoneGenericNames(UErrorCode& status) const {
     UMTX_CHECK(&gZoneMetaLock, (fTimeZoneGenericNames == NULL), create);
     if (create) {
         TimeZoneFormat *nonConstThis = const_cast<TimeZoneFormat *>(this);
-        umtx_lock(&nonConstThis->fLock);
+        umtx_lock(&gLock);
         {
             if (fTimeZoneGenericNames == NULL) {
                 nonConstThis->fTimeZoneGenericNames = TimeZoneGenericNames::createInstance(fLocale, status);
             }
         }
-        umtx_unlock(&nonConstThis->fLock);
+        umtx_unlock(&gLock);
     }
 
     return fTimeZoneGenericNames;
