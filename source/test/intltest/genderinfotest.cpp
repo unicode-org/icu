@@ -37,32 +37,19 @@ private:
     void TestGetListGender();
     void TestFallback();
     void TestCApi();
-    void check(UGender expected_neutral, UGender expected_mixed, UGender expected_taints, const UGender* genderList, int32_t listSize);
-    void checkLocale(const Locale& locale, UGender expected, const UGender* genderList, int32_t listSize);
+    void check(UGender expected_neutral, UGender expected_mixed, UGender expected_taints, const UGender* genderList, int32_t listLength);
+    void checkLocale(const Locale& locale, UGender expected, const UGender* genderList, int32_t listLength);
 };
 
-void GenderInfoTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char *par) {
-  switch(index) {
-    case 0:
-      name = "TestGetListGender";
-      if (exec) {
-        TestGetListGender();
-      }
-      break;
-    case 1:
-      name = "TestFallback";
-      if (exec) {
-        TestFallback();
-      }
-      break;
-    case 2:
-      name = "TestCApi";
-      if (exec) {
-        TestCApi();
-      }
-      break;
-    default: name = ""; break;
+void GenderInfoTest::runIndexedTest(int32_t index, UBool exec, const char *&name, char * /* par */) {
+  if (exec) {
+    logln("TestSuite GenderInfoTest: ");
   }
+  TESTCASE_AUTO_BEGIN;
+  TESTCASE_AUTO(TestGetListGender);
+  TESTCASE_AUTO(TestFallback);
+  TESTCASE_AUTO(TestCApi);
+  TESTCASE_AUTO_END;
 }
 
 void GenderInfoTest::TestGetListGender() {
@@ -115,7 +102,6 @@ void GenderInfoTest::TestCApi() {
   const UGenderInfo* expected_gi = (const UGenderInfo*) GenderInfo::getMaleTaintsInstance();
   if (expected_gi != actual_gi) {
     errln("Expected UGenderInfo %d got %d", expected_gi, actual_gi);
-    return;
   }
   UGender actual = ugender_getListGender(actual_gi, kAllFemale, LENGTHOF(kAllFemale), &status);
   if (U_FAILURE(status)) {
@@ -128,21 +114,21 @@ void GenderInfoTest::TestCApi() {
 }
 
 void GenderInfoTest::check(
-    UGender expected_neutral, UGender expected_mixed, UGender expected_taints, const UGender* genderList, int32_t listSize) {
-  checkLocale(Locale::getUS(), expected_neutral, genderList, listSize);
-  checkLocale(Locale::createFromName("is"), expected_mixed, genderList, listSize);
-  checkLocale(Locale::getFrench(), expected_taints, genderList, listSize);
+    UGender expected_neutral, UGender expected_mixed, UGender expected_taints, const UGender* genderList, int32_t listLength) {
+  checkLocale(Locale::getUS(), expected_neutral, genderList, listLength);
+  checkLocale(Locale::createFromName("is"), expected_mixed, genderList, listLength);
+  checkLocale(Locale::getFrench(), expected_taints, genderList, listLength);
 }
 
 void GenderInfoTest::checkLocale(
-    const Locale& locale, UGender expected, const UGender* genderList, int32_t listSize) {
+    const Locale& locale, UGender expected, const UGender* genderList, int32_t listLength) {
   UErrorCode status = U_ZERO_ERROR;
   const GenderInfo* gi = GenderInfo::getInstance(locale, status);
   if (U_FAILURE(status)) {
     errcheckln(status, "Fail to create GenderInfo - %s", u_errorName(status));
     return;
   }
-  UGender actual = gi->getListGender(genderList, listSize, status);
+  UGender actual = gi->getListGender(genderList, listLength, status);
   if (U_FAILURE(status)) {
     errcheckln(status, "Fail to get gender of list - %s", u_errorName(status));
     return;
