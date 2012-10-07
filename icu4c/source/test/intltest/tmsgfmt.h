@@ -113,11 +113,10 @@ public:
     void testAdopt(void);
     void TestTurkishCasing(void);
     void testAutoQuoteApostrophe(void);
+    void testCoverage();
+    void testGetFormatNames();
     void TestTrimArgumentName();
     void TestSelectOrdinal();
-
-    /* Provide better code coverage */
-    void testCoverage(void);
 
 private:
     UnicodeString GetPatternAndSkipSyntax(const MessagePattern& pattern);
