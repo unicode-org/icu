@@ -281,7 +281,6 @@
     <ClCompile Include="calregts.cpp" />
     <ClCompile Include="caltest.cpp" />
     <ClCompile Include="caltztst.cpp" />
-    <ClCompile Include="genderinfotest.cpp" />
     <ClCompile Include="dadrcal.cpp" />
     <ClCompile Include="dadrfmt.cpp" />
     <ClCompile Include="dcfmapts.cpp" />
