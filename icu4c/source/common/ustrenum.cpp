@@ -41,7 +41,7 @@ StringEnumeration::clone() const {
 const char *
 StringEnumeration::next(int32_t *resultLength, UErrorCode &status) {
     const UnicodeString *s=snext(status);
-    if(s!=NULL) {
+    if(U_SUCCESS(status) && s!=NULL) {
         unistr=*s;
         ensureCharsCapacity(unistr.length()+1, status);
         if(U_SUCCESS(status)) {
@@ -59,17 +59,22 @@ StringEnumeration::next(int32_t *resultLength, UErrorCode &status) {
 const UChar *
 StringEnumeration::unext(int32_t *resultLength, UErrorCode &status) {
     const UnicodeString *s=snext(status);
-    if(s!=NULL) {
+    if(U_SUCCESS(status) && s!=NULL) {
         unistr=*s;
-        if(U_SUCCESS(status)) {
-            if(resultLength!=NULL) {
-                *resultLength=unistr.length();
-            }
-            return unistr.getTerminatedBuffer();
+        if(resultLength!=NULL) {
+            *resultLength=unistr.length();
         }
+        return unistr.getTerminatedBuffer();
     }
 
     return NULL;
+}
+
+const UnicodeString *
+StringEnumeration::snext(UErrorCode &status) {
+    int32_t length;
+    const char *s=next(&length, status);
+    return setChars(s, length, status);
 }
 
 void
@@ -136,6 +141,10 @@ UStringEnumeration::~UStringEnumeration() {
 
 int32_t UStringEnumeration::count(UErrorCode& status) const {
     return uenum_count(uenum, &status);
+}
+
+const char *UStringEnumeration::next(int32_t *resultLength, UErrorCode &status) {
+    return uenum_next(uenum, resultLength, &status);
 }
 
 const UnicodeString* UStringEnumeration::snext(UErrorCode& status) {
