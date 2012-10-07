@@ -24,6 +24,7 @@ import java.util.Set;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.PluralRulesLoader;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -231,7 +232,7 @@ public class PluralRules implements Serializable {
      * @stable ICU 3.8
      */
     public static final PluralRules DEFAULT =
-        new PluralRules(new RuleChain(DEFAULT_RULE));
+            new PluralRules(new RuleChain(DEFAULT_RULE));
 
     /**
      * Parses a plural rules description and returns a PluralRules.
@@ -241,11 +242,11 @@ public class PluralRules implements Serializable {
      * @stable ICU 3.8
      */
     public static PluralRules parseDescription(String description)
-        throws ParseException {
+            throws ParseException {
 
         description = description.trim();
         if (description.length() == 0) {
-          return DEFAULT;
+            return DEFAULT;
         }
 
         return new PluralRules(parseRuleChain(description));
@@ -325,6 +326,7 @@ public class PluralRules implements Serializable {
 
         /* Return true if the values for this keyword are limited. */
         boolean isLimited(String keyword);
+
     }
 
     /*
@@ -351,7 +353,7 @@ public class PluralRules implements Serializable {
      * range :         value'..'value
      */
     private static Constraint parseConstraint(String description)
-        throws ParseException {
+            throws ParseException {
 
         description = description.trim().toLowerCase(Locale.ENGLISH);
 
@@ -443,14 +445,14 @@ public class PluralRules implements Serializable {
                     }
 
                     newConstraint =
-                        new RangeConstraint(mod, inRange, integersOnly, lowBound, highBound, vals);
+                            new RangeConstraint(mod, inRange, integersOnly, lowBound, highBound, vals);
                 }
 
                 if (andConstraint == null) {
                     andConstraint = newConstraint;
                 } else {
                     andConstraint = new AndConstraint(andConstraint,
-                                                      newConstraint);
+                            newConstraint);
                 }
             }
 
@@ -467,14 +469,14 @@ public class PluralRules implements Serializable {
     /* Returns a parse exception wrapping the token and context strings. */
     private static ParseException unexpected(String token, String context) {
         return new ParseException("unexpected token '" + token +
-                                  "' in '" + context + "'", -1);
+                "' in '" + context + "'", -1);
     }
 
     /*
      * Returns the token at x if available, else throws a parse exception.
      */
     private static String nextToken(String[] tokens, int x, String context)
-        throws ParseException {
+            throws ParseException {
         if (x < tokens.length) {
             return tokens[x];
         }
@@ -490,19 +492,19 @@ public class PluralRules implements Serializable {
         int x = description.indexOf(':');
         if (x == -1) {
             throw new ParseException("missing ':' in rule description '" +
-                                     description + "'", 0);
+                    description + "'", 0);
         }
 
         String keyword = description.substring(0, x).trim();
         if (!isValidKeyword(keyword)) {
-          throw new ParseException("keyword '" + keyword +
-                                   " is not valid", 0);
+            throw new ParseException("keyword '" + keyword +
+                    " is not valid", 0);
         }
 
         description = description.substring(x+1).trim();
         if (description.length() == 0) {
-          throw new ParseException("missing constraint in '" +
-                                   description + "'", x+1);
+            throw new ParseException("missing constraint in '" +
+                    description + "'", x+1);
         }
         Constraint constraint = parseConstraint(description);
         Rule rule = new ConstrainedRule(keyword, constraint);
@@ -515,7 +517,7 @@ public class PluralRules implements Serializable {
      *         rule ';' rules
      */
     private static RuleChain parseRuleChain(String description)
-        throws ParseException {
+            throws ParseException {
 
         RuleChain rc = null;
         String[] rules = Utility.split(description, ';');
@@ -546,7 +548,7 @@ public class PluralRules implements Serializable {
         private long[] range_list;
 
         RangeConstraint(int mod, boolean inRange, boolean integersOnly,
-                        long lowerBound, long upperBound, long[] range_list) {
+                long lowerBound, long upperBound, long[] range_list) {
             this.mod = mod;
             this.inRange = inRange;
             this.integersOnly = integersOnly;
@@ -577,8 +579,8 @@ public class PluralRules implements Serializable {
         }
 
         public int updateRepeatLimit(int limit) {
-          int mylimit = mod == 0 ? (int)upperBound : mod;
-          return Math.max(mylimit, limit);
+            int mylimit = mod == 0 ? (int)upperBound : mod;
+            return Math.max(mylimit, limit);
         }
 
         public String toString() {
@@ -629,7 +631,7 @@ public class PluralRules implements Serializable {
 
     /* Convenience base class for and/or constraints. */
     private static abstract class BinaryConstraint implements Constraint,
-                                                   Serializable {
+    Serializable {
         private static final long serialVersionUID = 1;
         protected final Constraint a;
         protected final Constraint b;
@@ -802,13 +804,13 @@ public class PluralRules implements Serializable {
         }
 
         public int getRepeatLimit() {
-          int result = 0;
-          RuleChain rc = this;
-          while (rc != null) {
-            result = rc.rule.updateRepeatLimit(result);
-            rc = rc.next;
-          }
-          return result;
+            int result = 0;
+            RuleChain rc = this;
+            while (rc != null) {
+                result = rc.rule.updateRepeatLimit(result);
+                rc = rc.next;
+            }
+            return result;
         }
 
         public String toString() {
@@ -843,7 +845,7 @@ public class PluralRules implements Serializable {
      * @stable ICU 3.8
      */
     public static PluralRules forLocale(ULocale locale) {
-      return PluralRulesLoader.loader.forLocale(locale, PluralType.CARDINAL);
+        return PluralRulesLoader.loader.forLocale(locale, PluralType.CARDINAL);
     }
 
     /**
@@ -866,7 +868,7 @@ public class PluralRules implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static PluralRules forLocale(ULocale locale, PluralType type) {
-      return PluralRulesLoader.loader.forLocale(locale, type);
+        return PluralRulesLoader.loader.forLocale(locale, type);
     }
 
     /*
@@ -875,9 +877,9 @@ public class PluralRules implements Serializable {
      * @param token the token to be checked
      * @return true if the token is a valid keyword.
      */
-     private static boolean isValidKeyword(String token) {
-         return PatternProps.isIdentifier(token);
-     }
+    private static boolean isValidKeyword(String token) {
+        return PatternProps.isIdentifier(token);
+    }
 
     /*
      * Creates a new <code>PluralRules</code> object.  Immutable.
@@ -936,6 +938,7 @@ public class PluralRules implements Serializable {
      * @stable ICU 4.8
      */
     public Collection<Double> getAllKeywordValues(String keyword) {
+        // HACK for now
         if (!keywords.contains(keyword)) {
             return Collections.<Double>emptyList();
         }
@@ -952,6 +955,7 @@ public class PluralRules implements Serializable {
         }
         return result;
     }
+
 
     /**
      * Returns a list of values for which select() would return that keyword,
@@ -1044,7 +1048,7 @@ public class PluralRules implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
-      return PluralRulesLoader.loader.getAvailableULocales();
+        return PluralRulesLoader.loader.getAvailableULocales();
     }
 
     /**
@@ -1073,9 +1077,9 @@ public class PluralRules implements Serializable {
      * @stable ICU 3.8
      */
     public String toString() {
-      return "keywords: " + keywords +
-          " limit: " + getRepeatLimit() +
-          " rules: " + rules.toString();
+        return "keywords: " + keywords +
+                " limit: " + getRepeatLimit() +
+                " rules: " + rules.toString();
     }
 
     /**
@@ -1112,34 +1116,173 @@ public class PluralRules implements Serializable {
      * @stable ICU 3.8
      */
     public boolean equals(PluralRules rhs) {
-      if (rhs == null) {
-        return false;
-      }
-      if (rhs == this) {
-        return true;
-      }
-
-      if (hashCode() != rhs.hashCode()) {
-          return false;
-      }
-
-      if (!rhs.getKeywords().equals(keywords)) {
-          return false;
-      }
-
-      int limit = Math.max(getRepeatLimit(), rhs.getRepeatLimit());
-      for (int i = 0; i < limit * 2; ++i) {
-        if (!select(i).equals(rhs.select(i))) {
-          return false;
+        if (rhs == null) {
+            return false;
         }
-      }
-      return true;
+        if (rhs == this) {
+            return true;
+        }
+
+        if (hashCode() != rhs.hashCode()) {
+            return false;
+        }
+
+        if (!rhs.getKeywords().equals(keywords)) {
+            return false;
+        }
+
+        int limit = Math.max(getRepeatLimit(), rhs.getRepeatLimit());
+        for (int i = 0; i < limit * 2; ++i) {
+            if (!select(i).equals(rhs.select(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private int getRepeatLimit() {
-      if (repeatLimit == 0) {
-        repeatLimit = rules.getRepeatLimit() + 1;
-      }
-      return repeatLimit;
+        if (repeatLimit == 0) {
+            repeatLimit = rules.getRepeatLimit() + 1;
+        }
+        return repeatLimit;
     }
- }
+
+    /**
+     * Status of the keyword for the rules, given a set of explicit values.
+     * 
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    public enum KeywordStatus {
+        /**
+         * The keyword is not valid for the rules.
+         * 
+         * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
+         */
+        INVALID,
+        /**
+         * The keyword is valid, but unused (it is covered by the explicit values).
+         * 
+         * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
+         */
+        SUPPRESSED,
+        /**
+         * The keyword is valid, used, and has a single possible value (before considering explicit values).
+         * 
+         * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
+         */
+        UNIQUE,
+        /**
+         * The keyword is valid, used, not unique, and has a finite set of values.
+         * 
+         * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
+         */
+        BOUNDED,
+        /**
+         * The keyword is valid but not bounded; there indefinitely many matching values.
+         * 
+         * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
+         */
+        UNBOUNDED
+    }
+
+//    /**
+//     * Indicates whether the values are all restricted to be integers, or whether they may be non-integers.
+//     * 
+//     * @draft ICU 50
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public enum NumberType {
+//        /**
+//         * Indicates that the values are all restricted to be integers.
+//         * 
+//         * @draft ICU 50
+//         * @provisional This API might change or be removed in a future release.
+//         */
+//        INTEGER,
+//        /**
+//         * Indicates that the values may be non-integers.
+//         * 
+//         * @draft ICU 50
+//         * @provisional This API might change or be removed in a future release.
+//         */
+//        DOUBLE
+//    }
+
+    /**
+     * Find the status for the keyword, given a certain set of explicit values.
+     * 
+     * @param keyword
+     *            the particular keyword (call rules.getKeywords() to get the valid ones)
+     * @param offset
+     *            the offset used, or 0.0d if not. Internally, the offset is subtracted from each explicit value before
+     *            checking against the keyword values.
+     * @param explicits
+     *            a set of Doubles that are used explicitly (eg [=0], "[=1]"). May be empty or null.
+//     * @param numberType
+//     *            In circumstances where the values used are known to be integers, this parameter can be set to INTEGER.
+//     *            Examples: "There are 3 people in..." (integerOnly=true) vs. "There are 1.2 people per household
+//     *            (integerOnly=false). This may produce different results in languages where fractions have the same
+//     *            format as integers for some keywords.
+     * @return the KeywordStatus
+     * @param uniqueValue
+     *            If non null, set to the unique value.
+     *            <p>
+     *            NOTE: For testing, this is a static with the first parameter being the rules. Those will disappear.
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    public KeywordStatus getKeywordStatus(String keyword, int offset, Set<Double> explicits,
+            Output<Double> uniqueValue) {
+
+        if (uniqueValue != null) {
+            uniqueValue.value = null;
+        }
+
+        if (!rules.getKeywords().contains(keyword)) {
+            return KeywordStatus.INVALID;
+        }
+        Collection<Double> values = getAllKeywordValues(keyword);
+        if (values == null) {
+            return KeywordStatus.UNBOUNDED;
+        }
+        int originalSize = values.size();
+
+        if (explicits == null) {
+            explicits = Collections.emptySet();
+        }
+        
+        // Quick check on whether there are multiple elements
+
+        if (originalSize > explicits.size()) {
+            if (originalSize == 1) {
+                if (uniqueValue != null) {
+                    uniqueValue.value = values.iterator().next();
+                }
+                return KeywordStatus.UNIQUE;
+            }
+            return KeywordStatus.BOUNDED;
+        }
+
+        // Compute if the quick test is insufficient.
+
+        HashSet<Double> subtractedSet = new HashSet<Double>(values);
+        for (Double explicit : explicits) {
+            subtractedSet.remove(explicit - offset);
+        }
+        if (subtractedSet.size() == 0) {
+            return KeywordStatus.SUPPRESSED;
+        }
+
+        if (uniqueValue != null && subtractedSet.size() == 1) {
+            uniqueValue.value = subtractedSet.iterator().next();
+        }
+
+        return originalSize == 1 ? KeywordStatus.UNIQUE : KeywordStatus.BOUNDED;
+    }
+}
