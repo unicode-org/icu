@@ -28,6 +28,8 @@
 #include "cmsgtst.h"
 #include "cformtst.h"
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 static const char* const txt_testCasePatterns[] = {
    "Quotes '', '{', a {0,number,integer} '{'0}",
    "Quotes '', '{', a {0,number,integer} '{'0}",
@@ -1110,6 +1112,24 @@ static void MessageLength(void)
     }
 }
 
+static void TestMessageWithUnusedArgNumber() {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    U_STRING_DECL(pattern, "abc {1} def", 11);
+    UChar x[2] = { 0x78, 0 };  // "x"
+    UChar y[2] = { 0x79, 0 };  // "y"
+    U_STRING_DECL(expected, "abc y def", 9);
+    UChar result[20];
+    int32_t length;
+
+    U_STRING_INIT(pattern, "abc {1} def", 11);
+    U_STRING_INIT(expected, "abc y def", 9);
+    length = u_formatMessage("en", pattern, -1, result, LENGTHOF(result), &errorCode, x, y);
+    if (U_FAILURE(errorCode) || length != u_strlen(expected) || u_strcmp(result, expected) != 0) {
+        log_err("u_formatMessage(pattern with only {1}, 2 args) failed: result length %d, UErrorCode %s \n",
+                (int)length, u_errorName(errorCode));
+    }
+}
+
 static void TestErrorChaining(void) {
     UErrorCode status = U_USELESS_COLLATOR_ERROR;
 
@@ -1164,6 +1184,7 @@ void addMsgForTest(TestNode** root)
     addTest(root, &TestParseMessageWithValist, "tsformat/cmsgtst/TestParseMessageWithValist");
     addTest(root, &TestJ904, "tsformat/cmsgtst/TestJ904");
     addTest(root, &MessageLength, "tsformat/cmsgtst/MessageLength");
+    addTest(root, &TestMessageWithUnusedArgNumber, "tsformat/cmsgtst/TestMessageWithUnusedArgNumber");
     addTest(root, &TestErrorChaining, "tsformat/cmsgtst/TestErrorChaining");
     addTest(root, &TestMsgFormatSelect, "tsformat/cmsgtst/TestMsgFormatSelect");
 }
