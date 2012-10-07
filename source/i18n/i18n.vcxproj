@@ -299,6 +299,7 @@
     <ClCompile Include="format.cpp" />
     <ClCompile Include="fphdlimp.cpp" />
     <ClCompile Include="fpositer.cpp" />
+    <ClCompile Include="gender.cpp" />
     <ClCompile Include="gregocal.cpp" />
     <ClCompile Include="gregoimp.cpp" />
     <ClCompile Include="hebrwcal.cpp" />
@@ -892,6 +893,34 @@
     </CustomBuild>
     <ClInclude Include="fphdlimp.h" />
     <CustomBuild Include="unicode\fpositer.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="unicode\gender.h">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)" ..\..\include\unicode
+</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
+    </CustomBuild>
+    <CustomBuild Include="unicode\ugender.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
