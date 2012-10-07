@@ -171,6 +171,9 @@
     <ClCompile Include="fpositer.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="gender.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="gregocal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -877,6 +880,9 @@
     <CustomBuild Include="unicode\fpositer.h">
       <Filter>formatting</Filter>
     </CustomBuild>
+    <CustomBuild Include="unicode\gender.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
     <CustomBuild Include="unicode\gregocal.h">
       <Filter>formatting</Filter>
     </CustomBuild>
@@ -953,6 +959,9 @@
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\udatpg.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\ugender.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\uldnames.h">

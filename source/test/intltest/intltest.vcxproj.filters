@@ -214,6 +214,9 @@
     <ClCompile Include="fldset.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="genderinfotest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="incaltst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
