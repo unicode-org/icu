@@ -851,7 +851,7 @@ MessageFormat::getFormatNames(UErrorCode& status) {
     fFormatNames->setDeleter(uprv_deleteUObject);
 
     for (int32_t partIndex = 0; (partIndex = nextTopLevelArgStart(partIndex)) >= 0;) {
-        fFormatNames->addElement(new UnicodeString(getArgName(partIndex)), status);
+        fFormatNames->addElement(new UnicodeString(getArgName(partIndex + 1)), status);
     }
 
     StringEnumeration* nameEnumerator = new FormatNameEnumeration(fFormatNames, status);
