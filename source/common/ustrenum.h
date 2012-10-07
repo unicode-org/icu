@@ -47,6 +47,8 @@ public:
      */
     virtual int32_t count(UErrorCode& status) const;
 
+    virtual const char* next(int32_t *resultLength, UErrorCode& status);
+
     /**
      * Returns the next element a UnicodeString*.  If there are no
      * more elements, returns NULL.
