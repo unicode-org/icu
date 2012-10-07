@@ -292,6 +292,9 @@
 #   define UCONFIG_NO_NORMALIZATION 0
 #elif UCONFIG_NO_NORMALIZATION
     /* common library */
+    /* ICU 50 CJK dictionary BreakIterator uses normalization */
+#   define UCONFIG_NO_BREAK_ITERATION 1
+    /* IDNA (UTS #46) is implemented via normalization */
 #   define UCONFIG_NO_IDNA 1
 
     /* i18n library */
