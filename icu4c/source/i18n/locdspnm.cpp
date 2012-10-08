@@ -164,6 +164,7 @@ public:
 
   virtual const Locale& getLocale() const;
   virtual UDialectHandling getDialectHandling() const;
+
   virtual UnicodeString& localeDisplayName(const Locale& locale,
                                            UnicodeString& result) const;
   virtual UnicodeString& localeDisplayName(const char* localeId,
@@ -273,14 +274,17 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
   UnicodeString sep;
   MessageFormat *format;
   MessageFormat *keyTypeFormat;
+  UDisplayContext capitalizationContext;
 
 public:
   // constructor
   LocaleDisplayNamesImpl(const Locale& locale, UDialectHandling dialectHandling);
+  LocaleDisplayNamesImpl(const Locale& locale, UDisplayContext *contexts, int32_t length);
   virtual ~LocaleDisplayNamesImpl();
 
   virtual const Locale& getLocale() const;
   virtual UDialectHandling getDialectHandling() const;
+  virtual UDisplayContext getContext(UDisplayContextType type) const;
 
   virtual UnicodeString& localeDisplayName(const Locale& locale,
                                            UnicodeString& result) const;
@@ -305,6 +309,7 @@ private:
   UnicodeString& localeIdName(const char* localeId,
                               UnicodeString& result) const;
   UnicodeString& appendWithSep(UnicodeString& buffer, const UnicodeString& src) const;
+  void initialize(void);
 };
 
 LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
@@ -314,7 +319,39 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
   , regionData(U_ICUDATA_REGION, locale)
   , format(NULL)
   , keyTypeFormat(NULL)
+  , capitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
+  initialize();
+}
+
+LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
+                                               UDisplayContext *contexts, int32_t length)
+  : dialectHandling(ULDN_STANDARD_NAMES)
+  , langData(U_ICUDATA_LANG, locale)
+  , regionData(U_ICUDATA_REGION, locale)
+  , format(NULL)
+  , keyTypeFormat(NULL)
+  , capitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+{
+  while (length-- > 0) {
+    UDisplayContext value = *contexts++;
+  	UDisplayContextType selector = (UDisplayContextType)(value & ~0xFF);
+  	switch (selector) {
+  	  case UDISPCTX_TYPE_DIALECT_HANDLING:
+  	    dialectHandling = (UDialectHandling)value;
+  	    break;
+  	  case UDISPCTX_TYPE_CAPITALIZATION:
+  	    capitalizationContext = value;
+  	    break;
+  	  default:
+  	    break;
+  	}
+  }
+  initialize();
+}
+
+void
+LocaleDisplayNamesImpl::initialize(void) {
   LocaleDisplayNamesImpl *nonConstThis = (LocaleDisplayNamesImpl *)this;
   nonConstThis->locale = langData.getLocale() == Locale::getRoot()
     ? regionData.getLocale()
@@ -356,6 +393,20 @@ LocaleDisplayNamesImpl::getDialectHandling() const {
   return dialectHandling;
 }
 
+UDisplayContext
+LocaleDisplayNamesImpl::getContext(UDisplayContextType type) const {
+  switch (type) {
+  	case UDISPCTX_TYPE_DIALECT_HANDLING:
+      return (UDisplayContext)dialectHandling;
+  	case UDISPCTX_TYPE_CAPITALIZATION:
+      return capitalizationContext;
+    default:
+      break;
+  }
+  return (UDisplayContext)0;
+}
+
+// TODO: Make the following depend on capitalizationContext
 UnicodeString&
 LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
                                           UnicodeString& result) const {
@@ -542,6 +593,15 @@ LocaleDisplayNames::createInstance(const Locale& locale,
   return new LocaleDisplayNamesImpl(locale, dialectHandling);
 }
 
+LocaleDisplayNames*
+LocaleDisplayNames::createInstance(const Locale& locale,
+                                   UDisplayContext *contexts, int32_t length) {
+  if (contexts == NULL) {
+    length = 0;
+  }
+  return new LocaleDisplayNamesImpl(locale, contexts, length);
+}
+
 U_NAMESPACE_END
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -560,6 +620,20 @@ uldn_open(const char * locale,
   }
   return (ULocaleDisplayNames *)LocaleDisplayNames::createInstance(Locale(locale), dialectHandling);
 }
+
+U_CAPI ULocaleDisplayNames * U_EXPORT2
+uldn_openForContext(const char * locale,
+                    UDisplayContext *contexts, int32_t length,
+                    UErrorCode *pErrorCode) {
+  if (U_FAILURE(*pErrorCode)) {
+    return 0;
+  }
+  if (locale == NULL) {
+    locale = uloc_getDefault();
+  }
+  return (ULocaleDisplayNames *)LocaleDisplayNames::createInstance(Locale(locale), contexts, length);
+}
+
 
 U_CAPI void U_EXPORT2
 uldn_close(ULocaleDisplayNames *ldn) {
@@ -580,6 +654,16 @@ uldn_getDialectHandling(const ULocaleDisplayNames *ldn) {
     return ((const LocaleDisplayNames *)ldn)->getDialectHandling();
   }
   return ULDN_STANDARD_NAMES;
+}
+
+U_CAPI UDisplayContext U_EXPORT2
+uldn_getContext(const ULocaleDisplayNames *ldn,
+              UDisplayContextType type,
+              UErrorCode *pErrorCode) {
+  if (U_FAILURE(*pErrorCode)) {
+    return (UDisplayContext)0;
+  }
+  return ((const LocaleDisplayNames *)ldn)->getContext(type);
 }
 
 U_CAPI int32_t U_EXPORT2
