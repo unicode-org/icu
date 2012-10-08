@@ -676,7 +676,7 @@ ucol_setStrength(UCollator *coll,
  * @see UColReorderCode
  * @stable ICU 4.8
  */
-U_DRAFT int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ucol_getReorderCodes(const UCollator* coll,
                     int32_t* dest,
                     int32_t destCapacity,
@@ -738,7 +738,7 @@ ucol_setReorderCodes(UCollator* coll,
  * @see UColReorderCode
  * @stable ICU 4.8
  */
-U_DRAFT int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2 
 ucol_getEquivalentReorderCodes(int32_t reorderCode,
                     int32_t* dest,
                     int32_t destCapacity,

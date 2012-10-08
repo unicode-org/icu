@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -707,32 +707,32 @@ U_NAMESPACE_END
 
 U_NAMESPACE_USE
 
-U_DRAFT const UNormalizer2 * U_EXPORT2
+U_CAPI const UNormalizer2 * U_EXPORT2
 unorm2_getNFCInstance(UErrorCode *pErrorCode) {
     return (const UNormalizer2 *)Normalizer2::getNFCInstance(*pErrorCode);
 }
 
-U_DRAFT const UNormalizer2 * U_EXPORT2
+U_CAPI const UNormalizer2 * U_EXPORT2
 unorm2_getNFDInstance(UErrorCode *pErrorCode) {
     return (const UNormalizer2 *)Normalizer2::getNFDInstance(*pErrorCode);
 }
 
-U_DRAFT const UNormalizer2 * U_EXPORT2
+U_CAPI const UNormalizer2 * U_EXPORT2
 unorm2_getNFKCInstance(UErrorCode *pErrorCode) {
     return (const UNormalizer2 *)Normalizer2::getNFKCInstance(*pErrorCode);
 }
 
-U_DRAFT const UNormalizer2 * U_EXPORT2
+U_CAPI const UNormalizer2 * U_EXPORT2
 unorm2_getNFKDInstance(UErrorCode *pErrorCode) {
     return (const UNormalizer2 *)Normalizer2::getNFKDInstance(*pErrorCode);
 }
 
-U_DRAFT const UNormalizer2 * U_EXPORT2
+U_CAPI const UNormalizer2 * U_EXPORT2
 unorm2_getNFKCCasefoldInstance(UErrorCode *pErrorCode) {
     return (const UNormalizer2 *)Normalizer2::getNFKCCasefoldInstance(*pErrorCode);
 }
 
-U_DRAFT const UNormalizer2 * U_EXPORT2
+U_CAPI const UNormalizer2 * U_EXPORT2
 unorm2_getInstance(const char *packageName,
                    const char *name,
                    UNormalization2Mode mode,
@@ -740,12 +740,12 @@ unorm2_getInstance(const char *packageName,
     return (const UNormalizer2 *)Normalizer2::getInstance(packageName, name, mode, *pErrorCode);
 }
 
-U_DRAFT void U_EXPORT2
+U_CAPI void U_EXPORT2
 unorm2_close(UNormalizer2 *norm2) {
     delete (Normalizer2 *)norm2;
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 unorm2_normalize(const UNormalizer2 *norm2,
                  const UChar *src, int32_t length,
                  UChar *dest, int32_t capacity,
@@ -835,7 +835,7 @@ normalizeSecondAndAppend(const UNormalizer2 *norm2,
     return firstString.extract(first, firstCapacity, *pErrorCode);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 unorm2_normalizeSecondAndAppend(const UNormalizer2 *norm2,
                                 UChar *first, int32_t firstLength, int32_t firstCapacity,
                                 const UChar *second, int32_t secondLength,
@@ -846,7 +846,7 @@ unorm2_normalizeSecondAndAppend(const UNormalizer2 *norm2,
                                     TRUE, pErrorCode);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 unorm2_append(const UNormalizer2 *norm2,
               UChar *first, int32_t firstLength, int32_t firstCapacity,
               const UChar *second, int32_t secondLength,
@@ -857,7 +857,7 @@ unorm2_append(const UNormalizer2 *norm2,
                                     FALSE, pErrorCode);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 unorm2_getDecomposition(const UNormalizer2 *norm2,
                         UChar32 c, UChar *decomposition, int32_t capacity,
                         UErrorCode *pErrorCode) {
@@ -876,7 +876,7 @@ unorm2_getDecomposition(const UNormalizer2 *norm2,
     }
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 unorm2_getRawDecomposition(const UNormalizer2 *norm2,
                            UChar32 c, UChar *decomposition, int32_t capacity,
                            UErrorCode *pErrorCode) {
@@ -895,17 +895,17 @@ unorm2_getRawDecomposition(const UNormalizer2 *norm2,
     }
 }
 
-U_DRAFT UChar32 U_EXPORT2
+U_CAPI UChar32 U_EXPORT2
 unorm2_composePair(const UNormalizer2 *norm2, UChar32 a, UChar32 b) {
     return reinterpret_cast<const Normalizer2 *>(norm2)->composePair(a, b);
 }
 
-U_DRAFT uint8_t U_EXPORT2
+U_CAPI uint8_t U_EXPORT2
 unorm2_getCombiningClass(const UNormalizer2 *norm2, UChar32 c) {
     return reinterpret_cast<const Normalizer2 *>(norm2)->getCombiningClass(c);
 }
 
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 unorm2_isNormalized(const UNormalizer2 *norm2,
                     const UChar *s, int32_t length,
                     UErrorCode *pErrorCode) {
@@ -920,7 +920,7 @@ unorm2_isNormalized(const UNormalizer2 *norm2,
     return ((const Normalizer2 *)norm2)->isNormalized(sString, *pErrorCode);
 }
 
-U_DRAFT UNormalizationCheckResult U_EXPORT2
+U_CAPI UNormalizationCheckResult U_EXPORT2
 unorm2_quickCheck(const UNormalizer2 *norm2,
                   const UChar *s, int32_t length,
                   UErrorCode *pErrorCode) {
@@ -935,7 +935,7 @@ unorm2_quickCheck(const UNormalizer2 *norm2,
     return ((const Normalizer2 *)norm2)->quickCheck(sString, *pErrorCode);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 unorm2_spanQuickCheckYes(const UNormalizer2 *norm2,
                          const UChar *s, int32_t length,
                          UErrorCode *pErrorCode) {
@@ -950,17 +950,17 @@ unorm2_spanQuickCheckYes(const UNormalizer2 *norm2,
     return ((const Normalizer2 *)norm2)->spanQuickCheckYes(sString, *pErrorCode);
 }
 
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 unorm2_hasBoundaryBefore(const UNormalizer2 *norm2, UChar32 c) {
     return ((const Normalizer2 *)norm2)->hasBoundaryBefore(c);
 }
 
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 unorm2_hasBoundaryAfter(const UNormalizer2 *norm2, UChar32 c) {
     return ((const Normalizer2 *)norm2)->hasBoundaryAfter(c);
 }
 
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 unorm2_isInert(const UNormalizer2 *norm2, UChar32 c) {
     return ((const Normalizer2 *)norm2)->isInert(c);
 }

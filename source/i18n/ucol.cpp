@@ -6780,7 +6780,7 @@ ucol_getStrength(const UCollator *coll)
     return ucol_getAttribute(coll, UCOL_STRENGTH, &status);
 }
 
-U_DRAFT int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ucol_getReorderCodes(const UCollator *coll,
                     int32_t *dest,
                     int32_t destCapacity,
@@ -6813,7 +6813,7 @@ ucol_getReorderCodes(const UCollator *coll,
     return coll->reorderCodesLength;
 }
 
-U_DRAFT void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 ucol_setReorderCodes(UCollator* coll,
                     const int32_t* reorderCodes,
                     int32_t reorderCodesLength,
@@ -6857,7 +6857,7 @@ ucol_setReorderCodes(UCollator* coll,
     ucol_buildPermutationTable(coll, status);
 }
 
-U_DRAFT int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 ucol_getEquivalentReorderCodes(int32_t reorderCode,
                     int32_t* dest,
                     int32_t destCapacity,
@@ -8858,7 +8858,7 @@ ucol_strcoll( const UCollator    *coll,
     return returnVal;
 }
 
-U_DRAFT UCollationResult U_EXPORT2
+U_CAPI UCollationResult U_EXPORT2
 ucol_strcollUTF8(
         const UCollator *coll,
         const char      *source,
