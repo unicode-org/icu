@@ -1089,7 +1089,7 @@ uloc_minimizeSubtags(const char*    localeID,
  * @return          the length of the locale ID.
  * @stable ICU 4.2
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_forLanguageTag(const char* langtag,
                     char* localeID,
                     int32_t localeIDCapacity,
@@ -1117,7 +1117,7 @@ uloc_forLanguageTag(const char* langtag,
  * @return          The length of the BCP47 language tag.
  * @stable ICU 4.2
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uloc_toLanguageTag(const char* localeID,
                    char* langtag,
                    int32_t langtagCapacity,

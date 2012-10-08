@@ -2883,7 +2883,7 @@ ucnv_toUCountPending(const UConverter* cnv, UErrorCode* status){
     return 0;
 }
 
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 ucnv_isFixedWidth(UConverter *cnv, UErrorCode *status){
     if (U_FAILURE(*status)) {
         return FALSE;

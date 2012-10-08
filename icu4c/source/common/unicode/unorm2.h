@@ -350,7 +350,7 @@ unorm2_append(const UNormalizer2 *norm2,
  * @return the non-negative length of c's decomposition, if there is one; otherwise a negative value
  * @stable ICU 4.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 unorm2_getDecomposition(const UNormalizer2 *norm2,
                         UChar32 c, UChar *decomposition, int32_t capacity,
                         UErrorCode *pErrorCode);

@@ -79,7 +79,7 @@ typedef struct UPluralRules UPluralRules;  /**< C typedef for struct UPluralRule
  * @return A UPluralRules for the specified locale, or NULL if an error occurred.
  * @stable ICU 4.8
  */
-U_DRAFT UPluralRules* U_EXPORT2
+U_STABLE UPluralRules* U_EXPORT2
 uplrules_open(const char *locale, UErrorCode *status);
 
 /**
@@ -99,7 +99,7 @@ uplrules_openForType(const char *locale, UPluralType type, UErrorCode *status);
  * @param uplrules The UPluralRules object to close.
  * @stable ICU 4.8
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uplrules_close(UPluralRules *uplrules);
 
 
@@ -134,7 +134,7 @@ U_NAMESPACE_END
  * @return The length of keyword.
  * @stable ICU 4.8
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uplrules_select(const UPluralRules *uplrules,
                double number,
                UChar *keyword, int32_t capacity,
