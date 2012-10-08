@@ -757,13 +757,15 @@ public abstract class DateFormat extends UFormat {
 
     /**
      * {@icu} Constant for date skeleton with quarter.
-     * draft ICU 50.0
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String QUARTER = "QQQQ";
 
     /**
      * {@icu} Constant for date skeleton with abbreviated quarter.
-     * draft ICU 50.0
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String ABBR_QUARTER = "QQQ";
 
@@ -780,10 +782,10 @@ public abstract class DateFormat extends UFormat {
     public static final String YEAR_ABBR_QUARTER = "yQQQ";
 
     /**
-     * {@icu} Constant for date skeleton with numeric month.
+     * {@icu} Constant for date skeleton with month.
      * @stable ICU 4.0
      */
-    public static final String NUM_MONTH = "M";
+    public static final String MONTH = "MMMM";
 
     /**
      * {@icu} Constant for date skeleton with abbreviated month.
@@ -792,22 +794,10 @@ public abstract class DateFormat extends UFormat {
     public static final String ABBR_MONTH = "MMM";
 
     /**
-     * {@icu} Constant for date skeleton with month.
+     * {@icu} Constant for date skeleton with numeric month.
      * @stable ICU 4.0
      */
-    public static final String MONTH = "MMMM";
-
-    /**
-     * {@icu} Constant for date skeleton with year and numeric month.
-     * @stable ICU 4.0
-     */
-    public static final String YEAR_NUM_MONTH = "yM";
-
-    /**
-     * {@icu} Constant for date skeleton with year and abbreviated month.
-     * @stable ICU 4.0
-     */
-    public static final String YEAR_ABBR_MONTH = "yMMM";
+    public static final String NUM_MONTH = "M";
 
     /**
      * {@icu} Constant for date skeleton with year and month.
@@ -816,24 +806,22 @@ public abstract class DateFormat extends UFormat {
     public static final String YEAR_MONTH = "yMMMM";
 
     /**
+     * {@icu} Constant for date skeleton with year and abbreviated month.
+     * @stable ICU 4.0
+     */
+    public static final String YEAR_ABBR_MONTH = "yMMM";
+
+    /**
+     * {@icu} Constant for date skeleton with year and numeric month.
+     * @stable ICU 4.0
+     */
+    public static final String YEAR_NUM_MONTH = "yM";
+
+    /**
      * {@icu} Constant for date skeleton with day.
      * @stable ICU 4.0
      */
     public static final String DAY = "d";
-
-    /**
-     * {@icu} Constant for date skeleton with year, numeric month, and day.
-     * Used in combinations date + time, date + time + zone, or time + zone.
-     * @stable ICU 4.0
-     */
-    public static final String YEAR_NUM_MONTH_DAY = "yMd";
-
-    /**
-     * {@icu} Constant for date skeleton with year, abbreviated month, and day.
-     * Used in combinations date + time, date + time + zone, or time + zone.
-     * @stable ICU 4.0
-     */
-    public static final String YEAR_ABBR_MONTH_DAY = "yMMMd";
 
     /**
      * {@icu} Constant for date skeleton with year, month, and day.
@@ -843,19 +831,32 @@ public abstract class DateFormat extends UFormat {
     public static final String YEAR_MONTH_DAY = "yMMMMd";
 
     /**
-     * {@icu} Constant for date skeleton with year, numeric month, weekday, and day.
+     * {@icu} Constant for date skeleton with year, abbreviated month, and day.
      * Used in combinations date + time, date + time + zone, or time + zone.
      * @stable ICU 4.0
      */
-    public static final String YEAR_NUM_MONTH_WEEKDAY_DAY = "yMEd";
+    public static final String YEAR_ABBR_MONTH_DAY = "yMMMd";
 
     /**
-     * {@icu} Constant for date skeleton with year, abbreviated month, weekday,
-     * and day.
+     * {@icu} Constant for date skeleton with year, numeric month, and day.
      * Used in combinations date + time, date + time + zone, or time + zone.
      * @stable ICU 4.0
      */
-    public static final String YEAR_ABBR_MONTH_WEEKDAY_DAY = "yMMMEd";
+    public static final String YEAR_NUM_MONTH_DAY = "yMd";
+
+    /**
+     * {@icu} Constant for date skeleton with weekday.
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final String WEEKDAY = "EEEE";
+
+    /**
+     * {@icu} Constant for date skeleton with abbreviated weekday.
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final String ABBR_WEEKDAY = "E";
 
     /**
      * {@icu} Constant for date skeleton with year, month, weekday, and day.
@@ -865,18 +866,18 @@ public abstract class DateFormat extends UFormat {
     public static final String YEAR_MONTH_WEEKDAY_DAY = "yMMMMEEEEd";
 
     /**
-     * {@icu} Constant for date skeleton with numeric month and day.
+     * {@icu} Constant for date skeleton with year, abbreviated month, weekday, and day.
      * Used in combinations date + time, date + time + zone, or time + zone.
      * @stable ICU 4.0
      */
-    public static final String NUM_MONTH_DAY = "Md";
+    public static final String YEAR_ABBR_MONTH_WEEKDAY_DAY = "yMMMEd";
 
     /**
-     * {@icu} Constant for date skeleton with abbreviated month and day.
+     * {@icu} Constant for date skeleton with year, numeric month, weekday, and day.
      * Used in combinations date + time, date + time + zone, or time + zone.
      * @stable ICU 4.0
      */
-    public static final String ABBR_MONTH_DAY = "MMMd";
+    public static final String YEAR_NUM_MONTH_WEEKDAY_DAY = "yMEd";
 
     /**
      * {@icu} Constant for date skeleton with long month and day.
@@ -886,11 +887,25 @@ public abstract class DateFormat extends UFormat {
     public static final String MONTH_DAY = "MMMMd";
 
     /**
-     * {@icu} Constant for date skeleton with numeric month, weekday, and day.
+     * {@icu} Constant for date skeleton with abbreviated month and day.
      * Used in combinations date + time, date + time + zone, or time + zone.
      * @stable ICU 4.0
      */
-    public static final String NUM_MONTH_WEEKDAY_DAY = "MEd";
+    public static final String ABBR_MONTH_DAY = "MMMd";
+
+    /**
+     * {@icu} Constant for date skeleton with numeric month and day.
+     * Used in combinations date + time, date + time + zone, or time + zone.
+     * @stable ICU 4.0
+     */
+    public static final String NUM_MONTH_DAY = "Md";
+
+    /**
+     * {@icu} Constant for date skeleton with month, weekday, and day.
+     * Used in combinations date + time, date + time + zone, or time + zone.
+     * @stable ICU 4.0
+     */
+    public static final String MONTH_WEEKDAY_DAY = "MMMMEEEEd";
 
     /**
      * {@icu} Constant for date skeleton with abbreviated month, weekday, and day.
@@ -900,31 +915,33 @@ public abstract class DateFormat extends UFormat {
     public static final String ABBR_MONTH_WEEKDAY_DAY = "MMMEd";
 
     /**
-     * {@icu} Constant for date skeleton with month, weekday, and day.
+     * {@icu} Constant for date skeleton with numeric month, weekday, and day.
      * Used in combinations date + time, date + time + zone, or time + zone.
      * @stable ICU 4.0
      */
-    public static final String MONTH_WEEKDAY_DAY = "MMMMEEEEd";
-    
+    public static final String NUM_MONTH_WEEKDAY_DAY = "MEd";
+
     /*
      * TIMES
      */
 
     /**
      * {@icu} Constant for date skeleton with hour, with the locale's preferred hour format (12 or 24).
-     * draft ICU 50.0
+     * @stable ICU 4.0
      */
     public static final String HOUR = "j";
 
     /**
      * {@icu} Constant for date skeleton with hour in 24-hour presentation.
-     * draft ICU 50.0
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String HOUR24 = "H";
 
     /**
      * {@icu} Constant for date skeleton with minute.
-     * @stable ICU 4.0
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String MINUTE = "m";
 
@@ -944,12 +961,14 @@ public abstract class DateFormat extends UFormat {
 
     /**
      * {@icu} Constant for date skeleton with second.
-     * @stable ICU 4.0
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String SECOND = "s";
 
     /**
-     * {@icu} Constant for date skeleton with hour, minute, and second, with the locale's preferred hour format (12 or 24).
+     * {@icu} Constant for date skeleton with hour, minute, and second,
+     * with the locale's preferred hour format (12 or 24).
      * Used in combinations date + time, date + time + zone, or time + zone.
      * @stable ICU 4.0
      */
@@ -980,6 +999,7 @@ public abstract class DateFormat extends UFormat {
      * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
      * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String LOCATION_TZ = "VVVV";
     
@@ -989,6 +1009,7 @@ public abstract class DateFormat extends UFormat {
      * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
      * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String GENERIC_TZ = "vvvv";
     
@@ -998,6 +1019,7 @@ public abstract class DateFormat extends UFormat {
      * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
      * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String ABBR_GENERIC_TZ = "v";
     
@@ -1007,6 +1029,7 @@ public abstract class DateFormat extends UFormat {
      * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
      * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String SPECIFIC_TZ = "zzzz";
     
@@ -1016,6 +1039,7 @@ public abstract class DateFormat extends UFormat {
      * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
      * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String ABBR_SPECIFIC_TZ = "z";
     
@@ -1025,51 +1049,50 @@ public abstract class DateFormat extends UFormat {
      * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
      * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final String ABBR_UTC_TZ = "ZZZZ";
 
+    /*
+     * deprecated skeleton constants
+     */
+
     /**
      * {@icu} Constant for date skeleton with standalone month.
-     * @stable ICU 4.0
-     * @deprecated Use {@link #MONTH} instead.
+     * @deprecated ICU 50 Use {@link #MONTH} instead.
      */
     public static final String STANDALONE_MONTH = "LLLL";
 
     /**
      * {@icu} Constant for date skeleton with standalone abbreviated month.
-     * @stable ICU 4.0
-     * @deprecated Use {@link #ABBR_MONTH} instead.
+     * @deprecated ICU 50 Use {@link #ABBR_MONTH} instead.
      */
     public static final String ABBR_STANDALONE_MONTH = "LLL";
 
     /**
      * {@icu} Constant for date skeleton with hour, minute, and generic timezone.
-     * @stable ICU 4.0
-     * @deprecated Use instead {@link #HOUR_MINUTE}+{@link #ABBR_GENERIC_TZ} or some other timezone presentation.
+     * @deprecated ICU 50 Use instead {@link #HOUR_MINUTE}+{@link #ABBR_GENERIC_TZ} or some other timezone presentation.
      */
     public static final String HOUR_MINUTE_GENERIC_TZ = "jmv";
 
     /**
      * {@icu} Constant for date skeleton with hour, minute, and timezone.
-     * @stable ICU 4.0
-     * @deprecated Use instead {@link #HOUR_MINUTE}+{@link #ABBR_SPECIFIC_TZ} or some other timezone presentation.
+     * @deprecated ICU 50 Use instead {@link #HOUR_MINUTE}+{@link #ABBR_SPECIFIC_TZ} or some other timezone presentation.
      */
     public static final String HOUR_MINUTE_TZ = "jmz";
 
     /**
      * {@icu} Constant for date skeleton with hour and generic timezone.
-     * @stable ICU 4.0
-     * @deprecated Use instead {@link #HOUR}+{@link #ABBR_GENERIC_TZ} or some other timezone presentation.
+     * @deprecated ICU 50 Use instead {@link #HOUR}+{@link #ABBR_GENERIC_TZ} or some other timezone presentation.
      */
     public static final String HOUR_GENERIC_TZ = "jv";
 
     /**
      * {@icu} Constant for date skeleton with hour and timezone.
-     * @stable ICU 4.0
-     * @deprecated Use instead {@link #HOUR}+{@link #ABBR_SPECIFIC_TZ} or some other timezone presentation.
+     * @deprecated ICU 50 Use instead {@link #HOUR}+{@link #ABBR_SPECIFIC_TZ} or some other timezone presentation.
      */
     public static final String HOUR_TZ = "jz";
-    
+
 
     /**
      * Gets the time formatter with the default formatting style
