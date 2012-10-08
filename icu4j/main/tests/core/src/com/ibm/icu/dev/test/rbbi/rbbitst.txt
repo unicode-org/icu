@@ -671,7 +671,7 @@ Bangkok)•</data>
 
 <locale ja>
 <line>
-<data>•\u3041\u3043\u3045\u31f1•</data>
+<data>•\u3041•\u3043•\u3045•\u31f1•</data>
 <locale en>
 <line>
 <data>•\u3041\u3043\u3045\u31f1•</data>
