@@ -8876,9 +8876,14 @@ ucol_strcollUTF8(
         UTRACE_DATA2(UTRACE_VERBOSE, "target string = %vb ", target, targetLength);
     }
 
+    if (U_FAILURE(*status)) {
+        /* do nothing */
+        UTRACE_EXIT_VALUE(UCOL_EQUAL);
+        return UCOL_EQUAL;
+    }
+
     if(source == NULL || target == NULL) {
-        // do not crash, but return. Should have
-        // status argument to return error.
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
         UTRACE_EXIT_VALUE(UCOL_EQUAL);
         return UCOL_EQUAL;
     }
