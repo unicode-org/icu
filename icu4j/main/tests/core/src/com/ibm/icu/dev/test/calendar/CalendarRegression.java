@@ -2295,6 +2295,45 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
         logln("-1 day: " + dstr);
         assertEquals("Subtract 1 day", "2011-12-29T00:00:00-10:00", dstr);
     }
+    
+    /**
+     * Test case for ticket 9403
+     * semantic API change when attempting to call setTimeInMillis(long) with a value outside the bounds. 
+     * In strict mode an IllegalIcuArgumentException will be thrown
+     * In lenient mode the value will be pinned to the relative min/max 
+     */
+    public void TestT9403() {
+    	Calendar myCal = Calendar.getInstance();
+    	long dateBit1, dateBit2, testMillis = 0L;
+    	boolean missedException = true;
+
+    	testMillis = -184303902611600000L;
+        logln("Testing invalid setMillis value in lienent mode - using value: " + testMillis);
+    	
+    	try {
+    		myCal.setTimeInMillis(testMillis);
+    	} catch (IllegalArgumentException e) {
+    		logln("Fail: detected as bad millis");
+    		missedException = false;  
+    	}
+    	assertTrue("Fail: out of bound millis did not trigger exception!", missedException);
+   	    dateBit1 = myCal.get(Calendar.MILLISECOND);
+   	    assertNotEquals("Fail: millis not changed to MIN_MILLIS", testMillis, dateBit1);
+
+   	    
+        logln("Testing invalid setMillis value in strict mode - using value: " + testMillis);
+        myCal.setLenient(false);
+        try {
+            myCal.setTimeInMillis(testMillis);
+        } catch (IllegalArgumentException e) {
+            logln("Pass: correctly detected bad millis");
+            missedException = false;  
+        }
+        dateBit1 = myCal.get(Calendar.DAY_OF_MONTH);
+        dateBit2 = myCal.getTimeInMillis();
+        assertFalse("Fail: error in setMillis, allowed invalid value : " + testMillis + "...returned dayOfMonth : " + dateBit1 + " millis : " + dateBit2, missedException);            
+    }
+    
 }
 
 //eof

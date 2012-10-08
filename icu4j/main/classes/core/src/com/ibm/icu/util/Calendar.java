@@ -592,7 +592,7 @@ import com.ibm.icu.util.ULocale.Category;
  * boundaries. The new <code>Calendar</code> protocol specifies the
  * maximum range of supportable dates as those having Julian day numbers
  * of <code>-0x7F000000</code> to <code>+0x7F000000</code>. This
- * corresponds to years from ~5,000,000 BCE to ~5,000,000 CE. Programmers
+ * corresponds to years from ~5,800,000 BCE to ~5,800,000 CE. Programmers
  * should use the protected constants in <code>Calendar</code> to
  * specify an extremely early or extremely late date.</p>
  *
@@ -2091,14 +2091,25 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * Sets this Calendar's current time from the given long value.
+     * An IllegalIcuArgumentException is thrown when millis is outside the range permitted
+     * by a Calendar object when in strict mode.
+     * When in lenient mode the out of range values are pinned to their respective min/max.
      * @param millis the new time in UTC milliseconds from the epoch.
      * @stable ICU 2.0
      */
     public void setTimeInMillis( long millis ) {
         if (millis > MAX_MILLIS) {
-            millis = MAX_MILLIS;
+            if(isLenient()) {
+                millis = MAX_MILLIS;
+            } else {
+                throw new IllegalArgumentException("millis value greater than upper bounds for a Calendar : " + millis);
+            }
         } else if (millis < MIN_MILLIS) {
-            millis = MIN_MILLIS;
+            if(isLenient()) {
+                millis = MIN_MILLIS;
+            } else {
+                throw new IllegalArgumentException("millis value less than lower bounds for a Calendar : " + millis);
+            }
         }
         time = millis;
         areFieldsSet = areAllFieldsSet = false;
