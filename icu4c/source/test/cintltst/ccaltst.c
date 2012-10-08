@@ -481,7 +481,7 @@ static void TestCalendar()
 
 static void TestGetSetDateAPI()
 {
-    UCalendar *caldef = 0, *caldef2 = 0;
+    UCalendar *caldef = 0, *caldef2 = 0, *caldef3 = 0;
     UChar tzID[4];
     UDate d1;
     int32_t hour;
@@ -490,12 +490,15 @@ static void TestGetSetDateAPI()
     UErrorCode status=U_ZERO_ERROR;
     UDate d2= 837039928046.0;
     UChar temp[30];
+	double testMillis;
+	int32_t dateBit;
 
     log_verbose("\nOpening the calendars()\n");
     u_strcpy(tzID, fgGMTID);
     /*open the calendars used */
     caldef=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     caldef2=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
+    caldef3=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_TRADITIONAL, &status);
     /*open the dateformat */
     /* this is supposed to open default date format, but later on it treats it like it is "en_US" 
        - very bad if you try to run the tests on machine where default locale is NOT "en_US" */
@@ -528,6 +531,53 @@ static void TestGetSetDateAPI()
         log_err("error in setMillis or getMillis\n");
     /*-------------------*/
     
+    /*testing large negative millis*/
+	/*test a previously failed millis and beyond the lower bounds - ICU trac #9403 */
+	// -184303902611600000.0         - just beyond lower bounds (#9403 sets U_ILLEGAL_ARGUMENT_ERROR in strict mode)
+	// -46447814188001000.0	         - fixed by #9403
+
+    log_verbose("\nTesting very large valid millis & invalid setMillis values (in both strict & lienent modes) detected\n");
+
+	testMillis = -46447814188001000.0;	// point where floorDivide in handleComputeFields failed as per #9403
+	log_verbose("using value[%lf]\n", testMillis);
+    ucal_setAttribute(caldef3, UCAL_LENIENT, 0);
+    ucal_setMillis(caldef3, testMillis, &status);
+   	if(U_FAILURE(status)){
+   		log_err("Fail: setMillis incorrectly detected invalid value : for millis : %e : returned  : %s\n", testMillis, u_errorName(status));
+		status = U_ZERO_ERROR;
+	}
+
+    log_verbose("\nTesting invalid setMillis values detected\n");
+	testMillis = -184303902611600000.0;
+	log_verbose("using value[%lf]\n", testMillis);
+    ucal_setAttribute(caldef3, UCAL_LENIENT, 1);
+   	ucal_setMillis(caldef3, testMillis, &status);
+   	if(U_FAILURE(status)){
+   		log_err("Fail: setMillis incorrectly detected invalid value : for millis : %e : returned  : %s\n", testMillis, u_errorName(status));
+		status = U_ZERO_ERROR;
+   	} else {
+        dateBit = ucal_get(caldef2, UCAL_MILLISECOND, &status);
+        if(testMillis == dateBit)
+        {
+		    log_err("Fail: error in setMillis, allowed invalid value %e : returns millisecond : %d", testMillis, dateBit);
+        } else {
+            log_verbose("Pass: setMillis correctly pinned min, returned : %d", dateBit);
+        }
+	}
+
+    log_verbose("\nTesting invalid setMillis values detected\n");
+	testMillis = -184303902611600000.0;
+	log_verbose("using value[%lf]\n", testMillis);
+    ucal_setAttribute(caldef3, UCAL_LENIENT, 0);
+   	ucal_setMillis(caldef3, testMillis, &status);
+   	if(U_FAILURE(status)){
+   		log_verbose("Pass: Illegal argument error as expected : for millis : %e : returned  : %s\n", testMillis, u_errorName(status));
+		status = U_ZERO_ERROR;
+   	} else {
+		dateBit = ucal_get(caldef3, UCAL_DAY_OF_MONTH, &status);
+		log_err("Fail: error in setMillis, allowed invalid value %e : returns DayOfMonth : %d", testMillis, dateBit);
+	}
+	/*-------------------*/
     
     
     ctest_setTimeZone(NULL, &status);
