@@ -3272,6 +3272,11 @@ private:
   toUTF8(int32_t start, int32_t len,
          char *target, int32_t capacity) const;
 
+  /**
+   * Internal string contents comparison, called by operator==.
+   * Requires: this & text not bogus and have same lengths.
+   */
+  UBool doEquals(const UnicodeString &text, int32_t len) const;
 
   inline int8_t
   doCompare(int32_t start,
@@ -3665,10 +3670,7 @@ UnicodeString::operator== (const UnicodeString& text) const
     return text.isBogus();
   } else {
     int32_t len = length(), textLength = text.length();
-    return
-      !text.isBogus() &&
-      len == textLength &&
-      doCompare(0, len, text, 0, textLength) == 0;
+    return !text.isBogus() && len == textLength && doEquals(text, len);
   }
 }
 
