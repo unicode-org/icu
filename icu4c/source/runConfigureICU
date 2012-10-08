@@ -307,10 +307,10 @@ case $platform in
     zOS)
         THE_OS="z/OS (OS/390)"
         THE_COMP="z/OS C/C++"
-        CC=cc; export CC
-        CXX=cxx; export CXX
-        RELEASE_CFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
-        RELEASE_CXXFLAGS="-2 -Wc,'inline(auto,noreport,500,4000)'"
+        CC=xlc; export CC
+        CXX=xlC; export CXX
+        RELEASE_CFLAGS="-O2 -Wc,'inline(AUTO,NOREPORT,1000,8000)'"
+        RELEASE_CXXFLAGS="-O2 -Wc,'inline(AUTO,NOREPORT,1000,8000)'"
         ;;
     zOSV1R2)
         THE_OS="z/OS 1.2"
