@@ -48,7 +48,7 @@ typedef struct UGenderInfo UGenderInfo;
  * @return A UGenderInfo for the specified locale, or NULL if an error occurred.
  * @stable ICU 4.8
  */
-U_DRAFT const UGenderInfo* U_EXPORT2
+U_STABLE const UGenderInfo* U_EXPORT2
 ugender_getInstance(const char *locale, UErrorCode *status);
 
 

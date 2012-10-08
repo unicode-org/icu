@@ -2614,7 +2614,7 @@ ultag_getGrandfathered(const ULanguageTag* langtag) {
 *
 * -------------------------------------------------
 */
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_toLanguageTag(const char* localeID,
                    char* langtag,
                    int32_t langtagCapacity,
@@ -2693,7 +2693,7 @@ uloc_toLanguageTag(const char* localeID,
 }
 
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uloc_forLanguageTag(const char* langtag,
                     char* localeID,
                     int32_t localeIDCapacity,

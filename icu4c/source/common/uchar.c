@@ -571,7 +571,7 @@ uscript_getScript(UChar32 c, UErrorCode *pErrorCode) {
     }
 }
 
-U_DRAFT UBool U_EXPORT2
+U_CAPI UBool U_EXPORT2
 uscript_hasScript(UChar32 c, UScriptCode sc) {
     const uint16_t *scx;
     uint32_t scriptX=u_getUnicodeProperties(c, 0)&UPROPS_SCRIPT_X_MASK;
@@ -593,7 +593,7 @@ uscript_hasScript(UChar32 c, UScriptCode sc) {
     return sc==(*scx&0x7fff);
 }
 
-U_DRAFT int32_t U_EXPORT2
+U_CAPI int32_t U_EXPORT2
 uscript_getScriptExtensions(UChar32 c,
                             UScriptCode *scripts, int32_t capacity,
                             UErrorCode *pErrorCode) {

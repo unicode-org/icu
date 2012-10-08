@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2004-2011, International Business Machines
+*   Copyright (C) 2004-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  regex.cpp
@@ -854,7 +854,7 @@ uregex_setRegion64(URegularExpression   *regexp2,
 //    uregex_setRegionAndStart
 //
 //------------------------------------------------------------------------------
-U_DRAFT void U_EXPORT2 
+U_CAPI void U_EXPORT2 
 uregex_setRegionAndStart(URegularExpression   *regexp2,
                  int64_t               regionStart,
                  int64_t               regionLimit,

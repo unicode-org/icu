@@ -231,7 +231,7 @@ unum_formatDouble(    const    UNumberFormat*  fmt,
 }
 
 
-U_DRAFT int32_t U_EXPORT2 
+U_CAPI int32_t U_EXPORT2 
 unum_formatDecimal(const    UNumberFormat*  fmt,
             const char *    number,
             int32_t         length,

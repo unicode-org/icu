@@ -134,7 +134,7 @@ typedef struct UIDNA UIDNA;  /**< C typedef for struct UIDNA. @stable ICU 4.6 */
  * @return the UTS #46 UIDNA instance, if successful
  * @stable ICU 4.6
  */
-U_DRAFT UIDNA * U_EXPORT2
+U_STABLE UIDNA * U_EXPORT2
 uidna_openUTS46(uint32_t options, UErrorCode *pErrorCode);
 
 /**
@@ -142,7 +142,7 @@ uidna_openUTS46(uint32_t options, UErrorCode *pErrorCode);
  * @param idna UIDNA instance to be closed
  * @stable ICU 4.6
  */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 uidna_close(UIDNA *idna);
 
 #if U_SHOW_CPLUSPLUS_API
@@ -226,7 +226,7 @@ typedef struct UIDNAInfo {
  * @return destination string length
  * @stable ICU 4.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_labelToASCII(const UIDNA *idna,
                    const UChar *label, int32_t length,
                    UChar *dest, int32_t capacity,
@@ -253,7 +253,7 @@ uidna_labelToASCII(const UIDNA *idna,
  * @return destination string length
  * @stable ICU 4.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_labelToUnicode(const UIDNA *idna,
                      const UChar *label, int32_t length,
                      UChar *dest, int32_t capacity,
@@ -282,7 +282,7 @@ uidna_labelToUnicode(const UIDNA *idna,
  * @return destination string length
  * @stable ICU 4.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_nameToASCII(const UIDNA *idna,
                   const UChar *name, int32_t length,
                   UChar *dest, int32_t capacity,
@@ -309,7 +309,7 @@ uidna_nameToASCII(const UIDNA *idna,
  * @return destination string length
  * @stable ICU 4.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_nameToUnicode(const UIDNA *idna,
                     const UChar *name, int32_t length,
                     UChar *dest, int32_t capacity,
@@ -334,7 +334,7 @@ uidna_nameToUnicode(const UIDNA *idna,
  * @return destination string length
  * @stable ICU 4.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_labelToASCII_UTF8(const UIDNA *idna,
                         const char *label, int32_t length,
                         char *dest, int32_t capacity,
@@ -357,7 +357,7 @@ uidna_labelToASCII_UTF8(const UIDNA *idna,
  * @return destination string length
  * @stable ICU 4.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_labelToUnicodeUTF8(const UIDNA *idna,
                          const char *label, int32_t length,
                          char *dest, int32_t capacity,
@@ -380,7 +380,7 @@ uidna_labelToUnicodeUTF8(const UIDNA *idna,
  * @return destination string length
  * @stable ICU 4.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_nameToASCII_UTF8(const UIDNA *idna,
                        const char *name, int32_t length,
                        char *dest, int32_t capacity,
@@ -403,7 +403,7 @@ uidna_nameToASCII_UTF8(const UIDNA *idna,
  * @return destination string length
  * @stable ICU 4.6
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uidna_nameToUnicodeUTF8(const UIDNA *idna,
                         const char *name, int32_t length,
                         char *dest, int32_t capacity,
