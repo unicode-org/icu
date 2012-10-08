@@ -34,6 +34,7 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/datefmt.h"
+#include "unicode/udisplaycontext.h"
 
 U_NAMESPACE_BEGIN
 
@@ -397,38 +398,6 @@ public:
      * @stable ICU 2.1
      */
     virtual UnicodeString& format(  Calendar& cal,
-                                    UnicodeString& appendTo,
-                                    FieldPosition& pos) const;
-
-/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
-    /**
-     * Format a date or time, which is the standard millis since 24:00 GMT, Jan
-     * 1, 1970. Overrides DateFormat pure virtual method.
-     * <P>
-     * Example: using the US locale: "yyyy.MM.dd e 'at' HH:mm:ss zzz" ->>
-     * 1996.07.10 AD at 15:08:56 PDT
-     *
-     * @param cal       Calendar set to the date and time to be formatted
-     *                  into a date/time string.
-     * @param types     Array of UDateFormatContextTypes for which the corresponding
-     *                  value specified in the next parameter should override the
-     *                  formatter's default value for this call (this does not
-     *                  change the default value).
-     * @param values    Array of UDateFormatContextValues corresponding 1-1 to the
-     *                  UDateFormatContextTypes in the previous parameter.
-     * @param typesAndValuesCount Number of elements in the types and values
-     *                  arrays.
-     * @param appendTo  Output parameter to receive result.
-     *                  Result is appended to existing contents.
-     * @param pos       The formatting position. On input: an alignment field,
-     *                  if desired. On output: the offsets of the alignment field.
-     * @return          Reference to 'appendTo' parameter.
-     * @draft ICU 49
-     */
-    virtual UnicodeString& format(  Calendar& cal,
-                                    const UDateFormatContextType* types,
-                                    const UDateFormatContextValue* values,
-                                    int32_t typesAndValuesCount,
                                     UnicodeString& appendTo,
                                     FieldPosition& pos) const;
 
@@ -806,34 +775,32 @@ public:
      */
     virtual void adoptCalendar(Calendar* calendarToAdopt);
 
-/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
+    /* Cannot use #ifndef U_HIDE_INTERNAL_API for the following draft method since it is virtual */
     /**
-     * Set the formatter's default value for a particular context type,
-     * such as UDAT_CAPITALIZATION.
-     * @param type The context type for which the default value should be set.
-     * @param value The default value to set for the specified context type.
+     * Set a particular UDisplayContext value in the formatter, such as
+     * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.
+     * @param value The UDisplayContext value to set.
      * @param status Input/output status. If at entry this indicates a failure
      *               status, the function will do nothing; otherwise this will be
      *               updated with any new status from the function. 
-     * @draft ICU 49
+     * @internal ICU 50 technology preview
      */
-    virtual void setDefaultContext(UDateFormatContextType type, UDateFormatContextValue value, 
-                                   UErrorCode& status);
+    virtual void setContext(UDisplayContext value, UErrorCode& status);
 
-/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
+    /* Cannot use #ifndef U_HIDE_INTERNAL_API for the following draft method since it is virtual */
     /**
-     * Get the formatter's default value for a particular context type,
-     * such as UDAT_CAPITALIZATION.
-     * @param type The context type for which the default value should be obtained.
+     * Get the formatter's UDisplayContext value for the specified UDisplayContextType,
+     * such as UDISPCTX_TYPE_CAPITALIZATION.
+     * @param type The UDisplayContextType whose value to return
      * @param status Input/output status. If at entry this indicates a failure
      *               status, the function will do nothing; otherwise this will be
      *               updated with any new status from the function. 
-     * @return The current default value for the specified context type.
-     * @draft ICU 49
+     * @return The UDisplayContextValue for the specified type.
+     * @internal ICU 50 technology preview
      */
-    virtual int32_t getDefaultContext(UDateFormatContextType type, UErrorCode& status) const;
+    virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
 
-#ifndef U_HIDE_INTERNAL_API
+    /* Cannot use #ifndef U_HIDE_INTERNAL_API for the following methods since they are virtual */
     /**
      * Sets the TimeZoneFormat to be used by this date/time formatter.
      * The caller should not delete the TimeZoneFormat object after
@@ -856,7 +823,6 @@ public:
      * @internal ICU 49 technology preview
      */
     virtual const TimeZoneFormat* getTimeZoneFormat(void) const;
-#endif  /* U_HIDE_INTERNAL_API */
 
 #ifndef U_HIDE_INTERNAL_API
     /**
@@ -927,8 +893,7 @@ private:
     /**
      * Hook called by format(... FieldPosition& ...) and format(...FieldPositionIterator&...)
      */
-    UnicodeString& _format(Calendar& cal, UDateFormatContextValue capitalizationContext,
-                           UnicodeString& appendTo, FieldPositionHandler& handler, UErrorCode& status) const;
+    UnicodeString& _format(Calendar& cal, UnicodeString& appendTo, FieldPositionHandler& handler, UErrorCode& status) const;
 
     /**
      * Called by format() to format a single field.
@@ -949,7 +914,7 @@ private:
     void subFormat(UnicodeString &appendTo,
                    UChar ch,
                    int32_t count,
-                   UDateFormatContextValue capitalizationContext,
+                   UDisplayContext capitalizationContext,
                    int32_t fieldNum,
                    FieldPositionHandler& handler,
                    Calendar& cal,
@@ -1254,7 +1219,7 @@ private:
 
     UBool fHaveDefaultCentury;
 
-    UDateFormatContextValue fDefaultCapitalizationContext;
+    UDisplayContext fCapitalizationContext;
 };
 
 inline UDate
