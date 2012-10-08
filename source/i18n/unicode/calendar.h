@@ -182,6 +182,19 @@ class BasicTimeZone;
  * For example, subtracting 5 days from the date <code>September 12, 1996</code>
  * results in <code>September 7, 1996</code>.
  *
+ * <p><big><b>Supported range</b></big>
+ *
+ * <p>The allowable range of <code>Calendar</code> has been
+ * narrowed. <code>GregorianCalendar</code> used to attempt to support
+ * the range of dates with millisecond values from
+ * <code>Long.MIN_VALUE</code> to <code>Long.MAX_VALUE</code>.
+ * The new <code>Calendar</code> protocol specifies the
+ * maximum range of supportable dates as those having Julian day numbers
+ * of <code>-0x7F000000</code> to <code>+0x7F000000</code>. This
+ * corresponds to years from ~5,800,000 BCE to ~5,800,000 CE. Programmers
+ * should use the protected constants in <code>Calendar</code> to
+ * specify an extremely early or extremely late date.</p>
+ *
  * @stable ICU 2.0
  */
 class U_I18N_API Calendar : public UObject {

@@ -1050,6 +1050,9 @@ Calendar::getTimeInMillis(UErrorCode& status) const
 
 /**
 * Sets this Calendar's current time from the given long value.
+* A status of U_ILLEGAL_ARGUMENT_ERROR is set when millis is
+* outside the range permitted by a Calendar object when not in lenient mode.
+* when in lenient mode the out of range values are pinned to their respective min/max.
 * @param date the new time in UTC milliseconds from the epoch.
 */
 void 
@@ -1058,9 +1061,19 @@ Calendar::setTimeInMillis( double millis, UErrorCode& status ) {
         return;
 
     if (millis > MAX_MILLIS) {
-        millis = MAX_MILLIS;
+        if(isLenient()) {
+            millis = MAX_MILLIS;
+        } else {
+		    status = U_ILLEGAL_ARGUMENT_ERROR;
+		    return;
+        }
     } else if (millis < MIN_MILLIS) {
-        millis = MIN_MILLIS;
+        if(isLenient()) {
+            millis = MIN_MILLIS;
+        } else {
+    		status = U_ILLEGAL_ARGUMENT_ERROR;
+	    	return;
+        }
     }
 
     fTime = millis;
