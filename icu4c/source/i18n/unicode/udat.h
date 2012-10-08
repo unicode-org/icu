@@ -15,6 +15,7 @@
 #include "unicode/localpointer.h"
 #include "unicode/ucal.h"
 #include "unicode/unum.h"
+#include "unicode/udisplaycontext.h"
 /**
  * \file
  * \brief C API: DateFormat
@@ -178,67 +179,6 @@ typedef enum UDateFormatStyle {
     /** @internal alias to UDAT_PATTERN */
     UDAT_IGNORE = UDAT_PATTERN
 } UDateFormatStyle;
-
-/* Cannot use #ifndef U_HIDE_DRAFT_API for UDateFormatContextType and UDateFormatContextValue
- * since a SimpleDateFormat virtual method & data member depends on them */
-/** Date format context types
- *  @draft ICU 49
- */
-typedef enum UDateFormatContextType {
-    /**
-     * Type (key) for specifying the capitalization context for which a date
-     * is to be formatted (possible values are in UDateFormatContextValue).
-     * @draft ICU 49
-     */
-    UDAT_CAPITALIZATION = 1
-} UDateFormatContextType;
-
-/** Values for date format context types
- *  @draft ICU 49
- */
-typedef enum UDateFormatContextValue {
-       /** Values for any UDateFormatContextType (key) */
-    /**
-     * Value for any UDateFormatContextType (such as UDAT_CAPITALIZATION) if the
-     * relevant context to be used in formatting a date is unknown (this is the
-     * default value for any UDateFormatContextType when no value has been
-     * explicitly specified for that UDateFormatContextType).
-     * @draft ICU 49
-     */
-    UDAT_CONTEXT_UNKNOWN = 0,
-#if !UCONFIG_NO_BREAK_ITERATION
-    /** Values for type (key) UDAT_CAPITALIZATION */
-    /**
-     * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
-     * with capitalization appropriate for the middle of a sentence.
-     * @draft ICU 49
-     */
-    UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE = 1,
-    /**
-     * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
-     * with capitalization appropriate for the beginning of a sentence.
-     * @draft ICU 49
-     */
-    UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE = 2,
-    /**
-     * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
-     * with capitalization appropriate for a user-interface list or menu item.
-     * @draft ICU 49
-     */
-    UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU = 3,
-    /**
-     * UDAT_CAPITALIZATION value if a date (or date symbol) is to be formatted
-     * with capitalization appropriate for stand-alone usage such as an
-     * isolated name on a calendar page.
-     * @draft ICU 49
-     */
-    UDAT_CAPITALIZATION_FOR_STANDALONE = 4,
-#endif
-    /**
-     * @internal
-     */
-    UDAT_CONTEXT_DEFAULT = UDAT_CONTEXT_UNKNOWN
-} UDateFormatContextValue;
 
 /**
  * @{
@@ -1040,35 +980,31 @@ udat_getLocaleByType(const UDateFormat *fmt,
                      ULocDataLocaleType type,
                      UErrorCode* status); 
 
-#ifndef U_HIDE_DRAFT_API
+#ifndef U_HIDE_INTERNAL_API
 /**
- * Set the formatter's default value for a particular context type,
- * such as UDAT_CAPITALIZATION.
- * @param fmt The formatter for which to set a context type's default value.
- * @param type The context type for which the default value should be set.
- * @param value The default value to set for the specified context type.
+ * Set a particular UDisplayContext value in the formatter, such as
+ * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.
+ * @param fmt The formatter for which to set a UDisplayContext value.
+ * @param value The UDisplayContext value to set.
  * @param status A pointer to an UErrorCode to receive any errors
- * @draft ICU 49
+ * @internal ICU 50 technology preview
  */
-U_DRAFT void U_EXPORT2
-udat_setDefaultContext(UDateFormat* fmt,
-                       UDateFormatContextType type, UDateFormatContextValue value,
-                       UErrorCode* status);
+U_INTERNAL void U_EXPORT2
+udat_setContext(UDateFormat* fmt, UDisplayContext value, UErrorCode* status);
 
 /**
- * Get the formatter's default value for a particular context type,
- * such as UDAT_CAPITALIZATION.
- * @param fmt The formatter from which to get a context type's default value.
- * @param type The context type for which the default value should be obtained.
+ * Get the formatter's UDisplayContext value for the specified UDisplayContextType,
+ * such as UDISPCTX_TYPE_CAPITALIZATION.
+ * @param fmt The formatter to query.
+ * @param type The UDisplayContextType whose value to return
  * @param status A pointer to an UErrorCode to receive any errors
- * @return The current default value for the specified context type.
- * @draft ICU 49
+ * @return The UDisplayContextValue for the specified type.
+ * @internal ICU 50 technology preview
  */
-U_DRAFT int32_t U_EXPORT2
-udat_getDefaultContext(UDateFormat* fmt,
-                       UDateFormatContextType type,
-                       UErrorCode* status);
-#endif  /* U_HIDE_DRAFT_API */
+U_INTERNAL UDisplayContext U_EXPORT2
+udat_getContext(UDateFormat* fmt, UDisplayContextType type, UErrorCode* status);
+
+#endif  /* U_HIDE_INTERNAL_API */
 
 #ifndef U_HIDE_INTERNAL_API
 /**

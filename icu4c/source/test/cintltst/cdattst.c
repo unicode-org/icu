@@ -1245,26 +1245,26 @@ static const UChar july2008_csTitle[] = { 0x10C,0x65,0x72,0x76,0x65,0x6E,0x65,0x
 typedef struct {
     const char * locale;
     const UChar * skeleton;
-    UDateFormatContextValue capitalizationContext;
+    UDisplayContext capitalizationContext;
     const UChar * expectedFormat;
 } TestContextItem;
 
 static const TestContextItem textContextItems[] = {
-    { "fr", skeleton_yMMMM, UDAT_CONTEXT_UNKNOWN,          july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_NONE,                   july2008_frDefault },
 #if !UCONFIG_NO_BREAK_ITERATION
-    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, july2008_frDefault },
-    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, july2008_frTitle },
-    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,  july2008_frDefault },
-    { "fr", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_STANDALONE,       july2008_frTitle },
+    { "fr", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, july2008_frTitle },
+    { "fr", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,    july2008_frDefault },
+    { "fr", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_STANDALONE,         july2008_frTitle },
 #endif
-    { "cs", skeleton_yMMMM, UDAT_CONTEXT_UNKNOWN,          july2008_csDefault },
+    { "cs", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_NONE,                   july2008_csDefault },
 #if !UCONFIG_NO_BREAK_ITERATION
-    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, july2008_csDefault },
-    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, july2008_csTitle },
-    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,  july2008_csTitle },
-    { "cs", skeleton_yMMMM, UDAT_CAPITALIZATION_FOR_STANDALONE,       july2008_csDefault },
+    { "cs", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, july2008_csDefault },
+    { "cs", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, july2008_csTitle },
+    { "cs", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,    july2008_csTitle },
+    { "cs", skeleton_yMMMM, UDISPCTX_CAPITALIZATION_FOR_STANDALONE,         july2008_csDefault },
 #endif
-    { NULL, NULL, 0, NULL }
+    { NULL, NULL, (UDisplayContext)0, NULL }
 };
 
 static const UDate july022008 = 1215000001979.0;
@@ -1288,12 +1288,12 @@ static void TestContext(void) {
                     log_err("FAIL: udatpg_getBestPattern for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
                 } else {
                     udat_applyPattern(udfmt, FALSE, ubuf, len);
-                    udat_setDefaultContext(udfmt, UDAT_CAPITALIZATION, textContextItemPtr->capitalizationContext, &status);
+                    udat_setContext(udfmt, textContextItemPtr->capitalizationContext, &status);
                     if ( U_FAILURE(status) ) {
-                        log_err("FAIL: udat_setDefaultContext for locale %s, capitalizationContext %d, status %s\n",
+                        log_err("FAIL: udat_setContext for locale %s, capitalizationContext %d, status %s\n",
                                 textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, u_errorName(status) );
                     } else {
-                        int32_t getContext;
+                        UDisplayContext getContext;
                         len = udat_format(udfmt, july022008, ubuf, kUbufMax, NULL, &status);
                         if ( U_FAILURE(status) ) {
                             log_err("FAIL: udat_format for locale %s, capitalizationContext %d, status %s\n",
@@ -1306,13 +1306,13 @@ static void TestContext(void) {
                                     textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext,
                                     u_austrncpy(bbuf1,textContextItemPtr->expectedFormat,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
                         }
-                        getContext = udat_getDefaultContext(udfmt, UDAT_CAPITALIZATION, &status);
+                        getContext = udat_getContext(udfmt, UDISPCTX_TYPE_CAPITALIZATION, &status);
                         if ( U_FAILURE(status) ) {
-                            log_err("FAIL: udat_getDefaultContext for locale %s, capitalizationContext %d, status %s\n",
+                            log_err("FAIL: udat_getContext for locale %s, capitalizationContext %d, status %s\n",
                                     textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, u_errorName(status) );
-                        } else if (getContext != (int)textContextItemPtr->capitalizationContext) {
-                            log_err("FAIL: udat_getDefaultContext for locale %s, capitalizationContext %d, got context %d\n",
-                                    textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, getContext );
+                        } else if (getContext != textContextItemPtr->capitalizationContext) {
+                            log_err("FAIL: udat_getContext for locale %s, capitalizationContext %d, got context %d\n",
+                                    textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, (int)getContext );
                         }
                     }
                 }
