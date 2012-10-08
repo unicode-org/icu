@@ -910,7 +910,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
     private void preParse(String pattern) {
         if(isFrozen()) {
             throw new UnsupportedOperationException(
-                "Attempt to parse(\""+prefix(pattern)+"\") on frozen MessagePattern instance.");
+                "Attempt to parse("+prefix(pattern)+") on frozen MessagePattern instance.");
         }
         msg=pattern;
         hasArgNames=hasArgNumbers=false;
@@ -1005,7 +1005,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
         }
         if(nestingLevel>0 && !inTopLevelChoiceMessage(nestingLevel, parentType)) {
             throw new IllegalArgumentException(
-                "Unmatched '{' braces in message \""+prefix()+"\"");
+                "Unmatched '{' braces in message "+prefix());
         }
         addLimitPart(msgStart, Part.Type.MSG_LIMIT, index, 0, nestingLevel);
         return index;
@@ -1018,7 +1018,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
         int nameIndex=index=skipWhiteSpace(index+argStartLength);
         if(index==msg.length()) {
             throw new IllegalArgumentException(
-                "Unmatched '{' braces in message \""+prefix()+"\"");
+                "Unmatched '{' braces in message "+prefix());
         }
         // parse argument name or number
         index=skipIdentifier(index);
@@ -1045,7 +1045,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
         index=skipWhiteSpace(index);
         if(index==msg.length()) {
             throw new IllegalArgumentException(
-                "Unmatched '{' braces in message \""+prefix()+"\"");
+                "Unmatched '{' braces in message "+prefix());
         }
         char c=msg.charAt(index);
         if(c=='}') {
@@ -1062,7 +1062,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
             index=skipWhiteSpace(index);
             if(index==msg.length()) {
                 throw new IllegalArgumentException(
-                    "Unmatched '{' braces in message \""+prefix()+"\"");
+                    "Unmatched '{' braces in message "+prefix());
             }
             if(length==0 || ((c=msg.charAt(index))!=',' && c!='}')) {
                 throw new IllegalArgumentException("Bad argument syntax: "+prefix(nameIndex));
@@ -1124,8 +1124,8 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                 index=msg.indexOf('\'', index);
                 if(index<0) {
                     throw new IllegalArgumentException(
-                        "Quoted literal argument style text reaches to the end of the message: \""+
-                        prefix(start)+"\"");
+                        "Quoted literal argument style text reaches to the end of the message: "+
+                        prefix(start));
                 }
                 // skip the quote-ending apostrophe
                 ++index;
@@ -1146,7 +1146,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
             }  // c is part of literal text
         }
         throw new IllegalArgumentException(
-            "Unmatched '{' braces in message \""+prefix()+"\"");
+            "Unmatched '{' braces in message "+prefix());
     }
 
     private int parseChoiceStyle(int index, int nestingLevel) {
@@ -1154,7 +1154,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
         index=skipWhiteSpace(index);
         if(index==msg.length() || msg.charAt(index)=='}') {
             throw new IllegalArgumentException(
-                "Missing choice argument pattern in \""+prefix()+"\"");
+                "Missing choice argument pattern in "+prefix());
         }
         for(;;) {
             // The choice argument style contains |-separated (number, separator, message) triples.
@@ -1220,7 +1220,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                     throw new IllegalArgumentException(
                         "Missing 'other' keyword in "+
                         argType.toString().toLowerCase(Locale.ENGLISH)+
-                        " pattern in \""+prefix()+"\"");
+                        " pattern in "+prefix());
                 }
                 return index;
             }
@@ -1265,7 +1265,7 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
                     index=skipDouble(valueIndex);
                     if(index==valueIndex) {
                         throw new IllegalArgumentException(
-                            "Missing value for plural 'offset:' at "+prefix(start));
+                            "Missing value for plural 'offset:' "+prefix(start));
                     }
                     if((index-valueIndex)>Part.MAX_LENGTH) {
                         throw new IndexOutOfBoundsException(
@@ -1565,18 +1565,24 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
      * @return s.substring(start) or a prefix of that
      */
     private static String prefix(String s, int start) {
+        StringBuilder prefix=new StringBuilder(MAX_PREFIX_LENGTH+20);
+        if(start==0) {
+            prefix.append("\"");
+        } else {
+            prefix.append("[at pattern index ").append(start).append("] \"");
+        }
         int substringLength=s.length()-start;
         if(substringLength<=MAX_PREFIX_LENGTH) {
-            return start==0 ? s : s.substring(start);
+            prefix.append(start==0 ? s : s.substring(start));
         } else {
-            StringBuilder prefix=new StringBuilder(MAX_PREFIX_LENGTH);
-            prefix.append(s, start, start+MAX_PREFIX_LENGTH-4);
-            if(Character.isHighSurrogate(prefix.charAt(MAX_PREFIX_LENGTH-5))) {
+            int limit=start+MAX_PREFIX_LENGTH-4;
+            if(Character.isHighSurrogate(s.charAt(limit-1))) {
                 // remove lead surrogate from the end of the prefix
-                prefix.setLength(MAX_PREFIX_LENGTH-5);
+                --limit;
             }
-            return prefix.append(" ...").toString();
+            prefix.append(s, start, limit).append(" ...");
         }
+        return prefix.append("\"").toString();
     }
 
     private static String prefix(String s) {
