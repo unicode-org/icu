@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2010, International Business Machines Corporation and    *
+* Copyright (C) 1997-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -364,7 +364,7 @@ GregorianCalendar::setGregorianChange(UDate date, UErrorCode& status)
 
 
 void GregorianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& status) {
-    int32_t eyear, month, dayOfMonth, dayOfYear;
+    int32_t eyear, month, dayOfMonth, dayOfYear, unusedRemainder;
 
 
     if(U_FAILURE(status)) { 
@@ -386,7 +386,7 @@ void GregorianCalendar::handleComputeFields(int32_t julianDay, UErrorCode& statu
         // The Julian epoch day (not the same as Julian Day)
         // is zero on Saturday December 30, 0 (Gregorian).
         int32_t julianEpochDay = julianDay - (kJan1_1JulianDay - 2);
-        eyear = (int32_t) ClockMath::floorDivide(4*julianEpochDay + 1464, 1461);
+		eyear = (int32_t) ClockMath::floorDivide((4.0*julianEpochDay) + 1464.0, (int32_t) 1461, unusedRemainder);
 
         // Compute the Julian calendar day number for January 1, eyear
         int32_t january1 = 365*(eyear-1) + ClockMath::floorDivide(eyear-1, (int32_t)4);
