@@ -48,6 +48,7 @@
 #include "unicode/tzfmt.h"
 #include "unicode/utf16.h"
 #include "unicode/vtzone.h"
+#include "unicode/udisplaycontext.h"
 #include "olsontz.h"
 #include "patternprops.h"
 #include "fphdlimp.h"
@@ -241,7 +242,7 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
       fTimeZoneFormat(NULL),
       fNumberFormatters(NULL),
       fOverrideList(NULL),
-      fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
+      fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
     initializeDefaultCentury();
@@ -257,7 +258,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
@@ -277,7 +278,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
@@ -299,7 +300,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
 
     fDateOverride.setToBogus();
@@ -321,7 +322,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
 
     fDateOverride.setTo(override);
@@ -346,7 +347,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
 
     fDateOverride.setToBogus();
@@ -368,7 +369,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
 
     fDateOverride.setToBogus();
@@ -391,7 +392,7 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     construct(timeStyle, dateStyle, fLocale, status);
     if(U_SUCCESS(status)) {
@@ -414,7 +415,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     if (U_FAILURE(status)) return;
     initializeSymbols(fLocale, initializeCalendar(NULL, fLocale, status),status);
@@ -449,7 +450,7 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
     fOverrideList(NULL),
-    fDefaultCapitalizationContext(UDAT_CONTEXT_UNKNOWN)
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     *this = other;
 }
@@ -482,7 +483,7 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
         fLocale = other.fLocale;
     }
 
-    fDefaultCapitalizationContext = other.fDefaultCapitalizationContext;
+    fCapitalizationContext = other.fCapitalizationContext;
 
     return *this;
 }
@@ -509,7 +510,7 @@ SimpleDateFormat::operator==(const Format& other) const
                 *fSymbols            == *that->fSymbols &&
                 fHaveDefaultCentury  == that->fHaveDefaultCentury &&
                 fDefaultCenturyStart == that->fDefaultCenturyStart &&
-                fDefaultCapitalizationContext == that->fDefaultCapitalizationContext);
+                fCapitalizationContext == that->fCapitalizationContext);
     }
     return FALSE;
 }
@@ -816,22 +817,7 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& appendTo, FieldPosition& 
 {
   UErrorCode status = U_ZERO_ERROR;
   FieldPositionOnlyHandler handler(pos);
-  return _format(cal, fDefaultCapitalizationContext, appendTo, handler, status);
-}
-
-//----------------------------------------------------------------------
-
-UnicodeString&
-SimpleDateFormat::format(Calendar& cal, const UDateFormatContextType* types, const UDateFormatContextValue* values,
-                         int32_t typesAndValuesCount, UnicodeString& appendTo, FieldPosition& pos) const
-{
-  UErrorCode status = U_ZERO_ERROR;
-  FieldPositionOnlyHandler handler(pos);
-  UDateFormatContextValue capitalizationContext = fDefaultCapitalizationContext;
-  if (types != NULL && values != NULL && typesAndValuesCount==1 && types[0]==UDAT_CAPITALIZATION) {
-    capitalizationContext = values[0];
-  }
-  return _format(cal, capitalizationContext, appendTo, handler, status);
+  return _format(cal, appendTo, handler, status);
 }
 
 //----------------------------------------------------------------------
@@ -841,14 +827,14 @@ SimpleDateFormat::format(Calendar& cal, UnicodeString& appendTo,
                          FieldPositionIterator* posIter, UErrorCode& status) const
 {
   FieldPositionIteratorHandler handler(posIter, status);
-  return _format(cal, fDefaultCapitalizationContext, appendTo, handler, status);
+  return _format(cal, appendTo, handler, status);
 }
 
 //----------------------------------------------------------------------
 
 UnicodeString&
-SimpleDateFormat::_format(Calendar& cal, UDateFormatContextValue capitalizationContext,
-                          UnicodeString& appendTo, FieldPositionHandler& handler, UErrorCode& status) const
+SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
+                            FieldPositionHandler& handler, UErrorCode& status) const
 {
     if ( U_FAILURE(status) ) {
        return appendTo; 
@@ -883,7 +869,7 @@ SimpleDateFormat::_format(Calendar& cal, UDateFormatContextValue capitalizationC
         // Use subFormat() to format a repeated pattern character
         // when a different pattern or non-pattern character is seen
         if (ch != prevCh && count > 0) {
-            subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, status);
+            subFormat(appendTo, prevCh, count, fCapitalizationContext, fieldNum++, handler, *workCal, status);
             count = 0;
         }
         if (ch == QUOTE) {
@@ -911,7 +897,7 @@ SimpleDateFormat::_format(Calendar& cal, UDateFormatContextValue capitalizationC
 
     // Format the last item in the pattern, if any
     if (count > 0) {
-        subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, status);
+        subFormat(appendTo, prevCh, count, fCapitalizationContext, fieldNum++, handler, *workCal, status);
     }
 
     if (calClone != NULL) {
@@ -1188,7 +1174,7 @@ void
 SimpleDateFormat::subFormat(UnicodeString &appendTo,
                             UChar ch,
                             int32_t count,
-                            UDateFormatContextValue capitalizationContext,
+                            UDisplayContext capitalizationContext,
                             int32_t fieldNum,
                             FieldPositionHandler& handler,
                             Calendar& cal,
@@ -1532,15 +1518,15 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         // first field, check to see whether we need to titlecase it
         UBool titlecase = FALSE;
         switch (capitalizationContext) {
-            case UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
+            case UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
                 titlecase = TRUE;
                 break;
-            case UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU:
-            	titlecase = fSymbols->fCapitalization[capContextUsageType][0];
-            	break;
-            case UDAT_CAPITALIZATION_FOR_STANDALONE:
-            	titlecase = fSymbols->fCapitalization[capContextUsageType][1];
-            	break;
+            case UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU:
+                titlecase = fSymbols->fCapitalization[capContextUsageType][0];
+                break;
+            case UDISPCTX_CAPITALIZATION_FOR_STANDALONE:
+                titlecase = fSymbols->fCapitalization[capContextUsageType][1];
+                break;
             default:
                 // titlecase = FALSE;
                 break;
@@ -3123,31 +3109,30 @@ void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
 //----------------------------------------------------------------------
 
 
-void SimpleDateFormat::setDefaultContext(UDateFormatContextType type,
-                                         UDateFormatContextValue value, UErrorCode& status)
+void SimpleDateFormat::setContext(UDisplayContext value, UErrorCode& status)
 {
     if (U_FAILURE(status))
         return;
-    if (type != UDAT_CAPITALIZATION) {
+    if ( (UDisplayContextType)(value & ~0xFF) == UDISPCTX_TYPE_CAPITALIZATION ) {
+        fCapitalizationContext = value;
+    } else {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-    }
-    fDefaultCapitalizationContext = value;
+   }
 }
 
 
 //----------------------------------------------------------------------
 
 
-int32_t SimpleDateFormat::getDefaultContext(UDateFormatContextType type, UErrorCode& status) const
+UDisplayContext SimpleDateFormat::getContext(UDisplayContextType type, UErrorCode& status) const
 {
     if (U_FAILURE(status))
-        return 0;
-    if (type != UDAT_CAPITALIZATION) {
+        return (UDisplayContext)0;
+    if (type != UDISPCTX_TYPE_CAPITALIZATION) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return (UDisplayContext)0;
     }
-    return (int32_t)fDefaultCapitalizationContext;
+    return fCapitalizationContext;
 }
 
 

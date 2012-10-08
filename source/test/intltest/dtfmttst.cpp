@@ -3837,7 +3837,7 @@ void DateFormatTest::TestMonthPatterns()
 typedef struct {
     const char * locale;
     UnicodeString pattern;
-    UDateFormatContextValue capitalizationContext;
+    UDisplayContext capitalizationContext;
     UnicodeString expectedFormat;
 } TestContextItem;
 
@@ -3845,23 +3845,23 @@ void DateFormatTest::TestContext()
 {
     const UDate july022008 = 1215000001979.0;
     const TestContextItem items[] = {
-        //locale              pattern    capitalizationContext                      expected formatted date
-        { "fr", UnicodeString("MMMM y"), UDAT_CONTEXT_UNKNOWN,               UnicodeString("juillet 2008") },
+        //locale              pattern    capitalizationContext                              expected formatted date
+        { "fr", UnicodeString("MMMM y"), UDISPCTX_CAPITALIZATION_NONE,                      UnicodeString("juillet 2008") },
 #if !UCONFIG_NO_BREAK_ITERATION
-        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    UnicodeString("juillet 2008") },
-        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, UnicodeString("Juillet 2008") },
-        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       UnicodeString("juillet 2008") },
-        { "fr", UnicodeString("MMMM y"), UDAT_CAPITALIZATION_FOR_STANDALONE,            UnicodeString("Juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    UnicodeString("juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, UnicodeString("Juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       UnicodeString("juillet 2008") },
+        { "fr", UnicodeString("MMMM y"), UDISPCTX_CAPITALIZATION_FOR_STANDALONE,            UnicodeString("Juillet 2008") },
 #endif
-        { "cs", UnicodeString("LLLL y"), UDAT_CONTEXT_UNKNOWN,               CharsToUnicodeString("\\u010Dervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDISPCTX_CAPITALIZATION_NONE,                      CharsToUnicodeString("\\u010Dervenec 2008") },
 #if !UCONFIG_NO_BREAK_ITERATION
-        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    CharsToUnicodeString("\\u010Dervenec 2008") },
-        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, CharsToUnicodeString("\\u010Cervenec 2008") },
-        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       CharsToUnicodeString("\\u010Cervenec 2008") },
-        { "cs", UnicodeString("LLLL y"), UDAT_CAPITALIZATION_FOR_STANDALONE,            CharsToUnicodeString("\\u010Dervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    CharsToUnicodeString("\\u010Dervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, CharsToUnicodeString("\\u010Cervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       CharsToUnicodeString("\\u010Cervenec 2008") },
+        { "cs", UnicodeString("LLLL y"), UDISPCTX_CAPITALIZATION_FOR_STANDALONE,            CharsToUnicodeString("\\u010Dervenec 2008") },
 #endif
         // terminator
-        { NULL, UnicodeString(""),       (UDateFormatContextValue)0, UnicodeString("") }
+        { NULL, UnicodeString(""),       (UDisplayContext)0, UnicodeString("") }
     };
     UErrorCode status = U_ZERO_ERROR;
     Calendar* cal = Calendar::createInstance(status);
@@ -3877,13 +3877,13 @@ void DateFormatTest::TestContext()
            if (U_FAILURE(status)) {
                 dataerrln(UnicodeString("FAIL: Unable to create SimpleDateFormat for specified pattern with locale ") + UnicodeString(itemPtr->locale));
            } else {
-               UDateFormatContextType contextType = UDAT_CAPITALIZATION;
-               UDateFormatContextValue contextValue = itemPtr->capitalizationContext;
+               sdmft->setContext(itemPtr->capitalizationContext, status);
                UnicodeString result;
                FieldPosition pos(0);
-               sdmft->format(*cal, &contextType, &contextValue, 1, result, pos);
+               sdmft->format(*cal, result, pos);
                if (result.compare(itemPtr->expectedFormat) != 0) {
                    errln(UnicodeString("FAIL: format for locale ") + UnicodeString(itemPtr->locale) +
+                           ", status " + (int)status +
                            ", capitalizationContext " + (int)itemPtr->capitalizationContext +
                            ", expected " + itemPtr->expectedFormat + ", got " + result);
                }
