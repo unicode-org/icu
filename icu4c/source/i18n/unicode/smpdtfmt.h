@@ -551,7 +551,6 @@ public:
      * @param pos   On input, the position at which to start parsing; on
      *              output, the position at which parsing terminated, or the
      *              start position if the parse failed.
-     * @return      A valid UDate if the input could be parsed.
      * @stable ICU 2.1
      */
     virtual void parse( const UnicodeString& text,

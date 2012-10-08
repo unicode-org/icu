@@ -543,8 +543,6 @@ public:
     * @param parsePosition  The position to start parsing at on input.
     *                       On output, moved to after the last successfully
     *                       parse character. On parse failure, does not change.
-    * @return               A Formattable object of numeric type.  The caller
-    *                       owns this an must delete it.  NULL on failure.
     * @stable ICU 2.0
     */
     virtual void parse(const UnicodeString& text,
@@ -561,14 +559,12 @@ public:
      *                      If parse fails, return contents are undefined.
      * @param status        Output parameter set to a failure error code
      *                      when a failure occurs.
-     * @return              A Formattable object of numeric type.  The caller
-     *                      owns this an must delete it.  NULL on failure.
      * @see                 NumberFormat::isParseIntegerOnly
      * @stable ICU 2.0
      */
-    virtual void parse( const UnicodeString& text,
-                        Formattable& result,
-                        UErrorCode& status) const;
+    virtual void parse(const UnicodeString& text,
+                       Formattable& result,
+                       UErrorCode& status) const;
 
 /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
