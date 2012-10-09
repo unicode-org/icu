@@ -180,85 +180,290 @@ typedef enum UDateFormatStyle {
     UDAT_IGNORE = UDAT_PATTERN
 } UDateFormatStyle;
 
-/**
- * @{
- * Below are a set of pre-defined skeletons.
- *
- * <P>
- * A skeleton 
- * <ol>
- * <li>
- *    only keeps the field pattern letter and ignores all other parts 
- *    in a pattern, such as space, punctuations, and string literals.
- * </li>
- * <li>
- *    hides the order of fields. 
- * </li>
- * <li>
- *    might hide a field's pattern letter length.
- *
- *    For those non-digit calendar fields, the pattern letter length is 
- *    important, such as MMM, MMMM, and MMMMM; EEE and EEEE, 
- *    and the field's pattern letter length is honored.
- *    
- *    For the digit calendar fields,  such as M or MM, d or dd, yy or yyyy, 
- *    the field pattern length is ignored and the best match, which is defined 
- *    in date time patterns, will be returned without honor the field pattern
- *    letter length in skeleton.
- * </li>
- * </ol>
- *
- * @stable ICU 4.0
- */
-
-#define UDAT_MINUTE_SECOND              "ms"
-#define UDAT_HOUR24_MINUTE              "Hm"
-#define UDAT_HOUR24_MINUTE_SECOND       "Hms"      
-#define UDAT_HOUR_MINUTE_SECOND         "hms"
-#define UDAT_STANDALONE_MONTH           "LLLL"
-#define UDAT_ABBR_STANDALONE_MONTH      "LLL"
-#define UDAT_YEAR_QUARTER               "yQQQ"
-#define UDAT_YEAR_ABBR_QUARTER          "yQ"
-
-/** @} */
+// Skeletons for dates.
 
 /**
- * @{
- * Below are a set of pre-defined skeletons that 
- * have pre-defined interval patterns in resource files.
- * Users are encouraged to use them in date interval format factory methods.
- * 
+ * Constant for date skeleton with year.
  * @stable ICU 4.0
  */
-#define UDAT_HOUR_MINUTE                "hm"
 #define UDAT_YEAR                       "y"
-#define UDAT_DAY                        "d"
-#define UDAT_NUM_MONTH_WEEKDAY_DAY      "MEd"
-#define UDAT_YEAR_NUM_MONTH             "yM"              
-#define UDAT_NUM_MONTH_DAY              "Md"
-#define UDAT_YEAR_NUM_MONTH_WEEKDAY_DAY "yMEd"
-#define UDAT_ABBR_MONTH_WEEKDAY_DAY     "MMMEd"
-#define UDAT_YEAR_MONTH                 "yMMMM"
-#define UDAT_YEAR_ABBR_MONTH            "yMMM"
-#define UDAT_MONTH_DAY                  "MMMMd"
-#define UDAT_ABBR_MONTH_DAY             "MMMd" 
-#define UDAT_MONTH_WEEKDAY_DAY          "MMMMEEEEd"
-#define UDAT_YEAR_ABBR_MONTH_WEEKDAY_DAY "yMMMEd" 
-#define UDAT_YEAR_MONTH_WEEKDAY_DAY     "yMMMMEEEEd"
-#define UDAT_YEAR_MONTH_DAY             "yMMMMd"
-#define UDAT_YEAR_ABBR_MONTH_DAY        "yMMMd"
-#define UDAT_YEAR_NUM_MONTH_DAY         "yMd"
-#define UDAT_NUM_MONTH                  "M"
-#define UDAT_ABBR_MONTH                 "MMM"
+/**
+ * Constant for date skeleton with quarter.
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_QUARTER                    "QQQQ"
+/**
+ * Constant for date skeleton with abbreviated quarter.
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_ABBR_QUARTER               "QQQ"
+/**
+ * Constant for date skeleton with year and quarter.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_QUARTER               "yQQQQ"
+/**
+ * Constant for date skeleton with year and abbreviated quarter.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_ABBR_QUARTER          "yQQQ"
+/**
+ * Constant for date skeleton with month.
+ * @stable ICU 4.0
+ */
 #define UDAT_MONTH                      "MMMM"
-#define UDAT_HOUR_MINUTE_GENERIC_TZ     "hmv"
-#define UDAT_HOUR_MINUTE_TZ             "hmz"
-#define UDAT_HOUR                       "h"
-#define UDAT_HOUR_GENERIC_TZ            "hv"
-#define UDAT_HOUR_TZ                    "hz"
+/**
+ * Constant for date skeleton with abbreviated month.
+ * @stable ICU 4.0
+ */
+#define UDAT_ABBR_MONTH                 "MMM"
+/**
+ * Constant for date skeleton with numeric month.
+ * @stable ICU 4.0
+ */
+#define UDAT_NUM_MONTH                  "M"
+/**
+ * Constant for date skeleton with year and month.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_MONTH                 "yMMMM"
+/**
+ * Constant for date skeleton with year and abbreviated month.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_ABBR_MONTH            "yMMM"
+/**
+ * Constant for date skeleton with year and numeric month.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_NUM_MONTH             "yM"
+/**
+ * Constant for date skeleton with day.
+ * @stable ICU 4.0
+ */
+#define UDAT_DAY                        "d"
+/**
+ * Constant for date skeleton with year, month, and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_MONTH_DAY             "yMMMMd"
+/**
+ * Constant for date skeleton with year, abbreviated month, and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_ABBR_MONTH_DAY        "yMMMd"
+/**
+ * Constant for date skeleton with year, numeric month, and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_NUM_MONTH_DAY         "yMd"
+/**
+ * Constant for date skeleton with weekday.
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_WEEKDAY                    "EEEE"
+/**
+ * Constant for date skeleton with abbreviated weekday.
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_ABBR_WEEKDAY               "E"
+/**
+ * Constant for date skeleton with year, month, weekday, and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_MONTH_WEEKDAY_DAY     "yMMMMEEEEd"
+/**
+ * Constant for date skeleton with year, abbreviated month, weekday, and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_ABBR_MONTH_WEEKDAY_DAY "yMMMEd" 
+/**
+ * Constant for date skeleton with year, numeric month, weekday, and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_YEAR_NUM_MONTH_WEEKDAY_DAY "yMEd"
+/**
+ * Constant for date skeleton with long month and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_MONTH_DAY                  "MMMMd"
+/**
+ * Constant for date skeleton with abbreviated month and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_ABBR_MONTH_DAY             "MMMd"
+/**
+ * Constant for date skeleton with numeric month and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_NUM_MONTH_DAY              "Md"
+/**
+ * Constant for date skeleton with month, weekday, and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_MONTH_WEEKDAY_DAY          "MMMMEEEEd"
+/**
+ * Constant for date skeleton with abbreviated month, weekday, and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_ABBR_MONTH_WEEKDAY_DAY     "MMMEd"
+/**
+ * Constant for date skeleton with numeric month, weekday, and day.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_NUM_MONTH_WEEKDAY_DAY      "MEd"
 
-/** @} */
+// Skeletons for times.
 
+/**
+ * Constant for date skeleton with hour, with the locale's preferred hour format (12 or 24).
+ * @stable ICU 4.0
+ */
+#define UDAT_HOUR                       "j"
+/**
+ * Constant for date skeleton with hour in 24-hour presentation.
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_HOUR24                     "H"
+/**
+ * Constant for date skeleton with minute.
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_MINUTE                     "m"
+/**
+ * Constant for date skeleton with hour and minute, with the locale's preferred hour format (12 or 24).
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_HOUR_MINUTE                "jm"
+/**
+ * Constant for date skeleton with hour and minute in 24-hour presentation.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_HOUR24_MINUTE              "Hm"
+/**
+ * Constant for date skeleton with second.
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_SECOND                     "s"
+/**
+ * Constant for date skeleton with hour, minute, and second,
+ * with the locale's preferred hour format (12 or 24).
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_HOUR_MINUTE_SECOND         "jms"
+/**
+ * Constant for date skeleton with hour, minute, and second in
+ * 24-hour presentation.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_HOUR24_MINUTE_SECOND       "Hms"
+/**
+ * Constant for date skeleton with minute and second.
+ * Used in combinations date + time, date + time + zone, or time + zone.
+ * @stable ICU 4.0
+ */
+#define UDAT_MINUTE_SECOND              "ms"
+
+// Skeletons for time zones.
+
+/**
+ * Constant for <i>generic location format</i>, such as Los Angeles Time;
+ * used in combinations date + time + zone, or time + zone.
+ * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
+ * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_LOCATION_TZ "VVVV"
+/**
+ * Constant for <i>generic non-location format</i>, such as Pacific Time;
+ * used in combinations date + time + zone, or time + zone.
+ * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
+ * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_GENERIC_TZ "vvvv"
+/**
+ * Constant for <i>generic non-location format</i>, abbreviated if possible, such as PT;
+ * used in combinations date + time + zone, or time + zone.
+ * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
+ * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_ABBR_GENERIC_TZ "v"
+/**
+ * Constant for <i>specific non-location format</i>, such as Pacific Daylight Time;
+ * used in combinations date + time + zone, or time + zone.
+ * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
+ * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_SPECIFIC_TZ "zzzz"
+/**
+ * Constant for <i>specific non-location format</i>, abbreviated if possible, such as PDT;
+ * used in combinations date + time + zone, or time + zone.
+ * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
+ * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_ABBR_SPECIFIC_TZ "z"
+/**
+ * Constant for <i>localized GMT/UTC format</i>, such as GMT+8:00 or HPG-8:00;
+ * used in combinations date + time + zone, or time + zone.
+ * @see <a href="http://unicode.org/reports/tr35/#Date_Format_Patterns">LDML Date Format Patterns</a>
+ * @see <a href="http://unicode.org/reports/tr35/#Time_Zone_Fallback">LDML Time Zone Fallback</a>
+ * @internal ICU 50 technology preview
+ */
+#define UDAT_ABBR_UTC_TZ "ZZZZ"
+
+// deprecated skeleton constants
+
+/**
+ * Constant for date skeleton with standalone month.
+ * @deprecated ICU 50 Use UDAT_MONTH instead.
+ */
+#define UDAT_STANDALONE_MONTH           "LLLL"
+/**
+ * Constant for date skeleton with standalone abbreviated month.
+ * @deprecated ICU 50 Use UDAT_ABBR_MONTH instead.
+ */
+#define UDAT_ABBR_STANDALONE_MONTH      "LLL"
+
+/**
+ * Constant for date skeleton with hour, minute, and generic timezone.
+ * @deprecated ICU 50 Use instead UDAT_HOUR_MINUTE UDAT_ABBR_GENERIC_TZ or some other timezone presentation.
+ */
+#define UDAT_HOUR_MINUTE_GENERIC_TZ     "jmv"
+/**
+ * Constant for date skeleton with hour, minute, and timezone.
+ * @deprecated ICU 50 Use instead UDAT_HOUR_MINUTE UDAT_ABBR_SPECIFIC_TZ or some other timezone presentation.
+ */
+#define UDAT_HOUR_MINUTE_TZ             "jmz"
+/**
+ * Constant for date skeleton with hour and generic timezone.
+ * @deprecated ICU 50 Use instead UDAT_HOUR UDAT_ABBR_GENERIC_TZ or some other timezone presentation.
+ */
+#define UDAT_HOUR_GENERIC_TZ            "jv"
+/**
+ * Constant for date skeleton with hour and timezone.
+ * @deprecated ICU 50 Use instead UDAT_HOUR UDAT_ABBR_SPECIFIC_TZ or some other timezone presentation.
+ */
+#define UDAT_HOUR_TZ                    "jz"
 
 /**
  * FieldPosition and UFieldPosition selectors for format fields
