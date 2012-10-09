@@ -282,9 +282,8 @@ uldn_keyValueDisplayName(const ULocaleDisplayNames *ldn,
 * @internal ICU 50 technology preview
 */
 U_INTERNAL ULocaleDisplayNames * U_EXPORT2
-uldn_openForContext(const char * locale,
-                    UDisplayContext *contexts, int32_t length,
-                    UErrorCode *pErrorCode);
+uldn_openForContext(const char * locale, UDisplayContext *contexts,
+                    int32_t length, UErrorCode *pErrorCode);
 
 /**
 * Returns the UDisplayContext value for the specified UDisplayContextType.
@@ -297,9 +296,8 @@ uldn_openForContext(const char * locale,
 * @internal ICU 50 technology preview
 */
 U_INTERNAL UDisplayContext U_EXPORT2
-uldn_getContext(const ULocaleDisplayNames *ldn,
-              UDisplayContextType type,
-              UErrorCode *pErrorCode);
+uldn_getContext(const ULocaleDisplayNames *ldn, UDisplayContextType type,
+                UErrorCode *pErrorCode);
 
 #endif  /* U_HIDE_INTERNAL_API */
 

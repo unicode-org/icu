@@ -335,7 +335,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
 {
   while (length-- > 0) {
     UDisplayContext value = *contexts++;
-  	UDisplayContextType selector = (UDisplayContextType)(value & ~0xFF);
+  	UDisplayContextType selector = (UDisplayContextType)((uint32_t)value >> 8);
   	switch (selector) {
   	  case UDISPCTX_TYPE_DIALECT_HANDLING:
   	    dialectHandling = (UDialectHandling)value;
