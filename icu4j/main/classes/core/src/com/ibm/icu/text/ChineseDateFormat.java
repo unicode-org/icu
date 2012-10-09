@@ -116,7 +116,7 @@ public class ChineseDateFormat extends SimpleDateFormat {
      */
     protected void subFormat(StringBuffer buf,
                              char ch, int count, int beginOffset,
-                             int fieldNum, ContextValue capitalizationContext,
+                             int fieldNum, DisplayContext capitalizationContext,
                              FieldPosition pos,
                              Calendar cal) {
 
