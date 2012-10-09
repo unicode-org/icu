@@ -23,18 +23,41 @@ public class TimeZoneNameProviderICU extends java.util.spi.TimeZoneNameProvider 
         if (isSystemID[0]) {
             long date = System.currentTimeMillis();
             TimeZoneNames tznames = TimeZoneNames.getInstance(ICULocaleServiceProvider.toULocaleNoSpecialVariant(locale));
-            switch (style) {
-            case TimeZone.LONG:
-                dispName = daylight ?
-                        tznames.getDisplayName(canonicalID, NameType.LONG_DAYLIGHT, date) :
-                        tznames.getDisplayName(canonicalID, NameType.LONG_STANDARD, date);
-                break;
-            case TimeZone.SHORT:
-                dispName = daylight ?
-                        tznames.getDisplayName(canonicalID, NameType.SHORT_DAYLIGHT, date) :
-                        tznames.getDisplayName(canonicalID, NameType.SHORT_STANDARD, date);
-                break;
+
+            {
+                // Workaround for Java bug. Java needs all 4 names available at the same time.
+                // 2012-10-09 yoshito
+                String lstd = tznames.getDisplayName(canonicalID, NameType.LONG_STANDARD, date);
+                String ldst = tznames.getDisplayName(canonicalID, NameType.LONG_DAYLIGHT, date);
+                String sstd = tznames.getDisplayName(canonicalID, NameType.SHORT_STANDARD, date);
+                String sdst = tznames.getDisplayName(canonicalID, NameType.SHORT_DAYLIGHT, date);
+
+                if (lstd != null && ldst != null && sstd != null && sdst != null) {
+                    switch (style) {
+                    case TimeZone.LONG:
+                        dispName = daylight ? ldst : lstd;
+                        break;
+                    case TimeZone.SHORT:
+                        dispName = daylight ? sdst : sstd;
+                        break;
+                    }
+                }
             }
+
+//            {
+//                switch (style) {
+//                case TimeZone.LONG:
+//                    dispName = daylight ?
+//                            tznames.getDisplayName(canonicalID, NameType.LONG_DAYLIGHT, date) :
+//                            tznames.getDisplayName(canonicalID, NameType.LONG_STANDARD, date);
+//                    break;
+//                case TimeZone.SHORT:
+//                    dispName = daylight ?
+//                            tznames.getDisplayName(canonicalID, NameType.SHORT_DAYLIGHT, date) :
+//                            tznames.getDisplayName(canonicalID, NameType.SHORT_STANDARD, date);
+//                    break;
+//                }
+//            }
         }
         return dispName;
     }
