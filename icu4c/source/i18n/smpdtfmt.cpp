@@ -3113,7 +3113,7 @@ void SimpleDateFormat::setContext(UDisplayContext value, UErrorCode& status)
 {
     if (U_FAILURE(status))
         return;
-    if ( (UDisplayContextType)(value & ~0xFF) == UDISPCTX_TYPE_CAPITALIZATION ) {
+    if ( (UDisplayContextType)((uint32_t)value >> 8) == UDISPCTX_TYPE_CAPITALIZATION ) {
         fCapitalizationContext = value;
     } else {
         status = U_ILLEGAL_ARGUMENT_ERROR;
