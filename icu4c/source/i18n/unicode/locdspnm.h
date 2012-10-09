@@ -61,6 +61,7 @@ public:
     static LocaleDisplayNames* U_EXPORT2 createInstance(const Locale& locale,
                             UDialectHandling dialectHandling);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Returns an instance of LocaleDisplayNames that returns names formatted
      * for the provided locale, using the provided UDisplayContext settings.
@@ -74,6 +75,7 @@ public:
      */
     static LocaleDisplayNames* U_EXPORT2 createInstance(const Locale& locale,
                             UDisplayContext *contexts, int32_t length);
+#endif  /* U_HIDE_INTERNAL_API */
 
     // getters for state
     /**
