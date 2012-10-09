@@ -342,6 +342,13 @@ import com.ibm.icu.util.ULocale.Category;
  * {@link #parse(String)} indicates parse failure by throwing a {@link
  * java.text.ParseException}.
  *
+ * <p>Parsing an extremely large or small absolute value (such as 1.0E10000 or 1.0E-10000)
+ * requires huge memory allocation for representing the parsed number. Such input may expose
+ * a risk of DoS attacks. To prevent huge memory allocation triggered by such inputs,
+ * <code>DecimalFormat</code> internally limits of maximum decimal digits to be 1000. Thus,
+ * an input string resulting more than 1000 digits in plain decimal representation (non-exponent)
+ * will be treated as either overflow (positive/negative infinite) or underflow (+0.0/-0.0).
+ * 
  * <h4>Formatting</h4>
  *
  * <p>Formatting is guided by several parameters, all of which can be specified either
