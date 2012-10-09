@@ -23,6 +23,11 @@ class DateFormatTest: public CalendarTimeZoneTest {
     void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par );
 public:
     /**
+     * Verify that patterns have the correct values and could produce
+     * the DateFormat instances that contain the correct localized patterns.
+     */
+    void TestPatterns();
+    /**
      *  "Test written by Wally Wedel and emailed to me."
      *  Test handling of timezone offsets
      **/
