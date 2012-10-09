@@ -9,10 +9,12 @@
 #if !UCONFIG_NO_FORMATTING
 
 #include "dtfmttst.h"
+#include "unicode/localpointer.h"
 #include "unicode/timezone.h"
 #include "unicode/gregocal.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/datefmt.h"
+#include "unicode/dtptngen.h"
 #include "unicode/simpletz.h"
 #include "unicode/strenum.h"
 #include "unicode/dtfmtsym.h"
@@ -25,6 +27,8 @@
 #include "windttst.h"
 #endif
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
+
 #define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
 
 #define ASSERT_OK(status)  if(U_FAILURE(status)) {errcheckln(status, #status " = %s @ %s:%d", u_errorName(status), __FILE__, __LINE__); return; }
@@ -35,63 +39,175 @@
 
 void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
-    // if (exec) logln((UnicodeString)"TestSuite DateFormatTest");
-    switch (index) {
-        TESTCASE(0,TestEquals);
-        TESTCASE(1,TestTwoDigitYearDSTParse);
-        TESTCASE(2,TestFieldPosition);
-        TESTCASE(3,TestPartialParse994);
-        TESTCASE(4,TestRunTogetherPattern985);
-        TESTCASE(5,TestRunTogetherPattern917);
-        TESTCASE(6,TestCzechMonths459);
-        TESTCASE(7,TestLetterDPattern212);
-        TESTCASE(8,TestDayOfYearPattern195);
-        TESTCASE(9,TestQuotePattern161);
-        TESTCASE(10,TestBadInput135);
-        TESTCASE(11,TestBadInput135a);
-        TESTCASE(12,TestTwoDigitYear);
-        TESTCASE(13,TestDateFormatZone061);
-        TESTCASE(14,TestDateFormatZone146);
-        TESTCASE(15,TestLocaleDateFormat);
-        TESTCASE(16,TestWallyWedel);
-        TESTCASE(17,TestDateFormatCalendar);
-        TESTCASE(18,TestSpaceParsing);
-        TESTCASE(19,TestExactCountFormat);
-        TESTCASE(20,TestWhiteSpaceParsing);
-        TESTCASE(21,TestInvalidPattern);
-        TESTCASE(22,TestGeneral);
-        TESTCASE(23,TestGreekMay);
-        TESTCASE(24,TestGenericTime);
-        TESTCASE(25,TestGenericTimeZoneOrder);
-        TESTCASE(26,TestHost);
-        TESTCASE(27,TestEras);
-        TESTCASE(28,TestNarrowNames);
-        TESTCASE(29,TestStandAloneDays);
-        TESTCASE(30,TestStandAloneMonths);
-        TESTCASE(31,TestQuarters);
-        TESTCASE(32,TestZTimeZoneParsing);
-        TESTCASE(33,TestRelative);
-        TESTCASE(34,TestRelativeClone);
-        TESTCASE(35,TestHostClone);
-        TESTCASE(36,TestTimeZoneDisplayName);
-        TESTCASE(37,TestRoundtripWithCalendar);
-        TESTCASE(38,Test6338);
-        TESTCASE(39,Test6726);
-        TESTCASE(40,TestGMTParsing);
-        TESTCASE(41,Test6880);
-        TESTCASE(42,TestISOEra);
-        TESTCASE(43,TestFormalChineseDate);
-        TESTCASE(44,TestNumberAsStringParsing);
-        TESTCASE(45,TestStandAloneGMTParse);
-        TESTCASE(46,TestParsePosition);
-        TESTCASE(47,TestMonthPatterns);
-        TESTCASE(48,TestContext);
-        TESTCASE(49,TestNonGregoFmtParse);
-        /*
-        TESTCASE(50,TestRelativeError);
-        TESTCASE(51,TestRelativeOther);
-        */
-        default: name = ""; break;
+    if(exec) {
+        logln("TestSuite DateFormatTest: ");
+    }
+    TESTCASE_AUTO_BEGIN;
+    TESTCASE_AUTO(TestPatterns);
+    TESTCASE_AUTO(TestEquals);
+    TESTCASE_AUTO(TestTwoDigitYearDSTParse);
+    TESTCASE_AUTO(TestFieldPosition);
+    TESTCASE_AUTO(TestPartialParse994);
+    TESTCASE_AUTO(TestRunTogetherPattern985);
+    TESTCASE_AUTO(TestRunTogetherPattern917);
+    TESTCASE_AUTO(TestCzechMonths459);
+    TESTCASE_AUTO(TestLetterDPattern212);
+    TESTCASE_AUTO(TestDayOfYearPattern195);
+    TESTCASE_AUTO(TestQuotePattern161);
+    TESTCASE_AUTO(TestBadInput135);
+    TESTCASE_AUTO(TestBadInput135a);
+    TESTCASE_AUTO(TestTwoDigitYear);
+    TESTCASE_AUTO(TestDateFormatZone061);
+    TESTCASE_AUTO(TestDateFormatZone146);
+    TESTCASE_AUTO(TestLocaleDateFormat);
+    TESTCASE_AUTO(TestWallyWedel);
+    TESTCASE_AUTO(TestDateFormatCalendar);
+    TESTCASE_AUTO(TestSpaceParsing);
+    TESTCASE_AUTO(TestExactCountFormat);
+    TESTCASE_AUTO(TestWhiteSpaceParsing);
+    TESTCASE_AUTO(TestInvalidPattern);
+    TESTCASE_AUTO(TestGeneral);
+    TESTCASE_AUTO(TestGreekMay);
+    TESTCASE_AUTO(TestGenericTime);
+    TESTCASE_AUTO(TestGenericTimeZoneOrder);
+    TESTCASE_AUTO(TestHost);
+    TESTCASE_AUTO(TestEras);
+    TESTCASE_AUTO(TestNarrowNames);
+    TESTCASE_AUTO(TestStandAloneDays);
+    TESTCASE_AUTO(TestStandAloneMonths);
+    TESTCASE_AUTO(TestQuarters);
+    TESTCASE_AUTO(TestZTimeZoneParsing);
+    TESTCASE_AUTO(TestRelative);
+    TESTCASE_AUTO(TestRelativeClone);
+    TESTCASE_AUTO(TestHostClone);
+    TESTCASE_AUTO(TestTimeZoneDisplayName);
+    TESTCASE_AUTO(TestRoundtripWithCalendar);
+    TESTCASE_AUTO(Test6338);
+    TESTCASE_AUTO(Test6726);
+    TESTCASE_AUTO(TestGMTParsing);
+    TESTCASE_AUTO(Test6880);
+    TESTCASE_AUTO(TestISOEra);
+    TESTCASE_AUTO(TestFormalChineseDate);
+    TESTCASE_AUTO(TestNumberAsStringParsing);
+    TESTCASE_AUTO(TestStandAloneGMTParse);
+    TESTCASE_AUTO(TestParsePosition);
+    TESTCASE_AUTO(TestMonthPatterns);
+    TESTCASE_AUTO(TestContext);
+    TESTCASE_AUTO(TestNonGregoFmtParse);
+    /*
+    TESTCASE_AUTO(TestRelativeError);
+    TESTCASE_AUTO(TestRelativeOther);
+    */
+    TESTCASE_AUTO_END;
+}
+
+void DateFormatTest::TestPatterns() {
+    static const struct {
+        const char *actualPattern;
+        const char *expectedPattern;
+        const char *localeID;
+        const char *expectedLocalPattern;
+    } EXPECTED[] = {
+        {UDAT_YEAR, "y","en","y"},
+
+        {UDAT_QUARTER, "QQQQ", "en", "QQQQ"},
+        {UDAT_ABBR_QUARTER, "QQQ", "en", "QQQ"},
+        {UDAT_YEAR_QUARTER, "yQQQQ", "en", "QQQQ y"}, 
+        {UDAT_YEAR_ABBR_QUARTER, "yQQQ", "en", "QQQ y"},
+
+        {UDAT_NUM_MONTH, "M", "en", "L"},
+        {UDAT_ABBR_MONTH, "MMM", "en", "LLL"},
+        {UDAT_MONTH, "MMMM", "en", "LLLL"},
+        {UDAT_YEAR_NUM_MONTH, "yM","en","M/y"}, 
+        {UDAT_YEAR_ABBR_MONTH, "yMMM","en","MMM y"},
+        {UDAT_YEAR_MONTH, "yMMMM","en","MMMM y"},
+
+        {UDAT_DAY, "d","en","d"},
+        {UDAT_YEAR_NUM_MONTH_DAY, "yMd", "en", "M/d/y"}, 
+        {UDAT_YEAR_ABBR_MONTH_DAY, "yMMMd", "en", "MMM d, y"},
+        {UDAT_YEAR_MONTH_DAY, "yMMMMd", "en", "MMMM d, y"},
+        {UDAT_YEAR_NUM_MONTH_WEEKDAY_DAY, "yMEd", "en", "EEE, M/d/y"}, 
+        {UDAT_YEAR_ABBR_MONTH_WEEKDAY_DAY, "yMMMEd", "en", "EEE, MMM d, y"},
+        {UDAT_YEAR_MONTH_WEEKDAY_DAY, "yMMMMEEEEd", "en", "EEEE, MMMM d, y"},
+
+        {UDAT_NUM_MONTH_DAY, "Md","en","M/d"},
+        {UDAT_ABBR_MONTH_DAY, "MMMd","en","MMM d"},
+        {UDAT_MONTH_DAY, "MMMMd","en","MMMM d"},
+        {UDAT_NUM_MONTH_WEEKDAY_DAY, "MEd","en","EEE, M/d"},
+        {UDAT_ABBR_MONTH_WEEKDAY_DAY, "MMMEd","en","EEE, MMM d"},
+        {UDAT_MONTH_WEEKDAY_DAY, "MMMMEEEEd","en","EEEE, MMMM d"},
+
+        {UDAT_HOUR, "j", "en", "h a"}, // (fixed expected result per ticket 6872<-6626)
+        {UDAT_HOUR24, "H", "en", "HH"}, // (fixed expected result per ticket 6872<-6626
+
+        {UDAT_MINUTE, "m", "en", "m"},
+        {UDAT_HOUR_MINUTE, "jm","en","h:mm a"}, // (fixed expected result per ticket 6872<-7180)
+        {UDAT_HOUR24_MINUTE, "Hm", "en", "HH:mm"}, // (fixed expected result per ticket 6872<-6626)
+
+        {UDAT_SECOND, "s", "en", "s"},
+        {UDAT_HOUR_MINUTE_SECOND, "jms","en","h:mm:ss a"}, // (fixed expected result per ticket 6872<-7180)
+        {UDAT_HOUR24_MINUTE_SECOND, "Hms","en","HH:mm:ss"}, // (fixed expected result per ticket 6872<-6626)
+        {UDAT_MINUTE_SECOND, "ms", "en", "mm:ss"}, // (fixed expected result per ticket 6872<-6626)
+
+        {UDAT_LOCATION_TZ, "VVVV", "en", "VVVV"},
+        {UDAT_GENERIC_TZ, "vvvv", "en", "vvvv"},
+        {UDAT_ABBR_GENERIC_TZ, "v", "en", "v"},
+        {UDAT_SPECIFIC_TZ, "zzzz", "en", "zzzz"},
+        {UDAT_ABBR_SPECIFIC_TZ, "z", "en", "z"},
+        {UDAT_ABBR_UTC_TZ, "ZZZZ", "en", "ZZZZ"},
+
+        {UDAT_YEAR_NUM_MONTH_DAY UDAT_ABBR_UTC_TZ, "yMdZZZZ", "en", "M/d/y, ZZZZ"},
+        {UDAT_MONTH_DAY UDAT_LOCATION_TZ, "MMMMdVVVV", "en", "MMMM d, VVVV"}
+    };
+
+    IcuTestErrorCode errorCode(*this, "TestPatterns()");
+    for (int32_t i = 0; i < LENGTHOF(EXPECTED); i++) {
+        // Verify that patterns have the correct values
+        UnicodeString actualPattern(EXPECTED[i].actualPattern, -1, US_INV);
+        UnicodeString expectedPattern(EXPECTED[i].expectedPattern, -1, US_INV);
+        Locale locale(EXPECTED[i].localeID);
+        if (actualPattern != expectedPattern) {
+            errln("FAILURE! Expected pattern: " + expectedPattern + 
+                    " but was: " + actualPattern);
+        }
+
+        // Verify that DataFormat instances produced contain the correct 
+        // localized patterns
+        // TODO: use DateFormat::getInstanceForSkeleton(), ticket #9029
+        // Java test code:
+        // DateFormat date1 = DateFormat.getPatternInstance(actualPattern, 
+        //         locale);
+        // DateFormat date2 = DateFormat.getPatternInstance(Calendar.getInstance(locale),
+        //         actualPattern, locale);
+        LocalPointer<DateTimePatternGenerator> generator(
+                DateTimePatternGenerator::createInstance(locale, errorCode));
+        if(errorCode.logIfFailureAndReset("DateTimePatternGenerator::createInstance() failed")) {
+            errln("  for locale ID \"%s\"", EXPECTED[i].localeID);
+            continue;
+        }
+        UnicodeString pattern = generator->getBestPattern(actualPattern, errorCode);
+        SimpleDateFormat date1(pattern, locale, errorCode);
+        SimpleDateFormat date2(pattern, locale, errorCode);
+        date2.adoptCalendar(Calendar::createInstance(locale, errorCode));
+        if(errorCode.logIfFailureAndReset("DateFormat::getInstanceForSkeleton() failed")) {
+            errln("  for actualPattern \"%s\" & locale ID \"%s\"",
+                  EXPECTED[i].actualPattern, EXPECTED[i].localeID);
+            continue;
+        }
+
+        UnicodeString expectedLocalPattern(EXPECTED[i].expectedLocalPattern, -1, US_INV);
+        UnicodeString actualLocalPattern1;
+        UnicodeString actualLocalPattern2;
+        date1.toLocalizedPattern(actualLocalPattern1, errorCode);
+        date2.toLocalizedPattern(actualLocalPattern2, errorCode);
+        if (actualLocalPattern1 != expectedLocalPattern) {
+            errln("FAILURE! Expected local pattern: " + expectedLocalPattern 
+                    + " but was: " + actualLocalPattern1);
+        }
+        if (actualLocalPattern2 != expectedLocalPattern) {
+            errln("FAILURE! Expected local pattern: " + expectedLocalPattern 
+                    + " but was: " + actualLocalPattern2);
+        }
     }
 }
 
