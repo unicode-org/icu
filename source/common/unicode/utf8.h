@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -60,13 +60,41 @@ U_CFUNC U_IMPORT const uint8_t /* U_IMPORT2? */ /*U_IMPORT*/
 utf8_countTrailBytes[256];
 
 /**
- * Count the trail bytes for a UTF-8 lead byte.
+ * Counts the trail bytes for a UTF-8 lead byte.
+ * Returns 0 for 0..0xbf as well as for 0xfe and 0xff.
  *
  * This is internal since it is not meant to be called directly by external clients;
  * however it is called by public macros in this file and thus must remain stable.
+ *
+ * Note: Beginning with ICU 50, the implementation uses a multi-condition expression
+ * which was shown in 2012 (on x86-64) to compile to fast, branch-free code.
+ * leadByte is evaluated multiple times.
+ *
+ * The pre-ICU 50 implementation used the exported array utf8_countTrailBytes:
+ * #define U8_COUNT_TRAIL_BYTES(leadByte) (utf8_countTrailBytes[leadByte])
+ * leadByte was evaluated exactly once.
+ *
+ * @param leadByte The first byte of a UTF-8 sequence. Must be 0..0xff.
  * @internal
  */
-#define U8_COUNT_TRAIL_BYTES(leadByte) (utf8_countTrailBytes[(uint8_t)leadByte])
+#define U8_COUNT_TRAIL_BYTES(leadByte) \
+    ((leadByte)<0xf0 ? \
+        ((leadByte)>=0xc0)+((leadByte)>=0xe0) : \
+        (leadByte)<0xfe ? 3+((leadByte)>=0xf8)+((leadByte)>=0xfc) : 0)
+
+/**
+ * Counts the trail bytes for a UTF-8 lead byte of a valid UTF-8 sequence.
+ * The maximum supported lead byte is 0xf4 corresponding to U+10FFFF.
+ * leadByte might be evaluated multiple times.
+ *
+ * This is internal since it is not meant to be called directly by external clients;
+ * however it is called by public macros in this file and thus must remain stable.
+ *
+ * @param leadByte The first byte of a UTF-8 sequence. Must be 0..0xff.
+ * @internal
+ */
+#define U8_COUNT_TRAIL_BYTES_UNSAFE(leadByte) \
+    (((leadByte)>=0xc0)+((leadByte)>=0xe0)+((leadByte)>=0xf0))
 
 /**
  * Mask a UTF-8 lead byte, leave only the lower bits that form part of the code point value.
@@ -243,19 +271,16 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  */
 #define U8_NEXT_UNSAFE(s, i, c) { \
     (c)=(uint8_t)(s)[(i)++]; \
-    if((uint8_t)((c)-0xc0)<0x35) { \
-        uint8_t __count=U8_COUNT_TRAIL_BYTES(c); \
-        U8_MASK_LEAD_BYTE(c, __count); \
-        switch(__count) { \
-        /* each following branch falls through to the next one */ \
-        case 3: \
-            (c)=((c)<<6)|((s)[(i)++]&0x3f); \
-        case 2: \
-            (c)=((c)<<6)|((s)[(i)++]&0x3f); \
-        case 1: \
-            (c)=((c)<<6)|((s)[(i)++]&0x3f); \
-        /* no other branches to optimize switch() */ \
-            break; \
+    if((c)>=0x80) { \
+        if((c)<0xe0) { \
+            (c)=(((c)&0x1f)<<6)|((s)[(i)++]&0x3f); \
+        } else if((c)<0xf0) { \
+            /* no need for (c&0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */ \
+            (c)=(UChar)(((c)<<12)|(((s)[i]&0x3f)<<6)|((s)[(i)+1]&0x3f)); \
+            (i)+=2; \
+        } else { \
+            (c)=(((c)&7)<<18)|(((s)[i]&0x3f)<<12)|(((s)[(i)+1]&0x3f)<<6)|((s)[(i)+2]&0x3f); \
+            (i)+=3; \
         } \
     } \
 }
@@ -382,7 +407,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
  * @stable ICU 2.4
  */
 #define U8_FWD_1_UNSAFE(s, i) { \
-    (i)+=1+U8_COUNT_TRAIL_BYTES((s)[i]); \
+    (i)+=1+U8_COUNT_TRAIL_BYTES_UNSAFE((uint8_t)(s)[i]); \
 }
 
 /**

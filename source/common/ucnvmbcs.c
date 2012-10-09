@@ -4930,7 +4930,7 @@ ucnv_SBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
             if(U8_IS_TRAIL(b)) {
                 ++i;
             } else {
-                if(i<utf8_countTrailBytes[b]) {
+                if(i<U8_COUNT_TRAIL_BYTES(b)) {
                     /* exit the conversion loop before the lead byte if there are not enough trail bytes for it */
                     sourceLimit-=i+1;
                 }
@@ -5023,7 +5023,7 @@ ucnv_SBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
                     /* handle "complicated" and error cases, and continuing partial characters */
                     oldToULength=0;
                     toULength=1;
-                    toULimit=utf8_countTrailBytes[b]+1;
+                    toULimit=U8_COUNT_TRAIL_BYTES(b)+1;
                     c=b;
 moreBytes:
                     while(toULength<toULimit) {
@@ -5148,7 +5148,7 @@ moreBytes:
             source<(sourceLimit=(uint8_t *)pToUArgs->sourceLimit)) {
         c=utf8->toUBytes[0]=b=*source++;
         toULength=1;
-        toULimit=utf8_countTrailBytes[b]+1;
+        toULimit=U8_COUNT_TRAIL_BYTES(b)+1;
         while(source<sourceLimit) {
             utf8->toUBytes[toULength++]=b=*source++;
             c=(c<<6)+b;
@@ -5230,7 +5230,7 @@ ucnv_DBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
             if(U8_IS_TRAIL(b)) {
                 ++i;
             } else {
-                if(i<utf8_countTrailBytes[b]) {
+                if(i<U8_COUNT_TRAIL_BYTES(b)) {
                     /* exit the conversion loop before the lead byte if there are not enough trail bytes for it */
                     sourceLimit-=i+1;
                 }
@@ -5303,7 +5303,7 @@ ucnv_DBCSFromUTF8(UConverterFromUnicodeArgs *pFromUArgs,
                     /* handle "complicated" and error cases, and continuing partial characters */
                     oldToULength=0;
                     toULength=1;
-                    toULimit=utf8_countTrailBytes[b]+1;
+                    toULimit=U8_COUNT_TRAIL_BYTES(b)+1;
                     c=b;
 moreBytes:
                     while(toULength<toULimit) {
@@ -5458,7 +5458,7 @@ unassigned:
             source<(sourceLimit=(uint8_t *)pToUArgs->sourceLimit)) {
         c=utf8->toUBytes[0]=b=*source++;
         toULength=1;
-        toULimit=utf8_countTrailBytes[b]+1;
+        toULimit=U8_COUNT_TRAIL_BYTES(b)+1;
         while(source<sourceLimit) {
             utf8->toUBytes[toULength++]=b=*source++;
             c=(c<<6)+b;
