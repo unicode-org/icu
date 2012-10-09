@@ -12,10 +12,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import com.ibm.icu.impl.Grego;
 import com.ibm.icu.impl.ICUConfig;
-import com.ibm.icu.impl.ICULogger;
 import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.impl.ZoneMeta;
@@ -112,12 +112,9 @@ import com.ibm.icu.util.ULocale.Category;
  */
 abstract public class TimeZone implements Serializable, Cloneable, Freezable<TimeZone> {
     /**
-     * {@icu} A logger for TimeZone. Will be null if logging is not on by way of system
-     * property: "icu4j.debug.logging"
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
+     * Logger instance for this class
      */
-    public static ICULogger TimeZoneLogger = ICULogger.getICULogger(TimeZone.class.getName());
+    private static final Logger LOGGER = Logger.getLogger("com.ibm.icu.util.TimeZone");
 
     // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = -744942128318337471L;
@@ -775,11 +772,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
         }
 
         if (result == null) {
-            /* Log that timezone is using GMT if logging is on. */
-            if (TimeZoneLogger != null && TimeZoneLogger.isLoggingOn()) {
-                TimeZoneLogger.warning(
-                    "\"" +ID + "\" is a bogus id so timezone is falling back to Etc/Unknown(GMT).");
-            }
+            LOGGER.fine("\"" +ID + "\" is a bogus id so timezone is falling back to Etc/Unknown(GMT).");
             result = UNKNOWN_ZONE;
         }
 
