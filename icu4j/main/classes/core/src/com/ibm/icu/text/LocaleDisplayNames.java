@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -61,6 +61,19 @@ public abstract class LocaleDisplayNames {
         return LocaleDisplayNamesImpl.getInstance(locale, dialectHandling);
     }
 
+    /**
+     * Returns an instance of LocaleDisplayNames that returns names formatted for the provided locale,
+     * using the provided DisplayContext settings
+     * @param locale the display locale
+     * @param contexts one or more context settings (e.g. for dialect
+     *              handling, capitalization, etc.
+     * @return a LocaleDisplayNames instance
+     * @internal ICU 50 technology preview
+     */
+    public static LocaleDisplayNames getInstance(ULocale locale, DisplayContext... contexts) {
+        return LocaleDisplayNamesImpl.getInstance(locale, contexts);
+    }
+
     // getters for state
     /**
      * Returns the locale used to determine the display names. This is not necessarily the same
@@ -76,6 +89,14 @@ public abstract class LocaleDisplayNames {
      * @stable ICU 4.4
      */
     public abstract DialectHandling getDialectHandling();
+
+    /**
+     * Returns the current value for a specified DisplayContext.Type.
+     * @param type the DisplayContext.Type whose value to return
+     * @return the current DisplayContext setting for the specified type
+     * @internal ICU 50 technology preview
+     */
+    public abstract DisplayContext getContext(DisplayContext.Type type);
 
     // names for entire locales
     /**

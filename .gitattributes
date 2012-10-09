@@ -3579,6 +3579,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/DictionaryBreakEngine.java svneol=n
 icu4j/main/classes/core/src/com/ibm/icu/text/DictionaryData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/DictionaryMatcher.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/DigitList.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/text/DisplayContext.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/DurationFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/FilteredNormalizer2.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/IDNA.java svneol=native#text/plain%3Bcharset%3Dutf-8

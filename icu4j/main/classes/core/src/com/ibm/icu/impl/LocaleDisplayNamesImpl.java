@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.LocaleDisplayNames;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
@@ -18,6 +19,7 @@ import com.ibm.icu.util.UResourceBundle;
 public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final ULocale locale;
     private final DialectHandling dialectHandling;
+    private final DisplayContext capitalization;
     private final DataTable langData;
     private final DataTable regionData;
     private final Appender appender;
@@ -32,8 +34,36 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         }
     }
 
+    public static LocaleDisplayNames getInstance(ULocale locale, DisplayContext... contexts) {
+        synchronized (cache) {
+            return cache.get(locale, contexts);
+        }
+    }
+
     public LocaleDisplayNamesImpl(ULocale locale, DialectHandling dialectHandling) {
+        this(locale, (dialectHandling==DialectHandling.STANDARD_NAMES)? DisplayContext.STANDARD_NAMES: DisplayContext.DIALECT_NAMES,
+             DisplayContext.CAPITALIZATION_NONE);
+    }
+
+    public LocaleDisplayNamesImpl(ULocale locale, DisplayContext... contexts) {
+        DialectHandling dialectHandling = DialectHandling.STANDARD_NAMES;
+        DisplayContext capitalization = DisplayContext.CAPITALIZATION_NONE;
+        for (DisplayContext contextItem : contexts) {
+            switch (contextItem.type()) {
+                case DIALECT_HANDLING:
+                    dialectHandling = (contextItem.value()==DisplayContext.STANDARD_NAMES.value())?
+                                      DialectHandling.STANDARD_NAMES: DialectHandling.DIALECT_NAMES;
+                    break;
+                case CAPITALIZATION:
+                    capitalization = contextItem;
+                    break;
+                default:
+                    break;
+            }
+        }
+
         this.dialectHandling = dialectHandling;
+        this.capitalization = capitalization;
         this.langData = LangDataTables.impl.get(locale);
         this.regionData = RegionDataTables.impl.get(locale);
         this.locale = ULocale.ROOT.equals(langData.getLocale()) ? regionData.getLocale() :
@@ -73,6 +103,23 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     }
 
     @Override
+    public DisplayContext getContext(DisplayContext.Type type) {
+        DisplayContext result;
+        switch (type) {
+            case DIALECT_HANDLING:
+                result = (dialectHandling==DialectHandling.STANDARD_NAMES)? DisplayContext.STANDARD_NAMES: DisplayContext.DIALECT_NAMES;
+                break;
+            case CAPITALIZATION:
+                result = capitalization;
+                break;
+            default:
+                result = DisplayContext.STANDARD_NAMES; // hmm, we should do something else here
+                break;
+        }
+        return result;
+    }
+
+    @Override
     public String localeDisplayName(ULocale locale) {
         return localeDisplayNameInternal(locale);
     }
@@ -87,6 +134,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         return localeDisplayNameInternal(new ULocale(localeId));
     }
 
+    // TOTO: implement use of capitalization
     private String localeDisplayNameInternal(ULocale locale) {
         // lang
         // lang (script, country, variant, keyword=value, ...)
@@ -346,12 +394,38 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private static class Cache {
         private ULocale locale;
         private DialectHandling dialectHandling;
+        private DisplayContext capitalization;
         private LocaleDisplayNames cache;
         public LocaleDisplayNames get(ULocale locale, DialectHandling dialectHandling) {
-            if (!(dialectHandling == this.dialectHandling && locale.equals(this.locale))) {
+            if (!(dialectHandling == this.dialectHandling && DisplayContext.CAPITALIZATION_NONE == this.capitalization && locale.equals(this.locale))) {
                 this.locale = locale;
                 this.dialectHandling = dialectHandling;
+                this.capitalization = DisplayContext.CAPITALIZATION_NONE;
                 this.cache = new LocaleDisplayNamesImpl(locale, dialectHandling);
+            }
+            return cache;
+        }
+        public LocaleDisplayNames get(ULocale locale, DisplayContext... contexts) {
+            DialectHandling dialectHandlingIn = DialectHandling.STANDARD_NAMES;
+            DisplayContext capitalizationIn = DisplayContext.CAPITALIZATION_NONE;
+            for (DisplayContext contextItem : contexts) {
+                switch (contextItem.type()) {
+                    case DIALECT_HANDLING:
+                        dialectHandlingIn = (contextItem.value()==DisplayContext.STANDARD_NAMES.value())?
+                                            DialectHandling.STANDARD_NAMES: DialectHandling.DIALECT_NAMES;
+                        break;
+                    case CAPITALIZATION:
+                        capitalizationIn = contextItem;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            if (!(dialectHandlingIn == this.dialectHandling && capitalizationIn == this.capitalization && locale.equals(this.locale))) {
+                this.locale = locale;
+                this.dialectHandling = dialectHandlingIn;
+                this.capitalization = capitalizationIn;
+                this.cache = new LocaleDisplayNamesImpl(locale, contexts);
             }
             return cache;
         }
