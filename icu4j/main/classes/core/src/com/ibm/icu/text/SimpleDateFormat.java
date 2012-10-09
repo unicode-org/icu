@@ -381,70 +381,24 @@ public class SimpleDateFormat extends DateFormat {
     private volatile TimeZoneFormat tzFormat;
 
     /*
-     *  Default capitalization context, introduced in ICU 49
+     *  Capitalization setting, introduced in ICU 50
+     */
+    private DisplayContext capitalizationSetting;
+
+    /*
+     *  Old defaultCapitalizationContext, preserved only to avoid
+     *  deserialization errs from ICU 49.1.
      */
     private ContextValue defaultCapitalizationContext;
-
     /**
-     * Date format context types
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     *  Old ContextValue enum, preserved only to avoid
+     *  deserialization errs from ICU 49.1.
      */
-    public enum ContextType {
-        /**
-         * Type (key) for specifying the capitalization context for which a date
-         * is to be formatted (possible values are in ContextValue).
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
-         */
-        CAPITALIZATION
-    }
-    
-    /**
-     * Values for date format context types
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
-     */
-    public enum ContextValue {
-        /** Values for any ContextType (key) */
-        /**
-         * Value for any ContextType (such as CAPITALIZATION) if the
-         * relevant context to be used in formatting a date is unknown (this is the
-         * default value for any ContextType when no value has been
-         * explicitly specified for that ContextType).
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
-         */
+    private enum ContextValue {
         UNKNOWN,
-        /** Values for context type (key) CAPITALIZATION */
-        /**
-         * CAPITALIZATION value if a date (or date symbol) is to be formatted
-         * with capitalization appropriate for the middle of a sentence.
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
-         */
         CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
-        /**
-         * CAPITALIZATION value if a date (or date symbol) is to be formatted
-         * with capitalization appropriate for the beginning of a sentence.
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
-         */
         CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE,
-        /**
-         * CAPITALIZATION value if a date (or date symbol) is to be formatted
-         * with capitalization appropriate for a user-interface list or menu item.
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
-         */
         CAPITALIZATION_FOR_UI_LIST_OR_MENU,
-        /**
-         * CAPITALIZATION value if a date (or date symbol) is to be formatted
-         * with capitalization appropriate for stand-alone usage such as an
-         * isolated name on a calendar page.
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
-         */
         CAPITALIZATION_FOR_STANDALONE
     }
 
@@ -615,7 +569,7 @@ public class SimpleDateFormat extends DateFormat {
            initNumberFormatters(locale);
         }
         
-        defaultCapitalizationContext = ContextValue.UNKNOWN;
+        capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
 
     }
 
@@ -768,37 +722,6 @@ public class SimpleDateFormat extends DateFormat {
      */
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
                                FieldPosition pos) {
-        return format(cal, null, toAppendTo, pos);
-    }
-
-    /**
-     * Formats a date or time, which is the standard millis
-     * since January 1, 1970, 00:00:00 GMT.
-     * <p>Example: using the US locale:
-     * "yyyy.MM.dd G 'at' HH:mm:ss zzz" ->> 1996.07.10 AD at 15:08:56 PDT
-     * @param cal the calendar whose date-time value is to be formatted into a date-time string
-     * @param contextValues a list of DateFormatContextTypes (e.g. CAPITALIZATION) and
-     * corresponding DateFormatContextValues (e.g. CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE)
-     * which should override the formatter's default values just for this call (does not change
-     * the default values). May be null, in which case the default values are used.
-     * @param toAppendTo where the new date-time text is to be appended
-     * @param pos the formatting position. On input: an alignment field,
-     * if desired. On output: the offsets of the alignment field.
-     * @return the formatted date-time string.
-     * @see DateFormat
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
-     */
-    public StringBuffer format(Calendar cal,
-                               Map<ContextType,ContextValue> contextValues,
-                               StringBuffer toAppendTo, FieldPosition pos) {
-        ContextValue capitalizationContext = defaultCapitalizationContext;
-        if (contextValues != null ) {
-            ContextValue newCapContextValue = contextValues.get(ContextType.CAPITALIZATION);
-            if (newCapContextValue != null) {
-                capitalizationContext = newCapContextValue;
-            }
-        }
         TimeZone backupTZ = null;
         if (cal != calendar && !cal.getType().equals(calendar.getType())) {
             // Different calendar type
@@ -809,7 +732,7 @@ public class SimpleDateFormat extends DateFormat {
             calendar.setTimeZone(cal.getTimeZone());
             cal = calendar;
         }
-        StringBuffer result = format(cal, capitalizationContext, toAppendTo, pos, null);
+        StringBuffer result = format(cal, capitalizationSetting, toAppendTo, pos, null);
         if (backupTZ != null) {
             // Restore the original time zone
             calendar.setTimeZone(backupTZ);
@@ -819,7 +742,7 @@ public class SimpleDateFormat extends DateFormat {
 
     // The actual method to format date. If List attributes is not null,
     // then attribute information will be recorded.
-    private StringBuffer format(Calendar cal, ContextValue capitalizationContext,
+    private StringBuffer format(Calendar cal, DisplayContext capitalizationContext,
             StringBuffer toAppendTo, FieldPosition pos, List<FieldPosition> attributes) {
         // Initialize
         pos.setBeginIndex(0);
@@ -972,7 +895,7 @@ public class SimpleDateFormat extends DateFormat {
         throws IllegalArgumentException
     {
         // Note: formatData is ignored
-        return subFormat(ch, count, beginOffset, 0, ContextValue.UNKNOWN, pos, cal);
+        return subFormat(ch, count, beginOffset, 0, DisplayContext.CAPITALIZATION_NONE, pos, cal);
     }
 
      /**
@@ -983,7 +906,7 @@ public class SimpleDateFormat extends DateFormat {
      * @deprecated This API is ICU internal only.
      */
     protected String subFormat(char ch, int count, int beginOffset,
-                               int fieldNum, ContextValue capitalizationContext,
+                               int fieldNum, DisplayContext capitalizationContext,
                                FieldPosition pos,
                                Calendar cal)
     {
@@ -1007,7 +930,7 @@ public class SimpleDateFormat extends DateFormat {
     @SuppressWarnings("fallthrough")
     protected void subFormat(StringBuffer buf,
                              char ch, int count, int beginOffset,
-                             int fieldNum, ContextValue capitalizationContext,
+                             int fieldNum, DisplayContext capitalizationContext,
                              FieldPosition pos,
                              Calendar cal) {
 
@@ -1303,7 +1226,7 @@ public class SimpleDateFormat extends DateFormat {
                     case CAPITALIZATION_FOR_STANDALONE:
                         if (formatData.capitalization != null) {
                              boolean[] transforms = formatData.capitalization.get(capContextUsageType);
-                            titlecase = (capitalizationContext==ContextValue.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
+                            titlecase = (capitalizationContext==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
                                         transforms[0]: transforms[1];
                         }
                         break;
@@ -2699,32 +2622,29 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
-     * {@icu} Set the formatter's default value for a particular context type,
-     * such as CAPITALIZATION. 
+     * {@icu} Set a particular DisplayContext value in the formatter,
+     * such as CAPITALIZATION_FOR_STANDALONE. 
      * 
-     * @param type The context type for which the default value should be set. 
-     * @param value The default value to set for the specified context type. 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @param context The DisplayContext value to set. 
+     * @internal ICU 50 technology preview
      */
-    public void setDefaultContext(ContextType type, ContextValue value) {
-        if (type == ContextType.CAPITALIZATION && value != null) {
-            defaultCapitalizationContext = value;
+    public void setContext(DisplayContext context) {
+        if (context.type() == DisplayContext.Type.CAPITALIZATION) {
+            capitalizationSetting = context;
         }
     }
 
     /**
-     * {@icu} Get the formatter's default value for a particular context type, 
-     * such as CAPITALIZATION. 
+     * {@icu} Get the formatter's DisplayContext value for the specified DisplayContext.Type,
+     * such as CAPITALIZATION.
      * 
-     * @param type The context type for which the default value should be obtained. 
-     * @return The current default value for the specified context type.
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @param type the DisplayContext.Type whose value to return
+     * @return the current DisplayContext setting for the specified type
+     * @internal ICU 50 technology preview
      */
-    public ContextValue getDefaultContext(ContextType type) {
-        return (type == ContextType.CAPITALIZATION && defaultCapitalizationContext != null)?
-                defaultCapitalizationContext: ContextValue.UNKNOWN;
+    public DisplayContext getContext(DisplayContext.Type type) {
+        return (type == DisplayContext.Type.CAPITALIZATION && capitalizationSetting != null)?
+                capitalizationSetting: DisplayContext.CAPITALIZATION_NONE;
     }
 
     /**
@@ -2825,7 +2745,7 @@ public class SimpleDateFormat extends DateFormat {
         StringBuffer toAppendTo = new StringBuffer();
         FieldPosition pos = new FieldPosition(0);
         List<FieldPosition> attributes = new ArrayList<FieldPosition>();
-        format(cal, defaultCapitalizationContext, toAppendTo, pos, attributes);
+        format(cal, capitalizationSetting, toAppendTo, pos, attributes);
 
         AttributedString as = new AttributedString(toAppendTo.toString());
 
@@ -3054,10 +2974,10 @@ public class SimpleDateFormat extends DateFormat {
                 PatternItem item = (PatternItem)items[i];
                 if (useFastFormat) {
                     subFormat(appendTo, item.type, item.length, appendTo.length(),
-                              i, defaultCapitalizationContext, pos, fromCalendar);
+                              i, capitalizationSetting, pos, fromCalendar);
                 } else {
                     appendTo.append(subFormat(item.type, item.length, appendTo.length(),
-                                              i, defaultCapitalizationContext, pos, fromCalendar));
+                                              i, capitalizationSetting, pos, fromCalendar));
                 }
             }
         }
@@ -3072,10 +2992,10 @@ public class SimpleDateFormat extends DateFormat {
                 PatternItem item = (PatternItem)items[i];
                 if (useFastFormat) {
                     subFormat(appendTo, item.type, item.length, appendTo.length(),
-                              i, defaultCapitalizationContext, pos, toCalendar);
+                              i, capitalizationSetting, pos, toCalendar);
                 } else {
                     appendTo.append(subFormat(item.type, item.length, appendTo.length(),
-                                              i, defaultCapitalizationContext, pos, toCalendar));
+                                              i, capitalizationSetting, pos, toCalendar));
                 }
             }
         }
