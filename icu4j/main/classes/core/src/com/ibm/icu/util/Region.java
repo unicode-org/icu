@@ -119,25 +119,25 @@ public class Region implements Comparable<Region> {
     private Region containingRegion = null;
     private Set<Region> containedRegions = new TreeSet<Region>();
     private List<Region> preferredValues = null;
-    
+
     private static boolean regionDataIsLoaded = false;
-    
+
     private static Map<String,Region> regionIDMap = null;       // Map from ID the regions
     private static Map<Integer,Region> numericCodeMap = null;   // Map from numeric code to the regions
     private static Map<String,Region> regionAliases = null;     // Aliases
 
     private static ArrayList<Region> regions = null;            // This is the main data structure where the Regions are stored.
     private static ArrayList<Set<Region>> availableRegions = null;
-    
+
     private static final String UNKNOWN_REGION_ID = "ZZ";
     private static final String OUTLYING_OCEANIA_REGION_ID = "QO";
     private static final String WORLD_ID = "001";
-   
+
     /*
      * Private default constructor.  Use factory methods only.
      */
     private Region () {}
-    
+
     /*
      * Initializes the region data from the ICU resource bundles.  The region data
      * contains the basic relationships such as which regions are known, what the numeric
@@ -148,25 +148,25 @@ public class Region implements Comparable<Region> {
      * 
      */
     private static synchronized void loadRegionData() {
-        
+
         if ( regionDataIsLoaded ) {
             return;
         }
-        
+
         regionAliases = new HashMap<String,Region>();
         regionIDMap = new HashMap<String,Region>();
         numericCodeMap = new HashMap<Integer,Region>();
-        
+
         availableRegions = new ArrayList<Set<Region>>(RegionType.values().length);
-        
-        
+
+
         UResourceBundle regionCodes = null;
         UResourceBundle territoryAlias = null;
         UResourceBundle codeMappings = null;
         UResourceBundle worldContainment = null;
         UResourceBundle territoryContainment = null;
         UResourceBundle groupingContainment = null;
- 
+
         UResourceBundle rb = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"metadata",ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         regionCodes = rb.get("regionCodes");
         territoryAlias = rb.get("territoryAlias");
@@ -174,13 +174,10 @@ public class Region implements Comparable<Region> {
         UResourceBundle rb2 = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,"supplementalData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
         codeMappings = rb2.get("codeMappings");
 
-        // Right now only fetch as much territory containment as we need in order to determine
-        // types.  Only fetch the rest if we have to.
-        //
         territoryContainment = rb2.get("territoryContainment");
         worldContainment = territoryContainment.get("001");
         groupingContainment = territoryContainment.get("grouping");
-        
+
         String[] continentsArr = worldContainment.getStringArray();
         List<String> continents = Arrays.asList(continentsArr);
         String[] groupingArr = groupingContainment.getStringArray();
@@ -204,33 +201,32 @@ public class Region implements Comparable<Region> {
             }
             regions.add(r);
         }
-        
-        // Process the code mappings - This will allow us to assign numeric codes to most of the territories.
-        for ( int i = 0 ; i < codeMappings.getSize(); i++ ) {
-            UResourceBundle mapping = codeMappings.get(i);
-            if ( mapping.getType() == UResourceBundle.ARRAY ) {
-                String [] codeMappingStrings = mapping.getStringArray();
-                String codeMappingID = codeMappingStrings[0];
-                Integer codeMappingNumber = Integer.valueOf(codeMappingStrings[1]);
-                String codeMapping3Letter = codeMappingStrings[2];
-                
-                if ( regionIDMap.containsKey(codeMappingID)) {
-                    Region r = regionIDMap.get(codeMappingID);
-                    r.code = codeMappingNumber.intValue();
-                    numericCodeMap.put(r.code, r);
-                    regionAliases.put(codeMapping3Letter, r);
-                }                    
-            }
-        }
+
 
         // Process the territory aliases
         for ( int i = 0 ; i < territoryAlias.getSize(); i++ ) {
             UResourceBundle res = territoryAlias.get(i);
             String aliasFrom = res.getKey();
             String aliasTo = res.getString();
-            
-            if ( regionIDMap.containsKey(aliasFrom) ) {  // This is a deprecated region
-                Region r = regionIDMap.get(aliasFrom);
+
+            if ( regionIDMap.containsKey(aliasTo) && !regionIDMap.containsKey(aliasFrom) ) { // This is just an alias from some string to a region
+                regionAliases.put(aliasFrom, regionIDMap.get(aliasTo));
+            } else {
+                Region r;
+                if ( regionIDMap.containsKey(aliasFrom) ) {  // This is a deprecated region
+                    r = regionIDMap.get(aliasFrom);
+                } else { // Deprecated region code not in the master codes list - so need to create a deprecated region for it.
+                    r = new Region();
+                    r.id = aliasFrom;
+                    regionIDMap.put(aliasFrom, r);
+                    if ( aliasFrom.matches("[0-9]{3}")) {
+                        r.code = Integer.valueOf(aliasFrom).intValue();
+                        numericCodeMap.put(r.code, r);
+                    } else {
+                        r.code = UNDEFINED_NUMERIC_CODE;
+                    }
+                    regions.add(r);
+                }
                 r.type = RegionType.DEPRECATED;
                 List<String> aliasToRegionStrings = Arrays.asList(aliasTo.split(" "));
                 r.preferredValues = new ArrayList<Region>();
@@ -239,8 +235,24 @@ public class Region implements Comparable<Region> {
                         r.preferredValues.add(regionIDMap.get(s));
                     }
                 }
-            } else if ( regionIDMap.containsKey(aliasTo) ) { // This is just an alias from some string to a region
-                regionAliases.put(aliasFrom, regionIDMap.get(aliasTo));
+            }
+        }
+
+        // Process the code mappings - This will allow us to assign numeric codes to most of the territories.
+        for ( int i = 0 ; i < codeMappings.getSize(); i++ ) {
+            UResourceBundle mapping = codeMappings.get(i);
+            if ( mapping.getType() == UResourceBundle.ARRAY ) {
+                String [] codeMappingStrings = mapping.getStringArray();
+                String codeMappingID = codeMappingStrings[0];
+                Integer codeMappingNumber = Integer.valueOf(codeMappingStrings[1]);
+                String codeMapping3Letter = codeMappingStrings[2];
+
+                if ( regionIDMap.containsKey(codeMappingID)) {
+                    Region r = regionIDMap.get(codeMappingID);
+                    r.code = codeMappingNumber.intValue();
+                    numericCodeMap.put(r.code, r);
+                    regionAliases.put(codeMapping3Letter, r);
+                }                    
             }
         }
 
@@ -255,24 +267,24 @@ public class Region implements Comparable<Region> {
             r = regionIDMap.get(UNKNOWN_REGION_ID);
             r.type = RegionType.UNKNOWN;
         }
-        
+
         for ( String continent : continents ) {
             if (regionIDMap.containsKey(continent)) {
                 r = regionIDMap.get(continent);
                 r.type = RegionType.CONTINENT;
             }
         }
-        
+
         for ( String grouping : groupings ) {
             if (regionIDMap.containsKey(grouping)) {
                 r = regionIDMap.get(grouping);
                 r.type = RegionType.GROUPING;
             }
         }
-        
+
         // Special case: The region code "QO" (Outlying Oceania) is a subcontinent code added by CLDR
         // even though it looks like a territory code.  Need to handle it here.
-        
+
         if ( regionIDMap.containsKey(OUTLYING_OCEANIA_REGION_ID)) {
             r = regionIDMap.get(OUTLYING_OCEANIA_REGION_ID);
             r.type = RegionType.SUBCONTINENT;
@@ -288,7 +300,7 @@ public class Region implements Comparable<Region> {
                 String child = mapping.getString(j);
                 Region childRegion = regionIDMap.get(child);
                 if ( parentRegion != null && childRegion != null ) {                    
-                    
+
                     // Add the child region to the set of regions contained by the parent
                     parentRegion.containedRegions.add(childRegion);
 
@@ -303,7 +315,7 @@ public class Region implements Comparable<Region> {
         }     
 
         // Create the availableRegions lists
-        
+
         for (int i = 0 ; i < RegionType.values().length ; i++) {
             availableRegions.add(new TreeSet<Region>());
         }
@@ -313,10 +325,10 @@ public class Region implements Comparable<Region> {
             currentSet.add(ar);
             availableRegions.set(ar.type.ordinal(),currentSet);
         }
-        
+
         regionDataIsLoaded = true;
     }    
-    
+
     /** Returns a Region using the given region ID.  The region ID can be either a 2-letter ISO code,
      * 3-letter ISO code,  UNM.49 numeric code, or other valid Unicode Region Code as defined by the CLDR.
      * @param id The id of the region to be retrieved.
@@ -325,7 +337,7 @@ public class Region implements Comparable<Region> {
      * @throws IllegalArgumentException if the supplied ID cannot be canonicalized to a Region ID that is known by ICU.
      * @draft ICU 50
      */
-    
+
     public static Region getInstance(String id) {
 
         if ( id == null ) {
@@ -335,23 +347,23 @@ public class Region implements Comparable<Region> {
         loadRegionData();
 
         Region r = regionIDMap.get(id);
-        
+
         if ( r == null ) {
             r = regionAliases.get(id);
         }
-        
+
         if ( r == null ) {
             throw new IllegalArgumentException("Unknown region id: " + id);         
         }
-        
+
         if ( r.type == RegionType.DEPRECATED && r.preferredValues.size() == 1) {
-           r = r.preferredValues.get(0);
+            r = r.preferredValues.get(0);
         }
-       
+
         return r;
     }
-    
-    
+
+
     /** Returns a Region using the given numeric code as defined by UNM.49
      * @param code The numeric code of the region to be retrieved.
      * @return The corresponding region.
@@ -364,7 +376,7 @@ public class Region implements Comparable<Region> {
         loadRegionData();
 
         Region r = numericCodeMap.get(code);
-        
+
         if ( r == null ) { // Just in case there's an alias that's numeric, try to find it.
             String pad = "";
             if ( code < 10 ) {
@@ -379,15 +391,15 @@ public class Region implements Comparable<Region> {
         if ( r == null ) {
             throw new IllegalArgumentException("Unknown region code: " + code);
         }
-        
+
         if ( r.type == RegionType.DEPRECATED && r.preferredValues.size() == 1) {
-           r = r.preferredValues.get(0);
+            r = r.preferredValues.get(0);
         }
-       
+
         return r;
     }
 
-    
+
     /** Used to retrieve all available regions of a specific type.
      * 
      * @param type The type of regions to be returned ( TERRITORY, MACROREGION, etc. )
@@ -396,12 +408,12 @@ public class Region implements Comparable<Region> {
      */
 
     public static Set<Region> getAvailable(RegionType type) {
-        
+
         loadRegionData();
         return Collections.unmodifiableSet(availableRegions.get(type.ordinal()));
     }
 
-    
+
     /** Used to determine the macroregion that geographically contains this region.
      * 
      * @return The region that geographically contains this region.  Returns NULL if this region is
@@ -413,6 +425,26 @@ public class Region implements Comparable<Region> {
     public Region getContainingRegion() {
         loadRegionData();        
         return containingRegion;
+    }
+
+    /** Used to determine the macroregion that geographically contains this region and that matches the given type.
+     * 
+     * @return The region that geographically contains this region and matches the given type.  May return NULL if 
+     *  no containing region can be found that matches the given type.  For example, calling this method with region "IT" (Italy)
+     *  and type CONTINENT returns the region "150" (Europe).    
+     * @draft ICU 50
+     */
+
+    public Region getContainingRegion(RegionType type) {
+        loadRegionData();
+        if ( containingRegion == null ) {
+            return null;
+        }
+        if ( containingRegion.type.equals(type)) {
+            return containingRegion;
+        } else {
+            return containingRegion.getContainingRegion(type);
+        }
     }
 
     /** Used to determine the sub-regions that are contained within this region.
@@ -432,7 +464,7 @@ public class Region implements Comparable<Region> {
         loadRegionData();
         return Collections.unmodifiableSet(containedRegions);
     }
-    
+
     /** Used to determine all the regions that are contained within this region and that match the given type
      * 
      * @return An unmodifiable set containing all the regions that are children of this region
@@ -442,15 +474,15 @@ public class Region implements Comparable<Region> {
      *  containing all the territories in Europe ( "FR" (France) - "IT" (Italy) - "DE" (Germany) etc. )
      * @draft ICU 50
      */
-    
+
     public Set<Region> getContainedRegions(RegionType type) {
-        
+
         loadRegionData();
 
         Set<Region> result = new TreeSet<Region>();
         Set<Region> cr = getContainedRegions();
-        
-       for ( Region r : cr ) {
+
+        for ( Region r : cr ) {
             if ( r.getType() == type ) {
                 result.add(r);
             } else {
@@ -468,16 +500,20 @@ public class Region implements Comparable<Region> {
      * @draft ICU 50
      */
     public List<Region> getPreferredValues() {
-        return Collections.unmodifiableList(preferredValues);
+        if ( type == RegionType.DEPRECATED) {
+            return Collections.unmodifiableList(preferredValues);
+        } else {
+            return null;
+        }
     }
-    
+
     /**
      * @return Returns true if this region contains the supplied other region anywhere in the region hierarchy.
      */
     public boolean contains(Region other) {
 
         loadRegionData();
-        
+
         if (containedRegions.contains(other)) {
             return true;
         } else {
@@ -487,21 +523,21 @@ public class Region implements Comparable<Region> {
                 }
             }
         }
-        
+
         return false;
     }
-    
+
     /** Returns the string representation of this region
      * 
      * @return The string representation of this region, which is its ID.
      *
      * @draft ICU 50
      */
- 
+
     public String toString() {
         return id;
     }
-    
+
     /** Returns the numeric code for this region
      * 
      * @return The numeric code for this region.   Returns UNDEFINED_NUMERIC_CODE (-1) if the
@@ -510,22 +546,22 @@ public class Region implements Comparable<Region> {
      *
      * @draft ICU 50
      */
-   
+
     public int getNumericCode() {
         return code;
     }
-    
+
     /** Returns this region's type.
      * 
      * @return This region's type classification, such as MACROREGION or TERRITORY.
      *
      * @draft ICU 50
      */
-  
+
     public RegionType getType() {
         return type;
     }
-    
+
     /**
      * {@inheritDoc}
      * @draft ICU 50
