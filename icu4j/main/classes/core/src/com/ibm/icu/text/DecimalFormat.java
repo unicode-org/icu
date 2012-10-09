@@ -1285,16 +1285,7 @@ public class DecimalFormat extends NumberFormat {
         // digitList.count = 0;
         // }
 
-        int i;
-        char [] digits = symbols.getDigitsLocal();
 
-        char grouping = currencySignCount > 0 ? symbols.getMonetaryGroupingSeparator() :
-            symbols.getGroupingSeparator();
-        char decimal = currencySignCount > 0 ? symbols.getMonetaryDecimalSeparator() :
-            symbols.getDecimalSeparator();
-        boolean useSigDig = areSignificantDigitsUsed();
-        int maxIntDig = getMaximumIntegerDigits();
-        int minIntDig = getMinimumIntegerDigits();
 
         // Per bug 4147706, DecimalFormat must respect the sign of numbers which format as
         // zero. This allows sensible computations and preserves relations such as
@@ -1307,362 +1298,398 @@ public class DecimalFormat extends NumberFormat {
         int prefixLen = appendAffix(result, isNegative, true, parseAttr);
 
         if (useExponentialNotation) {
-            // Record field information for caller.
-            if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
-                fieldPosition.setBeginIndex(result.length());
-                fieldPosition.setEndIndex(-1);
-            } else if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
-                fieldPosition.setBeginIndex(-1);
-            } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-                fieldPosition.setBeginIndex(result.length());
-                fieldPosition.setEndIndex(-1);
-            } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
-                fieldPosition.setBeginIndex(-1);
-            }
-
-            // [Spark/CDL]
-            // the begin index of integer part
-            // the end index of integer part
-            // the begin index of fractional part
-            int intBegin = result.length();
-            int intEnd = -1;
-            int fracBegin = -1;
-            int minFracDig = 0;
-            if (useSigDig) {
-                maxIntDig = minIntDig = 1;
-                minFracDig = getMinimumSignificantDigits() - 1;
-            } else {
-                minFracDig = getMinimumFractionDigits();
-                if (maxIntDig > MAX_SCIENTIFIC_INTEGER_DIGITS) {
-                    maxIntDig = 1;
-                    if (maxIntDig < minIntDig) {
-                        maxIntDig = minIntDig;
-                    }
-                }
-                if (maxIntDig > minIntDig) {
-                    minIntDig = 1;
-                }
-            }
-
-            // Minimum integer digits are handled in exponential format by adjusting the
-            // exponent. For example, 0.01234 with 3 minimum integer digits is "123.4E-4".
-
-            // Maximum integer digits are interpreted as indicating the repeating
-            // range. This is useful for engineering notation, in which the exponent is
-            // restricted to a multiple of 3. For example, 0.01234 with 3 maximum integer
-            // digits is "12.34e-3".  If maximum integer digits are defined and are larger
-            // than minimum integer digits, then minimum integer digits are ignored.
-
-            int exponent = digitList.decimalAt;
-            if (maxIntDig > 1 && maxIntDig != minIntDig) {
-                // A exponent increment is defined; adjust to it.
-                exponent = (exponent > 0) ? (exponent - 1) / maxIntDig : (exponent / maxIntDig) - 1;
-                exponent *= maxIntDig;
-            } else {
-                // No exponent increment is defined; use minimum integer digits.
-                // If none is specified, as in "#E0", generate 1 integer digit.
-                exponent -= (minIntDig > 0 || minFracDig > 0) ? minIntDig : 1;
-            }
-
-            // We now output a minimum number of digits, and more if there are more
-            // digits, up to the maximum number of digits. We place the decimal point
-            // after the "integer" digits, which are the first (decimalAt - exponent)
-            // digits.
-            int minimumDigits = minIntDig + minFracDig;
-            // The number of integer digits is handled specially if the number
-            // is zero, since then there may be no digits.
-            int integerDigits = digitList.isZero() ? minIntDig : digitList.decimalAt - exponent;
-            int totalDigits = digitList.count;
-            if (minimumDigits > totalDigits)
-                totalDigits = minimumDigits;
-            if (integerDigits > totalDigits)
-                totalDigits = integerDigits;
-
-            for (i = 0; i < totalDigits; ++i) {
-                if (i == integerDigits) {
-                    // Record field information for caller.
-                    if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
-                        fieldPosition.setEndIndex(result.length());
-                    } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-                        fieldPosition.setEndIndex(result.length());
-                    }
-
-                    // [Spark/CDL] Add attribute for integer part
-                    if (parseAttr) {
-                        intEnd = result.length();
-                        addAttribute(Field.INTEGER, intBegin, result.length());
-                    }
-                    result.append(decimal);
-                    // [Spark/CDL] Add attribute for decimal separator
-                    if (parseAttr) {
-                        // Length of decimal separator is 1.
-                        int decimalSeparatorBegin = result.length() - 1;
-                        addAttribute(Field.DECIMAL_SEPARATOR, decimalSeparatorBegin,
-                                     result.length());
-                        fracBegin = result.length();
-                    }
-                    // Record field information for caller.
-                    if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
-                        fieldPosition.setBeginIndex(result.length());
-                    } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
-                        fieldPosition.setBeginIndex(result.length());
-                    }
-                }
-                result.append((i < digitList.count)
-                              ? digits[digitList.getDigitValue(i)]
-                              : digits[0]);
-            }
-
-            // For ICU compatibility and format 0 to 0E0 with pattern "#E0" [Richard/GCL]
-            if (digitList.isZero() && (totalDigits == 0)) {
-                result.append(digits[0]);
-            }
-
-            // Record field information
-            if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
-                if (fieldPosition.getEndIndex() < 0) {
-                    fieldPosition.setEndIndex(result.length());
-                }
-            } else if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
-                if (fieldPosition.getBeginIndex() < 0) {
-                    fieldPosition.setBeginIndex(result.length());
-                }
-                fieldPosition.setEndIndex(result.length());
-            } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-                if (fieldPosition.getEndIndex() < 0) {
-                    fieldPosition.setEndIndex(result.length());
-                }
-            } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
-                if (fieldPosition.getBeginIndex() < 0) {
-                    fieldPosition.setBeginIndex(result.length());
-                }
-                fieldPosition.setEndIndex(result.length());
-            }
-
-            // [Spark/CDL] Calcuate the end index of integer part and fractional
-            // part if they are not properly processed yet.
-            if (parseAttr) {
-                if (intEnd < 0) {
-                    addAttribute(Field.INTEGER, intBegin, result.length());
-                }
-                if (fracBegin > 0) {
-                    addAttribute(Field.FRACTION, fracBegin, result.length());
-                }
-            }
-
-            // The exponent is output using the pattern-specified minimum exponent
-            // digits. There is no maximum limit to the exponent digits, since truncating
-            // the exponent would result in an unacceptable inaccuracy.
-            result.append(symbols.getExponentSeparator());
-            // [Spark/CDL] For exponent symbol, add an attribute.
-            if (parseAttr) {
-                addAttribute(Field.EXPONENT_SYMBOL, result.length() -
-                             symbols.getExponentSeparator().length(), result.length());
-            }
-            // For zero values, we force the exponent to zero. We must do this here, and
-            // not earlier, because the value is used to determine integer digit count
-            // above.
-            if (digitList.isZero())
-                exponent = 0;
-
-            boolean negativeExponent = exponent < 0;
-            if (negativeExponent) {
-                exponent = -exponent;
-                result.append(symbols.getMinusSign());
-                // [Spark/CDL] If exponent has sign, then add an exponent sign
-                // attribute.
-                if (parseAttr) {
-                    // Length of exponent sign is 1.
-                    addAttribute(Field.EXPONENT_SIGN, result.length() - 1, result.length());
-                }
-            } else if (exponentSignAlwaysShown) {
-                result.append(symbols.getPlusSign());
-                // [Spark/CDL] Add an plus sign attribute.
-                if (parseAttr) {
-                    // Length of exponent sign is 1.
-                    int expSignBegin = result.length() - 1;
-                    addAttribute(Field.EXPONENT_SIGN, expSignBegin, result.length());
-                }
-            }
-            int expBegin = result.length();
-            digitList.set(exponent);
-            {
-                int expDig = minExponentDigits;
-                if (useExponentialNotation && expDig < 1) {
-                    expDig = 1;
-                }
-                for (i = digitList.decimalAt; i < expDig; ++i)
-                    result.append(digits[0]);
-            }
-            for (i = 0; i < digitList.decimalAt; ++i) {
-                result.append((i < digitList.count) ? digits[digitList.getDigitValue(i)]
-                              : digits[0]);
-            }
-            // [Spark/CDL] Add attribute for exponent part.
-            if (parseAttr) {
-                addAttribute(Field.EXPONENT, expBegin, result.length());
-            }
+            subformatExponential(result, fieldPosition, parseAttr);
         } else {
-            // [Spark/CDL] Record the integer start index.
-            int intBegin = result.length();
-            // Record field information for caller.
-            if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
-                fieldPosition.setBeginIndex(result.length());
-            } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-                fieldPosition.setBeginIndex(result.length());
-            }
-
-            int sigCount = 0;
-            int minSigDig = getMinimumSignificantDigits();
-            int maxSigDig = getMaximumSignificantDigits();
-            if (!useSigDig) {
-                minSigDig = 0;
-                maxSigDig = Integer.MAX_VALUE;
-            }
-
-            // Output the integer portion. Here 'count' is the total number of integer
-            // digits we will display, including both leading zeros required to satisfy
-            // getMinimumIntegerDigits, and actual digits present in the number.
-            int count = useSigDig ? Math.max(1, digitList.decimalAt) : minIntDig;
-            if (digitList.decimalAt > 0 && count < digitList.decimalAt) {
-                count = digitList.decimalAt;
-            }
-
-            // Handle the case where getMaximumIntegerDigits() is smaller than the real
-            // number of integer digits. If this is so, we output the least significant
-            // max integer digits. For example, the value 1997 printed with 2 max integer
-            // digits is just "97".
-
-            int digitIndex = 0; // Index into digitList.fDigits[]
-            if (count > maxIntDig && maxIntDig >= 0) {
-                count = maxIntDig;
-                digitIndex = digitList.decimalAt - count;
-            }
-
-            int sizeBeforeIntegerPart = result.length();
-            for (i = count - 1; i >= 0; --i) {
-                if (i < digitList.decimalAt && digitIndex < digitList.count
-                    && sigCount < maxSigDig) {
-                    // Output a real digit
-                    result.append(digits[digitList.getDigitValue(digitIndex++)]);
-                    ++sigCount;
-                } else {
-                    // Output a zero (leading or trailing)
-                    result.append(digits[0]);
-                    if (sigCount > 0) {
-                        ++sigCount;
-                    }
-                }
-
-                // Output grouping separator if necessary.
-                if (isGroupingPosition(i)) {
-                    result.append(grouping);
-                    // [Spark/CDL] Add grouping separator attribute here.
-                    if (parseAttr) {
-                        // Length of grouping separator is 1.
-                        addAttribute(Field.GROUPING_SEPARATOR, result.length() - 1, result.length());
-                    }
-                }
-            }
-
-            // Record field information for caller.
-            if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
-                fieldPosition.setEndIndex(result.length());
-            } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
-                fieldPosition.setEndIndex(result.length());
-            }
-
-            // Determine whether or not there are any printable fractional digits. If
-            // we've used up the digits we know there aren't.
-            boolean fractionPresent = (!isInteger && digitIndex < digitList.count)
-                    || (useSigDig ? (sigCount < minSigDig) : (getMinimumFractionDigits() > 0));
-
-            // If there is no fraction present, and we haven't printed any integer digits,
-            // then print a zero. Otherwise we won't print _any_ digits, and we won't be
-            // able to parse this string.
-            if (!fractionPresent && result.length() == sizeBeforeIntegerPart)
-                result.append(digits[0]);
-            // [Spark/CDL] Add attribute for integer part.
-            if (parseAttr) {
-                addAttribute(Field.INTEGER, intBegin, result.length());
-            }
-            // Output the decimal separator if we always do so.
-            if (decimalSeparatorAlwaysShown || fractionPresent) {
-                result.append(decimal);
-                // [Spark/CDL] Add attribute for decimal separator
-                if (parseAttr) {
-                    addAttribute(Field.DECIMAL_SEPARATOR, result.length() - 1, result.length());
-                }
-            }
-
-            // Record field information for caller.
-            if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
-                fieldPosition.setBeginIndex(result.length());
-            } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
-                fieldPosition.setBeginIndex(result.length());
-            }
-
-            // [Spark/CDL] Record the begin index of fraction part.
-            int fracBegin = result.length();
-
-            count = useSigDig ? Integer.MAX_VALUE : getMaximumFractionDigits();
-            if (useSigDig && (sigCount == maxSigDig ||
-                              (sigCount >= minSigDig && digitIndex == digitList.count))) {
-                count = 0;
-            }
-            for (i = 0; i < count; ++i) {
-                // Here is where we escape from the loop. We escape if we've output the
-                // maximum fraction digits (specified in the for expression above). We
-                // also stop when we've output the minimum digits and either: we have an
-                // integer, so there is no fractional stuff to display, or we're out of
-                // significant digits.
-                if (!useSigDig && i >= getMinimumFractionDigits() &&
-                    (isInteger || digitIndex >= digitList.count)) {
-                    break;
-                }
-
-                // Output leading fractional zeros. These are zeros that come after the
-                // decimal but before any significant digits. These are only output if
-                // abs(number being formatted) < 1.0.
-                if (-1 - i > (digitList.decimalAt - 1)) {
-                    result.append(digits[0]);
-                    continue;
-                }
-
-                // Output a digit, if we have any precision left, or a zero if we
-                // don't. We don't want to output noise digits.
-                if (!isInteger && digitIndex < digitList.count) {
-                    result.append(digits[digitList.getDigitValue(digitIndex++)]);
-                } else {
-                    result.append(digits[0]);
-                }
-
-                // If we reach the maximum number of significant digits, or if we output
-                // all the real digits and reach the minimum, then we are done.
-                ++sigCount;
-                if (useSigDig && (sigCount == maxSigDig ||
-                                  (digitIndex == digitList.count && sigCount >= minSigDig))) {
-                    break;
-                }
-            }
-
-            // Record field information for caller.
-            if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
-                fieldPosition.setEndIndex(result.length());
-            } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
-                fieldPosition.setEndIndex(result.length());
-            }
-
-            // [Spark/CDL] Add attribute information if necessary.
-            if (parseAttr && (decimalSeparatorAlwaysShown || fractionPresent)) {
-                addAttribute(Field.FRACTION, fracBegin, result.length());
-            }
+            subformatFixed(result, fieldPosition, isInteger, parseAttr);
         }
 
         int suffixLen = appendAffix(result, isNegative, false, parseAttr);
 
         addPadding(result, fieldPosition, prefixLen, suffixLen);
         return result;
+    }
+
+    private void subformatFixed(StringBuffer result,
+            FieldPosition fieldPosition,
+            boolean isInteger,
+            boolean parseAttr) {
+        char [] digits = symbols.getDigitsLocal();
+
+        char grouping = currencySignCount > 0 ? symbols.getMonetaryGroupingSeparator() :
+            symbols.getGroupingSeparator();
+        char decimal = currencySignCount > 0 ? symbols.getMonetaryDecimalSeparator() :
+            symbols.getDecimalSeparator();
+        boolean useSigDig = areSignificantDigitsUsed();
+        int maxIntDig = getMaximumIntegerDigits();
+        int minIntDig = getMinimumIntegerDigits();
+        int i;
+        // [Spark/CDL] Record the integer start index.
+        int intBegin = result.length();
+        // Record field information for caller.
+        if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
+            fieldPosition.setBeginIndex(result.length());
+        } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+            fieldPosition.setBeginIndex(result.length());
+        }
+
+        int sigCount = 0;
+        int minSigDig = getMinimumSignificantDigits();
+        int maxSigDig = getMaximumSignificantDigits();
+        if (!useSigDig) {
+            minSigDig = 0;
+            maxSigDig = Integer.MAX_VALUE;
+        }
+
+        // Output the integer portion. Here 'count' is the total number of integer
+        // digits we will display, including both leading zeros required to satisfy
+        // getMinimumIntegerDigits, and actual digits present in the number.
+        int count = useSigDig ? Math.max(1, digitList.decimalAt) : minIntDig;
+        if (digitList.decimalAt > 0 && count < digitList.decimalAt) {
+            count = digitList.decimalAt;
+        }
+
+        // Handle the case where getMaximumIntegerDigits() is smaller than the real
+        // number of integer digits. If this is so, we output the least significant
+        // max integer digits. For example, the value 1997 printed with 2 max integer
+        // digits is just "97".
+
+        int digitIndex = 0; // Index into digitList.fDigits[]
+        if (count > maxIntDig && maxIntDig >= 0) {
+            count = maxIntDig;
+            digitIndex = digitList.decimalAt - count;
+        }
+
+        int sizeBeforeIntegerPart = result.length();
+        for (i = count - 1; i >= 0; --i) {
+            if (i < digitList.decimalAt && digitIndex < digitList.count
+                && sigCount < maxSigDig) {
+                // Output a real digit
+                result.append(digits[digitList.getDigitValue(digitIndex++)]);
+                ++sigCount;
+            } else {
+                // Output a zero (leading or trailing)
+                result.append(digits[0]);
+                if (sigCount > 0) {
+                    ++sigCount;
+                }
+            }
+
+            // Output grouping separator if necessary.
+            if (isGroupingPosition(i)) {
+                result.append(grouping);
+                // [Spark/CDL] Add grouping separator attribute here.
+                if (parseAttr) {
+                    // Length of grouping separator is 1.
+                    addAttribute(Field.GROUPING_SEPARATOR, result.length() - 1, result.length());
+                }
+            }
+        }
+
+        // Record field information for caller.
+        if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
+            fieldPosition.setEndIndex(result.length());
+        } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+            fieldPosition.setEndIndex(result.length());
+        }
+
+        // Determine whether or not there are any printable fractional digits. If
+        // we've used up the digits we know there aren't.
+        boolean fractionPresent = (!isInteger && digitIndex < digitList.count)
+                || (useSigDig ? (sigCount < minSigDig) : (getMinimumFractionDigits() > 0));
+
+        // If there is no fraction present, and we haven't printed any integer digits,
+        // then print a zero. Otherwise we won't print _any_ digits, and we won't be
+        // able to parse this string.
+        if (!fractionPresent && result.length() == sizeBeforeIntegerPart)
+            result.append(digits[0]);
+        // [Spark/CDL] Add attribute for integer part.
+        if (parseAttr) {
+            addAttribute(Field.INTEGER, intBegin, result.length());
+        }
+        // Output the decimal separator if we always do so.
+        if (decimalSeparatorAlwaysShown || fractionPresent) {
+            if (fieldPosition.getFieldAttribute() == Field.DECIMAL_SEPARATOR) {
+                fieldPosition.setBeginIndex(result.length());
+            }
+            result.append(decimal);
+            if (fieldPosition.getFieldAttribute() == Field.DECIMAL_SEPARATOR) {
+                fieldPosition.setEndIndex(result.length());
+            }
+            // [Spark/CDL] Add attribute for decimal separator
+            if (parseAttr) {
+                addAttribute(Field.DECIMAL_SEPARATOR, result.length() - 1, result.length());
+            }
+        }
+
+        // Record field information for caller.
+        if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
+            fieldPosition.setBeginIndex(result.length());
+        } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+            fieldPosition.setBeginIndex(result.length());
+        }
+
+        // [Spark/CDL] Record the begin index of fraction part.
+        int fracBegin = result.length();
+
+        count = useSigDig ? Integer.MAX_VALUE : getMaximumFractionDigits();
+        if (useSigDig && (sigCount == maxSigDig ||
+                          (sigCount >= minSigDig && digitIndex == digitList.count))) {
+            count = 0;
+        }
+        for (i = 0; i < count; ++i) {
+            // Here is where we escape from the loop. We escape if we've output the
+            // maximum fraction digits (specified in the for expression above). We
+            // also stop when we've output the minimum digits and either: we have an
+            // integer, so there is no fractional stuff to display, or we're out of
+            // significant digits.
+            if (!useSigDig && i >= getMinimumFractionDigits() &&
+                (isInteger || digitIndex >= digitList.count)) {
+                break;
+            }
+
+            // Output leading fractional zeros. These are zeros that come after the
+            // decimal but before any significant digits. These are only output if
+            // abs(number being formatted) < 1.0.
+            if (-1 - i > (digitList.decimalAt - 1)) {
+                result.append(digits[0]);
+                continue;
+            }
+
+            // Output a digit, if we have any precision left, or a zero if we
+            // don't. We don't want to output noise digits.
+            if (!isInteger && digitIndex < digitList.count) {
+                result.append(digits[digitList.getDigitValue(digitIndex++)]);
+            } else {
+                result.append(digits[0]);
+            }
+
+            // If we reach the maximum number of significant digits, or if we output
+            // all the real digits and reach the minimum, then we are done.
+            ++sigCount;
+            if (useSigDig && (sigCount == maxSigDig ||
+                              (digitIndex == digitList.count && sigCount >= minSigDig))) {
+                break;
+            }
+        }
+
+        // Record field information for caller.
+        if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
+            fieldPosition.setEndIndex(result.length());
+        } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+            fieldPosition.setEndIndex(result.length());
+        }
+
+        // [Spark/CDL] Add attribute information if necessary.
+        if (parseAttr && (decimalSeparatorAlwaysShown || fractionPresent)) {
+            addAttribute(Field.FRACTION, fracBegin, result.length());
+        }
+    }
+
+    private void subformatExponential(StringBuffer result,
+            FieldPosition fieldPosition,
+            boolean parseAttr) {
+        char [] digits = symbols.getDigitsLocal();
+        char decimal = currencySignCount > 0 ? symbols.getMonetaryDecimalSeparator() :
+            symbols.getDecimalSeparator();
+        boolean useSigDig = areSignificantDigitsUsed();
+        int maxIntDig = getMaximumIntegerDigits();
+        int minIntDig = getMinimumIntegerDigits();
+        int i;
+        // Record field information for caller.
+        if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
+            fieldPosition.setBeginIndex(result.length());
+            fieldPosition.setEndIndex(-1);
+        } else if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
+            fieldPosition.setBeginIndex(-1);
+        } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+            fieldPosition.setBeginIndex(result.length());
+            fieldPosition.setEndIndex(-1);
+        } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+            fieldPosition.setBeginIndex(-1);
+        }
+
+        // [Spark/CDL]
+        // the begin index of integer part
+        // the end index of integer part
+        // the begin index of fractional part
+        int intBegin = result.length();
+        int intEnd = -1;
+        int fracBegin = -1;
+        int minFracDig = 0;
+        if (useSigDig) {
+            maxIntDig = minIntDig = 1;
+            minFracDig = getMinimumSignificantDigits() - 1;
+        } else {
+            minFracDig = getMinimumFractionDigits();
+            if (maxIntDig > MAX_SCIENTIFIC_INTEGER_DIGITS) {
+                maxIntDig = 1;
+                if (maxIntDig < minIntDig) {
+                    maxIntDig = minIntDig;
+                }
+            }
+            if (maxIntDig > minIntDig) {
+                minIntDig = 1;
+            }
+        }
+
+        // Minimum integer digits are handled in exponential format by adjusting the
+        // exponent. For example, 0.01234 with 3 minimum integer digits is "123.4E-4".
+
+        // Maximum integer digits are interpreted as indicating the repeating
+        // range. This is useful for engineering notation, in which the exponent is
+        // restricted to a multiple of 3. For example, 0.01234 with 3 maximum integer
+        // digits is "12.34e-3".  If maximum integer digits are defined and are larger
+        // than minimum integer digits, then minimum integer digits are ignored.
+
+        int exponent = digitList.decimalAt;
+        if (maxIntDig > 1 && maxIntDig != minIntDig) {
+            // A exponent increment is defined; adjust to it.
+            exponent = (exponent > 0) ? (exponent - 1) / maxIntDig : (exponent / maxIntDig) - 1;
+            exponent *= maxIntDig;
+        } else {
+            // No exponent increment is defined; use minimum integer digits.
+            // If none is specified, as in "#E0", generate 1 integer digit.
+            exponent -= (minIntDig > 0 || minFracDig > 0) ? minIntDig : 1;
+        }
+
+        // We now output a minimum number of digits, and more if there are more
+        // digits, up to the maximum number of digits. We place the decimal point
+        // after the "integer" digits, which are the first (decimalAt - exponent)
+        // digits.
+        int minimumDigits = minIntDig + minFracDig;
+        // The number of integer digits is handled specially if the number
+        // is zero, since then there may be no digits.
+        int integerDigits = digitList.isZero() ? minIntDig : digitList.decimalAt - exponent;
+        int totalDigits = digitList.count;
+        if (minimumDigits > totalDigits)
+            totalDigits = minimumDigits;
+        if (integerDigits > totalDigits)
+            totalDigits = integerDigits;
+
+        for (i = 0; i < totalDigits; ++i) {
+            if (i == integerDigits) {
+                // Record field information for caller.
+                if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
+                    fieldPosition.setEndIndex(result.length());
+                } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+                    fieldPosition.setEndIndex(result.length());
+                }
+
+                // [Spark/CDL] Add attribute for integer part
+                if (parseAttr) {
+                    intEnd = result.length();
+                    addAttribute(Field.INTEGER, intBegin, result.length());
+                }
+                result.append(decimal);
+                // [Spark/CDL] Add attribute for decimal separator
+                if (parseAttr) {
+                    // Length of decimal separator is 1.
+                    int decimalSeparatorBegin = result.length() - 1;
+                    addAttribute(Field.DECIMAL_SEPARATOR, decimalSeparatorBegin,
+                                 result.length());
+                    fracBegin = result.length();
+                }
+                // Record field information for caller.
+                if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
+                    fieldPosition.setBeginIndex(result.length());
+                } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+                    fieldPosition.setBeginIndex(result.length());
+                }
+            }
+            result.append((i < digitList.count)
+                          ? digits[digitList.getDigitValue(i)]
+                          : digits[0]);
+        }
+
+        // For ICU compatibility and format 0 to 0E0 with pattern "#E0" [Richard/GCL]
+        if (digitList.isZero() && (totalDigits == 0)) {
+            result.append(digits[0]);
+        }
+
+        // Record field information
+        if (fieldPosition.getField() == NumberFormat.INTEGER_FIELD) {
+            if (fieldPosition.getEndIndex() < 0) {
+                fieldPosition.setEndIndex(result.length());
+            }
+        } else if (fieldPosition.getField() == NumberFormat.FRACTION_FIELD) {
+            if (fieldPosition.getBeginIndex() < 0) {
+                fieldPosition.setBeginIndex(result.length());
+            }
+            fieldPosition.setEndIndex(result.length());
+        } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
+            if (fieldPosition.getEndIndex() < 0) {
+                fieldPosition.setEndIndex(result.length());
+            }
+        } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
+            if (fieldPosition.getBeginIndex() < 0) {
+                fieldPosition.setBeginIndex(result.length());
+            }
+            fieldPosition.setEndIndex(result.length());
+        }
+
+        // [Spark/CDL] Calcuate the end index of integer part and fractional
+        // part if they are not properly processed yet.
+        if (parseAttr) {
+            if (intEnd < 0) {
+                addAttribute(Field.INTEGER, intBegin, result.length());
+            }
+            if (fracBegin > 0) {
+                addAttribute(Field.FRACTION, fracBegin, result.length());
+            }
+        }
+
+        // The exponent is output using the pattern-specified minimum exponent
+        // digits. There is no maximum limit to the exponent digits, since truncating
+        // the exponent would result in an unacceptable inaccuracy.
+        result.append(symbols.getExponentSeparator());
+        // [Spark/CDL] For exponent symbol, add an attribute.
+        if (parseAttr) {
+            addAttribute(Field.EXPONENT_SYMBOL, result.length() -
+                         symbols.getExponentSeparator().length(), result.length());
+        }
+        // For zero values, we force the exponent to zero. We must do this here, and
+        // not earlier, because the value is used to determine integer digit count
+        // above.
+        if (digitList.isZero())
+            exponent = 0;
+
+        boolean negativeExponent = exponent < 0;
+        if (negativeExponent) {
+            exponent = -exponent;
+            result.append(symbols.getMinusSign());
+            // [Spark/CDL] If exponent has sign, then add an exponent sign
+            // attribute.
+            if (parseAttr) {
+                // Length of exponent sign is 1.
+                addAttribute(Field.EXPONENT_SIGN, result.length() - 1, result.length());
+            }
+        } else if (exponentSignAlwaysShown) {
+            result.append(symbols.getPlusSign());
+            // [Spark/CDL] Add an plus sign attribute.
+            if (parseAttr) {
+                // Length of exponent sign is 1.
+                int expSignBegin = result.length() - 1;
+                addAttribute(Field.EXPONENT_SIGN, expSignBegin, result.length());
+            }
+        }
+        int expBegin = result.length();
+        digitList.set(exponent);
+        {
+            int expDig = minExponentDigits;
+            if (useExponentialNotation && expDig < 1) {
+                expDig = 1;
+            }
+            for (i = digitList.decimalAt; i < expDig; ++i)
+                result.append(digits[0]);
+        }
+        for (i = 0; i < digitList.decimalAt; ++i) {
+            result.append((i < digitList.count) ? digits[digitList.getDigitValue(i)]
+                          : digits[0]);
+        }
+        // [Spark/CDL] Add attribute for exponent part.
+        if (parseAttr) {
+            addAttribute(Field.EXPONENT, expBegin, result.length());
+        }
     }
 
     private final void addPadding(StringBuffer result, FieldPosition fieldPosition, int prefixLen,
