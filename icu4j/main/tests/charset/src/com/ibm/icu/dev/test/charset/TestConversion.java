@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -125,8 +125,8 @@ public class TestConversion extends ModuleTest {
     private void TestFromUnicode(DataMap testcase, int caseNr) {
         
         ConversionCase cc = new ConversionCase();
-        
-        try {
+         
+       try {
             // retrieve test case data
             cc.caseNr = caseNr;
             cc.charset = ((ICUResourceBundle) testcase.getObject("charset")).getString();
@@ -142,6 +142,25 @@ public class TestConversion extends ModuleTest {
             errln("Skipping test:");
             errln("error parsing conversion/toUnicode test case " + cc.caseNr);
             return;
+        }
+        
+        /*
+         * Skip the following data driven converter tests.
+         * These tests were added to the data driven conversion test in ICU
+         * to test direct-from-UTF-8 m:n Unicode:charset conversion.
+         * This feature is not in ICU4J.
+         * See #9601
+         */
+        String [] testsToSkip = {
+                "*test2"
+        };
+        for (int i = 0; i < testsToSkip.length; i++) {
+            if (cc.charset.equals(testsToSkip[i])) {
+                logln("");
+                logln("Skipping: " + cc.charset);
+                logln("...............................................");
+                return;
+            }
         }
 
         // ----for debugging only
