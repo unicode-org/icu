@@ -70,7 +70,7 @@ const GenderInfo* GenderInfo::getInstance(const Locale& locale, UErrorCode& stat
   }
 
   // Make sure our cache exists.
-  bool needed;
+  UBool needed;
   UMTX_CHECK(&gGenderMetaLock, (gGenderInfoCache == NULL), needed);
   if (needed) {
     Mutex lock(&gGenderMetaLock);
@@ -175,8 +175,8 @@ UGender GenderInfo::getListGender(const UGender* genders, int32_t length, UError
   if (length == 1) {
     return genders[0];
   }
-  bool has_female = false;
-  bool has_male = false;
+  UBool has_female = FALSE;
+  UBool has_male = FALSE;
   switch (_style) {
     case MIXED_NEUTRAL:
       for (int32_t i = 0; i < length; ++i) {
@@ -188,13 +188,13 @@ UGender GenderInfo::getListGender(const UGender* genders, int32_t length, UError
             if (has_male) {
               return UGENDER_OTHER;
             }
-            has_female = true;
+            has_female = TRUE;
             break;
           case UGENDER_MALE:
             if (has_female) {
               return UGENDER_OTHER;
             }
-            has_male = true;
+            has_male = TRUE;
             break;
           default:
             break;
