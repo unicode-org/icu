@@ -196,7 +196,9 @@ struct UMutex {
 
 #endif
 
+#if (U_PLATFORM != U_PF_CYGWIN && U_PLATFORM != U_PF_MINGW) || defined(CYGWINMSVC)
 typedef struct UMutex UMutex;
+#endif
     
 /* Lock a mutex.
  * @param mutex The given mutex to be locked.  Pass NULL to specify
