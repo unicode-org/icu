@@ -568,15 +568,9 @@ public class DateTimeGeneratorTest extends TestFmwk {
         DateOrder order1 = getOrdering(style1, uLocale);
         DateOrder order2 = getOrdering(style2, uLocale);
         if (!order1.hasSameOrderAs(order2)) {
-            if (order1.monthLength == order2.monthLength) { // error if have same month length, different ordering
-                if (isICUVersionBefore(50, 1, 0)) { // ticket#6806
-                    logln(showOrderComparison(uLocale, style1, style2, order1, order2));
-                } else {
-                    errln(showOrderComparison(uLocale, style1, style2, order1, order2));
-                }
-            } else if (isVerbose() && order1.monthLength > 2 && order2.monthLength > 2) { // warn if both are not numeric
-                logln(showOrderComparison(uLocale, style1, style2, order1, order2));
-            }
+            // Note: This test case was updated by #6806 and no longer reports
+            // ordering difference as an error case.
+            logln(showOrderComparison(uLocale, style1, style2, order1, order2));
         }
     }
 
