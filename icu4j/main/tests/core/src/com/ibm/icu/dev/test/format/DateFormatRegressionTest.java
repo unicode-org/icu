@@ -1061,10 +1061,12 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-    
-    
-    public void Test5006GetShortMonths() throws Exception {
 
+    // Note: The purpose of this test case is a little bit questionable. This test
+    // case expects Islamic month name is different from Gregorian month name.
+    // However, some locales (in this code, zh_CN) may intentionally use the same
+    // month name for both Gregorian and Islamic calendars. See #9645.
+    public void Test5006GetShortMonths() throws Exception {
         // Currently supported NLV locales
         Locale ENGLISH = new Locale("en", "US"); // We don't support 'en' alone
         Locale ARABIC = new Locale("ar", "");
@@ -1136,11 +1138,6 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
         }
 
-        boolean skipIn8822 =  isICUVersionBefore(50, 1, 0);
-        if(skipIn8822) {
-            logln("Note: some tests timebombed to go off by 50.1");
-        }
-
         // Compare
         for (int i = 0; i < locales.length; i++) {
 
@@ -1150,32 +1147,23 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
 
             logln(locales[i] + ": g:" + gregorianTwelfthMonth + ", ic:" + islamicCivilTwelfthMonth + ", i:"+islamicTwelfthMonth);
             if (gregorianTwelfthMonth.equalsIgnoreCase(islamicTwelfthMonth)) {
-                if(!skipIn8822) {
+                // Simplified Chinese uses numeric month for both Gregorian/Islamic calendars
+                if (locales[i] != CHINESE_SIMPLIFIED) {
                     errln(locales[i] + ": gregorian and islamic are same: " + gregorianTwelfthMonth
                           + ", " + islamicTwelfthMonth);
-                } else {
-                    logln(locales[i] + ": gregorian and islamic are same: " + gregorianTwelfthMonth
-                          + ", " + islamicTwelfthMonth + " (TIMEBOMBED until ICU 50.1)");
                 }
             }
 
             if (gregorianTwelfthMonth.equalsIgnoreCase(islamicCivilTwelfthMonth)) {
-                if(!skipIn8822) {
+                // Simplified Chinese uses numeric month for both Gregorian/Islamic calendars
+                if (locales[i] != CHINESE_SIMPLIFIED) {
                     errln(locales[i] + ": gregorian and islamic-civil are same: " + gregorianTwelfthMonth
-                          + ", " + islamicCivilTwelfthMonth);
-                } else {
-                    logln(locales[i] + ": gregorian and islamic-civil are same: " + gregorianTwelfthMonth
-                          + ", " + islamicCivilTwelfthMonth + " (TIMEBOMBED until ICU 50.1)");
+                            + ", " + islamicCivilTwelfthMonth);
                 }
             }
             if (!islamicTwelfthMonth.equalsIgnoreCase(islamicCivilTwelfthMonth)) {
-                if(!skipIn8822) {
-                    errln(locales[i] + ": islamic-civil and islamic are NOT same: " + islamicCivilTwelfthMonth
-                          + ", " + islamicTwelfthMonth);
-                } else {
-                    logln(locales[i] + ": islamic-civil and islamic are NOT same: " + islamicCivilTwelfthMonth
-                          + ", " + islamicTwelfthMonth + " (TIMEBOMBED until 50.1)");
-                }
+                errln(locales[i] + ": islamic-civil and islamic are NOT same: " + islamicCivilTwelfthMonth
+                        + ", " + islamicTwelfthMonth);
             }
         }
     }

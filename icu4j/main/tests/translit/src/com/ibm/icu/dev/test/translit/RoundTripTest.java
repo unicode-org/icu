@@ -80,9 +80,9 @@ public class RoundTripTest extends TestFmwk {
 
     @Override
     public void init() {
-        // TODO(Mark): Fix ticket #8989, transliterate U+0970.
+        // TODO(Mark): Fix ticket #8989 (CLDR#4375), transliterate U+0970.
         // Remove this method?
-        beforeICU50 = isICUVersionBefore(50, 1, 0);
+        beforeICU50 = isICUVersionBefore(51, 0, 1);
         minusDevAbbBefore50 = beforeICU50 ? "-[\u0970]" : "";
     }
 
