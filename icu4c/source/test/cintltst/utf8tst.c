@@ -4,7 +4,7 @@
  * others. All Rights Reserved.
  ********************************************************************/
 /*
-* File test.c
+* File utf8tst.c
 *
 * Modification History:
 *
