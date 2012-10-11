@@ -6,15 +6,21 @@
  */
 package com.ibm.icu.impl;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
 
+import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
+import com.ibm.icu.util.UResourceBundleIterator;
 
 public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final ULocale locale;
@@ -27,6 +33,37 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final MessageFormat keyTypeFormat;
 
     private static final Cache cache = new Cache();
+
+    /**
+     * Capitalization context usage types for locale display names
+     */
+    private enum CapitalizationContextUsage {
+        LANGUAGE, 
+        SCRIPT, 
+        TERRITORY,
+        VARIANT, 
+        KEY, 
+        TYPE 
+    }
+     /**
+     * Capitalization transforms. For each usage type, the first array element indicates
+     * whether to titlecase for uiListOrMenu context, the second indicates whether to
+     * titlecase for stand-alone context.
+     */
+    private Map<CapitalizationContextUsage,boolean[]> capitalizationUsage = null;
+    /**
+     * Map from resource key to CapitalizationContextUsage value
+     */
+    private static final Map<String, CapitalizationContextUsage> contextUsageTypeMap;
+    static {
+        contextUsageTypeMap=new HashMap<String, CapitalizationContextUsage>();
+        contextUsageTypeMap.put("languages", CapitalizationContextUsage.LANGUAGE);
+        contextUsageTypeMap.put("script",    CapitalizationContextUsage.SCRIPT);
+        contextUsageTypeMap.put("territory", CapitalizationContextUsage.TERRITORY);
+        contextUsageTypeMap.put("variant",   CapitalizationContextUsage.VARIANT);
+        contextUsageTypeMap.put("key",       CapitalizationContextUsage.KEY);
+        contextUsageTypeMap.put("type",      CapitalizationContextUsage.TYPE);
+    }
 
     public static LocaleDisplayNames getInstance(ULocale locale, DialectHandling dialectHandling) {
         synchronized (cache) {
@@ -90,6 +127,45 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             keyTypePattern = "{0}={1}";
         }
         this.keyTypeFormat = new MessageFormat(keyTypePattern);
+
+        // Get values from the contextTransforms data
+        // (copied from DateFormatSymbols)
+        if (capitalization == DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU ||
+                capitalization == DisplayContext.CAPITALIZATION_FOR_STANDALONE) {
+            capitalizationUsage = new HashMap<CapitalizationContextUsage,boolean[]>();
+            boolean[] noTransforms = new boolean[2];
+            noTransforms[0] = false;
+            noTransforms[1] = false;
+            CapitalizationContextUsage allUsages[] = CapitalizationContextUsage.values();
+            for (CapitalizationContextUsage usage: allUsages) {
+                capitalizationUsage.put(usage, noTransforms);
+            }
+            ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+            UResourceBundle contextTransformsBundle = null;
+            try {
+               contextTransformsBundle = (UResourceBundle)rb.getWithFallback("contextTransforms");
+            }
+            catch (MissingResourceException e) {
+                contextTransformsBundle = null; // probably redundant
+            }
+            if (contextTransformsBundle != null) {
+                UResourceBundleIterator ctIterator = contextTransformsBundle.getIterator();
+                while ( ctIterator.hasNext() ) {
+                    UResourceBundle contextTransformUsage = ctIterator.next();
+                    int[] intVector = contextTransformUsage.getIntVector();
+                    if (intVector.length >= 2) {
+                        String usageKey = contextTransformUsage.getKey();
+                        CapitalizationContextUsage usage = contextUsageTypeMap.get(usageKey);
+                        if (usage != null) {
+                            boolean[] transforms = new boolean[2];
+                            transforms[0] = (intVector[0] != 0);
+                            transforms[1] = (intVector[1] != 0);
+                            capitalizationUsage.put(usage, transforms);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -115,6 +191,60 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             default:
                 result = DisplayContext.STANDARD_NAMES; // hmm, we should do something else here
                 break;
+        }
+        return result;
+    }
+
+    private String adjustForUsageAndContext(CapitalizationContextUsage usage, String name) {
+        String result = name;
+        boolean titlecase = false;
+        switch (capitalization) {
+            case CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
+                titlecase = true;
+                break;
+            case CAPITALIZATION_FOR_UI_LIST_OR_MENU:
+            case CAPITALIZATION_FOR_STANDALONE:
+                if (capitalizationUsage != null) {
+                    boolean[] transforms = capitalizationUsage.get(usage);
+                    titlecase = (capitalization==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
+                                transforms[0]: transforms[1];
+                }
+                break;
+            default:
+                break;
+        }
+        if (titlecase) {
+            // TODO: Fix this titlecase hack when we figure out something better to do.
+            // We don't want to titlecase the whole text, only something like the first word,
+            // of the first segment long enough to have a complete cluster, whichever is
+            // shorter. We could have keep a word break iterator around, but I am not sure
+            // that will do the ight thing for the purposes here. For now we assume that in
+            // languages for which titlecasing makes a difference, we can stop at non-letter
+            // characters in 0x0000-0x00FF and only titlecase up to the first occurrence of
+            // any of those, or to a small number of chars, whichever comes first.
+            int stopPos, stopPosLimit = 8, len = name.length();
+            if ( stopPosLimit > len ) {
+                stopPosLimit = len;
+            }
+            for ( stopPos = 0; stopPos < stopPosLimit; stopPos++ ) {
+                int ch = name.codePointAt(stopPos);
+                if ( (ch < 0x41) || (ch > 0x5A && ch < 0x61) || (ch > 0x7A && ch < 0xC0) ) {
+                    break;
+                }
+                if (ch >= 0x10000) {
+                    stopPos++;
+                }
+            }
+            if ( stopPos > 0 && stopPos < len ) {
+                String firstWord = name.substring(0, stopPos);
+                String firstWordTitleCase = UCharacter.toTitleCase(locale, firstWord, null,
+                                            UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+                result = firstWordTitleCase.concat(name.substring(stopPos));
+            } else {
+                // no stopPos, titlecase the whole text
+                result = UCharacter.toTitleCase(locale, name, null,
+                         UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+            }
         }
         return result;
     }
@@ -235,10 +365,10 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         }
 
         if (resultRemainder != null) {
-            return format.format(new Object[] {resultName, resultRemainder});
+            resultName =  format.format(new Object[] {resultName, resultRemainder});
         }
 
-        return resultName;
+        return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, resultName);
     }
 
     private String localeIdName(String localeId) {
@@ -251,47 +381,46 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         if (lang.equals("root") || lang.indexOf('_') != -1) {
             return lang;
         }
-        return langData.get("Languages", lang);
+        return adjustForUsageAndContext(CapitalizationContextUsage.LANGUAGE, langData.get("Languages", lang));
     }
 
     @Override
     public String scriptDisplayName(String script) {
         String str = langData.get("Scripts%stand-alone", script);
         if (str.equals(script) ) {
-            return langData.get("Scripts", script);
-        } else {
-            return str;
+            str = langData.get("Scripts", script);
         }
+        return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, str);
     }
 
     @Override
     public String scriptDisplayNameInContext(String script) {
-        return langData.get("Scripts", script);
+        return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, langData.get("Scripts", script));
     }
 
     @Override
     public String scriptDisplayName(int scriptCode) {
-        return scriptDisplayName(UScript.getShortName(scriptCode));
+        return adjustForUsageAndContext(CapitalizationContextUsage.SCRIPT, scriptDisplayName(UScript.getShortName(scriptCode)));
     }
 
     @Override
     public String regionDisplayName(String region) {
-        return regionData.get("Countries", region);
+        return adjustForUsageAndContext(CapitalizationContextUsage.TERRITORY, regionData.get("Countries", region));
     }
 
     @Override
     public String variantDisplayName(String variant) {
-        return langData.get("Variants", variant);
+        return adjustForUsageAndContext(CapitalizationContextUsage.VARIANT, langData.get("Variants", variant));
     }
 
     @Override
     public String keyDisplayName(String key) {
-        return langData.get("Keys", key);
+        return adjustForUsageAndContext(CapitalizationContextUsage.KEY, langData.get("Keys", key));
     }
 
     @Override
     public String keyValueDisplayName(String key, String value) {
-        return langData.get("Types", key, value);
+        return adjustForUsageAndContext(CapitalizationContextUsage.TYPE, langData.get("Types", key, value));
     }
 
     public static class DataTable {

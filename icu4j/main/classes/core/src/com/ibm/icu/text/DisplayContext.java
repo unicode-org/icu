@@ -90,7 +90,7 @@ public enum DisplayContext {
 
     private final Type type;
     private final int value;
-    DisplayContext(Type type, int value) {
+    private DisplayContext(Type type, int value) {
         this.type = type;
         this.value = value;
     }
