@@ -19,6 +19,7 @@
 #include "unicode/simpletz.h"
 #include "unicode/ustring.h"
 #include "unicode/strenum.h"
+#include "unicode/localpointer.h"
 #include "cmemory.h"
 #include "cstring.h"
 #include "ustrenum.h"
@@ -736,13 +737,10 @@ ucal_getTimeZoneTransitionDate(const UCalendar* cal, UTimeZoneTransitionType typ
     }
     UDate base = ((Calendar*)cal)->getTime(*status);
     const TimeZone& tz = ((Calendar*)cal)->getTimeZone();
-    // The reference returned from Calendar::getTimeZone() "is only valid until clients
-    // make another call to adoptTimeZone or setTimeZone, or this Calendar is destroyed."
-    // Add a mutex lock until after we clone (or fail)?
     const BasicTimeZone * btz = dynamic_cast<const BasicTimeZone *>(&tz);
     if (btz != NULL && U_SUCCESS(*status)) {
         TimeZoneTransition tzt;
-        BasicTimeZone * btzClone = static_cast<BasicTimeZone *>(btz->clone()); // getNext/PreviousTransition are non-const
+        LocalPointer<BasicTimeZone> btzClone(static_cast<BasicTimeZone *>(btz->clone())); // getNext/PreviousTransition are non-const
         UBool inclusive = (type == UCAL_TZ_TRANSITION_NEXT_INCLUSIVE || type == UCAL_TZ_TRANSITION_PREVIOUS_INCLUSIVE);
         UBool result = (type == UCAL_TZ_TRANSITION_NEXT || type == UCAL_TZ_TRANSITION_NEXT_INCLUSIVE)?
                         btzClone->getNextTransition(base, inclusive, tzt):
