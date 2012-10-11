@@ -26,8 +26,20 @@
  * @draft ICU 50
  */
 enum UGender {
+    /**
+     * Male gender.
+     * @draft ICU 50
+     */
     UGENDER_MALE,
+    /**
+     * Female gender.
+     * @draft ICU 50
+     */
     UGENDER_FEMALE,
+    /**
+     * Neutral gender.
+     * @draft ICU 50
+     */
     UGENDER_OTHER
 };
 /**
@@ -46,7 +58,7 @@ typedef struct UGenderInfo UGenderInfo;
  * Opens a new UGenderInfo object given locale.
  * @param locale The locale for which the rules are desired.
  * @return A UGenderInfo for the specified locale, or NULL if an error occurred.
- * @stable ICU 4.8
+ * @draft ICU 50
  */
 U_STABLE const UGenderInfo* U_EXPORT2
 ugender_getInstance(const char *locale, UErrorCode *status);
@@ -62,7 +74,7 @@ ugender_getInstance(const char *locale, UErrorCode *status);
  * @draft ICU 50
  */
 U_DRAFT UGender U_EXPORT2
-ugender_getListGender(const UGenderInfo* genderinfo, UGender *genders, int32_t size, UErrorCode *status);
+ugender_getListGender(const UGenderInfo* genderinfo, const UGender *genders, int32_t size, UErrorCode *status);
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
