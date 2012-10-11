@@ -53,10 +53,6 @@ static UBool U_CALLCONV gender_cleanup(void) {
   return TRUE;
 }
 
-static void U_CALLCONV deleteChars(void* chars) {
-  uprv_free(chars);
-}
-
 U_CDECL_END
 
 U_NAMESPACE_BEGIN
@@ -93,7 +89,7 @@ const GenderInfo* GenderInfo::getInstance(const Locale& locale, UErrorCode& stat
         delete [] gObjs;
         return NULL;
       }
-      uhash_setKeyDeleter(gGenderInfoCache, deleteChars);
+      uhash_setKeyDeleter(gGenderInfoCache, uprv_free);
       ucln_i18n_registerCleanup(UCLN_I18N_GENDERINFO, gender_cleanup);
     }
   }
@@ -110,6 +106,9 @@ const GenderInfo* GenderInfo::getInstance(const Locale& locale, UErrorCode& stat
 
   // On cache miss, try to create GenderInfo from CLDR data
   result = loadInstance(locale, status);
+  if (U_FAILURE(status)) {
+    return NULL;
+  }
 
   // Try to put our GenderInfo object in cache. If there is a race condition,
   // favor the GenderInfo object that is already in the cache.
@@ -119,10 +118,8 @@ const GenderInfo* GenderInfo::getInstance(const Locale& locale, UErrorCode& stat
     if (temp) {
       result = temp;
     } else {
-      char* keyDup = uprv_strdup(key);
-      uhash_put(gGenderInfoCache, keyDup, (void*) result, &status);
+      uhash_put(gGenderInfoCache, uprv_strdup(key), (void*) result, &status);
       if (U_FAILURE(status)) {
-        uprv_free(keyDup);
         return NULL;
       }
     }
