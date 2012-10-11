@@ -8878,30 +8878,29 @@ ucol_strcollUTF8(
 
     if (U_FAILURE(*status)) {
         /* do nothing */
-        UTRACE_EXIT_VALUE(UCOL_EQUAL);
+        UTRACE_EXIT_VALUE_STATUS(UCOL_EQUAL, *status);
         return UCOL_EQUAL;
     }
 
     if(source == NULL || target == NULL) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
-        UTRACE_EXIT_VALUE(UCOL_EQUAL);
+        UTRACE_EXIT_VALUE_STATUS(UCOL_EQUAL, *status);
         return UCOL_EQUAL;
     }
 
     /* Quick check if source and target are same strings. */
     /* They should either both be NULL terminated or the explicit length should be set on both. */
     if (source==target && sourceLength==targetLength) {
-        UTRACE_EXIT_VALUE(UCOL_EQUAL);
+        UTRACE_EXIT_VALUE_STATUS(UCOL_EQUAL, *status);
         return UCOL_EQUAL;
     }
 
-    // TODO - provider support
-/*
     if(coll->delegate != NULL) {
-        UErrorCode status = U_ZERO_ERROR;
-        return ((const Collator*)coll->delegate)->compare(source,sourceLength,target,targetLength, status);
+        return ((const Collator*)coll->delegate)->compareUTF8(
+            StringPiece(source, (sourceLength < 0) ? uprv_strlen(source) : sourceLength),
+            StringPiece(target, (targetLength < 0) ? uprv_strlen(target) : targetLength),
+            *status);
     }
-*/
 
     /* Scan the strings.  Find:                                                             */
     /*    The length of any leading portion that is equal                                   */
@@ -8919,7 +8918,7 @@ ucol_strcollUTF8(
             pTarg++;
         }
         if (*pSrc == 0 && *pTarg == 0) {
-            UTRACE_EXIT_VALUE(UCOL_EQUAL);
+            UTRACE_EXIT_VALUE_STATUS(UCOL_EQUAL, *status);
             return UCOL_EQUAL;
         }
         bSrcLimit = (*pSrc == 0);
@@ -8952,7 +8951,7 @@ ucol_strcollUTF8(
         if (bSrcLimit &&    /* At end of src string, however it was specified. */
             bTargLimit)     /* and also at end of dest string                  */
         {
-            UTRACE_EXIT_VALUE(UCOL_EQUAL);
+            UTRACE_EXIT_VALUE_STATUS(UCOL_EQUAL, *status);
             return UCOL_EQUAL;
         }
     }
@@ -9035,8 +9034,8 @@ ucol_strcollUTF8(
         }
     } else {
         // Lead byte of Latin 1 character is 0x00 - 0xC3
-        bSawNonLatin1 = (source && (sourceLength != 0) && (*source > -61 && *source < 0));
-        bSawNonLatin1 |= (target && (targetLength != 0) && (*target > -61 && *target < 0));
+        bSawNonLatin1 = (source && (sourceLength != 0) && ((uint8_t)*source > 0xc3 && *source < 0));
+        bSawNonLatin1 |= (target && (targetLength != 0) && ((uint8_t)*target > 0xc3 && *target < 0));
     }
 
     UCollationResult returnVal;
@@ -9046,7 +9045,7 @@ ucol_strcollUTF8(
     } else {
         returnVal = ucol_strcollUseLatin1UTF8(coll, source, sourceLength, target, targetLength, status);
     }
-    UTRACE_EXIT_VALUE(returnVal);
+    UTRACE_EXIT_VALUE_STATUS(returnVal, *status);
     return returnVal;
 }
 
