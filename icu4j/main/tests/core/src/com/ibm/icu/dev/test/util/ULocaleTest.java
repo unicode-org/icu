@@ -24,6 +24,7 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DisplayContext;
 import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
 import com.ibm.icu.text.NumberFormat;
@@ -1022,6 +1023,61 @@ public class ULocaleTest extends TestFmwk {
                 String name = locale2.getDisplayNameWithDialect(locales[i]);
                 if (!names2[i].equals(name)) {
                     errln("expected '" + names2[i] + "' but got '" + name + "'");
+                }
+            }
+        }
+        // test use of context
+        {
+            class TestContextItem {
+                public String displayLocale;
+                public DisplayContext dialectHandling;
+                public DisplayContext capitalization;
+                public String localeToBeNamed;
+                public String result;
+                public TestContextItem(String dLoc, DisplayContext dia, DisplayContext cap, String locToName, String res) {
+                    displayLocale = dLoc;
+                    dialectHandling = dia;
+                    capitalization = cap;
+                    localeToBeNamed = locToName;
+                    result = res;
+                }
+            };
+            final TestContextItem[] items = {
+                new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "en",    "engelsk" ),
+                new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "en",    "Engelsk" ),
+                new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en",    "engelsk" ),
+                new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "en_US", "engelsk (USA)" ),
+                new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "en_US", "Engelsk (USA)" ),
+                new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en_US", "engelsk (USA)" ),
+                new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "en_US", "amerikansk engelsk" ),
+                new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "en_US", "Amerikansk engelsk" ),
+                new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en_US", "amerikansk engelsk" ),
+                new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "en",    "ingl\u00E9s" ),
+                new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "en",    "Ingl\u00E9s" ),
+                new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en",    "Ingl\u00E9s" ),
+                new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "en_US", "ingl\u00E9s (Estados Unidos)" ),
+                new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "en_US", "Ingl\u00E9s (Estados Unidos)" ),
+                new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en_US", "Ingl\u00E9s (Estados Unidos)" ),
+                new TestContextItem( "es", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "en_US", "ingl\u00E9s estadounidense" ),
+                new TestContextItem( "es", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "en_US", "Ingl\u00E9s estadounidense" ),
+                new TestContextItem( "es", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en_US", "Ingl\u00E9s estadounidense" ),
+            };
+            for (TestContextItem item: items) {
+                ULocale locale = new ULocale(item.displayLocale);
+                LocaleDisplayNames ldn = LocaleDisplayNames.getInstance(locale, item.dialectHandling, item.capitalization);
+                DisplayContext dialectHandling = ldn.getContext(DisplayContext.Type.DIALECT_HANDLING);
+                DisplayContext capitalization = ldn.getContext(DisplayContext.Type.CAPITALIZATION);
+                if (dialectHandling != item.dialectHandling || capitalization != item.capitalization) {
+                    errln("FAIL: displayLocale: " + item.displayLocale + ", dialectHandling: " + item.dialectHandling +
+                          ", capitalization: " + item.capitalization + ", localeToName: " + item.localeToBeNamed +
+                          ", => read back dialectHandling: " + dialectHandling + ", capitalization: " + capitalization);
+                } else {
+                    String result = ldn.localeDisplayName(item.localeToBeNamed);
+                    if (!result.equals(item.result)) {
+                        errln("FAIL: displayLocale: " + item.displayLocale + ", dialectHandling: " + item.dialectHandling +
+                              ", capitalization: " + item.capitalization + ", localeToName: " + item.localeToBeNamed +
+                              ", => expected result: " + item.result + ", got: " + result);
+                    } 
                 }
             }
         }
