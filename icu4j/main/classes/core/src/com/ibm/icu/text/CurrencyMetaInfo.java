@@ -277,7 +277,7 @@ public class CurrencyMetaInfo {
 
         /**
          * Returns a string representing the filter, for debugging.
-         * @return A string representing the fielter.
+         * @return A string representing the filter.
          * @stable ICU 4.4
          */
         @Override
@@ -394,7 +394,7 @@ public class CurrencyMetaInfo {
 
         /**
          * Returns a string representation of this object, useful for debugging.
-         * @return A string representing of this object.
+         * @return A string representation of this object.
          * @stable ICU 4.4
          */
         @Override
