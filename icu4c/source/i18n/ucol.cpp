@@ -9034,8 +9034,8 @@ ucol_strcollUTF8(
         }
     } else {
         // Lead byte of Latin 1 character is 0x00 - 0xC3
-        bSawNonLatin1 = (source && (sourceLength != 0) && ((uint8_t)*source > 0xc3 && *source < 0));
-        bSawNonLatin1 |= (target && (targetLength != 0) && ((uint8_t)*target > 0xc3 && *target < 0));
+        bSawNonLatin1 = (source && (sourceLength != 0) && (uint8_t)*source > 0xc3);
+        bSawNonLatin1 |= (target && (targetLength != 0) && (uint8_t)*target > 0xc3);
     }
 
     UCollationResult returnVal;
