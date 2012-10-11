@@ -18,12 +18,6 @@
 
 #include "unicode/utypes.h"
 
-/**
- * \file
- * \brief C++ API: The purpose of this API is to compute the gender of a list as
- * a whole given the gender of each element.
- */
-
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/locid.h"
@@ -34,6 +28,11 @@ class GenderInfoTest;
 
 U_NAMESPACE_BEGIN
 
+/**
+ * GenderInfo computes the gender of a list as a whole given the gender of
+ * each element.
+ * @draft ICU 50
+ */
 class U_I18N_API GenderInfo : public UObject {
 public:
 
@@ -80,21 +79,17 @@ private:
 
     /**
      * No "poor man's RTTI"
-     *
-     * @draft ICU 50
      */
     virtual UClassID getDynamicClassID() const;
 
     /**
      * Copy constructor. One object per locale invariant. Clients
      * must never copy GenderInfo objects.
-     * @draft ICU 50
      */
     GenderInfo(const GenderInfo& other);
 
     /**
       * Assignment operator. Not applicable to immutable objects.
-      * @draft ICU 50
       */
     GenderInfo& operator=(const GenderInfo&);
 
@@ -106,7 +101,7 @@ private:
 
     static const GenderInfo* getMaleTaintsInstance();
 
-    static GenderInfo* loadInstance(const Locale& locale, UErrorCode& status);
+    static const GenderInfo* loadInstance(const Locale& locale, UErrorCode& status);
     friend class ::GenderInfoTest;
 };
 

@@ -281,6 +281,7 @@
     <ClCompile Include="cdtdptst.c" />
     <ClCompile Include="cdtrgtst.c" />
     <ClCompile Include="cformtst.c" />
+    <ClCompile Include="cgendtst.c" />
     <ClCompile Include="cmsgtst.c" />
     <ClCompile Include="cnmdptst.c" />
     <ClCompile Include="cnumtst.c" />
