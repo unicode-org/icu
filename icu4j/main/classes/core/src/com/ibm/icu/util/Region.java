@@ -53,6 +53,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
  *  
  * @author       John Emmons
  * @draft ICU 50
+ * @provisional This API might change or be removed in a future release.
  */
 
 public class Region implements Comparable<Region> {
@@ -62,46 +63,54 @@ public class Region implements Comparable<Region> {
      * values are WORLD, CONTINENT, SUBCONTINENT, TERRITORY, GROUPING, DEPRECATED, and UNKNOWN.
      * 
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public enum RegionType {
         /**
          * Type representing the unknown region.
          * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
          */
         UNKNOWN,
 
         /**
          * Type representing a territory.
          * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
          */
         TERRITORY,
 
         /**
          * Type representing the whole world.
          * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
          */
         WORLD,
         /**
          * Type representing a continent.
          * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
          */
         CONTINENT,
         /**
          * Type representing a sub-continent.
          * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
          */
         SUBCONTINENT,
         /**
          * Type representing a grouping of territories that is not to be used in
          * the normal WORLD/CONTINENT/SUBCONTINENT/TERRITORY containment tree.
          * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
          */
         GROUPING,
         /**
          * Type representing a region whose code has been deprecated, usually
          * due to a country splitting into multiple territories or changing its name.
          * @draft ICU 50
+         * @provisional This API might change or be removed in a future release.
          */
         DEPRECATED,
     }
@@ -110,6 +119,7 @@ public class Region implements Comparable<Region> {
      * A constant used for unknown numeric region code.
      * @see #getNumericCode()
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public static final int UNDEFINED_NUMERIC_CODE = -1;
 
@@ -336,6 +346,7 @@ public class Region implements Comparable<Region> {
      * @throws NullPointerException if the supplied id is null.
      * @throws IllegalArgumentException if the supplied ID cannot be canonicalized to a Region ID that is known by ICU.
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public static Region getInstance(String id) {
@@ -369,6 +380,7 @@ public class Region implements Comparable<Region> {
      * @return The corresponding region.
      * @throws IllegalArgumentException if the supplied numeric code is not recognized.
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public static Region getInstance(int code) {
@@ -405,6 +417,7 @@ public class Region implements Comparable<Region> {
      * @param type The type of regions to be returned ( TERRITORY, MACROREGION, etc. )
      * @return An unmodifiable set of all known regions that match the given type.
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public static Set<Region> getAvailable(RegionType type) {
@@ -420,6 +433,7 @@ public class Region implements Comparable<Region> {
      *  code "001" (World) or "ZZ" (Unknown region).  For example, calling this method with region "IT" (Italy)
      *  returns the region "039" (Southern Europe).    
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public Region getContainingRegion() {
@@ -433,6 +447,7 @@ public class Region implements Comparable<Region> {
      *  no containing region can be found that matches the given type.  For example, calling this method with region "IT" (Italy)
      *  and type CONTINENT returns the region "150" (Europe).    
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public Region getContainingRegion(RegionType type) {
@@ -458,6 +473,7 @@ public class Region implements Comparable<Region> {
      * - "154" (Northern Europe) and "155" (Western Europe).
      *
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public Set<Region> getContainedRegions() {
@@ -473,6 +489,7 @@ public class Region implements Comparable<Region> {
      * For example, calling this method with region "150" (Europe) and type "TERRITORY" returns a set
      *  containing all the territories in Europe ( "FR" (France) - "IT" (Italy) - "DE" (Germany) etc. )
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public Set<Region> getContainedRegions(RegionType type) {
@@ -498,6 +515,7 @@ public class Region implements Comparable<Region> {
      * return a list of the regions containing "RU" (Russia), "AM" (Armenia), "AZ" (Azerbaijan), etc... 
      *    
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public List<Region> getPreferredValues() {
         if ( type == RegionType.DEPRECATED) {
@@ -509,6 +527,9 @@ public class Region implements Comparable<Region> {
 
     /**
      * @return Returns true if this region contains the supplied other region anywhere in the region hierarchy.
+     * 
+     * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public boolean contains(Region other) {
 
@@ -532,6 +553,7 @@ public class Region implements Comparable<Region> {
      * @return The string representation of this region, which is its ID.
      *
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public String toString() {
@@ -545,6 +567,7 @@ public class Region implements Comparable<Region> {
      * only occurs for a few very small territories.
      *
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public int getNumericCode() {
@@ -556,6 +579,7 @@ public class Region implements Comparable<Region> {
      * @return This region's type classification, such as MACROREGION or TERRITORY.
      *
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
 
     public RegionType getType() {
@@ -565,6 +589,7 @@ public class Region implements Comparable<Region> {
     /**
      * {@inheritDoc}
      * @draft ICU 50
+     * @provisional This API might change or be removed in a future release.
      */
     public int compareTo(Region other) {
         return id.compareTo(other.id);
