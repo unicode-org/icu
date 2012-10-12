@@ -119,6 +119,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(53,TestRoundingPattern);
         CASE(54,Test9087);
         CASE(55,TestFormatFastpaths);
+        CASE(56,TestEnumSet);
         default: name = ""; break;
     }
 }
@@ -6583,103 +6584,141 @@ NumberFormatTest::Test9087(void)
 
 void NumberFormatTest::TestFormatFastpaths() {
 #if UCONFIG_FORMAT_FASTPATHS_49
-  logln("Sizeof DecimalFormat = %d, Sizeof DecimalFormatInternal=%d, UNUM_DECIMALFORMAT_INTERNAL_SIZE=%d\n",
+    logln("Sizeof DecimalFormat = %d, Sizeof DecimalFormatInternal=%d, UNUM_DECIMALFORMAT_INTERNAL_SIZE=%d\n",
         sizeof(DecimalFormat), sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE);
-  if(UNUM_DECIMALFORMAT_INTERNAL_SIZE < sizeof(DecimalFormatInternal)) {
-    errln("Error: sizeof(DecimalFormatInternal)=%d but UNUM_DECIMALFORMAT_INTERNAL_SIZE is only %d. Increase the #define?\n", sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE);
-  } else if(UNUM_DECIMALFORMAT_INTERNAL_SIZE > (sizeof(DecimalFormatInternal)+16)) {
-    infoln("Note: sizeof(DecimalFormatInternal)=%d but UNUM_DECIMALFORMAT_INTERNAL_SIZE is %d. Decrease the #define? sizeof(DecimalFormat)=%d\n", sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE, sizeof(DecimalFormat));
-  }
+    if(UNUM_DECIMALFORMAT_INTERNAL_SIZE < sizeof(DecimalFormatInternal)) {
+        errln("Error: sizeof(DecimalFormatInternal)=%d but UNUM_DECIMALFORMAT_INTERNAL_SIZE is only %d. Increase the #define?\n", sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE);
+    } else if(UNUM_DECIMALFORMAT_INTERNAL_SIZE > (sizeof(DecimalFormatInternal)+16)) {
+        infoln("Note: sizeof(DecimalFormatInternal)=%d but UNUM_DECIMALFORMAT_INTERNAL_SIZE is %d. Decrease the #define? sizeof(DecimalFormat)=%d\n", sizeof(DecimalFormatInternal), UNUM_DECIMALFORMAT_INTERNAL_SIZE, sizeof(DecimalFormat));
+    }
 #else
-  infoln("NOTE: UCONFIG_FORMAT_FASTPATHS not set, test skipped.");
+    infoln("NOTE: UCONFIG_FORMAT_FASTPATHS not set, test skipped.");
 #endif  
 
-  // get some additional case
-  {
-    UErrorCode status=U_ZERO_ERROR;
-    DecimalFormat df(UnicodeString("0000",""),status);
-    int64_t long_number = 1;
-    UnicodeString expect = "0001";
-    UnicodeString result;
-    FieldPosition pos;
-    df.format(long_number, result, pos);
-    if(U_FAILURE(status)||expect!=result) {
-      errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),""));
-    } else {
-      logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),""));
+    // get some additional case
+    {
+        UErrorCode status=U_ZERO_ERROR;
+        DecimalFormat df(UnicodeString("0000",""),status);
+        int64_t long_number = 1;
+        UnicodeString expect = "0001";
+        UnicodeString result;
+        FieldPosition pos;
+        df.format(long_number, result, pos);
+        if(U_FAILURE(status)||expect!=result) {
+            errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),""));
+        } else {
+            logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),""));
+        }
     }
-  }
-  {
-    UErrorCode status=U_ZERO_ERROR;
-    DecimalFormat df(UnicodeString("0000000000000000000",""),status);
-    int64_t long_number = U_INT64_MIN; // -9223372036854775808L;
-    // uint8_t bits[8];
-    // memcpy(bits,&long_number,8);
-    // for(int i=0;i<8;i++) {
-    //   logln("bits: %02X", (unsigned int)bits[i]);
-    // }
-    UnicodeString expect = "-9223372036854775808";
-    UnicodeString result;
-    FieldPosition pos;
-    df.format(long_number, result, pos);
-    if(U_FAILURE(status)||expect!=result) {
-      errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
-    } else {
-      logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
+    {
+        UErrorCode status=U_ZERO_ERROR;
+        DecimalFormat df(UnicodeString("0000000000000000000",""),status);
+        int64_t long_number = U_INT64_MIN; // -9223372036854775808L;
+        // uint8_t bits[8];
+        // memcpy(bits,&long_number,8);
+        // for(int i=0;i<8;i++) {
+        //   logln("bits: %02X", (unsigned int)bits[i]);
+        // }
+        UnicodeString expect = "-9223372036854775808";
+        UnicodeString result;
+        FieldPosition pos;
+        df.format(long_number, result, pos);
+        if(U_FAILURE(status)||expect!=result) {
+            errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
+        } else {
+            logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775808");
+        }
     }
-  }
-  {
-    UErrorCode status=U_ZERO_ERROR;
-    DecimalFormat df(UnicodeString("0000000000000000000",""),status);
-    int64_t long_number = U_INT64_MAX; // -9223372036854775808L;
-    // uint8_t bits[8];
-    // memcpy(bits,&long_number,8);
-    // for(int i=0;i<8;i++) {
-    //   logln("bits: %02X", (unsigned int)bits[i]);
-    // }
-    UnicodeString expect = "9223372036854775807";
-    UnicodeString result;
-    FieldPosition pos;
-    df.format(long_number, result, pos);
-    if(U_FAILURE(status)||expect!=result) {
-      errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
-    } else {
-      logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
+    {
+        UErrorCode status=U_ZERO_ERROR;
+        DecimalFormat df(UnicodeString("0000000000000000000",""),status);
+        int64_t long_number = U_INT64_MAX; // -9223372036854775808L;
+        // uint8_t bits[8];
+        // memcpy(bits,&long_number,8);
+        // for(int i=0;i<8;i++) {
+        //   logln("bits: %02X", (unsigned int)bits[i]);
+        // }
+        UnicodeString expect = "9223372036854775807";
+        UnicodeString result;
+        FieldPosition pos;
+        df.format(long_number, result, pos);
+        if(U_FAILURE(status)||expect!=result) {
+            errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
+        } else {
+            logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on U_INT64_MAX");
+        }
     }
-  }
-  {
-    UErrorCode status=U_ZERO_ERROR;
-    DecimalFormat df(UnicodeString("0000000000000000000",""),status);
-    int64_t long_number = 0;
-    // uint8_t bits[8];
-    // memcpy(bits,&long_number,8);
-    // for(int i=0;i<8;i++) {
-    //   logln("bits: %02X", (unsigned int)bits[i]);
-    // }
-    UnicodeString expect = "0000000000000000000";
-    UnicodeString result;
-    FieldPosition pos;
-    df.format(long_number, result, pos);
-    if(U_FAILURE(status)||expect!=result) {
-      errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
-    } else {
-      logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
+    {
+        UErrorCode status=U_ZERO_ERROR;
+        DecimalFormat df(UnicodeString("0000000000000000000",""),status);
+        int64_t long_number = 0;
+        // uint8_t bits[8];
+        // memcpy(bits,&long_number,8);
+        // for(int i=0;i<8;i++) {
+        //   logln("bits: %02X", (unsigned int)bits[i]);
+        // }
+        UnicodeString expect = "0000000000000000000";
+        UnicodeString result;
+        FieldPosition pos;
+        df.format(long_number, result, pos);
+        if(U_FAILURE(status)||expect!=result) {
+            errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
+        } else {
+            logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on 0");
+        }
     }
-  }
-  {
-    UErrorCode status=U_ZERO_ERROR;
-    DecimalFormat df(UnicodeString("0000000000000000000",""),status);
-    int64_t long_number = U_INT64_MIN + 1;
-    UnicodeString expect = "-9223372036854775807";
-    UnicodeString result;
-    FieldPosition pos;
-    df.format(long_number, result, pos);
-    if(U_FAILURE(status)||expect!=result) {
-      errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
-    } else {
-      logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
+    {
+        UErrorCode status=U_ZERO_ERROR;
+        DecimalFormat df(UnicodeString("0000000000000000000",""),status);
+        int64_t long_number = U_INT64_MIN + 1;
+        UnicodeString expect = "-9223372036854775807";
+        UnicodeString result;
+        FieldPosition pos;
+        df.format(long_number, result, pos);
+        if(U_FAILURE(status)||expect!=result) {
+            errcheckln(status, "FAIL: expected '"+expect+"' got '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
+        } else {
+            logln("OK:  got expected '"+result+"' status "+UnicodeString(u_errorName(status),"")+" on -9223372036854775807");
+        }
     }
-  }
+}
+
+enum myEnum {
+    MAX_NONBOOLEAN=-1,
+    THING1,
+    THING2,
+    THING3,
+    LIMIT_BOOLEAN
+};
+
+void NumberFormatTest::TestEnumSet(void) {
+    EnumSet<myEnum,
+            myEnum::MAX_NONBOOLEAN+1, 
+            myEnum::LIMIT_BOOLEAN>  
+                            flags;
+    infoln("TODO!! This test doesn't fail on error. Convert printf into error assert.\n");
+
+    logln("Enum is from [%d..%d]\n", myEnum::MAX_NONBOOLEAN+1, 
+          myEnum::LIMIT_BOOLEAN);
+
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
+    logln("Value now: %d\n", flags.getAll());
+    flags.clear();
+    logln("clear -Value now: %d\n", flags.getAll());
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
+    flags.add(myEnum::THING1);
+    logln("set THING1 -Value now: %d\n", flags.getAll());
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
+    flags.add(myEnum::THING3);
+    logln("set THING3 -Value now: %d\n", flags.getAll());
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
+    flags.remove(myEnum::THING2);
+    logln("remove THING2 -Value now: %d\n", flags.getAll());
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
+    flags.remove(myEnum::THING1);
+    logln("remove THING1 -Value now: %d\n", flags.getAll());
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
+
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

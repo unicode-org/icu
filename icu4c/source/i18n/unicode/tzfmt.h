@@ -375,6 +375,8 @@ public:
      */
     UnicodeString& formatOffsetLocalizedGMT(int32_t offset, UnicodeString& result, UErrorCode& status) const;
 
+    using Format::format;
+
     /**
      * Returns the display name of the time zone at the given date for the style.
      * @param style The style (e.g. <code>UTZFMT_STYLE_GENERIC_LONG</code>, <code>UTZFMT_STYLE_LOCALIZED_GMT</code>...)
