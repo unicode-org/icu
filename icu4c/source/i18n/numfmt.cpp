@@ -362,6 +362,46 @@ NumberFormat::format(int64_t /* unused number */,
     return toAppendTo;
 }
 
+// ------------------------------------------
+// These functions add the status code, just fall back to the non-status versions
+UnicodeString&
+NumberFormat::format(double number,
+                     UnicodeString& appendTo,
+                     FieldPosition& pos,
+                     UErrorCode &status) const {
+    if(U_SUCCESS(status)) {
+        return format(number,appendTo,pos);
+    } else {
+        return appendTo;
+    }
+}
+
+UnicodeString&
+NumberFormat::format(int32_t number,
+                     UnicodeString& appendTo,
+                     FieldPosition& pos,
+                     UErrorCode &status) const {
+    if(U_SUCCESS(status)) {
+        return format(number,appendTo,pos);
+    } else {
+        return appendTo;
+    }
+}
+
+UnicodeString&
+NumberFormat::format(int64_t number,
+                     UnicodeString& appendTo,
+                     FieldPosition& pos,
+                     UErrorCode &status) const {
+    if(U_SUCCESS(status)) {
+        return format(number,appendTo,pos);
+    } else {
+        return appendTo;
+    }
+}
+
+
+
 // -------------------------------------
 // Decimal Number format() default implementation 
 // Subclasses do not normally override this function, but rather the DigitList

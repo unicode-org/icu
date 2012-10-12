@@ -158,6 +158,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void Test9087();
     void TestFormatFastpaths();
 
+    void TestEnumSet();
 
  private:
 

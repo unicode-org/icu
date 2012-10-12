@@ -359,6 +359,24 @@ public:
                                   UnicodeString& appendTo,
                                   FieldPosition& pos) const = 0;
     /**
+     * Format a double number. By default, the parent function simply
+     * calls the base class and does not return an error status.
+     * Therefore, the status may be ignored in some subclasses.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status    error status
+     * @return          Reference to 'appendTo' parameter.
+     * @internal
+     */
+    virtual UnicodeString& format(double number,
+                                  UnicodeString& appendTo,
+                                  FieldPosition& pos,
+                                  UErrorCode &status) const;
+    /**
      * Format a double number. Subclasses must implement
      * this method.
      *
@@ -391,6 +409,24 @@ public:
     virtual UnicodeString& format(int32_t number,
                                   UnicodeString& appendTo,
                                   FieldPosition& pos) const = 0;
+
+    /**
+     * Format a long number. Concrete subclasses may override
+     * this function to provide status return.
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @param status the output status.
+     * @return          Reference to 'appendTo' parameter.
+     * @internal
+    */
+    virtual UnicodeString& format(int32_t number,
+                                  UnicodeString& appendTo,
+                                  FieldPosition& pos,
+                                  UErrorCode &status) const;
 
     /**
      * Format an int32 number. Subclasses must implement
@@ -426,6 +462,24 @@ public:
     virtual UnicodeString& format(int64_t number,
                                   UnicodeString& appendTo,
                                   FieldPosition& pos) const;
+
+    /**
+     * Format an int64 number. (Not abstract to retain compatibility
+     * with earlier releases, however subclasses should override this
+     * method as it just delegates to format(int32_t number...);
+     *
+     * @param number    The value to be formatted.
+     * @param appendTo  Output parameter to receive result.
+     *                  Result is appended to existing contents.
+     * @param pos       On input: an alignment field, if desired.
+     *                  On output: the offsets of the alignment field.
+     * @return          Reference to 'appendTo' parameter.
+     * @internal
+    */
+    virtual UnicodeString& format(int64_t number,
+                                  UnicodeString& appendTo,
+                                  FieldPosition& pos,
+                                  UErrorCode& status) const;
     /**
      * Format an int64 number. Subclasses must implement
      * this method.
