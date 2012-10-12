@@ -6693,31 +6693,31 @@ enum myEnum {
 
 void NumberFormatTest::TestEnumSet(void) {
     EnumSet<myEnum,
-            myEnum::MAX_NONBOOLEAN+1, 
-            myEnum::LIMIT_BOOLEAN>  
+            MAX_NONBOOLEAN+1,
+            LIMIT_BOOLEAN>
                             flags;
     infoln("TODO!! This test doesn't fail on error. Convert printf into error assert.\n");
 
-    logln("Enum is from [%d..%d]\n", myEnum::MAX_NONBOOLEAN+1, 
-          myEnum::LIMIT_BOOLEAN);
+    logln("Enum is from [%d..%d]\n", MAX_NONBOOLEAN+1,
+          LIMIT_BOOLEAN);
 
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
     logln("Value now: %d\n", flags.getAll());
     flags.clear();
     logln("clear -Value now: %d\n", flags.getAll());
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
-    flags.add(myEnum::THING1);
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
+    flags.add(THING1);
     logln("set THING1 -Value now: %d\n", flags.getAll());
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
-    flags.add(myEnum::THING3);
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
+    flags.add(THING3);
     logln("set THING3 -Value now: %d\n", flags.getAll());
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
-    flags.remove(myEnum::THING2);
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
+    flags.remove(THING2);
     logln("remove THING2 -Value now: %d\n", flags.getAll());
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
-    flags.remove(myEnum::THING1);
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
+    flags.remove(THING1);
     logln("remove THING1 -Value now: %d\n", flags.getAll());
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(myEnum::THING1),          flags.get(myEnum::THING2),          flags.get(myEnum::THING3));
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
 
 }
 
