@@ -5172,7 +5172,7 @@ TestTailor6179(void)
         }
         log_err("\n");
     }
-if(isICUVersionAtLeast(50, 1, 0)) {  /* TODO: debug & fix, see ticket #8982 */
+if(isICUVersionAtLeast(51, 1, 0)) {  /* TODO: debug & fix, see ticket #8982 */
     tLen = u_strlen(tData2[1]);
     rLen = ucol_getSortKey(coll, tData2[1], tLen, resColl, 100);
     if (rLen != LEN(firstSecondaryIgnCE) || uprv_memcmp(resColl, firstSecondaryIgnCE, rLen) != 0) {

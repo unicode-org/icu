@@ -281,7 +281,7 @@ static void TestErrorCodes(void) {
 
   /* we look up the resource which is aliased and at our level */
   /* TODO: restore the following test when cldrbug 3058: is fixed */
-  if(U_SUCCESS(status) && r != NULL && isICUVersionAtLeast(50, 1, 0)) {
+  if(U_SUCCESS(status) && r != NULL && isICUVersionAtLeast(51, 0, 0)) {
     status = U_USING_DEFAULT_WARNING;
     r2 = ures_getByKey(r, "Countries", r2, &status);
     checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);

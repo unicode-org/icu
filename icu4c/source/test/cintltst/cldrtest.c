@@ -934,7 +934,7 @@ static void VerifyTranslation(void) {
             if (U_FAILURE(errorCode)) {
                 log_err("error uloc_getDisplayCountry returned %s\n", u_errorName(errorCode));
             }
-            else if (uprv_strstr(currLoc, "ti_") != currLoc || isICUVersionAtLeast(50, 1, 0)) { /* TODO: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) */
+            else if (uprv_strstr(currLoc, "ti_") != currLoc || isICUVersionAtLeast(51, 0, 0)) { /* TODO: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) */
               strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE, &badChar);
                 if (strIdx >= 0) {
                     log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters: %04X.\n",
