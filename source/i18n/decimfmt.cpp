@@ -73,6 +73,7 @@
 
 U_NAMESPACE_BEGIN
 
+
 /* == Fastpath calculation. ==
  */
 #if UCONFIG_FORMAT_FASTPATHS_49
@@ -350,6 +351,7 @@ DecimalFormat::init(UErrorCode &status) {
     fUseExponentialNotation = FALSE;
     fMinExponentDigits = 0;
     fExponentSignAlwaysShown = FALSE;
+    fBoolFlags.clear();
     fRoundingIncrement = 0;
     fRoundingMode = kRoundHalfEven;
     fPad = 0;
@@ -737,6 +739,7 @@ DecimalFormat::operator=(const DecimalFormat& rhs)
         _copy_ptr(&fSymbols, rhs.fSymbols);
         fUseExponentialNotation = rhs.fUseExponentialNotation;
         fExponentSignAlwaysShown = rhs.fExponentSignAlwaysShown;
+        fBoolFlags = rhs.fBoolFlags;
         /*Bertrand A. D. Update 98.03.17*/
         fCurrencySignCount = rhs.fCurrencySignCount;
         /*end of Update*/
@@ -993,6 +996,15 @@ DecimalFormat::format(int32_t number,
 UnicodeString&
 DecimalFormat::format(int32_t number,
                       UnicodeString& appendTo,
+                      FieldPosition& fieldPosition,
+                      UErrorCode& status) const
+{
+    return format((int64_t)number, appendTo, fieldPosition, status);
+}
+
+UnicodeString&
+DecimalFormat::format(int32_t number,
+                      UnicodeString& appendTo,
                       FieldPositionIterator* posIter,
                       UErrorCode& status) const
 {
@@ -1048,7 +1060,17 @@ DecimalFormat::format(int64_t number,
                       UnicodeString& appendTo,
                       FieldPosition& fieldPosition) const
 {
-    UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR; /* ignored */
+    FieldPositionOnlyHandler handler(fieldPosition);
+    return _format(number, appendTo, handler, status);
+}
+
+UnicodeString&
+DecimalFormat::format(int64_t number,
+                      UnicodeString& appendTo,
+                      FieldPosition& fieldPosition,
+                      UErrorCode& status) const
+{
     FieldPositionOnlyHandler handler(fieldPosition);
     return _format(number, appendTo, handler, status);
 }
@@ -1115,6 +1137,10 @@ DecimalFormat::_format(int64_t number,
     int32_t maxIntDig = getMaximumIntegerDigits();
     int32_t destlength = length<=maxIntDig?length:maxIntDig; // dest length pinned to max int digits
 
+    if(length>maxIntDig && fBoolFlags.contains(UNUM_FORMAT_FAIL_IF_MAX_DIGITS)) {
+      status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+
     int32_t prependZero = getMinimumIntegerDigits() - destlength;
 
 #ifdef FMT_DEBUG
@@ -1158,7 +1184,17 @@ DecimalFormat::format(  double number,
                         UnicodeString& appendTo,
                         FieldPosition& fieldPosition) const
 {
-    UErrorCode status = U_ZERO_ERROR;
+    UErrorCode status = U_ZERO_ERROR; /* ignored */
+    FieldPositionOnlyHandler handler(fieldPosition);
+    return _format(number, appendTo, handler, status);
+}
+
+UnicodeString&
+DecimalFormat::format(  double number,
+                        UnicodeString& appendTo,
+                        FieldPosition& fieldPosition,
+                        UErrorCode& status) const
+{
     FieldPositionOnlyHandler handler(fieldPosition);
     return _format(number, appendTo, handler, status);
 }
@@ -1370,7 +1406,7 @@ DecimalFormat::_format(const DigitList &number,
         return appendTo;
     }
  
-    return subformat(appendTo, handler, adjustedNum, FALSE);
+    return subformat(appendTo, handler, adjustedNum, FALSE, status);
 }
 
 
@@ -1415,7 +1451,8 @@ UnicodeString&
 DecimalFormat::subformat(UnicodeString& appendTo,
                          FieldPositionHandler& handler,
                          DigitList&     digits,
-                         UBool          isInteger) const
+                         UBool          isInteger,
+                         UErrorCode& status) const
 {
     // char zero = '0'; 
     // DigitList returns digits as '0' thru '9', so we will need to 
@@ -1624,6 +1661,9 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         if (count > maxIntDig && maxIntDig >= 0) {
             count = maxIntDig;
             digitIndex = digits.getDecimalAt() - count;
+            if(fBoolFlags.contains(UNUM_FORMAT_FAIL_IF_MAX_DIGITS)) {
+                status = U_ILLEGAL_ARGUMENT_ERROR;
+            }
         }
 
         int32_t sizeBeforeIntegerPart = appendTo.length();
@@ -2435,61 +2475,67 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
                 // decimalSet is considered to consist of (ch,ch)
             }
             else {
-                const UnicodeString *tmp;
-                tmp = &getConstSymbol(DecimalFormatSymbols::kExponentialSymbol);
-                if (!text.caseCompare(position, tmp->length(), *tmp, U_FOLD_CASE_DEFAULT))    // error code is set below if !sawDigit 
-                {
-                    // Parse sign, if present
-                    int32_t pos = position + tmp->length();
-                    char exponentSign = '+';
 
-                    if (pos < textLength)
+                if(!fBoolFlags.contains(UNUM_PARSE_NO_EXPONENT) || // don't parse if this is set unless..
+                    fUseExponentialNotation /* should be:  isScientificNotation() but it is not const (?!) see bug #9619 */) { // .. it's an exponent format - ignore setting and parse anyways
+                    const UnicodeString *tmp;
+                    tmp = &getConstSymbol(DecimalFormatSymbols::kExponentialSymbol);
+                    // TODO: CASE
+                    if (!text.caseCompare(position, tmp->length(), *tmp, U_FOLD_CASE_DEFAULT))    // error code is set below if !sawDigit 
                     {
-                        tmp = &getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
-                        if (!text.compare(pos, tmp->length(), *tmp))
+                        // Parse sign, if present
+                        int32_t pos = position + tmp->length();
+                        char exponentSign = '+';
+
+                        if (pos < textLength)
                         {
-                            pos += tmp->length();
-                        }
-                        else {
-                            tmp = &getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
+                            tmp = &getConstSymbol(DecimalFormatSymbols::kPlusSignSymbol);
                             if (!text.compare(pos, tmp->length(), *tmp))
                             {
-                                exponentSign = '-';
                                 pos += tmp->length();
                             }
-                        }
-                    }
-
-                    UBool sawExponentDigit = FALSE;
-                    while (pos < textLength) {
-                        ch = text[(int32_t)pos];
-                        digit = ch - zero;
-
-                        if (digit < 0 || digit > 9) {
-                            digit = u_charDigitValue(ch);
-                        }
-                        if (0 <= digit && digit <= 9) {
-                            if (!sawExponentDigit) {
-                                parsedNum.append('E', err);
-                                parsedNum.append(exponentSign, err);
-                                sawExponentDigit = TRUE;
+                            else {
+                                tmp = &getConstSymbol(DecimalFormatSymbols::kMinusSignSymbol);
+                                if (!text.compare(pos, tmp->length(), *tmp))
+                                {
+                                    exponentSign = '-';
+                                    pos += tmp->length();
+                                }
                             }
-                            ++pos;
-                            parsedNum.append((char)(digit + '0'), err);
-                        } else {
-                            break;
                         }
-                    }
 
-                    if (sawExponentDigit) {
-                        position = pos; // Advance past the exponent
-                    }
+                        UBool sawExponentDigit = FALSE;
+                        while (pos < textLength) {
+                            ch = text[(int32_t)pos];
+                            digit = ch - zero;
 
-                    break; // Whether we fail or succeed, we exit this loop
-                }
-                else {
+                            if (digit < 0 || digit > 9) {
+                                digit = u_charDigitValue(ch);
+                            }
+                            if (0 <= digit && digit <= 9) {
+                                if (!sawExponentDigit) {
+                                    parsedNum.append('E', err);
+                                    parsedNum.append(exponentSign, err);
+                                    sawExponentDigit = TRUE;
+                                }
+                                ++pos;
+                                parsedNum.append((char)(digit + '0'), err);
+                            } else {
+                                break;
+                            }
+                        }
+
+                        if (sawExponentDigit) {
+                            position = pos; // Advance past the exponent
+                        }
+
+                        break; // Whether we fail or succeed, we exit this loop
+                    } else {
+                        break;
+                    }
+                } else { // not parsing exponent
                     break;
-                }
+              }
             }
         }
 
@@ -5302,6 +5348,190 @@ DecimalFormat::copyHashForAffixPattern(const Hashtable* source,
             }
         }
     }
+}
+
+DecimalFormat& DecimalFormat::setAttribute( UNumberFormatAttribute attr,
+                                            int32_t newValue,
+                                            UErrorCode &status) {
+  if(U_FAILURE(status)) return *this;
+
+  switch(attr) {
+  case UNUM_LENIENT_PARSE:
+    setLenient(newValue!=0);
+    break;
+
+    case UNUM_PARSE_INT_ONLY:
+      setParseIntegerOnly(newValue!=0);
+      break;
+      
+    case UNUM_GROUPING_USED:
+      setGroupingUsed(newValue!=0);
+      break;
+        
+    case UNUM_DECIMAL_ALWAYS_SHOWN:
+      setDecimalSeparatorAlwaysShown(newValue!=0);
+        break;
+        
+    case UNUM_MAX_INTEGER_DIGITS:
+      setMaximumIntegerDigits(newValue);
+        break;
+        
+    case UNUM_MIN_INTEGER_DIGITS:
+      setMinimumIntegerDigits(newValue);
+        break;
+        
+    case UNUM_INTEGER_DIGITS:
+      setMinimumIntegerDigits(newValue);
+      setMaximumIntegerDigits(newValue);
+        break;
+        
+    case UNUM_MAX_FRACTION_DIGITS:
+      setMaximumFractionDigits(newValue);
+        break;
+        
+    case UNUM_MIN_FRACTION_DIGITS:
+      setMinimumFractionDigits(newValue);
+        break;
+        
+    case UNUM_FRACTION_DIGITS:
+      setMinimumFractionDigits(newValue);
+      setMaximumFractionDigits(newValue);
+      break;
+        
+    case UNUM_SIGNIFICANT_DIGITS_USED:
+      setSignificantDigitsUsed(newValue!=0);
+        break;
+
+    case UNUM_MAX_SIGNIFICANT_DIGITS:
+      setMaximumSignificantDigits(newValue);
+        break;
+        
+    case UNUM_MIN_SIGNIFICANT_DIGITS:
+      setMinimumSignificantDigits(newValue);
+        break;
+        
+    case UNUM_MULTIPLIER:
+      setMultiplier(newValue);    
+       break;
+        
+    case UNUM_GROUPING_SIZE:
+      setGroupingSize(newValue);    
+        break;
+        
+    case UNUM_ROUNDING_MODE:
+      setRoundingMode((DecimalFormat::ERoundingMode)newValue);
+        break;
+        
+    case UNUM_FORMAT_WIDTH:
+      setFormatWidth(newValue);
+        break;
+        
+    case UNUM_PADDING_POSITION:
+        /** The position at which padding will take place. */
+      setPadPosition((DecimalFormat::EPadPosition)newValue);
+        break;
+        
+    case UNUM_SECONDARY_GROUPING_SIZE:
+      setSecondaryGroupingSize(newValue);
+        break;
+
+#if UCONFIG_HAVE_PARSEALLINPUT
+    case UNUM_PARSE_ALL_INPUT:
+      setParseAllInput((UNumberFormatAttributeValue)newValue);
+        break;
+#endif
+
+    /* These are stored in fBoolFlags */
+    case UNUM_PARSE_NO_EXPONENT:
+    case UNUM_FORMAT_FAIL_IF_MAX_DIGITS:
+      if(!fBoolFlags.isValidValue(newValue)) {
+          status = U_ILLEGAL_ARGUMENT_ERROR;
+      } else {
+          fBoolFlags.set(attr, newValue);
+      }
+      break;
+
+    default:
+      status = U_UNSUPPORTED_ERROR;
+      break;
+  }
+  return *this;
+}
+
+int32_t DecimalFormat::getAttribute( UNumberFormatAttribute attr, 
+                                     UErrorCode &status ) const {
+  if(U_FAILURE(status)) return -1;
+  switch(attr) {
+    case UNUM_LENIENT_PARSE: 
+        return isLenient();
+
+    case UNUM_PARSE_INT_ONLY:
+        return isParseIntegerOnly();
+        
+    case UNUM_GROUPING_USED:
+        return isGroupingUsed();
+        
+    case UNUM_DECIMAL_ALWAYS_SHOWN:
+        return isDecimalSeparatorAlwaysShown();    
+        
+    case UNUM_MAX_INTEGER_DIGITS:
+        return getMaximumIntegerDigits();
+        
+    case UNUM_MIN_INTEGER_DIGITS:
+        return getMinimumIntegerDigits();
+        
+    case UNUM_INTEGER_DIGITS:
+        // TBD: what should this return?
+        return getMinimumIntegerDigits();
+        
+    case UNUM_MAX_FRACTION_DIGITS:
+        return getMaximumFractionDigits();
+        
+    case UNUM_MIN_FRACTION_DIGITS:
+        return getMinimumFractionDigits();
+        
+    case UNUM_FRACTION_DIGITS:
+        // TBD: what should this return?
+        return getMinimumFractionDigits();
+        
+    case UNUM_SIGNIFICANT_DIGITS_USED:
+        return areSignificantDigitsUsed();
+        
+    case UNUM_MAX_SIGNIFICANT_DIGITS:
+        return getMaximumSignificantDigits();
+        
+    case UNUM_MIN_SIGNIFICANT_DIGITS:
+        return getMinimumSignificantDigits();
+        
+    case UNUM_MULTIPLIER:
+        return getMultiplier();    
+        
+    case UNUM_GROUPING_SIZE:
+        return getGroupingSize();    
+        
+    case UNUM_ROUNDING_MODE:
+        return getRoundingMode();
+        
+    case UNUM_FORMAT_WIDTH:
+        return getFormatWidth();
+        
+    case UNUM_PADDING_POSITION:
+        return getPadPosition();
+        
+    case UNUM_SECONDARY_GROUPING_SIZE:
+        return getSecondaryGroupingSize();
+        
+    /* These are stored in fBoolFlags */
+    case UNUM_PARSE_NO_EXPONENT:
+    case UNUM_FORMAT_FAIL_IF_MAX_DIGITS:
+      return fBoolFlags.get(attr);
+
+    default:
+        status = U_UNSUPPORTED_ERROR;
+        break;
+  }
+
+  return -1; /* undefined */
 }
 
 #if UCONFIG_HAVE_PARSEALLINPUT
