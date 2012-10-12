@@ -1191,29 +1191,6 @@ public class PluralRules implements Serializable {
         UNBOUNDED
     }
 
-//    /**
-//     * Indicates whether the values are all restricted to be integers, or whether they may be non-integers.
-//     * 
-//     * @draft ICU 50
-//     * @provisional This API might change or be removed in a future release.
-//     */
-//    public enum NumberType {
-//        /**
-//         * Indicates that the values are all restricted to be integers.
-//         * 
-//         * @draft ICU 50
-//         * @provisional This API might change or be removed in a future release.
-//         */
-//        INTEGER,
-//        /**
-//         * Indicates that the values may be non-integers.
-//         * 
-//         * @draft ICU 50
-//         * @provisional This API might change or be removed in a future release.
-//         */
-//        DOUBLE
-//    }
-
     /**
      * Find the status for the keyword, given a certain set of explicit values.
      * 
@@ -1224,16 +1201,9 @@ public class PluralRules implements Serializable {
      *            checking against the keyword values.
      * @param explicits
      *            a set of Doubles that are used explicitly (eg [=0], "[=1]"). May be empty or null.
-//     * @param numberType
-//     *            In circumstances where the values used are known to be integers, this parameter can be set to INTEGER.
-//     *            Examples: "There are 3 people in..." (integerOnly=true) vs. "There are 1.2 people per household
-//     *            (integerOnly=false). This may produce different results in languages where fractions have the same
-//     *            format as integers for some keywords.
-     * @return the KeywordStatus
      * @param uniqueValue
      *            If non null, set to the unique value.
-     *            <p>
-     *            NOTE: For testing, this is a static with the first parameter being the rules. Those will disappear.
+     * @return the KeywordStatus
      * @draft ICU 50
      * @provisional This API might change or be removed in a future release.
      */
