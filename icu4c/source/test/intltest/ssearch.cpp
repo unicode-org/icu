@@ -980,8 +980,8 @@ void SSearchTest::offsetTest()
     col->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
 
     for(int32_t i = 0; i < testCount; i += 1) {
-        if (!isICUVersionAtLeast(50, 1) && i>=4 && i<=6) {
-            continue; // timebomb until ticket #8080 is resolved
+        if (!isICUVersionAtLeast(51, 1) && i>=4 && i<=6) {
+            continue; // timebomb until ticket #9156 (was #8081) is resolved
         }
         UnicodeString ts = CharsToUnicodeString(test[i]);
         CollationElementIterator *iter = col->createCollationElementIterator(ts);
@@ -2414,12 +2414,12 @@ void SSearchTest::bmMonkeyTest(char *params)
         CollData *data = CollData::open(coll, status);
 
         UnicodeSet skipSet;
-        if(isICUVersionBefore(50, 1)) {
-            // timebomb until ticket #8080 is resolved
+        if(isICUVersionBefore(51, 1)) {
+            // timebomb until ticket #9156 (was #8081) is resolved
             UnicodeString skipString(skipChars);
             skipSet.addAll(skipString);
         }
-        if(isICUVersionBefore(51, 0)) {
+        if(isICUVersionBefore(51, 1)) {
             // Time bomb until ticket #9490 is fixed.
             skipSet.add(0x12327);
             skipSet.add(0x1311b);
