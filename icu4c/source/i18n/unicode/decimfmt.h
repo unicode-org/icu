@@ -56,7 +56,6 @@ class Hashtable;
 class UnicodeSet;
 class FieldPositionHandler;
 
-#include <stdio.h>
 /**
  * enum bitset for boolean fields. Similar to Java EnumSet<>. 
  * Needs to range check. Not specific to decimal format.
