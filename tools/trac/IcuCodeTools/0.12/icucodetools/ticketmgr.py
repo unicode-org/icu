@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright (C) 2007-2011 IBM and Others. All Rights Reserved
+# Copyright (C) 2007-2012 IBM and Others. All Rights Reserved
 # Author: <srl@icu-project.org>
 #
 
@@ -104,7 +104,7 @@ class TicketManager(Component):
         
         #self.ticket_pattern = self.env.config.get('icucodetools', 'ticket_pattern', '^cldrbug (\d+):')
 
-        #        log.info("Pat: %s" % (self.ticket_pattern))
+        #log.info("Pat: %s" % (self.ticket_pattern))
         try:
             self.ticket_match = re.compile(self.ticket_pattern)
         except Exception, e:
@@ -154,7 +154,7 @@ class TicketManager(Component):
         # sync the 'rev2ticket' table
         message = cset.message or '--'
         # can we load a ticket from it?   "ticket:1234: Message"
-        res = self.ticket_match.match(message)
+        res = self.ticket_match.match(message.strip())
         if res:
             tickname = res.group(1)
             try:
@@ -173,8 +173,8 @@ class TicketManager(Component):
                 log.warning('rev2ticket %s could not cache: %s' %
                                  (next_youngest, e))
         else:
-                log.warning('Revision %s had unmatched message %s' %
-                                 (next_youngest, cset.message))
+            log.warning('Revision %s had unmatched message "%s" for pattern /%s/' %
+                        (next_youngest, cset.message, self.ticket_pattern))
     
     def repository_resync(self, cursor):
         cursor.execute("DELETE FROM rev2ticket");
