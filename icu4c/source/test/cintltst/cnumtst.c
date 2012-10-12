@@ -2175,12 +2175,12 @@ static void TestMaxInt(void) {
 
 
 
-    /* test UNUM_FORMAT_FAIL_IF_MAX_DIGITS */
-    ASSERT_TRUE(unum_getAttribute(fmt, UNUM_FORMAT_FAIL_IF_MAX_DIGITS)==0);
+    /* test UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS */
+    ASSERT_TRUE(unum_getAttribute(fmt, UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS)==0);
 
-    unum_setAttribute(fmt, UNUM_FORMAT_FAIL_IF_MAX_DIGITS, 1);
-    /* test UNUM_FORMAT_FAIL_IF_MAX_DIGITS */
-    ASSERT_TRUE(unum_getAttribute(fmt, UNUM_FORMAT_FAIL_IF_MAX_DIGITS)==1);
+    unum_setAttribute(fmt, UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS, 1);
+    /* test UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS */
+    ASSERT_TRUE(unum_getAttribute(fmt, UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS)==1);
 
     status = U_ZERO_ERROR;
     /* max int digits still '2' */

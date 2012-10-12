@@ -1137,7 +1137,7 @@ DecimalFormat::_format(int64_t number,
     int32_t maxIntDig = getMaximumIntegerDigits();
     int32_t destlength = length<=maxIntDig?length:maxIntDig; // dest length pinned to max int digits
 
-    if(length>maxIntDig && fBoolFlags.contains(UNUM_FORMAT_FAIL_IF_MAX_DIGITS)) {
+    if(length>maxIntDig && fBoolFlags.contains(UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS)) {
       status = U_ILLEGAL_ARGUMENT_ERROR;
     }
 
@@ -1661,7 +1661,7 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         if (count > maxIntDig && maxIntDig >= 0) {
             count = maxIntDig;
             digitIndex = digits.getDecimalAt() - count;
-            if(fBoolFlags.contains(UNUM_FORMAT_FAIL_IF_MAX_DIGITS)) {
+            if(fBoolFlags.contains(UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS)) {
                 status = U_ILLEGAL_ARGUMENT_ERROR;
             }
         }
@@ -5443,7 +5443,7 @@ DecimalFormat& DecimalFormat::setAttribute( UNumberFormatAttribute attr,
 
     /* These are stored in fBoolFlags */
     case UNUM_PARSE_NO_EXPONENT:
-    case UNUM_FORMAT_FAIL_IF_MAX_DIGITS:
+    case UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS:
       if(!fBoolFlags.isValidValue(newValue)) {
           status = U_ILLEGAL_ARGUMENT_ERROR;
       } else {
@@ -5523,7 +5523,7 @@ int32_t DecimalFormat::getAttribute( UNumberFormatAttribute attr,
         
     /* These are stored in fBoolFlags */
     case UNUM_PARSE_NO_EXPONENT:
-    case UNUM_FORMAT_FAIL_IF_MAX_DIGITS:
+    case UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS:
       return fBoolFlags.get(attr);
 
     default:
