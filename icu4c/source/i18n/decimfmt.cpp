@@ -693,26 +693,23 @@ DecimalFormat::DecimalFormat(const DecimalFormat &source) :
 
 template <class T>
 static void _copy_ptr(T** pdest, const T* source) {
-    if (source != NULL && *pdest != NULL) {
-        **pdest = *source;
-    } else if (*pdest != NULL) {
+    if (source == NULL) {
         delete *pdest;
         *pdest = NULL;
-    } else if (source != NULL) {
+    } else if (*pdest == NULL) {
         *pdest = new T(*source);
+    } else {
+        **pdest = *source;
     }
-    // Both source and pdest are null, don't need to do anything.
 }
 
 template <class T>
 static void _clone_ptr(T** pdest, const T* source) {
-    if (*pdest != NULL) {
-      delete *pdest;
-    }
+    delete *pdest;
     if (source == NULL) {
-      *pdest = NULL;
+        *pdest = NULL;
     } else {
-      *pdest = static_cast<T*>(source->clone());
+        *pdest = static_cast<T*>(source->clone());
     }
 }
 
