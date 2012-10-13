@@ -3928,6 +3928,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/IBMCalendarTest.java svn
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/IndianTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/IslamicTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/JapaneseTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/PersianTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/TestCase.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/calendar/package.html svneol=native#text/html
