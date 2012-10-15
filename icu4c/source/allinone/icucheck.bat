@@ -20,12 +20,12 @@ exit /b 1
 
 set ICU_OPATH=%PATH%
 
-set ICU_ICUDIR="%~f0"\..\..\..
+set ICU_ICUDIR="%~dp0"\..\..
 
 if "%ICU_ARCH%" == "x64" (
-set ICU_BINDIR=%~f0\..\..\..\bin64
+set ICU_BINDIR=%~dp0\..\..\bin64
 ) else (
-set ICU_BINDIR=%~f0\..\..\..\bin
+set ICU_BINDIR=%~dp0\..\..\bin
 )
 
 set PATH=%ICU_BINDIR%;%PATH%
