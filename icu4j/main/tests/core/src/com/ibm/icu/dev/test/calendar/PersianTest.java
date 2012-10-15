@@ -8,8 +8,6 @@ package com.ibm.icu.dev.test.calendar;
 import java.util.Date;
 
 import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.PersianCalendar;
-import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.ULocale;
 
 public class PersianTest extends CalendarTest {
