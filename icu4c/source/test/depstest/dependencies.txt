@@ -740,7 +740,7 @@ group: platform
 
 library: i18n
   deps
-    localedata charset_detector spoof_detection
+    localedata genderinfo charset_detector spoof_detection
     alphabetic_index collation formatting formattable_cnv regex regex_cnv translit
     universal_time_scale
     uclean_i18n
@@ -750,6 +750,12 @@ group: localedata
   deps
     uniset_props resourcebundle
     uset_props  # TODO: change to using C++ UnicodeSet, remove this dependency
+
+group: genderinfo
+    gender.o
+  deps
+    resourcebundle
+    uclean_i18n
 
 group: charset_detector
     csdetect.o csmatch.o csr2022.o csrecog.o csrmbcs.o csrsbcs.o csrucode.o csrutf8.o inputext.o ucsdet.o
