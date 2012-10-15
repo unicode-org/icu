@@ -4303,6 +4303,7 @@ public:
             capacity_ = 0;
         }
     }
+    virtual ~SortKeyByteSink();
 
     virtual void Append(const char *bytes, int32_t n);
     void Append(uint32_t b) {
@@ -4346,6 +4347,8 @@ private:
     SortKeyByteSink(const SortKeyByteSink &); // copy constructor not implemented
     SortKeyByteSink &operator=(const SortKeyByteSink &); // assignment operator not implemented
 };
+
+SortKeyByteSink::~SortKeyByteSink() {}
 
 void
 SortKeyByteSink::Append(const char *bytes, int32_t n) {
@@ -4392,11 +4395,14 @@ class FixedSortKeyByteSink : public SortKeyByteSink {
 public:
     FixedSortKeyByteSink(char *dest, int32_t destCapacity)
             : SortKeyByteSink(dest, destCapacity) {}
+    virtual ~FixedSortKeyByteSink();
 
 private:
     virtual void AppendBeyondCapacity(const char *bytes, int32_t n, int32_t length);
     virtual UBool Resize(int32_t appendCapacity, int32_t length);
 };
+
+FixedSortKeyByteSink::~FixedSortKeyByteSink() {}
 
 void
 FixedSortKeyByteSink::AppendBeyondCapacity(const char *bytes, int32_t /*n*/, int32_t length) {
@@ -4418,6 +4424,7 @@ public:
     CollationKeyByteSink(CollationKey &key)
             : SortKeyByteSink(reinterpret_cast<char *>(key.getBytes()), key.getCapacity()),
               key_(key) {}
+    virtual ~CollationKeyByteSink();
 
 private:
     virtual void AppendBeyondCapacity(const char *bytes, int32_t n, int32_t length);
@@ -4425,6 +4432,8 @@ private:
 
     CollationKey &key_;
 };
+
+CollationKeyByteSink::~CollationKeyByteSink() {}
 
 void
 CollationKeyByteSink::AppendBeyondCapacity(const char *bytes, int32_t n, int32_t length) {
