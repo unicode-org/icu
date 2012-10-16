@@ -237,7 +237,8 @@ public class SimpleDateFormat extends DateFormat {
     // the internal serial version which says which version was written
     // - 0 (default) for version up to JDK 1.1.3
     // - 1 for version from JDK 1.1.4, which includes a new field
-    static final int currentSerialVersion = 1;
+    // - 2 we write additional int for capitalizationContext
+    static final int currentSerialVersion = 2;
 
     static boolean DelayedHebrewMonthCheck = false;
 
@@ -294,6 +295,8 @@ public class SimpleDateFormat extends DateFormat {
      * has no <code>defaultCenturyStart</code> on stream.
      * <li><b>1</b> JDK 1.1.4 or later.  This version adds
      * <code>defaultCenturyStart</code>.
+     * <li><b>2</b> This version writes an additional int for
+     * <code>capitalizationContext</code>.
      * </ul>
      * When streaming out this class, the most recent format
      * and the highest allowable <code>serialVersionOnStream</code>
@@ -381,14 +384,15 @@ public class SimpleDateFormat extends DateFormat {
 
     /*
      *  Capitalization setting, introduced in ICU 50
+     *  Special serialization, see writeObject & readObject below
      */
-    private DisplayContext capitalizationSetting;
+    private transient DisplayContext capitalizationSetting;
 
     /*
-     *  Old defaultCapitalizationContext, preserved only to avoid
-     *  deserialization errs from ICU 49.1.
+     *  Old defaultCapitalizationContext field
+     *  from ICU 49.1:
      */
-    private ContextValue defaultCapitalizationContext;
+    //private ContextValue defaultCapitalizationContext;
     /**
      *  Old ContextValue enum, preserved only to avoid
      *  deserialization errs from ICU 49.1.
@@ -2681,6 +2685,7 @@ public class SimpleDateFormat extends DateFormat {
 
     /**
      * Override writeObject.
+     * See http://docs.oracle.com/javase/6/docs/api/java/io/ObjectOutputStream.html
      */
     private void writeObject(ObjectOutputStream stream) throws IOException{
         if (defaultCenturyStart == null) {
@@ -2690,14 +2695,17 @@ public class SimpleDateFormat extends DateFormat {
         }
         initializeTimeZoneFormat(false);
         stream.defaultWriteObject();
+        stream.writeInt(capitalizationSetting.value());
     }
 
     /**
      * Override readObject.
+     * See http://docs.oracle.com/javase/6/docs/api/java/io/ObjectInputStream.html
      */
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
+        int capitalizationSettingValue = (serialVersionOnStream > 1)? stream.readInt(): -1;
         ///CLOVER:OFF
         // don't have old serial data to test with
         if (serialVersionOnStream < 1) {
@@ -2719,6 +2727,16 @@ public class SimpleDateFormat extends DateFormat {
         }
 
         initLocalZeroPaddingNumberFormat();
+
+        capitalizationSetting = DisplayContext.CAPITALIZATION_NONE;
+        if (capitalizationSettingValue >= 0) {
+            for (DisplayContext context: DisplayContext.values()) {
+                if (context.value() == capitalizationSettingValue) {
+                    capitalizationSetting = context;
+                    break;
+                }
+            }
+        }
     }
 
     /**
