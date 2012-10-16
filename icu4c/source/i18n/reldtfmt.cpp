@@ -9,6 +9,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include <stdlib.h>
+
 #include "reldtfmt.h"
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
