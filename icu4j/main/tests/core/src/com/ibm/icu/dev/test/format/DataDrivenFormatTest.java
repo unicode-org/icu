@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2008, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -19,6 +19,7 @@ import com.ibm.icu.dev.test.util.DateTimeStyleSet;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -80,6 +81,7 @@ public class DataDrivenFormatTest extends ModuleTest {
             String caseString = "["+testData.getName()+"#"+n+(fmt?"format":"parse")+"]";
             
             String locale = currentCase.getString("locale");
+            String zone = currentCase.getString("zone");
             String spec = currentCase.getString("spec");
             String date = currentCase.getString("date");
             String str = currentCase.getString("str");
@@ -106,6 +108,12 @@ public class DataDrivenFormatTest extends ModuleTest {
             }
 
             Calendar cal = Calendar.getInstance(loc);
+
+            if (zone.length() > 0) {
+                TimeZone tz = TimeZone.getFrozenTimeZone(zone);
+                cal.setTimeZone(tz);
+                format.setTimeZone(tz);
+            }
             
             // parse 'date' - either 'MILLIS=12345' or  a CalendarFieldsSet
             if(date.startsWith(kMILLIS)) {
@@ -125,7 +133,11 @@ public class DataDrivenFormatTest extends ModuleTest {
                 /// perform op on 'to calendar'
                 for (int q=0; q<addSet.fieldCount(); q++) {
                     if (addSet.isSet(q)) {
-                         cal.add(q,addSet.get(q));
+                        if (q == Calendar.DATE) {
+                            cal.add(q,addSet.get(q));
+                        } else {
+                            cal.set(q,addSet.get(q));
+                        }
                     }
                 }
 

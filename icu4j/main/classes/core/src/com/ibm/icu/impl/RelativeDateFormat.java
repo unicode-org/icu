@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -16,6 +16,7 @@ import java.util.TreeSet;
 
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.MessageFormat;
+import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -55,18 +56,33 @@ public class RelativeDateFormat extends DateFormat {
         fLocale = locale;
         fTimeStyle = timeStyle;
         fDateStyle = dateStyle;
-        
-        if(fDateStyle != DateFormat.NONE) {
+
+        if (fDateStyle != DateFormat.NONE) {
             int newStyle = fDateStyle & ~DateFormat.RELATIVE;
-            fDateFormat = DateFormat.getDateInstance(newStyle, locale);
+            DateFormat df = DateFormat.getDateInstance(newStyle, locale);
+            if (df instanceof SimpleDateFormat) {
+                fDateTimeFormat = (SimpleDateFormat)df;
+            } else {
+                throw new IllegalArgumentException("Can't create SimpleDateFormat for date style");
+            }
+            fDatePattern = fDateTimeFormat.toPattern();
+            if (fTimeStyle != DateFormat.NONE) {
+                newStyle = fTimeStyle & ~DateFormat.RELATIVE;
+                df = DateFormat.getTimeInstance(newStyle, locale);
+                if (df instanceof SimpleDateFormat) {
+                    fTimePattern = ((SimpleDateFormat)df).toPattern();
+                }
+            }
         } else {
-            fDateFormat = null;
-        }
-        if(fTimeStyle != DateFormat.NONE) {
+            // does not matter whether timeStyle is UDAT_NONE, we need something for fDateTimeFormat
             int newStyle = fTimeStyle & ~DateFormat.RELATIVE;
-            fTimeFormat = DateFormat.getTimeInstance(newStyle, locale);
-        } else {
-            fTimeFormat = null;
+            DateFormat df = DateFormat.getTimeInstance(newStyle, locale);
+            if (df instanceof SimpleDateFormat) {
+                fDateTimeFormat = (SimpleDateFormat)df;
+            } else {
+                throw new IllegalArgumentException("Can't create SimpleDateFormat for time style");
+            }
+            fTimePattern = fDateTimeFormat.toPattern();
         }
 
         initializeCalendar(null, fLocale);
@@ -85,38 +101,50 @@ public class RelativeDateFormat extends DateFormat {
     public StringBuffer format(Calendar cal, StringBuffer toAppendTo,
             FieldPosition fieldPosition) {
 
-        String dayString = null;
+        String relativeDayString = null;
         if (fDateStyle != DateFormat.NONE) {
             // calculate the difference, in days, between 'cal' and now.
             int dayDiff = dayDifference(cal);
 
             // look up string
-            dayString = getStringForDay(dayDiff);
+            relativeDayString = getStringForDay(dayDiff);
         }
-        if (fTimeStyle == DateFormat.NONE) {
-            if (dayString != null) {
-                toAppendTo.append(dayString);
-            } else if (fDateStyle != DateFormat.NONE) {
+
+        if (fDateTimeFormat != null && (fDatePattern != null || fTimePattern != null)) {
+            // The new way
+            if (fDatePattern == null) {
+                // must have fTimePattern
+                fDateTimeFormat.applyPattern(fTimePattern);
+                fDateTimeFormat.format(cal, toAppendTo, fieldPosition);
+            } else if (fTimePattern == null) {
+                // must have fDatePattern
+                if (relativeDayString != null) {
+                    toAppendTo.append(relativeDayString);
+                } else {
+                    fDateTimeFormat.applyPattern(fDatePattern);
+                    fDateTimeFormat.format(cal, toAppendTo, fieldPosition);
+                }
+            } else {
+                String datePattern = fDatePattern; // default;
+                if (relativeDayString != null) {
+                    // Need to quote the relativeDayString to make it a legal date pattern
+                    datePattern = "'" + relativeDayString.replace("'", "''") + "'";
+                }
+                StringBuffer combinedPattern = new StringBuffer("");
+                fCombinedFormat.format(new Object[] {fTimePattern, datePattern}, combinedPattern, new FieldPosition(0));
+                fDateTimeFormat.applyPattern(combinedPattern.toString());
+                fDateTimeFormat.format(cal, toAppendTo, fieldPosition);
+            }
+        } else if (fDateFormat != null) {
+            // A subset of the old way, for serialization compatibility
+            // (just do the date part)
+            if (relativeDayString != null) {
+                toAppendTo.append(relativeDayString);
+            } else {
                 fDateFormat.format(cal, toAppendTo, fieldPosition);
             }
-        } else {
-            if (dayString == null && fDateStyle != DateFormat.NONE) {
-                dayString = fDateFormat.format(cal, new StringBuffer(), fieldPosition).toString();
-            }
-            FieldPosition timePos = new FieldPosition(fieldPosition.getField());
-            String timeString = fTimeFormat.format(cal, new StringBuffer(), timePos).toString();
-            fCombinedFormat.format(new Object[] {dayString, timeString}, toAppendTo, new FieldPosition(0));
-            int offset;
-            if (fieldPosition.getEndIndex() > 0 && (offset = toAppendTo.toString().indexOf(dayString)) >= 0 ) {
-                // fieldPosition.getField() was found in dayString, offset start & end based on final position of dayString
-                fieldPosition.setBeginIndex( fieldPosition.getBeginIndex() + offset );
-                fieldPosition.setEndIndex( fieldPosition.getEndIndex() + offset );
-            } else if (timePos.getEndIndex() > 0 && (offset = toAppendTo.toString().indexOf(timeString)) >= 0) {
-                // fieldPosition.getField() was found in timeString, offset start & end based on final position of timeString
-                fieldPosition.setBeginIndex( timePos.getBeginIndex() + offset );
-                fieldPosition.setEndIndex( timePos.getEndIndex() + offset );
-            }
         }
+
         return toAppendTo;
     }
 
@@ -127,9 +155,12 @@ public class RelativeDateFormat extends DateFormat {
         throw new UnsupportedOperationException("Relative Date parse is not implemented yet");
     }
 
-    private DateFormat fDateFormat; // the held date format
-    private DateFormat fTimeFormat; // the held time format
+    private DateFormat fDateFormat; // now unused, keep for serialization compatibility
+    private DateFormat fTimeFormat; // now unused, keep for serialization compatibility
     private MessageFormat fCombinedFormat; //  the {0} {1} format. 
+    private SimpleDateFormat fDateTimeFormat = null; // the held date/time formatter
+    private String fDatePattern = null;
+    private String fTimePattern = null;
 
     int fDateStyle;
     int fTimeStyle;
