@@ -330,6 +330,7 @@ void LocaleDisplayNamesTest::TestUldnDisplayContext() {
                 	      ", expected " + exp + ", got " + got );
                 }
             }
+            uldn_close(uldn);
         }
     }
 }
