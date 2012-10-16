@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -136,9 +136,10 @@ public class GatherAPIDataOld {
 
         OutputStream os = System.out;
         if (output != null) {
+            ZipOutputStream zos = null;
             try {
                 if (zip) {
-                    ZipOutputStream zos = new ZipOutputStream(new FileOutputStream(output + ".zip"));
+                    zos = new ZipOutputStream(new FileOutputStream(output + ".zip"));
                     zos.putNextEntry(new ZipEntry(output));
                     os = zos;
                 } else if (gzip) {
@@ -151,6 +152,15 @@ public class GatherAPIDataOld {
                 RuntimeException re = new RuntimeException(e.getMessage());
                 re.initCause(e);
                 throw re;
+            }
+            finally {
+                if (zos != null) {
+                    try {
+                        zos.close();
+                    } catch (Exception e) {
+                        // ignore
+                    }
+                }
             }
         }
 

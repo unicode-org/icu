@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2010, International Business Machines Corporation and    *
+* Copyright (C) 2004-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -138,8 +138,9 @@ public class CodeMangler {
                     if (arg.charAt(0) == '@') {
                         File argfile = new File(arg.substring(1));
                         if (argfile.exists() && !argfile.isDirectory()) {
+                            BufferedReader br = null;
                             try {
-                                BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(argfile)));
+                                br = new BufferedReader(new InputStreamReader(new FileInputStream(argfile)));
                                 ArrayList list = new ArrayList();
                                 for (int x = 0; x < args.length; ++x) {
                                     list.add(args[x]);
@@ -156,6 +157,15 @@ public class CodeMangler {
                             }
                             catch (IOException e) {
                                 System.err.println("error reading arg file: " + e);
+                            }
+                            finally {
+                                if (br != null) {
+                                    try {
+                                        br.close();
+                                    } catch (Exception e){
+                                        // ignore
+                                    }
+                                }
                             }
                         }
                     } else {
@@ -367,7 +377,7 @@ public class CodeMangler {
                         }
                         if (line.equals(headerline)) {
                             if (verbose) System.out.println("no changes necessary to " + infile.getCanonicalPath());
-                            instream.close();
+                            reader.close();
                             return false; // nothing to do
                         }
                         if (verbose) {
@@ -382,6 +392,7 @@ public class CodeMangler {
                         File outp = new File(outpname);
                         if (!(outp.exists() || outp.mkdirs())) {
                             System.err.println("could not create directory: '" + outpname + "'");
+                            reader.close();
                             return false;
                         }
                     }
@@ -394,6 +405,7 @@ public class CodeMangler {
                         }
                         catch (IOException ex) {
                             System.err.println(ex.getMessage());
+                            reader.close();
                             return false;
                         }
                     }
@@ -560,6 +572,7 @@ public class CodeMangler {
                 if (oldMap != null) {
                     map = oldMap;
                 }
+                reader.close();
                 outstream.close();
                 return false;
             }
