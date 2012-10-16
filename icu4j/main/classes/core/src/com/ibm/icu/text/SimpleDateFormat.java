@@ -397,6 +397,7 @@ public class SimpleDateFormat extends DateFormat {
      *  Old ContextValue enum, preserved only to avoid
      *  deserialization errs from ICU 49.1.
      */
+    @SuppressWarnings("unused")
     private enum ContextValue {
         UNKNOWN,
         CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,
