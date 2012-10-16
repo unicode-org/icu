@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -588,10 +588,11 @@ public class Demo extends Frame {
     static final byte NONE = 0, TITLEWORD = 1, TITLELINE = 2;
     
     static void genTestFile(File sourceFile, Transliterator translit, String variant) {
+        BufferedReader in = null;
         try {
             
             System.out.println("Reading: " + sourceFile.getCanonicalPath());
-            BufferedReader in = new BufferedReader(
+            in = new BufferedReader(
                 new InputStreamReader(
                     new FileInputStream(sourceFile), "UTF-8"));
             String targetFile = sourceFile.getCanonicalPath();
@@ -757,6 +758,14 @@ public class Demo extends Frame {
             System.out.println("Done Writing");
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
         }
     }
     

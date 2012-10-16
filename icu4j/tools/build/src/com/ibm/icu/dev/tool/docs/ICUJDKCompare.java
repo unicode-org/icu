@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -155,12 +155,13 @@ public class ICUJDKCompare {
 
         if (ignorelist != null) {
             if (ignorelist.charAt(0) == '@') { // a file containing ignoreinfo
+                BufferedReader br = null;
                 try {
                     ArrayList nl = new ArrayList();
                     File f = new File(namelist.substring(1));
                     FileInputStream fis = new FileInputStream(f);
                     InputStreamReader isr = new InputStreamReader(fis);
-                    BufferedReader br = new BufferedReader(isr);
+                    br = new BufferedReader(isr);
                     String line = null;
                     while (null != (line = br.readLine())) {
                         nl.add(line);
@@ -171,6 +172,15 @@ public class ICUJDKCompare {
                     System.err.println(e);
                     throw new IllegalStateException();
                 }
+                finally {
+                    if (br != null) {
+                        try {
+                            br.close();
+                        } catch (Exception e) {
+                            // ignore
+                        }
+                    }
+                }
             } else { // a list of ignoreinfo separated by semicolons
                 ignore = ignorelist.split("\\s*;\\s*");
             }
@@ -179,12 +189,13 @@ public class ICUJDKCompare {
         if (namelist != null) {
             String[] names = null;
             if (namelist.charAt(0) == '@') { // a file
+                BufferedReader br = null;
                 try {
                     ArrayList nl = new ArrayList();
                     File f = new File(namelist.substring(1));
                     FileInputStream fis = new FileInputStream(f);
                     InputStreamReader isr = new InputStreamReader(fis);
-                    BufferedReader br = new BufferedReader(isr);
+                    br = new BufferedReader(isr);
                     String line = null;
                     while (null != (line = br.readLine())) {
                         nl.add(line);
@@ -194,11 +205,19 @@ public class ICUJDKCompare {
                 catch (Exception e) {
                     System.err.println(e);
                     throw new IllegalStateException();
+                } finally {
+                    if (br != null) {
+                        try {
+                            br.close();
+                        } catch (Exception e) {
+                            // ignore
+                        }
+                    }
                 }
+
             } else { // a list of names separated by semicolons
                 names = namelist.split("\\s*;\\s*");
             }
-
             processPairInfo(names);
         }
 

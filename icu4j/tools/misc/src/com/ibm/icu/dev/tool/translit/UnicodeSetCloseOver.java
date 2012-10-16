@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2010, International Business Machines
+* Copyright (c) 2003-2012, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -178,6 +178,7 @@ class UnicodeSetCloseOver {
         }
     }
 
+    @SuppressWarnings("resource")
     static void generateCaseData() throws IOException {
 
         Map equivClasses = createCaseFoldEquivalencyClasses();

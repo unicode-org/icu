@@ -1,6 +1,6 @@
 /*
  ***********************************************************************
- * Copyright (C) 2005-2010, International Business Machines            *
+ * Copyright (C) 2005-2012, International Business Machines            *
  * Corporation and others. All Rights Reserved.                        *
  ***********************************************************************
  *
@@ -192,7 +192,7 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
         int extension = filename.lastIndexOf(".");
         String outputFileName = filename.substring(0, extension) + "-" + inputFile.getEncoding() +
                                     (visual? "-visual.dat" : ".dat");
-        PrintStream output;
+        PrintStream output = null;
         
         try {
             output = new PrintStream(
@@ -200,6 +200,14 @@ public class StatisticsTool implements NGramParser.NGramParserClient, NGramList.
         } catch (IOException e) {
             System.out.println("? Could not open " + outputFileName + " for writing.");
             return;
+        } finally {
+            if (output != null) {
+                try {
+                    output.close();
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
         }
         
         int i = 0;

@@ -1,7 +1,7 @@
 /*
  ***********************************************************************
  *
- * Copyright (C) 2006, International Business Machines Corporation and
+ * Copyright (C) 2006-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  *
  ***********************************************************************
@@ -110,9 +110,10 @@ public class BIG5Tool {
         System.out.println(dir.getName());
         File[] files = dir.listFiles();
         for (i=0; i<files.length; i++) {
+            FileInputStream is = null;
             try {
                 if (files[i].isFile()) {
-                    FileInputStream is = new FileInputStream(files[i]);
+                    is = new FileInputStream(files[i]);
                     fileSize = is.read(buf);
                     if (option_v) {
                         System.out.println(files[i].getPath());
@@ -160,6 +161,15 @@ public class BIG5Tool {
             catch (Exception e) {
                 System.err.println("Exception:" + e);
 
+            }
+            finally {
+                if (is != null) {
+                    try {
+                        is.close();
+                    } catch (Exception e) {
+                        // ignore
+                    }
+                }
             }
         }
 
