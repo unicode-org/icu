@@ -714,6 +714,7 @@ static void TestGetSetDateAPI()
     /*close caldef and datdef*/
     ucal_close(caldef);
     ucal_close(caldef2);
+    ucal_close(caldef3);
     udat_close(datdef);
 }
 
