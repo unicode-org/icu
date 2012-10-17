@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2008,2012, International Business Machines Corporation   *
- * and others. All Rights Reserved.                                            *
+ * Copyright (C) 2006-2012, International Business Machines Corporation
+ * and others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -803,7 +803,7 @@ CjkBreakEngine::divideUpDictionaryRange( UText *text,
         int32_t index = 0;
         charPositions[0] = 0;
         while(index < normalizer.endIndex()){
-            UChar32 uc = normalizer.next();
+            /* UChar32 uc = */ normalizer.next();
             charPositions[++numChars] = index = normalizer.getIndex();
         }
         utext_openUnicodeString(&normalizedText, &normalizedString, &status);
