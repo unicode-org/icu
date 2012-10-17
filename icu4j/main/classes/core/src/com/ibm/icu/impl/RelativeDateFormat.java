@@ -155,7 +155,8 @@ public class RelativeDateFormat extends DateFormat {
         throw new UnsupportedOperationException("Relative Date parse is not implemented yet");
     }
 
-    private DateFormat fDateFormat; // now unused, keep for serialization compatibility
+    private DateFormat fDateFormat; // keep for serialization compatibility
+    @SuppressWarnings("unused")
     private DateFormat fTimeFormat; // now unused, keep for serialization compatibility
     private MessageFormat fCombinedFormat; //  the {0} {1} format. 
     private SimpleDateFormat fDateTimeFormat = null; // the held date/time formatter
