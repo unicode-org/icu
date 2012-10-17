@@ -82,6 +82,7 @@ class TimeZoneFormat;
  * m        minute in hour          (Number)            30
  * s        second in minute        (Number)            55
  * S        fractional second       (Number)            978
+ *          (maximum resolution of SSS; truncated if shorter, zero-padded if longer)
  * E        day of week             (Text)              Tuesday
  * e        day of week (local 1~7) (Text & Number)     Tues & 2
  * D        day in year             (Number)            189

@@ -534,6 +534,14 @@ typedef enum UDateFormatField {
     /**
      * FieldPosition and UFieldPosition selector for 'S' field alignment,
      * corresponding to the UCAL_MILLISECOND field.
+     *
+     * Note: Time formats that use 'S' can display a maximum of three
+     * significant digits for fractional seconds, corresponding to millisecond
+     * resolution and a fractional seconds sub-pattern of SSS. If the
+     * sub-pattern is S or SS, the fractional seconds value will be truncated
+     * (not rounded) to the number of display places specified. If the
+     * fractional seconds sub-pattern is longer than SSS, the additional
+     * display places will be filled with zeros.
      * @stable ICU 3.0
      */
     UDAT_FRACTIONAL_SECOND_FIELD = 8,
