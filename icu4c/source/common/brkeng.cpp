@@ -21,6 +21,7 @@
 #include "unicode/uscript.h"
 #include "unicode/ucharstrie.h"
 #include "unicode/bytestrie.h"
+#include "charstr.h"
 #include "dictionarydata.h"
 #include "uvector.h"
 #include "umutex.h"
@@ -279,35 +280,27 @@ DictionaryMatcher *
 ICULanguageBreakFactory::loadDictionaryMatcherFor(UScriptCode script, int32_t /* brkType */) { 
     UErrorCode status = U_ZERO_ERROR;
     // open root from brkitr tree.
-    char dictnbuf[256];
-    char ext[6] = {'\0'};
     UResourceBundle *b = ures_open(U_ICUDATA_BRKITR, "", &status);
     b = ures_getByKeyWithFallback(b, "dictionaries", b, &status);
-    b = ures_getByKeyWithFallback(b, uscript_getShortName(script), b, &status);
     int32_t dictnlength = 0;
-    const UChar *dictfname = ures_getString(b, &dictnlength, &status);
-    if (U_SUCCESS(status) && (size_t)dictnlength >= sizeof(dictnbuf)) {
-        dictnlength = 0;
-        status = U_BUFFER_OVERFLOW_ERROR;
+    const UChar *dictfname =
+        ures_getStringByKeyWithFallback(b, uscript_getShortName(script), &dictnlength, &status);
+    if (U_FAILURE(status)) {
+        ures_close(b);
+        return NULL;
     }
-    if (U_SUCCESS(status) && dictfname) {
-        UChar *extStart = u_strchr(dictfname, 0x002e);
-        int32_t extLen = u_strlen(extStart+1);
-        if (extLen > sizeof(ext) - 1) {
-            ures_close(b);
-            return NULL;
-        }
-        int len = 0;
-        if (extStart != NULL) {
-            len = (int)(extStart - dictfname);
-            u_UCharsToChars(extStart+1, ext, extLen); // null-terminates the buffer
-            u_UCharsToChars(dictfname, dictnbuf, len);
-        }
-        dictnbuf[len] = '\0'; // null-terminate
+    CharString dictnbuf;
+    CharString ext;
+    const UChar *extStart = u_memrchr(dictfname, 0x002e, dictnlength);  // last dot
+    if (extStart != NULL) {
+        int32_t len = (int32_t)(extStart - dictfname);
+        ext.appendInvariantChars(UnicodeString(FALSE, extStart + 1, dictnlength - len - 1), status);
+        dictnlength = len;
     }
+    dictnbuf.appendInvariantChars(UnicodeString(FALSE, dictfname, dictnlength), status);
     ures_close(b);
 
-    UDataMemory *file = udata_open(U_ICUDATA_BRKITR, ext, dictnbuf, &status);
+    UDataMemory *file = udata_open(U_ICUDATA_BRKITR, ext.data(), dictnbuf.data(), &status);
     if (U_SUCCESS(status)) {
         // build trie
         const uint8_t *data = (const uint8_t *)udata_getMemory(file);
