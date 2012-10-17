@@ -166,7 +166,7 @@ uenum_reset(UEnumeration* en, UErrorCode* status);
  * @return a UEnumeration wrapping the adopted StringEnumeration.
  * @stable ICU 4.2
  */
-U_CAPI UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 uenum_openFromStringEnumeration(icu::StringEnumeration* adopted, UErrorCode* ec);
 
 #endif
@@ -183,7 +183,7 @@ uenum_openFromStringEnumeration(icu::StringEnumeration* adopted, UErrorCode* ec)
  * @see uenum_close
  * @draft ICU 50
  */
-U_CAPI UEnumeration* U_EXPORT2
+U_DRAFT UEnumeration* U_EXPORT2
 uenum_openUCharStringsEnumeration(const UChar* const strings[], int32_t count,
                                  UErrorCode* ec);
 #endif
@@ -201,7 +201,7 @@ uenum_openUCharStringsEnumeration(const UChar* const strings[], int32_t count,
  * @see uenum_close
  * @draft ICU 50
  */
-U_CAPI UEnumeration* U_EXPORT2
+U_DRAFT UEnumeration* U_EXPORT2
 uenum_openCharStringsEnumeration(const char* const strings[], int32_t count,
                                  UErrorCode* ec);
 

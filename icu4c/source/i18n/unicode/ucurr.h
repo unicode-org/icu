@@ -269,7 +269,7 @@ ucurr_openISOCurrencies(uint32_t currType, UErrorCode *pErrorCode);
   * 
   * @stable ICU 4.8 
   */ 
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 ucurr_isAvailable(const UChar* isoCode, 
              UDate from, 
              UDate to, 

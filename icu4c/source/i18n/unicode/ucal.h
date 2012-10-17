@@ -564,7 +564,7 @@ typedef enum USystemTimeZoneType USystemTimeZoneType;
  *          *ec will indicate the error.
  * @stable ICU 4.8
  */ 
-U_DRAFT UEnumeration* U_EXPORT2
+U_STABLE UEnumeration* U_EXPORT2
 ucal_openTimeZoneIDEnumeration(USystemTimeZoneType zoneType, const char* region,
                                 const int32_t* rawOffset, UErrorCode* ec);
 
