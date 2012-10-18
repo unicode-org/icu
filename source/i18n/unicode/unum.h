@@ -800,7 +800,7 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS,
   /** 
-   * if this attribute is set to 1, specifies that, if the pattern doesn’t contain an exponent, the exponent will not be parsed. If the pattern does contain an exponent, this attribute has no effect.
+   * if this attribute is set to 1, specifies that, if the pattern doesn't contain an exponent, the exponent will not be parsed. If the pattern does contain an exponent, this attribute has no effect.
    * Has no effect on formatting.
    * Default: 0 (unset)
    * @draft ICU 50
