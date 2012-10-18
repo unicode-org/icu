@@ -66,16 +66,18 @@ unorm2_swap(const UDataSwapper *ds,
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestUDataOpen(void);
 static void TestUDataOpenChoiceDemo1(void);
 static void TestUDataOpenChoiceDemo2(void);
 static void TestUDataGetInfo(void);
 static void TestUDataGetMemory(void);
-static void TestUDataSetAppData(void);
 static void TestErrorConditions(void);
 static void TestAppData(void);
-static void TestICUDataName(void);
 static void TestSwapData(void);
+#endif
+static void TestUDataSetAppData(void);
+static void TestICUDataName(void);
 static void PointerTableOfContents(void);
 static void SetBadCommonData(void);
 static void TestUDataFileAccess(void);
@@ -116,6 +118,7 @@ static void lots_of_mallocs()
 }
 #endif
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestUDataOpen(){
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
@@ -349,6 +352,7 @@ static void TestUDataOpen(){
 
     free(path);
 }
+#endif
 
 typedef struct {
     uint16_t headerSize;
@@ -597,6 +601,7 @@ isAcceptable3(void *context,
 
 }
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestUDataOpenChoiceDemo1() {
     UDataMemory *result;
     UErrorCode status=U_ZERO_ERROR;
@@ -743,7 +748,6 @@ static void TestUDataOpenChoiceDemo2() {
         }
     }
 }
-
 
 static void TestUDataGetInfo() {
 
@@ -1073,6 +1077,7 @@ static void TestAppData()
     ures_close(icu);
     ures_close(app);
 }
+#endif
 
 static void TestICUDataName()
 {
@@ -1574,6 +1579,7 @@ printErrorToString(void *context, const char *fmt, va_list args) {
     vsprintf((char *)context, fmt, args);
 }
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void
 TestSwapData() {
     char name[100];
@@ -1688,7 +1694,7 @@ TestSwapData() {
 
     free(buffer);
 }
-
+#endif
 
 static void PointerTableOfContents() {
     UDataMemory      *dataItem;

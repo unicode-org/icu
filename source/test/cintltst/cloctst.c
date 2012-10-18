@@ -1020,6 +1020,7 @@ setUpDataTable();
 cleanUpDataTable();
 }
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 /* test for uloc_getISOLanguages, uloc_getISOCountries */
 static void TestISOFunctions()
 {
@@ -1151,6 +1152,7 @@ static void TestISOFunctions()
     ures_close(subRes);
     ures_close(res);
 }
+#endif
 
 static void setUpDataTable()
 {
