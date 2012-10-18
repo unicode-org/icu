@@ -30,11 +30,16 @@ public class TimeZoneNameTest extends TestFmwk {
             }
 
             for (String tzid : tzids) {
-                // Java does not pick up time zone names for ID/Locale from an SPI
-                // when long standard display name is not available.
+                // Java has a problem when a provider does not supply all 4 names
+                // for a zone. For this reason, ICU TimeZoneName provider does not return
+                // localized names unless these 4 names are available. 
 
                 String icuStdLong = getIcuDisplayName(tzid, false, TimeZone.LONG, loc);
-                if (icuStdLong != null) {
+                String icuDstLong = getIcuDisplayName(tzid, true, TimeZone.LONG, loc);
+                String icuStdShort = getIcuDisplayName(tzid, false, TimeZone.SHORT, loc);
+                String icuDstShort = getIcuDisplayName(tzid, true, TimeZone.SHORT, loc);
+
+                if (icuStdLong != null && icuDstLong != null && icuStdShort != null && icuDstShort != null) {
                     checkDisplayNamePair(TimeZone.SHORT, tzid, loc, warningOnly);
                     checkDisplayNamePair(TimeZone.LONG, tzid, loc, warningOnly);
                 } else {
