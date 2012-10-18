@@ -255,7 +255,6 @@ void LocaleDisplayNamesTest::TestUldnComponents() {
 }
 
 
-
 typedef struct {
     const char * displayLocale;
     UDisplayContext dialectHandling;
@@ -268,37 +267,42 @@ static char en[]    = "en";
 static char en_US[] = "en_US";
 
 static UChar daFor_en[]       = {0x65,0x6E,0x67,0x65,0x6C,0x73,0x6B,0}; //"engelsk"
-static UChar daFor_en_T[]     = {0x45,0x6E,0x67,0x65,0x6C,0x73,0x6B,0}; //"Engelsk"
 static UChar daFor_en_US[]    = {0x65,0x6E,0x67,0x65,0x6C,0x73,0x6B,0x20,0x28,0x55,0x53,0x41,0x29,0}; //"engelsk (USA)"
-static UChar daFor_en_US_T[]  = {0x45,0x6E,0x67,0x65,0x6C,0x73,0x6B,0x20,0x28,0x55,0x53,0x41,0x29,0}; //"Engelsk (USA)"
 static UChar daFor_en_US_D[]  = {0x61,0x6D,0x65,0x72,0x69,0x6B,0x61,0x6E,0x73,0x6B,0x20,0x65,0x6E,0x67,0x65,0x6C,0x73,0x6B,0}; //"amerikansk engelsk"
-static UChar daFor_en_US_DT[] = {0x41,0x6D,0x65,0x72,0x69,0x6B,0x61,0x6E,0x73,0x6B,0x20,0x65,0x6E,0x67,0x65,0x6C,0x73,0x6B,0}; //"Amerikansk engelsk"
 static UChar esFor_en[]       = {0x69,0x6E,0x67,0x6C,0xE9,0x73,0}; //"ingles" with acute on e
-static UChar esFor_en_T[]     = {0x49,0x6E,0x67,0x6C,0xE9,0x73,0}; //"Ingles" ...
 static UChar esFor_en_US[]    = {0x69,0x6E,0x67,0x6C,0xE9,0x73,0x20,0x28,0x45,0x73,0x74,0x61,0x64,0x6F,0x73,0x20,0x55,0x6E,0x69,0x64,0x6F,0x73,0x29,0}; //"ingles (Estados Unidos)" ...
-static UChar esFor_en_US_T[]  = {0x49,0x6E,0x67,0x6C,0xE9,0x73,0x20,0x28,0x45,0x73,0x74,0x61,0x64,0x6F,0x73,0x20,0x55,0x6E,0x69,0x64,0x6F,0x73,0x29,0}; //"Ingles (Estados Unidos)" ...
 static UChar esFor_en_US_D[]  = {0x69,0x6E,0x67,0x6C,0xE9,0x73,0x20,0x65,0x73,0x74,0x61,0x64,0x6F,0x75,0x6E,0x69,0x64,0x65,0x6E,0x73,0x65,0}; //"ingles estadounidense" ...
+#if !UCONFIG_NO_BREAK_ITERATION
+static UChar daFor_en_T[]     = {0x45,0x6E,0x67,0x65,0x6C,0x73,0x6B,0}; //"Engelsk"
+static UChar daFor_en_US_T[]  = {0x45,0x6E,0x67,0x65,0x6C,0x73,0x6B,0x20,0x28,0x55,0x53,0x41,0x29,0}; //"Engelsk (USA)"
+static UChar daFor_en_US_DT[] = {0x41,0x6D,0x65,0x72,0x69,0x6B,0x61,0x6E,0x73,0x6B,0x20,0x65,0x6E,0x67,0x65,0x6C,0x73,0x6B,0}; //"Amerikansk engelsk"
+static UChar esFor_en_T[]     = {0x49,0x6E,0x67,0x6C,0xE9,0x73,0}; //"Ingles" ...
+static UChar esFor_en_US_T[]  = {0x49,0x6E,0x67,0x6C,0xE9,0x73,0x20,0x28,0x45,0x73,0x74,0x61,0x64,0x6F,0x73,0x20,0x55,0x6E,0x69,0x64,0x6F,0x73,0x29,0}; //"Ingles (Estados Unidos)" ...
 static UChar esFor_en_US_DT[] = {0x49,0x6E,0x67,0x6C,0xE9,0x73,0x20,0x65,0x73,0x74,0x61,0x64,0x6F,0x75,0x6E,0x69,0x64,0x65,0x6E,0x73,0x65,0}; //"Ingles estadounidense" ...
+#endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
 static const LocNameDispContextItem ctxtItems[] = {
     { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    en,    daFor_en   },
-    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en,    daFor_en_T },
-    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en,    daFor_en   },
     { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    en_US, daFor_en_US   },
-    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en_US, daFor_en_US_T },
-    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, daFor_en_US   },
     { "da", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    en_US, daFor_en_US_D  },
-    { "da", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en_US, daFor_en_US_DT },
-    { "da", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, daFor_en_US_D  },
     { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    en,    esFor_en   },
-    { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en,    esFor_en_T },
-    { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en,    esFor_en_T },
     { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    en_US, esFor_en_US   },
-    { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en_US, esFor_en_US_T },
-    { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, esFor_en_US_T },
     { "es", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    en_US, esFor_en_US_D  },
-    { "es", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en_US, esFor_en_US_DT },
+#if !UCONFIG_NO_BREAK_ITERATION
+    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en,    daFor_en_T },
+    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en_US, daFor_en_US_T },
+    { "da", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en_US, daFor_en_US_DT },
+    { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en,    esFor_en_T },
+    { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en_US, esFor_en_US_T },
     { "es", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, esFor_en_US_DT },
+
+    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en,    daFor_en   },
+    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, daFor_en_US   },
+    { "da", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, daFor_en_US_D  },
+    { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en,    esFor_en_T },
+    { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, esFor_en_US_T },
+    { "es", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en_US, esFor_en_US_DT },
+ #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
     { NULL, (UDisplayContext)0,      (UDisplayContext)0,                                NULL,  NULL }
 };
 

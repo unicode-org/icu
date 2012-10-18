@@ -38,7 +38,9 @@ log_data_err("Failure at file %s, line %d, error = %s (Are you missing data?)\n"
 #define TEST_ASSERT(expr) {if ((expr)==FALSE) { \
 log_data_err("Test Failure at file %s, line %d (Are you missing data?)\n", __FILE__, __LINE__);}}
 
+#if !UCONFIG_NO_FILE_IO
 static void TestBreakIteratorSafeClone(void);
+#endif
 static void TestBreakIteratorRules(void);
 static void TestBreakIteratorRuleError(void);
 static void TestBreakIteratorStatusVec(void);
@@ -135,6 +137,7 @@ static void freeToUCharStrings(void **hook) {
 }
 
 
+#if !UCONFIG_NO_FILE_IO
 static void TestBreakIteratorCAPI()
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -499,6 +502,7 @@ static void TestBreakIteratorSafeClone(void)
         ubrk_close(someIterators[i]);
     }
 }
+#endif
 
 
 /*

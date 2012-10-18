@@ -171,6 +171,7 @@ public:
 const char* DataDrivenLogger::fgDataDir = NULL;
 char* DataDrivenLogger::fgTestDataPath = NULL;
 
+#if !UCONFIG_NO_FORMATTING && !UCONFIG_NO_FILE_IO
 static int64_t
 uto64(const UChar     *buffer)
 {
@@ -187,7 +188,7 @@ uto64(const UChar     *buffer)
     }
     return result;
 }
-
+#endif
 
 U_CDECL_BEGIN
 static void U_CALLCONV DataDrivenPrintf(void)

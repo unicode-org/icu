@@ -6,11 +6,14 @@
 /* Modification History:
 */
 
-#include <stdlib.h>
+#include "unicode/utypes.h"
 
-#include "intltest.h"
+#if !UCONFIG_NO_FORMATTING
+
+#include <stdlib.h>
 #include "unicode/gender.h"
 #include "unicode/unum.h"
+#include "intltest.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array) / sizeof((array)[0]))
 
@@ -115,3 +118,5 @@ void GenderInfoTest::checkLocale(
 extern IntlTest *createGenderInfoTest() {
   return new GenderInfoTest();
 }
+
+#endif /* #if !UCONFIG_NO_FORMATTING */

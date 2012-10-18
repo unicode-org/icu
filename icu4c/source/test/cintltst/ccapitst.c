@@ -35,8 +35,10 @@
 #define UCS_FILE_NAME_SIZE 512
 
 /*returns an action other than the one provided*/
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA);
 static UConverterToUCallback otherCharAction(UConverterToUCallback MIA);
+#endif
 
 static UConverter *
 cnv_open(const char *name, UErrorCode *pErrorCode) {
@@ -54,7 +56,9 @@ static void TestDuplicateAlias(void);
 static void TestCCSID(void);
 static void TestJ932(void);
 static void TestJ1968(void);
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestLMBCSMaxChar(void);
+#endif
 
 #if !UCONFIG_NO_LEGACY_CONVERSION
 static void TestConvertSafeCloneCallback(void);
@@ -1042,16 +1046,17 @@ static void TestConvert()
 #endif
 }
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static UConverterFromUCallback otherUnicodeAction(UConverterFromUCallback MIA)
 {
     return (MIA==(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP)?(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_SUBSTITUTE:(UConverterFromUCallback)UCNV_FROM_U_CALLBACK_STOP;
 }
 
-
 static UConverterToUCallback otherCharAction(UConverterToUCallback MIA)
 {
     return (MIA==(UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP)?(UConverterToUCallback)UCNV_TO_U_CALLBACK_SUBSTITUTE:(UConverterToUCallback)UCNV_TO_U_CALLBACK_STOP;
 }
+#endif
 
 static void TestFlushCache(void) {
 #if !UCONFIG_NO_LEGACY_CONVERSION
@@ -1351,6 +1356,7 @@ static TSCCContext *TSCC_clone(TSCCContext *ctx)
     return newCtx;
 }
 
+#if !UCONFIG_NO_LEGACY_CONVERSION
 static void TSCC_fromU(const void *context,
                         UConverterFromUnicodeArgs *fromUArgs,
                         const UChar* codeUnits,
@@ -1397,7 +1403,6 @@ static void TSCC_fromU(const void *context,
         ctx->wasClosed = TRUE;
     }
 }
-
 
 static void TSCC_toU(const void *context,
                         UConverterToUnicodeArgs *toUArgs,
@@ -1466,7 +1471,6 @@ static void TSCC_print_log(TSCCContext *q, const char *name)
     }
 }
 
-#if !UCONFIG_NO_LEGACY_CONVERSION
 static void TestConvertSafeCloneCallback()
 {
     UErrorCode err = U_ZERO_ERROR;
@@ -2852,6 +2856,7 @@ ucnv_close(cnv);
 #endif
 }
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestLMBCSMaxChar(void) {
     static const struct {
         int8_t maxSize;
@@ -2921,7 +2926,7 @@ static void TestLMBCSMaxChar(void) {
         log_err("error UCNV_GET_MAX_BYTES_FOR_STRING(1, 2)<10\n");
     }
 }
-
+#endif
 
 static void TestJ1968(void) {
     UErrorCode err = U_ZERO_ERROR;
