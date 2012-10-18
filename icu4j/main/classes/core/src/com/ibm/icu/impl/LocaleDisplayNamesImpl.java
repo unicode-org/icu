@@ -12,11 +12,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UScript;
-import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.DisplayContext;
+import com.ibm.icu.text.LocaleDisplayNames;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
