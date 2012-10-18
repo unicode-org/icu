@@ -4,9 +4,10 @@
 # These are very bad "C" APIs that do not work with a C compiler and
 # violate many ICU coding guidelines. These were added with ticket #5996.
 # Temporarily marked as C++ for the hdrtst to pass.
-vzone.h
-zrule.h
-ztrans.h
+# These are gone in ICU 50.1, remove
+#vzone.h
+#zrule.h
+#ztrans.h
 # End temporary addition.
 # common & i18n
 alphaindex.h
@@ -45,6 +46,7 @@ fieldpos.h
 fmtable.h
 format.h
 fpositer.h
+gender.h
 gregocal.h
 idna.h
 listformatter.h
