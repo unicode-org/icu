@@ -3339,6 +3339,7 @@ static int32_t  getIntParam(UnicodeString name, UnicodeString &params, int32_t d
 }
 #endif
 
+#if !UCONFIG_NO_REGULAR_EXPRESSIONS
 static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr,
                                     BreakIterator *bi,
                                     int expected[],
@@ -3408,6 +3409,7 @@ static void testBreakBoundPreceding(RBBITest *test, UnicodeString ustr,
         }
     }
 }
+#endif
 
 void RBBITest::TestWordBreaks(void)
 {

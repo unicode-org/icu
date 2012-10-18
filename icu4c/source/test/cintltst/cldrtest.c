@@ -68,6 +68,7 @@ isCurrencyPreEuro(const char* currencyKey){
     }
     return FALSE;
 }
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void
 TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                        UResourceBundle *currentBundle, const char *locale) {
@@ -441,7 +442,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
         ures_close(subBundle);
     }
 }
-
+#endif
 
 static void
 testLCID(UResourceBundle *currentBundle,
@@ -482,6 +483,7 @@ testLCID(UResourceBundle *currentBundle,
     }
 }
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void
 TestLocaleStructure(void) {
     UResourceBundle *root, *currentLocale;
@@ -563,6 +565,7 @@ TestLocaleStructure(void) {
 
     ures_close(root);
 }
+#endif
 
 static void
 compareArrays(const char *keyName,
@@ -1269,6 +1272,7 @@ static void TestIndexChars(void) {
 
 
 
+#if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void TestCurrencyList(void){
 #if !UCONFIG_NO_FORMATTING
     UErrorCode errorCode = U_ZERO_ERROR;
@@ -1303,6 +1307,7 @@ static void TestCurrencyList(void){
     uenum_close(en);
 #endif
 }
+#endif
 
 static void TestAvailableIsoCodes(void){
 #if !UCONFIG_NO_FORMATTING
