@@ -1733,8 +1733,8 @@ icu4c/source/data/makedata.vcxproj -text
 icu4c/source/data/makedata.vcxproj.filters -text
 icu4c/source/data/mappings/convrtrs.txt svneol=native#text/plain
 icu4c/source/data/misc/currencyNumericCodes.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/misc/dayPeriods.txt svneol=native#text/plain
-icu4c/source/data/misc/genderList.txt svneol=native#text/plain
+icu4c/source/data/misc/dayPeriods.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/misc/genderList.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/icustd.txt svneol=native#text/plain
 icu4c/source/data/misc/icuver.txt svneol=native#text/plain
 icu4c/source/data/misc/keyTypeData.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1743,7 +1743,7 @@ icu4c/source/data/misc/metaZones.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/metadata.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/numberingSystems.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/plurals.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/misc/postalCodeData.txt svneol=native#text/plain
+icu4c/source/data/misc/postalCodeData.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/supplementalData.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/timezoneTypes.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/misc/windowsZones.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -2741,7 +2741,7 @@ icu4c/source/data/zone/kln.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/km.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/kn.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/ko.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/zone/ko_KP.txt svneol=native#text/plain
+icu4c/source/data/zone/ko_KP.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/kok.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/ks.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/ks_Arab.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -2946,9 +2946,6 @@ icu4c/source/extra/uconv/uconv.vcxproj.filters -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
 icu4c/source/i18n/regexcst.txt svneol=native#text/plain
-icu4c/source/i18n/unicode/gender.h -text
-icu4c/source/i18n/unicode/udisplaycontext.h -text
-icu4c/source/i18n/unicode/ugender.h -text
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
 icu4c/source/layout/layout.vcxproj -text
