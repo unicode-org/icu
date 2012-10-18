@@ -14,10 +14,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.TreeMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -43,8 +43,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
-import com.sun.xml.internal.fastinfoset.stax.events.XMLConstants;
 
 
 /**
@@ -211,7 +209,8 @@ public class StableAPI {
     }
 
 
-    private InputStream loadStream(String name, String argName, File argFile) {
+    @SuppressWarnings("resource")
+	private InputStream loadStream(String name, String argName, File argFile) {
     	InputStream stream = null;
     	if(argFile != null) {
     		try {
@@ -878,6 +877,27 @@ public class StableAPI {
             JoinedFunction fun = iter.next();
             root.appendChild(fun.toXml(doc));
         }
+        
+        // add the 'changed' stuff
+        Element root2 = doc.createElement("simplifications");
+        root.appendChild(root2);
+        {
+        	for(String simplification : getChangedSimplifications()) {
+        		Element subSimplification = doc.createElement("simplification");
+        		Element baseElement = doc.createElement("base");
+        		baseElement.appendChild(doc.createTextNode(simplification));
+        		subSimplification.appendChild(baseElement);
+        		
+        		root2.appendChild(subSimplification);
+        		
+        		for(String change : simplifications.get(simplification)) {
+        			Element changeElement = doc.createElement("change");
+        			changeElement.appendChild(doc.createTextNode(change));
+        			subSimplification.appendChild(changeElement);
+        		}
+	       	}
+        }
+        
         return doc;
     }
 
