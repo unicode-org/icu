@@ -9,7 +9,6 @@ package com.ibm.icu.dev.util;
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import com.ibm.icu.dev.util.BagFormatter;
 import com.ibm.icu.text.Transliterator;
 
 public class TransliteratorUtilities {

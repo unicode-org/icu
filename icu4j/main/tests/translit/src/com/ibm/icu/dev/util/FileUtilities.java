@@ -11,8 +11,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Locale;
 
-import com.ibm.icu.dev.util.BagFormatter;
-
 public class FileUtilities {
     public static void appendFile(String filename, String encoding, PrintWriter output) throws IOException {
         appendFile(filename, encoding, output, null);
