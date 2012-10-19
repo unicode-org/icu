@@ -142,7 +142,7 @@ et{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -191,9 +191,8 @@ et{
                 yMMMEd{"E, d. MMMM y"}
                 yMMMd{"d. MMM y"}
                 yMd{"d.M.y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q. yy"}
+                yQQQQ{"QQQQ y"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"MMMM y"}
             }

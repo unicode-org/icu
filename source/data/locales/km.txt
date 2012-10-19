@@ -33,80 +33,80 @@ km{
             patternsLong{
                 decimalFormat{
                     1000{
-                        other{"0K"}
+                        other{"0ពាន់"}
                     }
                     10000{
-                        other{"00K"}
+                        other{"0ម៉ឺន"}
                     }
                     100000{
-                        other{"000K"}
+                        other{"0សែន"}
                     }
                     1000000{
-                        other{"0M"}
+                        other{"0លាន"}
                     }
                     10000000{
-                        other{"00M"}
+                        other{"00លាន"}
                     }
                     100000000{
-                        other{"000M"}
+                        other{"000លាន"}
                     }
                     1000000000{
-                        other{"0G"}
+                        other{"0ពាន់លាន"}
                     }
                     10000000000{
-                        other{"00G"}
+                        other{"00ពាន់លាន"}
                     }
                     100000000000{
-                        other{"000G"}
+                        other{"000ពាន់លាន"}
                     }
                     1000000000000{
-                        other{"0T"}
+                        other{"0លានលាន"}
                     }
                     10000000000000{
-                        other{"00T"}
+                        other{"00លានលាន"}
                     }
                     100000000000000{
-                        other{"000T"}
+                        other{"000លានលាន"}
                     }
                 }
             }
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0K"}
+                        other{"0ព"}
                     }
                     10000{
-                        other{"00K"}
+                        other{"0ម"}
                     }
                     100000{
-                        other{"000K"}
+                        other{"0ស"}
                     }
                     1000000{
-                        other{"0M"}
+                        other{"0ល"}
                     }
                     10000000{
-                        other{"00M"}
+                        other{"00ល"}
                     }
                     100000000{
-                        other{"000M"}
+                        other{"000ល"}
                     }
                     1000000000{
-                        other{"0G"}
+                        other{"0ព'.'ល"}
                     }
                     10000000000{
-                        other{"00G"}
+                        other{"00ព'.'ល"}
                     }
                     100000000000{
-                        other{"000G"}
+                        other{"000ព'.'ល"}
                     }
                     1000000000000{
-                        other{"0T"}
+                        other{"0ល'.'ល"}
                     }
                     10000000000000{
-                        other{"00T"}
+                        other{"00ល'.'ល"}
                     }
                     100000000000000{
-                        other{"000T"}
+                        other{"000ល'.'ល"}
                     }
                 }
             }
@@ -125,7 +125,7 @@ km{
         }
         native{"khmr"}
     }
-    Version{"2.0.76.16"}
+    Version{"2.0.78.39"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -170,8 +170,8 @@ km{
                 yMMMEd{"E, d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d-M-y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{

@@ -28,86 +28,86 @@ bs_Cyrl{
             patternsLong{
                 decimalFormat{
                     1000{
-                        few{"0000"}
-                        many{"0000"}
-                        one{"0000"}
-                        other{"0000"}
+                        few{"0"}
+                        many{"0"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        few{"00 хиљ"}
-                        many{"00 хиљ"}
-                        one{"00 хиљ"}
-                        other{"00 хиљ"}
+                        few{"00 хиљ"}
+                        many{"00 хиљ"}
+                        one{"00 хиљ"}
+                        other{"00 хиљ"}
                     }
                     100000{
-                        few{"000 хиљ"}
-                        many{"000 хиљ"}
-                        one{"000 хиљ"}
-                        other{"000 хиљ"}
+                        few{"000 хиљ"}
+                        many{"000 хиљ"}
+                        one{"000 хиљ"}
+                        other{"000 хиљ"}
                     }
                     1000000{
-                        few{"0 мил"}
-                        many{"0 мил"}
-                        one{"0 мил"}
-                        other{"0 мил"}
+                        few{"0 мил"}
+                        many{"0 мил"}
+                        one{"0 мил"}
+                        other{"0 мил"}
                     }
                     10000000{
-                        few{"00 мил"}
-                        many{"00 мил"}
-                        one{"00 мил"}
-                        other{"00 мил"}
+                        few{"00 мил"}
+                        many{"00 мил"}
+                        one{"00 мил"}
+                        other{"00 мил"}
                     }
                     100000000{
-                        few{"000 мил"}
-                        many{"000 мил"}
-                        one{"000 мил"}
-                        other{"000 мил"}
+                        few{"000 мил"}
+                        many{"000 мил"}
+                        one{"000 мил"}
+                        other{"000 мил"}
                     }
                     1000000000{
-                        few{"0 млрд"}
-                        many{"0 млрд"}
-                        one{"0 млрд"}
-                        other{"0 млрд"}
+                        few{"0 млрд"}
+                        many{"0 млрд"}
+                        one{"0 млрд"}
+                        other{"0 млрд"}
                     }
                     10000000000{
-                        few{"00 млрд"}
-                        many{"00 млрд"}
-                        one{"00 млрд"}
-                        other{"00 млрд"}
+                        few{"00 млрд"}
+                        many{"00 млрд"}
+                        one{"00 млрд"}
+                        other{"00 млрд"}
                     }
                     100000000000{
-                        few{"000 млрд"}
-                        many{"000 млрд"}
-                        one{"000 млрд"}
-                        other{"000 млрд"}
+                        few{"000 млрд"}
+                        many{"000 млрд"}
+                        one{"000 млрд"}
+                        other{"000 млрд"}
                     }
                     1000000000000{
-                        few{"0 бил"}
-                        many{"0 бил"}
-                        one{"0 бил"}
-                        other{"0 бил"}
+                        few{"0 бил"}
+                        many{"0 бил"}
+                        one{"0 бил"}
+                        other{"0 бил"}
                     }
                     10000000000000{
-                        few{"00 бил"}
-                        many{"00 бил"}
-                        one{"00 бил"}
-                        other{"00 бил"}
+                        few{"00 бил"}
+                        many{"00 бил"}
+                        one{"00 бил"}
+                        other{"00 бил"}
                     }
                     100000000000000{
-                        few{"000 бил"}
-                        many{"000 бил"}
-                        one{"000 бил"}
-                        other{"000 бил"}
+                        few{"000 бил"}
+                        many{"000 бил"}
+                        one{"000 бил"}
+                        other{"000 бил"}
                     }
                 }
             }
             patternsShort{
                 decimalFormat{
                     1000{
-                        few{"0000"}
-                        many{"0000"}
-                        one{"0000"}
-                        other{"0000"}
+                        few{"0"}
+                        many{"0"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
                         few{"00 хиљ"}
@@ -191,7 +191,7 @@ bs_Cyrl{
             }
         }
     }
-    Version{"2.0.75.94"}
+    Version{"2.0.78.38"}
     calendar{
         buddhist{
             eras{
@@ -284,8 +284,8 @@ bs_Cyrl{
                 yMMMEd{"E, dd. MMM y."}
                 yMMMd{"dd. MMM y."}
                 yMd{"dd.MM.y."}
-                yQ{"y Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
             }
             dayNames{
                 format{
@@ -649,8 +649,8 @@ bs_Cyrl{
                 yyyyMMMEd{"E, dd. MMM y. G"}
                 yyyyMMMd{"dd. MMM y. G"}
                 yyyyMd{"dd.MM.y. G"}
-                yyyyQ{"y G Q"}
                 yyyyQQQ{"y G QQQ"}
+                yyyyQQQQ{"y G QQQQ"}
             }
             eras{
                 abbreviated{

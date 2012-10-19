@@ -110,8 +110,8 @@ ru{
                         other{"0 тыс'.'"}
                     }
                     10000{
-                        few{"00 тыс'.'"}
-                        many{"00 тыс'.'"}
+                        few{"00 тыс'.'"}
+                        many{"00 тыс'.'"}
                         one{"00 тыс'.'"}
                         other{"00 тыс'.'"}
                     }
@@ -122,7 +122,7 @@ ru{
                         other{"000 тыс'.'"}
                     }
                     1000000{
-                        few{"0 млн"}
+                        few{"0 млн"}
                         many{"0 млн"}
                         one{"0 млн"}
                         other{"0 млн"}
@@ -170,7 +170,7 @@ ru{
                         other{"00 трлн"}
                     }
                     100000000000000{
-                        few{"000 трлн"}
+                        few{"000 трлн"}
                         many{"000 трлн"}
                         one{"000 трлн"}
                         other{"000 трлн"}
@@ -191,7 +191,7 @@ ru{
             }
         }
     }
-    Version{"2.0.75.94"}
+    Version{"2.0.78.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -199,8 +199,8 @@ ru{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE, d MMMM y 'г'. G",
-                "d MMMM y 'г'. G",
+                "EEEE, d MMMM y 'г'. G",
+                "d MMMM y 'г'. G",
                 "dd.MM.yyyy G",
                 "dd.MM.yy G",
                 "{1}, {0}",
@@ -236,12 +236,11 @@ ru{
                 yyMM{"MM.yy G"}
                 yyMMM{"LLL yy G"}
                 yyMMMEd{"E, d MMM yy G"}
-                yyQ{"Q yy G"}
                 yyyy{"y G"}
                 yyyyLLLL{"LLLL y G"}
                 yyyyMM{"MM.yyyy G"}
                 yyyyMMMM{"LLLL y G"}
-                yyyyQQQQ{"QQQQ y 'г'. G"}
+                yyyyQQQQ{"QQQQ y 'г'. G"}
             }
         }
         chinese{
@@ -484,8 +483,8 @@ ru{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE, d MMMM y 'г'.",
-                "d MMMM y 'г'.",
+                "EEEE, d MMMM y 'г'.",
+                "d MMMM y 'г'.",
                 "dd MMM y 'г'.",
                 "dd.MM.yy",
                 "{1}, {0}",
@@ -517,19 +516,18 @@ ru{
                 yMEd{"ccc, d.MM.y 'г'."}
                 yMMM{"LLL y"}
                 yMMMEd{"E, d MMM y"}
-                yMMMd{"d MMM y 'г'."}
+                yMMMd{"d MMM y 'г'."}
                 yMd{"dd.MM.y"}
-                yQ{"QQQ y 'г'."}
-                yQQQ{"y QQQ"}
+                yQQQ{"QQQ y 'г'."}
                 yyMM{"MM.yy"}
                 yyMMM{"LLL yy"}
                 yyMMMEd{"E, d MMM yy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
                 yyyy{"y"}
                 yyyyLLLL{"LLLL y"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"LLLL y"}
-                yyyyQQQQ{"QQQQ y 'г'."}
+                yyyyQQQQ{"QQQQ y 'г'."}
             }
             dayNames{
                 format{
@@ -699,11 +697,11 @@ ru{
                     M{"M-M"}
                 }
                 MEd{
-                    M{"E, MM-dd – E, MM-dd"}
-                    d{"E, dd.MM – E, dd.MM"}
+                    M{"E, dd.MM - E, dd.MM"}
+                    d{"E, dd.MM - E, dd.MM"}
                 }
                 MMM{
-                    M{"LLL–MMM"}
+                    M{"LLL-MMM"}
                 }
                 MMMEd{
                     M{"ccc, d MMM - ccc, d MMM"}
@@ -1061,8 +1059,8 @@ ru{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE, d MMMM y 'г'. G",
-                "d MMMM y 'г'. G",
+                "EEEE, d MMMM y 'г'. G",
+                "d MMMM y 'г'. G",
                 "dd.MM.yyyy G",
                 "dd.MM.yy G",
                 "{1}, {0}",
@@ -1074,6 +1072,7 @@ ru{
             availableFormats{
                 E{"ccc"}
                 Ed{"E, d"}
+                Gy{"y G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -1086,10 +1085,11 @@ ru{
                 Md{"dd.MM"}
                 d{"d"}
                 ms{"mm:ss"}
+                y{"y G"}
                 yyMM{"MM.yy G"}
                 yyMMM{"LLL yy G"}
                 yyMMMEd{"E, d MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyyy{"y G"}
                 yyyyLLLL{"LLLL y G"}
                 yyyyM{"MM.y G"}
@@ -1101,7 +1101,7 @@ ru{
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"dd.MM.y G"}
                 yyyyQQQ{"QQQ y G"}
-                yyyyQQQQ{"QQQQ y 'г'. G"}
+                yyyyQQQQ{"QQQQ y 'г'. G"}
             }
             monthNames{
                 format{
@@ -1186,8 +1186,8 @@ ru{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE, d MMMM y 'г'. G",
-                "d MMMM y 'г'. G",
+                "EEEE, d MMMM y 'г'. G",
+                "d MMMM y 'г'. G",
                 "dd.MM.yyyy G",
                 "dd.MM.yy G",
                 "{1} {0}",
@@ -1216,7 +1216,7 @@ ru{
                 yyMM{"MM.yy G"}
                 yyMMM{"LLL yy G"}
                 yyMMMEd{"E, d MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyyy{"y G"}
                 yyyyLLLL{"LLLL y G"}
                 yyyyM{"MM.y G"}
@@ -1228,7 +1228,7 @@ ru{
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"dd.MM.y G"}
                 yyyyQQQ{"QQQ y G"}
-                yyyyQQQQ{"QQQQ y 'г'. G"}
+                yyyyQQQQ{"QQQQ y 'г'. G"}
             }
             eras{
                 abbreviated{
@@ -1555,8 +1555,8 @@ ru{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE, d MMMM y 'г'. G",
-                "d MMMM y 'г'. G",
+                "EEEE, d MMMM y 'г'. G",
+                "d MMMM y 'г'. G",
                 "dd.MM.yyyy G",
                 "dd.MM.yy G",
                 "{1}, {0}",
@@ -1585,7 +1585,7 @@ ru{
                 yyMM{"MM.yy G"}
                 yyMMM{"LLL yy G"}
                 yyMMMEd{"E, d MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyyy{"y G"}
                 yyyyLLLL{"LLLL y G"}
                 yyyyM{"MM.y G"}
@@ -1597,7 +1597,7 @@ ru{
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"dd.MM.y G"}
                 yyyyQQQ{"QQQ y G"}
-                yyyyQQQQ{"QQQQ y 'г'. G"}
+                yyyyQQQQ{"QQQQ y 'г'. G"}
             }
         }
     }

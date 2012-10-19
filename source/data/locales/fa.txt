@@ -12,7 +12,7 @@
 fa{
     AuxExemplarCharacters{
         "[\u200C\u200D\u200E\u200F \u064E \u0650 \u064F \u0652 \u0656 \u0670 ۰ ۱ ۲ ۳ "
-        "۴ ۵ ۶ ۷ ۸ ۹]"
+        "۴ ۵ ۶ ۷ ۸ ۹ إ ك ى ي]"
     }
     ExemplarCharacters{
         "[\u064B \u064D \u064C \u0651 \u0654 آ ا ء أ ؤ ئ ب پ ت ث ج چ ح خ د ذ ر ز ژ س "
@@ -141,7 +141,7 @@ fa{
         }
         native{"arabext"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -195,8 +195,8 @@ fa{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"y/M/d"}
-                yQ{"QQQ y"}
-                yQQQ{"QQQ y"}
+                yQQQ{"QQQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyyyM{"yyyy/M"}
                 yyyyMMMM{"MMMM yyyy"}
                 yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
@@ -722,8 +722,8 @@ fa{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             eras{
                 abbreviated{

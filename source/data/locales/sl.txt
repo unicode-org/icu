@@ -56,13 +56,13 @@ sl{
                     10000000{
                         few{"00 milijoni"}
                         one{"00 milijon"}
-                        other{"00 milijona"}
+                        other{"00 milijonov"}
                         two{"00 milijona"}
                     }
                     100000000{
                         few{"000 milijoni"}
                         one{"000 milijon"}
-                        other{"000 milijona"}
+                        other{"000 milijonov"}
                         two{"000 milijona"}
                     }
                     1000000000{
@@ -74,13 +74,13 @@ sl{
                     10000000000{
                         few{"00 milijarde"}
                         one{"00 milijarda"}
-                        other{"00 milijarde"}
+                        other{"00 milijard"}
                         two{"00 milijardi"}
                     }
                     100000000000{
                         few{"000 milijarde"}
                         one{"000 milijarda"}
-                        other{"000 milijarde"}
+                        other{"000 milijard"}
                         two{"000 milijardi"}
                     }
                     1000000000000{
@@ -92,13 +92,13 @@ sl{
                     10000000000000{
                         few{"00 bilijoni"}
                         one{"00 bilijon"}
-                        other{"00 bilijona"}
+                        other{"00 bilijonov"}
                         two{"00 bilijona"}
                     }
                     100000000000000{
                         few{"000 bilijoni("}
                         one{"000 bilijon"}
-                        other{"000 bilijona"}
+                        other{"000 bilijonov"}
                         two{"000 bilijona"}
                     }
                 }
@@ -193,7 +193,7 @@ sl{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -237,11 +237,10 @@ sl{
                 yMEd{"E, d. M. y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d. MMM y"}
-                yMMMd{"MMM d, y"}
+                yMMMd{"d. MMM y"}
                 yMd{"d. M. y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q/yy"}
+                yQQQQ{"QQQQ y"}
                 yyyyM{"M/yyyy"}
                 yyyyMMMM{"MMMM y"}
             }

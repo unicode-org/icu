@@ -28,7 +28,7 @@ to{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -72,11 +72,11 @@ to{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
-                yQ{"yyyy Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
                 yyMM{"MM-yy"}
                 yyMMM{"MMM yy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
             }
             dayNames{
                 format{

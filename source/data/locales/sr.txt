@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sr.xml
  */
 sr{
-    AuxExemplarCharacters{"[]"}
+    AuxExemplarCharacters{"[ё й щ ъ ы ь э ю я]"}
     ExemplarCharacters{"[а б в г д ђ е ж з и ј к л љ м н њ о п р с т ћ у ф х ц ч џ ш]"}
     ExemplarCharactersIndex{"[А Б В Г Д Ђ Е Ж З И Ј К Л Љ М Н Њ О П Р С Т Ћ У Ф Х Ц Ч Џ Ш]"}
     LocaleScript{
@@ -103,10 +103,10 @@ sr{
             patternsShort{
                 decimalFormat{
                     1000{
-                        few{"0000"}
-                        many{"0000"}
-                        one{"0000"}
-                        other{"0000"}
+                        few{"0"}
+                        many{"0"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
                         few{"00K"}
@@ -190,7 +190,7 @@ sr{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     calendar{
         buddhist{
             eras{
@@ -290,12 +290,12 @@ sr{
                 yMMMM{"MMMM y."}
                 yMMMd{"d. MMM y."}
                 yMd{"d. M. y."}
-                yQ{"y Q"}
                 yQQQ{"QQQ. y"}
+                yQQQQ{"QQQQ. y"}
                 yyMM{"MM.yy"}
                 yyMMMd{"d. MMM yy."}
                 yyMMdd{"dd.MM.yy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyy{"y."}
                 yyyyMM{"yyyy-MM"}

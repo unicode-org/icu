@@ -32,7 +32,7 @@ sr_Latn{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -81,12 +81,12 @@ sr_Latn{
                 yMMMM{"MMMM y."}
                 yMMMd{"d. MMM y."}
                 yMd{"d. M. y."}
-                yQ{"y Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
                 yyMM{"MM.yy"}
                 yyMMMd{"d. MMM yy."}
                 yyMMdd{"dd.MM.yy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyy{"y."}
                 yyyyMM{"yyyy-MM"}

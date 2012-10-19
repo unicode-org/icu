@@ -775,6 +775,7 @@ zh{
             buddhist{"佛教日历"}
             chinese{"农历"}
             coptic{"科普特日历"}
+            dangi{"檀纪日历"}
             ethiopic{"埃塞俄比亚日历"}
             ethiopic-amete-alem{"埃塞俄比亚阿米特阿莱姆日历"}
             gregorian{"公历"}
@@ -919,7 +920,7 @@ zh{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.76.33"}
+    Version{"2.0.78.39"}
     codePatterns{
         language{"语言：{0}"}
         script{"文字：{0}"}

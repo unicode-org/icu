@@ -335,7 +335,7 @@ en{
         lui{"Luiseno"}
         lun{"Lunda"}
         luo{"Luo"}
-        lus{"Lushai"}
+        lus{"Mizo"}
         luy{"Luyia"}
         lv{"Latvian"}
         mad{"Madurese"}
@@ -778,6 +778,7 @@ en{
             buddhist{"Buddhist Calendar"}
             chinese{"Chinese Calendar"}
             coptic{"Coptic Calendar"}
+            dangi{"Dangi Calendar"}
             ethiopic{"Ethiopic Calendar"}
             ethiopic-amete-alem{"Ethiopic Amete Alem Calendar"}
             gregorian{"Gregorian Calendar"}
@@ -876,23 +877,30 @@ en{
         AREVMDA{"Western Armenian"}
         BAKU1926{"Unified Turkic Latin Alphabet"}
         BISKE{"San Giorgio/Bila dialect"}
+        BOHORIC{"Bohorič alphabet"}
         BOONT{"Boontling"}
+        DAJNKO{"Dajnko alphabet"}
+        EMODENG{"Early Modern English"}
         FONIPA{"IPA Phonetics"}
         FONUPA{"UPA Phonetics"}
         HEPBURN{"Hepburn romanization"}
         HEPLOC{"Hepburn romanization, Library of Congress method"}
         KKCOR{"Common Orthography"}
+        KSCOR{"Standard Orthography"}
         LIPAW{"The Lipovaz dialect of Resian"}
+        METELKO{"Metelko alphabet"}
         MONOTON{"Monotonic"}
         NDYUKA{"Ndyuka dialect"}
         NEDIS{"Natisone dialect"}
         NJIVA{"Gniva/Njiva dialect"}
+        NULIK{"Modern Volapük"}
         OSOJS{"Oseacco/Osojane dialect"}
         PAMAKA{"Pamaka dialect"}
         PINYIN{"Pinyin Romanization"}
         POLYTON{"Polytonic"}
         POSIX{"Computer"}
         REVISED{"Revised Orthography"}
+        RIGIK{"Classic Volapük"}
         ROZAJ{"Resian"}
         SAAHO{"Saho"}
         SCOTLAND{"Scottish Standard English"}
@@ -904,7 +912,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.76.85"}
+    Version{"2.0.78.36"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

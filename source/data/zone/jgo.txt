@@ -10,13 +10,13 @@
  *  ICU <specials> source: <path>/xml/main/jgo.xml
  */
 jgo{
-    Version{"2.0.76.38"}
+    Version{"2.0.77.53"}
     zoneStrings{
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"({0})"}
+        regionFormat{"{0}"}
     }
 }

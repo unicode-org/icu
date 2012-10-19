@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pl.xml
  */
 pl{
-    AuxExemplarCharacters{"[å q v x]"}
+    AuxExemplarCharacters{"[à â å ä æ ç é è ê ë î ï ô ö œ q ß ù û ü v x ÿ]"}
     ExemplarCharacters{"[a ą b c ć d e ę f g h i j k l ł m n ń o ó p r s ś t u w y z ź ż]"}
     ExemplarCharactersIndex{"[A Ą B C Ć D E Ę F G H I J K L Ł M N Ń O Ó P Q R S Ś T U V W X Y Z Ź Ż]"}
     ExemplarCharactersPunctuation{
@@ -107,10 +107,10 @@ pl{
             patternsShort{
                 decimalFormat{
                     1000{
-                        few{"0 tys'.'"}
-                        many{"0 tys'.'"}
-                        one{"0 tys'.'"}
-                        other{"0 tys'.'"}
+                        few{"0 tys'.'"}
+                        many{"0 tys'.'"}
+                        one{"0 tys'.'"}
+                        other{"0 tys'.'"}
                     }
                     10000{
                         few{"00 tys'.'"}
@@ -194,7 +194,7 @@ pl{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -238,10 +238,9 @@ pl{
                 yMMMM{"LLLL y G"}
                 yMMMd{"d MMM y G"}
                 yMd{"d.MM.yyyy G"}
-                yQ{"G y Q"}
                 yQQQ{"G y QQQ"}
+                yQQQQ{"G y QQQQ"}
                 yyMMM{"LLL y G"}
-                yyQ{"Q y G"}
                 yyyyMM{"MM.yyyy G"}
                 yyyyMMMM{"LLLL y G"}
             }
@@ -492,10 +491,9 @@ pl{
                 yMMMM{"LLLL y"}
                 yMMMd{"d MMM y"}
                 yMd{"d.MM.yyyy"}
-                yQ{"QQQ y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMMM{"LLLL yy"}
-                yyQ{"QQQ yy"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"LLLL y"}
             }
@@ -1026,6 +1024,7 @@ pl{
             }
             availableFormats{
                 Ed{"E, d"}
+                Gy{"y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1042,16 +1041,15 @@ pl{
                 hm{"hh:mm a"}
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
+                y{"y G"}
                 yM{"MM.yyyy"}
                 yMEd{"E, d.MM.yyyy"}
                 yMMM{"LLL y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"LLLL y"}
-                yQ{"yyyy Q"}
-                yQQQ{"y QQQ"}
+                yQQQ{"G y QQQ"}
+                yQQQQ{"G y QQQQ"}
                 yyMMM{"LLL yy G"}
-                yyQ{"Q y G"}
                 yyyy{"y G"}
                 yyyyMEd{"E, dd.MM.yyyy G"}
                 yyyyMM{"MM.yyyy G"}
@@ -1059,8 +1057,8 @@ pl{
                 yyyyMMMM{"LLLL y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"dd.MM.yyyy G"}
-                yyyyQ{"G y Q"}
                 yyyyQQQ{"G y QQQ"}
+                yyyyQQQQ{"G y QQQQ"}
             }
             monthNames{
                 format{
@@ -1175,7 +1173,6 @@ pl{
                 ms{"mm:ss"}
                 y{"y G"}
                 yyMMM{"LLL yy G"}
-                yyQ{"Q y G"}
                 yyyy{"y G"}
                 yyyyM{"M.y G"}
                 yyyyMEd{"E, dd.MM.y G"}
@@ -1184,8 +1181,8 @@ pl{
                 yyyyMMMM{"LLLL y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"dd.MM.y G"}
-                yyyyQ{"G y Q"}
                 yyyyQQQ{"G y QQQ"}
+                yyyyQQQQ{"G y QQQQ"}
             }
         }
         persian{
@@ -1303,7 +1300,6 @@ pl{
                 y{"y G"}
                 yyMM{"MM/y G"}
                 yyMMM{"LLL y G"}
-                yyQ{"Q y G"}
                 yyyy{"y G"}
                 yyyyM{"M.y G"}
                 yyyyMEd{"E, d.MM.y G"}
@@ -1312,8 +1308,8 @@ pl{
                 yyyyMMMM{"LLLL y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d.MM.y G"}
-                yyyyQ{"G y Q"}
                 yyyyQQQ{"G y QQQ"}
+                yyyyQQQQ{"G y QQQQ"}
             }
             eras{
                 abbreviated{

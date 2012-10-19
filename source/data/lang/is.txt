@@ -644,7 +644,7 @@ is{
             vaii{"Vai-tölustafir"}
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     codePatterns{
         language{"tungumál: {0}"}
         script{"leturgerð: {0}"}

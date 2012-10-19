@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/am.xml
  */
 am{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"አቢጃን"}
@@ -1144,7 +1144,7 @@ am{
             ec{"ማሄ"}
         }
         "Indian:Maldives"{
-            ec{"ሞልዶቫ"}
+            ec{"ማልዲቨ"}
         }
         "Indian:Mauritius"{
             ec{"ሞሪሽየስ"}
@@ -1334,7 +1334,7 @@ am{
         "meta:Argentina_Western"{
             ld{"የአርጀንቲና ምስራቃዊ በጋ ሰዓት አቆጣጠር"}
             lg{"የአርጀንቲና ምስራቃዊ ሰዓት አቆጣጠር"}
-            ls{"የምዕራባዊ አርጀንቲና መደበኛ  ሰዓት አቆጣጠር"}
+            ls{"የምዕራባዊ አርጀንቲና መደበኛ ሰዓት አቆጣጠር"}
         }
         "meta:Armenia"{
             ld{"የአርመኒያ ክረምት ሰዓት"}
@@ -1689,7 +1689,7 @@ am{
         "meta:Novosibirsk"{
             ld{"የኖቮሲብሪስክ የበጋ ሰአት አቆጣጠር"}
             lg{"የኖቮሲብሪስክ የሰዓት አቆጣጠር"}
-            ls{"የኖቮሲቢርስክ መደበኛ  የሰዓት አቆጣጠር"}
+            ls{"የኖቮሲቢርስክ መደበኛ የሰዓት አቆጣጠር"}
         }
         "meta:Omsk"{
             ld{"የኦምስክ የበጋ ሰዓት አቆጣጠር"}

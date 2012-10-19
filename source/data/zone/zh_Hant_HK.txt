@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 zh_Hant_HK{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比贊"}
@@ -86,9 +86,6 @@ zh_Hant_HK{
         }
         "Europe:Chisinau"{
             ec{"基希訥烏"}
-        }
-        "Europe:Guernsey"{
-            ec{"德國"}
         }
         "Europe:Jersey"{
             ec{"澤西"}

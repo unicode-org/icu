@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/et.xml
  */
 et{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alžiir"}
@@ -880,6 +880,6 @@ et{
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"({0})"}
+        regionFormat{"{0} aeg"}
     }
 }

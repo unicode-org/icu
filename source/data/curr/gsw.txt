@@ -949,11 +949,11 @@ gsw{
         }
         VEB{
             "VEB",
-            "Bolivar",
+            "Bolivar (1871-2008)",
         }
         VEF{
             "VEF",
-            "Bolívar Fuerte",
+            "Bolivar",
         }
         VND{
             "₫",
@@ -1997,6 +1997,10 @@ gsw{
             one{"Bolivar (1871-2008)"}
             other{"Bolivar (1871-2008)"}
         }
+        VEF{
+            one{"Bolivar"}
+            other{"Bolivar"}
+        }
         VUV{
             one{"Vatu"}
             other{"Vatu"}
@@ -2126,5 +2130,5 @@ gsw{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
 }

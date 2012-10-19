@@ -35,7 +35,7 @@ te{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0 వేలు"}
+                        one{"0 వేయి"}
                         other{"0 వేలు"}
                     }
                     10000{
@@ -151,7 +151,7 @@ te{
         }
         native{"telu"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -198,9 +198,8 @@ te{
                 yMMMEd{"E, d, MMM y"}
                 yMMMd{"d, MMM y"}
                 yMd{"d/M/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
+                yQQQQ{"QQQQ y"}
                 yyyyMM{"MM-yyyy"}
                 yyyyMMMM{"MMMM y"}
             }

@@ -28,11 +28,14 @@ lo{
         laoo{
             patternsLong{
                 decimalFormat{
+                    1000{
+                        other{"0ພັນ"}
+                    }
                     10000{
-                        other{"00ກີບ"}
+                        other{"00ພັນ"}
                     }
                     100000{
-                        other{"000ກີບ"}
+                        other{"000ພັນ"}
                     }
                     1000000{
                         other{"0ລ້ານ"}
@@ -47,13 +50,13 @@ lo{
                         other{"0ພັນລ້ານ"}
                     }
                     10000000000{
-                        other{"00ໝື່ນລ້ານ"}
+                        other{"00ພັນລ້ານ"}
                     }
                     100000000000{
-                        other{"000ແສນລ້ານ"}
+                        other{"000ພັນລ້ານ"}
                     }
                     1000000000000{
-                        other{"0ລ້ານລ້ານ"}
+                        other{"0000ພັນລ້ານ"}
                     }
                     10000000000000{
                         other{"00ລ້ານລ້ານ"}
@@ -65,11 +68,14 @@ lo{
             }
             patternsShort{
                 decimalFormat{
+                    1000{
+                        other{"0ພັນ"}
+                    }
                     10000{
-                        other{"00ກີບ"}
+                        other{"00ພັນ"}
                     }
                     100000{
-                        other{"000ກີບ"}
+                        other{"000ພັນ"}
                     }
                     1000000{
                         other{"0ລ້ານ"}
@@ -81,22 +87,22 @@ lo{
                         other{"000ລ້ານ"}
                     }
                     1000000000{
-                        other{"0ພັນລ້ານ"}
+                        other{"0ຕື້"}
                     }
                     10000000000{
-                        other{"00ໝື່ນລ້ານ"}
+                        other{"00ຕື້"}
                     }
                     100000000000{
-                        other{"000ແສນລ້ານ"}
+                        other{"000ຕື້"}
                     }
                     1000000000000{
-                        other{"0ລ້ານລ້ານ"}
+                        other{"0000ຕື້"}
                     }
                     10000000000000{
-                        other{"00ລ້ານລ້ານ"}
+                        other{"00ພັນຕື້"}
                     }
                     100000000000000{
-                        other{"000ລ້ານລ້ານ"}
+                        other{"000ພັນຕື້"}
                     }
                 }
             }
@@ -203,7 +209,7 @@ lo{
         }
         native{"laoo"}
     }
-    Version{"2.0.76.38"}
+    Version{"2.0.78.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -672,8 +678,8 @@ lo{
                 yMMMEd{"E, y MMM d"}
                 yMMMd{"y MMM d"}
                 yMd{"y-M-d"}
-                yQ{"y Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
             }
             dayNames{
                 format{
@@ -1236,11 +1242,11 @@ lo{
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/yyyy"}
-                yMEd{"E  M/d/y"}
+                yMEd{"E M/d/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E,MMM d,y"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             eras{
                 abbreviated{

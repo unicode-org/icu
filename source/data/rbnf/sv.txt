@@ -12,7 +12,7 @@
 sv{
     RBNFRules{
         OrdinalRules{
-            "%digits-ordinal-neutre:",
+            "%digits-ordinal-neuter:",
             "0: =%digits-ordinal-feminine=;",
             "%digits-ordinal-masculine:",
             "-x: \u2212>>;",
@@ -115,7 +115,7 @@ sv{
             "90: nittio[\u00AD>>];",
             "100: <%spellout-numbering<\u00ADhundra[\u00AD>>];",
             "1000: ERROR;",
-            "%spellout-cardinal-neutre:",
+            "%spellout-cardinal-neuter:",
             "0: =%spellout-numbering=;",
             "%spellout-cardinal-masculine:",
             "0: =%spellout-cardinal-reale=;",
@@ -135,7 +135,7 @@ sv{
             "70: sjuttio[\u00AD>>];",
             "80: \u00E5ttio[\u00AD>>];",
             "90: nittio[\u00AD>>];",
-            "100: <%spellout-cardinal-neutre<\u00ADhundra[\u00AD>>];",
+            "100: <%spellout-cardinal-neuter<\u00ADhundra[\u00AD>>];",
             "1000: ettusen[ >>];",
             "2000: <%spellout-cardinal-reale<\u00ADtusen[ >>];",
             "1000000: en miljon[ >>];",
@@ -147,7 +147,7 @@ sv{
             "1000000000000000: en biljard[ >>];",
             "2000000000000000: <%spellout-cardinal-reale< biljarder[ >>];",
             "1000000000000000000: =#,##0=;",
-            "%spellout-ordinal-neutre:",
+            "%spellout-ordinal-neuter:",
             "-x: minus >>;",
             "x.x: =#,##0.#=;",
             "0: nollte;",
@@ -201,7 +201,7 @@ sv{
             "10: tionde;",
             "11: elfte;",
             "12: tolfte;",
-            "13: =%spellout-cardinal-neutre=de;",
+            "13: =%spellout-cardinal-neuter=de;",
             "20: tjugo>%%ord-masc-nde>;",
             "30: trettio>%%ord-masc-nde>;",
             "40: fyrtio>%%ord-masc-nde>;",
@@ -234,10 +234,10 @@ sv{
             "0: te;",
             "1: er =%spellout-ordinal-masculine=;",
             "%spellout-ordinal-feminine:",
-            "0: =%spellout-ordinal-neutre=;",
+            "0: =%spellout-ordinal-neuter=;",
             "%spellout-ordinal-reale:",
-            "0: =%spellout-ordinal-neutre=;",
+            "0: =%spellout-ordinal-neuter=;",
         }
     }
-    Version{"2.0.74.11"}
+    Version{"2.0.77.34"}
 }

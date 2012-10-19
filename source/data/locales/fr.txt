@@ -32,7 +32,7 @@ fr{
                 decimalFormat{
                     1000{
                         one{"0 millier"}
-                        other{"0 milliers"}
+                        other{"0 mille"}
                     }
                     10000{
                         one{"00 mille"}
@@ -83,23 +83,23 @@ fr{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0 K"}
-                        other{"0 K"}
+                        one{"0 K"}
+                        other{"0 K"}
                     }
                     10000{
-                        one{"00 K"}
-                        other{"00 K"}
+                        one{"00 K"}
+                        other{"00 K"}
                     }
                     100000{
-                        one{"000 K"}
-                        other{"000 K"}
+                        one{"000 K"}
+                        other{"000 K"}
                     }
                     1000000{
-                        one{"0 M"}
-                        other{"0 M"}
+                        one{"0 M"}
+                        other{"0 M"}
                     }
                     10000000{
-                        one{"00 M"}
+                        one{"00 M"}
                         other{"00 M"}
                     }
                     100000000{
@@ -111,12 +111,12 @@ fr{
                         other{"0 Md"}
                     }
                     10000000000{
-                        one{"00 Md"}
-                        other{"00 Md"}
+                        one{"00 Md"}
+                        other{"00 Md"}
                     }
                     100000000000{
-                        one{"000 Md"}
-                        other{"000 Md"}
+                        one{"000 Md"}
+                        other{"000 Md"}
                     }
                     1000000000000{
                         one{"0 Bn"}
@@ -146,7 +146,7 @@ fr{
             }
         }
     }
-    Version{"2.0.76.53"}
+    Version{"2.0.78.30"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -187,13 +187,13 @@ fr{
                 yMMM{"MMM y G"}
                 yMMMEd{"E d MMM y G"}
                 yMd{"d/M/y G"}
-                yQ{"'T'Q y G"}
                 yQQQ{"QQQ y G"}
+                yQQQQ{"QQQQ y G"}
                 yyMM{"MM/y G"}
                 yyMMM{"MMM y G"}
                 yyMMMEd{"E d MMM y G"}
                 yyMMMd{"d MMM y G"}
-                yyQ{"'T'Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ y G"}
                 yyyyMMMM{"MMMM y G"}
             }
@@ -240,8 +240,8 @@ fr{
                 yMMMEd{"E d MMM U"}
                 yMMMd{"d MMM U"}
                 yMd{"d/M/y"}
-                yQ{"'T'Q U"}
                 yQQQ{"QQQ U"}
+                yQQQQ{"QQQQ U"}
             }
             monthNames{
                 format{
@@ -323,14 +323,12 @@ fr{
                 yMMMEd{"E d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/yyyy"}
-                yQ{"'T'Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
                 yyMMMEd{"E d MMM yy"}
                 yyMMMd{"d MMM yy"}
-                yyQ{"'T'Q yy"}
-                yyQQQQ{"QQQQ yy"}
                 yyyyMMMM{"MMMM y"}
             }
             dayNames{
@@ -746,6 +744,7 @@ fr{
             }
             availableFormats{
                 Ed{"E d"}
+                Gy{"y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -764,18 +763,18 @@ fr{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
+                y{"y G"}
                 yM{"M/yyyy"}
                 yMEd{"E d/M/yyyy"}
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
-                yQ{"'T'Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM/y G"}
                 yyMMM{"MMM y G"}
                 yyMMMEd{"E d MMM y G"}
                 yyMMMd{"d MMM y G"}
-                yyQ{"'T'Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y G"}
@@ -785,8 +784,8 @@ fr{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y G"}
-                yyyyQ{"'T'Q y G"}
-                yyyyQQQ{"QQQ y G"}
+                yyyyQQQ{"'T'QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             eras{
                 abbreviated{
@@ -923,7 +922,7 @@ fr{
                 yyMMM{"MMM y G"}
                 yyMMMEd{"E d MMM y G"}
                 yyMMMd{"d MMM y G"}
-                yyQ{"'T'Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
@@ -933,8 +932,8 @@ fr{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
-                yyyyQ{"'T'Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
         roc{
@@ -975,7 +974,7 @@ fr{
                 yyMMM{"MMM y G"}
                 yyMMMEd{"E d MMM y G"}
                 yyMMMd{"d MMM y G"}
-                yyQ{"'T'Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
@@ -985,8 +984,8 @@ fr{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
-                yyyyQ{"'T'Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             eras{
                 abbreviated{

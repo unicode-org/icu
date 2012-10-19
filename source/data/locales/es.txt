@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/es.xml
  */
 es{
-    AuxExemplarCharacters{"[à ă â å ä ã ā æ ç è ĕ ê ë ē ì ĭ î ï ī º ò ŏ ô ö ø ō œ ù ŭ û ū ÿ]"}
+    AuxExemplarCharacters{"[ª à ă â å ä ã ā æ ç è ĕ ê ë ē ì ĭ î ï ī º ò ŏ ô ö ø ō œ ù ŭ û ū ÿ]"}
     ExemplarCharacters{"[a á b c d e é f g h i í j k l m n ñ o ó p q r s t u ú ü v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N Ñ O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{
@@ -43,7 +43,7 @@ es{
                         other{"000 mil"}
                     }
                     1000000{
-                        one{"0 millones"}
+                        one{"0 millón"}
                         other{"0 millones"}
                     }
                     10000000{
@@ -55,7 +55,7 @@ es{
                         other{"000 millones"}
                     }
                     1000000000{
-                        one{"0 millardos"}
+                        one{"0 millardo"}
                         other{"0 millardos"}
                     }
                     10000000000{
@@ -67,7 +67,7 @@ es{
                         other{"000 millardos"}
                     }
                     1000000000000{
-                        one{"0 billones"}
+                        one{"0 billón"}
                         other{"0 billones"}
                     }
                     10000000000000{
@@ -83,16 +83,16 @@ es{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0000"}
-                        other{"0000"}
+                        one{"0 K"}
+                        other{"0 K"}
                     }
                     10000{
-                        one{"00k"}
-                        other{"00k"}
+                        one{"00 K"}
+                        other{"00 K"}
                     }
                     100000{
-                        one{"000k"}
-                        other{"000k"}
+                        one{"000 K"}
+                        other{"000 K"}
                     }
                     1000000{
                         one{"0 M"}
@@ -111,12 +111,12 @@ es{
                         other{"0000 M"}
                     }
                     10000000000{
-                        one{"00k M"}
-                        other{"00k M"}
+                        one{"00 K M"}
+                        other{"00 K M"}
                     }
                     100000000000{
-                        one{"000k M"}
-                        other{"000k M"}
+                        one{"000 K M"}
+                        other{"000 K M"}
                     }
                     1000000000000{
                         one{"0 B"}
@@ -146,7 +146,7 @@ es{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -191,11 +191,11 @@ es{
                 yMMMM{"MMMM 'de' y G"}
                 yMMMd{"d MMM y G"}
                 yMd{"d/M/y G"}
-                yQ{"Q y G"}
                 yQQQ{"QQQ y G"}
+                yQQQQ{"QQQQ 'de' y G"}
                 yyMM{"MM/y G"}
                 yyMMM{"MMM-y G"}
-                yyQ{"Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ 'de' y G"}
                 yyyyMM{"MM/y G"}
             }
@@ -265,12 +265,10 @@ es{
                 yMMMM{"MMMM 'de' y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ 'de' y"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM-yy"}
-                yyQ{"Q yy"}
-                yyQQQQ{"QQQQ 'de' yy"}
                 yyyyMM{"MM/yyyy"}
             }
             dayNames{
@@ -619,7 +617,7 @@ es{
                 yMMMEd{"E d MMM y"}
                 yyMM{"MM/y G"}
                 yyMMM{"MMM-y G"}
-                yyQ{"Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ 'de' y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y G"}
@@ -629,8 +627,8 @@ es{
                 yyyyMMMM{"MMMM 'de' y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ 'de' y G"}
             }
         }
         japanese{
@@ -671,7 +669,7 @@ es{
                 y{"y G"}
                 yyMM{"MM/y GGGGG"}
                 yyMMM{"MMM-y G"}
-                yyQ{"Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ 'de' y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
@@ -681,8 +679,8 @@ es{
                 yyyyMMMM{"MMMM 'de' y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ 'de' y G"}
             }
         }
         roc{
@@ -723,7 +721,7 @@ es{
                 y{"y G"}
                 yyMM{"MM/y GGGGG"}
                 yyMMM{"MMM-y G"}
-                yyQ{"Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ 'de' y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
@@ -734,8 +732,8 @@ es{
                 yyyyMMMM{"MMMM 'de' y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ 'de' y G"}
             }
             eras{
                 abbreviated{

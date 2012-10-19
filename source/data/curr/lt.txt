@@ -1029,11 +1029,11 @@ lt{
         }
         VEB{
             "VEB",
-            "Venesuelos bolivaras",
+            "Venesuelos bolivaras (1871-2008)",
         }
         VEF{
             "VEF",
-            "Stiprusis Venesuelos bolivaras",
+            "Venesuelos bolivaras",
         }
         VND{
             "₫",
@@ -2456,14 +2456,14 @@ lt{
             other{"Uzbekistano sumas"}
         }
         VEB{
+            few{"Venesuelos bolivarai (1871-2008)"}
+            one{"Venesuelos bolivaras (1871-2008)"}
+            other{"Venesuelos bolivarai (1871-2008)"}
+        }
+        VEF{
             few{"Venesuelos bolivarai"}
             one{"Venesuelos bolivaras"}
             other{"Venesuelos bolivarai"}
-        }
-        VEF{
-            few{"Stiprieji Venesuelos bolivarai"}
-            one{"Stiprusis Venesuelos bolivaras"}
-            other{"Stiprieji Venesuelos bolivarai"}
         }
         VND{
             few{"Vietnamo dongas"}
@@ -2651,5 +2651,5 @@ lt{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
 }

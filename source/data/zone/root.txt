@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/root.xml
  */
 root{
-    Version{"2.0.75.94"}
+    Version{"2.0.78.30"}
     zoneStrings{
         "Africa:Asmera"{
             ec{"Asmara"}
@@ -104,7 +104,7 @@ root{
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"({0})"}
+        regionFormat{"{0}"}
         singleCountries{
             "Europe/Kiev",
             "Pacific/Majuro",

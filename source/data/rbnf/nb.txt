@@ -22,7 +22,7 @@ nb{
             "10000: =%spellout-numbering=;",
             "%spellout-numbering:",
             "0: =%spellout-cardinal-reale=;",
-            "%spellout-cardinal-neutre:",
+            "%spellout-cardinal-neuter:",
             "-x: minus >>;",
             "x.x: << komma >>;",
             "0: null;",
@@ -64,8 +64,8 @@ nb{
             "80: [>>\u00ADog\u00AD]\u00E5tti;",
             "90: [>>\u00ADog\u00AD]nitti;",
             "100: etthundre[\u00ADog\u00AD>>];",
-            "200: <%spellout-cardinal-neutre<hundre[\u00ADog\u00AD>>];",
-            "1000: <%spellout-cardinal-neutre< tusen[ og >>];",
+            "200: <%spellout-cardinal-neuter<hundre[\u00ADog\u00AD>>];",
+            "1000: <%spellout-cardinal-neuter< tusen[ og >>];",
             "1000000: \u00E9n million[ >>];",
             "2000000: << millioner[ >>];",
             "1000000000: \u00E9n milliard[ >>];",
@@ -77,5 +77,5 @@ nb{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"2.0.73.63"}
+    Version{"2.0.77.34"}
 }

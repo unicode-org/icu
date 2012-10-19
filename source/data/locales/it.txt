@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/it.xml
  */
 it{
-    AuxExemplarCharacters{"[í ï ú]"}
+    AuxExemplarCharacters{"[á â å ä ã æ ç ê ë í î ï ñ ô ö õ ø œ ß ú û ü ÿ]"}
     ExemplarCharacters{"[a à b c d e é è f g h i ì j k l m n o ó ò p q r s t u ù v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{"[\- — , ; \: ! ? . … “ ” ( ) \[ \] \{ \} @ /]"}
@@ -80,52 +80,52 @@ it{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0000"}
-                        other{"0000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00000"}
-                        other{"00000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000000"}
-                        other{"000000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
-                        one{"0 M"}
-                        other{"0 M"}
+                        one{"0 Mln"}
+                        other{"0 Mln"}
                     }
                     10000000{
-                        one{"00 M"}
-                        other{"00 M"}
+                        one{"00 Mln"}
+                        other{"00 Mln"}
                     }
                     100000000{
-                        one{"000 M"}
-                        other{"000 M"}
+                        one{"000 Mln"}
+                        other{"000 Mln"}
                     }
                     1000000000{
-                        one{"0 Md"}
-                        other{"0 Md"}
+                        one{"0 Mld"}
+                        other{"0 Mld"}
                     }
                     10000000000{
-                        one{"00 Md"}
-                        other{"00 Md"}
+                        one{"00 Mld"}
+                        other{"00 Mld"}
                     }
                     100000000000{
-                        one{"000 Md"}
-                        other{"000 Md"}
+                        one{"000 Mld"}
+                        other{"000 Mld"}
                     }
                     1000000000000{
-                        one{"0 B"}
-                        other{"0 B"}
+                        one{"0 Bln"}
+                        other{"0 Bln"}
                     }
                     10000000000000{
-                        one{"00 B"}
-                        other{"00 B"}
+                        one{"00 Bln"}
+                        other{"00 Bln"}
                     }
                     100000000000000{
-                        one{"000 B"}
-                        other{"000 B"}
+                        one{"000 Bln"}
+                        other{"000 Bln"}
                     }
                 }
             }
@@ -143,7 +143,7 @@ it{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -186,10 +186,10 @@ it{
                 yMMMEd{"E d MMM y G"}
                 yMMMd{"d MMM y G"}
                 yMd{"d/M/y G"}
-                yQ{"Q-y G"}
                 yQQQ{"QQQ y G"}
+                yQQQQ{"QQQQ y G"}
                 yyMM{"MM/y G"}
-                yyQ{"Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ y G"}
                 yyyyMMMM{"MMMM y G"}
             }
@@ -244,10 +244,9 @@ it{
                 yMMMEd{"E d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
-                yQ{"Q-yyyy"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM/yy"}
-                yyQ{"Q yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyyMMMM{"MMMM y"}
             }
@@ -624,6 +623,7 @@ it{
             }
             availableFormats{
                 Ed{"E d"}
+                Gy{"y G"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -639,10 +639,11 @@ it{
                 hm{"hh:mm a"}
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
-                yQ{"Q-y G"}
+                y{"y G"}
                 yQQQ{"QQQ y G"}
+                yQQQQ{"QQQQ y G"}
                 yyMM{"MM/y G"}
-                yyQ{"Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y G"}
@@ -689,10 +690,10 @@ it{
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yQ{"Q-y G"}
                 yQQQ{"QQQ y G"}
+                yQQQQ{"QQQQ y G"}
                 yyMM{"MM/y G"}
-                yyQ{"Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y G"}
@@ -739,10 +740,10 @@ it{
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yQ{"Q-y G"}
                 yQQQ{"QQQ y G"}
+                yQQQQ{"QQQQ y G"}
                 yyMM{"MM/y G"}
-                yyQ{"Q y G"}
+                yyQQQ{"QQQ y G"}
                 yyQQQQ{"QQQQ y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y G"}

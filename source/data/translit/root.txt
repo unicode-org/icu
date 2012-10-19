@@ -15,6 +15,12 @@ root {
         Digit-Tone {
             alias {"NumericPinyin-Pinyin"}
         }
+        Hans-Hant {
+            alias {"Simplified-Traditional"}
+        }
+        Hant-Hans {
+            alias {"Traditional-Simplified"}
+        }
         Amharic-Latin/BGN {
             file {
                 resource:process(transliterator) {"Amharic_Latin_BGN.txt"}

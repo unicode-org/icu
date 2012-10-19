@@ -31,9 +31,9 @@ sk{
             patternsLong{
                 decimalFormat{
                     1000{
-                        few{"0"}
-                        one{"0"}
-                        other{"0"}
+                        few{"0 tisíc"}
+                        one{"0 tisíc"}
+                        other{"0 tisíc"}
                     }
                     10000{
                         few{"00 tisíc"}
@@ -46,48 +46,48 @@ sk{
                         other{"000 tisíc"}
                     }
                     1000000{
-                        few{"0 milióna"}
-                        one{"0 milióna"}
-                        other{"0 milióna"}
+                        few{"0 milióny"}
+                        one{"0 milión"}
+                        other{"0 miliónov"}
                     }
                     10000000{
-                        few{"00 miliónov"}
-                        one{"00 miliónov"}
+                        few{"00 milióny"}
+                        one{"00 milión"}
                         other{"00 miliónov"}
                     }
                     100000000{
-                        few{"000 miliónov"}
-                        one{"000 miliónov"}
+                        few{"000 milióny"}
+                        one{"000 milión"}
                         other{"000 miliónov"}
                     }
                     1000000000{
                         few{"0 miliardy"}
-                        one{"0 miliardy"}
-                        other{"0 miliardy"}
+                        one{"0 miliarda"}
+                        other{"0 miliard"}
                     }
                     10000000000{
-                        few{"00 miliárd"}
-                        one{"00 miliárd"}
+                        few{"00 miliárdy"}
+                        one{"00 miliarda"}
                         other{"00 miliárd"}
                     }
                     100000000000{
-                        few{"000 miliárd"}
-                        one{"000 miliárd"}
+                        few{"000 miliárdy"}
+                        one{"000 miliarda"}
                         other{"000 miliárd"}
                     }
                     1000000000000{
-                        few{"0 bilióna"}
-                        one{"0 bilióna"}
-                        other{"0 bilióna"}
+                        few{"0 bilióny"}
+                        one{"0 bilión"}
+                        other{"0 biliónov"}
                     }
                     10000000000000{
-                        few{"00 biliónov"}
-                        one{"00 biliónov"}
+                        few{"00 bilióny"}
+                        one{"00 bilión"}
                         other{"00 biliónov"}
                     }
                     100000000000000{
-                        few{"000 biliónov"}
-                        one{"000 biliónov"}
+                        few{"000 bilióny"}
+                        one{"000 bilión"}
                         other{"000 biliónov"}
                     }
                 }
@@ -170,7 +170,7 @@ sk{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -219,10 +219,8 @@ sk{
                 yMMMM{"LLLL y"}
                 yMMMd{"d.M.yyyy"}
                 yMd{"d.M.yyyy"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
-                yyQQQQ{"QQQQ yy"}
+                yQQQQ{"QQQQ y"}
                 yyyyM{"M.yyyy"}
                 yyyyMMMM{"LLLL y"}
             }

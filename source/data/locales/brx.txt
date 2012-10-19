@@ -47,7 +47,7 @@ brx{
         }
         native{"deva"}
     }
-    Version{"2.0.75.86"}
+    Version{"2.0.78.30"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -90,8 +90,8 @@ brx{
                 yMMM{"MMM yyyy"}
                 yMMMEd{"E, MMM d, yyyy"}
                 yMMMM{"MMMM yyyy"}
-                yQ{"Q yyyy"}
-                yQQQ{"QQQ yyyy"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{

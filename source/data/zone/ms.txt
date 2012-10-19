@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ms.xml
  */
 ms{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.20"}
     zoneStrings{
         "America:Lower_Princes"{
             ec{"Lower Prince's Quarter"}

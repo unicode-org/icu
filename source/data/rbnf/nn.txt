@@ -22,7 +22,7 @@ nn{
             "10000: =%spellout-numbering=;",
             "%spellout-numbering:",
             "0: =%spellout-cardinal-reale=;",
-            "%spellout-cardinal-neutre:",
+            "%spellout-cardinal-neuter:",
             "-x: minus >>;",
             "x.x: << komma >>;",
             "0: null;",
@@ -63,8 +63,8 @@ nn{
             "70: s\u00F8tti[\u00AD>>];",
             "80: \u00E5tti[\u00AD>>];",
             "90: nitti[\u00AD>>];",
-            "100: <%spellout-cardinal-neutre< hundre[ og >>];",
-            "1000: <%spellout-cardinal-neutre< tusen[ og >>];",
+            "100: <%spellout-cardinal-neuter< hundre[ og >>];",
+            "1000: <%spellout-cardinal-neuter< tusen[ og >>];",
             "1000000: \u00E9in miljon[ >>];",
             "2000000: << miljoner[ >>];",
             "1000000000: \u00E9in miljard[ >>];",
@@ -76,5 +76,5 @@ nn{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"2.0.73.63"}
+    Version{"2.0.77.34"}
 }

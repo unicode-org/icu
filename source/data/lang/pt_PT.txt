@@ -22,24 +22,18 @@ pt_PT{
         x{"Utilização Privada"}
     }
     Languages{
-        ach{"Acoli"}
         af{"afrikaans"}
         agq{"aghem"}
-        ak{"Akan"}
         art{"idioma artifical"}
         asa{"asu"}
-        awa{"Awadhi"}
         bai{"bamileke Languages"}
         bax{"bamun"}
         bbj{"ghomala"}
-        bem{"Bemba"}
         bez{"bena"}
         bfd{"bafut"}
-        bh{"Biari"}
         bkm{"kom"}
-        br{"Bretão"}
         bss{"akoose"}
-        bug{"Buginese"}
+        bug{"buginese"}
         bum{"bulu"}
         byv{"medumba"}
         cay{"cayuga"}
@@ -47,8 +41,7 @@ pt_PT{
         cel{"idioma céltico"}
         cgg{"chiga"}
         chn{"jargão chinook"}
-        chr{"Cherokee"}
-        co{"Corso"}
+        co{"corso"}
         cpe{"crioulo ou pidgin do inglês"}
         cpf{"crioulo ou pidgin do francês"}
         cpp{"crioulo ou pidgin do português"}
@@ -60,7 +53,7 @@ pt_PT{
         dyo{"jola-fonyi"}
         dyu{"diula"}
         dzg{"dazaga"}
-        ee{"Ewe"}
+        ee{"ewe"}
         egy{"egípcio clássico"}
         enm{"inglês medieval"}
         et{"estónio"}
@@ -68,7 +61,6 @@ pt_PT{
         frm{"francês medieval"}
         frs{"frísio oriental"}
         fy{"frísico ocidental"}
-        gaa{"Ga"}
         gmh{"alemão medieval alto"}
         grc{"grego clássico"}
         guz{"gusii"}
@@ -76,15 +68,13 @@ pt_PT{
         hi{"hindi"}
         hsb{"sorbiano superior"}
         hy{"arménio"}
-        ia{"Interlíngua"}
-        iba{"Iban"}
         ibb{"ibibio"}
         ig{"igbo"}
-        ik{"Inupiaq"}
+        ik{"inupiaq"}
         jmc{"machame"}
         kbl{"kanembu"}
         kde{"makonde"}
-        kg{"Conguês"}
+        kg{"conguês"}
         khi{"khoisan"}
         khq{"koyra chiini"}
         kkj{"kako"}
@@ -95,17 +85,17 @@ pt_PT{
         ksf{"bafia"}
         lag{"langi"}
         lez{"lezghiano"}
-        lg{"Ganda"}
+        lg{"ganda"}
         luy{"luyia"}
         maf{"mafa"}
         mde{"maba"}
         mer{"meru"}
-        mga{"irlandês, medieval (900-1200)"}
+        mga{"irlandês, medieval"}
         mgh{"makhuwa-meetto"}
         mk{"macedónio"}
         mua{"mundang"}
         mye{"myene"}
-        nah{"Nauatle"}
+        nah{"nauatle"}
         naq{"nama"}
         nb{"norueguês bokmål"}
         nds{"baixo alemão"}
@@ -115,14 +105,11 @@ pt_PT{
         nnh{"ngiemboon"}
         non{"norse, old"}
         nus{"nuer"}
-        nyn{"Nyankole"}
         oc{"provençal"}
-        om{"Oromo"}
         os{"ossético"}
-        peo{"persa arcaico (aprox. 600-400 a.C.)"}
         pl{"polaco"}
         pra{"idioma prácito"}
-        pro{"provençal, arcaico (até 1500)"}
+        pro{"provençal, arcaico"}
         ps{"pastó"}
         rom{"romanês"}
         root{"root"}
@@ -144,14 +131,11 @@ pt_PT{
         swc{"suaili do Congo"}
         tai{"idioma tailândes"}
         teo{"teso"}
-        tet{"Tétum"}
         tg{"tajique"}
         ti{"tigre"}
-        tlh{"Klingon"}
         to{"tonga"}
         tog{"toganês"}
         trv{"taroko"}
-        tum{"Tumbuka"}
         twq{"tasawaq"}
         tyv{"tuviniano"}
         tzm{"tamazight de Marrocos Central"}
@@ -161,7 +145,6 @@ pt_PT{
         xog{"soga"}
         yav{"yangben"}
         ybb{"yemba"}
-        yi{"Iídiche"}
     }
     Scripts{
         Armn{"arménio"}
@@ -254,10 +237,8 @@ pt_PT{
         SOLBA{"dialecto stolvizza/solbica"}
         WADEGILE{"Romanização Wade-Giles"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     codePatterns{
-        language{"Idioma: {0}"}
         script{"Escrita: {0}"}
-        territory{"Região: {0}"}
     }
 }

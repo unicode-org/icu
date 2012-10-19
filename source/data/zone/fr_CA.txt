@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fr_CA{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     zoneStrings{
         "Africa:Ndjamena"{
             ec{"Ndjamena"}
@@ -59,9 +59,6 @@ fr_CA{
         }
         "Indian:Kerguelen"{
             ec{"Îles Kerguelen"}
-        }
-        "Pacific:Norfolk"{
-            ec{"Île Norfolk"}
         }
         "Pacific:Pitcairn"{
             ec{"Île Pitcairn"}

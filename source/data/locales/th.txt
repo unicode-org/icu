@@ -12,15 +12,15 @@
 th{
     AuxExemplarCharacters{"[\u200B]"}
     ExemplarCharacters{
-        "[\u0E4E \u0E4C \u0E47 \u0E48 \u0E49 \u0E4A \u0E4B ฯ ๆ ก ข ฃ ค ฅ ฆ ง จ ฉ ช ซ "
-        "ฌ ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ฤ ล ฦ ว ศ ษ ส ห ฬ อ ฮ \u0E4D"
-        " ะ \u0E31 า ๅ ำ \u0E34 \u0E35 \u0E36 \u0E37 \u0E38 \u0E39 เ แ โ ใ ไ \u0E3A]"
+        "[ฯๆ \u0E4E \u0E4C \u0E47 \u0E48 \u0E49 \u0E4A \u0E4B ก ข ฃ ค ฅ ฆ ง จ ฉ ช ซ ฌ"
+        " ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ฤ ล ฦ ว ศ ษ ส ห ฬ อ ฮ \u0E4D "
+        "ะ \u0E31 า ๅ ำ \u0E34 \u0E35 \u0E36 \u0E37 \u0E38 \u0E39 เ แ โ ใ ไ \u0E3A]"
     }
     ExemplarCharactersIndex{
         "[ก ข ฃ ค ฅ ฆ ง จ ฉ ช ซ ฌ ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ฤ ล ฦ"
         " ว ศ ษ ส ห ฬ อ ฮ]"
     }
-    ExemplarCharactersPunctuation{"[\- ‐ – — , \: ! . … ' ‘ ’ \" “ ” ( ) \[ \] @ * / \\ # ′ ″]"}
+    ExemplarCharactersPunctuation{"[!\"#'()*,\-./\:@\[\\\]‐–—‘’“”…′″]"}
     LocaleScript{
         "Thai",
     }
@@ -76,19 +76,19 @@ th{
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0 พ'.'"}
+                        other{"0 พ'.'"}
                     }
                     10000{
-                        other{"0 ม'.'"}
+                        other{"0 ม'.'"}
                     }
                     100000{
-                        other{"0 ส'.'"}
+                        other{"0 ส'.'"}
                     }
                     1000000{
-                        other{"0 ล'.'"}
+                        other{"0 ล'.'"}
                     }
                     10000000{
-                        other{"00 ล'.'"}
+                        other{"00 ล'.'"}
                     }
                     100000000{
                         other{"000 ล'.'"}
@@ -128,7 +128,7 @@ th{
         }
         native{"thai"}
     }
-    Version{"2.0.76.33"}
+    Version{"2.0.78.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -173,9 +173,8 @@ th{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/yyyy"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
+                yQQQQ{"QQQQ y"}
                 yyyyM{"M/yyyy"}
                 yyyyMMMM{"MMMM y"}
             }
@@ -190,21 +189,17 @@ th{
             intervalFormats{
                 H{
                     H{"H-H"}
-                    a{"H-H"}
                 }
                 Hm{
                     H{"H:mm-H:mm"}
-                    a{"H:mm-H:mm"}
                     m{"H:mm-H:mm"}
                 }
                 Hmv{
                     H{"H:mm-H:mm v"}
-                    a{"H:mm-H:mm v"}
                     m{"H:mm-H:mm v"}
                 }
                 Hv{
                     H{"H-H v"}
-                    a{"H-H v"}
                 }
                 M{
                     M{"M-M"}
@@ -742,9 +737,8 @@ th{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/yyyy"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
+                yQQQQ{"QQQQ y"}
                 yyyyM{"M/yyyy"}
                 yyyyMMMM{"MMMM y"}
             }
@@ -1338,8 +1332,8 @@ th{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             eras{
                 abbreviated{
@@ -1478,7 +1472,7 @@ th{
                 yyyyMMM{"MMM G yy"}
                 yyyyMMMEd{"E d MMM G y"}
                 yyyyMMMd{"d MMM G y"}
-                yyyyQ{"Q GGGGG yy"}
+                yyyyQQQ{"QQQ G yy"}
             }
             eras{
                 abbreviated{
@@ -1856,7 +1850,7 @@ th{
                 yyyyMMM{"MMM G yy"}
                 yyyyMMMEd{"E d MMM G y"}
                 yyyyMMMd{"d MMM G y"}
-                yyyyQ{"Q GGGGG yy"}
+                yyyyQQQ{"QQQ G yy"}
             }
             eras{
                 abbreviated{

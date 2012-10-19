@@ -30,16 +30,16 @@ eu{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0 mila"}
-                        other{"0 mila"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00 mila"}
-                        other{"00 mila"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000 mila"}
-                        other{"000 mila"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         one{"0 milioi"}
@@ -54,16 +54,16 @@ eu{
                         other{"000 milioi"}
                     }
                     1000000000{
-                        one{"0 mila milioi"}
-                        other{"0 mila milioi"}
+                        one{"0000 milioi"}
+                        other{"0000 milioi"}
                     }
                     10000000000{
-                        one{"00 mila milioi"}
-                        other{"00 mila milioi"}
+                        one{"00000 milioi"}
+                        other{"00000 milioi"}
                     }
                     100000000000{
-                        one{"000 mila milioi"}
-                        other{"000 mila milioi"}
+                        one{"000000 milioi"}
+                        other{"000000 milioi"}
                     }
                     1000000000000{
                         one{"0 bilioi"}
@@ -82,16 +82,16 @@ eu{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0000"}
-                        other{"0000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00000"}
-                        other{"00000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000000"}
-                        other{"000000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         one{"0 M"}
@@ -132,9 +132,9 @@ eu{
                 }
             }
             symbols{
-                decimal{"."}
+                decimal{","}
                 exponential{"E"}
-                group{","}
+                group{"."}
                 infinity{"∞"}
                 list{";"}
                 minusSign{"-"}
@@ -145,7 +145,7 @@ eu{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
     calendar{
         buddhist{
             eras{
@@ -196,9 +196,8 @@ eu{
                 yMMMEd{"E, MMM d, y"}
                 yMMMd{"MMM d, y"}
                 yMd{"y-M-d"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{

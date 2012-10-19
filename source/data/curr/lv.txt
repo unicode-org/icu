@@ -713,11 +713,11 @@ lv{
         }
         VEB{
             "VEB",
-            "Venecuēlas bolivārs",
+            "Venecuēlas bolivārs (1871-2008)",
         }
         VEF{
             "VEF",
-            "Venecuēlas stiprais bolivārs",
+            "Venecuēlas bolivārs",
         }
         VND{
             "₫",
@@ -1570,10 +1570,15 @@ lv{
             other{"Uzbekistānas sumi"}
             zero{"Uzbekistānas sumi"}
         }
+        VEB{
+            one{"Venecuēlas bolivārs (1871-2008)"}
+            other{"Venecuēlas bolivāri (1871-2008)"}
+            zero{"Venecuēlas bolivāri (1871-2008)"}
+        }
         VEF{
-            one{"Venecuēlas stiprais bolivārs"}
-            other{"Venecuēlas stiprie bolivāri"}
-            zero{"Venecuēlas stiprie bolivāri"}
+            one{"Venecuēlas bolivārs"}
+            other{"Venecuēlas bolivāri"}
+            zero{"Venecuēlas bolivāri"}
         }
         VND{
             one{"Vjetnamas dongi"}
@@ -1661,5 +1666,5 @@ lv{
         other{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
 }

@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_AU{
     %%Parent{"en_GB"}
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -29,14 +29,8 @@ en_AU{
             availableFormats{
                 MEd{"E, d/M"}
                 MMMEd{"E, d MMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                MMdd{"dd/MM"}
                 yMEd{"E, d/M/y"}
-                yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM y"}
             }
             intervalFormats{
                 M{
@@ -82,9 +76,6 @@ en_AU{
                 hv{
                     a{"h a - h a v"}
                     h{"h-h a v"}
-                }
-                y{
-                    y{"y-y"}
                 }
                 yM{
                     M{"MM/yy - MM/yy"}

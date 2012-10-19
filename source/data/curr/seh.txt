@@ -236,5 +236,5 @@ seh{
             "Dólar do Zimbábue",
         }
     }
-    Version{"2.0.74.79"}
+    Version{"2.0.77.46"}
 }

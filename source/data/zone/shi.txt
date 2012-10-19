@@ -10,5 +10,5 @@
  *  ICU <specials> source: <path>/xml/main/shi.xml
  */
 shi{
-    Version{"2.0.75.56"}
+    Version{"2.0.78.30"}
 }

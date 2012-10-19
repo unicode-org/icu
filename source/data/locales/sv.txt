@@ -80,52 +80,52 @@ sv{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0 tn"}
-                        other{"0 tn"}
+                        one{"0 tn"}
+                        other{"0 tn"}
                     }
                     10000{
-                        one{"00 tn"}
-                        other{"00 tn"}
+                        one{"00 tn"}
+                        other{"00 tn"}
                     }
                     100000{
-                        one{"000 tn"}
-                        other{"000 tn"}
+                        one{"000 tn"}
+                        other{"000 tn"}
                     }
                     1000000{
-                        one{"0 mn"}
-                        other{"0 mn"}
+                        one{"0 mn"}
+                        other{"0 mn"}
                     }
                     10000000{
-                        one{"00 mn"}
-                        other{"00 mn"}
+                        one{"00 mn"}
+                        other{"00 mn"}
                     }
                     100000000{
-                        one{"000 mn"}
-                        other{"000 mn"}
+                        one{"000 mn"}
+                        other{"000 mn"}
                     }
                     1000000000{
-                        one{"0 md"}
-                        other{"0 md"}
+                        one{"0 md"}
+                        other{"0 md"}
                     }
                     10000000000{
-                        one{"00 md"}
-                        other{"00 md"}
+                        one{"00 md"}
+                        other{"00 md"}
                     }
                     100000000000{
-                        one{"000 md"}
-                        other{"000 md"}
+                        one{"000 md"}
+                        other{"000 md"}
                     }
                     1000000000000{
-                        one{"0 bn"}
-                        other{"0 bn"}
+                        one{"0 bn"}
+                        other{"0 bn"}
                     }
                     10000000000000{
-                        one{"00 bn"}
-                        other{"00 bn"}
+                        one{"00 bn"}
+                        other{"00 bn"}
                     }
                     100000000000000{
-                        one{"000 bn"}
-                        other{"000 bn"}
+                        one{"000 bn"}
+                        other{"000 bn"}
                     }
                 }
             }
@@ -145,7 +145,7 @@ sv{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -189,11 +189,11 @@ sv{
                 yMMMEd{"E d MMM y G"}
                 yMMMd{"d MMM y G"}
                 yMd{"G yyyy-MM-dd"}
-                yQ{"G yyyy Q"}
                 yQQQ{"G y QQQ"}
+                yQQQQ{"G y QQQQ"}
                 yyMM{"G yy-MM"}
                 yyMMM{"MMM -yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyyyMM{"G yyyy-MM"}
                 yyyyMMM{"MMM y G"}
                 yyyyQQQQ{"QQQQ y G"}
@@ -387,11 +387,11 @@ sv{
                 yMMMEd{"E d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"yyyy-MM-dd"}
-                yQ{"yyyy Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
                 yyMM{"yy-MM"}
                 yyMMM{"MMM -yy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
                 yyyyMM{"yyyy-MM"}
                 yyyyMMM{"MMM y"}
                 yyyyQQQQ{"QQQQ y"}
@@ -929,6 +929,7 @@ sv{
             }
             availableFormats{
                 Ed{"E d"}
+                Gy{"y G"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -945,9 +946,10 @@ sv{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
+                y{"y G"}
                 yyMM{"G yy-MM"}
                 yyMMM{"MMM -yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyyy{"y G"}
                 yyyyM{"G y-MM"}
                 yyyyMEd{"E, G y-MM-dd"}
@@ -956,8 +958,7 @@ sv{
                 yyyyMMMEd{"E d MMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"G y-MM-dd"}
-                yyyyQ{"G y Q"}
-                yyyyQQQ{"G y QQQ"}
+                yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
             }
             eras{
@@ -1038,7 +1039,7 @@ sv{
                 y{"y G"}
                 yyMM{"G yy-MM"}
                 yyMMM{"MMM -yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyyy{"y G"}
                 yyyyM{"G y-MM"}
                 yyyyMEd{"E, G y-MM-dd"}
@@ -1047,9 +1048,8 @@ sv{
                 yyyyMMMEd{"E d MMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"G y-MM-dd"}
-                yyyyQ{"G y Q"}
                 yyyyQQQ{"G y QQQ"}
-                yyyyQQQQ{"QQQQ y G"}
+                yyyyQQQQ{"G y QQQQ"}
             }
             eras{
                 abbreviated{
@@ -1399,7 +1399,7 @@ sv{
                 y{"y G"}
                 yyMM{"G yy-MM"}
                 yyMMM{"MMM -yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyyy{"y G"}
                 yyyyM{"G y-MM"}
                 yyyyMEd{"E, G y-MM-dd"}
@@ -1408,9 +1408,8 @@ sv{
                 yyyyMMMEd{"E d MMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"G y-MM-dd"}
-                yyyyQ{"G y Q"}
                 yyyyQQQ{"G y QQQ"}
-                yyyyQQQQ{"QQQQ y G"}
+                yyyyQQQQ{"G y QQQQ"}
             }
             eras{
                 abbreviated{

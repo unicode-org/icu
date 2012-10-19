@@ -873,6 +873,10 @@ ga{
         }
         VEB{
             "VEB",
+            "Bolivar Veiniséala (1871-2008)",
+        }
+        VEF{
+            "VEF",
             "Bolivar Veiniséala",
         }
         VND{
@@ -984,5 +988,5 @@ ga{
             "Dollar Siombábach",
         }
     }
-    Version{"2.0.74.74"}
+    Version{"2.0.77.27"}
 }

@@ -29,11 +29,9 @@ zh_Hans_HK{
     Variants{
         WADEGILE{"韦氏拼音罗马字"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     codePatterns{
-        language{"语言：{0}"}
         script{"语系：{0}"}
-        territory{"地区：{0}"}
     }
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}

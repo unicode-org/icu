@@ -11,7 +11,7 @@
  */
 ur{
     AuxExemplarCharacters{
-        "[؀؁؂؃\u200C \u200D \u200E \u200F \u0652 \u064E \u0650 \u064F \u0670 \u0656 "
+        "[؀؁؂؃\u200C\u200D\u200E\u200F \u0652 \u064E \u0650 \u064F \u0670 \u0656 "
         "\u0657 \u064B \u064D \u064C \u0654 \u0651 \u0658 ۃ ٻ ٺ ټ ٽ ي]"
     }
     ExemplarCharacters{
@@ -34,55 +34,55 @@ ur{
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
             }
-            patternsLong{
+            patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0 ہزار"}
-                        other{"0 ہزار"}
+                        one{"0 ہزار"}
+                        other{"0 ہزار"}
                     }
                     10000{
-                        one{"00 ہزار"}
-                        other{"00 ہزار"}
+                        one{"00 ہزار"}
+                        other{"00 ہزار"}
                     }
                     100000{
-                        one{"000 ہزار"}
-                        other{"000 ہزار"}
+                        one{"0 لاکھ"}
+                        other{"0 لاکھ"}
                     }
                     1000000{
-                        one{"0 ملین"}
-                        other{"0 ملین"}
+                        one{"00 لاکھ"}
+                        other{"00 لاکھ"}
                     }
                     10000000{
-                        one{"00 ملین"}
-                        other{"00 ملین"}
+                        one{"0 کروڑ"}
+                        other{"0 کروڑ"}
                     }
                     100000000{
-                        one{"000 ملین"}
-                        other{"000 ملین"}
+                        one{"00 کروڑ"}
+                        other{"00 کروڑ"}
                     }
                     1000000000{
-                        one{"0 بلین"}
-                        other{"0 بلین"}
+                        one{"0 ارب"}
+                        other{"0 ارب"}
                     }
                     10000000000{
-                        one{"00 بلین"}
-                        other{"00 بلین"}
+                        one{"00 ارب"}
+                        other{"00 ارب"}
                     }
                     100000000000{
-                        one{"000 بلین"}
-                        other{"000 بلین"}
+                        one{"0 کھرب"}
+                        other{"0 کھرب"}
                     }
                     1000000000000{
-                        one{"0 ٹریلین"}
-                        other{"0 ٹریلین"}
+                        one{"00 کھرب"}
+                        other{"00 کھرب"}
                     }
                     10000000000000{
-                        one{"00 ٹریلین"}
-                        other{"00 ٹریلین"}
+                        one{"000 کھرب"}
+                        other{"000 کھرب"}
                     }
                     100000000000000{
-                        one{"000 ٹریلین"}
-                        other{"000 ٹریلین"}
+                        one{"0000 کھرب"}
+                        other{"0000 کھرب"}
                     }
                 }
             }
@@ -101,7 +101,7 @@ ur{
         }
         native{"arabext"}
     }
-    Version{"2.0.76.49"}
+    Version{"2.0.78.39"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -146,8 +146,8 @@ ur{
                 yMMMEd{"E، d MMM، y"}
                 yMMMd{"d MMM، y"}
                 yMd{"d/M/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{

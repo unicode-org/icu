@@ -550,6 +550,7 @@ windowsZones:table(nofallback){
         "Tonga Standard Time"{
             001{"Pacific/Tongatapu"}
             KI{"Pacific/Enderbury"}
+            TK{"Pacific/Fakaofo"}
             TO{"Pacific/Tongatapu"}
             ZZ{"Etc/GMT-13"}
         }

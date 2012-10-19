@@ -66,7 +66,7 @@ cs{
             "2000000000000000: <%spellout-cardinal-masculine< biliardy[ >>];",
             "5000000000000000: <%spellout-cardinal-masculine< biliard\u016F[ >>];",
             "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-neutre:",
+            "%spellout-cardinal-neuter:",
             "-x: minus >>;",
             "x.x: << \u010D\u00E1rka >>;",
             "0: nula;",
@@ -134,5 +134,5 @@ cs{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"2.0.73.63"}
+    Version{"2.0.77.34"}
 }

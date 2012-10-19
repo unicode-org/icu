@@ -11,8 +11,8 @@
  */
 tr{
     AuxExemplarCharacters{
-        "[á à ă â å ä ã ā æ é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ q ú ù ŭ û ū w x ÿ"
-        "]"
+        "[á à ă â å ä ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ö q ß ú ù ŭ û ū"
+        " ü w x ÿ]"
     }
     ExemplarCharacters{"[a b c ç d e f g ğ h ı i {i\u0307} j k l m n o ö p r s ş t u ü v y z]"}
     ExemplarCharactersIndex{"[A B C Ç D E F G H I İ J K L M N O Ö P Q R S Ş T U Ü V W X Y Z]"}
@@ -23,7 +23,7 @@ tr{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"#,##0.00 ¤"}
+                currencyFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"%#,##0"}
                 scientificFormat{"#E0"}
@@ -71,7 +71,7 @@ tr{
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0000"}
+                        other{"0"}
                     }
                     10000{
                         other{"00 B"}
@@ -98,13 +98,13 @@ tr{
                         other{"000 Mr"}
                     }
                     1000000000000{
-                        other{"0 T"}
+                        other{"0 Tn"}
                     }
                     10000000000000{
-                        other{"00 T"}
+                        other{"00 Tn"}
                     }
                     100000000000000{
-                        other{"000 T"}
+                        other{"000 Tn"}
                     }
                 }
             }
@@ -122,7 +122,7 @@ tr{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -133,7 +133,7 @@ tr{
                 "dd MMMM y G EEEE",
                 "dd MMMM y G",
                 "dd MMM y G",
-                "dd.MM.yyyy G",
+                "d.MM.yyyy G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -165,12 +165,10 @@ tr{
                 yMMMM{"MMMM y G"}
                 yMMMd{"dd MMM y G"}
                 yMd{"dd.MM.y G"}
-                yQ{"Q y G"}
                 yQQQ{"QQQ y G"}
+                yQQQQ{"QQQQ y G"}
                 yyMM{"MM.yy G"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
-                yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
             }
         }
@@ -229,7 +227,7 @@ tr{
                 "d MMMM y EEEE",
                 "d MMMM y",
                 "d MMM y",
-                "dd.MM.yyyy",
+                "d.MM.yyyy",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -263,11 +261,11 @@ tr{
                 yMMMM{"MMMM y"}
                 yMMMd{"dd MMM y"}
                 yMd{"dd.MM.yyyy"}
-                yQ{"y/Q"}
                 yQQQ{"y/QQQ"}
+                yQQQQ{"y/QQQQ"}
                 yyMM{"MM.yy"}
                 yyMMM{"MMM yy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
                 yyQQQQ{"QQQQ yy"}
                 yyyy{"y"}
             }
@@ -675,7 +673,7 @@ tr{
                 "dd MMMM y G EEEE",
                 "dd MMMM y G",
                 "dd MMM y G",
-                "dd.MM.yyyy G",
+                "d.MM.yyyy G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -684,6 +682,7 @@ tr{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -698,9 +697,10 @@ tr{
                 hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
+                y{"y G"}
                 yyMM{"MM.yy G"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
                 yyyyM{"MM.y G"}
@@ -710,8 +710,8 @@ tr{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"dd MMM y G"}
                 yyyyMd{"dd.MM.y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             monthNames{
                 format{
@@ -771,7 +771,7 @@ tr{
                 "dd MMMM y G EEEE",
                 "dd MMMM y G",
                 "dd MMM y G",
-                "dd.MM.yyyy G",
+                "d.MM.yyyy G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -798,7 +798,7 @@ tr{
                 y{"y G"}
                 yyMM{"MM.yy G"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
                 yyyyM{"MM.y G"}
@@ -808,8 +808,8 @@ tr{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"dd MMM y G"}
                 yyyyMd{"dd.MM.y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
         persian{
@@ -841,7 +841,7 @@ tr{
                 "dd MMMM y G EEEE",
                 "dd MMMM y G",
                 "dd MMM y G",
-                "dd.MM.yyyy G",
+                "d.MM.yyyy G",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -868,7 +868,7 @@ tr{
                 y{"y G"}
                 yyMM{"MM.yy G"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
                 yyyyM{"MM.y G"}
@@ -878,8 +878,8 @@ tr{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"dd MMM y G"}
                 yyyyMd{"dd.MM.y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
     }

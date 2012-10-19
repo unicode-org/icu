@@ -22,7 +22,7 @@ nyn{
             }
         }
     }
-    Version{"2.0.74.65"}
+    Version{"2.0.77.46"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -60,8 +60,8 @@ nyn{
                 yMMM{"MMM y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMM{"MMMM y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{

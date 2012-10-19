@@ -43,76 +43,76 @@ hi{
                         other{"00 हज़ार"}
                     }
                     100000{
-                        one{"000 हज़ार"}
-                        other{"000 हज़ार"}
+                        one{"0 लाख"}
+                        other{"0 लाख"}
                     }
                     1000000{
-                        one{"0 मिलियन"}
-                        other{"0 मिलियन"}
+                        one{"00 लाख"}
+                        other{"00 लाख"}
                     }
                     10000000{
-                        one{"00 म‍िल‍ियन"}
-                        other{"00 मिलियन"}
+                        one{"0 करोड़"}
+                        other{"0 करोड़"}
                     }
                     100000000{
-                        one{"000 मिलियन"}
-                        other{"000 मिलियन"}
+                        one{"00 करोड़"}
+                        other{"00 करोड़"}
                     }
                     1000000000{
-                        one{"0 बि‍ल‍ियन"}
-                        other{"0 बि‍ल‍ियन"}
+                        one{"0 अरब"}
+                        other{"0 अरब"}
                     }
                     10000000000{
-                        one{"00 बि‍ल‍ियन"}
-                        other{"00 बि‍ल‍ियन"}
+                        one{"00 अरब"}
+                        other{"00 अरब"}
                     }
                     100000000000{
-                        one{"000 ब‍िल‍ियन"}
-                        other{"000 ब‍िल‍ियन"}
+                        one{"0 खरब"}
+                        other{"0 खरब"}
                     }
                     1000000000000{
-                        one{"0 ट्रि‍ल‍ियन"}
-                        other{"0 ट्रि‍ल‍ियन"}
+                        one{"00 खरब"}
+                        other{"00 खरब"}
                     }
                     10000000000000{
-                        one{"00 ट्रि‍ल‍ियन"}
-                        other{"00 ट्रि‍ल‍ियन"}
+                        one{"000 खरब"}
+                        other{"000 खरब"}
                     }
                     100000000000000{
-                        one{"000 ट्रि‍ल‍ियन"}
-                        other{"000 ट्रि‍ल‍ियन"}
+                        one{"0000 खरब"}
+                        other{"0000 खरब"}
                     }
                 }
             }
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0K"}
-                        other{"0K"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00K"}
-                        other{"00K"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000K"}
-                        other{"000K"}
+                        one{"0L"}
+                        other{"0L"}
                     }
                     1000000{
-                        one{"0M"}
-                        other{"0M"}
+                        one{"00L"}
+                        other{"00L"}
                     }
                     10000000{
-                        one{"00M"}
-                        other{"00M"}
+                        one{"0Cr"}
+                        other{"0Cr"}
                     }
                     100000000{
-                        one{"000M"}
-                        other{"000M"}
+                        one{"00Cr"}
+                        other{"00Cr"}
                     }
                     1000000000{
-                        one{"0B"}
-                        other{"0B"}
+                        one{"000Cr"}
+                        other{"000Cr"}
                     }
                     10000000000{
                         one{"00B"}
@@ -151,7 +151,7 @@ hi{
         }
         native{"deva"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
     calendar{
         ethiopic{
             monthNames{
@@ -222,12 +222,11 @@ hi{
                 yMMMEd{"E, d MMM y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d/M/y"}
-                yQ{"y Q"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMMMEd{"E, d MMM yy"}
                 yyMMMd{"d MMM, yy"}
                 yyMMdd{"dd-MM-yy"}
-                yyQ{"Q yy"}
                 yyyyMM{"MM-yyyy"}
                 yyyyMMMM{"MMMM y"}
             }
