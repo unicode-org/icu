@@ -69,7 +69,7 @@ pl{
         }
         ATS{
             "ATS",
-            "szyling austriacki ",
+            "szyling austriacki",
         }
         AUD{
             "A$",
@@ -341,7 +341,7 @@ pl{
         }
         FRF{
             "FRF",
-            "frank francuski ",
+            "frank francuski",
         }
         GBP{
             "£",
@@ -425,7 +425,7 @@ pl{
         }
         HUF{
             "HUF",
-            "forint węgierski ",
+            "forint węgierski",
         }
         IDR{
             "IDR",
@@ -661,7 +661,7 @@ pl{
         }
         NLG{
             "NLG",
-            "gulden holenderski ",
+            "gulden holenderski",
         }
         NOK{
             "NOK",
@@ -821,7 +821,7 @@ pl{
         }
         STD{
             "STD",
-            "dobra Wysp Świętego Tomasza i Książęcej",
+            "dobra Wysp Świętego Tomasza i Książęcej",
         }
         SUR{
             "SUR",
@@ -909,7 +909,7 @@ pl{
         }
         USD{
             "US$",
-            "dolar amerykański ",
+            "dolar amerykański",
         }
         UYP{
             "UYP",
@@ -1409,7 +1409,7 @@ pl{
             few{"franki francuskie"}
             many{"franków francuskich"}
             one{"frank francuski"}
-            other{"frank francuski "}
+            other{"frank francuski"}
         }
         GBP{
             few{"funty szterlingi"}
@@ -2162,5 +2162,5 @@ pl{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
 }

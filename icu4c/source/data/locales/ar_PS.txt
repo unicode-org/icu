@@ -24,16 +24,16 @@ ar_PS{
             patternsShort{
                 decimalFormat{
                     1000000000{
-                        few{"0 بليون"}
-                        many{"0 بليون"}
-                        one{"0 بليون"}
-                        other{"0 بليون"}
-                        two{"0 بليون"}
-                        zero{"0 بليون"}
+                        few{"0 بليون"}
+                        many{"0 بليون"}
+                        one{"0 بليون"}
+                        other{"0 بليون"}
+                        two{"0 بليون"}
+                        zero{"0 بليون"}
                     }
                 }
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
 }

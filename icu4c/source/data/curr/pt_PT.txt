@@ -401,10 +401,6 @@ pt_PT{
             "UZS",
             "Som do Uzbequistão",
         }
-        VEF{
-            "VEF",
-            "Bolívar venezuelano forte",
-        }
         WST{
             "WST",
             "Tala de Samoa Ocidental",
@@ -779,10 +775,6 @@ pt_PT{
             one{"Som do Uzbequistão"}
             other{"Somes do Uzbequistão"}
         }
-        VEF{
-            one{"Bolívar venezuelano forte"}
-            other{"Bolívares venezuelanos fortes"}
-        }
         WST{
             one{"Tala samoano"}
             other{"Talas samoanos"}
@@ -804,5 +796,5 @@ pt_PT{
             other{"Kwachas zambianos"}
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
 }

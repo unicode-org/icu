@@ -11,9 +11,9 @@
  */
 ks{
     ExemplarCharacters{
-        "[\u06ED \u064E \u064F \u0650 \u0654 \u0655 \u0656 \u0657 \u065A \u065B "
-        "\u06EA ء آ أ ٲ ؤ ا ٮ ب پ ت ث ٹ ج چ ح خ د ذ ڈ ر ز ڑ ژ س ش ص ض ط ظ ع غ ف ق ک گ"
-        " ل م ن ں ھ ہ و ۄ ی ۍ ے]"
+        "[\u06EA\u06ED \u064E \u064F \u0650 \u0654 \u0655 \u0656 \u0657 \u065A \u065B"
+        " ء آ أ ٲ ؤ ا ٮ ب پ ت ث ٹ ج چ ح خ د ذ ڈ ر ز ڑ ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن"
+        " ں ھ ہ و ۄ ی ۍ ے]"
     }
     LocaleScript{
         "Arab",
@@ -42,7 +42,7 @@ ks{
         }
         native{"arabext"}
     }
-    Version{"2.0.76.49"}
+    Version{"2.0.78.55"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -81,8 +81,8 @@ ks{
                 yMMM{"MMM yyyy"}
                 yMMMEd{"EEE, MMM d, yyyy"}
                 yMMMM{"MMMM yyyy"}
-                yQ{"Q yyyy"}
-                yQQQ{"QQQ yyyy"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{

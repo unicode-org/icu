@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kn.xml
  */
 kn{
-    Version{"2.0.76.46"}
+    Version{"2.0.78.40"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ಅಬಿದ್‌ಜನ್"}
@@ -1644,7 +1644,7 @@ kn{
         }
         "meta:Novosibirsk"{
             ld{"ನೊವೊಸಿಬಿರ್‌ಸ್ಕ್ ಬೇಸಿಗೆ ಸಮಯ"}
-            lg{"ನೊವೊಸಿಬಿರ್‌ಸ್ಕ್  ಸಮಯ"}
+            lg{"ನೊವೊಸಿಬಿರ್‌ಸ್ಕ್ ಸಮಯ"}
             ls{"ನೊವೊಸಿಬಿಸ್ಕ್ ಸ್ಟ್ಯಾಂಡರ್ಡ್ ಸಮಯ"}
         }
         "meta:Omsk"{

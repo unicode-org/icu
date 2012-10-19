@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/uk.xml
  */
 uk{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абіджан"}
@@ -22,7 +22,7 @@ uk{
             ec{"Аддис-Абеба"}
         }
         "Africa:Algiers"{
-            ec{"Алжир"}
+            ec{"м. Алжир"}
         }
         "Africa:Asmera"{
             ec{"Асмера"}
@@ -160,7 +160,7 @@ uk{
             ec{"Тріполі"}
         }
         "Africa:Tunis"{
-            ec{"Туніс"}
+            ec{"м. Туніс"}
         }
         "Africa:Windhoek"{
             ec{"Віндхук"}

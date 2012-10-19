@@ -259,7 +259,7 @@ pl{
         SS{"Sudan Południowy"}
         ST{"Wyspy Świętego Tomasza i Książęca"}
         SV{"Salwador"}
-        SX{"*Sint Maarten"}
+        SX{"Sint Maarten"}
         SY{"Syria"}
         SZ{"Suazi"}
         TA{"Tristan da Cunha"}
@@ -301,5 +301,5 @@ pl{
         ZW{"Zimbabwe"}
         ZZ{"Nieznany region"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
 }

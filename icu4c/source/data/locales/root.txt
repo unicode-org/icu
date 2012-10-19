@@ -113,7 +113,7 @@ root{
         297,
         210,
     }
-    Version{"2.0.75.94"}
+    Version{"2.0.78.30"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -169,8 +169,8 @@ root{
                 yMMMEd{"E, G y MMM d"}
                 yMMMd{"G y MMM d"}
                 yMd{"GGGGG yyyy-MM-dd"}
-                yQ{"GGGGG yyyy Q"}
-                yQQQ{"G y QQQ"}
+                yQQQ{"GGGGG y QQQ"}
+                yQQQQ{"G y QQQQ"}
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
@@ -237,8 +237,8 @@ root{
                 yMMMEd{"E, U MMM d"}
                 yMMMd{"U MMM d"}
                 yMd{"y-M-d"}
-                yQ{"U Q"}
                 yQQQ{"U QQQ"}
+                yQQQQ{"U QQQQ"}
             }
             cyclicNameSets{
                 dayParts{
@@ -342,21 +342,17 @@ root{
             intervalFormats{
                 H{
                     H{"HH–HH"}
-                    a{"HH–HH"}
                 }
                 Hm{
                     H{"HH:mm–HH:mm"}
-                    a{"HH:mm–HH:mm"}
                     m{"HH:mm–HH:mm"}
                 }
                 Hmv{
                     H{"HH:mm–HH:mm v"}
-                    a{"HH:mm–HH:mm v"}
                     m{"HH:mm–HH:mm v"}
                 }
                 Hv{
                     H{"HH–HH v"}
-                    a{"HH–HH v"}
                 }
                 M{
                     M{"M–M"}
@@ -705,8 +701,8 @@ root{
                 yMMMEd{"E, y MMM d"}
                 yMMMd{"y MMM d"}
                 yMd{"y-M-d"}
-                yQ{"y Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
             }
             dayNames{
                 default{"format"}
@@ -1196,8 +1192,8 @@ root{
                 yyyyMMMEd{"E, G y MMM d"}
                 yyyyMMMd{"G y MMM d"}
                 yyyyMd{"GGGGG yy-MM-dd"}
-                yyyyQ{"GGGGG yy Q"}
-                yyyyQQQ{"G y QQQ"}
+                yyyyQQQ{"GGGGG y QQQ"}
+                yyyyQQQQ{"G y QQQQ"}
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
@@ -1793,8 +1789,8 @@ root{
                 yyyyMMMEd{"E, G y MMM d"}
                 yyyyMMMd{"G y MMM d"}
                 yyyyMd{"GGGGG yyy-MM-dd"}
-                yyyyQ{"GGGGG yyy Q"}
-                yyyyQQQ{"G y QQQ"}
+                yyyyQQQ{"GGGGG y QQQ"}
+                yyyyQQQQ{"G y QQQQ"}
             }
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{

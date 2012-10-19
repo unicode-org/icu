@@ -75,7 +75,7 @@ uk{
             "2000000000000000: <%spellout-cardinal-masculine< \u0431\u0456\u043B\u044C\u044F\u0440\u0434\u0438[ >>];",
             "5000000000000000: <%spellout-cardinal-masculine< \u0431\u0456\u043B\u044C\u044F\u0440\u0434\u0456\u0432[ >>];",
             "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-neutre:",
+            "%spellout-cardinal-neuter:",
             "-x: \u043C\u0456\u043D\u0443\u0441 >>;",
             "x.x: << \u043A\u043E\u043C\u0430 >>;",
             "0: \u043D\u0443\u043B\u044C;",
@@ -157,5 +157,5 @@ uk{
             "1000000000000000000: =#,##0=;",
         }
     }
-    Version{"2.0.73.63"}
+    Version{"2.0.77.34"}
 }

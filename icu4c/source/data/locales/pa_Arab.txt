@@ -23,7 +23,7 @@ pa_Arab{
         default{"arabext"}
         native{"arabext"}
     }
-    Version{"2.0.74.65"}
+    Version{"2.0.77.46"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -46,7 +46,7 @@ pa_Arab{
                 Md{"d/M"}
                 mmss{"mm:ss"}
                 yyMMM{"MMM yy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
             }
             dayNames{
                 format{

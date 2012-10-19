@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ne.xml
  */
 ne{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अविड्जान"}
@@ -1098,5 +1098,6 @@ ne{
         "meta:Africa_Central"{
             ls{"केन्द्रीय अफ्रिकी समय"}
         }
+        regionFormat{"{0} समय"}
     }
 }

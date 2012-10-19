@@ -107,40 +107,40 @@ he{
             patternsShort{
                 decimalFormat{
                     1000{
-                        many{"‏0 אלף"}
-                        one{"‏0 אלף"}
-                        other{"‏0 אלף"}
-                        two{"‏0 אלף"}
+                        many{"‏0 אלף"}
+                        one{"‏0 אלף"}
+                        other{"‏0 אלף"}
+                        two{"‏0 אלף"}
                     }
                     10000{
-                        many{"‏00 אלף"}
-                        one{"‏00 אלף"}
-                        other{"‏00 אלף"}
-                        two{"‏00 אלף"}
+                        many{"‏00 אלף"}
+                        one{"‏00 אלף"}
+                        other{"‏00 אלף"}
+                        two{"‏00 אלף"}
                     }
                     100000{
-                        many{"‏000 אלף"}
-                        one{"‏000 אלף"}
-                        other{"‏000 אלף"}
-                        two{"‏000 אלף"}
+                        many{"‏000 אלף"}
+                        one{"‏000 אלף"}
+                        other{"‏000 אלף"}
+                        two{"‏000 אלף"}
                     }
                     1000000{
-                        many{"‏0 מיליון"}
-                        one{"‏0 מיליון"}
-                        other{"‏0 מיליון"}
-                        two{"‏0 מיליון"}
+                        many{"‏0 מיליון"}
+                        one{"‏0 מיליון"}
+                        other{"‏0 מיליון"}
+                        two{"‏0 מיליון"}
                     }
                     10000000{
-                        many{"‏00 מיליון"}
-                        one{"‏00 מיליון"}
-                        other{"‏00 מיליון"}
-                        two{"‏00 מיליון"}
+                        many{"‏00 מיליון"}
+                        one{"‏00 מיליון"}
+                        other{"‏00 מיליון"}
+                        two{"‏00 מיליון"}
                     }
                     100000000{
-                        many{"‏000 מיליון"}
-                        one{"‏000 מיליון"}
-                        other{"‏000 מיליון"}
-                        two{"‏000 מיליון"}
+                        many{"‏000 מיליון"}
+                        one{"‏000 מיליון"}
+                        other{"‏000 מיליון"}
+                        two{"‏000 מיליון"}
                     }
                     1000000000{
                         many{"0B"}
@@ -167,10 +167,10 @@ he{
                         two{"0T"}
                     }
                     10000000000000{
-                        many{"‏00 טריליון"}
-                        one{"‏00 טריליון"}
-                        other{"‏00 טריליון"}
-                        two{"‏00 טריליון"}
+                        many{"00T"}
+                        one{"00T"}
+                        other{"00T"}
+                        two{"00T"}
                     }
                     100000000000000{
                         many{"000T"}
@@ -196,7 +196,7 @@ he{
         native{"latn"}
         traditional{"hebr"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -246,11 +246,11 @@ he{
                 yMMMM{"MMMM y"}
                 yMMMd{"d בMMM y"}
                 yMd{"d.M.yyyy"}
-                yQ{"yyyy Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yyyy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
                 yyyy{"y"}
                 yyyyMM{"MM/yyyy"}
                 yyyyMMMM{"MMMM y"}
@@ -765,8 +765,8 @@ he{
                 yMEd{"E, d.M.yyyy"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d בMMM y"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             eras{
                 abbreviated{

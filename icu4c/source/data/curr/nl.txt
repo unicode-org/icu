@@ -961,11 +961,11 @@ nl{
         }
         VEB{
             "VEB",
-            "Venezolaanse bolivar",
+            "Venezolaanse bolivar (1871-2008)",
         }
         VEF{
             "VEF",
-            "Venezolaanse sterke bolivar",
+            "Venezolaanse bolivar",
         }
         VND{
             "₫",
@@ -1382,5 +1382,5 @@ nl{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
 }

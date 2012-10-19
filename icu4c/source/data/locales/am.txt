@@ -79,16 +79,16 @@ am{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0K"}
-                        other{"0K"}
+                        one{"0 ሺ"}
+                        other{"0 ሺ"}
                     }
                     10000{
-                        one{"00K"}
-                        other{"00K"}
+                        one{"00 ሺ"}
+                        other{"00 ሺ"}
                     }
                     100000{
-                        one{"000ኪባ"}
-                        other{"000ኪባ"}
+                        one{"000 ሺ"}
+                        other{"000 ሺ"}
                     }
                     1000000{
                         one{"0 ሜትር"}
@@ -103,28 +103,28 @@ am{
                         other{"000 ሜትር"}
                     }
                     1000000000{
-                        one{"0G"}
-                        other{"0G"}
+                        one{"0 ቢ"}
+                        other{"0 ቢ"}
                     }
                     10000000000{
-                        one{"00G"}
-                        other{"00G"}
+                        one{"00 ቢ"}
+                        other{"00 ቢ"}
                     }
                     100000000000{
-                        one{"000G"}
-                        other{"000G"}
+                        one{"000 ቢ"}
+                        other{"000 ቢ"}
                     }
                     1000000000000{
-                        one{"0T"}
-                        other{"0T"}
+                        one{"0 ት"}
+                        other{"0 ት"}
                     }
                     10000000000000{
-                        one{"00T"}
-                        other{"00T"}
+                        one{"00 ት"}
+                        other{"00 ት"}
                     }
                     100000000000000{
-                        one{"000T"}
-                        other{"000T"}
+                        one{"000 ት"}
+                        other{"000 ት"}
                     }
                 }
             }
@@ -144,7 +144,7 @@ am{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     calendar{
         ethiopic{
             monthNames{
@@ -290,8 +290,8 @@ am{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{

@@ -29,11 +29,11 @@ sq{
             }
             symbols{
                 decimal{","}
-                group{"."}
+                group{" "}
             }
         }
     }
-    Version{"2.0.74.85"}
+    Version{"2.0.77.38"}
     calendar{
         gregorian{
             AmPmMarkers{

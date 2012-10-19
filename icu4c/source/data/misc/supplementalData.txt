@@ -104,6 +104,10 @@ supplementalData:table(nofallback){
             "islamic",
             "islamic-civil",
         }
+        KR{
+            "gregorian",
+            "dangi",
+        }
         KW{
             "gregorian",
             "islamic",
@@ -192,7 +196,7 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
     }
-    cldrVersion{"22.0"}
+    cldrVersion{"22.1"}
     codeMappings{
         {
             "AA",
@@ -6188,6 +6192,16 @@ supplementalData:table(nofallback){
                 "es-*-ES",
                 "es-*-ES",
                 "100",
+            }
+            {
+                "gsw",
+                "de-CH",
+                "85",
+            }
+            {
+                "gsw",
+                "de",
+                "80",
             }
             {
                 "hr",

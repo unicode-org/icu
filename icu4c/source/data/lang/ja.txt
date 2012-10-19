@@ -885,6 +885,7 @@ ja{
         REVISED{"改訂版"}
         ROZAJ{"レシア方言"}
         SAAHO{"サホ語"}
+        SCOTLAND{"スコットランド標準英語"}
         SCOUSE{"リバプール方言"}
         ULSTER{"アルスター"}
         VAIDIKA{"ヴァイディカ"}
@@ -892,7 +893,7 @@ ja{
         VALLADER{"ヴァラダー"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.0.76.70"}
+    Version{"2.0.78.39"}
     codePatterns{
         language{"言語: {0}"}
         script{"文字: {0}"}

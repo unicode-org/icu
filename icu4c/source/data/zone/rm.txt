@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/rm.xml
  */
 rm{
-    Version{"2.0.75.94"}
+    Version{"2.0.78.47"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -38,9 +38,6 @@ rm{
         }
         "Africa:Mogadishu"{
             ec{"Mogadischu"}
-        }
-        "Africa:Niamey"{
-            ec{"Niger"}
         }
         "Africa:Sao_Tome"{
             ec{"São Tomé"}

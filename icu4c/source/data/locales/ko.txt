@@ -54,7 +54,7 @@ ko{
             patternsLong{
                 decimalFormat{
                     1000{
-                        other{"0000"}
+                        other{"0"}
                     }
                     10000{
                         other{"0만"}
@@ -94,7 +94,7 @@ ko{
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0000"}
+                        other{"0"}
                     }
                     10000{
                         other{"0만"}
@@ -145,7 +145,7 @@ ko{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -193,11 +193,11 @@ ko{
                 yMMMEd{"G y년 MMM d일 (E)"}
                 yMMMd{"G y년 MMM d일"}
                 yMd{"G y. M. d."}
-                yQ{"G y년 Q분기"}
                 yQQQ{"G y년 QQQ"}
+                yQQQQ{"G y년 QQQQ"}
                 yyMM{"G yy. M."}
                 yyMMM{"G y년 MMM"}
-                yyQ{"G y년 Q분기"}
+                yyQQQ{"G y년 QQQ"}
                 yyyyMM{"G y. MM"}
             }
             eras{
@@ -246,8 +246,8 @@ ko{
                 yMMMEd{"U년 MMM d일 (E)"}
                 yMMMd{"U년 MMM d일"}
                 yMd{"U. M. d."}
-                yQ{"U년 Q분기"}
                 yQQQ{"U년 QQQ"}
+                yQQQQ{"U년 QQQQ"}
             }
             cyclicNameSets{
                 years{
@@ -367,11 +367,10 @@ ko{
                 yMMMEd{"y년 MMM d일 (E)"}
                 yMMMd{"y년 MMM d일"}
                 yMd{"yyyy. M. d."}
-                yQ{"y년 Q분기"}
                 yQQQ{"y년 QQQ"}
+                yQQQQ{"y년 QQQQ"}
                 yyMM{"yy. M."}
                 yyMMM{"yy년 MMM"}
-                yyQ{"yy년 Q분기"}
                 yyyyMM{"yyyy. MM"}
             }
             dayNames{
@@ -535,7 +534,7 @@ ko{
                 d{
                     d{"d일 ~ d일"}
                 }
-                fallback{"{0} – {1}"}
+                fallback{"{0} ~ {1}"}
                 h{
                     a{"a h시 ~ a h시"}
                     h{"a h시 ~ h시"}
@@ -701,7 +700,7 @@ ko{
                 y{"G yy년"}
                 yyMM{"G yy. M."}
                 yyMMM{"G yy년 MMM"}
-                yyQ{"G yy년 Q분기"}
+                yyQQQ{"G yy년 QQQ"}
                 yyyy{"G yy년"}
                 yyyyM{"G y. M."}
                 yyyyMEd{"G y. M. d. (E)"}
@@ -710,8 +709,8 @@ ko{
                 yyyyMMMEEEEd{"G y년 MMM d일 EEEE"}
                 yyyyMMMEd{"G y년 MMM d일 (E)"}
                 yyyyMMMd{"G yy년 MMM d일"}
-                yyyyQ{"G yy년 Q분기"}
-                yyyyQQQ{"G y년 QQQ"}
+                yyyyQQQ{"G yy년 QQQ"}
+                yyyyQQQQ{"G y년 QQQQ"}
             }
             eras{
                 abbreviated{
@@ -993,7 +992,7 @@ ko{
                 ms{"mm:ss"}
                 yyMM{"G yy. M."}
                 yyMMM{"G yy년 MMM"}
-                yyQ{"G y년 Q분기"}
+                yyQQQ{"G y년 QQQ"}
                 yyyy{"G yy년"}
                 yyyyM{"G y. M."}
                 yyyyMEd{"G y. M. d. (E)"}
@@ -1003,8 +1002,8 @@ ko{
                 yyyyMMMEd{"G y년 MMM d일 (E)"}
                 yyyyMMMd{"G yy년 MMM d일"}
                 yyyyMd{"G y. M. d."}
-                yyyyQ{"G y년 Q분기"}
                 yyyyQQQ{"G y년 QQQ"}
+                yyyyQQQQ{"G y년 QQQQ"}
             }
             eras{
                 abbreviated{

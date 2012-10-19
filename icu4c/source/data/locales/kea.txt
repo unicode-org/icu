@@ -72,7 +72,7 @@ kea{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -124,13 +124,12 @@ kea{
                 yMMMM{"MMMM 'di' y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd/MM/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
                 yyMMMEd{"E, d 'de' MMM 'de' yy"}
                 yyMMMd{"d 'de' MMM 'de' yy"}
-                yyQ{"Q yy"}
                 yyyyMM{"MM/yyyy"}
                 yyyyMMM{"MMM 'de' yyyy"}
             }

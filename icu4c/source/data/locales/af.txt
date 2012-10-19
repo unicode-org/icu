@@ -64,44 +64,44 @@ af{
                         other{"000 miljard"}
                     }
                     1000000000000{
-                        one{"0 triljoen"}
-                        other{"0 triljoen"}
+                        one{"0 biljoen"}
+                        other{"0 biljoen"}
                     }
                     10000000000000{
-                        one{"00 triljoen"}
-                        other{"00 triljoen"}
+                        one{"00 biljoen"}
+                        other{"00 biljoen"}
                     }
                     100000000000000{
-                        one{"000 triljoen"}
-                        other{"000 triljoen"}
+                        one{"000 biljoen"}
+                        other{"000 biljoen"}
                     }
                 }
             }
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0000"}
-                        other{"0000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00000"}
-                        other{"00000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000000"}
-                        other{"000000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
-                        one{"0 mil"}
-                        other{"0 mil"}
+                        one{"0 m"}
+                        other{"0 m"}
                     }
                     10000000{
-                        one{"00 mil"}
-                        other{"00 mil"}
+                        one{"00 m"}
+                        other{"00 m"}
                     }
                     100000000{
-                        one{"000 mil"}
-                        other{"000 mil"}
+                        one{"000 m"}
+                        other{"000 m"}
                     }
                     1000000000{
                         one{"0 mjd"}
@@ -116,16 +116,16 @@ af{
                         other{"000 mjd"}
                     }
                     1000000000000{
-                        one{"0 bil"}
-                        other{"0 bil"}
+                        one{"0 bn"}
+                        other{"0 bn"}
                     }
                     10000000000000{
-                        one{"00 bil"}
-                        other{"00 bil"}
+                        one{"00 bn"}
+                        other{"00 bn"}
                     }
                     100000000000000{
-                        one{"000 bil"}
-                        other{"000 bil"}
+                        one{"000 bn"}
+                        other{"000 bn"}
                     }
                 }
             }
@@ -143,7 +143,7 @@ af{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -192,8 +192,8 @@ af{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"M/d/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{

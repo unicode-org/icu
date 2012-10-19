@@ -19,7 +19,6 @@ genderList:table(nofallback){
         el{"mixedNeutral"}
         en{"neutral"}
         es{"maleTaints"}
-        es_419{"maleTaints"}
         et{"neutral"}
         eu{"neutral"}
         fa{"neutral"}
@@ -46,7 +45,6 @@ genderList:table(nofallback){
         no{"neutral"}
         pl{"maleTaints"}
         pt{"maleTaints"}
-        pt_PT{"maleTaints"}
         ro{"maleTaints"}
         ru{"maleTaints"}
         sk{"maleTaints"}

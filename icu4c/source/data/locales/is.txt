@@ -115,16 +115,16 @@ is{
                         other{"000 ma'.'"}
                     }
                     1000000000000{
-                        one{"0 bn"}
-                        other{"0 bn"}
+                        one{"0 bn"}
+                        other{"0 bn"}
                     }
                     10000000000000{
-                        one{"00 bn"}
-                        other{"00 bn"}
+                        one{"00 bn"}
+                        other{"00 bn"}
                     }
                     100000000000000{
-                        one{"000 bn"}
-                        other{"000 bn"}
+                        one{"000 bn"}
+                        other{"000 bn"}
                     }
                 }
             }
@@ -142,7 +142,7 @@ is{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -190,9 +190,8 @@ is{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d/M/y"}
-                yQ{"Q. yyyy"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
+                yQQQQ{"QQQQ y"}
                 yyyyM{"M.yyyy"}
                 yyyyMMMM{"MMMM y"}
             }

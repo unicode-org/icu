@@ -23,7 +23,7 @@ bs{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -66,8 +66,8 @@ bs{
                 yMMMEd{"E, dd. MMM y."}
                 yMMMd{"dd. MMM y."}
                 yMd{"dd.MM.y."}
-                yQ{"y Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
             }
             dayNames{
                 format{
@@ -245,8 +245,8 @@ bs{
                 yyyyMMMEd{"E, dd. MMM y. G"}
                 yyyyMMMd{"dd. MMM y. G"}
                 yyyyMd{"dd.MM.y. G"}
-                yyyyQ{"y G Q"}
                 yyyyQQQ{"y G QQQ"}
+                yyyyQQQQ{"y G QQQQ"}
             }
             eras{
                 abbreviated{

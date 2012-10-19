@@ -31,7 +31,7 @@ pa{
         }
         native{"guru"}
     }
-    Version{"2.0.74.85"}
+    Version{"2.0.77.46"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -58,7 +58,7 @@ pa{
                 Md{"d/M"}
                 mmss{"mm:ss"}
                 yyMMM{"MMM yy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
             }
             dayNames{
                 format{

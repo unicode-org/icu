@@ -957,11 +957,11 @@ sr_Latn{
         }
         VEB{
             "VEB",
-            "Venecuelanski bolivar",
+            "Venecuelanski bolivar (1871-2008)",
         }
         VEF{
             "VEF",
-            "Venecuelanska bolivija fuerte (VEF)",
+            "Venecuelanski bolivar",
         }
         VND{
             "₫",
@@ -2514,16 +2514,16 @@ sr_Latn{
             other{"uzbekistanski som"}
         }
         VEB{
+            few{"venecuelska bolivara (1871-2008)"}
+            many{"venecuelskih bolivara (1871-2008)"}
+            one{"venecuelski bolivar (1871-2008)"}
+            other{"venecuelskih bolivara (1871-2008)"}
+        }
+        VEF{
             few{"venecuelska bolivara"}
             many{"venecuelskih bolivara"}
             one{"venecuelski bolivar"}
             other{"venecuelskih bolivara"}
-        }
-        VEF{
-            few{"venezuelanska bolivara fuertes"}
-            many{"venezuelanskih bolivara fuertes"}
-            one{"venezuelanski bolivar fuertes"}
-            other{"venezuelanski bolivar fuertes"}
         }
         VND{
             few{"vijetnamska donga"}
@@ -2724,5 +2724,5 @@ sr_Latn{
             other{"zimbabvejski dolari"}
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
 }

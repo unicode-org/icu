@@ -49,9 +49,9 @@ cs{
                         other{"000 tisíc"}
                     }
                     1000000{
-                        few{"0 milionu"}
-                        one{"0 milionu"}
-                        other{"0 milionu"}
+                        few{"0 miliony"}
+                        one{"0 milion"}
+                        other{"0 milionů"}
                     }
                     10000000{
                         few{"00 milionů"}
@@ -65,8 +65,8 @@ cs{
                     }
                     1000000000{
                         few{"0 miliardy"}
-                        one{"0 miliardy"}
-                        other{"0 miliardy"}
+                        one{"0 miliarda"}
+                        other{"0 miliard"}
                     }
                     10000000000{
                         few{"00 miliard"}
@@ -79,9 +79,9 @@ cs{
                         other{"000 miliard"}
                     }
                     1000000000000{
-                        few{"0 bilionu"}
-                        one{"0 bilionu"}
-                        other{"0 bilionu"}
+                        few{"0 biliony"}
+                        one{"0 bilion"}
+                        other{"0 bilionů"}
                     }
                     10000000000000{
                         few{"00 bilionů"}
@@ -173,7 +173,7 @@ cs{
             }
         }
     }
-    Version{"2.0.76.5"}
+    Version{"2.0.78.38"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -203,8 +203,8 @@ cs{
                 yMEd{"E, d. M. y GGGGG"}
                 yMMM{"LLLL y G"}
                 yMMMEd{"E, d. M. y G"}
-                yQ{"Q., y GGGGG"}
-                yQQQ{"QQQ, y G"}
+                yQQQ{"QQQ, y GGGGG"}
+                yQQQQ{"QQQQ, y G"}
             }
         }
         chinese{
@@ -267,9 +267,8 @@ cs{
                 yMMMEd{"E, d. M. y"}
                 yMMMd{"d. M. y"}
                 yMd{"d. M. y"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
+                yQQQQ{"QQQQ y"}
                 yyyy{"y"}
                 yyyyM{"M/yyyy"}
                 yyyyMMMM{"LLLL y"}

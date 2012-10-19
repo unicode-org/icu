@@ -79,16 +79,16 @@ ca{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0 K"}
-                        other{"0 K"}
+                        one{"0 K"}
+                        other{"0 K"}
                     }
                     10000{
-                        one{"00 K"}
-                        other{"00 K"}
+                        one{"00 K"}
+                        other{"00 K"}
                     }
                     100000{
-                        one{"000 K"}
-                        other{"000 K"}
+                        one{"000 K"}
+                        other{"000 K"}
                     }
                     1000000{
                         one{"0 M"}
@@ -142,7 +142,7 @@ ca{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -180,8 +180,8 @@ ca{
                 yMEd{"E, dd/MM/yyyy GGGGG"}
                 yMMM{"MMM y G"}
                 yMMMEd{"E, d MMM y G"}
-                yQ{"Q yyyy GGGGG"}
-                yQQQ{"QQQ y G"}
+                yQQQ{"QQQ y GGGGG"}
+                yQQQQ{"QQQQ y G"}
             }
             eras{
                 abbreviated{
@@ -447,9 +447,8 @@ ca{
                 yMMMM{"LLLL 'de' y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/yyyy"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
+                yQQQQ{"QQQQ y"}
                 yyyyMM{"MM/yyyy"}
             }
             dayNames{

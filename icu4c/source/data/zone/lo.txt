@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lo.xml
  */
 lo{
-    Version{"2.0.76.38"}
+    Version{"2.0.78.39"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ອາບິດແຈນ"}
@@ -1936,6 +1936,6 @@ lo{
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"({0})"}
+        regionFormat{"ເວລາ {0}"}
     }
 }

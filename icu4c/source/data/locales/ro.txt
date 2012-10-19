@@ -30,81 +30,81 @@ ro{
                     1000{
                         few{"0 mii"}
                         one{"0 mie"}
-                        other{"0 mii"}
+                        other{"0 de mii"}
                     }
                     10000{
                         few{"00 mii"}
                         one{"00 mie"}
-                        other{"00 mii"}
+                        other{"00 de mii"}
                     }
                     100000{
                         few{"000 mii"}
                         one{"000 mie"}
-                        other{"000 mii"}
+                        other{"000 de mii"}
                     }
                     1000000{
                         few{"0 milioane"}
                         one{"0 milion"}
-                        other{"0 milioane"}
+                        other{"0 de milioane"}
                     }
                     10000000{
                         few{"00 milioane"}
                         one{"00 milion"}
-                        other{"00 milioane"}
+                        other{"00 de milioane"}
                     }
                     100000000{
                         few{"000 milioane"}
                         one{"000 milion"}
-                        other{"000 milioane"}
+                        other{"000 de milioane"}
                     }
                     1000000000{
                         few{"0 miliarde"}
                         one{"0 miliard"}
-                        other{"0 miliarde"}
+                        other{"0 de miliarde"}
                     }
                     10000000000{
                         few{"00 miliarde"}
                         one{"00 miliard"}
-                        other{"00 miliarde"}
+                        other{"00 de miliarde"}
                     }
                     100000000000{
                         few{"000 miliarde"}
                         one{"000 miliard"}
-                        other{"000 miliarde"}
+                        other{"000 de miliarde"}
                     }
                     1000000000000{
                         few{"0 trilioane"}
                         one{"0 trilion"}
-                        other{"0 trilioane"}
+                        other{"0 de trilioane"}
                     }
                     10000000000000{
                         few{"00 trilioane"}
                         one{"00 trilion"}
-                        other{"00 trilioane"}
+                        other{"00 de trilioane"}
                     }
                     100000000000000{
                         few{"000 trilioane"}
                         one{"000 trilion"}
-                        other{"000 trilioane"}
+                        other{"000 de trilioane"}
                     }
                 }
             }
             patternsShort{
                 decimalFormat{
                     1000{
-                        few{"0 K"}
-                        one{"0 K"}
-                        other{"0 K"}
+                        few{"0 K"}
+                        one{"0 K"}
+                        other{"0 K"}
                     }
                     10000{
-                        few{"00 K"}
+                        few{"00 K"}
                         one{"00 K"}
-                        other{"00 K"}
+                        other{"00 K"}
                     }
                     100000{
-                        few{"000 K"}
-                        one{"000 K"}
-                        other{"000 K"}
+                        few{"000 K"}
+                        one{"000 K"}
+                        other{"000 K"}
                     }
                     1000000{
                         few{"0 mil'.'"}
@@ -122,7 +122,7 @@ ro{
                         other{"000 mil'.'"}
                     }
                     1000000000{
-                        few{"0 mld'.'"}
+                        few{"0 mld'.'"}
                         one{"0 mld'.'"}
                         other{"0 mld'.'"}
                     }
@@ -137,19 +137,19 @@ ro{
                         other{"000 mld'.'"}
                     }
                     1000000000000{
-                        few{"0 T"}
-                        one{"0 T"}
-                        other{"0 T"}
+                        few{"0 T"}
+                        one{"0 T"}
+                        other{"0 T"}
                     }
                     10000000000000{
-                        few{"00 T"}
-                        one{"00 T"}
-                        other{"00 T"}
+                        few{"00 T"}
+                        one{"00 T"}
+                        other{"00 T"}
                     }
                     100000000000000{
-                        few{"000 T"}
-                        one{"000 T"}
-                        other{"000 T"}
+                        few{"000 T"}
+                        one{"000 T"}
+                        other{"000 T"}
                     }
                 }
             }
@@ -167,7 +167,7 @@ ro{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -308,11 +308,10 @@ ro{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"dd.MM.yyyy"}
-                yQ{"'trimestrul' Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM.yy"}
                 yyMMM{"MMM yy"}
-                yyQ{"Q yy"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"MMMM y"}
             }

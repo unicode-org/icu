@@ -826,7 +826,7 @@ et{
         }
         VEB{
             "VEB",
-            "Venezuela boliivar",
+            "Venezuela bolívar (1871-2008)",
         }
         VEF{
             "VEF",
@@ -1538,6 +1538,10 @@ et{
             one{"Usbekistani somm"}
             other{"Usbekistani sommi"}
         }
+        VEB{
+            one{"Venezuela bolívar (1871-2008)"}
+            other{"Venezuela boliivarit (1871-2008)"}
+        }
         VEF{
             one{"Venezuela bolívar"}
             other{"Venezuela boliivarit"}
@@ -1607,5 +1611,5 @@ et{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
 }

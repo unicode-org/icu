@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lv.xml
  */
 lv{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžana"}
@@ -1358,7 +1358,7 @@ lv{
         "meta:Greenland_Western"{
             ld{"Rietumgrenlandes vasaras laiks"}
             lg{"Rietumgrenlandes laiks"}
-            ls{"Rietumgrenlandes vasaras  laiks"}
+            ls{"Rietumgrenlandes ziemas laiks"}
         }
         "meta:Gulf"{
             ls{"Persijas līča laiks"}
@@ -1367,9 +1367,9 @@ lv{
             ls{"Gvijānas laiks"}
         }
         "meta:Hawaii_Aleutian"{
-            ld{"Havaju — Aleutu vasaras laiks"}
-            lg{"Havaju — Aleutu laiks"}
-            ls{"Havaju — Aleutu ziemas laiks"}
+            ld{"Havaju — Aleutu vasaras laiks"}
+            lg{"Havaju — Aleutu laiks"}
+            ls{"Havaju — Aleutu ziemas laiks"}
         }
         "meta:Hong_Kong"{
             ld{"Honkongas vasaras laiks"}

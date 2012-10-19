@@ -37,7 +37,7 @@ gsw{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -102,13 +102,11 @@ gsw{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d. MMM y"}
                 yMMMM{"MMMM y"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM.yy"}
                 yyMMM{"MMM yy"}
                 yyMMdd{"dd.MM.yy"}
-                yyQ{"Q yy"}
-                yyQQQQ{"QQQQ yy"}
                 yyyy{"y"}
                 yyyyMMMM{"MMMM y"}
             }

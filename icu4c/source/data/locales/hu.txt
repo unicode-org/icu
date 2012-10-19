@@ -75,40 +75,40 @@ hu{
             patternsShort{
                 decimalFormat{
                     1000{
-                        other{"0 E"}
+                        other{"0 E"}
                     }
                     10000{
-                        other{"00 E"}
+                        other{"00 E"}
                     }
                     100000{
-                        other{"000 E"}
+                        other{"000 E"}
                     }
                     1000000{
-                        other{"0 M"}
+                        other{"0 M"}
                     }
                     10000000{
-                        other{"00 M"}
+                        other{"00 M"}
                     }
                     100000000{
-                        other{"000 M"}
+                        other{"000 M"}
                     }
                     1000000000{
-                        other{"0 Mrd"}
+                        other{"0 Mrd"}
                     }
                     10000000000{
-                        other{"00 Mrd"}
+                        other{"00 Mrd"}
                     }
                     100000000000{
-                        other{"000 Mrd"}
+                        other{"000 Mrd"}
                     }
                     1000000000000{
-                        other{"0 B"}
+                        other{"0 B"}
                     }
                     10000000000000{
-                        other{"00 B"}
+                        other{"00 B"}
                     }
                     100000000000000{
-                        other{"000 B"}
+                        other{"000 B"}
                     }
                 }
             }
@@ -126,7 +126,7 @@ hu{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     calendar{
         buddhist{
             availableFormats{
@@ -386,9 +386,9 @@ hu{
                 yMMMEd{"y. MMM d., E"}
                 yMMMd{"y. MMM d."}
                 yMd{"yyyy.MM.dd."}
-                yQ{"y. Q"}
                 yQQQ{"y. QQQ"}
-                yyQ{"yy/Q"}
+                yQQQQ{"y. QQQQ"}
+                yyQQQ{"yy/QQQ"}
                 yyyyMM{"yyyy.MM"}
                 yyyyMMMM{"y. MMMM"}
             }
@@ -613,8 +613,8 @@ hu{
                     y{"y. MMM d., E - y. MMM d., E"}
                 }
                 yMMMM{
-                    M{"y MMMM-MMMM"}
-                    y{"y MMMM - y MMMM"}
+                    M{"y. MMMM-MMMM"}
+                    y{"y. MMMM - y. MMMM"}
                 }
                 yMMMd{
                     M{"y. MMM d. - MMM d."}
@@ -938,8 +938,8 @@ hu{
                 yMEd{"yyyy.MM.dd., E"}
                 yMMM{"y MMM"}
                 yMMMEd{"y. MMM d., E"}
-                yQ{"y Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
             }
             eras{
                 abbreviated{

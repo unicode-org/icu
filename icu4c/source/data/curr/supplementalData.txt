@@ -8,6 +8,15 @@
 // ***************************************************************************
 supplementalData:table(nofallback){
     CurrencyMap{
+        150{
+            {
+                from:intvector{
+                    213,
+                    320825952,
+                }
+                id{"EUR"}
+            }
+        }
         AD{
             {
                 from:intvector{

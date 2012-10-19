@@ -10,10 +10,10 @@
  *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
     zoneStrings{
         "Africa:Algiers"{
-            ec{"Alžir"}
+            ec{"alžirsko"}
         }
         "Africa:Djibouti"{
             ec{"Džibuti"}

@@ -249,11 +249,11 @@ km{
             tibt{"លេខ​តៃប៉ិ"}
         }
     }
-    Version{"2.0.76.16"}
+    Version{"2.0.78.39"}
     codePatterns{
-        language{"ភាសា ៖ {0}"}
-        script{"អក្សរ ៖ {0}"}
-        territory{"តំបន់ ៖ {0}"}
+        language{"ភាសា ៖ {0}"}
+        script{"អក្សរ ៖ {0}"}
+        territory{"តំបន់ ៖ {0}"}
     }
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}

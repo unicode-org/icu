@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bg.xml
  */
 bg{
-    AuxExemplarCharacters{"[{а\u0300} ѐ ѝ {о\u0300} {у\u0300} ъ ѣ {ю\u0300} {я\u0300} ѫ]"}
+    AuxExemplarCharacters{"[{а\u0300} ѐ ё ѝ {о\u0300} {у\u0300} ъ ы ѣ э {ю\u0300} {я\u0300} ѫ]"}
     ExemplarCharacters{"[а б в г д е ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ь ю я]"}
     ExemplarCharactersIndex{"[А Б В Г Д Е Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ю Я]"}
     LocaleScript{
@@ -27,15 +27,15 @@ bg{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"хиляда"}
-                        other{"хиляди"}
+                        one{"0 хиляда"}
+                        other{"0 хиляди"}
                     }
                     10000{
                         one{"00 хиляди"}
                         other{"00 хиляди"}
                     }
                     100000{
-                        one{"000 Х"}
+                        one{"000 Х"}
                         other{"000 хиляди"}
                     }
                     1000000{
@@ -142,7 +142,7 @@ bg{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -191,14 +191,14 @@ bg{
                 yMMMEd{"E, d MMM y 'г'."}
                 yMMMd{"dd MMM y"}
                 yMd{"dd.MM.yy"}
-                yQ{"Q y 'г'."}
                 yQQQ{"QQQ y 'г'."}
+                yQQQQ{"QQQQ y 'г'."}
                 yyMM{"MM.yy"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
                 yyyy{"y"}
                 yyyyMM{"MM.yyyy"}
                 yyyyMMMM{"MMMM y"}
-                yyyyQQQQ{"QQQQ y 'г'."}
+                yyyyQQQQ{"QQQQ y 'г'."}
             }
             dayNames{
                 format{

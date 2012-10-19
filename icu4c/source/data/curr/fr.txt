@@ -965,11 +965,11 @@ fr{
         }
         VEB{
             "VEB",
-            "bolivar",
+            "bolivar vénézuélien (1871-2008)",
         }
         VEF{
             "VEF",
-            "bolivar fuerte vénézuélien",
+            "bolivar vénézuélien",
         }
         VND{
             "₫",
@@ -2066,12 +2066,12 @@ fr{
             other{"sums ouzbeks"}
         }
         VEB{
-            one{"bolívar vénézuélien (1879–2008)"}
-            other{"bolívars vénézuéliens (1879–2008)"}
+            one{"bolivar vénézuélien (1871-2008)"}
+            other{"bolivar vénézuélien (1871-2008)"}
         }
         VEF{
-            one{"bolivar fuerte vénézuélien"}
-            other{"bolivar fuertes vénézuélien"}
+            one{"bolivar vénézuélien"}
+            other{"bolivar vénézuélien"}
         }
         VND{
             one{"dông vietnamien"}
@@ -2214,5 +2214,5 @@ fr{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.76.53"}
+    Version{"2.0.78.30"}
 }

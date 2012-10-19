@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mk.xml
  */
 mk{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.17"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Сеута"}

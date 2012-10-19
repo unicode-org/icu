@@ -89,16 +89,16 @@ vi{
                         other{"000 Tr"}
                     }
                     1000000000{
-                        other{"0 T"}
+                        other{"0 T"}
                     }
                     10000000000{
-                        other{"00 T"}
+                        other{"00 T"}
                     }
                     100000000000{
-                        other{"000 T"}
+                        other{"000 T"}
                     }
                     1000000000000{
-                        other{"0 NT"}
+                        other{"0 NT"}
                     }
                     10000000000000{
                         other{"00 NT"}
@@ -122,7 +122,7 @@ vi{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -167,9 +167,8 @@ vi{
                 yMMMEd{"E, d MMM y G"}
                 yMMMM{"MMMM y G"}
                 yMMMd{"d MMM y G"}
-                yQ{"Q yyyy G"}
                 yQQQ{"QQQ y G"}
-                yyQ{"Q yy G"}
+                yQQQQ{"QQQQ y G"}
                 yyyy{"'Năm' y G"}
                 yyyyMM{"MM-yyyy G"}
                 yyyyMd{"d-M-yyyy G"}
@@ -451,9 +450,8 @@ vi{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d/M/y"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
+                yQQQQ{"QQQQ y"}
                 yyyy{"y"}
                 yyyyMM{"MM-yyyy"}
             }
@@ -941,6 +939,7 @@ vi{
             }
             availableFormats{
                 Ed{"E, d"}
+                Gy{"y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -959,15 +958,15 @@ vi{
                 hms{"h:mm:ss a"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"y"}
+                y{"y G"}
                 yM{"M/yyyy"}
                 yMEd{"E, d-M-yyyy"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
-                yQ{"Q yyyy"}
-                yQQQ{"QQQ y"}
-                yyQ{"Q yy G"}
+                yQQQ{"QQQ yyyy"}
+                yQQQQ{"QQQQ y"}
+                yyQQQ{"QQQ yy G"}
                 yyyy{"'Năm' y G"}
                 yyyyMEd{"E, d-M-y G"}
                 yyyyMM{"MM-y G"}
@@ -976,8 +975,8 @@ vi{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d-M-y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
         japanese{
@@ -1007,7 +1006,7 @@ vi{
                 Md{"d-M"}
                 d{"'Ngày' d"}
                 mmss{"mm:ss"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyyy{"'Năm' y G"}
                 yyyyMEd{"E, d-M-y G"}
                 yyyyMM{"MM-y G"}
@@ -1016,8 +1015,8 @@ vi{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d-M-y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
         persian{
@@ -1121,7 +1120,7 @@ vi{
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyyy{"'Năm' y G"}
                 yyyyMEd{"E, d-M-y G"}
                 yyyyMM{"MM-y G"}
@@ -1130,8 +1129,8 @@ vi{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d-M-y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             eras{
                 abbreviated{

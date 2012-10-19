@@ -23,7 +23,7 @@ lv{
         017{"Vidusāfrika"}
         018{"Dienvidāfrika"}
         019{"Amerika"}
-        021{"Ziemeļamerika — ASV, Kanāda un Grenlande"}
+        021{"Ziemeļamerika — ASV, Kanāda un Grenlande"}
         029{"Karību jūras reģions"}
         030{"Austrumāzija"}
         034{"Dienvidāzija"}
@@ -301,5 +301,5 @@ lv{
         ZW{"Zimbabve"}
         ZZ{"nezināms reģions"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
 }
