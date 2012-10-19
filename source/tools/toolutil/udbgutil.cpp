@@ -391,10 +391,22 @@ paramStatic(const USystemParams *param, char *target, int32_t targetCapacity, UE
   return u_terminateChars(target, targetCapacity, len, status);
 }
 
+static const char *nullString = "(null)";
+
 static int32_t stringToStringBuffer(char *target, int32_t targetCapacity, const char *str, UErrorCode *status) {
+  if(str==NULL) str=nullString; 
+
   int32_t len = uprv_strlen(str);
-  if(target!=NULL) {
-    uprv_strncpy(target,str,uprv_min(len,targetCapacity));
+  if (U_SUCCESS(*status)) {
+    if(target!=NULL) {
+      uprv_strncpy(target,str,uprv_min(len,targetCapacity));
+    }
+  } else {
+    const char *s = u_errorName(*status);
+    len = uprv_strlen(s);
+    if(target!=NULL) {
+      uprv_strncpy(target,s,uprv_min(len,targetCapacity));
+    }
   }
   return u_terminateChars(target, targetCapacity, len, status);
 }
