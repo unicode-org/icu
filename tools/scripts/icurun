@@ -4,6 +4,9 @@
 #
 # This is designed for building and running single-source-file ICU programs.
 #
+# You can always download the latest from http://source.icu-project.org/repos/icu/tools/trunk/scripts/icurun
+# Or, as an unofficial link, http://bit.ly/icu-run
+#
 # In its simplest usage,  simply type:
 #
 #     icurun  yourprogram.c 
@@ -67,21 +70,21 @@ then
         exit 1
 fi
 
-if [ "$1" == "-?" -o $1 == "-h" ];
+if [ "$1" = "-?" -o $1 = "-h" ];
 then
         usage
         exit 0
 fi
 
 
-if [ $1 == "-i" ];
+if [ $1 = "-i" ];
 then
         shift
         ICU_OVERRIDE=$1
         shift
 fi
 
-if [ $1 == "-O" ];
+if [ $1 = "-O" ];
 then
     shift
     XTRA_OPTS=$1
