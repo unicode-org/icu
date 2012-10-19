@@ -223,8 +223,9 @@ sharedstatedir = @sharedstatedir@
 sysconfdir = @sysconfdir@
 INSTALL-L = ${INSTALL_DATA}
 
-# for derivative builds - don't bother with SILENT_COMPILE
-SILENT_COMPILE=$(1)
+# for derivative builds - don't bother with VERBOSE/NONVERBOSE SILENT_COMPILE
+SILENT_COMPILE=$(1)  #M#
+ICU_MSG=@echo "   $(1)	"  #M#
 
 ##################################################################
 ##################################################################
