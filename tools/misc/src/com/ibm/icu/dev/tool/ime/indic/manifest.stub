@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+
+Name: com/ibm/icu/dev/tool/ime/indic
+Specification-Title: ICU Indic IME
+Specification-Version: 1.0
+Specification-Vendor: IBM
+Implementation-Title: ICU Indic IME
+Implementation-Version: 1.0
+Implementation-Vendor: IBM Corporation
+Implementation-Vendor-Id: com.ibm
+Copyright-Info: Copyright (c) 2000-2004, International Business Machines Corporation and others.  All Rights Reserved.
+Extension-Name: com.ibm.icu.dev.tool.ime.indic
+
+

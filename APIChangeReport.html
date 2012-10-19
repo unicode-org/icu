@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>ICU4J API Comparison: ICU4J 49.1 with ICU4J 50.1</title>
+<!-- Copyright 2012, IBM, All Rights Reserved. -->
+</head>
+<body>
+<h1>ICU4J API Comparison: ICU4J 49.1 with ICU4J 50.1</h1>
+
+<hr/>
+<h2>Removed from ICU4J 49.1</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:green'>(stable)</span> public class <i>DictionaryBasedBreakIterator</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>NumberFormat.CompactStyle</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>SimpleDateFormat.ContextType</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>SimpleDateFormat.ContextValue</i></li>
+CharsetMatch
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int BOM</li>
+<li><span style='color:green'>(stable)</span> public static final int DECLARED_ENCODING</li>
+<li><span style='color:green'>(stable)</span> public static final int ENCODING_SCHEME</li>
+<li><span style='color:green'>(stable)</span> public static final int LANG_STATISTICS</li>
+<li><span style='color:orange'>(draft)</span> public int <i>getMatchType</i>()</li>
+</ul>
+NumberFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final CompactDecimalFormat <i>getCompactDecimalInstance</i>(ULocale, NumberFormat.CompactStyle)</li>
+<li><span style='color:orange'>(draft)</span> public static final CompactDecimalFormat <i>getCompactDecimalInstance</i>(java.util.Locale, NumberFormat.CompactStyle)</li>
+</ul>
+SimpleDateFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.lang.StringBuffer <i>format</i>(Calendar, java.util.Map<SimpleDateFormat.ContextType, SimpleDateFormat.ContextValue>, java.lang.StringBuffer, java.text.FieldPosition)</li>
+<li><span style='color:orange'>(draft)</span> public SimpleDateFormat.ContextValue <i>getDefaultContext</i>(SimpleDateFormat.ContextType)</li>
+<li><span style='color:orange'>(draft)</span> public void <i>setDefaultContext</i>(SimpleDateFormat.ContextType, SimpleDateFormat.ContextValue)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+TimeZone
+<ul>
+<li><span style='color:orange'>(draft)</span> public static ICULogger TimeZoneLogger</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Deprecated or Obsoleted in ICU4J 50.1</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public class <i>ChineseDateFormat</i></li>
+<li><span style='color:gray'>(deprecated)</span> public static class <i>ChineseDateFormat.Field</i></li>
+<li><span style='color:gray'>(deprecated)</span> public class <i>ChineseDateFormatSymbols</i></li>
+DateFormat
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public static final java.lang.String ABBR_STANDALONE_MONTH</li>
+<li><span style='color:gray'>(deprecated)</span> public static final java.lang.String HOUR_GENERIC_TZ</li>
+<li><span style='color:gray'>(deprecated)</span> public static final java.lang.String HOUR_MINUTE_GENERIC_TZ</li>
+<li><span style='color:gray'>(deprecated)</span> public static final java.lang.String HOUR_MINUTE_TZ</li>
+<li><span style='color:gray'>(deprecated)</span> public static final java.lang.String HOUR_TZ</li>
+<li><span style='color:gray'>(deprecated)</span> public static final java.lang.String STANDALONE_MONTH</li>
+</ul>
+PluralFormat
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public void <i>setLocale</i>(ULocale)</li>
+</ul>
+RuleBasedCollator
+<ul>
+<li><span style='color:gray'>(deprecated)</span> public boolean <i>isHiraganaQuaternary</i>()</li>
+<li><span style='color:gray'>(deprecated)</span> public void <i>setHiraganaQuaternary</i>(boolean)</li>
+<li><span style='color:gray'>(deprecated)</span> public void <i>setHiraganaQuaternaryDefault</i>()</li>
+</ul>
+</ul>
+
+
+<hr/>
+<h2>Changed in ICU4J 50.1 (old, new)</h2>
+<p>(no API changed)</p>
+
+<hr/>
+<h2>Promoted to stable in ICU4J 50.1</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UProperty
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int OTHER_PROPERTY_LIMIT</li>
+<li><span style='color:green'>(stable)</span> public static final int OTHER_PROPERTY_START</li>
+<li><span style='color:green'>(stable)</span> public static final int SCRIPT_EXTENSIONS</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:green'>(stable)</span> public abstract class <i>CurrencyDisplayNames</i></li>
+<li><span style='color:green'>(stable)</span> public class <i>CurrencyMetaInfo</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>CurrencyMetaInfo.CurrencyDigits</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>CurrencyMetaInfo.CurrencyFilter</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>CurrencyMetaInfo.CurrencyInfo</i></li>
+</ul>
+
+
+<hr/>
+<h2>Added in ICU4J 50.1</h2>
+
+<h3>Package com.ibm.icu.lang</h3>
+<ul>
+UCharacter.GraphemeClusterBreak
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int REGIONAL_INDICATOR</li>
+</ul>
+UCharacter.LineBreak
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int REGIONAL_INDICATOR</li>
+</ul>
+UCharacter.WordBreak
+<ul>
+<li><span style='color:green'>(stable)</span> public static final int REGIONAL_INDICATOR</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final class <i>CompactDecimalFormat.CompactStyle</i></li>
+<li><span style='color:orange'>(draft)</span> public final class <i>ListFormatter</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>PluralRules.KeywordStatus</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>PluralRules.PluralType</i></li>
+CompactDecimalFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public java.text.AttributedCharacterIterator <i>formatToCharacterIterator</i>(java.lang.Object)</li>
+<li><span style='color:orange'>(draft)</span> public static CompactDecimalFormat <i>getInstance</i>(ULocale, CompactDecimalFormat.CompactStyle)</li>
+<li><span style='color:orange'>(draft)</span> public static CompactDecimalFormat <i>getInstance</i>(java.util.Locale, CompactDecimalFormat.CompactStyle)</li>
+</ul>
+DateFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String ABBR_GENERIC_TZ</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String ABBR_QUARTER</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String ABBR_SPECIFIC_TZ</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String ABBR_UTC_TZ</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String ABBR_WEEKDAY</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String GENERIC_TZ</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String HOUR24</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String LOCATION_TZ</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String MINUTE</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String QUARTER</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String SECOND</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String SPECIFIC_TZ</li>
+<li><span style='color:orange'>(draft)</span> public static final java.lang.String WEEKDAY</li>
+</ul>
+MessagePattern.ArgType
+<ul>
+<li><span style='color:orange'>(draft)</span> public boolean <i>hasPluralStyle</i>()</li>
+</ul>
+PluralFormat
+<ul>
+<li><span style='color:orange'>(draft)</span> public <i>PluralFormat</i>(ULocale, PluralRules.PluralType)</li>
+<li><span style='color:orange'>(draft)</span> public <i>PluralFormat</i>(ULocale, PluralRules.PluralType, java.lang.String)</li>
+</ul>
+PluralRules
+<ul>
+<li><span style='color:orange'>(draft)</span> public static PluralRules <i>forLocale</i>(ULocale, PluralRules.PluralType)</li>
+<li><span style='color:orange'>(draft)</span> public PluralRules.KeywordStatus <i>getKeywordStatus</i>(java.lang.String, int, java.util.Set<java.lang.Double>, Output<java.lang.Double>)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li><span style='color:orange'>(draft)</span> public class <i>Region</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>Region.RegionType</i></li>
+VersionInfo
+<ul>
+<li><span style='color:green'>(stable)</span> public static final VersionInfo UNICODE_6_2</li>
+</ul>
+</ul>
+
+<hr/>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Oct 17 17:58:20 EDT 2012<br/>Copyright (C) 2012, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+</body>
+</html>
