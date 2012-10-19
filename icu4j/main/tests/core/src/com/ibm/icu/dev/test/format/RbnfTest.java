@@ -656,7 +656,7 @@ public class RbnfTest extends TestFmwk {
             { "21,001", "tjugo\u00adet\u00adtusen ett" }
         };
 
-        formatter.setDefaultRuleSet("%spellout-cardinal-neutre");
+        formatter.setDefaultRuleSet("%spellout-cardinal-neuter");
         logln("testing neutrum rules");
         doTest(formatter, testDataNeutrum, true);
 
