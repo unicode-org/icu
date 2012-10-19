@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fa.xml
  */
 fa{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"آبیجان"}
@@ -160,7 +160,7 @@ fa{
             ec{"طرابلس"}
         }
         "Africa:Tunis"{
-            ec{"تونس"}
+            ec{"شهر تونس"}
         }
         "Africa:Windhoek"{
             ec{"ویندهوک"}
@@ -625,7 +625,7 @@ fa{
             ec{"آلماتی"}
         }
         "Asia:Amman"{
-            ec{"عمان"}
+            ec{"عمّان"}
         }
         "Asia:Anadyr"{
             ec{"آنادیر"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bg.xml
  */
 bg{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -22,7 +22,7 @@ bg{
             ec{"Адис Абеба"}
         }
         "Africa:Algiers"{
-            ec{"Алжир"}
+            ec{"град Алжир"}
         }
         "Africa:Asmera"{
             ec{"Асмара"}
@@ -160,7 +160,7 @@ bg{
             ec{"Триполи"}
         }
         "Africa:Tunis"{
-            ec{"Тунис"}
+            ec{"град Тунис"}
         }
         "Africa:Windhoek"{
             ec{"Виндхук"}
@@ -427,7 +427,7 @@ bg{
             ec{"Мерида"}
         }
         "America:Mexico_City"{
-            ec{"Мексико"}
+            ec{"Мексико Сити"}
         }
         "America:Miquelon"{
             ec{"Микелон"}

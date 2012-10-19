@@ -820,7 +820,7 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     codePatterns{
         language{"Keel: {0}"}
         script{"Skript: {0}"}

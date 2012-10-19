@@ -7,11 +7,10 @@
 # File: Russian_Latin_BGN.txt
 # Generated from CLDR 
 #
-:: [АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя] ;
-:: NFD (NFC) ;
-$prime  = ʹ ;
+::[АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя];
+$prime = ʹ ;
 $doublePrime = ʺ ;
-$wordBoundary =  [^[:L:][:M:][:N:]] ;
+$wordBoundary = [^[:L:][:M:][:N:]] ;
 $upperConsonants = [БВГДЖЙКЛМНПРСТФХЦЧШЩЭ] ;
 $lowerConsonants = [бвгджйклмнпрстфхцчшщэ] ;
 $consonants = [$upperConsonants $lowerConsonants] ;
@@ -19,8 +18,14 @@ $upperVowels = [АЕЁЭИОУЫЮЯ] ;
 $lowerVowels = [аеёэиоуыюя] ;
 $vowels = [$upperVowels $lowerVowels] ;
 $lower = [$lowerConsonants $lowerVowels] ;
-$lowerVowels ы → y ;
-$upperVowels[Ыы] → Y ;
+$upper = [$upperConsonants $upperVowels] ;
+[$upperVowels [ЙЪЬ]] { Е } $upper → YE ; # CYRILLIC CAPITAL LETTER IE
+[$upperVowels [ЙЪЬ]] { Е → Ye ; # CYRILLIC CAPITAL LETTER IE
+[$upperVowels $lowerVowels [ЙйЪъЬь]] { е → ye ; # CYRILLIC SMALL LETTER IE
+[$upperVowels [ЙЪЬ]] { Ё } $upper → YË ; # CYRILLIC CAPITAL LETTER IO
+[$upperVowels [ЙЪЬ]] { Ё → Yë ; # CYRILLIC CAPITAL LETTER IO
+[$upperVowels $lowerVowels [ЙйЪъЬь]] { ё → yë ; # CYRILLIC SMALL LETTER IO
+::Null;
 А → A ; # CYRILLIC CAPITAL LETTER A
 а → a ; # CYRILLIC SMALL LETTER A
 Б → B ; # CYRILLIC CAPITAL LETTER BE
@@ -31,31 +36,23 @@ $upperVowels[Ыы] → Y ;
 г → g ; # CYRILLIC SMALL LETTER GHE
 Д → D ; # CYRILLIC CAPITAL LETTER DE
 д → d ; # CYRILLIC SMALL LETTER DE
-Е}[$upperVowels [ЙЪЬ]] → YE ; # CYRILLIC CAPITAL LETTER IE
-Е}[$lowerVowels [йъь]] → Ye ; # CYRILLIC CAPITAL LETTER IE
+$wordBoundary{Е} $upper → YE ; # CYRILLIC CAPITAL LETTER IE
 $wordBoundary{Е → Ye ; # CYRILLIC CAPITAL LETTER IE
-Е →  E ; # CYRILLIC CAPITAL LETTER IE
-е}[$upperVowels $lowerVowels [ЙйЪъЬь]] → ye ; # CYRILLIC SMALL LETTER IE
+Е → E ; # CYRILLIC CAPITAL LETTER IE
 $wordBoundary{е → ye ; # CYRILLIC SMALL LETTER IE
-е →  e ; # CYRILLIC SMALL LETTER IE
-Ё}[$upperVowels [ЙЪЬ]] → YË ; # CYRILLIC CAPITAL LETTER IO
-Ё}[$lowerVowels [йъь]] → Yë ; # CYRILLIC CAPITAL LETTER IO
-$wordBoundary{Ё → YË ; # CYRILLIC CAPITAL LETTER IO
-Ё →  Ë ; # CYRILLIC CAPITAL LETTER IO
-ё}[$upperVowels $lowerVowels [ЙйЪъЬь]] → yë ; # CYRILLIC SMALL LETTER IO
+е → e ; # CYRILLIC SMALL LETTER IE
+$wordBoundary {Ё} $upper → YË ; # CYRILLIC CAPITAL LETTER IO
+$wordBoundary {Ё} $lower → Yë ; # CYRILLIC CAPITAL LETTER IO
+Ё → Ë ; # CYRILLIC CAPITAL LETTER IO
 $wordBoundary{ё → yë ; # CYRILLIC SMALL LETTER IO
-ё →  ë ; # CYRILLIC SMALL LETTER IO
+ё → ë ; # CYRILLIC SMALL LETTER IO
 Ж} $lower → Zh ; # CYRILLIC CAPITAL LETTER ZHE
 Ж → ZH ; # CYRILLIC CAPITAL LETTER ZHE
 ж → zh ; # CYRILLIC SMALL LETTER ZHE
 З → Z ; # CYRILLIC CAPITAL LETTER ZE
 з → z ; # CYRILLIC SMALL LETTER ZE
-[$consonants - [Йй]]}Э → ·Е ;
-[$consonants - [Йй]]}э → ·е ;
 И → I ; # CYRILLIC CAPITAL LETTER I
 и → i ; # CYRILLIC SMALL LETTER I
-Й}[АаУуЫыЭэ] → Y· ; # CYRILLIC CAPITAL LETTER I
-й}[АаУуЫыЭэ] → y· ; # CYRILLIC SMALL LETTER I
 Й → Y ; # CYRILLIC CAPITAL LETTER I
 й → y ; # CYRILLIC SMALL LETTER I
 К → K ; # CYRILLIC CAPITAL LETTER KA
@@ -74,9 +71,9 @@ $wordBoundary{ё → yë ; # CYRILLIC SMALL LETTER IO
 р → r ; # CYRILLIC SMALL LETTER ER
 С → S ; # CYRILLIC CAPITAL LETTER ES
 с → s ; # CYRILLIC SMALL LETTER ES
-ТС → T·S ; # CYRILLIC CAPITAL LETTER TE
-Тс → T·s ; # CYRILLIC CAPITAL LETTER TE
-тс → t·s ; # CYRILLIC SMALL LETTER TE
+ТС → TS ; # CYRILLIC CAPITAL LETTER TE
+Тс → Ts ; # CYRILLIC CAPITAL LETTER TE
+тс → ts ; # CYRILLIC SMALL LETTER TE
 Т → T ; # CYRILLIC CAPITAL LETTER TE
 т → t ; # CYRILLIC SMALL LETTER TE
 У → U ; # CYRILLIC CAPITAL LETTER U
@@ -92,9 +89,9 @@ $wordBoundary{ё → yë ; # CYRILLIC SMALL LETTER IO
 Ч} $lower → Ch ; # CYRILLIC CAPITAL LETTER CHE
 Ч → CH ; # CYRILLIC CAPITAL LETTER CHE
 ч → ch ; # CYRILLIC SMALL LETTER CHE
-ШЧ → SH·CH ; # CYRILLIC CAPITAL LETTER SHA
-Шч → Sh·ch ; # CYRILLIC CAPITAL LETTER SHA
-шч → sh·ch ; # CYRILLIC SMALL LETTER SHA
+ШЧ → SHCH ; # CYRILLIC CAPITAL LETTER SHA
+Шч → Shch ; # CYRILLIC CAPITAL LETTER SHA
+шч → shch ; # CYRILLIC SMALL LETTER SHA
 Ш} $lower → Sh ; # CYRILLIC CAPITAL LETTER SHA
 Ш → SH ; # CYRILLIC CAPITAL LETTER SHA
 ш → sh ; # CYRILLIC SMALL LETTER SHA
@@ -103,10 +100,6 @@ $wordBoundary{ё → yë ; # CYRILLIC SMALL LETTER IO
 щ → shch ; # CYRILLIC SMALL LETTER SHCHA
 Ъ → $doublePrime ; # CYRILLIC CAPITAL LETTER HARD SIGN
 ъ → $doublePrime ; # CYRILLIC SMALL LETTER HARD SIGN
-$vowels}Ы → ·Y ; # CYRILLIC CAPITAL LETTER I
-$vowels}ы → ·y ; # CYRILLIC CAPITAL LETTER I
-Ы}[АаУуЫыЭэ] → Y· ; # CYRILLIC CAPITAL LETTER YERU
-ы}[ауыэ] → y· ; # CYRILLIC SMALL LETTER YERU
 Ы → Y ; # CYRILLIC CAPITAL LETTER YERU
 ы → y ; # CYRILLIC SMALL LETTER YERU
 Ь → $prime ; # CYRILLIC CAPITAL LETTER SOFT SIGN

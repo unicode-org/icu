@@ -38,7 +38,7 @@ nn{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -80,10 +80,9 @@ nn{
                 yMMMEd{"E d. MMM y"}
                 yMMMd{"d. MMM y"}
                 yMd{"d.M.yyyy"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM.yy"}
-                yyQ{"Q yy"}
                 yyyyMMMM{"MMMM y"}
             }
             dayNames{

@@ -142,7 +142,7 @@ fil{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.77.46"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -190,8 +190,8 @@ fil{
                 yMMMM{"MMMM y"}
                 yMMMd{"MMM d, y"}
                 yMd{"M/d/y"}
-                yQ{"Q y"}
-                yQQQ{"y QQQ"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"y QQQQ"}
                 yyMM{"MM-yy"}
                 yyMMM{"MMM yy"}
             }

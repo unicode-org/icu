@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/he.xml
  */
 he{
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"אביג'אן"}
@@ -160,7 +160,7 @@ he{
             ec{"טריפולי"}
         }
         "Africa:Tunis"{
-            ec{"תוניסיה"}
+            ec{"טוניס"}
         }
         "Africa:Windhoek"{
             ec{"וינדהוק"}
@@ -772,7 +772,7 @@ he{
             ec{"פונטיאנק"}
         }
         "Asia:Pyongyang"{
-            ec{"צפון קוריאה"}
+            ec{"פיונגיאנג"}
         }
         "Asia:Qatar"{
             ec{"קטאר"}
@@ -796,7 +796,7 @@ he{
             ec{"אסיה/סמרקנד"}
         }
         "Asia:Seoul"{
-            ec{"דרום קוריאה"}
+            ec{"סיאול"}
         }
         "Asia:Shanghai"{
             ec{"אסיה/שנחאי"}
@@ -829,7 +829,7 @@ he{
             ec{"אורומקי"}
         }
         "Asia:Vientiane"{
-            ec{"וייטנאם"}
+            ec{"האנוי"}
         }
         "Asia:Vladivostok"{
             ec{"ולדיווסטוק"}

@@ -1171,5 +1171,5 @@ ja{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.76.70"}
+    Version{"2.0.78.39"}
 }

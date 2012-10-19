@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fr.xml
  */
 fr{
-    Version{"2.0.76.53"}
+    Version{"2.0.78.30"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis-Abeba"}
@@ -1142,10 +1142,10 @@ fr{
             ls{"heure normale du Yukon"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Heure : {1} ({0})"}
+        fallbackRegionFormat{"Heure : {1} ({0})"}
         gmtFormat{"UTC{0}"}
         gmtZeroFormat{"UTC"}
         hourFormat{"+HH:mm;−HH:mm"}
-        regionFormat{"Heure : {0}"}
+        regionFormat{"Heure : {0}"}
     }
 }

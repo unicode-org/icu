@@ -501,7 +501,7 @@ tr{
         sn{"Shona"}
         snk{"Soninke"}
         so{"Somalice"}
-        sog{"Sogdiana Dili"}
+        sog{"Sogdiana Dili"}
         son{"Songhai"}
         sq{"Arnavutça"}
         sr{"Sırpça"}
@@ -851,7 +851,7 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Alfabe: {0}"}

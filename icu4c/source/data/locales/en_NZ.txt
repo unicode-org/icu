@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_NZ{
     %%Parent{"en_GB"}
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -28,15 +28,8 @@ en_NZ{
             }
             availableFormats{
                 MMMEd{"E, d MMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
                 Md{"d/M"}
-                yMEd{"E, dd/MM/yyyy"}
-                yMMMEd{"E, d MMM y"}
-                yMMMd{"d MMM y"}
                 yMd{"d/MM/yy"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM y"}
             }
             intervalFormats{
                 M{
@@ -82,9 +75,6 @@ en_NZ{
                 hv{
                     a{"h a - h a v"}
                     h{"h-h a v"}
-                }
-                y{
-                    y{"y-y"}
                 }
                 yM{
                     M{"MM/yy - MM/yy"}

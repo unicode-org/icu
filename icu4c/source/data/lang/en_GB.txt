@@ -22,7 +22,7 @@ en_GB{
             fullwide{"Full-Width Digits"}
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
     }

@@ -957,11 +957,11 @@ sl{
         }
         VEB{
             "VEB",
-            "venezuelski bolivar",
+            "venezuelski bolivar (1871-2008)",
         }
         VEF{
             "VEF",
-            "venezuelski bolivar fuerte",
+            "venezuelski bolivar",
         }
         VND{
             "₫",
@@ -1146,5 +1146,5 @@ sl{
         other{"{0} {1}"}
         two{"{0} {1}"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
 }

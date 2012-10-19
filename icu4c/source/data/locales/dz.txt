@@ -106,7 +106,7 @@ dz{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -151,8 +151,8 @@ dz{
                 yMMMEd{"གཟའ་E, ལོy ཟླ་MMM ཚེ་d"}
                 yMMMd{"y MMM d"}
                 yMd{"y-M-d"}
-                yQ{"y བཞི་དཔྱ་Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
             }
             dayNames{
                 format{

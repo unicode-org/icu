@@ -38,7 +38,7 @@ or{
         }
         native{"orya"}
     }
-    Version{"2.0.74.74"}
+    Version{"2.0.77.46"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -63,7 +63,7 @@ or{
             availableFormats{
                 MMMMd{"MMMM d"}
                 MMdd{"dd-MM"}
-                yyQ{"Q yy"}
+                yyQQQ{"QQQ yy"}
                 yyyyMM{"MM-yyyy"}
                 yyyyMMMM{"MMMM y"}
             }

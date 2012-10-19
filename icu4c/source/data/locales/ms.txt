@@ -10,10 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ms.xml
  */
 ms{
-    AuxExemplarCharacters{
-        "[á à ă â å ä ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ú ù ŭ û ü ū ÿ"
-        "]"
-    }
+    AuxExemplarCharacters{"[]"}
     ExemplarCharacters{
         "[a {ai} {au} b c d {dz} e f g h i j k {kh} l m n {ng} {ngg} {ny} o p q r s {"
         "sy} t {ts} u {ua} v w x y z]"
@@ -82,13 +79,13 @@ ms{
                         other{"000K"}
                     }
                     1000000{
-                        other{"0M"}
+                        other{"0J"}
                     }
                     10000000{
-                        other{"00M"}
+                        other{"00J"}
                     }
                     100000000{
-                        other{"000M"}
+                        other{"000J"}
                     }
                     1000000000{
                         other{"0B"}
@@ -124,7 +121,7 @@ ms{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.20"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -309,8 +306,8 @@ ms{
                 yMMMEd{"E, d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{

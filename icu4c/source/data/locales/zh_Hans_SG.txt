@@ -14,7 +14,7 @@ zh_Hans_SG{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -57,7 +57,6 @@ zh_Hans_SG{
                 yM{"y年M月"}
                 yMEd{"y年M月d日，E"}
                 yMd{"y年M月d日"}
-                yQQQ{"y年第Q季度"}
             }
             fields{
                 era{

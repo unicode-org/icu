@@ -329,7 +329,7 @@ ms{
             vaii{"Digit Vai"}
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.20"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

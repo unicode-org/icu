@@ -31,7 +31,7 @@ vai{
         }
         native{"vaii"}
     }
-    Version{"2.0.74.65"}
+    Version{"2.0.78.30"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -69,8 +69,8 @@ vai{
                 yMMM{"MMM yyyy"}
                 yMMMEd{"E, MMM d, yyyy"}
                 yMMMM{"MMMM yyyy"}
-                yQ{"Q yyyy"}
-                yQQQ{"QQQ yyyy"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
             }
             dayNames{
                 format{

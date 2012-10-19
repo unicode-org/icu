@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nl.xml
  */
 nl{
-    AuxExemplarCharacters{"[å ã ç ñ ô]"}
+    AuxExemplarCharacters{"[à â å ã æ ç è ê î ñ ô ø œ ù û ÿ]"}
     ExemplarCharacters{
         "[a á ä b c d e é ë f g h i í ï {ij} j k l m n o ó ö p q r s t u ú ü v w x y "
         "z]"
@@ -95,40 +95,40 @@ nl{
                         other{"000K"}
                     }
                     1000000{
-                        one{"0 mln'.'"}
-                        other{"0 mln'.'"}
+                        one{"0 mln'.'"}
+                        other{"0 mln'.'"}
                     }
                     10000000{
-                        one{"00 mln'.'"}
-                        other{"00 mln'.'"}
+                        one{"00 mln'.'"}
+                        other{"00 mln'.'"}
                     }
                     100000000{
-                        one{"000 mln'.'"}
-                        other{"000 mln'.'"}
+                        one{"000 mln'.'"}
+                        other{"000 mln'.'"}
                     }
                     1000000000{
-                        one{"0 mld'.'"}
-                        other{"0 mld'.'"}
+                        one{"0 mld'.'"}
+                        other{"0 mld'.'"}
                     }
                     10000000000{
-                        one{"00 mld'.'"}
-                        other{"00 mld'.'"}
+                        one{"00 mld'.'"}
+                        other{"00 mld'.'"}
                     }
                     100000000000{
-                        one{"000 mld'.'"}
-                        other{"000 mld'.'"}
+                        one{"000 mld'.'"}
+                        other{"000 mld'.'"}
                     }
                     1000000000000{
-                        one{"0 bln'.'"}
-                        other{"0 bln'.'"}
+                        one{"0 bln'.'"}
+                        other{"0 bln'.'"}
                     }
                     10000000000000{
-                        one{"00 bln'.'"}
-                        other{"00 bln'.'"}
+                        one{"00 bln'.'"}
+                        other{"00 bln'.'"}
                     }
                     100000000000000{
-                        one{"000 bln'.'"}
-                        other{"000 bln'.'"}
+                        one{"000 bln'.'"}
+                        other{"000 bln'.'"}
                     }
                 }
             }
@@ -146,7 +146,7 @@ nl{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -186,12 +186,10 @@ nl{
                 yMMMEd{"E d MMM y G"}
                 yMMMd{"d MMM y G"}
                 yMd{"d-M-y G"}
-                yQ{"Q y G"}
                 yQQQ{"QQQ y G"}
+                yQQQQ{"QQQQ y G"}
                 yyMM{"MM-yy G"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
-                yyQQQQ{"QQQQ yy G"}
                 yyyyMMMM{"MMMM y G"}
             }
         }
@@ -225,7 +223,7 @@ nl{
                 MMM{"LLL"}
                 MMMEd{"E d MMM"}
                 MMMMd{"d MMMM"}
-                MMMd{"d-MMM"}
+                MMMd{"d MMM"}
                 MMd{"d-MM"}
                 MMdd{"dd-MM"}
                 Md{"d-M"}
@@ -241,12 +239,10 @@ nl{
                 yMMMEd{"E d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d-M-y"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM-yy"}
                 yyMMM{"MMM yy"}
-                yyQ{"Q yy"}
-                yyQQQQ{"QQQQ yy"}
                 yyyyMMMM{"MMMM y"}
             }
             dayNames{
@@ -679,7 +675,7 @@ nl{
                 ms{"mm:ss"}
                 yyMM{"MM-yy G"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
                 yyyyM{"M-y G"}
@@ -689,8 +685,8 @@ nl{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d-M-y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             eras{
                 abbreviated{
@@ -782,7 +778,7 @@ nl{
                 y{"y G"}
                 yyMM{"MM-yy GGGGG"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
                 yyyyM{"M-y GGGGG"}
@@ -792,8 +788,8 @@ nl{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d-M-y GGGGG"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
         roc{
@@ -830,7 +826,7 @@ nl{
                 y{"y G"}
                 yyMM{"MM-yy GGGGG"}
                 yyMMM{"MMM yy G"}
-                yyQ{"Q yy G"}
+                yyQQQ{"QQQ yy G"}
                 yyQQQQ{"QQQQ yy G"}
                 yyyy{"y G"}
                 yyyyM{"M-y GGGGG"}
@@ -840,8 +836,8 @@ nl{
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d-M-y GGGGG"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
     }

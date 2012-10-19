@@ -99,7 +99,7 @@ root{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.75.94"}
+    Version{"2.0.78.30"}
     currencySpacing{
         afterCurrency{
             currencyMatch{"[:letter:]"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/si.xml
  */
 si{
-    Version{"2.0.75.94"}
+    Version{"2.0.78.39"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"අබිජාන්"}
@@ -591,7 +591,7 @@ si{
         "meta:America_Pacific"{
             ld{"උතුරු ඇමරිකානු පැසිෆික් දිවා කාලය"}
             lg{"උතුරු ඇමරිකානු පැසිෆික් වේලාව"}
-            ls{"උතුරු ඇමරිකානු පැසිෆික්  සම්මත වේලාව"}
+            ls{"උතුරු ඇමරිකානු පැසිෆික් සම්මත වේලාව"}
         }
         "meta:Arabian"{
             ld{"අරාබි දහවල් වේලාව"}
@@ -634,7 +634,7 @@ si{
             ls{"බටහිර ඕස්ට්‍රේලියානු සම්මත වේලාව"}
         }
         "meta:Bangladesh"{
-            ld{"බංගලාදේශ ග්‍රීෂ්ම කාලය"}
+            ld{"බංගලාදේශ ග්‍රීෂ්ම කාලය"}
             lg{"බංගලාදේශ වේලාව"}
             ls{"බංගලාදේශ සම්මත වේලාව"}
         }
@@ -819,6 +819,6 @@ si{
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"ග්‍රිමවේ"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"({0}) ජපාන වේලාව"}
+        regionFormat{"{0} ජපාන වේලාව"}
     }
 }

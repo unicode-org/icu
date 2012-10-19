@@ -17,7 +17,7 @@ kn{
         }
         AFN{
             "AFN",
-            "ಅಫ್‌ಘನ್  ಅಫಗಾನಿ",
+            "ಅಫ್‌ಘನ್ ಅಫಗಾನಿ",
         }
         ALL{
             "ALL",
@@ -647,5 +647,5 @@ kn{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.76.46"}
+    Version{"2.0.78.40"}
 }

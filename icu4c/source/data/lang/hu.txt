@@ -743,17 +743,17 @@ hu{
     }
     Types{
         calendar{
-            buddhist{"buddhista naptár"}
-            chinese{"kínai naptár"}
+            buddhist{"Buddhista naptár"}
+            chinese{"Kínai naptár"}
             coptic{"Kopt naptár"}
             ethiopic{"Etióp naptár"}
             ethiopic-amete-alem{"Etióp amete alem naptár"}
             gregorian{"Gergely-naptár"}
-            hebrew{"héber naptár"}
+            hebrew{"Héber naptár"}
             indian{"Indiai nemzeti naptár"}
-            islamic{"iszlám naptár"}
-            islamic-civil{"iszlám civil naptár"}
-            japanese{"japán naptár"}
+            islamic{"Iszlám naptár"}
+            islamic-civil{"Iszlám civil naptár"}
+            japanese{"Japán naptár"}
             persian{"Perzsa naptár"}
             roc{"Kínai köztársasági naptár"}
         }
@@ -770,7 +770,7 @@ hu{
             searchjl{"Keresés hangul kezdő mássalhangzó szerint"}
             stroke{"Vonássorrend"}
             traditional{"Hagyományos"}
-            unihan{"szótővonás rendezési sorrend"}
+            unihan{"Szótővonás rendezési sorrend"}
         }
         numbers{
             arab{"Arab-indiai számjegyek"}
@@ -873,7 +873,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

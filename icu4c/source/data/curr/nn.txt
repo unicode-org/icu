@@ -949,11 +949,11 @@ nn{
         }
         VEB{
             "VEB",
-            "venezuelansk bolivar",
+            "venezuelansk bolivar (1871-2008)",
         }
         VEF{
             "VEF",
-            "venezuelansk bolivar fuerte",
+            "venezuelansk bolivar",
         }
         VND{
             "₫",
@@ -1802,12 +1802,12 @@ nn{
             other{"usbekiske sum"}
         }
         VEB{
-            one{"venezuelansk bolivar"}
-            other{"venezuelanske bolivar"}
+            one{"venezuelansk bolivar (1871-2008)"}
+            other{"venezuelanske bolivar (1871-2008)"}
         }
         VEF{
-            one{"venezuelansk bolivar fuerte"}
-            other{"venezuelanske bolivar fuerte"}
+            one{"venezuelansk bolivar"}
+            other{"venezuelanske bolivar"}
         }
         VND{
             one{"vietnamesisk dong"}
@@ -1918,5 +1918,5 @@ nn{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
 }

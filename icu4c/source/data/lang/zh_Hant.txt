@@ -318,7 +318,7 @@ zh_Hant{
         lo{"寮國文"}
         lol{"芒戈文"}
         loz{"洛齊文"}
-        lt{"立陶宛語"}
+        lt{"立陶宛文"}
         lu{"魯巴加丹加文"}
         lua{"魯巴魯魯亞文"}
         lui{"路易塞諾文"}
@@ -467,7 +467,7 @@ zh_Hant{
         sem{"閃語諸語言"}
         ses{"東桑海文"}
         sg{"桑戈文"}
-        sga{"古愛爾蘭文（至 900）"}
+        sga{"古愛爾蘭文"}
         sgn{"手語"}
         sh{"塞爾維亞克羅埃西亞文"}
         shi{"希爾哈文"}
@@ -763,6 +763,7 @@ zh_Hant{
             buddhist{"佛教曆法"}
             chinese{"農曆"}
             coptic{"科普特曆"}
+            dangi{"檀紀曆"}
             ethiopic{"衣索比亞曆"}
             ethiopic-amete-alem{"衣索比亞曆 (Amete Alem)"}
             gregorian{"公曆"}
@@ -905,7 +906,7 @@ zh_Hant{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.76.33"}
+    Version{"2.0.78.39"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

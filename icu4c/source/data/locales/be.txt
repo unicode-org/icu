@@ -30,7 +30,7 @@ be{
             }
         }
     }
-    Version{"2.0.75.94"}
+    Version{"2.0.78.38"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -113,8 +113,8 @@ be{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d.M.yy"}
-                yQ{"Q 'кв'. y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyyyM{"MM/yyyy"}
             }
             dayNames{

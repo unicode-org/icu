@@ -23,7 +23,7 @@ bm{
             }
         }
     }
-    Version{"2.0.75.61"}
+    Version{"2.0.78.30"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -61,8 +61,8 @@ bm{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/y"}
-                yQ{"'T'Q y"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM/y"}
                 yyMMM{"MMM yy"}
                 yyMMMEd{"E d MMM yy"}

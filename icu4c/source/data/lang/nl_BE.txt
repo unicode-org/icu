@@ -9,7 +9,7 @@
 nl_BE{
     Languages{
         lv{"Lets"}
-        oc{"Occitaans (na 1500); Provençaals"}
+        oc{"Occitaans; Provençaals"}
         sh{"Servo-Kroatisch"}
     }
     Types{
@@ -17,5 +17,5 @@ nl_BE{
             traditional{"Traditioneel"}
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.77.28"}
 }

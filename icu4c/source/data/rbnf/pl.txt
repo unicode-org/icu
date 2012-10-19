@@ -64,13 +64,13 @@ pl{
             "2000000000000000: <%spellout-cardinal-masculine< biliardy[ >>];",
             "5000000000000000: <%spellout-cardinal-masculine< biliard\u00F3w[ >>];",
             "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-neutre:",
+            "%spellout-cardinal-neuter:",
             "-x: minus >>;",
             "x.x: << przecinek >%%spellout-fraction>;",
             "0: zero;",
             "1: jedno;",
-            "2: =%%spellout-cardinal-neutre-priv=;",
-            "%%spellout-cardinal-neutre-priv:",
+            "2: =%%spellout-cardinal-neuter-priv=;",
+            "%%spellout-cardinal-neuter-priv:",
             "1: jeden;",
             "2: =%spellout-cardinal-masculine=;",
             "20: dwadzie\u015Bcia[ >>];",
@@ -156,5 +156,5 @@ pl{
             "10: << >>;",
         }
     }
-    Version{"2.0.76.31"}
+    Version{"2.0.77.34"}
 }

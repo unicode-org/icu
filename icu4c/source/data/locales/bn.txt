@@ -156,7 +156,7 @@ bn{
         }
         native{"beng"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.39"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -205,9 +205,9 @@ bn{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d/M/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
+                yQQQQ{"QQQQ y"}
+                yyQQQ{"QQQ yy"}
                 yyyyMM{"MM-yyyy"}
                 yyyyMMMM{"MMMM y"}
             }
@@ -651,8 +651,8 @@ bn{
             other{"{0} সেকেন্ডে"}
         }
         second-past{
-            one{"{0}  সেকেন্ড পূর্বে"}
-            other{"{0}  সেকেন্ড পূর্বে"}
+            one{"{0} সেকেন্ড পূর্বে"}
+            other{"{0} সেকেন্ড পূর্বে"}
         }
         week{
             one{"{0} সপ্তাহ"}

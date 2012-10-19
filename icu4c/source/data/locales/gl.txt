@@ -79,8 +79,8 @@ gl{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0000"}
-                        other{"0000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
                         one{"00k"}
@@ -129,9 +129,9 @@ gl{
                 }
             }
             symbols{
-                decimal{"."}
+                decimal{","}
                 exponential{"E"}
-                group{","}
+                group{"."}
                 infinity{"∞"}
                 list{";"}
                 minusSign{"-"}
@@ -142,7 +142,7 @@ gl{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.30"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -192,10 +192,9 @@ gl{
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d/M/y"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM/yy"}
-                yyQ{"Q yy"}
                 yyyyMMMM{"MMMM y"}
             }
             dayNames{

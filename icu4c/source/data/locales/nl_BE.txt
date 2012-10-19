@@ -14,7 +14,7 @@ nl_BE{
             }
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.77.28"}
     calendar{
         gregorian{
             DateTimePatterns{

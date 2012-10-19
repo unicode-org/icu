@@ -9,9 +9,9 @@
 es_VE{
     Currencies{
         VEF{
-            "Bs.F.",
+            "Bs.",
             "bolívar venezolano",
         }
     }
-    Version{"2.0.65.46"}
+    Version{"2.0.77.27"}
 }

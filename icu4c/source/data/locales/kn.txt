@@ -127,7 +127,7 @@ kn{
         }
         native{"knda"}
     }
-    Version{"2.0.76.46"}
+    Version{"2.0.78.40"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -174,9 +174,8 @@ kn{
                 yMMMEd{"E, MMM d, y"}
                 yMMMd{"d, MMM, y"}
                 yMd{"d/M/y"}
-                yQ{"Q y"}
                 yQQQ{"QQQ y"}
-                yyQ{"Q yy"}
+                yQQQQ{"QQQQ y"}
                 yyyyMM{"MM-yyyy"}
                 yyyyMMMM{"MMMM y"}
             }

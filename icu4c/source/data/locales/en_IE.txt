@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_IE{
     %%Parent{"en_GB"}
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -32,15 +32,10 @@ en_IE{
             }
             availableFormats{
                 MEd{"E, d/M"}
-                MMMMd{"d MMMM"}
-                MMdd{"dd/MM"}
                 Md{"d/M"}
                 yMEd{"E, d/M/yyyy"}
                 yMMMEd{"E d MMM y"}
-                yMMMd{"d MMM y"}
                 yMd{"d/M/yyyy"}
-                yyyyMM{"MM/yyyy"}
-                yyyyMMMM{"MMMM y"}
             }
             intervalFormats{
                 Hm{
@@ -83,9 +78,6 @@ en_IE{
                 hmv{
                     h{"h:mm-h:mm a v"}
                     m{"h:mm-h:mm a v"}
-                }
-                y{
-                    y{"y-y"}
                 }
                 yM{
                     M{"MM/yyyy - MM/yyyy"}

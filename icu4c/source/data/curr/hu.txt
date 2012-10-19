@@ -961,11 +961,11 @@ hu{
         }
         VEB{
             "VEB",
-            "Venezuelai bolívar",
+            "Venezuelai bolivar (1871-2008)",
         }
         VEF{
             "VEF",
-            "Venezuelai bolivar fuerte",
+            "Venezuelai bolivar",
         }
         VND{
             "VND",
@@ -1282,8 +1282,11 @@ hu{
         UYU{
             other{"Uruguayi peso"}
         }
+        VEB{
+            other{"Venezuelai bolivar (1871-2008)"}
+        }
         VEF{
-            other{"Venezuelai bolivar fuerte"}
+            other{"Venezuelai bolivar"}
         }
         XBA{
             other{"Európai kompozit egység"}
@@ -1313,5 +1316,5 @@ hu{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.47"}
 }

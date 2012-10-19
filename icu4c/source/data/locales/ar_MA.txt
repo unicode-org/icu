@@ -16,7 +16,7 @@ ar_MA{
             }
         }
     }
-    Version{"2.0.76.48"}
+    Version{"2.0.77.46"}
     calendar{
         gregorian{
             DateTimePatterns{

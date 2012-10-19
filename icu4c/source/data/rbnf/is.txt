@@ -53,8 +53,8 @@ is{
             "70: sj\u00F6t\u00EDu[ og >>];",
             "80: \u00E1ttat\u00EDu[ og >>];",
             "90: n\u00EDut\u00EDu[ og >>];",
-            "100: <%spellout-cardinal-neutre<\u00ADhundra\u00F0[ og >>];",
-            "1000: <%spellout-cardinal-neutre< \u00FE\u00FAsund[ og >>];",
+            "100: <%spellout-cardinal-neuter<\u00ADhundra\u00F0[ og >>];",
+            "1000: <%spellout-cardinal-neuter< \u00FE\u00FAsund[ og >>];",
             "1000000: ein milli\u00F3n[ og >>];",
             "2000000: <%spellout-cardinal-feminine< milli\u00F3nur[ og >>];",
             "1000000000: ein milliar\u00F0[ og >>];",
@@ -64,7 +64,7 @@ is{
             "1000000000000000: ein billiar\u00F0[ og >>];",
             "2000000000000000: <%spellout-cardinal-feminine< billiar\u00F0ur[ og >>];",
             "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-neutre:",
+            "%spellout-cardinal-neuter:",
             "-x: m\u00EDnus >>;",
             "x.x: << komma >>;",
             "0: n\u00FAll;",
@@ -81,8 +81,8 @@ is{
             "70: sj\u00F6t\u00EDu[ og >>];",
             "80: \u00E1ttat\u00EDu[ og >>];",
             "90: n\u00EDut\u00EDu[ og >>];",
-            "100: <%spellout-cardinal-neutre<\u00ADhundra\u00F0[ og >>];",
-            "1000: <%spellout-cardinal-neutre< \u00FE\u00FAsund[ og >>];",
+            "100: <%spellout-cardinal-neuter<\u00ADhundra\u00F0[ og >>];",
+            "1000: <%spellout-cardinal-neuter< \u00FE\u00FAsund[ og >>];",
             "1000000: ein milli\u00F3n[ og >>];",
             "2000000: <%spellout-cardinal-feminine< milli\u00F3nur[ og >>];",
             "1000000000: ein milliar\u00F0[ og >>];",
@@ -109,8 +109,8 @@ is{
             "70: sj\u00F6t\u00EDu[ og >>];",
             "80: \u00E1ttat\u00EDu[ og >>];",
             "90: n\u00EDut\u00EDu[ og >>];",
-            "100: <%spellout-cardinal-neutre<\u00ADhundra\u00F0[ og >>];",
-            "1000: <%spellout-cardinal-neutre< \u00FE\u00FAsund[ og >>];",
+            "100: <%spellout-cardinal-neuter<\u00ADhundra\u00F0[ og >>];",
+            "1000: <%spellout-cardinal-neuter< \u00FE\u00FAsund[ og >>];",
             "1000000: ein milli\u00F3n[ og >>];",
             "2000000: <%spellout-cardinal-feminine< milli\u00F3nur[ og >>];",
             "1000000000: ein milliar\u00F0[ og >>];",
@@ -122,5 +122,5 @@ is{
             "1000000000000000000: =#,##0.#=;",
         }
     }
-    Version{"2.0.73.63"}
+    Version{"2.0.77.34"}
 }

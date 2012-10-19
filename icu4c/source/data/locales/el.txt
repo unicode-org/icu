@@ -10,7 +10,10 @@
  *  ICU <specials> source: <path>/xml/main/el.xml
  */
 el{
-    AuxExemplarCharacters{"[]"}
+    AuxExemplarCharacters{
+        "[ἀ ἄ ἂ ἆ ἁ ἅ ἃ ἇ ὰ ᾶ ἐ ἔ ἒ ἑ ἕ ἓ ὲ ἠ ἤ ἢ ἦ ἡ ἥ ἣ ἧ ὴ ῆ ἰ ἴ ἲ ἶ ἱ ἵ ἳ ἷ ὶ ῖ ῒ"
+        " ῗ ὄ ὂ ὃ ὸ ὐ ὔ ὒ ὖ ὑ ὕ ὓ ὗ ὺ ῦ ῢ ῧ ὤ ὢ ὦ ὥ ὣ ὧ ὼ ῶ]"
+    }
     ExemplarCharacters{"[α ά β γ δ ε έ ζ η ή θ ι ί ϊ ΐ κ λ μ ν ξ ο ό π ρ σ ς τ υ ύ ϋ ΰ φ χ ψ ω ώ]"}
     ExemplarCharactersIndex{"[Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω]"}
     ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! . … \" ( ) \[ \] § @ * / \\ \&]"}
@@ -28,7 +31,7 @@ el{
             patternsLong{
                 decimalFormat{
                     1000{
-                        one{"0 χιλιάδες"}
+                        one{"0 χιλιάδα"}
                         other{"0 χιλιάδες"}
                     }
                     10000{
@@ -40,7 +43,7 @@ el{
                         other{"000 χιλιάδες"}
                     }
                     1000000{
-                        one{"0 εκατομμύρια"}
+                        one{"0 εκατομμύριο"}
                         other{"0 εκατομμύρια"}
                     }
                     10000000{
@@ -52,7 +55,7 @@ el{
                         other{"000 εκατομμύρια"}
                     }
                     1000000000{
-                        one{"0 δισεκατομμύρια"}
+                        one{"0 δισεκατομμύριο"}
                         other{"0 δισεκατομμύρια"}
                     }
                     10000000000{
@@ -64,7 +67,7 @@ el{
                         other{"000 δισεκατομμύρια"}
                     }
                     1000000000000{
-                        one{"0 τρισεκατομμύρια"}
+                        one{"0 τρισεκατομμύριο"}
                         other{"0 τρισεκατομμύρια"}
                     }
                     10000000000000{
@@ -81,7 +84,7 @@ el{
                 decimalFormat{
                     1000{
                         one{"0 χιλ'.'"}
-                        other{"0 χιλ'.'"}
+                        other{"0 χιλ'.'"}
                     }
                     10000{
                         one{"00 χιλ'.'"}
@@ -145,7 +148,7 @@ el{
         native{"latn"}
         traditional{"grek"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.32"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -230,12 +233,10 @@ el{
                 yMMMEd{"E, d MMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"d/M/yyyy"}
-                yQ{"y Q"}
                 yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
                 yyMM{"MM/yy"}
                 yyMMM{"LLL yy"}
-                yyQ{"Q yy"}
-                yyQQQQ{"QQQQ yy"}
                 yyyy{"y"}
                 yyyyMM{"MM/yyyy"}
                 yyyyMMMM{"LLLL y"}
@@ -648,7 +649,7 @@ el{
                 yyyyMMMEd{"E, d MMM, y G"}
                 yyyyMMMd{"d MMM, y G"}
                 yyyyMd{"dd/MM/yy GGGGG"}
-                yyyyQ{"yy GGGGG Q"}
+                yyyyQQQ{"yy GGGGG QQQ"}
             }
         }
         roc{
@@ -683,8 +684,8 @@ el{
                 yyyyMMMEd{"E, d MMM, y G"}
                 yyyyMMMd{"d MMM, y G"}
                 yyyyMd{"d/M/y G"}
-                yyyyQ{"y G Q"}
-                yyyyQQQ{"QQQ y G"}
+                yyyyQQQ{"y G QQQ"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             eras{
                 abbreviated{

@@ -1571,13 +1571,13 @@ IntlTestRBNF::TestSwedishSpellout()
               { NULL, NULL }
           };
   
-          formatter->setDefaultRuleSet("%spellout-cardinal-neutre", status);
+          formatter->setDefaultRuleSet("%spellout-cardinal-neuter", status);
           if (U_SUCCESS(status)) {
-          logln("        testing spellout-cardinal-neutre rules");
+          logln("        testing spellout-cardinal-neuter rules");
           doTest(formatter, testDataNeutrum, TRUE);
           }
           else {
-          errln("Can't test spellout-cardinal-neutre rules");
+          errln("Can't test spellout-cardinal-neuter rules");
           }
 
         static const char* testDataYear[][2] = {
@@ -1592,6 +1592,7 @@ IntlTestRBNF::TestSwedishSpellout()
             { NULL, NULL }
         };
 
+        status = U_ZERO_ERROR;
         formatter->setDefaultRuleSet("%spellout-numbering-year", status);
         if (U_SUCCESS(status)) {
             logln("testing year rules");

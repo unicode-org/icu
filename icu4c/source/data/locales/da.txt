@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/da.xml
  */
 da{
-    AuxExemplarCharacters{"[á é è ê ë ü ä ö]"}
+    AuxExemplarCharacters{"[á à â ç é è ê ë í î ï ñ ó ô ú ù û ÿ ü æ ä ø ö œ å]"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z æ ø å]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å]"}
     ExemplarCharactersPunctuation{"[\- ‐ – , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] § @ * / \& # † ′ ″]"}
@@ -80,16 +80,16 @@ da{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0000"}
-                        other{"0000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        one{"00000"}
-                        other{"00000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        one{"000000"}
-                        other{"000000"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         one{"0 mio"}
@@ -143,7 +143,7 @@ da{
             }
         }
     }
-    Version{"2.0.76.4"}
+    Version{"2.0.78.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -186,11 +186,10 @@ da{
                 yMMMEd{"E d. MMM y G"}
                 yMMMd{"d. MMM y G"}
                 yMd{"d/M/y G"}
-                yQ{"Q y G"}
                 yQQQ{"QQQ y G"}
+                yQQQQ{"QQQQ y G"}
                 yyMM{"MM/y G"}
                 yyMMM{"MMM y G"}
-                yyQ{"Q. 'kvartal' y G"}
                 yyyy{"y G"}
                 yyyyMM{"MM/y G"}
                 yyyyMMM{"MMM y G"}
@@ -241,11 +240,10 @@ da{
                 yMMMEd{"E d. MMM y"}
                 yMMMd{"d. MMM y"}
                 yMd{"d/M/y"}
-                yQ{"Q yyyy"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"MM/yy"}
                 yyMMM{"MMM yy"}
-                yyQ{"Q. 'kvartal' yy"}
                 yyyy{"y"}
                 yyyyMM{"MM/yyyy"}
                 yyyyMMM{"MMM y"}
@@ -641,6 +639,7 @@ da{
             }
             availableFormats{
                 Ed{"E d."}
+                Gy{"y G"}
                 H{"HH"}
                 Hm{"HH.mm"}
                 Hms{"HH.mm.ss"}
@@ -656,9 +655,9 @@ da{
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}
                 ms{"mm.ss"}
+                y{"y G"}
                 yyMM{"MM/y G"}
                 yyMMM{"MMM y G"}
-                yyQ{"Q. 'kvartal' y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y G"}
                 yyyyMEd{"E d/M/y G"}
@@ -666,8 +665,8 @@ da{
                 yyyyMMMEd{"E d. MMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d/M/y G"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
         japanese{
@@ -707,7 +706,6 @@ da{
                 y{"y G"}
                 yyMM{"MM/y GGGGG"}
                 yyMMM{"MMM y G"}
-                yyQ{"Q. 'kvartal' y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E d/M/y GGGGG"}
@@ -716,8 +714,8 @@ da{
                 yyyyMMMEd{"E d. MMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
         roc{
@@ -757,7 +755,6 @@ da{
                 y{"y G"}
                 yyMM{"MM/y GGGGG"}
                 yyMMM{"MMM y G"}
-                yyQ{"Q. 'kvartal' y G"}
                 yyyy{"y G"}
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E d/M/y GGGGG"}
@@ -766,8 +763,8 @@ da{
                 yyyyMMMEd{"E d. MMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d/M/y GGGGG"}
-                yyyyQ{"Q y G"}
                 yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
         }
     }

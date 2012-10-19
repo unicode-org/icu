@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fi.xml
  */
 fi{
-    AuxExemplarCharacters{"[á à â ã č ç đ é è ë ǧ ǥ ȟ í ï ǩ ń ñ ŋ ô õ œ ř ŧ ú ü ʒ ǯ æ ø]"}
+    AuxExemplarCharacters{"[á à â ã č ç đ é è ê ë ǧ ǥ ȟ í î ï ǩ ń ñ ŋ ô õ œ ř ß ŧ ú ù û ÿ ü ʒ ǯ æ ø]"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s š t u v w x y z ž å ä ö]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Å Ä Ö]"}
     LocaleScript{
@@ -79,52 +79,52 @@ fi{
             patternsShort{
                 decimalFormat{
                     1000{
-                        one{"0 t'.'"}
-                        other{"0 t'.'"}
+                        one{"0 t'.'"}
+                        other{"0 t'.'"}
                     }
                     10000{
-                        one{"00 t'.'"}
-                        other{"00 t'.'"}
+                        one{"00 t'.'"}
+                        other{"00 t'.'"}
                     }
                     100000{
-                        one{"000 t'.'"}
-                        other{"000 t'.'"}
+                        one{"000 t'.'"}
+                        other{"000 t'.'"}
                     }
                     1000000{
-                        one{"0 milj'.'"}
-                        other{"0 milj'.'"}
+                        one{"0 milj'.'"}
+                        other{"0 milj'.'"}
                     }
                     10000000{
-                        one{"00 milj'.'"}
-                        other{"00 milj'.'"}
+                        one{"00 milj'.'"}
+                        other{"00 milj'.'"}
                     }
                     100000000{
-                        one{"000 milj'.'"}
-                        other{"000 milj'.'"}
+                        one{"000 milj'.'"}
+                        other{"000 milj'.'"}
                     }
                     1000000000{
-                        one{"0 mrd'.'"}
-                        other{"0 mrd'.'"}
+                        one{"0 mrd'.'"}
+                        other{"0 mrd'.'"}
                     }
                     10000000000{
-                        one{"00 mrd'.'"}
-                        other{"00 mrd'.'"}
+                        one{"00 mrd'.'"}
+                        other{"00 mrd'.'"}
                     }
                     100000000000{
-                        one{"000 mrd'.'"}
-                        other{"000 mrd'.'"}
+                        one{"000 mrd'.'"}
+                        other{"000 mrd'.'"}
                     }
                     1000000000000{
-                        one{"0 bilj'.'"}
-                        other{"0 bilj'.'"}
+                        one{"0 bilj'.'"}
+                        other{"0 bilj'.'"}
                     }
                     10000000000000{
-                        one{"00 bilj'.'"}
-                        other{"00 bilj'.'"}
+                        one{"00 bilj'.'"}
+                        other{"00 bilj'.'"}
                     }
                     100000000000000{
-                        one{"000 bilj'.'"}
-                        other{"000 bilj'.'"}
+                        one{"000 bilj'.'"}
+                        other{"000 bilj'.'"}
                     }
                 }
             }
@@ -142,7 +142,7 @@ fi{
             }
         }
     }
-    Version{"2.0.76.14"}
+    Version{"2.0.78.39"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -184,11 +184,11 @@ fi{
                 yMMMMccccd{"cccc, d. MMMM y G"}
                 yMMMd{"d. MMM y G"}
                 yMd{"d.M.y G"}
-                yQ{"Q/y G"}
                 yQQQ{"QQQ y G"}
+                yQQQQ{"QQQQ y G"}
                 yyMM{"M.y G"}
                 yyMMM{"LLLL y G"}
-                yyQ{"Q/y G"}
+                yyQQQ{"QQQ y G"}
                 yyyyM{"M.y G"}
                 yyyyMEd{"E d.M.y G"}
                 yyyyMMMM{"LLLL y G"}
@@ -270,11 +270,10 @@ fi{
                 yMMMMccccd{"cccc d. MMMM y"}
                 yMMMd{"d. MMM y"}
                 yMd{"d.M.yyyy"}
-                yQ{"Q/yyyy"}
                 yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
                 yyMM{"M.yy"}
                 yyMMM{"LLLL yy"}
-                yyQ{"Q/yy"}
                 yyyyM{"M.yyyy"}
                 yyyyMEd{"E d.M.yyyy"}
                 yyyyMMMM{"LLLL y"}
@@ -775,7 +774,6 @@ fi{
                 yyyyMMMMccccd{"cccc, d. MMMM y G"}
                 yyyyMMMd{"d. MMM y G"}
                 yyyyMd{"d.M.y G"}
-                yyyyQ{"Q/y G"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
             }

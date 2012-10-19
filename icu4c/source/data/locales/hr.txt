@@ -31,22 +31,22 @@ hr{
             patternsLong{
                 decimalFormat{
                     1000{
-                        few{"0000"}
-                        many{"0000"}
-                        one{"0000"}
-                        other{"0000"}
+                        few{"0"}
+                        many{"0"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        few{"00,000"}
-                        many{"00,000"}
-                        one{"00,000"}
-                        other{"00,000"}
+                        few{"0"}
+                        many{"0"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        few{",000,000"}
-                        many{",000,000"}
-                        one{",000,000"}
-                        other{",000,000"}
+                        few{"0"}
+                        many{"0"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         few{"0 milijuna"}
@@ -107,22 +107,22 @@ hr{
             patternsShort{
                 decimalFormat{
                     1000{
-                        few{"0000"}
-                        many{"0000"}
-                        one{"0000"}
-                        other{"0000"}
+                        few{"0"}
+                        many{"0"}
+                        one{"0"}
+                        other{"0"}
                     }
                     10000{
-                        few{"00000"}
-                        many{"00000"}
-                        one{"00000"}
-                        other{"00000"}
+                        few{"0"}
+                        many{"0"}
+                        one{"0"}
+                        other{"0"}
                     }
                     100000{
-                        few{"000000"}
-                        many{"000000"}
-                        one{"000000"}
-                        other{"000000"}
+                        few{"0"}
+                        many{"0"}
+                        one{"0"}
+                        other{"0"}
                     }
                     1000000{
                         few{"0 mil'.'"}
@@ -143,20 +143,20 @@ hr{
                         other{"000 mil'.'"}
                     }
                     1000000000{
-                        few{"0 mlr'.'"}
-                        many{"0 mlr'.'"}
+                        few{"0 mlr'.'"}
+                        many{"0 mlr'.'"}
                         one{"0 mlr'.'"}
-                        other{"0 mlr'.'"}
+                        other{"0 mlr'.'"}
                     }
                     10000000000{
-                        few{"00 mlr'.'"}
-                        many{"00 mlr'.'"}
-                        one{"00 mlr'.'"}
-                        other{"00 mlr'.'"}
+                        few{"00 mlr'.'"}
+                        many{"00 mlr'.'"}
+                        one{"00 mlr'.'"}
+                        other{"00 mlr'.'"}
                     }
                     100000000000{
-                        few{"000 mlr'.'"}
-                        many{"000 mlr'.'"}
+                        few{"000 mlr'.'"}
+                        many{"000 mlr'.'"}
                         one{"000 mlr'.'"}
                         other{"000 mlr'.'"}
                     }
@@ -194,7 +194,7 @@ hr{
             }
         }
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.78.38"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -278,11 +278,9 @@ hr{
                 yMMMM{"LLLL y."}
                 yMMMd{"d. MMM y."}
                 yMd{"d. M. y."}
-                yQ{"Q. yyyy."}
                 yQQQ{"QQQ y."}
+                yQQQQ{"QQQQ y."}
                 yyMMMEd{"E, d. MMM yy."}
-                yyQ{"Q yy."}
-                yyQQQQ{"QQQQ yy."}
                 yyyyMM{"MM. yyyy."}
                 yyyyMMMM{"LLLL y."}
             }
@@ -694,7 +692,7 @@ hr{
                 yyyyMMMEd{"E, d. MMM y. GGGGG"}
                 yyyyMMMd{"d. MMM y. GGGGG"}
                 yyyyMd{"d. M. y. GGGGG"}
-                yyyyQ{"Q. yy. GGGGG"}
+                yyyyQQQ{"QQQ y. GGGGG"}
             }
         }
         roc{
@@ -731,8 +729,8 @@ hr{
                 yyyyMMMEd{"E, d. MMM y. G"}
                 yyyyMMMd{"d. MMM y. G"}
                 yyyyMd{"d. M. y. G"}
-                yyyyQ{"Q. y. G"}
                 yyyyQQQ{"QQQ y. G"}
+                yyyyQQQQ{"QQQQ y. G"}
             }
             eras{
                 abbreviated{

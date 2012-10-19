@@ -371,6 +371,7 @@ metadata:table(nofallback){
         "CO",
         "CP",
         "CR",
+        "CS",
         "CU",
         "CV",
         "CW",
