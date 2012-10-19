@@ -12737,21 +12737,17 @@ structLocale:table(nofallback){
              intervalFormats{
                 H{
                     H{""}
-                    a{""}
                 }
                 Hm{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hmv{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hv{
                     H{""}
-                    a{""}
                 }
                 M{
                     M{""}
@@ -12984,21 +12980,17 @@ structLocale:table(nofallback){
             intervalFormats{
                 H{
                     H{""}
-                    a{""}
                 }
                 Hm{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hmv{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hv{
                     H{""}
-                    a{""}
                 }
                 M{
                     M{""}
@@ -13248,21 +13240,17 @@ structLocale:table(nofallback){
             intervalFormats{
                 H{
                     H{""}
-                    a{""}
                 }
                 Hm{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hmv{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hv{
                     H{""}
-                    a{""}
                 }
                 M{
                     M{""}
@@ -13489,21 +13477,17 @@ structLocale:table(nofallback){
             intervalFormats{
                 H{
                     H{""}
-                    a{""}
                 }
                 Hm{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hmv{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hv{
                     H{""}
-                    a{""}
                 }
                 M{
                     M{""}
@@ -14227,21 +14211,17 @@ structLocale:table(nofallback){
             intervalFormats{
                 H{
                     H{""}
-                    a{""}
                 }
                 Hm{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hmv{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hv{
                     H{""}
-                    a{""}
                 }
                 M{
                     M{""}
@@ -14486,21 +14466,17 @@ structLocale:table(nofallback){
             intervalFormats{
                 H{
                     H{""}
-                    a{""}
                 }
                 Hm{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hmv{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hv{
                     H{""}
-                    a{""}
                 }
                 M{
                     M{""}
@@ -14737,21 +14713,17 @@ structLocale:table(nofallback){
             intervalFormats{
                 H{
                     H{""}
-                    a{""}
                 }
                 Hm{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hmv{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hv{
                     H{""}
-                    a{""}
                 }
                 M{
                     M{""}
@@ -14988,21 +14960,17 @@ structLocale:table(nofallback){
             intervalFormats{
                 H{
                     H{""}
-                    a{""}
                 }
                 Hm{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hmv{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hv{
                     H{""}
-                    a{""}
                 }
                 M{
                     M{""}
@@ -15991,21 +15959,17 @@ structLocale:table(nofallback){
             intervalFormats{
                 H{
                     H{""}
-                    a{""}
                 }
                 Hm{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hmv{
                     H{""}
-                    a{""}
                     m{""}
                 }
                 Hv{
                     H{""}
-                    a{""}
                 }
                 M{
                     M{""}
