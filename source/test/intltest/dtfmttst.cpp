@@ -181,8 +181,7 @@ void DateFormatTest::TestPatterns() {
         //         actualPattern, locale);
         LocalPointer<DateTimePatternGenerator> generator(
                 DateTimePatternGenerator::createInstance(locale, errorCode));
-        if(errorCode.logIfFailureAndReset("DateTimePatternGenerator::createInstance() failed")) {
-            errln("  for locale ID \"%s\"", EXPECTED[i].localeID);
+        if(errorCode.logDataIfFailureAndReset("DateTimePatternGenerator::createInstance() failed for locale ID \"%s\"", EXPECTED[i].localeID)) {
             continue;
         }
         UnicodeString pattern = generator->getBestPattern(actualPattern, errorCode);
