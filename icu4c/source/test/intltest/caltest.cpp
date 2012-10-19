@@ -560,43 +560,44 @@ CalendarTest::TestGenericAPI()
         Calendar::getKeywordValuesForLocale("calendar", Locale("he"), FALSE, status));
     if (values.isNull() || U_FAILURE(status)) {
         dataerrln("FAIL: Calendar::getKeywordValuesForLocale(he): %s", u_errorName(status));
-    }
-    UBool containsHebrew = FALSE;
-    const char *charValue;
-    int32_t valueLength;
-    while ((charValue = values->next(&valueLength, status)) != NULL) {
-        if (valueLength == 6 && strcmp(charValue, "hebrew") == 0) {
-            containsHebrew = TRUE;
+    } else {
+        UBool containsHebrew = FALSE;
+        const char *charValue;
+        int32_t valueLength;
+        while ((charValue = values->next(&valueLength, status)) != NULL) {
+            if (valueLength == 6 && strcmp(charValue, "hebrew") == 0) {
+                containsHebrew = TRUE;
+            }
         }
-    }
-    if (!containsHebrew) {
-        errln("Calendar::getKeywordValuesForLocale(he)->next() does not contain \"hebrew\"");
-    }
+        if (!containsHebrew) {
+            errln("Calendar::getKeywordValuesForLocale(he)->next() does not contain \"hebrew\"");
+        }
 
-    values->reset(status);
-    containsHebrew = FALSE;
-    UnicodeString hebrew = UNICODE_STRING_SIMPLE("hebrew");
-    const UChar *ucharValue;
-    while ((ucharValue = values->unext(&valueLength, status)) != NULL) {
-        UnicodeString value(FALSE, ucharValue, valueLength);
-        if (value == hebrew) {
-            containsHebrew = TRUE;
+        values->reset(status);
+        containsHebrew = FALSE;
+        UnicodeString hebrew = UNICODE_STRING_SIMPLE("hebrew");
+        const UChar *ucharValue;
+        while ((ucharValue = values->unext(&valueLength, status)) != NULL) {
+            UnicodeString value(FALSE, ucharValue, valueLength);
+            if (value == hebrew) {
+                containsHebrew = TRUE;
+            }
         }
-    }
-    if (!containsHebrew) {
-        errln("Calendar::getKeywordValuesForLocale(he)->unext() does not contain \"hebrew\"");
-    }
+        if (!containsHebrew) {
+            errln("Calendar::getKeywordValuesForLocale(he)->unext() does not contain \"hebrew\"");
+        }
 
-    values->reset(status);
-    containsHebrew = FALSE;
-    const UnicodeString *stringValue;
-    while ((stringValue = values->snext(status)) != NULL) {
-        if (*stringValue == hebrew) {
-            containsHebrew = TRUE;
+        values->reset(status);
+        containsHebrew = FALSE;
+        const UnicodeString *stringValue;
+        while ((stringValue = values->snext(status)) != NULL) {
+            if (*stringValue == hebrew) {
+                containsHebrew = TRUE;
+            }
         }
-    }
-    if (!containsHebrew) {
-        errln("Calendar::getKeywordValuesForLocale(he)->snext() does not contain \"hebrew\"");
+        if (!containsHebrew) {
+            errln("Calendar::getKeywordValuesForLocale(he)->snext() does not contain \"hebrew\"");
+        }
     }
     delete cal;
 }

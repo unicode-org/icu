@@ -326,12 +326,12 @@ void LocaleDisplayNamesTest::TestUldnDisplayContext() {
                 UChar nameBuf[ULOC_FULLNAME_CAPACITY];
                 int32_t len = uldn_localeDisplayName(uldn, ctxtItemPtr->localeToBeNamed, nameBuf, ULOC_FULLNAME_CAPACITY, &status);
                 if (U_FAILURE(status)) {
-                    errln(UnicodeString("FAIL: uldn_localeDisplayName status ") + (int)status);
+                    dataerrln(UnicodeString("FAIL: uldn_localeDisplayName status: ") + u_errorName(status));
                 } else if (u_strcmp(ctxtItemPtr->result, nameBuf) != 0) {
                     UnicodeString exp(ctxtItemPtr->result, u_strlen(ctxtItemPtr->result));
                     UnicodeString got(nameBuf, len);
-                	errln(UnicodeString("FAIL: uldn_localeDisplayName, capitalization ") + ctxtItemPtr->capitalization +
-                	      ", expected " + exp + ", got " + got );
+                    dataerrln(UnicodeString("FAIL: uldn_localeDisplayName, capitalization ") + ctxtItemPtr->capitalization +
+                          ", expected " + exp + ", got " + got );
                 }
             }
             uldn_close(uldn);

@@ -2282,7 +2282,7 @@ void TestGetTZTransition() {
                 
                 result = ucal_getTimeZoneTransitionDate(ucal, UCAL_TZ_TRANSITION_PREVIOUS, &transition1, &status);
                 if (U_FAILURE(status) || result != itemPtr->hasPrev) {
-                    log_err("FAIL: %s ucal_getTimeZoneTransitionDate prev status %s, expected result %d but got %d\n",
+                    log_data_err("FAIL: %s ucal_getTimeZoneTransitionDate prev status %s, expected result %d but got %d\n",
                             itemPtr->descrip, u_errorName(status), itemPtr->hasPrev, result);
                 } else if (result) {
                     ucal_setMillis(ucal, transition1, &status);
@@ -2296,7 +2296,7 @@ void TestGetTZTransition() {
 
                 result = ucal_getTimeZoneTransitionDate(ucal, UCAL_TZ_TRANSITION_NEXT, &transition1, &status);
                 if (U_FAILURE(status) || result != itemPtr->hasNext) {
-                    log_err("FAIL: %s ucal_getTimeZoneTransitionDate next status %s, expected result %d but got %d\n",
+                    log_data_err("FAIL: %s ucal_getTimeZoneTransitionDate next status %s, expected result %d but got %d\n",
                             itemPtr->descrip, u_errorName(status), itemPtr->hasNext, result);
                 } else if (result) {
                     ucal_setMillis(ucal, transition1, &status);
