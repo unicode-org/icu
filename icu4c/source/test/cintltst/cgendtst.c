@@ -37,7 +37,7 @@ static void TestGenderInfo(void) {
   const UGenderInfo* actual_gi = ugender_getInstance("fr_CA", &status);
   UGender actual;
   if (U_FAILURE(status)) {
-    log_err("Fail to create UGenderInfo - %s\n", u_errorName(status));
+    log_err_status(status, "Fail to create UGenderInfo - %s (Are you missing data?)", u_errorName(status));
     return;
   }
   actual = ugender_getListGender(actual_gi, kAllFemale, LENGTHOF(kAllFemale), &status);

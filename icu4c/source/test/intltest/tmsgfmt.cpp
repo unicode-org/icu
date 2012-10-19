@@ -1797,7 +1797,7 @@ void TestMessageFormat::testCoverage(void) {
 void TestMessageFormat::testGetFormatNames() {
     IcuTestErrorCode errorCode(*this, "testGetFormatNames");
     MessageFormat msgfmt("Hello, {alice,number} {oops,date,full}  {zip,spellout} World.", Locale::getRoot(), errorCode);
-    if(errorCode.logIfFailureAndReset("MessageFormat() failed")) {
+    if(errorCode.logDataIfFailureAndReset("MessageFormat() failed")) {
         return;
     }
     LocalPointer<StringEnumeration> names(msgfmt.getFormatNames(errorCode));
