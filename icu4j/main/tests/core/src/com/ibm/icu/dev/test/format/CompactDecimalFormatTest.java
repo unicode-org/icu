@@ -147,9 +147,9 @@ public class CompactDecimalFormatTest extends TestFmwk {
     };
   
     Object[][] SkTestDataLong = {
-            {1000, "1000"},
-            {1572, "1600"},
-            {5184, "5200"},
+            {1000, "1 tis\u00edc"},
+            {1572, "1,6 tis\u00edc"},
+            {5184, "5,2 tis\u00edc"},
     };
 
     Object[][] SwahiliTestDataNegative = {
@@ -197,11 +197,6 @@ public class CompactDecimalFormatTest extends TestFmwk {
     }
     
     public void TestSkLong() {
-        // For this Locale, we have
-        // 1000 {
-        //    few{"0"}
-        //    one{"0"}
-        //    other{"0"}
         checkLocale(ULocale.forLanguageTag("sk"), CompactStyle.LONG, SkTestDataLong);
     }
 

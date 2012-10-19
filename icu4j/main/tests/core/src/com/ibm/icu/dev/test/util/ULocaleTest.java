@@ -2996,8 +2996,8 @@ public class ULocaleTest extends TestFmwk {
                 "si"
             }, {
                 "und_Syrc",
-                "syr_Syrc_145",
-                "syr_Syrc_145"
+                "syr_Syrc_SY",
+                "syr_Syrc_SY"
             }, {
                 "und_TD",
                 "fr_Latn_TD",
