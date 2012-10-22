@@ -14,7 +14,7 @@ el{
     collations{
         standard{
             Sequence{" [normalization on ]"}
-            Version{"22.0"}
+            Version{"22.1"}
         }
     }
 }

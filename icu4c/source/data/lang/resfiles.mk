@@ -1,6 +1,6 @@
 # *   Copyright (C) 1998-2012, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-LANG_CLDR_VERSION = 22.0
+LANG_CLDR_VERSION = 22.1
 # A list of txt's to build
 # Note:
 #
