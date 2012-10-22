@@ -16,14 +16,15 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 50 (DRAFT - Milestone 2) ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 50 (Release Candidate) ReadMe</h1>
 
-    <p><b>Note:</b> This is a development milestone release of ICU4C 50.
+    <!--<p><b>Note:</b> This is a development milestone release of ICU4C 50.
     This milestone is intended for those wishing to get an early look at ICU 50 new features and API changes.
-    It is not recommended for production use.
-    </p>
+    It is not recommended for production use.</p>-->
+    <p><b>Note:</b> This is a release candidate version of ICU4C 50.
+    It is not recommended for production use.</p>
 
-    <p>Last updated: 2012-Sep-04<br />
+    <p>Last updated: 2012-Oct-22<br />
      Copyright &copy; 1997-2012 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -109,7 +110,7 @@
 
       <li>Character set conversions with support for over 220 codepages</li>
 
-      <li>Locale data for more than 260 locales</li>
+      <li>Locale data for more than 290 locales</li>
 
       <li>Language sensitive text collation (sorting) and searching based on the
       Unicode Collation Algorithm (=ISO 14651)</li>
@@ -1001,28 +1002,31 @@
 
       <li>Change directory to the "icu/source".</li>
 
-      <li>Run <tt>"chmod +x runConfigureICU configure install-sh"</tt> because
+      <li>Run <span style='font-family: monospace;'>"chmod +x runConfigureICU configure install-sh"</span> because
       these files may have the wrong permissions.</li>
 
-      <li>Run the <tt><a href="source/runConfigureICU">runConfigureICU</a></tt>
+      <li>Run the <span style='font-family: monospace;'><a href="source/runConfigureICU">runConfigureICU</a></span>
       script for your platform. (See <a href="#HowToConfigureICU">configuration
       note</a> below).</li>
 
-      <li>Type <tt>"gmake"</tt> (or "make" if GNU make is the default make on
+      <li>Type <span style='font-family: monospace;'>"gmake"</span> (or "make" if GNU make is the default make on
       your platform) to compile the libraries and all the data files. The proper
       name of the GNU make command is printed at the end of the configuration
       run, as in "You must use gmake to compile ICU".
-        <br/>
+      <br/>
       Note that the compilation command output may be simplified on your platform.  If this is the case, you will see just:
-      <blockquote><tt style='background-color: #ddd; font-size: small'>gcc ... stubdata.c</tt></blockquote> rather than <blockquote><tt style='background-color: #ddd; font-size: small'>gcc  -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -D_REENTRANT -I../common -DU_ATTRIBUTE_DEPRECATED= -O2 -Wall -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -c -DPIC -fPIC -o stubdata.o stubdata.c</tt></blockquote>.  <br/>
-      If you need to see the whole compilation line,  use <tt>"gmake VERBOSE=1"</tt>.  The full compilation line will print if an error occurs.<p>
+      <blockquote><p style='background-color: #ddd; font-family: monospace; font-size: small'>gcc ... stubdata.c</p></blockquote>
+      rather than
+      <blockquote><p style='background-color: #ddd; font-family: monospace; font-size: small'>gcc  -DU_NO_DEFAULT_INCLUDE_UTF_HEADERS=1 -D_REENTRANT -I../common -DU_ATTRIBUTE_DEPRECATED= -O2 -Wall -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings -c -DPIC -fPIC -o stubdata.o stubdata.c</p></blockquote>
+      .<br/>
+      If you need to see the whole compilation line,  use <span style='font-family: monospace;'>"gmake VERBOSE=1"</span>. The full compilation line will print if an error occurs.
       </li>
 
-      <li>Optionally, type <tt>"gmake check"</tt> to run the test suite, which
+      <li>Optionally, type <span style='font-family: monospace;'>"gmake check"</span> to run the test suite, which
       checks for ICU's functionality integrity (See <a href=
       "#HowToTestWithoutGmake">testing note</a> below).</li>
 
-      <li>Type <tt>"gmake install"</tt> to install ICU. If you used the --prefix=
+      <li>Type <span style='font-family: monospace;'>"gmake install"</span> to install ICU. If you used the --prefix=
       option on configure or runConfigureICU, ICU will be installed to the
       directory you specified. (See <a href="#HowToInstallICU">installation
       note</a> below).</li>
@@ -1120,10 +1124,10 @@
 
       <li>ICU requires XPLINK for the icuio library. If you want to use the
       rest of ICU without XPLINK, then you must use the --disable-icuio
-      configure option.</a>
+      configure option.</li>
 
       <li>The latest versions of z/OS use <a
-      href="http://www.ibm.com/support/docview.wss?uid=swg21202407&amp">XPLINK
+      href="http://www.ibm.com/support/docview.wss?uid=swg2120240">XPLINK
       version (C128) of the C++ standard library</a> by default. You may see <a
       href="http://www.ibm.com/support/docview.wss?uid=swg21376279">an
       error</a> when running with XPLINK disabled. To avoid this error,
