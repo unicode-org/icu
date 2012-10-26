@@ -1,8 +1,6 @@
 ﻿#*******************************************************************************
-#*
-#*   Copyright (C) 2003-2012, National Electronics and Computer Technology Center
-#*   and others.  All Rights Reserved.
-#* 
+#* Copyright (C) 2003-2012, International Business Machines Corporation and    *
+#* others. All Rights Reserved.                                                *
 #*******************************************************************************
 # Sorted Thai word list used for testing the ThaiCollator class.
 # This list was taken from the Web: <http://www.links.nectec.or.th/itech/download.html>
