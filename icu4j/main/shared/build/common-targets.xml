@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009-2011, International Business Machines Corporation and    *
+* Copyright (C) 2009-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -67,7 +67,6 @@
             <fileset dir="${bin.dir}" includes="**/*"/>
             <fileset dir="${shared.dir}/licenses">
                 <include name="license.html"/>
-                <include name="unicode-license.txt"/>
             </fileset>
         </jar>
     </target>
@@ -78,7 +77,6 @@
             <fileset dir="${src.dir}" includes="**/*.java"/>
             <fileset dir="${shared.dir}/licenses">
                 <include name="license.html"/>
-                <include name="unicode-license.txt"/>
             </fileset>
         </jar>
     </target>

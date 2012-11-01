@@ -250,10 +250,6 @@
     <copy file="${shared.dir}/licenses/license.html"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
 
-    <!-- ucd terms -->
-    <copy file="${shared.dir}/licenses/unicode-license.txt"
-          todir="${eclipse.projects.dir}/plugins/com.ibm.icu/about_files" />
-
     <!-- about -->
     <copy file="misc/about_icu.html"
           tofile="${eclipse.projects.dir}/plugins/com.ibm.icu/about.html" />
@@ -317,10 +313,6 @@
 
     <!-- license -->
     <copy file="${shared.dir}/licenses/license.html"
-          todir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests/about_files" />
-
-    <!-- ucd terms -->
-    <copy file="${shared.dir}/licenses/unicode-license.txt"
           todir="${eclipse.projects.dir}/plugins/com.ibm.icu.tests/about_files" />
 
     <!-- about -->
