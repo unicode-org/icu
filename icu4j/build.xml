@@ -387,7 +387,6 @@
             <fileset dir="${icu4j.translit.dir}/${bin.dir}" includes="**/*"/>
             <fileset dir="${shared.dir}/licenses">
                 <include name="license.html"/>
-                <include name="unicode-license.txt"/>
             </fileset>
         </jar>
     </target>
@@ -403,7 +402,6 @@
             <fileset dir="${icu4j.translit.dir}/${src.dir}" includes="**/*.java"/>
             <fileset dir="${shared.dir}/licenses">
                 <include name="license.html"/>
-                <include name="unicode-license.txt"/>
             </fileset>
         </jar>
 	</target>
