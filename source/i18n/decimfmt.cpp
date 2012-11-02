@@ -1146,7 +1146,7 @@ DecimalFormat::_format(int64_t number,
     int32_t intBegin = appendTo.length();
 
     while((prependZero--)>0) {
-      appendTo.append(0x0030); // '0'
+      appendTo.append((UChar)0x0030); // '0'
     }
 
     appendTo.append(outputStr+destIdx+

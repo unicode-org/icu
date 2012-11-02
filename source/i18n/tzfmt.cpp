@@ -2057,7 +2057,7 @@ TimeZoneFormat::expandOffsetPattern(const UnicodeString& offsetHM, UnicodeString
     }
 
     UnicodeString sep;
-    int32_t idx_H = offsetHM.tempSubString(0, idx_mm).lastIndexOf(0x0048 /* H */);
+    int32_t idx_H = offsetHM.tempSubString(0, idx_mm).lastIndexOf((UChar)0x0048 /* H */);
     if (idx_H >= 0) {
         sep = offsetHM.tempSubString(idx_H + 1, idx_mm - (idx_H + 1));
     }

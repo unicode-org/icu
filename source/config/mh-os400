@@ -1,7 +1,11 @@
 ## -*-makefile-*-
 ## OS400-specific setup (for cross build)
-## Copyright (c) 1999-2011, International Business Machines Corporation and
+## Copyright (c) 1999-2012, International Business Machines Corporation and
 ## others. All Rights Reserved.
+
+# This otherwise breaks on OS400 - can't find "shell"
+CURR_FULL_DIR=.
+CURR_SRCCODE_FULL_DIR=.
 
 GEN_DEPS.c=	$(CC1) -E -M $(DEFS) $(CPPFLAGS)
 GEN_DEPS.cc=	$(CXX1) -E -M $(DEFS) $(CPPFLAGS)
