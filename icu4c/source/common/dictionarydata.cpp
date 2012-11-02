@@ -35,7 +35,7 @@ int32_t UCharsDictionaryMatcher::getType() const {
     return DictionaryData::TRIE_TYPE_UCHARS;
 }
 
-int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int *lengths, int &count, int limit, int32_t *values) const {
+int32_t UCharsDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t *lengths, int32_t &count, int32_t limit, int32_t *values) const {
     UCharsTrie uct(characters);
     UChar32 c = utext_next32(text);
     if (c < 0) {
@@ -99,7 +99,7 @@ int32_t BytesDictionaryMatcher::getType() const {
     return DictionaryData::TRIE_TYPE_BYTES;
 }
 
-int32_t BytesDictionaryMatcher::matches(UText *text, int32_t maxLength, int *lengths, int &count, int limit, int32_t *values) const {
+int32_t BytesDictionaryMatcher::matches(UText *text, int32_t maxLength, int32_t *lengths, int32_t &count, int32_t limit, int32_t *values) const {
     BytesTrie bt(characters);
     UChar32 c = utext_next32(text);
     if (c < 0) {
