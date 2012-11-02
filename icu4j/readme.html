@@ -1,4 +1,5 @@
-<!DOCTYPE html PUBLIC "-//w3c//dtd html 4.0 transitional//en">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -14,12 +15,11 @@ h4.doc { text-decoration: underline }
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
 <h3>Read Me for ICU4J 50 (50.1)</h3>
-(Last Update: 2012-oct-22)
+(Last Update: 2012-Nov-02)
 <hr size="2" width="100%">
 
-<p><b>Note:</b> This is a release candidate version of ICU4J 50.
-The contents of this document may not reflect the recent changes done
-for ICU 50 development. It is not recommended for production use.
+<p><b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
+of inherited API and introduces new API or functionality.
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -435,7 +435,7 @@ ICU4J source archive is extracted.
 </tr>
 <tr>
   <td>main/classes/localespi</td>
-  <td>icu4j-localespi</code>
+  <td>icu4j-localespi</td>
   <td>icu4j-core<br>
   icu4j-collate<br>
   </td>
@@ -535,8 +535,8 @@ ICU4J source archive is extracted.
 <p><b>Others:</b></p>
 <table border="1">
 <tr>
-  <th>Path</td>
-  <th>Description</td>
+  <th>Path</th>
+  <th>Description</th>
 </tr>
 <tr>
   <td>main/shared</td>
@@ -650,7 +650,7 @@ its bin directory to your path. For example: </p>
     <pre>
         set JAVA_HOME=C:\jdk1.7.0
         set ANT_HOME=C:\ant
-        set PATH=%PATH%;%ANT_HOME%\bin</pre>
+        set PATH=%JAVA_HOME%\bin;%ANT_HOME%\bin;%PATH%</pre>
     <p>See the current Ant documentation for details.</p>
   </li>
 </ul>
@@ -666,13 +666,13 @@ Buildfile: C:\icu4j\build.xml
 
 info:
      [echo] ----- Build Environment Information -------------------
-     [echo] Java Home:    C:\jdk1.7.0
+     [echo] Java Home:    C:\jdk1.7.0\jre
      [echo] Java Version: 1.7.0
      [echo] Ant Home:     C:\ant
-     [echo] Ant Version:  Apache Ant(TM) version 1.8.3 compiled on February 26 2012
+     [echo] Ant Version:  Apache Ant(TM) version 1.8.4 compiled on May 22 2012
      [echo] OS:           Windows 7
      [echo] OS Version:   6.1
-     [echo] OS Arch:      x86
+     [echo] OS Arch:      amd64
      [echo] Host:         ICUDEV
      [echo] -------------------------------------------------------
 
@@ -682,7 +682,7 @@ core:
      [echo] --- java compiler arguments ------------------------
      [echo] source dir:     C:\icu4j\main\classes\core/src
      [echo] output dir:     C:\icu4j\main\classes\core/out/bin
-     [echo] classpath:      
+     [echo] classpath:
      [echo] source:         1.5
      [echo] target:         1.5
      [echo] debug:          on
@@ -690,7 +690,7 @@ core:
      [echo] compiler arg:   -Xlint:all,-deprecation,-dep-ann,-options
      [echo] ----------------------------------------------------
     [mkdir] Created dir: C:\icu4j\main\classes\core\out\bin
-    [javac] Compiling 336 source files to C:\icu4j\main\classes\core\out\bin
+    [javac] Compiling 346 source files to C:\icu4j\main\classes\core\out\bin
     [javac] Note: Some input files use or override a deprecated API.
     [javac] Note: Recompile with -Xlint:deprecation for details.
 
@@ -700,8 +700,10 @@ compile:
      [copy] Copying 23 files to C:\icu4j\main\classes\core\out\bin
 
 copy-data:
-    [unjar] Expanding: C:\icu4j\main\shared\data\icudata.jar into C:\icu4j\main\classes\core\out\bin
-    [unjar] Expanding: C:\icu4j\main\shared\data\icutzdata.jar into C:\icu4j\main\classes\core\out\bin
+    [unjar] Expanding: C:\icu4j\main\shared\data\icudata.jar into C:\icu4j\main\
+classes\core\out\bin
+    [unjar] Expanding: C:\icu4j\main\shared\data\icutzdata.jar into C:\icu4j\mai
+n\classes\core\out\bin
 
 ...
 ...
@@ -713,7 +715,8 @@ _build-localespi:
      [echo] --- java compiler arguments ------------------------
      [echo] source dir:     C:\icu4j\main\classes\localespi/src
      [echo] output dir:     C:\icu4j\main\classes\localespi/out/bin
-     [echo] classpath:      C:\icu4j\main\classes\core\out\lib\icu4j-core.jar;C:\icu4j\main\classes\collate\out\lib\icu4j-collate.jar
+     [echo] classpath:      C:\icu4j\main\classes\core\out\lib\icu4j-core.jar;C:
+\icu4j\main\classes\collate\out\lib\icu4j-collate.jar
      [echo] source:         1.6
      [echo] target:         1.6
      [echo] debug:          on
@@ -722,6 +725,7 @@ _build-localespi:
      [echo] ----------------------------------------------------
     [mkdir] Created dir: C:\icu4j\main\classes\localespi\out\bin
     [javac] Compiling 22 source files to C:\icu4j\main\classes\localespi\out\bin
+
 
 compile:
 
@@ -733,12 +737,14 @@ copy:
 @jar:
     [mkdir] Created dir: C:\icu4j\main\classes\localespi\out\lib
      [copy] Copying 1 file to C:\icu4j\main\classes\localespi\out
-      [jar] Building jar: C:\icu4j\main\classes\localespi\out\lib\icu4j-localespi.jar
+      [jar] Building jar: C:\icu4j\main\classes\localespi\out\lib\icu4j-localesp
+i.jar
 
 jar:
 
 @src-jar:
-      [jar] Building jar: C:\icu4j\main\classes\localespi\out\lib\icu4j-localespi-src.jar
+      [jar] Building jar: C:\icu4j\main\classes\localespi\out\lib\icu4j-localesp
+i-src.jar
 
 src-jar:
 
@@ -749,7 +755,7 @@ jar:
      [copy] Copying 1 file to C:\icu4j
 
 BUILD SUCCESSFUL
-Total time: 1 minute 38 seconds</pre>
+Total time: 1 minute 58 seconds</pre>
 </blockquote>
 <I>Note: The above output is an example. The numbers are likely to be different with the current version ICU4J.</I>
 <p>The following are some targets that you can provide to <b>ant</b>.
@@ -803,7 +809,7 @@ For more targets run <code>ant -projecthelp</code> or see the build.xml file.</p
 
 <p>For more information, read the Ant documentation and the <strong>build.xml</strong>
 file.</p>
-<b>Note:</b> If you get an OutOfMemoryError when you are running <tt>"ant check"</tt>,
+<p><b>Note:</b> If you get an OutOfMemoryError when you are running <tt>"ant check"</tt>,
 you can set the heap size of the jvm by setting the environment variable JVM_OPTIONS
 to the appropriate java options.</p>
 
@@ -839,9 +845,8 @@ You can use the charsets by placing these files on your classpath.
 <h4>Other demos</h4>
 <p>The other demo programs are <strong>not supported</strong> and
 exist only to let you experiment with the ICU4J classes. First, build ICU4J using <tt>ant&nbsp;jarDemos</tt>.
-Then launch the demos as below:
+Then launch the demos as below:</p>
 <blockquote><tt>java -jar $icu4j_root/icu4jdemos.jar</tt></blockquote>
-</p>
 
 <h3 class="doc"><a name="resources">ICU4J Resource Information</a></h3>
 Starting with release 2.1, ICU4J includes its own
@@ -1015,7 +1020,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 50.1 includes time zone data version 2012g, which is the latest one as of
+<p>ICU4J 50.1 includes time zone data version 2012h, which is the latest one as of
 the release date.  However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
