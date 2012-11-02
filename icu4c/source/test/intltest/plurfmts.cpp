@@ -587,17 +587,17 @@ PluralFormatTest::ordinalFormatTest(void) {
     if (errorCode.logDataIfFailureAndReset("PluralFormat(en, UPLURAL_TYPE_ORDINAL, pattern) failed")) {
       return;
     }
-    UnicodeString result = pf.format(321, errorCode);
+    UnicodeString result = pf.format((int32_t)321, errorCode);
     if (!errorCode.logIfFailureAndReset("PluralFormat.format(321) failed") &&
         result != UNICODE_STRING_SIMPLE("321st file")) {
       errln(UnicodeString("PluralFormat.format(321) wrong result string: ") + result);
     }
-    result = pf.format(22, errorCode);
+    result = pf.format((int32_t)22, errorCode);
     if (!errorCode.logIfFailureAndReset("PluralFormat.format(22) failed") &&
         result != UNICODE_STRING_SIMPLE("22nd file")) {
       errln(UnicodeString("PluralFormat.format(22) wrong result string: ") + result);
     }
-    result = pf.format(3, errorCode);
+    result = pf.format((int32_t)3, errorCode);
     if (!errorCode.logIfFailureAndReset("PluralFormat.format(3) failed") &&
         result != UNICODE_STRING_SIMPLE("3rd file")) {
       errln(UnicodeString("PluralFormat.format(3) wrong result string: ") + result);
@@ -609,12 +609,12 @@ PluralFormatTest::ordinalFormatTest(void) {
     if (errorCode.logIfFailureAndReset("PluralFormat(en, UPLURAL_TYPE_ORDINAL, pattern) failed")) {
       return;
     }
-    result = pf2.format(456, errorCode);
+    result = pf2.format((int32_t)456, errorCode);
     if (!errorCode.logIfFailureAndReset("PluralFormat.format(456) failed") &&
         result != UNICODE_STRING_SIMPLE("456th file")) {
       errln(UnicodeString("PluralFormat.format(456) wrong result string: ") + result);
     }
-    result = pf2.format(111, errorCode);
+    result = pf2.format((int32_t)111, errorCode);
     if (!errorCode.logIfFailureAndReset("PluralFormat.format(111) failed") &&
         result != UNICODE_STRING_SIMPLE("111th file")) {
       errln(UnicodeString("PluralFormat.format(111) wrong result string: ") + result);
