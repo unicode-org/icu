@@ -24,26 +24,35 @@ public class GenderInfoTest extends TestFmwk {
     public static GenderInfo MALE_TAINTS_LOCALE = GenderInfo.getInstance(ULocale.FRENCH);
 
     public void TestEmpty() {
-        check(Gender.OTHER, Gender.OTHER);
+        // Gender of the empty list is always OTHER regardless of gender style.
+        check(Gender.OTHER, Gender.OTHER, Gender.OTHER);
     }
 
     public void TestOne() {
+        // Gender of single item list is always gender of sole item regardless of
+        // gender style.
         for (Gender g : Gender.values()) {
-            check(g, g, g);
+            check(g, g, g, g);
         }
     }
 
     public void TestOther() {
-        check(Gender.OTHER, Gender.MALE, Gender.MALE, Gender.FEMALE);
-        check(Gender.OTHER, Gender.MALE, Gender.FEMALE, Gender.MALE);
-        check(Gender.MALE, Gender.MALE, Gender.MALE, Gender.MALE);
-        check(Gender.FEMALE, Gender.FEMALE, Gender.FEMALE, Gender.FEMALE);
-        check(Gender.OTHER, Gender.MALE, Gender.FEMALE, Gender.OTHER);
+        check(Gender.OTHER, Gender.MALE, Gender.MALE, Gender.MALE, Gender.MALE);
+        check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.MALE, Gender.FEMALE);
+        check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.MALE, Gender.OTHER);
+    
+        check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.FEMALE, Gender.MALE);
+        check(Gender.OTHER, Gender.FEMALE, Gender.FEMALE, Gender.FEMALE, Gender.FEMALE);
+        check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.FEMALE, Gender.OTHER);
+
+        check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.OTHER, Gender.MALE);
+        check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.OTHER, Gender.FEMALE);
+        check(Gender.OTHER, Gender.OTHER, Gender.MALE, Gender.OTHER, Gender.OTHER);
     }
 
-    public void check(Gender mixed, Gender taints, Gender... genders) {
+    public void check(Gender neutral, Gender mixed, Gender taints, Gender... genders) {
         List<Gender> mixed0 = Arrays.asList(genders);
-        assertEquals("neutral " + mixed0, Gender.OTHER, NEUTRAL_LOCALE.getListGender(mixed0));
+        assertEquals("neutral " + mixed0, neutral, NEUTRAL_LOCALE.getListGender(mixed0));
         assertEquals("mixed neutral " + mixed0, mixed, MIXED_NEUTRAL_LOCALE.getListGender(mixed0));
         assertEquals("male taints " + mixed0, taints, MALE_TAINTS_LOCALE.getListGender(mixed0));
     }
