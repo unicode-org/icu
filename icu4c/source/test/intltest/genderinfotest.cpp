@@ -55,8 +55,8 @@ void GenderInfoTest::runIndexedTest(int32_t index, UBool exec, const char *&name
 
 void GenderInfoTest::TestGetListGender() {
     check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_OTHER, NULL, 0);
-    check(UGENDER_OTHER, UGENDER_FEMALE, UGENDER_FEMALE, kSingleFemale, LENGTHOF(kSingleFemale));
-    check(UGENDER_OTHER, UGENDER_MALE, UGENDER_MALE, kSingleMale, LENGTHOF(kSingleMale));
+    check(UGENDER_FEMALE, UGENDER_FEMALE, UGENDER_FEMALE, kSingleFemale, LENGTHOF(kSingleFemale));
+    check(UGENDER_MALE, UGENDER_MALE, UGENDER_MALE, kSingleMale, LENGTHOF(kSingleMale));
     check(UGENDER_OTHER, UGENDER_OTHER, UGENDER_OTHER, kSingleOther, LENGTHOF(kSingleOther));
 
     check(UGENDER_OTHER, UGENDER_FEMALE, UGENDER_FEMALE, kAllFemale, LENGTHOF(kAllFemale));
