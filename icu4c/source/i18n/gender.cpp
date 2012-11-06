@@ -173,7 +173,7 @@ UGender GenderInfo::getListGender(const UGender* genders, int32_t length, UError
   if (U_FAILURE(status)) {
     return UGENDER_OTHER;
   }
-  if (length == 0 || _style == NEUTRAL) {
+  if (length == 0) {
     return UGENDER_OTHER;
   }
   if (length == 1) {
@@ -182,6 +182,8 @@ UGender GenderInfo::getListGender(const UGender* genders, int32_t length, UError
   UBool has_female = FALSE;
   UBool has_male = FALSE;
   switch (_style) {
+    case NEUTRAL:
+      return UGENDER_OTHER;
     case MIXED_NEUTRAL:
       for (int32_t i = 0; i < length; ++i) {
         switch (genders[i]) {
