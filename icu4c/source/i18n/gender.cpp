@@ -63,8 +63,6 @@ GenderInfo::GenderInfo() {
 GenderInfo::~GenderInfo() {
 }
 
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(GenderInfo)
-
 const GenderInfo* GenderInfo::getInstance(const Locale& locale, UErrorCode& status) {
   if (U_FAILURE(status)) {
     return NULL;

@@ -917,9 +917,6 @@ private:
 
     void setParseError(UParseError *parseError, int32_t index);
 
-    // No ICU "poor man's RTTI" for this class nor its subclasses.
-    virtual UClassID getDynamicClassID() const;
-
     UBool init(UErrorCode &errorCode);
     UBool copyStorage(const MessagePattern &other, UErrorCode &errorCode);
 

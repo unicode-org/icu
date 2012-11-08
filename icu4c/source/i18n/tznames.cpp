@@ -303,8 +303,6 @@ TimeZoneNamesDelegate::find(const UnicodeString& text, int32_t start, uint32_t t
 // ---------------------------------------------------
 // TimeZoneNames base class
 // ---------------------------------------------------
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(TimeZoneNames)
-
 TimeZoneNames::~TimeZoneNames() {
 }
 

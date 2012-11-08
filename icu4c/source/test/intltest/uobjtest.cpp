@@ -1,8 +1,8 @@
 /********************************************************************
- * COPYRIGHT: 
+ * COPYRIGHT:
  * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
- * Copyright (C) 2010 , Yahoo! Inc. 
+ * Copyright (C) 2010 , Yahoo! Inc.
  ********************************************************************/
 
 #include <stdio.h>
@@ -324,6 +324,8 @@ void UObjectTest::testIDs()
 {
     ids_count = 0;
     UErrorCode status = U_ZERO_ERROR;
+
+    TESTCLASSID_NONE_CTOR(UObject, ());
 
 #if !UCONFIG_NO_TRANSLITERATION || !UCONFIG_NO_FORMATTING
     UParseError parseError;

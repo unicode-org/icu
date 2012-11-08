@@ -511,9 +511,6 @@ class U_I18N_API AlphabeticIndex: public UObject {
     virtual AlphabeticIndex &resetRecordIterator();
 
 private:
-    // No ICU "poor man's RTTI" for this class nor its subclasses.
-    virtual UClassID getDynamicClassID() const;
-
      /**
       * No Copy constructor.
       * @internal

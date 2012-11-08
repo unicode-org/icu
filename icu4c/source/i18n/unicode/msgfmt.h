@@ -1087,7 +1087,6 @@ private:
         virtual void parseObject(const UnicodeString&,
                                  Formattable&,
                                  ParsePosition&) const;
-        virtual UClassID getDynamicClassID() const;
     };
 
     friend class MessageFormatAdapter; // getFormatTypeList() access

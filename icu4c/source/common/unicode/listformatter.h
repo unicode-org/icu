@@ -124,7 +124,6 @@ class U_COMMON_API ListFormatter : public UObject{
     ListFormatter& operator = (const ListFormatter&);
     void addNewString(const UnicodeString& pattern, UnicodeString& originalString,
                       const UnicodeString& newString, UErrorCode& errorCode) const;
-    virtual UClassID getDynamicClassID() const;
 
     const ListFormatData& data;
 };
