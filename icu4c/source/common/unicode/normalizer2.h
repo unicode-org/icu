@@ -429,10 +429,6 @@ public:
      * @stable ICU 4.4
      */
     virtual UBool isInert(UChar32 c) const = 0;
-
-private:
-    // No ICU "poor man's RTTI" for this class nor its subclasses.
-    virtual UClassID getDynamicClassID() const;
 };
 
 /**

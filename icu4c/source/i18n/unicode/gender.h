@@ -76,12 +76,6 @@ public:
 private:
     int32_t _style;
 
-
-    /**
-     * No "poor man's RTTI"
-     */
-    virtual UClassID getDynamicClassID() const;
-
     /**
      * Copy constructor. One object per locale invariant. Clients
      * must never copy GenderInfo objects.
