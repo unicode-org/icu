@@ -149,8 +149,6 @@ ICUDataTable::getNoFallback(const char* tableKey, const char* subTableKey, const
 
 LocaleDisplayNames::~LocaleDisplayNames() {}
 
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(LocaleDisplayNames)
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #if 0  // currently unused

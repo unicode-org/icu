@@ -50,8 +50,6 @@ Normalizer2::getCombiningClass(UChar32 /*c*/) const {
     return 0;
 }
 
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(Normalizer2)
-
 // Normalizer2 implementation for the old UNORM_NONE.
 class NoopNormalizer2 : public Normalizer2 {
     virtual ~NoopNormalizer2();

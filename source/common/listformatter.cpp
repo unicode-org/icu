@@ -320,6 +320,4 @@ void ListFormatter::addNewString(const UnicodeString& pat, UnicodeString& origin
     originalString = result;
 }
 
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(ListFormatter)
-
 U_NAMESPACE_END

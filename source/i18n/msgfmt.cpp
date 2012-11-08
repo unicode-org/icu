@@ -163,7 +163,6 @@ U_NAMESPACE_BEGIN
 
 // -------------------------------------
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(MessageFormat)
-UOBJECT_DEFINE_NO_RTTI_IMPLEMENTATION(MessageFormat::DummyFormat)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(FormatNameEnumeration)
 
 //--------------------------------------------------------------------

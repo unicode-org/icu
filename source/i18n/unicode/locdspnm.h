@@ -193,10 +193,6 @@ public:
      */
     virtual UnicodeString& keyValueDisplayName(const char* key, const char* value,
                            UnicodeString& result) const = 0;
-
-private:
-    // No ICU "poor man's RTTI" for this class nor its subclasses.
-    virtual UClassID getDynamicClassID() const;
 };
 
 inline LocaleDisplayNames* LocaleDisplayNames::createInstance(const Locale& locale) {
