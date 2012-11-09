@@ -183,7 +183,6 @@ void ListFormatterTest::TestOutOfOrderPatterns() {
         four + " in the last after " + three + " after " + two + " after the first " + one
     };
 
-    UErrorCode errorCode = U_ZERO_ERROR;
     ListFormatData data("{1} after {0}", "{1} after the first {0}",
                         "{1} after {0}", "{1} in the last after {0}");
     ListFormatter formatter(data);
