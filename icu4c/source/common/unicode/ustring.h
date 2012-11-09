@@ -939,7 +939,7 @@ u_memrchr32(const UChar *s, UChar32 c, int32_t count);
  * @stable ICU 2.0
  */
 #if defined(U_DECLARE_UTF16)
-#   define U_STRING_DECL(var, cs, length) static const UChar var[(length)+1]=U_DECLARE_UTF16(cs)
+#   define U_STRING_DECL(var, cs, length) static const UChar *var=(const UChar *)U_DECLARE_UTF16(cs)
     /**@stable ICU 2.0 */
 #   define U_STRING_INIT(var, cs, length)
 #elif U_SIZEOF_WCHAR_T==U_SIZEOF_UCHAR && (U_CHARSET_FAMILY==U_ASCII_FAMILY || (U_SIZEOF_UCHAR == 2 && defined(U_WCHAR_IS_UTF16)))
