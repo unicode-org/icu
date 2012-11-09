@@ -421,11 +421,11 @@ CalendarTest::TestGenericAPI()
     for (i=0; i<UCAL_FIELD_COUNT; ++i)
     {
         if (cal->getMinimum((UCalendarDateFields)i) > cal->getGreatestMinimum((UCalendarDateFields)i))
-            errln("FAIL: getMinimum larger than getGreatestMinimum for field " + i);
+            errln(UnicodeString("FAIL: getMinimum larger than getGreatestMinimum for field ") + i);
         if (cal->getLeastMaximum((UCalendarDateFields)i) > cal->getMaximum((UCalendarDateFields)i))
-            errln("FAIL: getLeastMaximum larger than getMaximum for field " + i);
+            errln(UnicodeString("FAIL: getLeastMaximum larger than getMaximum for field ") + i);
         if (cal->getMinimum((UCalendarDateFields)i) >= cal->getMaximum((UCalendarDateFields)i))
-            errln("FAIL: getMinimum not less than getMaximum for field " + i);
+            errln(UnicodeString("FAIL: getMinimum not less than getMaximum for field ") + i);
     }
 
     cal->adoptTimeZone(TimeZone::createDefault());

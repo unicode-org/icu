@@ -720,8 +720,8 @@ void DateFormatRegressionTest::Test4101483(void)
     sdf->format(d, buf, fp);
     //logln(sdf.format(d, buf, fp).toString());
     logln(dateToString(d) + " => " + buf);
-    logln("beginIndex = " + fp.getBeginIndex());
-    logln("endIndex = " + fp.getEndIndex());
+    logln(UnicodeString("beginIndex = ") + fp.getBeginIndex());
+    logln(UnicodeString("endIndex = ") + fp.getEndIndex());
     if (fp.getBeginIndex() == fp.getEndIndex()) 
         errln("Fail: Empty field");
 
@@ -843,7 +843,7 @@ void DateFormatRegressionTest::Test4104136(void)
         logln(" index: %d", pos.getIndex()); 
         logln((UnicodeString) " result: " + d);
         if(pos.getIndex() != finish.getIndex())
-            errln("Fail: Expected pos " + finish.getIndex());
+            errln(UnicodeString("Fail: Expected pos ") + finish.getIndex());
         if (! ((d == 0 && exp == -1) || (d == exp)))
             errln((UnicodeString) "Fail: Expected result " + exp);
     }

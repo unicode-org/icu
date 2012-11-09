@@ -590,7 +590,7 @@ void CalendarRegressionTest::dowTest(UBool lenient)
     if (dow < min || dow > max) 
         errln("FAIL: Day of week %d out of range [%d,%d]\n", dow, min, max);
     if (dow != UCAL_SUNDAY) 
-        errln("FAIL: Day of week should be SUNDAY Got " + dow);
+        errln(UnicodeString("FAIL: Day of week should be SUNDAY Got ") + dow);
 
     if(U_FAILURE(status)) {
       errln("Error checking Calendar: %s", u_errorName(status));
@@ -844,7 +844,7 @@ void CalendarRegressionTest::test4095407()
     }
     int32_t dow = a->get(UCAL_DAY_OF_WEEK, status);
     if (dow != UCAL_THURSDAY)
-        errln("Fail: Want THURSDAY Got " + dow);
+        errln(UnicodeString("Fail: Want THURSDAY Got ") + dow);
 
     delete a;
 }
@@ -1722,7 +1722,7 @@ CalendarRegressionTest::Test4149677()
             UnicodeString temp;
             errln("test failed with zone " + zones[i]->getID(temp));
             errln(" cutover date is Date(Long.MAX_VALUE)");
-            errln(" isLeapYear(100) returns: " + is100Leap);
+            errln(UnicodeString(" isLeapYear(100) returns: ") + is100Leap);
         }
         delete calendar;
     }
