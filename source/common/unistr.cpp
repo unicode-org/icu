@@ -100,7 +100,7 @@ U_NAMESPACE_BEGIN
    due to how AIX works with multiple definitions of virtual functions.
 */
 Replaceable::~Replaceable() {}
-Replaceable::Replaceable() {}
+
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(UnicodeString)
 
 UnicodeString U_EXPORT2
@@ -147,10 +147,8 @@ UnicodeString::releaseArray() {
 //========================================
 // Constructors
 //========================================
-UnicodeString::UnicodeString()
-  : fShortLength(0),
-    fFlags(kShortString)
-{}
+
+// The default constructor is inline in unistr.h.
 
 UnicodeString::UnicodeString(int32_t capacity, UChar32 c, int32_t count)
   : fShortLength(0),

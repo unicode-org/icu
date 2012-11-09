@@ -2852,7 +2852,7 @@ public:
   /** Construct an empty UnicodeString.
    * @stable ICU 2.0
    */
-  UnicodeString();
+  inline UnicodeString();
 
   /**
    * Construct a UnicodeString with capacity to hold <TT>capacity</TT> UChars
@@ -3205,7 +3205,7 @@ public:
    * character.  See unescape() for a listing of the recognized escape
    * sequences.  The character at offset-1 is assumed (without
    * checking) to be a backslash.  If the escape sequence is
-   * ill-formed, or the offset is out of range, (UChar32)0xFFFFFFFF is
+   * ill-formed, or the offset is out of range, U_SENTINEL=-1 is
    * returned.
    *
    * @param offset an input output parameter.  On input, it is the
@@ -3213,7 +3213,7 @@ public:
    * after the initial backslash.  On output, it is advanced after the
    * last character parsed.  On error, it is not advanced at all.
    * @return the character represented by the escape sequence at
-   * offset, or (UChar32)0xFFFFFFFF on error.
+   * offset, or U_SENTINEL=-1 on error.
    * @see UnicodeString#unescape()
    * @see u_unescape()
    * @see u_unescapeAt()
@@ -3602,6 +3602,16 @@ UnicodeString::getArrayStart()
 inline const UChar*
 UnicodeString::getArrayStart() const
 { return (fFlags&kUsingStackBuffer) ? fUnion.fStackBuffer : fUnion.fFields.fArray; }
+
+//========================================
+// Default constructor
+//========================================
+
+inline
+UnicodeString::UnicodeString()
+  : fShortLength(0),
+    fFlags(kShortString)
+{}
 
 //========================================
 // Read-only implementation methods
