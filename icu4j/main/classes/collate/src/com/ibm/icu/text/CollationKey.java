@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2012, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 package com.ibm.icu.text;
@@ -144,12 +144,21 @@ public final class CollationKey implements Comparable<CollationKey>
      */
     public CollationKey(String source, byte key[])
     {
+        this(source, key, -1);
+    }
+
+    /**
+     * Private constructor, takes a length argument so it need not be lazy-evaluated.
+     * There must be a 00 byte at key[length] and none before.
+     */
+    private CollationKey(String source, byte key[], int length)
+    {
         m_source_ = source;
         m_key_ = key;
         m_hashCode_ = 0;
-        m_length_ = -1;
+        m_length_ = length;
     }
-    
+
     /**
      * CollationKey constructor that forces key to release its internal byte 
      * array for adoption. key will have a null byte array after this 
@@ -445,7 +454,7 @@ public final class CollationKey implements Comparable<CollationKey>
         }
         
         // READ ME: this code assumes that the values for BoundMode variables 
-        // will not changes. They are set so that the enum value corresponds to 
+        // will not change. They are set so that the enum value corresponds to 
         // the number of extra bytes each bound type needs.
         byte resultkey[] = new byte[offset + boundType + 1];
         System.arraycopy(m_key_, 0, resultkey, 0, offset);
@@ -466,46 +475,38 @@ public final class CollationKey implements Comparable<CollationKey>
                 throw new IllegalArgumentException(
                                                 "Illegal boundType argument");
         }
-        resultkey[offset ++] = 0;
-        return new CollationKey(null, resultkey);
+        resultkey[offset] = 0;
+        return new CollationKey(null, resultkey, offset);
     }
 
 
     
     /** 
-     * <p>
-     * Merges this CollationKey with another. Only the sorting order of the 
-     * CollationKeys will be merged. This API does not attempt to merge the 
-     * String representations of the CollationKeys, hence null will be returned
-     * as the String representation.
-     * </p>
-     * <p>
-     * The strength levels are merged with their corresponding counterparts 
-     * (PRIMARIES with PRIMARIES, SECONDARIES with SECONDARIES etc.). 
-     * </p>
-     * <p>
-     * The merged String representation of the result CollationKey will be a
-     * concatenation of the String representations of the 2 source 
-     * CollationKeys.
-     * </p>
-     * <p>
+     * Merges this CollationKey with another.
+     * The levels are merged with their corresponding counterparts
+     * (primaries with primaries, secondaries with secondaries etc.).
      * Between the values from the same level a separator is inserted.
-     * example (uncompressed):
-     * <pre> 
-     * 191B1D 01 050505 01 910505 00 and 1F2123 01 050505 01 910505 00
+     *
+     * <p>This is useful, for example, for combining sort keys from first and last names
+     * to sort such pairs.
+     * It is possible to merge multiple sort keys by consecutively merging
+     * another one with the intermediate result.
+     *
+     * <p>Only the sort key bytes of the CollationKeys are merged.
+     * This API does not attempt to merge the
+     * String representations of the CollationKeys, hence null will be returned
+     * as the result's String representation.
+     *
+     * <p>Example (uncompressed):
+     * <pre>191B1D 01 050505 01 910505 00
+     * 1F2123 01 050505 01 910505 00</pre>
      * will be merged as 
-     * 191B1D 02 1F212301 050505 02 050505 01 910505 02 910505 00
-     * </pre>
-     * </p>
-     * <p>
-     * This allows for concatenating of first and last names for sorting, among 
-     * other things.
-     * </p>
-     * </p>
-     * @param source CollationKey to merge with 
-     * @return a CollationKey that contains the valid merged sorting order 
-     *         with a null String representation, 
-     *         i.e. <tt>new CollationKey(null, merge_sort_order)</tt>
+     * <pre>191B1D 02 1F2123 01 050505 02 050505 01 910505 02 910505 00</pre>
+     *
+     * @param source CollationKey to merge with
+     * @return a CollationKey that contains the valid merged sort keys
+     *         with a null String representation,
+     *         i.e. <tt>new CollationKey(null, merged_sort_keys)</tt>
      * @exception IllegalArgumentException thrown if source CollationKey
      *            argument is null or of 0 length.
      * @stable ICU 2.6
@@ -517,31 +518,29 @@ public final class CollationKey implements Comparable<CollationKey>
             throw new IllegalArgumentException(
                       "CollationKey argument can not be null or of 0 length");
         }
-    
-        getLength(); // gets the length of this sort key
-        int sourcelength = source.getLength();
-        // 1 extra for the last strength that has no seperators
-        byte result[] = new byte[m_length_ + sourcelength + 2];
+
+        // 1 byte extra for the 02 separator at the end of the copy of this sort key,
+        // and 1 more for the terminating 00.
+        byte result[] = new byte[getLength() + source.getLength() + 2];
     
         // merge the sort keys with the same number of levels
         int rindex = 0;
         int index = 0;
         int sourceindex = 0;
         while (true) { 
-            // while both have another level
             // copy level from src1 not including 00 or 01
             // unsigned issues
             while (m_key_[index] < 0 || m_key_[index] >= MERGE_SEPERATOR_) {
-                result[rindex ++] = m_key_[index ++];
+                result[rindex++] = m_key_[index++];
             }
     
             // add a 02 merge separator
-            result[rindex ++] = MERGE_SEPERATOR_;
+            result[rindex++] = MERGE_SEPERATOR_;
     
             // copy level from src2 not including 00 or 01
             while (source.m_key_[sourceindex] < 0 
                    || source.m_key_[sourceindex] >= MERGE_SEPERATOR_) {
-                result[rindex ++] = source.m_key_[sourceindex ++];
+                result[rindex++] = source.m_key_[sourceindex++];
             }
     
             // if both sort keys have another level, then add a 01 level 
@@ -549,30 +548,31 @@ public final class CollationKey implements Comparable<CollationKey>
             if (m_key_[index] == RuleBasedCollator.SORT_LEVEL_TERMINATOR_
                 && source.m_key_[sourceindex] 
                         == RuleBasedCollator.SORT_LEVEL_TERMINATOR_) {
-                ++ index;
-                ++ sourceindex;
-                result[rindex ++] = RuleBasedCollator.SORT_LEVEL_TERMINATOR_;
+                ++index;
+                ++sourceindex;
+                result[rindex++] = RuleBasedCollator.SORT_LEVEL_TERMINATOR_;
             }
             else {
                 break;
             }
         }
-    
+
         // here, at least one sort key is finished now, but the other one
         // might have some contents left from containing more levels;
         // that contents is just appended to the result
-        if (m_key_[index] != 0) {
-            System.arraycopy(m_key_, index, result, rindex,
-                             m_length_ - index);
+        int remainingLength;
+        if ((remainingLength = m_length_ - index) > 0) {
+            System.arraycopy(m_key_, index, result, rindex, remainingLength);
+            rindex += remainingLength;
         }
-        else if (source.m_key_[sourceindex] != 0) {
-            System.arraycopy(source.m_key_, sourceindex, result, rindex,  
-                             source.m_length_ - sourceindex);
+        else if ((remainingLength = source.m_length_ - sourceindex) > 0) {
+            System.arraycopy(source.m_key_, sourceindex, result, rindex, remainingLength);
+            rindex += remainingLength;
         }
-        result[result.length - 1] = 0;
+        result[rindex] = 0;
     
-        // trust that neither sort key contained illegally embedded zero bytes
-        return new CollationKey(null, result);
+        assert rindex == result.length - 1;
+        return new CollationKey(null, result, rindex);
     }
 
     // private data members -------------------------------------------------
