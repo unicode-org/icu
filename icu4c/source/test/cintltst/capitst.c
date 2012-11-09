@@ -270,7 +270,6 @@ void TestProperty()
     UChar *disName;
     int32_t len = 0;
     UChar source[12], target[12];
-    char sourceU8[36], targetU8[36];
     int32_t tempLength;
     UErrorCode status = U_ZERO_ERROR;
     /*

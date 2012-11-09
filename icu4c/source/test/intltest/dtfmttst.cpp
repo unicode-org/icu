@@ -689,7 +689,7 @@ DateFormatTest::TestRunTogetherPattern985()
     logln(now);
     ParsePosition pos(0);
     UDate date2 = formatter->parse(now, pos);
-    if (date2 == 0) then = "Parse stopped at " + pos.getIndex();
+    if (date2 == 0) then = UnicodeString("Parse stopped at ") + pos.getIndex();
     else ((DateFormat*)formatter)->format(date2, then);
     logln(then);
     if (!(date2 == date1)) errln((UnicodeString)"FAIL");

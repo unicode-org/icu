@@ -1048,7 +1048,7 @@ public:
                 int32_t cmpres2 = coll->compare(lines[i].buff, lines[i].buflen, lines[prev].buff, lines[prev].buflen);
 
                 if(cmpres != -cmpres2) {
-                    error("Compare result not symmetrical on line " + (i + 1));
+                    error(UnicodeString("Compare result not symmetrical on line ") + (i + 1));
                     break;
                 }
 

@@ -289,13 +289,13 @@ void NumberFormatRegressionTest::Test4088161 (void)
         UnicodeString sBuf1;
         FieldPosition fp1(0);
         logln(UnicodeString("d = ") + d);
-        logln("maxFractionDigits = " + df->getMaximumFractionDigits());
-        
+        logln(UnicodeString("maxFractionDigits = ") + df->getMaximumFractionDigits());
+
         logln(" format(d) = '" + df->format(d, sBuf1, fp1) + "'");
         df->setMaximumFractionDigits(17);
         UnicodeString sBuf2;
         FieldPosition fp2(0);
-        logln("maxFractionDigits = " + df->getMaximumFractionDigits());
+        logln(UnicodeString("maxFractionDigits = ") + df->getMaximumFractionDigits());
         sBuf2 = df->format(d, sBuf2, fp2);
         if(sBuf2 != "100")
             errln(" format(d) = '" + sBuf2 + "'");
@@ -1306,7 +1306,7 @@ void NumberFormatRegressionTest::Test4101481(void)
     }
     failure(status, "new DecimalFormat");
     if (sdf->getMinimumIntegerDigits() != 1)
-        errln("Minimum integer digits : " + sdf->getMinimumIntegerDigits());
+        errln(UnicodeString("Minimum integer digits : ") + sdf->getMinimumIntegerDigits());
     delete sdf;
 }
 /* @bug 4052223 (API addition request A27)
@@ -1618,7 +1618,7 @@ void NumberFormatRegressionTest::Test4110936(void)
     nf->setMaximumIntegerDigits(MAX_INT_DIGITS);
     logln("setMaximumIntegerDigits(MAX_INT_DIGITS)");
     if (nf->getMaximumIntegerDigits() != MAX_INT_DIGITS)
-        errln("getMaximumIntegerDigits() returns " +
+        errln(UnicodeString("getMaximumIntegerDigits() returns ") +
             nf->getMaximumIntegerDigits());
 
     delete nf;
