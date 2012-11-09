@@ -1948,7 +1948,7 @@ void TestMergeSortKeys(void) {
        uint32_t reqLen = 0;
        log_verbose("testing buffer overflow\n");
        reqLen = ucol_mergeSortkeys(prefixKey, prefixKeyLen, suffixKey, suffixKeyLen, smallBuf, 3);
-       if(reqLen != (prefixKeyLen+suffixKeyLen-1)) {
+       if(reqLen != (prefixKeyLen+suffixKeyLen)) {
          log_err("Wrong preflight size for merged sortkey\n");
        }
      }
