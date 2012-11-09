@@ -4188,43 +4188,13 @@ while((start)<(end)) { \
 /*                                                                          */
 /****************************************************************************/
 
-/**
- * Merge two sort keys.
- * This is useful, for example, to combine sort keys from first and last names
- * to sort such pairs.
- * Merged sort keys consider on each collation level the first part first entirely,
- * then the second one.
- * It is possible to merge multiple sort keys by consecutively merging
- * another one with the intermediate result.
- *
- * The length of the merge result is the sum of the lengths of the input sort keys
- * minus 1.
- *
- * @param src1 the first sort key
- * @param src1Length the length of the first sort key, including the zero byte at the end;
- *        can be -1 if the function is to find the length
- * @param src2 the second sort key
- * @param src2Length the length of the second sort key, including the zero byte at the end;
- *        can be -1 if the function is to find the length
- * @param dest the buffer where the merged sort key is written,
- *        can be NULL if destCapacity==0
- * @param destCapacity the number of bytes in the dest buffer
- * @return the length of the merged sort key, src1Length+src2Length-1;
- *         can be larger than destCapacity, or 0 if an error occurs (only for illegal arguments),
- *         in which cases the contents of dest is undefined
- *
- * @draft
- */
 U_CAPI int32_t U_EXPORT2
 ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
                    const uint8_t *src2, int32_t src2Length,
                    uint8_t *dest, int32_t destCapacity) {
-    int32_t destLength;
-    uint8_t b;
-
     /* check arguments */
-    if( src1==NULL || src1Length<-2 || src1Length==0 || (src1Length>0 && src1[src1Length-1]!=0) ||
-        src2==NULL || src2Length<-2 || src2Length==0 || (src2Length>0 && src2[src2Length-1]!=0) ||
+    if( src1==NULL || src1Length<-1 || src1Length==0 || (src1Length>0 && src1[src1Length-1]!=0) ||
+        src2==NULL || src2Length<-1 || src2Length==0 || (src2Length>0 && src2[src2Length-1]!=0) ||
         destCapacity<0 || (destCapacity>0 && dest==NULL)
     ) {
         /* error, attempt to write a zero byte and return 0 */
@@ -4242,34 +4212,38 @@ ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
         src2Length=(int32_t)uprv_strlen((const char *)src2)+1;
     }
 
-    destLength=src1Length+src2Length-1;
+    int32_t destLength=src1Length+src2Length;
     if(destLength>destCapacity) {
         /* the merged sort key does not fit into the destination */
         return destLength;
     }
 
     /* merge the sort keys with the same number of levels */
-    while(*src1!=0 && *src2!=0) { /* while both have another level */
+    uint8_t *p=dest;
+    for(;;) {
         /* copy level from src1 not including 00 or 01 */
+        uint8_t b;
         while((b=*src1)>=2) {
             ++src1;
-            *dest++=b;
+            *p++=b;
         }
 
         /* add a 02 merge separator */
-        *dest++=2;
+        *p++=2;
 
         /* copy level from src2 not including 00 or 01 */
         while((b=*src2)>=2) {
             ++src2;
-            *dest++=b;
+            *p++=b;
         }
 
         /* if both sort keys have another level, then add a 01 level separator and continue */
         if(*src1==1 && *src2==1) {
             ++src1;
             ++src2;
-            *dest++=1;
+            *p++=1;
+        } else {
+            break;
         }
     }
 
@@ -4283,10 +4257,10 @@ ucol_mergeSortkeys(const uint8_t *src1, int32_t src1Length,
         src2=src1;
     }
     /* append src2, "the other, unfinished sort key" */
-    uprv_strcpy((char *)dest, (const char *)src2);
+    while((*p++=*src2++)!=0) {}
 
-    /* trust that neither sort key contained illegally embedded zero bytes */
-    return destLength;
+    /* the actual length might be less than destLength if either sort key contained illegally embedded zero bytes */
+    return (int32_t)(p-dest);
 }
 
 U_NAMESPACE_BEGIN
