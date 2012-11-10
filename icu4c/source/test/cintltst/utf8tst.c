@@ -64,6 +64,7 @@ static void TestCodeUnitValues(void);
 static void TestCharLength(void);
 static void TestGetChar(void);
 static void TestNextPrevChar(void);
+static void TestNulTerminated(void);
 static void TestNextPrevNonCharacters(void);
 static void TestNextPrevCharUnsafe(void);
 static void TestFwdBack(void);
@@ -83,6 +84,7 @@ addUTF8Test(TestNode** root)
     addTest(root, &TestCharLength,              "utf8tst/TestCharLength");
     addTest(root, &TestGetChar,                 "utf8tst/TestGetChar");
     addTest(root, &TestNextPrevChar,            "utf8tst/TestNextPrevChar");
+    addTest(root, &TestNulTerminated,           "utf8tst/TestNulTerminated");
     addTest(root, &TestNextPrevNonCharacters,   "utf8tst/TestNextPrevNonCharacters");
     addTest(root, &TestNextPrevCharUnsafe,      "utf8tst/TestNextPrevCharUnsafe");
     addTest(root, &TestFwdBack,                 "utf8tst/TestFwdBack");
@@ -344,6 +346,82 @@ static void TestNextPrevChar() {
 
          i=i+6;
     }
+}
+
+/* keep this in sync with utf16tst.c's TestNulTerminated() */
+static void TestNulTerminated() {
+    static const uint8_t input[]={
+        /*  0 */  0x61,
+        /*  1 */  0xf0, 0x90, 0x90, 0x81,
+        /*  5 */  0xc0, 0x80,
+        /*  7 */  0xdf, 0x80,
+        /*  9 */  0xc2,
+        /* 10 */  0x62,
+        /* 11 */  0xfd, 0xbe,
+        /* 13 */  0xe0, 0xa0, 0x80,
+        /* 16 */  0xe2, 0x82, 0xac,
+        /* 19 */  0xf0, 0x90, 0x90,
+        /* 22 */  0x00
+        /* 23 */
+    };
+    static const UChar32 result[]={
+        0x61,
+        0x10401,
+        U_SENTINEL,
+        0x7c0,
+        U_SENTINEL,
+        0x62,
+        U_SENTINEL,
+        0x800,
+        0x20ac,
+        U_SENTINEL,
+        0
+    };
+
+    UChar32 c, c2;
+    int32_t i0, i=0, j, k, expectedIndex;
+    int32_t cpIndex=0;
+    do {
+        i0=i;
+        U8_NEXT(input, i, -1, c);
+        if(c!=result[cpIndex]) {
+            log_err("U8_NEXT(from %d)=U+%04x != U+%04x\n", i0, c, result[cpIndex]);
+        }
+        j=i0;
+        U8_FWD_1(input, j, -1);
+        if(j!=i) {
+            log_err("U8_FWD_1() moved to index %d but U8_NEXT() moved to %d\n", j, i);
+        }
+        ++cpIndex;
+        /*
+         * Move by this many code points from the start.
+         * U8_FWD_N() stops at the end of the string, that is, at the NUL if necessary.
+         */
+        expectedIndex= (c==0) ? i-1 : i;
+        k=0;
+        U8_FWD_N(input, k, -1, cpIndex);
+        if(k!=expectedIndex) {
+            log_err("U8_FWD_N(code points from 0) moved to index %d but expected %d\n", k, expectedIndex);
+        }
+    } while(c!=0);
+
+    i=0;
+    do {
+        j=i0=i;
+        U8_NEXT(input, i, -1, c);
+        do {
+            U8_GET(input, 0, j, -1, c2);
+            if(c2!=c) {
+                log_err("U8_NEXT(from %d)=U+%04x != U+%04x=U8_GET(at %d)\n", i0, c, c2, j);
+            }
+            /* U8_SET_CP_LIMIT moves from a non-lead byte to the limit of the code point */
+            k=j+1;
+            U8_SET_CP_LIMIT(input, 0, k, -1);
+            if(k!=i) {
+                log_err("U8_NEXT() moved to %d but U8_SET_CP_LIMIT(%d) moved to %d\n", i, j+1, k);
+            }
+        } while(++j<i);
+    } while(c!=0);
 }
 
 static void TestNextPrevNonCharacters() {
