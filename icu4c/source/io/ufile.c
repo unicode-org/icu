@@ -18,6 +18,7 @@
 ******************************************************************************
 */
 
+#include "uposixdefs.h"
 #include "locmap.h"
 #include "unicode/ustdio.h"
 #include "ufile.h"
