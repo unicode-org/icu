@@ -102,7 +102,7 @@ class PossibleWord {
 private:
     // list of word candidate lengths, in increasing length order
     int32_t   lengths[POSSIBLE_WORD_LIST_MAX];
-    int       count;      // Count of candidates
+    int32_t   count;      // Count of candidates
     int32_t   prefix;     // The longest match with a dictionary word
     int32_t   offset;     // Offset in the text of these candidates
     int       mark;       // The preferred candidate's offset
@@ -840,15 +840,15 @@ CjkBreakEngine::divideUpDictionaryRange( UText *text,
 
     // Dynamic programming to find the best segmentation.
     bool is_prev_katakana = false;
-    for (int i = 0; i < numChars; ++i) {
+    for (int32_t i = 0; i < numChars; ++i) {
         //utext_setNativeIndex(text, rangeStart + i);
         utext_setNativeIndex(&normalizedText, i);
         if (bestSnlp[i] == kuint32max)
             continue;
 
-        int count;
+        int32_t count;
         // limit maximum word length matched to size of current substring
-        int maxSearchLength = (i + maxWordSize < (size_t) numChars)? maxWordSize : (numChars - i);
+        int32_t maxSearchLength = (i + maxWordSize < (size_t) numChars)? maxWordSize : (numChars - i);
 
         fDictionary->matches(&normalizedText, maxSearchLength, lengths.elems(), count, maxSearchLength, values.elems());
 
