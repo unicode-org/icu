@@ -2626,10 +2626,7 @@ static int32_t containsSpanUTF8(const UnicodeSetWithStrings &set, const char *s,
         UChar32 c;
         int32_t start=0, prev;
         while((prev=start)<length) {
-            U8_NEXT(s, start, length, c);
-            if(c<0) {
-                c=0xfffd;
-            }
+            U8_NEXT_OR_FFFD(s, start, length, c);
             if(realSet.contains(c)!=spanCondition) {
                 break;
             }
@@ -2640,10 +2637,7 @@ static int32_t containsSpanUTF8(const UnicodeSetWithStrings &set, const char *s,
         UChar32 c;
         int32_t start, next;
         for(start=next=0; start<length;) {
-            U8_NEXT(s, next, length, c);
-            if(c<0) {
-                c=0xfffd;
-            }
+            U8_NEXT_OR_FFFD(s, next, length, c);
             if(realSet.contains(c)) {
                 break;
             }
@@ -2664,10 +2658,7 @@ static int32_t containsSpanUTF8(const UnicodeSetWithStrings &set, const char *s,
         UChar32 c;
         int32_t start, next, maxSpanLimit=0;
         for(start=next=0; start<length;) {
-            U8_NEXT(s, next, length, c);
-            if(c<0) {
-                c=0xfffd;
-            }
+            U8_NEXT_OR_FFFD(s, next, length, c);
             if(!realSet.contains(c)) {
                 next=start;  // Do not span this single, not-contained code point.
             }
@@ -2738,10 +2729,7 @@ static int32_t containsSpanBackUTF8(const UnicodeSetWithStrings &set, const char
         UChar32 c;
         int32_t prev=length;
         do {
-            U8_PREV(s, 0, length, c);
-            if(c<0) {
-                c=0xfffd;
-            }
+            U8_PREV_OR_FFFD(s, 0, length, c);
             if(realSet.contains(c)!=spanCondition) {
                 break;
             }
@@ -2752,10 +2740,7 @@ static int32_t containsSpanBackUTF8(const UnicodeSetWithStrings &set, const char
         UChar32 c;
         int32_t prev=length;
         do {
-            U8_PREV(s, 0, length, c);
-            if(c<0) {
-                c=0xfffd;
-            }
+            U8_PREV_OR_FFFD(s, 0, length, c);
             if(realSet.contains(c)) {
                 break;
             }
@@ -2775,10 +2760,7 @@ static int32_t containsSpanBackUTF8(const UnicodeSetWithStrings &set, const char
         UChar32 c;
         int32_t prev=length, minSpanStart=length;
         do {
-            U8_PREV(s, 0, length, c);
-            if(c<0) {
-                c=0xfffd;
-            }
+            U8_PREV_OR_FFFD(s, 0, length, c);
             if(!realSet.contains(c)) {
                 length=prev;  // Do not span this single, not-contained code point.
             }

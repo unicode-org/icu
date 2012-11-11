@@ -195,7 +195,7 @@ static void TestGetChar()
         0x240,            UTF8_ERROR_VALUE_1,         UTF8_ERROR_VALUE_1
     };
     uint16_t i=0;
-    UChar32 c;
+    UChar32 c, expected;
     uint32_t offset=0;
 
     for(offset=0; offset<sizeof(input); offset++) {
@@ -213,14 +213,22 @@ static void TestGetChar()
             }
         }
 
-        U8_GET(input, 0, offset, sizeof(input), c);
-        if(UTF_IS_ERROR(result[i+1]) ? c >= 0 : c != result[i+1]){
-            log_err("ERROR: UTF8_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
+        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, FALSE);
+        expected=result[i+1];
+        if(c != expected){
+            log_err("ERROR: UTF8_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
 
-        UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, FALSE);
-        if(c != result[i+1]){
-            log_err("ERROR: UTF8_GET_CHAR_SAFE failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
+        U8_GET(input, 0, offset, sizeof(input), c);
+        if(UTF_IS_ERROR(expected)) { expected=U_SENTINEL; }
+        if(c != expected){
+            log_err("ERROR: U8_GET failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
+
+        U8_GET_OR_FFFD(input, 0, offset, sizeof(input), c);
+        if(expected<0) { expected=0xfffd; }
+        if(c != expected){
+            log_err("ERROR: U8_GET_OR_FFFD failed for offset=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
         }
 
         UTF8_GET_CHAR_SAFE(input, 0, offset, sizeof(input), c, TRUE);
@@ -228,7 +236,7 @@ static void TestGetChar()
             log_err("ERROR: UTF8_GET_CHAR_SAFE(strict) failed for offset=%ld. Expected:%lx Got:%lx\n", offset, result[i+2], c);
         }
 
-         i=(uint16_t)(i+3);
+        i=(uint16_t)(i+3);
     }
 }
 
@@ -274,7 +282,7 @@ static void TestNextPrevChar() {
     };
     /* TODO: remove unused columns for next_unsafe & prev_unsafe, and adjust the test code */
 
-    UChar32 c=0x0000;
+    UChar32 c, expected;
     uint32_t i=0;
     uint32_t offset=0;
     int32_t setOffset=0;
@@ -285,9 +293,10 @@ static void TestNextPrevChar() {
              log_err("ERROR: UTF8_NEXT_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                  offset, movedOffset[i+1], setOffset);
          }
-         if(c != result[i+1]){
-             log_err("ERROR: UTF8_NEXT_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
-         }
+        expected=result[i+1];
+        if(c != expected){
+            log_err("ERROR: UTF8_NEXT_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
 
          setOffset=offset;
          U8_NEXT(input, setOffset, sizeof(input), c);
@@ -295,9 +304,21 @@ static void TestNextPrevChar() {
              log_err("ERROR: U8_NEXT failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                  offset, movedOffset[i+1], setOffset);
          }
-         if(UTF_IS_ERROR(result[i+1]) ? c >= 0 : c != result[i+1]){
-             log_err("ERROR: U8_NEXT failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+1], c);
-         }
+        if(UTF_IS_ERROR(expected)) { expected=U_SENTINEL; }
+        if(c != expected){
+            log_err("ERROR: U8_NEXT failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
+
+        setOffset=offset;
+        U8_NEXT_OR_FFFD(input, setOffset, sizeof(input), c);
+        if(setOffset != movedOffset[i+1]){
+            log_err("ERROR: U8_NEXT_OR_FFFD failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                offset, movedOffset[i+1], setOffset);
+        }
+        if(expected<0) { expected=0xfffd; }
+        if(c != expected){
+            log_err("ERROR: U8_NEXT_OR_FFFD failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
 
          setOffset=offset;
          UTF8_NEXT_CHAR_SAFE(input, setOffset, sizeof(input), c, TRUE);
@@ -320,9 +341,10 @@ static void TestNextPrevChar() {
              log_err("ERROR: UTF8_PREV_CHAR_SAFE failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                  offset, movedOffset[i+4], setOffset);
          }
-         if(c != result[i+4]){
-             log_err("ERROR: UTF8_PREV_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+4], c);
-         }
+        expected=result[i+4];
+        if(c != expected){
+            log_err("ERROR: UTF8_PREV_CHAR_SAFE failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
 
          setOffset=offset;
          U8_PREV(input, 0, setOffset, c);
@@ -330,9 +352,21 @@ static void TestNextPrevChar() {
              log_err("ERROR: U8_PREV failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
                  offset, movedOffset[i+4], setOffset);
          }
-         if(UTF_IS_ERROR(result[i+4]) ? c >= 0 : c != result[i+4]){
-             log_err("ERROR: U8_PREV failed for input=%ld. Expected:%lx Got:%lx\n", offset, result[i+4], c);
-         }
+        if(UTF_IS_ERROR(expected)) { expected=U_SENTINEL; }
+        if(c != expected){
+            log_err("ERROR: U8_PREV failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
+
+        setOffset=offset;
+        U8_PREV_OR_FFFD(input, 0, setOffset, c);
+        if(setOffset != movedOffset[i+4]){
+            log_err("ERROR: U8_PREV_OR_FFFD failed to move the offset correctly at %d\n ExpectedOffset:%d Got %d\n",
+                offset, movedOffset[i+4], setOffset);
+        }
+        if(expected<0) { expected=0xfffd; }
+        if(c != expected){
+            log_err("ERROR: U8_PREV_OR_FFFD failed for input=%ld. Expected:%lx Got:%lx\n", offset, expected, c);
+        }
 
          setOffset=offset;
          UTF8_PREV_CHAR_SAFE(input, 0,  setOffset, c, TRUE);
@@ -378,14 +412,24 @@ static void TestNulTerminated() {
         0
     };
 
-    UChar32 c, c2;
+    UChar32 c, c2, expected;
     int32_t i0, i=0, j, k, expectedIndex;
     int32_t cpIndex=0;
     do {
         i0=i;
         U8_NEXT(input, i, -1, c);
-        if(c!=result[cpIndex]) {
-            log_err("U8_NEXT(from %d)=U+%04x != U+%04x\n", i0, c, result[cpIndex]);
+        expected=result[cpIndex];
+        if(c!=expected) {
+            log_err("U8_NEXT(from %d)=U+%04x != U+%04x\n", i0, c, expected);
+        }
+        j=i0;
+        U8_NEXT_OR_FFFD(input, j, -1, c);
+        if(expected<0) { expected=0xfffd; }
+        if(c!=expected) {
+            log_err("U8_NEXT_OR_FFFD(from %d)=U+%04x != U+%04x\n", i0, c, expected);
+        }
+        if(j!=i) {
+            log_err("U8_NEXT_OR_FFFD() moved to index %d but U8_NEXT() moved to %d\n", j, i);
         }
         j=i0;
         U8_FWD_1(input, j, -1);
@@ -413,6 +457,11 @@ static void TestNulTerminated() {
             U8_GET(input, 0, j, -1, c2);
             if(c2!=c) {
                 log_err("U8_NEXT(from %d)=U+%04x != U+%04x=U8_GET(at %d)\n", i0, c, c2, j);
+            }
+            U8_GET_OR_FFFD(input, 0, j, -1, c2);
+            expected= (c>=0) ? c : 0xfffd;
+            if(c2!=expected) {
+                log_err("U8_NEXT_OR_FFFD(from %d)=U+%04x != U+%04x=U8_GET_OR_FFFD(at %d)\n", i0, expected, c2, j);
             }
             /* U8_SET_CP_LIMIT moves from a non-lead byte to the limit of the code point */
             k=j+1;
