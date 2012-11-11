@@ -86,15 +86,31 @@ utf8_errorValue[6]={
     0x3ffffff, 0x7fffffff
 };
 
+static UChar32
+errorValue(int32_t count, int8_t strict) {
+    if(strict>=0) {
+        return utf8_errorValue[count];
+    } else if(strict==-3) {
+        return 0xfffd;
+    } else {
+        return U_SENTINEL;
+    }
+}
+
 /*
- * Handle the non-inline part of the U8_NEXT() macro and its obsolete sibling
- * UTF8_NEXT_CHAR_SAFE().
+ * Handle the non-inline part of the U8_NEXT() and U8_NEXT_FFFD() macros
+ * and their obsolete sibling UTF8_NEXT_CHAR_SAFE().
  *
  * U8_NEXT() supports NUL-terminated strings indicated via length<0.
  *
  * The "strict" parameter controls the error behavior:
- * <0  "Safe" behavior of U8_NEXT(): All illegal byte sequences yield a negative
- *     code point result.
+ * <0  "Safe" behavior of U8_NEXT():
+ *     -1: All illegal byte sequences yield U_SENTINEL=-1.
+ *     -2: Same as -1, except for lenient treatment of surrogate code points as legal.
+ *         Some implementations use this for roundtripping of
+ *         Unicode 16-bit strings that are not well-formed UTF-16, that is, they
+ *         contain unpaired surrogates.
+ *     -3: All illegal byte sequences yield U+FFFD.
  *  0  Obsolete "safe" behavior of UTF8_NEXT_CHAR_SAFE(..., FALSE):
  *     All illegal byte sequences yield a positive code point such that this
  *     result code point would be encoded with the same number of bytes as
@@ -102,11 +118,6 @@ utf8_errorValue[6]={
  * >0  Obsolete "strict" behavior of UTF8_NEXT_CHAR_SAFE(..., TRUE):
  *     Same as the obsolete "safe" behavior, but non-characters are also treated
  *     like illegal sequences.
- *
- * The special negative (<0) value -2 is used for lenient treatment of surrogate
- * code points as legal. Some implementations use this for roundtripping of
- * Unicode 16-bit strings that are not well-formed UTF-16, that is, they
- * contain unpaired surrogates.
  *
  * Note that a UBool is the same as an int8_t.
  */
@@ -165,11 +176,7 @@ utf8_nextCharSafeBody(const uint8_t *s, int32_t *pi, int32_t length, UChar32 c, 
         ++i;
         --count;
     }
-    if(strict>=0) {
-        c=utf8_errorValue[i-*pi];
-    } else {
-        c=U_SENTINEL;
-    }
+    c=errorValue(i-*pi, strict);
     *pi=i;
     return c;
 }
@@ -224,18 +231,15 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
     int32_t i=*pi;
     uint8_t b, count=1, shift=6;
 
+    if(!U8_IS_TRAIL(c)) { return errorValue(0, strict); }
+
     /* extract value bits from the last trail byte */
     c&=0x3f;
 
     for(;;) {
         if(i<=start) {
             /* no lead byte at all */
-            if(strict>=0) {
-                return UTF8_ERROR_VALUE_1;
-            } else {
-                return U_SENTINEL;
-            }
-            /*break;*/
+            return errorValue(0, strict);
         }
 
         /* read another previous byte */
@@ -255,11 +259,7 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
                         if(count>=4) {
                             count=3;
                         }
-                        if(strict>=0) {
-                            c=utf8_errorValue[count];
-                        } else {
-                            c=U_SENTINEL;
-                        }
+                        c=errorValue(count, strict);
                     } else {
                         /* exit with correct c */
                     }
@@ -269,17 +269,9 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
                        include the trail byte that we started with */
                     if(count<shouldCount) {
                         *pi=i;
-                        if(strict>=0) {
-                            c=utf8_errorValue[count];
-                        } else {
-                            c=U_SENTINEL;
-                        }
+                        c=errorValue(count, strict);
                     } else {
-                        if(strict>=0) {
-                            c=UTF8_ERROR_VALUE_1;
-                        } else {
-                            c=U_SENTINEL;
-                        }
+                        c=errorValue(0, strict);
                     }
                 }
                 break;
@@ -290,20 +282,12 @@ utf8_prevCharSafeBody(const uint8_t *s, int32_t start, int32_t *pi, UChar32 c, U
                 shift+=6;
             } else {
                 /* more than 5 trail bytes is illegal */
-                if(strict>=0) {
-                    c=UTF8_ERROR_VALUE_1;
-                } else {
-                    c=U_SENTINEL;
-                }
+                c=errorValue(0, strict);
                 break;
             }
         } else {
             /* single-byte character precedes trailing bytes */
-            if(strict>=0) {
-                c=UTF8_ERROR_VALUE_1;
-            } else {
-                c=U_SENTINEL;
-            }
+            c=errorValue(0, strict);
             break;
         }
     }
