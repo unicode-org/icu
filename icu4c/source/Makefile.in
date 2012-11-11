@@ -356,7 +356,7 @@ update-windows-makefiles: config.status
 
 # For building a source distribution.
 distcheck dist-local:
-	$(MAKE) -C . -f config/dist.mk srcdir="$(srcdir)" top_srcdir="$(top_srcdir)" $@
+	$(MAKE) -C . -f $(top_srcdir)/config/dist.mk srcdir="$(srcdir)" top_srcdir="$(top_srcdir)" $@
 
 ifeq ($(DESTDIR),)
 releaseDist:

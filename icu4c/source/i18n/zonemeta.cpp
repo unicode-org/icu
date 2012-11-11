@@ -876,8 +876,8 @@ ZoneMeta::formatCustomID(uint8_t hour, uint8_t min, uint8_t sec, UBool negative,
           id.append((UChar)0x2B);    // '+'
         }
         // Always use US-ASCII digits
-        id.append((UChar)0x30 + (hour%100)/10);
-        id.append((UChar)0x30 + (hour%10));
+        id.append((UChar)(0x30 + (hour%100)/10));
+        id.append((UChar)(0x30 + (hour%10)));
         id.append((UChar)0x3A);    // ':'
         id.append((UChar)(0x30 + (min%100)/10));
         id.append((UChar)(0x30 + (min%10)));
