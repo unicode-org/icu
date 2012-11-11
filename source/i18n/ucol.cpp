@@ -8038,163 +8038,9 @@ endOfSecLoop:
 }
 
 /*
-  Slightly modified version of U8_NEXT macro defined in utf8.h. U8_NEXT requires
-  the length of UTF-8 string. This version assumes that the UTF-8 string is null
-  terminated and does not require the length as input.
-
   Note: ucol_strcollUTF8 supports null terminated input. Calculating length of
   null terminated input string takes extra amount of CPU cycles.
 */
-static const UChar32
-utf8_minLegal[4]={ 0, 0x80, 0x800, 0x10000 };
-
-#define UTF8_ERROR_VALUE_1 0x15
-#define UTF8_ERROR_VALUE_2 0x9f
-#define UTF_ERROR_VALUE 0xffff
-
-static const UChar32
-utf8_errorValue[6]={
-    UTF8_ERROR_VALUE_1, UTF8_ERROR_VALUE_2, UTF_ERROR_VALUE, 0x10ffff,
-    0x3ffffff, 0x7fffffff
-};
-
-static
-UChar32 utf8_nextCharSafeBodyNullTerm(const uint8_t *s, int32_t *pi, UChar32 c, UBool strict) {
-    int32_t i=*pi;
-    uint8_t count=U8_COUNT_TRAIL_BYTES(c);
-    U_ASSERT(count <= 5); /* U8_COUNT_TRAIL_BYTES returns value 0...5 */
-
-    if (c) {
-        uint8_t trail, illegal=0;
-
-        U8_MASK_LEAD_BYTE((c), count);
-        /* count==0 for illegally leading trail bytes and the illegal bytes 0xfe and 0xff */
-        switch(count) {
-        /* each branch falls through to the next one */
-        case 5:
-        case 4:
-            /* count>=4 is always illegal: no more than 3 trail bytes in Unicode's UTF-8 */
-            illegal=1;
-            break;
-        case 3:
-            trail=s[(i)];
-            if (trail==0) {
-                illegal=1;
-                break;
-            }
-            (c)=((c)<<6)|(trail&0x3f);
-            if(c<0x110) {
-                illegal|=(trail&0xc0)^0x80;
-            } else {
-                /* code point>0x10ffff, outside Unicode */
-                illegal=1;
-                break;
-            }
-            ++(i);
-        case 2:
-            trail=s[(i)];
-            if (trail==0) {
-                illegal=1;
-                break;
-            }
-            (c)=((c)<<6)|(trail&0x3f);
-            illegal|=(trail&0xc0)^0x80;
-            ++(i);
-        case 1:
-            trail=s[(i)];
-            if (trail==0) {
-                illegal=1;
-                break;
-            }
-            (c)=((c)<<6)|(trail&0x3f);
-            illegal|=(trail&0xc0)^0x80;
-            ++(i);
-            break;
-        case 0:
-            if(strict>=0) {
-                return UTF8_ERROR_VALUE_1;
-            } else {
-                return U_SENTINEL;
-            }
-        /* no default branch to optimize switch()  - all values are covered */
-        }
-
-        /*
-         * All the error handling should return a value
-         * that needs count bytes so that UTF8_GET_CHAR_SAFE() works right.
-         *
-         * Starting with Unicode 3.0.1, non-shortest forms are illegal.
-         * Starting with Unicode 3.2, surrogate code points must not be
-         * encoded in UTF-8, and there are no irregular sequences any more.
-         *
-         * U8_ macros (new in ICU 2.4) return negative values for error conditions.
-         */
-
-        /* correct sequence - all trail bytes have (b7..b6)==(10)? */
-        /* illegal is also set if count>=4 */
-        if(illegal || (c)<utf8_minLegal[count] || (U_IS_SURROGATE(c) && strict!=-2)) {
-            /* error handling */
-            uint8_t errorCount=count;
-            /* don't go beyond this sequence */
-            i=*pi;
-            while(count>0 && U8_IS_TRAIL(s[i])) {
-                ++(i);
-                --count;
-            }
-            if(strict>=0) {
-                c=utf8_errorValue[errorCount-count];
-            } else {
-                c=U_SENTINEL;
-            }
-        } else if((strict)>0 && U_IS_UNICODE_NONCHAR(c)) {
-            /* strict: forbid non-characters like U+fffe */
-            c=utf8_errorValue[count];
-        }
-    }
-    *pi=i;
-    return c;
-}
-
-#define U8_NEXT_NULLTERM(s, i, c) { \
-    (c)=(uint8_t)(s)[(i)]; \
-    if((c)>=0x80) { \
-        uint8_t __t1, __t2; \
-        if( /* handle U+1000..U+CFFF inline */ \
-            (0xe0<(c) && (c)<=0xec) && \
-            (__t1=(uint8_t)((s)[(i)+1]-0x80))<=0x3f && __t1 != 0 && \
-            (__t2=(uint8_t)((s)[(i)+2]-0x80))<= 0x3f && __t2 != 0 \
-        ) { \
-            /* no need for (c&0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */ \
-            (c)=(UChar)(((c)<<12)|(__t1<<6)|__t2); \
-            (i)+=3; \
-        } else if( /* handle U+0080..U+07FF inline */ \
-            ((c)<0xe0 && (c)>=0xc2) && \
-            (__t1=(uint8_t)((s)[(i)+1]-0x80))<=0x3f && __t1 != 0 \
-        ) { \
-            (c)=(UChar)((((c)&0x1f)<<6)|__t1); \
-            (i)+=2; \
-        } else if(U8_IS_LEAD(c)) { \
-            /* function call for "complicated" and error cases */ \
-            ++(i); \
-            (c)=utf8_nextCharSafeBodyNullTerm((const uint8_t *)s, &(i), c, -1); \
-        } else { \
-            (c)=U_SENTINEL; \
-            ++(i); \
-        } \
-    } else { \
-        if ((c)) { \
-            ++(i); \
-        } \
-    } \
-}
-
-#define U8_GET_NULLTERM(s, start, i, c) { \
-    int32_t _u8_get_index=(int32_t)(i); \
-    U8_SET_CP_START(s, start, _u8_get_index); \
-    U8_NEXT_NULLTERM(s, _u8_get_index, c); \
-}
-
-
 static UCollationResult
 ucol_strcollRegularUTF8(
                     const UCollator *coll,
@@ -8253,19 +8099,12 @@ ucol_getLatinOneContractionUTF8(const UCollator *coll, int32_t strength,
     UChar32 schar = 0, tchar = 0;
 
     for(;;) {
-        if (len == -1) {
-            U8_GET_NULLTERM((const uint8_t*)s, 0, *index, schar);
-            if (schar == 0) {
-                return(coll->latinOneCEs[strength*coll->latinOneTableLen+latinOneOffset]);
-            }
-        } else {
-            if (*index == len) {
-                return(coll->latinOneCEs[strength*coll->latinOneTableLen+latinOneOffset]);
-            }
-            U8_GET((const uint8_t*)s, 0, *index, len, schar);
+        if (*index == len) {
+            return(coll->latinOneCEs[strength*coll->latinOneTableLen+latinOneOffset]);
         }
-        if (schar == -1) {
-            schar = 0xfffd;
+        U8_GET_OR_FFFD((const uint8_t*)s, 0, *index, len, schar);
+        if (len < 0 && schar == 0) {
+            return(coll->latinOneCEs[strength*coll->latinOneTableLen+latinOneOffset]);
         }
 
         while(schar > (tchar = *(UCharOffset+offset))) { /* since the contraction codepoints should be ordered, we skip all that are smaller */
@@ -8320,22 +8159,15 @@ ucol_strcollUseLatin1UTF8(
     for(;;) {
         while(sOrder==0) { // this loop skips primary ignorables
             // sOrder=getNextlatinOneCE(source);
-            if (sLen==-1) {
-                U8_NEXT_NULLTERM(source, sIndex, sChar);
-                if (sChar == 0) {
-                    endOfSource = TRUE;
-                    sLen = sIndex;
-                    break;
-                }
-            } else {
-                if (sIndex == sLen) {
-                    endOfSource = TRUE;
-                    break;
-                }
-                U8_NEXT(source, sIndex, sLen ,sChar);
+            if (sIndex == sLen) {
+                endOfSource = TRUE;
+                break;
             }
-            if (sChar == -1) {
-                sChar = 0xfffd; // fallback for the bad code
+            U8_NEXT_OR_FFFD(source, sIndex, sLen ,sChar);
+            if (sLen < 0 && sChar == 0) {
+                endOfSource = TRUE;
+                sLen = sIndex;
+                break;
             }
             if(sChar&0xFFFFFF00) { // if we encounter non-latin-1, we bail out (sChar > 0xFF, but this is faster on win32)
                 //fprintf(stderr, "R");
@@ -8360,28 +8192,21 @@ ucol_strcollUseLatin1UTF8(
 
         while(tOrder==0) {  // this loop skips primary ignorables
             // tOrder=getNextlatinOneCE(target);
-            if (tLen == -1) {
-                U8_NEXT_NULLTERM(target, tIndex, tChar);
-                if (tChar == 0) {
-                    if(endOfSource) {
-                        tLen = tIndex;
-                        goto endOfPrimLoopU8;
-                    } else {
-                        return UCOL_GREATER;
-                    }
+            if (tIndex == tLen) {
+                if(endOfSource) {
+                    goto endOfPrimLoopU8;
+                } else {
+                    return UCOL_GREATER;
                 }
-            } else {
-                if (tIndex == tLen) {
-                    if(endOfSource) {
-                        goto endOfPrimLoopU8;
-                    } else {
-                        return UCOL_GREATER;
-                    }
-                }
-                U8_NEXT(target, tIndex, tLen, tChar);
             }
-            if (tChar == -1) {
-                tChar = 0xfffd;
+            U8_NEXT_OR_FFFD(target, tIndex, tLen, tChar);
+            if (tLen < 0 && tChar == 0) {
+                if(endOfSource) {
+                    tLen = tIndex;
+                    goto endOfPrimLoopU8;
+                } else {
+                    return UCOL_GREATER;
+                }
             }
             if(tChar&0xFFFFFF00) { // if we encounter non-latin-1, we bail out (sChar > 0xFF, but this is faster on win32)
                 //fprintf(stderr, "R");
@@ -8448,7 +8273,7 @@ endOfPrimLoopU8:
                         break;
                     }
                     U_ASSERT(sLen >= 0);
-                    U8_NEXT(source, sIndex, sLen, sChar);
+                    U8_NEXT_OR_FFFD(source, sIndex, sLen, sChar);
                     U_ASSERT(sChar >= 0 && sChar <= 0xFF);
                     sOrder = elements[sChar];
                     if(sOrder > UCOL_NOT_FOUND) {
@@ -8465,7 +8290,7 @@ endOfPrimLoopU8:
                         }
                     }
                     U_ASSERT(tLen >= 0);
-                    U8_NEXT(target, tIndex, tLen, tChar);
+                    U8_NEXT_OR_FFFD(target, tIndex, tLen, tChar);
                     U_ASSERT(tChar >= 0 && tChar <= 0xFF);
                     tOrder = elements[tChar];
                     if(tOrder > UCOL_NOT_FOUND) {
@@ -8505,7 +8330,7 @@ endOfPrimLoopU8:
                         endOfSource = TRUE;
                         break;
                     }
-                    U8_PREV(source, 0, sIndex, sChar);
+                    U8_PREV_OR_FFFD(source, 0, sIndex, sChar);
                     U_ASSERT(sChar >= 0 && sChar <= 0xFF);
                     sOrder = elements[sChar];
                     // don't even look for contractions
@@ -8519,7 +8344,7 @@ endOfPrimLoopU8:
                             return UCOL_GREATER;
                         }
                     }
-                    U8_PREV(target, 0, tIndex, tChar);
+                    U8_PREV_OR_FFFD(target, 0, tIndex, tChar);
                     U_ASSERT(tChar >= 0 && tChar <= 0xFF);
                     tOrder = elements[tChar];
                     // don't even look for contractions
@@ -8560,7 +8385,7 @@ endOfSecLoopU8:
                     break;
                 }
                 U_ASSERT(sLen >= 0);
-                U8_NEXT(source, sIndex, sLen, sChar);
+                U8_NEXT_OR_FFFD(source, sIndex, sLen, sChar);
                 U_ASSERT(sChar >= 0 && sChar <= 0xFF);
                 sOrder = elements[sChar];
                 if(sOrder > UCOL_NOT_FOUND) {
@@ -8576,7 +8401,7 @@ endOfSecLoopU8:
                     }
                 }
                 U_ASSERT(tLen >= 0);
-                U8_NEXT(target, tIndex, tLen, tChar);
+                U8_NEXT_OR_FFFD(target, tIndex, tLen, tChar);
                 U_ASSERT(tChar >= 0 && tChar <= 0xFF);
                 tOrder = elements[tChar];
                 if(tOrder > UCOL_NOT_FOUND) {
@@ -8963,36 +8788,18 @@ ucol_strcollUTF8(
         UChar32 uc32 = -1;
 
         if (!bSrcLimit) {
-            if (sourceLength >= 0) {
-                U8_GET((uint8_t*)source, 0, equalLength, sourceLength, uc32);
-            } else {
-                U8_GET_NULLTERM((uint8_t*)source, 0, equalLength, uc32);
+            U8_GET_OR_FFFD((const uint8_t*)source, 0, equalLength, sourceLength, uc32);
+            if (uc32 >= 0x10000 || ucol_unsafeCP((UChar)uc32, coll)) {
+                bUnsafeCP = TRUE;
             }
-            if (uc32 == -1) {
-                uc32 = 0xfffd;
-                bSawNonLatin1 |= TRUE;
-            } else {
-                if (uc32 >= 0x10000 || ucol_unsafeCP((UChar)uc32, coll)) {
-                    bUnsafeCP = TRUE;
-                }
-                bSawNonLatin1 |= (uc32 > 0xff);
-            }
+            bSawNonLatin1 |= (uc32 > 0xff);
         }
         if (!bTargLimit) {
-            if (targetLength >= 0) {
-                U8_GET((uint8_t*)target, 0, equalLength, targetLength, uc32);
-            } else {
-                U8_GET_NULLTERM((uint8_t*)target, 0, equalLength, uc32);
+            U8_GET_OR_FFFD((const uint8_t*)target, 0, equalLength, targetLength, uc32);
+            if (uc32 >= 0x10000 || ucol_unsafeCP((UChar)uc32, coll)) {
+                bUnsafeCP = TRUE;
             }
-            if (uc32 == -1) {
-                uc32 = 0xfffd;
-                bSawNonLatin1 |= TRUE;
-            } else {
-                if (uc32 >= 0x10000 || ucol_unsafeCP((UChar)uc32, coll)) {
-                    bUnsafeCP = TRUE;
-                }
-                bSawNonLatin1 |= (uc32 > 0xff);
-            }
+            bSawNonLatin1 |= (uc32 > 0xff);
         }
 
         if (bUnsafeCP) {
@@ -9000,7 +8807,7 @@ ucol_strcollUTF8(
                 // We are stopped in the middle of a contraction.
                 // Scan backwards through the == part of the string looking for the start of the contraction.
                 //   It doesn't matter which string we scan, since they are the same in this region.
-                U8_PREV((uint8_t*)source, 0, equalLength, uc32);
+                U8_PREV_OR_FFFD((uint8_t*)source, 0, equalLength, uc32);
                 bSawNonLatin1 |= (uc32 > 0xff);
                 if (uc32 < 0x10000 && !ucol_unsafeCP((UChar)uc32, coll)) {
                     break;

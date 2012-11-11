@@ -253,6 +253,37 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
     U8_NEXT(s, _u8_get_index, length, c); \
 }
 
+/**
+ * Get a code point from a string at a random-access offset,
+ * without changing the offset.
+ * The offset may point to either the lead byte or one of the trail bytes
+ * for a code point, in which case the macro will read all of the bytes
+ * for the code point.
+ *
+ * The length can be negative for a NUL-terminated string.
+ *
+ * If the offset points to an illegal UTF-8 byte sequence, then
+ * c is set to U+FFFD.
+ * Iteration through a string is more efficient with U8_NEXT_UNSAFE or U8_NEXT_OR_FFFD.
+ *
+ * This macro does not distinguish between a real U+FFFD in the text
+ * and U+FFFD returned for an ill-formed sequence.
+ * Use U8_GET() if that distinction is important.
+ *
+ * @param s const uint8_t * string
+ * @param start int32_t starting string offset
+ * @param i int32_t string offset, must be start<=i<length
+ * @param length int32_t string length
+ * @param c output UChar32 variable, set to U+FFFD in case of an error
+ * @see U8_GET
+ * @draft ICU 51
+ */
+#define U8_GET_OR_FFFD(s, start, i, length, c) { \
+    int32_t _u8_get_index=(i); \
+    U8_SET_CP_START(s, start, _u8_get_index); \
+    U8_NEXT_OR_FFFD(s, _u8_get_index, length, c); \
+}
+
 /* definitions with forward iteration --------------------------------------- */
 
 /**
@@ -328,11 +359,60 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
         ) { \
             (c)=(UChar)((((c)&0x1f)<<6)|__t1); \
             ++(i); \
-        } else if(U8_IS_LEAD(c)) { \
+        } else { \
             /* function call for "complicated" and error cases */ \
             (c)=utf8_nextCharSafeBody((const uint8_t *)s, &(i), (length), c, -1); \
+        } \
+    } \
+}
+
+/**
+ * Get a code point from a string at a code point boundary offset,
+ * and advance the offset to the next code point boundary.
+ * (Post-incrementing forward iteration.)
+ * "Safe" macro, checks for illegal sequences and for string boundaries.
+ *
+ * The length can be negative for a NUL-terminated string.
+ *
+ * The offset may point to the lead byte of a multi-byte sequence,
+ * in which case the macro will read the whole sequence.
+ * If the offset points to a trail byte or an illegal UTF-8 sequence, then
+ * c is set to U+FFFD.
+ *
+ * This macro does not distinguish between a real U+FFFD in the text
+ * and U+FFFD returned for an ill-formed sequence.
+ * Use U8_NEXT() if that distinction is important.
+ *
+ * @param s const uint8_t * string
+ * @param i int32_t string offset, must be i<length
+ * @param length int32_t string length
+ * @param c output UChar32 variable, set to U+FFFD in case of an error
+ * @see U8_NEXT
+ * @draft ICU 51
+ */
+#define U8_NEXT_OR_FFFD(s, i, length, c) { \
+    (c)=(uint8_t)(s)[(i)++]; \
+    if((c)>=0x80) { \
+        uint8_t __t1, __t2; \
+        if( /* handle U+1000..U+CFFF inline */ \
+            (0xe0<(c) && (c)<=0xec) && \
+            (((i)+1)<(length) || (length)<0) && \
+            (__t1=(uint8_t)((s)[i]-0x80))<=0x3f && \
+            (__t2=(uint8_t)((s)[(i)+1]-0x80))<= 0x3f \
+        ) { \
+            /* no need for (c&0xf) because the upper bits are truncated after <<12 in the cast to (UChar) */ \
+            (c)=(UChar)(((c)<<12)|(__t1<<6)|__t2); \
+            (i)+=2; \
+        } else if( /* handle U+0080..U+07FF inline */ \
+            ((c)<0xe0 && (c)>=0xc2) && \
+            ((i)!=(length)) && \
+            (__t1=(uint8_t)((s)[i]-0x80))<=0x3f \
+        ) { \
+            (c)=(UChar)((((c)&0x1f)<<6)|__t1); \
+            ++(i); \
         } else { \
-            (c)=U_SENTINEL; \
+            /* function call for "complicated" and error cases */ \
+            (c)=utf8_nextCharSafeBody((const uint8_t *)s, &(i), (length), c, -3); \
         } \
     } \
 }
@@ -588,11 +668,38 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
 #define U8_PREV(s, start, i, c) { \
     (c)=(uint8_t)(s)[--(i)]; \
     if((c)>=0x80) { \
-        if((c)<=0xbf) { \
-            (c)=utf8_prevCharSafeBody((const uint8_t *)s, start, &(i), c, -1); \
-        } else { \
-            (c)=U_SENTINEL; \
-        } \
+        (c)=utf8_prevCharSafeBody((const uint8_t *)s, start, &(i), c, -1); \
+    } \
+}
+
+/**
+ * Move the string offset from one code point boundary to the previous one
+ * and get the code point between them.
+ * (Pre-decrementing backward iteration.)
+ * "Safe" macro, checks for illegal sequences and for string boundaries.
+ *
+ * The input offset may be the same as the string length.
+ * If the offset is behind a multi-byte sequence, then the macro will read
+ * the whole sequence.
+ * If the offset is behind a lead byte, then that itself
+ * will be returned as the code point.
+ * If the offset is behind an illegal UTF-8 sequence, then c is set to U+FFFD.
+ *
+ * This macro does not distinguish between a real U+FFFD in the text
+ * and U+FFFD returned for an ill-formed sequence.
+ * Use U8_PREV() if that distinction is important.
+ *
+ * @param s const uint8_t * string
+ * @param start int32_t starting string offset (usually 0)
+ * @param i int32_t string offset, must be start<i
+ * @param c output UChar32 variable, set to U+FFFD in case of an error
+ * @see U8_PREV
+ * @draft ICU 51
+ */
+#define U8_PREV_OR_FFFD(s, start, i, c) { \
+    (c)=(uint8_t)(s)[--(i)]; \
+    if((c)>=0x80) { \
+        (c)=utf8_prevCharSafeBody((const uint8_t *)s, start, &(i), c, -3); \
     } \
 }
 
