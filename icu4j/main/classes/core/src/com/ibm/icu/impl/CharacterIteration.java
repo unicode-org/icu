@@ -63,6 +63,9 @@ public final class CharacterIteration {
     //        from there, but the ci.getIndex() will be wrong, and needs
     //        adjustment.
     public static int nextTrail32(CharacterIterator ci, int lead) {
+        if (lead == CharacterIterator.DONE && ci.getIndex() >= ci.getEndIndex()) {
+            return DONE32;
+        }
         int retVal = lead;
         if (lead <= UTF16.LEAD_SURROGATE_MAX_VALUE) {
             char  cTrail = ci.next();
@@ -72,10 +75,6 @@ public final class CharacterIteration {
                             UTF16.SUPPLEMENTARY_MIN_VALUE;
             } else {
                 ci.previous();
-            }
-        } else {
-            if (lead == CharacterIterator.DONE && ci.getIndex() >= ci.getEndIndex()) {
-                retVal = DONE32;
             }
         }
         return retVal;
