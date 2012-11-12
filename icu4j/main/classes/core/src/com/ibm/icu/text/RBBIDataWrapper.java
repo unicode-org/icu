@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and    *
+* Copyright (C) 1996-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -335,6 +335,10 @@ final class RBBIDataWrapper {
     ///CLOVER:OFF
     /* Debug function to display the break iterator data. */
     void dump() {
+        if (fFTable.length == 0) {
+            // There is no table. Fail early for testing purposes.
+            throw new NullPointerException();
+        }
         System.out.println("RBBI Data Wrapper dump ...");
         System.out.println();
         System.out.println("Forward State Table");

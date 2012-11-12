@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.Stack;
 
 import com.ibm.icu.impl.Assert;
+import com.ibm.icu.impl.CharTrie;
 import com.ibm.icu.impl.ICUDebug;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UProperty;
@@ -44,7 +45,10 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @internal 
      * @deprecated This API is ICU internal only.
      */
-    public RuleBasedBreakIterator() {
+    private RuleBasedBreakIterator() {
+        fLastStatusIndexValid = true;
+        fDictionaryCharCount  = 0;
+        fBreakEngines.add(fUnhandledBreakEngine);
     }
 
     /**
@@ -74,7 +78,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @stable ICU 2.2
      */
     public RuleBasedBreakIterator(String rules)  {
-        init();
+        this();
         try {
             ByteArrayOutputStream ruleOS = new ByteArrayOutputStream();
             compileRules(rules, ruleOS);
@@ -248,7 +252,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     //               are.  The state machine only fetches user text input while in RUN mode.
     private static final int  RBBI_START  = 0;
     private static final int  RBBI_RUN    = 1;
-    private static final int  RBBI_END   = 2;
+    private static final int  RBBI_END    = 2;
 
     /*
      * The character iterator through which this BreakIterator accesses the text.
@@ -260,7 +264,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    RBBIDataWrapper     fRData;
+    RBBIDataWrapper             fRData;
     
     /*
      * Index of the Rule {tag} values for the most recent match. 
@@ -342,12 +346,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
      */
     public void dump() {
         this.fRData.dump();   
-    }
-
-    private void init() {
-        fLastStatusIndexValid = true;
-        fDictionaryCharCount  = 0;
-        fBreakEngines.add(fUnhandledBreakEngine);
     }
 
     /**
@@ -1005,7 +1003,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    protected LanguageBreakEngine getEngineFor(int c) { 
+    private LanguageBreakEngine getEngineFor(int c) { 
         if (c == DONE32 || !fUseDictionary) {
             return null;
         }
@@ -1063,7 +1061,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
     //      handleNext(void)    All forward iteration vectors through this function.
     //                      
     //-----------------------------------------------------------------------------------
-    int handleNext() {
+    private int handleNext() {
         // if there are no cached break positions, or if we've just moved
         // off the end of the range covered by the cache, we have to dump
         // and possibly regenerate the cache
@@ -1087,12 +1085,13 @@ public class RuleBasedBreakIterator extends BreakIterator {
                     Stack<Integer> breaks = new Stack<Integer>();
                     e.findBreaks(fText, startPos, result, false, getBreakType(), breaks);
 
-                    fCachedBreakPositions = new int[breaks.size() + 2];
+                    int breaksSize = breaks.size();
+                    fCachedBreakPositions = new int[breaksSize + 2];
                     fCachedBreakPositions[0] = startPos;
-                    for (int i = 0; i < breaks.size(); i++) {
+                    for (int i = 0; i < breaksSize; i++) {
                         fCachedBreakPositions[i + 1] = breaks.elementAt(i).intValue();
                     }
-                    fCachedBreakPositions[breaks.size() + 1] = result;
+                    fCachedBreakPositions[breaksSize + 1] = result;
 
                     fPositionInCache = 0;
                 } else {
@@ -1148,18 +1147,11 @@ public class RuleBasedBreakIterator extends BreakIterator {
         fLastStatusIndexValid = true;
         fLastRuleStatusIndex  = 0;
 
-        // if we're already at the end of the text, return DONE.
-        if (fText == null) {
-            return BreakIterator.DONE;
-        }
-
         // caches for quicker access
         CharacterIterator text = fText;
-        short flagsState    = stateTable[RBBIDataWrapper.FLAGS+1];
+        CharTrie trie = fRData.fTrie;
 
         // Set up the starting char
-        int initialPosition = text.getIndex();
-        int result          = initialPosition;
         int c               = text.current();
         if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE) {
             c = nextTrail32(text, c);
@@ -1167,11 +1159,14 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 return BreakIterator.DONE;
             }
         }
+        int initialPosition = text.getIndex();
+        int result          = initialPosition;
 
         // Set the initial state for the state machine
         int state           = START_STATE;
         int row             = fRData.getRowIndex(state); 
         short category      = 3;
+        short flagsState    = stateTable[RBBIDataWrapper.FLAGS+1];
         int mode            = RBBI_RUN;
         if ((flagsState & RBBIDataWrapper.RBBI_BOF_REQUIRED) != 0) {
             category = 2;
@@ -1185,8 +1180,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
         int lookaheadStatus = 0;
         int lookaheadTagIdx = 0;
         int lookaheadResult = 0;
-        boolean lookAheadHardBreak = 
-            (flagsState & RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK) != 0;
 
         // loop until we reach the end of the text or transition to state 0
         while (state != STOP_STATE) {
@@ -1205,11 +1198,6 @@ public class RuleBasedBreakIterator extends BreakIterator {
                         // the match at the / position from the look-ahead rule.
                         result = lookaheadResult;
                         fLastRuleStatusIndex = lookaheadTagIdx;
-                    } else if (result == initialPosition) {
-                        // Ran off end, no match found.
-                        // move forward one
-                        text.setIndex(initialPosition);
-                        next32(text);
                     }
                     break;
                 }
@@ -1226,7 +1214,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
                 // look up the current character's character category, which tells us
                 // which column in the state table to look at.
                 //
-                category = (short) fRData.fTrie.getCodePointValue(c);
+                category = (short) trie.getCodePointValue(c);
                 
                 // Check the dictionary bit in the character's category.
                 //    Counter is only used by dictionary based iterators (subclasses).
@@ -1283,7 +1271,7 @@ public class RuleBasedBreakIterator extends BreakIterator {
                     fLastRuleStatusIndex = lookaheadTagIdx;
                     lookaheadStatus      = 0;
                     // TODO: make a standalone hard break in a rule work.
-                    if (lookAheadHardBreak) {
+                    if ((flagsState & RBBIDataWrapper.RBBI_LOOKAHEAD_HARD_BREAK) != 0) {
                         text.setIndex(result);
                         return result;
                     }
@@ -1312,22 +1300,24 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
         // The state machine is done.  Check whether it found a match...
 
-        // If the iterator failed to advance in the match engine, force it ahead by one.
-        //   (This really indicates a defect in the break rules.  They should always match
-        //    at least one character.)
+        // If c == DONE32 we ran off the end as normal, no match found. Move forward one.
+        // If the iterator failed to advance in the match engine when c != DONE32,
+        //   force it ahead by one. (This second condition really indicates a defect
+        //   in the break rules. They should always match at least one character.)
         if (result == initialPosition) {
-            if (TRACE) {
+            if (TRACE && c != DONE32) {
                 System.out.println("Iterator did not move. Advancing by 1.");
             }
-            result = text.setIndex(initialPosition);
+            text.setIndex(initialPosition);
             next32(text);
             result = text.getIndex();
         }
-
-        // Leave the iterator at our result position.
-        //   (we may have advanced beyond the last accepting position chasing after
-        //    longer matches that never completed.)
-        text.setIndex(result);
+        else {
+            // Leave the iterator at our result position.
+            //   (we may have advanced beyond the last accepting position chasing after
+            //    longer matches that never completed.)
+            text.setIndex(result);
+        }
         if (TRACE) {
             System.out.println("result = " + result);
         }
