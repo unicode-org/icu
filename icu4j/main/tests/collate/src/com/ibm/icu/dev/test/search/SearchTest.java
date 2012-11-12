@@ -1790,7 +1790,7 @@ public class SearchTest extends TestFmwk {
     }
 
     public void TestSupplementary() {
-        if (isICUVersionBefore(51, 0, 1)) { // ticket#8080
+        if (isICUVersionBefore(51, 0, 2)) { // ticket#8080
             return;
         }
         int count = 0;
@@ -1803,7 +1803,7 @@ public class SearchTest extends TestFmwk {
     }
 
     public void TestSupplementaryCanonical() {
-        if (isICUVersionBefore(51, 0, 1)) { // ticket#8080
+        if (isICUVersionBefore(51, 0, 2)) { // ticket#8080
             return;
         }
         int count = 0;
