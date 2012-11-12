@@ -694,7 +694,7 @@ public class RBBITest extends TestFmwk {
 
     /* Tests the method public Object clone() */
     public void TestClone() {
-        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator();
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
         try {
             rbbi.setText((CharacterIterator) null);
             if (((RuleBasedBreakIterator) rbbi.clone()).getText() != null)
@@ -745,7 +745,7 @@ public class RBBITest extends TestFmwk {
      * Tests the method public void dump()
      */
     public void TestDump() {
-        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator();
+        RuleBasedBreakIterator rbbi = new RuleBasedBreakIterator("");
         try {
             rbbi.dump();
             errln("RuleBasedBreakIterator.dump() was suppose to return "

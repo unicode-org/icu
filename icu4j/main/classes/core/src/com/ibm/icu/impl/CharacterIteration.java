@@ -17,7 +17,7 @@ public final class CharacterIteration {
     // 32 bit Char value returned from when an iterator has run out of range.
     //     Positive value so fast case (not end, not surrogate) can be checked
     //     with a single test.
-    public static int DONE32 = 0x7fffffff;
+    public static final int DONE32 = 0x7fffffff;
 
     /**
      * Move the iterator forward to the next code point, and return that code point,
