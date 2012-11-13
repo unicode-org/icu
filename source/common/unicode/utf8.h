@@ -357,7 +357,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
             ((i)!=(length)) && \
             (__t1=(uint8_t)((s)[i]-0x80))<=0x3f \
         ) { \
-            (c)=(UChar)((((c)&0x1f)<<6)|__t1); \
+            (c)=(((c)&0x1f)<<6)|__t1; \
             ++(i); \
         } else { \
             /* function call for "complicated" and error cases */ \
@@ -408,7 +408,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
             ((i)!=(length)) && \
             (__t1=(uint8_t)((s)[i]-0x80))<=0x3f \
         ) { \
-            (c)=(UChar)((((c)&0x1f)<<6)|__t1); \
+            (c)=(((c)&0x1f)<<6)|__t1; \
             ++(i); \
         } else { \
             /* function call for "complicated" and error cases */ \
