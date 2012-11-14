@@ -181,6 +181,9 @@
     <ClCompile Include="caltztst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="compactdecimalformattest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="dadrcal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
