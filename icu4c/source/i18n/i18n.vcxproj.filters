@@ -495,6 +495,9 @@
     <ClCompile Include="tznames_impl.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="compactdecimalformat.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="bocsu.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -1017,6 +1020,9 @@
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\tznames.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\compactdecimalformat.h">
       <Filter>formatting</Filter>
     </CustomBuild>
   </ItemGroup>
