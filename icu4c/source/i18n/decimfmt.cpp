@@ -1319,7 +1319,74 @@ DecimalFormat::format(const DigitList &number,
     return appendTo;
 }
 
+DigitList&
+DecimalFormat::_round(const DigitList &number, DigitList &adjustedNum, UBool& isNegative, UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return adjustedNum;
+    }
+    adjustedNum = number;
+    isNegative = false;
+    if (number.isNaN()) {
+        return adjustedNum;
+    }
 
+    // Do this BEFORE checking to see if value is infinite or negative! Sets the
+    // begin and end index to be length of the string composed of
+    // localized name of Infinite and the positive/negative localized
+    // signs.
+
+    adjustedNum.setRoundingMode(fRoundingMode);
+    if (fMultiplier != NULL) {
+        adjustedNum.mult(*fMultiplier, status);
+        if (U_FAILURE(status)) {
+            return adjustedNum;
+        }
+    }
+
+    /*
+     * Note: sign is important for zero as well as non-zero numbers.
+     * Proper detection of -0.0 is needed to deal with the
+     * issues raised by bugs 4106658, 4106667, and 4147706.  Liu 7/6/98.
+     */
+    isNegative = !adjustedNum.isPositive();
+
+    // Apply rounding after multiplier
+
+    adjustedNum.fContext.status &= ~DEC_Inexact;
+    if (fRoundingIncrement != NULL) {
+        adjustedNum.div(*fRoundingIncrement, status);
+        adjustedNum.toIntegralValue();
+        adjustedNum.mult(*fRoundingIncrement, status);
+        adjustedNum.trim();
+        if (U_FAILURE(status)) {
+            return adjustedNum;
+        }
+    }
+    if (fRoundingMode == kRoundUnnecessary && (adjustedNum.fContext.status & DEC_Inexact)) {
+        status = U_FORMAT_INEXACT_ERROR;
+        return adjustedNum;
+    }
+
+    if (adjustedNum.isInfinite()) {
+        return adjustedNum;
+    }
+
+    if (fUseExponentialNotation || areSignificantDigitsUsed()) {
+        int32_t sigDigits = precision();
+        if (sigDigits > 0) {
+            adjustedNum.round(sigDigits);
+        }
+    } else {
+        // Fixed point format.  Round to a set number of fraction digits.
+        int32_t numFractionDigits = precision();
+        adjustedNum.roundFixedPoint(numFractionDigits);
+    }
+    if (fRoundingMode == kRoundUnnecessary && (adjustedNum.fContext.status & DEC_Inexact)) {
+        status = U_FORMAT_INEXACT_ERROR;
+        return adjustedNum;
+    }
+    return adjustedNum;
+}
 
 UnicodeString&
 DecimalFormat::_format(const DigitList &number,
@@ -1327,6 +1394,10 @@ DecimalFormat::_format(const DigitList &number,
                         FieldPositionHandler& handler,
                         UErrorCode &status) const
 {
+    if (U_FAILURE(status)) {
+        return appendTo;
+    }
+
     // Special case for NaN, sets the begin and end index to be the
     // the string length of localized name of NaN.
     if (number.isNaN())
@@ -1340,38 +1411,12 @@ DecimalFormat::_format(const DigitList &number,
         return appendTo;
     }
 
-    // Do this BEFORE checking to see if value is infinite or negative! Sets the
-    // begin and end index to be length of the string composed of
-    // localized name of Infinite and the positive/negative localized
-    // signs.
-
-    DigitList adjustedNum(number);  // Copy, so we do not alter the original. 
-    adjustedNum.setRoundingMode(fRoundingMode);
-    if (fMultiplier != NULL) {
-        adjustedNum.mult(*fMultiplier, status);
-    }
-
-    /* 
-     * Note: sign is important for zero as well as non-zero numbers.
-     * Proper detection of -0.0 is needed to deal with the
-     * issues raised by bugs 4106658, 4106667, and 4147706.  Liu 7/6/98.
-     */
-    UBool isNegative = !adjustedNum.isPositive();
-
-    // Apply rounding after multiplier
-    
-    adjustedNum.fContext.status &= ~DEC_Inexact;
-    if (fRoundingIncrement != NULL) {
-        adjustedNum.div(*fRoundingIncrement, status);
-        adjustedNum.toIntegralValue();
-        adjustedNum.mult(*fRoundingIncrement, status);
-        adjustedNum.trim();
-    }
-    if (fRoundingMode == kRoundUnnecessary && (adjustedNum.fContext.status & DEC_Inexact)) {
-        status = U_FORMAT_INEXACT_ERROR;
+    DigitList adjustedNum;
+    UBool isNegative;
+    _round(number, adjustedNum, isNegative, status);
+    if (U_FAILURE(status)) {
         return appendTo;
     }
-        
 
     // Special case for INFINITE,
     if (adjustedNum.isInfinite()) {
@@ -1387,25 +1432,8 @@ DecimalFormat::_format(const DigitList &number,
         addPadding(appendTo, handler, prefixLen, suffixLen);
         return appendTo;
     }
-
-    if (fUseExponentialNotation || areSignificantDigitsUsed()) {
-        int32_t sigDigits = precision();
-        if (sigDigits > 0) {
-            adjustedNum.round(sigDigits);
-        }
-    } else {
-        // Fixed point format.  Round to a set number of fraction digits.
-        int32_t numFractionDigits = precision();
-        adjustedNum.roundFixedPoint(numFractionDigits);
-    }
-    if (fRoundingMode == kRoundUnnecessary && (adjustedNum.fContext.status & DEC_Inexact)) {
-        status = U_FORMAT_INEXACT_ERROR;
-        return appendTo;
-    }
- 
     return subformat(appendTo, handler, adjustedNum, FALSE, status);
 }
-
 
 UnicodeString&
 DecimalFormat::format(  const Formattable& obj,
