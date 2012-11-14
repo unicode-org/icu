@@ -71,6 +71,9 @@ class StringEnumeration;
  *    cout << " Example 1: " << myString << endl;
  * \endcode
  * </pre>
+ * Note that there are additional factory methods within subclasses of
+ * NumberFormat.
+ * <P>
  * If you are formatting multiple numbers, it is more efficient to get
  * the format and use it multiple times so that the system doesn't
  * have to fetch the information about the local language and country
@@ -982,6 +985,17 @@ protected:
      * @internal
      */
     virtual void getEffectiveCurrency(UChar* result, UErrorCode& ec) const;
+
+    /**
+     * Creates the specified number format style of the desired locale.
+     * If mustBeDecimalFormat is TRUE, then the returned pointer is
+     * either a DecimalFormat or it is NULL.
+     * @internal
+     */
+    static NumberFormat* makeInstance(const Locale& desiredLocale,
+                                      UNumberFormatStyle style,
+                                      UBool mustBeDecimalFormat,
+                                      UErrorCode& errorCode);
 
 private:
 

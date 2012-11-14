@@ -2404,6 +2404,12 @@ private:
 protected:
 
     /**
+     * Rounds a value according to the rules of this object.
+     * @internal
+     */
+    DigitList& _round(const DigitList& number, DigitList& adjustedNum, UBool& isNegative, UErrorCode& status) const;
+
+    /**
      * Returns the currency in effect for this formatter.  Subclasses
      * should override this method as needed.  Unlike getCurrency(),
      * this method should never return "".

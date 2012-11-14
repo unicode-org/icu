@@ -51,6 +51,7 @@ typedef enum ECleanupI18NType {
     UCLN_I18N_COLL_DATA,
     UCLN_I18N_INDEX_CHARACTERS,
     UCLN_I18N_GENDERINFO,
+    UCLN_I18N_CDFINFO,
     UCLN_I18N_COUNT /* This must be last */
 } ECleanupI18NType;
 

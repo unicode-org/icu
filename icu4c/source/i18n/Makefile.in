@@ -86,7 +86,7 @@ tmunit.o tmutamt.o tmutfmt.o colldata.o bmsearch.o bms.o currpinf.o \
 uspoof.o uspoof_impl.o uspoof_build.o uspoof_conf.o uspoof_wsconf.o decfmtst.o smpdtfst.o \
 ztrans.o zrule.o vzone.o fphdlimp.o fpositer.o locdspnm.o \
 decNumber.o decContext.o alphaindex.o tznames.o tznames_impl.o tzgnames.o \
-tzfmt.o gender.o
+tzfmt.o compactdecimalformat.o gender.o
 
 ## Header files to install
 HEADERS = $(srcdir)/unicode/*.h
