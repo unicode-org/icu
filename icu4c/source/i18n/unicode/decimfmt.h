@@ -58,7 +58,7 @@ class UnicodeSet;
 class FieldPositionHandler;
 
 // explicit template instantiation. see digitlst.h
-#if !U_PLATFORM_IS_DARWIN_BASED
+#if defined (_MSC_VER)
 template class U_I18N_API    EnumSet<UNumberFormatAttribute,
             UNUM_MAX_NONBOOLEAN_ATTRIBUTE+1, 
             UNUM_LIMIT_BOOLEAN_ATTRIBUTE>;
