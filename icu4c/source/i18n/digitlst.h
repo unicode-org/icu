@@ -420,13 +420,13 @@ private:
      * Placement new for stack usage
      * @internal
      */
-    static inline void * U_EXPORT2 operator new(size_t size, void *onStack, EStackMode mode) U_NO_THROW { return onStack; }
+    static inline void * U_EXPORT2 operator new(size_t /*size*/, void * onStack, EStackMode  /*mode*/) U_NO_THROW { return onStack; }
 
     /**
      * Placement delete for stack usage
      * @internal
      */
-    static inline void U_EXPORT2 operator delete(void *ptr, void *onStack, EStackMode mode)  U_NO_THROW {}
+    static inline void U_EXPORT2 operator delete(void * /*ptr*/, void * /*onStack*/, EStackMode /*mode*/)  U_NO_THROW {}
 
  private:
     inline void internalSetDouble(double d) {
