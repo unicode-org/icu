@@ -758,7 +758,7 @@ static void populatePower10(const UResourceBundle* power10Bundle, CDFLocaleStyle
     status = U_INTERNAL_PROGRAM_ERROR;
     return;
   }
-  long divisor = power10;
+  double divisor = power10;
   for (int32_t i = 1; i < numZeros; ++i) {
     divisor /= 10.0;
   }
