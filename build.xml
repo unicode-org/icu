@@ -47,8 +47,6 @@
     <!-- <property name="icu4jsrc.zip.versioned.file" value="icu4j-${release.file.ver}.zip"/> -->
     <property name="icu4jsrc.tgz.versioned.file" value="icu4j-${release.file.ver}.tgz"/>
 
-    <property name="icu4jdocs.jar.file" value="icu4j-${release.file.ver}-docs.jar"/>
-
     <!-- API doc -->
     <property name="icu4j.api.doc.title" value="ICU4J ${api.doc.version} API Specification"/>
     <property name="icu4j.api.doc.window.title" value="ICU4J ${api.doc.version}"/>
@@ -1809,7 +1807,7 @@
                 todir="${module.tests.dir}/com/ibm/icu/dev/data"/>
     </target>
 
-    <target name="publishToMavenRepo" depends="release">
+    <target name="publishToMavenRepo" depends="releaseVer">
         <!--
             Publish libraries to Maven repositories, snapshot or release depending on current
             version in pom.xml.
@@ -1865,7 +1863,7 @@
 
         <copy file="${release.dir}/${icu4j.jar.versioned.file}" tofile="${maven.release.dir}/${maven.icu4j.jar.versioned.file}"/>
         <copy file="${release.dir}/${icu4j-src.jar.versioned.file}" tofile="${maven.release.dir}/${maven.icu4j-src.jar.versioned.file}"/>
-        <copy file="${release.dir}/${icu4jdocs.jar.file}" tofile="${maven.release.dir}/${maven.icu4jdocs.jar.file}"/>
+        <copy file="${release.dir}/${icu4jdocs.jar.versioned.file}" tofile="${maven.release.dir}/${maven.icu4jdocs.jar.file}"/>
 
         <copy file="pom.xml" todir="${maven.release.dir}"/>
 
