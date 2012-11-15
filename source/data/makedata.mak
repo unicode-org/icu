@@ -750,13 +750,13 @@ $(ICUBRK)\khmerdict.dict:
 !IFNDEF ICUDATA_SOURCE_ARCHIVE
 # Rule for creating converters
 $(CNV_FILES): $(UCM_SOURCE)
-	@echo Making Charset Conversion tables
+	@echo Building Charset Conversion table $(@B)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -c -d"$(ICUBLD_PKG)" $(ICUSRCDATA_RELATIVE_PATH)\$(ICUUCM)\$(@B).ucm
 !ENDIF
 
 !IFDEF BUILD_SPECIAL_CNV_FILES
 $(CNV_FILES_SPECIAL): $(UCM_SOURCE_SPECIAL)
-	@echo Making Special Charset Conversion tables
+	@echo Building Special Charset Conversion table $(@B)
 	@"$(ICUTOOLS)\makeconv\$(CFG)\makeconv" -c --ignore-siso-check -d"$(ICUBLD_PKG)" $(ICUSRCDATA_RELATIVE_PATH)\$(ICUUCM)\$(@B).ucm
 !ENDIF
 

@@ -808,6 +808,9 @@
     <ClInclude Include="uchar_props_data.h">
       <Filter>properties &amp; sets</Filter>
     </ClInclude>
+    <ClInclude Include="unicode\enumset.h">
+      <Filter>data &amp; memory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="common.rc">
