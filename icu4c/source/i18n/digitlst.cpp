@@ -946,13 +946,6 @@ DigitList::isZero() const
     return decNumberIsZero(fDecNumber);
 }
 
-
-
-void * U_EXPORT2 DigitList::operator new(size_t /*size*/, void *stack, EStackMode /*mode*/) U_NO_THROW {
-  return stack;
-}
-
-
 U_NAMESPACE_END
 #endif // #if !UCONFIG_NO_FORMATTING
 

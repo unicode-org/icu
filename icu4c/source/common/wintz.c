@@ -339,7 +339,7 @@ uprv_detectWindowsTimeZone() {
                         /* if icuTZ has more than one city, take only the first (i.e. terminate icuTZ at first space) */
                         int index=0;
                         while (! (*icuTZ == '\0' || *icuTZ ==' ')) {
-                            tmpid[index++]=*icuTZ++;
+                            tmpid[index++]=(char)(*icuTZ++);  /* safe to assume 'char' is ASCII compatible on windows */
                         }
                         tmpid[index]='\0';
                     }
