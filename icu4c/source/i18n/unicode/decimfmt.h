@@ -38,6 +38,7 @@
 #include "unicode/fpositer.h"
 #include "unicode/stringpiece.h"
 #include "unicode/curramt.h"
+#include "unicode/enumset.h"
 
 /**
  * \def UNUM_DECIMALFORMAT_INTERNAL_SIZE
@@ -56,39 +57,12 @@ class Hashtable;
 class UnicodeSet;
 class FieldPositionHandler;
 
-/**
- * enum bitset for boolean fields. Similar to Java EnumSet<>. 
- * Needs to range check. Not specific to decimal format.
- * @internal
- */
-template<typename T, uint32_t minValue, uint32_t limitValue>
-class EnumSet {
-public:
-    EnumSet() : fBools(0) {}
-    EnumSet(const EnumSet<T,minValue,limitValue>& other) : fBools(other.fBools) {}
-    ~EnumSet() {}
-    void clear() { fBools=0; }
-    void add(T toAdd) { set(toAdd, 1); }
-    void remove(T toRemove) { set(toRemove, 0); }
-    int32_t contains(T toCheck) const { return get(toCheck); }
-    void set(T toSet, int32_t v) { fBools=(fBools&(~flag(toSet)))|(v?(flag(toSet)):0); }
-    int32_t get(T toCheck) const { return (fBools & flag(toCheck))?1:0; }
-    UBool isValidEnum(T toCheck) const {  return (toCheck>=minValue&&toCheck<limitValue); }
-    UBool isValidValue(int32_t v) const { return (v==0||v==1); }
-    const EnumSet<T,minValue,limitValue>& operator=(const EnumSet<T,minValue,limitValue>& other) {
-        fBools = other.fBools;
-        return *this;
-    }
-  
-    uint32_t getAll() const {
-        return fBools; 
-    }
-
-private:
-    uint32_t flag(T toCheck) const { return (1<<(toCheck-minValue)); }
-private:
-    uint32_t fBools;
-};
+// explicit template instantiation. see digitlst.h
+#if !U_PLATFORM_IS_DARWIN_BASED
+template class U_I18N_API    EnumSet<UNumberFormatAttribute,
+            UNUM_MAX_NONBOOLEAN_ATTRIBUTE+1, 
+            UNUM_LIMIT_BOOLEAN_ATTRIBUTE>;
+#endif
 
 /**
  * DecimalFormat is a concrete subclass of NumberFormat that formats decimal
