@@ -387,7 +387,7 @@ void CDFLocaleData::Init(UErrorCode& status) {
 
 // Helper method for operator=
 static UBool divisors_equal(const double* lhs, const double* rhs) {
-  for (int32_t i = 0; i < MAX_DIGITS; i++) {
+  for (int32_t i = 0; i < MAX_DIGITS; ++i) {
     if (lhs[i] != rhs[i]) {
       return FALSE;
     }
@@ -718,7 +718,7 @@ static void populatePower10(const UResourceBundle* power10Bundle, CDFLocaleStyle
   UBool otherVariantDefined = FALSE;
   UResourceBundle* variantBundle = NULL;
   // Iterate over all the plural variants for the power of 10
-  for (int i = 0; i < size; ++i) {
+  for (int32_t i = 0; i < size; ++i) {
     variantBundle = ures_getByIndex(power10Bundle, i, variantBundle, &status);
     if (U_FAILURE(status)) {
       ures_close(variantBundle);
@@ -735,7 +735,7 @@ static void populatePower10(const UResourceBundle* power10Bundle, CDFLocaleStyle
     if (uprv_strcmp(variant, gOther) == 0) {
       otherVariantDefined = TRUE;
     }
-    int nz = populatePrefixSuffix(
+    int32_t nz = populatePrefixSuffix(
         variant, log10Value, formatStr, result->unitsByVariant, status);
     if (U_FAILURE(status)) {
       ures_close(variantBundle);
@@ -759,7 +759,7 @@ static void populatePower10(const UResourceBundle* power10Bundle, CDFLocaleStyle
     return;
   }
   long divisor = power10;
-  for (int i = 1; i < numZeros; i++) {
+  for (int32_t i = 1; i < numZeros; ++i) {
     divisor /= 10.0;
   }
   result->divisors[log10Value] = divisor;
@@ -821,7 +821,7 @@ static void fixQuotes(UnicodeString& s) {
   QuoteState state = OUTSIDE;
   int32_t len = s.length();
   int32_t dest = 0;
-  for (int i = 0; i < len; ++i) {
+  for (int32_t i = 0; i < len; ++i) {
     UChar ch = s.charAt(i);
     if (ch == u_apos) {
       if (state == INSIDE_EMPTY) {
@@ -871,7 +871,7 @@ static void fillInMissing(CDFLocaleStyleData* result) {
       (const CDFUnit*) uhash_get(result->unitsByVariant, gOther);
   UBool definedInCLDR[MAX_DIGITS];
   double lastDivisor = 1.0;
-  for (int i = 0; i < MAX_DIGITS; ++i) {
+  for (int32_t i = 0; i < MAX_DIGITS; ++i) {
     if (!otherUnits[i].isSet()) {
       result->divisors[i] = lastDivisor;
       definedInCLDR[i] = FALSE;
