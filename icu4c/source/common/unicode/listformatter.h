@@ -100,22 +100,12 @@ class U_COMMON_API ListFormatter : public UObject{
         UnicodeString& appendTo, UErrorCode& errorCode) const;
 
     /**
-     * Gets the fallback locale for a given locale.
-     * TODO: Consider moving this to the Locale class.
-     * @param in The input locale.
-     * @param out The output locale after fallback.
-     * @internal For testing.
-     */
-    static void getFallbackLocale(const Locale& in, Locale& out, UErrorCode& errorCode);
-
-    /**
      * @internal constructor made public for testing.
      */
     ListFormatter(const ListFormatData& listFormatterData);
 
   private:
     static void initializeHash(UErrorCode& errorCode);
-    static void addDataToHash(const char* locale, const char* two, const char* start, const char* middle, const char* end, UErrorCode& errorCode);
     static const ListFormatData* getListFormatData(const Locale& locale, UErrorCode& errorCode);
 
     ListFormatter();

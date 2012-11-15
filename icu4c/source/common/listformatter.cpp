@@ -21,6 +21,7 @@
 #include "ulocimp.h"
 #include "charstr.h"
 #include "ucln_cmn.h"
+#include "uresimp.h"
 
 U_NAMESPACE_BEGIN
 
@@ -43,6 +44,9 @@ uprv_deleteListFormatData(void *obj) {
 
 U_CDECL_END
 
+static ListFormatData* loadListFormatData(const Locale& locale, UErrorCode& errorCode);
+static void getStringByKey(const UResourceBundle* rb, const char* key, UnicodeString& result, UErrorCode& errorCode);
+
 void ListFormatter::initializeHash(UErrorCode& errorCode) {
     if (U_FAILURE(errorCode)) {
         return;
@@ -57,106 +61,6 @@ void ListFormatter::initializeHash(UErrorCode& errorCode) {
     listPatternHash->setValueDeleter(uprv_deleteListFormatData);
     ucln_common_registerCleanup(UCLN_COMMON_LIST_FORMATTER, uprv_listformatter_cleanup);
 
-    addDataToHash("af", "{0} en {1}", "{0}, {1}", "{0}, {1}", "{0} en {1}", errorCode);
-    addDataToHash("am", "{0} \\u12a5\\u1293 {1}", "{0}, {1}", "{0}, {1}", "{0}, \\u12a5\\u1293 {1}", errorCode);
-    addDataToHash("ar", "{0} \\u0648 {1}", "{0}\\u060c {1}", "{0}\\u060c {1}", "{0}\\u060c \\u0648 {1}", errorCode);
-    addDataToHash("bg", "{0} \\u0438 {1}", "{0}, {1}", "{0}, {1}", "{0} \\u0438 {1}", errorCode);
-    addDataToHash("bn", "{0} \\u098f\\u09ac\\u0982 {1}", "{0}, {1}", "{0}, {1}", "{0}, \\u098f\\u09ac\\u0982 {1}", errorCode);
-    addDataToHash("bs", "{0} i {1}", "{0}, {1}", "{0}, {1}", "{0} i {1}", errorCode);
-    addDataToHash("ca", "{0} i {1}", "{0}, {1}", "{0}, {1}", "{0} i {1}", errorCode);
-    addDataToHash("cs", "{0} a {1}", "{0}, {1}", "{0}, {1}", "{0} a {1}", errorCode);
-    addDataToHash("da", "{0} og {1}", "{0}, {1}", "{0}, {1}", "{0} og {1}", errorCode);
-    addDataToHash("de", "{0} und {1}", "{0}, {1}", "{0}, {1}", "{0} und {1}", errorCode);
-    addDataToHash("ee", "{0} kple {1}", "{0}, {1}", "{0}, {1}", "{0}, kple {1}", errorCode);
-    addDataToHash("el", "{0} \\u03ba\\u03b1\\u03b9 {1}", "{0}, {1}", "{0}, {1}", "{0} \\u03ba\\u03b1\\u03b9 {1}", errorCode);
-    addDataToHash("en", "{0} and {1}", "{0}, {1}", "{0}, {1}", "{0}, and {1}", errorCode);
-    addDataToHash("es", "{0} y {1}", "{0}, {1}", "{0}, {1}", "{0} y {1}", errorCode);
-    addDataToHash("et", "{0} ja {1}", "{0}, {1}", "{0}, {1}", "{0} ja {1}", errorCode);
-    addDataToHash("eu", "{0} eta {1}", "{0}, {1}", "{0}, {1}", "{0} eta {1}", errorCode);
-    addDataToHash("fa", "{0} \\u0648 {1}", "{0}\\u060c\\u200f {1}", "{0}\\u060c\\u200f {1}", "{0}\\u060c \\u0648 {1}", errorCode);
-    addDataToHash("fi", "{0} ja {1}", "{0}, {1}", "{0}, {1}", "{0} ja {1}", errorCode);
-    addDataToHash("fil", "{0} at {1}", "{0}, {1}", "{0}, {1}", "{0} at {1}", errorCode);
-    addDataToHash("fo", "{0} og {1}", "{0}, {1}", "{0}, {1}", "{0} og {1}", errorCode);
-    addDataToHash("fr", "{0} et {1}", "{0}, {1}", "{0}, {1}", "{0} et {1}", errorCode);
-    addDataToHash("fur", "{0} e {1}", "{0}, {1}", "{0}, {1}", "{0} e {1}", errorCode);
-    addDataToHash("gd", "{0} agus {1}", "{0}, {1}", "{0}, {1}", "{0}, agus {1}", errorCode);
-    addDataToHash("gl", "{0} e {1}", "{0}, {1}", "{0}, {1}", "{0} e {1}", errorCode);
-    addDataToHash("gsw", "{0} und {1}", "{0}, {1}", "{0}, {1}", "{0} und {1}", errorCode);
-    addDataToHash("gu", "{0} \\u0a85\\u0aa8\\u0ac7 {1}", "{0}, {1}", "{0}, {1}", "{0} \\u0a85\\u0aa8\\u0ac7 {1}", errorCode);
-    addDataToHash("he", "{0} \\u05d5-{1}", "{0}, {1}", "{0}, {1}", "{0} \\u05d5-{1}", errorCode);
-    addDataToHash("hi", "{0} \\u0914\\u0930 {1}", "{0}, {1}", "{0}, {1}", "{0}, \\u0914\\u0930 {1}", errorCode);
-    addDataToHash("hr", "{0} i {1}", "{0}, {1}", "{0}, {1}", "{0} i {1}", errorCode);
-    addDataToHash("hu", "{0} \\u00e9s {1}", "{0}, {1}", "{0}, {1}", "{0} \\u00e9s {1}", errorCode);
-    addDataToHash("id", "{0} dan {1}", "{0}, {1}", "{0}, {1}", "{0}, dan {1}", errorCode);
-    addDataToHash("is", "{0} og {1}", "{0}, {1}", "{0}, {1}", "{0} og {1}", errorCode);
-    addDataToHash("it", "{0} e {1}", "{0}, {1}", "{0}, {1}", "{0}, e {1}", errorCode);
-    addDataToHash("ja", "{0}\\u3001{1}", "{0}\\u3001{1}", "{0}\\u3001{1}", "{0}\\u3001{1}", errorCode);
-    addDataToHash("ka", "{0} \\u10d3\\u10d0 {1}", "{0}, {1}", "{0}, {1}", "{0} \\u10d3\\u10d0 {1}", errorCode);
-    addDataToHash("kea", "{0} y {1}", "{0}, {1}", "{0}, {1}", "{0} y {1}", errorCode);
-    addDataToHash("kl", "{0} aamma {1}", "{0} aamma {1}", "{0}, {1}", "{0}, {1}", errorCode);
-    addDataToHash("kn", "{0} \\u0cae\\u0ca4\\u0ccd\\u0ca4\\u0cc1 {1}", "{0}, {1}", "{0}, {1}",
-                  "{0}, \\u0cae\\u0ca4\\u0ccd\\u0ca4\\u0cc1 {1}", errorCode);
-    addDataToHash("ko", "{0} \\ubc0f {1}", "{0}, {1}", "{0}, {1}", "{0} \\ubc0f {1}", errorCode);
-    addDataToHash("ksh", "{0} un {1}", "{0}, {1}", "{0}, {1}", "{0} un {1}", errorCode);
-    addDataToHash("lt", "{0} ir {1}", "{0}, {1}", "{0}, {1}", "{0} ir {1}", errorCode);
-    addDataToHash("lv", "{0} un {1}", "{0}, {1}", "{0}, {1}", "{0} un {1}", errorCode);
-    addDataToHash("ml", "{0} \\u0d15\\u0d42\\u0d1f\\u0d3e\\u0d24\\u0d46 {1}", "{0}, {1}", "{0}, {1}",
-                  "{0}, {1} \\u0d0e\\u0d28\\u0d4d\\u0d28\\u0d3f\\u0d35", errorCode);
-    addDataToHash("mr", "{0} \\u0906\\u0923\\u093f {1}", "{0}, {1}", "{0}, {1}", "{0} \\u0906\\u0923\\u093f {1}", errorCode);
-    addDataToHash("ms", "{0} dan {1}", "{0}, {1}", "{0}, {1}", "{0}, dan {1}", errorCode);
-    addDataToHash("nb", "{0} og {1}", "{0}, {1}", "{0}, {1}", "{0} og {1}", errorCode);
-    addDataToHash("nl", "{0} en {1}", "{0}, {1}", "{0}, {1}", "{0} en {1}", errorCode);
-    addDataToHash("nn", "{0} og {1}", "{0}, {1}", "{0}, {1}", "{0} og {1}", errorCode);
-    addDataToHash("pl", "{0} i {1}", "{0}; {1}", "{0}; {1}", "{0} i {1}", errorCode);
-    addDataToHash("pt", "{0} e {1}", "{0}, {1}", "{0}, {1}", "{0} e {1}", errorCode);
-    addDataToHash("ro", "{0} \\u015fi {1}", "{0}, {1}", "{0}, {1}", "{0} \\u015fi {1}", errorCode);
-    addDataToHash("", "{0}, {1}", "{0}, {1}", "{0}, {1}", "{0}, {1}", errorCode); // root
-    addDataToHash("ru", "{0} \\u0438 {1}", "{0}, {1}", "{0}, {1}", "{0} \\u0438 {1}", errorCode);
-    addDataToHash("se", "{0} ja {1}", "{0}, {1}", "{0}, {1}", "{0} ja {1}", errorCode);
-    addDataToHash("sk", "{0} a {1}", "{0}, {1}", "{0}, {1}", "{0} a {1}", errorCode);
-    addDataToHash("sl", "{0} in {1}", "{0}, {1}", "{0}, {1}", "{0} in {1}", errorCode);
-    addDataToHash("sr", "{0} \\u0438 {1}", "{0}, {1}", "{0}, {1}", "{0} \\u0438 {1}", errorCode);
-    addDataToHash("sr_Cyrl", "{0} \\u0438 {1}", "{0}, {1}", "{0}, {1}", "{0} \\u0438 {1}", errorCode);
-    addDataToHash("sr_Latn", "{0} i {1}", "{0}, {1}", "{0}, {1}", "{0} i {1}", errorCode);
-    addDataToHash("sv", "{0} och {1}", "{0}, {1}", "{0}, {1}", "{0} och {1}", errorCode);
-    addDataToHash("sw", "{0} na {1}", "{0}, {1}", "{0}, {1}", "{0}, na {1}", errorCode);
-    addDataToHash("ta", "{0} \\u0bae\\u0bb1\\u0bcd\\u0bb1\\u0bc1\\u0bae\\u0bcd {1}", "{0}, {1}", "{0}, {1}",
-                  "{0} \\u0bae\\u0bb1\\u0bcd\\u0bb1\\u0bc1\\u0bae\\u0bcd {1}", errorCode);
-    addDataToHash("te", "{0} \\u0c2e\\u0c30\\u0c3f\\u0c2f\\u0c41 {1}", "{0}, {1}", "{0}, {1}",
-                  "{0} \\u0c2e\\u0c30\\u0c3f\\u0c2f\\u0c41 {1}", errorCode);
-    addDataToHash("th", "{0}\\u0e41\\u0e25\\u0e30{1}", "{0} {1}", "{0} {1}", "{0} \\u0e41\\u0e25\\u0e30{1}", errorCode);
-    addDataToHash("tr", "{0} ve {1}", "{0}, {1}", "{0}, {1}", "{0} ve {1}", errorCode);
-    addDataToHash("uk", "{0} \\u0442\\u0430 {1}", "{0}, {1}", "{0}, {1}", "{0} \\u0442\\u0430 {1}", errorCode);
-    addDataToHash("ur", "{0} \\u0627\\u0648\\u0631 {1}", "{0}\\u060c {1}", "{0}\\u060c {1}",
-                  "{0}\\u060c \\u0627\\u0648\\u0631 {1}", errorCode);
-    addDataToHash("vi", "{0} v\\u00e0 {1}", "{0}, {1}", "{0}, {1}", "{0} v\\u00e0 {1}", errorCode);
-    addDataToHash("wae", "{0} und {1}", "{0}, {1}", "{0}, {1}", "{0} und {1}", errorCode);
-    addDataToHash("zh", "{0}\\u548c{1}", "{0}\\u3001{1}", "{0}\\u3001{1}", "{0}\\u548c{1}", errorCode);
-    addDataToHash("zu", "I-{0} ne-{1}", "{0}, {1}", "{0}, {1}", "{0}, no-{1}", errorCode);
-}
-
-void ListFormatter::addDataToHash(
-    const char* locale,
-    const char* two,
-    const char* start,
-    const char* middle,
-    const char* end,
-    UErrorCode& errorCode) {
-    if (U_FAILURE(errorCode)) {
-        return;
-    }
-    UnicodeString key(locale, -1, US_INV);
-    ListFormatData* value = new ListFormatData(
-        UnicodeString(two, -1, US_INV).unescape(),
-        UnicodeString(start, -1, US_INV).unescape(),
-        UnicodeString(middle, -1, US_INV).unescape(),
-        UnicodeString(end, -1, US_INV).unescape());
-
-    if (value == NULL) {
-        errorCode = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    listPatternHash->put(key, value, errorCode);
 }
 
 const ListFormatData* ListFormatter::getListFormatData(
@@ -164,6 +68,8 @@ const ListFormatData* ListFormatter::getListFormatData(
     if (U_FAILURE(errorCode)) {
         return NULL;
     }
+    UnicodeString key(locale.getName(), -1, US_INV);
+    ListFormatData* result = NULL;
     {
         Mutex m(&listFormatterMutex);
         if (listPatternHash == NULL) {
@@ -172,10 +78,68 @@ const ListFormatData* ListFormatter::getListFormatData(
                 return NULL;
             }
         }
+        result = static_cast<ListFormatData*>(listPatternHash->get(key));
+    }
+    if (result != NULL) {
+        return result;
+    }
+    result = loadListFormatData(locale, errorCode);
+    if (U_FAILURE(errorCode)) {
+        return NULL;
     }
 
-    UnicodeString key(locale.getName(), -1, US_INV);
-    return static_cast<const ListFormatData*>(listPatternHash->get(key));
+    {
+        Mutex m(&listFormatterMutex);
+        ListFormatData* temp = static_cast<ListFormatData*>(listPatternHash->get(key));
+        if (temp != NULL) {
+            delete result;
+            result = temp;
+        } else {
+            listPatternHash->put(key, result, errorCode);
+            if (U_FAILURE(errorCode)) {
+                return NULL;
+            }
+        }
+    }
+    return result;
+}
+
+static ListFormatData* loadListFormatData(const Locale& locale, UErrorCode& errorCode) {
+    UResourceBundle* rb = ures_open(NULL, locale.getName(), &errorCode);
+    if (U_FAILURE(errorCode)) {
+        ures_close(rb);
+        return NULL;
+    }
+    rb = ures_getByKeyWithFallback(rb, "listPattern", rb, &errorCode);
+    rb = ures_getByKeyWithFallback(rb, "standard", rb, &errorCode);
+    if (U_FAILURE(errorCode)) {
+        ures_close(rb);
+        return NULL;
+    }
+    UnicodeString two, start, middle, end;
+    getStringByKey(rb, "2", two, errorCode);
+    getStringByKey(rb, "start", start, errorCode);
+    getStringByKey(rb, "middle", middle, errorCode);
+    getStringByKey(rb, "end", end, errorCode);
+    ures_close(rb);
+    if (U_FAILURE(errorCode)) {
+        return NULL;
+    }
+    ListFormatData* result = new ListFormatData(two, start, middle, end);
+    if (result == NULL) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    return result;
+}
+
+static void getStringByKey(const UResourceBundle* rb, const char* key, UnicodeString& result, UErrorCode& errorCode) {
+    int32_t len;
+    const UChar* ustr = ures_getStringByKeyWithFallback(rb, key, &len, &errorCode);
+    if (U_FAILURE(errorCode)) {
+      return;
+    }
+    result.setTo(ustr, len);
 }
 
 ListFormatter* ListFormatter::createInstance(UErrorCode& errorCode) {
@@ -185,71 +149,22 @@ ListFormatter* ListFormatter::createInstance(UErrorCode& errorCode) {
 
 ListFormatter* ListFormatter::createInstance(const Locale& locale, UErrorCode& errorCode) {
     Locale tempLocale = locale;
-    for (;;) {
-        const ListFormatData* listFormatData = getListFormatData(tempLocale, errorCode);
-        if (U_FAILURE(errorCode)) {
-            return NULL;
-        }
-        if (listFormatData != NULL) {
-            ListFormatter* p = new ListFormatter(*listFormatData);
-            if (p == NULL) {
-                errorCode = U_MEMORY_ALLOCATION_ERROR;
-                return NULL;
-            }
-            return p;
-        }
-        errorCode = U_ZERO_ERROR;
-        Locale correctLocale;
-        getFallbackLocale(tempLocale, correctLocale, errorCode);
-        if (U_FAILURE(errorCode)) {
-            return NULL;
-        }
-        if (correctLocale.isBogus()) {
-            return createInstance(Locale::getRoot(), errorCode);
-        }
-        tempLocale = correctLocale;
+    const ListFormatData* listFormatData = getListFormatData(tempLocale, errorCode);
+    if (U_FAILURE(errorCode)) {
+        return NULL;
     }
+    ListFormatter* p = new ListFormatter(*listFormatData);
+    if (p == NULL) {
+        errorCode = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
+    }
+    return p;
 }
 
 ListFormatter::ListFormatter(const ListFormatData& listFormatterData) : data(listFormatterData) {
 }
 
 ListFormatter::~ListFormatter() {}
-
-void ListFormatter::getFallbackLocale(const Locale& in, Locale& out, UErrorCode& errorCode) {
-    if (uprv_strcmp(in.getName(), "zh_TW") == 0) {
-        out = Locale::getTraditionalChinese();
-    } else {
-        const char* localeString = in.getName();
-        const char* extStart = locale_getKeywordsStart(localeString);
-        if (extStart == NULL) {
-            extStart = uprv_strchr(localeString, 0);
-        }
-        const char* last = extStart;
-
-        // TODO: Check whether uloc_getParent() will work here.
-        while (last > localeString && *(last - 1) != '_') {
-            --last;
-        }
-
-        // Truncate empty segment.
-        while (last > localeString) {
-            if (*(last-1) != '_') {
-                break;
-            }
-            --last;
-        }
-
-        size_t localePortionLen = last - localeString;
-        CharString fullLocale;
-        fullLocale.append(localeString, localePortionLen, errorCode).append(extStart, errorCode);
-
-        if (U_FAILURE(errorCode)) {
-            return;
-        }
-        out = Locale(fullLocale.data());
-    }
-}
 
 UnicodeString& ListFormatter::format(const UnicodeString items[], int32_t nItems,
                       UnicodeString& appendTo, UErrorCode& errorCode) const {
@@ -263,7 +178,7 @@ UnicodeString& ListFormatter::format(const UnicodeString items[], int32_t nItems
             addNewString(data.twoPattern, newString, items[1], errorCode);
         } else if (nItems > 2) {
             addNewString(data.startPattern, newString, items[1], errorCode);
-            int i;
+            int32_t i;
             for (i = 2; i < nItems - 1; ++i) {
                 addNewString(data.middlePattern, newString, items[i], errorCode);
             }
