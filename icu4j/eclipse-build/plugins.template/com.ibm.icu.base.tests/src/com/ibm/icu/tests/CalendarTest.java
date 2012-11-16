@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2006-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2006-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -502,20 +502,6 @@ public class CalendarTest extends ICUTestCase {
         Calendar cal = Calendar.getInstance(Locale.US);
         assertEquals(Calendar.WEEKDAY, cal.getDayOfWeekType(Calendar.FRIDAY));
         assertEquals(Calendar.WEEKEND, cal.getDayOfWeekType(Calendar.SATURDAY));
-    }
-
-    /*
-     * Test method for 'com.ibm.icu.util.Calendar.getWeekendTransition(int)'
-     */
-    public void testGetWeekendTransition() {
-        Calendar cal = Calendar.getInstance(Locale.US);
-        try {
-            cal.getWeekendTransition(Calendar.WEEKEND_ONSET);
-            fail("expected IllegalArgumentException from getWeekendTransition");
-        }
-        catch (UnsupportedOperationException e) {
-            // ok
-        }
     }
 
     /*

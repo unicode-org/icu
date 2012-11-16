@@ -9,9 +9,9 @@ package com.ibm.icu.util;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.Set;
+import java.util.SimpleTimeZone;
 
 import com.ibm.icu.util.ULocale.Category;
 
@@ -93,7 +93,7 @@ import com.ibm.icu.util.ULocale.Category;
  * @author       Mark Davis, David Goldsmith, Chen-Lieh Huang, Alan Liu
  * @stable ICU 2.0
  */
-public class TimeZone implements Serializable, Cloneable {
+public class TimeZone implements Serializable, Cloneable, Freezable<TimeZone> {
     private static final long serialVersionUID = 1L;
     
     /**
@@ -157,104 +157,104 @@ public class TimeZone implements Serializable, Cloneable {
      */
     public static final int LONG  = 1;
 
-    /**
-     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
-     * a short generic name, such as "PT."
-     * @see #LONG_GENERIC
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final int SHORT_GENERIC = 2;
-
-    /**
-     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
-     * a long generic name, such as "Pacific Time."
-     * @see #SHORT_GENERIC
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final int LONG_GENERIC = 3;
-
-    /**
-     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
-     * a short name derived from the timezone's offset, such as "-0800."
-     * @see #LONG_GMT
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final int SHORT_GMT = 4;
-
-    /**
-     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
-     * a long name derived from the timezone's offset, such as "GMT-08:00."
-     * @see #SHORT_GMT
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final int LONG_GMT = 5;
-
-    /**
-     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
-     * a short name derived from the timezone's short standard or daylight
-     * timezone name ignoring commonlyUsed, such as "PDT."
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
-     */
-
-    public static final int SHORT_COMMONLY_USED = 6;
-
-    /**
-     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
-     * a long name derived from the timezone's fallback name, such as
-     * "United States (Los Angeles)."
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final int GENERIC_LOCATION = 7;
-
-    /**
-     * Gets the time zone offset, for current date, modified in case of
-     * daylight savings. This is the offset to add *to* UTC to get local time.
-     * @param era the era of the given date.
-     * @param year the year in the given date.
-     * @param month the month in the given date.
-     * Month is 0-based. e.g., 0 for January.
-     * @param day the day-in-month of the given date.
-     * @param dayOfWeek the day-of-week of the given date.
-     * @param milliseconds the millis in day in <em>standard</em> local time.
-     * @return the offset to add *to* GMT to get local time.
-     * @stable ICU 2.0
-     */
+//    /**
+//     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
+//     * a short generic name, such as "PT."
+//     * @see #LONG_GENERIC
+//     * @draft ICU 4.4
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public static final int SHORT_GENERIC = 2;
+//
+//    /**
+//     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
+//     * a long generic name, such as "Pacific Time."
+//     * @see #SHORT_GENERIC
+//     * @draft ICU 4.4
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public static final int LONG_GENERIC = 3;
+//
+//    /**
+//     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
+//     * a short name derived from the timezone's offset, such as "-0800."
+//     * @see #LONG_GMT
+//     * @draft ICU 4.4
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public static final int SHORT_GMT = 4;
+//
+//    /**
+//     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
+//     * a long name derived from the timezone's offset, such as "GMT-08:00."
+//     * @see #SHORT_GMT
+//     * @draft ICU 4.4
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public static final int LONG_GMT = 5;
+//
+//    /**
+//     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
+//     * a short name derived from the timezone's short standard or daylight
+//     * timezone name ignoring commonlyUsed, such as "PDT."
+//     * @draft ICU 4.4
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//
+//    public static final int SHORT_COMMONLY_USED = 6;
+//
+//    /**
+//     * {@icu} A style specifier for <code>getDisplayName()</code> indicating
+//     * a long name derived from the timezone's fallback name, such as
+//     * "United States (Los Angeles)."
+//     * @draft ICU 4.4
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public static final int GENERIC_LOCATION = 7;
+//
+//    /**
+//     * Gets the time zone offset, for current date, modified in case of
+//     * daylight savings. This is the offset to add *to* UTC to get local time.
+//     * @param era the era of the given date.
+//     * @param year the year in the given date.
+//     * @param month the month in the given date.
+//     * Month is 0-based. e.g., 0 for January.
+//     * @param day the day-in-month of the given date.
+//     * @param dayOfWeek the day-of-week of the given date.
+//     * @param milliseconds the millis in day in <em>standard</em> local time.
+//     * @return the offset to add *to* GMT to get local time.
+//     * @stable ICU 2.0
+//     */
     
-    /**
-     * {@icu} System time zone type constants used by filtering zones in
-     * {@link TimeZone#getAvailableIDs(SystemTimeZoneType, String, Integer)}
-     *
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
-     */
-    public enum SystemTimeZoneType {
-        /**
-         * Any system zones.
-         * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release.
-         */
-        ANY,
-
-        /**
-         * Canonical system zones.
-         * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release.
-         */
-        CANONICAL,
-
-        /**
-         * Canonical system zones associated with actual locations.
-         * @draft ICU 4.8
-         * @provisional This API might change or be removed in a future release.
-         */
-        CANONICAL_LOCATION,
-    }
+//    /**
+//     * {@icu} System time zone type constants used by filtering zones in
+//     * {@link TimeZone#getAvailableIDs(SystemTimeZoneType, String, Integer)}
+//     *
+//     * @draft ICU 4.8
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public enum SystemTimeZoneType {
+//        /**
+//         * Any system zones.
+//         * @draft ICU 4.8
+//         * @provisional This API might change or be removed in a future release.
+//         */
+//        ANY,
+//
+//        /**
+//         * Canonical system zones.
+//         * @draft ICU 4.8
+//         * @provisional This API might change or be removed in a future release.
+//         */
+//        CANONICAL,
+//
+//        /**
+//         * Canonical system zones associated with actual locations.
+//         * @draft ICU 4.8
+//         * @provisional This API might change or be removed in a future release.
+//         */
+//        CANONICAL_LOCATION,
+//    }
     
     public int getOffset(int era, int year, int month, int day,
                                   int dayOfWeek, int milliseconds) {
@@ -280,30 +280,30 @@ public class TimeZone implements Serializable, Cloneable {
         return timeZone.getOffset(date);
     }
 
-    /**
-     * Returns the time zone raw and GMT offset for the given moment
-     * in time.  Upon return, local-millis = GMT-millis + rawOffset +
-     * dstOffset.  All computations are performed in the proleptic
-     * Gregorian calendar.  The default implementation in the TimeZone
-     * class delegates to the 8-argument getOffset().
-     *
-     * @param date moment in time for which to return offsets, in
-     * units of milliseconds from January 1, 1970 0:00 GMT, either GMT
-     * time or local wall time, depending on `local'.
-     * @param local if true, `date' is local wall time; otherwise it
-     * is in GMT time.
-     * @param offsets output parameter to receive the raw offset, that
-     * is, the offset not including DST adjustments, in offsets[0],
-     * and the DST offset, that is, the offset to be added to
-     * `rawOffset' to obtain the total offset between local and GMT
-     * time, in offsets[1]. If DST is not in effect, the DST offset is
-     * zero; otherwise it is a positive value, typically one hour.
-     *
-     * @stable ICU 2.8
-     */
-    public void getOffset(long date, boolean local, int[] offsets) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Returns the time zone raw and GMT offset for the given moment
+//     * in time.  Upon return, local-millis = GMT-millis + rawOffset +
+//     * dstOffset.  All computations are performed in the proleptic
+//     * Gregorian calendar.  The default implementation in the TimeZone
+//     * class delegates to the 8-argument getOffset().
+//     *
+//     * @param date moment in time for which to return offsets, in
+//     * units of milliseconds from January 1, 1970 0:00 GMT, either GMT
+//     * time or local wall time, depending on `local'.
+//     * @param local if true, `date' is local wall time; otherwise it
+//     * is in GMT time.
+//     * @param offsets output parameter to receive the raw offset, that
+//     * is, the offset not including DST adjustments, in offsets[0],
+//     * and the DST offset, that is, the offset to be added to
+//     * `rawOffset' to obtain the total offset between local and GMT
+//     * time, in offsets[1]. If DST is not in effect, the DST offset is
+//     * zero; otherwise it is a positive value, typically one hour.
+//     *
+//     * @stable ICU 2.8
+//     */
+//    public void getOffset(long date, boolean local, int[] offsets) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Sets the base time zone offset to GMT.
@@ -312,6 +312,9 @@ public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public void setRawOffset(int offsetMillis) {
+        if (isFrozen) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen TimeZone instance.");
+        }
         timeZone.setRawOffset(offsetMillis);
     }
 
@@ -341,6 +344,9 @@ public class TimeZone implements Serializable, Cloneable {
      * @stable ICU 2.0
      */
     public void setID(String ID) {
+        if (isFrozen) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen TimeZone instance.");
+        }
         timeZone.setID(ID);
     }
 
@@ -482,6 +488,35 @@ public class TimeZone implements Serializable, Cloneable {
         return timeZone.useDaylightTime();
     }
 
+//    /**
+//     * Queries if this time zone is in daylight saving time or will observe
+//     * daylight saving time at any future time.
+//     * <p>The default implementation in this class returns <code>true</code> if {@link #useDaylightTime()}
+//     * or {@link #inDaylightTime(Date) inDaylightTime(new Date())} returns <code>true</code>.
+//     * <p>
+//     * <strong>Note:</strong> This method was added for JDK compatibility support.
+//     * The JDK's <code>useDaylightTime()</code> only checks the last known rule(s), therefore
+//     * it may return false even the zone observes daylight saving time currently. JDK added
+//     * <code>observesDaylightTime()</code> to resolve the issue. In ICU, {@link #useDaylightTime()}
+//     * works differently. The ICU implementation checks if the zone uses daylight saving time
+//     * in the current calendar year. Therefore, it will never return <code>false</code> if
+//     * daylight saving time is currently used.
+//     * <p>
+//     * ICU's TimeZone subclass implementations override this method to support the same behavior
+//     * with JDK's <code>observesDaylightSavingTime()</code>. Unlike {@link #useDaylightTime()},
+//     * the implementation does not take past daylight saving time into account, so
+//     * that this method may return <code>false</code> even when {@link #useDaylightTime()} returns
+//     * <code>true</code>.
+//     * 
+//     * @return <code>true</code> if this time zone is in daylight saving time or will observe
+//     * daylight saving time at any future time.
+//     * @see #useDaylightTime
+//     * @stable ICU 49
+//     */
+//    public boolean observesDaylightTime() {
+//        throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
+//    }
+
     /**
      * Queries if the given date is in daylight savings time in
      * this time zone.
@@ -507,6 +542,26 @@ public class TimeZone implements Serializable, Cloneable {
      */
     public static synchronized TimeZone getTimeZone(String ID) {
         return new TimeZone(java.util.TimeZone.getTimeZone(ID));
+    }
+
+    /**
+     * Gets the <code>TimeZone</code> for the given ID. The instance of <code>TimeZone</code>
+     * returned by this method is immutable. Any methods mutate the instance({@link #setID(String)},
+     * {@link #setRawOffset(int)}) will throw <code>UnsupportedOperationException</code> upon its
+     * invocation.
+     *
+     * @param ID the ID for a <code>TimeZone</code>, such as "America/Los_Angeles",
+     * or a custom ID such as "GMT-8:00". Note that the support of abbreviations,
+     * such as "PST", is for JDK 1.1.x compatibility only and full names should be used.
+     *
+     * @return the specified <code>TimeZone</code>, or the UNKNOWN_ZONE
+     * if the given ID cannot be understood.
+     * @see #UNKNOWN_ZONE
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static TimeZone getFrozenTimeZone(String ID) {
+        return getTimeZone(ID).freeze();
     }
 
     /**
@@ -549,25 +604,25 @@ public class TimeZone implements Serializable, Cloneable {
         return TIMEZONE_JDK;
     }
 
-    /** 
-     * {@icu} Returns a set of time zone ID strings with the given filter conditions. 
-     * <p><b>Note:</b>A <code>Set</code> returned by this method is
-     * immutable.
-     * @param zoneType      The system time zone type.
-     * @param region        The ISO 3166 two-letter country code or UN M.49 three-digit area code. 
-     *                      When null, no filtering done by region. 
-     * @param rawOffset     An offset from GMT in milliseconds, ignoring the effect of daylight savings 
-     *                      time, if any. When null, no filtering done by zone offset. 
-     * @return an immutable set of system time zone IDs.
-     * @see SystemTimeZoneType
-     * 
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
-     */ 
-    public static Set<String> getAvailableIDs(SystemTimeZoneType zoneType,
-            String region, Integer rawOffset) {
-    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /** 
+//     * {@icu} Returns a set of time zone ID strings with the given filter conditions. 
+//     * <p><b>Note:</b>A <code>Set</code> returned by this method is
+//     * immutable.
+//     * @param zoneType      The system time zone type.
+//     * @param region        The ISO 3166 two-letter country code or UN M.49 three-digit area code. 
+//     *                      When null, no filtering done by region. 
+//     * @param rawOffset     An offset from GMT in milliseconds, ignoring the effect of daylight savings 
+//     *                      time, if any. When null, no filtering done by zone offset. 
+//     * @return an immutable set of system time zone IDs.
+//     * @see SystemTimeZoneType
+//     * 
+//     * @draft ICU 4.8
+//     * @provisional This API might change or be removed in a future release.
+//     */ 
+//    public static Set<String> getAvailableIDs(SystemTimeZoneType zoneType,
+//            String region, Integer rawOffset) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
     
     /**
      * Return a new String array containing all system TimeZone IDs
@@ -585,20 +640,20 @@ public class TimeZone implements Serializable, Cloneable {
     }
 
 
-    /**
-     * Return a new String array containing all system TimeZone IDs
-     * associated with the given country.  These IDs may be passed to
-     * <code>get()</code> to construct the corresponding TimeZone
-     * object.
-     * @param country a two-letter ISO 3166 country code, or <code>null</code>
-     * to return zones not associated with any country
-     * @return an array of IDs for system TimeZones in the given
-     * country.  If there are none, return a zero-length array.
-     * @stable ICU 2.0
-     */
-    public static String[] getAvailableIDs(String country) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Return a new String array containing all system TimeZone IDs
+//     * associated with the given country.  These IDs may be passed to
+//     * <code>get()</code> to construct the corresponding TimeZone
+//     * object.
+//     * @param country a two-letter ISO 3166 country code, or <code>null</code>
+//     * to return zones not associated with any country
+//     * @return an array of IDs for system TimeZones in the given
+//     * country.  If there are none, return a zero-length array.
+//     * @stable ICU 2.0
+//     */
+//    public static String[] getAvailableIDs(String country) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Return a new String array containing all system TimeZone IDs.
@@ -612,46 +667,46 @@ public class TimeZone implements Serializable, Cloneable {
         return java.util.TimeZone.getAvailableIDs();
     }
 
-    /**
-     * {@icu} Returns the number of IDs in the equivalency group that
-     * includes the given ID.  An equivalency group contains zones
-     * that have the same GMT offset and rules.
-     *
-     * <p>The returned count includes the given ID; it is always >= 1
-     * for valid IDs.  The given ID must be a system time zone.  If it
-     * is not, returns zero.
-     * @param id a system time zone ID
-     * @return the number of zones in the equivalency group containing
-     * 'id', or zero if 'id' is not a valid system ID
-     * @see #getEquivalentID
-     * @stable ICU 2.0
-     */
-    public static int countEquivalentIDs(String id) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the number of IDs in the equivalency group that
+//     * includes the given ID.  An equivalency group contains zones
+//     * that have the same GMT offset and rules.
+//     *
+//     * <p>The returned count includes the given ID; it is always >= 1
+//     * for valid IDs.  The given ID must be a system time zone.  If it
+//     * is not, returns zero.
+//     * @param id a system time zone ID
+//     * @return the number of zones in the equivalency group containing
+//     * 'id', or zero if 'id' is not a valid system ID
+//     * @see #getEquivalentID
+//     * @stable ICU 2.0
+//     */
+//    public static int countEquivalentIDs(String id) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Returns an ID in the equivalency group that
-     * includes the given ID.  An equivalency group contains zones
-     * that have the same GMT offset and rules.
-     *
-     * <p>The given index must be in the range 0..n-1, where n is the
-     * value returned by <code>countEquivalentIDs(id)</code>.  For
-     * some value of 'index', the returned value will be equal to the
-     * given id.  If the given id is not a valid system time zone, or
-     * if 'index' is out of range, then returns an empty string.
-     * @param id a system time zone ID
-     * @param index a value from 0 to n-1, where n is the value
-     * returned by <code>countEquivalentIDs(id)</code>
-     * @return the ID of the index-th zone in the equivalency group
-     * containing 'id', or an empty string if 'id' is not a valid
-     * system ID or 'index' is out of range
-     * @see #countEquivalentIDs
-     * @stable ICU 2.0
-     */
-    public static String getEquivalentID(String id, int index) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Returns an ID in the equivalency group that
+//     * includes the given ID.  An equivalency group contains zones
+//     * that have the same GMT offset and rules.
+//     *
+//     * <p>The given index must be in the range 0..n-1, where n is the
+//     * value returned by <code>countEquivalentIDs(id)</code>.  For
+//     * some value of 'index', the returned value will be equal to the
+//     * given id.  If the given id is not a valid system time zone, or
+//     * if 'index' is out of range, then returns an empty string.
+//     * @param id a system time zone ID
+//     * @param index a value from 0 to n-1, where n is the value
+//     * returned by <code>countEquivalentIDs(id)</code>
+//     * @return the ID of the index-th zone in the equivalency group
+//     * containing 'id', or an empty string if 'id' is not a valid
+//     * system ID or 'index' is out of range
+//     * @see #countEquivalentIDs
+//     * @stable ICU 2.0
+//     */
+//    public static String getEquivalentID(String id, int index) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Gets the default <code>TimeZone</code> for this host.
@@ -717,68 +772,105 @@ public class TimeZone implements Serializable, Cloneable {
         return timeZone.hashCode();
     }
 
-    /**
-     * {@icu} Returns the time zone data version currently used by ICU.
-     *
-     * @return the version string, such as "2007f"
-     * @throws MissingResourceException if ICU time zone resource bundle
-     * is missing or the version information is not available.
-     *
-     * @stable ICU 3.8
-     */
-    public static synchronized String getTZDataVersion() {
-        throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the time zone data version currently used by ICU.
+//     *
+//     * @return the version string, such as "2007f"
+//     * @throws MissingResourceException if ICU time zone resource bundle
+//     * is missing or the version information is not available.
+//     *
+//     * @stable ICU 3.8
+//     */
+//    public static synchronized String getTZDataVersion() {
+//        throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
+//    }
+
+//    /**
+//     * {@icu} Returns the canonical system time zone ID or the normalized
+//     * custom time zone ID for the given time zone ID.
+//     * @param id The input time zone ID to be canonicalized.
+//     * @return The canonical system time zone ID or the custom time zone ID
+//     * in normalized format for the given time zone ID.  When the given time zone ID
+//     * is neither a known system time zone ID nor a valid custom time zone ID,
+//     * null is returned.
+//     * @stable ICU 4.0
+//     */
+//    public static String getCanonicalID(String id) {
+//        throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
+//    }
+
+//    /**
+//     * {@icu} Returns the canonical system time zone ID or the normalized
+//     * custom time zone ID for the given time zone ID.
+//     * @param id The input time zone ID to be canonicalized.
+//     * @param isSystemID When non-null boolean array is specified and
+//     * the given ID is a known system time zone ID, true is set to <code>isSystemID[0]</code>
+//     * @return The canonical system time zone ID or the custom time zone ID
+//     * in normalized format for the given time zone ID.  When the given time zone ID
+//     * is neither a known system time zone ID nor a valid custom time zone ID,
+//     * null is returned.
+//     * @stable ICU 4.0
+//     */
+//    public static String getCanonicalID(String id, boolean[] isSystemID) {
+//        throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
+//    }
+
+//    /** 
+//     * {@icu} Returns the region code associated with the given 
+//     * system time zone ID. The region code is either ISO 3166 
+//     * 2-letter country code or UN M.49 3-digit area code. 
+//     * When the time zone is not associated with a specific location, 
+//     * for example - "Etc/UTC", "EST5EDT", then this method returns 
+//     * "001" (UN M.49 area code for World). 
+//     * @param id the system time zone ID. 
+//     * @return the region code associated with the given 
+//     * system time zone ID. 
+//     * @throws IllegalArgumentException if <code>id</code> is not a known system ID. 
+//     * @see #getAvailableIDs(String) 
+//     * 
+//     * @draft ICU 4.8
+//     * @provisional This API might change or be removed in a future release.
+//     */ 
+//    public static String getRegion(String id) {
+//    	throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
+//    }
+
+    private transient boolean isFrozen = false;
 
     /**
-     * {@icu} Returns the canonical system time zone ID or the normalized
-     * custom time zone ID for the given time zone ID.
-     * @param id The input time zone ID to be canonicalized.
-     * @return The canonical system time zone ID or the custom time zone ID
-     * in normalized format for the given time zone ID.  When the given time zone ID
-     * is neither a known system time zone ID nor a valid custom time zone ID,
-     * null is returned.
-     * @stable ICU 4.0
-     */
-    public static String getCanonicalID(String id) {
-        throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
-    }
-
-    /**
-     * {@icu} Returns the canonical system time zone ID or the normalized
-     * custom time zone ID for the given time zone ID.
-     * @param id The input time zone ID to be canonicalized.
-     * @param isSystemID When non-null boolean array is specified and
-     * the given ID is a known system time zone ID, true is set to <code>isSystemID[0]</code>
-     * @return The canonical system time zone ID or the custom time zone ID
-     * in normalized format for the given time zone ID.  When the given time zone ID
-     * is neither a known system time zone ID nor a valid custom time zone ID,
-     * null is returned.
-     * @stable ICU 4.0
-     */
-    public static String getCanonicalID(String id, boolean[] isSystemID) {
-        throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
-    }
-
-    /** 
-     * {@icu} Returns the region code associated with the given 
-     * system time zone ID. The region code is either ISO 3166 
-     * 2-letter country code or UN M.49 3-digit area code. 
-     * When the time zone is not associated with a specific location, 
-     * for example - "Etc/UTC", "EST5EDT", then this method returns 
-     * "001" (UN M.49 area code for World). 
-     * @param id the system time zone ID. 
-     * @return the region code associated with the given 
-     * system time zone ID. 
-     * @throws IllegalArgumentException if <code>id</code> is not a known system ID. 
-     * @see #getAvailableIDs(String) 
-     * 
-     * @draft ICU 4.8
+     * {@inheritDoc}
+     * @draft ICU 49
      * @provisional This API might change or be removed in a future release.
-     */ 
-    public static String getRegion(String id) {
-    	throw new UnsupportedOperationException("Method not supproted by com.ibm.icu.base");
+     */
+    public boolean isFrozen() {
+        return isFrozen;
     }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public TimeZone freeze() {
+        isFrozen = true;
+        return this;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public TimeZone cloneAsThawed() {
+        try {
+            TimeZone other = (TimeZone) super.clone();
+            other.isFrozen = false;
+            return other;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
 
 //eof

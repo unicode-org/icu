@@ -1,4 +1,3 @@
-//##header
 /**
 *******************************************************************************
 * Copyright (C) 1996-2012, International Business Machines Corporation and
@@ -5611,12 +5610,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         return c1;
     }
 
-//#if defined(ECLIPSE)
-//##    public static final int codePointAt(String seq, int index) {
-//##        return codePointAt((CharSequence)seq, index);
-//##    }
-//#endif
-
     /**
      * Cover the JDK 1.5 API, for convenience.  Return the code point at index.
      * <br/><b>Note</b>: the semantics of this API is different from the related UTF16
@@ -5686,12 +5679,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         }
         return c2;
     }
-
-//#if defined(ECLIPSE)
-//##    public static final int codePointBefore(String seq, int index) {
-//##        return codePointBefore((CharSequence)seq, index);
-//##    }
-//#endif
 
     /**
      * Cover the JDK 1.5 API, for convenience.  Return the code point before index.
@@ -5839,12 +5826,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         return len;
     }
 
-//#if defined(ECLIPSE)
-//##    public static int codePointCount(String text, int start, int limit) {
-//##        return codePointCount((CharSequence)text, start, limit);
-//##    }
-//#endif
-
     /**
      * Cover the JDK API, for convenience.  Count the number of code points in the range of text.
      * @param text the characters to check
@@ -5917,12 +5898,6 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
 
         return index;
     }
-
-//#if defined(ECLIPSE)
-//##    public static int offsetByCodePoints(String text, int index, int codePointOffset) {
-//##        return offsetByCodePoints((CharSequence)text, index, codePointOffset);
-//##    }
-//#endif
 
     /**
      * Cover the JDK API, for convenience.  Adjust the char index by a code point offset.

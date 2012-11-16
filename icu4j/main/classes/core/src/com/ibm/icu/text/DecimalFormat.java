@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 1996-2012, International Business Machines Corporation and    *
@@ -3068,17 +3067,11 @@ public class DecimalFormat extends NumberFormat {
      * @see #setRoundingMode
      * @stable ICU 2.0
      */
-//#if defined(ECLIPSE)
-//##    public BigDecimal getRoundingIncrement() {
-//##        return roundingIncrementICU;
-//##    }
-//#else
     public java.math.BigDecimal getRoundingIncrement() {
         if (roundingIncrementICU == null)
             return null;
         return roundingIncrementICU.toBigDecimal();
     }
-//#endif
 
     /**
      * {@icu} Sets the rounding increment. This method also controls whether rounding is

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -18,9 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.ibm.icu.math.BigDecimal;
-import com.ibm.icu.math.MathContext;
 import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -677,36 +675,36 @@ public class DecimalFormat extends NumberFormat {
         this(new java.text.DecimalFormat(pattern, symbols.dfs));
     }
 
-    /**
-     * Creates a DecimalFormat from the given pattern, symbols, information used for
-     * currency plural format, and format style. Use this constructor when you need to
-     * completely customize the behavior of the format.
-     *
-     * <p>To obtain standard formats for a given locale, use the factory methods on
-     * NumberFormat such as getInstance or getCurrencyInstance.
-     *
-     * <p>If you need only minor adjustments to a standard format, you can modify the
-     * format returned by a NumberFormat factory method using the setters.
-     *
-     * <p>If you want to completely customize a decimal format, using your own
-     * DecimalFormatSymbols (such as group separators) and your own information for
-     * currency plural formatting (such as plural rule and currency plural patterns), you
-     * can use this constructor.
-     *
-     * @param pattern a non-localized pattern string
-     * @param symbols the set of symbols to be used
-     * @param infoInput the information used for currency plural format, including
-     * currency plural patterns and plural rules.
-     * @param style the decimal formatting style, it is one of the following values:
-     * NumberFormat.NUMBERSTYLE; NumberFormat.CURRENCYSTYLE; NumberFormat.PERCENTSTYLE;
-     * NumberFormat.SCIENTIFICSTYLE; NumberFormat.INTEGERSTYLE;
-     * NumberFormat.ISOCURRENCYSTYLE; NumberFormat.PLURALCURRENCYSTYLE;
-     * @stable ICU 4.2
-     */
-    public DecimalFormat(String pattern, DecimalFormatSymbols symbols, CurrencyPluralInfo infoInput,
-                         int style) {
-        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Creates a DecimalFormat from the given pattern, symbols, information used for
+//     * currency plural format, and format style. Use this constructor when you need to
+//     * completely customize the behavior of the format.
+//     *
+//     * <p>To obtain standard formats for a given locale, use the factory methods on
+//     * NumberFormat such as getInstance or getCurrencyInstance.
+//     *
+//     * <p>If you need only minor adjustments to a standard format, you can modify the
+//     * format returned by a NumberFormat factory method using the setters.
+//     *
+//     * <p>If you want to completely customize a decimal format, using your own
+//     * DecimalFormatSymbols (such as group separators) and your own information for
+//     * currency plural formatting (such as plural rule and currency plural patterns), you
+//     * can use this constructor.
+//     *
+//     * @param pattern a non-localized pattern string
+//     * @param symbols the set of symbols to be used
+//     * @param infoInput the information used for currency plural format, including
+//     * currency plural patterns and plural rules.
+//     * @param style the decimal formatting style, it is one of the following values:
+//     * NumberFormat.NUMBERSTYLE; NumberFormat.CURRENCYSTYLE; NumberFormat.PERCENTSTYLE;
+//     * NumberFormat.SCIENTIFICSTYLE; NumberFormat.INTEGERSTYLE;
+//     * NumberFormat.ISOCURRENCYSTYLE; NumberFormat.PLURALCURRENCYSTYLE;
+//     * @stable ICU 4.2
+//     */
+//    public DecimalFormat(String pattern, DecimalFormatSymbols symbols, CurrencyPluralInfo infoInput,
+//                         int style) {
+//        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
+//    }
 
     /**
      * {@inheritDoc}
@@ -776,22 +774,22 @@ public class DecimalFormat extends NumberFormat {
         return super.parse(text, parsePosition);
     }
 
-    /**
-     * Parses text from the given string as a CurrencyAmount. Unlike the parse() method,
-     * this method will attempt to parse a generic currency name, searching for a match of
-     * this object's locale's currency display names, or for a 3-letter ISO currency
-     * code. This method will fail if this format is not a currency format, that is, if it
-     * does not contain the currency pattern symbol (U+00A4) in its prefix or suffix.
-     *
-     * @param text the string to parse
-     * @param pos input-output position; on input, the position within text to match; must
-     *  have 0 <= pos.getIndex() < text.length(); on output, the position after the last
-     *  matched character. If the parse fails, the position in unchanged upon output.
-     * @return a CurrencyAmount, or null upon failure
-     */
-    CurrencyAmount parseCurrency(String text, ParsePosition pos) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Parses text from the given string as a CurrencyAmount. Unlike the parse() method,
+//     * this method will attempt to parse a generic currency name, searching for a match of
+//     * this object's locale's currency display names, or for a 3-letter ISO currency
+//     * code. This method will fail if this format is not a currency format, that is, if it
+//     * does not contain the currency pattern symbol (U+00A4) in its prefix or suffix.
+//     *
+//     * @param text the string to parse
+//     * @param pos input-output position; on input, the position within text to match; must
+//     *  have 0 <= pos.getIndex() < text.length(); on output, the position after the last
+//     *  matched character. If the parse fails, the position in unchanged upon output.
+//     * @return a CurrencyAmount, or null upon failure
+//     */
+//    CurrencyAmount parseCurrency(String text, ParsePosition pos) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Returns a copy of the decimal format symbols used by this format.
@@ -937,313 +935,313 @@ public class DecimalFormat extends NumberFormat {
         ((java.text.DecimalFormat)numberFormat).setMultiplier(newValue);
     }
 
-    /**
-     * {@icu} Returns the rounding increment.
-     *
-     * @return A positive rounding increment, or <code>null</code> if rounding is not in
-     * effect.
-     * @see #setRoundingIncrement
-     * @see #getRoundingMode
-     * @see #setRoundingMode
-     * @stable ICU 2.0
-     */
-    public BigDecimal getRoundingIncrement() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the rounding increment.
+//     *
+//     * @return A positive rounding increment, or <code>null</code> if rounding is not in
+//     * effect.
+//     * @see #setRoundingIncrement
+//     * @see #getRoundingMode
+//     * @see #setRoundingMode
+//     * @stable ICU 2.0
+//     */
+//    public BigDecimal getRoundingIncrement() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the rounding increment. This method also controls whether rounding is
-     * enabled.
-     *
-     * @param newValue A positive rounding increment, or <code>null</code> or
-     * <code>BigDecimal(0.0)</code> to disable rounding.
-     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
-     * @see #getRoundingIncrement
-     * @see #getRoundingMode
-     * @see #setRoundingMode
-     * @stable ICU 2.0
-     */
-    public void setRoundingIncrement(java.math.BigDecimal newValue) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the rounding increment. This method also controls whether rounding is
+//     * enabled.
+//     *
+//     * @param newValue A positive rounding increment, or <code>null</code> or
+//     * <code>BigDecimal(0.0)</code> to disable rounding.
+//     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
+//     * @see #getRoundingIncrement
+//     * @see #getRoundingMode
+//     * @see #setRoundingMode
+//     * @stable ICU 2.0
+//     */
+//    public void setRoundingIncrement(java.math.BigDecimal newValue) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the rounding increment. This method also controls whether rounding is
-     * enabled.
-     *
-     * @param newValue A positive rounding increment, or <code>null</code> or
-     * <code>BigDecimal(0.0)</code> to disable rounding.
-     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
-     * @see #getRoundingIncrement
-     * @see #getRoundingMode
-     * @see #setRoundingMode
-     * @stable ICU 3.6
-     */
-    public void setRoundingIncrement(BigDecimal newValue) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the rounding increment. This method also controls whether rounding is
+//     * enabled.
+//     *
+//     * @param newValue A positive rounding increment, or <code>null</code> or
+//     * <code>BigDecimal(0.0)</code> to disable rounding.
+//     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
+//     * @see #getRoundingIncrement
+//     * @see #getRoundingMode
+//     * @see #setRoundingMode
+//     * @stable ICU 3.6
+//     */
+//    public void setRoundingIncrement(BigDecimal newValue) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the rounding increment. This method also controls whether rounding is
-     * enabled.
-     *
-     * @param newValue A positive rounding increment, or 0.0 to disable rounding.
-     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
-     * @see #getRoundingIncrement
-     * @see #getRoundingMode
-     * @see #setRoundingMode
-     * @stable ICU 2.0
-     */
-    public void setRoundingIncrement(double newValue) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the rounding increment. This method also controls whether rounding is
+//     * enabled.
+//     *
+//     * @param newValue A positive rounding increment, or 0.0 to disable rounding.
+//     * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
+//     * @see #getRoundingIncrement
+//     * @see #getRoundingMode
+//     * @see #setRoundingMode
+//     * @stable ICU 2.0
+//     */
+//    public void setRoundingIncrement(double newValue) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Returns the rounding mode.
-     *
-     * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
-     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
-     * @see #setRoundingIncrement
-     * @see #getRoundingIncrement
-     * @see #setRoundingMode
-     * @see java.math.BigDecimal
-     * @stable ICU 2.0
-     */
-    public int getRoundingMode() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Returns the rounding mode.
+//     *
+//     * @return A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
+//     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
+//     * @see #setRoundingIncrement
+//     * @see #getRoundingIncrement
+//     * @see #setRoundingMode
+//     * @see java.math.BigDecimal
+//     * @stable ICU 2.0
+//     */
+//    public int getRoundingMode() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Sets the rounding mode. This has no effect unless the rounding increment is greater
-     * than zero.
-     *
-     * @param roundingMode A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
-     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
-     * @exception IllegalArgumentException if <code>roundingMode</code> is unrecognized.
-     * @see #setRoundingIncrement
-     * @see #getRoundingIncrement
-     * @see #getRoundingMode
-     * @see java.math.BigDecimal
-     * @stable ICU 2.0
-     */
-    public void setRoundingMode(int roundingMode) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Sets the rounding mode. This has no effect unless the rounding increment is greater
+//     * than zero.
+//     *
+//     * @param roundingMode A rounding mode, between <code>BigDecimal.ROUND_UP</code> and
+//     * <code>BigDecimal.ROUND_UNNECESSARY</code>.
+//     * @exception IllegalArgumentException if <code>roundingMode</code> is unrecognized.
+//     * @see #setRoundingIncrement
+//     * @see #getRoundingIncrement
+//     * @see #getRoundingMode
+//     * @see java.math.BigDecimal
+//     * @stable ICU 2.0
+//     */
+//    public void setRoundingMode(int roundingMode) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Returns the width to which the output of <code>format()</code> is padded. The width is
-     * counted in 16-bit code units.
-     *
-     * @return the format width, or zero if no padding is in effect
-     * @see #setFormatWidth
-     * @see #getPadCharacter
-     * @see #setPadCharacter
-     * @see #getPadPosition
-     * @see #setPadPosition
-     * @stable ICU 2.0
-     */
-    public int getFormatWidth() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Returns the width to which the output of <code>format()</code> is padded. The width is
+//     * counted in 16-bit code units.
+//     *
+//     * @return the format width, or zero if no padding is in effect
+//     * @see #setFormatWidth
+//     * @see #getPadCharacter
+//     * @see #setPadCharacter
+//     * @see #getPadPosition
+//     * @see #setPadPosition
+//     * @stable ICU 2.0
+//     */
+//    public int getFormatWidth() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Sets the width to which the output of <code>format()</code> is
-     * padded. The width is counted in 16-bit code units.  This method
-     * also controls whether padding is enabled.
-     *
-     * @param width the width to which to pad the result of
-     * <code>format()</code>, or zero to disable padding
-     * @exception IllegalArgumentException if <code>width</code> is < 0
-     * @see #getFormatWidth
-     * @see #getPadCharacter
-     * @see #setPadCharacter
-     * @see #getPadPosition
-     * @see #setPadPosition
-     * @stable ICU 2.0
-     */
-    public void setFormatWidth(int width) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Sets the width to which the output of <code>format()</code> is
+//     * padded. The width is counted in 16-bit code units.  This method
+//     * also controls whether padding is enabled.
+//     *
+//     * @param width the width to which to pad the result of
+//     * <code>format()</code>, or zero to disable padding
+//     * @exception IllegalArgumentException if <code>width</code> is < 0
+//     * @see #getFormatWidth
+//     * @see #getPadCharacter
+//     * @see #setPadCharacter
+//     * @see #getPadPosition
+//     * @see #setPadPosition
+//     * @stable ICU 2.0
+//     */
+//    public void setFormatWidth(int width) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the character used to pad to the format width. The default is ' '.
-     *
-     * @return the pad character
-     * @see #setFormatWidth
-     * @see #getFormatWidth
-     * @see #setPadCharacter
-     * @see #getPadPosition
-     * @see #setPadPosition
-     * @stable ICU 2.0
-     */
-    public char getPadCharacter() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the character used to pad to the format width. The default is ' '.
+//     *
+//     * @return the pad character
+//     * @see #setFormatWidth
+//     * @see #getFormatWidth
+//     * @see #setPadCharacter
+//     * @see #getPadPosition
+//     * @see #setPadPosition
+//     * @stable ICU 2.0
+//     */
+//    public char getPadCharacter() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the character used to pad to the format width. If padding is not
-     * enabled, then this will take effect if padding is later enabled.
-     *
-     * @param padChar the pad character
-     * @see #setFormatWidth
-     * @see #getFormatWidth
-     * @see #getPadCharacter
-     * @see #getPadPosition
-     * @see #setPadPosition
-     * @stable ICU 2.0
-     */
-    public void setPadCharacter(char padChar) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the character used to pad to the format width. If padding is not
+//     * enabled, then this will take effect if padding is later enabled.
+//     *
+//     * @param padChar the pad character
+//     * @see #setFormatWidth
+//     * @see #getFormatWidth
+//     * @see #getPadCharacter
+//     * @see #getPadPosition
+//     * @see #setPadPosition
+//     * @stable ICU 2.0
+//     */
+//    public void setPadCharacter(char padChar) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the position at which padding will take place. This is the location at
-     * which padding will be inserted if the result of <code>format()</code> is shorter
-     * than the format width.
-     *
-     * @return the pad position, one of <code>PAD_BEFORE_PREFIX</code>,
-     *         <code>PAD_AFTER_PREFIX</code>, <code>PAD_BEFORE_SUFFIX</code>, or
-     *         <code>PAD_AFTER_SUFFIX</code>.
-     * @see #setFormatWidth
-     * @see #getFormatWidth
-     * @see #setPadCharacter
-     * @see #getPadCharacter
-     * @see #setPadPosition
-     * @see #PAD_BEFORE_PREFIX
-     * @see #PAD_AFTER_PREFIX
-     * @see #PAD_BEFORE_SUFFIX
-     * @see #PAD_AFTER_SUFFIX
-     * @stable ICU 2.0
-     */
-    public int getPadPosition() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the position at which padding will take place. This is the location at
+//     * which padding will be inserted if the result of <code>format()</code> is shorter
+//     * than the format width.
+//     *
+//     * @return the pad position, one of <code>PAD_BEFORE_PREFIX</code>,
+//     *         <code>PAD_AFTER_PREFIX</code>, <code>PAD_BEFORE_SUFFIX</code>, or
+//     *         <code>PAD_AFTER_SUFFIX</code>.
+//     * @see #setFormatWidth
+//     * @see #getFormatWidth
+//     * @see #setPadCharacter
+//     * @see #getPadCharacter
+//     * @see #setPadPosition
+//     * @see #PAD_BEFORE_PREFIX
+//     * @see #PAD_AFTER_PREFIX
+//     * @see #PAD_BEFORE_SUFFIX
+//     * @see #PAD_AFTER_SUFFIX
+//     * @stable ICU 2.0
+//     */
+//    public int getPadPosition() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the position at which padding will take place. This is the location at
-     * which padding will be inserted if the result of <code>format()</code> is shorter
-     * than the format width. This has no effect unless padding is enabled.
-     *
-     * @param padPos the pad position, one of <code>PAD_BEFORE_PREFIX</code>,
-     * <code>PAD_AFTER_PREFIX</code>, <code>PAD_BEFORE_SUFFIX</code>, or
-     * <code>PAD_AFTER_SUFFIX</code>.
-     * @exception IllegalArgumentException if the pad position in unrecognized
-     * @see #setFormatWidth
-     * @see #getFormatWidth
-     * @see #setPadCharacter
-     * @see #getPadCharacter
-     * @see #getPadPosition
-     * @see #PAD_BEFORE_PREFIX
-     * @see #PAD_AFTER_PREFIX
-     * @see #PAD_BEFORE_SUFFIX
-     * @see #PAD_AFTER_SUFFIX
-     * @stable ICU 2.0
-     */
-    public void setPadPosition(int padPos) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the position at which padding will take place. This is the location at
+//     * which padding will be inserted if the result of <code>format()</code> is shorter
+//     * than the format width. This has no effect unless padding is enabled.
+//     *
+//     * @param padPos the pad position, one of <code>PAD_BEFORE_PREFIX</code>,
+//     * <code>PAD_AFTER_PREFIX</code>, <code>PAD_BEFORE_SUFFIX</code>, or
+//     * <code>PAD_AFTER_SUFFIX</code>.
+//     * @exception IllegalArgumentException if the pad position in unrecognized
+//     * @see #setFormatWidth
+//     * @see #getFormatWidth
+//     * @see #setPadCharacter
+//     * @see #getPadCharacter
+//     * @see #getPadPosition
+//     * @see #PAD_BEFORE_PREFIX
+//     * @see #PAD_AFTER_PREFIX
+//     * @see #PAD_BEFORE_SUFFIX
+//     * @see #PAD_AFTER_SUFFIX
+//     * @stable ICU 2.0
+//     */
+//    public void setPadPosition(int padPos) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns whether or not scientific notation is used.
-     *
-     * @return true if this object formats and parses scientific notation
-     * @see #setScientificNotation
-     * @see #getMinimumExponentDigits
-     * @see #setMinimumExponentDigits
-     * @see #isExponentSignAlwaysShown
-     * @see #setExponentSignAlwaysShown
-     * @stable ICU 2.0
-     */
-    public boolean isScientificNotation() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns whether or not scientific notation is used.
+//     *
+//     * @return true if this object formats and parses scientific notation
+//     * @see #setScientificNotation
+//     * @see #getMinimumExponentDigits
+//     * @see #setMinimumExponentDigits
+//     * @see #isExponentSignAlwaysShown
+//     * @see #setExponentSignAlwaysShown
+//     * @stable ICU 2.0
+//     */
+//    public boolean isScientificNotation() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets whether or not scientific notation is used. When scientific notation is
-     * used, the effective maximum number of integer digits is <= 8. If the maximum number
-     * of integer digits is set to more than 8, the effective maximum will be 1. This
-     * allows this call to generate a 'default' scientific number format without
-     * additional changes.
-     *
-     * @param useScientific true if this object formats and parses scientific notation
-     * @see #isScientificNotation
-     * @see #getMinimumExponentDigits
-     * @see #setMinimumExponentDigits
-     * @see #isExponentSignAlwaysShown
-     * @see #setExponentSignAlwaysShown
-     * @stable ICU 2.0
-     */
-    public void setScientificNotation(boolean useScientific) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets whether or not scientific notation is used. When scientific notation is
+//     * used, the effective maximum number of integer digits is <= 8. If the maximum number
+//     * of integer digits is set to more than 8, the effective maximum will be 1. This
+//     * allows this call to generate a 'default' scientific number format without
+//     * additional changes.
+//     *
+//     * @param useScientific true if this object formats and parses scientific notation
+//     * @see #isScientificNotation
+//     * @see #getMinimumExponentDigits
+//     * @see #setMinimumExponentDigits
+//     * @see #isExponentSignAlwaysShown
+//     * @see #setExponentSignAlwaysShown
+//     * @stable ICU 2.0
+//     */
+//    public void setScientificNotation(boolean useScientific) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the minimum exponent digits that will be shown.
-     *
-     * @return the minimum exponent digits that will be shown
-     * @see #setScientificNotation
-     * @see #isScientificNotation
-     * @see #setMinimumExponentDigits
-     * @see #isExponentSignAlwaysShown
-     * @see #setExponentSignAlwaysShown
-     * @stable ICU 2.0
-     */
-    public byte getMinimumExponentDigits() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the minimum exponent digits that will be shown.
+//     *
+//     * @return the minimum exponent digits that will be shown
+//     * @see #setScientificNotation
+//     * @see #isScientificNotation
+//     * @see #setMinimumExponentDigits
+//     * @see #isExponentSignAlwaysShown
+//     * @see #setExponentSignAlwaysShown
+//     * @stable ICU 2.0
+//     */
+//    public byte getMinimumExponentDigits() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the minimum exponent digits that will be shown. This has no effect
-     * unless scientific notation is in use.
-     *
-     * @param minExpDig a value >= 1 indicating the fewest exponent
-     * digits that will be shown
-     * @exception IllegalArgumentException if <code>minExpDig</code> < 1
-     * @see #setScientificNotation
-     * @see #isScientificNotation
-     * @see #getMinimumExponentDigits
-     * @see #isExponentSignAlwaysShown
-     * @see #setExponentSignAlwaysShown
-     * @stable ICU 2.0
-     */
-    public void setMinimumExponentDigits(byte minExpDig) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the minimum exponent digits that will be shown. This has no effect
+//     * unless scientific notation is in use.
+//     *
+//     * @param minExpDig a value >= 1 indicating the fewest exponent
+//     * digits that will be shown
+//     * @exception IllegalArgumentException if <code>minExpDig</code> < 1
+//     * @see #setScientificNotation
+//     * @see #isScientificNotation
+//     * @see #getMinimumExponentDigits
+//     * @see #isExponentSignAlwaysShown
+//     * @see #setExponentSignAlwaysShown
+//     * @stable ICU 2.0
+//     */
+//    public void setMinimumExponentDigits(byte minExpDig) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns whether the exponent sign is always shown.
-     *
-     * @return true if the exponent is always prefixed with either the localized minus
-     * sign or the localized plus sign, false if only negative exponents are prefixed with
-     * the localized minus sign.
-     * @see #setScientificNotation
-     * @see #isScientificNotation
-     * @see #setMinimumExponentDigits
-     * @see #getMinimumExponentDigits
-     * @see #setExponentSignAlwaysShown
-     * @stable ICU 2.0
-     */
-    public boolean isExponentSignAlwaysShown() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns whether the exponent sign is always shown.
+//     *
+//     * @return true if the exponent is always prefixed with either the localized minus
+//     * sign or the localized plus sign, false if only negative exponents are prefixed with
+//     * the localized minus sign.
+//     * @see #setScientificNotation
+//     * @see #isScientificNotation
+//     * @see #setMinimumExponentDigits
+//     * @see #getMinimumExponentDigits
+//     * @see #setExponentSignAlwaysShown
+//     * @stable ICU 2.0
+//     */
+//    public boolean isExponentSignAlwaysShown() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets whether the exponent sign is always shown. This has no effect unless
-     * scientific notation is in use.
-     *
-     * @param expSignAlways true if the exponent is always prefixed with either the
-     * localized minus sign or the localized plus sign, false if only negative exponents
-     * are prefixed with the localized minus sign.
-     * @see #setScientificNotation
-     * @see #isScientificNotation
-     * @see #setMinimumExponentDigits
-     * @see #getMinimumExponentDigits
-     * @see #isExponentSignAlwaysShown
-     * @stable ICU 2.0
-     */
-    public void setExponentSignAlwaysShown(boolean expSignAlways) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets whether the exponent sign is always shown. This has no effect unless
+//     * scientific notation is in use.
+//     *
+//     * @param expSignAlways true if the exponent is always prefixed with either the
+//     * localized minus sign or the localized plus sign, false if only negative exponents
+//     * are prefixed with the localized minus sign.
+//     * @see #setScientificNotation
+//     * @see #isScientificNotation
+//     * @see #setMinimumExponentDigits
+//     * @see #getMinimumExponentDigits
+//     * @see #isExponentSignAlwaysShown
+//     * @stable ICU 2.0
+//     */
+//    public void setExponentSignAlwaysShown(boolean expSignAlways) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Returns the grouping size. Grouping size is the number of digits between grouping
@@ -1273,82 +1271,82 @@ public class DecimalFormat extends NumberFormat {
         ((java.text.DecimalFormat)numberFormat).setGroupingSize(newValue);
     }
 
-    /**
-     * {@icu} Returns the secondary grouping size. In some locales one grouping interval
-     * is used for the least significant integer digits (the primary grouping size), and
-     * another is used for all others (the secondary grouping size). A formatter
-     * supporting a secondary grouping size will return a positive integer unequal to the
-     * primary grouping size returned by <code>getGroupingSize()</code>. For example, if
-     * the primary grouping size is 4, and the secondary grouping size is 2, then the
-     * number 123456789 formats as "1,23,45,6789", and the pattern appears as "#,##,###0".
-     *
-     * @return the secondary grouping size, or a value less than one if there is none
-     * @see #setSecondaryGroupingSize
-     * @see NumberFormat#isGroupingUsed
-     * @see DecimalFormatSymbols#getGroupingSeparator
-     * @stable ICU 2.0
-     */
-    public int getSecondaryGroupingSize() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the secondary grouping size. In some locales one grouping interval
+//     * is used for the least significant integer digits (the primary grouping size), and
+//     * another is used for all others (the secondary grouping size). A formatter
+//     * supporting a secondary grouping size will return a positive integer unequal to the
+//     * primary grouping size returned by <code>getGroupingSize()</code>. For example, if
+//     * the primary grouping size is 4, and the secondary grouping size is 2, then the
+//     * number 123456789 formats as "1,23,45,6789", and the pattern appears as "#,##,###0".
+//     *
+//     * @return the secondary grouping size, or a value less than one if there is none
+//     * @see #setSecondaryGroupingSize
+//     * @see NumberFormat#isGroupingUsed
+//     * @see DecimalFormatSymbols#getGroupingSeparator
+//     * @stable ICU 2.0
+//     */
+//    public int getSecondaryGroupingSize() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the secondary grouping size. If set to a value less than 1, then
-     * secondary grouping is turned off, and the primary grouping size is used for all
-     * intervals, not just the least significant.
-     *
-     * @see #getSecondaryGroupingSize
-     * @see NumberFormat#setGroupingUsed
-     * @see DecimalFormatSymbols#setGroupingSeparator
-     * @stable ICU 2.0
-     */
-    public void setSecondaryGroupingSize(int newValue) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the secondary grouping size. If set to a value less than 1, then
+//     * secondary grouping is turned off, and the primary grouping size is used for all
+//     * intervals, not just the least significant.
+//     *
+//     * @see #getSecondaryGroupingSize
+//     * @see NumberFormat#setGroupingUsed
+//     * @see DecimalFormatSymbols#setGroupingSeparator
+//     * @stable ICU 2.0
+//     */
+//    public void setSecondaryGroupingSize(int newValue) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the MathContext used by this format.
-     *
-     * @return desired MathContext
-     * @see #getMathContext
-     * @stable ICU 4.2
-     */
-    public MathContext getMathContextICU() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the MathContext used by this format.
+//     *
+//     * @return desired MathContext
+//     * @see #getMathContext
+//     * @stable ICU 4.2
+//     */
+//    public MathContext getMathContextICU() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the MathContext used by this format.
-     *
-     * @return desired MathContext
-     * @see #getMathContext
-     * @stable ICU 4.2
-     */
-    public java.math.MathContext getMathContext() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the MathContext used by this format.
+//     *
+//     * @return desired MathContext
+//     * @see #getMathContext
+//     * @stable ICU 4.2
+//     */
+//    public java.math.MathContext getMathContext() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the MathContext used by this format.
-     *
-     * @param newValue desired MathContext
-     * @see #getMathContext
-     * @stable ICU 4.2
-     */
-    public void setMathContextICU(MathContext newValue) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the MathContext used by this format.
+//     *
+//     * @param newValue desired MathContext
+//     * @see #getMathContext
+//     * @stable ICU 4.2
+//     */
+//    public void setMathContextICU(MathContext newValue) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the MathContext used by this format.
-     *
-     * @param newValue desired MathContext
-     * @see #getMathContext
-     * @stable ICU 4.2
-     */
-    public void setMathContext(java.math.MathContext newValue) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the MathContext used by this format.
+//     *
+//     * @param newValue desired MathContext
+//     * @see #getMathContext
+//     * @stable ICU 4.2
+//     */
+//    public void setMathContext(java.math.MathContext newValue) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Returns the behavior of the decimal separator with integers. (The decimal
@@ -1379,32 +1377,32 @@ public class DecimalFormat extends NumberFormat {
         ((java.text.DecimalFormat)numberFormat).setDecimalSeparatorAlwaysShown(newValue);
     }
 
-    /**
-     * {@icu} Returns a copy of the CurrencyPluralInfo used by this format. It might
-     * return null if the decimal format is not a plural type currency decimal
-     * format. Plural type currency decimal format means either the pattern in the decimal
-     * format contains 3 currency signs, or the decimal format is initialized with
-     * PLURALCURRENCYSTYLE.
-     *
-     * @return desired CurrencyPluralInfo
-     * @see CurrencyPluralInfo
-     * @stable ICU 4.2
-     */
-    public CurrencyPluralInfo getCurrencyPluralInfo() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns a copy of the CurrencyPluralInfo used by this format. It might
+//     * return null if the decimal format is not a plural type currency decimal
+//     * format. Plural type currency decimal format means either the pattern in the decimal
+//     * format contains 3 currency signs, or the decimal format is initialized with
+//     * PLURALCURRENCYSTYLE.
+//     *
+//     * @return desired CurrencyPluralInfo
+//     * @see CurrencyPluralInfo
+//     * @stable ICU 4.2
+//     */
+//    public CurrencyPluralInfo getCurrencyPluralInfo() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the CurrencyPluralInfo used by this format. The format uses a copy of
-     * the provided information.
-     *
-     * @param newInfo desired CurrencyPluralInfo
-     * @see CurrencyPluralInfo
-     * @stable ICU 4.2
-     */
-    public void setCurrencyPluralInfo(CurrencyPluralInfo newInfo) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the CurrencyPluralInfo used by this format. The format uses a copy of
+//     * the provided information.
+//     *
+//     * @param newInfo desired CurrencyPluralInfo
+//     * @see CurrencyPluralInfo
+//     * @stable ICU 4.2
+//     */
+//    public void setCurrencyPluralInfo(CurrencyPluralInfo newInfo) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Overrides clone.
@@ -1587,80 +1585,80 @@ public class DecimalFormat extends NumberFormat {
         super.setMinimumIntegerDigits(newValue);
     }
 
-    /**
-     * {@icu} Returns the minimum number of significant digits that will be
-     * displayed. This value has no effect unless {@link #areSignificantDigitsUsed()}
-     * returns true.
-     *
-     * @return the fewest significant digits that will be shown
-     * @stable ICU 3.0
-     */
-    public int getMinimumSignificantDigits() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the minimum number of significant digits that will be
+//     * displayed. This value has no effect unless {@link #areSignificantDigitsUsed()}
+//     * returns true.
+//     *
+//     * @return the fewest significant digits that will be shown
+//     * @stable ICU 3.0
+//     */
+//    public int getMinimumSignificantDigits() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the maximum number of significant digits that will be
-     * displayed. This value has no effect unless {@link #areSignificantDigitsUsed()}
-     * returns true.
-     *
-     * @return the most significant digits that will be shown
-     * @stable ICU 3.0
-     */
-    public int getMaximumSignificantDigits() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the maximum number of significant digits that will be
+//     * displayed. This value has no effect unless {@link #areSignificantDigitsUsed()}
+//     * returns true.
+//     *
+//     * @return the most significant digits that will be shown
+//     * @stable ICU 3.0
+//     */
+//    public int getMaximumSignificantDigits() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the minimum number of significant digits that will be displayed. If
-     * <code>min</code> is less than one then it is set to one. If the maximum significant
-     * digits count is less than <code>min</code>, then it is set to
-     * <code>min</code>. This value has no effect unless {@link #areSignificantDigitsUsed()}
-     * returns true.
-     *
-     * @param min the fewest significant digits to be shown
-     * @stable ICU 3.0
-     */
-    public void setMinimumSignificantDigits(int min) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the minimum number of significant digits that will be displayed. If
+//     * <code>min</code> is less than one then it is set to one. If the maximum significant
+//     * digits count is less than <code>min</code>, then it is set to
+//     * <code>min</code>. This value has no effect unless {@link #areSignificantDigitsUsed()}
+//     * returns true.
+//     *
+//     * @param min the fewest significant digits to be shown
+//     * @stable ICU 3.0
+//     */
+//    public void setMinimumSignificantDigits(int min) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the maximum number of significant digits that will be displayed. If
-     * <code>max</code> is less than one then it is set to one. If the minimum significant
-     * digits count is greater than <code>max</code>, then it is set to
-     * <code>max</code>. This value has no effect unless {@link #areSignificantDigitsUsed()}
-     * returns true.
-     *
-     * @param max the most significant digits to be shown
-     * @stable ICU 3.0
-     */
-    public void setMaximumSignificantDigits(int max) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the maximum number of significant digits that will be displayed. If
+//     * <code>max</code> is less than one then it is set to one. If the minimum significant
+//     * digits count is greater than <code>max</code>, then it is set to
+//     * <code>max</code>. This value has no effect unless {@link #areSignificantDigitsUsed()}
+//     * returns true.
+//     *
+//     * @param max the most significant digits to be shown
+//     * @stable ICU 3.0
+//     */
+//    public void setMaximumSignificantDigits(int max) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns true if significant digits are in use or false if integer and
-     * fraction digit counts are in use.
-     *
-     * @return true if significant digits are in use
-     * @stable ICU 3.0
-     */
-    public boolean areSignificantDigitsUsed() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns true if significant digits are in use or false if integer and
+//     * fraction digit counts are in use.
+//     *
+//     * @return true if significant digits are in use
+//     * @stable ICU 3.0
+//     */
+//    public boolean areSignificantDigitsUsed() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets whether significant digits are in use, or integer and fraction digit
-     * counts are in use.
-     *
-     * @param useSignificantDigits true to use significant digits, or false to use integer
-     * and fraction digit counts
-     * @stable ICU 3.0
-     */
-    public void setSignificantDigitsUsed(boolean useSignificantDigits) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets whether significant digits are in use, or integer and fraction digit
+//     * counts are in use.
+//     *
+//     * @param useSignificantDigits true to use significant digits, or false to use integer
+//     * and fraction digit counts
+//     * @stable ICU 3.0
+//     */
+//    public void setSignificantDigitsUsed(boolean useSignificantDigits) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Sets the <tt>Currency</tt> object used to display currency amounts. This takes

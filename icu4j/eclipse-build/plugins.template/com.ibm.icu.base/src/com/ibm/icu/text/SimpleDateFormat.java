@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -249,23 +249,23 @@ public class SimpleDateFormat extends DateFormat {
         this(pattern, loc.toLocale());
     }
 
-    /**
-     * Constructs a SimpleDateFormat using the given pattern , override and locale.
-     * @param pattern The pattern to be used
-     * @param override The override string.  A numbering system override string can take one of the following forms:
-     *     1). If just a numbering system name is specified, it applies to all numeric fields in the date format pattern.
-     *     2). To specify an alternate numbering system on a field by field basis, use the field letters from the pattern
-     *         followed by an = sign, followed by the numbering system name.  For example, to specify that just the year
-     *         be formatted using Hebrew digits, use the override "y=hebr".  Multiple overrides can be specified in a single
-     *         string by separating them with a semi-colon. For example, the override string "m=thai;y=deva" would format using
-     *         Thai digits for the month and Devanagari digits for the year.
-     * @param loc The locale to be used
-     * @stable ICU 4.2
-     */
-    public SimpleDateFormat(String pattern, String override, ULocale loc)
-    {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Constructs a SimpleDateFormat using the given pattern , override and locale.
+//     * @param pattern The pattern to be used
+//     * @param override The override string.  A numbering system override string can take one of the following forms:
+//     *     1). If just a numbering system name is specified, it applies to all numeric fields in the date format pattern.
+//     *     2). To specify an alternate numbering system on a field by field basis, use the field letters from the pattern
+//     *         followed by an = sign, followed by the numbering system name.  For example, to specify that just the year
+//     *         be formatted using Hebrew digits, use the override "y=hebr".  Multiple overrides can be specified in a single
+//     *         string by separating them with a semi-colon. For example, the override string "m=thai;y=deva" would format using
+//     *         Thai digits for the month and Devanagari digits for the year.
+//     * @param loc The locale to be used
+//     * @stable ICU 4.2
+//     */
+//    public SimpleDateFormat(String pattern, String override, ULocale loc)
+//    {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Constructs a SimpleDateFormat using the given pattern and
@@ -399,6 +399,30 @@ public class SimpleDateFormat extends DateFormat {
     public void setDateFormatSymbols(DateFormatSymbols newFormatSymbols) {
         ((java.text.SimpleDateFormat)dateFormat).setDateFormatSymbols(newFormatSymbols.dfs);
     }
+
+//    /**
+//     * {@icu} Gets the time zone formatter which this date/time
+//     * formatter uses to format and parse a time zone.
+//     * 
+//     * @return the time zone formatter which this date/time
+//     * formatter uses.
+//     * @draft ICU 49
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public TimeZoneFormat getTimeZoneFormat() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
+
+//    /**
+//     * {@icu} Allows you to set the time zone formatter.
+//     * 
+//     * @param tzfmt the new time zone formatter
+//     * @draft ICU 49
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public void setTimeZoneFormat(TimeZoneFormat tzfmt) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     // For clone to use
     private SimpleDateFormat(java.text.SimpleDateFormat sdf) {
