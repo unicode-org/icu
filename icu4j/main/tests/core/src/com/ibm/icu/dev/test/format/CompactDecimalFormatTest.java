@@ -128,7 +128,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {12345678901234f, "T12"},
             {12345678901234567890f, "T12000000"},
     };
-    
+
     Object[][] CsTestDataShort = {
             {1000, "1\u00a0tis."},
             {1500, "1,5\u00a0tis."},
@@ -145,7 +145,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {12712345678901f, "13\u00a0bil."},
             {127123456789012f, "130\u00a0bil."},
     };
-  
+
     Object[][] SkTestDataLong = {
             {1000, "1 tis\u00edc"},
             {1572, "1,6 tis\u00edc"},
@@ -167,11 +167,16 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {-12345678901234567890f, "T-12000000"},
     };
 
-    // TODO: Write a test for negative numbers in arabic.
+    public void TestDefaultSignificantDigits() {
+        // We are expecting three significant digits as default.
+        CompactDecimalFormat cdf =
+                CompactDecimalFormat.getInstance(ULocale.ENGLISH, CompactStyle.SHORT);
+        assertEquals("Default significant digits", "12.3K", cdf.format(12345));
+    }
 
     public void TestCharacterIterator() {
         CompactDecimalFormat cdf =
-            CompactDecimalFormat.getInstance(ULocale.forLanguageTag("sw"), CompactStyle.SHORT);
+            getCDFInstance(ULocale.forLanguageTag("sw"), CompactStyle.SHORT);
         AttributedCharacterIterator iter = cdf.formatToCharacterIterator(1234567);
         assertEquals("CharacterIterator", "M1.2", iterToString(iter));
         iter = cdf.formatToCharacterIterator(1234567);
@@ -191,11 +196,11 @@ public class CompactDecimalFormatTest extends TestFmwk {
                         ULocale.forLanguageTag("ar"), CompactStyle.LONG);
         assertEquals("Arabic Long", "\u0665\u066B\u0663- \u0623\u0644\u0641", cdf.format(-5300));
     }
-    
+
     public void TestCsShort() {
         checkLocale(ULocale.forLanguageTag("cs"), CompactStyle.SHORT, CsTestDataShort);
     }
-    
+
     public void TestSkLong() {
         checkLocale(ULocale.forLanguageTag("sk"), CompactStyle.LONG, SkTestDataLong);
     }
@@ -225,7 +230,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
     }
 
     public void TestFieldPosition() {
-        CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(
+        CompactDecimalFormat cdf = getCDFInstance(
                 ULocale.forLanguageTag("sw"), CompactStyle.SHORT);
         FieldPosition fp = new FieldPosition(0);
         StringBuffer sb = new StringBuffer();
@@ -235,8 +240,20 @@ public class CompactDecimalFormatTest extends TestFmwk {
         assertEquals("fp end", 2, fp.getEndIndex());
     }
 
+    public void TestEquals() {
+        CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(
+                ULocale.forLanguageTag("sw"), CompactStyle.SHORT);
+        CompactDecimalFormat equalsCdf = CompactDecimalFormat.getInstance(
+                ULocale.forLanguageTag("sw"), CompactStyle.SHORT);
+        CompactDecimalFormat notEqualsCdf = CompactDecimalFormat.getInstance(
+                ULocale.forLanguageTag("sw"), CompactStyle.LONG);
+        assertEquals("equals", cdf, equalsCdf);
+        assertNotEquals("not equals", cdf, notEqualsCdf);
+
+    }
+
     public void checkLocale(ULocale locale, CompactStyle style, Object[][] testData) {
-        CompactDecimalFormat cdf = CompactDecimalFormat.getInstance(locale, style);
+        CompactDecimalFormat cdf = getCDFInstance(locale, style);
         for (Object[] row : testData) {
             assertEquals(locale + " (" + locale.getDisplayName(locale) + ")", row[1], cdf.format(row[0]));
         }
@@ -248,5 +265,13 @@ public class CompactDecimalFormatTest extends TestFmwk {
             builder.append(c);
         }
         return builder.toString();
+    }
+
+    private static CompactDecimalFormat getCDFInstance(ULocale locale, CompactStyle style) {
+        CompactDecimalFormat result = CompactDecimalFormat.getInstance(locale, style);
+        // Our tests are written for two significant digits. We set explicitly here
+        // because default significant digits may change.
+        result.setMaximumSignificantDigits(2);
+        return result;
     }
 }

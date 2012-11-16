@@ -347,7 +347,7 @@ import com.ibm.icu.util.ULocale.Category;
  * <code>DecimalFormat</code> internally limits of maximum decimal digits to be 1000. Thus,
  * an input string resulting more than 1000 digits in plain decimal representation (non-exponent)
  * will be treated as either overflow (positive/negative infinite) or underflow (+0.0/-0.0).
- * 
+ *
  * <h4>Formatting</h4>
  *
  * <p>Formatting is guided by several parameters, all of which can be specified either
@@ -5696,6 +5696,18 @@ public class DecimalFormat extends NumberFormat {
 
         public void writePrefix(StringBuffer toAppendTo) {
             toAppendTo.append(prefix);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (!(obj instanceof Unit)) {
+                return false;
+            }
+            Unit other = (Unit) obj;
+            return prefix.equals(other.prefix) && suffix.equals(other.suffix);
         }
     }
 
