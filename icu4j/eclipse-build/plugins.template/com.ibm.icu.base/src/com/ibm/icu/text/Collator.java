@@ -6,12 +6,11 @@
 */
 package com.ibm.icu.text;
 
+import java.text.RuleBasedCollator;
 import java.util.Comparator;
 import java.util.Locale;
-import java.util.Set;
 
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.VersionInfo;
 
 /**
 * {@icuenhanced java.text.Collator}.{@icu _usage_}
@@ -265,6 +264,9 @@ public class Collator implements Comparator<Object>, Cloneable
      */
     public void setStrength(int newStrength)
     {
+        if (isFrozen) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen Collator instance.");
+        }
         collator.setStrength(newStrength);
     }
 
@@ -300,6 +302,9 @@ public class Collator implements Comparator<Object>, Cloneable
      */
     public void setDecomposition(int decomposition)
     {
+        if (isFrozen) {
+            throw new UnsupportedOperationException("Attempt to modify a frozen Collator instance.");
+        }
         collator.setDecomposition(decomposition);
     }
 
@@ -331,13 +336,15 @@ public class Collator implements Comparator<Object>, Cloneable
     }
 
     // Freezable interface implementation -------------------------------------------------
-    
+
+    private transient boolean isFrozen = false;
+
     /**
      * Determines whether the object has been frozen or not.
      * @draft ICU 4.8
      */
     public boolean isFrozen() {
-        return false;
+        return isFrozen;
     }
 
     /**
@@ -346,7 +353,8 @@ public class Collator implements Comparator<Object>, Cloneable
      * @draft ICU 4.8
      */
     public Collator freeze() {
-        throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
+        isFrozen = true;
+        return this;
     }
 
     /**
@@ -354,110 +362,116 @@ public class Collator implements Comparator<Object>, Cloneable
      * @draft ICU 4.8
      */
     public Collator cloneAsThawed() {
-        throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
+        try {
+            Collator other = (Collator) super.clone();
+            other.isFrozen = false;
+            return other;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException(e);
+        }
     }
-    
+
     // begin registry stuff
 
-    /**
-     * A factory used with registerFactory to register multiple collators and provide
-     * display names for them.  If standard locale display names are sufficient,
-     * Collator instances may be registered instead.
-     * <p><b>Note:</b> as of ICU4J 3.2, the default API for CollatorFactory uses
-     * ULocale instead of Locale.  Instead of overriding createCollator(Locale),
-     * new implementations should override createCollator(ULocale).  Note that
-     * one of these two methods <b>MUST</b> be overridden or else an infinite
-     * loop will occur.
-     * @stable ICU 2.6
-     */
-    public static abstract class CollatorFactory {
-        /**
-         * Return true if this factory will be visible.  Default is true.
-         * If not visible, the locales supported by this factory will not
-         * be listed by getAvailableLocales.
-         *
-         * @return true if this factory is visible
-         * @stable ICU 2.6
-         */
-        public boolean visible() {
-            return true;
-        }
-
-        /**
-         * Return an instance of the appropriate collator.  If the locale
-         * is not supported, return null.
-         * <b>Note:</b> as of ICU4J 3.2, implementations should override
-         * this method instead of createCollator(Locale).
-         * @param loc the locale for which this collator is to be created.
-         * @return the newly created collator.
-         * @stable ICU 3.2
-         */
-        public Collator createCollator(ULocale loc) {
-            return createCollator(loc.toLocale());
-        }
-
-        /**
-         * Return an instance of the appropriate collator.  If the locale
-         * is not supported, return null.
-         * <p><b>Note:</b> as of ICU4J 3.2, implementations should override
-         * createCollator(ULocale) instead of this method, and inherit this
-         * method's implementation.  This method is no longer abstract
-         * and instead delegates to createCollator(ULocale).
-         * @param loc the locale for which this collator is to be created.
-         * @return the newly created collator.
-         * @stable ICU 2.6
-         */
-         public Collator createCollator(Locale loc) {
-            return createCollator(ULocale.forLocale(loc));
-        }
-
-        /**
-         * Return the name of the collator for the objectLocale, localized for the displayLocale.
-         * If objectLocale is not visible or not defined by the factory, return null.
-         * @param objectLocale the locale identifying the collator
-         * @param displayLocale the locale for which the display name of the collator should be localized
-         * @return the display name
-         * @stable ICU 2.6
-         */
-        public String getDisplayName(Locale objectLocale, Locale displayLocale) {
-            return getDisplayName(ULocale.forLocale(objectLocale), ULocale.forLocale(displayLocale));
-        }
-
-        /**
-         * Return the name of the collator for the objectLocale, localized for the displayLocale.
-         * If objectLocale is not visible or not defined by the factory, return null.
-         * @param objectLocale the locale identifying the collator
-         * @param displayLocale the locale for which the display name of the collator should be localized
-         * @return the display name
-         * @stable ICU 3.2
-         */
-        public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
-            if (visible()) {
-                Set<String> supported = getSupportedLocaleIDs();
-                String name = objectLocale.getBaseName();
-                if (supported.contains(name)) {
-                    return objectLocale.getDisplayName(displayLocale);
-                }
-            }
-            return null;
-        }
-
-        /**
-         * Return an unmodifiable collection of the locale names directly
-         * supported by this factory.
-         *
-         * @return the set of supported locale IDs.
-         * @stable ICU 2.6
-         */
-        public abstract Set<String> getSupportedLocaleIDs();
-
-        /**
-         * Empty default constructor.
-         * @stable ICU 2.6
-         */
-        protected CollatorFactory() {
-        }
-    }
+//    /**
+//     * A factory used with registerFactory to register multiple collators and provide
+//     * display names for them.  If standard locale display names are sufficient,
+//     * Collator instances may be registered instead.
+//     * <p><b>Note:</b> as of ICU4J 3.2, the default API for CollatorFactory uses
+//     * ULocale instead of Locale.  Instead of overriding createCollator(Locale),
+//     * new implementations should override createCollator(ULocale).  Note that
+//     * one of these two methods <b>MUST</b> be overridden or else an infinite
+//     * loop will occur.
+//     * @stable ICU 2.6
+//     */
+//    public static abstract class CollatorFactory {
+//        /**
+//         * Return true if this factory will be visible.  Default is true.
+//         * If not visible, the locales supported by this factory will not
+//         * be listed by getAvailableLocales.
+//         *
+//         * @return true if this factory is visible
+//         * @stable ICU 2.6
+//         */
+//        public boolean visible() {
+//            return true;
+//        }
+//
+//        /**
+//         * Return an instance of the appropriate collator.  If the locale
+//         * is not supported, return null.
+//         * <b>Note:</b> as of ICU4J 3.2, implementations should override
+//         * this method instead of createCollator(Locale).
+//         * @param loc the locale for which this collator is to be created.
+//         * @return the newly created collator.
+//         * @stable ICU 3.2
+//         */
+//        public Collator createCollator(ULocale loc) {
+//            return createCollator(loc.toLocale());
+//        }
+//
+//        /**
+//         * Return an instance of the appropriate collator.  If the locale
+//         * is not supported, return null.
+//         * <p><b>Note:</b> as of ICU4J 3.2, implementations should override
+//         * createCollator(ULocale) instead of this method, and inherit this
+//         * method's implementation.  This method is no longer abstract
+//         * and instead delegates to createCollator(ULocale).
+//         * @param loc the locale for which this collator is to be created.
+//         * @return the newly created collator.
+//         * @stable ICU 2.6
+//         */
+//         public Collator createCollator(Locale loc) {
+//            return createCollator(ULocale.forLocale(loc));
+//        }
+//
+//        /**
+//         * Return the name of the collator for the objectLocale, localized for the displayLocale.
+//         * If objectLocale is not visible or not defined by the factory, return null.
+//         * @param objectLocale the locale identifying the collator
+//         * @param displayLocale the locale for which the display name of the collator should be localized
+//         * @return the display name
+//         * @stable ICU 2.6
+//         */
+//        public String getDisplayName(Locale objectLocale, Locale displayLocale) {
+//            return getDisplayName(ULocale.forLocale(objectLocale), ULocale.forLocale(displayLocale));
+//        }
+//
+//        /**
+//         * Return the name of the collator for the objectLocale, localized for the displayLocale.
+//         * If objectLocale is not visible or not defined by the factory, return null.
+//         * @param objectLocale the locale identifying the collator
+//         * @param displayLocale the locale for which the display name of the collator should be localized
+//         * @return the display name
+//         * @stable ICU 3.2
+//         */
+//        public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
+//            if (visible()) {
+//                Set<String> supported = getSupportedLocaleIDs();
+//                String name = objectLocale.getBaseName();
+//                if (supported.contains(name)) {
+//                    return objectLocale.getDisplayName(displayLocale);
+//                }
+//            }
+//            return null;
+//        }
+//
+//        /**
+//         * Return an unmodifiable collection of the locale names directly
+//         * supported by this factory.
+//         *
+//         * @return the set of supported locale IDs.
+//         * @stable ICU 2.6
+//         */
+//        public abstract Set<String> getSupportedLocaleIDs();
+//
+//        /**
+//         * Empty default constructor.
+//         * @stable ICU 2.6
+//         */
+//        protected CollatorFactory() {
+//        }
+//    }
 
     /**
      * {@icu} Returns the Collator for the desired locale.
@@ -493,41 +507,41 @@ public class Collator implements Comparator<Object>, Cloneable
         return new Collator(java.text.Collator.getInstance(locale));
     }
 
-    /**
-     * {@icu} Registers a collator as the default collator for the provided locale.  The
-     * collator should not be modified after it is registered.
-     *
-     * @param collator the collator to register
-     * @param locale the locale for which this is the default collator
-     * @return an object that can be used to unregister the registered collator.
-     *
-     * @stable ICU 3.2
-     */
-    public static final Object registerInstance(Collator collator, ULocale locale) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Registers a collator as the default collator for the provided locale.  The
+//     * collator should not be modified after it is registered.
+//     *
+//     * @param collator the collator to register
+//     * @param locale the locale for which this is the default collator
+//     * @return an object that can be used to unregister the registered collator.
+//     *
+//     * @stable ICU 3.2
+//     */
+//    public static final Object registerInstance(Collator collator, ULocale locale) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Registers a collator factory.
-     *
-     * @param factory the factory to register
-     * @return an object that can be used to unregister the registered factory.
-     *
-     * @stable ICU 2.6
-     */
-    public static final Object registerFactory(CollatorFactory factory) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Registers a collator factory.
+//     *
+//     * @param factory the factory to register
+//     * @return an object that can be used to unregister the registered factory.
+//     *
+//     * @stable ICU 2.6
+//     */
+//    public static final Object registerFactory(CollatorFactory factory) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Unregisters a collator previously registered using registerInstance.
-     * @param registryKey the object previously returned by registerInstance.
-     * @return true if the collator was successfully unregistered.
-     * @stable ICU 2.6
-     */
-    public static final boolean unregister(Object registryKey) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Unregisters a collator previously registered using registerInstance.
+//     * @param registryKey the object previously returned by registerInstance.
+//     * @return true if the collator was successfully unregistered.
+//     * @stable ICU 2.6
+//     */
+//    public static final boolean unregister(Object registryKey) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Returns the set of locales, as Locale objects, for which collators
@@ -583,118 +597,118 @@ public class Collator implements Comparator<Object>, Cloneable
         return new String[0];
     }
 
-    /**
-     * {@icu} Given a key and a locale, returns an array of string values in a preferred
-     * order that would make a difference. These are all and only those values where
-     * the open (creation) of the service with the locale formed from the input locale
-     * plus input keyword and that value has different behavior than creation with the
-     * input locale alone.
-     * @param key           one of the keys supported by this service.  For now, only
-     *                      "collation" is supported.
-     * @param locale        the locale
-     * @param commonlyUsed  if set to true it will return only commonly used values
-     *                      with the given locale in preferred order.  Otherwise,
-     *                      it will return all the available values for the locale.
-     * @return an array of string values for the given key and the locale.
-     * @stable ICU 4.2
-     */
-    public static final String[] getKeywordValuesForLocale(String key, ULocale locale, 
-                                                           boolean commonlyUsed) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Given a key and a locale, returns an array of string values in a preferred
+//     * order that would make a difference. These are all and only those values where
+//     * the open (creation) of the service with the locale formed from the input locale
+//     * plus input keyword and that value has different behavior than creation with the
+//     * input locale alone.
+//     * @param key           one of the keys supported by this service.  For now, only
+//     *                      "collation" is supported.
+//     * @param locale        the locale
+//     * @param commonlyUsed  if set to true it will return only commonly used values
+//     *                      with the given locale in preferred order.  Otherwise,
+//     *                      it will return all the available values for the locale.
+//     * @return an array of string values for the given key and the locale.
+//     * @stable ICU 4.2
+//     */
+//    public static final String[] getKeywordValuesForLocale(String key, ULocale locale, 
+//                                                           boolean commonlyUsed) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the functionally equivalent locale for the given
-     * requested locale, with respect to given keyword, for the
-     * collation service.  If two locales return the same result, then
-     * collators instantiated for these locales will behave
-     * equivalently.  The converse is not always true; two collators
-     * may in fact be equivalent, but return different results, due to
-     * internal details.  The return result has no other meaning than
-     * that stated above, and implies nothing as to the relationship
-     * between the two locales.  This is intended for use by
-     * applications who wish to cache collators, or otherwise reuse
-     * collators when possible.  The functional equivalent may change
-     * over time.  For more information, please see the <a
-     * href="http://www.icu-project.org/userguide/locale.html#services">
-     * Locales and Services</a> section of the ICU User Guide.
-     * @param keyword a particular keyword as enumerated by
-     * getKeywords.
-     * @param locID The requested locale
-     * @param isAvailable If non-null, isAvailable[0] will receive and
-     * output boolean that indicates whether the requested locale was
-     * 'available' to the collation service. If non-null, isAvailable
-     * must have length >= 1.
-     * @return the locale
-     * @stable ICU 3.0
-     */
-    public static final ULocale getFunctionalEquivalent(String keyword,
-                                                        ULocale locID,
-                                                        boolean isAvailable[]) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the functionally equivalent locale for the given
+//     * requested locale, with respect to given keyword, for the
+//     * collation service.  If two locales return the same result, then
+//     * collators instantiated for these locales will behave
+//     * equivalently.  The converse is not always true; two collators
+//     * may in fact be equivalent, but return different results, due to
+//     * internal details.  The return result has no other meaning than
+//     * that stated above, and implies nothing as to the relationship
+//     * between the two locales.  This is intended for use by
+//     * applications who wish to cache collators, or otherwise reuse
+//     * collators when possible.  The functional equivalent may change
+//     * over time.  For more information, please see the <a
+//     * href="http://www.icu-project.org/userguide/locale.html#services">
+//     * Locales and Services</a> section of the ICU User Guide.
+//     * @param keyword a particular keyword as enumerated by
+//     * getKeywords.
+//     * @param locID The requested locale
+//     * @param isAvailable If non-null, isAvailable[0] will receive and
+//     * output boolean that indicates whether the requested locale was
+//     * 'available' to the collation service. If non-null, isAvailable
+//     * must have length >= 1.
+//     * @return the locale
+//     * @stable ICU 3.0
+//     */
+//    public static final ULocale getFunctionalEquivalent(String keyword,
+//                                                        ULocale locID,
+//                                                        boolean isAvailable[]) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the functionally equivalent locale for the given
-     * requested locale, with respect to given keyword, for the
-     * collation service.
-     * @param keyword a particular keyword as enumerated by
-     * getKeywords.
-     * @param locID The requested locale
-     * @return the locale
-     * @see #getFunctionalEquivalent(String,ULocale,boolean[])
-     * @stable ICU 3.0
-     */
-    public static final ULocale getFunctionalEquivalent(String keyword,
-                                                        ULocale locID) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the functionally equivalent locale for the given
+//     * requested locale, with respect to given keyword, for the
+//     * collation service.
+//     * @param keyword a particular keyword as enumerated by
+//     * getKeywords.
+//     * @param locID The requested locale
+//     * @return the locale
+//     * @see #getFunctionalEquivalent(String,ULocale,boolean[])
+//     * @stable ICU 3.0
+//     */
+//    public static final ULocale getFunctionalEquivalent(String keyword,
+//                                                        ULocale locID) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the name of the collator for the objectLocale, localized for the
-     * displayLocale.
-     * @param objectLocale the locale of the collator
-     * @param displayLocale the locale for the collator's display name
-     * @return the display name
-     * @stable ICU 2.6
-     */
-    static public String getDisplayName(Locale objectLocale, Locale displayLocale) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the name of the collator for the objectLocale, localized for the
+//     * displayLocale.
+//     * @param objectLocale the locale of the collator
+//     * @param displayLocale the locale for the collator's display name
+//     * @return the display name
+//     * @stable ICU 2.6
+//     */
+//    static public String getDisplayName(Locale objectLocale, Locale displayLocale) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the name of the collator for the objectLocale, localized for the
-     * displayLocale.
-     * @param objectLocale the locale of the collator
-     * @param displayLocale the locale for the collator's display name
-     * @return the display name
-     * @stable ICU 3.2
-     */
-    static public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the name of the collator for the objectLocale, localized for the
+//     * displayLocale.
+//     * @param objectLocale the locale of the collator
+//     * @param displayLocale the locale for the collator's display name
+//     * @return the display name
+//     * @stable ICU 3.2
+//     */
+//    static public String getDisplayName(ULocale objectLocale, ULocale displayLocale) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the name of the collator for the objectLocale, localized for the
-     * current locale.
-     * @param objectLocale the locale of the collator
-     * @return the display name
-     * @stable ICU 2.6
-     */
-    static public String getDisplayName(Locale objectLocale) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the name of the collator for the objectLocale, localized for the
+//     * current locale.
+//     * @param objectLocale the locale of the collator
+//     * @return the display name
+//     * @stable ICU 2.6
+//     */
+//    static public String getDisplayName(Locale objectLocale) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the name of the collator for the objectLocale, localized for the
-     * current locale.
-     * @param objectLocale the locale of the collator
-     * @return the display name
-     * @stable ICU 3.2
-     */
-    static public String getDisplayName(ULocale objectLocale) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the name of the collator for the objectLocale, localized for the
+//     * current locale.
+//     * @param objectLocale the locale of the collator
+//     * @return the display name
+//     * @stable ICU 3.2
+//     */
+//    static public String getDisplayName(ULocale objectLocale) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Returns this Collator's strength property. The strength property
@@ -755,18 +769,18 @@ public class Collator implements Comparator<Object>, Cloneable
         return (compare(source, target) == 0);
     }
 
-    /**
-     * {@icu} Returns a UnicodeSet that contains all the characters and sequences tailored
-     * in this collator.
-     * @return a pointer to a UnicodeSet object containing all the
-     *         code points and sequences that may sort differently than
-     *         in the UCA.
-     * @stable ICU 2.4
-     */
-    public UnicodeSet getTailoredSet()
-    {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns a UnicodeSet that contains all the characters and sequences tailored
+//     * in this collator.
+//     * @return a pointer to a UnicodeSet object containing all the
+//     *         code points and sequences that may sort differently than
+//     *         in the UCA.
+//     * @stable ICU 2.4
+//     */
+//    public UnicodeSet getTailoredSet()
+//    {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Compares the source text String to the target text String according to
@@ -825,164 +839,164 @@ public class Collator implements Comparator<Object>, Cloneable
         return new CollationKey(collator.getCollationKey(source));
     }
 
-    /**
-     * {@icu} Returns the simpler form of a CollationKey for the String source following
-     * the rules of this Collator and stores the result into the user provided argument
-     * key.  If key has a internal byte array of length that's too small for the result,
-     * the internal byte array will be grown to the exact required size.
-     * @param source the text String to be transformed into a RawCollationKey
-     * @return If key is null, a new instance of RawCollationKey will be
-     *         created and returned, otherwise the user provided key will be
-     *         returned.
-     * @see #compare(String, String)
-     * @see #getCollationKey
-     * @see RawCollationKey
-     * @stable ICU 2.8
-     */
-    public RawCollationKey getRawCollationKey(String source, RawCollationKey key) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the simpler form of a CollationKey for the String source following
+//     * the rules of this Collator and stores the result into the user provided argument
+//     * key.  If key has a internal byte array of length that's too small for the result,
+//     * the internal byte array will be grown to the exact required size.
+//     * @param source the text String to be transformed into a RawCollationKey
+//     * @return If key is null, a new instance of RawCollationKey will be
+//     *         created and returned, otherwise the user provided key will be
+//     *         returned.
+//     * @see #compare(String, String)
+//     * @see #getCollationKey
+//     * @see RawCollationKey
+//     * @stable ICU 2.8
+//     */
+//    public RawCollationKey getRawCollationKey(String source, RawCollationKey key) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Variable top is a two byte primary value which causes all the codepoints
-     * with primary values that are less or equal than the variable top to be
-     * shifted when alternate handling is set to SHIFTED.
-     * </p>
-     * <p>
-     * Sets the variable top to a collation element value of a string supplied.
-     * </p>
-     * @param varTop one or more (if contraction) characters to which the
-     *               variable top should be set
-     * @return a int value containing the value of the variable top in upper 16
-     *         bits. Lower 16 bits are undefined.
-     * @throws IllegalArgumentException is thrown if varTop argument is not
-     *            a valid variable top element. A variable top element is
-     *            invalid when it is a contraction that does not exist in the
-     *            Collation order or when the PRIMARY strength collation
-     *            element for the variable top has more than two bytes
-     * @see #getVariableTop
-     * @see RuleBasedCollator#setAlternateHandlingShifted
-     * @stable ICU 2.6
-     */
-    public int setVariableTop(String varTop) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Variable top is a two byte primary value which causes all the codepoints
+//     * with primary values that are less or equal than the variable top to be
+//     * shifted when alternate handling is set to SHIFTED.
+//     * </p>
+//     * <p>
+//     * Sets the variable top to a collation element value of a string supplied.
+//     * </p>
+//     * @param varTop one or more (if contraction) characters to which the
+//     *               variable top should be set
+//     * @return a int value containing the value of the variable top in upper 16
+//     *         bits. Lower 16 bits are undefined.
+//     * @throws IllegalArgumentException is thrown if varTop argument is not
+//     *            a valid variable top element. A variable top element is
+//     *            invalid when it is a contraction that does not exist in the
+//     *            Collation order or when the PRIMARY strength collation
+//     *            element for the variable top has more than two bytes
+//     * @see #getVariableTop
+//     * @see RuleBasedCollator#setAlternateHandlingShifted
+//     * @stable ICU 2.6
+//     */
+//    public int setVariableTop(String varTop) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the variable top value of a Collator.
-     * Lower 16 bits are undefined and should be ignored.
-     * @return the variable top value of a Collator.
-     * @see #setVariableTop
-     * @stable ICU 2.6
-     */
-    public int getVariableTop() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the variable top value of a Collator.
+//     * Lower 16 bits are undefined and should be ignored.
+//     * @return the variable top value of a Collator.
+//     * @see #setVariableTop
+//     * @stable ICU 2.6
+//     */
+//    public int getVariableTop() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Sets the variable top to a collation element value supplied.
-     * Variable top is set to the upper 16 bits.
-     * Lower 16 bits are ignored.
-     * @param varTop Collation element value, as returned by setVariableTop or
-     *               getVariableTop
-     * @see #getVariableTop
-     * @see #setVariableTop
-     * @stable ICU 2.6
-     */
-    public void setVariableTop(int varTop) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the variable top to a collation element value supplied.
+//     * Variable top is set to the upper 16 bits.
+//     * Lower 16 bits are ignored.
+//     * @param varTop Collation element value, as returned by setVariableTop or
+//     *               getVariableTop
+//     * @see #getVariableTop
+//     * @see #setVariableTop
+//     * @stable ICU 2.6
+//     */
+//    public void setVariableTop(int varTop) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the version of this collator object.
-     * @return the version object associated with this collator
-     * @stable ICU 2.8
-     */
-    public VersionInfo getVersion() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the version of this collator object.
+//     * @return the version object associated with this collator
+//     * @stable ICU 2.8
+//     */
+//    public VersionInfo getVersion() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the UCA version of this collator object.
-     * @return the version object associated with this collator
-     * @stable ICU 2.8
-     */
-    public VersionInfo getUCAVersion() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the UCA version of this collator object.
+//     * @return the version object associated with this collator
+//     * @stable ICU 2.8
+//     */
+//    public VersionInfo getUCAVersion() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**  
-     * Retrieves the reordering codes for this collator.
-     * These reordering codes are a combination of UScript codes and ReorderCodes.
-     * @return a copy of the reordering codes for this collator; 
-     * if none are set then returns an empty array
-     * @see #setReorderCodes
-     * @see #getEquivalentReorderCodes
-     * @draft ICU 4.8
-     */ 
-    public int[] getReorderCodes() 
-    { 
-        throw new UnsupportedOperationException(); 
-    }   
+//    /**  
+//     * Retrieves the reordering codes for this collator.
+//     * These reordering codes are a combination of UScript codes and ReorderCodes.
+//     * @return a copy of the reordering codes for this collator; 
+//     * if none are set then returns an empty array
+//     * @see #setReorderCodes
+//     * @see #getEquivalentReorderCodes
+//     * @draft ICU 4.8
+//     */ 
+//    public int[] getReorderCodes() 
+//    { 
+//        throw new UnsupportedOperationException(); 
+//    }   
 
-    /** 
-     * Sets the reordering codes for this collator.
-     * Reordering codes allow the collation ordering for groups of characters to be changed.
-     * The reordering codes are a combination of UScript  codes and ReorderCodes.
-     * These allow the ordering of characters belonging to these groups to be changed as a group.  
-     * @param order the reordering codes to apply to this collator; if this is null or an empty array
-     * then this clears any existing reordering
-     * @see #getReorderCodes
-     * @see #getEquivalentReorderCodes
-     * @draft ICU 4.8
-     */ 
-    public void setReorderCodes(int... order) 
-    { 
-        throw new UnsupportedOperationException(); 
-    } 
+//    /** 
+//     * Sets the reordering codes for this collator.
+//     * Reordering codes allow the collation ordering for groups of characters to be changed.
+//     * The reordering codes are a combination of UScript  codes and ReorderCodes.
+//     * These allow the ordering of characters belonging to these groups to be changed as a group.  
+//     * @param order the reordering codes to apply to this collator; if this is null or an empty array
+//     * then this clears any existing reordering
+//     * @see #getReorderCodes
+//     * @see #getEquivalentReorderCodes
+//     * @draft ICU 4.8
+//     */ 
+//    public void setReorderCodes(int... order) 
+//    { 
+//        throw new UnsupportedOperationException(); 
+//    } 
 
-    /**
-     * Retrieves all the reorder codes that are grouped with the given reorder code. Some reorder
-     * codes are grouped and must reorder together.
-     * 
-     * @param reorderCode code for which equivalents to be retrieved
-     * @return the set of all reorder codes in the same group as the given reorder code.
-     * @see #setReorderCodes
-     * @see #getReorderCodes
-     * @draft ICU 4.8
-     */
-    public static int[] getEquivalentReorderCodes(int reorderCode)
-    { 
-        throw new UnsupportedOperationException(); 
-    }   
+//    /**
+//     * Retrieves all the reorder codes that are grouped with the given reorder code. Some reorder
+//     * codes are grouped and must reorder together.
+//     * 
+//     * @param reorderCode code for which equivalents to be retrieved
+//     * @return the set of all reorder codes in the same group as the given reorder code.
+//     * @see #setReorderCodes
+//     * @see #getReorderCodes
+//     * @draft ICU 4.8
+//     */
+//    public static int[] getEquivalentReorderCodes(int reorderCode)
+//    { 
+//        throw new UnsupportedOperationException(); 
+//    }
 
-    /**
-     * {@icu} Returns the locale that was used to create this object, or null.
-     * This may may differ from the locale requested at the time of
-     * this object's creation.  For example, if an object is created
-     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
-     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
-     * <tt>en_US</tt> may be the most specific locale that exists (the
-     * <i>valid</i> locale).
-     *
-     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
-     * contains a partial preview implementation.  The * <i>actual</i>
-     * locale is returned correctly, but the <i>valid</i> locale is
-     * not, in most cases.
-     * @param type type of information requested, either {@link
-     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
-     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
-     * @return the information specified by <i>type</i>, or null if
-     * this object was not constructed from locale data.
-     * @see com.ibm.icu.util.ULocale
-     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
-     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
-     */
-    public final ULocale getLocale(ULocale.Type type) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the locale that was used to create this object, or null.
+//     * This may may differ from the locale requested at the time of
+//     * this object's creation.  For example, if an object is created
+//     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
+//     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
+//     * <tt>en_US</tt> may be the most specific locale that exists (the
+//     * <i>valid</i> locale).
+//     *
+//     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
+//     * contains a partial preview implementation.  The * <i>actual</i>
+//     * locale is returned correctly, but the <i>valid</i> locale is
+//     * not, in most cases.
+//     * @param type type of information requested, either {@link
+//     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
+//     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
+//     * @return the information specified by <i>type</i>, or null if
+//     * this object was not constructed from locale data.
+//     * @see com.ibm.icu.util.ULocale
+//     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
+//     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
+//     * @draft ICU 2.8 (retain)
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public final ULocale getLocale(ULocale.Type type) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     // com.ibm.icu.base specific overrides
     public String toString() {

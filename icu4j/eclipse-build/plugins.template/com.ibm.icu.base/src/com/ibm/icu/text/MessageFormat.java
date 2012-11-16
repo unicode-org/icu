@@ -23,7 +23,6 @@ import java.text.ParsePosition;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
@@ -542,36 +541,34 @@ public class MessageFormat extends UFormat {
         wrapNestedFormatters(messageFormat);
     }
 
-    /**
-     * {@icu} Sets the ApostropheMode and the pattern used by this message format.
-     * Parses the pattern and caches Format objects for simple argument types.
-     * Patterns and their interpretation are specified in the
-     * <a href="#patterns">class description</a>.
-     * <p>
-     * This method is best used only once on a given object to avoid confusion about the mode,
-     * and after constructing the object with an empty pattern string to minimize overhead.
-     *
-     * @param pattern the pattern for this message format
-     * @param aposMode the new ApostropheMode
-     * @throws IllegalArgumentException if the pattern is invalid
-     * @see MessagePattern.ApostropheMode
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
-     */
-    public void applyPattern(String pattern, MessagePattern.ApostropheMode aposMode) {
-    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the ApostropheMode and the pattern used by this message format.
+//     * Parses the pattern and caches Format objects for simple argument types.
+//     * Patterns and their interpretation are specified in the
+//     * <a href="#patterns">class description</a>.
+//     * <p>
+//     * This method is best used only once on a given object to avoid confusion about the mode,
+//     * and after constructing the object with an empty pattern string to minimize overhead.
+//     *
+//     * @param pattern the pattern for this message format
+//     * @param aposMode the new ApostropheMode
+//     * @throws IllegalArgumentException if the pattern is invalid
+//     * @see MessagePattern.ApostropheMode
+//     * @stable ICU 4.8
+//     */
+//    public void applyPattern(String pattern, MessagePattern.ApostropheMode aposMode) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu}
-     * @return this instance's ApostropheMode.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
-     */
-    public MessagePattern.ApostropheMode getApostropheMode() {
-    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
-    
+//    /**
+//     * {@icu}
+//     * @return this instance's ApostropheMode.
+//     * @stable ICU 4.8
+//     */
+//    public MessagePattern.ApostropheMode getApostropheMode() {
+//    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
+
     /**
      * Returns a pattern representing the current state of the message format.
      * The string is constructed from internal information and therefore
@@ -617,30 +614,30 @@ public class MessageFormat extends UFormat {
         savedPattern = null;
     }
 
-    /**
-     * {@icu} Sets the formats to use for the values passed into
-     * <code>format</code> methods or returned from <code>parse</code>
-     * methods. The keys in <code>newFormats</code> are the argument
-     * names in the previously set pattern string, and the values
-     * are the formats.
-     * <p>
-     * Only argument names from the pattern string are considered.
-     * Extra keys in <code>newFormats</code> that do not correspond
-     * to an argument name are ignored.  Similarly, if there is no
-     * format in newFormats for an argument name, the formatter
-     * for that argument remains unchanged.
-     * <p>
-     * This may be called on formats that do not use named arguments.
-     * In this case the map will be queried for key Strings that
-     * represent argument indices, e.g. "0", "1", "2" etc.
-     *
-     * @param newFormats a map from String to Format providing new
-     *        formats for named arguments.
-     * @stable ICU 3.8
-     */
-    public void setFormatsByArgumentName(Map<String, Format> newFormats) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the formats to use for the values passed into
+//     * <code>format</code> methods or returned from <code>parse</code>
+//     * methods. The keys in <code>newFormats</code> are the argument
+//     * names in the previously set pattern string, and the values
+//     * are the formats.
+//     * <p>
+//     * Only argument names from the pattern string are considered.
+//     * Extra keys in <code>newFormats</code> that do not correspond
+//     * to an argument name are ignored.  Similarly, if there is no
+//     * format in newFormats for an argument name, the formatter
+//     * for that argument remains unchanged.
+//     * <p>
+//     * This may be called on formats that do not use named arguments.
+//     * In this case the map will be queried for key Strings that
+//     * represent argument indices, e.g. "0", "1", "2" etc.
+//     *
+//     * @param newFormats a map from String to Format providing new
+//     *        formats for named arguments.
+//     * @stable ICU 3.8
+//     */
+//    public void setFormatsByArgumentName(Map<String, Format> newFormats) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Sets the formats to use for the format elements in the
@@ -697,28 +694,28 @@ public class MessageFormat extends UFormat {
         savedPattern = null;
     }
 
-    /**
-     * {@icu} Sets the format to use for the format elements within the
-     * previously set pattern string that use the given argument
-     * name.
-     * <p>
-     * If the argument name is used for more than one format element
-     * in the pattern string, then the new format is used for all such
-     * format elements. If the argument name is not used for any format
-     * element in the pattern string, then the new format is ignored.
-     * <p>
-     * This API may be used on formats that do not use named arguments.
-     * In this case <code>argumentName</code> should be a String that names
-     * an argument index, e.g. "0", "1", "2"... etc.  If it does not name
-     * a valid index, the format will be ignored.  No error is thrown.
-     *
-     * @param argumentName the name of the argument to change
-     * @param newFormat the new format to use
-     * @stable ICU 3.8
-     */
-    public void setFormatByArgumentName(String argumentName, Format newFormat) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets the format to use for the format elements within the
+//     * previously set pattern string that use the given argument
+//     * name.
+//     * <p>
+//     * If the argument name is used for more than one format element
+//     * in the pattern string, then the new format is used for all such
+//     * format elements. If the argument name is not used for any format
+//     * element in the pattern string, then the new format is ignored.
+//     * <p>
+//     * This API may be used on formats that do not use named arguments.
+//     * In this case <code>argumentName</code> should be a String that names
+//     * an argument index, e.g. "0", "1", "2"... etc.  If it does not name
+//     * a valid index, the format will be ignored.  No error is thrown.
+//     *
+//     * @param argumentName the name of the argument to change
+//     * @param newFormat the new format to use
+//     * @stable ICU 3.8
+//     */
+//    public void setFormatByArgumentName(String argumentName, Format newFormat) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Sets the format to use for the format element with the given
@@ -796,39 +793,37 @@ public class MessageFormat extends UFormat {
         return messageFormat.getFormats();
     }
 
-    /**
-     * {@icu} Returns the format argument names. For more details, see
-     * {@link #setFormatByArgumentName(String, Format)}.
-     * @return List of names
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public Set<String> getFormatArgumentNames() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the format argument names. For more details, see
+//     * {@link #setFormatByArgumentName(String, Format)}.
+//     * @return List of names
+//     * @internal
+//     * @deprecated This API is ICU internal only.
+//     */
+//    public Set<String> getFormatArgumentNames() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the first top-level format associated with the given argument name.
-     * For more details, see {@link #setFormatByArgumentName(String, Format)}.
-     * @param argumentName The name of the desired argument.
-     * @return the Format associated with the name, or null if there isn't one.
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
-     */
-    public Format getFormatByArgumentName(String argumentName) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the first top-level format associated with the given argument name.
+//     * For more details, see {@link #setFormatByArgumentName(String, Format)}.
+//     * @param argumentName The name of the desired argument.
+//     * @return the Format associated with the name, or null if there isn't one.
+//     * @stable ICU 4.8
+//     */
+//    public Format getFormatByArgumentName(String argumentName) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns the top-level argument names. For more details, see
-     * {@link #setFormatByArgumentName(String, Format)}.
-     * @return a Set of argument names
-     * @draft ICU 4.8
-     * @provisional This API might change or be removed in a future release.
-     */
-    public Set<String> getArgumentNames() {
-    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the top-level argument names. For more details, see
+//     * {@link #setFormatByArgumentName(String, Format)}.
+//     * @return a Set of argument names
+//     * @stable ICU 4.8
+//     */
+//    public Set<String> getArgumentNames() {
+//    	throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
     
     /**
      * Formats an array of objects and appends the <code>MessageFormat</code>'s
@@ -913,39 +908,39 @@ public class MessageFormat extends UFormat {
         return buf;
     }
 
-    /**
-     * Formats a map of objects and appends the <code>MessageFormat</code>'s
-     * pattern, with format elements replaced by the formatted objects, to the
-     * provided <code>StringBuffer</code>.
-     * <p>
-     * The text substituted for the individual format elements is derived from
-     * the current subformat of the format element and the
-     * <code>arguments</code> value corresopnding to the format element's
-     * argument name.
-     * <p>
-     * This API may be called on formats that do not use named arguments.
-     * In this case the the keys in <code>arguments</code> must be numeric
-     * strings (e.g. "0", "1", "2"...).
-     * <p>
-     * An argument is <i>unavailable</i> if <code>arguments</code> is
-     * <code>null</code> or does not have a value corresponding to an argument
-     * name in the pattern.  When an argument is unavailable no substitution
-     * is performed.
-     *
-     * @param arguments a map of objects to be formatted and substituted.
-     * @param result where text is appended.
-     * @param pos On input: an alignment field, if desired.
-     *            On output: the offsets of the alignment field.
-     * @throws IllegalArgumentException if an argument in the
-     *         <code>arguments</code> array is not of the type
-     *         expected by the format element(s) that use it.
-     * @return the passed-in StringBuffer
-     * @stable ICU 3.8
-     */
-    public final StringBuffer format(Map<String, Object> arguments, StringBuffer result,
-                                     FieldPosition pos) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Formats a map of objects and appends the <code>MessageFormat</code>'s
+//     * pattern, with format elements replaced by the formatted objects, to the
+//     * provided <code>StringBuffer</code>.
+//     * <p>
+//     * The text substituted for the individual format elements is derived from
+//     * the current subformat of the format element and the
+//     * <code>arguments</code> value corresopnding to the format element's
+//     * argument name.
+//     * <p>
+//     * This API may be called on formats that do not use named arguments.
+//     * In this case the the keys in <code>arguments</code> must be numeric
+//     * strings (e.g. "0", "1", "2"...).
+//     * <p>
+//     * An argument is <i>unavailable</i> if <code>arguments</code> is
+//     * <code>null</code> or does not have a value corresponding to an argument
+//     * name in the pattern.  When an argument is unavailable no substitution
+//     * is performed.
+//     *
+//     * @param arguments a map of objects to be formatted and substituted.
+//     * @param result where text is appended.
+//     * @param pos On input: an alignment field, if desired.
+//     *            On output: the offsets of the alignment field.
+//     * @throws IllegalArgumentException if an argument in the
+//     *         <code>arguments</code> array is not of the type
+//     *         expected by the format element(s) that use it.
+//     * @return the passed-in StringBuffer
+//     * @stable ICU 3.8
+//     */
+//    public final StringBuffer format(Map<String, Object> arguments, StringBuffer result,
+//                                     FieldPosition pos) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Creates a MessageFormat with the given pattern and uses it
@@ -967,22 +962,22 @@ public class MessageFormat extends UFormat {
         return java.text.MessageFormat.format(pattern, arguments);
     }
 
-    /**
-     * Creates a MessageFormat with the given pattern and uses it to
-     * format the given arguments.  The pattern must identifyarguments
-     * by name instead of by number.
-     * <p>
-     * @throws IllegalArgumentException if the pattern is invalid,
-     *         or if an argument in the <code>arguments</code> map
-     *         is not of the type expected by the format element(s)
-     *         that use it.
-     * @see #format(Map, StringBuffer, FieldPosition)
-     * @see #format(String, Object[])
-     * @stable ICU 3.8
-     */
-    public static String format(String pattern, Map<String, Object> arguments) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Creates a MessageFormat with the given pattern and uses it to
+//     * format the given arguments.  The pattern must identifyarguments
+//     * by name instead of by number.
+//     * <p>
+//     * @throws IllegalArgumentException if the pattern is invalid,
+//     *         or if an argument in the <code>arguments</code> map
+//     *         is not of the type expected by the format element(s)
+//     *         that use it.
+//     * @see #format(Map, StringBuffer, FieldPosition)
+//     * @see #format(String, Object[])
+//     * @stable ICU 3.8
+//     */
+//    public static String format(String pattern, Map<String, Object> arguments) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * {@icu} Returns true if this MessageFormat uses named arguments,
@@ -1143,22 +1138,22 @@ public class MessageFormat extends UFormat {
         return messageFormat.parse(source, pos);
     }
 
-    /**
-     * {@icu} Parses the string, returning the results in a Map.
-     * This is similar to the version that returns an array
-     * of Object.  This supports both named and numbered
-     * arguments-- if numbered, the keys in the map are the
-     * corresponding Strings (e.g. "0", "1", "2"...).
-     *
-     * @param source the text to parse
-     * @param pos the position at which to start parsing.  on return,
-     *        contains the result of the parse.
-     * @return a Map containing key/value pairs for each parsed argument.
-     * @stable ICU 3.8
-     */
-    public Map<String, Object> parseToMap(String source, ParsePosition pos) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Parses the string, returning the results in a Map.
+//     * This is similar to the version that returns an array
+//     * of Object.  This supports both named and numbered
+//     * arguments-- if numbered, the keys in the map are the
+//     * corresponding Strings (e.g. "0", "1", "2"...).
+//     *
+//     * @param source the text to parse
+//     * @param pos the position at which to start parsing.  on return,
+//     *        contains the result of the parse.
+//     * @return a Map containing key/value pairs for each parsed argument.
+//     * @stable ICU 3.8
+//     */
+//    public Map<String, Object> parseToMap(String source, ParsePosition pos) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Parses text from the beginning of the given string to produce an object
@@ -1178,23 +1173,23 @@ public class MessageFormat extends UFormat {
         return messageFormat.parse(source);
     }
 
-    /**
-     * {@icu} Parses text from the beginning of the given string to produce a map from
-     * argument to values. The method may not use the entire text of the given string.
-     *
-     * <p>See the {@link #parse(String, ParsePosition)} method for more information on
-     * message parsing.
-     *
-     * @param source A <code>String</code> whose beginning should be parsed.
-     * @return A <code>Map</code> parsed from the string.
-     * @throws ParseException if the beginning of the specified string cannot
-     *         be parsed.
-     * @see #parseToMap(String, ParsePosition)
-     * @stable ICU 3.8
-     */
-    public Map<String, Object> parseToMap(String source) throws ParseException {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Parses text from the beginning of the given string to produce a map from
+//     * argument to values. The method may not use the entire text of the given string.
+//     *
+//     * <p>See the {@link #parse(String, ParsePosition)} method for more information on
+//     * message parsing.
+//     *
+//     * @param source A <code>String</code> whose beginning should be parsed.
+//     * @return A <code>Map</code> parsed from the string.
+//     * @throws ParseException if the beginning of the specified string cannot
+//     *         be parsed.
+//     * @see #parseToMap(String, ParsePosition)
+//     * @stable ICU 3.8
+//     */
+//    public Map<String, Object> parseToMap(String source) throws ParseException {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Parses text from a string to produce an object array or Map.

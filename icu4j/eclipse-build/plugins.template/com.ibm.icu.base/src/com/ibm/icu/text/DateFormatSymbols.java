@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -8,13 +8,8 @@
 package com.ibm.icu.text;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
-import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -226,26 +221,7 @@ public class DateFormatSymbols implements Serializable, Cloneable {
      * @stable ICU 3.8
      */
     public static Locale[] getAvailableLocales() {
-        Locale[] avlocs = null;
-        boolean isJava5 = true;
-        try {
-            Method mGetAvailableLocales = java.text.DateFormatSymbols.class.getMethod("getAvailableLocales", (Class[])null);
-            avlocs = (Locale[]) mGetAvailableLocales.invoke(null, (Object[]) null);
-            isJava5 = false;
-        } catch (NoSuchMethodException nsme) {
-            // fall through
-        } catch (InvocationTargetException ite) {
-            // fall through
-        } catch (IllegalAccessException iae) {
-            // fall through
-        }
-
-        if (isJava5) {
-            // Use DateFormat's getAvailableLocales as fallback
-           avlocs = DateFormat.getAvailableLocales();
-        }
-
-        return avlocs;
+        return java.text.DateFormat.getAvailableLocales();
     }
 
     /**
@@ -481,29 +457,30 @@ public class DateFormatSymbols implements Serializable, Cloneable {
     public void setShortWeekdays(String[] newShortWeekdays) {
         dfs.setShortWeekdays(newShortWeekdays);
     }
-    /**
-     * {@icu} Returns quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
-     * @param context    The quarter context, FORMAT or STANDALONE.
-     * @param width      The width or the returned quarter string,
-     *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
-     * @return the quarter strings.
-     * @stable ICU 3.6
-     */
-    public String[] getQuarters(int context, int width) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
 
-    /**
-     * {@icu} Sets quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
-     * @param newQuarters the new quarter strings.
-     * @param context    The formatting context, FORMAT or STANDALONE.
-     * @param width      The width of the quarter string,
-     *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
-     * @stable ICU 3.8
-     */
-    public void setQuarters(String[] newQuarters, int context, int width) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
+//     * @param context    The quarter context, FORMAT or STANDALONE.
+//     * @param width      The width or the returned quarter string,
+//     *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
+//     * @return the quarter strings.
+//     * @stable ICU 3.6
+//     */
+//    public String[] getQuarters(int context, int width) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
+
+//    /**
+//     * {@icu} Sets quarter strings. For example: "1st Quarter", "2nd Quarter", etc.
+//     * @param newQuarters the new quarter strings.
+//     * @param context    The formatting context, FORMAT or STANDALONE.
+//     * @param width      The width of the quarter string,
+//     *                   either WIDE or ABBREVIATED. There are no NARROW quarters.
+//     * @stable ICU 3.8
+//     */
+//    public void setQuarters(String[] newQuarters, int context, int width) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Returns am/pm strings. For example: "AM" and "PM".
@@ -598,265 +575,269 @@ public class DateFormatSymbols implements Serializable, Cloneable {
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    /**
-     * Returns the {@link DateFormatSymbols} object that should be used to format a
-     * calendar system's dates in the given locale.
-     * <p>
-     * <b>Subclassing:</b><br>
-     * When creating a new Calendar subclass, you must create the
-     * {@link ResourceBundle ResourceBundle}
-     * containing its {@link DateFormatSymbols DateFormatSymbols} in a specific place.
-     * The resource bundle name is based on the calendar's fully-specified
-     * class name, with ".resources" inserted at the end of the package name
-     * (just before the class name) and "Symbols" appended to the end.
-     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
-     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * <p>
-     * Within the ResourceBundle, this method searches for five keys:
-     * <ul>
-     * <li><b>DayNames</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>DAY_OF_WEEK</code> field.  Even though
-     *      <code>DAY_OF_WEEK</code> starts with <code>SUNDAY</code> = 1,
-     *      This array is 0-based; the name for Sunday goes in the
-     *      first position, at index 0.  If this key is not found
-     *      in the bundle, the day names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     *
-     * <li><b>DayAbbreviations</b> -
-     *      An array of abbreviated day names corresponding
-     *      to the values in the "DayNames" array.  If this key
-     *      is not found in the resource bundle, the "DayNames"
-     *      values are used instead.  If neither key is found,
-     *      the day abbreviations are inherited from the default
-     *      <code>DateFormatSymbols</code> for the locale.
-     *
-     * <li><b>MonthNames</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>MONTH</code> field.  If this key is not found
-     *      in the bundle, the month names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     *
-     * <li><b>MonthAbbreviations</b> -
-     *      An array of abbreviated day names corresponding
-     *      to the values in the "MonthNames" array.  If this key
-     *      is not found in the resource bundle, the "MonthNames"
-     *      values are used instead.  If neither key is found,
-     *      the day abbreviations are inherited from the default
-     *      <code>DateFormatSymbols</code> for the locale.
-     *
-     * <li><b>Eras</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>ERA</code> field.  If this key is not found
-     *      in the bundle, the era names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     * </ul>
-     * <p>
-     * @param cal       The calendar system whose date format symbols are desired.
-     * @param locale    The locale whose symbols are desired.
-     *
-     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
-     * @stable ICU 2.0
-     */
-    public DateFormatSymbols(Calendar cal, Locale locale) {
-        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Returns the {@link DateFormatSymbols} object that should be used to format a
+//     * calendar system's dates in the given locale.
+//     * <p>
+//     * <b>Subclassing:</b><br>
+//     * When creating a new Calendar subclass, you must create the
+//     * {@link ResourceBundle ResourceBundle}
+//     * containing its {@link DateFormatSymbols DateFormatSymbols} in a specific place.
+//     * The resource bundle name is based on the calendar's fully-specified
+//     * class name, with ".resources" inserted at the end of the package name
+//     * (just before the class name) and "Symbols" appended to the end.
+//     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
+//     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
+//     * <p>
+//     * Within the ResourceBundle, this method searches for five keys:
+//     * <ul>
+//     * <li><b>DayNames</b> -
+//     *      An array of strings corresponding to each possible
+//     *      value of the <code>DAY_OF_WEEK</code> field.  Even though
+//     *      <code>DAY_OF_WEEK</code> starts with <code>SUNDAY</code> = 1,
+//     *      This array is 0-based; the name for Sunday goes in the
+//     *      first position, at index 0.  If this key is not found
+//     *      in the bundle, the day names are inherited from the
+//     *      default <code>DateFormatSymbols</code> for the requested locale.
+//     *
+//     * <li><b>DayAbbreviations</b> -
+//     *      An array of abbreviated day names corresponding
+//     *      to the values in the "DayNames" array.  If this key
+//     *      is not found in the resource bundle, the "DayNames"
+//     *      values are used instead.  If neither key is found,
+//     *      the day abbreviations are inherited from the default
+//     *      <code>DateFormatSymbols</code> for the locale.
+//     *
+//     * <li><b>MonthNames</b> -
+//     *      An array of strings corresponding to each possible
+//     *      value of the <code>MONTH</code> field.  If this key is not found
+//     *      in the bundle, the month names are inherited from the
+//     *      default <code>DateFormatSymbols</code> for the requested locale.
+//     *
+//     * <li><b>MonthAbbreviations</b> -
+//     *      An array of abbreviated day names corresponding
+//     *      to the values in the "MonthNames" array.  If this key
+//     *      is not found in the resource bundle, the "MonthNames"
+//     *      values are used instead.  If neither key is found,
+//     *      the day abbreviations are inherited from the default
+//     *      <code>DateFormatSymbols</code> for the locale.
+//     *
+//     * <li><b>Eras</b> -
+//     *      An array of strings corresponding to each possible
+//     *      value of the <code>ERA</code> field.  If this key is not found
+//     *      in the bundle, the era names are inherited from the
+//     *      default <code>DateFormatSymbols</code> for the requested locale.
+//     * </ul>
+//     * <p>
+//     * @param cal       The calendar system whose date format symbols are desired.
+//     * @param locale    The locale whose symbols are desired.
+//     *
+//     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
+//     * @stable ICU 2.0
+//     */
+//    public DateFormatSymbols(Calendar cal, Locale locale) {
+//        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Returns the {@link DateFormatSymbols} object that should be used to format a
-     * calendar system's dates in the given locale.
-     * <p>
-     * <b>Subclassing:</b><br>
-     * When creating a new Calendar subclass, you must create the
-     * {@link ResourceBundle ResourceBundle}
-     * containing its {@link DateFormatSymbols DateFormatSymbols} in a specific place.
-     * The resource bundle name is based on the calendar's fully-specified
-     * class name, with ".resources" inserted at the end of the package name
-     * (just before the class name) and "Symbols" appended to the end.
-     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
-     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * <p>
-     * Within the ResourceBundle, this method searches for five keys:
-     * <ul>
-     * <li><b>DayNames</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>DAY_OF_WEEK</code> field.  Even though
-     *      <code>DAY_OF_WEEK</code> starts with <code>SUNDAY</code> = 1,
-     *      This array is 0-based; the name for Sunday goes in the
-     *      first position, at index 0.  If this key is not found
-     *      in the bundle, the day names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     *
-     * <li><b>DayAbbreviations</b> -
-     *      An array of abbreviated day names corresponding
-     *      to the values in the "DayNames" array.  If this key
-     *      is not found in the resource bundle, the "DayNames"
-     *      values are used instead.  If neither key is found,
-     *      the day abbreviations are inherited from the default
-     *      <code>DateFormatSymbols</code> for the locale.
-     *
-     * <li><b>MonthNames</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>MONTH</code> field.  If this key is not found
-     *      in the bundle, the month names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     *
-     * <li><b>MonthAbbreviations</b> -
-     *      An array of abbreviated day names corresponding
-     *      to the values in the "MonthNames" array.  If this key
-     *      is not found in the resource bundle, the "MonthNames"
-     *      values are used instead.  If neither key is found,
-     *      the day abbreviations are inherited from the default
-     *      <code>DateFormatSymbols</code> for the locale.
-     *
-     * <li><b>Eras</b> -
-     *      An array of strings corresponding to each possible
-     *      value of the <code>ERA</code> field.  If this key is not found
-     *      in the bundle, the era names are inherited from the
-     *      default <code>DateFormatSymbols</code> for the requested locale.
-     * </ul>
-     * <p>
-     * @param cal       The calendar system whose date format symbols are desired.
-     * @param locale    The ulocale whose symbols are desired.
-     *
-     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
-     * @stable ICU 3.2
-     */
-    public DateFormatSymbols(Calendar cal, ULocale locale) {
-        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Returns the {@link DateFormatSymbols} object that should be used to format a
+//     * calendar system's dates in the given locale.
+//     * <p>
+//     * <b>Subclassing:</b><br>
+//     * When creating a new Calendar subclass, you must create the
+//     * {@link ResourceBundle ResourceBundle}
+//     * containing its {@link DateFormatSymbols DateFormatSymbols} in a specific place.
+//     * The resource bundle name is based on the calendar's fully-specified
+//     * class name, with ".resources" inserted at the end of the package name
+//     * (just before the class name) and "Symbols" appended to the end.
+//     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
+//     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
+//     * <p>
+//     * Within the ResourceBundle, this method searches for five keys:
+//     * <ul>
+//     * <li><b>DayNames</b> -
+//     *      An array of strings corresponding to each possible
+//     *      value of the <code>DAY_OF_WEEK</code> field.  Even though
+//     *      <code>DAY_OF_WEEK</code> starts with <code>SUNDAY</code> = 1,
+//     *      This array is 0-based; the name for Sunday goes in the
+//     *      first position, at index 0.  If this key is not found
+//     *      in the bundle, the day names are inherited from the
+//     *      default <code>DateFormatSymbols</code> for the requested locale.
+//     *
+//     * <li><b>DayAbbreviations</b> -
+//     *      An array of abbreviated day names corresponding
+//     *      to the values in the "DayNames" array.  If this key
+//     *      is not found in the resource bundle, the "DayNames"
+//     *      values are used instead.  If neither key is found,
+//     *      the day abbreviations are inherited from the default
+//     *      <code>DateFormatSymbols</code> for the locale.
+//     *
+//     * <li><b>MonthNames</b> -
+//     *      An array of strings corresponding to each possible
+//     *      value of the <code>MONTH</code> field.  If this key is not found
+//     *      in the bundle, the month names are inherited from the
+//     *      default <code>DateFormatSymbols</code> for the requested locale.
+//     *
+//     * <li><b>MonthAbbreviations</b> -
+//     *      An array of abbreviated day names corresponding
+//     *      to the values in the "MonthNames" array.  If this key
+//     *      is not found in the resource bundle, the "MonthNames"
+//     *      values are used instead.  If neither key is found,
+//     *      the day abbreviations are inherited from the default
+//     *      <code>DateFormatSymbols</code> for the locale.
+//     *
+//     * <li><b>Eras</b> -
+//     *      An array of strings corresponding to each possible
+//     *      value of the <code>ERA</code> field.  If this key is not found
+//     *      in the bundle, the era names are inherited from the
+//     *      default <code>DateFormatSymbols</code> for the requested locale.
+//     * </ul>
+//     * <p>
+//     * @param cal       The calendar system whose date format symbols are desired.
+//     * @param locale    The ulocale whose symbols are desired.
+//     *
+//     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
+//     * @stable ICU 3.2
+//     */
+//    public DateFormatSymbols(Calendar cal, ULocale locale) {
+//        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Variant of DateFormatSymbols(Calendar, Locale) that takes the Calendar class
-     * instead of a Calandar instance.
-     * @see #DateFormatSymbols(Calendar, Locale)
-     * @stable ICU 2.2
-     */
-    public DateFormatSymbols(Class<? extends Calendar> calendarClass, Locale locale) {
-        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Variant of DateFormatSymbols(Calendar, Locale) that takes the Calendar class
+//     * instead of a Calandar instance.
+//     * @see #DateFormatSymbols(Calendar, Locale)
+//     * @stable ICU 2.2
+//     */
+//    public DateFormatSymbols(Class<? extends Calendar> calendarClass, Locale locale) {
+//        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Variant of DateFormatSymbols(Calendar, ULocale) that takes the Calendar class
-     * instead of a Calandar instance.
-     * @see #DateFormatSymbols(Calendar, Locale)
-     * @stable ICU 3.2
-     */
-    public DateFormatSymbols(Class<? extends Calendar> calendarClass, ULocale locale) {
-        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Variant of DateFormatSymbols(Calendar, ULocale) that takes the Calendar class
+//     * instead of a Calandar instance.
+//     * @see #DateFormatSymbols(Calendar, Locale)
+//     * @stable ICU 3.2
+//     */
+//    public DateFormatSymbols(Class<? extends Calendar> calendarClass, ULocale locale) {
+//        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Fetches a custom calendar's DateFormatSymbols out of the given resource
-     * bundle.  Symbols that are not overridden are inherited from the
-     * default DateFormatSymbols for the locale.
-     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
-     * @stable ICU 2.0
-     */
-    public DateFormatSymbols(ResourceBundle bundle, Locale locale) {
-        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Fetches a custom calendar's DateFormatSymbols out of the given resource
+//     * bundle.  Symbols that are not overridden are inherited from the
+//     * default DateFormatSymbols for the locale.
+//     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
+//     * @stable ICU 2.0
+//     */
+//    public DateFormatSymbols(ResourceBundle bundle, Locale locale) {
+//        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Fetches a custom calendar's DateFormatSymbols out of the given resource
-     * bundle.  Symbols that are not overridden are inherited from the
-     * default DateFormatSymbols for the locale.
-     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
-     * @stable ICU 3.2
-     */
-    public DateFormatSymbols(ResourceBundle bundle, ULocale locale) {
-        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Fetches a custom calendar's DateFormatSymbols out of the given resource
+//     * bundle.  Symbols that are not overridden are inherited from the
+//     * default DateFormatSymbols for the locale.
+//     * @see DateFormatSymbols#DateFormatSymbols(java.util.Locale)
+//     * @stable ICU 3.2
+//     */
+//    public DateFormatSymbols(ResourceBundle bundle, ULocale locale) {
+//        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Finds the ResourceBundle containing the date format information for
-     * a specified calendar subclass in a given locale.
-     * <p>
-     * The resource bundle name is based on the calendar's fully-specified
-     * class name, with ".resources" inserted at the end of the package name
-     * (just before the class name) and "Symbols" appended to the end.
-     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
-     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * <p>
-     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
-     * this API no longer works as described.  This method always returns null.
-     * @deprecated ICU 4.0
-     */
-    // This API was formerly @stable ICU 2.0
-    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass,
-                                                     Locale locale) throws MissingResourceException {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");    }
+//    /**
+//     * Finds the ResourceBundle containing the date format information for
+//     * a specified calendar subclass in a given locale.
+//     * <p>
+//     * The resource bundle name is based on the calendar's fully-specified
+//     * class name, with ".resources" inserted at the end of the package name
+//     * (just before the class name) and "Symbols" appended to the end.
+//     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
+//     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
+//     * <p>
+//     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
+//     * this API no longer works as described.  This method always returns null.
+//     * @deprecated ICU 4.0
+//     */
+//    // This API was formerly @stable ICU 2.0
+//    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass,
+//                                                     Locale locale) throws MissingResourceException {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Finds the ResourceBundle containing the date format information for
-     * a specified calendar subclass in a given locale.
-     * <p>
-     * The resource bundle name is based on the calendar's fully-specified
-     * class name, with ".resources" inserted at the end of the package name
-     * (just before the class name) and "Symbols" appended to the end.
-     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
-     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
-     * <p>
-     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
-     * this API no longer works as described.  This method always returns null.
-     * @deprecated ICU 4.0
-     */
-    // This API was formerly @stable ICU 3.2
-    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass,
-                                                     ULocale locale) throws MissingResourceException {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");    }
+//    /**
+//     * Finds the ResourceBundle containing the date format information for
+//     * a specified calendar subclass in a given locale.
+//     * <p>
+//     * The resource bundle name is based on the calendar's fully-specified
+//     * class name, with ".resources" inserted at the end of the package name
+//     * (just before the class name) and "Symbols" appended to the end.
+//     * For example, the bundle corresponding to "com.ibm.icu.util.HebrewCalendar"
+//     * is "com.ibm.icu.impl.data.HebrewCalendarSymbols".
+//     * <p>
+//     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
+//     * this API no longer works as described.  This method always returns null.
+//     * @deprecated ICU 4.0
+//     */
+//    // This API was formerly @stable ICU 3.2
+//    static public ResourceBundle getDateFormatBundle(Class<? extends Calendar> calendarClass,
+//                                                     ULocale locale) throws MissingResourceException {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
-     * a Calendar instance instead of a Calendar class.
-     * <p>
-     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
-     * this API no longer works as described.  This method always returns null.
-     * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
-     * @deprecated ICU 4.0
-     */
-    // This API was formerly @stable ICU 2.2
-    public static ResourceBundle getDateFormatBundle(Calendar cal, Locale locale) throws MissingResourceException {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");    }
+//    /**
+//     * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
+//     * a Calendar instance instead of a Calendar class.
+//     * <p>
+//     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
+//     * this API no longer works as described.  This method always returns null.
+//     * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
+//     * @deprecated ICU 4.0
+//     */
+//    // This API was formerly @stable ICU 2.2
+//    public static ResourceBundle getDateFormatBundle(Calendar cal, Locale locale) throws MissingResourceException {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
-     * a Calendar instance instead of a Calendar class.
-     * <p>
-     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
-     * this API no longer works as described.  This method always returns null.
-     * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
-     * @deprecated ICU 4.0
-     */
-    // This API was formerly @stable ICU 3.2
-    public static ResourceBundle getDateFormatBundle(Calendar cal, ULocale locale) throws MissingResourceException {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");    }
+//    /**
+//     * Variant of getDateFormatBundle(java.lang.Class, java.util.Locale) that takes
+//     * a Calendar instance instead of a Calendar class.
+//     * <p>
+//     * <b>Note:</b>Because of the structural changes in the ICU locale bundle,
+//     * this API no longer works as described.  This method always returns null.
+//     * @see #getDateFormatBundle(java.lang.Class, java.util.Locale)
+//     * @deprecated ICU 4.0
+//     */
+//    // This API was formerly @stable ICU 3.2
+//    public static ResourceBundle getDateFormatBundle(Calendar cal, ULocale locale) throws MissingResourceException {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * Returns the locale that was used to create this object, or null.
-     * This may may differ from the locale requested at the time of
-     * this object's creation.  For example, if an object is created
-     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
-     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
-     * <tt>en_US</tt> may be the most specific locale that exists (the
-     * <i>valid</i> locale).
-     *
-     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
-     * contains a partial preview implementation.  The * <i>actual</i>
-     * locale is returned correctly, but the <i>valid</i> locale is
-     * not, in most cases.
-     * @param type type of information requested, either {@link
-     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
-     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
-     * @return the information specified by <i>type</i>, or null if
-     * this object was not constructed from locale data.
-     * @see com.ibm.icu.util.ULocale
-     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
-     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
-     */
-    public final ULocale getLocale(ULocale.Type type) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Returns the locale that was used to create this object, or null.
+//     * This may may differ from the locale requested at the time of
+//     * this object's creation.  For example, if an object is created
+//     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
+//     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
+//     * <tt>en_US</tt> may be the most specific locale that exists (the
+//     * <i>valid</i> locale).
+//     *
+//     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
+//     * contains a partial preview implementation.  The * <i>actual</i>
+//     * locale is returned correctly, but the <i>valid</i> locale is
+//     * not, in most cases.
+//     * @param type type of information requested, either {@link
+//     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
+//     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
+//     * @return the information specified by <i>type</i>, or null if
+//     * this object was not constructed from locale data.
+//     * @see com.ibm.icu.util.ULocale
+//     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
+//     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
+//     * @draft ICU 2.8 (retain)
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public final ULocale getLocale(ULocale.Type type) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 }

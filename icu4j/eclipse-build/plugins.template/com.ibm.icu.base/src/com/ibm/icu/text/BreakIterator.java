@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -428,11 +428,11 @@ public abstract class BreakIterator implements Cloneable
      * @stable ICU 2.4
      */
     public static final int KIND_SENTENCE = 3;
-    /** 
-     * {@icu}
-     * @stable ICU 2.4
-     */
-    public static final int KIND_TITLE = 4;
+//    /** 
+//     * {@icu}
+//     * @stable ICU 2.4
+//     */
+//    public static final int KIND_TITLE = 4;
 
     /**
      * Returns a new instance of BreakIterator that locates word boundaries.
@@ -582,87 +582,87 @@ public abstract class BreakIterator implements Cloneable
         return getBreakInstance(where.toLocale(), KIND_SENTENCE);
     }
 
-    /**
-     * {@icu} Returns a new instance of BreakIterator that locates title boundaries.
-     * This function assumes the text being analyzed is in the default locale's
-     * language. The iterator returned locates title boundaries as described for
-     * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
-     * please use a word boundary iterator. {@link #getWordInstance}
-     * @return A new instance of BreakIterator that locates title boundaries.
-     * @stable ICU 2.0
-     */
-    public static BreakIterator getTitleInstance()
-    {
-        return getTitleInstance(Locale.getDefault());
-    }
+//    /**
+//     * {@icu} Returns a new instance of BreakIterator that locates title boundaries.
+//     * This function assumes the text being analyzed is in the default locale's
+//     * language. The iterator returned locates title boundaries as described for
+//     * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
+//     * please use a word boundary iterator. {@link #getWordInstance}
+//     * @return A new instance of BreakIterator that locates title boundaries.
+//     * @stable ICU 2.0
+//     */
+//    public static BreakIterator getTitleInstance()
+//    {
+//        return getTitleInstance(Locale.getDefault());
+//    }
 
-    /**
-     * {@icu} Returns a new instance of BreakIterator that locates title boundaries.
-     * The iterator returned locates title boundaries as described for
-     * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
-     * please use Word Boundary iterator.{@link #getWordInstance}
-     * @param where A Locale specifying the language of the text being analyzed.
-     * @return A new instance of BreakIterator that locates title boundaries.
-     * @stable ICU 2.0
-     */
-    public static BreakIterator getTitleInstance(Locale where)
-    {
-        return getBreakInstance(where, KIND_TITLE);
-    }
+//    /**
+//     * {@icu} Returns a new instance of BreakIterator that locates title boundaries.
+//     * The iterator returned locates title boundaries as described for
+//     * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
+//     * please use Word Boundary iterator.{@link #getWordInstance}
+//     * @param where A Locale specifying the language of the text being analyzed.
+//     * @return A new instance of BreakIterator that locates title boundaries.
+//     * @stable ICU 2.0
+//     */
+//    public static BreakIterator getTitleInstance(Locale where)
+//    {
+//        return getBreakInstance(where, KIND_TITLE);
+//    }
 
-    /**
-     * {@icu} Returns a new instance of BreakIterator that locates title boundaries.
-     * The iterator returned locates title boundaries as described for
-     * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
-     * please use Word Boundary iterator.{@link #getWordInstance}
-     * @param where A Locale specifying the language of the text being analyzed.
-     * @return A new instance of BreakIterator that locates title boundaries.
-     * @stable ICU 3.2
-s     */
-    public static BreakIterator getTitleInstance(ULocale where)
-    {
-        return getBreakInstance(where.toLocale(), KIND_TITLE);
-    }
+//    /**
+//     * {@icu} Returns a new instance of BreakIterator that locates title boundaries.
+//     * The iterator returned locates title boundaries as described for
+//     * Unicode 3.2 only. For Unicode 4.0 and above title boundary iteration,
+//     * please use Word Boundary iterator.{@link #getWordInstance}
+//     * @param where A Locale specifying the language of the text being analyzed.
+//     * @return A new instance of BreakIterator that locates title boundaries.
+//     * @stable ICU 3.2
+//s     */
+//    public static BreakIterator getTitleInstance(ULocale where)
+//    {
+//        return getBreakInstance(where.toLocale(), KIND_TITLE);
+//    }
 
-    /**
-     * {@icu} Registers a new break iterator of the indicated kind, to use in the given
-     * locale.  Clones of the iterator will be returned if a request for a break iterator
-     * of the given kind matches or falls back to this locale.
-     * @param iter the BreakIterator instance to adopt.
-     * @param locale the Locale for which this instance is to be registered
-     * @param kind the type of iterator for which this instance is to be registered
-     * @return a registry key that can be used to unregister this instance
-     * @stable ICU 2.4
-     */
-    public static Object registerInstance(BreakIterator iter, Locale locale, int kind) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Registers a new break iterator of the indicated kind, to use in the given
+//     * locale.  Clones of the iterator will be returned if a request for a break iterator
+//     * of the given kind matches or falls back to this locale.
+//     * @param iter the BreakIterator instance to adopt.
+//     * @param locale the Locale for which this instance is to be registered
+//     * @param kind the type of iterator for which this instance is to be registered
+//     * @return a registry key that can be used to unregister this instance
+//     * @stable ICU 2.4
+//     */
+//    public static Object registerInstance(BreakIterator iter, Locale locale, int kind) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Registers a new break iterator of the indicated kind, to use in the given
-     * locale.  Clones of the iterator will be returned if a request for a break iterator
-     * of the given kind matches or falls back to this locale.
-     * @param iter the BreakIterator instance to adopt.
-     * @param locale the Locale for which this instance is to be registered
-     * @param kind the type of iterator for which this instance is to be registered
-     * @return a registry key that can be used to unregister this instance
-     * @stable ICU 3.2
-     */
-    public static Object registerInstance(BreakIterator iter, ULocale locale, int kind) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Registers a new break iterator of the indicated kind, to use in the given
+//     * locale.  Clones of the iterator will be returned if a request for a break iterator
+//     * of the given kind matches or falls back to this locale.
+//     * @param iter the BreakIterator instance to adopt.
+//     * @param locale the Locale for which this instance is to be registered
+//     * @param kind the type of iterator for which this instance is to be registered
+//     * @return a registry key that can be used to unregister this instance
+//     * @stable ICU 3.2
+//     */
+//    public static Object registerInstance(BreakIterator iter, ULocale locale, int kind) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Unregisters a previously-registered BreakIterator using the key returned
-     * from the register call.  Key becomes invalid after this call and should not be used
-     * again.
-     * @param key the registry key returned by a previous call to registerInstance
-     * @return true if the iterator for the key was successfully unregistered
-     * @stable ICU 2.4
-     */
-    public static boolean unregister(Object key) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Unregisters a previously-registered BreakIterator using the key returned
+//     * from the register call.  Key becomes invalid after this call and should not be used
+//     * again.
+//     * @param key the registry key returned by a previous call to registerInstance
+//     * @return true if the iterator for the key was successfully unregistered
+//     * @stable ICU 2.4
+//     */
+//    public static boolean unregister(Object key) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     // end of registration
 
@@ -683,7 +683,7 @@ s     */
         case KIND_WORD: br = java.text.BreakIterator.getWordInstance(where); break;
         case KIND_LINE: br = java.text.BreakIterator.getLineInstance(where); break;
         case KIND_SENTENCE: br = java.text.BreakIterator.getSentenceInstance(where); break;             
-        case KIND_TITLE: throw new UnsupportedOperationException("Title break is not supported by com.ibm.icu.base");
+//        case KIND_TITLE: throw new UnsupportedOperationException("Title break is not supported by com.ibm.icu.base");
         }
         return new BreakIteratorHandle(br);
     }
@@ -714,31 +714,31 @@ s     */
         return ulocales;
     }
 
-    /**
-     * {@icu} Returns the locale that was used to create this object, or null.
-     * This may may differ from the locale requested at the time of
-     * this object's creation.  For example, if an object is created
-     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
-     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
-     * <tt>en_US</tt> may be the most specific locale that exists (the
-     * <i>valid</i> locale).
-     *
-     * <p>Note: The <i>actual</i> locale is returned correctly, but the <i>valid</i>
-     * locale is not, in most cases.
-     * @param type type of information requested, either {@link
-     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
-     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
-     * @return the information specified by <i>type</i>, or null if
-     * this object was not constructed from locale data.
-     * @see com.ibm.icu.util.ULocale
-     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
-     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
-     */
-    public final ULocale getLocale(ULocale.Type type) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the locale that was used to create this object, or null.
+//     * This may may differ from the locale requested at the time of
+//     * this object's creation.  For example, if an object is created
+//     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
+//     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
+//     * <tt>en_US</tt> may be the most specific locale that exists (the
+//     * <i>valid</i> locale).
+//     *
+//     * <p>Note: The <i>actual</i> locale is returned correctly, but the <i>valid</i>
+//     * locale is not, in most cases.
+//     * @param type type of information requested, either {@link
+//     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
+//     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
+//     * @return the information specified by <i>type</i>, or null if
+//     * this object was not constructed from locale data.
+//     * @see com.ibm.icu.util.ULocale
+//     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
+//     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
+//     * @draft ICU 2.8 (retain)
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public final ULocale getLocale(ULocale.Type type) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     // forwarding implementation class
     static final class BreakIteratorHandle extends BreakIterator {

@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2011, International Business Machines Corporation and   *
+* Copyright (C) 2003-2012, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -19,10 +19,22 @@ import com.ibm.icu.impl.locale.AsciiUtil;
  * Utility class to parse and normalize locale ids (including POSIX style)
  */
 public final class LocaleIDParser {
+    
+    /**
+     * Char array representing the locale ID.
+     */
     private char[] id;
+    
+    /**
+     * Current position in {@link #id} (while parsing).
+     */
     private int index;
-    private char[] buffer;
-    private int blen;
+    
+    /**
+     * Temporary buffer for parsed sections of data.
+     */
+    private StringBuilder buffer;
+    
     // um, don't handle POSIX ids unless we request it.  why not?  well... because.
     private boolean canonicalize;
     private boolean hadCountry;
@@ -49,37 +61,24 @@ public final class LocaleIDParser {
     public LocaleIDParser(String localeID, boolean canonicalize) {
         id = localeID.toCharArray();
         index = 0;
-        buffer = new char[id.length + 5];
-        blen = 0;
+        buffer = new StringBuilder(id.length + 5);
         this.canonicalize = canonicalize;
     }
 
     private void reset() {
-        index = blen = 0;
+        index = 0;
+        buffer = new StringBuilder(id.length + 5);
     }
 
     // utilities for working on text in the buffer
-
+    
     /**
      * Append c to the buffer.
      */
     private void append(char c) {
-        try {
-            buffer[blen] = c;
-        }
-        catch (IndexOutOfBoundsException e) {
-            if (buffer.length > 512) {
-                // something is seriously wrong, let this go
-                throw e;
-            }
-            char[] nbuffer = new char[buffer.length * 2];
-            System.arraycopy(buffer, 0, nbuffer, 0, buffer.length);
-            nbuffer[blen] = c;
-            buffer = nbuffer;
-        }
-        ++blen;
+        buffer.append(c);
     }
-
+    
     private void addSeparator() {
         append(UNDERSCORE);
     }
@@ -88,27 +87,22 @@ public final class LocaleIDParser {
      * Returns the text in the buffer from start to blen as a String.
      */
     private String getString(int start) {
-        if (start == blen) {
-            return "";
-        }
-        return new String(buffer, start, blen-start);
+        return buffer.substring(start);
     }
 
     /**
      * Set the length of the buffer to pos, then append the string.
      */
     private void set(int pos, String s) {
-        this.blen = pos; // no safety
-        append(s);
+        buffer.delete(pos, buffer.length());
+        buffer.insert(pos, s);
     }
 
     /**
      * Append the string to the buffer.
      */
     private void append(String s) {
-        for (int i = 0; i < s.length(); ++i) {
-            append(s.charAt(i));
-        }
+        buffer.append(s);
     }
 
     // utilities for parsing text out of the id
@@ -136,8 +130,7 @@ public final class LocaleIDParser {
      * Advance index until the next terminator or id separator, and leave it there.
      */
     private void skipUntilTerminatorOrIDSeparator() {
-        while (!isTerminatorOrIDSeparator(next())) {
-        }
+        while (!isTerminatorOrIDSeparator(next()));
         --index;
     }
 
@@ -147,13 +140,6 @@ public final class LocaleIDParser {
     private boolean atTerminator() {
         return index >= id.length || isTerminator(id[index]);
     }
-
-    /*
-     * Returns true if the character is an id separator (underscore or hyphen).
-     */
-    /*        private boolean isIDSeparator(char c) {
-            return c == UNDERSCORE || c == HYPHEN;
-        }*/
 
     /**
      * Returns true if the character is a terminator (keyword separator, dot, or DONE).
@@ -168,8 +154,7 @@ public final class LocaleIDParser {
      * Returns true if the character is a terminator or id separator.
      */
     private boolean isTerminatorOrIDSeparator(char c) {
-        return c == KEYWORD_SEPARATOR || c == UNDERSCORE || c == HYPHEN ||
-        c == DONE || c == DOT;
+        return c == UNDERSCORE || c == HYPHEN || isTerminator(c);
     }
 
     /**
@@ -206,19 +191,21 @@ public final class LocaleIDParser {
      * separator.  Returns the start of the language code in the buffer.
      */
     private int parseLanguage() {
+        int startLength = buffer.length();
+        
         if (haveExperimentalLanguagePrefix()) {
-            append(Character.toLowerCase(id[0]));
+            append(AsciiUtil.toLower(id[0]));
             append(HYPHEN);
             index = 2;
         }
 
         char c;
         while(!isTerminatorOrIDSeparator(c = next())) {
-            append(Character.toLowerCase(c));
+            append(AsciiUtil.toLower(c));
         }
         --index; // unget
 
-        if (blen == 3) {
+        if (buffer.length() - startLength == 3) {
             String lang = LocaleIDs.threeToTwoLetterLanguage(getString(0));
             if (lang != null) {
                 set(0, lang);
@@ -253,14 +240,16 @@ public final class LocaleIDParser {
             int oldIndex = index; // save original index
             ++index;
 
-            int oldBlen = blen; // get before append hyphen, if we truncate everything is undone
+            int oldBlen = buffer.length(); // get before append hyphen, if we truncate everything is undone
             char c;
-            while(!isTerminatorOrIDSeparator(c = next())) {
-                if (blen == oldBlen) { // first pass
+            boolean firstPass = true;
+            while(!isTerminatorOrIDSeparator(c = next()) && AsciiUtil.isAlpha(c)) {
+                if (firstPass) {
                     addSeparator();
-                    append(Character.toUpperCase(c));
+                    append(AsciiUtil.toUpper(c));
+                    firstPass = false;
                 } else {
-                    append(Character.toLowerCase(c));
+                    append(AsciiUtil.toLower(c));
                 }
             }
             --index; // unget
@@ -268,14 +257,14 @@ public final class LocaleIDParser {
             /* If it's not exactly 4 characters long, then it's not a script. */
             if (index - oldIndex != 5) { // +1 to account for separator
                 index = oldIndex;
-                blen = oldBlen;
+                buffer.delete(oldBlen, buffer.length());
             } else {
                 oldBlen++; // index past hyphen, for clients who want to extract just the script
             }
 
             return oldBlen;
         }
-        return blen;
+        return buffer.length();
     }
 
     /**
@@ -289,8 +278,11 @@ public final class LocaleIDParser {
         if (!atTerminator()) {
             int oldIndex = index;
             ++index;
+            
+            char c;
+            while (!isTerminatorOrIDSeparator(c = next()) && AsciiUtil.isAlpha(c));
+            --index;
 
-            skipUntilTerminatorOrIDSeparator();
             if (index - oldIndex != 5) { // +1 to account for separator
                 index = oldIndex;
             }
@@ -307,19 +299,21 @@ public final class LocaleIDParser {
             int oldIndex = index;
             ++index;
 
-            int oldBlen = blen;
+            int oldBlen = buffer.length();
             char c;
+            boolean firstPass = true;
             while (!isTerminatorOrIDSeparator(c = next())) {
-                if (oldBlen == blen) { // first, add hyphen
+                if (firstPass) { // first, add hyphen
                     hadCountry = true; // we have a country, let variant parsing know
                     addSeparator();
                     ++oldBlen; // increment past hyphen
+                    firstPass = false;
                 }
-                append(Character.toUpperCase(c));
+                append(AsciiUtil.toUpper(c));
             }
             --index; // unget
 
-            int charsAppended = blen - oldBlen;
+            int charsAppended = buffer.length() - oldBlen;
 
             if (charsAppended == 0) {
                 // Do nothing.
@@ -329,7 +323,7 @@ public final class LocaleIDParser {
                 // their previous values.
                 index = oldIndex;
                 --oldBlen;
-                blen = oldBlen;
+                buffer.delete(oldBlen, buffer.length());
                 hadCountry = false;
             }
             else if (charsAppended == 3) {
@@ -342,7 +336,7 @@ public final class LocaleIDParser {
             return oldBlen;
         }
 
-        return blen;
+        return buffer.length();
     }
 
     /**
@@ -352,7 +346,9 @@ public final class LocaleIDParser {
      */
     private void skipCountry() {
         if (!atTerminator()) {
-            ++index;
+            if (id[index] == UNDERSCORE || id[index] == HYPHEN) {
+                ++index;
+            }
             /*
              * Save the index point after the separator, since the format
              * requires two separators if the country is not present.
@@ -392,12 +388,14 @@ public final class LocaleIDParser {
      * becomes a bit more complex.
      */
     private int parseVariant() {
-        int oldBlen = blen;
+        int oldBlen = buffer.length();
 
         boolean start = true;
         boolean needSeparator = true;
         boolean skipping = false;
         char c;
+        boolean firstPass = true;
+        
         while ((c = next()) != DONE) {
             if (c == DOT) {
                 start = false;
@@ -411,20 +409,23 @@ public final class LocaleIDParser {
                 needSeparator = true; // add another underscore if we have more text
             } else if (start) {
                 start = false;
+                if (c != UNDERSCORE && c != HYPHEN) {
+                    index--;
+                }
             } else if (!skipping) {
                 if (needSeparator) {
-                    boolean incOldBlen = blen == oldBlen; // need to skip separators
                     needSeparator = false;
-                    if (incOldBlen && !hadCountry) { // no country, we'll need two
+                    if (firstPass && !hadCountry) { // no country, we'll need two
                         addSeparator();
                         ++oldBlen; // for sure
                     }
                     addSeparator();
-                    if (incOldBlen) { // only for the first separator
+                    if (firstPass) { // only for the first separator
                         ++oldBlen;
+                        firstPass = false;
                     }
                 }
-                c = Character.toUpperCase(c);
+                c = AsciiUtil.toUpper(c);
                 if (c == HYPHEN || c == COMMA) {
                     c = UNDERSCORE;
                 }
@@ -505,8 +506,9 @@ public final class LocaleIDParser {
             parseVariant();
 
             // catch unwanted trailing underscore after country if there was no variant
-            if (blen > 1 && buffer[blen-1] == UNDERSCORE) {
-                --blen;
+            int len = buffer.length();
+            if (len > 0 && buffer.charAt(len - 1) == UNDERSCORE) {
+                buffer.deleteCharAt(len - 1);
             }
         }
     }
@@ -641,7 +643,7 @@ public final class LocaleIDParser {
      * Parse the keywords and return start of the string in the buffer.
      */
     private int parseKeywords() {
-        int oldBlen = blen;
+        int oldBlen = buffer.length();
         Map<String, String> m = getKeywordMap();
         if (!m.isEmpty()) {
             boolean first = true;
@@ -652,7 +654,7 @@ public final class LocaleIDParser {
                 append(KEYWORD_ASSIGN);
                 append(e.getValue());
             }
-            if (blen != oldBlen) {
+            if (first == false) {
                 ++oldBlen;
             }
         }

@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2001-2012, International Business Machines Corporation and    *
@@ -1254,11 +1253,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect2(df, 2.0, "2.00 *&' \u20B9 '&*");
         expect2(df, -1.0, "-1.00 *&' \u20B9 '&*");
 
-//#if defined(ECLIPSE)
-//##        BigDecimal r;
-//#else
         java.math.BigDecimal r;
-//#endif
+
         r = df.getRoundingIncrement();
         if (r != null) {
             errln("FAIL: rounding = " + r + ", expect null");
