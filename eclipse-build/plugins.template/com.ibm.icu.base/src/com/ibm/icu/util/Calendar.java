@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2011, International Business Machines
+*   Copyright (C) 1996-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -868,68 +868,68 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
      */
     public final static int DST_OFFSET = 16;
 
-    /**
-     * {@icu} Field number for <code>get()</code> and <code>set()</code>
-     * indicating the extended year corresponding to the
-     * {@link #WEEK_OF_YEAR} field.  This may be one greater or less
-     * than the value of {@link #EXTENDED_YEAR}.
-     * @stable ICU 2.0
-     */
-    public static final int YEAR_WOY = 17;
-
-    /**
-     * {@icu} Field number for <code>get()</code> and <code>set()</code>
-     * indicating the localized day of week.  This will be a value from 1
-     * to 7 inclusive, with 1 being the localized first day of the week.
-     * @stable ICU 2.0
-     */
-    public static final int DOW_LOCAL = 18;
-
-    /**
-     * {@icu} Field number for <code>get()</code> and <code>set()</code>
-     * indicating the extended year.  This is a single number designating
-     * the year of this calendar system, encompassing all supra-year
-     * fields.  For example, for the Julian calendar system, year numbers
-     * are positive, with an era of BCE or CE.  An extended year value for
-     * the Julian calendar system assigns positive values to CE years and
-     * negative values to BCE years, with 1 BCE being year 0.
-     * @stable ICU 2.0
-     */
-    public static final int EXTENDED_YEAR = 19;
-
-    /**
-     * {@icu} Field number for <code>get()</code> and <code>set()</code>
-     * indicating the modified Julian day number.  This is different from
-     * the conventional Julian day number in two regards.  First, it
-     * demarcates days at local zone midnight, rather than noon GMT.
-     * Second, it is a local number; that is, it depends on the local time
-     * zone.  It can be thought of as a single number that encompasses all
-     * the date-related fields.
-     * @stable ICU 2.0
-     */
-    public static final int JULIAN_DAY = 20;
-
-    /**
-     * {@icu} Field number for <code>get()</code> and <code>set()</code>
-     * indicating the milliseconds in the day.  This ranges from 0 to
-     * 23:59:59.999 (regardless of DST).  This field behaves
-     * <em>exactly</em> like a composite of all time-related fields, not
-     * including the zone fields.  As such, it also reflects
-     * discontinuities of those fields on DST transition days.  On a day of
-     * DST onset, it will jump forward.  On a day of DST cessation, it will
-     * jump backward.  This reflects the fact that is must be combined with
-     * the DST_OFFSET field to obtain a unique local time value.
-     * @stable ICU 2.0
-     */
-    public static final int MILLISECONDS_IN_DAY = 21;
-
-    /**
-     * {@icu} Field indicating whether or not the current month is a leap month.
-     * Should have a value of 0 for non-leap months, and 1 for leap months.
-     * @draft ICU 4.4
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final int IS_LEAP_MONTH = 22;
+//    /**
+//     * {@icu} Field number for <code>get()</code> and <code>set()</code>
+//     * indicating the extended year corresponding to the
+//     * {@link #WEEK_OF_YEAR} field.  This may be one greater or less
+//     * than the value of {@link #EXTENDED_YEAR}.
+//     * @stable ICU 2.0
+//     */
+//    public static final int YEAR_WOY = 17;
+//
+//    /**
+//     * {@icu} Field number for <code>get()</code> and <code>set()</code>
+//     * indicating the localized day of week.  This will be a value from 1
+//     * to 7 inclusive, with 1 being the localized first day of the week.
+//     * @stable ICU 2.0
+//     */
+//    public static final int DOW_LOCAL = 18;
+//
+//    /**
+//     * {@icu} Field number for <code>get()</code> and <code>set()</code>
+//     * indicating the extended year.  This is a single number designating
+//     * the year of this calendar system, encompassing all supra-year
+//     * fields.  For example, for the Julian calendar system, year numbers
+//     * are positive, with an era of BCE or CE.  An extended year value for
+//     * the Julian calendar system assigns positive values to CE years and
+//     * negative values to BCE years, with 1 BCE being year 0.
+//     * @stable ICU 2.0
+//     */
+//    public static final int EXTENDED_YEAR = 19;
+//
+//    /**
+//     * {@icu} Field number for <code>get()</code> and <code>set()</code>
+//     * indicating the modified Julian day number.  This is different from
+//     * the conventional Julian day number in two regards.  First, it
+//     * demarcates days at local zone midnight, rather than noon GMT.
+//     * Second, it is a local number; that is, it depends on the local time
+//     * zone.  It can be thought of as a single number that encompasses all
+//     * the date-related fields.
+//     * @stable ICU 2.0
+//     */
+//    public static final int JULIAN_DAY = 20;
+//
+//    /**
+//     * {@icu} Field number for <code>get()</code> and <code>set()</code>
+//     * indicating the milliseconds in the day.  This ranges from 0 to
+//     * 23:59:59.999 (regardless of DST).  This field behaves
+//     * <em>exactly</em> like a composite of all time-related fields, not
+//     * including the zone fields.  As such, it also reflects
+//     * discontinuities of those fields on DST transition days.  On a day of
+//     * DST onset, it will jump forward.  On a day of DST cessation, it will
+//     * jump backward.  This reflects the fact that is must be combined with
+//     * the DST_OFFSET field to obtain a unique local time value.
+//     * @stable ICU 2.0
+//     */
+//    public static final int MILLISECONDS_IN_DAY = 21;
+//
+//    /**
+//     * {@icu} Field indicating whether or not the current month is a leap month.
+//     * Should have a value of 0 for non-leap months, and 1 for leap months.
+//     * @draft ICU 4.4
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public static final int IS_LEAP_MONTH = 22;
 
     /**
      * Value of the <code>DAY_OF_WEEK</code> field indicating
@@ -1133,6 +1133,42 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
     public static final int WEEKEND_CEASE = 3;
 
     /**
+     * {@icu}Option used by {@link #setRepeatedWallTimeOption(int)} and
+     * {@link #setSkippedWallTimeOption(int)} specifying an ambiguous wall time
+     * to be interpreted as the latest.
+     * @see #setRepeatedWallTimeOption(int)
+     * @see #getRepeatedWallTimeOption()
+     * @see #setSkippedWallTimeOption(int)
+     * @see #getSkippedWallTimeOption()
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int WALLTIME_LAST = 0;
+
+    /**
+     * {@icu}Option used by {@link #setRepeatedWallTimeOption(int)} and
+     * {@link #setSkippedWallTimeOption(int)} specifying an ambiguous wall time
+     * to be interpreted as the earliest.
+     * @see #setRepeatedWallTimeOption(int)
+     * @see #getRepeatedWallTimeOption()
+     * @see #setSkippedWallTimeOption(int)
+     * @see #getSkippedWallTimeOption()
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int WALLTIME_FIRST = 1;
+
+    /**
+     * {@icu}Option used by {@link #setSkippedWallTimeOption(int)} specifying an
+     * ambiguous wall time to be interpreted as the next valid wall time.
+     * @see #setSkippedWallTimeOption(int)
+     * @see #getSkippedWallTimeOption()
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static final int WALLTIME_NEXT_VALID = 2;
+
+    /**
      * Constructs a Calendar with the default time zone
      * and locale.
      * @see     TimeZone#getDefault
@@ -1265,25 +1301,25 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
     }
     private static volatile ULocale[] availableLocales;
 
-    /**
-     * {@icu} Given a key and a locale, returns an array of string values in a preferred
-     * order that would make a difference. These are all and only those values where
-     * the open (creation) of the service with the locale formed from the input locale
-     * plus input keyword and that value has different behavior than creation with the
-     * input locale alone.
-     * @param key           one of the keys supported by this service.  For now, only
-     *                      "calendar" is supported.
-     * @param locale        the locale
-     * @param commonlyUsed  if set to true it will return only commonly used values
-     *                      with the given locale in preferred order.  Otherwise,
-     *                      it will return all the available values for the locale.
-     * @return an array of string values for the given key and the locale.
-     * @stable ICU 4.2
-     */
-    public static final String[] getKeywordValuesForLocale(String key, ULocale locale,
-                                                           boolean commonlyUsed) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Given a key and a locale, returns an array of string values in a preferred
+//     * order that would make a difference. These are all and only those values where
+//     * the open (creation) of the service with the locale formed from the input locale
+//     * plus input keyword and that value has different behavior than creation with the
+//     * input locale alone.
+//     * @param key           one of the keys supported by this service.  For now, only
+//     *                      "calendar" is supported.
+//     * @param locale        the locale
+//     * @param commonlyUsed  if set to true it will return only commonly used values
+//     *                      with the given locale in preferred order.  Otherwise,
+//     *                      it will return all the available values for the locale.
+//     * @return an array of string values for the given key and the locale.
+//     * @stable ICU 4.2
+//     */
+//    public static final String[] getKeywordValuesForLocale(String key, ULocale locale,
+//                                                           boolean commonlyUsed) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Returns this Calendar's current time.
@@ -2015,6 +2051,105 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
         return calendar.isLenient();
     }
 
+//    /**
+//     * {@icu}Sets the behavior for handling wall time repeating multiple times
+//     * at negative time zone offset transitions. For example, 1:30 AM on
+//     * November 6, 2011 in US Eastern time (Ameirca/New_York) occurs twice;
+//     * 1:30 AM EDT, then 1:30 AM EST one hour later. When <code>WALLTIME_FIRST</code>
+//     * is used, the wall time 1:30AM in this example will be interpreted as 1:30 AM EDT
+//     * (first occurrence). When <code>WALLTIME_LAST</code> is used, it will be
+//     * interpreted as 1:30 AM EST (last occurrence). The default value is
+//     * <code>WALLTIME_LAST</code>.
+//     * 
+//     * @param option the behavior for handling repeating wall time, either
+//     * <code>WALLTIME_FIRST</code> or <code>WALLTIME_LAST</code>.
+//     * @throws IllegalArgumentException when <code>option</code> is neither
+//     * <code>WALLTIME_FIRST</code> nor <code>WALLTIME_LAST</code>.
+//     * 
+//     * @see #getRepeatedWallTimeOption()
+//     * @see #WALLTIME_FIRST
+//     * @see #WALLTIME_LAST
+//     * 
+//     * @draft ICU 49
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public void setRepeatedWallTimeOption(int option) {
+//        if (option != WALLTIME_LAST) {
+//            throw new UnsupportedOperationException("The option not supported by com.ibm.icu.base");
+//        }
+//    }
+
+    /**
+     * {@icu}Gets the behavior for handling wall time repeating multiple times
+     * at negative time zone offset transitions.
+     * 
+     * @return the behavior for handling repeating wall time, either
+     * <code>WALLTIME_FIRST</code> or <code>WALLTIME_LAST</code>.
+     * 
+     * @see #setRepeatedWallTimeOption(int)
+     * @see #WALLTIME_FIRST
+     * @see #WALLTIME_LAST
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getRepeatedWallTimeOption() {
+        return WALLTIME_LAST;
+    }
+
+//    /**
+//     * {@icu}Sets the behavior for handling skipped wall time at positive time zone offset
+//     * transitions. For example, 2:30 AM on March 13, 2011 in US Eastern time (America/New_York)
+//     * does not exist because the wall time jump from 1:59 AM EST to 3:00 AM EDT. When
+//     * <code>WALLTIME_FIRST</code> is used, 2:30 AM is interpreted as 30 minutes before 3:00 AM
+//     * EDT, therefore, it will be resolved as 1:30 AM EST. When <code>WALLTIME_LAST</code>
+//     * is used, 2:30 AM is interpreted as 31 minutes after 1:59 AM EST, therefore, it will be
+//     * resolved as 3:30 AM EDT. When <code>WALLTIME_NEXT_VALID</code> is used, 2:30 AM will
+//     * be resolved as next valid wall time, that is 3:00 AM EDT. The default value is
+//     * <code>WALLTIME_LAST</code>.
+//     * <p>
+//     * <b>Note:</b>This option is effective only when this calendar is {@link #isLenient() lenient}.
+//     * When the calendar is strict, such non-existing wall time will cause an exception.
+//     * 
+//     * @param option the behavior for handling skipped wall time at positive time zone
+//     * offset transitions, one of <code>WALLTIME_FIRST</code>, <code>WALLTIME_LAST</code> and
+//     * <code>WALLTIME_NEXT_VALID</code>.
+//     * @throws IllegalArgumentException when <code>option</code> is not any of
+//     * <code>WALLTIME_FIRST</code>, <code>WALLTIME_LAST</code> and <code>WALLTIME_NEXT_VALID</code>.
+//     * 
+//     * @see #getSkippedWallTimeOption()
+//     * @see #WALLTIME_FIRST
+//     * @see #WALLTIME_LAST
+//     * @see #WALLTIME_NEXT_VALID
+//     * 
+//     * @draft ICU 49
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public void setSkippedWallTimeOption(int option) {
+//        if (option != WALLTIME_LAST) {
+//            throw new UnsupportedOperationException("The option not supported by com.ibm.icu.base");
+//        }
+//    }
+
+    /**
+     * {@icu}Gets the behavior for handling skipped wall time at positive time zone offset
+     * transitions.
+     * 
+     * @return the behavior for handling skipped wall time, one of
+     * <code>WALLTIME_FIRST</code>, <code>WALLTIME_LAST</code> and <code>WALLTIME_NEXT_VALID</code>.
+     * 
+     * @see #setSkippedWallTimeOption(int)
+     * @see #WALLTIME_FIRST
+     * @see #WALLTIME_LAST
+     * @see #WALLTIME_NEXT_VALID
+     * 
+     * @draft ICU 49
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int getSkippedWallTimeOption() {
+        return WALLTIME_LAST;
+    }
+
     /**
      * Sets what the first day of the week is; e.g., Sunday in US,
      * Monday in France.
@@ -2148,26 +2283,26 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
         }
         return WEEKDAY;}
 
-    /**
-     * {@icu} Returns the time during the day at which the weekend begins or end in this
-     * calendar system.  If getDayOfWeekType(dayOfWeek) == WEEKEND_ONSET return the time
-     * at which the weekend begins.  If getDayOfWeekType(dayOfWeek) == WEEKEND_CEASE
-     * return the time at which the weekend ends.  If getDayOfWeekType(dayOfWeek) has some
-     * other value, then throw an exception.
-     * @param dayOfWeek either SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
-     * THURSDAY, FRIDAY, or SATURDAY
-     * @return the milliseconds after midnight at which the
-     * weekend begins or ends
-     * @exception IllegalArgumentException if dayOfWeek is not
-     * WEEKEND_ONSET or WEEKEND_CEASE
-     * @see #getDayOfWeekType
-     * @see #isWeekend(Date)
-     * @see #isWeekend()
-     * @stable ICU 2.0
-     */
-    public int getWeekendTransition(int dayOfWeek) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the time during the day at which the weekend begins or end in this
+//     * calendar system.  If getDayOfWeekType(dayOfWeek) == WEEKEND_ONSET return the time
+//     * at which the weekend begins.  If getDayOfWeekType(dayOfWeek) == WEEKEND_CEASE
+//     * return the time at which the weekend ends.  If getDayOfWeekType(dayOfWeek) has some
+//     * other value, then throw an exception.
+//     * @param dayOfWeek either SUNDAY, MONDAY, TUESDAY, WEDNESDAY,
+//     * THURSDAY, FRIDAY, or SATURDAY
+//     * @return the milliseconds after midnight at which the
+//     * weekend begins or ends
+//     * @exception IllegalArgumentException if dayOfWeek is not
+//     * WEEKEND_ONSET or WEEKEND_CEASE
+//     * @see #getDayOfWeekType
+//     * @see #isWeekend(Date)
+//     * @see #isWeekend()
+//     * @stable ICU 2.0
+//     */
+//    public int getWeekendTransition(int dayOfWeek) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * {@icu} Returns true if the given date and time is in the weekend in this calendar
@@ -2240,7 +2375,8 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
     public final int getFieldCount() {
         return FIELD_COUNT;
     }
-    private static final int FIELD_COUNT = IS_LEAP_MONTH + 1;
+
+    private static final int FIELD_COUNT = /* IS_LEAP_MONTH */ DST_OFFSET + 1;
 
     /**
      * {@icu} Returns the current Calendar type.  Note, in 3.0 this function will return
@@ -2261,33 +2397,33 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
 
     // -------- BEGIN ULocale boilerplate --------
 
-    /**
-     * {@icu} Returns the locale that was used to create this object, or null.
-     * This may may differ from the locale requested at the time of
-     * this object's creation.  For example, if an object is created
-     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
-     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
-     * <tt>en_US</tt> may be the most specific locale that exists (the
-     * <i>valid</i> locale).
-     *
-     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
-     * contains a partial preview implementation.  The * <i>actual</i>
-     * locale is returned correctly, but the <i>valid</i> locale is
-     * not, in most cases.
-     * @param type type of information requested, either {@link
-     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
-     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
-     * @return the information specified by <i>type</i>, or null if
-     * this object was not constructed from locale data.
-     * @see com.ibm.icu.util.ULocale
-     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
-     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
-     * @draft ICU 2.8 (retain)
-     * @provisional This API might change or be removed in a future release.
-     */
-    public final ULocale getLocale(ULocale.Type type) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns the locale that was used to create this object, or null.
+//     * This may may differ from the locale requested at the time of
+//     * this object's creation.  For example, if an object is created
+//     * for locale <tt>en_US_CALIFORNIA</tt>, the actual data may be
+//     * drawn from <tt>en</tt> (the <i>actual</i> locale), and
+//     * <tt>en_US</tt> may be the most specific locale that exists (the
+//     * <i>valid</i> locale).
+//     *
+//     * <p>Note: This method will be implemented in ICU 3.0; ICU 2.8
+//     * contains a partial preview implementation.  The * <i>actual</i>
+//     * locale is returned correctly, but the <i>valid</i> locale is
+//     * not, in most cases.
+//     * @param type type of information requested, either {@link
+//     * com.ibm.icu.util.ULocale#VALID_LOCALE} or {@link
+//     * com.ibm.icu.util.ULocale#ACTUAL_LOCALE}.
+//     * @return the information specified by <i>type</i>, or null if
+//     * this object was not constructed from locale data.
+//     * @see com.ibm.icu.util.ULocale
+//     * @see com.ibm.icu.util.ULocale#VALID_LOCALE
+//     * @see com.ibm.icu.util.ULocale#ACTUAL_LOCALE
+//     * @draft ICU 2.8 (retain)
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public final ULocale getLocale(ULocale.Type type) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     // -------- END ULocale boilerplate --------
 
@@ -2331,13 +2467,13 @@ public class Calendar implements Serializable, Cloneable, Comparable<Calendar> {
         case DST_OFFSET:
             return java.util.Calendar.DST_OFFSET;
 
-        case YEAR_WOY:
-        case DOW_LOCAL:
-        case EXTENDED_YEAR:
-        case JULIAN_DAY:
-        case MILLISECONDS_IN_DAY:
-            // Unmappable
-            throw new UnsupportedOperationException("Calendar field type not supported by com.ibm.icu.base");
+//        case YEAR_WOY:
+//        case DOW_LOCAL:
+//        case EXTENDED_YEAR:
+//        case JULIAN_DAY:
+//        case MILLISECONDS_IN_DAY:
+//            // Unmappable
+//            throw new UnsupportedOperationException("Calendar field type not supported by com.ibm.icu.base");
         default:
             // Illegal
             throw new ArrayIndexOutOfBoundsException("Specified calendar field is out of range");

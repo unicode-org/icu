@@ -1,7 +1,6 @@
-//##header
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2011, International Business Machines
+ *   Copyright (C) 1996-2012, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -335,11 +334,7 @@ public class IntlTestDecimalFormatAPI extends com.ibm.icu.dev.test.TestFmwk
     public void testJB6354()
     {
         DecimalFormat pat = new DecimalFormat("#,##0.00");
-//#if defined(ECLIPSE)
-//##        BigDecimal r1, r2;
-//#else
         java.math.BigDecimal r1, r2;
-//#endif
 
         // get default rounding increment
         r1 = pat.getRoundingIncrement();

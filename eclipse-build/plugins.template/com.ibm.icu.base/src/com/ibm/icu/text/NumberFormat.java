@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -17,7 +17,6 @@ import java.util.Locale;
 import java.util.Set;
 
 import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
@@ -304,13 +303,13 @@ public class NumberFormat extends Format {
         return numberFormat.format(number.toBigDecimal());
     }
 
-    /**
-     * {@icu} Convenience method to format a CurrencyAmount.
-     * @stable ICU 3.0
-     */
-    public final String format(CurrencyAmount currAmt) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Convenience method to format a CurrencyAmount.
+//     * @stable ICU 3.0
+//     */
+//    public final String format(CurrencyAmount currAmt) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Specialization of format.
@@ -384,16 +383,16 @@ public class NumberFormat extends Format {
         return buf;
     }
 
-    /**
-     * {@icu} Formats a CurrencyAmount. Specialization of format.
-     * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
-     * @stable ICU 3.0
-     */
-    public StringBuffer format(CurrencyAmount currAmt,
-                               StringBuffer toAppendTo,
-                               FieldPosition pos) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Formats a CurrencyAmount. Specialization of format.
+//     * @see java.text.Format#format(Object, StringBuffer, FieldPosition)
+//     * @stable ICU 3.0
+//     */
+//    public StringBuffer format(CurrencyAmount currAmt,
+//                               StringBuffer toAppendTo,
+//                               FieldPosition pos) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Returns a Long if possible (e.g., within the range [Long.MIN_VALUE,
@@ -426,25 +425,27 @@ public class NumberFormat extends Format {
         return numberFormat.parse(text);
     }
 
-    /**
-     * Parses text from the given string as a CurrencyAmount.  Unlike
-     * the parse() method, this method will attempt to parse a generic
-     * currency name, searching for a match of this object's locale's
-     * currency display names, or for a 3-letter ISO currency code.
-     * This method will fail if this format is not a currency format,
-     * that is, if it does not contain the currency pattern symbol
-     * (U+00A4) in its prefix or suffix.
-     *
-     * @param text the string to parse
-     * @param pos input-output position; on input, the position within
-     * text to match; must have 0 <= pos.getIndex() < text.length();
-     * on output, the position after the last matched character. If
-     * the parse fails, the position in unchanged upon output.
-     * @return a CurrencyAmount, or null upon failure
-     */
-    CurrencyAmount parseCurrency(String text, ParsePosition pos) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * Parses text from the given string as a CurrencyAmount.  Unlike
+//     * the parse() method, this method will attempt to parse a generic
+//     * currency name, searching for a match of this object's locale's
+//     * currency display names, or for a 3-letter ISO currency code.
+//     * This method will fail if this format is not a currency format,
+//     * that is, if it does not contain the currency pattern symbol
+//     * (U+00A4) in its prefix or suffix.
+//     *
+//     * @param text the text to parse
+//     * @param pos input-output position; on input, the position within
+//     * text to match; must have 0 <= pos.getIndex() < text.length();
+//     * on output, the position after the last matched character. If
+//     * the parse fails, the position in unchanged upon output.
+//     * @return a CurrencyAmount, or null upon failure
+//     * @draft ICU 49
+//     * @provisional This API might change or be removed in a future release.
+//     */
+//    public CurrencyAmount parseCurrency(CharSequence text, ParsePosition pos) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Returns true if this format will parse numbers as integers only.
@@ -470,38 +471,38 @@ public class NumberFormat extends Format {
         numberFormat.setParseIntegerOnly(value);
     }
 
-    /**
-     * {@icu} Sets whether strict parsing is in effect.  When this is true, the
-     * following conditions cause a parse failure (examples use the pattern "#,##0.#"):<ul>
-     * <li>Leading zeros<br>
-     * '00', '0123' fail the parse, but '0' and '0.001' pass</li>
-     * <li>Leading or doubled grouping separators<br>
-     * ',123' and '1,,234" fail</li>
-     * <li>Groups of incorrect length when grouping is used<br>
-     * '1,23' and '1234,567' fail, but '1234' passes</li>
-     * <li>Grouping separators used in numbers followed by exponents<br>
-     * '1,234E5' fails, but '1234E5' and '1,234E' pass ('E' is not an exponent when
-     * not followed by a number)</li>
-     * </ul>
-     * When strict parsing is off, leading zeros and all grouping separators are ignored.
-     * This is the default behavior.
-     * @param value True to enable strict parsing.  Default is false.
-     * @see #isParseStrict
-     * @stable ICU 3.6
-     */
-    public void setParseStrict(boolean value) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Sets whether strict parsing is in effect.  When this is true, the
+//     * following conditions cause a parse failure (examples use the pattern "#,##0.#"):<ul>
+//     * <li>Leading zeros<br>
+//     * '00', '0123' fail the parse, but '0' and '0.001' pass</li>
+//     * <li>Leading or doubled grouping separators<br>
+//     * ',123' and '1,,234" fail</li>
+//     * <li>Groups of incorrect length when grouping is used<br>
+//     * '1,23' and '1234,567' fail, but '1234' passes</li>
+//     * <li>Grouping separators used in numbers followed by exponents<br>
+//     * '1,234E5' fails, but '1234E5' and '1,234E' pass ('E' is not an exponent when
+//     * not followed by a number)</li>
+//     * </ul>
+//     * When strict parsing is off, leading zeros and all grouping separators are ignored.
+//     * This is the default behavior.
+//     * @param value True to enable strict parsing.  Default is false.
+//     * @see #isParseStrict
+//     * @stable ICU 3.6
+//     */
+//    public void setParseStrict(boolean value) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Returns whether strict parsing is in effect.
-     * @return true if strict parsing is in effect
-     * @see #setParseStrict
-     * @stable ICU 3.6
-     */
-    public boolean isParseStrict() {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Returns whether strict parsing is in effect.
+//     * @return true if strict parsing is in effect
+//     * @see #setParseStrict
+//     * @stable ICU 3.6
+//     */
+//    public boolean isParseStrict() {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     //============== Locale Stuff =====================
 
@@ -850,28 +851,28 @@ public class NumberFormat extends Format {
     }
     private static volatile ULocale[] availableULocales;
 
-    /**
-     * {@icu} Registers a new NumberFormatFactory.  The factory is adopted by
-     * the service and must not be modified.  The returned object is a
-     * key that can be used to unregister this factory.
-     * @param factory the factory to register
-     * @return a key with which to unregister the factory
-     * @stable ICU 2.6
-     */
-    public static Object registerFactory(NumberFormatFactory factory) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Registers a new NumberFormatFactory.  The factory is adopted by
+//     * the service and must not be modified.  The returned object is a
+//     * key that can be used to unregister this factory.
+//     * @param factory the factory to register
+//     * @return a key with which to unregister the factory
+//     * @stable ICU 2.6
+//     */
+//    public static Object registerFactory(NumberFormatFactory factory) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * {@icu} Unregisters the factory or instance associated with this key (obtained from
-     * registerInstance or registerFactory).
-     * @param registryKey a key obtained from registerFactory
-     * @return true if the object was successfully unregistered
-     * @stable ICU 2.6
-     */
-    public static boolean unregister(Object registryKey) {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * {@icu} Unregisters the factory or instance associated with this key (obtained from
+//     * registerInstance or registerFactory).
+//     * @param registryKey a key obtained from registerFactory
+//     * @return true if the object was successfully unregistered
+//     * @stable ICU 2.6
+//     */
+//    public static boolean unregister(Object registryKey) {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
 
     /**
      * Overrides hashCode.

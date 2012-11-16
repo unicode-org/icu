@@ -1,4 +1,3 @@
-//##header
 /*
  *******************************************************************************
  * Copyright (C) 2005-2012, International Business Machines Corporation and    *
@@ -207,11 +206,7 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
                 URL url = urlEnum.nextElement();
                 URLHandler handler  = URLHandler.get(url);
                 if (handler == null) {
-//#if defined(ECLIPSE)
-//##                    logln("Unsupported URL: " + url);
-//#else
                     errln("Unsupported URL: " + url);
-//#endif
                     continue;
                 }
                 handler.guide(this, true, false);

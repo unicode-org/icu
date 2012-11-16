@@ -1,7 +1,0 @@
-# Copyright (C) 2011, International Business Machines Corporation and
-# others. All Rights Reserved.
-
-com/ibm/icu/dev/test/format/IntlTestDecimalFormatAPI.java
-com/ibm/icu/dev/test/format/NumberFormatTest.java
-com/ibm/icu/dev/test/serializable/CompatibilityTest.java
-com/ibm/icu/dev/test/serializable/CoverageTest.java

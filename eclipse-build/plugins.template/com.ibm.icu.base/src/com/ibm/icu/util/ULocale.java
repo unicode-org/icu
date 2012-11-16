@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2011, International Business Machines Corporation and   *
+* Copyright (C) 2003-2012, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -3125,7 +3125,7 @@ public final class ULocale implements Serializable {
                         String bcpType = uext.getUnicodeLocaleType(bcpKey);
                         // convert to legacy key/type
                         String lkey = bcp47ToLDMLKey(bcpKey);
-                        String ltype = bcp47ToLDMLType(lkey, ((bcpType.length() == 0) ? "true" : bcpType)); // use "true" as the value of typeless keywords
+                        String ltype = bcp47ToLDMLType(lkey, ((bcpType.length() == 0) ? "yes" : bcpType)); // use "yes" as the value of typeless keywords
                         // special handling for u-va-posix, since this is a variant, not a keyword
                         if (lkey.equals("va") && ltype.equals("posix") && base.getVariant().length() == 0) {
                             id = id + "_POSIX";
@@ -3303,6 +3303,8 @@ public final class ULocale implements Serializable {
         } else if (key.equals("colstrength")) {
             map = TYPEMAP_COLSTRENGTH;
             aliasMap = TYPEALIAS_COLSTRENGTH;
+        } else if (key.equals("numbers")) {
+            map = TYPEMAP_NUMBERS;
         } else if (key.equals("timezone")) {
             map = TYPEMAP_TIMEZONE;
             aliasMap = TYPEALIAS_TIMEZONE;
@@ -3603,8 +3605,8 @@ public final class ULocale implements Serializable {
                     if (kwKey.length() != 1) {
                         // Unicode locale key
                         kwKey = bcp47ToLDMLKey(kwKey);
-                        // use "true" as the value of typeless keywords
-                        kwVal = bcp47ToLDMLType(kwKey, ((kwVal.length() == 0) ? "true" : kwVal));
+                        // use "yes" as the value of typeless keywords
+                        kwVal = bcp47ToLDMLType(kwKey, ((kwVal.length() == 0) ? "yes" : kwVal));
                     }
 
                     if (addSep) {
@@ -3826,6 +3828,10 @@ public final class ULocale implements Serializable {
         "tertiary", "level3",
     };
 
+    private static final String[] TYPEMAP_NUMBERS = {
+        "traditional", "traditio",
+    };
+
     private static final String[] TYPEMAP_TIMEZONE = {
         "Africa/Abidjan", "ciabj",
         "Africa/Accra", "ghacc",
@@ -3852,6 +3858,7 @@ public final class ULocale implements Serializable {
         "Africa/Gaborone", "bwgbe",
         "Africa/Harare", "zwhre",
         "Africa/Johannesburg", "zajnb",
+        "Africa/Juba", "ssjub",
         "Africa/Kampala", "ugkla",
         "Africa/Khartoum", "sdkrt",
         "Africa/Kigali", "rwkgl",
@@ -3914,6 +3921,7 @@ public final class ULocale implements Serializable {
         "America/Coral_Harbour", "cayzs",
         "America/Cordoba", "arcor",
         "America/Costa_Rica", "crsjo",
+        "America/Creston", "cacfq",
         "America/Cuiaba", "brcgb",
         "America/Curacao", "ancur",
         "America/Danmarkshavn", "gldkshvn",
@@ -3952,10 +3960,12 @@ public final class ULocale implements Serializable {
         "America/Jujuy", "arjuj",
         "America/Juneau", "usjnu",
         "America/Kentucky/Monticello", "usmoc",
+        "America/Kralendijk", "bqkra",
         "America/La_Paz", "bolpb",
         "America/Lima", "pelim",
         "America/Los_Angeles", "uslax",
         "America/Louisville", "uslui",
+        "America/Lower_Princes", "sxphi",
         "America/Maceio", "brmcz",
         "America/Managua", "nimga",
         "America/Manaus", "brmao",
@@ -3987,8 +3997,8 @@ public final class ULocale implements Serializable {
         "America/Pangnirtung", "capnt",
         "America/Paramaribo", "srpbm",
         "America/Phoenix", "usphx",
-        "America/Port-au-Prince", "htpap",
         "America/Port_of_Spain", "ttpos",
+        "America/Port-au-Prince", "htpap",
         "America/Porto_Velho", "brpvh",
         "America/Puerto_Rico", "prsju",
         "America/Rainy_River", "caffs",
@@ -4060,6 +4070,7 @@ public final class ULocale implements Serializable {
         "Asia/Dushanbe", "tjdyu",
         "Asia/Gaza", "gaza",
         "Asia/Harbin", "cnhrb",
+        "Asia/Hebron", "hebron",
         "Asia/Hong_Kong", "hkhkg",
         "Asia/Hovd", "mnhvd",
         "Asia/Irkutsk", "ruikt",
@@ -4230,7 +4241,6 @@ public final class ULocale implements Serializable {
         "Indian/Mayotte", "ytmam",
         "Indian/Reunion", "rereu",
         "MST7MDT", "mst7mdt",
-        "PST8PDT", "pst8pdt",
         "Pacific/Apia", "wsapw",
         "Pacific/Auckland", "nzakl",
         "Pacific/Chatham", "nzcht",
@@ -4269,6 +4279,7 @@ public final class ULocale implements Serializable {
         "Pacific/Truk", "fmtkk",
         "Pacific/Wake", "umawk",
         "Pacific/Wallis", "wfmau",
+        "PST8PDT", "pst8pdt",
     };
 
     private static final String[] TYPEALIAS_COLSTRENGTH = {
@@ -4311,8 +4322,8 @@ public final class ULocale implements Serializable {
         "Australia/ACT", "Australia/Sydney",
         "Australia/Canberra", "Australia/Sydney",
         "Australia/LHI", "Australia/Lord_Howe",
-        "Australia/NSW", "Australia/Sydney",
         "Australia/North", "Australia/Darwin",
+        "Australia/NSW", "Australia/Sydney",
         "Australia/Queensland", "Australia/Brisbane",
         "Australia/South", "Australia/Adelaide",
         "Australia/Tasmania", "Australia/Hobart",
@@ -4325,8 +4336,8 @@ public final class ULocale implements Serializable {
         "Brazil/West", "America/Manaus",
         "Canada/Atlantic", "America/Halifax",
         "Canada/Central", "America/Winnipeg",
-        "Canada/East-Saskatchewan", "America/Regina",
         "Canada/Eastern", "America/Toronto",
+        "Canada/East-Saskatchewan", "America/Regina",
         "Canada/Mountain", "America/Edmonton",
         "Canada/Newfoundland", "America/St_Johns",
         "Canada/Pacific", "America/Vancouver",
@@ -4335,16 +4346,16 @@ public final class ULocale implements Serializable {
         "Chile/Continental", "America/Santiago",
         "Chile/EasterIsland", "Pacific/Easter",
         "Cuba", "America/Havana",
-        "EST", "Etc/GMT+5",
         "Egypt", "Africa/Cairo",
         "Eire", "Europe/Dublin",
+        "EST", "Etc/GMT+5",
         "Etc/GMT+0", "Etc/GMT",
-        "Etc/GMT-0", "Etc/GMT",
         "Etc/GMT0", "Etc/GMT",
+        "Etc/GMT-0", "Etc/GMT",
         "Etc/Greenwich", "Etc/GMT",
         "Etc/UCT", "Etc/GMT",
-        "Etc/UTC", "Etc/GMT",
         "Etc/Universal", "Etc/GMT",
+        "Etc/UTC", "Etc/GMT",
         "Etc/Zulu", "Etc/GMT",
         "Europe/Belfast", "Europe/London",
         "Europe/Nicosia", "Asia/Nicosia",
@@ -4353,11 +4364,11 @@ public final class ULocale implements Serializable {
         "GB-Eire", "Europe/London",
         "GMT", "Etc/GMT",
         "GMT+0", "Etc/GMT",
-        "GMT-0", "Etc/GMT",
         "GMT0", "Etc/GMT",
+        "GMT-0", "Etc/GMT",
         "Greenwich", "Etc/GMT",
-        "HST", "Etc/GMT+10",
         "Hongkong", "Asia/Hong_Kong",
+        "HST", "Etc/GMT+10",
         "Iceland", "Atlantic/Reykjavik",
         "Iran", "Asia/Tehran",
         "Israel", "Asia/Jerusalem",
@@ -4365,31 +4376,32 @@ public final class ULocale implements Serializable {
         "Japan", "Asia/Tokyo",
         "Kwajalein", "Pacific/Kwajalein",
         "Libya", "Africa/Tripoli",
-        "MST", "Etc/GMT+7",
         "Mexico/BajaNorte", "America/Tijuana",
         "Mexico/BajaSur", "America/Mazatlan",
         "Mexico/General", "America/Mexico_City",
+        "MST", "Etc/GMT+7",
+        "Navajo", "America/Shiprock",
         "NZ", "Pacific/Auckland",
         "NZ-CHAT", "Pacific/Chatham",
-        "Navajo", "America/Shiprock",
-        "PRC", "Asia/Shanghai",
         "Pacific/Chuuk", "Pacific/Truk",
         "Pacific/Pohnpei", "Pacific/Ponape",
         "Pacific/Samoa", "Pacific/Pago_Pago",
         "Pacific/Yap", "Pacific/Truk",
         "Poland", "Europe/Warsaw",
         "Portugal", "Europe/Lisbon",
+        "PRC", "Asia/Shanghai",
         "ROC", "Asia/Taipei",
         "ROK", "Asia/Seoul",
         "Singapore", "Asia/Singapore",
         "Turkey", "Europe/Istanbul",
         "UCT", "Etc/GMT",
+        "Universal", "Etc/GMT",
         "US/Alaska", "America/Anchorage",
         "US/Aleutian", "America/Adak",
         "US/Arizona", "America/Phoenix",
         "US/Central", "America/Chicago",
-        "US/East-Indiana", "America/Indianapolis",
         "US/Eastern", "America/New_York",
+        "US/East-Indiana", "America/Indianapolis",
         "US/Hawaii", "Pacific/Honolulu",
         "US/Indiana-Starke", "America/Indiana/Knox",
         "US/Michigan", "America/Detroit",
@@ -4398,7 +4410,6 @@ public final class ULocale implements Serializable {
         "US/Pacific-New", "America/Los_Angeles",
         "US/Samoa", "Pacific/Pago_Pago",
         "UTC", "Etc/GMT",
-        "Universal", "Etc/GMT",
         "W-SU", "Europe/Moscow",
         "Zulu", "Etc/GMT",
     };

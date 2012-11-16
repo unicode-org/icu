@@ -50,10 +50,6 @@
 
   </target>
 
-  <target name="build-tools" description="Build build-tool classes">
-    <ant dir="${icu4j.build-tools.dir}" inheritAll="false"/>
-  </target>
-
   <target name="initPluginVersion">
     <tstamp>
       <format property="build.date" pattern="yyyyMMdd"/>
@@ -149,7 +145,7 @@
   </target>
 
   <target name="icuProjectFiles"
-        depends="initPluginVersion,build-tools"
+        depends="initPluginVersion"
         description="Copy com.ibm.icu plug-in project files">
 
     <delete failonerror="no">
@@ -166,14 +162,6 @@
       <fileset dir="${icu4j.regiondata.dir}/src"/>
       <fileset dir="${icu4j.translit.dir}/src"/>
     </copy>
-
-    <!-- update some source files to change API signatures for backward compatibility support -->
-    <echo message="Updating java source files for eclipse in com.ibm.icu"/>
-    <java classname="com.ibm.icu.dev.tool.docs.CodeMangler"
-        classpath="${icu4j.build-tools.jar}"
-        failonerror="true">
-      <arg line="-dECLIPSE -in ${eclipse.projects.dir}/plugins/com.ibm.icu/src -f @eclipse_mod_classes.txt"/>
-    </java>
 
     <!-- overwriting the ICU runtime configuration file for forcing ICU4J plugin to use JDK time zone rules -->
     <copy file="misc/ICUConfig.properties"
@@ -267,7 +255,7 @@
   </target>
 
   <target name="icuTestsProjectFiles"
-        depends="initPluginVersion,build-tools"
+        depends="initPluginVersion"
         description="Copy com.ibm.icu.tests plug-in project files">
 
     <delete failonerror="no">
@@ -281,14 +269,6 @@
       <fileset dir="${icu4j.collate-tests.dir}/src"/>
       <fileset dir="${icu4j.translit-tests.dir}/src"/>
     </copy>
-
-    <!-- update some source files to change API signatures for backward compatibility support -->
-    <echo message="Updating java source files for eclipse in com.ibm.icu.tests"/>
-    <java classname="com.ibm.icu.dev.tool.docs.CodeMangler"
-        classpath="${icu4j.build-tools.jar}"
-        failonerror="true">
-      <arg line="-dECLIPSE -in ${eclipse.projects.dir}/plugins/com.ibm.icu.tests/src -f @eclipse_mod_test_classes.txt"/>
-    </java>
 
     <!-- icu test data -->
     <unjar src="${icu4j.testdata.jar}" dest="${eclipse.projects.dir}/plugins/com.ibm.icu.tests/src">

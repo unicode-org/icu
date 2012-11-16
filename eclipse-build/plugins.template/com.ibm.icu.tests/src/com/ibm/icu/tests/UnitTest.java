@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 2005-2011, International Business Machines Corporation and   *
+ * Copyright (C) 2005-2012, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -25,85 +25,6 @@ public class UnitTest extends TestCase {
     }
 
 
-    // Core
-
-    public void testFormat() throws Exception {
-        runUtility("Core/Format");
-    }
-
-    public void testCompression() throws Exception {
-        runUtility("Core/Compression");
-    }
-
-    public void testRBBI() throws Exception {
-        runUtility("Core/RBBI");
-    }
-
-    public void testArabicShapingRegTest() throws Exception {
-        runUtility("Core/ArabicShapingRegTest");
-    }
-
-    public void testCalendar() throws Exception {
-        runUtility("Core/Calendar");
-    }
-
-    public void testTimeZone() throws Exception {
-        runUtility("Core/TimeZone");
-    }
-
-    public void testProperty() throws Exception {
-        runUtility("Core/Property");
-    }
-
-    public void testSpoofChecker() throws Exception {
-        runUtility("Core/SpoofChecker");
-    }
-
-    public void testNormalizer() throws Exception {
-        runUtility("Core/Normalizer");
-    }
-
-    public void testUtil() throws Exception {
-        runUtility("Core/Util");
-    }
-
-    public void testTestUCharacterIterator() throws Exception {
-        runUtility("Core/TestUCharacterIterator");
-    }
-
-    public void testDiagBigDecimal() throws Exception {
-        runUtility("Core/DiagBigDecimal");
-    }
-
-    public void testImpl() throws Exception {
-        runUtility("Core/Impl");
-    }
-
-    public void testStringPrep() throws Exception {
-        runUtility("Core/StringPrep");
-    }
-
-    public void testTimeScale() throws Exception {
-        runUtility("Core/TimeScale");
-    }
-
-    public void testTestCharsetDetector() throws Exception {
-        runUtility("Core/TestCharsetDetector");
-    }
-
-    public void testBidi() throws Exception {
-        runUtility("Core/Bidi");
-    }
-
-    public void testDuration() throws Exception {
-        runUtility("Core/Duration");
-    }
-
-    public void testSerializable() throws Exception {
-        runUtility("Core/Serializable");
-    }
-
-
     // Collate
 
     public void testCollator() throws Exception {
@@ -114,14 +35,6 @@ public class UnitTest extends TestCase {
         runUtility("Collate/GlobalizationPreferencesTest");
     }
 
-    public void testRbnfLenientScannerTest() throws Exception {
-        runUtility("Collate/RbnfLenientScannerTest");
-    }
-
-    public void testSearchTest() throws Exception {
-        runUtility("Collate/SearchTest");
-    }
-
     public void testICUResourceBundleCollationTest() throws Exception {
         runUtility("Collate/ICUResourceBundleCollationTest");
     }
@@ -130,9 +43,99 @@ public class UnitTest extends TestCase {
         runUtility("Collate/LocaleAliasCollationTest");
     }
 
+    public void testRbnfLenientScannerTest() throws Exception {
+        runUtility("Collate/RbnfLenientScannerTest");
+    }
+
+    public void testSearchTest() throws Exception {
+        runUtility("Collate/SearchTest");
+    }
+
     public void testULocaleCollationTest() throws Exception {
         runUtility("Collate/ULocaleCollationTest");
     }
+
+
+    // Core
+
+    public void testArabicShapingRegTest() throws Exception {
+        runUtility("Core/ArabicShapingRegTest");
+    }
+
+    public void testBidi() throws Exception {
+        runUtility("Core/Bidi");
+    }
+
+    public void testCalendar() throws Exception {
+        runUtility("Core/Calendar");
+    }
+
+    public void testCompression() throws Exception {
+        runUtility("Core/Compression");
+    }
+
+    public void testDiagBigDecimal() throws Exception {
+        runUtility("Core/DiagBigDecimal");
+    }
+
+    public void testDuration() throws Exception {
+        runUtility("Core/Duration");
+    }
+
+    public void testFormat() throws Exception {
+        runUtility("Core/Format");
+    }
+
+    public void testImpl() throws Exception {
+        runUtility("Core/Impl");
+    }
+
+    public void testNormalizer() throws Exception {
+        runUtility("Core/Normalizer");
+    }
+
+    public void testProperty() throws Exception {
+        runUtility("Core/Property");
+    }
+
+    public void testRBBI() throws Exception {
+        runUtility("Core/RBBI");
+    }
+
+// Note: ICU serializable test cases do not support test data loading
+// through Eclipse's class loader.
+//    public void testSerializable() throws Exception {
+//        runUtility("Core/Serializable");
+//    }
+
+    public void testSpoofChecker() throws Exception {
+        runUtility("Core/SpoofChecker");
+    }
+
+    public void testStringPrep() throws Exception {
+        runUtility("Core/StringPrep");
+    }
+
+    public void testTestCharsetDetector() throws Exception {
+        runUtility("Core/TestCharsetDetector");
+    }
+
+    public void testTestUCharacterIterator() throws Exception {
+        runUtility("Core/TestUCharacterIterator");
+    }
+
+    public void testTimeScale() throws Exception {
+        runUtility("Core/TimeScale");
+    }
+
+    public void testTimeZone() throws Exception {
+        runUtility("Core/TimeZone");
+    }
+
+    public void testUtil() throws Exception {
+        runUtility("Core/Util");
+    }
+
 
     // Translit
 

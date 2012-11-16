@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2011, International Business Machines Corporation and    *
+* Copyright (C) 1996-2012, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -96,84 +96,84 @@ public final class CollationKey implements Comparable<CollationKey>
 
     // public inner classes -------------------------------------------------
     
-    /** 
-     * Options that used in the API CollationKey.getBound() for getting a 
-     * CollationKey based on the bound mode requested.
-     * @stable ICU 2.6
-     */
-    public static final class BoundMode 
-    {
-        /*
-         * do not change the values assigned to the members of this enum. 
-         * Underlying code depends on them having these numbers  
-         */
-         
-        /** 
-         * Lower bound
-         * @stable ICU 2.6
-         */
-        public static final int LOWER = 0;
-
-        /** 
-         * Upper bound that will match strings of exact size
-         * @stable ICU 2.6
-         */
-        public static final int UPPER = 1;
-
-        /** 
-         * Upper bound that will match all the strings that have the same 
-         * initial substring as the given string
-         * @stable ICU 2.6
-         */
-        public static final int UPPER_LONG = 2;
-
-        /**
-         * Number of bound mode
-         * @stable ICU 2.6
-         */
-        public static final int COUNT = 3;
-        
-        /**
-         * Private Constructor
-         */
-        ///CLOVER:OFF
-        private BoundMode(){}
-        ///CLOVER:ON
-    }
+//    /** 
+//     * Options that used in the API CollationKey.getBound() for getting a 
+//     * CollationKey based on the bound mode requested.
+//     * @stable ICU 2.6
+//     */
+//    public static final class BoundMode 
+//    {
+//        /*
+//         * do not change the values assigned to the members of this enum. 
+//         * Underlying code depends on them having these numbers  
+//         */
+//         
+//        /** 
+//         * Lower bound
+//         * @stable ICU 2.6
+//         */
+//        public static final int LOWER = 0;
+//
+//        /** 
+//         * Upper bound that will match strings of exact size
+//         * @stable ICU 2.6
+//         */
+//        public static final int UPPER = 1;
+//
+//        /** 
+//         * Upper bound that will match all the strings that have the same 
+//         * initial substring as the given string
+//         * @stable ICU 2.6
+//         */
+//        public static final int UPPER_LONG = 2;
+//
+//        /**
+//         * Number of bound mode
+//         * @stable ICU 2.6
+//         */
+//        public static final int COUNT = 3;
+//        
+//        /**
+//         * Private Constructor
+//         */
+//        ///CLOVER:OFF
+//        private BoundMode(){}
+//        ///CLOVER:ON
+//    }
     
     // public constructor ---------------------------------------------------
     
-    /**
-     * CollationKey constructor.
-     * This constructor is given public access, unlike the JDK version, to
-     * allow access to users extending the Collator class. See 
-     * {@link Collator#getCollationKey(String)}. 
-     * @param source string this CollationKey is to represent
-     * @param key array of bytes that represent the collation order of argument
-     *            source terminated by a null
-     * @see Collator
-     * @stable ICU 2.8
-     */
-    public CollationKey(String source, byte key[])
-    {
-        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * CollationKey constructor.
+//     * This constructor is given public access, unlike the JDK version, to
+//     * allow access to users extending the Collator class. See 
+//     * {@link Collator#getCollationKey(String)}. 
+//     * @param source string this CollationKey is to represent
+//     * @param key array of bytes that represent the collation order of argument
+//     *            source terminated by a null
+//     * @see Collator
+//     * @stable ICU 2.8
+//     */
+//    public CollationKey(String source, byte key[])
+//    {
+//        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
+//    }
 
-    /**
-     * CollationKey constructor that forces key to release its internal byte 
-     * array for adoption. key will have a null byte array after this 
-     * construction.
-     * @param source string this CollationKey is to represent
-     * @param key RawCollationKey object that represents the collation order of 
-     *            argument source. 
-     * @see Collator
-     * @see RawCollationKey
-     * @stable ICU 2.8 
-     */
-    public CollationKey(String source, RawCollationKey key)
-    {
-    	throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * CollationKey constructor that forces key to release its internal byte 
+//     * array for adoption. key will have a null byte array after this 
+//     * construction.
+//     * @param source string this CollationKey is to represent
+//     * @param key RawCollationKey object that represents the collation order of 
+//     *            argument source. 
+//     * @see Collator
+//     * @see RawCollationKey
+//     * @stable ICU 2.8 
+//     */
+//    public CollationKey(String source, RawCollationKey key)
+//    {
+//        throw new UnsupportedOperationException("Constructor not supported by com.ibm.icu.base");
+//    }
 
     // public getters -------------------------------------------------------
     
@@ -308,67 +308,67 @@ public final class CollationKey implements Comparable<CollationKey>
     	return key.hashCode();
     }
     
-    /**
-     * <p>
-     * Produce a bound for the sort order of a given collation key and a 
-     * strength level. This API does not attempt to find a bound for the 
-     * CollationKey String representation, hence null will be returned in its 
-     * place.
-     * </p>
-     * <p>
-     * Resulting bounds can be used to produce a range of strings that are
-     * between upper and lower bounds. For example, if bounds are produced
-     * for a sortkey of string "smith", strings between upper and lower 
-     * bounds with primary strength would include "Smith", "SMITH", "sMiTh".
-     * </p>
-     * <p>
-     * There are two upper bounds that can be produced. If BoundMode.UPPER
-     * is produced, strings matched would be as above. However, if a bound
-     * is produced using BoundMode.UPPER_LONG is used, the above example will
-     * also match "Smithsonian" and similar.
-     * </p>
-     * <p>
-     * For more on usage, see example in test procedure 
-     * <a href="http://source.icu-project.org/repos/icu/icu4j/trunk/src/com/ibm/icu/dev/test/collator/CollationAPITest.java">
-     * src/com/ibm/icu/dev/test/collator/CollationAPITest/TestBounds.
-     * </a>
-     * </p>
-     * <p>
-     * Collation keys produced may be compared using the <TT>compare</TT> API.
-     * </p>
-     * @param boundType Mode of bound required. It can be BoundMode.LOWER, which 
-     *              produces a lower inclusive bound, BoundMode.UPPER, that 
-     *              produces upper bound that matches strings of the same 
-     *              length or BoundMode.UPPER_LONG that matches strings that 
-     *              have the same starting substring as the source string.
-     * @param noOfLevels Strength levels required in the resulting bound 
-     *                 (for most uses, the recommended value is PRIMARY). This
-     *                 strength should be less than the maximum strength of 
-     *                 this CollationKey.
-     *                 See users guide for explanation on the strength levels a 
-     *                 collation key can have. 
-     * @return the result bounded CollationKey with a valid sort order but 
-     *         a null String representation.
-     * @exception IllegalArgumentException thrown when the strength level 
-     *            requested is higher than or equal to the strength in this
-     *            CollationKey. 
-     *            In the case of an Exception, information 
-     *            about the maximum strength to use will be returned in the 
-     *            Exception. The user can then call getBound() again with the 
-     *            appropriate strength.
-     * @see CollationKey
-     * @see CollationKey.BoundMode
-     * @see Collator#PRIMARY
-     * @see Collator#SECONDARY
-     * @see Collator#TERTIARY
-     * @see Collator#QUATERNARY
-     * @see Collator#IDENTICAL
-     * @stable ICU 2.6
-     */
-    public CollationKey getBound(int boundType, int noOfLevels) 
-    {
-        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
-    }
+//    /**
+//     * <p>
+//     * Produce a bound for the sort order of a given collation key and a 
+//     * strength level. This API does not attempt to find a bound for the 
+//     * CollationKey String representation, hence null will be returned in its 
+//     * place.
+//     * </p>
+//     * <p>
+//     * Resulting bounds can be used to produce a range of strings that are
+//     * between upper and lower bounds. For example, if bounds are produced
+//     * for a sortkey of string "smith", strings between upper and lower 
+//     * bounds with primary strength would include "Smith", "SMITH", "sMiTh".
+//     * </p>
+//     * <p>
+//     * There are two upper bounds that can be produced. If BoundMode.UPPER
+//     * is produced, strings matched would be as above. However, if a bound
+//     * is produced using BoundMode.UPPER_LONG is used, the above example will
+//     * also match "Smithsonian" and similar.
+//     * </p>
+//     * <p>
+//     * For more on usage, see example in test procedure 
+//     * <a href="http://source.icu-project.org/repos/icu/icu4j/trunk/src/com/ibm/icu/dev/test/collator/CollationAPITest.java">
+//     * src/com/ibm/icu/dev/test/collator/CollationAPITest/TestBounds.
+//     * </a>
+//     * </p>
+//     * <p>
+//     * Collation keys produced may be compared using the <TT>compare</TT> API.
+//     * </p>
+//     * @param boundType Mode of bound required. It can be BoundMode.LOWER, which 
+//     *              produces a lower inclusive bound, BoundMode.UPPER, that 
+//     *              produces upper bound that matches strings of the same 
+//     *              length or BoundMode.UPPER_LONG that matches strings that 
+//     *              have the same starting substring as the source string.
+//     * @param noOfLevels Strength levels required in the resulting bound 
+//     *                 (for most uses, the recommended value is PRIMARY). This
+//     *                 strength should be less than the maximum strength of 
+//     *                 this CollationKey.
+//     *                 See users guide for explanation on the strength levels a 
+//     *                 collation key can have. 
+//     * @return the result bounded CollationKey with a valid sort order but 
+//     *         a null String representation.
+//     * @exception IllegalArgumentException thrown when the strength level 
+//     *            requested is higher than or equal to the strength in this
+//     *            CollationKey. 
+//     *            In the case of an Exception, information 
+//     *            about the maximum strength to use will be returned in the 
+//     *            Exception. The user can then call getBound() again with the 
+//     *            appropriate strength.
+//     * @see CollationKey
+//     * @see CollationKey.BoundMode
+//     * @see Collator#PRIMARY
+//     * @see Collator#SECONDARY
+//     * @see Collator#TERTIARY
+//     * @see Collator#QUATERNARY
+//     * @see Collator#IDENTICAL
+//     * @stable ICU 2.6
+//     */
+//    public CollationKey getBound(int boundType, int noOfLevels) 
+//    {
+//        throw new UnsupportedOperationException("Method not supported by com.ibm.icu.base");
+//    }
     
     /** 
      * <p>
