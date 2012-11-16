@@ -178,11 +178,12 @@ final public class ListFormatter {
         private static ListFormatter load(ULocale ulocale) {
             ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
                     getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
+            r = r.getWithFallback("listPattern/standard");
             return new ListFormatter(
-                r.getWithFallback("listPattern/standard/2").getString(),
-                r.getWithFallback("listPattern/standard/start").getString(),
-                r.getWithFallback("listPattern/standard/middle").getString(),
-                r.getWithFallback("listPattern/standard/end").getString());
+                r.getWithFallback("2").getString(),
+                r.getWithFallback("start").getString(),
+                r.getWithFallback("middle").getString(),
+                r.getWithFallback("end").getString());
         }
     }
 
