@@ -55,12 +55,6 @@ enum QuoteState {
   INSIDE_FULL
 };
 
-enum DataLocation {
-  LOCAL_LOC,
-  LATIN_LOC,
-  ROOT_LOC
-};
-
 enum FallbackFlags {
   ANY = 0,
   MUST = 1,
@@ -488,15 +482,12 @@ static CDFLocaleData* loadCDFLocaleData(const Locale& inLocale, UErrorCode& stat
 
 // initCDFLocaleData initializes result with data from CLDR.
 // inLocale is the locale, the CLDR data is stored in result.
-// First we load the UNUM_SHORT data looking first in local numbering
+// We load the UNUM_SHORT  and UNUM_LONG data looking first in local numbering
 // system and not including root locale in fallback. Next we try in the latn
-// numbering system where we fallback all the way to root. So we find the
-// short data in one of 3 places: the local numbering system, the latn
-// numbering system non root, latn numbering system root locale.
-// Next we look for the UNUM_LONG data in the same way except that if we don't
-// find the UNUM_LONG data before we get to where we found the UNUM_SHORT data
-// we mark our UNUM_LONG data bogus so that it will fallback to what we have
-// for UNUM_SHORT.
+// numbering system where we fallback all the way to root. If we don't find
+// UNUM_SHORT data in these three places, we report an error. If we find
+// UNUM_SHORT data before finding UNUM_LONG data we make UNUM_LONG data fall
+// back to UNUM_SHORT data.
 static void initCDFLocaleData(const Locale& inLocale, CDFLocaleData* result, UErrorCode& status) {
   LocalPointer<NumberingSystem> ns(NumberingSystem::createInstance(inLocale, status));
   if (U_FAILURE(status)) {
@@ -509,53 +500,51 @@ static void initCDFLocaleData(const Locale& inLocale, CDFLocaleData* result, UEr
     ures_close(rb);
     return;
   }
-  LocalUResourceBundlePointer localResource;
-  LocalUResourceBundlePointer latnResource;
-  UResourceBundle* dataFillIn = NULL;
-  UResourceBundle* data = NULL;
+  UResourceBundle* shortDataFillIn = NULL;
+  UResourceBundle* longDataFillIn = NULL;
+  UResourceBundle* shortData = NULL;
+  UResourceBundle* longData = NULL;
 
-  // Look in local numbering system first for UNUM_SHORT if it is not latn
-  DataLocation shortLocation = LOCAL_LOC;
   if (uprv_strcmp(numberingSystemName, gLatnTag) != 0) {
-    localResource.adoptInstead(tryGetByKeyWithFallback(rb, numberingSystemName, NULL, NOT_ROOT, status));
-    data = tryGetDecimalFallback(localResource.getAlias(), gPatternsShort, &dataFillIn, NOT_ROOT, status);
+    LocalUResourceBundlePointer localResource(
+        tryGetByKeyWithFallback(rb, numberingSystemName, NULL, NOT_ROOT, status));
+    shortData = tryGetDecimalFallback(
+        localResource.getAlias(), gPatternsShort, &shortDataFillIn, NOT_ROOT, status);
+    longData = tryGetDecimalFallback(
+        localResource.getAlias(), gPatternsLong, &longDataFillIn, NOT_ROOT, status);
   }
-  // If we haven't found UNUM_SHORT look in latn numbering system. We must
-  // succeed at finding UNUM_SHORT here.
-  if (data == NULL) {
-    latnResource.adoptInstead(tryGetByKeyWithFallback(rb, gLatnTag, NULL, MUST, status));
-    data = tryGetDecimalFallback(latnResource.getAlias(), gPatternsShort, &dataFillIn, MUST, status);
-    shortLocation = isRoot(data, status) ? ROOT_LOC : LATIN_LOC;
-  }
-  initCDFLocaleStyleData(data, &result->shortData, status);
   if (U_FAILURE(status)) {
-    ures_close(dataFillIn);
+    ures_close(shortDataFillIn);
+    ures_close(longDataFillIn);
     ures_close(rb);
     return;
   }
-  data = NULL;
 
-  // Look for UNUM_LONG data in local numbering system first.
-  data = tryGetDecimalFallback(localResource.getAlias(), gPatternsLong, &dataFillIn, NOT_ROOT, status);
-
-  // If we haven't found UNUM_LONG and we found the UNUM_SHORT data in the latn
-  // Numbering system, continue. If we find UNUM_LONG in the latin numbering
-  // system, we have to be sure that we didn't find it after where we found
-  // UNUM_SHORT.
-  if (data == NULL && shortLocation != LOCAL_LOC) {
-    data = tryGetDecimalFallback(latnResource.getAlias(), gPatternsLong, &dataFillIn, ANY, status);
-    if (data != NULL) {
-      if (shortLocation == LATIN_LOC && isRoot(data, status)) {
-        data = NULL;
+  // If we haven't found UNUM_SHORT look in latn numbering system. We must
+  // succeed at finding UNUM_SHORT here.
+  if (shortData == NULL) {
+    LocalUResourceBundlePointer latnResource(tryGetByKeyWithFallback(rb, gLatnTag, NULL, MUST, status));
+    shortData = tryGetDecimalFallback(latnResource.getAlias(), gPatternsShort, &shortDataFillIn, MUST, status);
+    if (longData == NULL) {
+      longData = tryGetDecimalFallback(latnResource.getAlias(), gPatternsLong, &longDataFillIn, ANY, status);
+      if (longData != NULL && isRoot(longData, status) && !isRoot(shortData, status)) {
+        longData = NULL;
       }
     }
   }
-  if (data == NULL) {
+  initCDFLocaleStyleData(shortData, &result->shortData, status);
+  ures_close(shortDataFillIn);
+  if (U_FAILURE(status)) {
+    ures_close(longDataFillIn);
+    ures_close(rb);
+  }
+
+  if (longData == NULL) {
     result->longData.setToBogus();
   } else {
-    initCDFLocaleStyleData(data, &result->longData, status);
+    initCDFLocaleStyleData(longData, &result->longData, status);
   }
-  ures_close(dataFillIn);
+  ures_close(longDataFillIn);
   ures_close(rb);
 }
 
