@@ -16,6 +16,7 @@ import java.math.BigInteger;
 import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -122,7 +123,7 @@ public class CompactDecimalFormat extends DecimalFormat {
         this.divisor = data.divisors;
         applyPattern(format.toPattern());
         setDecimalFormatSymbols(format.getDecimalFormatSymbols());
-        setMaximumSignificantDigits(2); // default significant digits
+        setMaximumSignificantDigits(3); // default significant digits
         setSignificantDigitsUsed(true);
         setGroupingUsed(false);
         this.pluralRules = PluralRules.forLocale(locale);
@@ -209,6 +210,34 @@ public class CompactDecimalFormat extends DecimalFormat {
         this.currencyAffixes = currencyAffixes.clone();
         this.pluralRules = null;
         setCurrency(null);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+            return false;
+        if (!super.equals(obj))
+            return false; // super does class check
+        CompactDecimalFormat other = (CompactDecimalFormat) obj;
+        return mapsAreEqual(units, other.units)
+                && Arrays.equals(divisor, other.divisor)
+                && Arrays.equals(currencyAffixes, other.currencyAffixes)
+                && pluralRules.equals(other.pluralRules);
+    }
+
+    private boolean mapsAreEqual(
+        Map<String, DecimalFormat.Unit[]> lhs, Map<String, DecimalFormat.Unit[]> rhs) {
+        if (lhs.size() != rhs.size()) {
+            return false;
+        }
+        // For each MapEntry in lhs, see if there is a matching one in rhs.
+        for (Map.Entry<String, DecimalFormat.Unit[]> entry : lhs.entrySet()) {
+            DecimalFormat.Unit[] value = rhs.get(entry.getKey());
+            if (value == null || !Arrays.equals(entry.getValue(), value)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
