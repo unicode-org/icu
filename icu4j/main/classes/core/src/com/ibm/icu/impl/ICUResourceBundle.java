@@ -882,7 +882,7 @@ public  class ICUResourceBundle extends UResourceBundle {
                 if (i != -1) {
                     String temp = localeName.substring(0, i);
                     b = (ICUResourceBundle)instantiateBundle(baseName, temp, root, disableFallback);
-                    if(b!=null && b.getULocale().equals(temp)){
+                    if(b!=null && b.getULocale().getName().equals(temp)){
                         b.setLoadingStatus(ICUResourceBundle.FROM_FALLBACK);
                     }
                 }else{

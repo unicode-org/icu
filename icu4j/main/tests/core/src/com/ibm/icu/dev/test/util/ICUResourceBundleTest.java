@@ -92,7 +92,7 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
 
         bundle = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "bogus");
-        if(bundle instanceof UResourceBundle && bundle.getULocale().equals("en_US")){
+        if(bundle instanceof UResourceBundle && bundle.getULocale().getName().equals("en_US")){
             logln("wrapper mechanism works for bogus locale");
         }else{
             errln("wrapper mechanism failed for bogus locale.");
