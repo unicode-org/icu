@@ -758,7 +758,7 @@ public final class ULocale implements Serializable {
 
     /**
      * Returns true if the other object is another ULocale with the
-     * same full name, or is a String localeID that matches the full name.
+     * same full name.
      * Note that since names are not canonicalized, two ULocales that
      * function identically might not compare equal.
      *
@@ -768,9 +768,6 @@ public final class ULocale implements Serializable {
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
-        }
-        if (obj instanceof String) {
-            return localeID.equals((String)obj);
         }
         if (obj instanceof ULocale) {
             return localeID.equals(((ULocale)obj).localeID);

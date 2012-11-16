@@ -92,7 +92,7 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
         try{
             bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_COLLATION_BASE_NAME,ULocale.canonicalize("de__PHONEBOOK"));
 
-            if(!bundle.getULocale().equals("de")){
+            if(!bundle.getULocale().getName().equals("de")){
                 errln("did not get the expected bundle");
             }
             key = bundle.getStringWithFallback("collations/collation/default");
