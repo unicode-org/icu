@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2007, International Business Machines
+*   Copyright (C) 2005-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -36,6 +36,9 @@ typedef struct _TIME_ZONE_INFORMATION TIME_ZONE_INFORMATION;
 U_CDECL_END
 
 U_NAMESPACE_BEGIN
+
+U_CAPI UBool U_EXPORT2
+uprv_getWindowsTimeZoneInfo(TIME_ZONE_INFORMATION *zoneInfo, const UChar *icuid, int32_t length);
 
 class Win32DateFormat : public DateFormat
 {
