@@ -739,7 +739,7 @@ private:
      * A friend to allow the default locale to be set by either the C or C++ API.
      * @internal
      */
-    friend void locale_set_default_internal(const char *);
+    friend void locale_set_default_internal(const char *, UErrorCode& status);
 };
 
 inline UBool
