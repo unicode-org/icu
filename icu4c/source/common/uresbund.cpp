@@ -1670,16 +1670,12 @@ ures_getStringByKeyWithFallback(const UResourceBundle *resB,
     const UChar* retVal = NULL;
     ures_initStackObject(&stack);
     ures_getByKeyWithFallback(resB, inKey, &stack, status);
-    int32_t length;
-    retVal = ures_getString(&stack, &length, status);
+    retVal = ures_getString(&stack, len, status);
     ures_close(&stack);
-    if ( retVal != NULL && length == 3 && retVal[0] == EMPTY_SET && retVal[1] == EMPTY_SET && retVal[2] == EMPTY_SET ) {
+    if ( retVal != NULL && u_strlen(retVal) == 3 && retVal[0] == EMPTY_SET && retVal[1] == EMPTY_SET && retVal[2] == EMPTY_SET ) {
         retVal = NULL;
-        length = 0;
+        *len = 0;
         *status = U_MISSING_RESOURCE_ERROR;
-    }
-    if (len != NULL) {
-        *len = length;
     }
     return retVal;
 }
