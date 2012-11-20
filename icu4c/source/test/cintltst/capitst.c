@@ -611,21 +611,21 @@ void TestDecomposition() {
     if (ucol_getAttribute(vi_VN, UCOL_NORMALIZATION_MODE, &status) != UCOL_ON ||
         U_FAILURE(status))
     {
-        log_err("ERROR: vi_VN collation did not have cannonical decomposition for normalization!\n");
+        log_err("ERROR: vi_VN collation did not have canonical decomposition for normalization!\n");
     }
 
     status = U_ZERO_ERROR;
     if (ucol_getAttribute(el_GR, UCOL_NORMALIZATION_MODE, &status) != UCOL_ON ||
         U_FAILURE(status))
     {
-        log_err("ERROR: el_GR collation did not have cannonical decomposition for normalization!\n");
+        log_err("ERROR: el_GR collation did not have canonical decomposition for normalization!\n");
     }
 
     status = U_ZERO_ERROR;
     if (ucol_getAttribute(en_US, UCOL_NORMALIZATION_MODE, &status) != UCOL_OFF ||
         U_FAILURE(status))
     {
-        log_err("ERROR: en_US collation had cannonical decomposition for normalization!\n");
+        log_err("ERROR: en_US collation had canonical decomposition for normalization!\n");
     }
 
     ucol_close(en_US);
