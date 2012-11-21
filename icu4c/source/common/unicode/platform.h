@@ -272,7 +272,7 @@
 #ifdef U_HAVE_STDINT_H
     /* Use the predefined value. */
 #elif U_PLATFORM_USES_ONLY_WIN32_API
-#   if defined(__BORLANDC__) || (defined(_MSC_VER) && _MSC_VER>=1600)
+#   if defined(__BORLANDC__) || U_PLATFORM == U_PF_MINGW || (defined(_MSC_VER) && _MSC_VER>=1600)
         /* Windows Visual Studio 9 and below do not have stdint.h & inttypes.h, but VS 2010 adds them. */
 #       define U_HAVE_STDINT_H 1
 #   else
