@@ -1,4 +1,4 @@
-# Some Portions Copyright (c) 2006-2010 IBM and others. All Rights Reserved.
+# Some Portions Copyright (c) 2006-2012 IBM and others. All Rights Reserved.
 
 srcdir = @srcdir@
 top_srcdir = @top_srcdir@
@@ -127,7 +127,7 @@ $(ICUZDUMPTARG):	$(srcdir)/icuzdump.cpp
 $(TDATA): tdatamarker
 
 tdatamarker: $(TZDATA)
-	gunzip -d < $(TZDATA) | tar xf -
+	gunzip -d < $(TZDATA) | tar xf - --exclude=Makefile
 	touch $@
 
 yearistype:	yearistype.sh
