@@ -873,6 +873,13 @@ tools/multi/c/patch/3_2 -text
 tools/multi/c/patch/3_4_1 -text
 tools/multi/common/Makefile-multi.inc -text
 tools/multi/j/Makefile-j.inc -text
+tools/multi/proj/icu4cscan/Makefile -text
+tools/multi/proj/icu4cscan/Makefile.local.sample -text
+tools/multi/proj/icu4cscan/Makefile_c -text
+tools/multi/proj/icu4cscan/Makefile_j -text
+tools/multi/proj/icu4cscan/dtd/icucaps.dtd -text
+tools/multi/proj/icu4cscan/old-xmls.tar.bz2 -text
+tools/multi/proj/icu4cscan/zappit.sed -text
 tools/multi/proj/icu4jscan/.classpath -text
 tools/multi/proj/icu4jscan/.project -text
 tools/multi/proj/icu4jscan/src/com/ibm/icu/dev/scan/CapDocument.java -text
