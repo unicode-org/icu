@@ -1,4 +1,5 @@
-# Copyright (C) 2012 IBM Corporation and Others. All Rights Reserved.
+# -*- makefile -*-
+# Copyright (C) 2008-2012 IBM Corporation and Others. All Rights Reserved.
 CPPFLAGS+=-DU_DISABLE_RENAMING=1 -I. -I/xsrl/IIE/include -I/xsrl/E/icu/source/tools/toolutil
 OBJECTS=testxml.o xmlout.o
 CXX_SOURCES:=$(OBJECTS:%.o=%.cpp)
@@ -9,8 +10,8 @@ TARGET=testxml
 all:
 	@echo To build and list "'" $(OUTFILES) "'"  in "'" $(C_GOOD) "'" use "$(MAKE) check"
 
-MULTICU_ROOT=../../multicu/
-include $(MULTICU_ROOT)/Makefile-c.inc
+MULTICU_ROOT=../../
+include $(MULTICU_ROOT)/c/Makefile-c.inc
 
 OUT=./xml
 $(OUT):

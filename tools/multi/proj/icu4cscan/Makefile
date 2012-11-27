@@ -1,6 +1,6 @@
 # Copyright (C) 2008-2012 IBM Corporation and Others. All Rights Reserved.
-MULTICU_ROOT=../../multicu/
-include $(MULTICU_ROOT)/Makefile-multi.inc
+MULTICU_ROOT=../../
+include $(MULTICU_ROOT)/common/Makefile-multi.inc
 
 XML=./xml
 JXML=./jxml
@@ -22,7 +22,7 @@ MergerPackageSlash=$(subst .,/,$(MergerPackage))
 MergerLib=$(ICUMETA)/lib
 MergerJar=$(ICUMETA)/icumeta.jar
 #was: $(ICUMETA)/classes
-MergerClassPath=$(shell ls $(MergerLib)/*.jar | tr '\n' ':')$(MergerJar)
+MergerClassPath=$(shell ls $(MergerLib)/*.jar | tr '\n' ':')$(MergerJar):$(OTHERJARS)
 include Makefile.local
 MergerBuild=$(ICUMETA)/build.xml
 #MergerClass=$(ICUMETA)/classes/$(MergerPackageSlash)/$(MergerName).class
@@ -45,10 +45,13 @@ $(BLD):
 	-mkdir $(BLD)
 
 $(XML):
-	mkdir $(XML)
+	-mkdir $(XML)
 
 $(JXML):
-	mkdir $(JXML)
+	-mkdir $(JXML)
+
+$(JVMXML):
+	-mkdir $(JXML)
 
 ifeq ($(JVMSH),)
 JVMSH_WARN=warn-jvmsh
