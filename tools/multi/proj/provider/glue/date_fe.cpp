@@ -305,7 +305,7 @@ const UnicodeString
 
 //static URegistryKey rkdate = NULL;
 
-VersionDateFormatFactory vdf;
+static VersionDateFormatFactory vdf;
 
 extern "C" UDateFormat *versionDateFormatOpener(UDateFormatStyle  timeStyle,
                                                     UDateFormatStyle  dateStyle,

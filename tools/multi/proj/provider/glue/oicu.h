@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2012, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -108,6 +108,30 @@ OICU_udat_format(    const    UDateFormat*    format,
 /**
  end ucol.h
 */
+
+#include "unicode/ucal.h"
+
+U_STABLE UCalendar* U_EXPORT2 
+OICU_ucal_open(const UChar*   zoneID,
+          int32_t        len,
+          const char*    locale,
+          UCalendarType  type,
+          UErrorCode*    status);
+
+/**
+ * Close a UCalendar.
+ * Once closed, a UCalendar may no longer be used.
+ * @param cal The UCalendar to close.
+ * @stable ICU 2.0
+ */
+U_STABLE void U_EXPORT2 
+OICU_ucal_close(UCalendar *cal);
+
+
+U_STABLE int32_t U_EXPORT2 
+OICU_ucal_getAttribute(const UCalendar*    cal,
+                  UCalendarAttribute  attr);
+
 
 // define version
 
