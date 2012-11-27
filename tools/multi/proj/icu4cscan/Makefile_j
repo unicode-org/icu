@@ -1,13 +1,15 @@
+# -*- makefile -*-
 # Copyright (C) 2012 IBM Corporation and Others. All Rights Reserved.
 ## Name of the app
+
 TARGET=icu4jscan
 
 all:
 	@echo To build and list "'" $(OUTFILES) "'"  in "'" $(J_GOOD) "'" use "$(MAKE) check"
 
 ## Setup multicu
-MULTICU_ROOT=../../multicu
-include $(MULTICU_ROOT)/Makefile-j.inc
+MULTICU_ROOT=../../
+include $(MULTICU_ROOT)/j/Makefile-j.inc
 
 
 ## The output files.  Will result in:   out/3_8.txt  out/4_0.txt  etc.
@@ -35,8 +37,8 @@ check: $(OUTFILES)
 		sed -e "s%^%$$file: %g" < $$file; \
 	done
 
-MULTICU_ROOT=../../multicu/
-include $(MULTICU_ROOT)/Makefile-multi.inc
+MULTICU_ROOT=../../
+include $(MULTICU_ROOT)/common/Makefile-multi.inc
 
 XML=./xml
 
@@ -82,7 +84,7 @@ MergerPackageSlash=$(subst .,/,$(MergerPackage))
 MergerLib=$(ICUMETA)/lib
 MergerJar=$(ICUMETA)/icumeta.jar
 #was: $(ICUMETA)/classes
-MergerClassPath=$(shell ls $(MergerLib)/*.jar | tr '\n' ':')$(MergerJar)
+MergerClassPath=$(shell ls $(MergerLib)/*.jar | tr '\n' ':')$(MergerJar):$(OTHERJARS)
 include Makefile.local
 MergerBuild=$(ICUMETA)/build.xml
 #MergerClass=$(ICUMETA)/classes/$(MergerPackageSlash)/$(MergerName).class
@@ -138,7 +140,7 @@ $(XML):
 
 $(JXML):
 	mkdir $(JXML)
-	
+
 ifeq ($(JVMSH),)
 JVMSH_WARN=warn-jvmsh
 warn-jvmsh:
@@ -181,8 +183,6 @@ ICUMETA_XML=$(ICUMETA)/xml/icumeta.xml
 
 #$(ICUMETA)/xml/icumeta.xml: $(MergerBuild)
 #	( cd $(ICUMETA) ; ant xml )	
-	
-
 
 featxmls: $(FEATXMLS)
 
@@ -201,7 +201,7 @@ $(COOKED)/%-cooked.xml: $(ICUMETA_XML) $(INPUT)/%-introduction.xml $(MergerJar)
 $(COOKED)/characters.xml: $(ALLJXMLS) $(ALLXMLS) $(MergerJar)
 	$(JAVA) $(JAVAPROPS) -classpath $(MergerClassPath) $(MergerPackage).$(PropagateCharsName) > $@ $(ALLJXMLS) $(ALLXMLS) || (rm ./$@ ; false)
 
- 
+
 icucaps.xml: $(BASEXMLS) $(ALLJXMLS) $(ALLXMLS) $(MergerJar) $(ALLCOOKED)
 	-rm -rf ./dtdcache
 	mkdir dtdcache
@@ -214,10 +214,10 @@ icucaps.xml: $(BASEXMLS) $(ALLJXMLS) $(ALLXMLS) $(MergerJar) $(ALLCOOKED)
 # --- J 
 
 $(JXML)/%.xml: $(JCLASSFILE) $(ICUS)/icu4j-%.jar | $(JXML)
-	$(JAVA) -classpath $(JSCANDIR)/bin:$(ICUS)/icu4j-$*.jar:$(JSCANDIR)/lib/icumeta.jar:$(JSCANDIR)/lib/xalan.jar:$(JSCANDIR)/lib/cldr.jar:$(JSCANDIR)/lib/utilities.jar:$(MergerJar):$(MergerLib)/utilities.jar:$(MergerLib)/cldr.jar:$(JSCANDIR)/lib/xerces.jar $(JScanPackage).$(JSCAN) > $@ || (rm -f ./$@ ; false)
+	$(JAVA) -classpath $(JSCANDIR)/bin:$(ICUS)/icu4j-$*.jar:$(JSCANDIR)/lib/icumeta.jar:$(JSCANDIR)/lib/xalan.jar:$(JSCANDIR)/lib/cldr.jar:$(JSCANDIR)/lib/utilities.jar:$(MergerJar):$(MergerLib)/utilities.jar:$(MergerLib)/cldr.jar:$(JSCANDIR)/lib/xerces.jar:$(OTHERJARS) $(JScanPackage).$(JSCAN) > $@ || (rm -f ./$@ ; false)
 
 $(JVMXML)/%.xml: $(JVMCLASSFILE) $(JVM)/%$(JVM_CFG) | $(JVMXML)
-	$(JVM)/invoke.sh $(JVM)/$*$(JVM_CFG) $(JSCANDIR)/bin:$(ICUS)/icu4j-$*.jar:$(JSCANDIR)/lib/icumeta.jar:$(JSCANDIR)/lib/xalan.jar:$(JSCANDIR)/lib/cldr.jar:$(MergerJar):$(MergerJar):$(MergerLib)/utilities.jar:$(MergerLib)/cldr.jar:$(JSCANDIR)/lib/utilities.jar:$(JSCANDIR)/lib/xerces.jar $(JScanPackage).$(JVMSCAN) > $@ || (rm ./$@ ; false)
-	
+	$(JVM)/invoke.sh $(JVM)/$*$(JVM_CFG) $(JSCANDIR)/bin:$(ICUS)/icu4j-$*.jar:$(JSCANDIR)/lib/icumeta.jar:$(JSCANDIR)/lib/xalan.jar:$(JSCANDIR)/lib/cldr.jar:$(MergerJar):$(MergerJar):$(MergerLib)/utilities.jar:$(MergerLib)/cldr.jar:$(JSCANDIR)/lib/utilities.jar:$(JSCANDIR)/lib/xerces.jar:$(OTHERJARS) $(JScanPackage).$(JVMSCAN) > $@ || (rm ./$@ ; false)
+
 ## Just generate
 outfiles: $(XML) $(JXML) $(ALLJXMLS) $(ALLJVMXMLS)

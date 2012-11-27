@@ -948,6 +948,11 @@ tools/multi/c/Makefile.local
 tools/multi/packages/*.jar
 tools/multi/packages/*.tgz
 tools/multi/proj/chello/out
+tools/multi/proj/icu4cscan/Makefile.local
+tools/multi/proj/icu4cscan/cooked
+tools/multi/proj/icu4cscan/dtdcache
+tools/multi/proj/icu4cscan/jxml
+tools/multi/proj/icu4cscan/xml
 tools/multi/proj/icu4jscan/bin
 tools/multi/proj/provider/Makefile.local
 tools/multi/proj/provider/out
