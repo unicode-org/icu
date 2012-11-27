@@ -6,7 +6,7 @@ all: glurens ii plugs testprog
 # extra files that need generation.
 PLUG_EXTRA_DEPS=
 UNAME=$(shell uname)
-
+DOT=../../c
 SOBJ=ao
 ifeq ($(UNAME),Linux)
 LIBPATH_VAR=LD_LIBRARY_PATH
@@ -33,6 +33,8 @@ $(warning this script may not know how to handle your $(UNAME) system)
 endif
 endif
 endif
+
+SUBHEAD="*** ICU"
 
 srcdir=$(shell pwd)
 
@@ -87,7 +89,7 @@ OK=ok
 MOPTS=
 
 # directories that need to be built
-ALLDIRS=$(INST) $(BUILD) $(SRC) $(GLOUT) $(OUT)
+ALLDIRS=$(INST) $(BUILD) $(SRC) $(GLOUT) $(OUT) $(GLOUT)/$(PLUGLIB) $(OUT)/$(PLUGLIB)/bin
 # The 'ok' flag file for installations
 INST_ICU=$(PLUGLIB_AVAILABLE:%=$(INST)/%/$(OK))
 BUILD_ICU=$(PLUGLIB_AVAILABLE:%=$(BUILD)/%/$(OK))
@@ -121,15 +123,21 @@ ICU_CONFIG_CC=--cc $(ICU_CONFIG_COMMON) --cflags
 # icu-config switches for C++
 ICU_CONFIG_CXX=--cxx $(ICU_CONFIG_COMMON) --cxxflags
 
+# sigh, include common.
+PLUG_EXTRA_FLAGS=-I$(BUILD)/$(PLUGLIB)/common -I$(M_TMP)/build/r$(PLUGLIB)/icu/source/common
+
 include Makefile.local
+
 
 
 # Usage:  $(call SILENT_COMPILE,logfile,cmd)
 ifndef VERBOSE
-	LOG_COMPILE=echo build with VERBOSE=1 to unhide compile ;  ($(2) 2>&1 > $(1) || (echo "Compile failed, see logfile in $(1) for details." ;false))
+	LOG_COMPILE=echo build with VERBOSE=1 to unhide compile ;  ( ($(2) 2>&1) > $(1) || (echo "Compile failed, see logfile in $(1) for details." ;exit 1))
 else
 	LOG_COMPILE=$(2) 2>&1 | tee $(1)
 endif
+
+ECHO_COMPILE=echo "\# ${subst ",\",$(1)}" ; ( $(1) || (  exit 1) )
 
 PLUGLIB=$(shell echo $(PROVIDER_TARGET)  | tr '.' '_' )
 PLUGLIB_MAJ=$(shell  ./icu2symver.sh $(PLUGLIB))
@@ -151,14 +159,13 @@ $(ALLDIRS):
 
 # Build r$(PLUGLIB) from ../../c
 $(PLUGLIB_ICU_CONFIG):
-	@echo ICU $(PLUGLIB) "(plugin) building..."
-	$(call LOG_COMPILE,../../c/ricus$(PLUGLIB).log,$(MAKE) -C ../../c ICUVERS=$(PLUGLIB) ricus)
+	@echo "$(SUBHEAD) "$(PLUGLIB) "(plugin) building..."
+	$(call LOG_COMPILE,../../c/ricus$(PLUGLIB).log,$(MAKE) MAKE_OPTS=$(MAKE_OPTS) XTRA_RICU_CPPFLAGS=$(XTRA_RICU_CPPFLAGS) -C ../../c ICUVERS=$(PLUGLIB) ricus)
 
 # build the glue objects for TARGET
 # used to be %/* instead of $(PLUGLIB) - now, wire it down to pluglib.
-$(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG) $(GL_FE_FILES)
-	@echo ICU $* "(plugin) building glue.."
-	-mkdir $(GLOUT)/$(PLUGLIB)
+$(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG) $(GL_FE_FILES) $(ALLDIRS)
+	@echo $(SUBHEAD) $(PLUGLIB) "(plugin) building glue.."
 #	$(shell $(BUILD)/$(PLUGLIB)/config/$(ICU_CONFIG) $(ICU_CONFIG_CC)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$(PLUGLIB) -o $(GLOUT)/$(PLUGLIB)/gl_be_c_$(PLUGLIB).o $(GL_BE_C:%.c=$(GLUE)/%.c)
 #	$(shell $(BUILD)/$(PLUGLIB)/config/$(ICU_CONFIG) $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -DICUGLUE_VER=$(PLUGLIB) -o $(GLOUT)/$(PLUGLIB)/gl_be_cxx_$(PLUGLIB).o $(GL_BE_CXX:%.cpp=$(GLUE)/%.cpp)
 	-rm -rf $(GLOUT)/$(PLUGLIB)/include
@@ -166,28 +173,24 @@ $(GLOUT)/$(PLUGLIB)/obj-$(OK): $(GLOUT) glurens  $(PLUGLIB_ICU_CONFIG) $(GL_FE_F
 # for each version..  build all OTHER FE files
 # TODO: check is unnecessary, not permitted.
 # TODO: change to depend instead of for list. 
-#	@echo GL_PARTS=$(GL_PARTS)
-#	@echo GL_FE_CXX=$(GL_FE_CXX)
-#	@echo PARTSUFF=$(PARTSUFF)
 	@for ver in $(PLUGLIB_AVAILABLE) ; \
 	do \
-		echo building $$ver for $(PLUGLIB) ; \
+		echo "*$(SUBHEAD)" $$ver "(provider)" for  $(PLUGLIB) "(plugin)" ; \
 		if [ ! "$$ver" = "$(PLUGLIB)" ]; \
 		then \
 			for part in $(GL_PARTS) ; \
 			do \
-				echo $(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -I$(TOP)/$(BUILD)/$$ver/gluren/include -DICUGLUE_VER=$$ver "-DICUGLUE_VER_STR=\"$$ver\"" "-DGLUE_SYM(x)=glue ## x ## $$ver" -o $(GLOUT)/$(PLUGLIB)/$${part}_$${ver}_for_$(PLUGLIB).o $(GLUE)/$${part}$(PARTSUFF).cpp $(XOPTS) ; \
-				$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -I$(TOP)/$(BUILD)/$$ver/gluren/include -DICUGLUE_VER=$$ver "-DICUGLUE_VER_STR=\"$$ver\"" "-DGLUE_SYM(x)=glue ## x ## $$ver" -o $(GLOUT)/$(PLUGLIB)/$${part}_$${ver}_for_$(PLUGLIB).o $(GLUE)/$${part}$(PARTSUFF).cpp $(XOPTS) || exit 1; \
+				echo "**$(SUBHEAD)" $$ver "(provider) backend: ---- " "$$part" "----"  ; \
+				$(call ECHO_COMPILE,$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -c -I$(TOP)/$(BUILD)/$$ver/gluren/include -DICUGLUE_VER=$$ver -DICUGLUE_VER_STR=\"$$ver\" "-DGLUE_SYM(x)=glue ## x ## $$ver" -o $(GLOUT)/$(PLUGLIB)/$${part}_$${ver}_for_$(PLUGLIB).o $(GLUE)/$${part}$(PARTSUFF).cpp $(XOPTS) ) || exit 1 ; \
 			done ; \
 			echo " GLUE_VER( $$ver ) " >> $(GLOUT)/$(PLUGLIB)/include/icuglue/glver.h; \
 		fi \
 	done
 # build 'this version' FE files
-	@echo Building FE for $(PLUGLIB)
 	@for part in $(GL_PARTS) ; \
 	do \
-		echo $(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -I$(GLOUT)/$(PLUGLIB)/include -c -o $(GLOUT)/$(PLUGLIB)/$${part}_$(PLUGLIB).o $(GLUE)/$${part}$(PARTSUFF).cpp $(XOPTS) ; \
-		$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -I$(GLOUT)/$(PLUGLIB)/include -c -o $(GLOUT)/$(PLUGLIB)/$${part}_$(PLUGLIB).o $(GLUE)/$${part}$(PARTSUFF).cpp $(XOPTS) || exit 1; \
+		echo "ICU" $(PLUGLIB) "(plugin) building plugin for  ------- $$part -----" ; \
+		$(call ECHO_COMPILE,$(shell $(PLUGLIB_ICU_CONFIG) --noverify $(ICU_CONFIG_CXX)) $(GLUE_CFLAGS) -I$(GLOUT)/$(PLUGLIB)/include -c -o $(GLOUT)/$(PLUGLIB)/$${part}_$(PLUGLIB).o $(GLUE)/$${part}$(PARTSUFF).cpp $(XOPTS) $(PLUG_EXTRA_FLAGS) ) || exit 1 ; \
 	done
 	touch $@
 
@@ -222,12 +225,18 @@ $(OUT)/icuplugins$(PLUGLIB_MAJ).txt: $(PLUGLIB_OUTLIBS) Makefile
 		echo " $${part}_provider_plugin" ; \
 	done
 
-TESTPROG=coldiff datediff
+TESTPROG=$(GL_PARTS:%=%diff$(EXEEXT))
 
 testprog: $(PLUGLIB:%=$(OUT)/%/bin/$(TESTPROG)) 
 
 check-icu2symver:
 	./check-icu2symver.sh
+
+generate-gdbrc:
+	echo "# generated by $@" > .gdbrc
+	echo "set environment ICU_PLUGINS=$(OUT)" >> .gdbrc
+	echo "set environment $(LIBPATH_VAR)=$(OUT)/../$(PLUGLIB_INST)/lib:$(OUT)/$(PLUGLIB)/lib" >> .gdbrc
+
 
 check: check-icu2symver all testprog $(OUT)/icuplugins$(PLUGLIB_MAJ).txt
 	ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib $(PLUGLIB_INST)/bin/icuinfo || ( echo "ICU broken." ; /bin/false )
@@ -235,7 +244,7 @@ check: check-icu2symver all testprog $(OUT)/icuplugins$(PLUGLIB_MAJ).txt
 	@for prog in $(TESTPROG) ; \
 	do \
 		echo "# ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib out/$(PLUGLIB)/bin/$${prog}" ; \
-		ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib out/$(PLUGLIB)/bin/$${prog} || ( echo "$${prog} failed." ; /bin/false ) ; \
+		ICU_PLUGINS=$(OUT) $(LIBPATH_VAR)=$(PLUGLIB_INST)/lib:out/$(PLUGLIB)/lib out/$(PLUGLIB)/bin/$${prog} || ( echo "$${prog} failed." ; exit 1 ) ; \
 	done
 
 install-check: install-plugs
@@ -243,14 +252,13 @@ install-check: install-plugs
 	@for prog in $(TESTPROG) ; \
 	do \
 		echo "# $${prog}" ; \
-		$(LIBPATH_VAR)=$(PLUGLIB_INST)/lib out/$(PLUGLIB)/bin/$${prog} || ( echo "$${prog} against installed failed." ; /bin/false ) ; \
+		$(LIBPATH_VAR)=$(PLUGLIB_INST)/lib out/$(PLUGLIB)/bin/$${prog} || ( echo "$${prog} against installed failed." ; exit 1 ) ; \
 	done
 
-$(OUT)/$(PLUGLIB)/bin/$(TESTPROG):  $(GLOUT)/$(PLUGLIB)/obj-$(OK) $(OUT)/$(PLUGLIB)/provider_version.h
-	-mkdir -p $(OUT)/$(PLUGLIB)/bin
+$(OUT)/$(PLUGLIB)/bin/$(TESTPROG):  $(GLOUT)/$(PLUGLIB)/obj-$(OK) $(OUT)/$(PLUGLIB)/provider_version.h $(ALLDIRS)
 	@for prog in $(TESTPROG) ; \
 	do \
-		$(shell $(PLUGLIB_ICU_CONFIG) --cxx --cxxflags --cppflags --ldflags) -o $(OUT)/$(PLUGLIB)/bin/$${prog} -I$(OUT)/$(PLUGLIB) $(srcdir)/$${prog}.cpp ; \
+		${call ECHO_COMPILE,$(shell $(PLUGLIB_ICU_CONFIG) --cxx --cxxflags --cppflags --ldflags) -o $(OUT)/$(PLUGLIB)/bin/$${prog} -I$(OUT)/$(PLUGLIB) $(TESTPROG_XTRA_OPTS) $(srcdir)/$${prog}.cpp} || exit 1 ; \
 	done
 
 $(OUT)/%/lib/$(PLUGLIB_NAME):  $(GLOUT)/%/obj-$(OK) $(PLUG_EXTRA_DEPS)
@@ -279,7 +287,7 @@ $(BUILD)/%/config/$(ICU_CONFIG): $(BUILD)/%/config/$(ICU_CONFIG_ORIG) icu-config
 
 # perform installation
 $(INST)/%/ok: $(BUILD)/%/ok
-	echo ICU $* "(backend) installing..."
+	echo $(SUBHEAD) $* "(backend) installing..."
 	echo "INST " "[" $* "]"
 	mkdir -p $(INST)/$*
 	-$(call LOG_COMPILE,$(BUILD)$*/ok.log,$(MAKE) $(MOPTS) -C $(BUILD)/$* install $(MAKE_INSTALL_XTRA_OPTS))
@@ -288,23 +296,23 @@ $(INST)/%/ok: $(BUILD)/%/ok
 # unpack ICU and patch
 $(SRC)/%/ok: $(ICUS)/icu4c-%-src.tgz
 	-[ -d $(SRC)/$* ] && rm -rf $(SRC)/$*
-	@echo ICU $* "(backend) unpacking..."
+	@echo $(SUBHEAD) $* "(backend) unpacking..."
 	mkdir -p $(SRC)/$*
 	$(call LOG_COMPILE,$(SRC)/$*/unpack.log,( cd $(SRC)/$* && gunzip -d < $(TOP)/$(ICUS)/icu4c-$*-src.tgz | tar xvfp - ))
-	@echo Should patch $* here
+	([ -f $(DOT)/patch/$* ] && patch -d $(SRC)/$* -p1 < $(DOT)/patch/$*) || true
 	touch $@
 
 # config 
 $(BUILD)/%/config.status: $(SRC)/%/ok
-	@echo ICU $* "(backend) configuring..."
+	@echo $(SUBHEAD) $* "(backend) configuring..."
 	-[ -d $(BUILD)/$* ] && rm -rf $(BUILD)/$*
 	mkdir -p $(BUILD)/$*
-	( cd $(BUILD)/$* && env CFLAGS="$(CFLAGS) $(PBLD_EXTRA_FLAGS)" CXXFLAGS="$(CXXFLAGS) $(PBLD_EXTRA_FLAGS)" $(shell $(SUPERCONF) $(TOP)/$(SRC)/$*/$(SOURCE) $*) $(CONFIGURE_OPTS) --srcdir=$(TOP)/$(SRC)/$*/$(SOURCE) --prefix=$(TOP)/$(INST)/$* )
+	$(call LOG_COMPILE,$(BUILD)/$*/configure.log,( cd $(BUILD)/$* && env CFLAGS="$(CFLAGS) $(PBLD_EXTRA_FLAGS)" CXXFLAGS="$(CXXFLAGS) $(PBLD_EXTRA_FLAGS)" $(shell $(SUPERCONF) $(TOP)/$(SRC)/$*/$(SOURCE) $*) $(CONFIGURE_OPTS) --srcdir=$(TOP)/$(SRC)/$*/$(SOURCE) --prefix=$(TOP)/$(INST)/$* ))
 
 # build 
 # note: regex had renaming problems, and spoof depends on regex. Nuke them.
 $(BUILD)/%/ok: $(BUILD)/%/config.status
-	@echo ICU $* "(backend) building.."
+	@echo $(SUBHEAD) $* "(backend) building.."
 	$(call LOG_COMPILE,$(BUILD)/$*/ok2.log,( $(MAKE)  $(MOPTS) -C $(BUILD)/$* all $(MAKE_XTRA_OPTS) ))
 	@if [ ! -f $(BUILD)/$*/common/putil.$(SOBJ) ]; \
 	then \
@@ -321,7 +329,7 @@ $(BUILD)/%/ok: $(BUILD)/%/config.status
 	touch $@
 
 info help:
-	@echo ICU Provider Build
+	@echo $(SUBHEAD) Provider Build
 	@echo "Targetting Provider against ICU $(PROVIDER_TARGET) ($(PLUGLIB), major $(PLUGLIB_MAJ))"
 	@echo "Available plugins: $(PROVIDER_AVAILABLE) ($(PLUGLIB_AVAILABLE))"
 	@echo "Available keywords:"
@@ -333,18 +341,18 @@ info help:
 	@echo Available ICU tarballs:  $(ICU_TARBALLS)
 	@echo Available ICU versions: $(shell echo $(ICU_TARBALLS_VERS) | tr '_' '.')
 
-$(OUT)/$(PLUGLIB)/provider_version.h: Makefile.local Makefile
-	@echo Generating $@ ..
+$(OUT)/$(PLUGLIB)/provider_version.h: Makefile.local Makefile $(ALLDIRS)
+	@echo $(SUBHEAD) $(PLUGIN) "(plugin)" Generating $@ ..
 	@echo "/* Generated file. */" > $@
 	@echo "const char *provider_version[] = {" >> $@
 	@for ver in $(PROVIDER_AVAILABLE); do \
-		echo VER $$ver ; \
 		sym=`echo $$ver | ./icu2symver.sh` ; \
-		echo SYM $$sym ; \
+		echo Version $$ver, Symbol $$sym ; \
 		echo "\"$$sym\"",  >> $@ ; \
 	done
 	@echo " }; " >> $@
 	@echo "#define PROVIDER_COUNT (sizeof(provider_version)/sizeof(provider_version[0]))" >> $@
 	@echo >> $@
+	@echo $(SUBHEAD) $(PLUGIN) "(plugin)" Generated $@
 
 #-- for the prototype
