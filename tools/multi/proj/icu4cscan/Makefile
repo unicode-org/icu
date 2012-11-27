@@ -33,6 +33,8 @@ BASEXMLS=$(ICUMETA)/input/versions.xml
 
 APRECIOUS=$(ICUVERS:%=$(BLD)/%/$(S_SRC)) $(ICUVERS:%=$(BLD)/%/$(S_BLD)) $(ICUVERS:%=$(INS)/%/$(S_INS))
 
+all: icucaps.xml
+
 .PRECIOUS: $(APRECIOUS)
 
 tehprecious:
