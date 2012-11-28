@@ -1193,16 +1193,16 @@ udat_getLocaleByType(const UDateFormat *fmt,
                      ULocDataLocaleType type,
                      UErrorCode* status); 
 
-#ifndef U_HIDE_INTERNAL_API
+#ifndef U_HIDE_DRAFT_API
 /**
  * Set a particular UDisplayContext value in the formatter, such as
  * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.
  * @param fmt The formatter for which to set a UDisplayContext value.
  * @param value The UDisplayContext value to set.
  * @param status A pointer to an UErrorCode to receive any errors
- * @internal ICU 50 technology preview
+ * @draft ICU 51
  */
-U_INTERNAL void U_EXPORT2
+U_DRAFT void U_EXPORT2
 udat_setContext(UDateFormat* fmt, UDisplayContext value, UErrorCode* status);
 
 /**
@@ -1212,12 +1212,12 @@ udat_setContext(UDateFormat* fmt, UDisplayContext value, UErrorCode* status);
  * @param type The UDisplayContextType whose value to return
  * @param status A pointer to an UErrorCode to receive any errors
  * @return The UDisplayContextValue for the specified type.
- * @internal ICU 50 technology preview
+ * @draft ICU 51
  */
-U_INTERNAL UDisplayContext U_EXPORT2
+U_DRAFT UDisplayContext U_EXPORT2
 udat_getContext(UDateFormat* fmt, UDisplayContextType type, UErrorCode* status);
 
-#endif  /* U_HIDE_INTERNAL_API */
+#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_INTERNAL_API
 /**
