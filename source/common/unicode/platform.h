@@ -664,9 +664,9 @@
      * does not support u"abc" string literals.
      * gcc 4.4 defines the __CHAR16_TYPE__ macro to a usable type but
      * does not support u"abc" string literals.
-     * C++11 requires support for UTF-16 literals
+     * C++11 and C11 require support for UTF-16 literals
      */
-#   if (defined(__cplusplus) && __cplusplus >= 201103L)
+#   if (defined(__cplusplus) && __cplusplus >= 201103L) || (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L)
 #       define U_HAVE_CHAR16_T 1
 #   else
 #       define U_HAVE_CHAR16_T 0
