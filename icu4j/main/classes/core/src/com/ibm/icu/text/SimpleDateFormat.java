@@ -2631,7 +2631,8 @@ public class SimpleDateFormat extends DateFormat {
      * such as CAPITALIZATION_FOR_STANDALONE. 
      * 
      * @param context The DisplayContext value to set. 
-     * @internal ICU 50 technology preview
+     * @draft ICU 51
+     * @provisional This API might change or be removed in a future release.
      */
     public void setContext(DisplayContext context) {
         if (context.type() == DisplayContext.Type.CAPITALIZATION) {
@@ -2645,7 +2646,8 @@ public class SimpleDateFormat extends DateFormat {
      * 
      * @param type the DisplayContext.Type whose value to return
      * @return the current DisplayContext setting for the specified type
-     * @internal ICU 50 technology preview
+     * @draft ICU 51
+     * @provisional This API might change or be removed in a future release.
      */
     public DisplayContext getContext(DisplayContext.Type type) {
         return (type == DisplayContext.Type.CAPITALIZATION && capitalizationSetting != null)?
