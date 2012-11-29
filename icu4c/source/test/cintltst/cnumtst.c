@@ -75,40 +75,6 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestNoExponent);
 }
 
-/** copy src to dst with unicode-escapes for values < 0x20 and > 0x7e, null terminate if possible */
-static int32_t ustrToAstr(const UChar* src, int32_t srcLength, char* dst, int32_t dstLength) {
-    static const char hex[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
-
-    char *p = dst;
-    const char *e = p + dstLength;
-    if (srcLength < 0) {
-        const UChar* s = src;
-        while (*s) {
-            ++s;
-        }
-        srcLength = (int32_t)(s - src);
-    }
-    while (p < e && --srcLength >= 0) {
-        UChar c = *src++;
-        if (c == 0xd || c == 0xa || c == 0x9 || (c>= 0x20 && c <= 0x7e)) {
-            *p++ = (char) c & 0x7f;
-        } else if (e - p >= 6) {
-            *p++ = '\\';
-            *p++ = 'u';
-            *p++ = hex[(c >> 12) & 0xf];
-            *p++ = hex[(c >> 8) & 0xf];
-            *p++ = hex[(c >> 4) & 0xf];
-            *p++ = hex[c & 0xf];
-        } else {
-            break;
-        }
-    }
-    if (p < e) {
-        *p = 0;
-    }
-    return (int32_t)(p - dst);
-}
-
 /* test Parse int 64 */
 
 static void TestInt64Parse()
@@ -297,7 +263,7 @@ static void TestNumberFormat()
         log_err("Fail: Error in complete number Formatting using unum_format()\nGot: b=%d end=%d\nExpected: b=1 end=12\n",
                 pos1.beginIndex, pos1.endIndex);
 
-free(result);
+    free(result);
     result = 0;
 
     log_verbose("\nTesting unum_formatDouble()\n");
@@ -333,17 +299,14 @@ free(result);
     /* Testing unum_parse() and unum_parseDouble() */
     log_verbose("\nTesting unum_parseDouble()\n");
 /*    for (i = 0; i < 100000; i++)*/
-    if (result != NULL)
-    {
-        parsepos=0;
-        d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
+    parsepos=0;
+    if (result != NULL) {
+      d1=unum_parseDouble(cur_def, result, u_strlen(result), &parsepos, &status);
+    } else {
+      log_err("result is NULL\n");
     }
-    else {
-        log_err("result is NULL\n");
-    }
-    if(U_FAILURE(status))
-    {
-        log_err("parse failed. The error is  : %s\n", myErrorName(status));
+    if(U_FAILURE(status)) {
+      log_err("parse of '%s' failed. Parsepos=%d. The error is  : %s\n", aescstrdup(result,u_strlen(result)),parsepos, myErrorName(status));
     }
 
     if(d1!=d)
@@ -354,7 +317,7 @@ free(result);
         free(result);
     result = 0;
 
-
+    status = U_ZERO_ERROR;
     /* Testing unum_formatDoubleCurrency / unum_parseDoubleCurrency */
     log_verbose("\nTesting unum_formatDoubleCurrency\n");
     u_uastrcpy(temp1, "Y1,235");
@@ -392,7 +355,7 @@ free(result);
     else {
         d1=unum_parseDoubleCurrency(cur_def, result, u_strlen(result), &parsepos, temp2, &status);
         if (U_FAILURE(status)) {
-            log_err("parse failed. The error is  : %s\n", myErrorName(status));
+          log_err("parseDoubleCurrency '%s' failed. The error is  : %s\n", aescstrdup(result, u_strlen(result)), myErrorName(status));
         }
         /* Note: a==1234.56, but on parse expect a1=1235.0 */
         if (d1!=a1) {
@@ -406,8 +369,9 @@ free(result);
             log_err("Fail: parsed incorrect currency\n");
         }
     }
+    status = U_ZERO_ERROR; /* reset */
 
-free(result);
+    free(result);
     result = 0;
 
 
@@ -421,7 +385,7 @@ free(result);
     }
     if(U_FAILURE(status))
     {
-        log_err("parse failed. The error is  : %s\n", myErrorName(status));
+        log_err("parseDouble('%s') failed. The error is  : %s\n", aescstrdup(temp1, resultlength), myErrorName(status));
     }
 
     /*
@@ -805,9 +769,8 @@ free(result);
             } else {
                 int32_t pp = 0;
                 int32_t parseResult;
-                char logbuf[256];
-                ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));
-                log_verbose("formatted %d as '%s', length: %d\n", value, logbuf, len);
+                /*ustrToAstr(buffer, len, logbuf, LENGTH(logbuf));*/
+                log_verbose("formatted %d as '%s', length: %d\n", value, aescstrdup(buffer, len), len);
 
                 parseResult = unum_parse(spellout_def, buffer, len, &pp, &status);
                 if (U_FAILURE(status)) {
