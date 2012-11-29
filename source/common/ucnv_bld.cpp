@@ -793,6 +793,8 @@ ucnv_loadSharedData(const char *converterName,
             * without updating the alias table, or when there is no alias table
             */
             pArgs->name = pPieces->cnvName;
+        } else if (internalErrorCode == U_AMBIGUOUS_ALIAS_WARNING) {
+            *err = U_AMBIGUOUS_ALIAS_WARNING;
         }
     }
 
