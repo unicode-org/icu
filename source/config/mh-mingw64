@@ -1,12 +1,12 @@
 ## -*-makefile-*-
-## Cygwin/MinGW specific setup
-## Copyright (c) 2001-2012, International Business Machines Corporation and
+## Cygwin64/MinGW64 specific setup
+## Copyright (c) 2012, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 # TODO: Finish the rest of this port. This platform port is incomplete.
 
-# This file is similar to mh-mingw64
-# Any changes made here may also need to be made in mh-mingw64
+# This file is similar to mh-mingw
+# Any changes made here may also need to be made in mh-mingw
 
 # We install sbin tools into the same bin directory because
 # pkgdata needs some of the tools in sbin, and we can't always depend on
@@ -137,10 +137,10 @@ PKGDATA_VERSIONING = -r $(SO_TARGET_VERSION_MAJOR)
 LDLIBRARYPATH_ENVVAR = PATH
 
 # The type of assembly to write for generating an object file
-GENCCODE_ASSEMBLY=-a gcc-cygwin
+GENCCODE_ASSEMBLY=-a gcc-mingw64
 
 # These are needed to allow the pkgdata GNU make files to work
 PKGDATA_DEFS = -DU_MAKE=\"$(MAKE)\"
 
-## End Cygwin/MinGW specific setup
+## End Cygwin64/MinGW64 specific setup
 
