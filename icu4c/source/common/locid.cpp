@@ -50,66 +50,12 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-static void default_locale_initializer(UErrorCode& status);
-
-/**
- * SingletonSpec is the specification for a singleton it contains
- * the following information:
- * <ul>
- *   <li>The mutex that protects the singleton.</li>
- *   <li>Pointer to the function that initializes the singleton.</li>
- *   <li>Pointer to the singleton itself. It is used to determine if
- *   the singleton has been initialized. The singleton is expected to
- *   be a pointer. If the singleton is non-NULL, then it is
- *   initialized.</li>
- * </ul>
- * <p>
- * SingletonSpec does not extend UMemory because it is expected to be
- * allocated in the data segment along with the singleton it specifies.
- */
-struct SingletonSpec {
-    UMutex mutex;
-    void (*initFunc)(UErrorCode& status);
-    void **singleton;
-};
-
-/**
- * SingletonLock protects a singleton like a mutex would. Note that
- * singletonSpec determines what singleton gets protected. Use like this:
- * <pre>
- * {
- *     SingletonLock lock(singletonSpec, status);
- *     if (U_FAILURE(status)) {
- *         // Unsafe to use singleton.
- *         return
- *     }
- *     // Singleton is initialized, use normally.
- * }
- * // Lock on singleton released.
- */ 
-class SingletonLock : UMemory {
-public:
-    SingletonLock(SingletonSpec& spec, UErrorCode& status) : _mutex(&spec.mutex) {
-        if (*spec.singleton == NULL) {
-            spec.initFunc(status);
-        }
-    }
-    ~SingletonLock() { }
-private:
-    Mutex _mutex;
-};
-
 static Locale *gLocaleCache = NULL;
 
-// gDefaultLocaleSpec covers gDefaultLocalesHashT and gDefaultLocale
-// gDefaultLocaleSpec does not initialize gDefaultLocale though
+// gDefaultLocaleMutex protects all access to gDefaultLocalesHashT and gDefaultLocale.
+static UMutex gDefaultLocaleMutex = U_MUTEX_INITIALIZER;
 static UHashtable *gDefaultLocalesHashT = NULL;
 static Locale *gDefaultLocale = NULL;
-static SingletonSpec gDefaultLocaleSpec = {
-    U_MUTEX_INITIALIZER,
-    default_locale_initializer,
-    (void**) &gDefaultLocalesHashT
-};
 
 U_NAMESPACE_END
 
@@ -177,17 +123,10 @@ U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
-// default_locale_initializer initializes gDefaultLocalesHashT
-static void default_locale_initializer(UErrorCode& status) {
-    gDefaultLocalesHashT = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &status);
-    if (U_FAILURE(status)) {
-        return;
-    }
-    uhash_setValueDeleter(gDefaultLocalesHashT, deleteLocale);
-    ucln_common_registerCleanup(UCLN_COMMON_LOCALE, locale_cleanup);
-}
-
-void locale_set_default_internal(const char *id, UErrorCode& status) {
+Locale *locale_set_default_internal(const char *id, UErrorCode& status) {
+    // Synchronize this entire function.
+    Mutex lock(&gDefaultLocaleMutex);
+    
     UBool canonicalize = FALSE;
 
     // If given a NULL string for the locale id, grab the default
@@ -195,7 +134,7 @@ void locale_set_default_internal(const char *id, UErrorCode& status) {
     //   (Different from most other locale APIs, where a null name means use
     //    the current ICU default locale.)
     if (id == NULL) {
-        id = uprv_getDefaultLocaleID();
+        id = uprv_getDefaultLocaleID();   // This function not thread safe? TODO: verify.
         canonicalize = TRUE; // always canonicalize host ID
     }
 
@@ -211,22 +150,33 @@ void locale_set_default_internal(const char *id, UErrorCode& status) {
                                                  //   (long names are truncated.)
                                                  //
     if (U_FAILURE(status)) {
-        return;
+        return gDefaultLocale;
     }
+
+    if (gDefaultLocalesHashT == NULL) {
+        gDefaultLocalesHashT = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &status);
+        if (U_FAILURE(status)) {
+            return gDefaultLocale;
+        }
+        uhash_setValueDeleter(gDefaultLocalesHashT, deleteLocale);
+        ucln_common_registerCleanup(UCLN_COMMON_LOCALE, locale_cleanup);
+    }
+
     Locale *newDefault = (Locale *)uhash_get(gDefaultLocalesHashT, localeNameBuf);
     if (newDefault == NULL) {
         newDefault = new Locale(Locale::eBOGUS);
         if (newDefault == NULL) {
             status = U_MEMORY_ALLOCATION_ERROR;
-            return;
+            return gDefaultLocale;
         }
         newDefault->init(localeNameBuf, FALSE);
         uhash_put(gDefaultLocalesHashT, (char*) newDefault->getName(), newDefault, &status);
         if (U_FAILURE(status)) {
-            return;
+            return gDefaultLocale;
         }
     }
     gDefaultLocale = newDefault;
+    return gDefaultLocale;
 }
 
 U_NAMESPACE_END
@@ -237,12 +187,7 @@ locale_set_default(const char *id)
 {
     U_NAMESPACE_USE
     UErrorCode status = U_ZERO_ERROR;
-    {
-        SingletonLock lock(gDefaultLocaleSpec, status);
-        if (!U_FAILURE(status)) {
-            locale_set_default_internal(id, status);
-        }
-    }
+    locale_set_default_internal(id, status);
 }
 /* end */
 
@@ -250,7 +195,6 @@ U_CFUNC const char *
 locale_get_default(void)
 {
     U_NAMESPACE_USE
-
     return Locale::getDefault().getName();
 }
 
@@ -656,16 +600,14 @@ Locale::setToBogus() {
 const Locale& U_EXPORT2
 Locale::getDefault()
 {
-    UErrorCode status = U_ZERO_ERROR;
     {
-        SingletonLock lock(gDefaultLocaleSpec, status);
-        if (!U_FAILURE(status)) {
-           if (gDefaultLocale == NULL) {
-               locale_set_default_internal(NULL, status);
-           }
+        Mutex lock(&gDefaultLocaleMutex);
+        if (gDefaultLocale != NULL) {
+            return *gDefaultLocale;
         }
-        return *gDefaultLocale;
     }
+    UErrorCode status = U_ZERO_ERROR;
+    return *locale_set_default_internal(NULL, status);
 }
 
 
@@ -682,12 +624,7 @@ Locale::setDefault( const   Locale&     newLocale,
      * This is a convenient way to access the default locale caching mechanisms.
      */
     const char *localeID = newLocale.getName();
-    {
-        SingletonLock lock(gDefaultLocaleSpec, status);
-        if (!U_FAILURE(status)) {
-            locale_set_default_internal(localeID, status);
-        }
-    }
+    locale_set_default_internal(localeID, status);
 }
 
 Locale U_EXPORT2
