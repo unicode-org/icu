@@ -31,6 +31,7 @@
 #include <stdlib.h>
 #include "cstring.h"
 #include "unicode/numsys.h"
+#include "fmtableimp.h"
 
 //#define NUMFMTST_CACHE_DEBUG 1
 #include "stdio.h" /* for sprintf */
@@ -120,6 +121,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
         CASE(54,Test9087);
         CASE(55,TestFormatFastpaths);
         CASE(56,TestEnumSet);
+        CASE(57,TestFormattableSize);
         default: name = ""; break;
     }
 }
@@ -6719,6 +6721,19 @@ void NumberFormatTest::TestEnumSet(void) {
     logln("remove THING1 -Value now: %d\n", flags.getAll());
     logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
 
+}
+
+void NumberFormatTest::TestFormattableSize(void) {
+  if(sizeof(FmtStackData) > UNUM_INTERNAL_STACKARRAY_SIZE) {
+    errln("Error: sizeof(FmtStackData)=%d, UNUM_INTERNAL_STACKARRAY_SIZE=%d\n",
+          sizeof(FmtStackData), UNUM_INTERNAL_STACKARRAY_SIZE);
+  } else if(sizeof(FmtStackData) < UNUM_INTERNAL_STACKARRAY_SIZE) {
+    logln("Warning: sizeof(FmtStackData)=%d, UNUM_INTERNAL_STACKARRAY_SIZE=%d\n",
+        sizeof(FmtStackData), UNUM_INTERNAL_STACKARRAY_SIZE);
+  } else {
+    logln("sizeof(FmtStackData)=%d, UNUM_INTERNAL_STACKARRAY_SIZE=%d\n",
+        sizeof(FmtStackData), UNUM_INTERNAL_STACKARRAY_SIZE);
+  }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
