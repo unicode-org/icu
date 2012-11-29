@@ -51,15 +51,6 @@
 #define HEX_0X 0 /*  0x1234 */
 #define HEX_0H 1 /*  01234h */
 
-/*
- * The following is needed by MinGW64
- */
-#ifndef __USER_LABEL_PREFIX__
-#define __USER_LABEL_PREFIX__ _
-#endif
-#define GCC_LABEL_PREFIX_INTERNAL(a) #a
-#define GCC_LABEL_PREFIX(a) GCC_LABEL_PREFIX_INTERNAL(a)
-
 /* prototypes --------------------------------------------------------------- */
 static void
 getOutFilename(const char *inFilename, const char *destdir, char *outFilename, char *entryName, const char *newSuffix, const char *optFilename);
@@ -143,10 +134,18 @@ static const struct AssemblyType {
         ".long ","",HEX_0X
     },
     {"gcc-cygwin",
-        ".globl "GCC_LABEL_PREFIX(__USER_LABEL_PREFIX__) "%s\n"
+        ".globl _%s\n"
         "\t.section .rodata\n"
         "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
-        GCC_LABEL_PREFIX(__USER_LABEL_PREFIX__) "%s:\n\n",
+        "_%s:\n\n",
+
+        ".long ","",HEX_0X
+    },
+    {"gcc-mingw64",
+        ".globl %s\n"
+        "\t.section .rodata\n"
+        "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
+        "%s:\n\n",
 
         ".long ","",HEX_0X
     },
