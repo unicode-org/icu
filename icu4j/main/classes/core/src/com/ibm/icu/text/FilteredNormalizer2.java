@@ -277,7 +277,8 @@ public class FilteredNormalizer2 extends Normalizer2 {
                     norm2.append(first, prefix);
                 }
             } else {
-                StringBuilder middle=new StringBuilder(first.subSequence(suffixStart, 0x7fffffff));
+                StringBuilder middle=new StringBuilder(
+                        first.subSequence(suffixStart, first.length()));
                 if(doNormalize) {
                     norm2.normalizeSecondAndAppend(middle, prefix);
                 } else {
@@ -287,7 +288,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
             }
         }
         if(prefixLimit<second.length()) {
-            CharSequence rest=second.subSequence(prefixLimit, 0x7fffffff);
+            CharSequence rest=second.subSequence(prefixLimit, second.length());
             if(doNormalize) {
                 normalize(rest, first, UnicodeSet.SpanCondition.NOT_CONTAINED);
             } else {
