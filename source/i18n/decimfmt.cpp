@@ -2158,7 +2158,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
 #endif
 
     UBool fastParseOk = false; /* TRUE iff fast parse is OK */
-    UBool fastParseHadDecimal = FALSE; /* true if fast parse saw a decimal point. */
+    // UBool fastParseHadDecimal = FALSE; /* true if fast parse saw a decimal point. */
 
     if(!currencyParsing &&
 
@@ -2220,7 +2220,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
         } else if(ch == decimalChar) {
           parsedNum.append((char)('.'), err);
           decimalChar=0; // no more decimals.
-          fastParseHadDecimal=TRUE;
+          // fastParseHadDecimal=TRUE;
         } else if(intOnly && !u_isdigit(ch)) {
           break; // hit a non-integer. (fall through if integer, to slow parse)
         } else {
