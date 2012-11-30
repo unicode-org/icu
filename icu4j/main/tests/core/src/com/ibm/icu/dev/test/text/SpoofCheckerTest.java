@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -10,7 +10,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.text.ParseException;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -19,8 +23,12 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.dev.test.TestUtil.JavaVendor;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.IdentifierInfo;
+import com.ibm.icu.text.IdentifierInfo.RestrictionLevel;
 import com.ibm.icu.text.Normalizer2;
 import com.ibm.icu.text.SpoofChecker;
+import com.ibm.icu.text.SpoofChecker.CheckResult;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
@@ -185,7 +193,7 @@ public class SpoofCheckerTest extends TestFmwk {
          * don't want to see in this test.
          */
         sc = new SpoofChecker.Builder().setChecks(SpoofChecker.CHAR_LIMIT).setAllowedLocales(allowedLocales).build();
-        
+
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
         checkResults = sc.failsChecks(goodLatin);
         assertFalse("", checkResults);
@@ -254,7 +262,7 @@ public class SpoofCheckerTest extends TestFmwk {
         assertTrue("", checkResults);
         assertEquals("", SpoofChecker.MIXED_SCRIPT_CONFUSABLE | SpoofChecker.SINGLE_SCRIPT, result.checks);
         assertEquals("", 2, result.position);
-        
+
         result.position = 666;
         checkResults = sc.failsChecks(han_Hiragana, result);
         assertFalse("", checkResults);
@@ -294,7 +302,7 @@ public class SpoofCheckerTest extends TestFmwk {
     public void TestSpoofAPI() {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         String s = "xyz";  // Many latin ranges are whole-script confusable with other scripts.
-                           // If this test starts failing, consult confusablesWholeScript.txt
+        // If this test starts failing, consult confusablesWholeScript.txt
         SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
         result.position = 666;
         boolean checkResults = sc.failsChecks(s, result);
@@ -317,7 +325,7 @@ public class SpoofCheckerTest extends TestFmwk {
         SpoofChecker sc = new SpoofChecker.Builder().build();
         checkSkeleton(sc, "TestSkeleton");
     }
-    
+
     // testSkeleton. Spot check a number of confusable skeleton substitutions from the
     // Unicode data file confusables.txt
     // Test cases chosen for substitutions of various lengths, and
@@ -337,11 +345,11 @@ public class SpoofCheckerTest extends TestFmwk {
                         + " A 1ong 'identifier' that will overflow implementation stack buffers, forcing heap allocations."
                         + " A 1ong 'identifier' that will overflow implementation stack buffers, forcing heap allocations."
                         + " A 1ong 'identifier' that will overflow implementation stack buffers, forcing heap allocations.",
-                " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
-                        + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
-                        + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
-                        + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations.",
-                testName);
+                        " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
+                                + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
+                                + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
+                                + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations.",
+                                testName);
 
         checkSkeleton(sc, SL, "nochange", "nochange", testName);
         checkSkeleton(sc, MA, "love", "love", testName);
@@ -428,6 +436,100 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals("", 7, result.position);
     }
 
+    public void TestRestrictionLevel() {
+        Object[][] tests = {
+                {"a", RestrictionLevel.ASCII},
+                {"γ", RestrictionLevel.HIGHLY_RESTRICTIVE},
+                {"aアー", RestrictionLevel.HIGHLY_RESTRICTIVE},
+                {"aऄ", RestrictionLevel.MODERATELY_RESTRICTIVE},
+                {"aγ", RestrictionLevel.MINIMALLY_RESTRICTIVE},
+        };
+        IdentifierInfo idInfo = new IdentifierInfo();
+        CheckResult checkResult = new CheckResult();
+        for (Object[] test : tests) {
+            String testString = (String) test[0];
+            RestrictionLevel expectedLevel = (RestrictionLevel) test[1];
+            idInfo.setIdentifier(testString);
+            assertEquals("Testing restriction level for '" + testString + "'", expectedLevel, idInfo.getRestrictionLevel());
+            for (RestrictionLevel testLevel : RestrictionLevel.values()) {
+                SpoofChecker sc = new SpoofChecker.Builder()
+                .setChecks(SpoofChecker.RESTRICTION_LEVEL) // only check this
+                .setRestrictionLevel(testLevel)
+                .build();
+                boolean actualValue = sc.failsChecks(testString, checkResult);
+
+                // we want to fail if the text is (say) MODERATE and the testLevel is ASCII
+                boolean expectedFailure = expectedLevel.compareTo(testLevel) > 0;
+                boolean t = assertEquals("Testing spoof restriction level for '" + testString + "', " + testLevel, expectedFailure, actualValue);
+//                if (!t) { // debugging
+//                    actualValue = sc.failsChecks(testString, checkResult);
+//                    // we want to fail if the text is (say) MODERATE and the testLevel is ASCII
+//                    expectedFailure = expectedLevel.compareTo(testLevel) > 0;
+//                }
+            }
+        }
+    }
+
+    public void TestMixedNumbers() {
+        Object[][] tests = {
+                {"1", "[0]"},
+                {"१", "[०]"},
+                {"1१", "[0०]"},
+                {"١۱", "[٠۰]"},
+        };
+        IdentifierInfo idInfo = new IdentifierInfo();
+        CheckResult checkResult = new CheckResult();
+        for (Object[] test : tests) {
+            String testString = (String) test[0];
+            UnicodeSet expected = new UnicodeSet((String)test[1]);
+            idInfo.setIdentifier(testString);
+            assertEquals("", expected, idInfo.getNumerics());
+
+            SpoofChecker sc = new SpoofChecker.Builder()
+            .setChecks(SpoofChecker.MIXED_NUMBERS) // only check this
+            .build();
+            boolean actualValue = sc.failsChecks(testString, checkResult);
+            boolean t = assertEquals("Testing spoof mixed numbers for '" + testString + "', ", expected.size() > 1, actualValue);
+        }
+    }
+    
+    public void TestIdentifierInfo() {
+//        contains(BitSet, BitSet)
+        BitSet bitset12 = IdentifierInfo.set(new BitSet(), UScript.LATIN, UScript.HANGUL);
+        BitSet bitset2 = IdentifierInfo.set(new BitSet(), UScript.HANGUL);
+        assertTrue("", IdentifierInfo.contains(bitset12, bitset2));
+        assertTrue("", IdentifierInfo.contains(bitset12, bitset12));
+        assertTrue("", !IdentifierInfo.contains(bitset2, bitset12));
+
+//      displayAlternates(Collection<BitSet>)
+//      displayScripts(BitSet)
+        String scriptString = IdentifierInfo.displayScripts(bitset12);
+        assertEquals("", "Hang Latn", scriptString);
+        Set<BitSet> alternates = new HashSet(Arrays.asList(bitset12, bitset2));
+        String alternatesString = IdentifierInfo.displayAlternates(alternates);
+        assertEquals("", "Hang Latn; Hang", alternatesString);
+
+//        parseAlternates(String)
+//        parseScripts(String)
+        assertEquals("", bitset12, IdentifierInfo.parseScripts(scriptString));
+        assertEquals("", alternates, IdentifierInfo.parseAlternates(alternatesString));
+
+        IdentifierInfo idInfo = new IdentifierInfo();
+        String manyAlternates = "aアー〼1१١۱";
+        idInfo.setIdentifier(manyAlternates);
+        assertEquals("", manyAlternates, idInfo.getIdentifier());
+
+        assertEquals("", null, idInfo.getScripts());
+        assertEquals("", null, idInfo.getAlternates());
+        assertEquals("", null, idInfo.getCommonAmongAlternates());
+        assertEquals("", null, idInfo.getNumerics());
+        assertEquals("", null, idInfo.getRestrictionLevel());
+
+// TODO
+//        getIdentifierProfile()
+//        setIdentifierProfile(UnicodeSet)
+    }
+
     private String parseHex(String in) {
         StringBuilder sb = new StringBuilder();
         for (String oneCharAsHexString : in.split("\\s+")) {
@@ -483,7 +585,7 @@ public class SpoofCheckerTest extends TestFmwk {
             Matcher parseLine = Pattern.compile(
                     "\\ufeff?" + "(?:([0-9A-F\\s]+);([0-9A-F\\s]+);\\s*(SL|ML|SA|MA)\\s*(?:#.*?)?$)"
                             + "|\\ufeff?(\\s*(?:#.*)?)"). // Comment line
-                    matcher("");
+                            matcher("");
             Normalizer2 normalizer = Normalizer2.getNFDInstance();
             int lineNum = 0;
             String inputLine;

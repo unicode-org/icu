@@ -33,6 +33,7 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.IdentifierInfo.RestrictionLevel;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -219,13 +220,28 @@ public class SpoofChecker {
      * @stable ICU 4.6
      */
     public static final int CHAR_LIMIT = 64;
+    
+    /**
+     * Check that an identifier is no looser than the specified RestrictionLevel.
+     * 
+     * @internal
+     */
+    public static final int RESTRICTION_LEVEL = 128;
+
+    /**
+     * Check that an identifier contains only characters from a specified set of acceptable characters. See
+     * Builder.setAllowedChars() and Builder.setAllowedLocales().
+     * 
+     * @internal
+     */
+    public static final int MIXED_NUMBERS = 256;
 
     /**
      * Enable all spoof checks.
      * 
      * @stable ICU 4.6
      */
-    public static final int ALL_CHECKS = 0x7f;
+    public static final int ALL_CHECKS = 0xFFFFFFFF;
 
     // Magic number for sanity checking spoof binary resource data.
     static final int MAGIC = 0x3845fdef;
@@ -249,6 +265,7 @@ public class SpoofChecker {
         UnicodeSet fAllowedCharsSet; // The UnicodeSet of allowed characters.
                                      // for this Spoof Checker. Defaults to all chars.
         Set<ULocale> fAllowedLocales; // The list of allowed locales.
+        private RestrictionLevel restrictionLevel;
 
         /**
          * Constructor: Create a default Unicode Spoof Checker Builder, configured to perform all checks except for
@@ -263,6 +280,7 @@ public class SpoofChecker {
             fSpoofData = null;
             fAllowedCharsSet = new UnicodeSet(0, 0x10ffff);
             fAllowedLocales = new LinkedHashSet<ULocale>();
+            restrictionLevel = RestrictionLevel.MINIMALLY_RESTRICTIVE;
         }
 
         /**
@@ -279,6 +297,7 @@ public class SpoofChecker {
             fAllowedCharsSet = src.fAllowedCharsSet.cloneAsThawed();
             fAllowedLocales = new LinkedHashSet<ULocale>();
             fAllowedLocales.addAll(src.fAllowedLocales);
+            restrictionLevel = src.restrictionLevel;
         }
 
         /**
@@ -305,11 +324,12 @@ public class SpoofChecker {
             result.fAllowedCharsSet = (UnicodeSet) (this.fAllowedCharsSet.clone());
             result.fAllowedCharsSet.freeze();
             result.fAllowedLocales = this.fAllowedLocales;
+            result.restrictionLevel = this.restrictionLevel;
             return result;
         }
 
         /**
-         * Specify the source form of the spoof data Spoof Checker. The Three inputs correspond to the Unicode data
+         * Specify the source form of the spoof data Spoof Checker. The inputs correspond to the Unicode data
          * files confusables.txt and confusablesWholeScript.txt as described in Unicode UAX 39. The syntax of the source
          * data is as described in UAX 39 for these files, and the content of these files is acceptable input.
          * 
@@ -445,6 +465,16 @@ public class SpoofChecker {
             fAllowedCharsSet = chars.cloneAsThawed();
             fAllowedLocales = new LinkedHashSet<ULocale>();
             fChecks |= CHAR_LIMIT;
+            return this;
+        }
+        
+        /**
+         * Set the loosest restriction level allowed.
+         * @param restrictionLevel The loosest restriction level allowed.
+         * @return self
+         */
+        public Builder setRestrictionLevel(RestrictionLevel restrictionLevel) {
+            this.restrictionLevel = restrictionLevel;
             return this;
         }
 
@@ -1391,6 +1421,28 @@ public class SpoofChecker {
         // haven't done it yet.
         int scriptCount = -1;
 
+        // Allocate an identifier info if needed.
+        // Note: we may want to allocate one per SpoofChecker and synchronize
+        
+        IdentifierInfo identifierInfo = null;
+        if (0 != ((this.fChecks) & (RESTRICTION_LEVEL | MIXED_NUMBERS))) {
+            identifierInfo = new IdentifierInfo().setIdentifier(text);
+        }
+        
+        if (0 != ((this.fChecks) & RESTRICTION_LEVEL)) {
+            RestrictionLevel textRestrictionLevel = identifierInfo.getRestrictionLevel();
+            if (textRestrictionLevel.compareTo(restrictionLevel) > 0) {
+                result |= RESTRICTION_LEVEL;
+            }
+        }
+        
+        if (0 != ((this.fChecks) & MIXED_NUMBERS)) {
+            UnicodeSet numerics = identifierInfo.getNumerics();
+            if (numerics.size() > 1) {
+                result |= MIXED_NUMBERS;
+            }
+        }
+        
         if (0 != ((this.fChecks) & SINGLE_SCRIPT)) {
             scriptCount = this.scriptScan(text, checkResult);
             // no need to set failPos, it will be set to checkResult.position inside this.scriptScan
@@ -1881,6 +1933,7 @@ public class SpoofChecker {
     private SpoofData fSpoofData;
     private Set<ULocale> fAllowedLocales; // The Set of allowed locales.
     private UnicodeSet fAllowedCharsSet; // The UnicodeSet of allowed characters.
+    private RestrictionLevel restrictionLevel;
 
     // for this Spoof Checker. Defaults to all chars.
     //
