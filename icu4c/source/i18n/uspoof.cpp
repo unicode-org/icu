@@ -369,7 +369,7 @@ uspoof_checkUTF8(const USpoofChecker *sc,
         // u_strToUTF8() in preflight mode is an easy way to do it.
         U_ASSERT(position16 <= len16);
         u_strToUTF8(NULL, 0, position, text16, position16, status);
-        if (position > 0) {
+        if (position != NULL && *position > 0) {
             // position is the required buffer length from u_strToUTF8, which includes
             // space for a terminating NULL, which we don't want, hence the -1.
             *position -= 1;
