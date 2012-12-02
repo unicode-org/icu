@@ -502,13 +502,16 @@ public class SpoofCheckerTest extends TestFmwk {
         assertTrue("", IdentifierInfo.contains(bitset12, bitset12));
         assertTrue("", !IdentifierInfo.contains(bitset2, bitset12));
 
+        assertTrue("", IdentifierInfo.BITSET_COMPARATOR.compare(
+                IdentifierInfo.set(new BitSet(), UScript.ARABIC), 
+                IdentifierInfo.set(new BitSet(), UScript.LATIN)) < 0);
 //      displayAlternates(Collection<BitSet>)
 //      displayScripts(BitSet)
         String scriptString = IdentifierInfo.displayScripts(bitset12);
         assertEquals("", "Hang Latn", scriptString);
         Set<BitSet> alternates = new HashSet(Arrays.asList(bitset12, bitset2));
         String alternatesString = IdentifierInfo.displayAlternates(alternates);
-        assertEquals("", "Hang Latn; Hang", alternatesString);
+        assertEquals("", "Hang; Hang Latn", alternatesString);
 
 //        parseAlternates(String)
 //        parseScripts(String)
