@@ -515,17 +515,38 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals("", bitset12, IdentifierInfo.parseScripts(scriptString));
         assertEquals("", alternates, IdentifierInfo.parseAlternates(alternatesString));
 
-        IdentifierInfo idInfo = new IdentifierInfo();
-        String manyAlternates = "aアー〼1१١۱";
-        idInfo.setIdentifier(manyAlternates);
-        assertEquals("", manyAlternates, idInfo.getIdentifier());
+        String[][] tests = {
+                // String, restriction-level, numerics, scripts, alternates, common-alternates, numerics
+                {"a〼",  "HIGHLY_RESTRICTIVE", "[]", "Latn", "Kana Hira Hani", "Kana Hira Hani"},
+                {"aー〼",  "HIGHLY_RESTRICTIVE", "[]", "Latn", "Kana Hira", "Kana Hira"},
+                {"aー〼ア",  "HIGHLY_RESTRICTIVE", "[]", "Latn Kana", "", ""},
+                {"アaー〼",  "HIGHLY_RESTRICTIVE", "[]", "Latn Kana", "", ""},
+                {"a1١",  "UNRESTRICTIVE", "[0٠]", "Latn", "Arab Thaa", "Arab Thaa"},
+                {"a1١۱",  "UNRESTRICTIVE", "[0٠۰]", "Latn Arab", "", ""},
+                {"١ー〼aア1१۱",  "UNRESTRICTIVE", "[0٠۰०]", "Latn Kana Arab Deva", "", ""},
+                {"aアー〼1१١۱",  "UNRESTRICTIVE", "[0٠۰०]", "Latn Kana Arab Deva", "", ""},
+        };
+        for (String[] test : tests) {
+            String testString = test[0];
+            IdentifierInfo idInfo = new IdentifierInfo()
+            .setIdentifier(testString);
+            assertEquals("Identifier " + testString, testString, idInfo.getIdentifier());
+            
+            RestrictionLevel restrictionLevel = RestrictionLevel.valueOf(test[1]);
+            assertEquals("RestrictionLevel " + testString, restrictionLevel, idInfo.getRestrictionLevel());
+            
+            UnicodeSet numerics = new UnicodeSet(test[2]);
+            assertEquals("Numerics " + testString, numerics, idInfo.getNumerics());
 
-        assertEquals("", IdentifierInfo.set(new BitSet(), UScript.LATIN, UScript.KATAKANA, UScript.ARABIC, UScript.DEVANAGARI), idInfo.getScripts());
-        Set<BitSet> alternates2 = idInfo.getAlternates();
-        assertEquals("", Collections.EMPTY_SET, alternates2);
-        assertEquals("", new BitSet(), idInfo.getCommonAmongAlternates());
-        assertEquals("", new UnicodeSet("[0٠۰०]"), idInfo.getNumerics());
-        assertEquals("", RestrictionLevel.UNRESTRICTIVE, idInfo.getRestrictionLevel());
+            BitSet scripts = IdentifierInfo.parseScripts(test[3]);
+            assertEquals("Scripts " + testString, scripts, idInfo.getScripts());
+
+            Set<BitSet> alternates2 = IdentifierInfo.parseAlternates(test[4]);
+            assertEquals("Alternates " + testString, alternates2, idInfo.getAlternates());
+
+            BitSet commonAlternates = IdentifierInfo.parseScripts(test[5]);
+            assertEquals("Common Alternates " + testString, commonAlternates, idInfo.getCommonAmongAlternates());
+        }
 
 // TODO
 //        getIdentifierProfile()
