@@ -12,6 +12,7 @@ import java.io.Reader;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -519,11 +520,12 @@ public class SpoofCheckerTest extends TestFmwk {
         idInfo.setIdentifier(manyAlternates);
         assertEquals("", manyAlternates, idInfo.getIdentifier());
 
-        assertEquals("", null, idInfo.getScripts());
-        assertEquals("", null, idInfo.getAlternates());
-        assertEquals("", null, idInfo.getCommonAmongAlternates());
-        assertEquals("", null, idInfo.getNumerics());
-        assertEquals("", null, idInfo.getRestrictionLevel());
+        assertEquals("", IdentifierInfo.set(new BitSet(), UScript.LATIN, UScript.KATAKANA, UScript.ARABIC, UScript.DEVANAGARI), idInfo.getScripts());
+        Set<BitSet> alternates2 = idInfo.getAlternates();
+        assertEquals("", Collections.EMPTY_SET, alternates2);
+        assertEquals("", new BitSet(), idInfo.getCommonAmongAlternates());
+        assertEquals("", new UnicodeSet("[0٠۰०]"), idInfo.getNumerics());
+        assertEquals("", RestrictionLevel.UNRESTRICTIVE, idInfo.getRestrictionLevel());
 
 // TODO
 //        getIdentifierProfile()
