@@ -8,9 +8,11 @@ package com.ibm.icu.text;
 
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
@@ -383,9 +385,16 @@ public class IdentifierInfo {
      * @return display form
      * @internal
      */
-    public static String displayAlternates(Collection<BitSet> alternates) {
+    public static String displayAlternates(Set<BitSet> alternates) {
+        if (alternates.size() == 0) {
+            return "";
+        }
         StringBuilder result = new StringBuilder();
-        for (BitSet item : alternates) {
+        Comparator<? super BitSet> foo;
+        // for consistent results
+        Set<BitSet> sorted = new TreeSet<BitSet>(BITSET_COMPARATOR);
+        sorted.addAll(alternates);
+        for (BitSet item : sorted) {
             if (result.length() != 0) {
                 result.append("; ");
             }
@@ -393,6 +402,26 @@ public class IdentifierInfo {
         }
         return result.toString();
     }
+    
+    /**
+     * Order BitSets, first by shortest, then by items.
+     * @internal
+     */
+    public static final Comparator<BitSet> BITSET_COMPARATOR = new Comparator<BitSet>() {
+
+        public int compare(BitSet arg0, BitSet arg1) {
+            int diff = arg0.cardinality() - arg1.cardinality();
+            if (diff != 0) return diff;
+            int i0 = arg0.nextSetBit(0);
+            int i1 = arg1.nextSetBit(0);
+            while ((diff = i0-i1) == 0) {
+                i0 = arg0.nextSetBit(i0+1);
+                i1 = arg1.nextSetBit(i1+1);
+            }
+            return diff;
+        }
+        
+    };
 
     /**
      * Produce a readable string of a set of scripts
