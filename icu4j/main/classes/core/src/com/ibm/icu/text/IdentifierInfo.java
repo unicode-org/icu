@@ -343,7 +343,7 @@ public class IdentifierInfo {
         // The number of scripts in the text.
         // Plus 1 if there is some commonality among the alternates (eg [Arab Thaa]; [Arab Syrc])
         // Plus number of alternates otherwise (this only works because we only test cardinality up to 2.)
-        final int cardinalityPlus = temp.cardinality() + (commonAmongAlternates.isEmpty() ? scriptSetSet.size() : 1);
+        final int cardinalityPlus = temp.cardinality() + (commonAmongAlternates.cardinality() == 0 ? scriptSetSet.size() : 1);
         if (cardinalityPlus < 2) {
             return RestrictionLevel.HIGHLY_RESTRICTIVE;
         }
@@ -422,7 +422,7 @@ public class IdentifierInfo {
     public static BitSet parseScripts(String scriptsString) {
         BitSet result = new BitSet();
         for (String item : scriptsString.trim().split(",?\\s+")) {
-            if (!item.isEmpty()) {
+            if (item.length() != 0) {
                 result.set(UScript.getCodeFromName(item));
             }
         }
@@ -439,7 +439,7 @@ public class IdentifierInfo {
     public static Set<BitSet> parseAlternates(String scriptsSetString) {
         Set<BitSet> result = new HashSet<BitSet>();
         for (String item : scriptsSetString.trim().split("\\s*;\\s*")) {
-            if (!item.isEmpty()) {
+            if (item.length() != 0) {
                 result.add(parseScripts(item));
             }
         }
