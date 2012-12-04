@@ -171,6 +171,7 @@ NumberFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const cha
         CASE(61,Test8199);
         CASE(62,Test9109);
         CASE(63,Test9780);
+        CASE(64,Test9677);
 
         default: name = ""; break;
     }
@@ -2892,4 +2893,94 @@ void NumberFormatRegressionTest::Test9780(void) {
     }
     delete nf;
 }
+
+
+void NumberFormatRegressionTest::Test9677(void) {
+  static const UChar pattern[] = { 0x23,0x23,0x23,0x23,0x2E,0x23,0x23,0x23,0x23,0 }; // "####.####"
+  static const UChar positivePrefix[] = { 0x40,0 }; // "@"
+  static const UChar negativePrefix[] = { 0x6E,0 }; // "n"
+  static const UChar text[] = { 0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0 }; // 123456789
+  static const UChar text2[] = { 0x6E, 0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0 }; // n123456789
+  
+  UErrorCode status = U_ZERO_ERROR;
+  LocalUNumberFormatPointer f(unum_open(UNUM_DEFAULT, NULL, 0, "en_US", NULL, &status));
+
+  assertSuccess("opening unum_open", status);
+  if (U_SUCCESS(status)) {
+    unum_applyPattern(f.getAlias(), FALSE, pattern, -1, NULL, &status);
+    unum_setTextAttribute(f.getAlias(), UNUM_POSITIVE_PREFIX, positivePrefix, -1, &status);
+    assertSuccess("setting attributes", status);
+  }
+
+  if(U_SUCCESS(status)) {
+    int32_t n = unum_parse(f.getAlias(), text, -1, NULL, &status);
+    logln("unum_parse status %s, result %d\n", u_errorName(status), n);
+
+    if(U_FAILURE(status)) {
+        logln("Got expected parse error %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else {
+        errln("FAIL: unum_parse status %s, result %d - expected failure\n", u_errorName(status), n);
+    }
+  }
+
+  if (U_SUCCESS(status)) {
+    unum_setTextAttribute(f.getAlias(), UNUM_POSITIVE_PREFIX, NULL, 0, &status);
+    assertSuccess("setting attributes", status);
+    logln("removed positive prefix");
+  }
+
+  if(U_SUCCESS(status)) {
+    int32_t n = unum_parse(f.getAlias(), text, -1, NULL, &status);
+    logln("unum_parse status %s, result %d\n", u_errorName(status), n);
+
+    if(U_FAILURE(status)) {
+        errln("FAIL: with pos prefix removed, parse error %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else {
+        if(n!=123456789) {
+          errln("FAIL: with pos prefix removed , unum_parse status %s, result %d expected 123456789\n", u_errorName(status), n);
+        } else {
+          logln("PASS: with pos prefix removed , unum_parse status %s, result %d expected 123456789\n", u_errorName(status),n);
+        }
+    }
+  }
+
+  if(U_SUCCESS(status)) {
+    int32_t n = unum_parse(f.getAlias(), text2, -1, NULL, &status);
+    logln("unum_parse status %s, result %d\n", u_errorName(status), n);
+
+    if(U_FAILURE(status)) {
+        logln("text2: Got expected parse error %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else {
+        errln("FAIL: text2: unum_parse status %s, result %d - expected failure\n", u_errorName(status), n);
+    }
+  }
+
+  if (U_SUCCESS(status)) {
+    unum_setTextAttribute(f.getAlias(), UNUM_NEGATIVE_PREFIX, negativePrefix, -1, &status);
+    assertSuccess("setting attributes", status);
+    logln("Set a different neg prefix prefix");
+  }
+
+  if(U_SUCCESS(status)) {
+    int32_t n = unum_parse(f.getAlias(), text2, -1, NULL, &status);
+    logln("unum_parse status %s, result %d\n", u_errorName(status), n);
+
+    if(U_FAILURE(status)) {
+        errln("FAIL: with different neg prefix , parse error %s\n", u_errorName(status));
+        status = U_ZERO_ERROR;
+    } else {
+;
+        if(n!=-123456789) {
+          errln("FAIL: with different neg prefix , unum_parse status %s, result %d expected -123456789\n", u_errorName(status), n);
+        } else {
+          logln("PASS: with different neg prefix , unum_parse status %s, result %d expected -123456789\n", u_errorName(status), n);
+        }
+    }
+  }
+}
+
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
