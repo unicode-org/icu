@@ -92,7 +92,7 @@ public:
     void TestJ691(void);
     void Test8199(void);
     void Test9109(void);
-
+    void Test9780(void);
 protected:
     UBool failure(UErrorCode status, const UnicodeString& msg, UBool possibleDataError=FALSE);
     UBool failure(UErrorCode status, const UnicodeString& msg, const char *l, UBool possibleDataError=FALSE);
