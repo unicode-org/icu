@@ -17,12 +17,13 @@ import java.util.TreeSet;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.text.SpoofChecker.RestrictionLevel;
 import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.Freezable;
 
 /**
  * This class analyzes a possible identifier for script and identifier status. Use it by calling setIdentifierProfile
- * then setIdentifier. At this point:
+ * then setIdentifier. Available methods include:
  * <ol>
  * <li>call getScripts for the specific scripts in the identifier. The identifier contains at least one character in
  * each of these.
@@ -31,50 +32,13 @@ import com.ibm.icu.util.Freezable;
  * <li>call getCommonAmongAlternates to find out if any scripts are common to all the alternates.
  * <li>call getNumerics to get a representative character (with value zero) for each of the decimal number systems in
  * the identifier.
- * <li>call getRestrictionLevel to see what the UTS36 restriction level is. (This has some proposed changes from the
- * current one, however.)
+ * <li>call getRestrictionLevel to see what the UTS36 restriction level is.
  * </ol>
  * 
  * @author markdavis
  * @internal
  */
 public class IdentifierInfo {
-
-    public enum RestrictionLevel {
-        /**
-         * Only ASCII characters: U+0000..U+007F
-         * 
-         * @internal
-         */
-        ASCII,
-        /**
-         * All characters in each identifier must be from a single script, or from the combinations: Latin + Han +
-         * Hiragana + Katakana; Latin + Han + Bopomofo; or Latin + Han + Hangul. Note that this level will satisfy the
-         * vast majority of Latin-script users; also that TR36 has ASCII instead of Latin.
-         * 
-         * @internal
-         */
-        HIGHLY_RESTRICTIVE,
-        /**
-         * Allow Latin with other scripts except Cyrillic, Greek, Cherokee Otherwise, the same as Highly Restrictive
-         * 
-         * @internal
-         */
-        MODERATELY_RESTRICTIVE,
-        /**
-         * Allow arbitrary mixtures of scripts, such as Ωmega, Teχ, HλLF-LIFE, Toys-Я-Us. Otherwise, the same as
-         * Moderately Restrictive
-         * 
-         * @internal
-         */
-        MINIMALLY_RESTRICTIVE,
-        /**
-         * Any valid identifiers, including characters outside of the Identifier Profile, such as I♥NY.org
-         * 
-         * @internal
-         */
-        UNRESTRICTIVE
-    }
 
     private static final UnicodeSet ASCII = new UnicodeSet(0, 0x7F).freeze();
 
@@ -94,21 +58,21 @@ public class IdentifierInfo {
     }
 
     /**
-     * Set the identifier profile, for what is allowed.
+     * Set the identifier profile: the characters that are to be allowed in the identifier.
      * 
-     * @param identifierProfile
-     * @return
+     * @param identifierProfile the characters that are to be allowed in the identifier
+     * @return self
      * @internal
      */
     public IdentifierInfo setIdentifierProfile(UnicodeSet identifierProfile) {
-        this.numerics.set(numerics);
+        this.identifierProfile.set(identifierProfile);
         return this;
     }
 
     /**
-     * Get the identifier profile
+     * Get the identifier profile: the characters that are to be allowed in the identifier.
      * 
-     * @return
+     * @return The characters that are to be allowed in the identifier.
      * @internal
      */
     public UnicodeSet getIdentifierProfile() {
@@ -116,10 +80,10 @@ public class IdentifierInfo {
     }
 
     /**
-     * Set an identifier to analyse.
+     * Set an identifier to analyze. Afterwards, call methods like getScripts()
      * 
-     * @param identifier
-     * @return the identifier info.
+     * @param identifier the identifier to analyze
+     * @return self
      * @internal
      */
     public IdentifierInfo setIdentifier(String identifier) {
@@ -262,9 +226,9 @@ public class IdentifierInfo {
     //    }
 
     /**
-     * Get the identifer that was analysed.
+     * Get the identifier that was analyzed.
      * 
-     * @return
+     * @return the identifier that was analyzed.
      * @internal
      */
     public String getIdentifier() {
@@ -272,7 +236,7 @@ public class IdentifierInfo {
     }
 
     /**
-     * Get the scripts found in the identifiers
+     * Get the scripts found in the identifiers.
      * 
      * @return the set of explicit scripts.
      * @internal
@@ -309,7 +273,7 @@ public class IdentifierInfo {
     /**
      * Find out which scripts are in common among the alternates.
      * 
-     * @return
+     * @return the set of scripts that are in common among the alternates.
      */
     public BitSet getCommonAmongAlternates() {
         return (BitSet) commonAmongAlternates.clone();
@@ -381,7 +345,7 @@ public class IdentifierInfo {
     /**
      * Produce a readable string of alternates.
      * 
-     * @param alternates
+     * @param alternates a set of BitSets of script values.
      * @return display form
      * @internal
      */
@@ -426,7 +390,7 @@ public class IdentifierInfo {
     /**
      * Produce a readable string of a set of scripts
      * 
-     * @param scripts
+     * @param scripts a BitSet of UScript values
      * @return
      * @internal
      */
@@ -442,9 +406,9 @@ public class IdentifierInfo {
     }
 
     /**
-     * Parse a list of scripts into a bitset.
+     * Parse a text list of scripts into a BitSet.
      * 
-     * @param scripts
+     * @param scriptsString the string to be parsed
      * @return BitSet of UScript values.
      * @internal
      */
@@ -461,8 +425,8 @@ public class IdentifierInfo {
     /**
      * Parse a list of alternates into a set of sets of UScript values.
      * 
-     * @param scriptsSetString
-     * @return
+     * @param scriptsSetString a list of alternates, separated by ;
+     * @return a set of BitSets of UScript values
      * @internal
      */
     public static Set<BitSet> parseAlternates(String scriptsSetString) {
@@ -476,11 +440,11 @@ public class IdentifierInfo {
     }
 
     /**
-     * Test containment. Should be a method on BitSet...
+     * Test containment. Should be a method on BitSet.
      * 
-     * @param container
-     * @param containee
-     * @return
+     * @param container possible container to be tested
+     * @param containee possible containee to be tested
+     * @return true if container contains containee
      * @internal
      */
     public static final boolean contains(BitSet container, BitSet containee) {
@@ -495,9 +459,9 @@ public class IdentifierInfo {
     /**
      * Sets a number of values at once. Should be on BitSet.
      * 
-     * @param container
-     * @param containee
-     * @return
+     * @param bitset bitset to be affected
+     * @param values values to be set in the bitset
+     * @return modified bitset.
      * @internal
      */
     public static final BitSet set(BitSet bitset, int... values) {
