@@ -12,6 +12,9 @@
 #include <stdlib.h>
 
 #include "intltest.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/compactdecimalformat.h"
 #include "unicode/unum.h"
 
@@ -340,3 +343,5 @@ const char *CompactDecimalFormatTest::StyleStr(UNumberCompactStyle style) {
 extern IntlTest *createCompactDecimalFormatTest() {
   return new CompactDecimalFormatTest();
 }
+
+#endif
