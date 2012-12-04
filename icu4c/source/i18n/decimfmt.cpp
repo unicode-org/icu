@@ -1028,6 +1028,15 @@ void DecimalFormat::handleChanged() {
 #endif
   if (fFormatWidth!=0) {
       debug("No Parse fastpath: fFormatWidth");
+  } else if(fPositivePrefix.length()>0) {
+    debug("No Parse fastpath: positive prefix");
+  } else if(fPositiveSuffix.length()>0) {
+    debug("No Parse fastpath: positive suffix");
+  } else if(fNegativePrefix.length()>1 
+            || ((fNegativePrefix.length()==1) && (fNegativePrefix.charAt(0)!=0x002D))) {
+    debug("No Parse fastpath: negative prefix that isn't '-'");
+  } else if(fNegativeSuffix.length()>0) {
+    debug("No Parse fastpath: negative suffix");
   } else {
     data.fFastParseStatus = kFastpathYES;
     debug("parse fastpath: YES");
@@ -2169,7 +2178,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
     UChar dbgbuf[300];
     UnicodeString s(dbgbuf,0,300);;
     s.append((UnicodeString)"PARSE \"").append(text.tempSubString(position)).append((UnicodeString)"\" " );
-#define DBGAPPD(x) if(x) { s.append(UnicodeString(#x "="));  if(x->isEmpty()) { s.append(UnicodeString("<empty>")); } else { s.append(*x); } s.append(UnicodeString(" ")); }
+#define DBGAPPD(x) if(x) { s.append(UnicodeString(#x "="));  if(x->isEmpty()) { s.append(UnicodeString("<empty>")); } else { s.append(*x); } s.append(UnicodeString(" ")); } else { s.append(UnicodeString(#x "=NULL ")); }
     DBGAPPD(negPrefix);
     DBGAPPD(negSuffix);
     DBGAPPD(posPrefix);
@@ -2218,9 +2227,8 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
         (intOnly)?'y':'n',
         (strictParse)?'y':'n');
 #endif
-      if(ch=='-') {
-        /* for now- no negs. */
-        j=l+1;//=break
+      if(ch==0x002D) { // '-'
+        j=l+1;//=break - negative number.
         
         /*
           parsedNum.append('-',err); 
