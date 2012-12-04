@@ -369,7 +369,8 @@ DecimalFormat::init(UErrorCode &status) {
 
 #if UCONFIG_FORMAT_FASTPATHS_49
     DecimalFormatInternal &data = internalData(fReserved);
-    data.fFastpathStatus=kFastpathUNKNOWN; // don't try to calculate the fastpath until later.
+    data.fFastFormatStatus=kFastpathUNKNOWN; // don't try to calculate the fastpath until later.
+    data.fFastParseStatus=kFastpathUNKNOWN; // don't try to calculate the fastpath until later.
 #endif
     // only do this once per obj.
     DecimalFormatStaticSets::initSets(&status);
@@ -515,7 +516,8 @@ DecimalFormat::construct(UErrorCode&             status,
     }
 #if UCONFIG_FORMAT_FASTPATHS_49
     DecimalFormatInternal &data = internalData(fReserved);
-    data.fFastpathStatus = kFastpathNO; // allow it to be calculated
+    data.fFastFormatStatus = kFastpathNO; // allow it to be calculated
+    data.fFastParseStatus = kFastpathNO; // allow it to be calculated
     handleChanged();
 #endif
 }
@@ -1013,41 +1015,55 @@ DecimalFormat::format(int32_t number,
 void DecimalFormat::handleChanged() {
   DecimalFormatInternal &data = internalData(fReserved);
 
-  if(data.fFastpathStatus == kFastpathUNKNOWN) {
+  if(data.fFastFormatStatus == kFastpathUNKNOWN || data.fFastParseStatus == kFastpathUNKNOWN) {
     return; // still constructing. Wait.
   }
 
-  data.fFastpathStatus = kFastpathNO;
+  data.fFastParseStatus = data.fFastFormatStatus = kFastpathNO;
 
+#if UCONFIG_HAVE_PARSEALLINPUT
+  if(fParseAllInput == UNUM_NO) {
+    debug("No Parse fastpath: fParseAllInput==UNUM_NO");
+  } else 
+#endif
+  if (fFormatWidth!=0) {
+      debug("No Parse fastpath: fFormatWidth");
+  } else {
+    data.fFastParseStatus = kFastpathYES;
+    debug("parse fastpath: YES");
+  }
+  
   if (fGroupingSize!=0 && isGroupingUsed()) {
-    debug("No fastpath: fGroupingSize!=0 and grouping is used");
+    debug("No format fastpath: fGroupingSize!=0 and grouping is used");
 #ifdef FMT_DEBUG
     printf("groupingsize=%d\n", fGroupingSize);
 #endif
   } else if(fGroupingSize2!=0 && isGroupingUsed()) {
-    debug("No fastpath: fGroupingSize2!=0");
+    debug("No format fastpath: fGroupingSize2!=0");
   } else if(fUseExponentialNotation) {
-    debug("No fastpath: fUseExponentialNotation");
+    debug("No format fastpath: fUseExponentialNotation");
   } else if(fFormatWidth!=0) {
-    debug("No fastpath: fFormatWidth!=0");
+    debug("No format fastpath: fFormatWidth!=0");
   } else if(fMinSignificantDigits!=1) {
-    debug("No fastpath: fMinSignificantDigits!=1");
+    debug("No format fastpath: fMinSignificantDigits!=1");
   } else if(fMultiplier!=NULL) {
-    debug("No fastpath: fMultiplier!=NULL");
+    debug("No format fastpath: fMultiplier!=NULL");
   } else if(0x0030 != getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0)) {
-    debug("No fastpath: 0x0030 != getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0)");
+    debug("No format fastpath: 0x0030 != getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0)");
   } else if(fDecimalSeparatorAlwaysShown) {
-    debug("No fastpath: fDecimalSeparatorAlwaysShown");
+    debug("No format fastpath: fDecimalSeparatorAlwaysShown");
   } else if(getMinimumFractionDigits()>0) {
-    debug("No fastpath: fMinFractionDigits>0");
+    debug("No format fastpath: fMinFractionDigits>0");
   } else if(fCurrencySignCount > fgCurrencySignCountZero) {
-    debug("No fastpath: fCurrencySignCount > fgCurrencySignCountZero");
+    debug("No format fastpath: fCurrencySignCount > fgCurrencySignCountZero");
   } else if(fRoundingIncrement!=0) {
-    debug("No fastpath: fRoundingIncrement!=0");
+    debug("No format fastpath: fRoundingIncrement!=0");
   } else {
-    data.fFastpathStatus = kFastpathYES;
-    debug("kFastpathYES!");
+    data.fFastFormatStatus = kFastpathYES;
+    debug("format:kFastpathYES!");
   }
+
+
 }
 #endif
 //------------------------------------------------------------------------------
@@ -1105,7 +1121,7 @@ DecimalFormat::_format(int64_t number,
   printf("fastpath? [%d]\n", number);
 #endif
     
-  if( data.fFastpathStatus==kFastpathYES) {
+  if( data.fFastFormatStatus==kFastpathYES) {
 
 #define kZero 0x0030
     const int32_t MAX_IDX = MAX_DIGITS+2;
@@ -2144,6 +2160,11 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
     int32_t textLength = text.length(); // One less pointer to follow
     UBool strictParse = !isLenient();
     UChar32 zero = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
+    const UnicodeString *groupingString = &getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
+    UChar32 groupingChar = groupingString->char32At(0);
+    int32_t groupingStringLength = groupingString->length();
+    int32_t groupingCharLength   = U16_LENGTH(groupingChar);
+    UBool   groupingUsed = isGroupingUsed();
 #ifdef FMT_DEBUG
     UChar dbgbuf[300];
     UnicodeString s(dbgbuf,0,300);;
@@ -2159,26 +2180,17 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
 
     UBool fastParseOk = false; /* TRUE iff fast parse is OK */
     // UBool fastParseHadDecimal = FALSE; /* true if fast parse saw a decimal point. */
-
-    if(!currencyParsing &&
-
-
-       ( (
-#if UCONFIG_HAVE_PARSEALLINPUT
-         fParseAllInput == UNUM_YES ) ||
-          ( fParseAllInput == UNUM_MAYBE &&
-#endif
-            fFormatWidth==0 &&
-            //       (negPrefix!=NULL&&negPrefix->isEmpty()) ||
-            text.length()>0 &&
-            text.length()<32 &&
-            (posPrefix==NULL||posPrefix->isEmpty()) &&
-            (posSuffix==NULL||posSuffix->isEmpty()) &&
-            //            (negPrefix==NULL||negPrefix->isEmpty()) &&
-            //            (negSuffix==NULL||(negSuffix->isEmpty()) ) &&
-            TRUE
-            )
-          )) {  // optimized path
+    const DecimalFormatInternal &data = internalData(fReserved);
+    if((data.fFastParseStatus==kFastpathYES) &&
+       !currencyParsing &&
+       //       (negPrefix!=NULL&&negPrefix->isEmpty()) ||
+       text.length()>0 &&
+       text.length()<32 &&
+       (posPrefix==NULL||posPrefix->isEmpty()) &&
+       (posSuffix==NULL||posSuffix->isEmpty()) &&
+       //            (negPrefix==NULL||negPrefix->isEmpty()) &&
+       //            (negSuffix==NULL||(negSuffix->isEmpty()) ) &&
+       TRUE) {  // optimized path
       int j=position;
       int l=text.length();
       int digitCount=0;
@@ -2186,18 +2198,26 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
       const UnicodeString *decimalString = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
       UChar32 decimalChar = 0;
       UBool intOnly = FALSE;
+      UChar32 lookForGroup = (groupingUsed&&intOnly&&strictParse)?groupingChar:0;
+
       int32_t decimalCount = decimalString->countChar32(0,3);
       if(isParseIntegerOnly()) {
         decimalChar = 0; // not allowed
-        intOnly = TRUE;
+        intOnly = TRUE; // Don't look for decimals.
       } else if(decimalCount==1) {
-        decimalChar = decimalString->char32At(0);
+        decimalChar = decimalString->char32At(0); // Look for this decimal
       } else if(decimalCount==0) {
-        decimalChar=0;
+        decimalChar=0; // NO decimal set
       } else {
-        j=l+1;//=break
+        j=l+1;//Set counter to end of line, so that we break. Unknown decimal situation.
       }
 
+#ifdef FMT_DEBUG
+      printf("Preparing to do fastpath parse: decimalChar=U+%04X, groupingChar=U+%04X, first ch=U+%04X intOnly=%c strictParse=%c\n",
+        decimalChar, groupingChar, ch,
+        (intOnly)?'y':'n',
+        (strictParse)?'y':'n');
+#endif
       if(ch=='-') {
         /* for now- no negs. */
         j=l+1;//=break
@@ -2217,22 +2237,27 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
           if((digitCount>0) || digit!=0 || j==(l-1)) {
             digitCount++;
           }
+        } else if(ch == 0) { // break out
+          digitCount=-1;
+          break;
         } else if(ch == decimalChar) {
           parsedNum.append((char)('.'), err);
           decimalChar=0; // no more decimals.
           // fastParseHadDecimal=TRUE;
-        } else if(intOnly && !u_isdigit(ch)) {
-          break; // hit a non-integer. (fall through if integer, to slow parse)
+        } else if(ch == lookForGroup) {
+          // ignore grouping char. No decimals, so it has to be an ignorable grouping sep
+        } else if(intOnly && (lookForGroup!=0) && !u_isdigit(ch)) {
+          // parsing integer only and can fall through
         } else {
-          digitCount=-1; // fail
+          digitCount=-1; // fail - fall through to slow parse
           break;
         }
         j+=U16_LENGTH(ch);
         ch = text.char32At(j); // for next  
       }
       if(
-         ((j==l)||intOnly)
-         && (digitCount>0)) {
+         ((j==l)||intOnly) // end OR only parsing integer
+         && (digitCount>0)) { // and have at least one digit
 #ifdef FMT_DEBUG
         printf("PP -> %d, good = [%s]  digitcount=%d, fGroupingSize=%d fGroupingSize2=%d!\n", j, parsedNum.data(), digitCount, fGroupingSize, fGroupingSize2);
 #endif
@@ -2338,13 +2363,9 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
         } else {
             decimalString = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
         }
-        const UnicodeString *groupingString = &getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
         UChar32 decimalChar = decimalString->char32At(0);
-        UChar32 groupingChar = groupingString->char32At(0);
         int32_t decimalStringLength = decimalString->length();
         int32_t decimalCharLength   = U16_LENGTH(decimalChar);
-        int32_t groupingStringLength = groupingString->length();
-        int32_t groupingCharLength   = U16_LENGTH(groupingChar);
 
         UBool sawDecimal = FALSE;
         UChar32 sawDecimalChar = 0xFFFF;
@@ -2453,7 +2474,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
             else if (groupingStringLength > 0 && 
                 matchGrouping(groupingChar, sawGrouping, sawGroupingChar, groupingSet, 
                             decimalChar, decimalSet,
-                            ch) && isGroupingUsed())
+                            ch) && groupingUsed)
             {
                 if (sawDecimal) {
                     break;

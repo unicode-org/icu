@@ -170,6 +170,7 @@ NumberFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const cha
         CASE(60,TestJ691);
         CASE(61,Test8199);
         CASE(62,Test9109);
+        CASE(63,Test9780);
 
         default: name = ""; break;
     }
@@ -2852,4 +2853,43 @@ void NumberFormatRegressionTest::Test9109(void) {
     }
 }
 
+
+void NumberFormatRegressionTest::Test9780(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    NumberFormat *nf = NumberFormat::createInstance(Locale::getUS(), status);
+    if (failure(status, "NumberFormat::createInstance", TRUE)){
+        delete nf;
+        return;
+    };
+    DecimalFormat *df = dynamic_cast<DecimalFormat *>(nf);
+    if(df == NULL) {
+        errln("DecimalFormat needed to continue");
+        return;
+    }
+    df->setParseIntegerOnly(TRUE);
+
+    {
+      Formattable n;
+      ParsePosition pos(0);
+      UnicodeString toParse("1,234","");
+      df->parse(toParse, n, pos);
+      if (n.getType() != Formattable::kLong
+          || n.getLong() != 1234) {
+        errln(UnicodeString("FAIL: parse(\"") + toParse + UnicodeString("\") returns ") + toString(n));
+      }
+    }
+    // should still work in lenient mode, just won't get fastpath
+    df->setLenient(TRUE);
+    {
+      Formattable n;
+      ParsePosition pos(0);
+      UnicodeString toParse("1,234","");
+      df->parse(toParse, n, pos);
+      if (n.getType() != Formattable::kLong
+          || n.getLong() != 1234) {
+        errln(UnicodeString("FAIL: parse(\"") + toParse + UnicodeString("\") returns ") + toString(n));
+      }
+    }
+    delete nf;
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
