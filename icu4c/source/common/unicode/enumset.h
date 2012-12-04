@@ -17,6 +17,9 @@
 
 #include "unicode/utypes.h"
 
+#if U_SHOW_CPLUSPLUS_API
+
+U_NAMESPACE_BEGIN
 
 /**
  * enum bitset for boolean fields. Similar to Java EnumSet<>. 
@@ -52,4 +55,7 @@ private:
     uint32_t fBools;
 };
 
-#endif
+U_NAMESPACE_END
+
+#endif /* U_SHOW_CPLUSPLUS_API */
+#endif /* ENUMSET_H */
