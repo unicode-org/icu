@@ -36,13 +36,7 @@ U_NAMESPACE_BEGIN
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Formattable)
 
-struct FmtStackData {
-  DigitList stackDecimalNum;   // 128
-  //CharString stackDecimalStr;  // 64
-  //                         -----
-  //                         192 total
-};
-
+#include "fmtableimp.h"
 
 //-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.-.
 
