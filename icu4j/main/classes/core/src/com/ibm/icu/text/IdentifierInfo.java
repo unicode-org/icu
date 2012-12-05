@@ -378,7 +378,7 @@ public class IdentifierInfo {
             if (diff != 0) return diff;
             int i0 = arg0.nextSetBit(0);
             int i1 = arg1.nextSetBit(0);
-            while ((diff = i0-i1) == 0) {
+            while ((diff = i0-i1) == 0 && i0 > 0) {
                 i0 = arg0.nextSetBit(i0+1);
                 i1 = arg1.nextSetBit(i1+1);
             }

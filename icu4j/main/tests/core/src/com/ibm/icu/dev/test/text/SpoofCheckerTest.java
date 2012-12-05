@@ -13,9 +13,11 @@ import java.text.ParseException;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -558,6 +560,60 @@ public class SpoofCheckerTest extends TestFmwk {
 // TODO
 //        getIdentifierProfile()
 //        setIdentifierProfile(UnicodeSet)
+    }
+    
+    public void TestComparator() {
+        Random random = new Random(0);
+        for (int i = 0; i < 100; ++i) {
+            BitSet[] items = new BitSet[random.nextInt(5)+3];
+            for (int j = 0; j < items.length; ++j) {
+                items[j] = new BitSet();
+                int countInBitset = random.nextInt(5);
+                for (int k = 0; k < countInBitset; ++k) {
+                    items[j].set(random.nextInt(10));
+                }
+            }
+            checkComparator(IdentifierInfo.BITSET_COMPARATOR, items);
+        }
+    }
+    
+    // Dumb implementation for now
+    private <T> void checkComparator(Comparator<T> comparator, T... items) {
+        logln("Checking " + Arrays.asList(items));
+        /*
+         * The relation is transitive: a < b and b < c implies a < c. We test here.
+         * The relation is trichotomous: exactly one of a <  b, b < a and a = b is true. Guaranteed by comparator.
+         */
+        for (int i = 0; i < items.length-2; ++i) {
+            T a = items[i];
+            for (int j = i+1; j < items.length-1; ++j) {
+                T b = items[j];
+                for (int k = j+1; k < items.length; ++k) {
+                    T c = items[k];
+                    checkTransitivity(comparator, a, b, c);
+                    checkTransitivity(comparator, a, c, b);
+                    checkTransitivity(comparator, b, a, b);
+                    checkTransitivity(comparator, b, c, a);
+                    checkTransitivity(comparator, c, a, b);
+                    checkTransitivity(comparator, c, b, a);
+                }
+            }
+        }
+    }
+    
+    private <T> void checkTransitivity(Comparator<T> comparator, T a, T b, T c) {
+        int ab = comparator.compare(a,b);
+        int bc = comparator.compare(b,c);
+        int ca = comparator.compare(c,a);
+        if (!assertFalse("Transitive: " + a + ", " + b + ", " + c, 
+                ab < 0 && bc < 0 && ca <= 0)) {
+            // for debugging
+            comparator.compare(a,b);
+            comparator.compare(b,c);
+            comparator.compare(c,a);
+            assertFalse("Transitive: " + a + ", " + b + ", " + c, 
+                    ab < 0 && bc < 0 && ca <= 0);
+        }
     }
 
     private String parseHex(String in) {
