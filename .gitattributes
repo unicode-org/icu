@@ -52,6 +52,7 @@ README text !eol
 source/allinone/icucheck.bat -text
 source/common/common.vcxproj -text
 source/common/common.vcxproj.filters -text
+source/common/unicode/enumset.h -text
 source/data/curr/pool.res -text
 source/data/in/coll/invuca.icu -text
 source/data/in/coll/ucadata.icu -text
