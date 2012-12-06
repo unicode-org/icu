@@ -143,6 +143,10 @@ import com.ibm.icu.util.ULocale;
  */
 public class SpoofChecker {
     
+    /**
+     * Constants from UAX 31 for use in setRestrictionLevel.
+     * @internal
+     */
     public enum RestrictionLevel {
         /**
          * Only ASCII characters: U+0000..U+007F
@@ -1482,7 +1486,7 @@ public class SpoofChecker {
         /**
          * The restriction level that the text meets, if RESTRICTION_LEVEL is set; otherwise null.
          * 
-         * @stable ICU 4.6
+         * @internal
          */
         public RestrictionLevel restrictionLevel;
 

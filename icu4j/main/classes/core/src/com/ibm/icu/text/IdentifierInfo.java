@@ -49,6 +49,15 @@ public class IdentifierInfo {
     private final UnicodeSet numerics = new UnicodeSet();
     private final UnicodeSet identifierProfile = new UnicodeSet(0, 0x10FFFF);
 
+    /**
+     * Create an identifier info object. Subsequently, call {@link #setIdentifier(String)}, etc.
+     * {@link #setIdentifierProfile(UnicodeSet)}
+     * @internal
+     */
+    public IdentifierInfo() {
+        super();
+    }
+
     private IdentifierInfo clear() {
         requiredScripts.clear();
         scriptSetSet.clear();
@@ -274,6 +283,7 @@ public class IdentifierInfo {
      * Find out which scripts are in common among the alternates.
      * 
      * @return the set of scripts that are in common among the alternates.
+     * @internal
      */
     public BitSet getCommonAmongAlternates() {
         return (BitSet) commonAmongAlternates.clone();
@@ -323,6 +333,10 @@ public class IdentifierInfo {
         return RestrictionLevel.MINIMALLY_RESTRICTIVE;
     }
 
+    /**
+     * See Object.toString()
+     * @internal
+     */
     @Override
     public String toString() {
         return identifier + ", " + identifierProfile.toPattern(false) + ", " + getRestrictionLevel() + ", "
@@ -470,7 +484,8 @@ public class IdentifierInfo {
         }
         return bitset;
     }
-
+    
+    
     // public static final class FreezableBitSet extends BitSet implements Freezable<FreezableBitSet> {
     // private boolean frozen;
     //
