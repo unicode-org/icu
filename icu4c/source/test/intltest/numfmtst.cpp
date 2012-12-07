@@ -48,82 +48,77 @@ static const UChar ISO_CURRENCY_USD[] = {0x55, 0x53, 0x44, 0}; // "USD"
 // class NumberFormatTest
 // *****************************************************************************
 
-#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break
-
 #define CHECK(status,str) if (U_FAILURE(status)) { errcheckln(status, UnicodeString("FAIL: ") + str + " - " + u_errorName(status)); return; }
 #define CHECK_DATA(status,str) if (U_FAILURE(status)) { dataerrln(UnicodeString("FAIL: ") + str + " - " + u_errorName(status)); return; }
 
 void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ )
 {
-    // if (exec) logln((UnicodeString)"TestSuite DateFormatTest");
-    switch (index) {
-        CASE(0,TestCurrencySign);
-        CASE(1,TestCurrency);
-        CASE(2,TestParse);
-        CASE(3,TestRounding487);
-        CASE(4,TestQuotes);
-        CASE(5,TestExponential);
-        CASE(6,TestPatterns);
+  TESTCASE_AUTO_BEGIN;
+  TESTCASE_AUTO(TestCurrencySign);
+  TESTCASE_AUTO(TestCurrency);
+  TESTCASE_AUTO(TestParse);
+  TESTCASE_AUTO(TestRounding487);
+  TESTCASE_AUTO(TestQuotes);
+  TESTCASE_AUTO(TestExponential);
+  TESTCASE_AUTO(TestPatterns);
 
-        // Upgrade to alphaWorks - liu 5/99
-        CASE(7,TestExponent);
-        CASE(8,TestScientific);
-        CASE(9,TestPad);
-        CASE(10,TestPatterns2);
-        CASE(11,TestSecondaryGrouping);
-        CASE(12,TestSurrogateSupport);
-        CASE(13,TestAPI);
+  // Upgrade to alphaWorks - liu 5/99
+  TESTCASE_AUTO(TestExponent);
+  TESTCASE_AUTO(TestScientific);
+  TESTCASE_AUTO(TestPad);
+  TESTCASE_AUTO(TestPatterns2);
+  TESTCASE_AUTO(TestSecondaryGrouping);
+  TESTCASE_AUTO(TestSurrogateSupport);
+  TESTCASE_AUTO(TestAPI);
 
-        CASE(14,TestCurrencyObject);
-        CASE(15,TestCurrencyPatterns);
-        //CASE(16,TestDigitList);
-        CASE(16,TestWhiteSpaceParsing);
-        CASE(17,TestComplexCurrency);  // This test removed because CLDR no longer uses choice formats in currency symbols.
-        CASE(18,TestRegCurrency);
-        CASE(19,TestSymbolsWithBadLocale);
-        CASE(20,TestAdoptDecimalFormatSymbols);
+  TESTCASE_AUTO(TestCurrencyObject);
+  TESTCASE_AUTO(TestCurrencyPatterns);
+  //TESTCASE_AUTO(TestDigitList);
+  TESTCASE_AUTO(TestWhiteSpaceParsing);
+  TESTCASE_AUTO(TestComplexCurrency);  // This test removed because CLDR no longer uses choice formats in currency symbols.
+  TESTCASE_AUTO(TestRegCurrency);
+  TESTCASE_AUTO(TestSymbolsWithBadLocale);
+  TESTCASE_AUTO(TestAdoptDecimalFormatSymbols);
 
-        CASE(21,TestScientific2);
-        CASE(22,TestScientificGrouping);
-        CASE(23,TestInt64);
+  TESTCASE_AUTO(TestScientific2);
+  TESTCASE_AUTO(TestScientificGrouping);
+  TESTCASE_AUTO(TestInt64);
 
-        CASE(24,TestPerMill);
-        CASE(25,TestIllegalPatterns);
-        CASE(26,TestCases);
+  TESTCASE_AUTO(TestPerMill);
+  TESTCASE_AUTO(TestIllegalPatterns);
+  TESTCASE_AUTO(TestCases);
 
-        CASE(27,TestCurrencyNames);
-        CASE(28,TestCurrencyAmount);
-        CASE(29,TestCurrencyUnit);
-        CASE(30,TestCoverage);
-        CASE(31,TestJB3832);
-        CASE(32,TestHost);
-        CASE(33,TestHostClone);
-        CASE(34,TestCurrencyFormat);
-        CASE(35,TestRounding);
-        CASE(36,TestNonpositiveMultiplier);
-        CASE(37,TestNumberingSystems);
-        CASE(38,TestSpaceParsing);
-        CASE(39,TestMultiCurrencySign);
-        CASE(40,TestCurrencyFormatForMixParsing);
-        CASE(41,TestDecimalFormatCurrencyParse);
-        CASE(42,TestCurrencyIsoPluralFormat);
-        CASE(43,TestCurrencyParsing);
-        CASE(44,TestParseCurrencyInUCurr);
-        CASE(45,TestFormatAttributes);
-        CASE(46,TestFieldPositionIterator);
-        CASE(47,TestDecimal);
-        CASE(48,TestCurrencyFractionDigits);
-        CASE(49,TestExponentParse); 
-        CASE(50,TestExplicitParents); 
-        CASE(51,TestLenientParse);
-        CASE(52,TestAvailableNumberingSystems);
-        CASE(53,TestRoundingPattern);
-        CASE(54,Test9087);
-        CASE(55,TestFormatFastpaths);
-        CASE(56,TestEnumSet);
-        CASE(57,TestFormattableSize);
-        default: name = ""; break;
-    }
+  TESTCASE_AUTO(TestCurrencyNames);
+  TESTCASE_AUTO(TestCurrencyAmount);
+  TESTCASE_AUTO(TestCurrencyUnit);
+  TESTCASE_AUTO(TestCoverage);
+  TESTCASE_AUTO(TestJB3832);
+  TESTCASE_AUTO(TestHost);
+  TESTCASE_AUTO(TestHostClone);
+  TESTCASE_AUTO(TestCurrencyFormat);
+  TESTCASE_AUTO(TestRounding);
+  TESTCASE_AUTO(TestNonpositiveMultiplier);
+  TESTCASE_AUTO(TestNumberingSystems);
+  TESTCASE_AUTO(TestSpaceParsing);
+  TESTCASE_AUTO(TestMultiCurrencySign);
+  TESTCASE_AUTO(TestCurrencyFormatForMixParsing);
+  TESTCASE_AUTO(TestDecimalFormatCurrencyParse);
+  TESTCASE_AUTO(TestCurrencyIsoPluralFormat);
+  TESTCASE_AUTO(TestCurrencyParsing);
+  TESTCASE_AUTO(TestParseCurrencyInUCurr);
+  TESTCASE_AUTO(TestFormatAttributes);
+  TESTCASE_AUTO(TestFieldPositionIterator);
+  TESTCASE_AUTO(TestDecimal);
+  TESTCASE_AUTO(TestCurrencyFractionDigits);
+  TESTCASE_AUTO(TestExponentParse); 
+  TESTCASE_AUTO(TestExplicitParents); 
+  TESTCASE_AUTO(TestLenientParse);
+  TESTCASE_AUTO(TestAvailableNumberingSystems);
+  TESTCASE_AUTO(TestRoundingPattern);
+  TESTCASE_AUTO(Test9087);
+  TESTCASE_AUTO(TestFormatFastpaths);
+  TESTCASE_AUTO(TestFormattableSize);
+  TESTCASE_AUTO_END;
 }
 
 // -------------------------------------
@@ -6685,43 +6680,6 @@ void NumberFormatTest::TestFormatFastpaths() {
     }
 }
 
-enum myEnum {
-    MAX_NONBOOLEAN=-1,
-    THING1,
-    THING2,
-    THING3,
-    LIMIT_BOOLEAN
-};
-
-void NumberFormatTest::TestEnumSet(void) {
-    EnumSet<myEnum,
-            MAX_NONBOOLEAN+1,
-            LIMIT_BOOLEAN>
-                            flags;
-    infoln("TODO!! This test doesn't fail on error. Convert printf into error assert.\n");
-
-    logln("Enum is from [%d..%d]\n", MAX_NONBOOLEAN+1,
-          LIMIT_BOOLEAN);
-
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
-    logln("Value now: %d\n", flags.getAll());
-    flags.clear();
-    logln("clear -Value now: %d\n", flags.getAll());
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
-    flags.add(THING1);
-    logln("set THING1 -Value now: %d\n", flags.getAll());
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
-    flags.add(THING3);
-    logln("set THING3 -Value now: %d\n", flags.getAll());
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
-    flags.remove(THING2);
-    logln("remove THING2 -Value now: %d\n", flags.getAll());
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
-    flags.remove(THING1);
-    logln("remove THING1 -Value now: %d\n", flags.getAll());
-    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
-
-}
 
 void NumberFormatTest::TestFormattableSize(void) {
   if(sizeof(FmtStackData) > UNUM_INTERNAL_STACKARRAY_SIZE) {
