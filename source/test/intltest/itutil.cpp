@@ -508,27 +508,51 @@ void EnumSetTest::TestEnumSet() {
             MAX_NONBOOLEAN+1,
             LIMIT_BOOLEAN>
                             flags;
-    infoln("TODO!! This test doesn't fail on error. Convert printf into error assert.\n");
 
     logln("Enum is from [%d..%d]\n", MAX_NONBOOLEAN+1,
           LIMIT_BOOLEAN);
+
+    TEST_ASSERT_TRUE(flags.get(THING1) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING2) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING3) == FALSE);
 
     logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
     logln("Value now: %d\n", flags.getAll());
     flags.clear();
     logln("clear -Value now: %d\n", flags.getAll());
     logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
+    TEST_ASSERT_TRUE(flags.get(THING1) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING2) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING3) == FALSE);
     flags.add(THING1);
     logln("set THING1 -Value now: %d\n", flags.getAll());
+    TEST_ASSERT_TRUE(flags.get(THING1) == TRUE);
+    TEST_ASSERT_TRUE(flags.get(THING2) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING3) == FALSE);
     logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
     flags.add(THING3);
     logln("set THING3 -Value now: %d\n", flags.getAll());
+    TEST_ASSERT_TRUE(flags.get(THING1) == TRUE);
+    TEST_ASSERT_TRUE(flags.get(THING2) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING3) == TRUE);
     logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
     flags.remove(THING2);
+    TEST_ASSERT_TRUE(flags.get(THING1) == TRUE);
+    TEST_ASSERT_TRUE(flags.get(THING2) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING3) == TRUE);
     logln("remove THING2 -Value now: %d\n", flags.getAll());
     logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
     flags.remove(THING1);
+    TEST_ASSERT_TRUE(flags.get(THING1) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING2) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING3) == TRUE);
     logln("remove THING1 -Value now: %d\n", flags.getAll());
     logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
 
+    flags.clear();
+    logln("clear -Value now: %d\n", flags.getAll());
+    logln("get(thing1)=%d, get(thing2)=%d, get(thing3)=%d\n",          flags.get(THING1),          flags.get(THING2),          flags.get(THING3));
+    TEST_ASSERT_TRUE(flags.get(THING1) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING2) == FALSE);
+    TEST_ASSERT_TRUE(flags.get(THING3) == FALSE);
 }
