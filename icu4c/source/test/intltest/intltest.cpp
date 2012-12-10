@@ -1652,6 +1652,19 @@ UBool IntlTest::assertTrue(const char* message, UBool condition, UBool quiet, UB
     return condition;
 }
 
+UBool IntlTest::assertTrue(const char *file, int line, const char* message, UBool condition, UBool quiet, UBool possibleDataError) {
+    if (!condition) {
+        if (possibleDataError) {
+          dataerrln("%s:%d: FAIL: assertTrue() failed: %s", file, line, message);
+        } else {
+          errln("%s:%d: FAIL: assertTrue() failed: %s", file, line, message);
+        }
+    } else if (!quiet) {
+      logln("%s:%d: Ok: %s", file, line, message);
+    }
+    return condition;
+}
+
 UBool IntlTest::assertFalse(const char* message, UBool condition, UBool quiet) {
     if (condition) {
         errln("FAIL: assertFalse() failed: %s", message);

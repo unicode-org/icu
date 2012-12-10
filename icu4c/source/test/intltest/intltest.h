@@ -120,6 +120,9 @@ UnicodeString toString(int32_t n);
         break; \
     }
 
+#define TEST_ASSERT_TRUE(x) \
+  assertTrue(__FILE__, __LINE__, #x, (x), FALSE, FALSE)
+
 class IntlTest : public TestLog {
 public:
 
@@ -232,6 +235,7 @@ public:
 protected:
     /* JUnit-like assertions. Each returns TRUE if it succeeds. */
     UBool assertTrue(const char* message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE);
+    UBool assertTrue(const char *file, int line, const char* message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE);
     UBool assertFalse(const char* message, UBool condition, UBool quiet=FALSE);
     UBool assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError=FALSE);
     UBool assertEquals(const char* message, const UnicodeString& expected,
