@@ -1751,7 +1751,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         final String[] strings = {"Mar 15", "Mar 15 1997", "asdf", "3/1/97 1:23:", "3/1/00 1:23:45 AM"}; 
         int strings_length = strings.length;
         DateFormat full = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.US); 
-        String expected = "March 1, 2000 1:23:45 AM ";
+        String expected = "March 1, 2000 at 1:23:45 AM ";
         for (int i = 0; i < strings_length; ++i) {
             final String text = strings[i];
             for (int j = 0; j < looks_length; ++j) {
@@ -1770,8 +1770,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             String format;
                             format = full.format(when);
                             logln(prefix + "OK: " + format);
-                            if (!format.substring(0, expected.length()).equals(expected))
-                                errln("FAIL: Expected " + expected);
+                            if (!format.substring(0, expected.length()).equals(expected)) {
+                                errln("FAIL: Expected <" + expected + ">, but got <"
+                                        + format.substring(0, expected.length()) + ">");
+                            }
                         }
                     } catch(java.text.ParseException e) {
                         logln(e.getMessage());
@@ -1842,7 +1844,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             String result = ((DateFormat) dateParse).format(date);
                             logln("Parsed \"" + s + "\" using \"" + dateParse.toPattern() + "\" to: " + result);
                             if (expected == null)
-                                errln("FAIL: Expected parse failure");
+                                errln("FAIL: Expected parse failure for <" + result + ">");
                             else
                                 if (!result.equals(expected))
                                     errln("FAIL: Expected " + expected);
