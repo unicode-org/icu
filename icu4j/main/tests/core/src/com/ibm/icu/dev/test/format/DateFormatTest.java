@@ -17,10 +17,12 @@ import java.text.CharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -4184,6 +4186,57 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    static Date NOW = new Date(2012-1900, 12, 15);
+
+    public void TestDotAndAtLeniency() {
+        for (ULocale locale : Arrays.asList(ULocale.ENGLISH, ULocale.FRENCH)) {
+            List<Object[]> tests = new ArrayList();
+
+            for (int dateStyle = DateFormat.FULL; dateStyle <= DateFormat.SHORT; ++dateStyle) {
+                DateFormat dateFormat = DateFormat.getDateInstance(dateStyle, locale);
+
+                for (int timeStyle = DateFormat.FULL; timeStyle <= DateFormat.SHORT; ++timeStyle) {
+                    DateFormat format = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
+                    DateFormat timeFormat = DateFormat.getTimeInstance(timeStyle, locale);
+                    String formattedString = format.format(NOW);
+
+                    tests.add(new Object[]{format, formattedString});
+
+                    formattedString = dateFormat.format(NOW) + "  " + timeFormat.format(NOW);
+                    tests.add(new Object[]{format, formattedString});
+                    if (formattedString.contains("n ")) {
+                        tests.add(new Object[]{format, formattedString.replace("n ", "n. ") + "."});
+                    }
+                    if (formattedString.contains(". ")) {
+                        tests.add(new Object[]{format, formattedString.replace(". ", " ")});
+                    }
+                }
+            }
+            for (Object[] test : tests) {
+                DateFormat format = (DateFormat) test[0];
+                String formattedString = (String) test[1];
+                if (!showParse(format, formattedString)) {
+                    // showParse(format, formattedString); // for debugging
+                }
+            }
+        }
+
+    }
+    
+    private boolean showParse(DateFormat format, String formattedString) {
+        ParsePosition parsePosition = new ParsePosition(0);
+        parsePosition.setIndex(0);
+        Date parsed = format.parse(formattedString, parsePosition);
+        boolean ok = NOW.equals(parsed) && parsePosition.getIndex() == formattedString.length();
+        if (ok) {
+            logln(format + "\t" + formattedString);
+        } else {
+            errln(format + "\t" + formattedString);
+        }
+        return ok;
+    }
+
 }
 
 
