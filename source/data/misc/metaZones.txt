@@ -1054,6 +1054,11 @@ metaZones:table(nofallback){
             {
                 "Europe_Eastern",
                 "1997-10-03 22:00",
+                "2012-11-10 00:00",
+            }
+            {
+                "Europe_Central",
+                "2012-11-10 00:00",
                 "9999-12-31 23:59",
             }
         }
