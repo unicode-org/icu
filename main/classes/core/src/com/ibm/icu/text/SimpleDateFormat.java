@@ -1640,33 +1640,9 @@ public class SimpleDateFormat extends DateFormat {
             } else {
                 // Handle literal pattern text literal
                 numericFieldStart = -1;
-
-                String patl = (String)items[i];
-                int plen = patl.length();
-                int tlen = text.length();
-                int idx = 0;
-                while (idx < plen && pos < tlen) {
-                    char pch = patl.charAt(idx);
-                    char ich = text.charAt(pos);
-                    if (PatternProps.isWhiteSpace(pch)
-                        && PatternProps.isWhiteSpace(ich)) {
-                        // White space characters found in both patten and input.
-                        // Skip contiguous white spaces.
-                        while ((idx + 1) < plen &&
-                                PatternProps.isWhiteSpace(patl.charAt(idx + 1))) {
-                             ++idx;
-                        }
-                        while ((pos + 1) < tlen &&
-                                PatternProps.isWhiteSpace(text.charAt(pos + 1))) {
-                             ++pos;
-                        }
-                    } else if (pch != ich) {
-                        break;
-                    }
-                    ++idx;
-                    ++pos;
-                }
-                if (idx != plen) {
+                boolean[] complete = new boolean[1];
+                pos = matchLiteral(text, pos, items, i, complete);
+                if (!complete[0]) {
                     // Set the position of mismatch
                     parsePos.setIndex(start);
                     parsePos.setErrorIndex(pos);
@@ -1677,6 +1653,18 @@ public class SimpleDateFormat extends DateFormat {
                 }
             }
             ++i;
+        }
+        
+        // Special hack for trailing "." after non-numeric field.
+        if (pos < text.length()) {
+            char extra = text.charAt(pos);
+            if (extra == '.' && isLenient() && items.length != 0) {
+                // only do if the last field is not numeric
+                Object lastItem = items[items.length - 1];
+                if (lastItem instanceof PatternItem && !((PatternItem)lastItem).isNumeric) {
+                    pos++; // skip the extra "."
+                }
+            }
         }
 
         // At this point the fields of Calendar have been set.  Calendar
@@ -1855,6 +1843,88 @@ public class SimpleDateFormat extends DateFormat {
     }
 
     /**
+     * Matches text (starting at pos) with patl. Returns the new pos, and sets complete[0]
+     * if it matched the entire text. Whitespace sequences are treated as singletons.
+     * <p>If isLenient and if we fail to match the first time, some special hacks are put into place.
+     * <ul><li>we are between date and time fields, then one or more whitespace characters
+     * in the text are accepted instead.</li>
+     * <ul><li>we are after a non-numeric field, and the text starts with a ".", we skip it.</li>
+     * </ul>
+     * @param text
+     * @param pos
+     * @param patternLiteral
+     * @param complete
+     * @return
+     */
+    private int matchLiteral(String text, int pos, Object[] items, int itemIndex, boolean[] complete) {
+        int originalPos = pos;
+        String patternLiteral = (String)items[itemIndex];
+        int plen = patternLiteral.length();
+        int tlen = text.length();
+        int idx = 0;
+        while (idx < plen && pos < tlen) {
+            char pch = patternLiteral.charAt(idx);
+            char ich = text.charAt(pos);
+            if (PatternProps.isWhiteSpace(pch)
+                && PatternProps.isWhiteSpace(ich)) {
+                // White space characters found in both patten and input.
+                // Skip contiguous white spaces.
+                while ((idx + 1) < plen &&
+                        PatternProps.isWhiteSpace(patternLiteral.charAt(idx + 1))) {
+                     ++idx;
+                }
+                while ((pos + 1) < tlen &&
+                        PatternProps.isWhiteSpace(text.charAt(pos + 1))) {
+                     ++pos;
+                }
+            } else if (pch != ich) {
+                if (ich == '.' && pos == originalPos && 0 < itemIndex && isLenient()) {
+                    Object before = items[itemIndex-1];
+                    if (before instanceof PatternItem) {
+                        boolean isNumeric = ((PatternItem) before).isNumeric;
+                        if (!isNumeric) {
+                            ++pos; // just update pos
+                            continue;
+                        }
+                    }
+                }
+                break;
+            }
+            ++idx;
+            ++pos;
+        }
+        complete[0] = idx == plen;
+        if (complete[0] == false && isLenient() && 0 < itemIndex && itemIndex < items.length - 1) {
+            // If fully lenient, accept " "* for any text between a date and a time field
+            // We don't go more lenient, because we don't want to accept "12/31" for "12:31".
+            // People may be trying to parse for a date, then for a time.
+            if (originalPos < tlen) {
+                Object before = items[itemIndex-1];
+                Object after = items[itemIndex+1];
+                if (before instanceof PatternItem && after instanceof PatternItem) {
+                    char beforeType = ((PatternItem) before).type;
+                    char afterType = ((PatternItem) after).type;
+                    if (DATE_PATTERN_TYPE.contains(beforeType) != DATE_PATTERN_TYPE.contains(afterType)) {
+                        int newPos = originalPos;
+                        while (true) {
+                            char ich = text.charAt(newPos);
+                            if (!PatternProps.isWhiteSpace(ich)) {
+                                break;
+                            }
+                            ++newPos;
+                        }
+                        complete[0] = newPos > originalPos;
+                        pos = newPos;
+                    }
+                }
+            }
+        }
+        return pos;
+    }
+    
+    static final UnicodeSet DATE_PATTERN_TYPE = new UnicodeSet("[GyYuUQqMLlwWd]").freeze();
+
+    /**
      * Attempt to match the text at a given position against an array of
      * strings.  Since multiple strings in the array may match (for
      * example, if the array contains "a", "ab", and "abc", all will match
@@ -1910,6 +1980,7 @@ public class SimpleDateFormat extends DateFormat {
         // unfortunately requires us to test all array elements.
         int bestMatchLength = 0, bestMatch = -1;
         int isLeapMonth = 0;
+        int matchLength = 0;
 
         for (; i<count; ++i)
             {
@@ -1917,10 +1988,10 @@ public class SimpleDateFormat extends DateFormat {
                 // Always compare if we have no match yet; otherwise only compare
                 // against potentially better matches (longer strings).
                 if (length > bestMatchLength &&
-                    text.regionMatches(true, start, data[i], 0, length))
+                    (matchLength = regionMatchesWithOptionalDot(text, start, data[i], length)) >= 0)
                     {
                         bestMatch = i;
-                        bestMatchLength = length;
+                        bestMatchLength = matchLength;
                         isLeapMonth = 0;
                     }
                 if (monthPattern != null) {
@@ -1947,6 +2018,19 @@ public class SimpleDateFormat extends DateFormat {
                 return start + bestMatchLength;
             }
         return -start;
+    }
+
+    private int regionMatchesWithOptionalDot(String text, int start, String data, int length) {
+        boolean matches = text.regionMatches(true, start, data, 0, length);
+        if (matches) {
+            return length;
+        }
+        if (data.length() > 0 && data.charAt(data.length()-1) == '.') {
+            if (text.regionMatches(true, start, data, 0, length-1)) {
+                return length - 1;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -1976,14 +2060,16 @@ public class SimpleDateFormat extends DateFormat {
         // We keep track of the longest match, and return that.  Note that this
         // unfortunately requires us to test all array elements.
         int bestMatchLength = 0, bestMatch = -1;
+        int matchLength = 0;
         for (; i<count; ++i) {
             int length = data[i].length();
             // Always compare if we have no match yet; otherwise only compare
             // against potentially better matches (longer strings).
             if (length > bestMatchLength &&
-                text.regionMatches(true, start, data[i], 0, length)) {
+                (matchLength = regionMatchesWithOptionalDot(text, start, data[i], length)) >= 0) {
+
                 bestMatch = i;
-                bestMatchLength = length;
+                bestMatchLength = matchLength;
             }
         }
 

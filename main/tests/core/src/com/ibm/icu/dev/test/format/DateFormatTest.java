@@ -17,10 +17,12 @@ import java.text.CharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -1751,7 +1753,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         final String[] strings = {"Mar 15", "Mar 15 1997", "asdf", "3/1/97 1:23:", "3/1/00 1:23:45 AM"}; 
         int strings_length = strings.length;
         DateFormat full = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.US); 
-        String expected = "March 1, 2000 1:23:45 AM ";
+        String expected = "March 1, 2000 at 1:23:45 AM ";
         for (int i = 0; i < strings_length; ++i) {
             final String text = strings[i];
             for (int j = 0; j < looks_length; ++j) {
@@ -1770,8 +1772,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             String format;
                             format = full.format(when);
                             logln(prefix + "OK: " + format);
-                            if (!format.substring(0, expected.length()).equals(expected))
-                                errln("FAIL: Expected " + expected);
+                            if (!format.substring(0, expected.length()).equals(expected)) {
+                                errln("FAIL: Expected <" + expected + ">, but got <"
+                                        + format.substring(0, expected.length()) + ">");
+                            }
                         }
                     } catch(java.text.ParseException e) {
                         logln(e.getMessage());
@@ -1842,7 +1846,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             String result = ((DateFormat) dateParse).format(date);
                             logln("Parsed \"" + s + "\" using \"" + dateParse.toPattern() + "\" to: " + result);
                             if (expected == null)
-                                errln("FAIL: Expected parse failure");
+                                errln("FAIL: Expected parse failure for <" + result + ">");
                             else
                                 if (!result.equals(expected))
                                     errln("FAIL: Expected " + expected);
@@ -4182,6 +4186,57 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    static Date TEST_DATE = new Date(2012-1900, 1-1, 15); // January 15, 2012
+
+    public void TestDotAndAtLeniency() {
+        for (ULocale locale : Arrays.asList(ULocale.ENGLISH, ULocale.FRENCH)) {
+            List<Object[]> tests = new ArrayList();
+
+            for (int dateStyle = DateFormat.FULL; dateStyle <= DateFormat.SHORT; ++dateStyle) {
+                DateFormat dateFormat = DateFormat.getDateInstance(dateStyle, locale);
+
+                for (int timeStyle = DateFormat.FULL; timeStyle <= DateFormat.SHORT; ++timeStyle) {
+                    DateFormat format = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
+                    DateFormat timeFormat = DateFormat.getTimeInstance(timeStyle, locale);
+                    String formattedString = format.format(TEST_DATE);
+
+                    tests.add(new Object[]{format, formattedString});
+
+                    formattedString = dateFormat.format(TEST_DATE) + "  " + timeFormat.format(TEST_DATE);
+                    tests.add(new Object[]{format, formattedString});
+                    if (formattedString.contains("n ")) { // will add "." after the end of text ending in 'n', like Jan.
+                        tests.add(new Object[]{format, formattedString.replace("n ", "n. ") + "."});
+                    }
+                    if (formattedString.contains(". ")) { // will subtract "." at the end of strings.
+                        tests.add(new Object[]{format, formattedString.replace(". ", " ")});
+                    }
+                }
+            }
+            for (Object[] test : tests) {
+                DateFormat format = (DateFormat) test[0];
+                String formattedString = (String) test[1];
+                if (!showParse(format, formattedString)) {
+                    // showParse(format, formattedString); // for debugging
+                }
+            }
+        }
+
+    }
+    
+    private boolean showParse(DateFormat format, String formattedString) {
+        ParsePosition parsePosition = new ParsePosition(0);
+        parsePosition.setIndex(0);
+        Date parsed = format.parse(formattedString, parsePosition);
+        boolean ok = TEST_DATE.equals(parsed) && parsePosition.getIndex() == formattedString.length();
+        if (ok) {
+            logln(format + "\t" + formattedString);
+        } else {
+            errln(format + "\t" + formattedString);
+        }
+        return ok;
+    }
+
 }
 
 
