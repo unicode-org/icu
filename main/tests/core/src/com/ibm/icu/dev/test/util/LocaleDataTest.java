@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2012, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -275,6 +275,52 @@ public class LocaleDataTest extends TestFmwk{
         assertTrue("case-folded is sometimes a strict superset, and sometimes equal",
                 equalCount > 0 && equalCount < availableLocales.length * 2);
     }
+
+    // Test case created for checking type coverage of static getExemplarSet method.
+    // See #9785, #9794 and #9795
+    public void TestExemplarSetTypes() {
+        final String[] testLocales = {
+            "am",   // No auxiliary / index exemplars as of ICU 50
+            "en",
+            "th",   // #9785
+            "foo",  // Bogus locale
+        };
+
+        final int[] testTypes = {
+            LocaleData.ES_STANDARD,
+            LocaleData.ES_AUXILIARY,
+            LocaleData.ES_INDEX,
+            LocaleData.ES_CURRENCY,
+            LocaleData.ES_PUNCTUATION,
+        };
+
+        final String[] testTypeNames = {
+                "ES_STANDARD",
+                "ES_AUXILIARY",
+                "ES_INDEX",
+                "ES_CURRENCY",
+                "ES_PUNCTUATION",
+            };
+
+        for (String locstr : testLocales) {
+            ULocale loc = new ULocale(locstr);
+            for (int i = 0; i < testTypes.length; i++) {
+                try {
+                    UnicodeSet set = LocaleData.getExemplarSet(loc, 0, testTypes[i]);
+                    if (set == null) {
+                        // Not sure null is really OK (#9795)
+                        logln(loc + "(" + testTypeNames[i] + ") returned null");
+                    } else if (set.isEmpty()) {
+                        // This is probably reasonable when data is absent
+                        logln(loc + "(" + testTypeNames[i] + ") returned an empty set");
+                    }
+                } catch (Exception e) {
+                    errln(loc + "(" + testTypeNames[i] + ") Exception:" + e.getMessage());
+                }
+            }
+        }
+    }
+
     public void TestCoverage(){
         LocaleData ld = LocaleData.getInstance();
         boolean t = ld.getNoSubstitute();
