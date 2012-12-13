@@ -45,13 +45,14 @@ public final class LocaleData {
 
     /**
      * EXType for {@link #getExemplarSet(int, int)}.
-     * @stable ICU 3.4
+     * @stable ICU 4.4
      */
    public static final int ES_INDEX = 2;
 
    /**
     * EXType for {@link #getExemplarSet(int, int)}.
-    * @stable ICU 3.4
+    * Note: This type is no longer supported.
+    * @stable ICU 4.4
     */
     public static final int ES_CURRENCY = 3;
 
@@ -156,7 +157,7 @@ public final class LocaleData {
      *                  IGNORE_SPACE bit is always set, regardless of the
      *                  value of 'options'.
      * @param extype    The type of exemplar set to be retrieved,
-     *                  ES_STANDARD, ES_INDEX, ES_CURRENCY,  or ES_AUXILIARY
+     *                  ES_STANDARD, ES_INDEX, ES_AUXILIARY, or ES_PUNCTUATION
      * @return          The set of exemplar characters for the given locale.
      * @stable ICU 3.4
      */
@@ -166,6 +167,11 @@ public final class LocaleData {
             "ExemplarCharactersIndex", "ExemplarCharactersCurrency",
             "ExemplarCharactersPunctuation"
         };
+
+        if (extype == ES_CURRENCY) {
+            // currency symbol exemplar is no longer available
+            return new UnicodeSet();
+        }
 
         try{
             ICUResourceBundle stringBundle = (ICUResourceBundle) bundle.get(exemplarSetTypes[extype]);
@@ -195,7 +201,7 @@ public final class LocaleData {
         }
     }
     
-    static final Pattern US_SYNTAX = Pattern.compile(" ([\\-\\&\\{\\}\\[\\]])");
+    static final Pattern US_SYNTAX = Pattern.compile(" ([\\-\\&\\{\\}\\[\\]\\\\])");
 
     /**
      * Gets the LocaleData object associated with the ULocale specified in locale
