@@ -4187,7 +4187,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
     
-    static Date NOW = new Date(2012-1900, 12, 15);
+    static Date TEST_DATE = new Date(2012-1900, 1-1, 15); // January 15, 2012
 
     public void TestDotAndAtLeniency() {
         for (ULocale locale : Arrays.asList(ULocale.ENGLISH, ULocale.FRENCH)) {
@@ -4199,16 +4199,16 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 for (int timeStyle = DateFormat.FULL; timeStyle <= DateFormat.SHORT; ++timeStyle) {
                     DateFormat format = DateFormat.getDateTimeInstance(dateStyle, timeStyle, locale);
                     DateFormat timeFormat = DateFormat.getTimeInstance(timeStyle, locale);
-                    String formattedString = format.format(NOW);
+                    String formattedString = format.format(TEST_DATE);
 
                     tests.add(new Object[]{format, formattedString});
 
-                    formattedString = dateFormat.format(NOW) + "  " + timeFormat.format(NOW);
+                    formattedString = dateFormat.format(TEST_DATE) + "  " + timeFormat.format(TEST_DATE);
                     tests.add(new Object[]{format, formattedString});
-                    if (formattedString.contains("n ")) {
+                    if (formattedString.contains("n ")) { // will add "." after the end of text ending in 'n', like Jan.
                         tests.add(new Object[]{format, formattedString.replace("n ", "n. ") + "."});
                     }
-                    if (formattedString.contains(". ")) {
+                    if (formattedString.contains(". ")) { // will subtract "." at the end of strings.
                         tests.add(new Object[]{format, formattedString.replace(". ", " ")});
                     }
                 }
@@ -4228,7 +4228,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         ParsePosition parsePosition = new ParsePosition(0);
         parsePosition.setIndex(0);
         Date parsed = format.parse(formattedString, parsePosition);
-        boolean ok = NOW.equals(parsed) && parsePosition.getIndex() == formattedString.length();
+        boolean ok = TEST_DATE.equals(parsed) && parsePosition.getIndex() == formattedString.length();
         if (ok) {
             logln(format + "\t" + formattedString);
         } else {

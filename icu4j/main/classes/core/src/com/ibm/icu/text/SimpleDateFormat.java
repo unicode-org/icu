@@ -1922,7 +1922,7 @@ public class SimpleDateFormat extends DateFormat {
         return pos;
     }
     
-    static final UnicodeSet DATE_PATTERN_TYPE = new UnicodeSet("[GyYuUQqMLlwWd]");
+    static final UnicodeSet DATE_PATTERN_TYPE = new UnicodeSet("[GyYuUQqMLlwWd]").freeze();
 
     /**
      * Attempt to match the text at a given position against an array of
