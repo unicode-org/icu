@@ -25,6 +25,7 @@
 #include "unicode/calendar.h"
 #include "unicode/uobject.h"
 #include "unicode/locid.h"
+#include "unicode/udat.h"
 #include "unicode/ures.h"
 
 /**
@@ -802,6 +803,22 @@ private:
      * Delete just the zone strings.
      */
     void disposeZoneStrings(void);
+
+    /**
+     * Returns the date format field index of the pattern character c,
+     * or UDAT_FIELD_COUNT if c is not a pattern character.
+     */
+    static UDateFormatField U_EXPORT2 getPatternCharIndex(UChar c);
+
+    /**
+     * Returns TRUE if f (with its pattern character repeated count times) is a numeric field.
+     */
+    static UBool U_EXPORT2 isNumericField(UDateFormatField f, int32_t count);
+
+    /**
+     * Returns TRUE if c (repeated count times) is the pattern character for a numeric field.
+     */
+    static UBool U_EXPORT2 isNumericPatternChar(UChar c, int32_t count);
 };
 
 U_NAMESPACE_END

@@ -98,6 +98,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestRelativeError);
     TESTCASE_AUTO(TestRelativeOther);
     */
+    TESTCASE_AUTO(TestDotAndAtLeniency);
     TESTCASE_AUTO_END;
 }
 
@@ -4091,6 +4092,66 @@ void DateFormatTest::TestNonGregoFmtParse()
             delete dfmt;
         }
     }
+}
+
+static const UDate TEST_DATE = 1326585600000.;  // 2012-jan-15
+
+void DateFormatTest::TestDotAndAtLeniency() {
+    // Test for date/time parsing regression with CLDR 22.1/ICU 50 pattern strings.
+    // For details see http://bugs.icu-project.org/trac/ticket/9789
+    static const char *locales[] = { "en", "fr" };
+    for (int32_t i = 0; i < LENGTHOF(locales); ++i) {
+        Locale locale(locales[i]);
+
+        for (DateFormat::EStyle dateStyle = DateFormat::FULL; dateStyle <= DateFormat::SHORT; ++dateStyle) {
+            LocalPointer<DateFormat> dateFormat(DateFormat::createDateInstance(dateStyle, locale));
+
+            for (DateFormat::EStyle timeStyle = DateFormat::FULL; timeStyle <= DateFormat::SHORT; ++timeStyle) {
+                LocalPointer<DateFormat> format(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
+                LocalPointer<DateFormat> timeFormat(DateFormat::createTimeInstance(timeStyle, locale));
+                UnicodeString formattedString;
+                format->format(TEST_DATE, formattedString);
+
+                if (!showParse(*format, formattedString)) {
+                    errln(UnicodeString("    with date-time: dateStyle=") + dateStyle + " timeStyle=" + timeStyle);
+                }
+
+                UnicodeString ds, ts;
+                formattedString = dateFormat->format(TEST_DATE, ds) + "  " + timeFormat->format(TEST_DATE, ts);
+                if (!showParse(*format, formattedString)) {
+                    errln(UnicodeString("    with date sp sp time: dateStyle=") + dateStyle + " timeStyle=" + timeStyle);
+                }
+                if (formattedString.indexOf("n ") >= 0) { // will add "." after the end of text ending in 'n', like Jan.
+                    UnicodeString plusDot(formattedString);
+                    plusDot.findAndReplace("n ", "n. ").append(".");
+                    if (!showParse(*format, plusDot)) {
+                        errln(UnicodeString("    with date plus-dot time: dateStyle=") + dateStyle + " timeStyle=" + timeStyle);
+                    }
+                }
+                if (formattedString.indexOf(". ") >= 0) { // will subtract "." at the end of strings.
+                    UnicodeString minusDot(formattedString);
+                    minusDot.findAndReplace(". ", " ");
+                    if (!showParse(*format, minusDot)) {
+                        errln(UnicodeString("    with date minus-dot time: dateStyle=") + dateStyle + " timeStyle=" + timeStyle);
+                    }
+                }
+            }
+        }
+    }
+}
+
+UBool DateFormatTest::showParse(DateFormat &format, const UnicodeString &formattedString) {
+    ParsePosition parsePosition;
+    UDate parsed = format.parse(formattedString, parsePosition);
+    UBool ok = TEST_DATE == parsed && parsePosition.getIndex() == formattedString.length();
+    UnicodeString pattern;
+    static_cast<SimpleDateFormat &>(format).toPattern(pattern);
+    if (ok) {
+        logln(pattern + "  parsed: " + formattedString);
+    } else {
+        errln(pattern + "  fails to parse: " + formattedString);
+    }
+    return ok;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
