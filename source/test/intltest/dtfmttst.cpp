@@ -4103,10 +4103,12 @@ void DateFormatTest::TestDotAndAtLeniency() {
     for (int32_t i = 0; i < LENGTHOF(locales); ++i) {
         Locale locale(locales[i]);
 
-        for (DateFormat::EStyle dateStyle = DateFormat::FULL; dateStyle <= DateFormat::SHORT; ++dateStyle) {
+        for (DateFormat::EStyle dateStyle = DateFormat::FULL; dateStyle <= DateFormat::SHORT;
+                  dateStyle = static_cast<DateFormat::EStyle>(dateStyle + 1)) {
             LocalPointer<DateFormat> dateFormat(DateFormat::createDateInstance(dateStyle, locale));
 
-            for (DateFormat::EStyle timeStyle = DateFormat::FULL; timeStyle <= DateFormat::SHORT; ++timeStyle) {
+            for (DateFormat::EStyle timeStyle = DateFormat::FULL; timeStyle <= DateFormat::SHORT;
+                      timeStyle = static_cast<DateFormat::EStyle>(timeStyle + 1)) {
                 LocalPointer<DateFormat> format(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
                 LocalPointer<DateFormat> timeFormat(DateFormat::createTimeInstance(timeStyle, locale));
                 UnicodeString formattedString;
