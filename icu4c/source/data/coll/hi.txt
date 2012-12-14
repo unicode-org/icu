@@ -14,7 +14,7 @@ hi{
     collations{
         standard{
             Sequence{" [normalization on ]&ॐ<ं<<ँ<ः"}
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
     }
 }

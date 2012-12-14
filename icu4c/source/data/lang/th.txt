@@ -917,7 +917,7 @@ th{
         VALLADER{"วัลลาเดอร์"}
         WADEGILE{"การถอดอักษรแบบเวด-ไจลส์"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.79.79"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

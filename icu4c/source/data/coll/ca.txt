@@ -62,11 +62,11 @@ ca{
                 "&ᅮᅵ=ᅱ"
                 "&L<ŀ=l·<<<Ŀ=L·"
             }
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
         standard{
             Sequence{" [backwards 2]&L<<ŀ=l·<<<Ŀ=L·"}
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
     }
 }

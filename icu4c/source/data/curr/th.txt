@@ -1171,5 +1171,5 @@ th{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.79.79"}
 }
