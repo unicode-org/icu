@@ -147,30 +147,7 @@ public class ICUCurrencyMetaInfo extends CurrencyMetaInfo {
             return defaultValue;
         }
         int[] values = b.getIntVector();
-        long time = ((long) values[0] << 32) | (((long) values[1]) & MASK);
-        
-        // TODO: remove once errors in CLDR data are fixed.  Or push this into ICU data generation.
-        // The CLDR data parses month as minutes.  We should be getting minutes = 0, so if we detect
-        // that the minute value is nonzero, this means we have bad data and the minute value is really
-        // the month value.
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTimeZone(TimeZone.getTimeZone("GMT"));
-        cal.setTimeInMillis(time);
-        int minute = cal.get(Calendar.MINUTE);
-        if (minute != 0) {
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.MONTH, minute - 1); // months are 1-based
-            time = cal.getTimeInMillis();
-        }
-        // TODO: generate in CLDR data rather than here, remove endOfDay flag.
-        if (endOfDay) {
-            cal.set(Calendar.HOUR_OF_DAY, 23);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            cal.set(Calendar.MILLISECOND, 999);
-            time = cal.getTimeInMillis();
-        }
-        return time;
+        return ((long) values[0] << 32) | (((long) values[1]) & MASK);
     }
 
     // Utility, just because I don't like the n^2 behavior of using list.contains to build a
