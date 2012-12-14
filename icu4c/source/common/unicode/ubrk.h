@@ -313,7 +313,13 @@ ubrk_setText(UBreakIterator* bi,
 
 
 /**
- * Sets an existing iterator to point to a new piece of text
+ * Sets an existing iterator to point to a new piece of text.
+ *
+ * All index positions returned by break iterator functions are
+ * native indices from the UText. For example, when breaking UTF-8
+ * encoded text, the break positions returned by \ref ubrk_next, \ref ubrk_previous, etc.
+ * will be UTF-8 string indices, not UTF-16 positions.
+ *
  * @param bi The iterator to use
  * @param text The text to be set.
  *             This function makes a shallow clone of the supplied UText.  This means
