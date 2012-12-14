@@ -1869,28 +1869,33 @@ ucurr_createCurrencyList(UErrorCode* status){
                     }
                     const UChar *isoCode = ures_getString(idRes, &isoLength, &localStatus);
 
-                    // get the from date
-                    int32_t fromLength = 0;
+                    // get from date
+                    UDate fromDate = U_DATE_MIN;
                     UResourceBundle *fromRes = ures_getByKey(currencyRes, "from", NULL, &localStatus);
-                    const int32_t *fromArray = ures_getIntVector(fromRes, &fromLength, &localStatus);
-                    int64_t currDate64 = (int64_t)fromArray[0] << 32;
-                    currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
-                    UDate fromDate = (UDate)currDate64;
+
+                    if (U_SUCCESS(localStatus)) {
+                        int32_t fromLength = 0;
+                        const int32_t *fromArray = ures_getIntVector(fromRes, &fromLength, &localStatus);
+                        int64_t currDate64 = (int64_t)fromArray[0] << 32;
+                        currDate64 |= ((int64_t)fromArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
+                        fromDate = (UDate)currDate64;
+                    }
+                    ures_close(fromRes);
+
+                    // get to date
                     UDate toDate = U_DATE_MAX;
+                    localStatus = U_ZERO_ERROR;
+                    UResourceBundle *toRes = ures_getByKey(currencyRes, "to", NULL, &localStatus);
 
-                    if (ures_getSize(currencyRes)> 2) {
+                    if (U_SUCCESS(localStatus)) {
                         int32_t toLength = 0;
-                        UResourceBundle *toRes = ures_getByKey(currencyRes, "to", NULL, &localStatus);
                         const int32_t *toArray = ures_getIntVector(toRes, &toLength, &localStatus);
-
-                        currDate64 = (int64_t)toArray[0] << 32;
+                        int64_t currDate64 = (int64_t)toArray[0] << 32;
                         currDate64 |= ((int64_t)toArray[1] & (int64_t)INT64_C(0x00000000FFFFFFFF));
                         toDate = (UDate)currDate64;
+                    }
+                    ures_close(toRes);
 
-                        ures_close(toRes);
-                    } 
-
-                    ures_close(fromRes);  
                     ures_close(idRes);
                     ures_close(currencyRes);
 
@@ -1898,6 +1903,7 @@ ucurr_createCurrencyList(UErrorCode* status){
                     entry->from = fromDate;
                     entry->to = toDate;
 
+                    localStatus = U_ZERO_ERROR;
                     uhash_put(gIsoCodes, (UChar *)isoCode, entry, &localStatus);
                 }
             } else {
@@ -1939,7 +1945,7 @@ ucurr_isAvailable(const UChar* isoCode, UDate from, UDate to, UErrorCode* eError
         uhash_setValueDeleter(gIsoCodes, deleteIsoCodeEntry);
 
         ucln_i18n_registerCleanup(UCLN_I18N_CURRENCY, currency_cleanup);
-
+        fprintf(stderr, "creating currency list");
         ucurr_createCurrencyList(&status);
         if (U_FAILURE(status)) {
             umtx_unlock(&gIsoCodesLock);
