@@ -182,6 +182,11 @@ public:
      * Utext that was passed as a parameter, but that the underlying text itself
      * must not be altered while being referenced by the break iterator.
      *
+     * All index positions returned by break iterator functions are
+     * native indices from the UText. For example, when breaking UTF-8
+     * encoded text, the break positions returned by next(), previous(), etc.
+     * will be UTF-8 string indices, not UTF-16 positions.
+     *
      * @param text The UText used to change the text.
      * @param status receives any error codes.
      * @stable ICU 3.4
