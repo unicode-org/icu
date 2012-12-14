@@ -1998,10 +1998,10 @@ public class SimpleDateFormat extends DateFormat {
                     String leapMonthName = MessageFormat.format(monthPattern, data[i]);
                     length = leapMonthName.length();
                     if (length > bestMatchLength &&
-                        text.regionMatches(true, start, leapMonthName, 0, length))
+                        (matchLength = regionMatchesWithOptionalDot(text, start, leapMonthName, length)) >= 0)
                         {
                             bestMatch = i;
-                            bestMatchLength = length;
+                            bestMatchLength = matchLength;
                             isLeapMonth = 1;
                         }
                  }
