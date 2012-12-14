@@ -225,6 +225,10 @@ public:
      void TestRelativeOther(void);
 */
 
+    void TestDotAndAtLeniency();
+private:
+    UBool showParse(DateFormat &format, const UnicodeString &formattedString);
+
 public:
     /**
      * Test parsing a number as a string

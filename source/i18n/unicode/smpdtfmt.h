@@ -946,6 +946,16 @@ private:
     static UBool isNumeric(UChar formatChar, int32_t count);
 
     /**
+     * Returns TRUE if the patternOffset is at the start of a numeric field.
+     */
+    static UBool isAtNumericField(const UnicodeString &pattern, int32_t patternOffset);
+
+    /**
+     * Returns TRUE if the patternOffset is right after a non-numeric field.
+     */
+    static UBool isAfterNonNumericField(const UnicodeString &pattern, int32_t patternOffset);
+
+    /**
      * initializes fCalendar from parameters.  Returns fCalendar as a convenience.
      * @param adoptZone  Zone to be adopted, or NULL for TimeZone::createDefault().
      * @param locale Locale of the calendar
