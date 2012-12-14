@@ -196,7 +196,7 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
     }
-    cldrVersion{"22.1"}
+    cldrVersion{"22.1.1"}
     codeMappings{
         {
             "AA",

@@ -14,7 +14,7 @@ pa{
     collations{
         standard{
             Sequence{" [normalization on ]&ੱ<<ੰ<<ਂ<<ਁ<<਼&ੜ<੍"}
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
     }
 }

@@ -14,7 +14,7 @@ kok{
     collations{
         standard{
             Sequence{" [normalization on ]&ॐ<ं<<ँ<ः&ह<ळ<क्ष"}
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
     }
 }

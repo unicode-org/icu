@@ -14,7 +14,7 @@ en_US_POSIX{
     collations{
         standard{
             Sequence{"&A<*'\u0020'-'/'0-'@'A-Z'['-'`'a-z'{'-'\u007F'"}
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
     }
 }

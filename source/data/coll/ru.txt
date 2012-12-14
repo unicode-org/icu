@@ -14,7 +14,7 @@ ru{
     collations{
         standard{
             Sequence{"[suppressContractions [АаӘәГгЕеЖжЗзІіОоӨөКкУуЧчЫыЭэѴѵ] ]"}
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
     }
 }

@@ -16,7 +16,7 @@ root{
         default{"standard"}
         ducet{
             Sequence{" [normalization on ]"}
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
         search{
             Sequence{
@@ -67,11 +67,11 @@ root{
                 "&ᅮᅴᅵ=ᅰ"
                 "&ᅮᅵ=ᅱ"
             }
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
         standard{
             Sequence{""}
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
     }
     depends:process(dependency){"ucadata.icu"}

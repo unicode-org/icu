@@ -14,7 +14,7 @@ uk{
     collations{
         standard{
             Sequence{"[suppressContractions [АаӘәГгЕеЖжЗзОоӨөКкУуЧчЫыЭэѴѵ] ]&Г<ґ<<<Ґ"}
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
     }
 }
