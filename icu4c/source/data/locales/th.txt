@@ -128,7 +128,7 @@ th{
         }
         native{"thai"}
     }
-    Version{"2.0.79.66"}
+    Version{"2.0.79.79"}
     calendar{
         buddhist{
             DateTimePatterns{

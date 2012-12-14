@@ -122,7 +122,7 @@
                     <arg name="--specialsdir"     value="${env.ICU4C_DIR}/source/data/xml/main"/>
                     <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="--type" value="locales"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
 		<remapper>
 		  <remap sourcePath="/Keys" targetDir="lang" />
@@ -314,7 +314,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="supplementalData"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
 		<remapper>
 		  <remap sourcePath="/CurrencyMap" targetDir="curr" />
@@ -331,7 +331,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="metadata"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
             </run>
         </cldr-build>
@@ -344,7 +344,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="metaZones"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
             </run>
         </cldr-build>
@@ -357,7 +357,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="windowsZones"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
             </run>
         </cldr-build>
@@ -370,7 +370,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="likelySubtags"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
             </run>
         </cldr-build>
@@ -383,7 +383,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="plurals"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
             </run>
         </cldr-build>
@@ -396,7 +396,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="numberingSystems"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
             </run>
         </cldr-build>
@@ -409,7 +409,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="genderList"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
             </run>
         </cldr-build>
@@ -422,7 +422,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="postalCodeData"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
             </run>
         </cldr-build>
@@ -435,7 +435,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="dayPeriods"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
             </run>
         </cldr-build>
@@ -476,7 +476,7 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/bcp47" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="keyTypeData"/>
-                    <arg name="--cldrVersion" value="22.1"/>
+                    <arg name="--cldrVersion" value="22.1.1"/>
                 </args>
             </run>
         </cldr-build>

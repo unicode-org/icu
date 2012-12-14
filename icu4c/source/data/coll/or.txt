@@ -14,7 +14,7 @@ or{
     collations{
         standard{
             Sequence{" [normalization on ]&ଔ<ଁ<ଂ<ଃ&ହ<କ୍ଷ&ଯ<<ୟ"}
-            Version{"22.1"}
+            Version{"22.1.1"}
         }
     }
 }
