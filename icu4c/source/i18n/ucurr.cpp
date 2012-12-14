@@ -1945,7 +1945,6 @@ ucurr_isAvailable(const UChar* isoCode, UDate from, UDate to, UErrorCode* eError
         uhash_setValueDeleter(gIsoCodes, deleteIsoCodeEntry);
 
         ucln_i18n_registerCleanup(UCLN_I18N_CURRENCY, currency_cleanup);
-        fprintf(stderr, "creating currency list");
         ucurr_createCurrencyList(&status);
         if (U_FAILURE(status)) {
             umtx_unlock(&gIsoCodesLock);
