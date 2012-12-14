@@ -2001,7 +2001,7 @@ public class SimpleDateFormat extends DateFormat {
                         (matchLength = regionMatchesWithOptionalDot(text, start, leapMonthName, length)) >= 0)
                         {
                             bestMatch = i;
-                            bestMatchLength = length;
+                            bestMatchLength = matchLength;
                             isLeapMonth = 1;
                         }
                  }
