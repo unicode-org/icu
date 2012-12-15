@@ -29,6 +29,7 @@ import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.CurrencyMetaInfo;
 import com.ibm.icu.text.CurrencyMetaInfo.CurrencyDigits;
 import com.ibm.icu.text.CurrencyMetaInfo.CurrencyFilter;
+import com.ibm.icu.text.CurrencyMetaInfo.CurrencyInfo;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
@@ -159,9 +160,8 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 4.0
      */
     public static String[] getAvailableCurrencyCodes(ULocale loc, Date d) {
-        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
         CurrencyFilter filter = CurrencyFilter.onDate(d).withRegion(loc.getCountry());
-        List<String> list = info.currencies(filter);
+        List<String> list = getTenderCurrencies(filter);
         // Note: Prior to 4.4 the spec didn't say that we return null if there are no results, but 
         // the test assumed it did.  Kept the behavior and amended the spec.
         if (list.isEmpty()) {
@@ -356,7 +356,6 @@ public class Currency extends MeasureUnit implements Serializable {
             return EMPTY_STRING_ARRAY;
         }
         
-        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
         if (!commonlyUsed) {
             // Behavior change from 4.3.3, no longer sort the currencies
             return getAvailableCurrencyCodes().toArray(new String[0]);
@@ -377,7 +376,7 @@ public class Currency extends MeasureUnit implements Serializable {
         
         // currencies are in region's preferred order when we're filtering on region, which
         // matches our spec
-        List<String> result = info.currencies(filter);
+        List<String> result = getTenderCurrencies(filter);
         
         // No fallback anymore (change from 4.3.3)
         if (result.size() == 0) {
@@ -836,16 +835,16 @@ public class Currency extends MeasureUnit implements Serializable {
 
     private static SoftReference<List<String>> ALL_CODES;
     /*
-     * Returns an unmodifiable String list including all known currency codes
+     * Returns an unmodifiable String list including all known tender currency codes.
      */
     private static synchronized List<String> getAvailableCurrencyCodes() {
         List<String> all = (ALL_CODES == null) ? null : ALL_CODES.get();
         if (all == null) {
-            CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
             // Filter out non-tender currencies which have "from" date set to 9999-12-31
             // CurrencyFilter has "to" value set to 9998-12-31 in order to exclude them
-            CurrencyFilter filter = CurrencyFilter.onDateRange(null, new Date(253373299200000L));
-            all = Collections.unmodifiableList(info.currencies(filter));
+            //CurrencyFilter filter = CurrencyFilter.onDateRange(null, new Date(253373299200000L));
+            CurrencyFilter filter = CurrencyFilter.all();
+            all = Collections.unmodifiableList(getTenderCurrencies(filter));
             ALL_CODES = new SoftReference<List<String>>(all);
         }
         return all;
@@ -893,6 +892,25 @@ public class Currency extends MeasureUnit implements Serializable {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
         List<String> allActive = info.currencies(CurrencyFilter.onDateRange(from, to));
         return allActive.contains(code);
+    }
+
+    /**
+     * Returns the list of remaining tender currencies after a filter is applied.
+     * @param filter the filter to apply to the tender currencies
+     * @return a list of tender currencies
+     */
+    private static List<String> getTenderCurrencies(CurrencyFilter filter) {
+        CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
+        List<CurrencyInfo> infoList = info.currencyInfo(filter);
+        List<String> list = new ArrayList<String>();
+        for (CurrencyInfo currencyInfo : infoList) {
+            // Non-tender currencies always have a from of MIN_VALUE and a to of MAX_VALUE, so
+            // exclude them.
+            if (currencyInfo.from != Long.MIN_VALUE || currencyInfo.to != Long.MAX_VALUE) {
+                list.add(currencyInfo.code);
+            }
+        }
+        return list;
     }
 }
 //eof
