@@ -2904,8 +2904,11 @@ void NumberFormatRegressionTest::Test9677(void) {
   
   UErrorCode status = U_ZERO_ERROR;
   LocalUNumberFormatPointer f(unum_open(UNUM_DEFAULT, NULL, 0, "en_US", NULL, &status));
+  if (U_FAILURE(status)) {
+      dataerrln("Failure opening unum_open");
+      return;
+  }
 
-  assertSuccess("opening unum_open", status);
   if (U_SUCCESS(status)) {
     unum_applyPattern(f.getAlias(), FALSE, pattern, -1, NULL, &status);
     unum_setTextAttribute(f.getAlias(), UNUM_POSITIVE_PREFIX, positivePrefix, -1, &status);
