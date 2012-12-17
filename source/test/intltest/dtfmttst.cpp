@@ -4112,6 +4112,10 @@ void DateFormatTest::TestDotAndAtLeniency() {
                 LocalPointer<DateFormat> format(DateFormat::createDateTimeInstance(dateStyle, timeStyle, locale));
                 LocalPointer<DateFormat> timeFormat(DateFormat::createTimeInstance(timeStyle, locale));
                 UnicodeString formattedString;
+                if (format.isNull()) {
+                    dataerrln("Unable to create DateFormat");
+                    continue;
+                }
                 format->format(TEST_DATE, formattedString);
 
                 if (!showParse(*format, formattedString)) {
