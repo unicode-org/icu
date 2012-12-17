@@ -162,7 +162,7 @@ UnicodeString& RelativeDateFormat::format(  Calendar& cal,
         UnicodeString datePattern;
         if (relativeDayString.length() > 0) {
             // Need to quote the relativeDayString to make it a legal date pattern
-            relativeDayString.findAndReplace(UnicodeString("'"), UnicodeString("''") ); // double any existing APOSTROPHE
+            relativeDayString.findAndReplace(UNICODE_STRING("'", 1), UNICODE_STRING("''", 2)); // double any existing APOSTROPHE
             relativeDayString.insert(0, APOSTROPHE); // add APOSTROPHE at beginning...
             relativeDayString.append(APOSTROPHE); // and at end
             datePattern.setTo(relativeDayString);
