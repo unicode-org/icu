@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2006, International Business Machines Corporation and
+ * Copyright (c) 1997-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /***************************************************************************
@@ -62,6 +62,8 @@ static void TestGetVersionColl(void);
 static void TestEmptyBundle(void);
 
 static void TestDirectAccess(void);
+
+static void TestTicket9804(void);
 
 static void TestResourceLevelAliasing(void);
 
