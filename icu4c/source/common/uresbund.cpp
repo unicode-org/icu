@@ -1680,6 +1680,35 @@ ures_getStringByKeyWithFallback(const UResourceBundle *resB,
     return retVal;
 }
 
+/*
+  Like res_getTableItemByKey but accepts full paths like "NumberElements/latn/patternsShort".
+*/  
+static Resource getTableItemByKeyPath(const ResourceData *pResData, Resource table, const char *key) {
+  Resource resource = table;  /* The current resource */
+  char path[256];
+  uprv_strcpy(path, key);
+  char *pathPart = path;  /* Path from current resource to desired resource */
+  UResType type = (UResType)RES_GET_TYPE(resource);  /* the current resource type */
+  while (*pathPart && resource != RES_BOGUS && URES_IS_CONTAINER(type)) {
+    char *nextPathPart = uprv_strchr(pathPart, RES_PATH_SEPARATOR);
+    if (nextPathPart != NULL) {
+      *nextPathPart = 0;  /* Terminating null for this part of path. */
+      nextPathPart++;
+    } else {
+      nextPathPart = uprv_strchr(pathPart, 0);
+    }
+    int32_t t;
+    const char *pathP = pathPart;
+    resource = res_getTableItemByKey(pResData, resource, &t, &pathP);
+    type = (UResType)RES_GET_TYPE(resource);
+    pathPart = nextPathPart; 
+  }
+  if (*pathPart) {
+    return RES_BOGUS;
+  }
+  return resource;
+}
+
 U_CAPI UResourceBundle* U_EXPORT2 
 ures_getByKeyWithFallback(const UResourceBundle *resB, 
                           const char* inKey, 
@@ -1687,7 +1716,6 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
                           UErrorCode *status) {
     Resource res = RES_BOGUS, rootRes = RES_BOGUS;
     /*UResourceDataEntry *realData = NULL;*/
-    const char *key = inKey;
     UResourceBundle *helper = NULL;
 
     if (status==NULL || U_FAILURE(*status)) {
@@ -1701,14 +1729,14 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
     int32_t type = RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
         int32_t t;
-        res = res_getTableItemByKey(&(resB->fResData), resB->fRes, &t, &key);
+        res = getTableItemByKeyPath(&(resB->fResData), resB->fRes, inKey);
+        const char* key = inKey;
         if(res == RES_BOGUS) {
             UResourceDataEntry *dataEntry = resB->fData;
             char path[256];
             char* myPath = path;
             const char* resPath = resB->fResPath;
             int32_t len = resB->fResPathLen;
-
             while(res == RES_BOGUS && dataEntry->fParent != NULL) { /* Otherwise, we'll look in parents */
                 dataEntry = dataEntry->fParent;
                 rootRes = dataEntry->fData.rootRes;
