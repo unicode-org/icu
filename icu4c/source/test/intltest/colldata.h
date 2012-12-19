@@ -44,6 +44,8 @@
   */
 #define STRING_LIST_BUFFER_SIZE 16
 
+U_NAMESPACE_USE
+
  /**
   * This object holds a list of CEs generated from a particular
   * <code>UnicodeString</code>
