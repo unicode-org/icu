@@ -172,8 +172,8 @@ public class CurrencyMetaInfo {
          * Returns a filter that accepts all currencies that were in use at some point between
          * the given dates, or if dates are equal, currencies in use on that date.
          * @param from date on or after a currency must have been in use
-         * @param to date before which a currency must have been in use, or if equal to from,
-         * the date on which a currency must have been in use
+         * @param to date on or before which a currency must have been in use,
+         * or if equal to from, the date on which a currency must have been in use
          * @return a filter
          * @see #withDateRange(Date, Date)
          * @draft ICU 49
@@ -221,7 +221,7 @@ public class CurrencyMetaInfo {
         /**
          * Returns a copy of this filter, with from and to set to the given dates.
          * @param from date on or after which the currency must have been in use
-         * @param to date before which the currency must have been in use
+         * @param to date on or before which the currency must have been in use
          * @return the filter
          * @see #onDateRange(Date, Date)
          * @draft ICU 49
