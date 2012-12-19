@@ -26,6 +26,7 @@
 #if !UCONFIG_NO_COLLATION
 
 #include "unicode/ucol.h"
+#include "unicode/unistr.h"
 
  /**
   * The size of the internal CE buffer in a <code>CEList</code> object
