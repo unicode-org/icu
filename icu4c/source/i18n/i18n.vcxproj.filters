@@ -24,19 +24,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="bms.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
-    <ClCompile Include="bmsearch.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
     <ClCompile Include="coleitr.cpp">
       <Filter>collation</Filter>
     </ClCompile>
     <ClCompile Include="coll.cpp">
-      <Filter>collation</Filter>
-    </ClCompile>
-    <ClCompile Include="colldata.cpp">
       <Filter>collation</Filter>
     </ClCompile>
     <ClCompile Include="search.cpp">
@@ -796,19 +787,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="unicode\bms.h">
-      <Filter>collation</Filter>
-    </CustomBuild>
-    <CustomBuild Include="unicode\bmsearch.h">
-      <Filter>collation</Filter>
-    </CustomBuild>
     <CustomBuild Include="unicode\coleitr.h">
       <Filter>collation</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\coll.h">
-      <Filter>collation</Filter>
-    </CustomBuild>
-    <CustomBuild Include="unicode\colldata.h">
       <Filter>collation</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\search.h">

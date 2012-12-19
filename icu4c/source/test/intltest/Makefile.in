@@ -37,7 +37,7 @@ DEFS += -D'U_TOPSRCDIR="$(top_srcdir)/"' -D'U_TOPBUILDDIR="$(BUILDDIR)"'
 LIBS = $(LIBCTESTFW) $(LIBICUI18N) $(LIBICUUC) $(LIBICUTOOLUTIL) $(DEFAULT_LIBS) $(LIB_M) $(LIB_THREAD)
 
 OBJECTS = aliastst.o allcoll.o apicoll.o astrotst.o callimts.o calregts.o caltest.o \
-caltztst.o canittst.o citrtest.o cntabcol.o convtest.o currcoll.o \
+caltztst.o canittst.o citrtest.o cntabcol.o colldata.o convtest.o currcoll.o \
 fldset.o dadrfmt.o dadrcal.o dadrcoll.o dcfmapts.o decoll.o dtfmapts.o dtfmrgts.o dtfmtrtts.o dtfmttst.o	\
 dtptngts.o encoll.o escoll.o ficoll.o frcoll.o g7coll.o intltest.o	\
 itercoll.o itformat.o itmajor.o itutil.o jacoll.o lcukocol.o	\
