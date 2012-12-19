@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -224,6 +224,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="bytestrietest.cpp" />
+    <ClCompile Include="colldata.cpp" />
     <ClCompile Include="ucharstrietest.cpp" />
     <ClCompile Include="itrbbi.cpp" />
     <ClCompile Include="rbbiapts.cpp" />
@@ -392,6 +393,7 @@
     <ClCompile Include="listformattertest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="colldata.h" />
     <ClInclude Include="itrbbi.h" />
     <ClInclude Include="rbbiapts.h" />
     <ClInclude Include="rbbitst.h" />
