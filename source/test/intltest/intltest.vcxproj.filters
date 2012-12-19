@@ -450,6 +450,10 @@
     <ClCompile Include="alphaindextst.cpp">
       <Filter>collation</Filter>
     </ClCompile>
+    <ClCompile Include="listformattertest.cpp" />
+    <ClCompile Include="colldata.cpp">
+      <Filter>collation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">
@@ -816,6 +820,10 @@
       <Filter>charset detection</Filter>
     </ClInclude>
     <ClInclude Include="alphaindextst.h">
+      <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="listformattertest.h" />
+    <ClInclude Include="colldata.h">
       <Filter>collation</Filter>
     </ClInclude>
   </ItemGroup>
