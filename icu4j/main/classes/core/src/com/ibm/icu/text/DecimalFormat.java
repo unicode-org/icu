@@ -2152,9 +2152,9 @@ public class DecimalFormat extends NumberFormat {
     // When parsing a number with big exponential value, it requires to transform the
     // value into a string representation to construct BigInteger instance.  We want to
     // set the maximum size because it can easily trigger OutOfMemoryException.
-    // PARSE_MAX_EXPONENT is currently set to 1000, which is much bigger than MAX_VALUE of
-    // Double ( See the problem reported by ticket#5698
-    private static final int PARSE_MAX_EXPONENT = 1000;
+    // PARSE_MAX_EXPONENT is currently set to 1000 (See getParseMaxDigits()),
+    // which is much bigger than MAX_VALUE of Double ( See the problem reported by ticket#5698
+    private int PARSE_MAX_EXPONENT = 1000;
 
     /**
      * Parses the given text into a number. The text is parsed beginning at parsePosition,
@@ -2499,9 +2499,9 @@ public class DecimalFormat extends NumberFormat {
 
             // Adjust for exponent, if any
             exponent += digits.decimalAt;
-            if (exponent < -PARSE_MAX_EXPONENT) {
+            if (exponent < -getParseMaxDigits()) {
                 status[STATUS_UNDERFLOW] = true;
-            } else if (exponent > PARSE_MAX_EXPONENT) {
+            } else if (exponent > getParseMaxDigits()) {
                 status[STATUS_INFINITE] = true;
             } else {
                 digits.decimalAt = (int) exponent;
@@ -5056,6 +5056,29 @@ public class DecimalFormat extends NumberFormat {
      */
     public boolean isParseBigDecimal() {
         return parseBigDecimal;
+    }
+    
+    /**
+    * Set the maximum number of exponent digits when parsing a number. 
+    * If the limit is set too high, an OutOfMemoryException may be triggered.
+    * The default value is 1000.
+    * @param newValue the new limit
+    * @draft ICU 51
+    */
+    public void setParseMaxDigits(int newValue) {
+        if (newValue > 0) {
+            PARSE_MAX_EXPONENT = newValue;
+        }
+    }
+    
+    /**
+    * Get the current maximum number of exponent digits when parsing a
+    * number.
+    *
+    * @draft ICU 51
+    */
+    public int getParseMaxDigits() {
+        return PARSE_MAX_EXPONENT;
     }
 
     private void writeObject(ObjectOutputStream stream) throws IOException {

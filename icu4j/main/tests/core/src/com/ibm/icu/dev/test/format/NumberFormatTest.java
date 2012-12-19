@@ -3039,6 +3039,33 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+    
+    public void TestParseMaxDigits() {
+        DecimalFormat fmt = new DecimalFormat();
+        String number = "100000000000";
+        int newParseMax = number.length() - 1;
+        
+        fmt.setParseMaxDigits(-1);
+        
+        /* Default value is 1000 */
+        if (fmt.getParseMaxDigits() != 1000) {
+            errln("Fail valid value checking in setParseMaxDigits.");
+        }
+        
+        try {
+            if (fmt.parse(number).doubleValue() == Float.POSITIVE_INFINITY) {
+                errln("Got Infinity but should NOT when parsing number: " + number);
+            }
+            
+            fmt.setParseMaxDigits(newParseMax);
+            
+            if (fmt.parse(number).doubleValue() != Float.POSITIVE_INFINITY) {
+                errln("Did not get Infinity but should when parsing number: " + number);
+            }
+        } catch (ParseException ex) {
+            
+        }
+    }
 
     private static class FormatCharItrTestThread implements Runnable {
         private final NumberFormat fmt;
