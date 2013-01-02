@@ -1,5 +1,5 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual C++ Express 2010
+# Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cal", "..\samples\cal\cal.vcxproj", "{F7659D77-09CF-4FE9-ACEE-927287AA9509}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cintltst", "..\test\cintltst\cintltst.vcxproj", "{3D1246AE-1B32-479B-BECA-AEFA97BE2321}"
@@ -65,6 +65,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testplug", "..\tools\icuinfo\testplug.vcxproj", "{659D0C08-D4ED-4BF3-B02B-2D8D4B5A7A7A}"
 EndProject
 Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
 		Debug|x64 = Debug|x64
@@ -170,10 +174,12 @@ Global
 		{77C78066-746F-4EA6-B3FE-B8C8A4A97891}.Release|x64.Build.0 = Release|x64
 		{0178B127-6269-407D-B112-93877BB62776}.Debug|Win32.ActiveCfg = Debug|Win32
 		{0178B127-6269-407D-B112-93877BB62776}.Debug|Win32.Build.0 = Debug|Win32
-		{0178B127-6269-407D-B112-93877BB62776}.Debug|x64.ActiveCfg = Debug|Win32
+		{0178B127-6269-407D-B112-93877BB62776}.Debug|x64.ActiveCfg = Debug|x64
+		{0178B127-6269-407D-B112-93877BB62776}.Debug|x64.Build.0 = Debug|x64
 		{0178B127-6269-407D-B112-93877BB62776}.Release|Win32.ActiveCfg = Release|Win32
 		{0178B127-6269-407D-B112-93877BB62776}.Release|Win32.Build.0 = Release|Win32
-		{0178B127-6269-407D-B112-93877BB62776}.Release|x64.ActiveCfg = Release|Win32
+		{0178B127-6269-407D-B112-93877BB62776}.Release|x64.ActiveCfg = Release|x64
+		{0178B127-6269-407D-B112-93877BB62776}.Release|x64.Build.0 = Release|x64
 		{73632960-B3A6-464D-83A3-4B43365F19B8}.Debug|Win32.ActiveCfg = Debug|Win32
 		{73632960-B3A6-464D-83A3-4B43365F19B8}.Debug|Win32.Build.0 = Debug|Win32
 		{73632960-B3A6-464D-83A3-4B43365F19B8}.Debug|x64.ActiveCfg = Debug|x64
@@ -329,9 +335,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 EndGlobal
