@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, Google, International Business Machines Corporation and
+ * Copyright (C) 1996-2013, Google, International Business Machines Corporation and
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -76,7 +76,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {1234567890123f, "1,2 трилиона"},
             {12345678901234f, "12 трилиона"},
             {123456789012345f, "120 трилиона"},
-            {1234567890123456f, "1200 трилиона"},
+            {1234567890123456f, "1.200 трилиона"},
     };
 
     Object[][] SerbianTestDataLongNegative = {
@@ -96,7 +96,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {-1234567890123f, "-1,2 трилиона"},
             {-12345678901234f, "-12 трилиона"},
             {-123456789012345f, "-120 трилиона"},
-            {-1234567890123456f, "-1200 трилиона"},
+            {-1234567890123456f, "-1.200 трилиона"},
     };
 
    Object[][] JapaneseTestData = {

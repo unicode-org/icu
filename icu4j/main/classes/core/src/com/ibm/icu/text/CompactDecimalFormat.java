@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, Google, International Business Machines Corporation and
+ * Copyright (C) 1996-2013, Google, International Business Machines Corporation and
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -125,7 +125,9 @@ public class CompactDecimalFormat extends DecimalFormat {
         setDecimalFormatSymbols(format.getDecimalFormatSymbols());
         setMaximumSignificantDigits(3); // default significant digits
         setSignificantDigitsUsed(true);
-        setGroupingUsed(false);
+        if (style == CompactStyle.SHORT) {
+          setGroupingUsed(false);
+        }
         this.pluralRules = PluralRules.forLocale(locale);
 
         DecimalFormat currencyFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
