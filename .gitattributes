@@ -82,6 +82,7 @@ source/data/locales/zh_Hans_HK.txt -text
 source/data/locales/zh_Hans_MO.txt -text
 source/data/misc/likelySubtags.txt -text
 source/data/misc/plurals.txt -text
+source/data/misc/windowsZones.txt -text
 source/data/xml/collation/bn_IN.xml -text
 source/data/xml/collation/ur.xml -text
 source/data/xml/main/ha.xml -text
