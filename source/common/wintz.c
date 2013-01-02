@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2005-2008, International Business Machines
+*   Copyright (C) 2005-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -14,7 +14,6 @@
 #ifdef U_WINDOWS
 
 #include "wintz.h"
-
 #include "cmemory.h"
 #include "cstring.h"
 
@@ -28,6 +27,8 @@
 #   define NOIME
 #   define NOMCX
 #include <windows.h>
+
+#define MAX_LENGTH_ID 40
 
 /* The layout of the Tzi value in the registry */
 typedef struct
@@ -113,7 +114,7 @@ static int32_t detectWindowsType()
         }
     }
 
-    return winType+1; // +1 to bring it inline with the enum
+    return winType+1; /* +1 to bring it inline with the enum */
 }
 
 static LONG openTZRegKey(HKEY *hkey, const char *winid)
@@ -161,6 +162,28 @@ static LONG getTZI(const char *winid, TZI *tzi)
                                     NULL,
                                     NULL,
                                     (LPBYTE)tzi,
+                                    &cbData);
+
+    }
+
+    RegCloseKey(hkey);
+
+    return result;
+}
+
+static LONG getSTDName(const char *winid, char *regStdName, int32_t length) {
+    DWORD cbData = length;
+    LONG result;
+    HKEY hkey;
+
+    result = openTZRegKey(&hkey, winid);
+
+    if (result == ERROR_SUCCESS) {
+        result = RegQueryValueExA(hkey,
+                                    STD_REGKEY,
+                                    NULL,
+                                    NULL,
+                                    (LPBYTE)regStdName,
                                     &cbData);
 
     }
@@ -227,6 +250,14 @@ uprv_detectWindowsTimeZone() {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle* bundle = NULL;
     char* icuid = NULL;
+    UChar apiStd[MAX_LENGTH_ID];
+    char apiStdName[MAX_LENGTH_ID];
+    char regStdName[MAX_LENGTH_ID];
+    char tmpid[MAX_LENGTH_ID];
+    int32_t len;
+    int id;
+    int errorCode;
+    char ISOcode[3]; /* 2 letter iso code */
 
     LONG result;
     TZI tziKey;
@@ -246,14 +277,22 @@ uprv_detectWindowsTimeZone() {
     uprv_memcpy((char *)&tziKey.daylightDate, (char*)&apiTZI.DaylightDate,
            sizeof(apiTZI.DaylightDate));
 
-    bundle = ures_openDirect(NULL, "supplementalData", &status);
-    bundle = ures_getByKey(bundle, "mapTimezones", bundle, &status);
-    bundle = ures_getByKey(bundle, "windows", bundle, &status);
+    /* Convert the wchar_t* standard name to char* */
+    uprv_memset(apiStdName, 0, sizeof(apiStdName));
+    WideCharToMultiByte(CP_ACP,0, apiTZI.StandardName, -1, apiStdName, MAX_LENGTH_ID, NULL, NULL); 
+
+    tmpid[0] = 0;
+
+    id = GetUserGeoID(GEOCLASS_NATION);
+    errorCode = GetGeoInfo(id,GEO_ISO2,ISOcode,3,0);
+
+    bundle = ures_openDirect(NULL, "windowsZones", &status);
+    ures_getByKey(bundle, "mapTimezones", bundle, &status);
 
     /* Note: We get the winid not from static tables but from resource bundle. */
     while (U_SUCCESS(status) && ures_hasNext(bundle)) {
+        UBool idFound = FALSE;
         const char* winid;
-        int32_t len;
         UResourceBundle* winTZ = ures_getNextResource(bundle, NULL, &status);
         if (U_FAILURE(status)) {
             break;
@@ -269,23 +308,63 @@ uprv_detectWindowsTimeZone() {
             tziKey.daylightBias = tziReg.daylightBias;
 
             if (uprv_memcmp((char *)&tziKey, (char*)&tziReg, sizeof(tziKey)) == 0) {
-                const UChar* icuTZ = ures_getString(winTZ, &len, &status);
+                const UChar* icuTZ = NULL;
+                if (errorCode != 0) {
+                    icuTZ = ures_getStringByKey(winTZ, ISOcode, &len, &status);
+                }
+                if (errorCode==0 || icuTZ==NULL) {
+                    /* fallback to default "001" and reset status */
+                    status = U_ZERO_ERROR;
+                    icuTZ = ures_getStringByKey(winTZ, "001", &len, &status);
+                }
+
                 if (U_SUCCESS(status)) {
-                    icuid = (char*)uprv_malloc(sizeof(char) * (len + 1));
-                    uprv_memset(icuid, 0, len + 1);
-                    u_austrncpy(icuid, icuTZ, len);
+                    /* Get the standard name from the registry key to compare with
+                       the one from Windows API call. */
+                    uprv_memset(regStdName, 0, sizeof(regStdName));
+                    result = getSTDName(winid, regStdName, sizeof(regStdName));
+                    if (result == ERROR_SUCCESS) {
+                        if (uprv_strcmp(apiStdName, regStdName) == 0) {
+                            idFound = TRUE;
+                        }
+                    }
+
+                    /* tmpid buffer holds the ICU timezone ID corresponding to the timezone ID from Windows.
+                     * If none is found, tmpid buffer will contain a fallback ID (i.e. the time zone ID matching
+                     * the current time zone information)
+                     */
+                    if (idFound || tmpid[0] == 0) {
+                        /* if icuTZ has more than one city, take only the first (i.e. terminate icuTZ at first space) */
+                        int index=0;
+                        while (! (*icuTZ == '\0' || *icuTZ ==' ')) {
+                            tmpid[index++]=*icuTZ++;
+                        }
+                        tmpid[index]='\0';
+                    }
                 }
             }
         }
         ures_close(winTZ);
-        if (icuid != NULL) {
+        if (idFound) {
             break;
         }
     }
 
-    ures_close(bundle);
+    /*
+     * Copy the timezone ID to icuid to be returned.
+     */
+    if (tmpid[0] != 0) {
+        len = uprv_strlen(tmpid);
+        icuid = (char*)uprv_malloc((len + 1) * sizeof(char));
+        uprv_memset(icuid, 0, len + 1);
+        if (icuid != NULL) {
+            uprv_strcpy(icuid, tmpid);
+        }
+    }
 
+    ures_close(bundle);
+    
     return icuid;
 }
 
-#endif /* #ifdef U_WINDOWS */
+#endif 

@@ -49,6 +49,7 @@ README text !eol
 *.tri2 -text
 
 /icu4c.css -text
+source/data/misc/windowsZones.txt -text
 source/samples/ucnv/data02.bin -text
 source/test/perf/README -text
 source/test/testdata/ConverterSelectorTestUTF16.txt -text
