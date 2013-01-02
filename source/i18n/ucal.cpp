@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2012, International Business Machines
+*   Copyright (C) 1996-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -198,6 +198,21 @@ ucal_setTimeZone(    UCalendar*      cal,
   if (zone != NULL) {
       ((Calendar*)cal)->adoptTimeZone(zone);
   }
+}
+
+U_CAPI int32_t U_EXPORT2
+ucal_getTimeZoneID(const UCalendar *cal,
+                   UChar *result,
+                   int32_t resultLength,
+                   UErrorCode *status)
+{
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+    const TimeZone& tz = ((Calendar*)cal)->getTimeZone();
+    UnicodeString id;
+    tz.getID(id);
+    return id.extract(result, resultLength, *status);
 }
 
 U_CAPI int32_t U_EXPORT2

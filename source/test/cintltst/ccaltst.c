@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2012, International Business Machines
+ * Copyright (c) 1997-2013, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *
@@ -492,6 +492,8 @@ static void TestGetSetDateAPI()
     UChar temp[30];
 	double testMillis;
 	int32_t dateBit;
+    UChar id[4];
+    int32_t idLen;
 
     log_verbose("\nOpening the calendars()\n");
     u_strcpy(tzID, fgGMTID);
@@ -509,7 +511,6 @@ static void TestGetSetDateAPI()
         log_data_err("error in creating the dateformat : %s (Are you missing data?)\n", u_errorName(status));
         return;
     }
-    
 
     /*Testing getMillis and setMillis */
     log_verbose("\nTesting the date and time fetched in millis for a calendar using getMillis\n");
@@ -582,11 +583,20 @@ static void TestGetSetDateAPI()
     
     ctest_setTimeZone(NULL, &status);
 
-    /*testing ucal_setTimeZone() function*/
-    log_verbose("\nTesting if the function ucal_setTimeZone() works fine\n");
+    /*testing ucal_setTimeZone() and ucal_getTimeZoneID function*/
+    log_verbose("\nTesting if the function ucal_setTimeZone() and ucal_getTimeZoneID work fine\n");
+    idLen = ucal_getTimeZoneID(caldef2, id, sizeof(id)/sizeof(id[0]), &status);
+    if (U_FAILURE(status)) {
+        log_err("Error in getTimeZoneID : %s\n", u_errorName(status));
+    } else if (u_strcmp(id, fgGMTID) != 0) {
+        log_err("FAIL: getTimeZoneID returns a wrong ID: actual=%d, expected=%s\n", austrdup(id), austrdup(fgGMTID));
+    } else {
+        log_verbose("PASS: getTimeZoneID works fine\n");
+    }
+
     ucal_setMillis(caldef2, d2, &status); 
     if(U_FAILURE(status)){
-        log_err("Error in getMillis : %s\n", u_errorName(status));;
+        log_err("Error in getMillis : %s\n", u_errorName(status));
     }
     hour=ucal_get(caldef2, UCAL_HOUR_OF_DAY, &status);
         
@@ -597,6 +607,16 @@ static void TestGetSetDateAPI()
     }
     else
         log_verbose("ucal_setTimeZone worked fine\n");
+
+    idLen = ucal_getTimeZoneID(caldef2, id, sizeof(id)/sizeof(id[0]), &status);
+    if (U_FAILURE(status)) {
+        log_err("Error in getTimeZoneID : %s\n", u_errorName(status));
+    } else if (u_strcmp(id, tzID) != 0) {
+        log_err("FAIL: getTimeZoneID returns a wrong ID: actual=%d, expected=%s\n", austrdup(id), austrdup(tzID));
+    } else {
+        log_verbose("PASS: getTimeZoneID works fine\n");
+    }
+
     if(hour == ucal_get(caldef2, UCAL_HOUR_OF_DAY, &status))
         log_err("FAIL: Error setting the time zone doesn't change the represented time\n");
     else if((hour-8 + 1) != ucal_get(caldef2, UCAL_HOUR_OF_DAY, &status)) /*because it is not in daylight savings time */

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * Copyright (C) 1996-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -744,6 +744,22 @@ ucal_setTimeZone(UCalendar*    cal,
                  const UChar*  zoneID,
                  int32_t       len,
                  UErrorCode*   status);
+
+/** 
+ * Get the ID of the UCalendar's time zone. 
+ * 
+ * @param cal           The UCalendar to query. 
+ * @param result        Receives the UCalendar's time zone ID. 
+ * @param resultLength  The maximum size of result. 
+ * @param status        Receives the status. 
+ * @return              The total buffer size needed; if greater than resultLength, the output was truncated. 
+ * @draft ICU 51 
+ */ 
+U_DRAFT int32_t U_EXPORT2 
+ucal_getTimeZoneID(const UCalendar *cal,
+                   UChar *result,
+                   int32_t resultLength,
+                   UErrorCode *status);
 
 /**
  * Possible formats for a UCalendar's display name 
