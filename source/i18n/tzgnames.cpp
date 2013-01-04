@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2011-2012, International Business Machines Corporation and
+* Copyright (C) 2011-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -546,35 +546,32 @@ TZGNCore::getGenericLocationName(const UnicodeString& tzCanonicalID) {
 
     // Construct location name
     UnicodeString name;
-    UBool isSingleCountry = FALSE;
     UnicodeString usCountryCode;
-    ZoneMeta::getSingleCountry(tzCanonicalID, usCountryCode);
-    if (!usCountryCode.isEmpty()) {
-        isSingleCountry = TRUE;
-    } else {
-        ZoneMeta::getCanonicalCountry(tzCanonicalID, usCountryCode);
-    }
+    UBool isPrimary = FALSE;
+
+    ZoneMeta::getCanonicalCountry(tzCanonicalID, usCountryCode, &isPrimary);
 
     if (!usCountryCode.isEmpty()) {
-        char countryCode[ULOC_COUNTRY_CAPACITY];
-        U_ASSERT(usCountryCode.length() < ULOC_COUNTRY_CAPACITY);
-        int32_t ccLen = usCountryCode.extract(0, usCountryCode.length(), countryCode, sizeof(countryCode), US_INV);
-        countryCode[ccLen] = 0;
-
-        UnicodeString country;
-        fLocaleDisplayNames->regionDisplayName(countryCode, country);
-
-        // Format
         FieldPosition fpos;
-        if (isSingleCountry) {
-            // If this is only the single zone in the country, use the country name
+
+        if (isPrimary) {
+            // If this is the primary zone in the country, use the country name.
+            char countryCode[ULOC_COUNTRY_CAPACITY];
+            U_ASSERT(usCountryCode.length() < ULOC_COUNTRY_CAPACITY);
+            int32_t ccLen = usCountryCode.extract(0, usCountryCode.length(), countryCode, sizeof(countryCode), US_INV);
+            countryCode[ccLen] = 0;
+
+            UnicodeString country;
+            fLocaleDisplayNames->regionDisplayName(countryCode, country);
+
             Formattable param[] = {
                 Formattable(country)
             };
+
             fRegionFormat->format(param, 1, name, fpos, status);
         } else {
-            // If there are multiple zones including this in the country,
-            // use the exemplar city name
+            // If this is not the primary zone in the country,
+            // use the exemplar city name.
 
             // getExemplarLocationName should retur non-empty string
             // if the time zone is associated with a region
@@ -585,6 +582,7 @@ TZGNCore::getGenericLocationName(const UnicodeString& tzCanonicalID) {
             Formattable param[] = {
                 Formattable(city),
             };
+
             fRegionFormat->format(param, 1, name, fpos, status);
         }
         if (U_FAILURE(status)) {
