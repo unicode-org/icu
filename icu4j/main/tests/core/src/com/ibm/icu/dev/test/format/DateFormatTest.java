@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -857,7 +857,11 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "India Standard Time", "+5:30" },
         { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "India Time", "Asia/Calcutta" },
         { "en", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "India Standard Time", "Asia/Calcutta" },
-        
+
+        // Proper CLDR primary zone support #9733
+        { "en", "Asia/Shanghai", "2013-01-01T00:00:00Z", "VVVV", "China Time", "Asia/Shanghai" },
+        { "en", "Asia/Harbin", "2013-01-01T00:00:00Z", "VVVV", "Harbin Time", "Asia/Harbin" },
+
         // ==========
 
         { "de", "America/Los_Angeles", "2004-01-15T00:00:00Z", "Z", "-0800", "-8:00" },
@@ -1069,6 +1073,10 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "zzzz", "\u5370\u5ea6\u65f6\u95f4", "+5:30" },
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "v", "\u5370\u5ea6\u65f6\u95f4", "Asia/Calcutta" },
         { "zh", "Asia/Calcutta", "2004-07-15T00:00:00Z", "vvvv", "\u5370\u5EA6\u65f6\u95f4", "Asia/Calcutta" },
+
+        // Proper CLDR primary zone support #9733
+        { "zh", "Asia/Shanghai", "2013-01-01T00:00:00Z", "VVVV", "\u4e2d\u56fd\u65f6\u95f4", "Asia/Shanghai" },
+        { "zh", "Asia/Harbin", "2013-01-01T00:00:00Z", "VVVV", "\u54c8\u5c14\u6ee8\u65f6\u95f4", "Asia/Harbin" },
 
         // ==========
 
