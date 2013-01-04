@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2012, International Business Machines Corporation and    *
+* Copyright (C) 1997-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -2541,19 +2541,22 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             && u_isdigit(text.charAt(start))
             && u_isdigit(text.charAt(start+1)))
         {
-            // Assume for example that the defaultCenturyStart is 6/18/1903.
-            // This means that two-digit years will be forced into the range
-            // 6/18/1903 to 6/17/2003.  As a result, years 00, 01, and 02
-            // correspond to 2000, 2001, and 2002.  Years 04, 05, etc. correspond
-            // to 1904, 1905, etc.  If the year is 03, then it is 2003 if the
-            // other fields specify a date before 6/18, or 1903 if they specify a
-            // date afterwards.  As a result, 03 is an ambiguous year.  All other
-            // two-digit years are unambiguous.
-          if(fHaveDefaultCentury) { // check if this formatter even has a pivot year
-              int32_t ambiguousTwoDigitYear = fDefaultCenturyStartYear % 100;
-              ambiguousYear[0] = (value == ambiguousTwoDigitYear);
-              value += (fDefaultCenturyStartYear/100)*100 +
-                (value < ambiguousTwoDigitYear ? 100 : 0);
+        	// only adjust year for patterns less than 3.
+        	if(count < 3) {
+        		// Assume for example that the defaultCenturyStart is 6/18/1903.
+        		// This means that two-digit years will be forced into the range
+        		// 6/18/1903 to 6/17/2003.  As a result, years 00, 01, and 02
+        		// correspond to 2000, 2001, and 2002.  Years 04, 05, etc. correspond
+        		// to 1904, 1905, etc.  If the year is 03, then it is 2003 if the
+        		// other fields specify a date before 6/18, or 1903 if they specify a
+        		// date afterwards.  As a result, 03 is an ambiguous year.  All other
+        		// two-digit years are unambiguous.
+        		if(fHaveDefaultCentury) { // check if this formatter even has a pivot year
+        			int32_t ambiguousTwoDigitYear = fDefaultCenturyStartYear % 100;
+        			ambiguousYear[0] = (value == ambiguousTwoDigitYear);
+        			value += (fDefaultCenturyStartYear/100)*100 +
+        					(value < ambiguousTwoDigitYear ? 100 : 0);
+        		}
             }
         }
         cal.set(UCAL_YEAR, value);
