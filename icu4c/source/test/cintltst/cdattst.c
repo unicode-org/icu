@@ -899,12 +899,9 @@ static void TestCalendarDateParse() {
     UCalendar* tempCal = 0;
     UCalendar* calendar = 0;
 
-    U_STRING_DECL(pattern, "yyyy", 4);
-    U_STRING_INIT(pattern, "yyyy", 4);
-    U_STRING_DECL(pattern2, "yy", 2);
-    U_STRING_INIT(pattern2, "yy", 2);
-    U_STRING_DECL(text, "75", 2);
-    U_STRING_INIT(text, "75", 2);
+    static const UChar pattern[5] = "yyyy";
+    static const UChar pattern2[3] = "yy";
+    static const UChar text[3] = "75";
 
     simpleDateFormat = udat_open(UDAT_FULL, UDAT_FULL, "en-GB", 0, 0, 0, 0, &ec);
     udat_applyPattern(simpleDateFormat, 0, pattern, u_strlen(pattern));
