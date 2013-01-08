@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/supplementalData.xml
@@ -522,9 +522,11 @@ supplementalData:table(nofallback){
             }
             {
                 id{"BEL"}
+                tender{"false"}
             }
             {
                 id{"BEC"}
+                tender{"false"}
             }
         }
         BF{
@@ -686,6 +688,7 @@ supplementalData:table(nofallback){
             }
             {
                 id{"BOV"}
+                tender{"false"}
             }
         }
         BR{
@@ -958,9 +961,11 @@ supplementalData:table(nofallback){
             }
             {
                 id{"CHE"}
+                tender{"false"}
             }
             {
                 id{"CHW"}
+                tender{"false"}
             }
         }
         CI{
@@ -1002,6 +1007,7 @@ supplementalData:table(nofallback){
             }
             {
                 id{"CLF"}
+                tender{"false"}
             }
         }
         CM{
@@ -1023,6 +1029,7 @@ supplementalData:table(nofallback){
             }
             {
                 id{"CNX"}
+                tender{"false"}
             }
         }
         CO{
@@ -1035,6 +1042,7 @@ supplementalData:table(nofallback){
             }
             {
                 id{"COU"}
+                tender{"false"}
             }
         }
         CR{
@@ -1287,6 +1295,7 @@ supplementalData:table(nofallback){
             }
             {
                 id{"ECV"}
+                tender{"false"}
             }
         }
         EE{
@@ -1379,9 +1388,11 @@ supplementalData:table(nofallback){
             }
             {
                 id{"ESA"}
+                tender{"false"}
             }
             {
                 id{"ESB"}
+                tender{"false"}
             }
         }
         ET{
@@ -2383,9 +2394,11 @@ supplementalData:table(nofallback){
             }
             {
                 id{"LUC"}
+                tender{"false"}
             }
             {
                 id{"LUL"}
+                tender{"false"}
             }
         }
         LV{
@@ -2816,6 +2829,7 @@ supplementalData:table(nofallback){
             }
             {
                 id{"MXV"}
+                tender{"false"}
             }
         }
         MY{
@@ -4095,9 +4109,11 @@ supplementalData:table(nofallback){
             }
             {
                 id{"USN"}
+                tender{"false"}
             }
             {
                 id{"USS"}
+                tender{"false"}
             }
         }
         UY{
@@ -4121,6 +4137,7 @@ supplementalData:table(nofallback){
             }
             {
                 id{"UYI"}
+                tender{"false"}
             }
         }
         UZ{
@@ -4355,6 +4372,7 @@ supplementalData:table(nofallback){
             }
             {
                 id{"ZAL"}
+                tender{"false"}
             }
         }
         ZM{
@@ -4446,54 +4464,71 @@ supplementalData:table(nofallback){
         ZZ{
             {
                 id{"XAG"}
+                tender{"false"}
             }
             {
                 id{"XAU"}
+                tender{"false"}
             }
             {
                 id{"XBA"}
+                tender{"false"}
             }
             {
                 id{"XBB"}
+                tender{"false"}
             }
             {
                 id{"XBC"}
+                tender{"false"}
             }
             {
                 id{"XBD"}
+                tender{"false"}
             }
             {
                 id{"XDR"}
+                tender{"false"}
             }
             {
                 id{"XEU"}
+                tender{"false"}
             }
             {
                 id{"XFO"}
+                tender{"false"}
             }
             {
                 id{"XFU"}
+                tender{"false"}
             }
             {
                 id{"XPD"}
+                tender{"false"}
             }
             {
                 id{"XPT"}
+                tender{"false"}
             }
             {
                 id{"XRE"}
+                tender{"false"}
             }
             {
                 id{"XSU"}
+                tender{"false"}
             }
             {
                 id{"XTS"}
+                tender{"false"}
             }
             {
                 id{"XUA"}
+                tender{"false"}
             }
             {
                 id{"XXX"}
+                tender{"false"}
             }
         }
     }
