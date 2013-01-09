@@ -378,7 +378,39 @@ public class CurrencyTest extends TestFmwk {
         assertEquals("millisecond is 0", 0, cal.get(GregorianCalendar.MILLISECOND));
     }
     
-    public void TestTicket9508() {
+    public void testCurrencyMetaInfoRangesWithLongs() {
+        CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance(true);
+        assertNotNull("have metainfo", metainfo);
+    
+        CurrencyFilter filter = CurrencyFilter.onRegion("DE"); // must be capitalized
+        List<CurrencyInfo> currenciesInGermany = metainfo.currencyInfo(filter);
+        logln("currencies: " + currenciesInGermany.size());
+        long demLastDate = Long.MAX_VALUE;
+        long eurFirstDate = Long.MIN_VALUE;
+        for (CurrencyInfo info : currenciesInGermany) {
+            logln(info.toString());
+            if (info.code.equals("DEM")) {
+                demLastDate = info.to;
+            } else if (info.code.equals("EUR")) {
+                eurFirstDate = info.from;
+            }
+        }
+        // the Euro and Deutschmark overlapped for several years
+        assertEquals("DEM available at last date", 2, metainfo.currencyInfo(filter.withDate(demLastDate)).size());
+        
+        // demLastDate + 1 millisecond is not the start of the last day, we consider it the next day, so...
+        long demLastDatePlus1ms = demLastDate + 1;
+        assertEquals("DEM not available after very start of last date", 1, metainfo.currencyInfo(filter.withDate(demLastDatePlus1ms)).size());
+        
+        // both available for start of euro
+        assertEquals("EUR available on start of first date", 2, metainfo.currencyInfo(filter.withDate(eurFirstDate)).size());
+        
+        // but not one millisecond before the start of the first day
+        long eurFirstDateMinus1ms = eurFirstDate - 1;
+        assertEquals("EUR not avilable before very start of first date", 1, metainfo.currencyInfo(filter.withDate(eurFirstDateMinus1ms)).size());
+    }
+    
+    public void TestWithTender() {
         CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance();
         if (metainfo == null) {
             errln("Unable to get CurrencyMetaInfo instance.");
