@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -99,22 +99,25 @@ public class CurrencyMetaInfo {
          * @stable ICU 4.4
          */
         public final long to;
+        
+        /**
+         * true if we are filtering only for currencies used as legal tender.
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public final boolean tenderOnly;
 
-        private CurrencyFilter(String region, String currency, long from, long to) {
+        private CurrencyFilter(String region, String currency, long from, long to, boolean tenderOnly) {
             this.region = region;
             this.currency = currency;
             this.from = from;
             this.to = to;
+            this.tenderOnly = tenderOnly;
+            
         }
 
-        private CurrencyFilter(String region, String currency, Date dateFrom, Date dateTo) {
-            this.region = region;
-            this.currency = currency;
-            this.from = dateFrom == null ? Long.MIN_VALUE : dateFrom.getTime();
-            this.to = dateTo == null ? Long.MAX_VALUE : dateTo.getTime();
-        }
-
-        private static final CurrencyFilter ALL = new CurrencyFilter(null, null, null, null);
+        private static final CurrencyFilter ALL = new CurrencyFilter(
+                null, null, Long.MIN_VALUE, Long.MAX_VALUE, false);
 
         /**
          * Returns a filter that accepts all currency data.
@@ -182,6 +185,38 @@ public class CurrencyMetaInfo {
         public static CurrencyFilter onDateRange(Date from, Date to) {
             return ALL.withDateRange(from, to);
         }
+        
+        /**
+         * Returns a filter that accepts all currencies in use on the given date.
+         * @param date the date as milliseconds after Jan 1, 1970
+         * @draft ICU 51
+         */
+        public static CurrencyFilter onDate(long date) {
+            return ALL.withDate(date);
+        }
+
+        /**
+         * Returns a filter that accepts all currencies that were in use at some
+         * point between the given dates, or if dates are equal, currencies in
+         * use on that date.
+         * @param from The date on or after a currency must have been in use.
+         *   Measured in milliseconds since Jan 1, 1970 GMT.
+         * @param to The date on or before which a currency must have been in use.
+         *   Measured in milliseconds since Jan 1, 1970 GMT.
+         * @draft ICU 51
+         */
+        public static CurrencyFilter onDateRange(long from, long to) {
+            return ALL.withDateRange(from, to);
+        }
+        
+        /**
+         * Returns a CurrencyFilter for finding currencies that were either once used,
+         * are used, or will be used as tender.
+         * @draft ICU 51
+         */
+        public static CurrencyFilter onTender() {
+            return ALL.withTender();
+        }
 
         /**
          * Returns a copy of this filter, with the specified region.  Region can be null to
@@ -192,7 +227,7 @@ public class CurrencyMetaInfo {
          * @stable ICU 4.4
          */
         public CurrencyFilter withRegion(String region) {
-            return new CurrencyFilter(region, this.currency, this.from, this.to);
+            return new CurrencyFilter(region, this.currency, this.from, this.to, this.tenderOnly);
         }
 
         /**
@@ -204,7 +239,7 @@ public class CurrencyMetaInfo {
          * @stable ICU 4.4
          */
         public CurrencyFilter withCurrency(String currency) {
-            return new CurrencyFilter(this.region, currency, this.from, this.to);
+            return new CurrencyFilter(this.region, currency, this.from, this.to, this.tenderOnly);
         }
 
         /**
@@ -215,7 +250,7 @@ public class CurrencyMetaInfo {
          * @stable ICU 4.4
          */
         public CurrencyFilter withDate(Date date) {
-            return new CurrencyFilter(this.region, this.currency, date, date);
+            return new CurrencyFilter(this.region, this.currency, date.getTime(), date.getTime(), this.tenderOnly);
         }
 
         /**
@@ -228,7 +263,42 @@ public class CurrencyMetaInfo {
          * @provisional This API might change or be removed in a future release.
          */
         public CurrencyFilter withDateRange(Date from, Date to) {
-            return new CurrencyFilter(this.region, this.currency, from, to);
+            long fromLong = from == null ? Long.MIN_VALUE : from.getTime();
+            long toLong = to == null ? Long.MAX_VALUE : to.getTime();
+            return new CurrencyFilter(this.region, this.currency, fromLong, toLong, this.tenderOnly);
+        }
+        
+        /**
+         * Returns a copy of this filter that accepts all currencies in use on
+         * the given date.
+         * @param date the date as milliseconds after Jan 1, 1970
+         * @draft ICU 51
+         */
+        public CurrencyFilter withDate(long date) {
+            return new CurrencyFilter(this.region, this.currency, date, date, this.tenderOnly);
+        }
+
+        /**
+         * Returns a copy of this filter that accepts all currencies that were
+         * in use at some point between the given dates, or if dates are equal,
+         * currencies in use on that date.
+         * @param from The date on or after a currency must have been in use.
+         *   Measured in milliseconds since Jan 1, 1970 GMT.
+         * @param to The date on or before which a currency must have been in use.
+         *   Measured in milliseconds since Jan 1, 1970 GMT.
+         * @draft ICU 51
+         */
+        public CurrencyFilter withDateRange(long from, long to) {
+            return new CurrencyFilter(this.region, this.currency, from, to, this.tenderOnly);
+        }
+        
+        /**
+         * Returns a copy of this filter that filters for currencies that were
+         * either once used, are used, or will be used as tender.
+         * @draft ICU 51
+         */
+        public CurrencyFilter withTender() {
+            return new CurrencyFilter(this.region, this.currency, this.from, this.to, true);
         }
 
         /**
@@ -252,7 +322,8 @@ public class CurrencyMetaInfo {
                     equals(this.region, rhs.region) &&
                     equals(this.currency, rhs.currency) &&
                     this.from == rhs.from &&
-                    this.to == rhs.to);
+                    this.to == rhs.to &&
+                    this.tenderOnly == rhs.tenderOnly);
         }
 
         /**
@@ -272,6 +343,7 @@ public class CurrencyMetaInfo {
             hc = hc * 31 + (int) (from >>> 32);
             hc = hc * 31 + (int) to;
             hc = hc * 31 + (int) (to >>> 32);
+            hc = hc * 31 + (tenderOnly ? 1 : 0);
             return hc;
         }
 
@@ -373,6 +445,9 @@ public class CurrencyMetaInfo {
          * @provisional This API might change or be removed in a future release.
          */
         public final int priority;
+        
+        
+        private final boolean tender;
 
         /**
          * Constructs a currency info.
@@ -384,12 +459,25 @@ public class CurrencyMetaInfo {
          * @param priority priority value, 0 is highest priority, increasing values are lower
          * @stable ICU 4.4
          */
+        /*
         public CurrencyInfo(String region, String code, long from, long to, int priority) {
+            this(region, code, from, to, priority, true);
+        }
+        */
+        
+        /**
+         * Constructs a currency info.
+         * 
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public CurrencyInfo(String region, String code, long from, long to, int priority, boolean tender) {
             this.region = region;
             this.code = code;
             this.from = from;
             this.to = to;
             this.priority = priority;
+            this.tender = tender;
         }
 
         /**
@@ -400,6 +488,15 @@ public class CurrencyMetaInfo {
         @Override
         public String toString() {
             return debugString(this);
+        }
+        
+        /**
+         * Determine whether or not this currency was once used, is used,
+         * or will be used as tender in this region.
+         * @draft ICU 51
+         */
+        public boolean isTender() {
+            return tender;
         }
     }
 
