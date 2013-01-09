@@ -1,6 +1,6 @@
 /*
  **************************************************************************************
- * Copyright (C) 2009-2012, Google, Inc.; International Business Machines Corporation *
+ * Copyright (C) 2009-2013, Google, Inc.; International Business Machines Corporation *
  * and others. All Rights Reserved.                                                   *
  **************************************************************************************
  */
@@ -52,7 +52,7 @@ public final class LocaleData {
    /**
     * EXType for {@link #getExemplarSet(int, int)}.
     * Note: This type is no longer supported.
-    * @stable ICU 4.4
+    * @deprecated ICU 51
     */
     public static final int ES_CURRENCY = 3;
 
