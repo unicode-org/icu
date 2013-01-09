@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2002-2012, International Business Machines
+ * Copyright (c) 2002-2013, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -378,6 +378,25 @@ public class CurrencyTest extends TestFmwk {
         assertEquals("millisecond is 0", 0, cal.get(GregorianCalendar.MILLISECOND));
     }
     
+    public void TestTicket9508() {
+        CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance();
+        if (metainfo == null) {
+            errln("Unable to get CurrencyMetaInfo instance.");
+            return;
+        }
+        CurrencyMetaInfo.CurrencyFilter filter =
+                CurrencyMetaInfo.CurrencyFilter.onRegion("CH");
+        List<CurrencyInfo> currencyInfos = metainfo.currencyInfo(filter);
+        assertEquals("Number of currencies for switzerland", 3, currencyInfos.size());
+        currencyInfos = metainfo.currencyInfo(filter.withCurrency("CHF"));
+        assertEquals("One CHF", 1, currencyInfos.size());
+        CurrencyInfo swissFranc = currencyInfos.get(0);
+        assertEquals(
+                "With Date",
+                Arrays.asList(new String[] {"CHF"}),
+                metainfo.currencies(filter.withTender().withDate(swissFranc.from)));
+    }
+   
     // Coverage-only test of the CurrencyMetaInfo class
     public void TestCurrencyMetaInfo() {
         CurrencyMetaInfo metainfo = CurrencyMetaInfo.getInstance();
@@ -425,7 +444,7 @@ public class CurrencyTest extends TestFmwk {
         }
             
         { // CurrencyInfo
-            info = new CurrencyMetaInfo.CurrencyInfo("region", "code", 0, 1, 1);
+            info = new CurrencyMetaInfo.CurrencyInfo("region", "code", 0, 1, 1, false);
             if (info == null) {
                 errln("Error creating CurrencyInfo.");
                 return;
