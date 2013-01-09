@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2010-2012 International Business Machines
+// * Copyright (C) 2010-2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/metazoneInfo.xml
@@ -436,6 +436,11 @@ metazoneInfo:table(nofallback){
             mz4{
                 "Europe_Eastern",
                 "1997-10-03 22:00",
+                "2012-11-10 00:00",
+            }
+            mz5{
+                "Europe_Central",
+                "2012-11-10 00:00",
                 "9999-12-31 23:59",
             }
         }
