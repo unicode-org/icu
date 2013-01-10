@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh.xml
@@ -281,7 +281,7 @@ zh{
         TZ{"坦桑尼亚"}
         UA{"乌克兰"}
         UG{"乌干达"}
-        UM{"美国边远小岛"}
+        UM{"美国本土外小岛"}
         US{"美国"}
         UY{"乌拉圭"}
         UZ{"乌兹别克斯坦"}
@@ -301,5 +301,5 @@ zh{
         ZW{"津巴布韦"}
         ZZ{"未知地区"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.79.49"}
 }

@@ -2843,8 +2843,8 @@ void DateFormatTest::TestTimeZoneDisplayName()
         { "hi", "Europe/London", "2004-07-15T00:00:00Z", "ZZZZ", "GMT+01:00", "+1:00" },
         { "hi", "Europe/London", "2004-07-15T00:00:00Z", "z", "GMT+01:00", "+1:00" },
         { "hi", "Europe/London", "2004-07-15T00:00:00Z", "zzzz", "GMT+01:00", "+1:00" },
-        { "hi", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u092C\\u094D\\u0930\\u093F\\u0924\\u0928 \\u0938\\u092E\\u092F", "Europe/London" },
-        { "hi", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u092C\\u094D\\u0930\\u093F\\u0924\\u0928 \\u0938\\u092E\\u092F", "Europe/London" },
+        { "hi", "Europe/London", "2004-07-15T00:00:00Z", "v", "\\u092C\\u094D\\u0930\\u093F\\u091F\\u0947\\u0928 \\u0938\\u092E\\u092F", "Europe/London" },
+        { "hi", "Europe/London", "2004-07-15T00:00:00Z", "vvvv", "\\u092C\\u094D\\u0930\\u093F\\u091F\\u0947\\u0928 \\u0938\\u092E\\u092F", "Europe/London" },
 
         { "hi", "Etc/GMT+3", "2004-01-15T00:00:00Z", "Z", "-0300", "-3:00" },
         { "hi", "Etc/GMT+3", "2004-01-15T00:00:00Z", "ZZZZ", "GMT-03:00", "-3:00" },

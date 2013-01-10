@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/he.xml
@@ -196,7 +196,7 @@ he{
         native{"latn"}
         traditional{"hebr"}
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.4"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -847,7 +847,7 @@ he{
                     "Daidō (806-810)",
                     "Kōnin (810-824)",
                     "Tenchō (824-834)",
-                    "Shōwa (834-848)",
+                    "Jōwa (834-848)",
                     "Kajō (848-851)",
                     "נינג׳ו",
                     "Saiko (854-857)",

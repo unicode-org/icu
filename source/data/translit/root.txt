@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// *  Copyright (C) 2004-2012, International Business Machines
+// *  Copyright (C) 2004-2013, International Business Machines
 // *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
 // *
 // ***************************************************************************
@@ -1352,6 +1352,13 @@ root {
             }
         }
 
+        az-Upper {
+            file {
+                resource:process(transliterator) {"az_Upper.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         cs-cs_FONIPA {
             file {
                 resource:process(transliterator) {"cs_cs_FONIPA.txt"}
@@ -1383,6 +1390,13 @@ root {
         cs_FONIPA-ko {
             file {
                 resource:process(transliterator) {"cs_FONIPA_ko.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        el-Upper {
+            file {
+                resource:process(transliterator) {"el_Upper.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -1485,6 +1499,20 @@ root {
             }
         }
 
+        lt-Upper {
+            file {
+                resource:process(transliterator) {"lt_Upper.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        nl-Title {
+            file {
+                resource:process(transliterator) {"nl_Title.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         pl-ja {
             file {
                 resource:process(transliterator) {"pl_ja.txt"}
@@ -1558,6 +1586,13 @@ root {
         sk_FONIPA-ja {
             file {
                 resource:process(transliterator) {"sk_FONIPA_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        tr-Upper {
+            file {
+                resource:process(transliterator) {"tr_Upper.txt"}
                 direction {"FORWARD"}
             }
         }
