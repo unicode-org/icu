@@ -1,0 +1,13 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2013, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: el_Upper.txt
+# Generated from CLDR 
+#
+::NFD();
+[[:Greek:] & [:Ll:]] [\u0308]? { \u0301 → ;
+::NFC();
+::Any-Upper();

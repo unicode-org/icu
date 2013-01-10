@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ks.xml
@@ -346,7 +346,7 @@ ks{
         non{"پرون نارسی"}
         nqo{"ایٚن کو"}
         nr{"جنوب ڈیٚبیل"}
-        nso{"جنوبی سوتھو"}
+        nso{"شمالی ستھو"}
         nub{"نوٗبیَن زبان"}
         nv{"نَواجو"}
         nwc{"کلاسِکَل نیواری"}
@@ -438,7 +438,7 @@ ks{
         srr{"سیٚریر"}
         ss{"سواتی"}
         ssa{"نیٖلو سہارَن زبان"}
-        st{"جنوٗبی سوتھو"}
+        st{"جنوبی ستھو"}
         su{"سَنڈَنیٖز"}
         suk{"سُکُما"}
         sus{"سُسوٗ"}
@@ -682,7 +682,7 @@ ks{
         SOLBA{"ثٹولوِزا/سولبِکا بوٗلۍ"}
         TARASK{"تاراسکیٖوِکا علمہ ہِجاِ"}
     }
-    Version{"2.0.78.55"}
+    Version{"2.0.80.4"}
     codePatterns{
         language{"زَبان: {0}"}
         script{"رَسم الخط: {0}"}

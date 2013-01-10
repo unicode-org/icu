@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ks.xml
@@ -45,11 +45,11 @@ ks{
         AE{"مُتحدہ عرَب امارات"}
         AF{"اَفغانَستان"}
         AG{"اٮ۪نٹِگُوا تہٕ باربوڑا"}
-        AI{"اینٛگوِلا"}
+        AI{"انگوئیلا"}
         AL{"اٮ۪لبانِیا"}
         AM{"اَرمانِیا"}
         AN{"نَیدَرلینٛڑٕس اٮ۪نٹَیلٕس"}
-        AO{"اینٛگولا"}
+        AO{"انگولا"}
         AQ{"اینٹارٹِکا"}
         AR{"أرجَنٹینا"}
         AS{"اَمریٖکَن سَموا"}
@@ -288,5 +288,5 @@ ks{
         ZW{"زِمبابے"}
         ZZ{"نامعلوٗم تہٕ نالَگہار عَلاقہٕ"}
     }
-    Version{"2.0.78.55"}
+    Version{"2.0.80.4"}
 }
