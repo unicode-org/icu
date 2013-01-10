@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pt_PT.xml
@@ -122,7 +122,7 @@ pt_PT{
             }
         }
     }
-    Version{"2.0.78.47"}
+    Version{"2.0.79.49"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -171,6 +171,7 @@ pt_PT{
                 MMMMd{"d 'de' MMMM"}
                 MMMd{"d/MM"}
                 yMMM{"MM/y"}
+                yMMMEEEEd{"EEEE, d/MM/y"}
                 yMMMEd{"E, d/MM/y"}
                 yMMMM{"MMMM 'de' y"}
                 yMMMMEd{"E, d 'de' MMMM 'de' y"}

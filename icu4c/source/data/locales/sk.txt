@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sk.xml
@@ -170,7 +170,7 @@ sk{
             }
         }
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.23"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -479,50 +479,22 @@ sk{
                         "nov",
                         "dec",
                     }
-                    narrow{
-                        "j",
-                        "f",
-                        "m",
-                        "a",
-                        "m",
-                        "j",
-                        "j",
-                        "a",
-                        "s",
-                        "o",
-                        "n",
-                        "d",
-                    }
                     wide{
-                        "január",
-                        "február",
-                        "marec",
-                        "apríl",
-                        "máj",
-                        "jún",
-                        "júl",
-                        "august",
-                        "september",
-                        "október",
-                        "november",
-                        "december",
+                        "januára",
+                        "februára",
+                        "marca",
+                        "apríla",
+                        "mája",
+                        "júna",
+                        "júla",
+                        "augusta",
+                        "septembra",
+                        "októbra",
+                        "novembra",
+                        "decembra",
                     }
                 }
                 stand-alone{
-                    abbreviated{
-                        "jan",
-                        "feb",
-                        "mar",
-                        "apr",
-                        "máj",
-                        "jún",
-                        "júl",
-                        "aug",
-                        "sep",
-                        "okt",
-                        "nov",
-                        "dec",
-                    }
                     narrow{
                         "j",
                         "f",

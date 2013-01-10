@@ -1,6 +1,6 @@
-# *   Copyright (C) 1998-2012, International Business Machines
+# *   Copyright (C) 1998-2013, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-BRK_RES_CLDR_VERSION = 22.1.1
+BRK_RES_CLDR_VERSION = 23
 # A list of txt's to build
 # Note:
 #

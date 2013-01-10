@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sv.xml
@@ -131,7 +131,6 @@ sv{
             }
             symbols{
                 currencyDecimal{":"}
-                currencyGroup{"."}
                 decimal{","}
                 exponential{"×10^"}
                 group{" "}
@@ -145,7 +144,7 @@ sv{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.27"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -240,34 +239,34 @@ sv{
                 }
                 stand-alone{
                     abbreviated{
-                        "tout",
-                        "bâbâ",
-                        "hâtour",
-                        "kiahk",
-                        "toubah",
-                        "amshîr",
-                        "barmahât",
-                        "barmoudah",
-                        "bashans",
-                        "ba’ounah",
-                        "abîb",
-                        "misra",
-                        "al-nasi",
+                        "Tout",
+                        "Bâbâ",
+                        "Hâtour",
+                        "Kiahk",
+                        "Toubah",
+                        "Amshîr",
+                        "Barmahât",
+                        "Barmoudah",
+                        "Bashans",
+                        "Ba’ounah",
+                        "Abîb",
+                        "Misra",
+                        "Al-nasi",
                     }
                     wide{
-                        "tout",
-                        "bâbâ",
-                        "hâtour",
-                        "kiahk",
-                        "toubah",
-                        "amshîr",
-                        "barmahât",
-                        "barmoudah",
-                        "bashans",
-                        "ba’ounah",
-                        "abîb",
-                        "misra",
-                        "al-nasi",
+                        "Tout",
+                        "Bâbâ",
+                        "Hâtour",
+                        "Kiahk",
+                        "Toubah",
+                        "Amshîr",
+                        "Barmahât",
+                        "Barmoudah",
+                        "Bashans",
+                        "Ba’ounah",
+                        "Abîb",
+                        "Misra",
+                        "Al-nasi",
                     }
                 }
             }
@@ -308,34 +307,34 @@ sv{
                 }
                 stand-alone{
                     abbreviated{
-                        "mäskäräm",
-                        "teqemt",
-                        "hedar",
-                        "tahesas",
-                        "ter",
-                        "yäkatit",
-                        "mägabit",
-                        "miyazya",
-                        "guenbot",
-                        "säné",
-                        "hamlé",
-                        "nähasé",
-                        "pagumén",
+                        "Mäskäräm",
+                        "Teqemt",
+                        "Hedar",
+                        "Tahesas",
+                        "Ter",
+                        "Yäkatit",
+                        "Mägabit",
+                        "Miyazya",
+                        "Guenbot",
+                        "Säné",
+                        "Hamlé",
+                        "Nähasé",
+                        "Pagumén",
                     }
                     wide{
-                        "mäskäräm",
-                        "teqemt",
-                        "hedar",
-                        "tahesas",
-                        "ter",
-                        "yäkatit",
-                        "mägabit",
-                        "miyazya",
-                        "guenbot",
-                        "säné",
-                        "hamlé",
-                        "nähasé",
-                        "pagumén",
+                        "Mäskäräm",
+                        "Teqemt",
+                        "Hedar",
+                        "Tahesas",
+                        "Ter",
+                        "Yäkatit",
+                        "Mägabit",
+                        "Miyazya",
+                        "Guenbot",
+                        "Säné",
+                        "Hamlé",
+                        "Nähasé",
+                        "Pagumén",
                     }
                 }
             }
@@ -437,13 +436,13 @@ sv{
                 }
                 stand-alone{
                     abbreviated{
-                        "sön",
-                        "mån",
-                        "tis",
-                        "ons",
-                        "tor",
-                        "fre",
-                        "lör",
+                        "Sön",
+                        "Mån",
+                        "Tis",
+                        "Ons",
+                        "Tor",
+                        "Fre",
+                        "Lör",
                     }
                     narrow{
                         "S",
@@ -455,22 +454,22 @@ sv{
                         "L",
                     }
                     short{
-                        "sö",
-                        "må",
-                        "ti",
-                        "on",
-                        "to",
-                        "fr",
-                        "lö",
+                        "Sö",
+                        "Må",
+                        "Ti",
+                        "On",
+                        "To",
+                        "Fr",
+                        "Lö",
                     }
                     wide{
-                        "söndag",
-                        "måndag",
-                        "tisdag",
-                        "onsdag",
-                        "torsdag",
-                        "fredag",
-                        "lördag",
+                        "Söndag",
+                        "Måndag",
+                        "Tisdag",
+                        "Onsdag",
+                        "Torsdag",
+                        "Fredag",
+                        "Lördag",
                     }
                 }
             }
@@ -679,18 +678,18 @@ sv{
                 }
                 stand-alone{
                     abbreviated{
-                        "jan",
-                        "feb",
-                        "mar",
-                        "apr",
-                        "maj",
-                        "jun",
-                        "jul",
-                        "aug",
-                        "sep",
-                        "okt",
-                        "nov",
-                        "dec",
+                        "Jan",
+                        "Feb",
+                        "Mar",
+                        "Apr",
+                        "Maj",
+                        "Jun",
+                        "Jul",
+                        "Aug",
+                        "Sep",
+                        "Okt",
+                        "Nov",
+                        "Dec",
                     }
                     narrow{
                         "J",
@@ -707,18 +706,18 @@ sv{
                         "D",
                     }
                     wide{
-                        "januari",
-                        "februari",
-                        "mars",
-                        "april",
-                        "maj",
-                        "juni",
-                        "juli",
-                        "augusti",
-                        "september",
-                        "oktober",
-                        "november",
-                        "december",
+                        "Januari",
+                        "Februari",
+                        "Mars",
+                        "April",
+                        "Maj",
+                        "Juni",
+                        "Juli",
+                        "Augusti",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "December",
                     }
                 }
             }
@@ -808,36 +807,36 @@ sv{
                 }
                 stand-alone{
                     abbreviated{
-                        "tishrí",
-                        "heshván",
-                        "kislév",
-                        "tevét",
-                        "shevát",
-                        "adár I",
-                        "adár",
-                        "nisán",
-                        "ijjár",
-                        "siván",
-                        "tammúz",
-                        "ab",
-                        "elúl",
-                        "adár II",
+                        "Tishrí",
+                        "Heshván",
+                        "Kislév",
+                        "Tevét",
+                        "Shevát",
+                        "Adár I",
+                        "Adár",
+                        "Nisán",
+                        "Ijjár",
+                        "Siván",
+                        "Tammúz",
+                        "Ab",
+                        "Elúl",
+                        "Adár II",
                     }
                     wide{
-                        "tishrí",
-                        "heshván",
-                        "kislév",
-                        "tevét",
-                        "shevát",
-                        "adár I",
-                        "adár",
-                        "nisán",
-                        "ijjár",
-                        "siván",
-                        "tammúz",
-                        "ab",
-                        "elúl",
-                        "adár II",
+                        "Tishrí",
+                        "Heshván",
+                        "Kislév",
+                        "Tevét",
+                        "Shevát",
+                        "Adár I",
+                        "Adár",
+                        "Nisán",
+                        "Ijjár",
+                        "Siván",
+                        "Tammúz",
+                        "Ab",
+                        "Elúl",
+                        "Adár II",
                     }
                 }
             }
@@ -881,32 +880,32 @@ sv{
                 }
                 stand-alone{
                     abbreviated{
-                        "chaitra",
-                        "vaishākh",
-                        "jyaishtha",
-                        "āshādha",
-                        "shrāvana",
-                        "bhādrapad",
-                        "āshwin",
-                        "kārtik",
-                        "mārgashīrsha",
-                        "paush",
-                        "māgh",
-                        "phālgun",
+                        "Chaitra",
+                        "Vaishākh",
+                        "Jyaishtha",
+                        "Āshādha",
+                        "Shrāvana",
+                        "Bhādrapad",
+                        "Āshwin",
+                        "Kārtik",
+                        "Mārgashīrsha",
+                        "Paush",
+                        "Māgh",
+                        "Phālgun",
                     }
                     wide{
-                        "chaitra",
-                        "vaishākh",
-                        "jyaishtha",
-                        "āshādha",
-                        "shrāvana",
-                        "bhādrapad",
-                        "āshwin",
-                        "kārtik",
-                        "mārgashīrsha",
-                        "paush",
-                        "māgh",
-                        "phālgun",
+                        "Chaitra",
+                        "Vaishākh",
+                        "Jyaishtha",
+                        "Āshādha",
+                        "Shrāvana",
+                        "Bhādrapad",
+                        "Āshwin",
+                        "Kārtik",
+                        "Mārgashīrsha",
+                        "Paush",
+                        "Māgh",
+                        "Phālgun",
                     }
                 }
             }
@@ -985,18 +984,18 @@ sv{
                 }
                 stand-alone{
                     wide{
-                        "muharram",
-                        "safar",
-                        "rabi’ al-awwal",
-                        "rabi’ al-akhir",
-                        "jumada-l-ula",
-                        "jumada-l-akhira",
-                        "rajab",
-                        "sha’ban",
-                        "ramadan",
-                        "shawwal",
-                        "dhu-l-ga’da",
-                        "dhu-l-hijja",
+                        "Muharram",
+                        "Safar",
+                        "Rabi’ al-awwal",
+                        "Rabi’ al-akhir",
+                        "Jumada-l-ula",
+                        "Jumada-l-akhira",
+                        "Rajab",
+                        "Sha’ban",
+                        "Ramadan",
+                        "Shawwal",
+                        "Dhu-l-ga’da",
+                        "Dhu-l-hijja",
                     }
                 }
             }
@@ -1075,7 +1074,7 @@ sv{
                     "Daidō (806–810)",
                     "Kōnin (810–824)",
                     "Tenchō (824–834)",
-                    "Shōwa (834–848)",
+                    "Jōwa (834–848)",
                     "Kajō (848–851)",
                     "Ninju (851–854)",
                     "Saiko (854–857)",
@@ -1331,32 +1330,32 @@ sv{
                 }
                 stand-alone{
                     abbreviated{
-                        "farvardin",
-                        "ordibehesht",
-                        "khordād",
-                        "tir",
-                        "mordād",
-                        "shahrivar",
-                        "mehr",
-                        "ābān",
-                        "āzar",
-                        "dey",
-                        "bahman",
-                        "esfand",
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordād",
+                        "Tir",
+                        "Mordād",
+                        "Shahrivar",
+                        "Mehr",
+                        "Ābān",
+                        "Āzar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
                     }
                     wide{
-                        "farvardin",
-                        "ordibehesht",
-                        "khordād",
-                        "tir",
-                        "mordād",
-                        "shahrivar",
-                        "mehr",
-                        "ābān",
-                        "āzar",
-                        "dey",
-                        "bahman",
-                        "esfand",
+                        "Farvardin",
+                        "Ordibehesht",
+                        "Khordād",
+                        "Tir",
+                        "Mordād",
+                        "Shahrivar",
+                        "Mehr",
+                        "Ābān",
+                        "Āzar",
+                        "Dey",
+                        "Bahman",
+                        "Esfand",
                     }
                 }
             }
