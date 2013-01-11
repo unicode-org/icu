@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -434,10 +434,10 @@ static void TestErrorBehaviour(){
             log_err("u-> ibm-1363 [UCNV_MBCS] \n");
 
         if(!convertFromU(sampleText4MBCS, sizeof(sampleText4MBCS)/sizeof(sampleText4MBCS[0]),
-                expected4MBCS, sizeof(expected4MBCS), "euc-jp", offsets4MBCS, TRUE, U_ZERO_ERROR))
+                expected4MBCS, sizeof(expected4MBCS), "IBM-eucJP", offsets4MBCS, TRUE, U_ZERO_ERROR))
             log_err("u-> euc-jp [UCNV_MBCS] \n");
         if(!convertFromU(sampleText4MBCS, sizeof(sampleText4MBCS)/sizeof(sampleText4MBCS[0]),
-                expected4MBCS, sizeof(expected4MBCS), "euc-jp", offsets4MBCS, FALSE, U_ZERO_ERROR))
+                expected4MBCS, sizeof(expected4MBCS), "IBM-eucJP", offsets4MBCS, FALSE, U_ZERO_ERROR))
             log_err("u-> euc-jp [UCNV_MBCS] \n");
     }
 
