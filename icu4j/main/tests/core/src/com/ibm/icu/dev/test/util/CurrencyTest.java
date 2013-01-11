@@ -645,8 +645,9 @@ public class CurrencyTest extends TestFmwk {
         assertFalse("DEM after 2005", Currency.isAvailable("DEM", d2005, null));
         assertTrue("DEM on 2000-01-01", Currency.isAvailable("DEM", d2000, d2000));
         assertFalse("DEM on 2005-01-01", Currency.isAvailable("DEM", d2005, d2005));
+        assertTrue("CHE all the time", Currency.isAvailable("CHE", null, null));
 
-        assertFalse("XXX unknown code", Currency.isAvailable("XXX", null, null));
+        assertFalse("XXY unknown code", Currency.isAvailable("XXY", null, null));
 
         assertFalse("USDOLLAR invalid code", Currency.isAvailable("USDOLLAR", null, null));
 
