@@ -1,6 +1,6 @@
 //*******************************************************************************
 //
-//   Copyright (C) 2003-2012, International Business Machines
+//   Copyright (C) 2003-2013, International Business Machines
 //   Corporation and others.  All Rights Reserved.
 //
 //   file name:  conversion.txt
@@ -1766,8 +1766,8 @@ conversion:table(nofallback) {
         { "UTF-8", "a\ud800b", :bin{ 61efbfbd62 }, :intvector{ 0, 1, 1, 1, 2 }, :int{1}, :int{0}, "", "", "" }
 
         // Code coverage for the EUC variants.
-        { "EUC-JP", "\u0061\u4edd\u5bec\ud801\udc01\ud801\u0061\u00a2", :bin{ 61a1b88ff4ae618ee0 }, :intvector{ 0, 1, 1, 2, 2, 2, 6, 7, 7 }, :int{1}, :int{0}, "", "0", "" }
-        { "EUC-JP", "\u0061\u4edd\u5bec\ud801\udc01\ud801\u0061\u00a2", :bin{ 61a1b88ff4aef4fef4fe618ee0 }, :intvector{ 0, 1, 1, 2, 2, 2, 3, 3, 5, 5, 6, 7, 7 }, :int{1}, :int{0}, "", "", "" }
+        { "IBM-eucJP", "\u0061\u4edd\u5bec\ud801\udc01\ud801\u0061\u00a2", :bin{ 61a1b88ff4ae618ee0 }, :intvector{ 0, 1, 1, 2, 2, 2, 6, 7, 7 }, :int{1}, :int{0}, "", "0", "" }
+        { "IBM-eucJP", "\u0061\u4edd\u5bec\ud801\udc01\ud801\u0061\u00a2", :bin{ 61a1b88ff4aef4fef4fe618ee0 }, :intvector{ 0, 1, 1, 2, 2, 2, 3, 3, 5, 5, 6, 7, 7 }, :int{1}, :int{0}, "", "", "" }
         { "EUC-TW", "\u0061\u2295\u5BF2\ud801\udc01\ud801\u0061\u8706\u008a", :bin{ 61a2d38ea2dce561e6ca8a }, :intvector{ 0, 1, 1, 2, 2, 2, 2, 6, 7, 7, 8 }, :int{1}, :int{0}, "", "0", "" }
         { "EUC-TW", "\u0061\u2295\u5BF2\ud801\udc01\ud801\u0061\u8706\u008a", :bin{ 61a2d38ea2dce5fdfefdfe61e6ca8a }, :intvector{ 0, 1, 1, 2, 2, 2, 2, 3, 3, 5, 5, 6, 7, 7, 8 }, :int{1}, :int{0}, "", "", "" }
         
