@@ -2689,7 +2689,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 a *= 10;
                 i--;
             }
-            value = (value + (a>>1)) / a;
+            value /= a;
         }
         cal.set(UCAL_MILLISECOND, value);
         return pos.getIndex();
