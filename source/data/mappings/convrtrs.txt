@@ -673,6 +673,7 @@ windows-950-2000 { UTR22* }
                         windows-950 { WINDOWS* }
                         x-windows-950 { JAVA }
                         x-big5
+                        ms950
 ibm-950_P110-1999 { UTR22* }                # Taiwan Big-5 (w/o euro update)
                         ibm-950 { IBM* JAVA }
                         cp950 { JAVA* }
