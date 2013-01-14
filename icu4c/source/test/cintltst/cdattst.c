@@ -592,7 +592,7 @@ static void TestSymbols()
         udat_countSymbols(def, UDAT_SHORT_MONTHS)!=12 || udat_countSymbols(def, UDAT_WEEKDAYS)!=8 ||
         udat_countSymbols(def, UDAT_SHORT_WEEKDAYS)!=8 || udat_countSymbols(def, UDAT_AM_PMS)!=2 ||
         udat_countSymbols(def, UDAT_QUARTERS) != 4 || udat_countSymbols(def, UDAT_SHORT_QUARTERS) != 4 ||
-        udat_countSymbols(def, UDAT_LOCALIZED_CHARS)!=1)
+        udat_countSymbols(def, UDAT_LOCALIZED_CHARS)!=1 || udat_countSymbols(def, UDAT_SHORTER_WEEKDAYS)!=8)
     {
         log_err("FAIL: error in udat_countSymbols\n");
     }
@@ -634,6 +634,7 @@ static void TestSymbols()
     VerifygetSymbols(fr, UDAT_WEEKDAYS, 1, "dimanche");
     VerifygetSymbols(def, UDAT_WEEKDAYS, 1, "Sunday");
     VerifygetSymbols(fr, UDAT_SHORT_WEEKDAYS, 7, "sam.");
+    VerifygetSymbols(fr, UDAT_SHORTER_WEEKDAYS, 7, "sa");
     VerifygetSymbols(def, UDAT_SHORT_WEEKDAYS, 7, "Sat");
     VerifygetSymbols(def, UDAT_MONTHS, 11, "December");
     VerifygetSymbols(def, UDAT_MONTHS, 0, "January");
