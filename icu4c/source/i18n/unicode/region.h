@@ -147,8 +147,6 @@ public:
      * @draft ICU 51
      */
     UBool operator!=(const Region &that) const;
-
-
  
     /**
      * Returns a pointer to a Region using the given region code.  The region code can be either 2-letter ISO code,
@@ -157,20 +155,20 @@ public:
      * If the region code is NULL or not recognized, the appropriate error code will be set ( U_ILLEGAL_ARGUMENT_ERROR )
      * @draft ICU 51 
      */
-    static const Region *getInstance(const char *region_code, UErrorCode &status);
+    static const Region* U_EXPORT2 getInstance(const char *region_code, UErrorCode &status);
 
     /**
      * Returns a pointer to a Region using the given numeric region code. If the numeric region code is not recognized,
      * the appropriate error code will be set ( U_ILLEGAL_ARGUMENT_ERROR ).
      * @draft ICU 51 
      */
-    static const Region *getInstance (int32_t code, UErrorCode &status);
+    static const Region* U_EXPORT2 getInstance (int32_t code, UErrorCode &status);
 
     /**
      * Returns an enumeration over the IDs of all known regions that match the given type.
      * @draft ICU 51 
      */
-    static StringEnumeration *getAvailable(URegionType type);
+    static StringEnumeration* U_EXPORT2 getAvailable(URegionType type);
    
     /**
      * Returns a pointer to the region that contains this region.  Returns NULL if this region is code "001" (World)
@@ -178,7 +176,7 @@ public:
      * region "039" (Southern Europe).
      * @draft ICU 51 
      */
-    const Region *getContainingRegion() const;
+    const Region* getContainingRegion() const;
 
     /**
      * Return a pointer to the region that geographically contains this region and matches the given type,
@@ -199,7 +197,7 @@ public:
      * and "155" (Western Europe).
      * @draft ICU 51 
      */
-    StringEnumeration *getContainedRegions() const;
+    StringEnumeration* getContainedRegions() const;
 
     /**
      * Returns an enumeration over the IDs of all the regions that are children of this region anywhere in the region
@@ -208,7 +206,7 @@ public:
      * "URGN_TERRITORY" returns a set containing all the territories in Europe ( "FR" (France) - "IT" (Italy) - "DE" (Germany) etc. )
      * @draft ICU 51 
      */
-    StringEnumeration *getContainedRegions( URegionType type ) const;
+    StringEnumeration* getContainedRegions( URegionType type ) const;
  
     /**
      * Returns true if this region contains the supplied other region anywhere in the region hierarchy.
@@ -222,14 +220,14 @@ public:
      * "SU" (Soviet Union) would return a list of the regions containing "RU" (Russia), "AM" (Armenia), "AZ" (Azerbaijan), etc...
      * @draft ICU 51 
      */
-    StringEnumeration *getPreferredValues() const;
+    StringEnumeration* getPreferredValues() const;
  
 
     /**
      * Return this region's canonical region code.
      * @draft ICU 51 
      */
-    const char *getRegionCode() const;
+    const char* getRegionCode() const;
 
     /**
      * Return this region's numeric code. Returns UNDEFINED_NUMERIC_CODE (-1) if the given region does not have a numeric code assigned to it.
