@@ -1343,6 +1343,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         break;
 
     // for "ee" or "e", use local numeric day-of-the-week
+    // for "EEEEEE" or "eeeeee", write out the short day-of-the-week name
     // for "EEEEE" or "eeeee", write out the narrow day-of-the-week name
     // for "EEEE" or "eeee", write out the wide day-of-the-week name
     // for "EEE" or "EE" or "E" or "eee", write out the abbreviated day-of-the-week name
@@ -1367,6 +1368,10 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
             _appendSymbol(appendTo, value, fSymbols->fWeekdays,
                           fSymbols->fWeekdaysCount);
             capContextUsageType = DateFormatSymbols::kCapContextUsageDayFormat;
+        } else if (count == 6) {
+            _appendSymbol(appendTo, value, fSymbols->fShorterWeekdays,
+                          fSymbols->fShorterWeekdaysCount);
+            capContextUsageType = DateFormatSymbols::kCapContextUsageDayFormat;
         } else {
             _appendSymbol(appendTo, value, fSymbols->fShortWeekdays,
                           fSymbols->fShortWeekdaysCount);
@@ -1377,6 +1382,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     // for "ccc", write out the abbreviated day-of-the-week name
     // for "cccc", write out the wide day-of-the-week name
     // for "ccccc", use the narrow day-of-the-week name
+    // for "ccccc", use the short day-of-the-week name
     case UDAT_STANDALONE_DAY_FIELD:
         if ( count < 3 ) {
             zeroPaddingNumber(currentNumberFormat,appendTo, value, 1, maxIntCount);
@@ -1395,6 +1401,10 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
         } else if (count == 4) {
             _appendSymbol(appendTo, value, fSymbols->fStandaloneWeekdays,
                           fSymbols->fStandaloneWeekdaysCount);
+            capContextUsageType = DateFormatSymbols::kCapContextUsageDayStandalone;
+        } else if (count == 6) {
+            _appendSymbol(appendTo, value, fSymbols->fStandaloneShorterWeekdays,
+                          fSymbols->fStandaloneShorterWeekdaysCount);
             capContextUsageType = DateFormatSymbols::kCapContextUsageDayStandalone;
         } else { // count == 3
             _appendSymbol(appendTo, value, fSymbols->fStandaloneShortWeekdays,
@@ -2706,16 +2716,20 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     case UDAT_DAY_OF_WEEK_FIELD:
         {
             // Want to be able to parse both short and long forms.
-            // Try count == 4 (EEEE) first:
+            // Try count == 4 (EEEE) wide first:
             int32_t newStart = 0;
             if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                       fSymbols->fWeekdays, fSymbols->fWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
-            // EEEE failed, now try EEE
+            // EEEE wide failed, now try EEE abbreviated
             else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                    fSymbols->fShortWeekdays, fSymbols->fShortWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
-            // EEE failed, now try EEEEE
+            // EEE abbreviated failed, now try EEEEEE short
+            else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                                   fSymbols->fShorterWeekdays, fSymbols->fShorterWeekdaysCount, NULL, cal)) > 0)
+                return newStart;
+            // EEEEEE short failed, now try EEEEE narrow
             else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                    fSymbols->fNarrowWeekdays, fSymbols->fNarrowWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
@@ -2741,6 +2755,9 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 return newStart;
             else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                           fSymbols->fStandaloneShortWeekdays, fSymbols->fStandaloneShortWeekdaysCount, NULL, cal)) > 0)
+                return newStart;
+            else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
+                                          fSymbols->fStandaloneShorterWeekdays, fSymbols->fStandaloneShorterWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
             else if (!lenient)
                 return newStart;

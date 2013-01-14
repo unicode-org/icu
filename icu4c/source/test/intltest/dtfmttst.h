@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -194,11 +194,13 @@ public:
 
 public:
     /**
-     * Test patterns added in CLDR 1.4
+     * Test patterns added in CLDR 1.4, CLDR 23
      */
     void TestEras(void);
 
     void TestNarrowNames(void);
+
+    void TestShortDays(void);
 
     void TestStandAloneDays(void);
 
