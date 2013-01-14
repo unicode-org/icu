@@ -80,6 +80,9 @@ icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
+icu4c/source/i18n/region.cpp -text
+icu4c/source/i18n/region_impl.h -text
+icu4c/source/i18n/unicode/region.h -text
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
 icu4c/source/layout/layout.vcxproj -text
@@ -141,6 +144,8 @@ icu4c/source/test/cintltst/cintltst.vcxproj -text
 icu4c/source/test/cintltst/cintltst.vcxproj.filters -text
 icu4c/source/test/intltest/intltest.vcxproj -text
 icu4c/source/test/intltest/intltest.vcxproj.filters -text
+icu4c/source/test/intltest/regiontst.cpp -text
+icu4c/source/test/intltest/regiontst.h -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/iotest/iotest.vcxproj.filters -text
 icu4c/source/test/letest/cletest.vcxproj -text

@@ -248,6 +248,7 @@
     <ClCompile Include="bocsu.cpp" />
     <ClCompile Include="coleitr.cpp" />
     <ClCompile Include="coll.cpp" />
+    <ClCompile Include="region.cpp" />
     <ClCompile Include="search.cpp" />
     <ClCompile Include="sortkey.cpp" />
     <ClCompile Include="stsearch.cpp" />
@@ -537,6 +538,7 @@
     </CustomBuild>
     <ClInclude Include="dcfmtimp.h" />
     <ClInclude Include="numsys_impl.h" />
+    <ClInclude Include="region_impl.h" />
     <ClInclude Include="selfmtimpl.h" />
     <ClInclude Include="tzgnames.h" />
     <ClInclude Include="tznames_impl.h" />
@@ -594,6 +596,7 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">copy "%(FullPath)" ..\..\include\unicode</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="unicode\region.h" />
     <ClInclude Include="usrchimp.h" />
     <ClInclude Include="astro.h" />
     <CustomBuild Include="unicode\basictz.h">
