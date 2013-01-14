@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines
+ * Copyright (C) 1996-2013, International Business Machines
  * Corporation and others. All Rights Reserved.
  *******************************************************************************
 */
@@ -1077,9 +1077,12 @@ typedef enum UDateFormatSymbolType {
     UDAT_MONTHS,
     /** The short month names, for example Feb. */
     UDAT_SHORT_MONTHS,
-    /** The weekday names, for example Monday */
+    /** The CLDR-style format "wide" weekday names, for example Monday */
     UDAT_WEEKDAYS,
-    /** The short weekday names, for example Mon. */
+    /**
+     * The CLDR-style format "abbreviated" (not "short") weekday names, for example "Mon."
+     * For the CLDR-style format "short" weekday names, use UDAT_SHORTER_WEEKDAYS.
+     */
     UDAT_SHORT_WEEKDAYS,
     /** The AM/PM names, for example AM */
     UDAT_AM_PMS,
@@ -1089,15 +1092,20 @@ typedef enum UDateFormatSymbolType {
     UDAT_ERA_NAMES,
     /** The narrow month names, for example F */
     UDAT_NARROW_MONTHS,
-    /** The narrow weekday names, for example N */
+    /** The CLDR-style format "narrow" weekday names, for example "M" */
     UDAT_NARROW_WEEKDAYS,
     /** Standalone context versions of months */
     UDAT_STANDALONE_MONTHS,
     UDAT_STANDALONE_SHORT_MONTHS,
     UDAT_STANDALONE_NARROW_MONTHS,
-    /** Standalone context versions of weekdays */
+    /** The CLDR-style stand-alone "wide" weekday names */
     UDAT_STANDALONE_WEEKDAYS,
+    /**
+     * The CLDR-style stand-alone "abbreviated" (not "short") weekday names.
+     * For the CLDR-style stand-alone "short" weekday names, use UDAT_STANDALONE_SHORTER_WEEKDAYS.
+     */
     UDAT_STANDALONE_SHORT_WEEKDAYS,
+    /** The CLDR-style stand-alone "narrow" weekday names */
     UDAT_STANDALONE_NARROW_WEEKDAYS,
     /** The quarters, for example 1st Quarter */
     UDAT_QUARTERS,
@@ -1105,7 +1113,16 @@ typedef enum UDateFormatSymbolType {
     UDAT_SHORT_QUARTERS,
     /** Standalone context versions of quarters */
     UDAT_STANDALONE_QUARTERS,
-    UDAT_STANDALONE_SHORT_QUARTERS
+    UDAT_STANDALONE_SHORT_QUARTERS,
+    /**
+     * The CLDR-style short weekday names, e.g. "Su", Mo", etc.
+     * These are named "SHORTER" to contrast with the constants using _SHORT_
+     * above, which actually get the CLDR-style *abbreviated* versions of the
+     * corresponding names.
+     * @draft ICU 51
+     */
+     UDAT_SHORTER_WEEKDAYS,
+     UDAT_STANDALONE_SHORTER_WEEKDAYS
 
 } UDateFormatSymbolType;
 

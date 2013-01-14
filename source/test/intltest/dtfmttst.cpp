@@ -73,6 +73,7 @@ void DateFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &nam
     TESTCASE_AUTO(TestHost);
     TESTCASE_AUTO(TestEras);
     TESTCASE_AUTO(TestNarrowNames);
+    TESTCASE_AUTO(TestShortDays);
     TESTCASE_AUTO(TestStandAloneDays);
     TESTCASE_AUTO(TestStandAloneMonths);
     TESTCASE_AUTO(TestQuarters);
@@ -1614,6 +1615,30 @@ void DateFormatTest::TestStandAloneDays()
 
     expect(EN_DATA, ARRAY_SIZE(EN_DATA), Locale("en", "", ""));
     expect(CS_DATA, ARRAY_SIZE(CS_DATA), Locale("cs", "", ""));
+}
+
+void DateFormatTest::TestShortDays()
+{
+    const char *EN_DATA[] = {
+        "yyyy MM dd HH:mm:ss",
+
+        "EEEEEE, MMM d y", "fp", "2013 01 13 0:00:00", "Su, Jan 13 2013", "2013 01 13 0:00:00",
+        "EEEEEE, MMM d y", "fp", "2013 01 16 0:00:00", "We, Jan 16 2013", "2013 01 16 0:00:00",
+        "EEEEEE d",        "fp", "1970 01 17 0:00:00", "Sa 17",           "1970 01 17 0:00:00",
+        "cccccc d",        "fp", "1970 01 17 0:00:00", "Sa 17",           "1970 01 17 0:00:00",
+        "cccccc",          "fp", "1970 01 03 0:00:00", "Sa",              "1970 01 03 0:00:00",
+    };
+    const char *SV_DATA[] = {
+        "yyyy MM dd HH:mm:ss",
+
+        "EEEEEE d MMM y",  "fp", "2013 01 13 0:00:00", "s\\u00F6 13 jan 2013", "2013 01 13 0:00:00",
+        "EEEEEE d MMM y",  "fp", "2013 01 16 0:00:00", "on 16 jan 2013",       "2013 01 16 0:00:00",
+        "EEEEEE d",        "fp", "1970 01 17 0:00:00", "l\\u00F6 17",          "1970 01 17 0:00:00",
+        "cccccc d",        "fp", "1970 01 17 0:00:00", "L\\u00F6 17",          "1970 01 17 0:00:00",
+        "cccccc",          "fp", "1970 01 03 0:00:00", "L\\u00F6",             "1970 01 03 0:00:00",
+    };
+    expect(EN_DATA, ARRAY_SIZE(EN_DATA), Locale("en", "", ""));
+    expect(SV_DATA, ARRAY_SIZE(SV_DATA), Locale("sv", "", ""));
 }
 
 void DateFormatTest::TestNarrowNames()
