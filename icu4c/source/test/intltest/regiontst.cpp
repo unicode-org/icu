@@ -414,7 +414,7 @@ void RegionTest::TestGetInstanceString() {
 
 
     UErrorCode status = U_ZERO_ERROR;
-    const Region *r = Region::getInstance(NULL,status);
+    const Region *r = Region::getInstance((const char *)NULL,status);
     if ( status != U_ILLEGAL_ARGUMENT_ERROR ) {
         errln("Calling Region::getInstance(NULL) should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't.");
     }
@@ -465,7 +465,7 @@ void RegionTest::TestGetInstanceInt() {
     };
 
     UErrorCode status = U_ZERO_ERROR;
-    const Region *r = Region::getInstance(-123,status);
+    Region::getInstance(-123,status);
     if ( status != U_ILLEGAL_ARGUMENT_ERROR ) {
         errln("Calling Region::getInstance(-123) should have triggered an U_ILLEGAL_ARGUMENT_ERROR, but didn't.");
     }
@@ -503,7 +503,6 @@ void RegionTest::TestGetContainedRegions() {
                 continue;
             }
             StringEnumeration *containedRegions = r->getContainedRegions();
-            int32_t count = containedRegions->count(status);
             for ( int32_t i = 0 ; i < containedRegions->count(status); i++ ) {
                 const char *crID = containedRegions->next(NULL,status);
                 const Region *cr = Region::getInstance(crID,status);
