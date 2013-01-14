@@ -454,6 +454,9 @@
     <ClCompile Include="colldata.cpp">
       <Filter>collation</Filter>
     </ClCompile>
+    <ClCompile Include="regiontst.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="itrbbi.h">
@@ -825,6 +828,9 @@
     <ClInclude Include="listformattertest.h" />
     <ClInclude Include="colldata.h">
       <Filter>collation</Filter>
+    </ClInclude>
+    <ClInclude Include="regiontst.h">
+      <Filter>formatting</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

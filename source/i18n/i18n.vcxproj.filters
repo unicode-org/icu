@@ -490,6 +490,9 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="bocsu.cpp" />
+    <ClCompile Include="region.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bocsu.h">
@@ -778,6 +781,12 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="selfmtimpl.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="region_impl.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="unicode\region.h">
       <Filter>formatting</Filter>
     </ClInclude>
   </ItemGroup>

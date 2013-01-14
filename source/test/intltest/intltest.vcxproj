@@ -225,6 +225,7 @@
   <ItemGroup>
     <ClCompile Include="bytestrietest.cpp" />
     <ClCompile Include="colldata.cpp" />
+    <ClCompile Include="regiontst.cpp" />
     <ClCompile Include="ucharstrietest.cpp" />
     <ClCompile Include="itrbbi.cpp" />
     <ClCompile Include="rbbiapts.cpp" />
@@ -415,6 +416,7 @@
     <ClInclude Include="lcukocol.h" />
     <ClInclude Include="mnkytst.h" />
     <ClInclude Include="regcoll.h" />
+    <ClInclude Include="regiontst.h" />
     <ClInclude Include="srchtest.h" />
     <ClInclude Include="ssearch.h" />
     <ClInclude Include="svccoll.h" />
