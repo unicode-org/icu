@@ -323,7 +323,7 @@ Region::Region () {
 /**
  * Returns true if the two regions are equal.
  */
-UBool U_EXPORT2
+UBool
 Region::operator==(const Region &that) const {
     return (idStr == that.idStr);
 }
@@ -331,7 +331,7 @@ Region::operator==(const Region &that) const {
 /**
  * Returns true if the two regions are NOT equal; that is, if operator ==() returns false.
  */
-UBool U_EXPORT2
+UBool
 Region::operator!=(const Region &that) const {
         return (idStr != that.idStr);
 }
@@ -379,7 +379,7 @@ Region::getInstance(const char *region_code, UErrorCode &status) {
  * Returns a pointer to a Region using the given numeric region code. If the numeric region code is not recognized,
  * the appropriate error code will be set ( U_ILLEGAL_ARGUMENT_ERROR ).
  */
-const Region * U_EXPORT2
+const Region* U_EXPORT2 
 Region::getInstance (int32_t code, UErrorCode &status) {
 
     loadRegionData();
@@ -417,7 +417,7 @@ Region::getInstance (int32_t code, UErrorCode &status) {
 /**
  * Returns an enumeration over the IDs of all known regions that match the given type.
  */
-StringEnumeration * U_EXPORT2
+StringEnumeration* U_EXPORT2
 Region::getAvailable(URegionType type) {
     
     loadRegionData();
@@ -432,7 +432,7 @@ Region::getAvailable(URegionType type) {
  * or "ZZ" (Unknown region). For example, calling this method with region "IT" (Italy) returns the
  * region "039" (Southern Europe).
  */
-const Region * U_EXPORT2
+const Region*
 Region::getContainingRegion() const {
     loadRegionData();
     return containingRegion;
@@ -445,7 +445,7 @@ Region::getContainingRegion() const {
  * are not appropriate for use in this API. NULL will be returned in this case. For example, calling this method
  * with region "IT" (Italy) for type "URGN_CONTINENT" returns the region "150" ( Europe ).
  */
-const Region* U_EXPORT2
+const Region*
 Region::getContainingRegion(URegionType type) const {
     loadRegionData();
     if ( containingRegion == NULL ) {
@@ -467,7 +467,7 @@ Region::getContainingRegion(URegionType type) const {
  * the various sub regions of Europe - "039" (Southern Europe) - "151" (Eastern Europe) - "154" (Northern Europe)
  * and "155" (Western Europe).
  */
-StringEnumeration * U_EXPORT2
+StringEnumeration*
 Region::getContainedRegions() const {
     loadRegionData();
     UErrorCode status = U_ZERO_ERROR;
@@ -480,7 +480,7 @@ Region::getContainedRegions() const {
  * sub-regions that match the given type. For example, calling this method with region "150" (Europe) and type
  * "URGN_TERRITORY" returns a set containing all the territories in Europe ( "FR" (France) - "IT" (Italy) - "DE" (Germany) etc. )
  */
-StringEnumeration * U_EXPORT2
+StringEnumeration*
 Region::getContainedRegions( URegionType type ) const {
     loadRegionData();
 
@@ -509,7 +509,7 @@ Region::getContainedRegions( URegionType type ) const {
 /**
  * Returns true if this region contains the supplied other region anywhere in the region hierarchy.
  */
-UBool U_EXPORT2
+UBool
 Region::contains(const Region &other) const {
     loadRegionData();
 
@@ -536,7 +536,7 @@ Region::contains(const Region &other) const {
  * regions for this region.  Returns NULL for a non-deprecated region.  For example, calling this method with region
  * "SU" (Soviet Union) would return a list of the regions containing "RU" (Russia), "AM" (Armenia), "AZ" (Azerbaijan), etc...
  */
-StringEnumeration * U_EXPORT2
+StringEnumeration*
 Region::getPreferredValues() const {
     loadRegionData();
     UErrorCode status = U_ZERO_ERROR;
@@ -551,7 +551,7 @@ Region::getPreferredValues() const {
 /**
  * Return this region's canonical region code.
  */
-const char * U_EXPORT2
+const char*
 Region::getRegionCode() const {
     return id;
 }
@@ -559,7 +559,7 @@ Region::getRegionCode() const {
 /**
  * Return this region's numeric code. Returns UNDEFINED_NUMERIC_CODE (-1) if the given region does not have a numeric code assigned to it.
  */
-int32_t U_EXPORT2
+int32_t
 Region::getNumericCode() const {
     return code;
 }
@@ -567,7 +567,7 @@ Region::getNumericCode() const {
 /**
  * Returns the region type of this region.
  */
-URegionType U_EXPORT2
+URegionType
 Region::getType() const {
     return type;
 }
@@ -577,7 +577,7 @@ RegionNameEnumeration::RegionNameEnumeration(UVector *fNameList, UErrorCode& /*s
     fRegionNames = fNameList;
 }
 
-const char *
+const char*
 RegionNameEnumeration::next(int32_t *resultLength, UErrorCode& status) {
     if (U_SUCCESS(status) && pos < fRegionNames->size()) {
         if (resultLength != NULL) {
