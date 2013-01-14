@@ -143,7 +143,6 @@ void Region::loadRegionData() {
 
 
     // Process the territory aliases
-    int32_t territoryAliasSize = ures_getSize(territoryAlias);
     while ( ures_hasNext(territoryAlias) ) {
         UResourceBundle *res = ures_getNextResource(territoryAlias,NULL,&status);
         const char *aliasFrom = ures_getKey(res);

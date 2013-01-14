@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1999-2012, International Business Machines
+#   Copyright (C) 1999-2013, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -55,7 +55,7 @@ itrbnf.o itrbnfrt.o itrbnfp.o ucaconf.o icusvtst.o \
 uobjtest.o idnaref.o idnaconf.o nptrans.o punyref.o testidn.o testidna.o uts46test.o \
 incaltst.o calcasts.o v32test.o uvectest.o textfile.o tokiter.o utxttest.o \
 windttst.o winnmtst.o winutil.o csdetest.o tzrulets.o tzoffloc.o tzfmttst.o ssearch.o dtifmtts.o \
-tufmtts.o itspoof.o simplethread.o bidiconf.o locnmtst.o dcfmtest.o alphaindextst.o listformattertest.o genderinfotest.o compactdecimalformattest.o
+tufmtts.o itspoof.o simplethread.o bidiconf.o locnmtst.o dcfmtest.o alphaindextst.o listformattertest.o genderinfotest.o compactdecimalformattest.o regiontst.o
 
 DEPS = $(OBJECTS:.o=.d)
 
