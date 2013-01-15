@@ -28,7 +28,6 @@ public:
     virtual ~RegionNameEnumeration();
     static UClassID U_EXPORT2 getStaticClassID(void);
     virtual UClassID getDynamicClassID(void) const;
-    virtual const char *next(int32_t *resultLength, UErrorCode& status);
     virtual const UnicodeString* snext(UErrorCode& status);
     virtual void reset(UErrorCode& status);
     virtual int32_t count(UErrorCode& status) const;
