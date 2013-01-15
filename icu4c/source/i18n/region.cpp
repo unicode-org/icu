@@ -24,22 +24,61 @@
 #include "unicode/unistr.h"
 #include "unicode/ures.h"
 #include "unicode/decimfmt.h"
+#include "ucln_in.h"
 #include "cstring.h"
 #include "uhash.h"
+#include "umutex.h"
 #include "uresimp.h"
 #include "region_impl.h"
 
 #if !UCONFIG_NO_FORMATTING
 
-U_NAMESPACE_BEGIN
 
+
+static UMutex gRegionDataLock = U_MUTEX_INITIALIZER;
 static UBool regionDataIsLoaded = false;
-static UVector* regions = NULL;
 static UVector* availableRegions[URGN_LIMIT];
 
 static UHashtable *regionAliases;
 static UHashtable *regionIDMap;
 static UHashtable *numericCodeMap;
+
+U_CDECL_BEGIN
+
+static void U_CALLCONV
+deleteRegion(void *obj) {
+    delete (icu::Region *)obj;
+}
+
+/**
+ * Cleanup callback func
+ */
+static UBool U_CALLCONV region_cleanup(void)
+{
+    for (int32_t i = 0 ; i < URGN_LIMIT ; i++ ) {
+        if ( availableRegions[i] ) {
+            delete availableRegions[i];
+        }
+    }
+
+    if (regionAliases) {
+        uhash_close(regionAliases);
+    }
+
+    if (numericCodeMap) {
+        uhash_close(numericCodeMap);
+    }
+
+    if (regionIDMap) {
+        uhash_close(regionIDMap);
+    }
+
+    return TRUE;
+}
+
+U_CDECL_END
+
+U_NAMESPACE_BEGIN
 
 static UnicodeString UNKNOWN_REGION_ID = UNICODE_STRING_SIMPLE("ZZ");
 static UnicodeString OUTLYING_OCEANIA_REGION_ID = UNICODE_STRING_SIMPLE("QO");
@@ -48,24 +87,6 @@ static UnicodeString WORLD_ID = UNICODE_STRING_SIMPLE("001");
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Region)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RegionNameEnumeration)
 
-void addRegion( Region *r ) {
-
-    UErrorCode status = U_ZERO_ERROR;
-    if ( regions == NULL ) {
-        regions = new UVector(NULL, NULL, status);
-    }
-    regions->addElement(r,status);
-}
-
-void addAvailableRegion( const Region *r , URegionType type) {
-
-    UErrorCode status = U_ZERO_ERROR;
-    if ( availableRegions[type] == NULL ) {
-        availableRegions[type] = new UVector(NULL, uhash_compareChars, status);
-    }
-
-    availableRegions[type]->addElement((void *)r->getRegionCode(),status);
-}
 /*
  * Initializes the region data from the ICU resource bundles.  The region data
  * contains the basic relationships such as which regions are known, what the numeric
@@ -79,7 +100,15 @@ void Region::loadRegionData() {
     if (regionDataIsLoaded) {
         return;
     }
-    
+
+    umtx_lock(&gRegionDataLock);
+
+    if (regionDataIsLoaded) { // In case another thread gets to it before we do...
+        umtx_unlock(&gRegionDataLock);
+        return;
+    }
+
+   
     UErrorCode status = U_ZERO_ERROR;
 
     UResourceBundle* regionCodes = NULL;
@@ -92,9 +121,13 @@ void Region::loadRegionData() {
     DecimalFormat *df = new DecimalFormat(status);
     df->setParseIntegerOnly(TRUE);
 
-    regionAliases = uhash_open(uhash_hashUnicodeString,uhash_compareUnicodeString,NULL,&status);
     regionIDMap = uhash_open(uhash_hashUnicodeString,uhash_compareUnicodeString,NULL,&status);
+    uhash_setValueDeleter(regionIDMap, deleteRegion);
+
     numericCodeMap = uhash_open(uhash_hashLong,uhash_compareLong,NULL,&status);
+
+    regionAliases = uhash_open(uhash_hashUnicodeString,uhash_compareUnicodeString,NULL,&status);
+    uhash_setKeyDeleter(regionAliases,uprv_deleteUObject);
 
     UResourceBundle *rb = ures_openDirect(NULL,"metadata",&status);
     regionCodes = ures_getByKey(rb,"regionCodes",NULL,&status);
@@ -138,7 +171,6 @@ void Region::loadRegionData() {
         } else {
             r->code = Region::UNDEFINED_NUMERIC_CODE;
         }
-        addRegion(r);
     }
 
 
@@ -171,13 +203,12 @@ void Region::loadRegionData() {
                     aliasFromRegion->code = Region::UNDEFINED_NUMERIC_CODE;
                 }
                 aliasFromRegion->type = URGN_DEPRECATED;
-                addRegion(aliasFromRegion);
             } else {
                 aliasFromRegion->type = URGN_DEPRECATED;
             }
             delete aliasFromStr;
 
-            aliasFromRegion->preferredValues = new UVector(NULL, uhash_compareChars, status);
+            aliasFromRegion->preferredValues = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status);
             UnicodeString currentRegion;
             currentRegion.remove();
             for (int32_t i = 0 ; i < aliasTo.length() ; i++ ) {
@@ -187,7 +218,8 @@ void Region::loadRegionData() {
                 if ( aliasTo.charAt(i) == 0x0020 || i+1 == aliasTo.length() ) {
                     Region *target = (Region *)uhash_get(regionIDMap,(void *)&currentRegion);
                     if (target) {
-                        aliasFromRegion->preferredValues->addElement((void *)target->id,status);
+                        UnicodeString *preferredValue = new UnicodeString(target->idStr);
+                        aliasFromRegion->preferredValues->addElement((void *)preferredValue,status);
                     }
                     currentRegion.remove();
                 }
@@ -269,9 +301,12 @@ void Region::loadRegionData() {
 
                 // Add the child region to the set of regions contained by the parent
                 if (parentRegion->containedRegions == NULL) {
-                    parentRegion->containedRegions = new UVector(NULL, uhash_compareChars, status);
+                    parentRegion->containedRegions = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status);
                 }
-                parentRegion->containedRegions->addElement((void *)childRegion->id,status);
+
+                UnicodeString *childStr = new UnicodeString(status);
+                childStr->fastCopyFrom(childRegion->idStr);
+                parentRegion->containedRegions->addElement((void *)childStr,status);
 
                 // Set the parent region to be the containing region of the child.
                 // Regions of type GROUPING can't be set as the parent, since another region
@@ -281,16 +316,19 @@ void Region::loadRegionData() {
                 }
             }
         }
+        ures_close(mapping);
     }     
 
     // Create the availableRegions lists
-
-    for ( int32_t i = 0 ; i < regions->size() ; i++ ) {
-        Region *ar = (Region *)regions->elementAt(i);
-        addAvailableRegion(ar,ar->type);
+    int32_t pos = -1;
+    while ( const UHashElement* element = uhash_nextElement(regionIDMap,&pos)) {
+        Region *ar = (Region *)element->value.pointer;
+        if ( availableRegions[ar->type] == NULL ) {
+            availableRegions[ar->type] = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status);
+        }
+        UnicodeString *arString = new UnicodeString(ar->idStr);
+        availableRegions[ar->type]->addElement((void *)arString,status);
     }
-
-    regionDataIsLoaded = true;
 
     ures_close(territoryContainment);
     ures_close(worldContainment);
@@ -303,6 +341,12 @@ void Region::loadRegionData() {
     ures_close(rb);
 
     delete df;
+
+    ucln_i18n_registerCleanup(UCLN_I18N_REGION, region_cleanup);
+
+    regionDataIsLoaded = true;
+    umtx_unlock(&gRegionDataLock);
+
 }
 
 
@@ -321,6 +365,14 @@ Region::Region () {
         preferredValues = NULL;
 }
 
+Region::~Region () {
+        if (containedRegions) {
+            delete containedRegions;
+        }
+        if (preferredValues) {
+            delete preferredValues;
+        }
+}
 
 /**
  * Returns true if the two regions are equal.
@@ -497,18 +549,21 @@ Region::getContainedRegions( URegionType type ) const {
         const char *id = cr->next(NULL,status);
         const Region *r = Region::getInstance(id,status);
         if ( r->getType() == type ) {
-            result->addElement((void *)r->id,status);
+            result->addElement((void *)&r->idStr,status);
         } else {
             StringEnumeration *children = r->getContainedRegions(type);
             for ( int32_t j = 0 ; j < children->count(status) ; j++ ) {
                 const char *id2 = children->next(NULL,status);
                 const Region *r2 = Region::getInstance(id2,status);
-                result->addElement((void *)r2->id,status);
+                result->addElement((void *)&r2->idStr,status);
             }
             delete children;
         }
     }
-    return new RegionNameEnumeration(result,status);
+    delete cr;
+    StringEnumeration* resultEnumeration = new RegionNameEnumeration(result,status);
+    delete result;
+    return resultEnumeration;
 }
  
 /**
@@ -521,12 +576,12 @@ Region::contains(const Region &other) const {
     if (!containedRegions) {
           return FALSE;
     }
-    if (containedRegions->contains((void *)other.id)) {
+    if (containedRegions->contains((void *)&other.idStr)) {
         return TRUE;
     } else {
         for ( int32_t i = 0 ; i < containedRegions->size() ; i++ ) {
-            UErrorCode status = U_ZERO_ERROR;
-            const Region *cr = Region::getInstance((const char *)containedRegions->elementAt(i),status);
+            UnicodeString *crStr = (UnicodeString *)containedRegions->elementAt(i);
+            Region *cr = (Region *) uhash_get(regionIDMap,(void *)crStr);
             if ( cr && cr->contains(other) ) {
                 return TRUE;
             }
@@ -580,41 +635,21 @@ Region::getType() const {
 RegionNameEnumeration::RegionNameEnumeration(UVector *fNameList, UErrorCode& status) {
     pos=0;
     if (fNameList) {
-        fRegionNames = new UVector(NULL, uhash_compareChars, fNameList->size(),status);
+        fRegionNames = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, fNameList->size(),status);
         for ( int32_t i = 0 ; i < fNameList->size() ; i++ ) {
-            char *region_name = (char *) uprv_malloc(sizeof(fNameList->elementAt(i)));
-            if (!region_name) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                delete fRegionNames;
-                fRegionNames = NULL;
-                return;
-            }
-            uprv_strcpy(region_name,(char *)fNameList->elementAt(i));
-            fRegionNames->addElement(region_name,status);
-            
+            UnicodeString* this_region_name = (UnicodeString *)fNameList->elementAt(i);
+            UnicodeString* new_region_name = new UnicodeString(*this_region_name);
+            fRegionNames->addElement((void *)new_region_name,status);          
         }
     }
     else { 
-        fRegionNames = fNameList;
+        fRegionNames = NULL;
     }
-}
-
-const char*
-RegionNameEnumeration::next(int32_t *resultLength, UErrorCode& status) {
-    if (U_SUCCESS(status) && pos < fRegionNames->size()) {
-        if (resultLength != NULL) {
-            *resultLength = uprv_strlen((const char *)fRegionNames->elementAt(pos));
-        }
-        return (const char *)fRegionNames->elementAt(pos++);
-    }
-    return NULL;
 }
 
 const UnicodeString*
-RegionNameEnumeration::snext(UErrorCode& status) { 
-    int32_t resultLength=0;
-    const char *s=next(&resultLength, status);
-    return setChars(s, resultLength, status);
+RegionNameEnumeration::snext(UErrorCode& /*status*/) { 
+    return (const UnicodeString *)fRegionNames->elementAt(pos++);
 }
 
 void
