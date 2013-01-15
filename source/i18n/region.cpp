@@ -148,6 +148,7 @@ void Region::loadRegionData() {
         const char *aliasFrom = ures_getKey(res);
         UnicodeString* aliasFromStr = new UnicodeString(aliasFrom);
         UnicodeString aliasTo = ures_getUnicodeString(res,&status);
+        ures_close(res);
 
         Region *aliasToRegion = (Region *) uhash_get(regionIDMap,&aliasTo);
         Region *aliasFromRegion = (Region *)uhash_get(regionIDMap,aliasFromStr);
@@ -155,7 +156,7 @@ void Region::loadRegionData() {
         if ( aliasToRegion != NULL && aliasFromRegion == NULL ) { // This is just an alias from some string to a region
             uhash_put(regionAliases,(void *)aliasFromStr, (void *)aliasToRegion,&status);
         } else {
-           if ( aliasFromRegion == NULL ) { // Deprecated region code not in the master codes list - so need to create a deprecated region for it.
+            if ( aliasFromRegion == NULL ) { // Deprecated region code not in the master codes list - so need to create a deprecated region for it.
                 aliasFromRegion = new Region();
                 aliasFromRegion->idStr.setTo(*aliasFromStr);
                 aliasFromRegion->idStr.extract(0,aliasFromRegion->idStr.length(),aliasFromRegion->id,sizeof(aliasFromRegion->id),US_INV);
@@ -215,6 +216,7 @@ void Region::loadRegionData() {
                 uhash_put(regionAliases,(void *)code3, (void *)r,&status);
             }                    
         }
+        ures_close(mapping);
     }
 
     // Now fill in the special cases for WORLD, UNKNOWN, CONTINENTS, and GROUPINGS
@@ -369,6 +371,7 @@ Region::getInstance(const char *region_code, UErrorCode &status) {
         pv->reset(status);
         const UnicodeString *ustr = pv->snext(status);
         r = (Region *)uhash_get(regionIDMap,(void *)ustr);
+        delete pv;
     }
 
     return r;
@@ -408,6 +411,7 @@ Region::getInstance (int32_t code, UErrorCode &status) {
         pv->reset(status);
         const UnicodeString *ustr = pv->snext(status);
         r = (Region *)uhash_get(regionIDMap,(void *)ustr);
+        delete pv;
     }
 
     return r;
@@ -485,7 +489,7 @@ Region::getContainedRegions( URegionType type ) const {
     loadRegionData();
 
     UErrorCode status = U_ZERO_ERROR;
-    UVector *result = new UVector(uprv_deleteUObject, uhash_compareChars, status);
+    UVector *result = new UVector(NULL, uhash_compareChars, status);
  
     StringEnumeration *cr = getContainedRegions();
 
@@ -501,6 +505,7 @@ Region::getContainedRegions( URegionType type ) const {
                 const Region *r2 = Region::getInstance(id2,status);
                 result->addElement((void *)r2->id,status);
             }
+            delete children;
         }
     }
     return new RegionNameEnumeration(result,status);
@@ -572,9 +577,26 @@ Region::getType() const {
     return type;
 }
 
-RegionNameEnumeration::RegionNameEnumeration(UVector *fNameList, UErrorCode& /*status*/) {
+RegionNameEnumeration::RegionNameEnumeration(UVector *fNameList, UErrorCode& status) {
     pos=0;
-    fRegionNames = fNameList;
+    if (fNameList) {
+        fRegionNames = new UVector(NULL, uhash_compareChars, fNameList->size(),status);
+        for ( int32_t i = 0 ; i < fNameList->size() ; i++ ) {
+            char *region_name = (char *) uprv_malloc(sizeof(fNameList->elementAt(i)));
+            if (!region_name) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                delete fRegionNames;
+                fRegionNames = NULL;
+                return;
+            }
+            uprv_strcpy(region_name,(char *)fNameList->elementAt(i));
+            fRegionNames->addElement(region_name,status);
+            
+        }
+    }
+    else { 
+        fRegionNames = fNameList;
+    }
 }
 
 const char*
