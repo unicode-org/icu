@@ -135,6 +135,13 @@ public:
      */
     Region();
 
+    /**
+     * Default Destructor.
+     *
+     * @draft ICU 51
+     */
+    ~Region();
+
 
     /**
      * Returns true if the two regions are equal.

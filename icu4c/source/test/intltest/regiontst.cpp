@@ -512,6 +512,7 @@ void RegionTest::TestGetContainedRegions() {
                         r->getRegionCode(),cr->getRegionCode(),containingRegion?containingRegion->getRegionCode():"NULL"); 
                 }
             }
+            delete containedRegions;
         } else {
             errln("Known region %s was not recognized.",rd.code);
         }
@@ -538,6 +539,7 @@ void RegionTest::TestGetContainedRegionsWithType() {
                         r->getRegionCode(),cr->getRegionCode(),containingRegion?containingRegion->getRegionCode():"NULL"); 
                 }
             }
+            delete containedRegions;
         } else {
             errln("Known region %s was not recognized.",rd.code);
         }
@@ -623,6 +625,7 @@ void RegionTest::TestGetPreferredValues() {
                     errln("Region::getPreferredValues() for region \"%s\" should have contained \"%s\" but it didn't.",r->getRegionCode(),data[i]);
                 }
             }
+            delete preferredValues;
         } else {
             errln("Known region %s was not recognized.",data[0]);
         }
@@ -682,6 +685,8 @@ void RegionTest::TestAvailableTerritories() {
             errln("Available territories and all territories contained in world should be the same set.\nAvailable          = %s\nContained in World = %s",
                 availableTerritoriesString,containedInWorldString);
         }
+        delete availableTerritories;
+        delete containedInWorld;
     }
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
