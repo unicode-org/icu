@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -653,12 +653,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
         }
         ICUResourceBundle b2 = b1.getWithFallback(defaultCal);
         ICUResourceBundle b3 = b2.getWithFallback("monthNames");
-        String defaultContext = b3.getStringWithFallback("default");
-        ICUResourceBundle b4 = b3.getWithFallback(defaultContext);
-        String defaultWidth  = b4.getStringWithFallback("default");
-        ICUResourceBundle b5 = b4.getWithFallback(defaultWidth);
+        ICUResourceBundle b4 = b3.getWithFallback("format");
+        ICUResourceBundle b5 = b4.getWithFallback("narrow");
         if(b5.getSize()!=12){
-            errln("Did not get the expected size for the default monthNames");
+            errln("Did not get the expected size for the monthNames");
         }
     }
 
