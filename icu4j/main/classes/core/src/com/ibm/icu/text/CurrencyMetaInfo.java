@@ -458,12 +458,10 @@ public class CurrencyMetaInfo {
          * @param to end date in milliseconds.  This is one second before midnight at the end of the last day on which the currency was used, GMT.
          * @param priority priority value, 0 is highest priority, increasing values are lower
          * @stable ICU 4.4
-         */
-        /*
+         */     
         public CurrencyInfo(String region, String code, long from, long to, int priority) {
             this(region, code, from, to, priority, true);
         }
-        */
         
         /**
          * Constructs a currency info.
