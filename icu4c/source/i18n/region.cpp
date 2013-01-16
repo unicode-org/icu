@@ -34,15 +34,6 @@
 #if !UCONFIG_NO_FORMATTING
 
 
-
-static UMutex gRegionDataLock = U_MUTEX_INITIALIZER;
-static UBool regionDataIsLoaded = false;
-static UVector* availableRegions[URGN_LIMIT];
-
-static UHashtable *regionAliases;
-static UHashtable *regionIDMap;
-static UHashtable *numericCodeMap;
-
 U_CDECL_BEGIN
 
 static void U_CALLCONV
@@ -55,23 +46,7 @@ deleteRegion(void *obj) {
  */
 static UBool U_CALLCONV region_cleanup(void)
 {
-    for (int32_t i = 0 ; i < URGN_LIMIT ; i++ ) {
-        if ( availableRegions[i] ) {
-            delete availableRegions[i];
-        }
-    }
-
-    if (regionAliases) {
-        uhash_close(regionAliases);
-    }
-
-    if (numericCodeMap) {
-        uhash_close(numericCodeMap);
-    }
-
-    if (regionIDMap) {
-        uhash_close(regionIDMap);
-    }
+    icu::Region::cleanupRegionData();
 
     return TRUE;
 }
@@ -79,6 +54,14 @@ static UBool U_CALLCONV region_cleanup(void)
 U_CDECL_END
 
 U_NAMESPACE_BEGIN
+
+static UMutex gRegionDataLock = U_MUTEX_INITIALIZER;
+static UBool regionDataIsLoaded = false;
+static UVector* availableRegions[URGN_LIMIT];
+
+static UHashtable *regionAliases;
+static UHashtable *regionIDMap;
+static UHashtable *numericCodeMap;
 
 static UnicodeString UNKNOWN_REGION_ID = UNICODE_STRING_SIMPLE("ZZ");
 static UnicodeString OUTLYING_OCEANIA_REGION_ID = UNICODE_STRING_SIMPLE("QO");
@@ -349,7 +332,26 @@ void Region::loadRegionData() {
 
 }
 
+void Region::cleanupRegionData() {
 
+    for (int32_t i = 0 ; i < URGN_LIMIT ; i++ ) {
+        if ( availableRegions[i] ) {
+            delete availableRegions[i];
+        }
+    }
+
+    if (regionAliases) {
+        uhash_close(regionAliases);
+    }
+
+    if (numericCodeMap) {
+        uhash_close(numericCodeMap);
+    }
+
+    if (regionIDMap) {
+        uhash_close(regionIDMap);
+    }
+}
 
 /*
  * Default constructor.  Use factory methods only.
