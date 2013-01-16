@@ -725,4 +725,8 @@ public class CurrencyTest extends TestFmwk {
             assertEquals("getDisplayName() for " + data[0] + " in locale " + root, data[0], cur.getDisplayName(root));
         }
     }
+    
+    public void TestCurrencyInfoCtor() {
+        new CurrencyMetaInfo.CurrencyInfo("region", "code", 0, 0, 1);
+    }
 }
