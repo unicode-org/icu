@@ -15,6 +15,15 @@
 
 #include "unicode/utypes.h"
 
+#ifndef U_HIDE_DRAFT_API
+/**
+ * URegionType is an enumeration defining the different types of regions.  Current possible
+ * values are URGN_WORLD, URGN_CONTINENT, URGN_SUBCONTINENT, URGN_TERRITORY, URGN_GROUPING,
+ * URGN_DEPRECATED, and URGN_UNKNOWN.
+ * 
+ * @draft ICU 51 
+ */
+
 typedef enum URegionType {
     /**
      * Type representing the unknown region.
@@ -68,6 +77,7 @@ typedef enum URegionType {
 } URegionType;
 
 
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/uobject.h"
@@ -119,28 +129,8 @@ class U_I18N_API Region : public UObject {
 
 public:
 
-    /**
-     * URegionType is an enumeration defining the different types of regions.  Current possible
-     * values are URGN_WORLD, URGN_CONTINENT, URGN_SUBCONTINENT, URGN_TERRITORY, URGN_GROUPING,
-     * URGN_DEPRECATED, and URGN_UNKNOWN.
-     * 
-     * @draft ICU 51 
-     */
     static const int32_t UNDEFINED_NUMERIC_CODE = -1;
 
-    /**
-     * Default Constructor.
-     *
-     * @draft ICU 51
-     */
-    Region();
-
-    /**
-     * Default Destructor.
-     *
-     * @draft ICU 51
-     */
-    ~Region();
 
 
     /**
@@ -251,7 +241,7 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for this class.
      *
-     * @stable ICU 4.2
+     * @draft ICU 51
      *
     */
     static UClassID U_EXPORT2 getStaticClassID(void);
@@ -259,9 +249,25 @@ public:
     /**
      * ICU "poor man's RTTI", returns a UClassID for the actual class.
      *
-     * @stable ICU 4.2
+     * @draft ICU 51
      */
     virtual UClassID getDynamicClassID() const;
+
+#ifndef U_HIDE_INTERNAL_API
+   /**
+     * Default Destructor.
+     *
+     * @internal
+     */
+    ~Region();
+
+    /**
+     * Cleans up statically allocated memory.
+     * @internal 
+     */
+
+    static void cleanupRegionData();
+#endif  /* U_HIDE_INTERNAL_API */
 
 private:
     char id[4];
@@ -271,6 +277,15 @@ private:
     Region *containingRegion;
     UVector *containedRegions;
     UVector *preferredValues;
+
+#ifndef U_HIDE_INTERNAL_API
+    /**
+     * Default Constructor. Internal - use factory methods only.
+     *
+     * @internal
+     */
+    Region();
+
 
     /*
      * Initializes the region data from the ICU resource bundles.  The region data
@@ -284,12 +299,14 @@ private:
 
     static void loadRegionData();
 
+#endif  /* U_HIDE_INTERNAL_API */
+
 };
 
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
-
+#endif  /* U_HIDE_DRAFT_API */
 #endif // REGION_H
 
 //eof
