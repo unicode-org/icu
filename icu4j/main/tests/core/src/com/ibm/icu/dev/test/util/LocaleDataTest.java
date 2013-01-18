@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -96,7 +96,27 @@ public class LocaleDataTest extends TestFmwk{
             }
         }
     }
-    
+
+    // Simple test case for checking exemplar character type coverage
+    public void TestEnglishExemplarCharacters() {
+        final char[] testChars = {
+            0x61,   // standard
+            0xE1,   // auxiliary
+            0x41,   // index
+            0,      // filler for deprecated currency exemplar
+            0x2D,   // punctuation
+        };
+        LocaleData ld = LocaleData.getInstance(ULocale.ENGLISH);
+        for (int type = 0; type < LocaleData.ES_COUNT; type++) {
+            UnicodeSet exSet = ld.getExemplarSet(0, type);
+            if (exSet != null) {
+                if (testChars[type] > 0 && !exSet.contains(testChars[type])) {
+                    errln("Character '" + testChars[type] + "' is not included in exemplar type " + type);
+                }
+            }
+        }
+    }
+
     // Bundle together a UnicodeSet (of expemplars) and ScriptCode combination.
     //   We keep a set of combinations that have already been tested, to
     //   avoid repeated (time consuming) retesting of the same data.
