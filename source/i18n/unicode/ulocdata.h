@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2003-2012, International Business Machines                   *
+* Copyright (C) 2003-2013, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -45,8 +45,10 @@ typedef enum ULocaleDataExemplarSetType  {
     ULOCDATA_ES_AUXILIARY=1,
     /** Index Character set @stable ICU 4.8 */
     ULOCDATA_ES_INDEX=2,
+    /** Punctuation set @draft ICU 51 */
+    ULOCDATA_ES_PUNCTUATION=3,
     /** One higher than the last valid type @stable ICU 3.4 */
-    ULOCDATA_ES_COUNT=3
+    ULOCDATA_ES_COUNT=4
 } ULocaleDataExemplarSetType;
 
 /** The possible types of delimiters.

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -244,6 +244,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestForLanguageTag);
     TESTCASE(TestTrailingNull);
     TESTCASE(TestUnicodeDefines);
+    TESTCASE(TestEnglishExemplarCharacters);
 }
 
 
@@ -2508,6 +2509,39 @@ static void TestGetLocale(void) {
         ucol_close(obj);
     }
 #endif
+}
+static void TestEnglishExemplarCharacters(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    int i;
+    USet *exSet = NULL;
+    UChar testChars[] = {
+        0x61,   /* standard */
+        0xE1,   /* auxiliary */
+        0x41,   /* index */
+        0x2D    /* punctuation */
+    };
+    ULocaleData *uld = ulocdata_open("en", &status);
+    if (U_FAILURE(status)) {
+        log_err("ulocdata_open() failed\n");
+        return;
+    }
+
+    for (i = 0; i < ULOCDATA_ES_COUNT; i++) {
+        exSet = ulocdata_getExemplarSet(uld, exSet, 0, (ULocaleDataExemplarSetType)i, &status);
+        if (U_FAILURE(status)) {
+            /* until pucntuation data problem is resolved */
+            /* log_err_status(status, "ulocdata_getExemplarSet() for type %d failed\n", i); */
+            log_verbose("ulocdata_getExemplarSet() for type %d failed\n", i);
+            status = U_ZERO_ERROR;
+            continue;
+        }
+        if (!uset_contains(exSet, (UChar32)testChars[i])) {
+            log_err("Character U+%04X is not included in exemplar type %d\n", testChars[i], i);
+        }
+    }
+
+    uset_close(exSet);
+    ulocdata_close(uld);
 }
 
 static void TestNonexistentLanguageExemplars(void) {
