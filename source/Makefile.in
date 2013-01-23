@@ -1,6 +1,6 @@
 #******************************************************************************
 #
-#   Copyright (C) 1998-2012, International Business Machines
+#   Copyright (C) 1998-2013, International Business Machines
 #   Corporation and others.  All Rights Reserved.
 #
 #******************************************************************************
@@ -52,7 +52,7 @@ ALL_PKGCONFIG_FILES=$(ALL_PKGCONFIG_SUFFIX:%=$(top_builddir)/config/icu-%.pc)
 INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config @platform_make_fragment@ $(EXTRA_DATA:%=$(DESTDIR)$(pkglibdir)/%) $(ALL_PKGCONFIG_FILES)
 
 ## Files built (autoconfed) but not installed
-LOCAL_BUILT_FILES = icudefs.mk config/icucross.mk
+LOCAL_BUILT_FILES = icudefs.mk config/icucross.mk config/icucross.inc
 
 DOCDIRS = common i18n
 SUBDIRS =  stubdata common i18n $(LAYOUT) tools data $(ICUIO) $(EXTRA) $(SAMPLE) $(TEST)
@@ -206,7 +206,7 @@ clean-local:
 
 distclean-local: clean-local
 	$(RMV) $(top_builddir)/config/Makefile.inc $(top_builddir)/config/pkgdata.inc $(top_builddir)/config/icu-config $(top_builddir)/config/icu.pc $(ALL_PKGCONFIG_FILES)
-	$(RMV) config.cache config.log config.status $(top_builddir)/config/icucross.mk autom4te.cache uconfig.h.prepend
+	$(RMV) config.cache config.log config.status $(top_builddir)/config/icucross.mk $(top_builddir)/config/icucross.inc autom4te.cache uconfig.h.prepend
 	$(RMV) Makefile config/Makefile icudefs.mk $(LIBDIR) $(BINDIR)
 	-$(RMV) dist
 
@@ -238,6 +238,11 @@ config/icucross.mk: $(top_builddir)/icudefs.mk  $(top_builddir)/Makefile
 	  echo "PKGDATA_INVOKE=$(LDLIBRARYPATH_ENVVAR)=$(LIBRARY_PATH_PREFIX)"'$$(cross_buildroot)/stubdata:$$(cross_buildroot)/tools/ctestfw:$$(TOOLLIBDIR):$$$$'"$(LDLIBRARYPATH_ENVVAR) " ;\
 	  echo ) >> $@
 
+config/icucross.inc: $(top_builddir)/icudefs.mk  $(top_builddir)/Makefile @platform_make_fragment@
+	@echo rebuilding $@
+	@(grep '^CURR_FULL_DIR' $(top_builddir)/icudefs.mk ; \
+	  grep '^CURR_FULL_DIR' @platform_make_fragment || echo ""; \
+	   ) > $@
 
 config/icu.pc: $(srcdir)/config/icu.pc.in
 	cd $(top_builddir) \
