@@ -450,14 +450,7 @@ public class CurrencyMetaInfo {
         private final boolean tender;
 
         /**
-         * Constructs a currency info.
-         * 
-         * @param region region code
-         * @param code currency code
-         * @param from start date in milliseconds.  This is midnight at the start of the first day on which the currency was used, GMT.
-         * @param to end date in milliseconds.  This is one second before midnight at the end of the last day on which the currency was used, GMT.
-         * @param priority priority value, 0 is highest priority, increasing values are lower
-         * @stable ICU 4.4
+         * @deprecated ICU 51
          */     
         public CurrencyInfo(String region, String code, long from, long to, int priority) {
             this(region, code, from, to, priority, true);
