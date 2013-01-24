@@ -158,7 +158,7 @@ public class LocaleIDs {
         "dgr", "din", "doi", "dra", "dsb", "dua", "dum", "dv",  "dyu",
         "dz",  "ee",  "efi", "egy", "eka", "el",  "elx", "en",
         "enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",
-        "fan", "fat", "ff",  "fi",  "fiu", "fj",  "fo",  "fon",
+        "fan", "fat", "ff",  "fi",  "fil", "fiu", "fj",  "fo",  "fon",
         "fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",
         "gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",
         "goh", "gon", "gor", "got", "grb", "grc", "gu",  "gv",
@@ -244,8 +244,8 @@ public class LocaleIDs {
         "dzo", "ewe", "efi", "egy", "eka", "ell", "elx", "eng",
         /*"enm", "eo",  "es",  "et",  "eu",  "ewo", "fa",     */
         "enm", "epo", "spa", "est", "eus", "ewo", "fas",
-        /*"fan", "fat", "ff",  "fi",  "fiu", "fj",  "fo",  "fon",    */
-        "fan", "fat", "ful", "fin", "fiu", "fij", "fao", "fon",
+        /*"fan", "fat", "ff",  "fi", "fil", "fiu", "fj",  "fo",  "fon",    */
+        "fan", "fat", "ful", "fin",  "fil", "fiu", "fij", "fao", "fon",
         /*"fr",  "frm", "fro", "fur", "fy",  "ga",  "gaa", "gay",    */
         "fra", "frm", "fro", "fur", "fry", "gle", "gaa", "gay",
         /*"gba", "gd",  "gem", "gez", "gil", "gl",  "gmh", "gn",     */
