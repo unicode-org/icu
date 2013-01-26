@@ -750,7 +750,7 @@ kn{
             vaii{"ವಾಯ್ ಅಂಕೆಗಳು"}
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{","}

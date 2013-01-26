@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/km.xml
  */
 km{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"អាប៊ីដ្យាន"}
@@ -1692,7 +1692,9 @@ km{
             ls{"ម៉ោង​ស្តង់ដារ​នៅ Sakhalin"}
         }
         "meta:Samoa"{
-            ls{"ម៉ោង​នៅ​សាម៉ៅ"}
+            ld{"ម៉ោង​នៅ​សាម៉ៅ រដូវ​ក្ដៅ"}
+            lg{"ម៉ោង​នៅ​សាម៉ៅ"}
+            ls{"ម៉ោង​ស្តង់ដារនៅ​សាម៉ៅ"}
         }
         "meta:Seychelles"{
             ls{"ម៉ោង​នៅ​សីស្ហែល"}

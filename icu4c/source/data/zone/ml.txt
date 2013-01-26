@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ml.xml
  */
 ml{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"അബിദ്‌ജാൻ‌"}
@@ -1748,6 +1748,8 @@ ml{
             ls{"സമാറ സ്റ്റാൻഡേർഡ് സമയം"}
         }
         "meta:Samoa"{
+            ld{"സമോവാ വേനൽക്കാല സമയം"}
+            lg{"സമോവാ സമയം"}
             ls{"സമോവാ സ്റ്റാൻഡേർഡ് സമയം"}
         }
         "meta:Seychelles"{

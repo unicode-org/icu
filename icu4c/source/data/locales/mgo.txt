@@ -16,7 +16,7 @@ mgo{
         " u ù w y z ʼ]"
     }
     ExemplarCharactersIndex{"[A B {CH} D E Ə F G {GH} I J K M N Ŋ O Ɔ P R S T U W Y Z ʼ]"}
-    ExemplarCharactersPunctuation{"[, ; \: ! ? . ' ‘ ’ \u0022 “ ”]"}
+    ExemplarCharactersPunctuation{"[, ; \\: ! ? . ' ‘ ’ \u0022 “ ”]"}
     LocaleScript{
         "Latn",
     }

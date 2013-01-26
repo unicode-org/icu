@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/de.xml
  */
 de{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -857,7 +857,9 @@ de{
             ls{"Samara-Normalzeit"}
         }
         "meta:Samoa"{
-            ls{"Samoa-Zeit"}
+            ld{"Samoa-Sommerzeit"}
+            lg{"Samoa-Zeit"}
+            ls{"Samoa-Normalzeit"}
         }
         "meta:Seychelles"{
             ls{"Seychellen-Zeit"}

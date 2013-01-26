@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sk.xml
  */
 sk{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Džibutsko"}
@@ -658,6 +658,8 @@ sk{
             ls{"Samarský štandardný čas"}
         }
         "meta:Samoa"{
+            ld{"Samojský letný čas"}
+            lg{"Samojský čas"}
             ls{"Samojský štandardný čas"}
         }
         "meta:Seychelles"{

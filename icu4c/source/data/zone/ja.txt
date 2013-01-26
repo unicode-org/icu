@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ja.xml
  */
 ja{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"アビジャン"}
@@ -1797,7 +1797,9 @@ ja{
             ls{"サマラ標準時"}
         }
         "meta:Samoa"{
-            ls{"サモア時間"}
+            ld{"サモア夏時間"}
+            lg{"サモア時間"}
+            ls{"サモア標準時"}
         }
         "meta:Seychelles"{
             ls{"セーシェル時間"}

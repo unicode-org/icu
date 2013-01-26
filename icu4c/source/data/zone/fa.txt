@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fa.xml
  */
 fa{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"آبیجان"}
@@ -1734,7 +1734,9 @@ fa{
             ls{"وقت عادی سامارا"}
         }
         "meta:Samoa"{
-            ls{"وقت ساموا"}
+            ld{"وقت تابستانی ساموا"}
+            lg{"وقت ساموا"}
+            ls{"وقت عادی ساموا"}
         }
         "meta:Seychelles"{
             ls{"وقت سیشل"}

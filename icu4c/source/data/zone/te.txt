@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/te.xml
  */
 te{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"అబిడ్జాన్"}
@@ -1744,10 +1744,12 @@ te{
         }
         "meta:Samara"{
             ld{"సమారా వేసవి సమయం"}
-            lg{"సమార సమయం"}
+            lg{"సమారా సమయం"}
             ls{"సమారా ప్రామాణిక సమయం"}
         }
         "meta:Samoa"{
+            ld{"సమోవా వేసవి సమయం"}
+            lg{"సమోవా సమయం"}
             ls{"సమోవా ప్రామాణిక సమయం"}
         }
         "meta:Seychelles"{

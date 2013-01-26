@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sw.xml
  */
 sw{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -517,6 +517,8 @@ sw{
             ls{"Saa za Wastani za Samara"}
         }
         "meta:Samoa"{
+            ld{"Saa ya Majira ya joto ya Samoa"}
+            lg{"Saa ya Samoa"}
             ls{"Saa Wastani ya Samoa"}
         }
         "meta:Seychelles"{

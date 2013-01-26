@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ko.xml
  */
 ko{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -1718,6 +1718,8 @@ ko{
             ls{"사마라 표준시"}
         }
         "meta:Samoa"{
+            ld{"사모아 하계 표준시"}
+            lg{"사모아 시간"}
             ls{"사모아 표준시"}
         }
         "meta:Seychelles"{

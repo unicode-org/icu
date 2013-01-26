@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bg.xml
  */
 bg{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -1708,6 +1708,8 @@ bg{
             ls{"Самара – стандартно време"}
         }
         "meta:Samoa"{
+            ld{"Самоа – лятно часово време"}
+            lg{"Самоа време"}
             ls{"Самоа – стандартно време"}
         }
         "meta:Seychelles"{

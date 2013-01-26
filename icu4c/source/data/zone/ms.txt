@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ms.xml
  */
 ms{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "America:Lower_Princes"{
             ec{"Lower Prince's Quarter"}
@@ -517,6 +517,8 @@ ms{
             ls{"Waktu Piawai Samara"}
         }
         "meta:Samoa"{
+            ld{"Waktu Musim Panas Samoa"}
+            lg{"Waktu Samoa"}
             ls{"Waktu Piawai Samoa"}
         }
         "meta:Seychelles"{

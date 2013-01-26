@@ -196,7 +196,7 @@ he{
         native{"latn"}
         traditional{"hebr"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -1011,8 +1011,8 @@ he{
     delimiters{
         alternateQuotationEnd{"'"}
         alternateQuotationStart{"'"}
-        quotationEnd{"&quot;"}
-        quotationStart{"&quot;"}
+        quotationEnd{"\u0022"}
+        quotationStart{"\u0022"}
     }
     fields{
         day{

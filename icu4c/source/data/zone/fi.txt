@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fi.xml
  */
 fi{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -977,7 +977,9 @@ fi{
             ls{"Samaran normaaliaika"}
         }
         "meta:Samoa"{
-            ls{"Samoan aika"}
+            ld{"Samoan kesäaika"}
+            lg{"Samoan aika"}
+            ls{"Samoan normaaliaika"}
         }
         "meta:Seychelles"{
             ls{"Seychellien aika"}

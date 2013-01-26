@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lo.xml
  */
 lo{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ອາບິດແຈນ"}
@@ -1737,7 +1737,9 @@ lo{
             ls{"ເວລາມາດຕະຖານສາຄາລິງ"}
         }
         "meta:Samoa"{
-            ls{"ເວລາຊາມົວ"}
+            ld{"ເວລາລະດູຮ້ອນຊາມົວ"}
+            lg{"ເວລາຊາມົວ"}
+            ls{"ເວລາມາດຕະຖານຊາມົວ"}
         }
         "meta:Seychelles"{
             ls{"ເວລາເຊເຊວ"}

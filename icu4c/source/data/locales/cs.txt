@@ -19,7 +19,7 @@ cs{
         "w x y ý z ž]"
     }
     ExemplarCharactersIndex{"[A B C Č D E F G H {CH} I J K L M N O P Q R Ř S Š T U V W X Y Z Ž]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ – , ; \: ! ? . … ‘ ‚ “ „ ( ) \\[ \\] § @ * / \\&]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – , ; \\: ! ? . … ‘ ‚ “ „ ( ) \\[ \\] § @ * / \\&]"}
     LocaleScript{
         "Latn",
     }
@@ -173,7 +173,7 @@ cs{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     calendar{
         buddhist{
             DateTimePatterns{

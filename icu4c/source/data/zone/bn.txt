@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bn.xml
  */
 bn{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"আবিদজান"}
@@ -1709,6 +1709,8 @@ bn{
             ls{"সামারা মান সময়"}
         }
         "meta:Samoa"{
+            ld{"সামোয়া গৃষ্মকালীন সময়"}
+            lg{"সামোয়া সময়"}
             ls{"সামোয়া মানক সময়"}
         }
         "meta:Seychelles"{

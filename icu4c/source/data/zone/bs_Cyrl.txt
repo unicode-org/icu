@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bs_Cyrl.xml
  */
 bs_Cyrl{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиџан"}
@@ -1738,6 +1738,8 @@ bs_Cyrl{
             ls{"Самара стандардно време"}
         }
         "meta:Samoa"{
+            ld{"Самоа летње рачунање времена"}
+            lg{"Самоа време"}
             ls{"Самоа стандардно време"}
         }
         "meta:Seychelles"{

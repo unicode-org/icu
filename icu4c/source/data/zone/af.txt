@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/af.xml
  */
 af{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -530,11 +530,13 @@ af{
             ls{"Sakhalin-standaardtyd"}
         }
         "meta:Samara"{
-            ld{"Samara-somertyd"}
+            ld{"Samara-dagligtyd"}
             lg{"Samara-tyd"}
             ls{"Samara-standaardtyd"}
         }
         "meta:Samoa"{
+            ld{"Samoa-dagligtyd"}
+            lg{"Samoa-tyd"}
             ls{"Samoa-standaardtyd"}
         }
         "meta:Seychelles"{

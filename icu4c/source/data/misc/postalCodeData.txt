@@ -23,7 +23,7 @@ postalCodeData:table(nofallback){
     BH{"((1[0-2]|[2-9])\d{2})?"}
     BM{"[A-Z]{2}[ ]?[A-Z0-9]{2}"}
     BN{"[A-Z]{2}[ ]?\d{4}"}
-    BR{"\d{5}[\\-]?\d{3}"}
+    BR{"\d{5}[\-]?\d{3}"}
     BY{"\d{6}"}
     CA{"[ABCEGHJKLMNPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ ]?\d[ABCEGHJ-NPRSTV-Z]\d"}
     CC{"6799"}
@@ -48,7 +48,7 @@ postalCodeData:table(nofallback){
     ET{"\d{4}"}
     FI{"\d{5}"}
     FK{"FIQQ 1ZZ"}
-    FM{"(9694[1-4])([ \\-]\d{4})?"}
+    FM{"(9694[1-4])([ \-]\d{4})?"}
     FO{"\d{3}"}
     FR{"\d{2}[ ]?\d{3}"}
     GB{
@@ -68,7 +68,7 @@ postalCodeData:table(nofallback){
     GR{"\d{3}[ ]?\d{2}"}
     GS{"SIQQ 1ZZ"}
     GT{"\d{5}"}
-    GU{"969[123]\d([ \\-]\d{4})?"}
+    GU{"969[123]\d([ \-]\d{4})?"}
     GW{"\d{4}"}
     HM{"\d{4}"}
     HN{"(?:\d{5})?"}
@@ -90,7 +90,7 @@ postalCodeData:table(nofallback){
     KE{"\d{5}"}
     KG{"\d{6}"}
     KH{"\d{5}"}
-    KR{"\d{3}[\\-]\d{3}"}
+    KR{"\d{3}[\-]\d{3}"}
     KW{"\d{5}"}
     KZ{"\d{6}"}
     LA{"\d{5}"}
@@ -107,10 +107,10 @@ postalCodeData:table(nofallback){
     MD{"\d{4}"}
     ME{"8\d{4}"}
     MG{"\d{3}"}
-    MH{"969[67]\d([ \\-]\d{4})?"}
+    MH{"969[67]\d([ \-]\d{4})?"}
     MK{"\d{4}"}
     MN{"\d{6}"}
-    MP{"9695[012]([ \\-]\d{4})?"}
+    MP{"9695[012]([ \-]\d{4})?"}
     MQ{"9[78]2\d{2}"}
     MT{"[A-Z]{3}[ ]?\d{2,4}"}
     MU{"(\d{3}[A-Z]{2}\d{3})?"}
@@ -134,8 +134,8 @@ postalCodeData:table(nofallback){
     PL{"\d{2}-\d{3}"}
     PM{"9[78]5\d{2}"}
     PN{"PCRN 1ZZ"}
-    PR{"00[679]\d{2}([ \\-]\d{4})?"}
-    PT{"\d{4}([\\-]\d{3})?"}
+    PR{"00[679]\d{2}([ \-]\d{4})?"}
+    PT{"\d{4}([\-]\d{3})?"}
     PW{"96940"}
     PY{"\d{4}"}
     RE{"9[78]4\d{2}"}
@@ -161,12 +161,12 @@ postalCodeData:table(nofallback){
     TR{"\d{5}"}
     TW{"\d{3}(\d{2})?"}
     UA{"\d{5}"}
-    US{"\d{5}([ \\-]\d{4})?"}
+    US{"\d{5}([ \-]\d{4})?"}
     UY{"\d{5}"}
     UZ{"\d{6}"}
     VA{"00120"}
     VE{"\d{4}"}
-    VI{"008(([0-4]\d)|(5[01]))([ \\-]\d{4})?"}
+    VI{"008(([0-4]\d)|(5[01]))([ \-]\d{4})?"}
     WF{"986\d{2}"}
     YT{"976\d{2}"}
     YU{"\d{5}"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh.xml
  */
 zh{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -1752,7 +1752,9 @@ zh{
             ls{"萨马拉标准时间"}
         }
         "meta:Samoa"{
-            ls{"萨摩亚时间"}
+            ld{"萨摩亚夏令时间"}
+            lg{"萨摩亚时间"}
+            ls{"萨摩亚标准时间"}
         }
         "meta:Seychelles"{
             ls{"塞舌尔时间"}

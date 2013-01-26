@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/et.xml
  */
 et{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alžiir"}
@@ -760,11 +760,13 @@ et{
             ls{"Sahhalini standardaeg"}
         }
         "meta:Samara"{
-            ld{"Samara suveag"}
+            ld{"Samara suveaeg"}
             lg{"Samara aeg"}
             ls{"Samara standardaeg"}
         }
         "meta:Samoa"{
+            ld{"Samoa suveaeg"}
+            lg{"Samoa aeg"}
             ls{"Samoa standardaeg"}
         }
         "meta:Seychelles"{
