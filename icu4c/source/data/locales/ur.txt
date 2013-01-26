@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ur.xml
 // *
@@ -22,11 +22,23 @@ ur{
         "[ا ب پ ت ٹ ث ج چ ح خ د ڈ ذ ر ڑ ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ہ ھ ء ی ے"
         "]"
     }
-    ExemplarCharactersPunctuation{"[، ؍ ٫ ٬ ؛ \: ؟ . ۔ ( ) \[ \]]"}
+    ExemplarCharactersPunctuation{"[، ؍ ٫ ٬ ؛ \: ؟ . ۔ ( ) \\[ \\]]"}
     LocaleScript{
         "Arab",
     }
     NumberElements{
+        arabext{
+            symbols{
+                decimal{"."}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+            }
+        }
         default{"latn"}
         latn{
             patterns{
@@ -101,7 +113,7 @@ ur{
         }
         native{"arabext"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -208,63 +220,6 @@ ur{
                 wide{
                     "قبل مسیح",
                     "عیسوی سن",
-                }
-            }
-            fields{
-                day{
-                    dn{"دن"}
-                    relative{
-                        "-1"{"گزشتہ کل"}
-                        "-2"{"گزشتہ پرسوں"}
-                        "0"{"آج"}
-                        "1"{"آئندہ کل"}
-                        "2"{"آنے والا پرسوں"}
-                    }
-                }
-                dayperiod{
-                    dn{"رات/صبح"}
-                }
-                era{
-                    dn{"عہد"}
-                }
-                hour{
-                    dn{"گھنٹہ"}
-                }
-                minute{
-                    dn{"منٹ"}
-                }
-                month{
-                    dn{"مہینہ"}
-                    relative{
-                        "-1"{"پچھلے مہینہ"}
-                        "0"{"اس مہینہ"}
-                        "1"{"اگلے مہینہ"}
-                    }
-                }
-                second{
-                    dn{"سیکنڈ"}
-                }
-                week{
-                    dn{"ہفتہ"}
-                    relative{
-                        "-1"{"پچھلے ہفتہ"}
-                        "0"{"اس ہفتہ"}
-                        "1"{"اگلے ہفتہ"}
-                    }
-                }
-                weekday{
-                    dn{"ہفتے کا دن"}
-                }
-                year{
-                    dn{"سال"}
-                    relative{
-                        "-1"{"پچھلے سال"}
-                        "0"{"اس سال"}
-                        "1"{"اگلے سال"}
-                    }
-                }
-                zone{
-                    dn{"منطقہ وقت"}
                 }
             }
             intervalFormats{
@@ -462,9 +417,65 @@ ur{
         quotationEnd{"“"}
         quotationStart{"”"}
     }
+    fields{
+        day{
+            dn{"دن"}
+            relative{
+                "-1"{"گزشتہ کل"}
+                "-2"{"گزشتہ پرسوں"}
+                "0"{"آج"}
+                "1"{"آئندہ کل"}
+                "2"{"آنے والا پرسوں"}
+            }
+        }
+        dayperiod{
+            dn{"رات/صبح"}
+        }
+        era{
+            dn{"عہد"}
+        }
+        hour{
+            dn{"گھنٹہ"}
+        }
+        minute{
+            dn{"منٹ"}
+        }
+        month{
+            dn{"مہینہ"}
+            relative{
+                "-1"{"پچھلے مہینہ"}
+                "0"{"اس مہینہ"}
+                "1"{"اگلے مہینہ"}
+            }
+        }
+        second{
+            dn{"سیکنڈ"}
+        }
+        week{
+            dn{"ہفتہ"}
+            relative{
+                "-1"{"پچھلے ہفتہ"}
+                "0"{"اس ہفتہ"}
+                "1"{"اگلے ہفتہ"}
+            }
+        }
+        weekday{
+            dn{"ہفتے کا دن"}
+        }
+        year{
+            dn{"سال"}
+            relative{
+                "-1"{"پچھلے سال"}
+                "0"{"اس سال"}
+                "1"{"اگلے سال"}
+            }
+        }
+        zone{
+            dn{"منطقہ وقت"}
+        }
+    }
     layout{
         characters{"right-to-left"}
-        lines{"top-to-bottom"}
     }
     listPattern{
         standard{

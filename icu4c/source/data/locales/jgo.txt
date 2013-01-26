@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/jgo.xml
 // *
@@ -21,7 +21,7 @@ jgo{
         "[A B C D Ɛ F G H I J K L M N Ŋ Ɔ P {Pf} S {Sh} T {Ts} U Ʉ {Ʉ\u0308} V W Ẅ Y "
         "Z Ꞌ]"
     }
-    ExemplarCharactersPunctuation{"[\- , ; \: ! ? . ‹ › « »]"}
+    ExemplarCharactersPunctuation{"[\\- , ; \: ! ? . ‹ › « »]"}
     LocaleScript{
         "Latn",
     }
@@ -49,7 +49,7 @@ jgo{
         }
         native{"latn"}
     }
-    Version{"2.0.77.53"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -141,13 +141,6 @@ jgo{
                 abbreviated{
                     "tsɛttsɛt mɛŋgu’ mi ɛ́ lɛɛnɛ Kɛlísɛtɔ gɔ ńɔ́",
                     "tsɛttsɛt mɛŋgu’ mi ɛ́ fúnɛ Kɛlísɛtɔ tɔ́ mɔ́",
-                }
-            }
-            fields{
-                day{
-                    relative{
-                        "0"{"lɔꞋɔ"}
-                    }
                 }
             }
             intervalFormats{
@@ -251,9 +244,12 @@ jgo{
         quotationEnd{"»"}
         quotationStart{"«"}
     }
-    layout{
-        characters{"left-to-right"}
-        lines{"top-to-bottom"}
+    fields{
+        day{
+            relative{
+                "0"{"lɔꞋɔ"}
+            }
+        }
     }
     listPattern{
         standard{

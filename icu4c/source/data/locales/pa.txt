@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pa.xml
 // *
@@ -31,7 +31,7 @@ pa{
         }
         native{"guru"}
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -108,43 +108,6 @@ pa{
                     "ਸਾਲ",
                 }
             }
-            fields{
-                day{
-                    dn{"ਦਿਨ"}
-                    relative{
-                        "-1"{"ਲੰਘਿਆਂ ਕੱਲ"}
-                        "0"{"ਅੱਜ"}
-                        "1"{"ਭਲਕੇ"}
-                    }
-                }
-                era{
-                    dn{"ਯੁੱਗ"}
-                }
-                hour{
-                    dn{"ਘੰਟਾ"}
-                }
-                minute{
-                    dn{"ਮਿੰਟ"}
-                }
-                month{
-                    dn{"ਮਹੀਨਾ"}
-                }
-                second{
-                    dn{"ਸਕਿੰਡ"}
-                }
-                week{
-                    dn{"ਹਫ਼ਤਾ"}
-                }
-                weekday{
-                    dn{"ਹਫ਼ਤੇ ਦਾ ਦਿਨ"}
-                }
-                year{
-                    dn{"ਸਾਲ"}
-                }
-                zone{
-                    dn{"ਖੇਤਰ"}
-                }
-            }
             monthNames{
                 format{
                     wide{
@@ -211,6 +174,43 @@ pa{
                     }
                 }
             }
+        }
+    }
+    fields{
+        day{
+            dn{"ਦਿਨ"}
+            relative{
+                "-1"{"ਲੰਘਿਆਂ ਕੱਲ"}
+                "0"{"ਅੱਜ"}
+                "1"{"ਭਲਕੇ"}
+            }
+        }
+        era{
+            dn{"ਯੁੱਗ"}
+        }
+        hour{
+            dn{"ਘੰਟਾ"}
+        }
+        minute{
+            dn{"ਮਿੰਟ"}
+        }
+        month{
+            dn{"ਮਹੀਨਾ"}
+        }
+        second{
+            dn{"ਸਕਿੰਡ"}
+        }
+        week{
+            dn{"ਹਫ਼ਤਾ"}
+        }
+        weekday{
+            dn{"ਹਫ਼ਤੇ ਦਾ ਦਿਨ"}
+        }
+        year{
+            dn{"ਸਾਲ"}
+        }
+        zone{
+            dn{"ਖੇਤਰ"}
         }
     }
     measurementSystemNames{

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/to.xml
 // *
@@ -28,7 +28,7 @@ to{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -150,48 +150,6 @@ to{
                 wide{
                     "ki muʻa",
                     "taʻu ʻo Sīsū",
-                }
-            }
-            fields{
-                day{
-                    dn{"ʻaho"}
-                    relative{
-                        "-1"{"ʻaneafi"}
-                        "-2"{"ʻaneheafi"}
-                        "0"{"ʻaho⸍ni"}
-                        "1"{"ʻapongipongi"}
-                        "2"{"ʻahepongipongi"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"kuonga"}
-                }
-                hour{
-                    dn{"houa"}
-                }
-                minute{
-                    dn{"miniti"}
-                }
-                month{
-                    dn{"māhina"}
-                }
-                second{
-                    dn{"sekoni"}
-                }
-                week{
-                    dn{"uike"}
-                }
-                weekday{
-                    dn{"ʻaho ʻo e uike"}
-                }
-                year{
-                    dn{"taʻu"}
-                }
-                zone{
-                    dn{"taimi fakavahe"}
                 }
             }
             intervalFormats{
@@ -402,6 +360,48 @@ to{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"ʻaho"}
+            relative{
+                "-1"{"ʻaneafi"}
+                "-2"{"ʻaneheafi"}
+                "0"{"ʻaho⸍ni"}
+                "1"{"ʻapongipongi"}
+                "2"{"ʻahepongipongi"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"kuonga"}
+        }
+        hour{
+            dn{"houa"}
+        }
+        minute{
+            dn{"miniti"}
+        }
+        month{
+            dn{"māhina"}
+        }
+        second{
+            dn{"sekoni"}
+        }
+        week{
+            dn{"uike"}
+        }
+        weekday{
+            dn{"ʻaho ʻo e uike"}
+        }
+        year{
+            dn{"taʻu"}
+        }
+        zone{
+            dn{"taimi fakavahe"}
+        }
     }
     measurementSystemNames{
         US{"fakaʻamelika"}

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/rn.xml
 // *
@@ -28,7 +28,7 @@ rn{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -106,46 +106,6 @@ rn{
                     "Nyuma ya Yezu",
                 }
             }
-            fields{
-                day{
-                    dn{"Umusi"}
-                    relative{
-                        "-1"{"Ejo (haheze)"}
-                        "0"{"Uyu musi"}
-                        "1"{"Ejo (hazoza)"}
-                    }
-                }
-                dayperiod{
-                    dn{"M.s/N.s"}
-                }
-                era{
-                    dn{"Igihe"}
-                }
-                hour{
-                    dn{"Isaha"}
-                }
-                minute{
-                    dn{"Umunota"}
-                }
-                month{
-                    dn{"Ukwezi"}
-                }
-                second{
-                    dn{"Isegonda"}
-                }
-                week{
-                    dn{"Indwi, Iyinga"}
-                }
-                weekday{
-                    dn{"Iminsi y'iyinga"}
-                }
-                year{
-                    dn{"Umwaka"}
-                }
-                zone{
-                    dn{"Isaha yo mukarere"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -201,5 +161,45 @@ rn{
         alternateQuotationStart{"’"}
         quotationEnd{"”"}
         quotationStart{"”"}
+    }
+    fields{
+        day{
+            dn{"Umusi"}
+            relative{
+                "-1"{"Ejo (haheze)"}
+                "0"{"Uyu musi"}
+                "1"{"Ejo (hazoza)"}
+            }
+        }
+        dayperiod{
+            dn{"M.s/N.s"}
+        }
+        era{
+            dn{"Igihe"}
+        }
+        hour{
+            dn{"Isaha"}
+        }
+        minute{
+            dn{"Umunota"}
+        }
+        month{
+            dn{"Ukwezi"}
+        }
+        second{
+            dn{"Isegonda"}
+        }
+        week{
+            dn{"Indwi, Iyinga"}
+        }
+        weekday{
+            dn{"Iminsi y'iyinga"}
+        }
+        year{
+            dn{"Umwaka"}
+        }
+        zone{
+            dn{"Isaha yo mukarere"}
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ff.xml
 // *
@@ -27,7 +27,7 @@ ff{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -118,46 +118,6 @@ ff{
                     "Caggal Iisa",
                 }
             }
-            fields{
-                day{
-                    dn{"Ñalnde"}
-                    relative{
-                        "-1"{"Haŋki"}
-                        "0"{"Hannde"}
-                        "1"{"Jaŋngo"}
-                    }
-                }
-                dayperiod{
-                    dn{"Sahnga"}
-                }
-                era{
-                    dn{"Jamaanu"}
-                }
-                hour{
-                    dn{"Waktu"}
-                }
-                minute{
-                    dn{"Hoƴom"}
-                }
-                month{
-                    dn{"Lewru"}
-                }
-                second{
-                    dn{"Majaango"}
-                }
-                week{
-                    dn{"Yontere"}
-                }
-                weekday{
-                    dn{"Ñalɗi yontere"}
-                }
-                year{
-                    dn{"Hitaande"}
-                }
-                zone{
-                    dn{"Diiwaan waktu"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -229,5 +189,45 @@ ff{
         alternateQuotationStart{"‚"}
         quotationEnd{"”"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"Ñalnde"}
+            relative{
+                "-1"{"Haŋki"}
+                "0"{"Hannde"}
+                "1"{"Jaŋngo"}
+            }
+        }
+        dayperiod{
+            dn{"Sahnga"}
+        }
+        era{
+            dn{"Jamaanu"}
+        }
+        hour{
+            dn{"Waktu"}
+        }
+        minute{
+            dn{"Hoƴom"}
+        }
+        month{
+            dn{"Lewru"}
+        }
+        second{
+            dn{"Majaango"}
+        }
+        week{
+            dn{"Yontere"}
+        }
+        weekday{
+            dn{"Ñalɗi yontere"}
+        }
+        year{
+            dn{"Hitaande"}
+        }
+        zone{
+            dn{"Diiwaan waktu"}
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/dua.xml
 // *
@@ -32,7 +32,7 @@ dua{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -121,43 +121,6 @@ dua{
                     "mbúsa kwédi a Yés",
                 }
             }
-            fields{
-                day{
-                    dn{"búnyá"}
-                    relative{
-                        "-1"{"kíɛlɛ nítómb́í"}
-                        "0"{"wɛ́ŋgɛ̄"}
-                        "1"{"kíɛlɛ"}
-                    }
-                }
-                dayperiod{
-                    dn{"epasi a búnyá"}
-                }
-                era{
-                    dn{"póndá"}
-                }
-                hour{
-                    dn{"ŋgandɛ"}
-                }
-                minute{
-                    dn{"ndɔkɔ"}
-                }
-                month{
-                    dn{"mɔ́di"}
-                }
-                second{
-                    dn{"píndí"}
-                }
-                week{
-                    dn{"disama"}
-                }
-                weekday{
-                    dn{"mínyá má disama"}
-                }
-                year{
-                    dn{"mbú"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -229,5 +192,42 @@ dua{
         alternateQuotationStart{"‘"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"búnyá"}
+            relative{
+                "-1"{"kíɛlɛ nítómb́í"}
+                "0"{"wɛ́ŋgɛ̄"}
+                "1"{"kíɛlɛ"}
+            }
+        }
+        dayperiod{
+            dn{"epasi a búnyá"}
+        }
+        era{
+            dn{"póndá"}
+        }
+        hour{
+            dn{"ŋgandɛ"}
+        }
+        minute{
+            dn{"ndɔkɔ"}
+        }
+        month{
+            dn{"mɔ́di"}
+        }
+        second{
+            dn{"píndí"}
+        }
+        week{
+            dn{"disama"}
+        }
+        weekday{
+            dn{"mínyá má disama"}
+        }
+        year{
+            dn{"mbú"}
+        }
     }
 }

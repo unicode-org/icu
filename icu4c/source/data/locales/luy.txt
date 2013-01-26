@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/luy.xml
 // *
@@ -22,7 +22,7 @@ luy{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -110,46 +110,6 @@ luy{
                     "Muhiga Kuvita Kuuza",
                 }
             }
-            fields{
-                day{
-                    dn{"Ridiku"}
-                    relative{
-                        "-1"{"Mgorova"}
-                        "0"{"Lero"}
-                        "1"{"Mgamba"}
-                    }
-                }
-                dayperiod{
-                    dn{"Vuche/Vwira"}
-                }
-                era{
-                    dn{"Rimenya"}
-                }
-                hour{
-                    dn{"Isaa"}
-                }
-                minute{
-                    dn{"Idagika"}
-                }
-                month{
-                    dn{"Mweri"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Risiza"}
-                }
-                weekday{
-                    dn{"Mrisiza"}
-                }
-                year{
-                    dn{"Muhiga"}
-                }
-                zone{
-                    dn{"Havundu"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -221,6 +181,46 @@ luy{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"Ridiku"}
+            relative{
+                "-1"{"Mgorova"}
+                "0"{"Lero"}
+                "1"{"Mgamba"}
+            }
+        }
+        dayperiod{
+            dn{"Vuche/Vwira"}
+        }
+        era{
+            dn{"Rimenya"}
+        }
+        hour{
+            dn{"Isaa"}
+        }
+        minute{
+            dn{"Idagika"}
+        }
+        month{
+            dn{"Mweri"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Risiza"}
+        }
+        weekday{
+            dn{"Mrisiza"}
+        }
+        year{
+            dn{"Muhiga"}
+        }
+        zone{
+            dn{"Havundu"}
+        }
     }
     measurementSystemNames{
         metric{"Metric"}

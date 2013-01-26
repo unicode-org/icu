@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/uk.xml
 // *
@@ -190,7 +190,7 @@ uk{
             }
         }
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         coptic{
             monthNames{
@@ -329,63 +329,6 @@ uk{
                 wide{
                     "до нашої ери",
                     "нашої ери",
-                }
-            }
-            fields{
-                day{
-                    dn{"День"}
-                    relative{
-                        "-1"{"Вчора"}
-                        "-2"{"Позавчора"}
-                        "0"{"Сьогодні"}
-                        "1"{"Завтра"}
-                        "2"{"Післязавтра"}
-                    }
-                }
-                dayperiod{
-                    dn{"Частина доби"}
-                }
-                era{
-                    dn{"Ера"}
-                }
-                hour{
-                    dn{"Година"}
-                }
-                minute{
-                    dn{"Хвилина"}
-                }
-                month{
-                    dn{"Місяць"}
-                    relative{
-                        "-1"{"Минулого місяця"}
-                        "0"{"Цього місяця"}
-                        "1"{"Наступного місяця"}
-                    }
-                }
-                second{
-                    dn{"Секунда"}
-                }
-                week{
-                    dn{"Тиждень"}
-                    relative{
-                        "-1"{"Минулого тижня"}
-                        "0"{"Цього тижня"}
-                        "1"{"Наступного тижня"}
-                    }
-                }
-                weekday{
-                    dn{"День тижня"}
-                }
-                year{
-                    dn{"Рік"}
-                    relative{
-                        "-1"{"Минулого року"}
-                        "0"{"Цього року"}
-                        "1"{"Наступного року"}
-                    }
-                }
-                zone{
-                    dn{"Зона"}
                 }
             }
             intervalFormats{
@@ -692,6 +635,63 @@ uk{
         alternateQuotationStart{"„"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"День"}
+            relative{
+                "-1"{"Вчора"}
+                "-2"{"Позавчора"}
+                "0"{"Сьогодні"}
+                "1"{"Завтра"}
+                "2"{"Післязавтра"}
+            }
+        }
+        dayperiod{
+            dn{"Частина доби"}
+        }
+        era{
+            dn{"Ера"}
+        }
+        hour{
+            dn{"Година"}
+        }
+        minute{
+            dn{"Хвилина"}
+        }
+        month{
+            dn{"Місяць"}
+            relative{
+                "-1"{"Минулого місяця"}
+                "0"{"Цього місяця"}
+                "1"{"Наступного місяця"}
+            }
+        }
+        second{
+            dn{"Секунда"}
+        }
+        week{
+            dn{"Тиждень"}
+            relative{
+                "-1"{"Минулого тижня"}
+                "0"{"Цього тижня"}
+                "1"{"Наступного тижня"}
+            }
+        }
+        weekday{
+            dn{"День тижня"}
+        }
+        year{
+            dn{"Рік"}
+            relative{
+                "-1"{"Минулого року"}
+                "0"{"Цього року"}
+                "1"{"Наступного року"}
+            }
+        }
+        zone{
+            dn{"Зона"}
+        }
     }
     listPattern{
         standard{

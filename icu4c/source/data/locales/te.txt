@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/te.xml
 // *
@@ -151,7 +151,7 @@ te{
         }
         native{"telu"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -293,63 +293,6 @@ te{
                 wide{
                     "ఈసాపూర్వ.",
                     "సన్.",
-                }
-            }
-            fields{
-                day{
-                    dn{"దినం"}
-                    relative{
-                        "-1"{"నిన్న"}
-                        "-2"{"మొన్న"}
-                        "0"{"ఈ రోజు"}
-                        "1"{"రేపు"}
-                        "2"{"ఎల్లుండి"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"యుగం, శకము"}
-                }
-                hour{
-                    dn{"గంట"}
-                }
-                minute{
-                    dn{"నిమిషము"}
-                }
-                month{
-                    dn{"నెల"}
-                    relative{
-                        "-1"{"గత నెల"}
-                        "0"{"ఈ నెల"}
-                        "1"{"తర్వాతి నెల"}
-                    }
-                }
-                second{
-                    dn{"క్షణం"}
-                }
-                week{
-                    dn{"వారము"}
-                    relative{
-                        "-1"{"గత వారం"}
-                        "0"{"ఈ వారం"}
-                        "1"{"తదుపరి వారం"}
-                    }
-                }
-                weekday{
-                    dn{"వారంలో రోజు"}
-                }
-                year{
-                    dn{"సంవత్సరం"}
-                    relative{
-                        "-1"{"మునుపటి సంవత్సరం"}
-                        "0"{"ఈ సంవత్సరం"}
-                        "1"{"తర్వాతి సంవత్సరం"}
-                    }
-                }
-                zone{
-                    dn{"మండలం"}
                 }
             }
             intervalFormats{
@@ -550,6 +493,63 @@ te{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"దినం"}
+            relative{
+                "-1"{"నిన్న"}
+                "-2"{"మొన్న"}
+                "0"{"ఈ రోజు"}
+                "1"{"రేపు"}
+                "2"{"ఎల్లుండి"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"యుగం, శకము"}
+        }
+        hour{
+            dn{"గంట"}
+        }
+        minute{
+            dn{"నిమిషము"}
+        }
+        month{
+            dn{"నెల"}
+            relative{
+                "-1"{"గత నెల"}
+                "0"{"ఈ నెల"}
+                "1"{"తర్వాతి నెల"}
+            }
+        }
+        second{
+            dn{"క్షణం"}
+        }
+        week{
+            dn{"వారము"}
+            relative{
+                "-1"{"గత వారం"}
+                "0"{"ఈ వారం"}
+                "1"{"తదుపరి వారం"}
+            }
+        }
+        weekday{
+            dn{"వారంలో రోజు"}
+        }
+        year{
+            dn{"సంవత్సరం"}
+            relative{
+                "-1"{"మునుపటి సంవత్సరం"}
+                "0"{"ఈ సంవత్సరం"}
+                "1"{"తర్వాతి సంవత్సరం"}
+            }
+        }
+        zone{
+            dn{"మండలం"}
+        }
     }
     listPattern{
         standard{

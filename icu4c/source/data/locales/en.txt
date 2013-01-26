@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/en.xml
 // *
@@ -16,7 +16,7 @@ en{
     }
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] § @ * / \& # † ‡ ′ ″]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     LocaleScript{
         "Latn",
     }
@@ -146,7 +146,7 @@ en{
             }
         }
     }
-    Version{"2.0.78.36"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -435,61 +435,6 @@ en{
                 wide{
                     "Before Christ",
                     "Anno Domini",
-                }
-            }
-            fields{
-                day{
-                    dn{"Day"}
-                    relative{
-                        "-1"{"Yesterday"}
-                        "0"{"Today"}
-                        "1"{"Tomorrow"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"Era"}
-                }
-                hour{
-                    dn{"Hour"}
-                }
-                minute{
-                    dn{"Minute"}
-                }
-                month{
-                    dn{"Month"}
-                    relative{
-                        "-1"{"Last month"}
-                        "0"{"This month"}
-                        "1"{"Next month"}
-                    }
-                }
-                second{
-                    dn{"Second"}
-                }
-                week{
-                    dn{"Week"}
-                    relative{
-                        "-1"{"Last week"}
-                        "0"{"This week"}
-                        "1"{"Next week"}
-                    }
-                }
-                weekday{
-                    dn{"Day of the Week"}
-                }
-                year{
-                    dn{"Year"}
-                    relative{
-                        "-1"{"Last year"}
-                        "0"{"This year"}
-                        "1"{"Next year"}
-                    }
-                }
-                zone{
-                    dn{"Time Zone"}
                 }
             }
             intervalFormats{
@@ -781,6 +726,61 @@ en{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Day"}
+            relative{
+                "-1"{"Yesterday"}
+                "0"{"Today"}
+                "1"{"Tomorrow"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"Era"}
+        }
+        hour{
+            dn{"Hour"}
+        }
+        minute{
+            dn{"Minute"}
+        }
+        month{
+            dn{"Month"}
+            relative{
+                "-1"{"Last month"}
+                "0"{"This month"}
+                "1"{"Next month"}
+            }
+        }
+        second{
+            dn{"Second"}
+        }
+        week{
+            dn{"Week"}
+            relative{
+                "-1"{"Last week"}
+                "0"{"This week"}
+                "1"{"Next week"}
+            }
+        }
+        weekday{
+            dn{"Day of the Week"}
+        }
+        year{
+            dn{"Year"}
+            relative{
+                "-1"{"Last year"}
+                "0"{"This year"}
+                "1"{"Next year"}
+            }
+        }
+        zone{
+            dn{"Time Zone"}
+        }
     }
     listPattern{
         standard{

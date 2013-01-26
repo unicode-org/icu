@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ar.xml
 // *
@@ -263,7 +263,7 @@ ar{
         }
         native{"arab"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -514,63 +514,6 @@ ar{
                 wide{
                     "قبل الميلاد",
                     "ميلادي",
-                }
-            }
-            fields{
-                day{
-                    dn{"يوم"}
-                    relative{
-                        "-1"{"أمس"}
-                        "-2"{"أول أمس"}
-                        "0"{"اليوم"}
-                        "1"{"غدًا"}
-                        "2"{"بعد الغد"}
-                    }
-                }
-                dayperiod{
-                    dn{"ص/م"}
-                }
-                era{
-                    dn{"العصر"}
-                }
-                hour{
-                    dn{"الساعات"}
-                }
-                minute{
-                    dn{"الدقائق"}
-                }
-                month{
-                    dn{"الشهر"}
-                    relative{
-                        "-1"{"الشهر الماضي"}
-                        "0"{"هذا الشهر"}
-                        "1"{"الشهر التالي"}
-                    }
-                }
-                second{
-                    dn{"الثواني"}
-                }
-                week{
-                    dn{"الأسبوع"}
-                    relative{
-                        "-1"{"الأسبوع الماضي"}
-                        "0"{"هذا الأسبوع"}
-                        "1"{"الأسبوع التالي"}
-                    }
-                }
-                weekday{
-                    dn{"اليوم"}
-                }
-                year{
-                    dn{"السنة"}
-                    relative{
-                        "-1"{"السنة الماضية"}
-                        "0"{"هذه السنة"}
-                        "1"{"السنة التالية"}
-                    }
-                }
-                zone{
-                    dn{"التوقيت"}
                 }
             }
             intervalFormats{
@@ -1301,9 +1244,65 @@ ar{
         quotationEnd{"“"}
         quotationStart{"”"}
     }
+    fields{
+        day{
+            dn{"يوم"}
+            relative{
+                "-1"{"أمس"}
+                "-2"{"أول أمس"}
+                "0"{"اليوم"}
+                "1"{"غدًا"}
+                "2"{"بعد الغد"}
+            }
+        }
+        dayperiod{
+            dn{"ص/م"}
+        }
+        era{
+            dn{"العصر"}
+        }
+        hour{
+            dn{"الساعات"}
+        }
+        minute{
+            dn{"الدقائق"}
+        }
+        month{
+            dn{"الشهر"}
+            relative{
+                "-1"{"الشهر الماضي"}
+                "0"{"هذا الشهر"}
+                "1"{"الشهر التالي"}
+            }
+        }
+        second{
+            dn{"الثواني"}
+        }
+        week{
+            dn{"الأسبوع"}
+            relative{
+                "-1"{"الأسبوع الماضي"}
+                "0"{"هذا الأسبوع"}
+                "1"{"الأسبوع التالي"}
+            }
+        }
+        weekday{
+            dn{"اليوم"}
+        }
+        year{
+            dn{"السنة"}
+            relative{
+                "-1"{"السنة الماضية"}
+                "0"{"هذه السنة"}
+                "1"{"السنة التالية"}
+            }
+        }
+        zone{
+            dn{"التوقيت"}
+        }
+    }
     layout{
         characters{"right-to-left"}
-        lines{"top-to-bottom"}
     }
     listPattern{
         standard{

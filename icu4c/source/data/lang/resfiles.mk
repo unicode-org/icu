@@ -72,22 +72,22 @@ LANG_SOURCE = af.txt agq.txt ak.txt am.txt\
  lag.txt lg.txt ln.txt lo.txt lt.txt\
  lu.txt luo.txt luy.txt lv.txt mas.txt\
  mer.txt mfe.txt mg.txt mgh.txt mgo.txt\
- mk.txt ml.txt mr.txt ms.txt mt.txt\
- mua.txt my.txt naq.txt nb.txt nd.txt\
- ne.txt nl.txt nl_BE.txt nmg.txt nn.txt\
- nus.txt nyn.txt om.txt or.txt pa.txt\
- pa_Arab.txt pa_Guru.txt pl.txt ps.txt pt.txt\
- pt_PT.txt rm.txt rn.txt ro.txt rof.txt\
- ru.txt ru_UA.txt rw.txt rwk.txt saq.txt\
- sbp.txt seh.txt ses.txt sg.txt shi.txt\
- shi_Latn.txt shi_Tfng.txt si.txt sk.txt sl.txt\
- sn.txt so.txt sq.txt sr.txt sr_Cyrl.txt\
- sr_Latn.txt sv.txt sv_FI.txt sw.txt swc.txt\
- ta.txt te.txt teo.txt th.txt ti.txt\
- to.txt tr.txt twq.txt tzm.txt tzm_Latn.txt\
- uk.txt ur.txt uz.txt uz_Arab.txt uz_Cyrl.txt\
- uz_Latn.txt vai.txt vai_Latn.txt vai_Vaii.txt vi.txt\
- vun.txt xog.txt yav.txt yo.txt zh.txt\
- zh_Hans.txt zh_Hans_HK.txt zh_Hans_MO.txt zh_Hans_SG.txt zh_Hant.txt\
- zh_Hant_HK.txt zu.txt
+ mk.txt ml.txt mr.txt ms.txt ms_Latn.txt\
+ mt.txt mua.txt my.txt naq.txt nb.txt\
+ nd.txt ne.txt nl.txt nl_BE.txt nmg.txt\
+ nn.txt nus.txt nyn.txt om.txt or.txt\
+ pa.txt pa_Arab.txt pa_Guru.txt pl.txt ps.txt\
+ pt.txt pt_PT.txt rm.txt rn.txt ro.txt\
+ rof.txt ru.txt ru_UA.txt rw.txt rwk.txt\
+ saq.txt sbp.txt seh.txt ses.txt sg.txt\
+ shi.txt shi_Latn.txt shi_Tfng.txt si.txt sk.txt\
+ sl.txt sn.txt so.txt sq.txt sr.txt\
+ sr_Cyrl.txt sr_Latn.txt sv.txt sv_FI.txt sw.txt\
+ swc.txt ta.txt te.txt teo.txt th.txt\
+ ti.txt to.txt tr.txt twq.txt tzm.txt\
+ tzm_Latn.txt uk.txt ur.txt uz.txt uz_Arab.txt\
+ uz_Cyrl.txt uz_Latn.txt vai.txt vai_Latn.txt vai_Vaii.txt\
+ vi.txt vun.txt xog.txt yav.txt yo.txt\
+ zh.txt zh_Hans.txt zh_Hans_HK.txt zh_Hans_MO.txt zh_Hans_SG.txt\
+ zh_Hant.txt zh_Hant_HK.txt zu.txt
 

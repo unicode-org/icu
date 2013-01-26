@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ks.xml
 // *
@@ -682,7 +682,7 @@ ks{
         SOLBA{"ثٹولوِزا/سولبِکا بوٗلۍ"}
         TARASK{"تاراسکیٖوِکا علمہ ہِجاِ"}
     }
-    Version{"2.0.80.4"}
+    Version{"2.0.80.73"}
     codePatterns{
         language{"زَبان: {0}"}
         script{"رَسم الخط: {0}"}

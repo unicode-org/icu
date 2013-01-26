@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/si.xml
 // *
@@ -301,5 +301,5 @@ si{
         ZW{"සිම්බාබ්වේ"}
         ZZ{"හඳුනා නොගත් කළාපය"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
 }

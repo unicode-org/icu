@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/kln.xml
 // *
@@ -23,7 +23,7 @@ kln{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -111,46 +111,6 @@ kln{
                     "Kokakesich Jesu",
                 }
             }
-            fields{
-                day{
-                    dn{"Betut"}
-                    relative{
-                        "-1"{"Amut"}
-                        "0"{"Raini"}
-                        "1"{"Mutai"}
-                    }
-                }
-                dayperiod{
-                    dn{"BE/KE"}
-                }
-                era{
-                    dn{"Ibinta"}
-                }
-                hour{
-                    dn{"Sait"}
-                }
-                minute{
-                    dn{"Minitit"}
-                }
-                month{
-                    dn{"Arawet"}
-                }
-                second{
-                    dn{"Sekondit"}
-                }
-                week{
-                    dn{"Wikit"}
-                }
-                weekday{
-                    dn{"Betutab wikit"}
-                }
-                year{
-                    dn{"Kenyit"}
-                }
-                zone{
-                    dn{"Saitab sonit"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -222,5 +182,45 @@ kln{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Betut"}
+            relative{
+                "-1"{"Amut"}
+                "0"{"Raini"}
+                "1"{"Mutai"}
+            }
+        }
+        dayperiod{
+            dn{"BE/KE"}
+        }
+        era{
+            dn{"Ibinta"}
+        }
+        hour{
+            dn{"Sait"}
+        }
+        minute{
+            dn{"Minitit"}
+        }
+        month{
+            dn{"Arawet"}
+        }
+        second{
+            dn{"Sekondit"}
+        }
+        week{
+            dn{"Wikit"}
+        }
+        weekday{
+            dn{"Betutab wikit"}
+        }
+        year{
+            dn{"Kenyit"}
+        }
+        zone{
+            dn{"Saitab sonit"}
+        }
     }
 }

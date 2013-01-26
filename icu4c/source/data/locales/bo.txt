@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bo.xml
 // *
@@ -44,7 +44,7 @@ bo{
             }
         }
     }
-    Version{"2.0.74.85"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -136,36 +136,6 @@ bo{
                     "སྤྱི་ལོ།",
                 }
             }
-            fields{
-                day{
-                    dn{"ཉིན།"}
-                    relative{
-                        "-1"{"ཁས་ས་"}
-                        "-2"{"ཁས་ཉིན་ཀ་"}
-                        "0"{"དེ་རིང་"}
-                        "1"{"སང་ཉིན་"}
-                        "2"{"གནངས་ཉིན་ཀ་"}
-                    }
-                }
-                hour{
-                    dn{"ཆུ་ཙོ་"}
-                }
-                minute{
-                    dn{"སྐར་མ།"}
-                }
-                month{
-                    dn{"ཟླ་བ་"}
-                }
-                second{
-                    dn{"སྐར་ཆ།"}
-                }
-                year{
-                    dn{"ལོ།"}
-                }
-                zone{
-                    dn{"དུས་ཚོད།"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -198,6 +168,36 @@ bo{
                     }
                 }
             }
+        }
+    }
+    fields{
+        day{
+            dn{"ཉིན།"}
+            relative{
+                "-1"{"ཁས་ས་"}
+                "-2"{"ཁས་ཉིན་ཀ་"}
+                "0"{"དེ་རིང་"}
+                "1"{"སང་ཉིན་"}
+                "2"{"གནངས་ཉིན་ཀ་"}
+            }
+        }
+        hour{
+            dn{"ཆུ་ཙོ་"}
+        }
+        minute{
+            dn{"སྐར་མ།"}
+        }
+        month{
+            dn{"ཟླ་བ་"}
+        }
+        second{
+            dn{"སྐར་ཆ།"}
+        }
+        year{
+            dn{"ལོ།"}
+        }
+        zone{
+            dn{"དུས་ཚོད།"}
         }
     }
 }

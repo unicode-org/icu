@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/fi.xml
@@ -23,11 +23,11 @@ fi{
                 "&Z'\u0020'̵<<ʒ<<<Ʒ"
                 "&[before 1]ǀ<å<<<Å<ä<<<Ä<<æ<<<Æ<ö<<<Ö<<ø<<<Ø"
             }
-            Version{"22.1.1"}
+            Version{"23"}
         }
         search{
             Sequence{
-                " [normalization on ][suppressContractions [เ-ไ ເ-ໄ] ]"
+                " [normalization on][suppressContractions [เ-ไ ເ-ໄ]]"
                 "&'='<'\u2260'&ا<<<ﺎ<<<ﺍ<<آ<<<ﺂ<<<ﺁ<<أ<<<ﺄ<<<ﺃ<<إ<<<ﺈ<<<ﺇ"
                 "&و<<<ۥ<<<ﻮ<<<ﻭ<<ؤ<<<ﺆ<<<ﺅ"
                 "&ي<<<ۦ<<<ﻳ<<<ﻴ<<<ﻲ<<<ﻱ<<ئ<<<ﺋ<<<ﺌ<<<ﺊ<<<ﺉ<<ى<<<ﯨ<<<ﯩ<<<ﻰ<<<ﻯ"
@@ -80,7 +80,7 @@ fi{
                 "&Y<<ü<<<Ü<<ű<<<Ű"
                 "&[before 1]ǀ<å<<<Å<ä<<<Ä<<æ<<<Æ<ö<<<Ö<<ø<<<Ø<<ő<<<Ő<<õ<<<Õ<<œ<<<Œ"
             }
-            Version{"22.1.1"}
+            Version{"23"}
         }
         standard{
             Sequence{
@@ -91,7 +91,7 @@ fi{
                 "&Y<<ü<<<Ü<<ű<<<Ű"
                 "&[before 1]ǀ<å<<<Å<ä<<<Ä<<æ<<<Æ<ö<<<Ö<<ø<<<Ø<<ő<<<Ő<<õ<<<Õ<<œ<<<Œ"
             }
-            Version{"22.1.1"}
+            Version{"23"}
         }
     }
 }

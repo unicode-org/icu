@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/de.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/de.xml
  */
 de{
-    Version{"2.0.78.47"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -373,20 +373,10 @@ de{
             lg{"Westafrikanische Zeit"}
             ls{"Westafrikanische Normalzeit"}
         }
-        "meta:Aktyubinsk"{
-            ld{"Aktyubinsk-Sommerzeit"}
-            lg{"Aktyubinsk-Zeit"}
-            ls{"Aktyubinsk-Normalzeit"}
-        }
         "meta:Alaska"{
             ld{"Alaska Sommerzeit"}
             lg{"Alaska Zeit"}
             ls{"Alaska-Normalzeit"}
-        }
-        "meta:Alaska_Hawaii"{
-            ld{"Alaska-Hawaii-Sommerzeit"}
-            lg{"Alaska-Hawaii-Zeit"}
-            ls{"Alaska-Hawaii-Normalzeit"}
         }
         "meta:Almaty"{
             ld{"Almaty-Sommerzeit"}
@@ -716,11 +706,6 @@ de{
             lg{"Krasnoyarsk-Zeit"}
             ls{"Krasnoyarsk-Normalzeit"}
         }
-        "meta:Kuybyshev"{
-            ld{"Kuibyschew-Sommerzeit"}
-            lg{"Kuibyschew-Zeit"}
-            ls{"Kuibyschew-Normalzeit"}
-        }
         "meta:Kyrgystan"{
             ls{"Kirgisistan-Zeit"}
         }
@@ -883,9 +868,6 @@ de{
         "meta:South_Georgia"{
             ls{"Südgeorgische Zeit"}
         }
-        "meta:Suriname"{
-            ls{"Suriname-Zeit"}
-        }
         "meta:Syowa"{
             ls{"Syowa-Zeit"}
         }
@@ -910,11 +892,6 @@ de{
         }
         "meta:Truk"{
             ls{"Chuuk-Zeit"}
-        }
-        "meta:Turkey"{
-            ld{"Türkische Sommerzeit"}
-            lg{"Türkische Zeit"}
-            ls{"Türkische Normalzeit"}
         }
         "meta:Turkmenistan"{
             ld{"Turkmenistan-Sommerzeit"}

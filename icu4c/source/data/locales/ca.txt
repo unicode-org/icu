@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ca.xml
 // *
@@ -142,7 +142,7 @@ ca{
             }
         }
     }
-    Version{"2.0.78.32"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -543,63 +543,6 @@ ca{
                     "després de Crist",
                 }
             }
-            fields{
-                day{
-                    dn{"dia"}
-                    relative{
-                        "-1"{"ahir"}
-                        "-2"{"abans d'ahir"}
-                        "0"{"avui"}
-                        "1"{"demà"}
-                        "2"{"demà passat"}
-                    }
-                }
-                dayperiod{
-                    dn{"a.m./p.m."}
-                }
-                era{
-                    dn{"era"}
-                }
-                hour{
-                    dn{"hora"}
-                }
-                minute{
-                    dn{"minut"}
-                }
-                month{
-                    dn{"mes"}
-                    relative{
-                        "-1"{"Últim mes"}
-                        "0"{"Aquest mes"}
-                        "1"{"Mes següent"}
-                    }
-                }
-                second{
-                    dn{"segon"}
-                }
-                week{
-                    dn{"setmana"}
-                    relative{
-                        "-1"{"Última setmana"}
-                        "0"{"Aquesta setmana"}
-                        "1"{"Setmana següent"}
-                    }
-                }
-                weekday{
-                    dn{"dia de la setmana"}
-                }
-                year{
-                    dn{"any"}
-                    relative{
-                        "-1"{"Últim any"}
-                        "0"{"Aquest any"}
-                        "1"{"Any següent"}
-                    }
-                }
-                zone{
-                    dn{"zona"}
-                }
-            }
             intervalFormats{
                 H{
                     H{"H-H"}
@@ -834,6 +777,63 @@ ca{
         alternateQuotationStart{"«"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"dia"}
+            relative{
+                "-1"{"ahir"}
+                "-2"{"abans d'ahir"}
+                "0"{"avui"}
+                "1"{"demà"}
+                "2"{"demà passat"}
+            }
+        }
+        dayperiod{
+            dn{"a.m./p.m."}
+        }
+        era{
+            dn{"era"}
+        }
+        hour{
+            dn{"hora"}
+        }
+        minute{
+            dn{"minut"}
+        }
+        month{
+            dn{"mes"}
+            relative{
+                "-1"{"Últim mes"}
+                "0"{"Aquest mes"}
+                "1"{"Mes següent"}
+            }
+        }
+        second{
+            dn{"segon"}
+        }
+        week{
+            dn{"setmana"}
+            relative{
+                "-1"{"Última setmana"}
+                "0"{"Aquesta setmana"}
+                "1"{"Setmana següent"}
+            }
+        }
+        weekday{
+            dn{"dia de la setmana"}
+        }
+        year{
+            dn{"any"}
+            relative{
+                "-1"{"Últim any"}
+                "0"{"Aquest any"}
+                "1"{"Any següent"}
+            }
+        }
+        zone{
+            dn{"zona"}
+        }
     }
     listPattern{
         standard{

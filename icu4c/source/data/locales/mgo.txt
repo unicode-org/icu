@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mgo.xml
 // *
@@ -16,7 +16,7 @@ mgo{
         " u ù w y z ʼ]"
     }
     ExemplarCharactersIndex{"[A B {CH} D E Ə F G {GH} I J K M N Ŋ O Ɔ P R S T U W Y Z ʼ]"}
-    ExemplarCharactersPunctuation{"[, ; \: ! ? . ' ‘ ’ \" “ ”]"}
+    ExemplarCharactersPunctuation{"[, ; \: ! ? . ' ‘ ’ \u0022 “ ”]"}
     LocaleScript{
         "Latn",
     }
@@ -44,7 +44,7 @@ mgo{
         }
         native{"latn"}
     }
-    Version{"2.0.77.53"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -153,47 +153,6 @@ mgo{
                     "CE",
                 }
             }
-            fields{
-                day{
-                    dn{"anəg"}
-                    relative{
-                        "-1"{"ikwiri"}
-                        "0"{"tèchɔ̀ŋ"}
-                        "1"{"isu"}
-                        "2"{"isu ywi"}
-                    }
-                }
-                dayperiod{
-                    dn{"Dayperiod"}
-                }
-                era{
-                    dn{"Era"}
-                }
-                hour{
-                    dn{"Hour"}
-                }
-                minute{
-                    dn{"Minute"}
-                }
-                month{
-                    dn{"iməg"}
-                }
-                second{
-                    dn{"Second"}
-                }
-                week{
-                    dn{"nkap"}
-                }
-                weekday{
-                    dn{"anəg agu nkap"}
-                }
-                year{
-                    dn{"fituʼ"}
-                }
-                zone{
-                    dn{"Zone"}
-                }
-            }
             intervalFormats{
                 fallback{"{0} – {1}"}
             }
@@ -295,9 +254,46 @@ mgo{
         quotationEnd{"”"}
         quotationStart{"“"}
     }
-    layout{
-        characters{"left-to-right"}
-        lines{"top-to-bottom"}
+    fields{
+        day{
+            dn{"anəg"}
+            relative{
+                "-1"{"ikwiri"}
+                "0"{"tèchɔ̀ŋ"}
+                "1"{"isu"}
+                "2"{"isu ywi"}
+            }
+        }
+        dayperiod{
+            dn{"Dayperiod"}
+        }
+        era{
+            dn{"Era"}
+        }
+        hour{
+            dn{"Hour"}
+        }
+        minute{
+            dn{"Minute"}
+        }
+        month{
+            dn{"iməg"}
+        }
+        second{
+            dn{"Second"}
+        }
+        week{
+            dn{"nkap"}
+        }
+        weekday{
+            dn{"anəg agu nkap"}
+        }
+        year{
+            dn{"fituʼ"}
+        }
+        zone{
+            dn{"Zone"}
+        }
     }
     units{
         day{

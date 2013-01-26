@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ne_IN.xml
 // *
 // ***************************************************************************
 ne_IN{
-    Version{"2.0.78.47"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -25,35 +25,6 @@ ne_IN{
                         "शुक्रवार",
                         "शनिवार",
                     }
-                }
-            }
-            fields{
-                day{
-                    dn{"वार"}
-                    relative{
-                        "2"{"पर्सि"}
-                    }
-                }
-                dayperiod{
-                    dn{"पूर्वाह्न / अपराह्न"}
-                }
-                era{
-                    dn{"युग"}
-                }
-                second{
-                    dn{"सेकेन्ड"}
-                }
-                week{
-                    dn{"साता"}
-                }
-                weekday{
-                    dn{"हप्ताको वार"}
-                }
-                year{
-                    dn{"वर्ष"}
-                }
-                zone{
-                    dn{"अञ्‍चल"}
                 }
             }
             monthNames{
@@ -104,6 +75,35 @@ ne_IN{
                     }
                 }
             }
+        }
+    }
+    fields{
+        day{
+            dn{"वार"}
+            relative{
+                "2"{"पर्सि"}
+            }
+        }
+        dayperiod{
+            dn{"पूर्वाह्न / अपराह्न"}
+        }
+        era{
+            dn{"युग"}
+        }
+        second{
+            dn{"सेकेन्ड"}
+        }
+        week{
+            dn{"साता"}
+        }
+        weekday{
+            dn{"हप्ताको वार"}
+        }
+        year{
+            dn{"वर्ष"}
+        }
+        zone{
+            dn{"अञ्‍चल"}
         }
     }
     measurementSystemNames{

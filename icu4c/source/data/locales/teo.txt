@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/teo.xml
 // *
@@ -23,7 +23,7 @@ teo{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -111,43 +111,6 @@ teo{
                     "Baada ya Christo",
                 }
             }
-            fields{
-                day{
-                    dn{"Aparan"}
-                    relative{
-                        "-1"{"Jaan"}
-                        "0"{"Lolo"}
-                        "1"{"Moi"}
-                    }
-                }
-                dayperiod{
-                    dn{"TA/EB"}
-                }
-                era{
-                    dn{"Enzi"}
-                }
-                hour{
-                    dn{"Esaa"}
-                }
-                minute{
-                    dn{"Idakika"}
-                }
-                month{
-                    dn{"Elap"}
-                }
-                second{
-                    dn{"Isekonde"}
-                }
-                week{
-                    dn{"Ewiki"}
-                }
-                year{
-                    dn{"Ekan"}
-                }
-                zone{
-                    dn{"Majira ya saa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -219,5 +182,42 @@ teo{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Aparan"}
+            relative{
+                "-1"{"Jaan"}
+                "0"{"Lolo"}
+                "1"{"Moi"}
+            }
+        }
+        dayperiod{
+            dn{"TA/EB"}
+        }
+        era{
+            dn{"Enzi"}
+        }
+        hour{
+            dn{"Esaa"}
+        }
+        minute{
+            dn{"Idakika"}
+        }
+        month{
+            dn{"Elap"}
+        }
+        second{
+            dn{"Isekonde"}
+        }
+        week{
+            dn{"Ewiki"}
+        }
+        year{
+            dn{"Ekan"}
+        }
+        zone{
+            dn{"Majira ya saa"}
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hr.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"alžirsko"}
@@ -555,14 +555,6 @@ hr{
             lg{"krasnojarsko vrijeme"}
             ls{"krasnojarsko standardno vrijeme"}
         }
-        "meta:Kuybyshev"{
-            ld{"kujbiševsko ljetno vrijeme"}
-            lg{"kujbiševsko vrijeme"}
-            ls{"kujbiševsko standardno vrijeme"}
-        }
-        "meta:Kwajalein"{
-            ls{"kwajaleinsko vrijeme"}
-        }
         "meta:Kyrgystan"{
             ls{"kirgistansko vrijeme"}
         }
@@ -731,9 +723,6 @@ hr{
         "meta:South_Georgia"{
             ls{"vrijeme Južne Džordžije"}
         }
-        "meta:Suriname"{
-            ls{"surinamsko vrijeme"}
-        }
         "meta:Syowa"{
             ls{"vrijeme Syowa"}
         }
@@ -758,11 +747,6 @@ hr{
         }
         "meta:Truk"{
             ls{"vrijeme Truka"}
-        }
-        "meta:Turkey"{
-            ld{"tursko ljetno vrijeme"}
-            lg{"tursko vrijeme"}
-            ls{"tursko standardno vrijeme"}
         }
         "meta:Turkmenistan"{
             ld{"turkmenistansko ljetno vrijeme"}

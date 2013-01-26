@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mas.xml
 // *
@@ -57,5 +57,5 @@ mas{
         zh{"nkʉtʉ́k ɔ́ɔ̄ lchina"}
         zu{"nkʉtʉ́k ɔ́ɔ̄ lzulu"}
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
 }

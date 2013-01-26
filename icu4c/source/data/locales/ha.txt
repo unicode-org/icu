@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ha.xml
 // *
@@ -30,7 +30,7 @@ ha{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -114,46 +114,6 @@ ha{
                     "Bayan haihuwar annab",
                 }
             }
-            fields{
-                day{
-                    dn{"Kwana"}
-                    relative{
-                        "-1"{"Jiya"}
-                        "0"{"Yau"}
-                        "1"{"Gobe"}
-                    }
-                }
-                dayperiod{
-                    dn{"Yini"}
-                }
-                era{
-                    dn{"Zamani"}
-                }
-                hour{
-                    dn{"Awa"}
-                }
-                minute{
-                    dn{"Minti"}
-                }
-                month{
-                    dn{"Wata"}
-                }
-                second{
-                    dn{"Daƙiƙa"}
-                }
-                week{
-                    dn{"Mako"}
-                }
-                weekday{
-                    dn{"Rana"}
-                }
-                year{
-                    dn{"Shekara"}
-                }
-                zone{
-                    dn{"Agogo"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -225,5 +185,45 @@ ha{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Kwana"}
+            relative{
+                "-1"{"Jiya"}
+                "0"{"Yau"}
+                "1"{"Gobe"}
+            }
+        }
+        dayperiod{
+            dn{"Yini"}
+        }
+        era{
+            dn{"Zamani"}
+        }
+        hour{
+            dn{"Awa"}
+        }
+        minute{
+            dn{"Minti"}
+        }
+        month{
+            dn{"Wata"}
+        }
+        second{
+            dn{"Daƙiƙa"}
+        }
+        week{
+            dn{"Mako"}
+        }
+        weekday{
+            dn{"Rana"}
+        }
+        year{
+            dn{"Shekara"}
+        }
+        zone{
+            dn{"Agogo"}
+        }
     }
 }

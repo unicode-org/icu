@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sw.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sw.xml
  */
 sw{
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -530,9 +530,6 @@ sw{
         }
         "meta:South_Georgia"{
             ls{"Saa ya Jojia Kusini"}
-        }
-        "meta:Suriname"{
-            ls{"Saa ya Surinam"}
         }
         "meta:Syowa"{
             ls{"Saa ya Syowa"}

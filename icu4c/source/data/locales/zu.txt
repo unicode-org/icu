@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zu.xml
 // *
@@ -149,7 +149,7 @@ zu{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -252,63 +252,6 @@ zu{
                 abbreviated{
                     "BC",
                     "AD",
-                }
-            }
-            fields{
-                day{
-                    dn{"Usuku"}
-                    relative{
-                        "-1"{"Izolo"}
-                        "-2"{"Usuku olwandulela olwayizolo"}
-                        "0"{"Namhlanje"}
-                        "1"{"Kusasa"}
-                        "2"{"Usuku olulandela olakusasa"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"Isikhathi"}
-                }
-                hour{
-                    dn{"Ihora"}
-                }
-                minute{
-                    dn{"Iminithi"}
-                }
-                month{
-                    dn{"Inyanga"}
-                    relative{
-                        "-1"{"Inyanga edlule"}
-                        "0"{"Le nyanga"}
-                        "1"{"Inyanga ezayo"}
-                    }
-                }
-                second{
-                    dn{"Isekhondi"}
-                }
-                week{
-                    dn{"Iviki"}
-                    relative{
-                        "-1"{"Iviki eledlule"}
-                        "0"{"Leli viki"}
-                        "1"{"Iviki elizayo"}
-                    }
-                }
-                weekday{
-                    dn{"Usuku evikini"}
-                }
-                year{
-                    dn{"Unyaka"}
-                    relative{
-                        "-1"{"Onyakeni odlule"}
-                        "0"{"Kulo nyaka"}
-                        "1"{"Unyaka ozayo"}
-                    }
-                }
-                zone{
-                    dn{"Isikhathi sendawo"}
                 }
             }
             intervalFormats{
@@ -517,6 +460,63 @@ zu{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Usuku"}
+            relative{
+                "-1"{"Izolo"}
+                "-2"{"Usuku olwandulela olwayizolo"}
+                "0"{"Namhlanje"}
+                "1"{"Kusasa"}
+                "2"{"Usuku olulandela olakusasa"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"Isikhathi"}
+        }
+        hour{
+            dn{"Ihora"}
+        }
+        minute{
+            dn{"Iminithi"}
+        }
+        month{
+            dn{"Inyanga"}
+            relative{
+                "-1"{"Inyanga edlule"}
+                "0"{"Le nyanga"}
+                "1"{"Inyanga ezayo"}
+            }
+        }
+        second{
+            dn{"Isekhondi"}
+        }
+        week{
+            dn{"Iviki"}
+            relative{
+                "-1"{"Iviki eledlule"}
+                "0"{"Leli viki"}
+                "1"{"Iviki elizayo"}
+            }
+        }
+        weekday{
+            dn{"Usuku evikini"}
+        }
+        year{
+            dn{"Unyaka"}
+            relative{
+                "-1"{"Onyakeni odlule"}
+                "0"{"Kulo nyaka"}
+                "1"{"Unyaka ozayo"}
+            }
+        }
+        zone{
+            dn{"Isikhathi sendawo"}
+        }
     }
     listPattern{
         standard{

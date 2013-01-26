@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/km.xml
 // *
@@ -17,7 +17,7 @@ km{
         " ឧ {ឧក} ឩ ឯ ឰ ឱ ឳ ា \u17B7 \u17B8 \u17B9 \u17BA \u17BB \u17BC \u17BD ើ ឿ ៀ េ"
         " ែ ៃ ោ ៅ \u17C6 ះ \u17D2]"
     }
-    ExemplarCharactersPunctuation{"[\- , ៖ ! ? . ។ ៕ ‘ ’ \" “ ” ( ) \[ \] \{ \} ៙ ៚]"}
+    ExemplarCharactersPunctuation{"[\\- , ៖ ! ? . ។ ៕ ‘ ’ \u0022 “ ” ( ) \\[ \\] \\{ \\} ៙ ៚]"}
     LocaleScript{
         "Khmr",
     }
@@ -125,7 +125,7 @@ km{
         }
         native{"khmr"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -259,45 +259,6 @@ km{
                 wide{
                     "មុន​គ្រិស្តសករាជ",
                     "គ្រិស្តសករាជ",
-                }
-            }
-            fields{
-                day{
-                    dn{"ថ្ងៃ"}
-                    relative{
-                        "-1"{"ម្សិលមិញ"}
-                        "-2"{"ម្សិល​ម៉្ងៃ"}
-                        "0"{"ថ្ងៃ​នេះ"}
-                        "1"{"ថ្ងៃ​ស្អែក"}
-                        "2"{"​ខាន​ស្អែក"}
-                    }
-                }
-                dayperiod{
-                    dn{"ព្រឹក/ល្ងាច"}
-                }
-                era{
-                    dn{"សករាជ"}
-                }
-                hour{
-                    dn{"ម៉ោង"}
-                }
-                minute{
-                    dn{"នាទី"}
-                }
-                month{
-                    dn{"ខែ"}
-                }
-                second{
-                    dn{"វិនាទី"}
-                }
-                week{
-                    dn{"សប្ដាហ៍"}
-                }
-                weekday{
-                    dn{"ថ្ងៃ​នៃ​សប្ដាហ៍"}
-                }
-                year{
-                    dn{"ឆ្នាំ"}
                 }
             }
             intervalFormats{
@@ -534,6 +495,45 @@ km{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"ថ្ងៃ"}
+            relative{
+                "-1"{"ម្សិលមិញ"}
+                "-2"{"ម្សិល​ម៉្ងៃ"}
+                "0"{"ថ្ងៃ​នេះ"}
+                "1"{"ថ្ងៃ​ស្អែក"}
+                "2"{"​ខាន​ស្អែក"}
+            }
+        }
+        dayperiod{
+            dn{"ព្រឹក/ល្ងាច"}
+        }
+        era{
+            dn{"សករាជ"}
+        }
+        hour{
+            dn{"ម៉ោង"}
+        }
+        minute{
+            dn{"នាទី"}
+        }
+        month{
+            dn{"ខែ"}
+        }
+        second{
+            dn{"វិនាទី"}
+        }
+        week{
+            dn{"សប្ដាហ៍"}
+        }
+        weekday{
+            dn{"ថ្ងៃ​នៃ​សប្ដាហ៍"}
+        }
+        year{
+            dn{"ឆ្នាំ"}
+        }
     }
     listPattern{
         standard{

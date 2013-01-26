@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pl.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pl.xml
  */
 pl{
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidżan"}
@@ -834,11 +834,6 @@ pl{
         "meta:Gilbert_Islands"{
             ls{"Wyspy Gilberta"}
         }
-        "meta:Greenland_Central"{
-            ld{"Czas centralnogrenlandzki letni"}
-            lg{"Czas centralnogrenlandzki"}
-            ls{"Czas standardowy centralnogrenlandzki"}
-        }
         "meta:Greenland_Eastern"{
             ld{"Grenlandia Wschodnia (czas letni)"}
             lg{"Grenlandia Wschodnia"}
@@ -1075,9 +1070,6 @@ pl{
         }
         "meta:South_Georgia"{
             ls{"Georgia Południowa"}
-        }
-        "meta:Suriname"{
-            ls{"Surinam"}
         }
         "meta:Syowa"{
             ls{"Syowa"}

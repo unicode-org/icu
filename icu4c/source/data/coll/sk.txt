@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/sk.xml
@@ -14,7 +14,7 @@ sk{
     collations{
         search{
             Sequence{
-                " [normalization on ][suppressContractions [เ-ไ ເ-ໄ] ]"
+                " [normalization on][suppressContractions [เ-ไ ເ-ໄ]]"
                 "&'='<'\u2260'&ا<<<ﺎ<<<ﺍ<<آ<<<ﺂ<<<ﺁ<<أ<<<ﺄ<<<ﺃ<<إ<<<ﺈ<<<ﺇ"
                 "&و<<<ۥ<<<ﻮ<<<ﻭ<<ؤ<<<ﺆ<<<ﺅ"
                 "&ي<<<ۦ<<<ﻳ<<<ﻴ<<<ﻲ<<<ﻱ<<ئ<<<ﺋ<<<ﺌ<<<ﺊ<<<ﺉ<<ى<<<ﯨ<<<ﯩ<<<ﻰ<<<ﻯ"
@@ -75,7 +75,7 @@ sk{
                 "&Y<ý<<<Ý"
                 "&Z<ž<<<Ž"
             }
-            Version{"22.1.1"}
+            Version{"23"}
         }
         standard{
             Sequence{
@@ -87,7 +87,7 @@ sk{
                 "&S<š<<<Š"
                 "&Z<ž<<<Ž"
             }
-            Version{"22.1.1"}
+            Version{"23"}
         }
     }
 }

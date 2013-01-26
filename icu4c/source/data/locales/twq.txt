@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/twq.xml
 // *
@@ -28,7 +28,7 @@ twq{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -117,43 +117,6 @@ twq{
                     "Isaa zamanoo",
                 }
             }
-            fields{
-                day{
-                    dn{"Zaari"}
-                    relative{
-                        "-1"{"Bi"}
-                        "0"{"Hõo"}
-                        "1"{"Suba"}
-                    }
-                }
-                dayperiod{
-                    dn{"Subbaahi/Zaarikay banda"}
-                }
-                era{
-                    dn{"Zaman"}
-                }
-                hour{
-                    dn{"Guuru"}
-                }
-                minute{
-                    dn{"Miniti"}
-                }
-                month{
-                    dn{"Handu"}
-                }
-                second{
-                    dn{"Miti"}
-                }
-                week{
-                    dn{"Hebu"}
-                }
-                year{
-                    dn{"Jiiri"}
-                }
-                zone{
-                    dn{"Leerazuu"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -225,5 +188,42 @@ twq{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Zaari"}
+            relative{
+                "-1"{"Bi"}
+                "0"{"Hõo"}
+                "1"{"Suba"}
+            }
+        }
+        dayperiod{
+            dn{"Subbaahi/Zaarikay banda"}
+        }
+        era{
+            dn{"Zaman"}
+        }
+        hour{
+            dn{"Guuru"}
+        }
+        minute{
+            dn{"Miniti"}
+        }
+        month{
+            dn{"Handu"}
+        }
+        second{
+            dn{"Miti"}
+        }
+        week{
+            dn{"Hebu"}
+        }
+        year{
+            dn{"Jiiri"}
+        }
+        zone{
+            dn{"Leerazuu"}
+        }
     }
 }

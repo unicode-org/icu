@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/vun.xml
 // *
@@ -23,7 +23,7 @@ vun{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -111,43 +111,6 @@ vun{
                     "Baada ya Kristu",
                 }
             }
-            fields{
-                day{
-                    dn{"Mfiri"}
-                    relative{
-                        "-1"{"Ukou"}
-                        "0"{"Inu"}
-                        "1"{"Ngama"}
-                    }
-                }
-                dayperiod{
-                    dn{"Mfiri o siku"}
-                }
-                era{
-                    dn{"Kacha"}
-                }
-                hour{
-                    dn{"Saa"}
-                }
-                minute{
-                    dn{"Dakyika"}
-                }
-                month{
-                    dn{"Mori"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Wiikyi"}
-                }
-                year{
-                    dn{"Maka"}
-                }
-                zone{
-                    dn{"Mfiri o saa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -219,5 +182,42 @@ vun{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Mfiri"}
+            relative{
+                "-1"{"Ukou"}
+                "0"{"Inu"}
+                "1"{"Ngama"}
+            }
+        }
+        dayperiod{
+            dn{"Mfiri o siku"}
+        }
+        era{
+            dn{"Kacha"}
+        }
+        hour{
+            dn{"Saa"}
+        }
+        minute{
+            dn{"Dakyika"}
+        }
+        month{
+            dn{"Mori"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Wiikyi"}
+        }
+        year{
+            dn{"Maka"}
+        }
+        zone{
+            dn{"Mfiri o saa"}
+        }
     }
 }

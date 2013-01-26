@@ -330,9 +330,10 @@ icu4c/source/data/coll/mo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/mr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/mr_IN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/ms.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/coll/ms_BN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/coll/ms_MY.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/coll/ms_SG.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/coll/ms_Latn.txt -text
+icu4c/source/data/coll/ms_Latn_BN.txt -text
+icu4c/source/data/coll/ms_Latn_MY.txt -text
+icu4c/source/data/coll/ms_Latn_SG.txt -text
 icu4c/source/data/coll/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/mt_MT.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/coll/my.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -644,7 +645,8 @@ icu4c/source/data/curr/ml.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/mo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/mr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/ms.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/curr/ms_BN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/curr/ms_Latn.txt -text
+icu4c/source/data/curr/ms_Latn_BN.txt -text
 icu4c/source/data/curr/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/mua.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/my.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -953,6 +955,7 @@ icu4c/source/data/lang/ml.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/mo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/mr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/ms.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/lang/ms_Latn.txt -text
 icu4c/source/data/lang/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/mua.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/lang/my.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1505,9 +1508,10 @@ icu4c/source/data/locales/mo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/mr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/mr_IN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/ms.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/locales/ms_BN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/locales/ms_MY.txt svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4c/source/data/locales/ms_SG.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/locales/ms_Latn.txt -text
+icu4c/source/data/locales/ms_Latn_BN.txt -text
+icu4c/source/data/locales/ms_Latn_MY.txt -text
+icu4c/source/data/locales/ms_Latn_SG.txt -text
 icu4c/source/data/locales/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/mt_MT.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/mua.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1990,6 +1994,7 @@ icu4c/source/data/region/ml.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/mo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/mr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/ms.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/region/ms_Latn.txt -text
 icu4c/source/data/region/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/mua.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/region/my.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -2775,6 +2780,7 @@ icu4c/source/data/zone/ml.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/mo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/mr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/ms.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/zone/ms_Latn.txt -text
 icu4c/source/data/zone/mt.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/mua.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/my.txt svneol=native#text/plain%3Bcharset%3Dutf-8

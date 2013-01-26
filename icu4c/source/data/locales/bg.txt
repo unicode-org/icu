@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bg.xml
 // *
@@ -142,7 +142,7 @@ bg{
             }
         }
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -263,63 +263,6 @@ bg{
                 wide{
                     "пр.Хр.",
                     "сл.Хр.",
-                }
-            }
-            fields{
-                day{
-                    dn{"Ден"}
-                    relative{
-                        "-1"{"Вчера"}
-                        "-2"{"Онзи ден"}
-                        "0"{"Днес"}
-                        "1"{"Утре"}
-                        "2"{"Вдругиден"}
-                    }
-                }
-                dayperiod{
-                    dn{"ден"}
-                }
-                era{
-                    dn{"ера"}
-                }
-                hour{
-                    dn{"час"}
-                }
-                minute{
-                    dn{"минута"}
-                }
-                month{
-                    dn{"месец"}
-                    relative{
-                        "-1"{"Миналия месец"}
-                        "0"{"Този месец"}
-                        "1"{"Следващия месец"}
-                    }
-                }
-                second{
-                    dn{"секунда"}
-                }
-                week{
-                    dn{"седмица"}
-                    relative{
-                        "-1"{"Миналата седмица"}
-                        "0"{"Тази седмица"}
-                        "1"{"Следващата седмица"}
-                    }
-                }
-                weekday{
-                    dn{"Ден от седмицата"}
-                }
-                year{
-                    dn{"година"}
-                    relative{
-                        "-1"{"Миналата година"}
-                        "0"{"Тази година"}
-                        "1"{"Следващата година"}
-                    }
-                }
-                zone{
-                    dn{"зона"}
                 }
             }
             intervalFormats{
@@ -570,6 +513,63 @@ bg{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"Ден"}
+            relative{
+                "-1"{"Вчера"}
+                "-2"{"Онзи ден"}
+                "0"{"Днес"}
+                "1"{"Утре"}
+                "2"{"Вдругиден"}
+            }
+        }
+        dayperiod{
+            dn{"ден"}
+        }
+        era{
+            dn{"ера"}
+        }
+        hour{
+            dn{"час"}
+        }
+        minute{
+            dn{"минута"}
+        }
+        month{
+            dn{"месец"}
+            relative{
+                "-1"{"Миналия месец"}
+                "0"{"Този месец"}
+                "1"{"Следващия месец"}
+            }
+        }
+        second{
+            dn{"секунда"}
+        }
+        week{
+            dn{"седмица"}
+            relative{
+                "-1"{"Миналата седмица"}
+                "0"{"Тази седмица"}
+                "1"{"Следващата седмица"}
+            }
+        }
+        weekday{
+            dn{"Ден от седмицата"}
+        }
+        year{
+            dn{"година"}
+            relative{
+                "-1"{"Миналата година"}
+                "0"{"Тази година"}
+                "1"{"Следващата година"}
+            }
+        }
+        zone{
+            dn{"зона"}
+        }
     }
     listPattern{
         standard{

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fr.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fr.xml
  */
 fr{
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis-Abeba"}
@@ -473,20 +473,10 @@ fr{
             lg{"heure d’Afrique de l’Ouest"}
             ls{"heure normale d’Afrique de l’Ouest"}
         }
-        "meta:Aktyubinsk"{
-            ld{"heure avancée d’Aktioubé"}
-            lg{"heure d’Aktioubé"}
-            ls{"heure normale d’Aktioubé"}
-        }
         "meta:Alaska"{
             ld{"heure avancée de l’Alaska"}
             lg{"heure de l’Alaska"}
             ls{"heure normale de l’Alaska"}
-        }
-        "meta:Alaska_Hawaii"{
-            ld{"heure avancée d’Alaska - Hawaii"}
-            lg{"heure d’Alaska - Hawaii"}
-            ls{"heure normale d’Alaska - Hawaii"}
         }
         "meta:Almaty"{
             ld{"heure avancée d’Alma Ata"}
@@ -553,11 +543,6 @@ fr{
             lg{"heure d’Arménie"}
             ls{"heure normale d’Arménie"}
         }
-        "meta:Ashkhabad"{
-            ld{"heure avancée d’Achgabat"}
-            lg{"heure d’Achgabat"}
-            ls{"heure normale d’Achgabat"}
-        }
         "meta:Atlantic"{
             ld{"heure avancée de l’Atlantique"}
             lg{"heure de l’Atlantique"}
@@ -593,31 +578,16 @@ fr{
             lg{"heure des Açores"}
             ls{"heure normale des Açores"}
         }
-        "meta:Baku"{
-            ld{"heure avancée de Bakou"}
-            lg{"heure de Bakou"}
-            ls{"heure normale de Bakou"}
-        }
         "meta:Bangladesh"{
             ld{"heure avancée du Bangladesh"}
             lg{"heure du Bangladesh"}
             ls{"heure normale du Bangladesh"}
-        }
-        "meta:Bering"{
-            ld{"heure avancée de Bering"}
-            lg{"heure de Bering"}
-            ls{"heure normale de Bering"}
         }
         "meta:Bhutan"{
             ls{"heure du Bhoutan"}
         }
         "meta:Bolivia"{
             ls{"heure de Bolivie"}
-        }
-        "meta:Borneo"{
-            ld{"heure avancée de Bornéo"}
-            lg{"heure de Bornéo"}
-            ls{"heure normale de Bornéo"}
         }
         "meta:Brasilia"{
             ld{"heure avancée de Brasilia"}
@@ -634,9 +604,6 @@ fr{
         }
         "meta:Chamorro"{
             ls{"heure des Chamorro"}
-        }
-        "meta:Changbai"{
-            ls{"heure du Changbai"}
         }
         "meta:Chatham"{
             ld{"heure avancée des Îles Chatham"}
@@ -679,22 +646,11 @@ fr{
             lg{"heure de Cuba"}
             ls{"heure normale de Cuba"}
         }
-        "meta:Dacca"{
-            ls{"heure de Dhâkâ"}
-        }
         "meta:Davis"{
             ls{"heure de Davis"}
         }
         "meta:DumontDUrville"{
             ls{"heure de Dumont-d’Urville"}
-        }
-        "meta:Dushanbe"{
-            ld{"heure avancée de Duchanbé"}
-            lg{"heure de Duchanbé"}
-            ls{"heure normale de Duchanbé"}
-        }
-        "meta:Dutch_Guiana"{
-            ls{"heure de Guyane néerlandaise"}
         }
         "meta:East_Timor"{
             ls{"heure du Timor oriental"}
@@ -738,11 +694,6 @@ fr{
         "meta:French_Southern"{
             ls{"heure des Terres australes et antarctiques françaises"}
         }
-        "meta:Frunze"{
-            ld{"heure avancée de Frounzé"}
-            lg{"heure de Frounzé"}
-            ls{"heure normale de Frounzé"}
-        }
         "meta:GMT"{
             ls{"heure moyenne de Greenwich"}
         }
@@ -759,11 +710,6 @@ fr{
         }
         "meta:Gilbert_Islands"{
             ls{"heure des îles Gilbert"}
-        }
-        "meta:Greenland_Central"{
-            ld{"heure avancée du Centre du Groenland"}
-            lg{"heure du Centre du Groenland"}
-            ls{"heure normale du Centre du Groenland"}
         }
         "meta:Greenland_Eastern"{
             ld{"heure avancée de l’Est du Groenland"}
@@ -842,22 +788,11 @@ fr{
             lg{"heure de Petropavlovsk-Kamchatski"}
             ls{"heure normale de Petropavlovsk-Kamchatski"}
         }
-        "meta:Karachi"{
-            ls{"heure de Karâchi"}
-        }
-        "meta:Kashgar"{
-            ls{"heure de Kachgar"}
-        }
         "meta:Kazakhstan_Eastern"{
             ls{"heure de l’Est kazakh"}
         }
         "meta:Kazakhstan_Western"{
             ls{"heure de l’Ouest kazakh"}
-        }
-        "meta:Kizilorda"{
-            ld{"heure avancée de Kyzylorda"}
-            lg{"heure de Kyzylorda"}
-            ls{"heure normale de Kyzylorda"}
         }
         "meta:Korea"{
             ld{"heure avancée de Corée"}
@@ -871,14 +806,6 @@ fr{
             ld{"heure avancée de Krasnoïarsk"}
             lg{"heure de Krasnoïarsk"}
             ls{"heure normale de Krasnoïarsk"}
-        }
-        "meta:Kuybyshev"{
-            ld{"heure avancée de Kouïbychev"}
-            lg{"heure de Kouïbychev"}
-            ls{"heure normale de Kouïbychev"}
-        }
-        "meta:Kwajalein"{
-            ls{"heure de Kwajalein"}
         }
         "meta:Kyrgystan"{
             ls{"heure du Kirghizistan"}
@@ -1048,9 +975,6 @@ fr{
         "meta:South_Georgia"{
             ls{"heure de Géorgie du Sud"}
         }
-        "meta:Suriname"{
-            ls{"heure du Suriname"}
-        }
         "meta:Syowa"{
             ls{"heure de Syowa"}
         }
@@ -1075,11 +999,6 @@ fr{
         }
         "meta:Truk"{
             ls{"heure de Truk"}
-        }
-        "meta:Turkey"{
-            ld{"heure avancée de Turquie"}
-            lg{"heure de Turquie"}
-            ls{"heure normale de Turquie"}
         }
         "meta:Turkmenistan"{
             ld{"heure avancée du Turkménistan"}
@@ -1135,11 +1054,6 @@ fr{
             ld{"heure avancée d’Ekaterinbourg"}
             lg{"heure d’Ekaterinbourg"}
             ls{"heure normale d’Ekaterinbourg"}
-        }
-        "meta:Yukon"{
-            ld{"heure avancée du Yukon"}
-            lg{"heure du Yukon"}
-            ls{"heure normale du Yukon"}
         }
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Heure : {1} ({0})"}

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/rm.xml
 // *
@@ -38,7 +38,7 @@ rm{
             }
         }
     }
-    Version{"2.0.78.47"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -135,48 +135,6 @@ rm{
                 wide{
                     "avant Cristus",
                     "suenter Cristus",
-                }
-            }
-            fields{
-                day{
-                    dn{"Tag"}
-                    relative{
-                        "-1"{"ier"}
-                        "-2"{"stersas"}
-                        "0"{"oz"}
-                        "1"{"damaun"}
-                        "2"{"puschmaun"}
-                    }
-                }
-                dayperiod{
-                    dn{"mesadad dal di"}
-                }
-                era{
-                    dn{"epoca"}
-                }
-                hour{
-                    dn{"ura"}
-                }
-                minute{
-                    dn{"minuta"}
-                }
-                month{
-                    dn{"mais"}
-                }
-                second{
-                    dn{"secunda"}
-                }
-                week{
-                    dn{"emna"}
-                }
-                weekday{
-                    dn{"di da l'emna"}
-                }
-                year{
-                    dn{"onn"}
-                }
-                zone{
-                    dn{"zona d'urari"}
                 }
             }
             intervalFormats{
@@ -325,6 +283,48 @@ rm{
         alternateQuotationStart{"‹"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"Tag"}
+            relative{
+                "-1"{"ier"}
+                "-2"{"stersas"}
+                "0"{"oz"}
+                "1"{"damaun"}
+                "2"{"puschmaun"}
+            }
+        }
+        dayperiod{
+            dn{"mesadad dal di"}
+        }
+        era{
+            dn{"epoca"}
+        }
+        hour{
+            dn{"ura"}
+        }
+        minute{
+            dn{"minuta"}
+        }
+        month{
+            dn{"mais"}
+        }
+        second{
+            dn{"secunda"}
+        }
+        week{
+            dn{"emna"}
+        }
+        weekday{
+            dn{"di da l'emna"}
+        }
+        year{
+            dn{"onn"}
+        }
+        zone{
+            dn{"zona d'urari"}
+        }
     }
     measurementSystemNames{
         US{"unitads americans"}

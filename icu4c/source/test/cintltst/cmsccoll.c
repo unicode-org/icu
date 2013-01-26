@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2012, International Business Machines Corporation and
+ * Copyright (c) 2001-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -1399,6 +1399,8 @@ static void RamsRulesTest(void) {
             }
             if (uprv_strcmp("bn", locName)==0 ||
                 uprv_strcmp("en_US_POSIX", locName)==0 ||
+                uprv_strcmp("he", locName)==0 ||            /* Add due to new tailoring of \u05F3 vs \u0027 per cldrbug 5576 */
+                uprv_strcmp("he_IL", locName)==0 ||         /* Add due to new tailoring of \u05F3 vs \u0027 per cldrbug 5576 */
                 uprv_strcmp("km", locName)==0 ||
                 uprv_strcmp("km_KH", locName)==0 ||
                 uprv_strcmp("my", locName)==0 ||

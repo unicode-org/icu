@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/swc.xml
 // *
@@ -28,7 +28,7 @@ swc{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -117,46 +117,6 @@ swc{
                     "kisha ya Yezu Kristo",
                 }
             }
-            fields{
-                day{
-                    dn{"Siku"}
-                    relative{
-                        "-1"{"Jana"}
-                        "0"{"Leo"}
-                        "1"{"Kesho"}
-                    }
-                }
-                dayperiod{
-                    dn{"Muda wa siku"}
-                }
-                era{
-                    dn{"Wakati"}
-                }
-                hour{
-                    dn{"Saa"}
-                }
-                minute{
-                    dn{"Dakika"}
-                }
-                month{
-                    dn{"Mwezi"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Juma"}
-                }
-                weekday{
-                    dn{"Siku ya juma"}
-                }
-                year{
-                    dn{"Mwaka"}
-                }
-                zone{
-                    dn{"Majira ya saa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -228,5 +188,45 @@ swc{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Siku"}
+            relative{
+                "-1"{"Jana"}
+                "0"{"Leo"}
+                "1"{"Kesho"}
+            }
+        }
+        dayperiod{
+            dn{"Muda wa siku"}
+        }
+        era{
+            dn{"Wakati"}
+        }
+        hour{
+            dn{"Saa"}
+        }
+        minute{
+            dn{"Dakika"}
+        }
+        month{
+            dn{"Mwezi"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Juma"}
+        }
+        weekday{
+            dn{"Siku ya juma"}
+        }
+        year{
+            dn{"Mwaka"}
+        }
+        zone{
+            dn{"Majira ya saa"}
+        }
     }
 }

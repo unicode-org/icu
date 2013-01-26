@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ka.xml
 // *
@@ -16,6 +16,7 @@ ka{
     }
     ExemplarCharacters{"[ა ბ გ დ ე ვ ზ თ ი კ ლ მ ნ ო პ ჟ რ ს ტ უ ფ ქ ღ ყ შ ჩ ც ძ წ ჭ ხ ჯ ჰ]"}
     ExemplarCharactersIndex{"[ა ბ გ დ ე ვ ზ თ ი კ ლ მ ნ ო პ ჟ რ ს ტ უ ფ ქ ღ ყ შ ჩ ც ძ წ ჭ ხ ჯ ჰ]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! ? . … ჻ ‚ \u0022 “ „ « » ( ) \\[ \\] \\{ \\} § * / \\& # №]"}
     LocaleScript{
         "Geor",
     }
@@ -43,7 +44,7 @@ ka{
         native{"latn"}
         traditional{"geor"}
     }
-    Version{"2.0.80.16"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             availableFormats{
@@ -117,46 +118,6 @@ ka{
                 abbreviated{
                     "ჩვენს წელთაღრიცხვამდე",
                     "ჩვენი წელთაღრიცხვით",
-                }
-            }
-            fields{
-                day{
-                    dn{"დღე"}
-                    relative{
-                        "-1"{"გუშინ"}
-                        "0"{"დღეს"}
-                        "1"{"ხვალ"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"ერა"}
-                }
-                hour{
-                    dn{"საათი"}
-                }
-                minute{
-                    dn{"წუთი"}
-                }
-                month{
-                    dn{"თვე"}
-                }
-                second{
-                    dn{"წამი"}
-                }
-                week{
-                    dn{"კვირა"}
-                }
-                weekday{
-                    dn{"კვირის დღე"}
-                }
-                year{
-                    dn{"წელი"}
-                }
-                zone{
-                    dn{"სასაათო სარტყელი"}
                 }
             }
             intervalFormats{
@@ -323,6 +284,46 @@ ka{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"დღე"}
+            relative{
+                "-1"{"გუშინ"}
+                "0"{"დღეს"}
+                "1"{"ხვალ"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"ეპოქა"}
+        }
+        hour{
+            dn{"საათი"}
+        }
+        minute{
+            dn{"წუთი"}
+        }
+        month{
+            dn{"თვე"}
+        }
+        second{
+            dn{"წამი"}
+        }
+        week{
+            dn{"კვირა"}
+        }
+        weekday{
+            dn{"კვირის დღე"}
+        }
+        year{
+            dn{"წელი"}
+        }
+        zone{
+            dn{"დროის სარტყელი"}
+        }
     }
     listPattern{
         standard{

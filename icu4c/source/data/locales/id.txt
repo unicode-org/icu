@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/id.xml
 // *
@@ -13,7 +13,7 @@ id{
     AuxExemplarCharacters{"[å q x z]"}
     ExemplarCharacters{"[a b c d e f g h i j k l m n o p q r s t u v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
-    ExemplarCharactersPunctuation{"[‐ – — , ; \: ! ? . … ' ‘ ’ “ ” ( ) \[ \] /]"}
+    ExemplarCharactersPunctuation{"[‐ – — , ; \: ! ? . … ' ‘ ’ “ ” ( ) \\[ \\] /]"}
     LocaleScript{
         "Latn",
     }
@@ -119,7 +119,7 @@ id{
             }
         }
     }
-    Version{"2.0.79.49"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -715,63 +715,6 @@ id{
                 wide{
                     "SM",
                     "M",
-                }
-            }
-            fields{
-                day{
-                    dn{"Hari"}
-                    relative{
-                        "-1"{"Kemarin"}
-                        "-2"{"Kemarin lusa"}
-                        "0"{"Hari Ini"}
-                        "1"{"Besok"}
-                        "2"{"Lusa"}
-                    }
-                }
-                dayperiod{
-                    dn{"Siang/Malam"}
-                }
-                era{
-                    dn{"Era"}
-                }
-                hour{
-                    dn{"Jam"}
-                }
-                minute{
-                    dn{"Menit"}
-                }
-                month{
-                    dn{"Bulan"}
-                    relative{
-                        "-1"{"Bulan lalu"}
-                        "0"{"Bulan ini"}
-                        "1"{"Bulan berikutnya"}
-                    }
-                }
-                second{
-                    dn{"Detik"}
-                }
-                week{
-                    dn{"Minggu"}
-                    relative{
-                        "-1"{"Minggu lalu"}
-                        "0"{"Minggu ini"}
-                        "1"{"Minggu berikutnya"}
-                    }
-                }
-                weekday{
-                    dn{"Hari dalam Seminggu"}
-                }
-                year{
-                    dn{"Tahun"}
-                    relative{
-                        "-1"{"Tahun lalu"}
-                        "0"{"Tahun ini"}
-                        "1"{"Tahun depan"}
-                    }
-                }
-                zone{
-                    dn{"Zona Waktu"}
                 }
             }
             intervalFormats{
@@ -1753,6 +1696,63 @@ id{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Hari"}
+            relative{
+                "-1"{"Kemarin"}
+                "-2"{"Kemarin lusa"}
+                "0"{"Hari Ini"}
+                "1"{"Besok"}
+                "2"{"Lusa"}
+            }
+        }
+        dayperiod{
+            dn{"Siang/Malam"}
+        }
+        era{
+            dn{"Era"}
+        }
+        hour{
+            dn{"Jam"}
+        }
+        minute{
+            dn{"Menit"}
+        }
+        month{
+            dn{"Bulan"}
+            relative{
+                "-1"{"Bulan lalu"}
+                "0"{"Bulan ini"}
+                "1"{"Bulan berikutnya"}
+            }
+        }
+        second{
+            dn{"Detik"}
+        }
+        week{
+            dn{"Minggu"}
+            relative{
+                "-1"{"Minggu lalu"}
+                "0"{"Minggu ini"}
+                "1"{"Minggu berikutnya"}
+            }
+        }
+        weekday{
+            dn{"Hari dalam Seminggu"}
+        }
+        year{
+            dn{"Tahun"}
+            relative{
+                "-1"{"Tahun lalu"}
+                "0"{"Tahun ini"}
+                "1"{"Tahun depan"}
+            }
+        }
+        zone{
+            dn{"Zona Waktu"}
+        }
     }
     listPattern{
         standard{

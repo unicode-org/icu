@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ja.xml
 // *
@@ -301,5 +301,5 @@ ja{
         ZW{"ジンバブエ"}
         ZZ{"不明な地域"}
     }
-    Version{"2.0.80.25"}
+    Version{"2.0.80.73"}
 }

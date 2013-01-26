@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/saq.xml
 // *
@@ -23,7 +23,7 @@ saq{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -111,43 +111,6 @@ saq{
                     "Baada ya Christo",
                 }
             }
-            fields{
-                day{
-                    dn{"Mpari"}
-                    relative{
-                        "-1"{"Ng'ole"}
-                        "0"{"Duo"}
-                        "1"{"Taisere"}
-                    }
-                }
-                dayperiod{
-                    dn{"TS/TP"}
-                }
-                era{
-                    dn{"Nyamata"}
-                }
-                hour{
-                    dn{"Saai"}
-                }
-                minute{
-                    dn{"Idakika"}
-                }
-                month{
-                    dn{"Lapa"}
-                }
-                second{
-                    dn{"Isekondi"}
-                }
-                week{
-                    dn{"Saipa napo"}
-                }
-                year{
-                    dn{"Lari"}
-                }
-                zone{
-                    dn{"Majira ya saa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -219,5 +182,42 @@ saq{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Mpari"}
+            relative{
+                "-1"{"Ng'ole"}
+                "0"{"Duo"}
+                "1"{"Taisere"}
+            }
+        }
+        dayperiod{
+            dn{"TS/TP"}
+        }
+        era{
+            dn{"Nyamata"}
+        }
+        hour{
+            dn{"Saai"}
+        }
+        minute{
+            dn{"Idakika"}
+        }
+        month{
+            dn{"Lapa"}
+        }
+        second{
+            dn{"Isekondi"}
+        }
+        week{
+            dn{"Saipa napo"}
+        }
+        year{
+            dn{"Lari"}
+        }
+        zone{
+            dn{"Majira ya saa"}
+        }
     }
 }

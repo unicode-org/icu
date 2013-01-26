@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ja.xml
 // *
@@ -69,8 +69,8 @@ ja{
     }
     ExemplarCharactersIndex{"[あ か さ た な は ま や ら わ]"}
     ExemplarCharactersPunctuation{
-        "[‾ _＿ \-－ ‐ — ― 〜 ・ ･ ,， 、､ ;； \:： !！ ?？ .． ‥ … 。｡ ＇＼ ‘ ’ \"＂ “ ” (（ )） \[［ "
-        "\]］ \{｛ \}｝ 〈 〉 《 》 「｢ 」｣ 『 』 【 】 〔 〕 ‖ § ¶ @＠ *＊ /／ \\ \&＆ #＃ %％ ‰ † ‡ ′ ″ "
+        "[‾ _＿ \\- － ‐ — ― 〜 ・ ･ ,， 、､ ;； \:： !！ ?？ .． ‥ … 。｡ ＇＼ ‘ ’ \u0022＂ “ ” (（ )） \\[［ "
+        "\\] ］ \\{｛ \\} ｝ 〈 〉 《 》 「｢ 」｣ 『 』 【 】 〔 〕 ‖ § ¶ @＠ *＊ /／ \\\\  \\& ＆ #＃ %％ ‰ † ‡ ′ ″ "
         "〃 ※]"
     }
     LocaleScript{
@@ -184,7 +184,7 @@ ja{
         native{"latn"}
         traditional{"jpan"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -784,7 +784,9 @@ ja{
             availableFormats{
                 EEEEd{"d日EEEE"}
                 Ed{"d日(E)"}
-                GGGGyMd{"GGGGy年M月d日"}
+                Gy{"Gy年"}
+                GyMMM{"Gy年M月"}
+                GyMMMd{"Gy年M月d日"}
                 H{"H時"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -868,8 +870,8 @@ ja{
             }
             eras{
                 abbreviated{
-                    "BC",
-                    "AD",
+                    "紀元前",
+                    "西暦",
                 }
                 narrow{
                     "BC",
@@ -878,63 +880,6 @@ ja{
                 wide{
                     "紀元前",
                     "西暦",
-                }
-            }
-            fields{
-                day{
-                    dn{"日"}
-                    relative{
-                        "-1"{"昨日"}
-                        "-2"{"一昨日"}
-                        "0"{"今日"}
-                        "1"{"明日"}
-                        "2"{"明後日"}
-                    }
-                }
-                dayperiod{
-                    dn{"午前/午後"}
-                }
-                era{
-                    dn{"時代"}
-                }
-                hour{
-                    dn{"時"}
-                }
-                minute{
-                    dn{"分"}
-                }
-                month{
-                    dn{"月"}
-                    relative{
-                        "-1"{"先月"}
-                        "0"{"今月"}
-                        "1"{"翌月"}
-                    }
-                }
-                second{
-                    dn{"秒"}
-                }
-                week{
-                    dn{"週"}
-                    relative{
-                        "-1"{"先週"}
-                        "0"{"今週"}
-                        "1"{"翌週"}
-                    }
-                }
-                weekday{
-                    dn{"曜日"}
-                }
-                year{
-                    dn{"年"}
-                    relative{
-                        "-1"{"昨年"}
-                        "0"{"今年"}
-                        "1"{"翌年"}
-                    }
-                }
-                zone{
-                    dn{"タイムゾーン"}
                 }
             }
             intervalFormats{
@@ -2091,6 +2036,63 @@ ja{
         alternateQuotationStart{"『"}
         quotationEnd{"」"}
         quotationStart{"「"}
+    }
+    fields{
+        day{
+            dn{"日"}
+            relative{
+                "-1"{"昨日"}
+                "-2"{"一昨日"}
+                "0"{"今日"}
+                "1"{"明日"}
+                "2"{"明後日"}
+            }
+        }
+        dayperiod{
+            dn{"午前/午後"}
+        }
+        era{
+            dn{"時代"}
+        }
+        hour{
+            dn{"時"}
+        }
+        minute{
+            dn{"分"}
+        }
+        month{
+            dn{"月"}
+            relative{
+                "-1"{"先月"}
+                "0"{"今月"}
+                "1"{"翌月"}
+            }
+        }
+        second{
+            dn{"秒"}
+        }
+        week{
+            dn{"週"}
+            relative{
+                "-1"{"先週"}
+                "0"{"今週"}
+                "1"{"翌週"}
+            }
+        }
+        weekday{
+            dn{"曜日"}
+        }
+        year{
+            dn{"年"}
+            relative{
+                "-1"{"昨年"}
+                "0"{"今年"}
+                "1"{"翌年"}
+            }
+        }
+        zone{
+            dn{"タイムゾーン"}
+        }
     }
     listPattern{
         standard{

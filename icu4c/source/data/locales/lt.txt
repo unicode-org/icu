@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lt.xml
 // *
@@ -172,7 +172,7 @@ lt{
             }
         }
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -471,63 +471,6 @@ lt{
                     "po Kristaus",
                 }
             }
-            fields{
-                day{
-                    dn{"diena"}
-                    relative{
-                        "-1"{"vakar"}
-                        "-2"{"užvakar"}
-                        "0"{"šiandien"}
-                        "1"{"rytoj"}
-                        "2"{"poryt"}
-                    }
-                }
-                dayperiod{
-                    dn{"iki pietų / po pietų"}
-                }
-                era{
-                    dn{"era"}
-                }
-                hour{
-                    dn{"valanda"}
-                }
-                minute{
-                    dn{"minutė"}
-                }
-                month{
-                    dn{"mėnuo"}
-                    relative{
-                        "-1"{"praėjusį mėnesį"}
-                        "0"{"šį mėnesį"}
-                        "1"{"kitą mėnesį"}
-                    }
-                }
-                second{
-                    dn{"sekundė"}
-                }
-                week{
-                    dn{"savaitė"}
-                    relative{
-                        "-1"{"praėjusią savaitę"}
-                        "0"{"šią savaitę"}
-                        "1"{"kitą savaitę"}
-                    }
-                }
-                weekday{
-                    dn{"savaitės diena"}
-                }
-                year{
-                    dn{"metai"}
-                    relative{
-                        "-1"{"praėjusiais metais"}
-                        "0"{"šiais metais"}
-                        "1"{"kitais metais"}
-                    }
-                }
-                zone{
-                    dn{"laiko juosta"}
-                }
-            }
             intervalFormats{
                 H{
                     H{"HH–HH"}
@@ -762,6 +705,63 @@ lt{
         alternateQuotationStart{"„"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"diena"}
+            relative{
+                "-1"{"vakar"}
+                "-2"{"užvakar"}
+                "0"{"šiandien"}
+                "1"{"rytoj"}
+                "2"{"poryt"}
+            }
+        }
+        dayperiod{
+            dn{"iki pietų / po pietų"}
+        }
+        era{
+            dn{"era"}
+        }
+        hour{
+            dn{"valanda"}
+        }
+        minute{
+            dn{"minutė"}
+        }
+        month{
+            dn{"mėnuo"}
+            relative{
+                "-1"{"praėjusį mėnesį"}
+                "0"{"šį mėnesį"}
+                "1"{"kitą mėnesį"}
+            }
+        }
+        second{
+            dn{"sekundė"}
+        }
+        week{
+            dn{"savaitė"}
+            relative{
+                "-1"{"praėjusią savaitę"}
+                "0"{"šią savaitę"}
+                "1"{"kitą savaitę"}
+            }
+        }
+        weekday{
+            dn{"savaitės diena"}
+        }
+        year{
+            dn{"metai"}
+            relative{
+                "-1"{"praėjusiais metais"}
+                "0"{"šiais metais"}
+                "1"{"kitais metais"}
+            }
+        }
+        zone{
+            dn{"laiko juosta"}
+        }
     }
     listPattern{
         standard{

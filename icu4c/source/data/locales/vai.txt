@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/vai.xml
 // *
@@ -31,7 +31,7 @@ vai{
         }
         native{"vaii"}
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -85,37 +85,6 @@ vai{
                     }
                 }
             }
-            fields{
-                day{
-                    dn{"ꔎꔒ"}
-                    relative{
-                        "-1"{"ꖴꖸ"}
-                        "0"{"ꗦꗷ"}
-                        "1"{"ꔻꕯ"}
-                    }
-                }
-                hour{
-                    dn{"ꕌꕎ"}
-                }
-                minute{
-                    dn{"ꕆꕇ"}
-                }
-                month{
-                    dn{"ꕪꖃ"}
-                }
-                second{
-                    dn{"ꕧꕃꕧꕪ"}
-                }
-                week{
-                    dn{"ꔨꔤꕃ"}
-                }
-                weekday{
-                    dn{"ꔨꕃꕮ ꔎꔒ"}
-                }
-                year{
-                    dn{"ꕢꘋ"}
-                }
-            }
             monthNames{
                 format{
                     wide{
@@ -141,5 +110,36 @@ vai{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"ꔎꔒ"}
+            relative{
+                "-1"{"ꖴꖸ"}
+                "0"{"ꗦꗷ"}
+                "1"{"ꔻꕯ"}
+            }
+        }
+        hour{
+            dn{"ꕌꕎ"}
+        }
+        minute{
+            dn{"ꕆꕇ"}
+        }
+        month{
+            dn{"ꕪꖃ"}
+        }
+        second{
+            dn{"ꕧꕃꕧꕪ"}
+        }
+        week{
+            dn{"ꔨꔤꕃ"}
+        }
+        weekday{
+            dn{"ꔨꕃꕮ ꔎꔒ"}
+        }
+        year{
+            dn{"ꕢꘋ"}
+        }
     }
 }

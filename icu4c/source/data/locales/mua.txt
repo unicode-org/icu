@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mua.xml
 // *
@@ -29,7 +29,7 @@ mua{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -118,43 +118,6 @@ mua{
                     "Pel Kristu",
                 }
             }
-            fields{
-                day{
-                    dn{"Zah'nane/ Comme"}
-                    relative{
-                        "-1"{"Tǝsoo"}
-                        "0"{"Tǝ'nahko"}
-                        "1"{"Tǝ'nane"}
-                    }
-                }
-                era{
-                    dn{"Syii ma tãa"}
-                }
-                hour{
-                    dn{"Cok comme"}
-                }
-                minute{
-                    dn{"Cok comme ma laŋne"}
-                }
-                month{
-                    dn{"Fĩi"}
-                }
-                second{
-                    dn{"Cok comme ma laŋ tǝ biŋ"}
-                }
-                week{
-                    dn{"Luma"}
-                }
-                weekday{
-                    dn{"Kǝsyil luma"}
-                }
-                year{
-                    dn{"Syii"}
-                }
-                zone{
-                    dn{"Waŋ cok comme"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -226,5 +189,42 @@ mua{
         alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"Zah'nane/ Comme"}
+            relative{
+                "-1"{"Tǝsoo"}
+                "0"{"Tǝ'nahko"}
+                "1"{"Tǝ'nane"}
+            }
+        }
+        era{
+            dn{"Syii ma tãa"}
+        }
+        hour{
+            dn{"Cok comme"}
+        }
+        minute{
+            dn{"Cok comme ma laŋne"}
+        }
+        month{
+            dn{"Fĩi"}
+        }
+        second{
+            dn{"Cok comme ma laŋ tǝ biŋ"}
+        }
+        week{
+            dn{"Luma"}
+        }
+        weekday{
+            dn{"Kǝsyil luma"}
+        }
+        year{
+            dn{"Syii"}
+        }
+        zone{
+            dn{"Waŋ cok comme"}
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mgh.xml
 // *
@@ -24,7 +24,7 @@ mgh{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -113,40 +113,6 @@ mgh{
                     "Yopia yesu",
                 }
             }
-            fields{
-                day{
-                    dn{"nihuku"}
-                    relative{
-                        "-1"{"n'chana"}
-                        "0"{"lel'lo"}
-                        "1"{"me'llo"}
-                    }
-                }
-                era{
-                    dn{"kal'lai"}
-                }
-                hour{
-                    dn{"isaa"}
-                }
-                minute{
-                    dn{"idakika"}
-                }
-                month{
-                    dn{"mweri"}
-                }
-                second{
-                    dn{"isekunde"}
-                }
-                week{
-                    dn{"iwiki mocha"}
-                }
-                weekday{
-                    dn{"nihuku no mwisho wa wiki"}
-                }
-                year{
-                    dn{"yaka"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -195,6 +161,40 @@ mgh{
                     }
                 }
             }
+        }
+    }
+    fields{
+        day{
+            dn{"nihuku"}
+            relative{
+                "-1"{"n'chana"}
+                "0"{"lel'lo"}
+                "1"{"me'llo"}
+            }
+        }
+        era{
+            dn{"kal'lai"}
+        }
+        hour{
+            dn{"isaa"}
+        }
+        minute{
+            dn{"idakika"}
+        }
+        month{
+            dn{"mweri"}
+        }
+        second{
+            dn{"isekunde"}
+        }
+        week{
+            dn{"iwiki mocha"}
+        }
+        weekday{
+            dn{"nihuku no mwisho wa wiki"}
+        }
+        year{
+            dn{"yaka"}
         }
     }
 }

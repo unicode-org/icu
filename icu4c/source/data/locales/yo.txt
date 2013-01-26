@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/yo.xml
 // *
@@ -26,7 +26,7 @@ yo{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -103,48 +103,6 @@ yo{
                     "Lehin Kristi",
                 }
             }
-            fields{
-                day{
-                    dn{"Ọjọ́"}
-                    relative{
-                        "-1"{"Àná"}
-                        "-2"{"íjẹta"}
-                        "0"{"Òní"}
-                        "1"{"Ọ̀la"}
-                        "2"{"òtúùnla"}
-                    }
-                }
-                dayperiod{
-                    dn{"Àárọ̀/ọ̀sán"}
-                }
-                era{
-                    dn{"Ìgbà"}
-                }
-                hour{
-                    dn{"wákàtí"}
-                }
-                minute{
-                    dn{"Ìsẹ́jú"}
-                }
-                month{
-                    dn{"Osù"}
-                }
-                second{
-                    dn{"Ìsẹ́jú Ààyá"}
-                }
-                week{
-                    dn{"Ọ̀sè"}
-                }
-                weekday{
-                    dn{"Ọjọ́ Ọ̀sẹ̀"}
-                }
-                year{
-                    dn{"Ọdún"}
-                }
-                zone{
-                    dn{"Ibi Àkókò Àgbáyé"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -200,5 +158,47 @@ yo{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Ọjọ́"}
+            relative{
+                "-1"{"Àná"}
+                "-2"{"íjẹta"}
+                "0"{"Òní"}
+                "1"{"Ọ̀la"}
+                "2"{"òtúùnla"}
+            }
+        }
+        dayperiod{
+            dn{"Àárọ̀/ọ̀sán"}
+        }
+        era{
+            dn{"Ìgbà"}
+        }
+        hour{
+            dn{"wákàtí"}
+        }
+        minute{
+            dn{"Ìsẹ́jú"}
+        }
+        month{
+            dn{"Osù"}
+        }
+        second{
+            dn{"Ìsẹ́jú Ààyá"}
+        }
+        week{
+            dn{"Ọ̀sè"}
+        }
+        weekday{
+            dn{"Ọjọ́ Ọ̀sẹ̀"}
+        }
+        year{
+            dn{"Ọdún"}
+        }
+        zone{
+            dn{"Ibi Àkókò Àgbáyé"}
+        }
     }
 }

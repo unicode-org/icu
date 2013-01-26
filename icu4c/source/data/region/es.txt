@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/es.xml
 // *
@@ -31,7 +31,7 @@ es{
         039{"Europa meridional"}
         053{"Australasia"}
         054{"Melanesia"}
-        057{"Micronesia [057]"}
+        057{"Región de Micronesia"}
         061{"Polinesia"}
         142{"Asia"}
         143{"Asia central"}
@@ -304,5 +304,5 @@ es{
         ZW{"Zimbabue"}
         ZZ{"Región desconocida"}
     }
-    Version{"2.0.78.32"}
+    Version{"2.0.80.73"}
 }

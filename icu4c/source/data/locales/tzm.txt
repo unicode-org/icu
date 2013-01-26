@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/tzm.xml
 // *
@@ -27,7 +27,7 @@ tzm{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -115,46 +115,6 @@ tzm{
                     "Ḍeffir Ɛisa (TAƔ)",
                 }
             }
-            fields{
-                day{
-                    dn{"Ass"}
-                    relative{
-                        "-1"{"Assenaṭ"}
-                        "0"{"Assa"}
-                        "1"{"Asekka"}
-                    }
-                }
-                dayperiod{
-                    dn{"Zdat azal/Deffir azal"}
-                }
-                era{
-                    dn{"Tallit"}
-                }
-                hour{
-                    dn{"Tasragt"}
-                }
-                minute{
-                    dn{"Tusdat"}
-                }
-                month{
-                    dn{"Ayur"}
-                }
-                second{
-                    dn{"Tusnat"}
-                }
-                week{
-                    dn{"Imalass"}
-                }
-                weekday{
-                    dn{"Ass n Imalass"}
-                }
-                year{
-                    dn{"Asseggas"}
-                }
-                zone{
-                    dn{"Aseglem asergan"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -226,5 +186,45 @@ tzm{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Ass"}
+            relative{
+                "-1"{"Assenaṭ"}
+                "0"{"Assa"}
+                "1"{"Asekka"}
+            }
+        }
+        dayperiod{
+            dn{"Zdat azal/Deffir azal"}
+        }
+        era{
+            dn{"Tallit"}
+        }
+        hour{
+            dn{"Tasragt"}
+        }
+        minute{
+            dn{"Tusdat"}
+        }
+        month{
+            dn{"Ayur"}
+        }
+        second{
+            dn{"Tusnat"}
+        }
+        week{
+            dn{"Imalass"}
+        }
+        weekday{
+            dn{"Ass n Imalass"}
+        }
+        year{
+            dn{"Asseggas"}
+        }
+        zone{
+            dn{"Aseglem asergan"}
+        }
     }
 }

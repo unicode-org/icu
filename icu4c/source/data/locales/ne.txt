@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ne.xml
 // *
@@ -31,7 +31,7 @@ ne{
         }
         native{"deva"}
     }
-    Version{"2.0.79.38"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -120,47 +120,6 @@ ne{
                 abbreviated{
                     "ईसा पूर्व",
                     "सन्",
-                }
-            }
-            fields{
-                day{
-                    dn{"बार"}
-                    relative{
-                        "-1"{"हिजो"}
-                        "-2"{"अस्ति"}
-                        "0"{"आज"}
-                        "1"{"भोलि"}
-                    }
-                }
-                dayperiod{
-                    dn{"पूर्व मध्यान्ह/उत्तर मध्यान्ह"}
-                }
-                era{
-                    dn{"काल"}
-                }
-                hour{
-                    dn{"घण्टा"}
-                }
-                minute{
-                    dn{"मिनेट"}
-                }
-                month{
-                    dn{"महिना"}
-                }
-                second{
-                    dn{"दोस्रो"}
-                }
-                week{
-                    dn{"हप्ता"}
-                }
-                weekday{
-                    dn{"हप्ताको बार"}
-                }
-                year{
-                    dn{"बर्ष"}
-                }
-                zone{
-                    dn{"क्षेत्र"}
                 }
             }
             monthNames{
@@ -302,6 +261,47 @@ ne{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"बार"}
+            relative{
+                "-1"{"हिजो"}
+                "-2"{"अस्ति"}
+                "0"{"आज"}
+                "1"{"भोलि"}
+            }
+        }
+        dayperiod{
+            dn{"पूर्व मध्यान्ह/उत्तर मध्यान्ह"}
+        }
+        era{
+            dn{"काल"}
+        }
+        hour{
+            dn{"घण्टा"}
+        }
+        minute{
+            dn{"मिनेट"}
+        }
+        month{
+            dn{"महिना"}
+        }
+        second{
+            dn{"दोस्रो"}
+        }
+        week{
+            dn{"हप्ता"}
+        }
+        weekday{
+            dn{"हप्ताको बार"}
+        }
+        year{
+            dn{"बर्ष"}
+        }
+        zone{
+            dn{"क्षेत्र"}
+        }
     }
     measurementSystemNames{
         UK{"युके"}

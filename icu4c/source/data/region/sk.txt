@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sk.xml
 // *
@@ -13,7 +13,7 @@ sk{
     Countries{
         001{"Svet"}
         002{"Afrika"}
-        003{"Severná Amerika [003]"}
+        003{"Severná Amerika"}
         005{"Južná Amerika"}
         009{"Oceánia"}
         011{"Západná Afrika"}
@@ -21,9 +21,9 @@ sk{
         014{"Východná Afrika"}
         015{"Severná Afrika"}
         017{"Stredná Afrika"}
-        018{"Južná Afrika [018]"}
+        018{"južné územia Afriky"}
         019{"Americký kontinent"}
-        021{"Severná Amerika"}
+        021{"severné územia Ameriky"}
         029{"Karibik"}
         030{"Východná Ázia"}
         034{"Južná Ázia"}
@@ -301,5 +301,5 @@ sk{
         ZW{"Zimbabwe"}
         ZZ{"Neznámy región"}
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
 }

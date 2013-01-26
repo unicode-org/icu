@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sr_Latn.xml
 // *
@@ -32,7 +32,7 @@ sr_Latn{
             }
         }
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -133,48 +133,6 @@ sr_Latn{
                 wide{
                     "Pre nove ere",
                     "Nove ere",
-                }
-            }
-            fields{
-                day{
-                    dn{"dan"}
-                    relative{
-                        "-1"{"juče"}
-                        "-2"{"prekjuče"}
-                        "0"{"danas"}
-                        "1"{"sutra"}
-                        "2"{"prekosutra"}
-                    }
-                }
-                dayperiod{
-                    dn{"pre podne/ popodne"}
-                }
-                era{
-                    dn{"era"}
-                }
-                hour{
-                    dn{"čas"}
-                }
-                minute{
-                    dn{"minut"}
-                }
-                month{
-                    dn{"mesec"}
-                }
-                second{
-                    dn{"sekund"}
-                }
-                week{
-                    dn{"nedelja"}
-                }
-                weekday{
-                    dn{"dan u nedelji"}
-                }
-                year{
-                    dn{"godina"}
-                }
-                zone{
-                    dn{"zona"}
                 }
             }
             intervalFormats{
@@ -351,6 +309,48 @@ sr_Latn{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"dan"}
+            relative{
+                "-1"{"juče"}
+                "-2"{"prekjuče"}
+                "0"{"danas"}
+                "1"{"sutra"}
+                "2"{"prekosutra"}
+            }
+        }
+        dayperiod{
+            dn{"pre podne/ popodne"}
+        }
+        era{
+            dn{"era"}
+        }
+        hour{
+            dn{"čas"}
+        }
+        minute{
+            dn{"minut"}
+        }
+        month{
+            dn{"mesec"}
+        }
+        second{
+            dn{"sekund"}
+        }
+        week{
+            dn{"nedelja"}
+        }
+        weekday{
+            dn{"dan u nedelji"}
+        }
+        year{
+            dn{"godina"}
+        }
+        zone{
+            dn{"zona"}
+        }
     }
     listPattern{
         standard{

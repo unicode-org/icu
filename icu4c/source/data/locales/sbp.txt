@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sbp.xml
 // *
@@ -29,7 +29,7 @@ sbp{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -118,46 +118,6 @@ sbp{
                     "Pamwandi ya Kilisto",
                 }
             }
-            fields{
-                day{
-                    dn{"Lusiku"}
-                    relative{
-                        "-1"{"Imehe"}
-                        "0"{"Ineng'uni"}
-                        "1"{"Pamulaawu"}
-                    }
-                }
-                dayperiod{
-                    dn{"Uluhaavi lwa lusiku"}
-                }
-                era{
-                    dn{"Uluhaavi lwa"}
-                }
-                hour{
-                    dn{"Ilisala"}
-                }
-                minute{
-                    dn{"Idakika"}
-                }
-                month{
-                    dn{"Mwesi"}
-                }
-                second{
-                    dn{"Isekunde"}
-                }
-                week{
-                    dn{"Ilijuma"}
-                }
-                weekday{
-                    dn{"Ulusiku lwa Lijuma"}
-                }
-                year{
-                    dn{"Mwakha"}
-                }
-                zone{
-                    dn{"Uluhaavi lwa lisaa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -213,5 +173,45 @@ sbp{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Lusiku"}
+            relative{
+                "-1"{"Imehe"}
+                "0"{"Ineng'uni"}
+                "1"{"Pamulaawu"}
+            }
+        }
+        dayperiod{
+            dn{"Uluhaavi lwa lusiku"}
+        }
+        era{
+            dn{"Uluhaavi lwa"}
+        }
+        hour{
+            dn{"Ilisala"}
+        }
+        minute{
+            dn{"Idakika"}
+        }
+        month{
+            dn{"Mwesi"}
+        }
+        second{
+            dn{"Isekunde"}
+        }
+        week{
+            dn{"Ilijuma"}
+        }
+        weekday{
+            dn{"Ulusiku lwa Lijuma"}
+        }
+        year{
+            dn{"Mwakha"}
+        }
+        zone{
+            dn{"Uluhaavi lwa lisaa"}
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/am.xml
 // *
@@ -144,7 +144,7 @@ am{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         ethiopic{
             monthNames{
@@ -381,63 +381,6 @@ am{
                     "ዓመተ ምሕረት",
                 }
             }
-            fields{
-                day{
-                    dn{"ቀን"}
-                    relative{
-                        "-1"{"ትናንት"}
-                        "-2"{"ከትናንት ወዲያ"}
-                        "0"{"ዛሬ"}
-                        "1"{"ነገ"}
-                        "2"{"ከነገ ወዲያ"}
-                    }
-                }
-                dayperiod{
-                    dn{"ጥዋት/ከሰዓት"}
-                }
-                era{
-                    dn{"ዘመን"}
-                }
-                hour{
-                    dn{"ሰዓት"}
-                }
-                minute{
-                    dn{"ደቂቃ"}
-                }
-                month{
-                    dn{"ወር"}
-                    relative{
-                        "-1"{"ያለፈው ወር"}
-                        "0"{"በዚህ ወር"}
-                        "1"{"የሚቀጥለው ወር"}
-                    }
-                }
-                second{
-                    dn{"ሰከንድ"}
-                }
-                week{
-                    dn{"ሳምንት"}
-                    relative{
-                        "-1"{"ባለፈው ሳምንት"}
-                        "0"{"በዚህ ሣምንት"}
-                        "1"{"የሚቀጥለው ሳምንት"}
-                    }
-                }
-                weekday{
-                    dn{"አዘቦት"}
-                }
-                year{
-                    dn{"ዓመት"}
-                    relative{
-                        "-1"{"ያለፈው ዓመት"}
-                        "0"{"በዚህ ዓመት"}
-                        "1"{"የሚቀጥለው ዓመት"}
-                    }
-                }
-                zone{
-                    dn{"የሰዓት ሰቅ"}
-                }
-            }
             intervalFormats{
                 H{
                     H{"hh–hh a"}
@@ -672,6 +615,63 @@ am{
         alternateQuotationStart{"‹"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"ቀን"}
+            relative{
+                "-1"{"ትናንት"}
+                "-2"{"ከትናንት ወዲያ"}
+                "0"{"ዛሬ"}
+                "1"{"ነገ"}
+                "2"{"ከነገ ወዲያ"}
+            }
+        }
+        dayperiod{
+            dn{"ጥዋት/ከሰዓት"}
+        }
+        era{
+            dn{"ዘመን"}
+        }
+        hour{
+            dn{"ሰዓት"}
+        }
+        minute{
+            dn{"ደቂቃ"}
+        }
+        month{
+            dn{"ወር"}
+            relative{
+                "-1"{"ያለፈው ወር"}
+                "0"{"በዚህ ወር"}
+                "1"{"የሚቀጥለው ወር"}
+            }
+        }
+        second{
+            dn{"ሰከንድ"}
+        }
+        week{
+            dn{"ሳምንት"}
+            relative{
+                "-1"{"ባለፈው ሳምንት"}
+                "0"{"በዚህ ሣምንት"}
+                "1"{"የሚቀጥለው ሳምንት"}
+            }
+        }
+        weekday{
+            dn{"አዘቦት"}
+        }
+        year{
+            dn{"ዓመት"}
+            relative{
+                "-1"{"ያለፈው ዓመት"}
+                "0"{"በዚህ ዓመት"}
+                "1"{"የሚቀጥለው ዓመት"}
+            }
+        }
+        zone{
+            dn{"የሰዓት ሰቅ"}
+        }
     }
     listPattern{
         standard{

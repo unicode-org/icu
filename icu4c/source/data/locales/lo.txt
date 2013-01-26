@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lo.xml
 // *
@@ -209,7 +209,7 @@ lo{
         }
         native{"laoo"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -763,48 +763,6 @@ lo{
                 abbreviated{
                     "BCE",
                     "ຄ.ສ.",
-                }
-            }
-            fields{
-                day{
-                    dn{"ມື້"}
-                    relative{
-                        "-1"{"ວານນີ້"}
-                        "-2"{"ມື້ກ່ອນ"}
-                        "0"{"ມື້ນີ້"}
-                        "1"{"ມື້ອື່ນ"}
-                        "2"{"ມື້ຮື"}
-                    }
-                }
-                dayperiod{
-                    dn{"ເຊົ້າ/ແລງ"}
-                }
-                era{
-                    dn{"ສະໄໝ"}
-                }
-                hour{
-                    dn{"ຊົ່ວໂມງ"}
-                }
-                minute{
-                    dn{"ນາທີ"}
-                }
-                month{
-                    dn{"ເດືອນ"}
-                }
-                second{
-                    dn{"ວິນາທີ"}
-                }
-                week{
-                    dn{"ອາທິດ"}
-                }
-                weekday{
-                    dn{"ມື້ຂອງອາທິດ"}
-                }
-                year{
-                    dn{"ປີ"}
-                }
-                zone{
-                    dn{"ເວລາຕາມເຂດ"}
                 }
             }
             intervalFormats{
@@ -1697,6 +1655,48 @@ lo{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"ມື້"}
+            relative{
+                "-1"{"ວານນີ້"}
+                "-2"{"ມື້ກ່ອນ"}
+                "0"{"ມື້ນີ້"}
+                "1"{"ມື້ອື່ນ"}
+                "2"{"ມື້ຮື"}
+            }
+        }
+        dayperiod{
+            dn{"ເຊົ້າ/ແລງ"}
+        }
+        era{
+            dn{"ສະໄໝ"}
+        }
+        hour{
+            dn{"ຊົ່ວໂມງ"}
+        }
+        minute{
+            dn{"ນາທີ"}
+        }
+        month{
+            dn{"ເດືອນ"}
+        }
+        second{
+            dn{"ວິນາທີ"}
+        }
+        week{
+            dn{"ອາທິດ"}
+        }
+        weekday{
+            dn{"ມື້ຂອງອາທິດ"}
+        }
+        year{
+            dn{"ປີ"}
+        }
+        zone{
+            dn{"ເວລາຕາມເຂດ"}
+        }
     }
     measurementSystemNames{
         metric{"ເມຕິກ"}

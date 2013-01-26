@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hy.xml
 // *
@@ -33,7 +33,7 @@ hy{
         native{"latn"}
         traditional{"armn"}
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -115,6 +115,48 @@ hy{
                     }
                 }
             }
+        }
+    }
+    fields{
+        day{
+            dn{"Օր"}
+            relative{
+                "-1"{"Երեկ"}
+                "-2"{"Երեկ չէ առաջի օրը"}
+                "0"{"Այսօր"}
+                "1"{"Վաղը"}
+                "2"{"Վաղը չէ մյուս օրը"}
+            }
+        }
+        dayperiod{
+            dn{"ԿԱ/ԿՀ"}
+        }
+        era{
+            dn{"Թվարկություն"}
+        }
+        hour{
+            dn{"Ժամ"}
+        }
+        minute{
+            dn{"Րոպե"}
+        }
+        month{
+            dn{"Ամիս"}
+        }
+        second{
+            dn{"Վայրկյան"}
+        }
+        week{
+            dn{"Շաբաթ"}
+        }
+        weekday{
+            dn{"Շաբաթվա օր"}
+        }
+        year{
+            dn{"Տարի"}
+        }
+        zone{
+            dn{"Ժամային գոտի"}
         }
     }
 }

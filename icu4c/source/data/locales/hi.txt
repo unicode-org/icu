@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hi.xml
 // *
@@ -151,7 +151,7 @@ hi{
         }
         native{"deva"}
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         ethiopic{
             monthNames{
@@ -285,63 +285,6 @@ hi{
                 abbreviated{
                     "ईसापूर्व",
                     "सन",
-                }
-            }
-            fields{
-                day{
-                    dn{"दिन"}
-                    relative{
-                        "-1"{"बीता कल"}
-                        "-2"{"बीता परसों"}
-                        "0"{"आज"}
-                        "1"{"कल"}
-                        "2"{"परसों"}
-                    }
-                }
-                dayperiod{
-                    dn{"समय अवधि"}
-                }
-                era{
-                    dn{"युग"}
-                }
-                hour{
-                    dn{"घंटा"}
-                }
-                minute{
-                    dn{"मिनट"}
-                }
-                month{
-                    dn{"मास"}
-                    relative{
-                        "-1"{"पिछला माह"}
-                        "0"{"इस माह"}
-                        "1"{"अगले माह"}
-                    }
-                }
-                second{
-                    dn{"सेकेंड"}
-                }
-                week{
-                    dn{"सप्ताह"}
-                    relative{
-                        "-1"{"पिछले सप्ताह"}
-                        "0"{"इस सप्ताह"}
-                        "1"{"अगले सप्ताह"}
-                    }
-                }
-                weekday{
-                    dn{"सप्ताह का दिन"}
-                }
-                year{
-                    dn{"वर्ष"}
-                    relative{
-                        "-1"{"पिछले वर्ष"}
-                        "0"{"इस वर्ष"}
-                        "1"{"अगले वर्ष"}
-                    }
-                }
-                zone{
-                    dn{"क्षेत्र"}
                 }
             }
             intervalFormats{
@@ -806,6 +749,63 @@ hi{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"दिन"}
+            relative{
+                "-1"{"बीता कल"}
+                "-2"{"बीता परसों"}
+                "0"{"आज"}
+                "1"{"कल"}
+                "2"{"परसों"}
+            }
+        }
+        dayperiod{
+            dn{"समय अवधि"}
+        }
+        era{
+            dn{"युग"}
+        }
+        hour{
+            dn{"घंटा"}
+        }
+        minute{
+            dn{"मिनट"}
+        }
+        month{
+            dn{"मास"}
+            relative{
+                "-1"{"पिछला माह"}
+                "0"{"इस माह"}
+                "1"{"अगले माह"}
+            }
+        }
+        second{
+            dn{"सेकेंड"}
+        }
+        week{
+            dn{"सप्ताह"}
+            relative{
+                "-1"{"पिछले सप्ताह"}
+                "0"{"इस सप्ताह"}
+                "1"{"अगले सप्ताह"}
+            }
+        }
+        weekday{
+            dn{"सप्ताह का दिन"}
+        }
+        year{
+            dn{"वर्ष"}
+            relative{
+                "-1"{"पिछले वर्ष"}
+                "0"{"इस वर्ष"}
+                "1"{"अगले वर्ष"}
+            }
+        }
+        zone{
+            dn{"क्षेत्र"}
+        }
     }
     listPattern{
         standard{

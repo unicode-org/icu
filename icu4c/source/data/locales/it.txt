@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/it.xml
 // *
@@ -13,7 +13,7 @@ it{
     AuxExemplarCharacters{"[á â å ä ã æ ç ê ë í î ï ñ ô ö õ ø œ ß ú û ü ÿ]"}
     ExemplarCharacters{"[a à b c d e é è f g h i ì j k l m n o ó ò p q r s t u ù v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
-    ExemplarCharactersPunctuation{"[\- — , ; \: ! ? . … “ ” ( ) \[ \] \{ \} @ /]"}
+    ExemplarCharactersPunctuation{"[\\- — , ; \: ! ? . … “ ” ( ) \\[ \\] \\{ \\} @ /]"}
     LocaleScript{
         "Latn",
     }
@@ -143,7 +143,7 @@ it{
             }
         }
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -318,63 +318,6 @@ it{
                 wide{
                     "a.C.",
                     "d.C",
-                }
-            }
-            fields{
-                day{
-                    dn{"giorno"}
-                    relative{
-                        "-1"{"ieri"}
-                        "-2"{"l'altro ieri"}
-                        "0"{"oggi"}
-                        "1"{"domani"}
-                        "2"{"dopodomani"}
-                    }
-                }
-                dayperiod{
-                    dn{"periodo del giorno"}
-                }
-                era{
-                    dn{"era"}
-                }
-                hour{
-                    dn{"ora"}
-                }
-                minute{
-                    dn{"minuto"}
-                }
-                month{
-                    dn{"mese"}
-                    relative{
-                        "-1"{"Mese scorso"}
-                        "0"{"Questo mese"}
-                        "1"{"Mese prossimo"}
-                    }
-                }
-                second{
-                    dn{"secondo"}
-                }
-                week{
-                    dn{"settimana"}
-                    relative{
-                        "-1"{"Settimana scorsa"}
-                        "0"{"Questa settimana"}
-                        "1"{"Settimana prossima"}
-                    }
-                }
-                weekday{
-                    dn{"giorno della settimana"}
-                }
-                year{
-                    dn{"anno"}
-                    relative{
-                        "-1"{"Anno scorso"}
-                        "0"{"Questo anno"}
-                        "1"{"Anno prossimo"}
-                    }
-                }
-                zone{
-                    dn{"zona"}
                 }
             }
             intervalFormats{
@@ -783,6 +726,63 @@ it{
         alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"giorno"}
+            relative{
+                "-1"{"ieri"}
+                "-2"{"l'altro ieri"}
+                "0"{"oggi"}
+                "1"{"domani"}
+                "2"{"dopodomani"}
+            }
+        }
+        dayperiod{
+            dn{"periodo del giorno"}
+        }
+        era{
+            dn{"era"}
+        }
+        hour{
+            dn{"ora"}
+        }
+        minute{
+            dn{"minuto"}
+        }
+        month{
+            dn{"mese"}
+            relative{
+                "-1"{"Mese scorso"}
+                "0"{"Questo mese"}
+                "1"{"Mese prossimo"}
+            }
+        }
+        second{
+            dn{"secondo"}
+        }
+        week{
+            dn{"settimana"}
+            relative{
+                "-1"{"Settimana scorsa"}
+                "0"{"Questa settimana"}
+                "1"{"Settimana prossima"}
+            }
+        }
+        weekday{
+            dn{"giorno della settimana"}
+        }
+        year{
+            dn{"anno"}
+            relative{
+                "-1"{"Anno scorso"}
+                "0"{"Questo anno"}
+                "1"{"Anno prossimo"}
+            }
+        }
+        zone{
+            dn{"zona"}
+        }
     }
     listPattern{
         standard{

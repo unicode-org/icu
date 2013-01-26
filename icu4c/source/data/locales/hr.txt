@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hr.xml
 // *
@@ -16,7 +16,7 @@ hr{
         "[A B C Č Ć D {DŽ} Đ E F G H I J K L {LJ} M N {NJ} O P Q R S Š T U V W X Y Z "
         "Ž]"
     }
-    ExemplarCharactersPunctuation{"[‐ – — , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] @ * / ′ ″]"}
+    ExemplarCharactersPunctuation{"[‐ – — , ; \: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] @ * / ′ ″]"}
     LocaleScript{
         "Latn",
     }
@@ -194,7 +194,7 @@ hr{
             }
         }
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -374,63 +374,6 @@ hr{
                 wide{
                     "Prije Krista",
                     "Poslije Krista",
-                }
-            }
-            fields{
-                day{
-                    dn{"dan"}
-                    relative{
-                        "-1"{"jučer"}
-                        "-2"{"prekjučer"}
-                        "0"{"danas"}
-                        "1"{"sutra"}
-                        "2"{"prekosutra"}
-                    }
-                }
-                dayperiod{
-                    dn{"dio dana"}
-                }
-                era{
-                    dn{"era"}
-                }
-                hour{
-                    dn{"sat"}
-                }
-                minute{
-                    dn{"minuta"}
-                }
-                month{
-                    dn{"mjesec"}
-                    relative{
-                        "-1"{"Prošli mjesec"}
-                        "0"{"Ovaj mjesec"}
-                        "1"{"Sljedeći mjesec"}
-                    }
-                }
-                second{
-                    dn{"sekunda"}
-                }
-                week{
-                    dn{"tjedan"}
-                    relative{
-                        "-1"{"Prošli tjedan"}
-                        "0"{"Ovaj tjedan"}
-                        "1"{"Sljedeći tjedan"}
-                    }
-                }
-                weekday{
-                    dn{"dan u tjednu"}
-                }
-                year{
-                    dn{"godina"}
-                    relative{
-                        "-1"{"Prošla godina"}
-                        "0"{"Ova godina"}
-                        "1"{"Sljedeća godina"}
-                    }
-                }
-                zone{
-                    dn{"vremenska zona"}
                 }
             }
             intervalFormats{
@@ -767,6 +710,63 @@ hr{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"dan"}
+            relative{
+                "-1"{"jučer"}
+                "-2"{"prekjučer"}
+                "0"{"danas"}
+                "1"{"sutra"}
+                "2"{"prekosutra"}
+            }
+        }
+        dayperiod{
+            dn{"dio dana"}
+        }
+        era{
+            dn{"era"}
+        }
+        hour{
+            dn{"sat"}
+        }
+        minute{
+            dn{"minuta"}
+        }
+        month{
+            dn{"mjesec"}
+            relative{
+                "-1"{"Prošli mjesec"}
+                "0"{"Ovaj mjesec"}
+                "1"{"Sljedeći mjesec"}
+            }
+        }
+        second{
+            dn{"sekunda"}
+        }
+        week{
+            dn{"tjedan"}
+            relative{
+                "-1"{"Prošli tjedan"}
+                "0"{"Ovaj tjedan"}
+                "1"{"Sljedeći tjedan"}
+            }
+        }
+        weekday{
+            dn{"dan u tjednu"}
+        }
+        year{
+            dn{"godina"}
+            relative{
+                "-1"{"Prošla godina"}
+                "0"{"Ova godina"}
+                "1"{"Sljedeća godina"}
+            }
+        }
+        zone{
+            dn{"vremenska zona"}
+        }
     }
     listPattern{
         standard{

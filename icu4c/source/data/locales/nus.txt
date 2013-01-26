@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nus.xml
 // *
@@ -32,7 +32,7 @@ nus{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -121,40 +121,6 @@ nus{
                     "Ɛ ca Yecu dap",
                 }
             }
-            fields{
-                day{
-                    dn{"Cäŋ"}
-                    relative{
-                        "-1"{"Pan"}
-                        "0"{"Walɛ"}
-                        "1"{"Ruun"}
-                    }
-                }
-                era{
-                    dn{"Gua̱a̱th Ruëc"}
-                }
-                hour{
-                    dn{"Thaak"}
-                }
-                minute{
-                    dn{"Minit"}
-                }
-                month{
-                    dn{"Pay"}
-                }
-                second{
-                    dn{"Thɛkɛni"}
-                }
-                week{
-                    dn{"Jiɔk"}
-                }
-                weekday{
-                    dn{"Ni̱n jokä"}
-                }
-                year{
-                    dn{"Ruɔ̱n"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -226,5 +192,39 @@ nus{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Cäŋ"}
+            relative{
+                "-1"{"Pan"}
+                "0"{"Walɛ"}
+                "1"{"Ruun"}
+            }
+        }
+        era{
+            dn{"Gua̱a̱th Ruëc"}
+        }
+        hour{
+            dn{"Thaak"}
+        }
+        minute{
+            dn{"Minit"}
+        }
+        month{
+            dn{"Pay"}
+        }
+        second{
+            dn{"Thɛkɛni"}
+        }
+        week{
+            dn{"Jiɔk"}
+        }
+        weekday{
+            dn{"Ni̱n jokä"}
+        }
+        year{
+            dn{"Ruɔ̱n"}
+        }
     }
 }
