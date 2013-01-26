@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- * Copyright (C) 2006-2012, Google, International Business Machines Corporation *
+ * Copyright (C) 2006-2013, Google, International Business Machines Corporation *
  * and others. All Rights Reserved.                                             *
  ********************************************************************************
  */
@@ -203,9 +203,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }catch(MissingResourceException e) {
         }
 
-        // CLDR item names (hmm, do we need aliases in root for all non-gregorian calendars?)
+        // CLDR item names
         try {
-            ICUResourceBundle itemBundle = calTypeBundle.getWithFallback("fields");
+            ICUResourceBundle itemBundle = rb.getWithFallback("fields");
             ICUResourceBundle fieldBundle, dnBundle;
             for (int i=0; i<TYPE_LIMIT; ++i) {
                 if ( isCLDRFieldName(i) ) {
