@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gl.xml
  */
 gl{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Xibutí"}
@@ -685,6 +685,8 @@ gl{
             ls{"Horario estándar de Samara"}
         }
         "meta:Samoa"{
+            ld{"Horario de verán de Samoa"}
+            lg{"Horario de Samoa"}
             ls{"Horario estándar de Samoa"}
         }
         "meta:Seychelles"{

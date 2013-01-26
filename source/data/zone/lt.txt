@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lt.xml
  */
 lt{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžanas"}
@@ -1339,7 +1339,9 @@ lt{
             ls{"Samaros žiemos laikas"}
         }
         "meta:Samoa"{
-            ls{"Samoa laikas"}
+            ld{"Samoa vasaros laikas"}
+            lg{"Samoa laikas"}
+            ls{"Samoa žiemos laikas"}
         }
         "meta:Seychelles"{
             ls{"Seišelių laikas"}

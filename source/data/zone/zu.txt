@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zu.xml
  */
 zu{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"I-São Tomé"}
@@ -517,6 +517,8 @@ zu{
             ls{"esase-Samara Standard Time"}
         }
         "meta:Samoa"{
+            ld{"Isikhathi sehlobo sase-Samoa"}
+            lg{"Isikhathi sase-Samoa"}
             ls{"Isikhathi esivamile sase-Samoa"}
         }
         "meta:Seychelles"{

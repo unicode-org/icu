@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/el.xml
  */
 el{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Αμπιτζάν"}
@@ -1775,7 +1775,9 @@ el{
             ls{"Χειμερινή ώρα Σάμαρας"}
         }
         "meta:Samoa"{
-            ls{"Ώρα Σαμόα"}
+            ld{"Θερινή ώρα Σαμόα"}
+            lg{"Ώρα Σαμόα"}
+            ls{"Χειμερινή ώρα Σαμόα"}
         }
         "meta:Seychelles"{
             ls{"Ώρα Σεϋχελλών"}

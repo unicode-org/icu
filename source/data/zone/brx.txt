@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/brx.xml
  */
 brx{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अबिद्जान"}
@@ -1675,6 +1675,8 @@ brx{
             ls{"समारा स्टैंडर्ड टाईम"}
         }
         "meta:Samoa"{
+            ld{"समोआ समर टाईम"}
+            lg{"समोआ टाईम"}
             ls{"समोआ स्टैंडर्ड टाईम"}
         }
         "meta:Seychelles"{

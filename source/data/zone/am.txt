@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/am.xml
  */
 am{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"አቢጃን"}
@@ -1753,6 +1753,8 @@ am{
             ls{"የሳማራ መደበኛ ሰዓት አቆጣጠር"}
         }
         "meta:Samoa"{
+            ld{"የሳሞዋ የበጋ ሰዓት"}
+            lg{"የሳሞዋ ሰዓት"}
             ls{"የሳሞዋ መደበኛ ሰዓት"}
         }
         "meta:Seychelles"{

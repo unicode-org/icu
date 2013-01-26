@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/id.xml
  */
 id{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akra"}
@@ -802,7 +802,9 @@ id{
             ls{"Waktu Standar Samara"}
         }
         "meta:Samoa"{
-            ls{"Waktu Samoa"}
+            ld{"Waktu Musim Panas Samoa"}
+            lg{"Waktu Samoa"}
+            ls{"Waktu Standar Samoa"}
         }
         "meta:Seychelles"{
             ls{"Waktu Seychelles"}

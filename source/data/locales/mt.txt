@@ -13,7 +13,7 @@ mt{
     AuxExemplarCharacters{"[c y]"}
     ExemplarCharacters{"[a à b ċ d e è f ġ g {għ} h ħ i ì j k l m n o ò p q r s t u ù v w x ż z]"}
     ExemplarCharactersIndex{"[A B Ċ C D E F Ġ G {GĦ} H Ħ I {IE} J K L M N O P Q R S T U V W X Y Ż Z]"}
-    ExemplarCharactersPunctuation{"[\\- , ; \: ! ? . ' ‘ ’ \u0022 “ ” ( ) \\[ \\] \\{ \\}]"}
+    ExemplarCharactersPunctuation{"[\\- , ; \\: ! ? . ' ‘ ’ \u0022 “ ” ( ) \\[ \\] \\{ \\}]"}
     LocaleScript{
         "Latn",
     }

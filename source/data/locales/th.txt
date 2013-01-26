@@ -20,7 +20,7 @@ th{
         "[ก ข ฃ ค ฅ ฆ ง จ ฉ ช ซ ฌ ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ฤ ล ฦ"
         " ว ศ ษ ส ห ฬ อ ฮ]"
     }
-    ExemplarCharactersPunctuation{"[! \u0022 # ' ( ) * , \\- . / \: @ \\[ \\\\  \\] ‐ – — ‘ ’ “ ” … ′ ″]"}
+    ExemplarCharactersPunctuation{"[! \u0022 # ' ( ) * , \\- . / \\: @ \\[ \\\\ \\] ‐ – — ‘ ’ “ ” … ′ ″]"}
     LocaleScript{
         "Thai",
     }
@@ -128,7 +128,7 @@ th{
         }
         native{"thai"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     calendar{
         buddhist{
             DateTimePatterns{

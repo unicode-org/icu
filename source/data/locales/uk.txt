@@ -190,7 +190,7 @@ uk{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     calendar{
         coptic{
             monthNames{

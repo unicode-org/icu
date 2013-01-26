@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/to.xml
  */
 to{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "America:Anchorage"{
             ec{"Houa Puleʻanga fakataha ʻAmelika (Anchorage)"}
@@ -76,7 +76,9 @@ to{
             ls{"houa fakaniuē"}
         }
         "meta:Samoa"{
-            ls{"houa fakahaʻamoa"}
+            ld{"houa fakahaʻamoa fakamaama"}
+            lg{"houa fakahaʻamoa"}
+            ls{"houa fakahaʻamoa fakasīpinga"}
         }
         "meta:Tahiti"{
             ls{"houa fakatahisi"}

@@ -2824,5 +2824,5 @@ bs{
             other{"zimbabvejskih dolara (2008)"}
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
 }

@@ -748,7 +748,7 @@ hr{
             chinese{"kineski kalendar"}
             coptic{"Koptski kalendar"}
             ethiopic{"Etiopski kalendar"}
-            ethiopic-amete-alem{"Etiopski kalendar \"Amete Alem\""}
+            ethiopic-amete-alem{"Etiopski kalendar \u0022Amete Alem\u0022"}
             gregorian{"gregorijanski kalendar"}
             hebrew{"hebrejski kalendar"}
             indian{"indijski nacionalni kalendar"}
@@ -848,7 +848,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}

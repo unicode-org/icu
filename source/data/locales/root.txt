@@ -12,7 +12,7 @@
 root{
     AuxExemplarCharacters{"[]"}
     ExemplarCharacters{"[]"}
-    ExemplarCharactersPunctuation{"[\\- , ; \: ! ? . ( ) \\[ \\] \\{ \\}]"}
+    ExemplarCharactersPunctuation{"[\\- , ; \\: ! ? . ( ) \\[ \\] \\{ \\}]"}
     LocaleScript{
         "Zyyy",
     }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/es.xml
  */
 es{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abiyán"}
@@ -1021,6 +1021,8 @@ es{
             ls{"Hora estándar de Samara"}
         }
         "meta:Samoa"{
+            ld{"Hora de verano de Samoa"}
+            lg{"Hora de Samoa"}
             ls{"Hora estándar de Samoa"}
         }
         "meta:Solomon"{

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nl.xml
  */
 nl{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -890,6 +890,8 @@ nl{
             ls{"Samara-standaardtijd"}
         }
         "meta:Samoa"{
+            ld{"Samoaanse zomertijd"}
+            lg{"Samoaanse tijd"}
             ls{"Samoaanse standaardtijd"}
         }
         "meta:Seychelles"{

@@ -13,7 +13,10 @@ lv{
     AuxExemplarCharacters{"[q w x y]"}
     ExemplarCharacters{"[a ā b c č d e ē f g ģ h i ī j k ķ l ļ m n ņ o p r s š t u ū v z ž]"}
     ExemplarCharactersIndex{"[A B C Č D E F G Ģ H I J K Ķ L Ļ M N Ņ O P Q R S Š T U V W X Y Z Ž]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! ? . … ' ‘ ’ ‚ \u0022 “ ” „ ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ ‚ \u0022 “ ” „ ( ) \\[ \\] § @ * / \\& # † "
+        "‡ ′ ″]"
+    }
     LocaleScript{
         "Latn",
     }
@@ -167,7 +170,7 @@ lv{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     calendar{
         gregorian{
             AmPmMarkers{

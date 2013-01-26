@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/is.xml
  */
 is{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Algeirsborg"}
@@ -733,6 +733,8 @@ is{
             ls{"Staðaltími í Samara"}
         }
         "meta:Samoa"{
+            ld{"Sumartími í Samóa"}
+            lg{"Tími í Samóa"}
             ls{"Staðaltími á Samóa"}
         }
         "meta:Seychelles"{

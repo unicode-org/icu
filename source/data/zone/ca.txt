@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ca.xml
  */
 ca{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -828,6 +828,11 @@ ca{
             ld{"Hora d'estiu de Samara"}
             lg{"Hora de Samara"}
             ls{"Hora estàndard de Samara"}
+        }
+        "meta:Samoa"{
+            ld{"Hora d'estiu de Samoa"}
+            lg{"Hora de Samoa"}
+            ls{"Hora estàndard de Samoa"}
         }
         "meta:Seychelles"{
             ls{"Hora de les Seychelles"}
