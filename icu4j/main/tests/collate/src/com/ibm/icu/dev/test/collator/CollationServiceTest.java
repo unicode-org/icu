@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -444,22 +444,22 @@ public class CollationServiceTest extends TestFmwk {
     
     public void TestGetKeywordValues(){
         final String[][] PREFERRED = {
-            {"und",             "standard", "ducet", "search"},
-            {"en_US",           "standard", "ducet", "search"},
-            {"en_029",          "standard", "ducet", "search"},
-            {"de_DE",           "standard", "phonebook", "search", "ducet"},
-            {"de_Latn_DE",      "standard", "phonebook", "search", "ducet"},
-            {"zh",              "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "ducet", "search"},
-            {"zh_Hans",         "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "ducet", "search"},
-            {"zh_CN",           "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "ducet", "search"},
-            {"zh_Hant",         "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "ducet", "search"},
-            {"zh_TW",           "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "ducet", "search"},
-            {"zh__PINYIN",      "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "ducet", "search"},
-            {"es_ES",           "standard", "search", "traditional", "ducet"},
-            {"es__TRADITIONAL", "traditional", "search", "standard", "ducet"},
-            {"und@collation=phonebook",     "standard", "ducet", "search"},
-            {"de_DE@collation=big5han",     "standard", "phonebook", "search", "ducet"},
-            {"zzz@collation=xxx",           "standard", "ducet", "search"},
+            {"und",             "standard", "search"},
+            {"en_US",           "standard", "search"},
+            {"en_029",          "standard", "search"},
+            {"de_DE",           "standard", "phonebook", "search"},
+            {"de_Latn_DE",      "standard", "phonebook", "search"},
+            {"zh",              "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "search"},
+            {"zh_Hans",         "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "search"},
+            {"zh_CN",           "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "search"},
+            {"zh_Hant",         "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "search"},
+            {"zh_TW",           "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "search"},
+            {"zh__PINYIN",      "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "search"},
+            {"es_ES",           "standard", "search", "traditional"},
+            {"es__TRADITIONAL", "traditional", "search", "standard"},
+            {"und@collation=phonebook",     "standard", "search"},
+            {"de_DE@collation=big5han",     "standard", "phonebook", "search"},
+            {"zzz@collation=xxx",           "standard", "search"},
         };
 
         for (int i = 0; i < PREFERRED.length; i++) {
