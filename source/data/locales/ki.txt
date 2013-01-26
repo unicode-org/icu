@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ki.xml
 // *
@@ -23,7 +23,7 @@ ki{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -111,43 +111,6 @@ ki{
                     "Thutha wa Kristo",
                 }
             }
-            fields{
-                day{
-                    dn{"Mũthenya"}
-                    relative{
-                        "-1"{"Ira"}
-                        "0"{"Ũmũthĩ"}
-                        "1"{"Rũciũ"}
-                    }
-                }
-                era{
-                    dn{"Kĩhinda"}
-                }
-                hour{
-                    dn{"Ithaa"}
-                }
-                minute{
-                    dn{"Ndagĩka"}
-                }
-                month{
-                    dn{"Mweri"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Kiumia"}
-                }
-                weekday{
-                    dn{"Mũthenya kiumia-inĩ"}
-                }
-                year{
-                    dn{"Mwaka"}
-                }
-                zone{
-                    dn{"Mũcooro wa mathaa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -219,5 +182,42 @@ ki{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Mũthenya"}
+            relative{
+                "-1"{"Ira"}
+                "0"{"Ũmũthĩ"}
+                "1"{"Rũciũ"}
+            }
+        }
+        era{
+            dn{"Kĩhinda"}
+        }
+        hour{
+            dn{"Ithaa"}
+        }
+        minute{
+            dn{"Ndagĩka"}
+        }
+        month{
+            dn{"Mweri"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Kiumia"}
+        }
+        weekday{
+            dn{"Mũthenya kiumia-inĩ"}
+        }
+        year{
+            dn{"Mwaka"}
+        }
+        zone{
+            dn{"Mũcooro wa mathaa"}
+        }
     }
 }

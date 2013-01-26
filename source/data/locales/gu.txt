@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/gu.xml
 // *
@@ -151,7 +151,7 @@ gu{
         }
         native{"gujr"}
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -293,63 +293,6 @@ gu{
                 wide{
                     "ઈસવીસન પૂર્વે",
                     "ઇસવીસન",
-                }
-            }
-            fields{
-                day{
-                    dn{"દિવસ"}
-                    relative{
-                        "-1"{"ગઈકાલ"}
-                        "-2"{"ગઈકાસ પહેસાંનો દિવસ"}
-                        "0"{"આજ"}
-                        "1"{"આવતીકાલ"}
-                        "2"{"પરમ દિવસ"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"યુગ"}
-                }
-                hour{
-                    dn{"કલાક"}
-                }
-                minute{
-                    dn{"મિનિટ"}
-                }
-                month{
-                    dn{"મહિનો"}
-                    relative{
-                        "-1"{"છેલ્લો મહિનો"}
-                        "0"{"આ મહિને"}
-                        "1"{"આગલો મહીનો"}
-                    }
-                }
-                second{
-                    dn{"ક્ષણ"}
-                }
-                week{
-                    dn{"અહવાડિયું"}
-                    relative{
-                        "-1"{"છેલ્લું અઠવાડિયું"}
-                        "0"{"આ અઠવાડિયે"}
-                        "1"{"આગલા અઠવાડિયે"}
-                    }
-                }
-                weekday{
-                    dn{"અઠવાડિયાનો દિવસ"}
-                }
-                year{
-                    dn{"વર્ષ"}
-                    relative{
-                        "-1"{"પાછલું વર્ષ"}
-                        "0"{"આ વર્ષ"}
-                        "1"{"આગલું વર્ષ"}
-                    }
-                }
-                zone{
-                    dn{"વિસ્તાર"}
                 }
             }
             intervalFormats{
@@ -586,6 +529,63 @@ gu{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"દિવસ"}
+            relative{
+                "-1"{"ગઈકાલ"}
+                "-2"{"ગઈકાસ પહેસાંનો દિવસ"}
+                "0"{"આજ"}
+                "1"{"આવતીકાલ"}
+                "2"{"પરમ દિવસ"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"યુગ"}
+        }
+        hour{
+            dn{"કલાક"}
+        }
+        minute{
+            dn{"મિનિટ"}
+        }
+        month{
+            dn{"મહિનો"}
+            relative{
+                "-1"{"છેલ્લો મહિનો"}
+                "0"{"આ મહિને"}
+                "1"{"આગલો મહીનો"}
+            }
+        }
+        second{
+            dn{"ક્ષણ"}
+        }
+        week{
+            dn{"અહવાડિયું"}
+            relative{
+                "-1"{"છેલ્લું અઠવાડિયું"}
+                "0"{"આ અઠવાડિયે"}
+                "1"{"આગલા અઠવાડિયે"}
+            }
+        }
+        weekday{
+            dn{"અઠવાડિયાનો દિવસ"}
+        }
+        year{
+            dn{"વર્ષ"}
+            relative{
+                "-1"{"પાછલું વર્ષ"}
+                "0"{"આ વર્ષ"}
+                "1"{"આગલું વર્ષ"}
+            }
+        }
+        zone{
+            dn{"વિસ્તાર"}
+        }
     }
     listPattern{
         standard{

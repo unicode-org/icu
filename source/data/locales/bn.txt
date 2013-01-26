@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bn.xml
 // *
@@ -156,7 +156,7 @@ bn{
         }
         native{"beng"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -266,63 +266,6 @@ bn{
                 abbreviated{
                     "খৃষ্টপূর্ব",
                     "খৃষ্টাব্দ",
-                }
-            }
-            fields{
-                day{
-                    dn{"দিন"}
-                    relative{
-                        "-1"{"গতকাল"}
-                        "-2"{"গত পরশু"}
-                        "0"{"আজ"}
-                        "1"{"আগামীকাল"}
-                        "2"{"আগামী পরশু"}
-                    }
-                }
-                dayperiod{
-                    dn{"পূর্বাহ্ণ/অপরাহ্ণ"}
-                }
-                era{
-                    dn{"যুগ"}
-                }
-                hour{
-                    dn{"ঘন্টা"}
-                }
-                minute{
-                    dn{"মিনিট"}
-                }
-                month{
-                    dn{"মাস"}
-                    relative{
-                        "-1"{"গত মাস"}
-                        "0"{"এই মাস"}
-                        "1"{"পরের মাস"}
-                    }
-                }
-                second{
-                    dn{"সেকেন্ড"}
-                }
-                week{
-                    dn{"সপ্তাহ"}
-                    relative{
-                        "-1"{"গত সপ্তাহ"}
-                        "0"{"এই সপ্তাহ"}
-                        "1"{"পরবর্তী সপ্তাহ"}
-                    }
-                }
-                weekday{
-                    dn{"সপ্তাহের দিন"}
-                }
-                year{
-                    dn{"বছর"}
-                    relative{
-                        "-1"{"আগের বছর"}
-                        "0"{"এই বছর"}
-                        "1"{"পরের বছর"}
-                    }
-                }
-                zone{
-                    dn{"এলাকা"}
                 }
             }
             intervalFormats{
@@ -579,6 +522,63 @@ bn{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"দিন"}
+            relative{
+                "-1"{"গতকাল"}
+                "-2"{"গত পরশু"}
+                "0"{"আজ"}
+                "1"{"আগামীকাল"}
+                "2"{"আগামী পরশু"}
+            }
+        }
+        dayperiod{
+            dn{"পূর্বাহ্ণ/অপরাহ্ণ"}
+        }
+        era{
+            dn{"যুগ"}
+        }
+        hour{
+            dn{"ঘন্টা"}
+        }
+        minute{
+            dn{"মিনিট"}
+        }
+        month{
+            dn{"মাস"}
+            relative{
+                "-1"{"গত মাস"}
+                "0"{"এই মাস"}
+                "1"{"পরের মাস"}
+            }
+        }
+        second{
+            dn{"সেকেন্ড"}
+        }
+        week{
+            dn{"সপ্তাহ"}
+            relative{
+                "-1"{"গত সপ্তাহ"}
+                "0"{"এই সপ্তাহ"}
+                "1"{"পরবর্তী সপ্তাহ"}
+            }
+        }
+        weekday{
+            dn{"সপ্তাহের দিন"}
+        }
+        year{
+            dn{"বছর"}
+            relative{
+                "-1"{"আগের বছর"}
+                "0"{"এই বছর"}
+                "1"{"পরের বছর"}
+            }
+        }
+        zone{
+            dn{"এলাকা"}
+        }
     }
     listPattern{
         standard{

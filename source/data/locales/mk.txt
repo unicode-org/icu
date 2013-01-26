@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mk.xml
 // *
@@ -142,7 +142,7 @@ mk{
             }
         }
     }
-    Version{"2.0.78.17"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -262,48 +262,6 @@ mk{
                 abbreviated{
                     "пр.н.е.",
                     "ае.",
-                }
-            }
-            fields{
-                day{
-                    dn{"ден"}
-                    relative{
-                        "-1"{"Вчера"}
-                        "-2"{"завчера"}
-                        "0"{"Денес"}
-                        "1"{"Утре"}
-                        "2"{"задутре"}
-                    }
-                }
-                dayperiod{
-                    dn{"претпладне/попладне"}
-                }
-                era{
-                    dn{"Ера"}
-                }
-                hour{
-                    dn{"Час"}
-                }
-                minute{
-                    dn{"Минута"}
-                }
-                month{
-                    dn{"Месец"}
-                }
-                second{
-                    dn{"Секунда"}
-                }
-                week{
-                    dn{"Недела"}
-                }
-                weekday{
-                    dn{"Ден во неделата"}
-                }
-                year{
-                    dn{"година"}
-                }
-                zone{
-                    dn{"зона"}
                 }
             }
             intervalFormats{
@@ -495,6 +453,48 @@ mk{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"ден"}
+            relative{
+                "-1"{"Вчера"}
+                "-2"{"завчера"}
+                "0"{"Денес"}
+                "1"{"Утре"}
+                "2"{"задутре"}
+            }
+        }
+        dayperiod{
+            dn{"претпладне/попладне"}
+        }
+        era{
+            dn{"Ера"}
+        }
+        hour{
+            dn{"Час"}
+        }
+        minute{
+            dn{"Минута"}
+        }
+        month{
+            dn{"Месец"}
+        }
+        second{
+            dn{"Секунда"}
+        }
+        week{
+            dn{"Недела"}
+        }
+        weekday{
+            dn{"Ден во неделата"}
+        }
+        year{
+            dn{"година"}
+        }
+        zone{
+            dn{"зона"}
+        }
     }
     listPattern{
         standard{

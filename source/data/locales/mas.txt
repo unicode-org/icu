@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mas.xml
 // *
@@ -26,7 +26,7 @@ mas{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -114,46 +114,6 @@ mas{
                     "Eínō Yɛ́sʉ",
                 }
             }
-            fields{
-                day{
-                    dn{"Ɛnkɔlɔ́ŋ"}
-                    relative{
-                        "-1"{"Ŋolé"}
-                        "0"{"Táatá"}
-                        "1"{"Tááisérè"}
-                    }
-                }
-                dayperiod{
-                    dn{"Ɛnkakɛnyá/Ɛndámâ"}
-                }
-                era{
-                    dn{"Ɛnkátá"}
-                }
-                hour{
-                    dn{"Ɛ́sáâ"}
-                }
-                minute{
-                    dn{"Oldákikaè"}
-                }
-                month{
-                    dn{"Ɔlápà"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Ewíkî"}
-                }
-                weekday{
-                    dn{"Ɛnkɔ́lɔŋ ewíkî"}
-                }
-                year{
-                    dn{"Ɔlárì"}
-                }
-                zone{
-                    dn{"Ɛ́sáâ o inkuapí"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -209,6 +169,46 @@ mas{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Ɛnkɔlɔ́ŋ"}
+            relative{
+                "-1"{"Ŋolé"}
+                "0"{"Táatá"}
+                "1"{"Tááisérè"}
+            }
+        }
+        dayperiod{
+            dn{"Ɛnkakɛnyá/Ɛndámâ"}
+        }
+        era{
+            dn{"Ɛnkátá"}
+        }
+        hour{
+            dn{"Ɛ́sáâ"}
+        }
+        minute{
+            dn{"Oldákikaè"}
+        }
+        month{
+            dn{"Ɔlápà"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Ewíkî"}
+        }
+        weekday{
+            dn{"Ɛnkɔ́lɔŋ ewíkî"}
+        }
+        year{
+            dn{"Ɔlárì"}
+        }
+        zone{
+            dn{"Ɛ́sáâ o inkuapí"}
+        }
     }
     measurementSystemNames{
         metric{"Metric"}

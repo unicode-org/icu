@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bs_Cyrl.xml
 // *
@@ -191,7 +191,7 @@ bs_Cyrl{
             }
         }
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             eras{
@@ -332,63 +332,6 @@ bs_Cyrl{
                 wide{
                     "Пре нове ере",
                     "Нове ере",
-                }
-            }
-            fields{
-                day{
-                    dn{"дан"}
-                    relative{
-                        "-1"{"јуче"}
-                        "-2"{"прекјуче"}
-                        "0"{"данас"}
-                        "1"{"сутра"}
-                        "2"{"прекосутра"}
-                    }
-                }
-                dayperiod{
-                    dn{"пре подне/поподне"}
-                }
-                era{
-                    dn{"ера"}
-                }
-                hour{
-                    dn{"час"}
-                }
-                minute{
-                    dn{"минут"}
-                }
-                month{
-                    dn{"месец"}
-                    relative{
-                        "-1"{"Прошлог месеца"}
-                        "0"{"Овог месеца"}
-                        "1"{"Следећег месеца"}
-                    }
-                }
-                second{
-                    dn{"секунд"}
-                }
-                week{
-                    dn{"недеља"}
-                    relative{
-                        "-1"{"Прошле недеље"}
-                        "0"{"Ове недеље"}
-                        "1"{"Следеће недеље"}
-                    }
-                }
-                weekday{
-                    dn{"дан у недељи"}
-                }
-                year{
-                    dn{"година"}
-                    relative{
-                        "-1"{"Прошле године"}
-                        "0"{"Ове године"}
-                        "1"{"Следеће године"}
-                    }
-                }
-                zone{
-                    dn{"зона"}
                 }
             }
             intervalFormats{
@@ -967,6 +910,63 @@ bs_Cyrl{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"дан"}
+            relative{
+                "-1"{"јуче"}
+                "-2"{"прекјуче"}
+                "0"{"данас"}
+                "1"{"сутра"}
+                "2"{"прекосутра"}
+            }
+        }
+        dayperiod{
+            dn{"пре подне/поподне"}
+        }
+        era{
+            dn{"ера"}
+        }
+        hour{
+            dn{"час"}
+        }
+        minute{
+            dn{"минут"}
+        }
+        month{
+            dn{"месец"}
+            relative{
+                "-1"{"Прошлог месеца"}
+                "0"{"Овог месеца"}
+                "1"{"Следећег месеца"}
+            }
+        }
+        second{
+            dn{"секунд"}
+        }
+        week{
+            dn{"недеља"}
+            relative{
+                "-1"{"Прошле недеље"}
+                "0"{"Ове недеље"}
+                "1"{"Следеће недеље"}
+            }
+        }
+        weekday{
+            dn{"дан у недељи"}
+        }
+        year{
+            dn{"година"}
+            relative{
+                "-1"{"Прошле године"}
+                "0"{"Ове године"}
+                "1"{"Следеће године"}
+            }
+        }
+        zone{
+            dn{"зона"}
+        }
     }
     listPattern{
         standard{

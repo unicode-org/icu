@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/shi.xml
 // *
@@ -26,7 +26,7 @@ shi{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -101,46 +101,6 @@ shi{
                     "ⴷⴼⴼⵉⵔ ⵏ ⵄⵉⵙⴰ",
                 }
             }
-            fields{
-                day{
-                    dn{"ⴰⵙⵙ"}
-                    relative{
-                        "-1"{"ⵉⴹⵍⵍⵉ"}
-                        "0"{"ⴰⵙⵙⴰ"}
-                        "1"{"ⴰⵙⴽⴽⴰ"}
-                    }
-                }
-                dayperiod{
-                    dn{"ⵜⵉⵣⵉ ⴳ ⵡⴰⵙⵙ: ⵜⵉⴼⴰⵡⵜ/ⵜⴰⴷⴳⴳⵯⴰⵜ"}
-                }
-                era{
-                    dn{"ⵜⴰⵙⵓⵜ"}
-                }
-                hour{
-                    dn{"ⵜⴰⵙⵔⴰⴳⵜ"}
-                }
-                minute{
-                    dn{"ⵜⵓⵙⴷⵉⴷⵜ"}
-                }
-                month{
-                    dn{"ⴰⵢⵢⵓⵔ"}
-                }
-                second{
-                    dn{"ⵜⴰⵙⵉⵏⵜ"}
-                }
-                week{
-                    dn{"ⵉⵎⴰⵍⴰⵙⵙ"}
-                }
-                weekday{
-                    dn{"ⴰⵙⵙ ⴳ ⵉⵎⴰⵍⴰⵙⵙ"}
-                }
-                year{
-                    dn{"ⴰⵙⴳⴳⵯⴰⵙ"}
-                }
-                zone{
-                    dn{"ⴰⴽⵓⴷ ⵏ ⵓⴳⵎⵎⴰⴹ"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -212,5 +172,45 @@ shi{
         alternateQuotationStart{"„"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"ⴰⵙⵙ"}
+            relative{
+                "-1"{"ⵉⴹⵍⵍⵉ"}
+                "0"{"ⴰⵙⵙⴰ"}
+                "1"{"ⴰⵙⴽⴽⴰ"}
+            }
+        }
+        dayperiod{
+            dn{"ⵜⵉⵣⵉ ⴳ ⵡⴰⵙⵙ: ⵜⵉⴼⴰⵡⵜ/ⵜⴰⴷⴳⴳⵯⴰⵜ"}
+        }
+        era{
+            dn{"ⵜⴰⵙⵓⵜ"}
+        }
+        hour{
+            dn{"ⵜⴰⵙⵔⴰⴳⵜ"}
+        }
+        minute{
+            dn{"ⵜⵓⵙⴷⵉⴷⵜ"}
+        }
+        month{
+            dn{"ⴰⵢⵢⵓⵔ"}
+        }
+        second{
+            dn{"ⵜⴰⵙⵉⵏⵜ"}
+        }
+        week{
+            dn{"ⵉⵎⴰⵍⴰⵙⵙ"}
+        }
+        weekday{
+            dn{"ⴰⵙⵙ ⴳ ⵉⵎⴰⵍⴰⵙⵙ"}
+        }
+        year{
+            dn{"ⴰⵙⴳⴳⵯⴰⵙ"}
+        }
+        zone{
+            dn{"ⴰⴽⵓⴷ ⵏ ⵓⴳⵎⵎⴰⴹ"}
+        }
     }
 }

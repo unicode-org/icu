@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/cs.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/cs.xml
  */
 cs{
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -506,20 +506,10 @@ cs{
             lg{"Západoafrický čas"}
             ls{"Západoafrický standardní čas"}
         }
-        "meta:Aktyubinsk"{
-            ld{"Akťubinský letní čas"}
-            lg{"Akťubinský čas"}
-            ls{"Akťubinský standardní čas"}
-        }
         "meta:Alaska"{
             ld{"Aljašský letní čas"}
             lg{"Aljašský čas"}
             ls{"Aljašský standardní čas"}
-        }
-        "meta:Alaska_Hawaii"{
-            ld{"Aljašsko-havajský letní čas"}
-            lg{"Aljašsko-havajský čas"}
-            ls{"Aljašsko-havajský standardní čas"}
         }
         "meta:Almaty"{
             ld{"Almatský letní čas"}
@@ -586,11 +576,6 @@ cs{
             lg{"Arménský čas"}
             ls{"Arménský standardní čas"}
         }
-        "meta:Ashkhabad"{
-            ld{"Ašchabadský letní čas"}
-            lg{"Ašchabadský čas"}
-            ls{"Ašchabadský standardní čas"}
-        }
         "meta:Atlantic"{
             ld{"Atlantický letní čas"}
             lg{"Atlantický čas"}
@@ -626,31 +611,16 @@ cs{
             lg{"Azorský čas"}
             ls{"Azorský standardní čas"}
         }
-        "meta:Baku"{
-            ld{"Bakuský letní čas"}
-            lg{"Bakuský čas"}
-            ls{"Bakuský standardní čas"}
-        }
         "meta:Bangladesh"{
             ld{"Bangladéšský letní čas"}
             lg{"Bangladéšský čas"}
             ls{"Bangladéšský standardní čas"}
-        }
-        "meta:Bering"{
-            ld{"Beringský letní čas"}
-            lg{"Beringský čas"}
-            ls{"Beringský standardní čas"}
         }
         "meta:Bhutan"{
             ls{"Bhútánský čas"}
         }
         "meta:Bolivia"{
             ls{"Bolivijský čas"}
-        }
-        "meta:Borneo"{
-            ld{"Bornejský letní čas"}
-            lg{"Bornejský čas"}
-            ls{"Bornejský standardní čas"}
         }
         "meta:Brasilia"{
             ld{"Brasilijský letní čas"}
@@ -670,9 +640,6 @@ cs{
         }
         "meta:Chamorro"{
             ls{"Chamorrský čas"}
-        }
-        "meta:Changbai"{
-            ls{"Čchangpejský čas"}
         }
         "meta:Chatham"{
             ld{"Chathamský letní čas"}
@@ -715,22 +682,11 @@ cs{
             lg{"Kubánský čas"}
             ls{"Kubánský standardní čas"}
         }
-        "meta:Dacca"{
-            ls{"Dhácký čas"}
-        }
         "meta:Davis"{
             ls{"Čas Davisovy stanice"}
         }
         "meta:DumontDUrville"{
             ls{"Čas stanice Dumonta d’Urvilla"}
-        }
-        "meta:Dushanbe"{
-            ld{"Dušanbský letní čas"}
-            lg{"Dušanbský čas"}
-            ls{"Dušanbský standardní čas"}
-        }
-        "meta:Dutch_Guiana"{
-            ls{"Nizozemskoguyanský čas"}
         }
         "meta:East_Timor"{
             ls{"Východotimorský čas"}
@@ -774,11 +730,6 @@ cs{
         "meta:French_Southern"{
             ls{"Čas Francouzských jižních a antarktických území"}
         }
-        "meta:Frunze"{
-            ld{"Frunzský letní čas"}
-            lg{"Frunzský čas"}
-            ls{"Frunzský standardní čas"}
-        }
         "meta:GMT"{
             ls{"Greenwichský střední čas"}
         }
@@ -795,11 +746,6 @@ cs{
         }
         "meta:Gilbert_Islands"{
             ls{"Čas Gilbertových ostrovů"}
-        }
-        "meta:Greenland_Central"{
-            ld{"Středogrónský letní čas"}
-            lg{"Středogrónský čas"}
-            ls{"Středogrónský standardní čas"}
         }
         "meta:Greenland_Eastern"{
             ld{"Východogrónský letní čas"}
@@ -878,12 +824,6 @@ cs{
             lg{"Petropavlovsko-kamčatský čas"}
             ls{"Petropavlovsko-kamčatský standardní čas"}
         }
-        "meta:Karachi"{
-            ls{"Karáčský čas"}
-        }
-        "meta:Kashgar"{
-            ls{"Kašgarský čas"}
-        }
         "meta:Kazakhstan_Eastern"{
             ls{"Východokazachstánský čas"}
         }
@@ -902,14 +842,6 @@ cs{
             ld{"Krasnojarský letní čas"}
             lg{"Krasnojarský čas"}
             ls{"Krasnojarský standardní čas"}
-        }
-        "meta:Kuybyshev"{
-            ld{"Kujbyševský letní čas"}
-            lg{"Kujbyševský čas"}
-            ls{"Kujbyševský standardní čas"}
-        }
-        "meta:Kwajalein"{
-            ls{"Kwajaleinský čas"}
         }
         "meta:Kyrgystan"{
             ls{"Kyrgyzský čas"}
@@ -934,9 +866,6 @@ cs{
             ld{"Magadanský letní čas"}
             lg{"Magadanský čas"}
             ls{"Magadanský standardní čas"}
-        }
-        "meta:Malaya"{
-            ls{"Malajský čas"}
         }
         "meta:Malaysia"{
             ls{"Malajsijský čas"}
@@ -1077,11 +1006,6 @@ cs{
             lg{"Samarský čas"}
             ls{"Samarský standardní čas"}
         }
-        "meta:Samarkand"{
-            ld{"Samarkandský letní čas"}
-            lg{"Samarkandský čas"}
-            ls{"Samarkandský standardní čas"}
-        }
         "meta:Samoa"{
             ls{"Samojský čas"}
         }
@@ -1097,14 +1021,6 @@ cs{
         "meta:South_Georgia"{
             ls{"Jihogeorgijský čas"}
         }
-        "meta:Suriname"{
-            ls{"Surinamský čas"}
-        }
-        "meta:Sverdlovsk"{
-            ld{"Sverdlovský letní čas"}
-            lg{"Sverdlovský čas"}
-            ls{"Sverdlovský standardní čas"}
-        }
         "meta:Syowa"{
             ls{"Čas stanice Šówa"}
         }
@@ -1119,16 +1035,6 @@ cs{
         "meta:Tajikistan"{
             ls{"Tádžický čas"}
         }
-        "meta:Tashkent"{
-            ld{"Taškentský letní čas"}
-            lg{"Taškentský čas"}
-            ls{"Taškentský standardní čas"}
-        }
-        "meta:Tbilisi"{
-            ld{"Tbiliský letní čas"}
-            lg{"Tbiliský čas"}
-            ls{"Tbiliský standardní čas"}
-        }
         "meta:Tokelau"{
             ls{"Tokelauský čas"}
         }
@@ -1140,11 +1046,6 @@ cs{
         "meta:Truk"{
             ls{"Chuukský čas"}
         }
-        "meta:Turkey"{
-            ld{"Turecký letní čas"}
-            lg{"Turecký čas"}
-            ls{"Turecký standardní čas"}
-        }
         "meta:Turkmenistan"{
             ld{"Turkmenský letní čas"}
             lg{"Turkmenský čas"}
@@ -1153,18 +1054,10 @@ cs{
         "meta:Tuvalu"{
             ls{"Tuvalský čas"}
         }
-        "meta:Uralsk"{
-            ld{"Uralský letní čas"}
-            lg{"Uralský čas"}
-            ls{"Uralský standardní čas"}
-        }
         "meta:Uruguay"{
             ld{"Uruguayský letní čas"}
             lg{"Uruguayský čas"}
             ls{"Uruguayský standardní čas"}
-        }
-        "meta:Urumqi"{
-            ls{"Urumčijský čas"}
         }
         "meta:Uzbekistan"{
             ld{"Uzbecký letní čas"}
@@ -1207,16 +1100,6 @@ cs{
             ld{"Jekatěrinburský letní čas"}
             lg{"Jekatěrinburský čas"}
             ls{"Jekatěrinburský standardní čas"}
-        }
-        "meta:Yerevan"{
-            ld{"Jerevanský letní čas"}
-            lg{"Jerevanský čas"}
-            ls{"Jerevanský standardní čas"}
-        }
-        "meta:Yukon"{
-            ld{"Yukonský letní čas"}
-            lg{"Yukonský čas"}
-            ls{"Yukonský standardní čas"}
         }
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Časové pásmo {1} ({0})"}

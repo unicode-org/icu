@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ml.xml
 // *
@@ -149,9 +149,23 @@ ml{
                 plusSign{"+"}
             }
         }
+        mlym{
+            symbols{
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"സംഖ്യയല്ല"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+            }
+        }
         native{"mlym"}
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -265,63 +279,6 @@ ml{
                 wide{
                     "ക്രിസ്തുവിനു് മുമ്പ്‌",
                     "ക്രിസ്തുവിന് പിൻപ്",
-                }
-            }
-            fields{
-                day{
-                    dn{"ദിവസം"}
-                    relative{
-                        "-1"{"ഇന്നലെ"}
-                        "-2"{"മിനിഞ്ഞാന്ന്"}
-                        "0"{"ഇന്ന്"}
-                        "1"{"നാളെ"}
-                        "2"{"മറ്റന്നാൾ"}
-                    }
-                }
-                dayperiod{
-                    dn{"am/pm"}
-                }
-                era{
-                    dn{"കാലഘട്ടം"}
-                }
-                hour{
-                    dn{"മണിക്കൂർ"}
-                }
-                minute{
-                    dn{"മിനിട്ട്"}
-                }
-                month{
-                    dn{"മാസം"}
-                    relative{
-                        "-1"{"കഴിഞ്ഞ മാസം"}
-                        "0"{"ഈ മാസം"}
-                        "1"{"അടുത്ത മാസം"}
-                    }
-                }
-                second{
-                    dn{"സെക്കൻറ്"}
-                }
-                week{
-                    dn{"ആഴ്ച"}
-                    relative{
-                        "-1"{"കഴിഞ്ഞ ആഴ്‌ച"}
-                        "0"{"ഈ ആഴ്ച"}
-                        "1"{"അടുത്ത ആഴ്ച"}
-                    }
-                }
-                weekday{
-                    dn{"ആഴ്ചയിലെ ദിവസം"}
-                }
-                year{
-                    dn{"വർഷം"}
-                    relative{
-                        "-1"{"കഴിഞ്ഞ വർഷം"}
-                        "0"{"ഈ വർ‌ഷം"}
-                        "1"{"അടുത്തവർഷം"}
-                    }
-                }
-                zone{
-                    dn{"മേഖല"}
                 }
             }
             intervalFormats{
@@ -623,6 +580,63 @@ ml{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"ദിവസം"}
+            relative{
+                "-1"{"ഇന്നലെ"}
+                "-2"{"മിനിഞ്ഞാന്ന്"}
+                "0"{"ഇന്ന്"}
+                "1"{"നാളെ"}
+                "2"{"മറ്റന്നാൾ"}
+            }
+        }
+        dayperiod{
+            dn{"am/pm"}
+        }
+        era{
+            dn{"കാലഘട്ടം"}
+        }
+        hour{
+            dn{"മണിക്കൂർ"}
+        }
+        minute{
+            dn{"മിനിട്ട്"}
+        }
+        month{
+            dn{"മാസം"}
+            relative{
+                "-1"{"കഴിഞ്ഞ മാസം"}
+                "0"{"ഈ മാസം"}
+                "1"{"അടുത്ത മാസം"}
+            }
+        }
+        second{
+            dn{"സെക്കൻറ്"}
+        }
+        week{
+            dn{"ആഴ്ച"}
+            relative{
+                "-1"{"കഴിഞ്ഞ ആഴ്‌ച"}
+                "0"{"ഈ ആഴ്ച"}
+                "1"{"അടുത്ത ആഴ്ച"}
+            }
+        }
+        weekday{
+            dn{"ആഴ്ചയിലെ ദിവസം"}
+        }
+        year{
+            dn{"വർഷം"}
+            relative{
+                "-1"{"കഴിഞ്ഞ വർഷം"}
+                "0"{"ഈ വർ‌ഷം"}
+                "1"{"അടുത്തവർഷം"}
+            }
+        }
+        zone{
+            dn{"മേഖല"}
+        }
     }
     listPattern{
         standard{

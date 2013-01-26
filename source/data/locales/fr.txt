@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fr.xml
 // *
@@ -16,7 +16,7 @@ fr{
         " x y ÿ z]"
     }
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ’ \" “ ” « » ( ) \[ \] § @ * / \& # † ‡]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! ? . … ’ \u0022 “ ” « » ( ) \\[ \\] § @ * / \\& # † ‡]"}
     LocaleScript{
         "Latn",
     }
@@ -146,7 +146,7 @@ fr{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -417,63 +417,6 @@ fr{
                 wide{
                     "avant Jésus-Christ",
                     "après Jésus-Christ",
-                }
-            }
-            fields{
-                day{
-                    dn{"jour"}
-                    relative{
-                        "-1"{"hier"}
-                        "-2"{"avant-hier"}
-                        "0"{"aujourd’hui"}
-                        "1"{"demain"}
-                        "2"{"après-demain"}
-                    }
-                }
-                dayperiod{
-                    dn{"cadran"}
-                }
-                era{
-                    dn{"ère"}
-                }
-                hour{
-                    dn{"heure"}
-                }
-                minute{
-                    dn{"minute"}
-                }
-                month{
-                    dn{"mois"}
-                    relative{
-                        "-1"{"le mois dernier"}
-                        "0"{"ce mois-ci"}
-                        "1"{"le mois prochain"}
-                    }
-                }
-                second{
-                    dn{"seconde"}
-                }
-                week{
-                    dn{"semaine"}
-                    relative{
-                        "-1"{"la semaine dernière"}
-                        "0"{"cette semaine"}
-                        "1"{"la semaine prochaine"}
-                    }
-                }
-                weekday{
-                    dn{"jour de la semaine"}
-                }
-                year{
-                    dn{"année"}
-                    relative{
-                        "-1"{"l’année dernière"}
-                        "0"{"cette année"}
-                        "1"{"l’année prochaine"}
-                    }
-                }
-                zone{
-                    dn{"fuseau horaire"}
                 }
             }
             intervalFormats{
@@ -808,7 +751,6 @@ fr{
                         "dhou.q.",
                         "dhou.h.",
                     }
-                    default{"wide"}
                     narrow{
                         "1",
                         "2",
@@ -1018,6 +960,63 @@ fr{
         alternateQuotationStart{"«"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"jour"}
+            relative{
+                "-1"{"hier"}
+                "-2"{"avant-hier"}
+                "0"{"aujourd’hui"}
+                "1"{"demain"}
+                "2"{"après-demain"}
+            }
+        }
+        dayperiod{
+            dn{"cadran"}
+        }
+        era{
+            dn{"ère"}
+        }
+        hour{
+            dn{"heure"}
+        }
+        minute{
+            dn{"minute"}
+        }
+        month{
+            dn{"mois"}
+            relative{
+                "-1"{"le mois dernier"}
+                "0"{"ce mois-ci"}
+                "1"{"le mois prochain"}
+            }
+        }
+        second{
+            dn{"seconde"}
+        }
+        week{
+            dn{"semaine"}
+            relative{
+                "-1"{"la semaine dernière"}
+                "0"{"cette semaine"}
+                "1"{"la semaine prochaine"}
+            }
+        }
+        weekday{
+            dn{"jour de la semaine"}
+        }
+        year{
+            dn{"année"}
+            relative{
+                "-1"{"l’année dernière"}
+                "0"{"cette année"}
+                "1"{"l’année prochaine"}
+            }
+        }
+        zone{
+            dn{"fuseau horaire"}
+        }
     }
     listPattern{
         standard{

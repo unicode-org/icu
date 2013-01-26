@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/kn.xml
 // *
@@ -127,7 +127,7 @@ kn{
         }
         native{"knda"}
     }
-    Version{"2.0.78.40"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -238,63 +238,6 @@ kn{
                 wide{
                     "ಈಸಪೂವ೯.",
                     "ಕ್ರಿಸ್ತ ಶಕ",
-                }
-            }
-            fields{
-                day{
-                    dn{"ದಿನ"}
-                    relative{
-                        "-1"{"ನಿನ್ನೆ"}
-                        "-2"{"ಮೊನ್ನೆ"}
-                        "0"{"ಇಂದು"}
-                        "1"{"ನಾಳೆ"}
-                        "2"{"ನಾಡಿದ್ದು"}
-                    }
-                }
-                dayperiod{
-                    dn{"ಪೂರ್ವಾಹ್ನ/ಅಪರಾಹ್ನ"}
-                }
-                era{
-                    dn{"ಯುಗ"}
-                }
-                hour{
-                    dn{"ಗಂಟೆ"}
-                }
-                minute{
-                    dn{"ನಿಮಿಷ"}
-                }
-                month{
-                    dn{"ತಿಂಗಳು"}
-                    relative{
-                        "-1"{"ಕಳೆದ ತಿಂಗಳು"}
-                        "0"{"ಈ ತಿಂಗಳು"}
-                        "1"{"ಮುಂದಿನ ತಿಂಗಳು"}
-                    }
-                }
-                second{
-                    dn{"ಸೆಕೆಂಡ್"}
-                }
-                week{
-                    dn{"ವಾರ"}
-                    relative{
-                        "-1"{"ಕೊನೆಯ ವಾರ"}
-                        "0"{"ಈ ವಾರ"}
-                        "1"{"ಮುಂದಿನ ವಾರ"}
-                    }
-                }
-                weekday{
-                    dn{"ವಾರದ ದಿನ"}
-                }
-                year{
-                    dn{"ವರ್ಷ"}
-                    relative{
-                        "-1"{"ಕೊನೆಯ ವರ್ಷ"}
-                        "0"{"ಈ ವರ್ಷ"}
-                        "1"{"ಮುಂದಿನ ವರ್ಷ"}
-                    }
-                }
-                zone{
-                    dn{"ಸಮಯ ವಲಯ:"}
                 }
             }
             intervalFormats{
@@ -503,6 +446,63 @@ kn{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"ದಿನ"}
+            relative{
+                "-1"{"ನಿನ್ನೆ"}
+                "-2"{"ಮೊನ್ನೆ"}
+                "0"{"ಇಂದು"}
+                "1"{"ನಾಳೆ"}
+                "2"{"ನಾಡಿದ್ದು"}
+            }
+        }
+        dayperiod{
+            dn{"ಪೂರ್ವಾಹ್ನ/ಅಪರಾಹ್ನ"}
+        }
+        era{
+            dn{"ಯುಗ"}
+        }
+        hour{
+            dn{"ಗಂಟೆ"}
+        }
+        minute{
+            dn{"ನಿಮಿಷ"}
+        }
+        month{
+            dn{"ತಿಂಗಳು"}
+            relative{
+                "-1"{"ಕಳೆದ ತಿಂಗಳು"}
+                "0"{"ಈ ತಿಂಗಳು"}
+                "1"{"ಮುಂದಿನ ತಿಂಗಳು"}
+            }
+        }
+        second{
+            dn{"ಸೆಕೆಂಡ್"}
+        }
+        week{
+            dn{"ವಾರ"}
+            relative{
+                "-1"{"ಕೊನೆಯ ವಾರ"}
+                "0"{"ಈ ವಾರ"}
+                "1"{"ಮುಂದಿನ ವಾರ"}
+            }
+        }
+        weekday{
+            dn{"ವಾರದ ದಿನ"}
+        }
+        year{
+            dn{"ವರ್ಷ"}
+            relative{
+                "-1"{"ಕೊನೆಯ ವರ್ಷ"}
+                "0"{"ಈ ವರ್ಷ"}
+                "1"{"ಮುಂದಿನ ವರ್ಷ"}
+            }
+        }
+        zone{
+            dn{"ಸಮಯ ವಲಯ:"}
+        }
     }
     listPattern{
         standard{

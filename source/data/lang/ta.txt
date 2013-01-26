@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ta.xml
 // *
@@ -755,7 +755,7 @@ ta{
         PINYIN{"பின்யின் ரோமானைசெஷன்"}
         WADEGILE{"வேட்-கைல்ஸ் ரோமனைஷேசன்"}
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     codePatterns{
         language{"மொழி: {0}"}
         script{"எழுத்து: {0}"}

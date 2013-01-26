@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/gl.xml
 // *
@@ -142,7 +142,7 @@ gl{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -256,63 +256,6 @@ gl{
                 wide{
                     "antes de Cristo",
                     "despois de Cristo",
-                }
-            }
-            fields{
-                day{
-                    dn{"Día"}
-                    relative{
-                        "-1"{"onte"}
-                        "-2"{"antonte"}
-                        "0"{"hoxe"}
-                        "1"{"mañá"}
-                        "2"{"pasadomañá"}
-                    }
-                }
-                dayperiod{
-                    dn{"a.m./p.m."}
-                }
-                era{
-                    dn{"Era"}
-                }
-                hour{
-                    dn{"Hora"}
-                }
-                minute{
-                    dn{"Minuto"}
-                }
-                month{
-                    dn{"Mes"}
-                    relative{
-                        "-1"{"Mes pasado"}
-                        "0"{"Este mes"}
-                        "1"{"Mes seguinte"}
-                    }
-                }
-                second{
-                    dn{"Segundo"}
-                }
-                week{
-                    dn{"Semana"}
-                    relative{
-                        "-1"{"Semana pasada"}
-                        "0"{"Esta semana"}
-                        "1"{"Semana seguinte"}
-                    }
-                }
-                weekday{
-                    dn{"Día da semana"}
-                }
-                year{
-                    dn{"Ano"}
-                    relative{
-                        "-1"{"Ano pasado"}
-                        "0"{"Este ano"}
-                        "1"{"Seguinte ano"}
-                    }
-                }
-                zone{
-                    dn{"Fuso horario"}
                 }
             }
             intervalFormats{
@@ -495,6 +438,63 @@ gl{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Día"}
+            relative{
+                "-1"{"onte"}
+                "-2"{"antonte"}
+                "0"{"hoxe"}
+                "1"{"mañá"}
+                "2"{"pasadomañá"}
+            }
+        }
+        dayperiod{
+            dn{"a.m./p.m."}
+        }
+        era{
+            dn{"Era"}
+        }
+        hour{
+            dn{"Hora"}
+        }
+        minute{
+            dn{"Minuto"}
+        }
+        month{
+            dn{"Mes"}
+            relative{
+                "-1"{"Mes pasado"}
+                "0"{"Este mes"}
+                "1"{"Mes seguinte"}
+            }
+        }
+        second{
+            dn{"Segundo"}
+        }
+        week{
+            dn{"Semana"}
+            relative{
+                "-1"{"Semana pasada"}
+                "0"{"Esta semana"}
+                "1"{"Semana seguinte"}
+            }
+        }
+        weekday{
+            dn{"Día da semana"}
+        }
+        year{
+            dn{"Ano"}
+            relative{
+                "-1"{"Ano pasado"}
+                "0"{"Este ano"}
+                "1"{"Seguinte ano"}
+            }
+        }
+        zone{
+            dn{"Fuso horario"}
+        }
     }
     listPattern{
         standard{

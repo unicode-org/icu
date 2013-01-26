@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/root.xml
 // *
@@ -12,7 +12,7 @@
 root{
     AuxExemplarCharacters{"[]"}
     ExemplarCharacters{"[]"}
-    ExemplarCharactersPunctuation{"[\- , ; \: ! ? . ( ) \[ \] \{ \}]"}
+    ExemplarCharactersPunctuation{"[\\- , ; \: ! ? . ( ) \\[ \\] \\{ \\}]"}
     LocaleScript{
         "Zyyy",
     }
@@ -113,7 +113,7 @@ root{
         297,
         210,
     }
-    Version{"2.0.80.24"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -435,10 +435,8 @@ root{
                 }
             }
             monthNames{
-                default{"format"}
                 format{
                     abbreviated:alias{"/LOCALE/calendar/chinese/monthNames/format/wide"}
-                    default{"wide"}
                     narrow:alias{"/LOCALE/calendar/chinese/monthNames/stand-alone/narrow"}
                     wide{
                         "1",
@@ -513,10 +511,8 @@ root{
             }
             intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
-                default{"format"}
                 format{
                     abbreviated:alias{"/LOCALE/calendar/coptic/monthNames/format/wide"}
-                    default{"wide"}
                     narrow:alias{"/LOCALE/calendar/coptic/monthNames/stand-alone/narrow"}
                     wide{
                         "Tout",
@@ -585,10 +581,8 @@ root{
             }
             intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
-                default{"format"}
                 format{
                     abbreviated:alias{"/LOCALE/calendar/ethiopic/monthNames/format/wide"}
-                    default{"wide"}
                     narrow:alias{"/LOCALE/calendar/ethiopic/monthNames/stand-alone/narrow"}
                     wide{
                         "Meskerem",
@@ -705,10 +699,8 @@ root{
                 yQQQQ{"y QQQQ"}
             }
             dayNames{
-                default{"format"}
                 format{
                     abbreviated:alias{"/LOCALE/calendar/gregorian/dayNames/format/wide"}
-                    default{"wide"}
                     narrow:alias{"/LOCALE/calendar/gregorian/dayNames/stand-alone/narrow"}
                     short:alias{"/LOCALE/calendar/gregorian/dayNames/format/abbreviated"}
                     wide{
@@ -743,46 +735,6 @@ root{
                 }
                 narrow:alias{"/LOCALE/calendar/gregorian/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/gregorian/eras/abbreviated"}
-            }
-            fields{
-                day{
-                    dn{"Day"}
-                    relative{
-                        "-1"{"Yesterday"}
-                        "0"{"Today"}
-                        "1"{"Tomorrow"}
-                    }
-                }
-                dayperiod{
-                    dn{"Dayperiod"}
-                }
-                era{
-                    dn{"Era"}
-                }
-                hour{
-                    dn{"Hour"}
-                }
-                minute{
-                    dn{"Minute"}
-                }
-                month{
-                    dn{"Month"}
-                }
-                second{
-                    dn{"Second"}
-                }
-                week{
-                    dn{"Week"}
-                }
-                weekday{
-                    dn{"Day of the Week"}
-                }
-                year{
-                    dn{"Year"}
-                }
-                zone{
-                    dn{"Zone"}
-                }
             }
             intervalFormats{
                 H{
@@ -880,10 +832,8 @@ root{
                 }
             }
             monthNames{
-                default{"format"}
                 format{
                     abbreviated:alias{"/LOCALE/calendar/gregorian/monthNames/format/wide"}
-                    default{"wide"}
                     narrow:alias{"/LOCALE/calendar/gregorian/monthNames/stand-alone/narrow"}
                     wide{
                         "1",
@@ -957,10 +907,8 @@ root{
             }
             intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
-                default{"format"}
                 format{
                     abbreviated:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
-                    default{"wide"}
                     narrow{
                         "1",
                         "2",
@@ -1016,10 +964,8 @@ root{
             }
             intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
-                default{"format"}
                 format{
                     abbreviated:alias{"/LOCALE/calendar/indian/monthNames/format/wide"}
-                    default{"wide"}
                     narrow:alias{"/LOCALE/calendar/indian/monthNames/stand-alone/narrow"}
                     wide{
                         "Chaitra",
@@ -1072,7 +1018,6 @@ root{
             }
             intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
-                default{"format"}
                 format{
                     abbreviated{
                         "Muh.",
@@ -1088,7 +1033,6 @@ root{
                         "Dhuʻl-Q.",
                         "Dhuʻl-H.",
                     }
-                    default{"wide"}
                     narrow:alias{"/LOCALE/calendar/islamic/monthNames/stand-alone/narrow"}
                     wide{
                         "Muharram",
@@ -1693,10 +1637,8 @@ root{
             }
             intervalFormats:alias{"/LOCALE/calendar/gregorian/intervalFormats"}
             monthNames{
-                default{"format"}
                 format{
                     abbreviated:alias{"/LOCALE/calendar/persian/monthNames/format/wide"}
-                    default{"wide"}
                     narrow:alias{"/LOCALE/calendar/persian/monthNames/stand-alone/narrow"}
                     wide{
                         "Farvardin",
@@ -1811,6 +1753,46 @@ root{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Day"}
+            relative{
+                "-1"{"Yesterday"}
+                "0"{"Today"}
+                "1"{"Tomorrow"}
+            }
+        }
+        dayperiod{
+            dn{"Dayperiod"}
+        }
+        era{
+            dn{"Era"}
+        }
+        hour{
+            dn{"Hour"}
+        }
+        minute{
+            dn{"Minute"}
+        }
+        month{
+            dn{"Month"}
+        }
+        second{
+            dn{"Second"}
+        }
+        week{
+            dn{"Week"}
+        }
+        weekday{
+            dn{"Day of the Week"}
+        }
+        year{
+            dn{"Year"}
+        }
+        zone{
+            dn{"Zone"}
+        }
     }
     layout{
         characters{"left-to-right"}

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sn.xml
 // *
@@ -23,7 +23,7 @@ sn{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -107,43 +107,6 @@ sn{
                     "Kristo ashaya",
                 }
             }
-            fields{
-                day{
-                    dn{"Zuva"}
-                    relative{
-                        "-1"{"Nezuro"}
-                        "0"{"Nhasi"}
-                        "1"{"Mangwana"}
-                    }
-                }
-                era{
-                    dn{"Mukore"}
-                }
-                hour{
-                    dn{"Awa"}
-                }
-                minute{
-                    dn{"Mineti"}
-                }
-                month{
-                    dn{"Mwedzi"}
-                }
-                second{
-                    dn{"Sekondi"}
-                }
-                week{
-                    dn{"Vhiki"}
-                }
-                weekday{
-                    dn{"Zuva revhiki"}
-                }
-                year{
-                    dn{"Gore"}
-                }
-                zone{
-                    dn{"Nguva"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -215,5 +178,42 @@ sn{
         alternateQuotationStart{"’"}
         quotationEnd{"”"}
         quotationStart{"”"}
+    }
+    fields{
+        day{
+            dn{"Zuva"}
+            relative{
+                "-1"{"Nezuro"}
+                "0"{"Nhasi"}
+                "1"{"Mangwana"}
+            }
+        }
+        era{
+            dn{"Mukore"}
+        }
+        hour{
+            dn{"Awa"}
+        }
+        minute{
+            dn{"Mineti"}
+        }
+        month{
+            dn{"Mwedzi"}
+        }
+        second{
+            dn{"Sekondi"}
+        }
+        week{
+            dn{"Vhiki"}
+        }
+        weekday{
+            dn{"Zuva revhiki"}
+        }
+        year{
+            dn{"Gore"}
+        }
+        zone{
+            dn{"Nguva"}
+        }
     }
 }

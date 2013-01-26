@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bez.xml
 // *
@@ -23,7 +23,7 @@ bez{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -113,46 +113,6 @@ bez{
                     "Baada ya Mtwaa",
                 }
             }
-            fields{
-                day{
-                    dn{"Sihu"}
-                    relative{
-                        "-1"{"Igolo"}
-                        "0"{"Neng'u ni"}
-                        "1"{"Hilawu"}
-                    }
-                }
-                dayperiod{
-                    dn{"Lwamelau"}
-                }
-                era{
-                    dn{"Amajira"}
-                }
-                hour{
-                    dn{"Saa"}
-                }
-                minute{
-                    dn{"Dakika"}
-                }
-                month{
-                    dn{"Mwedzi"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Mlungu gumamfu"}
-                }
-                weekday{
-                    dn{"Sihudza kasi"}
-                }
-                year{
-                    dn{"Mwaha"}
-                }
-                zone{
-                    dn{"Amajira ga saa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -224,5 +184,45 @@ bez{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Sihu"}
+            relative{
+                "-1"{"Igolo"}
+                "0"{"Neng'u ni"}
+                "1"{"Hilawu"}
+            }
+        }
+        dayperiod{
+            dn{"Lwamelau"}
+        }
+        era{
+            dn{"Amajira"}
+        }
+        hour{
+            dn{"Saa"}
+        }
+        minute{
+            dn{"Dakika"}
+        }
+        month{
+            dn{"Mwedzi"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Mlungu gumamfu"}
+        }
+        weekday{
+            dn{"Sihudza kasi"}
+        }
+        year{
+            dn{"Mwaha"}
+        }
+        zone{
+            dn{"Amajira ga saa"}
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ko.xml
 // *
@@ -33,11 +33,11 @@ ko{
         " 饉 饋 饑 駒 駕 駱 騎 騏 騫 驅 驕 驚 驥 骨 高 鬼 魁 鮫 鯤 鯨 鱇 鳩 鵑 鵠 鷄 鷗 鸞 麒 麴 黔 鼓 龕 龜]"
     }
     ExemplarCharacters{"[가-힣]"}
-    ExemplarCharactersIndex{"[ᄀ ᄂ ᄃ ᄅ ᄆ ᄇ ᄉ ᄋ ᄌ ᄎ ᄏ ᄐ ᄑ ᄒ]"}
+    ExemplarCharactersIndex{"[ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅅ ㅇ ㅈ ㅊ ㅋ ㅌ ㅍ ㅎ]"}
     ExemplarCharactersPunctuation{
-        "[‾ _ ＿ \- － ‐ — ― 〜 ・ , ， 、 ; ； \: ： ! ！ ¡ ? ？ ¿ . ． ‥ … 。 · ＇ ‘ ’ \" ＂ “ ” "
-        "( （ ) ） \[ ［ \] ］ \{ ｛ \} ｝ 〈 〉 《 》 「 」 『 』 【 】 〔 〕 § ¶ @ ＠ * ＊ / ／ \\ ＼ \& "
-        "＆ # ＃ % ％ ‰ † ‡ ′ ″ 〃 ※]"
+        "[‾ _ ＿ \\- － ‐ — ― 〜 ・ , ， 、 ; ； \: ： ! ！ ¡ ? ？ ¿ . ． ‥ … 。 · ＇ ‘ ’ \u0022 ＂ “ ” ("
+        " （ ) ） \\[ ［ \\] ］ \\{ ｛ \\} ｝ 〈 〉 《 》 「 」 『 』 【 】 〔 〕 § ¶ @ ＠ * ＊ / ／ \\\\  ＼ \\& ＆"
+        " # ＃ % ％ ‰ † ‡ ′ ″ 〃 ※]"
     }
     LocaleScript{
         "Hang",
@@ -145,7 +145,7 @@ ko{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -432,63 +432,6 @@ ko{
                 wide{
                     "서력기원전",
                     "서력기원",
-                }
-            }
-            fields{
-                day{
-                    dn{"일"}
-                    relative{
-                        "-1"{"어제"}
-                        "-2"{"그저께"}
-                        "0"{"오늘"}
-                        "1"{"내일"}
-                        "2"{"모레"}
-                    }
-                }
-                dayperiod{
-                    dn{"오전/오후"}
-                }
-                era{
-                    dn{"연호"}
-                }
-                hour{
-                    dn{"시"}
-                }
-                minute{
-                    dn{"분"}
-                }
-                month{
-                    dn{"월"}
-                    relative{
-                        "-1"{"지난달"}
-                        "0"{"이번 달"}
-                        "1"{"다음 달"}
-                    }
-                }
-                second{
-                    dn{"초"}
-                }
-                week{
-                    dn{"주"}
-                    relative{
-                        "-1"{"지난주"}
-                        "0"{"이번 주"}
-                        "1"{"다음 주"}
-                    }
-                }
-                weekday{
-                    dn{"요일"}
-                }
-                year{
-                    dn{"년"}
-                    relative{
-                        "-1"{"지난해"}
-                        "0"{"올해"}
-                        "1"{"내년"}
-                    }
-                }
-                zone{
-                    dn{"시간대"}
                 }
             }
             intervalFormats{
@@ -1018,6 +961,63 @@ ko{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"일"}
+            relative{
+                "-1"{"어제"}
+                "-2"{"그저께"}
+                "0"{"오늘"}
+                "1"{"내일"}
+                "2"{"모레"}
+            }
+        }
+        dayperiod{
+            dn{"오전/오후"}
+        }
+        era{
+            dn{"연호"}
+        }
+        hour{
+            dn{"시"}
+        }
+        minute{
+            dn{"분"}
+        }
+        month{
+            dn{"월"}
+            relative{
+                "-1"{"지난달"}
+                "0"{"이번 달"}
+                "1"{"다음 달"}
+            }
+        }
+        second{
+            dn{"초"}
+        }
+        week{
+            dn{"주"}
+            relative{
+                "-1"{"지난주"}
+                "0"{"이번 주"}
+                "1"{"다음 주"}
+            }
+        }
+        weekday{
+            dn{"요일"}
+        }
+        year{
+            dn{"년"}
+            relative{
+                "-1"{"지난해"}
+                "0"{"올해"}
+                "1"{"내년"}
+            }
+        }
+        zone{
+            dn{"시간대"}
+        }
     }
     listPattern{
         standard{

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/vi.xml
 // *
@@ -122,7 +122,7 @@ vi{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -528,63 +528,6 @@ vi{
                 abbreviated{
                     "tr. CN",
                     "sau CN",
-                }
-            }
-            fields{
-                day{
-                    dn{"Ngày"}
-                    relative{
-                        "-1"{"Ngày hôm qua"}
-                        "-2"{"Ngày hôm kia"}
-                        "0"{"Hôm nay"}
-                        "1"{"Ngày mai"}
-                        "2"{"Ngày kia"}
-                    }
-                }
-                dayperiod{
-                    dn{"SA/CH"}
-                }
-                era{
-                    dn{"Thời đại"}
-                }
-                hour{
-                    dn{"Giờ"}
-                }
-                minute{
-                    dn{"Phút"}
-                }
-                month{
-                    dn{"Tháng"}
-                    relative{
-                        "-1"{"Tháng trước"}
-                        "0"{"Tháng này"}
-                        "1"{"Tháng sau"}
-                    }
-                }
-                second{
-                    dn{"Giây"}
-                }
-                week{
-                    dn{"Tuần"}
-                    relative{
-                        "-1"{"Tuần trước"}
-                        "0"{"Tuần này"}
-                        "1"{"Tuần sau"}
-                    }
-                }
-                weekday{
-                    dn{"Ngày trong tuần"}
-                }
-                year{
-                    dn{"Năm"}
-                    relative{
-                        "-1"{"Năm ngoái"}
-                        "0"{"Năm nay"}
-                        "1"{"Năm sau"}
-                    }
-                }
-                zone{
-                    dn{"Múi giờ"}
                 }
             }
             intervalFormats{
@@ -1145,6 +1088,63 @@ vi{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Ngày"}
+            relative{
+                "-1"{"Ngày hôm qua"}
+                "-2"{"Ngày hôm kia"}
+                "0"{"Hôm nay"}
+                "1"{"Ngày mai"}
+                "2"{"Ngày kia"}
+            }
+        }
+        dayperiod{
+            dn{"SA/CH"}
+        }
+        era{
+            dn{"Thời đại"}
+        }
+        hour{
+            dn{"Giờ"}
+        }
+        minute{
+            dn{"Phút"}
+        }
+        month{
+            dn{"Tháng"}
+            relative{
+                "-1"{"Tháng trước"}
+                "0"{"Tháng này"}
+                "1"{"Tháng sau"}
+            }
+        }
+        second{
+            dn{"Giây"}
+        }
+        week{
+            dn{"Tuần"}
+            relative{
+                "-1"{"Tuần trước"}
+                "0"{"Tuần này"}
+                "1"{"Tuần sau"}
+            }
+        }
+        weekday{
+            dn{"Ngày trong tuần"}
+        }
+        year{
+            dn{"Năm"}
+            relative{
+                "-1"{"Năm ngoái"}
+                "0"{"Năm nay"}
+                "1"{"Năm sau"}
+            }
+        }
+        zone{
+            dn{"Múi giờ"}
+        }
     }
     listPattern{
         standard{

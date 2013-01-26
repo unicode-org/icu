@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/shi_Latn.xml
 // *
@@ -28,7 +28,7 @@ shi_Latn{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -103,46 +103,6 @@ shi_Latn{
                     "dffir n ɛisa",
                 }
             }
-            fields{
-                day{
-                    dn{"ass"}
-                    relative{
-                        "-1"{"iḍlli"}
-                        "0"{"assa"}
-                        "1"{"askka"}
-                    }
-                }
-                dayperiod{
-                    dn{"tizi g wass: tifawt / tadggʷat"}
-                }
-                era{
-                    dn{"tasut"}
-                }
-                hour{
-                    dn{"tasragt"}
-                }
-                minute{
-                    dn{"tusdidt"}
-                }
-                month{
-                    dn{"ayyur"}
-                }
-                second{
-                    dn{"tasint"}
-                }
-                week{
-                    dn{"imalass"}
-                }
-                weekday{
-                    dn{"ass g imalass"}
-                }
-                year{
-                    dn{"asggʷas"}
-                }
-                zone{
-                    dn{"akud n ugmmaḍ"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -214,5 +174,45 @@ shi_Latn{
         alternateQuotationStart{"„"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"ass"}
+            relative{
+                "-1"{"iḍlli"}
+                "0"{"assa"}
+                "1"{"askka"}
+            }
+        }
+        dayperiod{
+            dn{"tizi g wass: tifawt / tadggʷat"}
+        }
+        era{
+            dn{"tasut"}
+        }
+        hour{
+            dn{"tasragt"}
+        }
+        minute{
+            dn{"tusdidt"}
+        }
+        month{
+            dn{"ayyur"}
+        }
+        second{
+            dn{"tasint"}
+        }
+        week{
+            dn{"imalass"}
+        }
+        weekday{
+            dn{"ass g imalass"}
+        }
+        year{
+            dn{"asggʷas"}
+        }
+        zone{
+            dn{"akud n ugmmaḍ"}
+        }
     }
 }

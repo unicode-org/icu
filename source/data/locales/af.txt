@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/af.xml
 // *
@@ -143,7 +143,7 @@ af{
             }
         }
     }
-    Version{"2.0.78.32"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -254,63 +254,6 @@ af{
                 wide{
                     "voor Christus",
                     "na Christus",
-                }
-            }
-            fields{
-                day{
-                    dn{"Dag"}
-                    relative{
-                        "-1"{"Gister"}
-                        "-2"{"Die dag voor gister"}
-                        "0"{"Vandag"}
-                        "1"{"Môre"}
-                        "2"{"Die dag na môre"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"Era"}
-                }
-                hour{
-                    dn{"Uur"}
-                }
-                minute{
-                    dn{"Minuut"}
-                }
-                month{
-                    dn{"Maand"}
-                    relative{
-                        "-1"{"Verlede maand"}
-                        "0"{"Vandeesmaand"}
-                        "1"{"Volgende maand"}
-                    }
-                }
-                second{
-                    dn{"Sekonde"}
-                }
-                week{
-                    dn{"Week"}
-                    relative{
-                        "-1"{"Verlede week"}
-                        "0"{"Vandeesweek"}
-                        "1"{"Volgende week"}
-                    }
-                }
-                weekday{
-                    dn{"Weeksdag"}
-                }
-                year{
-                    dn{"Jaar"}
-                    relative{
-                        "-1"{"Verlede jaar"}
-                        "0"{"Hierdie jaar"}
-                        "1"{"Volgende jaar"}
-                    }
-                }
-                zone{
-                    dn{"Tydsone"}
                 }
             }
             intervalFormats{
@@ -507,6 +450,63 @@ af{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Dag"}
+            relative{
+                "-1"{"Gister"}
+                "-2"{"Die dag voor gister"}
+                "0"{"Vandag"}
+                "1"{"Môre"}
+                "2"{"Die dag na môre"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"Era"}
+        }
+        hour{
+            dn{"Uur"}
+        }
+        minute{
+            dn{"Minuut"}
+        }
+        month{
+            dn{"Maand"}
+            relative{
+                "-1"{"Verlede maand"}
+                "0"{"Vandeesmaand"}
+                "1"{"Volgende maand"}
+            }
+        }
+        second{
+            dn{"Sekonde"}
+        }
+        week{
+            dn{"Week"}
+            relative{
+                "-1"{"Verlede week"}
+                "0"{"Vandeesweek"}
+                "1"{"Volgende week"}
+            }
+        }
+        weekday{
+            dn{"Weeksdag"}
+        }
+        year{
+            dn{"Jaar"}
+            relative{
+                "-1"{"Verlede jaar"}
+                "0"{"Hierdie jaar"}
+                "1"{"Volgende jaar"}
+            }
+        }
+        zone{
+            dn{"Tydsone"}
+        }
     }
     listPattern{
         standard{

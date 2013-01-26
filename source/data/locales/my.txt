@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/my.xml
 // *
@@ -42,7 +42,7 @@ my{
         }
         native{"mymr"}
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -130,42 +130,6 @@ my{
                 wide{
                     "ခရစ်တော် မပေါ်မီကာလ",
                     "ခရစ်တော် ပေါ်ထွန်းပြီးကာလ",
-                }
-            }
-            fields{
-                day{
-                    dn{"ရက်"}
-                    relative{
-                        "-1"{"မနေ့က"}
-                        "-2"{"တနေ့က"}
-                        "0"{"ယနေ့"}
-                        "1"{"မနက်ဖြန်"}
-                        "2"{"သဘက်ခါ"}
-                    }
-                }
-                era{
-                    dn{"ခေတ်"}
-                }
-                hour{
-                    dn{"နာရီ"}
-                }
-                minute{
-                    dn{"မိနစ်"}
-                }
-                month{
-                    dn{"လ"}
-                }
-                second{
-                    dn{"စက္ကန့်"}
-                }
-                week{
-                    dn{"ပတ်"}
-                }
-                weekday{
-                    dn{"နေ့"}
-                }
-                year{
-                    dn{"နှစ်"}
                 }
             }
             intervalFormats{
@@ -337,6 +301,42 @@ my{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"ရက်"}
+            relative{
+                "-1"{"မနေ့က"}
+                "-2"{"တနေ့က"}
+                "0"{"ယနေ့"}
+                "1"{"မနက်ဖြန်"}
+                "2"{"သဘက်ခါ"}
+            }
+        }
+        era{
+            dn{"ခေတ်"}
+        }
+        hour{
+            dn{"နာရီ"}
+        }
+        minute{
+            dn{"မိနစ်"}
+        }
+        month{
+            dn{"လ"}
+        }
+        second{
+            dn{"စက္ကန့်"}
+        }
+        week{
+            dn{"ပတ်"}
+        }
+        weekday{
+            dn{"နေ့"}
+        }
+        year{
+            dn{"နှစ်"}
+        }
     }
     measurementSystemNames{
         US{"အမေရိကန်စနစ်"}

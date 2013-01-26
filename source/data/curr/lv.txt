@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lv.xml
 // *
@@ -1666,5 +1666,5 @@ lv{
         other{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
 }

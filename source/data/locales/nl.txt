@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nl.xml
 // *
@@ -16,7 +16,7 @@ nl{
         "z]"
     }
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] § @ * / \& # † ‡ ′ ″]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     LocaleScript{
         "Latn",
     }
@@ -146,7 +146,7 @@ nl{
             }
         }
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -331,63 +331,6 @@ nl{
                 wide{
                     "Voor Christus",
                     "na Christus",
-                }
-            }
-            fields{
-                day{
-                    dn{"Dag"}
-                    relative{
-                        "-1"{"Gisteren"}
-                        "-2"{"Eergisteren"}
-                        "0"{"Vandaag"}
-                        "1"{"Morgen"}
-                        "2"{"Overmorgen"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"Tijdperk"}
-                }
-                hour{
-                    dn{"Uur"}
-                }
-                minute{
-                    dn{"Minuut"}
-                }
-                month{
-                    dn{"Maand"}
-                    relative{
-                        "-1"{"Vorige maand"}
-                        "0"{"Deze maand"}
-                        "1"{"Volgende maand"}
-                    }
-                }
-                second{
-                    dn{"Seconde"}
-                }
-                week{
-                    dn{"week"}
-                    relative{
-                        "-1"{"Vorige week"}
-                        "0"{"Deze week"}
-                        "1"{"Volgende week"}
-                    }
-                }
-                weekday{
-                    dn{"Dag van de week"}
-                }
-                year{
-                    dn{"Jaar"}
-                    relative{
-                        "-1"{"Vorig jaar"}
-                        "0"{"Dit jaar"}
-                        "1"{"Volgend jaar"}
-                    }
-                }
-                zone{
-                    dn{"Zone"}
                 }
             }
             intervalFormats{
@@ -694,7 +637,6 @@ nl{
                 }
             }
             monthNames{
-                default{"format"}
                 format{
                     abbreviated{
                         "Moeh.",
@@ -710,7 +652,6 @@ nl{
                         "Doe al k.",
                         "Doe al h.",
                     }
-                    default{"wide"}
                     wide{
                         "Moeharram",
                         "Safar",
@@ -864,6 +805,63 @@ nl{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Dag"}
+            relative{
+                "-1"{"Gisteren"}
+                "-2"{"Eergisteren"}
+                "0"{"Vandaag"}
+                "1"{"Morgen"}
+                "2"{"Overmorgen"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"Tijdperk"}
+        }
+        hour{
+            dn{"Uur"}
+        }
+        minute{
+            dn{"Minuut"}
+        }
+        month{
+            dn{"Maand"}
+            relative{
+                "-1"{"Vorige maand"}
+                "0"{"Deze maand"}
+                "1"{"Volgende maand"}
+            }
+        }
+        second{
+            dn{"Seconde"}
+        }
+        week{
+            dn{"week"}
+            relative{
+                "-1"{"Vorige week"}
+                "0"{"Deze week"}
+                "1"{"Volgende week"}
+            }
+        }
+        weekday{
+            dn{"Dag van de week"}
+        }
+        year{
+            dn{"Jaar"}
+            relative{
+                "-1"{"Vorig jaar"}
+                "0"{"Dit jaar"}
+                "1"{"Volgend jaar"}
+            }
+        }
+        zone{
+            dn{"Zone"}
+        }
     }
     listPattern{
         standard{

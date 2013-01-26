@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/az.xml
 // *
@@ -35,7 +35,7 @@ az{
             }
         }
     }
-    Version{"2.0.74.65"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -104,43 +104,6 @@ az{
                     "bizim eramızın",
                 }
             }
-            fields{
-                day{
-                    dn{"bu gün"}
-                    relative{
-                        "-1"{"dünən"}
-                        "0"{"bu gün"}
-                        "1"{"sabah"}
-                    }
-                }
-                era{
-                    dn{"era"}
-                }
-                hour{
-                    dn{"saat"}
-                }
-                minute{
-                    dn{"dəqiqə"}
-                }
-                month{
-                    dn{"ay"}
-                }
-                second{
-                    dn{"saniyə"}
-                }
-                week{
-                    dn{"həftə"}
-                }
-                weekday{
-                    dn{"həftə günü"}
-                }
-                year{
-                    dn{"il"}
-                }
-                zone{
-                    dn{"zona"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -196,6 +159,43 @@ az{
         alternateQuotationStart{"‹"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"bu gün"}
+            relative{
+                "-1"{"dünən"}
+                "0"{"bu gün"}
+                "1"{"sabah"}
+            }
+        }
+        era{
+            dn{"era"}
+        }
+        hour{
+            dn{"saat"}
+        }
+        minute{
+            dn{"dəqiqə"}
+        }
+        month{
+            dn{"ay"}
+        }
+        second{
+            dn{"saniyə"}
+        }
+        week{
+            dn{"həftə"}
+        }
+        weekday{
+            dn{"həftə günü"}
+        }
+        year{
+            dn{"il"}
+        }
+        zone{
+            dn{"zona"}
+        }
     }
     measurementSystemNames{
         US{"ABŞ"}

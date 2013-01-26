@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lg.xml
 // *
@@ -23,7 +23,7 @@ lg{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -107,46 +107,6 @@ lg{
                     "Bukya Kulisito Azaal",
                 }
             }
-            fields{
-                day{
-                    dn{"Lunaku"}
-                    relative{
-                        "-1"{"Ggulo"}
-                        "0"{"Lwaleero"}
-                        "1"{"Nkya"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"Mulembe"}
-                }
-                hour{
-                    dn{"Saawa"}
-                }
-                minute{
-                    dn{"Dakiika"}
-                }
-                month{
-                    dn{"Mwezi"}
-                }
-                second{
-                    dn{"Kasikonda"}
-                }
-                week{
-                    dn{"Sabbiiti"}
-                }
-                weekday{
-                    dn{"Lunaku lw'omu sabbiiti"}
-                }
-                year{
-                    dn{"Mwaka"}
-                }
-                zone{
-                    dn{"Ssaawa za:"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -218,5 +178,45 @@ lg{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Lunaku"}
+            relative{
+                "-1"{"Ggulo"}
+                "0"{"Lwaleero"}
+                "1"{"Nkya"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"Mulembe"}
+        }
+        hour{
+            dn{"Saawa"}
+        }
+        minute{
+            dn{"Dakiika"}
+        }
+        month{
+            dn{"Mwezi"}
+        }
+        second{
+            dn{"Kasikonda"}
+        }
+        week{
+            dn{"Sabbiiti"}
+        }
+        weekday{
+            dn{"Lunaku lw'omu sabbiiti"}
+        }
+        year{
+            dn{"Mwaka"}
+        }
+        zone{
+            dn{"Ssaawa za:"}
+        }
     }
 }

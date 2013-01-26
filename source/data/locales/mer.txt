@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mer.xml
 // *
@@ -22,7 +22,7 @@ mer{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -110,46 +110,6 @@ mer{
                     "Nyuma ya Kristũ",
                 }
             }
-            fields{
-                day{
-                    dn{"Ntukũ"}
-                    relative{
-                        "-1"{"Ĩgoro"}
-                        "0"{"Narua"}
-                        "1"{"Rũjũ"}
-                    }
-                }
-                dayperiod{
-                    dn{"Mũthenya"}
-                }
-                era{
-                    dn{"Ĩgita"}
-                }
-                hour{
-                    dn{"Ĩthaa"}
-                }
-                minute{
-                    dn{"Ndagika"}
-                }
-                month{
-                    dn{"Mweri"}
-                }
-                second{
-                    dn{"Sekondi"}
-                }
-                week{
-                    dn{"Kiumia"}
-                }
-                weekday{
-                    dn{"Ntukũ ya ngũgĩ"}
-                }
-                year{
-                    dn{"Mwaka"}
-                }
-                zone{
-                    dn{"Gũntũ kwa thaa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -215,5 +175,45 @@ mer{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Ntukũ"}
+            relative{
+                "-1"{"Ĩgoro"}
+                "0"{"Narua"}
+                "1"{"Rũjũ"}
+            }
+        }
+        dayperiod{
+            dn{"Mũthenya"}
+        }
+        era{
+            dn{"Ĩgita"}
+        }
+        hour{
+            dn{"Ĩthaa"}
+        }
+        minute{
+            dn{"Ndagika"}
+        }
+        month{
+            dn{"Mweri"}
+        }
+        second{
+            dn{"Sekondi"}
+        }
+        week{
+            dn{"Kiumia"}
+        }
+        weekday{
+            dn{"Ntukũ ya ngũgĩ"}
+        }
+        year{
+            dn{"Mwaka"}
+        }
+        zone{
+            dn{"Gũntũ kwa thaa"}
+        }
     }
 }

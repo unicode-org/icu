@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/luo.xml
 // *
@@ -23,7 +23,7 @@ luo{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -111,46 +111,6 @@ luo{
                     "Ka Kristo osebiro",
                 }
             }
-            fields{
-                day{
-                    dn{"chieng'"}
-                    relative{
-                        "-1"{"nyoro"}
-                        "0"{"kawuono"}
-                        "1"{"kiny"}
-                    }
-                }
-                dayperiod{
-                    dn{"odieochieng'/otieno"}
-                }
-                era{
-                    dn{"ndalo"}
-                }
-                hour{
-                    dn{"saa"}
-                }
-                minute{
-                    dn{"dakika"}
-                }
-                month{
-                    dn{"dwe"}
-                }
-                second{
-                    dn{"nyiriri mar saa"}
-                }
-                week{
-                    dn{"juma"}
-                }
-                weekday{
-                    dn{"ndalo mar juma"}
-                }
-                year{
-                    dn{"higa"}
-                }
-                zone{
-                    dn{"kar saa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -222,5 +182,45 @@ luo{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"chieng'"}
+            relative{
+                "-1"{"nyoro"}
+                "0"{"kawuono"}
+                "1"{"kiny"}
+            }
+        }
+        dayperiod{
+            dn{"odieochieng'/otieno"}
+        }
+        era{
+            dn{"ndalo"}
+        }
+        hour{
+            dn{"saa"}
+        }
+        minute{
+            dn{"dakika"}
+        }
+        month{
+            dn{"dwe"}
+        }
+        second{
+            dn{"nyiriri mar saa"}
+        }
+        week{
+            dn{"juma"}
+        }
+        weekday{
+            dn{"ndalo mar juma"}
+        }
+        year{
+            dn{"higa"}
+        }
+        zone{
+            dn{"kar saa"}
+        }
     }
 }

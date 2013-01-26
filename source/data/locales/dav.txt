@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/dav.xml
 // *
@@ -23,7 +23,7 @@ dav{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -113,43 +113,6 @@ dav{
                     "Baada ya Kristo",
                 }
             }
-            fields{
-                day{
-                    dn{"Ituku"}
-                    relative{
-                        "-1"{"Iguo"}
-                        "0"{"Idime"}
-                        "1"{"Kesho"}
-                    }
-                }
-                dayperiod{
-                    dn{"KE/PE"}
-                }
-                era{
-                    dn{"Ngelo"}
-                }
-                hour{
-                    dn{"Saa"}
-                }
-                minute{
-                    dn{"Dakika"}
-                }
-                month{
-                    dn{"Mori"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Juma"}
-                }
-                year{
-                    dn{"Mwaka"}
-                }
-                zone{
-                    dn{"Majira ya saa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -221,5 +184,42 @@ dav{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Ituku"}
+            relative{
+                "-1"{"Iguo"}
+                "0"{"Idime"}
+                "1"{"Kesho"}
+            }
+        }
+        dayperiod{
+            dn{"KE/PE"}
+        }
+        era{
+            dn{"Ngelo"}
+        }
+        hour{
+            dn{"Saa"}
+        }
+        minute{
+            dn{"Dakika"}
+        }
+        month{
+            dn{"Mori"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Juma"}
+        }
+        year{
+            dn{"Mwaka"}
+        }
+        zone{
+            dn{"Majira ya saa"}
+        }
     }
 }

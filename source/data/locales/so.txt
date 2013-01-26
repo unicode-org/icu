@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/so.xml
 // *
@@ -25,7 +25,7 @@ so{
             }
         }
     }
-    Version{"2.0.78.32"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -113,46 +113,6 @@ so{
                     "Ciise ka dib (CS)",
                 }
             }
-            fields{
-                day{
-                    dn{"Maalin"}
-                    relative{
-                        "-1"{"Shalay"}
-                        "0"{"Maanta"}
-                        "1"{"Berri"}
-                    }
-                }
-                dayperiod{
-                    dn{"sn./gn."}
-                }
-                era{
-                    dn{"Qarni"}
-                }
-                hour{
-                    dn{"Saacad"}
-                }
-                minute{
-                    dn{"Daqiiqad"}
-                }
-                month{
-                    dn{"Bil"}
-                }
-                second{
-                    dn{"Il biriqsi"}
-                }
-                week{
-                    dn{"Toddobaad"}
-                }
-                weekday{
-                    dn{"Maalinta toddobaadka"}
-                }
-                year{
-                    dn{"Sanad"}
-                }
-                zone{
-                    dn{"Xadka waqtiga"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -208,5 +168,45 @@ so{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Maalin"}
+            relative{
+                "-1"{"Shalay"}
+                "0"{"Maanta"}
+                "1"{"Berri"}
+            }
+        }
+        dayperiod{
+            dn{"sn./gn."}
+        }
+        era{
+            dn{"Qarni"}
+        }
+        hour{
+            dn{"Saacad"}
+        }
+        minute{
+            dn{"Daqiiqad"}
+        }
+        month{
+            dn{"Bil"}
+        }
+        second{
+            dn{"Il biriqsi"}
+        }
+        week{
+            dn{"Toddobaad"}
+        }
+        weekday{
+            dn{"Maalinta toddobaadka"}
+        }
+        year{
+            dn{"Sanad"}
+        }
+        zone{
+            dn{"Xadka waqtiga"}
+        }
     }
 }

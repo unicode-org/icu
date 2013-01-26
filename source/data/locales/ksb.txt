@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ksb.xml
 // *
@@ -23,7 +23,7 @@ ksb{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -111,46 +111,6 @@ ksb{
                     "Baada ya Klisto",
                 }
             }
-            fields{
-                day{
-                    dn{"Siku"}
-                    relative{
-                        "-1"{"Ghuo"}
-                        "0"{"Evi eo"}
-                        "1"{"Keloi"}
-                    }
-                }
-                dayperiod{
-                    dn{"Namshii"}
-                }
-                era{
-                    dn{"Mishi"}
-                }
-                hour{
-                    dn{"Saa"}
-                }
-                minute{
-                    dn{"Dakika"}
-                }
-                month{
-                    dn{"Ng'ezi"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Niki"}
-                }
-                weekday{
-                    dn{"Mwesiku za wiki"}
-                }
-                year{
-                    dn{"Ng'waka"}
-                }
-                zone{
-                    dn{"Majila"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -222,5 +182,45 @@ ksb{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Siku"}
+            relative{
+                "-1"{"Ghuo"}
+                "0"{"Evi eo"}
+                "1"{"Keloi"}
+            }
+        }
+        dayperiod{
+            dn{"Namshii"}
+        }
+        era{
+            dn{"Mishi"}
+        }
+        hour{
+            dn{"Saa"}
+        }
+        minute{
+            dn{"Dakika"}
+        }
+        month{
+            dn{"Ng'ezi"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Niki"}
+        }
+        weekday{
+            dn{"Mwesiku za wiki"}
+        }
+        year{
+            dn{"Ng'waka"}
+        }
+        zone{
+            dn{"Majila"}
+        }
     }
 }

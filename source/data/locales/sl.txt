@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sl.xml
 // *
@@ -193,7 +193,7 @@ sl{
             }
         }
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -312,63 +312,6 @@ sl{
                 wide{
                     "pred našim štetjem",
                     "naše štetje",
-                }
-            }
-            fields{
-                day{
-                    dn{"Dan"}
-                    relative{
-                        "-1"{"Včeraj"}
-                        "-2"{"Predvčerajšnjim"}
-                        "0"{"Danes"}
-                        "1"{"Jutri"}
-                        "2"{"Pojutrišnjem"}
-                    }
-                }
-                dayperiod{
-                    dn{"Čas dneva"}
-                }
-                era{
-                    dn{"Doba"}
-                }
-                hour{
-                    dn{"Ura"}
-                }
-                minute{
-                    dn{"Minuta"}
-                }
-                month{
-                    dn{"Mesec"}
-                    relative{
-                        "-1"{"Prejšnji mesec"}
-                        "0"{"Ta mesec"}
-                        "1"{"Naslednji mesec"}
-                    }
-                }
-                second{
-                    dn{"Sekunda"}
-                }
-                week{
-                    dn{"Teden"}
-                    relative{
-                        "-1"{"Prejšnji teden"}
-                        "0"{"Ta teden"}
-                        "1"{"Naslednji teden"}
-                    }
-                }
-                weekday{
-                    dn{"Dan v tednu"}
-                }
-                year{
-                    dn{"Leto"}
-                    relative{
-                        "-1"{"Lani"}
-                        "0"{"Letos"}
-                        "1"{"Naslednje leto"}
-                    }
-                }
-                zone{
-                    dn{"Območje"}
                 }
             }
             intervalFormats{
@@ -565,6 +508,63 @@ sl{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"Dan"}
+            relative{
+                "-1"{"Včeraj"}
+                "-2"{"Predvčerajšnjim"}
+                "0"{"Danes"}
+                "1"{"Jutri"}
+                "2"{"Pojutrišnjem"}
+            }
+        }
+        dayperiod{
+            dn{"Čas dneva"}
+        }
+        era{
+            dn{"Doba"}
+        }
+        hour{
+            dn{"Ura"}
+        }
+        minute{
+            dn{"Minuta"}
+        }
+        month{
+            dn{"Mesec"}
+            relative{
+                "-1"{"Prejšnji mesec"}
+                "0"{"Ta mesec"}
+                "1"{"Naslednji mesec"}
+            }
+        }
+        second{
+            dn{"Sekunda"}
+        }
+        week{
+            dn{"Teden"}
+            relative{
+                "-1"{"Prejšnji teden"}
+                "0"{"Ta teden"}
+                "1"{"Naslednji teden"}
+            }
+        }
+        weekday{
+            dn{"Dan v tednu"}
+        }
+        year{
+            dn{"Leto"}
+            relative{
+                "-1"{"Lani"}
+                "0"{"Letos"}
+                "1"{"Naslednje leto"}
+            }
+        }
+        zone{
+            dn{"Območje"}
+        }
     }
     listPattern{
         standard{

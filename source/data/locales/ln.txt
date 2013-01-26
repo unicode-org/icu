@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ln.xml
 // *
@@ -35,7 +35,7 @@ ln{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -124,46 +124,6 @@ ln{
                     "Nsima ya Yézu Krís",
                 }
             }
-            fields{
-                day{
-                    dn{"Mokɔlɔ"}
-                    relative{
-                        "-1"{"Lóbi elékí"}
-                        "0"{"Lɛlɔ́"}
-                        "1"{"Lóbi ekoyâ"}
-                    }
-                }
-                dayperiod{
-                    dn{"Eleko ya mokɔlɔ"}
-                }
-                era{
-                    dn{"Ntángo"}
-                }
-                hour{
-                    dn{"Ngonga"}
-                }
-                minute{
-                    dn{"Monúti"}
-                }
-                month{
-                    dn{"Sánzá"}
-                }
-                second{
-                    dn{"Sɛkɔ́ndɛ"}
-                }
-                week{
-                    dn{"Pɔ́sɔ"}
-                }
-                weekday{
-                    dn{"Mokɔlɔ ya pɔ́sɔ"}
-                }
-                year{
-                    dn{"Mobú"}
-                }
-                zone{
-                    dn{"Ntáká ya ngonga"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -235,5 +195,45 @@ ln{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Mokɔlɔ"}
+            relative{
+                "-1"{"Lóbi elékí"}
+                "0"{"Lɛlɔ́"}
+                "1"{"Lóbi ekoyâ"}
+            }
+        }
+        dayperiod{
+            dn{"Eleko ya mokɔlɔ"}
+        }
+        era{
+            dn{"Ntángo"}
+        }
+        hour{
+            dn{"Ngonga"}
+        }
+        minute{
+            dn{"Monúti"}
+        }
+        month{
+            dn{"Sánzá"}
+        }
+        second{
+            dn{"Sɛkɔ́ndɛ"}
+        }
+        week{
+            dn{"Pɔ́sɔ"}
+        }
+        weekday{
+            dn{"Mokɔlɔ ya pɔ́sɔ"}
+        }
+        year{
+            dn{"Mobú"}
+        }
+        zone{
+            dn{"Ntáká ya ngonga"}
+        }
     }
 }

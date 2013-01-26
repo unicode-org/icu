@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nn.xml
 // *
@@ -38,7 +38,7 @@ nn{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -126,48 +126,6 @@ nn{
                 wide{
                     "f.Kr.",
                     "e.Kr.",
-                }
-            }
-            fields{
-                day{
-                    dn{"dag"}
-                    relative{
-                        "-1"{"i går"}
-                        "-2"{"i forgårs"}
-                        "0"{"i dag"}
-                        "1"{"i morgon"}
-                        "2"{"i overmorgon"}
-                    }
-                }
-                dayperiod{
-                    dn{"f.m./e.m.-val"}
-                }
-                era{
-                    dn{"æra"}
-                }
-                hour{
-                    dn{"time"}
-                }
-                minute{
-                    dn{"minutt"}
-                }
-                month{
-                    dn{"månad"}
-                }
-                second{
-                    dn{"sekund"}
-                }
-                week{
-                    dn{"veke"}
-                }
-                weekday{
-                    dn{"vekedag"}
-                }
-                year{
-                    dn{"år"}
-                }
-                zone{
-                    dn{"sone"}
                 }
             }
             intervalFormats{
@@ -326,6 +284,48 @@ nn{
         alternateQuotationStart{"‘"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"dag"}
+            relative{
+                "-1"{"i går"}
+                "-2"{"i forgårs"}
+                "0"{"i dag"}
+                "1"{"i morgon"}
+                "2"{"i overmorgon"}
+            }
+        }
+        dayperiod{
+            dn{"f.m./e.m.-val"}
+        }
+        era{
+            dn{"æra"}
+        }
+        hour{
+            dn{"time"}
+        }
+        minute{
+            dn{"minutt"}
+        }
+        month{
+            dn{"månad"}
+        }
+        second{
+            dn{"sekund"}
+        }
+        week{
+            dn{"veke"}
+        }
+        weekday{
+            dn{"vekedag"}
+        }
+        year{
+            dn{"år"}
+        }
+        zone{
+            dn{"sone"}
+        }
     }
     listPattern{
         standard{

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/si.xml
 // *
@@ -32,7 +32,7 @@ si{
             }
         }
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -166,48 +166,6 @@ si{
                 wide{
                     "ක්‍රිස්තු පූර්‍ව",
                     "ක්‍රිස්තු වර්‍ෂ",
-                }
-            }
-            fields{
-                day{
-                    dn{"දිනය"}
-                    relative{
-                        "-1"{"ඊයෙ"}
-                        "-2"{"පෙරේදා"}
-                        "0"{"අද"}
-                        "1"{"හෙට"}
-                        "2"{"අනිද්දා"}
-                    }
-                }
-                dayperiod{
-                    dn{"දිවා කාලය"}
-                }
-                era{
-                    dn{"යුගය"}
-                }
-                hour{
-                    dn{"පැය"}
-                }
-                minute{
-                    dn{"මිනිස්තුව"}
-                }
-                month{
-                    dn{"මාසය"}
-                }
-                second{
-                    dn{"තප්පරය"}
-                }
-                week{
-                    dn{"සතිය"}
-                }
-                weekday{
-                    dn{"සතියේ දිනය"}
-                }
-                year{
-                    dn{"වර්ෂ"}
-                }
-                zone{
-                    dn{"වේලා කලාපය"}
                 }
             }
             intervalFormats{
@@ -444,6 +402,48 @@ si{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"දිනය"}
+            relative{
+                "-1"{"ඊයෙ"}
+                "-2"{"පෙරේදා"}
+                "0"{"අද"}
+                "1"{"හෙට"}
+                "2"{"අනිද්දා"}
+            }
+        }
+        dayperiod{
+            dn{"දිවා කාලය"}
+        }
+        era{
+            dn{"යුගය"}
+        }
+        hour{
+            dn{"පැය"}
+        }
+        minute{
+            dn{"මිනිස්තුව"}
+        }
+        month{
+            dn{"මාසය"}
+        }
+        second{
+            dn{"තප්පරය"}
+        }
+        week{
+            dn{"සතිය"}
+        }
+        weekday{
+            dn{"සතියේ දිනය"}
+        }
+        year{
+            dn{"වර්ෂ"}
+        }
+        zone{
+            dn{"වේලා කලාපය"}
+        }
     }
     listPattern{
         standard{

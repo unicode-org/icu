@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ro.xml
 // *
@@ -13,7 +13,7 @@ ro{
     AuxExemplarCharacters{"[á à å ä ç é è ê ë ñ ö q ş ţ ü w y]"}
     ExemplarCharacters{"[a ă â b c d e f g h i î j k l m n o p r s ș t ț u v x z]"}
     ExemplarCharactersIndex{"[A Ă Â B C D E F G H I Î J K L M N O P Q R S Ș T Ț U V W X Y Z]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ \" “ ” „ « » ( ) \[ \] @ * /]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! ? . … ' ‘ \u0022 “ ” „ « » ( ) \\[ \\] @ * /]"}
     LocaleScript{
         "Latn",
     }
@@ -167,7 +167,7 @@ ro{
             }
         }
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -401,63 +401,6 @@ ro{
                 wide{
                     "înainte de Hristos",
                     "după Hristos",
-                }
-            }
-            fields{
-                day{
-                    dn{"zi"}
-                    relative{
-                        "-1"{"ieri"}
-                        "-2"{"alaltăieri"}
-                        "0"{"azi"}
-                        "1"{"mâine"}
-                        "2"{"poimâine"}
-                    }
-                }
-                dayperiod{
-                    dn{"perioada zilei"}
-                }
-                era{
-                    dn{"eră"}
-                }
-                hour{
-                    dn{"oră"}
-                }
-                minute{
-                    dn{"minut"}
-                }
-                month{
-                    dn{"lună"}
-                    relative{
-                        "-1"{"Luna trecută"}
-                        "0"{"Luna aceasta"}
-                        "1"{"Luna viitoare"}
-                    }
-                }
-                second{
-                    dn{"secundă"}
-                }
-                week{
-                    dn{"săptămână"}
-                    relative{
-                        "-1"{"Săptămâna trecută"}
-                        "0"{"Săptămâna aceasta"}
-                        "1"{"Săptămâna viitoare"}
-                    }
-                }
-                weekday{
-                    dn{"zi a săptămânii"}
-                }
-                year{
-                    dn{"an"}
-                    relative{
-                        "-1"{"Anul trecut"}
-                        "0"{"Anul acesta"}
-                        "1"{"Anul viitor"}
-                    }
-                }
-                zone{
-                    dn{"zonă"}
                 }
             }
             intervalFormats{
@@ -771,6 +714,63 @@ ro{
         alternateQuotationStart{"«"}
         quotationEnd{"”"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"zi"}
+            relative{
+                "-1"{"ieri"}
+                "-2"{"alaltăieri"}
+                "0"{"azi"}
+                "1"{"mâine"}
+                "2"{"poimâine"}
+            }
+        }
+        dayperiod{
+            dn{"perioada zilei"}
+        }
+        era{
+            dn{"eră"}
+        }
+        hour{
+            dn{"oră"}
+        }
+        minute{
+            dn{"minut"}
+        }
+        month{
+            dn{"lună"}
+            relative{
+                "-1"{"Luna trecută"}
+                "0"{"Luna aceasta"}
+                "1"{"Luna viitoare"}
+            }
+        }
+        second{
+            dn{"secundă"}
+        }
+        week{
+            dn{"săptămână"}
+            relative{
+                "-1"{"Săptămâna trecută"}
+                "0"{"Săptămâna aceasta"}
+                "1"{"Săptămâna viitoare"}
+            }
+        }
+        weekday{
+            dn{"zi a săptămânii"}
+        }
+        year{
+            dn{"an"}
+            relative{
+                "-1"{"Anul trecut"}
+                "0"{"Anul acesta"}
+                "1"{"Anul viitor"}
+            }
+        }
+        zone{
+            dn{"zonă"}
+        }
     }
     listPattern{
         standard{

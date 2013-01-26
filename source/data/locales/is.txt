@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/is.xml
 // *
@@ -142,7 +142,7 @@ is{
             }
         }
     }
-    Version{"2.0.78.32"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -263,63 +263,6 @@ is{
                 narrow{
                     "f.k.",
                     "e.k.",
-                }
-            }
-            fields{
-                day{
-                    dn{"dagur"}
-                    relative{
-                        "-1"{"í gær"}
-                        "-2"{"fyrir tveimur dögum"}
-                        "0"{"í dag"}
-                        "1"{"á morgun"}
-                        "2"{"eftir tvo daga"}
-                    }
-                }
-                dayperiod{
-                    dn{"f.h./e.h."}
-                }
-                era{
-                    dn{"tímabil"}
-                }
-                hour{
-                    dn{"klukkustund"}
-                }
-                minute{
-                    dn{"mínúta"}
-                }
-                month{
-                    dn{"mánuður"}
-                    relative{
-                        "-1"{"Í síðasta mánuði"}
-                        "0"{"Í þessum mánuði"}
-                        "1"{"Í næsta mánuði"}
-                    }
-                }
-                second{
-                    dn{"sekúnda"}
-                }
-                week{
-                    dn{"vika"}
-                    relative{
-                        "-1"{"Í síðustu viku"}
-                        "0"{"Í þessari viku"}
-                        "1"{"Í næstu viku"}
-                    }
-                }
-                weekday{
-                    dn{"vikudagur"}
-                }
-                year{
-                    dn{"ár"}
-                    relative{
-                        "-1"{"Á síðasta ári"}
-                        "0"{"Á þessu ári"}
-                        "1"{"Á næsta ári"}
-                    }
-                }
-                zone{
-                    dn{"svæði"}
                 }
             }
             intervalFormats{
@@ -531,6 +474,63 @@ is{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"dagur"}
+            relative{
+                "-1"{"í gær"}
+                "-2"{"fyrir tveimur dögum"}
+                "0"{"í dag"}
+                "1"{"á morgun"}
+                "2"{"eftir tvo daga"}
+            }
+        }
+        dayperiod{
+            dn{"f.h./e.h."}
+        }
+        era{
+            dn{"tímabil"}
+        }
+        hour{
+            dn{"klukkustund"}
+        }
+        minute{
+            dn{"mínúta"}
+        }
+        month{
+            dn{"mánuður"}
+            relative{
+                "-1"{"Í síðasta mánuði"}
+                "0"{"Í þessum mánuði"}
+                "1"{"Í næsta mánuði"}
+            }
+        }
+        second{
+            dn{"sekúnda"}
+        }
+        week{
+            dn{"vika"}
+            relative{
+                "-1"{"Í síðustu viku"}
+                "0"{"Í þessari viku"}
+                "1"{"Í næstu viku"}
+            }
+        }
+        weekday{
+            dn{"vikudagur"}
+        }
+        year{
+            dn{"ár"}
+            relative{
+                "-1"{"Á síðasta ári"}
+                "0"{"Á þessu ári"}
+                "1"{"Á næsta ári"}
+            }
+        }
+        zone{
+            dn{"svæði"}
+        }
     }
     listPattern{
         standard{

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/en_HK.xml
 // *
@@ -15,7 +15,7 @@ en_HK{
             }
         }
     }
-    Version{"2.0.78.47"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -63,20 +63,6 @@ en_HK{
                 yMMMEd{"E, d MMM, y"}
                 yMMMd{"d MMM, y"}
                 yMd{"d/M/y"}
-            }
-            fields{
-                week{
-                    relative{
-                        "1"{"Next Week"}
-                    }
-                }
-                year{
-                    relative{
-                        "-1"{"Last Year"}
-                        "0"{"This Year"}
-                        "1"{"Next Year"}
-                    }
-                }
             }
             intervalFormats{
                 MEd{
@@ -395,6 +381,20 @@ en_HK{
             }
             availableFormats{
                 MMMEd{"E, d MMM"}
+            }
+        }
+    }
+    fields{
+        week{
+            relative{
+                "1"{"Next Week"}
+            }
+        }
+        year{
+            relative{
+                "-1"{"Last Year"}
+                "0"{"This Year"}
+                "1"{"Next Year"}
             }
         }
     }

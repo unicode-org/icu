@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hi.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hi.xml
  */
 hi{
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"एबिजान"}
@@ -1722,9 +1722,6 @@ hi{
         }
         "meta:South_Georgia"{
             ls{"दक्षिणी जॉर्जिया का समय"}
-        }
-        "meta:Suriname"{
-            ls{"सूरीनाम का समय"}
         }
         "meta:Syowa"{
             ls{"स्योवा का समय"}

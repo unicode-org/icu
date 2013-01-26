@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lv.xml
 // *
@@ -13,7 +13,7 @@ lv{
     AuxExemplarCharacters{"[q w x y]"}
     ExemplarCharacters{"[a ā b c č d e ē f g ģ h i ī j k ķ l ļ m n ņ o p r s š t u ū v z ž]"}
     ExemplarCharactersIndex{"[A B C Č D E F G Ģ H I J K Ķ L Ļ M N Ņ O P Q R S Š T U V W X Y Z Ž]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ’ ‚ \" “ ” „ ( ) \[ \] § @ * / \& # † ‡ ′ ″]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! ? . … ' ‘ ’ ‚ \u0022 “ ” „ ( ) \\[ \\] § @ * / \\& # † ‡ ′ ″]"}
     LocaleScript{
         "Latn",
     }
@@ -167,7 +167,7 @@ lv{
             }
         }
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -306,63 +306,6 @@ lv{
                 wide{
                     "pirms mūsu ēras",
                     "mūsu ērā",
-                }
-            }
-            fields{
-                day{
-                    dn{"Diena"}
-                    relative{
-                        "-1"{"vakar"}
-                        "-2"{"aizvakar"}
-                        "0"{"šodien"}
-                        "1"{"rīt"}
-                        "2"{"parīt"}
-                    }
-                }
-                dayperiod{
-                    dn{"Pirmspusd./pēcpusd."}
-                }
-                era{
-                    dn{"Ēra"}
-                }
-                hour{
-                    dn{"Stundas"}
-                }
-                minute{
-                    dn{"Minūtes"}
-                }
-                month{
-                    dn{"Mēnesis"}
-                    relative{
-                        "-1"{"Pagājušajā mēnesī"}
-                        "0"{"Šomēnes"}
-                        "1"{"Nākammēnes"}
-                    }
-                }
-                second{
-                    dn{"Sekundes"}
-                }
-                week{
-                    dn{"Nedēļa"}
-                    relative{
-                        "-1"{"Pagājušajā nedēļā"}
-                        "0"{"Šonedēļ"}
-                        "1"{"Nākamnedēļ"}
-                    }
-                }
-                weekday{
-                    dn{"Nedēļas diena"}
-                }
-                year{
-                    dn{"Gads"}
-                    relative{
-                        "-1"{"Pagājušajā gadā"}
-                        "0"{"Šogad"}
-                        "1"{"Nākamgad"}
-                    }
-                }
-                zone{
-                    dn{"Laika josla"}
                 }
             }
             intervalFormats{
@@ -641,6 +584,63 @@ lv{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Diena"}
+            relative{
+                "-1"{"vakar"}
+                "-2"{"aizvakar"}
+                "0"{"šodien"}
+                "1"{"rīt"}
+                "2"{"parīt"}
+            }
+        }
+        dayperiod{
+            dn{"Pirmspusd./pēcpusd."}
+        }
+        era{
+            dn{"Ēra"}
+        }
+        hour{
+            dn{"Stundas"}
+        }
+        minute{
+            dn{"Minūtes"}
+        }
+        month{
+            dn{"Mēnesis"}
+            relative{
+                "-1"{"Pagājušajā mēnesī"}
+                "0"{"Šomēnes"}
+                "1"{"Nākammēnes"}
+            }
+        }
+        second{
+            dn{"Sekundes"}
+        }
+        week{
+            dn{"Nedēļa"}
+            relative{
+                "-1"{"Pagājušajā nedēļā"}
+                "0"{"Šonedēļ"}
+                "1"{"Nākamnedēļ"}
+            }
+        }
+        weekday{
+            dn{"Nedēļas diena"}
+        }
+        year{
+            dn{"Gads"}
+            relative{
+                "-1"{"Pagājušajā gadā"}
+                "0"{"Šogad"}
+                "1"{"Nākamgad"}
+            }
+        }
+        zone{
+            dn{"Laika josla"}
+        }
     }
     listPattern{
         standard{

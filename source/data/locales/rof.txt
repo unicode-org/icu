@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/rof.xml
 // *
@@ -23,7 +23,7 @@ rof{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -111,46 +111,6 @@ rof{
                     "Baada ya Mayesu",
                 }
             }
-            fields{
-                day{
-                    dn{"Mfiri"}
-                    relative{
-                        "-1"{"Hiyo"}
-                        "0"{"Linu"}
-                        "1"{"Ng'ama"}
-                    }
-                }
-                dayperiod{
-                    dn{"Nkwaya"}
-                }
-                era{
-                    dn{"Kacha"}
-                }
-                hour{
-                    dn{"Isaa"}
-                }
-                minute{
-                    dn{"Dakika"}
-                }
-                month{
-                    dn{"Mweri"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Iwiki"}
-                }
-                weekday{
-                    dn{"Mfiri a iwiki"}
-                }
-                year{
-                    dn{"Muaka"}
-                }
-                zone{
-                    dn{"Mfiri o saa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -222,5 +182,45 @@ rof{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Mfiri"}
+            relative{
+                "-1"{"Hiyo"}
+                "0"{"Linu"}
+                "1"{"Ng'ama"}
+            }
+        }
+        dayperiod{
+            dn{"Nkwaya"}
+        }
+        era{
+            dn{"Kacha"}
+        }
+        hour{
+            dn{"Isaa"}
+        }
+        minute{
+            dn{"Dakika"}
+        }
+        month{
+            dn{"Mweri"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Iwiki"}
+        }
+        weekday{
+            dn{"Mfiri a iwiki"}
+        }
+        year{
+            dn{"Muaka"}
+        }
+        zone{
+            dn{"Mfiri o saa"}
+        }
     }
 }

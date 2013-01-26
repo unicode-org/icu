@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/si.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/si.xml
  */
 si{
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"අබිජාන්"}
@@ -802,9 +802,6 @@ si{
             ld{"ශාන්ත පියරේ සහ මැකෝලන් දිවා කාලය"}
             lg{"ශාන්ත පියරේ සහ මැකෝලන් වේලාව"}
             ls{"ශාන්ත පියරේ සහ මැකෝලන් සම්මත වේලාව"}
-        }
-        "meta:Suriname"{
-            ls{"සුරිනාම වේලාව"}
         }
         "meta:Uruguay"{
             ld{"උරුගුවේ ග්‍රීෂ්ම කාලය"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/vi.xml
@@ -14,7 +14,7 @@ vi{
     collations{
         standard{
             Sequence{
-                " [normalization on ]"
+                " [normalization on]"
                 "&̀<<̉<<̃<<́<<̣"
                 "&a<ă<<<Ă<â<<<Â"
                 "&d<đ<<<Đ"
@@ -22,7 +22,7 @@ vi{
                 "&o<ô<<<Ô<ơ<<<Ơ"
                 "&u<ư<<<Ư"
             }
-            Version{"22.1.1"}
+            Version{"23"}
         }
     }
 }

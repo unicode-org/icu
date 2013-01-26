@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/xog.xml
 // *
@@ -22,7 +22,7 @@ xog{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -110,46 +110,6 @@ xog{
                     "Kulisto nga affile",
                 }
             }
-            fields{
-                day{
-                    dn{"Olunaku"}
-                    relative{
-                        "-1"{"Edho"}
-                        "0"{"Olwaleelo (leelo)"}
-                        "1"{"Enkyo"}
-                    }
-                }
-                dayperiod{
-                    dn{"munkyo/Eigulo"}
-                }
-                era{
-                    dn{"Emulembe"}
-                }
-                hour{
-                    dn{"Essawa"}
-                }
-                minute{
-                    dn{"Edakiika"}
-                }
-                month{
-                    dn{"Omwezi"}
-                }
-                second{
-                    dn{"Obutikitiki"}
-                }
-                week{
-                    dn{"Esabiiti"}
-                }
-                weekday{
-                    dn{"Olunaka lwa sabiiti"}
-                }
-                year{
-                    dn{"Omwaka"}
-                }
-                zone{
-                    dn{"Essawa edha"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -221,5 +181,45 @@ xog{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Olunaku"}
+            relative{
+                "-1"{"Edho"}
+                "0"{"Olwaleelo (leelo)"}
+                "1"{"Enkyo"}
+            }
+        }
+        dayperiod{
+            dn{"munkyo/Eigulo"}
+        }
+        era{
+            dn{"Emulembe"}
+        }
+        hour{
+            dn{"Essawa"}
+        }
+        minute{
+            dn{"Edakiika"}
+        }
+        month{
+            dn{"Omwezi"}
+        }
+        second{
+            dn{"Obutikitiki"}
+        }
+        week{
+            dn{"Esabiiti"}
+        }
+        weekday{
+            dn{"Olunaka lwa sabiiti"}
+        }
+        year{
+            dn{"Omwaka"}
+        }
+        zone{
+            dn{"Essawa edha"}
+        }
     }
 }

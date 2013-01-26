@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/naq.xml
 // *
@@ -23,7 +23,7 @@ naq{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -111,44 +111,6 @@ naq{
                     "Xristub khaoǃgâ",
                 }
             }
-            fields{
-                day{
-                    dn{"Tsees"}
-                    relative{
-                        "0"{"Neetsee"}
-                    }
-                }
-                dayperiod{
-                    dn{"ǁgoas/ǃuis"}
-                }
-                era{
-                    dn{"ǁAeǃgâs"}
-                }
-                hour{
-                    dn{"Iiri"}
-                }
-                minute{
-                    dn{"Haib"}
-                }
-                month{
-                    dn{"ǁKhâb"}
-                }
-                second{
-                    dn{"ǀGâub"}
-                }
-                week{
-                    dn{"Wekheb"}
-                }
-                weekday{
-                    dn{"Wekheb tsees"}
-                }
-                year{
-                    dn{"Kurib"}
-                }
-                zone{
-                    dn{"ǁAeb ǀharib"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -220,5 +182,43 @@ naq{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Tsees"}
+            relative{
+                "0"{"Neetsee"}
+            }
+        }
+        dayperiod{
+            dn{"ǁgoas/ǃuis"}
+        }
+        era{
+            dn{"ǁAeǃgâs"}
+        }
+        hour{
+            dn{"Iiri"}
+        }
+        minute{
+            dn{"Haib"}
+        }
+        month{
+            dn{"ǁKhâb"}
+        }
+        second{
+            dn{"ǀGâub"}
+        }
+        week{
+            dn{"Wekheb"}
+        }
+        weekday{
+            dn{"Wekheb tsees"}
+        }
+        year{
+            dn{"Kurib"}
+        }
+        zone{
+            dn{"ǁAeb ǀharib"}
+        }
     }
 }

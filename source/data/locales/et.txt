@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/et.xml
 // *
@@ -142,7 +142,7 @@ et{
             }
         }
     }
-    Version{"2.0.78.32"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -282,63 +282,6 @@ et{
                 wide{
                     "enne meie aega",
                     "meie aja järgi",
-                }
-            }
-            fields{
-                day{
-                    dn{"päev"}
-                    relative{
-                        "-1"{"eile"}
-                        "-2"{"üleeile"}
-                        "0"{"täna"}
-                        "1"{"homme"}
-                        "2"{"ülehomme"}
-                    }
-                }
-                dayperiod{
-                    dn{"enne/pärast lõunat"}
-                }
-                era{
-                    dn{"ajastu"}
-                }
-                hour{
-                    dn{"tund"}
-                }
-                minute{
-                    dn{"minut"}
-                }
-                month{
-                    dn{"kuu"}
-                    relative{
-                        "-1"{"Eelmine kuu"}
-                        "0"{"See kuu"}
-                        "1"{"Järgmine kuu"}
-                    }
-                }
-                second{
-                    dn{"sekund"}
-                }
-                week{
-                    dn{"nädal"}
-                    relative{
-                        "-1"{"Eelmine nädal"}
-                        "0"{"See nädal"}
-                        "1"{"Järgmine nädal"}
-                    }
-                }
-                weekday{
-                    dn{"nädalapäev"}
-                }
-                year{
-                    dn{"aasta"}
-                    relative{
-                        "-1"{"Eelmine aasta"}
-                        "0"{"Sel aastal"}
-                        "1"{"Järgmine aasta"}
-                    }
-                }
-                zone{
-                    dn{"vöönd"}
                 }
             }
             intervalFormats{
@@ -575,6 +518,63 @@ et{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"päev"}
+            relative{
+                "-1"{"eile"}
+                "-2"{"üleeile"}
+                "0"{"täna"}
+                "1"{"homme"}
+                "2"{"ülehomme"}
+            }
+        }
+        dayperiod{
+            dn{"enne/pärast lõunat"}
+        }
+        era{
+            dn{"ajastu"}
+        }
+        hour{
+            dn{"tund"}
+        }
+        minute{
+            dn{"minut"}
+        }
+        month{
+            dn{"kuu"}
+            relative{
+                "-1"{"Eelmine kuu"}
+                "0"{"See kuu"}
+                "1"{"Järgmine kuu"}
+            }
+        }
+        second{
+            dn{"sekund"}
+        }
+        week{
+            dn{"nädal"}
+            relative{
+                "-1"{"Eelmine nädal"}
+                "0"{"See nädal"}
+                "1"{"Järgmine nädal"}
+            }
+        }
+        weekday{
+            dn{"nädalapäev"}
+        }
+        year{
+            dn{"aasta"}
+            relative{
+                "-1"{"Eelmine aasta"}
+                "0"{"Sel aastal"}
+                "1"{"Järgmine aasta"}
+            }
+        }
+        zone{
+            dn{"vöönd"}
+        }
     }
     listPattern{
         standard{

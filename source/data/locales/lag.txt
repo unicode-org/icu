@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lag.xml
 // *
@@ -15,7 +15,7 @@ lag{
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -103,46 +103,6 @@ lag{
                     "Kɨrɨsitʉ akavyaalwe",
                 }
             }
-            fields{
-                day{
-                    dn{"Sikʉ"}
-                    relative{
-                        "-1"{"Niijo"}
-                        "0"{"Isikʉ"}
-                        "1"{"Lamʉtoondo"}
-                    }
-                }
-                dayperiod{
-                    dn{"Mpɨɨndɨ ja sikʉ"}
-                }
-                era{
-                    dn{"Mpɨɨndɨ"}
-                }
-                hour{
-                    dn{"Sáa"}
-                }
-                minute{
-                    dn{"Dakíka"}
-                }
-                month{
-                    dn{"Mweéri"}
-                }
-                second{
-                    dn{"Sekúunde"}
-                }
-                week{
-                    dn{"Wíiki"}
-                }
-                weekday{
-                    dn{"Sikʉ ya júma"}
-                }
-                year{
-                    dn{"Mwaáka"}
-                }
-                zone{
-                    dn{"Mpɨɨndɨ ja mɨɨtʉ"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -214,5 +174,45 @@ lag{
         alternateQuotationStart{"’"}
         quotationEnd{"”"}
         quotationStart{"”"}
+    }
+    fields{
+        day{
+            dn{"Sikʉ"}
+            relative{
+                "-1"{"Niijo"}
+                "0"{"Isikʉ"}
+                "1"{"Lamʉtoondo"}
+            }
+        }
+        dayperiod{
+            dn{"Mpɨɨndɨ ja sikʉ"}
+        }
+        era{
+            dn{"Mpɨɨndɨ"}
+        }
+        hour{
+            dn{"Sáa"}
+        }
+        minute{
+            dn{"Dakíka"}
+        }
+        month{
+            dn{"Mweéri"}
+        }
+        second{
+            dn{"Sekúunde"}
+        }
+        week{
+            dn{"Wíiki"}
+        }
+        weekday{
+            dn{"Sikʉ ya júma"}
+        }
+        year{
+            dn{"Mwaáka"}
+        }
+        zone{
+            dn{"Mpɨɨndɨ ja mɨɨtʉ"}
+        }
     }
 }
