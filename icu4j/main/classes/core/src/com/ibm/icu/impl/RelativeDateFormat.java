@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2007-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -14,6 +14,7 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.SimpleDateFormat;
@@ -191,8 +192,8 @@ public class RelativeDateFormat extends DateFormat {
      * Load the Date string array
      */
     private synchronized void loadDates() {
-        CalendarData calData = new CalendarData(fLocale, calendar.getType());
-        UResourceBundle rb = calData.get("fields", "day", "relative");
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, fLocale);
+        ICUResourceBundle rdb = rb.getWithFallback("fields/day/relative");
         
         Set<URelativeString> datesSet = new TreeSet<URelativeString>(new Comparator<URelativeString>() { 
             public int compare(URelativeString r1, URelativeString r2) {
@@ -207,7 +208,7 @@ public class RelativeDateFormat extends DateFormat {
             }
         }) ;
         
-        for(UResourceBundleIterator i = rb.getIterator();i.hasNext();) {
+        for(UResourceBundleIterator i = rdb.getIterator();i.hasNext();) {
             UResourceBundle line = i.next();
             
             String k = line.getKey();
