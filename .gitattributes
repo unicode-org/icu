@@ -2521,6 +2521,7 @@ icu4c/source/data/xml/main/mk.xml svneol=native#text/xml
 icu4c/source/data/xml/main/ml.xml svneol=native#text/xml
 icu4c/source/data/xml/main/mr.xml svneol=native#text/xml
 icu4c/source/data/xml/main/ms.xml svneol=native#text/xml
+icu4c/source/data/xml/main/ms_Latn.xml -text
 icu4c/source/data/xml/main/mt.xml svneol=native#text/xml
 icu4c/source/data/xml/main/mua.xml svneol=native#text/xml
 icu4c/source/data/xml/main/my.xml svneol=native#text/xml
