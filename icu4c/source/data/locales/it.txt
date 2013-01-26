@@ -13,7 +13,7 @@ it{
     AuxExemplarCharacters{"[á â å ä ã æ ç ê ë í î ï ñ ô ö õ ø œ ß ú û ü ÿ]"}
     ExemplarCharacters{"[a à b c d e é è f g h i ì j k l m n o ó ò p q r s t u ù v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
-    ExemplarCharactersPunctuation{"[\\- — , ; \: ! ? . … “ ” ( ) \\[ \\] \\{ \\} @ /]"}
+    ExemplarCharactersPunctuation{"[\\- — , ; \\: ! ? . … “ ” ( ) \\[ \\] \\{ \\} @ /]"}
     LocaleScript{
         "Latn",
     }
@@ -143,7 +143,7 @@ it{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     calendar{
         buddhist{
             DateTimePatterns{

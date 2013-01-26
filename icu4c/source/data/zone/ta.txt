@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ta.xml
  */
 ta{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"அபிட்ஜான்"}
@@ -1748,7 +1748,9 @@ ta{
             ls{"சமரா தர நேரம்"}
         }
         "meta:Samoa"{
-            ls{"சமோயா நேரப்படி"}
+            ld{"சமோயா கோடை நேரம்"}
+            lg{"சமோயா நேரம்"}
+            ls{"சமோயா தர நேரம்"}
         }
         "meta:Seychelles"{
             ls{"சீசெல்லெஸ் நேரம்"}

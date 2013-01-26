@@ -16,7 +16,7 @@ hr{
         "[A B C Č Ć D {DŽ} Đ E F G H I J K L {LJ} M N {NJ} O P Q R S Š T U V W X Y Z "
         "Ž]"
     }
-    ExemplarCharactersPunctuation{"[‐ – — , ; \: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] @ * / ′ ″]"}
+    ExemplarCharactersPunctuation{"[‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] @ * / ′ ″]"}
     LocaleScript{
         "Latn",
     }
@@ -194,7 +194,7 @@ hr{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     calendar{
         buddhist{
             DateTimePatterns{

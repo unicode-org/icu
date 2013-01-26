@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sr_Latn.xml
  */
 sr_Latn{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -1240,6 +1240,8 @@ sr_Latn{
             ls{"Samara standardno vreme"}
         }
         "meta:Samoa"{
+            ld{"Samoa letnje računanje vremena"}
+            lg{"Samoa vreme"}
             ls{"Samoa standardno vreme"}
         }
         "meta:Seychelles"{

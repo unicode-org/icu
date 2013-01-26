@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kn.xml
  */
 kn{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ಅಬಿದ್‌ಜನ್"}
@@ -1709,6 +1709,8 @@ kn{
             ls{"ಸಮರ ಪ್ರಮಾಣಿತ ಸಮಯ"}
         }
         "meta:Samoa"{
+            ld{"ಸಮೋವಾ ಬೇಸಿಗೆ ಸಮಯ"}
+            lg{"ಸಮೋವಾ ಸಮಯ"}
             ls{"ಸಮೋವಾ ಪ್ರಮಾಣಿತ ಸಮಯ"}
         }
         "meta:Seychelles"{

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hu.xml
  */
 hu{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addisz-Abeba"}
@@ -1082,6 +1082,8 @@ hu{
             ls{"Szamarai zónaidő"}
         }
         "meta:Samoa"{
+            ld{"Szamoai nyári idő"}
+            lg{"Szamoai idő"}
             ls{"Szamoai zónaidő"}
         }
         "meta:Seychelles"{

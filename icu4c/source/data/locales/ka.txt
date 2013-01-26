@@ -16,7 +16,10 @@ ka{
     }
     ExemplarCharacters{"[ა ბ გ დ ე ვ ზ თ ი კ ლ მ ნ ო პ ჟ რ ს ტ უ ფ ქ ღ ყ შ ჩ ც ძ წ ჭ ხ ჯ ჰ]"}
     ExemplarCharactersIndex{"[ა ბ გ დ ე ვ ზ თ ი კ ლ მ ნ ო პ ჟ რ ს ტ უ ფ ქ ღ ყ შ ჩ ც ძ წ ჭ ხ ჯ ჰ]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! ? . … ჻ ‚ \u0022 “ „ « » ( ) \\[ \\] \\{ \\} § * / \\& # №]"}
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ – — , ; \\: ! ? . … ჻ ‚ \u0022 “ „ « » ( ) \\[ \\] \\{ \\} § * / \\& "
+        "# №]"
+    }
     LocaleScript{
         "Geor",
     }

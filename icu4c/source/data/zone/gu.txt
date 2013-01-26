@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gu.xml
  */
 gu{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"આબિદ્જાન"}
@@ -1748,6 +1748,8 @@ gu{
             ls{"સમારા પ્રમાણભૂત સમય"}
         }
         "meta:Samoa"{
+            ld{"સમોઆ ગ્રીષ્મ સમય"}
+            lg{"સમોઆ સમય"}
             ls{"સમોઆ માનક સમય"}
         }
         "meta:Seychelles"{

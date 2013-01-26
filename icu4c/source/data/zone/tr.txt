@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/tr.xml
  */
 tr{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abican"}
@@ -953,7 +953,9 @@ tr{
             ls{"Samara Standart Saati"}
         }
         "meta:Samoa"{
-            ls{"Samoa Saati"}
+            ld{"Samoa Yaz Saati"}
+            lg{"Samoa Saati"}
+            ls{"Samoa Standart Saati"}
         }
         "meta:Seychelles"{
             ls{"Seyşeller Saati"}

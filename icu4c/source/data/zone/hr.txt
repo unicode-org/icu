@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"alžirsko"}
@@ -709,7 +709,9 @@ hr{
             ls{"samarsko standardno vrijeme"}
         }
         "meta:Samoa"{
-            ls{"samoansko vrijeme"}
+            ld{"samoansko ljetno vrijeme"}
+            lg{"samoansko vrijeme"}
+            ls{"samoansko standardno vrijeme"}
         }
         "meta:Seychelles"{
             ls{"sejšelsko vrijeme"}

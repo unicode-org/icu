@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/vi.xml
  */
 vi{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Asmera"{
             ec{"Asmara"}
@@ -664,6 +664,8 @@ vi{
             ls{"Giờ Chuẩn Samara"}
         }
         "meta:Samoa"{
+            ld{"Giờ mùa hè Samoa"}
+            lg{"Giờ Samoa"}
             ls{"Giờ Chuẩn Samoa"}
         }
         "meta:Seychelles"{

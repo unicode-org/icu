@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/he.xml
  */
 he{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"אביג'אן"}
@@ -1256,7 +1256,7 @@ he{
         "meta:America_Central"{
             ld{"שעון קיץ, צפון אמריקה"}
             lg{"שעון מרכז ארה״ב (אמריקה/שיקגו)"}
-            ls{"שעון רגיל מרכז ארה\"ב"}
+            ls{"שעון רגיל מרכז ארה\u0022ב"}
         }
         "meta:America_Eastern"{
             ld{"שעון קיץ מזרח ארה״ב"}

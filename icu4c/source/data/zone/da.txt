@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/da.xml
  */
 da{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -721,6 +721,8 @@ da{
             ls{"Samara-normaltid"}
         }
         "meta:Samoa"{
+            ld{"Samoa-sommertid"}
+            lg{"Samoa-tid"}
             ls{"Samoa-normaltid"}
         }
         "meta:Seychelles"{

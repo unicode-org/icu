@@ -19,7 +19,7 @@ fa{
         "ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ة ی]"
     }
     ExemplarCharactersIndex{"[آ ا ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ی]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ ، ٫ ٬ ؛ \: ! ؟ . … « » ( ) \\[ \\] * / \\\\ ]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ ، ٫ ٬ ؛ \\: ! ؟ . … « » ( ) \\[ \\] * / \\\\]"}
     LocaleScript{
         "Arab",
     }
@@ -141,7 +141,7 @@ fa{
         }
         native{"arabext"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     calendar{
         gregorian{
             AmPmMarkers{

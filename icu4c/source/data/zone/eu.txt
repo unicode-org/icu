@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/eu.xml
  */
 eu{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Djibuti"}
@@ -569,6 +569,8 @@ eu{
             ls{"Samarako ordu estandarra"}
         }
         "meta:Samoa"{
+            ld{"Samoako udako ordua"}
+            lg{"Samoako ordua"}
             ls{"Samoako ordu estandarra"}
         }
         "meta:Seychelles"{

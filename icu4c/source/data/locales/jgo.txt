@@ -21,7 +21,7 @@ jgo{
         "[A B C D Ɛ F G H I J K L M N Ŋ Ɔ P {Pf} S {Sh} T {Ts} U Ʉ {Ʉ\u0308} V W Ẅ Y "
         "Z Ꞌ]"
     }
-    ExemplarCharactersPunctuation{"[\\- , ; \: ! ? . ‹ › « »]"}
+    ExemplarCharactersPunctuation{"[\\- , ; \\: ! ? . ‹ › « »]"}
     LocaleScript{
         "Latn",
     }

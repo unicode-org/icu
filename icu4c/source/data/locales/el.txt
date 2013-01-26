@@ -16,7 +16,7 @@ el{
     }
     ExemplarCharacters{"[α ά β γ δ ε έ ζ η ή θ ι ί ϊ ΐ κ λ μ ν ξ ο ό π ρ σ ς τ υ ύ ϋ ΰ φ χ ψ ω ώ]"}
     ExemplarCharactersIndex{"[Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω]"}
-    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! . … \u0022 ( ) \\[ \\] § @ * / \\\\  \\&]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! . … \u0022 ( ) \\[ \\] § @ * / \\\\ \\&]"}
     LocaleScript{
         "Grek",
     }
@@ -148,7 +148,7 @@ el{
         native{"latn"}
         traditional{"grek"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     calendar{
         buddhist{
             DateTimePatterns{

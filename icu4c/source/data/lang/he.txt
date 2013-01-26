@@ -755,7 +755,7 @@ he{
         POSIX{"מחשב"}
         SCOTLAND{"אנגלית סקוטית סטנדרטית"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     codePatterns{
         language{"שפה:‏ {0}"}
         script{"כתב: {0}"}

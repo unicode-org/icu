@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ur.xml
  */
 ur{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"عابدجان"}
@@ -1708,6 +1708,8 @@ ur{
             ls{"سمارا اسٹینڈرڈ ٹائم"}
         }
         "meta:Samoa"{
+            ld{"ساموآ سمر وقت"}
+            lg{"ساموآ وقت"}
             ls{"ساموآ کا معیاری وقت"}
         }
         "meta:Seychelles"{

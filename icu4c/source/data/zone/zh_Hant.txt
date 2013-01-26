@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh_Hant.xml
  */
 zh_Hant{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿必尚"}
@@ -1755,6 +1755,8 @@ zh_Hant{
             ls{"薩馬拉標準時間"}
         }
         "meta:Samoa"{
+            ld{"薩摩亞夏令時間"}
+            lg{"薩摩亞時間"}
             ls{"薩摩亞標準時間"}
         }
         "meta:Seychelles"{

@@ -301,5 +301,5 @@ lt{
         ZW{"Zimbabvė"}
         ZZ{"nežinoma sritis"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
 }

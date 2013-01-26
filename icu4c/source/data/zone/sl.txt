@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sl.xml
  */
 sl{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -805,6 +805,8 @@ sl{
             ls{"Samarski standardni čas"}
         }
         "meta:Samoa"{
+            ld{"Samoanski poletni čas"}
+            lg{"Samoanski čas"}
             ls{"Samoanski standardni čas"}
         }
         "meta:Seychelles"{

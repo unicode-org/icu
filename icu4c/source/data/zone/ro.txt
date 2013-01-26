@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ro.xml
  */
 ro{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -734,6 +734,8 @@ ro{
             ls{"Ora standard din Samara"}
         }
         "meta:Samoa"{
+            ld{"Ora de vară din Samoa"}
+            lg{"Ora din Samoa"}
             ls{"Ora standard din Samoa"}
         }
         "meta:Seychelles"{

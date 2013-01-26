@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hi.xml
  */
 hi{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"एबिजान"}
@@ -1709,6 +1709,8 @@ hi{
             ls{"समारा मानक समय"}
         }
         "meta:Samoa"{
+            ld{"समोआ का ग्रीष्मकालीन समय"}
+            lg{"समोआ का समय"}
             ls{"समोआ का मानक समय"}
         }
         "meta:Seychelles"{

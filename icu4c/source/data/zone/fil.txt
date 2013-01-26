@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fil.xml
  */
 fil{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
     zoneStrings{
         "America:Asuncion"{
             ec{"Asunción"}
@@ -526,7 +526,9 @@ fil{
             ls{"Standard na Oras sa Samara"}
         }
         "meta:Samoa"{
-            ls{"Samoa Standard Time"}
+            ld{"Panahon ng Tag-init sa Samoa"}
+            lg{"Oras sa Samoa"}
+            ls{"Standard na Oras sa Samoa"}
         }
         "meta:Seychelles"{
             ls{"Seychelles Time"}

@@ -269,7 +269,7 @@ lt{
         }
         CNX{
             "CNX",
-            "Kinijos \"People\" banko doleriai",
+            "Kinijos \u0022People\u0022 banko doleriai",
         }
         CNY{
             "CN¥",
@@ -1506,9 +1506,9 @@ lt{
             other{"Čilės pesai"}
         }
         CNX{
-            few{"Kinijos \"People\" banko doleriai"}
-            one{"Kinijos \"People\" banko doleris"}
-            other{"Kinijos \"People\" banko doleriai"}
+            few{"Kinijos \u0022People\u0022 banko doleriai"}
+            one{"Kinijos \u0022People\u0022 banko doleris"}
+            other{"Kinijos \u0022People\u0022 banko doleriai"}
         }
         CNY{
             few{"Kinijos juaniai"}
@@ -2651,5 +2651,5 @@ lt{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.74"}
 }
