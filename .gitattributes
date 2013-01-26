@@ -87,6 +87,7 @@ icu4c/source/data/translit/el_Upper.txt -text
 icu4c/source/data/translit/lt_Upper.txt -text
 icu4c/source/data/translit/nl_Title.txt -text
 icu4c/source/data/translit/tr_Upper.txt -text
+icu4c/source/data/xml/main/ms_Latn.xml -text
 icu4c/source/data/zone/ms_Latn.txt -text
 icu4c/source/data/zone/pool.res -text
 icu4c/source/extra/uconv/uconv.vcxproj -text
