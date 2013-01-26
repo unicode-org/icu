@@ -180,10 +180,7 @@ public final class LocaleData {
                return null;
     
             String unicodeSetPattern = stringBundle.getString();
-            // HACK
             if (extype == ES_PUNCTUATION) {
-                Matcher matcher = US_SYNTAX.matcher(" " + unicodeSetPattern.substring(1,unicodeSetPattern.length()-1) + " ");
-                unicodeSetPattern = '[' + matcher.replaceAll(" \\\\$1") + ']';
                 try {
                     return new UnicodeSet(unicodeSetPattern, UnicodeSet.IGNORE_SPACE | options);
                 } catch (IllegalArgumentException e) {
@@ -200,8 +197,6 @@ public final class LocaleData {
             throw ex;
         }
     }
-    
-    static final Pattern US_SYNTAX = Pattern.compile(" ([\\-\\&\\{\\}\\[\\]\\\\])");
 
     /**
      * Gets the LocaleData object associated with the ULocale specified in locale
