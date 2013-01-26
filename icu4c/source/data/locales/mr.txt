@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mr.xml
 // *
@@ -151,7 +151,7 @@ mr{
         }
         native{"deva"}
     }
-    Version{"2.0.79.49"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -280,61 +280,6 @@ mr{
                 wide{
                     "ईसवीसनपूर्व",
                     "ईसवीसन",
-                }
-            }
-            fields{
-                day{
-                    dn{"दिवस"}
-                    relative{
-                        "-1"{"काल"}
-                        "0"{"आज"}
-                        "1"{"उद्या"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"युग"}
-                }
-                hour{
-                    dn{"तास"}
-                }
-                minute{
-                    dn{"मिनिट"}
-                }
-                month{
-                    dn{"महिना"}
-                    relative{
-                        "-1"{"मागील महिना"}
-                        "0"{"हा महिना"}
-                        "1"{"पुढील महिना"}
-                    }
-                }
-                second{
-                    dn{"सेकंद"}
-                }
-                week{
-                    dn{"आठव़डा"}
-                    relative{
-                        "-1"{"मागील आठवडा"}
-                        "0"{"हा आठवडा"}
-                        "1"{"पुढील आठवडा"}
-                    }
-                }
-                weekday{
-                    dn{"आठवड्याचा दिवस"}
-                }
-                year{
-                    dn{"वर्ष"}
-                    relative{
-                        "-1"{"मागील वर्ष"}
-                        "0"{"या वर्षी"}
-                        "1"{"पुढील वर्ष"}
-                    }
-                }
-                zone{
-                    dn{"झोन"}
                 }
             }
             intervalFormats{
@@ -551,6 +496,61 @@ mr{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"दिवस"}
+            relative{
+                "-1"{"काल"}
+                "0"{"आज"}
+                "1"{"उद्या"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"युग"}
+        }
+        hour{
+            dn{"तास"}
+        }
+        minute{
+            dn{"मिनिट"}
+        }
+        month{
+            dn{"महिना"}
+            relative{
+                "-1"{"मागील महिना"}
+                "0"{"हा महिना"}
+                "1"{"पुढील महिना"}
+            }
+        }
+        second{
+            dn{"सेकंद"}
+        }
+        week{
+            dn{"आठव़डा"}
+            relative{
+                "-1"{"मागील आठवडा"}
+                "0"{"हा आठवडा"}
+                "1"{"पुढील आठवडा"}
+            }
+        }
+        weekday{
+            dn{"आठवड्याचा दिवस"}
+        }
+        year{
+            dn{"वर्ष"}
+            relative{
+                "-1"{"मागील वर्ष"}
+                "0"{"या वर्षी"}
+                "1"{"पुढील वर्ष"}
+            }
+        }
+        zone{
+            dn{"झोन"}
+        }
     }
     listPattern{
         standard{

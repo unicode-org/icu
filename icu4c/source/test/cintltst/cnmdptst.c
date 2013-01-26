@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation
+ * Copyright (c) 1997-2013, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -880,7 +880,7 @@ static void TestGetKeywordValuesForLocale(void) {
             { "de",                 "EUR", NULL, NULL },
             { "de_DE",              "EUR", NULL, NULL },
             { "ar",                 "EGP", NULL, NULL },
-            { "ar_PS",              "JOD", "ILS", NULL },
+            { "ar_PS",              "ILS", "JOD", NULL },
             { "en@currency=CAD",    "USD", "USN", "USS" },
             { "fr@currency=zzz",    "EUR", NULL, NULL },
             { "de_DE@currency=DEM", "EUR", NULL, NULL },

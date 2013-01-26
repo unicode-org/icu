@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/seh.xml
 // *
@@ -29,7 +29,7 @@ seh{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -120,31 +120,6 @@ seh{
                     "Anno Domini",
                 }
             }
-            fields{
-                day{
-                    dn{"Ntsiku"}
-                    relative{
-                        "-1"{"Zuro"}
-                        "0"{"Lero"}
-                        "1"{"Manguana"}
-                    }
-                }
-                hour{
-                    dn{"Hora"}
-                }
-                minute{
-                    dn{"Minuto"}
-                }
-                month{
-                    dn{"Mwezi"}
-                }
-                second{
-                    dn{"Segundo"}
-                }
-                year{
-                    dn{"Chaka"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -200,5 +175,30 @@ seh{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Ntsiku"}
+            relative{
+                "-1"{"Zuro"}
+                "0"{"Lero"}
+                "1"{"Manguana"}
+            }
+        }
+        hour{
+            dn{"Hora"}
+        }
+        minute{
+            dn{"Minuto"}
+        }
+        month{
+            dn{"Mwezi"}
+        }
+        second{
+            dn{"Segundo"}
+        }
+        year{
+            dn{"Chaka"}
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ms.xml
 // *
@@ -121,7 +121,7 @@ ms{
             }
         }
     }
-    Version{"2.0.78.20"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -391,63 +391,6 @@ ms{
                 abbreviated{
                     "S.M.",
                     "TM",
-                }
-            }
-            fields{
-                day{
-                    dn{"Hari"}
-                    relative{
-                        "-1"{"Semalam"}
-                        "-2"{"Hari sebelum semalam"}
-                        "0"{"Hari ini"}
-                        "1"{"Esok"}
-                        "2"{"Hari selepas esok"}
-                    }
-                }
-                dayperiod{
-                    dn{"PG/PTG"}
-                }
-                era{
-                    dn{"Era"}
-                }
-                hour{
-                    dn{"Jam"}
-                }
-                minute{
-                    dn{"Minit"}
-                }
-                month{
-                    dn{"Bulan"}
-                    relative{
-                        "-1"{"Bulan lalu"}
-                        "0"{"Bulan ini"}
-                        "1"{"Bulan seterusnya"}
-                    }
-                }
-                second{
-                    dn{"Kedua"}
-                }
-                week{
-                    dn{"Minggu"}
-                    relative{
-                        "-1"{"Minggu lepas"}
-                        "0"{"Minggu ini"}
-                        "1"{"Minggu seterusnya"}
-                    }
-                }
-                weekday{
-                    dn{"Hari dalam Minggu"}
-                }
-                year{
-                    dn{"Tahun"}
-                    relative{
-                        "-1"{"Tahun lepas"}
-                        "0"{"Tahun ini"}
-                        "1"{"Tahun depan"}
-                    }
-                }
-                zone{
-                    dn{"Zon Waktu"}
                 }
             }
             intervalFormats{
@@ -774,6 +717,63 @@ ms{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Hari"}
+            relative{
+                "-1"{"Semalam"}
+                "-2"{"Hari sebelum semalam"}
+                "0"{"Hari ini"}
+                "1"{"Esok"}
+                "2"{"Hari selepas esok"}
+            }
+        }
+        dayperiod{
+            dn{"PG/PTG"}
+        }
+        era{
+            dn{"Era"}
+        }
+        hour{
+            dn{"Jam"}
+        }
+        minute{
+            dn{"Minit"}
+        }
+        month{
+            dn{"Bulan"}
+            relative{
+                "-1"{"Bulan lalu"}
+                "0"{"Bulan ini"}
+                "1"{"Bulan seterusnya"}
+            }
+        }
+        second{
+            dn{"Kedua"}
+        }
+        week{
+            dn{"Minggu"}
+            relative{
+                "-1"{"Minggu lepas"}
+                "0"{"Minggu ini"}
+                "1"{"Minggu seterusnya"}
+            }
+        }
+        weekday{
+            dn{"Hari dalam Minggu"}
+        }
+        year{
+            dn{"Tahun"}
+            relative{
+                "-1"{"Tahun lepas"}
+                "0"{"Tahun ini"}
+                "1"{"Tahun depan"}
+            }
+        }
+        zone{
+            dn{"Zon Waktu"}
+        }
     }
     listPattern{
         standard{

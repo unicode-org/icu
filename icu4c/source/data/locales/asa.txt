@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/asa.xml
 // *
@@ -23,7 +23,7 @@ asa{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -113,46 +113,6 @@ asa{
                     "Baada yakwe Yethu",
                 }
             }
-            fields{
-                day{
-                    dn{"Thiku"}
-                    relative{
-                        "-1"{"Ighuo"}
-                        "0"{"Iyoo"}
-                        "1"{"Yavo"}
-                    }
-                }
-                dayperiod{
-                    dn{"Marango athiku"}
-                }
-                era{
-                    dn{"Edhi"}
-                }
-                hour{
-                    dn{"Thaa"}
-                }
-                minute{
-                    dn{"Dakika"}
-                }
-                month{
-                    dn{"Mweji"}
-                }
-                second{
-                    dn{"Thekunde"}
-                }
-                week{
-                    dn{"Ndisha"}
-                }
-                weekday{
-                    dn{"Thiku ya ndisha"}
-                }
-                year{
-                    dn{"Mwaka"}
-                }
-                zone{
-                    dn{"Majira Athaa"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -224,5 +184,45 @@ asa{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Thiku"}
+            relative{
+                "-1"{"Ighuo"}
+                "0"{"Iyoo"}
+                "1"{"Yavo"}
+            }
+        }
+        dayperiod{
+            dn{"Marango athiku"}
+        }
+        era{
+            dn{"Edhi"}
+        }
+        hour{
+            dn{"Thaa"}
+        }
+        minute{
+            dn{"Dakika"}
+        }
+        month{
+            dn{"Mweji"}
+        }
+        second{
+            dn{"Thekunde"}
+        }
+        week{
+            dn{"Ndisha"}
+        }
+        weekday{
+            dn{"Thiku ya ndisha"}
+        }
+        year{
+            dn{"Mwaka"}
+        }
+        zone{
+            dn{"Majira Athaa"}
+        }
     }
 }

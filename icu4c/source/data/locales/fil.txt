@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fil.xml
 // *
@@ -142,7 +142,7 @@ fil{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -259,63 +259,6 @@ fil{
                 abbreviated{
                     "BC",
                     "AD",
-                }
-            }
-            fields{
-                day{
-                    dn{"Araw"}
-                    relative{
-                        "-1"{"Kahapon"}
-                        "-2"{"Araw bago ang kahapon"}
-                        "0"{"Ngayon"}
-                        "1"{"Bukas"}
-                        "2"{"Araw pagkatapos ng kahapon"}
-                    }
-                }
-                dayperiod{
-                    dn{"Dayperiod"}
-                }
-                era{
-                    dn{"Era"}
-                }
-                hour{
-                    dn{"Oras"}
-                }
-                minute{
-                    dn{"Minuto"}
-                }
-                month{
-                    dn{"Buwan"}
-                    relative{
-                        "-1"{"Nakaraang buwan"}
-                        "0"{"Ngayon buwang ito"}
-                        "1"{"Susunod na buwan"}
-                    }
-                }
-                second{
-                    dn{"Segundo"}
-                }
-                week{
-                    dn{"Linggo"}
-                    relative{
-                        "-1"{"Nakaraang Linggo"}
-                        "0"{"Sa linggong ito"}
-                        "1"{"Susunod na linggo"}
-                    }
-                }
-                weekday{
-                    dn{"Araw ng Linggo"}
-                }
-                year{
-                    dn{"Taon"}
-                    relative{
-                        "-1"{"Nakaraang taon"}
-                        "0"{"Sa taong ito"}
-                        "1"{"Susunod na taon"}
-                    }
-                }
-                zone{
-                    dn{"Zone"}
                 }
             }
             intervalFormats{
@@ -510,6 +453,63 @@ fil{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Araw"}
+            relative{
+                "-1"{"Kahapon"}
+                "-2"{"Araw bago ang kahapon"}
+                "0"{"Ngayon"}
+                "1"{"Bukas"}
+                "2"{"Araw pagkatapos ng kahapon"}
+            }
+        }
+        dayperiod{
+            dn{"Dayperiod"}
+        }
+        era{
+            dn{"Era"}
+        }
+        hour{
+            dn{"Oras"}
+        }
+        minute{
+            dn{"Minuto"}
+        }
+        month{
+            dn{"Buwan"}
+            relative{
+                "-1"{"Nakaraang buwan"}
+                "0"{"Ngayon buwang ito"}
+                "1"{"Susunod na buwan"}
+            }
+        }
+        second{
+            dn{"Segundo"}
+        }
+        week{
+            dn{"Linggo"}
+            relative{
+                "-1"{"Nakaraang Linggo"}
+                "0"{"Sa linggong ito"}
+                "1"{"Susunod na linggo"}
+            }
+        }
+        weekday{
+            dn{"Araw ng Linggo"}
+        }
+        year{
+            dn{"Taon"}
+            relative{
+                "-1"{"Nakaraang taon"}
+                "0"{"Sa taong ito"}
+                "1"{"Susunod na taon"}
+            }
+        }
+        zone{
+            dn{"Zone"}
+        }
     }
     listPattern{
         standard{

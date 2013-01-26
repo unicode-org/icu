@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/th.xml
 // *
@@ -20,7 +20,7 @@ th{
         "[ก ข ฃ ค ฅ ฆ ง จ ฉ ช ซ ฌ ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ฤ ล ฦ"
         " ว ศ ษ ส ห ฬ อ ฮ]"
     }
-    ExemplarCharactersPunctuation{"[! \" # ' ( ) * , \- . / \: @ \[ \\ \] ‐ – — ‘ ’ “ ” … ′ ″]"}
+    ExemplarCharactersPunctuation{"[! \u0022 # ' ( ) * , \\- . / \: @ \\[ \\\\  \\] ‐ – — ‘ ’ “ ” … ′ ″]"}
     LocaleScript{
         "Thai",
     }
@@ -128,7 +128,7 @@ th{
         }
         native{"thai"}
     }
-    Version{"2.0.79.95"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -832,63 +832,6 @@ th{
                 wide{
                     "ปีก่อนคริสต์ศักราช",
                     "คริสต์ศักราช",
-                }
-            }
-            fields{
-                day{
-                    dn{"วัน"}
-                    relative{
-                        "-1"{"เมื่อวาน"}
-                        "-2"{"เมื่อวานซืน"}
-                        "0"{"วันนี้"}
-                        "1"{"พรุ่งนี้"}
-                        "2"{"มะรืนนี้"}
-                    }
-                }
-                dayperiod{
-                    dn{"ช่วงวัน"}
-                }
-                era{
-                    dn{"สมัย"}
-                }
-                hour{
-                    dn{"ชั่วโมง"}
-                }
-                minute{
-                    dn{"นาที"}
-                }
-                month{
-                    dn{"เดือน"}
-                    relative{
-                        "-1"{"เดือนที่แล้ว"}
-                        "0"{"เดือนนี้"}
-                        "1"{"เดือนหน้า"}
-                    }
-                }
-                second{
-                    dn{"วินาที"}
-                }
-                week{
-                    dn{"สัปดาห์"}
-                    relative{
-                        "-1"{"สัปดาห์ที่แล้ว"}
-                        "0"{"สัปดาห์นี้"}
-                        "1"{"สัปดาห์หน้า"}
-                    }
-                }
-                weekday{
-                    dn{"วันในสัปดาห์"}
-                }
-                year{
-                    dn{"ปี"}
-                    relative{
-                        "-1"{"ปีที่แล้ว"}
-                        "0"{"ปีนี้"}
-                        "1"{"ปีหน้า"}
-                    }
-                }
-                zone{
-                    dn{"เขต"}
                 }
             }
             intervalFormats{
@@ -1865,6 +1808,63 @@ th{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"วัน"}
+            relative{
+                "-1"{"เมื่อวาน"}
+                "-2"{"เมื่อวานซืน"}
+                "0"{"วันนี้"}
+                "1"{"พรุ่งนี้"}
+                "2"{"มะรืนนี้"}
+            }
+        }
+        dayperiod{
+            dn{"ช่วงวัน"}
+        }
+        era{
+            dn{"สมัย"}
+        }
+        hour{
+            dn{"ชั่วโมง"}
+        }
+        minute{
+            dn{"นาที"}
+        }
+        month{
+            dn{"เดือน"}
+            relative{
+                "-1"{"เดือนที่แล้ว"}
+                "0"{"เดือนนี้"}
+                "1"{"เดือนหน้า"}
+            }
+        }
+        second{
+            dn{"วินาที"}
+        }
+        week{
+            dn{"สัปดาห์"}
+            relative{
+                "-1"{"สัปดาห์ที่แล้ว"}
+                "0"{"สัปดาห์นี้"}
+                "1"{"สัปดาห์หน้า"}
+            }
+        }
+        weekday{
+            dn{"วันในสัปดาห์"}
+        }
+        year{
+            dn{"ปี"}
+            relative{
+                "-1"{"ปีที่แล้ว"}
+                "0"{"ปีนี้"}
+                "1"{"ปีหน้า"}
+            }
+        }
+        zone{
+            dn{"เขต"}
+        }
     }
     listPattern{
         standard{

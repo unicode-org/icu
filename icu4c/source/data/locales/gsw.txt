@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/gsw.xml
 // *
@@ -37,7 +37,7 @@ gsw{
             }
         }
     }
-    Version{"2.0.78.47"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -151,48 +151,6 @@ gsw{
                 wide{
                     "v. Chr.",
                     "n. Chr.",
-                }
-            }
-            fields{
-                day{
-                    dn{"Tag"}
-                    relative{
-                        "-1"{"geschter"}
-                        "-2"{"vorgeschter"}
-                        "0"{"hüt"}
-                        "1"{"moorn"}
-                        "2"{"übermoorn"}
-                    }
-                }
-                dayperiod{
-                    dn{"Tageshälfti"}
-                }
-                era{
-                    dn{"Epoche"}
-                }
-                hour{
-                    dn{"Schtund"}
-                }
-                minute{
-                    dn{"Minuute"}
-                }
-                month{
-                    dn{"Monet"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Wuche"}
-                }
-                weekday{
-                    dn{"Wuchetag"}
-                }
-                year{
-                    dn{"Jaar"}
-                }
-                zone{
-                    dn{"Zone"}
                 }
             }
             intervalFormats{
@@ -364,6 +322,48 @@ gsw{
         alternateQuotationStart{"‹"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"Tag"}
+            relative{
+                "-1"{"geschter"}
+                "-2"{"vorgeschter"}
+                "0"{"hüt"}
+                "1"{"moorn"}
+                "2"{"übermoorn"}
+            }
+        }
+        dayperiod{
+            dn{"Tageshälfti"}
+        }
+        era{
+            dn{"Epoche"}
+        }
+        hour{
+            dn{"Schtund"}
+        }
+        minute{
+            dn{"Minuute"}
+        }
+        month{
+            dn{"Monet"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Wuche"}
+        }
+        weekday{
+            dn{"Wuchetag"}
+        }
+        year{
+            dn{"Jaar"}
+        }
+        zone{
+            dn{"Zone"}
+        }
     }
     listPattern{
         standard{

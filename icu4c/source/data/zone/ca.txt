@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ca.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ca.xml
  */
 ca{
-    Version{"2.0.78.32"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -432,11 +432,6 @@ ca{
             lg{"Hora d'Alaska"}
             ls{"Horari estàndard d'Alaska"}
         }
-        "meta:Alaska_Hawaii"{
-            ld{"Horari d'estiu d'Alaska-Hawaii"}
-            lg{"Hora d'Alaska-Hawaii"}
-            ls{"Hora estàndard d'Alaska-Hawaii"}
-        }
         "meta:Amazon"{
             ld{"Hora d'estiu de l'Amazones"}
             lg{"Hora de l'Amazones"}
@@ -521,11 +516,6 @@ ca{
             ld{"Hora d'estiu de Bangla Desh"}
             lg{"Hora de Bangla Desh"}
             ls{"Hora estàndard de Bangla Desh"}
-        }
-        "meta:Bering"{
-            ld{"Hora d'estiu de Bering"}
-            lg{"Hora de Bering"}
-            ls{"Hora estàndard de Bering"}
         }
         "meta:Bhutan"{
             ls{"Hora de Bhutan"}
@@ -623,11 +613,6 @@ ca{
             lg{"Hora de Geòrgia"}
             ls{"Hora estàndard de Geòrgia"}
         }
-        "meta:Greenland_Central"{
-            ld{"Horari d'estiu de Grenlàndia Central"}
-            lg{"Hora de Grenlàndia Central"}
-            ls{"Hora estàndard de Grenlàndia Central"}
-        }
         "meta:Greenland_Eastern"{
             ld{"Hora d'estiu de l'Est de Grenlàndia"}
             lg{"Hora de l'Est de Grenlàndia"}
@@ -709,11 +694,6 @@ ca{
             ld{"Horari d'estiu de Krasnoiarsk"}
             lg{"Hora de Krasnoiarsk"}
             ls{"Hora estàndard de Krasnoiarsk"}
-        }
-        "meta:Kuybyshev"{
-            ld{"Hora d'estiu de Kujbysev"}
-            lg{"Hora de Kujbysev"}
-            ls{"Hora estàndard de Kujbysev"}
         }
         "meta:Kyrgystan"{
             ls{"Hora del Kirguizistan"}
@@ -858,9 +838,6 @@ ca{
         "meta:South_Georgia"{
             ls{"Hora de Geòrgia del Sud"}
         }
-        "meta:Suriname"{
-            ls{"Hora de Surinam"}
-        }
         "meta:Syowa"{
             ls{"Hora de Syowa"}
         }
@@ -885,11 +862,6 @@ ca{
         }
         "meta:Truk"{
             ls{"Hora de Chuuk"}
-        }
-        "meta:Turkey"{
-            ld{"Hora d'estiu de Turquia"}
-            lg{"Hora de Turquia"}
-            ls{"Hora estàndard de Turquia"}
         }
         "meta:Turkmenistan"{
             ld{"Hora d'estiu del Turkmenistan"}
@@ -940,11 +912,6 @@ ca{
             ld{"Horari d'estiu d'Ekaterinburg"}
             lg{"Hora d'Ekaterinburg"}
             ls{"Hora estàndard d'Ekaterinburg"}
-        }
-        "meta:Yukon"{
-            ld{"Hora d'estiu de Yuokon"}
-            lg{"Hora de Yukon"}
-            ls{"Hora estàndard de Yukon"}
         }
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Hora de: {1} ({0})"}

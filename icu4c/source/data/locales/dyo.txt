@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/dyo.xml
 // *
@@ -29,7 +29,7 @@ dyo{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -114,31 +114,6 @@ dyo{
                     "Atooŋe Yeesu",
                 }
             }
-            fields{
-                day{
-                    dn{"Funak"}
-                    relative{
-                        "-1"{"Fucen"}
-                        "0"{"Jaat"}
-                        "1"{"Kajom"}
-                    }
-                }
-                dayperiod{
-                    dn{"Bujom / Kalíim"}
-                }
-                era{
-                    dn{"Jamanay"}
-                }
-                month{
-                    dn{"Fuleeŋ"}
-                }
-                week{
-                    dn{"Lóokuŋ"}
-                }
-                year{
-                    dn{"Emit"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -194,5 +169,30 @@ dyo{
         alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"Funak"}
+            relative{
+                "-1"{"Fucen"}
+                "0"{"Jaat"}
+                "1"{"Kajom"}
+            }
+        }
+        dayperiod{
+            dn{"Bujom / Kalíim"}
+        }
+        era{
+            dn{"Jamanay"}
+        }
+        month{
+            dn{"Fuleeŋ"}
+        }
+        week{
+            dn{"Lóokuŋ"}
+        }
+        year{
+            dn{"Emit"}
+        }
     }
 }

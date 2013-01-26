@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/supplementalMetadata.xml
 // *
@@ -192,12 +192,14 @@ metadata:table(nofallback){
         no_NYNORSK{"nn"}
         nob{"nb"}
         nor{"nb"}
+        npi{"ne"}
         nya{"ny"}
         oci{"oc"}
         ojg{"oj"}
         oji{"oj"}
         ori{"or"}
         orm{"om"}
+        ory{"or"}
         oss{"os"}
         pan{"pa"}
         pbu{"ps"}
@@ -352,7 +354,6 @@ metadata:table(nofallback){
         "BR",
         "BS",
         "BT",
-        "BU",
         "BV",
         "BW",
         "BY",
@@ -371,14 +372,12 @@ metadata:table(nofallback){
         "CO",
         "CP",
         "CR",
-        "CS",
         "CU",
         "CV",
         "CW",
         "CX",
         "CY",
         "CZ",
-        "DD",
         "DE",
         "DG",
         "DJ",
@@ -401,7 +400,6 @@ metadata:table(nofallback){
         "FM",
         "FO",
         "FR",
-        "FX",
         "GA",
         "GB",
         "GD",
@@ -497,7 +495,6 @@ metadata:table(nofallback){
         "NO",
         "NP",
         "NR",
-        "NT",
         "NU",
         "NZ",
         "OM",
@@ -517,7 +514,6 @@ metadata:table(nofallback){
         "PY",
         "QA",
         "QO",
-        "QU",
         "RE",
         "RO",
         "RS",
@@ -540,7 +536,6 @@ metadata:table(nofallback){
         "SR",
         "SS",
         "ST",
-        "SU",
         "SV",
         "SX",
         "SY",
@@ -557,7 +552,6 @@ metadata:table(nofallback){
         "TM",
         "TN",
         "TO",
-        "TP",
         "TR",
         "TT",
         "TV",
@@ -578,13 +572,10 @@ metadata:table(nofallback){
         "VU",
         "WF",
         "WS",
-        "YD",
         "YE",
         "YT",
-        "YU",
         "ZA",
         "ZM",
-        "ZR",
         "ZW",
         "ZZ",
     }

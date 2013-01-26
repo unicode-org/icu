@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ak.xml
 // *
@@ -27,7 +27,7 @@ ak{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -116,46 +116,6 @@ ak{
                     "Kristo Ekyiri",
                 }
             }
-            fields{
-                day{
-                    dn{"Da"}
-                    relative{
-                        "-1"{"Ndeda"}
-                        "0"{"Ndɛ"}
-                        "1"{"Ɔkyena"}
-                    }
-                }
-                dayperiod{
-                    dn{"Da bere"}
-                }
-                era{
-                    dn{"Bere"}
-                }
-                hour{
-                    dn{"Dɔnhwer"}
-                }
-                minute{
-                    dn{"Sema"}
-                }
-                month{
-                    dn{"Bosome"}
-                }
-                second{
-                    dn{"Sɛkɛnd"}
-                }
-                week{
-                    dn{"Dapɛn"}
-                }
-                weekday{
-                    dn{"Dapɛn mu da"}
-                }
-                year{
-                    dn{"Afe"}
-                }
-                zone{
-                    dn{"Bere apaamu"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -195,5 +155,45 @@ ak{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Da"}
+            relative{
+                "-1"{"Ndeda"}
+                "0"{"Ndɛ"}
+                "1"{"Ɔkyena"}
+            }
+        }
+        dayperiod{
+            dn{"Da bere"}
+        }
+        era{
+            dn{"Bere"}
+        }
+        hour{
+            dn{"Dɔnhwer"}
+        }
+        minute{
+            dn{"Sema"}
+        }
+        month{
+            dn{"Bosome"}
+        }
+        second{
+            dn{"Sɛkɛnd"}
+        }
+        week{
+            dn{"Dapɛn"}
+        }
+        weekday{
+            dn{"Dapɛn mu da"}
+        }
+        year{
+            dn{"Afe"}
+        }
+        zone{
+            dn{"Bere apaamu"}
+        }
     }
 }

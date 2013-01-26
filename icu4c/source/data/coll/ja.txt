@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/collation/ja.xml
@@ -14,7 +14,7 @@ ja{
     collations{
         standard{
             Sequence{
-                " [strength 3 ] [hiraganaQ on ]"
+                " [strength 3] [hiraganaQ on]"
                 "&ヽ=ゝ"
                 "&[before 3]ァ<<<ァ|ー=ｧ|ー=ぁ|ー=ア|ー=ｱ|ー=あ|ー=カ|ー=ｶ|ー=か|ー=ゕ|ー=ガ|ー=が|ー=サ|ー=ｻ"
                 "|ー=さ|ー=ザ|ー=ざ|ー=タ|ー=ﾀ|ー=た|ー=ダ|ー=だ|ー=ナ|ー=ﾅ|ー=な|ー=ハ|ー=ﾊ|ー=ㇵ|ー=は|ー=バ|ー=ば"
@@ -417,11 +417,11 @@ ja{
                 "鴃鴆鴪鴦鶯鴣鴟鵄鴕鴒鵁鴿鴾鵆鵈鵝鵞鵤鵑鵐鵙鵲鶉鶇鶫鵯鵺鶚鶤鶩鶲鷄鷁鶻鶸鶺鷆鷏鷂鷙鷓鷸鷦鷭鷯鷽鸚鸛鸞鹵鹹鹽麁麈麋麌麒麕麑麝麥麩麸麪麭靡黌黎"
                 "-黐黔黜點黝黠黥黨黯黴黶黷黹黻-黽鼇鼈皷鼕鼡鼬鼾齊齒齔齣齟-齡齦齧齬齪齷齲齶龕龜龠堯槇遙瑤凜熙"
             }
-            Version{"22.1.1"}
+            Version{"23"}
         }
         unihan{
             Sequence{
-                " [strength 3 ] [hiraganaQ on ]"
+                " [strength 3] [hiraganaQ on]"
                 "&ヽ=ゝ"
                 "&[before 3]ァ<<<ァ|ー=ｧ|ー=ぁ|ー=ア|ー=ｱ|ー=あ|ー=カ|ー=ｶ|ー=か|ー=ゕ|ー=ガ|ー=が|ー=サ|ー=ｻ"
                 "|ー=さ|ー=ザ|ー=ざ|ー=タ|ー=ﾀ|ー=た|ー=ダ|ー=だ|ー=ナ|ー=ﾅ|ー=な|ー=ハ|ー=ﾊ|ー=ㇵ|ー=は|ー=バ|ー=ば"
@@ -1741,7 +1741,7 @@ ja{
                 "&龟<<<⻳"
                 "&龠<<<⿕"
             }
-            Version{"22.1.1"}
+            Version{"23"}
         }
     }
 }

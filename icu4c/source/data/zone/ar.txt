@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ar.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ar.xml
  */
 ar{
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"أبيدجان"}
@@ -1293,11 +1293,6 @@ ar{
             lg{"توقيت ألاسكا"}
             ls{"التوقيت الرسمي لألاسكا"}
         }
-        "meta:Alaska_Hawaii"{
-            ld{"توقيت ألاسكا-هاواي الصيفي"}
-            lg{"توقيت ألاسكا-هاواي"}
-            ls{"التوقيت الرسمي لألاسكا-هاواي"}
-        }
         "meta:Amazon"{
             ld{"توقيت الأمازون الصيفي"}
             lg{"توقيت الأمازون"}
@@ -1388,11 +1383,6 @@ ar{
         }
         "meta:Bolivia"{
             ls{"توقيت بوليفيا"}
-        }
-        "meta:Borneo"{
-            ld{"توقيت بورنيو الصيفي"}
-            lg{"توقيت بورنيو"}
-            ls{"توقيت بورنيو الرسمي"}
         }
         "meta:Brasilia"{
             ld{"توقيت برازيليا الصيفي"}
@@ -1577,9 +1567,6 @@ ar{
             lg{"توقيت كراسنويارسك"}
             ls{"توقيت كراسنويارسك الرسمي"}
         }
-        "meta:Kwajalein"{
-            ls{"توقيت كواجالين"}
-        }
         "meta:Lord_Howe"{
             ld{"التوقيت الصيفي للورد هاو"}
             lg{"توقيت لورد هاو"}
@@ -1592,9 +1579,6 @@ ar{
             ld{"توقيت ماغادان الصيفي"}
             lg{"توقيت ماغادان"}
             ls{"توقيت ماغادان الرسمي"}
-        }
-        "meta:Malaya"{
-            ls{"توقيت مالايا"}
         }
         "meta:Malaysia"{
             ls{"توقيت ماليزيا"}
@@ -1707,9 +1691,6 @@ ar{
         }
         "meta:Solomon"{
             ls{"توقيت جزر سليمان"}
-        }
-        "meta:Suriname"{
-            ls{"توقيت سورينام"}
         }
         "meta:Tahiti"{
             ls{"توقيت تاهيتي"}

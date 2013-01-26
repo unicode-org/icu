@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sv_FI.xml
 // *
@@ -12,5 +12,5 @@ sv_FI{
         MF{"S:t Martin (franska delen)"}
         SD{"Nordsudan"}
     }
-    Version{"2.0.75.99"}
+    Version{"2.0.80.73"}
 }

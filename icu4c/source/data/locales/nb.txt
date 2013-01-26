@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nb.xml
 // *
@@ -13,7 +13,7 @@ nb{
     AuxExemplarCharacters{"[á ǎ ã č ç đ è ê í ń ñ ŋ š ŧ ü ž ä ö]"}
     ExemplarCharacters{"[a à b c d e é f g h i j k l m n o ó ò ô p q r s t u v w x y z æ ø å]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z Æ Ø Å]"}
-    ExemplarCharactersPunctuation{"[\- – , ; \: ! ? . ' \" « » ( ) \[ \] \{ \} § @ * / \\]"}
+    ExemplarCharactersPunctuation{"[\\- – , ; \: ! ? . ' \u0022 « » ( ) \\[ \\] \\{ \\} § @ * / \\\\ ]"}
     LocaleScript{
         "Latn",
     }
@@ -143,7 +143,7 @@ nb{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -333,63 +333,6 @@ nb{
                 wide{
                     "f.Kr.",
                     "e.Kr.",
-                }
-            }
-            fields{
-                day{
-                    dn{"dag"}
-                    relative{
-                        "-1"{"i går"}
-                        "-2"{"i forgårs"}
-                        "0"{"i dag"}
-                        "1"{"i morgen"}
-                        "2"{"i overmorgen"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"tidsalder"}
-                }
-                hour{
-                    dn{"time"}
-                }
-                minute{
-                    dn{"minutt"}
-                }
-                month{
-                    dn{"måned"}
-                    relative{
-                        "-1"{"Sist måned"}
-                        "0"{"Denne måneden"}
-                        "1"{"Neste måned"}
-                    }
-                }
-                second{
-                    dn{"sekund"}
-                }
-                week{
-                    dn{"uke"}
-                    relative{
-                        "-1"{"Sist uke"}
-                        "0"{"Denne uken"}
-                        "1"{"Neste uke"}
-                    }
-                }
-                weekday{
-                    dn{"ukedag"}
-                }
-                year{
-                    dn{"år"}
-                    relative{
-                        "-1"{"I fjor"}
-                        "0"{"Dette året"}
-                        "1"{"Neste år"}
-                    }
-                }
-                zone{
-                    dn{"sone"}
                 }
             }
             intervalFormats{
@@ -773,6 +716,63 @@ nb{
         alternateQuotationStart{"‘"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"dag"}
+            relative{
+                "-1"{"i går"}
+                "-2"{"i forgårs"}
+                "0"{"i dag"}
+                "1"{"i morgen"}
+                "2"{"i overmorgen"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"tidsalder"}
+        }
+        hour{
+            dn{"time"}
+        }
+        minute{
+            dn{"minutt"}
+        }
+        month{
+            dn{"måned"}
+            relative{
+                "-1"{"Sist måned"}
+                "0"{"Denne måneden"}
+                "1"{"Neste måned"}
+            }
+        }
+        second{
+            dn{"sekund"}
+        }
+        week{
+            dn{"uke"}
+            relative{
+                "-1"{"Sist uke"}
+                "0"{"Denne uken"}
+                "1"{"Neste uke"}
+            }
+        }
+        weekday{
+            dn{"ukedag"}
+        }
+        year{
+            dn{"år"}
+            relative{
+                "-1"{"I fjor"}
+                "0"{"Dette året"}
+                "1"{"Neste år"}
+            }
+        }
+        zone{
+            dn{"sone"}
+        }
     }
     listPattern{
         standard{

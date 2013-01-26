@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/dz.xml
 // *
@@ -22,8 +22,8 @@ dz{
     }
     ExemplarCharactersIndex{"[ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཨ]"}
     ExemplarCharactersPunctuation{
-        "[\- ‐ – — , ; \: ༔ ! ? . … ' ‘ ’ \" “ ” ( ) \[ \] ༼ ༽ § @ * / \& # † ‡ ༄ ༅ ༆"
-        " ༈ ༉ ༊ ࿐ ࿑ ༌ ། ༎ ༏ ༐ ༑ ༒ ࿒ ࿓ ࿔ ༴ ༶ ྾ ྿]"
+        "[\\- ‐ – — , ; \: ༔ ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] ༼ ༽ § @ * / \\& # † ‡ ༄ ༅ ༆ "
+        "༈ ༉ ༊ ࿐ ࿑ ༌ ། ༎ ༏ ༐ ༑ ༒ ࿒ ࿓ ࿔ ༴ ༶ ྾ ྿]"
     }
     LocaleScript{
         "Tibt",
@@ -106,7 +106,7 @@ dz{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -236,48 +236,6 @@ dz{
                 abbreviated{
                     "BCE",
                     "CE",
-                }
-            }
-            fields{
-                day{
-                    dn{"ཚེས་"}
-                    relative{
-                        "-1"{"ཁ་ཙ་"}
-                        "-2"{"ཁ་ཉིམ"}
-                        "0"{"ད་རིས་"}
-                        "1"{"ནངས་པ་"}
-                        "2"{"གནངས་ཚེ"}
-                    }
-                }
-                dayperiod{
-                    dn{"སྔ་ཆ/ཕྱི་ཆ་"}
-                }
-                era{
-                    dn{"དུས་བསྐལ"}
-                }
-                hour{
-                    dn{"ཆུ་ཚོད"}
-                }
-                minute{
-                    dn{"སྐར་མ"}
-                }
-                month{
-                    dn{"ཟླ་ཝ་"}
-                }
-                second{
-                    dn{"སྐར་ཆཱ་"}
-                }
-                week{
-                    dn{"བདུན་ཕྲག"}
-                }
-                weekday{
-                    dn{"བདུན་ཕྲག་གི་ཉིམ"}
-                }
-                year{
-                    dn{"ལོ"}
-                }
-                zone{
-                    dn{"དུས་ཀུལ"}
                 }
             }
             intervalFormats{
@@ -514,6 +472,48 @@ dz{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"ཚེས་"}
+            relative{
+                "-1"{"ཁ་ཙ་"}
+                "-2"{"ཁ་ཉིམ"}
+                "0"{"ད་རིས་"}
+                "1"{"ནངས་པ་"}
+                "2"{"གནངས་ཚེ"}
+            }
+        }
+        dayperiod{
+            dn{"སྔ་ཆ/ཕྱི་ཆ་"}
+        }
+        era{
+            dn{"དུས་བསྐལ"}
+        }
+        hour{
+            dn{"ཆུ་ཚོད"}
+        }
+        minute{
+            dn{"སྐར་མ"}
+        }
+        month{
+            dn{"ཟླ་ཝ་"}
+        }
+        second{
+            dn{"སྐར་ཆཱ་"}
+        }
+        week{
+            dn{"བདུན་ཕྲག"}
+        }
+        weekday{
+            dn{"བདུན་ཕྲག་གི་ཉིམ"}
+        }
+        year{
+            dn{"ལོ"}
+        }
+        zone{
+            dn{"དུས་ཀུལ"}
+        }
     }
     listPattern{
         standard{

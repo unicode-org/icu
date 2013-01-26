@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/guz.xml
 // *
@@ -23,7 +23,7 @@ guz{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -111,46 +111,6 @@ guz{
                     "Yeso kaiboirwe",
                 }
             }
-            fields{
-                day{
-                    dn{"Rituko"}
-                    relative{
-                        "-1"{"Igoro"}
-                        "0"{"Rero"}
-                        "1"{"Mambia"}
-                    }
-                }
-                dayperiod{
-                    dn{"Mambia gose Morogoba"}
-                }
-                era{
-                    dn{"Ebiro"}
-                }
-                hour{
-                    dn{"Ensa"}
-                }
-                minute{
-                    dn{"Edakika"}
-                }
-                month{
-                    dn{"Omotienyi"}
-                }
-                second{
-                    dn{"Esekendi"}
-                }
-                week{
-                    dn{"Omokubio"}
-                }
-                weekday{
-                    dn{"Rituko r'ewiki"}
-                }
-                year{
-                    dn{"Omwaka"}
-                }
-                zone{
-                    dn{"Chinse 'chimo"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -222,5 +182,45 @@ guz{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Rituko"}
+            relative{
+                "-1"{"Igoro"}
+                "0"{"Rero"}
+                "1"{"Mambia"}
+            }
+        }
+        dayperiod{
+            dn{"Mambia gose Morogoba"}
+        }
+        era{
+            dn{"Ebiro"}
+        }
+        hour{
+            dn{"Ensa"}
+        }
+        minute{
+            dn{"Edakika"}
+        }
+        month{
+            dn{"Omotienyi"}
+        }
+        second{
+            dn{"Esekendi"}
+        }
+        week{
+            dn{"Omokubio"}
+        }
+        weekday{
+            dn{"Rituko r'ewiki"}
+        }
+        year{
+            dn{"Omwaka"}
+        }
+        zone{
+            dn{"Chinse 'chimo"}
+        }
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/supplementalData.xml
 // *
@@ -15,6 +15,15 @@ supplementalData:table(nofallback){
                     320765952,
                 }
                 id{"EUR"}
+            }
+        }
+        AC{
+            {
+                from:intvector{
+                    44,
+                    323838976,
+                }
+                id{"SHP"}
             }
         }
         AD{
@@ -155,15 +164,6 @@ supplementalData:table(nofallback){
                     161,
                     -2079101953,
                 }
-            }
-        }
-        AN{
-            {
-                from:intvector{
-                    -218,
-                    763670528,
-                }
-                id{"ANG"}
             }
         }
         AO{
@@ -521,12 +521,28 @@ supplementalData:table(nofallback){
                 }
             }
             {
+                from:intvector{
+                    0,
+                    0,
+                }
                 id{"BEL"}
                 tender{"false"}
+                to:intvector{
+                    148,
+                    1026440191,
+                }
             }
             {
+                from:intvector{
+                    0,
+                    0,
+                }
                 id{"BEC"}
                 tender{"false"}
+                to:intvector{
+                    148,
+                    1026440191,
+                }
             }
         }
         BF{
@@ -689,6 +705,26 @@ supplementalData:table(nofallback){
             {
                 id{"BOV"}
                 tender{"false"}
+            }
+        }
+        BQ{
+            {
+                from:intvector{
+                    301,
+                    1054843904,
+                }
+                id{"USD"}
+            }
+            {
+                from:intvector{
+                    299,
+                    -1821388800,
+                }
+                id{"ANG"}
+                to:intvector{
+                    301,
+                    1141243903,
+                }
             }
         }
         BR{
@@ -1028,8 +1064,16 @@ supplementalData:table(nofallback){
                 id{"CNY"}
             }
             {
+                from:intvector{
+                    66,
+                    528958464,
+                }
                 id{"CNX"}
                 tender{"false"}
+                to:intvector{
+                    213,
+                    320765951,
+                }
             }
         }
         CO{
@@ -1043,6 +1087,11 @@ supplementalData:table(nofallback){
             {
                 id{"COU"}
                 tender{"false"}
+            }
+        }
+        CP{
+            {
+                id{"XXX"}
             }
         }
         CR{
@@ -1136,6 +1185,15 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        CW{
+            {
+                from:intvector{
+                    299,
+                    -1821388800,
+                }
+                id{"ANG"}
+            }
+        }
         CX{
             {
                 from:intvector{
@@ -1218,6 +1276,15 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        DG{
+            {
+                from:intvector{
+                    -31,
+                    -2046981120,
+                }
+                id{"USD"}
+            }
+        }
         DJ{
             {
                 from:intvector{
@@ -1274,6 +1341,15 @@ supplementalData:table(nofallback){
                 id{"DZD"}
             }
         }
+        EA{
+            {
+                from:intvector{
+                    213,
+                    320765952,
+                }
+                id{"EUR"}
+            }
+        }
         EC{
             {
                 from:intvector{
@@ -1294,8 +1370,16 @@ supplementalData:table(nofallback){
                 }
             }
             {
+                from:intvector{
+                    171,
+                    -619174912,
+                }
                 id{"ECV"}
                 tender{"false"}
+                to:intvector{
+                    220,
+                    -1725372417,
+                }
             }
         }
         EE{
@@ -1387,12 +1471,28 @@ supplementalData:table(nofallback){
                 }
             }
             {
+                from:intvector{
+                    58,
+                    -942270464,
+                }
                 id{"ESA"}
                 tender{"false"}
+                to:intvector{
+                    88,
+                    734077951,
+                }
             }
             {
+                from:intvector{
+                    36,
+                    -1147389952,
+                }
                 id{"ESB"}
                 tender{"false"}
+                to:intvector{
+                    183,
+                    -1355582465,
+                }
             }
         }
         ET{
@@ -1411,6 +1511,18 @@ supplementalData:table(nofallback){
                     320765952,
                 }
                 id{"EUR"}
+            }
+            {
+                from:intvector{
+                    66,
+                    528958464,
+                }
+                id{"XEU"}
+                tender{"false"}
+                to:intvector{
+                    213,
+                    320765951,
+                }
             }
         }
         FI{
@@ -1886,6 +1998,15 @@ supplementalData:table(nofallback){
                 id{"HUF"}
             }
         }
+        IC{
+            {
+                from:intvector{
+                    213,
+                    320765952,
+                }
+                id{"EUR"}
+            }
+        }
         ID{
             {
                 from:intvector{
@@ -1982,13 +2103,6 @@ supplementalData:table(nofallback){
                     -2046981120,
                 }
                 id{"USD"}
-            }
-            {
-                from:intvector{
-                    -31,
-                    -2046981120,
-                }
-                id{"GBP"}
             }
         }
         IQ{
@@ -2393,12 +2507,28 @@ supplementalData:table(nofallback){
                 }
             }
             {
+                from:intvector{
+                    0,
+                    0,
+                }
                 id{"LUC"}
                 tender{"false"}
+                to:intvector{
+                    148,
+                    1026440191,
+                }
             }
             {
+                from:intvector{
+                    0,
+                    0,
+                }
                 id{"LUL"}
                 tender{"false"}
+                to:intvector{
+                    148,
+                    1026440191,
+                }
             }
         }
         LV{
@@ -2886,10 +3016,6 @@ supplementalData:table(nofallback){
                     -1022325760,
                 }
                 id{"ZAR"}
-                to:intvector{
-                    169,
-                    83326975,
-                }
             }
         }
         NC{
@@ -3221,17 +3347,17 @@ supplementalData:table(nofallback){
         PS{
             {
                 from:intvector{
-                    191,
-                    -550520832,
-                }
-                id{"JOD"}
-            }
-            {
-                from:intvector{
                     115,
                     718760960,
                 }
                 id{"ILS"}
+            }
+            {
+                from:intvector{
+                    191,
+                    -550520832,
+                }
+                id{"JOD"}
             }
             {
                 from:intvector{
@@ -3743,6 +3869,15 @@ supplementalData:table(nofallback){
                 }
             }
         }
+        SX{
+            {
+                from:intvector{
+                    299,
+                    -1821388800,
+                }
+                id{"ANG"}
+            }
+        }
         SY{
             {
                 from:intvector{
@@ -3759,6 +3894,15 @@ supplementalData:table(nofallback){
                     1628711936,
                 }
                 id{"SZL"}
+            }
+        }
+        TA{
+            {
+                from:intvector{
+                    -235,
+                    424514560,
+                }
+                id{"GBP"}
             }
         }
         TC{
@@ -4371,8 +4515,16 @@ supplementalData:table(nofallback){
                 id{"ZAR"}
             }
             {
+                from:intvector{
+                    115,
+                    459560960,
+                }
                 id{"ZAL"}
                 tender{"false"}
+                to:intvector{
+                    185,
+                    570250239,
+                }
             }
         }
         ZM{
@@ -4491,12 +4643,16 @@ supplementalData:table(nofallback){
                 tender{"false"}
             }
             {
-                id{"XEU"}
-                tender{"false"}
-            }
-            {
+                from:intvector{
+                    -294,
+                    416385024,
+                }
                 id{"XFO"}
                 tender{"false"}
+                to:intvector{
+                    244,
+                    1269579775,
+                }
             }
             {
                 id{"XFU"}
@@ -4508,10 +4664,6 @@ supplementalData:table(nofallback){
             }
             {
                 id{"XPT"}
-                tender{"false"}
-            }
-            {
-                id{"XRE"}
                 tender{"false"}
             }
             {

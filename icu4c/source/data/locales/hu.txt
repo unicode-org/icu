@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hu.xml
 // *
@@ -20,7 +20,7 @@ hu{
         "[A Á B C {CS} D {DZ} {DZS} E É F G {GY} H I Í J K L {LY} M N {NY} O Ó Ö Ő P "
         "Q R S {SZ} T {TY} U Ú Ü Ű V W X Y Z {ZS}]"
     }
-    ExemplarCharactersPunctuation{"[\- – , ; \: ! ? . … ' ’ \" ” „ « » ( ) \[ \] \{ \} 〈 〉 § @ * / \& # ⸓ ~]"}
+    ExemplarCharactersPunctuation{"[\\- – , ; \: ! ? . … ' ’ \u0022 ” „ « » ( ) \\[ \\] \\{ \\} 〈 〉 § @ * / \\& # ⸓ ~]"}
     LocaleScript{
         "Latn",
     }
@@ -126,7 +126,7 @@ hu{
             }
         }
     }
-    Version{"2.0.78.47"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             availableFormats{
@@ -473,63 +473,6 @@ hu{
                 wide{
                     "időszámításunk előtt",
                     "időszámításunk szerint",
-                }
-            }
-            fields{
-                day{
-                    dn{"nap"}
-                    relative{
-                        "-1"{"tegnap"}
-                        "-2"{"tegnapelőtt"}
-                        "0"{"ma"}
-                        "1"{"holnap"}
-                        "2"{"holnapután"}
-                    }
-                }
-                dayperiod{
-                    dn{"napszak"}
-                }
-                era{
-                    dn{"éra"}
-                }
-                hour{
-                    dn{"óra"}
-                }
-                minute{
-                    dn{"perc"}
-                }
-                month{
-                    dn{"hónap"}
-                    relative{
-                        "-1"{"Előző hónap"}
-                        "0"{"Ez a hónap"}
-                        "1"{"Következő hónap"}
-                    }
-                }
-                second{
-                    dn{"másodperc"}
-                }
-                week{
-                    dn{"hét"}
-                    relative{
-                        "-1"{"Előző hét"}
-                        "0"{"Ez a hét"}
-                        "1"{"Következő hét"}
-                    }
-                }
-                weekday{
-                    dn{"hét napja"}
-                }
-                year{
-                    dn{"év"}
-                    relative{
-                        "-1"{"Előző év"}
-                        "0"{"Ez az év"}
-                        "1"{"Következő év"}
-                    }
-                }
-                zone{
-                    dn{"időzóna"}
                 }
             }
             intervalFormats{
@@ -1098,6 +1041,63 @@ hu{
         alternateQuotationStart{"»"}
         quotationEnd{"”"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"nap"}
+            relative{
+                "-1"{"tegnap"}
+                "-2"{"tegnapelőtt"}
+                "0"{"ma"}
+                "1"{"holnap"}
+                "2"{"holnapután"}
+            }
+        }
+        dayperiod{
+            dn{"napszak"}
+        }
+        era{
+            dn{"éra"}
+        }
+        hour{
+            dn{"óra"}
+        }
+        minute{
+            dn{"perc"}
+        }
+        month{
+            dn{"hónap"}
+            relative{
+                "-1"{"Előző hónap"}
+                "0"{"Ez a hónap"}
+                "1"{"Következő hónap"}
+            }
+        }
+        second{
+            dn{"másodperc"}
+        }
+        week{
+            dn{"hét"}
+            relative{
+                "-1"{"Előző hét"}
+                "0"{"Ez a hét"}
+                "1"{"Következő hét"}
+            }
+        }
+        weekday{
+            dn{"hét napja"}
+        }
+        year{
+            dn{"év"}
+            relative{
+                "-1"{"Előző év"}
+                "0"{"Ez az év"}
+                "1"{"Következő év"}
+            }
+        }
+        zone{
+            dn{"időzóna"}
+        }
     }
     listPattern{
         standard{

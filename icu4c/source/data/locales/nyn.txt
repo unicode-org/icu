@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nyn.xml
 // *
@@ -22,7 +22,7 @@ nyn{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -106,46 +106,6 @@ nyn{
                     "Kurisito Yaijire",
                 }
             }
-            fields{
-                day{
-                    dn{"Eizooba"}
-                    relative{
-                        "-1"{"Nyomwabazyo"}
-                        "0"{"Erizooba"}
-                        "1"{"Nyenkyakare"}
-                    }
-                }
-                dayperiod{
-                    dn{"Nyomushana/nyekiro"}
-                }
-                era{
-                    dn{"Obunaku"}
-                }
-                hour{
-                    dn{"Shaaha"}
-                }
-                minute{
-                    dn{"Edakiika"}
-                }
-                month{
-                    dn{"Omwezi"}
-                }
-                second{
-                    dn{"Obucweka/Esekendi"}
-                }
-                week{
-                    dn{"Esande"}
-                }
-                weekday{
-                    dn{"Eizooba ry'okukora"}
-                }
-                year{
-                    dn{"Omwaka"}
-                }
-                zone{
-                    dn{"Eshaaha za"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -217,5 +177,45 @@ nyn{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Eizooba"}
+            relative{
+                "-1"{"Nyomwabazyo"}
+                "0"{"Erizooba"}
+                "1"{"Nyenkyakare"}
+            }
+        }
+        dayperiod{
+            dn{"Nyomushana/nyekiro"}
+        }
+        era{
+            dn{"Obunaku"}
+        }
+        hour{
+            dn{"Shaaha"}
+        }
+        minute{
+            dn{"Edakiika"}
+        }
+        month{
+            dn{"Omwezi"}
+        }
+        second{
+            dn{"Obucweka/Esekendi"}
+        }
+        week{
+            dn{"Esande"}
+        }
+        weekday{
+            dn{"Eizooba ry'okukora"}
+        }
+        year{
+            dn{"Omwaka"}
+        }
+        zone{
+            dn{"Eshaaha za"}
+        }
     }
 }

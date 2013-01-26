@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fi.xml
 // *
@@ -142,7 +142,7 @@ fi{
             }
         }
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -369,63 +369,6 @@ fi{
                 wide{
                     "ennen Kristuksen syntymää",
                     "jälkeen Kristuksen syntymän",
-                }
-            }
-            fields{
-                day{
-                    dn{"päivä"}
-                    relative{
-                        "-1"{"eilen"}
-                        "-2"{"toissapäivänä"}
-                        "0"{"tänään"}
-                        "1"{"huomenna"}
-                        "2"{"ylihuomenna"}
-                    }
-                }
-                dayperiod{
-                    dn{"vuorokaudenaika"}
-                }
-                era{
-                    dn{"aikakausi"}
-                }
-                hour{
-                    dn{"tunti"}
-                }
-                minute{
-                    dn{"minuutti"}
-                }
-                month{
-                    dn{"kuukausi"}
-                    relative{
-                        "-1"{"viime kuussa"}
-                        "0"{"tässä kuussa"}
-                        "1"{"ensi kuussa"}
-                    }
-                }
-                second{
-                    dn{"sekunti"}
-                }
-                week{
-                    dn{"viikko"}
-                    relative{
-                        "-1"{"viime viikolla"}
-                        "0"{"tällä viikolla"}
-                        "1"{"ensi viikolla"}
-                    }
-                }
-                weekday{
-                    dn{"viikonpäivä"}
-                }
-                year{
-                    dn{"vuosi"}
-                    relative{
-                        "-1"{"viime vuonna"}
-                        "0"{"tänä vuonna"}
-                        "1"{"ensi vuonna"}
-                    }
-                }
-                zone{
-                    dn{"aikavyöhyke"}
                 }
             }
             intervalFormats{
@@ -879,6 +822,63 @@ fi{
         alternateQuotationStart{"’"}
         quotationEnd{"”"}
         quotationStart{"”"}
+    }
+    fields{
+        day{
+            dn{"päivä"}
+            relative{
+                "-1"{"eilen"}
+                "-2"{"toissapäivänä"}
+                "0"{"tänään"}
+                "1"{"huomenna"}
+                "2"{"ylihuomenna"}
+            }
+        }
+        dayperiod{
+            dn{"vuorokaudenaika"}
+        }
+        era{
+            dn{"aikakausi"}
+        }
+        hour{
+            dn{"tunti"}
+        }
+        minute{
+            dn{"minuutti"}
+        }
+        month{
+            dn{"kuukausi"}
+            relative{
+                "-1"{"viime kuussa"}
+                "0"{"tässä kuussa"}
+                "1"{"ensi kuussa"}
+            }
+        }
+        second{
+            dn{"sekunti"}
+        }
+        week{
+            dn{"viikko"}
+            relative{
+                "-1"{"viime viikolla"}
+                "0"{"tällä viikolla"}
+                "1"{"ensi viikolla"}
+            }
+        }
+        weekday{
+            dn{"viikonpäivä"}
+        }
+        year{
+            dn{"vuosi"}
+            relative{
+                "-1"{"viime vuonna"}
+                "0"{"tänä vuonna"}
+                "1"{"ensi vuonna"}
+            }
+        }
+        zone{
+            dn{"aikavyöhyke"}
+        }
     }
     listPattern{
         standard{

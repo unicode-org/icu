@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mfe.xml
 // *
@@ -22,7 +22,7 @@ mfe{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -108,46 +108,6 @@ mfe{
                     "apre Zezi-Krist",
                 }
             }
-            fields{
-                day{
-                    dn{"Zour"}
-                    relative{
-                        "-1"{"Yer"}
-                        "0"{"Zordi"}
-                        "1"{"Demin"}
-                    }
-                }
-                dayperiod{
-                    dn{"Peryod dan lazourne"}
-                }
-                era{
-                    dn{"Lepok"}
-                }
-                hour{
-                    dn{"Ler"}
-                }
-                minute{
-                    dn{"Minit"}
-                }
-                month{
-                    dn{"Mwa"}
-                }
-                second{
-                    dn{"Segonn"}
-                }
-                week{
-                    dn{"Semenn"}
-                }
-                weekday{
-                    dn{"Zour lasemenn"}
-                }
-                year{
-                    dn{"Lane"}
-                }
-                zone{
-                    dn{"Peryod letan"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -219,5 +179,45 @@ mfe{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Zour"}
+            relative{
+                "-1"{"Yer"}
+                "0"{"Zordi"}
+                "1"{"Demin"}
+            }
+        }
+        dayperiod{
+            dn{"Peryod dan lazourne"}
+        }
+        era{
+            dn{"Lepok"}
+        }
+        hour{
+            dn{"Ler"}
+        }
+        minute{
+            dn{"Minit"}
+        }
+        month{
+            dn{"Mwa"}
+        }
+        second{
+            dn{"Segonn"}
+        }
+        week{
+            dn{"Semenn"}
+        }
+        weekday{
+            dn{"Zour lasemenn"}
+        }
+        year{
+            dn{"Lane"}
+        }
+        zone{
+            dn{"Peryod letan"}
+        }
     }
 }

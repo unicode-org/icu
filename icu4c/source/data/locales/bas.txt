@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bas.xml
 // *
@@ -35,7 +35,7 @@ bas{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -124,46 +124,6 @@ bas{
                     "i mbūs Yesù Krǐstò",
                 }
             }
-            fields{
-                day{
-                    dn{"kɛl"}
-                    relative{
-                        "-1"{"yààni"}
-                        "0"{"lɛ̀n"}
-                        "1"{"yàni"}
-                    }
-                }
-                dayperiod{
-                    dn{"njǎmùha"}
-                }
-                era{
-                    dn{"kèk"}
-                }
-                hour{
-                    dn{"ŋgɛŋ"}
-                }
-                minute{
-                    dn{"ŋget"}
-                }
-                month{
-                    dn{"soŋ"}
-                }
-                second{
-                    dn{"hìŋgeŋget"}
-                }
-                week{
-                    dn{"sɔndɛ̂"}
-                }
-                weekday{
-                    dn{"hìlɔ hi sɔndɛ̂"}
-                }
-                year{
-                    dn{"ŋwìi"}
-                }
-                zone{
-                    dn{"komboo i ŋgɛŋ"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -235,5 +195,45 @@ bas{
         alternateQuotationStart{"„"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"kɛl"}
+            relative{
+                "-1"{"yààni"}
+                "0"{"lɛ̀n"}
+                "1"{"yàni"}
+            }
+        }
+        dayperiod{
+            dn{"njǎmùha"}
+        }
+        era{
+            dn{"kèk"}
+        }
+        hour{
+            dn{"ŋgɛŋ"}
+        }
+        minute{
+            dn{"ŋget"}
+        }
+        month{
+            dn{"soŋ"}
+        }
+        second{
+            dn{"hìŋgeŋget"}
+        }
+        week{
+            dn{"sɔndɛ̂"}
+        }
+        weekday{
+            dn{"hìlɔ hi sɔndɛ̂"}
+        }
+        year{
+            dn{"ŋwìi"}
+        }
+        zone{
+            dn{"komboo i ŋgɛŋ"}
+        }
     }
 }

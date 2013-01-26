@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh.xml
 // *
@@ -70,10 +70,10 @@ zh{
     }
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{
-        "[﹉-﹌ _ ＿ ﹍-﹏ ︳ ︴ \- － ﹣ ‐ – — ︱ ― , ， ﹐ 、 ﹑ ; ； ﹔ \: ： ﹕ ! ！ ﹗ ? ？ ﹖ . ． ﹒ ‥"
-        " ︰ … 。 · ＇ ‘ ’ \" ＂ “ ” 〝 〞 ( （ ﹙ ︵ ) ） ﹚ ︶ \[ ［ \] ］ \{ ｛ ﹛ ︷ \} ｝ ﹜ ︸ 〈 ︿ "
-        "〉 ﹀ 《 ︽ 》 ︾ 「 ﹁ 」 ﹂ 『 ﹃ 』 ﹄ 【 ︻ 】 ︼ 〔 ﹝ ︹ 〕 ﹞ ︺ 〖 〗 ‖ § @ ＠ ﹫ * ＊ ﹡ / ／ \\ ＼"
-        " ﹨ \& ＆ ﹠ # ＃ ﹟ % ％ ﹪ ‰ ′ ″ ‵ 〃 ※]"
+        "[﹉-﹌ _ ＿ ﹍-﹏ ︳ ︴ \\- － ﹣ ‐ – — ︱ ― , ， ﹐ 、 ﹑ ; ； ﹔ \: ： ﹕ ! ！ ﹗ ? ？ ﹖ . ． ﹒ ‥"
+        " ︰ … 。 · ＇ ‘ ’ \u0022 ＂ “ ” 〝 〞 ( （ ﹙ ︵ ) ） ﹚ ︶ \\[ ［ \\] ］ \\{ ｛ ﹛ ︷ \\} ｝ ﹜ ︸ 〈 ︿ 〉"
+        " ﹀ 《 ︽ 》 ︾ 「 ﹁ 」 ﹂ 『 ﹃ 』 ﹄ 【 ︻ 】 ︼ 〔 ﹝ ︹ 〕 ﹞ ︺ 〖 〗 ‖ § @ ＠ ﹫ * ＊ ﹡ / ／ \\\\  ＼ "
+        "﹨ \\& ＆ ﹠ # ＃ ﹟ % ％ ﹪ ‰ ′ ″ ‵ 〃 ※]"
     }
     LocaleScript{
         "Hani",
@@ -184,7 +184,7 @@ zh{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -921,63 +921,6 @@ zh{
                 wide{
                     "公元前",
                     "公元",
-                }
-            }
-            fields{
-                day{
-                    dn{"日"}
-                    relative{
-                        "-1"{"昨天"}
-                        "-2"{"前天"}
-                        "0"{"今天"}
-                        "1"{"明天"}
-                        "2"{"后天"}
-                    }
-                }
-                dayperiod{
-                    dn{"上午/下午"}
-                }
-                era{
-                    dn{"时期"}
-                }
-                hour{
-                    dn{"小时"}
-                }
-                minute{
-                    dn{"分钟"}
-                }
-                month{
-                    dn{"月"}
-                    relative{
-                        "-1"{"上个月"}
-                        "0"{"本月"}
-                        "1"{"下个月"}
-                    }
-                }
-                second{
-                    dn{"秒钟"}
-                }
-                week{
-                    dn{"周"}
-                    relative{
-                        "-1"{"上周"}
-                        "0"{"本周"}
-                        "1"{"下周"}
-                    }
-                }
-                weekday{
-                    dn{"星期"}
-                }
-                year{
-                    dn{"年"}
-                    relative{
-                        "-1"{"去年"}
-                        "0"{"今年"}
-                        "1"{"明年"}
-                    }
-                }
-                zone{
-                    dn{"时区"}
                 }
             }
             intervalFormats{
@@ -1961,6 +1904,63 @@ zh{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"日"}
+            relative{
+                "-1"{"昨天"}
+                "-2"{"前天"}
+                "0"{"今天"}
+                "1"{"明天"}
+                "2"{"后天"}
+            }
+        }
+        dayperiod{
+            dn{"上午/下午"}
+        }
+        era{
+            dn{"时期"}
+        }
+        hour{
+            dn{"小时"}
+        }
+        minute{
+            dn{"分钟"}
+        }
+        month{
+            dn{"月"}
+            relative{
+                "-1"{"上个月"}
+                "0"{"本月"}
+                "1"{"下个月"}
+            }
+        }
+        second{
+            dn{"秒钟"}
+        }
+        week{
+            dn{"周"}
+            relative{
+                "-1"{"上周"}
+                "0"{"本周"}
+                "1"{"下周"}
+            }
+        }
+        weekday{
+            dn{"星期"}
+        }
+        year{
+            dn{"年"}
+            relative{
+                "-1"{"去年"}
+                "0"{"今年"}
+                "1"{"明年"}
+            }
+        }
+        zone{
+            dn{"时区"}
+        }
     }
     listPattern{
         standard{

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/eu.xml
 // *
@@ -145,7 +145,7 @@ eu{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             eras{
@@ -263,63 +263,6 @@ eu{
                 abbreviated{
                     "K.a.",
                     "K.o.",
-                }
-            }
-            fields{
-                day{
-                    dn{"Eguna"}
-                    relative{
-                        "-1"{"Atzo"}
-                        "-2"{"Herenegun"}
-                        "0"{"Gaur"}
-                        "1"{"Bihar"}
-                        "2"{"Etzi"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM//PM"}
-                }
-                era{
-                    dn{"Aroa"}
-                }
-                hour{
-                    dn{"Ordua"}
-                }
-                minute{
-                    dn{"Minutuak"}
-                }
-                month{
-                    dn{"Hilabetea"}
-                    relative{
-                        "-1"{"Aurreko hilabetea"}
-                        "0"{"Gauden hilabetea"}
-                        "1"{"Hurrengo hilabetea"}
-                    }
-                }
-                second{
-                    dn{"Segundoak"}
-                }
-                week{
-                    dn{"Astea"}
-                    relative{
-                        "-1"{"Aurreko astea"}
-                        "0"{"Aste hau"}
-                        "1"{"Hurrengo astea"}
-                    }
-                }
-                weekday{
-                    dn{"Asteguna"}
-                }
-                year{
-                    dn{"Urtea"}
-                    relative{
-                        "-1"{"Aurreko urtea"}
-                        "0"{"Aurten"}
-                        "1"{"Hurrengo urtea"}
-                    }
-                }
-                zone{
-                    dn{"Ordu-eremua"}
                 }
             }
             intervalFormats{
@@ -510,6 +453,63 @@ eu{
         alternateQuotationStart{"«"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Eguna"}
+            relative{
+                "-1"{"Atzo"}
+                "-2"{"Herenegun"}
+                "0"{"Gaur"}
+                "1"{"Bihar"}
+                "2"{"Etzi"}
+            }
+        }
+        dayperiod{
+            dn{"AM//PM"}
+        }
+        era{
+            dn{"Aroa"}
+        }
+        hour{
+            dn{"Ordua"}
+        }
+        minute{
+            dn{"Minutuak"}
+        }
+        month{
+            dn{"Hilabetea"}
+            relative{
+                "-1"{"Aurreko hilabetea"}
+                "0"{"Gauden hilabetea"}
+                "1"{"Hurrengo hilabetea"}
+            }
+        }
+        second{
+            dn{"Segundoak"}
+        }
+        week{
+            dn{"Astea"}
+            relative{
+                "-1"{"Aurreko astea"}
+                "0"{"Aste hau"}
+                "1"{"Hurrengo astea"}
+            }
+        }
+        weekday{
+            dn{"Asteguna"}
+        }
+        year{
+            dn{"Urtea"}
+            relative{
+                "-1"{"Aurreko urtea"}
+                "0"{"Aurten"}
+                "1"{"Hurrengo urtea"}
+            }
+        }
+        zone{
+            dn{"Ordu-eremua"}
+        }
     }
     listPattern{
         standard{

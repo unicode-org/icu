@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/kde.xml
 // *
@@ -22,7 +22,7 @@ kde{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -110,46 +110,6 @@ kde{
                     "Nankuida Yesu",
                 }
             }
-            fields{
-                day{
-                    dn{"Lihiku"}
-                    relative{
-                        "-1"{"Lido"}
-                        "0"{"Nelo"}
-                        "1"{"Nundu"}
-                    }
-                }
-                dayperiod{
-                    dn{"Muhi/Chilo"}
-                }
-                era{
-                    dn{"Mahiku"}
-                }
-                hour{
-                    dn{"Saa"}
-                }
-                minute{
-                    dn{"Dakika"}
-                }
-                month{
-                    dn{"Mwedi"}
-                }
-                second{
-                    dn{"Sekunde"}
-                }
-                week{
-                    dn{"Lijuma"}
-                }
-                weekday{
-                    dn{"Disiku dya lijuma"}
-                }
-                year{
-                    dn{"Mwaka"}
-                }
-                zone{
-                    dn{"Npanda wa muda"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -221,5 +181,45 @@ kde{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Lihiku"}
+            relative{
+                "-1"{"Lido"}
+                "0"{"Nelo"}
+                "1"{"Nundu"}
+            }
+        }
+        dayperiod{
+            dn{"Muhi/Chilo"}
+        }
+        era{
+            dn{"Mahiku"}
+        }
+        hour{
+            dn{"Saa"}
+        }
+        minute{
+            dn{"Dakika"}
+        }
+        month{
+            dn{"Mwedi"}
+        }
+        second{
+            dn{"Sekunde"}
+        }
+        week{
+            dn{"Lijuma"}
+        }
+        weekday{
+            dn{"Disiku dya lijuma"}
+        }
+        year{
+            dn{"Mwaka"}
+        }
+        zone{
+            dn{"Npanda wa muda"}
+        }
     }
 }

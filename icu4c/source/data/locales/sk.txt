@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sk.xml
 // *
@@ -16,7 +16,7 @@ sk{
         "ú v w x y ý z ž]"
     }
     ExemplarCharactersIndex{"[A Ä B C Č D Ď E F G H {CH} I J K L Ľ M N O Ô P Q R S Š T Ť U V W X Y Z Ž]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – , ; \: ! ? . … ‘ ‚ “ „ ( ) \[ \] § @ * / \&]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – , ; \: ! ? . … ‘ ‚ “ „ ( ) \\[ \\] § @ * / \\&]"}
     LocaleScript{
         "Latn",
     }
@@ -170,7 +170,7 @@ sk{
             }
         }
     }
-    Version{"2.0.80.23"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -306,63 +306,6 @@ sk{
                 abbreviated{
                     "pred n.l.",
                     "n.l.",
-                }
-            }
-            fields{
-                day{
-                    dn{"Deň"}
-                    relative{
-                        "-1"{"Včera"}
-                        "-2"{"Predvčerom"}
-                        "0"{"Dnes"}
-                        "1"{"Zajtra"}
-                        "2"{"Pozajtra"}
-                    }
-                }
-                dayperiod{
-                    dn{"Časť dňa"}
-                }
-                era{
-                    dn{"Éra"}
-                }
-                hour{
-                    dn{"Hodina"}
-                }
-                minute{
-                    dn{"Minúta"}
-                }
-                month{
-                    dn{"Mesiac"}
-                    relative{
-                        "-1"{"Posledný mesiac"}
-                        "0"{"Tento mesiac"}
-                        "1"{"Budúci mesiac"}
-                    }
-                }
-                second{
-                    dn{"Sekunda"}
-                }
-                week{
-                    dn{"Týždeň"}
-                    relative{
-                        "-1"{"Minulý týždeň"}
-                        "0"{"Tento týždeň"}
-                        "1"{"Budúci týždeň"}
-                    }
-                }
-                weekday{
-                    dn{"Deň v týždni"}
-                }
-                year{
-                    dn{"Rok"}
-                    relative{
-                        "-1"{"Minulý rok"}
-                        "0"{"Tento rok"}
-                        "1"{"Budúci rok"}
-                    }
-                }
-                zone{
-                    dn{"Časové pásmo"}
                 }
             }
             intervalFormats{
@@ -574,6 +517,63 @@ sk{
         alternateQuotationStart{"‚"}
         quotationEnd{"“"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"Deň"}
+            relative{
+                "-1"{"Včera"}
+                "-2"{"Predvčerom"}
+                "0"{"Dnes"}
+                "1"{"Zajtra"}
+                "2"{"Pozajtra"}
+            }
+        }
+        dayperiod{
+            dn{"Časť dňa"}
+        }
+        era{
+            dn{"Éra"}
+        }
+        hour{
+            dn{"Hodina"}
+        }
+        minute{
+            dn{"Minúta"}
+        }
+        month{
+            dn{"Mesiac"}
+            relative{
+                "-1"{"Posledný mesiac"}
+                "0"{"Tento mesiac"}
+                "1"{"Budúci mesiac"}
+            }
+        }
+        second{
+            dn{"Sekunda"}
+        }
+        week{
+            dn{"Týždeň"}
+            relative{
+                "-1"{"Minulý týždeň"}
+                "0"{"Tento týždeň"}
+                "1"{"Budúci týždeň"}
+            }
+        }
+        weekday{
+            dn{"Deň v týždni"}
+        }
+        year{
+            dn{"Rok"}
+            relative{
+                "-1"{"Minulý rok"}
+                "0"{"Tento rok"}
+                "1"{"Budúci rok"}
+            }
+        }
+        zone{
+            dn{"Časové pásmo"}
+        }
     }
     listPattern{
         standard{

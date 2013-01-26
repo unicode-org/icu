@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ru.xml
 // *
@@ -13,7 +13,7 @@ ru{
     AuxExemplarCharacters{"[]"}
     ExemplarCharacters{"[а б в г д е ё ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ы ь э ю я]"}
     ExemplarCharactersIndex{"[А Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ы Э Ю Я]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! ? . … ' ‘ ‚ \" “ „ « » ( ) \[ \] \{ \} § @ * / \& #]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! ? . … ' ‘ ‚ \u0022 “ „ « » ( ) \\[ \\] \\{ \\} § @ * / \\& #]"}
     LocaleScript{
         "Cyrl",
     }
@@ -191,7 +191,7 @@ ru{
             }
         }
     }
-    Version{"2.0.78.39"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -619,63 +619,6 @@ ru{
                 wide{
                     "до н.э.",
                     "н.э.",
-                }
-            }
-            fields{
-                day{
-                    dn{"День"}
-                    relative{
-                        "-1"{"Вчера"}
-                        "-2"{"Позавчера"}
-                        "0"{"Сегодня"}
-                        "1"{"Завтра"}
-                        "2"{"Послезавтра"}
-                    }
-                }
-                dayperiod{
-                    dn{"ДП/ПП"}
-                }
-                era{
-                    dn{"Эра"}
-                }
-                hour{
-                    dn{"Час"}
-                }
-                minute{
-                    dn{"Минута"}
-                }
-                month{
-                    dn{"Месяц"}
-                    relative{
-                        "-1"{"В прошлом месяце"}
-                        "0"{"В этом месяце"}
-                        "1"{"В следующем месяце"}
-                    }
-                }
-                second{
-                    dn{"Секунда"}
-                }
-                week{
-                    dn{"Неделя"}
-                    relative{
-                        "-1"{"На прошлой неделе"}
-                        "0"{"На этой неделе"}
-                        "1"{"На следующей неделе"}
-                    }
-                }
-                weekday{
-                    dn{"День недели"}
-                }
-                year{
-                    dn{"Год"}
-                    relative{
-                        "-1"{"В прошлом году"}
-                        "0"{"В этом году"}
-                        "1"{"В следующем году"}
-                    }
-                }
-                zone{
-                    dn{"Часовой пояс"}
                 }
             }
             intervalFormats{
@@ -1648,6 +1591,63 @@ ru{
         alternateQuotationStart{"„"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"День"}
+            relative{
+                "-1"{"Вчера"}
+                "-2"{"Позавчера"}
+                "0"{"Сегодня"}
+                "1"{"Завтра"}
+                "2"{"Послезавтра"}
+            }
+        }
+        dayperiod{
+            dn{"ДП/ПП"}
+        }
+        era{
+            dn{"Эра"}
+        }
+        hour{
+            dn{"Час"}
+        }
+        minute{
+            dn{"Минута"}
+        }
+        month{
+            dn{"Месяц"}
+            relative{
+                "-1"{"В прошлом месяце"}
+                "0"{"В этом месяце"}
+                "1"{"В следующем месяце"}
+            }
+        }
+        second{
+            dn{"Секунда"}
+        }
+        week{
+            dn{"Неделя"}
+            relative{
+                "-1"{"На прошлой неделе"}
+                "0"{"На этой неделе"}
+                "1"{"На следующей неделе"}
+            }
+        }
+        weekday{
+            dn{"День недели"}
+        }
+        year{
+            dn{"Год"}
+            relative{
+                "-1"{"В прошлом году"}
+                "0"{"В этом году"}
+                "1"{"В следующем году"}
+            }
+        }
+        zone{
+            dn{"Часовой пояс"}
+        }
     }
     listPattern{
         standard{

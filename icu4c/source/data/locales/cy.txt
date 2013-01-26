@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/cy.xml
 // *
@@ -15,11 +15,14 @@ cy{
         "[a á à â ä b c {ch} d {dd} e é è ê ë f {ff} g {ng} h i í ì î ï l {ll} m n o "
         "ó ò ô ö p {ph} r {rh} s t {th} u ú ù û ü w ẃ ẁ ŵ ẅ y ý ỳ ŷ ÿ]"
     }
-    ExemplarCharactersIndex{"[A B C {CH} D E F {FF} G H I J L {LL} M N O P {PH} R {RH} S T {TH} U W Y]"}
+    ExemplarCharactersIndex{
+        "[A B C {CH} D {DD} E F {FF} G {NG} H I J L {LL} M N O P {PH} R {RH} S T {TH}"
+        " U W Y]"
+    }
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -112,41 +115,6 @@ cy{
                 wide{
                     "Cyn Crist",
                     "Oed Crist",
-                }
-            }
-            fields{
-                day{
-                    dn{"Dydd"}
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"Oes"}
-                }
-                hour{
-                    dn{"Awr"}
-                }
-                minute{
-                    dn{"Munud"}
-                }
-                month{
-                    dn{"Mis"}
-                }
-                second{
-                    dn{"Eiliad"}
-                }
-                week{
-                    dn{"Wythnos"}
-                }
-                weekday{
-                    dn{"Dydd o'r Wythnos"}
-                }
-                year{
-                    dn{"Blwyddyn"}
-                }
-                zone{
-                    dn{"Cylchfa"}
                 }
             }
             intervalFormats{
@@ -339,6 +307,48 @@ cy{
                     }
                 }
             }
+        }
+    }
+    fields{
+        day{
+            dn{"Dydd"}
+            relative{
+                "-1"{"Ddoe"}
+                "-2"{"Echdoe"}
+                "0"{"Heddiw"}
+                "1"{"Yfory"}
+                "2"{"Drennydd"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"Oes"}
+        }
+        hour{
+            dn{"Awr"}
+        }
+        minute{
+            dn{"Munud"}
+        }
+        month{
+            dn{"Mis"}
+        }
+        second{
+            dn{"Eiliad"}
+        }
+        week{
+            dn{"Wythnos"}
+        }
+        weekday{
+            dn{"Dydd o'r Wythnos"}
+        }
+        year{
+            dn{"Blwyddyn"}
+        }
+        zone{
+            dn{"Cylchfa"}
         }
     }
     measurementSystemNames{

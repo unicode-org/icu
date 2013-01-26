@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ksf.xml
 // *
@@ -31,7 +31,7 @@ ksf{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -120,46 +120,6 @@ ksf{
                     "cámɛɛn kǝ kǝbɔpka Y",
                 }
             }
-            fields{
-                day{
-                    dn{"Ŋwós"}
-                    relative{
-                        "-1"{"Rinkɔɔ́"}
-                        "0"{"Gɛ́ɛnǝ"}
-                        "1"{"Ridúrǝ́"}
-                    }
-                }
-                dayperiod{
-                    dn{"Sárúwá / Cɛɛ́nko"}
-                }
-                era{
-                    dn{"Byámɛɛn"}
-                }
-                hour{
-                    dn{"Cámɛɛn"}
-                }
-                minute{
-                    dn{"Mǝnít"}
-                }
-                month{
-                    dn{"Ŋwíí"}
-                }
-                second{
-                    dn{"Háu"}
-                }
-                week{
-                    dn{"Sɔ́ndǝ"}
-                }
-                weekday{
-                    dn{"Mǝrú mǝ sɔ́ndǝ"}
-                }
-                year{
-                    dn{"Bǝk"}
-                }
-                zone{
-                    dn{"Wáas"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -215,5 +175,45 @@ ksf{
         alternateQuotationStart{"‘"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"Ŋwós"}
+            relative{
+                "-1"{"Rinkɔɔ́"}
+                "0"{"Gɛ́ɛnǝ"}
+                "1"{"Ridúrǝ́"}
+            }
+        }
+        dayperiod{
+            dn{"Sárúwá / Cɛɛ́nko"}
+        }
+        era{
+            dn{"Byámɛɛn"}
+        }
+        hour{
+            dn{"Cámɛɛn"}
+        }
+        minute{
+            dn{"Mǝnít"}
+        }
+        month{
+            dn{"Ŋwíí"}
+        }
+        second{
+            dn{"Háu"}
+        }
+        week{
+            dn{"Sɔ́ndǝ"}
+        }
+        weekday{
+            dn{"Mǝrú mǝ sɔ́ndǝ"}
+        }
+        year{
+            dn{"Bǝk"}
+        }
+        zone{
+            dn{"Wáas"}
+        }
     }
 }

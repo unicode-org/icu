@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/yav.xml
 // *
@@ -32,7 +32,7 @@ yav{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -121,46 +121,6 @@ yav{
                     "ékélémkúnupíén n",
                 }
             }
-            fields{
-                day{
-                    dn{"puɔ́sɛ́"}
-                    relative{
-                        "-1"{"púyoó"}
-                        "0"{"ínaan"}
-                        "1"{"nakinyám"}
-                    }
-                }
-                dayperiod{
-                    dn{"kiɛmɛ́ɛm,kisɛ́ndɛ"}
-                }
-                era{
-                    dn{"kipéŋén"}
-                }
-                hour{
-                    dn{"kisikɛl,"}
-                }
-                minute{
-                    dn{"minít"}
-                }
-                month{
-                    dn{"oóli"}
-                }
-                second{
-                    dn{"síkɛn"}
-                }
-                week{
-                    dn{"sɔ́ndiɛ"}
-                }
-                weekday{
-                    dn{"metúk mɔ́sɔ́ndiɛ"}
-                }
-                year{
-                    dn{"yɔɔŋ"}
-                }
-                zone{
-                    dn{"kinúki kisikɛl ɔ́ pitɔŋ"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -216,5 +176,45 @@ yav{
         alternateQuotationStart{"«"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"puɔ́sɛ́"}
+            relative{
+                "-1"{"púyoó"}
+                "0"{"ínaan"}
+                "1"{"nakinyám"}
+            }
+        }
+        dayperiod{
+            dn{"kiɛmɛ́ɛm,kisɛ́ndɛ"}
+        }
+        era{
+            dn{"kipéŋén"}
+        }
+        hour{
+            dn{"kisikɛl,"}
+        }
+        minute{
+            dn{"minít"}
+        }
+        month{
+            dn{"oóli"}
+        }
+        second{
+            dn{"síkɛn"}
+        }
+        week{
+            dn{"sɔ́ndiɛ"}
+        }
+        weekday{
+            dn{"metúk mɔ́sɔ́ndiɛ"}
+        }
+        year{
+            dn{"yɔɔŋ"}
+        }
+        zone{
+            dn{"kinúki kisikɛl ɔ́ pitɔŋ"}
+        }
     }
 }

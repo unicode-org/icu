@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ta.xml
 // *
@@ -151,7 +151,7 @@ ta{
         native{"tamldec"}
         traditional{"taml"}
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -271,63 +271,6 @@ ta{
                 wide{
                     "கிறிஸ்துவுக்கு முன்",
                     "அனோ டோமினி",
-                }
-            }
-            fields{
-                day{
-                    dn{"நாள்"}
-                    relative{
-                        "-1"{"நேற்று"}
-                        "-2"{"முந்தா நாள்"}
-                        "0"{"இன்று"}
-                        "1"{"நாளை"}
-                        "2"{"நாளை மறுநாள்"}
-                    }
-                }
-                dayperiod{
-                    dn{"முற்பகல்/பிற்பகல்"}
-                }
-                era{
-                    dn{"காலம்"}
-                }
-                hour{
-                    dn{"மணி"}
-                }
-                minute{
-                    dn{"நிமிடம்"}
-                }
-                month{
-                    dn{"மாதம்"}
-                    relative{
-                        "-1"{"சென்ற மாதம்"}
-                        "0"{"இந்த மாதம்"}
-                        "1"{"அடுத்த மாதம்"}
-                    }
-                }
-                second{
-                    dn{"வினாடி"}
-                }
-                week{
-                    dn{"வாரம்"}
-                    relative{
-                        "-1"{"கடந்த வாரம்"}
-                        "0"{"இந்த வாரம்"}
-                        "1"{"அடுத்த வாரம்"}
-                    }
-                }
-                weekday{
-                    dn{"வார நாள்"}
-                }
-                year{
-                    dn{"வருடம்"}
-                    relative{
-                        "-1"{"கடந்த வருடம்"}
-                        "0"{"இந்த ஆண்டு"}
-                        "1"{"அடுத்த வருடம்"}
-                    }
-                }
-                zone{
-                    dn{"மண்டலம்"}
                 }
             }
             intervalFormats{
@@ -564,6 +507,63 @@ ta{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"நாள்"}
+            relative{
+                "-1"{"நேற்று"}
+                "-2"{"முந்தா நாள்"}
+                "0"{"இன்று"}
+                "1"{"நாளை"}
+                "2"{"நாளை மறுநாள்"}
+            }
+        }
+        dayperiod{
+            dn{"முற்பகல்/பிற்பகல்"}
+        }
+        era{
+            dn{"காலம்"}
+        }
+        hour{
+            dn{"மணி"}
+        }
+        minute{
+            dn{"நிமிடம்"}
+        }
+        month{
+            dn{"மாதம்"}
+            relative{
+                "-1"{"சென்ற மாதம்"}
+                "0"{"இந்த மாதம்"}
+                "1"{"அடுத்த மாதம்"}
+            }
+        }
+        second{
+            dn{"வினாடி"}
+        }
+        week{
+            dn{"வாரம்"}
+            relative{
+                "-1"{"கடந்த வாரம்"}
+                "0"{"இந்த வாரம்"}
+                "1"{"அடுத்த வாரம்"}
+            }
+        }
+        weekday{
+            dn{"வார நாள்"}
+        }
+        year{
+            dn{"வருடம்"}
+            relative{
+                "-1"{"கடந்த வருடம்"}
+                "0"{"இந்த ஆண்டு"}
+                "1"{"அடுத்த வருடம்"}
+            }
+        }
+        zone{
+            dn{"மண்டலம்"}
+        }
     }
     listPattern{
         standard{

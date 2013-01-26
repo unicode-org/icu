@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ewo.xml
 // *
@@ -34,7 +34,7 @@ ewo{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -123,46 +123,6 @@ ewo{
                     "ámvus Yésus Kirís",
                 }
             }
-            fields{
-                day{
-                    dn{"Amǒs"}
-                    relative{
-                        "-1"{"Angogé"}
-                        "0"{"Aná"}
-                        "1"{"Okírí"}
-                    }
-                }
-                dayperiod{
-                    dn{"Kírí / Ngəgógəle"}
-                }
-                era{
-                    dn{"Abǒg"}
-                }
-                hour{
-                    dn{"Awola"}
-                }
-                minute{
-                    dn{"Enútɛn"}
-                }
-                month{
-                    dn{"Ngɔn"}
-                }
-                second{
-                    dn{"Akábəga"}
-                }
-                week{
-                    dn{"Sɔ́ndɔ"}
-                }
-                weekday{
-                    dn{"Amǒs yá sɔ́ndɔ"}
-                }
-                year{
-                    dn{"M̀bú"}
-                }
-                zone{
-                    dn{"Nkɔŋ Awola"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -234,5 +194,45 @@ ewo{
         alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"Amǒs"}
+            relative{
+                "-1"{"Angogé"}
+                "0"{"Aná"}
+                "1"{"Okírí"}
+            }
+        }
+        dayperiod{
+            dn{"Kírí / Ngəgógəle"}
+        }
+        era{
+            dn{"Abǒg"}
+        }
+        hour{
+            dn{"Awola"}
+        }
+        minute{
+            dn{"Enútɛn"}
+        }
+        month{
+            dn{"Ngɔn"}
+        }
+        second{
+            dn{"Akábəga"}
+        }
+        week{
+            dn{"Sɔ́ndɔ"}
+        }
+        weekday{
+            dn{"Amǒs yá sɔ́ndɔ"}
+        }
+        year{
+            dn{"M̀bú"}
+        }
+        zone{
+            dn{"Nkɔŋ Awola"}
+        }
     }
 }

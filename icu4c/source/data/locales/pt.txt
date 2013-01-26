@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/pt.xml
 // *
@@ -147,7 +147,7 @@ pt{
         }
         native{"latn"}
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -539,63 +539,6 @@ pt{
                 wide{
                     "Antes de Cristo",
                     "Ano do Senhor",
-                }
-            }
-            fields{
-                day{
-                    dn{"Dia"}
-                    relative{
-                        "-1"{"Ontem"}
-                        "-2"{"Anteontem"}
-                        "0"{"Hoje"}
-                        "1"{"Amanhã"}
-                        "2"{"Depois de amanhã"}
-                    }
-                }
-                dayperiod{
-                    dn{"Período do dia"}
-                }
-                era{
-                    dn{"Era"}
-                }
-                hour{
-                    dn{"Hora"}
-                }
-                minute{
-                    dn{"Minuto"}
-                }
-                month{
-                    dn{"Mês"}
-                    relative{
-                        "-1"{"Mês passado"}
-                        "0"{"Este mês"}
-                        "1"{"Próximo mês"}
-                    }
-                }
-                second{
-                    dn{"Segundo"}
-                }
-                week{
-                    dn{"Semana"}
-                    relative{
-                        "-1"{"Semana passada"}
-                        "0"{"Esta semana"}
-                        "1"{"Próxima semana"}
-                    }
-                }
-                weekday{
-                    dn{"Dia da semana"}
-                }
-                year{
-                    dn{"Ano"}
-                    relative{
-                        "-1"{"Ano passado"}
-                        "0"{"Este ano"}
-                        "1"{"Próximo ano"}
-                    }
-                }
-                zone{
-                    dn{"Fuso"}
                 }
             }
             intervalFormats{
@@ -1210,6 +1153,63 @@ pt{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Dia"}
+            relative{
+                "-1"{"Ontem"}
+                "-2"{"Anteontem"}
+                "0"{"Hoje"}
+                "1"{"Amanhã"}
+                "2"{"Depois de amanhã"}
+            }
+        }
+        dayperiod{
+            dn{"Período do dia"}
+        }
+        era{
+            dn{"Era"}
+        }
+        hour{
+            dn{"Hora"}
+        }
+        minute{
+            dn{"Minuto"}
+        }
+        month{
+            dn{"Mês"}
+            relative{
+                "-1"{"Mês passado"}
+                "0"{"Este mês"}
+                "1"{"Próximo mês"}
+            }
+        }
+        second{
+            dn{"Segundo"}
+        }
+        week{
+            dn{"Semana"}
+            relative{
+                "-1"{"Semana passada"}
+                "0"{"Esta semana"}
+                "1"{"Próxima semana"}
+            }
+        }
+        weekday{
+            dn{"Dia da semana"}
+        }
+        year{
+            dn{"Ano"}
+            relative{
+                "-1"{"Ano passado"}
+                "0"{"Este ano"}
+                "1"{"Próximo ano"}
+            }
+        }
+        zone{
+            dn{"Fuso"}
+        }
     }
     listPattern{
         standard{

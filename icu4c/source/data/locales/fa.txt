@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fa.xml
 // *
@@ -19,7 +19,7 @@ fa{
         "ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ة ی]"
     }
     ExemplarCharactersIndex{"[آ ا ب پ ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن و ه ی]"}
-    ExemplarCharactersPunctuation{"[\- ‐ ، ٫ ٬ ؛ \: ! ؟ . … « » ( ) \[ \] * / \\]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ ، ٫ ٬ ؛ \: ! ؟ . … « » ( ) \\[ \\] * / \\\\ ]"}
     LocaleScript{
         "Arab",
     }
@@ -141,7 +141,7 @@ fa{
         }
         native{"arabext"}
     }
-    Version{"2.0.78.32"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -291,63 +291,6 @@ fa{
                 wide{
                     "قبل از میلاد",
                     "میلادی",
-                }
-            }
-            fields{
-                day{
-                    dn{"روز"}
-                    relative{
-                        "-1"{"دیروز"}
-                        "-2"{"پریروز"}
-                        "0"{"امروز"}
-                        "1"{"فردا"}
-                        "2"{"پس‌فردا"}
-                    }
-                }
-                dayperiod{
-                    dn{"قبل/بعدازظهر"}
-                }
-                era{
-                    dn{"دوره"}
-                }
-                hour{
-                    dn{"ساعت"}
-                }
-                minute{
-                    dn{"دقیقه"}
-                }
-                month{
-                    dn{"ماه"}
-                    relative{
-                        "-1"{"ماه گذشته"}
-                        "0"{"این ماه"}
-                        "1"{"ماه آینده"}
-                    }
-                }
-                second{
-                    dn{"ثانیه"}
-                }
-                week{
-                    dn{"هفته"}
-                    relative{
-                        "-1"{"هفتهٔ گذشته"}
-                        "0"{"این هفته"}
-                        "1"{"هفتهٔ آینده"}
-                    }
-                }
-                weekday{
-                    dn{"روز هفته"}
-                }
-                year{
-                    dn{"سال"}
-                    relative{
-                        "-1"{"سال گذشته"}
-                        "0"{"امسال"}
-                        "1"{"سال آینده"}
-                    }
-                }
-                zone{
-                    dn{"منطقهٔ زمانی"}
                 }
             }
             intervalFormats{
@@ -931,9 +874,65 @@ fa{
         quotationEnd{"»"}
         quotationStart{"«"}
     }
+    fields{
+        day{
+            dn{"روز"}
+            relative{
+                "-1"{"دیروز"}
+                "-2"{"پریروز"}
+                "0"{"امروز"}
+                "1"{"فردا"}
+                "2"{"پس‌فردا"}
+            }
+        }
+        dayperiod{
+            dn{"قبل/بعدازظهر"}
+        }
+        era{
+            dn{"دوره"}
+        }
+        hour{
+            dn{"ساعت"}
+        }
+        minute{
+            dn{"دقیقه"}
+        }
+        month{
+            dn{"ماه"}
+            relative{
+                "-1"{"ماه گذشته"}
+                "0"{"این ماه"}
+                "1"{"ماه آینده"}
+            }
+        }
+        second{
+            dn{"ثانیه"}
+        }
+        week{
+            dn{"هفته"}
+            relative{
+                "-1"{"هفتهٔ گذشته"}
+                "0"{"این هفته"}
+                "1"{"هفتهٔ آینده"}
+            }
+        }
+        weekday{
+            dn{"روز هفته"}
+        }
+        year{
+            dn{"سال"}
+            relative{
+                "-1"{"سال گذشته"}
+                "0"{"امسال"}
+                "1"{"سال آینده"}
+            }
+        }
+        zone{
+            dn{"منطقهٔ زمانی"}
+        }
+    }
     layout{
         characters{"right-to-left"}
-        lines{"top-to-bottom"}
     }
     listPattern{
         standard{

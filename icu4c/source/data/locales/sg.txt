@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sg.xml
 // *
@@ -27,7 +27,7 @@ sg{
             }
         }
     }
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -113,46 +113,6 @@ sg{
                     "Na pekô tî Krîstu",
                 }
             }
-            fields{
-                day{
-                    dn{"Lâ"}
-                    relative{
-                        "-1"{"Bîrï"}
-                        "0"{"Lâsô"}
-                        "1"{"Kêkerêke"}
-                    }
-                }
-                dayperiod{
-                    dn{"Na lâ"}
-                }
-                era{
-                    dn{"Kùotângo"}
-                }
-                hour{
-                    dn{"Ngbonga"}
-                }
-                minute{
-                    dn{"Ndurü ngbonga"}
-                }
-                month{
-                    dn{"Nze"}
-                }
-                second{
-                    dn{"Nzîna ngbonga"}
-                }
-                week{
-                    dn{"Dimâsi"}
-                }
-                weekday{
-                    dn{"Bïkua"}
-                }
-                year{
-                    dn{"Ngû"}
-                }
-                zone{
-                    dn{"Zukangbonga"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -224,5 +184,45 @@ sg{
         alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"Lâ"}
+            relative{
+                "-1"{"Bîrï"}
+                "0"{"Lâsô"}
+                "1"{"Kêkerêke"}
+            }
+        }
+        dayperiod{
+            dn{"Na lâ"}
+        }
+        era{
+            dn{"Kùotângo"}
+        }
+        hour{
+            dn{"Ngbonga"}
+        }
+        minute{
+            dn{"Ndurü ngbonga"}
+        }
+        month{
+            dn{"Nze"}
+        }
+        second{
+            dn{"Nzîna ngbonga"}
+        }
+        week{
+            dn{"Dimâsi"}
+        }
+        weekday{
+            dn{"Bïkua"}
+        }
+        year{
+            dn{"Ngû"}
+        }
+        zone{
+            dn{"Zukangbonga"}
+        }
     }
 }

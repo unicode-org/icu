@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lu.xml
 // *
@@ -31,7 +31,7 @@ lu{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -120,46 +120,6 @@ lu{
                     "Kunyima kwa Yezu Kli",
                 }
             }
-            fields{
-                day{
-                    dn{"Dituku"}
-                    relative{
-                        "-1"{"Makelela"}
-                        "0"{"Lelu"}
-                        "1"{"Malaba"}
-                    }
-                }
-                dayperiod{
-                    dn{"Mutantshi wa diba"}
-                }
-                era{
-                    dn{"Tshipungu"}
-                }
-                hour{
-                    dn{"Diba"}
-                }
-                minute{
-                    dn{"Kasunsu"}
-                }
-                month{
-                    dn{"Ngondo"}
-                }
-                second{
-                    dn{"Kasunsukusu"}
-                }
-                week{
-                    dn{"Lubingu"}
-                }
-                weekday{
-                    dn{"Dituku dia lubingu"}
-                }
-                year{
-                    dn{"Tshidimu"}
-                }
-                zone{
-                    dn{"Nzeepu"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -231,5 +191,45 @@ lu{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Dituku"}
+            relative{
+                "-1"{"Makelela"}
+                "0"{"Lelu"}
+                "1"{"Malaba"}
+            }
+        }
+        dayperiod{
+            dn{"Mutantshi wa diba"}
+        }
+        era{
+            dn{"Tshipungu"}
+        }
+        hour{
+            dn{"Diba"}
+        }
+        minute{
+            dn{"Kasunsu"}
+        }
+        month{
+            dn{"Ngondo"}
+        }
+        second{
+            dn{"Kasunsukusu"}
+        }
+        week{
+            dn{"Lubingu"}
+        }
+        weekday{
+            dn{"Dituku dia lubingu"}
+        }
+        year{
+            dn{"Tshidimu"}
+        }
+        zone{
+            dn{"Nzeepu"}
+        }
     }
 }

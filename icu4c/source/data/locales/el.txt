@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/el.xml
 // *
@@ -16,7 +16,7 @@ el{
     }
     ExemplarCharacters{"[α ά β γ δ ε έ ζ η ή θ ι ί ϊ ΐ κ λ μ ν ξ ο ό π ρ σ ς τ υ ύ ϋ ΰ φ χ ψ ω ώ]"}
     ExemplarCharactersIndex{"[Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω]"}
-    ExemplarCharactersPunctuation{"[\- ‐ – — , ; \: ! . … \" ( ) \[ \] § @ * / \\ \&]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \: ! . … \u0022 ( ) \\[ \\] § @ * / \\\\  \\&]"}
     LocaleScript{
         "Grek",
     }
@@ -148,7 +148,7 @@ el{
         native{"latn"}
         traditional{"grek"}
     }
-    Version{"2.0.78.32"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -323,63 +323,6 @@ el{
                 abbreviated{
                     "π.Χ.",
                     "μ.Χ.",
-                }
-            }
-            fields{
-                day{
-                    dn{"Ημέρα"}
-                    relative{
-                        "-1"{"Χτες"}
-                        "-2"{"Προχτές"}
-                        "0"{"Σήμερα"}
-                        "1"{"Αύριο"}
-                        "2"{"Μεθαύριο"}
-                    }
-                }
-                dayperiod{
-                    dn{"π.μ./μ.μ."}
-                }
-                era{
-                    dn{"Περίοδος"}
-                }
-                hour{
-                    dn{"Ώρα"}
-                }
-                minute{
-                    dn{"Λεπτό"}
-                }
-                month{
-                    dn{"Μήνας"}
-                    relative{
-                        "-1"{"Προηγούμενος μήνας"}
-                        "0"{"Τρέχων μήνας"}
-                        "1"{"Επόμενος μήνας"}
-                    }
-                }
-                second{
-                    dn{"Δευτερόλεπτο"}
-                }
-                week{
-                    dn{"Εβδομάδα"}
-                    relative{
-                        "-1"{"Προηγούμενη εβδομάδα"}
-                        "0"{"Αυτήν την εβδομάδα"}
-                        "1"{"Επόμενη εβδομάδα"}
-                    }
-                }
-                weekday{
-                    dn{"Ημέρα εβδομάδας"}
-                }
-                year{
-                    dn{"Έτος"}
-                    relative{
-                        "-1"{"Προηγούμενο έτος"}
-                        "0"{"Φέτος"}
-                        "1"{"Επόμενο έτος"}
-                    }
-                }
-                zone{
-                    dn{"Ζώνη"}
                 }
             }
             intervalFormats{
@@ -700,6 +643,63 @@ el{
         alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"Ημέρα"}
+            relative{
+                "-1"{"Χτες"}
+                "-2"{"Προχτές"}
+                "0"{"Σήμερα"}
+                "1"{"Αύριο"}
+                "2"{"Μεθαύριο"}
+            }
+        }
+        dayperiod{
+            dn{"π.μ./μ.μ."}
+        }
+        era{
+            dn{"Περίοδος"}
+        }
+        hour{
+            dn{"Ώρα"}
+        }
+        minute{
+            dn{"Λεπτό"}
+        }
+        month{
+            dn{"Μήνας"}
+            relative{
+                "-1"{"Προηγούμενος μήνας"}
+                "0"{"Τρέχων μήνας"}
+                "1"{"Επόμενος μήνας"}
+            }
+        }
+        second{
+            dn{"Δευτερόλεπτο"}
+        }
+        week{
+            dn{"Εβδομάδα"}
+            relative{
+                "-1"{"Προηγούμενη εβδομάδα"}
+                "0"{"Αυτήν την εβδομάδα"}
+                "1"{"Επόμενη εβδομάδα"}
+            }
+        }
+        weekday{
+            dn{"Ημέρα εβδομάδας"}
+        }
+        year{
+            dn{"Έτος"}
+            relative{
+                "-1"{"Προηγούμενο έτος"}
+                "0"{"Φέτος"}
+                "1"{"Επόμενο έτος"}
+            }
+        }
+        zone{
+            dn{"Ζώνη"}
+        }
     }
     listPattern{
         standard{

@@ -1,7 +1,7 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2012, International Business Machines Corporation and
- * others. All Rights Reserved.
+ * Copyright (c) 2012-2013, International Business Machines Corporation
+ * and others. All Rights Reserved.
  ********************************************************************/
 //
 //   file:  alphaindex.cpp
@@ -285,13 +285,13 @@ void AlphabeticIndexTest::APITest() {
     TEST_CHECK_STATUS;
     n = index->getBucketIndex(adam, status);
     TEST_CHECK_STATUS;
-    TEST_ASSERT(n == 0);    //  Label #0 is underflow
+    TEST_ASSERT(n == 32);   // Now Latin is in overflow label for Russian collation
     n = index->getBucketIndex(baker, status);
-    TEST_ASSERT(n == 0);
+    TEST_ASSERT(n == 32);
     n = index->getBucketIndex(Cyrillic, status);
-    TEST_ASSERT(n == 1);   // Overflow label
+    TEST_ASSERT(n == 1);    // First label
     n = index->getBucketIndex(zed, status);
-    TEST_ASSERT(n == 0);
+    TEST_ASSERT(n == 32);
 
     delete index;
 

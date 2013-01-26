@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/jgo.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/jgo.xml
  */
 jgo{
-    Version{"2.0.77.53"}
+    Version{"2.0.80.73"}
     zoneStrings{
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"{1} ({0})"}

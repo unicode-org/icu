@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ko.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ko.xml
  */
 ko{
-    Version{"2.0.78.30"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -1253,11 +1253,6 @@ ko{
             lg{"알래스카 시간"}
             ls{"알래스카 표준시"}
         }
-        "meta:Alaska_Hawaii"{
-            ld{"알래스카-하와이 하계 표준시"}
-            lg{"알래스카-하와이 시간"}
-            ls{"알래스카-하와이 표준시"}
-        }
         "meta:Amazon"{
             ld{"아마존 하계 표준시"}
             lg{"아마존 시간"}
@@ -1420,9 +1415,6 @@ ko{
         "meta:DumontDUrville"{
             ls{"뒤몽뒤르빌 시간"}
         }
-        "meta:Dutch_Guiana"{
-            ls{"네덜란드령 기아나 표준시"}
-        }
         "meta:East_Timor"{
             ls{"동티모르 시간"}
         }
@@ -1465,11 +1457,6 @@ ko{
         "meta:French_Southern"{
             ls{"프랑스령 남부 식민지 및 남극 시간"}
         }
-        "meta:Frunze"{
-            ld{"프룬제 일광 절약 시간"}
-            lg{"프룬제 시간"}
-            ls{"프룬제 표준시"}
-        }
         "meta:GMT"{
             ls{"그리니치 표준시"}
         }
@@ -1486,11 +1473,6 @@ ko{
         }
         "meta:Gilbert_Islands"{
             ls{"길버트 제도 시간"}
-        }
-        "meta:Greenland_Central"{
-            ld{"그린란드 중부 하계 표준시"}
-            lg{"그린란드 중부 시간"}
-            ls{"그린란드 중부 표준시"}
         }
         "meta:Greenland_Eastern"{
             ld{"그린란드 동부 하계 표준시"}
@@ -1749,9 +1731,6 @@ ko{
         }
         "meta:South_Georgia"{
             ls{"사우스 조지아 시간"}
-        }
-        "meta:Suriname"{
-            ls{"수리남 시간"}
         }
         "meta:Syowa"{
             ls{"쇼와 시간"}

@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ro.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ro.xml
  */
 ro{
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -370,11 +370,6 @@ ro{
             lg{"Ora Alaska"}
             ls{"Ora standard Alaska"}
         }
-        "meta:Alaska_Hawaii"{
-            ld{"Ora de vară Alaska-Hawaii"}
-            lg{"Ora Alaska-Hawaii"}
-            ls{"Ora standard Alaska-Hawaii"}
-        }
         "meta:Amazon"{
             ld{"Ora de vară a Amazonului"}
             lg{"Ora Amazon"}
@@ -459,11 +454,6 @@ ro{
             ld{"Ora de vară din Bangladesh"}
             lg{"Ora din Bangladesh"}
             ls{"Ora standard din Bangladesh"}
-        }
-        "meta:Bering"{
-            ld{"Ora de vară Bering"}
-            lg{"Ora Bering"}
-            ls{"Ora standard Bering"}
         }
         "meta:Bhutan"{
             ls{"Ora Bhutanului"}
@@ -566,11 +556,6 @@ ro{
             ld{"Ora de vară a Georgiei"}
             lg{"Ora Georgiei"}
             ls{"Ora standard a Georgiei"}
-        }
-        "meta:Greenland_Central"{
-            ld{"Ora de vară a Groenlandei centrale"}
-            lg{"Ora Groenlandei centrale"}
-            ls{"Ora standard a Groenlandei centrale"}
         }
         "meta:Greenland_Eastern"{
             ld{"Ora de vară a Groenlandei orientale"}
@@ -753,9 +738,6 @@ ro{
         }
         "meta:Seychelles"{
             ls{"Ora din Seychelles"}
-        }
-        "meta:Suriname"{
-            ls{"Ora Surinamului"}
         }
         "meta:Syowa"{
             ls{"Ora din Syowa"}

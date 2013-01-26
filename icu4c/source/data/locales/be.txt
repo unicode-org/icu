@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/be.xml
 // *
@@ -30,7 +30,7 @@ be{
             }
         }
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -156,48 +156,6 @@ be{
                     "н.э.",
                 }
             }
-            fields{
-                day{
-                    dn{"дзень"}
-                    relative{
-                        "-1"{"учора"}
-                        "-2"{"пазаўчора"}
-                        "0"{"сёння"}
-                        "1"{"заўтра"}
-                        "2"{"паслязаўтра"}
-                    }
-                }
-                dayperiod{
-                    dn{"ДП/ПП"}
-                }
-                era{
-                    dn{"эра"}
-                }
-                hour{
-                    dn{"гадзіна"}
-                }
-                minute{
-                    dn{"хвіліна"}
-                }
-                month{
-                    dn{"месяц"}
-                }
-                second{
-                    dn{"секунда"}
-                }
-                week{
-                    dn{"тыдзень"}
-                }
-                weekday{
-                    dn{"дзень тыдня"}
-                }
-                year{
-                    dn{"год"}
-                }
-                zone{
-                    dn{"Zone"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -311,6 +269,48 @@ be{
         alternateQuotationStart{"‹"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"дзень"}
+            relative{
+                "-1"{"учора"}
+                "-2"{"пазаўчора"}
+                "0"{"сёння"}
+                "1"{"заўтра"}
+                "2"{"паслязаўтра"}
+            }
+        }
+        dayperiod{
+            dn{"ДП/ПП"}
+        }
+        era{
+            dn{"эра"}
+        }
+        hour{
+            dn{"гадзіна"}
+        }
+        minute{
+            dn{"хвіліна"}
+        }
+        month{
+            dn{"месяц"}
+        }
+        second{
+            dn{"секунда"}
+        }
+        week{
+            dn{"тыдзень"}
+        }
+        weekday{
+            dn{"дзень тыдня"}
+        }
+        year{
+            dn{"год"}
+        }
+        zone{
+            dn{"Zone"}
+        }
     }
     measurementSystemNames{
         US{"ЗША"}

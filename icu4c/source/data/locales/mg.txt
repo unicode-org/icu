@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mg.xml
 // *
@@ -23,7 +23,7 @@ mg{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -110,40 +110,6 @@ mg{
                     "Aorian'i JK",
                 }
             }
-            fields{
-                day{
-                    dn{"Andro"}
-                    relative{
-                        "-1"{"Omaly"}
-                        "0"{"Anio"}
-                        "1"{"Rahampitso"}
-                    }
-                }
-                dayperiod{
-                    dn{"AM/PM"}
-                }
-                era{
-                    dn{"Era"}
-                }
-                hour{
-                    dn{"Ora"}
-                }
-                minute{
-                    dn{"Minitra"}
-                }
-                month{
-                    dn{"Volana"}
-                }
-                second{
-                    dn{"Segondra"}
-                }
-                week{
-                    dn{"Herinandro"}
-                }
-                year{
-                    dn{"Taona"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -215,5 +181,39 @@ mg{
         alternateQuotationStart{"“"}
         quotationEnd{"»"}
         quotationStart{"«"}
+    }
+    fields{
+        day{
+            dn{"Andro"}
+            relative{
+                "-1"{"Omaly"}
+                "0"{"Anio"}
+                "1"{"Rahampitso"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"Era"}
+        }
+        hour{
+            dn{"Ora"}
+        }
+        minute{
+            dn{"Minitra"}
+        }
+        month{
+            dn{"Volana"}
+        }
+        second{
+            dn{"Segondra"}
+        }
+        week{
+            dn{"Herinandro"}
+        }
+        year{
+            dn{"Taona"}
+        }
     }
 }

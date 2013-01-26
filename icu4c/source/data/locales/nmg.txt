@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nmg.xml
 // *
@@ -33,7 +33,7 @@ nmg{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -122,43 +122,6 @@ nmg{
                     "Pfiɛ Burī",
                 }
             }
-            fields{
-                day{
-                    dn{"Duö"}
-                    relative{
-                        "-1"{"Nakugú"}
-                        "0"{"Dɔl"}
-                        "1"{"Namáná"}
-                    }
-                }
-                dayperiod{
-                    dn{"Máná, Muó, Kugú, Bvul"}
-                }
-                era{
-                    dn{"Pīl/Lahlɛ̄"}
-                }
-                hour{
-                    dn{"Wulā"}
-                }
-                minute{
-                    dn{"Mpálâ"}
-                }
-                month{
-                    dn{"Ngwɛn"}
-                }
-                second{
-                    dn{"Nyiɛl"}
-                }
-                week{
-                    dn{"Sɔ́ndɔ"}
-                }
-                year{
-                    dn{"Mbvu"}
-                }
-                zone{
-                    dn{"Nkɛ̌l wulā"}
-                }
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -214,5 +177,42 @@ nmg{
         alternateQuotationStart{"«"}
         quotationEnd{"”"}
         quotationStart{"„"}
+    }
+    fields{
+        day{
+            dn{"Duö"}
+            relative{
+                "-1"{"Nakugú"}
+                "0"{"Dɔl"}
+                "1"{"Namáná"}
+            }
+        }
+        dayperiod{
+            dn{"Máná, Muó, Kugú, Bvul"}
+        }
+        era{
+            dn{"Pīl/Lahlɛ̄"}
+        }
+        hour{
+            dn{"Wulā"}
+        }
+        minute{
+            dn{"Mpálâ"}
+        }
+        month{
+            dn{"Ngwɛn"}
+        }
+        second{
+            dn{"Nyiɛl"}
+        }
+        week{
+            dn{"Sɔ́ndɔ"}
+        }
+        year{
+            dn{"Mbvu"}
+        }
+        zone{
+            dn{"Nkɛ̌l wulā"}
+        }
     }
 }

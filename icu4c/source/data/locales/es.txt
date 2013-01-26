@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/es.xml
 // *
@@ -14,8 +14,8 @@ es{
     ExemplarCharacters{"[a á b c d e é f g h i í j k l m n ñ o ó p q r s t u ú ü v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N Ñ O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{
-        "[\- ‐ – — , ; \: ! ¡ ? ¿ . … ' ‘ ’ \" “ ” « » ( ) \[ \] § @ * / \\ \& # † ‡ "
-        "′ ″]"
+        "[\\- ‐ – — , ; \: ! ¡ ? ¿ . … ' ‘ ’ \u0022 “ ” « » ( ) \\[ \\] § @ * / \\\\  \\& # † ‡ ′"
+        " ″]"
     }
     LocaleScript{
         "Latn",
@@ -146,7 +146,7 @@ es{
             }
         }
     }
-    Version{"2.0.78.32"}
+    Version{"2.0.80.73"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -330,63 +330,6 @@ es{
                 wide{
                     "antes de Cristo",
                     "anno Dómini",
-                }
-            }
-            fields{
-                day{
-                    dn{"día"}
-                    relative{
-                        "-1"{"ayer"}
-                        "-2"{"antes de ayer"}
-                        "0"{"hoy"}
-                        "1"{"mañana"}
-                        "2"{"pasado mañana"}
-                    }
-                }
-                dayperiod{
-                    dn{"periodo del día"}
-                }
-                era{
-                    dn{"era"}
-                }
-                hour{
-                    dn{"hora"}
-                }
-                minute{
-                    dn{"minuto"}
-                }
-                month{
-                    dn{"mes"}
-                    relative{
-                        "-1"{"el mes pasado"}
-                        "0"{"este mes"}
-                        "1"{"el próximo mes"}
-                    }
-                }
-                second{
-                    dn{"segundo"}
-                }
-                week{
-                    dn{"semana"}
-                    relative{
-                        "-1"{"la semana pasada"}
-                        "0"{"esta semana"}
-                        "1"{"la próxima semana"}
-                    }
-                }
-                weekday{
-                    dn{"día de la semana"}
-                }
-                year{
-                    dn{"año"}
-                    relative{
-                        "-1"{"el año pasado"}
-                        "0"{"este año"}
-                        "1"{"el próximo año"}
-                    }
-                }
-                zone{
-                    dn{"zona"}
                 }
             }
             intervalFormats{
@@ -770,6 +713,63 @@ es{
         alternateQuotationStart{"«"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"día"}
+            relative{
+                "-1"{"ayer"}
+                "-2"{"antes de ayer"}
+                "0"{"hoy"}
+                "1"{"mañana"}
+                "2"{"pasado mañana"}
+            }
+        }
+        dayperiod{
+            dn{"periodo del día"}
+        }
+        era{
+            dn{"era"}
+        }
+        hour{
+            dn{"hora"}
+        }
+        minute{
+            dn{"minuto"}
+        }
+        month{
+            dn{"mes"}
+            relative{
+                "-1"{"el mes pasado"}
+                "0"{"este mes"}
+                "1"{"el próximo mes"}
+            }
+        }
+        second{
+            dn{"segundo"}
+        }
+        week{
+            dn{"semana"}
+            relative{
+                "-1"{"la semana pasada"}
+                "0"{"esta semana"}
+                "1"{"la próxima semana"}
+            }
+        }
+        weekday{
+            dn{"día de la semana"}
+        }
+        year{
+            dn{"año"}
+            relative{
+                "-1"{"el año pasado"}
+                "0"{"este año"}
+                "1"{"el próximo año"}
+            }
+        }
+        zone{
+            dn{"zona"}
+        }
     }
     listPattern{
         standard{

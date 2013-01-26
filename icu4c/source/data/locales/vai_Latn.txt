@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/vai_Latn.xml
 // *
@@ -33,7 +33,7 @@ vai_Latn{
         }
         native{"vaii"}
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             DateTimePatterns{
@@ -88,37 +88,6 @@ vai_Latn{
                     }
                 }
             }
-            fields{
-                day{
-                    dn{"tele"}
-                    relative{
-                        "-1"{"kunu"}
-                        "0"{"wɛlɛ"}
-                        "1"{"sina"}
-                    }
-                }
-                hour{
-                    dn{"hawa"}
-                }
-                minute{
-                    dn{"mini"}
-                }
-                month{
-                    dn{"kalo"}
-                }
-                second{
-                    dn{"jaki-jaka"}
-                }
-                week{
-                    dn{"wiki"}
-                }
-                weekday{
-                    dn{"wikiyɛma tele"}
-                }
-                year{
-                    dn{"saŋ"}
-                }
-            }
             monthNames{
                 format{
                     wide{
@@ -144,5 +113,36 @@ vai_Latn{
         alternateQuotationStart{"‘"}
         quotationEnd{"”"}
         quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"tele"}
+            relative{
+                "-1"{"kunu"}
+                "0"{"wɛlɛ"}
+                "1"{"sina"}
+            }
+        }
+        hour{
+            dn{"hawa"}
+        }
+        minute{
+            dn{"mini"}
+        }
+        month{
+            dn{"kalo"}
+        }
+        second{
+            dn{"jaki-jaka"}
+        }
+        week{
+            dn{"wiki"}
+        }
+        weekday{
+            dn{"wikiyɛma tele"}
+        }
+        year{
+            dn{"saŋ"}
+        }
     }
 }

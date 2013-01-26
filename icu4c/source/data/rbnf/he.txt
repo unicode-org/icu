@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
+// * Copyright (C) 2013 International Business Machines
 // * Corporation and others.  All Rights Reserved.
 // * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
 // * Source File:<path>/common/rbnf/he.xml
@@ -60,17 +60,6 @@ he{
             "2000000000000000: \u05E9\u05E0\u05D9 \u05D8\u05E8\u05D9\u05DC\u05D9\u05D5\u05DF[ >%%and-feminine>];",
             "3000000000000000: <%%spellout-numbering-m< \u05D8\u05E8\u05D9\u05DC\u05D9\u05D5\u05DF[ >%%and-feminine>];",
             "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-feminine-prefixpart@noparse:",
-            "-x: \u05DE\u05D9\u05E0\u05D5\u05E1 >%spellout-cardinal-feminine>;",
-            "0: =%spellout-cardinal-feminine= ;",
-            "1: ;",
-            "2: \u05E9\u05EA\u05D9;",
-            "3: =%spellout-cardinal-feminine= ;",
-            "%spellout-cardinal-feminine-postfixpart@noparse:",
-            "-x: ;",
-            "0: ;",
-            "1: =%spellout-cardinal-feminine=;",
-            "2: ;",
             "%spellout-cardinal-feminine:",
             "-x: \u05DE\u05D9\u05E0\u05D5\u05E1 >>;",
             "x.x: <%spellout-numbering< \u05E0\u05E7\u05D5\u05D3\u05D4 >> ;",
@@ -211,17 +200,6 @@ he{
             "2000000000000000: \u05E9\u05E0\u05D9 \u05D8\u05E8\u05D9\u05DC\u05D9\u05D5\u05DF[ >%%and-masculine>];",
             "3000000000000000: <%%spellout-numbering-m< \u05D8\u05E8\u05D9\u05DC\u05D9\u05D5\u05DF[ >%%and-masculine>];",
             "1000000000000000000: =#,##0=;",
-            "%spellout-cardinal-masculine-prefixpart@noparse:",
-            "-x: \u05DE\u05D9\u05E0\u05D5\u05E1 >%spellout-cardinal-masculine>;",
-            "0: =%spellout-cardinal-masculine= ;",
-            "1: ;",
-            "2: \u05E9\u05E0\u05D9;",
-            "3: =%spellout-cardinal-masculine= ;",
-            "%spellout-cardinal-masculine-postfixpart@noparse:",
-            "-x: ;",
-            "0: ;",
-            "1: =%spellout-cardinal-masculine=;",
-            "2: ;",
             "%spellout-cardinal-masculine:",
             "-x: \u05DE\u05D9\u05E0\u05D5\u05E1 >>;",
             "x.x: <%%spellout-numbering-m< \u05E0\u05E7\u05D5\u05D3\u05D4 >> ;",
@@ -373,5 +351,5 @@ he{
             "11: =%spellout-numbering=;",
         }
     }
-    Version{"2.0.73.65"}
+    Version{"2.0.79.24"}
 }

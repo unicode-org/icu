@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mk.xml
 // *
@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mk.xml
  */
 mk{
-    Version{"2.0.78.17"}
+    Version{"2.0.80.73"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Сеута"}
@@ -652,11 +652,6 @@ mk{
             lg{"Време во Бангладеш"}
             ls{"Стандардно време во Бангладеш"}
         }
-        "meta:Bering"{
-            ld{"Беринг летно сметање на времето"}
-            lg{"Беринг време"}
-            ls{"Беринг стандардно време"}
-        }
         "meta:Bhutan"{
             ls{"Време во Бутан"}
         }
@@ -726,9 +721,6 @@ mk{
         "meta:DumontDUrville"{
             ls{"Димон-дурвил време"}
         }
-        "meta:Dutch_Guiana"{
-            ls{"Холандска Гвајана време"}
-        }
         "meta:East_Timor"{
             ls{"Време во Источен Тимор"}
         }
@@ -796,11 +788,6 @@ mk{
         }
         "meta:Gilbert_Islands"{
             ls{"Време на Островите Гилберт"}
-        }
-        "meta:Greenland_Central"{
-            ld{"Централен Гренланд летно сметање на времето"}
-            lg{"Централен Гренланд време"}
-            ls{"Централен Гренланд стандардно време"}
         }
         "meta:Greenland_Eastern"{
             ld{"Источен Гренланд летно сметање на времето"}
@@ -889,11 +876,6 @@ mk{
             ld{"Летно време во Краснојарск"}
             lg{"Време во Краснојарск"}
             ls{"Стандардно време во Краснојарск"}
-        }
-        "meta:Kuybyshev"{
-            ld{"Кујбишев летно сметање на времето"}
-            lg{"Кујбишев време"}
-            ls{"Кујбишев стандардно време"}
         }
         "meta:Kyrgystan"{
             ls{"Време во Киргистан"}
@@ -1060,9 +1042,6 @@ mk{
         "meta:South_Georgia"{
             ls{"Време во Јужна Грузија"}
         }
-        "meta:Suriname"{
-            ls{"Суринам време"}
-        }
         "meta:Syowa"{
             ls{"Време во Сајова"}
         }
@@ -1087,11 +1066,6 @@ mk{
         }
         "meta:Truk"{
             ls{"Време во Чуук"}
-        }
-        "meta:Turkey"{
-            ld{"Турција летно сметање на времето"}
-            lg{"Турција време"}
-            ls{"Турција стандардно време"}
         }
         "meta:Turkmenistan"{
             ld{"Летно време во Туркменистан"}
@@ -1147,11 +1121,6 @@ mk{
             ld{"Летно време во Екатеринбург"}
             lg{"Време во Екатеринбург"}
             ls{"Стандардно време во Екатеринбург"}
-        }
-        "meta:Yukon"{
-            ld{"Јукон летно сметање на времето"}
-            lg{"Јукон време"}
-            ls{"Јукон стандардно време"}
         }
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"{1} ({0})"}

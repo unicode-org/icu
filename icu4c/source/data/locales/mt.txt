@@ -1,7 +1,7 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2012 International Business Machines
-// * Corporation and others.  All Rights Reserved.
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mt.xml
 // *
@@ -13,7 +13,7 @@ mt{
     AuxExemplarCharacters{"[c y]"}
     ExemplarCharacters{"[a à b ċ d e è f ġ g {għ} h ħ i ì j k l m n o ò p q r s t u ù v w x ż z]"}
     ExemplarCharactersIndex{"[A B Ċ C D E F Ġ G {GĦ} H Ħ I {IE} J K L M N O P Q R S T U V W X Y Ż Z]"}
-    ExemplarCharactersPunctuation{"[\- , ; \: ! ? . ' ‘ ’ \" “ ” ( ) \[ \] \{ \}]"}
+    ExemplarCharactersPunctuation{"[\\- , ; \: ! ? . ' ‘ ’ \u0022 “ ” ( ) \\[ \\] \\{ \\}]"}
     LocaleScript{
         "Latn",
     }
@@ -28,7 +28,7 @@ mt{
             }
         }
     }
-    Version{"2.0.78.38"}
+    Version{"2.0.80.73"}
     calendar{
         gregorian{
             AmPmMarkers{
@@ -91,43 +91,6 @@ mt{
                 wide{
                     "Qabel Kristu",
                     "Wara Kristu",
-                }
-            }
-            fields{
-                day{
-                    dn{"Jum"}
-                    relative{
-                        "-1"{"Lbieraħ"}
-                        "0"{"Illum"}
-                        "1"{"Għada"}
-                    }
-                }
-                era{
-                    dn{"Epoka"}
-                }
-                hour{
-                    dn{"Siegħa"}
-                }
-                minute{
-                    dn{"Minuta"}
-                }
-                month{
-                    dn{"Xahar"}
-                }
-                second{
-                    dn{"Sekonda"}
-                }
-                week{
-                    dn{"Ġimgħa"}
-                }
-                weekday{
-                    dn{"Jum tal-Ġimgħa"}
-                }
-                year{
-                    dn{"Sena"}
-                }
-                zone{
-                    dn{"Żona"}
                 }
             }
             monthNames{
@@ -194,6 +157,43 @@ mt{
                     }
                 }
             }
+        }
+    }
+    fields{
+        day{
+            dn{"Jum"}
+            relative{
+                "-1"{"Lbieraħ"}
+                "0"{"Illum"}
+                "1"{"Għada"}
+            }
+        }
+        era{
+            dn{"Epoka"}
+        }
+        hour{
+            dn{"Siegħa"}
+        }
+        minute{
+            dn{"Minuta"}
+        }
+        month{
+            dn{"Xahar"}
+        }
+        second{
+            dn{"Sekonda"}
+        }
+        week{
+            dn{"Ġimgħa"}
+        }
+        weekday{
+            dn{"Jum tal-Ġimgħa"}
+        }
+        year{
+            dn{"Sena"}
+        }
+        zone{
+            dn{"Żona"}
         }
     }
     measurementSystemNames{
