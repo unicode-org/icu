@@ -597,7 +597,7 @@ public class CurrencyTest extends TestFmwk {
             {"de_DE",           "EUR"},
             {"de_ZZ",                },
             {"ar",              "EGP"},
-            {"ar_PS",           "JOD", "ILS"},
+            {"ar_PS",           "ILS", "JOD"},
             {"en@currency=CAD",     "USD"},
             {"fr@currency=ZZZ",     "EUR"},
             {"de_DE@currency=DEM",  "EUR"},
