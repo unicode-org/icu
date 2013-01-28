@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/he.xml
  */
 he{
-    Version{"2.0.80.59"}
+    Version{"2.0.80.77"}
     collations{
         search{
             Sequence{
@@ -64,11 +64,7 @@ he{
             Version{"23"}
         }
         standard{
-            Sequence{
-                " [normalization on] [reorder Hebr Latn]"
-                "&[before 2]''<<׳"
-                "&[before 2]'\"'<<״"
-            }
+            Sequence{" [normalization on] [reorder Hebr]&[before 2]''<<׳&[before 2]'\"'<<״"}
             Version{"23"}
         }
     }

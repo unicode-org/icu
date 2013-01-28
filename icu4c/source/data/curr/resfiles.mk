@@ -31,7 +31,8 @@ CURR_SYNTHETIC_ALIAS = az_AZ.txt az_Latn_AZ.txt bs_BA.txt bs_Latn_BA.txt\
  ha_GH.txt ha_Latn_GH.txt ha_Latn_NE.txt ha_Latn_NG.txt ha_NE.txt\
  ha_NG.txt he_IL.txt id_ID.txt in.txt in_ID.txt\
  iw.txt iw_IL.txt ja_JP.txt ja_JP_TRADITIONAL.txt kk_Cyrl_KZ.txt\
- kk_KZ.txt ks_Arab_IN.txt ks_IN.txt mo.txt nb_NO.txt\
+ kk_KZ.txt ks_Arab_IN.txt ks_IN.txt mo.txt ms_BN.txt\
+ ms_Latn_MY.txt ms_Latn_SG.txt ms_MY.txt ms_SG.txt nb_NO.txt\
  nn_NO.txt no.txt no_NO.txt no_NO_NY.txt pa_Arab_PK.txt\
  pa_Guru_IN.txt pa_IN.txt pa_PK.txt ro_MD.txt sh.txt\
  sh_BA.txt sh_CS.txt sh_YU.txt shi_Latn_MA.txt shi_MA.txt\
