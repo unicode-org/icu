@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2009-2012, International Business Machines Corporation and    *
+* Copyright (C) 2009-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -22,6 +22,9 @@
     <alias from="kk_KZ" to="kk_Cyrl_KZ" />
     <alias from="ks_IN" to="ks_Arab_IN" />
     <alias from="mo" to="ro_MD"/>
+    <alias from="ms_BN" to="ms_Latn_BN"/>
+    <alias from="ms_MY" to="ms_Latn_MY"/>
+    <alias from="ms_SG" to="ms_Latn_SG"/>
     <alias from="no_NO" to="nb_NO"/>
     <alias from="no_NO_NY" to="nn_NO"/>
     <alias from="no" to="nb"/>

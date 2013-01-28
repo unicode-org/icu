@@ -423,10 +423,13 @@
 		<include locales="mr"/>
 		<include locales="mr_IN"/>
 		<include locales="ms"/>
+		<include locales="ms_BN"/>
 		<include locales="ms_Latn"/>
 		<include locales="ms_Latn_BN"/>
-		<include locales="ms_Latn_SG"/>
 		<include locales="ms_Latn_MY"/>
+		<include locales="ms_Latn_SG"/>
+		<include locales="ms_MY"/>
+		<include locales="ms_SG"/>
 		<include locales="mt"/>
 		<include locales="mt_MT"/>
 		<include locales="mua"/>
