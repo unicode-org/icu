@@ -161,7 +161,7 @@ void Region::loadRegionData() {
     while ( ures_hasNext(territoryAlias) ) {
         UResourceBundle *res = ures_getNextResource(territoryAlias,NULL,&status);
         const char *aliasFrom = ures_getKey(res);
-        UnicodeString* aliasFromStr = new UnicodeString(aliasFrom);
+        UnicodeString* aliasFromStr = new UnicodeString(aliasFrom, -1, US_INV);
         UnicodeString aliasTo = ures_getUnicodeString(res,&status);
         ures_close(res);
 
@@ -274,7 +274,7 @@ void Region::loadRegionData() {
     while ( ures_hasNext(territoryContainment) ) {
         UResourceBundle *mapping = ures_getNextResource(territoryContainment,NULL,&status);
         const char *parent = ures_getKey(mapping);
-        UnicodeString parentStr = UnicodeString(parent);
+        UnicodeString parentStr = UnicodeString(parent, -1 , US_INV);
         Region *parentRegion = (Region *) uhash_get(regionIDMap,(void *)&parentStr);
 
         for ( int j = 0 ; j < ures_getSize(mapping); j++ ) {
@@ -408,7 +408,7 @@ Region::getInstance(const char *region_code, UErrorCode &status) {
 
     loadRegionData();
 
-    UnicodeString regionCodeString = UnicodeString(region_code);
+    UnicodeString regionCodeString = UnicodeString(region_code, -1, US_INV);
     Region *r = (Region *)uhash_get(regionIDMap,(void *)&regionCodeString);
 
     if ( !r ) {
