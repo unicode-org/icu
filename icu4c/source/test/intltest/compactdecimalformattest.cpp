@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2012, International Business Machines Corporation and    *
+* Copyright (C) 1997-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -246,7 +246,8 @@ void CompactDecimalFormatTest::TestFieldPosition() {
   UErrorCode status = U_ZERO_ERROR;
   LocalPointer<CompactDecimalFormat> cdf(createCDFInstance("sw", UNUM_SHORT, status));
   if (U_FAILURE(status)) {
-    errln("Unable to create format object - %s", u_errorName(status));
+    dataerrln("Unable to create format object - %s", u_errorName(status));
+    return;
   }
   FieldPosition fp(UNUM_INTEGER_FIELD);
   UnicodeString result;
@@ -282,7 +283,7 @@ void CompactDecimalFormatTest::TestSignificantDigits() {
   UErrorCode status = U_ZERO_ERROR;
   LocalPointer<CompactDecimalFormat> cdf(CompactDecimalFormat::createInstance("en", UNUM_SHORT, status));
   if (U_FAILURE(status)) {
-    errln("Unable to create format object - %s", u_errorName(status));
+    dataerrln("Unable to create format object - %s", u_errorName(status));
     return;
   }
   UnicodeString actual;
@@ -298,7 +299,7 @@ void CompactDecimalFormatTest::CheckLocale(const Locale& locale, UNumberCompactS
   UErrorCode status = U_ZERO_ERROR;
   LocalPointer<CompactDecimalFormat> cdf(createCDFInstance(locale, style, status));
   if (U_FAILURE(status)) {
-    errln("Unable to create format object - %s", u_errorName(status));
+    dataerrln("Unable to create format object - %s", u_errorName(status));
     return;
   }
   char description[256];

@@ -2522,7 +2522,7 @@ static void TestEnglishExemplarCharacters(void) {
     };
     ULocaleData *uld = ulocdata_open("en", &status);
     if (U_FAILURE(status)) {
-        log_err("ulocdata_open() failed\n");
+        log_data_err("ulocdata_open() failed : %s - (Are you missing data?)\n", u_errorName(status));
         return;
     }
 
