@@ -102,6 +102,10 @@ void Region::loadRegionData() {
     UResourceBundle* groupingContainment = NULL;
 
     DecimalFormat *df = new DecimalFormat(status);
+    if (U_FAILURE(status)) {
+        umtx_unlock(&gRegionDataLock);
+        return;
+    }
     df->setParseIntegerOnly(TRUE);
 
     regionIDMap = uhash_open(uhash_hashUnicodeString,uhash_compareUnicodeString,NULL,&status);
@@ -408,6 +412,11 @@ Region::getInstance(const char *region_code, UErrorCode &status) {
 
     loadRegionData();
 
+    if (regionIDMap == NULL) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
+
     UnicodeString regionCodeString = UnicodeString(region_code, -1, US_INV);
     Region *r = (Region *)uhash_get(regionIDMap,(void *)&regionCodeString);
 
@@ -440,6 +449,11 @@ const Region* U_EXPORT2
 Region::getInstance (int32_t code, UErrorCode &status) {
 
     loadRegionData();
+
+    if (numericCodeMap == NULL) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return NULL;
+    }
 
     Region *r = (Region *)uhash_iget(numericCodeMap,code);
 
