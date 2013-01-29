@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2012, International Business Machines
+ *   Copyright (C) 2005-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -34,7 +34,7 @@ char testId[100];
     errln("Failure in file %s, line %d, test ID = \"%s\"", __FILE__, __LINE__, testId);}}
 
 #define TEST_ASSERT_M(x, m) {if (!(x)) { \
-    errln("Failure in file %s, line %d.   \"%s\"", __FILE__, __LINE__, m);return;}}
+    dataerrln("Failure in file %s, line %d.   \"%s\"", __FILE__, __LINE__, m);return;}}
 
 #define TEST_ASSERT_SUCCESS(errcode) {if (U_FAILURE(errcode)) { \
     dataerrln("Failure in file %s, line %d, test ID \"%s\", status = \"%s\"", \
@@ -763,7 +763,7 @@ void SSearchTest::sharpSTest()
         if (bFound) {
             logln("Test %d: found long pattern at [%d, %d].", t, start, end);
         } else {
-            errln("Test %d: did not find long pattern.", t);
+            dataerrln("Test %d: did not find long pattern.", t);
         }
 
         usearch_setText(ussShort.getAlias(), target.getBuffer(), target.length(), &status);
@@ -772,7 +772,7 @@ void SSearchTest::sharpSTest()
         if (bFound) {
             logln("Test %d: found long pattern at [%d, %d].", t, start, end);
         } else {
-            errln("Test %d: did not find long pattern.", t);
+            dataerrln("Test %d: did not find long pattern.", t);
         }
     }
 
@@ -803,7 +803,7 @@ void SSearchTest::goodSuffixTest()
     if (bFound) {
         logln("Found pattern at [%d, %d].", start, end);
     } else {
-        errln("Did not find pattern.");
+        dataerrln("Did not find pattern.");
     }
 
     ucol_close(coll);
