@@ -388,7 +388,7 @@ void RegionTest::TestKnownRegions() {
                 }
              }
         } else {
-            errln("Known region %s was not recognized.",rd.code);
+            dataerrln("Known region %s was not recognized.",rd.code);
         }
     }
 }
@@ -440,10 +440,10 @@ void RegionTest::TestGetInstanceString() {
             type = URGN_UNKNOWN;
         }
         if ( uprv_strcmp(id,data.expectedID)) {
-            errln("Unexpected region ID for Region::getInstance(\"%s\"); Expected: %s Got: %s",data.inputID,data.expectedID,id);
+            dataerrln("Unexpected region ID for Region::getInstance(\"%s\"); Expected: %s Got: %s",data.inputID,data.expectedID,id);
         }
         if ( type != data.expectedType) {
-            errln("Unexpected region type for Region::getInstance(\"%s\"); Expected: %d Got: %d",data.inputID,data.expectedType,type);
+            dataerrln("Unexpected region type for Region::getInstance(\"%s\"); Expected: %d Got: %d",data.inputID,data.expectedType,type);
         }
     }
 }
@@ -484,10 +484,10 @@ void RegionTest::TestGetInstanceInt() {
             type = URGN_UNKNOWN;
         }
         if ( uprv_strcmp(data.expectedID,id)) {
-            errln("Unexpected region ID for Region.getInstance(%d)); Expected: %s Got: %s",data.inputID,data.expectedID,id);
+            dataerrln("Unexpected region ID for Region.getInstance(%d)); Expected: %s Got: %s",data.inputID,data.expectedID,id);
         }
         if ( data.expectedType != type) {
-            errln("Unexpected region type for Region.getInstance(%d)); Expected: %d Got: %d",data.inputID,data.expectedType,type);
+            dataerrln("Unexpected region type for Region.getInstance(%d)); Expected: %d Got: %d",data.inputID,data.expectedType,type);
         }
     }
 }
@@ -514,7 +514,7 @@ void RegionTest::TestGetContainedRegions() {
             }
             delete containedRegions;
         } else {
-            errln("Known region %s was not recognized.",rd.code);
+            dataerrln("Known region %s was not recognized.",rd.code);
         }
     }
 }
@@ -541,7 +541,7 @@ void RegionTest::TestGetContainedRegionsWithType() {
             }
             delete containedRegions;
         } else {
-            errln("Known region %s was not recognized.",rd.code);
+            dataerrln("Known region %s was not recognized.",rd.code);
         }
     }
 }
@@ -565,7 +565,7 @@ void RegionTest::TestGetContainingRegion() {
                 }
             }
         } else {
-            errln("Known region %s was not recognized.",rd.code);
+            dataerrln("Known region %s was not recognized.",rd.code);
         }
     }
 }
@@ -590,7 +590,7 @@ void RegionTest::TestGetContainingRegionWithType() {
                 }
             }
         } else {
-            errln("Known region %s was not recognized.",rd.code);
+            dataerrln("Known region %s was not recognized.",rd.code);
         }
     }
 }
@@ -627,7 +627,7 @@ void RegionTest::TestGetPreferredValues() {
             }
             delete preferredValues;
         } else {
-            errln("Known region %s was not recognized.",data[0]);
+            dataerrln("Known region %s was not recognized.",data[0]);
         }
     }
 }
@@ -647,47 +647,51 @@ void RegionTest::TestContains() {
                 c = c->getContainingRegion();
             }
         } else {
-            errln("Known region %s was not recognized.",rd.code);
+            dataerrln("Known region %s was not recognized.",rd.code);
         }
     }
 }
 
 void RegionTest::TestAvailableTerritories() {
-        // Test to make sure that the set of territories contained in World and the set of all available
-        // territories are one and the same.
-        UErrorCode status = U_ZERO_ERROR;
-        StringEnumeration *availableTerritories = Region::getAvailable(URGN_TERRITORY);
-        const Region *world = Region::getInstance("001",status);
-        StringEnumeration *containedInWorld = world->getContainedRegions(URGN_TERRITORY);
-        if ( !availableTerritories || !containedInWorld || *availableTerritories != *containedInWorld ) {
-            char availableTerritoriesString[1024] = "";
-            char containedInWorldString[1024] = "";
-            if ( availableTerritories ) {
-                for (int32_t i = 0 ; i < availableTerritories->count(status) ; i++ ) {
-                    if ( i > 0 ) {
-                        uprv_strcat(availableTerritoriesString," ");
-                    }
-                    uprv_strcat(availableTerritoriesString,availableTerritories->next(NULL,status));
-                }
-            } else {
-                uprv_strcpy(availableTerritoriesString,"NULL");
-            }
-            if ( containedInWorld ) {
-                for (int32_t i = 0 ; i < containedInWorld->count(status) ; i++ ) {
-                    if ( i > 0 ) {
-                        uprv_strcat(containedInWorldString," ");
-                    }
-                    uprv_strcat(containedInWorldString,containedInWorld->next(NULL,status));
-                }
-            } else {
-                uprv_strcpy(containedInWorldString,"NULL");
-            }
-            errln("Available territories and all territories contained in world should be the same set.\nAvailable          = %s\nContained in World = %s",
-                availableTerritoriesString,containedInWorldString);
-        }
-        delete availableTerritories;
-        delete containedInWorld;
+    // Test to make sure that the set of territories contained in World and the set of all available
+    // territories are one and the same.
+    UErrorCode status = U_ZERO_ERROR;
+    StringEnumeration *availableTerritories = Region::getAvailable(URGN_TERRITORY);
+    const Region *world = Region::getInstance("001",status);
+    if (U_FAILURE(status)) {
+        dataerrln("Region::getInstance(\"001\",status) failed: %s", u_errorName(status));
+        return;
     }
+    StringEnumeration *containedInWorld = world->getContainedRegions(URGN_TERRITORY);
+    if ( !availableTerritories || !containedInWorld || *availableTerritories != *containedInWorld ) {
+        char availableTerritoriesString[1024] = "";
+        char containedInWorldString[1024] = "";
+        if ( availableTerritories ) {
+            for (int32_t i = 0 ; i < availableTerritories->count(status) ; i++ ) {
+                if ( i > 0 ) {
+                    uprv_strcat(availableTerritoriesString," ");
+                }
+                uprv_strcat(availableTerritoriesString,availableTerritories->next(NULL,status));
+            }
+        } else {
+            uprv_strcpy(availableTerritoriesString,"NULL");
+        }
+        if ( containedInWorld ) {
+            for (int32_t i = 0 ; i < containedInWorld->count(status) ; i++ ) {
+                if ( i > 0 ) {
+                    uprv_strcat(containedInWorldString," ");
+                }
+                uprv_strcat(containedInWorldString,containedInWorld->next(NULL,status));
+            }
+        } else {
+            uprv_strcpy(containedInWorldString,"NULL");
+        }
+        errln("Available territories and all territories contained in world should be the same set.\nAvailable          = %s\nContained in World = %s",
+            availableTerritoriesString,containedInWorldString);
+    }
+    delete availableTerritories;
+    delete containedInWorld;
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof

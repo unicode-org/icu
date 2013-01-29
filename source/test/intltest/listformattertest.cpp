@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2012, International Business Machines
+*   Copyright (C) 2012-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -39,7 +39,7 @@ void ListFormatterTest::CheckFourCases(const char* locale_string, UnicodeString 
     UErrorCode errorCode = U_ZERO_ERROR;
     LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(Locale(locale_string), errorCode));
     if (U_FAILURE(errorCode)) {
-        errln("Allocation problem\n");
+        dataerrln("ListFormatter::createInstance(Locale(\"%s\"), errorCode) failed in CheckFourCases: %s", locale_string, u_errorName(errorCode));
         return;
     }
     UnicodeString input1[] = {one};
@@ -60,7 +60,7 @@ UBool ListFormatterTest::RecordFourCases(const Locale& locale, UnicodeString one
     UErrorCode errorCode = U_ZERO_ERROR;
     LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(locale, errorCode));
     if (U_FAILURE(errorCode)) {
-        errln("Allocation problem in RecordFourCases\n");
+        dataerrln("ListFormatter::createInstance(\"%s\", errorCode) failed in RecordFourCases: %s", locale.getName(), u_errorName(errorCode));
         return FALSE;
     }
     UnicodeString input1[] = {one};

@@ -909,6 +909,10 @@ static void TestCalendarDateParse() {
     U_STRING_INIT(text, "75", 2);
 
     simpleDateFormat = udat_open(UDAT_FULL, UDAT_FULL, "en-GB", 0, 0, 0, 0, &ec);
+    if (U_FAILURE(ec)) {
+        log_data_err("udat_open(UDAT_FULL, UDAT_FULL, \"en-GB\", 0, 0, 0, 0, &ec) failed: %s - (Are you missing data?)\n", u_errorName(ec));
+        return;
+    }
     udat_applyPattern(simpleDateFormat, 0, pattern, u_strlen(pattern));
     udat_setLenient(simpleDateFormat, 0);
 
