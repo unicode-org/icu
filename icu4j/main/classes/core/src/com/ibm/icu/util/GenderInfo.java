@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2012, Google, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2013, Google, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
 */
@@ -58,17 +58,23 @@ public class GenderInfo {
      */
     public enum ListGenderStyle {
         /**
-         * Always OTHER (if more than one).
+         * For an empty list, returns OTHER;
+         * For a single item, returns its gender;
+         * Otherwise always OTHER.
          */
         NEUTRAL,
         /**
-         * gender(all male) = male, gender(all female) = female, otherwise gender(list) = other.
-         * In particular, any 'other' value makes the overall gender be 'other'.
+         * For an empty list, returns OTHER;
+         * For a single item, returns its gender;
+         * Otherwise gender(all male) = male, gender(all female) = female, otherwise gender(list) = other.
+         * So any 'other' value makes the overall gender be 'other'.
          */
         MIXED_NEUTRAL,
         /**
-         * If more than one, gender(all female) = female, otherwise gender(list) = male.
-         * If more than one, any 'other' value makes the overall gender be 'male'.
+         * For an empty list, returns OTHER;
+         * For a single item, returns its gender;
+         * Otherwise, gender(all female) = female, otherwise gender(list) = male.
+         * So for more than one item, any 'other' value makes the overall gender be 'male'.
          */
         MALE_TAINTS;
 
