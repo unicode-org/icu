@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2012, International Business Machines
+*   Copyright (C) 1998-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -299,4 +299,10 @@ u_fgetConverter(UFILE *file)
 {
     return file->fConverter;
 }
+#if !UCONFIG_NO_FORMATTING
+U_CAPI const UNumberFormat* U_EXPORT2 u_fgetNumberFormat(const UFILE *file)
+{
+    return u_locbund_getNumberFormat(&file->str.fBundle, UNUM_DECIMAL);
+}
+#endif
 

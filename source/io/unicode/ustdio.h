@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1998-2012, International Business Machines
+*   Copyright (C) 1998-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -29,6 +29,7 @@
 #include "unicode/ucnv.h"
 #include "unicode/utrans.h"
 #include "unicode/localpointer.h"
+#include "unicode/unum.h"
 
 /*
     TODO
@@ -438,6 +439,13 @@ u_fsetcodepage(const char   *codepage,
 U_STABLE UConverter* U_EXPORT2 u_fgetConverter(UFILE *f);
 
 #if !UCONFIG_NO_FORMATTING
+/**
+ * Returns an alias to the number formatter being used for this file.
+ * @param f The UFILE to get the value from
+ * @return alias to the number formatter (The formatter <EM>must not</EM> be modified or closed)
+ * @draft ICU 51
+*/
+ U_DRAFT const UNumberFormat* U_EXPORT2 u_fgetNumberFormat(const UFILE *f);
 
 /* Output functions */
 
