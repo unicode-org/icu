@@ -365,7 +365,7 @@ u_frewind(UFILE *file);
 /**
  * Get the FILE* associated with a UFILE.
  * @param f The UFILE
- * @return A FILE*, owned by the UFILE.  The FILE <EM>must not</EM> be closed.
+ * @return A FILE*, owned by the UFILE. (The FILE <EM>must not</EM> be modified or closed)
  * @stable ICU 3.0
  */
 U_STABLE FILE* U_EXPORT2
@@ -433,7 +433,7 @@ u_fsetcodepage(const char   *codepage,
 /**
  * Returns an alias to the converter being used for this file.
  * @param f The UFILE to get the value from
- * @return alias to the converter
+ * @return alias to the converter (The converter <EM>must not</EM> be modified or closed)
  * @stable ICU 3.0
  */
 U_STABLE UConverter* U_EXPORT2 u_fgetConverter(UFILE *f);
