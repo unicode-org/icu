@@ -1,14 +1,13 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2008-2013, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.collator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -28,6 +27,7 @@ import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.AlphabeticIndex;
 import com.ibm.icu.text.AlphabeticIndex.Bucket;
 import com.ibm.icu.text.AlphabeticIndex.Bucket.LabelType;
+import com.ibm.icu.text.AlphabeticIndex.ImmutableIndex;
 import com.ibm.icu.text.AlphabeticIndex.Record;
 import com.ibm.icu.text.Collator;
 import com.ibm.icu.text.Normalizer2;
@@ -37,8 +37,7 @@ import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
 /**
- * @author markdavis
- *
+ * @author Mark Davis
  */
 public class AlphabeticIndexTest extends TestFmwk {
     /**
@@ -246,11 +245,14 @@ public class AlphabeticIndexTest extends TestFmwk {
         AlphabeticIndex alphabeticIndex = new AlphabeticIndex(Locale.ENGLISH);
         RuleBasedCollator collator = alphabeticIndex.getCollator();
         collator.setStrength(Collator.IDENTICAL);
-        List<String> firsts = alphabeticIndex.getFirstScriptCharacters();
-        // Verify that they are all in order, and that each script is represented exactly once.
+        Collection<String> firsts = AlphabeticIndex.getFirstCharactersInScripts();
+        // Verify that each script is represented exactly once.
         UnicodeSet missingScripts = new UnicodeSet("[^[:sc=inherited:][:sc=unknown:][:sc=common:][:Script=Braille:]]");
         String last = "";
         for (String index : firsts) {
+            if (index.equals("\uFFFF")) {
+                continue;
+            }
             if (collator.compare(last,index) >= 0) {
                 errln("Characters not in order: " + last + " !< " + index);
             }
@@ -363,6 +365,9 @@ public class AlphabeticIndexTest extends TestFmwk {
             itemCount.add(item, 1);
         }
 
+        List<String> labels = index.getBucketLabels();
+        ImmutableIndex<Integer> immIndex = index.buildImmutableIndex();
+
         logln(desiredLocale + "\t" + desiredLocale.getDisplayName(ULocale.ENGLISH) + " - " + desiredLocale.getDisplayName(desiredLocale) + "\t"
                 + index.getCollator().getLocale(ULocale.ACTUAL_LOCALE));
         UI.setLength(0);
@@ -378,7 +383,21 @@ public class AlphabeticIndexTest extends TestFmwk {
         logln(UI.toString());
 
         // Show the buckets with their contents, skipping empty buckets
-        for (AlphabeticIndex.Bucket<Integer> bucket : index) {
+        int bucketIndex = 0;
+        for (Bucket<Integer> bucket : index) {
+            assertEquals("bucket label vs. iterator",
+                    labels.get(bucketIndex), bucket.getLabel());
+            assertEquals("bucket label vs. immutable",
+                    labels.get(bucketIndex), immIndex.getBucket(bucketIndex).getLabel());
+            assertEquals("bucket label type vs. immutable",
+                    bucket.getLabelType(), immIndex.getBucket(bucketIndex).getLabelType());
+            for (Record<Integer> r : bucket) {
+                CharSequence name = r.getName();
+                assertEquals("getBucketIndex(" + name + ")",
+                        bucketIndex, index.getBucketIndex(name));
+                assertEquals("immutable getBucketIndex(" + name + ")",
+                        bucketIndex, immIndex.getBucketIndex(name));
+            }
             if (bucket.getLabel().equals(testBucket)) {
                 Counter<String> keys = getKeys(bucket);
                 for (String item : items) {
@@ -399,16 +418,27 @@ public class AlphabeticIndexTest extends TestFmwk {
                 }
                 logln(UI.toString());
             }
+            ++bucketIndex;
+        }
+        assertEquals("getBucketCount()", bucketIndex, index.getBucketCount());
+        assertEquals("immutable getBucketCount()", bucketIndex, immIndex.getBucketCount());
+
+        assertNull("immutable getBucket(-1)", immIndex.getBucket(-1));
+        assertNull("immutable getBucket(count)", immIndex.getBucket(bucketIndex));
+
+        for (Bucket<Integer> bucket : immIndex) {
+            assertEquals("immutable bucket size", 0, bucket.size());
+            assertFalse("immutable bucket iterator.hasNext()", bucket.iterator().hasNext());
         }
     }
 
     public <T> void showIndex(AlphabeticIndex<T> index, boolean showEmpty) {
         logln("Actual");
         StringBuilder UI = new StringBuilder();
-        for (AlphabeticIndex.Bucket<T> bucket : index) {
+        for (Bucket<T> bucket : index) {
             if (showEmpty || bucket.size() != 0) {
                 showLabelInList(UI, bucket.getLabel());
-                for (AlphabeticIndex.Record<T> item : bucket) {
+                for (Record<T> item : bucket) {
                     showIndexedItem(UI, item.getName(), item.getData());
                 }
                 logln(UI.toString());
@@ -488,7 +518,7 @@ public class AlphabeticIndexTest extends TestFmwk {
     public void TestBasics() {
         ULocale[] list = ULocale.getAvailableLocales();
         // get keywords combinations
-        // don't bother with multiple combinations at this poin
+        // don't bother with multiple combinations at this point
         List keywords = new ArrayList();
         keywords.add("");
 
@@ -529,12 +559,12 @@ public class AlphabeticIndexTest extends TestFmwk {
         }
     }
     private void showIfNotEmpty(String title, List alreadyIn) {
-        if (alreadyIn.size() != 0) {
+        if (alreadyIn != null && alreadyIn.size() != 0) {
             logln("\t" + title + ":\t" + alreadyIn);
         }
     }
     private void showIfNotEmpty(String title, Map alreadyIn) {
-        if (alreadyIn.size() != 0) {
+        if (alreadyIn != null && alreadyIn.size() != 0) {
             logln("\t" + title + ":\t" + alreadyIn);
         }
     }
@@ -634,27 +664,23 @@ public class AlphabeticIndexTest extends TestFmwk {
     }
 
     public void TestFirstScriptCharacters() {
-        List<String> firstCharacters = AlphabeticIndex.getFirstCharactersInScripts();
-        List<String> expectedFirstCharacters = firstStringsInScript((RuleBasedCollator) Collator.getInstance(ULocale.ROOT));
-        assertEquals("First Characters", expectedFirstCharacters, firstCharacters);
+        Collection<String> firstCharacters = AlphabeticIndex.getFirstCharactersInScripts();
+        Collection<String> expectedFirstCharacters = firstStringsInScript((RuleBasedCollator) Collator.getInstance(ULocale.ROOT));
+        Collection<String> diff = new TreeSet<String>(firstCharacters);
+        diff.removeAll(expectedFirstCharacters);
+        assertTrue("First Characters contains unexpected ones: " + diff, diff.isEmpty());
+        diff.clear();
+        diff.addAll(expectedFirstCharacters);
+        diff.removeAll(firstCharacters);
+        assertTrue("First Characters missing expected ones: " + diff, diff.isEmpty());
     }
 
     private static final UnicodeSet TO_TRY = new UnicodeSet("[[:^nfcqc=no:]-[:sc=Common:]-[:sc=Inherited:]-[:sc=Unknown:]]").freeze();
 
     /**
-     * Returns a list of all the "First" characters of scripts, according to the collation, and sorted according to the
-     * collation.
-     * 
-     * @param ruleBasedCollator
-     *            TODO
-     * @param comparator
-     * @param lowerLimit
-     * @param testScript
-     * 
-     * @return
+     * Returns a collection of all the "First" characters of scripts, according to the collation.
      */
-
-    private static List<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
+    private static Collection<String> firstStringsInScript(RuleBasedCollator ruleBasedCollator) {
         String[] results = new String[UScript.CODE_LIMIT];
         for (String current : TO_TRY) {
             if (ruleBasedCollator.compare(current, "a") < 0) { // TODO fix; we only want "real" script characters, not
@@ -693,19 +719,15 @@ public class AlphabeticIndexTest extends TestFmwk {
         } catch (Exception e) {
         } // why have a checked exception???
 
-        TreeSet<String> sorted = new TreeSet<String>(ruleBasedCollator);
+        Collection<String> result = new ArrayList<String>();
         for (int i = 0; i < results.length; ++i) {
             if (results[i] != null) {
-                sorted.add(results[i]);
+                result.add(results[i]);
             }
         }
-        if (false) {
-            for (String s : sorted) {
-                System.out.println("\"" + s + "\",");
-            }
-        }
-
-        List<String> result = Collections.unmodifiableList(new ArrayList<String>(sorted));
+        // AlphabeticIndex also has a boundary string for the ultimate overflow bucket,
+        // for unassigned code points and trailing/special primary weights.
+        result.add("\uFFFF");
         return result;
     }
 
@@ -863,5 +885,89 @@ public class AlphabeticIndexTest extends TestFmwk {
             "\uD85A\uDDC4", "\uD85A\uDDC5", "\uD85C\uDD98", "\uD85E\uDCB1", "\uD861\uDC04", "\uD864\uDDD3",
             "\uD865\uDE63", "\uD869\uDCCA", "\uD86B\uDE9A", };
 
+    /**
+     * Test AlphabeticIndex vs. root with script reordering.
+     */
+    public void TestHaniFirst() {
+        RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(ULocale.ROOT);
+        coll.setReorderCodes(UScript.HAN);
+        // TODO: Use the new public API that constructs an index from a collator.
+        AlphabeticIndex index = new AlphabeticIndex(ULocale.ROOT, coll, new UnicodeSet());
+        index.addLabels(ULocale.ENGLISH);
+        assertEquals("getBucketCount()", 28, index.getBucketCount());  // ... A-Z ...
+        int bucketIndex = index.getBucketIndex("\u897f");
+        assertEquals("getBucketIndex(U+897F)", 0, bucketIndex);  // underflow bucket
+        bucketIndex = index.getBucketIndex("i");
+        assertEquals("getBucketIndex(i)", 9, bucketIndex);
+        bucketIndex = index.getBucketIndex("\u03B1");
+        assertEquals("getBucketIndex(Greek alpha)", 27, bucketIndex);
+        // TODO: Test with an unassigned code point (not just U+FFFF)
+        // when unassigned code points are not in the Hani reordering group any more.
+        // String unassigned = UTF16.valueOf(0x50005);
+        bucketIndex = index.getBucketIndex("\uFFFF");
+        assertEquals("getBucketIndex(U+FFFF)", 27, bucketIndex);
+    }
 
+    /**
+     * Test AlphabeticIndex vs. Pinyin with script reordering.
+     */
+    public void TestPinyinFirst() {
+        RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(ULocale.CHINESE);
+        coll.setReorderCodes(UScript.HAN);
+        // TODO: Use the new public API that constructs an index from a collator.
+        AlphabeticIndex index = new AlphabeticIndex(ULocale.CHINESE, coll, null);
+        //assertEquals("getBucketCount()", 28, index.getBucketCount());  // ... A-Z ...
+        int bucketIndex = index.getBucketIndex("\u897f");
+        //assertEquals("getBucketIndex(U+897F)", 'X' - 'A' + 1, bucketIndex);
+        bucketIndex = index.getBucketIndex("i");
+        assertEquals("getBucketIndex(i)", 9, bucketIndex);
+        bucketIndex = index.getBucketIndex("\u03B1");
+        assertEquals("getBucketIndex(Greek alpha)", 27, bucketIndex);
+        // TODO: Test with an unassigned code point (not just U+FFFF)
+        // when unassigned code points are not in the Hani reordering group any more.
+        // String unassigned = UTF16.valueOf(0x50005);
+        bucketIndex = index.getBucketIndex("\uFFFF");
+        //assertEquals("getBucketIndex(U+FFFF)", 27, bucketIndex);
+    }
+
+    /**
+     * Test labels with multiple primary weights.
+     */
+    public void TestSchSt() {
+        AlphabeticIndex index = new AlphabeticIndex(ULocale.GERMAN);
+        index.addLabels(new UnicodeSet("[Æ{Sch*}{St*}]"));
+        // ... A Æ B-R S Sch St T-Z ...
+        ImmutableIndex immIndex = index.buildImmutableIndex();
+        assertEquals("getBucketCount()", 31, index.getBucketCount());
+        assertEquals("immutable getBucketCount()", 31, immIndex.getBucketCount());
+        String[][] testCases = new String[][] {
+            // name, bucket index, bucket label
+            { "Adelbert", "1", "A" },
+            { "Afrika", "1", "A" },
+            { "Æsculap", "2", "Æ" },
+            { "Aesthet", "2", "Æ" },
+            { "Berlin", "3", "B" },
+            { "Rilke", "19", "R" },
+            { "Sacher", "20", "S" },
+            { "Seiler", "20", "S" },
+            { "Sultan", "20", "S" },
+            { "Schiller", "21", "Sch" },
+            { "Steiff", "22", "St" },
+            { "Thomas", "23", "T" }
+        };
+        List<String> labels = index.getBucketLabels();
+        for (String[] testCase : testCases) {
+            String name = testCase[0];
+            int bucketIndex = Integer.valueOf(testCase[1]);
+            String label = testCase[2];
+            String msg = "getBucketIndex(" + name + ")";
+            assertEquals(msg, bucketIndex, index.getBucketIndex(name));
+            msg = "immutable " + msg;
+            assertEquals(msg, bucketIndex, immIndex.getBucketIndex(name));
+            msg = "bucket label (" + name + ")";
+            assertEquals(msg, label, labels.get(index.getBucketIndex(name)));
+            msg = "immutable " + msg;
+            assertEquals(msg, label, immIndex.getBucket(bucketIndex).getLabel());
+        }
+    }
 }
