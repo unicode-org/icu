@@ -2529,9 +2529,7 @@ static void TestEnglishExemplarCharacters(void) {
     for (i = 0; i < ULOCDATA_ES_COUNT; i++) {
         exSet = ulocdata_getExemplarSet(uld, exSet, 0, (ULocaleDataExemplarSetType)i, &status);
         if (U_FAILURE(status)) {
-            /* until pucntuation data problem is resolved */
-            /* log_err_status(status, "ulocdata_getExemplarSet() for type %d failed\n", i); */
-            log_verbose("ulocdata_getExemplarSet() for type %d failed\n", i);
+            log_err_status(status, "ulocdata_getExemplarSet() for type %d failed\n", i);
             status = U_ZERO_ERROR;
             continue;
         }
