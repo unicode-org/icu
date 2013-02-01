@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2003-2012, International Business Machines
+* Copyright (c) 2003-2013, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -25,6 +25,7 @@
 #include <float.h> // DBL_MAX
 #include "uresimp.h" // struct UResourceBundle
 #include "zonemeta.h"
+#include "umutex.h"
 
 #ifdef U_DEBUG_TZ
 # include <stdio.h>
@@ -399,7 +400,7 @@ void OlsonTimeZone::getOffset(UDate date, UBool local, int32_t& rawoff,
 
 void
 OlsonTimeZone::getOffsetFromLocal(UDate date, int32_t nonExistingTimeOpt, int32_t duplicatedTimeOpt,
-                                  int32_t& rawoff, int32_t& dstoff, UErrorCode& ec) /*const*/ {
+                                  int32_t& rawoff, int32_t& dstoff, UErrorCode& ec) const {
     if (U_FAILURE(ec)) {
         return;
     }
@@ -571,7 +572,7 @@ UBool OlsonTimeZone::useDaylightTime() const {
     // Return TRUE if DST is observed at any time during the current
     // year.
     for (int16_t i = 0; i < transitionCount(); ++i) {
-        double transition = transitionTimeInSeconds(i);
+        double transition = (double)transitionTimeInSeconds(i);
         if (transition >= limit) {
             break;
         }
@@ -678,6 +679,28 @@ OlsonTimeZone::deleteTransitionRules(void) {
         uprv_free(historicRules);
     }
     clearTransitionRules();
+}
+
+/*
+ * Lazy transition rules initializer
+ */
+static UMutex gLock = U_MUTEX_INITIALIZER;
+
+void
+OlsonTimeZone::checkTransitionRules(UErrorCode& status) const {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    UBool initialized;
+    UMTX_CHECK(&gLock, transitionRulesInitialized, initialized);
+    if (!initialized) {
+        umtx_lock(&gLock);
+        if (!transitionRulesInitialized) {
+            OlsonTimeZone *ncThis = const_cast<OlsonTimeZone*>(this);
+            ncThis->initTransitionRules(status);
+        }
+        umtx_unlock(&gLock);
+    }
 }
 
 void
@@ -860,9 +883,9 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
 }
 
 UBool
-OlsonTimeZone::getNextTransition(UDate base, UBool inclusive, TimeZoneTransition& result) /*const*/ {
+OlsonTimeZone::getNextTransition(UDate base, UBool inclusive, TimeZoneTransition& result) const {
     UErrorCode status = U_ZERO_ERROR;
-    initTransitionRules(status);
+    checkTransitionRules(status);
     if (U_FAILURE(status)) {
         return FALSE;
     }
@@ -925,9 +948,9 @@ OlsonTimeZone::getNextTransition(UDate base, UBool inclusive, TimeZoneTransition
 }
 
 UBool
-OlsonTimeZone::getPreviousTransition(UDate base, UBool inclusive, TimeZoneTransition& result) /*const*/ {
+OlsonTimeZone::getPreviousTransition(UDate base, UBool inclusive, TimeZoneTransition& result) const {
     UErrorCode status = U_ZERO_ERROR;
-    initTransitionRules(status);
+    checkTransitionRules(status);
     if (U_FAILURE(status)) {
         return FALSE;
     }
@@ -986,11 +1009,11 @@ OlsonTimeZone::getPreviousTransition(UDate base, UBool inclusive, TimeZoneTransi
 }
 
 int32_t
-OlsonTimeZone::countTransitionRules(UErrorCode& status) /*const*/ {
+OlsonTimeZone::countTransitionRules(UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return 0;
     }
-    initTransitionRules(status);
+    checkTransitionRules(status);
     if (U_FAILURE(status)) {
         return 0;
     }
@@ -1019,11 +1042,11 @@ void
 OlsonTimeZone::getTimeZoneRules(const InitialTimeZoneRule*& initial,
                                 const TimeZoneRule* trsrules[],
                                 int32_t& trscount,
-                                UErrorCode& status) /*const*/ {
+                                UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }
-    initTransitionRules(status);
+    checkTransitionRules(status);
     if (U_FAILURE(status)) {
         return;
     }
