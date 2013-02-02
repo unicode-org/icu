@@ -12,7 +12,6 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -304,6 +303,7 @@ public class AlphabeticIndexTest extends TestFmwk {
                 }
             } catch (Exception e) {
                 errln("Exception when creating AlphabeticIndex for:\t" + locale.toLanguageTag());
+                errln(e.toString());
             }
         }
     }
@@ -550,40 +550,12 @@ public class AlphabeticIndexTest extends TestFmwk {
                 logln(mainChars.size() + "\t" + locale + "\t" + locale.getDisplayName(ULocale.ENGLISH));
                 logln("Index:\t" + mainCharString);
                 if (mainChars.size() > 100) {
-                    errln("Index character set too large");
+                    errln("Index character set too large: " +
+                            locale + " [" + mainChars.size() + "]:\n    " + mainChars);
                 }
-                showIfNotEmpty("A sequence sorting the same is already present", alphabeticIndex.getAlreadyIn());
-                showIfNotEmpty("A sequence sorts the same as components", alphabeticIndex.getNoDistinctSorting());
-                showIfNotEmpty("A sequence has only Marks or Nonalphabetics", alphabeticIndex.getNotAlphabetic());
             }
         }
     }
-    private void showIfNotEmpty(String title, List alreadyIn) {
-        if (alreadyIn != null && alreadyIn.size() != 0) {
-            logln("\t" + title + ":\t" + alreadyIn);
-        }
-    }
-    private void showIfNotEmpty(String title, Map alreadyIn) {
-        if (alreadyIn != null && alreadyIn.size() != 0) {
-            logln("\t" + title + ":\t" + alreadyIn);
-        }
-    }
-
-    //    public void TestFilter() {
-    //        displayPairs(true);
-    //        logln("");
-    //        displayPairs(false);
-    //    }
-
-    //    private void displayPairs(boolean in) {
-    //        for (String[] pair : localeAndIndexCharactersLists) {
-    //            if (KEY_LOCALES.contains(pair[0]) == in) {
-    //                logln("\t"
-    //                        + "/* " + ULocale.getDisplayName(pair[0], "en") + "*/\t"
-    //                        + "{\"" + pair[0] + "\", \"" + pair[1] + "\"},");
-    //            }
-    //        }
-    //    }
 
     public void TestClientSupport() {
         for (String localeString : new String[] {"zh"}) { // KEY_LOCALES, new String[] {"zh"}
@@ -718,6 +690,12 @@ public class AlphabeticIndexTest extends TestFmwk {
             }
         } catch (Exception e) {
         } // why have a checked exception???
+
+        results[UScript.LATIN] = "A";  // See comment about en_US_POSIX in the implementation.
+        // TODO: We should not test that we get the same strings, but that we
+        // get strings that sort primary-equal to those from the implementation.
+        // This whole test becomes obsolete when the root collator adds script-first-primary mappings
+        // and the AlphabeticIndex implementation starts using them.
 
         Collection<String> result = new ArrayList<String>();
         for (int i = 0; i < results.length; ++i) {
@@ -916,9 +894,9 @@ public class AlphabeticIndexTest extends TestFmwk {
         coll.setReorderCodes(UScript.HAN);
         // TODO: Use the new public API that constructs an index from a collator.
         AlphabeticIndex index = new AlphabeticIndex(ULocale.CHINESE, coll, null);
-        //assertEquals("getBucketCount()", 28, index.getBucketCount());  // ... A-Z ...
+        assertEquals("getBucketCount()", 28, index.getBucketCount());  // ... A-Z ...
         int bucketIndex = index.getBucketIndex("\u897f");
-        //assertEquals("getBucketIndex(U+897F)", 'X' - 'A' + 1, bucketIndex);
+        assertEquals("getBucketIndex(U+897F)", 'X' - 'A' + 1, bucketIndex);
         bucketIndex = index.getBucketIndex("i");
         assertEquals("getBucketIndex(i)", 9, bucketIndex);
         bucketIndex = index.getBucketIndex("\u03B1");
@@ -927,7 +905,7 @@ public class AlphabeticIndexTest extends TestFmwk {
         // when unassigned code points are not in the Hani reordering group any more.
         // String unassigned = UTF16.valueOf(0x50005);
         bucketIndex = index.getBucketIndex("\uFFFF");
-        //assertEquals("getBucketIndex(U+FFFF)", 27, bucketIndex);
+        assertEquals("getBucketIndex(U+FFFF)", 27, bucketIndex);
     }
 
     /**
@@ -969,5 +947,35 @@ public class AlphabeticIndexTest extends TestFmwk {
             msg = "immutable " + msg;
             assertEquals(msg, label, immIndex.getBucket(bucketIndex).getLabel());
         }
+    }
+
+    /**
+     * With no real labels, there should be only the underflow label.
+     */
+    public void TestNoLabels() {
+        RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(ULocale.ROOT);
+        // TODO: Use the new public API that constructs an index from a collator.
+        AlphabeticIndex<Integer> index = new AlphabeticIndex<Integer>(ULocale.ROOT, coll, new UnicodeSet());
+        index.addRecord("\u897f", 0);
+        index.addRecord("i", 0);
+        index.addRecord("\u03B1", 0);
+        assertEquals("getBucketCount()", 1, index.getBucketCount());  // ...
+        Bucket<Integer> bucket = index.iterator().next();
+        assertEquals("underflow label type", LabelType.UNDERFLOW, bucket.getLabelType());
+        assertEquals("all records in the underflow bucket", 3, bucket.size());
+    }
+
+    /**
+     * Test with the Bopomofo-phonetic tailoring.
+     */
+    public void TestChineseZhuyin() {
+        AlphabeticIndex index = new AlphabeticIndex(ULocale.forLanguageTag("zh-u-co-zhuyin"));
+        ImmutableIndex immIndex = index.buildImmutableIndex();
+        assertEquals("getBucketCount()", 38, immIndex.getBucketCount());  // ... ㄅ ㄆ ㄇ ㄈ ㄉ -- ㄩ ...
+        assertEquals("label 1", "ㄅ", immIndex.getBucket(1).getLabel());
+        assertEquals("label 2", "ㄆ", immIndex.getBucket(2).getLabel());
+        assertEquals("label 3", "ㄇ", immIndex.getBucket(3).getLabel());
+        assertEquals("label 4", "ㄈ", immIndex.getBucket(4).getLabel());
+        assertEquals("label 5", "ㄉ", immIndex.getBucket(5).getLabel());
     }
 }
