@@ -12,17 +12,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
-import com.ibm.icu.impl.MultiComparator;
 import com.ibm.icu.lang.UCharacter;
-import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.AlphabeticIndex.Bucket;
 import com.ibm.icu.text.AlphabeticIndex.Bucket.LabelType;
 import com.ibm.icu.util.LocaleData;
@@ -132,30 +125,22 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     private static final String BASE = "\uFDD0";
 
-    // these are generated. Later, get from CLDR data.
-    private static final UnicodeSet PINYIN_LABELS = new UnicodeSet("[A-Z{\uFDD0A}{\uFDD0B}{\uFDD0C}{\uFDD0D}{\uFDD0E}{\uFDD0F}{\uFDD0G}{\uFDD0H}{\uFDD0I}{\uFDD0J}{\uFDD0K}{\uFDD0L}{\uFDD0M}{\uFDD0N}{\uFDD0O}{\uFDD0P}{\uFDD0Q}{\uFDD0R}{\uFDD0S}{\uFDD0T}{\uFDD0U}{\uFDD0V}{\uFDD0W}{\uFDD0X}{\uFDD0Y}{\uFDD0Z}]").freeze();
-    private static final UnicodeSet STROKE_LABELS = new UnicodeSet("[{\uFDD0\u2801}{\uFDD0\u2802}{\uFDD0\u2803}{\uFDD0\u2804}{\uFDD0\u2805}{\uFDD0\u2806}{\uFDD0\u2807}{\uFDD0\u2808}{\uFDD0\u2809}{\uFDD0\u280A}{\uFDD0\u280B}{\uFDD0\u280C}{\uFDD0\u280D}{\uFDD0\u280E}{\uFDD0\u280F}{\uFDD0\u2810}{\uFDD0\u2811}{\uFDD0\u2812}{\uFDD0\u2813}{\uFDD0\u2814}{\uFDD0\u2815}{\uFDD0\u2816}{\uFDD0\u2817}{\uFDD0\u2818}{\uFDD0\u2819}{\uFDD0\u281A}{\uFDD0\u281B}{\uFDD0\u281C}{\uFDD0\u281D}{\uFDD0\u281E}{\uFDD0\u281F}{\uFDD0\u2820}{\uFDD0\u2821}{\uFDD0\u2822}{\uFDD0\u2823}{\uFDD0\u2824}{\uFDD0\u2825}{\uFDD0\u2826}{\uFDD0\u2827}{\uFDD0\u2828}{\uFDD0\u2829}{\uFDD0\u282A}{\uFDD0\u282B}{\uFDD0\u282C}{\uFDD0\u282E}{\uFDD0\u2830}{\uFDD0\u2834}{\uFDD0\u2840}]").freeze();
-    private static final UnicodeSet RADICAL_LABELS = new UnicodeSet("[{\uFDD0\u2E80}{\uFDD0\u2E81}{\uFDD0\u2E84}{\uFDD0\u2E85}{\uFDD0\u2E86}{\uFDD0\u2E87}{\uFDD0\u2E88}{\uFDD0\u2E8A}{\uFDD0\u2E8B}{\uFDD0\u2E8C}{\uFDD0\u2E91}{\uFDD0\u2E92}{\uFDD0\u2E93}{\uFDD0\u2E95}{\uFDD0\u2E97}{\uFDD0\u2E98}{\uFDD0\u2E99}{\uFDD0\u2E9B}{\uFDD0\u2E9D}{\uFDD0\u2E9E}{\uFDD0\u2E9F}{\uFDD0\u2EA0}{\uFDD0\u2EA2}{\uFDD0\u2EA3}{\uFDD0\u2EA4}{\uFDD0\u2EA7}{\uFDD0\u2EA8}{\uFDD0\u2EA9}{\uFDD0\u2EAA}{\uFDD0\u2EAB}{\uFDD0\u2EAC}{\uFDD0\u2EAE}{\uFDD0\u2EAF}{\uFDD0\u2EB0}{\uFDD0\u2EB4}{\uFDD0\u2EB8}{\uFDD0\u2EB9}{\uFDD0\u2EBB}{\uFDD0\u2EBC}{\uFDD0\u2EBD}{\uFDD0\u2EC0}{\uFDD0\u2EC1}{\uFDD0\u2EC2}{\uFDD0\u2EC3}{\uFDD0\u2EC5}{\uFDD0\u2EC6}{\uFDD0\u2EC8}{\uFDD0\u2EC9}{\uFDD0\u2ECA}{\uFDD0\u2ECB}{\uFDD0\u2ECF}{\uFDD0\u2ED0}{\uFDD0\u2ED1}{\uFDD0\u2ED3}{\uFDD0\u2ED4}{\uFDD0\u2ED6}{\uFDD0\u2ED7}{\uFDD0\u2ED8}{\uFDD0\u2ED9}{\uFDD0\u2EDA}{\uFDD0\u2EDB}{\uFDD0\u2EDC}{\uFDD0\u2EDD}{\uFDD0\u2EE0}{\uFDD0\u2EE1}{\uFDD0\u2EE2}{\uFDD0\u2EE3}{\uFDD0\u2EE4}{\uFDD0\u2EE5}{\uFDD0\u2EE6}{\uFDD0\u2EE7}{\uFDD0\u2EE8}{\uFDD0\u2EEA}{\uFDD0\u2EEB}{\uFDD0\u2EED}{\uFDD0\u2EEE}{\uFDD0\u2EEF}{\uFDD0\u2EF0}{\uFDD0\u2EF2}{\uFDD0\u2EF3}{\uFDD0\u2F00}{\uFDD0\u2F01}{\uFDD0\u2F02}{\uFDD0\u2F03}{\uFDD0\u2F05}{\uFDD0\u2F06}{\uFDD0\u2F07}{\uFDD0\u2F09}{\uFDD0\u2F0A}{\uFDD0\u2F0B}{\uFDD0\u2F0D}{\uFDD0\u2F0E}{\uFDD0\u2F10}{\uFDD0\u2F12}{\uFDD0\u2F13}{\uFDD0\u2F14}{\uFDD0\u2F15}{\uFDD0\u2F16}{\uFDD0\u2F17}{\uFDD0\u2F1B}{\uFDD0\u2F1D}{\uFDD0\u2F1E}{\uFDD0\u2F1F}{\uFDD0\u2F20}{\uFDD0\u2F21}{\uFDD0\u2F22}{\uFDD0\u2F23}{\uFDD0\u2F24}{\uFDD0\u2F25}{\uFDD0\u2F26}{\uFDD0\u2F27}{\uFDD0\u2F28}{\uFDD0\u2F2B}{\uFDD0\u2F2C}{\uFDD0\u2F2D}{\uFDD0\u2F2E}{\uFDD0\u2F2F}{\uFDD0\u2F31}{\uFDD0\u2F32}{\uFDD0\u2F34}{\uFDD0\u2F35}{\uFDD0\u2F36}{\uFDD0\u2F37}{\uFDD0\u2F38}{\uFDD0\u2F3A}{\uFDD0\u2F3B}{\uFDD0\u2F3D}{\uFDD0\u2F3E}{\uFDD0\u2F40}{\uFDD0\u2F42}{\uFDD0\u2F43}{\uFDD0\u2F44}{\uFDD0\u2F45}{\uFDD0\u2F46}{\uFDD0\u2F48}{\uFDD0\u2F4A}{\uFDD0\u2F4B}{\uFDD0\u2F4C}{\uFDD0\u2F4E}{\uFDD0\u2F50}{\uFDD0\u2F51}{\uFDD0\u2F53}{\uFDD0\u2F57}{\uFDD0\u2F58}{\uFDD0\u2F59}{\uFDD0\u2F5A}{\uFDD0\u2F5B}{\uFDD0\u2F5E}{\uFDD0\u2F60}{\uFDD0\u2F61}{\uFDD0\u2F62}{\uFDD0\u2F63}{\uFDD0\u2F64}{\uFDD0\u2F65}{\uFDD0\u2F67}{\uFDD0\u2F68}{\uFDD0\u2F69}{\uFDD0\u2F6A}{\uFDD0\u2F6B}{\uFDD0\u2F6D}{\uFDD0\u2F6E}{\uFDD0\u2F6F}{\uFDD0\u2F71}{\uFDD0\u2F72}{\uFDD0\u2F73}{\uFDD0\u2F74}{\uFDD0\u2F76}{\uFDD0\u2F78}{\uFDD0\u2F7B}{\uFDD0\u2F7D}{\uFDD0\u2F7E}{\uFDD0\u2F7F}{\uFDD0\u2F82}{\uFDD0\u2F83}{\uFDD0\u2F84}{\uFDD0\u2F86}{\uFDD0\u2F87}{\uFDD0\u2F88}{\uFDD0\u2F89}{\uFDD0\u2F8A}{\uFDD0\u2F8D}{\uFDD0\u2F8E}{\uFDD0\u2F8F}{\uFDD0\u2F92}{\uFDD0\u2F94}{\uFDD0\u2F95}{\uFDD0\u2F96}{\uFDD0\u2F97}{\uFDD0\u2F98}{\uFDD0\u2F99}{\uFDD0\u2F9A}{\uFDD0\u2F9B}{\uFDD0\u2F9D}{\uFDD0\u2F9E}{\uFDD0\u2F9F}{\uFDD0\u2FA0}{\uFDD0\u2FA1}{\uFDD0\u2FA3}{\uFDD0\u2FA4}{\uFDD0\u2FA5}{\uFDD0\u2FA6}{\uFDD0\u2FA8}{\uFDD0\u2FAA}{\uFDD0\u2FAB}{\uFDD0\u2FAE}{\uFDD0\u2FAF}{\uFDD0\u2FB0}{\uFDD0\u2FB1}{\uFDD0\u2FB2}{\uFDD0\u2FB3}{\uFDD0\u2FB4}{\uFDD0\u2FB5}{\uFDD0\u2FB6}{\uFDD0\u2FB9}{\uFDD0\u2FBA}{\uFDD0\u2FBC}{\uFDD0\u2FBD}{\uFDD0\u2FBE}{\uFDD0\u2FBF}{\uFDD0\u2FC0}{\uFDD0\u2FC2}{\uFDD0\u2FC3}{\uFDD0\u2FC4}{\uFDD0\u2FC5}{\uFDD0\u2FC6}{\uFDD0\u2FC7}{\uFDD0\u2FC8}{\uFDD0\u2FC9}{\uFDD0\u2FCA}{\uFDD0\u2FCB}{\uFDD0\u2FCC}{\uFDD0\u2FCD}{\uFDD0\u2FCE}{\uFDD0\u2FCF}{\uFDD0\u2FD0}{\uFDD0\u2FD1}{\uFDD0\u2FD5}]").freeze();
-    private static final List<String> PROBES = Arrays.asList("\u4E00", "\uFDD0A", "\uFDD0\u2801", "\uFDD0\u2E80");
-    private static final UnicodeSet[] MATCHING = {null, PINYIN_LABELS, STROKE_LABELS, RADICAL_LABELS};
-
     private static final char CGJ = '\u034F';
-    private static final UnicodeSet ALPHABETIC = new UnicodeSet("[[:alphabetic:]-[:mark:]]").add(BASE).freeze();
-    private static final UnicodeSet HANGUL = new UnicodeSet(
-    "[\uAC00 \uB098 \uB2E4 \uB77C \uB9C8 \uBC14  \uC0AC  \uC544 \uC790  \uCC28 \uCE74 \uD0C0 \uD30C \uD558]").freeze();
-    private static final UnicodeSet ETHIOPIC = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]").freeze();
-    private static final UnicodeSet CORE_LATIN = new UnicodeSet("[a-z]").freeze();
+
+    private static final Comparator<String> binaryCmp = new UTF16.StringComparator(true, false, 0);
 
     private final RuleBasedCollator collatorOriginal;
     private final RuleBasedCollator collatorPrimaryOnly;
     private RuleBasedCollator collatorExternal;
 
-    private final List<String> firstCharsInScripts;
+    // Comparator for records, so that the Record class can be static.
+    private final Comparator<Record<V>> recordComparator = new Comparator<Record<V>>() {
+        public int compare(Record<V> o1, Record<V> o2) {
+            return collatorOriginal.compare(o1.name, o2.name);
+        }
+    };
 
-    // for testing
-    private LinkedHashMap<String, Set<String>> alreadyIn;
-    private List<String> noDistinctSorting;
-    private List<String> notAlphabetic;
+    private final List<String> firstCharsInScripts;
 
     // We accumulate these as we build up the input parameters
     private final UnicodeSet initialLabels = new UnicodeSet();
@@ -260,42 +245,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         this(ULocale.forLocale(locale));
     }
 
-    //    /**
-    //     * @internal
-    //     * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
-    //     */
-    //    public enum LangType { 
-    //        /**
-    //         * @internal
-    //         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
-    //         */
-    //        NORMAL, 
-    //        /**
-    //         * @internal
-    //         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
-    //         */
-    //        SIMPLIFIED,
-    //        /**
-    //         * @internal
-    //         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
-    //         */
-    //        TRADITIONAL;
-    //        /**
-    //         * @internal
-    //         * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
-    //         */
-    //        public static LangType fromLocale(ULocale locale) {
-    //            String lang = locale.getLanguage();
-    //            if (lang.equals("zh")) {
-    //                if ("Hant".equals(locale.getScript()) || "TW".equals(locale.getCountry())) {
-    //                    return TRADITIONAL;
-    //                }
-    //                return SIMPLIFIED;
-    //            }
-    //            return NORMAL;
-    //        }
-    //    }
-
     /**
      * @internal
      * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
@@ -310,12 +259,28 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         }
         collatorPrimaryOnly.setStrength(Collator.PRIMARY);
         collatorPrimaryOnly.freeze();
+
         firstCharsInScripts = new ArrayList<String>(HACK_FIRST_CHARS_IN_SCRIPTS);
         Collections.sort(firstCharsInScripts, collatorPrimaryOnly);
-        if (exemplarChars == null) {
-            exemplarChars = getIndexExemplars(locale);
+        if (collatorPrimaryOnly.compare("\u4E00", "\u1112") <= 0 &&
+                collatorPrimaryOnly.compare("\u1100", "\u4E00") <= 0) {
+            // The standard Korean tailoring sorts Hanja (Han characters)
+            // as secondary differences from Hangul syllables.
+            // This makes U+4E00 not useful as a Han-script boundary.
+            // TODO: This becomes obsolete when the root collator gets
+            // reliable script-first-primary mappings.
+            int hanIndex = Collections.binarySearch(
+                    firstCharsInScripts, "\u4E00", collatorPrimaryOnly);
+            if (hanIndex >= 0) {
+                firstCharsInScripts.remove(hanIndex);
+            }
         }
-        addLabels(exemplarChars);
+
+        if (exemplarChars != null) {
+            addLabels(exemplarChars);
+        } else {
+            addIndexExemplars(locale);
+        }
     }
 
     /**
@@ -338,7 +303,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public AlphabeticIndex<V> addLabels(ULocale... additions) {
         for (ULocale addition : additions) {
-            initialLabels.addAll(getIndexExemplars(addition));
+            addIndexExemplars(addition);
         }
         buckets = null;
         return this;
@@ -352,7 +317,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public AlphabeticIndex<V> addLabels(Locale... additions) {
         for (Locale addition : additions) {
-            initialLabels.addAll(getIndexExemplars(ULocale.forLocale(addition)));
+            addIndexExemplars(ULocale.forLocale(addition));
         }
         buckets = null;
         return this;
@@ -454,29 +419,21 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Determine the best labels to use. This is based on the exemplars, but we also process to make sure that they are unique,
      * and sort differently, and that the overall list is small enough.
      */
-    private ArrayList<String> initLabels() {
-        UnicodeSet exemplars = new UnicodeSet(initialLabels);
+    private List<String> initLabels() {
+        List<String> indexCharacters = new ArrayList<String>();
 
-        // First sort them, with a "best" ordering among items that are the same according
-        // to the collator.
-        // Re the warning: the JDK inexplicably didn't make Collators be Comparator<String>!
-        @SuppressWarnings("unchecked")
-        Set<String> preferenceSorting = new TreeSet<String>(new MultiComparator<Object>(collatorPrimaryOnly, PREFERENCE_COMPARATOR));
-        exemplars.addAllTo(preferenceSorting);
-
-        TreeSet<String> indexCharacterSet = new TreeSet<String>(collatorPrimaryOnly);
-
+        String firstScriptBoundary = firstCharsInScripts.get(0);
         String overflowBoundary = firstCharsInScripts.get(firstCharsInScripts.size() - 1);
 
-        // We now make a sorted array of elements
-        // Some of the input may, however, be redundant.
-        // That is, we might have c, ch, d, where "ch" sorts just like "c", "h"
-        // So we make a pass through, filtering out those cases.
-
-        for (String item : preferenceSorting) {
+        // We make a sorted array of elements.
+        // Some of the input may be redundant.
+        // That is, we might have c, ch, d, where "ch" sorts just like "c", "h".
+        // We filter out those cases.
+        for (String item : initialLabels) {
             boolean checkDistinct;
-            if (UTF16.hasMoreCodePointsThan(item, 1) &&
-                    item.charAt(item.length() - 1) == '*' &&
+            if (!UTF16.hasMoreCodePointsThan(item, 1)) {
+                checkDistinct = false;
+            } else if(item.charAt(item.length() - 1) == '*' &&
                     item.charAt(item.length() - 2) != '*') {
                 // Use a label if it is marked with one trailing star,
                 // even if the label string sorts the same when all contractions are suppressed.
@@ -485,47 +442,33 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             } else {
                 checkDistinct = true;
             }
-            if (indexCharacterSet.contains(item)) {
-                if (alreadyIn == null) {
-                    alreadyIn = new LinkedHashMap<String, Set<String>>();
-                }
-                for (String itemAlreadyIn : indexCharacterSet) {
-                    if (collatorPrimaryOnly.compare(item, itemAlreadyIn) == 0) {
-                        Set<String> targets = alreadyIn.get(itemAlreadyIn);
-                        if (targets == null) {
-                            alreadyIn.put(itemAlreadyIn, targets = new LinkedHashSet<String>());
-                        }
-                        targets.add(item);
-                        break;
+            if (collatorPrimaryOnly.compare(item, firstScriptBoundary) < 0) {
+                // Ignore a primary-ignorable or non-alphabetic index character.
+            } else if (collatorPrimaryOnly.compare(item, overflowBoundary) >= 0) {
+                // Ignore an index characters that will land in the overflow bucket.
+            } else if (checkDistinct && collatorPrimaryOnly.compare(item, separated(item)) == 0) {
+                // Ignore a multi-code point index character that does not sort distinctly
+                // from the sequence of its separate characters.
+            } else {
+                int insertionPoint = Collections.binarySearch(indexCharacters, item, collatorPrimaryOnly);
+                if (insertionPoint < 0) {
+                    indexCharacters.add(~insertionPoint, item);
+                } else {
+                    String itemAlreadyIn = indexCharacters.get(insertionPoint);
+                    if (isOneLabelBetterThanOther(item, itemAlreadyIn)) {
+                        indexCharacters.set(insertionPoint, item);
                     }
                 }
-            } else if (checkDistinct && UTF16.hasMoreCodePointsThan(item, 1) &&
-                    collatorPrimaryOnly.compare(item, separated(item)) == 0) {
-                if (noDistinctSorting == null) {
-                    noDistinctSorting = new ArrayList<String>();
-                }
-                noDistinctSorting.add(item);
-            } else if (!ALPHABETIC.containsSome(item)) {
-                if (notAlphabetic == null) {
-                    notAlphabetic = new ArrayList<String>();
-                }
-                notAlphabetic.add(item);
-            } else if (collatorPrimaryOnly.compare(item, "") == 0) {
-                // Ignore primary-ignorable index characters.
-            } else if (collatorPrimaryOnly.compare(item, overflowBoundary) >= 0) {
-                // Ignore index characters that will land in the overflow bucket.
-            } else {
-                indexCharacterSet.add(item);
             }
         }
 
         // if the result is still too large, cut down to maxCount elements, by removing every nth element
 
-        final int size = indexCharacterSet.size() - 1;
+        final int size = indexCharacters.size() - 1;
         if (size > maxLabelCount) {
             int count = 0;
             int old = -1;
-            for (Iterator<String> it = indexCharacterSet.iterator(); it.hasNext();) {
+            for (Iterator<String> it = indexCharacters.iterator(); it.hasNext();) {
                 ++count;
                 it.next();
                 final int bump = count * maxLabelCount / size;
@@ -537,7 +480,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             }
         }
 
-        return new ArrayList<String>(indexCharacterSet);
+        return indexCharacters;
     }
 
     private static String fixLabel(String current) {
@@ -556,64 +499,106 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * but if they aren't available, we have to synthesize them.
      * @param locale
      */
-    private UnicodeSet getIndexExemplars(ULocale locale) {
-        UnicodeSet exemplars;
-
-        exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_INDEX);
-        if (exemplars != null) {
-            final String language = locale.getLanguage();
-            if (language.equals("zh") || language.equals("ja") || language.equals("ko")) {
-                // TODO: HACK      
-                // find out which one we are using
-                TreeSet<String> probeSet = new TreeSet<String>(collatorOriginal);
-
-                //                UnicodeSet tailored = collatorOriginal.getTailoredSet();
-                //                tailored.addAllTo(probeSet);
-                //                System.out.println(probeSet);
-                //                probeSet.clear();
-
-                probeSet.addAll(PROBES);
-                String first = probeSet.iterator().next();
-                int location = PROBES.indexOf(first);
-                if (location > 0) {
-                    exemplars.clear().addAll(MATCHING[location]);
-                }
+    private void addIndexExemplars(ULocale locale) {
+        // Chinese index characters, which are specific to each of the several Chinese tailorings,
+        // take precedence over the single locale data exemplar set per language.
+        final String language = locale.getLanguage();
+        if (language.equals("zh") || language.equals("ja") || language.equals("ko")) {
+            // TODO: This should be done regardless of the language, but it's expensive.
+            // We should add a Collator function (can be @internal)
+            // to enumerate just the contractions that start with a given code point or string.
+            if (addChineseIndexCharacters()) {
+                return;
             }
-            return exemplars;
+        }
+
+        UnicodeSet exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_INDEX);
+        if (exemplars != null) {
+            initialLabels.addAll(exemplars);
+            return;
         }
 
         // Synthesize the index exemplars
-
-        exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_STANDARD);
-
         // get the exemplars, and handle special cases
+        exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_STANDARD);
 
         exemplars = exemplars.cloneAsThawed();
         // question: should we add auxiliary exemplars?
-        if (exemplars.containsSome(CORE_LATIN) || exemplars.size() == 0) {
-            exemplars.addAll(CORE_LATIN);
+        if (exemplars.containsSome('a', 'z') || exemplars.size() == 0) {
+            exemplars.addAll('a', 'z');
         }
-        if (exemplars.containsSome(HANGUL)) {
+        if (exemplars.containsSome(0xAC00, 0xD7A3)) {  // Hangul syllables
             // cut down to small list
-            exemplars.removeAll(new UnicodeSet("[:block=hangul_syllables:]")).addAll(HANGUL);
+            exemplars.remove(0xAC00, 0xD7A3).
+                add(0xAC00).add(0xB098).add(0xB2E4).add(0xB77C).
+                add(0xB9C8).add(0xBC14).add(0xC0AC).add(0xC544).
+                add(0xC790).add(0xCC28).add(0xCE74).add(0xD0C0).
+                add(0xD30C).add(0xD558);
         }
-        if (exemplars.containsSome(ETHIOPIC)) {
+        if (exemplars.containsSome(0x1200, 0x137F)) {  // Ethiopic block
             // cut down to small list
             // make use of the fact that Ethiopic is allocated in 8's, where
             // the base is 0 mod 8.
-            for (UnicodeSetIterator it = new UnicodeSetIterator(ETHIOPIC); it.next();) {
+            UnicodeSet ethiopic = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]");
+            for (UnicodeSetIterator it = new UnicodeSetIterator(ethiopic); it.next();) {
+                if (it.codepoint == UnicodeSetIterator.IS_STRING) {
+                    break;
+                }
                 if ((it.codepoint & 0x7) != 0) {
                     exemplars.remove(it.codepoint);
                 }
             }
         }
 
-        UnicodeSet uppercased = new UnicodeSet();
         for (String item : exemplars) {
-            uppercased.add(UCharacter.toUpperCase(locale, item));
+            initialLabels.add(UCharacter.toUpperCase(locale, item));
         }
+    }
 
-        return uppercased;
+    /**
+     * Add Chinese index characters from the tailoring.
+     */
+    private boolean addChineseIndexCharacters() {
+        UnicodeSet contractions = new UnicodeSet();
+        try {
+            collatorPrimaryOnly.getContractionsAndExpansions(contractions, null, false);
+        } catch (Exception e) {
+            return false;
+        }
+        String firstHanBoundary = null;
+        boolean hasPinyin = false;
+        for (String s : contractions) {
+            if (s.startsWith(BASE)) {
+                initialLabels.add(s);
+                if (firstHanBoundary == null ||
+                        collatorPrimaryOnly.compare(s, firstHanBoundary) < 0) {
+                    firstHanBoundary = s;
+                }
+                char c = s.charAt(s.length() - 1);
+                if ('A' <= c && c <= 'Z') {
+                    hasPinyin = true;
+                }
+            }
+        }
+        if (hasPinyin) {
+            initialLabels.add('A', 'Z');
+        }
+        if (firstHanBoundary != null) {
+            // The hardcoded list of script boundaries includes U+4E00
+            // which is tailored to not be the first primary
+            // in all Chinese tailorings except "unihan".
+            // Replace U+4E00 with the first boundary string from the tailoring.
+            // TODO: This becomes obsolete when the root collator gets
+            // reliable script-first-primary mappings.
+            int hanIndex = Collections.binarySearch(
+                    firstCharsInScripts, "\u4E00", collatorPrimaryOnly);
+            if (hanIndex >= 0) {
+                firstCharsInScripts.set(hanIndex, firstHanBoundary);
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -717,7 +702,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         if (inputList == null) {
             inputList = new ArrayList<Record<V>>();
         }
-        inputList.add(new Record<V>(name, data, inputList.size()));
+        inputList.add(new Record<V>(name, data));
         return this;
     }
 
@@ -807,21 +792,10 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             return;
         }
 
-        // Make a collator for records. Do this so that the Records can be static classes, and not know about the collators.
-        // TODO make this a member of the class.
-        Comparator<Record<V>> fullComparator = new Comparator<Record<V>>() {
-            public int compare(Record<V> o1, Record<V> o2) {
-                int result = collatorOriginal.compare(o1.name, o2.name);
-                if (result != 0) {
-                    return result;
-                }
-                return o1.counter - o2.counter;
-            }
-        };
-
-        // Set up a sorted list of the input
-        TreeSet<Record<V>> sortedInput = new TreeSet<Record<V>>(fullComparator);
-        sortedInput.addAll(inputList);
+        // Set up a sorted list of the input.
+        // Stable sort preserves input order of collation duplicates.
+        List<Record<V>> sortedInput = new ArrayList<Record<V>>(inputList);
+        Collections.sort(sortedInput, recordComparator);
 
         // Now, we traverse all of the input, which is now sorted.
         // If the item doesn't go in the current bucket, we find the next bucket that contains it.
@@ -831,9 +805,18 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         Iterator<Bucket<V>> bucketIterator = buckets.fullIterator();
         Bucket<V> currentBucket = bucketIterator.next();
-        Bucket<V> nextBucket = bucketIterator.next();
-        String upperBoundary = nextBucket.lowerBoundary; // there is always at least one bucket, so this is safe
-        boolean atEnd = false;
+        Bucket<V> nextBucket;
+        String upperBoundary;
+        boolean atEnd;
+        if (bucketIterator.hasNext()) {
+            nextBucket = bucketIterator.next();
+            upperBoundary = nextBucket.lowerBoundary;
+            atEnd = false;
+        } else {
+            nextBucket = null;
+            upperBoundary = null;
+            atEnd = true;
+        }
         for (Record<V> s : sortedInput) {
             // if the current bucket isn't the right one, find the one that is
             // We have a special flag for the last bucket so that we don't look any further
@@ -859,69 +842,26 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         }
     }
 
-    /**
-     * As the index is built, strings may be discarded from the exemplars. This contains some of the discards, and is
-     * intended for debugging.
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public Map<String, Set<String>> getAlreadyIn() {
-        return alreadyIn;
-    }
-
-    /**
-     * As the index is built, strings may be discarded from the exemplars. This contains some of the discards, and is
-     * intended for debugging.
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public List<String> getNoDistinctSorting() {
-        return noDistinctSorting;
-    }
-
-    /**
-     * As the index is built, strings may be discarded from the exemplars. This contains some of the discards, and is
-     * intended for debugging.
-     * 
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public List<String> getNotAlphabetic() {
-        return notAlphabetic;
-    }
-
-    private static final PreferenceComparator PREFERENCE_COMPARATOR = new PreferenceComparator();
     private int maxLabelCount = 99;
 
     /**
-     * Comparator that returns "better" strings first, where shorter NFKD is better, and otherwise NFKD binary order is
-     * better, and otherwise binary order is better.
+     * Returns true if one index character string is "better" than the other.
+     * Shorter NFKD is better, and otherwise NFKD-binary-less-than is
+     * better, and otherwise binary-less-than is better.
      */
-    private static class PreferenceComparator implements Comparator<Object> {
-        static final Comparator<String> binary = new UTF16.StringComparator(true, false, 0);
-
-        public int compare(Object o1, Object o2) {
-            return compare((String) o1, (String) o2);
+    private static boolean isOneLabelBetterThanOther(String one, String other) {
+        // This is called with primary-equal strings, but never with one.equals(other).
+        String n1 = Normalizer.decompose(one, true);
+        String n2 = Normalizer.decompose(other, true);
+        int result = n1.codePointCount(0, n1.length()) - n2.codePointCount(0, n2.length());
+        if (result != 0) {
+            return result < 0;
         }
-
-        public int compare(String s1, String s2) {
-            if (s1 == s2) {
-                return 0;
-            }
-            String n1 = Normalizer.decompose(s1, true);
-            String n2 = Normalizer.decompose(s2, true);
-            int result = n1.length() - n2.length();
-            if (result != 0) {
-                return result;
-            }
-            result = binary.compare(n1, n2);
-            if (result != 0) {
-                return result;
-            }
-            return binary.compare(s1, s2);
+        result = binaryCmp.compare(n1, n2);
+        if (result != 0) {
+            return result < 0;
         }
+        return binaryCmp.compare(one, other) < 0;
     }
 
     /**
@@ -930,14 +870,12 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @stable ICU 4.8
      */
     public static class Record<V> {
-        private CharSequence name;
-        private V data;
-        private int counter;
+        private final CharSequence name;
+        private final V data;
 
-        private Record(CharSequence name, V data, int counter) {
+        private Record(CharSequence name, V data) {
             this.name = name;
             this.data = data;
-            this.counter = counter;
         }
 
         /**
@@ -1070,11 +1008,18 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     private BucketList<V> createBucketList() {
-        CollationElementIterator cei = collatorPrimaryOnly.getCollationElementIterator("");
-        boolean hasInvisibleBuckets = false;
-
-        // initialize indexCharacters;
+        // Initialize indexCharacters.
         List<String> indexCharacters = initLabels();
+
+        // Variables for hasMultiplePrimaryWeights().
+        CollationElementIterator cei = collatorPrimaryOnly.getCollationElementIterator("");
+        int variableTop;
+        if (collatorPrimaryOnly.isAlternateHandlingShifted()) {
+            variableTop = CollationElementIterator.primaryOrder(collatorPrimaryOnly.getVariableTop());
+        } else {
+            variableTop = 0;
+        }
+        boolean hasInvisibleBuckets = false;
 
         // Helper arrays for Chinese Pinyin collation.
         @SuppressWarnings("unchecked")
@@ -1090,59 +1035,31 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
         // fix up the list, adding underflow, additions, overflow
         // Insert inflow labels as needed.
-        int prevScript = UScript.INVALID_CODE;
         int scriptIndex = -1;
         String scriptUpperBoundary = "";
         for (String current : indexCharacters) {
-            int indexCharVsScriptUpper = collatorPrimaryOnly.compare(current, scriptUpperBoundary);
-            // TODO start of hack: Remove this hack and the "script" variable
-            // when we have a reliable Han-script first primary string.
-            // Until then, we use U+4E00 as the first Han character,
-            // but it is usually tailored in CJK collations.
-            // When we see a Chinese index boundary string or detect that we do not really
-            // cross a script boundary
-            // (because the Korean tailoring interleaves Han characters with Hangul syllables)
-            // we look for the next script boundary string.
-            int script;
-            if (current.startsWith(BASE) && !current.equals(BASE)) {
-                script = UScript.HAN;
-            } else {
-                int c;
-                for (int i = 0;; i += Character.charCount(c)) {
-                    if (i == current.length()) {
-                        script = prevScript;
-                        break;
-                    }
-                    c = current.codePointAt(i);
-                    int sc = UScript.getScript(c);
-                    if (sc != UScript.UNKNOWN && sc != UScript.INHERITED) {
-                        script = sc;
-                        break;
-                    }
-                }
-            }
-            if (indexCharVsScriptUpper > 0 && scriptUpperBoundary.equals("\u4E00")) {
-                if (script == UScript.HAN || script == prevScript) {
-                    do {
-                        scriptUpperBoundary = firstCharsInScripts.get(++scriptIndex);
-                    } while (collatorPrimaryOnly.compare(current, scriptUpperBoundary) >= 0);
-                    indexCharVsScriptUpper = -1;
-                }
-            }
-            // TODO end of hack
-            if (indexCharVsScriptUpper >= 0) {
+            if (collatorPrimaryOnly.compare(current, scriptUpperBoundary) >= 0) {
                 // We crossed the script boundary into a new script.
-                if (indexCharVsScriptUpper > 0 && bucketList.size() > 1) {
-                    // We are skipping one or more scripts.
-                    bucketList.add(new Bucket<V>(getInflowLabel(), scriptUpperBoundary,
+                String inflowBoundary = scriptUpperBoundary;
+                boolean skippedScript = false;
+                for (;;) {
+                    scriptUpperBoundary = firstCharsInScripts.get(++scriptIndex);
+                    if (collatorPrimaryOnly.compare(current, scriptUpperBoundary) < 0) {
+                        break;
+                    }
+                    skippedScript = true;
+                }
+                if (skippedScript && bucketList.size() > 1) {
+                    // We are skipping one or more scripts,
+                    // and we are not just getting out of the underflow label.
+                    bucketList.add(new Bucket<V>(getInflowLabel(), inflowBoundary,
                             LabelType.INFLOW));
                 }
-                do {
-                    scriptUpperBoundary = firstCharsInScripts.get(++scriptIndex);
-                } while (collatorPrimaryOnly.compare(current, scriptUpperBoundary) >= 0);
             }
+            // Add a bucket with the current label.
             Bucket<V> bucket = new Bucket<V>(fixLabel(current), current, LabelType.NORMAL);
             bucketList.add(bucket);
+            // Remember ASCII and Pinyin buckets for Pinyin redirects.
             char c;
             if (current.length() == 1 && 'A' <= (c = current.charAt(0)) && c <= 'Z') {
                 asciiBuckets[c - 'A'] = bucket;
@@ -1150,8 +1067,12 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                     'A' <= (c = current.charAt(BASE.length())) && c <= 'Z') {
                 pinyinBuckets[c - 'A'] = bucket;
                 hasPinyin = true;
-            } else if (hasMultiplePrimaryWeights(cei, current) && !current.endsWith("\uffff")) {
-                // "Sch" etc.
+            }
+            // Check for multiple primary weights.
+            if (!current.startsWith(BASE) &&
+                    hasMultiplePrimaryWeights(cei, variableTop, current) &&
+                    !current.endsWith("\uffff")) {
+                // "Æ" or "Sch" etc.
                 for (int i = bucketList.size() - 2;; --i) {
                     Bucket<V> singleBucket = bucketList.get(i);
                     if (singleBucket.labelType != LabelType.NORMAL) {
@@ -1160,7 +1081,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                         break;
                     }
                     if (singleBucket.displayBucket == null &&
-                            !hasMultiplePrimaryWeights(cei, singleBucket.lowerBoundary)) {
+                            !hasMultiplePrimaryWeights(cei, variableTop, singleBucket.lowerBoundary)) {
                         // Add an invisible bucket that redirects strings greater than the expansion
                         // to the previous single-character bucket.
                         // For example, after ... Q R S Sch we add Sch\uFFFF->S
@@ -1173,7 +1094,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                     }
                 }
             }
-            prevScript = script;
         }
         if (bucketList.size() == 1) {
             // No real labels, show only the underflow label.
@@ -1280,7 +1200,8 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         }
     }
 
-    private static boolean hasMultiplePrimaryWeights(CollationElementIterator cei, String s) {
+    private static boolean hasMultiplePrimaryWeights(
+            CollationElementIterator cei, int variableTop, String s) {
         cei.setText(s);
         boolean seenPrimary = false;
         for (;;) {
@@ -1289,7 +1210,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 break;
             }
             int p = CollationElementIterator.primaryOrder(ce32);
-            if (p != 0 && (ce32 & 0xc0) != 0xc0) {
+            if (p > variableTop && (ce32 & 0xc0) != 0xc0) {
                 // not primary ignorable, and not a continuation CE
                 if (seenPrimary) {
                     return true;
@@ -1301,11 +1222,20 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
-     * HACKS
+     * This list contains one character per script that has the
+     * lowest primary weight for that script in the root collator.
+     * This list will be copied and sorted to account for script reordering.
+     *
+     * <p>TODO: This is fragile. If the first character of a script is tailored
+     * so that it does not map to the script's lowest primary weight any more,
+     * then the buckets will be off.
+     * There are hacks in the code to handle the known CJK tailorings of U+4E00.
+     *
+     * <p>We use "A" not "a" because the en_US_POSIX tailoring sorts A primary-before a.
      */
     private static final List<String> HACK_FIRST_CHARS_IN_SCRIPTS = 
         Arrays.asList(new String[] { 
-                "a", "\u03B1", "\u2C81", "\u0430", "\u2C30", "\u10D0", "\u0561", "\u05D0", "\uD802\uDD00", "\u0800", "\u0621",
+                "A", "\u03B1", "\u2C81", "\u0430", "\u2C30", "\u10D0", "\u0561", "\u05D0", "\uD802\uDD00", "\u0800", "\u0621",
                 "\u0710",  // Syriac
                 "\u0840",  // Mandaic
                 "\u0780", "\u07CA", "\u2D30", "\u1200", "\u0950", "\u0985", "\u0A74", "\u0AD0", "\u0B05", "\u0BD0", 
