@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009, Google, International Business Machines Corporation and         *
+ * Copyright (C) 2009-2013, Google, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -106,9 +106,10 @@ public class AnyScriptTest extends TestFmwk {
         back = latin.transform(widePunctOnly);
         assertEquals("Should be ascii", punctOnly, back);
        
-        Transliterator t2 = Transliterator.getInstance("any-Han");
-        back = t2.transform(widePunctOnly);
-        assertEquals("Should be same", widePunctOnly, back);
+        // Han-Latin is now forward-only per CLDR ticket #5630
+        //Transliterator t2 = Transliterator.getInstance("any-Han");
+        //back = t2.transform(widePunctOnly);
+        //assertEquals("Should be same", widePunctOnly, back);
 
 
     }
