@@ -54,7 +54,7 @@ kk{
             latn{"Батыс сандары"}
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.80.95"}
     codePatterns{
         language{"Тіл: {0}"}
         script{"Жазылуы: {0}"}

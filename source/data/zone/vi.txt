@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/vi.xml
  */
 vi{
-    Version{"2.0.80.74"}
+    Version{"2.0.80.95"}
     zoneStrings{
         "Africa:Asmera"{
             ec{"Asmara"}

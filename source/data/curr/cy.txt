@@ -11,38 +11,1272 @@
  */
 cy{
     Currencies{
+        AED{
+            "AED",
+            "Dirham Yr Emiradau Arabaidd Unedig",
+        }
+        AFN{
+            "AFN",
+            "Afghani Afghanistan",
+        }
+        ALL{
+            "ALL",
+            "Lek Albania",
+        }
+        AMD{
+            "AMD",
+            "Dram Armenia",
+        }
+        ANG{
+            "ANG",
+            "Guilder Antilles yr Iseldiroedd",
+        }
+        AOA{
+            "AOA",
+            "Kwanza Angola",
+        }
+        ARS{
+            "ARS",
+            "ARS",
+        }
+        AUD{
+            "A$",
+            "Doler Awstralia",
+        }
+        AWG{
+            "AWG",
+            "Fflorin Aruba",
+        }
+        AZN{
+            "AZN",
+            "Manat Azerbaijan",
+        }
+        BAM{
+            "BAM",
+            "Marc Trosadwy Bosnia a Hercegovina",
+        }
+        BBD{
+            "BBD",
+            "Doler Barbados",
+        }
+        BDT{
+            "BDT",
+            "Taka Bangladesh",
+        }
+        BGN{
+            "BGN",
+            "Lev Bwlgaria",
+        }
+        BHD{
+            "BHD",
+            "Dinar Bahrain",
+        }
+        BIF{
+            "BIF",
+            "Ffranc Burundi",
+        }
+        BMD{
+            "BMD",
+            "Doler Bermuda",
+        }
+        BND{
+            "BND",
+            "Doler Brunei",
+        }
+        BOB{
+            "BOB",
+            "Boliviano Bolifia",
+        }
         BRL{
             "R$",
             "Real Brasil",
         }
+        BSD{
+            "BSD",
+            "Doler y Bahamas",
+        }
+        BTN{
+            "BTN",
+            "Ngultrum Bhutan",
+        }
+        BWP{
+            "BWP",
+            "Pula Botswana",
+        }
+        BYR{
+            "BYR",
+            "Rwbl Belarws",
+        }
+        BZD{
+            "BZD",
+            "Doler Belize",
+        }
+        CAD{
+            "CA$",
+            "Doler Canada",
+        }
+        CDF{
+            "CDF",
+            "Ffranc Congo",
+        }
+        CHF{
+            "CHF",
+            "Ffranc y Swistir",
+        }
+        CLP{
+            "CLP",
+            "Peso Chile",
+        }
         CNY{
             "CN¥",
-            "Yuan Renminbi Tseina",
+            "Yuan Tsieina",
+        }
+        COP{
+            "COP",
+            "Peso Colombia",
+        }
+        CRC{
+            "CRC",
+            "Colón Costa Rica",
+        }
+        CUC{
+            "CUC",
+            "Peso Trosadwy Cuba",
+        }
+        CUP{
+            "CUP",
+            "Peso Cuba",
+        }
+        CVE{
+            "CVE",
+            "Esgwdo Cabo Verde",
+        }
+        CZK{
+            "CZK",
+            "Koruna Tsiec",
+        }
+        DJF{
+            "DJF",
+            "Ffranc Djibouti",
+        }
+        DKK{
+            "DKK",
+            "Krone Denmarc",
+        }
+        DOP{
+            "DOP",
+            "Peso Gweriniaeth Dominica",
+        }
+        DZD{
+            "DZD",
+            "Dinar Algeria",
+        }
+        EGP{
+            "EGP",
+            "Punt Yr Aifft",
+        }
+        ERN{
+            "ERN",
+            "Nakfa Eritrea",
+        }
+        ETB{
+            "ETB",
+            "Birr Ethiopia",
         }
         EUR{
             "€",
             "Ewro",
         }
+        FJD{
+            "FJD",
+            "Doler Ffiji",
+        }
+        FKP{
+            "FKP",
+            "Punt Ynysoedd Falkland/Malvinas",
+        }
         GBP{
             "£",
             "Punt Sterling Prydain",
+        }
+        GEL{
+            "GEL",
+            "Lari Georgia",
+        }
+        GHS{
+            "GHS",
+            "Cedi Ghana",
+        }
+        GIP{
+            "GIP",
+            "Punt Gibraltar",
+        }
+        GMD{
+            "GMD",
+            "Dalasi Gambia",
+        }
+        GNF{
+            "GNF",
+            "Ffranc Guinée",
+        }
+        GTQ{
+            "GTQ",
+            "Quetzal Guatemala",
+        }
+        GYD{
+            "GYD",
+            "Doler Guyana",
+        }
+        HKD{
+            "HK$",
+            "Doler Hong Kong",
+        }
+        HNL{
+            "HNL",
+            "Lempira Honduras",
+        }
+        HRK{
+            "HRK",
+            "Kuna Croatia",
+        }
+        HTG{
+            "HTG",
+            "Gourde Haiti",
+        }
+        HUF{
+            "HUF",
+            "Fforint Hwngari",
+        }
+        IDR{
+            "IDR",
+            "Rupiah Indonesia",
+        }
+        ILS{
+            "₪",
+            "Shegel Newydd Israel",
         }
         INR{
             "₹",
             "Rwpî India",
         }
+        IQD{
+            "IQD",
+            "Dinar Irac",
+        }
+        IRR{
+            "IRR",
+            "Rial Iran",
+        }
+        ISK{
+            "ISK",
+            "Króna Gwlad yr Iâ",
+        }
+        JMD{
+            "JMD",
+            "Doler Jamaica",
+        }
+        JOD{
+            "JOD",
+            "Dinar Gwlad yr Iorddonen",
+        }
         JPY{
             "JP¥",
-            "Yen Siapan",
+            "Yen Japan",
+        }
+        KES{
+            "KES",
+            "Swllt Kenya",
+        }
+        KGS{
+            "KGS",
+            "Som Kyrgyzstan",
+        }
+        KHR{
+            "KHR",
+            "Riel Cambodia",
+        }
+        KMF{
+            "KMF",
+            "Ffranc Comoros",
+        }
+        KPW{
+            "KPW",
+            "Won Gogledd Corea",
+        }
+        KRW{
+            "₩",
+            "Won De Corea",
+        }
+        KWD{
+            "KWD",
+            "Dinar Kuwait",
+        }
+        KYD{
+            "KYD",
+            "Doler Ynysoedd Cayman",
+        }
+        KZT{
+            "KZT",
+            "Tenge Kazakstan",
+        }
+        LAK{
+            "LAK",
+            "Kip Laos",
+        }
+        LBP{
+            "LBP",
+            "Punt Libanus",
+        }
+        LKR{
+            "LKR",
+            "Rwpî Sri Lanka",
+        }
+        LRD{
+            "LRD",
+            "Doler Liberia",
+        }
+        LTL{
+            "LTL",
+            "Litas Lithwania",
+        }
+        LVL{
+            "LVL",
+            "Lats Latfia",
+        }
+        LYD{
+            "LYD",
+            "Dinar Libya",
+        }
+        MAD{
+            "MAD",
+            "Dirham Moroco",
+        }
+        MDL{
+            "MDL",
+            "Leu Moldofa",
+        }
+        MGA{
+            "MGA",
+            "Ariary Madagascar",
+        }
+        MKD{
+            "MKD",
+            "Denar Macedonia",
+        }
+        MMK{
+            "MMK",
+            "Kyat Myanmar",
+        }
+        MNT{
+            "MNT",
+            "Tugrik Mongolia",
+        }
+        MOP{
+            "MOP",
+            "Pataca Macau",
+        }
+        MRO{
+            "MRO",
+            "Ouguiya Mauritania",
+        }
+        MUR{
+            "MUR",
+            "Rwpî Mauritius",
+        }
+        MVR{
+            "MVR",
+            "Rufiyaa'r Maldives",
+        }
+        MWK{
+            "MWK",
+            "Kwacha Malawi",
+        }
+        MXN{
+            "MX$",
+            "Peso Mecsico",
+        }
+        MYR{
+            "MYR",
+            "Ringgit Malaysia",
+        }
+        MZN{
+            "MZN",
+            "Metical Mozambique",
+        }
+        NAD{
+            "NAD",
+            "Doler Namibia",
+        }
+        NGN{
+            "NGN",
+            "Naira Nigeria",
+        }
+        NIO{
+            "NIO",
+            "Córdoba Nicaragua",
+        }
+        NOK{
+            "NOK",
+            "Krone Norwy",
+        }
+        NPR{
+            "NPR",
+            "Rwpî Nepal",
+        }
+        NZD{
+            "NZ$",
+            "Doler Seland Newydd",
+        }
+        OMR{
+            "OMR",
+            "Rial Oman",
+        }
+        PAB{
+            "PAB",
+            "Balboa Panama",
+        }
+        PEN{
+            "PEN",
+            "Nuevo Sol Periw",
+        }
+        PGK{
+            "PGK",
+            "Kina Papua Guinea Newydd",
+        }
+        PHP{
+            "PHP",
+            "Peso Pilipinas",
+        }
+        PKR{
+            "PKR",
+            "Rwpî Pacistan",
+        }
+        PLN{
+            "PLN",
+            "Zloty Gwlad Pwyl",
+        }
+        PYG{
+            "PYG",
+            "Guarani Paraguay",
+        }
+        QAR{
+            "QAR",
+            "Rial Qatar",
+        }
+        RON{
+            "RON",
+            "Leu Rwmania",
+        }
+        RSD{
+            "RSD",
+            "Dinar Serbia",
         }
         RUB{
             "RUB",
             "Rwbl Rwsia",
         }
+        RWF{
+            "RWF",
+            "Ffranc Rwanda",
+        }
+        SAR{
+            "SAR",
+            "Riyal Saudi Arabia",
+        }
+        SBD{
+            "SBD",
+            "Doler Ynysoedd Solomon",
+        }
+        SCR{
+            "SCR",
+            "Rwpî Seychelles",
+        }
+        SDG{
+            "SDG",
+            "Punt Sudan",
+        }
+        SEK{
+            "SEK",
+            "Krona Sweden",
+        }
+        SGD{
+            "SGD",
+            "Doler Singapore",
+        }
+        SHP{
+            "SHP",
+            "Punt Saint Helena",
+        }
+        SLL{
+            "SLL",
+            "Leone Sierra Leone",
+        }
+        SOS{
+            "SOS",
+            "Swllt Somalia",
+        }
+        SRD{
+            "SRD",
+            "Doler Surinam",
+        }
+        SSP{
+            "SSP",
+            "Punt De Sudan",
+        }
+        STD{
+            "STD",
+            "Dobra São Tomé a Príncipe",
+        }
+        SYP{
+            "SYP",
+            "Punt Syria",
+        }
+        SZL{
+            "SZL",
+            "Lilangeni Gwlad Swazi",
+        }
+        THB{
+            "฿",
+            "Baht Gwlad Thai",
+        }
+        TJS{
+            "TJS",
+            "Somoni Tajikistan",
+        }
+        TMT{
+            "TMT",
+            "Manat Turkmenistan",
+        }
+        TND{
+            "TND",
+            "Dinar Tunisia",
+        }
+        TOP{
+            "TOP",
+            "Paʻanga Tonga",
+        }
+        TRY{
+            "TRY",
+            "Lira Twrci",
+        }
+        TTD{
+            "TTD",
+            "Doler Trinidad a Tobago",
+        }
+        TWD{
+            "NT$",
+            "Doler Newydd Taiwan",
+        }
+        TZS{
+            "TZS",
+            "Swllt Tanzania",
+        }
+        UAH{
+            "UAH",
+            "Hryvnia Wcráin",
+        }
+        UGX{
+            "UGX",
+            "Swllt Uganda",
+        }
         USD{
             "US$",
-            "Doler yr UDA",
+            "Doler UDA",
+        }
+        UYU{
+            "UYU",
+            "Peso Uruguay",
+        }
+        UZS{
+            "UZS",
+            "Som Uzbekistan",
+        }
+        VEF{
+            "VEF",
+            "Bolívar Venezuela",
+        }
+        VND{
+            "₫",
+            "Dong Fietnam",
+        }
+        VUV{
+            "VUV",
+            "Vatu Vanuatu",
+        }
+        WST{
+            "WST",
+            "Tala Samoa",
+        }
+        XAF{
+            "FCFA",
+            "Ffranc CFA y BEAC",
+        }
+        XCD{
+            "EC$",
+            "Doler Dwyrain y Caribî",
+        }
+        XOF{
+            "CFA",
+            "Ffranc CFA y BCEAO",
+        }
+        XPF{
+            "CFPF",
+            "Ffranc CPF",
+        }
+        XXX{
+            "XXX",
+            "Arian Cyfredol Anhysbys",
+        }
+        YER{
+            "YER",
+            "Rial Yemen",
+        }
+        ZAR{
+            "ZAR",
+            "Rand De Affrica",
+        }
+        ZMK{
+            "ZMK",
+            "Kwacha Zambia",
         }
     }
-    Version{"2.0.80.73"}
+    CurrencyPlurals{
+        AED{
+            one{"Dirham Yr Emiradau Arabaidd Unedig"}
+            other{"Dirham Yr Emiradau Arabaidd Unedig"}
+        }
+        AFN{
+            one{"Afghani Afghanistan"}
+            other{"Afghani Afghanistan"}
+        }
+        ALL{
+            one{"Lek Albania"}
+            other{"Lek Albania"}
+        }
+        AMD{
+            one{"Dram Armenia"}
+            other{"Dram Armenia"}
+        }
+        ANG{
+            one{"Guilder Antilles yr Iseldiroedd"}
+            other{"Guilder Antilles yr Iseldiroedd"}
+        }
+        AOA{
+            one{"Kwanza Angola"}
+            other{"Kwanza Angola"}
+        }
+        ARS{
+            one{"Peso yr Ariannin"}
+            other{"Peso yr Ariannin"}
+        }
+        AUD{
+            one{"Doler Awstralia"}
+            other{"Doler Awstralia"}
+        }
+        AWG{
+            one{"Fflorin Aruba"}
+            other{"Fflorin Aruba"}
+        }
+        AZN{
+            one{"Manat Azerbaijan"}
+            other{"Manat Azerbaijan"}
+        }
+        BAM{
+            one{"Marc Trosadwy Bosnia a Hercegovina"}
+            other{"Marc Trosadwy Bosnia a Hercegovina"}
+        }
+        BBD{
+            one{"Doler Barbados"}
+            other{"Doler Barbados"}
+        }
+        BDT{
+            one{"Taka Bangladesh"}
+            other{"Taka Bangladesh"}
+        }
+        BGN{
+            one{"Lev Bwlgaria"}
+            other{"Lev Bwlgaria"}
+        }
+        BHD{
+            one{"Dinar Bahrain"}
+            other{"Dinar Bahrain"}
+        }
+        BIF{
+            one{"Ffranc Burundi"}
+            other{"Ffranc Burundi"}
+        }
+        BMD{
+            one{"Doler Bermuda"}
+            other{"Doler Bermuda"}
+        }
+        BND{
+            one{"Doler Brunei"}
+            other{"Doler Brunei"}
+        }
+        BOB{
+            one{"Boliviano Bolifia"}
+            other{"Boliviano Bolifia"}
+        }
+        BRL{
+            one{"Real Brasil"}
+            other{"Real Brasil"}
+        }
+        BSD{
+            one{"Doler y Bahamas"}
+            other{"Doler y Bahamas"}
+        }
+        BTN{
+            one{"Ngultrum Bhutan"}
+            other{"Ngultrum Bhutan"}
+        }
+        BWP{
+            one{"Pula Botswana"}
+            other{"Pula Botswana"}
+        }
+        BYR{
+            one{"Rwbl Belarws"}
+            other{"Rwbl Belarws"}
+        }
+        BZD{
+            one{"Doler Belize"}
+            other{"Doler Belize"}
+        }
+        CAD{
+            one{"Doler Canada"}
+            other{"Doler Canada"}
+        }
+        CDF{
+            one{"Ffranc Congo"}
+            other{"Ffranc Congo"}
+        }
+        CHF{
+            one{"Ffranc y Swistir"}
+            other{"Ffranc y Swistir"}
+        }
+        CLP{
+            one{"Peso Chile"}
+            other{"Peso Chile"}
+        }
+        CNY{
+            one{"Yuan Tsieina"}
+            other{"Yuan Tsieina"}
+        }
+        COP{
+            one{"Peso Colombia"}
+            other{"Peso Colombia"}
+        }
+        CRC{
+            one{"Colón Costa Rica"}
+            other{"Colón Costa Rica"}
+        }
+        CUC{
+            one{"Peso Trosadwy Cuba"}
+            other{"Peso Trosadwy Cuba"}
+        }
+        CUP{
+            one{"Peso Cuba"}
+            other{"Peso Cuba"}
+        }
+        CVE{
+            one{"Esgwdo Cabo Verde"}
+            other{"Esgwdo Cabo Verde"}
+        }
+        CZK{
+            one{"Koruna Tsiec"}
+            other{"Koruna Tsiec"}
+        }
+        DJF{
+            one{"Ffranc Djibouti"}
+            other{"Ffranc Djibouti"}
+        }
+        DKK{
+            one{"Krone Denmarc"}
+            other{"Krone Denmarc"}
+        }
+        DOP{
+            one{"Peso Gweriniaeth Dominica"}
+            other{"Peso Gweriniaeth Dominica"}
+        }
+        DZD{
+            one{"Dinar Algeria"}
+            other{"Dinar Algeria"}
+        }
+        EGP{
+            one{"Punt Yr Aifft"}
+            other{"Punt Yr Aifft"}
+        }
+        ERN{
+            one{"Nakfa Eritrea"}
+            other{"Nakfa Eritrea"}
+        }
+        ETB{
+            one{"Birr Ethiopia"}
+            other{"Birr Ethiopia"}
+        }
+        EUR{
+            one{"Ewro"}
+            other{"Ewro"}
+        }
+        FJD{
+            one{"Doler Ffiji"}
+            other{"Doler Ffiji"}
+        }
+        FKP{
+            one{"Punt Ynysoedd Falkland/Malvinas"}
+            other{"Punt Ynysoedd Falkland/Malvinas"}
+        }
+        GBP{
+            one{"Punt Sterling Prydain"}
+            other{"Punt Sterling Prydain"}
+        }
+        GEL{
+            one{"Lari Georgia"}
+            other{"Lari Georgia"}
+        }
+        GHS{
+            one{"Cedi Ghana"}
+            other{"Cedi Ghana"}
+        }
+        GIP{
+            one{"Punt Gibraltar"}
+            other{"Punt Gibraltar"}
+        }
+        GMD{
+            one{"Dalasi Gambia"}
+            other{"Dalasi Gambia"}
+        }
+        GNF{
+            one{"Ffranc Guinée"}
+            other{"Ffranc Guinée"}
+        }
+        GTQ{
+            one{"Quetzal Guatemala"}
+            other{"Quetzal Guatemala"}
+        }
+        GYD{
+            one{"Doler Guyana"}
+            other{"Doler Guyana"}
+        }
+        HKD{
+            one{"Doler Hong Kong"}
+            other{"Doler Hong Kong"}
+        }
+        HNL{
+            one{"Lempira Honduras"}
+            other{"Lempira Honduras"}
+        }
+        HRK{
+            one{"Kuna Croatia"}
+            other{"Kuna Croatia"}
+        }
+        HTG{
+            one{"Gourde Haiti"}
+            other{"Gourde Haiti"}
+        }
+        HUF{
+            one{"Fforint Hwngari"}
+            other{"Fforint Hwngari"}
+        }
+        IDR{
+            one{"Rupiah Indonesia"}
+            other{"Rupiah Indonesia"}
+        }
+        ILS{
+            one{"Shegel Newydd Israel"}
+            other{"Shegel Newydd Israel"}
+        }
+        INR{
+            one{"Rwpî India"}
+            other{"Rwpî India"}
+        }
+        IQD{
+            one{"Dinar Irac"}
+            other{"Dinar Irac"}
+        }
+        IRR{
+            one{"Rial Iran"}
+            other{"Rial Iran"}
+        }
+        ISK{
+            one{"Króna Gwlad yr Iâ"}
+            other{"Króna Gwlad yr Iâ"}
+        }
+        JMD{
+            one{"Doler Jamaica"}
+            other{"Doler Jamaica"}
+        }
+        JOD{
+            one{"Dinar Gwlad yr Iorddonen"}
+            other{"Dinar Gwlad yr Iorddonen"}
+        }
+        JPY{
+            one{"Yen Japan"}
+            other{"Yen Japan"}
+        }
+        KES{
+            one{"Swllt Kenya"}
+            other{"Swllt Kenya"}
+        }
+        KGS{
+            one{"Som Kyrgyzstan"}
+            other{"Som Kyrgyzstan"}
+        }
+        KHR{
+            one{"Riel Cambodia"}
+            other{"Riel Cambodia"}
+        }
+        KMF{
+            one{"Ffranc Comoros"}
+            other{"Ffranc Comoros"}
+        }
+        KPW{
+            one{"Won Gogledd Corea"}
+            other{"Won Gogledd Corea"}
+        }
+        KRW{
+            one{"Won De Corea"}
+            other{"Won De Corea"}
+        }
+        KWD{
+            one{"Dinar Kuwait"}
+            other{"Dinar Kuwait"}
+        }
+        KYD{
+            one{"Doler Ynysoedd Cayman"}
+            other{"Doler Ynysoedd Cayman"}
+        }
+        KZT{
+            one{"Tenge Kazakstan"}
+            other{"Tenge Kazakstan"}
+        }
+        LAK{
+            one{"Kip Laos"}
+            other{"Kip Laos"}
+        }
+        LBP{
+            one{"Punt Libanus"}
+            other{"Punt Libanus"}
+        }
+        LKR{
+            one{"Rwpî Sri Lanka"}
+            other{"Rwpî Sri Lanka"}
+        }
+        LRD{
+            one{"Doler Liberia"}
+            other{"Doler Liberia"}
+        }
+        LTL{
+            one{"Litas Lithwania"}
+            other{"Litas Lithwania"}
+        }
+        LVL{
+            one{"Lats Latfia"}
+            other{"Lats Latfia"}
+        }
+        LYD{
+            one{"Dinar Libya"}
+            other{"Dinar Libya"}
+        }
+        MAD{
+            one{"Dirham Moroco"}
+            other{"Dirham Moroco"}
+        }
+        MDL{
+            one{"Leu Moldofa"}
+            other{"Leu Moldofa"}
+        }
+        MGA{
+            one{"Ariary Madagascar"}
+            other{"Ariary Madagascar"}
+        }
+        MKD{
+            one{"Denar Macedonia"}
+            other{"Denar Macedonia"}
+        }
+        MMK{
+            one{"Kyat Myanmar"}
+            other{"Kyat Myanmar"}
+        }
+        MNT{
+            one{"Tugrik Mongolia"}
+            other{"Tugrik Mongolia"}
+        }
+        MOP{
+            one{"Pataca Macau"}
+            other{"Pataca Macau"}
+        }
+        MRO{
+            one{"Ouguiya Mauritania"}
+            other{"Ouguiya Mauritania"}
+        }
+        MUR{
+            one{"Rwpî Mauritius"}
+            other{"Rwpî Mauritius"}
+        }
+        MVR{
+            one{"Rufiyaa'r Maldives"}
+            other{"Rufiyaa'r Maldives"}
+        }
+        MWK{
+            one{"Kwacha Malawi"}
+            other{"Kwacha Malawi"}
+        }
+        MXN{
+            one{"Peso Mecsico"}
+            other{"Peso Mecsico"}
+        }
+        MYR{
+            one{"Ringgit Malaysia"}
+            other{"Ringgit Malaysia"}
+        }
+        MZN{
+            one{"Metical Mozambique"}
+            other{"Metical Mozambique"}
+        }
+        NAD{
+            one{"Doler Namibia"}
+            other{"Doler Namibia"}
+        }
+        NGN{
+            one{"Naira Nigeria"}
+            other{"Naira Nigeria"}
+        }
+        NIO{
+            one{"Córdoba Nicaragua"}
+            other{"Córdoba Nicaragua"}
+        }
+        NOK{
+            one{"Krone Norwy"}
+            other{"Krone Norwy"}
+        }
+        NPR{
+            one{"Rwpî Nepal"}
+            other{"Rwpî Nepal"}
+        }
+        NZD{
+            one{"Doler Seland Newydd"}
+            other{"Doler Seland Newydd"}
+        }
+        OMR{
+            one{"Rial Oman"}
+            other{"Rial Oman"}
+        }
+        PAB{
+            one{"Balboa Panama"}
+            other{"Balboa Panama"}
+        }
+        PEN{
+            one{"Nuevo Sol Periw"}
+            other{"Nuevo Sol Periw"}
+        }
+        PGK{
+            one{"Kina Papua Guinea Newydd"}
+            other{"Kina Papua Guinea Newydd"}
+        }
+        PHP{
+            one{"Peso Pilipinas"}
+            other{"Peso Pilipinas"}
+        }
+        PKR{
+            one{"Rwpî Pacistan"}
+            other{"Rwpî Pacistan"}
+        }
+        PLN{
+            one{"Zloty Gwlad Pwyl"}
+            other{"Zloty Gwlad Pwyl"}
+        }
+        PYG{
+            one{"Guarani Paraguay"}
+            other{"Guarani Paraguay"}
+        }
+        QAR{
+            one{"Rial Qatar"}
+            other{"Rial Qatar"}
+        }
+        RON{
+            one{"Leu Rwmania"}
+            other{"Leu Rwmania"}
+        }
+        RSD{
+            one{"Dinar Serbia"}
+            other{"Dinar Serbia"}
+        }
+        RUB{
+            one{"Rwbl Rwsia"}
+            other{"Rwbl Rwsia"}
+        }
+        RWF{
+            one{"Ffranc Rwanda"}
+            other{"Ffranc Rwanda"}
+        }
+        SAR{
+            one{"Riyal Saudi Arabia"}
+            other{"Riyal Saudi Arabia"}
+        }
+        SBD{
+            one{"Doler Ynysoedd Solomon"}
+            other{"Doler Ynysoedd Solomon"}
+        }
+        SCR{
+            one{"Rwpî Seychelles"}
+            other{"Rwpî Seychelles"}
+        }
+        SDG{
+            one{"Punt Sudan"}
+            other{"Punt Sudan"}
+        }
+        SEK{
+            one{"Krona Sweden"}
+            other{"Krona Sweden"}
+        }
+        SGD{
+            one{"Doler Singapore"}
+            other{"Doler Singapore"}
+        }
+        SHP{
+            one{"Punt Saint Helena"}
+            other{"Punt Saint Helena"}
+        }
+        SLL{
+            one{"Leone Sierra Leone"}
+            other{"Leone Sierra Leone"}
+        }
+        SOS{
+            one{"Swllt Somalia"}
+            other{"Swllt Somalia"}
+        }
+        SRD{
+            one{"Doler Surinam"}
+            other{"Doler Surinam"}
+        }
+        SSP{
+            one{"Punt De Sudan"}
+            other{"Punt De Sudan"}
+        }
+        STD{
+            one{"Dobra São Tomé a Príncipe"}
+            other{"Dobra São Tomé a Príncipe"}
+        }
+        SYP{
+            one{"Punt Syria"}
+            other{"Punt Syria"}
+        }
+        SZL{
+            one{"Lilangeni Gwlad Swazi"}
+            other{"Lilangeni Gwlad Swazi"}
+        }
+        THB{
+            one{"Baht Gwlad Thai"}
+            other{"Baht Gwlad Thai"}
+        }
+        TJS{
+            one{"Somoni Tajikistan"}
+            other{"Somoni Tajikistan"}
+        }
+        TMT{
+            one{"Manat Turkmenistan"}
+            other{"Manat Turkmenistan"}
+        }
+        TND{
+            one{"Dinar Tunisia"}
+            other{"Dinar Tunisia"}
+        }
+        TOP{
+            one{"Paʻanga Tonga"}
+            other{"Paʻanga Tonga"}
+        }
+        TRY{
+            one{"Lira Twrci"}
+            other{"Lira Twrci"}
+        }
+        TTD{
+            one{"Doler Trinidad a Tobago"}
+            other{"Doler Trinidad a Tobago"}
+        }
+        TWD{
+            one{"Doler Newydd Taiwan"}
+            other{"Doler Newydd Taiwan"}
+        }
+        TZS{
+            one{"Swllt Tanzania"}
+            other{"Swllt Tanzania"}
+        }
+        UAH{
+            one{"Hryvnia Wcráin"}
+            other{"Hryvnia Wcráin"}
+        }
+        UGX{
+            one{"Swllt Uganda"}
+            other{"Swllt Uganda"}
+        }
+        USD{
+            one{"Doler UDA"}
+            other{"Doler UDA"}
+        }
+        UYU{
+            one{"Peso Uruguay"}
+            other{"Peso Uruguay"}
+        }
+        UZS{
+            one{"Som Uzbekistan"}
+            other{"Som Uzbekistan"}
+        }
+        VEF{
+            one{"Bolívar Venezuela"}
+            other{"Bolívar Venezuela"}
+        }
+        VND{
+            one{"Dong Fietnam"}
+            other{"Dong Fietnam"}
+        }
+        VUV{
+            one{"Vatu Vanuatu"}
+            other{"Vatu Vanuatu"}
+        }
+        WST{
+            one{"Tala Samoa"}
+            other{"Tala Samoa"}
+        }
+        XAF{
+            one{"Ffranc CFA y BEAC"}
+            other{"Ffranc CFA y BEAC"}
+        }
+        XCD{
+            one{"Doler Dwyrain y Caribî"}
+            other{"Doler Dwyrain y Caribî"}
+        }
+        XOF{
+            one{"Ffranc CFA y BCEAO"}
+            other{"Ffranc CFA y BCEAO"}
+        }
+        XPF{
+            one{"Ffranc CPF"}
+            other{"Ffranc CPF"}
+        }
+        XXX{
+            one{"Arian Cyfredol Anhysbys"}
+            other{"Arian Cyfredol Anhysbys"}
+        }
+        YER{
+            one{"Rial Yemen"}
+            other{"Rial Yemen"}
+        }
+        ZAR{
+            one{"Rand De Affrica"}
+            other{"Rand De Affrica"}
+        }
+        ZMK{
+            one{"Kwacha Zambia"}
+            other{"Kwacha Zambia"}
+        }
+    }
+    CurrencyUnitPatterns{
+        few{"{0} {1}"}
+        many{"{0} {1}"}
+        one{"{0} {1}"}
+        other{"{0} {1}"}
+        two{"{0} {1}"}
+        zero{"{0} {1}"}
+    }
+    Version{"2.0.80.94"}
 }

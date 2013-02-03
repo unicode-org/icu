@@ -868,7 +868,7 @@ nl{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.80.74"}
+    Version{"2.0.80.95"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Schrift: {0}"}

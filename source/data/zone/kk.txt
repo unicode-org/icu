@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kk.xml
  */
 kk{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.95"}
     zoneStrings{
         "Asia:Almaty"{
             ec{"Алматы"}

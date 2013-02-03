@@ -643,5 +643,5 @@ km{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.80.74"}
+    Version{"2.0.80.95"}
 }
