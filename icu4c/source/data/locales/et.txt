@@ -19,7 +19,7 @@ et{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"#0.00¤;(#0.00¤)"}
+                currencyFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -142,7 +142,7 @@ et{
             }
         }
     }
-    Version{"2.0.80.74"}
+    Version{"2.0.81.0"}
     calendar{
         gregorian{
             AmPmMarkers{

@@ -11,8 +11,8 @@
  */
 de{
     AuxExemplarCharacters{
-        "[á à ă â å ã ā æ ç é è ĕ ê ë ē ğ í ì ĭ î ï {i\u0307} ī ı ñ ó ò ŏ ô ø ō œ ş ú"
-        " ù ŭ û ū ÿ]"
+        "[á à ă â å ã ā æ ç é è ĕ ê ë ē ğ í ì ĭ î ï İ ī ı ñ ó ò ŏ ô ø ō œ ş ú ù ŭ û ū"
+        " ÿ]"
     }
     ExemplarCharacters{"[a ä b c d e f g h i j k l m n o ö p q r s ß t u ü v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N O P Q R S T U V W X Y Z]"}
@@ -149,7 +149,7 @@ de{
             }
         }
     }
-    Version{"2.0.80.74"}
+    Version{"2.0.80.95"}
     calendar{
         buddhist{
             DateTimePatterns{

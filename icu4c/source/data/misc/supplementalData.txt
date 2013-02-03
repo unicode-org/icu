@@ -3467,17 +3467,7 @@ supplementalData:table(nofallback){
                 scripts{"Latn"}
             }
         }
-        ike{
-            secondary{
-                territories{"CA"}
-            }
-        }
         ikt{
-            secondary{
-                territories{"CA"}
-            }
-        }
-        iku{
             secondary{
                 territories{"CA"}
             }
@@ -3528,11 +3518,12 @@ supplementalData:table(nofallback){
         }
         iu{
             primary{
-                scripts{"Cans"}
-            }
-            secondary{
                 scripts{"Latn"}
                 territories{"GL"}
+            }
+            secondary{
+                scripts{"Cans"}
+                territories{"CA"}
             }
         }
         ja{
