@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fil.xml
  */
 fil{
-    Version{"2.0.80.74"}
+    Version{"2.0.80.95"}
     zoneStrings{
         "America:Asuncion"{
             ec{"Asunción"}

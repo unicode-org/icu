@@ -144,7 +144,7 @@ am{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.0.80.74"}
+    Version{"2.0.80.95"}
     calendar{
         ethiopic{
             monthNames{

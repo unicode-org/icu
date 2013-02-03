@@ -467,12 +467,6 @@ root {
                 direction {"FORWARD"}
             }
         }
-        Latin-Han {
-            file {
-                resource:process(transliterator) {"Han_Latin.txt"}
-                direction {"REVERSE"}
-            }
-        }
 
         Han-Latin/Names {
             file {

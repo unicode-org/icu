@@ -346,7 +346,7 @@ am{
             vaii{"የቫይ አሃዞች"}
         }
     }
-    Version{"2.0.80.74"}
+    Version{"2.0.80.95"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

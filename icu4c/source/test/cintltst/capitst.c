@@ -2323,7 +2323,7 @@ static void TestDefaultKeyword(void) {
 static void TestGetKeywordValuesForLocale(void) {
 #define INCLUDE_UNIHAN_COLLATION 0
 #define PREFERRED_SIZE 16
-#define MAX_NUMBER_OF_KEYWORDS 9
+#define MAX_NUMBER_OF_KEYWORDS 8
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
             { "und",            "standard", "search", NULL, NULL, NULL, NULL, NULL, NULL },
             { "en_US",          "standard", "search", NULL, NULL, NULL, NULL, NULL, NULL },
@@ -2331,19 +2331,19 @@ static void TestGetKeywordValuesForLocale(void) {
             { "de_DE",          "standard", "phonebook", "search", NULL, NULL, NULL, NULL, NULL },
             { "de_Latn_DE",     "standard", "phonebook", "search", NULL, NULL, NULL, NULL, NULL },
 #if INCLUDE_UNIHAN_COLLATION
-            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "unihan", "search", NULL },
-            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "unihan", "search", NULL },
-            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "unihan", "search", NULL },
-            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "unihan", "search", NULL },
-            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "unihan", "search", NULL },
-            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "unihan", "search", NULL },
+            { "zh",             "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "unihan", "search", "standard" },
+            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "unihan", "search", "standard" },
+            { "zh_CN",          "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "unihan", "search", "standard" },
+            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "unihan", "search", "standard" },
+            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "unihan", "search", "standard" },
+            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "unihan", "search", "standard" },
 #else
-            { "zh",             "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "search", NULL, NULL },
-            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "search", NULL, NULL },
-            { "zh_CN",          "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "search", NULL, NULL },
-            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "search", NULL, NULL },
-            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "standard", "zhuyin", "search", NULL, NULL },
-            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "standard", "stroke", "zhuyin", "search", NULL, NULL },
+            { "zh",             "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "search", "standard", NULL },
+            { "zh_Hans",        "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "search", "standard", NULL },
+            { "zh_CN",          "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "search", "standard", NULL },
+            { "zh_Hant",        "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "search", "standard", NULL },
+            { "zh_TW",          "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "search", "standard", NULL },
+            { "zh__PINYIN",     "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "search", "standard", NULL },
 #endif
             { "es_ES",          "standard", "search", "traditional", NULL, NULL, NULL, NULL, NULL },
             { "es__TRADITIONAL","traditional", "search", "standard", NULL, NULL, NULL, NULL, NULL },

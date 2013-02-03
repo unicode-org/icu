@@ -893,7 +893,7 @@ ja{
         VALLADER{"ヴァラダー"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.0.80.74"}
+    Version{"2.0.80.95"}
     codePatterns{
         language{"言語: {0}"}
         script{"文字: {0}"}

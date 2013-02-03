@@ -850,7 +850,7 @@ el{
         VALENCIA{"Βαλενθιανά"}
         WADEGILE{"Εκλατινισμένα Γουάντ-Γκιλς"}
     }
-    Version{"2.0.80.74"}
+    Version{"2.0.80.95"}
     codePatterns{
         language{"Γλώσσα: {0}"}
         script{"Σύστημα γραφής: {0}"}

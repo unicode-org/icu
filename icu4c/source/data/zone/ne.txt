@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ne.xml
  */
 ne{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.95"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अविड्जान"}

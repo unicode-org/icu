@@ -119,7 +119,7 @@ id{
             }
         }
     }
-    Version{"2.0.80.74"}
+    Version{"2.0.80.95"}
     calendar{
         buddhist{
             DateTimePatterns{

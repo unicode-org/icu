@@ -8,6 +8,7 @@
 # Generated from CLDR 
 #
 ::Han-Spacedhan();
+藏文→zàngwén;
 [呵锕阿𠼞𥥩𨉚]→ā;
 [嗄]→á;
 [啊]→a;

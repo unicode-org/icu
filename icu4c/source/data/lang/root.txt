@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/root.xml
  */
 root{
-    Version{"2.0.80.73"}
+    Version{"2.0.80.99"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}
