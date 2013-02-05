@@ -18,7 +18,13 @@
 ******************************************************************************
 */
 
-#include "uposixdefs.h"
+/*
+ * fileno is not declared when building with GCC in strict mode.
+ */
+#if defined(__GNUC__) && defined(__STRICT_ANSI__)
+#undef __STRICT_ANSI__
+#endif
+
 #include "locmap.h"
 #include "unicode/ustdio.h"
 #include "ufile.h"
