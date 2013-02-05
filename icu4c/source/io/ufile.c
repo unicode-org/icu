@@ -300,7 +300,7 @@ u_fgetConverter(UFILE *file)
     return file->fConverter;
 }
 #if !UCONFIG_NO_FORMATTING
-U_CAPI const UNumberFormat* U_EXPORT2 u_fgetNumberFormat(const UFILE *file)
+U_CAPI const UNumberFormat* U_EXPORT2 u_fgetNumberFormat(UFILE *file)
 {
     return u_locbund_getNumberFormat(&file->str.fBundle, UNUM_DECIMAL);
 }

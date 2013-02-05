@@ -445,7 +445,7 @@ U_STABLE UConverter* U_EXPORT2 u_fgetConverter(UFILE *f);
  * @return alias to the number formatter (The formatter <EM>must not</EM> be modified or closed)
  * @draft ICU 51
 */
- U_DRAFT const UNumberFormat* U_EXPORT2 u_fgetNumberFormat(const UFILE *f);
+ U_DRAFT const UNumberFormat* U_EXPORT2 u_fgetNumberFormat(UFILE *f);
 
 /* Output functions */
 
