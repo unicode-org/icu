@@ -3,9 +3,9 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 50</title>
+    <title>ReadMe for ICU 51</title>
     <meta name="COPYRIGHT" content=
-    "Copyright (c) 1997-2012 IBM Corporation and others. All Rights Reserved." />
+    "Copyright (c) 1997-2013 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
     "ICU; International Components for Unicode; ICU4C; what's new; readme; read me; introduction; downloads; downloading; building; installation;" />
     <meta name="DESCRIPTION" content=
@@ -16,7 +16,7 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 50 (Release Candidate) ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 51 (Release Candidate) ReadMe</h1>
 
     <!--<p><b>Note:</b> This is a development milestone release of ICU4C 50.
     This milestone is intended for those wishing to get an early look at ICU 50 new features and API changes.
@@ -24,8 +24,8 @@
     <!--<p><b>Note:</b> This is a release candidate version of ICU4C 50.
     It is not recommended for production use.</p>-->
 
-    <p>Last updated: 2012-Oct-31<br />
-     Copyright &copy; 1997-2012 International Business Machines Corporation and
+    <p>Last updated: 2013-Feb-5<br />
+     Copyright &copy; 1997-2013 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
     <hr />
@@ -224,55 +224,21 @@
     <a href="http://site.icu-project.org/download/milestone">ICU milestone download page</a>.
     </p>
 
-    <h3>Thread safety support cannot be removed</h3>
-    <p>ICU4C 50 dropped support for the --enable-threads/--disable-threads configure option
-    and the uconfig.h <code>ICU_USE_THREADS</code> switch.
-    ICU4C 50 and higher is always built with multi-threading safety support.
-    ICU4C has never created threads in its libraries.</p>
+    <h3>C++ BasicTimeZone subclassing-API breaking changes</h3>
+    <p>We have made make some changes to the C++ BasicTimeZone(basictz.h) for ICU 51
+    that will make it easier to use some time zone support features found in BasicTimeZone
+    (basictz.h), but the changes are incompatible for subclasses. If there are subclasses,
+    they will have to be modified as well.</p>
 
-    <p>If you need to prevent ICU from using thread safe mutexes when your application does
-    not create threads, then you can use the --enable-weak-threads configure option.
-    The --enable-weak-threads configure option will cause ICU to weakly reference the
-    pthread mutex functions, and the stub implementations in the C runtime will be used.
-    If this configure option does not work on your platform, then you can call
-    <code>u_setMutexFunctions()</code> and <code>u_setAtomicIncDecFunctions()</code>
-    with your own empty implementations.</p>
+    <p>BasicTimeZone is a subclass of TimeZone and providing some enhanced features, such as
+    getNextTransition and getPreviousTransition. The class is used as the base class of all
+    of ICU's time zone implementation classes. User Classes directly extending TimeZone and
+    consumers of ICU TimeZone implementation classes are not affected by the changes.</p>
 
-    <h3>The default compilers have changed</h3>
-    <p>ICU has changed the compilers chosen by default. If the clang and clang++ compilers
-    are available, those will be used instead of gcc and g++. If the clang compilers
-    are not available, then gcc and g++ will be used just as before. The clang++ compiler
-    provides C++11 support and some optimizations that are helpful to ICU. The API
-    remains the same between these two sets of compilers, but ICU can internally leverage
-    language features and optimizations that are available in clang++.</p>
-
-    <p>If you need to force ICU to compile with gcc and g++, then you can use the following
-    from the command line in the source directory:</p>
-
-<pre>
-<samp>./configure CC=gcc CXX=g++ CFLAGS=-O3 CXXFLAGS=-O3</samp>
-</pre>
-
-    <h3>C++ Collator subclassing-API breaking changes</h3>
-    <p>We have made some changes to the C++ Collator API for ICU 50
-    that will make it easier to use and implement the Collator but
-    which are incompatible for subclasses.
-    If there are subclasses, they will have to be modified as well.
-    It will be easy to adapt subclass source code, if there is any.
-    We think it is unlikely (or at least rare) that users write subclasses of the C++ Collator,
-    given the number of virtual methods and the complexities of a collation implementation.</p>
-
-    <p>For details see the email "ICU4C C++ Collator subclassing-API breaking changes"
-    sent on 2012-jul-25 to the icu-design and icu-support
+    <p>For details see the email "ICU4C C++ BasicTimeZone subclassing-API breaking changes"
+    sent on 2013-Feb-5 to the icu-support
     <a href="http://site.icu-project.org/contacts">mailing lists</a>,
-    and <a href="http://bugs.icu-project.org/trac/ticket/9346">ICU ticket #9346</a>,
-    including the <a href="http://bugs.icu-project.org/trac/review/9346">changes for that ticket</a>.</p>
-
-    <p>In particular, the <code>class TestCollator</code> in
-    <a href="http://bugs.icu-project.org/trac/browser/icu/trunk/source/test/intltest/apicoll.cpp"><code>source/test/intltest/apicoll.cpp</code></a>
-    <a href="http://bugs.icu-project.org/trac/changeset/32100#file5">illustrates how a subclass needs to be changed</a>.
-    However, note that the TestCollator was also simplified slightly;
-    not all changes made there were strictly required for the API signature changes.</p>
+    and <a href="http://bugs.icu-project.org/trac/ticket/9648">ICU ticket #9648</a>.
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
