@@ -36,6 +36,9 @@
     <ClCompile Include="ClassDefinitionTables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ContextualGlyphInsertionProc2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="ContextualGlyphSubstProc.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -264,6 +267,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContextualGlyphInsertion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ContextualGlyphInsertionProc2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ContextualGlyphSubstitution.h">

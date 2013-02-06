@@ -251,6 +251,7 @@
     <ClCompile Include="CanonData.cpp" />
     <ClCompile Include="CanonShaping.cpp" />
     <ClCompile Include="ClassDefinitionTables.cpp" />
+    <ClCompile Include="ContextualGlyphInsertionProc2.cpp" />
     <ClCompile Include="ContextualGlyphSubstProc.cpp" />
     <ClCompile Include="ContextualSubstSubtables.cpp" />
     <ClCompile Include="CoverageTables.cpp" />
@@ -329,6 +330,7 @@
     <ClInclude Include="CharSubstitutionFilter.h" />
     <ClInclude Include="ClassDefinitionTables.h" />
     <ClInclude Include="ContextualGlyphInsertion.h" />
+    <ClInclude Include="ContextualGlyphInsertionProc2.h" />
     <ClInclude Include="ContextualGlyphSubstitution.h" />
     <ClInclude Include="ContextualGlyphSubstProc.h" />
     <ClInclude Include="ContextualSubstSubtables.h" />
