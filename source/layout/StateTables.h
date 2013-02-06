@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2004 - All Rights Reserved
+ * (C) Copyright IBM Corp. and others 1998-2013 - All Rights Reserved
  *
  */
 
@@ -23,6 +23,14 @@ struct StateTableHeader
     ByteOffset classTableOffset;
     ByteOffset stateArrayOffset;
     ByteOffset entryTableOffset;
+};
+
+struct StateTableHeader2 
+{
+    le_uint32 nClasses;
+    le_uint32 classTableOffset;
+    le_uint32 stateArrayOffset;
+    le_uint32 entryTableOffset;
 };
 
 enum ClassCodes
@@ -58,6 +66,14 @@ struct StateEntry
 {
     ByteOffset  newStateOffset;
     le_int16    flags;
+};
+
+typedef le_uint16 EntryTableIndex2;
+
+struct StateEntry2 // same struct different interpretation
+{
+    le_uint16    newStateIndex;
+    le_uint16    flags;
 };
 
 U_NAMESPACE_END

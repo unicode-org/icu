@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2012 - All Rights Reserved
+ * (C) Copyright IBM Corp. and others 1998-2013 - All Rights Reserved
  *
  */
 
@@ -99,6 +99,10 @@ le_uint32 LookupProcessor::applySingleLookup(le_uint16 lookupTableIndex, GlyphIt
     }    
 
     const LookupTable *lookupTable = lookupListTable->getLookupTable(lookupTableIndex);
+    if (lookupTable == NULL) {
+        success = LE_INTERNAL_ERROR;
+        return 0;
+    }
     le_uint16 lookupFlags = SWAPW(lookupTable->lookupFlags);
     GlyphIterator tempIterator(*glyphIterator, lookupFlags);
     le_uint32 delta = applyLookupTable(lookupTable, &tempIterator, fontInstance, success);

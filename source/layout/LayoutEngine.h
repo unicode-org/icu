@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. 1998-2011 - All Rights Reserved
+ * (C) Copyright IBM Corp. and others 1998-2013 - All Rights Reserved
  */
 
 #ifndef __LAYOUTENGINE_H
@@ -64,10 +64,10 @@ class LEGlyphStorage;
 class U_LAYOUT_API LayoutEngine : public UObject {
 public:
 #ifndef U_HIDE_INTERNAL_API
-    /** @internal Flag to request kerning. */
+    /** @internal Flag to request kerning. Use LE_Kerning_FEATURE_FLAG instead. */
     static const le_int32 kTypoFlagKern;
-    /** @internal Flag to request ligatures. */
-    static const le_int32 kTypoFlagLiga;
+    /** @internal Flag to request ligatures. Use LE_Ligatures_FEATURE_FLAG instead. */
+    static const le_int32 kTypoFlagLiga;	
 #endif  /* U_HIDE_INTERNAL_API */
 
 protected:
