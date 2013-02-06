@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2012 - All Rights Reserved
+ * (C) Copyright IBM Corp. and others 1998-2013 - All Rights Reserved
  *
  */
 
@@ -454,7 +454,7 @@ enum LEFeatureTags {
     LE_CALT_FEATURE_TAG = 0x63616C74UL, /**< 'calt' */
     LE_CASE_FEATURE_TAG = 0x63617365UL, /**< 'case' */
     LE_CCMP_FEATURE_TAG = 0x63636D70UL, /**< 'ccmp' */
-	LE_CJCT_FEATURE_TAG = 0x636A6374UL, /**< 'cjct' */
+    LE_CJCT_FEATURE_TAG = 0x636A6374UL, /**< 'cjct' */
     LE_CLIG_FEATURE_TAG = 0x636C6967UL, /**< 'clig' */
     LE_CPSP_FEATURE_TAG = 0x63707370UL, /**< 'cpsp' */
     LE_CSWH_FEATURE_TAG = 0x63737768UL, /**< 'cswh' */
@@ -518,7 +518,7 @@ enum LEFeatureTags {
     LE_RAND_FEATURE_TAG = 0x72616E64UL, /**< 'rand' */
     LE_RLIG_FEATURE_TAG = 0x726C6967UL, /**< 'rlig' */
     LE_RPHF_FEATURE_TAG = 0x72706866UL, /**< 'rphf' */
-	LE_RKRF_FEATURE_TAG = 0x726B7266UL, /**< 'rkrf' */
+    LE_RKRF_FEATURE_TAG = 0x726B7266UL, /**< 'rkrf' */
     LE_RTBD_FEATURE_TAG = 0x72746264UL, /**< 'rtbd' */
     LE_RTLA_FEATURE_TAG = 0x72746C61UL, /**< 'rtla' */
     LE_RUBY_FEATURE_TAG = 0x72756279UL, /**< 'ruby' */
@@ -568,6 +568,64 @@ enum LEFeatureTags {
     LE_VRT2_FEATURE_TAG = 0x76727432UL, /**< 'vrt2' */
     LE_ZERO_FEATURE_TAG = 0x7A65726FUL  /**< 'zero' */
 };
+
+/**
+ * @internal
+ */
+enum LEFeatureENUMs {
+  LE_Kerning_FEATURE_ENUM = 0,   /**< Requests Kerning. Formerly LayoutEngine::kTypoFlagKern */
+  LE_Ligatures_FEATURE_ENUM = 1, /**< Requests Ligatures. Formerly LayoutEngine::kTypoFlagLiga */
+  LE_CLIG_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_DLIG_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_HLIG_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_LIGA_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_RLIG_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_SMCP_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_FRAC_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_AFRC_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_ZERO_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_SWSH_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_CSWH_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_SALT_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_NALT_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_RUBY_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_SS01_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_SS02_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_SS03_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_SS04_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_SS05_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_SS06_FEATURE_ENUM,  /**< Feature specific enum */
+  LE_SS07_FEATURE_ENUM,   /**< Feature specific enum */
+  
+  LE_CHAR_FILTER_FEATURE_ENUM = 31, /**< Apply CharSubstitutionFilter */
+  LE_FEATURE_ENUM_MAX = LE_CHAR_FILTER_FEATURE_ENUM
+};
+
+#define LE_Kerning_FEATURE_FLAG   (1 << LE_Kerning_FEATURE_ENUM)
+#define LE_Ligatures_FEATURE_FLAG (1 << LE_Ligatures_FEATURE_ENUM)
+#define LE_CLIG_FEATURE_FLAG (1 << LE_CLIG_FEATURE_ENUM)
+#define LE_DLIG_FEATURE_FLAG (1 << LE_DLIG_FEATURE_ENUM)
+#define LE_HLIG_FEATURE_FLAG (1 << LE_HLIG_FEATURE_ENUM)
+#define LE_LIGA_FEATURE_FLAG (1 << LE_LIGA_FEATURE_ENUM)
+#define LE_RLIG_FEATURE_FLAG (1 << LE_RLIG_FEATURE_ENUM)
+#define LE_SMCP_FEATURE_FLAG (1 << LE_SMCP_FEATURE_ENUM)
+#define LE_FRAC_FEATURE_FLAG (1 << LE_FRAC_FEATURE_ENUM)
+#define LE_AFRC_FEATURE_FLAG (1 << LE_AFRC_FEATURE_ENUM)
+#define LE_ZERO_FEATURE_FLAG (1 << LE_ZERO_FEATURE_ENUM)
+#define LE_SWSH_FEATURE_FLAG (1 << LE_SWSH_FEATURE_ENUM)
+#define LE_CSWH_FEATURE_FLAG (1 << LE_CSWH_FEATURE_ENUM)
+#define LE_SALT_FEATURE_FLAG (1 << LE_SALT_FEATURE_ENUM)
+#define LE_NALT_FEATURE_FLAG (1 << LE_NALT_FEATURE_ENUM)
+#define LE_RUBY_FEATURE_FLAG (1 << LE_RUBY_FEATURE_ENUM)
+#define LE_SS01_FEATURE_FLAG (1 << LE_SS01_FEATURE_ENUM)
+#define LE_SS02_FEATURE_FLAG (1 << LE_SS02_FEATURE_ENUM)
+#define LE_SS03_FEATURE_FLAG (1 << LE_SS03_FEATURE_ENUM)
+#define LE_SS04_FEATURE_FLAG (1 << LE_SS04_FEATURE_ENUM)
+#define LE_SS05_FEATURE_FLAG (1 << LE_SS05_FEATURE_ENUM)
+#define LE_SS06_FEATURE_FLAG (1 << LE_SS06_FEATURE_ENUM)
+#define LE_SS07_FEATURE_FLAG (1 << LE_SS07_FEATURE_ENUM)
+
+#define LE_CHAR_FILTER_FEATURE_FLAG (1 << LE_CHAR_FILTER_FEATURE_ENUM)
 
 /**
  * Error codes returned by the LayoutEngine.
