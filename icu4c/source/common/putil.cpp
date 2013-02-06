@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2012, International Business Machines
+*   Copyright (C) 1997-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -97,7 +97,7 @@
 #   define ICU_NO_USER_DATA_OVERRIDE 1
 #elif U_PLATFORM == U_PF_OS390
 #   include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
-#elif U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD
+#elif U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM == U_PF_SOLARIS
 #   include <limits.h>
 #   include <unistd.h>
 #elif U_PLATFORM == U_PF_QNX
@@ -671,12 +671,16 @@ uprv_timezone()
 extern U_IMPORT char *U_TZNAME[];
 #endif
 
-#if !UCONFIG_NO_FILE_IO && (U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD)
+#if !UCONFIG_NO_FILE_IO && (U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM == U_PF_SOLARIS)
 /* These platforms are likely to use Olson timezone IDs. */
 #define CHECK_LOCALTIME_LINK 1
 #if U_PLATFORM_IS_DARWIN_BASED
 #include <tzfile.h>
 #define TZZONEINFO      (TZDIR "/")
+#elif U_PLATFORM == U_PF_SOLARIS
+#define TZDEFAULT       "/etc/localtime"
+#define TZZONEINFO      "/usr/share/lib/zoneinfo/"
+#define TZ_ENV_CHECK    "localtime"
 #else
 #define TZDEFAULT       "/etc/localtime"
 #define TZZONEINFO      "/usr/share/zoneinfo/"
@@ -1006,8 +1010,12 @@ uprv_tzname(int n)
 /* This code can be temporarily disabled to test tzname resolution later on. */
 #ifndef DEBUG_TZNAME
     tzid = getenv("TZ");
-    if (tzid != NULL && isValidOlsonID(tzid))
-    {
+    if (tzid != NULL && isValidOlsonID(tzid)
+#if U_PLATFORM == U_PF_SOLARIS
+    /* When TZ equals localtime on Solaris, check the /etc/localtime file. */
+        && uprv_strcmp(tzid, TZ_ENV_CHECK) != 0
+#endif
+    ) {
         /* This might be a good Olson ID. */
         skipZoneIDPrefix(&tzid);
         return tzid;
