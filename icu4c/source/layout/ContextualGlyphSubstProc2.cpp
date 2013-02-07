@@ -79,16 +79,16 @@ TTGlyphID ContextualGlyphSubstitutionProcessor2::lookup(le_uint32 offset, LEGlyp
     switch (format) {
         case ltfSimpleArray: {
 #ifdef TEST_FORMAT
-			// Disabled pending for design review
+            // Disabled pending for design review
             SimpleArrayLookupTable *lookupTable0 = (SimpleArrayLookupTable *) lookupTable;
             TTGlyphID glyphCode = (TTGlyphID) LE_GET_GLYPH(gid);
             newGlyph = SWAPW(lookupTable0->valueArray[glyphCode]);
 #endif
             break;
         }
-        case ltfSegmentSingle: {            
+        case ltfSegmentSingle: {
 #ifdef TEST_FORMAT
-			// Disabled pending for design review
+            // Disabled pending for design review
             SegmentSingleLookupTable *lookupTable2 = (SegmentSingleLookupTable *) lookupTable;
             const LookupSegment *segment = lookupTable2->lookupSegment(lookupTable2->segments, gid);
             if (segment != NULL) {
@@ -101,9 +101,10 @@ TTGlyphID ContextualGlyphSubstitutionProcessor2::lookup(le_uint32 offset, LEGlyp
             printf("Context Lookup Table Format4: specific interpretation needed!\n");
             break;
         }
-        case ltfSingleTable: {
+        case ltfSingleTable:
+        {
 #ifdef TEST_FORMAT
-			// Disabled pending for design review
+            // Disabled pending for design review
             SingleTableLookupTable *lookupTable6 = (SingleTableLookupTable *) lookupTable;
             const LookupSingle *segment = lookupTable6->lookupSingle(lookupTable6->entries, gid);
             if (segment != NULL) {
