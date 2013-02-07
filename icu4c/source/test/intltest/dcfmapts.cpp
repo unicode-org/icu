@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -52,6 +52,12 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
             if(exec) {
                logln((UnicodeString)"CurrencyPluralInfo API test---");
                TestCurrencyPluralInfo();
+            }
+            break;
+        case 4: name = "TestScale";
+            if(exec) {
+               logln((UnicodeString)"Scale test---");
+               TestScale();
             }
             break;
         default: name = ""; break;
@@ -448,14 +454,14 @@ void IntlTestDecimalFormatAPI::testRounding(/*char *par*/)
         //for +2.55 with RoundingIncrement=1.0
         pat.setRoundingIncrement(1.0);
         pat.format(Roundingnumber, resultStr);
-        message= (UnicodeString)"round(" + (double)Roundingnumber + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
+        message= (UnicodeString)"Round() failed:  round(" + (double)Roundingnumber + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
         verify(message, resultStr, result[i++]);
         message.remove();
         resultStr.remove();
 
         //for -2.55 with RoundingIncrement=1.0
         pat.format(Roundingnumber1, resultStr);
-        message= (UnicodeString)"round(" + (double)Roundingnumber1 + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
+        message= (UnicodeString)"Round() failed:  round(" + (double)Roundingnumber1 + UnicodeString(",") + mode + UnicodeString(",FALSE) with RoundingIncrement=1.0==>");
         verify(message, resultStr, result[i++]);
         message.remove();
         resultStr.remove();
@@ -467,7 +473,14 @@ void IntlTestDecimalFormatAPI::verify(const UnicodeString& message, const Unicod
     UnicodeString expectedStr("");
     expectedStr=expectedStr + expected;
     if(got != expectedStr ) {
-            errln((UnicodeString)"ERROR: Round() failed:  " + message + got + (UnicodeString)"  Expected : " + expectedStr);
+            errln((UnicodeString)"ERROR: " + message + got + (UnicodeString)"  Expected : " + expectedStr);
+        }
+}
+
+void IntlTestDecimalFormatAPI::verifyString(const UnicodeString& message, const UnicodeString& got, UnicodeString& expected){
+    logln((UnicodeString)message + got + (UnicodeString)" Expected : " + expected);
+    if(got != expected ) {
+            errln((UnicodeString)"ERROR: " + message + got + (UnicodeString)"  Expected : " + expected);
         }
 }
 
@@ -501,4 +514,49 @@ void IntlTestDecimalFormatAPI::testRoundingInc(/*char *par*/)
     }
 }
 
+void IntlTestDecimalFormatAPI::TestScale()
+{
+    typedef struct TestData {
+        double inputValue;
+        int inputScale;
+        char *expectedOutput;
+    } TestData;
+
+    static TestData testData[] = {
+        { 100.0, 3,  "100,000" },
+        { 10034.0, -2, "100.34" },
+        { 0.86, -3, "0.0009" },
+        { -0.000455, 1, "-0%" },
+        { -0.000555, 1, "-1%" },
+        { 0.000455, 1, "0%" },
+        { 0.000555, 1, "1%" },
+    };
+
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat pat(status);
+    if(U_FAILURE(status)) {
+      errcheckln(status, "ERROR: Could not create DecimalFormat (default) - %s", u_errorName(status));
+      return;
+    }
+
+    UnicodeString message;
+    UnicodeString resultStr;
+    UnicodeString exp;
+    UnicodeString percentPattern("#,##0%");
+    pat.setMaximumFractionDigits(4);
+
+    for(int32_t i=0;i < sizeof(testData)/sizeof(testData[0]);i++) {
+        if ( i > 2 ) {
+            pat.applyPattern(percentPattern,status);
+        }
+        pat.setAttribute(UNUM_SCALE,testData[i].inputScale,status);
+        pat.format(testData[i].inputValue, resultStr);
+        message = UnicodeString("Unexpected output for ") + testData[i].inputValue + UnicodeString(" and scale ") + testData[i].inputScale + UnicodeString(". Got: ");
+        exp = testData[i].expectedOutput;
+        verifyString(message, resultStr, exp);
+        message.remove();
+        resultStr.remove();
+        exp.remove();
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */

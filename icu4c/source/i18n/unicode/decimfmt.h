@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2012, International Business Machines
+*   Copyright (C) 1997-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -17,7 +17,8 @@
 *   07/10/97    helena      Made ParsePosition a class and get rid of the function
 *                           hiding problems.
 *   09/09/97    aliu        Ported over support for exponential formats.
-*    07/20/98    stephen        Changed documentation
+*   07/20/98    stephen     Changed documentation
+*   01/30/13    emmons      Added Scaling methods
 ********************************************************************************
 */
 
@@ -2234,6 +2235,7 @@ private:
     ChoiceFormat*           fCurrencyChoice;
 
     DigitList *             fMultiplier;   // NULL for multiplier of one
+    int32_t                 fScale;        
     int32_t                 fGroupingSize;
     int32_t                 fGroupingSize2;
     UBool                   fDecimalSeparatorAlwaysShown;
