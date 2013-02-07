@@ -275,6 +275,19 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                 firstCharsInScripts.remove(hanIndex);
             }
         }
+        // Guard against a degenerate collator where
+        // some script boundary strings are primary ignorable.
+        for (;;) {
+            if (firstCharsInScripts.isEmpty()) {
+                throw new IllegalArgumentException(
+                        "AlphabeticIndex requires some non-ignorable script boundary strings");
+            }
+            if (collatorPrimaryOnly.compare(firstCharsInScripts.get(0), "") == 0) {
+                firstCharsInScripts.remove(0);
+            } else {
+                break;
+            }
+        }
 
         if (exemplarChars != null) {
             addLabels(exemplarChars);
