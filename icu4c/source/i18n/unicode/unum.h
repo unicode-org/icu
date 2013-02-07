@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2012, International Business Machines Corporation and others.
+* Copyright (C) 1997-2013, International Business Machines Corporation and others.
 * All Rights Reserved.
 * Modification History:
 *
@@ -795,7 +795,16 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_PARSE_ALL_INPUT,
 #endif
-
+  /** 
+    * Scale, which adjusts the position of the
+    * decimal point when formatting.  Amounts will be multiplied by 10 ^ (scale)
+    * before they are formatted.  The default value for the scale is 0 ( no adjustment ).
+    *
+    * <p>Example: setting the scale to 3, 123 formats as "123,000"
+    * <p>Example: setting the scale to -4, 123 formats as "0.0123"
+    *
+   * @draft ICU 51 */
+  UNUM_SCALE,
   /** Count of "regular" numeric attributes.
    * @internal */
   UNUM_NUMERIC_ATTRIBUTE_COUNT,
@@ -831,7 +840,8 @@ typedef enum UNumberFormatAttribute {
 * @param attr The attribute to query; one of UNUM_PARSE_INT_ONLY, UNUM_GROUPING_USED,
 * UNUM_DECIMAL_ALWAYS_SHOWN, UNUM_MAX_INTEGER_DIGITS, UNUM_MIN_INTEGER_DIGITS, UNUM_INTEGER_DIGITS,
 * UNUM_MAX_FRACTION_DIGITS, UNUM_MIN_FRACTION_DIGITS, UNUM_FRACTION_DIGITS, UNUM_MULTIPLIER,
-* UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION, UNUM_SECONDARY_GROUPING_SIZE.
+* UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION, UNUM_SECONDARY_GROUPING_SIZE,
+* UNUM_SCALE.
 * @return The value of attr.
 * @see unum_setAttribute
 * @see unum_getDoubleAttribute
@@ -854,7 +864,7 @@ unum_getAttribute(const UNumberFormat*          fmt,
 * UNUM_DECIMAL_ALWAYS_SHOWN, UNUM_MAX_INTEGER_DIGITS, UNUM_MIN_INTEGER_DIGITS, UNUM_INTEGER_DIGITS,
 * UNUM_MAX_FRACTION_DIGITS, UNUM_MIN_FRACTION_DIGITS, UNUM_FRACTION_DIGITS, UNUM_MULTIPLIER,
 * UNUM_GROUPING_SIZE, UNUM_ROUNDING_MODE, UNUM_FORMAT_WIDTH, UNUM_PADDING_POSITION, UNUM_SECONDARY_GROUPING_SIZE,
-* or UNUM_LENIENT_PARSE.
+* UNUM_LENIENT_PARSE, or UNUM_SCALE.
 * @param newValue The new value of attr.
 * @see unum_getAttribute
 * @see unum_getDoubleAttribute
