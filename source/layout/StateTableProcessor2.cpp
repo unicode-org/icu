@@ -58,7 +58,7 @@ void StateTableProcessor2::process(LEGlyphStorage &glyphStorage)
     beginStateTable();
     switch (format) {
         case ltfSimpleArray: {
-            printf("Lookup Table Format0 untested!\n");
+#ifdef TEST_FORMAT
             SimpleArrayLookupTable *lookupTable0 = (SimpleArrayLookupTable *) classTable;
             while ((dir == 1 && currGlyph <= glyphCount) || (dir == -1 && currGlyph >= -1)) {
                 LookupValue classCode = classCodeOOB;
@@ -78,6 +78,7 @@ void StateTableProcessor2::process(LEGlyphStorage &glyphStorage)
                 EntryTableIndex2 entryTableIndex = SWAPW(stateArray[classCode + currentState * nClasses]);
                 currentState = processStateEntry(glyphStorage, currGlyph, entryTableIndex); // return a zero-based index instead of a byte offset
             }
+#endif
             break;
         }
         case ltfSegmentSingle: {

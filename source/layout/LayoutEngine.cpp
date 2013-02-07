@@ -602,22 +602,9 @@ LayoutEngine *LayoutEngine::layoutEngineFactory(const LEFontInstance *fontInstan
             break;
         }
     } else {
-        MorphTableHeader2 *table = (MorphTableHeader2 *)fontInstance->getFontTable(morxTableTag);        
-        if (table != NULL) {
-            le_uint32 version = SWAPL(table->version);
-            switch (version) {
-                case 0x10000: { // mort e.g.:Skia Regular 
-                    const MorphTableHeader *mortTable = (MorphTableHeader *) fontInstance->getFontTable(mortTableTag);            
-                    if (mortTable != NULL) {
-                        result = new GXLayoutEngine(fontInstance, scriptCode, languageCode, mortTable, success);
-                    }
-                    break;    
-                }
-                case 0x20000: { // morx
-                    result = new GXLayoutEngine2(fontInstance, scriptCode, languageCode, table, typoFlags, success);
-                    break;
-                }
-            }
+        MorphTableHeader2 *morxTable = (MorphTableHeader2 *)fontInstance->getFontTable(morxTableTag);
+        if (morxTable != NULL) {
+            result = new GXLayoutEngine2(fontInstance, scriptCode, languageCode, morxTable, typoFlags, success);
         } else {
             const MorphTableHeader *mortTable = (MorphTableHeader *) fontInstance->getFontTable(mortTableTag);
             if (mortTable != NULL) { // mort
