@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 2008-2012, International Business Machines
+*   Copyright (C) 2008-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -337,7 +337,6 @@ public class DateIntervalFormat extends UFormat {
      * @deprecated This API is ICU internal only.
      */
     public DateIntervalFormat(String skeleton, DateIntervalInfo dtItvInfo,
-                               DateTimePatternGenerator generator, 
                                SimpleDateFormat simpleDateFormat)
     {
         SimpleDateFormat dateFormat = simpleDateFormat;
@@ -426,7 +425,7 @@ public class DateIntervalFormat extends UFormat {
     {
         DateIntervalInfo dtitvinf = new DateIntervalInfo(locale);
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
-        return new DateIntervalFormat(skeleton, dtitvinf, generator, new SimpleDateFormat(generator.getBestPattern(skeleton), locale));
+        return new DateIntervalFormat(skeleton, dtitvinf, new SimpleDateFormat(generator.getBestPattern(skeleton), locale));
     }
 
 
@@ -520,7 +519,7 @@ public class DateIntervalFormat extends UFormat {
         // returns a copy.
         dtitvinf = (DateIntervalInfo)dtitvinf.clone(); 
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
-        return new DateIntervalFormat(skeleton, dtitvinf, generator, new SimpleDateFormat(generator.getBestPattern(skeleton), locale));
+        return new DateIntervalFormat(skeleton, dtitvinf, new SimpleDateFormat(generator.getBestPattern(skeleton), locale));
     }
 
 
