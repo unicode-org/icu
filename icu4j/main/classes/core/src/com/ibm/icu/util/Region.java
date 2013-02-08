@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2011-2012, International Business Machines Corporation        *
+ * Copyright (C) 2011-2013, International Business Machines Corporation        *
  * All Rights Reserved.                                                        *
  *******************************************************************************
  */
@@ -518,6 +518,9 @@ public class Region implements Comparable<Region> {
      * @provisional This API might change or be removed in a future release.
      */
     public List<Region> getPreferredValues() {
+
+        loadRegionData();
+
         if ( type == RegionType.DEPRECATED) {
             return Collections.unmodifiableList(preferredValues);
         } else {
