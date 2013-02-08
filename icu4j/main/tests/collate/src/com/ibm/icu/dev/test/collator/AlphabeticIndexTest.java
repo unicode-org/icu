@@ -869,8 +869,8 @@ public class AlphabeticIndexTest extends TestFmwk {
     public void TestHaniFirst() {
         RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(ULocale.ROOT);
         coll.setReorderCodes(UScript.HAN);
-        // TODO: Use the new public API that constructs an index from a collator.
-        AlphabeticIndex index = new AlphabeticIndex(ULocale.ROOT, coll, new UnicodeSet());
+        AlphabeticIndex index = new AlphabeticIndex(coll);
+        assertEquals("getBucketCount()", 1, index.getBucketCount());   // ... (underflow only)
         index.addLabels(ULocale.ENGLISH);
         assertEquals("getBucketCount()", 28, index.getBucketCount());  // ... A-Z ...
         int bucketIndex = index.getBucketIndex("\u897f");
@@ -892,8 +892,9 @@ public class AlphabeticIndexTest extends TestFmwk {
     public void TestPinyinFirst() {
         RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(ULocale.CHINESE);
         coll.setReorderCodes(UScript.HAN);
-        // TODO: Use the new public API that constructs an index from a collator.
-        AlphabeticIndex index = new AlphabeticIndex(ULocale.CHINESE, coll, null);
+        AlphabeticIndex index = new AlphabeticIndex(coll);
+        assertEquals("getBucketCount()", 1, index.getBucketCount());   // ... (underflow only)
+        index.addLabels(ULocale.CHINESE);
         assertEquals("getBucketCount()", 28, index.getBucketCount());  // ... A-Z ...
         int bucketIndex = index.getBucketIndex("\u897f");
         assertEquals("getBucketIndex(U+897F)", 'X' - 'A' + 1, bucketIndex);
@@ -954,8 +955,7 @@ public class AlphabeticIndexTest extends TestFmwk {
      */
     public void TestNoLabels() {
         RuleBasedCollator coll = (RuleBasedCollator) Collator.getInstance(ULocale.ROOT);
-        // TODO: Use the new public API that constructs an index from a collator.
-        AlphabeticIndex<Integer> index = new AlphabeticIndex<Integer>(ULocale.ROOT, coll, new UnicodeSet());
+        AlphabeticIndex<Integer> index = new AlphabeticIndex<Integer>(coll);
         index.addRecord("\u897f", 0);
         index.addRecord("i", 0);
         index.addRecord("\u03B1", 0);
