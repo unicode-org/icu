@@ -76,6 +76,23 @@ void AlphabeticIndexTest::APITest() {
     //printf("getBucketCount() == %d\n", lc);
     delete index;
 
+    // Constructor from a Collator
+    //
+    status = U_ZERO_ERROR;
+    RuleBasedCollator *coll = dynamic_cast<RuleBasedCollator *>(Collator::createInstance(Locale::getChinese(), status));
+    TEST_CHECK_STATUS;
+    TEST_ASSERT(coll != NULL);
+    index = new AlphabeticIndex(coll, status);
+    TEST_CHECK_STATUS;
+    TEST_ASSERT(coll == &index->getCollator());
+    // TODO: The bucket count for an index built from a collator should be one, the underflow label.
+    //       The current implementation adds A-Z if the index is otherwise empty.
+    // TEST_ASSERT(1 == index->getBucketCount(status));
+    TEST_ASSERT(28 == index->getBucketCount(status));
+    TEST_CHECK_STATUS;
+    delete index;
+    
+
     // addLabels()
 
     status = U_ZERO_ERROR;
