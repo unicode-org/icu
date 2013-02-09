@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2009-2012, International Business Machines Corporation and    *
+* Copyright (C) 2009-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -100,6 +100,29 @@ AlphabeticIndex::AlphabeticIndex(const Locale &locale, UErrorCode &status) {
     }
     firstScriptCharacters_ = firstStringsInScript(status);
 }
+
+
+AlphabeticIndex::AlphabeticIndex(RuleBasedCollator *collator, UErrorCode &status) {
+    init(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    if (collator == NULL) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+    }
+    collator_ = collator;
+    collatorPrimaryOnly_ = collator_->clone();
+    if (collatorPrimaryOnly_ == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    collatorPrimaryOnly_->setStrength(Collator::PRIMARY);
+    // Note: initialLabels_ is set to an empty UnicodeSet by init().
+    indexBuildRequired_ = TRUE;
+    firstScriptCharacters_ = firstStringsInScript(status);
+}
+
 
 
 AlphabeticIndex::~AlphabeticIndex() {
@@ -219,6 +242,8 @@ void AlphabeticIndex::buildIndex(UErrorCode &status) {
     // If we have no labels, hard-code a fallback default set of [A-Z]
     // This case can occur with locales that don't have exemplar character data, including root.
     // A no-labels situation will cause other problems; it needs to be avoided.
+    //
+    // TODO: This case should be handled by having an underflow label only.
     if (labelSet.isEmpty()) {
         labelSet.add((UChar32)0x41, (UChar32)0x5A);
     }
