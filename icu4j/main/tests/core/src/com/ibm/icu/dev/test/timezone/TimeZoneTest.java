@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1666,7 +1666,7 @@ public class TimeZoneTest extends TestFmwk
             //  zone id             locale  summer          format      expected display name
             {"Europe/London",       "en",   Boolean.FALSE,  TZSHORT,    "GMT"},
             {"Europe/London",       "en",   Boolean.FALSE,  TZLONG,     "Greenwich Mean Time"},
-            {"Europe/London",       "en",   Boolean.TRUE,   TZSHORT,    "GMT+01:00" /*"BST"*/},
+            {"Europe/London",       "en",   Boolean.TRUE,   TZSHORT,    "GMT+1" /*"BST"*/},
             {"Europe/London",       "en",   Boolean.TRUE,   TZLONG,     "British Summer Time"},
 
             {"America/Anchorage",   "en",   Boolean.FALSE,  TZSHORT,    "AKST"},
@@ -1675,17 +1675,17 @@ public class TimeZoneTest extends TestFmwk
             {"America/Anchorage",   "en",   Boolean.TRUE,   TZLONG,     "Alaska Daylight Time"},
 
             // Southern Hemisphere, all data from meta:Australia_Western
-            {"Australia/Perth",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+08:00"/*"AWST"*/},
+            {"Australia/Perth",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+8"/*"AWST"*/},
             {"Australia/Perth",     "en",   Boolean.FALSE,  TZLONG,     "Australian Western Standard Time"},
             // Note: Perth does not observe DST currently. When display name is missing,
             // the localized GMT format with the current offset is used even daylight name was
             // requested. See #9350.
-            {"Australia/Perth",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+08:00"/*"AWDT"*/},
+            {"Australia/Perth",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+8"/*"AWDT"*/},
             {"Australia/Perth",     "en",   Boolean.TRUE,   TZLONG,     "Australian Western Daylight Time"},
 
-            {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZSHORT,    "GMT-03:00"/*"BRT"*/},
+            {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZSHORT,    "GMT-3"/*"BRT"*/},
             {"America/Sao_Paulo",   "en",   Boolean.FALSE,  TZLONG,     "Brasilia Standard Time"},
-            {"America/Sao_Paulo",   "en",   Boolean.TRUE,   TZSHORT,    "GMT-02:00"/*"BRST"*/},
+            {"America/Sao_Paulo",   "en",   Boolean.TRUE,   TZSHORT,    "GMT-2"/*"BRST"*/},
             {"America/Sao_Paulo",   "en",   Boolean.TRUE,   TZLONG,     "Brasilia Summer Time"},
 
             // No Summer Time, but had it before 1983.
@@ -1695,14 +1695,14 @@ public class TimeZoneTest extends TestFmwk
             {"Pacific/Honolulu",    "en",   Boolean.TRUE,   TZLONG,     "Hawaii-Aleutian Daylight Time"},
 
             // Northern, has Summer, not commonly used.
-            {"Europe/Helsinki",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+02:00"/*"EET"*/},
+            {"Europe/Helsinki",     "en",   Boolean.FALSE,  TZSHORT,    "GMT+2"/*"EET"*/},
             {"Europe/Helsinki",     "en",   Boolean.FALSE,  TZLONG,     "Eastern European Standard Time"},
-            {"Europe/Helsinki",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+03:00"/*"EEST"*/},
+            {"Europe/Helsinki",     "en",   Boolean.TRUE,   TZSHORT,    "GMT+3"/*"EEST"*/},
             {"Europe/Helsinki",     "en",   Boolean.TRUE,   TZLONG,     "Eastern European Summer Time"},
 
             // Repeating the test data for DST.  The test data below trigger the problem reported
             // by Ticket#6644
-            {"Europe/London",       "en",   Boolean.TRUE,   TZSHORT,    "GMT+01:00" /*"BST"*/},
+            {"Europe/London",       "en",   Boolean.TRUE,   TZSHORT,    "GMT+1" /*"BST"*/},
             {"Europe/London",       "en",   Boolean.TRUE,   TZLONG,     "British Summer Time"},
         };
 

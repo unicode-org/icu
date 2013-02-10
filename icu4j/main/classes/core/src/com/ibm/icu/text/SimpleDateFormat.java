@@ -98,8 +98,13 @@ import com.ibm.icu.util.ULocale.Category;
  * ZZZZZ    time zone (ISO 8601)    (Text & Number)     -08:00 & Z (UTC)
  * v        time zone (generic)     (Text)              PT
  * vvvv     time zone (generic)     (Text)              Pacific Time
- * V        time zone (abreviation) (Text)              PST
- * VVVV     time zone (location)    (Text)              United States Time (Los Angeles)
+ * V        time zone (short ID)    (Text)              uslax
+ * VV       time zone (ID)          (Text)              America/Los_Angeles
+ * VVV      time zone (exemplar)    (Text)              Los Angeles
+ * VVVV     time zone (location)    (Text)              Los Angeles Time
+ * O        time zone (GMT offset)  (Text & Number)     GMT-8 & GMT-08:00
+ * X        time zone (ISO 8601)    (Text & Number)     -08, -0800, -08:00 & Z (UTC)
+ * x        time zone (ISO 8601)    (Number)            -08, -0800 & -08:00
  * g*       Julian day              (Number)            2451334
  * A*       milliseconds in day     (Number)            69540000
  * Q*       quarter in year         (Text & Number)     Q1 & 01
@@ -274,14 +279,14 @@ public class SimpleDateFormat extends DateFormat {
      */
     private static final int[] PATTERN_CHAR_TO_LEVEL =
     {
-    //       A   B   C   D    E   F   G    H   I   J   K   L    M   N   O
-        -1, 40, -1, -1, 20,  30, 30,  0,  50, -1, -1, 50, 20,  20, -1, -1,
-    //   P   Q   R    S   T   U  V   W   X   Y  Z
-        -1, 20, -1,  80, -1, 10, 0, 30, -1, 10, 0, -1, -1, -1, -1, -1,
-    //       a   b   c   d    e   f  g   h   i   j    k   l    m   n   o
-        -1, 40, -1, 30,  30, 30, -1, 0, 50, -1, -1,  50, -1,  60, -1, -1,
-    //   p   q   r    s   t   u  v   w   x    y  z
-        -1, 20, -1,  70, -1, 10, 0, 20, -1,  10, 0, -1, -1, -1, -1, -1
+    //       A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
+        -1, 40, -1, -1, 20, 30, 30,  0, 50, -1, -1, 50, 20, 20, -1,  0,
+    //   P   Q   R   S   T   U   V   W   X   Y   Z
+        -1, 20, -1, 80, -1, 10,  0, 30,  0, 10,  0, -1, -1, -1, -1, -1,
+    //       a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
+        -1, 40, -1, 30, 30, 30, -1,  0, 50, -1, -1, 50, -1, 60, -1, -1,
+    //   p   q   r   s   t   u   v   w   x   y   z
+        -1, 20, -1, 70, -1, 10,  0, 20,  0, 10,  0, -1, -1, -1, -1, -1
     };
 
     // When calendar uses hebr numbering (i.e. he@calendar=hebrew),
@@ -798,13 +803,13 @@ public class SimpleDateFormat extends DateFormat {
     private static final int[] PATTERN_CHAR_TO_INDEX =
     {
     //       A   B   C   D   E   F   G   H   I   J   K   L   M   N   O
-        -1, 22, -1, -1, 10,  9, 11,  0,  5, -1, -1, 16, 26,  2, -1, -1,
+        -1, 22, -1, -1, 10,  9, 11,  0,  5, -1, -1, 16, 26,  2, -1, 31,
     //   P   Q   R   S   T   U   V   W   X   Y   Z
-        -1, 27, -1,  8, -1, 30, 29, 13, -1, 18, 23, -1, -1, -1, -1, -1,
+        -1, 27, -1,  8, -1, 30, 29, 13, 32, 18, 23, -1, -1, -1, -1, -1,
     //       a   b   c   d   e   f   g   h   i   j   k   l   m   n   o
         -1, 14, -1, 25,  3, 19, -1, 21, 15, -1, -1,  4, -1,  6, -1, -1,
     //   p   q   r   s   t   u   v   w   x   y   z
-        -1, 28, -1,  7, -1, 20, 24, 12, -1,  1, 17, -1, -1, -1, -1, -1
+        -1, 28, -1,  7, -1, 20, 24, 12, 33,  1, 17, -1, -1, -1, -1, -1
     };
 
     // Map pattern character index to Calendar field number
@@ -824,6 +829,8 @@ public class SimpleDateFormat extends DateFormat {
         /*Qq*/  Calendar.MONTH, Calendar.MONTH,
         /*V*/   Calendar.ZONE_OFFSET,
         /*U*/   Calendar.YEAR,
+        /*O*/   Calendar.ZONE_OFFSET,
+        /*Xx*/  Calendar.ZONE_OFFSET, Calendar.ZONE_OFFSET,
     };
 
     // Map pattern character index to DateFormat field number
@@ -842,6 +849,8 @@ public class SimpleDateFormat extends DateFormat {
         /*Qq*/  DateFormat.QUARTER_FIELD, DateFormat.STANDALONE_QUARTER_FIELD,
         /*V*/   DateFormat.TIMEZONE_SPECIAL_FIELD,
         /*U*/   DateFormat.YEAR_NAME_FIELD,
+        /*O*/   DateFormat.TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD,
+        /*Xx*/  DateFormat.TIMEZONE_ISO_FIELD, DateFormat.TIMEZONE_ISO_LOCAL_FIELD,
     };
 
     // Map pattern character index to DateFormat.Field
@@ -860,6 +869,8 @@ public class SimpleDateFormat extends DateFormat {
         /*Qq*/  DateFormat.Field.QUARTER, DateFormat.Field.QUARTER,
         /*V*/   DateFormat.Field.TIME_ZONE,
         /*U*/   DateFormat.Field.YEAR,
+        /*O*/   DateFormat.Field.TIME_ZONE,
+        /*Xx*/  DateFormat.Field.TIME_ZONE, DateFormat.Field.TIME_ZONE,
     };
 
     /**
@@ -1114,7 +1125,8 @@ public class SimpleDateFormat extends DateFormat {
                 zeroPaddingNumber(currentNumberFormat,buf, value, count, maxIntCount);
             }
             break;
-        case 17: // 'z' - ZONE_OFFSET
+
+        case 17: // 'z' - TIMEZONE_FIELD
             if (count < 4) {
                 // "z", "zz", "zzz"
                 result = tzFormat().format(Style.SPECIFIC_SHORT, tz, date);
@@ -1125,22 +1137,20 @@ public class SimpleDateFormat extends DateFormat {
             }
             buf.append(result);
             break;
-        case 23: // 'Z' - TIMEZONE_RFC
-        {
+        case 23: // 'Z' - TIMEZONE_RFC_FIELD
             if (count < 4) {
-                // RFC822 format
-                result = tzFormat().format(Style.RFC822, tz, date);
+                // RFC822 format - equivalent to ISO 8601 local offset fixed width format
+                result = tzFormat().format(Style.ISO_BASIC_LOCAL_FULL, tz, date);
             } else if (count == 5) {
                 // ISO 8601 extended format
-                result = tzFormat().format(Style.ISO8601, tz, date);
+                result = tzFormat().format(Style.ISO_EXTENDED_FULL, tz, date);
             } else {
                 // long form, localized GMT pattern
                 result = tzFormat().format(Style.LOCALIZED_GMT, tz, date);
             }
                 buf.append(result);
             break;
-            }
-        case 24: // 'v' - TIMEZONE_GENERIC
+        case 24: // 'v' - TIMEZONE_GENERIC_FIELD
             if (count == 1) {
                 // "v"
                 result = tzFormat().format(Style.GENERIC_SHORT, tz, date);
@@ -1149,7 +1159,72 @@ public class SimpleDateFormat extends DateFormat {
                 // "vvvv"
                 result = tzFormat().format(Style.GENERIC_LONG, tz, date);
                 capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.METAZONE_LONG;
-           }
+            }
+            buf.append(result);
+            break;
+        case 29: // 'V' - TIMEZONE_SPECIAL_FIELD
+            if (count == 1) {
+                // "V"
+                result = tzFormat().format(Style.ZONE_ID_SHORT, tz, date);
+            } else if (count == 2) {
+                // "VV"
+                result = tzFormat().format(Style.ZONE_ID, tz, date);
+            } else if (count == 3) {
+                // "VVV"
+                result = tzFormat().format(Style.EXEMPLAR_LOCATION, tz, date);
+            } else if (count == 4) {
+                // "VVVV"
+                result = tzFormat().format(Style.GENERIC_LOCATION, tz, date);
+                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.ZONE_LONG;
+            }
+            buf.append(result);
+            break;
+        case 31: // 'O' - TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD
+            if (count == 1) {
+                // "O" - Short Localized GMT format
+                result = tzFormat().format(Style.LOCALIZED_GMT_SHORT, tz, date);
+            } else if (count == 4) {
+                // "OOOO" - Localized GMT format
+                result = tzFormat().format(Style.LOCALIZED_GMT, tz, date);
+            }
+            buf.append(result);
+            break;
+        case 32: // 'X' - TIMEZONE_ISO_FIELD
+            if (count == 1) {
+                // "X" - ISO Basic/Short
+                result = tzFormat().format(Style.ISO_BASIC_SHORT, tz, date);
+            } else if (count == 2) {
+                // "XX" - ISO Basic/Fixed
+                result = tzFormat().format(Style.ISO_BASIC_FIXED, tz, date);
+            } else if (count == 3) {
+                // "XXX" - ISO Extended/Fixed
+                result = tzFormat().format(Style.ISO_EXTENDED_FIXED, tz, date);
+            } else if (count == 4) {
+                // "XXXX" - ISO Basic/Optional second field
+                result = tzFormat().format(Style.ISO_BASIC_FULL, tz, date);
+            } else if (count == 5) {
+                // "XXXXX" - ISO Extended/Optional second field
+                result = tzFormat().format(Style.ISO_EXTENDED_FULL, tz, date);
+            }
+            buf.append(result);
+            break;
+        case 33: // 'x' - TIMEZONE_ISO_LOCAL_FIELD
+            if (count == 1) {
+                // "x" - ISO Local Basic/Short
+                result = tzFormat().format(Style.ISO_BASIC_LOCAL_SHORT, tz, date);
+            } else if (count == 2) {
+                // "x" - ISO Local Basic/Fixed
+                result = tzFormat().format(Style.ISO_BASIC_LOCAL_FIXED, tz, date);
+            } else if (count == 3) {
+                // "xxx" - ISO Local Extended/Fixed
+                result = tzFormat().format(Style.ISO_EXTENDED_LOCAL_FIXED, tz, date);
+            } else if (count == 4) {
+                // "xxxx" - ISO Local Basic/Optional second field
+                result = tzFormat().format(Style.ISO_BASIC_LOCAL_FULL, tz, date);
+            } else if (count == 5) {
+                // "xxxxx" - ISO Local Extended/Optional second field
+                result = tzFormat().format(Style.ISO_EXTENDED_LOCAL_FULL, tz, date);
+            }
             buf.append(result);
             break;
 
@@ -1189,18 +1264,6 @@ public class SimpleDateFormat extends DateFormat {
             } else {
                 zeroPaddingNumber(currentNumberFormat,buf, (value/3)+1, count, maxIntCount);
             }
-            break;
-        case 29: // 'V' - TIMEZONE_SPECIAL
-            if (count == 1) {
-                // "V"
-                result = tzFormat().format(Style.SPECIFIC_SHORT, tz, date);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.METAZONE_SHORT;
-            } else if (count == 4) {
-                // "VVVV"
-                result = tzFormat().format(Style.GENERIC_LOCATION, tz, date);
-                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.ZONE_LONG;
-            }
-            buf.append(result);
             break;
         default:
             // case 3: // 'd' - DATE
@@ -2409,11 +2472,11 @@ public class SimpleDateFormat extends DateFormat {
                     return pos.getIndex();
                 }
                 return -start;
-                    }
+            }
             case 23: // 'Z' - TIMEZONE_RFC
             {
                 Output<TimeType> tzTimeType = new Output<TimeType>();
-                Style style = (count < 4) ? Style.RFC822 : ((count == 5) ? Style.ISO8601 : Style.LOCALIZED_GMT);
+                Style style = (count < 4) ? Style.ISO_BASIC_LOCAL_FULL : ((count == 5) ? Style.ISO_EXTENDED_FULL : Style.LOCALIZED_GMT);
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
                     tztype = tzTimeType.value;
@@ -2438,8 +2501,91 @@ public class SimpleDateFormat extends DateFormat {
             case 29: // 'V' - TIMEZONE_SPECIAL
             {
                 Output<TimeType> tzTimeType = new Output<TimeType>();
-                // Note: 'v' only supports count 1 and 4
-                Style style = (count < 4) ? Style.SPECIFIC_SHORT : Style.GENERIC_LOCATION;
+                Style style = null;
+                switch (count) {
+                case 1:
+                    style = Style.ZONE_ID_SHORT;
+                    break;
+                case 2:
+                    style = Style.ZONE_ID;
+                    break;
+                case 3:
+                    style = Style.EXEMPLAR_LOCATION;
+                    break;
+                default:
+                    style = Style.GENERIC_LOCATION;
+                    break;
+                }
+                TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
+                if (tz != null) {
+                    tztype = tzTimeType.value;
+                    cal.setTimeZone(tz);
+                    return pos.getIndex();
+                }
+                return -start;
+            }
+            case 31: // 'O' - TIMEZONE_LOCALIZED_GMT_OFFSET
+            {
+                Output<TimeType> tzTimeType = new Output<TimeType>();
+                Style style = (count < 4) ? Style.LOCALIZED_GMT_SHORT : Style.LOCALIZED_GMT;
+                TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
+                if (tz != null) {
+                    tztype = tzTimeType.value;
+                    cal.setTimeZone(tz);
+                    return pos.getIndex();
+                }
+                return -start;
+            }
+            case 32: // 'X' - TIMEZONE_ISO
+            {
+                Output<TimeType> tzTimeType = new Output<TimeType>();
+                Style style;
+                switch (count) {
+                case 1:
+                    style = Style.ISO_BASIC_SHORT;
+                    break;
+                case 2:
+                    style = Style.ISO_BASIC_FIXED;
+                    break;
+                case 3:
+                    style = Style.ISO_EXTENDED_FIXED;
+                    break;
+                case 4:
+                    style = Style.ISO_BASIC_FULL;
+                    break;
+                default: // count >= 5
+                    style = Style.ISO_EXTENDED_FULL;
+                    break;
+                }
+                TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
+                if (tz != null) {
+                    tztype = tzTimeType.value;
+                    cal.setTimeZone(tz);
+                    return pos.getIndex();
+                }
+                return -start;
+            }
+            case 33: // 'x' - TIMEZONE_ISO_LOCAL
+            {
+                Output<TimeType> tzTimeType = new Output<TimeType>();
+                Style style;
+                switch (count) {
+                case 1:
+                    style = Style.ISO_BASIC_LOCAL_SHORT;
+                    break;
+                case 2:
+                    style = Style.ISO_BASIC_LOCAL_FIXED;
+                    break;
+                case 3:
+                    style = Style.ISO_EXTENDED_LOCAL_FIXED;
+                    break;
+                case 4:
+                    style = Style.ISO_BASIC_LOCAL_FULL;
+                    break;
+                default: // count >= 5
+                    style = Style.ISO_EXTENDED_LOCAL_FULL;
+                    break;
+                }
                 TimeZone tz = tzFormat().parse(style, text, pos, tzTimeType);
                 if (tz != null) {
                     tztype = tzTimeType.value;
