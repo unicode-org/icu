@@ -829,4 +829,56 @@ public final class ZoneMeta {
         }
         return zid.toString();
     }
+
+    /**
+     * Returns the time zone's short ID for the zone.
+     * For example, "uslax" for zone "America/Los_Angeles".
+     * @param tz the time zone
+     * @return the short ID of the time zone, or null if the short ID is not available.
+     */
+    public static String getShortID(TimeZone tz) {
+        String canonicalID = null;
+
+        if (tz instanceof OlsonTimeZone) {
+            canonicalID = ((OlsonTimeZone)tz).getCanonicalID();
+        }
+        canonicalID = getCanonicalCLDRID(tz.getID());
+        if (canonicalID == null) {
+            return null;
+        }
+        return getShortIDFromCanonical(canonicalID);
+    }
+
+    /**
+     * Returns the time zone's short ID for the zone ID.
+     * For example, "uslax" for zone ID "America/Los_Angeles".
+     * @param id the time zone ID
+     * @return the short ID of the time zone ID, or null if the short ID is not available.
+     */
+    public static String getShortID(String id) {
+        String canonicalID = getCanonicalCLDRID(id);
+        if (canonicalID == null) {
+            return null;
+        }
+        return getShortIDFromCanonical(canonicalID);
+    }
+
+    private static String getShortIDFromCanonical(String canonicalID) {
+        String shortID = null;
+        String tzidKey = canonicalID.replace('/', ':');
+
+        try {
+            // First, try check if the given ID is canonical
+            UResourceBundle keyTypeData = UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,
+                    "keyTypeData", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+            UResourceBundle typeMap = keyTypeData.get("typeMap");
+            UResourceBundle typeKeys = typeMap.get("timezone");
+            shortID = typeKeys.getString(tzidKey);
+        } catch (MissingResourceException e) {
+            // fall through
+        }
+
+        return shortID;
+    }
+
 }

@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 1996-2012, International Business Machines
+ *   Copyright (C) 1996-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -408,11 +408,42 @@ public abstract class DateFormat extends UFormat {
     public final static int YEAR_NAME_FIELD = 30;
 
     /**
+     * {@icu} FieldPosition selector for 'O' field alignment,
+     * corresponding to the {@link Calendar#ZONE_OFFSET} and
+     * {@link Calendar#DST_OFFSET} fields.  This displays the
+     * localized GMT format.
+     * @draft ICU 51
+     * @provisional This API might change or be removed in a future release.
+     */
+    public final static int TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD = 31;
+
+    /**
+     * {@icu} FieldPosition selector for 'X' field alignment,
+     * corresponding to the {@link Calendar#ZONE_OFFSET} and
+     * {@link Calendar#DST_OFFSET} fields.  This displays the
+     * ISO 8601 local time offset format or UTC indicator ("Z").
+     * @draft ICU 51
+     * @provisional This API might change or be removed in a future release.
+     */
+    public final static int TIMEZONE_ISO_FIELD = 32;
+
+    /**
+     * {@icu} FieldPosition selector for 'x' field alignment,
+     * corresponding to the {@link Calendar#ZONE_OFFSET} and
+     * {@link Calendar#DST_OFFSET} fields.  This displays the
+     * ISO 8601 local time offset format.
+     * @draft ICU 51
+     * @provisional This API might change or be removed in a future release.
+     */
+    public final static int TIMEZONE_ISO_LOCAL_FIELD = 33;
+
+    /**
      * {@icu} Number of FieldPosition selectors for DateFormat.
      * Valid selectors range from 0 to FIELD_COUNT-1.
      * @stable ICU 3.0
      */
-    public final static int FIELD_COUNT = 31; // must == DateFormatSymbols.patternChars.length()
+
+    public final static int FIELD_COUNT = 34; // must == DateFormatSymbols.patternChars.length()
 
     // Proclaim serial compatibility with 1.1 FCS
     private static final long serialVersionUID = 7218322306649953788L;

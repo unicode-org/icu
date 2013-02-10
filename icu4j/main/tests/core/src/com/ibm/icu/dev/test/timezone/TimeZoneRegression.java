@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -854,25 +854,25 @@ public class TimeZoneRegression extends TestFmwk {
         // Description, Result, Expected Result
         String[] DATA = {
             "getDisplayName(false, SHORT)/std zone",
-            z1.getDisplayName(false, TimeZone.SHORT), "GMT+01:30",
+            z1.getDisplayName(false, TimeZone.SHORT), "GMT+1:30",
             "getDisplayName(false, LONG)/std zone",
             z1.getDisplayName(false, TimeZone.LONG ), "GMT+01:30",
             "getDisplayName(true, SHORT)/std zone",
-            z1.getDisplayName(true, TimeZone.SHORT), "GMT+01:30",
+            z1.getDisplayName(true, TimeZone.SHORT), "GMT+1:30",
             "getDisplayName(true, LONG)/std zone",
             z1.getDisplayName(true, TimeZone.LONG ), "GMT+01:30",
             "getDisplayName(false, SHORT)/dst zone",
-            z2.getDisplayName(false, TimeZone.SHORT), "GMT+01:30",
+            z2.getDisplayName(false, TimeZone.SHORT), "GMT+1:30",
             "getDisplayName(false, LONG)/dst zone",
             z2.getDisplayName(false, TimeZone.LONG ), "GMT+01:30",
             "getDisplayName(true, SHORT)/dst zone",
-            z2.getDisplayName(true, TimeZone.SHORT), "GMT+02:15",
+            z2.getDisplayName(true, TimeZone.SHORT), "GMT+2:15",
             "getDisplayName(true, LONG)/dst zone",
             z2.getDisplayName(true, TimeZone.LONG ), "GMT+02:15",
-            "DateFormat.format(std)/std zone", fmt1.format(std), "GMT+01:30",
-            "DateFormat.format(dst)/std zone", fmt1.format(dst), "GMT+01:30",
-            "DateFormat.format(std)/dst zone", fmt2.format(std), "GMT+01:30",
-            "DateFormat.format(dst)/dst zone", fmt2.format(dst), "GMT+02:15",
+            "DateFormat.format(std)/std zone", fmt1.format(std), "GMT+1:30",
+            "DateFormat.format(dst)/std zone", fmt1.format(dst), "GMT+1:30",
+            "DateFormat.format(std)/dst zone", fmt2.format(std), "GMT+1:30",
+            "DateFormat.format(dst)/dst zone", fmt2.format(dst), "GMT+2:15",
         };
 
         for (int i=0; i<DATA.length; i+=3) {
