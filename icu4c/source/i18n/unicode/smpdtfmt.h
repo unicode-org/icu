@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2012, International Business Machines Corporation and
+* Copyright (C) 1997-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -99,8 +99,13 @@ class TimeZoneFormat;
  * ZZZZZ    time zone (ISO 8601)    (Text & Number)     -08:00 & Z
  * v        time zone (generic)     (Text)              PT
  * vvvv     time zone (generic)     (Text)              Pacific Time
- * V        time zone (abreviation) (Text)              PST
- * VVVV     time zone (location)    (Text)              United States Time (Los Angeles)
+ * V        time zone (short ID)    (Text)              uslax
+ * VV       time zone (ID)          (Text)              America/Los_Angeles
+ * VVV      time zone (exemplar)    (Text)              Los Angeles
+ * VVVV     time zone (location)    (Text)              Los Angeles Time
+ * O        time zone (GMT offset)  (Text & Number)     GMT-8 & GMT-08:00
+ * X        time zone (ISO 8601)    (text & Number)     -08, -0800, -08:00 & Z (UTC)
+ * X        time zone (ISO 8601)    (Number)            -08, -0800 & -08:00
  * g        Julian day              (Number)            2451334
  * A        milliseconds in day     (Number)            69540000
  * q        stand alone quarter     (Text & Number)     Q2 & 02

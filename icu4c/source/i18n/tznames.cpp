@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2011-2012, International Business Machines Corporation and    *
+* Copyright (C) 2011-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -24,13 +24,6 @@
 
 
 U_NAMESPACE_BEGIN
-
-static const UChar gEtcPrefix[]         = { 0x45, 0x74, 0x63, 0x2F }; // "Etc/"
-static const int32_t gEtcPrefixLen      = 4;
-static const UChar gSystemVPrefix[]     = { 0x53, 0x79, 0x73, 0x74, 0x65, 0x6D, 0x56, 0x2F }; // "SystemV/
-static const int32_t gSystemVPrefixLen  = 8;
-static const UChar gRiyadh8[]           = { 0x52, 0x69, 0x79, 0x61, 0x64, 0x68, 0x38 }; // "Riyadh8"
-static const int32_t gRiyadh8Len       = 7;
 
 // TimeZoneNames object cache handling
 static UMutex gTimeZoneNamesLock = U_MUTEX_INITIALIZER;
@@ -313,21 +306,7 @@ TimeZoneNames::createInstance(const Locale& locale, UErrorCode& status) {
 
 UnicodeString&
 TimeZoneNames::getExemplarLocationName(const UnicodeString& tzID, UnicodeString& name) const {
-    if (tzID.isEmpty() || tzID.startsWith(gEtcPrefix, gEtcPrefixLen)
-        || tzID.startsWith(gSystemVPrefix, gSystemVPrefixLen) || tzID.indexOf(gRiyadh8, gRiyadh8Len, 0) > 0) {
-        name.setToBogus();
-        return name;
-    }
-
-    int32_t sep = tzID.lastIndexOf((UChar)0x2F /* '/' */);
-    if (sep > 0 && sep + 1 < tzID.length()) {
-        name.setTo(tzID, sep + 1);
-        name.findAndReplace(UnicodeString((UChar)0x5f /* _ */),
-                            UnicodeString((UChar)0x20 /* space */));
-    } else {
-        name.setToBogus();
-    }
-    return name;
+    return TimeZoneNamesImpl::getDefaultExemplarLocationName(tzID, name);
 }
 
 UnicodeString&

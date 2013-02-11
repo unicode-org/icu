@@ -117,7 +117,7 @@ static const char gMetaZones[]          = "metaZones";
 static const char gMetazoneInfo[]       = "metazoneInfo";
 static const char gMapTimezonesTag[]    = "mapTimezones";
 
-static const char gTimeZoneTypes[]      = "timezoneTypes";
+static const char gKeyTypeData[]        = "keyTypeData";
 static const char gTypeAliasTag[]       = "typeAlias";
 static const char gTypeMapTag[]         = "typeMap";
 static const char gTimezoneTag[]        = "timezone";
@@ -282,7 +282,7 @@ ZoneMeta::getCanonicalCLDRID(const UnicodeString &tzid, UErrorCode& status) {
         }
     }
 
-    UResourceBundle *top = ures_openDirect(NULL, gTimeZoneTypes, &tmpStatus);
+    UResourceBundle *top = ures_openDirect(NULL, gKeyTypeData, &tmpStatus);
     UResourceBundle *rb = ures_getByKey(top, gTypeMapTag, NULL, &tmpStatus);
     ures_getByKey(rb, gTimezoneTag, rb, &tmpStatus);
     ures_getByKey(rb, id, rb, &tmpStatus);
@@ -431,6 +431,7 @@ ZoneMeta::getCanonicalCountry(const UnicodeString &tzid, UnicodeString &country,
 
                     if (U_SUCCESS(status)) {
                         gCountryInfoVectorsInitialized = TRUE;
+                        ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
                     } else {
                         delete gSingleZoneCountries;
                         delete gMultiZonesCountries;
@@ -828,6 +829,7 @@ ZoneMeta::initAvailableMetaZoneIDs () {
                         gMetaZoneIDs = metaZoneIDs;
                         gMetaZoneIDTable = metaZoneIDTable;
                         gMetaZoneIDsInitialized = TRUE;
+                        ucln_i18n_registerCleanup(UCLN_I18N_ZONEMETA, zoneMeta_cleanup);
                     } else {
                         uhash_close(metaZoneIDTable);
                         delete metaZoneIDs;
@@ -906,6 +908,56 @@ ZoneMeta::formatCustomID(uint8_t hour, uint8_t min, uint8_t sec, UBool negative,
     return id;
 }
 
+const UChar*
+ZoneMeta::getShortID(const TimeZone& tz) {
+    const UChar* canonicalID = NULL;
+    if (dynamic_cast<const OlsonTimeZone *>(&tz) != NULL) {
+        // short cut for OlsonTimeZone
+        const OlsonTimeZone *otz = (const OlsonTimeZone*)&tz;
+        canonicalID = otz->getCanonicalID();
+    }
+    if (canonicalID == NULL) {
+        return NULL;
+    }
+    return getShortIDFromCanonical(canonicalID);
+}
+
+const UChar*
+ZoneMeta::getShortID(const UnicodeString& id) {
+    UErrorCode status = U_ZERO_ERROR;
+    const UChar* canonicalID = ZoneMeta::getCanonicalCLDRID(id, status);
+    if (U_FAILURE(status) || canonicalID == NULL) {
+        return NULL;
+    }
+    return ZoneMeta::getShortIDFromCanonical(canonicalID);
+}
+
+const UChar*
+ZoneMeta::getShortIDFromCanonical(const UChar* canonicalID) {
+    const UChar* shortID = NULL;
+    int32_t len = u_strlen(canonicalID);
+    char tzidKey[ZID_KEY_MAX + 1];
+
+    u_UCharsToChars(canonicalID, tzidKey, len);
+    tzidKey[len] = (char) 0; // Make sure it is null terminated.
+
+    // replace '/' with ':'
+    char *p = tzidKey;
+    while (*p++) {
+        if (*p == '/') {
+            *p = ':';
+        }
+    }
+
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle *rb = ures_openDirect(NULL, gKeyTypeData, &status);
+    ures_getByKey(rb, gTypeMapTag, rb, &status);
+    ures_getByKey(rb, gTimezoneTag, rb, &status);
+    shortID = ures_getStringByKey(rb, tzidKey, NULL, &status);
+    ures_close(rb);
+
+    return shortID;
+}
 
 U_NAMESPACE_END
 

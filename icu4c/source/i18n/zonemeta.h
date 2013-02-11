@@ -90,11 +90,28 @@ public:
      */
     static TimeZone* createCustomTimeZone(int32_t offset);
 
+    /**
+     * Returns the time zone's short ID (null terminated) for the zone.
+     * For example, "uslax" for zone "America/Los_Angeles".
+     * @param tz the time zone
+     * @return the short ID of the time zone, or null if the short ID is not available.
+     */
+    static const UChar* U_EXPORT2 getShortID(const TimeZone& tz);
+
+    /**
+     * Returns the time zone's short ID (null terminated) for the zone ID.
+     * For example, "uslax" for zone ID "America/Los_Angeles".
+     * @param tz the time zone ID
+     * @return the short ID of the time zone ID, or null if the short ID is not available.
+     */
+    static const UChar* U_EXPORT2 getShortID(const UnicodeString& id);
+
 private:
     ZoneMeta(); // Prevent construction.
     static UVector* createMetazoneMappings(const UnicodeString &tzid);
     static void initAvailableMetaZoneIDs();
     static UnicodeString& formatCustomID(uint8_t hour, uint8_t min, uint8_t sec, UBool negative, UnicodeString& id);
+    static const UChar* getShortIDFromCanonical(const UChar* canonicalID);
 };
 
 U_NAMESPACE_END
