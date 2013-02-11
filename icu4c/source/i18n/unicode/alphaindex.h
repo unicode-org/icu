@@ -187,22 +187,6 @@ class U_I18N_API AlphabeticIndex: public UObject {
      * after creation to add the desired labels to the index.
      * 
      * The index adopts the collator, and is responsible for deleting it. 
-     * The caller should make nor further use of the collator after creating the index.
-     * 
-     * @param collator The collator to use to order the contents of this index.
-     * @param status Error code, will be set with the reason if the 
-     *               operation fails.
-     * @draft ICU 51
-     */
-    AlphabeticIndex(RuleBasedCollator *collator, UErrorCode &status);
-
-   /** 
-     * Construct an AlphabeticIndex that uses a specific collator.
-     * 
-     * The index will be created with no labels; the addLabels() function must be called
-     * after creation to add the desired labels to the index.
-     * 
-     * The index adopts the collator, and is responsible for deleting it. 
      * The caller should make no further use of the collator after creating the index.
      * 
      * @param collator The collator to use to order the contents of this index.
