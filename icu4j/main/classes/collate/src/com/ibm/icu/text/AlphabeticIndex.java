@@ -247,27 +247,27 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
 
     /** 
-     * Create an AlphabeticIndex that uses a specific collator.
+     * <p>Create an AlphabeticIndex that uses a specific collator.</p>
      * 
-     * The index will be created with no labels; the addLabels() function must be called
-     * after creation to add the desired labels to the index.
+     * <p>The index will be created with no labels; the addLabels() function must be called
+     * after creation to add the desired labels to the index.</p>
      * 
-     * The index will work directly with the supplied collator. If the caller will need to 
+     * <p>The index will work directly with the supplied collator. If the caller will need to 
      * continue working with the collator it should be cloned first, so that the
-     * collator provided to the AlphabeticIndex remains unchanged after creation of the index.
+     * collator provided to the AlphabeticIndex remains unchanged after creation of the index.</p>
      * 
      * @param collator The collator to use to order the contents of this index.
      * @draft ICU 51
+     * @provisional This API might change or be removed in a future release.
      */
     public AlphabeticIndex(RuleBasedCollator collator) {
         this(null, collator, new UnicodeSet());
     }
 
     /**
-     * @internal
-     * @deprecated This API is ICU internal only, for testing purposes and use with CLDR.
+     * Internal constructor containing implementation used by public constructors.
      */
-    public AlphabeticIndex(ULocale locale, RuleBasedCollator collator, UnicodeSet exemplarChars) {
+    private AlphabeticIndex(ULocale locale, RuleBasedCollator collator, UnicodeSet exemplarChars) {
         collatorOriginal = collator != null ? collator : (RuleBasedCollator) Collator.getInstance(locale);
         try {
             collatorPrimaryOnly = (RuleBasedCollator) (collatorOriginal.clone());
