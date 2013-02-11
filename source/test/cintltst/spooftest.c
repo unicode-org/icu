@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 2009-2012, International Business Machines Corporation and
+ * Copyright (c) 2009-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -408,10 +408,13 @@ static void TestUSpoofCAPI(void) {
         TEST_ASSERT_SUCCESS(status);
         uset_close(tmpSet);
 
-        /* Latin Identifier should now fail; other non-latin test cases should still be OK */
+        /* Latin Identifier should now fail; other non-latin test cases should still be OK
+         *  Note: fail of CHAR_LIMIT also causes the restriction level to be USPOOF_UNRESTRICTIVE
+         *        which will give us a USPOOF_RESTRICTION_LEVEL failure.
+         */
         checkResults = uspoof_check(sc, goodLatin, -1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
-        TEST_ASSERT_EQ(USPOOF_CHAR_LIMIT, checkResults);
+        TEST_ASSERT_EQ(USPOOF_CHAR_LIMIT | USPOOF_RESTRICTION_LEVEL, checkResults);
 
         checkResults = uspoof_check(sc, goodGreek, -1, NULL, &status);
         TEST_ASSERT_SUCCESS(status);
@@ -432,7 +435,7 @@ static void TestUSpoofCAPI(void) {
         checkResults = uspoof_checkUTF8(sc, utf8buf, -1, &position, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(0, checkResults);
-        TEST_ASSERT_EQ(666, position);
+        TEST_ASSERT_EQ(0, position);
 
         u_strToUTF8(utf8buf, sizeof(utf8buf), NULL, goodCyrl, -1, &status);
         TEST_ASSERT_SUCCESS(status);
@@ -446,7 +449,7 @@ static void TestUSpoofCAPI(void) {
         checkResults = uspoof_checkUTF8(sc, utf8buf, -1, &position, &status);
         TEST_ASSERT_SUCCESS(status);
         TEST_ASSERT_EQ(USPOOF_MIXED_SCRIPT_CONFUSABLE | USPOOF_SINGLE_SCRIPT , checkResults);
-        TEST_ASSERT_EQ(2, position);
+        TEST_ASSERT_EQ(0, position);
 
     TEST_TEARDOWN;
 
