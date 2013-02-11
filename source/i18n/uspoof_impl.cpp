@@ -451,7 +451,7 @@ void SpoofImpl::releaseIdentifierInfo(IdentifierInfo *idInfo) const {
         }
         delete idInfo;
     }
-};
+}
 
 
 
