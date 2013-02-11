@@ -997,7 +997,7 @@ uspoof_getRecommendedSet(UErrorCode *status);
   *
   * @draft ICU 51
   */
-U_DRAFT const UnicodeSet * U_EXPORT2
+U_DRAFT const icu::UnicodeSet * U_EXPORT2
 uspoof_getInclusionUnicodeSet(UErrorCode *status);
 
 /**
@@ -1011,7 +1011,7 @@ uspoof_getInclusionUnicodeSet(UErrorCode *status);
   *
   * @draft ICU 51
   */
-U_DRAFT const UnicodeSet * U_EXPORT2
+U_DRAFT const icu::UnicodeSet * U_EXPORT2
 uspoof_getRecommendedUnicodeSet(UErrorCode *status);
 
 #endif /* U_SHOW_CPLUSPLUS_API */
