@@ -94,7 +94,7 @@ IdentifierInfo::IdentifierInfo(UErrorCode &status):
                               fCommonAmongAlternates == NULL || fNumerics == NULL || fIdentifierProfile == NULL)) {
         status = U_MEMORY_ALLOCATION_ERROR;
     }
-};
+}
 
 IdentifierInfo::~IdentifierInfo() {
     delete fIdentifier;
@@ -103,7 +103,7 @@ IdentifierInfo::~IdentifierInfo() {
     delete fCommonAmongAlternates;
     delete fNumerics;
     delete fIdentifierProfile;
-};
+}
 
 
 IdentifierInfo &IdentifierInfo::clear() {
