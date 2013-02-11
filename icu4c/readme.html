@@ -238,7 +238,30 @@
     <p>For details see the email "ICU4C C++ BasicTimeZone subclassing-API breaking changes"
     sent on 2013-Feb-5 to the icu-support
     <a href="http://site.icu-project.org/contacts">mailing lists</a>,
-    and <a href="http://bugs.icu-project.org/trac/ticket/9648">ICU ticket #9648</a>.
+    and <a href="http://bugs.icu-project.org/trac/ticket/9648">ICU ticket #9648</a>.</p>
+
+    <h3>Date format pattern "V"</h3>
+    <p>The date format pattern "V" was introduced in ICU 3.8 (inherited from CLDR 1.5) as
+    a variation of pattern "z" to support time zone abbreviation format such as "PST".
+    The pattern "z" use a time zone abbreviation only when it is commonly used for a locale.
+    The pattern "V" was slightly different from pattern "z" and the pattern designates
+    a time zone abbreviation even it is not commonly used for a locale. For example, time
+    zone abbreviation "AEST" for Australian Eastern Standard Time might not be well recognized
+    by people in the United States. For the zone, pattern "z" does not use "AEST" (instead, use
+    UTC offset format "GMT+10:00, as the fallback) , while pattern "V" used to print out "AEST".
+    In CLDR 21, the data used for checking commonly used or not was completely removed (CLDR
+    ticket <a href="http://unicode.org/cldr/trac/ticket/4052">#4052</a>), so the difference
+    between pattern "z" and "V" is no longer available since ICU 49 (based on CLDR 21 specification).</p>
+
+    <p>In CLDR 23, the CLDR technical committee decided to reuse the semantically deprecated
+    pattern "V" for a different purpose. With the new specification, the date format pattern
+    "V" is used for short time zone IDs, such as "uslax" for zone America/Los_Angeles. ICU 51
+    implements the new specification. So existing ICU users currently using custom date format
+    patterns with pattern "V" are suggested to change them to pattern "z".</p>
+
+   <p>Note that the existing pattern "VVVV" for a time zone's generic location name is not
+   affected by the new specification and the pattern "VVVV" continues to work as same as
+   previous ICU releases.</p>
 
     <h2><a name="Download" href="#Download" id="Download">How To Download the
     Source Code</a></h2>
