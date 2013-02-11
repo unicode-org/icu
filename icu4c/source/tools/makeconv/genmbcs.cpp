@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2012, International Business Machines
+*   Copyright (C) 2000-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1048,6 +1048,11 @@ MBCSAddTable(NewConverter *cnvData, UCMTable *table, UConverterStaticData *stati
             /* set only a fallback mapping from codepage to Unicode */
             staticData->hasToUnicodeFallback=TRUE;
             isOK&=MBCSAddToUnicode(mbcsData, m->b.bytes, m->bLen, c, f);
+            break;
+        case 4:
+            /* move "good one-way" mappings to the extension table */
+            m->f|=MBCS_FROM_U_EXT_FLAG;
+            m->moveFlag=UCM_MOVE_TO_EXT;
             break;
         default:
             /* will not occur because the parser checked it already */
