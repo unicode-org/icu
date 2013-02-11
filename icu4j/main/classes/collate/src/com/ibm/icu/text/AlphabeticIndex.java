@@ -245,16 +245,15 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         this(ULocale.forLocale(locale));
     }
 
-
     /** 
-     * <p>Create an AlphabeticIndex that uses a specific collator.</p>
+     * Create an AlphabeticIndex that uses a specific collator.
      * 
      * <p>The index will be created with no labels; the addLabels() function must be called
-     * after creation to add the desired labels to the index.</p>
+     * after creation to add the desired labels to the index.
      * 
      * <p>The index will work directly with the supplied collator. If the caller will need to 
      * continue working with the collator it should be cloned first, so that the
-     * collator provided to the AlphabeticIndex remains unchanged after creation of the index.</p>
+     * collator provided to the AlphabeticIndex remains unchanged after creation of the index.
      * 
      * @param collator The collator to use to order the contents of this index.
      * @draft ICU 51
