@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -282,6 +282,12 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
     private Map<String, Map<String, PatternInfo>> fIntervalPatterns = null;
 
     private transient boolean frozen = false;
+    
+    // If true, fIntervalPatterns should not be modified in-place because it
+    // is shared with other objects. Unlike frozen which is always true once
+    // set to true, this field can go from true to false as long as frozen is
+    // false.
+    private transient boolean fIntervalPatternsReadOnly = false;
 
 
     /**
@@ -329,26 +335,26 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         if ( dii == null ) {
             // initialize data from scratch
             setup(locale);
-            // TODO: should put a clone in cache?
-            // or put itself in cache?
-            // DIICACHE.put(key, this);
-            dii = (DateIntervalInfo)this.clone();
-            DIICACHE.put(key, dii);
+            // Marking fIntervalPatterns read-only makes cloning cheaper.
+            fIntervalPatternsReadOnly = true;
+            // We freeze what goes in the cache without freezing this object.
+            DIICACHE.put(key, ((DateIntervalInfo) clone()).freeze());
         } else {
-            initializeData(dii);
+            initializeFromReadOnlyPatterns(dii);
         }
     }
 
  
 
-    /*
-     * Initialize DateIntervalInfo from another instance
-     * @param dii  an DateIntervalInfo instance
+    /**
+     * Initialize this object
+     * @param dii must have read-only fIntervalPatterns.
      */
-    private void initializeData(DateIntervalInfo dii) {
+    private void initializeFromReadOnlyPatterns(DateIntervalInfo dii) {
         fFallbackIntervalPattern = dii.fFallbackIntervalPattern;
         fFirstDateInPtnIsLaterDate = dii.fFirstDateInPtnIsLaterDate;
         fIntervalPatterns = dii.fIntervalPatterns;
+        fIntervalPatternsReadOnly = true;
     }
 
 
@@ -550,7 +556,10 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
         if ( lrgDiffCalUnit > MINIMUM_SUPPORTED_CALENDAR_FIELD ) {
             throw new IllegalArgumentException("calendar field is larger than MINIMUM_SUPPORTED_CALENDAR_FIELD");
         }
-
+        if (fIntervalPatternsReadOnly) {
+            fIntervalPatterns = cloneIntervalPatterns(fIntervalPatterns);
+            fIntervalPatternsReadOnly = false;
+        }
         PatternInfo ptnInfo = setIntervalPatternInternally(skeleton,
                           CALENDAR_FIELD_TO_PATTERN_LETTER[lrgDiffCalUnit], 
                           intervalPattern);
@@ -759,16 +768,12 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
             DateIntervalInfo other = (DateIntervalInfo) super.clone();
             other.fFallbackIntervalPattern=fFallbackIntervalPattern;
             other.fFirstDateInPtnIsLaterDate = fFirstDateInPtnIsLaterDate;
-            other.fIntervalPatterns = new HashMap<String, Map<String, PatternInfo>>();
-            for (String skeleton : fIntervalPatterns.keySet()) {
-                Map<String, PatternInfo> patternsOfOneSkeleton = fIntervalPatterns.get(skeleton);
-                Map<String, PatternInfo> oneSetPtn = new HashMap<String, PatternInfo>();
-                for (Entry<String, PatternInfo> calEntry : patternsOfOneSkeleton.entrySet()) {
-                    String calField = calEntry.getKey();
-                    PatternInfo value = calEntry.getValue();
-                    oneSetPtn.put(calField, value);
-                }
-                other.fIntervalPatterns.put(skeleton, oneSetPtn);
+            if (fIntervalPatternsReadOnly) {
+                other.fIntervalPatterns = fIntervalPatterns;
+                other.fIntervalPatternsReadOnly = true;
+            } else {
+                other.fIntervalPatterns = cloneIntervalPatterns(fIntervalPatterns);
+                other.fIntervalPatternsReadOnly = false;
             }
             other.frozen = false;
             return other;
@@ -778,6 +783,24 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
             ///CLOVER:ON
         }
     }
+    
+    private static Map<String, Map<String, PatternInfo>> cloneIntervalPatterns(
+            Map<String, Map<String, PatternInfo>> patterns) {
+        Map<String, Map<String, PatternInfo>> result = new HashMap<String, Map<String, PatternInfo>>();
+        for (Entry<String, Map<String, PatternInfo>> skeletonEntry : patterns.entrySet()) {
+            String skeleton = skeletonEntry.getKey();
+            Map<String, PatternInfo> patternsOfOneSkeleton = skeletonEntry.getValue();
+            Map<String, PatternInfo> oneSetPtn = new HashMap<String, PatternInfo>();
+            for (Entry<String, PatternInfo> calEntry : patternsOfOneSkeleton.entrySet()) {
+                String calField = calEntry.getKey();
+                PatternInfo value = calEntry.getValue();
+                oneSetPtn.put(calField, value);
+            }
+            result.put(skeleton, oneSetPtn);
+        }
+        return result;
+    }
+    
 
     
     /**
@@ -794,6 +817,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
      */
     public DateIntervalInfo freeze() {
         frozen = true;
+        fIntervalPatternsReadOnly = true;
         return this;
     }
     
