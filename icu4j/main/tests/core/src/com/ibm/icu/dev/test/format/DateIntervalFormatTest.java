@@ -1215,6 +1215,19 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         } catch(Exception e){}
     }
     
+    public void TestSetIntervalPatternNoSideEffect() {
+        PatternInfo patternInfo = new DateIntervalInfo(ULocale.ENGLISH).getIntervalPattern("yMd", Calendar.DATE);
+        String expectedPattern = patternInfo.getFirstPart() + patternInfo.getSecondPart();
+        new DateIntervalInfo(ULocale.ENGLISH).setIntervalPattern(
+                "yMd", Calendar.DATE, "M/d/y \u2013 d");
+        patternInfo = new DateIntervalInfo(ULocale.ENGLISH).getIntervalPattern("yMd", Calendar.DATE);
+        String actualPattern = patternInfo.getFirstPart() + patternInfo.getSecondPart();
+        assertEquals(
+                "setIntervalPattern should not have side effects",
+                expectedPattern,
+                actualPattern);
+    }
+    
     /* Tests the method
      *      public int hashCode()
      */
