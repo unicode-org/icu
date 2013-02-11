@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation
+ * Copyright (c) 1997-2013, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -2113,7 +2113,7 @@ static struct   {
      //  zone id         locale   summer   format          expected display name
       {"Europe/London",     "en", FALSE, TimeZone::SHORT, "GMT"},
       {"Europe/London",     "en", FALSE, TimeZone::LONG,  "Greenwich Mean Time"},
-      {"Europe/London",     "en", TRUE,  TimeZone::SHORT, "GMT+01:00" /*"BST"*/},
+      {"Europe/London",     "en", TRUE,  TimeZone::SHORT, "GMT+1" /*"BST"*/},
       {"Europe/London",     "en", TRUE,  TimeZone::LONG,  "British Summer Time"},
       
       {"America/Anchorage", "en", FALSE, TimeZone::SHORT, "AKST"},
@@ -2122,17 +2122,17 @@ static struct   {
       {"America/Anchorage", "en", TRUE,  TimeZone::LONG,  "Alaska Daylight Time"},
       
       // Southern Hemisphere, all data from meta:Australia_Western
-      {"Australia/Perth",   "en", FALSE, TimeZone::SHORT, "GMT+08:00"/*"AWST"*/},
+      {"Australia/Perth",   "en", FALSE, TimeZone::SHORT, "GMT+8"/*"AWST"*/},
       {"Australia/Perth",   "en", FALSE, TimeZone::LONG,  "Australian Western Standard Time"},
       // Note: Perth does not observe DST currently. When display name is missing,
       // the localized GMT format with the current offset is used even daylight name was
       // requested. See #9350.
-      {"Australia/Perth",   "en", TRUE,  TimeZone::SHORT, "GMT+08:00"/*"AWDT"*/},
+      {"Australia/Perth",   "en", TRUE,  TimeZone::SHORT, "GMT+8"/*"AWDT"*/},
       {"Australia/Perth",   "en", TRUE,  TimeZone::LONG,  "Australian Western Daylight Time"},
        
-      {"America/Sao_Paulo",  "en", FALSE, TimeZone::SHORT, "GMT-03:00"/*"BRT"*/},
+      {"America/Sao_Paulo",  "en", FALSE, TimeZone::SHORT, "GMT-3"/*"BRT"*/},
       {"America/Sao_Paulo",  "en", FALSE, TimeZone::LONG,  "Brasilia Standard Time"},
-      {"America/Sao_Paulo",  "en", TRUE,  TimeZone::SHORT, "GMT-02:00"/*"BRST"*/},
+      {"America/Sao_Paulo",  "en", TRUE,  TimeZone::SHORT, "GMT-2"/*"BRST"*/},
       {"America/Sao_Paulo",  "en", TRUE,  TimeZone::LONG,  "Brasilia Summer Time"},
        
       // No Summer Time, but had it before 1983.
@@ -2142,14 +2142,14 @@ static struct   {
       {"Pacific/Honolulu",   "en", TRUE,  TimeZone::LONG,  "Hawaii-Aleutian Daylight Time"},
        
       // Northern, has Summer, not commonly used.
-      {"Europe/Helsinki",    "en", FALSE, TimeZone::SHORT, "GMT+02:00"/*"EET"*/},
+      {"Europe/Helsinki",    "en", FALSE, TimeZone::SHORT, "GMT+2"/*"EET"*/},
       {"Europe/Helsinki",    "en", FALSE, TimeZone::LONG,  "Eastern European Standard Time"},
-      {"Europe/Helsinki",    "en", TRUE,  TimeZone::SHORT, "GMT+03:00"/*"EEST"*/},
+      {"Europe/Helsinki",    "en", TRUE,  TimeZone::SHORT, "GMT+3"/*"EEST"*/},
       {"Europe/Helsinki",    "en", TRUE,  TimeZone::LONG,  "Eastern European Summer Time"},
 
       // Repeating the test data for DST.  The test data below trigger the problem reported
       // by Ticket#6644
-      {"Europe/London",       "en", TRUE, TimeZone::SHORT, "GMT+01:00" /*"BST"*/},
+      {"Europe/London",       "en", TRUE, TimeZone::SHORT, "GMT+1" /*"BST"*/},
       {"Europe/London",       "en", TRUE, TimeZone::LONG,  "British Summer Time"},
 
       {NULL, NULL, FALSE, TimeZone::SHORT, NULL}   // NULL values terminate list

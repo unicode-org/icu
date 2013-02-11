@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2012, International Business Machines Corporation and    *
+* Copyright (C) 1997-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -1252,7 +1252,11 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
         // appropriate for the requested daylight value.
         if ((daylight && timeType == UTZFMT_TIME_TYPE_STANDARD) || (!daylight && timeType == UTZFMT_TIME_TYPE_DAYLIGHT)) {
             offset = daylight ? getRawOffset() + getDSTSavings() : getRawOffset();
-            tzfmt->formatOffsetLocalizedGMT(offset, result, status);
+            if (style == SHORT_GENERIC) {
+                tzfmt->formatOffsetShortLocalizedGMT(offset, result, status);
+            } else {
+                tzfmt->formatOffsetLocalizedGMT(offset, result, status);
+            }
         }
     } else if (style == LONG_GMT || style == SHORT_GMT) {
         LocalPointer<TimeZoneFormat> tzfmt(TimeZoneFormat::createInstance(locale, status));
@@ -1266,7 +1270,7 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
             tzfmt->formatOffsetLocalizedGMT(offset, result, status);
             break;
         case SHORT_GMT:
-            tzfmt->formatOffsetRFC822(offset, result, status);
+            tzfmt->formatOffsetISO8601Basic(offset, FALSE, FALSE, FALSE, result, status);
             break;
         default:
             U_ASSERT(FALSE);
@@ -1297,7 +1301,11 @@ TimeZone::getDisplayName(UBool daylight, EDisplayType style, const Locale& local
             // Fallback to localized GMT
             LocalPointer<TimeZoneFormat> tzfmt(TimeZoneFormat::createInstance(locale, status));
             offset = daylight && useDaylightTime() ? getRawOffset() + getDSTSavings() : getRawOffset();
-            tzfmt->formatOffsetLocalizedGMT(offset, result, status);
+            if (style == LONG) {
+                tzfmt->formatOffsetLocalizedGMT(offset, result, status);
+            } else {
+                tzfmt->formatOffsetShortLocalizedGMT(offset, result, status);
+            }
         }
     }
     if (U_FAILURE(status)) {

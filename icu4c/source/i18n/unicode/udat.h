@@ -713,7 +713,31 @@ typedef enum UDateFormatField {
      */
     UDAT_YEAR_NAME_FIELD = 30,
 
-   /**
+    /**
+     * FieldPosition selector for 'O' field alignment,
+     * corresponding to the UCAL_ZONE_OFFSET and UCAL_DST_OFFSETfields.
+     * This displays the localized GMT format.
+     * @draft ICU 51
+     */
+    UDAT_TIMEZONE_LOCALIZED_GMT_OFFSET_FIELD = 31,
+
+    /**
+     * FieldPosition selector for 'X' field alignment,
+     * corresponding to the UCAL_ZONE_OFFSET and UCAL_DST_OFFSETfields.
+     * This displays the ISO 8601 local time offset format or UTC indicator ("Z").
+     * @draft ICU 51
+     */
+    UDAT_TIMEZONE_ISO_FIELD = 32,
+
+    /**
+     * FieldPosition selector for 'x' field alignment,
+     * corresponding to the UCAL_ZONE_OFFSET and UCAL_DST_OFFSETfields.
+     * This displays the ISO 8601 local time offset format.
+     * @draft ICU 51
+     */
+    UDAT_TIMEZONE_ISO_LOCAL_FIELD = 33,
+
+    /**
      * Number of FieldPosition and UFieldPosition selectors for
      * DateFormat and UDateFormat.
      * Valid selectors range from 0 to UDAT_FIELD_COUNT-1.
@@ -721,7 +745,7 @@ typedef enum UDateFormatField {
      * in the future.
      * @stable ICU 3.0
      */
-    UDAT_FIELD_COUNT = 31
+    UDAT_FIELD_COUNT = 34
 
 } UDateFormatField;
 

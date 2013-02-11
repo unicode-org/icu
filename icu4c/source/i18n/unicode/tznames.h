@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2011-2012, International Business Machines Corporation and    *
+* Copyright (C) 2011-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -60,7 +60,12 @@ typedef enum UTimeZoneNameType {
      * Short display name for daylight saving time, such as "EDT".
      * @draft ICU 50
      */
-    UTZNM_SHORT_DAYLIGHT    = 0x20
+    UTZNM_SHORT_DAYLIGHT    = 0x20,
+    /**
+     * Exemplar location name, such as "Los Angeles".
+     * @draft ICU 51
+     */
+    UTZNM_EXEMPLAR_LOCATION = 0x40
 } UTimeZoneNameType;
 
 U_CDECL_END
