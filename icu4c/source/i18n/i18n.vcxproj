@@ -302,6 +302,7 @@
     <ClCompile Include="gregocal.cpp" />
     <ClCompile Include="gregoimp.cpp" />
     <ClCompile Include="hebrwcal.cpp" />
+    <ClCompile Include="identifier_info.cpp" />
     <ClCompile Include="indiancal.cpp" />
     <ClCompile Include="islamcal.cpp" />
     <ClCompile Include="japancal.cpp" />
@@ -323,6 +324,7 @@
     <ClCompile Include="reldtfmt.cpp" />
     <ClCompile Include="selfmt.cpp" />
     <ClCompile Include="simpletz.cpp" />
+    <ClCompile Include="scriptset.cpp" />
     <ClCompile Include="smpdtfmt.cpp" />
     <ClCompile Include="smpdtfst.cpp" />
     <ClCompile Include="taiwncal.cpp" />
@@ -1546,6 +1548,8 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="identifier_info.h" />
+    <ClInclude Include="scriptset.h" />
     <ClInclude Include="uspoof_conf.h" />
     <ClInclude Include="uspoof_impl.h" />
     <ClInclude Include="uspoof_wsconf.h" />
