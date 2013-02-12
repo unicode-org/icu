@@ -27,8 +27,86 @@ ak{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "AN",
+                "EW",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, G y MMMM dd",
+                "G y MMMM d",
+                "G y MMM d",
+                "GGGGG yy/MM/dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M/d"}
+                MMM{"LLL"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+                d{"d"}
+                hm{"h:mm a"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"M/yyyy"}
+                yMEd{"E, M/d/yyyy"}
+                yMMM{"MMM yyyy"}
+                yMMMEd{"E, MMM d, yyyy"}
+                yMMMM{"MMMM yyyy"}
+                yMd{"y/M/d"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Kwe",
+                        "Dwo",
+                        "Ben",
+                        "Wuk",
+                        "Yaw",
+                        "Fia",
+                        "Mem",
+                    }
+                    wide{
+                        "Kwesida",
+                        "Dwowda",
+                        "Benada",
+                        "Wukuda",
+                        "Yawda",
+                        "Fida",
+                        "Memeneda",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "K",
+                        "D",
+                        "B",
+                        "W",
+                        "Y",
+                        "F",
+                        "M",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "AN",

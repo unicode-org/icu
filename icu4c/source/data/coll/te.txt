@@ -10,10 +10,14 @@
  *  ICU <specials> source: <path>/xml/collation/te.xml
  */
 te{
-    Version{"2.0.50.32"}
+    Version{"2.0.81.30"}
     collations{
         standard{
-            Sequence{" [normalization on]&ఔ<ఁ<ం<ః"}
+            Sequence{
+                " [normalization on] [reorder Telu Deva Beng Guru Gujr Orya Taml Knda"
+                " Mlym Sinh]"
+                "&ఔ<ఁ<ం<ః"
+            }
             Version{"23"}
         }
     }

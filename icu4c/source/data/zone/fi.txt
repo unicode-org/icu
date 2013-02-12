@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fi.xml
  */
 fi{
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -278,51 +278,6 @@ fi{
         }
         "Atlantic:St_Helena"{
             ec{"Saint Helena"}
-        }
-        "Etc:GMT"{
-            ec{"UTC"}
-        }
-        "Etc:GMT-1"{
-            ec{"UTC-1"}
-        }
-        "Etc:GMT-10"{
-            ec{"UTC-10"}
-        }
-        "Etc:GMT-11"{
-            ec{"UTC-11"}
-        }
-        "Etc:GMT-12"{
-            ec{"UTC-12"}
-        }
-        "Etc:GMT-13"{
-            ec{"UTC-13"}
-        }
-        "Etc:GMT-14"{
-            ec{"UTC-14"}
-        }
-        "Etc:GMT-2"{
-            ec{"UTC-2"}
-        }
-        "Etc:GMT-3"{
-            ec{"UTC-3"}
-        }
-        "Etc:GMT-4"{
-            ec{"UTC-4"}
-        }
-        "Etc:GMT-5"{
-            ec{"UTC-5"}
-        }
-        "Etc:GMT-6"{
-            ec{"UTC-6"}
-        }
-        "Etc:GMT-7"{
-            ec{"UTC-7"}
-        }
-        "Etc:GMT-8"{
-            ec{"UTC-8"}
-        }
-        "Etc:GMT-9"{
-            ec{"UTC-9"}
         }
         "Etc:Unknown"{
             ec{"tuntematon"}

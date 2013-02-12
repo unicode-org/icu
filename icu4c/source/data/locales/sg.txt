@@ -27,8 +27,99 @@ sg{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.58"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "ND",
+                "LK",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM y G",
+                "d MMMM y G",
+                "d MMM, y G",
+                "d/M/y GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                M{"M"}
+                MMM{"MMM"}
+                MMMEd{"E d MMM"}
+                MMMMEd{"E d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMMdd{"dd MMM"}
+                MMd{"d/MM"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                ms{"m:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"E d/M/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E d MMM y"}
+                yMMMM{"MMMM y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Bk1",
+                        "Bk2",
+                        "Bk3",
+                        "Bk4",
+                        "Bk5",
+                        "Lâp",
+                        "Lây",
+                    }
+                    wide{
+                        "Bikua-ôko",
+                        "Bïkua-ûse",
+                        "Bïkua-ptâ",
+                        "Bïkua-usïö",
+                        "Bïkua-okü",
+                        "Lâpôsö",
+                        "Lâyenga",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "K",
+                        "S",
+                        "T",
+                        "S",
+                        "K",
+                        "P",
+                        "Y",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "F4-1",
+                        "F4-2",
+                        "F4-3",
+                        "F4-4",
+                    }
+                    wide{
+                        "Fângbisïö ôko",
+                        "Fângbisïö ûse",
+                        "Fângbisïö otâ",
+                        "Fângbisïö usïö",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "ND",

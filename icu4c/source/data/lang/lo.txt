@@ -877,7 +877,7 @@ lo{
         VALLADER{"ວັລລາເດີ"}
         WADEGILE{"ການຖອດອັກສອນແບບເວດ-ໄຈລ໌"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.58"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

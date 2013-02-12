@@ -122,7 +122,7 @@ pt_PT{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.58"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -135,14 +135,111 @@ pt_PT{
                 "dd/MM/yyyy G",
                 "d/M/y G",
                 "{1}, {0}",
-                "{1} às {0}",
-                "{1} às {0}",
+                "{1} 'às' {0}",
+                "{1} 'às' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
             availableFormats{
                 yQQQ{"QQQQ 'de' y G"}
                 yQQQQ{"QQQQ 'de' y G"}
+            }
+        }
+        generic{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d 'de' MMMM 'de' y G",
+                "d 'de' MMMM 'de' y G",
+                "dd/MM/y G",
+                "dd/MM/yy GGGGG",
+                "{1}, {0}",
+                "{1} 'às' {0}",
+                "{1} 'às' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                MMMEd{"E, d/MM"}
+                MMMMEd{"E, d 'de' MMMM"}
+                MMMMd{"d 'de' MMMM"}
+                MMMd{"d/MM"}
+                yMMM{"MM/y"}
+                yMMMEEEEd{"EEEE, d/MM/y"}
+                yMMMEd{"E, d/MM/y"}
+                yMMMM{"MMMM 'de' y"}
+                yMMMMEd{"E, d 'de' MMMM 'de' y"}
+                yMMMMd{"d 'de' MMMM 'de' y"}
+                yMMMd{"d/MM/y"}
+                yQQQ{"QQQQ 'de' y"}
+                yQQQQ{"QQQQ 'de' y"}
+                yyMMM{"MM/yy"}
+                yyMMMEd{"E, d/MM/yy"}
+                yyMMMd{"d/MM/yy"}
+            }
+            dayNames{
+                format{
+                    short{
+                        "Do",
+                        "Sg",
+                        "Te",
+                        "Qu",
+                        "Qi",
+                        "Sx",
+                        "Sb",
+                    }
+                    wide{
+                        "Domingo",
+                        "Segunda-feira",
+                        "Terça-feira",
+                        "Quarta-feira",
+                        "Quinta-feira",
+                        "Sexta-feira",
+                        "Sábado",
+                    }
+                }
+                stand-alone{
+                    wide{
+                        "Domingo",
+                        "Segunda-feira",
+                        "Terça-feira",
+                        "Quarta-feira",
+                        "Quinta-feira",
+                        "Sexta-feira",
+                        "Sábado",
+                    }
+                }
+            }
+            intervalFormats{
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                h{
+                    a{"h a - h a"}
+                    h{"h-h a"}
+                }
+                hm{
+                    h{"h:mm - h:mm a"}
+                }
+                y{
+                    y{"y-y"}
+                }
+            }
+            quarters{
+                format{
+                    wide{
+                        "1.º trimestre",
+                        "2.º trimestre",
+                        "3.º trimestre",
+                        "4.º trimestre",
+                    }
+                }
             }
         }
         gregorian{
@@ -160,8 +257,8 @@ pt_PT{
                 "dd/MM/yyyy",
                 "dd/MM/yy",
                 "{1}, {0}",
-                "{1} às {0}",
-                "{1} às {0}",
+                "{1} 'às' {0}",
+                "{1} 'às' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -315,8 +412,8 @@ pt_PT{
                 "dd/MM/yyyy G",
                 "d/M/y G",
                 "{1}, {0}",
-                "{1} às {0}",
-                "{1} às {0}",
+                "{1} 'às' {0}",
+                "{1} 'às' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }
@@ -357,8 +454,8 @@ pt_PT{
                 "dd/MM/yyyy G",
                 "d/M/y G",
                 "{1}, {0}",
-                "{1} às {0}",
-                "{1} às {0}",
+                "{1} 'às' {0}",
+                "{1} 'às' {0}",
                 "{1}, {0}",
                 "{1}, {0}",
             }

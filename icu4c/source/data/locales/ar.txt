@@ -263,7 +263,7 @@ ar{
         }
         native{"arab"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -381,6 +381,250 @@ ar{
                         "هامل",
                         "نهاس",
                         "باجمن",
+                    }
+                }
+            }
+        }
+        generic{
+            AmPmMarkers{
+                "ص",
+                "م",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE، d MMMM، y",
+                "d MMMM، y",
+                "dd‏/MM‏/y G",
+                "d‏/M‏/y GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E، d"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E، d/M"}
+                MMM{"LLL"}
+                MMMEd{"E، d MMM"}
+                MMMMEd{"E، d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"dd‏/MM"}
+                Md{"d/‏M"}
+                d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M‏/yyyy"}
+                yMEd{"E، d/‏M/‏yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"E، d MMM، y"}
+                yMMMM{"MMMM y"}
+                yMMMd{"d MMM، y"}
+                yMd{"d‏/M‏/yyyy"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+                yyyyMM{"MM‏/yyyy"}
+                yyyyMMMM{"MMMM، y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "الأحد",
+                        "الاثنين",
+                        "الثلاثاء",
+                        "الأربعاء",
+                        "الخميس",
+                        "الجمعة",
+                        "السبت",
+                    }
+                    short{
+                        "الأحد",
+                        "الاثنين",
+                        "الثلاثاء",
+                        "الأربعاء",
+                        "الخميس",
+                        "الجمعة",
+                        "السبت",
+                    }
+                    wide{
+                        "الأحد",
+                        "الاثنين",
+                        "الثلاثاء",
+                        "الأربعاء",
+                        "الخميس",
+                        "الجمعة",
+                        "السبت",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "الأحد",
+                        "الاثنين",
+                        "الثلاثاء",
+                        "الأربعاء",
+                        "الخميس",
+                        "الجمعة",
+                        "السبت",
+                    }
+                    narrow{
+                        "ح",
+                        "ن",
+                        "ث",
+                        "ر",
+                        "خ",
+                        "ج",
+                        "س",
+                    }
+                    short{
+                        "الأحد",
+                        "الاثنين",
+                        "الثلاثاء",
+                        "الأربعاء",
+                        "الخميس",
+                        "الجمعة",
+                        "السبت",
+                    }
+                    wide{
+                        "الأحد",
+                        "الاثنين",
+                        "الثلاثاء",
+                        "الأربعاء",
+                        "الخميس",
+                        "الجمعة",
+                        "السبت",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"M–M"}
+                }
+                MEd{
+                    M{"E، d/‏M – E، d/‏M"}
+                    d{"E، d/‏M –‏ E، d/‏M"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"E، d MMM – E، d MMM"}
+                    d{"E، d – E، d MMM"}
+                }
+                MMMM{
+                    M{"LLLL–LLLL"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"MMM d–d"}
+                }
+                Md{
+                    M{"M/d – M/d"}
+                    d{"M/d – M/d"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"M‏/yyyy – M‏/yyyy"}
+                    y{"M‏/yyyy – M‏/yyyy"}
+                }
+                yMEd{
+                    M{"E، d‏/M‏/yyyy – E، d‏/M‏/yyyy"}
+                    d{"E، dd‏/MM‏/yyyy – E، dd‏/MM‏/yyyy"}
+                    y{"E، d‏/M‏/yyyy – E، d‏/M‏/yyyy"}
+                }
+                yMMM{
+                    M{"MMM – MMM، y"}
+                    y{"MMM، y – MMM، y"}
+                }
+                yMMMEd{
+                    M{"E، d MMM – E، d MMM، y"}
+                    d{"E، d – E، d MMM، yyyy"}
+                    y{"E، d MMM، y – E، d MMM، y"}
+                }
+                yMMMM{
+                    M{"MMMM – MMMM، y"}
+                    y{"MMMM، y – MMMM، y"}
+                }
+                yMMMd{
+                    M{"d MMM – d MMM، yyyy"}
+                    d{"d–d MMM، y"}
+                    y{"d MMM، y – d MMM، y"}
+                }
+                yMd{
+                    M{"d‏/M‏/yyyy – d‏/M‏/yyyy"}
+                    d{"d‏/M‏/yyyy – d‏/M‏/yyyy"}
+                    y{"d‏/M‏/yyyy – d‏/M‏/yyyy"}
+                }
+            }
+            quarters{
+                format{
+                    narrow{
+                        "١",
+                        "٢",
+                        "٣",
+                        "٤",
+                    }
+                    wide{
+                        "الربع الأول",
+                        "الربع الثاني",
+                        "الربع الثالث",
+                        "الربع الرابع",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "١",
+                        "٢",
+                        "٣",
+                        "٤",
                     }
                 }
             }

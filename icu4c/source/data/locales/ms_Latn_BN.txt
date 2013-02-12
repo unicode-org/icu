@@ -20,6 +20,23 @@ ms_Latn_BN{
     }
     Version{"2.0.80.58"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "dd MMMM y G",
+                "d MMMM y G",
+                "dd/MM/y G",
+                "d/MM/yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a zzzz",

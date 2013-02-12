@@ -22,8 +22,57 @@ ii{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "ꎸꄑ",
+                "ꁯꋒ",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ꑭꆏ",
+                        "ꆏꋍ",
+                        "ꆏꑍ",
+                        "ꆏꌕ",
+                        "ꆏꇖ",
+                        "ꆏꉬ",
+                        "ꆏꃘ",
+                    }
+                    wide{
+                        "ꑭꆏꑍ",
+                        "ꆏꊂꋍ",
+                        "ꆏꊂꑍ",
+                        "ꆏꊂꌕ",
+                        "ꆏꊂꇖ",
+                        "ꆏꊂꉬ",
+                        "ꆏꊂꃘ",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ꆏ",
+                        "ꋍ",
+                        "ꑍ",
+                        "ꌕ",
+                        "ꇖ",
+                        "ꉬ",
+                        "ꃘ",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    wide{
+                        "ꃅꑌ",
+                        "ꃅꎸ",
+                        "ꃅꍵ",
+                        "ꃅꋆ",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "ꎸꄑ",

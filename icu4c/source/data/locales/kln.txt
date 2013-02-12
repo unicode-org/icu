@@ -23,8 +23,101 @@ kln{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "Beet",
+                "Kemo",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "dd/MM/y GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M/d"}
+                MMM{"LLL"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+                d{"d"}
+                hm{"h:mm a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMM{"MMMM y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Tis",
+                        "Tai",
+                        "Aen",
+                        "Som",
+                        "Ang",
+                        "Mut",
+                        "Loh",
+                    }
+                    wide{
+                        "Betutab tisap",
+                        "Betut netai",
+                        "Betutab aeng'",
+                        "Betutab somok",
+                        "Betutab ang'wan",
+                        "Betutab mut",
+                        "Betutab lo",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "T",
+                        "T",
+                        "A",
+                        "S",
+                        "A",
+                        "M",
+                        "L",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "R1",
+                        "R2",
+                        "R3",
+                        "R4",
+                    }
+                    wide{
+                        "Robo netai",
+                        "Robo nebo aeng'",
+                        "Robo nebo somok",
+                        "Robo nebo ang'wan",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "Beet",

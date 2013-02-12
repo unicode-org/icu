@@ -20,8 +20,43 @@ uz_Latn{
     LocaleScript{
         "Latn",
     }
-    Version{"2.0.74.98"}
+    Version{"2.0.81.59"}
     calendar{
+        generic{
+            dayNames{
+                format{
+                    abbreviated{
+                        "Yaksh",
+                        "Dush",
+                        "Sesh",
+                        "Chor",
+                        "Pay",
+                        "Cum",
+                        "Shan",
+                    }
+                    wide{
+                        "yakshanba",
+                        "dushanba",
+                        "seshanba",
+                        "chorshanba",
+                        "payshanba",
+                        "cuma",
+                        "shanba",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "Y",
+                        "D",
+                        "S",
+                        "C",
+                        "P",
+                        "C",
+                        "S",
+                    }
+                }
+            }
+        }
         gregorian{
             dayNames{
                 format{

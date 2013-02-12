@@ -14,12 +14,34 @@ zh_Hant_HK{
             }
         }
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.59"}
     calendar{
         buddhist{
             availableFormats{
                 MEd{"M-d（E）"}
                 Md{"M-d"}
+            }
+        }
+        generic{
+            DateTimePatterns{
+                "ah:mm:ss [zzzz]",
+                "ah:mm:ss [z]",
+                "ahh:mm:ss",
+                "ah:mm",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gy年M月d日",
+                "d/M/yyGGGGG",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                MEd{"E, d/M"}
+                Md{"d/M"}
             }
         }
         gregorian{

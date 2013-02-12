@@ -31,5 +31,5 @@ sq{
         Zxxx{"I pashkruar"}
         Zzzz{"Skript i panjohur"}
     }
-    Version{"2.0.77.38"}
+    Version{"2.0.81.58"}
 }

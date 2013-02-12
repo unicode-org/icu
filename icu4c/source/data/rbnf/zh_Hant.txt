@@ -120,7 +120,7 @@ zh_Hant{
             "1000000000000: =%spellout-cardinal-financial=;",
             "%spellout-cardinal:",
             "-x: \u8CA0>>;",
-            "x.x: <<\u9EDE>%%spellout-fraction>;",
+            "x.x: <<\u9EDE>>>;",
             "0: \u96F6;",
             "1: \u4E00;",
             "2: \u4E8C;",
@@ -170,7 +170,7 @@ zh_Hant{
             "1000000000000: =%spellout-cardinal=;",
             "%spellout-cardinal-alternate2:",
             "-x: \u8CA0>>;",
-            "x.x: <<\u9EDE>%%spellout-fraction>;",
+            "x.x: =%spellout-cardinal=;",
             "0: \u96F6;",
             "1: \u4E00;",
             "2: \u5169;",
@@ -218,24 +218,10 @@ zh_Hant{
             "10: \u96F6\u4E00=%spellout-cardinal-alternate2=;",
             "20: \u96F6=%spellout-cardinal-alternate2=;",
             "1000000000000: =%spellout-cardinal-alternate2=;",
-            "%%spellout-fraction:",
-            "10: <%%spellout-fraction-digits<;",
-            "100: <%%spellout-fraction-digits<;",
-            "1000: <%%spellout-fraction-digits<;",
-            "10000: <%%spellout-fraction-digits<;",
-            "100000: <%%spellout-fraction-digits<;",
-            "1000000: <%%spellout-fraction-digits<;",
-            "10000000: <%%spellout-fraction-digits<;",
-            "100000000: <%%spellout-fraction-digits<;",
-            "1000000000: <%%spellout-fraction-digits<;",
-            "10000000000: <0<;",
-            "%%spellout-fraction-digits:",
-            "0: =%spellout-numbering=;",
-            "10: <<>>;",
             "%spellout-ordinal:",
             "x.x: =#,###0.#=;",
             "0: \u7B2C=%spellout-numbering=;",
         }
     }
-    Version{"2.0.76.62"}
+    Version{"2.0.81.51"}
 }

@@ -301,5 +301,5 @@ hr{
         ZW{"Zimbabve"}
         ZZ{"nepoznato područje"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
 }

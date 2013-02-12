@@ -10,11 +10,11 @@
  *  ICU <specials> source: <path>/xml/collation/my.xml
  */
 my{
-    Version{"2.0.51.23"}
+    Version{"2.0.81.30"}
     collations{
         standard{
             Sequence{
-                " [normalization on]"
+                " [normalization on] [reorder Mymr]"
                 "&ႌ<့<း<့း"
                 "&ာ<<ါ"
                 "&ဲ<ော<<ေါ<ော်<<ေါ်"

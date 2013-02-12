@@ -30,7 +30,7 @@ be{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -69,6 +69,102 @@ be{
                 yMMMEd{"E, d MMM y G"}
                 yMMMd{"d MMM y G"}
                 yMd{"d.M.yy"}
+            }
+        }
+        generic{
+            AmPmMarkers{
+                "да палудня",
+                "пасля палудня",
+            }
+            DateTimePatterns{
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, d MMMM y G",
+                "d MMMM y G",
+                "d.M.y G",
+                "d.M.yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Hm{"HH.mm"}
+                Hms{"HH.mm.ss"}
+                M{"L"}
+                MEd{"E, d MMM"}
+                MMM{"LLL"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"MMMM d, EEEE"}
+                MMMMd{"MMMM d"}
+                MMMd{"d MMM"}
+                d{"d"}
+                hm{"h.mm a"}
+                hms{"h.mm.ss a"}
+                ms{"mm.ss"}
+                y{"y"}
+                yM{"MM/yyyy"}
+                yMEd{"E, dd/MM/yyyy"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, d MMM y"}
+                yMMMM{"MMMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d.M.yy"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+                yyyyM{"MM/yyyy"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "нд",
+                        "пн",
+                        "аў",
+                        "ср",
+                        "чц",
+                        "пт",
+                        "сб",
+                    }
+                    wide{
+                        "нядзеля",
+                        "панядзелак",
+                        "аўторак",
+                        "серада",
+                        "чацвер",
+                        "пятніца",
+                        "субота",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "н",
+                        "п",
+                        "а",
+                        "с",
+                        "ч",
+                        "п",
+                        "с",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1-шы кв.",
+                        "2-гі кв.",
+                        "3-ці кв.",
+                        "4-ты кв.",
+                    }
+                    wide{
+                        "1-шы квартал",
+                        "2-гі квартал",
+                        "3-ці квартал",
+                        "4-ты квартал",
+                    }
+                }
             }
         }
         gregorian{

@@ -526,7 +526,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.58"}
     codePatterns{
         language{"Lingwa: {0}"}
         script{"Skritt: {0}"}

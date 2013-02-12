@@ -22,8 +22,32 @@ haw{
             }
         }
     }
-    Version{"2.0.74.85"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            dayNames{
+                format{
+                    abbreviated{
+                        "LP",
+                        "P1",
+                        "P2",
+                        "P3",
+                        "P4",
+                        "P5",
+                        "P6",
+                    }
+                    wide{
+                        "Lāpule",
+                        "Poʻakahi",
+                        "Poʻalua",
+                        "Poʻakolu",
+                        "Poʻahā",
+                        "Poʻalima",
+                        "Poʻaono",
+                    }
+                }
+            }
+        }
         gregorian{
             dayNames{
                 format{

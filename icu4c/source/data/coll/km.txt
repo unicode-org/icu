@@ -10,11 +10,11 @@
  *  ICU <specials> source: <path>/xml/collation/km.xml
  */
 km{
-    Version{"2.0.59.19"}
+    Version{"2.0.81.30"}
     collations{
         standard{
             Sequence{
-                " [normalization on]"
+                " [normalization on] [reorder Khmr]"
                 "&[last tertiary ignorable ]=឴=឵"
                 "&។ល។<<<៘"
                 "&ៈ<<៎<<៏<<៑<<័<<ៈ<<៝<<់<<៉<<៊<<៍"

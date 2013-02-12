@@ -28,5 +28,5 @@ uz_Latn{
         Cyrl{"Kiril"}
         Latn{"Lotin"}
     }
-    Version{"2.0.74.98"}
+    Version{"2.0.81.59"}
 }

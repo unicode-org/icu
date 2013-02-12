@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ne.xml
  */
 ne{
-    Version{"2.0.80.95"}
+    Version{"2.0.81.58"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अविड्जान"}
@@ -809,51 +809,6 @@ ne{
         }
         "Australia:Sydney"{
             ec{"सिड्नी"}
-        }
-        "Etc:GMT"{
-            ec{"जीएम्‌टी"}
-        }
-        "Etc:GMT-1"{
-            ec{"जीएम्‌टी-१"}
-        }
-        "Etc:GMT-10"{
-            ec{"जीएम्‌टी-१०"}
-        }
-        "Etc:GMT-11"{
-            ec{"जीएम्‌टी-११"}
-        }
-        "Etc:GMT-12"{
-            ec{"जीएम्‌टी-१२"}
-        }
-        "Etc:GMT-13"{
-            ec{"जीएम्‌टी-१३"}
-        }
-        "Etc:GMT-14"{
-            ec{"जीएम्‌टी-१४"}
-        }
-        "Etc:GMT-2"{
-            ec{"जीएम्‌टी-२"}
-        }
-        "Etc:GMT-3"{
-            ec{"जीएम्‌टी-३"}
-        }
-        "Etc:GMT-4"{
-            ec{"जीएम्‌टी-४"}
-        }
-        "Etc:GMT-5"{
-            ec{"जीएम्‌टी-५"}
-        }
-        "Etc:GMT-6"{
-            ec{"जीएम्‌टी-६"}
-        }
-        "Etc:GMT-7"{
-            ec{"जीएम्‌टी-७"}
-        }
-        "Etc:GMT-8"{
-            ec{"जीएम्‌टी-८"}
-        }
-        "Etc:GMT-9"{
-            ec{"जीएम्‌टी-९"}
         }
         "Etc:Unknown"{
             ec{"अज्ञात सिटी"}

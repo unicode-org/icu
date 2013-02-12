@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh_Hant.xml
  */
 zh_Hant{
-    Version{"2.0.80.95"}
+    Version{"2.0.81.59"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿必尚"}
@@ -908,9 +908,6 @@ zh_Hant{
         }
         "Australia:Sydney"{
             ec{"雪梨"}
-        }
-        "Etc:GMT"{
-            ec{"格林威治標準時間"}
         }
         "Etc:Unknown"{
             ec{"未知地區"}
