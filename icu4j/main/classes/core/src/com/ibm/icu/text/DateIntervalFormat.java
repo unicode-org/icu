@@ -308,7 +308,16 @@ public class DateIntervalFormat extends UFormat {
      * relavent (locale) to this formatter.
      */
     private String fSkeleton = null;
+    
+    /*
+     * Needed for efficient deserialization. If set, it means we can use the
+     * cache to initialize fIntervalPatterns.
+     */
+    private boolean isDateIntervalInfoDefault;
 
+    /**
+     *  Interval patterns for this instance's locale.
+     */
     private transient Map<String, PatternInfo> fIntervalPatterns = null;
     
    
@@ -339,18 +348,28 @@ public class DateIntervalFormat extends UFormat {
     public DateIntervalFormat(String skeleton, DateIntervalInfo dtItvInfo,
                                SimpleDateFormat simpleDateFormat)
     {
-        SimpleDateFormat dateFormat = simpleDateFormat;
-        fDateFormat = dateFormat;
+        fDateFormat = simpleDateFormat;
         // freeze date interval info
         dtItvInfo.freeze();
         fSkeleton = skeleton;
         fInfo = dtItvInfo;
-
+        isDateIntervalInfoDefault = false;
         fFromCalendar = (Calendar) fDateFormat.getCalendar().clone();
         fToCalendar = (Calendar) fDateFormat.getCalendar().clone();
-        initializePattern();
+        initializePattern(null);
     }
 
+    private DateIntervalFormat(String skeleton, ULocale locale,
+            SimpleDateFormat simpleDateFormat)
+    {
+        fDateFormat = simpleDateFormat;
+        fSkeleton = skeleton;
+        fInfo = new DateIntervalInfo(locale).freeze();
+        isDateIntervalInfoDefault = true;
+        fFromCalendar = (Calendar) fDateFormat.getCalendar().clone();
+        fToCalendar = (Calendar) fDateFormat.getCalendar().clone();
+        initializePattern(LOCAL_PATTERN_CACHE);
+}
     
 
     /**
@@ -423,9 +442,8 @@ public class DateIntervalFormat extends UFormat {
     public static final DateIntervalFormat 
         getInstance(String skeleton, ULocale locale)  
     {
-        DateIntervalInfo dtitvinf = new DateIntervalInfo(locale);
         DateTimePatternGenerator generator = DateTimePatternGenerator.getInstance(locale);
-        return new DateIntervalFormat(skeleton, dtitvinf, new SimpleDateFormat(generator.getBestPattern(skeleton), locale));
+        return new DateIntervalFormat(skeleton, locale, new SimpleDateFormat(generator.getBestPattern(skeleton), locale));
     }
 
 
@@ -514,7 +532,6 @@ public class DateIntervalFormat extends UFormat {
                                                  ULocale locale, 
                                                  DateIntervalInfo dtitvinf)
     {
-        LOCAL_PATTERN_CACHE.clear();
         // clone. If it is frozen, clone returns itself, otherwise, clone
         // returns a copy.
         dtitvinf = (DateIntervalInfo)dtitvinf.clone(); 
@@ -535,8 +552,6 @@ public class DateIntervalFormat extends UFormat {
         other.fInfo = (DateIntervalInfo) fInfo.clone();
         other.fFromCalendar = (Calendar) fFromCalendar.clone();
         other.fToCalendar = (Calendar) fToCalendar.clone();
-        other.fSkeleton = fSkeleton;
-        other.fIntervalPatterns = fIntervalPatterns;
         return other;
     }
 
@@ -808,10 +823,10 @@ public class DateIntervalFormat extends UFormat {
         // clone it. If it is frozen, the clone returns itself.
         // Otherwise, clone returns a copy
         fInfo = (DateIntervalInfo)newItvPattern.clone();
+        this.isDateIntervalInfoDefault = false;
         fInfo.freeze(); // freeze it
-        LOCAL_PATTERN_CACHE.clear();
         if ( fDateFormat != null ) {
-            initializePattern();
+            initializePattern(null);
         }
     }
 
@@ -835,20 +850,25 @@ public class DateIntervalFormat extends UFormat {
     /*
      * Initialize interval patterns locale to this formatter.
      */
-    private void initializePattern() { 
+    private void initializePattern(ICUCache<String, Map<String, PatternInfo>> cache) { 
         String fullPattern = fDateFormat.toPattern();
         ULocale locale = fDateFormat.getLocale();
-        String key;
-        if ( fSkeleton != null ) {
-            key = locale.toString() + "+" + fullPattern + "+" + fSkeleton;
-        } else {
-            key = locale.toString() + "+" + fullPattern;
+        String key = null;
+        Map<String, PatternInfo> patterns = null;
+        if (cache != null) {
+            if ( fSkeleton != null ) {
+                key = locale.toString() + "+" + fullPattern + "+" + fSkeleton;
+            } else {
+                key = locale.toString() + "+" + fullPattern;
+            }
+            patterns = cache.get(key);
         }
-        Map<String, PatternInfo> patterns = LOCAL_PATTERN_CACHE.get(key);
-        if ( patterns == null ) {
+        if (patterns == null) {
             Map<String, PatternInfo> intervalPatterns = initializeIntervalPattern(fullPattern, locale);
             patterns = Collections.unmodifiableMap(intervalPatterns);
-            LOCAL_PATTERN_CACHE.put(key, patterns);
+            if (cache != null) {
+                cache.put(key, patterns);
+            }
         } 
         fIntervalPatterns = patterns;
     }
@@ -1618,6 +1638,6 @@ public class DateIntervalFormat extends UFormat {
     private void readObject(ObjectInputStream stream)
         throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        initializePattern();
+        initializePattern(isDateIntervalInfoDefault ? LOCAL_PATTERN_CACHE : null);
     }
 }

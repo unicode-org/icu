@@ -1282,4 +1282,80 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             errln("hasCode() should return 1.");
         }
     }
+    
+    public void TestTicket9919GetInstance() {
+        // Creating a DateIntervalFormat with a custom DateIntervalInfo
+        // object used to corrupt the cache.
+        DateIntervalFormat dif = DateIntervalFormat.getInstance(
+                "yMd", ULocale.ENGLISH);
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        from.set(2013, 3, 26);
+        to.set(2013, 3, 28);
+        
+        // Save. This is the correct answer
+        String expected =
+                dif.format(from, to, new StringBuffer(), new FieldPosition(0))
+                .toString();
+        
+        // Now create a DateIntervalFormat with same skeleton and
+        // locale, but with a custom DateIntervalInfo. This used
+        // to corrupt the cache.
+        DateIntervalInfo dateIntervalInfo =
+                new DateIntervalInfo(ULocale.ENGLISH);
+        dateIntervalInfo.setIntervalPattern(
+                "yMd", Calendar.DATE, "M/d/y \u2013 d");
+        DateIntervalFormat.getInstance(
+                "yMd", ULocale.ENGLISH, dateIntervalInfo);
+        
+        // Now create a DateIntervalFormat with same skeleton and
+        // locale, but with default DateIntervalInfo. The cache should
+        // not be corrupted, and we should get the same answer as before.
+        dif = DateIntervalFormat.getInstance("yMd", ULocale.ENGLISH);
+        
+        assertEquals(
+                "Custom DateIntervalInfo objects should not mess up cache",
+                expected,
+                dif.format(from, to, new StringBuffer(), new FieldPosition(0))
+                .toString()); 
+                
+    }
+    
+    public void TestTicket9919Setter() {
+        
+        // Creating a DateIntervalFormat with a custom DateIntervalInfo
+        // object used to corrupt the cache.
+        DateIntervalFormat dif = DateIntervalFormat.getInstance(
+                "yMd", ULocale.ENGLISH);
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        from.set(2013, 3, 26);
+        to.set(2013, 3, 28);
+        
+        // Save. This is the correct answer
+        String expected =
+                dif.format(from, to, new StringBuffer(), new FieldPosition(0))
+                .toString();
+        
+        // Now create a DateIntervalFormat with same skeleton and
+        // locale, but with a custom DateIntervalInfo. This used
+        // to corrupt the cache.
+        DateIntervalInfo dateIntervalInfo =
+                new DateIntervalInfo(ULocale.ENGLISH);
+        dateIntervalInfo.setIntervalPattern(
+                "yMd", Calendar.DATE, "M/d/y \u2013 d");
+        DateIntervalFormat bad = DateIntervalFormat.getInstance(
+                "yMd", ULocale.ENGLISH);
+        bad.setDateIntervalInfo(dateIntervalInfo);
+        
+        // Now create a DateIntervalFormat with same skeleton and
+        // locale, but with default DateIntervalInfo. The cache should
+        // not be corrupted, and we should get the same answer as before.
+        dif = DateIntervalFormat.getInstance("yMd", ULocale.ENGLISH);
+        assertEquals(
+                "Custom DateIntervalInfo objects should not mess up cache",
+                expected,
+                dif.format(from, to, new StringBuffer(), new FieldPosition(0))
+                .toString()); 
+    }
 }
