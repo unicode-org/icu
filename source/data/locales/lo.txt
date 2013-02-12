@@ -209,7 +209,7 @@ lo{
         }
         native{"laoo"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.58"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -631,6 +631,268 @@ lo{
                         "ຮຳເລ",
                         "ເນແຮສ໌",
                         "ພາກູເມນ",
+                    }
+                }
+            }
+        }
+        generic{
+            AmPmMarkers{
+                "ກ່ອນທ່ຽງ",
+                "ຫຼັງທ່ຽງ",
+            }
+            DateTimePatterns{
+                "H ໂມງ m ນາທີ ss ວິນາທີ zzzz",
+                "H ໂມງ m ນາທີ ss ວິນາທີ z",
+                "H:mm:ss",
+                "H:mm",
+                "EEEEທີ d MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "d/M/y GGGGG",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M-d"}
+                MMM{"LLL"}
+                MMMEd{"E MMM d"}
+                MMMd{"MMM d"}
+                Md{"M-d"}
+                d{"d"}
+                h{"h ໂມງa"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"y-M"}
+                yMEd{"E, y-M-d"}
+                yMMM{"y MMM"}
+                yMMMEd{"E, y MMM d"}
+                yMMMd{"y MMM d"}
+                yMd{"y-M-d"}
+                yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ອາ.",
+                        "ຈ.",
+                        "ອ.",
+                        "ພ.",
+                        "ພຫ.",
+                        "ສກ.",
+                        "ສ.",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                    short{
+                        "ອທ.",
+                        "ຈ.",
+                        "ອ.",
+                        "ພ.",
+                        "ພຫ.",
+                        "ສກ.",
+                        "ສ.",
+                    }
+                    wide{
+                        "ວັນອາທິດ",
+                        "ວັນຈັນ",
+                        "ວັນອັງຄານ",
+                        "ວັນພຸດ",
+                        "ວັນພະຫັດ",
+                        "ວັນສຸກ",
+                        "ວັນເສົາ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ທ.",
+                        "ຈ.",
+                        "ອ.",
+                        "ພ.",
+                        "ພຫ.",
+                        "ສກ.",
+                        "ສ.",
+                    }
+                    narrow{
+                        "ທ",
+                        "ຈ",
+                        "ຄ",
+                        "​ພຸ",
+                        "ພ",
+                        "​ສຸ",
+                        "ສ",
+                    }
+                    short{
+                        "ອ.ທ.",
+                        "ຈັນ",
+                        "ຄ",
+                        "ພ",
+                        "ພຫ",
+                        "ສ",
+                        "ເສົາ",
+                    }
+                    wide{
+                        "ວັນອາທິດ",
+                        "ວັນຈັນ",
+                        "ວັນອັງຄານ",
+                        "ວັນພຸດ",
+                        "ວັນພະຫັດ",
+                        "ວັນສຸກ",
+                        "ວັນເສົາ",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"M–M"}
+                }
+                MEd{
+                    M{"E, MM-dd – E, MM-dd"}
+                    d{"E, MM-dd – E, MM-dd"}
+                }
+                MMM{
+                    M{"LLL–LLL"}
+                }
+                MMMEd{
+                    M{"E, MM-d – E, MM-d"}
+                    d{"E, MM-d – E, MM-d"}
+                }
+                MMMd{
+                    M{"MM-d – MM-d"}
+                    d{"MM-d – d"}
+                }
+                Md{
+                    M{"MM-dd – MM-dd"}
+                    d{"MM-dd – dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMEd{
+                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                }
+                yMMM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMEd{
+                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                }
+                yMMMM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMd{
+                    M{"yyyy-MM-dd – MM-d"}
+                    d{"yyyy-MM-d – d"}
+                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                }
+                yMd{
+                    M{"yyyy-MM-dd – MM-dd"}
+                    d{"yyyy-MM-dd – dd"}
+                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "ຄິວ1",
+                        "ຄີວ2",
+                        "ຄີວ3",
+                        "ຄິວ4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "ໄຕມາດ1",
+                        "ໄຕມາດ2",
+                        "ໄຕມາດ3",
+                        "ໄຕມາດ4",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Q1",
+                        "Q2",
+                        "Q3",
+                        "Q4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "ໄຕມາດ1",
+                        "ໄຕມາດ2",
+                        "ໄຕມາດ3",
+                        "ໄຕມາດ4",
                     }
                 }
             }

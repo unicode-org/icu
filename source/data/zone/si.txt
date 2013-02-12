@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/si.xml
  */
 si{
-    Version{"2.0.80.73"}
+    Version{"2.0.81.58"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"අබිජාන්"}
@@ -398,51 +398,6 @@ si{
         }
         "Australia:Sydney"{
             ec{"සිඩ්නි"}
-        }
-        "Etc:GMT"{
-            ec{"ග්‍රිමවේ"}
-        }
-        "Etc:GMT-1"{
-            ec{"ග්‍රිමවේ - 1"}
-        }
-        "Etc:GMT-10"{
-            ec{"ග්‍රිමවේ - 10"}
-        }
-        "Etc:GMT-11"{
-            ec{"ග්‍රිමවේ - 11"}
-        }
-        "Etc:GMT-12"{
-            ec{"ග්‍රිමවේ - 12"}
-        }
-        "Etc:GMT-13"{
-            ec{"ග්‍රිමවේ - 13"}
-        }
-        "Etc:GMT-14"{
-            ec{"ග්‍රිමවේ - 14"}
-        }
-        "Etc:GMT-2"{
-            ec{"ග්‍රිමවේ - 2"}
-        }
-        "Etc:GMT-3"{
-            ec{"ග්‍රිමවේ - 3"}
-        }
-        "Etc:GMT-4"{
-            ec{"ග්‍රිමවේ - 4"}
-        }
-        "Etc:GMT-5"{
-            ec{"ග්‍රිමවේ - 5"}
-        }
-        "Etc:GMT-6"{
-            ec{"ග්‍රිමවේ - 6"}
-        }
-        "Etc:GMT-7"{
-            ec{"ග්‍රිමවේ - 7"}
-        }
-        "Etc:GMT-8"{
-            ec{"ග්‍රිමවේ - 8"}
-        }
-        "Etc:GMT-9"{
-            ec{"ග්‍රිමවේ - 9"}
         }
         "Etc:Unknown"{
             ec{"හඳුනා නොගත් නගරය"}

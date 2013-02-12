@@ -77,8 +77,264 @@ ee{
             }
         }
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "ŋdi",
+                "ɣetrɔ",
+            }
+            DateTimePatterns{
+                "a h:mm:ss zzzz",
+                "a 'ga' h:mm:ss z",
+                "a 'ga' h:mm:ss",
+                "a 'ga' h:mm",
+                "EEEE, MMMM d 'lia' y G",
+                "MMMM d 'lia' y G",
+                "MMM d 'lia', y G",
+                "M/d/yy GGGGG",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+                "{0} {1}",
+            }
+            availableFormats{
+                Ed{"E d"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M/d"}
+                MMM{"LLL"}
+                MMMEd{"E, MMM d 'lia'"}
+                MMMMEd{"E, MMMM d 'lia'"}
+                MMMMd{"MMMM d 'lia'"}
+                MMMd{"MMM d 'lia'"}
+                Md{"M/d"}
+                d{"d"}
+                h{"a 'ga' h"}
+                hm{"a 'ga' h:mm"}
+                hms{"a 'ga' h:mm:ss"}
+                ms{"'aɖabaƒoƒo' mm:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMM{"MMMM y"}
+                yMMMd{"MMM d 'lia', y"}
+                yMd{"M/d/y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "kɔs",
+                        "dzo",
+                        "bla",
+                        "kuɖ",
+                        "yaw",
+                        "fiɖ",
+                        "mem",
+                    }
+                    narrow{
+                        "k",
+                        "d",
+                        "b",
+                        "k",
+                        "y",
+                        "f",
+                        "m",
+                    }
+                    short{
+                        "kɔs",
+                        "dzo",
+                        "bla",
+                        "kuɖ",
+                        "yaw",
+                        "fiɖ",
+                        "mem",
+                    }
+                    wide{
+                        "kɔsiɖa",
+                        "dzoɖa",
+                        "blaɖa",
+                        "kuɖa",
+                        "yawoɖa",
+                        "fiɖa",
+                        "memleɖa",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "kɔs",
+                        "dzo",
+                        "bla",
+                        "kuɖ",
+                        "yaw",
+                        "fiɖ",
+                        "mem",
+                    }
+                    narrow{
+                        "k",
+                        "d",
+                        "b",
+                        "k",
+                        "y",
+                        "f",
+                        "m",
+                    }
+                    short{
+                        "kɔs",
+                        "dzo",
+                        "bla",
+                        "kuɖ",
+                        "yaw",
+                        "fiɖ",
+                        "mem",
+                    }
+                    wide{
+                        "kɔsiɖa",
+                        "dzoɖa",
+                        "blaɖa",
+                        "kuɖa",
+                        "yawoɖa",
+                        "fiɖa",
+                        "memleɖa",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"'ɣleti' M 'lia' – 'ɣleti' M 'lia'"}
+                }
+                MEd{
+                    M{"E, M/d – E, M/d"}
+                    d{"E, M/d – E, M/d"}
+                }
+                MMM{
+                    M{"MMM–MMM"}
+                }
+                MMMEd{
+                    M{"E, MMM d 'lia' – E, MMM d 'lia'"}
+                    d{"E, MMM d 'lia' – E, MMM d 'lia'"}
+                }
+                MMMd{
+                    M{"MMM d 'lia' – MMM d 'lia'"}
+                    d{"MMM d 'lia' – d 'lia'"}
+                }
+                Md{
+                    M{"M/d – M/d"}
+                    d{"M/d – M/d"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"a h – a h"}
+                    h{"a h–h"}
+                }
+                hm{
+                    a{"a 'ga' h:mm - a 'ga' h:mm"}
+                    h{"a 'ga' h:mm - 'ga' h:mm"}
+                    m{"a 'ga' h:mm – 'ga' h:mm"}
+                }
+                hmv{
+                    a{"a 'ga' h:mm – a 'ga' h:mm v"}
+                    h{"a 'ga' h:mm–h:mm v"}
+                    m{"a h:mm–h:mm v"}
+                }
+                hv{
+                    a{"a h – a h v"}
+                    h{"a 'ga' h–h v"}
+                }
+                yM{
+                    M{"M/yy – M/yy"}
+                    y{"M/yy – M/yy"}
+                }
+                yMEd{
+                    M{"E, M/d/yy – E, M/d/yy"}
+                    d{"E, M/d/yy – E, M/d/yy"}
+                    y{"E, M/d/yy – E, M/d/yy"}
+                }
+                yMMM{
+                    M{"MMM–MMM y"}
+                    y{"MMM y – MMM y"}
+                }
+                yMMMEd{
+                    M{"E, MMM d 'lia' – E, MMM d 'lia', y"}
+                    d{"E, MMM d 'lia' – E, MMM d 'lia', y"}
+                    y{"E, MMM d 'lia', y – E, MMM d 'lia', y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"MMM d 'lia' – MMM d 'lia', y"}
+                    d{"MMM d 'lia' – d 'lia' , y"}
+                    y{"MMM d 'lia' , y – MMM d 'lia', y"}
+                }
+                yMd{
+                    M{"M/d/yy – M/d/yy"}
+                    d{"M/d/yy – M/d/yy"}
+                    y{"M/d/yy – M/d/yy"}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "k1",
+                        "k2",
+                        "k3",
+                        "k4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "kɔta gbãtɔ",
+                        "kɔta evelia",
+                        "kɔta etɔ̃lia",
+                        "kɔta enelia",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "k1",
+                        "k2",
+                        "k3",
+                        "k4",
+                    }
+                    wide{
+                        "kɔta gbãtɔ",
+                        "kɔta evelia",
+                        "kɔta etɔ̃lia",
+                        "kɔta enelia",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "ŋdi",

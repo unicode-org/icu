@@ -29,8 +29,32 @@ kl{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            dayNames{
+                format{
+                    abbreviated{
+                        "sab",
+                        "ata",
+                        "mar",
+                        "pin",
+                        "sis",
+                        "tal",
+                        "arf",
+                    }
+                    wide{
+                        "sabaat",
+                        "ataasinngorneq",
+                        "marlunngorneq",
+                        "pingasunngorneq",
+                        "sisamanngorneq",
+                        "tallimanngorneq",
+                        "arfininngorneq",
+                    }
+                }
+            }
+        }
         gregorian{
             dayNames{
                 format{

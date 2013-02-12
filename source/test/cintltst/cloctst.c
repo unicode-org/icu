@@ -3600,7 +3600,7 @@ const char* const full_data[][3] = {
     "pa_PK"
   }, {
     "pap",
-    "pap_Latn_AN",
+    "pap_Latn_BQ",
     "pap"
   }, {
     "pau",
@@ -3793,7 +3793,7 @@ const char* const full_data[][3] = {
   }, {
     "und_AN",
     "pap_Latn_AN",
-    "pap"
+    "pap_AN"
   }, {
     "und_AO",
     "pt_Latn_AO",

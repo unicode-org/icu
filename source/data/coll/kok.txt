@@ -10,10 +10,15 @@
  *  ICU <specials> source: <path>/xml/collation/kok.xml
  */
 kok{
-    Version{"2.0.42.63"}
+    Version{"2.0.81.30"}
     collations{
         standard{
-            Sequence{" [normalization on]&ॐ<ं<<ँ<ः&ह<ळ<क्ष"}
+            Sequence{
+                " [normalization on] [reorder Deva Beng Guru Gujr Orya Taml Telu Knda"
+                " Mlym Sinh]"
+                "&ॐ<ं<<ँ<ः"
+                "&ह<ळ<क्ष"
+            }
             Version{"23"}
         }
     }

@@ -347,7 +347,7 @@ void DateIntervalFormatTest::testFormat() {
     const char* DATA[] = {
         "yyyy MM dd HH:mm:ss",    
         // test root
-        "root", "2007 11 10 10:10:10", "2007 12 10 10:10:10", "yM", "2007-11 \\u2013 12",
+        "root", "2007 11 10 10:10:10", "2007 12 10 10:10:10", "yM", "2007-11 \\u2013 2007-12",
          
         // test 'H' and 'h', using availableFormat in fallback
         "en", "2007 11 10 10:10:10", "2007 11 10 15:10:10", "Hms", "10:10:10 \\u2013 15:10:10",

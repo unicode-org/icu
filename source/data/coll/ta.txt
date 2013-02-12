@@ -10,11 +10,12 @@
  *  ICU <specials> source: <path>/xml/collation/ta.xml
  */
 ta{
-    Version{"2.0.76.11"}
+    Version{"2.0.81.30"}
     collations{
         standard{
             Sequence{
-                " [normalization on]"
+                " [normalization on] [reorder Taml Deva Beng Guru Gujr Orya Telu Knda"
+                " Mlym Sinh]"
                 "&ஔ<ஂ<ஃ"
                 "&ஹ<க்ஷ"
                 "&[before 1]க<க்"

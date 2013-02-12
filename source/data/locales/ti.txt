@@ -35,8 +35,60 @@ ti{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.0.79.40"}
+    Version{"2.0.81.59"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "ንጉሆ ሰዓተ",
+                "ድሕር ሰዓት",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE፣ dd MMMM መዓልቲ y G",
+                "dd MMMM y G",
+                "dd-MMM-y G",
+                "dd/MM/yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                yyMM{"MM/yy"}
+                yyQQQ{"QQQ yy"}
+                yyyyMMMM{"MMMM y"}
+            }
+            dayNames{
+                format{
+                    wide{
+                        "ሰንበት",
+                        "ሰኑይ",
+                        "ሠሉስ",
+                        "ረቡዕ",
+                        "ኃሙስ",
+                        "ዓርቢ",
+                        "ቀዳም",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ሰ",
+                        "ሰ",
+                        "ሠ",
+                        "ረ",
+                        "ኃ",
+                        "ዓ",
+                        "ቀ",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "ንጉሆ ሰዓተ",

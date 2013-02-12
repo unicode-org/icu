@@ -35,8 +35,82 @@ az{
             }
         }
     }
-    Version{"2.0.80.78"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d, MMMM, y G",
+                "d MMMM , y G",
+                "d MMM, y G",
+                "GGGGG y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMM{"LLL"}
+                MMMEd{"E, d, MMM"}
+                MMMd{"d MMM"}
+                yMMM{"MMM, y"}
+                yMMMEd{"E, d, MMM, y"}
+                yMMMd{"d MMM, y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "B.",
+                        "B.E.",
+                        "Ç.A.",
+                        "Ç.",
+                        "C.A.",
+                        "C",
+                        "Ş.",
+                    }
+                    wide{
+                        "bazar",
+                        "bazar ertəsi",
+                        "çərşənbə axşamı",
+                        "çərşənbə",
+                        "cümə axşamı",
+                        "cümə",
+                        "şənbə",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "7",
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1-ci kv.",
+                        "2-ci kv.",
+                        "3-cü kv.",
+                        "4-cü kv.",
+                    }
+                    wide{
+                        "1-ci kvartal",
+                        "2-ci kvartal",
+                        "3-cü kvartal",
+                        "4-cü kvartal",
+                    }
+                }
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -46,7 +120,7 @@ az{
                 "EEEE, d, MMMM, y",
                 "d MMMM , y",
                 "d MMM, y",
-                "yyyy-MM-dd",
+                "y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

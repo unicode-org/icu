@@ -833,7 +833,7 @@ da{
         SCOTLAND{"skotsk standardengelsk"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     codePatterns{
         language{"Sprog: {0}"}
         script{"Instruks: {0}"}

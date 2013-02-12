@@ -10,5 +10,5 @@
  *  ICU <specials> source: <path>/xml/main/shi_Latn.xml
  */
 shi_Latn{
-    Version{"2.0.80.73"}
+    Version{"2.0.81.58"}
 }

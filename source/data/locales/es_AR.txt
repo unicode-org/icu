@@ -16,8 +16,29 @@ es_AR{
             }
         }
     }
-    Version{"2.0.74.65"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "HH'h'''mm:ss zzzz",
+                "H:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d 'de' MMMM 'de' y G",
+                "d 'de' MMMM 'de' y G",
+                "dd/MM/y G",
+                "dd/MM/yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MEd{"E d-M"}
+                yM{"M-yyyy"}
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "HH'h'''mm:ss zzzz",

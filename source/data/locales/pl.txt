@@ -194,7 +194,7 @@ pl{
             }
         }
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.58"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -441,6 +441,274 @@ pl{
                         "Hamle",
                         "Nehasse",
                         "Pagumen",
+                    }
+                }
+            }
+        }
+        generic{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "dd.MM.y GGGGG",
+                "{1}, {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                Ed{"E, d"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, d.MM"}
+                MMM{"LLL"}
+                MMMEd{"E, d MMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"d.MM"}
+                Md{"d.MM"}
+                d{"d"}
+                h{"hh a"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"MM.yyyy"}
+                yMEd{"E, d.MM.yyyy"}
+                yMMM{"LLL y"}
+                yMMMEd{"E, d MMM y"}
+                yMMMM{"LLLL y"}
+                yMMMd{"d MMM y"}
+                yMd{"d.MM.yyyy"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+                yyMMM{"LLLL yy"}
+                yyyyMM{"MM.yyyy"}
+                yyyyMMMM{"LLLL y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "niedz.",
+                        "pon.",
+                        "wt.",
+                        "śr.",
+                        "czw.",
+                        "pt.",
+                        "sob.",
+                    }
+                    narrow{
+                        "N",
+                        "P",
+                        "W",
+                        "Ś",
+                        "C",
+                        "P",
+                        "S",
+                    }
+                    short{
+                        "niedz.",
+                        "pon.",
+                        "wt.",
+                        "śr.",
+                        "czw.",
+                        "pt.",
+                        "sob.",
+                    }
+                    wide{
+                        "niedziela",
+                        "poniedziałek",
+                        "wtorek",
+                        "środa",
+                        "czwartek",
+                        "piątek",
+                        "sobota",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "niedz.",
+                        "pon.",
+                        "wt.",
+                        "śr.",
+                        "czw.",
+                        "pt.",
+                        "sob.",
+                    }
+                    narrow{
+                        "N",
+                        "P",
+                        "W",
+                        "Ś",
+                        "C",
+                        "P",
+                        "S",
+                    }
+                    short{
+                        "niedz.",
+                        "pon.",
+                        "wt.",
+                        "śr.",
+                        "czw.",
+                        "pt.",
+                        "sob.",
+                    }
+                    wide{
+                        "niedziela",
+                        "poniedziałek",
+                        "wtorek",
+                        "środa",
+                        "czwartek",
+                        "piątek",
+                        "sobota",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"MM-MM"}
+                }
+                MEd{
+                    M{"E, dd.MM – E, dd.MM"}
+                    d{"E, dd.MM – E, dd.MM"}
+                }
+                MMM{
+                    M{"LLL–LLL"}
+                }
+                MMMEd{
+                    M{"E, d MMM - E, d MMM"}
+                    d{"E, d MMM – E, d MMM"}
+                }
+                MMMd{
+                    M{"d MMM - d MMM"}
+                    d{"d-d MMM"}
+                }
+                Md{
+                    M{"dd.MM–dd.MM"}
+                    d{"dd.MM–dd.MM"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm-h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"MM.yyyy - MM.yyyy"}
+                    y{"MM.yyyy - MM.yyyy"}
+                }
+                yMEd{
+                    M{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                    d{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                    y{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                }
+                yMMM{
+                    M{"LLL-LLL y"}
+                    y{"LLL y - LLL y"}
+                }
+                yMMMEd{
+                    M{"E, d MMM - E, d MMM y"}
+                    d{"E, d - E, d MMM y"}
+                    y{"E, d MMM y - E, d MMM y"}
+                }
+                yMMMM{
+                    M{"LLLL-LLLL y"}
+                    y{"LLLL y - LLLL y"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM y"}
+                    d{"d-d MMM y"}
+                    y{"d MMM y - d MMM y"}
+                }
+                yMd{
+                    M{"dd.MM-dd.MM.yyyy"}
+                    d{"dd-dd.MM.yyyy"}
+                    y{"dd.MM.yyyy-dd.MM.yyyy"}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "I kwartał",
+                        "II kwartał",
+                        "III kwartał",
+                        "IV kwartał",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1 kw.",
+                        "2 kw.",
+                        "3 kw.",
+                        "4 kw.",
+                    }
+                    narrow{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "I kwartał",
+                        "II kwartał",
+                        "III kwartał",
+                        "IV kwartał",
                     }
                 }
             }

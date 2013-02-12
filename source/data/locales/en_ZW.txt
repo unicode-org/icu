@@ -14,8 +14,35 @@ en_ZW{
             }
         }
     }
-    Version{"2.0.75.60"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE dd MMMM y G",
+                "dd MMMM y G",
+                "dd MMM,y G",
+                "d/M/y GGGGG",
+                "{1}, {0}",
+                "{1} 'at' {0}",
+                "{1} 'at' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                MEd{"E d/M"}
+                MMMEd{"E dd MMM"}
+                MMMd{"dd MMM"}
+                Md{"d/M"}
+                yMEd{"E, d/M/y"}
+                yMMMEd{"E, dd MMM, y"}
+                yMMMd{"dd MMM, y"}
+                yMd{"d/M/y"}
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a zzzz",

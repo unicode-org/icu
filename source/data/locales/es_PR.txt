@@ -12,8 +12,32 @@ es_PR{
         279,
         216,
     }
-    Version{"2.0.74.74"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d 'de' MMMM 'de' y G",
+                "d 'de' MMMM 'de' y G",
+                "MM/dd/y G",
+                "MM/dd/yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MEd{"E, MM/dd"}
+                Md{"MM/dd"}
+                yM{"MM/yy"}
+                yMEd{"E MM/dd/yy"}
+                yMd{"MM/dd/yy"}
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a zzzz",

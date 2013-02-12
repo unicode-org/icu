@@ -327,7 +327,7 @@ zu{
             vaii{"Izinhlazu Zezinombolo ze-Vai"}
         }
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.59"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
         separator{","}

@@ -42,8 +42,201 @@ my{
         }
         native{"mymr"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.58"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "နံနက်",
+                "ညနေ",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, G y MMMM dd",
+                "G y MMMM d",
+                "G y MMM d",
+                "GGGGG yy/MM/dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E, d"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M/d"}
+                MMM{"LLL"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+                d{"d"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"yy/M"}
+                yMEd{"E, yy/M/d"}
+                yMMM{"y MMM"}
+                yMMMEd{"E, y MMM d"}
+                yMMMM{"y MMMM"}
+                yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
+                yyQQQ{"QQQ yy"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "နွေ",
+                        "လာ",
+                        "ဂါ",
+                        "ဟူး",
+                        "တေး",
+                        "ကြာ",
+                        "နေ",
+                    }
+                    wide{
+                        "တနင်္ဂနွေ",
+                        "တနင်္လာ",
+                        "အင်္ဂါ",
+                        "ဗုဒ္ဓဟူး",
+                        "ကြာသပတေး",
+                        "သောကြာ",
+                        "စနေ",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "တ",
+                        "တ",
+                        "အ",
+                        "ဗ",
+                        "က",
+                        "သ",
+                        "စ",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"HH-HH"}
+                }
+                Hm{
+                    H{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                Hv{
+                    H{"HH-HH v"}
+                }
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"EEEE၊ M/d – EEEE၊ M/d"}
+                    d{"EEEE၊ M/d – EEEE၊ M/d"}
+                }
+                MMM{
+                    M{"MMM – MMM"}
+                }
+                MMMEd{
+                    M{"MMM d၊ EEEE – MMM d၊ EEEE"}
+                    d{"MMM d၊ EEEE – MMM d၊ EEEE"}
+                }
+                MMMd{
+                    M{"MMM d – MMM d"}
+                    d{"MMM d – MMM d"}
+                }
+                Md{
+                    M{"M/d – M/d"}
+                    d{"M/d – M/d"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a - h a"}
+                    h{"h-h a"}
+                }
+                hm{
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
+                }
+                hv{
+                    a{"h a - h a v"}
+                    h{"h-h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"yy/M – yy/M"}
+                    y{"yy/M – yy/M"}
+                }
+                yMEd{
+                    M{"EEEE၊ yy/M/d – EEEE၊ yy/M/d"}
+                    d{"EEEE၊ yy/M/d – EEEE၊ yy/M/d"}
+                    y{"EEEE၊ yy/M/d – EEEE၊ yy/M/d"}
+                }
+                yMMM{
+                    M{"y MMM – y MMM"}
+                    y{"y MMM – y MMM"}
+                }
+                yMMMEd{
+                    M{"y၊ MMM d၊ EEEE – MMM d၊ EEEE"}
+                    d{"y၊ MMM d၊ EEEE – MMM d၊ EEEE"}
+                    y{"y၊ MMM d၊ EEEE – y၊ MMM d၊ EEEE"}
+                }
+                yMMMd{
+                    M{"y၊ MMM d – MMM d"}
+                    y{"y MMM d – y MMM d"}
+                }
+                yMd{
+                    M{"yy/M/d – yy/M/d"}
+                    d{"yy/M/d – yy/M/d"}
+                    y{"yy/M/d – yy/M/d"}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "ပ-စိတ်",
+                        "ဒု-စိတ်",
+                        "တ-စိတ်",
+                        "စ-စိတ်",
+                    }
+                    wide{
+                        "ပထမ သုံးလပတ်",
+                        "ဒုတိယ သုံးလပတ်",
+                        "တတိယ သုံးလပတ်",
+                        "စတုတ္ထ သုံးလပတ်",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ပ",
+                        "ဒု",
+                        "တ",
+                        "စ",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "နံနက်",

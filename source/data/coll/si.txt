@@ -10,14 +10,24 @@
  *  ICU <specials> source: <path>/xml/collation/si.xml
  */
 si{
-    Version{"2.0.50.23"}
+    Version{"2.0.81.30"}
     collations{
         dictionary{
-            Sequence{" [normalization on]&ඖ<ං<ඃ&ජ්ඤ<<ඥ"}
+            Sequence{
+                " [normalization on] [reorder Sinh Deva Beng Guru Gujr Orya Taml Telu"
+                " Knda Mlym]"
+                "&ඖ<ං<ඃ"
+                "&ජ්ඤ<<ඥ"
+            }
             Version{"23"}
         }
         standard{
-            Sequence{" [normalization on]&ඖ<ං<ඃ&ඥ<ඤ"}
+            Sequence{
+                " [normalization on] [reorder Sinh Deva Beng Guru Gujr Orya Taml Telu"
+                " Knda Mlym]"
+                "&ඖ<ං<ඃ"
+                "&ඥ<ඤ"
+            }
             Version{"23"}
         }
     }

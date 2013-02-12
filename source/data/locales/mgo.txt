@@ -44,8 +44,113 @@ mgo{
         }
         native{"latn"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.58"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, G y MMMM dd",
+                "G y MMMM d",
+                "G y MMM d",
+                "GGGGG y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                d{"d"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Aneg 1",
+                        "Aneg 2",
+                        "Aneg 3",
+                        "Aneg 4",
+                        "Aneg 5",
+                        "Aneg 6",
+                        "Aneg 7",
+                    }
+                    narrow{
+                        "A1",
+                        "A2",
+                        "A3",
+                        "A4",
+                        "A5",
+                        "A6",
+                        "A7",
+                    }
+                    short{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                    wide{
+                        "Aneg 1",
+                        "Aneg 2",
+                        "Aneg 3",
+                        "Aneg 4",
+                        "Aneg 5",
+                        "Aneg 6",
+                        "Aneg 7",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Aneg 1",
+                        "Aneg 2",
+                        "Aneg 3",
+                        "Aneg 4",
+                        "Aneg 5",
+                        "Aneg 6",
+                        "Aneg 7",
+                    }
+                    narrow{
+                        "A1",
+                        "A2",
+                        "A3",
+                        "A4",
+                        "A5",
+                        "A6",
+                        "A7",
+                    }
+                    short{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                    wide{
+                        "Aneg 1",
+                        "Aneg 2",
+                        "Aneg 3",
+                        "Aneg 4",
+                        "Aneg 5",
+                        "Aneg 6",
+                        "Aneg 7",
+                    }
+                }
+            }
+            intervalFormats{
+                fallback{"{0} – {1}"}
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "AM",

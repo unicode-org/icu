@@ -49,8 +49,98 @@ jgo{
         }
         native{"latn"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "mba’mba’",
+                "ŋka mbɔ́t nji",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, G y MMMM dd",
+                "G y MMMM d",
+                "G y MMM d",
+                "GGGGG y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E d"}
+                MEd{"E, d.M"}
+                Md{"d.M"}
+                yMd{"M.d.y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sɔ́ndi",
+                        "Mɔ́ndi",
+                        "Ápta Mɔ́ndi",
+                        "Wɛ́nɛsɛdɛ",
+                        "Tɔ́sɛdɛ",
+                        "Fɛlâyɛdɛ",
+                        "Sásidɛ",
+                    }
+                    narrow{
+                        "Sɔ́",
+                        "Mɔ́",
+                        "ÁM",
+                        "Wɛ́",
+                        "Tɔ́",
+                        "Fɛ",
+                        "Sá",
+                    }
+                    wide{
+                        "Sɔ́ndi",
+                        "Mɔ́ndi",
+                        "Ápta Mɔ́ndi",
+                        "Wɛ́nɛsɛdɛ",
+                        "Tɔ́sɛdɛ",
+                        "Fɛlâyɛdɛ",
+                        "Sásidɛ",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Sɔ́ndi",
+                        "Mɔ́ndi",
+                        "Ápta Mɔ́ndi",
+                        "Wɛ́nɛsɛdɛ",
+                        "Tɔ́sɛdɛ",
+                        "Fɛlâyɛdɛ",
+                        "Sásidɛ",
+                    }
+                    narrow{
+                        "Sɔ́",
+                        "Mɔ́",
+                        "ÁM",
+                        "Wɛ́",
+                        "Tɔ́",
+                        "Fɛ",
+                        "Sá",
+                    }
+                    wide{
+                        "Sɔ́ndi",
+                        "Mɔ́ndi",
+                        "Ápta Mɔ́ndi",
+                        "Wɛ́nɛsɛdɛ",
+                        "Tɔ́sɛdɛ",
+                        "Fɛlâyɛdɛ",
+                        "Sásidɛ",
+                    }
+                }
+            }
+            intervalFormats{
+                fallback{"{0} – {1}"}
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "mba’mba’",

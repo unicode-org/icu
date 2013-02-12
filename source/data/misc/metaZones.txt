@@ -223,7 +223,6 @@ metaZones:table(nofallback){
         }
         China{
             001{"Asia/Shanghai"}
-            MO{"Asia/Macau"}
         }
         Choibalsan{
             001{"Asia/Choibalsan"}

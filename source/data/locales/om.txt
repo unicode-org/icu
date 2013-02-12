@@ -25,8 +25,69 @@ om{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.81.58"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "WD",
+                "WB",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, y G",
+                "dd MMMM y G",
+                "dd-MMM-y G",
+                "dd/MM/yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MMMMdd{"dd MMMM"}
+                MMdd{"dd/MM"}
+                yyMM{"MM/yy"}
+                yyQQQ{"QQQ yy"}
+                yyyyMMMM{"MMMM y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Dil",
+                        "Wix",
+                        "Qib",
+                        "Rob",
+                        "Kam",
+                        "Jim",
+                        "San",
+                    }
+                    wide{
+                        "Dilbata",
+                        "Wiixata",
+                        "Qibxata",
+                        "Roobii",
+                        "Kamiisa",
+                        "Jimaata",
+                        "Sanbata",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "S",
+                        "M",
+                        "T",
+                        "W",
+                        "T",
+                        "F",
+                        "S",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "WD",

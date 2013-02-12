@@ -27,7 +27,7 @@ mgo{
             latn{"inu"}
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.58"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

@@ -7,8 +7,25 @@
 // *
 // ***************************************************************************
 sr_Latn_ME{
-    Version{"2.0.74.64"}
+    Version{"2.0.81.58"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "HH.mm.ss zzzz",
+                "HH.mm.ss z",
+                "HH.mm.ss",
+                "HH.mm",
+                "EEEE, dd. MMMM y. G",
+                "d.MM.y. G",
+                "dd.MM.y. G",
+                "d.M.yy. GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "HH.mm.ss zzzz",

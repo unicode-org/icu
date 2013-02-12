@@ -106,8 +106,270 @@ dz{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "སྔ་ཆ་",
+                "ཕྱི་ཆ་",
+            }
+            DateTimePatterns{
+                "ཆུ་ཚོད་ h སྐར་མ་ mm:ss a zzzz",
+                "ཆུ་ཚོད་ h སྐར་མ་ mm:ss a z",
+                "ཆུ་ཚོད་h:mm:ss a",
+                "ཆུ་ཚོད་ h སྐར་མ་ mm a",
+                "EEEE, G སྤྱི་ལོ་y MMMM ཚེས་dd",
+                "G སྤྱི་ལོ་y MMMM ཚེས་ dd",
+                "G སྤྱི་ལོ་y ཟླ་MMM ཚེས་dd",
+                "GGGGG y-MM-dd",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                H{"ཆུ་ཚོད་HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M-d"}
+                MMM{"སྤྱི་LLL"}
+                MMMEd{"E, སྤྱི་LLL ཚེ་d"}
+                MMMd{"སྤྱི་LLL ཚེ་d"}
+                Md{"M-d"}
+                d{"d"}
+                h{"ཆུ་ཚོད་h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"y-M"}
+                yMEd{"E, y-M-d"}
+                yMMM{"y སྤྱི་ཟླ་MMM"}
+                yMMMEd{"གཟའ་E, ལོy ཟླ་MMM ཚེ་d"}
+                yMMMd{"y MMM d"}
+                yMd{"y-M-d"}
+                yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ཟླ་",
+                        "མིར་",
+                        "ལྷག་",
+                        "ཕུར་",
+                        "སངས་",
+                        "སྤེན་",
+                        "ཉི་",
+                    }
+                    narrow{
+                        "ཟླ",
+                        "མིར",
+                        "ལྷག",
+                        "ཕུར",
+                        "སངྶ",
+                        "སྤེན",
+                        "ཉི",
+                    }
+                    short{
+                        "ཟླ་",
+                        "མིར་",
+                        "ལྷག་",
+                        "ཕུར་",
+                        "སངས་",
+                        "སྤེན་",
+                        "ཉི་",
+                    }
+                    wide{
+                        "གཟའ་ཟླ་བ་",
+                        "གཟའ་མིག་དམར་",
+                        "གཟའ་ལྷག་པ་",
+                        "གཟའ་ཕུར་བུ་",
+                        "གཟའ་པ་སངས་",
+                        "གཟའ་སྤེན་པ་",
+                        "གཟའ་ཉི་མ་",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ཟླ་",
+                        "མིར་",
+                        "ལྷག་",
+                        "ཕུར་",
+                        "སངས་",
+                        "སྤེན་",
+                        "ཉི་",
+                    }
+                    narrow{
+                        "ཟླ",
+                        "མིར",
+                        "ལྷག",
+                        "ཕུར",
+                        "སངྶ",
+                        "སྤེན",
+                        "ཉི",
+                    }
+                    short{
+                        "ཟླ་",
+                        "མིར་",
+                        "ལྷག་",
+                        "ཕུར་",
+                        "སངས་",
+                        "སྤེན་",
+                        "ཉི་",
+                    }
+                    wide{
+                        "གཟའ་ཟླ་བ་",
+                        "གཟའ་མིག་དམར་",
+                        "གཟའ་ལྷག་པ་",
+                        "གཟའ་ཕུར་བུ་",
+                        "གཟའ་པ་སངས་",
+                        "གཟའ་སྤེན་པ་",
+                        "གཟའ་ཉི་མ་",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"སྤྱི་ཟླ་M–M"}
+                }
+                MEd{
+                    M{"E, སྤྱི་ཟླ་MM ཚེས་dd–ཟླ་MM ཚེས་dd"}
+                    d{"E, སྤྱི་ཟླ་MM ཚེས་dd–ཟླ་MM ཚེས་dd"}
+                }
+                MMM{
+                    M{"སྤྱི་LLL–LLL"}
+                }
+                MMMEd{
+                    M{"E, སྤྱི་ཟླ་MM ཚེས་d – E, ཟླ་MM ཚེས་d"}
+                    d{"E, སྤྱི་ཟླ་MM ཚེས་d – E, ཟླ་MM ཚེས་d"}
+                }
+                MMMd{
+                    M{"སྤྱི་ཟླ་MM ཚེས་d–ཟླ་MM ཚེས་d"}
+                    d{"སྤྱི་ཟླ་MM ཚེས་d–d"}
+                }
+                Md{
+                    M{"སྤྱི་ཟླ་MM ཚེས་dd–ཟླ་MM ཚེས་dd"}
+                    d{"སྤྱི་ཟླ་M ཚེས་dd/dd"}
+                }
+                d{
+                    d{"d–d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y–y"}
+                }
+                yM{
+                    M{"yyyy-MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMEd{
+                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                }
+                yMMM{
+                    M{"སྤྱི་ཟླ་MMM/MMM, y"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMEd{
+                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                }
+                yMMMM{
+                    M{"yyyy-སྤྱི་ཟླ་MM – MM"}
+                    y{"yyyy-MM – yyyy-MM"}
+                }
+                yMMMd{
+                    M{"yyyy-MM-dd – MM-d"}
+                    d{"yyyy-MM-d – d"}
+                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                }
+                yMd{
+                    M{"yyyy-MM-dd – MM-dd"}
+                    d{"yyyy-MM-dd – dd"}
+                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "བཞི་དཔྱ་༡",
+                        "བཞི་དཔྱ་༢",
+                        "བཞི་དཔྱ་༣",
+                        "བཞི་དཔྱ་༤",
+                    }
+                    narrow{
+                        "༡",
+                        "༢",
+                        "༣",
+                        "༤",
+                    }
+                    wide{
+                        "བཞི་དཔྱ་དང་པ་",
+                        "བཞི་དཔྱ་གཉིས་པ་",
+                        "བཞི་དཔྱ་གསུམ་པ་",
+                        "བཞི་དཔྱ་བཞི་པ་",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "བཞི་དཔྱ་༡",
+                        "བཞི་དཔྱ་༢",
+                        "བཞི་དཔྱ་༣",
+                        "བཞི་དཔྱ་༤",
+                    }
+                    narrow{
+                        "༡",
+                        "༢",
+                        "༣",
+                        "༤",
+                    }
+                    wide{
+                        "བཞི་དཔྱ་དང་པ་",
+                        "བཞི་དཔྱ་གཉིས་པ་",
+                        "བཞི་དཔྱ་གསུམ་པ་",
+                        "བཞི་དཔྱ་བཞི་པ་",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "སྔ་ཆ་",

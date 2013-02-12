@@ -43,8 +43,47 @@ ps{
         }
         native{"arabext"}
     }
-    Version{"2.0.80.4"}
+    Version{"2.0.81.58"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "غ.م.",
+                "غ.و.",
+            }
+            DateTimePatterns{
+                "H:mm:ss (zzzz)",
+                "H:mm:ss (z)",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE د G y د MMMM d",
+                "د G y د MMMM d",
+                "d MMM y G",
+                "GGGGG y/M/d",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                H{"H"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
+            }
+            dayNames{
+                format{
+                    wide{
+                        "یکشنبه",
+                        "دوشنبه",
+                        "سه‌شنبه",
+                        "چهارشنبه",
+                        "پنجشنبه",
+                        "جمعه",
+                        "شنبه",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "غ.م.",

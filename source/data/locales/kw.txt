@@ -21,8 +21,36 @@ kw{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "a.m.",
+                "p.m.",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sul",
+                        "Lun",
+                        "Mth",
+                        "Mhr",
+                        "Yow",
+                        "Gwe",
+                        "Sad",
+                    }
+                    wide{
+                        "De Sul",
+                        "De Lun",
+                        "De Merth",
+                        "De Merher",
+                        "De Yow",
+                        "De Gwener",
+                        "De Sadorn",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "a.m.",

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/az.xml
  */
 az{
-    Version{"2.0.63.65"}
+    Version{"2.0.81.30"}
     collations{
         search{
             Sequence{
@@ -75,6 +75,7 @@ az{
         }
         standard{
             Sequence{
+                " [reorder Latn Cyrl]"
                 "&C<ç<<<Ç"
                 "&G<ğ<<<Ğ"
                 "&[before 1]i<ı<<<I"

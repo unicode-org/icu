@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/dz.xml
  */
 dz{
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     zoneStrings{
         "Africa:Cairo"{
             ec{"ཀཱའི་རོ"}
@@ -158,51 +158,6 @@ dz{
         }
         "Atlantic:Faeroe"{
             ec{"ཕཱའེ་རོ་"}
-        }
-        "Etc:GMT"{
-            ec{"ཇི་ཨེམ་ཊི"}
-        }
-        "Etc:GMT-1"{
-            ec{"ཇི་ཨེམ་ཊི-༡"}
-        }
-        "Etc:GMT-10"{
-            ec{"ཇི་ཨེམ་ཊི-༡༠"}
-        }
-        "Etc:GMT-11"{
-            ec{"ཇི་ཨེམ་ཊི-༡༡"}
-        }
-        "Etc:GMT-12"{
-            ec{"ཇི་ཨེམ་ཊི-༡༢"}
-        }
-        "Etc:GMT-13"{
-            ec{"ཇི་ཨེམ་ཊི-༡༣"}
-        }
-        "Etc:GMT-14"{
-            ec{"ཇི་ཨེམ་ཊི-༡༤"}
-        }
-        "Etc:GMT-2"{
-            ec{"ཇི་ཨེམ་ཊི-༢"}
-        }
-        "Etc:GMT-3"{
-            ec{"ཇི་ཨེམ་ཊི-༣"}
-        }
-        "Etc:GMT-4"{
-            ec{"ཇི་ཨེམ་ཊི-༤"}
-        }
-        "Etc:GMT-5"{
-            ec{"ཇི་ཨེམ་ཊི-༥"}
-        }
-        "Etc:GMT-6"{
-            ec{"ཇི་ཨེམ་ཊི-༦"}
-        }
-        "Etc:GMT-7"{
-            ec{"ཇི་ཨེམ་ཊི-༧"}
-        }
-        "Etc:GMT-8"{
-            ec{"ཇི་ཨེམ་ཊི-༨"}
-        }
-        "Etc:GMT-9"{
-            ec{"ཇི་ཨེམ་ཊི-༩"}
         }
         "Etc:Unknown"{
             ec{"མ་ཤེས་པའི་ཁྲོམ་སྡེ"}

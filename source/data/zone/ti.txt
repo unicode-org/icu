@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ti.xml
  */
 ti{
-    Version{"2.0.79.40"}
+    Version{"2.0.81.59"}
     zoneStrings{
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}

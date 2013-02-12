@@ -10,10 +10,14 @@
  *  ICU <specials> source: <path>/xml/collation/gu.xml
  */
 gu{
-    Version{"2.0.50.24"}
+    Version{"2.0.81.30"}
     collations{
         standard{
-            Sequence{" [normalization on]&ૐ<ં<<ઁ<ઃ"}
+            Sequence{
+                " [normalization on] [reorder Gujr Deva Beng Guru Orya Taml Telu Knda"
+                " Mlym Sinh]"
+                "&ૐ<ં<<ઁ<ઃ"
+            }
             Version{"23"}
         }
     }

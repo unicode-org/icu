@@ -191,7 +191,7 @@ bs_Cyrl{
             }
         }
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     calendar{
         buddhist{
             eras{
@@ -238,6 +238,210 @@ bs_Cyrl{
                         "Хамле",
                         "Нехасе",
                         "Пагумен",
+                    }
+                }
+            }
+        }
+        generic{
+            AmPmMarkers{
+                "пре подне",
+                "поподне",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, dd. MMMM y. G",
+                "dd. MMMM y. G",
+                "dd.MM.y. G",
+                "d.M.yy. GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E, d."}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, dd.MM."}
+                MMM{"LLL"}
+                MMMEd{"E, dd. MMM"}
+                MMMd{"dd. MMM"}
+                Md{"dd.MM."}
+                d{"d"}
+                h{"hh a"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y."}
+                yM{"MM.y."}
+                yMEd{"E, dd.MM.y."}
+                yMMM{"MMM y."}
+                yMMMEd{"E, dd. MMM y."}
+                yMMMd{"dd. MMM y."}
+                yMd{"dd.MM.y."}
+                yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "нед",
+                        "пон",
+                        "уто",
+                        "сри",
+                        "чет",
+                        "пет",
+                        "суб",
+                    }
+                    wide{
+                        "недеља",
+                        "понедељак",
+                        "уторак",
+                        "сриједа",
+                        "четвртак",
+                        "петак",
+                        "субота",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "н",
+                        "п",
+                        "у",
+                        "с",
+                        "ч",
+                        "п",
+                        "с",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"HH-HH"}
+                }
+                Hm{
+                    H{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                Hv{
+                    H{"HH-HH v"}
+                }
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, d.M - E, d.M"}
+                    d{"E, d.M - E, d.M"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, dd. MMM - E, dd. MMM"}
+                    d{"E, dd. - E, dd. MMM"}
+                }
+                MMMd{
+                    M{"dd. MMM - dd. MMM"}
+                    d{"dd.-dd. MMM"}
+                }
+                Md{
+                    M{"d.M - d.M"}
+                    d{"d.M - d.M"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"hh a - hh a"}
+                    h{"hh-hh a"}
+                }
+                hm{
+                    a{"hh:mm a - hh:mm a"}
+                    h{"hh:mm-hh:mm a"}
+                    m{"hh:mm-hh:mm a"}
+                }
+                hmv{
+                    a{"hh:mm a - hh:mm a v"}
+                    h{"hh:mm-hh:mm a v"}
+                    m{"hh:mm-hh:mm a v"}
+                }
+                hv{
+                    a{"hh a - hh a v"}
+                    h{"hh-hh a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM.-MM. y."}
+                    y{"MM.y. - MM.y."}
+                }
+                yMEd{
+                    M{"E, d.M.y. - E, d.M.y."}
+                    d{"E, d.M.y. - E, d.M.y."}
+                    y{"E, d.M.y. - E, d.M.y."}
+                }
+                yMMM{
+                    M{"MMM-MMM y."}
+                    y{"MMM y. - MMM y."}
+                }
+                yMMMEd{
+                    M{"E, dd. MMM - E, dd. MMM y."}
+                    d{"E, dd. - E, dd. MMM y."}
+                    y{"E, dd. MMM y. - E, dd. MMM y."}
+                }
+                yMMMM{
+                    M{"MMMM-MMMM y."}
+                    y{"MMMM y. - MMMM y."}
+                }
+                yMMMd{
+                    M{"dd. MMM - dd. MMM y."}
+                    d{"dd.-dd. MMM y."}
+                    y{"dd. MMM y. - dd. MMM y."}
+                }
+                yMd{
+                    M{"d.M.y. - d.M.y."}
+                    d{"d.M.y. - d.M.y."}
+                    y{"d.M.y. - d.M.y."}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "К1",
+                        "К2",
+                        "К3",
+                        "К4",
+                    }
+                    narrow{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
+                    }
+                    wide{
+                        "Прво тромесечје",
+                        "Друго тромесечје",
+                        "Треће тромесечје",
+                        "Четврто тромесечје",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
                     }
                 }
             }

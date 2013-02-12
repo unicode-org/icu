@@ -19,8 +19,32 @@ en_BE{
             }
         }
     }
-    Version{"2.0.79.49"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "HH 'h' mm 'min' ss 's' zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM y G",
+                "d MMM y G",
+                "dd MMM y G",
+                "dd/MM/yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MEd{"E d/M"}
+                Md{"d/M"}
+                yMEd{"E, d/M/y"}
+                yMMMEd{"E d MMM y"}
+                yMd{"d/M/y"}
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "HH 'h' mm 'min' ss 's' zzzz",

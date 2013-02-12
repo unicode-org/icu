@@ -23,8 +23,91 @@ bs{
             }
         }
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "pre podne",
+                "popodne",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, dd. MMMM y. G",
+                "dd. MMMM y. G",
+                "dd.MM.y. G",
+                "dd.MM.yy. GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E, dd."}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, dd.MM."}
+                MMM{"LLL"}
+                MMMEd{"E, dd. MMM"}
+                MMMd{"dd. MMM"}
+                Md{"dd.MM."}
+                d{"d"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y."}
+                yM{"MM.y."}
+                yMEd{"E, dd.MM.y."}
+                yMMM{"MMM y."}
+                yMMMEd{"E, dd. MMM y."}
+                yMMMd{"dd. MMM y."}
+                yMd{"dd.MM.y."}
+                yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sri",
+                        "čet",
+                        "pet",
+                        "sub",
+                    }
+                    wide{
+                        "nedjelja",
+                        "ponedjeljak",
+                        "utorak",
+                        "srijeda",
+                        "četvrtak",
+                        "petak",
+                        "subota",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "Prvi kvartal",
+                        "Drugi kvartal",
+                        "Treći kvartal",
+                        "Četvrti kvartal",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "pre podne",

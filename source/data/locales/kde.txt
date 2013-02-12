@@ -22,8 +22,101 @@ kde{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "Muhi",
+                "Chilo",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "dd/MM/y GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M/d"}
+                MMM{"LLL"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+                d{"d"}
+                hm{"h:mm a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMM{"MMMM y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Ll2",
+                        "Ll3",
+                        "Ll4",
+                        "Ll5",
+                        "Ll6",
+                        "Ll7",
+                        "Ll1",
+                    }
+                    wide{
+                        "Liduva lyapili",
+                        "Liduva lyatatu",
+                        "Liduva lyanchechi",
+                        "Liduva lyannyano",
+                        "Liduva lyannyano na linji",
+                        "Liduva lyannyano na mavili",
+                        "Liduva litandi",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                        "1",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "L1",
+                        "L2",
+                        "L3",
+                        "L4",
+                    }
+                    wide{
+                        "Lobo 1",
+                        "Lobo 2",
+                        "Lobo 3",
+                        "Lobo 4",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "Muhi",

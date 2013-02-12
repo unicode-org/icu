@@ -31,8 +31,36 @@ kok{
         }
         native{"deva"}
     }
-    Version{"2.0.74.65"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "म.पू.",
+                "म.नं.",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "रवि",
+                        "सोम",
+                        "मंगळ",
+                        "बुध",
+                        "गुरु",
+                        "शुक्र",
+                        "शनि",
+                    }
+                    wide{
+                        "आदित्यवार",
+                        "सोमवार",
+                        "मंगळार",
+                        "बुधवार",
+                        "गुरुवार",
+                        "शुक्रवार",
+                        "शनिवार",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "म.पू.",
