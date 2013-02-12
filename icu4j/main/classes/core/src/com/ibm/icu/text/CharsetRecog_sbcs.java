@@ -1,6 +1,6 @@
 /*
  ****************************************************************************
- * Copyright (C) 2005-2012, International Business Machines Corporation and *
+ * Copyright (C) 2005-2013, International Business Machines Corporation and *
  * others. All Rights Reserved.                                             *
  ************************************************************************** *
  *
@@ -1033,8 +1033,6 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
     {
         //arabic shaping class, method shape/unshape
         protected static ArabicShaping as = new ArabicShaping(ArabicShaping.LETTERS_UNSHAPE);
-        protected byte[] prev_fInputBytes = null;
-        protected int prev_fInputLen = 0;
 
         protected static byte[] byteMap = {
 /*                 -0           -1           -2           -3           -4           -5           -6           -7           -8           -9           -A           -B           -C           -D           -E           -F   */
@@ -1080,15 +1078,6 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         {
             return "ar";
         }
-        protected void matchInit(CharsetDetector det) 
-        {
-            assert prev_fInputBytes == null;
-            prev_fInputBytes = det.fInputBytes;
-            prev_fInputLen = det.fInputLen;
-            det.fInputBytes = unshape(prev_fInputBytes, prev_fInputLen);
-            det.fInputLen = det.fInputBytes.length;
-        }
-        
         /*
          * Arabic shaping needs to be done manually. Cannot call ArabicShaping class
          * because CharsetDetector is dealing with bytes not Unicode code points. We could
@@ -1096,7 +1085,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
          * on CharsetICU which we try to avoid. IBM420 converter amongst different versions
          * of JDK can produce different results and therefore is also avoided.
          */
-        private byte[] unshape(byte[] inputBytes, int inputLen) {
+        byte[] unshape(byte[] inputBytes, int inputLen) {
             byte resultByteArr[] = unshapeLamAlef(inputBytes, inputLen);
             
             for (int i=0; i<resultByteArr.length; i++){
@@ -1128,15 +1117,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
                     return true;
             return false;
         }
-        
-        protected void matchFinish(CharsetDetector det) {
-            if (prev_fInputBytes != null) {
-                det.fInputBytes = prev_fInputBytes;
-                det.fInputLen = prev_fInputLen;
-                prev_fInputBytes = null;
-            }
-        }
-        
+                
     }
     static class CharsetRecog_IBM420_ar_rtl extends CharsetRecog_IBM420_ar 
     {
@@ -1153,9 +1134,15 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
         public CharsetMatch match(CharsetDetector det)
         {
-            matchInit(det);
+            byte[] prev_fInputBytes = det.fInputBytes;
+            int prev_fInputLen = det.fInputLen;
+            det.fInputBytes = unshape(prev_fInputBytes, prev_fInputLen);
+            det.fInputLen = det.fInputBytes.length;
+
             int confidence =  match(det, ngrams, byteMap, (byte)0x40);
-            matchFinish(det);
+            
+            det.fInputBytes = prev_fInputBytes;
+            det.fInputLen = prev_fInputLen;
             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
         
@@ -1175,9 +1162,15 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
         public CharsetMatch match(CharsetDetector det)
         {
-            matchInit(det);
+            byte[] prev_fInputBytes = det.fInputBytes;
+            int prev_fInputLen = det.fInputLen;
+            det.fInputBytes = unshape(prev_fInputBytes, prev_fInputLen);
+            det.fInputLen = det.fInputBytes.length;
+            
             int confidence = match(det, ngrams, byteMap, (byte)0x40);
-            matchFinish(det);
+            
+            det.fInputBytes = prev_fInputBytes;
+            det.fInputLen = prev_fInputLen;
             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
         
