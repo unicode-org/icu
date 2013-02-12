@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2012, International Business Machines
+* Copyright (c) 2004-2013, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -2052,7 +2052,7 @@ public class ULocaleTest extends TestFmwk {
                 "pa_PK"
             }, {
                 "pap",
-                "pap_Latn_AN",
+                "pap_Latn_BQ",
                 "pap"
             }, {
                 "pau",
@@ -2245,7 +2245,7 @@ public class ULocaleTest extends TestFmwk {
             }, {
                 "und_AN",
                 "pap_Latn_AN",
-                "pap"
+                "pap_AN"
             }, {
                 "und_AO",
                 "pt_Latn_AO",
@@ -2997,7 +2997,7 @@ public class ULocaleTest extends TestFmwk {
             }, {
                 "und_Syrc",
                 "syr_Syrc_SY",
-                "syr_Syrc_SY"
+                "syr"
             }, {
                 "und_TD",
                 "fr_Latn_TD",
