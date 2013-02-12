@@ -45,7 +45,8 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(0, testAPI);
         TESTCASE(1, testFormat);
         TESTCASE(2, testFormatUserDII);
-        TESTCASE(3, testStress);
+        TESTCASE(3, testSetIntervalPatternNoSideEffect);
+        TESTCASE(4, testStress);
         default: name = ""; break;
     }
 }
@@ -1099,6 +1100,23 @@ void DateIntervalFormatTest::testFormatUserDII() {
         "es", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "10 ene 2007", 
     };
     expectUserDII(DATA, ARRAY_SIZE(DATA));
+}
+
+
+void DateIntervalFormatTest::testSetIntervalPatternNoSideEffect() {
+    UErrorCode ec = U_ZERO_ERROR;
+    DateIntervalInfo* dtitvinf = new DateIntervalInfo(ec);
+    UnicodeString expected;
+    dtitvinf->getIntervalPattern(ctou("yMd"), UCAL_DATE, expected, ec);
+    dtitvinf->setIntervalPattern(ctou("yMd"), UCAL_DATE, ctou("M/d/y \\u2013 d"), ec);
+    delete dtitvinf;
+    dtitvinf = new DateIntervalInfo(ec);
+    UnicodeString actual;
+    dtitvinf->getIntervalPattern(ctou("yMd"), UCAL_DATE, actual, ec);
+    delete dtitvinf;
+    if (expected != actual) {
+        errln("DateIntervalInfo.setIntervalPattern should have no side effects.");
+    }
 }
 
 
