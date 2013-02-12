@@ -29,8 +29,88 @@ seh{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.58"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d 'de' MMMM 'de' y G",
+                "d 'de' MMMM 'de' y G",
+                "d 'de' MMM 'de' y G",
+                "d/M/y GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                HHmmss{"HH:mm:ss"}
+                Hm{"H:mm"}
+                M{"L"}
+                MEd{"E, dd/MM"}
+                MMM{"LLL"}
+                MMMEd{"E, d MMM"}
+                MMMMEd{"E, d MMMM"}
+                MMMMd{"d MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                d{"d"}
+                mmss{"mm:ss"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"MM/y"}
+                yMEd{"E, dd/MM/y"}
+                yMMM{"MMM 'de' y"}
+                yMMMEd{"E, d 'de' MMM 'de' y"}
+                yMMMM{"MMMM 'de' y"}
+                yQQQ{"y QQQ"}
+                yQQQQ{"y QQQQ"}
+                yyMM{"MM/yy"}
+                yyMMM{"MMM yy"}
+                yyMMMEd{"E, d 'de' MMM 'de' yy"}
+                yyMMMd{"d 'de' MMM 'de' yy"}
+                yyQQQ{"QQQ yy"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Dim",
+                        "Pos",
+                        "Pir",
+                        "Tat",
+                        "Nai",
+                        "Sha",
+                        "Sab",
+                    }
+                    wide{
+                        "Dimingu",
+                        "Chiposi",
+                        "Chipiri",
+                        "Chitatu",
+                        "Chinai",
+                        "Chishanu",
+                        "Sabudu",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "D",
+                        "P",
+                        "C",
+                        "T",
+                        "N",
+                        "S",
+                        "S",
+                    }
+                }
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss zzzz",

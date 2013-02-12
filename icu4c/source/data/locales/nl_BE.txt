@@ -14,8 +14,25 @@ nl_BE{
             }
         }
     }
-    Version{"2.0.77.28"}
+    Version{"2.0.81.58"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM y G",
+                "d MMMM y G",
+                "d-MMM-y G",
+                "d/MM/yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss zzzz",

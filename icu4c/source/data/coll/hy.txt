@@ -10,10 +10,10 @@
  *  ICU <specials> source: <path>/xml/collation/hy.xml
  */
 hy{
-    Version{"2.0.48.6"}
+    Version{"2.0.81.30"}
     collations{
         standard{
-            Sequence{"&ք<և<<<Եւ"}
+            Sequence{" [reorder Armn]&ք<և<<<Եւ"}
             Version{"23"}
         }
     }

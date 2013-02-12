@@ -22,8 +22,103 @@ ebu{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "KI",
+                "UT",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "dd/MM/y GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M/d"}
+                MMM{"LLL"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+                d{"d"}
+                hm{"h:mm a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMM{"MMMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d/M/y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Kma",
+                        "Tat",
+                        "Ine",
+                        "Tan",
+                        "Arm",
+                        "Maa",
+                        "NMM",
+                    }
+                    wide{
+                        "Kiumia",
+                        "Njumatatu",
+                        "Njumaine",
+                        "Njumatano",
+                        "Aramithi",
+                        "Njumaa",
+                        "NJumamothii",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "K",
+                        "N",
+                        "N",
+                        "N",
+                        "A",
+                        "M",
+                        "N",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "Kuota ya mbere",
+                        "Kuota ya Kaĩrĩ",
+                        "Kuota ya kathatu",
+                        "Kuota ya kana",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "KI",

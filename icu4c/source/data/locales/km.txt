@@ -125,8 +125,270 @@ km{
         }
         native{"khmr"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "ព្រឹក",
+                "ល្ងាច",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d MMMM y G",
+                "d MMMM, y G",
+                "d MMM y G",
+                "d/M/y GGGGG",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+                "{1}, {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M-d"}
+                MMM{"LLL"}
+                MMMEd{"E d MMM"}
+                MMMd{"d MMM"}
+                Md{"M-d"}
+                d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M-y"}
+                yMEd{"E, d-M-y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, d MMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d-M-y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "អាទិត្យ",
+                        "ចន្ទ",
+                        "អង្គារ",
+                        "ពុធ",
+                        "ព្រហស្បតិ៍",
+                        "សុក្រ",
+                        "សៅរ៍",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                    short{
+                        "អាទិត្យ",
+                        "ចន្ទ",
+                        "អង្គារ",
+                        "ពុធ",
+                        "ព្រហស្បតិ៍",
+                        "សុក្រ",
+                        "សៅរ៍",
+                    }
+                    wide{
+                        "អាទិត្យ",
+                        "ចន្ទ",
+                        "អង្គារ",
+                        "ពុធ",
+                        "ព្រហស្បតិ៍",
+                        "សុក្រ",
+                        "សៅរ៍",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "អាទិត្យ",
+                        "ចន្ទ",
+                        "អង្គារ",
+                        "ពុធ",
+                        "ព្រហស្បតិ៍",
+                        "សុក្រ",
+                        "សៅរ៍",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                        "5",
+                        "6",
+                        "7",
+                    }
+                    short{
+                        "អាទិត្យ",
+                        "ចន្ទ",
+                        "អង្គារ",
+                        "ពុធ",
+                        "ព្រហស្បតិ៍",
+                        "សុក្រ",
+                        "សៅរ៍",
+                    }
+                    wide{
+                        "អាទិត្យ",
+                        "ចន្ទ",
+                        "អង្គារ",
+                        "ពុធ",
+                        "ព្រហស្បតិ៍",
+                        "សុក្រ",
+                        "សៅរ៍",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"H-H"}
+                }
+                Hm{
+                    H{"H:mm-H:mm"}
+                    m{"H:mm-H:mm"}
+                }
+                Hmv{
+                    H{"H:mm-H:mm v"}
+                    m{"H:mm-H:mm v"}
+                }
+                Hv{
+                    H{"H-H v"}
+                }
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, d/M - E, d/M"}
+                    d{"E, d/M– E, d/M"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, d MMM - E, d MMM"}
+                    d{"E, d MMM - E, d MMM"}
+                }
+                MMMd{
+                    M{"d MMM - d MMM"}
+                    d{"d-d MMM"}
+                }
+                Md{
+                    M{"d/M - d/M"}
+                    d{"d/M– d/M"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h-h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h-h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"M/yyyy - M/yyyy"}
+                    y{"M/yyyy - M/yyyy"}
+                }
+                yMEd{
+                    M{"E, d/M/yyyy - E, d/M/yyyy"}
+                    d{"E, d/M/yyyy - E, d/M/yyyy"}
+                    y{"E, d/M/yyyy - E, d/M/yyyy"}
+                }
+                yMMM{
+                    M{"MM – MM-yyyy"}
+                    y{"MM-yyyy – MM-yyyy"}
+                }
+                yMMMEd{
+                    M{"E, dd MMM y - E, dd MMM y"}
+                    d{"E, dd MMM y - E, dd MMM y"}
+                    y{"E, dd-MM-yyyy – E, dd MMM y"}
+                }
+                yMMMM{
+                    M{"MM – MM yyyy"}
+                    y{"MM-yyyy – MM-yyyy"}
+                }
+                yMMMd{
+                    M{"d MMM y – d MMM"}
+                    d{"d-d MMM y"}
+                    y{"d MMM y - d MMM y"}
+                }
+                yMd{
+                    M{"d/M/yyyy - d/M/yyyy"}
+                    d{"d/M/yyyy - d/M/yyyy"}
+                    y{"d/M/yyyy - d/M/yyyy"}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "ត្រីមាស ១",
+                        "ត្រីមាស ២",
+                        "ត្រីមាស ៣",
+                        "ត្រីមាស ៤",
+                    }
+                    narrow{
+                        "១",
+                        "២",
+                        "៣",
+                        "៤",
+                    }
+                    wide{
+                        "ត្រីមាស ទី ១",
+                        "ត្រីមាស ទី ២",
+                        "ត្រីមាស ទី ៣",
+                        "ត្រីមាស ទី ៤",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ត្រីមាស ១",
+                        "ត្រីមាស ២",
+                        "ត្រីមាស ៣",
+                        "ត្រីមាស ៤",
+                    }
+                    narrow{
+                        "១",
+                        "២",
+                        "៣",
+                        "៤",
+                    }
+                    wide{
+                        "ត្រីមាសទី ១",
+                        "ត្រីមាសទី ២",
+                        "ត្រីមាសទី ៣",
+                        "ត្រីមាសទី ៤",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "ព្រឹក",

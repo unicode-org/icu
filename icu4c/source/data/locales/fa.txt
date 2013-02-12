@@ -141,8 +141,282 @@ fa{
         }
         native{"arabext"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            AmPmMarkers{
+                "قبل‌ازظهر",
+                "بعدازظهر",
+            }
+            DateTimePatterns{
+                "H:mm:ss (zzzz)",
+                "H:mm:ss (z)",
+                "H:mm:ss",
+                "H:mm",
+                "EEEE d MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "GGGGG y/M/d",
+                "{1}،‏ {0}",
+                "{1}، ساعت {0}",
+                "{1}، ساعت {0}",
+                "{1}،‏ {0}",
+                "{1}،‏ {0}",
+            }
+            appendItems{
+                Day-Of-Week{"{1} {0}"}
+            }
+            availableFormats{
+                Ed{"E d"}
+                GGGGyyyyMMMMd{"d MMMM y GGGG"}
+                H{"H"}
+                HHmmZ{"HH:mm (Z)"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
+                M{"L"}
+                MEd{"E M/d"}
+                MMM{"LLL"}
+                MMMEd{"E d LLL"}
+                MMMMEd{"E d LLLL"}
+                MMMMd{"d LLLL"}
+                MMMd{"d LLL"}
+                Md{"M/d"}
+                d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                mmss{"mm:ss"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"y/M"}
+                yMEd{"E y/M/d"}
+                yMMM{"MMM y"}
+                yMMMEd{"E d MMM y"}
+                yMMMM{"MMMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"y/M/d"}
+                yQQQ{"QQQQ y"}
+                yQQQQ{"QQQQ y"}
+                yyyyM{"yyyy/M"}
+                yyyyMMMM{"MMMM yyyy"}
+                yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "یکشنبه",
+                        "دوشنبه",
+                        "سه‌شنبه",
+                        "چهارشنبه",
+                        "پنجشنبه",
+                        "جمعه",
+                        "شنبه",
+                    }
+                    narrow{
+                        "ی",
+                        "د",
+                        "س",
+                        "چ",
+                        "پ",
+                        "ج",
+                        "ش",
+                    }
+                    short{
+                        "۱ش",
+                        "۲ش",
+                        "۳ش",
+                        "۴ش",
+                        "۵ش",
+                        "ج",
+                        "ش",
+                    }
+                    wide{
+                        "یکشنبه",
+                        "دوشنبه",
+                        "سه‌شنبه",
+                        "چهارشنبه",
+                        "پنجشنبه",
+                        "جمعه",
+                        "شنبه",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "یکشنبه",
+                        "دوشنبه",
+                        "سه‌شنبه",
+                        "چهارشنبه",
+                        "پنجشنبه",
+                        "جمعه",
+                        "شنبه",
+                    }
+                    narrow{
+                        "ی",
+                        "د",
+                        "س",
+                        "چ",
+                        "پ",
+                        "ج",
+                        "ش",
+                    }
+                    short{
+                        "۱ش",
+                        "۲ش",
+                        "۳ش",
+                        "۴ش",
+                        "۵ش",
+                        "ج",
+                        "ش",
+                    }
+                    wide{
+                        "یکشنبه",
+                        "دوشنبه",
+                        "سه‌شنبه",
+                        "چهارشنبه",
+                        "پنجشنبه",
+                        "جمعه",
+                        "شنبه",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"H تا H"}
+                }
+                Hm{
+                    H{"H:mm تا H:mm"}
+                    m{"H:mm تا H:mm"}
+                }
+                Hmv{
+                    H{"H:mm تا H:mm (v)"}
+                    m{"H:mm تا H:mm (v)"}
+                }
+                Hv{
+                    H{"H تا H (v)"}
+                }
+                M{
+                    M{"M تا M"}
+                }
+                MEd{
+                    M{"E M/d تا E M/d"}
+                    d{"E M/d تا E M/d"}
+                }
+                MMM{
+                    M{"LLL تا LLL"}
+                }
+                MMMEd{
+                    M{"E d LLL تا E d LLL"}
+                    d{"E d LLL تا E d LLL"}
+                }
+                MMMd{
+                    M{"d LLL تا d LLL"}
+                    d{"d تا d LLL"}
+                }
+                Md{
+                    M{"M/d تا M/d"}
+                    d{"M/d تا M/d"}
+                }
+                d{
+                    d{"d تا d"}
+                }
+                fallback{"{0} تا {1}"}
+                h{
+                    a{"h a تا h a"}
+                    h{"h تا h a"}
+                }
+                hm{
+                    a{"h:mm a تا h:mm a"}
+                    h{"h:mm تا h:mm a"}
+                    m{"h:mm تا h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a تا h:mm a (v)"}
+                    h{"h:mm تا h:mm a (v)"}
+                    m{"h:mm تا h:mm a (v)"}
+                }
+                hv{
+                    a{"h a تا h a (v)"}
+                    h{"h تا h a (v)"}
+                }
+                y{
+                    y{"y تا y"}
+                }
+                yM{
+                    M{"yyyy/M تا yyyy/M"}
+                    y{"yyyy/M تا yyyy/M"}
+                }
+                yMEd{
+                    M{"E yyyy/M/d تا E yyyy/M/d"}
+                    d{"E yyyy/M/d تا E yyyy/M/d"}
+                    y{"E yyyy/M/d تا E yyyy/M/d"}
+                }
+                yMMM{
+                    M{"LLL تا MMM y"}
+                    y{"MMM y تا MMM y"}
+                }
+                yMMMEd{
+                    M{"E d LLL تا E d MMM y"}
+                    d{"E d LLL تا E d MMM y"}
+                    y{"E d MMM y تا E d MMM y"}
+                }
+                yMMMM{
+                    M{"LLLL تا MMMM y"}
+                    y{"MMMM y تا MMMM y"}
+                }
+                yMMMd{
+                    M{"d LLL تا d MMM y"}
+                    d{"d تا d MMM y"}
+                    y{"d MMM y تا d MMM y"}
+                }
+                yMd{
+                    M{"yyyy/M/d تا yyyy/M/d"}
+                    d{"yyyy/M/d تا yyyy/M/d"}
+                    y{"yyyy/M/d تا yyyy/M/d"}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "س‌م۱",
+                        "س‌م۲",
+                        "س‌م۳",
+                        "س‌م۴",
+                    }
+                    narrow{
+                        "۱",
+                        "۲",
+                        "۳",
+                        "۴",
+                    }
+                    wide{
+                        "سه‌ماههٔ اول",
+                        "سه‌ماههٔ دوم",
+                        "سه‌ماههٔ سوم",
+                        "سه‌ماههٔ چهارم",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "س‌م۱",
+                        "س‌م۲",
+                        "س‌م۳",
+                        "س‌م۴",
+                    }
+                    narrow{
+                        "۱",
+                        "۲",
+                        "۳",
+                        "۴",
+                    }
+                    wide{
+                        "سه‌ماههٔ اول",
+                        "سه‌ماههٔ دوم",
+                        "سه‌ماههٔ سوم",
+                        "سه‌ماههٔ چهارم",
+                    }
+                }
+            }
+        }
         gregorian{
             AmPmMarkers{
                 "قبل‌ازظهر",

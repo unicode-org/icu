@@ -194,7 +194,7 @@ hr{
             }
         }
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -228,6 +228,276 @@ hr{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+        }
+        generic{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d. MMMM y. G",
+                "d. MMMM y. G",
+                "d. M. y. G",
+                "d.M.y. GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E, d."}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L."}
+                MEd{"E, d. M."}
+                MMM{"LLL"}
+                MMMEd{"E, d. MMM"}
+                MMMMEd{"E, d. MMMM"}
+                MMMMd{"d. MMMM"}
+                MMMMdd{"dd. MMMM"}
+                MMMd{"d. MMM"}
+                MMdd{"dd. MM."}
+                Md{"d. M."}
+                d{"d."}
+                h{"hh a"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y."}
+                yM{"M. yyyy."}
+                yMEd{"E, d. M. y."}
+                yMMM{"LLL y."}
+                yMMMEd{"E, d. MMM y."}
+                yMMMM{"LLLL y."}
+                yMMMd{"d. MMM y."}
+                yMd{"d. M. y."}
+                yQQQ{"QQQ y."}
+                yQQQQ{"QQQQ y."}
+                yyMMMEd{"E, d. MMM yy."}
+                yyyyMM{"MM. yyyy."}
+                yyyyMMMM{"LLLL y."}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sri",
+                        "čet",
+                        "pet",
+                        "sub",
+                    }
+                    narrow{
+                        "N",
+                        "P",
+                        "U",
+                        "S",
+                        "Č",
+                        "P",
+                        "S",
+                    }
+                    short{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sri",
+                        "čet",
+                        "pet",
+                        "sub",
+                    }
+                    wide{
+                        "nedjelja",
+                        "ponedjeljak",
+                        "utorak",
+                        "srijeda",
+                        "četvrtak",
+                        "petak",
+                        "subota",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sri",
+                        "čet",
+                        "pet",
+                        "sub",
+                    }
+                    narrow{
+                        "n",
+                        "p",
+                        "u",
+                        "s",
+                        "č",
+                        "p",
+                        "s",
+                    }
+                    short{
+                        "ned",
+                        "pon",
+                        "uto",
+                        "sri",
+                        "čet",
+                        "pet",
+                        "sub",
+                    }
+                    wide{
+                        "nedjelja",
+                        "ponedjeljak",
+                        "utorak",
+                        "srijeda",
+                        "četvrtak",
+                        "petak",
+                        "subota",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"HH - HH'h'"}
+                }
+                Hm{
+                    H{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                Hv{
+                    H{"HH - HH 'h' v"}
+                }
+                M{
+                    M{"MM. - MM."}
+                }
+                MEd{
+                    M{"E, dd.MM. - E, dd.MM."}
+                    d{"E, dd.MM. - E, dd.MM."}
+                }
+                MMM{
+                    M{"LLL-LLL"}
+                }
+                MMMEd{
+                    M{"E, dd. MMM - E, dd. MMM"}
+                    d{"E, dd. - E, dd. MMM"}
+                }
+                MMMd{
+                    M{"dd. MMM - dd. MMM"}
+                    d{"dd. - dd. MMM"}
+                }
+                Md{
+                    M{"dd.MM. - dd.MM."}
+                    d{"dd.MM. - dd.MM."}
+                }
+                d{
+                    d{"dd. - dd."}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"h a - h a"}
+                    h{"h - h'h' a"}
+                }
+                hm{
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
+                }
+                hv{
+                    a{"h a - h a v"}
+                    h{"h - h 'h' a v"}
+                }
+                y{
+                    y{"y. - y."}
+                }
+                yM{
+                    M{"MM.yyyy. - MM.yyyy."}
+                    y{"MM.yyyy. - MM.yyyy."}
+                }
+                yMEd{
+                    M{"E, dd.MM.yyyy. - E, dd.MM.yyyy."}
+                    d{"E, dd.MM.yyyy. - E, dd.MM.yyyy."}
+                    y{"E, dd.MM.yyyy. - E, dd.MM.yyyy."}
+                }
+                yMMM{
+                    M{"LLL-LLL y."}
+                    y{"LLL y. - LLL y."}
+                }
+                yMMMEd{
+                    M{"E, dd. MMM - E, dd. MMM y."}
+                    d{"E, dd. - E, dd. MMM y."}
+                    y{"E, dd. MMM y. - E, dd. MMM y."}
+                }
+                yMMMM{
+                    M{"LLLL-LLLL y."}
+                    y{"LLLL y. - LLLL y."}
+                }
+                yMMMd{
+                    M{"dd. MMM - dd. MMM y."}
+                    d{"dd. - dd. MMM y."}
+                    y{"dd. MMM y. - dd. MMM y."}
+                }
+                yMd{
+                    M{"dd.MM.yyyy. - dd.MM.yyyy."}
+                    d{"dd.MM.yyyy. - dd.MM.yyyy."}
+                    y{"dd.MM.yyyy. - dd.MM.yyyy."}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "1kv",
+                        "2kv",
+                        "3kv",
+                        "4kv",
+                    }
+                    narrow{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
+                    }
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "1kv",
+                        "2kv",
+                        "3kv",
+                        "4kv",
+                    }
+                    narrow{
+                        "1.",
+                        "2.",
+                        "3.",
+                        "4.",
+                    }
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
+                    }
+                }
             }
         }
         gregorian{

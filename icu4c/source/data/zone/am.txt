@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/am.xml
  */
 am{
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"አቢጃን"}
@@ -908,51 +908,6 @@ am{
         }
         "Australia:Sydney"{
             ec{"ሲድኒ"}
-        }
-        "Etc:GMT"{
-            ec{"ጂ ኤም ቲ"}
-        }
-        "Etc:GMT-1"{
-            ec{"ጂ ኤም ቲ-1"}
-        }
-        "Etc:GMT-10"{
-            ec{"ጂ ኤም ቲ-10"}
-        }
-        "Etc:GMT-11"{
-            ec{"ጂ ኤም ቲ-11"}
-        }
-        "Etc:GMT-12"{
-            ec{"ጂ ኤም ቲ-12"}
-        }
-        "Etc:GMT-13"{
-            ec{"ጂ ኤም ቲ-13"}
-        }
-        "Etc:GMT-14"{
-            ec{"ጂ ኤም ቲ-14"}
-        }
-        "Etc:GMT-2"{
-            ec{"ጂ ኤም ቲ-2"}
-        }
-        "Etc:GMT-3"{
-            ec{"ጂ ኤም ቲ-3"}
-        }
-        "Etc:GMT-4"{
-            ec{"ጂ ኤም ቲ-4"}
-        }
-        "Etc:GMT-5"{
-            ec{"ጂ ኤም ቲ-5"}
-        }
-        "Etc:GMT-6"{
-            ec{"ጂ ኤም ቲ-6"}
-        }
-        "Etc:GMT-7"{
-            ec{"ጂ ኤም ቲ-7"}
-        }
-        "Etc:GMT-8"{
-            ec{"ጂ ኤም ቲ-8"}
-        }
-        "Etc:GMT-9"{
-            ec{"ጂ ኤም ቲ-9"}
         }
         "Etc:Unknown"{
             ec{"ያልታወቀ ከተማ"}

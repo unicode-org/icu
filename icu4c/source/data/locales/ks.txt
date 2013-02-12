@@ -42,8 +42,98 @@ ks{
         }
         native{"arabext"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                GGGGyMMMMEEEEdd{"EEEE,dd MMMM GGGGy"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, M/d"}
+                MMM{"LLL"}
+                MMMEd{"E, MMM d"}
+                MMMMEd{"E, MMMM d"}
+                MMMMd{"MMMM d"}
+                MMMd{"d-MMM"}
+                Md{"M/d"}
+                d{"d"}
+                hm{"h:mm a"}
+                ms{"mm:ss"}
+                y{"yyyy"}
+                yM{"M/yyyy"}
+                yMEd{"EEE, M/d/yyyy"}
+                yMMM{"MMM yyyy"}
+                yMMMEd{"EEE, MMM d, yyyy"}
+                yMMMM{"MMMM yyyy"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "آتھوار",
+                        "ژٔنٛدٕروار",
+                        "بوٚموار",
+                        "بودوار",
+                        "برٛٮ۪سوار",
+                        "جُمہ",
+                        "بٹوار",
+                    }
+                    wide{
+                        "اَتھوار",
+                        "ژٔنٛدرٕروار",
+                        "بوٚموار",
+                        "بودوار",
+                        "برٛٮ۪سوار",
+                        "جُمہ",
+                        "بٹوار",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "ا",
+                        "ژ",
+                        "ب",
+                        "ب",
+                        "ب",
+                        "ج",
+                        "ب",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "ژۄباگ",
+                        "دوٚیِم ژۄباگ",
+                        "ترٛیِم ژۄباگ",
+                        "ژوٗرِم ژۄباگ",
+                    }
+                    wide{
+                        "گۄڑنیُک ژۄباگ",
+                        "دوٚیِم ژۄباگ",
+                        "ترٛیِم ژۄباگ",
+                        "ژوٗرِم ژۄباگ",
+                    }
+                }
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "h:mm:ss a zzzz",

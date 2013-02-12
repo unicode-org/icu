@@ -143,7 +143,7 @@ it{
             }
         }
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.46"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -196,6 +196,255 @@ it{
             eras{
                 abbreviated{
                     "EB",
+                }
+            }
+        }
+        generic{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM y G",
+                "dd MMMM y G",
+                "dd/MMM/y G",
+                "dd/MM/yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E d"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E d/M"}
+                MMM{"LLL"}
+                MMMEd{"E d MMM"}
+                MMMMdd{"dd MMMM"}
+                MMMd{"d MMM"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                d{"d"}
+                h{"hh a"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"E d/M/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E d MMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d/M/y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+                yyMM{"MM/yy"}
+                yyQQQQ{"QQQQ yy"}
+                yyyyMMMM{"MMMM y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "dom",
+                        "lun",
+                        "mar",
+                        "mer",
+                        "gio",
+                        "ven",
+                        "sab",
+                    }
+                    short{
+                        "dom",
+                        "lun",
+                        "mar",
+                        "mer",
+                        "gio",
+                        "ven",
+                        "sab",
+                    }
+                    wide{
+                        "domenica",
+                        "lunedì",
+                        "martedì",
+                        "mercoledì",
+                        "giovedì",
+                        "venerdì",
+                        "sabato",
+                    }
+                }
+                stand-alone{
+                    narrow{
+                        "D",
+                        "L",
+                        "M",
+                        "M",
+                        "G",
+                        "V",
+                        "S",
+                    }
+                    short{
+                        "dom",
+                        "lun",
+                        "mar",
+                        "mer",
+                        "gio",
+                        "ven",
+                        "sab",
+                    }
+                    wide{
+                        "Domenica",
+                        "Lunedì",
+                        "Martedì",
+                        "Mercoledì",
+                        "Giovedì",
+                        "Venerdì",
+                        "Sabato",
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"HH-HH"}
+                }
+                Hm{
+                    H{"HH:mm-HH:mm"}
+                    m{"HH:mm-HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm-HH:mm v"}
+                    m{"HH:mm-HH:mm v"}
+                }
+                Hv{
+                    H{"HH-HH v"}
+                }
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E dd/MM - E dd/MM"}
+                    d{"E dd/MM - E dd/MM"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E dd MMM - E dd MMM"}
+                    d{"E dd - E dd MMM"}
+                }
+                MMMd{
+                    M{"dd MMM - dd MMM"}
+                    d{"dd-dd MMM"}
+                }
+                Md{
+                    M{"dd/MM - dd/MM"}
+                    d{"dd/MM - dd/MM"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} - {1}"}
+                h{
+                    a{"h a - h a"}
+                    h{"h-h a"}
+                }
+                hm{
+                    a{"h:mm a - h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a - h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
+                }
+                hv{
+                    a{"h a - h a v"}
+                    h{"h-h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"MM/yy - MM/yy"}
+                    y{"MM/yy - MM/yy"}
+                }
+                yMEd{
+                    M{"E dd/MM/yy - E dd/MM/yy"}
+                    d{"E dd/MM/yy - E dd/MM/yy"}
+                    y{"E dd/MM/yy - E dd/MM/yy"}
+                }
+                yMMM{
+                    M{"MMM-MMM y"}
+                    y{"MMM y - MMM y"}
+                }
+                yMMMEd{
+                    M{"E d MMM - E d MMM y"}
+                    d{"E d - E d MMM y"}
+                    y{"E d MMM y - E d MMM y"}
+                }
+                yMMMM{
+                    M{"MMMM-MMMM y"}
+                    y{"MMMM y - MMMM y"}
+                }
+                yMMMd{
+                    M{"dd MMM - dd MMM y"}
+                    d{"dd-dd MMM y"}
+                    y{"dd MMM y - dd MMM y"}
+                }
+                yMd{
+                    M{"dd/MM/yy - dd/MM/yy"}
+                    d{"dd/MM/yy - dd/MM/yy"}
+                    y{"dd/MM/yy - dd/MM/yy"}
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "1o trimestre",
+                        "2o trimestre",
+                        "3o trimestre",
+                        "4o trimestre",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "T1",
+                        "T2",
+                        "T3",
+                        "T4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "Primo trimestre",
+                        "Secondo trimestre",
+                        "Terzo trimestre",
+                        "Quarto trimestre",
+                    }
                 }
             }
         }

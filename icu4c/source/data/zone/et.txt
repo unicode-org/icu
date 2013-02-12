@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/et.xml
  */
 et{
-    Version{"2.0.81.0"}
+    Version{"2.0.81.46"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alžiir"}

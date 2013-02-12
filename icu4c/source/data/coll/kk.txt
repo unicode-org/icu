@@ -10,11 +10,12 @@
  *  ICU <specials> source: <path>/xml/collation/kk.xml
  */
 kk{
-    Version{"2.0.49.75"}
+    Version{"2.0.81.30"}
     collations{
         standard{
             Sequence{
-                "[suppressContractions [АаӘәГгЕеЖжЗзІіОоӨөКкУуЧчЫыЭэѴѵ]]"
+                " [reorder Cyrl][suppressContractions [АаӘәГгЕеЖжЗзІіОоӨөКкУуЧчЫыЭэѴѵ"
+                "]]"
                 "&Е<ё<<<Ё"
                 "&Ұ<ү<<<Ү"
                 "&[before 1]ь<і<<<І"

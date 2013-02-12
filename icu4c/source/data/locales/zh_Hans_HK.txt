@@ -14,7 +14,7 @@ zh_Hans_HK{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.59"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -34,6 +34,59 @@ zh_Hans_HK{
             }
             availableFormats{
                 M{"L"}
+            }
+        }
+        generic{
+            DateTimePatterns{
+                "zzzzah:mm:ss",
+                "zah:mm:ss",
+                "ah:mm:ss",
+                "ah:mm",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gy年M月d日",
+                "d/M/yyGGGGG",
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                HHmm{"HH:mm"}
+                M{"L"}
+                MMMMdd{"M月d日"}
+                Md{"M-d"}
+                yM{"y年M月"}
+            }
+            intervalFormats{
+                Hmv{
+                    H{"vHH:mm–HH:mm"}
+                    m{"vHH:mm–HH:mm"}
+                }
+                Hv{
+                    H{"vHH–HH"}
+                }
+                fallback{"{0}–{1}"}
+                h{
+                    h{"ah至h时"}
+                }
+                yM{
+                    M{"yy年M月至yy年M月"}
+                }
+                yMEd{
+                    M{"d/M/yyE至d/M/yyE"}
+                    d{"d/M/yyE至d/M/yyE"}
+                    y{"d/M/yyE至d/M/yyE"}
+                }
+                yMMMEd{
+                    d{"y年M月d日E至M月d日E"}
+                }
+                yMd{
+                    M{"d/M/yy至d/M/yy"}
+                    d{"d/M/yy至d/M/yy"}
+                    y{"d/M/yy至d/M/yy"}
+                }
             }
         }
         gregorian{

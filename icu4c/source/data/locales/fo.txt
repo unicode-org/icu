@@ -28,8 +28,63 @@ fo{
             }
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     calendar{
+        generic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE dd MMMM y G",
+                "d. MMM y G",
+                "dd-MM-y G",
+                "dd-MM-yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "sun",
+                        "mán",
+                        "týs",
+                        "mik",
+                        "hós",
+                        "frí",
+                        "ley",
+                    }
+                    wide{
+                        "sunnudagur",
+                        "mánadagur",
+                        "týsdagur",
+                        "mikudagur",
+                        "hósdagur",
+                        "fríggjadagur",
+                        "leygardagur",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
+                    }
+                }
+            }
+        }
         gregorian{
             DateTimePatterns{
                 "HH:mm:ss zzzz",

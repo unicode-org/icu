@@ -10,10 +10,15 @@
  *  ICU <specials> source: <path>/xml/collation/mr.xml
  */
 mr{
-    Version{"2.0.42.63"}
+    Version{"2.0.81.30"}
     collations{
         standard{
-            Sequence{" [normalization on]&ॐ<ं<<ँ<ः&ह<ळ<क्ष<ज्ञ"}
+            Sequence{
+                " [normalization on] [reorder Deva Beng Guru Gujr Orya Taml Telu Knda"
+                " Mlym Sinh]"
+                "&ॐ<ं<<ँ<ः"
+                "&ह<ळ<क्ष<ज्ञ"
+            }
             Version{"23"}
         }
     }

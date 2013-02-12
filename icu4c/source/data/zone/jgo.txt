@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/jgo.xml
  */
 jgo{
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
     zoneStrings{
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"{1} ({0})"}
