@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2005-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1125,6 +1125,51 @@ public class TestCharsetDetector extends TestFmwk
             assertTrue("Charset " + m.getName() + " encountered before",
                         detectedEncodings.add(m.getName()));
         }   
+    }
+    
+    public void TestMultithreaded() {
+        String  s = "This is some random plain text to run charset detection on.";
+        final byte [] bytes;
+        try {
+            bytes = s.getBytes("ISO-8859-1");
+        }
+        catch (Exception e) {
+            fail("Unexpected exception " + e.toString());
+            return;
+        }
+        
+        class WorkerThread extends Thread {
+            WorkerThread(int num) {
+                n = num;
+            }           
+            private int n;            
+            public void run() {
+                // System.out.println("Thread " + n + " is running.");
+                CharsetDetector det = new CharsetDetector();
+                det.setText(bytes);                
+                for (int i=0; i<10000; i++) {
+                    CharsetMatch matches[] = det.detectAll();
+                    for (CharsetMatch m: matches) {
+                        assertNotNull("Failure in thread " + n, m);
+                    }
+                }
+                // System.out.println("Thread " + n + " is finished.");
+            }
+        }
+        
+        Thread threads[] = new Thread[10];
+        for (int i=0; i<10; i++) {
+            threads[i] = new WorkerThread(i);
+            threads[i].start();
+        }
+        for (Thread thread: threads) {
+            try {
+                thread.join();
+            } catch(Exception e) {
+                fail("Unexpected exception " +  e.toString());
+                return;
+            }
+        }
     }
 
       
