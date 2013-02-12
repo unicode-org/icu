@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -255,7 +255,7 @@ public class SpoofCheckerTest extends TestFmwk {
         result.position = 666;
         checkResults = sc.failsChecks(goodLatin, result);
         assertFalse("", checkResults);
-//        assertEquals("", 666, result.position);
+        assertEquals("", 0, result.position);
 
         checkResults = sc.failsChecks(goodCyrl, result);
         assertFalse("", checkResults);
@@ -264,12 +264,12 @@ public class SpoofCheckerTest extends TestFmwk {
         checkResults = sc.failsChecks(scMixed, result);
         assertTrue("", checkResults);
         assertEquals("", SpoofChecker.MIXED_SCRIPT_CONFUSABLE | SpoofChecker.SINGLE_SCRIPT, result.checks);
-//        assertEquals("", 2, result.position);
+        assertEquals("", 0, result.position);
 
         result.position = 666;
         checkResults = sc.failsChecks(han_Hiragana, result);
         assertFalse("", checkResults);
-//        assertEquals("", 666, result.position);
+        assertEquals("", 0, result.position);
         assertEquals("", 0, result.checks);
     }
 
@@ -310,7 +310,7 @@ public class SpoofCheckerTest extends TestFmwk {
         result.position = 666;
         boolean checkResults = sc.failsChecks(s, result);
         assertFalse("", checkResults);
-//        assertEquals("", 666, result.position);   // not changed
+        assertEquals("", 0, result.position);
 
         sc = new SpoofChecker.Builder().build();
         String s1 = "cxs";
@@ -423,12 +423,12 @@ public class SpoofCheckerTest extends TestFmwk {
         result.position = -42;
         assertFalse("", sc.failsChecks(s, result));
         assertEquals("", 0, result.checks);
-//        assertEquals("", result.position, -42); // unchanged
+        assertEquals("", result.position, 0);
 
         String s2 = Utility.unescape("abcd\\u0301\\u0302\\u0301ef");
         assertTrue("", sc.failsChecks(s2, result));
         assertEquals("", SpoofChecker.INVISIBLE, result.checks);
-//        assertEquals("", 7, result.position);
+        assertEquals("", 0, result.position);
 
         // Two acute accents, one from the composed a with acute accent, \u00e1,
         // and one separate.
@@ -436,7 +436,7 @@ public class SpoofCheckerTest extends TestFmwk {
         String s3 = Utility.unescape("abcd\\u00e1\\u0301xyz");
         assertTrue("", sc.failsChecks(s3, result));
         assertEquals("", SpoofChecker.INVISIBLE, result.checks);
-//        assertEquals("", 7, result.position);
+        assertEquals("", 0, result.position);
     }
 
     public void TestRestrictionLevel() {
@@ -523,10 +523,10 @@ public class SpoofCheckerTest extends TestFmwk {
         assertEquals("", alternates, IdentifierInfo.parseAlternates(alternatesString));
 
         String[][] tests = {
-                // String, restriction-level, numerics, scripts, alternates, common-alternates, numerics
+                // String, restriction-level, numerics, scripts, alternates, common-alternates
                 {"a♥",  "UNRESTRICTIVE", "[]", "Latn", "", ""},
-                {"a〆",  "HIGHLY_RESTRICTIVE", "[]", "Latn", "Kana Hira Hani", "Kana Hira Hani"},
-                {"aー〆",  "HIGHLY_RESTRICTIVE", "[]", "Latn", "Kana Hira", "Kana Hira"},
+                {"a〆",  "HIGHLY_RESTRICTIVE", "[]", "Latn", "Hani Hira Kana", "Hani Hira Kana"},
+                {"aー〆",  "HIGHLY_RESTRICTIVE", "[]", "Latn", "Hira Kana", "Hira Kana"},
                 {"aー〆ア",  "HIGHLY_RESTRICTIVE", "[]", "Latn Kana", "", ""},
                 {"アaー〆",  "HIGHLY_RESTRICTIVE", "[]", "Latn Kana", "", ""},
                 {"a1١",  "UNRESTRICTIVE", "[0٠]", "Latn", "Arab Thaa", "Arab Thaa"},
@@ -536,9 +536,9 @@ public class SpoofCheckerTest extends TestFmwk {
         };
         for (String[] test : tests) {
             String testString = test[0];
-            IdentifierInfo idInfo = new IdentifierInfo()
-            .setIdentifierProfile(SpoofChecker.RECOMMENDED)
-            .setIdentifier(testString);
+            IdentifierInfo idInfo = new IdentifierInfo();
+            idInfo.setIdentifierProfile(SpoofChecker.RECOMMENDED);
+            idInfo.setIdentifier(testString);
             assertEquals("Identifier " + testString, testString, idInfo.getIdentifier());
             
             RestrictionLevel restrictionLevel = RestrictionLevel.valueOf(test[1]);
