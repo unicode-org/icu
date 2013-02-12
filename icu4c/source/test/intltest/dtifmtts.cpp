@@ -138,6 +138,38 @@ void DateIntervalFormatTest::testAPI() {
         dataerrln("ERROR: getDateIntervalInfo/setDateIntervalInfo failed");
     }
 
+    // We make sure that setDateIntervalInfo does not corrupt the cache. See ticket 9919.
+    status = U_ZERO_ERROR;
+    logln("Testing DateIntervalFormat setDateIntervalInfo");
+    const Locale &enLocale = Locale::getEnglish();
+    DateIntervalFormat* dif = DateIntervalFormat::createInstance("yMd", enLocale, status);
+    UnicodeString expected;
+    Calendar *fromTime = Calendar::createInstance(enLocale, status);
+    Calendar *toTime = Calendar::createInstance(enLocale, status);
+    FieldPosition pos = 0;
+    fromTime->set(2013, 3, 26);
+    toTime->set(2013, 3, 28);
+    dif->format(*fromTime, *toTime, expected, pos, status);
+    DateIntervalInfo* dii = new DateIntervalInfo(Locale::getEnglish(), status);
+    dii->setIntervalPattern(ctou("yMd"), UCAL_DATE, ctou("M/d/y \\u2013 d"), status);
+    dif->setDateIntervalInfo(*dii, status);
+    delete dii;
+    delete dif;
+    dif = DateIntervalFormat::createInstance("yMd", enLocale, status);
+    UnicodeString actual;
+    pos = 0;
+    dif->format(*fromTime, *toTime, actual, pos, status);
+    delete dif;
+    delete fromTime;
+    delete toTime;
+    if (U_FAILURE(status)) {
+        errln("Failure encountered: %s", u_errorName(status));
+        return;
+    }
+    if (expected != actual) {
+        errln("DateIntervalFormat.setIntervalInfo should have no side effects.");
+    }
+    
     /*
     status = U_ZERO_ERROR;
     DateIntervalInfo* nonConstInf = inf->clone();
@@ -219,7 +251,7 @@ void DateIntervalFormatTest::testAPI() {
     Formattable formattable;
     formattable.setInt64(10);
     UnicodeString res;
-    FieldPosition pos = 0;
+    pos = 0;
     status = U_ZERO_ERROR;
     dtitvfmt->format(formattable, res, pos, status);
     if ( status != U_ILLEGAL_ARGUMENT_ERROR ) {
