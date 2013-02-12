@@ -1110,10 +1110,18 @@ void DateIntervalFormatTest::testSetIntervalPatternNoSideEffect() {
     dtitvinf->getIntervalPattern(ctou("yMd"), UCAL_DATE, expected, ec);
     dtitvinf->setIntervalPattern(ctou("yMd"), UCAL_DATE, ctou("M/d/y \\u2013 d"), ec);
     delete dtitvinf;
+    if (U_FAILURE(ec)) {
+        errln("Failure encountered: %s", u_errorName(ec));
+        return;
+    }
     dtitvinf = new DateIntervalInfo(ec);
     UnicodeString actual;
     dtitvinf->getIntervalPattern(ctou("yMd"), UCAL_DATE, actual, ec);
     delete dtitvinf;
+    if (U_FAILURE(ec)) {
+        errln("Failure encountered: %s", u_errorName(ec));
+        return;
+    }
     if (expected != actual) {
         errln("DateIntervalInfo.setIntervalPattern should have no side effects.");
     }
