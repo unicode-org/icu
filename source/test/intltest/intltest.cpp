@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1639,28 +1639,28 @@ static UnicodeString& escape(const UnicodeString& s, UnicodeString& result) {
 
 #define VERBOSE_ASSERTIONS
 
-UBool IntlTest::assertTrue(const char* message, UBool condition, UBool quiet, UBool possibleDataError) {
-    if (!condition) {
-        if (possibleDataError) {
-            dataerrln("FAIL: assertTrue() failed: %s", message);
-        } else {
-            errln("FAIL: assertTrue() failed: %s", message);
+UBool IntlTest::assertTrue(const char* message, UBool condition, UBool quiet, UBool possibleDataError, const char *file, int line) {
+    if (file != NULL) {
+        if (!condition) {
+            if (possibleDataError) {
+                dataerrln("%s:%d: FAIL: assertTrue() failed: %s", file, line, message);
+            } else {
+                errln("%s:%d: FAIL: assertTrue() failed: %s", file, line, message);
+            }
+        } else if (!quiet) {
+            logln("%s:%d: Ok: %s", file, line, message);
         }
-    } else if (!quiet) {
-        logln("Ok: %s", message);
-    }
-    return condition;
-}
+    } else {
+        if (!condition) {
+            if (possibleDataError) {
+                dataerrln("FAIL: assertTrue() failed: %s", message);
+            } else {
+                errln("FAIL: assertTrue() failed: %s", message);
+            }
+        } else if (!quiet) {
+            logln("Ok: %s", message);
+        }
 
-UBool IntlTest::assertTrue(const char *file, int line, const char* message, UBool condition, UBool quiet, UBool possibleDataError) {
-    if (!condition) {
-        if (possibleDataError) {
-          dataerrln("%s:%d: FAIL: assertTrue() failed: %s", file, line, message);
-        } else {
-          errln("%s:%d: FAIL: assertTrue() failed: %s", file, line, message);
-        }
-    } else if (!quiet) {
-      logln("%s:%d: Ok: %s", file, line, message);
     }
     return condition;
 }
