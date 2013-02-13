@@ -14,7 +14,7 @@ en_ZW{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -52,7 +52,7 @@ en_ZW{
                 "EEEE dd MMMM y",
                 "dd MMMM y",
                 "dd MMM,y",
-                "d/M/yyyy",
+                "d/M/y",
                 "{1}, {0}",
                 "{1} 'at' {0}",
                 "{1} 'at' {0}",

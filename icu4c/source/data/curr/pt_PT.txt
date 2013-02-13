@@ -419,6 +419,10 @@ pt_PT{
         }
         ZMK{
             "ZMK",
+            "Kwacha zambiano (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kwacha zambiano",
         }
     }
@@ -792,9 +796,13 @@ pt_PT{
             other{"Rands da África do Sul"}
         }
         ZMK{
+            one{"Kwacha zambiano (1968-2012)"}
+            other{"Kwachas zambianos (1968-2012)"}
+        }
+        ZMW{
             one{"Kwacha zambiano"}
             other{"Kwachas zambianos"}
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

@@ -13,5 +13,5 @@ uz_Arab{
     Countries{
         AF{"افغانستان"}
     }
-    Version{"2.0.81.59"}
+    Version{"2.0.81.63"}
 }

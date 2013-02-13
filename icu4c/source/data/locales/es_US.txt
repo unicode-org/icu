@@ -13,7 +13,7 @@ es_US{
         279,
         216,
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -41,11 +41,11 @@ es_US{
                 MMMd{"MMM d"}
                 MMd{"MM/d"}
                 Md{"M/d"}
-                yM{"M/yy"}
-                yMEd{"E, M/d/yy"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMd{"MMM d, y"}
-                yMd{"M/d/yy"}
+                yMd{"M/d/y"}
             }
         }
         gregorian{
@@ -74,11 +74,11 @@ es_US{
                 MMMd{"MMM d"}
                 MMd{"MM/d"}
                 Md{"M/d"}
-                yM{"M/yy"}
-                yMEd{"E, M/d/yy"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
                 yMMMEd{"E, MMM d, y"}
                 yMMMd{"MMM d, y"}
-                yMd{"M/d/yy"}
+                yMd{"M/d/y"}
             }
         }
     }

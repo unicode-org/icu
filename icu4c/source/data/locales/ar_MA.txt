@@ -16,7 +16,7 @@ ar_MA{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -37,8 +37,8 @@ ar_MA{
             availableFormats{
                 MMdd{"MM/dd"}
                 Md{"M/d"}
-                yM{"yyyy/M"}
-                yyyyMM{"yyyy/MM"}
+                yM{"y/M"}
+                yMM{"y/MM"}
             }
             intervalFormats{
                 MMMd{
@@ -51,7 +51,7 @@ ar_MA{
                     y{"y‏-y"}
                 }
                 yMMMM{
-                    M{"MM ‏- MM ‏–yyyy"}
+                    M{"MM ‏- MM ‏–y"}
                 }
                 yMMMd{
                     d{"d‏–d MMM، y"}
@@ -66,8 +66,8 @@ ar_MA{
                 "h:mm a",
                 "EEEE، d MMMM، y",
                 "d MMMM، y",
-                "yyyy/MM/dd",
-                "yyyy/M/d",
+                "y/MM/dd",
+                "y/M/d",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -77,8 +77,8 @@ ar_MA{
             availableFormats{
                 MMdd{"MM/dd"}
                 Md{"M/d"}
-                yM{"yyyy/M"}
-                yyyyMM{"yyyy/MM"}
+                yM{"y/M"}
+                yMM{"y/MM"}
             }
             intervalFormats{
                 MMMd{
@@ -91,7 +91,7 @@ ar_MA{
                     y{"y‏-y"}
                 }
                 yMMMM{
-                    M{"MM ‏- MM ‏–yyyy"}
+                    M{"MM ‏- MM ‏–y"}
                 }
                 yMMMd{
                     d{"d‏–d MMM، y"}

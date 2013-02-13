@@ -772,7 +772,7 @@ bg{
         VALENCIA{"Валенсиански"}
         WADEGILE{"Уейд-Джайлс романизация"}
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.65"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

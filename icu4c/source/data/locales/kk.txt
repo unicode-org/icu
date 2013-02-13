@@ -85,7 +85,7 @@ kk{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -184,13 +184,13 @@ kk{
                     y{"y-y"}
                 }
                 yM{
-                    M{"MM.yy - MM.yy"}
-                    y{"MM.yy - MM.yy"}
+                    M{"MM.y - MM.y"}
+                    y{"MM.y - MM.y"}
                 }
                 yMEd{
-                    M{"E, dd.MM.yy - E, dd.MM.yy"}
-                    d{"E, dd.MM.yy - E, dd.MM.yy"}
-                    y{"E, dd.MM.yy - E, dd.MM.yy"}
+                    M{"E, dd.MM.y - E, dd.MM.y"}
+                    d{"E, dd.MM.y - E, dd.MM.y"}
+                    y{"E, dd.MM.y - E, dd.MM.y"}
                 }
                 yMMM{
                     M{"MMM-MMM y 'ж'."}
@@ -207,9 +207,9 @@ kk{
                     y{"d MMM y 'ж'. - d MMM y 'ж'."}
                 }
                 yMd{
-                    M{"dd.MM.yy - dd.MM.yy"}
-                    d{"dd.MM.yy - dd.MM.yy"}
-                    y{"dd.MM.yy - dd.MM.yy"}
+                    M{"dd.MM.y - dd.MM.y"}
+                    d{"dd.MM.y - dd.MM.y"}
+                    y{"dd.MM.y - dd.MM.y"}
                 }
             }
         }
@@ -221,7 +221,7 @@ kk{
                 "HH:mm",
                 "EEEE, d MMMM y 'ж'.",
                 "d MMMM y 'ж'.",
-                "dd.MM.yyyy",
+                "dd.MM.y",
                 "dd.MM.yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -310,13 +310,13 @@ kk{
                     y{"y-y"}
                 }
                 yM{
-                    M{"MM.yy - MM.yy"}
-                    y{"MM.yy - MM.yy"}
+                    M{"MM.y - MM.y"}
+                    y{"MM.y - MM.y"}
                 }
                 yMEd{
-                    M{"E, dd.MM.yy - E, dd.MM.yy"}
-                    d{"E, dd.MM.yy - E, dd.MM.yy"}
-                    y{"E, dd.MM.yy - E, dd.MM.yy"}
+                    M{"E, dd.MM.y - E, dd.MM.y"}
+                    d{"E, dd.MM.y - E, dd.MM.y"}
+                    y{"E, dd.MM.y - E, dd.MM.y"}
                 }
                 yMMM{
                     M{"MMM-MMM y 'ж'."}
@@ -333,9 +333,9 @@ kk{
                     y{"d MMM y 'ж'. - d MMM y 'ж'."}
                 }
                 yMd{
-                    M{"dd.MM.yy - dd.MM.yy"}
-                    d{"dd.MM.yy - dd.MM.yy"}
-                    y{"dd.MM.yy - dd.MM.yy"}
+                    M{"dd.MM.y - dd.MM.y"}
+                    d{"dd.MM.y - dd.MM.y"}
+                    y{"dd.MM.y - dd.MM.y"}
                 }
             }
             monthNames{

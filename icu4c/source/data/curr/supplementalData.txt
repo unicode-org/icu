@@ -4530,10 +4530,21 @@ supplementalData:table(nofallback){
         ZM{
             {
                 from:intvector{
+                    315,
+                    -211265536,
+                }
+                id{"ZMW"}
+            }
+            {
+                from:intvector{
                     -15,
                     -1732857856,
                 }
                 id{"ZMK"}
+                to:intvector{
+                    315,
+                    -124865537,
+                }
             }
         }
         ZR{
@@ -4712,10 +4723,6 @@ supplementalData:table(nofallback){
         BYR:intvector{
             0,
             0,
-        }
-        CHF:intvector{
-            2,
-            5,
         }
         CLF:intvector{
             0,

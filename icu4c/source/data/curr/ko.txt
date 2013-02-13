@@ -1133,6 +1133,10 @@ ko{
         }
         ZMK{
             "ZMK",
+            "쟘비아 콰쳐 (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "쟘비아 콰쳐",
         }
         ZRN{
@@ -1159,5 +1163,5 @@ ko{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

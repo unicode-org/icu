@@ -17,5 +17,5 @@ en_SG{
             "US Dollar",
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.81.63"}
 }

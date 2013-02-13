@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ko.xml
  */
 ko{
-    Version{"2.0.81.46"}
+    Version{"2.0.81.65"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}

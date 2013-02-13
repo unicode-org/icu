@@ -106,7 +106,7 @@ dz{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -295,36 +295,36 @@ dz{
                     y{"y–y"}
                 }
                 yM{
-                    M{"yyyy-MM – MM"}
-                    y{"yyyy-MM – yyyy-MM"}
+                    M{"y-MM – MM"}
+                    y{"y-MM – y-MM"}
                 }
                 yMEd{
-                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    M{"E, y-MM-dd – E, y-MM-dd"}
+                    d{"E, y-MM-dd – E, y-MM-dd"}
+                    y{"E, y-MM-dd – E, y-MM-dd"}
                 }
                 yMMM{
                     M{"སྤྱི་ཟླ་MMM/MMM, y"}
-                    y{"yyyy-MM – yyyy-MM"}
+                    y{"y-MM – y-MM"}
                 }
                 yMMMEd{
-                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    M{"E, y-MM-dd – E, y-MM-dd"}
+                    d{"E, y-MM-dd – E, y-MM-dd"}
+                    y{"E, y-MM-dd – E, y-MM-dd"}
                 }
                 yMMMM{
-                    M{"yyyy-སྤྱི་ཟླ་MM – MM"}
-                    y{"yyyy-MM – yyyy-MM"}
+                    M{"y-སྤྱི་ཟླ་MM – MM"}
+                    y{"y-MM – y-MM"}
                 }
                 yMMMd{
-                    M{"yyyy-MM-dd – MM-d"}
-                    d{"yyyy-MM-d – d"}
-                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                    M{"y-MM-dd – MM-d"}
+                    d{"y-MM-d – d"}
+                    y{"y-MM-dd – y-MM-dd"}
                 }
                 yMd{
-                    M{"yyyy-MM-dd – MM-dd"}
-                    d{"yyyy-MM-dd – dd"}
-                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                    M{"y-MM-dd – MM-dd"}
+                    d{"y-MM-dd – dd"}
+                    y{"y-MM-dd – y-MM-dd"}
                 }
             }
             quarters{
@@ -383,7 +383,7 @@ dz{
                 "EEEE, སྤྱི་ལོ་y MMMM ཚེས་dd",
                 "སྤྱི་ལོ་y MMMM ཚེས་ dd",
                 "སྤྱི་ལོ་y ཟླ་MMM ཚེས་dd",
-                "yyyy-MM-dd",
+                "y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -563,36 +563,36 @@ dz{
                     y{"y–y"}
                 }
                 yM{
-                    M{"yyyy-MM – MM"}
-                    y{"yyyy-MM – yyyy-MM"}
+                    M{"y-MM – MM"}
+                    y{"y-MM – y-MM"}
                 }
                 yMEd{
-                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    M{"E, y-MM-dd – E, y-MM-dd"}
+                    d{"E, y-MM-dd – E, y-MM-dd"}
+                    y{"E, y-MM-dd – E, y-MM-dd"}
                 }
                 yMMM{
                     M{"སྤྱི་ཟླ་MMM/MMM, y"}
-                    y{"yyyy-MM – yyyy-MM"}
+                    y{"y-MM – y-MM"}
                 }
                 yMMMEd{
-                    M{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-                    y{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
+                    M{"E, y-MM-dd – E, y-MM-dd"}
+                    d{"E, y-MM-dd – E, y-MM-dd"}
+                    y{"E, y-MM-dd – E, y-MM-dd"}
                 }
                 yMMMM{
-                    M{"yyyy-སྤྱི་ཟླ་MM – MM"}
-                    y{"yyyy-MM – yyyy-MM"}
+                    M{"y-སྤྱི་ཟླ་MM – MM"}
+                    y{"y-MM – y-MM"}
                 }
                 yMMMd{
-                    M{"yyyy-MM-dd – MM-d"}
-                    d{"yyyy-MM-d – d"}
-                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                    M{"y-MM-dd – MM-d"}
+                    d{"y-MM-d – d"}
+                    y{"y-MM-dd – y-MM-dd"}
                 }
                 yMd{
-                    M{"yyyy-MM-dd – MM-dd"}
-                    d{"yyyy-MM-dd – dd"}
-                    y{"yyyy-MM-dd – yyyy-MM-dd"}
+                    M{"y-MM-dd – MM-dd"}
+                    d{"y-MM-dd – dd"}
+                    y{"y-MM-dd – y-MM-dd"}
                 }
             }
             monthNames{

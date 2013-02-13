@@ -184,7 +184,7 @@ ja{
         native{"latn"}
         traditional{"jpan"}
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.65"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -226,20 +226,14 @@ ja{
                 y{"GGGGy年"}
                 yM{"GGGGy年M月"}
                 yMEd{"GGGGy年M/d(E)"}
+                yMM{"Gy/MM"}
                 yMMM{"GGGGy年M月"}
                 yMMMEEEEd{"GGGGy年M月d日EEEE"}
                 yMMMEd{"GGGGy年M月d日(E)"}
+                yMMMd{"GGGGy年M月d日"}
+                yMd{"Gy/M/d"}
                 yQQQ{"GGGGy QQQ"}
                 yQQQQ{"GGGGy第Q四半期"}
-                yyyy{"GGGGy年"}
-                yyyyMEd{"Gy/M/d(E)"}
-                yyyyMM{"Gy/MM"}
-                yyyyMMM{"GGGGy年M月"}
-                yyyyMMMEEEEd{"GGGGy年M月d日EEEE"}
-                yyyyMMMEd{"GGGGy年M月d日(E)"}
-                yyyyMMMd{"GGGGy年M月d日"}
-                yyyyMd{"Gy/M/d"}
-                yyyyQQQ{"Gy/QQQ"}
             }
             eras{
                 abbreviated{
@@ -774,7 +768,7 @@ ja{
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gy/MM/dd",
-                "GGGGGy/MM/dd",
+                "Gy/MM/dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -786,6 +780,8 @@ ja{
                 Ed{"d日(E)"}
                 Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
+                GyMMMEEEEd{"Gy年M月d日EEEE"}
+                GyMMMEd{"Gy年M月d日(E)"}
                 GyMMMd{"Gy年M月d日"}
                 H{"H時"}
                 Hm{"H:mm"}
@@ -796,26 +792,23 @@ ja{
                 MMMEEEEd{"M月d日EEEE"}
                 MMMEd{"M月d日(E)"}
                 MMMd{"M月d日"}
-                MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
                 h{"aK時"}
                 hm{"aK:mm"}
                 hms{"aK:mm:ss"}
                 ms{"mm:ss"}
-                y{"y年"}
-                yM{"y/M"}
-                yMEd{"y/M/d(E)"}
-                yMMM{"y年M月"}
-                yMMMEEEEd{"y年M月d日EEEE"}
-                yMMMEd{"y年M月d日(E)"}
-                yMMMd{"y年M月d日"}
-                yMd{"y/M/d"}
-                yQQQ{"y/QQQ"}
-                yQQQQ{"yQQQQ"}
-                yyMMM{"y年M月"}
-                yyyy{"y年"}
-                yyyyMM{"yyyy/MM"}
+                y{"Gy年"}
+                yyyy{"Gy年"}
+                yyyyM{"Gy/M"}
+                yyyyMEd{"Gy/M/d(E)"}
+                yyyyMMM{"Gy年M月"}
+                yyyyMMMEEEEd{"Gy年M月d日EEEE"}
+                yyyyMMMEd{"Gy年M月d日(E)"}
+                yyyyMMMd{"Gy年M月d日"}
+                yyyyMd{"Gy/M/d"}
+                yyyyQQQ{"Gy/QQQ"}
+                yyyyQQQQ{"GyQQQQ"}
             }
             dayNames{
                 format{
@@ -931,39 +924,39 @@ ja{
                     h{"aK時～K時(v)"}
                 }
                 y{
-                    y{"y年～y年"}
+                    y{"Gy年～y年"}
                 }
                 yM{
-                    M{"yy/MM～yy/MM"}
-                    y{"yy/MM～yy/MM"}
+                    M{"Gy/MM～y/MM"}
+                    y{"Gy/MM～y/MM"}
                 }
                 yMEd{
-                    M{"yy/MM/dd(E)～yy/MM/dd(E)"}
-                    d{"yy/MM/dd(E)～yy/MM/dd(E)"}
-                    y{"yy/MM/dd(E)～yy/MM/dd(E)"}
+                    M{"Gy/MM/dd(E)～y/MM/dd(E)"}
+                    d{"Gy/MM/dd(E)～y/MM/dd(E)"}
+                    y{"Gy/MM/dd(E)～y/MM/dd(E)"}
                 }
                 yMMM{
-                    M{"y年M月～M月"}
-                    y{"y年M月～y年M月"}
+                    M{"Gy年M月～M月"}
+                    y{"Gy年M月～y年M月"}
                 }
                 yMMMEd{
-                    M{"y年M月d日(E)～M月d日(E)"}
-                    d{"y年M月d日(E)～d日(E)"}
-                    y{"y年M月d日(E)～y年M月d日(E)"}
+                    M{"Gy年M月d日(E)～M月d日(E)"}
+                    d{"Gy年M月d日(E)～d日(E)"}
+                    y{"Gy年M月d日(E)～y年M月d日(E)"}
                 }
                 yMMMM{
-                    M{"y年M月～M月"}
-                    y{"y年M月～y年M月"}
+                    M{"Gy年M月～M月"}
+                    y{"Gy年M月～y年M月"}
                 }
                 yMMMd{
-                    M{"y年M月d日～M月d日"}
-                    d{"y年M月d日～d日"}
-                    y{"y年M月d日～y年M月d日"}
+                    M{"Gy年M月d日～M月d日"}
+                    d{"Gy年M月d日～d日"}
+                    y{"Gy年M月d日～y年M月d日"}
                 }
                 yMd{
-                    M{"yy/MM/dd～yy/MM/dd"}
-                    d{"yy/MM/dd～yy/MM/dd"}
-                    y{"yy/MM/dd～yy/MM/dd"}
+                    M{"Gy/MM/dd～y/MM/dd"}
+                    d{"Gy/MM/dd～y/MM/dd"}
+                    y{"Gy/MM/dd～y/MM/dd"}
                 }
             }
             quarters{
@@ -1015,8 +1008,8 @@ ja{
                 "H:mm",
                 "y年M月d日EEEE",
                 "y年M月d日",
-                "yyyy/MM/dd",
-                "yyyy/MM/dd",
+                "y/MM/dd",
+                "y/MM/dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -1028,6 +1021,8 @@ ja{
                 Ed{"d日(E)"}
                 Gy{"Gy年"}
                 GyMMM{"Gy年M月"}
+                GyMMMEEEEd{"Gy年M月d日EEEE"}
+                GyMMMEd{"Gy年M月d日(E)"}
                 GyMMMd{"Gy年M月d日"}
                 H{"H時"}
                 Hm{"H:mm"}
@@ -1048,6 +1043,7 @@ ja{
                 y{"y年"}
                 yM{"y/M"}
                 yMEd{"y/M/d(E)"}
+                yMM{"y/MM"}
                 yMMM{"y年M月"}
                 yMMMEEEEd{"y年M月d日EEEE"}
                 yMMMEd{"y年M月d日(E)"}
@@ -1055,9 +1051,6 @@ ja{
                 yMd{"y/M/d"}
                 yQQQ{"y/QQQ"}
                 yQQQQ{"yQQQQ"}
-                yyMMM{"y年M月"}
-                yyyy{"y年"}
-                yyyyMM{"yyyy/MM"}
             }
             dayNames{
                 format{
@@ -1190,13 +1183,13 @@ ja{
                     y{"y年～y年"}
                 }
                 yM{
-                    M{"yy/MM～yy/MM"}
-                    y{"yy/MM～yy/MM"}
+                    M{"y/MM～y/MM"}
+                    y{"y/MM～y/MM"}
                 }
                 yMEd{
-                    M{"yy/MM/dd(E)～yy/MM/dd(E)"}
-                    d{"yy/MM/dd(E)～yy/MM/dd(E)"}
-                    y{"yy/MM/dd(E)～yy/MM/dd(E)"}
+                    M{"y/MM/dd(E)～y/MM/dd(E)"}
+                    d{"y/MM/dd(E)～y/MM/dd(E)"}
+                    y{"y/MM/dd(E)～y/MM/dd(E)"}
                 }
                 yMMM{
                     M{"y年M月～M月"}
@@ -1217,9 +1210,9 @@ ja{
                     y{"y年M月d日～y年M月d日"}
                 }
                 yMd{
-                    M{"yy/MM/dd～yy/MM/dd"}
-                    d{"yy/MM/dd～yy/MM/dd"}
-                    y{"yy/MM/dd～yy/MM/dd"}
+                    M{"y/MM/dd～y/MM/dd"}
+                    d{"y/MM/dd～y/MM/dd"}
+                    y{"y/MM/dd～y/MM/dd"}
                 }
             }
             monthNames{
@@ -1631,16 +1624,15 @@ ja{
                 hms{"aK:mm:ss"}
                 ms{"mm:ss"}
                 y{"Gy年"}
-                yyyy{"Gy年"}
-                yyyyMEd{"Gy/M/d(E)"}
-                yyyyMM{"Gyy/MM"}
-                yyyyMMM{"Gy年M月"}
-                yyyyMMMEEEEd{"Gy年M月d日EEEE"}
-                yyyyMMMEd{"Gy年M月d日(E)"}
-                yyyyMMMd{"Gy年M月d日"}
-                yyyyMd{"Gy/M/d"}
-                yyyyQQQ{"Gy/QQQ"}
-                yyyyQQQQ{"GyQQQQ"}
+                yMEd{"Gy/M/d(E)"}
+                yMM{"Gy/MM"}
+                yMMM{"Gy年M月"}
+                yMMMEEEEd{"Gy年M月d日EEEE"}
+                yMMMEd{"Gy年M月d日(E)"}
+                yMMMd{"Gy年M月d日"}
+                yMd{"Gy/M/d"}
+                yQQQ{"Gy/QQQ"}
+                yQQQQ{"GyQQQQ"}
             }
             eras{
                 abbreviated{
@@ -2254,16 +2246,15 @@ ja{
                 hms{"aK:mm:ss"}
                 ms{"mm:ss"}
                 y{"Gy年"}
-                yyyy{"Gy年"}
-                yyyyMEd{"Gy/M/d(E)"}
-                yyyyMM{"Gy/MM"}
-                yyyyMMM{"Gy年M月"}
-                yyyyMMMEEEEd{"Gy年M月d日EEEE"}
-                yyyyMMMEd{"Gy年M月d日(E)"}
-                yyyyMMMd{"Gy年M月d日"}
-                yyyyMd{"Gy/M/d"}
-                yyyyQQQ{"Gy/QQQ"}
-                yyyyQQQQ{"GyQQQQ"}
+                yMEd{"Gy/M/d(E)"}
+                yMM{"Gy/MM"}
+                yMMM{"Gy年M月"}
+                yMMMEEEEd{"Gy年M月d日EEEE"}
+                yMMMEd{"Gy年M月d日(E)"}
+                yMMMd{"Gy年M月d日"}
+                yMd{"Gy/M/d"}
+                yQQQ{"Gy/QQQ"}
+                yQQQQ{"GyQQQQ"}
             }
             eras{
                 abbreviated{

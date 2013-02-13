@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mt.xml
  */
 mt{
-    Version{"2.0.81.58"}
+    Version{"2.0.81.63"}
     zoneStrings{
         "Etc:Unknown"{
             ec{"Mhux Magħruf"}

@@ -1101,6 +1101,10 @@ hr{
         }
         ZMK{
             "ZMK",
+            "zambijska kvača (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "zambijska kvača",
         }
         ZRN{
@@ -2752,6 +2756,12 @@ hr{
             other{"južnoafričkih randa"}
         }
         ZMK{
+            few{"zambijske kvače (1968-2012)"}
+            many{"zambijskih kvača (1968-2012)"}
+            one{"zambijska kvača (1968-2012)"}
+            other{"zambijskih kvača (1968-2012)"}
+        }
+        ZMW{
             few{"zambijske kvače"}
             many{"zambijskih kvača"}
             one{"zambijska kvača"}
@@ -2794,5 +2804,5 @@ hr{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

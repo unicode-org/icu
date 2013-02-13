@@ -221,6 +221,10 @@ dav{
         }
         ZMK{
             "ZMK",
+            "Kwacha ya Zambia (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kwacha ya Zambia",
         }
         ZWD{
@@ -228,5 +232,5 @@ dav{
             "Dola ya Zimbabwe",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

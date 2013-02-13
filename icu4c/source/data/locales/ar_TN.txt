@@ -20,7 +20,7 @@ ar_TN{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -41,8 +41,8 @@ ar_TN{
             availableFormats{
                 MMdd{"MM/dd"}
                 Md{"M/d"}
-                yM{"yyyy/M"}
-                yyyyMM{"yyyy/MM"}
+                yM{"y/M"}
+                yMM{"y/MM"}
             }
             intervalFormats{
                 M{
@@ -70,8 +70,8 @@ ar_TN{
                 "h:mm a",
                 "EEEE، d MMMM، y",
                 "d MMMM، y",
-                "yyyy/MM/dd",
-                "yyyy/M/d",
+                "y/MM/dd",
+                "y/M/d",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -81,8 +81,8 @@ ar_TN{
             availableFormats{
                 MMdd{"MM/dd"}
                 Md{"M/d"}
-                yM{"yyyy/M"}
-                yyyyMM{"yyyy/MM"}
+                yM{"y/M"}
+                yMM{"y/MM"}
             }
             intervalFormats{
                 M{

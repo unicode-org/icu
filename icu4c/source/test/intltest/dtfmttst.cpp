@@ -3638,7 +3638,7 @@ void DateFormatTest::TestNumberAsStringParsing()
 {
     const NumAsStringItem items[] = {
         // loc lenient fail?  datePattern                                         dateString
-        { "",   FALSE, FALSE, UnicodeString("y MMMM d HH:mm:ss"),                 UnicodeString("2009 7 14 08:43:57") },
+        { "",   FALSE, FALSE, UnicodeString("y MMMM d HH:mm:ss"),                 UnicodeString("2009 7 14 08:43:57") }, // currently timebombed out
         { "",   TRUE,  FALSE, UnicodeString("y MMMM d HH:mm:ss"),                 UnicodeString("2009 7 14 08:43:57") },
         { "en", FALSE, FALSE, UnicodeString("MMM d, y"),                          UnicodeString("Jul 14, 2009") },
         { "en", TRUE,  FALSE, UnicodeString("MMM d, y"),                          UnicodeString("Jul 14, 2009") },
@@ -3664,6 +3664,9 @@ void DateFormatTest::TestNumberAsStringParsing()
     };
     const NumAsStringItem * itemPtr;
     for (itemPtr = items; itemPtr->localeStr != NULL; itemPtr++ ) {
+        if (!isICUVersionAtLeast(51, 0, 2) && itemPtr->localeStr[0] == 0 && itemPtr->lenient == FALSE) {
+            continue; // Need to investigate this, noted in #9925 
+        }
         Locale locale = Locale::createFromName(itemPtr->localeStr);
         UErrorCode status = U_ZERO_ERROR;
         SimpleDateFormat *formatter = new SimpleDateFormat(itemPtr->datePattern, locale, status);
@@ -3874,14 +3877,14 @@ void DateFormatTest::TestMonthPatterns()
 
     const MonthPatternItem items[] = {
         // locale                     date style;           expected formats for the 3 dates above
-        { "root@calendar=chinese",    DateFormat::kLong,  { UnicodeString("ren-chen 4 2"),  UnicodeString("ren-chen 4bis 2"),       UnicodeString("ren-chen 5 2") } },
-        { "root@calendar=chinese",    DateFormat::kShort, { UnicodeString("29-4-2"),        UnicodeString("29-4bis-2"),             UnicodeString("29-5-2") } },
+        { "root@calendar=chinese",    DateFormat::kLong,  { UnicodeString("ren-chen month4 2"),  UnicodeString("ren-chen month4bis 2"),       UnicodeString("ren-chen month5 2") } },
+        { "root@calendar=chinese",    DateFormat::kShort, { UnicodeString("29-04-02"),        UnicodeString("29-04bis-02"),             UnicodeString("29-05-02") } },
         { "root@calendar=chinese",    -1,                 { UnicodeString("29-4-2"),        UnicodeString("29-4bis-2"),             UnicodeString("29-5-2") } },
         { "root@calendar=chinese",    -2,                 { UnicodeString("78x29-4-2"),     UnicodeString("78x29-4bis-2"),          UnicodeString("78x29-5-2") } },
         { "root@calendar=chinese",    -3,                 { UnicodeString("ren-chen-4-2"),  UnicodeString("ren-chen-4bis-2"),       UnicodeString("ren-chen-5-2") } },
-        { "root@calendar=chinese",    -4,                 { UnicodeString("ren-chen 4 2"),  UnicodeString("ren-chen 4bis 2"),       UnicodeString("ren-chen 5 2") } },
+        { "root@calendar=chinese",    -4,                 { UnicodeString("ren-chen month4 2"),  UnicodeString("ren-chen month4bis 2"),       UnicodeString("ren-chen month5 2") } },
         { "en@calendar=gregorian",    -3,                 { UnicodeString("2012-4-22"),     UnicodeString("2012-5-22"),             UnicodeString("2012-6-20") } },
-        { "en@calendar=chinese",      DateFormat::kLong,  { UnicodeString("4 2, ren-chen"), UnicodeString("4bis 2, ren-chen"),      UnicodeString("5 2, ren-chen") } },
+        { "en@calendar=chinese",      DateFormat::kLong,  { UnicodeString("month4 2, ren-chen"), UnicodeString("month4bis 2, ren-chen"),      UnicodeString("month5 2, ren-chen") } },
         { "en@calendar=chinese",      DateFormat::kShort, { UnicodeString("4/2/29"),        UnicodeString("4bis/2/29"),             UnicodeString("5/2/29") } },
         { "zh@calendar=chinese",      DateFormat::kLong,  { CharsToUnicodeString("\\u58EC\\u8FB0\\u5E74\\u56DB\\u6708\\u4E8C\\u65E5"),
                                                             CharsToUnicodeString("\\u58EC\\u8FB0\\u5E74\\u95F0\\u56DB\\u6708\\u4E8C\\u65E5"),

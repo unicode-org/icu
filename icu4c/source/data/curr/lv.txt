@@ -813,6 +813,10 @@ lv{
         }
         ZMK{
             "ZMK",
+            "Zambijas kvača (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Zambijas kvača",
         }
         ZWD{
@@ -1651,6 +1655,11 @@ lv{
             zero{"Dienvidāfrikas randi"}
         }
         ZMK{
+            one{"Zambijas kvača (1968-2012)"}
+            other{"Zambijas kvačas (1968-2012)"}
+            zero{"Zambijas kvačas (1968-2012)"}
+        }
+        ZMW{
             one{"Zambijas kvača"}
             other{"Zambijas kvačas"}
             zero{"Zambijas kvačas"}
@@ -1666,5 +1675,5 @@ lv{
         other{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

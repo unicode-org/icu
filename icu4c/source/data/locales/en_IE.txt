@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_IE{
     %%Parent{"en_GB"}
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -33,9 +33,9 @@ en_IE{
             availableFormats{
                 MEd{"E, d/M"}
                 Md{"d/M"}
-                yMEd{"E, d/M/yyyy"}
+                yMEd{"E, d/M/y"}
                 yMMMEd{"E d MMM y"}
-                yMd{"d/M/yyyy"}
+                yMd{"d/M/y"}
             }
             intervalFormats{
                 Hm{
@@ -80,13 +80,13 @@ en_IE{
                     m{"h:mm-h:mm a v"}
                 }
                 yM{
-                    M{"MM/yyyy - MM/yyyy"}
-                    y{"MM/yyyy - MM/yyyy"}
+                    M{"MM/y - MM/y"}
+                    y{"MM/y - MM/y"}
                 }
                 yMEd{
-                    M{"E dd/MM/yyyy - E dd/MM/yyyy"}
-                    d{"E dd/MM/yyyy - E dd/MM/yyyy"}
-                    y{"E dd/MM/yyyy - E dd/MM/yyyy"}
+                    M{"E dd/MM/y - E dd/MM/y"}
+                    d{"E dd/MM/y - E dd/MM/y"}
+                    y{"E dd/MM/y - E dd/MM/y"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -103,9 +103,9 @@ en_IE{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"dd/MM/yyyy - dd/MM/yyyy"}
-                    d{"dd/MM/yyyy - dd/MM/yyyy"}
-                    y{"dd/MM/yyyy - dd/MM/yyyy"}
+                    M{"dd/MM/y - dd/MM/y"}
+                    d{"dd/MM/y - dd/MM/y"}
+                    y{"dd/MM/y - dd/MM/y"}
                 }
             }
         }
@@ -122,7 +122,7 @@ en_IE{
                 "EEEE d MMMM y",
                 "d MMMM y",
                 "d MMM y",
-                "dd/MM/yyyy",
+                "dd/MM/y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -132,9 +132,9 @@ en_IE{
             availableFormats{
                 MEd{"E, d/M"}
                 Md{"d/M"}
-                yMEd{"E, d/M/yyyy"}
+                yMEd{"E, d/M/y"}
                 yMMMEd{"E d MMM y"}
-                yMd{"d/M/yyyy"}
+                yMd{"d/M/y"}
             }
             intervalFormats{
                 Hm{
@@ -179,13 +179,13 @@ en_IE{
                     m{"h:mm-h:mm a v"}
                 }
                 yM{
-                    M{"MM/yyyy - MM/yyyy"}
-                    y{"MM/yyyy - MM/yyyy"}
+                    M{"MM/y - MM/y"}
+                    y{"MM/y - MM/y"}
                 }
                 yMEd{
-                    M{"E dd/MM/yyyy - E dd/MM/yyyy"}
-                    d{"E dd/MM/yyyy - E dd/MM/yyyy"}
-                    y{"E dd/MM/yyyy - E dd/MM/yyyy"}
+                    M{"E dd/MM/y - E dd/MM/y"}
+                    d{"E dd/MM/y - E dd/MM/y"}
+                    y{"E dd/MM/y - E dd/MM/y"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -202,9 +202,9 @@ en_IE{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"dd/MM/yyyy - dd/MM/yyyy"}
-                    d{"dd/MM/yyyy - dd/MM/yyyy"}
-                    y{"dd/MM/yyyy - dd/MM/yyyy"}
+                    M{"dd/MM/y - dd/MM/y"}
+                    d{"dd/MM/y - dd/MM/y"}
+                    y{"dd/MM/y - dd/MM/y"}
                 }
             }
         }

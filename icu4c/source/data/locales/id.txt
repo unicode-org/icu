@@ -119,7 +119,7 @@ id{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.65"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -766,13 +766,13 @@ id{
                     y{"y-y"}
                 }
                 yM{
-                    M{"M/yy – M/yy"}
-                    y{"M/yy – M/yy"}
+                    M{"M/y – M/y"}
+                    y{"M/y – M/y"}
                 }
                 yMEd{
-                    M{"E, d/M/yy – E, d/M/yy"}
-                    d{"E, d/M/yy – E, d/M/yy"}
-                    y{"E, d/M/yy – E, d/M/yy"}
+                    M{"E, d/M/y – E, d/M/y"}
+                    d{"E, d/M/y – E, d/M/y"}
+                    y{"E, d/M/y – E, d/M/y"}
                 }
                 yMMM{
                     M{"MMM–MMM y"}
@@ -793,9 +793,9 @@ id{
                     y{"d MMM y – d MMM y"}
                 }
                 yMd{
-                    M{"d/M/yy – d/M/yy"}
-                    d{"d/M/yy – d/M/yy"}
-                    y{"d/M/yy – d/M/yy"}
+                    M{"d/M/y – d/M/y"}
+                    d{"d/M/y – d/M/y"}
+                    y{"d/M/y – d/M/y"}
                 }
             }
             quarters{
@@ -851,9 +851,9 @@ id{
                 "HH.mm.ss z",
                 "HH.mm.ss",
                 "HH.mm",
-                "EEEE, dd MMMM yyyy",
-                "d MMMM yyyy",
-                "d MMM yyyy",
+                "EEEE, dd MMMM y",
+                "d MMMM y",
+                "d MMM y",
                 "dd/MM/yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -1044,13 +1044,13 @@ id{
                     y{"y-y"}
                 }
                 yM{
-                    M{"M/yy – M/yy"}
-                    y{"M/yy – M/yy"}
+                    M{"M/y – M/y"}
+                    y{"M/y – M/y"}
                 }
                 yMEd{
-                    M{"E, d/M/yy – E, d/M/yy"}
-                    d{"E, d/M/yy – E, d/M/yy"}
-                    y{"E, d/M/yy – E, d/M/yy"}
+                    M{"E, d/M/y – E, d/M/y"}
+                    d{"E, d/M/y – E, d/M/y"}
+                    y{"E, d/M/y – E, d/M/y"}
                 }
                 yMMM{
                     M{"MMM–MMM y"}
@@ -1071,9 +1071,9 @@ id{
                     y{"d MMM y – d MMM y"}
                 }
                 yMd{
-                    M{"d/M/yy – d/M/yy"}
-                    d{"d/M/yy – d/M/yy"}
-                    y{"d/M/yy – d/M/yy"}
+                    M{"d/M/y – d/M/y"}
+                    d{"d/M/y – d/M/y"}
+                    y{"d/M/y – d/M/y"}
                 }
             }
             monthNames{
@@ -1423,13 +1423,9 @@ id{
                 yMEd{"E, d/M/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
+                yMMMd{"d MMM y G"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyyyM{"M/y G"}
-                yyyyMEd{"E, d/M/y G"}
-                yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E, d MMM y G"}
-                yyyyMMMd{"d MMM y G"}
             }
             eras{
                 abbreviated{
@@ -1562,11 +1558,11 @@ id{
                 hms{"h.mm.ss a"}
                 ms{"mm.ss"}
                 y{"G y"}
-                yyyyM{"M/y G"}
-                yyyyMEd{"E, d/M/y G"}
-                yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E, d MMM y G"}
-                yyyyMMMd{"d MMM y G"}
+                yM{"M/y G"}
+                yMEd{"E, d/M/y G"}
+                yMMM{"MMM y G"}
+                yMMMEd{"E, d MMM y G"}
+                yMMMd{"d MMM y G"}
             }
             eras{
                 abbreviated{
@@ -1941,11 +1937,11 @@ id{
                 hms{"h.mm.ss a"}
                 ms{"mm.ss"}
                 y{"G y"}
-                yyyyM{"M/y G"}
-                yyyyMEd{"E, d/M/y G"}
-                yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E, d MMM y G"}
-                yyyyMMMd{"d MMM y G"}
+                yM{"M/y G"}
+                yMEd{"E, d/M/y G"}
+                yMMM{"MMM y G"}
+                yMMMEd{"E, d MMM y G"}
+                yMMMd{"d MMM y G"}
             }
             eras{
                 abbreviated{

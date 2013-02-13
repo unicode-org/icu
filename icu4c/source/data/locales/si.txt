@@ -32,7 +32,7 @@ si{
             }
         }
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.65"}
     calendar{
         generic{
             AmPmMarkers{
@@ -221,13 +221,13 @@ si{
                     y{"y–y"}
                 }
                 yM{
-                    M{"M-yy - M-yy"}
-                    y{"M-yy - M-yy"}
+                    M{"M-y - M-y"}
+                    y{"M-y - M-y"}
                 }
                 yMEd{
-                    M{"E, M-d-yy - E, M-d-yy"}
-                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-                    y{"M-d-yy, E - M-d-yy, E"}
+                    M{"E, M-d-y - E, M-d-y"}
+                    d{"E, y-MM-dd – E, y-MM-dd"}
+                    y{"M-d-y, E - M-d-y, E"}
                 }
                 yMMM{
                     M{"y MMM–MMM"}
@@ -248,9 +248,9 @@ si{
                     y{"y MMM d - y MMM d"}
                 }
                 yMd{
-                    M{"M-d-yy - M-d-yy"}
-                    d{"M-d-yy - M-d-yy"}
-                    y{"M-d-yy - M-d-yy"}
+                    M{"M-d-y - M-d-y"}
+                    d{"M-d-y - M-d-y"}
+                    y{"M-d-y - M-d-y"}
                 }
             }
             quarters{
@@ -309,7 +309,7 @@ si{
                 "y MMMM d, EEEE",
                 "y MMMM d",
                 "y MMM d",
-                "yyyy/MM/dd",
+                "y/MM/dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -493,13 +493,13 @@ si{
                     y{"y–y"}
                 }
                 yM{
-                    M{"M-yy - M-yy"}
-                    y{"M-yy - M-yy"}
+                    M{"M-y - M-y"}
+                    y{"M-y - M-y"}
                 }
                 yMEd{
-                    M{"E, M-d-yy - E, M-d-yy"}
-                    d{"E, yyyy-MM-dd – E, yyyy-MM-dd"}
-                    y{"M-d-yy, E - M-d-yy, E"}
+                    M{"E, M-d-y - E, M-d-y"}
+                    d{"E, y-MM-dd – E, y-MM-dd"}
+                    y{"M-d-y, E - M-d-y, E"}
                 }
                 yMMM{
                     M{"y MMM–MMM"}
@@ -520,9 +520,9 @@ si{
                     y{"y MMM d - y MMM d"}
                 }
                 yMd{
-                    M{"M-d-yy - M-d-yy"}
-                    d{"M-d-yy - M-d-yy"}
-                    y{"M-d-yy - M-d-yy"}
+                    M{"M-d-y - M-d-y"}
+                    d{"M-d-y - M-d-y"}
+                    y{"M-d-y - M-d-y"}
                 }
             }
             monthNames{

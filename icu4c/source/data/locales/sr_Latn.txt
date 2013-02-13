@@ -32,7 +32,7 @@ sr_Latn{
             }
         }
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -75,22 +75,16 @@ sr_Latn{
                 ms{"mm.ss"}
                 y{"y."}
                 yM{"y-M"}
-                yMEd{"E, d. M. yyyy."}
+                yMEd{"E, d. M. y."}
+                yMM{"MM.y"}
                 yMMM{"MMM y."}
                 yMMMEd{"E, d. MMM y."}
                 yMMMM{"MMMM y."}
                 yMMMd{"d. MMM y."}
+                yMMdd{"dd.MM.y"}
                 yMd{"d. M. y."}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-                yyMM{"MM.yy"}
-                yyMMMd{"d. MMM yy."}
-                yyMMdd{"dd.MM.yy"}
-                yyQQQ{"QQQ yy"}
-                yyQQQQ{"QQQQ yy"}
-                yyyy{"y."}
-                yyyyMM{"yyyy-MM"}
-                yyyyMMMM{"MMMM y."}
             }
             dayNames{
                 format{
@@ -188,13 +182,13 @@ sr_Latn{
                     y{"y-y"}
                 }
                 yM{
-                    M{"M.yy - M.yy"}
-                    y{"M.yy - M.yy"}
+                    M{"M.y - M.y"}
+                    y{"M.y - M.y"}
                 }
                 yMEd{
-                    M{"E, d.M.yy. - E, d.M.yy."}
-                    d{"E, d.M.yy. - E, d.M.yy."}
-                    y{"E, d.M.yy. - E, d.M.yy."}
+                    M{"E, d.M.y. - E, d.M.y."}
+                    d{"E, d.M.y. - E, d.M.y."}
+                    y{"E, d.M.y. - E, d.M.y."}
                 }
                 yMMM{
                     M{"MMM-MMM y."}
@@ -206,8 +200,8 @@ sr_Latn{
                     y{"E, dd. MMM y. - E, dd. MMM y."}
                 }
                 yMMMM{
-                    M{"yyyy-MM – MM"}
-                    y{"yyyy-MM – yyyy-MM"}
+                    M{"y-MM – MM"}
+                    y{"y-MM – y-MM"}
                 }
                 yMMMd{
                     M{"dd. MMM - dd. MMM y."}
@@ -215,9 +209,9 @@ sr_Latn{
                     y{"dd. MMM y. - dd. MMM y."}
                 }
                 yMd{
-                    M{"d.M.yy. - d.M.yy."}
-                    d{"d.M.yy. - d.M.yy."}
-                    y{"d.M.yy. - d.M.yy."}
+                    M{"d.M.y. - d.M.y."}
+                    d{"d.M.y. - d.M.y."}
+                    y{"d.M.y. - d.M.y."}
                 }
             }
             quarters{
@@ -278,22 +272,16 @@ sr_Latn{
                 ms{"mm.ss"}
                 y{"y."}
                 yM{"y-M"}
-                yMEd{"E, d. M. yyyy."}
+                yMEd{"E, d. M. y."}
+                yMM{"MM.y"}
                 yMMM{"MMM y."}
                 yMMMEd{"E, d. MMM y."}
                 yMMMM{"MMMM y."}
                 yMMMd{"d. MMM y."}
+                yMMdd{"dd.MM.y"}
                 yMd{"d. M. y."}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-                yyMM{"MM.yy"}
-                yyMMMd{"d. MMM yy."}
-                yyMMdd{"dd.MM.yy"}
-                yyQQQ{"QQQ yy"}
-                yyQQQQ{"QQQQ yy"}
-                yyyy{"y."}
-                yyyyMM{"yyyy-MM"}
-                yyyyMMMM{"MMMM y."}
             }
             dayNames{
                 format{
@@ -401,13 +389,13 @@ sr_Latn{
                     y{"y-y"}
                 }
                 yM{
-                    M{"M.yy - M.yy"}
-                    y{"M.yy - M.yy"}
+                    M{"M.y - M.y"}
+                    y{"M.y - M.y"}
                 }
                 yMEd{
-                    M{"E, d.M.yy. - E, d.M.yy."}
-                    d{"E, d.M.yy. - E, d.M.yy."}
-                    y{"E, d.M.yy. - E, d.M.yy."}
+                    M{"E, d.M.y. - E, d.M.y."}
+                    d{"E, d.M.y. - E, d.M.y."}
+                    y{"E, d.M.y. - E, d.M.y."}
                 }
                 yMMM{
                     M{"MMM-MMM y."}
@@ -419,8 +407,8 @@ sr_Latn{
                     y{"E, dd. MMM y. - E, dd. MMM y."}
                 }
                 yMMMM{
-                    M{"yyyy-MM – MM"}
-                    y{"yyyy-MM – yyyy-MM"}
+                    M{"y-MM – MM"}
+                    y{"y-MM – y-MM"}
                 }
                 yMMMd{
                     M{"dd. MMM - dd. MMM y."}
@@ -428,9 +416,9 @@ sr_Latn{
                     y{"dd. MMM y. - dd. MMM y."}
                 }
                 yMd{
-                    M{"d.M.yy. - d.M.yy."}
-                    d{"d.M.yy. - d.M.yy."}
-                    y{"d.M.yy. - d.M.yy."}
+                    M{"d.M.y. - d.M.y."}
+                    d{"d.M.y. - d.M.y."}
+                    y{"d.M.y. - d.M.y."}
                 }
             }
             monthNames{

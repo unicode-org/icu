@@ -25,7 +25,7 @@ om{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -50,9 +50,9 @@ om{
             availableFormats{
                 MMMMdd{"dd MMMM"}
                 MMdd{"dd/MM"}
-                yyMM{"MM/yy"}
-                yyQQQ{"QQQ yy"}
-                yyyyMMMM{"MMMM y"}
+                yMM{"MM/y"}
+                yMMMM{"MMMM y"}
+                yQQQ{"QQQ y"}
             }
             dayNames{
                 format{
@@ -111,9 +111,9 @@ om{
             availableFormats{
                 MMMMdd{"dd MMMM"}
                 MMdd{"dd/MM"}
-                yyMM{"MM/yy"}
-                yyQQQ{"QQQ yy"}
-                yyyyMMMM{"MMMM y"}
+                yMM{"MM/y"}
+                yMMMM{"MMMM y"}
+                yQQQ{"QQQ y"}
             }
             dayNames{
                 format{

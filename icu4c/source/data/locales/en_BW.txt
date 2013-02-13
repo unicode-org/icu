@@ -14,7 +14,7 @@ en_BW{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -37,11 +37,11 @@ en_BW{
                 MMMEd{"E dd MMM"}
                 MMMd{"dd MMM"}
                 Md{"dd/MM"}
-                yM{"MM/yy"}
-                yMEd{"E, dd/MM/yy"}
+                yM{"MM/y"}
+                yMEd{"E, dd/MM/y"}
                 yMMMEd{"E dd MMM y"}
                 yMMMd{"dd MMM y"}
-                yMd{"dd/MM/yy"}
+                yMd{"dd/MM/y"}
             }
         }
         gregorian{
@@ -65,11 +65,11 @@ en_BW{
                 MMMEd{"E dd MMM"}
                 MMMd{"dd MMM"}
                 Md{"dd/MM"}
-                yM{"MM/yy"}
-                yMEd{"E, dd/MM/yy"}
+                yM{"MM/y"}
+                yMEd{"E, dd/MM/y"}
                 yMMMEd{"E dd MMM y"}
                 yMMMd{"dd MMM y"}
-                yMd{"dd/MM/yy"}
+                yMd{"dd/MM/y"}
             }
         }
     }

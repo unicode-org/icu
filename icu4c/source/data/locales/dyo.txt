@@ -29,7 +29,7 @@ dyo{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -114,7 +114,7 @@ dyo{
                 "EEEE d MMMM y",
                 "d MMMM y",
                 "d MMM y",
-                "d/M/yyyy",
+                "d/M/y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

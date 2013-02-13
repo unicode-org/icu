@@ -221,6 +221,10 @@ sg{
         }
         ZMK{
             "ZMK",
+            "kwâtia tî Zambïi (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "kwâtia tî Zambïi",
         }
         ZWD{
@@ -228,5 +232,5 @@ sg{
             "dolära tî Zimbäbwe",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

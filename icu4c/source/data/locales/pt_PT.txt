@@ -122,7 +122,7 @@ pt_PT{
             }
         }
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.63"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -132,7 +132,7 @@ pt_PT{
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "dd/MM/yyyy G",
+                "dd/MM/y G",
                 "d/M/y G",
                 "{1}, {0}",
                 "{1} 'às' {0}",
@@ -179,9 +179,6 @@ pt_PT{
                 yMMMd{"d/MM/y"}
                 yQQQ{"QQQQ 'de' y"}
                 yQQQQ{"QQQQ 'de' y"}
-                yyMMM{"MM/yy"}
-                yyMMMEd{"E, d/MM/yy"}
-                yyMMMd{"d/MM/yy"}
             }
             dayNames{
                 format{
@@ -254,7 +251,7 @@ pt_PT{
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
-                "dd/MM/yyyy",
+                "dd/MM/y",
                 "dd/MM/yy",
                 "{1}, {0}",
                 "{1} 'às' {0}",
@@ -276,9 +273,6 @@ pt_PT{
                 yMMMd{"d/MM/y"}
                 yQQQ{"QQQQ 'de' y"}
                 yQQQQ{"QQQQ 'de' y"}
-                yyMMM{"MM/yy"}
-                yyMMMEd{"E, d/MM/yy"}
-                yyMMMd{"d/MM/yy"}
             }
             dayNames{
                 format{
@@ -409,7 +403,7 @@ pt_PT{
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "dd/MM/yyyy G",
+                "dd/MM/y G",
                 "d/M/y G",
                 "{1}, {0}",
                 "{1} 'às' {0}",
@@ -430,13 +424,13 @@ pt_PT{
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "dd/MM/yyyy G",
+                "dd/MM/y G",
                 "d/M/y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1} 'às' {0}",
+                "{1} 'às' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 yQQQ{"QQQQ 'de' y G"}
@@ -451,7 +445,7 @@ pt_PT{
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "dd/MM/yyyy G",
+                "dd/MM/y G",
                 "d/M/y G",
                 "{1}, {0}",
                 "{1} 'às' {0}",

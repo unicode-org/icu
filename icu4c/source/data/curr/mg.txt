@@ -225,6 +225,10 @@ mg{
         }
         ZMK{
             "ZMK",
+            "Kwacha zambianina (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kwacha zambianina",
         }
         ZWD{
@@ -232,5 +236,5 @@ mg{
             "Dôlara Zimbaboeanina",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

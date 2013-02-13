@@ -221,6 +221,10 @@ bez{
         }
         ZMK{
             "ZMK",
+            "Lupila lwa Huzambia (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Lupila lwa Huzambia",
         }
         ZWD{
@@ -228,5 +232,5 @@ bez{
             "Lupila lwa Huzimbabwe",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }
