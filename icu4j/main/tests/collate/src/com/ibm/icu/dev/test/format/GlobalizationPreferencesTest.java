@@ -1223,8 +1223,8 @@ public class GlobalizationPreferencesTest extends TestFmwk {
         // Date - short
         df = gp.getDateFormat(GlobalizationPreferences.DF_SHORT, GlobalizationPreferences.DF_NONE);
         pattern = ((SimpleDateFormat)df).toPattern();
-        if (!pattern.equals("dd/MM/yyyy")) {
-            errln("FAIL: SHORT date pattern is " + pattern + " Expected: dd/MM/yyyy");
+        if (!pattern.equals("dd/MM/y")) {
+            errln("FAIL: SHORT date pattern is " + pattern + " Expected: dd/MM/y");
         }
 
         // Time - full
