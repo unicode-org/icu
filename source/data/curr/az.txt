@@ -981,6 +981,10 @@ az{
         }
         ZMK{
             "ZMK",
+            "Zambiya kvaçı (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Zambiya kvaçı",
         }
         ZRN{
@@ -1724,6 +1728,9 @@ az{
             other{"Cənub Afrika randı"}
         }
         ZMK{
+            other{"Zambiya kvaçı (1968-2012)"}
+        }
+        ZMW{
             other{"Zambiya kvaçı"}
         }
         ZRN{
@@ -1736,5 +1743,5 @@ az{
             other{"Zimbabve dolları (1980-2008)"}
         }
     }
-    Version{"2.0.80.78"}
+    Version{"2.0.81.46"}
 }

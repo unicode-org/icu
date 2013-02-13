@@ -225,6 +225,10 @@ ln{
         }
         ZMK{
             "ZMK",
+            "Kwasha ya Zambi (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kwasha ya Zambi",
         }
         ZWD{
@@ -232,5 +236,5 @@ ln{
             "Dolarɛ ya Zimbabwɛ",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

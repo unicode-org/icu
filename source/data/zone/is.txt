@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/is.xml
  */
 is{
-    Version{"2.0.81.46"}
+    Version{"2.0.81.65"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Algeirsborg"}

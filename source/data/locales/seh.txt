@@ -29,7 +29,7 @@ seh{
             }
         }
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -66,16 +66,13 @@ seh{
                 y{"y"}
                 yM{"MM/y"}
                 yMEd{"E, dd/MM/y"}
+                yMM{"MM/y"}
                 yMMM{"MMM 'de' y"}
                 yMMMEd{"E, d 'de' MMM 'de' y"}
                 yMMMM{"MMMM 'de' y"}
+                yMMMd{"d 'de' MMM 'de' y"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-                yyMM{"MM/yy"}
-                yyMMM{"MMM yy"}
-                yyMMMEd{"E, d 'de' MMM 'de' yy"}
-                yyMMMd{"d 'de' MMM 'de' yy"}
-                yyQQQ{"QQQ yy"}
             }
             dayNames{
                 format{
@@ -120,7 +117,7 @@ seh{
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
                 "d 'de' MMM 'de' y",
-                "d/M/yyyy",
+                "d/M/y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -146,16 +143,13 @@ seh{
                 y{"y"}
                 yM{"MM/y"}
                 yMEd{"E, dd/MM/y"}
+                yMM{"MM/y"}
                 yMMM{"MMM 'de' y"}
                 yMMMEd{"E, d 'de' MMM 'de' y"}
                 yMMMM{"MMMM 'de' y"}
+                yMMMd{"d 'de' MMM 'de' y"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-                yyMM{"MM/yy"}
-                yyMMM{"MMM yy"}
-                yyMMMEd{"E, d 'de' MMM 'de' yy"}
-                yyMMMd{"d 'de' MMM 'de' yy"}
-                yyQQQ{"QQQ yy"}
             }
             dayNames{
                 format{

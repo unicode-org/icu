@@ -194,7 +194,7 @@ pl{
             }
         }
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.65"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -205,7 +205,7 @@ pl{
                 "EEEE, d MMMM, y G",
                 "d MMMM, y G",
                 "d MMM y G",
-                "dd.MM.yyyy G",
+                "dd.MM.y G",
                 "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -231,18 +231,16 @@ pl{
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yM{"MM.yyyy G"}
-                yMEd{"E, d.MM.yyyy G"}
+                yM{"MM.y G"}
+                yMEd{"E, d.MM.y G"}
+                yMM{"MM.y G"}
                 yMMM{"LLL y G"}
                 yMMMEd{"E, d MMM y G"}
                 yMMMM{"LLLL y G"}
                 yMMMd{"d MMM y G"}
-                yMd{"d.MM.yyyy G"}
+                yMd{"d.MM.y G"}
                 yQQQ{"G y QQQ"}
                 yQQQQ{"G y QQQQ"}
-                yyMMM{"LLL y G"}
-                yyyyMM{"MM.yyyy G"}
-                yyyyMMMM{"LLLL y G"}
             }
         }
         chinese{
@@ -484,18 +482,16 @@ pl{
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"MM.yyyy"}
-                yMEd{"E, d.MM.yyyy"}
+                yM{"MM.y"}
+                yMEd{"E, d.MM.y"}
+                yMM{"MM.y"}
                 yMMM{"LLL y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"LLLL y"}
                 yMMMd{"d MMM y"}
-                yMd{"d.MM.yyyy"}
+                yMd{"d.MM.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyMMM{"LLLL yy"}
-                yyyyMM{"MM.yyyy"}
-                yyyyMMMM{"LLLL y"}
             }
             dayNames{
                 format{
@@ -638,13 +634,13 @@ pl{
                     y{"y–y"}
                 }
                 yM{
-                    M{"MM.yyyy - MM.yyyy"}
-                    y{"MM.yyyy - MM.yyyy"}
+                    M{"MM.y - MM.y"}
+                    y{"MM.y - MM.y"}
                 }
                 yMEd{
-                    M{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
-                    d{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
-                    y{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                    M{"E, dd.MM.y - E, dd.MM.y"}
+                    d{"E, dd.MM.y - E, dd.MM.y"}
+                    y{"E, dd.MM.y - E, dd.MM.y"}
                 }
                 yMMM{
                     M{"LLL-LLL y"}
@@ -665,9 +661,9 @@ pl{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"dd.MM-dd.MM.yyyy"}
-                    d{"dd-dd.MM.yyyy"}
-                    y{"dd.MM.yyyy-dd.MM.yyyy"}
+                    M{"dd.MM-dd.MM.y"}
+                    d{"dd-dd.MM.y"}
+                    y{"dd.MM.y-dd.MM.y"}
                 }
             }
             quarters{
@@ -726,7 +722,7 @@ pl{
                 "EEEE, d MMMM y",
                 "d MMMM y",
                 "d MMM y",
-                "dd.MM.yyyy",
+                "dd.MM.y",
                 "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -752,18 +748,16 @@ pl{
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"MM.yyyy"}
-                yMEd{"E, d.MM.yyyy"}
+                yM{"MM.y"}
+                yMEd{"E, d.MM.y"}
+                yMM{"MM.y"}
                 yMMM{"LLL y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"LLLL y"}
                 yMMMd{"d MMM y"}
-                yMd{"d.MM.yyyy"}
+                yMd{"d.MM.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyMMM{"LLLL yy"}
-                yyyyMM{"MM.yyyy"}
-                yyyyMMMM{"LLLL y"}
             }
             dayNames{
                 format{
@@ -916,13 +910,13 @@ pl{
                     y{"y–y"}
                 }
                 yM{
-                    M{"MM.yyyy - MM.yyyy"}
-                    y{"MM.yyyy - MM.yyyy"}
+                    M{"MM.y - MM.y"}
+                    y{"MM.y - MM.y"}
                 }
                 yMEd{
-                    M{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
-                    d{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
-                    y{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                    M{"E, dd.MM.y - E, dd.MM.y"}
+                    d{"E, dd.MM.y - E, dd.MM.y"}
+                    y{"E, dd.MM.y - E, dd.MM.y"}
                 }
                 yMMM{
                     M{"LLL-LLL y"}
@@ -943,9 +937,9 @@ pl{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"dd.MM-dd.MM.yyyy"}
-                    d{"dd-dd.MM.yyyy"}
-                    y{"dd.MM.yyyy-dd.MM.yyyy"}
+                    M{"dd.MM-dd.MM.y"}
+                    d{"dd-dd.MM.y"}
+                    y{"dd.MM.y-dd.MM.y"}
                 }
             }
             monthNames{
@@ -1226,7 +1220,7 @@ pl{
                 "EEEE, d MMMM, y G",
                 "d MMMM, y G",
                 "d MMM y G",
-                "dd.MM.yyyy G",
+                "dd.MM.y G",
                 "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -1253,23 +1247,16 @@ pl{
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yM{"MM.yyyy"}
-                yMEd{"E, d.MM.yyyy"}
+                yM{"MM.y"}
+                yMEd{"E, d.MM.y"}
+                yMM{"MM.y G"}
                 yMMM{"LLL y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"LLLL y"}
+                yMMMd{"d MMM y G"}
+                yMd{"dd.MM.y G"}
                 yQQQ{"G y QQQ"}
                 yQQQQ{"G y QQQQ"}
-                yyMMM{"LLL yy G"}
-                yyyy{"y G"}
-                yyyyMEd{"E, dd.MM.yyyy G"}
-                yyyyMM{"MM.yyyy G"}
-                yyyyMMMEd{"E, d MMM y G"}
-                yyyyMMMM{"LLLL y G"}
-                yyyyMMMd{"d MMM y G"}
-                yyyyMd{"dd.MM.yyyy G"}
-                yyyyQQQ{"G y QQQ"}
-                yyyyQQQQ{"G y QQQQ"}
             }
             monthNames{
                 format{
@@ -1357,12 +1344,12 @@ pl{
                 "EEEE, d MMMM, y G",
                 "d MMMM, y G",
                 "d MMM y G",
-                "dd.MM.yyyy G",
+                "dd.MM.y G",
+                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
             availableFormats{
                 Ed{"E, d"}
@@ -1383,17 +1370,16 @@ pl{
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yyMMM{"LLL yy G"}
-                yyyy{"y G"}
-                yyyyM{"M.y G"}
-                yyyyMEd{"E, dd.MM.y G"}
-                yyyyMM{"MM.y G"}
-                yyyyMMMEd{"E, d MMM y G"}
-                yyyyMMMM{"LLLL y G"}
-                yyyyMMMd{"d MMM y G"}
-                yyyyMd{"dd.MM.y G"}
-                yyyyQQQ{"G y QQQ"}
-                yyyyQQQQ{"G y QQQQ"}
+                yM{"M.y G"}
+                yMEd{"E, dd.MM.y G"}
+                yMM{"MM.y G"}
+                yMMM{"LLL y G"}
+                yMMMEd{"E, d MMM y G"}
+                yMMMM{"LLLL y G"}
+                yMMMd{"d MMM y G"}
+                yMd{"dd.MM.y G"}
+                yQQQ{"G y QQQ"}
+                yQQQQ{"G y QQQQ"}
             }
         }
         persian{
@@ -1483,7 +1469,7 @@ pl{
                 "EEEE, d MMMM, y G",
                 "d MMMM, y G",
                 "d MMM y G",
-                "dd.MM.yyyy G",
+                "dd.MM.y G",
                 "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -1509,18 +1495,16 @@ pl{
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yyMM{"MM/y G"}
-                yyMMM{"LLL y G"}
-                yyyy{"y G"}
-                yyyyM{"M.y G"}
-                yyyyMEd{"E, d.MM.y G"}
-                yyyyMM{"MM.yyyy G"}
-                yyyyMMMEd{"E, d MMM y G"}
-                yyyyMMMM{"LLLL y G"}
-                yyyyMMMd{"d MMM y G"}
-                yyyyMd{"d.MM.y G"}
-                yyyyQQQ{"G y QQQ"}
-                yyyyQQQQ{"G y QQQQ"}
+                yM{"M.y G"}
+                yMEd{"E, d.MM.y G"}
+                yMM{"MM/y G"}
+                yMMM{"LLL y G"}
+                yMMMEd{"E, d MMM y G"}
+                yMMMM{"LLLL y G"}
+                yMMMd{"d MMM y G"}
+                yMd{"d.MM.y G"}
+                yQQQ{"G y QQQ"}
+                yQQQQ{"G y QQQQ"}
             }
             eras{
                 abbreviated{

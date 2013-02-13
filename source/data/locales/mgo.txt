@@ -44,7 +44,7 @@ mgo{
         }
         native{"latn"}
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -164,7 +164,7 @@ mgo{
                 "EEEE, y MMMM dd",
                 "y MMMM d",
                 "y MMM d",
-                "yyyy-MM-dd",
+                "y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

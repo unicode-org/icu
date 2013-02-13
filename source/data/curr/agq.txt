@@ -221,6 +221,10 @@ agq{
         }
         ZMK{
             "ZMK",
+            "Kwachà è Zambìa (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kwachà è Zambìa",
         }
         ZWD{
@@ -228,5 +232,5 @@ agq{
             "Dɔlà è Zìmbagbɛ̀",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

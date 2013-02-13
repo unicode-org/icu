@@ -30,7 +30,7 @@ be{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -63,12 +63,12 @@ be{
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}
                 y{"G y"}
-                yM{"M.yy"}
-                yMEd{"E, d.M.yy"}
+                yM{"M.y"}
+                yMEd{"E, d.M.y"}
                 yMMM{"MMM y G"}
                 yMMMEd{"E, d MMM y G"}
                 yMMMd{"d MMM y G"}
-                yMd{"d.M.yy"}
+                yMd{"d.M.y"}
             }
         }
         generic{
@@ -106,16 +106,15 @@ be{
                 hms{"h.mm.ss a"}
                 ms{"mm.ss"}
                 y{"y"}
-                yM{"MM/yyyy"}
-                yMEd{"E, dd/MM/yyyy"}
+                yM{"MM/y"}
+                yMEd{"E, dd/MM/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
-                yMd{"d.M.yy"}
+                yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyyyM{"MM/yyyy"}
             }
             dayNames{
                 format{
@@ -179,7 +178,7 @@ be{
                 "HH.mm",
                 "EEEE, d MMMM y",
                 "d MMMM y",
-                "d.M.yyyy",
+                "d.M.y",
                 "d.M.yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -202,16 +201,15 @@ be{
                 hms{"h.mm.ss a"}
                 ms{"mm.ss"}
                 y{"y"}
-                yM{"MM/yyyy"}
-                yMEd{"E, dd/MM/yyyy"}
+                yM{"MM/y"}
+                yMEd{"E, dd/MM/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
-                yMd{"d.M.yy"}
+                yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyyyM{"MM/yyyy"}
             }
             dayNames{
                 format{

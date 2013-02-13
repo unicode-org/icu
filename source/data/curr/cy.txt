@@ -637,6 +637,10 @@ cy{
         }
         ZMK{
             "ZMK",
+            "Kwacha Zambia (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kwacha Zambia",
         }
     }
@@ -1266,6 +1270,10 @@ cy{
             other{"Rand De Affrica"}
         }
         ZMK{
+            one{"Kwacha Zambia (1968-2012)"}
+            other{"Kwacha Zambia (1968-2012)"}
+        }
+        ZMW{
             one{"Kwacha Zambia"}
             other{"Kwacha Zambia"}
         }
@@ -1278,5 +1286,5 @@ cy{
         two{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.0.80.94"}
+    Version{"2.0.81.65"}
 }

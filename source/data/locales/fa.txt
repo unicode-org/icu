@@ -141,7 +141,7 @@ fa{
         }
         native{"arabext"}
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.65"}
     calendar{
         generic{
             AmPmMarkers{
@@ -168,7 +168,7 @@ fa{
             }
             availableFormats{
                 Ed{"E d"}
-                GGGGyyyyMMMMd{"d MMMM y GGGG"}
+                GGGGyMMMMd{"d MMMM y GGGG"}
                 H{"H"}
                 HHmmZ{"HH:mm (Z)"}
                 Hm{"H:mm"}
@@ -193,13 +193,11 @@ fa{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEEEEd{"EEEE d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"y/M/d"}
                 yQQQ{"QQQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyyyM{"yyyy/M"}
-                yyyyMMMM{"MMMM yyyy"}
-                yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -342,13 +340,13 @@ fa{
                     y{"y تا y"}
                 }
                 yM{
-                    M{"yyyy/M تا yyyy/M"}
-                    y{"yyyy/M تا yyyy/M"}
+                    M{"y/M تا y/M"}
+                    y{"y/M تا y/M"}
                 }
                 yMEd{
-                    M{"E yyyy/M/d تا E yyyy/M/d"}
-                    d{"E yyyy/M/d تا E yyyy/M/d"}
-                    y{"E yyyy/M/d تا E yyyy/M/d"}
+                    M{"E y/M/d تا E y/M/d"}
+                    d{"E y/M/d تا E y/M/d"}
+                    y{"E y/M/d تا E y/M/d"}
                 }
                 yMMM{
                     M{"LLL تا MMM y"}
@@ -369,9 +367,9 @@ fa{
                     y{"d MMM y تا d MMM y"}
                 }
                 yMd{
-                    M{"yyyy/M/d تا yyyy/M/d"}
-                    d{"yyyy/M/d تا yyyy/M/d"}
-                    y{"yyyy/M/d تا yyyy/M/d"}
+                    M{"y/M/d تا y/M/d"}
+                    d{"y/M/d تا y/M/d"}
+                    y{"y/M/d تا y/M/d"}
                 }
             }
             quarters{
@@ -430,7 +428,7 @@ fa{
                 "EEEE d MMMM y",
                 "d MMMM y",
                 "d MMM y",
-                "yyyy/M/d",
+                "y/M/d",
                 "{1}،‏ {0}",
                 "{1}، ساعت {0}",
                 "{1}، ساعت {0}",
@@ -442,7 +440,7 @@ fa{
             }
             availableFormats{
                 Ed{"E d"}
-                GGGGyyyyMMMMd{"d MMMM y GGGG"}
+                GGGGyMMMMd{"d MMMM y GGGG"}
                 H{"H"}
                 HHmmZ{"HH:mm (Z)"}
                 Hm{"H:mm"}
@@ -467,13 +465,11 @@ fa{
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMMEEEEd{"EEEE d MMMM y"}
                 yMMMd{"d MMM y"}
                 yMd{"y/M/d"}
                 yQQQ{"QQQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyyyM{"yyyy/M"}
-                yyyyMMMM{"MMMM yyyy"}
-                yyyyMMMMEEEEd{"EEEE d MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -630,13 +626,13 @@ fa{
                     y{"y تا y"}
                 }
                 yM{
-                    M{"yyyy/M تا yyyy/M"}
-                    y{"yyyy/M تا yyyy/M"}
+                    M{"y/M تا y/M"}
+                    y{"y/M تا y/M"}
                 }
                 yMEd{
-                    M{"E yyyy/M/d تا E yyyy/M/d"}
-                    d{"E yyyy/M/d تا E yyyy/M/d"}
-                    y{"E yyyy/M/d تا E yyyy/M/d"}
+                    M{"E y/M/d تا E y/M/d"}
+                    d{"E y/M/d تا E y/M/d"}
+                    y{"E y/M/d تا E y/M/d"}
                 }
                 yMMM{
                     M{"LLL تا MMM y"}
@@ -657,9 +653,9 @@ fa{
                     y{"d MMM y تا d MMM y"}
                 }
                 yMd{
-                    M{"yyyy/M/d تا yyyy/M/d"}
-                    d{"yyyy/M/d تا yyyy/M/d"}
-                    y{"yyyy/M/d تا yyyy/M/d"}
+                    M{"y/M/d تا y/M/d"}
+                    d{"y/M/d تا y/M/d"}
+                    y{"y/M/d تا y/M/d"}
                 }
             }
             monthNames{
@@ -907,7 +903,7 @@ fa{
                 "H:mm",
                 "EEEE d MMMM y GGGG",
                 "d MMMM y G",
-                "yyyy/M/d G",
+                "y/M/d G",
                 "yy/M/d G",
                 "{1}،‏ {0}",
                 "{1}، ساعت {0}",
@@ -934,8 +930,8 @@ fa{
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"yyyy/M"}
-                yMEd{"E yyyy/M/d"}
+                yM{"y/M"}
+                yMEd{"E y/M/d"}
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}

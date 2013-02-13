@@ -217,6 +217,10 @@ vai_Latn{
         }
         ZMK{
             "ZMK",
+            "Zambiya Kuwacha (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Zambiya Kuwacha",
         }
         ZWD{
@@ -224,5 +228,5 @@ vai_Latn{
             "Zimbhabhuwe Dala",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

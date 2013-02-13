@@ -27,7 +27,7 @@ ff{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -64,16 +64,13 @@ ff{
                 y{"y"}
                 yM{"M/y"}
                 yMEd{"E d/M/y"}
+                yMM{"MM/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMd{"d MMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyMM{"MM/y"}
-                yyMMM{"MMM yy"}
-                yyMMMEd{"E d MMM yy"}
-                yyMMMd{"d MMM yy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{
@@ -138,7 +135,7 @@ ff{
                 "EEEE d MMMM y",
                 "d MMMM y",
                 "d MMM, y",
-                "d/M/yyyy",
+                "d/M/y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -160,16 +157,13 @@ ff{
                 y{"y"}
                 yM{"M/y"}
                 yMEd{"E d/M/y"}
+                yMM{"MM/y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E d MMM y"}
                 yMMMM{"MMMM y"}
+                yMMMd{"d MMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyMM{"MM/y"}
-                yyMMM{"MMM yy"}
-                yyMMMEd{"E d MMM yy"}
-                yyMMMd{"d MMM yy"}
-                yyyyMMMM{"MMMM yyyy"}
             }
             dayNames{
                 format{

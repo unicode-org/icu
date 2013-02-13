@@ -32,7 +32,7 @@ yav{
             }
         }
     }
-    Version{"2.0.81.59"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -141,7 +141,7 @@ yav{
                 "EEEE d MMMM y",
                 "d MMMM y",
                 "d MMM y",
-                "d/M/yyyy",
+                "d/M/y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

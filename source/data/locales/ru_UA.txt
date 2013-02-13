@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 ru_UA{
-    Version{"2.0.81.58"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -18,7 +18,7 @@ ru_UA{
                 "EEEE, d MMMM y 'г'. G",
                 "d MMMM y G",
                 "d MMM y G",
-                "dd.MM.yy GGGGG",
+                "dd.MM.yy G",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",

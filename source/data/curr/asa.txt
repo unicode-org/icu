@@ -225,6 +225,10 @@ asa{
         }
         ZMK{
             "ZMK",
+            "kwacha ya Dhambia (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "kwacha ya Dhambia",
         }
         ZWD{
@@ -232,5 +236,5 @@ asa{
             "dola ya Dhimbabwe",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

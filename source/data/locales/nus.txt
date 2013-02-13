@@ -32,7 +32,7 @@ nus{
             }
         }
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -141,7 +141,7 @@ nus{
                 "EEEE d MMMM y",
                 "d MMMM y",
                 "d MMM y",
-                "d/MM/yyyy",
+                "d/MM/y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

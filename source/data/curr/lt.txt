@@ -1161,6 +1161,10 @@ lt{
         }
         ZMK{
             "ZMK",
+            "Zambijos kvača (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Zambijos kvača",
         }
         ZRN{
@@ -2616,6 +2620,11 @@ lt{
             other{"Pietų Afrikos randas"}
         }
         ZMK{
+            few{"Zambijos kvačos (1968-2012)"}
+            one{"Zambijos kvača (1968-2012)"}
+            other{"Zambijos kvačos (1968-2012)"}
+        }
+        ZMW{
             few{"Zambijos kvačos"}
             one{"Zambijos kvača"}
             other{"Zambijos kvačos"}
@@ -2651,5 +2660,5 @@ lt{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.96"}
+    Version{"2.0.81.65"}
 }

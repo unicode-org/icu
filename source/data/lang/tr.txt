@@ -851,7 +851,7 @@ tr{
         VALENCIA{"Valensiyaca"}
         WADEGILE{"Wade-Giles (Latin Alfabesinde Yazımı)"}
     }
-    Version{"2.0.81.59"}
+    Version{"2.0.81.65"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Alfabe: {0}"}

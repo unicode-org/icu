@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_MT{
     %%Parent{"en_GB"}
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -42,7 +42,7 @@ en_MT{
                 "EEEE, d MMMM y",
                 "dd MMMM y",
                 "dd MMM y",
-                "dd/MM/yyyy",
+                "dd/MM/y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

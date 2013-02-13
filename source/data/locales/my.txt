@@ -42,7 +42,7 @@ my{
         }
         native{"mymr"}
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -80,14 +80,13 @@ my{
                 d{"d"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"yy/M"}
-                yMEd{"E, yy/M/d"}
+                yM{"y/M"}
+                yMEd{"E, y/M/d"}
                 yMMM{"y MMM"}
                 yMMMEd{"E, y MMM d"}
                 yMMMM{"y MMMM"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-                yyQQQ{"QQQ yy"}
             }
             dayNames{
                 format{
@@ -185,13 +184,13 @@ my{
                     y{"y-y"}
                 }
                 yM{
-                    M{"yy/M – yy/M"}
-                    y{"yy/M – yy/M"}
+                    M{"y/M – y/M"}
+                    y{"y/M – y/M"}
                 }
                 yMEd{
-                    M{"EEEE၊ yy/M/d – EEEE၊ yy/M/d"}
-                    d{"EEEE၊ yy/M/d – EEEE၊ yy/M/d"}
-                    y{"EEEE၊ yy/M/d – EEEE၊ yy/M/d"}
+                    M{"EEEE၊ y/M/d – EEEE၊ y/M/d"}
+                    d{"EEEE၊ y/M/d – EEEE၊ y/M/d"}
+                    y{"EEEE၊ y/M/d – EEEE၊ y/M/d"}
                 }
                 yMMM{
                     M{"y MMM – y MMM"}
@@ -207,9 +206,9 @@ my{
                     y{"y MMM d – y MMM d"}
                 }
                 yMd{
-                    M{"yy/M/d – yy/M/d"}
-                    d{"yy/M/d – yy/M/d"}
-                    y{"yy/M/d – yy/M/d"}
+                    M{"y/M/d – y/M/d"}
+                    d{"y/M/d – y/M/d"}
+                    y{"y/M/d – y/M/d"}
                 }
             }
             quarters{
@@ -273,14 +272,13 @@ my{
                 d{"d"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"yy/M"}
-                yMEd{"E, yy/M/d"}
+                yM{"y/M"}
+                yMEd{"E, y/M/d"}
                 yMMM{"y MMM"}
                 yMMMEd{"E, y MMM d"}
                 yMMMM{"y MMMM"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-                yyQQQ{"QQQ yy"}
             }
             dayNames{
                 format{
@@ -388,13 +386,13 @@ my{
                     y{"y-y"}
                 }
                 yM{
-                    M{"yy/M – yy/M"}
-                    y{"yy/M – yy/M"}
+                    M{"y/M – y/M"}
+                    y{"y/M – y/M"}
                 }
                 yMEd{
-                    M{"EEEE၊ yy/M/d – EEEE၊ yy/M/d"}
-                    d{"EEEE၊ yy/M/d – EEEE၊ yy/M/d"}
-                    y{"EEEE၊ yy/M/d – EEEE၊ yy/M/d"}
+                    M{"EEEE၊ y/M/d – EEEE၊ y/M/d"}
+                    d{"EEEE၊ y/M/d – EEEE၊ y/M/d"}
+                    y{"EEEE၊ y/M/d – EEEE၊ y/M/d"}
                 }
                 yMMM{
                     M{"y MMM – y MMM"}
@@ -410,9 +408,9 @@ my{
                     y{"y MMM d – y MMM d"}
                 }
                 yMd{
-                    M{"yy/M/d – yy/M/d"}
-                    d{"yy/M/d – yy/M/d"}
-                    y{"yy/M/d – yy/M/d"}
+                    M{"y/M/d – y/M/d"}
+                    d{"y/M/d – y/M/d"}
+                    y{"y/M/d – y/M/d"}
                 }
             }
             monthNames{

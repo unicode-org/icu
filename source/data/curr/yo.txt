@@ -225,6 +225,10 @@ yo{
         }
         ZMK{
             "ZMK",
+            "Kawaṣa ti Orílẹ́ède Saabia (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kawaṣa ti Orílẹ́ède Saabia",
         }
         ZWD{
@@ -232,5 +236,5 @@ yo{
             "Dọla ti Orílẹ́ède Siibabuwe",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

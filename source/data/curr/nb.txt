@@ -1089,6 +1089,10 @@ nb{
         }
         ZMK{
             "ZMK",
+            "zambiske kwacha (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "zambiske kwacha",
         }
         ZRN{
@@ -2174,6 +2178,10 @@ nb{
             other{"sørafrikanske rand"}
         }
         ZMK{
+            one{"zambisk kwacha (1968-2012)"}
+            other{"zambiske kwacha (1968-2012)"}
+        }
+        ZMW{
             one{"zambisk kwacha"}
             other{"zambiske kwacha"}
         }
@@ -2202,5 +2210,5 @@ nb{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

@@ -1077,6 +1077,10 @@ sl{
         }
         ZMK{
             "ZMK",
+            "zambijska kvača (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "zambijska kvača",
         }
         ZRN{
@@ -1146,5 +1150,5 @@ sl{
         other{"{0} {1}"}
         two{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

@@ -229,6 +229,10 @@ seh{
         }
         ZMK{
             "ZMK",
+            "Cuacha zambiano (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Cuacha zambiano",
         }
         ZWD{
@@ -236,5 +240,5 @@ seh{
             "Dólar do Zimbábue",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

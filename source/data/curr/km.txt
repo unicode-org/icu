@@ -637,11 +637,15 @@ km{
         }
         ZMK{
             "ZMK",
+            "ក្វាចា សំប៊ី (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "ក្វាចា សំប៊ី",
         }
     }
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

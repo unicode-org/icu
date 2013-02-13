@@ -19,7 +19,7 @@ es_EC{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -46,7 +46,7 @@ es_EC{
                 "H:mm",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
-                "dd/MM/yyyy",
+                "dd/MM/y",
                 "dd/MM/yy",
                 "{1} {0}",
                 "{1} {0}",

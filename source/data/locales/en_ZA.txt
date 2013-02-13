@@ -19,7 +19,7 @@ en_ZA{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -42,10 +42,10 @@ en_ZA{
                 MMMEd{"E dd MMM"}
                 MMMd{"dd MMM"}
                 Md{"MM/dd"}
-                yMEd{"E, yyyy/MM/dd"}
+                yMEd{"E, y/MM/dd"}
                 yMMMEd{"E, dd MMM y"}
                 yMMMd{"dd MMM y"}
-                yMd{"yyyy/MM/dd"}
+                yMd{"y/MM/dd"}
             }
         }
         gregorian{
@@ -57,7 +57,7 @@ en_ZA{
                 "EEEE dd MMMM y",
                 "dd MMMM y",
                 "dd MMM y",
-                "yyyy/MM/dd",
+                "y/MM/dd",
                 "{1}, {0}",
                 "{1} 'at' {0}",
                 "{1} 'at' {0}",
@@ -69,10 +69,10 @@ en_ZA{
                 MMMEd{"E dd MMM"}
                 MMMd{"dd MMM"}
                 Md{"MM/dd"}
-                yMEd{"E, yyyy/MM/dd"}
+                yMEd{"E, y/MM/dd"}
                 yMMMEd{"E, dd MMM y"}
                 yMMMd{"dd MMM y"}
-                yMd{"yyyy/MM/dd"}
+                yMd{"y/MM/dd"}
             }
         }
     }

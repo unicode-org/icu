@@ -1141,6 +1141,10 @@ rm{
         }
         ZMK{
             "ZMK",
+            "kwacha da la sambia (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "kwacha da la sambia",
         }
         ZRN{
@@ -1160,5 +1164,5 @@ rm{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.63"}
 }

@@ -1085,6 +1085,10 @@ tr{
         }
         ZMK{
             "ZMK",
+            "Zambiya Kvaçası (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Zambiya Kvaçası",
         }
         ZRN{
@@ -1107,5 +1111,5 @@ tr{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

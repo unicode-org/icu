@@ -144,7 +144,7 @@ am{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.65"}
     calendar{
         ethiopic{
             monthNames{
@@ -434,13 +434,13 @@ am{
                     y{"y–y"}
                 }
                 yM{
-                    M{"M/yy – M/yy"}
-                    y{"M/yy – M/yy"}
+                    M{"M/y – M/y"}
+                    y{"M/y – M/y"}
                 }
                 yMEd{
-                    M{"E d/M/ – E d/M፣ yy"}
-                    d{"E፣ d/M/yy – E፣ d/M/yy"}
-                    y{"E፣ d/M/yy – E፣ d/M/yy"}
+                    M{"E d/M/ – E d/M፣ y"}
+                    d{"E፣ d/M/y – E፣ d/M/y"}
+                    y{"E፣ d/M/y – E፣ d/M/y"}
                 }
                 yMMM{
                     M{"MMM–MMM፣ y"}
@@ -461,9 +461,9 @@ am{
                     y{"MMM d፣ y – MMM d፣ y"}
                 }
                 yMd{
-                    M{"d/M/yy – d/M/yy"}
-                    d{"d/M/yy – d/M/yy"}
-                    y{"d/M/yy – d/M/yy"}
+                    M{"d/M/y – d/M/y"}
+                    d{"d/M/y – d/M/y"}
+                    y{"d/M/y – d/M/y"}
                 }
             }
             quarters{
@@ -522,7 +522,7 @@ am{
                 "EEEE, d MMMM y",
                 "d MMMM y",
                 "d MMM y",
-                "dd/MM/yyyy",
+                "dd/MM/y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -709,13 +709,13 @@ am{
                     y{"y–y"}
                 }
                 yM{
-                    M{"M/yy – M/yy"}
-                    y{"M/yy – M/yy"}
+                    M{"M/y – M/y"}
+                    y{"M/y – M/y"}
                 }
                 yMEd{
-                    M{"E d/M/ – E d/M፣ yy"}
-                    d{"E፣ d/M/yy – E፣ d/M/yy"}
-                    y{"E፣ d/M/yy – E፣ d/M/yy"}
+                    M{"E d/M/ – E d/M፣ y"}
+                    d{"E፣ d/M/y – E፣ d/M/y"}
+                    y{"E፣ d/M/y – E፣ d/M/y"}
                 }
                 yMMM{
                     M{"MMM–MMM፣ y"}
@@ -736,9 +736,9 @@ am{
                     y{"MMM d፣ y – MMM d፣ y"}
                 }
                 yMd{
-                    M{"d/M/yy – d/M/yy"}
-                    d{"d/M/yy – d/M/yy"}
-                    y{"d/M/yy – d/M/yy"}
+                    M{"d/M/y – d/M/y"}
+                    d{"d/M/y – d/M/y"}
+                    y{"d/M/y – d/M/y"}
                 }
             }
             monthNames{

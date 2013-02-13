@@ -213,6 +213,10 @@ rn{
         }
         ZMK{
             "ZMK",
+            "Ikwaca ryo muri Zambiya (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Ikwaca ryo muri Zambiya",
         }
         ZWD{
@@ -220,5 +224,5 @@ rn{
             "Idolari ryo muri Zimbabwe",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

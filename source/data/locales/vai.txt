@@ -31,7 +31,7 @@ vai{
         }
         native{"vaii"}
     }
-    Version{"2.0.81.59"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -63,12 +63,12 @@ vai{
                 d{"d"}
                 hm{"h:mm a"}
                 ms{"mm:ss"}
-                y{"yyyy"}
-                yM{"M/yyyy"}
-                yMEd{"E, M/d/yyyy"}
-                yMMM{"MMM yyyy"}
-                yMMMEd{"E, MMM d, yyyy"}
-                yMMMM{"MMMM yyyy"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
@@ -95,7 +95,7 @@ vai{
                 "EEEE, d MMMM y",
                 "d MMMM y",
                 "d MMM y",
-                "dd/MM/yyyy",
+                "dd/MM/y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -116,12 +116,12 @@ vai{
                 d{"d"}
                 hm{"h:mm a"}
                 ms{"mm:ss"}
-                y{"yyyy"}
-                yM{"M/yyyy"}
-                yMEd{"E, M/d/yyyy"}
-                yMMM{"MMM yyyy"}
-                yMMMEd{"E, MMM d, yyyy"}
-                yMMMM{"MMMM yyyy"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }

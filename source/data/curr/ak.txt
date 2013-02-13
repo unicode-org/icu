@@ -221,6 +221,10 @@ ak{
         }
         ZMK{
             "ZMK",
+            "Zambia Kwacha (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Zambia Kwacha",
         }
         ZWD{
@@ -228,5 +232,5 @@ ak{
             "Zimbabwe Dɔla",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

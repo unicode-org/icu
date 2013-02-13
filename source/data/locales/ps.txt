@@ -43,7 +43,7 @@ ps{
         }
         native{"arabext"}
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             AmPmMarkers{
@@ -97,7 +97,7 @@ ps{
                 "EEEE د y د MMMM d",
                 "د y د MMMM d",
                 "d MMM y",
-                "yyyy/M/d",
+                "y/M/d",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

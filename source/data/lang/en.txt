@@ -22,6 +22,7 @@ en{
         colStrength{"Sorting Strength"}
         collation{"Sort Order"}
         currency{"Currency"}
+        cv{"Calendar algorithm variant"}
         numbers{"Numbers"}
         timezone{"Time Zone"}
         va{"Locale Variant"}
@@ -807,6 +808,12 @@ en{
             unihan{"Radical-Stroke Sort Order"}
             zhuyin{"Zhuyin Sort Order"}
         }
+        cv{
+            caltab{"Calendrica Arithmetic"}
+            mshijri{"Microsoft Hijri Calendar"}
+            rgsa{"Saudi Arabia Visual Sighting"}
+            umalqura{"Umm Al-Qura"}
+        }
         numbers{
             arab{"Arabic-Indic Digits"}
             arabext{"Extended Arabic-Indic Digits"}
@@ -913,7 +920,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.66"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

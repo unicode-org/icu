@@ -938,6 +938,10 @@ et{
         }
         ZMK{
             "ZMK",
+            "Sambia kvatša (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Sambia kvatša",
         }
         ZRZ{
@@ -1603,6 +1607,10 @@ et{
             other{"LAVi randi"}
         }
         ZMK{
+            one{"Sambia kvatša (1968-2012)"}
+            other{"Sambia kvatšat (1968-2012)"}
+        }
+        ZMW{
             one{"Sambia kvatša"}
             other{"Sambia kvatšat"}
         }
@@ -1611,5 +1619,5 @@ et{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.81.0"}
+    Version{"2.0.81.65"}
 }

@@ -1161,6 +1161,10 @@ pt{
         }
         ZMK{
             "ZMK",
+            "Cuacha zambiano (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Cuacha zambiano",
         }
         ZRN{
@@ -2334,6 +2338,10 @@ pt{
             other{"Rands sul-africanos"}
         }
         ZMK{
+            one{"Kwacha da Zâmbia (1968-2012)"}
+            other{"Kwachas da Zâmbia (1968-2012)"}
+        }
+        ZMW{
             one{"Kwacha da Zâmbia"}
             other{"Kwachas da Zâmbia"}
         }
@@ -2362,5 +2370,5 @@ pt{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

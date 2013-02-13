@@ -1145,6 +1145,10 @@ id{
         }
         ZMK{
             "ZMK",
+            "Kwacha Zambia (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kwacha Zambia",
         }
         ZRN{
@@ -1171,5 +1175,5 @@ id{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

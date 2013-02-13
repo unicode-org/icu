@@ -1085,6 +1085,10 @@ es{
         }
         ZMK{
             "ZMK",
+            "kwacha zambiano (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "kwacha zambiano",
         }
         ZRN{
@@ -2074,6 +2078,10 @@ es{
             other{"rands sudafricanos"}
         }
         ZMK{
+            one{"kwacha zambiano (1968-2012)"}
+            other{"kwachas zambianos (1968-2012)"}
+        }
+        ZMW{
             one{"kwacha zambiano"}
             other{"kwachas zambianos"}
         }
@@ -2082,5 +2090,5 @@ es{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

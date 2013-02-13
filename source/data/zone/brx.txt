@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/brx.xml
  */
 brx{
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अबिद्जान"}
