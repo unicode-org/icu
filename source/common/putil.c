@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2011, International Business Machines
+*   Copyright (C) 1997-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -102,7 +102,7 @@ Cleanly installed Solaris can use this #define.
 #   define ICU_NO_USER_DATA_OVERRIDE 1
 #elif defined(OS390)
 #   include "unicode/ucnv.h"   /* Needed for UCNV_SWAP_LFNL_OPTION_STRING */
-#elif defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD)
+#elif defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD) || defined(U_SOLARIS)
 #   include <limits.h>
 #   include <unistd.h>
 #elif defined(U_QNX)
@@ -654,12 +654,16 @@ uprv_timezone()
 extern U_IMPORT char *U_TZNAME[];
 #endif
 
-#if !UCONFIG_NO_FILE_IO && (defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD))
+#if !UCONFIG_NO_FILE_IO && (defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD) || defined(U_SOLARIS))
 /* These platforms are likely to use Olson timezone IDs. */
 #define CHECK_LOCALTIME_LINK 1
 #if defined(U_DARWIN)
 #include <tzfile.h>
 #define TZZONEINFO      (TZDIR "/")
+#elif defined(U_SOLARIS)
+#define TZDEFAULT       "/etc/localtime"
+#define TZZONEINFO      "/usr/share/lib/zoneinfo/"
+#define TZ_ENV_CHECK    "localtime"
 #else
 #define TZDEFAULT       "/etc/localtime"
 #define TZZONEINFO      "/usr/share/zoneinfo/"
@@ -987,8 +991,12 @@ uprv_tzname(int n)
 /* This code can be temporarily disabled to test tzname resolution later on. */
 #ifndef DEBUG_TZNAME
     tzid = getenv("TZ");
-    if (tzid != NULL && isValidOlsonID(tzid))
-    {
+    if (tzid != NULL && isValidOlsonID(tzid)
+#if defined(U_SOLARIS)
+    /* When TZ equals localtime on Solaris, check the /etc/localtime file. */
+        && uprv_strcmp(tzid, TZ_ENV_CHECK) != 0
+#endif
+    ) {
         /* This might be a good Olson ID. */
         skipZoneIDPrefix(&tzid);
         return tzid;
