@@ -1,5 +1,5 @@
 #**********************************************************************
-#* Copyright (C) 1999-2012, International Business Machines Corporation
+#* Copyright (C) 1999-2013, International Business Machines Corporation
 #* and others.  All Rights Reserved.
 #**********************************************************************
 # nmake file for creating data files on win32
@@ -737,15 +737,15 @@ CLEAN : GODATA
 #RBBI .dict file generation.
 {$(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)}.txt.dict:
     @echo Creating $@
-    @"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --uchars $<  $(ICUBLD_PKG)\$@
+    @"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --uchars $<  "$(ICUBLD_PKG)\$@"
 
 $(ICUBRK)\thaidict.dict:
 	@echo Creating $(ICUBRK)\thaidict.dict
-	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0xe00 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\thaidict.txt $(ICUBLD_PKG)\$(ICUBRK)\thaidict.dict
+	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0xe00 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\thaidict.txt "$(ICUBLD_PKG)\$(ICUBRK)\thaidict.dict"
 
 $(ICUBRK)\khmerdict.dict:
 	@echo Creating $(ICUBRK)\khmerdict.dict
-	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0x1780 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\khmerdict.txt $(ICUBLD_PKG)\$(ICUBRK)\khmerdict.dict
+	@"$(ICUTOOLS)\gendict\$(CFG)\gendict" -c --bytes --transform offset-0x1780 $(ICUSRCDATA_RELATIVE_PATH)\$(ICUBRK)\khmerdict.txt "$(ICUBLD_PKG)\$(ICUBRK)\khmerdict.dict"
 
 !IFNDEF ICUDATA_SOURCE_ARCHIVE
 # Rule for creating converters
