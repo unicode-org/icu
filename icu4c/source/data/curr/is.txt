@@ -885,6 +885,10 @@ is{
         }
         ZMK{
             "ZMK",
+            "Zambian Kwacha (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Zambian Kwacha",
         }
         ZWD{
@@ -950,5 +954,5 @@ is{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

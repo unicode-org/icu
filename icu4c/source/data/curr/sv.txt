@@ -1161,6 +1161,10 @@ sv{
         }
         ZMK{
             "ZMK",
+            "zambisk kwacha (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "zambisk kwacha",
         }
         ZRN{
@@ -2334,6 +2338,10 @@ sv{
             other{"sydafrikanska rand"}
         }
         ZMK{
+            one{"zambisk kwacha (1968-2012)"}
+            other{"zambiska kwacha (1968-2012)"}
+        }
+        ZMW{
             one{"zambisk kwacha"}
             other{"zambiska kwacha"}
         }
@@ -2362,5 +2370,5 @@ sv{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

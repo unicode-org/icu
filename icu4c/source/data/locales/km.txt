@@ -125,7 +125,7 @@ km{
         }
         native{"khmr"}
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.65"}
     calendar{
         generic{
             AmPmMarkers{
@@ -314,26 +314,26 @@ km{
                     y{"y-y"}
                 }
                 yM{
-                    M{"M/yyyy - M/yyyy"}
-                    y{"M/yyyy - M/yyyy"}
+                    M{"M/y - M/y"}
+                    y{"M/y - M/y"}
                 }
                 yMEd{
-                    M{"E, d/M/yyyy - E, d/M/yyyy"}
-                    d{"E, d/M/yyyy - E, d/M/yyyy"}
-                    y{"E, d/M/yyyy - E, d/M/yyyy"}
+                    M{"E, d/M/y - E, d/M/y"}
+                    d{"E, d/M/y - E, d/M/y"}
+                    y{"E, d/M/y - E, d/M/y"}
                 }
                 yMMM{
-                    M{"MM – MM-yyyy"}
-                    y{"MM-yyyy – MM-yyyy"}
+                    M{"MM – MM-y"}
+                    y{"MM-y – MM-y"}
                 }
                 yMMMEd{
                     M{"E, dd MMM y - E, dd MMM y"}
                     d{"E, dd MMM y - E, dd MMM y"}
-                    y{"E, dd-MM-yyyy – E, dd MMM y"}
+                    y{"E, dd-MM-y – E, dd MMM y"}
                 }
                 yMMMM{
-                    M{"MM – MM yyyy"}
-                    y{"MM-yyyy – MM-yyyy"}
+                    M{"MM – MM y"}
+                    y{"MM-y – MM-y"}
                 }
                 yMMMd{
                     M{"d MMM y – d MMM"}
@@ -341,9 +341,9 @@ km{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"d/M/yyyy - d/M/yyyy"}
-                    d{"d/M/yyyy - d/M/yyyy"}
-                    y{"d/M/yyyy - d/M/yyyy"}
+                    M{"d/M/y - d/M/y"}
+                    d{"d/M/y - d/M/y"}
+                    y{"d/M/y - d/M/y"}
                 }
             }
             quarters{
@@ -402,7 +402,7 @@ km{
                 "EEEE, d MMMM y",
                 "d MMMM, y",
                 "d MMM y",
-                "d/M/yyyy",
+                "d/M/y",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -586,26 +586,26 @@ km{
                     y{"y-y"}
                 }
                 yM{
-                    M{"M/yyyy - M/yyyy"}
-                    y{"M/yyyy - M/yyyy"}
+                    M{"M/y - M/y"}
+                    y{"M/y - M/y"}
                 }
                 yMEd{
-                    M{"E, d/M/yyyy - E, d/M/yyyy"}
-                    d{"E, d/M/yyyy - E, d/M/yyyy"}
-                    y{"E, d/M/yyyy - E, d/M/yyyy"}
+                    M{"E, d/M/y - E, d/M/y"}
+                    d{"E, d/M/y - E, d/M/y"}
+                    y{"E, d/M/y - E, d/M/y"}
                 }
                 yMMM{
-                    M{"MM – MM-yyyy"}
-                    y{"MM-yyyy – MM-yyyy"}
+                    M{"MM – MM-y"}
+                    y{"MM-y – MM-y"}
                 }
                 yMMMEd{
                     M{"E, dd MMM y - E, dd MMM y"}
                     d{"E, dd MMM y - E, dd MMM y"}
-                    y{"E, dd-MM-yyyy – E, dd MMM y"}
+                    y{"E, dd-MM-y – E, dd MMM y"}
                 }
                 yMMMM{
-                    M{"MM – MM yyyy"}
-                    y{"MM-yyyy – MM-yyyy"}
+                    M{"MM – MM y"}
+                    y{"MM-y – MM-y"}
                 }
                 yMMMd{
                     M{"d MMM y – d MMM"}
@@ -613,9 +613,9 @@ km{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"d/M/yyyy - d/M/yyyy"}
-                    d{"d/M/yyyy - d/M/yyyy"}
-                    y{"d/M/yyyy - d/M/yyyy"}
+                    M{"d/M/y - d/M/y"}
+                    d{"d/M/y - d/M/y"}
+                    y{"d/M/y - d/M/y"}
                 }
             }
             monthNames{

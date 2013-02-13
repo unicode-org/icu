@@ -45,7 +45,7 @@ ms_Latn_BN{
                 "h:mm a",
                 "dd MMMM y",
                 "d MMMM y",
-                "dd/MM/yyyy",
+                "dd/MM/y",
                 "d/MM/yy",
                 "{1} {0}",
                 "{1} {0}",

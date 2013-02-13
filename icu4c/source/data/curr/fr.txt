@@ -1089,6 +1089,10 @@ fr{
         }
         ZMK{
             "ZMK",
+            "kwacha zambien (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "kwacha zambien",
         }
         ZRN{
@@ -2186,6 +2190,10 @@ fr{
             other{"rands sud-africains"}
         }
         ZMK{
+            one{"kwacha zambien (1968-2012)"}
+            other{"kwachas zambiens (1968-2012)"}
+        }
+        ZMW{
             one{"kwacha zambien"}
             other{"kwachas zambiens"}
         }
@@ -2214,5 +2222,5 @@ fr{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

@@ -23,7 +23,7 @@ es_CL{
         279,
         216,
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -44,9 +44,9 @@ es_CL{
             availableFormats{
                 MEd{"E, dd-MM"}
                 Md{"dd-MM"}
-                yM{"MM-yy"}
-                yMEd{"E dd-MM-yy"}
-                yMd{"dd-MM-yy"}
+                yM{"MM-y"}
+                yMEd{"E dd-MM-y"}
+                yMd{"dd-MM-y"}
             }
         }
         gregorian{
@@ -57,7 +57,7 @@ es_CL{
                 "H:mm",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
-                "dd-MM-yyyy",
+                "dd-MM-y",
                 "dd-MM-yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -68,9 +68,9 @@ es_CL{
             availableFormats{
                 MEd{"E, dd-MM"}
                 Md{"dd-MM"}
-                yM{"MM-yy"}
-                yMEd{"E dd-MM-yy"}
-                yMd{"dd-MM-yy"}
+                yM{"MM-y"}
+                yMEd{"E dd-MM-y"}
+                yMd{"dd-MM-y"}
             }
         }
     }

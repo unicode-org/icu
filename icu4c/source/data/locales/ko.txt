@@ -145,7 +145,7 @@ ko{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.65"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -188,6 +188,7 @@ ko{
                 y{"G y년"}
                 yM{"G y. M."}
                 yMEd{"G y. M. d. (E)"}
+                yMM{"G y. MM"}
                 yMMM{"G y년 MMM"}
                 yMMMEEEEd{"G y년 MMM d일 EEEE"}
                 yMMMEd{"G y년 MMM d일 (E)"}
@@ -195,10 +196,6 @@ ko{
                 yMd{"G y. M. d."}
                 yQQQ{"G y년 QQQ"}
                 yQQQQ{"G y년 QQQQ"}
-                yyMM{"G yy. M."}
-                yyMMM{"G y년 MMM"}
-                yyQQQ{"G y년 QQQ"}
-                yyyyMM{"G y. MM"}
             }
             eras{
                 abbreviated{
@@ -331,7 +328,7 @@ ko{
                 "G y년 M월 d일 EEEE",
                 "G y년 M월 d일",
                 "G y. M. d.",
-                "GGGGG yy. M. d.",
+                "G y. M. d.",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -341,6 +338,11 @@ ko{
             availableFormats{
                 EEEEd{"d일 EEEE"}
                 Ed{"d일 (E)"}
+                Gy{"G y년"}
+                GyMMM{"G y년 MMM"}
+                GyMMMEEEEd{"G y년 MMM d일 EEEE"}
+                GyMMMEd{"G y년 MMM d일 (E)"}
+                GyMMMd{"G y년 MMM d일"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
@@ -351,7 +353,6 @@ ko{
                 MMM{"LLL"}
                 MMMEd{"MMM d일 (E)"}
                 MMMd{"MMM d일"}
-                MMdd{"MM. dd"}
                 Md{"M. d."}
                 d{"d일"}
                 h{"a h시"}
@@ -359,19 +360,17 @@ ko{
                 hms{"a h:mm:ss"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"y년"}
-                yM{"yyyy. M."}
-                yMEd{"yyyy. M. d. (E)"}
-                yMMM{"y년 MMM"}
-                yMMMEEEEd{"y년 MMM d일 EEEE"}
-                yMMMEd{"y년 MMM d일 (E)"}
-                yMMMd{"y년 MMM d일"}
-                yMd{"yyyy. M. d."}
-                yQQQ{"y년 QQQ"}
-                yQQQQ{"y년 QQQQ"}
-                yyMM{"yy. M."}
-                yyMMM{"yy년 MMM"}
-                yyyyMM{"yyyy. MM"}
+                y{"G y년"}
+                yyyy{"G y년"}
+                yyyyM{"G y. M."}
+                yyyyMEd{"G y. M. d. (E)"}
+                yyyyMMM{"G y년 MMM"}
+                yyyyMMMEEEEd{"G y년 MMM d일 EEEE"}
+                yyyyMMMEd{"G y년 MMM d일 (E)"}
+                yyyyMMMd{"G y년 MMM d일"}
+                yyyyMd{"G y. M. d."}
+                yyyyQQQ{"G y년 QQQ"}
+                yyyyQQQQ{"G y년 QQQQ"}
             }
             dayNames{
                 format{
@@ -487,44 +486,44 @@ ko{
                     h{"a h시 ~ h시(v)"}
                 }
                 y{
-                    y{"y년 ~ y년"}
+                    y{"G y년 ~ y년"}
                 }
                 yM{
-                    M{"yyyy. M ~ yyyy. M"}
-                    y{"yyyy. M ~ yyyy. M"}
+                    M{"G y. M ~ y. M"}
+                    y{"G y. M ~ y. M"}
                 }
                 yMEd{
-                    M{"yy. M. d. (E) ~ yy. M. d. (E)"}
-                    d{"yy. M. d. (E) ~ yy. M. d. (E)"}
-                    y{"yy. M. d. (E) ~ yy. M. d. (E)"}
+                    M{"G y. M. d. (E) ~ y. M. d. (E)"}
+                    d{"G y. M. d. (E) ~ y. M. d. (E)"}
+                    y{"G y. M. d. (E) ~ y. M. d. (E)"}
                 }
                 yMMM{
-                    M{"y년 M월~M월"}
-                    y{"y년 M월 ~ y년 M월"}
+                    M{"G y년 M월~M월"}
+                    y{"G y년 M월 ~ y년 M월"}
                 }
                 yMMMEEEEd{
-                    M{"y년 M월 d일 EEEE ~ M월 d일 EEEE"}
-                    d{"y년 M월 d일 EEEE ~ d일 EEEE"}
-                    y{"y년 M월 d일 EEEE ~ y년 M월 d일 EEEE"}
+                    M{"G y년 M월 d일 EEEE ~ M월 d일 EEEE"}
+                    d{"G y년 M월 d일 EEEE ~ d일 EEEE"}
+                    y{"G y년 M월 d일 EEEE ~ y년 M월 d일 EEEE"}
                 }
                 yMMMEd{
-                    M{"y년 M월 d일 (E) ~ M월 d일 (E)"}
-                    d{"y년 M월 d일 (E) ~ d일 (E)"}
-                    y{"y년 M월 d일 (E) ~ y년 M월 d일 (E)"}
+                    M{"G y년 M월 d일 (E) ~ M월 d일 (E)"}
+                    d{"G y년 M월 d일 (E) ~ d일 (E)"}
+                    y{"G y년 M월 d일 (E) ~ y년 M월 d일 (E)"}
                 }
                 yMMMM{
-                    M{"y년 MM월 ~ MM월"}
-                    y{"y년 MM월 ~ y년 MM월"}
+                    M{"G y년 MM월 ~ MM월"}
+                    y{"G y년 MM월 ~ y년 MM월"}
                 }
                 yMMMd{
-                    M{"y년 M월 d일 ~ M월 d일"}
-                    d{"y년 M월 d일~d일"}
-                    y{"y년 M월 d일 ~ y년 M월 d일"}
+                    M{"G y년 M월 d일 ~ M월 d일"}
+                    d{"G y년 M월 d일~d일"}
+                    y{"G y년 M월 d일 ~ y년 M월 d일"}
                 }
                 yMd{
-                    M{"yy. M. d. ~ yy. M. d."}
-                    d{"yy. M. d. ~ yy. M. d."}
-                    y{"yy. M. d. ~ yy. M. d."}
+                    M{"G y. M. d. ~ y. M. d."}
+                    d{"G y. M. d. ~ y. M. d."}
+                    y{"G y. M. d. ~ y. M. d."}
                 }
             }
             quarters{
@@ -570,7 +569,7 @@ ko{
                 "a h:mm",
                 "y년 M월 d일 EEEE",
                 "y년 M월 d일",
-                "yyyy. M. d.",
+                "y. M. d.",
                 "yy. M. d.",
                 "{1} {0}",
                 "{1} {0}",
@@ -581,6 +580,11 @@ ko{
             availableFormats{
                 EEEEd{"d일 EEEE"}
                 Ed{"d일 (E)"}
+                Gy{"G y년"}
+                GyMMM{"G y년 MMM"}
+                GyMMMEEEEd{"G y년 MMM d일 EEEE"}
+                GyMMMEd{"G y년 MMM d일 (E)"}
+                GyMMMd{"G y년 MMM d일"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
@@ -600,18 +604,16 @@ ko{
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y년"}
-                yM{"yyyy. M."}
-                yMEd{"yyyy. M. d. (E)"}
+                yM{"y. M."}
+                yMEd{"y. M. d. (E)"}
+                yMM{"y. M."}
                 yMMM{"y년 MMM"}
                 yMMMEEEEd{"y년 MMM d일 EEEE"}
                 yMMMEd{"y년 MMM d일 (E)"}
                 yMMMd{"y년 MMM d일"}
-                yMd{"yyyy. M. d."}
+                yMd{"y. M. d."}
                 yQQQ{"y년 QQQ"}
                 yQQQQ{"y년 QQQQ"}
-                yyMM{"yy. M."}
-                yyMMM{"yy년 MMM"}
-                yyyyMM{"yyyy. MM"}
             }
             dayNames{
                 format{
@@ -740,13 +742,13 @@ ko{
                     y{"y년 ~ y년"}
                 }
                 yM{
-                    M{"yyyy. M ~ yyyy. M"}
-                    y{"yyyy. M ~ yyyy. M"}
+                    M{"y. M ~ y. M"}
+                    y{"y. M ~ y. M"}
                 }
                 yMEd{
-                    M{"yy. M. d. (E) ~ yy. M. d. (E)"}
-                    d{"yy. M. d. (E) ~ yy. M. d. (E)"}
-                    y{"yy. M. d. (E) ~ yy. M. d. (E)"}
+                    M{"y. M. d. (E) ~ y. M. d. (E)"}
+                    d{"y. M. d. (E) ~ y. M. d. (E)"}
+                    y{"y. M. d. (E) ~ y. M. d. (E)"}
                 }
                 yMMM{
                     M{"y년 M월~M월"}
@@ -772,9 +774,9 @@ ko{
                     y{"y년 M월 d일 ~ y년 M월 d일"}
                 }
                 yMd{
-                    M{"yy. M. d. ~ yy. M. d."}
-                    d{"yy. M. d. ~ yy. M. d."}
-                    y{"yy. M. d. ~ yy. M. d."}
+                    M{"y. M. d. ~ y. M. d."}
+                    d{"y. M. d. ~ y. M. d."}
+                    y{"y. M. d. ~ y. M. d."}
                 }
             }
             monthNames{
@@ -861,7 +863,7 @@ ko{
             availableFormats{
                 EEEEd{"d일 EEEE"}
                 Ed{"d일 (E)"}
-                Gy{"G yy년"}
+                Gy{"G y년"}
                 H{"H시"}
                 HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
@@ -880,20 +882,16 @@ ko{
                 hms{"a h:mm:ss"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"G yy년"}
-                yyMM{"G yy. M."}
-                yyMMM{"G yy년 MMM"}
-                yyQQQ{"G yy년 QQQ"}
-                yyyy{"G yy년"}
-                yyyyM{"G y. M."}
-                yyyyMEd{"G y. M. d. (E)"}
-                yyyyMM{"G y. MM"}
-                yyyyMMM{"G y년 MMM"}
-                yyyyMMMEEEEd{"G y년 MMM d일 EEEE"}
-                yyyyMMMEd{"G y년 MMM d일 (E)"}
-                yyyyMMMd{"G yy년 MMM d일"}
-                yyyyQQQ{"G yy년 QQQ"}
-                yyyyQQQQ{"G y년 QQQQ"}
+                y{"G y년"}
+                yM{"G y. M."}
+                yMEd{"G y. M. d. (E)"}
+                yMM{"G y. M."}
+                yMMM{"G y년 MMM"}
+                yMMMEEEEd{"G y년 MMM d일 EEEE"}
+                yMMMEd{"G y년 MMM d일 (E)"}
+                yMMMd{"G y년 MMM d일"}
+                yQQQ{"G y년 QQQ"}
+                yQQQQ{"G y년 QQQQ"}
             }
             eras{
                 abbreviated{
@@ -1173,20 +1171,17 @@ ko{
                 hms{"a h:mm:ss"}
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
-                yyMM{"G yy. M."}
-                yyMMM{"G yy년 MMM"}
-                yyQQQ{"G y년 QQQ"}
-                yyyy{"G yy년"}
-                yyyyM{"G y. M."}
-                yyyyMEd{"G y. M. d. (E)"}
-                yyyyMM{"G y. MM"}
-                yyyyMMM{"G y년 MMM"}
-                yyyyMMMEEEEd{"G y년 MMM d일 EEEE"}
-                yyyyMMMEd{"G y년 MMM d일 (E)"}
-                yyyyMMMd{"G yy년 MMM d일"}
-                yyyyMd{"G y. M. d."}
-                yyyyQQQ{"G y년 QQQ"}
-                yyyyQQQQ{"G y년 QQQQ"}
+                y{"G y년"}
+                yM{"G y. M."}
+                yMEd{"G y. M. d. (E)"}
+                yMM{"G y. M."}
+                yMMM{"G y년 MMM"}
+                yMMMEEEEd{"G y년 MMM d일 EEEE"}
+                yMMMEd{"G y년 MMM d일 (E)"}
+                yMMMd{"G y년 MMM d일"}
+                yMd{"G y. M. d."}
+                yQQQ{"G y년 QQQ"}
+                yQQQQ{"G y년 QQQQ"}
             }
             eras{
                 abbreviated{

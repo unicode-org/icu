@@ -128,7 +128,7 @@ ka{
         native{"latn"}
         traditional{"geor"}
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.65"}
     calendar{
         generic{
             AmPmMarkers{
@@ -317,13 +317,13 @@ ka{
                     y{"y–y"}
                 }
                 yM{
-                    M{"MM.yy - MM.yy"}
-                    y{"MM.yy - MM.yy"}
+                    M{"MM.y - MM.y"}
+                    y{"MM.y - MM.y"}
                 }
                 yMEd{
-                    M{"E, dd.MM.yy - E, dd.MM.yy"}
-                    d{"E, dd.MM.yy - E, dd.MM.yy"}
-                    y{"E, dd.MM.yy - E, dd.MM.yy"}
+                    M{"E, dd.MM.y - E, dd.MM.y"}
+                    d{"E, dd.MM.y - E, dd.MM.y"}
+                    y{"E, dd.MM.y - E, dd.MM.y"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -335,17 +335,17 @@ ka{
                     y{"E, d MMM, y - E, d MMM, y"}
                 }
                 yMMMM{
-                    M{"MM - MM.yyyy"}
-                    y{"MM.yyyy - MM.yyyy"}
+                    M{"MM - MM.y"}
+                    y{"MM.y - MM.y"}
                 }
                 yMMMd{
                     M{"dd MM - dd MM, y"}
                     y{"dd MMM, y - d MMM, y"}
                 }
                 yMd{
-                    M{"dd.MM.yy - dd.MM.yy"}
-                    d{"dd.MM.yy - dd.MM.yy"}
-                    y{"dd.MM.yy - dd.MM.yy"}
+                    M{"dd.MM.y - dd.MM.y"}
+                    d{"dd.MM.y - dd.MM.y"}
+                    y{"dd.MM.y - dd.MM.y"}
                 }
             }
             quarters{
@@ -592,13 +592,13 @@ ka{
                     y{"y–y"}
                 }
                 yM{
-                    M{"MM.yy - MM.yy"}
-                    y{"MM.yy - MM.yy"}
+                    M{"MM.y - MM.y"}
+                    y{"MM.y - MM.y"}
                 }
                 yMEd{
-                    M{"E, dd.MM.yy - E, dd.MM.yy"}
-                    d{"E, dd.MM.yy - E, dd.MM.yy"}
-                    y{"E, dd.MM.yy - E, dd.MM.yy"}
+                    M{"E, dd.MM.y - E, dd.MM.y"}
+                    d{"E, dd.MM.y - E, dd.MM.y"}
+                    y{"E, dd.MM.y - E, dd.MM.y"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -610,17 +610,17 @@ ka{
                     y{"E, d MMM, y - E, d MMM, y"}
                 }
                 yMMMM{
-                    M{"MM - MM.yyyy"}
-                    y{"MM.yyyy - MM.yyyy"}
+                    M{"MM - MM.y"}
+                    y{"MM.y - MM.y"}
                 }
                 yMMMd{
                     M{"dd MM - dd MM, y"}
                     y{"dd MMM, y - d MMM, y"}
                 }
                 yMd{
-                    M{"dd.MM.yy - dd.MM.yy"}
-                    d{"dd.MM.yy - dd.MM.yy"}
-                    y{"dd.MM.yy - dd.MM.yy"}
+                    M{"dd.MM.y - dd.MM.y"}
+                    d{"dd.MM.y - dd.MM.y"}
+                    y{"dd.MM.y - dd.MM.y"}
                 }
             }
             monthNames{

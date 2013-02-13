@@ -973,6 +973,10 @@ ga{
         }
         ZMK{
             "ZMK",
+            "Kwacha Saimbiach (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kwacha Saimbiach",
         }
         ZRN{
@@ -988,5 +992,5 @@ ga{
             "Dollar Siombábach",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

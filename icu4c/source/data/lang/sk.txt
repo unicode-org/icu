@@ -737,7 +737,7 @@ sk{
     Variants{
         SCOTLAND{"škótska štandardná angličtina"}
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.65"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}

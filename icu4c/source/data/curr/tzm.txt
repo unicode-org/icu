@@ -225,6 +225,10 @@ tzm{
         }
         ZMK{
             "ZMK",
+            "Kwača Uzambi (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kwača Uzambi",
         }
         ZWD{
@@ -232,5 +236,5 @@ tzm{
             "Ḍular Uzimbabwi",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

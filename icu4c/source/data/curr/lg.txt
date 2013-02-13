@@ -225,6 +225,10 @@ lg{
         }
         ZMK{
             "ZMK",
+            "Kwaca ey'eZambya (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kwaca ey'eZambya",
         }
         ZWD{
@@ -232,5 +236,5 @@ lg{
             "Doola ey'eZimbabwe",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

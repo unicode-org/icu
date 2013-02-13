@@ -16,7 +16,7 @@ es_AR{
             }
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -36,7 +36,7 @@ es_AR{
             }
             availableFormats{
                 MEd{"E d-M"}
-                yM{"M-yyyy"}
+                yM{"M-y"}
             }
         }
         gregorian{
@@ -47,7 +47,7 @@ es_AR{
                 "HH:mm",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
-                "dd/MM/yyyy",
+                "dd/MM/y",
                 "dd/MM/yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -57,7 +57,7 @@ es_AR{
             }
             availableFormats{
                 MEd{"E d-M"}
-                yM{"M-yyyy"}
+                yM{"M-y"}
             }
         }
     }

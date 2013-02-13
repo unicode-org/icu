@@ -18,7 +18,7 @@ en_BZ{
         279,
         216,
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -29,7 +29,7 @@ en_BZ{
                 "EEEE, MMMM d, y G",
                 "MMMM d, y G",
                 "dd-MMM-y G",
-                "M/d/yy GGGGG",
+                "M/d/y GGGGG",
                 "{1}, {0}",
                 "{1} 'at' {0}",
                 "{1} 'at' {0}",

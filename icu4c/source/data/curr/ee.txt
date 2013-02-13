@@ -1129,6 +1129,10 @@ ee{
         }
         ZMK{
             "ZMK",
+            "zambiaga kwacha (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "zambiaga kwacha",
         }
         ZRN{
@@ -2270,6 +2274,10 @@ ee{
             other{"anyiehe afrikaga rand"}
         }
         ZMK{
+            one{"zambiaga kwacha (1968-2012)"}
+            other{"zambiaga kwacha (1968-2012)"}
+        }
+        ZMW{
             one{"zambiaga kwacha"}
             other{"zambiaga kwacha"}
         }
@@ -2297,5 +2305,5 @@ ee{
     CurrencyUnitPatterns{
         other{"{1} {0}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.63"}
 }

@@ -151,7 +151,7 @@ te{
         }
         native{"telu"}
     }
-    Version{"2.0.81.59"}
+    Version{"2.0.81.65"}
     calendar{
         generic{
             AmPmMarkers{
@@ -194,14 +194,14 @@ te{
                 y{"y"}
                 yM{"M/y"}
                 yMEd{"E, d/M/y"}
+                yMM{"MM-y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d, MMM y"}
+                yMMMM{"MMMM y"}
                 yMMMd{"d, MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyyyMM{"MM-yyyy"}
-                yyyyMMMM{"MMMM y"}
             }
             dayNames{
                 format{
@@ -328,8 +328,8 @@ te{
                     y{"y–y"}
                 }
                 yM{
-                    M{"M/yy – M/yy"}
-                    y{"M/yy – M/yy"}
+                    M{"M/y – M/y"}
+                    y{"M/y – M/y"}
                 }
                 yMMM{
                     M{"MMM–MMM y"}
@@ -424,14 +424,14 @@ te{
                 y{"y"}
                 yM{"M/y"}
                 yMEd{"E, d/M/y"}
+                yMM{"MM-y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d, MMM y"}
+                yMMMM{"MMMM y"}
                 yMMMd{"d, MMM y"}
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyyyMM{"MM-yyyy"}
-                yyyyMMMM{"MMMM y"}
             }
             dayNames{
                 format{
@@ -572,8 +572,8 @@ te{
                     y{"y–y"}
                 }
                 yM{
-                    M{"M/yy – M/yy"}
-                    y{"M/yy – M/yy"}
+                    M{"M/y – M/y"}
+                    y{"M/y – M/y"}
                 }
                 yMMM{
                     M{"MMM–MMM y"}

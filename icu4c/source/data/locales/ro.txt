@@ -167,7 +167,7 @@ ro{
             }
         }
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.65"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -178,7 +178,7 @@ ro{
                 "EEEE, d MMMM, y G",
                 "d MMMM y G",
                 "d MMM y G",
-                "d/M/yyyy",
+                "d/M/y",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -301,19 +301,16 @@ ro{
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"MM.yyyy"}
-                yMEd{"E, dd.MM.yyyy"}
+                yM{"MM.y"}
+                yMEd{"E, dd.MM.y"}
+                yMM{"MM.y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
-                yMd{"dd.MM.yyyy"}
+                yMd{"dd.MM.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyMM{"MM.yy"}
-                yyMMM{"MMM yy"}
-                yyyyMM{"MM.yyyy"}
-                yyyyMMMM{"MMMM y"}
             }
             dayNames{
                 format{
@@ -456,13 +453,13 @@ ro{
                     y{"y-y"}
                 }
                 yM{
-                    M{"MM.yyyy - MM.yyyy"}
-                    y{"MM.yyyy - MM.yyyy"}
+                    M{"MM.y - MM.y"}
+                    y{"MM.y - MM.y"}
                 }
                 yMEd{
-                    M{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
-                    d{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
-                    y{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                    M{"E, dd.MM.y - E, dd.MM.y"}
+                    d{"E, dd.MM.y - E, dd.MM.y"}
+                    y{"E, dd.MM.y - E, dd.MM.y"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -483,9 +480,9 @@ ro{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"dd.MM.yyyy - dd.MM.yyyy"}
-                    d{"dd.MM.yyyy - dd.MM.yyyy"}
-                    y{"dd.MM.yyyy - dd.MM.yyyy"}
+                    M{"dd.MM.y - dd.MM.y"}
+                    d{"dd.MM.y - dd.MM.y"}
+                    y{"dd.MM.y - dd.MM.y"}
                 }
             }
             quarters{
@@ -543,8 +540,8 @@ ro{
                 "HH:mm",
                 "EEEE, d MMMM y",
                 "d MMMM y",
-                "dd.MM.yyyy",
-                "dd.MM.yyyy",
+                "dd.MM.y",
+                "dd.MM.y",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -570,19 +567,16 @@ ro{
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"MM.yyyy"}
-                yMEd{"E, dd.MM.yyyy"}
+                yM{"MM.y"}
+                yMEd{"E, dd.MM.y"}
+                yMM{"MM.y"}
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
                 yMMMd{"d MMM y"}
-                yMd{"dd.MM.yyyy"}
+                yMd{"dd.MM.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyMM{"MM.yy"}
-                yyMMM{"MMM yy"}
-                yyyyMM{"MM.yyyy"}
-                yyyyMMMM{"MMMM y"}
             }
             dayNames{
                 format{
@@ -735,13 +729,13 @@ ro{
                     y{"y-y"}
                 }
                 yM{
-                    M{"MM.yyyy - MM.yyyy"}
-                    y{"MM.yyyy - MM.yyyy"}
+                    M{"MM.y - MM.y"}
+                    y{"MM.y - MM.y"}
                 }
                 yMEd{
-                    M{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
-                    d{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
-                    y{"E, dd.MM.yyyy - E, dd.MM.yyyy"}
+                    M{"E, dd.MM.y - E, dd.MM.y"}
+                    d{"E, dd.MM.y - E, dd.MM.y"}
+                    y{"E, dd.MM.y - E, dd.MM.y"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -762,9 +756,9 @@ ro{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"dd.MM.yyyy - dd.MM.yyyy"}
-                    d{"dd.MM.yyyy - dd.MM.yyyy"}
-                    y{"dd.MM.yyyy - dd.MM.yyyy"}
+                    M{"dd.MM.y - dd.MM.y"}
+                    d{"dd.MM.y - dd.MM.y"}
+                    y{"dd.MM.y - dd.MM.y"}
                 }
             }
             monthNames{
@@ -974,7 +968,7 @@ ro{
         }
         islamic{
             availableFormats{
-                yMEd{"E, dd.MM.yyyy"}
+                yMEd{"E, dd.MM.y"}
             }
         }
     }

@@ -1033,6 +1033,10 @@ pl{
         }
         ZMK{
             "ZMK",
+            "kwacha zambijska (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "kwacha zambijska",
         }
         ZRN{
@@ -2150,6 +2154,12 @@ pl{
             other{"randa południowoafrykańskiego"}
         }
         ZMK{
+            few{"kwacha zambijskie (1968-2012)"}
+            many{"kwacha zambijskich (1968-2012)"}
+            one{"kwacha zambijska (1968-2012)"}
+            other{"kwacha zambijskiej (1968-2012)"}
+        }
+        ZMW{
             few{"kwacha zambijskie"}
             many{"kwacha zambijskich"}
             one{"kwacha zambijska"}
@@ -2162,5 +2172,5 @@ pl{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

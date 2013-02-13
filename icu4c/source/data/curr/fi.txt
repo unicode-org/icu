@@ -1161,6 +1161,10 @@ fi{
         }
         ZMK{
             "ZMK",
+            "Sambian kwacha (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Sambian kwacha",
         }
         ZRN{
@@ -2334,6 +2338,10 @@ fi{
             other{"Etelä-Afrikan randia"}
         }
         ZMK{
+            one{"Sambian kwacha (1968-2012)"}
+            other{"Sambian kwachaa (1968-2012)"}
+        }
+        ZMW{
             one{"Sambian kwacha"}
             other{"Sambian kwachaa"}
         }
@@ -2362,5 +2370,5 @@ fi{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

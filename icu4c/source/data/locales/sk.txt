@@ -170,7 +170,7 @@ sk{
             }
         }
     }
-    Version{"2.0.81.58"}
+    Version{"2.0.81.65"}
     calendar{
         generic{
             AmPmMarkers{
@@ -212,17 +212,15 @@ sk{
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"M.yyyy"}
+                yM{"M.y"}
                 yMEd{"E d. M. y"}
                 yMMM{"LLL y"}
                 yMMMEd{"E, d. MMM y"}
                 yMMMM{"LLLL y"}
-                yMMMd{"d.M.yyyy"}
-                yMd{"d.M.yyyy"}
+                yMMMd{"d.M.y"}
+                yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyyyM{"M.yyyy"}
-                yyyyMMMM{"LLLL y"}
             }
             dayNames{
                 format{
@@ -368,13 +366,13 @@ sk{
                     y{"y - y"}
                 }
                 yM{
-                    M{"M.yyyy - M.yyyy"}
-                    y{"M.yyyy - M.yyyy"}
+                    M{"M.y - M.y"}
+                    y{"M.y - M.y"}
                 }
                 yMEd{
-                    M{"E, d.M.yy - E, d.M.yy"}
-                    d{"E, d.M.yy - E, d.M.yy"}
-                    y{"E, d.M.yy - E, d.M.yy"}
+                    M{"E, d.M.y - E, d.M.y"}
+                    d{"E, d.M.y - E, d.M.y"}
+                    y{"E, d.M.y - E, d.M.y"}
                 }
                 yMMM{
                     M{"LLL - LLL y"}
@@ -395,9 +393,9 @@ sk{
                     y{"d. MMM y - d. MMM y"}
                 }
                 yMd{
-                    M{"d.M.yy - d.M.yy"}
-                    d{"d.M.yy - d.M.yy"}
-                    y{"d.M.yy - d.M.yy"}
+                    M{"d.M.y - d.M.y"}
+                    d{"d.M.y - d.M.y"}
+                    y{"d.M.y - d.M.y"}
                 }
             }
             quarters{
@@ -455,8 +453,8 @@ sk{
                 "H:mm",
                 "EEEE, d. MMMM y",
                 "d. MMMM y",
-                "d.M.yyyy",
-                "d.M.yyyy",
+                "d.M.y",
+                "d.M.y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -483,17 +481,15 @@ sk{
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
-                yM{"M.yyyy"}
+                yM{"M.y"}
                 yMEd{"E d. M. y"}
                 yMMM{"LLL y"}
                 yMMMEd{"E, d. MMM y"}
                 yMMMM{"LLLL y"}
-                yMMMd{"d.M.yyyy"}
-                yMd{"d.M.yyyy"}
+                yMMMd{"d.M.y"}
+                yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-                yyyyM{"M.yyyy"}
-                yyyyMMMM{"LLLL y"}
             }
             dayNames{
                 format{
@@ -645,13 +641,13 @@ sk{
                     y{"y - y"}
                 }
                 yM{
-                    M{"M.yyyy - M.yyyy"}
-                    y{"M.yyyy - M.yyyy"}
+                    M{"M.y - M.y"}
+                    y{"M.y - M.y"}
                 }
                 yMEd{
-                    M{"E, d.M.yy - E, d.M.yy"}
-                    d{"E, d.M.yy - E, d.M.yy"}
-                    y{"E, d.M.yy - E, d.M.yy"}
+                    M{"E, d.M.y - E, d.M.y"}
+                    d{"E, d.M.y - E, d.M.y"}
+                    y{"E, d.M.y - E, d.M.y"}
                 }
                 yMMM{
                     M{"LLL - LLL y"}
@@ -672,9 +668,9 @@ sk{
                     y{"d. MMM y - d. MMM y"}
                 }
                 yMd{
-                    M{"d.M.yy - d.M.yy"}
-                    d{"d.M.yy - d.M.yy"}
-                    y{"d.M.yy - d.M.yy"}
+                    M{"d.M.y - d.M.y"}
+                    d{"d.M.y - d.M.y"}
+                    y{"d.M.y - d.M.y"}
                 }
             }
             monthNames{

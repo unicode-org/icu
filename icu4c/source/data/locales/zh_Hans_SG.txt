@@ -14,7 +14,7 @@ zh_Hans_SG{
             }
         }
     }
-    Version{"2.0.81.59"}
+    Version{"2.0.81.63"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -79,17 +79,17 @@ zh_Hans_SG{
                 }
                 fallback{"{0}至{1}"}
                 yM{
-                    M{"yy年M月至yy年M月"}
+                    M{"y年M月至y年M月"}
                 }
                 yMEd{
-                    M{"d/M/yyE至d/M/yyE"}
-                    d{"d/M/yyE至d/M/yyE"}
-                    y{"d/M/yyE至d/M/yyE"}
+                    M{"d/M/yE至d/M/yE"}
+                    d{"d/M/yE至d/M/yE"}
+                    y{"d/M/yE至d/M/yE"}
                 }
                 yMd{
-                    M{"d/M/yy至d/M/yy"}
-                    d{"d/M/yy至d/M/yy"}
-                    y{"d/M/yy至d/M/yy"}
+                    M{"d/M/y至d/M/y"}
+                    d{"d/M/y至d/M/y"}
+                    y{"d/M/y至d/M/y"}
                 }
             }
         }
@@ -139,17 +139,17 @@ zh_Hans_SG{
                 }
                 fallback{"{0}至{1}"}
                 yM{
-                    M{"yy年M月至yy年M月"}
+                    M{"y年M月至y年M月"}
                 }
                 yMEd{
-                    M{"d/M/yyE至d/M/yyE"}
-                    d{"d/M/yyE至d/M/yyE"}
-                    y{"d/M/yyE至d/M/yyE"}
+                    M{"d/M/yE至d/M/yE"}
+                    d{"d/M/yE至d/M/yE"}
+                    y{"d/M/yE至d/M/yE"}
                 }
                 yMd{
-                    M{"d/M/yy至d/M/yy"}
-                    d{"d/M/yy至d/M/yy"}
-                    y{"d/M/yy至d/M/yy"}
+                    M{"d/M/y至d/M/y"}
+                    d{"d/M/y至d/M/y"}
+                    y{"d/M/y至d/M/y"}
                 }
             }
         }

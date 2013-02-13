@@ -1081,6 +1081,10 @@ sr_Latn{
         }
         ZMK{
             "ZMK",
+            "Zambijska kvača (ZMK) (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Zambijska kvača (ZMK)",
         }
         ZRN{
@@ -2700,6 +2704,12 @@ sr_Latn{
             other{"južnoafričkih randa"}
         }
         ZMK{
+            few{"zambijske kvače (1968-2012)"}
+            many{"zambijskih kvača (1968-2012)"}
+            one{"zambijska kvača (1968-2012)"}
+            other{"zambijske kvače (1968-2012)"}
+        }
+        ZMW{
             few{"zambijske kvače"}
             many{"zambijskih kvača"}
             one{"zambijska kvača"}
@@ -2724,5 +2734,5 @@ sr_Latn{
             other{"zimbabvejski dolari"}
         }
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.63"}
 }

@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_AU{
     %%Parent{"en_GB"}
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -78,13 +78,13 @@ en_AU{
                     h{"h-h a v"}
                 }
                 yM{
-                    M{"MM/yy - MM/yy"}
-                    y{"MM/yy - MM/yy"}
+                    M{"MM/y - MM/y"}
+                    y{"MM/y - MM/y"}
                 }
                 yMEd{
-                    M{"E, d/MM/yy - E, d/MM/yy"}
-                    d{"E, d/MM/yy - E, d/MM/yy"}
-                    y{"E, d/MM/yy - E, d/MM/yy"}
+                    M{"E, d/MM/y - E, d/MM/y"}
+                    d{"E, d/MM/y - E, d/MM/y"}
+                    y{"E, d/MM/y - E, d/MM/y"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -101,9 +101,9 @@ en_AU{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"d/MM/yy - d/MM/yy"}
-                    d{"d/MM/yy - d/MM/yy"}
-                    y{"d/MM/yy - d/MM/yy"}
+                    M{"d/MM/y - d/MM/y"}
+                    d{"d/MM/y - d/MM/y"}
+                    y{"d/MM/y - d/MM/y"}
                 }
             }
         }
@@ -115,7 +115,7 @@ en_AU{
                 "h:mm a",
                 "EEEE, d MMMM y",
                 "d MMMM y",
-                "dd/MM/yyyy",
+                "dd/MM/y",
                 "d/MM/yy",
                 "{1} {0}",
                 "{1} {0}",
@@ -175,13 +175,13 @@ en_AU{
                     h{"h-h a v"}
                 }
                 yM{
-                    M{"MM/yy - MM/yy"}
-                    y{"MM/yy - MM/yy"}
+                    M{"MM/y - MM/y"}
+                    y{"MM/y - MM/y"}
                 }
                 yMEd{
-                    M{"E, d/MM/yy - E, d/MM/yy"}
-                    d{"E, d/MM/yy - E, d/MM/yy"}
-                    y{"E, d/MM/yy - E, d/MM/yy"}
+                    M{"E, d/MM/y - E, d/MM/y"}
+                    d{"E, d/MM/y - E, d/MM/y"}
+                    y{"E, d/MM/y - E, d/MM/y"}
                 }
                 yMMM{
                     M{"MMM-MMM y"}
@@ -198,9 +198,9 @@ en_AU{
                     y{"d MMM y - d MMM y"}
                 }
                 yMd{
-                    M{"d/MM/yy - d/MM/yy"}
-                    d{"d/MM/yy - d/MM/yy"}
-                    y{"d/MM/yy - d/MM/yy"}
+                    M{"d/MM/y - d/MM/y"}
+                    d{"d/MM/y - d/MM/y"}
+                    y{"d/MM/y - d/MM/y"}
                 }
             }
         }

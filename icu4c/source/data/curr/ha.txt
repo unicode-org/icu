@@ -221,6 +221,10 @@ ha{
         }
         ZMK{
             "ZMK",
+            "Kuɗin Zambiya (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kuɗin Zambiya",
         }
         ZWD{
@@ -228,5 +232,5 @@ ha{
             "Dalar zimbabuwe",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
 }

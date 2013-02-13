@@ -749,6 +749,10 @@ br{
         }
         ZMK{
             "ZMK",
+            "kwacha Zambia (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "kwacha Zambia",
         }
         ZWD{
@@ -1332,6 +1336,12 @@ br{
             two{"zinar Yemen"}
         }
         ZMK{
+            few{"kwacha Zambia (1968-2012)"}
+            one{"c'hwacha Zambia (1968-2012)"}
+            other{"kwacha Zambia (1968-2012)"}
+            two{"gwacha Zambia (1968-2012)"}
+        }
+        ZMW{
             few{"kwacha Zambia"}
             one{"c'hwacha Zambia"}
             other{"kwacha Zambia"}
@@ -1350,5 +1360,5 @@ br{
             two{"zollar Zimbabwe (2009)"}
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.46"}
 }

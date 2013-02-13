@@ -20,7 +20,7 @@ es_CO{
         279,
         216,
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.63"}
     calendar{
         generic{
             DateTimePatterns{
@@ -47,7 +47,7 @@ es_CO{
                 "H:mm",
                 "EEEE, d 'de' MMMM 'de' y",
                 "d 'de' MMMM 'de' y",
-                "d/MM/yyyy",
+                "d/MM/y",
                 "d/MM/yy",
                 "{1} {0}",
                 "{1} {0}",

@@ -1145,6 +1145,10 @@ zh{
         }
         ZMK{
             "ZMK",
+            "赞比亚克瓦查 (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "赞比亚克瓦查",
         }
         ZRN{
@@ -1171,5 +1175,5 @@ zh{
     CurrencyUnitPatterns{
         other{"{0}{1}"}
     }
-    Version{"2.0.80.95"}
+    Version{"2.0.81.65"}
 }

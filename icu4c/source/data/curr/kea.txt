@@ -301,6 +301,10 @@ kea{
         }
         ZMK{
             "ZMK",
+            "Kuaxa zambianu (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "Kuaxa zambianu",
         }
         ZWD{
@@ -311,5 +315,5 @@ kea{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

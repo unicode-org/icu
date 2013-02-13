@@ -225,6 +225,10 @@ shi_Latn{
         }
         ZMK{
             "ZMK",
+            "akwaca n zambya (1968-2012)",
+        }
+        ZMW{
+            "ZMW",
             "akwaca n zambya",
         }
         ZWD{
@@ -232,5 +236,5 @@ shi_Latn{
             "adular n zimbabwi",
         }
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.81.63"}
 }

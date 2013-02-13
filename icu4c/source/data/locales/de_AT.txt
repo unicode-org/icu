@@ -41,7 +41,7 @@ de_AT{
                 "HH:mm",
                 "EEEE, dd. MMMM y",
                 "dd. MMMM y",
-                "dd.MM.yyyy",
+                "dd.MM.y",
                 "dd.MM.yy",
                 "{1} {0}",
                 "{1} {0}",
