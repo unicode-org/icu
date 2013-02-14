@@ -1388,6 +1388,20 @@ root {
             }
         }
 
+        el-Lower {
+            file {
+                resource:process(transliterator) {"el_Lower.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        el-Title {
+            file {
+                resource:process(transliterator) {"el_Title.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         el-Upper {
             file {
                 resource:process(transliterator) {"el_Upper.txt"}
@@ -1580,6 +1594,20 @@ root {
         sk_FONIPA-ja {
             file {
                 resource:process(transliterator) {"sk_FONIPA_ja.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        tr-Lower {
+            file {
+                resource:process(transliterator) {"tr_Lower.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        tr-Title {
+            file {
+                resource:process(transliterator) {"tr_Title.txt"}
                 direction {"FORWARD"}
             }
         }

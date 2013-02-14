@@ -10,5 +10,5 @@
  *  ICU <specials> source: <path>/xml/main/dyo.xml
  */
 dyo{
-    Version{"2.0.81.63"}
+    Version{"2.0.81.88"}
 }

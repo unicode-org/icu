@@ -148,7 +148,7 @@ el{
         native{"latn"}
         traditional{"grek"}
     }
-    Version{"2.0.81.87"}
+    Version{"2.0.81.88"}
     calendar{
         buddhist{
             DateTimePatterns{

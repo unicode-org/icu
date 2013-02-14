@@ -587,7 +587,7 @@ ka{
             tibt{"ტიბეტური ციფრები"}
         }
     }
-    Version{"2.0.81.65"}
+    Version{"2.0.81.88"}
     codePatterns{
         language{"ენა: {0}"}
         script{"დამწერლობა: {0}"}

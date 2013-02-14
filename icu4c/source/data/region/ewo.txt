@@ -237,5 +237,5 @@ ewo{
         ZM{"Zambí"}
         ZW{"Zimbabwé"}
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.88"}
 }

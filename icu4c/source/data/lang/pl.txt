@@ -785,7 +785,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade'a i Gilesa"}
     }
-    Version{"2.0.81.65"}
+    Version{"2.0.81.88"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

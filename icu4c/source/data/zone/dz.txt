@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/dz.xml
  */
 dz{
-    Version{"2.0.81.63"}
+    Version{"2.0.81.88"}
     zoneStrings{
         "Africa:Cairo"{
             ec{"ཀཱའི་རོ"}

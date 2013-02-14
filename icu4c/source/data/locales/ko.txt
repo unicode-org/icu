@@ -146,7 +146,7 @@ ko{
             }
         }
     }
-    Version{"2.0.81.78"}
+    Version{"2.0.81.88"}
     calendar{
         buddhist{
             eras{

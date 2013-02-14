@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ps.xml
  */
 ps{
-    Version{"2.0.81.63"}
+    Version{"2.0.81.88"}
     zoneStrings{
         "Asia:Kabul"{
             ec{"کابل"}
