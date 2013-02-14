@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012, International Business Machines Corporation and         *
+ * Copyright (C) 2012-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -364,6 +364,7 @@ public class NumericCodeData {
         {"ZAL", "991"},
         {"ZAR", "710"},
         {"ZMK", "894"},
+        {"ZMW", "967"},
         {"ZRN", "180"},
         {"ZRZ", "180"},
         {"ZWD", "716"},
