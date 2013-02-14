@@ -906,7 +906,7 @@ zh_Hant{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.81.70"}
+    Version{"2.0.81.88"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

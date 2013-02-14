@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gu.xml
  */
 gu{
-    Version{"2.0.81.65"}
+    Version{"2.0.81.88"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"આબિદ્જાન"}

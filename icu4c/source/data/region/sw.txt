@@ -301,5 +301,5 @@ sw{
         ZW{"Zimbabwe"}
         ZZ{"Eneo lisilojulikana"}
     }
-    Version{"2.0.81.65"}
+    Version{"2.0.81.88"}
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bo.xml
  */
 bo{
-    Version{"2.0.81.46"}
+    Version{"2.0.81.88"}
     zoneStrings{
         "Etc:Unknown"{
             ec{"མ་རྟོགས་པ"}

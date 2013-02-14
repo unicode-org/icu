@@ -2734,5 +2734,5 @@ sr_Latn{
             other{"zimbabvejski dolari"}
         }
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.88"}
 }
