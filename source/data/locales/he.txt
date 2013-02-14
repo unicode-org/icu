@@ -196,7 +196,7 @@ he{
         native{"latn"}
         traditional{"hebr"}
     }
-    Version{"2.0.81.65"}
+    Version{"2.0.81.88"}
     calendar{
         generic{
             DateTimePatterns{

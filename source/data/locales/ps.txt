@@ -43,7 +43,7 @@ ps{
         }
         native{"arabext"}
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.88"}
     calendar{
         default{"persian"}
         generic{

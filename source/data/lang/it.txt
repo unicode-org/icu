@@ -821,7 +821,7 @@ it{
         SAAHO{"saho"}
         SCOTLAND{"inglese scozzese standard"}
     }
-    Version{"2.0.81.70"}
+    Version{"2.0.81.88"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Scrittura: {0}"}

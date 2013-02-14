@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/to.xml
  */
 to{
-    Version{"2.0.81.63"}
+    Version{"2.0.81.88"}
     zoneStrings{
         "America:Anchorage"{
             ec{"Houa Puleʻanga fakataha ʻAmelika (Anchorage)"}

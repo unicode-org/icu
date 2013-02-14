@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/az.xml
  */
 az{
-    Version{"2.0.81.46"}
+    Version{"2.0.81.88"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Seuta"}

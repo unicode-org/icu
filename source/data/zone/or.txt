@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/or.xml
  */
 or{
-    Version{"2.0.81.63"}
+    Version{"2.0.81.88"}
     zoneStrings{
         "meta:Christmas"{
             ls{"ଖ୍ରୀଷ୍ଟମାସ ଆଇଲ୍ୟାଣ୍ଡ ସମୟ"}

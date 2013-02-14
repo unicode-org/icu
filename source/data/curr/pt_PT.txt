@@ -804,5 +804,5 @@ pt_PT{
             other{"Kwachas zambianos"}
         }
     }
-    Version{"2.0.81.80"}
+    Version{"2.0.81.91"}
 }

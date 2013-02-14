@@ -653,7 +653,7 @@ az{
             pinyin{"Pinyin təqvimi"}
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.81.88"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Yazı: {0}"}

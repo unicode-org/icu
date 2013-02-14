@@ -8,6 +8,7 @@
 # Generated from CLDR 
 #
 ::NFD();
-[[:Greek:] & [:Ll:]] [\u0308]? { \u0301 → ;
+[:Greek:] [^[:ccc=Not_Reordered:][:ccc=Above:]]*? { [\u0313\u0314\u0301\u0300\u0306\u0342\u0308\u0304] → ;
+[:Greek:] [^[:ccc=Not_Reordered:][:ccc=Iota_Subscript:]]*? { \u0345 → ;
 ::NFC();
 ::Any-Upper();

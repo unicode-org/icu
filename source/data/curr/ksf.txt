@@ -232,5 +232,5 @@ ksf{
             "mɔni mǝ á zimbabwɛ́",
         }
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.88"}
 }

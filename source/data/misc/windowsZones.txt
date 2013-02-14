@@ -202,7 +202,7 @@ windowsZones:table(nofallback){
         }
         "E. South America Standard Time"{
             001{"America/Sao_Paulo"}
-            BR{"America/Sao_Paulo"}
+            BR{"America/Sao_Paulo America/Araguaina"}
         }
         "Eastern Standard Time"{
             001{"America/New_York"}
@@ -429,8 +429,8 @@ windowsZones:table(nofallback){
             001{"America/Cayenne"}
             AQ{"Antarctica/Rothera"}
             BR{
-                "America/Fortaleza America/Araguaina America/Belem America/Maceio Ame"
-                "rica/Recife America/Santarem"
+                "America/Fortaleza America/Belem America/Maceio America/Recife Americ"
+                "a/Santarem"
             }
             FK{"Atlantic/Stanley"}
             GF{"America/Cayenne"}

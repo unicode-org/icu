@@ -14,5 +14,5 @@ mgo{
         CM{"Kamalun"}
         ZZ{"aba aben tisɔ̀"}
     }
-    Version{"2.0.81.87"}
+    Version{"2.0.81.88"}
 }

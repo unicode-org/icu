@@ -193,7 +193,7 @@ kea{
             latn{"Numerus Arabikus"}
         }
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.88"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Skrita: {0}"}
