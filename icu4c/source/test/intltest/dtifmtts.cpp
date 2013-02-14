@@ -25,6 +25,7 @@
 #include "unicode/dtintrv.h"
 #include "unicode/dtitvinf.h"
 #include "unicode/dtitvfmt.h"
+#include "unicode/localpointer.h"
 #include "unicode/timezone.h"
 
 
@@ -138,36 +139,57 @@ void DateIntervalFormatTest::testAPI() {
         dataerrln("ERROR: getDateIntervalInfo/setDateIntervalInfo failed");
     }
 
-    // We make sure that setDateIntervalInfo does not corrupt the cache. See ticket 9919.
-    status = U_ZERO_ERROR;
-    logln("Testing DateIntervalFormat setDateIntervalInfo");
-    const Locale &enLocale = Locale::getEnglish();
-    DateIntervalFormat* dif = DateIntervalFormat::createInstance("yMd", enLocale, status);
-    UnicodeString expected;
-    Calendar *fromTime = Calendar::createInstance(enLocale, status);
-    Calendar *toTime = Calendar::createInstance(enLocale, status);
-    FieldPosition pos = 0;
-    fromTime->set(2013, 3, 26);
-    toTime->set(2013, 3, 28);
-    dif->format(*fromTime, *toTime, expected, pos, status);
-    DateIntervalInfo* dii = new DateIntervalInfo(Locale::getEnglish(), status);
-    dii->setIntervalPattern(ctou("yMd"), UCAL_DATE, ctou("M/d/y \\u2013 d"), status);
-    dif->setDateIntervalInfo(*dii, status);
-    delete dii;
-    delete dif;
-    dif = DateIntervalFormat::createInstance("yMd", enLocale, status);
-    UnicodeString actual;
-    pos = 0;
-    dif->format(*fromTime, *toTime, actual, pos, status);
-    delete dif;
-    delete fromTime;
-    delete toTime;
-    if (U_FAILURE(status)) {
-        errln("Failure encountered: %s", u_errorName(status));
-        return;
-    }
-    if (expected != actual) {
-        errln("DateIntervalFormat.setIntervalInfo should have no side effects.");
+    {
+        // We make sure that setDateIntervalInfo does not corrupt the cache. See ticket 9919.
+        status = U_ZERO_ERROR;
+        logln("Testing DateIntervalFormat setDateIntervalInfo");
+        const Locale &enLocale = Locale::getEnglish();
+        LocalPointer<DateIntervalFormat> dif(DateIntervalFormat::createInstance("yMd", enLocale, status));
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        UnicodeString expected;
+        LocalPointer<Calendar> fromTime(Calendar::createInstance(enLocale, status));
+        LocalPointer<Calendar> toTime(Calendar::createInstance(enLocale, status));
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        FieldPosition pos = 0;
+        fromTime->set(2013, 3, 26);
+        toTime->set(2013, 3, 28);
+        dif->format(*fromTime, *toTime, expected, pos, status);
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        LocalPointer<DateIntervalInfo> dii(new DateIntervalInfo(Locale::getEnglish(), status));
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        dii->setIntervalPattern(ctou("yMd"), UCAL_DATE, ctou("M/d/y \\u2013 d"), status);
+        dif->setDateIntervalInfo(*dii, status);
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        dif.adoptInstead(DateIntervalFormat::createInstance("yMd", enLocale, status));
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        UnicodeString actual;
+        pos = 0;
+        dif->format(*fromTime, *toTime, actual, pos, status);
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        if (expected != actual) {
+            errln("DateIntervalFormat.setIntervalInfo should have no side effects.");
+        }
     }
     
     /*
@@ -251,7 +273,7 @@ void DateIntervalFormatTest::testAPI() {
     Formattable formattable;
     formattable.setInt64(10);
     UnicodeString res;
-    pos = 0;
+    FieldPosition pos = 0;
     status = U_ZERO_ERROR;
     dtitvfmt->format(formattable, res, pos, status);
     if ( status != U_ILLEGAL_ARGUMENT_ERROR ) {
@@ -1137,19 +1159,25 @@ void DateIntervalFormatTest::testFormatUserDII() {
 
 void DateIntervalFormatTest::testSetIntervalPatternNoSideEffect() {
     UErrorCode ec = U_ZERO_ERROR;
-    DateIntervalInfo* dtitvinf = new DateIntervalInfo(ec);
-    UnicodeString expected;
-    dtitvinf->getIntervalPattern(ctou("yMd"), UCAL_DATE, expected, ec);
-    dtitvinf->setIntervalPattern(ctou("yMd"), UCAL_DATE, ctou("M/d/y \\u2013 d"), ec);
-    delete dtitvinf;
+    LocalPointer<DateIntervalInfo> dtitvinf(new DateIntervalInfo(ec));
     if (U_FAILURE(ec)) {
         errln("Failure encountered: %s", u_errorName(ec));
         return;
     }
-    dtitvinf = new DateIntervalInfo(ec);
+    UnicodeString expected;
+    dtitvinf->getIntervalPattern(ctou("yMd"), UCAL_DATE, expected, ec);
+    dtitvinf->setIntervalPattern(ctou("yMd"), UCAL_DATE, ctou("M/d/y \\u2013 d"), ec);
+    if (U_FAILURE(ec)) {
+        errln("Failure encountered: %s", u_errorName(ec));
+        return;
+    }
+    dtitvinf.adoptInstead(new DateIntervalInfo(ec));
+    if (U_FAILURE(ec)) {
+        errln("Failure encountered: %s", u_errorName(ec));
+        return;
+    }
     UnicodeString actual;
     dtitvinf->getIntervalPattern(ctou("yMd"), UCAL_DATE, actual, ec);
-    delete dtitvinf;
     if (U_FAILURE(ec)) {
         errln("Failure encountered: %s", u_errorName(ec));
         return;
