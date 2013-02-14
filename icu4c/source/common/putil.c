@@ -105,12 +105,13 @@ Cleanly installed Solaris can use this #define.
 #elif defined(U_DARWIN) || defined(U_LINUX) || defined(U_BSD) || defined(U_SOLARIS)
 #   include <limits.h>
 #   include <unistd.h>
+#   if defined(U_SOLARIS)
+#       ifndef _XPG4_2
+#           define _XPG4_2
+#       endif
+#   endif
 #elif defined(U_QNX)
 #   include <sys/neutrino.h>
-#elif defined(U_SOLARIS)
-#   ifndef _XPG4_2
-#       define _XPG4_2
-#   endif
 #endif
 
 #if (defined(U_CYGWIN) || defined(U_MINGW)) && defined(__STRICT_ANSI__)
