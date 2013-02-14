@@ -65,55 +65,6 @@ cgg{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "SAN",
-                        "ORK",
-                        "OKB",
-                        "OKS",
-                        "OKN",
-                        "OKT",
-                        "OMK",
-                    }
-                    wide{
-                        "Sande",
-                        "Orwokubanza",
-                        "Orwakabiri",
-                        "Orwakashatu",
-                        "Orwakana",
-                        "Orwakataano",
-                        "Orwamukaaga",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "K",
-                        "R",
-                        "S",
-                        "N",
-                        "T",
-                        "M",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    wide{
-                        "KWOTA 1",
-                        "KWOTA 2",
-                        "KWOTA 3",
-                        "KWOTA 4",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

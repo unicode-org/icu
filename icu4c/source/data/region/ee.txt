@@ -296,5 +296,5 @@ ee{
         ZW{"Zimbabwe nutome"}
         ZZ{"nutome manya"}
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.87"}
 }

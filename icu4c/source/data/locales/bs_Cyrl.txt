@@ -243,10 +243,6 @@ bs_Cyrl{
             }
         }
         generic{
-            AmPmMarkers{
-                "пре подне",
-                "поподне",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -286,39 +282,6 @@ bs_Cyrl{
                 yMd{"dd.MM.y."}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "нед",
-                        "пон",
-                        "уто",
-                        "сри",
-                        "чет",
-                        "пет",
-                        "суб",
-                    }
-                    wide{
-                        "недеља",
-                        "понедељак",
-                        "уторак",
-                        "сриједа",
-                        "четвртак",
-                        "петак",
-                        "субота",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "н",
-                        "п",
-                        "у",
-                        "с",
-                        "ч",
-                        "п",
-                        "с",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -413,36 +376,6 @@ bs_Cyrl{
                     M{"d.M.y. - d.M.y."}
                     d{"d.M.y. - d.M.y."}
                     y{"d.M.y. - d.M.y."}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "К1",
-                        "К2",
-                        "К3",
-                        "К4",
-                    }
-                    narrow{
-                        "1.",
-                        "2.",
-                        "3.",
-                        "4.",
-                    }
-                    wide{
-                        "Прво тромесечје",
-                        "Друго тромесечје",
-                        "Треће тромесечје",
-                        "Четврто тромесечје",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1.",
-                        "2.",
-                        "3.",
-                        "4.",
-                    }
                 }
             }
         }

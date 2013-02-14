@@ -30,10 +30,6 @@ ak{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "AN",
-                "EW",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -72,39 +68,6 @@ ak{
                 yMd{"y/M/d"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Kwe",
-                        "Dwo",
-                        "Ben",
-                        "Wuk",
-                        "Yaw",
-                        "Fia",
-                        "Mem",
-                    }
-                    wide{
-                        "Kwesida",
-                        "Dwowda",
-                        "Benada",
-                        "Wukuda",
-                        "Yawda",
-                        "Fida",
-                        "Memeneda",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "K",
-                        "D",
-                        "B",
-                        "W",
-                        "Y",
-                        "F",
-                        "M",
-                    }
-                }
             }
         }
         gregorian{

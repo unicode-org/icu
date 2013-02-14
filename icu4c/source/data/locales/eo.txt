@@ -27,10 +27,6 @@ eo{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "atm",
-                "ptm",
-            }
             DateTimePatterns{
                 "H-'a' 'horo' 'kaj' m:ss zzzz",
                 "HH:mm:ss z",
@@ -45,28 +41,6 @@ eo{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "di",
-                        "lu",
-                        "ma",
-                        "me",
-                        "ĵa",
-                        "ve",
-                        "sa",
-                    }
-                    wide{
-                        "dimanĉo",
-                        "lundo",
-                        "mardo",
-                        "merkredo",
-                        "ĵaŭdo",
-                        "vendredo",
-                        "sabato",
-                    }
-                }
             }
         }
         gregorian{

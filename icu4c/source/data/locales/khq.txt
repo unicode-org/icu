@@ -29,10 +29,6 @@ khq{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Adduha",
-                "Aluula",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -70,55 +66,6 @@ khq{
                 yMMMd{"d MMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Alh",
-                        "Ati",
-                        "Ata",
-                        "Ala",
-                        "Alm",
-                        "Alj",
-                        "Ass",
-                    }
-                    wide{
-                        "Alhadi",
-                        "Atini",
-                        "Atalata",
-                        "Alarba",
-                        "Alhamiisa",
-                        "Aljuma",
-                        "Assabdu",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "H",
-                        "T",
-                        "T",
-                        "L",
-                        "L",
-                        "L",
-                        "S",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "A1",
-                        "A2",
-                        "A3",
-                        "A4",
-                    }
-                    wide{
-                        "Arrubu 1",
-                        "Arrubu 2",
-                        "Arrubu 3",
-                        "Arrubu 4",
-                    }
-                }
             }
         }
         gregorian{

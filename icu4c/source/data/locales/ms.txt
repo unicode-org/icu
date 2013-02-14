@@ -261,10 +261,6 @@ ms{
             }
         }
         generic{
-            AmPmMarkers{
-                "PG",
-                "PTG",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -308,84 +304,6 @@ ms{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Ahd",
-                        "Isn",
-                        "Sel",
-                        "Rab",
-                        "Kha",
-                        "Jum",
-                        "Sab",
-                    }
-                    narrow{
-                        "A",
-                        "I",
-                        "S",
-                        "R",
-                        "K",
-                        "J",
-                        "S",
-                    }
-                    short{
-                        "Ah",
-                        "Is",
-                        "Se",
-                        "Ra",
-                        "Kh",
-                        "Ju",
-                        "Sa",
-                    }
-                    wide{
-                        "Ahad",
-                        "Isnin",
-                        "Selasa",
-                        "Rabu",
-                        "Khamis",
-                        "Jumaat",
-                        "Sabtu",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Ahd",
-                        "Isn",
-                        "Sel",
-                        "Rab",
-                        "Kha",
-                        "Jum",
-                        "Sab",
-                    }
-                    narrow{
-                        "A",
-                        "I",
-                        "S",
-                        "R",
-                        "K",
-                        "J",
-                        "S",
-                    }
-                    short{
-                        "Ah",
-                        "Is",
-                        "Se",
-                        "Ra",
-                        "Kh",
-                        "Ju",
-                        "Sa",
-                    }
-                    wide{
-                        "Ahad",
-                        "Isnin",
-                        "Selasa",
-                        "Rabu",
-                        "Khamis",
-                        "Jumaat",
-                        "Sabtu",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -480,48 +398,6 @@ ms{
                     M{"d/M/y – d/M/y"}
                     d{"d/M/y – d/M/y"}
                     y{"d/M/y – d/M/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Suku 1",
-                        "Suku Ke-2",
-                        "Suku Ke-3",
-                        "Suku Ke-4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "Suku pertama",
-                        "Suku Ke-2",
-                        "Suku Ke-3",
-                        "Suku Ke-4",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Suku 1",
-                        "Suku Ke-2",
-                        "Suku Ke-3",
-                        "Suku Ke-4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "Suku pertama",
-                        "Suku Ke-2",
-                        "Suku Ke-3",
-                        "Suku Ke-4",
-                    }
                 }
             }
         }

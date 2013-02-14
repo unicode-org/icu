@@ -64,55 +64,6 @@ lg{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Sab",
-                        "Bal",
-                        "Lw2",
-                        "Lw3",
-                        "Lw4",
-                        "Lw5",
-                        "Lw6",
-                    }
-                    wide{
-                        "Sabbiiti",
-                        "Balaza",
-                        "Lwakubiri",
-                        "Lwakusatu",
-                        "Lwakuna",
-                        "Lwakutaano",
-                        "Lwamukaaga",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "B",
-                        "L",
-                        "L",
-                        "L",
-                        "L",
-                        "L",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Kya1",
-                        "Kya2",
-                        "Kya3",
-                        "Kya4",
-                    }
-                    wide{
-                        "Kyakuna 1",
-                        "Kyakuna 2",
-                        "Kyakuna 3",
-                        "Kyakuna 4",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

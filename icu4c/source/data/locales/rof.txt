@@ -26,10 +26,6 @@ rof{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "kang'ama",
-                "kingoto",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -67,55 +63,6 @@ rof{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Ijp",
-                        "Ijt",
-                        "Ijn",
-                        "Ijtn",
-                        "Alh",
-                        "Iju",
-                        "Ijm",
-                    }
-                    wide{
-                        "Ijumapili",
-                        "Ijumatatu",
-                        "Ijumanne",
-                        "Ijumatano",
-                        "Alhamisi",
-                        "Ijumaa",
-                        "Ijumamosi",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "1",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "R1",
-                        "R2",
-                        "R3",
-                        "R4",
-                    }
-                    wide{
-                        "Robo ya kwanza",
-                        "Robo ya kaili",
-                        "Robo ya katatu",
-                        "Robo ya kaana",
-                    }
-                }
             }
         }
         gregorian{

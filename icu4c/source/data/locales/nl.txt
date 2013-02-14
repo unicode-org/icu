@@ -149,57 +149,16 @@ nl{
             }
         }
     }
-    Version{"2.0.81.65"}
+    Version{"2.0.81.70"}
     calendar{
         buddhist{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E d"}
-                Gy{"y G"}
-                Hm{"HH:mm"}
-                M{"L"}
-                MEd{"E d-M"}
-                MMM{"LLL"}
-                MMMEd{"E d MMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                MMd{"d-MM"}
-                MMdd{"dd-MM"}
-                Md{"d-M"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"M-y G"}
-                yMEd{"E d-M-y G"}
-                yMM{"MM-y G"}
-                yMMM{"MMM y G"}
-                yMMMEd{"E d MMM y G"}
-                yMMMM{"MMMM y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"d-M-y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y G"}
+            eras{
+                abbreviated{
+                    "BE",
+                }
             }
         }
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -247,84 +206,6 @@ nl{
                 yyyyMd{"d-M-y GGGGG"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "zo",
-                        "ma",
-                        "di",
-                        "wo",
-                        "do",
-                        "vr",
-                        "za",
-                    }
-                    narrow{
-                        "Z",
-                        "M",
-                        "D",
-                        "W",
-                        "D",
-                        "V",
-                        "Z",
-                    }
-                    short{
-                        "zo",
-                        "ma",
-                        "di",
-                        "wo",
-                        "do",
-                        "vr",
-                        "za",
-                    }
-                    wide{
-                        "zondag",
-                        "maandag",
-                        "dinsdag",
-                        "woensdag",
-                        "donderdag",
-                        "vrijdag",
-                        "zaterdag",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "zo",
-                        "ma",
-                        "di",
-                        "wo",
-                        "do",
-                        "vr",
-                        "za",
-                    }
-                    narrow{
-                        "Z",
-                        "M",
-                        "D",
-                        "W",
-                        "D",
-                        "V",
-                        "Z",
-                    }
-                    short{
-                        "zo",
-                        "ma",
-                        "di",
-                        "wo",
-                        "do",
-                        "vr",
-                        "za",
-                    }
-                    wide{
-                        "zondag",
-                        "maandag",
-                        "dinsdag",
-                        "woensdag",
-                        "donderdag",
-                        "vrijdag",
-                        "zaterdag",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -422,48 +303,6 @@ nl{
                     M{"dd-MM-y - dd-MM-y G"}
                     d{"dd-MM-y - dd-MM-y G"}
                     y{"dd-MM-y - dd-MM-y G"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1e kwartaal",
-                        "2e kwartaal",
-                        "3e kwartaal",
-                        "4e kwartaal",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1e kwartaal",
-                        "2e kwartaal",
-                        "3e kwartaal",
-                        "4e kwartaal",
-                    }
                 }
             }
         }
@@ -861,47 +700,6 @@ nl{
             }
         }
         islamic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E d"}
-                Hm{"HH:mm"}
-                M{"L"}
-                MEd{"E d-M"}
-                MMM{"LLL"}
-                MMMEd{"E d MMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                MMd{"d-MM"}
-                MMdd{"dd-MM"}
-                Md{"d-M"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"M-y G"}
-                yMEd{"E d-M-y G"}
-                yMM{"MM-y G"}
-                yMMM{"MMM y G"}
-                yMMMEd{"E d MMM y G"}
-                yMMMM{"MMMM y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"d-M-y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y G"}
-            }
             eras{
                 abbreviated{
                     "Saʻna Hizjria",
@@ -972,76 +770,13 @@ nl{
                 "{1} {0}",
                 "{1} {0}",
             }
-            availableFormats{
-                Ed{"E d"}
-                Gy{"y G"}
-                Hm{"HH:mm"}
-                M{"L"}
-                MEd{"E d-M"}
-                MMM{"LLL"}
-                MMMEd{"E d MMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                MMd{"d-MM"}
-                MMdd{"dd-MM"}
-                Md{"d-M"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"M-y GGGGG"}
-                yMEd{"E d-M-y GGGGG"}
-                yMM{"MM-y GGGGG"}
-                yMMM{"MMM y G"}
-                yMMMEd{"E d MMM y G"}
-                yMMMM{"MMMM y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"d-M-y GGGGG"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y G"}
-            }
         }
         roc{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "dd-MM-yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E d"}
-                Gy{"y G"}
-                Hm{"HH:mm"}
-                M{"L"}
-                MEd{"E d-M"}
-                MMM{"LLL"}
-                MMMEd{"E d MMM"}
-                MMMMd{"d MMMM"}
-                MMMd{"d MMM"}
-                MMd{"d-MM"}
-                MMdd{"dd-MM"}
-                Md{"d-M"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"M-y GGGGG"}
-                yMEd{"E d-M-y GGGGG"}
-                yMM{"MM-y GGGGG"}
-                yMMM{"MMM y G"}
-                yMMMEd{"E d MMM y G"}
-                yMMMM{"MMMM y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"d-M-y GGGGG"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y G"}
+            eras{
+                abbreviated{
+                    "Before R.O.C.",
+                    "Minguo",
+                }
             }
         }
     }

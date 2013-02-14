@@ -77,13 +77,9 @@ ee{
             }
         }
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.87"}
     calendar{
         generic{
-            AmPmMarkers{
-                "ŋdi",
-                "ɣetrɔ",
-            }
             DateTimePatterns{
                 "a h:mm:ss zzzz",
                 "a 'ga' h:mm:ss z",
@@ -127,84 +123,6 @@ ee{
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "kɔs",
-                        "dzo",
-                        "bla",
-                        "kuɖ",
-                        "yaw",
-                        "fiɖ",
-                        "mem",
-                    }
-                    narrow{
-                        "k",
-                        "d",
-                        "b",
-                        "k",
-                        "y",
-                        "f",
-                        "m",
-                    }
-                    short{
-                        "kɔs",
-                        "dzo",
-                        "bla",
-                        "kuɖ",
-                        "yaw",
-                        "fiɖ",
-                        "mem",
-                    }
-                    wide{
-                        "kɔsiɖa",
-                        "dzoɖa",
-                        "blaɖa",
-                        "kuɖa",
-                        "yawoɖa",
-                        "fiɖa",
-                        "memleɖa",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "kɔs",
-                        "dzo",
-                        "bla",
-                        "kuɖ",
-                        "yaw",
-                        "fiɖ",
-                        "mem",
-                    }
-                    narrow{
-                        "k",
-                        "d",
-                        "b",
-                        "k",
-                        "y",
-                        "f",
-                        "m",
-                    }
-                    short{
-                        "kɔs",
-                        "dzo",
-                        "bla",
-                        "kuɖ",
-                        "yaw",
-                        "fiɖ",
-                        "mem",
-                    }
-                    wide{
-                        "kɔsiɖa",
-                        "dzoɖa",
-                        "blaɖa",
-                        "kuɖa",
-                        "yawoɖa",
-                        "fiɖa",
-                        "memleɖa",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -296,42 +214,6 @@ ee{
                     M{"M/d/y – M/d/y"}
                     d{"M/d/y – M/d/y"}
                     y{"M/d/y – M/d/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "k1",
-                        "k2",
-                        "k3",
-                        "k4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "kɔta gbãtɔ",
-                        "kɔta evelia",
-                        "kɔta etɔ̃lia",
-                        "kɔta enelia",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "k1",
-                        "k2",
-                        "k3",
-                        "k4",
-                    }
-                    wide{
-                        "kɔta gbãtɔ",
-                        "kɔta evelia",
-                        "kɔta etɔ̃lia",
-                        "kɔta enelia",
-                    }
                 }
             }
         }

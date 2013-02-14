@@ -25,10 +25,6 @@ ebu{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "KI",
-                "UT",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -68,55 +64,6 @@ ebu{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Kma",
-                        "Tat",
-                        "Ine",
-                        "Tan",
-                        "Arm",
-                        "Maa",
-                        "NMM",
-                    }
-                    wide{
-                        "Kiumia",
-                        "Njumatatu",
-                        "Njumaine",
-                        "Njumatano",
-                        "Aramithi",
-                        "Njumaa",
-                        "NJumamothii",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "K",
-                        "N",
-                        "N",
-                        "N",
-                        "A",
-                        "M",
-                        "N",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    wide{
-                        "Kuota ya mbere",
-                        "Kuota ya Kaĩrĩ",
-                        "Kuota ya kathatu",
-                        "Kuota ya kana",
-                    }
-                }
             }
         }
         gregorian{

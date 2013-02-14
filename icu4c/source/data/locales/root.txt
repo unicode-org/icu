@@ -113,14 +113,14 @@ root{
         297,
         210,
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.70"}
     calendar{
         buddhist{
-            AmPmMarkers:alias{"/LOCALE/calendar/generic/AmPmMarkers"}
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
-            dayNames:alias{"/LOCALE/calendar/generic/dayNames"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
                     "BE",
@@ -130,10 +130,10 @@ root{
             }
             intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
-            quarters:alias{"/LOCALE/calendar/generic/quarters"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         chinese{
-            AmPmMarkers:alias{"/LOCALE/calendar/generic/AmPmMarkers"}
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -294,7 +294,7 @@ root{
                     }
                 }
             }
-            dayNames:alias{"/LOCALE/calendar/generic/dayNames"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             intervalFormats{
                 H{
                     H{"HH–HH"}
@@ -395,18 +395,18 @@ root{
                     abbreviated:alias{"/LOCALE/calendar/chinese/monthNames/format/wide"}
                     narrow:alias{"/LOCALE/calendar/chinese/monthNames/stand-alone/narrow"}
                     wide{
-                        "month1",
-                        "month2",
-                        "month3",
-                        "month4",
-                        "month5",
-                        "month6",
-                        "month7",
-                        "month8",
-                        "month9",
-                        "month10",
-                        "month11",
-                        "month12",
+                        "Month1",
+                        "Month2",
+                        "Month3",
+                        "Month4",
+                        "Month5",
+                        "Month6",
+                        "Month7",
+                        "Month8",
+                        "Month9",
+                        "Month10",
+                        "Month11",
+                        "Month12",
                     }
                 }
                 stand-alone{
@@ -449,14 +449,14 @@ root{
                     wide:alias{"/LOCALE/calendar/chinese/monthPatterns/format/wide"}
                 }
             }
-            quarters:alias{"/LOCALE/calendar/generic/quarters"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         coptic{
-            AmPmMarkers:alias{"/LOCALE/calendar/generic/AmPmMarkers"}
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
-            dayNames:alias{"/LOCALE/calendar/generic/dayNames"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
                     "ERA0",
@@ -506,7 +506,7 @@ root{
                     wide:alias{"/LOCALE/calendar/coptic/monthNames/format/wide"}
                 }
             }
-            quarters:alias{"/LOCALE/calendar/generic/quarters"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         dangi{
             AmPmMarkers:alias{"/LOCALE/calendar/chinese/AmPmMarkers"}
@@ -522,11 +522,11 @@ root{
         }
         default{"gregorian"}
         ethiopic{
-            AmPmMarkers:alias{"/LOCALE/calendar/generic/AmPmMarkers"}
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
-            dayNames:alias{"/LOCALE/calendar/generic/dayNames"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
                     "ERA0",
@@ -576,7 +576,7 @@ root{
                     wide:alias{"/LOCALE/calendar/ethiopic/monthNames/format/wide"}
                 }
             }
-            quarters:alias{"/LOCALE/calendar/generic/quarters"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         ethiopic-amete-alem{
             AmPmMarkers:alias{"/LOCALE/calendar/ethiopic/AmPmMarkers"}
@@ -596,10 +596,7 @@ root{
             quarters:alias{"/LOCALE/calendar/ethiopic/quarters"}
         }
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -659,40 +656,11 @@ root{
                 yyyyQQQ{"G y QQQ"}
                 yyyyQQQQ{"G y QQQQ"}
             }
-            dayNames{
-                format{
-                    abbreviated:alias{"/LOCALE/calendar/generic/dayNames/format/wide"}
-                    narrow:alias{"/LOCALE/calendar/generic/dayNames/stand-alone/narrow"}
-                    short:alias{"/LOCALE/calendar/generic/dayNames/format/abbreviated"}
-                    wide{
-                        "sun",
-                        "mon",
-                        "tue",
-                        "wed",
-                        "thu",
-                        "fri",
-                        "sat",
-                    }
-                }
-                stand-alone{
-                    abbreviated:alias{"/LOCALE/calendar/generic/dayNames/format/abbreviated"}
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "W",
-                        "T",
-                        "F",
-                        "S",
-                    }
-                    short:alias{"/LOCALE/calendar/generic/dayNames/format/short"}
-                    wide:alias{"/LOCALE/calendar/generic/dayNames/format/wide"}
-                }
-            }
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
-                    "era0",
-                    "era1",
+                    "ERA0",
+                    "ERA1",
                 }
                 narrow:alias{"/LOCALE/calendar/generic/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/generic/eras/abbreviated"}
@@ -797,18 +765,18 @@ root{
                     abbreviated:alias{"/LOCALE/calendar/generic/monthNames/format/wide"}
                     narrow:alias{"/LOCALE/calendar/generic/monthNames/stand-alone/narrow"}
                     wide{
-                        "month1",
-                        "month2",
-                        "month3",
-                        "month4",
-                        "month5",
-                        "month6",
-                        "month7",
-                        "month8",
-                        "month9",
-                        "month10",
-                        "month11",
-                        "month12",
+                        "Month1",
+                        "Month2",
+                        "Month3",
+                        "Month4",
+                        "Month5",
+                        "Month6",
+                        "Month7",
+                        "Month8",
+                        "Month9",
+                        "Month10",
+                        "Month11",
+                        "Month12",
                     }
                 }
                 stand-alone{
@@ -830,28 +798,7 @@ root{
                     wide:alias{"/LOCALE/calendar/generic/monthNames/format/wide"}
                 }
             }
-            quarters{
-                format{
-                    abbreviated:alias{"/LOCALE/calendar/generic/quarters/format/wide"}
-                    narrow:alias{"/LOCALE/calendar/generic/quarters/stand-alone/narrow"}
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                }
-                stand-alone{
-                    abbreviated:alias{"/LOCALE/calendar/generic/quarters/format/abbreviated"}
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide:alias{"/LOCALE/calendar/generic/quarters/format/wide"}
-                }
-            }
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         gregorian{
             AmPmMarkers{
@@ -922,13 +869,13 @@ root{
                     narrow:alias{"/LOCALE/calendar/gregorian/dayNames/stand-alone/narrow"}
                     short:alias{"/LOCALE/calendar/gregorian/dayNames/format/abbreviated"}
                     wide{
-                        "sun",
-                        "mon",
-                        "tue",
-                        "wed",
-                        "thu",
-                        "fri",
-                        "sat",
+                        "Sun",
+                        "Mon",
+                        "Tue",
+                        "Wed",
+                        "Thu",
+                        "Fri",
+                        "Sat",
                     }
                 }
                 stand-alone{
@@ -1054,18 +1001,18 @@ root{
                     abbreviated:alias{"/LOCALE/calendar/gregorian/monthNames/format/wide"}
                     narrow:alias{"/LOCALE/calendar/gregorian/monthNames/stand-alone/narrow"}
                     wide{
-                        "month1",
-                        "month2",
-                        "month3",
-                        "month4",
-                        "month5",
-                        "month6",
-                        "month7",
-                        "month8",
-                        "month9",
-                        "month10",
-                        "month11",
-                        "month12",
+                        "Month1",
+                        "Month2",
+                        "Month3",
+                        "Month4",
+                        "Month5",
+                        "Month6",
+                        "Month7",
+                        "Month8",
+                        "Month9",
+                        "Month10",
+                        "Month11",
+                        "Month12",
                     }
                 }
                 stand-alone{
@@ -1111,11 +1058,11 @@ root{
             }
         }
         hebrew{
-            AmPmMarkers:alias{"/LOCALE/calendar/generic/AmPmMarkers"}
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
-            dayNames:alias{"/LOCALE/calendar/generic/dayNames"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
                     "AM",
@@ -1165,14 +1112,14 @@ root{
                     wide:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                 }
             }
-            quarters:alias{"/LOCALE/calendar/generic/quarters"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         indian{
-            AmPmMarkers:alias{"/LOCALE/calendar/generic/AmPmMarkers"}
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
-            dayNames:alias{"/LOCALE/calendar/generic/dayNames"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
                     "SAKA",
@@ -1219,14 +1166,14 @@ root{
                     wide:alias{"/LOCALE/calendar/indian/monthNames/format/wide"}
                 }
             }
-            quarters:alias{"/LOCALE/calendar/generic/quarters"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         islamic{
-            AmPmMarkers:alias{"/LOCALE/calendar/generic/AmPmMarkers"}
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
-            dayNames:alias{"/LOCALE/calendar/generic/dayNames"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
                     "AH",
@@ -1286,7 +1233,7 @@ root{
                     wide:alias{"/LOCALE/calendar/islamic/monthNames/format/wide"}
                 }
             }
-            quarters:alias{"/LOCALE/calendar/generic/quarters"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         islamic-civil{
             AmPmMarkers:alias{"/LOCALE/calendar/islamic/AmPmMarkers"}
@@ -1300,11 +1247,11 @@ root{
             quarters:alias{"/LOCALE/calendar/islamic/quarters"}
         }
         japanese{
-            AmPmMarkers:alias{"/LOCALE/calendar/generic/AmPmMarkers"}
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
-            dayNames:alias{"/LOCALE/calendar/generic/dayNames"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
                     "Taika (645-650)",
@@ -1786,14 +1733,14 @@ root{
             }
             intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
-            quarters:alias{"/LOCALE/calendar/generic/quarters"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         persian{
-            AmPmMarkers:alias{"/LOCALE/calendar/generic/AmPmMarkers"}
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
-            dayNames:alias{"/LOCALE/calendar/generic/dayNames"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
                     "AP",
@@ -1840,14 +1787,14 @@ root{
                     wide:alias{"/LOCALE/calendar/persian/monthNames/format/wide"}
                 }
             }
-            quarters:alias{"/LOCALE/calendar/generic/quarters"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
         roc{
-            AmPmMarkers:alias{"/LOCALE/calendar/generic/AmPmMarkers"}
+            AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
             DateTimePatterns:alias{"/LOCALE/calendar/generic/DateTimePatterns"}
             appendItems:alias{"/LOCALE/calendar/generic/appendItems"}
             availableFormats:alias{"/LOCALE/calendar/generic/availableFormats"}
-            dayNames:alias{"/LOCALE/calendar/generic/dayNames"}
+            dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
                     "Before R.O.C.",
@@ -1858,7 +1805,7 @@ root{
             }
             intervalFormats:alias{"/LOCALE/calendar/generic/intervalFormats"}
             monthNames:alias{"/LOCALE/calendar/gregorian/monthNames"}
-            quarters:alias{"/LOCALE/calendar/generic/quarters"}
+            quarters:alias{"/LOCALE/calendar/gregorian/quarters"}
         }
     }
     delimiters{

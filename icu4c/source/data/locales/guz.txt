@@ -26,10 +26,6 @@ guz{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Ma/Mo",
-                "Mambia/Mog",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -67,55 +63,6 @@ guz{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Cpr",
-                        "Ctt",
-                        "Cmn",
-                        "Cmt",
-                        "Ars",
-                        "Icm",
-                        "Est",
-                    }
-                    wide{
-                        "Chumapiri",
-                        "Chumatato",
-                        "Chumaine",
-                        "Chumatano",
-                        "Aramisi",
-                        "Ichuma",
-                        "Esabato",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "C",
-                        "C",
-                        "C",
-                        "C",
-                        "A",
-                        "I",
-                        "E",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "E1",
-                        "E2",
-                        "E3",
-                        "E4",
-                    }
-                    wide{
-                        "Erobo entang'ani",
-                        "Erobo yakabere",
-                        "Erobo yagatato",
-                        "Erobo yakane",
-                    }
-                }
             }
         }
         gregorian{

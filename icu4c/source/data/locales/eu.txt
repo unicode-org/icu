@@ -155,10 +155,6 @@ eu{
             }
         }
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -198,66 +194,6 @@ eu{
                 yMd{"y-M-d"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ig",
-                        "al",
-                        "as",
-                        "az",
-                        "og",
-                        "or",
-                        "lr",
-                    }
-                    narrow{
-                        "I",
-                        "M",
-                        "A",
-                        "A",
-                        "A",
-                        "O",
-                        "I",
-                    }
-                    short{
-                        "ig.",
-                        "al.",
-                        "ar.",
-                        "az.",
-                        "og.",
-                        "or.",
-                        "lr.",
-                    }
-                    wide{
-                        "igandea",
-                        "astelehena",
-                        "asteartea",
-                        "asteazkena",
-                        "osteguna",
-                        "ostirala",
-                        "larunbata",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "I",
-                        "M",
-                        "A",
-                        "L",
-                        "A",
-                        "O",
-                        "I",
-                    }
-                    short{
-                        "ig.",
-                        "al.",
-                        "ar.",
-                        "az.",
-                        "og.",
-                        "or.",
-                        "lr.",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -352,36 +288,6 @@ eu{
                     M{"M/d/y – M/d/y"}
                     d{"M/d/y – M/d/y"}
                     y{"M/d/y – M/d/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "1Hh",
-                        "2Hh",
-                        "3Hh",
-                        "4Hh",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1. hiruhilekoa",
-                        "2. hiruhilekoa",
-                        "3. hiruhilekoa",
-                        "4. hiruhilekoa",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                 }
             }
         }

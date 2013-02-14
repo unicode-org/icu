@@ -37,10 +37,6 @@ ewo{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "kíkíríg",
-                "ngəgógəle",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -79,55 +75,6 @@ ewo{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "sɔ́n",
-                        "mɔ́n",
-                        "smb",
-                        "sml",
-                        "smn",
-                        "fúl",
-                        "sér",
-                    }
-                    wide{
-                        "sɔ́ndɔ",
-                        "mɔ́ndi",
-                        "sɔ́ndɔ məlú mə́bɛ̌",
-                        "sɔ́ndɔ məlú mə́lɛ́",
-                        "sɔ́ndɔ məlú mə́nyi",
-                        "fúladé",
-                        "séradé",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "s",
-                        "m",
-                        "s",
-                        "s",
-                        "s",
-                        "f",
-                        "s",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "nno",
-                        "nnb",
-                        "nnl",
-                        "nnny",
-                    }
-                    wide{
-                        "nsámbá ngɔn asú",
-                        "nsámbá ngɔn bɛ̌",
-                        "nsámbá ngɔn lála",
-                        "nsámbá ngɔn nyina",
-                    }
-                }
             }
         }
         gregorian{

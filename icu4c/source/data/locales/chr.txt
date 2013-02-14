@@ -45,10 +45,6 @@ chr{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "ᏌᎾᎴ",
-                "ᏒᎯᏱᎢᏗᏢ",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -81,39 +77,6 @@ chr{
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ᏆᏍᎬ",
-                        "ᏉᏅᎯ",
-                        "ᏔᎵᏁ",
-                        "ᏦᎢᏁ",
-                        "ᏅᎩᏁ",
-                        "ᏧᎾᎩ",
-                        "ᏈᏕᎾ",
-                    }
-                    wide{
-                        "ᎤᎾᏙᏓᏆᏍᎬ",
-                        "ᎤᎾᏙᏓᏉᏅᎯ",
-                        "ᏔᎵᏁᎢᎦ",
-                        "ᏦᎢᏁᎢᎦ",
-                        "ᏅᎩᏁᎢᎦ",
-                        "ᏧᎾᎩᎶᏍᏗ",
-                        "ᎤᎾᏙᏓᏈᏕᎾ",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "Ꮖ",
-                        "Ꮙ",
-                        "Ꮤ",
-                        "Ꮶ",
-                        "Ꮕ",
-                        "Ꮷ",
-                        "Ꭴ",
-                    }
-                }
             }
             intervalFormats{
                 MEd{

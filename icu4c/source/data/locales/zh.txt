@@ -184,7 +184,7 @@ zh{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.0.81.65"}
+    Version{"2.0.81.70"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -205,6 +205,9 @@ zh{
             availableFormats{
                 Ed{"d日E"}
                 Gy{"Gy年"}
+                GyMMM{"Gy年M月"}
+                GyMMMEd{"Gy年M月d日E"}
+                GyMMMd{"Gy年M月d日"}
                 H{"H时"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -262,6 +265,10 @@ zh{
             }
             availableFormats{
                 Ed{"d日E"}
+                Gy{"U年"}
+                GyMMM{"U年MMM"}
+                GyMMMEd{"U年MMMd日E"}
+                GyMMMd{"U年MMMd日"}
                 M{"MMM"}
                 MEd{"M-dE"}
                 MMMEd{"MMMd日E"}
@@ -269,14 +276,15 @@ zh{
                 Md{"M-d"}
                 d{"d日"}
                 y{"U年"}
-                yM{"U年M月"}
-                yMEd{"U年M月d日，E"}
-                yMMM{"U年MMM"}
-                yMMMEd{"U年MMMd日E"}
-                yMMMd{"U年MMMd日"}
-                yMd{"U年M月d日"}
-                yQQQ{"U年QQQQ"}
-                yQQQQ{"U年QQQQ"}
+                yyyy{"U年"}
+                yyyyM{"U年M月"}
+                yyyyMEd{"U年M月d日，E"}
+                yyyyMMM{"U年MMM"}
+                yyyyMMMEd{"U年MMMd日E"}
+                yyyyMMMd{"U年MMMd日"}
+                yyyyMd{"U年M月d日"}
+                yyyyQQQ{"U年QQQQ"}
+                yyyyQQQQ{"U年QQQQ"}
             }
             cyclicNameSets{
                 dayParts{
@@ -771,10 +779,6 @@ zh{
             }
         }
         generic{
-            AmPmMarkers{
-                "上午",
-                "下午",
-            }
             DateTimePatterns{
                 "zzzzah:mm:ss",
                 "zah:mm:ss",
@@ -824,84 +828,6 @@ zh{
                 yyyyMd{"Gy/M/d"}
                 yyyyQQQ{"Gy年第Q季度"}
                 yyyyQQQQ{"Gy年QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "周日",
-                        "周一",
-                        "周二",
-                        "周三",
-                        "周四",
-                        "周五",
-                        "周六",
-                    }
-                    narrow{
-                        "日",
-                        "一",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                    }
-                    short{
-                        "周日",
-                        "周一",
-                        "周二",
-                        "周三",
-                        "周四",
-                        "周五",
-                        "周六",
-                    }
-                    wide{
-                        "星期日",
-                        "星期一",
-                        "星期二",
-                        "星期三",
-                        "星期四",
-                        "星期五",
-                        "星期六",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "周日",
-                        "周一",
-                        "周二",
-                        "周三",
-                        "周四",
-                        "周五",
-                        "周六",
-                    }
-                    narrow{
-                        "日",
-                        "一",
-                        "二",
-                        "三",
-                        "四",
-                        "五",
-                        "六",
-                    }
-                    short{
-                        "周日",
-                        "周一",
-                        "周二",
-                        "周三",
-                        "周四",
-                        "周五",
-                        "周六",
-                    }
-                    wide{
-                        "星期日",
-                        "星期一",
-                        "星期二",
-                        "星期三",
-                        "星期四",
-                        "星期五",
-                        "星期六",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -992,48 +918,6 @@ zh{
                     M{"Gy/M/d – y/M/d"}
                     d{"Gy/M/d – y/M/d"}
                     y{"Gy/M/d – y/M/d"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "1季度",
-                        "2季度",
-                        "3季度",
-                        "4季度",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "第一季度",
-                        "第二季度",
-                        "第三季度",
-                        "第四季度",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1季度",
-                        "2季度",
-                        "3季度",
-                        "4季度",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "第一季度",
-                        "第二季度",
-                        "第三季度",
-                        "第四季度",
-                    }
                 }
             }
         }
@@ -1600,6 +1484,9 @@ zh{
             availableFormats{
                 Ed{"d日E"}
                 Gy{"GGGy年"}
+                GyMMM{"y年M月"}
+                GyMMMEd{"y年M月d日E"}
+                GyMMMd{"GGGGGy年M月d日"}
                 H{"H时"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -1741,6 +1628,9 @@ zh{
             availableFormats{
                 Ed{"d日E"}
                 Gy{"Gy年"}
+                GyMMM{"Gy年M月"}
+                GyMMMEd{"Gy年M月d日E"}
+                GyMMMd{"Gy年M月d日"}
                 H{"H时"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1756,13 +1646,14 @@ zh{
                 hms{"ah:mm:ss"}
                 ms{"mm:ss"}
                 y{"Gy年"}
-                yM{"Gy-MM"}
-                yMEd{"Gy-M-d（E）"}
-                yMMM{"Gy年M月"}
-                yMMMEd{"Gy年M月d日E"}
-                yMMMd{"Gy年M月d日"}
-                yMd{"Gy-MM-dd"}
-                yQQQ{"Gy年第Q季度"}
+                yyyy{"Gy年"}
+                yyyyM{"Gy-MM"}
+                yyyyMEd{"Gy-M-d（E）"}
+                yyyyMMM{"Gy年M月"}
+                yyyyMMMEd{"Gy年M月d日E"}
+                yyyyMMMd{"Gy年M月d日"}
+                yyyyMd{"Gy-MM-dd"}
+                yyyyQQQ{"Gy年第Q季度"}
             }
             eras{
                 abbreviated{
@@ -2121,6 +2012,9 @@ zh{
             availableFormats{
                 Ed{"d日E"}
                 Gy{"Gy年"}
+                GyMMM{"Gy年M月"}
+                GyMMMEd{"Gy年M月d日E"}
+                GyMMMd{"Gy年M月d日"}
                 H{"H时"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -2136,14 +2030,15 @@ zh{
                 hms{"ah:mm:ss"}
                 ms{"mm:ss"}
                 y{"Gy年"}
-                yM{"Gy-M"}
-                yMEd{"Gy-M-d（E）"}
-                yMM{"Gy-MM"}
-                yMMM{"Gy年M月"}
-                yMMMEd{"Gy年M月d日E"}
-                yMMMd{"Gy年M月d日"}
-                yMd{"Gy-M-d"}
-                yQQQ{"Gy年第Q季度"}
+                yyyy{"Gy年"}
+                yyyyM{"Gy-M"}
+                yyyyMEd{"Gy-M-d（E）"}
+                yyyyMM{"Gy-MM"}
+                yyyyMMM{"Gy年M月"}
+                yyyyMMMEd{"Gy年M月d日E"}
+                yyyyMMMd{"Gy年M月d日"}
+                yyyyMd{"Gy-M-d"}
+                yyyyQQQ{"Gy年第Q季度"}
             }
             eras{
                 abbreviated{

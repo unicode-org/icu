@@ -32,10 +32,6 @@ sbp{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Lwamilawu",
-                "Pashamihe",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -74,55 +70,6 @@ sbp{
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Mul",
-                        "Jtt",
-                        "Jnn",
-                        "Jtn",
-                        "Alh",
-                        "Iju",
-                        "Jmo",
-                    }
-                    wide{
-                        "Mulungu",
-                        "Jumatatu",
-                        "Jumanne",
-                        "Jumatano",
-                        "Alahamisi",
-                        "Ijumaa",
-                        "Jumamosi",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "M",
-                        "J",
-                        "J",
-                        "J",
-                        "A",
-                        "I",
-                        "J",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "L1",
-                        "L2",
-                        "L3",
-                        "L4",
-                    }
-                    wide{
-                        "Lobo 1",
-                        "Lobo 2",
-                        "Lobo 3",
-                        "Lobo 4",
-                    }
-                }
             }
         }
         gregorian{

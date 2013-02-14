@@ -35,7 +35,6 @@ pt_PT{
         GL{"Gronelândia"}
         GU{"Guame"}
         GW{"Guiné-Bissau"}
-        HK{"Região Administrativa Especial de Hong Kong"}
         IR{"Irão"}
         KE{"Quénia"}
         KG{"Quirguizistão"}
@@ -46,7 +45,6 @@ pt_PT{
         MC{"Mónaco"}
         MG{"Madagáscar"}
         MK{"Macedónia"}
-        MO{"Região Administrativa Especial de Macau"}
         MS{"Monserrate"}
         MU{"Maurícias"}
         NC{"Nova Caledónia"}
@@ -65,12 +63,11 @@ pt_PT{
         TJ{"Tajiquistão"}
         TM{"Turquemenistão"}
         TT{"Trindade e Tobago"}
-        UZ{"Usbequistão"}
         VN{"Vietname"}
         YE{"Iémen"}
         YT{"Maiote"}
         ZW{"Zimbabué"}
         ZZ{"Região desconhecida ou inválida"}
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.80"}
 }

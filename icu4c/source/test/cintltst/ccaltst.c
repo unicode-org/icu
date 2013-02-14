@@ -1556,7 +1556,7 @@ static void TestGetKeywordValuesForLocale() {
             { "th@calendar=gregorian", "buddhist", "gregorian", NULL, NULL },
             { "en@calendar=islamic",   "gregorian", NULL, NULL, NULL },
             { "zh_TW",       "gregorian", "roc", "chinese", NULL },
-            { "ar_IR",       "gregorian", "persian", "islamic", "islamic-civil" },
+            { "ar_IR",       "persian", "gregorian", "islamic", "islamic-civil" },
     };
     const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 4, 4, 2, 2, 2, 1, 3, 4 };
     UErrorCode status = U_ZERO_ERROR;

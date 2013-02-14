@@ -25,10 +25,6 @@ xog{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Munkyo",
-                "Eigulo",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -66,55 +62,6 @@ xog{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Sabi",
-                        "Bala",
-                        "Kubi",
-                        "Kusa",
-                        "Kuna",
-                        "Kuta",
-                        "Muka",
-                    }
-                    wide{
-                        "Sabiiti",
-                        "Balaza",
-                        "Owokubili",
-                        "Owokusatu",
-                        "Olokuna",
-                        "Olokutaanu",
-                        "Olomukaaga",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "B",
-                        "B",
-                        "S",
-                        "K",
-                        "K",
-                        "M",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "Ebisera ebyomwaka ebisoka",
-                        "Ebisera ebyomwaka ebyokubiri",
-                        "Ebisera ebyomwaka ebyokusatu",
-                        "Ebisera ebyomwaka ebyokuna",
-                    }
-                }
             }
         }
         gregorian{

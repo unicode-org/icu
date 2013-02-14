@@ -41,10 +41,6 @@ nn{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "formiddag",
-                "ettermiddag",
-            }
             DateTimePatterns{
                 "'kl'. HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -84,39 +80,6 @@ nn{
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "sø.",
-                        "må.",
-                        "ty.",
-                        "on.",
-                        "to.",
-                        "fr.",
-                        "la.",
-                    }
-                    wide{
-                        "søndag",
-                        "måndag",
-                        "tysdag",
-                        "onsdag",
-                        "torsdag",
-                        "fredag",
-                        "laurdag",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "O",
-                        "T",
-                        "F",
-                        "L",
-                    }
-                }
             }
             intervalFormats{
                 Hm{
@@ -201,22 +164,6 @@ nn{
                     M{"dd.MM.y–dd.MM.y"}
                     d{"dd.MM.y–dd.MM.y"}
                     y{"dd.MM.y–dd.MM.y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    wide{
-                        "1. kvartal",
-                        "2. kvartal",
-                        "3. kvartal",
-                        "4. kvartal",
-                    }
                 }
             }
         }

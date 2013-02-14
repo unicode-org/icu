@@ -37,10 +37,6 @@ agq{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "a.g",
-                "a.k",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -79,49 +75,6 @@ agq{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "nts",
-                        "kpa",
-                        "ghɔ",
-                        "tɔm",
-                        "ume",
-                        "ghɨ",
-                        "dzk",
-                    }
-                    wide{
-                        "tsuʔntsɨ",
-                        "tsuʔukpà",
-                        "tsuʔughɔe",
-                        "tsuʔutɔ̀mlò",
-                        "tsuʔumè",
-                        "tsuʔughɨ̂m",
-                        "tsuʔndzɨkɔʔɔ",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "n",
-                        "k",
-                        "g",
-                        "t",
-                        "u",
-                        "g",
-                        "d",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    wide{
-                        "kɨbâ kɨ 1",
-                        "ugbâ u 2",
-                        "ugbâ u 3",
-                        "ugbâ u 4",
-                    }
-                }
             }
         }
         gregorian{

@@ -35,10 +35,6 @@ yav{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "kiɛmɛ́ɛm",
-                "kisɛ́ndɛ",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -77,55 +73,6 @@ yav{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "sd",
-                        "md",
-                        "mw",
-                        "et",
-                        "kl",
-                        "fl",
-                        "ss",
-                    }
-                    wide{
-                        "sɔ́ndiɛ",
-                        "móndie",
-                        "muányáŋmóndie",
-                        "metúkpíápɛ",
-                        "kúpélimetúkpiapɛ",
-                        "feléte",
-                        "séselé",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "s",
-                        "m",
-                        "m",
-                        "e",
-                        "k",
-                        "f",
-                        "s",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "ndátúɛ 1",
-                        "ndátúɛ 2",
-                        "ndátúɛ 3",
-                        "ndátúɛ 4",
-                    }
-                }
             }
         }
         gregorian{

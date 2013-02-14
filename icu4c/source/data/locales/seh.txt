@@ -74,39 +74,6 @@ seh{
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Dim",
-                        "Pos",
-                        "Pir",
-                        "Tat",
-                        "Nai",
-                        "Sha",
-                        "Sab",
-                    }
-                    wide{
-                        "Dimingu",
-                        "Chiposi",
-                        "Chipiri",
-                        "Chitatu",
-                        "Chinai",
-                        "Chishanu",
-                        "Sabudu",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "D",
-                        "P",
-                        "C",
-                        "T",
-                        "N",
-                        "S",
-                        "S",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

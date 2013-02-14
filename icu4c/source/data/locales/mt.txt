@@ -31,10 +31,6 @@ mt{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "QN",
-                "WN",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -49,55 +45,6 @@ mt{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Ħad",
-                        "Tne",
-                        "Tli",
-                        "Erb",
-                        "Ħam",
-                        "Ġim",
-                        "Sib",
-                    }
-                    wide{
-                        "Il-Ħadd",
-                        "It-Tnejn",
-                        "It-Tlieta",
-                        "L-Erbgħa",
-                        "Il-Ħamis",
-                        "Il-Ġimgħa",
-                        "Is-Sibt",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "Ħ",
-                        "T",
-                        "T",
-                        "E",
-                        "Ħ",
-                        "Ġ",
-                        "S",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    wide{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                }
             }
         }
         gregorian{

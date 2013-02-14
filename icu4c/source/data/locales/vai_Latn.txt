@@ -75,19 +75,6 @@ vai_Latn{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
-            dayNames{
-                format{
-                    wide{
-                        "lahadi",
-                        "tɛɛnɛɛ",
-                        "talata",
-                        "alaba",
-                        "aimisa",
-                        "aijima",
-                        "siɓiti",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

@@ -34,10 +34,6 @@ lu{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Dinda",
-                "Dilolo",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -76,55 +72,6 @@ lu{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Lum",
-                        "Nko",
-                        "Ndy",
-                        "Ndg",
-                        "Njw",
-                        "Ngv",
-                        "Lub",
-                    }
-                    wide{
-                        "Lumingu",
-                        "Nkodya",
-                        "Ndàayà",
-                        "Ndangù",
-                        "Njòwa",
-                        "Ngòvya",
-                        "Lubingu",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "L",
-                        "N",
-                        "N",
-                        "N",
-                        "N",
-                        "N",
-                        "L",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "M1",
-                        "M2",
-                        "M3",
-                        "M4",
-                    }
-                    wide{
-                        "Mueji 1",
-                        "Mueji 2",
-                        "Mueji 3",
-                        "Mueji 4",
-                    }
-                }
             }
         }
         gregorian{

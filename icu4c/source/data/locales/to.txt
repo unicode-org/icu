@@ -31,10 +31,6 @@ to{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -75,66 +71,6 @@ to{
                 yMMMM{"MMMM y"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Sāp",
-                        "Mōn",
-                        "Tūs",
-                        "Pul",
-                        "Tuʻa",
-                        "Fal",
-                        "Tok",
-                    }
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "P",
-                        "T",
-                        "F",
-                        "T",
-                    }
-                    wide{
-                        "Sāpate",
-                        "Mōnite",
-                        "Tūsite",
-                        "Pulelulu",
-                        "Tuʻapulelulu",
-                        "Falaite",
-                        "Tokonaki",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Sāp",
-                        "Mōn",
-                        "Tūs",
-                        "Pul",
-                        "Tuʻa",
-                        "Fal",
-                        "Tok",
-                    }
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "P",
-                        "T",
-                        "F",
-                        "T",
-                    }
-                    wide{
-                        "Sāpate",
-                        "Mōnite",
-                        "Tūsite",
-                        "Pulelulu",
-                        "Tuʻapulelulu",
-                        "Falaite",
-                        "Tokonaki",
-                    }
-                }
             }
             intervalFormats{
                 M{
@@ -215,36 +151,6 @@ to{
                     M{"d/M/y - d/M/y"}
                     d{"d/M/y - d/M/y"}
                     y{"d/M/y - d/M/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    wide{
-                        "kuata ʻuluaki",
-                        "kuata ua",
-                        "kuata tolu",
-                        "kuata fā",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    wide{
-                        "kuata 1",
-                        "kuata 2",
-                        "kuata 3",
-                        "kuata 4",
-                    }
                 }
             }
         }

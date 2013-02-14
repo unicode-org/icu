@@ -45,10 +45,6 @@ my{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "နံနက်",
-                "ညနေ",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -87,39 +83,6 @@ my{
                 yMMMM{"y MMMM"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "နွေ",
-                        "လာ",
-                        "ဂါ",
-                        "ဟူး",
-                        "တေး",
-                        "ကြာ",
-                        "နေ",
-                    }
-                    wide{
-                        "တနင်္ဂနွေ",
-                        "တနင်္လာ",
-                        "အင်္ဂါ",
-                        "ဗုဒ္ဓဟူး",
-                        "ကြာသပတေး",
-                        "သောကြာ",
-                        "စနေ",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "တ",
-                        "တ",
-                        "အ",
-                        "ဗ",
-                        "က",
-                        "သ",
-                        "စ",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -209,30 +172,6 @@ my{
                     M{"y/M/d – y/M/d"}
                     d{"y/M/d – y/M/d"}
                     y{"y/M/d – y/M/d"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "ပ-စိတ်",
-                        "ဒု-စိတ်",
-                        "တ-စိတ်",
-                        "စ-စိတ်",
-                    }
-                    wide{
-                        "ပထမ သုံးလပတ်",
-                        "ဒုတိယ သုံးလပတ်",
-                        "တတိယ သုံးလပတ်",
-                        "စတုတ္ထ သုံးလပတ်",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "ပ",
-                        "ဒု",
-                        "တ",
-                        "စ",
-                    }
                 }
             }
         }

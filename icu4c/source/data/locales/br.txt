@@ -26,68 +26,6 @@ br{
     }
     Version{"2.0.81.46"}
     calendar{
-        generic{
-            dayNames{
-                format{
-                    abbreviated{
-                        "sul",
-                        "lun",
-                        "meu.",
-                        "mer.",
-                        "yaou",
-                        "gwe.",
-                        "sad.",
-                    }
-                    narrow{
-                        "su",
-                        "lu",
-                        "mz",
-                        "mc",
-                        "ya",
-                        "gw",
-                        "sa",
-                    }
-                    wide{
-                        "Sul",
-                        "Lun",
-                        "Meurzh",
-                        "Mercʼher",
-                        "Yaou",
-                        "Gwener",
-                        "Sadorn",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "sul",
-                        "lun",
-                        "meu.",
-                        "mer.",
-                        "yaou",
-                        "gwe.",
-                        "sad.",
-                    }
-                    narrow{
-                        "su",
-                        "lu",
-                        "mz",
-                        "mc",
-                        "ya",
-                        "gw",
-                        "sa",
-                    }
-                    wide{
-                        "Sul",
-                        "Lun",
-                        "Meurzh",
-                        "Mercʼher",
-                        "Yaou",
-                        "Gwener",
-                        "Sadorn",
-                    }
-                }
-            }
-        }
         gregorian{
             dayNames{
                 format{

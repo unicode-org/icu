@@ -345,10 +345,6 @@ hu{
             }
         }
         generic{
-            AmPmMarkers{
-                "de.",
-                "du.",
-            }
             DateTimePatterns{
                 "H:mm:ss zzzz",
                 "H:mm:ss z",
@@ -393,75 +389,6 @@ hu{
                 yMd{"y.MM.dd."}
                 yQQQ{"y. QQQ"}
                 yQQQQ{"y. QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "V",
-                        "H",
-                        "K",
-                        "Sze",
-                        "Cs",
-                        "P",
-                        "Szo",
-                    }
-                    narrow{
-                        "V",
-                        "H",
-                        "K",
-                        "Sz",
-                        "Cs",
-                        "P",
-                        "Sz",
-                    }
-                    wide{
-                        "vasárnap",
-                        "hétfő",
-                        "kedd",
-                        "szerda",
-                        "csütörtök",
-                        "péntek",
-                        "szombat",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "V",
-                        "H",
-                        "K",
-                        "Sze",
-                        "Cs",
-                        "P",
-                        "Szo",
-                    }
-                    narrow{
-                        "V",
-                        "H",
-                        "K",
-                        "Sz",
-                        "Cs",
-                        "P",
-                        "Sz",
-                    }
-                    short{
-                        "V",
-                        "H",
-                        "K",
-                        "Sze",
-                        "Cs",
-                        "P",
-                        "Szo",
-                    }
-                    wide{
-                        "vasárnap",
-                        "hétfő",
-                        "kedd",
-                        "szerda",
-                        "csütörtök",
-                        "péntek",
-                        "szombat",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -556,48 +483,6 @@ hu{
                     M{"y.MM.dd. - MM.dd."}
                     d{"y.MM.dd-dd."}
                     y{"y.MM.dd. - y.MM.dd."}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "N1",
-                        "N2",
-                        "N3",
-                        "N4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "I. negyedév",
-                        "II. negyedév",
-                        "III. negyedév",
-                        "IV. negyedév",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "N1",
-                        "N2",
-                        "N3",
-                        "N4",
-                    }
-                    narrow{
-                        "1.",
-                        "2.",
-                        "3.",
-                        "4.",
-                    }
-                    wide{
-                        "1. negyedév",
-                        "2. negyedév",
-                        "3. negyedév",
-                        "4. negyedév",
-                    }
                 }
             }
         }
