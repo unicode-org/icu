@@ -3972,14 +3972,14 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         };
         final MonthPatternItem[] items = {
-            new MonthPatternItem( "root@calendar=chinese",    DateFormat.LONG,  "ren-chen month4 2",     "ren-chen month4bis 2",     "ren-chen month5 2" ),
+            new MonthPatternItem( "root@calendar=chinese",    DateFormat.LONG,  "ren-chen Month4 2",     "ren-chen Month4bis 2",     "ren-chen Month5 2" ),
             new MonthPatternItem( "root@calendar=chinese",    DateFormat.SHORT, "29-04-02",              "29-04bis-02",              "29-05-02" ),
             new MonthPatternItem( "root@calendar=chinese",    -1,               "29-4-2",                "29-4bis-2",                "29-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -2,               "78x29-4-2",             "78x29-4bis-2",             "78x29-5-2" ),
             new MonthPatternItem( "root@calendar=chinese",    -3,               "ren-chen-4-2",          "ren-chen-4bis-2",          "ren-chen-5-2" ),
-            new MonthPatternItem( "root@calendar=chinese",    -4,               "ren-chen month4 2",     "ren-chen month4bis 2",     "ren-chen month5 2" ),
+            new MonthPatternItem( "root@calendar=chinese",    -4,               "ren-chen Month4 2",     "ren-chen Month4bis 2",     "ren-chen Month5 2" ),
             new MonthPatternItem( "en@calendar=gregorian",    -3,               "2012-4-22",             "2012-5-22",                "2012-6-20" ),
-            new MonthPatternItem( "en@calendar=chinese",      DateFormat.LONG,  "month4 2, ren-chen",    "month4bis 2, ren-chen",    "month5 2, ren-chen" ),
+            new MonthPatternItem( "en@calendar=chinese",      DateFormat.LONG,  "Month4 2, ren-chen",    "Month4bis 2, ren-chen",    "Month5 2, ren-chen" ),
             new MonthPatternItem( "en@calendar=chinese",      DateFormat.SHORT, "4/2/29",                "4bis/2/29",                "5/2/29" ),
             new MonthPatternItem( "zh@calendar=chinese",      DateFormat.LONG,  "\u58EC\u8FB0\u5E74\u56DB\u6708\u4E8C\u65E5",
                                                                                 "\u58EC\u8FB0\u5E74\u95F0\u56DB\u6708\u4E8C\u65E5",

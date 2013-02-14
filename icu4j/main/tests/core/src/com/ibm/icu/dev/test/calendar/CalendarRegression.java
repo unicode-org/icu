@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -2115,7 +2115,7 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
             {"th@calendar=gregorian",   "buddhist", "gregorian"},
             {"en@calendar=islamic",     "gregorian"},
             {"zh_TW",       "gregorian", "roc", "chinese"},
-            {"ar_IR",       "gregorian", "persian", "islamic", "islamic-civil"},
+            {"ar_IR",       "persian", "gregorian", "islamic", "islamic-civil"},
         };
 
         String[] ALL = Calendar.getKeywordValuesForLocale("calendar", ULocale.getDefault(), false);
