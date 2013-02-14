@@ -116,6 +116,14 @@ struct MatchInfo;
  * may provide time zone names only through {@link #getTimeZoneDisplayName}, or only through {@link #getMetaZoneDisplayName},
  * or both.
  * 
+ * <p>
+ * The default <code>TimeZoneNames</code> implementation returned by {@link #createInstance(const Locale&, UErrorCode&)}
+ * uses the locale data imported from CLDR. In CLDR, set of meta zone IDs and mappings between zone IDs and meta zone
+ * IDs are shared by all locales. Therefore, the behavior of {@link #getAvailableMetaZoneIDs(UErrorCode&)},
+ * {@link #getAvailableMetaZoneIDs(const UnicodeString&, UErrorCode&)}, {@link #getMetaZoneID(const UnicodeString&, UDate, UnicodeString&)},
+ * and {@link #getReferenceZoneID(const UnicodeString&, const char*, UnicodeString&)} won't be changed no matter
+ * what locale is used for getting an instance of <code>TimeZoneNames</code>.
+ *
  * @draft ICU 50
  */
 class U_I18N_API TimeZoneNames : public UObject {
@@ -192,6 +200,12 @@ public:
 
     /**
      * Returns the reference zone ID for the given meta zone ID for the region.
+     *
+     * Note: Each meta zone must have a reference zone associated with a special region "001" (world).
+     * Some meta zones may have region specific reference zone IDs other than the special region
+     * "001". When a meta zone does not have any region specific reference zone IDs, this method
+     * return the reference zone ID for the special region "001" (world).
+     *
      * @param mzID The meta zone ID.
      * @param region The region.
      * @param tzID Receives the reference zone ID ("golden zone" in the LDML specification) for the given time zone ID for the
