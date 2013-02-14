@@ -330,10 +330,6 @@ lt{
             }
         }
         generic{
-            AmPmMarkers{
-                "priešpiet",
-                "popiet",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -377,84 +373,6 @@ lt{
                 yMd{"y-M-d"}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "sk",
-                        "pr",
-                        "an",
-                        "tr",
-                        "kt",
-                        "pn",
-                        "št",
-                    }
-                    narrow{
-                        "S",
-                        "P",
-                        "A",
-                        "T",
-                        "K",
-                        "P",
-                        "Š",
-                    }
-                    short{
-                        "Sk",
-                        "Pr",
-                        "An",
-                        "Tr",
-                        "Kt",
-                        "Pn",
-                        "Št",
-                    }
-                    wide{
-                        "sekmadienis",
-                        "pirmadienis",
-                        "antradienis",
-                        "trečiadienis",
-                        "ketvirtadienis",
-                        "penktadienis",
-                        "šeštadienis",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "sk",
-                        "pr",
-                        "an",
-                        "tr",
-                        "kt",
-                        "pn",
-                        "št",
-                    }
-                    narrow{
-                        "S",
-                        "P",
-                        "A",
-                        "T",
-                        "K",
-                        "P",
-                        "Š",
-                    }
-                    short{
-                        "Sk",
-                        "Pr",
-                        "An",
-                        "Tr",
-                        "Kt",
-                        "Pn",
-                        "Št",
-                    }
-                    wide{
-                        "sekmadienis",
-                        "pirmadienis",
-                        "antradienis",
-                        "trečiadienis",
-                        "ketvirtadienis",
-                        "penktadienis",
-                        "šeštadienis",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -549,48 +467,6 @@ lt{
                     M{"y-MM-dd– y-MM-dd"}
                     d{"y-MM-dd–y-MM-dd"}
                     y{"y-MM-dd – y-MM-dd"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "I k.",
-                        "II k.",
-                        "III k.",
-                        "IV k.",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "I ketvirtis",
-                        "II ketvirtis",
-                        "III ketvirtis",
-                        "IV ketvirtis",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "I ketv.",
-                        "II ketv.",
-                        "III ketv.",
-                        "IV ketv.",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "I ketvirtis",
-                        "II ketvirtis",
-                        "III ketvirtis",
-                        "IV ketvirtis",
-                    }
                 }
             }
         }

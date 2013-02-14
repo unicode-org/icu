@@ -65,55 +65,6 @@ mg{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Alah",
-                        "Alats",
-                        "Tal",
-                        "Alar",
-                        "Alak",
-                        "Zom",
-                        "Asab",
-                    }
-                    wide{
-                        "Alahady",
-                        "Alatsinainy",
-                        "Talata",
-                        "Alarobia",
-                        "Alakamisy",
-                        "Zoma",
-                        "Asabotsy",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "A",
-                        "A",
-                        "T",
-                        "A",
-                        "A",
-                        "Z",
-                        "A",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    wide{
-                        "Telovolana voalohany",
-                        "Telovolana faharoa",
-                        "Telovolana fahatelo",
-                        "Telovolana fahefatra",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

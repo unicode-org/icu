@@ -176,35 +176,10 @@ cs{
     Version{"2.0.81.65"}
     calendar{
         buddhist{
-            DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "EEEE, d. MMMM y G",
-                "d. MMMM y G",
-                "d. M. y G",
-                "dd.MM.yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E, d."}
-                MEd{"E, d. M."}
-                MMMEd{"E, d. M."}
-                MMMd{"d. M."}
-                Md{"d. M."}
-                d{"d."}
-                y{"y G"}
-                yM{"LLLL y GGGGG"}
-                yMEd{"E, d. M. y GGGGG"}
-                yMMM{"LLLL y G"}
-                yMMMEd{"E, d. M. y G"}
-                yQQQ{"QQQ, y GGGGG"}
-                yQQQQ{"QQQQ, y G"}
+            eras{
+                abbreviated{
+                    "BE",
+                }
             }
         }
         chinese{
@@ -225,10 +200,6 @@ cs{
             }
         }
         generic{
-            AmPmMarkers{
-                "dop.",
-                "odp.",
-            }
             DateTimePatterns{
                 "H:mm:ss zzzz",
                 "H:mm:ss z",
@@ -246,6 +217,10 @@ cs{
             }
             availableFormats{
                 Ed{"E, d."}
+                Gy{"y G"}
+                GyMMM{"LLLL y G"}
+                GyMMMEd{"E, d. M. y G"}
+                GyMMMd{"d. M. y G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -260,94 +235,17 @@ cs{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"M/y"}
-                yMEd{"E, d. M. y"}
-                yMMM{"LLLL y"}
-                yMMMEd{"E, d. M. y"}
-                yMMMM{"LLLL y"}
-                yMMMd{"d. M. y"}
-                yMd{"d. M. y"}
-                yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ne",
-                        "po",
-                        "út",
-                        "st",
-                        "čt",
-                        "pá",
-                        "so",
-                    }
-                    narrow{
-                        "N",
-                        "P",
-                        "Ú",
-                        "S",
-                        "Č",
-                        "P",
-                        "S",
-                    }
-                    short{
-                        "ne",
-                        "po",
-                        "út",
-                        "st",
-                        "čt",
-                        "pá",
-                        "so",
-                    }
-                    wide{
-                        "neděle",
-                        "pondělí",
-                        "úterý",
-                        "středa",
-                        "čtvrtek",
-                        "pátek",
-                        "sobota",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "ne",
-                        "po",
-                        "út",
-                        "st",
-                        "čt",
-                        "pá",
-                        "so",
-                    }
-                    narrow{
-                        "N",
-                        "P",
-                        "Ú",
-                        "S",
-                        "Č",
-                        "P",
-                        "S",
-                    }
-                    short{
-                        "Ne",
-                        "Po",
-                        "Út",
-                        "St",
-                        "Čt",
-                        "Pá",
-                        "So",
-                    }
-                    wide{
-                        "neděle",
-                        "pondělí",
-                        "úterý",
-                        "středa",
-                        "čtvrtek",
-                        "pátek",
-                        "sobota",
-                    }
-                }
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y GGGGG"}
+                yyyyMEd{"E, d. M. y GGGGG"}
+                yyyyMMM{"LLLL y G"}
+                yyyyMMMEd{"E, d. M. y G"}
+                yyyyMMMM{"LLLL y G"}
+                yyyyMMMd{"d. M. y G"}
+                yyyyMd{"d. M. y GGGGG"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
                 H{
@@ -409,81 +307,39 @@ cs{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"y–y G"}
                 }
                 yM{
-                    M{"M/y – M/y"}
-                    y{"M/y – M/y"}
+                    M{"M/y – M/y G"}
+                    y{"M/y – M/y G"}
                 }
                 yMEd{
-                    M{"E, dd.MM.y – E, dd.MM.y"}
-                    d{"E, dd.MM.y – E, dd.MM.y"}
-                    y{"E, dd.MM.y – E, dd.MM.y"}
+                    M{"E, dd.MM.y – E, dd.MM.y G"}
+                    d{"E, dd.MM.y – E, dd.MM.y G"}
+                    y{"E, dd.MM.y – E, dd.MM.y G"}
                 }
                 yMMM{
-                    M{"MMM–MMM y"}
-                    y{"MMM y – MMM y"}
+                    M{"MMM–MMM y G"}
+                    y{"MMM y – MMM y G"}
                 }
                 yMMMEd{
-                    M{"E, d. M. – E, d. M. y"}
-                    d{"E, d. M. – E, d. M. y"}
-                    y{"E, d. M. y – E, d. M. y"}
+                    M{"E, d. M. – E, d. M. y G"}
+                    d{"E, d. M. – E, d. M. y G"}
+                    y{"E, d. M. y – E, d. M. y G"}
                 }
                 yMMMM{
-                    M{"LLLL – LLLL y"}
-                    y{"LLLL y – LLLL y"}
+                    M{"LLLL – LLLL y G"}
+                    y{"LLLL y – LLLL y G"}
                 }
                 yMMMd{
-                    M{"d. M. – d. M. y"}
-                    d{"d.–d. M. y"}
-                    y{"d. M. y – d. M. y"}
+                    M{"d. M. – d. M. y G"}
+                    d{"d.–d. M. y G"}
+                    y{"d. M. y – d. M. y G"}
                 }
                 yMd{
-                    M{"dd.MM.y – dd.MM.y"}
-                    d{"dd.MM.y – dd.MM.y"}
-                    y{"dd.MM.y – dd.MM.y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1. čtvrtletí",
-                        "2. čtvrtletí",
-                        "3. čtvrtletí",
-                        "4. čtvrtletí",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1. čtvrtletí",
-                        "2. čtvrtletí",
-                        "3. čtvrtletí",
-                        "4. čtvrtletí",
-                    }
+                    M{"dd.MM.y – dd.MM.y G"}
+                    d{"dd.MM.y – dd.MM.y G"}
+                    y{"dd.MM.y – dd.MM.y G"}
                 }
             }
         }
@@ -509,6 +365,10 @@ cs{
             }
             availableFormats{
                 Ed{"E, d."}
+                Gy{"y G"}
+                GyMMM{"LLLL y G"}
+                GyMMMEd{"E, d. M. y G"}
+                GyMMMd{"d. M. y G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -854,33 +714,18 @@ cs{
                 }
             }
         }
-        islamic{
-            DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "EEEE, d. MMMM y G",
-                "d. MMMM y G",
-                "d. MMM. y G",
-                "dd.MM.yy. G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+        hebrew{
+            eras{
+                abbreviated{
+                    "AM",
+                }
             }
-            availableFormats{
-                Ed{"E, d."}
-                MEd{"E, d. M."}
-                MMMEd{"E, d. MMM."}
-                MMMd{"d. MMM."}
-                Md{"d. M."}
-                d{"d."}
-                yM{"MM/y"}
-                yMEd{"E, d. M. y"}
-                yMMM{"LLL y"}
-                yMMMEd{"E, d. MMM y"}
+        }
+        islamic{
+            eras{
+                abbreviated{
+                    "AH",
+                }
             }
         }
         japanese{
@@ -889,32 +734,6 @@ cs{
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE d. MMMM y G",
-                "d. MMMM y G",
-                "d. M. y G",
-                "dd.MM.yy GGGGG",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E, d."}
-                MEd{"E, d. M."}
-                MMMEd{"E, d. M."}
-                MMMd{"d. M."}
-                Md{"d. M."}
-                d{"d."}
-                y{"y G"}
-            }
-        }
-        roc{
-            DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
                 "EEEE, d. MMMM y G",
                 "d. MMMM y G",
                 "d. M. y G",
@@ -925,15 +744,8 @@ cs{
                 "{1} {0}",
                 "{1} {0}",
             }
-            availableFormats{
-                Ed{"E, d."}
-                MEd{"E, d. M."}
-                MMMEd{"E, d. M."}
-                MMMd{"d. M."}
-                Md{"d. M."}
-                d{"d."}
-                y{"y G"}
-            }
+        }
+        roc{
             eras{
                 abbreviated{
                     "Před R. O. C.",

@@ -145,10 +145,6 @@ fil{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -193,66 +189,6 @@ fil{
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"y QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Lin",
-                        "Lun",
-                        "Mar",
-                        "Mye",
-                        "Huw",
-                        "Bye",
-                        "Sab",
-                    }
-                    short{
-                        "Li",
-                        "Lu",
-                        "Ma",
-                        "Mi",
-                        "Hu",
-                        "Bi",
-                        "Sab",
-                    }
-                    wide{
-                        "Linggo",
-                        "Lunes",
-                        "Martes",
-                        "Miyerkules",
-                        "Huwebes",
-                        "Biyernes",
-                        "Sabado",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Lin",
-                        "Lun",
-                        "Mar",
-                        "Miy",
-                        "Huw",
-                        "Biy",
-                        "Sab",
-                    }
-                    narrow{
-                        "L",
-                        "L",
-                        "M",
-                        "M",
-                        "H",
-                        "B",
-                        "S",
-                    }
-                    short{
-                        "Li",
-                        "Lu",
-                        "Ma",
-                        "Mi",
-                        "Hu",
-                        "Bi",
-                        "Sab",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -347,48 +283,6 @@ fil{
                     M{"M/d/y – M/d/y"}
                     d{"M/d/y – M/d/y"}
                     y{"M/d/y – M/d/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "ika-1 sangkapat",
-                        "ika-2 sangkapat",
-                        "ika-3 quarter",
-                        "ika-4 na quarter",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "ika-1 sangkapat",
-                        "ika-2 quarter",
-                        "ika-3 sangkapat",
-                        "ika-4 na quarter",
-                    }
                 }
             }
         }

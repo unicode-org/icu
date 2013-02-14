@@ -146,10 +146,6 @@ af{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "vm.",
-                "nm.",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -194,57 +190,6 @@ af{
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "So",
-                        "Ma",
-                        "Di",
-                        "Wo",
-                        "Do",
-                        "Vr",
-                        "Sa",
-                    }
-                    short{
-                        "So.",
-                        "Ma.",
-                        "Di.",
-                        "Wo.",
-                        "Do.",
-                        "Vr.",
-                        "Sa.",
-                    }
-                    wide{
-                        "Sondag",
-                        "Maandag",
-                        "Dinsdag",
-                        "Woensdag",
-                        "Donderdag",
-                        "Vrydag",
-                        "Saterdag",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "D",
-                        "W",
-                        "D",
-                        "V",
-                        "S",
-                    }
-                    short{
-                        "So.",
-                        "Ma.",
-                        "Di.",
-                        "Wo.",
-                        "Do.",
-                        "Vr.",
-                        "Sa.",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -339,36 +284,6 @@ af{
                     M{"M/d/y – M/d/y"}
                     d{"M/d/y – M/d/y"}
                     y{"M/d/y – M/d/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1ste kwartaal",
-                        "2de kwartaal",
-                        "3de kwartaal",
-                        "4de kwartaal",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                 }
             }
         }

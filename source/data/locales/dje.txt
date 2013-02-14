@@ -32,10 +32,6 @@ dje{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Subbaahi",
-                "Zaarikay b",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -74,55 +70,6 @@ dje{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Alh",
-                        "Ati",
-                        "Ata",
-                        "Ala",
-                        "Alm",
-                        "Alz",
-                        "Asi",
-                    }
-                    wide{
-                        "Alhadi",
-                        "Atinni",
-                        "Atalaata",
-                        "Alarba",
-                        "Alhamisi",
-                        "Alzuma",
-                        "Asibti",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "H",
-                        "T",
-                        "T",
-                        "L",
-                        "M",
-                        "Z",
-                        "S",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "A1",
-                        "A2",
-                        "A3",
-                        "A4",
-                    }
-                    wide{
-                        "Arrubu 1",
-                        "Arrubu 2",
-                        "Arrubu 3",
-                        "Arrubu 4",
-                    }
-                }
             }
         }
         gregorian{

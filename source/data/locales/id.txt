@@ -578,10 +578,6 @@ id{
             }
         }
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH.mm.ss zzzz",
                 "HH.mm.ss z",
@@ -624,84 +620,6 @@ id{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Min",
-                        "Sen",
-                        "Sel",
-                        "Rab",
-                        "Kam",
-                        "Jum",
-                        "Sab",
-                    }
-                    narrow{
-                        "M",
-                        "S",
-                        "S",
-                        "R",
-                        "K",
-                        "J",
-                        "S",
-                    }
-                    short{
-                        "Min",
-                        "Sen",
-                        "Sel",
-                        "Rab",
-                        "Kam",
-                        "Jum",
-                        "Sab",
-                    }
-                    wide{
-                        "Minggu",
-                        "Senin",
-                        "Selasa",
-                        "Rabu",
-                        "Kamis",
-                        "Jumat",
-                        "Sabtu",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Min",
-                        "Sen",
-                        "Sel",
-                        "Rab",
-                        "Kam",
-                        "Jum",
-                        "Sab",
-                    }
-                    narrow{
-                        "M",
-                        "S",
-                        "S",
-                        "R",
-                        "K",
-                        "J",
-                        "S",
-                    }
-                    short{
-                        "Min",
-                        "Sen",
-                        "Sel",
-                        "Rab",
-                        "Kam",
-                        "Jum",
-                        "Sab",
-                    }
-                    wide{
-                        "Minggu",
-                        "Senin",
-                        "Selasa",
-                        "Rabu",
-                        "Kamis",
-                        "Jumat",
-                        "Sabtu",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -796,48 +714,6 @@ id{
                     M{"d/M/y – d/M/y"}
                     d{"d/M/y – d/M/y"}
                     y{"d/M/y – d/M/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "Kuartal ke-1",
-                        "Kuartal ke-2",
-                        "Kuartal ke-3",
-                        "Kuartal ke-4",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "Kuartal ke-1",
-                        "Kuartal ke-2",
-                        "Kuartal ke-3",
-                        "Kuartal ke-4",
-                    }
                 }
             }
         }

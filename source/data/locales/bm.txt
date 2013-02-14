@@ -65,55 +65,6 @@ bm{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "kar",
-                        "ntɛ",
-                        "tar",
-                        "ara",
-                        "ala",
-                        "jum",
-                        "sib",
-                    }
-                    wide{
-                        "kari",
-                        "ntɛnɛ",
-                        "tarata",
-                        "araba",
-                        "alamisa",
-                        "juma",
-                        "sibiri",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "K",
-                        "N",
-                        "T",
-                        "A",
-                        "A",
-                        "J",
-                        "S",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "KS1",
-                        "KS2",
-                        "KS3",
-                        "KS4",
-                    }
-                    wide{
-                        "kalo saba fɔlɔ",
-                        "kalo saba filanan",
-                        "kalo saba sabanan",
-                        "kalo saba naaninan",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

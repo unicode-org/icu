@@ -25,10 +25,6 @@ kde{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Muhi",
-                "Chilo",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -66,55 +62,6 @@ kde{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Ll2",
-                        "Ll3",
-                        "Ll4",
-                        "Ll5",
-                        "Ll6",
-                        "Ll7",
-                        "Ll1",
-                    }
-                    wide{
-                        "Liduva lyapili",
-                        "Liduva lyatatu",
-                        "Liduva lyanchechi",
-                        "Liduva lyannyano",
-                        "Liduva lyannyano na linji",
-                        "Liduva lyannyano na mavili",
-                        "Liduva litandi",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                        "7",
-                        "1",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "L1",
-                        "L2",
-                        "L3",
-                        "L4",
-                    }
-                    wide{
-                        "Lobo 1",
-                        "Lobo 2",
-                        "Lobo 3",
-                        "Lobo 4",
-                    }
-                }
             }
         }
         gregorian{

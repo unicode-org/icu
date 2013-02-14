@@ -26,10 +26,6 @@ bs{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -68,44 +64,6 @@ bs{
                 yMd{"dd.MM.y."}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ned",
-                        "pon",
-                        "uto",
-                        "sri",
-                        "čet",
-                        "pet",
-                        "sub",
-                    }
-                    wide{
-                        "nedjelja",
-                        "ponedjeljak",
-                        "utorak",
-                        "srijeda",
-                        "četvrtak",
-                        "petak",
-                        "subota",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    wide{
-                        "Prvi kvartal",
-                        "Drugi kvartal",
-                        "Treći kvartal",
-                        "Četvrti kvartal",
-                    }
-                }
             }
         }
         gregorian{

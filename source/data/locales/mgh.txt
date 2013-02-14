@@ -27,10 +27,6 @@ mgh{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "wichishu",
-                "mchochil'l",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -69,39 +65,6 @@ mgh{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Sab",
-                        "Jtt",
-                        "Jnn",
-                        "Jtn",
-                        "Ara",
-                        "Iju",
-                        "Jmo",
-                    }
-                    wide{
-                        "Sabato",
-                        "Jumatatu",
-                        "Jumanne",
-                        "Jumatano",
-                        "Arahamisi",
-                        "Ijumaa",
-                        "Jumamosi",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "J",
-                        "J",
-                        "J",
-                        "A",
-                        "I",
-                        "J",
-                    }
-                }
             }
         }
         gregorian{

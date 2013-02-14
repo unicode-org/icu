@@ -2303,7 +2303,8 @@ ee{
         }
     }
     CurrencyUnitPatterns{
+        one{"{1} {0}"}
         other{"{1} {0}"}
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.87"}
 }

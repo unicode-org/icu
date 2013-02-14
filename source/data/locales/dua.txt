@@ -35,10 +35,6 @@ dua{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "idiɓa",
-                "ebyámu",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -77,55 +73,6 @@ dua{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ét",
-                        "mɔ́s",
-                        "kwa",
-                        "muk",
-                        "ŋgi",
-                        "ɗón",
-                        "esa",
-                    }
-                    wide{
-                        "éti",
-                        "mɔ́sú",
-                        "kwasú",
-                        "mukɔ́sú",
-                        "ŋgisú",
-                        "ɗónɛsú",
-                        "esaɓasú",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "e",
-                        "m",
-                        "k",
-                        "m",
-                        "ŋ",
-                        "ɗ",
-                        "e",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "ndu1",
-                        "ndu2",
-                        "ndu3",
-                        "ndu4",
-                    }
-                    wide{
-                        "ndúmbū nyá ɓosó",
-                        "ndúmbū ní lóndɛ́ íɓaá",
-                        "ndúmbū ní lóndɛ́ ílálo",
-                        "ndúmbū ní lóndɛ́ ínɛ́y",
-                    }
-                }
             }
         }
         gregorian{

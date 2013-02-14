@@ -143,54 +143,9 @@ it{
             }
         }
     }
-    Version{"2.0.81.65"}
+    Version{"2.0.81.70"}
     calendar{
         buddhist{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "dd MMMM y G",
-                "dd/MMM/y G",
-                "dd/MM/y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E d"}
-                Gy{"y G"}
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                M{"L"}
-                MEd{"E d/M"}
-                MMM{"LLL"}
-                MMMEd{"E d MMM"}
-                MMMMdd{"dd MMMM"}
-                MMMd{"d MMM"}
-                MMdd{"dd/MM"}
-                Md{"d/M"}
-                d{"d"}
-                h{"hh a"}
-                hm{"hh:mm a"}
-                hms{"hh:mm:ss a"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"M/y G"}
-                yMEd{"E, d/M/y G"}
-                yMM{"MM/y G"}
-                yMMM{"MMM y G"}
-                yMMMEd{"E d MMM y G"}
-                yMMMM{"MMMM y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"d/M/y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y G"}
-            }
             eras{
                 abbreviated{
                     "EB",
@@ -198,10 +153,6 @@ it{
             }
         }
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -248,66 +199,6 @@ it{
                 yyyyMd{"d/M/y GGGGG"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "dom",
-                        "lun",
-                        "mar",
-                        "mer",
-                        "gio",
-                        "ven",
-                        "sab",
-                    }
-                    short{
-                        "dom",
-                        "lun",
-                        "mar",
-                        "mer",
-                        "gio",
-                        "ven",
-                        "sab",
-                    }
-                    wide{
-                        "domenica",
-                        "lunedì",
-                        "martedì",
-                        "mercoledì",
-                        "giovedì",
-                        "venerdì",
-                        "sabato",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "G",
-                        "V",
-                        "S",
-                    }
-                    short{
-                        "dom",
-                        "lun",
-                        "mar",
-                        "mer",
-                        "gio",
-                        "ven",
-                        "sab",
-                    }
-                    wide{
-                        "Domenica",
-                        "Lunedì",
-                        "Martedì",
-                        "Mercoledì",
-                        "Giovedì",
-                        "Venerdì",
-                        "Sabato",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -402,48 +293,6 @@ it{
                     M{"dd/MM/y - dd/MM/y G"}
                     d{"dd/MM/y - dd/MM/y G"}
                     y{"dd/MM/y - dd/MM/y G"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1o trimestre",
-                        "2o trimestre",
-                        "3o trimestre",
-                        "4o trimestre",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "Primo trimestre",
-                        "Secondo trimestre",
-                        "Terzo trimestre",
-                        "Quarto trimestre",
-                    }
                 }
             }
         }
@@ -796,51 +645,18 @@ it{
                 }
             }
         }
-        islamic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "dd MMMM y G",
-                "dd/MMM/y G",
-                "dd/MM/y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+        hebrew{
+            eras{
+                abbreviated{
+                    "AM",
+                }
             }
-            availableFormats{
-                Ed{"E d"}
-                Gy{"y G"}
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                M{"L"}
-                MEd{"E d/M"}
-                MMM{"LLL"}
-                MMMEd{"E d MMM"}
-                MMMMdd{"dd MMMM"}
-                MMMd{"d MMM"}
-                MMdd{"dd/MM"}
-                Md{"d/M"}
-                d{"d"}
-                h{"hh a"}
-                hm{"hh:mm a"}
-                hms{"hh:mm:ss a"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"M/y G"}
-                yMEd{"E, d/M/y G"}
-                yMM{"MM/y G"}
-                yMMM{"MMM y G"}
-                yMMMEd{"E d MMM y G"}
-                yMMMM{"MMMM y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"d/M/y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y G"}
+        }
+        islamic{
+            eras{
+                abbreviated{
+                    "AH",
+                }
             }
         }
         japanese{
@@ -852,89 +668,20 @@ it{
                 "EEEE d MMMM y G",
                 "dd MMMM y G",
                 "dd/MMM/y G",
-                "dd/MM/y G",
+                "dd/MM/yy GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E d"}
-                Gy{"y G"}
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                M{"L"}
-                MEd{"E d/M"}
-                MMM{"LLL"}
-                MMMEd{"E d MMM"}
-                MMMMdd{"dd MMMM"}
-                MMMd{"d MMM"}
-                MMdd{"dd/MM"}
-                Md{"d/M"}
-                d{"d"}
-                h{"hh a"}
-                hm{"hh:mm a"}
-                hms{"hh:mm:ss a"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"M/y G"}
-                yMEd{"E, d/M/y G"}
-                yMM{"MM/y G"}
-                yMMM{"MMM y G"}
-                yMMMEd{"E d MMM y G"}
-                yMMMM{"MMMM y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"d/M/y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y G"}
             }
         }
         roc{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE d MMMM y G",
-                "dd MMMM y G",
-                "dd/MMM/y G",
-                "dd/MM/y G",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E d"}
-                Gy{"y G"}
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-                M{"L"}
-                MEd{"E d/M"}
-                MMM{"LLL"}
-                MMMEd{"E d MMM"}
-                MMMMdd{"dd MMMM"}
-                MMMd{"d MMM"}
-                MMdd{"dd/MM"}
-                Md{"d/M"}
-                d{"d"}
-                h{"hh a"}
-                hm{"hh:mm a"}
-                hms{"hh:mm:ss a"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"M/y G"}
-                yMEd{"E, d/M/y G"}
-                yMM{"MM/y G"}
-                yMMM{"MMM y G"}
-                yMMMEd{"E d MMM y G"}
-                yMMMM{"MMMM y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"d/M/y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y G"}
+            eras{
+                abbreviated{
+                    "Prima della R.O.C.",
+                    "Minguo",
+                }
             }
         }
     }

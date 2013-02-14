@@ -34,10 +34,10 @@ fr_CA{
                 MMd{"MM-d"}
                 MMdd{"MM-dd"}
                 Md{"M-d"}
-                yM{"y-MM"}
-                yMEd{"E y-MM-dd"}
-                yMM{"y-MM"}
-                yMd{"y-MM-dd"}
+                yyyyM{"G y-MM"}
+                yyyyMEd{"E G y-MM-dd"}
+                yyyyMM{"G y-MM"}
+                yyyyMd{"G y-MM-dd"}
             }
             intervalFormats{
                 H{
@@ -80,36 +80,36 @@ fr_CA{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"G y–y"}
                 }
                 yM{
-                    M{"y-MM – y-MM"}
-                    y{"y-MM – y-MM"}
+                    M{"G y-MM – y-MM"}
+                    y{"G y-MM – y-MM"}
                 }
                 yMEd{
-                    M{"'du' E y-MM-dd 'au' E y-MM-dd"}
-                    d{"'du' E y-MM-dd 'au' E y-MM-dd"}
-                    y{"'du' E y-MM-dd 'au' E y-MM-dd"}
+                    M{"'du' E y-MM-dd 'au' E y-MM-dd G"}
+                    d{"'du' E y-MM-dd 'au' E y-MM-dd G"}
+                    y{"'du' E y-MM-dd 'au' E y-MM-dd G"}
                 }
                 yMMM{
-                    y{"'de' MMM y 'à' MMM y"}
+                    y{"'de' MMM y 'à' MMM y G"}
                 }
                 yMMMEd{
-                    M{"'du' E d MMM 'au' E d MMM y"}
-                    d{"'du' E d 'au' E d MMM y"}
-                    y{"'du' E d MMM y 'au' E d MMM y"}
+                    M{"'du' E d MMM 'au' E d MMM y G"}
+                    d{"'du' E d 'au' E d MMM y G"}
+                    y{"'du' E d MMM y 'au' E d MMM y G"}
                 }
                 yMMMM{
-                    M{"MMMM – MMMM y"}
+                    M{"MMMM – MMMM y G"}
                 }
                 yMMMd{
-                    M{"'du' d MMM 'au' d MMM y"}
-                    y{"'du' d MMM y 'au' d MMM y"}
+                    M{"'du' d MMM 'au' d MMM y G"}
+                    y{"'du' d MMM y 'au' d MMM y G"}
                 }
                 yMd{
-                    M{"y-MM-dd – y-MM-dd"}
-                    d{"y-MM-dd – y-MM-dd"}
-                    y{"y-MM-dd – y-MM-dd"}
+                    M{"G y-MM-dd – y-MM-dd"}
+                    d{"G y-MM-dd – y-MM-dd"}
+                    y{"G y-MM-dd – y-MM-dd"}
                 }
             }
         }

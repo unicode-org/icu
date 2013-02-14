@@ -152,10 +152,6 @@ zu{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Ekuseni",
-                "Ntambama",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -196,57 +192,6 @@ zu{
                 yMd{"M/d/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Son",
-                        "Mso",
-                        "Bil",
-                        "Tha",
-                        "Sin",
-                        "Hla",
-                        "Mgq",
-                    }
-                    short{
-                        "Isonto",
-                        "Umsombuluko",
-                        "Ulwesibili",
-                        "Ulwesithathu",
-                        "Ulwesine",
-                        "Ulwesihlanu",
-                        "Umgqibelo",
-                    }
-                    wide{
-                        "Sonto",
-                        "Msombuluko",
-                        "Lwesibili",
-                        "Lwesithathu",
-                        "uLwesine",
-                        "Lwesihlanu",
-                        "Mgqibelo",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "B",
-                        "T",
-                        "S",
-                        "H",
-                        "M",
-                    }
-                    short{
-                        "Isonto",
-                        "Umsombuluko",
-                        "Ulwesibili",
-                        "Ulwesithathu",
-                        "Ulwesine",
-                        "Ulwesihlanu",
-                        "Umgqibelo",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -341,48 +286,6 @@ zu{
                     M{"M/d/y – M/d/y"}
                     d{"M/d/y – M/d/y"}
                     y{"M/d/y – M/d/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "ikota yoku-1",
-                        "ikota yesi-2",
-                        "ikota yesi-3",
-                        "ikota yesi-4",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "ikota yoku-1",
-                        "ikota yesi-2",
-                        "ikota yesi-3",
-                        "ikota yesi-4",
-                    }
                 }
             }
         }

@@ -145,10 +145,6 @@ gl{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "a.m.",
-                "p.m.",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -195,57 +191,6 @@ gl{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Dom",
-                        "Lun",
-                        "Mar",
-                        "Mér",
-                        "Xov",
-                        "Ven",
-                        "Sáb",
-                    }
-                    short{
-                        "Dom",
-                        "Luns",
-                        "Mt",
-                        "Mc",
-                        "Xv",
-                        "Ve",
-                        "Sáb",
-                    }
-                    wide{
-                        "Domingo",
-                        "Luns",
-                        "Martes",
-                        "Mércores",
-                        "Xoves",
-                        "Venres",
-                        "Sábado",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "X",
-                        "V",
-                        "S",
-                    }
-                    short{
-                        "Dom",
-                        "Luns",
-                        "Mt",
-                        "Mc",
-                        "Xv",
-                        "Ven",
-                        "Sáb",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -340,36 +285,6 @@ gl{
                     M{"d/M/y – d/M/y"}
                     d{"d/M/y – d/M/y"}
                     y{"d/M/y – d/M/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1o trimestre",
-                        "2o trimestre",
-                        "3o trimestre",
-                        "4o trimestre",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                 }
             }
         }

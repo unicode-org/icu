@@ -64,55 +64,6 @@ sn{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Svo",
-                        "Muv",
-                        "Chip",
-                        "Chit",
-                        "Chin",
-                        "Chis",
-                        "Mug",
-                    }
-                    wide{
-                        "Svondo",
-                        "Muvhuro",
-                        "Chipiri",
-                        "Chitatu",
-                        "China",
-                        "Chishanu",
-                        "Mugovera",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "C",
-                        "C",
-                        "C",
-                        "C",
-                        "M",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    wide{
-                        "Kota 1",
-                        "Kota 2",
-                        "Kota 3",
-                        "Kota 4",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

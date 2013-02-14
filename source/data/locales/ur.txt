@@ -116,10 +116,6 @@ ur{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "دن",
-                "رات",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -160,57 +156,6 @@ ur{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "W",
-                        "T",
-                        "F",
-                        "S",
-                    }
-                    short{
-                        "اتوار",
-                        "سوموار",
-                        "منگل",
-                        "بدھ",
-                        "جمعرات",
-                        "جمعہ",
-                        "ہفتہ",
-                    }
-                    wide{
-                        "اتوار",
-                        "پیر",
-                        "منگل",
-                        "بده",
-                        "جمعرات",
-                        "جمعہ",
-                        "ہفتہ",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "W",
-                        "T",
-                        "F",
-                        "S",
-                    }
-                    short{
-                        "اتوار",
-                        "سوموار",
-                        "منگل",
-                        "بدھ",
-                        "جمعرات",
-                        "جمعہ",
-                        "ہفتہ",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -305,30 +250,6 @@ ur{
                     M{"d/M/y – d/M/y"}
                     d{"d/M/y - d/M/y"}
                     y{"d/M/y – d/M/y"}
-                }
-            }
-            quarters{
-                format{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "پہلی سہ ماہی",
-                        "دوسری سہ ماہی",
-                        "تیسری سہ ماہی",
-                        "چوتهی سہ ماہی",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                 }
             }
         }

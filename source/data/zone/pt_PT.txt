@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 pt_PT{
-    Version{"2.0.81.63"}
+    Version{"2.0.81.80"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Jibuti"}
@@ -693,9 +693,9 @@ pt_PT{
             ls{"Hora Padrão do Uruguai"}
         }
         "meta:Uzbekistan"{
-            ld{"Hora de Verão do Usbequistão"}
-            lg{"Hora do Usbequistão"}
-            ls{"Hora Padrão do Usbequistão"}
+            ld{"Hora de Verão do Uzbequistão"}
+            lg{"Hora do Uzbequistão"}
+            ls{"Hora Padrão do Uzbequistão"}
         }
         "meta:Vanuatu"{
             ld{"Hora de Verão do Vanuatu"}

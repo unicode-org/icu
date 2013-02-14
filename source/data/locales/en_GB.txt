@@ -14,7 +14,7 @@ en_GB{
             }
         }
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.81.70"}
     calendar{
         chinese{
             DateTimePatterns{
@@ -253,10 +253,6 @@ en_GB{
             }
         }
         generic{
-            AmPmMarkers{
-                "am",
-                "pm",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",

@@ -36,10 +36,6 @@ sq{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "PD",
-                "MD",
-            }
             DateTimePatterns{
                 "h.mm.ss.a zzzz",
                 "h.mm.ss.a z",
@@ -78,39 +74,6 @@ sq{
                 yMMM{"MMM y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"MMMM y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Die",
-                        "Hën",
-                        "Mar",
-                        "Mër",
-                        "Enj",
-                        "Pre",
-                        "Sht",
-                    }
-                    wide{
-                        "e diel",
-                        "e hënë",
-                        "e martë",
-                        "e mërkurë",
-                        "e enjte",
-                        "e premte",
-                        "e shtunë",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "D",
-                        "H",
-                        "M",
-                        "M",
-                        "E",
-                        "P",
-                        "S",
-                    }
-                }
             }
             intervalFormats{
                 yMMM{

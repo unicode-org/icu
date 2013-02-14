@@ -173,10 +173,6 @@ lv{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "priekšpusdienā",
-                "pēcpusdienā",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -221,84 +217,6 @@ lv{
                 yMd{"d.M.y."}
                 yQQQ{"QQQ y"}
                 yQQQQ{"y QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Sv",
-                        "Pr",
-                        "Ot",
-                        "Tr",
-                        "Ce",
-                        "Pk",
-                        "Se",
-                    }
-                    narrow{
-                        "S",
-                        "P",
-                        "O",
-                        "T",
-                        "C",
-                        "P",
-                        "S",
-                    }
-                    short{
-                        "Sv",
-                        "Pr",
-                        "Ot",
-                        "Tr",
-                        "Ce",
-                        "Pk",
-                        "Se",
-                    }
-                    wide{
-                        "svētdiena",
-                        "pirmdiena",
-                        "otrdiena",
-                        "trešdiena",
-                        "ceturtdiena",
-                        "piektdiena",
-                        "sestdiena",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Sv",
-                        "Pr",
-                        "Ot",
-                        "Tr",
-                        "Ce",
-                        "Pk",
-                        "Se",
-                    }
-                    narrow{
-                        "S",
-                        "P",
-                        "O",
-                        "T",
-                        "C",
-                        "P",
-                        "S",
-                    }
-                    short{
-                        "Sv",
-                        "P",
-                        "O",
-                        "T",
-                        "C",
-                        "Pk",
-                        "S",
-                    }
-                    wide{
-                        "Svētdiena",
-                        "Pirmdiena",
-                        "Otrdiena",
-                        "Trešdiena",
-                        "Ceturtdiena",
-                        "Piektdiena",
-                        "Sestdiena",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -393,48 +311,6 @@ lv{
                     M{"dd.MM.y.–dd.MM.y."}
                     d{"dd.MM.y.–dd.MM.y."}
                     y{"dd.MM.y.–dd.MM.y."}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "C1",
-                        "C2",
-                        "C3",
-                        "C4",
-                    }
-                    narrow{
-                        "1.",
-                        "2.",
-                        "3.",
-                        "4.",
-                    }
-                    wide{
-                        "1. ceturksnis",
-                        "2. ceturksnis",
-                        "3. ceturksnis",
-                        "4. ceturksnis",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "C1",
-                        "C2",
-                        "C3",
-                        "C4",
-                    }
-                    narrow{
-                        "1.",
-                        "2.",
-                        "3.",
-                        "4.",
-                    }
-                    wide{
-                        "1. ceturksnis",
-                        "2. ceturksnis",
-                        "3. ceturksnis",
-                        "4. ceturksnis",
-                    }
                 }
             }
         }

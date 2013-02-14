@@ -263,10 +263,6 @@ ro{
             }
         }
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -311,84 +307,6 @@ ro{
                 yMd{"dd.MM.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Du",
-                        "Lu",
-                        "Ma",
-                        "Mi",
-                        "Jo",
-                        "Vi",
-                        "Sâ",
-                    }
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "J",
-                        "V",
-                        "S",
-                    }
-                    short{
-                        "Du",
-                        "Lu",
-                        "Ma",
-                        "Mi",
-                        "Jo",
-                        "Vi",
-                        "Sâ",
-                    }
-                    wide{
-                        "duminică",
-                        "luni",
-                        "marți",
-                        "miercuri",
-                        "joi",
-                        "vineri",
-                        "sâmbătă",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Du",
-                        "Lu",
-                        "Ma",
-                        "Mi",
-                        "Jo",
-                        "Vi",
-                        "Sâ",
-                    }
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "J",
-                        "V",
-                        "S",
-                    }
-                    short{
-                        "Du",
-                        "Lu",
-                        "Ma",
-                        "Mi",
-                        "Jo",
-                        "Vi",
-                        "Sâ",
-                    }
-                    wide{
-                        "duminică",
-                        "luni",
-                        "marți",
-                        "miercuri",
-                        "joi",
-                        "vineri",
-                        "sâmbătă",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -483,48 +401,6 @@ ro{
                     M{"dd.MM.y - dd.MM.y"}
                     d{"dd.MM.y - dd.MM.y"}
                     y{"dd.MM.y - dd.MM.y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "trim. I",
-                        "trim. II",
-                        "trim. III",
-                        "trim. IV",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "T4",
-                    }
-                    wide{
-                        "trimestrul I",
-                        "trimestrul al II-lea",
-                        "trimestrul al III-lea",
-                        "trimestrul al IV-lea",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    narrow{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    wide{
-                        "trimestrul I",
-                        "trimestrul al II-lea",
-                        "trimestrul al III-lea",
-                        "trimestrul al IV-lea",
-                    }
                 }
             }
         }

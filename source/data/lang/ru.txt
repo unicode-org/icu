@@ -811,7 +811,7 @@ ru{
         VALENCIA{"Валенсийский"}
         WADEGILE{"Система Уэйда – Джайлза"}
     }
-    Version{"2.0.81.65"}
+    Version{"2.0.81.70"}
     codePatterns{
         language{"Язык: {0}"}
         script{"Написание: {0}"}

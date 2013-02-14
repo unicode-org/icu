@@ -26,10 +26,6 @@ asa{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "icheheavo",
-                "ichamthi",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -69,55 +65,6 @@ asa{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Jpi",
-                        "Jtt",
-                        "Jnn",
-                        "Jtn",
-                        "Alh",
-                        "Ijm",
-                        "Jmo",
-                    }
-                    wide{
-                        "Jumapili",
-                        "Jumatatu",
-                        "Jumanne",
-                        "Jumatano",
-                        "Alhamisi",
-                        "Ijumaa",
-                        "Jumamosi",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "J",
-                        "J",
-                        "J",
-                        "J",
-                        "A",
-                        "I",
-                        "J",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "R1",
-                        "R2",
-                        "R3",
-                        "R4",
-                    }
-                    wide{
-                        "Robo 1",
-                        "Robo 2",
-                        "Robo 3",
-                        "Robo 4",
-                    }
-                }
             }
         }
         gregorian{

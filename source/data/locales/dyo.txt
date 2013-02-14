@@ -71,39 +71,6 @@ dyo{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Dim",
-                        "Ten",
-                        "Tal",
-                        "Ala",
-                        "Ara",
-                        "Arj",
-                        "Sib",
-                    }
-                    wide{
-                        "Dimas",
-                        "Teneŋ",
-                        "Talata",
-                        "Alarbay",
-                        "Aramisay",
-                        "Arjuma",
-                        "Sibiti",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "D",
-                        "T",
-                        "T",
-                        "A",
-                        "A",
-                        "A",
-                        "S",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

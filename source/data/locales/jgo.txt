@@ -52,10 +52,6 @@ jgo{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "mba’mba’",
-                "ŋka mbɔ́t nji",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -76,66 +72,6 @@ jgo{
                 MEd{"E, d.M"}
                 Md{"d.M"}
                 yMd{"M.d.y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Sɔ́ndi",
-                        "Mɔ́ndi",
-                        "Ápta Mɔ́ndi",
-                        "Wɛ́nɛsɛdɛ",
-                        "Tɔ́sɛdɛ",
-                        "Fɛlâyɛdɛ",
-                        "Sásidɛ",
-                    }
-                    narrow{
-                        "Sɔ́",
-                        "Mɔ́",
-                        "ÁM",
-                        "Wɛ́",
-                        "Tɔ́",
-                        "Fɛ",
-                        "Sá",
-                    }
-                    wide{
-                        "Sɔ́ndi",
-                        "Mɔ́ndi",
-                        "Ápta Mɔ́ndi",
-                        "Wɛ́nɛsɛdɛ",
-                        "Tɔ́sɛdɛ",
-                        "Fɛlâyɛdɛ",
-                        "Sásidɛ",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Sɔ́ndi",
-                        "Mɔ́ndi",
-                        "Ápta Mɔ́ndi",
-                        "Wɛ́nɛsɛdɛ",
-                        "Tɔ́sɛdɛ",
-                        "Fɛlâyɛdɛ",
-                        "Sásidɛ",
-                    }
-                    narrow{
-                        "Sɔ́",
-                        "Mɔ́",
-                        "ÁM",
-                        "Wɛ́",
-                        "Tɔ́",
-                        "Fɛ",
-                        "Sá",
-                    }
-                    wide{
-                        "Sɔ́ndi",
-                        "Mɔ́ndi",
-                        "Ápta Mɔ́ndi",
-                        "Wɛ́nɛsɛdɛ",
-                        "Tɔ́sɛdɛ",
-                        "Fɛlâyɛdɛ",
-                        "Sásidɛ",
-                    }
-                }
             }
             intervalFormats{
                 fallback{"{0} – {1}"}

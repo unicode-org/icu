@@ -30,10 +30,6 @@ kab{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "n tufat",
-                "n tmeddit",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -71,55 +67,6 @@ kab{
                 yMMMd{"d MMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Yan",
-                        "San",
-                        "Kraḍ",
-                        "Kuẓ",
-                        "Sam",
-                        "Sḍis",
-                        "Say",
-                    }
-                    wide{
-                        "Yanass",
-                        "Sanass",
-                        "Kraḍass",
-                        "Kuẓass",
-                        "Samass",
-                        "Sḍisass",
-                        "Sayass",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "Y",
-                        "S",
-                        "K",
-                        "K",
-                        "S",
-                        "S",
-                        "S",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Kḍg1",
-                        "Kḍg2",
-                        "Kḍg3",
-                        "Kḍg4",
-                    }
-                    wide{
-                        "akraḍaggur amenzu",
-                        "akraḍaggur wis-sin",
-                        "akraḍaggur wis-kraḍ",
-                        "akraḍaggur wis-kuẓ",
-                    }
-                }
             }
         }
         gregorian{

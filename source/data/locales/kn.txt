@@ -130,10 +130,6 @@ kn{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "hh:mm:ss a zzzz",
                 "hh:mm:ss a z",
@@ -178,57 +174,6 @@ kn{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ರ.",
-                        "ಸೋ.",
-                        "ಮಂ.",
-                        "ಬು.",
-                        "ಗು.",
-                        "ಶು.",
-                        "ಶನಿ.",
-                    }
-                    short{
-                        "ಭಾನು",
-                        "ಸೋಮ",
-                        "ಮಂಗಳ",
-                        "ಬುಧ",
-                        "ಗುರು",
-                        "ಶುಕ್ರ",
-                        "ಶನಿ",
-                    }
-                    wide{
-                        "ರವಿವಾರ",
-                        "ಸೋಮವಾರ",
-                        "ಮಂಗಳವಾರ",
-                        "ಬುಧವಾರ",
-                        "ಗುರುವಾರ",
-                        "ಶುಕ್ರವಾರ",
-                        "ಶನಿವಾರ",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "ರ",
-                        "ಸೋ",
-                        "ಮಂ",
-                        "ಬು",
-                        "ಗು",
-                        "ಶು",
-                        "ಶ",
-                    }
-                    short{
-                        "ಭಾನು",
-                        "ಸೋಮ",
-                        "ಮಂಗಳ",
-                        "ಬುಧ",
-                        "ಗುರು",
-                        "ಶುಕ್ರ",
-                        "ಶನಿ",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -323,48 +268,6 @@ kn{
                     M{"d/M/y – d/M/y"}
                     d{"d/M/y – d/M/y"}
                     y{"d/M/y – d/M/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
                 }
             }
         }

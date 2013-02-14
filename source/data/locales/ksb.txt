@@ -26,10 +26,6 @@ ksb{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "makeo",
-                "nyiaghuo",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -67,55 +63,6 @@ ksb{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Jpi",
-                        "Jtt",
-                        "Jmn",
-                        "Jtn",
-                        "Alh",
-                        "Iju",
-                        "Jmo",
-                    }
-                    wide{
-                        "Jumaapii",
-                        "Jumaatatu",
-                        "Jumaane",
-                        "Jumaatano",
-                        "Alhamisi",
-                        "Ijumaa",
-                        "Jumaamosi",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "A",
-                        "I",
-                        "1",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "L1",
-                        "L2",
-                        "L3",
-                        "L4",
-                    }
-                    wide{
-                        "Lobo ya bosi",
-                        "Lobo ya mbii",
-                        "Lobo ya nnd'atu",
-                        "Lobo ya nne",
-                    }
-                }
             }
         }
         gregorian{

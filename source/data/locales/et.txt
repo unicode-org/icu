@@ -145,10 +145,6 @@ et{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "H:mm.ss zzzz",
                 "H:mm.ss z",
@@ -195,84 +191,6 @@ et{
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "P",
-                        "E",
-                        "T",
-                        "K",
-                        "N",
-                        "R",
-                        "L",
-                    }
-                    narrow{
-                        "P",
-                        "E",
-                        "T",
-                        "K",
-                        "N",
-                        "R",
-                        "L",
-                    }
-                    short{
-                        "P",
-                        "E",
-                        "T",
-                        "K",
-                        "N",
-                        "R",
-                        "L",
-                    }
-                    wide{
-                        "pühapäev",
-                        "esmaspäev",
-                        "teisipäev",
-                        "kolmapäev",
-                        "neljapäev",
-                        "reede",
-                        "laupäev",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "P",
-                        "E",
-                        "T",
-                        "K",
-                        "N",
-                        "R",
-                        "L",
-                    }
-                    narrow{
-                        "P",
-                        "E",
-                        "T",
-                        "K",
-                        "N",
-                        "R",
-                        "L",
-                    }
-                    short{
-                        "P",
-                        "E",
-                        "T",
-                        "K",
-                        "N",
-                        "R",
-                        "L",
-                    }
-                    wide{
-                        "pühapäev",
-                        "esmaspäev",
-                        "teisipäev",
-                        "kolmapäev",
-                        "neljapäev",
-                        "reede",
-                        "laupäev",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -367,48 +285,6 @@ et{
                     M{"dd.MM.y–dd.MM.y"}
                     d{"dd.MM.y–dd.MM.y"}
                     y{"dd.MM.y–dd.MM.y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1. kvartal",
-                        "2. kvartal",
-                        "3. kvartal",
-                        "4. kvartal",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    narrow{
-                        "1.",
-                        "2.",
-                        "3.",
-                        "4.",
-                    }
-                    wide{
-                        "1. kvartal",
-                        "2. kvartal",
-                        "3. kvartal",
-                        "4. kvartal",
-                    }
                 }
             }
         }

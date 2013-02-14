@@ -196,10 +196,6 @@ sl{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "dop.",
-                "pop.",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -242,66 +238,6 @@ sl{
                 yMd{"d. M. y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ned.",
-                        "pon.",
-                        "tor.",
-                        "sre.",
-                        "čet.",
-                        "pet.",
-                        "sob.",
-                    }
-                    short{
-                        "ned.",
-                        "pon.",
-                        "tor.",
-                        "sre.",
-                        "čet.",
-                        "pet.",
-                        "sob.",
-                    }
-                    wide{
-                        "nedelja",
-                        "ponedeljek",
-                        "torek",
-                        "sreda",
-                        "četrtek",
-                        "petek",
-                        "sobota",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "ned",
-                        "pon",
-                        "tor",
-                        "sre",
-                        "čet",
-                        "pet",
-                        "sob",
-                    }
-                    narrow{
-                        "n",
-                        "p",
-                        "t",
-                        "s",
-                        "č",
-                        "p",
-                        "s",
-                    }
-                    short{
-                        "ned.",
-                        "pon.",
-                        "tor.",
-                        "sre.",
-                        "čet.",
-                        "pet.",
-                        "sob.",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -396,36 +332,6 @@ sl{
                     M{"d. M. – d. M. y"}
                     d{"d. M. y – d. M. y"}
                     y{"d. M. y – d. M. y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1. četrtletje",
-                        "2. četrtletje",
-                        "3. četrtletje",
-                        "4. četrtletje",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                 }
             }
         }

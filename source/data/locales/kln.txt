@@ -26,10 +26,6 @@ kln{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Beet",
-                "Kemo",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -67,55 +63,6 @@ kln{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Tis",
-                        "Tai",
-                        "Aen",
-                        "Som",
-                        "Ang",
-                        "Mut",
-                        "Loh",
-                    }
-                    wide{
-                        "Betutab tisap",
-                        "Betut netai",
-                        "Betutab aeng'",
-                        "Betutab somok",
-                        "Betutab ang'wan",
-                        "Betutab mut",
-                        "Betutab lo",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "T",
-                        "T",
-                        "A",
-                        "S",
-                        "A",
-                        "M",
-                        "L",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "R1",
-                        "R2",
-                        "R3",
-                        "R4",
-                    }
-                    wide{
-                        "Robo netai",
-                        "Robo nebo aeng'",
-                        "Robo nebo somok",
-                        "Robo nebo ang'wan",
-                    }
-                }
             }
         }
         gregorian{
