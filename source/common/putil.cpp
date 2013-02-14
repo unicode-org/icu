@@ -100,12 +100,13 @@
 #elif U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM == U_PF_SOLARIS
 #   include <limits.h>
 #   include <unistd.h>
+#   if U_PLATFORM == U_PF_SOLARIS
+#       ifndef _XPG4_2
+#           define _XPG4_2
+#       endif
+#   endif
 #elif U_PLATFORM == U_PF_QNX
 #   include <sys/neutrino.h>
-#elif U_PLATFORM == U_PF_SOLARIS
-#   ifndef _XPG4_2
-#       define _XPG4_2
-#   endif
 #endif
 
 #if (U_PF_MINGW <= U_PLATFORM && U_PLATFORM <= U_PF_CYGWIN) && defined(__STRICT_ANSI__)
