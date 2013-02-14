@@ -248,13 +248,9 @@ cy{
             }
         }
     }
-    Version{"2.0.81.65"}
+    Version{"2.0.81.84"}
     calendar{
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -294,84 +290,6 @@ cy{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Sul",
-                        "Llun",
-                        "Maw",
-                        "Mer",
-                        "Iau",
-                        "Gwen",
-                        "Sad",
-                    }
-                    narrow{
-                        "S",
-                        "Ll",
-                        "M",
-                        "M",
-                        "I",
-                        "G",
-                        "S",
-                    }
-                    short{
-                        "Su",
-                        "Ll",
-                        "Ma",
-                        "Me",
-                        "Ia",
-                        "Gw",
-                        "Sa",
-                    }
-                    wide{
-                        "Dydd Sul",
-                        "Dydd Llun",
-                        "Dydd Mawrth",
-                        "Dydd Mercher",
-                        "Dydd Iau",
-                        "Dydd Gwener",
-                        "Dydd Sadwrn",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Sul",
-                        "Llun",
-                        "Maw",
-                        "Mer",
-                        "Iau",
-                        "Gwe",
-                        "Sad",
-                    }
-                    narrow{
-                        "S",
-                        "Ll",
-                        "M",
-                        "M",
-                        "I",
-                        "G",
-                        "S",
-                    }
-                    short{
-                        "Su",
-                        "Ll",
-                        "Ma",
-                        "Me",
-                        "Ia",
-                        "Gw",
-                        "Sa",
-                    }
-                    wide{
-                        "Dydd Sul",
-                        "Dydd Llun",
-                        "Dydd Mawrth",
-                        "Dydd Mercher",
-                        "Dydd Iau",
-                        "Dydd Gwener",
-                        "Dydd Sadwrn",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -469,48 +387,6 @@ cy{
                     M{"d/M/y - d/M/y"}
                     d{"d/M/y - d/M/y"}
                     y{"d/M/y - d/M/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Ch1",
-                        "Ch2",
-                        "Ch3",
-                        "Ch4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "Chwarter 1af",
-                        "2il chwarter",
-                        "3ydd chwarter",
-                        "4ydd chwarter",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Ch1",
-                        "Ch2",
-                        "Ch3",
-                        "Ch4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "chwarter 1af",
-                        "2il chwarter",
-                        "3ydd chwarter",
-                        "4ydd chwarter",
-                    }
                 }
             }
         }

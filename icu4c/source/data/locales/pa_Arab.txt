@@ -48,29 +48,6 @@ pa_Arab{
                 yMMM{"MMM y"}
                 yQQQ{"QQQ y"}
             }
-            dayNames{
-                format{
-                    wide{
-                        "اتوار",
-                        "پیر",
-                        "منگل",
-                        "بُدھ",
-                        "جمعرات",
-                        "جمعہ",
-                        "ہفتہ",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    wide{
-                        "چوتھاي پہلاں",
-                        "چوتھاي دوجا",
-                        "چوتھاي تيجا",
-                        "چوتھاي چوتھا",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

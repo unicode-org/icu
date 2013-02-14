@@ -145,10 +145,6 @@ is{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "f.h.",
-                "e.h.",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -192,66 +188,6 @@ is{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "sun",
-                        "mán",
-                        "þri",
-                        "mið",
-                        "fim",
-                        "fös",
-                        "lau",
-                    }
-                    narrow{
-                        "S",
-                        "M",
-                        "Þ",
-                        "M",
-                        "F",
-                        "F",
-                        "L",
-                    }
-                    short{
-                        "su",
-                        "má",
-                        "þr",
-                        "mi",
-                        "fi",
-                        "fö",
-                        "la",
-                    }
-                    wide{
-                        "sunnudagur",
-                        "mánudagur",
-                        "þriðjudagur",
-                        "miðvikudagur",
-                        "fimmtudagur",
-                        "föstudagur",
-                        "laugardagur",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "þ",
-                        "M",
-                        "F",
-                        "F",
-                        "L",
-                    }
-                    short{
-                        "su",
-                        "má",
-                        "þr",
-                        "mi",
-                        "fi",
-                        "fö",
-                        "la",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -349,48 +285,6 @@ is{
                     M{"d.M.y – d.M.y"}
                     d{"d.M.y – d.M.y"}
                     y{"d.M.y – d.M.y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "F1",
-                        "F2",
-                        "F3",
-                        "F4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1. fjórðungur",
-                        "2. fjórðungur",
-                        "3. fjórðungur",
-                        "4. fjórðungur",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1F",
-                        "2F",
-                        "3F",
-                        "4F",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1. fjórðungur",
-                        "2. fjórðungur",
-                        "3. fjórðungur",
-                        "4. fjórðungur",
-                    }
                 }
             }
         }

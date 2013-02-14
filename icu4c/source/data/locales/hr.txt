@@ -231,10 +231,6 @@ hr{
             }
         }
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -281,84 +277,6 @@ hr{
                 yMd{"d. M. y."}
                 yQQQ{"QQQ y."}
                 yQQQQ{"QQQQ y."}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ned",
-                        "pon",
-                        "uto",
-                        "sri",
-                        "čet",
-                        "pet",
-                        "sub",
-                    }
-                    narrow{
-                        "N",
-                        "P",
-                        "U",
-                        "S",
-                        "Č",
-                        "P",
-                        "S",
-                    }
-                    short{
-                        "ned",
-                        "pon",
-                        "uto",
-                        "sri",
-                        "čet",
-                        "pet",
-                        "sub",
-                    }
-                    wide{
-                        "nedjelja",
-                        "ponedjeljak",
-                        "utorak",
-                        "srijeda",
-                        "četvrtak",
-                        "petak",
-                        "subota",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "ned",
-                        "pon",
-                        "uto",
-                        "sri",
-                        "čet",
-                        "pet",
-                        "sub",
-                    }
-                    narrow{
-                        "n",
-                        "p",
-                        "u",
-                        "s",
-                        "č",
-                        "p",
-                        "s",
-                    }
-                    short{
-                        "ned",
-                        "pon",
-                        "uto",
-                        "sri",
-                        "čet",
-                        "pet",
-                        "sub",
-                    }
-                    wide{
-                        "nedjelja",
-                        "ponedjeljak",
-                        "utorak",
-                        "srijeda",
-                        "četvrtak",
-                        "petak",
-                        "subota",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -453,48 +371,6 @@ hr{
                     M{"dd.MM.y. - dd.MM.y."}
                     d{"dd.MM.y. - dd.MM.y."}
                     y{"dd.MM.y. - dd.MM.y."}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "1kv",
-                        "2kv",
-                        "3kv",
-                        "4kv",
-                    }
-                    narrow{
-                        "1.",
-                        "2.",
-                        "3.",
-                        "4.",
-                    }
-                    wide{
-                        "1. kvartal",
-                        "2. kvartal",
-                        "3. kvartal",
-                        "4. kvartal",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1kv",
-                        "2kv",
-                        "3kv",
-                        "4kv",
-                    }
-                    narrow{
-                        "1.",
-                        "2.",
-                        "3.",
-                        "4.",
-                    }
-                    wide{
-                        "1. kvartal",
-                        "2. kvartal",
-                        "3. kvartal",
-                        "4. kvartal",
-                    }
                 }
             }
         }

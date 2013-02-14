@@ -57,10 +57,6 @@ gsw{
             }
         }
         generic{
-            AmPmMarkers{
-                "vorm.",
-                "nam.",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -106,39 +102,6 @@ gsw{
                 yMMdd{"dd.MM.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Su.",
-                        "Mä.",
-                        "Zi.",
-                        "Mi.",
-                        "Du.",
-                        "Fr.",
-                        "Sa.",
-                    }
-                    wide{
-                        "Sunntig",
-                        "Määntig",
-                        "Ziischtig",
-                        "Mittwuch",
-                        "Dunschtig",
-                        "Friitig",
-                        "Samschtig",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "D",
-                        "M",
-                        "D",
-                        "F",
-                        "S",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -236,22 +199,6 @@ gsw{
                     M{"dd.MM.y - dd.MM.y"}
                     d{"dd.MM.y - dd.MM.y"}
                     y{"dd.MM.y - dd.MM.y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "1. Quartal",
-                        "2. Quartal",
-                        "3. Quartal",
-                        "4. Quartal",
-                    }
                 }
             }
         }

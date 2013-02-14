@@ -149,7 +149,7 @@ en{
             }
         }
     }
-    Version{"2.0.81.66"}
+    Version{"2.0.81.70"}
     calendar{
         buddhist{
             eras{
@@ -328,41 +328,37 @@ en{
             monthNames{
                 format{
                     abbreviated{
-                        "mo1",
-                        "mo2",
-                        "mo3",
-                        "mo4",
-                        "mo5",
-                        "mo6",
-                        "mo7",
-                        "mo8",
-                        "mo9",
-                        "mo10",
-                        "mo11",
-                        "mo12",
+                        "Mo1",
+                        "Mo2",
+                        "Mo3",
+                        "Mo4",
+                        "Mo5",
+                        "Mo6",
+                        "Mo7",
+                        "Mo8",
+                        "Mo9",
+                        "Mo10",
+                        "Mo11",
+                        "Mo12",
                     }
                     wide{
-                        "month1",
-                        "month2",
-                        "month3",
-                        "month4",
-                        "month5",
-                        "month6",
-                        "month7",
-                        "month8",
-                        "month9",
-                        "month10",
-                        "month11",
-                        "month12",
+                        "Month1",
+                        "Month2",
+                        "Month3",
+                        "Month4",
+                        "Month5",
+                        "Month6",
+                        "Month7",
+                        "Month8",
+                        "Month9",
+                        "Month10",
+                        "Month11",
+                        "Month12",
                     }
                 }
             }
         }
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -425,48 +421,6 @@ en{
                 yyyyMd{"M/d/y GGGGG"}
                 yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y G"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Sun",
-                        "Mon",
-                        "Tue",
-                        "Wed",
-                        "Thu",
-                        "Fri",
-                        "Sat",
-                    }
-                    short{
-                        "Su",
-                        "Mo",
-                        "Tu",
-                        "We",
-                        "Th",
-                        "Fr",
-                        "Sa",
-                    }
-                    wide{
-                        "Sunday",
-                        "Monday",
-                        "Tuesday",
-                        "Wednesday",
-                        "Thursday",
-                        "Friday",
-                        "Saturday",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "T",
-                        "W",
-                        "T",
-                        "F",
-                        "S",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -561,30 +515,6 @@ en{
                     M{"M/d/y – M/d/y GGGGG"}
                     d{"M/d/y – M/d/y GGGGG"}
                     y{"M/d/y – M/d/y GGGGG"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "1st quarter",
-                        "2nd quarter",
-                        "3rd quarter",
-                        "4th quarter",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                 }
             }
         }
@@ -891,6 +821,23 @@ en{
                 abbreviated{
                     "AH",
                 }
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, MMMM d, y G",
+                "MMMM d, y G",
+                "MMM d, y G",
+                "M/d/y GGGGG",
+                "{1}, {0}",
+                "{1} 'at' {0}",
+                "{1} 'at' {0}",
+                "{1}, {0}",
+                "{1}, {0}",
             }
         }
         roc{

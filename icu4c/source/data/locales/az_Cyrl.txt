@@ -61,30 +61,6 @@ az_Cyrl{
                 yMMMEd{"E, d, MMM, y"}
                 yMMMd{"d MMM, y"}
             }
-            dayNames{
-                format{
-                    wide{
-                        "базар",
-                        "базар ертәси",
-                        "чәршәнбә ахшамы",
-                        "чәршәнбә",
-                        "ҹүмә ахшамы",
-                        "ҹүмә",
-                        "шәнбә",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "7",
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

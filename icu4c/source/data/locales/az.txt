@@ -61,55 +61,6 @@ az{
                 yMMMEd{"E, d, MMM, y"}
                 yMMMd{"d MMM, y"}
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "B.",
-                        "B.E.",
-                        "Ç.A.",
-                        "Ç.",
-                        "C.A.",
-                        "C",
-                        "Ş.",
-                    }
-                    wide{
-                        "bazar",
-                        "bazar ertəsi",
-                        "çərşənbə axşamı",
-                        "çərşənbə",
-                        "cümə axşamı",
-                        "cümə",
-                        "şənbə",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "7",
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "6",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "1-ci kv.",
-                        "2-ci kv.",
-                        "3-cü kv.",
-                        "4-cü kv.",
-                    }
-                    wide{
-                        "1-ci kvartal",
-                        "2-ci kvartal",
-                        "3-cü kvartal",
-                        "4-cü kvartal",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

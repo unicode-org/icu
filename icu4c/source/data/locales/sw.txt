@@ -144,10 +144,6 @@ sw{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "asubuhi",
-                "alasiri",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -189,57 +185,6 @@ sw{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "J2",
-                        "J3",
-                        "J4",
-                        "J5",
-                        "Alh",
-                        "Ij",
-                        "J1",
-                    }
-                    short{
-                        "Jumapili",
-                        "Jumatatu",
-                        "Jumanne",
-                        "Jumatano",
-                        "Alhamisi",
-                        "Ijumaa",
-                        "Jumamosi",
-                    }
-                    wide{
-                        "Jumapili",
-                        "Jumatatu",
-                        "Jumanne",
-                        "Jumatano",
-                        "Alhamisi",
-                        "Ijumaa",
-                        "Jumamosi",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "2",
-                        "3",
-                        "4",
-                        "5",
-                        "A",
-                        "I",
-                        "1",
-                    }
-                    short{
-                        "Jumapili",
-                        "Jumatatu",
-                        "Jumanne",
-                        "Jumatano",
-                        "Alhamisi",
-                        "Ijumaa",
-                        "Jumamosi",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -333,42 +278,6 @@ sw{
                     M{"d/M/y - d/M/y"}
                     d{"d/M/y - d/M/y"}
                     y{"d/M/y - d/M/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "Robo 1",
-                        "Robo 2",
-                        "Robo 3",
-                        "Robo 4",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
                 }
             }
         }

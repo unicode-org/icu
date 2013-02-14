@@ -23,34 +23,6 @@ gv{
     }
     Version{"2.0.81.46"}
     calendar{
-        generic{
-            AmPmMarkers{
-                "a.m.",
-                "p.m.",
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Jed",
-                        "Jel",
-                        "Jem",
-                        "Jerc",
-                        "Jerd",
-                        "Jeh",
-                        "Jes",
-                    }
-                    wide{
-                        "Jedoonee",
-                        "Jelhein",
-                        "Jemayrt",
-                        "Jercean",
-                        "Jerdein",
-                        "Jeheiney",
-                        "Jesarn",
-                    }
-                }
-            }
-        }
         gregorian{
             AmPmMarkers{
                 "a.m.",

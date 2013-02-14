@@ -25,19 +25,6 @@ ti_ER{
                 "{1} {0}",
                 "{1} {0}",
             }
-            dayNames{
-                format{
-                    wide{
-                        "ሰንበት",
-                        "ሰኑይ",
-                        "ሰሉስ",
-                        "ረቡዕ",
-                        "ሓሙስ",
-                        "ዓርቢ",
-                        "ቀዳም",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

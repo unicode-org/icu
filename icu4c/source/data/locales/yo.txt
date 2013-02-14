@@ -29,10 +29,6 @@ yo{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Àárọ̀",
-                "Ọ̀sán",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -70,44 +66,6 @@ yo{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Àìkú",
-                        "Ajé",
-                        "Ìsẹ́gun",
-                        "Ọjọ́rú",
-                        "Ọjọ́bọ",
-                        "Ẹtì",
-                        "Àbámẹ́ta",
-                    }
-                    wide{
-                        "Ọjọ́ Àìkú",
-                        "Ọjọ́ Ajé",
-                        "Ọjọ́ Ìsẹ́gun",
-                        "Ọjọ́rú",
-                        "Ọjọ́bọ",
-                        "Ọjọ́ Ẹtì",
-                        "Ọjọ́ Àbámẹ́ta",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    wide{
-                        "Kọ́tà Kínní",
-                        "Kọ́tà Kejì",
-                        "Kọ́à Keta",
-                        "Kọ́tà Kẹrin",
-                    }
-                }
             }
         }
         gregorian{

@@ -46,44 +46,6 @@ fo{
                 "{1} {0}",
                 "{1} {0}",
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "sun",
-                        "mán",
-                        "týs",
-                        "mik",
-                        "hós",
-                        "frí",
-                        "ley",
-                    }
-                    wide{
-                        "sunnudagur",
-                        "mánadagur",
-                        "týsdagur",
-                        "mikudagur",
-                        "hósdagur",
-                        "fríggjadagur",
-                        "leygardagur",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "K1",
-                        "K2",
-                        "K3",
-                        "K4",
-                    }
-                    wide{
-                        "1. kvartal",
-                        "2. kvartal",
-                        "3. kvartal",
-                        "4. kvartal",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

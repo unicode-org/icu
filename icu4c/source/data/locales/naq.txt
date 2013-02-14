@@ -26,10 +26,6 @@ naq{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "ǁgoagas",
-                "ǃuias",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -67,55 +63,6 @@ naq{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Son",
-                        "Ma",
-                        "De",
-                        "Wu",
-                        "Do",
-                        "Fr",
-                        "Sat",
-                    }
-                    wide{
-                        "Sontaxtsees",
-                        "Mantaxtsees",
-                        "Denstaxtsees",
-                        "Wunstaxtsees",
-                        "Dondertaxtsees",
-                        "Fraitaxtsees",
-                        "Satertaxtsees",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "S",
-                        "M",
-                        "E",
-                        "W",
-                        "D",
-                        "F",
-                        "A",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "KW1",
-                        "KW2",
-                        "KW3",
-                        "KW4",
-                    }
-                    wide{
-                        "1ro kwartals",
-                        "2ǁî kwartals",
-                        "3ǁî kwartals",
-                        "4ǁî kwartals",
-                    }
-                }
             }
         }
         gregorian{

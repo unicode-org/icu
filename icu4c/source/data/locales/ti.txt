@@ -38,10 +38,6 @@ ti{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "ንጉሆ ሰዓተ",
-                "ድሕር ሰዓት",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -63,30 +59,6 @@ ti{
                 yMM{"MM/y"}
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
-            }
-            dayNames{
-                format{
-                    wide{
-                        "ሰንበት",
-                        "ሰኑይ",
-                        "ሠሉስ",
-                        "ረቡዕ",
-                        "ኃሙስ",
-                        "ዓርቢ",
-                        "ቀዳም",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "ሰ",
-                        "ሰ",
-                        "ሠ",
-                        "ረ",
-                        "ኃ",
-                        "ዓ",
-                        "ቀ",
-                    }
-                }
             }
         }
         gregorian{

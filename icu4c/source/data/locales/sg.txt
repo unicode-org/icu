@@ -30,10 +30,6 @@ sg{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "ND",
-                "LK",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -69,55 +65,6 @@ sg{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Bk1",
-                        "Bk2",
-                        "Bk3",
-                        "Bk4",
-                        "Bk5",
-                        "Lâp",
-                        "Lây",
-                    }
-                    wide{
-                        "Bikua-ôko",
-                        "Bïkua-ûse",
-                        "Bïkua-ptâ",
-                        "Bïkua-usïö",
-                        "Bïkua-okü",
-                        "Lâpôsö",
-                        "Lâyenga",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "K",
-                        "S",
-                        "T",
-                        "S",
-                        "K",
-                        "P",
-                        "Y",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "F4-1",
-                        "F4-2",
-                        "F4-3",
-                        "F4-4",
-                    }
-                    wide{
-                        "Fângbisïö ôko",
-                        "Fângbisïö ûse",
-                        "Fângbisïö otâ",
-                        "Fângbisïö usïö",
-                    }
-                }
             }
         }
         gregorian{

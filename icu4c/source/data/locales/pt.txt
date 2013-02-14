@@ -147,48 +147,13 @@ pt{
         }
         native{"latn"}
     }
-    Version{"2.0.81.65"}
+    Version{"2.0.81.70"}
     calendar{
         buddhist{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d 'de' MMMM 'de' y G",
-                "d 'de' MMMM 'de' y G",
-                "dd/MM/y G",
-                "d/M/y",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E, d"}
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                Hm{"HH:mm"}
-                M{"L"}
-                MEd{"E, dd/MM"}
-                MMM{"LLL"}
-                MMMEd{"E, d 'de' MMM"}
-                MMMd{"d 'de' MMM"}
-                MMdd{"dd/MM"}
-                Md{"d/M"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"MM/y G"}
-                yMEd{"E, dd/MM/y G"}
-                yMM{"MM/y G"}
-                yMMM{"MMM 'de' y G"}
-                yMMMEd{"E, d 'de' MMM 'de' y G"}
-                yMMMd{"d 'de' MMM 'de' y G"}
-                yMd{"dd/MM/y G"}
-                yQQQ{"G y QQQ"}
-                yQQQQ{"G y QQQQ"}
+            eras{
+                abbreviated{
+                    "BE",
+                }
             }
         }
         chinese{
@@ -392,10 +357,6 @@ pt{
             }
         }
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -444,84 +405,6 @@ pt{
                 yyyyMd{"dd/MM/y GGGGG"}
                 yyyyQQQ{"G y QQQ"}
                 yyyyQQQQ{"G y QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "dom",
-                        "seg",
-                        "ter",
-                        "qua",
-                        "qui",
-                        "sex",
-                        "sáb",
-                    }
-                    narrow{
-                        "D",
-                        "S",
-                        "T",
-                        "Q",
-                        "Q",
-                        "S",
-                        "S",
-                    }
-                    short{
-                        "dom",
-                        "seg",
-                        "ter",
-                        "qua",
-                        "qui",
-                        "sex",
-                        "sáb",
-                    }
-                    wide{
-                        "domingo",
-                        "segunda-feira",
-                        "terça-feira",
-                        "quarta-feira",
-                        "quinta-feira",
-                        "sexta-feira",
-                        "sábado",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "dom",
-                        "seg",
-                        "ter",
-                        "qua",
-                        "qui",
-                        "sex",
-                        "sáb",
-                    }
-                    narrow{
-                        "D",
-                        "S",
-                        "T",
-                        "Q",
-                        "Q",
-                        "S",
-                        "S",
-                    }
-                    short{
-                        "dom",
-                        "seg",
-                        "ter",
-                        "qua",
-                        "qui",
-                        "sex",
-                        "sáb",
-                    }
-                    wide{
-                        "domingo",
-                        "segunda-feira",
-                        "terça-feira",
-                        "quarta-feira",
-                        "quinta-feira",
-                        "sexta-feira",
-                        "sábado",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -616,48 +499,6 @@ pt{
                     M{"dd/MM/y - dd/MM/y G"}
                     d{"dd/MM/y - dd/MM/y G"}
                     y{"dd/MM/y - dd/MM/y G"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1º trimestre",
-                        "2º trimestre",
-                        "3º trimestre",
-                        "4º trimestre",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1º trimestre",
-                        "2º trimestre",
-                        "3º trimestre",
-                        "4º trimestre",
-                    }
                 }
             }
         }
@@ -1168,51 +1009,10 @@ pt{
             }
         }
         islamic{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d 'de' MMMM 'de' y G",
-                "d 'de' MMMM 'de' y G",
-                "dd/MM/y G",
-                "d/M/y",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E, d"}
-                Gy{"y G"}
-                H{"HH"}
-                HHmm{"HH'h'mm"}
-                HHmmss{"HH'h'mm'min'ss's'"}
-                Hm{"HH'h'mm"}
-                Hms{"HH:mm:ss"}
-                M{"L"}
-                MEd{"E, dd/MM"}
-                MMM{"LLL"}
-                MMMEd{"E, d 'de' MMM"}
-                MMMd{"d 'de' MMM"}
-                MMdd{"dd/MM"}
-                Md{"d/M"}
-                d{"d"}
-                h{"h a"}
-                hm{"h:mm a"}
-                hms{"h:mm:ss a"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"MM/y"}
-                yMEd{"E, dd/MM/y"}
-                yMM{"MM/y G"}
-                yMMM{"MMM 'de' y"}
-                yMMMEd{"E, d 'de' MMM 'de' y"}
-                yMMMd{"d 'de' MMM 'de' y G"}
-                yMd{"dd/MM/y G"}
-                yQQQ{"G y QQQ"}
-                yQQQQ{"G y QQQQ"}
+            eras{
+                abbreviated{
+                    "AH",
+                }
             }
         }
         japanese{
@@ -1221,41 +1021,15 @@ pt{
                 "HH:mm:ss z",
                 "HH:mm:ss",
                 "HH:mm",
-                "EEEE, d MMMM y G",
+                "EEEE, d 'de' MMMM 'de' y G",
                 "d 'de' MMMM 'de' y G",
-                "d MMM y G",
-                "d/M/yy",
+                "dd/MM/y G",
+                "dd/MM/yy GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E, d"}
-                Gy{"y G"}
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                Hm{"HH:mm"}
-                M{"L"}
-                MEd{"E, dd/MM"}
-                MMM{"LLL"}
-                MMMEd{"E, d 'de' MMM"}
-                MMMd{"d 'de' MMM"}
-                MMdd{"dd/MM"}
-                Md{"d/M"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"MM/y G"}
-                yMEd{"E, dd/MM/y G"}
-                yMM{"MM/y G"}
-                yMMM{"MMM 'de' y G"}
-                yMMMEd{"E, d 'de' MMM 'de' y G"}
-                yMMMd{"d 'de' MMM 'de' y G"}
-                yMd{"dd/MM/y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"G y QQQQ"}
             }
         }
         persian{
@@ -1323,47 +1097,6 @@ pt{
             }
         }
         roc{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d 'de' MMMM 'de' y G",
-                "d 'de' MMMM 'de' y G",
-                "dd/MM/y G",
-                "d/M/y",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Ed{"E, d"}
-                Gy{"y G"}
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
-                Hm{"HH:mm"}
-                M{"L"}
-                MEd{"E, dd/MM"}
-                MMM{"LLL"}
-                MMMEd{"E, d 'de' MMM"}
-                MMMd{"d 'de' MMM"}
-                MMdd{"dd/MM"}
-                Md{"d/M"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yM{"MM/y G"}
-                yMEd{"E, dd/MM/y G"}
-                yMM{"MM/y G"}
-                yMMM{"MMM 'de' y G"}
-                yMMMEd{"E, d 'de' MMM 'de' y G"}
-                yMMMd{"d 'de' MMM 'de' y G"}
-                yMd{"dd/MM/y G"}
-                yQQQ{"G y QQQ"}
-                yQQQQ{"G y QQQQ"}
-            }
             eras{
                 abbreviated{
                     "Antes de R.O.C.",

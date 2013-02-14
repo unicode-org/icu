@@ -31,10 +31,6 @@ rn{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "Z.MU.",
-                "Z.MW.",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -73,44 +69,6 @@ rn{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "cu.",
-                        "mbe.",
-                        "kab.",
-                        "gtu.",
-                        "kan.",
-                        "gnu.",
-                        "gnd.",
-                    }
-                    wide{
-                        "Ku w'indwi",
-                        "Ku wa mbere",
-                        "Ku wa kabiri",
-                        "Ku wa gatatu",
-                        "Ku wa kane",
-                        "Ku wa gatanu",
-                        "Ku wa gatandatu",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "I1",
-                        "I2",
-                        "I3",
-                        "I4",
-                    }
-                    wide{
-                        "Igice ca mbere c'umwaka",
-                        "Igice ca kabiri c'umwaka",
-                        "Igice ca gatatu c'umwaka",
-                        "Igice ca kane c'umwaka",
-                    }
-                }
             }
         }
         gregorian{

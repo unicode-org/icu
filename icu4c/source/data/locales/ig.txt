@@ -28,10 +28,6 @@ ig{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "A.M.",
-                "P.M.",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -69,44 +65,6 @@ ig{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Ụka",
-                        "Mọn",
-                        "Tiu",
-                        "Wen",
-                        "Tọọ",
-                        "Fraị",
-                        "Sat",
-                    }
-                    wide{
-                        "Mbọsị Ụka",
-                        "Mọnde",
-                        "Tiuzdee",
-                        "Wenezdee",
-                        "Tọọzdee",
-                        "Fraịdee",
-                        "Satọdee",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Ọ1",
-                        "Ọ2",
-                        "Ọ3",
-                        "Ọ4",
-                    }
-                    wide{
-                        "Ọkara 1",
-                        "Ọkara 2",
-                        "Ọkara 3",
-                        "Ọkara 4",
-                    }
-                }
             }
         }
         gregorian{

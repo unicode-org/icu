@@ -401,10 +401,6 @@ ca{
             }
         }
         generic{
-            AmPmMarkers{
-                "a.m.",
-                "p.m.",
-            }
             DateTimePatterns{
                 "H.mm.ss zzzz",
                 "H.mm.ss z",
@@ -450,84 +446,6 @@ ca{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "dg.",
-                        "dl.",
-                        "dt.",
-                        "dc.",
-                        "dj.",
-                        "dv.",
-                        "ds.",
-                    }
-                    narrow{
-                        "dg",
-                        "dl",
-                        "dt",
-                        "dc",
-                        "dj",
-                        "dv",
-                        "ds",
-                    }
-                    short{
-                        "dg.",
-                        "dl.",
-                        "dt.",
-                        "dc.",
-                        "dj.",
-                        "dv.",
-                        "ds.",
-                    }
-                    wide{
-                        "diumenge",
-                        "dilluns",
-                        "dimarts",
-                        "dimecres",
-                        "dijous",
-                        "divendres",
-                        "dissabte",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "dg",
-                        "dl",
-                        "dt",
-                        "dc",
-                        "dj",
-                        "dv",
-                        "ds",
-                    }
-                    narrow{
-                        "dg",
-                        "dl",
-                        "dt",
-                        "dc",
-                        "dj",
-                        "dv",
-                        "ds",
-                    }
-                    short{
-                        "dg.",
-                        "dl.",
-                        "dm.",
-                        "dc.",
-                        "dj.",
-                        "dv.",
-                        "ds.",
-                    }
-                    wide{
-                        "Diumenge",
-                        "Dilluns",
-                        "Dimarts",
-                        "Dimecres",
-                        "Dijous",
-                        "Divendres",
-                        "Dissabte",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -622,48 +540,6 @@ ca{
                     M{"dd/MM/y - dd/MM/y"}
                     d{"dd/MM/y - dd/MM/y"}
                     y{"dd/MM/y - dd/MM/y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "1T",
-                        "2T",
-                        "3T",
-                        "4T",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1r trimestre",
-                        "2n trimestre",
-                        "3r trimestre",
-                        "4t trimestre",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1T",
-                        "2T",
-                        "3T",
-                        "4T",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1r trimestre",
-                        "2n trimestre",
-                        "3r trimestre",
-                        "4t trimestre",
-                    }
                 }
             }
         }

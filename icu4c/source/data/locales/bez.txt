@@ -26,10 +26,6 @@ bez{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "pamilau",
-                "pamunyi",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -69,55 +65,6 @@ bez{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Mul",
-                        "Vil",
-                        "Hiv",
-                        "Hid",
-                        "Hit",
-                        "Hih",
-                        "Lem",
-                    }
-                    wide{
-                        "pa mulungu",
-                        "pa shahuviluha",
-                        "pa hivili",
-                        "pa hidatu",
-                        "pa hitayi",
-                        "pa hihanu",
-                        "pa shahulembela",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "M",
-                        "J",
-                        "H",
-                        "H",
-                        "H",
-                        "W",
-                        "J",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "L1",
-                        "L2",
-                        "L3",
-                        "L4",
-                    }
-                    wide{
-                        "Lobo 1",
-                        "Lobo 2",
-                        "Lobo 3",
-                        "Lobo 4",
-                    }
-                }
             }
         }
         gregorian{

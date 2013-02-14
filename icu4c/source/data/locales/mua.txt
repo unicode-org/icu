@@ -32,10 +32,6 @@ mua{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "comme",
-                "lilli",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -74,55 +70,6 @@ mua{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Cya",
-                        "Cla",
-                        "Czi",
-                        "Cko",
-                        "Cka",
-                        "Cga",
-                        "Cze",
-                    }
-                    wide{
-                        "Com'yakke",
-                        "Comlaaɗii",
-                        "Comzyiiɗii",
-                        "Comkolle",
-                        "Comkaldǝɓlii",
-                        "Comgaisuu",
-                        "Comzyeɓsuu",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "Y",
-                        "L",
-                        "Z",
-                        "O",
-                        "A",
-                        "G",
-                        "E",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "F1",
-                        "F2",
-                        "F3",
-                        "F4",
-                    }
-                    wide{
-                        "Tai fĩi sai ma tǝn kee zah",
-                        "Tai fĩi sai zah lǝn gwa ma kee",
-                        "Tai fĩi sai zah lǝn sai ma kee",
-                        "Tai fĩi sai ma coo kee zah 'na",
-                    }
-                }
             }
         }
         gregorian{

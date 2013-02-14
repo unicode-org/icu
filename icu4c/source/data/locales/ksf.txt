@@ -34,10 +34,6 @@ ksf{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "sárúwá",
-                "cɛɛ́nko",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -76,55 +72,6 @@ ksf{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "sɔ́n",
-                        "lǝn",
-                        "maa",
-                        "mɛk",
-                        "jǝǝ",
-                        "júm",
-                        "sam",
-                    }
-                    wide{
-                        "sɔ́ndǝ",
-                        "lǝndí",
-                        "maadí",
-                        "mɛkrɛdí",
-                        "jǝǝdí",
-                        "júmbá",
-                        "samdí",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "s",
-                        "l",
-                        "m",
-                        "m",
-                        "j",
-                        "j",
-                        "s",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "i1",
-                        "i2",
-                        "i3",
-                        "i4",
-                    }
-                    wide{
-                        "id́ɛ́n kǝbǝk kǝ ntɔ́ntɔ́",
-                        "idɛ́n kǝbǝk kǝ kǝbɛ́ɛ",
-                        "idɛ́n kǝbǝk kǝ kǝráá",
-                        "idɛ́n kǝbǝk kǝ kǝnin",
-                    }
-                }
             }
         }
         gregorian{

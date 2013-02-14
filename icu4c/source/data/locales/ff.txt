@@ -30,10 +30,6 @@ ff{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "subaka",
-                "kikiiɗe",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -71,55 +67,6 @@ ff{
                 yMMMd{"d MMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "dew",
-                        "aaɓ",
-                        "maw",
-                        "nje",
-                        "naa",
-                        "mwd",
-                        "hbi",
-                    }
-                    wide{
-                        "dewo",
-                        "aaɓnde",
-                        "mawbaare",
-                        "njeslaare",
-                        "naasaande",
-                        "mawnde",
-                        "hoore-biir",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "d",
-                        "a",
-                        "m",
-                        "n",
-                        "n",
-                        "m",
-                        "h",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    wide{
-                        "Termes 1",
-                        "Termes 2",
-                        "Termes 3",
-                        "Termes 4",
-                    }
-                }
             }
         }
         gregorian{

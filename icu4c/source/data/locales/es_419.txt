@@ -74,30 +74,7 @@ es_419{
     calendar{
         generic{
             availableFormats{
-                yMEd{"E d/M/y"}
-            }
-            dayNames{
-                stand-alone{
-                    narrow{
-                        "D",
-                        "L",
-                        "M",
-                        "M",
-                        "J",
-                        "V",
-                        "S",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                }
+                yMEd{"E d/M/y G"}
             }
         }
         gregorian{

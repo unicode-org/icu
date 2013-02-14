@@ -41,44 +41,6 @@ rw{
                 "{1} {0}",
                 "{1} {0}",
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "cyu.",
-                        "mbe.",
-                        "kab.",
-                        "gtu.",
-                        "kan.",
-                        "gnu.",
-                        "gnd.",
-                    }
-                    wide{
-                        "Ku cyumweru",
-                        "Kuwa mbere",
-                        "Kuwa kabiri",
-                        "Kuwa gatatu",
-                        "Kuwa kane",
-                        "Kuwa gatanu",
-                        "Kuwa gatandatu",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "I1",
-                        "I2",
-                        "I3",
-                        "I4",
-                    }
-                    wide{
-                        "igihembwe cya mbere",
-                        "igihembwe cya kabiri",
-                        "igihembwe cya gatatu",
-                        "igihembwe cya kane",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

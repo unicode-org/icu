@@ -35,10 +35,6 @@ nus{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "RW",
-                "TŊ",
-            }
             DateTimePatterns{
                 "zzzz h:mm:ss a",
                 "z h:mm:ss a",
@@ -77,55 +73,6 @@ nus{
                 yMd{"d/M/y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "Cäŋ",
-                        "Jiec",
-                        "Rɛw",
-                        "Diɔ̱k",
-                        "Ŋuaan",
-                        "Dhieec",
-                        "Bäkɛl",
-                    }
-                    wide{
-                        "Cäŋ kuɔth",
-                        "Jiec la̱t",
-                        "Rɛw lätni",
-                        "Diɔ̱k lätni",
-                        "Ŋuaan lätni",
-                        "Dhieec lätni",
-                        "Bäkɛl lätni",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "C",
-                        "J",
-                        "R",
-                        "D",
-                        "Ŋ",
-                        "D",
-                        "B",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "P1",
-                        "P2",
-                        "P3",
-                        "P4",
-                    }
-                    wide{
-                        "Päth diɔk tin nhiam",
-                        "Päth diɔk tin guurɛ",
-                        "Päth diɔk tin wä kɔɔriɛn",
-                        "Päth diɔk tin jiɔakdiɛn",
-                    }
-                }
             }
         }
         gregorian{

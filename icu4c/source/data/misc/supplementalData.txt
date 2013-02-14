@@ -17,8 +17,8 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
         AF{
-            "gregorian",
             "persian",
+            "gregorian",
             "islamic",
             "islamic-civil",
         }
@@ -85,8 +85,8 @@ supplementalData:table(nofallback){
             "islamic-civil",
         }
         IR{
-            "gregorian",
             "persian",
+            "gregorian",
             "islamic",
             "islamic-civil",
         }

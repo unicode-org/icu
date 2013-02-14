@@ -173,10 +173,6 @@ sk{
     Version{"2.0.81.65"}
     calendar{
         generic{
-            AmPmMarkers{
-                "dopoludnia",
-                "popoludní",
-            }
             DateTimePatterns{
                 "H:mm:ss zzzz",
                 "H:mm:ss z",
@@ -221,84 +217,6 @@ sk{
                 yMd{"d.M.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ne",
-                        "po",
-                        "ut",
-                        "st",
-                        "št",
-                        "pi",
-                        "so",
-                    }
-                    narrow{
-                        "N",
-                        "P",
-                        "U",
-                        "S",
-                        "Š",
-                        "P",
-                        "S",
-                    }
-                    short{
-                        "Ne",
-                        "Po",
-                        "Ut",
-                        "St",
-                        "Št",
-                        "Pi",
-                        "So",
-                    }
-                    wide{
-                        "nedeľa",
-                        "pondelok",
-                        "utorok",
-                        "streda",
-                        "štvrtok",
-                        "piatok",
-                        "sobota",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "ne",
-                        "po",
-                        "ut",
-                        "st",
-                        "št",
-                        "pi",
-                        "so",
-                    }
-                    narrow{
-                        "N",
-                        "P",
-                        "U",
-                        "S",
-                        "Š",
-                        "P",
-                        "S",
-                    }
-                    short{
-                        "Ne",
-                        "Po",
-                        "Ut",
-                        "St",
-                        "Št",
-                        "Pi",
-                        "So",
-                    }
-                    wide{
-                        "nedeľa",
-                        "pondelok",
-                        "utorok",
-                        "streda",
-                        "štvrtok",
-                        "piatok",
-                        "sobota",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -396,48 +314,6 @@ sk{
                     M{"d.M.y - d.M.y"}
                     d{"d.M.y - d.M.y"}
                     y{"d.M.y - d.M.y"}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1. štvrťrok",
-                        "2. štvrťrok",
-                        "3. štvrťrok",
-                        "4. štvrťrok",
-                    }
-                }
-                stand-alone{
-                    abbreviated{
-                        "1Q",
-                        "2Q",
-                        "3Q",
-                        "4Q",
-                    }
-                    narrow{
-                        "1",
-                        "2",
-                        "3",
-                        "4",
-                    }
-                    wide{
-                        "1. štvrťrok",
-                        "2. štvrťrok",
-                        "3. štvrťrok",
-                        "4. štvrťrok",
-                    }
                 }
             }
         }

@@ -63,55 +63,6 @@ mfe{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
-            dayNames{
-                format{
-                    abbreviated{
-                        "dim",
-                        "lin",
-                        "mar",
-                        "mer",
-                        "ze",
-                        "van",
-                        "sam",
-                    }
-                    wide{
-                        "dimans",
-                        "lindi",
-                        "mardi",
-                        "merkredi",
-                        "zedi",
-                        "vandredi",
-                        "samdi",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "d",
-                        "l",
-                        "m",
-                        "m",
-                        "z",
-                        "v",
-                        "s",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "T1",
-                        "T2",
-                        "T3",
-                        "T4",
-                    }
-                    wide{
-                        "1e trimes",
-                        "2em trimes",
-                        "3em trimes",
-                        "4em trimes",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{

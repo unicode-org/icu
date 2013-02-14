@@ -41,10 +41,6 @@ rm{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "am",
-                "sm",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -90,39 +86,6 @@ rm{
                 yMMdd{"dd.MM.y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "du",
-                        "gli",
-                        "ma",
-                        "me",
-                        "gie",
-                        "ve",
-                        "so",
-                    }
-                    wide{
-                        "dumengia",
-                        "glindesdi",
-                        "mardi",
-                        "mesemna",
-                        "gievgia",
-                        "venderdi",
-                        "sonda",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "D",
-                        "G",
-                        "M",
-                        "M",
-                        "G",
-                        "V",
-                        "S",
-                    }
-                }
             }
             intervalFormats{
                 M{
@@ -203,16 +166,6 @@ rm{
                     M{"dd.MM.y - dd.MM.y"}
                     d{"dd.MM.y - dd.MM.y"}
                     y{"dd.MM.y - dd.MM.y"}
-                }
-            }
-            quarters{
-                format{
-                    wide{
-                        "1. quartal",
-                        "2. quartal",
-                        "3. quartal",
-                        "4. quartal",
-                    }
                 }
             }
         }

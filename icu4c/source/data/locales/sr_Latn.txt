@@ -35,10 +35,6 @@ sr_Latn{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "pre podne",
-                "popodne",
-            }
             DateTimePatterns{
                 "HH.mm.ss zzzz",
                 "HH.mm.ss z",
@@ -85,39 +81,6 @@ sr_Latn{
                 yMd{"d. M. y."}
                 yQQQ{"y QQQ"}
                 yQQQQ{"y QQQQ"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "ned",
-                        "pon",
-                        "uto",
-                        "sre",
-                        "čet",
-                        "pet",
-                        "sub",
-                    }
-                    wide{
-                        "nedelja",
-                        "ponedeljak",
-                        "utorak",
-                        "sreda",
-                        "četvrtak",
-                        "petak",
-                        "subota",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "n",
-                        "p",
-                        "u",
-                        "s",
-                        "č",
-                        "p",
-                        "s",
-                    }
-                }
             }
             intervalFormats{
                 H{
@@ -212,22 +175,6 @@ sr_Latn{
                     M{"d.M.y. - d.M.y."}
                     d{"d.M.y. - d.M.y."}
                     y{"d.M.y. - d.M.y."}
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "Q1",
-                        "Q2",
-                        "Q3",
-                        "Q4",
-                    }
-                    wide{
-                        "1. kvartal",
-                        "2. kvartal",
-                        "3. kvartal",
-                        "4. kvartal",
-                    }
                 }
             }
         }

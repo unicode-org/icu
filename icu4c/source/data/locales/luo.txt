@@ -26,10 +26,6 @@ luo{
     Version{"2.0.81.63"}
     calendar{
         generic{
-            AmPmMarkers{
-                "OD",
-                "OT",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -67,55 +63,6 @@ luo{
                 yMMMM{"MMMM y"}
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
-            }
-            dayNames{
-                format{
-                    abbreviated{
-                        "JMP",
-                        "WUT",
-                        "TAR",
-                        "TAD",
-                        "TAN",
-                        "TAB",
-                        "NGS",
-                    }
-                    wide{
-                        "Jumapil",
-                        "Wuok Tich",
-                        "Tich Ariyo",
-                        "Tich Adek",
-                        "Tich Ang'wen",
-                        "Tich Abich",
-                        "Ngeso",
-                    }
-                }
-                stand-alone{
-                    narrow{
-                        "J",
-                        "W",
-                        "T",
-                        "T",
-                        "T",
-                        "T",
-                        "N",
-                    }
-                }
-            }
-            quarters{
-                format{
-                    abbreviated{
-                        "NMN1",
-                        "NMN2",
-                        "NMN3",
-                        "NMN4",
-                    }
-                    wide{
-                        "nus mar nus 1",
-                        "nus mar nus 2",
-                        "nus mar nus 3",
-                        "nus mar nus 4",
-                    }
-                }
             }
         }
         gregorian{

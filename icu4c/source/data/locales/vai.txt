@@ -72,19 +72,6 @@ vai{
                 yQQQ{"QQQ y"}
                 yQQQQ{"QQQQ y"}
             }
-            dayNames{
-                format{
-                    wide{
-                        "ꕞꕌꔵ",
-                        "ꗳꗡꘉ",
-                        "ꕚꕞꕚ",
-                        "ꕉꕞꕒ",
-                        "ꕉꔤꕆꕢ",
-                        "ꕉꔤꕀꕮ",
-                        "ꔻꔬꔳ",
-                    }
-                }
-            }
         }
         gregorian{
             DateTimePatterns{
