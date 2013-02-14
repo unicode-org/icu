@@ -765,6 +765,15 @@ public:
                     UNumberFormatStyle style,
                     UErrorCode& status);
 
+#if UCONFIG_HAVE_PARSEALLINPUT
+    /**
+     * @internal
+     */
+    void setParseAllInput(UNumberFormatAttributeValue value);
+#endif
+
+#endif  /* U_HIDE_INTERNAL_API */
+
 
     /**
      * Set an integer attribute on this DecimalFormat.
@@ -773,8 +782,8 @@ public:
      * @param attr the attribute to set
      * @param newvalue new value
      * @param status the error type
-     * @return *this - for chaining
-     * @internal ICU 50
+     * @return *this - for chaining (example: format.setAttribute(...).setAttribute(...) )
+     * @draft ICU 51
      */
     virtual DecimalFormat& setAttribute( UNumberFormatAttribute attr,
                                        int32_t newvalue,
@@ -787,19 +796,12 @@ public:
      * @param attr the attribute to set
      * @param status the error type
      * @return the attribute value. Undefined if there is an error.
-     * @internal ICU 50
+     * @draft ICU 51
      */
     virtual int32_t getAttribute( UNumberFormatAttribute attr,
                                   UErrorCode &status) const;
 
-#if UCONFIG_HAVE_PARSEALLINPUT
-    /**
-     * @internal 
-     */
-    void setParseAllInput(UNumberFormatAttributeValue value);
-#endif
 
-#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Create a DecimalFormat from the given pattern and symbols.
