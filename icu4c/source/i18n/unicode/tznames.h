@@ -117,11 +117,10 @@ struct MatchInfo;
  * or both.
  * 
  * <p>
- * The default <code>TimeZoneNames</code> implementation returned by {@link #createInstance(const Locale&, UErrorCode&)}
+ * The default <code>TimeZoneNames</code> implementation returned by {@link #createInstance}
  * uses the locale data imported from CLDR. In CLDR, set of meta zone IDs and mappings between zone IDs and meta zone
- * IDs are shared by all locales. Therefore, the behavior of {@link #getAvailableMetaZoneIDs(UErrorCode&)},
- * {@link #getAvailableMetaZoneIDs(const UnicodeString&, UErrorCode&)}, {@link #getMetaZoneID(const UnicodeString&, UDate, UnicodeString&)},
- * and {@link #getReferenceZoneID(const UnicodeString&, const char*, UnicodeString&)} won't be changed no matter
+ * IDs are shared by all locales. Therefore, the behavior of {@link #getAvailableMetaZoneIDs},
+ * {@link #getMetaZoneID}, and {@link #getReferenceZoneID} won't be changed no matter
  * what locale is used for getting an instance of <code>TimeZoneNames</code>.
  *
  * @draft ICU 50
