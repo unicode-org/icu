@@ -1,5 +1,5 @@
 *******************************************************************************
-* Copyright (C) 2012, International Business Machines Corporation and         *
+* Copyright (C) 2012-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 
@@ -38,19 +38,14 @@ files that we're interested in.
 Table A.1 contains current currencies and funds and Table A.3 contains
 historic denominations.
 
-The tool supports 3 commands - check / print / build.
+The tool supports 2 commands - check / resource.
 
 1) check
 
 This command compares the hardcoded mapping data in NumericCodeData.java
 with the ISO 4217 XML data files side by side and check differences.
 
-2) print
-
-This command prints out body of String[][] CODE_MAP_DATA from the ISO
-4217 XML data files.
-
-3) build
+2) resource
 
 This command writes out the hardcoded mapping data in NumericCodeData.java
 in ICU resource bundle source format - currencyNumericCodes.txt.
@@ -107,7 +102,7 @@ In this case, you have to update the hardcoded data in NumericCodeData.
 You can either edit the table in NumericCodeData manually, or run the tool
 command "print" and copy the output and paste it to the table.
 
-Once you make sure "ant check" returns no errors, run "ant build". This
+Once you make sure "ant check" returns no errors, run "ant resource". This
 target generate out/res/currencyNumericCodes.txt. The file should go to
 <icu4c>/source/data/misc directory.
 
