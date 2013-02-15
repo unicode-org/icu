@@ -33,8 +33,9 @@
 
 
 #   Temp debugging tests 
-<line>
-<data>•\ufffc•\u30e3\u000c<100>\u1b39\u300a\u002f\u203a\u200b•\ufffc•\uaf64•\udcfb•</data>
+<char>
+<data>•\U00010020•\U00010000\u0301•x•</data>
+<data>•\U00010020•\U00010000\N{COMBINING MACRON}•</data>
 
 ########################################################################################
 #
@@ -167,8 +168,7 @@
 <data>•abc\U00010300<200> •abc\N{DESERET SMALL LETTER ENG}<200> •abc\N{MATHEMATICAL BOLD SMALL Z}<200> •abc\N{MATHEMATICAL SANS-SERIF BOLD ITALIC PI SYMBOL}<200> •</data>
 
 # Unassigned code points
-# TODO: This case should pass.
-#<data>•abc<200>\U0001D800•def<200>\U0001D3FF• •</data>
+<data>•abc<200>\U0001D800•def<200>\U0001D3FF• •</data>
 
 # Hiragana & Katakana stay together, but separates from each other and Latin.
 # *** what to do about theoretical combos of chars? i.e. hiragana + accent
@@ -539,7 +539,7 @@ What is the proper use of the abbreviation pp.? •Yes, I am definatelly 12" tal
 
 #      Surrogate line break tests.
 #
-#<data>•\u4e01•\ud840\udc01•\u4e02•abc •\ue000 •\udb80\udc01•</data> #TODO: should be same as the next line.
+<data>•\u4e01•\ud840\udc01•\u4e02•abc •\ue000 •\udb80\udc01•</data>  #This line and the following are equivalent.
 <data>•\u4e01•\U20001•\u4e02•abc •\ue000 •\Uf0001•</data>
 
 #      Regression for bug 836
@@ -819,6 +819,9 @@ Bangkok)•</data>
 
 <locale fi>
 <line>
+// TODO: problems with Finnish line break rules cause these two lines to fail.
 #<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
 #<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
 
+<data>•abc •- •def    •abc •-def    •abc- •def   •</data>   # With ASCII hyphen
+<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •</data>   # With Unicode u2010 hyphen
