@@ -1,5 +1,5 @@
 #
-#   Copyright (C) 2002-2012, International Business Machines Corporation and others.
+#   Copyright (C) 2002-2013, International Business Machines Corporation and others.
 #       All Rights Reserved.
 #
 #   file:  char.txt 
@@ -66,11 +66,15 @@ $SpacingMark [^$Control $CR $LF];
 
 
 ## -------------------------------------------------
+#  We don't logically need safe char break rules, but if we don't provide any at all
+#  the engine for preceding() and following() will fall back to the
+#  old style inefficient algorithm.
 
 !!safe_reverse;
-
+$LF $CR;
 
 ## -------------------------------------------------
 
 !!safe_forward;
+$CR $LF;
 
