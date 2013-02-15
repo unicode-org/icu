@@ -61,7 +61,7 @@ import com.ibm.icu.util.UResourceBundle;
  * 
  * // modify the generator by adding patterns
  * DateTimePatternGenerator.PatternInfo returnInfo = new DateTimePatternGenerator.PatternInfo();
- * gen.add(&quot;d'. von' MMMM&quot;, true, returnInfo);
+ * gen.addPattern(&quot;d'. von' MMMM&quot;, true, returnInfo);
  * // the returnInfo is mostly useful for debugging problem cases
  * format.applyPattern(gen.getBestPattern(&quot;MMMMddHmm&quot;));
  * assertEquals(&quot;modified format: MMMddHmm&quot;,
@@ -94,7 +94,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     // TODO add hack to fix months for CJK, as per bug ticket 1099
 
     /**
-     * Create empty generator, to be constructed with add(...) etc.
+     * Create empty generator, to be constructed with addPattern(...) etc.
      * @stable ICU 3.6
      */
     public static DateTimePatternGenerator getEmptyInstance() {
@@ -439,7 +439,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     }
 
     /**
-     * PatternInfo supplies output parameters for add(...). It is used because
+     * PatternInfo supplies output parameters for addPattern(...). It is used because
      * Java doesn't have real output parameters. It is treated like a struct (eg
      * Point), so all fields are public.
      * 
