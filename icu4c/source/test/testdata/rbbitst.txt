@@ -819,7 +819,7 @@ Bangkok)•</data>
 
 <locale fi>
 <line>
-// TODO: problems with Finnish line break rules cause these two lines to fail.
+# TODO: problems with Finnish line break rules cause these two lines to fail.
 #<data>•abc •- •def    •abc •-def    •abc- •def   •abc-•def•</data>   # With ASCII hyphen
 #<data>•abc •‐ •def    •abc •‐def    •abc‐ •def   •abc‐•def•</data>   # With Unicode u2010 hyphen
 
