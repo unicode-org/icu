@@ -741,7 +741,7 @@ public class Currency extends MeasureUnit implements Serializable {
                 int i = 0;
                 for (; i < resultList.size(); i++) {
                     CurrencyStringInfo tmp = resultList.get(i);
-                    if (item.getISOCode() == tmp.getISOCode()) {
+                    if (item.getISOCode().equals(tmp.getISOCode())) {
                         if (matchLength > tmp.getCurrencyString().length()) {
                             resultList.set(i, item);
                         }
