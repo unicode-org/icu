@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2007-2010, International Business Machines Corporation and   *
+* Copyright (C) 2007-2013, International Business Machines Corporation and   *
 * others. All Rights Reserved.                                               *
 ******************************************************************************
 */
@@ -67,12 +67,12 @@ public class YMDDateFormatter implements DateFormatter {
    * @param date the date
    */
   public String format(Date date) {
-    synchronized (this) {
-      if (df == null) {
-        // ignores requested fields
-        // todo: make this really work
-      }
-    }
+//    synchronized (this) {
+//      if (df == null) {
+//        // ignores requested fields
+//        // todo: make this really work
+//      }
+//    }
     return df.format(date);
   }
 
