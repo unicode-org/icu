@@ -287,7 +287,8 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
                     _namesTrie.put(name, info);
                 }
             }
-            _mzNamesMap.put(mzID, znames);
+            ZNames tmpZnames = _mzNamesMap.putIfAbsent(mzID, znames);
+            znames = (tmpZnames == null) ? znames : tmpZnames;
         }
         return znames;
     }
@@ -313,7 +314,8 @@ public class TimeZoneNamesImpl extends TimeZoneNames {
                     _namesTrie.put(name, info);
                 }
             }
-            _tzNamesMap.put(tzID, tznames);
+            TZNames tmpTznames = _tzNamesMap.putIfAbsent(tzID, tznames);
+            tznames = (tmpTznames == null) ? tznames : tmpTznames;
         }
         return tznames;
     }
