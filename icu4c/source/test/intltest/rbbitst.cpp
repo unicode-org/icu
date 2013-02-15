@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1999-2012, International Business Machines Corporation and
+ * Copyright (c) 1999-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /************************************************************************
@@ -956,6 +956,57 @@ void RBBITest::executeTest(TestParams *t) {
                       i, t->srcLine->elementAti(i), t->srcCol->elementAti(i));
         }
     }
+
+    // Check isBoundary()
+    for (i=0; i<t->expectedBreaks->size(); i++) {
+        UBool boundaryExpected = (t->expectedBreaks->elementAti(i) != 0);
+        UBool boundaryFound    = t->bi->isBoundary(i);
+        if (boundaryExpected != boundaryFound) {
+            errln("isBoundary(%d) incorrect. File line,col= %4d,%4d\n"
+                  "        Expected, Actual= %s, %s",
+                  i, t->srcLine->elementAti(i), t->srcCol->elementAti(i),
+                  boundaryExpected ? "true":"false", boundaryFound? "true" : "false");
+        }
+    }
+
+    // Check following()
+    for (i=0; i<t->expectedBreaks->size(); i++) {
+        int32_t actualBreak = t->bi->following(i);
+        int32_t expectedBreak = BreakIterator::DONE;
+        for (int32_t j=i+1; j < t->expectedBreaks->size(); j++) {
+            if (t->expectedBreaks->elementAti(j) != 0) {
+                expectedBreak = j;
+                break;
+            }
+        }
+        if (expectedBreak != actualBreak) {
+            errln("following(%d) incorrect. File line,col= %4d,%4d\n"
+                  "        Expected, Actual= %d, %d",
+                  i, t->srcLine->elementAti(i), t->srcCol->elementAti(i), expectedBreak, actualBreak);
+        }
+    }
+
+    // Check preceding()
+    for (i=t->expectedBreaks->size(); i>=0; i--) {
+        int32_t actualBreak = t->bi->preceding(i);
+        int32_t expectedBreak = BreakIterator::DONE;
+
+        // For supplementaries, back up to the start of the character.
+        int32_t currentCharStart = i < t->dataToBreak.length()? t->dataToBreak.getChar32Start(i) : i;
+
+        for (int32_t j=currentCharStart-1; j >= 0; j--) {
+        // for (int32_t j=i-1; j >= 0; j--) {
+            if (t->expectedBreaks->elementAti(j) != 0) {
+                expectedBreak = j;
+                break;
+            }
+        }
+        if (expectedBreak != actualBreak) {
+            errln("preceding(%d) incorrect. File line,col= %4d,%4d\n"
+                  "        Expected, Actual= %d, %d",
+                  i, t->srcLine->elementAti(i), t->srcCol->elementAti(i), expectedBreak, actualBreak);
+        }
+    }
 }
 
 
@@ -1100,7 +1151,7 @@ void RBBITest::TestExtended() {
                 char localeName8[100];
                 localeName.extract(0, localeName.length(), localeName8, sizeof(localeName8), 0);
                 locale = Locale::createFromName(localeName8);
-                charIdx += localeMatcher.group(0, status).length();
+                charIdx += localeMatcher.group(0, status).length() - 1;
                 TEST_ASSERT_SUCCESS(status);
                 break;
             }
