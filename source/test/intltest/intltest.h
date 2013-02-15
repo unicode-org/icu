@@ -241,6 +241,7 @@ protected:
                        const UnicodeString& actual, UBool possibleDataError=FALSE);
     UBool assertEquals(const char* message, const char* expected,
                        const char* actual);
+    UBool assertEquals(const char* message, int32_t expected, int32_t actual);
 #if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,
                        const Formattable& actual);
@@ -299,7 +300,12 @@ protected:
 
     static UnicodeString &prettify(const UnicodeString &source, UnicodeString &target);
     static UnicodeString prettify(const UnicodeString &source, UBool parseBackslash=FALSE);
+    // digits=-1 determines the number of digits automatically
     static UnicodeString &appendHex(uint32_t number, int32_t digits, UnicodeString &target);
+    static UnicodeString toHex(uint32_t number, int32_t digits=-1);
+    static inline UnicodeString toHex(int32_t number, int32_t digits=-1) {
+        return toHex((uint32_t)number, digits);
+    }
 
 public:
     static void setICU_DATA();       // Set up ICU_DATA if necessary.
