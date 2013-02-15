@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * Copyright (C) 1996-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1423,7 +1423,7 @@ public final class RuleBasedCollator extends Collator {
      * @stable ICU 2.8
      */
     public int compare(String source, String target) {
-        if (source == target) {
+        if (source.equals(target)) {
             return 0;
         }
         CollationBuffer buffer = null;
