@@ -992,10 +992,10 @@ void RBBITest::executeTest(TestParams *t) {
         int32_t expectedBreak = BreakIterator::DONE;
 
         // For supplementaries, back up to the start of the character.
-        int32_t currentCharStart = i < t->dataToBreak.length()? t->dataToBreak.getChar32Start(i) : i;
+        // int32_t currentCharStart = i < t->dataToBreak.length()? t->dataToBreak.getChar32Start(i) : i;
 
-        for (int32_t j=currentCharStart-1; j >= 0; j--) {
-        // for (int32_t j=i-1; j >= 0; j--) {
+        // for (int32_t j=currentCharStart-1; j >= 0; j--) {
+        for (int32_t j=i-1; j >= 0; j--) {
             if (t->expectedBreaks->elementAti(j) != 0) {
                 expectedBreak = j;
                 break;
