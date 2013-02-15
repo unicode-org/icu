@@ -22,13 +22,13 @@ import com.ibm.icu.util.LocaleData;
 import com.ibm.icu.util.ULocale;
 
 /**
- * AlphabeticIndex supports the creation of a UI index appropriate for a given language. It can support either direct
- * use, or use with a client that doesn't support localized collation. The following is an example of what an index
- * might look like in a UI:
- * 
+ * AlphabeticIndex supports the creation of a UI index appropriate for a given language.
+ * It can support either direct use, or use with a client that doesn't support localized collation.
+ * The following is an example of what an index might look like in a UI:
+ *
  * <pre>
  *  <b>... A B C D E F G H I J K L M N O P Q R S T U V W X Y Z  ...</b>
- *  
+ *
  *  <b>A</b>
  *     Addison
  *     Albertson
@@ -37,19 +37,23 @@ import com.ibm.icu.util.ULocale;
  *     Baecker
  *  ...
  * </pre>
- * 
- * The class can generate a list of labels for use as a UI "index", that is, a list of clickable characters (or
- * character sequences) that allow the user to see a segment (bucket) of a larger "target" list. That is, each label
- * corresponds to a bucket in the target list, where everything in the bucket is greater than or equal to the character
- * (according to the locale's collation). Strings can be added to the index; they will be in sorted order in the right
- * bucket.</p>
+ *
+ * The class can generate a list of labels for use as a UI "index", that is, a list of
+ * clickable characters (or character sequences) that allow the user to see a segment
+ * (bucket) of a larger "target" list. That is, each label corresponds to a bucket in
+ * the target list, where everything in the bucket is greater than or equal to the character
+ * (according to the locale's collation). Strings can be added to the index;
+ * they will be in sorted order in the right bucket.</p>
  * <p>
- * The class also supports having buckets for strings before the first (underflow), after the last (overflow), and
- * between scripts (inflow). For example, if the index is constructed with labels for Russian and English, Greek
- * characters would fall into an inflow bucket between the other two scripts.</p>
- * 
- * <p><em>Note:</em> If you expect to have a lot of ASCII or Latin characters as well as characters from the user's language, then it is a good idea to call addLabels(ULocale.English).</p>
- * 
+ * The class also supports having buckets for strings before the first (underflow),
+ * after the last (overflow), and between scripts (inflow). For example, if the index
+ * is constructed with labels for Russian and English, Greek characters would fall
+ * into an inflow bucket between the other two scripts.</p>
+ *
+ * <p><em>Note:</em> If you expect to have a lot of ASCII or Latin characters
+ * as well as characters from the user's language,
+ * then it is a good idea to call addLabels(ULocale.English).</p>
+ *
  * <h2>Direct Use</h2>
  * <p>The following shows an example of building an index directly.
  *  The "show..." methods below are just to illustrate usage.
@@ -80,14 +84,15 @@ import com.ibm.icu.util.ULocale;
  *             showIndexedItem(UI, item.getName(), item.getData());
  *         }
  * </pre>
- * 
- * The caller can build different UIs using this class. For example, an index character could be omitted or grayed-out
+ *
+ * The caller can build different UIs using this class.
+ * For example, an index character could be omitted or grayed-out
  * if its bucket is empty. Small buckets could also be combined based on size, such as:
- * 
+ *
  * <pre>
  * <b>... A-F G-N O-Z ...</b>
  * </pre>
- * 
+ *
  * <h2>Client Support</h2>
  * <p>Callers can also use the {@link AlphabeticIndex.ImmutableIndex}, or the AlphabeticIndex itself,
  * to support sorting on a client that doesn't support AlphabeticIndex functionality.
@@ -104,13 +109,13 @@ import com.ibm.icu.util.ULocale;
  * <li>When the client has a new name, it sends that name to the server.
  * The server needs to call the following methods,
  * and communicate the bucketIndex and collationKey back to the client.
- * 
+ *
  * <pre>
  * int bucketIndex = index.getBucketIndex(name);
  * String label = immutableIndex.getBucket(bucketIndex).getLabel();  // optional
  * RawCollationKey collationKey = collator.getRawCollationKey(name, null);
  * </pre>
- * 
+ *
  * <li>The client would put the name (and associated information) into its bucket for bucketIndex. The collationKey is a
  * sequence of bytes that can be compared with a binary compare, and produce the right localized result.</li>
  * </ul>
@@ -144,7 +149,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
 
     // We accumulate these as we build up the input parameters
     private final UnicodeSet initialLabels = new UnicodeSet();
-    private Collection<Record<V>> inputList;
+    private List<Record<V>> inputList;
 
     // Lazy evaluated: null means that we have not built yet.
     private BucketList<V> buckets;
@@ -231,7 +236,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @stable ICU 4.8
      */
     public AlphabeticIndex(ULocale locale) {
-        this(locale, null, null);
+        this(locale, null);
     }
 
     /**
@@ -242,7 +247,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @stable ICU 4.8
      */
     public AlphabeticIndex(Locale locale) {
-        this(ULocale.forLocale(locale));
+        this(ULocale.forLocale(locale), null);
     }
 
     /** 
@@ -260,13 +265,13 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @provisional This API might change or be removed in a future release.
      */
     public AlphabeticIndex(RuleBasedCollator collator) {
-        this(null, collator, new UnicodeSet());
+        this(null, collator);
     }
 
     /**
      * Internal constructor containing implementation used by public constructors.
      */
-    private AlphabeticIndex(ULocale locale, RuleBasedCollator collator, UnicodeSet exemplarChars) {
+    private AlphabeticIndex(ULocale locale, RuleBasedCollator collator) {
         collatorOriginal = collator != null ? collator : (RuleBasedCollator) Collator.getInstance(locale);
         try {
             collatorPrimaryOnly = (RuleBasedCollator) (collatorOriginal.clone());
@@ -306,9 +311,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             }
         }
 
-        if (exemplarChars != null) {
-            addLabels(exemplarChars);
-        } else {
+        if (locale != null) {
             addIndexExemplars(locale);
         }
     }
@@ -361,6 +364,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public AlphabeticIndex<V> setOverflowLabel(String overflowLabel) {
         this.overflowLabel = overflowLabel;
+        buckets = null;
         return this;
     }
 
@@ -383,6 +387,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public AlphabeticIndex<V> setUnderflowLabel(String underflowLabel) {
         this.underflowLabel = underflowLabel;
+        buckets = null;
         return this;
     }
 
@@ -405,6 +410,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public AlphabeticIndex<V> setInflowLabel(String inflowLabel) {
         this.inflowLabel = inflowLabel;
+        buckets = null;
         return this;
     }
 
@@ -442,6 +448,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      */
     public AlphabeticIndex<V> setMaxLabelCount(int maxLabelCount) {
         this.maxLabelCount = maxLabelCount;
+        buckets = null;
         return this;
     }
 
@@ -450,6 +457,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * and sort differently, and that the overall list is small enough.
      */
     private List<String> initLabels() {
+        Normalizer2 nfkdNormalizer = Normalizer2.getNFKDInstance();
         List<String> indexCharacters = new ArrayList<String>();
 
         String firstScriptBoundary = firstCharsInScripts.get(0);
@@ -485,7 +493,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
                     indexCharacters.add(~insertionPoint, item);
                 } else {
                     String itemAlreadyIn = indexCharacters.get(insertionPoint);
-                    if (isOneLabelBetterThanOther(item, itemAlreadyIn)) {
+                    if (isOneLabelBetterThanOther(nfkdNormalizer, item, itemAlreadyIn)) {
                         indexCharacters.set(insertionPoint, item);
                     }
                 }
@@ -527,7 +535,6 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     /**
      * This method is called to get the index exemplars. Normally these come from the locale directly,
      * but if they aren't available, we have to synthesize them.
-     * @param locale
      */
     private void addIndexExemplars(ULocale locale) {
         // Chinese index characters, which are specific to each of the several Chinese tailorings,
@@ -548,8 +555,8 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             return;
         }
 
-        // Synthesize the index exemplars
-        // get the exemplars, and handle special cases
+        // The locale data did not include explicit Index characters.
+        // Synthesize a set of them from the locale's standard exemplar characters.
         exemplars = LocaleData.getExemplarSet(locale, 0, LocaleData.ES_STANDARD);
 
         exemplars = exemplars.cloneAsThawed();
@@ -570,16 +577,16 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             // make use of the fact that Ethiopic is allocated in 8's, where
             // the base is 0 mod 8.
             UnicodeSet ethiopic = new UnicodeSet("[[:Block=Ethiopic:]&[:Script=Ethiopic:]]");
-            for (UnicodeSetIterator it = new UnicodeSetIterator(ethiopic); it.next();) {
-                if (it.codepoint == UnicodeSetIterator.IS_STRING) {
-                    break;
-                }
+            UnicodeSetIterator it = new UnicodeSetIterator(ethiopic);
+            while (it.next() && it.codepoint != UnicodeSetIterator.IS_STRING) {
                 if ((it.codepoint & 0x7) != 0) {
                     exemplars.remove(it.codepoint);
                 }
             }
         }
 
+        // Upper-case any that aren't already so.
+        //   (We only do this for synthesized index characters.)
         for (String item : exemplars) {
             initialLabels.add(UCharacter.toUpperCase(locale, item));
         }
@@ -682,9 +689,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @stable ICU 4.8
      */
     public List<String> getBucketLabels() {
-        if (buckets == null) {
-            initBuckets();
-        }
+        initBuckets();
         ArrayList<String> result = new ArrayList<String>();
         for (Bucket<V> bucket : buckets) {
             result.add(bucket.getLabel());
@@ -752,9 +757,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @stable ICU 4.8
      */
     public int getBucketIndex(CharSequence name) {
-        if (buckets == null) {
-            initBuckets();
-        }
+        initBuckets();
         return buckets.getBucketIndex(name, collatorPrimaryOnly);
     }
 
@@ -765,9 +768,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @stable ICU 4.8
      */
     public AlphabeticIndex<V> clearRecords() {
-        buckets = null;
-        if (inputList != null) {
+        if (inputList != null && !inputList.isEmpty()) {
             inputList.clear();
+            buckets = null;
         }
         return this;
     }
@@ -779,9 +782,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @stable ICU 4.8
      */
     public int getBucketCount() {
-        if (buckets == null) {
-            initBuckets();
-        }
+        initBuckets();
         return buckets.getBucketCount();
     }
 
@@ -802,30 +803,25 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * @stable ICU 4.8
      */
     public Iterator<Bucket<V>> iterator() {
-        if (buckets == null) {
-            initBuckets();
-        }
+        initBuckets();
         return buckets.iterator();
     }
 
     /**
-     * Convenience routine to bucket a list of input strings according to the index.<br>
-     * Warning: if a UI suppresses buckets that are empty, this may result in the special buckets (underflow, overflow,
-     * inflow) being adjacent. In that case, the application may want to combine them.
-     * 
-     * Works on the inputList:
-     *            List of strings to be sorted and bucketed according to the labels.
+     * Creates an index, and buckets and sorts the list of records into the index.
      */
     private void initBuckets() {
+        if (buckets != null) {
+            return;
+        }
         buckets = createBucketList();
         if (inputList == null || inputList.isEmpty()) {
             return;
         }
 
-        // Set up a sorted list of the input.
+        // Sort the records by name.
         // Stable sort preserves input order of collation duplicates.
-        List<Record<V>> sortedInput = new ArrayList<Record<V>>(inputList);
-        Collections.sort(sortedInput, recordComparator);
+        Collections.sort(inputList, recordComparator);
 
         // Now, we traverse all of the input, which is now sorted.
         // If the item doesn't go in the current bucket, we find the next bucket that contains it.
@@ -837,27 +833,25 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         Bucket<V> currentBucket = bucketIterator.next();
         Bucket<V> nextBucket;
         String upperBoundary;
-        boolean atEnd;
         if (bucketIterator.hasNext()) {
             nextBucket = bucketIterator.next();
             upperBoundary = nextBucket.lowerBoundary;
-            atEnd = false;
         } else {
             nextBucket = null;
             upperBoundary = null;
-            atEnd = true;
         }
-        for (Record<V> s : sortedInput) {
+        for (Record<V> r : inputList) {
             // if the current bucket isn't the right one, find the one that is
             // We have a special flag for the last bucket so that we don't look any further
-            while (!atEnd && collatorPrimaryOnly.compare(s.name, upperBoundary) >= 0) {
+            while (upperBoundary != null &&
+                    collatorPrimaryOnly.compare(r.name, upperBoundary) >= 0) {
                 currentBucket = nextBucket;
                 // now reset the boundary that we compare against
                 if (bucketIterator.hasNext()) {
                     nextBucket = bucketIterator.next();
                     upperBoundary = nextBucket.lowerBoundary;
                 } else {
-                    atEnd = true;
+                    upperBoundary = null;
                 }
             }
             // now put the record into the bucket.
@@ -868,7 +862,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             if (bucket.records == null) {
                 bucket.records = new ArrayList<Record<V>>();
             }
-            bucket.records.add(s);
+            bucket.records.add(r);
         }
     }
 
@@ -879,10 +873,10 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
      * Shorter NFKD is better, and otherwise NFKD-binary-less-than is
      * better, and otherwise binary-less-than is better.
      */
-    private static boolean isOneLabelBetterThanOther(String one, String other) {
+    private static boolean isOneLabelBetterThanOther(Normalizer2 nfkdNormalizer, String one, String other) {
         // This is called with primary-equal strings, but never with one.equals(other).
-        String n1 = Normalizer.decompose(one, true);
-        String n2 = Normalizer.decompose(other, true);
+        String n1 = nfkdNormalizer.normalize(one);
+        String n2 = nfkdNormalizer.normalize(other);
         int result = n1.codePointCount(0, n1.length()) - n2.codePointCount(0, n2.length());
         if (result != 0) {
             return result < 0;
@@ -895,7 +889,8 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
-     * A record to be sorted into buckets with getIndexBucketCharacters.
+     * A (name, data) pair, to be sorted by name into one of the index buckets.
+     * The user data is not used by the index implementation.
      * 
      * @stable ICU 4.8
      */
@@ -938,10 +933,12 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
     }
 
     /**
-     * A "bucket", containing records sorted under an index string by getIndexBucketCharacters. Is created by the
-     * addBucket method in BucketList. A typical implementation will provide methods getLabel(), getSpecial(), and
-     * getValues().<br>
-     * See com.ibm.icu.dev.test.collator.IndexCharactersTest for an example.
+     * An index "bucket" with a label string and type.
+     * It is referenced by {@link AlphabeticIndex#getBucketIndex(CharSequence)}
+     * and {@link AlphabeticIndex.ImmutableIndex#getBucketIndex(CharSequence)},
+     * returned by {@link AlphabeticIndex.ImmutableIndex#getBucket(int)},
+     * and {@link AlphabeticIndex#addRecord(CharSequence, Object)} adds a record
+     * into a bucket according to the record's name.
      * 
      * @param <V>
      *            Data type
@@ -1130,7 +1127,7 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
             return new BucketList<V>(bucketList, bucketList);
         }
         // overflow bucket
-        bucketList.add(new Bucket<V>(getOverflowLabel(), scriptUpperBoundary, Bucket.LabelType.OVERFLOW)); // final
+        bucketList.add(new Bucket<V>(getOverflowLabel(), scriptUpperBoundary, LabelType.OVERFLOW)); // final
 
         if (hasPinyin) {
             // Redirect Pinyin buckets.
