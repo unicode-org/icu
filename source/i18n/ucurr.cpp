@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2002-2012, International Business Machines
+* Copyright (c) 2002-2013, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
@@ -1712,6 +1712,7 @@ static const struct CurrencyList {
     {"SOS", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"SRD", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"SRG", UCURR_COMMON|UCURR_DEPRECATED},
+    {"SSP", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"STD", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"SUR", UCURR_COMMON|UCURR_DEPRECATED},
     {"SVC", UCURR_COMMON|UCURR_NON_DEPRECATED},
@@ -1764,7 +1765,9 @@ static const struct CurrencyList {
     {"XPF", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"XPT", UCURR_UNCOMMON|UCURR_NON_DEPRECATED},
     {"XRE", UCURR_UNCOMMON|UCURR_NON_DEPRECATED},
+    {"XSU", UCURR_UNCOMMON|UCURR_NON_DEPRECATED},
     {"XTS", UCURR_UNCOMMON|UCURR_NON_DEPRECATED},
+    {"XUA", UCURR_UNCOMMON|UCURR_NON_DEPRECATED},
     {"XXX", UCURR_UNCOMMON|UCURR_NON_DEPRECATED},
     {"YDD", UCURR_COMMON|UCURR_DEPRECATED},
     {"YER", UCURR_COMMON|UCURR_NON_DEPRECATED},
@@ -1774,10 +1777,11 @@ static const struct CurrencyList {
     {"YUR", UCURR_COMMON|UCURR_DEPRECATED},
     {"ZAL", UCURR_UNCOMMON|UCURR_NON_DEPRECATED},
     {"ZAR", UCURR_COMMON|UCURR_NON_DEPRECATED},
-    {"ZMK", UCURR_COMMON|UCURR_NON_DEPRECATED},
+    {"ZMK", UCURR_COMMON|UCURR_DEPRECATED},
+    {"ZMW", UCURR_COMMON|UCURR_NON_DEPRECATED},
     {"ZRN", UCURR_COMMON|UCURR_DEPRECATED},
     {"ZRZ", UCURR_COMMON|UCURR_DEPRECATED},
-    {"ZWL", UCURR_COMMON|UCURR_NON_DEPRECATED},
+    {"ZWL", UCURR_COMMON|UCURR_DEPRECATED},
     {"ZWR", UCURR_COMMON|UCURR_DEPRECATED},
     {"ZWD", UCURR_COMMON|UCURR_DEPRECATED},
     { NULL, 0 } // Leave here to denote the end of the list.
