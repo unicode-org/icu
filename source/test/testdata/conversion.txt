@@ -1007,13 +1007,13 @@ conversion:table(nofallback) {
         // Test ticket 9602: Add "good one-way" mapping type (|4).
         // Such mappings are used regardless of the fallback flag.
         {
-          "*test3", "##\uFE0E#\uFE0F",
+          "+*test3", "##\uFE0E#\uFE0F",
           :bin{ 010204010204010204 }, :intvector{ 0,0,0,1,1,1,3,3,3 },
           :int{1}, :int{0},  // no fallbacks
           "", "?", ""
         }
         {
-          "*test3", "##\uFE0E#\uFE0F",
+          "+*test3", "##\uFE0E#\uFE0F",
           :bin{ 010204010204010204 }, :intvector{ 0,0,0,1,1,1,3,3,3 },
           :int{1}, :int{1},  // with fallbacks
           "", "?", ""
@@ -1850,13 +1850,13 @@ conversion:table(nofallback) {
         // Test ticket 9602: Add "good one-way" mapping type (|4).
         // Excluded from roundtrip set, included in the set with fallbacks.
         {
-          "*test3",
+          "+*test3",
           "[{#\uFE0F}]",
           "[#{#\uFE0E}]",
           :int{0}
         }
         {
-          "*test3",
+          "+*test3",
           "[#{#\uFE0E}{#\uFE0F}]",
           "[]",
           :int{1}
