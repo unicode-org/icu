@@ -1,7 +1,7 @@
 /*
  * Created on May 5, 2004
  * 
- * Copyright (C) 2004-2012 International Business Machines Corporation and others.
+ * Copyright (C) 2004-2013 International Business Machines Corporation and others.
  * All Rights Reserved.
  *
  */
@@ -485,6 +485,52 @@ void executeTest(TestParams t) {
                     "  File line,col= " + t.srcLine[i] + ", " + t.srcCol[i]);
          }
     }
+    // Check isBoundary()
+    for (i=0; i<=t.dataToBreak.length(); i++) {
+        boolean boundaryExpected = (t.expectedBreaks[i] != 0);
+        boolean boundaryFound    = t.bi.isBoundary(i);
+        if (boundaryExpected != boundaryFound) {
+            errln("isBoundary(" + i + ") incorrect.\n" + 
+                  "  File line,col= " + t.srcLine[i] + ", " + t.srcCol[i] +
+                  "    Expected, Actual= " + boundaryExpected + ", " + boundaryFound);
+        }
+    }
+
+    // Check following()
+    for (i=0; i<=t.dataToBreak.length(); i++) {
+        int actualBreak = t.bi.following(i);
+        int expectedBreak = BreakIterator.DONE;
+        for (int j=i+1; j < t.expectedBreaks.length; j++) {
+            if (t.expectedBreaks[j] != 0) {
+                expectedBreak = j;
+                break;
+            }
+        }
+        if (expectedBreak != actualBreak) {
+            errln("following(" + i + ") incorrect.\n" +
+                    "  File line,col= " + t.srcLine[i] + ", " + t.srcCol[i] +
+                    "    Expected, Actual= " + expectedBreak + ", " + actualBreak);
+        }
+    }
+
+    // Check preceding()
+    for (i=t.dataToBreak.length(); i>=0; i--) {
+        int actualBreak = t.bi.preceding(i);
+        int expectedBreak = BreakIterator.DONE;
+
+        for (int j=i-1; j >= 0; j--) {
+            if (t.expectedBreaks[j] != 0) {
+                expectedBreak = j;
+                break;
+            }
+        }
+        if (expectedBreak != actualBreak) {
+            errln("preceding(" + i + ") incorrect.\n" +
+                    "  File line,col= " + t.srcLine[i] + ", " + t.srcCol[i] +
+                    "    Expected, Actual= " + expectedBreak + ", " + actualBreak);
+        }
+    }
+
 }
 
 
