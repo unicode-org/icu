@@ -191,6 +191,9 @@ class UVector;
  */
 class U_I18N_API AlphabeticIndex: public UObject {
 public:
+#ifdef U_HIDE_DRAFT_API
+    class Bucket;
+#else
      /**
       * An index "bucket" with a label string and type.
       * It is referenced by getBucketIndex(),
@@ -292,6 +295,7 @@ public:
         BucketList *buckets_;
         Collator *collatorPrimaryOnly_;
     };
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Construct an AlphabeticIndex object for the specified locale.  If the locale's
@@ -307,6 +311,7 @@ public:
      */
      AlphabeticIndex(const Locale &locale, UErrorCode &status);
 
+#ifndef U_HIDE_DRAFT_API
    /** 
      * Construct an AlphabeticIndex that uses a specific collator.
      * 
@@ -322,6 +327,7 @@ public:
      * @draft ICU 51
      */
     AlphabeticIndex(RuleBasedCollator *collator, UErrorCode &status);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Add Labels to this Index.  The labels are additions to those
@@ -333,7 +339,7 @@ public:
      * @return this, for chaining
      * @stable ICU 4.8
      */
-     virtual AlphabeticIndex &addLabels(const UnicodeSet &additions, UErrorCode &status);
+    virtual AlphabeticIndex &addLabels(const UnicodeSet &additions, UErrorCode &status);
 
     /**
      * Add the index characters from a Locale to the index.  The labels
@@ -348,15 +354,15 @@ public:
      * @return this, for chaining
      * @stable ICU 4.8
      */
-     virtual AlphabeticIndex &addLabels(const Locale &locale, UErrorCode &status);
+    virtual AlphabeticIndex &addLabels(const Locale &locale, UErrorCode &status);
 
      /**
       * Destructor
       * @stable ICU 4.8
       */
-     virtual ~AlphabeticIndex();
+    virtual ~AlphabeticIndex();
 
-
+#ifndef U_HIDE_DRAFT_API
     /**
      * Builds an immutable, thread-safe version of this instance, without data records.
      *
@@ -364,6 +370,7 @@ public:
      * @draft ICU 51
      */
     ImmutableIndex *buildImmutableIndex(UErrorCode &errorCode);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Get the Collator that establishes the ordering of the items in this index.
