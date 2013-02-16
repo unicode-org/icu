@@ -4026,11 +4026,12 @@ public final class RuleBasedCollator extends Collator {
 
         if (m_reorderCodes_[0] == ReorderCodes.DEFAULT) {
             if (m_reorderCodes_.length != 1) {
-                throw new IllegalArgumentException("Illegal collation reorder codes - default reorder code must be the only code in the list.");                
+                throw new IllegalArgumentException("Illegal collation reorder codes - default reorder code must be the only code in the list.");
             }
             // swap the reorder codes for those at build of the rules
             if (m_defaultReorderCodes_ == null || m_defaultReorderCodes_.length == 0) {
-                m_leadBytePermutationTable_ = null;                
+                m_leadBytePermutationTable_ = null;
+                return;
             }
             m_reorderCodes_ = m_defaultReorderCodes_.clone();
         }
