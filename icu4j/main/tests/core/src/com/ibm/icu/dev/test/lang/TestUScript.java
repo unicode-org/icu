@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2012, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -11,7 +11,10 @@ import java.util.BitSet;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.lang.UProperty;
 import com.ibm.icu.lang.UScript;
+import com.ibm.icu.lang.UScript.ScriptUsage;
+import com.ibm.icu.text.UnicodeSet;
 import com.ibm.icu.util.ULocale;
 
 public class TestUScript extends TestFmwk {
@@ -411,6 +414,111 @@ public class TestUScript extends TestFmwk {
         }
     }
 
+    public void TestScriptMetadataAPI() {
+        /* API & code coverage. */
+        String sample = UScript.getSampleString(UScript.LATIN);
+        if(sample.length()!=1 || UScript.getScript(sample.charAt(0))!=UScript.LATIN) {
+            errln("UScript.getSampleString(Latn) failed");
+        }
+        sample = UScript.getSampleString(UScript.INVALID_CODE);
+        if(sample.length()!=0) {
+            errln("UScript.getSampleString(invalid) failed");
+        }
+
+        if(UScript.getUsage(UScript.LATIN)!=ScriptUsage.RECOMMENDED ||
+                UScript.getUsage(UScript.YI)!=ScriptUsage.ASPIRATIONAL ||
+                UScript.getUsage(UScript.CHEROKEE)!=ScriptUsage.LIMITED_USE ||
+                UScript.getUsage(UScript.COPTIC)!=ScriptUsage.EXCLUDED ||
+                UScript.getUsage(UScript.CIRTH)!=ScriptUsage.NOT_ENCODED ||
+                UScript.getUsage(UScript.INVALID_CODE)!=ScriptUsage.NOT_ENCODED ||
+                UScript.getUsage(UScript.CODE_LIMIT)!=ScriptUsage.NOT_ENCODED) {
+            errln("UScript.getUsage() failed");
+        }
+
+        if(UScript.isRightToLeft(UScript.LATIN) ||
+                UScript.isRightToLeft(UScript.CIRTH) ||
+                !UScript.isRightToLeft(UScript.ARABIC) ||
+                !UScript.isRightToLeft(UScript.HEBREW)) {
+            errln("UScript.isRightToLeft() failed");
+        }
+
+        if(UScript.breaksBetweenLetters(UScript.LATIN) ||
+                UScript.breaksBetweenLetters(UScript.CIRTH) ||
+                !UScript.breaksBetweenLetters(UScript.HAN) ||
+                !UScript.breaksBetweenLetters(UScript.THAI)) {
+            errln("UScript.breaksBetweenLetters() failed");
+        }
+
+        if(UScript.isCased(UScript.CIRTH) ||
+                UScript.isCased(UScript.HAN) ||
+                !UScript.isCased(UScript.LATIN) ||
+                !UScript.isCased(UScript.GREEK)) {
+            errln("UScript.isCased() failed");
+        }
+    }
+
+    /**
+     * Maps a special script code to the most common script of its encoded characters.
+     */
+    private static final int getCharScript(int script) {
+        switch(script) {
+        case UScript.SIMPLIFIED_HAN:
+        case UScript.TRADITIONAL_HAN:
+            return UScript.HAN;
+        case UScript.JAPANESE:
+            return UScript.HIRAGANA;
+        case UScript.KOREAN:
+            return UScript.HANGUL;
+        default:
+            return script;
+        }
+    }
+
+    public void TestScriptMetadata() {
+        UnicodeSet rtl = new UnicodeSet("[[:bc=R:][:bc=AL:]-[:Cn:]-[:sc=Common:]]");
+        // So far, sample characters are uppercase.
+        // Georgian is special.
+        UnicodeSet cased = new UnicodeSet("[[:Lu:]-[:sc=Common:]-[:sc=Geor:]]");
+        for(int sci = 0; sci < UScript.CODE_LIMIT; ++sci) {
+            int sc = (int)sci;
+            // Run the test with -v to see which script has failures:
+            // .../intltest$ make && ./intltest utility/UnicodeTest/TestScriptMetadata -v | grep -C 3 FAIL
+            logln(UScript.getShortName(sc));
+            ScriptUsage usage = UScript.getUsage(sc);
+            String sample = UScript.getSampleString(sc);
+            UnicodeSet scriptSet = new UnicodeSet();
+            scriptSet.applyIntPropertyValue(UProperty.SCRIPT, sc);
+            if(usage == ScriptUsage.NOT_ENCODED) {
+                assertTrue("not encoded, no sample", sample.length() == 0);  // Java 6: sample.isEmpty()
+                assertFalse("not encoded, not RTL", UScript.isRightToLeft(sc));
+                assertFalse("not encoded, not LB letters", UScript.breaksBetweenLetters(sc));
+                assertFalse("not encoded, not cased", UScript.isCased(sc));
+                assertTrue("not encoded, no characters", scriptSet.isEmpty());
+            } else {
+                assertFalse("encoded, has a sample character", sample.length() == 0);  // Java 6: sample.isEmpty()
+                int firstChar = sample.codePointAt(0);
+                int charScript = getCharScript(sc);
+                assertEquals("script(sample(script))",
+                             charScript, UScript.getScript(firstChar));
+                assertEquals("RTL vs. set", rtl.contains(firstChar), UScript.isRightToLeft(sc));
+                assertEquals("cased vs. set", cased.contains(firstChar), UScript.isCased(sc));
+                assertEquals("encoded, has characters", sc == charScript, !scriptSet.isEmpty());
+                if(UScript.isRightToLeft(sc)) {
+                    rtl.removeAll(scriptSet);
+                }
+                if(UScript.isCased(sc)) {
+                    cased.removeAll(scriptSet);
+                }
+            }
+        }
+        assertEquals("no remaining RTL characters", "[]", rtl.toPattern(true));
+        assertEquals("no remaining cased characters", "[]", cased.toPattern(true));
+
+        assertTrue("Hani breaks between letters", UScript.breaksBetweenLetters(UScript.HAN));
+        assertTrue("Thai breaks between letters", UScript.breaksBetweenLetters(UScript.THAI));
+        assertFalse("Latn does not break between letters", UScript.breaksBetweenLetters(UScript.LATIN));
+    }
+
     public void TestScriptNames(){
         for(int i=0; i<UScript.CODE_LIMIT;i++){
             String name = UScript.getName(i);
@@ -523,4 +631,4 @@ public class TestUScript extends TestFmwk {
             }
         }
     }
- }
+}
