@@ -563,7 +563,7 @@ void TestScriptMetadataAPI() {
             uscript_getUsage(USCRIPT_COPTIC)!=USCRIPT_USAGE_EXCLUDED ||
             uscript_getUsage(USCRIPT_CIRTH)!=USCRIPT_USAGE_NOT_ENCODED ||
             uscript_getUsage(USCRIPT_INVALID_CODE)!=USCRIPT_USAGE_NOT_ENCODED ||
-            uscript_getUsage(USCRIPT_INVALID_CODE)!=USCRIPT_USAGE_NOT_ENCODED) {
+            uscript_getUsage(USCRIPT_CODE_LIMIT)!=USCRIPT_USAGE_NOT_ENCODED) {
         log_err("uscript_getUsage() failed\n");
     }
 
