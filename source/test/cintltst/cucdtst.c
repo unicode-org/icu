@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -184,6 +184,7 @@ void addUnicodeTest(TestNode** root)
     addTest(root, &TestUScriptCodeAPI, "tsutil/cucdtst/TestUScriptCodeAPI");
     addTest(root, &TestHasScript, "tsutil/cucdtst/TestHasScript");
     addTest(root, &TestGetScriptExtensions, "tsutil/cucdtst/TestGetScriptExtensions");
+    addTest(root, &TestScriptMetadataAPI, "tsutil/cucdtst/TestScriptMetadataAPI");
     addTest(root, &TestUScriptRunAPI, "tsutil/cucdtst/TestUScriptRunAPI");
     addTest(root, &TestPropertyNames, "tsutil/cucdtst/TestPropertyNames");
     addTest(root, &TestPropertyValues, "tsutil/cucdtst/TestPropertyValues");
