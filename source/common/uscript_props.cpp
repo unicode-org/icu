@@ -146,7 +146,7 @@ const int32_t SCRIPT_PROPS[] = {
     0,
     0x12000 | EXCLUSION,  // Xsux
     0,
-    0xFFFF | UNKNOWN,  // Zzzz
+    0xFDD0 | UNKNOWN,  // Zzzz
     0x102A0 | EXCLUSION,  // Cari
     0x304B | RECOMMENDED | LB_LETTERS,  // Jpan
     0x1A20 | LIMITED_USE | LB_LETTERS,  // Lana
