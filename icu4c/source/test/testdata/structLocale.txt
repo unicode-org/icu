@@ -1207,6 +1207,10 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        SSP{
+            "",
+            "",
+        }
         STD{
             "",
             "",
@@ -1415,6 +1419,14 @@ structLocale:table(nofallback){
             "",
             "",
         }
+        XSU{
+            "",
+            "",
+        }
+        XUA{
+            "",
+            "",
+        }
         XTS{
             "",
             "",
@@ -1456,6 +1468,10 @@ structLocale:table(nofallback){
             "",
         }
         ZMK{
+            "",
+            "",
+        }
+        ZMW{
             "",
             "",
         }
