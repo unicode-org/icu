@@ -479,30 +479,27 @@ public class TestUScript extends TestFmwk {
         // So far, sample characters are uppercase.
         // Georgian is special.
         UnicodeSet cased = new UnicodeSet("[[:Lu:]-[:sc=Common:]-[:sc=Geor:]]");
-        for(int sci = 0; sci < UScript.CODE_LIMIT; ++sci) {
-            int sc = (int)sci;
-            // Run the test with -v to see which script has failures:
-            // .../intltest$ make && ./intltest utility/UnicodeTest/TestScriptMetadata -v | grep -C 3 FAIL
-            logln(UScript.getShortName(sc));
+        for(int sc = 0; sc < UScript.CODE_LIMIT; ++sc) {
+            String sn = UScript.getShortName(sc);
             ScriptUsage usage = UScript.getUsage(sc);
             String sample = UScript.getSampleString(sc);
             UnicodeSet scriptSet = new UnicodeSet();
             scriptSet.applyIntPropertyValue(UProperty.SCRIPT, sc);
             if(usage == ScriptUsage.NOT_ENCODED) {
-                assertTrue("not encoded, no sample", sample.length() == 0);  // Java 6: sample.isEmpty()
-                assertFalse("not encoded, not RTL", UScript.isRightToLeft(sc));
-                assertFalse("not encoded, not LB letters", UScript.breaksBetweenLetters(sc));
-                assertFalse("not encoded, not cased", UScript.isCased(sc));
-                assertTrue("not encoded, no characters", scriptSet.isEmpty());
+                assertTrue(sn + " not encoded, no sample", sample.length() == 0);  // Java 6: sample.isEmpty()
+                assertFalse(sn + " not encoded, not RTL", UScript.isRightToLeft(sc));
+                assertFalse(sn + " not encoded, not LB letters", UScript.breaksBetweenLetters(sc));
+                assertFalse(sn + " not encoded, not cased", UScript.isCased(sc));
+                assertTrue(sn + " not encoded, no characters", scriptSet.isEmpty());
             } else {
-                assertFalse("encoded, has a sample character", sample.length() == 0);  // Java 6: sample.isEmpty()
+                assertFalse(sn + " encoded, has a sample character", sample.length() == 0);  // Java 6: sample.isEmpty()
                 int firstChar = sample.codePointAt(0);
                 int charScript = getCharScript(sc);
-                assertEquals("script(sample(script))",
+                assertEquals(sn + " script(sample(script))",
                              charScript, UScript.getScript(firstChar));
-                assertEquals("RTL vs. set", rtl.contains(firstChar), UScript.isRightToLeft(sc));
-                assertEquals("cased vs. set", cased.contains(firstChar), UScript.isCased(sc));
-                assertEquals("encoded, has characters", sc == charScript, !scriptSet.isEmpty());
+                assertEquals(sn + " RTL vs. set", rtl.contains(firstChar), UScript.isRightToLeft(sc));
+                assertEquals(sn + " cased vs. set", cased.contains(firstChar), UScript.isCased(sc));
+                assertEquals(sn + " encoded, has characters", sc == charScript, !scriptSet.isEmpty());
                 if(UScript.isRightToLeft(sc)) {
                     rtl.removeAll(scriptSet);
                 }
