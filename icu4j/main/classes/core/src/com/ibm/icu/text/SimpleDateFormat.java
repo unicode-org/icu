@@ -1108,6 +1108,9 @@ public class SimpleDateFormat extends DateFormat {
             } else if (count == 4) {
                 safeAppend(formatData.weekdays, value, buf);
                 capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_FORMAT;
+            } else if (count == 6 && formatData.shorterWeekdays != null) {
+                safeAppend(formatData.shorterWeekdays, value, buf);
+                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_FORMAT;
             } else {// count <= 3, use abbreviated form if exists
                 safeAppend(formatData.shortWeekdays, value, buf);
                 capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_FORMAT;
@@ -1241,6 +1244,9 @@ public class SimpleDateFormat extends DateFormat {
                 capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_NARROW;
             } else if (count == 4) {
                 safeAppend(formatData.standaloneWeekdays, value, buf);
+                capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_STANDALONE;
+            } else if (count == 6 && formatData.standaloneShorterWeekdays != null) {
+                safeAppend(formatData.standaloneShorterWeekdays, value, buf);
                 capContextUsageType = DateFormatSymbols.CapitalizationContextUsage.DAY_STANDALONE;
             } else { // count == 3
                 safeAppend(formatData.standaloneShortWeekdays, value, buf);
@@ -2429,28 +2435,28 @@ public class SimpleDateFormat extends DateFormat {
                 cal.set(Calendar.MILLISECOND, value);
                 return pos.getIndex();
             case 9: { // 'E' - DAY_OF_WEEK
-                // Want to be able to parse both short and long forms.
-                // Try count == 4 (EEEE) first:
-                int newStart = matchString(text, start, Calendar.DAY_OF_WEEK,
-                                           formatData.weekdays, null, cal);
+                // Want to be able to parse at least wide, abbrev, short forms.
+                int newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.weekdays, null, cal); // try EEEE wide
                 if (newStart > 0) {
                     return newStart;
-                } else { // EEEE failed, now try EEE
-                    return matchString(text, start, Calendar.DAY_OF_WEEK,
-                                       formatData.shortWeekdays, null, cal);
+                } else if ((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.shortWeekdays, null, cal)) > 0) { // try EEE abbrev
+                    return newStart;
+                } else if (formatData.shorterWeekdays != null) {
+                    return matchString(text, start, Calendar.DAY_OF_WEEK, formatData.shorterWeekdays, null, cal); // try EEEEEE short
                 }
+                return newStart;
             }
             case 25: { // 'c' - STAND_ALONE_DAY_OF_WEEK
-                // Want to be able to parse both short and long forms.
-                // Try count == 4 (cccc) first:
-                int newStart = matchString(text, start, Calendar.DAY_OF_WEEK,
-                                           formatData.standaloneWeekdays, null, cal);
+                // Want to be able to parse at least wide, abbrev, short forms.
+                int newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.standaloneWeekdays, null, cal); // try cccc wide
                 if (newStart > 0) {
                     return newStart;
-                } else { // cccc failed, now try ccc
-                    return matchString(text, start, Calendar.DAY_OF_WEEK,
-                                       formatData.standaloneShortWeekdays, null, cal);
+                } else if ((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.standaloneShortWeekdays, null, cal)) > 0) { // try ccc abbrev
+                    return newStart;
+                } else if (formatData.standaloneShorterWeekdays != null) {
+                    return matchString(text, start, Calendar.DAY_OF_WEEK, formatData.standaloneShorterWeekdays, null, cal); // try cccccc short
                 }
+                return newStart;
             }
             case 14: // 'a' - AM_PM
                 return matchString(text, start, Calendar.AM_PM, formatData.ampms, null, cal);
