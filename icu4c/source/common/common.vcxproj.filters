@@ -406,6 +406,9 @@
     <ClCompile Include="uscript.c">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
+    <ClCompile Include="uscript_props.cpp">
+      <Filter>properties &amp; sets</Filter>
+    </ClCompile>
     <ClCompile Include="uset.cpp">
       <Filter>properties &amp; sets</Filter>
     </ClCompile>
