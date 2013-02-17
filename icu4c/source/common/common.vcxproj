@@ -389,6 +389,7 @@
     <ClCompile Include="uprops.cpp" />
     <ClCompile Include="usc_impl.c" />
     <ClCompile Include="uscript.c" />
+    <ClCompile Include="uscript_props.cpp" />
     <ClCompile Include="uset.cpp" />
     <ClCompile Include="uset_props.cpp" />
     <ClCompile Include="usetiter.cpp" />
