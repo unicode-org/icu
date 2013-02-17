@@ -2784,6 +2784,32 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expect(CS_DATA, new Locale("cs", "", ""));
     }
     
+    public void TestShortDays()
+    {
+        String EN_DATA[] = {
+            "yyyy MM dd HH:mm:ss",
+
+            "EEEEEE, MMM d y", "fp", "2013 01 13 0:00:00", "Su, Jan 13 2013", "2013 01 13 0:00:00",
+            "EEEEEE, MMM d y", "fp", "2013 01 16 0:00:00", "We, Jan 16 2013", "2013 01 16 0:00:00",
+            "EEEEEE d",        "fp", "1970 01 17 0:00:00", "Sa 17",           "1970 01 17 0:00:00",
+            "cccccc d",        "fp", "1970 01 17 0:00:00", "Sa 17",           "1970 01 17 0:00:00",
+            "cccccc",          "fp", "1970 01 03 0:00:00", "Sa",              "1970 01 03 0:00:00",
+        };
+            
+        String SV_DATA[] = {
+            "yyyy MM dd HH:mm:ss",
+
+            "EEEEEE d MMM y",  "fp", "2013 01 13 0:00:00", "s\u00F6 13 jan 2013", "2013 01 13 0:00:00",
+            "EEEEEE d MMM y",  "fp", "2013 01 16 0:00:00", "on 16 jan 2013",      "2013 01 16 0:00:00",
+            "EEEEEE d",        "fp", "1970 01 17 0:00:00", "l\u00F6 17",          "1970 01 17 0:00:00",
+            "cccccc d",        "fp", "1970 01 17 0:00:00", "L\u00F6 17",          "1970 01 17 0:00:00",
+            "cccccc",          "fp", "1970 01 03 0:00:00", "L\u00F6",             "1970 01 03 0:00:00",
+        };
+        
+        expect(EN_DATA, new Locale("en", "", ""));
+        expect(SV_DATA, new Locale("sv", "", ""));
+    }
+    
     public void TestNarrowNames()
     {
         String EN_DATA[] = {

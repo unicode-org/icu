@@ -1,6 +1,6 @@
 /*****************************************************************************************
  *
- *   Copyright (C) 1996-2011, International Business Machines
+ *   Copyright (C) 1996-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **/
 
@@ -100,6 +100,21 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         }
         
     }
+
+    private boolean UnicodeStringsArePrefixes(String[] prefixArray, String[] baseArray){
+        if (prefixArray.length != baseArray.length) {
+            return false;
+        }
+        int i;
+        for (i = 0; i < baseArray.length; i++) {
+            if (!baseArray[i].startsWith(prefixArray[i])) {
+                errln("ERROR: Mismatch example, index " + i + ": expect prefix \"" + prefixArray[i] + "\" of base \"" + baseArray[i] + "\".");
+            	return false;
+            }
+        }
+        return true;
+    }
+
 
     // Test the API of DateFormatSymbols; primarily a simple get/set set.
     public void TestSymbols()
@@ -298,6 +313,10 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         }
 
         final String[] abbrWeekdays = en.getWeekdays(DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
+        final String[] shorterWeekdays = en.getWeekdays(DateFormatSymbols.FORMAT,DateFormatSymbols.SHORT);
+        if ( !UnicodeStringsArePrefixes(shorterWeekdays, abbrWeekdays) ) {
+            errln("ERROR: English format short weekday names don't match prefixes of format abbreviated names");
+        }
         fr2.setWeekdays(abbrWeekdays,DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
         final String[] abbrWeekdays1 = fr2.getWeekdays(DateFormatSymbols.FORMAT,DateFormatSymbols.ABBREVIATED);
         count = abbrWeekdays.length;
@@ -343,6 +362,10 @@ public class IntlTestDateFormatSymbols extends com.ibm.icu.dev.test.TestFmwk
         }
 
         final String[] standaloneShortWeekdays = en.getWeekdays(DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
+        final String[] standaloneShorterWeekdays = en.getWeekdays(DateFormatSymbols.STANDALONE,DateFormatSymbols.SHORT);
+        if ( !UnicodeStringsArePrefixes(standaloneShorterWeekdays, standaloneShortWeekdays) ) {
+            errln("ERROR: English standalone short weekday names don't match prefixes of standalone abbreviated names");
+        }
         fr.setWeekdays(standaloneShortWeekdays,DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
         final String[] standaloneShortWeekdays1 = fr.getWeekdays(DateFormatSymbols.STANDALONE,DateFormatSymbols.ABBREVIATED);
         count = standaloneShortWeekdays.length;
