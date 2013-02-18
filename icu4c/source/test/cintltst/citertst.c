@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2011, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1775,6 +1775,7 @@ static void TestCEValidity()
                 continue;
             }
         }
+        status = U_ZERO_ERROR; // clear status from previous loop iteration
 
         uprv_memset(&src, 0, sizeof(UColTokenParser));
 
@@ -1782,7 +1783,7 @@ static void TestCEValidity()
 
         coll      = ucol_open(loc, &status);
         if (U_FAILURE(status)) {
-            log_err("%s collator creation failed\n", loc);
+            log_err("%s collator creation failed with status %s\n", loc, u_errorName(status));
             return;
         }
 
@@ -1800,7 +1801,7 @@ static void TestCEValidity()
 
 	        /* Note that as a result of tickets 7015 or 6912, ucol_tok_parseNextToken can cause the pointer to
 	           the rules copy in src.source to get reallocated, freeing the original pointer in rulesCopy */
-            while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,&status)) != NULL) {
+            while ((current = ucol_tok_parseNextToken(&src, startOfRules, &parseError,&status)) != NULL && U_SUCCESS(status)) {
               strength = src.parsedToken.strength;
               chOffset = src.parsedToken.charsOffset;
               chLen = src.parsedToken.charsLen;
@@ -1815,6 +1816,9 @@ static void TestCEValidity()
                                                        chLen * sizeof(UChar));
                 codepoints[chLen] = 0;
                 checkCEValidity(coll, codepoints, chLen);
+            }
+            if (U_FAILURE(status)) {
+                log_err("%s collator, ucol_tok_parseNextToken failed with status %s\n", loc, u_errorName(status));
             }
             uprv_free(src.source);
         }
@@ -1967,12 +1971,13 @@ static void TestSortKeyValidity(void)
         UColTokenParser src;
         uint32_t strength = 0;
         uint16_t specs = 0;
+        status = U_ZERO_ERROR; // clear status from previous loop iteration
 
         uprv_memset(&src, 0, sizeof(UColTokenParser));
 
         coll      = ucol_open(locale[count], &status);
         if (U_FAILURE(status)) {
-            log_err("%s collator creation failed\n", locale[count]);
+            log_err("%s collator creation failed with status %s\n", locale[count], u_errorName(status));
             return;
         }
 
@@ -1990,7 +1995,7 @@ static void TestSortKeyValidity(void)
 
 	        /* Note that as a result of tickets 7015 or 6912, ucol_tok_parseNextToken can cause the pointer to
 	           the rules copy in src.source to get reallocated, freeing the original pointer in rulesCopy */
-            while ((current = ucol_tok_parseNextToken(&src, startOfRules,&parseError, &status)) != NULL) {
+            while ((current = ucol_tok_parseNextToken(&src, startOfRules,&parseError, &status)) != NULL && U_SUCCESS(status)) {
                 strength = src.parsedToken.strength;
                 chOffset = src.parsedToken.charsOffset;
                 chLen = src.parsedToken.charsLen;
@@ -2009,6 +2014,9 @@ static void TestSortKeyValidity(void)
                     continue;
                 }
                 checkSortKeyValidity(coll, codepoints, chLen);
+            }
+            if (U_FAILURE(status)) {
+                log_err("%s collator, ucol_tok_parseNextToken failed with status %s\n", locale[count], u_errorName(status));
             }
             uprv_free(src.source);
         }

@@ -11,5 +11,10 @@
  */
 bs_Cyrl{
     Version{"2.0.73.72"}
-    collations:alias{"sr/collations"}
+    collations{
+        standard{
+            Sequence{"[import sr]"}
+            Version{"23"}
+        }
+    }
 }
