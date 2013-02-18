@@ -94,7 +94,7 @@ U_NAMESPACE_BEGIN
  * @author Alan Liu
  * @internal
  */
-class ChineseCalendar : public Calendar {
+class U_I18N_API ChineseCalendar : public Calendar {
  public:
   //-------------------------------------------------------------------------
   // Constructors...
@@ -126,7 +126,7 @@ class ChineseCalendar : public Calendar {
    *                        if successful, will not be changed to an error value.
    * @internal
    */
-  ChineseCalendar(const Locale& aLocale, int32_t epochYear, TimeZone* zoneAstroCalc, UErrorCode &success);
+  ChineseCalendar(const Locale& aLocale, int32_t epochYear, const TimeZone* zoneAstroCalc, UErrorCode &success);
 
  public:
   /**
@@ -308,6 +308,3 @@ U_NAMESPACE_END
 
 #endif
 #endif
-
-
-

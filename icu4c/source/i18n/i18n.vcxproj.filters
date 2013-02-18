@@ -108,6 +108,9 @@
     <ClCompile Include="currunit.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="dangical.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="datefmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -541,6 +544,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="currfmt.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="dangical.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="decContext.h">

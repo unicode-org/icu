@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2011, International Business Machines Corporation
+ * Copyright (c) 1997-2013, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -159,6 +159,7 @@ CalendarLimitTest::TestLimits(void) {
         {"islamic",         FALSE,      DEFAULT_START, 800000}, // Approx. 2250 years from now, after which some rounding errors occur in Islamic calendar
         {"hebrew",          TRUE,       DEFAULT_START, DEFAULT_END},
         {"chinese",         TRUE,       DEFAULT_START, DEFAULT_END},
+        {"dangi",           TRUE,       DEFAULT_START, DEFAULT_END},
         {"indian",          FALSE,      DEFAULT_START, DEFAULT_END},
         {"coptic",          FALSE,      DEFAULT_START, DEFAULT_END},
         {"ethiopic",        FALSE,      DEFAULT_START, DEFAULT_END},

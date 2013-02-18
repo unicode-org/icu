@@ -127,7 +127,7 @@ ChineseCalendar::ChineseCalendar(const Locale& aLocale, UErrorCode& success)
 }
 
 ChineseCalendar::ChineseCalendar(const Locale& aLocale, int32_t epochYear,
-                                TimeZone* zoneAstroCalc, UErrorCode &success)
+                                const TimeZone* zoneAstroCalc, UErrorCode &success)
 :   Calendar(TimeZone::createDefault(), aLocale, success),
     isLeapYear(FALSE),
     fEpochYear(epochYear),
