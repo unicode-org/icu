@@ -2986,6 +2986,8 @@ icu4c/source/extra/uconv/samples/utf8/turkish.txt svneol=native#text/plain%3Bcha
 icu4c/source/extra/uconv/samples/utf8/utf-8-demo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text
+icu4c/source/i18n/dangical.cpp -text
+icu4c/source/i18n/dangical.h -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
 icu4c/source/i18n/regexcst.txt svneol=native#text/plain
