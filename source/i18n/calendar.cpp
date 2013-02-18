@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2012, International Business Machines Corporation and    *
+* Copyright (C) 1997-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -45,6 +45,7 @@
 #include "indiancal.h"
 #include "chnsecal.h"
 #include "coptccal.h"
+#include "dangical.h"
 #include "ethpccal.h"
 #include "unicode/calendar.h"
 #include "cpputils.h"
@@ -164,6 +165,7 @@ static const char * const gCalTypes[] = {
     "ethiopic",
     "ethiopic-amete-alem",
     "iso8601",
+    "dangi",
     NULL
 };
 
@@ -183,7 +185,8 @@ typedef enum ECalType {
     CALTYPE_COPTIC,
     CALTYPE_ETHIOPIC,
     CALTYPE_ETHIOPIC_AMETE_ALEM,
-    CALTYPE_ISO8601
+    CALTYPE_ISO8601,
+    CALTYPE_DANGI
 } ECalType;
 
 U_NAMESPACE_BEGIN
@@ -340,6 +343,9 @@ static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UEr
             cal = new GregorianCalendar(loc, status);
             cal->setFirstDayOfWeek(UCAL_MONDAY);
             cal->setMinimalDaysInFirstWeek(4);
+            break;
+        case CALTYPE_DANGI:
+            cal = new DangiCalendar(loc, status);
             break;
         default:
             status = U_UNSUPPORTED_ERROR;

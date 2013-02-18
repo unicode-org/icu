@@ -280,6 +280,7 @@
     <ClCompile Include="currfmt.cpp" />
     <ClCompile Include="currpinf.cpp" />
     <ClCompile Include="currunit.cpp" />
+    <ClCompile Include="dangical.cpp" />
     <ClCompile Include="datefmt.cpp" />
     <ClCompile Include="dcfmtsym.cpp" />
     <ClCompile Include="decContext.c" />
@@ -704,6 +705,7 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="dangical.h" />
     <CustomBuild Include="unicode\datefmt.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>

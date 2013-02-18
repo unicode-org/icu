@@ -69,7 +69,7 @@ choicfmt.o datefmt.o smpdtfmt.o reldtfmt.o dtfmtsym.o udat.o dtptngen.o udatpg.o
 nfrs.o nfrule.o nfsubs.o rbnf.o numsys.o ucsdet.o \
 ucal.o calendar.o gregocal.o timezone.o simpletz.o olsontz.o \
 astro.o taiwncal.o buddhcal.o persncal.o islamcal.o japancal.o gregoimp.o hebrwcal.o \
-indiancal.o chnsecal.o cecal.o coptccal.o ethpccal.o \
+indiancal.o chnsecal.o cecal.o coptccal.o dangical.o ethpccal.o \
 coleitr.o coll.o tblcoll.o sortkey.o bocsu.o ucoleitr.o \
 ucol.o ucol_res.o ucol_bld.o ucol_sit.o ucol_tok.o ucol_wgt.o ucol_cnt.o ucol_elm.o \
 strmatch.o usearch.o search.o stsearch.o \
