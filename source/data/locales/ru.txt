@@ -197,28 +197,38 @@ ru{
             }
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.15"}
     calendar{
         buddhist{
+            eras{
+                abbreviated{
+                    "BE",
+                }
+            }
+        }
+        chinese{
             DateTimePatterns{
                 "H:mm:ss zzzz",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
-                "EEEE, d MMMM y 'г'. G",
-                "d MMMM y 'г'. G",
-                "dd.MM.y G",
-                "dd.MM.yy G",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
+                "EEEE, d MMMM U",
+                "d MMMM U",
+                "dd.MM U",
+                "dd.MM.y",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
             availableFormats{
                 E{"ccc"}
                 Ed{"E, d"}
-                Gy{"y G"}
+                Gy{"U"}
+                GyMMM{"LLL U"}
+                GyMMMEd{"E, d MMM U"}
+                GyMMMd{"d MMM U"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -227,25 +237,24 @@ ru{
                 MMM{"LLL"}
                 MMMEd{"ccc, d MMM"}
                 MMMd{"d MMM"}
-                MMdd{"dd.MM"}
                 Md{"dd.MM"}
                 d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y G"}
-                yLLLL{"LLLL y G"}
-                yM{"MM.y G"}
-                yMEd{"E, dd.MM.y G"}
-                yMM{"MM.y G"}
-                yMMM{"LLL y G"}
-                yMMMEd{"E, d MMM y G"}
-                yMMMM{"LLLL y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"dd.MM.y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y 'г'. G"}
+                y{"U"}
+                yyyy{"U"}
+                yyyyM{"MM.y"}
+                yyyyMEd{"E, dd.MM.y"}
+                yyyyMMM{"LLL U"}
+                yyyyMMMEd{"E, d MMM U"}
+                yyyyMMMM{"LLLL U"}
+                yyyyMMMd{"d MMM U"}
+                yyyyMd{"dd.MM.y"}
+                yyyyQQQ{"QQQ U"}
+                yyyyQQQQ{"QQQQ U"}
             }
-        }
-        chinese{
             monthNames{
                 format{
                     abbreviated{
@@ -483,8 +492,8 @@ ru{
                 "H:mm",
                 "EEEE, d MMMM y 'г'. G",
                 "d MMMM y 'г'. G",
-                "dd MMM y 'г'. G",
-                "dd.MM.yy G",
+                "dd.MM.y G",
+                "dd.MM.y G",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -493,11 +502,11 @@ ru{
             }
             availableFormats{
                 E{"ccc"}
-                Ed{"ccc, d"}
+                Ed{"E, d"}
                 Gy{"y G"}
                 GyMMM{"LLL y G"}
                 GyMMMEd{"E, d MMM y G"}
-                GyMMMd{"d MMM y 'г'. G"}
+                GyMMMd{"d MMM y G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -506,7 +515,6 @@ ru{
                 MMM{"LLL"}
                 MMMEd{"ccc, d MMM"}
                 MMMd{"d MMM"}
-                MMdd{"dd.MM"}
                 Md{"dd.MM"}
                 d{"d"}
                 h{"h a"}
@@ -516,14 +524,13 @@ ru{
                 y{"y G"}
                 yyyy{"y G"}
                 yyyyM{"MM.y G"}
-                yyyyMEd{"ccc, d.MM.y 'г'. G"}
-                yyyyMM{"MM.y G"}
+                yyyyMEd{"E, dd.MM.y G"}
                 yyyyMMM{"LLL y G"}
                 yyyyMMMEd{"E, d MMM y G"}
                 yyyyMMMM{"LLLL y G"}
-                yyyyMMMd{"d MMM y 'г'. G"}
+                yyyyMMMd{"d MMM y G"}
                 yyyyMd{"dd.MM.y G"}
-                yyyyQQQ{"QQQ y 'г'. G"}
+                yyyyQQQ{"QQQ y G"}
                 yyyyQQQQ{"QQQQ y 'г'. G"}
             }
             intervalFormats{
@@ -1148,50 +1155,6 @@ ru{
             }
         }
         islamic{
-            DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "EEEE, d MMMM y 'г'. G",
-                "d MMMM y 'г'. G",
-                "dd.MM.y G",
-                "dd.MM.yy G",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                E{"ccc"}
-                Ed{"E, d"}
-                Gy{"y G"}
-                H{"H"}
-                Hm{"H:mm"}
-                Hms{"H:mm:ss"}
-                M{"L"}
-                MEd{"E, dd.MM"}
-                MMM{"LLL"}
-                MMMEd{"ccc, d MMM"}
-                MMMd{"d MMM"}
-                MMdd{"dd.MM"}
-                Md{"dd.MM"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yLLLL{"LLLL y G"}
-                yM{"MM.y G"}
-                yMEd{"E, dd.MM.y G"}
-                yMM{"MM.y G"}
-                yMMM{"LLL y G"}
-                yMMMEd{"E, d MMM y G"}
-                yMMMM{"LLLL y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"dd.MM.y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y 'г'. G"}
-            }
             monthNames{
                 format{
                     abbreviated{
@@ -1270,50 +1233,6 @@ ru{
             }
         }
         japanese{
-            DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "EEEE, d MMMM y 'г'. G",
-                "d MMMM y 'г'. G",
-                "dd.MM.y G",
-                "dd.MM.yy G",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                E{"ccc"}
-                Ed{"E, d"}
-                Gy{"y G"}
-                H{"H"}
-                Hm{"H:mm"}
-                Hms{"H:mm:ss"}
-                M{"L"}
-                MEd{"E, dd.MM"}
-                MMM{"LLL"}
-                MMMEd{"ccc, d MMM"}
-                MMMd{"d MMM"}
-                MMdd{"dd.MM"}
-                Md{"dd.MM"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yLLLL{"LLLL y G"}
-                yM{"MM.y G"}
-                yMEd{"E, dd.MM.y G"}
-                yMM{"MM.y G"}
-                yMMM{"LLL y G"}
-                yMMMEd{"E, d MMM y G"}
-                yMMMM{"LLLL y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"dd.MM.y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y 'г'. G"}
-            }
             eras{
                 abbreviated{
                     "Эпоха Тайка (645-650)",
@@ -1634,49 +1553,11 @@ ru{
             }
         }
         roc{
-            DateTimePatterns{
-                "H:mm:ss zzzz",
-                "H:mm:ss z",
-                "H:mm:ss",
-                "H:mm",
-                "EEEE, d MMMM y 'г'. G",
-                "d MMMM y 'г'. G",
-                "dd.MM.y G",
-                "dd.MM.yy G",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                E{"ccc"}
-                Ed{"E, d"}
-                Gy{"y G"}
-                H{"H"}
-                Hm{"H:mm"}
-                Hms{"H:mm:ss"}
-                M{"L"}
-                MEd{"E, dd.MM"}
-                MMM{"LLL"}
-                MMMEd{"ccc, d MMM"}
-                MMMd{"d MMM"}
-                MMdd{"dd.MM"}
-                Md{"dd.MM"}
-                d{"d"}
-                ms{"mm:ss"}
-                y{"y G"}
-                yLLLL{"LLLL y G"}
-                yM{"MM.y G"}
-                yMEd{"E, dd.MM.y G"}
-                yMM{"MM.y G"}
-                yMMM{"LLL y G"}
-                yMMMEd{"E, d MMM y G"}
-                yMMMM{"LLLL y G"}
-                yMMMd{"d MMM y G"}
-                yMd{"dd.MM.y G"}
-                yQQQ{"QQQ y G"}
-                yQQQQ{"QQQQ y 'г'. G"}
+            eras{
+                abbreviated{
+                    "Before R.O.C.",
+                    "Minguo",
+                }
             }
         }
     }

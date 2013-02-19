@@ -147,7 +147,7 @@ pt{
         }
         native{"latn"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.15"}
     calendar{
         buddhist{
             eras{
@@ -157,6 +157,21 @@ pt{
             }
         }
         chinese{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d 'de' MMMM 'de' U",
+                "d 'de' MMMM 'de' U",
+                "dd/MM U",
+                "dd/MM/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
             monthNames{
                 format{
                     abbreviated{
@@ -379,8 +394,6 @@ pt{
                 GyMMMEd{"E, d 'de' MMM 'de' y G"}
                 GyMMMd{"d 'de' MMM 'de' y G"}
                 H{"HH"}
-                HHmm{"HH:mm"}
-                HHmmss{"HH:mm:ss"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -388,7 +401,6 @@ pt{
                 MMM{"LLL"}
                 MMMEd{"E, d 'de' MMM"}
                 MMMd{"d 'de' MMM"}
-                MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d"}
                 h{"h a"}
