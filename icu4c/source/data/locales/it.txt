@@ -143,13 +143,30 @@ it{
             }
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.15"}
     calendar{
         buddhist{
             eras{
                 abbreviated{
                     "EB",
                 }
+            }
+        }
+        chinese{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE d MMMM U",
+                "dd MMMM U",
+                "dd/MMM U",
+                "dd/MM/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
             }
         }
         generic{

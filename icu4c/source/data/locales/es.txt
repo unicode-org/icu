@@ -146,7 +146,7 @@ es{
             }
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.15"}
     calendar{
         buddhist{
             eras{
@@ -170,6 +170,38 @@ es{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E d"}
+                Gy{"y"}
+                GyMMM{"M-y"}
+                GyMMMEd{"E, d-M-y"}
+                GyMMMd{"d-M-y"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, d-M"}
+                MMM{"L"}
+                MMMEd{"E d-M"}
+                MMMd{"d-M"}
+                Md{"d-M"}
+                d{"d"}
+                h{"hh a"}
+                hm{"hh:mm a"}
+                hms{"hh:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yyyy{"y"}
+                yyyyM{"M-y"}
+                yyyyMEd{"E, d-M-y"}
+                yyyyMMM{"M-y"}
+                yyyyMMMEd{"E, d-M-y"}
+                yyyyMMMM{"M-y"}
+                yyyyMMMd{"d-M-y"}
+                yyyyMd{"d-M-y"}
+                yyyyQQQ{"QQQ y"}
+                yyyyQQQQ{"QQQQ y"}
             }
         }
         generic{
@@ -204,8 +236,6 @@ es{
                 MMMMd{"d 'de' MMMM"}
                 MMMd{"d MMM"}
                 MMMdd{"dd-MMM"}
-                MMd{"d/MM"}
-                MMdd{"dd/MM"}
                 Md{"d/M"}
                 d{"d"}
                 h{"hh a"}
