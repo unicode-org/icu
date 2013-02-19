@@ -246,9 +246,6 @@
                  <deprecates>
                     <alias from="de__PHONEBOOK" to="de@collation=phonebook"  xpath="//ldml/collations/default[@type='phonebook']"/>
                     <alias from="es__TRADITIONAL" to="es@collation=traditional" xpath="//ldml/collations/default[@type='traditional']"/>
-                    <alias from="hi__DIRECT" to="hi@collation=direct" xpath="//ldml/collations/default[@type='direct']"/>
-                    <alias from="zh__PINYIN" to="zh@collation=pinyin" xpath="//ldml/collations/default[@type='pinyin']"/>
-                    <alias from="zh_TW_STROKE" to="zh@collation=stroke" xpath="//ldml/collations/default[@type='stroke']"/>
                     <alias from="in" to="id" />
                     <alias from="in_ID" to="id_ID" />
                     <alias from="iw" to="he" />
@@ -271,8 +268,6 @@
                     <alias from="zh_TW" to="zh_Hant_TW" />
                     <emptyLocale locale="de_" />
                     <emptyLocale locale="es_" />
-                    <emptyLocale locale="hi_" />
-                    <emptyLocale locale="zh_" />
                 </deprecates>
             </run>
         </cldr-build>
