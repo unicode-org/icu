@@ -543,14 +543,14 @@ import com.ibm.icu.util.ULocale.Category;
  *         <td>The <i>ISO8601 basic format</i> with hours and minutes fields.
  *         The ISO8601 UTC indicator "Z" is used when local time offset is 0.</td>
  *     </tr>
- *     </tr>
+ *     <tr>
  *         <td style="text-align: center">3</td>
  *         <td>-08:00<br>
  *         Z</td>
  *         <td>The <i>ISO8601 extended format</i> with hours and minutes fields.
  *         The ISO8601 UTC indicator "Z" is used when local time offset is 0.</td>
  *     </tr>
- *     </tr>
+ *     <tr>
  *         <td style="text-align: center">4</td>
  *         <td>-0800<br>
  *         -075258<br>
@@ -559,7 +559,7 @@ import com.ibm.icu.util.ULocale.Category;
  *         (Note: The seconds field is not supported by the ISO8601 specification.)
  *         The ISO8601 UTC indicator "Z" is used when local time offset is 0.</td>
  *     </tr>
- *     </tr>
+ *     <tr>
  *         <td style="text-align: center">5</td>
  *         <td>-08:00<br>
  *         -07:52:58<br>
@@ -580,19 +580,19 @@ import com.ibm.icu.util.ULocale.Category;
  *         <td>-0800</td>
  *         <td>The <i>ISO8601 basic format</i> with hours and minutes fields.</td>
  *     </tr>
- *     </tr>
+ *     <tr>
  *         <td style="text-align: center">3</td>
  *         <td>-08:00</td>
  *         <td>The <i>ISO8601 extended format</i> with hours and minutes fields.</td>
  *     </tr>
- *     </tr>
+ *     <tr>
  *         <td style="text-align: center">4</td>
  *         <td>-0800<br>
  *         -075258</td>
  *         <td>The <i>ISO8601 basic format</i> with hours, minutes and optional seconds fields.
  *         (Note: The seconds field is not supported by the ISO8601 specification.)</td>
  *     </tr>
- *     </tr>
+ *     <tr>
  *         <td style="text-align: center">5</td>
  *         <td>-08:00<br>
  *         -07:52:58</td>
