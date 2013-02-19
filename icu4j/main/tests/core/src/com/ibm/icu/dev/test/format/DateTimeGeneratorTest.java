@@ -384,7 +384,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "\u5E73\u621011\u5E741\u6708"},
-        new String[] {"MMMEd", "1\u670813\u65E5(\u6C34)"},
+        new String[] {"MMMEd", "1\u670813\u65E5\u6C34"}, // different than ICU4C's correct result, ICU4J code bug? #9952
         new String[] {"Ed", "13\u65E5\u6C34"},
         new String[] {"jmmssSSS", "23:58:59.123"},
         new ULocale("zh_Hans_CN"),
@@ -412,7 +412,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "1\u670813\u65E5"},
         new String[] {"MMMMd", "1\u670813\u65E5"},
-        new String[] {"yQQQ", "\u6C11\u570B88 1\u5B63"},
+        new String[] {"yQQQ", "\u6C11\u570B88\u5E741\u5B63"},
         new String[] {"hhmm", "\u4E0B\u534811:58"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "\u4E0B\u534811:58"},
