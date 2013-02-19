@@ -146,7 +146,7 @@ fr{
             }
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.15"}
     calendar{
         buddhist{
             eras{
@@ -190,6 +190,7 @@ fr{
                 Md{"d/M"}
                 ms{"mm:ss"}
                 y{"U"}
+                yMd{"d/M/y"}
                 yyyy{"U"}
                 yyyyM{"M/y"}
                 yyyyMEd{"E d/M/y"}

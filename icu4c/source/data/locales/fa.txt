@@ -141,7 +141,7 @@ fa{
         }
         native{"arabext"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.15"}
     calendar{
         default{"persian"}
         generic{
@@ -153,7 +153,7 @@ fa{
                 "EEEE d MMMM y G",
                 "d MMMM y G",
                 "d MMM y G",
-                "GGGGG y/M/d",
+                "y/M/d G",
                 "{1}،‏ {0}",
                 "{1}، ساعت {0}",
                 "{1}، ساعت {0}",
@@ -165,7 +165,10 @@ fa{
             }
             availableFormats{
                 Ed{"E d"}
-                GGGGyMMMMd{"d MMMM y GGGG"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"H"}
                 HHmmZ{"HH:mm (Z)"}
                 Hm{"H:mm"}
@@ -182,19 +185,17 @@ fa{
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
-                mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"y/M"}
-                yMEd{"E y/M/d"}
-                yMMM{"MMM y"}
-                yMMMEd{"E d MMM y"}
-                yMMMM{"MMMM y"}
-                yMMMMEEEEd{"EEEE d MMMM y"}
-                yMMMd{"d MMM y"}
-                yMd{"y/M/d"}
-                yQQQ{"QQQQ y"}
-                yQQQQ{"QQQQ y"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"y/M G"}
+                yyyyMEd{"E y/M/d G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E d MMM y G"}
+                yyyyMMMd{"d MMM y G"}
+                yyyyMd{"y/M/d G"}
+                yyyyQQQ{"QQQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
                 H{
@@ -256,39 +257,39 @@ fa{
                     h{"h تا h a (v)"}
                 }
                 y{
-                    y{"y تا y"}
+                    y{"y تا y G"}
                 }
                 yM{
-                    M{"y/M تا y/M"}
-                    y{"y/M تا y/M"}
+                    M{"y/M تا y/M G"}
+                    y{"y/M تا y/M G"}
                 }
                 yMEd{
-                    M{"E y/M/d تا E y/M/d"}
-                    d{"E y/M/d تا E y/M/d"}
-                    y{"E y/M/d تا E y/M/d"}
+                    M{"E y/M/d تا E y/M/d G"}
+                    d{"E y/M/d تا E y/M/d G"}
+                    y{"E y/M/d تا E y/M/d G"}
                 }
                 yMMM{
-                    M{"LLL تا MMM y"}
-                    y{"MMM y تا MMM y"}
+                    M{"LLL تا MMM y G"}
+                    y{"MMM y تا MMM y G"}
                 }
                 yMMMEd{
-                    M{"E d LLL تا E d MMM y"}
-                    d{"E d LLL تا E d MMM y"}
-                    y{"E d MMM y تا E d MMM y"}
+                    M{"E d LLL تا E d MMM y G"}
+                    d{"E d LLL تا E d MMM y G"}
+                    y{"E d MMM y تا E d MMM y G"}
                 }
                 yMMMM{
-                    M{"LLLL تا MMMM y"}
-                    y{"MMMM y تا MMMM y"}
+                    M{"LLLL تا MMMM y G"}
+                    y{"MMMM y تا MMMM y G"}
                 }
                 yMMMd{
-                    M{"d LLL تا d MMM y"}
-                    d{"d تا d MMM y"}
-                    y{"d MMM y تا d MMM y"}
+                    M{"d LLL تا d MMM y G"}
+                    d{"d تا d MMM y G"}
+                    y{"d MMM y تا d MMM y G"}
                 }
                 yMd{
-                    M{"y/M/d تا y/M/d"}
-                    d{"y/M/d تا y/M/d"}
-                    y{"y/M/d تا y/M/d"}
+                    M{"y/M/d تا y/M/d G"}
+                    d{"y/M/d تا y/M/d G"}
+                    y{"y/M/d تا y/M/d G"}
                 }
             }
         }
@@ -317,7 +318,10 @@ fa{
             }
             availableFormats{
                 Ed{"E d"}
-                GGGGyMMMMd{"d MMMM y GGGG"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"H"}
                 HHmmZ{"HH:mm (Z)"}
                 Hm{"H:mm"}
@@ -790,6 +794,10 @@ fa{
             }
             availableFormats{
                 Ed{"E d"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}

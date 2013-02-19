@@ -125,7 +125,7 @@ tr{
             }
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.15"}
     calendar{
         buddhist{
             eras{
@@ -216,16 +216,17 @@ tr{
                 mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y G"}
-                yM{"MM.y G"}
-                yMEd{"dd.MM.y G E"}
-                yMM{"MM.y G"}
-                yMMM{"MMM y G"}
-                yMMMEd{"d MMM y G E"}
-                yMMMM{"MMMM y G"}
-                yMMMd{"dd MMM y G"}
-                yMd{"dd.MM.y G"}
-                yQQQ{"G y/QQQ"}
-                yQQQQ{"G y/QQQQ"}
+                yyyy{"y G"}
+                yyyyM{"MM.y G"}
+                yyyyMEd{"dd.MM.y G E"}
+                yyyyMM{"MM.y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"d MMM y G E"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"dd MMM y G"}
+                yyyyMd{"dd.MM.y G"}
+                yyyyQQQ{"G y/QQQ"}
+                yyyyQQQQ{"G y/QQQQ"}
             }
             intervalFormats{
                 H{

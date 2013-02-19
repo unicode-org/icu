@@ -228,7 +228,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("1/13"),                                            // 04: Md    -> M/d
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 05: MMMd  ->M\u6708d\u65E5
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 06: MMMMd  ->M\u6708d\u65E5
-        CharsToUnicodeString("\\u6C11\\u570B88 1\\u5B63"),                // 07: yQQQ  -> Gy QQQ
+        CharsToUnicodeString("\\u6C11\\u570B88\\u5E741\\u5B63"),          // 07: yQQQ  -> Gy QQQ
         CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 08: hhmm  ->
         UnicodeString("23:58"),                                           // 09: HHmm  ->
         CharsToUnicodeString("\\u4E0B\\u534811:58"),                      // 10: jjmm

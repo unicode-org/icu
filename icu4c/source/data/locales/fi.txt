@@ -142,7 +142,7 @@ fi{
             }
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.15"}
     calendar{
         buddhist{
             eras{
@@ -178,8 +178,12 @@ fi{
                 hm{"h.mm a"}
                 hms{"h.mm.ss a"}
                 ms{"mm.ss"}
-                yMEd{"E d.M.y"}
-                yMd{"d.M.y"}
+                y{"y"}
+                yyyy{"y"}
+                yyyyMEd{"E d.M.y"}
+                yyyyMMMEd{"E d.M.y"}
+                yyyyMMMd{"d.M.y"}
+                yyyyMd{"d.M.y"}
             }
         }
         generic{

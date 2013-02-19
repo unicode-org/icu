@@ -14,7 +14,7 @@ zh_Hant_HK{
             }
         }
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.82.15"}
     calendar{
         buddhist{
             availableFormats{
@@ -31,7 +31,7 @@ zh_Hant_HK{
                 "Gy年M月d日EEEE",
                 "Gy年M月d日",
                 "Gy年M月d日",
-                "d/M/yyGGGGG",
+                "d/M/yGGGGG",
                 "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -42,6 +42,9 @@ zh_Hant_HK{
                 Ed{"d E"}
                 MEd{"E, d/M"}
                 Md{"d/M"}
+                yyyyM{"M/yGGGGG"}
+                yyyyMEd{"E, d/M/yGGGGG"}
+                yyyyMd{"d/M/yGGGGG"}
             }
         }
         gregorian{

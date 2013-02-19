@@ -184,7 +184,7 @@ ja{
         native{"latn"}
         traditional{"jpan"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.15"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -215,12 +215,12 @@ ja{
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 M{"M月"}
+                MEEEEd{"M/dEEEE"}
                 MEd{"M/d(E)"}
                 MMM{"M月"}
                 MMMEEEEd{"M月d日EEEE"}
                 MMMEd{"M月d日(E)"}
                 MMMd{"M月d日"}
-                MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
                 h{"aK時"}
@@ -230,6 +230,7 @@ ja{
                 y{"GGGGy年"}
                 yyyy{"GGGGy年"}
                 yyyyM{"GGGGy年M月"}
+                yyyyMEEEEd{"GGGGy年M/dEEEE"}
                 yyyyMEd{"GGGGy年M/d(E)"}
                 yyyyMM{"Gy/MM"}
                 yyyyMMM{"GGGGy年M月"}
@@ -279,16 +280,25 @@ ja{
                 Ed{"d日(E)"}
                 Gy{"U年"}
                 GyMMM{"U年MMM"}
+                GyMMMEEEEd{"U年MMMd日EEEE"}
                 GyMMMEd{"U年MMMd日(E)"}
                 GyMMMd{"U年MMMd日"}
+                H{"H時"}
+                Hm{"H:mm"}
+                Hms{"H:mm:ss"}
                 M{"MMM"}
+                MEEEEd{"M/dEEEE"}
                 MEd{"M/d(E)"}
                 MMMEEEEd{"MMMd日EEEE"}
                 MMMEd{"MMMd日(E)"}
                 MMMd{"MMMd日"}
                 Md{"M/d"}
                 d{"d日"}
+                h{"aK時"}
+                hm{"aK:mm"}
+                hms{"aK:mm:ss"}
                 y{"U年"}
+                yMd{"U年M月d日"}
                 yyyy{"U年"}
                 yyyyM{"U年M月"}
                 yyyyMEEEEd{"U年M月d日EEEE"}
@@ -793,6 +803,7 @@ ja{
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 M{"M月"}
+                MEEEEd{"M/dEEEE"}
                 MEd{"M/d(E)"}
                 MMM{"M月"}
                 MMMEEEEd{"M月d日EEEE"}
@@ -807,6 +818,7 @@ ja{
                 y{"Gy年"}
                 yyyy{"Gy年"}
                 yyyyM{"Gy/M"}
+                yyyyMEEEEd{"Gy/M/dEEEE"}
                 yyyyMEd{"Gy/M/d(E)"}
                 yyyyMMM{"Gy年M月"}
                 yyyyMMMEEEEd{"Gy年M月d日EEEE"}
@@ -947,12 +959,12 @@ ja{
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 M{"M月"}
+                MEEEEd{"M/dEEEE"}
                 MEd{"M/d(E)"}
                 MMM{"M月"}
                 MMMEEEEd{"M月d日EEEE"}
                 MMMEd{"M月d日(E)"}
                 MMMd{"M月d日"}
-                MMdd{"MM/dd"}
                 Md{"M/d"}
                 d{"d日"}
                 h{"aK時"}
@@ -961,6 +973,7 @@ ja{
                 ms{"mm:ss"}
                 y{"y年"}
                 yM{"y/M"}
+                yMEEEEd{"y/M/dEEEE"}
                 yMEd{"y/M/d(E)"}
                 yMM{"y/MM"}
                 yMMM{"y年M月"}
@@ -1536,8 +1549,10 @@ ja{
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
                 M{"M月"}
+                MEEEEd{"M/dEEEE"}
                 MEd{"M/d(E)"}
                 MMM{"M月"}
+                MMMEEEEd{"M月d日EEEE"}
                 MMMEd{"M月d日(E)"}
                 MMMd{"M月d日"}
                 Md{"M/d"}
@@ -1548,6 +1563,7 @@ ja{
                 ms{"mm:ss"}
                 y{"Gy年"}
                 yyyy{"Gy年"}
+                yyyyMEEEEd{"Gy/M/dEEEE"}
                 yyyyMEd{"Gy/M/d(E)"}
                 yyyyMM{"Gy/MM"}
                 yyyyMMM{"Gy年M月"}

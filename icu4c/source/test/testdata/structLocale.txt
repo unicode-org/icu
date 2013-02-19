@@ -12873,6 +12873,10 @@ structLocale:table(nofallback){
                     M{""}
                     d{""}
                 }
+                MMMEEEEd{
+                    M{""}
+                    d{""}
+                }
                 MMMM{
                     M{""}
                 }
@@ -13113,6 +13117,10 @@ structLocale:table(nofallback){
                     M{""}
                 }
                 MMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMEEEEd{
                     M{""}
                     d{""}
                 }
@@ -13376,6 +13384,10 @@ structLocale:table(nofallback){
                     M{""}
                     d{""}
                 }
+                MMMEEEEd{
+                    M{""}
+                    d{""}
+                }
                 MMMM{
                     M{""}
                 }
@@ -13610,6 +13622,10 @@ structLocale:table(nofallback){
                     M{""}
                 }
                 MMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMEEEEd{
                     M{""}
                     d{""}
                 }
@@ -13944,6 +13960,10 @@ structLocale:table(nofallback){
                     M{""}
                     d{""}
                 }
+                MMMEEEEd{
+                    M{""}
+                    d{""}
+                }
                 MMMM{
                     M{""}
                 }
@@ -14234,6 +14254,10 @@ structLocale:table(nofallback){
                     M{""}
                 }
                 MMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMEEEEd{
                     M{""}
                     d{""}
                 }
@@ -14528,6 +14552,10 @@ structLocale:table(nofallback){
                     M{""}
                     d{""}
                 }
+                MMMEEEEd{
+                    M{""}
+                    d{""}
+                }
                 MMMM{
                     M{""}
                 }
@@ -14783,6 +14811,10 @@ structLocale:table(nofallback){
                     M{""}
                     d{""}
                 }
+                MMMEEEEd{
+                    M{""}
+                    d{""}
+                }
                 MMMM{
                     M{""}
                 }
@@ -15030,6 +15062,10 @@ structLocale:table(nofallback){
                     M{""}
                     d{""}
                 }
+                MMMEEEEd{
+                    M{""}
+                    d{""}
+                }
                 MMMM{
                     M{""}
                 }
@@ -15274,6 +15310,10 @@ structLocale:table(nofallback){
                     M{""}
                 }
                 MMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMEEEEd{
                     M{""}
                     d{""}
                 }
@@ -16273,6 +16313,10 @@ structLocale:table(nofallback){
                     M{""}
                 }
                 MMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMEEEEd{
                     M{""}
                     d{""}
                 }

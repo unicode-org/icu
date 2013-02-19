@@ -149,13 +149,62 @@ de{
             }
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.15"}
     calendar{
         buddhist{
             eras{
                 abbreviated{
                     "BE",
                 }
+            }
+        }
+        chinese{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d. MMMM U",
+                "d. MMMM U",
+                "dd.MM U",
+                "dd.MM.yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"E, d."}
+                Gy{"U"}
+                GyMMM{"MMM U"}
+                GyMMMEd{"E, d. MMM U"}
+                GyMMMd{"d. MMM U"}
+                H{"HH 'Uhr'"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, d.M."}
+                MMM{"LLL"}
+                MMMEd{"E, d. MMM"}
+                MMMd{"d. MMM"}
+                Md{"d.M."}
+                d{"d"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                ms{"mm:ss"}
+                y{"U"}
+                yyyy{"U"}
+                yyyyM{"M.y"}
+                yyyyMEd{"E, d.M.y"}
+                yyyyMMM{"MMM U"}
+                yyyyMMMEd{"E, d. MMM U"}
+                yyyyMMMM{"MMMM U"}
+                yyyyMMMd{"d. MMM U"}
+                yyyyMd{"d.M.y"}
+                yyyyQQQ{"QQQ U"}
+                yyyyQQQQ{"QQQQ U"}
             }
         }
         generic{
