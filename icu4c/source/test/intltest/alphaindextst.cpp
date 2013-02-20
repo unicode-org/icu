@@ -7,6 +7,8 @@
 //   file:  alphaindex.cpp
 //          Alphabetic Index Tests.
 //
+#include <stdio.h>  // for sprintf
+
 #include "intltest.h"
 #include "alphaindextst.h"
 

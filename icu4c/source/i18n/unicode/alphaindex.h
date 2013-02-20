@@ -71,12 +71,7 @@ U_NAMESPACE_BEGIN
 
 // Forward Declarations
 
-namespace {
-
 class BucketList;
-
-}  // namespace;
-
 class Collator;
 class RuleBasedCollator;
 class StringEnumeration;
