@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012, International Business Machines Corporation and         *
+ * Copyright (C) 2012-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -214,7 +214,12 @@ class CompactDecimalDataCache {
      * isRoot returns true if r is in root locale or false otherwise.
      */
     private static boolean isRoot(ICUResourceBundle r) {
-        return r.getLocale().equals("root");
+        ULocale bundleLocale = r.getULocale();
+        // Note: bundleLocale for root should be ULocale.ROOT, which is equivalent to new ULocale("").
+        // However, resource bundle might be initialized with locale ID "root", which should be
+        // actually normalized to "" in ICUResourceBundle. For now, this logic also compare to
+        // "root", not just ULocale.ROOT.
+        return bundleLocale.equals(ULocale.ROOT) || bundleLocale.toString().equals("root");
     }
 
     /**
