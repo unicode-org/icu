@@ -117,6 +117,11 @@ int32_t binarySearch(const UVector &list, const UnicodeString &s, const Collator
     }
 }
 
+}  // namespace
+
+// The BucketList is not in the anonymous namespace because only Clang
+// seems to support its use in other classes from there.
+// However, we also don't need U_I18N_API because it is not used from outside the i18n library.
 class BucketList : public UObject {
 public:
     BucketList(UVector *bucketList, UVector *publicBucketList)
@@ -166,8 +171,6 @@ public:
     /** Just the visible buckets. */
     UVector *immutableVisibleList_;
 };
-
-}  // namespace
 
 AlphabeticIndex::ImmutableIndex::~ImmutableIndex() {
     delete buckets_;
