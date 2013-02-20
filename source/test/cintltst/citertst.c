@@ -1686,6 +1686,8 @@ static UBool checkCEValidity(const UCollator *coll, const UChar *codepoints,
     return result;
 }
 
+static const UChar IMPORT[] = { 0x5B, 0x69, 0x6D, 0x70, 0x6F, 0x72, 0x74, 0 };  /* "[import" */
+
 static void TestCEValidity()
 {
     /* testing UCA collation elements */
@@ -1790,7 +1792,14 @@ static void TestCEValidity()
         src.opts = &opts;
         rules = ucol_getRules(coll, &ruleLen);
 
-        if (ruleLen > 0) {
+        /*
+         * We have not set up the UColTokenParser with a callback function
+         * to fetch [import] sub-rules,
+         * so skip testing tailorings that import others.
+         * TODO: Ticket #8047: Change TestCEValidity to use ucol_getTailoredSet()
+         *                     rather than the internal collation rule parser
+         */
+        if (ruleLen > 0 && u_strstr(rules, IMPORT) == NULL) {
             rulesCopy = (UChar *)uprv_malloc((ruleLen +
                 UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
             uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
@@ -1984,7 +1993,14 @@ static void TestSortKeyValidity(void)
         src.opts = &opts;
         rules = ucol_getRules(coll, &ruleLen);
 
-        if (ruleLen > 0) {
+        /*
+         * We have not set up the UColTokenParser with a callback function
+         * to fetch [import] sub-rules,
+         * so skip testing tailorings that import others.
+         * TODO: Ticket #8047: Change TestSortKeyValidity to use ucol_getTailoredSet()
+         *                     rather than the internal collation rule parser
+         */
+        if (ruleLen > 0 && u_strstr(rules, IMPORT) == NULL) {
             rulesCopy = (UChar *)uprv_malloc((ruleLen +
                 UCOL_TOK_EXTRA_RULE_SPACE_SIZE) * sizeof(UChar));
             uprv_memcpy(rulesCopy, rules, ruleLen * sizeof(UChar));
