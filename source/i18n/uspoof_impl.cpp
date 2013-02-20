@@ -102,7 +102,7 @@ const SpoofImpl *SpoofImpl::validateThis(const USpoofChecker *sc, UErrorCode &st
     if (sc == NULL) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
-    };
+    }
     SpoofImpl *This = (SpoofImpl *)sc;
     if (This->fMagic != USPOOF_MAGIC ||
         This->fSpoofData == NULL) {
