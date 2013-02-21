@@ -400,6 +400,8 @@ public class CurrencyMetaInfo {
     /**
      * Represents a complete currency info record listing the region, currency, from and to dates,
      * and priority.
+     * Use {@link CurrencyMetaInfo#currencyInfo(CurrencyFilter)}
+     * for a list of info objects matching the filter.
      * @stable ICU 4.4
      */
     public static final class CurrencyInfo {
@@ -444,7 +446,7 @@ public class CurrencyMetaInfo {
         private final boolean tender;
 
         /**
-         * @deprecated ICU 51
+         * @deprecated ICU 51 Use {@link CurrencyMetaInfo#currencyInfo(CurrencyFilter)} instead.
          */     
         public CurrencyInfo(String region, String code, long from, long to, int priority) {
             this(region, code, from, to, priority, true);
