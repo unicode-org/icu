@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012, International Business Machines Corporation and         *
+ * Copyright (C) 2013, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -28,7 +28,7 @@ public final class CharacterIteration {
      */
     public static int next32(CharacterIterator ci) {
         // If the current position is at a surrogate pair, move to the trail surrogate
-        //   which leaves it in positon for underlying iterator's next() to work.
+        //   which leaves it in position for underlying iterator's next() to work.
         int c= ci.current();
         if (c >= UTF16.LEAD_SURROGATE_MIN_VALUE && c<=UTF16.LEAD_SURROGATE_MAX_VALUE) {
             c = ci.next();   
@@ -59,7 +59,7 @@ public final class CharacterIteration {
     // The call site does an initial ci.next() and calls this function
     //    if the 16 bit value it gets is >= LEAD_SURROGATE_MIN_VALUE.
     // NOTE:  we leave the underlying char iterator positioned in the
-    //        middle of a surroage pair.  ci.next() will work correctly
+    //        middle of a surrogate pair.  ci.next() will work correctly
     //        from there, but the ci.getIndex() will be wrong, and needs
     //        adjustment.
     public static int nextTrail32(CharacterIterator ci, int lead) {
