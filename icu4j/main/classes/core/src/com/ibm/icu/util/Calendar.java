@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2012, International Business Machines
+*   Copyright (C) 1996-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -1173,8 +1173,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #getRepeatedWallTimeOption()
      * @see #setSkippedWallTimeOption(int)
      * @see #getSkippedWallTimeOption()
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public static final int WALLTIME_LAST = 0;
 
@@ -1186,8 +1185,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #getRepeatedWallTimeOption()
      * @see #setSkippedWallTimeOption(int)
      * @see #getSkippedWallTimeOption()
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public static final int WALLTIME_FIRST = 1;
 
@@ -1196,8 +1194,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * ambiguous wall time to be interpreted as the next valid wall time.
      * @see #setSkippedWallTimeOption(int)
      * @see #getSkippedWallTimeOption()
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public static final int WALLTIME_NEXT_VALID = 2;
 
@@ -4030,8 +4027,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WALLTIME_FIRST
      * @see #WALLTIME_LAST
      * 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public void setRepeatedWallTimeOption(int option) {
         if (option != WALLTIME_LAST && option != WALLTIME_FIRST) {
@@ -4051,8 +4047,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WALLTIME_FIRST
      * @see #WALLTIME_LAST
      * 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public int getRepeatedWallTimeOption() {
         return repeatedWallTime;
@@ -4083,8 +4078,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WALLTIME_LAST
      * @see #WALLTIME_NEXT_VALID
      * 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public void setSkippedWallTimeOption(int option) {
         if (option != WALLTIME_LAST && option != WALLTIME_FIRST && option != WALLTIME_NEXT_VALID) {
@@ -4105,8 +4099,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      * @see #WALLTIME_LAST
      * @see #WALLTIME_NEXT_VALID
      * 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public int getSkippedWallTimeOption() {
         return skippedWallTime;

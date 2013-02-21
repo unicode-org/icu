@@ -242,16 +242,14 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @see #UNKNOWN_ZONE_ID
      * @see #getTimeZone(String)
      * 
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public static final TimeZone UNKNOWN_ZONE = new SimpleTimeZone(0, UNKNOWN_ZONE_ID).freeze();
 
     /**
      * {@icu} The immutable GMT (=UTC) time zone. Its ID is "Etc/GMT".
      *
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public static final TimeZone GMT_ZONE = new SimpleTimeZone(0, GMT_ZONE_ID).freeze();
 
@@ -716,8 +714,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
      * @return the specified <code>TimeZone</code>, or the UNKNOWN_ZONE
      * if the given ID cannot be understood.
      * @see #UNKNOWN_ZONE
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public static TimeZone getFrozenTimeZone(String ID) {
         return getTimeZone(ID, TZ_IMPL, true);
@@ -1119,8 +1116,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public boolean isFrozen() {
         return false;
@@ -1128,8 +1124,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public TimeZone freeze() {
         throw new UnsupportedOperationException("Needs to be implemented by the subclass.");
@@ -1137,8 +1132,7 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public TimeZone cloneAsThawed() {
         try {

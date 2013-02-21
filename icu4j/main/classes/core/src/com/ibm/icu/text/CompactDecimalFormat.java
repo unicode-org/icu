@@ -45,8 +45,7 @@ import com.ibm.icu.util.ULocale;
  * NumberFormat.
  *
  * @author markdavis
- * @draft ICU 49
- * @provisional This API might change or be removed in a future release.
+ * @stable ICU 49
  */
 public class CompactDecimalFormat extends DecimalFormat {
 
@@ -159,6 +158,7 @@ public class CompactDecimalFormat extends DecimalFormat {
      *            A collection of strings for debugging. If null on input, then any errors found will be added to that
      *            collection instead of throwing exceptions.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public CompactDecimalFormat(String pattern, DecimalFormatSymbols formatSymbols, String[] prefix, String[] suffix,
             long[] divisor, Collection<String> debugCreationErrors, CompactStyle style, String[] currencyAffixes) {
@@ -214,6 +214,10 @@ public class CompactDecimalFormat extends DecimalFormat {
         setCurrency(null);
     }
 
+    /**
+     * {@inheritDoc}
+     * @stable ICU 49
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null)
@@ -244,8 +248,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     @Override
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
@@ -274,8 +277,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     @Override
     public StringBuffer format(long number, StringBuffer toAppendTo, FieldPosition pos) {
@@ -284,8 +286,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     @Override
     public StringBuffer format(BigInteger number, StringBuffer toAppendTo, FieldPosition pos) {
@@ -294,8 +295,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     @Override
     public StringBuffer format(BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
@@ -304,8 +304,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     @Override
     public StringBuffer format(com.ibm.icu.math.BigDecimal number, StringBuffer toAppendTo, FieldPosition pos) {
@@ -314,8 +313,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * Parsing is currently unsupported, and throws an UnsupportedOperationException.
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     @Override
     public Number parse(String text, ParsePosition parsePosition) {

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1757,8 +1757,7 @@ public class DecimalFormat extends NumberFormat {
      *  have 0 <= pos.getIndex() < text.length(); on output, the position after the last
      *  matched character. If the parse fails, the position in unchanged upon output.
      * @return a CurrencyAmount, or null upon failure
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     @Override
     public CurrencyAmount parseCurrency(CharSequence text, ParsePosition pos) {

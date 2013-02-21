@@ -58,8 +58,7 @@ public final class LocaleData {
 
     /**
      * EXType for {@link #getExemplarSet(int, int)}.
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
      public static final int ES_PUNCTUATION = 4;
 
