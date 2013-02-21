@@ -71,6 +71,15 @@
 #include "decfmtst.h"
 #include "dcfmtimp.h"
 
+/*
+ * On certain platforms, round is a macro defined in math.h
+ * This undefine is to avoid conflict between the macro and
+ * the function defined below.
+ */
+#ifdef round
+#undef round
+#endif
+
 U_NAMESPACE_BEGIN
 
 
