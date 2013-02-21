@@ -1,6 +1,6 @@
 /*****************************************************************************
 *
-*   Copyright (C) 1999-2012, International Business Machines
+*   Copyright (C) 1999-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************/
@@ -63,7 +63,7 @@ U_NAMESPACE_USE
 /* below from the README */
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
-U_CFUNC char uconvmsg_dat[];
+extern  const void U_IMPORT *uconvmsg_dat;
 #endif
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -90,7 +90,7 @@ static void initMsg(const char *pname) {
 
         /* Set up our static data - if any */
 #ifdef UCONVMSG_LINK
-        udata_setAppData(UCONVMSG, (const void*) uconvmsg_dat, &err);
+        udata_setAppData(UCONVMSG, &uconvmsg_dat, &err);
         if (U_FAILURE(err)) {
           fprintf(stderr, "%s: warning, problem installing our static resource bundle data uconvmsg: %s - trying anyways.\n",
                   pname, u_errorName(err));
