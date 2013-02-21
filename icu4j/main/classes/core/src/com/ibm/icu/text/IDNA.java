@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2003-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2003-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -115,8 +115,7 @@ public abstract class IDNA {
      * (The CONTEXTO check is new in IDNA2008.)
      * <p>This is for use by registries for IDNA2008 conformance.
      * UTS #46 does not require the CONTEXTO check.
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public static final int CHECK_CONTEXTO = 0x40;
 
@@ -435,15 +434,13 @@ public abstract class IDNA {
          * A label does not meet the IDNA CONTEXTO requirements for punctuation characters.
          * Some punctuation characters "Would otherwise have been DISALLOWED"
          * but are allowed in certain contexts. (RFC 5892)
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 49
          */
         CONTEXTO_PUNCTUATION,
         /**
          * A label does not meet the IDNA CONTEXTO requirements for digits.
          * Arabic-Indic Digits (U+066x) must not be mixed with Extended Arabic-Indic Digits (U+06Fx).
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 49
          */
         CONTEXTO_DIGITS
     }

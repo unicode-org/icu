@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2009-2012, International Business Machines
+*   Copyright (C) 2009-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -89,8 +89,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     @Override
     public String getRawDecomposition(int c) {
@@ -99,8 +98,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     @Override
     public int composePair(int a, int b) {
@@ -109,8 +107,7 @@ public class FilteredNormalizer2 extends Normalizer2 {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     @Override
     public int getCombiningClass(int c) {

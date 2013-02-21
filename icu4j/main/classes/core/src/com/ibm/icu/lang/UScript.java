@@ -1039,8 +1039,7 @@ public final class UScript {
      * @param c code point
      * @param sc script code
      * @return true if sc is in Script_Extensions(c)
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public static final boolean hasScript(int c, int sc) {
         int scriptX=UCharacterProperty.INSTANCE.getAdditional(c, 0)&UCharacterProperty.SCRIPT_X_MASK;
@@ -1090,8 +1089,7 @@ public final class UScript {
      *            corresponding to c's Script_Extensions
      * @return negative number of script codes in c's Script_Extensions,
      *         or the non-negative single Script value
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public static final int getScriptExtensions(int c, BitSet set) {
         set.clear();

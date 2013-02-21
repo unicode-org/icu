@@ -46,8 +46,7 @@ public class CurrencyMetaInfo {
      * noSubstitute is true and there is no data to support this API.
      * @param noSubstitute true if no substitute data should be used
      * @return the meta info, or null
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public static CurrencyMetaInfo getInstance(boolean noSubstitute) {
         return hasData ? impl : null;
@@ -179,8 +178,7 @@ public class CurrencyMetaInfo {
          * or if equal to from, the date on which a currency must have been in use
          * @return a filter
          * @see #withDateRange(Date, Date)
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 49
          */
         public static CurrencyFilter onDateRange(Date from, Date to) {
             return ALL.withDateRange(from, to);
@@ -259,8 +257,7 @@ public class CurrencyMetaInfo {
          * @param to date on or before which the currency must have been in use
          * @return the filter
          * @see #onDateRange(Date, Date)
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 49
          */
         public CurrencyFilter withDateRange(Date from, Date to) {
             long fromLong = from == null ? Long.MIN_VALUE : from.getTime();
@@ -369,14 +366,12 @@ public class CurrencyMetaInfo {
     public static final class CurrencyDigits {
         /**
          * Number of fraction digits used to display this currency.
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 49
          */
         public final int fractionDigits;
         /**
          * Rounding increment used when displaying this currency.
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 49
          */
         public final int roundingIncrement;
 
@@ -441,8 +436,7 @@ public class CurrencyMetaInfo {
          * Preference order of currencies being used at the same time in the region.  Lower
          * values are preferred (generally, this is a transition from an older to a newer
          * currency).  Priorities within a single country are unique.
-         * @draft ICU 49
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 49
          */
         public final int priority;
         
