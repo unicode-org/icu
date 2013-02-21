@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2012 International Business Machines Corporation and     *
+ * Copyright (C) 2005-2013 International Business Machines Corporation and     *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1293,19 +1293,19 @@ public class RuleBasedBreakIterator extends BreakIterator {
 
             if (stateTable[row + RBBIDataWrapper.ACCEPTING] != 0) {
                 // Because this is an accepting state, any in-progress look-ahead match
-                //   is no longer relavant.  Clear out the pending lookahead status.
+                //   is no longer relevant.  Clear out the pending lookahead status.
                 lookaheadStatus = 0; 
             }
         }        // End of state machine main loop
 
         // The state machine is done.  Check whether it found a match...
 
-        // If c == DONE32 we ran off the end as normal, no match found. Move forward one.
-        // If the iterator failed to advance in the match engine when c != DONE32,
-        //   force it ahead by one. (This second condition really indicates a defect
-        //   in the break rules. They should always match at least one character.)
+        // If the iterator failed to advance in the match engine force it ahead by one.
+        // This indicates a defect in the break rules, which should always match
+        // at least one character.
+        
         if (result == initialPosition) {
-            if (TRACE && c != DONE32) {
+            if (TRACE) {
                 System.out.println("Iterator did not move. Advancing by 1.");
             }
             text.setIndex(initialPosition);
