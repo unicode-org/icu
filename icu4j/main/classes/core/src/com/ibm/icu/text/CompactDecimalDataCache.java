@@ -93,11 +93,11 @@ class CompactDecimalDataCache {
         INSIDE_FULL   // Inside single quote along with characters
     }
 
-    private static enum DataLocation { // Don't change order
-        LOCAL,  // In local numbering system
-        LATIN,  // In latin numbering system
-        ROOT    // In root locale
-    }
+//    private static enum DataLocation { // Don't change order
+//        LOCAL,  // In local numbering system
+//        LATIN,  // In latin numbering system
+//        ROOT    // In root locale
+//    }
 
     private static enum UResFlags {
         ANY,  // Any locale will do.
