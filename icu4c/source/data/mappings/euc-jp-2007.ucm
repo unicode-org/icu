@@ -22,7 +22,7 @@
 # 0xE3 and 0xE4 are dropped to avoid mapping 0x8E followed by 0xE3 and 0xE4
 # are mapped to ASCII range characters, U+005C and U+007E because that presents
 # a potential XSS attack risk.
-<icu:state>                   a1-e2
+<icu:state>                   a1-e4
 <icu:state>                   a1-fe:1, a1:4, a3-a4:4, ef-f2:4, f4-fe:4
 <icu:state>                   a1-fe.u
 
