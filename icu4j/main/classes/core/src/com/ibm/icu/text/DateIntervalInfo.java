@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.MissingResourceException;
@@ -391,6 +392,17 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                 ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,currentLocale);
                 ICUResourceBundle calBundle = rb.getWithFallback("calendar");
                 ICUResourceBundle calTypeBundle = calBundle.getWithFallback(calendarTypeToUse);
+                // Start hack to force inheriting sideways from generic before up to parent locale.
+                // This happens in ICU4C just via the aliases in root, not sure why not here.
+                // This is added per #9952, #9964 for better long-term fix.
+                if (calTypeBundle != null && !calendarTypeToUse.equals("gregorian") && !calendarTypeToUse.equals("chinese")) {
+                    Locale desiredLocale = rb.getLocale();
+                    Locale calDataLocale = calTypeBundle.getLocale();
+                    if (!calDataLocale.equals(desiredLocale)) {
+                        calTypeBundle = calBundle.getWithFallback("generic");
+                    }
+                }
+                // End hack
                 ICUResourceBundle itvDtPtnResource =calTypeBundle.getWithFallback("intervalFormats");
                 // look for fallback first, since it establishes the default order
                 String fallback = itvDtPtnResource.getStringWithFallback(FALLBACK_STRING);
