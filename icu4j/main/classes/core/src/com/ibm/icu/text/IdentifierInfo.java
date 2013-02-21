@@ -7,7 +7,6 @@
 package com.ibm.icu.text;
 
 import java.util.BitSet;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -18,8 +17,6 @@ import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.lang.UCharacterCategory;
 import com.ibm.icu.lang.UScript;
 import com.ibm.icu.text.SpoofChecker.RestrictionLevel;
-import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.util.Freezable;
 
 /**
  * This class analyzes a possible identifier for script and identifier status. Use it by calling setIdentifierProfile
@@ -37,6 +34,7 @@ import com.ibm.icu.util.Freezable;
  * 
  * @author markdavis
  * @internal
+ * @deprecated This API is ICU internal only.
  */
 public class IdentifierInfo {
 
@@ -53,6 +51,7 @@ public class IdentifierInfo {
      * Create an identifier info object. Subsequently, call {@link #setIdentifier(String)}, etc.
      * {@link #setIdentifierProfile(UnicodeSet)}
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public IdentifierInfo() {
         super();
@@ -72,6 +71,7 @@ public class IdentifierInfo {
      * @param identifierProfile the characters that are to be allowed in the identifier
      * @return self
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public IdentifierInfo setIdentifierProfile(UnicodeSet identifierProfile) {
         this.identifierProfile.set(identifierProfile);
@@ -83,6 +83,7 @@ public class IdentifierInfo {
      * 
      * @return The characters that are to be allowed in the identifier.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public UnicodeSet getIdentifierProfile() {
         return new UnicodeSet(identifierProfile);
@@ -94,6 +95,7 @@ public class IdentifierInfo {
      * @param identifier the identifier to analyze
      * @return self
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public IdentifierInfo setIdentifier(String identifier) {
         this.identifier = identifier;
@@ -162,6 +164,7 @@ public class IdentifierInfo {
      * 
      * @return the identifier that was analyzed.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String getIdentifier() {
         return identifier;
@@ -172,6 +175,7 @@ public class IdentifierInfo {
      * 
      * @return the set of explicit scripts.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public BitSet getScripts() {
         return (BitSet) requiredScripts.clone();
@@ -183,6 +187,7 @@ public class IdentifierInfo {
      * 
      * @return the set of explicit scripts.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public Set<BitSet> getAlternates() {
         Set<BitSet> result = new HashSet<BitSet>();
@@ -197,6 +202,7 @@ public class IdentifierInfo {
      * 
      * @return the set of explicit scripts.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public UnicodeSet getNumerics() {
         return new UnicodeSet(numerics);
@@ -207,6 +213,7 @@ public class IdentifierInfo {
      * 
      * @return the set of scripts that are in common among the alternates.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public BitSet getCommonAmongAlternates() {
         return (BitSet) commonAmongAlternates.clone();
@@ -226,6 +233,7 @@ public class IdentifierInfo {
      * 
      * @return the restriction level.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public RestrictionLevel getRestrictionLevel() {
         if (!identifierProfile.containsAll(identifier) || getNumerics().size() > 1) {
@@ -256,18 +264,19 @@ public class IdentifierInfo {
     }
 
     /**
-      * Get the number of scripts appearing in the identifier.
-      *   Note: Common and Inherited scripts are omitted from the count.
-      *   Note: If the identifier contains characters with alternate scripts
-      *         (the character is used with more than one script), minimize
-      *         the reported number of scripts by considering the character
-      *         to be of a script that already appears elsewhere in the identifier
-      *         when possible.
-      *         The alternate script computation may not be perfect. The distinction
-      *         between 0, 1 and > 1 scripts will be valid, however.
-      * @return the number of scripts.
-      * @internal
-      */
+     * Get the number of scripts appearing in the identifier.
+     *   Note: Common and Inherited scripts are omitted from the count.
+     *   Note: If the identifier contains characters with alternate scripts
+     *         (the character is used with more than one script), minimize
+     *         the reported number of scripts by considering the character
+     *         to be of a script that already appears elsewhere in the identifier
+     *         when possible.
+     *         The alternate script computation may not be perfect. The distinction
+     *         between 0, 1 and > 1 scripts will be valid, however.
+     * @return the number of scripts.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     public int getScriptCount() {
         // Note: Common and Inherited scripts were removed by setIdentifier(), and do not appear in fRequiredScripts.
         int count = requiredScripts.cardinality() +
@@ -279,6 +288,7 @@ public class IdentifierInfo {
     /**
      * See Object.toString()
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     public String toString() {
@@ -305,6 +315,7 @@ public class IdentifierInfo {
      * @param alternates a set of BitSets of script values.
      * @return display form
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static String displayAlternates(Set<BitSet> alternates) {
         if (alternates.size() == 0) {
@@ -326,6 +337,7 @@ public class IdentifierInfo {
     /**
      * Order BitSets, first by shortest, then by items.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final Comparator<BitSet> BITSET_COMPARATOR = new Comparator<BitSet>() {
 
@@ -347,8 +359,9 @@ public class IdentifierInfo {
      * Produce a readable string of a set of scripts
      * 
      * @param scripts a BitSet of UScript values
-     * @return
+     * @return a readable string of a set of scripts
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static String displayScripts(BitSet scripts) {
         StringBuilder result = new StringBuilder();
@@ -367,6 +380,7 @@ public class IdentifierInfo {
      * @param scriptsString the string to be parsed
      * @return BitSet of UScript values.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static BitSet parseScripts(String scriptsString) {
         BitSet result = new BitSet();
@@ -384,6 +398,7 @@ public class IdentifierInfo {
      * @param scriptsSetString a list of alternates, separated by ;
      * @return a set of BitSets of UScript values
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static Set<BitSet> parseAlternates(String scriptsSetString) {
         Set<BitSet> result = new HashSet<BitSet>();
@@ -402,6 +417,7 @@ public class IdentifierInfo {
      * @param containee possible containee to be tested
      * @return true if container contains containee
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final boolean contains(BitSet container, BitSet containee) {
         for (int i = containee.nextSetBit(0); i >= 0; i = containee.nextSetBit(i + 1)) {
@@ -419,6 +435,7 @@ public class IdentifierInfo {
      * @param values values to be set in the bitset
      * @return modified bitset.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final BitSet set(BitSet bitset, int... values) {
         for (int value : values) {

@@ -339,7 +339,6 @@ public class DateIntervalFormat extends UFormat {
      *
      * @param skeleton  the skeleton of the date formatter
      * @param dtItvInfo  the DateIntervalInfo object to be adopted.
-     * @param generator  will be used for matching
      * @param simpleDateFormat will be used for formatting
      * 
      * @internal

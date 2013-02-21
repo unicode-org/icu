@@ -12,11 +12,9 @@ import java.io.Reader;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.BitSet;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -494,7 +492,7 @@ public class SpoofCheckerTest extends TestFmwk {
             .setChecks(SpoofChecker.MIXED_NUMBERS) // only check this
             .build();
             boolean actualValue = sc.failsChecks(testString, checkResult);
-            boolean t = assertEquals("Testing spoof mixed numbers for '" + testString + "', ", expected.size() > 1, actualValue);
+            assertEquals("Testing spoof mixed numbers for '" + testString + "', ", expected.size() > 1, actualValue);
         }
     }
     
