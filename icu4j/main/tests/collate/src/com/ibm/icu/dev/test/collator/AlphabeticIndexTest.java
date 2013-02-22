@@ -224,7 +224,8 @@ public class AlphabeticIndexTest extends TestFmwk {
             List labels = alphabeticIndex.getBucketLabels();
             logln(labels.toString());
             Bucket<Integer> bucket = find(alphabeticIndex, probe);
-            assertEquals(probe + " found in right bucket", expectedLabel, bucket.getLabel());
+            assertEquals("locale " + test[0] + " name=" + probe + " in bucket",
+                    expectedLabel, bucket.getLabel());
         }
     }
 
