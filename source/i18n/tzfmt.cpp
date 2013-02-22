@@ -334,6 +334,9 @@ TimeZoneFormat::TimeZoneFormat(const Locale& locale, UErrorCode& status)
 
     fTimeZoneNames = TimeZoneNames::createInstance(locale, status);
     // fTimeZoneGenericNames is lazily instantiated
+    if (U_FAILURE(status)) {
+        return;
+    }
 
     const UChar* gmtPattern = NULL;
     const UChar* hourFormats = NULL;

@@ -85,7 +85,7 @@ static void initializeStatics() {
         gNfdNormalizer = Normalizer2::getNFDInstance(status);
     }
     ucln_i18n_registerCleanup(UCLN_I18N_SPOOF, uspoof_cleanup);
-    U_ASSERT(U_SUCCESS(status));   // TODO: remove after testing.
+
     return;
 }
 
