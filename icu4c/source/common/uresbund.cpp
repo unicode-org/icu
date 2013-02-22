@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
-* Copyright (C) 1997-2012, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
+* Copyright (C) 1997-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
 ******************************************************************************
 *
 * File URESBUND.C
@@ -21,6 +21,7 @@
 
 #include "unicode/ustring.h"
 #include "unicode/ucnv.h"
+#include "charstr.h"
 #include "uresimp.h"
 #include "ustr_imp.h"
 #include "cwchar.h"
@@ -1685,9 +1686,11 @@ ures_getStringByKeyWithFallback(const UResourceBundle *resB,
 */  
 static Resource getTableItemByKeyPath(const ResourceData *pResData, Resource table, const char *key) {
   Resource resource = table;  /* The current resource */
-  char path[256];
-  uprv_strcpy(path, key);
-  char *pathPart = path;  /* Path from current resource to desired resource */
+  icu::CharString path;
+  UErrorCode errorCode = U_ZERO_ERROR;
+  path.append(key, errorCode);
+  if (U_FAILURE(errorCode)) { return RES_BOGUS; }
+  char *pathPart = path.data();  /* Path from current resource to desired resource */
   UResType type = (UResType)RES_GET_TYPE(resource);  /* the current resource type */
   while (*pathPart && resource != RES_BOGUS && URES_IS_CONTAINER(type)) {
     char *nextPathPart = uprv_strchr(pathPart, RES_PATH_SEPARATOR);
@@ -1728,7 +1731,6 @@ ures_getByKeyWithFallback(const UResourceBundle *resB,
 
     int32_t type = RES_GET_TYPE(resB->fRes);
     if(URES_IS_TABLE(type)) {
-        int32_t t;
         res = getTableItemByKeyPath(&(resB->fResData), resB->fRes, inKey);
         const char* key = inKey;
         if(res == RES_BOGUS) {
