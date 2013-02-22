@@ -456,7 +456,6 @@ uscript_getShortName(UScriptCode scriptCode);
 U_STABLE UScriptCode  U_EXPORT2 
 uscript_getScript(UChar32 codepoint, UErrorCode *err);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Do the Script_Extensions of code point c contain script sc?
  * If c does not have explicit Script_Extensions, then this tests whether
@@ -470,9 +469,9 @@ uscript_getScript(UChar32 codepoint, UErrorCode *err);
  * @param c code point
  * @param sc script code
  * @return TRUE if sc is in Script_Extensions(c)
- * @draft ICU 49
+ * @stable ICU 49
  */
-U_DRAFT UBool U_EXPORT2
+U_STABLE UBool U_EXPORT2
 uscript_hasScript(UChar32 c, UScriptCode sc);
 
 /**
@@ -504,13 +503,12 @@ uscript_hasScript(UChar32 c, UScriptCode sc);
  *                  function chaining. (See User Guide for details.)
  * @return number of script codes in c's Script_Extensions, or 1 for the single Script value,
  *         written to scripts unless U_BUFFER_OVERFLOW_ERROR indicates insufficient capacity
- * @draft ICU 49
+ * @stable ICU 49
  */
-U_DRAFT int32_t U_EXPORT2
+U_STABLE int32_t U_EXPORT2
 uscript_getScriptExtensions(UChar32 c,
                             UScriptCode *scripts, int32_t capacity,
                             UErrorCode *errorCode);
-#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DRAFT_API
 

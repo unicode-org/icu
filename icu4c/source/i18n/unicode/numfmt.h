@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-* Copyright (C) 1997-2012, International Business Machines Corporation and others.
+* Copyright (C) 1997-2013, International Business Machines Corporation and others.
 * All Rights Reserved.
 ********************************************************************************
 *
@@ -641,7 +641,7 @@ public:
      * @return     if parse succeeds, a pointer to a newly-created CurrencyAmount
      *             object (owned by the caller) containing information about
      *             the parsed currency; if parse fails, this is NULL.
-     * @draft ICU 49
+     * @stable ICU 49
      */
     virtual CurrencyAmount* parseCurrency(const UnicodeString& text,
                                           ParsePosition& pos) const;

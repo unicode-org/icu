@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1997-2012, International Business Machines
+*   Copyright (C) 1997-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -898,7 +898,6 @@ public:
      */
     UBool isLenient(void) const;
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Sets the behavior for handling wall time repeating multiple times
      * at negative time zone offset transitions. For example, 1:30 AM on
@@ -917,7 +916,7 @@ public:
      * @param option the behavior for handling repeating wall time, either
      * <code>UCAL_WALLTIME_FIRST</code> or <code>UCAL_WALLTIME_LAST</code>.
      * @see #getRepeatedWallTimeOption
-     * @draft ICU 49
+     * @stable ICU 49
      */
     void setRepeatedWallTimeOption(UCalendarWallTimeOption option);
 
@@ -928,7 +927,7 @@ public:
      * @return the behavior for handling repeating wall time, either
      * <code>UCAL_WALLTIME_FIRST</code> or <code>UCAL_WALLTIME_LAST</code>.
      * @see #setRepeatedWallTimeOption
-     * @draft ICU 49
+     * @stable ICU 49
      */
     UCalendarWallTimeOption getRepeatedWallTimeOption(void) const;
 
@@ -951,7 +950,7 @@ public:
      * <code>UCAL_WALLTIME_NEXT_VALID</code>.
      * @see #getSkippedWallTimeOption
      * 
-     * @draft ICU 49
+     * @stable ICU 49
      */
     void setSkippedWallTimeOption(UCalendarWallTimeOption option);
 
@@ -963,10 +962,9 @@ public:
      * <code>UCAL_WALLTIME_FIRST</code>, <code>UCAL_WALLTIME_LAST</code>
      * and <code>UCAL_WALLTIME_NEXT_VALID</code>.
      * @see #setSkippedWallTimeOption
-     * @draft ICU 49
+     * @stable ICU 49
      */
     UCalendarWallTimeOption getSkippedWallTimeOption(void) const;
-#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_DEPRECATED_API
     /**
@@ -1371,7 +1369,7 @@ public:
      * \endcode
      *
      * @return legacy calendar type name string
-     * @draft ICU 49
+     * @stable ICU 49
      */
     virtual const char * getType() const = 0;
 
