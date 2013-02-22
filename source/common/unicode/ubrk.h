@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2012, International Business Machines Corporation and others.
+* Copyright (C) 1996-2013, International Business Machines Corporation and others.
 * All Rights Reserved.
 ******************************************************************************
 */
@@ -500,7 +500,6 @@ ubrk_getRuleStatusVec(UBreakIterator *bi, int32_t *fillInVec, int32_t capacity, 
 U_STABLE const char* U_EXPORT2
 ubrk_getLocaleByType(const UBreakIterator *bi, ULocDataLocaleType type, UErrorCode* status);
 
-#ifndef U_HIDE_DRAFT_API
 /**
   *  Set the subject text string upon which the break iterator is operating
   *  without changing any other aspect of the state.
@@ -524,13 +523,12 @@ ubrk_getLocaleByType(const UBreakIterator *bi, ULocDataLocaleType type, UErrorCo
   * @param text       The new (moved) text string.
   * @param status     Receives errors detected by this function.
   *
-  * @draft ICU 49
+  * @stable ICU 49
   */
-U_DRAFT void U_EXPORT2
+U_STABLE void U_EXPORT2
 ubrk_refreshUText(UBreakIterator *bi,
                        UText          *text,
                        UErrorCode     *status);
-#endif  /* U_HIDE_DRAFT_API */
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */
 
