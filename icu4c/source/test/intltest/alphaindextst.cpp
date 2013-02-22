@@ -545,6 +545,11 @@ void AlphabeticIndexTest::TestHaniFirst() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedCollator> coll(
         static_cast<RuleBasedCollator *>(Collator::createInstance(Locale::getRoot(), status)));
+
+    if (U_FAILURE(status)) {
+        dataerrln("Failed Collator::createInstance call - %s", u_errorName(status));
+        return;
+    }
     int32_t reorderCodes[] = { USCRIPT_HAN };
     coll->setReorderCodes(reorderCodes, LENGTHOF(reorderCodes), status);
     TEST_CHECK_STATUS; 
@@ -570,6 +575,10 @@ void AlphabeticIndexTest::TestPinyinFirst() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedCollator> coll(
         static_cast<RuleBasedCollator *>(Collator::createInstance(Locale::getChinese(), status)));
+    if (U_FAILURE(status)) {
+        dataerrln("Failed Collator::createInstance call - %s", u_errorName(status));
+        return;
+    }
     int32_t reorderCodes[] = { USCRIPT_HAN };
     coll->setReorderCodes(reorderCodes, LENGTHOF(reorderCodes), status);
     TEST_CHECK_STATUS; 
