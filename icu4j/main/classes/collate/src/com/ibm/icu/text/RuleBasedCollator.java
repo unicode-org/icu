@@ -2058,8 +2058,8 @@ public final class RuleBasedCollator extends Collator {
     }
 
     /**
-     * Constructors a RuleBasedCollator from the argument locale. If no resource bundle is associated with the locale,
-     * UCA is used instead.
+     * Constructs a RuleBasedCollator from the argument locale.
+     * If no resource bundle is associated with the locale, UCA is used instead.
      * 
      * @param locale
      */
@@ -2113,6 +2113,7 @@ public final class RuleBasedCollator extends Collator {
                         init(m_rules_);
                         return;
                     }
+                    init();
                     try {
                         UResourceBundle reorderRes = elements.get("%%ReorderCodes");
                         if (reorderRes != null) {
@@ -2123,7 +2124,6 @@ public final class RuleBasedCollator extends Collator {
                     } catch (MissingResourceException e) {
                         // ignore
                     }
-                    init();
                     return;
                 } else {
                     init(m_rules_);
