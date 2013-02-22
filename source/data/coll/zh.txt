@@ -10,10 +10,11 @@
  *  ICU <specials> source: <path>/xml/collation/zh.xml
  */
 zh{
-    Version{"2.0.80.85"}
+    Version{"2.0.81.30"}
     collations{
         big5han{
             Sequence{
+                " [reorder Latn Hani Bopo]"
                 "&[before 2]a<<ā<<<Ā<<á<<<Á<<ǎ<<<Ǎ<<à<<<À"
                 "&[before 2]e<<ē<<<Ē<<é<<<É<<ě<<<Ě<<è<<<È"
                 "&e<<ê̄<<<Ê̄<<ế<<<Ế<<ê̌<<<Ê̌<<ề<<<Ề"
@@ -222,6 +223,7 @@ zh{
         default{"pinyin"}
         gb2312han{
             Sequence{
+                " [reorder Latn Hani]"
                 "&[before 2]a<<ā<<<Ā<<á<<<Á<<ǎ<<<Ǎ<<à<<<À"
                 "&[before 2]e<<ē<<<Ē<<é<<<É<<ě<<<Ě<<è<<<È"
                 "&e<<ê̄<<<Ê̄<<ế<<<Ế<<ê̌<<<Ê̌<<ề<<<Ề"
@@ -335,6 +337,7 @@ zh{
         }
         pinyin{
             Sequence{
+                " [reorder Hani]"
                 "&[before 2]a<<ā<<<Ā<<á<<<Á<<ǎ<<<Ǎ<<à<<<À"
                 "&[before 2]e<<ē<<<Ē<<é<<<É<<ě<<<Ě<<è<<<È"
                 "&e<<ê̄<<<Ê̄<<ế<<<Ế<<ê̌<<<Ê̌<<ề<<<Ề"
@@ -1109,6 +1112,7 @@ zh{
         }
         stroke{
             Sequence{
+                " [reorder Hani Bopo]"
                 "&[before 2]a<<ā<<<Ā<<á<<<Á<<ǎ<<<Ǎ<<à<<<À"
                 "&[before 2]e<<ē<<<Ē<<é<<<É<<ě<<<Ě<<è<<<È"
                 "&e<<ê̄<<<Ê̄<<ế<<<Ế<<ê̌<<<Ê̌<<ề<<<Ề"
@@ -1762,6 +1766,7 @@ zh{
         }
         unihan{
             Sequence{
+                " [reorder Hani Bopo]"
                 "&[before 2]a<<ā<<<Ā<<á<<<Á<<ǎ<<<Ǎ<<à<<<À"
                 "&[before 2]e<<ē<<<Ē<<é<<<É<<ě<<<Ě<<è<<<È"
                 "&e<<ê̄<<<Ê̄<<ế<<<Ế<<ê̌<<<Ê̌<<ề<<<Ề"
@@ -2787,6 +2792,7 @@ zh{
         }
         zhuyin{
             Sequence{
+                " [reorder Hani Bopo]"
                 "&[last primary ignorable ]<<ˉ<ˊ<ˇ<ˋ<˙<˪<˫"
                 "&[before 2]a<<ā<<<Ā<<á<<<Á<<ǎ<<<Ǎ<<à<<<À"
                 "&[before 2]e<<ē<<<Ē<<é<<<É<<ě<<<Ě<<è<<<È"
