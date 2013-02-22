@@ -63,7 +63,7 @@ U_NAMESPACE_USE
 /* below from the README */
 #include "unicode/utypes.h"
 #include "unicode/udata.h"
-extern  const void U_IMPORT *uconvmsg_dat;
+U_CFUNC char uconvmsg_dat[];
 #endif
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -89,8 +89,8 @@ static void initMsg(const char *pname) {
         ps = 1;
 
         /* Set up our static data - if any */
-#ifdef UCONVMSG_LINK
-        udata_setAppData(UCONVMSG, &uconvmsg_dat, &err);
+#if defined(UCONVMSG_LINK) && U_PLATFORM != U_PF_OS390 /* On z/OS, this is failing. */
+        udata_setAppData(UCONVMSG, (const void*) uconvmsg_dat, &err);
         if (U_FAILURE(err)) {
           fprintf(stderr, "%s: warning, problem installing our static resource bundle data uconvmsg: %s - trying anyways.\n",
                   pname, u_errorName(err));
