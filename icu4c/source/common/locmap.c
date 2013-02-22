@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 1996-2012, International Business Machines
+ *   Copyright (C) 1996-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *
@@ -196,9 +196,24 @@ ILCID_POSIX_SUBTABLE(bo) {
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x047e, br, br_FR)
-ILCID_POSIX_ELEMENT_ARRAY(0x0403, ca, ca_ES)
+
+ILCID_POSIX_SUBTABLE(ca) {
+    {0x03,   "ca"},
+    {0x0403, "ca_ES"},
+    {0x0803, "ca_ES_VALENCIA"}
+};
+
 ILCID_POSIX_ELEMENT_ARRAY(0x0483, co, co_FR)
 ILCID_POSIX_ELEMENT_ARRAY(0x045c, chr,chr_US)
+
+ILCID_POSIX_SUBTABLE(ckb) {
+    {0x92,   "ckb"},
+    {0x92,   "ku"},
+    {0x7c92, "ckb_Arab"},
+    {0x7c92, "ku_Arab"},
+    {0x0492, "ckb_Arab_IQ"},
+    {0x0492, "ku_Arab_IQ"}
+};
 
 /* Declared as cs_CZ to get around compiler errors on z/OS, which defines cs as a function */
 ILCID_POSIX_ELEMENT_ARRAY(0x0405, cs, cs_CZ)
@@ -294,6 +309,12 @@ ILCID_POSIX_SUBTABLE(fa) {
 ILCID_POSIX_SUBTABLE(fa_AF) {
     {0x8c,   "fa_AF"},  /* Persian/Dari (Afghanistan) */
     {0x048c, "fa_AF"}   /* Persian/Dari (Afghanistan) */
+};
+
+ILCID_POSIX_SUBTABLE(ff) {
+    {0x67,   "ff"},
+    {0x7c67, "ff_Latn"},
+    {0x0867, "ff_Latn_SN"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x040b, fi, fi_FI)
@@ -495,7 +516,8 @@ ILCID_POSIX_SUBTABLE(or_IN) {
 ILCID_POSIX_SUBTABLE(pa) {
     {0x46,   "pa"},
     {0x0446, "pa_IN"},
-    {0x0846, "pa_PK"}
+    {0x0846, "pa_PK"},
+    {0x0846, "pa_Arab_PK"}
 };
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0479, pap, pap_AN)
@@ -585,7 +607,13 @@ ILCID_POSIX_SUBTABLE(sv) {
 
 ILCID_POSIX_ELEMENT_ARRAY(0x0441, sw, sw_KE)
 ILCID_POSIX_ELEMENT_ARRAY(0x045A, syr, syr_SY)
-ILCID_POSIX_ELEMENT_ARRAY(0x0449, ta, ta_IN)
+
+ILCID_POSIX_SUBTABLE(ta) {
+    {0x49,   "ta"},
+    {0x0449, "ta_IN"},
+    {0x0849, "ta_LK"}
+};
+
 ILCID_POSIX_ELEMENT_ARRAY(0x044a, te, te_IN)
 
 /* Cyrillic based by default */
@@ -599,9 +627,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x041e, th, th_TH)
 
 ILCID_POSIX_SUBTABLE(ti) {
     {0x73,   "ti"},
-    {0x0473, "ti_ER"},
     {0x0873, "ti_ER"},
-    {0x0873, "ti_ET"},
     {0x0473, "ti_ET"}
 };
 
@@ -609,7 +635,7 @@ ILCID_POSIX_ELEMENT_ARRAY(0x0442, tk, tk_TM)
 
 ILCID_POSIX_SUBTABLE(tn) {
     {0x32,   "tn"},
-    {0x0432, "tn_BW"},
+    {0x0832, "tn_BW"},
     {0x0432, "tn_ZA"}
 };
 
@@ -621,6 +647,7 @@ ILCID_POSIX_SUBTABLE(tzm) {
     {0x5f,   "tzm"},
     {0x7c5f, "tzm_Latn"},
     {0x085f, "tzm_Latn_DZ"},
+    {0x105f, "tzm_Tfng_MA"},
     {0x045f, "tmz"}
 };
 
@@ -714,6 +741,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(br),    /*  br  Breton                    0x7e */
     ILCID_POSIX_MAP(ca),    /*  ca  Catalan                   0x03 */
     ILCID_POSIX_MAP(chr),   /*  chr Cherokee                  0x5c */
+    ILCID_POSIX_MAP(ckb),   /*  ckb Sonari (Central Kurdish)  0x92 */
     ILCID_POSIX_MAP(co),    /*  co  Corsican                  0x83 */
     ILCID_POSIX_MAP(cs),    /*  cs  Czech                     0x05 */
     ILCID_POSIX_MAP(cy),    /*  cy  Welsh                     0x52 */
@@ -728,6 +756,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(eu),    /*  eu  Basque                    0x2d */
     ILCID_POSIX_MAP(fa),    /*  fa  Persian/Farsi             0x29 */
     ILCID_POSIX_MAP(fa_AF), /*  fa  Persian/Dari              0x8c */
+    ILCID_POSIX_MAP(ff),    /*  ff  Fula                      0x67 */
     ILCID_POSIX_MAP(fi),    /*  fi  Finnish                   0x0b */
     ILCID_POSIX_MAP(fil),   /*  fil Filipino                  0x64 */
     ILCID_POSIX_MAP(fo),    /*  fo  Faroese                   0x38 */
