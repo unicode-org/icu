@@ -721,7 +721,7 @@ typedef enum UDateFormatField {
      * corresponding to cyclic year names. This is implemented
      * using the {@link #UCAL_YEAR} field. This displays
      * the cyclic year name, if available.
-     * @draft ICU 49
+     * @stable ICU 49
      */
     UDAT_YEAR_NAME_FIELD = 30,
 

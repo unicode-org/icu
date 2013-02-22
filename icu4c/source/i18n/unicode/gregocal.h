@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2012, International Business Machines Corporation and others.
+* Copyright (C) 1997-2013, International Business Machines Corporation and others.
 * All Rights Reserved.
 ********************************************************************************
 *
@@ -477,7 +477,7 @@ public:
      * For more details see the Calendar::getType() documentation.
      *
      * @return legacy calendar type name string
-     * @draft ICU 49
+     * @stable ICU 49
      */
     virtual const char * getType() const;
 

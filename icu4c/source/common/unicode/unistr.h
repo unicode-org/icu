@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1998-2012, International Business Machines
+*   Copyright (C) 1998-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -142,7 +142,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  * This can be defined to be empty or "explicit".
  * If explicit, then the UnicodeString(UChar) and UnicodeString(UChar32)
  * constructors are marked as explicit, preventing their inadvertent use.
- * @draft ICU 49
+ * @stable ICU 49
  */
 #ifndef UNISTR_FROM_CHAR_EXPLICIT
 # if defined(U_COMBINED_IMPLEMENTATION) || defined(U_COMMON_IMPLEMENTATION) || defined(U_I18N_IMPLEMENTATION) || defined(U_IO_IMPLEMENTATION)
@@ -162,7 +162,7 @@ class UnicodeStringAppendable;  // unicode/appendable.h
  *
  * In particular, this helps prevent accidentally depending on ICU conversion code
  * by passing a string literal into an API with a const UnicodeString & parameter.
- * @draft ICU 49
+ * @stable ICU 49
  */
 #ifndef UNISTR_FROM_STRING_EXPLICIT
 # if defined(U_COMBINED_IMPLEMENTATION) || defined(U_COMMON_IMPLEMENTATION) || defined(U_I18N_IMPLEMENTATION) || defined(U_IO_IMPLEMENTATION)
