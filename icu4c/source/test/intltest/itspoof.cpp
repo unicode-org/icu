@@ -450,7 +450,6 @@ void IntlTestSpoof::testConfData() {
         }
     }
 }
-#endif // UCONFIG_NO_REGULAR_EXPRESSIONS
 
 // testIdentifierInfo. Note that IdentifierInfo is not public ICU API at this time
 void IntlTestSpoof::testIdentifierInfo() {
@@ -754,3 +753,5 @@ void IntlTestSpoof::testMixedNumbers() {
         uspoof_close(sc);
     }
 }
+
+#endif /* !UCONFIG_NO_REGULAR_EXPRESSIONS && !UCONFIG_NO_NORMALIZATION && !UCONFIG_NO_FILE_IO */
