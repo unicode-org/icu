@@ -340,11 +340,6 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
             mark += 5000; // 5 sec
         }
         UDate testMillis = greg.getTime(status);
-        if ( isICUVersionBefore(52,0,2) ) { // timebomb per #9967, fix with #9972
-            if ( uprv_strcmp(cal.getType(), "dangi") == 0 && testMillis >= 1865635198000.0 ) { // stop in Feb 2029, end of dangi 4361
-                continue;
-            }
-        }
         cal.setTime(testMillis, status);
         cal.setMinimalDaysInFirstWeek(1);
         if (failure(status, "Calendar set/getTime")) {
@@ -392,12 +387,23 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
                       ", actual_max=" + maxActual);
             }
             if (v < minActual || v > maxActual) {
-                errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
-                      ymdToString(cal, ymd) +
-                      " " + FIELD_NAME[f] + "(" + f + ")=" + v +
-                      ", actual range=" + minActual + ".." + maxActual +
-                      ", allowed=(" + minLow + ".." + minHigh + ")..(" +
-                      maxLow + ".." + maxHigh + ")");
+                // timebomb per #9967, fix with #9972
+                if ( isICUVersionBefore(52,0,2) && uprv_strcmp(cal.getType(), "dangi") == 0 &&
+                        testMillis >= 1865635198000.0 ) { // Feb 2029 gregorian, end of dangi 4361
+                    logln((UnicodeString)"Fail: [" + cal.getType() + "] " +
+                          ymdToString(cal, ymd) +
+                          " " + FIELD_NAME[f] + "(" + f + ")=" + v +
+                          ", actual=" + minActual + ".." + maxActual +
+                          ", allowed=(" + minLow + ".." + minHigh + ")..(" +
+                          maxLow + ".." + maxHigh + ")");
+                } else {
+                    errln((UnicodeString)"Fail: [" + cal.getType() + "] " +
+                          ymdToString(cal, ymd) +
+                          " " + FIELD_NAME[f] + "(" + f + ")=" + v +
+                          ", actual=" + minActual + ".." + maxActual +
+                          ", allowed=(" + minLow + ".." + minHigh + ")..(" +
+                          maxLow + ".." + maxHigh + ")");
+                }
             }
         }
         greg.add(UCAL_DAY_OF_YEAR, 1, status);
@@ -456,7 +462,11 @@ CalendarLimitTest::ymdToString(const Calendar& cal, UnicodeString& str) {
         + "/" + (cal.get(UCAL_MONTH, status) + 1)
         + (cal.get(UCAL_IS_LEAP_MONTH, status) == 1 ? "(leap)" : "")
         + "/" + cal.get(UCAL_DATE, status)
-        + ", time=" + cal.getTime(status));
+        + " " + cal.get(UCAL_HOUR_OF_DAY, status)
+        + ":" + cal.get(UCAL_MINUTE, status)
+        + " zone(hrs) " + cal.get(UCAL_ZONE_OFFSET, status)/(60.0*60.0*1000.0)
+        + " dst(hrs) " + cal.get(UCAL_DST_OFFSET, status)/(60.0*60.0*1000.0)
+        + ", time(millis)=" + cal.getTime(status));
     return str;
 }
 
