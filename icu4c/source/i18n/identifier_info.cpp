@@ -228,6 +228,8 @@ const ScriptSet *IdentifierInfo::getCommonAmongAlternates() const {
     return fCommonAmongAlternates;
 }
 
+#if !UCONFIG_NO_NORMALIZATION
+
 URestrictionLevel IdentifierInfo::getRestrictionLevel(UErrorCode &status) const {
     if (!fIdentifierProfile->containsAll(*fIdentifier) || getNumerics()->size() > 1) {
         return USPOOF_UNRESTRICTIVE;
@@ -258,6 +260,8 @@ URestrictionLevel IdentifierInfo::getRestrictionLevel(UErrorCode &status) const 
     }
     return USPOOF_MINIMALLY_RESTRICTIVE;
 }
+
+#endif /* !UCONFIG_NO_NORMALIZATION */
 
 int32_t IdentifierInfo::getScriptCount() const {
     // Note: Common and Inherited scripts were removed by setIdentifier(), and do not appear in fRequiredScripts.
