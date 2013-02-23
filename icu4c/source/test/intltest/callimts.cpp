@@ -339,7 +339,13 @@ CalendarLimitTest::doLimitsTest(Calendar& cal,
             logln((UnicodeString)"(" + i + " days)");
             mark += 5000; // 5 sec
         }
-        cal.setTime(greg.getTime(status), status);
+        UDate testMillis = greg.getTime(status);
+        if ( isICUVersionBefore(52,0,2) ) { // timebomb per #9967, fix with #9972
+            if ( uprv_strcmp(cal.getType(), "dangi") == 0 && testMillis >= 1865635198000.0 ) { // stop in Feb 2029, end of dangi 4361
+                continue;
+            }
+        }
+        cal.setTime(testMillis, status);
         cal.setMinimalDaysInFirstWeek(1);
         if (failure(status, "Calendar set/getTime")) {
             return;
