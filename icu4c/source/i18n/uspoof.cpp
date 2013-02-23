@@ -56,9 +56,9 @@ static void initializeStatics() {
     Mutex m(&gInitMutex);
     UErrorCode status = U_ZERO_ERROR;
     if (gInclusionSet == NULL) {
-        gInclusionSet = new UnicodeSet(UnicodeString("["
+        gInclusionSet = new UnicodeSet(UNICODE_STRING_SIMPLE("["
             "\\-.\\u00B7\\u05F3\\u05F4\\u0F0B\\u200C\\u200D\\u2019]"), status);
-        gRecommendedSet = new UnicodeSet(UnicodeString("["
+        gRecommendedSet = new UnicodeSet(UNICODE_STRING_SIMPLE("["
             "[0-z\\u00C0-\\u017E\\u01A0\\u01A1\\u01AF\\u01B0\\u01CD-"
             "\\u01DC\\u01DE-\\u01E3\\u01E6-\\u01F5\\u01F8-\\u021B\\u021E"
             "\\u021F\\u0226-\\u0233\\u02BB\\u02BC\\u02EC\\u0300-\\u0304"

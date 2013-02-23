@@ -157,7 +157,7 @@ const TimeZone* ChineseCalendar::getChineseCalZoneAstroCalc(void) const {
         umtx_lock(&astroLock);
         {
             if (!gChineseCalendarZoneAstroCalcInitialized) {
-                gChineseCalendarZoneAstroCalc = new SimpleTimeZone(CHINA_OFFSET, UnicodeString("CHINA_ZONE") );
+                gChineseCalendarZoneAstroCalc = new SimpleTimeZone(CHINA_OFFSET, UNICODE_STRING_SIMPLE("CHINA_ZONE") );
                 gChineseCalendarZoneAstroCalcInitialized = TRUE;
                 ucln_i18n_registerCleanup(UCLN_I18N_CHINESE_CALENDAR, calendar_chinese_cleanup);
             }
