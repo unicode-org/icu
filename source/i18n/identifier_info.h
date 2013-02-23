@@ -147,6 +147,8 @@ class U_I18N_API IdentifierInfo : public UMemory {
       */
     int32_t getScriptCount() const;
 
+#if !UCONFIG_NO_NORMALIZATION
+
     /**
      * Find the "tightest" restriction level that the identifier satisfies.
      * 
@@ -154,6 +156,8 @@ class U_I18N_API IdentifierInfo : public UMemory {
      * @internal
      */
     URestrictionLevel getRestrictionLevel(UErrorCode &status) const;
+
+#endif /*!UCONFIG_NO_NORMALIZATION */
 
     UnicodeString toString() const;
 
