@@ -3599,9 +3599,6 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 }
             }
 
-            if ( isICUVersionBefore(51, 0, 2) && (i != 1) ) { // problems with data imported per #9925, need to investigate
-                continue; // skip parse using formatters for "en_US" and "he_IL@calendar=hebrew"
-            }
             calendars[i].setTimeZone(gmt);
             calendars[i].clear();
             ppos.setErrorIndex(-1);
