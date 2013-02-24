@@ -3665,7 +3665,7 @@ void DateFormatTest::TestNumberAsStringParsing()
     const NumAsStringItem * itemPtr;
     for (itemPtr = items; itemPtr->localeStr != NULL; itemPtr++ ) {
         if (!isICUVersionAtLeast(51, 0, 2) && itemPtr->localeStr[0] == 0 && itemPtr->lenient == FALSE) {
-            continue; // Need to investigate this, noted in #9925 
+            continue; // Time-bomb added per #9925, fix per #9975
         }
         Locale locale = Locale::createFromName(itemPtr->localeStr);
         UErrorCode status = U_ZERO_ERROR;
