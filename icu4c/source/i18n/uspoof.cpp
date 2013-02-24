@@ -56,32 +56,32 @@ static void initializeStatics() {
     Mutex m(&gInitMutex);
     UErrorCode status = U_ZERO_ERROR;
     if (gInclusionSet == NULL) {
-        gInclusionSet = new UnicodeSet(UNICODE_STRING_SIMPLE("["
-            "\\-.\\u00B7\\u05F3\\u05F4\\u0F0B\\u200C\\u200D\\u2019]"), status);
-        gRecommendedSet = new UnicodeSet(UNICODE_STRING_SIMPLE("["
-            "[0-z\\u00C0-\\u017E\\u01A0\\u01A1\\u01AF\\u01B0\\u01CD-"
-            "\\u01DC\\u01DE-\\u01E3\\u01E6-\\u01F5\\u01F8-\\u021B\\u021E"
-            "\\u021F\\u0226-\\u0233\\u02BB\\u02BC\\u02EC\\u0300-\\u0304"
-            "\\u0306-\\u030C\\u030F-\\u0311\\u0313\\u0314\\u031B\\u0323-"
-            "\\u0328\\u032D\\u032E\\u0330\\u0331\\u0335\\u0338\\u0339"
-            "\\u0342-\\u0345\\u037B-\\u03CE\\u03FC-\\u045F\\u048A-\\u0525"
-            "\\u0531-\\u0586\\u05D0-\\u05F2\\u0621-\\u063F\\u0641-\\u0655"
-            "\\u0660-\\u0669\\u0670-\\u068D\\u068F-\\u06D5\\u06E5\\u06E6"
-            "\\u06EE-\\u06FF\\u0750-\\u07B1\\u0901-\\u0939\\u093C-\\u094D"
-            "\\u0950\\u0960-\\u0972\\u0979-\\u0A4D\\u0A5C-\\u0A74\\u0A81-"
-            "\\u0B43\\u0B47-\\u0B61\\u0B66-\\u0C56\\u0C60\\u0C61\\u0C66-"
-            "\\u0CD6\\u0CE0-\\u0CEF\\u0D02-\\u0D28\\u0D2A-\\u0D39\\u0D3D-"
-            "\\u0D43\\u0D46-\\u0D4D\\u0D57-\\u0D61\\u0D66-\\u0D8E\\u0D91-"
-            "\\u0DA5\\u0DA7-\\u0DDE\\u0DF2\\u0E01-\\u0ED9\\u0F00\\u0F20-"
-            "\\u0F8B\\u0F90-\\u109D\\u10D0-\\u10F0\\u10F7-\\u10FA\\u1200-"
-            "\\u135A\\u135F\\u1380-\\u138F\\u1401-\\u167F\\u1780-\\u17A2"
-            "\\u17A5-\\u17A7\\u17A9-\\u17B3\\u17B6-\\u17CA\\u17D2\\u17D7-"
-            "\\u17DC\\u17E0-\\u17E9\\u1810-\\u18A8\\u18AA-\\u18F5\\u1E00-"
-            "\\u1E99\\u1F00-\\u1FFC\\u2D30-\\u2D65\\u2D80-\\u2DDE\\u3005-"
-            "\\u3007\\u3041-\\u31B7\\u3400-\\u9FCB\\uA000-\\uA48C\\uA67F"
-            "\\uA717-\\uA71F\\uA788\\uAA60-\\uAA7B\\uAC00-\\uD7A3\\uFA0E-"
-            "\\uFA29\\U00020000-"
-            "\\U0002B734]-[[:Cn:][:nfkcqc=n:][:XIDC=n:]]]"), status);
+        gInclusionSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\
+            \\-.\\u00B7\\u05F3\\u05F4\\u0F0B\\u200C\\u200D\\u2019]"), status);
+        gRecommendedSet = new UnicodeSet(UNICODE_STRING_SIMPLE("[\
+            [0-z\\u00C0-\\u017E\\u01A0\\u01A1\\u01AF\\u01B0\\u01CD-\
+            \\u01DC\\u01DE-\\u01E3\\u01E6-\\u01F5\\u01F8-\\u021B\\u021E\
+            \\u021F\\u0226-\\u0233\\u02BB\\u02BC\\u02EC\\u0300-\\u0304\
+            \\u0306-\\u030C\\u030F-\\u0311\\u0313\\u0314\\u031B\\u0323-\
+            \\u0328\\u032D\\u032E\\u0330\\u0331\\u0335\\u0338\\u0339\
+            \\u0342-\\u0345\\u037B-\\u03CE\\u03FC-\\u045F\\u048A-\\u0525\
+            \\u0531-\\u0586\\u05D0-\\u05F2\\u0621-\\u063F\\u0641-\\u0655\
+            \\u0660-\\u0669\\u0670-\\u068D\\u068F-\\u06D5\\u06E5\\u06E6\
+            \\u06EE-\\u06FF\\u0750-\\u07B1\\u0901-\\u0939\\u093C-\\u094D\
+            \\u0950\\u0960-\\u0972\\u0979-\\u0A4D\\u0A5C-\\u0A74\\u0A81-\
+            \\u0B43\\u0B47-\\u0B61\\u0B66-\\u0C56\\u0C60\\u0C61\\u0C66-\
+            \\u0CD6\\u0CE0-\\u0CEF\\u0D02-\\u0D28\\u0D2A-\\u0D39\\u0D3D-\
+            \\u0D43\\u0D46-\\u0D4D\\u0D57-\\u0D61\\u0D66-\\u0D8E\\u0D91-\
+            \\u0DA5\\u0DA7-\\u0DDE\\u0DF2\\u0E01-\\u0ED9\\u0F00\\u0F20-\
+            \\u0F8B\\u0F90-\\u109D\\u10D0-\\u10F0\\u10F7-\\u10FA\\u1200-\
+            \\u135A\\u135F\\u1380-\\u138F\\u1401-\\u167F\\u1780-\\u17A2\
+            \\u17A5-\\u17A7\\u17A9-\\u17B3\\u17B6-\\u17CA\\u17D2\\u17D7-\
+            \\u17DC\\u17E0-\\u17E9\\u1810-\\u18A8\\u18AA-\\u18F5\\u1E00-\
+            \\u1E99\\u1F00-\\u1FFC\\u2D30-\\u2D65\\u2D80-\\u2DDE\\u3005-\
+            \\u3007\\u3041-\\u31B7\\u3400-\\u9FCB\\uA000-\\uA48C\\uA67F\
+            \\uA717-\\uA71F\\uA788\\uAA60-\\uAA7B\\uAC00-\\uD7A3\\uFA0E-\
+            \\uFA29\\U00020000-\
+            \\U0002B734]-[[:Cn:][:nfkcqc=n:][:XIDC=n:]]]"), status);
         gNfdNormalizer = Normalizer2::getNFDInstance(status);
     }
     ucln_i18n_registerCleanup(UCLN_I18N_SPOOF, uspoof_cleanup);
