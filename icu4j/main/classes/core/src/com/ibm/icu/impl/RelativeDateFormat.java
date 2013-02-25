@@ -14,7 +14,6 @@ import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.SimpleDateFormat;
