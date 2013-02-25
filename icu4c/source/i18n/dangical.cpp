@@ -128,7 +128,7 @@ const TimeZone* DangiCalendar::getDangiCalZoneAstroCalc(void) const {
                     gDangiCalendarZoneAstroCalc = NULL;
                 }
                 gDangiCalendarZoneAstroCalcInitialized = TRUE;
-                ucln_i18n_registerCleanup(UCLN_I18N_CHINESE_CALENDAR, calendar_dangi_cleanup);
+                ucln_i18n_registerCleanup(UCLN_I18N_DANGI_CALENDAR, calendar_dangi_cleanup);
             }
         }
         umtx_unlock(&dangiLock);
