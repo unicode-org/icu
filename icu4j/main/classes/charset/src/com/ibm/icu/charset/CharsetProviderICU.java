@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2006-2010, International Business Machines Corporation and    *
+* Copyright (C) 2006-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -223,14 +223,26 @@ public final class CharsetProviderICU extends CharsetProvider{
             if (cName != null) {
                 if (!gettingJavaCanonicalName) {
                     gettingJavaCanonicalName = true;
-                    if (Charset.isSupported(cName)) {
-                        String testName = Charset.forName(cName).name();
-                        /* Ensure that the java canonical name works in ICU */
-                        if (!testName.equals(cName)) {
-                            if (getICUCanonicalName(testName).length() > 0) {
-                                cName = testName;
+                    try {
+                        if (Charset.isSupported(cName)) {
+                            String testName = Charset.forName(cName).name();
+                            /* Ensure that the java canonical name works in ICU */
+                            if (!testName.equals(cName)) {
+                                if (getICUCanonicalName(testName).length() > 0) {
+                                    cName = testName;
+                                }
                             }
                         }
+                    } catch (Exception e) {
+                        // Any exception in the try block above
+                        // must result Java's canonical name to be
+                        // null. This block is necessary to reset
+                        // gettingJavaCanonicalName to true always.
+                        // See #9966.
+                        // Note: The use of static gettingJavaCanonicalName
+                        // looks really dangerous and obviously thread unsafe.
+                        // We should revisit this code later. See #9973
+                        cName = null;
                     }
                     gettingJavaCanonicalName = false;
                 }
