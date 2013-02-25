@@ -741,7 +741,7 @@ static const ILcidPosixMap gPosixIDmap[] = {
     ILCID_POSIX_MAP(br),    /*  br  Breton                    0x7e */
     ILCID_POSIX_MAP(ca),    /*  ca  Catalan                   0x03 */
     ILCID_POSIX_MAP(chr),   /*  chr Cherokee                  0x5c */
-    ILCID_POSIX_MAP(ckb),   /*  ckb Sonari (Central Kurdish)  0x92 */
+    ILCID_POSIX_MAP(ckb),   /*  ckb Sorani (Central Kurdish)  0x92 */
     ILCID_POSIX_MAP(co),    /*  co  Corsican                  0x83 */
     ILCID_POSIX_MAP(cs),    /*  cs  Czech                     0x05 */
     ILCID_POSIX_MAP(cy),    /*  cy  Welsh                     0x52 */
