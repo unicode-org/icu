@@ -653,6 +653,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
       }
     }
     uprv_free(src.source);
+    uprv_free(src.reorderCodes);
   }
 }
 
@@ -1287,6 +1288,7 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
             lastContCE = currContCE & 0xFFFFFFBF;
         }
         uprv_free(src.source);
+        uprv_free(src.reorderCodes);
     }
     ucol_close(UCA);
     uprv_delete_collIterate(c);
