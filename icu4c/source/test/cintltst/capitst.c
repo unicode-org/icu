@@ -776,7 +776,6 @@ void TestSafeClone() {
                In the meantime, just turn the following former error into a log message. */
             log_verbose("NOTE: Cloned collator did not use provided buffer, index %d, status %s, clone NULL? %d\n",
                                                         idx, myErrorName(err), someClonedCollators[idx] == NULL);
-            return;
         }
         if (!ucol_equals(someClonedCollators[idx], someCollators[idx])) {
             log_err("FAIL: Cloned collator is not equal to original at index = %d.\n", idx);
