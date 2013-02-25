@@ -1499,7 +1499,7 @@ MBCSWrite(NewConverter *cnvData, const UConverterStaticData *staticData,
         header.version[0]=4;
         headerLength=MBCS_HEADER_V4_LENGTH;  /* 8 */
     }
-    header.version[1]=3;
+    header.version[1]=4;
     /* header.version[2] set above for utf8Friendly data */
 
     header.options|=(uint32_t)headerLength;
