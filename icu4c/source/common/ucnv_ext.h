@@ -233,7 +233,7 @@
  *       if(bit 31 set) {
  *         roundtrip (|0);
  *       } else if(bit 30 set) {
- *         "good one-way" mapping (|4);
+ *         "good one-way" mapping (|4); -- new in ICU4C 51, _MBCSHeader.version 5.4/4.4
  *       } else {
  *         normal fallback (|1);
  *       }
