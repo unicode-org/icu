@@ -1919,7 +1919,7 @@ CurrencyAmount* DecimalFormat::parseCurrency(const UnicodeString& text,
                                              ParsePosition& pos) const {
     Formattable parseResult;
     int32_t start = pos.getIndex();
-    UChar curbuf[4];
+    UChar curbuf[4] = {};
     parse(text, parseResult, pos, curbuf);
     if (pos.getIndex() != start) {
         UErrorCode ec = U_ZERO_ERROR;
