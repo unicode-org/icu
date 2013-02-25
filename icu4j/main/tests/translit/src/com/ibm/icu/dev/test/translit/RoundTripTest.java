@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2012, International Business Machines Corporation and
+ * Copyright (C) 2000-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -81,7 +81,7 @@ public class RoundTripTest extends TestFmwk {
     public void init() {
         // TODO(Mark): Fix ticket #8989 (CLDR#4375), transliterate U+0970.
         // Remove this method?
-        minusDevAbbBefore51 = isICUVersionBefore(51, 0, 2) ? "-[\u0970]" : "";
+        minusDevAbbBefore51 = isICUVersionBefore(52, 0, 1) ? "-[\u0970]" : "";
     }
 
     //------------------------------------------------------------------
