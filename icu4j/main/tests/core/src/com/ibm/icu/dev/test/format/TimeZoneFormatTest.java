@@ -14,6 +14,7 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.ZoneMeta;
@@ -34,7 +35,9 @@ import com.ibm.icu.util.ULocale;
 
 public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
-    public static void main(String[] args) throws Exception {
+	private static boolean JDKTZ = (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK);
+
+	public static void main(String[] args) throws Exception {
         new TimeZoneFormatTest().run(args);
     }
 
@@ -110,7 +113,12 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             LOCALES = new ULocale[] {new ULocale("en"), new ULocale("en_CA"), new ULocale("fr"), new ULocale("zh_Hant")};
         }
 
-        String[] tzids = TimeZone.getAvailableIDs();
+        String[] tzids;
+        if (JDKTZ) {
+            tzids = java.util.TimeZone.getAvailableIDs();
+        } else {
+            tzids = TimeZone.getAvailableIDs();
+        }
         int[] inOffsets = new int[2];
         int[] outOffsets = new int[2];
 
@@ -241,8 +249,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                             } else {
                                 // Specific or generic: raw offset must be preserved.
                                 if (inOffsets[0] != outOffsets[0]) {
-                                    if (TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK
-                                            && tzids[tzidx].startsWith("SystemV/")) {
+                                    if (JDKTZ && tzids[tzidx].startsWith("SystemV/")) {
                                         // JDK uses rule SystemV for these zones while
                                         // ICU handles these zones as aliases of existing time zones
                                         if (REALLY_VERBOSE_LOG) {
@@ -350,7 +357,20 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 SimpleDateFormat sdf = new SimpleDateFormat(pattern, LOCALES[locidx]);
                 boolean minutesOffset = MINUTES_OFFSET.contains(PATTERNS[patidx]);
 
-                Set<String> ids = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, null, null);
+                Set<String> ids = null;
+                if (JDKTZ) {
+                	ids = new TreeSet<String>();
+                	String[] jdkIDs = java.util.TimeZone.getAvailableIDs();
+                	for (String jdkID : jdkIDs) {
+                		String tmpID = TimeZone.getCanonicalID(jdkID);
+                		if (tmpID != null) {
+                			ids.add(tmpID);
+                		}
+                	}
+                } else {
+                	ids = TimeZone.getAvailableIDs(SystemTimeZoneType.CANONICAL, null, null);                	
+                }
+
                 for (String id : ids) {
                     if (PATTERNS[patidx].equals("V")) {
                         // Some zones do not have short ID assigned, such as Asia/Riyadh87.

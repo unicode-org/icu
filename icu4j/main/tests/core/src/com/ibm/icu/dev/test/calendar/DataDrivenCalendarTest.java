@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2010, International Business Machines Corporation and         *
+ * Copyright (C) 2007-2013, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -270,7 +270,11 @@ public class DataDrivenCalendarTest extends ModuleTest {
                         logln(caseString + " SUCCESS: got=expected="+toDate);
                         logln("PASS: "+caseString+" matched! ");
                     } else {
-                        if (caseString.equals("[case 31]") && TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK) {
+                    	// Note: With JDK TimeZone implementation, tz offset on dates earlier than
+                    	// mid-1900 might be different from the TZDB. Following test cases are
+                    	// failing because of this.
+                        if ((caseString.equals("[case 31]") || caseString.equals("[case 36]")) 
+                        		&& TimeZone.getDefaultTimeZoneType() == TimeZone.TIMEZONE_JDK) {
                             logln(caseString + " FAIL(expected): got " + 
                                     toCalendar.getTimeInMillis() + "  expected " + 
                                     toDate);
