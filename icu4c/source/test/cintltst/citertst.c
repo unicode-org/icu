@@ -1830,6 +1830,7 @@ static void TestCEValidity()
                 log_err("%s collator, ucol_tok_parseNextToken failed with status %s\n", loc, u_errorName(status));
             }
             uprv_free(src.source);
+            uprv_free(src.reorderCodes);
         }
 
         ucol_close(coll);
@@ -2035,6 +2036,7 @@ static void TestSortKeyValidity(void)
                 log_err("%s collator, ucol_tok_parseNextToken failed with status %s\n", locale[count], u_errorName(status));
             }
             uprv_free(src.source);
+            uprv_free(src.reorderCodes);
         }
 
         ucol_close(coll);

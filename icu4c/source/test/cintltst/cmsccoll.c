@@ -1001,6 +1001,7 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
       log_verbose("No immediate difference with Win32!\n");
     }
     uprv_free(src.source);
+    uprv_free(src.reorderCodes);
   }
 }
 
