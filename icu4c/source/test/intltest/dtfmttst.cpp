@@ -3664,7 +3664,7 @@ void DateFormatTest::TestNumberAsStringParsing()
     };
     const NumAsStringItem * itemPtr;
     for (itemPtr = items; itemPtr->localeStr != NULL; itemPtr++ ) {
-        if (!isICUVersionAtLeast(51, 0, 2) && itemPtr->localeStr[0] == 0 && itemPtr->lenient == FALSE) {
+        if (!isICUVersionAtLeast(52, 0, 1) && itemPtr->localeStr[0] == 0 && itemPtr->lenient == FALSE) {
             continue; // Time-bomb added per #9925, fix per #9975
         }
         Locale locale = Locale::createFromName(itemPtr->localeStr);
