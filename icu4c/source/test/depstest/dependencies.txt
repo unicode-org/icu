@@ -757,6 +757,7 @@ library: i18n
 group: region
     region.o
   deps
+    formatting  # Temporary, TODO: Ticket #9982 class Region should use low-level ASCII-integer functions, and probably be moved to the common library.
     resourcebundle
     uvector uclean_i18n
 
