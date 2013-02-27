@@ -629,7 +629,7 @@ void SSearchTest::offsetTest()
     col->setAttribute(UCOL_NORMALIZATION_MODE, UCOL_ON, status);
 
     for(int32_t i = 0; i < testCount; i += 1) {
-        if (!isICUVersionAtLeast(51, 1) && i>=4 && i<=6) {
+        if (!isICUVersionAtLeast(52, 0, 1) && i>=4 && i<=6) {
             continue; // timebomb until ticket #9156 (was #8081) is resolved
         }
         UnicodeString ts = CharsToUnicodeString(test[i]);
