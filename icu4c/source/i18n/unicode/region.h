@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013, International Business Machines Corporation             *
- * All Rights Reserved.                                                        *
+ * Copyright (C) 2013, International Business Machines Corporation
+ * All Rights Reserved.
  *******************************************************************************
  */
 
@@ -120,18 +120,20 @@ U_NAMESPACE_BEGIN
  *  their own region code. Region "EU" (European Union) is one such region code that is a grouping.
  *  Groupings will never be returned by the getContainingRegion() API, since a different type of region
  *  ( WORLD, CONTINENT, or SUBCONTINENT ) will always be the containing region instead.
- *  
+ *
+ * The Region class is not intended for public subclassing.
+ *
  * @author       John Emmons
  * @draft ICU 51
  */
 
 class U_I18N_API Region : public UObject {
-
 public:
-
-    static const int32_t UNDEFINED_NUMERIC_CODE = -1;
-
-
+    /**
+     * Destructor.
+     * @draft ICU 51
+     */
+    virtual ~Region();
 
     /**
      * Returns true if the two regions are equal.
@@ -227,7 +229,8 @@ public:
     const char* getRegionCode() const;
 
     /**
-     * Return this region's numeric code. Returns UNDEFINED_NUMERIC_CODE (-1) if the given region does not have a numeric code assigned to it.
+     * Return this region's numeric code.
+     * Returns a negative value if the given region does not have a numeric code assigned to it.
      * @draft ICU 51 
      */
     int32_t getNumericCode() const;
@@ -237,35 +240,12 @@ public:
      * @draft ICU 51 
      */
     URegionType getType() const;
- 
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for this class.
-     *
-     * @draft ICU 51
-     *
-    */
-    static UClassID U_EXPORT2 getStaticClassID(void);
-
-    /**
-     * ICU "poor man's RTTI", returns a UClassID for the actual class.
-     *
-     * @draft ICU 51
-     */
-    virtual UClassID getDynamicClassID() const;
 
 #ifndef U_HIDE_INTERNAL_API
-   /**
-     * Default Destructor.
-     *
-     * @internal
-     */
-    ~Region();
-
     /**
      * Cleans up statically allocated memory.
      * @internal 
      */
-
     static void cleanupRegionData();
 #endif  /* U_HIDE_INTERNAL_API */
 
