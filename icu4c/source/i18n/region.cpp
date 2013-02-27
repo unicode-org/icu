@@ -67,7 +67,6 @@ static const UChar UNKNOWN_REGION_ID [] = { 0x5A, 0x5A, 0 };  /* "ZZ" */
 static const UChar OUTLYING_OCEANIA_REGION_ID [] = { 0x51, 0x4F, 0 };  /* "QO" */
 static const UChar WORLD_ID [] = { 0x30, 0x30, 0x31, 0 };  /* "001" */
 
-UOBJECT_DEFINE_RTTI_IMPLEMENTATION(Region)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RegionNameEnumeration)
 
 /*
@@ -156,7 +155,7 @@ void Region::loadRegionData() {
             uhash_iput(numericCodeMap,r->code,(void *)r,&status);
             r->type = URGN_SUBCONTINENT;
         } else {
-            r->code = Region::UNDEFINED_NUMERIC_CODE;
+            r->code = -1;
         }
     }
 
@@ -187,7 +186,7 @@ void Region::loadRegionData() {
                     aliasFromRegion->code = result.getLong(); // Convert string to number
                     uhash_iput(numericCodeMap,aliasFromRegion->code,(void *)aliasFromRegion,&status);
                 } else {
-                    aliasFromRegion->code = Region::UNDEFINED_NUMERIC_CODE;
+                    aliasFromRegion->code = -1;
                 }
                 aliasFromRegion->type = URGN_DEPRECATED;
             } else {
@@ -360,18 +359,13 @@ void Region::cleanupRegionData() {
     }
 }
 
-/*
- * Default constructor.  Use factory methods only.
- * @internal
- */
-
-Region::Region () {
-        idStr.remove();
-        code = UNDEFINED_NUMERIC_CODE;
-        type = URGN_UNKNOWN;
-        containingRegion = NULL;
-        containedRegions = NULL;
-        preferredValues = NULL;
+Region::Region ()
+        : code(-1),
+          type(URGN_UNKNOWN),
+          containingRegion(NULL),
+          containedRegions(NULL),
+          preferredValues(NULL) {
+    id[0] = 0;
 }
 
 Region::~Region () {
@@ -635,9 +629,6 @@ Region::getRegionCode() const {
     return id;
 }
 
-/**
- * Return this region's numeric code. Returns UNDEFINED_NUMERIC_CODE (-1) if the given region does not have a numeric code assigned to it.
- */
 int32_t
 Region::getNumericCode() const {
     return code;
