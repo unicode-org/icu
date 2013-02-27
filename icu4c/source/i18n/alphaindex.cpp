@@ -132,12 +132,9 @@ public:
         }
     }
 
-    virtual ~BucketList() {
-        delete bucketList_;
-        if (immutableVisibleList_ != bucketList_) {
-            delete immutableVisibleList_;
-        }
-    }
+    // The virtual destructor must not be inline.
+    // See ticket #8454 for details.
+    virtual ~BucketList();
 
     int32_t getBucketCount() const {
         return immutableVisibleList_->size();
@@ -171,6 +168,13 @@ public:
     /** Just the visible buckets. */
     UVector *immutableVisibleList_;
 };
+
+BucketList::~BucketList() {
+    delete bucketList_;
+    if (immutableVisibleList_ != bucketList_) {
+        delete immutableVisibleList_;
+    }
+}
 
 AlphabeticIndex::ImmutableIndex::~ImmutableIndex() {
     delete buckets_;
