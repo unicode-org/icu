@@ -3638,7 +3638,7 @@ void DateFormatTest::TestNumberAsStringParsing()
 {
     const NumAsStringItem items[] = {
         // loc lenient fail?  datePattern                                         dateString
-        { "",   FALSE, FALSE, UnicodeString("y MMMM d HH:mm:ss"),                 UnicodeString("2009 7 14 08:43:57") }, // currently timebombed out
+        { "",   FALSE, TRUE,  UnicodeString("y MMMM d HH:mm:ss"),                 UnicodeString("2009 7 14 08:43:57") },
         { "",   TRUE,  FALSE, UnicodeString("y MMMM d HH:mm:ss"),                 UnicodeString("2009 7 14 08:43:57") },
         { "en", FALSE, FALSE, UnicodeString("MMM d, y"),                          UnicodeString("Jul 14, 2009") },
         { "en", TRUE,  FALSE, UnicodeString("MMM d, y"),                          UnicodeString("Jul 14, 2009") },
@@ -3664,9 +3664,6 @@ void DateFormatTest::TestNumberAsStringParsing()
     };
     const NumAsStringItem * itemPtr;
     for (itemPtr = items; itemPtr->localeStr != NULL; itemPtr++ ) {
-        if (!isICUVersionAtLeast(52, 0, 1) && itemPtr->localeStr[0] == 0 && itemPtr->lenient == FALSE) {
-            continue; // Time-bomb added per #9925, fix per #9975
-        }
         Locale locale = Locale::createFromName(itemPtr->localeStr);
         UErrorCode status = U_ZERO_ERROR;
         SimpleDateFormat *formatter = new SimpleDateFormat(itemPtr->datePattern, locale, status);
