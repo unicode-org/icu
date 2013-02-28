@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2000-2012, International Business Machines
+ *   Copyright (C) 2000-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   file name:  pkgdata.cpp
@@ -1864,9 +1864,12 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
             }
             /* remove spaces at the beginning */
             linePtr = line;
+            /* On z/OS, disable call to isspace (#9996).  Investigate using uprv_isspace instead (#9999) */
+#if U_PLATFORM == U_PF_OS390
             while(isspace(*linePtr)) {
                 linePtr++;
             }
+#endif
             s=linePtr;
             /* remove trailing newline characters */
             while(*s!=0) {
