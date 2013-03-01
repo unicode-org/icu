@@ -142,8 +142,8 @@ void RBBITest::runIndexedTest( int32_t index, UBool exec, const char* &name, cha
             break;
 #endif
 
-        case 22: name = "skip";
-            break;
+        case 22: name = "TestBug9983";
+            if (exec) TestBug9983();                           break;
         case 23: name = "TestDictRules";
             if (exec) TestDictRules();                         break;
         case 24: name = "TestBug5532";
@@ -4216,6 +4216,35 @@ void RBBITest::TestBug5532(void)  {
     }
     delete bi;
     utext_close(&utext);
+}
+
+
+void RBBITest::TestBug9983(void)  {
+    UnicodeString text = UnicodeString("\\u002A"  // * Other
+                                       "\\uFF65"  //   Other
+                                       "\\u309C"  //   Katakana
+                                       "\\uFF9F"  //   Extend
+                                       "\\uFF65"  //   Other
+                                       "\\u0020"  //   Other
+                                       "\\u0000").unescape();
+
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<RuleBasedBreakIterator> brkiter(static_cast<RuleBasedBreakIterator *>(
+        BreakIterator::createWordInstance(Locale::getRoot(), status)));
+    TEST_ASSERT_SUCCESS(status);
+    brkiter->setText(text);
+    int32_t offset, rstatus;
+    brkiter->last();
+    int32_t iterationCount = 0;
+    while ( (offset = brkiter->previous()) != UBRK_DONE ) {
+        iterationCount++;
+        rstatus = brkiter->getRuleStatus();
+        // printf(" %d(%d)", offset, rstatus);
+        if (iterationCount >= 10) {
+           break; 
+        }
+    }
+    TEST_ASSERT(iterationCount == 6);
 }
 
 

@@ -214,7 +214,7 @@
 
 <data>•abc<200>\u4e01<400>\u4e02<400>\u3005<400>\u4e03\u4e03<400>abc<200> •</data>
 
-<data>•\u06c9<200>\uc799<200>\ufffa•</data>
+<data>•\u06c9<200>\uc799\ufffa•</data>
 
 
 #      
