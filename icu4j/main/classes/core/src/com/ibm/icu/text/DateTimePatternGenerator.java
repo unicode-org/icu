@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -187,26 +186,14 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         }
 
         // Get data for that calendar
-        ICUResourceBundle calBundle = rb.getWithFallback("calendar");
-        ICUResourceBundle calTypeBundle = calBundle.getWithFallback(calendarTypeToUse);
-        // Start hack to force inheriting sideways from generic before up to parent locale.
-        // This happens in ICU4C just via the aliases in root, not sure why not here.
-        // This is added per #9952, #9964 for better long-term fix. Part 2 is below.
-        if (calTypeBundle != null && !calendarTypeToUse.equals("gregorian") && !calendarTypeToUse.equals("chinese")) {
-            Locale desiredLocale = rb.getLocale();
-            Locale calDataLocale = calTypeBundle.getLocale();
-            if (!calDataLocale.equals(desiredLocale)) {
-                calTypeBundle = calBundle.getWithFallback("generic");
-            }
-        }
-        // End hack
-
-        // CLDR item formats
-
-
-        // (hmm, do we need aliases in root for all non-gregorian calendars?)
         try {
-            ICUResourceBundle itemBundle = calTypeBundle.getWithFallback("appendItems");
+            //      ICU4J getWithFallback does not work well when
+            //      1) A nested table is an alias to /LOCALE/...
+            //      2) getWithFallback is called multiple times for going down hierarchical resource path
+            //      #9987 resolved the issue of alias table when full path is specified in getWithFallback,
+            //      but there is no easy solution when the equivalent operation is done by multiple operations.
+            //      This issue is addressed in #9964.
+            ICUResourceBundle itemBundle = rb.getWithFallback("calendar/" + calendarTypeToUse + "/appendItems");
             for (int i=0; i<itemBundle.getSize(); ++i) {
                 ICUResourceBundle formatBundle = (ICUResourceBundle)itemBundle.get(i);
                 String formatName = itemBundle.get(i).getKey();
@@ -235,7 +222,13 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         // set the AvailableFormat in CLDR
         ICUResourceBundle availFormatsBundle = null;
         try {
-            availFormatsBundle = calTypeBundle.getWithFallback("availableFormats");
+            //      ICU4J getWithFallback does not work well when
+            //      1) A nested table is an alias to /LOCALE/...
+            //      2) getWithFallback is called multiple times for going down hierarchical resource path
+            //      #9987 resolved the issue of alias table when full path is specified in getWithFallback,
+            //      but there is no easy solution when the equivalent operation is done by multiple operations.
+            //      This issue is addressed in #9964.
+            availFormatsBundle = rb.getWithFallback("calendar/" + calendarTypeToUse + "/availableFormats");
         } catch (MissingResourceException e) {
             // fall through
         }
@@ -257,20 +250,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
             if (pbundle == null) {
                 break;
             }
-            calBundle = pbundle.getWithFallback("calendar");
-            calTypeBundle = calBundle.getWithFallback(calendarTypeToUse);
-            // Start hack for sideways inheritance, part 2
-            // This is added per #9952, #9964 for better long-term fix.
-            if (calTypeBundle != null && !calendarTypeToUse.equals("gregorian") && !calendarTypeToUse.equals("chinese")) {
-                Locale desiredLocale = pbundle.getLocale();
-                Locale calDataLocale = calTypeBundle.getLocale();
-                if (!calDataLocale.equals(desiredLocale)) {
-                    calTypeBundle = calBundle.getWithFallback("generic");
-                }
-            }
-            // End hack part 2
             try {
-                availFormatsBundle = calTypeBundle.getWithFallback("availableFormats");
+                availFormatsBundle = pbundle.getWithFallback("calendar/" + calendarTypeToUse + "/availableFormats");
             } catch (MissingResourceException e) {
                 availFormatsBundle = null;
             }

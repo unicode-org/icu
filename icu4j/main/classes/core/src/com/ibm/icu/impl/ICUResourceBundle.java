@@ -781,40 +781,44 @@ public  class ICUResourceBundle extends UResourceBundle {
         if (requested == null) {
             requested = actualBundle;
         }
-        while (actualBundle != null) {
-            ICUResourceBundle current = (ICUResourceBundle) actualBundle;
+
+        ICUResourceBundle base = (ICUResourceBundle) actualBundle;
+        String basePath = ((ICUResourceBundle)actualBundle).resPath.length() > 0 ?
+                ((ICUResourceBundle)actualBundle).resPath : "";
+
+        while (base != null) {
             if (path.indexOf('/') == -1) { // skip the tokenizer
-                sub = (ICUResourceBundle) current.handleGet(path, null, requested);
+                sub = (ICUResourceBundle) base.handleGet(path, null, requested);
                 if (sub != null) {
                     break;
                 }
             } else {
+                ICUResourceBundle currentBase = base;
                 StringTokenizer st = new StringTokenizer(path, "/");
                 while (st.hasMoreTokens()) {
                     String subKey = st.nextToken();
-                    sub = (ICUResourceBundle) current.handleGet(subKey, null, requested);
+                    sub = ICUResourceBundle.findResourceWithFallback(subKey, currentBase, requested);
                     if (sub == null) {
                         break;
                     }
-                    current = sub;
+                    currentBase = sub;
                 }
                 if (sub != null) {
                     //we found it
                     break;
                 }
             }
-            if (((ICUResourceBundle)actualBundle).resPath.length() != 0) {
-                path = ((ICUResourceBundle)actualBundle).resPath + "/" + path;
-            }
-            // if not try the parent bundle
-            actualBundle = ((ICUResourceBundle) actualBundle).getParent();
-
+            // if not try the parent bundle - note, getParent() returns the bundle root
+            base = (ICUResourceBundle)base.getParent();
+            path = basePath.length() > 0 ? basePath + "/" + path : path;
+            basePath = "";
         }
         if(sub != null){
             sub.setLoadingStatus(((ICUResourceBundle)requested).getLocaleID());
         }
         return sub;
     }
+
     public boolean equals(Object other) {
         if (this == other) {
             return true;
