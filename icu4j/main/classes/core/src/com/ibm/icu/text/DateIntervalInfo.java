@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.MissingResourceException;
@@ -390,20 +389,16 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                 }
 
                 ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME,currentLocale);
-                ICUResourceBundle calBundle = rb.getWithFallback("calendar");
-                ICUResourceBundle calTypeBundle = calBundle.getWithFallback(calendarTypeToUse);
-                // Start hack to force inheriting sideways from generic before up to parent locale.
-                // This happens in ICU4C just via the aliases in root, not sure why not here.
-                // This is added per #9952, #9964 for better long-term fix.
-                if (calTypeBundle != null && !calendarTypeToUse.equals("gregorian") && !calendarTypeToUse.equals("chinese")) {
-                    Locale desiredLocale = rb.getLocale();
-                    Locale calDataLocale = calTypeBundle.getLocale();
-                    if (!calDataLocale.equals(desiredLocale)) {
-                        calTypeBundle = calBundle.getWithFallback("generic");
-                    }
-                }
-                // End hack
-                ICUResourceBundle itvDtPtnResource =calTypeBundle.getWithFallback("intervalFormats");
+                // Note:
+                //      ICU4J getWithFallback does not work well when
+                //      1) A nested table is an alias to /LOCALE/...
+                //      2) getWithFallback is called multiple times for going down hierarchical resource path
+                //      #9987 resolved the issue of alias table when full path is specified in getWithFallback,
+                //      but there is no easy solution when the equivalent operation is done by multiple operations.
+                //      This issue is addressed in #9964.
+//                ICUResourceBundle calBundle = rb.getWithFallback("calendar");
+//                ICUResourceBundle calTypeBundle = calBundle.getWithFallback(calendarTypeToUse);
+                ICUResourceBundle itvDtPtnResource =rb.getWithFallback("calendar/" + calendarTypeToUse + "/intervalFormats");
                 // look for fallback first, since it establishes the default order
                 String fallback = itvDtPtnResource.getStringWithFallback(FALLBACK_STRING);
                 setFallbackIntervalPattern(fallback);
@@ -417,7 +412,7 @@ public class DateIntervalInfo implements Cloneable, Freezable<DateIntervalInfo>,
                     if ( skeleton.compareTo(FALLBACK_STRING) == 0 ) {
                         continue;
                     }
-                    ICUResourceBundle intervalPatterns =itvDtPtnResource.getWithFallback(skeleton);
+                    ICUResourceBundle intervalPatterns = (ICUResourceBundle)itvDtPtnResource.get(skeleton);
                     int ptnNum = intervalPatterns.getSize();
                     for ( int ptnIndex = 0; ptnIndex < ptnNum; ++ptnIndex) {
                         String key = intervalPatterns.get(ptnIndex).getKey();

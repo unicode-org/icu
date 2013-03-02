@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2001-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1186,5 +1186,19 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         if (cal.get(Calendar.DAY_OF_MONTH) != expectedDay) {
             errln("Parsing failed: day of month should be '7' with pattern: \"" + pattern + "\" for text: \"" + text + "\"");
         }
+    }
+
+    // Date formatting with Dangi calendar in en locale (#9987)
+    public void TestDangiFormat() {
+        DateFormat fmt = DateFormat.getDateInstance(DateFormat.MEDIUM, new ULocale("en@calendar=dangi"));
+        String calType = fmt.getCalendar().getType();
+        assertEquals("Incorrect calendar type used by the date format instance", "dangi", calType);
+
+        GregorianCalendar gcal = new GregorianCalendar();
+        gcal.set(2013, Calendar.MARCH, 1, 0, 0, 0);
+        Date d = gcal.getTime();
+
+        String dangiDateStr = fmt.format(d);
+        assertEquals("Bad date format", "Mo1 20, gui-si", dangiDateStr);
     }
 }
