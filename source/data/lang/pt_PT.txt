@@ -1,0 +1,244 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/pt_PT.xml
+// *
+// ***************************************************************************
+pt_PT{
+    Keys{
+        colAlternate{"Ignorar Ordenação de Símbolos"}
+        colBackwards{"Ordenação de Acentos Invertida"}
+        colCaseFirst{"Disposição de Maiúsculas/Minúsculas"}
+        colCaseLevel{"Ordenação Sensível a Maiúsculas e Minúsculas"}
+        colHiraganaQuaternary{"Ordenação Kana"}
+        colNormalization{"Ordenação Normalizada"}
+        colNumeric{"Ordenação Numérica"}
+        colStrength{"Força da Ordenação"}
+        timezone{"Fuso Horário"}
+        va{"Variante Local"}
+        variableTop{"Ordenar Como Símbolos"}
+        x{"Utilização Privada"}
+    }
+    Languages{
+        af{"afrikaans"}
+        agq{"aghem"}
+        art{"idioma artifical"}
+        asa{"asu"}
+        bai{"bamileke Languages"}
+        bax{"bamun"}
+        bbj{"ghomala"}
+        bez{"bena"}
+        bfd{"bafut"}
+        bkm{"kom"}
+        bss{"akoose"}
+        bug{"buginese"}
+        bum{"bulu"}
+        byv{"medumba"}
+        cay{"cayuga"}
+        ce{"chechene"}
+        cel{"idioma céltico"}
+        cgg{"chiga"}
+        chn{"jargão chinook"}
+        co{"corso"}
+        cpe{"crioulo ou pidgin do inglês"}
+        cpf{"crioulo ou pidgin do francês"}
+        cpp{"crioulo ou pidgin do português"}
+        cs{"checo"}
+        cus{"idioma cuchita"}
+        dav{"taita"}
+        dje{"zarma"}
+        dra{"idioma dravítico"}
+        dyo{"jola-fonyi"}
+        dyu{"diula"}
+        dzg{"dazaga"}
+        ee{"ewe"}
+        egy{"egípcio clássico"}
+        enm{"inglês medieval"}
+        et{"estónio"}
+        fiu{"idioma ugro-finês"}
+        frm{"francês medieval"}
+        frs{"frísio oriental"}
+        fy{"frísico ocidental"}
+        gmh{"alemão medieval alto"}
+        grc{"grego clássico"}
+        guz{"gusii"}
+        ha{"haúça"}
+        hi{"hindi"}
+        hsb{"sorbiano superior"}
+        hy{"arménio"}
+        ibb{"ibibio"}
+        ig{"igbo"}
+        ik{"inupiaq"}
+        jmc{"machame"}
+        kbl{"kanembu"}
+        kde{"makonde"}
+        kg{"conguês"}
+        khi{"khoisan"}
+        khq{"koyra chiini"}
+        kkj{"kako"}
+        kln{"kalenjin"}
+        kn{"canarim"}
+        ks{"caxemirense"}
+        ksb{"shambala"}
+        ksf{"bafia"}
+        lag{"langi"}
+        lez{"lezghiano"}
+        lg{"ganda"}
+        luy{"luyia"}
+        maf{"mafa"}
+        mde{"maba"}
+        mer{"meru"}
+        mga{"irlandês, medieval"}
+        mgh{"makhuwa-meetto"}
+        mk{"macedónio"}
+        mua{"mundang"}
+        mye{"myene"}
+        nah{"nauatle"}
+        naq{"nama"}
+        nb{"norueguês bokmål"}
+        nds{"baixo alemão"}
+        nic{"nigeriano - cordofano"}
+        nmg{"kwasio"}
+        nn{"norueguês nynorsk"}
+        nnh{"ngiemboon"}
+        non{"norse, old"}
+        nus{"nuer"}
+        oc{"provençal"}
+        os{"ossético"}
+        pl{"polaco"}
+        pra{"idioma prácito"}
+        pro{"provençal, arcaico"}
+        ps{"pastó"}
+        rom{"romanês"}
+        root{"root"}
+        sah{"sakha"}
+        sai{"idioma indígeno sul-americano"}
+        sal{"salishan languages"}
+        saq{"samburu"}
+        sba{"ngambay"}
+        sbp{"sangu"}
+        see{"seneca"}
+        seh{"sena"}
+        ses{"koyraboro senni"}
+        sgn{"linguages de sinais"}
+        shi{"tachelhit"}
+        shu{"árabe do Chade"}
+        ssa{"idioma nilo-sariano"}
+        ssy{"saho"}
+        swb{"língua comoriana"}
+        swc{"suaili do Congo"}
+        tai{"idioma tailândes"}
+        teo{"teso"}
+        tg{"tajique"}
+        ti{"tigre"}
+        to{"tonga"}
+        tog{"toganês"}
+        trv{"taroko"}
+        twq{"tasawaq"}
+        tyv{"tuviniano"}
+        tzm{"tamazight de Marrocos Central"}
+        und{"idioma desconhecido"}
+        vun{"vunjo"}
+        wen{"idioma sórbio"}
+        xog{"soga"}
+        yav{"yangben"}
+        ybb{"yemba"}
+    }
+    Scripts{
+        Armn{"arménio"}
+        Blis{"símbolos Bliss"}
+        Egyd{"egípcio demótico"}
+        Egyh{"egípcio hierático"}
+        Inds{"indus"}
+        Lina{"linear A"}
+        Linb{"linear B"}
+        Sylo{"siloti nagri"}
+        Tale{"tai le"}
+        Telu{"telugu"}
+        Xsux{"cuneiforme sumero-acadiano"}
+        Zxxx{"não escrito"}
+    }
+    Scripts%stand-alone{
+        Hans{"han simplificado"}
+        Hant{"han tradicional"}
+    }
+    Types{
+        calendar{
+            coptic{"Calendário Copta"}
+            ethiopic{"Calendário Etíope"}
+            ethiopic-amete-alem{"Calendário Etíope Amete Alem"}
+            islamic-civil{"Calendário Islâmico/Civil"}
+            persian{"Calendário Persa"}
+        }
+        collation{
+            dictionary{"Ordenação do Dicionário"}
+            phonebook{"Ordem da Lista Telefónica"}
+            phonetic{"Sequência de Ordenação Fonética"}
+            pinyin{"Ordem do Chinês Simplificado Pinyin"}
+            reformed{"Reforma da Ordenação"}
+            searchjl{"Pesquisar Por Consoante Inicial Hangul"}
+            stroke{"Ordem por traços"}
+            traditional{"Ordem tradicional"}
+            unihan{"Ordem por radical e traços"}
+        }
+        numbers{
+            armn{"Algarismos Arménios"}
+            armnlow{"Numeração Arménia Minúscula"}
+            beng{"Algarismos Bengalis"}
+            deva{"Algarismos Devanágaris"}
+            ethi{"Numeração Etíope"}
+            finance{"Algarismos Financeiros"}
+            fullwide{"Algarismos de Largura Completa"}
+            geor{"Numeração Georgiana"}
+            grek{"Numeração Grega"}
+            greklow{"Numeração Grega Minúscula"}
+            gujr{"Algarismos de Guzerate"}
+            hanidec{"Numeração Decimal Chinesa"}
+            hans{"Numeração Chinês Simplificado"}
+            hansfin{"Numeração Financeira Chinês Simplificado"}
+            hant{"Numeração Chinês Tradicional"}
+            hantfin{"Numeração Financeira Chinês Tradicional"}
+            hebr{"Numeração Hebraica"}
+            jpan{"Numeração Japonesa"}
+            jpanfin{"Numeração Financeira Japonesa"}
+            khmr{"Algarismo Khmer"}
+            knda{"Algarismos de Canarim"}
+            laoo{"Algarismos de Laos"}
+            latn{"Algarismos Ocidentais"}
+            mlym{"Algarismos Malaiala"}
+            mong{"Algarismos Mongóis"}
+            mymr{"Algarismos de Mianmar"}
+            native{"Dígitos Nativos"}
+            orya{"Algarismos Oriá"}
+            roman{"Numeração Romana"}
+            romanlow{"Numeração Romana Minúscula"}
+            taml{"Numeração Tâmil"}
+            telu{"Algarismos de Telugu"}
+            thai{"Algarismos Tailandeses"}
+            tibt{"Algarismos Tibetanos"}
+            traditional{"Algarismos Tradicionais"}
+            vaii{"Dígitos Vai"}
+        }
+    }
+    Variants{
+        AREVELA{"arménio oriental"}
+        AREVMDA{"arménio ocidental"}
+        BISKE{"dialecto san giorgio/bila"}
+        BOONT{"buntlingue"}
+        LIPAW{"dialecto lipovaz de Resian"}
+        MONOTON{"monotónico"}
+        NEDIS{"dialecto natisone"}
+        NJIVA{"dialecto gniva/njiva"}
+        OSOJS{"dialecto oseacco/osojane"}
+        PINYIN{"Romanização pinyin"}
+        POLYTON{"politónico"}
+        SOLBA{"dialecto stolvizza/solbica"}
+        WADEGILE{"Romanização Wade-Giles"}
+    }
+    Version{"2.0.82.51"}
+    codePatterns{
+        script{"Escrita: {0}"}
+    }
+}

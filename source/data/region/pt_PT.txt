@@ -1,0 +1,73 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/pt_PT.xml
+// *
+// ***************************************************************************
+pt_PT{
+    Countries{
+        009{"Oceânia"}
+        015{"Norte de África"}
+        035{"Sudeste Asiático"}
+        053{"Australásia"}
+        154{"Europa do Norte"}
+        AI{"Anguila"}
+        AM{"Arménia"}
+        AX{"Ilhas Åland"}
+        BH{"Barém"}
+        BJ{"Benim"}
+        BQ{"Países Baixos Caribenhos"}
+        BY{"Bielorrússia"}
+        CC{"Ilhas Cocos"}
+        CG{"Congo-Brazzaville"}
+        CM{"Camarões"}
+        CW{"Curaçau"}
+        CX{"Ilha do Natal"}
+        CZ{"República Checa"}
+        DJ{"Jibuti"}
+        DM{"Domínica"}
+        EE{"Estónia"}
+        EG{"Egipto"}
+        FK{"Ilhas Falkland"}
+        FO{"Ilhas Faroé"}
+        GL{"Gronelândia"}
+        GU{"Guame"}
+        GW{"Guiné-Bissau"}
+        IR{"Irão"}
+        KE{"Quénia"}
+        KG{"Quirguizistão"}
+        KN{"São Cristóvão e Neves"}
+        KY{"Ilhas Caimão"}
+        KZ{"Cazaquistão"}
+        LV{"Letónia"}
+        MC{"Mónaco"}
+        MG{"Madagáscar"}
+        MK{"Macedónia"}
+        MS{"Monserrate"}
+        MU{"Maurícias"}
+        NC{"Nova Caledónia"}
+        NL{"Países Baixos"}
+        PG{"Papuásia-Nova Guiné"}
+        PL{"Polónia"}
+        PN{"Pitcairn"}
+        PS{"Território Palestiniano"}
+        QO{"Oceânia Insular"}
+        RO{"Roménia"}
+        SC{"Seicheles"}
+        SG{"Singapura"}
+        SI{"Eslovénia"}
+        SM{"São Marino"}
+        TC{"Ilhas Turcas e Caicos"}
+        TJ{"Tajiquistão"}
+        TM{"Turquemenistão"}
+        TT{"Trindade e Tobago"}
+        VN{"Vietname"}
+        YE{"Iémen"}
+        YT{"Maiote"}
+        ZW{"Zimbabué"}
+        ZZ{"Região desconhecida ou inválida"}
+    }
+    Version{"2.0.82.51"}
+}
