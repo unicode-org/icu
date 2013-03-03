@@ -790,7 +790,6 @@ zh{
         collation{
             big5han{"繁体中文(Big5)"}
             dictionary{"字典排序顺序"}
-            direct{"直接"}
             ducet{"默认 Unicode 排序顺序"}
             gb2312han{"简体中文(GB2312)"}
             phonebook{"电话簿排序顺序"}
@@ -920,7 +919,7 @@ zh{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.60"}
     codePatterns{
         language{"语言：{0}"}
         script{"文字：{0}"}

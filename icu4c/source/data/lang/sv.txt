@@ -789,7 +789,6 @@ sv{
         collation{
             big5han{"big5-sorteringsordning"}
             dictionary{"ordbokssorteringsordning"}
-            direct{"∅∅∅"}
             ducet{"grundläggande Unicode-sorteringsordning"}
             gb2312han{"gb2312-sorteringsordning"}
             phonebook{"telefonkatalogssorteringsordning"}
@@ -915,7 +914,7 @@ sv{
         VALLADER{"vallader-dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.57"}
     codePatterns{
         language{"språk: {0}"}
         script{"skrift: {0}"}

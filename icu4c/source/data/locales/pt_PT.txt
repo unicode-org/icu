@@ -122,7 +122,7 @@ pt_PT{
             }
         }
     }
-    Version{"2.0.81.91"}
+    Version{"2.0.82.51"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -163,7 +163,7 @@ pt_PT{
                 MMMMd{"d 'de' MMMM"}
                 MMMd{"d/MM"}
                 yyyyMMM{"MM/y G"}
-                yyyyMMMEEEEd{"EEEE, d/MM/yy"}
+                yyyyMMMEEEEd{"EEEE, d/MM/y"}
                 yyyyMMMEd{"E, d/MM/y G"}
                 yyyyMMMM{"MMMM 'de' y G"}
                 yyyyMMMMEd{"E, d 'de' MMMM 'de' y G"}

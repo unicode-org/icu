@@ -13,5 +13,5 @@ sv_FI{
     Variants{
         1996{"1996 års stavning"}
     }
-    Version{"2.0.80.73"}
+    Version{"2.0.82.45"}
 }

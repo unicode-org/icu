@@ -788,7 +788,6 @@ id{
         collation{
             big5han{"Urutan Sortir China Tradisional - Big5"}
             dictionary{"Urutan Sortir Kamus"}
-            direct{"Langsung"}
             ducet{"Urutan Sortir Unicode Bawaan"}
             gb2312han{"Urutan Sortir China Aks. Sederhana - GB2312"}
             phonebook{"Urutan Sortir Buku Telepon"}
@@ -899,7 +898,7 @@ id{
         VALENCIA{"Valencia"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.57"}
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}

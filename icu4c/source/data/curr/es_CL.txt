@@ -13,5 +13,5 @@ es_CL{
             "peso chileno",
         }
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.82.45"}
 }

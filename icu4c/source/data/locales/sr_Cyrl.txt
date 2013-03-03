@@ -13,5 +13,5 @@ sr_Cyrl{
     LocaleScript{
         "Cyrl",
     }
-    Version{"2.0.41.23"}
+    Version{"2.0.82.45"}
 }

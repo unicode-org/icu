@@ -1267,23 +1267,23 @@ ee{
         }
         BEC{
             one{"beldziumga franc (convertible)"}
-            other{"beldziumga francwo (convertible)"}
+            other{"beldziumga franc (convertible)"}
         }
         BEF{
             one{"beldziumga franc"}
-            other{"beldziumga francwo"}
+            other{"beldziumga franc"}
         }
         BEL{
             one{"beldziumga franc (financial)"}
-            other{"beldziumga francwo (financial)"}
+            other{"beldziumga franc (financial)"}
         }
         BGL{
             one{"bɔlgariaga hard lev"}
-            other{"bɔlgariaga hard levwo"}
+            other{"bɔlgariaga hard lev"}
         }
         BGM{
             one{"bɔlgariaga socialist lev"}
-            other{"bɔlgariaga socialist levwo"}
+            other{"bɔlgariaga socialist lev"}
         }
         BGN{
             one{"bulgariaga lev"}
@@ -1299,7 +1299,7 @@ ee{
         }
         BIF{
             one{"burundiga franc"}
-            other{"burundiga francwo"}
+            other{"burundiga franc"}
         }
         BMD{
             one{"bermudaga dollar"}
@@ -1319,19 +1319,19 @@ ee{
         }
         BOP{
             one{"boliviaga peso"}
-            other{"boliviaga pesowo"}
+            other{"boliviaga peso"}
         }
         BOV{
             one{"boliviaga mvdol"}
-            other{"boliviaga mvdolwo"}
+            other{"boliviaga mvdol"}
         }
         BRB{
             one{"braziliaga cruzeiro xoxotɔ (1967-1986)"}
-            other{"braziliaga cruzeiro xoxotɔwo (1967-1986)"}
+            other{"braziliaga cruzeiro xoxotɔ (1967-1986)"}
         }
         BRC{
             one{"brazilia cruzado (1986-1989)"}
-            other{"brazilia cruzadowo (1986-1989)"}
+            other{"brazilia cruzado (1986-1989)"}
         }
         BRE{
             one{"braziliaga cruzeiro xoxotɔ gbãtɔ (1990-1993)"}
@@ -1339,11 +1339,11 @@ ee{
         }
         BRL{
             one{"braziliaga real"}
-            other{"braziliaga realwo"}
+            other{"braziliaga real"}
         }
         BRN{
             one{"brazilia cruzado xoxotɔ (1989-1990)"}
-            other{"brazilia cruzado xoxotɔwo (1989-1990)"}
+            other{"brazilia cruzado xoxotɔ (1989-1990)"}
         }
         BRR{
             one{"braziliaga cruzeiro (1993-1994)"}
@@ -1351,27 +1351,27 @@ ee{
         }
         BRZ{
             one{"braziliaga cruzeiro (1942-1967)"}
-            other{"braziliaga cruzeiros (1942-1967)"}
+            other{"braziliaga cruzeiro (1942-1967)"}
         }
         BSD{
             one{"bahamiaga dollar"}
-            other{"bahamiaga dollarwo"}
+            other{"bahamiaga dollar"}
         }
         BTN{
             one{"bhutanga ngultrum"}
-            other{"bhutanga ngultrumwo"}
+            other{"bhutanga ngultrum"}
         }
         BUK{
             one{"burmaga kyat"}
-            other{"burmaga kyatwo"}
+            other{"burmaga kyat"}
         }
         BWP{
             one{"botswanaga pula"}
-            other{"botswanaga pulawo"}
+            other{"botswanaga pula"}
         }
         BYB{
             one{"belarusiaga ruble yeytɔ (1994-1999)"}
-            other{"belarusiaga ruble yeyetɔwo (1994-1999)"}
+            other{"belarusiaga ruble yeyetɔ (1994-1999)"}
         }
         BYR{
             one{"belarusiaga ruble"}
@@ -1379,15 +1379,15 @@ ee{
         }
         BZD{
             one{"belizega dollar"}
-            other{"belizega dollarwo"}
+            other{"belizega dollar"}
         }
         CAD{
             one{"kanadaga dollar"}
-            other{"kanadaga dollarwo"}
+            other{"kanadaga dollar"}
         }
         CDF{
             one{"kongoga franc"}
-            other{"kongoga francwo"}
+            other{"kongoga franc"}
         }
         CHE{
             one{"WIR euro CHE"}
@@ -1395,7 +1395,7 @@ ee{
         }
         CHF{
             one{"swissga franc"}
-            other{"swissga francwo"}
+            other{"swissga franc"}
         }
         CHW{
             one{"WIR euro CHW"}
@@ -1407,7 +1407,7 @@ ee{
         }
         CLF{
             one{"tsilegakɔnta dzidzenu UF"}
-            other{"tsilegakɔnta dzidzenuwo UF"}
+            other{"tsilegakɔnta dzidzenu UF"}
         }
         CLP{
             one{"tsilega peso"}
@@ -1419,51 +1419,51 @@ ee{
         }
         CNY{
             one{"tsainaga yuan"}
-            other{"tsainaga yuanwo"}
+            other{"tsainaga yuan"}
         }
         COP{
             one{"kolombiaga peso"}
-            other{"kolombiaga pesowo"}
+            other{"kolombiaga peso"}
         }
         COU{
             one{"kolombiaga vavãtɔ"}
-            other{"kolombiaga vavãtɔwo"}
+            other{"kolombiaga vavãtɔ"}
         }
         CRC{
             one{"kosta rikaga kolón"}
-            other{"kosta rikaga kolónwo"}
+            other{"kosta rikaga kolón"}
         }
         CSD{
             one{"serbiaga dinar (2002-2006)"}
-            other{"serbiaga dinarwo (2002-2006)"}
+            other{"serbiaga dinar (2002-2006)"}
         }
         CSK{
             one{"tsɛkoslovakiaga hard koruna"}
-            other{"tsɛkoslovakiaga hard korunawo"}
+            other{"tsɛkoslovakiaga hard koruna"}
         }
         CUC{
             one{"kubaga convertible peso"}
-            other{"kubaga convertible pesowo"}
+            other{"kubaga convertible peso"}
         }
         CUP{
             one{"kubaga peso"}
-            other{"kubaga pesowo"}
+            other{"kubaga peso"}
         }
         CVE{
             one{"kape verdega escudo"}
-            other{"kape verdega escudowo"}
+            other{"kape verdega escudo"}
         }
         CYP{
             one{"saipriɔtga pound"}
-            other{"saipriɔtga poundwo"}
+            other{"saipriɔtga pound"}
         }
         CZK{
             one{"tsɛk repɔblikga koruna"}
-            other{"tsɛk repɔblikga korunawo"}
+            other{"tsɛk repɔblikga koruna"}
         }
         DDM{
             one{"ɣedzeƒe germaniaga mark"}
-            other{"ɣedzeƒe germaniaga markwo"}
+            other{"ɣedzeƒe germaniaga mark"}
         }
         DEM{
             one{"germaniaga mark"}
@@ -1755,7 +1755,7 @@ ee{
         }
         LUC{
             one{"lazembɔgga convertible franc"}
-            other{"lazembɔgga convertible francs"}
+            other{"lazembɔgga convertible franc"}
         }
         LUF{
             one{"lazembɔgga franc"}
@@ -1871,7 +1871,7 @@ ee{
         }
         NLG{
             one{"hollandga guilder"}
-            other{"hollandga guilderwo"}
+            other{"hollandga guilder"}
         }
         NOK{
             one{"nɔweiga krone"}
@@ -2306,5 +2306,5 @@ ee{
         one{"{1} {0}"}
         other{"{1} {0}"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.57"}
 }

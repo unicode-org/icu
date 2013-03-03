@@ -517,7 +517,6 @@ br{
         collation{
             big5han{"urzh rummañ sinaek hengounel - Big5"}
             dictionary{"urzh rummañ ar geriadur"}
-            direct{"eeun"}
             ducet{"urzh rummañ Unicode dre ziouer"}
             gb2312han{"urzh rummañ sinaek eeunaet - GB2312"}
             phonebook{"urzh rummañ al levr-pellgomz"}
@@ -629,5 +628,5 @@ br{
         VALLADER{"rannyezh romañchek Vallader"}
         WADEGILE{"romanekadur Wade-Giles"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.57"}
 }

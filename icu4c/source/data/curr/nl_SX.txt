@@ -13,5 +13,5 @@ nl_SX{
             "Nederlands-Antilliaanse gulden",
         }
     }
-    Version{"2.0.74.65"}
+    Version{"2.0.82.45"}
 }

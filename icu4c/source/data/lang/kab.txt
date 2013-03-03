@@ -57,5 +57,5 @@ kab{
         zh{"Tacinwat, Tamundarint"}
         zu{"Tazulut"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
 }

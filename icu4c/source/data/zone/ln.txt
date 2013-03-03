@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ln.xml
  */
 ln{
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
     zoneStrings{
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"Ngonga ya {1} ({0})"}

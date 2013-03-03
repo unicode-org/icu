@@ -27,11 +27,10 @@ COLLATION_CLDR_VERSION = 23
 
 # Aliases without a corresponding xx.xml file (see icu-config.xml & build.xml)
 COLLATION_SYNTHETIC_ALIAS = de_.txt de__PHONEBOOK.txt es_.txt es__TRADITIONAL.txt\
- in.txt in_ID.txt iw.txt\
- iw_IL.txt mo.txt no.txt no_NO.txt pa_IN.txt\
- sh.txt sh_BA.txt sh_YU.txt sr_BA.txt sr_ME.txt\
- sr_RS.txt zh_CN.txt zh_HK.txt zh_MO.txt\
- zh_SG.txt zh_TW.txt
+ in.txt in_ID.txt iw.txt iw_IL.txt mo.txt\
+ no.txt no_NO.txt pa_IN.txt sh.txt sh_BA.txt\
+ sh_YU.txt sr_BA.txt sr_ME.txt sr_RS.txt zh_CN.txt\
+ zh_HK.txt zh_MO.txt zh_SG.txt zh_TW.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.
