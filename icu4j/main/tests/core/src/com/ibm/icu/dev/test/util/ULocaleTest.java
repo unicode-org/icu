@@ -494,7 +494,7 @@ public class ULocaleTest extends TestFmwk {
         /* display name (English) */
         {   "English (United States)", "French (France)", "Catalan (Spain)",
             "Greek (Greece)", "Norwegian (Norway, NY)", "Chinese (Simplified Han, China)",
-            "German (Germany, Collation=Phonebook Order)", "Spanish (Collation=Traditional)", "Japanese (Japan, Calendar=Japanese Calendar)" },
+            "German (Germany, Collation=Phonebook Sort Order)", "Spanish (Collation=Traditional)", "Japanese (Japan, Calendar=Japanese Calendar)" },
 
         /* display language (French) */
         {   "anglais",  "fran\\u00E7ais",   "catalan", "grec",    "norv\\u00E9gien",    "chinois", "allemand", "espagnol", "japonais"     },
@@ -1178,7 +1178,7 @@ public class ULocaleTest extends TestFmwk {
     public void TestDisplayKeyword() {
         //prepare testing data
         initHashtable();
-        String[] data = {"en_US@collation=direct;calendar=islamic-civil",
+        String[] data = {"en_US@collation=phonebook;calendar=islamic-civil",
              "zh_Hans@collation=pinyin;calendar=chinese",
              "foo_Bar_BAZ@collation=traditional;calendar=buddhist"};
 
@@ -1317,11 +1317,10 @@ public class ULocaleTest extends TestFmwk {
         h[0].put("collation", "Sort Order");
         h[0].put("calendar", "Calendar");
         h[0].put("currency", "Currency");
-        h[0].put("phonebook", "Phonebook Order");
+        h[0].put("phonebook", "Phonebook Sort Order");
         h[0].put("pinyin", "Pinyin Sort Order");
         h[0].put("traditional", "Traditional Sort Order");
         h[0].put("stroke", "Stroke Order");
-        h[0].put("direct", "direct"); // Direct sort order is deprecated in CLDR
         h[0].put("japanese", "Japanese Calendar");
         h[0].put("buddhist", "Buddhist Calendar");
         h[0].put("islamic", "Islamic Calendar");
@@ -1334,8 +1333,7 @@ public class ULocaleTest extends TestFmwk {
         h[1].put("collation", "\u6392\u5E8F\u987A\u5E8F");
         h[1].put("calendar", "\u65E5\u5386");
         h[1].put("currency", "\u8D27\u5E01");
-        h[1].put("direct", "\u76F4\u63A5"); // Direct sort order is deprecated in CLDR
-        h[1].put("phonebook", "\u7535\u8BDD\u7C3F\u987A\u5E8F");
+        h[1].put("phonebook", "\u7535\u8BDD\u7C3F\u6392\u5E8F\u987A\u5E8F");
         h[1].put("pinyin", "\u62FC\u97F3\u6392\u5E8F");
         h[1].put("stroke", "\u7B14\u5212\u987A\u5E8F");
         h[1].put("traditional", "\u4F20\u7EDF\u6392\u5E8F\u987A\u5E8F");
@@ -2468,8 +2466,8 @@ public class ULocaleTest extends TestFmwk {
                 "es"
             }, {
                 "und_ET",
-                "en_Latn_ET",
-                "en_ET"
+                "am_Ethi_ET",
+                "am"
             }, {
                 "und_Ethi",
                 "am_Ethi_ET",
@@ -3208,8 +3206,8 @@ public class ULocaleTest extends TestFmwk {
                 "zh_HK"
             }, {
                 "und_AQ",
-                "en_Latn_AQ",
-                "en_AQ"
+                "und_Latn_AQ",
+                "und_AQ"
             }, {
                 "und_Zzzz",
                 "en_Latn_US",
@@ -3232,8 +3230,8 @@ public class ULocaleTest extends TestFmwk {
                 "zh_HK"
             }, {
                 "und_Zzzz_AQ",
-                "en_Latn_AQ",
-                "en_AQ"
+                "und_Latn_AQ",
+                "und_AQ"
             }, {
                 "und_Latn",
                 "en_Latn_US",
@@ -3248,16 +3246,16 @@ public class ULocaleTest extends TestFmwk {
                 "za"
             }, {
                 "und_Latn_TW",
-                "zh_Latn_TW",
-                "zh_Latn_TW"
+                "trv_Latn_TW",
+                "trv"
             }, {
                 "und_Latn_HK",
                 "zh_Latn_HK",
                 "zh_Latn_HK"
             }, {
                 "und_Latn_AQ",
-                "en_Latn_AQ",
-                "en_AQ"
+                "und_Latn_AQ",
+                "und_AQ"
             }, {
                 "und_Hans",
                 "zh_Hans_CN",
@@ -3328,8 +3326,8 @@ public class ULocaleTest extends TestFmwk {
                 "zh_Moon_HK"
             }, {
                 "und_Moon_AQ",
-                "en_Moon_AQ",
-                "en_Moon_AQ"
+                "und_Moon_AQ",
+                "und_Moon_AQ"
             }, {
                 "es",
                 "es_Latn_ES",
