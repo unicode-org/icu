@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/yo.xml
  */
 yo{
-    Version{"2.0.49.41"}
+    Version{"2.0.82.42"}
     collations{
         standard{
             Sequence{" [normalization on]&E<ẹ<<<Ẹ&G<gb<<<Gb<<<GB&O<ọ<<<Ọ&S<ṣ<<<Ṣ"}

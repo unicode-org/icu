@@ -401,5 +401,5 @@ it{
             "10: o\u00AD=%spellout-ordinal-feminine=;",
         }
     }
-    Version{"2.0.74.12"}
+    Version{"2.0.82.42"}
 }

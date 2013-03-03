@@ -37,7 +37,7 @@ bn_IN{
             taml{"তামিল সংখ্যা"}
         }
     }
-    Version{"2.0.81.46"}
+    Version{"2.0.82.45"}
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
     }

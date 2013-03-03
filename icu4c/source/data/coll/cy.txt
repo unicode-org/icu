@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/cy.xml
  */
 cy{
-    Version{"2.0.61.82"}
+    Version{"2.0.82.42"}
     collations{
         standard{
             Sequence{

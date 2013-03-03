@@ -8,7 +8,7 @@
 // ***************************************************************************
 sv_FI{
     AuxExemplarCharacters{"[ã ç ë í ñ ó š ÿ ü ž]"}
-    Version{"2.0.80.73"}
+    Version{"2.0.82.45"}
     fields{
         dayperiod{
             dn{"dagsperiod"}

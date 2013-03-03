@@ -787,7 +787,6 @@ ca{
         }
         collation{
             big5han{"ordre del xinès tradicional - Big5"}
-            direct{"directe"}
             ducet{"ordenació Unicode predeterminada"}
             gb2312han{"ordre del xinès simplificat - GB2312"}
             phonebook{"ordre de la guia telefònica"}
@@ -883,7 +882,7 @@ ca{
         VALLADER{"baix engiadinès"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.57"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escriptura: {0}"}

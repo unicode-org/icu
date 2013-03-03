@@ -40,7 +40,7 @@ swc{
             "Dola ya Kanada",
         }
         CDF{
-            "CDF",
+            "FC",
             "Faranga ya Kongo",
         }
         CHF{
@@ -232,5 +232,5 @@ swc{
             "Dola ya Zimbabwe",
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
 }

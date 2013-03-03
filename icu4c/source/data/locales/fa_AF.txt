@@ -15,7 +15,7 @@ fa_AF{
             }
         }
     }
-    Version{"2.0.77.46"}
+    Version{"2.0.82.45"}
     calendar{
         gregorian{
             monthNames{

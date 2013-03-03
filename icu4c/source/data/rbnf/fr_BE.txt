@@ -201,5 +201,5 @@ fr_BE{
             "2: =%%spellout-ordinal=;",
         }
     }
-    Version{"2.0.77.58"}
+    Version{"2.0.82.42"}
 }

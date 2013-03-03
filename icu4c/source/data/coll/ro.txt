@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/ro.xml
  */
 ro{
-    Version{"2.0.61.82"}
+    Version{"2.0.82.42"}
     collations{
         standard{
             Sequence{"&A<ă<<<Ă<â<<<Â&I<î<<<Î&S<ş=ș<<<Ş=Ș&T<ţ=ț<<<Ţ=Ț"}

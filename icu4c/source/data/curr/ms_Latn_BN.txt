@@ -13,5 +13,5 @@ ms_Latn_BN{
             "Dolar Brunei",
         }
     }
-    Version{"2.0.80.58"}
+    Version{"2.0.82.68"}
 }

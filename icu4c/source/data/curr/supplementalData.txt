@@ -1141,17 +1141,17 @@ supplementalData:table(nofallback){
         CU{
             {
                 from:intvector{
-                    176,
-                    1468155904,
-                }
-                id{"CUC"}
-            }
-            {
-                from:intvector{
                     -816,
                     1864513536,
                 }
                 id{"CUP"}
+            }
+            {
+                from:intvector{
+                    176,
+                    1468155904,
+                }
+                id{"CUC"}
             }
             {
                 from:intvector{

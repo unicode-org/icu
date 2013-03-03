@@ -56,5 +56,5 @@ ha{
         zh{"Harshen Sin"}
         zu{"Harshen Zulu"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
 }

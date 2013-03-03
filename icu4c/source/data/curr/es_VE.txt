@@ -13,5 +13,5 @@ es_VE{
             "bolívar venezolano",
         }
     }
-    Version{"2.0.77.27"}
+    Version{"2.0.82.45"}
 }

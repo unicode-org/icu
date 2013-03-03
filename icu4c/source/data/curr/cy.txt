@@ -35,10 +35,6 @@ cy{
             "AOA",
             "Kwanza Angola",
         }
-        ARS{
-            "ARS",
-            "ARS",
-        }
         AUD{
             "A$",
             "Doler Awstralia",
@@ -1918,5 +1914,5 @@ cy{
         two{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.51"}
 }

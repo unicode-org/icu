@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/sq.xml
  */
 sq{
-    Version{"2.0.76.11"}
+    Version{"2.0.82.42"}
     collations{
         standard{
             Sequence{

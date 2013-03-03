@@ -104,7 +104,7 @@ luy{
             "Sarafu ya Kijapani",
         }
         KES{
-            "KES",
+            "Ksh",
             "Sirinji ya Kenya",
         }
         KMF{
@@ -232,5 +232,5 @@ luy{
             "Dola ya Zimbabwe",
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
 }

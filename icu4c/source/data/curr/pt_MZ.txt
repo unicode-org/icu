@@ -13,5 +13,5 @@ pt_MZ{
             "Metical de Moçambique",
         }
     }
-    Version{"2.0.75.60"}
+    Version{"2.0.82.45"}
 }

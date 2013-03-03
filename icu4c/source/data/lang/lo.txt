@@ -751,7 +751,6 @@ lo{
         collation{
             big5han{"ລຽງຕາມອັກສອນຈີນດັ້ງເດີມ"}
             dictionary{"ລຽງຕາມພົດຈະນານຸກົມ"}
-            direct{"ໂດຍຕົງ"}
             ducet{"ລຽງຕາມລໍາດັບຕາມຢູນີໂຄດ"}
             gb2312han{"ລຽງຕາມອັກສອນຈີນປະຍຸກ"}
             phonebook{"ລຽງຕາມສະໝຸດໂທລະສັບ"}
@@ -877,7 +876,7 @@ lo{
         VALLADER{"ວັລລາເດີ"}
         WADEGILE{"ການຖອດອັກສອນແບບເວດ-ໄຈລ໌"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.57"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

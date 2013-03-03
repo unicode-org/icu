@@ -175,5 +175,5 @@ zh_Hant_HK{
             "0: \u7B2C=%spellout-numbering=;",
         }
     }
-    Version{"2.0.52.30"}
+    Version{"2.0.82.68"}
 }

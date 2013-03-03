@@ -351,5 +351,5 @@ he{
             "11: =%spellout-numbering=;",
         }
     }
-    Version{"2.0.79.24"}
+    Version{"2.0.82.42"}
 }

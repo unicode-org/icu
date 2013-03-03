@@ -17,5 +17,5 @@ en_ZA{
             "South African Rand",
         }
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.82.45"}
 }

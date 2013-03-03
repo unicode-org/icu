@@ -28,6 +28,10 @@ zh_Hans_MO{
             "KZT",
             "哈萨克斯坦腾格",
         }
+        MOP{
+            "MOP$",
+            "澳门元",
+        }
         NIO{
             "NIO",
             "尼加拉瓜科多巴",
@@ -40,5 +44,5 @@ zh_Hans_MO{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.82.45"}
 }

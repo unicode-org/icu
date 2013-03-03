@@ -40,7 +40,7 @@ ln{
             "Dolarɛ ya Kanadá",
         }
         CDF{
-            "CDF",
+            "FC",
             "Falánga ya Kongó",
         }
         CHF{
@@ -236,5 +236,5 @@ ln{
             "Dolarɛ ya Zimbabwɛ",
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
 }

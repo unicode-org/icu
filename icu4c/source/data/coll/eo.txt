@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/eo.xml
  */
 eo{
-    Version{"2.0.41.26"}
+    Version{"2.0.82.42"}
     collations{
         standard{
             Sequence{"&C<ĉ<<<Ĉ&G<ĝ<<<Ĝ&H<ĥ<<<Ĥ&J<ĵ<<<Ĵ&S<ŝ<<<Ŝ&U<ŭ<<<Ŭ"}

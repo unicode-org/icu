@@ -237,5 +237,5 @@ sg{
         ZM{"Zambïi"}
         ZW{"Zimbäbwe"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
 }

@@ -4020,8 +4020,8 @@ const char* const full_data[][3] = {
     "es"
   }, {
     "und_ET",
-    "en_Latn_ET",
-    "en_ET"
+    "am_Ethi_ET",
+    "am"
   }, {
     "und_Ethi",
     "am_Ethi_ET",
@@ -4760,8 +4760,8 @@ const char* const full_data[][3] = {
     "zh_HK"
   }, {
     "und_AQ",
-    "en_Latn_AQ",
-    "en_AQ"
+    "und_Latn_AQ",
+    "und_AQ"
   }, {
     "und_Zzzz",
     "en_Latn_US",
@@ -4784,8 +4784,8 @@ const char* const full_data[][3] = {
     "zh_HK"
   }, {
     "und_Zzzz_AQ",
-    "en_Latn_AQ",
-    "en_AQ"
+    "und_Latn_AQ",
+    "und_AQ"
   }, {
     "und_Latn",
     "en_Latn_US",
@@ -4800,16 +4800,16 @@ const char* const full_data[][3] = {
     "za"
   }, {
     "und_Latn_TW",
-    "zh_Latn_TW",
-    "zh_Latn_TW"
+    "trv_Latn_TW",
+    "trv"
   }, {
     "und_Latn_HK",
     "zh_Latn_HK",
     "zh_Latn_HK"
   }, {
     "und_Latn_AQ",
-    "en_Latn_AQ",
-    "en_AQ"
+    "und_Latn_AQ",
+    "und_AQ"
   }, {
     "und_Hans",
     "zh_Hans_CN",
@@ -4880,8 +4880,8 @@ const char* const full_data[][3] = {
     "zh_Moon_HK"
   }, {
     "und_Moon_AQ",
-    "en_Moon_AQ",
-    "en_Moon_AQ"
+    "und_Moon_AQ",
+    "und_Moon_AQ"
   }, {
     "es",
     "es_Latn_ES",
