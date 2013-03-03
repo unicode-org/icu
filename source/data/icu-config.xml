@@ -419,6 +419,9 @@
 		<include locales="mk_MK"/>
 		<include locales="ml"/>
 		<include locales="ml_IN"/>
+		<include locales="mn"/>
+		<include locales="mn_Cyrl"/>
+		<include locales="mn_Cyrl_MN"/>
 		<include locales="mo"/>
 		<include locales="mr"/>
 		<include locales="mr_IN"/>

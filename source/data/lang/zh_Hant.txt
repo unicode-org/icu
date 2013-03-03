@@ -778,7 +778,6 @@ zh_Hant{
         collation{
             big5han{"繁體中文排序 (Big5)"}
             dictionary{"字典排序"}
-            direct{"直接排序"}
             ducet{"預設 Unicode 排序"}
             gb2312han{"簡體中文排序 (GB2312)"}
             phonebook{"電話簿排序"}
@@ -906,7 +905,7 @@ zh_Hant{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.57"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

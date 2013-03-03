@@ -113,7 +113,7 @@ ur{
         }
         native{"arabext"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
     calendar{
         generic{
             DateTimePatterns{
@@ -255,8 +255,8 @@ ur{
         }
         gregorian{
             AmPmMarkers{
-                "دن",
-                "رات",
+                "قبل دوپہر",
+                "بعد دوپہر",
             }
             DateTimePatterns{
                 "h:mm:ss a zzzz",

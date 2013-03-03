@@ -40,7 +40,7 @@ lu{
             "Ndola wa Kanada",
         }
         CDF{
-            "CDF",
+            "FC",
             "Nfalanga wa Kongu",
         }
         CHF{
@@ -236,5 +236,5 @@ lu{
             "Ndola wa Zimbabwe",
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
 }

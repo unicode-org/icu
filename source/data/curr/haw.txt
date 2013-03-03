@@ -10,5 +10,11 @@
  *  ICU <specials> source: <path>/xml/main/haw.xml
  */
 haw{
-    Version{"2.0.81.88"}
+    Currencies{
+        USD{
+            "$",
+            "USD",
+        }
+    }
+    Version{"2.0.82.45"}
 }

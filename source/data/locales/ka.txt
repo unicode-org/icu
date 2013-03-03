@@ -128,7 +128,7 @@ ka{
         native{"latn"}
         traditional{"geor"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.61"}
     calendar{
         generic{
             DateTimePatterns{
@@ -643,8 +643,8 @@ ka{
         }
     }
     delimiters{
-        alternateQuotationEnd{"»"}
-        alternateQuotationStart{"«"}
+        alternateQuotationEnd{"“"}
+        alternateQuotationStart{"„"}
         quotationEnd{"“"}
         quotationStart{"„"}
     }

@@ -10,5 +10,5 @@
  *  ICU <specials> source: <path>/xml/main/yav.xml
  */
 yav{
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
 }

@@ -250,5 +250,5 @@ ko{
             "3: =%%spellout-ordinal-native-smaller=;",
         }
     }
-    Version{"2.0.81.60"}
+    Version{"2.0.82.42"}
 }

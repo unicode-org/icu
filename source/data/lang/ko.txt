@@ -788,7 +788,6 @@ ko{
         collation{
             big5han{"중국어 번체 정렬 순서 [Big5]"}
             dictionary{"사전 정렬순"}
-            direct{"직접"}
             ducet{"기본 유니코드 정렬 순서"}
             gb2312han{"중국어 간체 정렬 순서 [GB2312]"}
             phonebook{"전화번호부순"}
@@ -881,7 +880,7 @@ ko{
         VAIDIKA{"바이디카"}
         VALLADER{"발라더"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.57"}
     codePatterns{
         language{"언어: {0}"}
         script{"스크립트: {0}"}

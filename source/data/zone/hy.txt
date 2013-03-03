@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hy.xml
  */
 hy{
-    Version{"2.0.81.88"}
+    Version{"2.0.82.51"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Աբիջան"}

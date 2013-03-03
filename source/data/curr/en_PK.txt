@@ -8,14 +8,14 @@
 // ***************************************************************************
 en_PK{
     Currencies{
-        INR{
-            "INRs",
-            "Indian Rupee",
-        }
         PKR{
-            "₨",
+            "Rs",
             "Pakistani Rupee",
         }
+        USD{
+            "US$",
+            "US Dollar",
+        }
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.82.45"}
 }

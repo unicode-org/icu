@@ -239,7 +239,7 @@ si{
             tibt{"ටිබෙට ඉලක්කම්"}
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
     codePatterns{
         language{"{0} භාෂාව: සිංහල"}
         script{"{0} අක්ෂර මාලාව: සිංහල"}

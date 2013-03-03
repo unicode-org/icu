@@ -234,5 +234,5 @@ bas{
         ZM{"Zàmbià"}
         ZW{"Zìmbàbwê"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
 }

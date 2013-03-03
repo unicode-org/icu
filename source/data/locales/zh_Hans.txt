@@ -13,5 +13,5 @@ zh_Hans{
     LocaleScript{
         "Hani",
     }
-    Version{"2.0.41.23"}
+    Version{"2.0.82.45"}
 }

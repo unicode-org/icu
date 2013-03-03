@@ -15,7 +15,7 @@ en_HK{
             }
         }
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.82.45"}
     calendar{
         buddhist{
             DateTimePatterns{

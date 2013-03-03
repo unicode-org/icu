@@ -13,5 +13,5 @@ es_MX{
             "peso mexicano",
         }
     }
-    Version{"2.0.74.64"}
+    Version{"2.0.82.45"}
 }

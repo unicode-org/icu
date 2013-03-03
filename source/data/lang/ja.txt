@@ -784,7 +784,6 @@ ja{
         collation{
             big5han{"繁体字中国語順[Big5]"}
             dictionary{"辞書順"}
-            direct{"直接"}
             ducet{"ユニコード照合順"}
             gb2312han{"簡体字中国語順[GB2312]"}
             phonebook{"電話帳順"}
@@ -893,7 +892,7 @@ ja{
         VALLADER{"ヴァラダー"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.57"}
     codePatterns{
         language{"言語: {0}"}
         script{"文字: {0}"}

@@ -783,7 +783,6 @@ vi{
         collation{
             big5han{"Thứ tự sắp xếp theo tiếng Trung phồn thể - Big5"}
             dictionary{"Thứ tự sắp xếp theo từ điển"}
-            direct{"Trực tiếp"}
             ducet{"Thứ tự sắp xếp unicode mặc định"}
             gb2312han{"Thứ tự sắp xếp theo tiếng Trung giản thể - GB2312"}
             phonebook{"Thứ tự sắp xếp theo danh bạ điện thoại"}
@@ -892,7 +891,7 @@ vi{
         VALENCIA{"Tiếng Valencia"}
         WADEGILE{"La Mã hóa Wade-Giles"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.57"}
     codePatterns{
         language{"Ngôn ngữ: {0}"}
         script{"Chữ viết: {0}"}

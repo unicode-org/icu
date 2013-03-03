@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mgo.xml
  */
 mgo{
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
     zoneStrings{
         fallbackFormat{"{1} ({0})"}
         fallbackRegionFormat{"{1} ({0})"}

@@ -28,6 +28,10 @@ zh_Hans_SG{
             "NIO",
             "尼加拉瓜科多巴",
         }
+        SGD{
+            "$",
+            "新加坡元",
+        }
         XAG{
             "XAG",
             "白银",
@@ -36,5 +40,5 @@ zh_Hans_SG{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.81.63"}
+    Version{"2.0.82.45"}
 }

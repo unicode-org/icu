@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/si.xml
  */
 si{
-    Version{"2.0.81.30"}
+    Version{"2.0.82.42"}
     collations{
         dictionary{
             Sequence{

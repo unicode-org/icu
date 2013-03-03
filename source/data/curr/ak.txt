@@ -85,6 +85,10 @@ ak{
         }
         GHC{
             "GHC",
+            "Ghana Sidi (1979-2007)",
+        }
+        GHS{
+            "GH₵",
             "Ghana Sidi",
         }
         GMD{
@@ -232,5 +236,5 @@ ak{
             "Zimbabwe Dɔla",
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
 }

@@ -90,5 +90,5 @@ ee{
             "2: =%spellout-cardinal=lia;",
         }
     }
-    Version{"2.0.81.13"}
+    Version{"2.0.82.42"}
 }

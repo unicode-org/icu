@@ -249,7 +249,7 @@ km{
             tibt{"លេខ​តៃប៉ិ"}
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.45"}
     codePatterns{
         language{"ភាសា ៖ {0}"}
         script{"អក្សរ ៖ {0}"}

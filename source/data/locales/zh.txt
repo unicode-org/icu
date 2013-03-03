@@ -184,7 +184,7 @@ zh{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.0.82.15"}
+    Version{"2.0.82.60"}
     calendar{
         buddhist{
             eras{

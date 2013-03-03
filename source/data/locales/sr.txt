@@ -190,7 +190,7 @@ sr{
             }
         }
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.47"}
     calendar{
         buddhist{
             eras{
@@ -355,7 +355,7 @@ sr{
                 }
                 yM{
                     M{"y M - M"}
-                    y{"y M - M"}
+                    y{"M.y - M.y"}
                 }
                 yMEd{
                     M{"E, d.M.y. - E, d.M.y."}

@@ -751,10 +751,6 @@ ka{
             "SLL",
             "სიერა-ლეონეს ლეონე",
         }
-        SOS{
-            "SOS",
-            "SOS",
-        }
         SRD{
             "SRD",
             "სურინამული დოლარი",
@@ -1329,5 +1325,5 @@ ka{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.81.88"}
+    Version{"2.0.82.61"}
 }

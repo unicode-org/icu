@@ -1346,6 +1346,20 @@ root {
             }
         }
 
+        az-Lower {
+            file {
+                resource:process(transliterator) {"az_Lower.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        az-Title {
+            file {
+                resource:process(transliterator) {"az_Title.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
         az-Upper {
             file {
                 resource:process(transliterator) {"az_Upper.txt"}
@@ -1503,6 +1517,20 @@ root {
         ja_Latn-ru {
             file {
                 resource:process(transliterator) {"ja_Latn_ru.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        lt-Lower {
+            file {
+                resource:process(transliterator) {"lt_Lower.txt"}
+                direction {"FORWARD"}
+            }
+        }
+
+        lt-Title {
+            file {
+                resource:process(transliterator) {"lt_Title.txt"}
                 direction {"FORWARD"}
             }
         }
