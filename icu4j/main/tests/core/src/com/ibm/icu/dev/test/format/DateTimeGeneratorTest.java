@@ -361,14 +361,14 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "1\u670813\u65E5"},
         new String[] {"MMMMd", "1\u670813\u65E5"},
-        new String[] {"yQQQ", "1999/1Q"}, // *** expected result should be "1999Q1" with current data, changed test temporarily to match current result, needs investigation
+        new String[] {"yQQQ", "1999/1Q"}, // now current data produces y/QQQ => 1999/1Q
         new String[] {"hhmm", "\u5348\u5F8C11:58"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "1999\u5E741\u6708"}, // (new item for testing 6872<-5702)
-        new String[] {"MMMEd", "1\u670813\u65E5\u6C34"},
-        new String[] {"Ed", "13\u65E5\u6C34"},
+        new String[] {"MMMEd", "1\u670813\u65E5(\u6C34)"},
+        new String[] {"Ed", "13\u65E5(\u6C34)"},
         new String[] {"jmmssSSS", "23:58:59.123"},
         new ULocale("ja@calendar=japanese"), // (new locale for testing ticket 6872<-5702)
         new String[] {"yM", "\u5E73\u621011/1"},
@@ -384,8 +384,8 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
         new String[] {"yyyyMMMM", "\u5E73\u621011\u5E741\u6708"},
-        new String[] {"MMMEd", "1\u670813\u65E5\u6C34"}, // different than ICU4C's correct result, ICU4J code bug? #9952
-        new String[] {"Ed", "13\u65E5\u6C34"},
+        new String[] {"MMMEd", "1\u670813\u65E5(\u6C34)"},
+        new String[] {"Ed", "13\u65E5(\u6C34)"},
         new String[] {"jmmssSSS", "23:58:59.123"},
         new ULocale("zh_Hans_CN"),
         new String[] {"yM", "1999/1"},
@@ -426,7 +426,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"yMMM", "\u042F\u043D\u0432. 1999"},
         new String[] {"yMd", "13.01.1999"},
         new String[] {"yMMMd", "13 \u044F\u043D\u0432. 1999 \u0433."},
-        new String[] {"Md", "13.1"},
+        new String[] {"Md", "13.01"},
         new String[] {"MMMd", "13 \u044F\u043D\u0432."},
         new String[] {"MMMMd", "13 \u044F\u043D\u0432\u0430\u0440\u044F"},
         new String[] {"yQQQ", "1-\u0439 \u043A\u0432. 1999 \u0433."},
