@@ -241,9 +241,9 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         // ru                                                             // 9 ru
         UnicodeString("01.1999"),                                         // 00: yM    -> MM.y
         CharsToUnicodeString("\\u042F\\u043D\\u0432. 1999"),              // 01: yMMM  -> LLL y
-        UnicodeString("13.01.1999"),                                      // 02: yMd   -> d.MM.y
+        UnicodeString("13.01.1999"),                                      // 02: yMd   -> dd.MM.y
         CharsToUnicodeString("13 \\u044F\\u043D\\u0432. 1999 \\u0433."),  // 03: yMMMd -> d MMM y
-        UnicodeString("13.1"),                                            // 04: Md    -> d.M
+        UnicodeString("13.01"),                                           // 04: Md    -> dd.MM
         CharsToUnicodeString("13 \\u044F\\u043D\\u0432."),                // 05: MMMd  -> d MMM
         CharsToUnicodeString("13 \\u044F\\u043D\\u0432\\u0430\\u0440\\u044F"), // 06: MMMMd  -> d MMMM
         CharsToUnicodeString("1-\\u0439 \\u043A\\u0432. 1999 \\u0433."),  // 07: yQQQ  -> y QQQ
