@@ -45,8 +45,10 @@ typedef enum ULocaleDataExemplarSetType  {
     ULOCDATA_ES_AUXILIARY=1,
     /** Index Character set @stable ICU 4.8 */
     ULOCDATA_ES_INDEX=2,
+#ifndef U_HIDE_DRAFT_API
     /** Punctuation set @draft ICU 51 */
     ULOCDATA_ES_PUNCTUATION=3,
+#endif /* U_HIDE_DRAFT_API */
     /** One higher than the last valid type @stable ICU 3.4 */
     ULOCDATA_ES_COUNT=4
 } ULocaleDataExemplarSetType;

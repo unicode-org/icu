@@ -1,6 +1,6 @@
 /*
 *****************************************************************************************
-* Copyright (C) 2010-2012, International Business Machines
+* Copyright (C) 2010-2013, International Business Machines
 * Corporation and others. All Rights Reserved.
 *****************************************************************************************
 */
@@ -11,6 +11,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/localpointer.h"
 
@@ -60,7 +61,7 @@ typedef struct UGenderInfo UGenderInfo;
  * @return A UGenderInfo for the specified locale, or NULL if an error occurred.
  * @draft ICU 50
  */
-U_STABLE const UGenderInfo* U_EXPORT2
+U_DRAFT const UGenderInfo* U_EXPORT2
 ugender_getInstance(const char *locale, UErrorCode *status);
 
 
@@ -76,6 +77,7 @@ ugender_getInstance(const char *locale, UErrorCode *status);
 U_DRAFT UGender U_EXPORT2
 ugender_getListGender(const UGenderInfo* genderinfo, const UGender *genders, int32_t size, UErrorCode *status);
 
+#endif /* U_HIDE_DRAFT_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif

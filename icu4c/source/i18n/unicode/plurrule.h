@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2008-2012, International Business Machines Corporation and
+* Copyright (C) 2008-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -201,6 +201,7 @@ public:
      */
     static PluralRules* U_EXPORT2 forLocale(const Locale& locale, UErrorCode& status);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Provides access to the predefined <code>PluralRules</code> for a given
      * locale and the plural type.
@@ -218,6 +219,7 @@ public:
      * @draft ICU 50
      */
     static PluralRules* U_EXPORT2 forLocale(const Locale& locale, UPluralType type, UErrorCode& status);
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Given a number, returns the keyword of the first rule that applies to

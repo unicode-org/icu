@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2008-2012, International Business Machines Corporation and
+* Copyright (C) 2008-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -19,6 +19,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/locid.h"
 #include "unicode/ugender.h"
@@ -69,7 +70,6 @@ public:
      * Destructor.
      *
      * @draft ICU 50
-     * @internal
      */
     virtual ~GenderInfo();
 
@@ -101,6 +101,7 @@ private:
 
 U_NAMESPACE_END
 
+#endif /* U_HIDE_DRAFT_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // _GENDER

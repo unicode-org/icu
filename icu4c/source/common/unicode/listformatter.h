@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2012, International Business Machines
+*   Copyright (C) 2012-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -17,9 +17,12 @@
 #ifndef __LISTFORMATTER_H__
 #define __LISTFORMATTER_H__
 
+#include "unicode/utypes.h"
+
+#ifndef U_HIDE_DRAFT_API
+
 #include "unicode/unistr.h"
 #include "unicode/locid.h"
-
 
 U_NAMESPACE_BEGIN
 
@@ -52,6 +55,7 @@ struct ListFormatData : public UMemory {
  * as "Alice, Bob, Charlie and Delta" in English.
  *
  * The ListFormatter class is not intended for public subclassing.
+ * @draft ICU 50
  */
 class U_COMMON_API ListFormatter : public UObject{
 
@@ -120,4 +124,5 @@ class U_COMMON_API ListFormatter : public UObject{
 
 U_NAMESPACE_END
 
+#endif /* U_HIDE_DRAFT_API */
 #endif

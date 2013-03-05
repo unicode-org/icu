@@ -15,7 +15,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_INTERNAL_API
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/format.h"
 #include "unicode/timezone.h"
@@ -58,6 +58,7 @@ typedef enum UTimeZoneFormatStyle {
      * @draft ICU 50
      */
     UTZFMT_STYLE_LOCALIZED_GMT,
+#ifndef U_HIDE_DRAFT_API
     /**
      * Short localized GMT offset format, such as "GMT-5", "UTC+1:30"
      * This style is equivalent to the LDML date format pattern "O".
@@ -149,6 +150,7 @@ typedef enum UTimeZoneFormatStyle {
      * @draft ICU 51
      */
     UTZFMT_STYLE_EXEMPLAR_LOCATION
+#endif /* U_HIDE_DRAFT_API */
 } UTimeZoneFormatStyle;
 
 /**
@@ -176,6 +178,7 @@ typedef enum UTimeZoneFormatGMTOffsetPatternType {
      * @draft ICU 50
      */
     UTZFMT_PAT_NEGATIVE_HMS,
+#ifndef U_HIDE_DRAFT_API
     /**
      * Positive offset with hours field
      * @draft ICU 51
@@ -186,12 +189,15 @@ typedef enum UTimeZoneFormatGMTOffsetPatternType {
      * @draft ICU 51
      */
     UTZFMT_PAT_NEGATIVE_H,
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Number of UTimeZoneFormatGMTOffsetPatternType types.
      * @internal
      */
     UTZFMT_PAT_COUNT
+#endif  /* U_HIDE_INTERNAL_API */
 } UTimeZoneFormatGMTOffsetPatternType;
 
 /**
@@ -430,6 +436,7 @@ public:
      */
     void setDefaultParseOptions(uint32_t flags);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns the ISO 8601 basic time zone string for the given offset.
      * For example, "-08", "-0830" and "Z"
@@ -465,6 +472,7 @@ public:
      */
     UnicodeString& formatOffsetISO8601Extended(int32_t offset, UBool useUtcIndicator, UBool isShort, UBool ignoreSeconds,
         UnicodeString& result, UErrorCode& status) const;
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns the localized GMT(UTC) offset format for the given offset.
@@ -487,6 +495,7 @@ public:
      */
     UnicodeString& formatOffsetLocalizedGMT(int32_t offset, UnicodeString& result, UErrorCode& status) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns the short localized GMT(UTC) offset format for the given offset.
      * The short localized GMT offset is defined by;
@@ -507,6 +516,7 @@ public:
      * @draft ICU 51
      */
     UnicodeString& formatOffsetShortLocalizedGMT(int32_t offset, UnicodeString& result, UErrorCode& status) const;
+#endif /* U_HIDE_DRAFT_API */
 
     using Format::format;
 
@@ -556,6 +566,7 @@ public:
      */
     int32_t parseOffsetLocalizedGMT(const UnicodeString& text, ParsePosition& pos) const;
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Returns offset from GMT(UTC) in milliseconds for the given short localized GMT
      * offset format string. When the given string cannot be parsed, this method
@@ -569,6 +580,7 @@ public:
      * @draft ICU 51
      */
     int32_t parseOffsetShortLocalizedGMT(const UnicodeString& text, ParsePosition& pos) const;
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Returns a <code>TimeZone</code> by parsing the time zone string according to
@@ -1072,7 +1084,7 @@ private:
 
 U_NAMESPACE_END
 
-#endif  /* U_HIDE_INTERNAL_API */
-#endif
+#endif /* ndef U_HIDE_DRAFT_API */
+#endif /* !UCONFIG_NO_FORMATTING */
 #endif
 

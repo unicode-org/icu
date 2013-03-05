@@ -1,6 +1,6 @@
 /*
 *****************************************************************************************
-* Copyright (C) 2012, International Business Machines
+* Copyright (C) 2013, International Business Machines
 * Corporation and others. All Rights Reserved.
 *****************************************************************************************
 */
@@ -19,6 +19,7 @@
  * @draft ICU 51
  */
 enum UDisplayContextType {
+#ifndef U_HIDE_DRAFT_API
     /**
      * Type to retrieve the dialect handling setting, e.g.
      * UDISPCTX_STANDARD_NAMES or UDISPCTX_DIALECT_NAMES.
@@ -32,6 +33,7 @@ enum UDisplayContextType {
      * @draft ICU 51
      */
     UDISPCTX_TYPE_CAPITALIZATION = 1
+#endif /* U_HIDE_DRAFT_API */
 };
 /**
 *  @draft ICU 51
@@ -45,6 +47,7 @@ typedef enum UDisplayContextType UDisplayContextType;
  * @draft ICU 51
  */
 enum UDisplayContext {
+#ifndef U_HIDE_DRAFT_API
     /**
      * ================================
      * DIALECT_HANDLING can be set to one of UDISPCTX_STANDARD_NAMES or
@@ -104,6 +107,7 @@ enum UDisplayContext {
      * @draft ICU 51
      */
     UDISPCTX_CAPITALIZATION_FOR_STANDALONE = (UDISPCTX_TYPE_CAPITALIZATION<<8) + 4
+#endif /* U_HIDE_DRAFT_API */
 };
 /**
 *  @draft ICU 51

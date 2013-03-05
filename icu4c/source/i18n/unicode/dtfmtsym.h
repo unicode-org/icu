@@ -283,14 +283,16 @@ public:
          ABBREVIATED,
          WIDE,
          NARROW,
+#ifndef U_HIDE_DRAFT_API
          /**
           * Short width is currently only supported for weekday names.
           * @draft ICU 51
           */
          SHORT,
+#endif /* U_HIDE_DRAFT_API */
          /**
           */
-         DT_WIDTH_COUNT
+         DT_WIDTH_COUNT = 4
     };
 
     /**
@@ -740,15 +742,12 @@ private:
      */
     UnicodeString   fLocalPatternChars;
 
-#ifndef U_HIDE_INTERNAL_API
     /**
      * Capitalization transforms. For each usage type, the first array element indicates
      * whether to titlecase for uiListOrMenu context, the second indicates whether to
      * titlecase for stand-alone context.
      */
      UBool fCapitalization[kCapContextUsageTypeCount][2];
-#endif
-
 
 private:
     /** valid/actual locale information 

@@ -14,7 +14,7 @@
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
-#ifndef U_HIDE_INTERNAL_API
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/uloc.h"
 #include "unicode/unistr.h"
@@ -61,11 +61,13 @@ typedef enum UTimeZoneNameType {
      * @draft ICU 50
      */
     UTZNM_SHORT_DAYLIGHT    = 0x20,
+#ifndef U_HIDE_DRAFT_API
     /**
      * Exemplar location name, such as "Los Angeles".
      * @draft ICU 51
      */
     UTZNM_EXEMPLAR_LOCATION = 0x40
+#endif /* U_HIDE_DRAFT_API */
 } UTimeZoneNameType;
 
 U_CDECL_END
@@ -295,6 +297,7 @@ public:
          */
         virtual ~MatchInfoCollection();
 
+#ifndef U_HIDE_INTERNAL_API
         /**
          * Adds a zone match.
          * @param nameType The name type.
@@ -360,6 +363,7 @@ public:
          * @internal
          */
         UBool getMetaZoneIDAt(int32_t idx, UnicodeString& mzID) const;
+#endif  /* U_HIDE_INTERNAL_API */
 
     private:
         UVector* fMatches;  // vector of MatchEntry
@@ -385,6 +389,6 @@ public:
 
 U_NAMESPACE_END
 
-#endif  /* U_HIDE_INTERNAL_API */
+#endif /* U_HIDE_DRAFT_API */
 #endif
 #endif

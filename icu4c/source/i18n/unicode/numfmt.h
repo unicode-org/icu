@@ -623,7 +623,6 @@ public:
                        Formattable& result,
                        UErrorCode& status) const;
 
-/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Parses text from the given string as a currency amount.  Unlike
      * the parse() method, this method will attempt to parse a generic
@@ -986,6 +985,7 @@ protected:
      */
     virtual void getEffectiveCurrency(UChar* result, UErrorCode& ec) const;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Creates the specified number format style of the desired locale.
      * If mustBeDecimalFormat is TRUE, then the returned pointer is
@@ -996,6 +996,7 @@ protected:
                                       UNumberFormatStyle style,
                                       UBool mustBeDecimalFormat,
                                       UErrorCode& errorCode);
+#endif  /* U_HIDE_INTERNAL_API */
 
 private:
 
