@@ -2389,11 +2389,6 @@ public class SimpleDateFormat extends DateFormat {
      * in the text are accepted instead.</li>
      * <ul><li>we are after a non-numeric field, and the text starts with a ".", we skip it.</li>
      * </ul>
-     * @param text
-     * @param pos
-     * @param patternLiteral
-     * @param complete
-     * @return
      */
     private int matchLiteral(String text, int pos, Object[] items, int itemIndex, boolean[] complete) {
         int originalPos = pos;
