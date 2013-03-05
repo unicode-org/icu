@@ -745,6 +745,7 @@ ucal_setTimeZone(UCalendar*    cal,
                  int32_t       len,
                  UErrorCode*   status);
 
+#ifndef U_HIDE_DRAFT_API
 /** 
  * Get the ID of the UCalendar's time zone. 
  * 
@@ -760,6 +761,7 @@ ucal_getTimeZoneID(const UCalendar *cal,
                    UChar *result,
                    int32_t resultLength,
                    UErrorCode *status);
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Possible formats for a UCalendar's display name 

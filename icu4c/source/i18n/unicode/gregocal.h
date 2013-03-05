@@ -468,7 +468,6 @@ public:
      */
     static UClassID U_EXPORT2 getStaticClassID(void);
 
-/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Returns the calendar type name string for this Calendar object.
      * The returned string is the legacy ICU calendar attribute value,

@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (C) 1999-2012, International Business Machines
+* Copyright (C) 1999-2013, International Business Machines
 * Corporation and others. All Rights Reserved.
 **********************************************************************
 *   Date        Name        Description
@@ -1308,7 +1308,6 @@ inline void Transliterator::setID(const UnicodeString& id) {
     ID.truncate(ID.length()-1);
 }
 
-#ifndef U_HIDE_INTERNAL_API
 inline Transliterator::Token Transliterator::integerToken(int32_t i) {
     Token t;
     t.integer = i;
@@ -1320,7 +1319,6 @@ inline Transliterator::Token Transliterator::pointerToken(void* p) {
     t.pointer = p;
     return t;
 }
-#endif
 
 U_NAMESPACE_END
 

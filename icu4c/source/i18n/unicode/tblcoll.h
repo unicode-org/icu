@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 1996-2012, International Business Machines Corporation and
+* Copyright (C) 1996-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 ******************************************************************************
 */
@@ -394,6 +394,7 @@ public:
      */
     virtual void getVersion(UVersionInfo info) const;
 
+#ifndef U_HIDE_DEPRECATED_API 
     /**
      * Returns the maximum length of any expansion sequences that end with the
      * specified comparison order.
@@ -411,6 +412,7 @@ public:
      * @deprecated ICU 51 Use CollationElementIterator::getMaxExpansion() instead.
      */
     int32_t getMaxExpansion(int32_t order) const;
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
      * Returns a unique class ID POLYMORPHICALLY. Pure virtual override. This
@@ -841,12 +843,10 @@ inline void RuleBasedCollator::setUCollator(UCollator     *collator)
     setRuleStringFromCollator();
 }
 
-#ifndef U_HIDE_INTERNAL_API
 inline const UCollator * RuleBasedCollator::getUCollator()
 {
     return ucollator;
 }
-#endif
 
 U_NAMESPACE_END
 

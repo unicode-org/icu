@@ -250,6 +250,7 @@ typedef enum UNumberFormatPadPosition {
     UNUM_PAD_AFTER_SUFFIX
 } UNumberFormatPadPosition;
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Constants for specifying short or long format.
  * @draft ICU 51
@@ -261,6 +262,7 @@ typedef enum UNumberCompactStyle {
   UNUM_LONG
   /** @draft ICU 51 */
 } UNumberCompactStyle;
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Constants for specifying currency spacing
@@ -795,6 +797,7 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_PARSE_ALL_INPUT,
 #endif
+#ifndef U_HIDE_DRAFT_API
   /** 
     * Scale, which adjusts the position of the
     * decimal point when formatting.  Amounts will be multiplied by 10 ^ (scale)
@@ -804,7 +807,9 @@ typedef enum UNumberFormatAttribute {
     * <p>Example: setting the scale to -4, 123 formats as "0.0123"
     *
    * @draft ICU 51 */
-  UNUM_SCALE,
+  UNUM_SCALE = UNUM_LENIENT_PARSE + 2,
+#endif /* U_HIDE_DRAFT_API */
+#ifndef U_HIDE_INTERNAL_API
   /** Count of "regular" numeric attributes.
    * @internal */
   UNUM_NUMERIC_ATTRIBUTE_COUNT,
@@ -813,13 +818,15 @@ typedef enum UNumberFormatAttribute {
    * All items after this one are stored in boolean form.
    * @internal */
   UNUM_MAX_NONBOOLEAN_ATTRIBUTE = 0x0FFF,
+#endif  /* U_HIDE_INTERNAL_API */
 
+#ifndef U_HIDE_DRAFT_API
   /** If 1, specifies that if setting the "max integer digits" attribute would truncate a value, set an error status rather than silently truncating.
    * For example,  formatting the value 1234 with 4 max int digits would succeed, but formatting 12345 would fail. There is no effect on parsing.
    * Default: 0 (not set)
    * @draft ICU 50
    */
-  UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS,
+  UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS = 0x1000,
   /** 
    * if this attribute is set to 1, specifies that, if the pattern doesn't contain an exponent, the exponent will not be parsed. If the pattern does contain an exponent, this attribute has no effect.
    * Has no effect on formatting.
@@ -827,10 +834,13 @@ typedef enum UNumberFormatAttribute {
    * @draft ICU 50
    */
   UNUM_PARSE_NO_EXPONENT,
+#endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_INTERNAL_API
   /** Limit of boolean attributes.
    * @internal */
   UNUM_LIMIT_BOOLEAN_ATTRIBUTE
+#endif  /* U_HIDE_INTERNAL_API */
 } UNumberFormatAttribute;
 
 /**

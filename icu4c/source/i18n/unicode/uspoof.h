@@ -203,13 +203,15 @@ typedef enum USpoofChecks {
       */
     USPOOF_RESTRICTION_LEVEL        = 16,
 
+#ifndef U_HIDE_DEPRECATED_API 
     /** Check that an identifier contains only characters from a
       * single script (plus chars from the common and inherited scripts.)
       * Applies to checks of a single identifier check only.
       * @deprecated ICU 51  Use RESTRICTION_LEVEL instead.
       */
     USPOOF_SINGLE_SCRIPT            =  USPOOF_RESTRICTION_LEVEL,
-    
+#endif  /* U_HIDE_DEPRECATED_API */
+   
     /** Check an identifier for the presence of invisible characters,
       * such as zero-width spaces, or character sequences that are
       * likely not to display, such as multiple occurrences of the same
@@ -224,6 +226,7 @@ typedef enum USpoofChecks {
       */
     USPOOF_CHAR_LIMIT               =  64,
 
+#ifndef U_HIDE_DRAFT_API
    /**
      * Check that an identifier does not include decimal digits from
      * more than one numbering system.
@@ -231,6 +234,7 @@ typedef enum USpoofChecks {
      * @draft ICU 51
      */
     USPOOF_MIXED_NUMBERS            = 128,
+#endif /* U_HIDE_DRAFT_API */
 
    /**
      * Enable all spoof checks.
@@ -239,6 +243,7 @@ typedef enum USpoofChecks {
      */
     USPOOF_ALL_CHECKS               = 0xFFFF,
 
+#ifndef U_HIDE_DRAFT_API
     /**
       * Enable the return of auxillary (non-error) information in the
       * upper bits of the check results value. 
@@ -252,10 +257,12 @@ typedef enum USpoofChecks {
       * @draft ICU 51
       */
     USPOOF_AUX_INFO                  = 0x40000000
+#endif /* U_HIDE_DRAFT_API */
 
     } USpoofChecks;
     
     
+#ifndef U_HIDE_DRAFT_API
     /**
      * Constants from UAX #39 for use in setRestrictionLevel(), and
      * for returned identifier restriction levels in check results.
@@ -295,6 +302,7 @@ typedef enum USpoofChecks {
          */
         USPOOF_UNRESTRICTIVE = 0x50000000
     } URestrictionLevel;
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  *  Create a Unicode Spoof Checker, configured to perform all 
@@ -441,6 +449,7 @@ uspoof_setChecks(USpoofChecker *sc, int32_t checks, UErrorCode *status);
 U_STABLE int32_t U_EXPORT2
 uspoof_getChecks(const USpoofChecker *sc, UErrorCode *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
   * Set the loosest restriction level allowed. The default if this function 
   * is not called is HIGHLY_RESTRICTIVE.
@@ -462,6 +471,7 @@ uspoof_setRestrictionLevel(USpoofChecker *sc, URestrictionLevel restrictionLevel
   */
 U_DRAFT URestrictionLevel U_EXPORT2
 uspoof_getRestrictionLevel(const USpoofChecker *sc);
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Limit characters that are acceptable in identifiers being checked to those 
@@ -954,6 +964,7 @@ uspoof_getSkeletonUnicodeString(const USpoofChecker *sc,
 #endif   /* U_SHOW_CPLUSPLUS_API */
 
 
+#ifndef U_HIDE_DRAFT_API
 /**
   * Get the set of Candidate Characters for Inclusion in Identifiers, as defined
   * in Unicode UAX #31, http://www.unicode.org/reports/tr31/#Table_Candidate_Characters_for_Inclusion_in_Identifiers
@@ -981,8 +992,6 @@ uspoof_getInclusionSet(UErrorCode *status);
   */
 U_DRAFT const USet * U_EXPORT2
 uspoof_getRecommendedSet(UErrorCode *status);
-
-
 
 #if U_SHOW_CPLUSPLUS_API
 
@@ -1015,6 +1024,7 @@ U_DRAFT const icu::UnicodeSet * U_EXPORT2
 uspoof_getRecommendedUnicodeSet(UErrorCode *status);
 
 #endif /* U_SHOW_CPLUSPLUS_API */
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Serialize the data for a spoof detector into a chunk of memory.

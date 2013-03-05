@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 2012, International Business Machines
+*   Copyright (C) 2012-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 ********************************************************************************
 *
@@ -18,6 +18,7 @@
  */
 
 #if !UCONFIG_NO_FORMATTING
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/decimfmt.h"
 
@@ -47,6 +48,7 @@ class PluralRules;
  * Resetting the pattern prefixes or suffixes is not supported; the method calls
  * are ignored.
  * <p>
+ * @draft ICU 51
  */
 class U_I18N_API CompactDecimalFormat : public DecimalFormat {
 public:
@@ -260,7 +262,7 @@ public:
                        Formattable& result,
                        UErrorCode& status) const;
 
-/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
+/* Cannot use #ifndef U_HIDE_INTERNAL_API for the following draft method since it is virtual */
     /**
      * Parses text from the given string as a currency amount.  Unlike
      * the parse() method, this method will attempt to parse a generic
@@ -324,6 +326,7 @@ private:
 
 U_NAMESPACE_END
 
+#endif /* U_HIDE_DRAFT_API */
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 #endif // __COMPACT_DECIMAL_FORMAT_H__

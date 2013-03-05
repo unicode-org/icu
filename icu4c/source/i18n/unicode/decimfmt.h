@@ -41,6 +41,7 @@
 #include "unicode/curramt.h"
 #include "unicode/enumset.h"
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * \def UNUM_DECIMALFORMAT_INTERNAL_SIZE
  * @internal
@@ -48,6 +49,7 @@
 #if UCONFIG_FORMAT_FASTPATHS_49
 #define UNUM_DECIMALFORMAT_INTERNAL_SIZE 16
 #endif
+#endif  /* U_HIDE_INTERNAL_API */
 
 U_NAMESPACE_BEGIN
 
@@ -758,7 +760,7 @@ public:
      * @param style             style of decimal format
      * @param status            Output param set to success/failure code. If the
      *                          pattern is invalid this will be set to a failure code.
-     * @internal ICU 4.2
+     * @internal
      */
     DecimalFormat(  const UnicodeString& pattern,
                     DecimalFormatSymbols* symbolsToAdopt,
@@ -1211,7 +1213,6 @@ public:
                        Formattable& result,
                        UErrorCode& status) const;
 
-/* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
     /**
      * Parses text from the given string as a currency amount.  Unlike
      * the parse() method, this method will attempt to parse a generic
@@ -2381,11 +2382,13 @@ private:
 
 protected:
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Rounds a value according to the rules of this object.
      * @internal
      */
     DigitList& _round(const DigitList& number, DigitList& adjustedNum, UBool& isNegative, UErrorCode& status) const;
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Returns the currency in effect for this formatter.  Subclasses
@@ -2457,13 +2460,10 @@ DecimalFormat::format(int32_t number,
     return format((int64_t)number, appendTo, pos);
 }
 
-#ifndef U_HIDE_INTERNAL_API
 inline const UnicodeString &
 DecimalFormat::getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol symbol) const {
     return fSymbols->getConstSymbol(symbol);
 }
-
-#endif
 
 U_NAMESPACE_END
 
