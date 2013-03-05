@@ -1,0 +1,1050 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/cy.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/cy.xml
+ */
+cy{
+    AuxExemplarCharacters{"[k q v x z]"}
+    ExemplarCharacters{
+        "[a á à â ä b c {ch} d {dd} e é è ê ë f {ff} g {ng} h i í ì î ï j l {ll} m n "
+        "o ó ò ô ö p {ph} r {rh} s t {th} u ú ù û ü w ẃ ẁ ŵ ẅ y ý ỳ ŷ ÿ]"
+    }
+    ExemplarCharactersIndex{
+        "[A B C {CH} D {DD} E F {FF} G {NG} H I J L {LL} M N O P {PH} R {RH} S T {TH}"
+        " U W Y]"
+    }
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
+        "″]"
+    }
+    LocaleScript{
+        "Latn",
+    }
+    NumberElements{
+        latn{
+            patterns{
+                currencyFormat{"¤#,##0.00"}
+                decimalFormat{"#,##0.###"}
+                percentFormat{"#,##0%"}
+                scientificFormat{"#E0"}
+            }
+            patternsLong{
+                decimalFormat{
+                    1000{
+                        few{"0 mil"}
+                        many{"0 mil"}
+                        one{"0 fil"}
+                        other{"0 mil"}
+                        two{"0 fil"}
+                        zero{"0 mil"}
+                    }
+                    10000{
+                        few{"00 mil"}
+                        many{"00 mil"}
+                        one{"00 mil"}
+                        other{"00 mil"}
+                        two{"00 mil"}
+                        zero{"00 mil"}
+                    }
+                    100000{
+                        few{"000 mil"}
+                        many{"000 mil"}
+                        one{"000 mil"}
+                        other{"000 mil"}
+                        two{"000 mil"}
+                        zero{"000 mil"}
+                    }
+                    1000000{
+                        few{"0 miliwn"}
+                        many{"0 miliwn"}
+                        one{"0 filiwn"}
+                        other{"0 miliwn"}
+                        two{"0 filiwn"}
+                        zero{"0 miliwn"}
+                    }
+                    10000000{
+                        few{"00 miliwn"}
+                        many{"00 miliwn"}
+                        one{"00 miliwn"}
+                        other{"00 miliwn"}
+                        two{"00 miliwn"}
+                        zero{"00 miliwn"}
+                    }
+                    100000000{
+                        few{"000 miliwn"}
+                        many{"000 miliwn"}
+                        one{"000 miliwn"}
+                        other{"000 miliwn"}
+                        two{"000 miliwn"}
+                        zero{"000 miliwn"}
+                    }
+                    1000000000{
+                        few{"0 biliwn"}
+                        many{"0 biliwn"}
+                        one{"0 biliwn"}
+                        other{"0 biliwn"}
+                        two{"0 biliwn"}
+                        zero{"0 biliwn"}
+                    }
+                    10000000000{
+                        few{"00 biliwn"}
+                        many{"00 biliwn"}
+                        one{"00 biliwn"}
+                        other{"00 biliwn"}
+                        two{"00 biliwn"}
+                        zero{"00 biliwn"}
+                    }
+                    100000000000{
+                        few{"000 biliwn"}
+                        many{"000 biliwn"}
+                        one{"000 biliwn"}
+                        other{"000 biliwn"}
+                        two{"000 biliwn"}
+                        zero{"000 biliwn"}
+                    }
+                    1000000000000{
+                        few{"0 thriliwn"}
+                        many{"0 thriliwn"}
+                        one{"0 triliwn"}
+                        other{"0 triliwn"}
+                        two{"0 driliwn"}
+                        zero{"0 triliwn"}
+                    }
+                    10000000000000{
+                        few{"00 triliwn"}
+                        many{"00 triliwn"}
+                        one{"00 triliwn"}
+                        other{"00 triliwn"}
+                        two{"00 triliwn"}
+                        zero{"00 triliwn"}
+                    }
+                    100000000000000{
+                        few{"000 triliwn"}
+                        many{"000 triliwn"}
+                        one{"000 triliwn"}
+                        other{"000 triliwn"}
+                        two{"000 triliwn"}
+                        zero{"000 triliwn"}
+                    }
+                }
+            }
+            patternsShort{
+                decimalFormat{
+                    1000{
+                        few{"0K"}
+                        many{"0K"}
+                        one{"0K"}
+                        other{"0K"}
+                        two{"0K"}
+                        zero{"0K"}
+                    }
+                    10000{
+                        few{"00K"}
+                        many{"00K"}
+                        one{"00K"}
+                        other{"00K"}
+                        two{"00K"}
+                        zero{"00K"}
+                    }
+                    100000{
+                        few{"000K"}
+                        many{"000K"}
+                        one{"000K"}
+                        other{"000K"}
+                        two{"000K"}
+                        zero{"000K"}
+                    }
+                    1000000{
+                        few{"0M"}
+                        many{"0M"}
+                        one{"0M"}
+                        other{"0M"}
+                        two{"0M"}
+                        zero{"0M"}
+                    }
+                    10000000{
+                        few{"00M"}
+                        many{"00M"}
+                        one{"00M"}
+                        other{"00M"}
+                        two{"00M"}
+                        zero{"00M"}
+                    }
+                    100000000{
+                        few{"000M"}
+                        many{"000M"}
+                        one{"000M"}
+                        other{"000M"}
+                        two{"000M"}
+                        zero{"000M"}
+                    }
+                    1000000000{
+                        few{"0B"}
+                        many{"0B"}
+                        one{"0B"}
+                        other{"0B"}
+                        two{"0B"}
+                        zero{"0B"}
+                    }
+                    10000000000{
+                        few{"00B"}
+                        many{"00B"}
+                        one{"00B"}
+                        other{"00B"}
+                        two{"00B"}
+                        zero{"00B"}
+                    }
+                    100000000000{
+                        few{"000B"}
+                        many{"000B"}
+                        one{"000B"}
+                        other{"000B"}
+                        two{"000B"}
+                        zero{"000B"}
+                    }
+                    1000000000000{
+                        few{"0T"}
+                        many{"0T"}
+                        one{"0T"}
+                        other{"0T"}
+                        two{"0T"}
+                        zero{"0T"}
+                    }
+                    10000000000000{
+                        few{"00T"}
+                        many{"00T"}
+                        one{"00T"}
+                        other{"00T"}
+                        two{"00T"}
+                        zero{"00T"}
+                    }
+                    100000000000000{
+                        few{"000T"}
+                        many{"000T"}
+                        one{"000T"}
+                        other{"000T"}
+                        two{"000T"}
+                        zero{"000T"}
+                    }
+                }
+            }
+            symbols{
+                decimal{"."}
+                exponential{"E"}
+                group{","}
+                infinity{"∞"}
+                list{";"}
+                minusSign{"-"}
+                nan{"NaN"}
+                perMille{"‰"}
+                percentSign{"%"}
+                plusSign{"+"}
+            }
+        }
+    }
+    Version{"2.0.82.51"}
+    calendar{
+        generic{
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM y G",
+                "d MMMM y G",
+                "d MMM y G",
+                "dd/MM/y GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, d/M"}
+                MMM{"LLL"}
+                MMMEd{"E, d MMM"}
+                MMMd{"d MMM"}
+                Md{"d/M"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"E, d/M/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, d MMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d/M/y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, d/M – E, d/M"}
+                    d{"E, d/M – E, d/M"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, d MMM – E, d MMM"}
+                    d{"E, d MMM – E, d MMM"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"d–d MMM"}
+                }
+                Md{
+                    M{"d/M – d/M"}
+                    d{"d/M – d/M"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"M/y – M/y"}
+                    y{"M/y – M/y"}
+                }
+                yMEd{
+                    M{"E, d/M/y - E, d/M/y"}
+                    d{"E, d/M/y - E, d/M/y"}
+                    y{"E, d/M/y - E, d/M/y"}
+                }
+                yMMM{
+                    M{"MMM - MMM, y"}
+                    y{"MMM y - MMM y"}
+                }
+                yMMMEd{
+                    M{"E, d MMM - E, d MMM, y"}
+                    d{"E, d MMM - E, d MMM, y"}
+                    y{"E, d MMM, y - E, d MMM, y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM, y"}
+                    d{"d-d MMM, y"}
+                    y{"d MMM, y - d MMM, y"}
+                }
+                yMd{
+                    M{"d/M/y - d/M/y"}
+                    d{"d/M/y - d/M/y"}
+                    y{"d/M/y - d/M/y"}
+                }
+            }
+        }
+        gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE, d MMMM y",
+                "d MMMM y",
+                "d MMM y",
+                "dd/MM/y",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                H{"HH"}
+                Hm{"HH:mm"}
+                Hms{"HH:mm:ss"}
+                M{"L"}
+                MEd{"E, d/M"}
+                MMM{"LLL"}
+                MMMEd{"E, d MMM"}
+                MMMd{"d MMM"}
+                Md{"d/M"}
+                h{"h a"}
+                hm{"h:mm a"}
+                hms{"h:mm:ss a"}
+                ms{"mm:ss"}
+                y{"y"}
+                yM{"M/y"}
+                yMEd{"E, d/M/y"}
+                yMMM{"MMM y"}
+                yMMMEd{"E, d MMM y"}
+                yMMMd{"d MMM y"}
+                yMd{"d/M/y"}
+                yQQQ{"QQQ y"}
+                yQQQQ{"QQQQ y"}
+            }
+            dayNames{
+                format{
+                    abbreviated{
+                        "Sul",
+                        "Llun",
+                        "Maw",
+                        "Mer",
+                        "Iau",
+                        "Gwen",
+                        "Sad",
+                    }
+                    narrow{
+                        "S",
+                        "Ll",
+                        "M",
+                        "M",
+                        "I",
+                        "G",
+                        "S",
+                    }
+                    short{
+                        "Su",
+                        "Ll",
+                        "Ma",
+                        "Me",
+                        "Ia",
+                        "Gw",
+                        "Sa",
+                    }
+                    wide{
+                        "Dydd Sul",
+                        "Dydd Llun",
+                        "Dydd Mawrth",
+                        "Dydd Mercher",
+                        "Dydd Iau",
+                        "Dydd Gwener",
+                        "Dydd Sadwrn",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Sul",
+                        "Llun",
+                        "Maw",
+                        "Mer",
+                        "Iau",
+                        "Gwe",
+                        "Sad",
+                    }
+                    narrow{
+                        "S",
+                        "Ll",
+                        "M",
+                        "M",
+                        "I",
+                        "G",
+                        "S",
+                    }
+                    short{
+                        "Su",
+                        "Ll",
+                        "Ma",
+                        "Me",
+                        "Ia",
+                        "Gw",
+                        "Sa",
+                    }
+                    wide{
+                        "Dydd Sul",
+                        "Dydd Llun",
+                        "Dydd Mawrth",
+                        "Dydd Mercher",
+                        "Dydd Iau",
+                        "Dydd Gwener",
+                        "Dydd Sadwrn",
+                    }
+                }
+            }
+            eras{
+                abbreviated{
+                    "CC",
+                    "OC",
+                }
+                narrow{
+                    "C",
+                    "O",
+                }
+                wide{
+                    "Cyn Crist",
+                    "Oed Crist",
+                }
+            }
+            intervalFormats{
+                H{
+                    H{"HH–HH"}
+                }
+                Hm{
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
+                }
+                Hmv{
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
+                }
+                Hv{
+                    H{"HH–HH v"}
+                }
+                M{
+                    M{"M-M"}
+                }
+                MEd{
+                    M{"E, d/M – E, d/M"}
+                    d{"E, d/M – E, d/M"}
+                }
+                MMM{
+                    M{"MMM-MMM"}
+                }
+                MMMEd{
+                    M{"E, d MMM – E, d MMM"}
+                    d{"E, d MMM – E, d MMM"}
+                }
+                MMMM{
+                    M{"LLLL-LLLL"}
+                }
+                MMMd{
+                    M{"d MMM – d MMM"}
+                    d{"d–d MMM"}
+                }
+                Md{
+                    M{"d/M – d/M"}
+                    d{"d/M – d/M"}
+                }
+                d{
+                    d{"d-d"}
+                }
+                fallback{"{0} – {1}"}
+                h{
+                    a{"h a – h a"}
+                    h{"h–h a"}
+                }
+                hm{
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm–h:mm a"}
+                    m{"h:mm–h:mm a"}
+                }
+                hmv{
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm–h:mm a v"}
+                    m{"h:mm–h:mm a v"}
+                }
+                hv{
+                    a{"h a – h a v"}
+                    h{"h–h a v"}
+                }
+                y{
+                    y{"y-y"}
+                }
+                yM{
+                    M{"M/y – M/y"}
+                    y{"M/y – M/y"}
+                }
+                yMEd{
+                    M{"E, d/M/y - E, d/M/y"}
+                    d{"E, d/M/y - E, d/M/y"}
+                    y{"E, d/M/y - E, d/M/y"}
+                }
+                yMMM{
+                    M{"MMM - MMM, y"}
+                    y{"MMM y - MMM y"}
+                }
+                yMMMEd{
+                    M{"E, d MMM - E, d MMM, y"}
+                    d{"E, d MMM - E, d MMM, y"}
+                    y{"E, d MMM, y - E, d MMM, y"}
+                }
+                yMMMM{
+                    M{"MMMM–MMMM y"}
+                    y{"MMMM y – MMMM y"}
+                }
+                yMMMd{
+                    M{"d MMM - d MMM, y"}
+                    d{"d-d MMM, y"}
+                    y{"d MMM, y - d MMM, y"}
+                }
+                yMd{
+                    M{"d/M/y - d/M/y"}
+                    d{"d/M/y - d/M/y"}
+                    y{"d/M/y - d/M/y"}
+                }
+            }
+            monthNames{
+                format{
+                    abbreviated{
+                        "Ion",
+                        "Chwef",
+                        "Mawrth",
+                        "Ebrill",
+                        "Mai",
+                        "Meh",
+                        "Gorff",
+                        "Awst",
+                        "Medi",
+                        "Hyd",
+                        "Tach",
+                        "Rhag",
+                    }
+                    narrow{
+                        "I",
+                        "Ch",
+                        "M",
+                        "E",
+                        "M",
+                        "M",
+                        "G",
+                        "A",
+                        "M",
+                        "H",
+                        "T",
+                        "Rh",
+                    }
+                    wide{
+                        "Ionawr",
+                        "Chwefror",
+                        "Mawrth",
+                        "Ebrill",
+                        "Mai",
+                        "Mehefin",
+                        "Gorffennaf",
+                        "Awst",
+                        "Medi",
+                        "Hydref",
+                        "Tachwedd",
+                        "Rhagfyr",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Ion",
+                        "Chw",
+                        "Maw",
+                        "Ebr",
+                        "Mai",
+                        "Meh",
+                        "Gor",
+                        "Awst",
+                        "Medi",
+                        "Hyd",
+                        "Tach",
+                        "Rhag",
+                    }
+                    narrow{
+                        "I",
+                        "Ch",
+                        "M",
+                        "E",
+                        "M",
+                        "M",
+                        "G",
+                        "A",
+                        "M",
+                        "H",
+                        "T",
+                        "Rh",
+                    }
+                    wide{
+                        "Ionawr",
+                        "Chwefror",
+                        "Mawrth",
+                        "Ebrill",
+                        "Mai",
+                        "Mehefin",
+                        "Gorffennaf",
+                        "Awst",
+                        "Medi",
+                        "Hydref",
+                        "Tachwedd",
+                        "Rhagfyr",
+                    }
+                }
+            }
+            quarters{
+                format{
+                    abbreviated{
+                        "Ch1",
+                        "Ch2",
+                        "Ch3",
+                        "Ch4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "Chwarter 1af",
+                        "2il chwarter",
+                        "3ydd chwarter",
+                        "4ydd chwarter",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "Ch1",
+                        "Ch2",
+                        "Ch3",
+                        "Ch4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "chwarter 1af",
+                        "2il chwarter",
+                        "3ydd chwarter",
+                        "4ydd chwarter",
+                    }
+                }
+            }
+        }
+    }
+    delimiters{
+        alternateQuotationEnd{"’"}
+        alternateQuotationStart{"‘"}
+        quotationEnd{"”"}
+        quotationStart{"“"}
+    }
+    fields{
+        day{
+            dn{"Dydd"}
+            relative{
+                "-1"{"Ddoe"}
+                "-2"{"Echdoe"}
+                "0"{"Heddiw"}
+                "1"{"Yfory"}
+            }
+        }
+        dayperiod{
+            dn{"AM/PM"}
+        }
+        era{
+            dn{"Oes"}
+        }
+        hour{
+            dn{"Awr"}
+        }
+        minute{
+            dn{"Munud"}
+        }
+        month{
+            dn{"Mis"}
+        }
+        second{
+            dn{"Eiliad"}
+        }
+        week{
+            dn{"Wythnos"}
+        }
+        weekday{
+            dn{"Dydd o'r Wythnos"}
+        }
+        year{
+            dn{"Blwyddyn"}
+        }
+        zone{
+            dn{"Cylchfa"}
+        }
+    }
+    listPattern{
+        standard{
+            2{"{0} a {1}"}
+            end{"{0} a {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+    }
+    measurementSystemNames{
+        UK{"DU"}
+        US{"UDA"}
+        metric{"Metrig"}
+    }
+    units{
+        day{
+            few{"{0} diwrnod"}
+            many{"{0} diwrnod"}
+            one{"{0} diwrnod"}
+            other{"{0} diwrnod"}
+            two{"{0} ddiwrnod"}
+            zero{"{0} diwrnod"}
+        }
+        day-future{
+            few{"Ymhen {0} diwrnod"}
+            many{"Ymhen {0} diwrnod"}
+            one{"Ymhen {0} diwrnod"}
+            other{"Ymhen {0} diwrnod"}
+            two{"Ymhen {0} ddiwrnod"}
+            zero{"Ymhen {0} diwrnod"}
+        }
+        day-past{
+            few{"{0} diwrnod yn ôl"}
+            many{"{0} diwrnod yn ôl"}
+            one{"{0} diwrnod yn ôl"}
+            other{"{0} diwrnod yn ôl"}
+            two{"{0} ddiwrnod yn ôl"}
+            zero{"{0} diwrnod yn ôl"}
+        }
+        hour{
+            few{"{0} awr"}
+            many{"{0} awr"}
+            one{"{0} awr"}
+            other{"{0} awr"}
+            two{"{0} awr"}
+            zero{"{0} awr"}
+        }
+        hour-future{
+            few{"Ymhen {0} awr"}
+            many{"Ymhen {0} awr"}
+            one{"Ymhen {0} awr"}
+            other{"Ymhen {0} awr"}
+            two{"Ymhen {0} awr"}
+            zero{"Ymhen {0} awr"}
+        }
+        hour-past{
+            few{"{0} awr yn ôl"}
+            many{"{0} awr yn ôl"}
+            one{"{0} awr yn ôl"}
+            other{"{0} awr yn ôl"}
+            two{"{0} awr yn ôl"}
+            zero{"{0} awr yn ôl"}
+        }
+        minute{
+            few{"{0} munud"}
+            many{"{0} munud"}
+            one{"{0} munud"}
+            other{"{0} munud"}
+            two{"{0} funud"}
+            zero{"{0} munud"}
+        }
+        minute-future{
+            few{"Ymhen {0} munud"}
+            many{"Ymhen {0} munud"}
+            one{"Ymhen {0} munud"}
+            other{"Ymhen {0} munud"}
+            two{"Ymhen {0} funud"}
+            zero{"Ymhen {0} munud"}
+        }
+        minute-past{
+            few{"{0} munud yn ôl"}
+            many{"{0} munud yn ôl"}
+            one{"{0} munud yn ôl"}
+            other{"{0} munud yn ôl"}
+            two{"{0} funud yn ôl"}
+            zero{"{0} munud yn ôl"}
+        }
+        month{
+            few{"{0} mis"}
+            many{"{0} mis"}
+            one{"{0} mis"}
+            other{"{0} mis"}
+            two{"{0} fis"}
+            zero{"{0} mis"}
+        }
+        month-future{
+            few{"Ymhen {0} mis"}
+            many{"Ymhen {0} mis"}
+            one{"Ymhen {0} mis"}
+            other{"Ymhen {0} mis"}
+            two{"Ymhen {0} fis"}
+            zero{"Ymhen {0} mis"}
+        }
+        month-past{
+            few{"{0} mis yn ôl"}
+            many{"{0} mis yn ôl"}
+            one{"{0} mis yn ôl"}
+            other{"{0} mis yn ôl"}
+            two{"{0} fis yn ôl"}
+            zero{"{0} mis yn ôl"}
+        }
+        second{
+            few{"{0} eiliad"}
+            many{"{0} eiliad"}
+            one{"{0} eiliad"}
+            other{"{0} eiliad"}
+            two{"{0} eiliad"}
+            zero{"{0} eiliad"}
+        }
+        second-future{
+            few{"Ymhen {0} eiliad"}
+            many{"Ymhen {0} eiliad"}
+            one{"Ymhen {0} eiliad"}
+            other{"Ymhen {0} eiliad"}
+            two{"Ymhen {0} eiliad"}
+            zero{"Ymhen {0} eiliad"}
+        }
+        second-past{
+            few{"{0} eiliad yn ôl"}
+            many{"{0} eiliad yn ôl"}
+            one{"{0} eiliad yn ôl"}
+            other{"{0} eiliad yn ôl"}
+            two{"{0} eiliad yn ôl"}
+            zero{"{0} eiliad yn ôl"}
+        }
+        week{
+            few{"{0} wythnos"}
+            many{"{0} wythnos"}
+            one{"{0} wythnos"}
+            other{"{0} wythnos"}
+            two{"{0} wythnos"}
+            zero{"{0} wythnos"}
+        }
+        week-future{
+            few{"Ymhen {0} wythnos"}
+            many{"Ymhen {0} wythnos"}
+            one{"Ymhen {0} wythnos"}
+            other{"Ymhen {0} wythnos"}
+            two{"Ymhen {0} wythnos"}
+            zero{"Ymhen {0} wythnos"}
+        }
+        week-past{
+            few{"{0} wythnos yn ôl"}
+            many{"{0} wythnos yn ôl"}
+            one{"{0} wythnos yn ôl"}
+            other{"{0} wythnos yn ôl"}
+            two{"{0} wythnos yn ôl"}
+            zero{"{0} wythnos yn ôl"}
+        }
+        year{
+            few{"{0} blynedd"}
+            many{"{0} blynedd"}
+            one{"{0} blwyddyn"}
+            other{"{0} o flynyddoedd"}
+            two{"{0} flynedd"}
+            zero{"{0} blwyddyn"}
+        }
+        year-future{
+            few{"Ymhen {0} blynedd"}
+            many{"Ymhen {0} blynedd"}
+            one{"Ymhen {0} blwyddyn"}
+            other{"Ymhen {0} o flynyddoedd"}
+            two{"Ymhen {0} flynedd"}
+            zero{"Ymhen {0} o flynyddoedd"}
+        }
+        year-past{
+            few{"{0} blynedd yn ôl"}
+            many{"{0} blynedd yn ôl"}
+            one{"{0} flwyddyn yn ôl"}
+            other{"{0} o flynyddoedd yn ôl"}
+            two{"{0} flynedd yn ôl"}
+            zero{"{0} o flynyddoedd yn ôl"}
+        }
+    }
+    unitsShort{
+        day{
+            few{"{0} diwrnod"}
+            many{"{0} diwrnod"}
+            one{"{0} diwrnod"}
+            other{"{0} diwrnod"}
+            two{"{0} ddiwrnod"}
+            zero{"{0} diwrnod"}
+        }
+        hour{
+            few{"{0} awr"}
+            many{"{0} awr"}
+            one{"{0} awr"}
+            other{"{0} awr"}
+            two{"{0} awr"}
+            zero{"{0} awr"}
+        }
+        minute{
+            few{"{0} mun"}
+            many{"{0} mun"}
+            one{"{0} mun"}
+            other{"{0} mun"}
+            two{"{0} mun"}
+            zero{"{0} mun"}
+        }
+        month{
+            few{"{0} mis"}
+            many{"{0} mis"}
+            one{"{0} mis"}
+            other{"{0} mis"}
+            two{"{0} fis"}
+            zero{"{0} mis"}
+        }
+        second{
+            few{"{0} eil"}
+            many{"{0} eil"}
+            one{"{0} eil"}
+            other{"{0} eil"}
+            two{"{0} eil"}
+            zero{"{0} eil"}
+        }
+        week{
+            few{"{0} wythnos"}
+            many{"{0} wythnos"}
+            one{"{0} wythnos"}
+            other{"{0} wythnos"}
+            two{"{0} wythnos"}
+            zero{"{0} wythnos"}
+        }
+        year{
+            few{"{0} bl"}
+            many{"{0} bl"}
+            one{"{0} bl"}
+            other{"{0} bl"}
+            two{"{0} bl"}
+            zero{"{0} bl"}
+        }
+    }
+}

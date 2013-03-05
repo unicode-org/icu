@@ -1,0 +1,304 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/cy.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/cy.xml
+ */
+cy{
+    Countries{
+        001{"y Byd"}
+        002{"Affrica"}
+        003{"Gogledd America"}
+        005{"De America"}
+        009{"Oceania"}
+        011{"Gorllewin Affrica"}
+        013{"Canolbarth America"}
+        014{"Dwyrain Affrica"}
+        015{"Gogledd Affrica"}
+        017{"Canol Affrica"}
+        018{"Deheudir Affrica"}
+        019{"yr Amerig"}
+        021{"America i'r Gogledd o Mecsico"}
+        029{"y Caribî"}
+        030{"Dwyrain Asia"}
+        034{"De Asia"}
+        035{"De-Ddwyrain Asia"}
+        039{"De Ewrop"}
+        053{"Awstralasia"}
+        054{"Melanesia"}
+        057{"Rhanbarth Micronesia"}
+        061{"Polynesia"}
+        142{"Asia"}
+        143{"Canol Asia"}
+        145{"Gorllewin Asia"}
+        150{"Ewrop"}
+        151{"Dwyrain Ewrop"}
+        154{"Gogledd Ewrop"}
+        155{"Gorllewin Ewrop"}
+        419{"America Ladin"}
+        AC{"Ynys Ascension"}
+        AD{"Andorra"}
+        AE{"Yr Emiraethau Arabaidd Unedig"}
+        AF{"Afghanistan"}
+        AG{"Antigua a Barbuda"}
+        AI{"Anguilla"}
+        AL{"Albania"}
+        AM{"Armenia"}
+        AO{"Angola"}
+        AQ{"Yr Antarctig"}
+        AR{"yr Ariannin"}
+        AS{"Samoa America"}
+        AT{"Awstria"}
+        AU{"Awstralia"}
+        AW{"Aruba"}
+        AX{"Ynysoedd Åland"}
+        AZ{"Azerbaijan"}
+        BA{"Bosnia a Hercegovina"}
+        BB{"Barbados"}
+        BD{"Bangladesh"}
+        BE{"Gwlad Belg"}
+        BF{"Burkina Faso"}
+        BG{"Bwlgaria"}
+        BH{"Bahrain"}
+        BI{"Burundi"}
+        BJ{"Benin"}
+        BL{"Saint Barthélemy"}
+        BM{"Bermuda"}
+        BN{"Brunei"}
+        BO{"Bolifia"}
+        BQ{"Iseldiroedd y Caribî"}
+        BR{"Brasil"}
+        BS{"y Bahamas"}
+        BT{"Bhutan"}
+        BV{"Ynys Bouvet"}
+        BW{"Botswana"}
+        BY{"Belarws"}
+        BZ{"Belize"}
+        CA{"Canada"}
+        CC{"Ynysoedd Cocos [Keeling]"}
+        CD{"y Congo - Kinshasa"}
+        CF{"Gweriniaeth Canolbarth Affrica"}
+        CG{"y Congo - Brazzaville"}
+        CH{"y Swistir"}
+        CI{"Côte d’Ivoire"}
+        CK{"Ynysoedd Cook"}
+        CL{"Chile"}
+        CM{"y Camerŵn"}
+        CN{"Tsieina"}
+        CO{"Colombia"}
+        CP{"Ynys Clipperton"}
+        CR{"Costa Rica"}
+        CU{"Ciwba"}
+        CV{"Cabo Verde"}
+        CW{"Curaçao"}
+        CX{"Ynys y Nadolig"}
+        CY{"Cyprus"}
+        CZ{"Gweriniaeth Tsiec"}
+        DE{"yr Almaen"}
+        DG{"Diego Garcia"}
+        DJ{"Djibouti"}
+        DK{"Denmarc"}
+        DM{"Dominica"}
+        DO{"Gweriniaeth Dominica"}
+        DZ{"Algeria"}
+        EA{"Ceuta a Melilla"}
+        EC{"Ecuador"}
+        EE{"Estonia"}
+        EG{"yr Aifft"}
+        EH{"Gorllewin y Sahara"}
+        ER{"Eritrea"}
+        ES{"Sbaen"}
+        ET{"Ethiopia"}
+        EU{"yr Undeb Ewropeaidd"}
+        FI{"y Ffindir"}
+        FJ{"Ffiji"}
+        FK{"Ynysoedd y Falkland/Malvinas"}
+        FM{"Micronesia"}
+        FO{"Føroyar"}
+        FR{"Ffrainc"}
+        GA{"Gabon"}
+        GB{"y Deyrnas Unedig"}
+        GD{"Grenada"}
+        GE{"Georgia"}
+        GF{"Guyane Ffrengig"}
+        GG{"Guernsey"}
+        GH{"Ghana"}
+        GI{"Gibraltar"}
+        GL{"yr Ynys Las"}
+        GM{"Gambia"}
+        GN{"Guinée"}
+        GP{"Guadeloupe"}
+        GQ{"Guinea Gyhydeddol"}
+        GR{"Gwlad Groeg"}
+        GS{"De Georgia ac Ynysoedd Sandwich y De"}
+        GT{"Guatemala"}
+        GU{"Guam"}
+        GW{"Guiné-Bissau"}
+        GY{"Guyana"}
+        HK{"Hong Kong RhGA Tsieina"}
+        HM{"Ynys Heard ac Ynysoedd McDonald"}
+        HN{"Honduras"}
+        HR{"Croatia"}
+        HT{"Haiti"}
+        HU{"Hwngari"}
+        IC{"yr Ynysoedd Dedwydd"}
+        ID{"Indonesia"}
+        IE{"Iwerddon"}
+        IL{"Israel"}
+        IM{"Ynys Manaw"}
+        IN{"India"}
+        IO{"Tiriogaeth Brydeinig Cefnfor India"}
+        IQ{"Irac"}
+        IR{"Iran"}
+        IS{"Gwlad yr Iâ"}
+        IT{"yr Eidal"}
+        JE{"Jersey"}
+        JM{"Jamaica"}
+        JO{"Gwlad yr Iorddonen"}
+        JP{"Japan"}
+        KE{"Kenya"}
+        KG{"Kyrgyzstan"}
+        KH{"Cambodia"}
+        KI{"Kiribati"}
+        KM{"Comoros"}
+        KN{"Saint Kitts a Nevis"}
+        KP{"Gogledd Corea"}
+        KR{"De Corea"}
+        KW{"Kuwait"}
+        KY{"Ynysoedd Cayman"}
+        KZ{"Kazakstan"}
+        LA{"Laos"}
+        LB{"Libanus"}
+        LC{"Saint Lucia"}
+        LI{"Liechtenstein"}
+        LK{"Sri Lanka"}
+        LR{"Liberia"}
+        LS{"Lesotho"}
+        LT{"Lithwania"}
+        LU{"Lwcsembwrg"}
+        LV{"Latfia"}
+        LY{"Libia"}
+        MA{"Moroco"}
+        MC{"Monaco"}
+        MD{"Moldofa"}
+        ME{"Montenegro"}
+        MF{"Saint Martin"}
+        MG{"Madagascar"}
+        MH{"Ynysoedd Marshall"}
+        MK{"Macedonia"}
+        ML{"Mali"}
+        MM{"Myanmar [Burma]"}
+        MN{"Mongolia"}
+        MO{"Macau RhGA Tsieina"}
+        MP{"Ynysoedd Gogledd Mariana"}
+        MQ{"Martinique"}
+        MR{"Mauritania"}
+        MS{"Montserrat"}
+        MT{"Malta"}
+        MU{"Mauritius"}
+        MV{"y Maldives"}
+        MW{"Malawi"}
+        MX{"Mecsico"}
+        MY{"Malaysia"}
+        MZ{"Mozambique"}
+        NA{"Namibia"}
+        NC{"Caledonia Newydd"}
+        NE{"Niger"}
+        NF{"Ynys Norfolk"}
+        NG{"Nigeria"}
+        NI{"Nicaragwa"}
+        NL{"yr Iseldiroedd"}
+        NO{"Norwy"}
+        NP{"Nepal"}
+        NR{"Nauru"}
+        NU{"Niue"}
+        NZ{"Seland Newydd"}
+        OM{"Oman"}
+        PA{"Panama"}
+        PE{"Periw"}
+        PF{"Polynesia Ffrengig"}
+        PG{"Papua Gini Newydd"}
+        PH{"Pilipinas"}
+        PK{"Pacistan"}
+        PL{"Gwlad Pwyl"}
+        PM{"Saint-Pierre-et-Miquelon"}
+        PN{"Ynysoedd Pitcairn"}
+        PR{"Puerto Rico"}
+        PS{"Tiriogaethau Palesteinaidd"}
+        PT{"Portiwgal"}
+        PW{"Palau"}
+        PY{"Paraguay"}
+        QA{"Qatar"}
+        QO{"Oceania Bellennig"}
+        RE{"Réunion"}
+        RO{"Rwmania"}
+        RS{"Serbia"}
+        RU{"Rwsia"}
+        RW{"Rwanda"}
+        SA{"Saudi Arabia"}
+        SB{"Ynysoedd Solomon"}
+        SC{"Seychelles"}
+        SD{"y Swdan"}
+        SE{"Sweden"}
+        SG{"Singapore"}
+        SH{"Saint Helena"}
+        SI{"Slofenia"}
+        SJ{"Svalbard a Jan Mayen"}
+        SK{"Slofacia"}
+        SL{"Sierra Leone"}
+        SM{"San Marino"}
+        SN{"Sénégal"}
+        SO{"Somalia"}
+        SR{"Surinam"}
+        SS{"De Sudan"}
+        ST{"São Tomé a Príncipe"}
+        SV{"El Salvador"}
+        SX{"Sint Maarten"}
+        SY{"Syria"}
+        SZ{"Swaziland"}
+        TA{"Tristan da Cunha"}
+        TC{"Ynysoedd Turks a Caicos"}
+        TD{"Tchad"}
+        TF{"Tiroedd Deheuol ac Antarctig Ffrainc"}
+        TG{"Togo"}
+        TH{"Gwlad Thai"}
+        TJ{"Tajikistan"}
+        TK{"Tokelau"}
+        TL{"Timor-Leste"}
+        TM{"Turkmenistan"}
+        TN{"Tunisia"}
+        TO{"Tonga"}
+        TR{"Twrci"}
+        TT{"Trinidad a Tobago"}
+        TV{"Twfalw"}
+        TW{"Taiwan"}
+        TZ{"Tanzanïa"}
+        UA{"Wcráin"}
+        UG{"Uganda"}
+        UM{"Ynysoedd Pellennig UDA"}
+        US{"yr Unol Daleithiau"}
+        UY{"Uruguay"}
+        UZ{"Uzbekistan"}
+        VA{"y Fatican"}
+        VC{"Saint Vincent a’r Grenadines"}
+        VE{"Venezuela"}
+        VG{"Ynysoedd Gwyryf Prydain"}
+        VI{"Ynysoedd Gwyryf yr Unol Daleithiau"}
+        VN{"Fietnam"}
+        VU{"Vanuatu"}
+        WF{"Wallis a Futuna"}
+        WS{"Samoa"}
+        YE{"Yemen"}
+        YT{"Mayotte"}
+        ZA{"De Affrica"}
+        ZM{"Zambia"}
+        ZW{"Zimbabwe"}
+        ZZ{"Rhanbarth Anhysbys"}
+    }
+    Version{"2.0.82.51"}
+}

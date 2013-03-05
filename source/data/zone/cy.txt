@@ -1,0 +1,805 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/cy.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/cy.xml
+ */
+cy{
+    Version{"2.0.82.51"}
+    zoneStrings{
+        "Africa:Asmera"{
+            ec{"Asmara"}
+        }
+        "Africa:Ndjamena"{
+            ec{"N'Djamena"}
+        }
+        "Africa:Sao_Tome"{
+            ec{"São Tomé"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Atikokan"}
+        }
+        "America:Curacao"{
+            ec{"Curaçao"}
+        }
+        "America:Godthab"{
+            ec{"Godthab"}
+        }
+        "America:Havana"{
+            ec{"Habana"}
+        }
+        "America:Indiana:Knox"{
+            ec{"Knox, Indiana"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo, Indiana"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg, Indiana"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Dinas Tell, Indiana"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes, Indiana"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
+        }
+        "America:Lower_Princes"{
+            ec{"Lower Prince's Quarter"}
+        }
+        "America:Mexico_City"{
+            ec{"Dinas Mecsico"}
+        }
+        "America:New_York"{
+            ec{"Efrog Newydd"}
+        }
+        "America:North_Dakota:Beulah"{
+            ec{"Beulah, Gogledd Dakota"}
+        }
+        "America:North_Dakota:Center"{
+            ec{"Center, Gogledd Dakota"}
+        }
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, Gogledd Dakota"}
+        }
+        "America:Scoresbysund"{
+            ec{"Scoresbysund"}
+        }
+        "America:St_Barthelemy"{
+            ec{"St. Barthelemy"}
+        }
+        "America:St_Johns"{
+            ec{"St. John’s"}
+        }
+        "America:St_Kitts"{
+            ec{"Saint Kitts"}
+        }
+        "America:St_Lucia"{
+            ec{"Saint Lucia"}
+        }
+        "America:St_Thomas"{
+            ec{"Saint Thomas"}
+        }
+        "America:St_Vincent"{
+            ec{"Saint Vincent"}
+        }
+        "Antarctica:DumontDUrville"{
+            ec{"Dumont d’Urville"}
+        }
+        "Antarctica:South_Pole"{
+            ec{"Pegwn y De"}
+        }
+        "Asia:Aqtau"{
+            ec{"Aktau"}
+        }
+        "Asia:Aqtobe"{
+            ec{"Aqtöbe"}
+        }
+        "Asia:Calcutta"{
+            ec{"Kolkata"}
+        }
+        "Asia:Hovd"{
+            ec{"Khovd"}
+        }
+        "Asia:Jerusalem"{
+            ec{"Jeriwsalem"}
+        }
+        "Asia:Katmandu"{
+            ec{"Kathmandu"}
+        }
+        "Asia:Pyongyang"{
+            ec{"P'yŏngyang"}
+        }
+        "Asia:Rangoon"{
+            ec{"Yangon"}
+        }
+        "Asia:Saigon"{
+            ec{"Dinas Ho Chi Minh"}
+        }
+        "Asia:Sakhalin"{
+            ec{"Sachalin"}
+        }
+        "Asia:Samarkand"{
+            ec{"Samarcand"}
+        }
+        "Asia:Ulaanbaatar"{
+            ec{"Ulan Bator"}
+        }
+        "Asia:Urumqi"{
+            ec{"Ürümqi"}
+        }
+        "Asia:Yekaterinburg"{
+            ec{"Ekaterinburg"}
+        }
+        "Atlantic:Cape_Verde"{
+            ec{"Cabo Verde"}
+        }
+        "Atlantic:Faeroe"{
+            ec{"Føroyar"}
+        }
+        "Atlantic:Reykjavik"{
+            ec{"Reykjavík"}
+        }
+        "Atlantic:South_Georgia"{
+            ec{"De Georgia"}
+        }
+        "Atlantic:St_Helena"{
+            ec{"Saint Helena"}
+        }
+        "Etc:Unknown"{
+            ec{"Dinas Anhysbys"}
+        }
+        "Europe:Athens"{
+            ec{"Athen"}
+        }
+        "Europe:Belgrade"{
+            ec{"Beograd"}
+        }
+        "Europe:Brussels"{
+            ec{"Brwsel"}
+        }
+        "Europe:Bucharest"{
+            ec{"Bucureşti"}
+        }
+        "Europe:Chisinau"{
+            ec{"Chişinău"}
+        }
+        "Europe:Dublin"{
+            ec{"Dulyn"}
+            ld{"Amser Haf Iwerddon"}
+        }
+        "Europe:Isle_of_Man"{
+            ec{"Ynys Manaw"}
+        }
+        "Europe:London"{
+            ec{"Llundain"}
+            ld{"Amser Haf Prydain"}
+        }
+        "Europe:Luxembourg"{
+            ec{"Lwcsembwrg"}
+        }
+        "Europe:Moscow"{
+            ec{"Moscfa"}
+        }
+        "Europe:Prague"{
+            ec{"Prag"}
+        }
+        "Europe:Rome"{
+            ec{"Rhufain"}
+        }
+        "Europe:Tirane"{
+            ec{"Tirana"}
+        }
+        "Europe:Uzhgorod"{
+            ec{"Uzhhorod"}
+        }
+        "Europe:Vatican"{
+            ec{"y Fatican"}
+        }
+        "Europe:Vienna"{
+            ec{"Fienna"}
+        }
+        "Europe:Zurich"{
+            ec{"Zürich"}
+        }
+        "Indian:Christmas"{
+            ec{"Ynys y Nadolig"}
+        }
+        "Indian:Mahe"{
+            ec{"Mahé"}
+        }
+        "Pacific:Noumea"{
+            ec{"Nouméa"}
+        }
+        "Pacific:Ponape"{
+            ec{"Pohnpei"}
+        }
+        "Pacific:Truk"{
+            ec{"Chuuk"}
+        }
+        "meta:Afghanistan"{
+            ls{"Amser Afghanistan"}
+        }
+        "meta:Africa_Central"{
+            ls{"Amser Canolbarth Affrica"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Amser Dwyrain Affrica"}
+        }
+        "meta:Africa_Southern"{
+            ls{"Amser De Affrica"}
+        }
+        "meta:Africa_Western"{
+            ld{"Amser Haf Gorllewin Affrica"}
+            lg{"Amser Gorllewin Affrica"}
+            ls{"Amser Safonol Gorllewin Affrica"}
+        }
+        "meta:Alaska"{
+            ld{"Amser Haf Alaska"}
+            lg{"Amser Alaska"}
+            ls{"Amser Safonol Alaska"}
+        }
+        "meta:Amazon"{
+            ld{"Amser Haf Amazon"}
+            lg{"Amser Amazon"}
+            ls{"Amser Safonol Amazon"}
+        }
+        "meta:America_Central"{
+            ld{"Amser Haf Canolbarth Gogledd America"}
+            lg{"Amser Canolbarth Gogledd America"}
+            ls{"Amser Safonol Canolbarth Gogledd America"}
+        }
+        "meta:America_Eastern"{
+            ld{"Amser Haf Dwyrain Gogledd America"}
+            lg{"Amser Dwyrain Gogledd America"}
+            ls{"Amser Safonol Dwyrain Gogledd America"}
+        }
+        "meta:America_Mountain"{
+            ld{"Amser Haf Mynyddoedd Gogledd America"}
+            lg{"Amser Mynyddoedd Gogledd America"}
+            ls{"Amser Safonol Mynyddoedd Gogledd America"}
+        }
+        "meta:America_Pacific"{
+            ld{"Amser Haf Cefnfor Tawel Gogledd America"}
+            lg{"Amser Cefnfor Tawel Gogledd America"}
+            ls{"Amser Safonol Cefnfor Tawel Gogledd America"}
+        }
+        "meta:Arabian"{
+            ld{"Amser Haf Arabaidd"}
+            lg{"Amser Arabaidd"}
+            ls{"Amser Safonol Arabaidd"}
+        }
+        "meta:Argentina"{
+            ld{"Amser Haf yr Ariannin"}
+            lg{"Amser yr Ariannin"}
+            ls{"Amser Safonol yr Ariannin"}
+        }
+        "meta:Argentina_Western"{
+            ld{"Amser Haf Gorllewin yr Ariannin"}
+            lg{"Amser Gorllewin yr Ariannin"}
+            ls{"Amser Safonol Gorllewin yr Ariannin"}
+        }
+        "meta:Armenia"{
+            ld{"Amser Haf Armenia"}
+            lg{"Amser Armenia"}
+            ls{"Amser Safonol Armenia"}
+        }
+        "meta:Atlantic"{
+            ld{"Amser Haf Cefnfor yr Iwerydd"}
+            lg{"Amser Cefnfor yr Iwerydd"}
+            ls{"Amser Safonol Cefnfor yr Iwerydd"}
+        }
+        "meta:Australia_Central"{
+            ld{"Amser Haf Canolbarth Awstralia"}
+            lg{"Amser Canolbarth Awstralia"}
+            ls{"Amser Safonol Canolbarth Awstralia"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"Amser Haf Canolbarth Gorllewin Awstralia"}
+            lg{"Amser Canolbarth Gorllewin Awstralia"}
+            ls{"Amser Safonol Canolbarth Gorllewin Awstralia"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"Amser Haf Dwyrain Awstralia"}
+            lg{"Amser Dwyrain Awstralia"}
+            ls{"Amser Safonol Dwyrain Awstralia"}
+        }
+        "meta:Australia_Western"{
+            ld{"Amser Haf Gorllewin Awstralia"}
+            lg{"Amser Gorllewin Awstralia"}
+            ls{"Amser Safonol Gorllewin Awstralia"}
+        }
+        "meta:Azerbaijan"{
+            ld{"Amser Haf Azerbaijan"}
+            lg{"Amser Azerbaijan"}
+            ls{"Amser Safonol Azerbaijan"}
+        }
+        "meta:Azores"{
+            ld{"Amser Haf Azores"}
+            lg{"Amser Azores"}
+            ls{"Amser Safonol Azores"}
+        }
+        "meta:Bangladesh"{
+            ld{"Amser Haf Bangladesh"}
+            lg{"Amser Bangladesh"}
+            ls{"Amser Safonol Bangladesh"}
+        }
+        "meta:Bhutan"{
+            ls{"Amser Bhutan"}
+        }
+        "meta:Bolivia"{
+            ls{"Amser Bolifia"}
+        }
+        "meta:Brasilia"{
+            ld{"Amser Haf Brasília"}
+            lg{"Amser Brasília"}
+            ls{"Amser Safonol Brasília"}
+        }
+        "meta:Brunei"{
+            ls{"Amser Brunei Darussalam"}
+        }
+        "meta:Cape_Verde"{
+            ld{"Amser Haf Cabo Verde"}
+            lg{"Amser Cabo Verde"}
+            ls{"Amser Safonol Cabo Verde"}
+        }
+        "meta:Chamorro"{
+            ls{"Amser Chamorro"}
+        }
+        "meta:Chatham"{
+            ld{"Amser Haf Chatham"}
+            lg{"Amser Chatham"}
+            ls{"Amser Safonol Chatham"}
+        }
+        "meta:Chile"{
+            ld{"Amser Haf Chile"}
+            lg{"Amser Chile"}
+            ls{"Amser Safonol Chile"}
+        }
+        "meta:China"{
+            ld{"Amser Haf Tsieina"}
+            lg{"Amser Tsieina"}
+            ls{"Amser Safonol Tsieina"}
+        }
+        "meta:Choibalsan"{
+            ld{"Amser Haf Choibalsan"}
+            lg{"Amser Choibalsan"}
+            ls{"Amser Safonol Choibalsan"}
+        }
+        "meta:Christmas"{
+            ls{"Amser Ynys y Nadolig"}
+        }
+        "meta:Cocos"{
+            ls{"Amser Ynysoedd Cocos"}
+        }
+        "meta:Colombia"{
+            ld{"Amser Haf Colombia"}
+            lg{"Amser Colombia"}
+            ls{"Amser Safonol Colombia"}
+        }
+        "meta:Cook"{
+            ld{"Amser Hanner Haf Ynysoedd Cook"}
+            lg{"Amser Ynysoedd Cook"}
+            ls{"Amser Safonol Ynysoedd Cook"}
+        }
+        "meta:Cuba"{
+            ld{"Amser Haf Cuba"}
+            lg{"Amser Cuba"}
+            ls{"Amser Safonol Cuba"}
+        }
+        "meta:Davis"{
+            ls{"Amser Davis"}
+        }
+        "meta:DumontDUrville"{
+            ls{"Amser Dumont-d’Urville"}
+        }
+        "meta:East_Timor"{
+            ls{"Amser Dwyrain Timor"}
+        }
+        "meta:Easter"{
+            ld{"Amser Haf Ynys y Pasg"}
+            lg{"Amser Ynys y Pasg"}
+            ls{"Amser Safonol Ynys y Pasg"}
+        }
+        "meta:Ecuador"{
+            ls{"Amser Ecuador"}
+        }
+        "meta:Europe_Central"{
+            ld{"Amser Haf Canolbarth Ewrop"}
+            lg{"Amser Canolbarth Ewrop"}
+            ls{"Amser Safonol Canolbarth Ewrop"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Amser Haf Dwyrain Ewrop"}
+            lg{"Amser Dwyrain Ewrop"}
+            ls{"Amser Safonol Dwyrain Ewrop"}
+        }
+        "meta:Europe_Western"{
+            ld{"Amser Haf Gorllewin Ewrop"}
+            lg{"Amser Gorllewin Ewrop"}
+            ls{"Amser Safonol Gorllewin Ewrop"}
+        }
+        "meta:Falkland"{
+            ld{"Amser Haf Ynysoedd Falklands/Malvinas"}
+            lg{"Amser Ynysoedd Falklands/Malvinas"}
+            ls{"Amser Safonol Ynysoedd Falklands/Malvinas"}
+        }
+        "meta:Fiji"{
+            ld{"Amser Haf Ffiji"}
+            lg{"Amser Ffiji"}
+            ls{"Amser Safonol Ffiji"}
+        }
+        "meta:French_Guiana"{
+            ls{"Amser Guyane Ffrengig"}
+        }
+        "meta:French_Southern"{
+            ls{"Amser Deheuol ac Antarctig Frengig"}
+        }
+        "meta:GMT"{
+            ls{"Greenwich Mean Time"}
+        }
+        "meta:Galapagos"{
+            ls{"Amser Galapagos"}
+        }
+        "meta:Gambier"{
+            ls{"Amser Gambier"}
+        }
+        "meta:Georgia"{
+            ld{"Amser Haf Georgia"}
+            lg{"Amser Georgia"}
+            ls{"Amser Safonol Georgia"}
+        }
+        "meta:Gilbert_Islands"{
+            ls{"Amser Ynysoedd Gilbert"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"Amser Haf Dwyrain yr Ynys Las"}
+            lg{"Amser Dwyrain yr Ynys Las"}
+            ls{"Amser Safonol Dwyrain yr Ynys Las"}
+        }
+        "meta:Greenland_Western"{
+            ld{"Amser Haf Gorllewin yr Ynys Las"}
+            lg{"Amser Gorllewin yr Ynys Las"}
+            ls{"Amser Safonol Gorllewin yr Ynys Las"}
+        }
+        "meta:Gulf"{
+            ls{"Amser y Gwlff"}
+        }
+        "meta:Guyana"{
+            ls{"Amser Guyana"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ld{"Amser Haf Hawaii-Aleutian"}
+            lg{"Amser Hawaii-Aleutian"}
+            ls{"Amser Safonol Hawaii-Aleutian"}
+        }
+        "meta:Hong_Kong"{
+            ld{"Amser Haf Hong Kong"}
+            lg{"Amser Hong Kong"}
+            ls{"Amser Safonol Hong Kong"}
+        }
+        "meta:Hovd"{
+            ld{"Amser Haf Hovd"}
+            lg{"Amser Hovd"}
+            ls{"Amser Safonol Hovd"}
+        }
+        "meta:India"{
+            ls{"Amser India"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"Amser Cefnfor India"}
+        }
+        "meta:Indochina"{
+            ls{"Amser Indo-Tsieina"}
+        }
+        "meta:Indonesia_Central"{
+            ls{"Amser Canolbarth Indonesia"}
+        }
+        "meta:Indonesia_Eastern"{
+            ls{"Amser Dwyrain Indonesia"}
+        }
+        "meta:Indonesia_Western"{
+            ls{"Amser Gorllewin Indonesia"}
+        }
+        "meta:Iran"{
+            ld{"Amser Haf Iran"}
+            lg{"Amser Iran"}
+            ls{"Amser Safonol Iran"}
+        }
+        "meta:Irkutsk"{
+            ld{"Amser Haf Irkutsk"}
+            lg{"Amser Irkutsk"}
+            ls{"Amser Safonol Irkutsk"}
+        }
+        "meta:Israel"{
+            ld{"Amser Haf Israel"}
+            lg{"Amser Israel"}
+            ls{"Amser Safonol Israel"}
+        }
+        "meta:Japan"{
+            ld{"Amser Haf Japan"}
+            lg{"Amser Japan"}
+            ls{"Amser Safonol Japan"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ls{"Amser Dwyrain Kazakstan"}
+        }
+        "meta:Kazakhstan_Western"{
+            ls{"Amser Gorllewin Kazakstan"}
+        }
+        "meta:Korea"{
+            ld{"Amser Haf Corea"}
+            lg{"Amser Corea"}
+            ls{"Amser Safonol Corea"}
+        }
+        "meta:Kosrae"{
+            ls{"Amser Kosrae"}
+        }
+        "meta:Krasnoyarsk"{
+            ld{"Amser Haf Krasnoyarsk"}
+            lg{"Amser Krasnoyarsk"}
+            ls{"Amser Safonol Krasnoyarsk"}
+        }
+        "meta:Kyrgystan"{
+            ls{"Amser Kyrgyzstan"}
+        }
+        "meta:Line_Islands"{
+            ls{"Amser Ynysoedd Line"}
+        }
+        "meta:Lord_Howe"{
+            ld{"Amser Haf yr Arglwydd Howe"}
+            lg{"Amser yr Arglwydd Howe"}
+            ls{"Amser Safonol yr Arglwydd Howe"}
+        }
+        "meta:Macquarie"{
+            ls{"Amser Ynys Macquarie"}
+        }
+        "meta:Magadan"{
+            ld{"Amser Haf Magadan"}
+            lg{"Amser Magadan"}
+            ls{"Amser Safonol Magadan"}
+        }
+        "meta:Malaysia"{
+            ls{"Amser Malaysia"}
+        }
+        "meta:Maldives"{
+            ls{"Amser Y Maldives"}
+        }
+        "meta:Marquesas"{
+            ls{"Amser Marquesas"}
+        }
+        "meta:Marshall_Islands"{
+            ls{"Amser Ynysoedd Marshall"}
+        }
+        "meta:Mauritius"{
+            ld{"Amser Haf Mauritius"}
+            lg{"Amser Mauritius"}
+            ls{"Amser Safonol Mauritius"}
+        }
+        "meta:Mawson"{
+            ls{"Amser Mawson"}
+        }
+        "meta:Mongolia"{
+            ld{"Amser Haf Ulan Bator"}
+            lg{"Amser Ulan Bator"}
+            ls{"Amser Safonol Ulan Bator"}
+        }
+        "meta:Moscow"{
+            ld{"Amser Haf Moscfa"}
+            lg{"Amser Moscfa"}
+            ls{"Amser Safonol Moscfa"}
+        }
+        "meta:Myanmar"{
+            ls{"Amser Myanmar"}
+        }
+        "meta:Nauru"{
+            ls{"Amser Nauru"}
+        }
+        "meta:Nepal"{
+            ls{"Amser Nepal"}
+        }
+        "meta:New_Caledonia"{
+            ld{"Amser Haf Caledonia Newydd"}
+            lg{"Amser Caledonia Newydd"}
+            ls{"Amser Safonol Caledonia Newydd"}
+        }
+        "meta:New_Zealand"{
+            ld{"Amser Haf Seland Newydd"}
+            lg{"Amser Seland Newydd"}
+            ls{"Amser Safonol Seland Newydd"}
+        }
+        "meta:Newfoundland"{
+            ld{"Amser Haf Newfoundland"}
+            lg{"Amser Newfoundland"}
+            ls{"Amser Safonol Newfoundland"}
+        }
+        "meta:Niue"{
+            ls{"Amser Niue"}
+        }
+        "meta:Norfolk"{
+            ls{"Amser Ynys Norfolk"}
+        }
+        "meta:Noronha"{
+            ld{"Amser Haf Fernando de Noronha"}
+            lg{"Amser Fernando de Noronha"}
+            ls{"Amser Safonol Fernando de Noronha"}
+        }
+        "meta:Novosibirsk"{
+            ld{"Amser Haf Novosibirsk"}
+            lg{"Amser Novosibirsk"}
+            ls{"Amser Safonol Novosibirsk"}
+        }
+        "meta:Omsk"{
+            ld{"Amser Haf Omsk"}
+            lg{"Amser Omsk"}
+            ls{"Amser Safonol Omsk"}
+        }
+        "meta:Pakistan"{
+            ld{"Amser Haf Pacistan"}
+            lg{"Amser Pacistan"}
+            ls{"Amser Safonol Pacistan"}
+        }
+        "meta:Palau"{
+            ls{"Amser Palau"}
+        }
+        "meta:Papua_New_Guinea"{
+            ls{"Amser Papua Guinea Newydd"}
+        }
+        "meta:Paraguay"{
+            ld{"Amser Haf Paraguay"}
+            lg{"Amser Paraguay"}
+            ls{"Amser Safonol Paraguay"}
+        }
+        "meta:Peru"{
+            ld{"Amser Haf Periw"}
+            lg{"Amser Periw"}
+            ls{"Amser Safonol Periw"}
+        }
+        "meta:Philippines"{
+            ld{"Amser Haf Pilipinas"}
+            lg{"Amser Pilipinas"}
+            ls{"Amser Safonol Pilipinas"}
+        }
+        "meta:Phoenix_Islands"{
+            ls{"Amser Ynysoedd Phoenix"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"Amser Haf Saint-Pierre-et-Miquelon"}
+            lg{"Amser Saint-Pierre-et-Miquelon"}
+            ls{"Amser Safonol Saint-Pierre-et-Miquelon"}
+        }
+        "meta:Pitcairn"{
+            ls{"Amser Pitcairn"}
+        }
+        "meta:Ponape"{
+            ls{"Amser Pohnpei"}
+        }
+        "meta:Reunion"{
+            ls{"Amser Réunion"}
+        }
+        "meta:Rothera"{
+            ls{"Amser Rothera"}
+        }
+        "meta:Sakhalin"{
+            ld{"Amser Haf Sakhalin"}
+            lg{"Amser Sakhalin"}
+            ls{"Amser Safonol Sakhalin"}
+        }
+        "meta:Samoa"{
+            ld{"Amser Haf Samoa"}
+            lg{"Amser Samoa"}
+            ls{"Amser Safonol Samoa"}
+        }
+        "meta:Seychelles"{
+            ls{"Amser Seychelles"}
+        }
+        "meta:Singapore"{
+            ls{"Amser Singapore"}
+        }
+        "meta:Solomon"{
+            ls{"Amser Ynysoedd Solomon"}
+        }
+        "meta:South_Georgia"{
+            ls{"Amser De Georgia"}
+        }
+        "meta:Syowa"{
+            ls{"Amser Syowa"}
+        }
+        "meta:Tahiti"{
+            ls{"Amser Tahiti"}
+        }
+        "meta:Taipei"{
+            ld{"Amser Haf Taipei"}
+            lg{"Amser Taipei"}
+            ls{"Amser Safonol Taipei"}
+        }
+        "meta:Tajikistan"{
+            ls{"Amser Tajikistan"}
+        }
+        "meta:Tokelau"{
+            ls{"Amser Tokelau"}
+        }
+        "meta:Tonga"{
+            ld{"Amser Haf Tonga"}
+            lg{"Amser Tonga"}
+            ls{"Amser Safonol Tonga"}
+        }
+        "meta:Truk"{
+            ls{"Amser Chuuk"}
+        }
+        "meta:Turkmenistan"{
+            ld{"Amser Haf Turkmenistan"}
+            lg{"Amser Turkmenistan"}
+            ls{"Amser Safonol Turkmenistan"}
+        }
+        "meta:Tuvalu"{
+            ls{"Amser Twfalw"}
+        }
+        "meta:Uruguay"{
+            ld{"Amser Haf Uruguay"}
+            lg{"Amser Uruguay"}
+            ls{"Amser Safonol Uruguay"}
+        }
+        "meta:Uzbekistan"{
+            ld{"Amser Haf Uzbekistan"}
+            lg{"Amser Uzbekistan"}
+            ls{"Amser Safonol Uzbekistan"}
+        }
+        "meta:Vanuatu"{
+            ld{"Amser Haf Vanuatu"}
+            lg{"Amser Vanuatu"}
+            ls{"Amser Safonol Vanuatu"}
+        }
+        "meta:Venezuela"{
+            ls{"Amser Venezuela"}
+        }
+        "meta:Vladivostok"{
+            ld{"Amser Haf Vladivostok"}
+            lg{"Amser Vladivostok"}
+            ls{"Amser Safonol Vladivostok"}
+        }
+        "meta:Volgograd"{
+            ld{"Amser Haf Volgograd"}
+            lg{"Amser Volgograd"}
+            ls{"Amser Safonol Volgograd"}
+        }
+        "meta:Vostok"{
+            ls{"Amser Vostok"}
+        }
+        "meta:Wake"{
+            ls{"Amser Ynys Wake"}
+        }
+        "meta:Wallis"{
+            ls{"Amser Wallis a Futuna"}
+        }
+        "meta:Yakutsk"{
+            ld{"Amser Haf Yakutsk"}
+            lg{"Amser Yakutsk"}
+            ls{"Amser Safonol Yakutsk"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"Amser Haf Ekaterinburg"}
+            lg{"Amser Ekaterinburg"}
+            ls{"Amser Safonol Ekaterinburg"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"Amser {1} ({0})"}
+        gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"Amser {0}"}
+    }
+}

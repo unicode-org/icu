@@ -1,0 +1,16 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/fr_CA.xml
+// *
+// ***************************************************************************
+fr_CA{
+    Countries{
+        AC{"Île de l'Ascension"}
+        GS{"Géorgie du Sud et les îles Sandwich du Sud"}
+        ST{"Sao Tomé-et-Principe"}
+    }
+    Version{"2.0.82.45"}
+}

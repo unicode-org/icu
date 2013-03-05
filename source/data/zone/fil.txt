@@ -1,0 +1,632 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/fil.xml
+// *
+// ***************************************************************************
+/**
+ *  ICU <specials> source: <path>/xml/main/fil.xml
+ */
+fil{
+    Version{"2.0.82.45"}
+    zoneStrings{
+        "America:Asuncion"{
+            ec{"Asunción"}
+        }
+        "America:Lower_Princes"{
+            ec{"Lower Prince's Quarter"}
+        }
+        "America:St_Barthelemy"{
+            ec{"Saint Barthélemy"}
+        }
+        "America:St_Johns"{
+            ec{"St. John’s"}
+        }
+        "America:St_Kitts"{
+            ec{"St. Kitts"}
+        }
+        "America:St_Lucia"{
+            ec{"St. Lucia"}
+        }
+        "America:St_Thomas"{
+            ec{"St. Thomas"}
+        }
+        "America:St_Vincent"{
+            ec{"St. Vincent"}
+        }
+        "Etc:Unknown"{
+            ec{"Di-tiyak na lungsod"}
+        }
+        "Indian:Reunion"{
+            ec{"Réunion"}
+        }
+        "meta:Afghanistan"{
+            ls{"Oras sa Afghanistan"}
+        }
+        "meta:Africa_Central"{
+            ls{"Oras sa Central Africa"}
+        }
+        "meta:Africa_Eastern"{
+            ls{"Oras sa East Africa"}
+        }
+        "meta:Africa_Southern"{
+            ls{"Oras sa South Africa"}
+        }
+        "meta:Africa_Western"{
+            ld{"Summer Time sa West Africa"}
+            lg{"Oras sa West Africa"}
+            ls{"Standard Time sa West Africa"}
+        }
+        "meta:Alaska"{
+            ld{"Daylight Time sa Alaska"}
+            lg{"Oras sa Alaska"}
+            ls{"Standard Time sa Alaska"}
+        }
+        "meta:Amazon"{
+            ld{"Summer Time sa Amazon"}
+            lg{"Oras sa Amazon"}
+            ls{"Standard Time sa Amazon"}
+        }
+        "meta:America_Central"{
+            ld{"Central Daylight Time sa North America"}
+            lg{"Central Time sa North America"}
+            ls{"Central Standard Time sa North America"}
+        }
+        "meta:America_Eastern"{
+            ld{"Eastern Daylight Time sa North America"}
+            lg{"Eastern Time sa North America"}
+            ls{"Eastern Standard Time sa North America"}
+        }
+        "meta:America_Mountain"{
+            ld{"Mountain Daylight Time sa North America"}
+            lg{"Mountain Time sa North America"}
+            ls{"Mountain Standard Time sa North America"}
+        }
+        "meta:America_Pacific"{
+            ld{"Pacific Daylight Time sa North America"}
+            lg{"Pacific Time sa North America"}
+            ls{"Pacific Standard Time sa North America"}
+        }
+        "meta:Anadyr"{
+            ld{"Summer Time sa Anadyr"}
+            lg{"Oras sa Anadyr"}
+            ls{"Standard Time sa Anadyr"}
+        }
+        "meta:Arabian"{
+            ld{"Daylight Time sa Arabia"}
+            lg{"Oras sa Arabia"}
+            ls{"Standard Time sa Arabia"}
+        }
+        "meta:Argentina"{
+            ld{"Summer Time sa Argentina"}
+            lg{"Oras sa Argentina"}
+            ls{"Standard Time sa Argentina"}
+        }
+        "meta:Argentina_Western"{
+            ld{"Summer Time sa Western Argentina"}
+            lg{"Oras sa Western Argentina"}
+            ls{"Standard Time sa Western Argentina"}
+        }
+        "meta:Armenia"{
+            ld{"Summer Time sa Armenia"}
+            lg{"Oras sa Armenia"}
+            ls{"Standard Time sa Armenia"}
+        }
+        "meta:Atlantic"{
+            ld{"Daylight Time sa Atlantic"}
+            lg{"Oras sa Atlantic"}
+            ls{"Standard Time sa Atlantic"}
+        }
+        "meta:Australia_Central"{
+            ld{"Central Summer Time sa Australia"}
+            lg{"Oras sa Central Australia"}
+            ls{"Central Standard Time sa Australia"}
+        }
+        "meta:Australia_CentralWestern"{
+            ld{"Central Western Daylight Time sa Australia"}
+            lg{"Central Western Time sa Australia"}
+            ls{"Central Western Standard Time sa Australia"}
+        }
+        "meta:Australia_Eastern"{
+            ld{"Eastern Daylight Time sa Australia"}
+            lg{"Oras sa Eastern Australia"}
+            ls{"Eastern Standard Time sa Australia"}
+        }
+        "meta:Australia_Western"{
+            ld{"Western Daylight Time sa Australia"}
+            lg{"Oras sa Western Australia"}
+            ls{"Western Standard Time sa Australia"}
+        }
+        "meta:Azerbaijan"{
+            ld{"Azerbaijan Summer"}
+            lg{"Oras sa Azerbaijan"}
+            ls{"Standard Time sa Azerbaijan"}
+        }
+        "meta:Azores"{
+            ld{"Summer Time sa Azores"}
+            lg{"Oras sa Azores"}
+            ls{"Standard Time sa Azores"}
+        }
+        "meta:Bangladesh"{
+            ld{"Summer Time sa Bangladesh"}
+            lg{"Oras sa Bangladesh"}
+            ls{"Standard Time sa Bangladesh"}
+        }
+        "meta:Bhutan"{
+            ls{"Oras sa Bhutan"}
+        }
+        "meta:Bolivia"{
+            ls{"Oras sa Bolivia"}
+        }
+        "meta:Brasilia"{
+            ld{"Summer Time sa Brasilia"}
+            lg{"Oras sa Brasilia"}
+            ls{"Standard Time sa Brasilia"}
+        }
+        "meta:Brunei"{
+            ls{"Oras sa Brunie Darussalam"}
+        }
+        "meta:Cape_Verde"{
+            ld{"Summer Time sa Cape Verde"}
+            lg{"Oras sa Cape Verde"}
+            ls{"Standard Time sa Cape Verde"}
+        }
+        "meta:Chamorro"{
+            ls{"Standard Time sa Chamorro"}
+        }
+        "meta:Chatham"{
+            ld{"Daylight Time sa Chatham"}
+            lg{"Oras sa Chatham"}
+            ls{"Standard Time sa Chatham"}
+        }
+        "meta:Chile"{
+            ld{"Summer Time sa Chile"}
+            lg{"Oras sa Chile"}
+            ls{"Standard Time sa Chile"}
+        }
+        "meta:China"{
+            ld{"Daylight Time sa China"}
+            lg{"Oras sa China"}
+            ls{"Standard Time sa China"}
+        }
+        "meta:Choibalsan"{
+            ld{"Summer Time sa Choibalsan"}
+            lg{"Oras sa Oras sa Choibalsan"}
+            ls{"Standard Time sa Choibalsan"}
+        }
+        "meta:Christmas"{
+            ls{"Oras sa Christmas Island"}
+        }
+        "meta:Cocos"{
+            ls{"Oras sa Cocos Islands"}
+        }
+        "meta:Colombia"{
+            ld{"Summer Time sa Colombia"}
+            lg{"Oras sa Colombia"}
+            ls{"Standard Time sa Colombia"}
+        }
+        "meta:Cook"{
+            ld{"Half Summer Time sa Cook Islands"}
+            lg{"Oras sa Cook Islands"}
+            ls{"Standard Time sa Cook Islands"}
+        }
+        "meta:Cuba"{
+            ld{"Daylight Time sa Cuba"}
+            lg{"Oras sa Cuba"}
+            ls{"Standard Time sa Cuba"}
+        }
+        "meta:Davis"{
+            ls{"Oras sa Davis"}
+        }
+        "meta:DumontDUrville"{
+            ls{"Oras sa Dumont-d’Urville"}
+        }
+        "meta:East_Timor"{
+            ls{"Oras sa East Timor"}
+        }
+        "meta:Easter"{
+            ld{"Summer Time sa Easter Island"}
+            lg{"Oras sa Easter Island"}
+            ls{"Standard Time sa Easter Island"}
+        }
+        "meta:Ecuador"{
+            ls{"Oras sa Ecuador"}
+        }
+        "meta:Europe_Central"{
+            ld{"Central European Summer Time"}
+            lg{"Central European Time"}
+            ls{"Central European Standard Time"}
+        }
+        "meta:Europe_Eastern"{
+            ld{"Eastern European Summer Time"}
+            lg{"Eastern European Time"}
+            ls{"Eastern European Standard Time"}
+        }
+        "meta:Europe_Western"{
+            ld{"Western European Summer Time"}
+            lg{"Western European Time"}
+            ls{"Western European Standard Time"}
+        }
+        "meta:Falkland"{
+            ld{"Summer Time sa Falkland"}
+            lg{"Oras sa Falkland"}
+            ls{"Standard Time sa Falkland"}
+        }
+        "meta:Fiji"{
+            ld{"Summer Time sa Fiji"}
+            lg{"Oras sa Fiji"}
+            ls{"Standard Time sa Fiji"}
+        }
+        "meta:French_Guiana"{
+            ls{"Oras sa French Guiana"}
+        }
+        "meta:French_Southern"{
+            ls{"French Southern and Antarctic Time"}
+        }
+        "meta:GMT"{
+            ls{"Greenwich Mean Time"}
+        }
+        "meta:Galapagos"{
+            ls{"Oras sa Galapagos"}
+        }
+        "meta:Gambier"{
+            ls{"Oras sa Gambier"}
+        }
+        "meta:Georgia"{
+            ld{"Summer Time sa Georgia"}
+            lg{"Oras sa Georgia"}
+            ls{"Standard Time sa Georgia"}
+        }
+        "meta:Gilbert_Islands"{
+            ls{"Oras sa Gilbert Islands"}
+        }
+        "meta:Greenland_Eastern"{
+            ld{"Summer Time sa East Greenland"}
+            lg{"Oras sa East Greenland"}
+            ls{"Standard Time sa East Greenland"}
+        }
+        "meta:Greenland_Western"{
+            ld{"Summer Time sa West Greenland"}
+            lg{"Oras sa West Greenland"}
+            ls{"Standard Time sa West Greenland"}
+        }
+        "meta:Gulf"{
+            ls{"Standard Time sa Gulf"}
+        }
+        "meta:Guyana"{
+            ls{"Oras sa Guyana"}
+        }
+        "meta:Hawaii_Aleutian"{
+            ld{"Daylight Time sa Hawaii-Aleutian"}
+            lg{"Oras sa Hawaii-Aleutian"}
+            ls{"Standard Time sa Hawaii-Aleutian"}
+        }
+        "meta:Hong_Kong"{
+            ld{"Summer Time sa Hongkong"}
+            lg{"Oras sa Hongkong"}
+            ls{"Standard Time sa Hongkong"}
+        }
+        "meta:Hovd"{
+            ld{"Summer Time sa Hovd"}
+            lg{"Oras sa Hovd"}
+            ls{"Standard Time sa Hovd"}
+        }
+        "meta:India"{
+            ls{"Oras sa India"}
+        }
+        "meta:Indian_Ocean"{
+            ls{"Oras sa Indian Ocean"}
+        }
+        "meta:Indochina"{
+            ls{"Oras sa Indochina"}
+        }
+        "meta:Indonesia_Central"{
+            ls{"Oras sa Central Indonesia"}
+        }
+        "meta:Indonesia_Eastern"{
+            ls{"Oras sa Eastern Indonesia"}
+        }
+        "meta:Indonesia_Western"{
+            ls{"Oras sa Western Indonesia"}
+        }
+        "meta:Iran"{
+            ld{"Daylight Time sa Iran"}
+            lg{"Oras sa Iran"}
+            ls{"Standard Time sa Iran"}
+        }
+        "meta:Irkutsk"{
+            ld{"Summer Time sa Irkutsk"}
+            lg{"Oras sa Irkutsk"}
+            ls{"Standard Time sa Irkutsk"}
+        }
+        "meta:Israel"{
+            ld{"Daylight Time sa Israel"}
+            lg{"Oras sa Israel"}
+            ls{"Standard Time sa Israel"}
+        }
+        "meta:Japan"{
+            ld{"Daylight Time sa Japan"}
+            lg{"Oras sa Japan"}
+            ls{"Standard Time sa Japan"}
+        }
+        "meta:Kamchatka"{
+            ld{"Summer Time sa Petropavlovsk-Kamchatski"}
+            lg{"Oras sa Petropavlovsk-Kamchatski"}
+            ls{"Standard Time sa Petropavlovsk-Kamchatski"}
+        }
+        "meta:Kazakhstan_Eastern"{
+            ls{"Standard Time sa East Kazakhstan"}
+        }
+        "meta:Kazakhstan_Western"{
+            ls{"Standard Time sa West Kazakhstan"}
+        }
+        "meta:Korea"{
+            ld{"Daylight Time sa Korea"}
+            lg{"Oras sa Korea"}
+            ls{"Standard Time sa Korea"}
+        }
+        "meta:Kosrae"{
+            ls{"Oras sa Kosrae"}
+        }
+        "meta:Krasnoyarsk"{
+            ld{"Summer Time sa Krasnoyarsk"}
+            lg{"Oras sa Krasnoyarsk"}
+            ls{"Standard Time sa Krasnoyarsk"}
+        }
+        "meta:Kyrgystan"{
+            ls{"Oras sa Kyrgystan"}
+        }
+        "meta:Line_Islands"{
+            ls{"Oras sa Line Islands"}
+        }
+        "meta:Lord_Howe"{
+            ld{"Daylight Time sa Lord Howe"}
+            lg{"Oras sa Lord Howe"}
+            ls{"Standard Time sa Lord Howe"}
+        }
+        "meta:Macquarie"{
+            ls{"Oras sa Macquarie Island"}
+        }
+        "meta:Magadan"{
+            ld{"Summer Time sa Magadan"}
+            lg{"Oras sa Magadan"}
+            ls{"Standard Time sa Magadan"}
+        }
+        "meta:Malaysia"{
+            ls{"Oras sa Malaysia"}
+        }
+        "meta:Maldives"{
+            ls{"Oras sa Maldives"}
+        }
+        "meta:Marquesas"{
+            ls{"Oras sa Marquesas"}
+        }
+        "meta:Marshall_Islands"{
+            ls{"Oras sa Marshall Islands"}
+        }
+        "meta:Mauritius"{
+            ld{"Summer Time sa Mauritius"}
+            lg{"Oras sa Mauritius"}
+            ls{"Standard Time sa Mauritius"}
+        }
+        "meta:Mawson"{
+            ls{"Oras sa Mawson"}
+        }
+        "meta:Mongolia"{
+            ld{"Summer Time sa Ulan Bator"}
+            lg{"Oras sa Ulan Bator"}
+            ls{"Standard Time sa Ulan Bator"}
+        }
+        "meta:Moscow"{
+            ld{"Summer Time sa Moscow"}
+            lg{"Oras sa Moscow"}
+            ls{"Standard Time sa Moscow"}
+        }
+        "meta:Myanmar"{
+            ls{"Oras sa Myanmar"}
+        }
+        "meta:Nauru"{
+            ls{"Oras sa Nauru"}
+        }
+        "meta:Nepal"{
+            ls{"Oras sa Nepal"}
+        }
+        "meta:New_Caledonia"{
+            ld{"Summer Time sa New Caledonia"}
+            lg{"Oras sa New Caledonia"}
+            ls{"Standard Time sa New Caledonia"}
+        }
+        "meta:New_Zealand"{
+            ld{"Daylight Time sa New Zealand"}
+            lg{"Oras sa New Zealand"}
+            ls{"Standard Time sa New Zealand"}
+        }
+        "meta:Newfoundland"{
+            ld{"Daylight Time sa Newfoundland"}
+            lg{"Oras sa Newfoundland"}
+            ls{"Standard Time sa Newfoundland"}
+        }
+        "meta:Niue"{
+            ls{"Oras sa Niue"}
+        }
+        "meta:Norfolk"{
+            ls{"Oras sa Norfolk Islands"}
+        }
+        "meta:Noronha"{
+            ld{"Summer Time sa Fernando de Noronha"}
+            lg{"Oras sa Fernando de Noronha"}
+            ls{"Standard Time sa Fernando de Noronha"}
+        }
+        "meta:Novosibirsk"{
+            ld{"Summer Time sa Novosibirsk"}
+            lg{"Oras sa Novosibirsk"}
+            ls{"Standard Time sa Novosibirsk"}
+        }
+        "meta:Omsk"{
+            ld{"Summer Time sa Omsk"}
+            lg{"Oras sa Omsk"}
+            ls{"Standard Time sa Omsk"}
+        }
+        "meta:Pakistan"{
+            ld{"Summer Time sa Pakistan"}
+            lg{"Oras sa Pakistan"}
+            ls{"Standard Time sa Pakistan"}
+        }
+        "meta:Palau"{
+            ls{"Oras sa Palau"}
+        }
+        "meta:Papua_New_Guinea"{
+            ls{"Oras sa Papua New Guinea"}
+        }
+        "meta:Paraguay"{
+            ld{"Summer Time sa Paraguay"}
+            lg{"Oras sa Paraguay"}
+            ls{"Standard Time sa Paraguay"}
+        }
+        "meta:Peru"{
+            ld{"Summer Time Peru"}
+            lg{"Oras sa Peru"}
+            ls{"Standard Time sa Peru"}
+        }
+        "meta:Philippines"{
+            ld{"Summer Time sa Pilipinas"}
+            lg{"Oras sa Pilipinas"}
+            ls{"Standard Time sa Pilipinas"}
+        }
+        "meta:Phoenix_Islands"{
+            ls{"Oras sa Phoenix Islands"}
+        }
+        "meta:Pierre_Miquelon"{
+            ld{"Daylight Time sa Saint Pierre and Miquelon"}
+            lg{"Oras sa Saint Pierre and Miquelon"}
+            ls{"Standard Time sa Saint Pierre and Miquelon"}
+        }
+        "meta:Pitcairn"{
+            ls{"Oras sa Pitcairn"}
+        }
+        "meta:Ponape"{
+            ls{"Oras sa Pohnpei"}
+        }
+        "meta:Reunion"{
+            ls{"Oras sa Reunion"}
+        }
+        "meta:Rothera"{
+            ls{"Oras sa Rothera"}
+        }
+        "meta:Sakhalin"{
+            ld{"Summer Time sa Sakhalin"}
+            lg{"Oras sa Sakhalin"}
+            ls{"Standard Time sa Sakhalin"}
+        }
+        "meta:Samara"{
+            ld{"Samara Daylight"}
+            lg{"Oras sa Samara"}
+            ls{"Standard Time sa Samara"}
+        }
+        "meta:Samoa"{
+            ld{"Summer Time sa Samoa"}
+            lg{"Oras sa Samoa"}
+            ls{"Standard Time sa Samoa"}
+        }
+        "meta:Seychelles"{
+            ls{"Oras sa Seychelles"}
+        }
+        "meta:Singapore"{
+            ls{"Oras sa Singapore"}
+        }
+        "meta:Solomon"{
+            ls{"Oras sa Solomon Islands"}
+        }
+        "meta:South_Georgia"{
+            ls{"Oras sa South Georgia"}
+        }
+        "meta:Syowa"{
+            ls{"Oras sa Syowa"}
+        }
+        "meta:Tahiti"{
+            ls{"Oras sa Tahiti"}
+        }
+        "meta:Taipei"{
+            ld{"Daylight Time sa Taipei"}
+            lg{"Oras sa Taipei"}
+            ls{"Standard Time sa Taipei"}
+        }
+        "meta:Tajikistan"{
+            ls{"Oras sa Tajikistan"}
+        }
+        "meta:Tokelau"{
+            ls{"Oras sa Tokelau"}
+        }
+        "meta:Tonga"{
+            ld{"Summer Time sa Tonga"}
+            lg{"Oras sa Tonga"}
+            ls{"Standard Time sa Tonga"}
+        }
+        "meta:Truk"{
+            ls{"Oras sa Chuuk"}
+        }
+        "meta:Turkmenistan"{
+            ld{"Summer Time sa Turkmenistan"}
+            lg{"Oras sa Turkmenistan"}
+            ls{"Standard Time sa Turkmenistan"}
+        }
+        "meta:Tuvalu"{
+            ls{"Oras sa Tuvalu"}
+        }
+        "meta:Uruguay"{
+            ld{"Summer Time sa Uruguay"}
+            lg{"Oras sa Uruguay"}
+            ls{"Standard Time sa Uruguay"}
+        }
+        "meta:Uzbekistan"{
+            ld{"Summer Time sa Uzbekistan"}
+            lg{"Oras sa Uzbekistan"}
+            ls{"Standard Time sa Uzbekistan"}
+        }
+        "meta:Vanuatu"{
+            ld{"Summer Time sa Vanuatu"}
+            lg{"Oras sa Vanuatu"}
+            ls{"Standard Time sa Vanuatu"}
+        }
+        "meta:Venezuela"{
+            ls{"Oras sa Venezuela"}
+        }
+        "meta:Vladivostok"{
+            ld{"Summer Time sa Vladivostok"}
+            lg{"Oras sa Vladivostok"}
+            ls{"Standard Time sa Vladivostok"}
+        }
+        "meta:Volgograd"{
+            ld{"Summer Time sa Volgograd"}
+            lg{"Oras sa Volgograd"}
+            ls{"Standard Time sa Volgograd"}
+        }
+        "meta:Vostok"{
+            ls{"Oras sa Vostok"}
+        }
+        "meta:Wake"{
+            ls{"Oras sa Wake Island"}
+        }
+        "meta:Wallis"{
+            ls{"Oras sa Wallis and Futuna"}
+        }
+        "meta:Yakutsk"{
+            ld{"Summer Time sa Yakutsk"}
+            lg{"Oras sa Yakutsk"}
+            ls{"Standard Time sa Yakutsk"}
+        }
+        "meta:Yekaterinburg"{
+            ld{"Summer Time sa Yekaterinburg"}
+            lg{"Oras sa Yekaterinburg"}
+            ls{"Standard Time sa Yekaterinburg"}
+        }
+        fallbackFormat{"{1} ({0})"}
+        fallbackRegionFormat{"{1} Oras ({0})"}
+        gmtFormat{"GMT{0}"}
+        gmtZeroFormat{"GMT"}
+        hourFormat{"+HH:mm;-HH:mm"}
+        regionFormat{"{0} (na) Oras"}
+    }
+}
