@@ -445,6 +445,7 @@ typedef enum UDateFormatStyle {
 
 // deprecated skeleton constants
 
+#ifndef U_HIDE_DEPRECATED_API 
 /**
  * Constant for date skeleton with standalone month.
  * @deprecated ICU 50 Use UDAT_MONTH instead.
@@ -476,6 +477,7 @@ typedef enum UDateFormatStyle {
  * @deprecated ICU 50 Use instead UDAT_HOUR UDAT_ABBR_SPECIFIC_TZ or some other timezone presentation.
  */
 #define UDAT_HOUR_TZ                    "jz"
+#endif  /* U_HIDE_DEPRECATED_API */
 
 /**
  * FieldPosition and UFieldPosition selectors for format fields
@@ -1333,7 +1335,6 @@ udat_applyPatternRelative(UDateFormat *format,
                           const UChar *timePattern,
                           int32_t     timePatternLength,
                           UErrorCode  *status);
-#endif  /* U_HIDE_INTERNAL_API */
 
 /**
  * @internal
@@ -1361,6 +1362,7 @@ udat_registerOpener(UDateFormatOpener opener, UErrorCode *status);
  */
 U_INTERNAL UDateFormatOpener U_EXPORT2
 udat_unregisterOpener(UDateFormatOpener opener, UErrorCode *status);
+#endif  /* U_HIDE_INTERNAL_API */
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

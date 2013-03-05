@@ -1,6 +1,6 @@
 /*
 *****************************************************************************************
-* Copyright (C) 2010-2012, International Business Machines
+* Copyright (C) 2010-2013, International Business Machines
 * Corporation and others. All Rights Reserved.
 *****************************************************************************************
 */
@@ -37,6 +37,7 @@
  * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
  */
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Type of plurals and PluralRules.
  * @draft ICU 50
@@ -62,6 +63,7 @@ enum UPluralType {
  * @draft ICU 50
  */
 typedef enum UPluralType UPluralType;
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Opaque UPluralRules object for use in C programs.
@@ -82,6 +84,7 @@ typedef struct UPluralRules UPluralRules;  /**< C typedef for struct UPluralRule
 U_STABLE UPluralRules* U_EXPORT2
 uplrules_open(const char *locale, UErrorCode *status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Opens a new UPluralRules object using the predefined plural rules for a
  * given locale and the plural type.
@@ -93,6 +96,7 @@ uplrules_open(const char *locale, UErrorCode *status);
  */
 U_DRAFT UPluralRules* U_EXPORT2
 uplrules_openForType(const char *locale, UPluralType type, UErrorCode *status);
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Closes a UPluralRules object. Once closed it may no longer be used.

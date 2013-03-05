@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2012, International Business Machines
+*   Copyright (C) 1999-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -253,6 +253,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
     U8_NEXT(s, _u8_get_index, length, c); \
 }
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Get a code point from a string at a random-access offset,
  * without changing the offset.
@@ -283,6 +284,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
     U8_SET_CP_START(s, start, _u8_get_index); \
     U8_NEXT_OR_FFFD(s, _u8_get_index, length, c); \
 }
+#endif /* U_HIDE_DRAFT_API */
 
 /* definitions with forward iteration --------------------------------------- */
 
@@ -366,6 +368,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
     } \
 }
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Get a code point from a string at a code point boundary offset,
  * and advance the offset to the next code point boundary.
@@ -416,6 +419,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
         } \
     } \
 }
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Append a code point to a string, overwriting 1 to 4 bytes.
@@ -672,6 +676,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
     } \
 }
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Move the string offset from one code point boundary to the previous one
  * and get the code point between them.
@@ -702,6 +707,7 @@ utf8_back1SafeBody(const uint8_t *s, int32_t start, int32_t i);
         (c)=utf8_prevCharSafeBody((const uint8_t *)s, start, &(i), c, -3); \
     } \
 }
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Move the string offset from one code point boundary to the previous one.

@@ -258,7 +258,6 @@ private:
     UVector *containedRegions;
     UVector *preferredValues;
 
-#ifndef U_HIDE_INTERNAL_API
     /**
      * Default Constructor. Internal - use factory methods only.
      *
@@ -278,8 +277,6 @@ private:
      */
 
     static void loadRegionData();
-
-#endif  /* U_HIDE_INTERNAL_API */
 
 };
 

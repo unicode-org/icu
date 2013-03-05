@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 1997-2012, International Business Machines
+*   Copyright (C) 1997-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -1457,14 +1457,16 @@ typedef enum UEastAsianWidth {
 typedef enum UCharNameChoice {
     /** Unicode character name (Name property). @stable ICU 2.0 */
     U_UNICODE_CHAR_NAME,
+#ifndef U_HIDE_DEPRECATED_API 
     /**
      * The Unicode_1_Name property value which is of little practical value.
      * Beginning with ICU 49, ICU APIs return an empty string for this name choice.
      * @deprecated ICU 49
      */
     U_UNICODE_10_CHAR_NAME,
+#endif  /* U_HIDE_DEPRECATED_API */
     /** Standard or synthetic character name. @stable ICU 2.0 */
-    U_EXTENDED_CHAR_NAME,
+    U_EXTENDED_CHAR_NAME = U_UNICODE_CHAR_NAME+2,
     /** Corrected name from NameAliases.txt. @stable ICU 4.4 */
     U_CHAR_NAME_ALIAS,
     /** @stable ICU 2.0 */
@@ -2655,6 +2657,7 @@ u_charName(UChar32 code, UCharNameChoice nameChoice,
            char *buffer, int32_t bufferLength,
            UErrorCode *pErrorCode);
 
+#ifndef U_HIDE_DEPRECATED_API 
 /**
  * Returns an empty string.
  * Used to return the ISO 10646 comment for a character.
@@ -2677,6 +2680,7 @@ U_STABLE int32_t U_EXPORT2
 u_getISOComment(UChar32 c,
                 char *dest, int32_t destCapacity,
                 UErrorCode *pErrorCode);
+#endif  /* U_HIDE_DEPRECATED_API */
 
 /**
  * Find a Unicode character by its name and return its code point value.

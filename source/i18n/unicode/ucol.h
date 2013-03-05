@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (c) 1996-2012, International Business Machines Corporation and others.
+* Copyright (c) 1996-2013, International Business Machines Corporation and others.
 * All Rights Reserved.
 *******************************************************************************
 */
@@ -533,6 +533,7 @@ ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *target,
         int32_t            targetLength);
 
+#ifndef U_HIDE_DRAFT_API
 /** 
 * Compare two strings in UTF-8. 
 * The strings will be compared using the options already specified. 
@@ -559,6 +560,7 @@ ucol_strcollUTF8(
         const char      *target,
         int32_t         targetLength,
         UErrorCode      *status);
+#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Determine if one string is greater than another.

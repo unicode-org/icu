@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2012, International Business Machines Corporation and
+* Copyright (C) 2007-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -192,6 +192,7 @@ public:
      */
     PluralFormat(const Locale& locale, const PluralRules& rules, UErrorCode& status);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a new <code>PluralFormat</code> for the plural type.
      * The standard number formatting will be done using the given locale.
@@ -203,6 +204,7 @@ public:
      * @draft ICU 50
      */
     PluralFormat(const Locale& locale, UPluralType type, UErrorCode& status);
+#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Creates a new cardinal-number <code>PluralFormat</code> for a given pattern string.
@@ -266,6 +268,7 @@ public:
                  const UnicodeString& pattern,
                  UErrorCode& status);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a new <code>PluralFormat</code> for a plural type, a
      * pattern and a locale.
@@ -283,6 +286,7 @@ public:
                  UPluralType type,
                  const UnicodeString& pattern,
                  UErrorCode& status);
+#endif /* U_HIDE_DRAFT_API */
 
     /**
       * copy constructor.
@@ -383,6 +387,7 @@ public:
                           FieldPosition& pos,
                           UErrorCode& status) const;
 
+#ifndef U_HIDE_DEPRECATED_API 
     /**
      * Sets the locale used by this <code>PluraFormat</code> object.
      * Note: Calling this method resets this <code>PluraFormat</code> object,
@@ -399,6 +404,7 @@ public:
      *             use one of the constructors to create a new instance instead.
      */
     void setLocale(const Locale& locale, UErrorCode& status);
+#endif  /* U_HIDE_DEPRECATED_API */
 
     /**
       * Sets the number format used by this formatter.  You only need to
