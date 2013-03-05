@@ -4926,6 +4926,7 @@ icu4j/tools/build/icu4j46.api2.gz -text
 icu4j/tools/build/icu4j48.api2.gz -text
 icu4j/tools/build/icu4j49.api2.gz -text
 icu4j/tools/build/icu4j50.api2.gz -text
+icu4j/tools/build/icu4j51.api2.gz -text
 icu4j/tools/build/manifest.stub -text
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/APIData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/APIInfo.java svneol=native#text/plain%3Bcharset%3Dutf-8
