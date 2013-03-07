@@ -1,0 +1,116 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/zh_Hant_HK.xml
+// *
+// ***************************************************************************
+zh_Hant_HK{
+    NumberElements{
+        latn{
+            patterns{
+                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+            }
+        }
+    }
+    Version{"2.0.82.47"}
+    calendar{
+        buddhist{
+            availableFormats{
+                MEd{"M-d（E）"}
+                Md{"M-d"}
+            }
+        }
+        generic{
+            DateTimePatterns{
+                "ah:mm:ss [zzzz]",
+                "ah:mm:ss [z]",
+                "ahh:mm:ss",
+                "ah:mm",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gy年M月d日",
+                "d/M/yGGGGG",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                MEd{"E, d/M"}
+                Md{"d/M"}
+                yyyyM{"M/yGGGGG"}
+                yyyyMEd{"E, d/M/yGGGGG"}
+                yyyyMd{"d/M/yGGGGG"}
+            }
+        }
+        gregorian{
+            DateTimePatterns{
+                "ah:mm:ss [zzzz]",
+                "ah:mm:ss [z]",
+                "ahh:mm:ss",
+                "ah:mm",
+                "y年M月d日EEEE",
+                "y年M月d日",
+                "y年M月d日",
+                "d/M/yy",
+                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1}{0}",
+                "{1}{0}",
+            }
+            availableFormats{
+                Ed{"d E"}
+                MEd{"E, d/M"}
+                Md{"d/M"}
+            }
+        }
+        roc{
+            availableFormats{
+                MEd{"d-M（E）"}
+                Md{"d-M"}
+            }
+        }
+    }
+    fields{
+        month{
+            relative{
+                "-1"{"上月"}
+                "1"{"下月"}
+            }
+        }
+        year{
+            relative{
+                "-1"{"上年"}
+                "0"{"本年"}
+                "1"{"下年"}
+            }
+        }
+    }
+    measurementSystemNames{
+        UK{"英國"}
+        US{"美國"}
+        metric{"十進制"}
+    }
+    units{
+        day-future{
+            other{"{0} 日後"}
+        }
+        day-past{
+            other{"{0} 日前"}
+        }
+        hour{
+            other{"{0}時"}
+        }
+        month-past{
+            other{"{0} 月前"}
+        }
+        week{
+            other{"{0}星期"}
+        }
+    }
+}

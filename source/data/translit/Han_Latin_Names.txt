@@ -1,0 +1,40 @@
+﻿# ***************************************************************************
+# *
+# *  Copyright (C) 2004-2013, International Business Machines
+# *  Corporation; Unicode, Inc.; and others.  All Rights Reserved.
+# *
+# ***************************************************************************
+# File: Han_Latin_Names.txt
+# Generated from CLDR 
+#
+::Han-Spacedhan();
+万俟→mòqí;
+长孙→zhǎngsūn;
+秘→bì;
+卜→bǔ;
+长→cháng;
+重→chóng;
+干→gān;
+葛→gě;
+盖→gě;
+华→huà;
+贾→jiǎ;
+賈→jiǎ;
+筠→jūn;
+区→ōu;
+繁→pó;
+仇→qiú;
+任→rén;
+单→shàn;
+折→shé;
+沈→shěn;
+峙→shì;
+隗→wěi;
+解→xiè;
+莘→xīn;
+尉→yù;
+乐→yuè;
+查→zhā;
+翟→zhái;
+曾→zēng;
+::Han-Latin();
