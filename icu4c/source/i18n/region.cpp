@@ -644,7 +644,7 @@ Region::getType() const {
 
 RegionNameEnumeration::RegionNameEnumeration(UVector *fNameList, UErrorCode& status) {
     pos=0;
-    if (fNameList) {
+    if (fNameList && U_SUCCESS(status)) {
         fRegionNames = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, fNameList->size(),status);
         for ( int32_t i = 0 ; i < fNameList->size() ; i++ ) {
             UnicodeString* this_region_name = (UnicodeString *)fNameList->elementAt(i);
@@ -658,8 +658,15 @@ RegionNameEnumeration::RegionNameEnumeration(UVector *fNameList, UErrorCode& sta
 }
 
 const UnicodeString*
-RegionNameEnumeration::snext(UErrorCode& /*status*/) { 
-    return (const UnicodeString *)fRegionNames->elementAt(pos++);
+RegionNameEnumeration::snext(UErrorCode& status) { 
+  if (U_FAILURE(status) || (fRegionNames==NULL)) {
+    return NULL;
+  }
+  const UnicodeString* nextStr = (const UnicodeString *)fRegionNames->elementAt(pos);
+  if (nextStr!=NULL) {
+    pos++;
+  }
+  return nextStr;
 }
 
 void
