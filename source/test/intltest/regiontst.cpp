@@ -341,25 +341,24 @@ RegionTest::RegionTest() {
 RegionTest::~RegionTest() {
 }
 
-#define CASE(id,test) case id: name = #test; if (exec) { logln(#test "---"); logln((UnicodeString)""); test(); } break;
-
 void 
 RegionTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* par )
 {
-    optionv = (par && *par=='v');
-    switch (index) {
-        CASE(0, TestKnownRegions)
-        CASE(1, TestGetInstanceString)
-        CASE(2, TestGetInstanceInt)
-        CASE(3, TestGetContainedRegions)
-        CASE(4, TestGetContainedRegionsWithType)
-        CASE(5, TestGetContainingRegion)
-        CASE(6, TestGetContainingRegionWithType)
-        CASE(7, TestGetPreferredValues)
-        CASE(8, TestContains);
-        CASE(9, TestAvailableTerritories)
-        default: name = ""; break;
-    }
+   optionv = (par && *par=='v');
+
+   TESTCASE_AUTO_BEGIN;
+   TESTCASE_AUTO(TestKnownRegions);
+   TESTCASE_AUTO(TestGetInstanceString);
+   TESTCASE_AUTO(TestGetInstanceInt);
+   TESTCASE_AUTO(TestGetContainedRegions);
+   TESTCASE_AUTO(TestGetContainedRegionsWithType);
+   TESTCASE_AUTO(TestGetContainingRegion);
+   TESTCASE_AUTO(TestGetContainingRegionWithType);
+   TESTCASE_AUTO(TestGetPreferredValues);
+   TESTCASE_AUTO(TestContains);
+   TESTCASE_AUTO(TestAvailableTerritories);
+   TESTCASE_AUTO(TestNoContainedRegions);
+   TESTCASE_AUTO_END;
 }
 
 
@@ -692,6 +691,17 @@ void RegionTest::TestAvailableTerritories() {
     delete availableTerritories;
     delete containedInWorld;
 }
+
+void RegionTest::TestNoContainedRegions(void) {
+  UErrorCode status = U_ZERO_ERROR;
+  const char *emptyStr = Region::getInstance("BM",status)->getContainedRegions()->next(NULL, status);
+  if (U_FAILURE(status)||(emptyStr!=NULL)) {
+    errln("Error, 'BM' should have no subregions, but returned str=%p, err=%s\n", emptyStr, u_errorName(status));
+  } else {
+    logln("Success - BM has no subregions\n");
+  }
+}
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
 //eof
