@@ -3583,7 +3583,7 @@ void DateFormatTest::Test6880() {
     if (failure(status, "construct GregorianCalendar", TRUE)) return;
     
     gcal.clear();
-    gcal.set(1910, UCAL_JULY, 1, 12, 00);   // offset 8:05:52
+    gcal.set(1910, UCAL_JULY, 1, 12, 00);   // offset 8:05:57
     d1 = gcal.getTime(status);
 
     gcal.clear();
@@ -3593,7 +3593,7 @@ void DateFormatTest::Test6880() {
     gcal.clear();
     gcal.set(1970, UCAL_JANUARY, 1, 12, 00);
     dexp2 = gcal.getTime(status);
-    dexp1 = dexp2 - (5*60 + 52)*1000;   // subtract 5m52s
+    dexp1 = dexp2 - (5*60 + 57)*1000;   // subtract 5m57s
 
     if (U_FAILURE(status)) {
         errln("FAIL: Gregorian calendar error");

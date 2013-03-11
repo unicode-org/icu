@@ -149,7 +149,7 @@ clean:
 		-rm -rf $(TZDIR)
 		-$(RMV) $(ICUZDUMPTARG) tzorig ./zdumpout/ ./icuzdumpout/
 ifneq ($(TZDATA),)
-		-rm -rf `gunzip -d < $(TZDATA) | tar tf - | grep -o '[^ ]*$$' | tr '\n' ' '`
+		-rm -rf `gunzip -d < $(TZDATA) | tar tf - --exclude=Makefile | grep -o '[^ ]*$$' | tr '\n' ' '`
 		-rm tdatamarker
 endif
 

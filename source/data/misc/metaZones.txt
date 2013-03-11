@@ -2904,6 +2904,23 @@ metaZones:table(nofallback){
                 "Nepal",
             }
         }
+        "Asia:Khandyga"{
+            {
+                "Yakutsk",
+                "1970-01-01 00:00",
+                "2003-12-31 15:00",
+            }
+            {
+                "Vladivostok",
+                "2003-12-31 15:00",
+                "2011-09-12 13:00",
+            }
+            {
+                "Yakutsk",
+                "2011-09-12 13:00",
+                "9999-12-31 23:59",
+            }
+        }
         "Asia:Krasnoyarsk"{
             {
                 "Krasnoyarsk",
@@ -3190,6 +3207,23 @@ metaZones:table(nofallback){
                 "9999-12-31 23:59",
             }
         }
+        "Asia:Ust-Nera"{
+            {
+                "Yakutsk",
+                "1970-01-01 00:00",
+                "1981-03-31 15:00",
+            }
+            {
+                "Magadan",
+                "1981-03-31 15:00",
+                "2011-09-12 12:00",
+            }
+            {
+                "Vladivostok",
+                "2011-09-12 12:00",
+                "9999-12-31 23:59",
+            }
+        }
         "Asia:Vientiane"{
             {
                 "Indochina",
@@ -3409,6 +3443,11 @@ metaZones:table(nofallback){
             }
         }
         "Europe:Budapest"{
+            {
+                "Europe_Central",
+            }
+        }
+        "Europe:Busingen"{
             {
                 "Europe_Central",
             }
@@ -4148,6 +4187,7 @@ metaZones:table(nofallback){
     primaryZones{
         CL{"America/Santiago"}
         CN{"Asia/Shanghai"}
+        DE{"Europe/Berlin"}
         EC{"America/Guayaquil"}
         ES{"Europe/Madrid"}
         MH{"Pacific/Majuro"}

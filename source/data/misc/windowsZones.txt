@@ -606,7 +606,7 @@ windowsZones:table(nofallback){
         }
         "Vladivostok Standard Time"{
             001{"Asia/Vladivostok"}
-            RU{"Asia/Vladivostok Asia/Sakhalin"}
+            RU{"Asia/Vladivostok Asia/Sakhalin Asia/Ust-Nera"}
         }
         "W. Australia Standard Time"{
             001{"Australia/Perth"}
@@ -635,7 +635,7 @@ windowsZones:table(nofallback){
             AD{"Europe/Andorra"}
             AT{"Europe/Vienna"}
             CH{"Europe/Zurich"}
-            DE{"Europe/Berlin"}
+            DE{"Europe/Berlin Europe/Busingen"}
             GI{"Europe/Gibraltar"}
             IT{"Europe/Rome"}
             LI{"Europe/Vaduz"}
@@ -672,7 +672,7 @@ windowsZones:table(nofallback){
         }
         "Yakutsk Standard Time"{
             001{"Asia/Yakutsk"}
-            RU{"Asia/Yakutsk"}
+            RU{"Asia/Yakutsk Asia/Khandyga"}
         }
     }
 }
