@@ -35,6 +35,7 @@ public:
     void TestGetPreferredValues(void);
     void TestContains(void);
     void TestAvailableTerritories(void);
+    void TestNoContainedRegions(void);
 
 private:
 
