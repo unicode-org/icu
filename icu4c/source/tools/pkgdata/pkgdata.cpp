@@ -1865,7 +1865,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
             /* remove spaces at the beginning */
             linePtr = line;
             /* On z/OS, disable call to isspace (#9996).  Investigate using uprv_isspace instead (#9999) */
-#if U_PLATFORM == U_PF_OS390
+#if U_PLATFORM != U_PF_OS390
             while(isspace(*linePtr)) {
                 linePtr++;
             }
