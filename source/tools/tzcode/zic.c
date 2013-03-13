@@ -2209,18 +2209,24 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 			for (j=0; j<zp->z_nrules; ++j) {
 				rp = &zp->z_rules[j];
 				if (rp->r_hiyear == INT_MAX) {
+					if (rp->r_loyear > finalRuleYear) {
+						finalRuleYear = rp->r_loyear;
+					}
 					if (finalRule1 == NULL) {
 						finalRule1 = rp;
-						finalRuleYear = rp->r_loyear;
-			    	} else if (finalRule2 == NULL) {
+					} else if (finalRule2 == NULL) {
 						finalRule2 = rp;
-						if (rp->r_loyear > finalRuleYear) {
-							finalRuleYear = rp->r_loyear;
-						}
 					} else {
 						error("more than two max rules found (ICU)");
 						exit(EXIT_FAILURE);
 					}
+				} else if (rp->r_hiyear >= finalRuleYear) {
+					/* There might be an overriding non-max rule
+					 * applied to a specific year after the max rule's
+					 * start year. In this case, we need change the
+					 * start year of the final rules to the following
+					 * year. */
+					finalRuleYear = rp->r_hiyear + 1;
 				}
 			}
 			if (finalRule1 != NULL && finalRule2 == NULL) {
