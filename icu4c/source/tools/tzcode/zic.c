@@ -2220,7 +2220,7 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 						error("more than two max rules found (ICU)");
 						exit(EXIT_FAILURE);
 					}
-				} else if (rp->r_hiyear > finalRuleYear) {
+				} else if (rp->r_hiyear >= finalRuleYear) {
 					/* There might be an overriding non-max rule
 					 * applied to a specific year after the max rule's
 					 * start year. In this case, we need change the
