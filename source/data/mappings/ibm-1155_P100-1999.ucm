@@ -1,6 +1,6 @@
 # ***************************************************************************
 # *
-# *   Copyright (C) 1995-2002, International Business Machines
+# *   Copyright (C) 1995-2013, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
 # *
 # ***************************************************************************
@@ -187,7 +187,7 @@ CHARMAP
 <U00A7> \xB5 |0
 <U00A8> \xBD |0
 <U00A9> \xB4 |0
-<U00AA> \x9A |0
+<U00AA> \x9A |1
 <U00AB> \x8A |0
 <U00AC> \xBA |0
 <U00AD> \xCA |0
@@ -274,6 +274,7 @@ CHARMAP
 <U015E> \x7C |0
 <U015F> \x6A |0
 <U20AC> \x9F |0
+<U20BA> \x9A |0
 <UFF01> \x4F |1
 <UFF02> \xFC |1
 <UFF03> \xEC |1

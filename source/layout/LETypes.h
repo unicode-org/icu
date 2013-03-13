@@ -601,6 +601,12 @@ enum LEFeatureENUMs {
   LE_FEATURE_ENUM_MAX = LE_CHAR_FILTER_FEATURE_ENUM
 };
 
+
+/** 
+ * Flags for typographic features.
+ * @internal
+ * @{
+ */
 #define LE_Kerning_FEATURE_FLAG   (1 << LE_Kerning_FEATURE_ENUM)
 #define LE_Ligatures_FEATURE_FLAG (1 << LE_Ligatures_FEATURE_ENUM)
 #define LE_CLIG_FEATURE_FLAG (1 << LE_CLIG_FEATURE_ENUM)
@@ -626,6 +632,9 @@ enum LEFeatureENUMs {
 #define LE_SS07_FEATURE_FLAG (1 << LE_SS07_FEATURE_ENUM)
 
 #define LE_CHAR_FILTER_FEATURE_FLAG (1 << LE_CHAR_FILTER_FEATURE_ENUM)
+/**
+ * @}
+ */
 
 /**
  * Error codes returned by the LayoutEngine.
