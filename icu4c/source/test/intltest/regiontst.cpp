@@ -694,12 +694,19 @@ void RegionTest::TestAvailableTerritories() {
 
 void RegionTest::TestNoContainedRegions(void) {
   UErrorCode status = U_ZERO_ERROR;
-  const char *emptyStr = Region::getInstance("BM",status)->getContainedRegions()->next(NULL, status);
+  const Region *region = Region::getInstance("BM",status);
+  if (U_FAILURE(status) || region == NULL) {
+      dataerrln("Fail called to Region::getInstance(\"BM\", status) - %s", u_errorName(status));
+      return;
+  }
+  StringEnumeration *containedRegions = region->getContainedRegions();
+  const char *emptyStr = containedRegions->next(NULL, status);
   if (U_FAILURE(status)||(emptyStr!=NULL)) {
     errln("Error, 'BM' should have no subregions, but returned str=%p, err=%s\n", emptyStr, u_errorName(status));
   } else {
     logln("Success - BM has no subregions\n");
   }
+  delete containedRegions;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
