@@ -4232,6 +4232,9 @@ void RBBITest::TestBug9983(void)  {
     LocalPointer<RuleBasedBreakIterator> brkiter(static_cast<RuleBasedBreakIterator *>(
         BreakIterator::createWordInstance(Locale::getRoot(), status)));
     TEST_ASSERT_SUCCESS(status);
+    if (U_FAILURE(status)) {
+        return;
+    }
     brkiter->setText(text);
     int32_t offset, rstatus;
     brkiter->last();
