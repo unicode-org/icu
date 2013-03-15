@@ -15,14 +15,11 @@ h4.doc { text-decoration: underline }
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
 <h3>Read Me for ICU4J 51</h3>
-(Last Update: 2013-Mar-4)
+(Last Update: 2013-Mar-15)
 <hr size="2" width="100%">
 
-<p><b>Note:</b> <!-- This is major release of ICU4J. It contains bug fixes and adds implementations
-of inherited API and introduces new API or functionality. -->
-This is a release candidate version of ICU4J 51.
-The contents of this document may not reflect the recent changes done
-for ICU 51 development. It is not recommended for production use.
+<p><b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
+of inherited API and introduces new API or functionality.
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -131,7 +128,7 @@ found in ICU4J.</p>
 <p>See the <a href="http://sites.google.com/site/icusite/download/51">ICU 51 download page</a>
 about new features in this release.
 The list of API changes since the previous ICU4J release is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-51-rc/APIChangeReport.html">here</a>.</p>
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-51/APIChangeReport.html">here</a>.</p>
 
 <h4>Date format pattern "V"</h4>
 <p>The date format pattern "V" was introduced in ICU 3.8 (inherited from CLDR 1.5) as
@@ -179,7 +176,7 @@ mean that projects using ICU become subject to GPL.
 <p>
  The IBM version contains the essential text of the license, omitting the
 X-specific trademarks and copyright notices. The full copy of <a
- href="http://source.icu-project.org/repos/icu/icu4j/tags/release-51-rc/main/shared/licenses/license.html">ICU's license</a> is included in the download
+ href="http://source.icu-project.org/repos/icu/icu4j/tags/release-51/main/shared/licenses/license.html">ICU's license</a> is included in the download
 package.
 </p>
 <h3 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h3>
@@ -1005,9 +1002,9 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version 'release-23-d02'</li>
-    <li>Checkout ICU4C with tag 'release-51-rc'</li>
-    <li>Checkout ICU4J with tag 'release-51-rc'</li>
+    <li>Checkout or download CLDR version 'release-23'</li>
+    <li>Checkout ICU4C with tag 'release-51'</li>
+    <li>Checkout ICU4J with tag 'release-51'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
@@ -1019,7 +1016,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 51 Release Candidate includes time zone data version 2012j, which is the latest one as of
+<p>ICU4J 51.1 includes time zone data version 2013b, which is the latest one as of
 the release date. However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
