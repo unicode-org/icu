@@ -83,6 +83,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
 
         errorCode = U_ZERO_ERROR;
         currentBundleKey = ures_getKey(currentBundle);
+        (void)currentBundleKey;    /* Suppress set but not used warning. */
         subBundle = ures_getNextResource(currentBundle, NULL, &errorCode);
         if (U_FAILURE(errorCode)) {
             log_err("Can't open a resource for lnocale %s. Error: %s\n", locale, u_errorName(errorCode));
@@ -314,6 +315,7 @@ TestKeyInRootRecursive(UResourceBundle *root, const char *rootName,
                                 locale);
                     }
                 }
+                (void)sameArray;    /* Suppress set but not used warning. */
 /*                if (sameArray && strcmp(rootName, "root") == 0) {
                     log_err("Arrays are the same with key \"%s\" in \"%s\" from root for locale \"%s\"\n",
                             subBundleKey,
