@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2010, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -438,6 +438,7 @@ static void TestFallback()
 
     /* clear it out..  just do some calls to get the gears turning */
     junk = ures_getStringByKey(fr_FR, "LocaleID", &resultLen, &status);
+    (void)junk;    /* Suppress set but not used warning. */
     status = U_ZERO_ERROR;
     junk = ures_getStringByKey(fr_FR, "LocaleString", &resultLen, &status);
     status = U_ZERO_ERROR;

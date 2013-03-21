@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation
+ * Copyright (c) 1997-2013, International Business Machines Corporation
  * and others. All Rights Reserved.
  ********************************************************************/
  
@@ -326,6 +326,7 @@ void CalendarRegressionTest::test4040996()
     }
     UErrorCode status = U_ZERO_ERROR;    
     count = ids->count(status);
+    (void)count;    // Suppress set but not used warning.
     SimpleTimeZone *pdt = new SimpleTimeZone(-8 * 60 * 60 * 1000, *ids->snext(status));
     pdt->setStartRule(UCAL_APRIL, 1, UCAL_SUNDAY, 2 * 60 * 60 * 1000, status);
     pdt->setEndRule(UCAL_OCTOBER, -1, UCAL_SUNDAY, 2 * 60 * 60 * 1000, status);

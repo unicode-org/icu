@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -104,6 +104,7 @@ static void TestInt64Parse()
     log_verbose("About to test unum_parseInt64() with out of range number\n");
 
     a = unum_parseInt64(nf, text, size, 0, status);
+    (void)a;     /* Suppress set but not used warning. */
 
 
     if(!U_FAILURE(*status))
