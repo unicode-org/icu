@@ -1,6 +1,6 @@
 /*
  ********************************************************************************
- *   Copyright (C) 1997-2012, International Business Machines
+ *   Copyright (C) 1997-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ********************************************************************************
  *
@@ -371,20 +371,6 @@ public:
      * @stable ICU 2.0
      */
     UnicodeString& format(UDate date, UnicodeString& appendTo) const;
-
-    /**
-     * Redeclared Format method.
-     *
-     * @param obj       The object to be formatted into a string.
-     * @param appendTo  Output parameter to receive result.
-     *                  Result is appended to existing contents.
-     * @param status    Output param filled with success/failure status.
-     * @return          Reference to 'appendTo' parameter.
-     * @stable ICU 2.0
-     */
-    UnicodeString& format(const Formattable& obj,
-                          UnicodeString& appendTo,
-                          UErrorCode& status) const;
 
     /**
      * Parse a date/time string. For example, a time text "07/10/96 4:5 PM, PDT"
@@ -781,12 +767,6 @@ public:
 #endif  /* U_HIDE_OBSOLETE_API */
 };
 
-inline UnicodeString&
-DateFormat::format(const Formattable& obj,
-                   UnicodeString& appendTo,
-                   UErrorCode& status) const {
-    return Format::format(obj, appendTo, status);
-}
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

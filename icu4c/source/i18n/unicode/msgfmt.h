@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 2007-2012, International Business Machines Corporation and
+* Copyright (C) 2007-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 ********************************************************************************
 *
@@ -696,25 +696,6 @@ public:
                                   UErrorCode& status) const;
 
     /**
-     * Formats the given array of arguments into a user-readable
-     * string.  The array must be stored within a single Formattable
-     * object of type kArray. If the Formattable object type is not of
-     * type kArray, then returns a failing UErrorCode.
-     *
-     * @param obj       The object to format
-     * @param appendTo  Output parameter to receive result.
-     *                  Result is appended to existing contents.
-     * @param status    Input/output error code.  If the
-     *                  pattern cannot be parsed, set to failure code.
-     * @return          Reference to 'appendTo' parameter.
-     * @stable ICU 2.0
-     */
-    UnicodeString& format(const Formattable& obj,
-                          UnicodeString& appendTo,
-                          UErrorCode& status) const;
-
-
-    /**
      * Formats the given array of arguments into a user-defined argument name
      * array. This function supports both named and numbered
      * arguments-- if numbered, the formatName is the
@@ -1091,14 +1072,6 @@ private:
 
     friend class MessageFormatAdapter; // getFormatTypeList() access
 };
-
-inline UnicodeString&
-MessageFormat::format(const Formattable& obj,
-                      UnicodeString& appendTo,
-                      UErrorCode& status) const {
-    return Format::format(obj, appendTo, status);
-}
-
 
 U_NAMESPACE_END
 

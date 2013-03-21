@@ -1492,15 +1492,6 @@ DecimalFormat::_format(const DigitList &number,
     return subformat(appendTo, handler, adjustedNum, FALSE, status);
 }
 
-UnicodeString&
-DecimalFormat::format(  const Formattable& obj,
-                        UnicodeString& appendTo,
-                        FieldPosition& fieldPosition,
-                        UErrorCode& status) const
-{
-    return NumberFormat::format(obj, appendTo, fieldPosition, status);
-}
-
 /**
  * Return true if a grouping separator belongs at the given
  * position, based on whether grouping is in use and the values of
@@ -1899,14 +1890,6 @@ void DecimalFormat::addPadding(UnicodeString& appendTo,
 }
 
 //------------------------------------------------------------------------------
-
-void
-DecimalFormat::parse(const UnicodeString& text,
-                     Formattable& result,
-                     UErrorCode& status) const
-{
-    NumberFormat::parse(text, result, status);
-}
 
 void
 DecimalFormat::parse(const UnicodeString& text,
