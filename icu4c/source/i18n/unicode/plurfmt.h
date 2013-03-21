@@ -450,10 +450,12 @@ public:
      */
     virtual Format* clone(void) const;
 
-    /**
-    * Redeclared Format method.
+   /**
+    * Formats a plural message for a number taken from a Formattable object.
     *
-    * @param obj       The object to be formatted into a string.
+    * @param obj       The object containing a number for which the 
+    *                  plural message should be formatted.
+    *                  The object must be of a numeric type.
     * @param appendTo  output parameter to receive result.
     *                  Result is appended to existing contents.
     * @param pos       On input: an alignment field, if desired.

@@ -1104,79 +1104,8 @@ public:
                                   FieldPosition& pos,
                                   UErrorCode& status) const;
 
+   using NumberFormat::parse;
 
-    /**
-     * Format a Formattable using base-10 representation.
-     *
-     * @param obj       The value to be formatted.
-     * @param appendTo  Output parameter to receive result.
-     *                  Result is appended to existing contents.
-     * @param pos       On input: an alignment field, if desired.
-     *                  On output: the offsets of the alignment field.
-     * @param status    Error code indicating success or failure.
-     * @return          Reference to 'appendTo' parameter.
-     * @stable ICU 2.0
-     */
-    virtual UnicodeString& format(const Formattable& obj,
-                                  UnicodeString& appendTo,
-                                  FieldPosition& pos,
-                                  UErrorCode& status) const;
-
-    /**
-     * Redeclared NumberFormat method.
-     * Formats an object to produce a string.
-     *
-     * @param obj       The object to format.
-     * @param appendTo  Output parameter to receive result.
-     *                  Result is appended to existing contents.
-     * @param status    Output parameter filled in with success or failure status.
-     * @return          Reference to 'appendTo' parameter.
-     * @stable ICU 2.0
-     */
-    UnicodeString& format(const Formattable& obj,
-                          UnicodeString& appendTo,
-                          UErrorCode& status) const;
-
-    /**
-     * Redeclared NumberFormat method.
-     * Format a double number.
-     *
-     * @param number    The value to be formatted.
-     * @param appendTo  Output parameter to receive result.
-     *                  Result is appended to existing contents.
-     * @return          Reference to 'appendTo' parameter.
-     * @stable ICU 2.0
-     */
-    UnicodeString& format(double number,
-                          UnicodeString& appendTo) const;
-
-    /**
-     * Redeclared NumberFormat method.
-     * Format a long number. These methods call the NumberFormat
-     * pure virtual format() methods with the default FieldPosition.
-     *
-     * @param number    The value to be formatted.
-     * @param appendTo  Output parameter to receive result.
-     *                  Result is appended to existing contents.
-     * @return          Reference to 'appendTo' parameter.
-     * @stable ICU 2.0
-     */
-    UnicodeString& format(int32_t number,
-                          UnicodeString& appendTo) const;
-
-    /**
-     * Redeclared NumberFormat method.
-     * Format an int64 number. These methods call the NumberFormat
-     * pure virtual format() methods with the default FieldPosition.
-     *
-     * @param number    The value to be formatted.
-     * @param appendTo  Output parameter to receive result.
-     *                  Result is appended to existing contents.
-     * @return          Reference to 'appendTo' parameter.
-     * @stable ICU 2.8
-     */
-    UnicodeString& format(int64_t number,
-                          UnicodeString& appendTo) const;
    /**
     * Parse the given string using this object's choices. The method
     * does string comparisons to try to find an optimal match.
@@ -1199,19 +1128,6 @@ public:
     virtual void parse(const UnicodeString& text,
                        Formattable& result,
                        ParsePosition& parsePosition) const;
-
-    // Declare here again to get rid of function hiding problems.
-    /**
-     * Parse the given string using this object's choices.
-     *
-     * @param text           The text to be parsed.
-     * @param result         Formattable to be set to the parse result.
-     * @param status    Output parameter filled in with success or failure status.
-     * @stable ICU 2.0
-     */
-    virtual void parse(const UnicodeString& text,
-                       Formattable& result,
-                       UErrorCode& status) const;
 
     /**
      * Parses text from the given string as a currency amount.  Unlike
@@ -2436,29 +2352,6 @@ protected:
     void handleChanged();
 #endif
 };
-
-inline UnicodeString&
-DecimalFormat::format(const Formattable& obj,
-                      UnicodeString& appendTo,
-                      UErrorCode& status) const {
-    // Don't use Format:: - use immediate base class only,
-    // in case immediate base modifies behavior later.
-    return NumberFormat::format(obj, appendTo, status);
-}
-
-inline UnicodeString&
-DecimalFormat::format(double number,
-                      UnicodeString& appendTo) const {
-    FieldPosition pos(0);
-    return format(number, appendTo, pos);
-}
-
-inline UnicodeString&
-DecimalFormat::format(int32_t number,
-                      UnicodeString& appendTo) const {
-    FieldPosition pos(0);
-    return format((int64_t)number, appendTo, pos);
-}
 
 inline const UnicodeString &
 DecimalFormat::getConstSymbol(DecimalFormatSymbols::ENumberFormatSymbol symbol) const {
