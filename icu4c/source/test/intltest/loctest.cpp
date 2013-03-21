@@ -1714,6 +1714,7 @@ LocaleTest::TestKeywordVariantParsing(void) {
         *buffer = 0;
         Locale l(testCases[i].localeID);
         resultLen = l.getKeywordValue(testCases[i].keyword, buffer, 256, status);
+        (void)resultLen;  // Suppress unused variable warning.
         if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
             err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
                 testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
@@ -1748,6 +1749,7 @@ LocaleTest::TestSetKeywordValue(void) {
 
         *buffer = 0;
         resultLen = l.getKeywordValue(testCases[i].keyword, buffer, 256, status);
+        (void)resultLen;  // Suppress unused variable warning.
         if(uprv_strcmp(testCases[i].value, buffer) != 0) {
             err("Expected to extract \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
                 testCases[i].value, testCases[i].keyword, buffer);

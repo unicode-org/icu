@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1682,7 +1682,7 @@ public:
 private:
     static const char fgClassID;
 
-    int32_t i, length;
+    int32_t i;
 };
 
 const char TestEnumeration::fgClassID=0;
@@ -1783,7 +1783,7 @@ namespace bogus {
     public:
         enum EInvariant { kInvariant };
         UnicodeString() : i(1) {}
-        UnicodeString(UBool /*isTerminated*/, const UChar * /*text*/, int32_t textLength) : i(textLength) {}
+        UnicodeString(UBool /*isTerminated*/, const UChar * /*text*/, int32_t textLength) : i(textLength) {(void)i;}
         UnicodeString(const char * /*src*/, int32_t length, enum EInvariant /*inv*/
 ) : i(length) {}
     private:

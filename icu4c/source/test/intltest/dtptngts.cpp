@@ -343,7 +343,8 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
     UnicodeString newDateTimeFormat("{1} {0}");
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString conflictingPattern;
-    UDateTimePatternConflict conflictingStatus;
+    UDateTimePatternConflict conflictingStatus = UDATPG_NO_CONFLICT;
+    (void)conflictingStatus;   // Suppress set but not used warning.
 
     // ======= Test CreateInstance with default locale
     logln("Testing DateTimePatternGenerator createInstance from default locale");

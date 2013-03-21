@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1998-2012, International Business Machines Corporation and
+ * Copyright (c) 1998-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*
@@ -1096,7 +1096,7 @@ static void TestICUDataName()
     switch(U_CHARSET_FAMILY)
     {
     case U_ASCII_FAMILY:
-          switch(U_IS_BIG_ENDIAN)
+          switch((int)U_IS_BIG_ENDIAN)
           {
           case 1:
                 typeChar = 'b';

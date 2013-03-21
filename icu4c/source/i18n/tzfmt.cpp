@@ -1748,7 +1748,7 @@ TimeZoneFormat::parseOffsetFieldsWithPattern(const UnicodeString& text, int32_t 
     int32_t idx = start;
 
     for (int32_t i = 0; i < patternItems->size(); i++) {
-        int32_t len;
+        int32_t len = 0;
         const GMTOffsetField* field = (const GMTOffsetField*)patternItems->elementAt(i);
         GMTOffsetField::FieldType fieldType = field->getType();
         if (fieldType == GMTOffsetField::TEXT) {

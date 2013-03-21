@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -1001,6 +1001,7 @@ static void TestJ904(void) {
                              result, 256, &status,
                              string, 1/7.0,
                              789.0+1000*(56+60*(34+60*12)));
+    (void)length;   /* Suppress set but not used warning. */
 
     u_austrncpy(cresult, result, sizeof(cresult));
 

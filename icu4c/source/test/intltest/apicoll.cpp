@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 //===============================================================================
@@ -1772,6 +1772,9 @@ void CollationAPITest::TestBounds(void) {
     int32_t i = 0, j = 0, k = 0, buffSize = 0, skSize = 0, lowerSize = 0, upperSize = 0;
     int32_t arraySize = sizeof(tests)/sizeof(tests[0]);
 
+    (void)lowerSize;  // Suppress unused variable warnings.
+    (void)upperSize;
+
     for(i = 0; i<arraySize; i++) {
         buffSize = u_unescape(tests[i].original, buffer, 512);
         skSize = coll->getSortKey(buffer, buffSize, tests[i].key, 512);
@@ -2053,7 +2056,7 @@ Locale TestCollator::getLocale(ULocDataLocaleType type, UErrorCode& status) cons
 {
     // api not used, this is to make the compiler happy
     if (U_FAILURE(status)) {
-        type = ULOC_DATA_LOCALE_TYPE_LIMIT;
+        (void)type;
     }
     return NULL;
 }
@@ -2066,7 +2069,7 @@ Collator::ECollationStrength TestCollator::getStrength() const
 void TestCollator::setStrength(Collator::ECollationStrength newStrength)
 {
     // api not used, this is to make the compiler happy
-    newStrength = TERTIARY;
+    (void)newStrength;
 }
 
 UClassID TestCollator::getDynamicClassID(void) const
@@ -2080,14 +2083,9 @@ void TestCollator::getVersion(UVersionInfo info) const
     memset(info, 0, U_MAX_VERSION_LENGTH);
 }
 
-void TestCollator::setAttribute(UColAttribute attr, UColAttributeValue value, 
-                                UErrorCode &status)
+void TestCollator::setAttribute(UColAttribute /*attr*/, UColAttributeValue /*value*/, 
+                                UErrorCode & /*status*/)
 {
-    // api not used, this is to make the compiler happy
-    if (U_FAILURE(status)) {
-        attr = UCOL_ATTRIBUTE_COUNT;
-        value = UCOL_OFF;
-    }
 }
 
 UColAttributeValue TestCollator::getAttribute(UColAttribute attr, 
