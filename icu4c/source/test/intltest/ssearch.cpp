@@ -953,6 +953,7 @@ const char *cPattern = "maketh houndes ete hem";
     //   to get runtimes of at least several seconds.
     for (i=0; i<10000; i++) {
         found = usearch_search(uss.getAlias(), 0, &icuMatchPos, &icuMatchEnd, &status);
+        (void)found;   // Suppress set but not used warning.
         //TEST_ASSERT_SUCCESS(status);
         //TEST_ASSERT(found);
 

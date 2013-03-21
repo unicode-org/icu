@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -298,6 +298,7 @@ void Test4060212()
         return;
     }
     myString = myFormatit(fmt, myDate);
+    (void)myString;   /* Suppress set but not used warning. */
     cal=ucal_open(tzID, u_strlen(tzID), "en_US", UCAL_GREGORIAN, &status);
     if(U_FAILURE(status)){
         log_err("FAIL: error in ucal_open caldef : %s\n", myErrorName(status));
@@ -343,6 +344,7 @@ void Test4061287()
         log_err("setLenient nor working\n");
     ok = FALSE;
     myDate = udat_parse(df, dateString, u_strlen(dateString), &pos, &status);
+    (void)myDate;   /* Suppress set but not used warning. */
     if(U_FAILURE(status))
         ok = TRUE;
     if(ok!=TRUE) 
@@ -455,6 +457,7 @@ void Test4162071()
     }
     pos=0;
     x = udat_parse(df, datestr, u_strlen(datestr), &pos, &status);
+    (void)x;   /* Suppress set but not used warning. */
     if(U_FAILURE(status)){
         log_data_err("ERROR : parse format  %s fails : %s\n", austrdup(format), myErrorName(status));
     }
@@ -572,6 +575,7 @@ void Test_GEec(void)
 
             udat_applyPattern(dtfmt, FALSE, patTextPtr->pattern, -1);
             dmyGnTextLen = udat_format(dtfmt, july022008, dmyGnText, DATE_TEXT_MAX_CHARS, NULL, &status);
+            (void)dmyGnTextLen;   /* Suppress set but not used warning. */ 
             if ( U_FAILURE(status) ) {
                 log_err("FAIL: udat_format with %s: %s\n", patTextPtr->label, myErrorName(status) );
                 status = U_ZERO_ERROR;

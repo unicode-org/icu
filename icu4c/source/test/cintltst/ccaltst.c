@@ -586,6 +586,7 @@ static void TestGetSetDateAPI()
     /*testing ucal_setTimeZone() and ucal_getTimeZoneID function*/
     log_verbose("\nTesting if the function ucal_setTimeZone() and ucal_getTimeZoneID work fine\n");
     idLen = ucal_getTimeZoneID(caldef2, id, sizeof(id)/sizeof(id[0]), &status);
+    (void)idLen;    /* Suppress set but not used warning. */
     if (U_FAILURE(status)) {
         log_err("Error in getTimeZoneID : %s\n", u_errorName(status));
     } else if (u_strcmp(id, fgGMTID) != 0) {
@@ -747,8 +748,9 @@ static void TestFieldGetSet()
     UCalendar *cal = 0;
     UChar tzID[4];
     UDateFormat *datdef = 0;
-    UDate d1;
+    UDate d1 = 0;
     UErrorCode status=U_ZERO_ERROR;
+    (void)d1;   /* Suppress set but not used warning. */
     log_verbose("\nFetching pointer to UCalendar using the ucal_open()\n");
     u_strcpy(tzID, fgGMTID);
     /*open the calendar used */
@@ -2296,6 +2298,7 @@ void TestGetTZTransition() {
             ucal_setTimeZone(ucal, itemPtr->zoneName, -1, &status);
             ucal_setDateTime(ucal, itemPtr->year, itemPtr->month, itemPtr->day, 12, 0, 0, &status);
             curMillis = ucal_getMillis(ucal, &status);
+            (void)curMillis;    /* Suppress set but not used warning. */
             if ( U_SUCCESS(status) ) {
                 UDate transition1, transition2;
                 UBool result;

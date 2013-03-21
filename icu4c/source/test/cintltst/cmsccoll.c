@@ -582,6 +582,7 @@ static void testCollator(UCollator *coll, UErrorCode *status) {
 
       startOfRules = FALSE;
       varT = (UBool)((specs & UCOL_TOK_VARIABLE_TOP) != 0);
+      (void)varT;    /* Suppress set but not used warning. */
       top_ = (UBool)((specs & UCOL_TOK_TOP) != 0);
       if(top_) { /* if reset is on top, the sequence is broken. We should have an empty string */
         second[0] = 0;
@@ -937,6 +938,12 @@ static void testAgainstUCA(UCollator *coll, UCollator *UCA, const char *refName,
   uint32_t Windiff = 1;
   UParseError parseError;
 
+  (void)top_;      /* Suppress set but not used warnings. */
+  (void)varT;
+  (void)secondLen;
+  (void)prefixLen;
+  (void)prefixOffset;
+
   uprv_memset(&src, 0, sizeof(UColTokenParser));
   src.opts = &opts;
 
@@ -1111,6 +1118,12 @@ static void testCEs(UCollator *coll, UErrorCode *status) {
         UCOL_NEXT_TOP_VALUE, UCOL_NEXT_TOP_CONT;
     const char *colLoc;
     UCollator *UCA = ucol_open("root", status);
+
+    (void)varT;             /* Suppress set but not used warnings. */
+    (void)prefixLen;
+    (void)prefixOffset;
+    (void)exLen;
+    (void)exOffset;
 
     if (U_FAILURE(*status)) {
         log_err("Could not open root collator %s\n", u_errorName(*status));
@@ -2583,6 +2596,7 @@ static void TestCompressOverlap(void) {
     with correct overlapping compression, secstr should have 4 secondary
     bytes, tertstr should have > 2 tertiary bytes */
     resultlen = ucol_getSortKey(coll, secstr, 150, (uint8_t *)result, 250);
+    (void)resultlen;    /* Suppress set but not used warning. */
     tempptr = uprv_strchr(result, 1) + 1;
     while (*(tempptr + 1) != 1) {
         /* the last secondary collation element is not checked since it is not
@@ -2954,6 +2968,7 @@ static void TestBocsuCoverage(void) {
   ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_IDENTICAL, &status);
 
   klen = ucol_getSortKey(coll, test, tlen, key, 256);
+  (void)klen;    /* Suppress set but not used warning. */
 
   ucol_close(coll);
   } else {
@@ -2994,6 +3009,10 @@ static void TestVariableTopSetting(void) {
   UChar second[256] = { 0 };
   UParseError parseError;
   int32_t myQ = getTestOption(QUICK_OPTION);
+
+  (void)prefixLen;        /* Suppress set but not used warnings. */
+  (void)prefixOffset;
+  (void)specs;
 
   uprv_memset(&src, 0, sizeof(UColTokenParser));
 
@@ -3050,6 +3069,7 @@ static void TestVariableTopSetting(void) {
             uprv_init_collIterate(coll, src.source+oldChOffset, oldChLen, s, &collIterateStatus);
 
             CE = ucol_getNextCE(coll, s, &status);
+            (void)CE;    /* Suppress set but not used warning. */
 
             for(i = 0; i < oldChLen; i++) {
               j = sprintf(buf, "%04X ", *(src.source+oldChOffset+i));
@@ -3901,6 +3921,8 @@ static void Alexis2(void) {
 
     U16BELenS = ucnv_fromUChars(conv, U16BESource, CMSCOLL_ALEXIS2_BUFFER_SIZE, U16Source, U16LenS, &status);
     U16BELenT = ucnv_fromUChars(conv, U16BETarget, CMSCOLL_ALEXIS2_BUFFER_SIZE, U16Target, U16LenT, &status);
+    (void)U16BELenS;    /* Suppress set but not used warnings. */
+    (void)U16BELenT;
 
     /* use the original sizes, as the result from converter is in bytes */
     uiter_setUTF16BE(&U16BEItS, U16BESource, U16LenS);
@@ -3999,6 +4021,7 @@ static void TestPartialSortKeyTermination(void) {
     length = u_unescape(cases[i], currCase, 256);
     uiter_setString(&iter, currCase, length);
     pKeyLen = ucol_nextSortKeyPart(coll, &iter, state, key, 256, &status);
+    (void)pKeyLen;   /* Suppress set but not used warning. */
 
     log_verbose("Done\n");
 
@@ -4430,6 +4453,8 @@ static void TestImplicitGeneration(void) {
         currentBottom = current & bottomByte;
         lastTop = last & topByte;
         currentTop = current & topByte;
+        (void)lastBottom;     /* Suppress set but not used warnings. */
+        (void)currentBottom;
 
         /* print out some values for spot-checking*/
         if (lastTop != currentTop || i == 0x10000 || i == 0x110000) {
@@ -4519,6 +4544,7 @@ static void TestSeparateTrees(void) {
         assertSuccess("ucol_openAvailableLocales", &ec);
         assertTrue("ucol_openAvailableLocales!=0", e!=0);
         n = checkUEnumeration("ucol_openAvailableLocales", e, AVAIL, LEN(AVAIL));
+        (void)n;    /* Suppress set but not used warnings. */
         /* Don't need to check n because we check list */
         uenum_close(e);
     } else {
@@ -5838,6 +5864,7 @@ static void TestInvalidListsAndRanges(void)
         return;
     }
     myCollation = ucol_openRules(rule, length, UCOL_ON, UCOL_TERTIARY, &parse_error, &status);
+    (void)myCollation;      /* Suppress set but not used warning. */
     if(!U_FAILURE(status)){
       log_err("ERROR: Could not cause a failure as expected: \n");
     }
@@ -5876,6 +5903,8 @@ static void TestBeforeRuleWithScriptReordering(void)
     
     log_verbose("Testing the &[before 1] rule with [reorder grek]\n");
 
+    (void)beforeKeyLength;   /* Suppress set but not used warnings. */
+    (void)baseKeyLength;
 
     /* build collator */
     log_verbose("Testing the &[before 1] rule with [scriptReorder grek]\n");
@@ -6838,6 +6867,7 @@ static void TestImport(void)
             for (; start <= end; start++){
                 k = 0;
                 U16_APPEND(str, k, 500, start, b);
+                (void)b;    /* Suppress set but not used warning. */
                 ucol_getSortKey(viescoll, str, 1, sk1, 500);
                 ucol_getSortKey(importviescoll, str, 1, sk2, 500);
                 if(compare_uint8_t_arrays(sk1, sk2) != 0){

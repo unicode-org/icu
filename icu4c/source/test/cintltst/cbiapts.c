@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -198,6 +198,9 @@ static void TestBreakIteratorCAPI()
     }
     /*trying to open an illegal iterator*/
     bogus     = ubrk_open((UBreakIteratorType)5, "en_US", text, u_strlen(text), &status);
+    if(bogus != NULL) {
+        log_err("FAIL: expected NULL from opening an invalid break iterator.\n");
+    }
     if(U_SUCCESS(status)){
         log_err("FAIL: Error in ubrk_open() for BOGUS breakiterator. Expected U_ILLEGAL_ARGUMENT_ERROR\n");
     }

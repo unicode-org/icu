@@ -132,9 +132,9 @@ static void TestUSpoofCAPI(void) {
     const char *dataSrcDir;
     char       *fileName;
     char       *confusables;
-    int         confusablesLength;
+    int         confusablesLength = 0;
     char       *confusablesWholeScript;
-    int         confusablesWholeScriptLength;
+    int         confusablesWholeScriptLength = 0;
     FILE       *f;
     UParseError pe;
     int32_t     errType;
@@ -148,8 +148,8 @@ static void TestUSpoofCAPI(void) {
     TEST_ASSERT_NE(f, NULL);
     confusables = malloc(3000000);
     if (f != NULL) {
-    confusablesLength = fread(confusables, 1, 3000000, f);
-    fclose(f);
+        confusablesLength = fread(confusables, 1, 3000000, f);
+        fclose(f);
     }
 
     strcpy(fileName, dataSrcDir);
@@ -158,8 +158,8 @@ static void TestUSpoofCAPI(void) {
     TEST_ASSERT_NE(f, NULL);
     confusablesWholeScript = malloc(1000000);
     if (f != NULL) {
-    confusablesWholeScriptLength = fread(confusablesWholeScript, 1, 1000000, f);
-    fclose(f);
+        confusablesWholeScriptLength = fread(confusablesWholeScript, 1, 1000000, f);
+        fclose(f);
     }
 
     rsc = uspoof_openFromSource(confusables, confusablesLength,

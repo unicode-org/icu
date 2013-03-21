@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -398,6 +398,7 @@ static void doTestVariant(UCollator* myCollation, const UChar source[], const UC
 
     sortklenmax = (sortklen1>sortklen2?sortklen1:sortklen2);
     sortklenmin = (sortklen1<sortklen2?sortklen1:sortklen2);
+    (void)sortklenmin;  /* Suppress set but not used warning. */
 
     sortKey1 =(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
     sortKey1a=(uint8_t*)malloc(sizeof(uint8_t) * (sortklenmax+1));
@@ -900,6 +901,7 @@ static void TestJB581(void)
     }
     /* Now, do the same comparison with keys */
     sourceKeyOut = ucol_getSortKey(myCollator, source, -1, sourceKeyArray, 100);
+    (void)sourceKeyOut;    /* Suppress set but not used warning. */
     targetKeyOut = ucol_getSortKey(myCollator, target, -1, targetKeyArray, 100);
     bufferLen = ((targetKeyOut > 100) ? 100 : targetKeyOut);
     if (memcmp(sourceKeyArray, targetKeyArray, bufferLen) != 0)
@@ -1190,6 +1192,7 @@ TestInvalidRules(){
         u_memset(parseError.postContext,0x0000,U_PARSE_CONTEXT_LEN);
         /* open the rules and test */
         coll = ucol_openRules(rules,u_strlen(rules),UCOL_OFF,UCOL_DEFAULT_STRENGTH,&parseError,&status);
+        (void)coll;   /* Suppress set but not used warning. */
         if(u_strcmp(parseError.preContext,preContextExp)!=0){
             log_err_status(status, "preContext in UParseError for ucol_openRules does not match\n");
         }

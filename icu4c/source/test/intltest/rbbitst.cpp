@@ -1920,6 +1920,8 @@ int32_t RBBICharMonkey::next(int32_t prevPos) {
     p0 = p1 = p2 = p3 = prevPos;
     c3 =  fText->char32At(prevPos);
     c0 = c1 = c2 = 0;
+    (void)p0;   // suppress set but not used warning.
+    (void)c0;
 
     // Loop runs once per "significant" character position in the input text.
     for (;;) {
@@ -2072,8 +2074,6 @@ private:
     UnicodeSet  *fRegionalIndicatorSet;
     UnicodeSet  *fDictionaryCjkSet;
 
-    RegexMatcher  *fMatcher;
-
     const UnicodeString  *fText;
 };
 
@@ -2180,6 +2180,7 @@ int32_t RBBIWordMonkey::next(int32_t prevPos) {
     p0 = p1 = p2 = p3 = prevPos;
     c3 =  fText->char32At(prevPos);
     c0 = c1 = c2 = 0;
+    (void)p0;       // Suppress set but not used warning.
 
     // Loop runs once per "significant" character position in the input text.
     for (;;) {
@@ -2513,6 +2514,7 @@ int32_t RBBISentMonkey::next(int32_t prevPos) {
     p0 = p1 = p2 = p3 = prevPos;
     c3 =  fText->char32At(prevPos);
     c0 = c1 = c2 = 0;
+    (void)p0;     // Suppress set but not used warning.
 
     // Loop runs once per "significant" character position in the input text.
     for (;;) {
@@ -2722,13 +2724,9 @@ private:
     UnicodeSet  *fSA;
     UnicodeSet  *fXX;
 
-    BreakIterator  *fCharBI;
-
+    BreakIterator        *fCharBI;
     const UnicodeString  *fText;
-    int32_t              *fOrigPositions;
-
     RegexMatcher         *fNumberMatcher;
-    RegexMatcher         *fLB11Matcher;
 };
 
 
@@ -3981,6 +3979,8 @@ void RBBITest::RunMonkey(BreakIterator *bi, RBBIMonkeyKind &mk, const char *name
             expectedBreaks[breakPos] = 1;
             U_ASSERT(expectedCount<testText.length());
             expected[expectedCount ++] = breakPos;
+            (void)expected;   // Set but not used warning.
+                              // TODO (andy): check it out.
         }
 
         // Find the break positions using forward iteration
@@ -4242,6 +4242,7 @@ void RBBITest::TestBug9983(void)  {
     while ( (offset = brkiter->previous()) != UBRK_DONE ) {
         iterationCount++;
         rstatus = brkiter->getRuleStatus();
+        (void)rstatus;     // Suppress set but not used warning.
         // printf(" %d(%d)", offset, rstatus);
         if (iterationCount >= 10) {
            break; 

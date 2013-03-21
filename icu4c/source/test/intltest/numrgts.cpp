@@ -1,5 +1,5 @@
 /***********************************************************************
- * Copyright (c) 1997-2012, International Business Machines Corporation
+ * Copyright (c) 1997-2013, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -906,6 +906,7 @@ void NumberFormatRegressionTest::Test4070798 (void)
     UErrorCode status = U_ZERO_ERROR;
     char loc[256]={0};
     int len = uloc_canonicalize("fr_FR_PREEURO", loc, 256, &status);
+    (void)len;  // Suppress set but not used warning.
     formatter = NumberFormat::createInstance(Locale(loc), status);
     if(U_FAILURE(status)) {
       dataerrln("Error creating DecimalFormat: %s", u_errorName(status));

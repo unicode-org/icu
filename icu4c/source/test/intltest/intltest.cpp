@@ -1204,7 +1204,6 @@ main(int argc, char* argv[])
         fprintf(stdout, "### Too many properties.  Exiting.\n");
     }
 
-    UBool all_tests_exist = TRUE;
     MajorTestLevel major;
     major.setVerbose( verbose );
     major.setNoErrMsg( no_err_msg );
@@ -1374,7 +1373,6 @@ main(int argc, char* argv[])
                 }
                 if (!res || (execCount <= 0)) {
                     fprintf(stdout, "\n---ERROR: Test doesn't exist: %s!\n", name);
-                    all_tests_exist = FALSE;
                 }
             } else if(!strcmp(argv[i],"-x")) {
               i++;
