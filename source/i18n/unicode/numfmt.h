@@ -569,20 +569,6 @@ public:
 
 public:
 
-    /**
-     * Redeclared Format method.
-     * @param obj       The object to be formatted.
-     * @param appendTo  Output parameter to receive result.
-     *                  Result is appended to existing contents.
-     * @param status    Output parameter set to a failure error code
-     *                  when a failure occurs.
-     * @return          Reference to 'appendTo' parameter.
-     * @stable ICU 2.0
-     */
-    UnicodeString& format(const Formattable& obj,
-                          UnicodeString& appendTo,
-                          UErrorCode& status) const;
-
    /**
     * Return a long if possible (e.g. within range LONG_MAX,
     * LONG_MAX], and with no decimals), otherwise a double.  If
@@ -1125,13 +1111,6 @@ inline UBool
 NumberFormat::isLenient() const
 {
     return fLenient;
-}
-
-inline UnicodeString&
-NumberFormat::format(const Formattable& obj,
-                     UnicodeString& appendTo,
-                     UErrorCode& status) const {
-    return Format::format(obj, appendTo, status);
 }
 
 U_NAMESPACE_END
