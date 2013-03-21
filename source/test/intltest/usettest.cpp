@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-*   Copyright (C) 1999-2012 International Business Machines Corporation and
+*   Copyright (C) 1999-2013 International Business Machines Corporation and
 *   others. All Rights Reserved.
 ********************************************************************************
 *   Date        Name        Description
@@ -1488,6 +1488,7 @@ void UnicodeSetTest::TestInvalidCodePoint() {
         b = set.contains(start, end);
         b = set.containsNone(start, end);
         b = set.containsSome(start, end);
+        (void)b;   // Suppress set but not used warning.
 
         /*int32_t index = set.indexOf(start);*/
         
@@ -2363,9 +2364,6 @@ private:
 
     char utf8[1024];
     int32_t utf8Lengths[20];
-
-    int32_t nextStringIndex;
-    int32_t nextUTF8Start;
 };
 
 class UnicodeSetWithStringsIterator {
@@ -3771,6 +3769,7 @@ void UnicodeSetTest::TestStringSpan() {
     string16=UNICODE_STRING_SIMPLE("byayaxya");
     const UChar *s16=string16.getBuffer();
     int32_t length16=string16.length();
+    (void)length16;   // Suppress set but not used warning.
     if( set.span(s16, 8, USET_SPAN_NOT_CONTAINED)!=4 ||
         set.span(s16, 7, USET_SPAN_NOT_CONTAINED)!=4 ||
         set.span(s16, 6, USET_SPAN_NOT_CONTAINED)!=4 ||

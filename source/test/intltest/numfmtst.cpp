@@ -726,6 +726,7 @@ NumberFormatTest::TestCurrency(void)
     s.truncate(0);
     char loc[256]={0};
     int len = uloc_canonicalize("de_DE_PREEURO", loc, 256, &status);
+    (void)len;  // Suppress unused variable warning.
     currencyFmt = NumberFormat::createCurrencyInstance(Locale(loc),status);
     currencyFmt->format(1.50, s);
     logln((UnicodeString)"Un pauvre en Allemagne a.." + s);

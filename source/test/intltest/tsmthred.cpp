@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2012, International Business Machines Corporation and
+ * Copyright (c) 1999-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -1074,6 +1074,7 @@ public:
 
             oldSk = newSk;
             oldLen = resLen;
+            (void)oldLen;   // Suppress set but not used warning.
             prev = i;
 
             newSk = (newSk == sk1)?sk2:sk1;

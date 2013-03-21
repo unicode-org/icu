@@ -1667,6 +1667,7 @@ static void TestKeywordVariants(void)
             uenum_close(keywords);
         }
         resultLen = uloc_getName(testCases[i].localeID, buffer, 256, &status);
+        (void)resultLen;    /* Suppress set but not used warning. */
         if (uprv_strcmp(testCases[i].expectedLocaleID, buffer) != 0) {
             log_err("Expected uloc_getName(\"%s\") => \"%s\"; got \"%s\"\n",
                     testCases[i].localeID, testCases[i].expectedLocaleID, buffer);
@@ -1702,6 +1703,7 @@ static void TestKeywordVariantParsing(void)
     for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
         *buffer = 0;
         resultLen = uloc_getKeywordValue(testCases[i].localeID, testCases[i].keyword, buffer, 256, &status);
+        (void)resultLen;    /* Suppress set but not used warning. */
         if(uprv_strcmp(testCases[i].expectedValue, buffer) != 0) {
             log_err("Expected to extract \"%s\" from \"%s\" for keyword \"%s\". Got \"%s\" instead\n",
                 testCases[i].expectedValue, testCases[i].localeID, testCases[i].keyword, buffer);
@@ -2266,6 +2268,7 @@ static void TestGetBaseName(void) {
 
     for(i = 0; i < sizeof(testCases)/sizeof(testCases[0]); i++) {
         baseNameLen = uloc_getBaseName(testCases[i].localeID, baseName, 256, &status);
+        (void)baseNameLen;    /* Suppress set but not used warning. */
         if(strcmp(testCases[i].baseName, baseName)) {
             log_err("For locale \"%s\" expected baseName \"%s\", but got \"%s\"\n",
                 testCases[i].localeID, testCases[i].baseName, baseName);
@@ -2302,6 +2305,7 @@ static void TestDisplayNameWarning(void) {
     UErrorCode status = U_ZERO_ERROR;
     
     size = uloc_getDisplayLanguage("qqq", "kl", name, sizeof(name)/sizeof(name[0]), &status);
+    (void)size;    /* Suppress set but not used warning. */
     if (status != U_USING_DEFAULT_WARNING) {
         log_err("For language \"qqq\" in locale \"kl\", expecting U_USING_DEFAULT_WARNING, but got %s\n",
             u_errorName(status));
@@ -2643,6 +2647,7 @@ static void TestAcceptLanguage(void) {
         available = ures_openAvailableLocales(tests[i].icuSet, &status);
         tmp[0]=0;
         rc = uloc_acceptLanguageFromHTTP(tmp, 199, &outResult, http[tests[i].httpSet], available, &status);
+        (void)rc;    /* Suppress set but not used warning. */
         uenum_close(available);
         log_verbose(" got %s, %s [%s]\n", tmp[0]?tmp:"(EMPTY)", acceptResult(outResult), u_errorName(status));
         if(outResult != tests[i].res) {
@@ -5650,6 +5655,7 @@ static void TestToLanguageTag(void) {
         expected = locale_to_langtag[i][1];
 
         len = uloc_toLanguageTag(inloc, langtag, sizeof(langtag), FALSE, &status);
+        (void)len;    /* Suppress set but not used warning. */
         if (U_FAILURE(status)) {
             if (expected != NULL) {
                 log_err("Error returned by uloc_toLanguageTag for locale id [%s] - error: %s\n",

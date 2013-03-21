@@ -15,6 +15,8 @@
 #include "unicode/parseerr.h"
 #include "unicode/currpinf.h"
 
+#define LENGTHOF(array) ((int32_t)(sizeof(array)/sizeof((array)[0])))
+
 // This is an API test, not a unit test.  It doesn't test very many cases, and doesn't
 // try to test the full functionality.  It just calls each function in the class and
 // verifies that it works on a basic level.
@@ -519,7 +521,7 @@ void IntlTestDecimalFormatAPI::TestScale()
     typedef struct TestData {
         double inputValue;
         int inputScale;
-        char *expectedOutput;
+        const char *expectedOutput;
     } TestData;
 
     static TestData testData[] = {
@@ -545,7 +547,7 @@ void IntlTestDecimalFormatAPI::TestScale()
     UnicodeString percentPattern("#,##0%");
     pat.setMaximumFractionDigits(4);
 
-    for(int32_t i=0;i < sizeof(testData)/sizeof(testData[0]);i++) {
+    for(int32_t i=0; i < LENGTHOF(testData); i++) {
         if ( i > 2 ) {
             pat.applyPattern(percentPattern,status);
         }

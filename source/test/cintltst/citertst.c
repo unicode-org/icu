@@ -862,6 +862,7 @@ static void TestMaxExpansion()
       }
 
       U16_APPEND(supplementary, stringOffset, 2, unassigned, isError);
+      (void)isError;    /* Suppress set but not used warning. */
       ucol_setText(iter, supplementary, 2, &status);
       sorder = ucol_previous(iter, &status);
 
@@ -1768,6 +1769,14 @@ static void TestCEValidity()
         UColTokenParser src;
         uint32_t strength = 0;
         uint16_t specs = 0;
+
+        (void)specs;        /* Suppress set but not used warnings. */
+        (void)strength;
+        (void)prefixLen;
+        (void)prefixOffset;
+        (void)exLen;
+        (void)exOffset;
+
         if(getTestOption(QUICK_OPTION)) {
             loc = locale[count];
         } else {
@@ -1982,6 +1991,13 @@ static void TestSortKeyValidity(void)
         uint32_t strength = 0;
         uint16_t specs = 0;
         status = U_ZERO_ERROR; // clear status from previous loop iteration
+
+        (void)specs;
+        (void)strength;
+        (void)prefixLen;
+        (void)prefixOffset;
+        (void)exLen;
+        (void)exOffset;
 
         uprv_memset(&src, 0, sizeof(UColTokenParser));
 
