@@ -1229,7 +1229,9 @@ public class DateIntervalFormat extends UFormat {
     
         /* generate normalized form for date*/
         if ( yCount != 0 ) {
-            normalizedDateSkeleton.append('y');
+            for (i = 0; i < yCount; i++) {
+                normalizedDateSkeleton.append('y');
+            }
         }
         if ( MCount != 0 ) {
             if ( MCount < 3 ) {

@@ -1358,4 +1358,37 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 dif.format(from, to, new StringBuffer(), new FieldPosition(0))
                 .toString()); 
     }
+
+    public void TestTicket9914() {
+        DateIntervalInfo dateIntervalInfo =
+                new DateIntervalInfo(ULocale.ENGLISH);
+        
+        Calendar from = Calendar.getInstance();
+        Calendar to = Calendar.getInstance();
+        from.set(113, 3, 26);
+        to.set(113, 3, 28);
+        DateIntervalFormat dif = DateIntervalFormat.getInstance(
+                "yyyyMd", ULocale.ENGLISH, dateIntervalInfo);
+        assertEquals(
+                "yyyyMd skeleton.",
+                "4/26/0113 \u2013 4/28/0113",
+                dif.format(from, to, new StringBuffer(), new FieldPosition(0))
+                .toString());
+        
+        dif = DateIntervalFormat.getInstance(
+                "yyMd", ULocale.ENGLISH, dateIntervalInfo);
+        assertEquals(
+                "yyMd skeleton.",
+                "4/26/13 \u2013 4/28/13",
+                dif.format(from, to, new StringBuffer(), new FieldPosition(0))
+                .toString());
+        
+        dif = DateIntervalFormat.getInstance(
+                "yMd", ULocale.ENGLISH, dateIntervalInfo);
+        assertEquals(
+                "yMd skeleton.",
+                "4/26/113 \u2013 4/28/113",
+                dif.format(from, to, new StringBuffer(), new FieldPosition(0))
+                .toString());
+    }
 }
