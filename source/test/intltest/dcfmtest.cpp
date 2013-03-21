@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2002-2012, International Business Machines Corporation and
+ * Copyright (c) 2002-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -415,7 +415,7 @@ void DecimalFormatTest::execFormatTest(int32_t lineNum,
                 lineNum, UnicodeStringPiece(round).data());
     }
 
-    const char *typeStr;
+    const char *typeStr = "Unknown";
     UnicodeString result;
     UnicodeStringPiece spInput(input);
 

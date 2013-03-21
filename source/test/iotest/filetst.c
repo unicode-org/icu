@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2004-2011, International Business Machines
+ *   Copyright (C) 2004-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  *   file name:  filetst.c
@@ -981,6 +981,7 @@ static void TestFilePrintCompatibility(void) {
     static const UChar emptyStr[] = {0};
     char readBuf[512] = "";
     char testBuf[512] = "";
+    int32_t n = 0;
 
     if (myFile == NULL) {
         log_err("Can't write test file.\n");
@@ -1021,38 +1022,39 @@ static void TestFilePrintCompatibility(void) {
     }
 
     for (num = -STANDARD_TEST_NUM_RANGE; num < STANDARD_TEST_NUM_RANGE; num++) {
-        fscanf(myCFile, "%s", readBuf);
+        /* Note: gcc on Ubuntu complains if return value of scanf is ignored. */
+        n += fscanf(myCFile, "%s", readBuf);
         sprintf(testBuf, "%x", (int)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%x Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }
 
-        fscanf(myCFile, "%s", readBuf);
+        n += fscanf(myCFile, "%s", readBuf);
         sprintf(testBuf, "%X", (int)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%X Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }
 
-        fscanf(myCFile, "%s", readBuf);
+        n += fscanf(myCFile, "%s", readBuf);
         sprintf(testBuf, "%o", (int)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%o Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }
 
         /* fprintf is not compatible on all platforms e.g. the iSeries */
-        fscanf(myCFile, "%s", readBuf);
+        n += fscanf(myCFile, "%s", readBuf);
         sprintf(testBuf, "%d", (int)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%d Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }
 
-        fscanf(myCFile, "%s", readBuf);
+        n += fscanf(myCFile, "%s", readBuf);
         sprintf(testBuf, "%i", (int)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%i Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }
 
-        fscanf(myCFile, "%s", readBuf);
+        n += fscanf(myCFile, "%s", readBuf);
         sprintf(testBuf, "%f", (double)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%f Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
@@ -1070,13 +1072,13 @@ static void TestFilePrintCompatibility(void) {
             log_err("%%E Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }*/
 
-        fscanf(myCFile, "%s", readBuf);
+        n += fscanf(myCFile, "%s", readBuf);
         sprintf(testBuf, "%g", (double)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%g Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
         }
 
-        fscanf(myCFile, "%s", readBuf);
+        n += fscanf(myCFile, "%s", readBuf);
         sprintf(testBuf, "%G", (double)num);
         if (strcmp(readBuf, testBuf) != 0) {
             log_err("%%G Got: \"%s\", Expected: \"%s\"\n", readBuf, testBuf);
@@ -1085,13 +1087,13 @@ static void TestFilePrintCompatibility(void) {
 
     /* Properly eat the newlines */
     for (num = 0; num < (int32_t)strlen(C_NEW_LINE); num++) {
-        fscanf(myCFile, "%c", &cVal);
+        n += fscanf(myCFile, "%c", &cVal);
         if (cVal != C_NEW_LINE[num]) {
             log_err("OS newline error\n");
         }
     }
     for (num = 0; num < (int32_t)strlen(C_NEW_LINE); num++) {
-        fscanf(myCFile, "%c", &cVal);
+        n += fscanf(myCFile, "%c", &cVal);
         if (cVal != C_NEW_LINE[num]) {
             log_err("ustdio newline error\n");
         }
@@ -1099,11 +1101,12 @@ static void TestFilePrintCompatibility(void) {
 
     for (num = 0; num < 0x80; num++) {
         cVal = -1;
-        fscanf(myCFile, "%c", &cVal);
+        n += fscanf(myCFile, "%c", &cVal);
         if (num != cVal) {
             log_err("%%c Got: 0x%x, Expected: 0x%x\n", cVal, num);
         }
     }
+    (void)n;
     fclose(myCFile);
 }
 #endif
@@ -1416,6 +1419,7 @@ static void Test_u_vfprintf(const char *expectedResult, const char *format, ...)
 
     va_start(ap, format);
     count = u_vfprintf(myFile, format, ap);
+    (void)count;    /* Suppress set but not used warning.  */
     va_end(ap);
 
     u_fclose(myFile);
