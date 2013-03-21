@@ -47,7 +47,8 @@ void DateIntervalFormatTest::runIndexedTest( int32_t index, UBool exec, const ch
         TESTCASE(1, testFormat);
         TESTCASE(2, testFormatUserDII);
         TESTCASE(3, testSetIntervalPatternNoSideEffect);
-        TESTCASE(4, testStress);
+        TESTCASE(4, testYearFormats);
+        TESTCASE(5, testStress);
         default: name = ""; break;
     }
 }
@@ -1187,6 +1188,75 @@ void DateIntervalFormatTest::testSetIntervalPatternNoSideEffect() {
     }
 }
 
+void DateIntervalFormatTest::testYearFormats() {
+    const Locale &enLocale = Locale::getEnglish();
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar> fromTime(Calendar::createInstance(enLocale, status));
+    LocalPointer<Calendar> toTime(Calendar::createInstance(enLocale, status));
+    if (U_FAILURE(status)) {
+        errln("Failure encountered: %s", u_errorName(status));
+        return;
+    }
+    // April 26, 113. Three digit year so that we can test 2 digit years;
+    // 4 digit years with padded 0's and full years.
+    fromTime->set(113, 3, 26);
+    // April 28, 113.
+    toTime->set(113, 3, 28);
+    {
+        LocalPointer<DateIntervalFormat> dif(DateIntervalFormat::createInstance("yyyyMd", enLocale, status));
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        UnicodeString actual;
+        UnicodeString expected(ctou("4/26/0113 \\u2013 4/28/0113"));
+        FieldPosition pos = 0;
+        dif->format(*fromTime, *toTime, actual, pos, status);
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        if (actual != expected) {
+            errln("Expected " + expected + ", got: " + actual);
+        }
+    }
+    {
+        LocalPointer<DateIntervalFormat> dif(DateIntervalFormat::createInstance("yyMd", enLocale, status));
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        UnicodeString actual;
+        UnicodeString expected(ctou("4/26/13 \\u2013 4/28/13"));
+        FieldPosition pos = 0;
+        dif->format(*fromTime, *toTime, actual, pos, status);
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        if (actual != expected) {
+            errln("Expected " + expected + ", got: " + actual);
+        }
+    }
+    {
+        LocalPointer<DateIntervalFormat> dif(DateIntervalFormat::createInstance("yMd", enLocale, status));
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        UnicodeString actual;
+        UnicodeString expected(ctou("4/26/113 \\u2013 4/28/113"));
+        FieldPosition pos = 0;
+        dif->format(*fromTime, *toTime, actual, pos, status);
+        if (U_FAILURE(status)) {
+            errln("Failure encountered: %s", u_errorName(status));
+            return;
+        }
+        if (actual != expected) {
+            errln("Expected " + expected + ", got: " + actual);
+        }
+    }
+}
 
 void DateIntervalFormatTest::expectUserDII(const char** data, 
                                            int32_t data_length) {

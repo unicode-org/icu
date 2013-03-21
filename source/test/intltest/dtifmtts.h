@@ -43,6 +43,11 @@ public:
     void testSetIntervalPatternNoSideEffect();
 
     /**
+     * Tests different year formats.
+     */
+    void testYearFormats();
+
+    /**
      * Stress test -- stress test formatting on 40 locales
      */
     void testStress();
