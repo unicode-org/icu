@@ -1764,6 +1764,34 @@ public class DecimalFormat extends NumberFormat {
         Currency[] currency = new Currency[1];
         return (CurrencyAmount) parse(text.toString(), pos, currency);
     }
+    
+    private String normalizePlusAndMinus(String text) {
+        StringBuilder builder = null;
+        int len = text.length();
+        for (int i = 0; i < len; i++) {
+            if (minusSigns.contains(text.charAt(i)) && text.charAt(i) != symbols.getMinusSign()) {
+                builder = append(builder, text, i);
+                builder.append(symbols.getMinusSign());
+            }
+            if (plusSigns.contains(text.charAt(i)) && text.charAt(i) != symbols.getPlusSign()) {
+                builder = append(builder, text, i);
+                builder.append(symbols.getPlusSign());
+            }
+        }
+        if (builder == null) {
+            return text;
+        }
+        return append(builder, text, len).toString();
+        
+    }
+    
+    private StringBuilder append(StringBuilder builder, String text, int upToIndex) {
+        if (builder == null) {
+            builder = new StringBuilder(text.length());
+        }
+        builder.append(text.substring(builder.length(), upToIndex));
+        return builder;
+    }
 
     /**
      * Parses the given text as either a Number or a CurrencyAmount.
@@ -1778,6 +1806,7 @@ public class DecimalFormat extends NumberFormat {
      * @return a Number or CurrencyAmount or null
      */
     private Object parse(String text, ParsePosition parsePosition, Currency[] currency) {
+        text = normalizePlusAndMinus(text);
         if (symbols.getMinusSign() != '-') {
             text = text.replace('-', symbols.getMinusSign());
         }
@@ -2154,6 +2183,27 @@ public class DecimalFormat extends NumberFormat {
                 0xFF0C, 0xFF0C,
                 0xFF0E, 0xFF0E,
                 0xFF61, 0xFF61).freeze();
+    
+    private static final UnicodeSet minusSigns =
+        new UnicodeSet(
+                0x002D, 0x002D,
+                0x207B, 0x207B,
+                0x208B, 0x208B,
+                0x2212, 0x2212,
+                0x2796, 0x2796,
+                0xFE63, 0xFE63,
+                0xFF0D, 0xFF0D).freeze();
+    
+    private static final UnicodeSet plusSigns =
+            new UnicodeSet(
+                0x002B, 0x002B,
+                0x207A, 0x207A,
+                0x208A, 0x208A,
+                0x2795, 0x2795,
+                0xFB29, 0xFB29,
+                0xFE62, 0xFE62,
+                0xFF0B, 0xFF0B).freeze();
+    
 
     // When parsing a number with big exponential value, it requires to transform the
     // value into a string representation to construct BigInteger instance.  We want to
