@@ -43,6 +43,16 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     public static void main(String[] args) throws Exception {
         new NumberFormatTest().run(args);
     }
+    
+    public void TestParseNegativeWithLocaleUsingNonAsciiNegative() {
+        DecimalFormat parser = (DecimalFormat) NumberFormat.getInstance(new ULocale("fa"));
+        try {
+          double value = parser.parse("-0,5").doubleValue();
+          assertEquals("Expect -0.5", -0.5, value);
+        } catch (ParseException e) {
+            this.errln("Parsing -0.5 should have succeeded.");
+        }
+    }
 
     // Test various patterns
     public void TestPatterns() {

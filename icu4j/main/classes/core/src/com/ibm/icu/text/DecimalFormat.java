@@ -1778,6 +1778,13 @@ public class DecimalFormat extends NumberFormat {
      * @return a Number or CurrencyAmount or null
      */
     private Object parse(String text, ParsePosition parsePosition, Currency[] currency) {
+        if (symbols.getMinusSign() != '-') {
+            text = text.replace('-', symbols.getMinusSign());
+        }
+        if (symbols.getPlusSign() != '+') {
+            text = text.replace('+', symbols.getPlusSign());
+        }
+       
         int backup;
         int i = backup = parsePosition.getIndex();
 
