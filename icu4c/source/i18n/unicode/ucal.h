@@ -1365,14 +1365,15 @@ enum UCalendarWeekdayType {
 typedef enum UCalendarWeekdayType UCalendarWeekdayType;
 
 /**
- * Returns whether the given day of the week is a weekday, a
- * weekend day, or a day that transitions from one to the other,
- * in this calendar system. If a transition occurs at midnight,
+ * Returns whether the given day of the week is a weekday, a weekend day,
+ * or a day that transitions from one to the other, for the locale and
+ * calendar system associated with this UCalendar (the locale's region is
+ * often the most determinant factor). If a transition occurs at midnight,
  * then the days before and after the transition will have the
  * type UCAL_WEEKDAY or UCAL_WEEKEND. If a transition occurs at a time
  * other than midnight, then the day of the transition will have
  * the type UCAL_WEEKEND_ONSET or UCAL_WEEKEND_CEASE. In this case, the
- * method getWeekendTransition() will return the point of
+ * function ucal_getWeekendTransition() will return the point of
  * transition.
  * @param cal The UCalendar to query.
  * @param dayOfWeek The day of the week whose type is desired (UCAL_SUNDAY..UCAL_SATURDAY).
@@ -1385,7 +1386,7 @@ ucal_getDayOfWeekType(const UCalendar *cal, UCalendarDaysOfWeek dayOfWeek, UErro
 
 /**
  * Returns the time during the day at which the weekend begins or ends in
- * this calendar system.  If ucal_getDayOfWeekType() rerturns UCAL_WEEKEND_ONSET
+ * this calendar system.  If ucal_getDayOfWeekType() returns UCAL_WEEKEND_ONSET
  * for the specified dayOfWeek, return the time at which the weekend begins.
  * If ucal_getDayOfWeekType() returns UCAL_WEEKEND_CEASE for the specified dayOfWeek,
  * return the time at which the weekend ends. If ucal_getDayOfWeekType() returns
