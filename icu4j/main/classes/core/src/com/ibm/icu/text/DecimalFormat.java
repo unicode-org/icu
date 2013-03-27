@@ -1765,6 +1765,11 @@ public class DecimalFormat extends NumberFormat {
         return (CurrencyAmount) parse(text.toString(), pos, currency);
     }
     
+    /**
+     * NormalizePlusAndMinus substitutes any rendition of plus or minus sign in
+     * text with the plus or minus sign for the current locale and returns the
+     * new string.
+     */
     private String normalizePlusAndMinus(String text) {
         StringBuilder builder = null;
         int len = text.length();
