@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2012, International Business Machines Corporation and
+ * Copyright (C) 2007-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -28,52 +28,68 @@ import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
 /**
- * <p>Defines rules for mapping non-negative numeric values onto a small set of
- * keywords.
- *
- * <p>Rules are constructed from a text description, consisting
- * of a series of keywords and conditions.  The {@link #select} method
- * examines each condition in order and returns the keyword for the
- * first condition that matches the number.  If none match,
- * {@link #KEYWORD_OTHER} is returned.</p>
- *
- * <p>A PluralRules object is immutable.
- * It contains caches for sample values, but those are synchronized.
- *
- * <p>PluralRules is Serializable so that it can be used in formatters, which are
- * serializable.
- *
- * <p>For more information, details, and tips for writing rules, see the
- * <a href="http://www.unicode.org/draft/reports/tr35/tr35.html#Language_Plural_Rules">LDML spec,
- * C.11 Language Plural Rules</a></p>
- *
  * <p>
- * Examples:<pre>
- *   "one: n is 1; few: n in 2..4"</pre></p>
+ * Defines rules for mapping non-negative numeric values onto a small set of keywords.
+ * 
  * <p>
- * This defines two rules, for 'one' and 'few'.  The condition for
- * 'one' is "n is 1" which means that the number must be equal to
- * 1 for this condition to pass.  The condition for 'few' is
- * "n in 2..4" which means that the number must be between 2 and
- * 4 inclusive - and be an integer - for this condition to pass. All other
- * numbers are assigned the keyword "other" by the default rule.</p>
- * <p><pre>
- *   "zero: n is 0; one: n is 1; zero: n mod 100 in 1..19"</pre>
- * This illustrates that the same keyword can be defined multiple times.
- * Each rule is examined in order, and the first keyword whose condition
- * passes is the one returned.  Also notes that a modulus is applied
- * to n in the last rule.  Thus its condition holds for 119, 219, 319...</p>
- * <p><pre>
- *   "one: n is 1; few: n mod 10 in 2..4 and n mod 100 not in 12..14"</pre></p>
+ * Rules are constructed from a text description, consisting of a series of keywords and conditions. The {@link #select}
+ * method examines each condition in order and returns the keyword for the first condition that matches the number. If
+ * none match, {@link #KEYWORD_OTHER} is returned.
+ * </p>
+ * 
  * <p>
- * This illustrates conjunction and negation.  The condition for 'few'
- * has two parts, both of which must be met: "n mod 10 in 2..4" and
- * "n mod 100 not in 12..14".  The first part applies a modulus to n
- * before the test as in the previous example.  The second part applies
- * a different modulus and also uses negation, thus it matches all
- * numbers _not_ in 12, 13, 14, 112, 113, 114, 212, 213, 214...</p>
+ * A PluralRules object is immutable. It contains caches for sample values, but those are synchronized.
+ * 
  * <p>
- * Syntax:<pre>
+ * PluralRules is Serializable so that it can be used in formatters, which are serializable.
+ * 
+ * <p>
+ * For more information, details, and tips for writing rules, see the <a
+ * href="http://www.unicode.org/draft/reports/tr35/tr35.html#Language_Plural_Rules">LDML spec, C.11 Language Plural
+ * Rules</a>
+ * </p>
+ * 
+ * <p>
+ * Examples:
+ * 
+ * <pre>
+ * &quot;one: n is 1; few: n in 2..4&quot;
+ * </pre>
+ * 
+ * </p>
+ * <p>
+ * This defines two rules, for 'one' and 'few'. The condition for 'one' is "n is 1" which means that the number must be
+ * equal to 1 for this condition to pass. The condition for 'few' is "n in 2..4" which means that the number must be
+ * between 2 and 4 inclusive - and be an integer - for this condition to pass. All other numbers are assigned the
+ * keyword "other" by the default rule.
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ * &quot;zero: n is 0; one: n is 1; zero: n mod 100 in 1..19&quot;
+ * </pre>
+ * 
+ * This illustrates that the same keyword can be defined multiple times. Each rule is examined in order, and the first
+ * keyword whose condition passes is the one returned. Also notes that a modulus is applied to n in the last rule. Thus
+ * its condition holds for 119, 219, 319...
+ * </p>
+ * <p>
+ * 
+ * <pre>
+ * &quot;one: n is 1; few: n mod 10 in 2..4 and n mod 100 not in 12..14&quot;
+ * </pre>
+ * 
+ * </p>
+ * <p>
+ * This illustrates conjunction and negation. The condition for 'few' has two parts, both of which must be met:
+ * "n mod 10 in 2..4" and "n mod 100 not in 12..14". The first part applies a modulus to n before the test as in the
+ * previous example. The second part applies a different modulus and also uses negation, thus it matches all numbers
+ * _not_ in 12, 13, 14, 112, 113, 114, 212, 213, 214...
+ * </p>
+ * <p>
+ * Syntax:
+ * 
+ * <pre>
  * rules         = rule (';' rule)*
  * rule          = keyword ':' condition
  * keyword       = &lt;identifier&gt;
@@ -83,23 +99,72 @@ import com.ibm.icu.util.ULocale;
  * is_relation   = expr 'is' ('not')? value
  * in_relation   = expr ('not')? 'in' range_list
  * within_relation = expr ('not')? 'within' range_list
- * expr          = 'n' ('mod' value)?
+ * expr          = ('n' | 'i' | 'f' | 'v') ('mod' value)?
  * range_list    = (range | value) (',' range_list)*
  * value         = digit+
  * digit         = 0|1|2|3|4|5|6|7|8|9
  * range         = value'..'value
- * </pre></p>
+ * </pre>
+ * 
+ * </p>
  * <p>
- * An "identifier" is a sequence of characters that do not have the
- * Unicode Pattern_Syntax or Pattern_White_Space properties.
+ * The i, f, and v values are defined as follows.
+ * </p>
+ * <ul>
+ * <li>v to be the number of visible fraction digits.</li>
+ * <li>f to be the visible fractional digits.</li>
+ * <li>i to be the integer digits.</li>
+ * </ul>
  * <p>
- * The difference between 'in' and 'within' is that 'in' only includes
- * integers in the specified range, while 'within' includes all values.
- * Using 'within' with a range_list consisting entirely of values
- * is the same as using 'in' (it's not an error).</p>
+ * Examples are in the following table:
+ * </p>
+ * <table border='1'>
+ * <tbody>
+ * <tr>
+ * <td>n</td>
+ * <td>f</td>
+ * <td>v</td>
+ * </tr>
+ * <tr>
+ * <td>1.0</td>
+ * <td>0</td>
+ * <td>1</td>
+ * </tr>
+ * <tr>
+ * <td>1.00</td>
+ * <td>0</td>
+ * <td>2</td>
+ * </tr>
+ * <tr>
+ * <td>1.3</td>
+ * <td>3</td>
+ * <td>1</td>
+ * </tr>
+ * <tr>
+ * <td>1.03</td>
+ * <td>3</td>
+ * <td>2</td>
+ * </tr>
+ * <tr>
+ * <td>1.23</td>
+ * <td>23</td>
+ * <td>2</td>
+ * </tr>
+ * </tbody>
+ * </table>
+ * <p>
+ * An "identifier" is a sequence of characters that do not have the Unicode Pattern_Syntax or Pattern_White_Space
+ * properties.
+ * <p>
+ * The difference between 'in' and 'within' is that 'in' only includes integers in the specified range, while 'within'
+ * includes all values. Using 'within' with a range_list consisting entirely of values is the same as using 'in' (it's
+ * not an error).
+ * </p>
+ * 
  * @stable ICU 3.8
  */
 public class PluralRules implements Serializable {
+
     private static final long serialVersionUID = 1;
 
     private final RuleList rules;
@@ -182,7 +247,7 @@ public class PluralRules implements Serializable {
     private static final Constraint NO_CONSTRAINT = new Constraint() {
         private static final long serialVersionUID = 9163464945387899416L;
 
-        public boolean isFulfilled(double n) {
+        public boolean isFulfilled(NumberInfo n) {
             return true;
         }
 
@@ -209,7 +274,7 @@ public class PluralRules implements Serializable {
             return KEYWORD_OTHER;
         }
 
-        public boolean appliesTo(double n) {
+        public boolean appliesTo(NumberInfo n) {
             return true;
         }
 
@@ -267,6 +332,35 @@ public class PluralRules implements Serializable {
         }
     }
 
+    private static class NumberInfo {
+        private static final String OPERAND_LIST = "nifv";
+
+        public NumberInfo(double number, int countVisibleFractionDigits, int fractionalDigits) {
+            source = number;
+            intValue = (long)number;
+            this.fractionalDigits = fractionalDigits;
+            this.countVisibleFractionDigits = countVisibleFractionDigits;
+        }
+        public NumberInfo(double number) {
+            this(number, 0, 0);
+        }
+        final double source;
+        final double intValue;
+        final double fractionalDigits;
+        final double countVisibleFractionDigits;
+
+        public double get(int operand) {
+            switch(operand) {
+            default: return source;
+            case 1: return intValue;
+            case 2: return fractionalDigits;
+            case 3: return countVisibleFractionDigits;
+            }
+        }
+        public static int getOperand(String t) {
+            return OPERAND_LIST.indexOf(t);
+        }
+    }
     /*
      * A constraint on a number.
      */
@@ -275,7 +369,7 @@ public class PluralRules implements Serializable {
          * Returns true if the number fulfills the constraint.
          * @param n the number to test, >= 0.
          */
-        boolean isFulfilled(double n);
+        boolean isFulfilled(NumberInfo n);
 
         /*
          * Returns false if an unlimited number of values fulfills the
@@ -302,7 +396,7 @@ public class PluralRules implements Serializable {
         String getKeyword();
 
         /* Returns true if the rule applies to the number. */
-        boolean appliesTo(double n);
+        boolean appliesTo(NumberInfo n);
 
         /* Returns false if an unlimited number of values generate this rule. */
         boolean isLimited();
@@ -316,7 +410,7 @@ public class PluralRules implements Serializable {
      */
     private interface RuleList extends Serializable {
         /* Returns the keyword of the first rule that applies to the number. */
-        String select(double n);
+        String select(NumberInfo n);
 
         /* Returns the set of defined keywords. */
         Set<String> getKeywords();
@@ -379,7 +473,8 @@ public class PluralRules implements Serializable {
 
                 int x = 0;
                 String t = tokens[x++];
-                if (!"n".equals(t)) {
+                int operand = NumberInfo.getOperand(t);
+                if (operand < 0) {
                     throw unexpected(t, condition);
                 }
                 if (x < tokens.length) {
@@ -445,7 +540,7 @@ public class PluralRules implements Serializable {
                     }
 
                     newConstraint =
-                            new RangeConstraint(mod, inRange, integersOnly, lowBound, highBound, vals);
+                            new RangeConstraint(mod, inRange, operand, integersOnly, lowBound, highBound, vals);
                 }
 
                 if (andConstraint == null) {
@@ -540,14 +635,15 @@ public class PluralRules implements Serializable {
     private static class RangeConstraint implements Constraint, Serializable {
         private static final long serialVersionUID = 1;
 
-        private int mod;
-        private boolean inRange;
-        private boolean integersOnly;
-        private long lowerBound;
-        private long upperBound;
-        private long[] range_list;
+        private final int mod;
+        private final boolean inRange;
+        private final boolean integersOnly;
+        private final long lowerBound;
+        private final long upperBound;
+        private final long[] range_list;
+        private final int operand;
 
-        RangeConstraint(int mod, boolean inRange, boolean integersOnly,
+        RangeConstraint(int mod, boolean inRange, int operand, boolean integersOnly,
                 long lowerBound, long upperBound, long[] range_list) {
             this.mod = mod;
             this.inRange = inRange;
@@ -555,9 +651,11 @@ public class PluralRules implements Serializable {
             this.lowerBound = lowerBound;
             this.upperBound = upperBound;
             this.range_list = range_list;
+            this.operand = operand;
         }
 
-        public boolean isFulfilled(double n) {
+        public boolean isFulfilled(NumberInfo number) {
+            double n = number.get(operand);
             if (integersOnly && (n - (long)n) != 0.0) {
                 return !inRange;
             }
@@ -606,6 +704,7 @@ public class PluralRules implements Serializable {
                 }
             }
             ListBuilder lb = new ListBuilder();
+            lb.add(NumberInfo.OPERAND_LIST.substring(operand, operand+1));
             if (mod > 1) {
                 lb.add("mod", mod);
             }
@@ -660,7 +759,7 @@ public class PluralRules implements Serializable {
             super(a, b, " && ");
         }
 
-        public boolean isFulfilled(double n) {
+        public boolean isFulfilled(NumberInfo n) {
             return a.isFulfilled(n) && b.isFulfilled(n);
         }
 
@@ -679,7 +778,7 @@ public class PluralRules implements Serializable {
             super(a, b, " || ");
         }
 
-        public boolean isFulfilled(double n) {
+        public boolean isFulfilled(NumberInfo n) {
             return a.isFulfilled(n) || b.isFulfilled(n);
         }
 
@@ -716,7 +815,7 @@ public class PluralRules implements Serializable {
             return keyword;
         }
 
-        public boolean appliesTo(double n) {
+        public boolean appliesTo(NumberInfo n) {
             return constraint.isFulfilled(n);
         }
 
@@ -756,7 +855,7 @@ public class PluralRules implements Serializable {
             return new RuleChain(nextRule, this);
         }
 
-        private Rule selectRule(double n) {
+        private Rule selectRule(NumberInfo n) {
             Rule r = null;
             if (next != null) {
                 r = next.selectRule(n);
@@ -767,7 +866,7 @@ public class PluralRules implements Serializable {
             return r;
         }
 
-        public String select(double n) {
+        public String select(NumberInfo n) {
             Rule r = selectRule(n);
             if (r == null) {
                 return KEYWORD_OTHER;
@@ -898,7 +997,19 @@ public class PluralRules implements Serializable {
      * @stable ICU 4.0
      */
     public String select(double number) {
-        return rules.select(number);
+        return rules.select(new NumberInfo(number));
+    }
+
+    /**
+     * Given a number, returns the keyword of the first rule that applies to
+     * the number.
+     *
+     * @param number The number for which the rule has to be determined.
+     * @return The keyword of the selected rule.
+     * @internal
+     */
+    public String select(double number, int countVisibleFractionDigits, int fractionaldigits) {
+        return rules.select(new NumberInfo(number, countVisibleFractionDigits, fractionaldigits));
     }
 
     /**
@@ -1226,7 +1337,7 @@ public class PluralRules implements Serializable {
         if (explicits == null) {
             explicits = Collections.emptySet();
         }
-        
+
         // Quick check on whether there are multiple elements
 
         if (originalSize > explicits.size()) {

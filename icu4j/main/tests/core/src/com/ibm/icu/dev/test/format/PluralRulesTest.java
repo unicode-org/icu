@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2012, International Business Machines Corporation and
+ * Copyright (C) 2007-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -108,6 +108,56 @@ public class PluralRulesTest extends TestFmwk {
                 PluralRules rules = PluralRules.createRules(pattern);
                 String[] targets = getTargetStrings(expected);
                 checkTargets(rules, targets);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException(e.getMessage());
+            }
+        }
+    }
+
+    private static String[][] operandTestData = {
+        {"a: i is 2; b:i is 3", 
+            "b: 3.5; a: 2.5"},
+        {"a: f is 0; b:f is 50", 
+            "a: 1.00; b: 1.50"},
+        {"a: v is 1; b:v is 2", 
+            "a: 1.0; b: 1.00"},
+        {"one: n is 1 AND v is 0", 
+            "one: 1 ; other: 1.00,1.0"}, // English rules
+        {"one: v is 0 and i mod 10 is 1 or f mod 10 is 1", 
+            "one: 1, 1.1, 3.1; other: 1.0, 3.2, 5"}, // Last visible digit
+        {"one: n is 1 and v is 0; few: n in 2..4 and v is 0; many: v is not 0", 
+            "one: 1; few: 2, 3, 4; many: 0.5, 1.0, 2.0, 2.1, 3.0, 4.999, 5.3; other:0,5,1001"}, // Last visible digit
+        // one → n is 1; few → n in 2..4;
+    };
+
+    public void testOperands() {
+        for (String[] pair : operandTestData) {
+            String pattern = pair[0].trim();
+            String categoriesAndExpected = pair[1].trim();
+
+            //            logln("pattern[" + i + "] " + pattern);
+            try {
+                PluralRules rules = PluralRules.createRules(pattern);
+                logln(rules.toString());
+                for (String categoryAndExpected : categoriesAndExpected.split("\\s*;\\s*")) {
+                    String[] categoryFromExpected = categoryAndExpected.split("\\s*:\\s*");
+                    String expected = categoryFromExpected[0];
+                    for (String value : categoryFromExpected[1].split("\\s*,\\s*")) {
+                        double number = Double.parseDouble(value);
+                        int decimalPos = value.indexOf('.') + 1;
+                        int countVisibleFractionDigits;
+                        int fractionaldigits;
+                        if (decimalPos == 0) {
+                            countVisibleFractionDigits = fractionaldigits = 0;
+                        } else {
+                            countVisibleFractionDigits = value.length() - decimalPos;
+                            fractionaldigits = Integer.parseInt(value.substring(decimalPos));
+                        }
+                        String result = rules.select(number, countVisibleFractionDigits, fractionaldigits);
+                        assertEquals("testing <" + pair[0] + "> with <" + value + ">", expected, result);
+                    }
+                }
             } catch (Exception e) {
                 e.printStackTrace();
                 throw new RuntimeException(e.getMessage());
@@ -399,18 +449,18 @@ public class PluralRulesTest extends TestFmwk {
     public void TestKeywords() {
         Set<String> possibleKeywords = new LinkedHashSet(Arrays.asList("zero", "one", "two", "few", "many", "other"));
         Object[][] tests = {
-            // format is locale, explicits, then triples of keyword, status, unique value.
-            {"en", null, 
-                "one", KeywordStatus.UNIQUE, 1.0d, 
-                "other", KeywordStatus.UNBOUNDED, null},
-            {"pl", null, 
-                "one", KeywordStatus.UNIQUE, 1.0d, 
-                "few", KeywordStatus.UNBOUNDED, null, 
-                "many", KeywordStatus.UNBOUNDED, null, 
-                "other", KeywordStatus.UNBOUNDED, null},
-            {"en", new HashSet<Double>(Arrays.asList(1.0d)), // check that 1 is suppressed
-                "one", KeywordStatus.SUPPRESSED, null, 
-                "other", KeywordStatus.UNBOUNDED, null},
+                // format is locale, explicits, then triples of keyword, status, unique value.
+                {"en", null, 
+                    "one", KeywordStatus.UNIQUE, 1.0d, 
+                    "other", KeywordStatus.UNBOUNDED, null},
+                    {"pl", null, 
+                        "one", KeywordStatus.UNIQUE, 1.0d, 
+                        "few", KeywordStatus.UNBOUNDED, null, 
+                        "many", KeywordStatus.UNBOUNDED, null, 
+                        "other", KeywordStatus.UNBOUNDED, null},
+                        {"en", new HashSet<Double>(Arrays.asList(1.0d)), // check that 1 is suppressed
+                            "one", KeywordStatus.SUPPRESSED, null, 
+                            "other", KeywordStatus.UNBOUNDED, null},
         };
         Output<Double> uniqueValue = new Output<Double>();
         for (Object[] test : tests) {
