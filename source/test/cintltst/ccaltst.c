@@ -1701,17 +1701,24 @@ static const TestDaysOfWeek daysOfWeek_en_US[] = {
     { UCAL_MONDAY,   UCAL_WEEKDAY,       0        },
     { UCAL_FRIDAY,   UCAL_WEEKDAY,       0        },
     { UCAL_SATURDAY, UCAL_WEEKEND,       0        },
-    { UCAL_SUNDAY,   UCAL_WEEKEND_CEASE, 86400000 },
+    { UCAL_SUNDAY,   UCAL_WEEKEND,       0        },
 };
 static const TestDaysOfWeek daysOfWeek_ar_YE[] = { /* Thursday:Friday */
     { UCAL_WEDNESDAY,UCAL_WEEKDAY,       0        },
     { UCAL_SATURDAY, UCAL_WEEKDAY,       0        },
     { UCAL_THURSDAY, UCAL_WEEKEND,       0        },
-    { UCAL_FRIDAY,   UCAL_WEEKEND_CEASE, 86400000 },
+    { UCAL_FRIDAY,   UCAL_WEEKEND,       0        },
+};
+static const TestDaysOfWeek daysOfWeek_hi_IN[] = { /* Sunday only */
+    { UCAL_MONDAY,   UCAL_WEEKDAY,       0        },
+    { UCAL_FRIDAY,   UCAL_WEEKDAY,       0        },
+    { UCAL_SATURDAY, UCAL_WEEKDAY,       0        },
+    { UCAL_SUNDAY,   UCAL_WEEKEND,       0        },
 };
 static const TestDaysOfWeekList testDays[] = {
     { "en_US", daysOfWeek_en_US, sizeof(daysOfWeek_en_US)/sizeof(daysOfWeek_en_US[0]) },
     { "ar_YE", daysOfWeek_ar_YE, sizeof(daysOfWeek_ar_YE)/sizeof(daysOfWeek_ar_YE[0]) },
+    { "hi_IN", daysOfWeek_hi_IN, sizeof(daysOfWeek_hi_IN)/sizeof(daysOfWeek_hi_IN[0]) },
 };
 
 static const UChar logDateFormat[] = { 0x0045,0x0045,0x0045,0x0020,0x004D,0x004D,0x004D,0x0020,0x0064,0x0064,0x0020,0x0079,
