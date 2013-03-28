@@ -1142,7 +1142,6 @@ static UBool U_CALLCONV putil_cleanup(void)
 /*
  * Set the data directory.
  *    Make a copy of the passed string, and set the global data dir to point to it.
- *    TODO:  see bug #2849, regarding thread safety.
  */
 U_CAPI void U_EXPORT2
 u_setDataDirectory(const char *directory) {
@@ -1175,13 +1174,11 @@ u_setDataDirectory(const char *directory) {
 #endif
     }
 
-    umtx_lock(NULL);
     if (gDataDirectory && *gDataDirectory) {
         uprv_free(gDataDirectory);
     }
     gDataDirectory = newDataDir;
     ucln_common_registerCleanup(UCLN_COMMON_PUTIL, putil_cleanup);
-    umtx_unlock(NULL);
 }
 
 U_CAPI UBool U_EXPORT2
@@ -1228,10 +1225,8 @@ u_getDataDirectory(void) {
 #endif
 
     /* if we have the directory, then return it immediately */
-    UMTX_CHECK(NULL, gDataDirectory, path);
-
-    if(path) {
-        return path;
+    if(gDataDirectory) {
+        return gDataDirectory;
     }
 
     /*
