@@ -6,7 +6,9 @@
  */
 package com.ibm.icu.util;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * TimePeriod represents a time period.  TimePeriod objects are immutable.
@@ -21,6 +23,16 @@ import java.util.Iterator;
  * @draft ICU 52
  */
 public final class TimePeriod implements Iterable<TimeUnitAmount> {
+    
+    private final TimeUnitAmount[] fields;
+    private final int size;
+    private final int hash;
+    
+    private TimePeriod(TimeUnitAmount[] fields, int size, int hash) {
+        this.fields = fields;
+        this.size = size;
+        this.hash = hash;
+    }
        
     /**
      * Returns a new TimePeriod that matches the given time unit amounts.
@@ -33,7 +45,7 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
      * @draft ICU 52
      */
     public static TimePeriod forAmounts(TimeUnitAmount ...amounts) {
-            return null;
+        return forAmounts(Arrays.asList(amounts));      
     }
 
     /**
@@ -47,7 +59,18 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
      * @draft ICU 52
      */
     public static TimePeriod forAmounts(Iterable<TimeUnitAmount> amounts) {
-        return null;
+        TimeUnitAmount[] fields = new TimeUnitAmount[TimeUnit.TIME_UNIT_COUNT];
+        int size = 0;
+        for (TimeUnitAmount tua : amounts) {
+            int index = tua.getTimeUnit().getIndex();
+            if (fields[index] != null) {
+                throw new IllegalArgumentException(
+                        "Only one TimeUnitAmount per unit allowed.");
+            }
+            fields[index] = tua;
+            size++;
+        }
+        return new TimePeriod(fields, size, computeHash(fields));
     }
         
     /**
@@ -58,37 +81,82 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
      * @draft ICU 52
      */
     public TimeUnitAmount getAmount(TimeUnit timeUnit) {
-        return null;
+        return fields[timeUnit.getIndex()];
     }
 
     /**
      * Returned iterator iterates over all TimeUnitAmount objects in this object.
      * Iterated TimeUnitAmount objects are ordered from largest TimeUnit to
-     * smallest TimeUnit.
+     * smallest TimeUnit. Remove method on returned iterator throws an
+     * UnsupportedOperationException.
      * @draft ICU 52
      */
     public Iterator<TimeUnitAmount> iterator() {
-      return null;
+      return new TPIterator();
     }
 
     /**
      * Returns the number of TimeUnitAmount objects in this object.
      */
     public int size() {
-      return 0;
+      return size;
     }
     
     /**
      * Two TimePeriod objects are equal if they contain equal TimeUnitAmount objects.
      */
     @Override
-    public boolean equals(Object rhs) {
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof TimePeriod)) {
+            return false;
+        }
+        TimePeriod rhs = (TimePeriod) o;
+        if (this.hash != rhs.hash) {
+            return false;
+        }
+        return Arrays.equals(fields, rhs.fields);
     }
     
     @Override
     public int hashCode() {
-        return 0;
+        return hash;
+    }
+    
+    private static int computeHash(TimeUnitAmount[] fields) {
+        int result = 0;
+        for (TimeUnitAmount amount : fields) {
+            result *= 31;
+            if (amount != null) {
+                result += amount.hashCode();
+            }
+        }
+        return result;
+    }
+    
+    private class TPIterator implements Iterator<TimeUnitAmount> {
+        
+        private int index = 0;
+
+        public boolean hasNext() {
+            while (index < fields.length && fields[index] == null) {
+                index++;
+            }
+            return index < fields.length;
+        }
+
+        public TimeUnitAmount next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return fields[index++];
+        }
+
+        public void remove() {
+            throw new UnsupportedOperationException();           
+        }
     }
 }
 
