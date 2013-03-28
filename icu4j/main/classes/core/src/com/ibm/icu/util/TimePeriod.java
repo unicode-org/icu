@@ -67,7 +67,10 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
                 throw new IllegalArgumentException(
                         "Only one TimeUnitAmount per unit allowed.");
             }
-            fields[index] = tua;
+            // This line is necessary to guarantee immutability of the TimePeriod
+            // class. A Number object, which is in TimeUnitAmount, need not be immutable,
+            // but Double is immutable.
+            fields[index] = new TimeUnitAmount(tua.getNumber().doubleValue(), tua.getTimeUnit());
             size++;
         }
         return new TimePeriod(fields, size, computeHash(fields));
