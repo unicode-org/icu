@@ -23,7 +23,11 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class TimeUnitTest extends TestFmwk {
-    
+    private static final TimePeriod _19m = TimePeriod.forAmounts(
+            new TimeUnitAmount(19.0, TimeUnit.MINUTE));
+    private static final TimePeriod _19m_28s = TimePeriod.forAmounts(
+            new TimeUnitAmount(19.0, TimeUnit.MINUTE),
+            new TimeUnitAmount(28.0, TimeUnit.SECOND));
     private static final TimePeriod _1h_23_5s = TimePeriod.forAmounts(
             new TimeUnitAmount(1.0, TimeUnit.HOUR),
             new TimeUnitAmount(23.5, TimeUnit.SECOND));
@@ -31,6 +35,9 @@ public class TimeUnitTest extends TestFmwk {
             new TimeUnitAmount(1.0, TimeUnit.HOUR),
             new TimeUnitAmount(0.0, TimeUnit.MINUTE),
             new TimeUnitAmount(23.0, TimeUnit.SECOND));
+    private static final TimePeriod _5h_17m = TimePeriod.forAmounts(
+            new TimeUnitAmount(5.0, TimeUnit.HOUR),
+            new TimeUnitAmount(17.0, TimeUnit.MINUTE));
     private static final TimePeriod _2y_5M_3w_4d = TimePeriod.forAmounts(
             new TimeUnitAmount(2.0, TimeUnit.YEAR),
             new TimeUnitAmount(5.0, TimeUnit.MONTH),
@@ -342,25 +349,42 @@ public class TimeUnitTest extends TestFmwk {
     
     public void TestFormatPeriodEn() {
         Object[][] fullData = {
+                {_19m, "19 minutes"},
                 {_1h_23_5s, "1 hour and 23.5 seconds"},
                 {_1h_0m_23s, "1 hour, 0 minutes, and 23 seconds"},
                 {_2y_5M_3w_4d, "2 years, 5 months, 3 weeks, and 4 days"}};
+        Object[][] abbrevData = {
+                {_19m, "19 mins"},
+                {_1h_23_5s, "1 hr and 23.5 secs"},
+                {_1h_0m_23s, "1 hr, 0 mins, and 23 secs"},
+                {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, and 4 days"}};
+        Object[][] numericData = {
+                {_19m, "19 mins"},
+                {_1h_23_5s, "1:00:23.5"},
+                {_1h_0m_23s, "1:00:23"},
+                {_5h_17m, "5:17"},
+                {_19m_28s, "19:28"},
+                {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, and 4 days"}};
         TimeUnitFormat tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);
         verifyFormatPeriod("en FULL", tuf, fullData);
+        tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.ABBREVIATED_NAME);
+        verifyFormatPeriod("en ABBREV", tuf, abbrevData);       
+        tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.NUMERIC);
+        verifyFormatPeriod("en NUMERIC", tuf, numericData);
     }
     
     private void verifyFormatPeriod(String desc, TimeUnitFormat tuf, Object[][] testData) {
+        StringBuilder builder = new StringBuilder();
         boolean failure = false;
         for (Object[] testCase : testData) {
-            try {
-                assertEquals(desc, testCase[1], tuf.formatTimePeriod((TimePeriod) testCase[0]));
-            } catch (RuntimeException e) {
-                logln(e.getMessage());
+            String actual = tuf.formatTimePeriod((TimePeriod) testCase[0]);
+            if (!testCase[1].equals(actual)) {
+                builder.append(String.format("%s: Expected: '%s', got: '%s'\n", desc, testCase[1], actual));
                 failure = true;
             }
         }
         if (failure) {
-            errln("Test failed.");
+            errln(builder.toString());
         }
     }
 }
