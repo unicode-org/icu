@@ -13,6 +13,7 @@ import java.util.Locale;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.TimeUnitFormat;
+import com.ibm.icu.util.TimePeriod;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
@@ -22,6 +23,20 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class TimeUnitTest extends TestFmwk {
+    
+    private static final TimePeriod _1h_23_5s = TimePeriod.forAmounts(
+            new TimeUnitAmount(1.0, TimeUnit.HOUR),
+            new TimeUnitAmount(23.5, TimeUnit.SECOND));
+    private static final TimePeriod _1h_0m_23s = TimePeriod.forAmounts(
+            new TimeUnitAmount(1.0, TimeUnit.HOUR),
+            new TimeUnitAmount(0.0, TimeUnit.MINUTE),
+            new TimeUnitAmount(23.0, TimeUnit.SECOND));
+    private static final TimePeriod _2y_5M_3w_4d = TimePeriod.forAmounts(
+            new TimeUnitAmount(2.0, TimeUnit.YEAR),
+            new TimeUnitAmount(5.0, TimeUnit.MONTH),
+            new TimeUnitAmount(3.0, TimeUnit.WEEK),
+            new TimeUnitAmount(4.0, TimeUnit.DAY));
+            
     public static void main(String[] args) throws Exception{
         new TimeUnitTest().run(args);
     }
@@ -98,7 +113,14 @@ public class TimeUnitTest extends TestFmwk {
      */
     public void TestGreek() {
         String[] locales = {"el_GR", "el"};
-        final TimeUnit[] units = TimeUnit.values();
+        final TimeUnit[] units = new TimeUnit[]{
+                TimeUnit.SECOND,
+                TimeUnit.MINUTE,
+                TimeUnit.HOUR,
+                TimeUnit.DAY,
+                TimeUnit.WEEK,
+                TimeUnit.MONTH,
+                TimeUnit.YEAR};
         int[] styles = new int[] {TimeUnitFormat.FULL_NAME, TimeUnitFormat.ABBREVIATED_NAME};
         int[] numbers = new int[] {1, 7};
 
@@ -316,5 +338,29 @@ public class TimeUnitTest extends TestFmwk {
         TimeUnitFormat tuf1 = new TimeUnitFormat();
         tuf1.setNumberFormat(NumberFormat.getInstance());
         tuf1.parseObject("", new ParsePosition(0));
+    }
+    
+    public void TestFormatPeriodEn() {
+        Object[][] fullData = {
+                {_1h_23_5s, "1 hour and 23.5 seconds"},
+                {_1h_0m_23s, "1 hour, 0 minutes, and 23 seconds"},
+                {_2y_5M_3w_4d, "2 years, 5 months, 3 weeks, and 4 days"}};
+        TimeUnitFormat tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);
+        verifyFormatPeriod("en FULL", tuf, fullData);
+    }
+    
+    private void verifyFormatPeriod(String desc, TimeUnitFormat tuf, Object[][] testData) {
+        boolean failure = false;
+        for (Object[] testCase : testData) {
+            try {
+                assertEquals(desc, testCase[1], tuf.formatTimePeriod((TimePeriod) testCase[0]));
+            } catch (RuntimeException e) {
+                logln(e.getMessage());
+                failure = true;
+            }
+        }
+        if (failure) {
+            errln("Test failed.");
+        }
     }
 }

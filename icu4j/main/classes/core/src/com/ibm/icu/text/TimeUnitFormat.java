@@ -8,7 +8,9 @@ package com.ibm.icu.text;
 
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -97,6 +99,7 @@ public class TimeUnitFormat extends MeasureFormat {
     private ULocale locale;
     private transient Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns;
     private transient PluralRules pluralRules;
+    private transient ListFormatter listFormatter;
     private transient boolean isReady;
     private int style;
     
@@ -252,7 +255,15 @@ public class TimeUnitFormat extends MeasureFormat {
      * @draft ICU 52
      */
     public String formatTimePeriod(TimePeriod timePeriod) {
-        return null;    
+        if (!isReady) {
+            setup();
+        }
+        String[] items = new String[timePeriod.size()];
+        int idx = 0;
+        for (TimeUnitAmount amount : timePeriod) {
+            items[idx++] = format(amount);
+        }
+        return listFormatter.format((Object[]) items);   
     }
 
     /**
@@ -358,6 +369,7 @@ public class TimeUnitFormat extends MeasureFormat {
             format = NumberFormat.getNumberInstance(locale);
         }
         pluralRules = PluralRules.forLocale(locale);
+        listFormatter = ListFormatter.getInstance(locale);
         timeUnitToCountToPatterns = new HashMap<TimeUnit, Map<String, Object[]>>();
 
         Set<String> pluralKeywords = pluralRules.getKeywords();
