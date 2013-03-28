@@ -373,6 +373,31 @@ public class TimeUnitTest extends TestFmwk {
         verifyFormatPeriod("en NUMERIC", tuf, numericData);
     }
     
+    public void TestTimePeriodForAmounts() {
+        try {
+            TimePeriod.forAmounts(
+                    new TimeUnitAmount(3.0, TimeUnit.HOUR),
+                    new TimeUnitAmount(5.0, TimeUnit.HOUR));
+            errln("Expected IllegalArgumentException on duplicate TimeUnits.");
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+        try {
+            TimePeriod.forAmounts();
+            errln("Expected IllegalArgumentException on missing TimeUnitAmounts.");
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+        try {
+            TimePeriod.forAmounts(
+                    new TimeUnitAmount(3.5, TimeUnit.HOUR),
+                    new TimeUnitAmount(5.0, TimeUnit.MINUTE));
+            errln("Expected IllegalArgumentException. Only smallest time unit can have a fractional amount.");
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+    }
+    
     private void verifyFormatPeriod(String desc, TimeUnitFormat tuf, Object[][] testData) {
         StringBuilder builder = new StringBuilder();
         boolean failure = false;
