@@ -100,12 +100,15 @@ public class TimeUnitFormat extends MeasureFormat {
     private transient Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns;
     private transient PluralRules pluralRules;
     private transient ListFormatter listFormatter;
+    private transient MessageFormat hourMinute;
+    private transient MessageFormat minuteSecond;
+    private transient MessageFormat hourMinuteSecond;
     private transient boolean isReady;
     private int style;
     
     // When style is set to NUMERIC, this field is set to true and the style
     // field becomes ABBREVIATED_NAME.
-    private boolean numeric;
+    private boolean isNumericStyle;
 
     /**
      * Create empty format using full name style, for example, "hours". 
@@ -148,7 +151,7 @@ public class TimeUnitFormat extends MeasureFormat {
     public TimeUnitFormat(ULocale locale, int style) {
         if (style == NUMERIC) {
             style = ABBREVIATED_NAME;
-            numeric = true;
+            isNumericStyle = true;
         }
         if (style < FULL_NAME || style >= TOTAL_STYLES) {
             throw new IllegalArgumentException("style should be either FULL_NAME or ABBREVIATED_NAME style");
@@ -257,6 +260,12 @@ public class TimeUnitFormat extends MeasureFormat {
     public String formatTimePeriod(TimePeriod timePeriod) {
         if (!isReady) {
             setup();
+        }
+        if (isNumericStyle) {
+            String result = formatPeriodAsNumeric(timePeriod);
+            if (result != null) {
+                return result;
+            }
         }
         String[] items = new String[timePeriod.size()];
         int idx = 0;
@@ -370,6 +379,10 @@ public class TimeUnitFormat extends MeasureFormat {
         }
         pluralRules = PluralRules.forLocale(locale);
         listFormatter = ListFormatter.getInstance(locale);
+        DateTimePatternGenerator df = DateTimePatternGenerator.getInstance(locale);
+        hourMinute = getPattern(df, "hm", locale, "{0}", "{1,number,00.###}", null);
+        minuteSecond = getPattern(df, "ms", locale, null, "{1}", "{2,number,00.###}");
+        hourMinuteSecond = getPattern(df, "hms", locale, "{0}", "{1,number,00}", "{2,number,00.###}");
         timeUnitToCountToPatterns = new HashMap<TimeUnit, Map<String, Object[]>>();
 
         Set<String> pluralKeywords = pluralRules.getKeywords();
@@ -377,7 +390,64 @@ public class TimeUnitFormat extends MeasureFormat {
         setup("unitsShort", timeUnitToCountToPatterns, ABBREVIATED_NAME, pluralKeywords);
         isReady = true;
     }
-
+    
+    private MessageFormat getPattern(DateTimePatternGenerator dtpg, String skeleton, ULocale locale, 
+            String h, String m, String s) {
+        String pat = dtpg.getBestPattern(skeleton);
+        StringBuilder buffer = new StringBuilder();
+        for (Object item : new DateTimePatternGenerator.FormatParser().set(pat).getItems()) {
+            if (item instanceof DateTimePatternGenerator.VariableField) {
+                DateTimePatternGenerator.VariableField fld = (DateTimePatternGenerator.VariableField)item;
+                switch (fld.getType()) {
+                case DateTimePatternGenerator.HOUR: buffer.append(h); break;
+                case DateTimePatternGenerator.MINUTE: buffer.append(m); break;
+                case DateTimePatternGenerator.SECOND: buffer.append(s); break;
+                }
+            } else {
+                buffer.append(item);
+            }
+        }
+        return new MessageFormat(buffer.toString(), locale);
+    }
+    
+    private String formatPeriodAsNumeric(TimePeriod timePeriod) {
+        TimeUnit biggestUnit = null, smallestUnit = null;
+        for (TimeUnitAmount tua : timePeriod) {
+            if (biggestUnit == null) {
+                biggestUnit = tua.getTimeUnit();
+            }
+            smallestUnit = tua.getTimeUnit();
+        }
+        // We have to trim the result of  MessageFormat.format() not sure why.
+        if (biggestUnit == TimeUnit.HOUR && smallestUnit == TimeUnit.SECOND) {
+            return hourMinuteSecond.format(new Object[]{
+                    getZeroedAmount(timePeriod, TimeUnit.HOUR),
+                    getZeroedAmount(timePeriod, TimeUnit.MINUTE),
+                    getZeroedAmount(timePeriod, TimeUnit.SECOND)}).trim();
+            
+        }
+        if (biggestUnit == TimeUnit.MINUTE && smallestUnit == TimeUnit.SECOND) {
+            return minuteSecond.format(new Object[]{
+                    null,
+                    getZeroedAmount(timePeriod, TimeUnit.MINUTE),
+                    getZeroedAmount(timePeriod, TimeUnit.SECOND)}).trim();
+            
+        }
+        if (biggestUnit == TimeUnit.HOUR && smallestUnit == TimeUnit.MINUTE) {
+            return hourMinute.format(new Object[]{
+                    getZeroedAmount(timePeriod, TimeUnit.HOUR),
+                    getZeroedAmount(timePeriod, TimeUnit.MINUTE)}).trim();            
+        }
+        return null;
+    }
+    
+    private Number getZeroedAmount(TimePeriod timePeriod, TimeUnit timeUnit) {
+        TimeUnitAmount tua = timePeriod.getAmount(timeUnit);
+        if (tua == null) {
+            return Double.valueOf(0);
+        }
+        return tua.getNumber();
+    }
 
     private void setup(String resourceKey, Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns,
                        int style, Set<String> pluralKeywords) {
