@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -30,12 +30,14 @@ public class TimeUnitTest extends TestFmwk {
         String[] locales = {"en", "sl", "fr", "zh", "ar", "ru", "zh_Hant"};
         for ( int locIndex = 0; locIndex < locales.length; ++locIndex ) {
             //System.out.println("locale: " + locales[locIndex]);
-            Object[] formats = new Object[] {
+            TimeUnitFormat[] formats = new TimeUnitFormat[] {
                 new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.FULL_NAME),
-                new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.ABBREVIATED_NAME)
+                new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.ABBREVIATED_NAME),
+                new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.NUMERIC)
+                
             };
             for (int style = TimeUnitFormat.FULL_NAME;
-                 style <= TimeUnitFormat.ABBREVIATED_NAME;
+                 style <= TimeUnitFormat.NUMERIC;
                  ++style) {
                 final TimeUnit[] values = TimeUnit.values();
                 for (int j = 0; j < values.length; ++j) {
@@ -43,18 +45,16 @@ public class TimeUnitTest extends TestFmwk {
                     double[] tests = {0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 5, 10, 100, 101.35};
                     for (int i = 0; i < tests.length; ++i) {
                         TimeUnitAmount source = new TimeUnitAmount(tests[i], timeUnit);
-                        String formatted = ((TimeUnitFormat)formats[style]).format(source);
+                        String formatted = formats[style].format(source);
                         //System.out.println(formatted);
                         logln(tests[i] + " => " + formatted);
                         try {
-                            TimeUnitAmount result = (TimeUnitAmount) ((TimeUnitFormat)formats[style]).parseObject(formatted);
-                            if (result == null || !source.equals(result)) {
-                                errln("No round trip: " + source + " => " + formatted + " => " + result);
-                            }
-                            // mix style parsing
-                            result = (TimeUnitAmount) ((TimeUnitFormat)formats[1 - style]).parseObject(formatted);
-                            if (result == null || !source.equals(result)) {
-                                errln("No round trip: " + source + " => " + formatted + " => " + result);
+                            // Style should not matter when parsing.
+                            for (int parseStyle = TimeUnitFormat.FULL_NAME; parseStyle <= TimeUnitFormat.NUMERIC; parseStyle++) {
+                                TimeUnitAmount result = (TimeUnitAmount) formats[parseStyle].parseObject(formatted);
+                                if (result == null || !source.equals(result)) {
+                                    errln("No round trip: " + source + " => " + formatted + " => " + result);
+                                }
                             }
                         } catch (ParseException e) {
                             errln(e.getMessage());
@@ -230,7 +230,7 @@ public class TimeUnitTest extends TestFmwk {
     public void TestTimeUnitFormat() {
         // Tests when "if (style < FULL_NAME || style >= TOTAL_STYLES)" is true
         // TOTAL_STYLES is 2
-        int[] cases = { TimeUnitFormat.FULL_NAME - 1, TimeUnitFormat.FULL_NAME - 2, 2, 3 };
+        int[] cases = { TimeUnitFormat.FULL_NAME - 1, TimeUnitFormat.FULL_NAME - 2, 3 };
         for (int i = 0; i < cases.length; i++) {
             try {
                 TimeUnitFormat tuf = new TimeUnitFormat(new ULocale("en_US"), cases[i]);

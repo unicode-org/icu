@@ -1,6 +1,6 @@
 /*
  **************************************************************************
- * Copyright (C) 2008-2012, Google, International Business Machines
+ * Copyright (C) 2008-2013, Google, International Business Machines
  * Corporation and others. All Rights Reserved.
  **************************************************************************
  */
@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import com.ibm.icu.impl.ICUResourceBundle;
+import com.ibm.icu.util.TimePeriod;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
@@ -70,7 +71,16 @@ public class TimeUnitFormat extends MeasureFormat {
      * @stable ICU 4.2
      */
     public static final int ABBREVIATED_NAME = 1;
+    
+    /**
+     * Constant for numeric style format. 
+     * NUMERIC strives to be as brief as possible. For example: 3:05:47.
+     * @draft ICU 52
+     */
+    public static final int NUMERIC = 2;
 
+    // For now we don't consider NUMERIC a full-fledged style. NUMERIC is
+    // congruent to ABBREVIATED_NAME unless formatPeriod() is being called.
     private static final int TOTAL_STYLES = 2;
 
     private static final long serialVersionUID = -3707773153184971529L;
@@ -89,6 +99,10 @@ public class TimeUnitFormat extends MeasureFormat {
     private transient PluralRules pluralRules;
     private transient boolean isReady;
     private int style;
+    
+    // When style is set to NUMERIC, this field is set to true and the style
+    // field becomes ABBREVIATED_NAME.
+    private boolean numeric;
 
     /**
      * Create empty format using full name style, for example, "hours". 
@@ -129,6 +143,10 @@ public class TimeUnitFormat extends MeasureFormat {
      * @stable ICU 4.2
      */
     public TimeUnitFormat(ULocale locale, int style) {
+        if (style == NUMERIC) {
+            style = ABBREVIATED_NAME;
+            numeric = true;
+        }
         if (style < FULL_NAME || style >= TOTAL_STYLES) {
             throw new IllegalArgumentException("style should be either FULL_NAME or ABBREVIATED_NAME style");
         }
@@ -226,7 +244,16 @@ public class TimeUnitFormat extends MeasureFormat {
         MessageFormat pattern = (MessageFormat)(countToPattern.get(count))[style];
         return pattern.format(new Object[]{amount.getNumber()}, toAppendTo, pos);
     }
-
+    
+    /**
+     * Formats a TimePeriod. Currently there is no way to parse a formatted TimePeriod.
+     * @param timePeriod the TimePeriod to format.
+     * @return the formatted string.
+     * @draft ICU 52
+     */
+    public String formatTimePeriod(TimePeriod timePeriod) {
+        return null;    
+    }
 
     /**
      * Parse a TimeUnitAmount.

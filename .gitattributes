@@ -3816,6 +3816,7 @@ icu4j/main/classes/core/src/com/ibm/icu/util/StringTokenizer.java svneol=native#
 icu4j/main/classes/core/src/com/ibm/icu/util/StringTrieBuilder.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/TaiwanCalendar.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/TimeArrayTimeZoneRule.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/util/TimePeriod.java -text
 icu4j/main/classes/core/src/com/ibm/icu/util/TimeUnit.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/TimeUnitAmount.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/util/TimeZone.java svneol=native#text/plain%3Bcharset%3Dutf-8
