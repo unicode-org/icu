@@ -73,7 +73,23 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
             fields[index] = new TimeUnitAmount(tua.getNumber().doubleValue(), tua.getTimeUnit());
             size++;
         }
-        return new TimePeriod(fields, size, computeHash(fields));
+        if (size == 0) {
+            throw new IllegalArgumentException(
+                    "There must be at least one TimeUnitAmount.");
+        }
+        TimePeriod result = new TimePeriod(fields, size, computeHash(fields));
+        boolean fractionalFieldEncountered = false;
+        for (TimeUnitAmount tua : result) {
+            if (fractionalFieldEncountered) {
+                throw new IllegalArgumentException(
+                    "Only the smallest time unit can have a fractional amount.");
+            }
+            double value = tua.getNumber().doubleValue();
+            if (value != Math.floor(value)) {
+                fractionalFieldEncountered = true;
+            }
+        }
+        return result;
     }
         
     /**
