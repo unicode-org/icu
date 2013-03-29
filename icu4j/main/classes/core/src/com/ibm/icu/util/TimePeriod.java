@@ -6,9 +6,14 @@
  */
 package com.ibm.icu.util;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+
+import com.ibm.icu.math.BigDecimal;
 
 /**
  * TimePeriod represents a time period.  TimePeriod objects are immutable.
@@ -37,7 +42,10 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
     /**
      * Returns a new TimePeriod that matches the given time unit amounts.
      * @param amounts the TimeUnitAmounts. Must be non-empty. Normalization of the
-     *   amounts and inclusion/exclusion of 0 amounts is up to caller.
+     *   amounts and inclusion/exclusion of 0 amounts is up to caller. The Number
+     *   in each TimeUnitAmount must either be a Byte, Short, Integer, Long, Float,
+     *   Double, BigInteger, or BigDecimal or it must implement Cloneable and have
+     *   a public clone method.
      * @return the new TimePeriod object
      * @throws IllegalArgumentException if multiple TimeUnitAmount objects match
      * the same time unit or if any but the smallest TimeUnit has a fractional value
@@ -51,7 +59,10 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
     /**
      * Returns a new TimePeriod that matches the given time unit amounts.
      * @param amounts the TimeUnitAmounts. Must be non-empty. Normalization of the
-     *   amounts and inclusion/exclusion of 0 amounts is up to caller.
+     *   amounts and inclusion/exclusion of 0 amounts is up to caller. The Number
+     *   in each TimeUnitAmount must either be a Byte, Short, Integer, Long, Float,
+     *   Double, BigInteger, or BigDecimal or it must implement Cloneable and have
+     *   a public clone method.
      * @return the new TimePeriod object
      * @throws IllegalArgumentException if multiple TimeUnitAmount objects match
      * the same time unit or if any but the smallest TimeUnit has a fractional value
@@ -70,7 +81,7 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
             // This line is necessary to guarantee immutability of the TimePeriod
             // class. A Number object, which is in TimeUnitAmount, need not be immutable,
             // but Double is immutable.
-            fields[index] = new TimeUnitAmount(tua.getNumber().doubleValue(), tua.getTimeUnit());
+            fields[index] = cloneIfNecessary(tua);
             size++;
         }
         if (size == 0) {
@@ -100,7 +111,7 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
      * @draft ICU 52
      */
     public TimeUnitAmount getAmount(TimeUnit timeUnit) {
-        return fields[timeUnit.getIndex()];
+        return cloneIfNecessary(fields[timeUnit.getIndex()]);
     }
 
     /**
@@ -155,6 +166,43 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
         return result;
     }
     
+    private static TimeUnitAmount cloneIfNecessary(TimeUnitAmount tua) {
+        if (tua == null) {
+            return null;
+        }
+        Number number = tua.getNumber();
+        if (number instanceof Double || number instanceof Integer ||
+            number instanceof Long || number instanceof Float ||
+            number instanceof Byte || number instanceof Short ||
+            number instanceof BigInteger || number instanceof BigDecimal) {
+          return tua;            
+        }
+        return new TimeUnitAmount(cloneNumber(number), tua.getTimeUnit());
+    }
+    
+    private static Number cloneNumber(Number number) {
+        // Since Number doesn't implement Cloneable, we have to use reflection
+        // to find the clone() method. If this method throws an exception, it
+        // means that the subclass of Number can't be cloned.
+        Class<? extends Number> clz = number.getClass();
+        Method cloneMethod;
+        try {
+            cloneMethod = clz.getMethod("clone");
+            cloneMethod.setAccessible(true);
+            return (Number) cloneMethod.invoke(number);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        } catch (SecurityException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalArgumentException e) {
+            throw new RuntimeException(e);
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
     private class TPIterator implements Iterator<TimeUnitAmount> {
         
         private int index = 0;
@@ -176,6 +224,6 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
         public void remove() {
             throw new UnsupportedOperationException();           
         }
-    }
+    } 
 }
 

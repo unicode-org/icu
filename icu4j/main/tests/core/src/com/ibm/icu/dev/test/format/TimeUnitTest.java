@@ -398,6 +398,23 @@ public class TimeUnitTest extends TestFmwk {
         }
     }
     
+    public void TestTimePeriodWithMutableNumber() {
+        MutableInt mutableInput = new MutableInt(3);
+        TimePeriod tp = TimePeriod.forAmounts(
+                new TimeUnitAmount(mutableInput, TimeUnit.HOUR));
+        mutableInput.set(5);
+        MutableInt mutableOutput = (MutableInt) tp.getAmount(TimeUnit.HOUR).getNumber();
+        assertEquals(
+                "Mutating input shouldn't affect TimePeriod.",
+                3,
+                mutableOutput.intValue());
+        mutableOutput.set(5);
+        assertEquals(
+                "Mutating output shouldn't affect TimePeriod.",
+                3,
+                ((MutableInt) tp.getAmount(TimeUnit.HOUR).getNumber()).intValue());       
+    }
+    
     private void verifyFormatPeriod(String desc, TimeUnitFormat tuf, Object[][] testData) {
         StringBuilder builder = new StringBuilder();
         boolean failure = false;
@@ -410,6 +427,48 @@ public class TimeUnitTest extends TestFmwk {
         }
         if (failure) {
             errln(builder.toString());
+        }
+    }
+    
+    private static class MutableInt extends Number implements Cloneable {
+
+        private int value;
+        
+        public MutableInt(int x) {
+            value = x;
+        }
+        
+        @Override
+        public int intValue() {
+            return value;
+        }
+
+        @Override
+        public long longValue() {
+            return value;
+        }
+
+        @Override
+        public float floatValue() {
+            return value;
+        }
+
+        @Override
+        public double doubleValue() {
+            return value;
+        }
+        
+        public void set(int x) {
+            value = x;
+        }
+        
+        @Override
+        public MutableInt clone() {
+            try {
+                return (MutableInt) super.clone();
+            } catch (CloneNotSupportedException e) {
+                return null;
+            }
         }
     }
 }
