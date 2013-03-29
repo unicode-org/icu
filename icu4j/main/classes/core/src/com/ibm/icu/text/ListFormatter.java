@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012-2012, Google, International Business Machines Corporation and
+ * Copyright (C) 2012-2013, Google, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -117,11 +117,11 @@ final public class ListFormatter {
      * @draft ICU 50
      * @provisional This API might change or be removed in a future release.
      */
-    public String format(Collection<Object> items) {
+    public String format(Collection<?> items) {
         // TODO optimize this for the common case that the patterns are all of the
         // form {0}<sometext>{1}.
         // We avoid MessageFormat, because there is no "sub" formatting.
-        Iterator<Object> it = items.iterator();
+        Iterator<?> it = items.iterator();
         int count = items.size();
         switch (count) {
         case 0:
