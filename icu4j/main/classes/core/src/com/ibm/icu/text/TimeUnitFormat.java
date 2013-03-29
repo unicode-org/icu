@@ -8,9 +8,7 @@ package com.ibm.icu.text;
 
 import java.text.FieldPosition;
 import java.text.ParsePosition;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
