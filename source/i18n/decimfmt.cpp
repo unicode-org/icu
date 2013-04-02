@@ -1802,6 +1802,14 @@ DecimalFormat::subformat(UnicodeString& appendTo,
             count = 0;
         }
 
+        // This handles the special case of formatting 0. For zero only, we count the
+        // zero to the left of the decimal point as one signficant digit. Ordinarily we
+        // do not count any leading 0's as significant. If the number we are formatting
+        // is not zero, then either sigCount or digits.getDecimalAt() will be non-zero.
+        if (sigCount == 0 && digits.getDecimalAt() == 0) {
+          sigCount = 1;
+        }
+
         for (i=0; i < count; ++i) {
             // Here is where we escape from the loop.  We escape
             // if we've output the maximum fraction digits
