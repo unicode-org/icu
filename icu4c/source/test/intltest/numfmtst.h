@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation
+ * Copyright (c) 1997-2013, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -161,6 +161,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestFormattableSize();
 
     void TestEnumSet();
+
+    void TestSignificantDigits();
 
  private:
 
