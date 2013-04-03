@@ -1805,8 +1805,8 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         // This handles the special case of formatting 0. For zero only, we count the
         // zero to the left of the decimal point as one signficant digit. Ordinarily we
         // do not count any leading 0's as significant. If the number we are formatting
-        // is not zero, then either sigCount or digits.getDecimalAt() will be non-zero.
-        if (sigCount == 0 && digits.getDecimalAt() == 0) {
+        // is not zero, then either sigCount or digits.getCount() will be non-zero.
+        if (sigCount == 0 && digits.getCount() == 0) {
           sigCount = 1;
         }
 
