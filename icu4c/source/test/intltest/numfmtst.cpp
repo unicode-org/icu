@@ -6699,6 +6699,7 @@ void NumberFormatTest::TestFormattableSize(void) {
 void NumberFormatTest::TestSignificantDigits(void) {
   double input[] = {
         0, 0,
+        0.1, -0.1,
         123, -123,
         12345, -12345,
         123.45, -123.45,
@@ -6713,6 +6714,7 @@ void NumberFormatTest::TestSignificantDigits(void) {
     };
     const char* expected[] = {
         "0.00", "0.00",
+        "0.100", "-0.100",
         "123", "-123",
         "12345", "-12345",
         "123.45", "-123.45",
