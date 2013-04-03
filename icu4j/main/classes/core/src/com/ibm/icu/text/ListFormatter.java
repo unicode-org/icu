@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.text;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
@@ -32,6 +33,7 @@ final public class ListFormatter {
     private final String start;
     private final String middle;
     private final String end;
+    private final ULocale locale;
 
     /**
      * <b>Internal:</b> Create a ListFormatter from component strings,
@@ -52,10 +54,15 @@ final public class ListFormatter {
      * @internal
      */
     public ListFormatter(String two, String start, String middle, String end) {
+        this(two, start, middle, end, null);
+    }
+    
+    private ListFormatter(String two, String start, String middle, String end, ULocale locale) {
         this.two = two;
         this.start = start;
         this.middle = middle;
         this.end = end;
+        this.locale = locale;
     }
 
     /**
@@ -138,6 +145,28 @@ final public class ListFormatter {
         }
         return format2(end, result, it.next());
     }
+    
+    /**
+     * Returns the pattern to use for a particular item count.
+     * @param count the item count.
+     * @return the pattern with {0}, {1}, {2}, etc.
+     */
+    public String createPatternForNumItems(int count) {
+        ArrayList<String> list = new ArrayList<String>();
+        for (int i = 0; i < count; i++) {
+            list.add(String.format("{%d}", i));
+        }
+        return format(list);
+    }
+    
+    /**
+     * Returns the locale of this object.
+     * @deprecated
+     * @internal
+     */
+    public ULocale getLocale() {
+        return locale;
+    }
 
     private String format2(String pattern, Object a, Object b) {
         int i0 = pattern.indexOf("{0}");
@@ -183,7 +212,8 @@ final public class ListFormatter {
                 r.getWithFallback("2").getString(),
                 r.getWithFallback("start").getString(),
                 r.getWithFallback("middle").getString(),
-                r.getWithFallback("end").getString());
+                r.getWithFallback("end").getString(),
+                ulocale);
         }
     }
 

@@ -111,6 +111,20 @@ public class ListFormatterTest extends TestFmwk {
         list.add("C");
         assertEquals("list", "A, B, and C", listFormatter.format(list));
     }
+    
+    public void TestCreatePatternForNumItems() {
+        ListFormatter listFormatter = ListFormatter.getInstance(ULocale.ENGLISH);
+        assertEquals(
+                "createPatternForNumItems",
+                "{0}, {1}, and {2}",
+                listFormatter.createPatternForNumItems(3));
+        
+    }
+    
+    public void TestGetLocale() {
+        assertEquals(
+                "getLocale", ULocale.ENGLISH, ListFormatter.getInstance(ULocale.ENGLISH).getLocale());
+    }
 
     private boolean isDefaultLocaleEnglishLike() {
         ULocale defaultLocale = ULocale.getDefault(ULocale.Category.FORMAT);
