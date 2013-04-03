@@ -88,6 +88,7 @@ public class TimeUnitTest extends TestFmwk {
     }
 
     public void TestAPI() {
+        try {
         TimeUnitFormat format = new TimeUnitFormat();
         format.setLocale(new ULocale("pt_BR"));
         formatParsing(format);
@@ -110,6 +111,9 @@ public class TimeUnitTest extends TestFmwk {
         format = new TimeUnitFormat(new Locale("ja"));
         format.setNumberFormat(NumberFormat.getNumberInstance(new Locale("en")));
         formatParsing(format);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*
@@ -398,21 +402,20 @@ public class TimeUnitTest extends TestFmwk {
         }
     }
     
-    public void TestTimePeriodWithMutableNumber() {
-        MutableInt mutableInput = new MutableInt(3);
-        TimePeriod tp = TimePeriod.forAmounts(
-                new TimeUnitAmount(mutableInput, TimeUnit.HOUR));
-        mutableInput.set(5);
-        MutableInt mutableOutput = (MutableInt) tp.getAmount(TimeUnit.HOUR).getNumber();
-        assertEquals(
-                "Mutating input shouldn't affect TimePeriod.",
-                3,
-                mutableOutput.intValue());
-        mutableOutput.set(5);
-        assertEquals(
-                "Mutating output shouldn't affect TimePeriod.",
-                3,
-                ((MutableInt) tp.getAmount(TimeUnit.HOUR).getNumber()).intValue());       
+    public void TestTimePeriodEqualsHashCode() {
+        TimePeriod our_19m_28s = TimePeriod.forAmounts(
+                new TimeUnitAmount(28.0, TimeUnit.SECOND),
+                new TimeUnitAmount(19.0, TimeUnit.MINUTE));
+        assertEquals("TimePeriod equals", _19m_28s, our_19m_28s);
+        assertEquals("Hash code", _19m_28s.hashCode(), our_19m_28s.hashCode());
+        TimePeriod our_19m_29s = TimePeriod.forAmounts(
+                new TimeUnitAmount(29.0, TimeUnit.SECOND),
+                new TimeUnitAmount(19.0, TimeUnit.MINUTE));
+        assertNotEquals("TimePeriod not equals", _19m_28s, our_19m_29s);
+        
+        // It may be possible for non-equal objects to have equal hashCodes, but we
+        // are betting on the probability of that to be miniscule.
+        assertNotEquals("TimePeriod hash not equals", _19m_28s.hashCode(), our_19m_29s.hashCode());
     }
     
     private void verifyFormatPeriod(String desc, TimeUnitFormat tuf, Object[][] testData) {
@@ -427,48 +430,6 @@ public class TimeUnitTest extends TestFmwk {
         }
         if (failure) {
             errln(builder.toString());
-        }
-    }
-    
-    private static class MutableInt extends Number implements Cloneable {
-
-        private int value;
-        
-        public MutableInt(int x) {
-            value = x;
-        }
-        
-        @Override
-        public int intValue() {
-            return value;
-        }
-
-        @Override
-        public long longValue() {
-            return value;
-        }
-
-        @Override
-        public float floatValue() {
-            return value;
-        }
-
-        @Override
-        public double doubleValue() {
-            return value;
-        }
-        
-        public void set(int x) {
-            value = x;
-        }
-        
-        @Override
-        public MutableInt clone() {
-            try {
-                return (MutableInt) super.clone();
-            } catch (CloneNotSupportedException e) {
-                return null;
-            }
         }
     }
 }

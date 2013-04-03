@@ -79,9 +79,7 @@ public class TimeUnitFormat extends MeasureFormat {
      */
     public static final int NUMERIC = 2;
 
-    // For now we don't consider NUMERIC a full-fledged style. NUMERIC is
-    // congruent to ABBREVIATED_NAME unless formatPeriod() is being called.
-    private static final int TOTAL_STYLES = 2;
+    private static final int TOTAL_STYLES = 3;
 
     private static final long serialVersionUID = -3707773153184971529L;
   
@@ -103,10 +101,6 @@ public class TimeUnitFormat extends MeasureFormat {
     private transient MessageFormat hourMinuteSecond;
     private transient boolean isReady;
     private int style;
-    
-    // When style is set to NUMERIC, this field is set to true and the style
-    // field becomes ABBREVIATED_NAME.
-    private boolean isNumericStyle;
 
     /**
      * Create empty format using full name style, for example, "hours". 
@@ -147,10 +141,6 @@ public class TimeUnitFormat extends MeasureFormat {
      * @stable ICU 4.2
      */
     public TimeUnitFormat(ULocale locale, int style) {
-        if (style == NUMERIC) {
-            style = ABBREVIATED_NAME;
-            isNumericStyle = true;
-        }
         if (style < FULL_NAME || style >= TOTAL_STYLES) {
             throw new IllegalArgumentException("style should be either FULL_NAME or ABBREVIATED_NAME style");
         }
@@ -245,7 +235,9 @@ public class TimeUnitFormat extends MeasureFormat {
         Map<String, Object[]> countToPattern = timeUnitToCountToPatterns.get(amount.getTimeUnit());
         double number = amount.getNumber().doubleValue();
         String count = pluralRules.select(number);
-        MessageFormat pattern = (MessageFormat)(countToPattern.get(count))[style];
+        // A hack since NUMERIC really isn't a full fledged style
+        int effectiveStyle = (style == NUMERIC) ? ABBREVIATED_NAME : style;
+        MessageFormat pattern = (MessageFormat)(countToPattern.get(count))[effectiveStyle];
         return pattern.format(new Object[]{amount.getNumber()}, toAppendTo, pos);
     }
     
@@ -259,7 +251,7 @@ public class TimeUnitFormat extends MeasureFormat {
         if (!isReady) {
             setup();
         }
-        if (isNumericStyle) {
+        if (style == NUMERIC) {
             String result = formatPeriodAsNumeric(timePeriod);
             if (result != null) {
                 return result;
@@ -296,6 +288,10 @@ public class TimeUnitFormat extends MeasureFormat {
             for (Entry<String, Object[]> patternEntry : countToPattern.entrySet()) {
               String count = patternEntry.getKey();
               for (int styl = FULL_NAME; styl < TOTAL_STYLES; ++styl) {
+                  if (styl == NUMERIC) {
+                      // Numeric isn't a real style, so skip it.
+                      continue;
+                  }
                 MessageFormat pattern = (MessageFormat)(patternEntry.getValue())[styl];
                 pos.setErrorIndex(-1);
                 pos.setIndex(oldPos);
