@@ -6741,7 +6741,7 @@ void NumberFormatTest::TestSignificantDigits(void) {
     UnicodeString expectedResult;
     for (int i = 0; i < sizeof(input)/sizeof(double); ++i) {
         numberFormat->format(input[i], result);
-        expectedResult = UNICODE_STRING_SIMPLE(expected[i]);
+        UnicodeString expectedResult(expected[i]);
         if (result != expectedResult) {
           errln((UnicodeString)"Expected: '" + expectedResult + "' got '" + result);
         }
