@@ -4126,6 +4126,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberFormatTestCases.txt 
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/NumberRegression.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralFormatUnitTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralRulesFactory.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralRulesTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RBNFParseTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RbnfRoundTripTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4138,6 +4139,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TimeUnitTest.java svneol=n
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TimeZoneAliases.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TimeZoneFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/WriteNumberFormatSerialTestData.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/WritePluralRulesData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/iterator/TestUCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
