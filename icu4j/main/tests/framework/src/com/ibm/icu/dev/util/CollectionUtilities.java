@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -11,7 +11,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 
 import com.ibm.icu.text.UTF16;
@@ -542,4 +545,146 @@ public final class CollectionUtilities {
         }
     }
 
+    /**
+     * Compare, allowing nulls
+     * @param a
+     * @param b
+     * @return
+     */
+    public static <T> boolean equals(T a, T b) {
+        return a == null 
+                ? b == null 
+                : b == null ? false : a.equals(b);
+    }
+
+    /**
+     * Compare, allowing nulls and putting them first
+     * @param a
+     * @param b
+     * @return
+     */
+    public static <T extends Comparable> int compare(T a, T b) {
+        return a == null 
+                ? b == null ? 0 : -1 
+                        : b == null ? 1 : a.compareTo(b);
+    }
+
+    /**
+     * Compare iterators
+     * @param iterator1
+     * @param iterator2
+     * @return
+     */
+    public static <T extends Comparable> int compare(Iterator<T> iterator1, Iterator<T> iterator2) {
+        int diff;
+        while (true) {
+            if (!iterator1.hasNext()) {
+                return iterator2.hasNext() ? -1 : 0;
+            } else if (!iterator2.hasNext()) {
+                return 1;
+            }
+            diff = CollectionUtilities.compare(iterator1.next(), iterator2.next());
+            if (diff != 0) {
+                return diff;
+            }
+        }
+    }
+
+    /**
+     * Compare, with shortest first, and otherwise lexicographically
+     * @param a
+     * @param b
+     * @return
+     */
+    public static <T extends Comparable, U extends Collection<T>> int compare(U o1, U o2) {
+        int diff = o1.size() - o2.size();
+        if (diff != 0) {
+            return diff;
+        }
+        Iterator<T> iterator1 = o1.iterator();
+        Iterator<T> iterator2 = o2.iterator();
+        return compare(iterator1, iterator2);
+    }
+
+    /**
+     * Compare, with shortest first, and otherwise lexicographically
+     * @param a
+     * @param b
+     * @return
+     */
+    public static <T extends Comparable, U extends Set<T>> int compare(U o1, U o2) {
+        int diff = o1.size() - o2.size();
+        if (diff != 0) {
+            return diff;
+        }
+        return compare(new TreeSet(o1), new TreeSet(o2));
+    }
+
+    public static class SetComparator<T extends Comparable> 
+    implements Comparator<Set<T>> {
+        public int compare(Set<T> o1, Set<T> o2) {
+            return CollectionUtilities.compare(o1, o2);
+        }
+    };
+
+
+    public static class CollectionComparator<T extends Comparable> 
+    implements Comparator<Collection<T>> {
+        public int compare(Collection<T> o1, Collection<T> o2) {
+            return CollectionUtilities.compare(o1, o2);
+        }
+    };
+
+    /**
+     * Compare, allowing nulls and putting them first
+     * @param a
+     * @param b
+     * @return
+     */
+    public static <K extends Comparable, V extends Comparable, T extends Entry<K, V>> int compare(T a, T b) {
+        if (a == null) {
+            return b == null ? 0 : -1;
+        } else if (b == null) {
+            return 1;
+        }
+        int diff = compare(a.getKey(), b.getKey());
+        if (diff != 0) {
+            return diff;
+        }
+        return compare(a.getValue(), b.getValue());
+    }
+
+    public static <K extends Comparable, V extends Comparable, T extends Entry<K, V>> int compareEntrySets(Collection<T> o1, Collection<T> o2) {
+        int diff = o1.size() - o2.size();
+        if (diff != 0) {
+            return diff;
+        }
+        Iterator<T> iterator1 = o1.iterator();
+        Iterator<T> iterator2 = o2.iterator();
+        while (true) {
+            if (!iterator1.hasNext()) {
+                return iterator2.hasNext() ? -1 : 0;
+            } else if (!iterator2.hasNext()) {
+                return 1;
+            }
+            T item1 = iterator1.next();
+            T item2 = iterator2.next();
+            diff = CollectionUtilities.compare(item1, item2);
+            if (diff != 0) {
+                return diff;
+            }
+        }
+    }
+
+    public static class MapComparator<K extends Comparable, V extends Comparable> implements Comparator<Map<K,V>> {
+        public int compare(Map<K, V> o1, Map<K, V> o2) {
+            return CollectionUtilities.compareEntrySets(o1.entrySet(), o2.entrySet());
+        }
+    };
+    
+    public static class ComparableComparator<T extends Comparable> implements Comparator<T> {
+        public int compare(T arg0, T arg1) {
+            return CollectionUtilities.compare(arg0, arg1);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -736,6 +736,9 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 
         public final Factory add(UnicodeProperty sp) {
             String name2 = sp.getName();
+            if (name2.isEmpty()) {
+                throw new IllegalArgumentException();
+            }
             canonicalNames.put(name2, sp);
             skeletonNames.put(toSkeleton(name2), sp);
             List c = sp.getNameAliases(new ArrayList(1));
