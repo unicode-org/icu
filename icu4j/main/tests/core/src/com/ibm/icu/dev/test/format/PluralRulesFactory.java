@@ -26,11 +26,11 @@ public abstract class PluralRulesFactory {
     abstract boolean hasOverride(ULocale locale);
 
     abstract PluralRules forLocale(ULocale locale, PluralType ordinal);
-    
+
     PluralRules forLocale(ULocale locale) {
         return forLocale(locale, PluralType.CARDINAL);
     }
-    
+
     abstract ULocale[] getAvailableULocales();
 
     abstract ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable);
@@ -40,7 +40,7 @@ public abstract class PluralRulesFactory {
     static final PluralRulesFactory ALTERNATE = new PluralRulesFactoryWithOverrides();
 
     private PluralRulesFactory() {}
-    
+
     static class PluralRulesFactoryVanilla extends PluralRulesFactory {
         @Override
         boolean hasOverride(ULocale locale) {
@@ -85,13 +85,18 @@ public abstract class PluralRulesFactory {
                     {"sr", "one: j mod 10 is 1 and j mod 100 is not 11" +
                             " or v in 1..6 and f mod 10 is 1 and f mod 100 is not 11" +
                             " or v not in 0..6 and f mod 10 is 1;" +
-                            " few: j mod 10 in 2..4 and j mod 100 not in 12..14" +
+                            "few: j mod 10 in 2..4 and j mod 100 not in 12..14" +
                             " or v in 1..6 and f mod 10 in 2..4 and f mod 100 not in 12..14" +
-                            " or v not in 0..6 and f mod 10 in 2..4;" +
-                            " many: j mod 10 is 0 or j mod 10 in 5..9 or j mod 100 in 11..14" +
-                            " or v in 1..6 and f mod 10 in 5..9" +
-                            " or v in 1..6 and f mod 100 in 11..14" +
-                    " or v not in 0..6 and f mod 10 in 5..9"},
+                            " or v not in 0..6 and f mod 10 in 2..4"
+                            // +
+                            //                            " ; many: j mod 10 is 0 " +
+                            //                            " or j mod 10 in 5..9 " +
+                            //                            " or j mod 100 in 11..14" +
+                            //                            " or v in 1..6 and f mod 10 is 0" +
+                            //                            " or v in 1..6 and f mod 10 in 5..9" +
+                            //                            " or v in 1..6 and f mod 100 in 11..14" +
+                            //                    " or v not in 0..6 and f mod 10 in 5..9"
+                    },
                     {"ro", "one: j is 1; few: n is 0 or n is not 1 and n mod 100 in 1..19"},
                     {"ru,uk", "one: j mod 10 is 1 and j mod 100 is not 11;" +
                             " few: j mod 10 in 2..4 and j mod 100 not in 12..14;" +
@@ -103,7 +108,12 @@ public abstract class PluralRulesFactory {
                     if (OVERRIDES.containsKey(uLocale)) {
                         throw new IllegalArgumentException("Duplicate locale: " + uLocale);
                     }
-                    OVERRIDES.put(uLocale, PluralRules.createRules(pair[1]));
+                    try {
+                        PluralRules rules = PluralRules.parseDescription(pair[1]);
+                        OVERRIDES.put(uLocale, rules);
+                    } catch (Exception e) {
+                        throw new IllegalArgumentException(locale + "\t" + pair[1], e);
+                    }
                     if (pair.length==3) {
                         for (String item : pair[2].split("\\s*,\\s*")) {
                             EXTRA_SAMPLES.put(uLocale, new PluralRules.NumberInfo(item));
@@ -119,8 +129,12 @@ public abstract class PluralRulesFactory {
 
         @Override
         PluralRules forLocale(ULocale locale, PluralType ordinal) {
-            PluralRules override = ordinal != PluralType.CARDINAL ? null : OVERRIDES.get(locale);
-            return override != null ? override: PluralRules.forLocale(locale, ordinal);
+            PluralRules override = ordinal != PluralType.CARDINAL 
+                    ? null 
+                            : OVERRIDES.get(locale);
+            return override != null 
+                    ? override
+                            : PluralRules.forLocale(locale, ordinal);
         }
 
         @Override
@@ -129,7 +143,7 @@ public abstract class PluralRulesFactory {
         }
 
         static final Map<String,ULocale> rulesToULocale = new HashMap();
-        
+
         @Override
         ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
             if (rulesToULocale.isEmpty()) {

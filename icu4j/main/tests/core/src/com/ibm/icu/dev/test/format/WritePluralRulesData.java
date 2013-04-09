@@ -135,7 +135,7 @@ public class WritePluralRulesData {
                         new CollectionUtilities.MapComparator<String,OldNewData>()), TreeSet.class);
         for (String localeString : FOCUS_LOCALES) {
             ULocale locale = new ULocale(localeString);
-            PluralRules oldRules = PluralRules.forLocale(locale);
+            PluralRules oldRules = PluralRulesFactory.NORMAL.forLocale(locale);
             PluralRules newRules = PluralRulesFactory.ALTERNATE.hasOverride(locale) ? PluralRulesFactory.ALTERNATE.forLocale(locale) : null;
             Set<String> keywords = oldRules.getKeywords();
             if (newRules != null) {
@@ -438,7 +438,7 @@ public class WritePluralRulesData {
                 skippedLocales.add(locale);
                 continue;
             }
-            // check for errors. Changes state so that we get an error map
+            // check for errors. 
             samplePatterns.checkErrors(newRules.getKeywords());
             // now print.
             for (String keyword : newRules.getKeywords()) {
