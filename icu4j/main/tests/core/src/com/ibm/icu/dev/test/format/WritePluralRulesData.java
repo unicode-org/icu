@@ -100,7 +100,7 @@ public class WritePluralRulesData {
                 boolean[] isAvailable = new boolean[1];
                 for (ULocale locale : locales) {
                     ULocale base = pluralRulesFactory.getFunctionalEquivalent(locale, isAvailable);
-                    if (!locales.contains(base) && !base.toString().isEmpty()) {
+                    if (!locales.contains(base) && base.toString().length() != 0) {
                         System.out.println("**" + locales + " doesn't contain " + base);
                     }
                 }
@@ -400,14 +400,14 @@ public class WritePluralRulesData {
                 String skeleton = sample.replace(" ", "").replace("{0}", "");
                 String oldSkeletonKeyword = skeletonToKeyword.get(skeleton);
                 if (oldSkeletonKeyword != null) {
-                    if (!error.isEmpty()) {
+                    if (error.length() != 0) {
                         error += ", ";
                     }
                     error += "Duplicate keyword skeleton <" + keyword + ", " + skeleton + ">, same as for: <" + oldSkeletonKeyword + ">";
                 } else {
                     skeletonToKeyword.put(skeleton, keyword);
                 }
-                if (error.isEmpty()) {
+                if (error.length() == 0) {
                     keywordToErrors.put(keyword, "");
                 } else {
                     keywordToErrors.put(keyword, "\tERROR: " + error);

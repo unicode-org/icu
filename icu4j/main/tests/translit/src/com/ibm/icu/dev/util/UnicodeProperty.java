@@ -736,7 +736,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 
         public final Factory add(UnicodeProperty sp) {
             String name2 = sp.getName();
-            if (name2.isEmpty()) {
+            if (name2.length() == 0) {
                 throw new IllegalArgumentException();
             }
             canonicalNames.put(name2, sp);
