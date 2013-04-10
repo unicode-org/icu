@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -21,9 +21,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.Random;
+import java.util.TreeMap;
 
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
@@ -548,15 +552,32 @@ public class TestFmwk extends AbstractTestLog {
             localParams.log.flush();
         }
 
+        if (localParams.timeLog != null && localParams.timeLog.length() > 0) {
+            localParams.log.println("\nTest cases taking excessive time (>" +
+                    localParams.maxTargetSec + "s):");
+            localParams.log.println(localParams.timeLog.toString());
+        }
+
+        if (localParams.knownIssues != null) {
+            localParams.log.println("\nKnown Issues:");
+            for (Entry<String, List<String>> entry : localParams.knownIssues.entrySet()) {
+                String ticketLink = entry.getKey();
+                localParams.log.println("[" + ticketLink + "]");
+                for (String line : entry.getValue()) {
+                    localParams.log.println("  - " + line);
+                }
+            }
+        }
+
         if (localParams.errorSummary != null && localParams.errorSummary.length() > 0) {
             localParams.log.println("\nError summary:");
             localParams.log.println(localParams.errorSummary.toString());
         }
 
-        if (localParams.timeLog != null && localParams.timeLog.length() > 0) {
-            localParams.log.println("\nTest cases taking excessive time (>" +
-                    localParams.maxTargetSec + "s):");
-            localParams.log.println(localParams.timeLog.toString());
+        if (errorCount > 0) {
+            localParams.log.println("\n<< " + errorCount+ " TEST(S) FAILED >>");
+        } else {
+            localParams.log.println("\n<< ALL TESTS PASSED >>");
         }
 
         if (prompt) {
@@ -604,6 +625,7 @@ public class TestFmwk extends AbstractTestLog {
                 _params.errorSummary = summary;
             }
         } catch (Exception e) {
+            ec++;
             e.printStackTrace(_params.log);
             _params.log.println(e.getMessage());
             _params.log.println("encountered exception, exiting");
@@ -800,6 +822,59 @@ public class TestFmwk extends AbstractTestLog {
         params.msg(message, level, incCount, newln);
     }
 
+    static final String ICU_TRAC_URL = "http://bugs.icu-project.org/trac/ticket/";
+    static final String CLDR_TRAC_URL = "http://unicode.org/cldr/trac/ticket/";
+    static final String CLDR_TICKET_PREFIX = "cldrbug:";
+
+    /**
+     * Log the known issue.
+     * This method returns true unless -prop:logKnownIssue=no is specified
+     * in the argument list.
+     * 
+     * @param ticket A ticket number string. For an ICU ticket, use numeric characters only,
+     * such as "10245". For a CLDR ticket, use prefix "cldrbug:" followed by ticket number,
+     * such as "cldrbug:5013".
+     * @param comment Additional comment, or null
+     * @return true unless -prop:logKnownIssue=no is specified in the test command line argument.
+     */
+    public boolean logKnownIssue(String ticket, String comment) {
+        if (!getBooleanProperty("logKnownIssue", true)) {
+            return false;
+        }
+
+        StringBuffer descBuf = new StringBuffer();
+        params.stack.appendPath(descBuf);
+        if (comment != null && comment.length() > 0) {
+            descBuf.append(" (" + comment + ")");
+        }
+        String description = descBuf.toString();
+
+        String ticketLink = "Unknown Ticket";
+        if (ticket != null && ticket.length() > 0) {
+            boolean isCldr = false;
+            ticket = ticket.toLowerCase(Locale.ENGLISH);
+            if (ticket.startsWith(CLDR_TICKET_PREFIX)) {
+                isCldr = true;
+                ticket = ticket.substring(CLDR_TICKET_PREFIX.length());
+            }
+            ticketLink = (isCldr ? CLDR_TRAC_URL : ICU_TRAC_URL) + ticket;
+        }
+
+        if (params.knownIssues == null) {
+            params.knownIssues = new TreeMap<String, List<String>>();
+        }
+        List<String> lines = params.knownIssues.get(ticketLink);
+        if (lines == null) {
+            lines = new ArrayList<String>();
+            params.knownIssues.put(ticketLink, lines);
+        }
+        if (!lines.contains(description)) {
+            lines.add(description);
+        }
+
+        return true;
+    }
+
     protected int getErrorCount() {
         return params.errorCount;
     }
@@ -810,6 +885,19 @@ public class TestFmwk extends AbstractTestLog {
             val = (String)params.props.get(key.toLowerCase());
         }
         return val;
+    }
+
+    public boolean getBooleanProperty(String key, boolean defVal) {
+        String s = getProperty(key);
+        if (s != null) {
+            if (s.equalsIgnoreCase("yes") || s.equals("true")) {
+                return true;
+            }
+            if (s.equalsIgnoreCase("no") || s.equalsIgnoreCase("false")) {
+                return false;
+            }
+        }
+        return defVal;
     }
 
     protected TimeZone safeGetTimeZone(String id) {
@@ -1072,6 +1160,7 @@ public class TestFmwk extends AbstractTestLog {
 
         public StringBuffer errorSummary;
         private StringBuffer timeLog;
+        private Map<String, List<String>> knownIssues;
 
         public PrintWriter log;
         public int indentLevel;

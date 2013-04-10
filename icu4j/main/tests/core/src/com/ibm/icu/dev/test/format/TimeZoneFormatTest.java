@@ -72,7 +72,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      * and if the result TimeZone has the expected behavior.
      */
     public void TestTimeZoneRoundTrip() {
-        boolean TEST_ALL = "true".equalsIgnoreCase(getProperty("TimeZoneRoundTripAll"));
+        boolean TEST_ALL = getBooleanProperty("TimeZoneRoundTripAll", false);
 
         TimeZone unknownZone = new SimpleTimeZone(-31415, "Etc/Unknown");
         int badDstOffset = -1234;
@@ -282,7 +282,7 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
      */
     public void TestTimeRoundTrip() {
 
-        boolean TEST_ALL = "true".equalsIgnoreCase(getProperty("TimeZoneRoundTripAll"));
+        boolean TEST_ALL = getBooleanProperty("TimeZoneRoundTripAll", false);
 
         int startYear, endYear;
 

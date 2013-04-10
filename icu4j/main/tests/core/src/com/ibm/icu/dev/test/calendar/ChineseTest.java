@@ -278,7 +278,7 @@ public class ChineseTest extends CalendarTest {
                 Date e = fmt.parse(s);
                 if (e.equals(DATA[i])) {
                     logln("Ok: " + DATA[i] + " -> " + s + " -> " + e);
-                } else if (isICUVersionBefore(52, 0, 1)) { // until ticket #9043 fixes the ambiguous era problem
+                } else if (logKnownIssue("9043", "Ambiguous Chinese era parsing")) {
                     logln("Ambiguous parse fails: " + DATA[i] + " -> " + s + " -> " + e);
                 } else {
                     errln("FAIL: " + DATA[i] + " -> " + s + " -> " + e);
