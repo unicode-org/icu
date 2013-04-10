@@ -59,6 +59,7 @@ printUsage(const char *pname, UBool isHelp) {
             "%csage: %s [-h|-?|--help ] [-tl|-tb|-te] [-c] [-C comment]\n"
             "\t[-a list] [-r list] [-x list] [-l [-o outputListFileName]]\n"
             "\t[-s path] [-d path] [-w] [-m mode]\n"
+            "\t[--auto_toc_prefix] [--auto_toc_prefix_with_type] [--toc_prefix]\n"
             "\tinfilename [outfilename]\n",
             isHelp ? 'U' : 'u', pname);
     if(isHelp) {
@@ -141,7 +142,8 @@ printUsage(const char *pname, UBool isHelp) {
             "\t                can be used at a time.\n"
             "\t--toc_prefix prefix          ToC prefix to be used in the output package\n"
             "\t                             Overrides the package basename\n"
-            "\t                             and --auto_toc_prefix.\n");
+            "\t                             and --auto_toc_prefix.\n"
+            "\t                             Cannot be combined with --auto_toc_prefix_with_type.\n");
         /*
          * Usage text columns, starting after the initial TAB.
          *      1         2         3         4         5         6         7         8
