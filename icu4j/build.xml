@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 1997-2012, International Business Machines Corporation and    *
+* Copyright (C) 1997-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -757,8 +757,9 @@
                 header="${icu4j.api.doc.header}"
                 encoding="${java.src.encoding}"
                 docencoding="UTF-8"
+                charset="UTF-8"
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
-                additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src}"
+                additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar}${path.separator}${jcite.libs} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet -taglet ch.arrenbrecht.jcite.JCiteTaglet -J-Djcitesourcepath=${jcite.addl.src} -J-Dfile.encoding=UTF-8"
                 link="${icu4j.api.doc.jdk.link}"
                 source="1.5"
                 stylesheetfile="${docs.style.sheet}">
@@ -789,6 +790,7 @@
                 header="${icu4j.api.doc.header}"
                 encoding="${java.src.encoding}"
                 docencoding="UTF-8"
+                charset="UTF-8"
                 bottom="&lt;font size=-1&gt;Copyright (c) ${current.year} IBM Corporation and others.&lt;/font&gt;"
                 additionalparam="-breakiterator -use -tagletpath ${icu4j.build-tools.jar} -taglet com.ibm.icu.dev.tool.docs.ICUTaglet"
                 link="${icu4j.api.doc.jdk.link}"
