@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -144,8 +144,8 @@ public class ResourceReader {
             // Remove BOMs
             ++lineNo;
             String line = reader.readLine();
-            if (line.charAt(0) == '\uFFEF' ||
-                line.charAt(0) == '\uFEFF') {
+            if (line != null && (line.charAt(0) == '\uFFEF' ||
+                                 line.charAt(0) == '\uFEFF')) {
                 line = line.substring(1);
             }
             return line;

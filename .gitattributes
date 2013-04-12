@@ -3454,10 +3454,12 @@ icu4j/main/classes/charset/src/com/ibm/icu/charset/UConverterStaticData.java svn
 icu4j/main/classes/charset/src/com/ibm/icu/charset/package.html svneol=native#text/html
 icu4j/main/classes/collate/.classpath -text
 icu4j/main/classes/collate/.project -text
+icu4j/main/classes/collate/.settings/edu.umd.cs.findbugs.core.prefs -text
 icu4j/main/classes/collate/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/collate/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/collate/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/collate/collate-build.launch -text
+icu4j/main/classes/collate/findbugs-exclude.xml svneol=native#text/xml
 icu4j/main/classes/collate/src/com/ibm/icu/impl/ImplicitCEGenerator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/collate/src/com/ibm/icu/text/AlphabeticIndex.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/collate/src/com/ibm/icu/text/CollationElementIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3474,8 +3476,10 @@ icu4j/main/classes/collate/src/com/ibm/icu/text/StringSearch.java svneol=native#
 icu4j/main/classes/collate/src/com/ibm/icu/util/GlobalizationPreferences.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
+icu4j/main/classes/core/.settings/edu.umd.cs.findbugs.core.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/main/classes/core/findbugs-exclude.xml svneol=native#text/xml
 icu4j/main/classes/core/manifest.stub -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/Assert.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/BMPSet.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3888,9 +3892,11 @@ icu4j/main/classes/regiondata/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/regiondata/regiondata-build.launch -text
 icu4j/main/classes/regiondata/src/com/ibm/icu/impl/ICURegionDataTables.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/translit/.externalToolBuilders/copy-data-translit.launch -text
+icu4j/main/classes/translit/.settings/edu.umd.cs.findbugs.core.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.jdt.ui.prefs -text
+icu4j/main/classes/translit/findbugs-exclude.xml svneol=native#text/xml
 icu4j/main/classes/translit/src/com/ibm/icu/impl/UtilityExtensions.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/translit/src/com/ibm/icu/text/AnyTransliterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/translit/src/com/ibm/icu/text/BreakTransliterator.java svneol=native#text/plain%3Bcharset%3Dutf-8

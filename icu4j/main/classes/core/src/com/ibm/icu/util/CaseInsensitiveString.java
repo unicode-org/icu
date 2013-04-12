@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -62,22 +62,13 @@ public class CaseInsensitiveString {
         if (this == o) {
             return true;
         }
-        getFolded();
-        try {
+        if (o instanceof CaseInsensitiveString) {
+            getFolded();
             CaseInsensitiveString cis = (CaseInsensitiveString) o;
-            
             cis.getFolded();
-            
             return folded.equals(cis.folded);
-        } catch (ClassCastException e) {
-            try {
-                String s = (String) o;
-                
-                return folded.equals(foldCase(s));
-            } catch (ClassCastException e2) {
-                return false;
-            }
         }
+        return false;
     }
     
     /**

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -4062,14 +4062,14 @@ public class UnicodeSet extends UnicodeFilter implements Iterable<String>, Compa
         UnicodeSetIterator2(UnicodeSet source) {
             // set according to invariants
             len = source.len - 1;
-            if (item >= len) {
-                stringIterator = source.strings.iterator();
-                sourceList = null;
-            } else {
+            if (len > 0) {
                 sourceStrings = source.strings;
                 sourceList = source.list;
                 current = sourceList[item++];
                 limit = sourceList[item++];
+            } else {
+                stringIterator = source.strings.iterator();
+                sourceList = null;
             }
         }
 

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -248,15 +248,9 @@ public class XEquivalenceClass<T,R> implements Iterable<T> {
     }
     
     public static class Linkage<T,R> {
-        /**
-         * 
-         */
         public Set<R> reasons;
         public T result;
-        /**
-         * @param reasons
-         * @param item
-         */
+
         public Linkage(Set<R> reasons, T result) {
             this.reasons = reasons;
             this.result = result;
