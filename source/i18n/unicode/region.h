@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013, International Business Machines Corporation
+ * Copyright (C) 2013, International Business Machines Corporation and others.
  * All Rights Reserved.
  *******************************************************************************
  */
@@ -14,71 +14,10 @@
  */
 
 #include "unicode/utypes.h"
-
-#ifndef U_HIDE_DRAFT_API
-/**
- * URegionType is an enumeration defining the different types of regions.  Current possible
- * values are URGN_WORLD, URGN_CONTINENT, URGN_SUBCONTINENT, URGN_TERRITORY, URGN_GROUPING,
- * URGN_DEPRECATED, and URGN_UNKNOWN.
- * 
- * @draft ICU 51 
- */
-
-typedef enum URegionType {
-    /**
-     * Type representing the unknown region.
-     * @draft ICU 51 
-     */
-    URGN_UNKNOWN,
-
-    /**
-     * Type representing a territory.
-     * @draft ICU 51 
-     */
-    URGN_TERRITORY,
-
-    /**
-     * Type representing the whole world.
-     * @draft ICU 51 
-     */
-    URGN_WORLD,
-
-    /**
-     * Type representing a continent.
-     * @draft ICU 51 
-     */
-    URGN_CONTINENT,
-
-    /**
-     * Type representing a sub-continent.
-     * @draft ICU 51 
-     */
-    URGN_SUBCONTINENT,
-
-    /**
-     * Type representing a grouping of territories that is not to be used in
-     * the normal WORLD/CONTINENT/SUBCONTINENT/TERRITORY containment tree.
-     * @draft ICU 51 
-     */
-    URGN_GROUPING,
-
-    /**
-     * Type representing a region whose code has been deprecated, usually
-     * due to a country splitting into multiple territories or changing its name.
-     * @draft ICU 51 
-     */
-    URGN_DEPRECATED,
-
-    /**
-     * Maximum value for this unumeration.
-     * @draft ICU 51 
-     */
-    URGN_LIMIT
-} URegionType;
-
-
+#include "unicode/uregion.h"
 
 #if !UCONFIG_NO_FORMATTING
+#ifndef U_HIDE_DRAFT_API
 
 #include "unicode/uobject.h"
 #include "unicode/uniset.h"
@@ -282,8 +221,8 @@ private:
 
 U_NAMESPACE_END
 
-#endif /* #if !UCONFIG_NO_FORMATTING */
 #endif  /* U_HIDE_DRAFT_API */
+#endif /* #if !UCONFIG_NO_FORMATTING */
 #endif // REGION_H
 
 //eof

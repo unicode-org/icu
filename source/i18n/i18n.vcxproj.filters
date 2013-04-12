@@ -502,6 +502,9 @@
     <ClCompile Include="region.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="uregion.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bocsu.h">
@@ -805,6 +808,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="unicode\region.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="unicode\uregion.h">
       <Filter>formatting</Filter>
     </ClInclude>
   </ItemGroup>
