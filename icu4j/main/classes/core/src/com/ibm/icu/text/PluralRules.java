@@ -456,6 +456,15 @@ public class PluralRules implements Serializable {
         }
         @Override
         public boolean equals(Object arg0) {
+            if (arg0 == null) {
+                return false;
+            }
+            if (arg0 == this) {
+                return true;
+            }
+            if (!(arg0 instanceof NumberInfo)) {
+                return false;
+            }
             NumberInfo other = (NumberInfo)arg0;
             return source == other.source && visibleFractionDigitCount == other.visibleFractionDigitCount && fractionalDigits == other.fractionalDigits;
         }

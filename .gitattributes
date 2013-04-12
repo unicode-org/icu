@@ -239,12 +239,14 @@ icu4j/main/classes/charset/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/charset/manifest.stub -text
 icu4j/main/classes/collate/.classpath -text
 icu4j/main/classes/collate/.project -text
+icu4j/main/classes/collate/.settings/edu.umd.cs.findbugs.core.prefs -text
 icu4j/main/classes/collate/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/collate/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/collate/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/collate/collate-build.launch -text
 icu4j/main/classes/core/.classpath -text
 icu4j/main/classes/core/.project -text
+icu4j/main/classes/core/.settings/edu.umd.cs.findbugs.core.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
@@ -280,6 +282,7 @@ icu4j/main/classes/regiondata/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/regiondata/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/classes/regiondata/regiondata-build.launch -text
 icu4j/main/classes/translit/.externalToolBuilders/copy-data-translit.launch -text
+icu4j/main/classes/translit/.settings/edu.umd.cs.findbugs.core.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/translit/.settings/org.eclipse.jdt.ui.prefs -text
