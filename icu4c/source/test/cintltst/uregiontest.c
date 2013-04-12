@@ -387,12 +387,13 @@ static void TestGetContainedRegions() {
         const URegion *r = uregion_getRegionFromCode(rd->code, &status);
         if ( U_SUCCESS(status) ) {
         	UEnumeration *containedRegions;
+        	int32_t resultLength = 0; /* bug in uenum_next if this is NULL, only affects some compilers */ 
         	const char *crID;
             if (uregion_getType(r) == URGN_GROUPING) {
                 continue;
             }
             containedRegions = uregion_getContainedRegions(r, &status);
-            while ((crID = uenum_next(containedRegions, NULL, &status)) != NULL && U_SUCCESS(status) ) {
+            while ((crID = uenum_next(containedRegions, &resultLength, &status)) != NULL && U_SUCCESS(status) ) {
                 const URegion *cr = uregion_getRegionFromCode(crID, &status);
                 const URegion *containingRegion = (cr)? uregion_getContainingRegion(cr) : NULL;
                 if ( !containingRegion || !uregion_isEqualTo(containingRegion, r) ) {
@@ -414,12 +415,13 @@ static void TestGetContainedRegionsWithType() {
         const URegion *r = uregion_getRegionFromCode(rd->code, &status);
         if ( U_SUCCESS(status) ) {
         	UEnumeration *containedRegions;
+        	int32_t resultLength = 0; /* bug in uenum_next if this is NULL, only affects some compilers */ 
         	const char *crID;
             if (uregion_getType(r) != URGN_CONTINENT) {
                 continue;
             }
             containedRegions = uregion_getContainedRegionsOfType(r, URGN_TERRITORY, &status);
-            while ((crID = uenum_next(containedRegions, NULL, &status)) != NULL && U_SUCCESS(status) ) {
+            while ((crID = uenum_next(containedRegions, &resultLength, &status)) != NULL && U_SUCCESS(status) ) {
                 const URegion *cr = uregion_getRegionFromCode(crID, &status);
                 const URegion *containingRegion = (cr)? uregion_getContainingRegionOfType(cr, URGN_CONTINENT) : NULL;
                 if ( !containingRegion || !uregion_isEqualTo(containingRegion, r) ) {
