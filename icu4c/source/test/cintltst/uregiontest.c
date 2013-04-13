@@ -354,7 +354,7 @@ static KnownRegion knownRegions[] = {
 
 
 static void TestKnownRegions() {
-	const KnownRegion * rd;
+    const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
         const URegion *r = uregion_getRegionFromCode(rd->code, &status);
@@ -381,27 +381,29 @@ static void TestKnownRegions() {
 }
 
 static void TestGetContainedRegions() {
-	const KnownRegion * rd;
+    const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
         const URegion *r = uregion_getRegionFromCode(rd->code, &status);
         if ( U_SUCCESS(status) ) {
-        	UEnumeration *containedRegions;
-        	int32_t resultLength = 0; /* bug in uenum_next if this is NULL, only affects some compilers */ 
-        	const char *crID;
+            UEnumeration *containedRegions;
+            int32_t resultLength = 0; /* bug in uenum_next if this is NULL, only affects some compilers */ 
+            const char *crID;
             if (uregion_getType(r) == URGN_GROUPING) {
                 continue;
             }
             containedRegions = uregion_getContainedRegions(r, &status);
-            while ((crID = uenum_next(containedRegions, &resultLength, &status)) != NULL && U_SUCCESS(status) ) {
-                const URegion *cr = uregion_getRegionFromCode(crID, &status);
-                const URegion *containingRegion = (cr)? uregion_getContainingRegion(cr) : NULL;
-                if ( !containingRegion || !uregion_isEqualTo(containingRegion, r) ) {
-                    log_err("ERROR: Region: %s contains region %s. Expected containing region of this region to be the original region, but got %s\n",
-                        uregion_getRegionCode(r), uregion_getRegionCode(cr), (containingRegion)?uregion_getRegionCode(containingRegion):"NULL" ); 
+            if (containedRegions) {
+                while ((crID = uenum_next(containedRegions, &resultLength, &status)) != NULL && U_SUCCESS(status) ) {
+                    const URegion *cr = uregion_getRegionFromCode(crID, &status);
+                    const URegion *containingRegion = (cr)? uregion_getContainingRegion(cr) : NULL;
+                    if ( !containingRegion || !uregion_isEqualTo(containingRegion, r) ) {
+                        log_err("ERROR: Region: %s contains region %s. Expected containing region of this region to be the original region, but got %s\n",
+                            uregion_getRegionCode(r), uregion_getRegionCode(cr), (containingRegion)?uregion_getRegionCode(containingRegion):"NULL" ); 
+                    }
                 }
+                uenum_close(containedRegions);
             }
-            uenum_close(containedRegions);
         } else {
             log_data_err("ERROR: Known region %s was not recognized.\n", rd->code);
         }
@@ -409,27 +411,29 @@ static void TestGetContainedRegions() {
 }
 
 static void TestGetContainedRegionsWithType() {
-	const KnownRegion * rd;
+    const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
         const URegion *r = uregion_getRegionFromCode(rd->code, &status);
         if ( U_SUCCESS(status) ) {
-        	UEnumeration *containedRegions;
-        	int32_t resultLength = 0; /* bug in uenum_next if this is NULL, only affects some compilers */ 
-        	const char *crID;
+            UEnumeration *containedRegions;
+            int32_t resultLength = 0; /* bug in uenum_next if this is NULL, only affects some compilers */ 
+            const char *crID;
             if (uregion_getType(r) != URGN_CONTINENT) {
                 continue;
             }
             containedRegions = uregion_getContainedRegionsOfType(r, URGN_TERRITORY, &status);
-            while ((crID = uenum_next(containedRegions, &resultLength, &status)) != NULL && U_SUCCESS(status) ) {
-                const URegion *cr = uregion_getRegionFromCode(crID, &status);
-                const URegion *containingRegion = (cr)? uregion_getContainingRegionOfType(cr, URGN_CONTINENT) : NULL;
-                if ( !containingRegion || !uregion_isEqualTo(containingRegion, r) ) {
-                    log_err("ERROR: Continent: %s contains territory %s. Expected containing continent of this region to be the original region, but got %s\n",
-                        uregion_getRegionCode(r), uregion_getRegionCode(cr), (containingRegion)?uregion_getRegionCode(containingRegion):"NULL" ); 
+            if (containedRegions) {
+                while ((crID = uenum_next(containedRegions, &resultLength, &status)) != NULL && U_SUCCESS(status) ) {
+                    const URegion *cr = uregion_getRegionFromCode(crID, &status);
+                    const URegion *containingRegion = (cr)? uregion_getContainingRegionOfType(cr, URGN_CONTINENT) : NULL;
+                    if ( !containingRegion || !uregion_isEqualTo(containingRegion, r) ) {
+                        log_err("ERROR: Continent: %s contains territory %s. Expected containing continent of this region to be the original region, but got %s\n",
+                            uregion_getRegionCode(r), uregion_getRegionCode(cr), (containingRegion)?uregion_getRegionCode(containingRegion):"NULL" ); 
+                    }
                 }
+                uenum_close(containedRegions);
             }
-            uenum_close(containedRegions);
         } else {
             log_data_err("ERROR: Known region %s was not recognized.\n", rd->code);
         }
@@ -437,7 +441,7 @@ static void TestGetContainedRegionsWithType() {
 }
 
 static void TestGetContainingRegion() {        
-	const KnownRegion * rd;
+    const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
         const URegion *r = uregion_getRegionFromCode(rd->code, &status);
@@ -461,7 +465,7 @@ static void TestGetContainingRegion() {
 }
 
 static void TestGetContainingRegionWithType() {        
-	const KnownRegion * rd;
+    const KnownRegion * rd;
     for (rd = knownRegions; rd->code != NULL ; rd++ ) {
         UErrorCode status = U_ZERO_ERROR;
         const URegion *r = uregion_getRegionFromCode(rd->code, &status);
