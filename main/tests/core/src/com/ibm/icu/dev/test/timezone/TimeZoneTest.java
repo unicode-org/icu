@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2000-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2000-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1483,6 +1483,7 @@ public class TimeZoneTest extends TestFmwk
                 {"Antarctica/South_Pole", "Antarctica/McMurdo"},
                 {"Atlantic/Jan_Mayen", "Europe/Oslo"},
                 {"Arctic/Longyearbyen", "Europe/Oslo"},
+                {"Europe/Busingen", "Europe/Zurich"},
                 {"Europe/Guernsey", "Europe/London"},
                 {"Europe/Isle_of_Man", "Europe/London"},
                 {"Europe/Jersey", "Europe/London"},

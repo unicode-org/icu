@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * Copyright (C) 1996-2012, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -2649,6 +2649,26 @@ public class BasicTest extends TestFmwk {
                     ")==filtered NFC.getCC()",
                     expectedCC, cc);
         }
+    }
+
+    public void TestFilteredAppend() {
+        Normalizer2 nfcNorm2=Normalizer2.getNFCInstance();
+        UnicodeSet filter=new UnicodeSet("[^\u00a0-\u00ff\u0310-\u031f]");
+        FilteredNormalizer2 fn2=new FilteredNormalizer2(nfcNorm2, filter);
+
+        // Append two strings that each contain a character outside the filter set.
+        StringBuilder sb = new StringBuilder("a\u0313a");
+        String second = "\u0301\u0313";
+        assertEquals("append()", "a\u0313á\u0313", fn2.append(sb, second).toString());
+
+        // Same, and also normalize the second string.
+        sb.replace(0, 0x7fffffff, "a\u0313a");
+        assertEquals(
+            "normalizeSecondAndAppend()",
+            "a\u0313á\u0313", fn2.normalizeSecondAndAppend(sb, second).toString());
+        
+        // Normalizer2.normalize(String) uses spanQuickCheckYes() and normalizeSecondAndAppend().
+        assertEquals("normalize()", "a\u0313á\u0313", fn2.normalize("a\u0313a\u0301\u0313"));
     }
 
     public void TestGetEasyToUseInstance() {
