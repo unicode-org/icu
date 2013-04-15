@@ -37,13 +37,11 @@ U_NAMESPACE_BEGIN
 static const char gZoneStrings[]                = "zoneStrings";
 
 static const char gRegionFormatTag[]            = "regionFormat";
-static const char gFallbackRegionFormatTag[]    = "fallbackRegionFormat";
 static const char gFallbackFormatTag[]          = "fallbackFormat";
 
 static const UChar gEmpty[]                     = {0x00};
 
 static const UChar gDefRegionPattern[]          = {0x7B, 0x30, 0x7D, 0x00}; // "{0}"
-static const UChar gDefFallbackRegionPattern[]  = {0x7B, 0x31, 0x7D, 0x20, 0x28, 0x7B, 0x30, 0x7D, 0x29, 0x00}; // "{1} ({0})"
 static const UChar gDefFallbackPattern[]        = {0x7B, 0x31, 0x7D, 0x20, 0x28, 0x7B, 0x30, 0x7D, 0x29, 0x00}; // "{1} ({0})"
 
 static const double kDstCheckRange      = (double)184*U_MILLIS_PER_DAY;
@@ -361,7 +359,6 @@ TZGNCore::initialize(const Locale& locale, UErrorCode& status) {
 
     // Initialize format patterns
     UnicodeString rpat(TRUE, gDefRegionPattern, -1);
-    UnicodeString frpat(TRUE, gDefFallbackRegionPattern, -1);
     UnicodeString fpat(TRUE, gDefFallbackPattern, -1);
 
     UErrorCode tmpsts = U_ZERO_ERROR;   // OK with fallback warning..
@@ -372,11 +369,6 @@ TZGNCore::initialize(const Locale& locale, UErrorCode& status) {
         const UChar *regionPattern = ures_getStringByKeyWithFallback(zoneStrings, gRegionFormatTag, NULL, &tmpsts);
         if (U_SUCCESS(tmpsts) && u_strlen(regionPattern) > 0) {
             rpat.setTo(regionPattern, -1);
-        }
-        tmpsts = U_ZERO_ERROR;
-        const UChar *fallbackRegionPattern = ures_getStringByKeyWithFallback(zoneStrings, gFallbackRegionFormatTag, NULL, &tmpsts);
-        if (U_SUCCESS(tmpsts) && u_strlen(fallbackRegionPattern) > 0) {
-            frpat.setTo(fallbackRegionPattern, -1);
         }
         tmpsts = U_ZERO_ERROR;
         const UChar *fallbackPattern = ures_getStringByKeyWithFallback(zoneStrings, gFallbackFormatTag, NULL, &tmpsts);
