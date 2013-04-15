@@ -6,6 +6,12 @@
  */
 package com.ibm.icu.dev.test.format;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,11 +42,11 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis (Mark Davis) [for fractional support]
  */
 public class PluralRulesTest extends TestFmwk {
-    
+
     static boolean USE_ALT = System.getProperty("alt_plurals") != null;
-    
+
     PluralRulesFactory factory = USE_ALT ? PluralRulesFactory.ALTERNATE : PluralRulesFactory.NORMAL;
-    
+
     public static void main(String[] args) throws Exception {
         new PluralRulesTest().run(args);
     }
@@ -163,43 +169,43 @@ public class PluralRulesTest extends TestFmwk {
 
     public void testUniqueRules() {
         main:
-        for (ULocale locale : factory.getAvailableULocales()) {
-            PluralRules rules = factory.forLocale(locale);
-            Collection<NumberInfo> samples = rules.getFractionSamples();
-            Map<String,PluralRules> keywordToRule = new HashMap<String,PluralRules>();
-            for (String keyword : rules.getKeywords()) {
-                if (keyword.equals("other")) {
-                    continue;
-                }
-                String rules2 = keyword + ":" + rules.getRules(keyword);
-                PluralRules singleRule = PluralRules.createRules(rules2);
-                if (singleRule == null) {
-                    errln("Can't generate single rule for " + rules2);
-                    PluralRules.createRules(rules2); // for debugging
-                    continue main;
-                }
-                keywordToRule.put(keyword, singleRule);
-            }
-            Map<NumberInfo, String> collisionTest = new TreeMap();
-            for (NumberInfo sample : samples) {
-                collisionTest.clear();
-                for (Entry<String, PluralRules> entry: keywordToRule.entrySet()) {
-                    String keyword = entry.getKey();
-                    PluralRules rule = entry.getValue();
-                    String foundKeyword = rule.select(sample);
-                    if (foundKeyword.equals("other")) {
+            for (ULocale locale : factory.getAvailableULocales()) {
+                PluralRules rules = factory.forLocale(locale);
+                Collection<NumberInfo> samples = rules.getFractionSamples();
+                Map<String,PluralRules> keywordToRule = new HashMap<String,PluralRules>();
+                for (String keyword : rules.getKeywords()) {
+                    if (keyword.equals("other")) {
                         continue;
                     }
-                    String old = collisionTest.get(sample);
-                    if (old != null) {
-                        errln(locale + "\tNon-unique rules: " + sample + " => " + old + " & " + foundKeyword);
-                        rule.select(sample);
-                    } else {
-                        collisionTest.put(sample, foundKeyword);
+                    String rules2 = keyword + ":" + rules.getRules(keyword);
+                    PluralRules singleRule = PluralRules.createRules(rules2);
+                    if (singleRule == null) {
+                        errln("Can't generate single rule for " + rules2);
+                        PluralRules.createRules(rules2); // for debugging
+                        continue main;
+                    }
+                    keywordToRule.put(keyword, singleRule);
+                }
+                Map<NumberInfo, String> collisionTest = new TreeMap();
+                for (NumberInfo sample : samples) {
+                    collisionTest.clear();
+                    for (Entry<String, PluralRules> entry: keywordToRule.entrySet()) {
+                        String keyword = entry.getKey();
+                        PluralRules rule = entry.getValue();
+                        String foundKeyword = rule.select(sample);
+                        if (foundKeyword.equals("other")) {
+                            continue;
+                        }
+                        String old = collisionTest.get(sample);
+                        if (old != null) {
+                            errln(locale + "\tNon-unique rules: " + sample + " => " + old + " & " + foundKeyword);
+                            rule.select(sample);
+                        } else {
+                            collisionTest.put(sample, foundKeyword);
+                        }
                     }
                 }
             }
-        }
     }
 
     private void checkCategoriesAndExpected(String title, String categoriesAndExpected, PluralRules rules) {
@@ -224,14 +230,19 @@ public class PluralRulesTest extends TestFmwk {
     }
 
     private static String[][] equalityTestData = {
-        { "a: n is 5",
-        "a: n in 2..6 and n not in 2..4 and n is not 6" },
-        { "a: n in 2..3",
-            "a: n is 2 or n is 3",
-        "a: n is 3 and n in 2..5 or n is 2" },
-        { "a: n is 12; b:n mod 10 in 2..3",
-            "b: n mod 10 in 2..3 and n is not 12; a: n in 12..12",
-        "b: n is 13; a: n is 12; b: n mod 10 is 2 or n mod 10 is 3" },
+        // once we add fractions, we had to retract the "test all possibilities" for equality,
+        // so we only have a limited set of equality tests now.
+        { "a:n in 2;b:n in 5",
+        "b: n in 5;a: n in 2;" },
+
+//        { "a: n is 5",
+//        "a: n in 2..6 and n not in 2..4 and n is not 6" },
+//        { "a: n in 2..3",
+//            "a: n is 2 or n is 3",
+//        "a: n is 3 and n in 2..5 or n is 2" },
+//        { "a: n is 12; b:n mod 10 in 2..3",
+//            "b: n mod 10 in 2..3 and n is not 12; a: n in 12..12",
+//        "b: n is 13; a: n is 12; b: n mod 10 is 2 or n mod 10 is 3" },
     };
 
     private static String[][] inequalityTestData = {
@@ -240,7 +251,10 @@ public class PluralRulesTest extends TestFmwk {
         },
         { "a: n mod 3 is 2 and n is not 5",
             "a: n mod 6 is 2 or n is 8 or n is 11"
-        }
+        },
+        // the following are currently inequal, but we may make them equal in the future.
+        { "a: n in 2..5",
+        "a: n in 2..4,5" },
     };
 
     private void compareEquality(String id, Object[] objects, boolean shouldBeEqual) {
@@ -655,4 +669,37 @@ public class PluralRulesTest extends TestFmwk {
         "cy;    zero: 0, 0.0;   one: 1, 1.0;    two: 2; few: 3; many: 6;    other: 0.1, 2.5, 3.5, 5",
     };
 
+    private <T extends Serializable> T serializeAndDeserialize(T original, Output<Integer> size) { 
+        try { 
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(); 
+            ObjectOutputStream ostream = new ObjectOutputStream(baos); 
+            ostream.writeObject(original); 
+            ostream.flush(); 
+            byte bytes[] = baos.toByteArray();
+            size.value = bytes.length;
+            ObjectInputStream istream = new ObjectInputStream(new ByteArrayInputStream(bytes)); 
+            T reconstituted = (T)istream.readObject(); 
+            return reconstituted; 
+        } catch(IOException e) { 
+            throw new RuntimeException(e); 
+        } catch (ClassNotFoundException e) { 
+            throw new RuntimeException(e); 
+        } 
+    } 
+
+    public void TestSerialization() { 
+        Output<Integer> size = new Output<Integer>();
+        int max = 0;
+        for (ULocale locale : PluralRules.getAvailableULocales()) {
+            PluralRules item = PluralRules.forLocale(locale); 
+            PluralRules item2 = serializeAndDeserialize(item, size); 
+            logln(locale + "\tsize:\t" + size.value);
+            max = Math.max(max, size.value);
+            if (!assertEquals(locale + "\tPlural rules before and after serialization", item, item2)) {
+                PluralRules item3 = serializeAndDeserialize(item, size); 
+                item.equals(item2);
+            }
+        }
+        logln("max \tsize:\t" + max);
+    }
 }
