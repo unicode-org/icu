@@ -1,6 +1,6 @@
 /***************************************************************************
 *
-*   Copyright (C) 1998-2003, International Business Machines
+*   Copyright (C) 1998-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ************************************************************************/
@@ -10,6 +10,7 @@
 
 #include "sfnt.h"
 #include "cmaps.h"
+#include <stdio.h>
 
 #define SWAPU16(code) ((LEUnicode16) SWAPW(code))
 #define SWAPU32(code) ((LEUnicode32) SWAPL(code))
@@ -55,35 +56,80 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
     le_uint16 i;
     le_uint16 nSubtables = SWAPW(cmap->numberSubtables);
     const CMAPEncodingSubtable *subtable = NULL;
-    le_uint32 offset1 = 0, offset10 = 0;
-
-    for (i = 0; i < nSubtables; i += 1) {
+    le_bool found = FALSE;
+    le_uint16 foundPlatformID = 0xFFFF;
+    le_uint16 foundPlatformSpecificID = 0xFFFF;
+    le_uint32 foundOffset = 0;
+    le_uint16 foundTable = 0xFFFF;
+    // first pass, look for MS table. (preferred?)
+    for (i = 0; i < nSubtables && !found; i += 1) {
         const CMAPEncodingSubtableHeader *esh = &cmap->encodingSubtableHeaders[i];
 
-        if (SWAPW(esh->platformID) == 3) {
-            switch (SWAPW(esh->platformSpecificID)) {
-            case 1:
-                offset1 = SWAPL(esh->encodingOffset);
+        le_uint16 platformID = SWAPW(esh->platformID);
+        le_uint16 platformSpecificID = SWAPW(esh->platformSpecificID);
+        if (platformID == 3) { // microsoft
+          switch (platformSpecificID) {
+            case 1: // Unicode BMP (UCS-2)
+            case 10: // Unicode UCS-4
+                foundOffset = SWAPL(esh->encodingOffset);
+                foundPlatformID = platformID;
+                foundPlatformSpecificID = platformSpecificID;
+                found = TRUE;
+                foundTable = i;
                 break;
 
-            case 10:
-                offset10 = SWAPL(esh->encodingOffset);
-                break;
+                //default:
+              //              printf("%s:%d: microsoft (3) platform specific ID %d (wanted 1 or 10) for subtable %d/%d\n", __FILE__, __LINE__, (SWAPW(esh->platformSpecificID)), i, nSubtables);
             }
+        } else {
+          //printf("%s:%d: platform  ID %d (wanted 3, microsoft) for subtable %d/%d\n", __FILE__, __LINE__, (SWAPW(esh->platformID)), i, nSubtables);
+        }
+    }
+
+    // second pass, allow non MS table
+    // first pass, look for MS table. (preferred?)
+      for (i = 0; i < nSubtables && !found; i += 1) {
+        const CMAPEncodingSubtableHeader *esh = &cmap->encodingSubtableHeaders[i];
+        le_uint16 platformID = SWAPW(esh->platformID);
+        le_uint16 platformSpecificID = SWAPW(esh->platformSpecificID);
+        //printf("%s:%d: table %d/%d has platform:specific %d:%d\n", __FILE__, __LINE__, i, nSubtables, platformID, platformSpecificID);
+        switch(platformID) {
+        case 0: // Unicode platform
+          switch(platformSpecificID) {
+          case 0:
+          case 1:
+          case 2:
+          case 3:
+            foundOffset = SWAPL(esh->encodingOffset);
+            foundPlatformID = platformID;
+            foundPlatformSpecificID = platformSpecificID;
+            foundTable = i;
+            found = TRUE;
+            break;
+
+          default: printf("Error: table %d (psid %d) is unknown. Skipping.\n", i, platformSpecificID); break;
+          }
+          break;
+        
+          //default:
+          //printf("Skipping platform id %d\n", platformID);
         }
     }
 
 
-    if (offset10 != 0)
+    if (found)
     {
-        subtable = (const CMAPEncodingSubtable *) ((const char *) cmap + offset10);
-    } else if (offset1 != 0) {
-        subtable = (const CMAPEncodingSubtable *) ((const char *) cmap + offset1);
+      subtable = (const CMAPEncodingSubtable *) ((const char *) cmap + foundOffset);
+      //printf("%s:%d: using subtable #%d/%d type %d:%d\n", __FILE__, __LINE__, foundTable, nSubtables, foundPlatformID, foundPlatformSpecificID);
     } else {
-        return NULL;
+      printf("%s:%d: could not find subtable.\n", __FILE__, __LINE__);
+      return NULL;
     }
 
-    switch (SWAPW(subtable->format)) {
+    le_uint16 tableFormat = SWAPW(subtable->format);
+    //printf("%s:%d: table format %d\n", __FILE__, __LINE__, tableFormat);
+
+    switch (tableFormat) {
     case 4:
         return new CMAPFormat4Mapper(cmap, (const CMAPFormat4Encoding *) subtable);
 
@@ -98,6 +144,7 @@ CMAPMapper *CMAPMapper::createUnicodeMapper(const CMAPTable *cmap)
         break;
     }
 
+    printf("%s:%d: Unknown format %x.\n", __FILE__, __LINE__, (SWAPW(subtable->format)));
     return NULL;
 }
 

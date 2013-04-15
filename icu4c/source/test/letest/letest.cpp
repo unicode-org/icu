@@ -413,7 +413,7 @@ static void checkFontVersion(PortableFontInstance *fontInstance, const char *tes
 const char *getSourceTestData() {
     const char *srcDataDir = NULL;
 #ifdef U_TOPSRCDIR
-    srcDataDir =  U_TOPSRCDIR  U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
+    srcDataDir = U_TOPSRCDIR U_FILE_SEP_STRING "test" U_FILE_SEP_STRING "testdata" U_FILE_SEP_STRING;
 #else
     srcDataDir = ".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING;
     FILE *f = fopen(".."U_FILE_SEP_STRING".."U_FILE_SEP_STRING"test"U_FILE_SEP_STRING"testdata"U_FILE_SEP_STRING"rbbitst.txt", "r");

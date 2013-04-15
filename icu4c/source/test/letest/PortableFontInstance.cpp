@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2008, International Business Machines
+ *   Copyright (C) 1999-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -23,6 +23,18 @@
 #include "sfnt.h"
 
 #include <string.h>
+#include <stdio.h>
+
+#if 0
+static const char *letagToStr(LETag tag, char *str) {
+  str[0]= 0xFF & (tag>>24);
+  str[1]= 0xFF & (tag>>16);
+  str[2]= 0xFF & (tag>>8);
+  str[3]= 0xFF & (tag>>0);
+  str[4]= 0;
+  return str;
+}
+#endif
 
 //
 // Finds the high bit by binary searching
@@ -74,8 +86,10 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
 
     // open the font file
     fFile = fopen(fileName, "rb");
+    //printf("Open Font: %s\n", fileName);
 
     if (fFile == NULL) {
+        printf("%s:%d: %s: FNF\n", __FILE__, __LINE__, fileName);
         status = LE_FONT_FILE_NOT_FOUND_ERROR;
         return;
     }
@@ -96,6 +110,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
     fDirectory = (const SFNTDirectory *) NEW_ARRAY(char, dirSize);
 
     if (fDirectory == NULL) {
+        printf("%s:%d: %s: malloc err\n", __FILE__, __LINE__, fileName);
         status = LE_MEMORY_ALLOCATION_ERROR;
         goto error_exit;
     }
@@ -116,6 +131,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
 
     if (headTable == NULL) {
         status = LE_MISSING_FONT_TABLE_ERROR;
+        printf("%s:%d: %s: missing head table\n", __FILE__, __LINE__, fileName);
         goto error_exit;
     }
 
@@ -142,6 +158,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
     hheaTable = (HHEATable *) readFontTable(hheaTag);
 
     if (hheaTable == NULL) {
+        printf("%s:%d: %s: missing hhea table\n", __FILE__, __LINE__, fileName);
         status = LE_MISSING_FONT_TABLE_ERROR;
         goto error_exit;
     }
@@ -157,6 +174,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
     fCMAPMapper = findUnicodeMapper();
 
     if (fCMAPMapper == NULL) {
+        printf("%s:%d: %s: can't load cmap\n", __FILE__, __LINE__, fileName);
         status = LE_MISSING_FONT_TABLE_ERROR;
         goto error_exit;
     }
@@ -232,14 +250,24 @@ const void *PortableFontInstance::readTable(LETag tag, le_uint32 *length) const
 
 const void *PortableFontInstance::getFontTable(LETag tableTag) const
 {
-    return FontTableCache::find(tableTag);
+  size_t ignored;
+  return getFontTable(tableTag, ignored);
 }
 
-const void *PortableFontInstance::readFontTable(LETag tableTag) const
+const void *PortableFontInstance::getFontTable(LETag tableTag, size_t &length) const
+{
+  return FontTableCache::find(tableTag, length);
+}
+
+const void *PortableFontInstance::readFontTable(LETag tableTag, size_t &length) const
 {
     le_uint32 len;
 
-    return readTable(tableTag, &len);
+    const void *data= readTable(tableTag, &len);
+    length = len;
+    //char tag5[5];
+    //printf("Read %s, result %p #%d\n", letagToStr(tableTag,tag5), data,len);
+    return data;
 }
 
 CMAPMapper *PortableFontInstance::findUnicodeMapper()
@@ -379,6 +407,23 @@ le_int32 PortableFontInstance::getUnitsPerEM() const
 le_uint32 PortableFontInstance::getFontChecksum() const
 {
     return fFontChecksum;
+}
+
+le_uint32 PortableFontInstance::getRawChecksum() const
+{
+  // how big is it?
+  //  fseek(fFile, 0L, SEEK_END);
+  //  long size = ftell(fFile);
+  le_int32 chksum = 0;
+  // now, calculate
+  fseek(fFile, 0L, SEEK_SET);
+  int r;
+  int count =0;
+  while((r = fgetc(fFile)) != EOF) {
+    chksum += r;
+    count ++;
+  }
+  return (le_uint32) chksum; // cast to signed
 }
 
 le_int32 PortableFontInstance::getAscent() const
