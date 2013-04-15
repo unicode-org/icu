@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2012. All Rights Reserved.
+ * (C) Copyright IBM Corp. 1998-2013. All Rights Reserved.
  *
  * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
  * YOU REALLY KNOW WHAT YOU'RE DOING.
@@ -233,10 +233,11 @@ enum ScriptCodes {
  * @stable ICU 49
  */
 
-    khojScriptCode = 156,
-    tirhScriptCode = 157,
+    hluwScriptCode = 156,  /* bump to match current ICU */
+    khojScriptCode = 157,
+    tirhScriptCode = 158,
 
-    scriptCodeCount = 158
+    scriptCodeCount = 159
 };
 
 U_NAMESPACE_END
