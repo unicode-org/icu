@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -125,6 +125,32 @@ public class CompatibilityTest extends TestFmwk
     private static final String[][] SKIP_CASES = {
         {"ICU_3.8.1",   "com.ibm.icu.text.PluralFormat.dat"},
         {"ICU_3.8.1",   "com.ibm.icu.text.PluralRules.dat"},
+        // ICU 52 is not serialization-compatible with previous versions. 
+        {"ICU_3.8.1",   "com.ibm.icu.text.PluralFormat.dat"},
+        {"ICU_3.8.1",   "com.ibm.icu.text.PluralRules.dat"},
+        {"ICU_4.0",   "com.ibm.icu.text.PluralFormat.dat"},
+        {"ICU_4.0",   "com.ibm.icu.text.PluralRules.dat"},
+        {"ICU_4.2.1",   "com.ibm.icu.text.PluralFormat.dat"},
+        {"ICU_4.2.1",   "com.ibm.icu.text.PluralRules.dat"},
+        {"ICU_4.4",   "com.ibm.icu.text.PluralFormat.dat"},
+        {"ICU_4.4",   "com.ibm.icu.text.PluralRules.dat"},
+        {"ICU_4.4", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
+        {"ICU_4.6",   "com.ibm.icu.text.PluralFormat.dat"},
+        {"ICU_4.6",   "com.ibm.icu.text.PluralRules.dat"},
+        {"ICU_4.6", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
+        {"ICU_4.8",   "com.ibm.icu.text.PluralFormat.dat"},
+        {"ICU_4.8",   "com.ibm.icu.text.PluralRules.dat"},
+        {"ICU_4.8", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
+        {"ICU_49.1", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
+        {"ICU_49.1", "com.ibm.icu.text.PluralFormat.dat"},
+        {"ICU_49.1", "com.ibm.icu.text.PluralRules.dat"},
+        {"ICU_50.1", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
+        {"ICU_50.1", "com.ibm.icu.text.PluralFormat.dat"},
+        {"ICU_50.1", "com.ibm.icu.text.PluralRules.dat"},
+        {"ICU_51.1", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
+        {"ICU_51.1", "com.ibm.icu.text.PluralFormat.dat"},
+        {"ICU_51.1", "com.ibm.icu.text.PluralRules.dat"},
+        
         {"ICU_3.6",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
         {"ICU_3.8.1",   "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
         {"ICU_4.0",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},

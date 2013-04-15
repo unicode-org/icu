@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2004-2012, International Business Machines
+ * Copyright (c) 2004-2013, International Business Machines
  * Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *
@@ -2192,6 +2192,19 @@ public class FormatTests
             return a.equals(b);
         }
     }
+    
+    public static class PluralRulesSerialProxyHandler implements SerializableTest.Handler {
+        // Tested through PluralRules, so just a stub here to keep CoverageTest happy
+        final String[] cannedRules = {};
+
+        public Object[] getTestObjects() {
+            return new PluralRules[cannedRules.length];
+        }
+        public boolean hasSameBehavior(Object a, Object b) {
+            return a.equals(b);
+        }
+    }
+
 
 
     public static class TimeUnitFormatHandler implements SerializableTest.Handler {

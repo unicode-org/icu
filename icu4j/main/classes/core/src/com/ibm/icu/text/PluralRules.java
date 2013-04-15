@@ -7,6 +7,11 @@
 
 package com.ibm.icu.text;
 
+import java.io.IOException;
+import java.io.NotSerializableException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -303,7 +308,7 @@ public class PluralRules implements Serializable {
         }
 
         public String toString() {
-            return "";
+            return null;
         }
 
         public int updateRepeatLimit(int limit) {
@@ -374,7 +379,7 @@ public class PluralRules implements Serializable {
     public static class NumberInfo implements Comparable<NumberInfo> {
         public final double source;
         public final int visibleFractionDigitCount;
-        public final int fractionalDigits;
+        public final long fractionalDigits;
         public final long intValue;
         public final boolean hasIntegerValue;
 
@@ -384,22 +389,24 @@ public class PluralRules implements Serializable {
             fractionalDigits = f;
             intValue = (long)n;
             hasIntegerValue = source == intValue;
+            // check values. TODO make into unit test.
+            //            
+            //            long visiblePower = (int) Math.pow(10, v);
+            //            if (fractionalDigits > visiblePower) {
+            //                throw new IllegalArgumentException();
+            //            }
+            //            double fraction = intValue + (fractionalDigits / (double) visiblePower);
+            //            if (fraction != source) {
+            //                double diff = Math.abs(fraction - source)/(Math.abs(fraction) + Math.abs(source));
+            //                if (diff > 0.00000001d) {
+            //                    throw new IllegalArgumentException();
+            //                }
+            //            }
         }
 
         // Ugly, but for samples we don't care.
         public NumberInfo(double n, int v) {
             this(n,v,getFractionalDigits(n, v));
-        }
-
-        // Ugly, but for samples we don't care.
-        public static int decimals(double n) {
-            String temp = String.valueOf(n);
-            return temp.endsWith(".0") ? 0 : temp.length() - temp.indexOf('.') - 1;
-        }
-
-        // Ugly, but for samples we don't care.
-        public NumberInfo (String n) {
-            this(Double.parseDouble(n), getVisibleFractionCount(n));
         }
 
         private static int getFractionalDigits(double n, int v) {
@@ -412,21 +419,33 @@ public class PluralRules implements Serializable {
             }
         }
 
-        private static int getVisibleFractionCount(String value) {
-            int decimalPos = value.trim().indexOf('.') + 1;
-            if (decimalPos == 0) {
-                return 0;
-            } else {
-                return value.length() - decimalPos - 1;
-            }
-        }
-
         public NumberInfo(double n) {
             this(n, decimals(n));
         }
 
+        // Ugly, but for samples we don't care.
+        public static int decimals(double n) {
+            String temp = String.valueOf(n);
+            return temp.endsWith(".0") ? 0 : temp.length() - temp.indexOf('.') - 1;
+        }
+
         public NumberInfo(long n) {
             this(n,0);
+        }
+
+        // Ugly, but for samples we don't care.
+        public NumberInfo (String n) {
+            this(Double.parseDouble(n), getVisibleFractionCount(n));
+        }
+
+        private static int getVisibleFractionCount(String value) {
+            value = value.trim();
+            int decimalPos = value.indexOf('.') + 1;
+            if (decimalPos == 0) {
+                return 0;
+            } else {
+                return value.length() - decimalPos;
+            }
         }
 
         public double get(Operand operand) {
@@ -446,13 +465,20 @@ public class PluralRules implements Serializable {
          * We're not going to care about NaN.
          */
         public int compareTo(NumberInfo other) {
+            if (intValue != other.intValue) {
+                return intValue < other.intValue ? -1 : 1;
+            }
             if (source != other.source) {
                 return source < other.source ? -1 : 1;
             }
             if (visibleFractionDigitCount != other.visibleFractionDigitCount) {
                 return visibleFractionDigitCount < other.visibleFractionDigitCount ? -1 : 1;
             }
-            return fractionalDigits - other.fractionalDigits;
+            long diff = fractionalDigits - other.fractionalDigits;
+            if (diff != 0) {
+                return diff < 0 ? -1 : 1;
+            }
+            return 0;
         }
         @Override
         public boolean equals(Object arg0) {
@@ -471,7 +497,7 @@ public class PluralRules implements Serializable {
         @Override
         public int hashCode() {
             // TODO Auto-generated method stub
-            return fractionalDigits + 37 * (visibleFractionDigitCount + (int)(37 * source));
+            return (int)(fractionalDigits + 37 * (visibleFractionDigitCount + (int)(37 * source)));
         }
         @Override
         public String toString() {
@@ -660,13 +686,13 @@ public class PluralRules implements Serializable {
                             String[] pair = Utility.splitString(range, "..");
                             double low, high;
                             if (pair.length == 2) {
-                                low = Long.parseLong(pair[0]);
-                                high = Long.parseLong(pair[1]);
+                                low = Double.parseDouble(pair[0]);
+                                high = Double.parseDouble(pair[1]);
                                 if (low > high) {
                                     throw unexpected(range, condition);
                                 }
                             } else if (pair.length == 1) {
-                                low = high = Long.parseLong(pair[0]);
+                                low = high = Double.parseDouble(pair[0]);
                             } else {
                                 throw unexpected(range, condition);
                             }
@@ -679,7 +705,7 @@ public class PluralRules implements Serializable {
                             vals = null;
                         }
                     } else {
-                        lowBound = highBound = Long.parseLong(t);
+                        lowBound = highBound = Double.parseDouble(t);
                     }
 
                     if (x != tokens.length) {
@@ -761,6 +787,10 @@ public class PluralRules implements Serializable {
     private static RuleList parseRuleChain(String description)
             throws ParseException {
         RuleList result = new RuleList();
+        // remove trailing ;
+        if (description.endsWith(";")) { 
+            description = description.substring(0,description.length()-1);
+        }
         String[] rules = Utility.split(description, ';');
         for (int i = 0; i < rules.length; ++i) {
             result.addRule(parseRule(rules[i].trim()));
@@ -808,30 +838,30 @@ public class PluralRules implements Serializable {
             if (upperBound != lowerBound) {
                 toAddTo.add(new NumberInfo(upperBound + offset));
             }
-//            if (range_list != null) {
-//                // add from each range
-//                for (int i = 0; i < range_list.length; i += 2) {
-//                    double lower = range_list[i];
-//                    double upper = range_list[i+1];
-//                    if (lower != lowerBound) {
-//                        toAddTo.add(new NumberInfo(lower + offset)); 
-//                    }
-//                    if (upper != upperBound) {
-//                        toAddTo.add(new NumberInfo(upper + offset)); 
-//                    }
-//                }
-//            }
+            //            if (range_list != null) {
+            //                // add from each range
+            //                for (int i = 0; i < range_list.length; i += 2) {
+            //                    double lower = range_list[i];
+            //                    double upper = range_list[i+1];
+            //                    if (lower != lowerBound) {
+            //                        toAddTo.add(new NumberInfo(lower + offset)); 
+            //                    }
+            //                    if (upper != upperBound) {
+            //                        toAddTo.add(new NumberInfo(upper + offset)); 
+            //                    }
+            //                }
+            //            }
             if (!integersOnly) {
                 double average = (lowerBound + upperBound) / 2.0d;
                 toAddTo.add(new NumberInfo(average + offset));
-//                if (range_list != null) {
-//                    // we will just add one value from the middle
-//                    for (int i = 0; i < range_list.length; i += 2) {
-//                        double lower = range_list[i];
-//                        double upper = range_list[i+1];
-//                        toAddTo.add(new NumberInfo((lower + upper) / 2.0d + offset)); 
-//                    }
-//                }
+                //                if (range_list != null) {
+                //                    // we will just add one value from the middle
+                //                    for (int i = 0; i < range_list.length; i += 2) {
+                //                        double lower = range_list[i];
+                //                        double upper = range_list[i+1];
+                //                        toAddTo.add(new NumberInfo((lower + upper) / 2.0d + offset)); 
+                //                    }
+                //                }
             }
         }
 
@@ -1095,6 +1125,9 @@ public class PluralRules implements Serializable {
             Map<String, String> ordered = new TreeMap<String, String>(KEYWORD_COMPARATOR);
             for (Rule rule : rules) {
                 String keyword = rule.getKeyword();
+                if (keyword.equals("other")) {
+                    continue;
+                }
                 String constraint = rule.getConstraint();
                 ordered.put(keyword, constraint);
             }
@@ -1145,8 +1178,10 @@ public class PluralRules implements Serializable {
             return a;
         }
     }
-    
-    static final int[] TENS = {1, 10, 100, 1000};
+
+    private static final int[] TENS = {1, 10, 100, 1000, 10000, 100000, 1000000};
+
+    private static final int LIMIT_FRACTION_SAMPLES = 3;
 
     private Set<NumberInfo> fractions(Set<NumberInfo> original) {
         Set<NumberInfo> toAddTo = new HashSet<NumberInfo>();
@@ -1156,23 +1191,50 @@ public class PluralRules implements Serializable {
             result.add((int)base1.intValue);
         }
         List<Integer> ints = new ArrayList<Integer>(result);
+        Set<String> keywords = new HashSet<String>();
 
         for (int j = 0; j < ints.size(); ++j) {
             Integer base = ints.get(j);
-            Integer fract = ints.get((j == 0 ? ints.size() : j) -1);
-            for (int visibleFractions = 1; visibleFractions < 3; ++visibleFractions) {
-                for (int i = 1; i <= visibleFractions; ++i) {
-                    // with visible fractions = 3, and fract = 1, then we should get x.10, 0.01
-                    // with visible fractions = 3, and fract = 15, then we should get x.15, x.15
-                    if (fract >= TENS[i]) {
-                        continue;
+            String keyword = select(base);
+            if (keywords.contains(keyword)) {
+                continue;
+            }
+            keywords.add(keyword);
+            toAddTo.add(new NumberInfo(base,1)); // add .0
+            toAddTo.add(new NumberInfo(base,2)); // add .00
+            Integer fract = getDifferentCategory(ints, keyword);
+            if (fract >= TENS[LIMIT_FRACTION_SAMPLES-1]) { // make sure that we always get the value
+                toAddTo.add(new NumberInfo(base + "." + fract));
+            } else {
+                for (int visibleFractions = 1; visibleFractions < LIMIT_FRACTION_SAMPLES; ++visibleFractions) {
+                    for (int i = 1; i <= visibleFractions; ++i) {
+                        // with visible fractions = 3, and fract = 1, then we should get x.10, 0.01
+                        // with visible fractions = 3, and fract = 15, then we should get x.15, x.15
+                        if (fract >= TENS[i]) {
+                            continue;
+                        }
+                        toAddTo.add(new NumberInfo(base + fract/(double)TENS[i], visibleFractions));
                     }
-                    NumberInfo combo = new NumberInfo(base + fract/(double)TENS[i], visibleFractions);
-                    toAddTo.add(combo);
                 }
             }
         }
         return toAddTo;
+    }
+
+    /**
+     * @param ints
+     * @param base
+     * @return
+     */
+    private Integer getDifferentCategory(List<Integer> ints, String keyword) {
+        for (int i = ints.size() - 1; i >= 0; --i) {
+            Integer other = ints.get(i);
+            String keywordOther = select(other);
+            if (!keywordOther.equals(keyword)) {
+                return other;
+            }
+        }
+        return 37;
     }
 
     private boolean addConditional(Set<NumberInfo> toAddTo, Set<NumberInfo> others, double trial) {
@@ -1307,7 +1369,7 @@ public class PluralRules implements Serializable {
      * @deprecated This API is ICU internal only.
      */
     public String select(NumberInfo sample) {
-        return rules.select(new NumberInfo(sample.source, sample.visibleFractionDigitCount, sample.fractionalDigits));
+        return rules.select(sample);
     }
 
     /**
@@ -1472,65 +1534,67 @@ public class PluralRules implements Serializable {
                 addRelation(foundKeywords, keyword, s);
             }
             main:
-            if (foundKeywords.size() != keywords.size()) {
-                for (int i = 1; i < 1000; ++i) {
-                    boolean done = addIfNotPresent(i, mentioned, foundKeywords);
-                    if (done) break main;
+                if (foundKeywords.size() != keywords.size()) {
+                    for (int i = 1; i < 1000; ++i) {
+                        boolean done = addIfNotPresent(i, mentioned, foundKeywords);
+                        if (done) break main;
+                    }
+                    // if we are not done, try tenths
+                    for (int i = 10; i < 1000; ++i) {
+                        boolean done = addIfNotPresent(i/10d, mentioned, foundKeywords);
+                        if (done) break main;
+                    }
+                    System.out.println("Failed to find sample for each keyword: " + foundKeywords + "\n\t" + rules + "\n\t" + mentioned);
                 }
-                // if we are not done, try tenths
-                for (int i = 10; i < 1000; ++i) {
-                    boolean done = addIfNotPresent(i/10d, mentioned, foundKeywords);
-                    if (done) break main;
-                }
-                System.out.println("Failed to find sample for each keyword: " + foundKeywords + "\n\t" + rules + "\n\t" + mentioned);
-            }
             mentioned.add(new NumberInfo(0)); // always there
             mentioned.add(new NumberInfo(1)); // always there
             mentioned.add(new NumberInfo(2)); // always there
+            mentioned.add(new NumberInfo(0.1,1)); // always there
+            mentioned.add(new NumberInfo(1.99,2)); // always there
             mentioned.addAll(fractions(mentioned));
-//            Set<NumberInfo> toAddTo = mentioned;
-//            {
-//                // once done, manufacture values for the OTHER case
-//                int otherCount = 2;
-//                for (int i = 0; i < 1000; ++i) {
-//                }
-//                NumberInfo last = null;
-//                Set<NumberInfo> others = new LinkedHashSet<NumberInfo>();
-//                for (NumberInfo s : toAddTo) {
-//                    double trial;
-//                    if (last == null) {
-//                        trial = s.source-0.5;
-//                    } else {
-//                        double diff = s.source - last.source;
-//                        if (diff > 1.0d) {
-//                            trial = Math.floor(s.source);
-//                            if (trial == s.source) {
-//                                --trial;
-//                            }
-//                        } else {
-//                            trial = (s.source + last.source) / 2;
-//                        }                     
-//                    }
-//                    if (trial >= 0) {
-//                        addConditional(toAddTo, others, trial);
-//                    }
-//                    last = s;
-//                }
-//                double trial = last == null ? 0 : last.source;
-//                double fraction = 0;
-//                while (otherCount > 0) {
-//                    if (addConditional(toAddTo, others, trial = trial * 2 + 1 + fraction)) {
-//                        --otherCount;
-//                    }
-//                    fraction += 0.125;
-//                }
-//                toAddTo.addAll(others);
-//                others.clear();
-//                toAddTo.addAll(fractions(toAddTo, others));
-//
-//            }
+            //            Set<NumberInfo> toAddTo = mentioned;
+            //            {
+            //                // once done, manufacture values for the OTHER case
+            //                int otherCount = 2;
+            //                for (int i = 0; i < 1000; ++i) {
+            //                }
+            //                NumberInfo last = null;
+            //                Set<NumberInfo> others = new LinkedHashSet<NumberInfo>();
+            //                for (NumberInfo s : toAddTo) {
+            //                    double trial;
+            //                    if (last == null) {
+            //                        trial = s.source-0.5;
+            //                    } else {
+            //                        double diff = s.source - last.source;
+            //                        if (diff > 1.0d) {
+            //                            trial = Math.floor(s.source);
+            //                            if (trial == s.source) {
+            //                                --trial;
+            //                            }
+            //                        } else {
+            //                            trial = (s.source + last.source) / 2;
+            //                        }                     
+            //                    }
+            //                    if (trial >= 0) {
+            //                        addConditional(toAddTo, others, trial);
+            //                    }
+            //                    last = s;
+            //                }
+            //                double trial = last == null ? 0 : last.source;
+            //                double fraction = 0;
+            //                while (otherCount > 0) {
+            //                    if (addConditional(toAddTo, others, trial = trial * 2 + 1 + fraction)) {
+            //                        --otherCount;
+            //                    }
+            //                    fraction += 0.125;
+            //                }
+            //                toAddTo.addAll(others);
+            //                others.clear();
+            //                toAddTo.addAll(fractions(toAddTo, others));
+            //
+            //            }
             for (NumberInfo s : mentioned) {
-                String keyword = select(s.source, s.visibleFractionDigitCount, s.fractionalDigits);
+                String keyword = select(s);
                 Set<NumberInfo> list = sampleFractionMap.get(keyword);
                 if (list == null) {
                     list = new LinkedHashSet<NumberInfo>(); // will be sorted because the iteration is
@@ -1675,12 +1739,21 @@ public class PluralRules implements Serializable {
             return false;
         }
 
-        int limit = Math.max(getRepeatLimit(), rhs.getRepeatLimit());
-        for (int i = 0; i < limit * 2; ++i) {
-            if (!select(i).equals(rhs.select(i))) {
-                return false;
+        for (String keyword : rhs.getKeywords()) {
+            String rules2 = getRules(keyword);
+            String rules3 = rhs.getRules(keyword);
+            if (rules2 != rules3) {
+                if (rules2 == null || !rules2.equals(rules3)) {
+                    return false;
+                }
             }
         }
+        //        int limit = Math.max(getRepeatLimit(), rhs.getRepeatLimit());
+        //        for (int i = 0; i < limit * 2; ++i) {
+        //            if (!select(i).equals(rhs.select(i))) {
+        //                return false;
+        //            }
+        //        }
         return true;
     }
 
@@ -1806,5 +1879,22 @@ public class PluralRules implements Serializable {
      */
     public String getRules(String keyword) {
         return rules.getRules(keyword);
+    }
+
+    private void writeObject(
+            ObjectOutputStream out)
+                    throws IOException {
+        throw new NotSerializableException();
+    }
+    private void readObject(ObjectInputStream in
+            ) throws IOException, ClassNotFoundException {
+        throw new NotSerializableException();
+    }
+    private void readObjectNoData( 
+            ) throws ObjectStreamException {
+        throw new NotSerializableException();
+    }
+    private Object writeReplace() throws ObjectStreamException {
+        return new PluralRulesSerialProxy(toString());
     }
 }
