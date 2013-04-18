@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp. 1998-2008 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2013 - All Rights Reserved
  *
  */
 
@@ -16,18 +16,21 @@
 U_NAMESPACE_BEGIN
 
 GlyphIterator::GlyphIterator(LEGlyphStorage &theGlyphStorage, GlyphPositionAdjustments *theGlyphPositionAdjustments, le_bool rightToLeft, le_uint16 theLookupFlags,
-                             FeatureMask theFeatureMask, const GlyphDefinitionTableHeader *theGlyphDefinitionTableHeader)
+                             FeatureMask theFeatureMask, const LEReferenceTo<GlyphDefinitionTableHeader> &theGlyphDefinitionTableHeader)
   : direction(1), position(-1), nextLimit(-1), prevLimit(-1),
     glyphStorage(theGlyphStorage), glyphPositionAdjustments(theGlyphPositionAdjustments),
     srcIndex(-1), destIndex(-1), lookupFlags(theLookupFlags), featureMask(theFeatureMask), glyphGroup(0),
-    glyphClassDefinitionTable(NULL), markAttachClassDefinitionTable(NULL)
+    glyphClassDefinitionTable(), markAttachClassDefinitionTable()
 
 {
+  LEErrorCode success = LE_NO_ERROR; // TODO
     le_int32 glyphCount = glyphStorage.getGlyphCount();
 
-    if (theGlyphDefinitionTableHeader != NULL) {
-        glyphClassDefinitionTable = theGlyphDefinitionTableHeader->getGlyphClassDefinitionTable();
-        markAttachClassDefinitionTable = theGlyphDefinitionTableHeader->getMarkAttachClassDefinitionTable();
+    if (theGlyphDefinitionTableHeader.isValid()) {
+      glyphClassDefinitionTable = theGlyphDefinitionTableHeader
+        -> getGlyphClassDefinitionTable(theGlyphDefinitionTableHeader, success);
+      markAttachClassDefinitionTable = theGlyphDefinitionTableHeader
+        ->getMarkAttachClassDefinitionTable(theGlyphDefinitionTableHeader, success);
     }
 
     nextLimit = glyphCount;
@@ -355,6 +358,7 @@ void GlyphIterator::setCursiveGlyph()
 
 le_bool GlyphIterator::filterGlyph(le_uint32 index) const
 {
+    LEErrorCode success = LE_NO_ERROR;
     LEGlyphID glyphID = glyphStorage[index];
     le_int32 glyphClass = gcdNoGlyphClass;
 
@@ -362,8 +366,8 @@ le_bool GlyphIterator::filterGlyph(le_uint32 index) const
         return TRUE;
     }
 
-    if (glyphClassDefinitionTable != NULL) {
-        glyphClass = glyphClassDefinitionTable->getGlyphClass(glyphID);
+    if (glyphClassDefinitionTable.isValid()) {
+      glyphClass = glyphClassDefinitionTable->getGlyphClass(glyphClassDefinitionTable, glyphID, success);
     }
 
     switch (glyphClass)
@@ -385,8 +389,9 @@ le_bool GlyphIterator::filterGlyph(le_uint32 index) const
 
         le_uint16 markAttachType = (lookupFlags & lfMarkAttachTypeMask) >> lfMarkAttachTypeShift;
 
-        if ((markAttachType != 0) && (markAttachClassDefinitionTable != NULL)) {
-            return markAttachClassDefinitionTable->getGlyphClass(glyphID) != markAttachType;
+        if ((markAttachType != 0) && (markAttachClassDefinitionTable.isValid())) {
+          return markAttachClassDefinitionTable
+            -> getGlyphClass(markAttachClassDefinitionTable, glyphID, success) != markAttachType;
         }
 
         return FALSE;
@@ -436,6 +441,7 @@ le_bool GlyphIterator::nextInternal(le_uint32 delta)
     while (newPosition != nextLimit && delta > 0) {
         do {
             newPosition += direction;
+            //fprintf(stderr,"%s:%d:%s: newPosition = %d, delta = %d\n", __FILE__, __LINE__, __FUNCTION__, newPosition, delta);
         } while (newPosition != nextLimit && filterGlyph(newPosition));
 
         delta -= 1;
@@ -443,6 +449,7 @@ le_bool GlyphIterator::nextInternal(le_uint32 delta)
 
     position = newPosition;
 
+    //fprintf(stderr,"%s:%d:%s: exit position = %d, delta = %d\n", __FILE__, __LINE__, __FUNCTION__, position, delta);
     return position != nextLimit;
 }
 
@@ -458,6 +465,7 @@ le_bool GlyphIterator::prevInternal(le_uint32 delta)
     while (newPosition != prevLimit && delta > 0) {
         do {
             newPosition -= direction;
+            //fprintf(stderr,"%s:%d:%s: newPosition = %d, delta = %d\n", __FILE__, __LINE__, __FUNCTION__, newPosition, delta);
         } while (newPosition != prevLimit && filterGlyph(newPosition));
 
         delta -= 1;
@@ -465,6 +473,7 @@ le_bool GlyphIterator::prevInternal(le_uint32 delta)
 
     position = newPosition;
 
+    //fprintf(stderr,"%s:%d:%s: exit position = %d, delta = %d\n", __FILE__, __LINE__, __FUNCTION__, position, delta);
     return position != prevLimit;
 }
 
