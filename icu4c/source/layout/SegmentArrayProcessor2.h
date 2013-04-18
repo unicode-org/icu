@@ -25,9 +25,9 @@ class LEGlyphStorage;
 class SegmentArrayProcessor2 : public NonContextualGlyphSubstitutionProcessor2
 {
 public:
-    virtual void process(LEGlyphStorage &glyphStorage);
+    virtual void process(LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
-    SegmentArrayProcessor2(const MorphSubtableHeader2 *morphSubtableHeader);
+    SegmentArrayProcessor2(const LEReferenceTo<MorphSubtableHeader2> &morphSubtableHeader, LEErrorCode &success);
 
     virtual ~SegmentArrayProcessor2();
 
@@ -49,7 +49,7 @@ private:
     SegmentArrayProcessor2();
 
 protected:
-    const SegmentArrayLookupTable *segmentArrayLookupTable;
+    LEReferenceTo<SegmentArrayLookupTable> segmentArrayLookupTable;
 
 };
 

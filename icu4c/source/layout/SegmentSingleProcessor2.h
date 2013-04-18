@@ -25,9 +25,9 @@ class LEGlyphStorage;
 class SegmentSingleProcessor2 : public NonContextualGlyphSubstitutionProcessor2
 {
 public:
-    virtual void process(LEGlyphStorage &glyphStorage);
+    virtual void process(LEGlyphStorage &glyphStorage, LEErrorCode &success);
 
-    SegmentSingleProcessor2(const MorphSubtableHeader2 *morphSubtableHeader);
+    SegmentSingleProcessor2(const LEReferenceTo<MorphSubtableHeader2> &morphSubtableHeader, LEErrorCode &success);
 
     virtual ~SegmentSingleProcessor2();
 
@@ -49,7 +49,7 @@ private:
     SegmentSingleProcessor2();
 
 protected:
-    const SegmentSingleLookupTable *segmentSingleLookupTable;
+    LEReferenceTo<SegmentSingleLookupTable> segmentSingleLookupTable;
 
 };
 
