@@ -1,7 +1,7 @@
 
 /*
  *
- * (C) Copyright IBM Corp. 1998-2012 - All Rights Reserved
+ * (C) Copyright IBM Corp. 1998-2013 - All Rights Reserved
  *
  */
 
@@ -156,6 +156,10 @@ public:
      *
      * Subclasses which represent composite fonts should always return <code>NULL</code>.
      *
+     * Note that implementing this function does not allow for range checking. 
+     * Subclasses that desire the safety of range checking must implement the
+     * variation which has a length parameter.
+     *
      * @param tableTag - the four byte table tag. (e.g. 'cmap') 
      *
      * @return the address of the table in memory, or <code>NULL</code>
@@ -175,6 +179,8 @@ public:
      * Subclasses which represent composite fonts should always return <code>NULL</code>.
      * 
      * This version sets a length, for range checking.
+     * Note that range checking can only be accomplished if this function is 
+     * implemented in subclasses.
      *
      * @param tableTag - the four byte table tag. (e.g. 'cmap') 
      * @param length - ignored on entry, on exit will be the length of the table if known, or -1 if unknown.
