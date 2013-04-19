@@ -1,6 +1,6 @@
 <!--
 *******************************************************************************
-* Copyright (C) 2009-2012, International Business Machines Corporation and    *
+* Copyright (C) 2009-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
@@ -104,17 +104,14 @@
         <echo message="${full.locale.names}" file="${res.dir}/fullLocaleNames.lst"/>
     </target>
 
-    <!-- fail if findbugs.home is not given or the findbugs task is
-         unavailable -->
-    <target name="_findbugs_check">
-        <fail message="findbugs.home must be defined.">
-            <condition>
-                <not>
-                    <available file="${findbugs.home}" type="dir" />
-                </not>
-            </condition>
-        </fail>
-        <fail message="FindBugs task not found">
+    <!-- FindBugs targets -->
+    <target name="_findbugs_init">
+        <property name="findbugs.home" value="${env.FINDBUGS_HOME}"/>
+        <echo message="----------------------------------------------------"/>
+        <echo message="findbugs.home:  ${findbugs.home}"/>
+        <echo message="----------------------------------------------------"/>
+
+        <fail message="FindBugs task not found. Set environment variable FINDBUGS_HOME properly.">
             <condition>
                 <not>
                     <or>
@@ -124,28 +121,41 @@
                 </not>
             </condition>
         </fail>
-    </target>
-
-    <!-- if findbugs-ant.jar is already on the path, just define the task -->
-    <target name="_findbugs_task_available" depends="_findbugs_check" if="_findbugs.task.available">
-        <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" />
-    </target>
-
-    <!-- otherwise, specify findbugs-ant.jar on the path -->
-    <target name="_findbugs_task_unavailable" depends="_findbugs_check" unless="_findbugs.task.available">
         <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
-            classpath="${findbugs.home}/lib/findbugs-ant.jar" />
+            classpath="${findbugs.home}/lib/findbugs-ant.jar"/>
+
+        <property name="aux.classpath" value="${toString:javac.classpathref}"/>
+        <condition property="empty.aux.classpath">
+            <length string="${aux.classpath}" when="eq" length="0"/>
+        </condition>
     </target>
 
-    <target name="_findbugs_task" depends="_findbugs_task_available, _findbugs_task_unavailable" />
-
-    <target name="@findbugs" depends="_findbugs_task, @build-all">
-        <findbugs home="${findbugs.home}" output="html" outputFile="${out.dir}/fb-${ant.project.name}.html">
-            <sourcePath path="${src.dir}" />
-            <class location="${jar.dir}/${jar.name}" />
-            <auxClasspath path="${toString:javac.classpathref}" />
+    <target name="_findbugs_empty_aux_classpath" if="empty.aux.classpath">
+        <findbugs
+            home="${findbugs.home}"
+            output="html"
+            outputFile="${out.dir}/fb-${ant.project.name}.html"
+            excludeFilter="findbugs-exclude.xml">
+ 
+            <sourcePath path="${src.dir}"/>
+            <class location="${jar.dir}/${jar.name}"/>
         </findbugs>
     </target>
+
+    <target name="_findbugs_non_empty_aux_classpath" unless="empty.aux.classpath">
+        <findbugs
+            home="${findbugs.home}"
+            output="html"
+            outputFile="${out.dir}/fb-${ant.project.name}.html"
+            excludeFilter="findbugs-exclude.xml">
+ 
+            <sourcePath path="${src.dir}"/>
+            <class location="${jar.dir}/${jar.name}"/>
+            <auxClasspath path="${aux.classpath}"/>
+        </findbugs>
+    </target>
+
+    <target name="@findbugs" depends="_findbugs_init, @build-all, _findbugs_empty_aux_classpath, _findbugs_non_empty_aux_classpath"/>
 
     <!-- Dependencies -->
 
