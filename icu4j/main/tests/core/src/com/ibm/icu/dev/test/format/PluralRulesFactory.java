@@ -65,8 +65,9 @@ public abstract class PluralRulesFactory {
         static Relation<ULocale,NumberInfo> EXTRA_SAMPLES = Relation.of(new HashMap<ULocale,Set<NumberInfo>>(), HashSet.class); 
         static {
             String[][] overrides = {
-                    {"bn", ""},
-                    {"en,ca,de,et,fi,gl,it,nl,pt,sv,sw,ta,te,ur", "one: j is 1"},
+                    {"bn", "one: n within 0..1"},
+                    {"en,ca,de,et,fi,gl,it,nl,sv,sw,ta,te,ur", "one: j is 1"},
+                    {"pt", "one: n is 1 or f is 1"},
                     {"cs,sk", "one: j is 1;  few: j in 2..4; many: v is not 0"},
                     {"cy", "one: n is 1;  two: n is 2;  few: n is 3;  many: n is 6"},
                     //{"el", "one: j is 1 or i is 0 and f is 1"},
@@ -78,11 +79,10 @@ public abstract class PluralRulesFactory {
 //                    {"hr", "one: j mod 10 is 1 and j mod 100 is not 11;  few: j mod 10 in 2..4 and j mod 100 not in 12..14;  many: j mod 10 is 0 or j mod 10 in 5..9 or j mod 100 in 11..14"},
                     {"lv", "zero: n mod 10 is 0" +
                             " or n mod 10 in 11..19" +
-                            " or v in 1..6 and f is not 0 and f mod 10 is 0" +
-                            " or v in 1..6 and f mod 10 in 11..19;" +
+                            " or v is 2 and f mod 10 in 11..19;" +
                             "one: n mod 10 is 1 and n mod 100 is not 11" +
-                            " or v in 1..6 and f mod 10 is 1 and f mod 100 is not 11" +
-                            " or v not in 0..6 and f mod 10 is 1"},
+                            " or v is 2 and f mod 10 is 1 and f mod 100 is not 11" +
+                            " or v is not 2 and f mod 10 is 1"},
 //                    {"lv", "zero: n mod 10 is 0" +
 //                            " or n mod 10 in 11..19" +
 //                            " or v in 1..6 and f is not 0 and f mod 10 is 0" +
@@ -112,7 +112,7 @@ public abstract class PluralRulesFactory {
                             //                            " or v in 1..6 and f mod 10 in 5..9" +
                             //                            " or v in 1..6 and f mod 100 in 11..14" +
                             //                    " or v not in 0..6 and f mod 10 in 5..9"
-                    {"ro", "one: j is 1; few: n is 0 or n is not 1 and n mod 100 in 1..19"},
+                    {"ro", "one: j is 1; few: v is not 0 or n is 0 or n is not 1 and n mod 100 in 1..19"},
                     {"ru", "one: j mod 10 is 1 and j mod 100 is not 11;" +
                             " many: j mod 10 is 0 or j mod 10 in 5..9 or j mod 100 in 11..14"
 //                            + "; many: j mod 10 is 0 or j mod 10 in 5..9 or j mod 100 in 11..14"
@@ -120,6 +120,7 @@ public abstract class PluralRulesFactory {
                             {"uk", "one: j mod 10 is 1 and j mod 100 is not 11;  " +
                             		"few: j mod 10 in 2..4 and j mod 100 not in 12..14;  " +
                             		"many: j mod 10 is 0 or j mod 10 in 5..9 or j mod 100 in 11..14"},
+                                    {"zu", "one: n within 0..1"},
             };
             for (String[] pair : overrides) {
                 for (String locale : pair[0].split("\\s*,\\s*")) {
