@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -879,6 +879,8 @@ public class ICUServiceTest extends TestFmwk
     // ICURWLock
 
     ICURWLock rwlock = new ICURWLock();
+    rwlock.resetStats();
+
     rwlock.acquireRead();
     rwlock.releaseRead();
 
@@ -896,7 +898,7 @@ public class ICUServiceTest extends TestFmwk
         rwlock.releaseRead();
         errln("no error thrown");
     }
-    catch (IllegalStateException e) {
+    catch (Exception e) {
         logln("OK: " + e.getMessage());
     }
 
@@ -904,7 +906,7 @@ public class ICUServiceTest extends TestFmwk
         rwlock.releaseWrite();
         errln("no error thrown");
     }
-    catch (IllegalStateException e) {
+    catch (Exception e) {
         logln("OK: " + e.getMessage());
     }
 

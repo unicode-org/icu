@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2010, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -371,6 +371,7 @@ public class ICUServiceThreadTest extends TestFmwk
             stableService = new ICULocaleService();
             registerFactories(stableService, getFactoryCollection(50));
         }
+        if (PRINTSTATS) stableService.stats();  // Enable the stats collection
         return stableService;
     }
     private ICUService stableService;
@@ -413,6 +414,7 @@ public class ICUServiceThreadTest extends TestFmwk
     // run register/unregister on a service
     public void Test03_ConcurrentRegUnreg() {
         ICUService service = new ICULocaleService();
+        if (PRINTSTATS) service.stats();    // Enable the stats collection
         for (int i = 0; i < 5; ++i) {
             new RegisterFactoryThread("[" + i + "]", service, 0, this).start();
         }
@@ -425,6 +427,7 @@ public class ICUServiceThreadTest extends TestFmwk
 
     public void Test04_WitheringService() {
         ICUService service = new ICULocaleService();
+        if (PRINTSTATS) service.stats();    // Enable the stats collection
 
         Collection fc = getFactoryCollection(50);
         registerFactories(service, fc);
@@ -452,6 +455,7 @@ public class ICUServiceThreadTest extends TestFmwk
     // run for ten seconds
     public void Test05_ConcurrentEverything() {
         ICUService service = new ICULocaleService();
+        if (PRINTSTATS) service.stats();    // Enable the stats collection
 
         new RegisterFactoryThread("", service, 500, this).start();
 
