@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2001-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -959,8 +959,10 @@ public class ICUService extends ICUNotifier {
     }
 
     /**
-     * Return a string describing the statistics for this service.
-     * This also resets the statistics. Used for debugging purposes.
+     * When the statistics for this service is already enabled,
+     * return the log and resets he statistics.
+     * When the statistics is not enabled, this method enable
+     * the statistics. Used for debugging purposes.
      */
     public String stats() {
         ICURWLock.Stats stats = factoryLock.resetStats();
