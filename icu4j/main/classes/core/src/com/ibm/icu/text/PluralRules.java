@@ -382,9 +382,11 @@ public class PluralRules implements Serializable {
         public final long fractionalDigits;
         public final long intValue;
         public final boolean hasIntegerValue;
+        public final boolean isNegative;
 
         public NumberInfo(double n, int v, int f) {
-            source = n;
+            isNegative = n < 0;
+            source = isNegative ? -n : n;
             visibleFractionDigitCount = v;
             fractionalDigits = f;
             intValue = (long)n;
