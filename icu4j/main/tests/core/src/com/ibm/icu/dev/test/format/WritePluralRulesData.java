@@ -34,6 +34,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.dev.test.format.PluralRulesFactory.SamplePatterns;
 import com.ibm.icu.dev.test.format.PluralRulesTest.StandardPluralCategories;
 import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.dev.util.Relation;
@@ -55,14 +56,12 @@ public class WritePluralRulesData {
             args = new String[] {"rules"};
         }
         for (String arg : args) {
-            if (arg.equalsIgnoreCase("samples")) {
-                generateSamples(SampleStyle.modified);
-            } else if (arg.equalsIgnoreCase("original")) {
+            if (arg.equalsIgnoreCase("original")) {
                 generateSamples(SampleStyle.original);
             } else if (arg.startsWith("verify")) {
-                generateSamples(SampleStyle.verify);
-            } else if (arg.equalsIgnoreCase("rules")) {
                 showRules();
+                generateSamples(SampleStyle.samples);
+                generateSamples(SampleStyle.verify);
             } else if (arg.equalsIgnoreCase("oldSnap")) {
                 generateLOCALE_SNAPSHOT(PluralRulesFactory.NORMAL);
             } else if (arg.equalsIgnoreCase("newSnap")) {
@@ -79,172 +78,6 @@ public class WritePluralRulesData {
             "hi,hr,hu,hy,id,is,it,he,ja,ka,kk,km,kn,ko,ky,lo,lt,lv,mk,ml,mn,mr,ms,my,ne,nl,nb," +
             "pa,pl,ps,pt,ro,ru,si,sk,sl,sq,sr,sv,sw,ta,te,th,tr,uk,ur,uz,vi,zh,zu").split("\\s*,\\s*");
 
-    static String[][] SAMPLE_PATTERNS = {
-        {"af", "one", "{0} dag"},
-        {"af", "other", "{0} dae"},
-        {"am", "one", "{0} ቀን"},
-        {"am", "other", "{0} ቀናት"}, // fixed to 'other'
-        {"ar", "few", "{0} ساعات"},
-        {"ar", "many", "{0} ساعة"},
-        {"ar", "one", "ساعة"},
-        {"ar", "other", "{0} ساعة"},
-        {"ar", "two", "ساعتان"},
-        {"ar", "zero", "{0} ساعة"},
-        {"bg", "one", "{0} ден"},
-        {"bg", "other", "{0} дена"},
-        {"bn", "one", "সসে {0}টি আপেল নিয়ে সেটা খেল"},
-        {"bn", "other", "সসে {0}টি আপেল নিয়ে সেগুলি খেল"},
-        {"br", "few", "{0} deiz"},
-        {"br", "many", "{0} a zeizioù"},
-        {"br", "one", "{0} deiz"},
-        {"br", "other", "{0} deiz"},
-        {"br", "two", "{0} zeiz"},
-        {"ca", "one", "{0} dia"},
-        {"ca", "other", "{0} dies"},
-        {"cs", "few", "{0} dny"},
-        {"cs", "one", "{0} den"},
-        {"cs", "other", "{0} dní"},
-        {"cs", "many", "{0} dne"}, // added from spreadsheet
-        {"cy", "zero", "{0} cadair (f) {0} peint (m)"},
-        {"cy", "one", "{0} gadair (f) {0} peint (m)"},
-        {"cy", "two", "{0} gadair (f) {0} beint (m)"},
-        {"cy", "few", "{0} cadair (f) {0} pheint (m)"},
-        {"cy", "many", "{0} chadair (f) {0} pheint (m)"},
-        {"cy", "other", "{0} cadair (f) {0} peint (m)"},
-        {"da", "one", "{0} dag"},
-        {"da", "other", "{0} dage"},
-        {"de", "one", "{0} Tag"},
-        {"de", "other", "{0} Tage"},
-        {"dz", "other", "ཉིནམ་ {0} "},
-        {"el", "one", "{0} ημέρα"},
-        {"el", "other", "{0} ημέρες"},
-        {"es", "one", "{0} día"},
-        {"es", "other", "{0} días"},
-        {"et", "one", "{0} ööpäev"},
-        {"et", "other", "{0} ööpäeva"},
-        {"eu", "one", "Nire {0} lagunarekin nago"},
-        {"eu", "other", "Nire {0} lagunekin nago"},
-        {"fa", "other", "{0} روز"},
-        {"fi", "one", "{0} päivä"},
-        {"fi", "other", "{0} päivää"},
-        {"fil", "one", "sa {0} araw"},
-        {"fil", "other", "sa {0} (na) araw"},
-        {"fr", "one", "{0} jour"},
-        {"fr", "other", "{0} jours"},
-        {"gl", "one", "{0} día"},
-        {"gl", "other", "{0} días"},
-        {"gu", "one", "{0} અઠવાડિયું"},
-        {"gu", "other", "{0} અઠવાડિયા"},
-        {"he", "many", "{0} ימים"},
-        {"he", "one", " יום {0}"},
-        {"he", "other", "{0} ימים"},
-        {"he", "two", "יומיים"},
-        {"hi", "one", "{0} घंटा"},
-        {"hi", "other", "{0} घंटे"},
-        {"hr", "few", "za {0} mjeseca"},
-        {"hr", "many", "za {0} mjeseci"},
-        {"hr", "one", "za {0} mjesec"},
-        {"hr", "other", "za {0} mjeseci"},
-        {"hu", "other", "{0} nap"},
-        {"hy", "one", "այդ {0} ժամը"},
-        {"hy", "other", "այդ {0} ժամերը"},
-        {"id", "other", "{0} hari"},
-        {"is", "one", "{0} dagur"},
-        {"is", "other", "{0} dagar"},
-        {"it", "one", "{0} giorno"},
-        {"it", "other", "{0} giorni"},
-        {"ja", "other", "{0}日"},
-        {"km", "other", "{0} ថ្ងៃ"},
-        {"kn", "other", "{0} ದಿನಗಳು"},
-        {"ko", "other", "{0}일"},
-        {"lo", "other", "{0} ມື້"},
-        {"lt", "few", "{0} dienos"},
-        {"lt", "one", "{0} diena"},
-        {"lt", "other", "{0} dienų"},
-        {"lv", "one", "{0} diennakts"},
-        {"lv", "other", "{0} diennaktis"},
-        {"lv", "zero", "{0} diennakšu"},
-        {"ml", "one", "{0} വ്യക്തി"},
-        {"ml", "other", "{0} വ്യക്തികൾ"},
-        {"mr", "one", "{0} घर"},
-        {"mr", "other", "{0} घरे"},
-        {"ms", "other", "{0} hari"},
-        {"nb", "one", "{0} dag"},
-        {"nb", "other", "{0} dager"},
-        {"ne", "one", "तपाईंसँग {0} निमन्त्रणा छ"},
-        {"ne", "other", "तपाईँसँग {0} निमन्त्रणाहरू छन्"},
-        //        {"ne", "", "{0} दिन बाँकी छ ।"},
-        //        {"ne", "", "{0} दिन बाँकी छ ।"},
-        //        {"ne", "", "{0} दिन बाँकी छ ।"},
-        //        {"ne", "", "{0} जनाहरू पाहुना बाँकी छ ।"},
-        {"nl", "one", "{0} dag"},
-        {"nl", "other", "{0} dagen"},
-        {"pl", "few", "{0} miesiące"},
-        {"pl", "many", "{0} miesięcy"},
-        {"pl", "one", "{0} miesiąc"},
-        {"pl", "other", "{0} miesiąca"},
-        {"pt", "one", "{0} ponto"},
-        {"pt", "other", "{0} pontos"},
-//        {"pt_PT", "one", "{0} dia"},
-//        {"pt_PT", "other", "{0} dias"},
-        {"ro", "few", "{0} zile"},
-        {"ro", "one", "{0} zi"},
-        {"ro", "other", "{0} de zile"},
-        {"ru", "few", "{0} года"},
-        {"ru", "many", "{0} лет"},
-        {"ru", "one", "{0} год"},
-        {"ru", "other", "{0} года"},
-        {"si", "other", "දින {0}ක්"},
-        {"sk", "few", "{0} dni"},
-        {"sk", "one", "{0} deň"},
-        {"sk", "other", "{0} dní"},
-        {"sk", "many", "{0} dňa"}, // added from spreadsheet
-        {"sl", "few", "{0} ure"},
-        {"sl", "one", "{0} ura"},
-        {"sl", "other", "{0} ur"},
-        {"sl", "two", "{0} uri"},
-        {"sr", "few", "{0} сата"},
-        {"sr", "many", "{0} сати"},
-        {"sr", "one", "{0} сат"},
-        {"sr", "other", "{0} сати"},
-        {"sv", "one", "om {0} dag"},
-        {"sv", "other", "om {0} dagar"},
-        {"sw", "one", "siku {0} iliyopita"},
-        {"sw", "other", "siku {0} zilizopita"},
-        {"ta", "one", "{0} நாள்"},
-        {"ta", "other", "{0} நாட்கள்"},
-        {"te", "one", "{0} రోజు"},
-        {"te", "other", "{0} రోజులు"},
-        {"th", "other", "{0} วัน"},
-        {"tr", "other", "{0} gün"},
-        {"uk", "few", "{0} дні"},
-        {"uk", "many", "{0} днів"},
-        {"uk", "one", "{0} день"},
-        {"uk", "other", "{0} дня"},
-        {"ur", "one", "{0} گھنٹہ"},
-        {"ur", "other", "{0} گھنٹے"},
-        {"vi", "other", "{0} ngày"},
-        {"zh", "other", "{0} 天"},
-        {"zh_Hant", "other", "{0} 日"},     
-        {"en", "one", "{0} day"},        // added from spreadsheet  
-        {"en", "other", "{0} days"},       // added from spreadsheet   
-        {"zu", "one", "{0} usuku"},     // added from spreadsheet
-        {"zu", "other", "{0} izinsuku"},          // added from spreadsheet
-    };
-
-    static final Map<ULocale, SamplePatterns> localeToSamplePatterns = new LinkedHashMap();
-    static {
-        for (String[] row : SAMPLE_PATTERNS) {
-            ULocale locale = new ULocale(row[0]);
-            String keyword = row[1];
-            String sample = row[2];
-            SamplePatterns samplePatterns = localeToSamplePatterns.get(locale);
-            if (samplePatterns == null) {
-                localeToSamplePatterns.put(locale, samplePatterns = new SamplePatterns());
-            }
-            samplePatterns.put(keyword, sample);
-        }
-    }
 
     static final String[][] ORIGINAL_SAMPLES = {
         {"af", "0, 0.00, 0.000, 0.001, 0.002, 0.01, 0.010, 0.011, 0.02, 0.1, 0.10, 0.11, 0.2, 1.0, 1.00, 1.000, 1.002, 1.010, 1.011, 1.02, 1.10, 1.11, 1.2, 2.0, 2.00, 2.000, 2.001, 2.01, 2.1"},
@@ -431,7 +264,9 @@ public class WritePluralRulesData {
         }
     }
 
-    public static void showRules() {
+    public static void showRules() throws IOException {
+        BufferedWriter writer = getWriter("all-" + SampleStyle.rules + ".tsv");
+
         if (true) {
             // for debugging
             PluralRules rules = PluralRulesFactory.ALTERNATE.forLocale(new ULocale("lv"));
@@ -515,11 +350,11 @@ public class WritePluralRulesData {
             }
             rulesToLocale.put(temp, locale.toString());
         }
-        System.out.println("Locales\tPC\tOld Rules\tOld Sample Numbers\tNew Rules\tNew Sample Numbers\tInt-Diff");
+        writer.write("Locales\tPC\tOld Rules\tOld Sample Numbers\tNew Rules\tNew Sample Numbers\tInt-Diff\n");
         for (Entry<Map<String, OldNewData>, Set<String>> entry : rulesToLocale.keyValuesSet()) {
             String localeList = CollectionUtilities.join(entry.getValue(), " ");
             for (Entry<String, OldNewData> keywordRulesSamples : entry.getKey().entrySet()) {
-                System.out.println(
+                writer.write(
                         localeList // locale
                         + "\t" + keywordRulesSamples.getKey() // keyword
                         + "\t" + keywordRulesSamples.getValue().get0() // rules
@@ -527,6 +362,7 @@ public class WritePluralRulesData {
                         + "\t" + keywordRulesSamples.getValue().get2() // rules
                         + "\t" + keywordRulesSamples.getValue().get3() // samples
                         + "\t" + keywordRulesSamples.getValue().get4() // int diff
+                        + "\n"
                         );
                 localeList = "";
             }
@@ -540,6 +376,7 @@ public class WritePluralRulesData {
                 System.out.println("{\"" + locale.toString() + "\", \"" + oldRules.toString() + "\"},");
             }
         }
+        writer.close();
     }
 
     /**
@@ -575,85 +412,56 @@ public class WritePluralRulesData {
 
     static final Set<String> NEW_LOCALES = new HashSet(Arrays.asList("az,ka,kk,ky,mk,mn,my,pa,ps,sq,uz".split("\\s*,\\s*")));
 
-    static class SamplePatterns {
-        final Map<String,String> keywordToPattern = new TreeMap(PluralRules.KEYWORD_COMPARATOR);
-        final Map<String,String> keywordToErrors = new HashMap();
-        public void put(String keyword, String sample) {
-            if (keywordToPattern.containsKey(keyword)) {
-                throw new IllegalArgumentException("Duplicate keyword <" + keyword + ">");
-            } else {
-                keywordToPattern.put(keyword, sample.replace(" ", "\u00A0"));
-            }
-        }
-        public void checkErrors(Set<String> set) {
-            final Map<String,String> skeletonToKeyword = new HashMap();
-            for (String keyword : set) {
-                String error = "";
-                String sample = keywordToPattern.get(keyword);
-                String skeleton = sample.replace(" ", "").replaceAll("\\s*\\{0\\}\\s*", "");
-                String oldSkeletonKeyword = skeletonToKeyword.get(skeleton);
-                if (oldSkeletonKeyword != null) {
-                    if (error.length() != 0) {
-                        error += ", ";
-                    }
-                    error += "Duplicate keyword skeleton <" + keyword + ", " + skeleton + ">, same as for: <" + oldSkeletonKeyword + ">";
-                } else {
-                    skeletonToKeyword.put(skeleton, keyword);
-                }
-                if (error.length() == 0) {
-                    keywordToErrors.put(keyword, "");
-                } else {
-                    keywordToErrors.put(keyword, "\tERROR: " + error);
-                }
-            }
-        }
-    }
 
-    enum SampleStyle {original, modified, verify}
+    enum SampleStyle {original, samples, rules, verify}
 
     static void generateSamples(SampleStyle sampleStyle) throws IOException {
         LinkedHashSet<ULocale> skippedLocales = new LinkedHashSet<ULocale>();
-        System.out.println("Locale\tPC\tPattern\tSamples\tRules\tErrors (" + sampleStyle + ")");
         BufferedWriter writer = null;
+        if (sampleStyle != SampleStyle.verify) {
+            writer = getWriter("all-" + sampleStyle + ".tsv");
+            //writer.write("Plural Category\tEnglish Number\tFormatted Sample\tAcceptable?\tReplacement\n");
+            writer.write("Locale\tPC\tPattern\tSamples\tRules\tErrors (" + sampleStyle + ")\n");
+        }
+
         for (String localeString : FOCUS_LOCALES) {
             ULocale locale = new ULocale(localeString);
             if (sampleStyle == SampleStyle.verify) {
-                String fileName = TARGETDIR + "fraction-" + locale + ".tsv";
-                System.out.println(new File(fileName).getCanonicalPath());
-                writer = new BufferedWriter(
-                        new OutputStreamWriter(
-                                new FileOutputStream(fileName), Charset.forName("UTF-8")));
+                writer = getWriter("fraction-" + locale + ".tsv");
                 writer.write("Plural Category\tEnglish Number\tFormatted Sample\tAcceptable?\tReplacement\n");
             }
 
             NumberFormat nf = NumberFormat.getInstance(new ULocale(locale.toString()+"@numbers=latn"));
             PluralRules newRules = PluralRulesFactory.ALTERNATE.forLocale(locale);
-            SamplePatterns samplePatterns = localeToSamplePatterns.get(locale);
-            if (samplePatterns == null && NEW_LOCALES.contains(localeString)) {
-                skippedLocales.add(locale);
-                continue;
+            SamplePatterns samplePatterns = PluralRulesFactory.getLocaleToSamplePatterns().get(locale);
+            if (samplePatterns == null) {
+                samplePatterns = PluralRulesFactory.getLocaleToSamplePatterns().get(new ULocale("und"));
             }
+
+            //            if (samplePatterns == null && NEW_LOCALES.contains(localeString)) {
+            //                skippedLocales.add(locale);
+            //                continue;
+            //            }
             // check for errors. 
             samplePatterns.checkErrors(newRules.getKeywords());
             // now print.
             for (String keyword : newRules.getKeywords()) {
-                if (sampleStyle != SampleStyle.modified) {
-                    Collection<NumberInfo> samples = getSamples(newRules, keyword, 
-                            sampleStyle == SampleStyle.verify ? null : locale);
+                if (sampleStyle != SampleStyle.samples) {
+                    Collection<NumberInfo> samples = getSamples(newRules, keyword, locale, sampleStyle);
                     for (NumberInfo sample : samples) {
                         String pattern = samplePatterns.keywordToPattern.get(keyword);
                         String str = format(pattern, nf, sample);
                         if (sampleStyle == SampleStyle.verify) {
                             writer.write(keyword + "\t'" + sample + "\t" + str + "\n");
                         } else {
-                            System.out.println(locale + "\t" + keyword + "\t" + sample + "\t" + str);
+                            writer.write(locale + "\t" + keyword + "\t" + sample + "\t" + str + "\n");
                         }
                     }
                     continue;
                 }
                 String pattern = null;
                 String error = null;
-                Collection<NumberInfo> samples = getSamples(newRules, keyword, null);
+                Collection<NumberInfo> samples = getSamples(newRules, keyword, locale, sampleStyle);
                 NumberInfo first = samples.iterator().next();
                 String sample = "??? " + first.toString();
                 String rule = "";
@@ -679,32 +487,64 @@ public class WritePluralRulesData {
                         sample = buffer.toString();
                     }
                 }
-                System.out.println(locale + "\t" + keyword
+                writer.write(locale + "\t" + keyword
                         + "\t" + pattern
                         + "\t" + sample
                         + "\t" + rule
                         + error
+                        + "\n"
                         );
             }
             if (sampleStyle == SampleStyle.verify) {
                 writer.close();
             }
         }
-        System.out.println("SKIP:\t\t\t" + skippedLocales);
+        if (sampleStyle != SampleStyle.verify) {
+            if (skippedLocales.size() != 0) {
+                writer.write("SKIP:\t\t\t" + skippedLocales + "\n");
+            }
+            writer.close();
+        }
     }
 
-    private static Collection<NumberInfo> getSamples(PluralRules newRules, String keyword, ULocale locale) {
-        if (locale == null) {
-            return newRules.getFractionSamples(keyword);
+    private static BufferedWriter getWriter(String filename) {
+        try {
+            BufferedWriter writer;
+            String fileName = TARGETDIR + filename;
+            System.out.println(new File(fileName).getCanonicalPath());
+            writer = new BufferedWriter(
+                    new OutputStreamWriter(
+                            new FileOutputStream(fileName), Charset.forName("UTF-8")));
+            return writer;
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException(e);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
         }
-        Collection<NumberInfo> result = new ArrayList();
-        List<NumberInfo> originals = LOCALE_TO_ORIGINALS.get(locale);
-        if (originals == null) {
-            return newRules.getFractionSamples(keyword);
+    }
+
+    private static Collection<NumberInfo> getSamples(PluralRules newRules, String keyword, ULocale locale, SampleStyle sampleStyle) {
+        Set<NumberInfo> result = new TreeSet();
+        Collection<NumberInfo> extras;
+        if (sampleStyle == SampleStyle.original) {
+            extras = LOCALE_TO_ORIGINALS.get(locale);
+            if (extras != null) {
+                for (NumberInfo s : extras) {
+                    if (keyword.equals(newRules.select(s))) {
+                        result.add(s);
+                    }
+                }
+            }
         }
-        for (NumberInfo s : originals) {
-            if (keyword.equals(newRules.select(s))) {
-                result.add(s);
+        extras = PluralRulesFactory.getExtraSamples().get(locale);
+        if (extras == null) {
+            extras = PluralRulesFactory.getExtraSamples().get(new ULocale("und"));
+        }
+        if (extras != null) {
+            for (NumberInfo s : extras) {
+                if (keyword.equals(newRules.select(s))) {
+                    result.add(s);
+                }
             }
         }
         if (result.size() == 0) {
