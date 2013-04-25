@@ -101,7 +101,7 @@ import com.ibm.icu.lang.UCharacter;
  * next() or vice versa, reset(), setOffset() or setText() has to be called first
  * to reset the status, shifting current position to either the end or the start of
  * the string (reset() or setText()), or the specified position (setOffset()).
- * Hence at the next call of previous() or next(), the first or last collation order,
+ * Hence at the next call of next() or previous(), the first or last collation order,
  * or collation order at the specified position will be returned. If a change of
  * direction is done without one of these calls, the result is undefined.
  * </p>
