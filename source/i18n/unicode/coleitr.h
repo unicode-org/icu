@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- *   Copyright (C) 1997-2008, International Business Machines
+ *   Copyright (C) 1997-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  ******************************************************************************
  */
@@ -88,26 +88,22 @@ U_NAMESPACE_BEGIN
 * \endcode
 * </pre>
 * <p>
-* CollationElementIterator::next returns the collation order of the next
-* character based on the comparison level of the collator. 
-* CollationElementIterator::previous returns the collation order of the 
-* previous character based on the comparison level of the collator. 
-* The Collation Element Iterator moves only in one direction between calls to
-* CollationElementIterator::reset. That is, CollationElementIterator::next() 
-* and CollationElementIterator::previous can not be inter-used. Whenever 
-* CollationElementIterator::previous is to be called after 
-* CollationElementIterator::next() or vice versa, 
-* CollationElementIterator::reset has to be called first to reset the status, 
-* shifting pointers to either the end or the start of the string. Hence at the 
-* next call of CollationElementIterator::previous or 
-* CollationElementIterator::next(), the first or last collation order will be 
-* returned. 
-* If a change of direction is done without a CollationElementIterator::reset(), 
-* the result is undefined.
-* The result of a forward iterate (CollationElementIterator::next) and 
-* reversed result of the backward iterate (CollationElementIterator::previous) 
-* on the same string are equivalent, if collation orders with the value 
-* UCOL_IGNORABLE are ignored.
+* The method next() returns the collation order of the next character based on
+* the comparison level of the collator. The method previous() returns the
+* collation order of the previous character based on the comparison level of
+* the collator. The Collation Element Iterator moves only in one direction
+* between calls to reset(), setOffset(), or setText(). That is, next() 
+* and previous() can not be inter-used. Whenever previous() is to be called after 
+* next() or vice versa, reset(), setOffset() or setText() has to be called first
+* to reset the status, shifting pointers to either the end or the start of
+* the string (reset() or setText()), or the specified position (setOffset()).
+* Hence at the next call of next() or previous(), the first or last collation order,
+* or collation order at the spefcifieid position will be returned. If a change of
+* direction is done without one of these calls, the result is undefined.
+* <p>
+* The result of a forward iterate (next()) and reversed result of the backward
+* iterate (previous()) on the same string are equivalent, if collation orders
+* with the value UCOL_IGNORABLE are ignored.
 * Character based on the comparison level of the collator.  A collation order 
 * consists of primary order, secondary order and tertiary order.  The data 
 * type of the collation order is <strong>t_int32</strong>. 
