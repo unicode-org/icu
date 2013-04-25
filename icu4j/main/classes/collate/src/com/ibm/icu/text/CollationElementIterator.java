@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2012, International Business Machines Corporation and    *
+* Copyright (C) 1996-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -92,7 +92,21 @@ import com.ibm.icu.lang.UCharacter;
  * </blockquote>
  * </p>
  * <p>
- * This class is not subclassable
+ * The method next() returns the collation order of the next character based on
+ * the comparison level of the collator. The method previous() returns the
+ * collation order of the previous character based on the comparison level of
+ * the collator. The Collation Element Iterator moves only in one direction
+ * between calls to reset(), setOffset(), or setText(). That is, next() and
+ * previous() can not be inter-used. Whenever previous() is to be called after
+ * next() or vice versa, reset(), setOffset() or setText() has to be called first
+ * to reset the status, shifting current position to either the end or the start of
+ * the string (reset() or setText()), or the specified position (setOffset()).
+ * Hence at the next call of previous() or next(), the first or last collation order,
+ * or collation order at the specified position will be returned. If a change of
+ * direction is done without one of these calls, the result is undefined.
+ * </p>
+ * <p>
+ * This class is not subclassable.
  * </p>
  * @see Collator
  * @see RuleBasedCollator
@@ -138,7 +152,7 @@ public final class CollationElementIterator
      * corresponding to the next collation element. I.e., getOffset()
      * returns the position in the source string corresponding to the
      * collation element that will be returned by the next call to
-     * next(). This value could be any of:
+     * next() or previous(). This value could be any of:
      * <ul>
      * <li> The index of the <b>first</b> character corresponding to
      * the next collation element. (This means that if
@@ -157,7 +171,7 @@ public final class CollationElementIterator
      * </p>
      * @return The character offset in the source string corresponding to the
      *         collation element that will be returned by the next call to
-     *         next().
+     *         next() or previous().
      * @stable ICU 2.8
      */
     public int getOffset()
@@ -228,6 +242,7 @@ public final class CollationElementIterator
     {
         m_source_.setToStart();
         updateInternalState();
+        m_direction = 0;    // initial state
     }
 
     /**
@@ -242,11 +257,7 @@ public final class CollationElementIterator
      *
      * <p>This function returns the collation element that the
      * iterator is currently pointing to, and then updates the
-     * internal pointer to point to the next element.  Previous()
-     * updates the pointer first, and then returns the element. This
-     * means that when you change direction while iterating (i.e.,
-     * call next() and then call previous(), or call previous() and
-     * then call next()), you'll get back the same element twice.</p>
+     * internal pointer to point to the next element.</p>
      *
      * @return the next collation element or NULLORDER if the end of the
      *         iteration has been reached.
@@ -254,6 +265,9 @@ public final class CollationElementIterator
      */
     public int next()
     {
+        assert m_direction >= 0;
+        m_direction = 1;
+
         m_isForwards_ = true;
         if (m_CEBufferSize_ > 0) {
             if (m_CEBufferOffset_ < m_CEBufferSize_) {
@@ -332,10 +346,7 @@ public final class CollationElementIterator
      * <p>This function updates the iterator's internal pointer to
      * point to the collation element preceding the one it's currently
      * pointing to and then returns that element, while next() returns
-     * the current element and then updates the pointer. This means
-     * that when you change direction while iterating (i.e., call
-     * next() and then call previous(), or call previous() and then
-     * call next()), you'll get back the same element twice.</p>
+     * the current element and then updates the pointer.</p>
      *
      * @return the previous collation element, or NULLORDER when the start of
      *             the iteration has been reached.
@@ -343,6 +354,9 @@ public final class CollationElementIterator
      */
     public int previous()
     {
+        assert m_direction <= 0;
+        m_direction = -1;
+
         if (m_source_.getIndex() <= 0 && m_isForwards_) {
             // if iterator is new or reset, we can immediate perform  backwards
             // iteration even when the offset is not right.
@@ -468,6 +482,8 @@ public final class CollationElementIterator
      */
     public void setOffset(int offset)
     {
+        m_direction = 0;    // reset to initial state
+
         m_source_.setIndex(offset);
         int ch_int = m_source_.current();
         char ch = (char)ch_int;
@@ -527,6 +543,8 @@ public final class CollationElementIterator
         m_srcUtilIter_.setText(source);
         m_source_ = m_srcUtilIter_;
         updateInternalState();
+
+        m_direction = 0;   // reset to initial state
     }
     
     /**
@@ -543,6 +561,8 @@ public final class CollationElementIterator
         m_srcUtilIter_.setText(source.getText());
         m_source_ = m_srcUtilIter_;
         updateInternalState(); 
+
+        m_direction = 0;   // reset to initial state
     }
 
     /**
@@ -557,6 +577,8 @@ public final class CollationElementIterator
         m_source_ = new CharacterIteratorWrapper(source);
         m_source_.setToStart();
         updateInternalState();
+
+        m_direction = 0;   // reset to initial state
     }
 
     // public miscellaneous methods -----------------------------------------
@@ -732,6 +754,8 @@ public final class CollationElementIterator
     {
         m_source_.setIndex(offset);
         updateInternalState();
+
+        m_direction = 0;    // reset to initial state
     }
 
     /**
@@ -764,6 +788,8 @@ public final class CollationElementIterator
         m_source_ = m_srcUtilIter_;
         m_source_.setIndex(offset);
         updateInternalState();
+
+        m_direction = 0;   // reset to initial state
     }
 
     // private inner class --------------------------------------------------
@@ -962,7 +988,19 @@ public final class CollationElementIterator
     private static final int NON_CJK_OFFSET_ = 0x110000;
 */
     private static final boolean DEBUG  =  ICUDebug.enabled("collator");
-    
+
+    // Field tracking the current direction. This field was added
+    // just for making sure that reset()/setOffset()/setText() is called
+    // before switching the iterator direction.
+    // We used to allow changing direction without calling reset()/setOffset()
+    // setText() in ICU4J, but the API specification was updated to match the
+    // ICU4C's specification. The current implementation seems to handle
+    // direction change (or not), but it will be completely replaced with
+    // a new implementation not allowing this. Until then, we use this field
+    // to trigger assertion and make sure our implementation is not depending on
+    // the assumption. See ticket#9104.
+    private byte m_direction = 0;   // -1: backward, 0: initial state, 1: forward
+
     // private methods ------------------------------------------------------
 
     /**

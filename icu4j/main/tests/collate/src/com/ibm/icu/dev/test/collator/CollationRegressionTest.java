@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2002-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -1065,6 +1065,7 @@ public class CollationRegressionTest extends TestFmwk {
         }
 
         // Now iterate backward and make sure they're the same
+        iter.reset();
         int index = elements.size() - 1;
         while ((elem = iter.previous()) != CollationElementIterator.NULLORDER) {
             int expect = ((Integer)elements.get(index)).intValue();
