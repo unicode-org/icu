@@ -42,48 +42,6 @@ import com.ibm.icu.util.UResourceBundle;
  * The main method people will use is getBestPattern(String skeleton), since
  * normally this class is pre-built with data from a particular locale. However,
  * generators can be built directly from other data as well.
- * <pre>
- * // some simple use cases
- * Date sampleDate = new Date(99, 9, 13, 23, 58, 59);
- * ULocale locale = ULocale.GERMANY;
- * TimeZone zone = TimeZone.getTimeZone(&quot;Europe/Paris&quot;);
- * 
- * // make from locale
- * 
- * DateTimePatternGenerator gen = DateTimePatternGenerator.getInstance(locale);
- * SimpleDateFormat format = new SimpleDateFormat(gen.getBestPattern(&quot;MMMddHmm&quot;),
- *     locale);
- * format.setTimeZone(zone);
- * assertEquals(&quot;simple format: MMMddHmm&quot;, 
- *     &quot;8:58 14. Okt&quot;,
- *     format.format(sampleDate));
- * // (a generator can be built from scratch, but that is not a typical use case)
- * 
- * // modify the generator by adding patterns
- * DateTimePatternGenerator.PatternInfo returnInfo = new DateTimePatternGenerator.PatternInfo();
- * gen.addPattern(&quot;d'. von' MMMM&quot;, true, returnInfo);
- * // the returnInfo is mostly useful for debugging problem cases
- * format.applyPattern(gen.getBestPattern(&quot;MMMMddHmm&quot;));
- * assertEquals(&quot;modified format: MMMddHmm&quot;,
- *     &quot;8:58 14. von Oktober&quot;,
- *     format.format(sampleDate));
- * 
- * // get a pattern and modify it
- * format = (SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.FULL,
- *     DateFormat.FULL, locale);
- * format.setTimeZone(zone);
- * String pattern = format.toPattern();
- * assertEquals(&quot;full-date&quot;,
- *     &quot;Donnerstag, 14. Oktober 1999 8:58 Uhr GMT+02:00&quot;,
- *     format.format(sampleDate));
- * 
- * // modify it to change the zone.
- * String newPattern = gen.replaceFieldTypes(pattern, &quot;vvvv&quot;);
- * format.applyPattern(newPattern);
- * assertEquals(&quot;full-date, modified zone&quot;,
- *     &quot;Donnerstag, 14. Oktober 1999 8:58 Uhr Frankreich&quot;,
- *     format.format(sampleDate));
- * </pre>
  * @stable ICU 3.6
  */
 public class DateTimePatternGenerator implements Freezable<DateTimePatternGenerator>, Cloneable {
@@ -393,7 +351,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     /**
      * Return the best pattern matching the input skeleton. It is guaranteed to
      * have all of the fields in the skeleton.
-     * 
+     * <p>Example code:{@.jcite com.ibm.icu.samples.text.datetimepatterngenerator.DateTimePatternGeneratorSample:---getBestPatternExample}
      * @param skeleton The skeleton is a pattern containing only the variable fields.
      *            For example, "MMMdd" and "mmhh" are skeletons.
      * @return Best pattern matching the input skeleton.
@@ -497,7 +455,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * <p>
      * Note that single-field patterns (like "MMM") are automatically added, and
      * don't need to be added explicitly!
-     * 
+     * * <p>Example code:{@.jcite com.ibm.icu.samples.text.datetimepatterngenerator.DateTimePatternGeneratorSample:---addPatternExample}
      * @param pattern Pattern to add.
      * @param override When existing values are to be overridden use true, otherwise
      *            use false.
@@ -679,7 +637,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * skeleton of "MMMMddhhmm", then the input pattern is adjusted to be
      * "dd-MMMM hh:mm". This is used internally to get the best match for the
      * input skeleton, but can also be used externally.
-     * 
+     * <p>Example code:{@.jcite com.ibm.icu.samples.text.datetimepatterngenerator.DateTimePatternGeneratorSample:---replaceFieldTypesExample}
      * @param pattern input pattern
      * @param skeleton For the pattern to match to.
      * @return pattern adjusted to match the skeleton fields widths and subtypes.
