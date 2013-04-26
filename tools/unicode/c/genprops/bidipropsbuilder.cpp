@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2012, International Business Machines
+*   Copyright (C) 2004-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -43,7 +43,7 @@ the udata API for loading ICU data. Especially, a UDataInfo structure
 precedes the actual data. It contains platform properties values and the
 file format version.
 
-The following is a description of format version 2.0 .
+The following is a description of format version 2.1 .
 
 The file contains the following structures:
 
@@ -80,7 +80,7 @@ Bits
     12  is mirrored
     11  Bidi_Control
     10  Join_Control
- 9.. 8  reserved (set to 0)
+ 9.. 8  Bidi_Paired_Bracket_Type(bpt) -- new in format version 2.1
  7.. 5  Joining_Type
  4.. 0  BiDi category
 
@@ -120,6 +120,11 @@ containing the Joining_Group value.
 
 All code points outside of this range have No_Joining_Group (0).
 
+--- Changes in format version 2.1 ---
+
+Addition of Bidi_Paired_Bracket_Type(bpt) values.
+(Trie data bits 9..8 were reserved.)
+
 --- Changes in format version 2 ---
 
 Change from UTrie to UTrie2.
@@ -140,7 +145,7 @@ static UDataInfo dataInfo={
 
     /* dataFormat="BiDi" */
     { UBIDI_FMT_0, UBIDI_FMT_1, UBIDI_FMT_2, UBIDI_FMT_3 },
-    { 2, 0, 0, 0 },                             /* formatVersion */
+    { 2, 1, 0, 0 },                             /* formatVersion */
     { 6, 0, 0, 0 }                              /* dataVersion */
 };
 
@@ -252,6 +257,15 @@ BiDiPropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     UChar32 start=props.start;
     UChar32 end=props.end;
 
+    // The runtime code relies on this invariant for returning both bmg and bpb
+    // from the same data.
+    int32_t bpt=props.getIntProp(UCHAR_BIDI_PAIRED_BRACKET_TYPE);
+    if(!(bpt==0 ? props.bpb==U_SENTINEL : props.bpb==props.bmg)) {
+        fprintf(stderr,
+                "genprops error: invariant not true: "
+                "if(bpt==None) then bpb=<none> else bpb=bmg\n");
+        return;
+    }
     int32_t delta=encodeBidiMirroringGlyph(start, end, props.bmg, errorCode);
     uint32_t value=(uint32_t)delta<<UBIDI_MIRROR_DELTA_SHIFT;
     if(props.binProps[UCHAR_BIDI_MIRRORED]) {
@@ -263,6 +277,7 @@ BiDiPropsBuilder::setProps(const UniProps &props, const UnicodeSet &newValues,
     if(props.binProps[UCHAR_JOIN_CONTROL]) {
         value|=U_MASK(UBIDI_JOIN_CONTROL_SHIFT);
     }
+    value|=(uint32_t)bpt<<UBIDI_BPT_SHIFT;
     value|=(uint32_t)props.getIntProp(UCHAR_JOINING_TYPE)<<UBIDI_JT_SHIFT;
     value|=(uint32_t)props.getIntProp(UCHAR_BIDI_CLASS);
     utrie2_setRange32(pTrie, start, end, value, TRUE, &errorCode);
