@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2000-2012, International Business Machines
+*   Copyright (C) 2000-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -705,7 +705,7 @@ UCAElements *readAnElement(FILE *data, tempUCATable *t, UCAConstants *consts, Le
                 u_versionToString(UCAVersion, uca);
                 u_versionToString(UCDVersion, ucd);
                 // Warning, not error, to permit bootstrapping during a version upgrade.
-                fprintf(stderr, "warning: UCA version %s != UCD version %s (temporarily change the FractionalUCA.txt UCA version during Unicode version upgrade)\n", uca, ucd);
+                fprintf(stderr, "warning: UCA version %s != UCD version %s\n", uca, ucd);
                 // *status = U_INVALID_FORMAT_ERROR;
                 // return NULL;
               }
