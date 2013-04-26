@@ -1,6 +1,6 @@
-#!/usr/bin/python2.6
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
-# Copyright (c) 2009-2012 International Business Machines
+# Copyright (c) 2009-2013 International Business Machines
 # Corporation and others. All Rights Reserved.
 #
 #   file name:  preparseucd.py
@@ -909,6 +909,20 @@ def ParseSpecialCasing(in_file):
         update = (NeedToSetAlways, DoSetConditionalCaseMappings, ccm)
         UpdateProps(start, end, update)
 
+
+def ParseBidiBrackets(in_file):
+  for data in ReadUCDLines(in_file, want_missing=True):
+    if data[0] == "missing":
+      SetDefaultValue("bpt", data[2][1])
+    else:
+      # type == "range"
+      start = data[2]
+      end = data[3]
+      assert start == end
+      mapping = data[4][1]
+      bracket_type = data[4][2]
+      SetProps(start, end, {"bpb": mapping, "bpt": bracket_type})
+
 # Postprocessing ----------------------------------------------------------- ***
 
 def CompactBlock(b, i):
@@ -1480,6 +1494,7 @@ def DontCopy(s, t):
 # An explicit order number is set only for files that must be parsed
 # before others.
 _files = {
+  "BidiBrackets.txt": (DontCopy, ParseBidiBrackets),
   "BidiMirroring.txt": (DontCopy, ParseBidiMirroring),
   "BidiTest.txt": (CopyOnly, "testdata"),
   "Blocks.txt": (DontCopy, ParseBlocks),
