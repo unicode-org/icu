@@ -1091,7 +1091,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                         }
                     }
                     UChar c = (typeValue!= UDATPG_HOUR_FIELD && typeValue!= UDATPG_MONTH_FIELD &&
-                               typeValue!= UDATPG_WEEKDAY_FIELD && typeValue!= UDATPG_YEAR_FIELD)?
+                               typeValue!= UDATPG_WEEKDAY_FIELD && (typeValue!= UDATPG_YEAR_FIELD || reqField.charAt(0)==CAP_Y))?
                         reqField.charAt(0): field.charAt(0);
                     field.remove();
                     for (int32_t i=adjFieldLen; i>0; --i) {
