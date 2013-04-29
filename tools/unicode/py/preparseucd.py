@@ -64,7 +64,9 @@ _scripts_only_in_iso15924 = (
 
     "Afak", "Jurc", "Mroo", "Nshu", "Tang", "Wole",
 
-    "Hluw", "Khoj", "Tirh"
+    "Hluw", "Khoj", "Tirh",
+
+    "Aghb", "Mahj"
 )
 
 # Properties --------------------------------------------------------------- ***
