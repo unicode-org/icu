@@ -505,7 +505,7 @@ static const Value VALUES_nt[4] = {
     Value(U_NT_NUMERIC, "Nu Numeric"),
 };
 
-static const Value VALUES_sc[159] = {
+static const Value VALUES_sc[161] = {
     Value(USCRIPT_COMMON, "Zyyy Common"),
     Value(USCRIPT_INHERITED, "Zinh Inherited Qaai"),
     Value(USCRIPT_ARABIC, "Arab Arabic"),
@@ -598,7 +598,7 @@ static const Value VALUES_sc[159] = {
     Value(USCRIPT_OLD_PERMIC, "Perm Perm"),
     Value(USCRIPT_PHAGS_PA, "Phag Phags_Pa"),
     Value(USCRIPT_PHOENICIAN, "Phnx Phoenician"),
-    Value(USCRIPT_PHONETIC_POLLARD, "Plrd Miao"),
+    Value(USCRIPT_MIAO, "Plrd Miao"),
     Value(USCRIPT_RONGORONGO, "Roro Roro"),
     Value(USCRIPT_SARATI, "Sara Sara"),
     Value(USCRIPT_ESTRANGELO_SYRIAC, "Syre Syre"),
@@ -665,6 +665,8 @@ static const Value VALUES_sc[159] = {
     Value(USCRIPT_ANATOLIAN_HIEROGLYPHS, "Hluw Hluw"),
     Value(USCRIPT_KHOJKI, "Khoj Khoj"),
     Value(USCRIPT_TIRHUTA, "Tirh Tirh"),
+    Value(USCRIPT_CAUCASIAN_ALBANIAN, "Aghb Aghb"),
+    Value(USCRIPT_MAHAJANI, "Mahj Mahj"),
 };
 
 static const Value VALUES_hst[6] = {
@@ -987,7 +989,7 @@ static const Property PROPERTIES[96] = {
     Property(UCHAR_JOINING_TYPE, "jt Joining_Type", VALUES_jt, 6),
     Property(UCHAR_LINE_BREAK, "lb Line_Break", VALUES_lb, 40),
     Property(UCHAR_NUMERIC_TYPE, "nt Numeric_Type", VALUES_nt, 4),
-    Property(UCHAR_SCRIPT, "sc Script", VALUES_sc, 159),
+    Property(UCHAR_SCRIPT, "sc Script", VALUES_sc, 161),
     Property(UCHAR_HANGUL_SYLLABLE_TYPE, "hst Hangul_Syllable_Type", VALUES_hst, 6),
     Property(UCHAR_NFD_QUICK_CHECK, "NFD_QC NFD_Quick_Check", VALUES_NFD_QC, 2),
     Property(UCHAR_NFKD_QUICK_CHECK, "NFKD_QC NFKD_Quick_Check", VALUES_NFKD_QC, 2),
