@@ -1556,9 +1556,17 @@ def PreprocessFiles(source_files, icu_src_root):
   }
   files_processed = set()
   for source_file in source_files:
-    basename = os.path.basename(source_file)
+    (folder, basename) = os.path.split(source_file)
     match = _file_version_re.match(basename)
-    if match: basename = match.group(1) + match.group(2)
+    if match:
+      new_basename = match.group(1) + match.group(2)
+      if new_basename != basename:
+        print "Removing version suffix from " + source_file
+        # ... so that we can easily compare UCD files.
+        new_source_file = os.path.join(folder, new_basename)
+        shutil.move(source_file, new_source_file)
+        basename = new_basename
+        source_file = new_source_file
     if basename in _files:
       print "Preprocessing %s" % basename
       if basename in files_processed:
