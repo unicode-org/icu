@@ -447,6 +447,7 @@ BiDiPropsBuilder::build(UErrorCode &errorCode) {
     indexes[UBIDI_MAX_VALUES_INDEX]=
         ((int32_t)U_CHAR_DIRECTION_COUNT-1)|
         (((int32_t)U_JT_COUNT-1)<<UBIDI_JT_SHIFT)|
+        (((int32_t)U_BPT_COUNT-1)<<UBIDI_BPT_SHIFT)|
         (((int32_t)U_JG_COUNT-1)<<UBIDI_MAX_JG_SHIFT);
 }
 
