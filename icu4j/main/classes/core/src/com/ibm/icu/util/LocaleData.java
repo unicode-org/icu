@@ -247,6 +247,13 @@ public final class LocaleData {
        return noSubstitute;
     }
 
+    private static final String [] DELIMITER_TYPES = {
+                                 "quotationStart", 
+                                 "quotationEnd", 
+                                 "alternateQuotationStart", 
+                                 "alternateQuotationEnd"
+    };
+
     /**
      * Retrieves a delimiter string from the locale data.
      *
@@ -257,12 +264,9 @@ public final class LocaleData {
      * @stable ICU 3.4
      */
     public String getDelimiter(int type) {
-        String [] delimiterTypes = { "quotationStart", 
-                                     "quotationEnd", 
-                                     "alternateQuotationStart", 
-                                     "alternateQuotationEnd" };
-
-        ICUResourceBundle stringBundle = (ICUResourceBundle) bundle.get("delimiters").get(delimiterTypes[type]);
+        ICUResourceBundle delimitersBundle = (ICUResourceBundle) bundle.get("delimiters");
+        // Only some of the quotation marks may be here. So we make sure that we do a multilevel fallback.
+        ICUResourceBundle stringBundle = delimitersBundle.getWithFallback(DELIMITER_TYPES[type]);
 
         if ( noSubstitute && (stringBundle.getLoadingStatus() == ICUResourceBundle.FROM_ROOT) )
            return null;
