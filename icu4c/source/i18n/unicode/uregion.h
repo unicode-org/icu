@@ -127,7 +127,7 @@ typedef struct URegion URegion;
 
 /**
  * Returns a pointer to a URegion for the specified region code: A 2-letter or 3-letter ISO 3166
- * code, UNM.49 numeric code (superset of ISO 3166 numeric codes), or other valid Unicode Region
+ * code, UN M.49 numeric code (superset of ISO 3166 numeric codes), or other valid Unicode Region
  * Code as defined by the LDML specification. The code will be canonicalized internally. If the
  * region code is NULL or not recognized, the appropriate error code will be set
  * (U_ILLEGAL_ARGUMENT_ERROR).
@@ -157,7 +157,7 @@ uregion_getAvailable(URegionType type, UErrorCode *status);
  * @draft ICU 52
  */
 U_DRAFT UBool U_EXPORT2
-uregion_isEqualTo(const URegion* uregion, const URegion* otherRegion);
+uregion_areEqual(const URegion* uregion, const URegion* otherRegion);
 
 /**
  * Returns a pointer to the URegion that contains the specified uregion. Returns NULL if the
