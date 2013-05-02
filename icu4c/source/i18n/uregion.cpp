@@ -38,9 +38,9 @@ uregion_getAvailable(URegionType type, UErrorCode *status)
 
 
 U_CAPI UBool U_EXPORT2
-uregion_isEqualTo(const URegion* uregion, const URegion* otherRegion)
+uregion_areEqual(const URegion* uregion, const URegion* otherRegion)
 {
-    return ( (Region*)uregion == (Region*)otherRegion );
+    return ( (void*)uregion == (void*)otherRegion );
 }
 
 
