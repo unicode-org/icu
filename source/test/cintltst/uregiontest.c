@@ -369,7 +369,7 @@ static void TestKnownRegions() {
             }
             if ( e > 0 ) {
                 const URegion *ncRegion = uregion_getRegionFromNumericCode(e, &status);
-                if ( !uregion_isEqualTo(ncRegion, r) && e != 891 ) { // 891 is special case - CS and YU both deprecated codes for region 891
+                if ( !uregion_areEqual(ncRegion, r) && e != 891 ) { // 891 is special case - CS and YU both deprecated codes for region 891
                     log_err("ERROR: Creating region %s by its numeric code returned a different region. Got: %s instead.\n",
                         uregion_getRegionCode(r), uregion_getRegionCode(ncRegion) );
                 }
@@ -396,7 +396,7 @@ static void TestGetContainedRegions() {
                 while ((crID = uenum_next(containedRegions, NULL, &status)) != NULL && U_SUCCESS(status) ) {
                     const URegion *cr = uregion_getRegionFromCode(crID, &status);
                     const URegion *containingRegion = (cr)? uregion_getContainingRegion(cr) : NULL;
-                    if ( !containingRegion || !uregion_isEqualTo(containingRegion, r) ) {
+                    if ( !containingRegion || !uregion_areEqual(containingRegion, r) ) {
                         log_err("ERROR: Region: %s contains region %s. Expected containing region of this region to be the original region, but got %s\n",
                             uregion_getRegionCode(r), uregion_getRegionCode(cr), (containingRegion)?uregion_getRegionCode(containingRegion):"NULL" ); 
                     }
@@ -425,7 +425,7 @@ static void TestGetContainedRegionsWithType() {
                 while ((crID = uenum_next(containedRegions, NULL, &status)) != NULL && U_SUCCESS(status) ) {
                     const URegion *cr = uregion_getRegionFromCode(crID, &status);
                     const URegion *containingRegion = (cr)? uregion_getContainingRegionOfType(cr, URGN_CONTINENT) : NULL;
-                    if ( !containingRegion || !uregion_isEqualTo(containingRegion, r) ) {
+                    if ( !containingRegion || !uregion_areEqual(containingRegion, r) ) {
                         log_err("ERROR: Continent: %s contains territory %s. Expected containing continent of this region to be the original region, but got %s\n",
                             uregion_getRegionCode(r), uregion_getRegionCode(cr), (containingRegion)?uregion_getRegionCode(containingRegion):"NULL" ); 
                     }
@@ -451,7 +451,7 @@ static void TestGetContainingRegion() {
                 }
             } else {
                 const URegion *p = uregion_getRegionFromCode(rd->parent, &status);                   
-                if ( c == NULL || !uregion_isEqualTo(p, c) ) {
+                if ( c == NULL || !uregion_areEqual(p, c) ) {
                     log_err("ERROR: Expected containing continent of region %s to be %s. Got: %s\n",
                         uregion_getRegionCode(r), (p)?uregion_getRegionCode(p):"NULL", (c)?uregion_getRegionCode(c):"NULL" );
                 }
@@ -475,7 +475,7 @@ static void TestGetContainingRegionWithType() {
                  }
             } else {
                 const URegion *p = uregion_getRegionFromCode(rd->containingContinent, &status);                   
-                if ( !uregion_isEqualTo(p, c) ) {
+                if ( !uregion_areEqual(p, c) ) {
                     log_err("ERROR: Expected containing continent of region %s to be %s. Got: %s\n",
                         uregion_getRegionCode(r), (p)?uregion_getRegionCode(p):"NULL", (c)?uregion_getRegionCode(c):"NULL" );
                 }
