@@ -1023,6 +1023,7 @@ uprv_convertToPosix(uint32_t hostid, char *posixID, int32_t posixIDCapacity, UEr
         for (localeIndex = 0; localeIndex < gLocaleCount; localeIndex++) {
             if (langID == gPosixIDmap[localeIndex].regionMaps->hostID) {
                 pCandidate = getPosixID(&gPosixIDmap[localeIndex], hostid);
+                break;
             }
         }
 
