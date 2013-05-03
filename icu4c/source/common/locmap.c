@@ -26,7 +26,6 @@
  */
 
 #include "locmap.h"
-#include "unicode/uloc.h"
 #include "cstring.h"
 #include "cmemory.h"
 
@@ -111,7 +110,7 @@ static const ILcidPosixElement locmap_ ## id [] =
  * Create the map for the posixID. This macro supposes that the language string
  * name is the same as the global variable name, and that the first element
  * in the ILcidPosixElement is just the language.
- * @param _posixID the full POSIX ID for this entry. 
+ * @param _posixID the full POSIX ID for this entry.
  */
 #define ILCID_POSIX_MAP(_posixID) \
     {sizeof(locmap_ ## _posixID)/sizeof(ILcidPosixElement), locmap_ ## _posixID}
@@ -129,6 +128,11 @@ static const ILcidPosixElement locmap_ ## id [] =
 //       Microsoft is moving away from LCID in favor of locale name as of Vista.  This table needs to be
 //       maintained for support of older Windows version.
 //       Update: Windows 7 (091130)
+//
+// Note: Microsoft assign a different LCID if a locale has a sorting variant. POSIX IDs below may contain
+//       @collation=XXX, but no other keywords are allowed (at least for now). When uprv_convertToLCID() is
+//       called from uloc_getLCID(), keywords other than collation are already removed. If we really need
+//       to support other keywords in this mapping data, we must update the implementation.
 ////////////////////////////////////////////
 */
 
@@ -958,13 +962,6 @@ getPosixID(const ILcidPosixMap *this_0, uint32_t hostID)
 */
 #ifdef USE_WINDOWS_LOCALE_API
 /*
- * Change the tag separator from '-' to '_'
- */
-#define FIX_LOCALE_ID_TAG_SEPARATOR(buffer, len, i) \
-    for(i = 0; i < len; i++) \
-        if (buffer[i] == '-') buffer[i] = '_';
-
-/*
  * Various language tags needs to be changed:
  * quz -> qu
  * prs -> fa
@@ -980,39 +977,83 @@ getPosixID(const ILcidPosixMap *this_0, uint32_t hostID)
         } \
     }
 
-static char gPosixFromLCID[ULOC_FULLNAME_CAPACITY];
 #endif
-U_CAPI const char *
-uprv_convertToPosix(uint32_t hostid, UErrorCode* status)
+U_CAPI int32_t
+uprv_convertToPosix(uint32_t hostid, char *posixID, int32_t posixIDCapacity, UErrorCode* status)
 {
     uint16_t langID;
     uint32_t localeIndex;
+    UBool bLookup = TRUE;
+    const char *pPosixID = NULL;
+
 #ifdef USE_WINDOWS_LOCALE_API
-    int32_t ret = 0;
+    int32_t tmpLen = 0;
+    char locName[157];  /* ULOC_FULLNAME_CAPACITY */
 
-    uprv_memset(gPosixFromLCID, 0, sizeof(gPosixFromLCID));
-
-    ret = GetLocaleInfoA(hostid, LOCALE_SNAME, (LPSTR)gPosixFromLCID, sizeof(gPosixFromLCID));
-    if (ret > 1) {
-        FIX_LOCALE_ID_TAG_SEPARATOR(gPosixFromLCID, (uint32_t)ret, localeIndex)
-        FIX_LANGUAGE_ID_TAG(gPosixFromLCID, ret)
-
-        return gPosixFromLCID;
+    tmpLen = GetLocaleInfoA(hostid, LOCALE_SNAME, (LPSTR)locName, sizeof(locName)/sizeof(locName[0]));
+    if (tmpLen > 1) {
+        /* Windows locale name may contain sorting variant, such as "es-ES_tradnl".
+           In such case, we need special mapping data found in the hardcoded table
+           in this source file. */
+        char *p = uprv_strchr(locName, '_');
+        if (p) {
+            /* Keep the base locale, without variant */
+            *p = 0;
+            tmpLen = uprv_strlen(locName);
+        } else {
+            /* No hardcoded table lookup necessary */
+            bLookup = FALSE;
+        }
+        /* Change the tag separator from '-' to '_' */
+        p = locName;
+        while (*p) {
+            if (*p == '-') {
+                *p = '_';
+            }
+            p++;
+        }
+        FIX_LANGUAGE_ID_TAG(locName, tmpLen);
+        pPosixID = locName;
     }
 #endif
-    langID = LANGUAGE_LCID(hostid);
+    if (bLookup) {
+        const char *pCandidate = NULL;
+        langID = LANGUAGE_LCID(hostid);
 
-    for (localeIndex = 0; localeIndex < gLocaleCount; localeIndex++)
-    {
-        if (langID == gPosixIDmap[localeIndex].regionMaps->hostID)
-        {
-            return getPosixID(&gPosixIDmap[localeIndex], hostid);
+        for (localeIndex = 0; localeIndex < gLocaleCount; localeIndex++) {
+            if (langID == gPosixIDmap[localeIndex].regionMaps->hostID) {
+                pCandidate = getPosixID(&gPosixIDmap[localeIndex], hostid);
+            }
         }
+
+        /* On Windows, when locale name has a variant, we still look up the hardcoded table.
+           If a match in the hardcoded table is longer than the Windows locale name without
+           variant, we use the one as the result */
+        if (pCandidate && (pPosixID == NULL || uprv_strlen(pCandidate) > uprv_strlen(pPosixID))) {
+            pPosixID = pCandidate;
+        }
+    }
+
+    if (pPosixID) {
+        int32_t resLen = uprv_strlen(pPosixID);
+        int32_t copyLen = resLen <= posixIDCapacity ? resLen : posixIDCapacity;
+        uprv_memcpy(posixID, pPosixID, copyLen);
+        if (resLen < posixIDCapacity) {
+            posixID[resLen] = 0;
+            if (*status == U_STRING_NOT_TERMINATED_WARNING) {
+                *status = U_ZERO_ERROR;
+            }
+        } else if (resLen == posixIDCapacity) {
+            *status = U_STRING_NOT_TERMINATED_WARNING;
+        } else {
+            *status = U_BUFFER_OVERFLOW_ERROR;
+        }
+        return resLen;
     }
 
     /* no match found */
     *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return NULL;
+    return -1;
 }
 
 /*

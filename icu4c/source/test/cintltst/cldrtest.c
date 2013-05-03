@@ -453,6 +453,7 @@ testLCID(UResourceBundle *currentBundle,
     UErrorCode status = U_ZERO_ERROR;
     uint32_t expectedLCID;
     char lcidStringC[64] = {0};
+    int32_t len;
 
     expectedLCID = uloc_getLCID(localeName);
     if (expectedLCID == 0) {
@@ -462,11 +463,12 @@ testLCID(UResourceBundle *currentBundle,
     }
 
     status = U_ZERO_ERROR;
-    uprv_strcpy(lcidStringC, uprv_convertToPosix(expectedLCID, &status));
+    len = uprv_convertToPosix(expectedLCID, lcidStringC, sizeof(lcidStringC)/sizeof(lcidStringC[0]) - 1, &status);
     if (U_FAILURE(status)) {
         log_err("ERROR:   %.4x does not have a POSIX mapping due to %s\n",
             expectedLCID, u_errorName(status));
     }
+    lcidStringC[len] = 0;
 
     if(strcmp(localeName, lcidStringC) != 0) {
         char langName[1024];
