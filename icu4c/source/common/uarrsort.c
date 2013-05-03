@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2003, International Business Machines
+*   Copyright (C) 2003-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -51,29 +51,77 @@ uprv_uint32Comparator(const void *context, const void *left, const void *right) 
     }
 }
 
-/* Straight insertion sort from Knuth vol. III, pg. 81 ---------------------- */
+/* Insertion sort using binary search --------------------------------------- */
+
+/* TODO: Make this binary search function more generally available in ICU. */
+/**
+ * Much like Java Collections.binarySearch(List, Element, Comparator).
+ *
+ * @return the index>=0 where the item was found:
+ *         the largest such index, if multiple, for stable sorting;
+ *         or the index<0 for inserting the item at ~index in sorted order
+ */
+static int32_t
+binarySearch(char *array, int32_t limit, int32_t itemSize, void *item,
+             UComparator *cmp, const void *context) {
+    int32_t start=0;
+    UBool found=FALSE;
+
+    /* Binary search until we get down to a tiny sub-array. */
+    while((limit-start)>8) {
+        int32_t i=(start+limit)/2;
+        int32_t diff=cmp(context, item, array+i*itemSize);
+        if(diff==0) {
+            /*
+             * Found the item. We look for the *last* occurrence of such
+             * an item, for stable sorting.
+             * If we knew that there will be only few equal items,
+             * we could break now and enter the linear search.
+             * However, if there are many equal items, then it should be
+             * faster to continue with the binary search.
+             * It seems likely that we either have all unique items
+             * or potentially many duplicates.
+             */
+            found=TRUE;
+            start=i+1;
+        } else if(diff<0) {
+            limit=i;
+        } else {
+            start=i;
+        }
+    }
+
+    /* Linear search over the remaining tiny sub-array. */
+    while(start<limit) {
+        int32_t diff=cmp(context, item, array+start*itemSize);
+        if(diff==0) {
+            found=TRUE;
+        } else if(diff<0) {
+            break;
+        }
+        ++start;
+    }
+    return found ? (start-1) : ~start;
+}
 
 static void
-doInsertionSort(char *array, int32_t start, int32_t limit, int32_t itemSize,
+doInsertionSort(char *array, int32_t length, int32_t itemSize,
                 UComparator *cmp, const void *context, void *pv) {
-    int32_t i, j;
+    int32_t j;
 
-    for(j=start+1; j<limit; ++j) {
-        /* v=array[j] */
-        uprv_memcpy(pv, array+j*itemSize, itemSize);
-
-        for(i=j; i>start; --i) {
-            if(/* v>=array[i-1] */ cmp(context, pv, array+(i-1)*itemSize)>=0) {
-                break;
-            }
-
-            /* array[i]=array[i-1]; */
-            uprv_memcpy(array+i*itemSize, array+(i-1)*itemSize, itemSize);
+    for(j=1; j<length; ++j) {
+        char *item=array+j*itemSize;
+        int32_t insertionPoint=binarySearch(array, j, itemSize, item, cmp, context);
+        if(insertionPoint<0) {
+            insertionPoint=~insertionPoint;
+        } else {
+            ++insertionPoint;  /* one past the last equal item */
         }
-
-        if(i!=j) {
-            /* array[i]=v; */
-            uprv_memcpy(array+i*itemSize, pv, itemSize);
+        if(insertionPoint<j) {
+            char *dest=array+insertionPoint*itemSize;
+            uprv_memcpy(pv, item, itemSize);  /* v=array[j] */
+            uprv_memmove(dest+itemSize, dest, (j-insertionPoint)*itemSize);
+            uprv_memcpy(dest, pv, itemSize);  /* array[insertionPoint]=v */
         }
     }
 }
@@ -95,7 +143,7 @@ insertionSort(char *array, int32_t length, int32_t itemSize,
         }
     }
 
-    doInsertionSort(array, 0, length, itemSize, cmp, context, pv);
+    doInsertionSort(array, length, itemSize, cmp, context, pv);
 
     if(pv!=v) {
         uprv_free(pv);
@@ -125,7 +173,7 @@ subQuickSort(char *array, int32_t start, int32_t limit, int32_t itemSize,
     /* start and left are inclusive, limit and right are exclusive */
     do {
         if((start+MIN_QSORT)>=limit) {
-            doInsertionSort(array, start, limit, itemSize, cmp, context, px);
+            doInsertionSort(array+start*itemSize, limit-start, itemSize, cmp, context, px);
             break;
         }
 
@@ -229,7 +277,6 @@ uprv_sortArray(void *array, int32_t length, int32_t itemSize,
         return;
     } else if(length<MIN_QSORT || sortStable) {
         insertionSort((char *)array, length, itemSize, cmp, context, pErrorCode);
-        /* could add heapSort or similar for stable sorting of longer arrays */
     } else {
         quickSort((char *)array, length, itemSize, cmp, context, pErrorCode);
     }
