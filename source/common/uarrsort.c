@@ -21,7 +21,14 @@
 #include "uarrsort.h"
 
 enum {
-    MIN_QSORT=9, /* from Knuth */
+    /**
+     * "from Knuth"
+     *
+     * A binary search over 8 items performs 4 comparisons:
+     * log2(8)=3 to subdivide, +1 to check for equality.
+     * A linear search over 8 items on average also performs 4 comparisons.
+     */
+    MIN_QSORT=9,
     STACK_ITEM_SIZE=200
 };
 
@@ -53,22 +60,14 @@ uprv_uint32Comparator(const void *context, const void *left, const void *right) 
 
 /* Insertion sort using binary search --------------------------------------- */
 
-/* TODO: Make this binary search function more generally available in ICU. */
-/**
- * Much like Java Collections.binarySearch(List, Element, Comparator).
- *
- * @return the index>=0 where the item was found:
- *         the largest such index, if multiple, for stable sorting;
- *         or the index<0 for inserting the item at ~index in sorted order
- */
-static int32_t
-binarySearch(char *array, int32_t limit, int32_t itemSize, void *item,
-             UComparator *cmp, const void *context) {
+U_CAPI int32_t U_EXPORT2
+uprv_stableBinarySearch(char *array, int32_t limit, void *item, int32_t itemSize,
+                        UComparator *cmp, const void *context) {
     int32_t start=0;
     UBool found=FALSE;
 
     /* Binary search until we get down to a tiny sub-array. */
-    while((limit-start)>8) {
+    while((limit-start)>=MIN_QSORT) {
         int32_t i=(start+limit)/2;
         int32_t diff=cmp(context, item, array+i*itemSize);
         if(diff==0) {
@@ -80,6 +79,7 @@ binarySearch(char *array, int32_t limit, int32_t itemSize, void *item,
              * However, if there are many equal items, then it should be
              * faster to continue with the binary search.
              * It seems likely that we either have all unique items
+             * (where found will never become TRUE in the insertion sort)
              * or potentially many duplicates.
              */
             found=TRUE;
@@ -111,7 +111,7 @@ doInsertionSort(char *array, int32_t length, int32_t itemSize,
 
     for(j=1; j<length; ++j) {
         char *item=array+j*itemSize;
-        int32_t insertionPoint=binarySearch(array, j, itemSize, item, cmp, context);
+        int32_t insertionPoint=uprv_stableBinarySearch(array, j, item, itemSize, cmp, context);
         if(insertionPoint<0) {
             insertionPoint=~insertionPoint;
         } else {
