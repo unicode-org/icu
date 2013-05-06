@@ -170,6 +170,7 @@ metadata:table(nofallback){
         mkd{"mk"}
         mlg{"mg"}
         mlt{"mt"}
+        mnk{"man"}
         mo{"ro"}
         mol{"ro"}
         mon{"mn"}
@@ -572,6 +573,7 @@ metadata:table(nofallback){
         "VU",
         "WF",
         "WS",
+        "XK",
         "YE",
         "YT",
         "ZA",

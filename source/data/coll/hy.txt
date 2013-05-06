@@ -14,7 +14,7 @@ hy{
     collations{
         standard{
             Sequence{" [reorder Armn]&ք<և<<<Եւ"}
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

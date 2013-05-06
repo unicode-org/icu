@@ -917,7 +917,7 @@ fi{
         VALLADER{"reoromaanin vallader-muoto"}
         WADEGILE{"kiinan Wade-Giles-latinaistus"}
     }
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
     codePatterns{
         language{"kieli: {0}"}
         script{"kirjoitusjärjestelmä: {0}"}

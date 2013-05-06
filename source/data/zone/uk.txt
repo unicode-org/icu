@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/uk.xml
  */
 uk{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абіджан"}
@@ -1608,6 +1608,9 @@ uk{
         }
         "meta:South_Georgia"{
             ls{"за часом на острові Південна Джорджія"}
+        }
+        "meta:Suriname"{
+            ls{"Час: Суринам"}
         }
         "meta:Tahiti"{
             ls{"за часом на острові Таїті"}

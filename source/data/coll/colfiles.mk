@@ -1,6 +1,6 @@
 # *   Copyright (C) 1998-2013, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-COLLATION_CLDR_VERSION = 23
+COLLATION_CLDR_VERSION = 23.1
 # A list of txt's to build
 # Note:
 #
@@ -95,14 +95,14 @@ COLLATION_EMPTY_SOURCE = af_NA.txt af_ZA.txt ar_001.txt ar_AE.txt\
  pt_ST.txt pt_TL.txt ro_MD.txt ro_RO.txt ru_BY.txt\
  ru_KG.txt ru_KZ.txt ru_MD.txt ru_RU.txt ru_UA.txt\
  si_LK.txt sk_SK.txt sl_SI.txt sq_AL.txt sq_MK.txt\
- sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt sr_Latn_BA.txt\
- sr_Latn_ME.txt sr_Latn_RS.txt sv_AX.txt sv_FI.txt sv_SE.txt\
- sw.txt sw_KE.txt sw_TZ.txt sw_UG.txt ta_IN.txt\
- ta_LK.txt ta_MY.txt ta_SG.txt te_IN.txt th_TH.txt\
- to_TO.txt tr_CY.txt tr_TR.txt uk_UA.txt ur_IN.txt\
- ur_PK.txt vi_VN.txt yo_NG.txt zh_Hans.txt zh_Hans_CN.txt\
- zh_Hans_SG.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt zu.txt\
- zu_ZA.txt
+ sq_XK.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt\
+ sr_Cyrl_XK.txt sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt sr_Latn_XK.txt\
+ sv_AX.txt sv_FI.txt sv_SE.txt sw.txt sw_KE.txt\
+ sw_TZ.txt sw_UG.txt ta_IN.txt ta_LK.txt ta_MY.txt\
+ ta_SG.txt te_IN.txt th_TH.txt to_TO.txt tr_CY.txt\
+ tr_TR.txt uk_UA.txt ur_IN.txt ur_PK.txt vi_VN.txt\
+ yo_NG.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_SG.txt zh_Hant_HK.txt\
+ zh_Hant_MO.txt zh_Hant_TW.txt zu.txt zu_ZA.txt
 
 
 # Ordinary resources

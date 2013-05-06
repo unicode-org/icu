@@ -200,7 +200,7 @@ numberingSystems:table(nofallback){
         }
         nkoo{
             algorithmic:int{0}
-            desc{"߉߈߇߆߅߄߃߂߁߀"}
+            desc{"߀߁߂߃߄߅߆߇߈߉"}
             radix:int{10}
         }
         olck{

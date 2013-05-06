@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bs_Cyrl.xml
  */
 bs_Cyrl{
-    Version{"2.0.82.47"}
+    Version{"2.0.86.63"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиџан"}
@@ -1753,6 +1753,9 @@ bs_Cyrl{
         }
         "meta:South_Georgia"{
             ls{"Јужна Џорџија време"}
+        }
+        "meta:Suriname"{
+            ls{"Суринам време"}
         }
         "meta:Syowa"{
             ls{"Шова време"}

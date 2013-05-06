@@ -294,6 +294,7 @@ zu{
         VU{"i-Vanuatu"}
         WF{"i-Wallis ne-Futuna"}
         WS{"i-Samoa"}
+        XK{"I-Kosovo"}
         YE{"i-Yemen"}
         YT{"i-Mayotte"}
         ZA{"iNingizimu Afrika"}
@@ -301,5 +302,5 @@ zu{
         ZW{"i-Zimbabwe"}
         ZZ{"Isifunda esingaziwa"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
 }

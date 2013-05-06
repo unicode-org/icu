@@ -294,6 +294,7 @@ fr{
         VU{"Vanuatu"}
         WF{"Wallis-et-Futuna"}
         WS{"Samoa"}
+        XK{"Kosovo"}
         YE{"Yémen"}
         YT{"Mayotte"}
         ZA{"Afrique du Sud"}
@@ -301,5 +302,5 @@ fr{
         ZW{"Zimbabwe"}
         ZZ{"région indéterminée"}
     }
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
 }

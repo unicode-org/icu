@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/vi.xml
  */
 vi{
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Asmera"{
             ec{"Asmara"}
@@ -679,6 +679,9 @@ vi{
         }
         "meta:South_Georgia"{
             ls{"Giờ Nam Georgia"}
+        }
+        "meta:Suriname"{
+            ls{"Giờ Suriname"}
         }
         "meta:Syowa"{
             ls{"Giờ Syowa"}

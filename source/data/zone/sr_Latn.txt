@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sr_Latn.xml
  */
 sr_Latn{
-    Version{"2.0.82.51"}
+    Version{"2.0.86.79"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -1408,6 +1408,9 @@ sr_Latn{
         }
         "meta:South_Georgia"{
             ls{"Južna Džordžija vreme"}
+        }
+        "meta:Suriname"{
+            ls{"Surinam vreme"}
         }
         "meta:Syowa"{
             ls{"Šova vreme"}

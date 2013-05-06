@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bn.xml
  */
 bn{
-    Version{"2.0.82.47"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"আবিদজান"}
@@ -1724,6 +1724,9 @@ bn{
         }
         "meta:South_Georgia"{
             ls{"দক্ষিণ জর্জিয়া সময়"}
+        }
+        "meta:Suriname"{
+            ls{"সুরিনাম সময়"}
         }
         "meta:Syowa"{
             ls{"সায়োওয়া সময়"}

@@ -67,7 +67,7 @@ hr{
                 "&S<š<<<Š"
                 "&Z<ž<<<Ž"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
         standard{
             Sequence{
@@ -79,7 +79,7 @@ hr{
                 "&S<š<<<Š"
                 "&Z<ž<<<Ž"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

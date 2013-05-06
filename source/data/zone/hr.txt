@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hr.xml
  */
 hr{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"alžirsko"}
@@ -724,6 +724,9 @@ hr{
         }
         "meta:South_Georgia"{
             ls{"vrijeme Južne Džordžije"}
+        }
+        "meta:Suriname"{
+            ls{"surinamsko vrijeme"}
         }
         "meta:Syowa"{
             ls{"vrijeme Syowa"}

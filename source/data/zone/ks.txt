@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ks.xml
  */
 ks{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.63"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"عابِدجان"}
@@ -1683,6 +1683,9 @@ ks{
         }
         "meta:South_Georgia"{
             ls{"شُمٲلی جورجِیا ٹایِم"}
+        }
+        "meta:Suriname"{
+            ls{"سُرِنام ٹایِم"}
         }
         "meta:Syowa"{
             ls{"سیووا ٹایِم"}

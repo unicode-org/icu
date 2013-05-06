@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/he.xml
  */
 he{
-    Version{"2.0.82.47"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"אביג'אן"}
@@ -1616,6 +1616,9 @@ he{
         }
         "meta:Solomon"{
             ls{"שעון איי שלמה"}
+        }
+        "meta:Suriname"{
+            ls{"שעון סורינאם"}
         }
         "meta:Tahiti"{
             ls{"שעון טהיטי"}

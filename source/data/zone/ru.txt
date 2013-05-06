@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ru.xml
  */
 ru{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.63"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -1641,6 +1641,9 @@ ru{
         }
         "meta:South_Georgia"{
             ls{"Южная Георгия время"}
+        }
+        "meta:Suriname"{
+            ls{"Время Суринама"}
         }
         "meta:Syowa"{
             ls{"Сёва время"}

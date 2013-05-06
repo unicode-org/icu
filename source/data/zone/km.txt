@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/km.xml
  */
 km{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"អាប៊ីដ្យាន"}
@@ -1707,6 +1707,9 @@ km{
         }
         "meta:South_Georgia"{
             ls{"ម៉ោង​នៅ​កោះ​ហ្សកហ្ស៊ី"}
+        }
+        "meta:Suriname"{
+            ls{"ម៉ោង​នៅ​សូរីណាម"}
         }
         "meta:Syowa"{
             ls{"ម៉ោង​នៅ​ស៊ីអូវ៉ា"}

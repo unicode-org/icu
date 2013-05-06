@@ -1,6 +1,6 @@
 # *   Copyright (C) 1998-2013, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-ZONE_CLDR_VERSION = 23
+ZONE_CLDR_VERSION = 23.1
 # A list of txt's to build
 # Note:
 #
@@ -37,12 +37,13 @@ ZONE_SYNTHETIC_ALIAS = az_AZ.txt az_Latn_AZ.txt bs_BA.txt bs_Latn_BA.txt\
  pa_Arab_PK.txt pa_Guru_IN.txt pa_IN.txt pa_PK.txt ro_MD.txt\
  sh.txt sh_BA.txt sh_CS.txt sh_YU.txt shi_MA.txt\
  shi_Tfng_MA.txt sr_BA.txt sr_CS.txt sr_Cyrl_BA.txt sr_Cyrl_CS.txt\
- sr_Cyrl_RS.txt sr_Cyrl_YU.txt sr_Latn_BA.txt sr_Latn_CS.txt sr_Latn_ME.txt\
- sr_Latn_RS.txt sr_Latn_YU.txt sr_ME.txt sr_RS.txt sr_YU.txt\
- th_TH.txt th_TH_TRADITIONAL.txt tl.txt tl_PH.txt tzm_Latn_MA.txt\
- tzm_MA.txt uz_AF.txt uz_Arab_AF.txt uz_Cyrl_UZ.txt uz_UZ.txt\
- vai_LR.txt vai_Vaii_LR.txt zh_CN.txt zh_HK.txt zh_Hans_CN.txt\
- zh_Hant_MO.txt zh_Hant_TW.txt zh_MO.txt zh_SG.txt zh_TW.txt
+ sr_Cyrl_RS.txt sr_Cyrl_XK.txt sr_Cyrl_YU.txt sr_Latn_BA.txt sr_Latn_CS.txt\
+ sr_Latn_ME.txt sr_Latn_RS.txt sr_Latn_YU.txt sr_ME.txt sr_RS.txt\
+ sr_XK.txt sr_YU.txt th_TH.txt th_TH_TRADITIONAL.txt tl.txt\
+ tl_PH.txt tzm_Latn_MA.txt tzm_MA.txt uz_AF.txt uz_Arab_AF.txt\
+ uz_Cyrl_UZ.txt uz_UZ.txt vai_LR.txt vai_Vaii_LR.txt zh_CN.txt\
+ zh_HK.txt zh_Hans_CN.txt zh_Hant_MO.txt zh_Hant_TW.txt zh_MO.txt\
+ zh_SG.txt zh_TW.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.

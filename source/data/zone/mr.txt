@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/mr.xml
  */
 mr{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अबिद्जान"}
@@ -1763,6 +1763,9 @@ mr{
         }
         "meta:South_Georgia"{
             ls{"दक्षिण जॉर्जिया वेळ"}
+        }
+        "meta:Suriname"{
+            ls{"सुरिनाम वेळ"}
         }
         "meta:Syowa"{
             ls{"स्योवा वेळ"}

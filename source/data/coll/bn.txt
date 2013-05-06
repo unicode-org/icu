@@ -18,7 +18,7 @@ bn{
                 " Mlym Sinh]"
                 "&ঔ<ং<ঃ<ঁ"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
         traditional{
             Sequence{
@@ -638,7 +638,7 @@ bn{
                 "&যৌ<<<য়ৌ"
                 "&য্<<<য়্"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

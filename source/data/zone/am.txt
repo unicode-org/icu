@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/am.xml
  */
 am{
-    Version{"2.0.82.52"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"አቢጃን"}
@@ -1723,6 +1723,9 @@ am{
         }
         "meta:South_Georgia"{
             ls{"የደቡብ ጂዮርጂያ ሰዓት"}
+        }
+        "meta:Suriname"{
+            ls{"የሱሪናም ሰዓት"}
         }
         "meta:Syowa"{
             ls{"የሲዮዋ ሰዓት"}

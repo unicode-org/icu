@@ -851,7 +851,7 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
     codePatterns{
         language{"Kalba: {0}"}
         script{"Rašmenys: {0}"}

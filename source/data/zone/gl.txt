@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gl.xml
  */
 gl{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Xibutí"}
@@ -700,6 +700,9 @@ gl{
         }
         "meta:South_Georgia"{
             ls{"Horario de Xeorxia do Sur"}
+        }
+        "meta:Suriname"{
+            ls{"Horario de Surinam"}
         }
         "meta:Syowa"{
             ls{"Horario de Syowa"}

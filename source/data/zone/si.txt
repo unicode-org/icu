@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/si.xml
  */
 si{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"අබිජාන්"}
@@ -757,6 +757,9 @@ si{
             ld{"ශාන්ත පියරේ සහ මැකෝලන් දිවා කාලය"}
             lg{"ශාන්ත පියරේ සහ මැකෝලන් වේලාව"}
             ls{"ශාන්ත පියරේ සහ මැකෝලන් සම්මත වේලාව"}
+        }
+        "meta:Suriname"{
+            ls{"සුරිනාම වේලාව"}
         }
         "meta:Uruguay"{
             ld{"උරුගුවේ ග්‍රීෂ්ම කාලය"}
