@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/is.xml
  */
 is{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Algeirsborg"}
@@ -748,6 +748,9 @@ is{
         }
         "meta:South_Georgia"{
             ls{"Suður-Georgíutími"}
+        }
+        "meta:Suriname"{
+            ls{"Súrinamtími"}
         }
         "meta:Syowa"{
             ls{"Syowa-tími"}

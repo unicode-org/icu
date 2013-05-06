@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ja.xml
  */
 ja{
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"アビジャン"}
@@ -1767,6 +1767,9 @@ ja{
         }
         "meta:South_Georgia"{
             ls{"サウスジョージア時間"}
+        }
+        "meta:Suriname"{
+            ls{"スリナム時間"}
         }
         "meta:Syowa"{
             ls{"昭和基地時間"}

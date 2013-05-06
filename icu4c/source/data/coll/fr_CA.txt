@@ -14,7 +14,7 @@ fr_CA{
     collations{
         standard{
             Sequence{" [backwards 2]"}
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

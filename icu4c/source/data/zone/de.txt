@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/de.xml
  */
 de{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -869,6 +869,9 @@ de{
         }
         "meta:South_Georgia"{
             ls{"Südgeorgische Zeit"}
+        }
+        "meta:Suriname"{
+            ls{"Suriname-Zeit"}
         }
         "meta:Syowa"{
             ls{"Syowa-Zeit"}

@@ -17,7 +17,7 @@ bg{
                 " [reorder Cyrl][suppressContractions [АаӘәГгЕеЖжЗзІіОоӨөКкУуЧчЫыЭэѴѵ"
                 "]]"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

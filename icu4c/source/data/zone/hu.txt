@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/hu.xml
  */
 hu{
-    Version{"2.0.82.47"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addisz-Abeba"}
@@ -1097,6 +1097,9 @@ hu{
         }
         "meta:South_Georgia"{
             ls{"Dél-georgiai idő"}
+        }
+        "meta:Suriname"{
+            ls{"Szurinámi idő"}
         }
         "meta:Syowa"{
             ls{"Syowai idő"}

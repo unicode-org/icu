@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fil.xml
  */
 fil{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "America:Asuncion"{
             ec{"Asunción"}
@@ -541,6 +541,9 @@ fil{
         }
         "meta:South_Georgia"{
             ls{"Oras sa South Georgia"}
+        }
+        "meta:Suriname"{
+            ls{"Suriname Time"}
         }
         "meta:Syowa"{
             ls{"Oras sa Syowa"}

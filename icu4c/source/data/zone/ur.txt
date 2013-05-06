@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ur.xml
  */
 ur{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"عابدجان"}
@@ -1723,6 +1723,9 @@ ur{
         }
         "meta:South_Georgia"{
             ls{"جنوبی جارجیا کا وقت"}
+        }
+        "meta:Suriname"{
+            ls{"سورینام کا وقت"}
         }
         "meta:Syowa"{
             ls{"سیووا کا وقت"}

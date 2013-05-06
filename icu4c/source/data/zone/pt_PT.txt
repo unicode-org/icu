@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 pt_PT{
-    Version{"2.0.82.51"}
+    Version{"2.0.86.63"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Jibuti"}
@@ -653,6 +653,9 @@ pt_PT{
         }
         "meta:South_Georgia"{
             ls{"Hora da Geórgia do Sul"}
+        }
+        "meta:Suriname"{
+            ls{"Hora do Suriname"}
         }
         "meta:Syowa"{
             ls{"Hora de Syowa"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/gu.xml
  */
 gu{
-    Version{"2.0.82.47"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"આબિદ્જાન"}
@@ -1763,6 +1763,9 @@ gu{
         }
         "meta:South_Georgia"{
             ls{"દક્ષિણ જ્યોર્જીયા સમય"}
+        }
+        "meta:Suriname"{
+            ls{"સૂરીનામ સમય"}
         }
         "meta:Syowa"{
             ls{"સ્યોવા સમય"}

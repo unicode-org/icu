@@ -162,11 +162,12 @@ sq{
         VA{"Vatikan"}
         VC{"Saint Vincent e Grenadinet"}
         VE{"Venezuelë"}
+        XK{"Kosovë"}
         YE{"Jemen"}
         ZA{"Afrika e Jugut"}
         ZM{"Zambi"}
         ZW{"Zimbabve"}
         ZZ{"Rajon i panjohur"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.82"}
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/et.xml
  */
 et{
-    Version{"2.0.82.47"}
+    Version{"2.0.86.63"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Alžiir"}
@@ -780,6 +780,9 @@ et{
         }
         "meta:South_Georgia"{
             ls{"Lõuna-Georgia aeg"}
+        }
+        "meta:Suriname"{
+            ls{"Suriname aeg"}
         }
         "meta:Syowa"{
             ls{"Syowa aeg"}

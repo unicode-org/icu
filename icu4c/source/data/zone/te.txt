@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/te.xml
  */
 te{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"అబిడ్జాన్"}
@@ -1763,6 +1763,9 @@ te{
         }
         "meta:South_Georgia"{
             ls{"దక్షణ జార్జియా సమయం"}
+        }
+        "meta:Suriname"{
+            ls{"సూరినామ్ సమయం"}
         }
         "meta:Syowa"{
             ls{"స్యోవా సమయం"}

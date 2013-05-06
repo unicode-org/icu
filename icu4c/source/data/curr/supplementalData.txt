@@ -4418,6 +4418,37 @@ supplementalData:table(nofallback){
                 id{"WST"}
             }
         }
+        XK{
+            {
+                from:intvector{
+                    235,
+                    525885440,
+                }
+                id{"EUR"}
+            }
+            {
+                from:intvector{
+                    217,
+                    -158870528,
+                }
+                id{"DEM"}
+                to:intvector{
+                    236,
+                    2106118143,
+                }
+            }
+            {
+                from:intvector{
+                    176,
+                    -839611392,
+                }
+                id{"YUM"}
+                to:intvector{
+                    218,
+                    -1861837825,
+                }
+            }
+        }
         YD{
             {
                 from:intvector{

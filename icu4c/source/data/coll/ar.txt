@@ -14,7 +14,7 @@ ar{
     collations{
         standard{
             Sequence{" [reorder Arab]&ت<<ة<<<ﺔ<<<ﺓ&ي<<ى<<<ﯨ<<<ﯩ<<<ﻰ<<<ﻯ<<<ﲐ<<<ﱝ"}
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/kn.xml
  */
 kn{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ಅಬಿದ್‌ಜನ್"}
@@ -1724,6 +1724,9 @@ kn{
         }
         "meta:South_Georgia"{
             ls{"ದಕ್ಷಿಣ ಜಾರ್ಜಿಯಾ ಸಮಯ"}
+        }
+        "meta:Suriname"{
+            ls{"ಸುರಿನೇಮ್ ಸಮಯ"}
         }
         "meta:Syowa"{
             ls{"ಸ್ಯೊವಾ ಸಮಯ"}

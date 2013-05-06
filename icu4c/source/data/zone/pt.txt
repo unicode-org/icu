@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/pt.xml
  */
 pt{
-    Version{"2.0.82.47"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Argel"}
@@ -947,6 +947,9 @@ pt{
         }
         "meta:South_Georgia"{
             ls{"Horário da Geórgia do Sul"}
+        }
+        "meta:Suriname"{
+            ls{"Horário do Suriname"}
         }
         "meta:Syowa"{
             ls{"Horário de Syowa"}

@@ -294,6 +294,7 @@ hu{
         VU{"Vanuatu"}
         WF{"Wallis- és Futuna-szigetek"}
         WS{"Szamoa"}
+        XK{"Koszovó"}
         YE{"Jemen"}
         YT{"Mayotte"}
         ZA{"Dél-afrikai Köztársaság"}
@@ -301,5 +302,5 @@ hu{
         ZW{"Zimbabwe"}
         ZZ{"Ismeretlen vagy érvénytelen körzet"}
     }
-    Version{"2.0.82.47"}
+    Version{"2.0.86.71"}
 }

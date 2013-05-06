@@ -184,7 +184,7 @@ ja{
         native{"latn"}
         traditional{"jpan"}
     }
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
     calendar{
         buddhist{
             DateTimePatterns{

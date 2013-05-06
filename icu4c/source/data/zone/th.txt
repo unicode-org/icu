@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/th.xml
  */
 th{
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"อาบีจาน"}
@@ -1753,6 +1753,9 @@ th{
         }
         "meta:South_Georgia"{
             ls{"เวลาเซาท์จอร์เจีย"}
+        }
+        "meta:Suriname"{
+            ls{"เวลาซูรินาเม"}
         }
         "meta:Tahiti"{
             ls{"เวลาตาฮีตี"}
