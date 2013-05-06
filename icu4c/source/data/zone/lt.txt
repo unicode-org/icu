@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/lt.xml
  */
 lt{
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžanas"}
@@ -1354,6 +1354,9 @@ lt{
         }
         "meta:South_Georgia"{
             ls{"Pietų Džordžijos laikas"}
+        }
+        "meta:Suriname"{
+            ls{"Surinamo laikas"}
         }
         "meta:Syowa"{
             ls{"Siovos laikas"}

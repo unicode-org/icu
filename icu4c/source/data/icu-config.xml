@@ -523,6 +523,7 @@
 		<include locales="sg"/>
 		<include locales="sg_CF"/>
 		<include locales="sq_MK"/>
+		<include locales="sq_XK"/>
 		<include locales="sh"/>
 		<include locales="sh_BA"/>
 		<include locales="sh_CS"/>
@@ -554,12 +555,14 @@
 		<include locales="sr_Latn_ME" />
 		<include locales="sr_Latn_RS" />
 		<include locales="sr_Latn_CS" />
+		<include locales="sr_Latn_XK" />
 		<include locales="sr_Latn_YU" />
 		<include locales="sr_Cyrl"/>
 		<include locales="sr_Cyrl_BA"/>
 		<include locales="sr_Cyrl_ME" />
 		<include locales="sr_Cyrl_RS" />
 		<include locales="sr_Cyrl_CS" />
+		<include locales="sr_Cyrl_XK" />
 		<include locales="sr_Cyrl_YU" />
 		<include locales="sr_BA"/>
 		<include locales="sr_ME"/>

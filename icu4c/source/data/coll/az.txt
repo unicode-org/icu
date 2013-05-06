@@ -71,7 +71,7 @@ az{
                 "&E<ə<<<Ə"
                 "&H<x<<<X"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
         standard{
             Sequence{
@@ -87,7 +87,7 @@ az{
                 "&E<ə<<<Ə"
                 "&H<x<<<X"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

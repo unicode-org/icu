@@ -925,7 +925,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.82.76"}
+    Version{"2.0.86.71"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}

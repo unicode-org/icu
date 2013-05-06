@@ -26,7 +26,7 @@ ee{
                 "&T<ts<<<Ts<<<TS"
                 "&V<ʋ<<<Ʋ"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

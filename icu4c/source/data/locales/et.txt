@@ -142,7 +142,7 @@ et{
             }
         }
     }
-    Version{"2.0.82.47"}
+    Version{"2.0.86.63"}
     calendar{
         generic{
             DateTimePatterns{

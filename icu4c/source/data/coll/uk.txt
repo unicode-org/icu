@@ -17,7 +17,7 @@ uk{
                 " [reorder Cyrl][suppressContractions [АаӘәГгЕеЖжЗзОоӨөКкУуЧчЫыЭэѴѵ]]"
                 "&Г<ґ<<<Ґ"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

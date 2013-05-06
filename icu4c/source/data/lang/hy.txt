@@ -234,7 +234,7 @@ hy{
             tibt{"տիբեթական թվեր"}
         }
     }
-    Version{"2.0.82.51"}
+    Version{"2.0.86.71"}
     codePatterns{
         language{"Լեզու. {0}"}
         script{"Գիր. {0}"}

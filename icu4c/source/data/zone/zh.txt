@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/zh.xml
  */
 zh{
-    Version{"2.0.82.60"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -1767,6 +1767,9 @@ zh{
         }
         "meta:South_Georgia"{
             ls{"南乔治亚岛时间"}
+        }
+        "meta:Suriname"{
+            ls{"苏里南时间"}
         }
         "meta:Syowa"{
             ls{"昭和时间"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/es.xml
  */
 es{
-    Version{"2.0.82.47"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abiyán"}
@@ -1030,6 +1030,9 @@ es{
         }
         "meta:South_Georgia"{
             ls{"Hora de Georgia meridional"}
+        }
+        "meta:Suriname"{
+            ls{"Hora de Surinam"}
         }
         "meta:Syowa"{
             ls{"Hora de Syowa"}

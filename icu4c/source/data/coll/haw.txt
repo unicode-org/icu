@@ -28,7 +28,7 @@ haw{
                 "&p<<<P"
                 "&w<<<W"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

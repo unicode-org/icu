@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/en.xml
  */
 en{
-    Version{"2.0.82.76"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -610,6 +610,9 @@ en{
         }
         "meta:South_Georgia"{
             ls{"South Georgia Time"}
+        }
+        "meta:Suriname"{
+            ls{"Suriname Time"}
         }
         "meta:Syowa"{
             ls{"Syowa Time"}

@@ -40,6 +40,7 @@
     <alias from="sr_CS" to="sr_Cyrl_RS"/>
     <alias from="sr_ME" to="sr_Latn_ME"/>
     <alias from="sr_RS" to="sr_Cyrl_RS"/>
+    <alias from="sr_XK" to="sr_Cyrl_XK"/>
     <alias from="sr_YU" to="sr_Cyrl_RS"/>
     <alias from="sr_Cyrl_YU" to="sr_Cyrl_RS"/>
     <alias from="sr_Cyrl_CS" to="sr_Cyrl_RS"/>

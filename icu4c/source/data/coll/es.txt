@@ -62,15 +62,15 @@ es{
                 "&ᅮᅵ=ᅱ"
                 "&N<ñ<<<Ñ"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
         standard{
             Sequence{"&N<ñ<<<Ñ"}
-            Version{"23"}
+            Version{"23.1"}
         }
         traditional{
             Sequence{"&N<ñ<<<Ñ&C<ch<<<Ch<<<CH&l<ll<<<Ll<<<LL"}
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

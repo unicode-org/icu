@@ -69,5 +69,5 @@ pt_PT{
         ZW{"Zimbabué"}
         ZZ{"Região desconhecida ou inválida"}
     }
-    Version{"2.0.82.51"}
+    Version{"2.0.86.63"}
 }

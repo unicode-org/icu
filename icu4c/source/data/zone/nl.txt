@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nl.xml
  */
 nl{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -905,6 +905,9 @@ nl{
         }
         "meta:South_Georgia"{
             ls{"Zuid-Georgische tijd"}
+        }
+        "meta:Suriname"{
+            ls{"Surinaamse tijd"}
         }
         "meta:Syowa"{
             ls{"Syowa tijd"}

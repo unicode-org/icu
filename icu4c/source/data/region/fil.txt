@@ -294,6 +294,7 @@ fil{
         VU{"Vanuatu"}
         WF{"Wallis and the Futuna Islands"}
         WS{"Samoa"}
+        XK{"Kosovo"}
         YE{"Yemen"}
         YT{"Mayotte"}
         ZA{"South Africa"}
@@ -301,5 +302,5 @@ fil{
         ZW{"Zimbabwe"}
         ZZ{"Hindi kilala o Hindi wastong Rehiyon"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
 }

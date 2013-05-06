@@ -191,7 +191,7 @@ sr_Latn{
             }
         }
     }
-    Version{"2.0.82.51"}
+    Version{"2.0.86.79"}
     calendar{
         buddhist{
             eras{

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/dz.xml
  */
 dz{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.63"}
     zoneStrings{
         "Africa:Cairo"{
             ec{"ཀཱའི་རོ"}
@@ -516,6 +516,9 @@ dz{
         }
         "meta:Seychelles"{
             ls{"སེ་ཤཱལས་ཆུ་ཚོད"}
+        }
+        "meta:Suriname"{
+            ls{"སུ་རི་ནཱམ་ཆུ་ཚོད"}
         }
         "meta:Uruguay"{
             ld{"ཡུ་རུ་གུ་ཝཱའི་བྱཱར་དུས་ཆུ་ཚོད"}

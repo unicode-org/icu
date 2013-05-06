@@ -294,6 +294,7 @@ eu{
         VU{"Vanuatu"}
         WF{"Wallis eta Futuna"}
         WS{"Samoa"}
+        XK{"Kosovo"}
         YE{"Yemen"}
         YT{"Mayotte"}
         ZA{"Hegoafrika"}
@@ -301,5 +302,5 @@ eu{
         ZW{"Zimbabwe"}
         ZZ{"Eskualde ezezaguna"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
 }
