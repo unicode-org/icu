@@ -63,11 +63,11 @@ root{
                 "&ᅮᅴᅵ=ᅰ"
                 "&ᅮᅵ=ᅱ"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
         standard{
             Sequence{""}
-            Version{"23"}
+            Version{"23.1"}
         }
     }
     depends:process(dependency){"ucadata.icu"}

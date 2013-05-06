@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sw.xml
  */
 sw{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -532,6 +532,9 @@ sw{
         }
         "meta:South_Georgia"{
             ls{"Saa ya Jojia Kusini"}
+        }
+        "meta:Suriname"{
+            ls{"Saa ya Surinam"}
         }
         "meta:Syowa"{
             ls{"Saa ya Syowa"}

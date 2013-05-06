@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/tr.xml
  */
 tr{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abican"}
@@ -968,6 +968,9 @@ tr{
         }
         "meta:South_Georgia"{
             ls{"Güney Georgia Saati"}
+        }
+        "meta:Suriname"{
+            ls{"Surinam Saati"}
         }
         "meta:Syowa"{
             ls{"Showa Saati"}

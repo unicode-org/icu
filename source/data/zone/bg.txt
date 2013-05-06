@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/bg.xml
  */
 bg{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.63"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -1723,6 +1723,9 @@ bg{
         }
         "meta:South_Georgia"{
             ls{"Южна Джорджия"}
+        }
+        "meta:Suriname"{
+            ls{"Суринамско време"}
         }
         "meta:Syowa"{
             ls{"Шова"}

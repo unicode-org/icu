@@ -1,6 +1,6 @@
 # *   Copyright (C) 1998-2013, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-GENRB_CLDR_VERSION = 23
+GENRB_CLDR_VERSION = 23.1
 # A list of txt's to build
 # Note:
 #
@@ -33,10 +33,10 @@ GENRB_SYNTHETIC_ALIAS = az_AZ.txt bs_BA.txt en_NH.txt en_RH.txt\
  no.txt no_NO.txt no_NO_NY.txt pa_IN.txt pa_PK.txt\
  sh.txt sh_BA.txt sh_CS.txt sh_YU.txt shi_MA.txt\
  sr_BA.txt sr_CS.txt sr_Cyrl_CS.txt sr_Cyrl_YU.txt sr_Latn_CS.txt\
- sr_Latn_YU.txt sr_ME.txt sr_RS.txt sr_YU.txt th_TH_TRADITIONAL.txt\
- tl.txt tl_PH.txt tzm_MA.txt uz_AF.txt uz_UZ.txt\
- vai_LR.txt zh_CN.txt zh_HK.txt zh_MO.txt zh_SG.txt\
- zh_TW.txt
+ sr_Latn_YU.txt sr_ME.txt sr_RS.txt sr_XK.txt sr_YU.txt\
+ th_TH_TRADITIONAL.txt tl.txt tl_PH.txt tzm_MA.txt uz_AF.txt\
+ uz_UZ.txt vai_LR.txt zh_CN.txt zh_HK.txt zh_MO.txt\
+ zh_SG.txt zh_TW.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.
@@ -147,21 +147,22 @@ GENRB_SOURCE = af.txt af_NA.txt af_ZA.txt agq.txt\
  si_LK.txt sk.txt sk_SK.txt sl.txt sl_SI.txt\
  sn.txt sn_ZW.txt so.txt so_DJ.txt so_ET.txt\
  so_KE.txt so_SO.txt sq.txt sq_AL.txt sq_MK.txt\
- sr.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt sr_Cyrl_RS.txt\
- sr_Latn.txt sr_Latn_BA.txt sr_Latn_ME.txt sr_Latn_RS.txt sv.txt\
- sv_AX.txt sv_FI.txt sv_SE.txt sw.txt sw_KE.txt\
- sw_TZ.txt sw_UG.txt swc.txt swc_CD.txt ta.txt\
- ta_IN.txt ta_LK.txt ta_MY.txt ta_SG.txt te.txt\
- te_IN.txt teo.txt teo_KE.txt teo_UG.txt th.txt\
- th_TH.txt ti.txt ti_ER.txt ti_ET.txt to.txt\
- to_TO.txt tr.txt tr_CY.txt tr_TR.txt twq.txt\
- twq_NE.txt tzm.txt tzm_Latn.txt tzm_Latn_MA.txt uk.txt\
- uk_UA.txt ur.txt ur_IN.txt ur_PK.txt uz.txt\
- uz_Arab.txt uz_Arab_AF.txt uz_Cyrl.txt uz_Cyrl_UZ.txt uz_Latn.txt\
- uz_Latn_UZ.txt vai.txt vai_Latn.txt vai_Latn_LR.txt vai_Vaii.txt\
- vai_Vaii_LR.txt vi.txt vi_VN.txt vun.txt vun_TZ.txt\
- xog.txt xog_UG.txt yav.txt yav_CM.txt yo.txt\
- yo_NG.txt zh.txt zh_Hans.txt zh_Hans_CN.txt zh_Hans_HK.txt\
- zh_Hans_MO.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt\
- zh_Hant_TW.txt zu.txt zu_ZA.txt
+ sq_XK.txt sr.txt sr_Cyrl.txt sr_Cyrl_BA.txt sr_Cyrl_ME.txt\
+ sr_Cyrl_RS.txt sr_Cyrl_XK.txt sr_Latn.txt sr_Latn_BA.txt sr_Latn_ME.txt\
+ sr_Latn_RS.txt sr_Latn_XK.txt sv.txt sv_AX.txt sv_FI.txt\
+ sv_SE.txt sw.txt sw_KE.txt sw_TZ.txt sw_UG.txt\
+ swc.txt swc_CD.txt ta.txt ta_IN.txt ta_LK.txt\
+ ta_MY.txt ta_SG.txt te.txt te_IN.txt teo.txt\
+ teo_KE.txt teo_UG.txt th.txt th_TH.txt ti.txt\
+ ti_ER.txt ti_ET.txt to.txt to_TO.txt tr.txt\
+ tr_CY.txt tr_TR.txt twq.txt twq_NE.txt tzm.txt\
+ tzm_Latn.txt tzm_Latn_MA.txt uk.txt uk_UA.txt ur.txt\
+ ur_IN.txt ur_PK.txt uz.txt uz_Arab.txt uz_Arab_AF.txt\
+ uz_Cyrl.txt uz_Cyrl_UZ.txt uz_Latn.txt uz_Latn_UZ.txt vai.txt\
+ vai_Latn.txt vai_Latn_LR.txt vai_Vaii.txt vai_Vaii_LR.txt vi.txt\
+ vi_VN.txt vun.txt vun_TZ.txt xog.txt xog_UG.txt\
+ yav.txt yav_CM.txt yo.txt yo_NG.txt zh.txt\
+ zh_Hans.txt zh_Hans_CN.txt zh_Hans_HK.txt zh_Hans_MO.txt zh_Hans_SG.txt\
+ zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt zh_Hant_TW.txt zu.txt\
+ zu_ZA.txt
 

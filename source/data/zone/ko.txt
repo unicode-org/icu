@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ko.xml
  */
 ko{
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"아비장"}
@@ -1733,6 +1733,9 @@ ko{
         }
         "meta:South_Georgia"{
             ls{"사우스 조지아 시간"}
+        }
+        "meta:Suriname"{
+            ls{"수리남 시간"}
         }
         "meta:Syowa"{
             ls{"쇼와 시간"}

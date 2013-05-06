@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/sk.xml
  */
 sk{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Džibutsko"}
@@ -673,6 +673,9 @@ sk{
         }
         "meta:South_Georgia"{
             ls{"Čas Južnej Georgie"}
+        }
+        "meta:Suriname"{
+            ls{"Surinamský čas"}
         }
         "meta:Syowa"{
             ls{"Čas stanice Šówa"}

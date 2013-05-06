@@ -61,11 +61,11 @@ he{
                 "&ᅮᅴᅵ=ᅰ"
                 "&ᅮᅵ=ᅱ"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
         standard{
             Sequence{" [normalization on] [reorder Hebr]&[before 2]''<<׳&[before 2]'\"'<<״"}
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/collation/sq.xml
  */
 sq{
-    Version{"2.0.82.42"}
+    Version{"2.0.86.78"}
     collations{
         standard{
             Sequence{
@@ -26,7 +26,7 @@ sq{
                 "&[before 1]Y<xh<<<Xh<<<XH"
                 "&[before 1]Ʒ<zh<<<Zh<<<ZH"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

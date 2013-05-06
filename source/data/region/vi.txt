@@ -293,6 +293,7 @@ vi{
         VU{"Vanuatu"}
         WF{"Wallis và Futuna"}
         WS{"Samoa"}
+        XK{"Kosovo"}
         YE{"Yemen"}
         YT{"Mayotte"}
         ZA{"Nam Phi"}
@@ -300,5 +301,5 @@ vi{
         ZW{"Zimbabwe"}
         ZZ{"Vùng Chưa biết hoặc không Hợp lệ"}
     }
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
 }

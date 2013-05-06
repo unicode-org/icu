@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/fr.xml
  */
 fr{
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis-Abeba"}
@@ -976,6 +976,9 @@ fr{
         }
         "meta:South_Georgia"{
             ls{"heure de Géorgie du Sud"}
+        }
+        "meta:Suriname"{
+            ls{"heure du Suriname"}
         }
         "meta:Syowa"{
             ls{"heure de Syowa"}

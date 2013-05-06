@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/el.xml
  */
 el{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Αμπιτζάν"}
@@ -1745,6 +1745,9 @@ el{
         }
         "meta:South_Georgia"{
             ls{"Ώρα Νότιας Γεωργίας"}
+        }
+        "meta:Suriname"{
+            ls{"Ώρα Σουρινάμ"}
         }
         "meta:Syowa"{
             ls{"Ώρα Σίοβα"}

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/ms.xml
  */
 ms{
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "America:Lower_Princes"{
             ec{"Lower Prince's Quarter"}
@@ -532,6 +532,9 @@ ms{
         }
         "meta:South_Georgia"{
             ls{"Waktu Georgia Selatan"}
+        }
+        "meta:Suriname"{
+            ls{"Waktu Suriname"}
         }
         "meta:Syowa"{
             ls{"Waktu Syowa"}

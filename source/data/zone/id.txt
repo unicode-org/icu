@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/id.xml
  */
 id{
-    Version{"2.0.82.57"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akra"}
@@ -817,6 +817,9 @@ id{
         }
         "meta:South_Georgia"{
             ls{"Waktu Georgia Selatan"}
+        }
+        "meta:Suriname"{
+            ls{"Waktu Suriname"}
         }
         "meta:Syowa"{
             ls{"Waktu Syowa"}

@@ -294,6 +294,7 @@ is{
         VU{"Vanúatú"}
         WF{"Wallis- og Fútúnaeyjar"}
         WS{"Samóa"}
+        XK{"Kósóvó"}
         YE{"Jemen"}
         YT{"Mayotte"}
         ZA{"Suður-Afríka"}
@@ -301,5 +302,5 @@ is{
         ZW{"Simbabve"}
         ZZ{"Óþekkt svæði"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.71"}
 }

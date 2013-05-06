@@ -919,7 +919,7 @@ zh{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.82.60"}
+    Version{"2.0.86.71"}
     codePatterns{
         language{"语言：{0}"}
         script{"文字：{0}"}

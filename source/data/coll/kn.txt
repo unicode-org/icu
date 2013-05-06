@@ -18,7 +18,7 @@ kn{
                 " Mlym Sinh]"
                 "&ಔ<ಂ<ಃ<ೱ<ೲ"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
         traditional{
             Sequence{
@@ -660,7 +660,7 @@ kn{
                 "&ಫೋ<<<ಫ಼ೋ"
                 "&ಫೌ<<<ಫ಼ೌ"
             }
-            Version{"23"}
+            Version{"23.1"}
         }
     }
 }

@@ -10,7 +10,7 @@
  *  ICU <specials> source: <path>/xml/main/nb.xml
  */
 nb{
-    Version{"2.0.82.47"}
+    Version{"2.0.86.71"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -596,6 +596,9 @@ nb{
             ld{"Russisk (Samara) sommertid"}
             lg{"Russisk (Samara) tid"}
             ls{"Russisk (Samara) normaltid"}
+        }
+        "meta:Suriname"{
+            ls{"Surinam-tid"}
         }
         "meta:Vladivostok"{
             ld{"Russisk (Vladivostok) sommertid"}
