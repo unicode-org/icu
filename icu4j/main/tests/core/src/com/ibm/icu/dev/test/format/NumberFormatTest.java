@@ -44,7 +44,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         new NumberFormatTest().run(args);
     }
     
-    public void TestParseNegativeWithLocaleUsingNonAsciiNegative() {
+    public void TestParseNegativeWithFaLocale() {
         DecimalFormat parser = (DecimalFormat) NumberFormat.getInstance(new ULocale("fa"));
         try {
           double value = parser.parse("-0,5").doubleValue();
@@ -54,7 +54,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
     
-    public void TestParseNegativeEnglishButWithAlternativeMinusSign() {
+    public void TestParseNegativeWithAlternativeMinusSign() {
         DecimalFormat parser = (DecimalFormat) NumberFormat.getInstance(new ULocale("en"));
         try {
           double value = parser.parse("\u208B0.5").doubleValue();

@@ -1764,39 +1764,6 @@ public class DecimalFormat extends NumberFormat {
         Currency[] currency = new Currency[1];
         return (CurrencyAmount) parse(text.toString(), pos, currency);
     }
-    
-    /**
-     * NormalizePlusAndMinus substitutes any rendition of plus or minus sign in
-     * text with the plus or minus sign for the current locale and returns the
-     * new string.
-     */
-    private String normalizePlusAndMinus(String text) {
-        StringBuilder builder = null;
-        int len = text.length();
-        for (int i = 0; i < len; i++) {
-            if (minusSigns.contains(text.charAt(i)) && text.charAt(i) != symbols.getMinusSign()) {
-                builder = append(builder, text, i);
-                builder.append(symbols.getMinusSign());
-            }
-            if (plusSigns.contains(text.charAt(i)) && text.charAt(i) != symbols.getPlusSign()) {
-                builder = append(builder, text, i);
-                builder.append(symbols.getPlusSign());
-            }
-        }
-        if (builder == null) {
-            return text;
-        }
-        return append(builder, text, len).toString();
-        
-    }
-    
-    private StringBuilder append(StringBuilder builder, String text, int upToIndex) {
-        if (builder == null) {
-            builder = new StringBuilder(text.length());
-        }
-        builder.append(text.substring(builder.length(), upToIndex));
-        return builder;
-    }
 
     /**
      * Parses the given text as either a Number or a CurrencyAmount.
@@ -1811,14 +1778,6 @@ public class DecimalFormat extends NumberFormat {
      * @return a Number or CurrencyAmount or null
      */
     private Object parse(String text, ParsePosition parsePosition, Currency[] currency) {
-        text = normalizePlusAndMinus(text);
-        if (symbols.getMinusSign() != '-') {
-            text = text.replace('-', symbols.getMinusSign());
-        }
-        if (symbols.getPlusSign() != '+') {
-            text = text.replace('+', symbols.getPlusSign());
-        }
-       
         int backup;
         int i = backup = parsePosition.getIndex();
 
@@ -2745,7 +2704,7 @@ public class DecimalFormat extends NumberFormat {
                 // (such as U+00A0) that is also in the affix.
                 i = skipUWhiteSpace(affix, i);
             } else {
-                if (pos < input.length() && UTF16.charAt(input, pos) == c) {
+                if (pos < input.length() && equalWithSignCompatibility(UTF16.charAt(input, pos), c)) {
                     i += len;
                     pos += len;
                 } else {
@@ -2754,6 +2713,12 @@ public class DecimalFormat extends NumberFormat {
             }
         }
         return pos - start;
+    }
+
+    private static boolean equalWithSignCompatibility(int lhs, int rhs) {
+        return lhs == rhs
+                || (minusSigns.contains(lhs) && minusSigns.contains(rhs))
+                || (plusSigns.contains(lhs) && plusSigns.contains(rhs));
     }
 
     /**
