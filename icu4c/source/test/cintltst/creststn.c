@@ -282,7 +282,7 @@ static void TestErrorCodes(void) {
 
   /* we look up the resource which is aliased and at our level */
   /* TODO: restore the following test when cldrbug 3058: is fixed - but CldrBug:3058 is WONTFIX */
-  if(U_SUCCESS(status) && r != NULL && isICUVersionAtLeast(52, 0, 1)) {
+  if(U_SUCCESS(status) && r != NULL && isICUVersionAtLeast(52, 0, 2)) {
     status = U_USING_DEFAULT_WARNING;
     r2 = ures_getByKey(r, "Countries", r2, &status);
     checkStatus(__LINE__, U_USING_DEFAULT_WARNING, status);
