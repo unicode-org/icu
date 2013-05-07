@@ -66,11 +66,11 @@ SO_TARGET_VERSION_SUFFIX =
 endif
 
 # Static library prefix and file extension
-LIBSICU = $(LIBPREFIX)$(STATIC_PREFIX)$(ICUPREFIX)
+LIBSICU = lib$(LIBPREFIX)$(STATIC_PREFIX)$(ICUPREFIX)
 A = a
 
 ## An import library is needed for z/OS and MSVC
-IMPORT_LIB_EXT = .lib
+IMPORT_LIB_EXT = .dll.a
 
 LIBPREFIX=
 
