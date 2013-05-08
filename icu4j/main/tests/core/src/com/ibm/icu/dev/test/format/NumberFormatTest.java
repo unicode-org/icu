@@ -730,6 +730,13 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         expectCurrency(fmt, Currency.getInstance(Locale.FRANCE),
                        1234.56, "1 234,56 \u20AC"); // Euro
     }
+    
+    public void TestCompatibleCurrencies() {
+        NumberFormat fmt =
+                NumberFormat.getCurrencyInstance(Locale.US);
+        expectParseCurrency(fmt, Currency.getInstance(Locale.JAPAN), "\u00A51,235"); // Yen half-width        
+        expectParseCurrency(fmt, Currency.getInstance(Locale.JAPAN), "\uFFE51,235"); // Yen full-wdith
+    }
 
     public void TestCurrencyPatterns() {
         int i;
@@ -2184,6 +2191,14 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         } else {
             errln("FAIL \"" + pat + "\", expected \"" + exp + "\"");
         }
+    }
+    
+  
+    private void expectParseCurrency(NumberFormat fmt, Currency expected, String text) {
+        ParsePosition pos = new ParsePosition(0);
+        CurrencyAmount currencyAmount = fmt.parseCurrency(text, pos);
+        assertTrue("Parse of " + text + " should have succeeded.", pos.getIndex() > 0);
+        assertEquals("Currency should be correct.", expected, currencyAmount.getCurrency());      
     }
 
     public void TestJB3832(){
