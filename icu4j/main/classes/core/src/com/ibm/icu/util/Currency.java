@@ -87,6 +87,13 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 4.2
      */
     public static final int PLURAL_LONG_NAME = 2;
+    
+    private static final EquivalenceRelation<String> EQUIVALENT_CURRENCY_SYMBOLS =
+            new EquivalenceRelation<String>()
+            .add("\u00a5", "\uffe5")
+            .add("$", "\ufe69", "\uff04")
+            .add("\u20a8", "\u20b9")
+            .add("\u00a3", "\u20a4");
 
     // begin registry stuff
 
@@ -682,7 +689,9 @@ public class Currency extends MeasureUnit implements Serializable {
         for (Map.Entry<String, String> e : names.symbolMap().entrySet()) {
             String symbol = e.getKey();
             String isoCode = e.getValue();
-            symTrie.put(symbol, new CurrencyStringInfo(isoCode, symbol));
+            for (String equivalentSymbol : EQUIVALENT_CURRENCY_SYMBOLS.get(symbol)) {
+                symTrie.put(equivalentSymbol, new CurrencyStringInfo(isoCode, symbol));
+            }
         }
         for (Map.Entry<String, String> e : names.nameMap().entrySet()) {
             String name = e.getKey();
@@ -880,6 +889,33 @@ public class Currency extends MeasureUnit implements Serializable {
     private static List<String> getTenderCurrencies(CurrencyFilter filter) {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
         return info.currencies(filter.withTender());
+    }
+    
+    private static final class EquivalenceRelation<T> {
+        
+        private Map<T, Set<T>> data = new HashMap<T, Set<T>>();
+        
+        public EquivalenceRelation<T> add(T... items) {
+            Set<T> group = new HashSet<T>();
+            for (T item : items) {
+                if (data.containsKey(item)) {
+                    throw new IllegalArgumentException("All groups passed to add must be disjoint.");
+                }
+                group.add(item);
+            }
+            for (T item : items) {
+                data.put(item, group);
+            }
+            return this;
+        }
+        
+        public Set<T> get(T item) {
+            Set<T> result = data.get(item);
+            if (result == null) {
+                return Collections.singleton(item);
+            }
+            return Collections.unmodifiableSet(result);
+        }
     }
 }
 //eof
