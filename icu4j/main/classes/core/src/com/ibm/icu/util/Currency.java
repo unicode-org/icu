@@ -12,6 +12,7 @@ import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -654,35 +655,18 @@ public class Currency extends MeasureUnit implements Serializable {
         TextTrieMap<CurrencyStringInfo> currencyNameTrie = currencyTrieVec.get(1);
         CurrencyNameResultHandler handler = new CurrencyNameResultHandler();
         currencyNameTrie.find(text, pos.getIndex(), handler);
-        List<CurrencyStringInfo> list = handler.getMatchedCurrencyNames();
-        if (list != null && list.size() != 0) {
-            for (CurrencyStringInfo info : list) {
-                String isoCode = info.getISOCode();
-                String currencyString = info.getCurrencyString();
-                if (currencyString.length() > maxLength) {
-                    maxLength = currencyString.length();
-                    isoResult = isoCode;
-                }
-            }
-        }
+        isoResult = handler.getBestCurrencyISOCode();
+        maxLength = handler.getBestMatchLength();
 
         if (type != Currency.LONG_NAME) {  // not long name only
             TextTrieMap<CurrencyStringInfo> currencySymbolTrie = currencyTrieVec.get(0);
             handler = new CurrencyNameResultHandler();
             currencySymbolTrie.find(text, pos.getIndex(), handler);
-            list = handler.getMatchedCurrencyNames();
-            if (list != null && list.size() != 0) {
-                for (CurrencyStringInfo info : list) {
-                    String isoCode = info.getISOCode();
-                    String currencyString = info.getCurrencyString();
-                    if (currencyString.length() > maxLength) {
-                        maxLength = currencyString.length();
-                        isoResult = isoCode;
-                    }
-                }
+            if (handler.getBestMatchLength() > maxLength) {
+                isoResult = handler.getBestCurrencyISOCode();
+                maxLength = handler.getBestMatchLength();
             }
         }
-
         int start = pos.getIndex();
         pos.setIndex(start + maxLength);
         return isoResult;
@@ -727,40 +711,23 @@ public class Currency extends MeasureUnit implements Serializable {
 
     private static class CurrencyNameResultHandler 
             implements TextTrieMap.ResultHandler<CurrencyStringInfo> {
-        private ArrayList<CurrencyStringInfo> resultList;
+        private int bestMatchLength;
+        private String bestCurrencyISOCode;
     
         public boolean handlePrefixMatch(int matchLength, Iterator<CurrencyStringInfo> values) {
-            if (resultList == null) {
-                resultList = new ArrayList<CurrencyStringInfo>();
-            }
-            while (values.hasNext()) {
-                CurrencyStringInfo item = values.next();
-                if (item == null) {
-                    break;
-                }
-                int i = 0;
-                for (; i < resultList.size(); i++) {
-                    CurrencyStringInfo tmp = resultList.get(i);
-                    if (item.getISOCode().equals(tmp.getISOCode())) {
-                        if (matchLength > tmp.getCurrencyString().length()) {
-                            resultList.set(i, item);
-                        }
-                        break;
-                    }
-                }
-                if (i == resultList.size()) {
-                    // not found in the current list
-                    resultList.add(item);
-                }
+            if (values.hasNext()) {
+                bestCurrencyISOCode = values.next().getISOCode();
+                bestMatchLength = matchLength;
             }
             return true;
         }
 
-        List<CurrencyStringInfo> getMatchedCurrencyNames() {
-            if (resultList == null || resultList.size() == 0) {
-                return null;
-            }
-            return resultList;
+        public String getBestCurrencyISOCode() {
+            return bestCurrencyISOCode;
+        }
+        
+        public int getBestMatchLength() {
+            return bestMatchLength;
         }
     }
 
