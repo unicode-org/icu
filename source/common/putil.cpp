@@ -681,6 +681,7 @@ extern U_IMPORT char *U_TZNAME[];
 #elif U_PLATFORM == U_PF_SOLARIS
 #define TZDEFAULT       "/etc/localtime"
 #define TZZONEINFO      "/usr/share/lib/zoneinfo/"
+#define TZZONEINFO2     "../usr/share/lib/zoneinfo/"
 #define TZ_ENV_CHECK    "localtime"
 #else
 #define TZDEFAULT       "/etc/localtime"
@@ -1041,6 +1042,17 @@ uprv_tzname(int n)
             {
                 return (gTimeZoneBufferPtr = gTimeZoneBuffer + tzZoneInfoLen);
             }
+#if U_PLATFORM == U_PF_SOLARIS
+            else
+            {
+                tzZoneInfoLen = uprv_strlen(TZZONEINFO2);
+                if (uprv_strncmp(gTimeZoneBuffer, TZZONEINFO2, tzZoneInfoLen) == 0
+                                && isValidOlsonID(gTimeZoneBuffer + tzZoneInfoLen))
+                {
+                    return (gTimeZoneBufferPtr = gTimeZoneBuffer + tzZoneInfoLen);
+                }
+            }
+#endif
         } else {
 #if defined(SEARCH_TZFILE)
             DefaultTZInfo* tzInfo = (DefaultTZInfo*)uprv_malloc(sizeof(DefaultTZInfo));
