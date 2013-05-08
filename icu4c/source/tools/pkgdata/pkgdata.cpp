@@ -1326,6 +1326,31 @@ static int32_t pkg_generateLibraryFile(const char *targetDir, const char mode, c
 
         /* Generate the library file. */
         result = runCommand(cmd);
+
+#if U_PLATFORM == U_PF_OS390 && defined(OS390BATCH)
+        char PDS_LibName[512];
+        if (uprv_strcmp(libFileNames[LIB_FILE],"libicudata") == 0) {
+            sprintf(PDS_LibName,"%s%s%s",
+                    "\"//'",
+                    getenv("LOADMOD"),
+                    "(IXMI" U_ICU_VERSION_SHORT "DA)'\"");
+        } else if (uprv_strcmp(libFileNames[LIB_FILE],"libicudata_stub") == 0) {
+           sprintf(PDS_LibName,"%s%s%s",
+                   "\"//'",
+                   getenv("LOADMOD"),
+                   "(IXMI" U_ICU_VERSION_SHORT "D1)'\"");
+           sprintf(cmd, "%s %s -o %s %s %s%s %s %s",
+                   pkgDataFlags[GENLIB],
+                   pkgDataFlags[LDICUDTFLAGS],
+                   PDS_LibName,
+                   objectFile,
+                   pkgDataFlags[LD_SONAME],
+                   pkgDataFlags[LD_SONAME][0] == 0 ? "" : libFileNames[LIB_FILE_VERSION_MAJOR],
+                   pkgDataFlags[RPATH_FLAGS],
+                   pkgDataFlags[BIR_FLAGS]);
+        }
+        result = runCommand(cmd);
+#endif
     }
 
     if (result != 0) {
