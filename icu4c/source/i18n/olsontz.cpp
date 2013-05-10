@@ -464,6 +464,11 @@ OlsonTimeZone::transitionTimeInSeconds(int16_t transIdx) const {
         | ((int64_t)((uint32_t)transitionTimesPost32[(transIdx << 1) + 1]));
 }
 
+// Maximum absolute offset in seconds (86400 seconds = 1 day)
+// getHistoricalOffset uses this constant as safety margin of
+// quick zone transition checking.
+#define MAX_OFFSET_SECONDS 86400
+
 void
 OlsonTimeZone::getHistoricalOffset(UDate date, UBool local,
                                    int32_t NonExistingTimeOpt, int32_t DuplicatedTimeOpt,
@@ -488,7 +493,7 @@ OlsonTimeZone::getHistoricalOffset(UDate date, UBool local,
             for (transIdx = transCount - 1; transIdx >= 0; transIdx--) {
                 int64_t transition = transitionTimeInSeconds(transIdx);
 
-                if (local) {
+                if (local && (sec >= (transition - MAX_OFFSET_SECONDS))) {
                     int32_t offsetBefore = zoneOffsetAt(transIdx - 1);
                     UBool dstBefore = dstOffsetAt(transIdx - 1) != 0;
 
