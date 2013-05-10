@@ -1,6 +1,6 @@
  /*
   *******************************************************************************
-  * Copyright (C) 2005-2012, International Business Machines Corporation and         *
+  * Copyright (C) 2005-2013, International Business Machines Corporation and         *
   * others. All Rights Reserved.                                                *
   *******************************************************************************
   */
@@ -669,6 +669,11 @@ public class OlsonTimeZone extends BasicTimeZone {
         transitionRulesInitialized = false;
     }
 
+    // Maximum absolute offset in seconds = 1 day.
+    // getHistoricalOffset uses this constant as safety margin of
+    // quick zone transition checking.
+    private static final int MAX_OFFSET_SECONDS = 86400; // 60 * 60 * 24;
+
     private void getHistoricalOffset(long date, boolean local,
             int NonExistingTimeOpt, int DuplicatedTimeOpt, int[] offsets) {
         if (transitionCount != 0) {
@@ -683,7 +688,7 @@ public class OlsonTimeZone extends BasicTimeZone {
                 int transIdx;
                 for (transIdx = transitionCount - 1; transIdx >= 0; transIdx--) {
                     long transition = transitionTimes64[transIdx];
-                    if (local) {
+                    if (local && (sec >= (transition - MAX_OFFSET_SECONDS))) {
                         int offsetBefore = zoneOffsetAt(transIdx - 1);
                         boolean dstBefore = dstOffsetAt(transIdx - 1) != 0;
 
