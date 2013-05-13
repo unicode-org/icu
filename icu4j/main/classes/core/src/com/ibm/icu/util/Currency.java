@@ -689,6 +689,8 @@ public class Currency extends MeasureUnit implements Serializable {
         for (Map.Entry<String, String> e : names.symbolMap().entrySet()) {
             String symbol = e.getKey();
             String isoCode = e.getValue();
+            // Register under not just symbol, but under every equivalent symbol as well
+            // e.g short width yen and long width yen.
             for (String equivalentSymbol : EQUIVALENT_CURRENCY_SYMBOLS.get(symbol)) {
                 symTrie.put(equivalentSymbol, new CurrencyStringInfo(isoCode, symbol));
             }
@@ -720,11 +722,18 @@ public class Currency extends MeasureUnit implements Serializable {
 
     private static class CurrencyNameResultHandler 
             implements TextTrieMap.ResultHandler<CurrencyStringInfo> {
+        // The length of longest matching key
         private int bestMatchLength;
+        // The currency ISO code of longest matching key
         private String bestCurrencyISOCode;
     
+        // As the trie is traversed, handlePrefixMatch is called at each node. matchLength is the
+        // length length of the key at the current node; values is the list of all the values mapped to
+        // that key. matchLength increases with each call as trie is traversed.
         public boolean handlePrefixMatch(int matchLength, Iterator<CurrencyStringInfo> values) {
             if (values.hasNext()) {
+                // Since the best match criteria is only based on length of key in trie and since all the
+                // values are mapped to the same key, we only need to examine the first value.
                 bestCurrencyISOCode = values.next().getISOCode();
                 bestMatchLength = matchLength;
             }
