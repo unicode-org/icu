@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2012, International Business Machines Corporation and
+ * Copyright (C) 2007-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -255,6 +255,7 @@ public class PluralFormat extends UFormat {
      * locale.
      * The locale will be used to get the set of plural rules and for
      * standard number formatting.
+     * <p>Example code:{@.jcite com.ibm.icu.samples.text.pluralformat.PluralFormatSample:---PluralFormatExample}
      * @param ulocale the <code>PluralFormat</code> will be configured with
      *        rules for this locale. This locale will also be used for standard
      *        number formatting.

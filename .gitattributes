@@ -4590,6 +4590,7 @@ icu4j/samples/src/com/ibm/icu/samples/text/datetimepatterngenerator/DateTimePatt
 icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MessagePatternDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MessagePatternUtilDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MiniMessageFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/samples/src/com/ibm/icu/samples/text/pluralformat/PluralFormatSample.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/util/timescale/PivotDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/util/timezone/BasicTimeZoneExample.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/stylesheet.css svneol=native#text/css
