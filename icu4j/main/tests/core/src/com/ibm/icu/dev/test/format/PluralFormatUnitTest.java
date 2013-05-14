@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2007-2012, International Business Machines Corporation and
+ * Copyright (C) 2007-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -19,6 +19,7 @@ import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.UFieldPosition;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ULocale;
 
@@ -339,4 +340,43 @@ public class PluralFormatUnitTest extends TestFmwk {
         assertEquals("PluralFormat.format(456)", "456th file", pf.format(456));
         assertEquals("PluralFormat.format(111)", "111th file", pf.format(111));
     }
+    
+    public void TestBasicFraction() {
+        String[][] tests = {
+                {"en", "one: j is 1"},
+                {"1", "0", "1", "one"},                
+                {"1", "2", "1.00", "other"},                
+        };
+        ULocale locale = null;
+        NumberFormat nf = null;
+        PluralRules pr = null;
+
+        for (String[] row : tests) {
+            switch(row.length) {
+            case 2:
+                locale = ULocale.forLanguageTag(row[0]);
+                nf = NumberFormat.getInstance(locale);
+                pr = PluralRules.createRules(row[1]);
+                break;
+            case 4:
+                double n = Double.parseDouble(row[0]);
+                int minFracDigits = Integer.parseInt(row[1]);
+                nf.setMinimumFractionDigits(minFracDigits);
+                String expectedFormat = row[2];
+                String expectedKeyword = row[3];
+                
+                UFieldPosition pos = new UFieldPosition();
+                String formatted = nf.format(1.0, new StringBuffer(), pos).toString();
+                int countVisibleFractionDigits = pos.getCountVisibleFractionDigits();
+                long fractionDigits = pos.getFractionDigits();
+                String keyword = pr.select(n, countVisibleFractionDigits, fractionDigits);
+                assertEquals("Formatted " + n + "\t" + minFracDigits, expectedFormat, formatted);
+                assertEquals("Keyword " + n + "\t" + minFracDigits, expectedKeyword, keyword);
+                break;
+            default:
+                throw new RuntimeException();
+            }
+        }
+    }
+
 }

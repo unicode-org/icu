@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -233,9 +233,21 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
     /**
      * Given a number, returns the keyword of the first rule that applies
      * to the number.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     String select(double number) {
         return pluralRules.select(number);
+    }
+
+    /**
+     * Given a number, returns the keyword of the first rule that applies
+     * to the number.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    String select(PluralRules.NumberInfo numberInfo) {
+        return pluralRules.select(numberInfo);
     }
 
     /**

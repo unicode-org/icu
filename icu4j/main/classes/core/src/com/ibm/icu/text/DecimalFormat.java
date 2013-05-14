@@ -1330,6 +1330,9 @@ public class DecimalFormat extends NumberFormat {
         } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
             fieldPosition.setBeginIndex(result.length());
         }
+        long fractionalDigits = 0;
+        int fractionalDigitsCount = 0;
+        boolean recordFractionDigits = false;
 
         int sigCount = 0;
         int minSigDig = getMinimumSignificantDigits();
@@ -1429,6 +1432,7 @@ public class DecimalFormat extends NumberFormat {
 
         // [Spark/CDL] Record the begin index of fraction part.
         int fracBegin = result.length();
+        recordFractionDigits = fieldPosition instanceof UFieldPosition;
 
         count = useSigDig ? Integer.MAX_VALUE : getMaximumFractionDigits();
         if (useSigDig && (sigCount == maxSigDig ||
@@ -1451,15 +1455,29 @@ public class DecimalFormat extends NumberFormat {
             // abs(number being formatted) < 1.0.
             if (-1 - i > (digitList.decimalAt - 1)) {
                 result.append(digits[0]);
+                if (recordFractionDigits) {
+                    ++fractionalDigitsCount;
+                    fractionalDigits *= 10;
+                }
                 continue;
             }
 
             // Output a digit, if we have any precision left, or a zero if we
             // don't. We don't want to output noise digits.
             if (!isInteger && digitIndex < digitList.count) {
-                result.append(digits[digitList.getDigitValue(digitIndex++)]);
+                byte digit = digitList.getDigitValue(digitIndex++);
+                result.append(digits[digit]);
+                if (recordFractionDigits) {
+                    ++fractionalDigitsCount;
+                    fractionalDigits *= 10;
+                    fractionalDigits += digit;
+                }
             } else {
                 result.append(digits[0]);
+                if (recordFractionDigits) {
+                    ++fractionalDigitsCount;
+                    fractionalDigits *= 10;
+                }
             }
 
             // If we reach the maximum number of significant digits, or if we output
@@ -1476,6 +1494,9 @@ public class DecimalFormat extends NumberFormat {
             fieldPosition.setEndIndex(result.length());
         } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
             fieldPosition.setEndIndex(result.length());
+        }
+        if (recordFractionDigits) {
+            ((UFieldPosition) fieldPosition).setFractionDigits(fractionalDigitsCount, fractionalDigits);
         }
 
         // [Spark/CDL] Add attribute information if necessary.
@@ -1507,6 +1528,7 @@ public class DecimalFormat extends NumberFormat {
             fieldPosition.setBeginIndex(-1);
         }
 
+
         // [Spark/CDL]
         // the begin index of integer part
         // the end index of integer part
@@ -1530,6 +1552,9 @@ public class DecimalFormat extends NumberFormat {
                 minIntDig = 1;
             }
         }
+        long fractionalDigits = 0;
+        int fractionalDigitsCount = 0;
+        boolean recordFractionDigits = false;
 
         // Minimum integer digits are handled in exponential format by adjusting the
         // exponent. For example, 0.01234 with 3 minimum integer digits is "123.4E-4".
@@ -1594,10 +1619,16 @@ public class DecimalFormat extends NumberFormat {
                 } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.FRACTION) {
                     fieldPosition.setBeginIndex(result.length());
                 }
+                recordFractionDigits = fieldPosition instanceof UFieldPosition;
+
             }
-            result.append((i < digitList.count)
-                          ? digits[digitList.getDigitValue(i)]
-                          : digits[0]);
+            byte digit = (i < digitList.count) ? digitList.getDigitValue(i) : (byte)0;
+            result.append(digits[digit]);
+            if (recordFractionDigits) {
+                ++fractionalDigitsCount;
+                fractionalDigits *= 10;
+                fractionalDigits += digit;
+            }
         }
 
         // For ICU compatibility and format 0 to 0E0 with pattern "#E0" [Richard/GCL]
@@ -1624,6 +1655,9 @@ public class DecimalFormat extends NumberFormat {
                 fieldPosition.setBeginIndex(result.length());
             }
             fieldPosition.setEndIndex(result.length());
+        }
+        if (recordFractionDigits) {
+            ((UFieldPosition) fieldPosition).setFractionDigits(fractionalDigitsCount, fractionalDigits);
         }
 
         // [Spark/CDL] Calcuate the end index of integer part and fractional

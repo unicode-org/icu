@@ -550,6 +550,7 @@ public class WritePluralRulesData {
         if (result.size() == 0) {
             return newRules.getFractionSamples(keyword);
         }
+        result.addAll(newRules.getFractionSamples(keyword));
         return result;
     }
 
