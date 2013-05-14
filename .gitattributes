@@ -4585,6 +4585,7 @@ icu4j/perf-tests/src/com/ibm/icu/dev/test/perf/UnicodeSetPerf.java svneol=native
 icu4j/readme.html svneol=native#text/html
 icu4j/samples/build.properties -text
 icu4j/samples/manifest.stub -text
+icu4j/samples/src/com/ibm/icu/samples/text/dateintervalformat/DateIntervalFormatSample.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/datetimepatterngenerator/DateTimePatternGeneratorSample.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MessagePatternDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/samples/src/com/ibm/icu/samples/text/messagepattern/MessagePatternUtilDemo.java svneol=native#text/plain%3Bcharset%3Dutf-8
