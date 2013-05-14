@@ -384,7 +384,7 @@ public class PluralRules implements Serializable {
         public final boolean hasIntegerValue;
         public final boolean isNegative;
 
-        public NumberInfo(double n, int v, int f) {
+        public NumberInfo(double n, int v, long f) {
             isNegative = n < 0;
             source = isNegative ? -n : n;
             visibleFractionDigitCount = v;
@@ -1357,10 +1357,11 @@ public class PluralRules implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public String select(double number, int countVisibleFractionDigits, int fractionaldigits) {
+    public String select(double number, int countVisibleFractionDigits, long fractionaldigits) {
         return rules.select(new NumberInfo(number, countVisibleFractionDigits, fractionaldigits));
     }
 
+    
     /**
      * Given a number, returns the keyword of the first rule that applies to
      * the number.

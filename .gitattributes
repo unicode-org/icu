@@ -3771,6 +3771,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/TimeZoneFormat.java svneol=native#t
 icu4j/main/classes/core/src/com/ibm/icu/text/TimeZoneNames.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/Transform.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/UCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/text/UFieldPosition.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/UFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/UForwardCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/UTF16.java svneol=native#text/plain%3Bcharset%3Dutf-8
