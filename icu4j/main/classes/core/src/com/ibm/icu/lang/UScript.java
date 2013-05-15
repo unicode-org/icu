@@ -525,9 +525,14 @@ public final class UScript {
     public static final int PHOENICIAN                    = 91; /* Phnx */
     /**
      * ISO 15924 script code
+     * @stable ICU 52
+     */
+    public static final int MIAO                          = 92; /* Plrd */
+    /**
+     * ISO 15924 script code
      * @stable ICU 3.6
      */
-    public static final int PHONETIC_POLLARD              = 92; /* Plrd */
+    public static final int PHONETIC_POLLARD              = MIAO;
     /**
      * ISO 15924 script code
      * @stable ICU 3.6
@@ -584,7 +589,6 @@ public final class UScript {
      */
     public static final int UNKNOWN                       = 103;/* Zzzz */ /* Unknown="Code for uncoded script", for unassigned code points */
     
-    /* Private use codes from Qaaa - Qabx are not supported*/
     /**
      * ISO 15924 script code
      * @stable ICU 3.8
@@ -878,6 +882,18 @@ public final class UScript {
      * @stable ICU 49
      */
     public static final int TIRHUTA = 158;/* Tirh */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 52
+     */
+    public static final int CAUCASIAN_ALBANIAN = 159; /* Aghb */
+    /**
+     * ISO 15924 script code
+     * @stable ICU 52
+     */
+    public static final int MAHAJANI = 160; /* Mahj */
+
+    /* Private use codes from Qaaa - Qabx are not supported */
 
     /**
      * One higher than the last ISO 15924 script code integer.
@@ -885,7 +901,7 @@ public final class UScript {
      * for which integer constants are added above.
      * @stable ICU 2.4
      */
-    public static final int CODE_LIMIT   = 159;
+    public static final int CODE_LIMIT   = 161;
 
     private static final String kLocaleScript = "LocaleScript";
     
@@ -1319,6 +1335,8 @@ public final class UScript {
             0x11183 | EXCLUSION,  // Shrd
             0x110D0 | EXCLUSION,  // Sora
             0x11680 | EXCLUSION,  // Takr
+            0,
+            0,
             0,
             0,
             0,

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2004-2011, International Business Machines
+*   Copyright (C) 2004-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -152,6 +152,8 @@ public final class UBiDiProps {
             return (max&MAX_JG_MASK)>>MAX_JG_SHIFT;
         case UProperty.JOINING_TYPE:
             return (max&JT_MASK)>>JT_SHIFT;
+        case UProperty.BIDI_PAIRED_BRACKET_TYPE:
+            return (max&BPT_MASK)>>BPT_SHIFT;
         default:
             return -1; /* undefined */
         }
@@ -165,12 +167,8 @@ public final class UBiDiProps {
         return getFlagFromProps(trie.get(c), IS_MIRRORED_SHIFT);
     }
 
-    public final int getMirror(int c) {
-        int props;
-        int delta;
-
-        props=trie.get(c);
-        delta=((short)props)>>MIRROR_DELTA_SHIFT;
+    private final int getMirror(int c, int props) {
+        int delta=getMirrorDeltaFromProps(props);
         if(delta!=ESC_MIRROR_DELTA) {
             return c+delta;
         } else {
@@ -198,6 +196,11 @@ public final class UBiDiProps {
         }
     }
 
+    public final int getMirror(int c) {
+        int props=trie.get(c);
+        return getMirror(c, props);
+    }
+
     public final boolean isBidiControl(int c) {
         return getFlagFromProps(trie.get(c), BIDI_CONTROL_SHIFT);
     }
@@ -219,6 +222,19 @@ public final class UBiDiProps {
             return (int)jgArray[c-start]&0xff;
         } else {
             return UCharacter.JoiningGroup.NO_JOINING_GROUP;
+        }
+    }
+
+    public final int getPairedBracketType(int c) {
+        return (trie.get(c)&BPT_MASK)>>BPT_SHIFT;
+    }
+
+    public final int getPairedBracket(int c) {
+        int props=trie.get(c);
+        if((props&BPT_MASK)==0) {
+            return c;
+        } else {
+            return getMirror(c, props);
         }
     }
 
@@ -254,7 +270,7 @@ public final class UBiDiProps {
                           /* CLASS_SHIFT=0, */     /* bidi class: 5 bits (4..0) */
     private static final int JT_SHIFT=5;           /* joining type: 3 bits (7..5) */
 
-    /* private static final int _SHIFT=8, reserved: 2 bits (9..8) */
+    private static final int BPT_SHIFT=8;          /* Bidi_Paired_Bracket_Type(bpt): 2 bits (9..8) */
 
     private static final int JOIN_CONTROL_SHIFT=10;
     private static final int BIDI_CONTROL_SHIFT=11;
@@ -266,6 +282,7 @@ public final class UBiDiProps {
 
     private static final int CLASS_MASK=    0x0000001f;
     private static final int JT_MASK=       0x000000e0;
+    private static final int BPT_MASK=      0x00000300;
 
     private static final int MAX_JG_MASK=   0x00ff0000;
 
@@ -274,6 +291,9 @@ public final class UBiDiProps {
     }
     private static final boolean getFlagFromProps(int props, int shift) {
         return ((props>>shift)&1)!=0;
+    }
+    private static final int getMirrorDeltaFromProps(int props) {
+        return (short)props>>MIRROR_DELTA_SHIFT;
     }
 
     private static final int ESC_MIRROR_DELTA=-4;

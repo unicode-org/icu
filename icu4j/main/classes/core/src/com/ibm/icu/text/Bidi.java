@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2012, International Business Machines
+*   Copyright (C) 2001-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -850,6 +850,10 @@ public class Bidi {
     static final byte PDF = UCharacterDirection.POP_DIRECTIONAL_FORMAT;
     static final byte NSM = UCharacterDirection.DIR_NON_SPACING_MARK;
     static final byte BN  = UCharacterDirection.BOUNDARY_NEUTRAL;
+    static final byte FSI = UCharacterDirection.FIRST_STRONG_ISOLATE;
+    static final byte LRI = UCharacterDirection.LEFT_TO_RIGHT_ISOLATE;
+    static final byte RLI = UCharacterDirection.RIGHT_TO_LEFT_ISOLATE;
+    static final byte PDI = UCharacterDirection.POP_DIRECTIONAL_ISOLATE;
 
     static final int MASK_R_AL = (1 << R | 1 << AL);
 
@@ -3954,11 +3958,14 @@ public class Bidi {
         int dir;
 
         if (customClassifier == null ||
-            (dir = customClassifier.classify(c)) == Bidi.CLASS_DEFAULT) {
-            return bdp.getClass(c);
-        } else {
-            return dir;
+                (dir = customClassifier.classify(c)) == Bidi.CLASS_DEFAULT) {
+            dir = bdp.getClass(c);
         }
+        if (dir > 18) {
+            // TODO: Implement Unicode 6.3 BiDi isolates in the ICU BiDi code.
+            dir = ON;
+        }
+        return dir;
     }
 
     /**

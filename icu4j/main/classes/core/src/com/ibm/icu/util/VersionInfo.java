@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -142,6 +142,12 @@ public final class VersionInfo implements Comparable<VersionInfo>
      * @stable ICU 50
      */
     public static final VersionInfo UNICODE_6_2;
+
+    /**
+     * Unicode 6.3 version
+     * @stable ICU 52
+     */
+    public static final VersionInfo UNICODE_6_3;
 
     /**
      * ICU4J current release version
@@ -505,10 +511,11 @@ public final class VersionInfo implements Comparable<VersionInfo>
         UNICODE_6_0   = getInstance(6, 0, 0, 0);
         UNICODE_6_1   = getInstance(6, 1, 0, 0);
         UNICODE_6_2   = getInstance(6, 2, 0, 0);
+        UNICODE_6_3   = getInstance(6, 3, 0, 0);
 
         ICU_VERSION   = getInstance(52, 0, 1, 0);
         ICU_DATA_VERSION = getInstance(52, 0, 1, 0);
-        UNICODE_VERSION = UNICODE_6_2;
+        UNICODE_VERSION = UNICODE_6_3;
 
         UCOL_RUNTIME_VERSION = getInstance(7);
         UCOL_BUILDER_VERSION = getInstance(8);
@@ -529,9 +536,9 @@ public final class VersionInfo implements Comparable<VersionInfo>
     /**
      * Gets the int from the version numbers
      * @param major non-negative version number
-     * @param minor non-negativeversion number
-     * @param milli non-negativeversion number
-     * @param micro non-negativeversion number
+     * @param minor non-negative version number
+     * @param milli non-negative version number
+     * @param micro non-negative version number
      */
     private static int getInt(int major, int minor, int milli, int micro)
     {

@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004-2007, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2004-2013, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 
@@ -476,10 +476,34 @@ public class UCharacterEnums {
         public static final byte DIRECTIONALITY_BOUNDARY_NEUTRAL = (byte)BOUNDARY_NEUTRAL;
 
         /**
+         * Directional type FSI
+         * @stable ICU 52
+         */
+        public static final byte FIRST_STRONG_ISOLATE        = 19;
+
+        /**
+         * Directional type LRI
+         * @stable ICU 52
+         */
+        public static final byte LEFT_TO_RIGHT_ISOLATE       = 20;
+
+        /**
+         * Directional type RLI
+         * @stable ICU 52
+         */
+        public static final byte RIGHT_TO_LEFT_ISOLATE       = 21;
+
+        /**
+         * Directional type PDI
+         * @stable ICU 52
+         */
+        public static final byte POP_DIRECTIONAL_ISOLATE     = 22;
+
+        /**
          * Number of directional types
          * @stable ICU 2.1
          */
-        public static final int CHAR_DIRECTION_COUNT       = 19;
+        public static final int CHAR_DIRECTION_COUNT       = 23;
 
         /**
          * Undefined bidirectional character type. Undefined <code>char</code>

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2010, International Business Machines Corporation and
+ * Copyright (C) 2010-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -27,6 +27,11 @@ public class BiDiConformanceTest extends TestFmwk {
     public BiDiConformanceTest() {}
 
     public void TestBidiTest() throws IOException {
+        if(logKnownIssue("10142",
+                "Update the ICU BiDi code to implement the additions in the " +
+                "Unicode 6.3 BiDi Algorithm, and reenable the BiDi conformance test.")) {
+            return;
+        }
         BufferedReader bidiTestFile=TestUtil.getDataReader("unicode/BidiTest.txt");
         Bidi ubidi=new Bidi();
         ubidi.setCustomClassifier(new ConfTestBidiClassifier());
@@ -140,7 +145,12 @@ outerLoop:
         0x4f,   // 'O' for RLO
         0x2a,   // '*' for PDF
         0x60,   // '`' for NSM
-        0x7c    // '|' for BN
+        0x7c,   // '|' for BN
+        // new in Unicode 6.3/ICU 52
+        0x53,   // 'S' for FSI
+        0x69,   // 'i' for LRI
+        0x49,   // 'I' for RLI
+        0x2e    // '.' for PDI
     };
     private class ConfTestBidiClassifier extends BidiClassifier {
         public ConfTestBidiClassifier() {
@@ -159,7 +169,7 @@ outerLoop:
         }
     }
     private static final int biDiClassNameLengths[]={
-        1, 1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 3, 2, 3, 3, 3, 3, 2, 0
+        1, 1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 3, 2, 3, 3, 3, 3, 2, 3, 3, 3, 3, 0
     };
     private void parseInputStringFromBiDiClasses() {
         inputStringBuilder.delete(0, 0x7fffffff);
@@ -178,6 +188,8 @@ outerLoop:
                 if((lineIndex+2)<line.length() && line.charAt(lineIndex+1)=='R') {
                     if((c2=line.charAt(lineIndex+2))=='E') {
                         biDiClass=UCharacterDirection.LEFT_TO_RIGHT_EMBEDDING;
+                    } else if(line.charAt(lineIndex+2)=='I') {
+                        biDiClass=UCharacterDirection.LEFT_TO_RIGHT_ISOLATE;
                     } else if(c2=='O') {
                         biDiClass=UCharacterDirection.LEFT_TO_RIGHT_OVERRIDE;
                     }
@@ -188,6 +200,8 @@ outerLoop:
                 if((lineIndex+2)<line.length() && line.charAt(lineIndex+1)=='L') {
                     if((c2=line.charAt(lineIndex+2))=='E') {
                         biDiClass=UCharacterDirection.RIGHT_TO_LEFT_EMBEDDING;
+                    } else if(line.charAt(lineIndex+2)=='I') {
+                        biDiClass=UCharacterDirection.RIGHT_TO_LEFT_ISOLATE;
                     } else if(c2=='O') {
                         biDiClass=UCharacterDirection.RIGHT_TO_LEFT_OVERRIDE;
                     }
@@ -226,12 +240,18 @@ outerLoop:
                 biDiClass=UCharacterDirection.WHITE_SPACE_NEUTRAL;
             } else if(c0=='O' && (lineIndex+1)<line.length() && line.charAt(lineIndex+1)=='N') {
                 biDiClass=UCharacterDirection.OTHER_NEUTRAL;
-            } else if(c0=='P' && (lineIndex+2)<line.length() &&
-                      line.charAt(lineIndex+1)=='D' && line.charAt(lineIndex+2)=='F') {
-                biDiClass=UCharacterDirection.POP_DIRECTIONAL_FORMAT;
+            } else if(c0=='P' && (lineIndex+2)<line.length() && line.charAt(lineIndex+1)=='D') {
+                if(line.charAt(lineIndex+2)=='F') {
+                    biDiClass=UCharacterDirection.POP_DIRECTIONAL_FORMAT;
+                } else if(line.charAt(lineIndex+2)=='I') {
+                    biDiClass=UCharacterDirection.POP_DIRECTIONAL_ISOLATE;
+                }
             } else if(c0=='N' && (lineIndex+2)<line.length() &&
                       line.charAt(lineIndex+1)=='S' && line.charAt(lineIndex+2)=='M') {
                 biDiClass=UCharacterDirection.DIR_NON_SPACING_MARK;
+            } else if(c0=='F' && (lineIndex+2)<line.length() &&
+                    line.charAt(lineIndex+1)=='S' && line.charAt(lineIndex+2)=='I') {
+                biDiClass=UCharacterDirection.FIRST_STRONG_ISOLATE;
             }
             // Now we verify that the class name is terminated properly,
             // and not just the start of a longer word.

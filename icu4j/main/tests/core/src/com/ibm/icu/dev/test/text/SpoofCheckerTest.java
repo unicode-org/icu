@@ -529,8 +529,8 @@ public class SpoofCheckerTest extends TestFmwk {
                 {"アaー〆",  "HIGHLY_RESTRICTIVE", "[]", "Latn Kana", "", ""},
                 {"a1١",  "UNRESTRICTIVE", "[0٠]", "Latn", "Arab Thaa", "Arab Thaa"},
                 {"a1١۱",  "UNRESTRICTIVE", "[0٠۰]", "Latn Arab", "", ""},
-                {"١ー〆aア1१۱",  "UNRESTRICTIVE", "[0٠۰०]", "Latn Kana Arab Deva", "", ""},
-                {"aアー〆1१١۱",  "UNRESTRICTIVE", "[0٠۰०]", "Latn Kana Arab Deva", "", ""},
+                {"١ー〆aア1१۱",  "UNRESTRICTIVE", "[0٠۰०]", "Latn Kana Arab", "Deva Kthi", "Deva Kthi"},
+                {"aアー〆1१١۱",  "UNRESTRICTIVE", "[0٠۰०]", "Latn Kana Arab", "Deva Kthi", "Deva Kthi"},
         };
         for (String[] test : tests) {
             String testString = test[0];
