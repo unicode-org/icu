@@ -1,7 +1,7 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2004, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1996-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -78,6 +78,14 @@ public final class UCharacterDirection implements ECharacterDirection {
                 return "Non-Spacing Mark";
             case BOUNDARY_NEUTRAL :
                 return "Boundary Neutral";
+            case FIRST_STRONG_ISOLATE:
+                return "First Strong Isolate";
+            case LEFT_TO_RIGHT_ISOLATE:
+                return "Left-to-Right Isolate";
+            case RIGHT_TO_LEFT_ISOLATE:
+                return "Right-to-Left Isolate";
+            case POP_DIRECTIONAL_ISOLATE:
+                return "Pop Directional Isolate";
             }
         return "Unassigned";
     }

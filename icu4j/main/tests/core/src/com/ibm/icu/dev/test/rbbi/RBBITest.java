@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * Copyright (C) 1996-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -588,6 +588,8 @@ public class RBBITest extends TestFmwk {
        }
    }
   
+   
+   // TODO: Move these test cases to rbbitst.txt if they aren't there already, then remove this test. It is redundant.
     public void TestTailoredBreaks() {
         class TBItem {
             private int     type;
@@ -661,7 +663,7 @@ public class RBBITest extends TestFmwk {
         // KIND_WORD "en_US_POSIX"
         final String posxWordText     = "Can't have breaks in xx:yy or struct.field for CS-types.";
         final int[]  posxWordTOffsets = { 5, 6, 10, 11, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30, 36, 37, 42, 43, 46, 47, 49, 50, 55, 56 };
-        final int[]  posxWordROffsets = { 5, 6, 10, 11, 17, 18, 20, 21,         26, 27, 29, 30,         42, 43, 46, 47, 49, 50, 55, 56 };
+        final int[]  posxWordROffsets = { 5, 6, 10, 11, 17, 18, 20, 21, 23, 24, 26, 27, 29, 30,         42, 43, 46, 47, 49, 50, 55, 56 };
         // KIND_SENTENCE "el"
         final String elSentText     = "\u0391\u03B2, \u03B3\u03B4; \u0395 \u03B6\u03B7\u037E \u0398 \u03B9\u03BA. " +
                                       "\u039B\u03BC \u03BD\u03BE! \u039F\u03C0, \u03A1\u03C2? \u03A3";

@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2002-2012, International Business Machines Corporation and
+ * Copyright (C) 2002-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -436,7 +436,11 @@ public class CollationAPITest extends TestFmwk {
         // Assume that the UCD and UCA versions are the same,
         // rather than hardcoding (and updating each time) a particular UCA version.
         VersionInfo ucdVersion = UCharacter.getUnicodeVersion();
-        doAssert(col.getUCAVersion().equals(ucdVersion), "Expected UCA version "+ucdVersion.toString()+" got "+col.getUCAVersion().toString());
+        VersionInfo ucaVersion = col.getUCAVersion();
+        doAssert(logKnownIssue("9101", "update to collv2 & UCA 6.3") ?
+                    ucdVersion.getMajor() == 6 && ucdVersion.getMinor() == 3 :
+                    ucaVersion.equals(ucdVersion),
+                "Expected UCA version "+ucdVersion.toString()+" got "+col.getUCAVersion().toString());
 
         doAssert((col.compare("ab", "abc") < 0), "ab < abc comparison failed");
         doAssert((col.compare("ab", "AB") < 0), "ab < AB comparison failed");

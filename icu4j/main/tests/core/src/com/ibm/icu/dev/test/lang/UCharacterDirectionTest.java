@@ -1,7 +1,7 @@
 /**
  *******************************************************************************
- * Copyright (C) 2001-2009, International Business Machines Corporation and    *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2001-2013, International Business Machines Corporation and
+ * others. All Rights Reserved.
  *******************************************************************************
  */
 package com.ibm.icu.dev.test.lang;
@@ -65,6 +65,10 @@ public class UCharacterDirectionTest extends TestFmwk
                          "Pop Directional Format",
                          "Non-Spacing Mark",
                          "Boundary Neutral",
+                         "First Strong Isolate",
+                         "Left-to-Right Isolate",
+                         "Right-to-Left Isolate",
+                         "Pop Directional Isolate",
                          "Unassigned"};
         
         for (int i = UCharacterDirection.LEFT_TO_RIGHT;

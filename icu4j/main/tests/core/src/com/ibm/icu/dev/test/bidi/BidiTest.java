@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -28,7 +28,9 @@ public class BidiTest extends TestFmwk {
          /* L      R    EN    ES    ET     AN    CS    B    S    WS    ON */
          0x61, 0x5d0, 0x30, 0x2f, 0x25, 0x660, 0x2c, 0xa, 0x9, 0x20, 0x26,
          /* LRE     LRO     AL     RLE     RLO     PDF    NSM      BN */
-         0x202a, 0x202d, 0x627, 0x202b, 0x202e, 0x202c, 0x308, 0x200c
+         0x202a, 0x202d, 0x627, 0x202b, 0x202e, 0x202c, 0x308, 0x200c,
+         /* FSI     LRI     RLI     PDI */
+         0x2068, 0x2066, 0x2067, 0x2069  /* new in Unicode 6.3/ICU 52 */
     };
 
     static {

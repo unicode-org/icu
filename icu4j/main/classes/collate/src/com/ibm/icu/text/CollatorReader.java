@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and
+ * Copyright (C) 1996-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -16,7 +16,6 @@ import com.ibm.icu.impl.ICUBinary;
 import com.ibm.icu.impl.ICUData;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.IntTrie;
-import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.CollationParsedRuleBuilder.InverseUCA;
 import com.ibm.icu.text.RuleBasedCollator.LeadByteConstants;
 import com.ibm.icu.text.RuleBasedCollator.UCAConstants;
@@ -138,13 +137,14 @@ final class CollatorReader {
      */
     private CollatorReader(InputStream inputStream, boolean readICUHeader) throws IOException {
         if (readICUHeader) {
-            byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, UCA_AUTHENTICATE_);
-            // weiv: check that we have the correct Unicode version in
-            // binary files
-            VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
-            if (UnicodeVersion[0] != UCDVersion.getMajor() || UnicodeVersion[1] != UCDVersion.getMinor()) {
-                throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
-            }
+            ICUBinary.readHeader(inputStream, DATA_FORMAT_ID_, UCA_AUTHENTICATE_);
+            // Note: In ICU 51 and earlier,
+            // we used to check that the UCA data version (readHeader() return value)
+            // matches the UCD version (UCharacter.getUnicodeVersion())
+            // but that complicated version updates, and
+            // a mismatch is "only" a problem for handling canonical equivalence.
+            // It need not be a fatal error.
+            // throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
         }
         m_dataInputStream_ = new DataInputStream(inputStream);
     }
@@ -512,15 +512,11 @@ final class CollatorReader {
      *                thrown when error occurs while reading the inverse uca
      */
     private static CollationParsedRuleBuilder.InverseUCA readInverseUCA(InputStream inputStream) throws IOException {
-        byte[] UnicodeVersion = ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_,
-                INVERSE_UCA_AUTHENTICATE_);
+        ICUBinary.readHeader(inputStream, INVERSE_UCA_DATA_FORMAT_ID_, INVERSE_UCA_AUTHENTICATE_);
 
-        // weiv: check that we have the correct Unicode version in
-        // binary files
-        VersionInfo UCDVersion = UCharacter.getUnicodeVersion();
-        if (UnicodeVersion[0] != UCDVersion.getMajor() || UnicodeVersion[1] != UCDVersion.getMinor()) {
-            throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
-        }
+        // TODO: Check that the invuca data version (readHeader() return value)
+        // matches the ucadata version.
+        // throw new IOException(WRONG_UNICODE_VERSION_ERROR_);
 
         CollationParsedRuleBuilder.InverseUCA result = new CollationParsedRuleBuilder.InverseUCA();
         DataInputStream input = new DataInputStream(inputStream);
@@ -616,7 +612,7 @@ final class CollatorReader {
     /**
      * Wrong unicode version error string
      */
-    private static final String WRONG_UNICODE_VERSION_ERROR_ = "Unicode version in binary image is not compatible with the current Unicode version";
+    // private static final String WRONG_UNICODE_VERSION_ERROR_ = "Unicode version in binary image is not compatible with the current Unicode version";
 
     /**
      * Size of expansion table in bytes

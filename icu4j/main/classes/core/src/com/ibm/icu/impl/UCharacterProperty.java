@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2012, International Business Machines Corporation and
+* Copyright (C) 1996-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -560,6 +560,11 @@ public final class UCharacterProperty
         new IntProperty(2, GCB_MASK, GCB_SHIFT),  // GRAPHEME_CLUSTER_BREAK
         new IntProperty(2, SB_MASK, SB_SHIFT),  // SENTENCE_BREAK
         new IntProperty(2, WB_MASK, WB_SHIFT),  // WORD_BREAK
+        new BiDiIntProperty() {  // BIDI_PAIRED_BRACKET_TYPE
+            int getValue(int c) {
+                return UBiDiProps.INSTANCE.getPairedBracketType(c);
+            }
+        },
     };
 
     public int getIntPropertyValue(int c, int which) {

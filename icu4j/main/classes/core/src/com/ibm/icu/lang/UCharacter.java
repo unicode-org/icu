@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2012, International Business Machines Corporation and
+* Copyright (C) 1996-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -2823,10 +2823,16 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
         public static final int NEWLINE = 12;
         /** @stable ICU 50 */
         public static final int REGIONAL_INDICATOR = 13;  /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
+        /** @stable ICU 52 */
+        public static final int HEBREW_LETTER = 14;    /*[HL]*/ /* from here on: new in Unicode 6.3/ICU 52 */
+        /** @stable ICU 52 */
+        public static final int SINGLE_QUOTE = 15;     /*[SQ]*/
+        /** @stable ICU 52 */
+        public static final int DOUBLE_QUOTE = 16;     /*[DQ]*/
         /**
          * @stable ICU 4.0
          */
-        public static final int COUNT = 14;
+        public static final int COUNT = 17;
     }
 
     /**
@@ -3137,6 +3143,34 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
          * @stable ICU 2.6
          */
         public static final int COUNT               = 6;
+    }
+
+    /**
+     * Bidi Paired Bracket Type constants.
+     *
+     * @see UProperty#BIDI_PAIRED_BRACKET_TYPE
+     * @stable ICU 52
+     */
+    public static interface BidiPairedBracketType {
+        /**
+         * Not a paired bracket.
+         * @stable ICU 52
+         */
+        public static final int NONE = 0;
+        /**
+         * Open paired bracket.
+         * @stable ICU 52
+         */
+        public static final int OPEN = 1;
+        /**
+         * Close paired bracket.
+         * @stable ICU 52
+         */
+        public static final int CLOSE = 2;
+        /**
+         * @stable ICU 52
+         */
+        public static final int COUNT = 3;
     }
 
     // public data members -----------------------------------------------
@@ -3935,6 +3969,26 @@ public final class UCharacter implements ECharacterCategory, ECharacterDirection
     public static int getMirror(int ch)
     {
         return UBiDiProps.INSTANCE.getMirror(ch);
+    }
+
+    /**
+     * {@icu} Maps the specified character to its paired bracket character.
+     * For Bidi_Paired_Bracket_Type!=None, this is the same as getMirror(int).
+     * Otherwise c itself is returned.
+     * See http://www.unicode.org/reports/tr9/
+     *
+     * @param c the code point to be mapped
+     * @return the paired bracket code point,
+     *         or c itself if there is no such mapping
+     *         (Bidi_Paired_Bracket_Type=None)
+     *
+     * @see UProperty#BIDI_PAIRED_BRACKET
+     * @see UProperty#BIDI_PAIRED_BRACKET_TYPE
+     * @see #getMirror(int)
+     * @stable ICU 52
+     */
+    public static int getBidiPairedBracket(int c) {
+        return UBiDiProps.INSTANCE.getPairedBracket(c);
     }
 
     /**

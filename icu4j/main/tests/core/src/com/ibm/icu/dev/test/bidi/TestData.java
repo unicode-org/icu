@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -37,11 +37,16 @@ public class TestData {
     protected static final int PDF = UCharacterDirection.POP_DIRECTIONAL_FORMAT;
     protected static final int NSM = UCharacterDirection.DIR_NON_SPACING_MARK;
     protected static final int BN  = UCharacterDirection.BOUNDARY_NEUTRAL;
+    protected static final int FSI = UCharacterDirection.FIRST_STRONG_ISOLATE;
+    protected static final int LRI = UCharacterDirection.LEFT_TO_RIGHT_ISOLATE;
+    protected static final int RLI = UCharacterDirection.RIGHT_TO_LEFT_ISOLATE;
+    protected static final int PDI = UCharacterDirection.POP_DIRECTIONAL_ISOLATE;
     protected static final int DEF = Bidi.CLASS_DEFAULT;
 
     protected static final String[] dirPropNames = {
         "L", "R", "EN", "ES", "ET", "AN", "CS", "B", "S", "WS", "ON",
-        "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN"
+        "LRE", "LRO", "AL", "RLE", "RLO", "PDF", "NSM", "BN",
+        "FSI", "LRI", "RLI", "PDI"  /* new in Unicode 6.3/ICU 52 */
     };
     protected static final short[][] testDirProps = {
         { L, L, WS, L, WS, EN, L, B },                                          // 0

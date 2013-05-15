@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 1996-2012, International Business Machines Corporation and
+* Copyright (C) 1996-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -46,7 +46,7 @@ public final class UCharacterTest extends TestFmwk
     /**
     * ICU4J data version number
     */
-    private final VersionInfo VERSION_ = VersionInfo.getInstance("6.2.0.0");
+    private final VersionInfo VERSION_ = VersionInfo.getInstance("6.3.0.0");
 
     // constructor ===================================================
 
@@ -534,6 +534,16 @@ public final class UCharacterTest extends TestFmwk
                 if(c3!=start) {
                     errln("getMirror() does not roundtrip: U+"+hex(start)+"->U+"+hex(c2)+"->U+"+hex(c3));
                 }
+                c3=UCharacter.getBidiPairedBracket(start);
+                if(UCharacter.getIntPropertyValue(start, UProperty.BIDI_PAIRED_BRACKET_TYPE)==UCharacter.BidiPairedBracketType.NONE) {
+                    if(c3!=start) {
+                        errln("u_getBidiPairedBracket(U+"+hex(start)+") != self for bpt(c)==None");
+                    }
+                } else {
+                    if(c3!=c2) {
+                        errln("u_getBidiPairedBracket(U+"+hex(start)+") != U+"+hex(c2)+" = bmg(c)'");
+                    }
+                }
             } while(++start<=end);
         }
 
@@ -673,10 +683,10 @@ public final class UCharacterTest extends TestFmwk
         final String TYPE =
             "LuLlLtLmLoMnMeMcNdNlNoZsZlZpCcCfCoCsPdPsPePcPoSmScSkSoPiPf";
 
-        // directory types used in the UnicodeData file
+        // directorionality types used in the UnicodeData file
         // padded by spaces to make each type size 4
         final String DIR =
-            "L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  ";
+            "L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  FSI LRI RLI PDI ";
 
         Normalizer2 nfc = Normalizer2.getNFCInstance();
         Normalizer2 nfkc = Normalizer2.getNFKCInstance();
@@ -802,7 +812,7 @@ public final class UCharacterTest extends TestFmwk
                 }
                 int i=UCharacter.getIntPropertyValue(ch, UProperty.DECOMPOSITION_TYPE);
                 assertEquals(
-                        String.format("error: u_getIntPropertyValue(U+%04x, UCHAR_DECOMPOSITION_TYPE) is wrong", ch),
+                        String.format("error: UCharacter.getIntPropertyValue(U+%04x, UProperty.DECOMPOSITION_TYPE) is wrong", ch),
                         dt, i);
                 /* Expect Decomposition_Mapping=nfkc.getRawDecomposition(c). */
                 String mapping=nfkc.getRawDecomposition(ch);
@@ -1492,6 +1502,8 @@ public final class UCharacterTest extends TestFmwk
             { 0x07C0, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x08A0, UCharacterDirection.RIGHT_TO_LEFT },
             { 0x0900, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+08A0..U+08FF from R to AL */
+            { 0x20A0, UCharacterDirection.LEFT_TO_RIGHT },
+            { 0x20D0, UCharacterDirection.EUROPEAN_NUMBER_TERMINATOR },  /* Unicode 6.3 changes the currency symbols block U+20A0..U+20CF to default to ET not L */
             { 0xFB1D, UCharacterDirection.LEFT_TO_RIGHT },
             { 0xFB50, UCharacterDirection.RIGHT_TO_LEFT },
             { 0xFE00, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
@@ -2067,6 +2079,20 @@ public final class UCharacterTest extends TestFmwk
             { 0x08ba, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
             { 0x1eee4, UProperty.BIDI_CLASS, UCharacterDirection.RIGHT_TO_LEFT_ARABIC },
 
+            { -1, 0x630, 0 }, /* version break for Unicode 6.3 */
+
+            /* unassigned code points in the currency symbols block now default to ET */
+            { 0x20C0, UProperty.BIDI_CLASS, UCharacterDirection.EUROPEAN_NUMBER_TERMINATOR },
+            { 0x20CF, UProperty.BIDI_CLASS, UCharacterDirection.EUROPEAN_NUMBER_TERMINATOR },
+
+            /* new property in Unicode 6.3 */
+            { 0x0027, UProperty.BIDI_PAIRED_BRACKET_TYPE, UCharacter.BidiPairedBracketType.NONE },
+            { 0x0028, UProperty.BIDI_PAIRED_BRACKET_TYPE, UCharacter.BidiPairedBracketType.OPEN },
+            { 0x0029, UProperty.BIDI_PAIRED_BRACKET_TYPE, UCharacter.BidiPairedBracketType.CLOSE },
+            { 0xFF5C, UProperty.BIDI_PAIRED_BRACKET_TYPE, UCharacter.BidiPairedBracketType.NONE },
+            { 0xFF5B, UProperty.BIDI_PAIRED_BRACKET_TYPE, UCharacter.BidiPairedBracketType.OPEN },
+            { 0xFF5D, UProperty.BIDI_PAIRED_BRACKET_TYPE, UCharacter.BidiPairedBracketType.CLOSE },
+
             /* undefined UProperty values */
             { 0x61, 0x4a7, 0 },
             { 0x234bc, 0x15ed, 0 }
@@ -2120,6 +2146,9 @@ public final class UCharacterTest extends TestFmwk
         }
         if(UCharacter.getIntPropertyMaxValue(UProperty.WORD_BREAK)!=UCharacter.WordBreak.COUNT-1) {
             errln("error: UCharacter.getIntPropertyMaxValue(UProperty.WORD_BREAK) wrong\n");
+        }
+        if(UCharacter.getIntPropertyMaxValue(UProperty.BIDI_PAIRED_BRACKET_TYPE)!=UCharacter.BidiPairedBracketType.COUNT-1) {
+            errln("error: UCharacter.getIntPropertyMaxValue(UProperty.BIDI_PAIRED_BRACKET_TYPE) wrong\n");
         }
         /*JB#2410*/
         if( UCharacter.getIntPropertyMaxValue(0x2345)!=-1) {
@@ -2227,8 +2256,6 @@ public final class UCharacterTest extends TestFmwk
             // where UCharacter.NO_NUMERIC_VALUE is turned into -1.
             // getNumericValue() returns -2 if the code point has a value
             // which is not a non-negative integer. (This is mostly auto-converted to -2.)
-            { 0x12456, UCharacter.NumericType.NUMERIC, -1. },
-            { 0x12457, UCharacter.NumericType.NUMERIC, -1. },
             { 0x0F33, UCharacter.NumericType.NUMERIC, -1./2. },
             { 0x0C66, UCharacter.NumericType.DECIMAL, 0 },
             { 0x96f6, UCharacter.NumericType.NUMERIC, 0 },
@@ -2387,6 +2414,32 @@ public final class UCharacterTest extends TestFmwk
                 }
             } catch (IllegalArgumentException e) {}
         }
+    }
+
+    public void TestBidiPairedBracketType() {
+        // BidiBrackets-6.3.0.txt says:
+        //
+        // The set of code points listed in this file was originally derived
+        // using the character properties General_Category (gc), Bidi_Class (bc),
+        // Bidi_Mirrored (Bidi_M), and Bidi_Mirroring_Glyph (bmg), as follows:
+        // two characters, A and B, form a pair if A has gc=Ps and B has gc=Pe,
+        // both have bc=ON and Bidi_M=Y, and bmg of A is B. Bidi_Paired_Bracket
+        // maps A to B and vice versa, and their Bidi_Paired_Bracket_Type
+        // property values are Open and Close, respectively.
+        UnicodeSet bpt = new UnicodeSet("[:^bpt=n:]");
+        assertTrue("bpt!=None is not empty", !bpt.isEmpty());
+        // The following should always be true.
+        UnicodeSet mirrored = new UnicodeSet("[:Bidi_M:]");
+        UnicodeSet other_neutral = new UnicodeSet("[:bc=ON:]");
+        assertTrue("bpt!=None is a subset of Bidi_M", mirrored.containsAll(bpt));
+        assertTrue("bpt!=None is a subset of bc=ON", other_neutral.containsAll(bpt));
+        // The following are true at least initially in Unicode 6.3.
+        UnicodeSet bpt_open = new UnicodeSet("[:bpt=o:]");
+        UnicodeSet bpt_close = new UnicodeSet("[:bpt=c:]");
+        UnicodeSet ps = new UnicodeSet("[:Ps:]");
+        UnicodeSet pe = new UnicodeSet("[:Pe:]");
+        assertTrue("bpt=Open is a subset of Ps", ps.containsAll(bpt_open));
+        assertTrue("bpt=Close is a subset of Pe", pe.containsAll(bpt_close));
     }
 
     public void TestIsBMP()

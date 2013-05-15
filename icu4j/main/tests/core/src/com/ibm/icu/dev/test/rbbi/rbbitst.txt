@@ -711,10 +711,11 @@ Bangkok)•</data>
 
 #  UBreakIteratorType UBRK_WORD, Locale "en_US_POSIX"
 #  Words don't include colon or period (cldrbug #1969).
+#  Unicode 6.3 change: colon now breaks words.
 
 <locale en_US>
 <word>
-<data>•Can't<200> •have<200> •breaks<200> •in<200> •xx:yy<200> •or<200> •struct.field<200> \
+<data>•Can't<200> •have<200> •breaks<200> •in<200> •xx<200>:•yy<200> •or<200> •struct.field<200> \
 •for<200> •CS<200>-•types<200>.•</data>
 
 <locale en_US_POSIX>
