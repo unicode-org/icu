@@ -39,7 +39,7 @@ U_CDECL_BEGIN
  * @see u_getUnicodeVersion
  * @stable ICU 2.0
  */
-#define U_UNICODE_VERSION "6.2"
+#define U_UNICODE_VERSION "6.3"
 
 /**
  * \file
@@ -480,8 +480,13 @@ typedef enum UProperty {
         (http://www.unicode.org/reports/tr29/)
         Returns UWordBreakValues values. @stable ICU 3.4 */
     UCHAR_WORD_BREAK=0x1014,
+    /** Enumerated property Bidi_Paired_Bracket_Type (new in Unicode 6.3).
+        Used in UAX #9: Unicode Bidirectional Algorithm
+        (http://www.unicode.org/reports/tr9/)
+        Returns UBidiPairedBracketType values. @stable ICU 52 */
+    UCHAR_BIDI_PAIRED_BRACKET_TYPE=0x1015,
     /** One more than the last constant for enumerated/integer Unicode properties. @stable ICU 2.2 */
-    UCHAR_INT_LIMIT=0x1015,
+    UCHAR_INT_LIMIT=0x1016,
 
     /** Bitmask property General_Category_Mask.
         This is the General_Category property returned as a bit mask.
@@ -548,11 +553,13 @@ typedef enum UProperty {
     /** String property Uppercase_Mapping.
         Corresponds to u_strToUpper in ustring.h. @stable ICU 2.4 */
     UCHAR_UPPERCASE_MAPPING=0x400C,
+    /** String property Bidi_Paired_Bracket (new in Unicode 6.3).
+        Corresponds to u_getBidiPairedBracket. @stable ICU 52 */
+    UCHAR_BIDI_PAIRED_BRACKET=0x400D,
     /** One more than the last constant for string Unicode properties. @stable ICU 2.4 */
-    UCHAR_STRING_LIMIT=0x400D,
-    /** Provisional property Script_Extensions (new in Unicode 6.0).
-        As a provisional property, it may be modified or removed
-        in future versions of the Unicode Standard, and thus in ICU.
+    UCHAR_STRING_LIMIT=0x400E,
+
+    /** Miscellaneous property Script_Extensions (new in Unicode 6.0).
         Some characters are commonly used in multiple scripts.
         For more information, see UAX #24: http://www.unicode.org/reports/tr24/.
         Corresponds to uscript_hasScript and uscript_getScriptExtensions in uscript.h.
@@ -809,9 +816,40 @@ typedef enum UCharDirection {
     U_DIR_NON_SPACING_MARK        = 17,
     /** BN @stable ICU 2.0 */
     U_BOUNDARY_NEUTRAL            = 18,
+    /** FSI @stable ICU 52 */
+    U_FIRST_STRONG_ISOLATE        = 19,
+    /** LRI @stable ICU 52 */
+    U_LEFT_TO_RIGHT_ISOLATE       = 20,
+    /** RLI @stable ICU 52 */
+    U_RIGHT_TO_LEFT_ISOLATE       = 21,
+    /** PDI @stable ICU 52 */
+    U_POP_DIRECTIONAL_ISOLATE     = 22,
     /** @stable ICU 2.0 */
     U_CHAR_DIRECTION_COUNT
 } UCharDirection;
+
+/**
+ * Bidi Paired Bracket Type constants.
+ *
+ * @see UCHAR_BIDI_PAIRED_BRACKET_TYPE
+ * @stable ICU 52
+ */
+typedef enum UBidiPairedBracketType {
+    /*
+     * Note: UBidiPairedBracketType constants are parsed by preparseucd.py.
+     * It matches lines like
+     *     U_BPT_<Unicode Bidi_Paired_Bracket_Type value name>
+     */
+
+    /** Not a paired bracket. @stable ICU 52 */
+    U_BPT_NONE,
+    /** Open paired bracket. @stable ICU 52 */
+    U_BPT_OPEN,
+    /** Close paired bracket. @stable ICU 52 */
+    U_BPT_CLOSE,
+    /** @stable ICU 52 */
+    U_BPT_COUNT /* 3 */
+} UBidiPairedBracketType;
 
 /**
  * Constants for Unicode blocks, see the Unicode Data file Blocks.txt
@@ -1680,7 +1718,10 @@ typedef enum UWordBreakValues {
     U_WB_MIDNUMLET =11,         /*[MB]*/
     U_WB_NEWLINE =12,           /*[NL]*/
     U_WB_REGIONAL_INDICATOR = 13,   /*[RI]*/ /* new in Unicode 6.2/ICU 50 */
-    U_WB_COUNT = 14
+    U_WB_HEBREW_LETTER = 14,    /*[HL]*/ /* from here on: new in Unicode 6.3/ICU 52 */
+    U_WB_SINGLE_QUOTE = 15,     /*[SQ]*/
+    U_WB_DOUBLE_QUOTE = 16,     /*[DQ]*/
+    U_WB_COUNT = 17
 } UWordBreakValues;
 
 /**
@@ -2483,7 +2524,7 @@ u_isMirrored(UChar32 c);
  * as the mirror-image of the default glyph of the specified
  * character. This is useful for text conversion to and from
  * codepages with visual order, and for displays without glyph
- * selecetion capabilities.
+ * selection capabilities.
  *
  * @param c the code point to be mapped
  * @return another Unicode code point that may serve as a mirror-image
@@ -2496,6 +2537,25 @@ u_isMirrored(UChar32 c);
  */
 U_STABLE UChar32 U_EXPORT2
 u_charMirror(UChar32 c);
+
+/**
+ * Maps the specified character to its paired bracket character.
+ * For Bidi_Paired_Bracket_Type!=None, this is the same as u_charMirror().
+ * Otherwise c itself is returned.
+ * See http://www.unicode.org/reports/tr9/
+ *
+ * @param c the code point to be mapped
+ * @return the paired bracket code point,
+ *         or c itself if there is no such mapping
+ *         (Bidi_Paired_Bracket_Type=None)
+ *
+ * @see UCHAR_BIDI_PAIRED_BRACKET
+ * @see UCHAR_BIDI_PAIRED_BRACKET_TYPE
+ * @see u_charMirror
+ * @stable ICU 52
+ */
+U_STABLE UChar32 U_EXPORT2
+u_getBidiPairedBracket(UChar32 c);
 
 /**
  * Returns the general category value for the code point.

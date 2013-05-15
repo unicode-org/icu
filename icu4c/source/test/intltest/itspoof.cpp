@@ -505,9 +505,9 @@ void IntlTestSpoof::testIdentifierInfo() {
             {"\\u0061\\u0031\\u0661",         USPOOF_UNRESTRICTIVE,      "[\\u0030\\u0660]", "Latn", "Arab Thaa", "Arab Thaa"},
             {"\\u0061\\u0031\\u0661\\u06F1",  USPOOF_UNRESTRICTIVE,      "[\\u0030\\u0660\\u06F0]", "Latn Arab", "", ""},
             {"\\u0661\\u30FC\\u3006\\u0061\\u30A2\\u0031\\u0967\\u06F1",  USPOOF_UNRESTRICTIVE, 
-                  "[\\u0030\\u0660\\u06F0\\u0966]", "Latn Kana Arab Deva", "", ""},
+                  "[\\u0030\\u0660\\u06F0\\u0966]", "Latn Kana Arab", "Deva Kthi", "Deva Kthi"},
             {"\\u0061\\u30A2\\u30FC\\u3006\\u0031\\u0967\\u0661\\u06F1",  USPOOF_UNRESTRICTIVE, 
-                  "[\\u0030\\u0660\\u06F0\\u0966]", "Latn Kana Arab Deva", "", ""}
+                  "[\\u0030\\u0660\\u06F0\\u0966]", "Latn Kana Arab", "Deva Kthi", "Deva Kthi"}
     };
 
     int testNum;
