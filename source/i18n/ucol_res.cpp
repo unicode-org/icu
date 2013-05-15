@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2012, International Business Machines
+*   Copyright (C) 1996-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol_res.cpp
@@ -93,12 +93,13 @@ isAcceptableUCA(void * /*context*/,
         //pInfo->formatVersion[2]==UCA_FORMAT_VERSION_2 && // Too harsh
         //pInfo->formatVersion[3]==UCA_FORMAT_VERSION_3 && // Too harsh
         ) {
-        UVersionInfo UCDVersion;
-        u_getUnicodeVersion(UCDVersion);
-        return (UBool)(pInfo->dataVersion[0]==UCDVersion[0]
-            && pInfo->dataVersion[1]==UCDVersion[1]);
-            //&& pInfo->dataVersion[2]==ucaDataInfo.dataVersion[2]
-            //&& pInfo->dataVersion[3]==ucaDataInfo.dataVersion[3]);
+        return TRUE;
+        // Note: In ICU 51 and earlier,
+        // we used to check that the UCA data version (pInfo->dataVersion)
+        // matches the UCD version (u_getUnicodeVersion())
+        // but that complicated version updates, and
+        // a mismatch is "only" a problem for handling canonical equivalence.
+        // It need not be a fatal error.
     } else {
         return FALSE;
     }

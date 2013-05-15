@@ -38,6 +38,7 @@ public:
     void TestConsistency();
     void TestPatternProperties();
     void TestScriptMetadata();
+    void TestBidiPairedBracketType();
 
 private:
 

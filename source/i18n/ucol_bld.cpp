@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2012, International Business Machines
+*   Copyright (C) 2001-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -63,13 +63,9 @@ isAcceptableInvUCA(void * /*context*/,
         //pInfo->formatVersion[3]==INVUCA_FORMAT_VERSION_3 &&
         )
     {
-        UVersionInfo UCDVersion;
-        u_getUnicodeVersion(UCDVersion);
-        return (pInfo->dataVersion[0]==UCDVersion[0] &&
-            pInfo->dataVersion[1]==UCDVersion[1]);
-            //pInfo->dataVersion[1]==invUcaDataInfo.dataVersion[1] &&
-            //pInfo->dataVersion[2]==invUcaDataInfo.dataVersion[2] &&
-            //pInfo->dataVersion[3]==invUcaDataInfo.dataVersion[3]) {
+        // TODO: Check that the invuca data version (pInfo->dataVersion)
+        // matches the ucadata version.
+        return TRUE;
     } else {
         return FALSE;
     }
