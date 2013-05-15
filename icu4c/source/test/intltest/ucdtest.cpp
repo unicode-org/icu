@@ -61,6 +61,7 @@ void UnicodeTest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
     TESTCASE_AUTO(TestConsistency);
     TESTCASE_AUTO(TestPatternProperties);
     TESTCASE_AUTO(TestScriptMetadata);
+    TESTCASE_AUTO(TestBidiPairedBracketType);
     TESTCASE_AUTO_END;
 }
 
@@ -497,4 +498,31 @@ void UnicodeTest::TestScriptMetadata() {
     assertTrue("Hani breaks between letters", uscript_breaksBetweenLetters(USCRIPT_HAN));
     assertTrue("Thai breaks between letters", uscript_breaksBetweenLetters(USCRIPT_THAI));
     assertFalse("Latn does not break between letters", uscript_breaksBetweenLetters(USCRIPT_LATIN));
+}
+
+void UnicodeTest::TestBidiPairedBracketType() {
+    // BidiBrackets-6.3.0.txt says:
+    //
+    // The set of code points listed in this file was originally derived
+    // using the character properties General_Category (gc), Bidi_Class (bc),
+    // Bidi_Mirrored (Bidi_M), and Bidi_Mirroring_Glyph (bmg), as follows:
+    // two characters, A and B, form a pair if A has gc=Ps and B has gc=Pe,
+    // both have bc=ON and Bidi_M=Y, and bmg of A is B. Bidi_Paired_Bracket
+    // maps A to B and vice versa, and their Bidi_Paired_Bracket_Type
+    // property values are Open and Close, respectively.
+    IcuTestErrorCode errorCode(*this, "TestBidiPairedBracketType()");
+    UnicodeSet bpt("[:^bpt=n:]", errorCode);
+    assertTrue("bpt!=None is not empty", !bpt.isEmpty());
+    // The following should always be true.
+    UnicodeSet mirrored("[:Bidi_M:]", errorCode);
+    UnicodeSet other_neutral("[:bc=ON:]", errorCode);
+    assertTrue("bpt!=None is a subset of Bidi_M", mirrored.containsAll(bpt));
+    assertTrue("bpt!=None is a subset of bc=ON", other_neutral.containsAll(bpt));
+    // The following are true at least initially in Unicode 6.3.
+    UnicodeSet bpt_open("[:bpt=o:]", errorCode);
+    UnicodeSet bpt_close("[:bpt=c:]", errorCode);
+    UnicodeSet ps("[:Ps:]", errorCode);
+    UnicodeSet pe("[:Pe:]", errorCode);
+    assertTrue("bpt=Open is a subset of Ps", ps.containsAll(bpt_open));
+    assertTrue("bpt=Close is a subset of Pe", pe.containsAll(bpt_close));
 }

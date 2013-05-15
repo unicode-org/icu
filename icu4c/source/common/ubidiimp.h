@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1999-2011, International Business Machines
+*   Copyright (C) 1999-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -53,6 +53,10 @@ enum {
     PDF=U_POP_DIRECTIONAL_FORMAT,
     NSM=U_DIR_NON_SPACING_MARK,
     BN= U_BOUNDARY_NEUTRAL,
+    FSI=U_FIRST_STRONG_ISOLATE,
+    LRI=U_LEFT_TO_RIGHT_ISOLATE,
+    RLI=U_RIGHT_TO_LEFT_ISOLATE,
+    PDI=U_POP_DIRECTIONAL_ISOLATE,
     dirPropCount
 };
 

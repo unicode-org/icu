@@ -159,7 +159,12 @@ static const char dirStrings[][5] = {
     "RLO",
     "PDF",
     "NSM",
-    "BN"
+    "BN",
+    /* new in Unicode 6.3/ICU 52 */
+    "FSI",
+    "LRI",
+    "RLI",
+    "PDI"
 };
 
 void addUnicodeTest(TestNode** root);
@@ -1214,6 +1219,8 @@ enumDefaultsRange(const void *context, UChar32 start, UChar32 limit, UCharCatego
         { 0x07C0, U_RIGHT_TO_LEFT_ARABIC },
         { 0x08A0, U_RIGHT_TO_LEFT },
         { 0x0900, U_RIGHT_TO_LEFT_ARABIC },  /* Unicode 6.1 changes U+08A0..U+08FF from R to AL */
+        { 0x20A0, U_LEFT_TO_RIGHT },
+        { 0x20D0, U_EUROPEAN_NUMBER_TERMINATOR },  /* Unicode 6.3 changes the currency symbols block U+20A0..U+20CF to default to ET not L */
         { 0xFB1D, U_LEFT_TO_RIGHT },
         { 0xFB50, U_RIGHT_TO_LEFT },
         { 0xFE00, U_RIGHT_TO_LEFT_ARABIC },
@@ -1567,7 +1574,7 @@ static int32_t MakeProp(char* str)
 static int32_t MakeDir(char* str) 
 {
     int32_t pos = 0;
-    for (pos = 0; pos < 19; pos++) {
+    for (pos = 0; pos < U_CHAR_DIRECTION_COUNT; pos++) {
         if (strcmp(str, dirStrings[pos]) == 0) {
             return pos;
         }
@@ -1978,6 +1985,18 @@ TestMirroring() {
                 c3=u_charMirror(c2);
                 if(c3!=start) {
                     log_err("u_charMirror() does not roundtrip: U+%04lx->U+%04lx->U+%04lx\n", (long)start, (long)c2, (long)c3);
+                }
+                c3=u_getBidiPairedBracket(start);
+                if(u_getIntPropertyValue(start, UCHAR_BIDI_PAIRED_BRACKET_TYPE)==U_BPT_NONE) {
+                    if(c3!=start) {
+                        log_err("u_getBidiPairedBracket(U+%04lx) != self for bpt(c)==None\n",
+                                (long)start);
+                    }
+                } else {
+                    if(c3!=c2) {
+                        log_err("u_getBidiPairedBracket(U+%04lx) != U+%04lx = bmg(c)'\n",
+                                (long)start, (long)c2);
+                    }
                 }
             } while(++start<=end);
         }
@@ -2615,6 +2634,20 @@ TestAdditionalProperties() {
         { 0x08ba, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
         { 0x1eee4, UCHAR_BIDI_CLASS, U_RIGHT_TO_LEFT_ARABIC },
 
+        { -1, 0x630, 0 }, /* version break for Unicode 6.3 */
+
+        /* unassigned code points in the currency symbols block now default to ET */
+        { 0x20C0, UCHAR_BIDI_CLASS, U_EUROPEAN_NUMBER_TERMINATOR },
+        { 0x20CF, UCHAR_BIDI_CLASS, U_EUROPEAN_NUMBER_TERMINATOR },
+
+        /* new property in Unicode 6.3 */
+        { 0x0027, UCHAR_BIDI_PAIRED_BRACKET_TYPE, U_BPT_NONE },
+        { 0x0028, UCHAR_BIDI_PAIRED_BRACKET_TYPE, U_BPT_OPEN },
+        { 0x0029, UCHAR_BIDI_PAIRED_BRACKET_TYPE, U_BPT_CLOSE },
+        { 0xFF5C, UCHAR_BIDI_PAIRED_BRACKET_TYPE, U_BPT_NONE },
+        { 0xFF5B, UCHAR_BIDI_PAIRED_BRACKET_TYPE, U_BPT_OPEN },
+        { 0xFF5D, UCHAR_BIDI_PAIRED_BRACKET_TYPE, U_BPT_CLOSE },
+
         /* undefined UProperty values */
         { 0x61, 0x4a7, 0 },
         { 0x234bc, 0x15ed, 0 }
@@ -2693,6 +2726,9 @@ TestAdditionalProperties() {
     }
     if(u_getIntPropertyMaxValue(UCHAR_WORD_BREAK)!=(int32_t)U_WB_COUNT-1) {
         log_err("error: u_getIntPropertyMaxValue(UCHAR_WORD_BREAK) wrong\n");
+    }
+    if(u_getIntPropertyMaxValue(UCHAR_BIDI_PAIRED_BRACKET_TYPE)!=(int32_t)U_BPT_COUNT-1) {
+        log_err("error: u_getIntPropertyMaxValue(UCHAR_BIDI_PAIRED_BRACKET_TYPE) wrong\n");
     }
     /*JB#2410*/
     if( u_getIntPropertyMaxValue(0x2345)!=-1) {
@@ -2782,8 +2818,6 @@ TestNumericProperties(void) {
         int32_t type;
         double numValue;
     } values[]={
-        { 0x12456, U_NT_NUMERIC, -1. },
-        { 0x12457, U_NT_NUMERIC, -1. },
         { 0x0F33, U_NT_NUMERIC, -1./2. },
         { 0x0C66, U_NT_DECIMAL, 0 },
         { 0x96f6, U_NT_NUMERIC, 0 },

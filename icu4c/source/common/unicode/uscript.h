@@ -251,8 +251,10 @@ typedef enum UScriptCode {
       USCRIPT_PHAGS_PA                      = 90, /* Phag */
       /** @stable ICU 3.6 */
       USCRIPT_PHOENICIAN                    = 91, /* Phnx */
+      /** @stable ICU 52 */
+      USCRIPT_MIAO                          = 92, /* Plrd */
       /** @stable ICU 3.6 */
-      USCRIPT_PHONETIC_POLLARD              = 92, /* Plrd */
+      USCRIPT_PHONETIC_POLLARD              = USCRIPT_MIAO,
       /** @stable ICU 3.6 */
       USCRIPT_RONGORONGO                    = 93, /* Roro */
       /** @stable ICU 3.6 */
@@ -396,10 +398,15 @@ typedef enum UScriptCode {
       /** @stable ICU 49 */
       USCRIPT_TIRHUTA                       = 158,/* Tirh */
 
+      /** @stable ICU 52 */
+      USCRIPT_CAUCASIAN_ALBANIAN            = 159,/* Aghb */
+      /** @stable ICU 52 */
+      USCRIPT_MAHAJANI                      = 160,/* Mahj */
+
       /* Private use codes from Qaaa - Qabx are not supported */
 
       /** @stable ICU 2.2 */
-      USCRIPT_CODE_LIMIT    = 159
+      USCRIPT_CODE_LIMIT    = 161
 } UScriptCode;
 
 /**
