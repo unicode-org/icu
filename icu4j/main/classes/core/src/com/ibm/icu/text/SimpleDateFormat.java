@@ -2143,6 +2143,16 @@ public class SimpleDateFormat extends DateFormat {
 
                             if (i+1 < items.length) { 
                                 
+                                // if it's not a String we can't use it
+                                if (!(items[i] instanceof String)) {
+                                    parsePos.setIndex(start);
+                                    parsePos.setErrorIndex(s);
+                                    if (backupTZ != null) {
+                                        calendar.setTimeZone(backupTZ);
+                                    }
+                                    return;
+                                }
+                                
                                 // get next item in pattern
                                 String patl = (String)items[i+1];
                                 int plen = patl.length();
