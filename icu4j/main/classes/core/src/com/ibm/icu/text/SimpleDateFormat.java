@@ -2143,18 +2143,22 @@ public class SimpleDateFormat extends DateFormat {
 
                             if (i+1 < items.length) { 
                                 
-                                // if it's not a String we can't use it
-                                if (!(items[i] instanceof String)) {
+                                String patl = null;
+                                // if it will cause a class cast exception to String, we can't use it                                
+                                try {
+                                    patl = (String)items[i+1];
+                                } catch(ClassCastException cce) {
                                     parsePos.setIndex(start);
                                     parsePos.setErrorIndex(s);
                                     if (backupTZ != null) {
                                         calendar.setTimeZone(backupTZ);
                                     }
                                     return;
-                                }
+                                }                                
                                 
                                 // get next item in pattern
-                                String patl = (String)items[i+1];
+                                if(patl == null)
+                                    patl = (String)items[i+1];
                                 int plen = patl.length();
                                 int idx=0;
                                 
