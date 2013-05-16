@@ -1049,7 +1049,7 @@ public class DecimalFormat extends NumberFormat {
 
         // If we are to do rounding, we need to move into the BigDecimal
         // domain in order to do divide/multiply correctly.
-        if (roundingIncrementICU != null) {
+        if (actualRoundingIncrementICU != null) {
             return format(BigDecimal.valueOf(number), result, fieldPosition);
         }
 
@@ -1102,7 +1102,7 @@ public class DecimalFormat extends NumberFormat {
                                 boolean parseAttr) {
         // If we are to do rounding, we need to move into the BigDecimal
         // domain in order to do divide/multiply correctly.
-        if (roundingIncrementICU != null) {
+        if (actualRoundingIncrementICU != null) {
             return format(new BigDecimal(number), result, fieldPosition);
         }
 
@@ -1137,8 +1137,8 @@ public class DecimalFormat extends NumberFormat {
             number = number.multiply(java.math.BigDecimal.valueOf(multiplier));
         }
 
-        if (roundingIncrement != null) {
-            number = number.divide(roundingIncrement, 0, roundingMode).multiply(roundingIncrement);
+        if (actualRoundingIncrement != null) {
+            number = number.divide(actualRoundingIncrement, 0, roundingMode).multiply(actualRoundingIncrement);
         }
 
         synchronized (digitList) {
@@ -1165,9 +1165,9 @@ public class DecimalFormat extends NumberFormat {
             number = number.multiply(BigDecimal.valueOf(multiplier), mathContext);
         }
 
-        if (roundingIncrementICU != null) {
-            number = number.divide(roundingIncrementICU, 0, roundingMode)
-                .multiply(roundingIncrementICU, mathContext);
+        if (actualRoundingIncrementICU != null) {
+            number = number.divide(actualRoundingIncrementICU, 0, roundingMode)
+                .multiply(actualRoundingIncrementICU, mathContext);
         }
 
         synchronized (digitList) {
@@ -3175,7 +3175,7 @@ public class DecimalFormat extends NumberFormat {
         } else {
             setInternalRoundingIncrement(newValue);
         }
-        setRoundingDouble();
+        resetActualRounding();
     }
 
     /**
@@ -3193,28 +3193,15 @@ public class DecimalFormat extends NumberFormat {
         if (newValue < 0.0) {
             throw new IllegalArgumentException("Illegal rounding increment");
         }
-        roundingDouble = newValue;
-        roundingDoubleReciprocal = 0.0d;
         if (newValue == 0.0d) {
-            setRoundingIncrement((BigDecimal) null);
+            setInternalRoundingIncrement((BigDecimal) null);
         } else {
-            roundingDouble = newValue;
-            if (roundingDouble < 1.0d) {
-                double rawRoundedReciprocal = 1.0d / roundingDouble;
-                setRoundingDoubleReciprocal(rawRoundedReciprocal);
-            }
-            setInternalRoundingIncrement(new BigDecimal(newValue));
+            // Should use BigDecimal#valueOf(double) instead of constructor
+            // to avoid the double precision problem.
+            setInternalRoundingIncrement(BigDecimal.valueOf(newValue));
         }
+        resetActualRounding();
     }
-
-    private void setRoundingDoubleReciprocal(double rawRoundedReciprocal) {
-        roundingDoubleReciprocal = Math.rint(rawRoundedReciprocal);
-        if (Math.abs(rawRoundedReciprocal - roundingDoubleReciprocal) > roundingIncrementEpsilon) {
-            roundingDoubleReciprocal = 0.0d;
-        }
-    }
-
-    static final double roundingIncrementEpsilon = 0.000000001;
 
     /**
      * Returns the rounding mode.
@@ -3252,10 +3239,7 @@ public class DecimalFormat extends NumberFormat {
         }
 
         this.roundingMode = roundingMode;
-
-        if (getRoundingIncrement() == null) {
-            setRoundingIncrement(Math.pow(10.0, -getMaximumFractionDigits()));
-        }
+        resetActualRounding();
     }
 
     /**
@@ -4794,7 +4778,7 @@ public class DecimalFormat extends NumberFormat {
                     // [Richard/GCL]
                     setMaximumIntegerDigits(useExponentialNotation ? digitLeftCount + minInt :
                                             DOUBLE_INTEGER_DIGITS);
-                    setMaximumFractionDigits(decimalPos >= 0 ?
+                    _setMaximumFractionDigits(decimalPos >= 0 ?
                                              (digitTotalCount - decimalPos) : 0);
                     setMinimumFractionDigits(decimalPos >= 0 ?
                                              (digitLeftCount + zeroDigitCount - decimalPos) : 0);
@@ -4820,7 +4804,6 @@ public class DecimalFormat extends NumberFormat {
                     if (scale < 0) {
                         roundingIncrementICU = roundingIncrementICU.movePointRight(-scale);
                     }
-                    setRoundingDouble();
                     roundingMode = BigDecimal.ROUND_HALF_EVEN;
                 } else {
                     setRoundingIncrement((BigDecimal) null);
@@ -4844,7 +4827,7 @@ public class DecimalFormat extends NumberFormat {
             setMinimumIntegerDigits(0);
             setMaximumIntegerDigits(DOUBLE_INTEGER_DIGITS);
             setMinimumFractionDigits(0);
-            setMaximumFractionDigits(DOUBLE_FRACTION_DIGITS);
+            _setMaximumFractionDigits(DOUBLE_FRACTION_DIGITS);
         }
 
         // If there was no negative pattern, or if the negative pattern is identical to
@@ -4872,7 +4855,7 @@ public class DecimalFormat extends NumberFormat {
                 setRoundingIncrement(theCurrency.getRoundingIncrement());
                 int d = theCurrency.getDefaultFractionDigits();
                 setMinimumFractionDigits(d);
-                setMaximumFractionDigits(d);
+                _setMaximumFractionDigits(d);
             }
 
             // initialize currencyPluralInfo if needed
@@ -4881,20 +4864,9 @@ public class DecimalFormat extends NumberFormat {
                 currencyPluralInfo = new CurrencyPluralInfo(symbols.getULocale());
             }
         }
+        resetActualRounding();
     }
 
-    /**
-     * Centralizes the setting of the roundingDouble and roundingDoubleReciprocal.
-     */
-    private void setRoundingDouble() {
-        if (roundingIncrementICU == null) {
-            roundingDouble = 0.0d;
-            roundingDoubleReciprocal = 0.0d;
-        } else {
-            roundingDouble = roundingIncrementICU.doubleValue();
-            setRoundingDoubleReciprocal(1.0d / roundingDouble);
-        }
-    }
 
     private void patternError(String msg, String pattern) {
         throw new IllegalArgumentException(msg + " in pattern \"" + pattern + '"');
@@ -5081,6 +5053,15 @@ public class DecimalFormat extends NumberFormat {
      */
     @Override
     public void setMaximumFractionDigits(int newValue) {
+        _setMaximumFractionDigits(newValue);
+        resetActualRounding();
+    }
+
+    /*
+     * Internal method for DecimalFormat, setting maximum fractional digits
+     * without triggering actual rounding recalculated.
+     */
+    private void _setMaximumFractionDigits(int newValue) {
         super.setMaximumFractionDigits(Math.min(newValue, DOUBLE_FRACTION_DIGITS));
     }
 
@@ -5182,12 +5163,11 @@ public class DecimalFormat extends NumberFormat {
             setMaximumIntegerDigits(DOUBLE_INTEGER_DIGITS);
         }
         if (getMaximumFractionDigits() > DOUBLE_FRACTION_DIGITS) {
-            setMaximumFractionDigits(DOUBLE_FRACTION_DIGITS);
+            _setMaximumFractionDigits(DOUBLE_FRACTION_DIGITS);
         }
         if (serialVersionOnStream < 2) {
             exponentSignAlwaysShown = false;
             setInternalRoundingIncrement(null);
-            setRoundingDouble();
             roundingMode = BigDecimal.ROUND_HALF_EVEN;
             formatWidth = 0;
             pad = ' ';
@@ -5207,8 +5187,8 @@ public class DecimalFormat extends NumberFormat {
 
         if (roundingIncrement != null) {
             setInternalRoundingIncrement(new BigDecimal(roundingIncrement));
-            setRoundingDouble();
         }
+        resetActualRounding();
     }
 
     private void setInternalRoundingIncrement(BigDecimal value) {
@@ -5443,19 +5423,6 @@ public class DecimalFormat extends NumberFormat {
      * @since AlphaWorks NumberFormat
      */
     private transient BigDecimal roundingIncrementICU = null;
-
-    /**
-     * The rounding increment as a double. If this value is <= 0, then no rounding is
-     * done. This value is <code>roundingIncrementICU.doubleValue()</code>. Default value
-     * 0.0.
-     */
-    private transient double roundingDouble = 0.0;
-
-    /**
-     * If the roundingDouble is the reciprocal of an integer (the most common case!), this
-     * is set to be that integer.  Otherwise it is 0.0.
-     */
-    private transient double roundingDoubleReciprocal = 0.0;
 
     /**
      * The rounding mode. This value controls any rounding operations which occur when
@@ -5795,6 +5762,92 @@ public class DecimalFormat extends NumberFormat {
     }
 
     static final Unit NULL_UNIT = new Unit("", "");
+
+
+    // Note about rounding implementation
+    //
+    // The original design intended to skip rounding operation when roundingIncrement is not
+    // set. However, rounding may need to occur when fractional digits exceed the width of
+    // fractional part of pattern.
+    //
+    // DigitList class has built-in rounding mechanism, using ROUND_HALF_EVEN. This implementation
+    // forces non-null roundingIncrement if the setting is other than ROUND_HALF_EVEN, otherwise,
+    // when rounding occurs in DigitList by pattern's fractional digits' width, the result
+    // does not match the rounding mode.
+    //
+    // Ideally, all rounding operation should be done in one place like ICU4C trunk does
+    // (ICU4C rounding implementation was rewritten recently). This is intrim implemetation
+    // to fix various issues. In the future, we should entire implementation of rounding
+    // in this class, like ICU4C did.
+    //
+    // Once we fully implement rounding logic in DigitList, then following fields and methods
+    // should be gone.
+
+    private transient BigDecimal actualRoundingIncrementICU = null;
+    private transient java.math.BigDecimal actualRoundingIncrement = null;
+
+    /*
+     * The actual rounding increment as a double.
+     */
+    private transient double roundingDouble = 0.0;
+
+    /*
+     * If the roundingDouble is the reciprocal of an integer (the most common case!), this
+     * is set to be that integer.  Otherwise it is 0.0.
+     */
+    private transient double roundingDoubleReciprocal = 0.0;
+
+    /*
+     * Set roundingDouble, roundingDoubleReciprocal and actualRoundingIncrement
+     * based on rounding mode and width of fractional digits. Whenever setting affecting
+     * rounding mode, rounding increment and maximum width of fractional digits, then
+     * this method must be called.
+     * 
+     * roundingIncrementICU is the field storing the custom rounding increment value,
+     * while actual rounding increment could be larger.
+     */
+    private void resetActualRounding() {
+        if (roundingIncrementICU != null) {
+            BigDecimal byWidth = getMaximumFractionDigits() > 0 ?
+                    BigDecimal.ONE.movePointLeft(getMaximumFractionDigits()) : BigDecimal.ONE;
+            if (roundingIncrementICU.compareTo(byWidth) >= 0) {
+                actualRoundingIncrementICU = roundingIncrementICU;
+            } else {
+                actualRoundingIncrementICU = byWidth.equals(BigDecimal.ONE) ? null : byWidth;
+            }
+        } else {
+            if (roundingMode == BigDecimal.ROUND_HALF_EVEN) {
+                actualRoundingIncrementICU = null;
+            } else {
+                if (getMaximumFractionDigits() > 0) {
+                    actualRoundingIncrementICU = BigDecimal.ONE.movePointLeft(getMaximumFractionDigits());
+                }
+            }
+        }
+
+        if (actualRoundingIncrementICU == null) {
+            setRoundingDouble(0.0d);
+            actualRoundingIncrement = null;
+        } else {
+            setRoundingDouble(actualRoundingIncrementICU.doubleValue());
+            actualRoundingIncrement = actualRoundingIncrementICU.toBigDecimal();
+        }
+    }
+
+    static final double roundingIncrementEpsilon = 0.000000001;
+
+    private void setRoundingDouble(double newValue) {
+        roundingDouble = newValue;
+        if (roundingDouble > 0.0d) {
+            double rawRoundedReciprocal = 1.0d / roundingDouble;
+            roundingDoubleReciprocal = Math.rint(rawRoundedReciprocal);
+            if (Math.abs(rawRoundedReciprocal - roundingDoubleReciprocal) > roundingIncrementEpsilon) {
+                roundingDoubleReciprocal = 0.0d;
+            }
+        } else {
+            roundingDoubleReciprocal = 0.0d;
+        }
+    }
 }
 
 // eof
