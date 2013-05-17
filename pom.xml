@@ -11,7 +11,7 @@
 
   <groupId>com.ibm.icu</groupId>
   <artifactId>icu4j</artifactId>
-  <version>51.1</version>
+  <version>51.2</version>
 
   <name>ICU4J</name>
   <description>
