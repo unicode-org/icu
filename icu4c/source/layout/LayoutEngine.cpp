@@ -512,7 +512,6 @@ void LayoutEngine::reset()
 {
   if(fGlyphStorage!=NULL) {
     fGlyphStorage->reset();
-    fGlyphStorage = NULL;
   }
 }
 
