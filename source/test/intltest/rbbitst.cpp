@@ -4261,18 +4261,34 @@ void RBBITest::TestBug9983(void)  {
     LocalPointer<RuleBasedBreakIterator> brkiter(static_cast<RuleBasedBreakIterator *>(
         BreakIterator::createWordInstance(Locale::getRoot(), status)));
     TEST_ASSERT_SUCCESS(status);
+    LocalPointer<RuleBasedBreakIterator> brkiterPOSIX(static_cast<RuleBasedBreakIterator *>(
+        BreakIterator::createWordInstance(Locale::createFromName("en_US_POSIX"), status)));
+    TEST_ASSERT_SUCCESS(status);
     if (U_FAILURE(status)) {
         return;
     }
+    int32_t offset, rstatus, iterationCount;
+
     brkiter->setText(text);
-    int32_t offset, rstatus;
     brkiter->last();
-    int32_t iterationCount = 0;
+    iterationCount = 0;
     while ( (offset = brkiter->previous()) != UBRK_DONE ) {
         iterationCount++;
         rstatus = brkiter->getRuleStatus();
         (void)rstatus;     // Suppress set but not used warning.
-        // printf(" %d(%d)", offset, rstatus);
+        if (iterationCount >= 10) {
+           break; 
+        }
+    }
+    TEST_ASSERT(iterationCount == 6);
+
+    brkiterPOSIX->setText(text);
+    brkiterPOSIX->last();
+    iterationCount = 0;
+    while ( (offset = brkiterPOSIX->previous()) != UBRK_DONE ) {
+        iterationCount++;
+        rstatus = brkiterPOSIX->getRuleStatus();
+        (void)rstatus;     // Suppress set but not used warning.
         if (iterationCount >= 10) {
            break; 
         }

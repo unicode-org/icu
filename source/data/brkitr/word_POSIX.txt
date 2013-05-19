@@ -96,7 +96,7 @@ $CR $LF;
 #          begins with a group of Format chars, or with a "word" consisting of a single
 #          char that is not in any of the listed word break categories followed by
 #          format char(s), or is not a CJK dictionary character.
-[^$CR $LF $Newline $dictionaryCJK]? ($Extend |  $Format)+;
+[^$CR $LF $Newline]? ($Extend |  $Format)+;
 
 $NumericEx {100};
 $ALetterEx {200};
@@ -186,7 +186,7 @@ $BackRegional_IndicatorEx = ($Format | $Extend)* $Regional_Indicator;
 $LF $CR;
 
 # rule 4
-($Format | $Extend)*  [^$CR $LF $Newline $dictionaryCJK]?;
+($Format | $Extend)*  [^$CR $LF $Newline]?;
 
 # rule 5
 
