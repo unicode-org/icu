@@ -722,6 +722,7 @@ Bangkok)•</data>
 <word>
 <data>•Can't<200> •have<200> •breaks<200> •in<200> •xx<200>:•yy<200> •or<200> •struct<200>.•field<200> \
 •for<200> •CS<200>-•types<200>.•</data>
+<data>•\u06c9<200>\uc799\ufffa•</data>
 
 
 # UBreakIteratorType UBRK_CHARACTER, Locale "th"
