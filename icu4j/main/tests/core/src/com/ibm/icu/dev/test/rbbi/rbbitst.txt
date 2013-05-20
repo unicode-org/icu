@@ -717,12 +717,14 @@ Bangkok)•</data>
 <word>
 <data>•Can't<200> •have<200> •breaks<200> •in<200> •xx<200>:•yy<200> •or<200> •struct.field<200> \
 •for<200> •CS<200>-•types<200>.•</data>
+<data>•\uFF92\uFF76\uFF9E<400> •</data>
 
 <locale en_US_POSIX>
 <word>
 <data>•Can't<200> •have<200> •breaks<200> •in<200> •xx<200>:•yy<200> •or<200> •struct<200>.•field<200> \
 •for<200> •CS<200>-•types<200>.•</data>
 <data>•\u06c9<200>\uc799\ufffa•</data>
+<data>•\uFF92\uFF76\uFF9E<400> •</data>
 
 
 # UBreakIteratorType UBRK_CHARACTER, Locale "th"
