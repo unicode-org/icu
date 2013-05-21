@@ -2095,6 +2095,39 @@ uloc_getLCID(const char* localeID)
         return 0;
     }
 
+    if (uprv_strchr(localeID, '@')) {
+        // uprv_convertToLCID does not support keywords other than collation.
+        // Remove all keywords except collation.
+        int32_t len;
+        char collVal[ULOC_KEYWORDS_CAPACITY];
+        char tmpLocaleID[ULOC_FULLNAME_CAPACITY];
+
+        len = uloc_getKeywordValue(localeID, "collation", collVal,
+            sizeof(collVal)/sizeof(collVal[0]) - 1, &status);
+
+        if (U_SUCCESS(status) && len > 0) {
+            collVal[len] = 0;
+
+            len = uloc_getBaseName(localeID, tmpLocaleID,
+                sizeof(tmpLocaleID)/sizeof(tmpLocaleID[0]) - 1, &status);
+
+            if (U_SUCCESS(status)) {
+                tmpLocaleID[len] = 0;
+
+                len = uloc_setKeywordValue("collation", collVal, tmpLocaleID,
+                    sizeof(tmpLocaleID)/sizeof(tmpLocaleID[0]) - len - 1, &status);
+
+                if (U_SUCCESS(status)) {
+                    tmpLocaleID[len] = 0;
+                    return uprv_convertToLCID(langID, tmpLocaleID, &status);
+                }
+            }
+        }
+
+        // fall through - all keywords are simply ignored
+        status = U_ZERO_ERROR;
+    }
+
     return uprv_convertToLCID(langID, localeID, &status);
 }
 
@@ -2102,19 +2135,7 @@ U_CAPI int32_t U_EXPORT2
 uloc_getLocaleForLCID(uint32_t hostid, char *locale, int32_t localeCapacity,
                 UErrorCode *status)
 {
-    int32_t length;
-    const char *posix = uprv_convertToPosix(hostid, status);
-    if (U_FAILURE(*status) || posix == NULL) {
-        return 0;
-    }
-    length = (int32_t)uprv_strlen(posix);
-    if (length+1 > localeCapacity) {
-        *status = U_BUFFER_OVERFLOW_ERROR;
-    }
-    else {
-        uprv_strcpy(locale, posix);
-    }
-    return length;
+    return uprv_convertToPosix(hostid, locale, localeCapacity, status);
 }
 
 /* ### Default locale **************************************************/
