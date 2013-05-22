@@ -352,6 +352,63 @@ public:
     static UnicodeString& U_EXPORT2 getCanonicalID(const UnicodeString& id,
         UnicodeString& canonicalID, UBool& isSystemID, UErrorCode& status);
 
+#ifndef U_HIDE_DRAFT_API
+    /**
+    * Converts a system time zone ID to an equivalent Windows time zone ID. For example,
+    * Windows time zone ID "Pacific Standard Time" is returned for input "America/Los_Angeles".
+    *
+    * <p>There are system time zones that cannot be mapped to Windows zones. When the input
+    * system time zone ID is unknown or unmappable to a Windows time zone, then the result will be
+    * empty, but the operation itself remains successful (no error status set on return).
+    *
+    * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
+    * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
+    * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
+    * Updating the Time Zone Data</a>.
+    *
+    * @param id        A system time zone ID.
+    * @param winid     Receives a Windows time zone ID. When the input system time zone ID is unknown
+    *                  or unmappable to a Windows time zone ID, then an empty string is set on return.
+    * @param status    Receives the status.
+    * @return          A reference to the result (<code>winid</code>).
+    * @see getIDForWindowsID
+    *
+    * @draft ICU 52
+    */
+    static UnicodeString& U_EXPORT2 getWindowsID(const UnicodeString& id,
+        UnicodeString& winid, UErrorCode& status);
+
+    /**
+    * Converts a Windows time zone ID to an equivalent system time zone ID
+    * for a region. For example, system time zone ID "America/Los_Angeles" is returned
+    * for input Windows ID "Pacific Standard Time" and region "US" (or <code>null</code>),
+    * "America/Vancouver" is returned for the same Windows ID "Pacific Standard Time" and
+    * region "CA".
+    *
+    * <p>Not all Windows time zones can be mapped to system time zones. When the input
+    * Windows time zone ID is unknown or unmappable to a system time zone, then the result
+    * will be empty, but the operation itself remains successful (no error status set on return).
+    *
+    * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
+    * Zone-Tzid mapping data</a>. The mapping data is updated time to time. To get the latest changes,
+    * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
+    * Updating the Time Zone Data</a>.
+    *
+    * @param winid     A Windows time zone ID.
+    * @param region    A null-terminated region code, or <code>NULL</code> if no regional preference.
+    * @param id        Receives a system time zone ID. When the input Windows time zone ID is unknown
+    *                  or unmappable to a system time zone ID, then an empty string is set on return.
+    * @param status    Receives the status.
+    * @return          A reference to the result (<code>id</code>).
+    * @see getWindowsID
+    *
+    * @draft ICU 52
+    */
+    static UnicodeString& U_EXPORT2 getIDForWindowsID(const UnicodeString& winid, const char* region,
+        UnicodeString& id, UErrorCode& status);
+
+#endif /* U_HIDE_DRAFT_API */
+
     /**
      * Returns true if the two TimeZones are equal.  (The TimeZone version only compares
      * IDs, but subclasses are expected to also compare the fields they add.)
