@@ -2159,6 +2159,47 @@ public class TimeZoneTest extends TestFmwk
         }
         return rbtz;
      }
+
+    public void TestGetWindowsID() {
+        String[][] TESTDATA = {
+            {"America/New_York",        "Eastern Standard Time"},
+            {"America/Montreal",        "Eastern Standard Time"},
+            {"America/Los_Angeles",     "Pacific Standard Time"},
+            {"America/Vancouver",       "Pacific Standard Time"},
+            {"Asia/Shanghai",           "China Standard Time"},
+            {"Asia/Chongqing",          "China Standard Time"},
+            {"America/Indianapolis",    "US Eastern Standard Time"},            // CLDR canonical name
+            {"America/Indiana/Indianapolis",    "US Eastern Standard Time"},    // tzdb canonical name
+            {"Asia/Khandyga",           "Yakutsk Standard Time"},
+            {"Australia/Eucla",         null}, // No Windows ID mapping
+            {"Bogus",                   null},
+        };
+
+        for (String[] data : TESTDATA) {
+            String winID = TimeZone.getWindowsID(data[0]);
+            assertEquals("Fail: ID=" + data[0], data[1], winID);
+        }
+    }
+
+    public void TestGetIDForWindowsID() {
+        final String[][] TESTDATA = {
+            {"Eastern Standard Time",   null,   "America/New_York"},
+            {"Eastern Standard Time",   "US",   "America/New_York"},
+            {"Eastern Standard Time",   "CA",   "America/Toronto"},
+            {"Eastern Standard Time",   "CN",   "America/New_York"},
+            {"China Standard Time",     null,   "Asia/Shanghai"},
+            {"China Standard Time",     "CN",   "Asia/Shanghai"},
+            {"China Standard Time",     "HK",   "Asia/Hong_Kong"},
+            {"Mid-Atlantic Standard Time",  null,   null}, // No tz database mapping
+            {"Bogus",                   null,   null},
+        };
+
+        for (String[] data : TESTDATA) {
+            String id = TimeZone.getIDForWindowsID(data[0], data[1]);
+            assertEquals("Fail: Windows ID=" + data[0] + ", Region=" + data[1],
+                    data[2], id);
+        }
+    }
 }
 
 //eof
