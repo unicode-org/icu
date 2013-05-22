@@ -767,4 +767,43 @@ ucal_getTimeZoneTransitionDate(const UCalendar* cal, UTimeZoneTransitionType typ
     return FALSE;
 }
 
+#ifndef U_HIDE_DRAFT_API
+U_CAPI int32_t U_EXPORT2
+ucal_getWindowsTimeZoneID(const UChar* id, int32_t len, UChar* winid, int32_t winidCapacity, UErrorCode* status) {
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+
+    int32_t resultLen = 0;
+    UnicodeString resultWinID;
+
+    TimeZone::getWindowsID(UnicodeString(id, len), resultWinID, *status);
+    if (U_SUCCESS(*status) && resultWinID.length() > 0) {
+        resultLen = resultWinID.length();
+        resultWinID.extract(winid, winidCapacity, *status);
+    }
+
+    return resultLen;
+}
+
+U_CAPI int32_t U_EXPORT2
+ucal_getTimeZoneIDForWindowsID(const UChar* winid, int32_t len, const char* region, UChar* id, int32_t idCapacity, UErrorCode* status) {
+    if (U_FAILURE(*status)) {
+        return 0;
+    }
+
+    int32_t resultLen = 0;
+    UnicodeString resultID;
+
+    TimeZone::getIDForWindowsID(UnicodeString(winid, len), region, resultID, *status);
+    if (U_SUCCESS(*status) && resultID.length() > 0) {
+        resultLen = resultID.length();
+        resultID.extract(id, idCapacity, *status);
+    }
+
+    return resultLen;
+}
+
+#endif /* U_HIDE_DRAFT_API */
+
 #endif /* #if !UCONFIG_NO_FORMATTING */
