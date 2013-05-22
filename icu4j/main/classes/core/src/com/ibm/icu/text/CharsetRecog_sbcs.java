@@ -8,8 +8,6 @@
 
 package com.ibm.icu.text;
 
-import java.nio.ByteBuffer;
-
 /**
  * This class recognizes single-byte encodings. Because the encoding scheme is so
  * simple, language statistics are used to do the matching.
@@ -26,16 +24,16 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 //        private static final int N_GRAM_SIZE = 3;
         private static final int N_GRAM_MASK = 0xFFFFFF;
 
-        private int byteIndex = 0;
+        protected int byteIndex = 0;
         private int ngram = 0;
         
         private int[] ngramList;
-        private byte[] byteMap;
+        protected byte[] byteMap;
         
         private int ngramCount;
         private int hitCount;
         
-        private byte spaceChar;
+        protected byte spaceChar;
         
         public NGramParser(int[] theNgramList, byte[] theByteMap)
         {
@@ -99,7 +97,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             
         }
         
-        private void addByte(int b)
+        protected void addByte(int b)
         {
             ngram = ((ngram << 8) + (b & 0xFF)) & N_GRAM_MASK;
             lookup(ngram);
@@ -114,15 +112,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             return det.fInputBytes[byteIndex++] & 0xFF;
         }
         
-        public int parse(CharsetDetector det)
-        {
-            return parse (det, (byte)0x20);
-        }
-        public int parse(CharsetDetector det, byte spaceCh)
+        protected void parseCharacters(CharsetDetector det)
         {
             int b;
             boolean ignoreSpace = false;
-            this.spaceChar = spaceCh;
             
             while ((b = nextByte(det)) >= 0) {
                 byte mb = byteMap[b];
@@ -136,6 +129,19 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
                     ignoreSpace = (mb == spaceChar);
                 }
             }
+            
+        }
+
+        public int parse(CharsetDetector det)
+        {
+            return parse (det, (byte)0x20);
+        }
+        public int parse(CharsetDetector det, byte spaceCh)
+        {
+            
+        	this.spaceChar = spaceCh;
+            
+        	parseCharacters(det);
             
             // TODO: Is this OK? The buffer could have ended in the middle of a word...
             addByte(spaceChar);
@@ -156,6 +162,106 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
     }
         
+    static class NGramParser_IBM420 extends NGramParser
+    {
+    	private byte alef = 0x00;
+    	
+        protected static byte[] unshapeMap = {
+/*                 -0           -1           -2           -3           -4           -5           -6           -7           -8           -9           -A           -B           -C           -D           -E           -F   */
+/* 0- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 1- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 2- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 3- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
+/* 4- */    (byte) 0x40, (byte) 0x40, (byte) 0x42, (byte) 0x42, (byte) 0x44, (byte) 0x45, (byte) 0x46, (byte) 0x47, (byte) 0x47, (byte) 0x49, (byte) 0x4A, (byte) 0x4B, (byte) 0x4C, (byte) 0x4D, (byte) 0x4E, (byte) 0x4F, 
+/* 5- */    (byte) 0x50, (byte) 0x49, (byte) 0x52, (byte) 0x53, (byte) 0x54, (byte) 0x55, (byte) 0x56, (byte) 0x56, (byte) 0x58, (byte) 0x58, (byte) 0x5A, (byte) 0x5B, (byte) 0x5C, (byte) 0x5D, (byte) 0x5E, (byte) 0x5F, 
+/* 6- */    (byte) 0x60, (byte) 0x61, (byte) 0x62, (byte) 0x63, (byte) 0x63, (byte) 0x65, (byte) 0x65, (byte) 0x67, (byte) 0x67, (byte) 0x69, (byte) 0x6A, (byte) 0x6B, (byte) 0x6C, (byte) 0x6D, (byte) 0x6E, (byte) 0x6F, 
+/* 7- */    (byte) 0x69, (byte) 0x71, (byte) 0x71, (byte) 0x73, (byte) 0x74, (byte) 0x75, (byte) 0x76, (byte) 0x77, (byte) 0x77, (byte) 0x79, (byte) 0x7A, (byte) 0x7B, (byte) 0x7C, (byte) 0x7D, (byte) 0x7E, (byte) 0x7F, 
+/* 8- */    (byte) 0x80, (byte) 0x81, (byte) 0x82, (byte) 0x83, (byte) 0x84, (byte) 0x85, (byte) 0x86, (byte) 0x87, (byte) 0x88, (byte) 0x89, (byte) 0x80, (byte) 0x8B, (byte) 0x8B, (byte) 0x8D, (byte) 0x8D, (byte) 0x8F, 
+/* 9- */    (byte) 0x90, (byte) 0x91, (byte) 0x92, (byte) 0x93, (byte) 0x94, (byte) 0x95, (byte) 0x96, (byte) 0x97, (byte) 0x98, (byte) 0x99, (byte) 0x9A, (byte) 0x9A, (byte) 0x9A, (byte) 0x9A, (byte) 0x9E, (byte) 0x9E, 
+/* A- */    (byte) 0x9E, (byte) 0xA1, (byte) 0xA2, (byte) 0xA3, (byte) 0xA4, (byte) 0xA5, (byte) 0xA6, (byte) 0xA7, (byte) 0xA8, (byte) 0xA9, (byte) 0x9E, (byte) 0xAB, (byte) 0xAB, (byte) 0xAD, (byte) 0xAD, (byte) 0xAF, 
+/* B- */    (byte) 0xAF, (byte) 0xB1, (byte) 0xB2, (byte) 0xB3, (byte) 0xB4, (byte) 0xB5, (byte) 0xB6, (byte) 0xB7, (byte) 0xB8, (byte) 0xB9, (byte) 0xB1, (byte) 0xBB, (byte) 0xBB, (byte) 0xBD, (byte) 0xBD, (byte) 0xBF, 
+/* C- */    (byte) 0xC0, (byte) 0xC1, (byte) 0xC2, (byte) 0xC3, (byte) 0xC4, (byte) 0xC5, (byte) 0xC6, (byte) 0xC7, (byte) 0xC8, (byte) 0xC9, (byte) 0xCA, (byte) 0xBF, (byte) 0xCC, (byte) 0xBF, (byte) 0xCE, (byte) 0xCF, 
+/* D- */    (byte) 0xD0, (byte) 0xD1, (byte) 0xD2, (byte) 0xD3, (byte) 0xD4, (byte) 0xD5, (byte) 0xD6, (byte) 0xD7, (byte) 0xD8, (byte) 0xD9, (byte) 0xDA, (byte) 0xDA, (byte) 0xDC, (byte) 0xDC, (byte) 0xDC, (byte) 0xDF, 
+/* E- */    (byte) 0xE0, (byte) 0xE1, (byte) 0xE2, (byte) 0xE3, (byte) 0xE4, (byte) 0xE5, (byte) 0xE6, (byte) 0xE7, (byte) 0xE8, (byte) 0xE9, (byte) 0xEA, (byte) 0xEB, (byte) 0xEC, (byte) 0xED, (byte) 0xEE, (byte) 0xEF, 
+/* F- */    (byte) 0xF0, (byte) 0xF1, (byte) 0xF2, (byte) 0xF3, (byte) 0xF4, (byte) 0xF5, (byte) 0xF6, (byte) 0xF7, (byte) 0xF8, (byte) 0xF9, (byte) 0xFA, (byte) 0xFB, (byte) 0xFC, (byte) 0xFD, (byte) 0xFE, (byte) 0xFF, 
+        };
+    
+
+    	public NGramParser_IBM420(int[] theNgramList, byte[] theByteMap)
+        {
+    	   super(theNgramList, theByteMap);
+        }
+    	
+    	private byte isLamAlef(byte b) {
+         	if(b == 0xb2 || b == 0xb3){
+         		return 0x47;        		
+         	}else if(b == 0xb4 || b == 0xb5){
+         		return 0x49;
+         	}else if(b == 0xb8 || b == 0xb9){
+         		return 0x56;
+         	}else
+         		return 0x00;
+         }
+    	
+    	/*
+         * Arabic shaping needs to be done manually. Cannot call ArabicShaping class
+         * because CharsetDetector is dealing with bytes not Unicode code points. We could
+         * convert the bytes to Unicode code points but that would leave us dependent
+         * on CharsetICU which we try to avoid. IBM420 converter amongst different versions
+         * of JDK can produce different results and therefore is also avoided.
+         */    	
+    	 private int nextByte(CharsetDetector det)
+         {
+             if (byteIndex >= det.fInputLen || det.fInputBytes[byteIndex] == 0) {
+                 return -1;
+             }              
+            int next;
+             
+            alef = isLamAlef(det.fInputBytes[byteIndex]);
+            if(alef != 0x00)
+            	next = 0xB1 & 0xFF;
+            else
+            	next = unshapeMap[det.fInputBytes[byteIndex]& 0xFF] & 0xFF;
+            
+            byteIndex++;
+             
+            return next;
+         }
+    	 
+    	 protected void parseCharacters(CharsetDetector det)
+         {
+         	 int b;
+             boolean ignoreSpace = false;
+             
+             while ((b = nextByte(det)) >= 0) {
+                 byte mb = byteMap[b];
+                 
+                 // TODO: 0x20 might not be a space in all character sets...
+                 if (mb != 0) {
+                     if (!(mb == spaceChar && ignoreSpace)) {
+                         addByte(mb);                    
+                     }
+                     
+                     ignoreSpace = (mb == spaceChar);
+                 }
+                 if(alef != 0x00){
+                	 mb = byteMap[alef & 0xFF];
+                     
+                     // TODO: 0x20 might not be a space in all character sets...
+                     if (mb != 0) {
+                         if (!(mb == spaceChar && ignoreSpace)) {
+                             addByte(mb);                    
+                         }
+                         
+                         ignoreSpace = (mb == spaceChar);
+                     }
+                	 
+                 }
+             }
+        }
+    }
+    	
+     
     int match(CharsetDetector det, int[] ngrams,  byte[] byteMap)
     {
         return match (det, ngrams, byteMap, (byte)0x20);
@@ -164,6 +270,11 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
     int match(CharsetDetector det, int[] ngrams,  byte[] byteMap, byte spaceChar)
     {
         NGramParser parser = new NGramParser(ngrams, byteMap);
+        return parser.parse(det, spaceChar);
+    }
+    
+    int matchIBM420(CharsetDetector det, int[] ngrams,  byte[] byteMap, byte spaceChar){
+    	NGramParser_IBM420 parser = new NGramParser_IBM420(ngrams, byteMap);
         return parser.parse(det, spaceChar);
     }
     
@@ -1031,8 +1142,6 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
     
     abstract static class CharsetRecog_IBM420_ar extends CharsetRecog_sbcs
     {
-        //arabic shaping class, method shape/unshape
-        protected static ArabicShaping as = new ArabicShaping(ArabicShaping.LETTERS_UNSHAPE);
 
         protected static byte[] byteMap = {
 /*                 -0           -1           -2           -3           -4           -5           -6           -7           -8           -9           -A           -B           -C           -D           -E           -F   */
@@ -1054,68 +1163,10 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 /* F- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0xFB, (byte) 0xFC, (byte) 0xFD, (byte) 0xFE, (byte) 0x40, 
         };
         
-        protected static byte[] unshapeMap = {
-/*                 -0           -1           -2           -3           -4           -5           -6           -7           -8           -9           -A           -B           -C           -D           -E           -F   */
-/* 0- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
-/* 1- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
-/* 2- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
-/* 3- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
-/* 4- */    (byte) 0x40, (byte) 0x40, (byte) 0x42, (byte) 0x42, (byte) 0x44, (byte) 0x45, (byte) 0x46, (byte) 0x47, (byte) 0x47, (byte) 0x49, (byte) 0x4A, (byte) 0x4B, (byte) 0x4C, (byte) 0x4D, (byte) 0x4E, (byte) 0x4F, 
-/* 5- */    (byte) 0x50, (byte) 0x49, (byte) 0x52, (byte) 0x53, (byte) 0x54, (byte) 0x55, (byte) 0x56, (byte) 0x56, (byte) 0x58, (byte) 0x58, (byte) 0x5A, (byte) 0x5B, (byte) 0x5C, (byte) 0x5D, (byte) 0x5E, (byte) 0x5F, 
-/* 6- */    (byte) 0x60, (byte) 0x61, (byte) 0x62, (byte) 0x63, (byte) 0x63, (byte) 0x65, (byte) 0x65, (byte) 0x67, (byte) 0x67, (byte) 0x69, (byte) 0x6A, (byte) 0x6B, (byte) 0x6C, (byte) 0x6D, (byte) 0x6E, (byte) 0x6F, 
-/* 7- */    (byte) 0x69, (byte) 0x71, (byte) 0x71, (byte) 0x73, (byte) 0x74, (byte) 0x75, (byte) 0x76, (byte) 0x77, (byte) 0x77, (byte) 0x79, (byte) 0x7A, (byte) 0x7B, (byte) 0x7C, (byte) 0x7D, (byte) 0x7E, (byte) 0x7F, 
-/* 8- */    (byte) 0x80, (byte) 0x81, (byte) 0x82, (byte) 0x83, (byte) 0x84, (byte) 0x85, (byte) 0x86, (byte) 0x87, (byte) 0x88, (byte) 0x89, (byte) 0x80, (byte) 0x8B, (byte) 0x8B, (byte) 0x8D, (byte) 0x8D, (byte) 0x8F, 
-/* 9- */    (byte) 0x90, (byte) 0x91, (byte) 0x92, (byte) 0x93, (byte) 0x94, (byte) 0x95, (byte) 0x96, (byte) 0x97, (byte) 0x98, (byte) 0x99, (byte) 0x9A, (byte) 0x9A, (byte) 0x9A, (byte) 0x9A, (byte) 0x9E, (byte) 0x9E, 
-/* A- */    (byte) 0x9E, (byte) 0xA1, (byte) 0xA2, (byte) 0xA3, (byte) 0xA4, (byte) 0xA5, (byte) 0xA6, (byte) 0xA7, (byte) 0xA8, (byte) 0xA9, (byte) 0x9E, (byte) 0xAB, (byte) 0xAB, (byte) 0xAD, (byte) 0xAD, (byte) 0xAF, 
-/* B- */    (byte) 0xAF, (byte) 0xB1, (byte) 0xB2, (byte) 0xB3, (byte) 0xB4, (byte) 0xB5, (byte) 0xB6, (byte) 0xB7, (byte) 0xB8, (byte) 0xB9, (byte) 0xB1, (byte) 0xBB, (byte) 0xBB, (byte) 0xBD, (byte) 0xBD, (byte) 0xBF, 
-/* C- */    (byte) 0xC0, (byte) 0xC1, (byte) 0xC2, (byte) 0xC3, (byte) 0xC4, (byte) 0xC5, (byte) 0xC6, (byte) 0xC7, (byte) 0xC8, (byte) 0xC9, (byte) 0xCA, (byte) 0xBF, (byte) 0xCC, (byte) 0xBF, (byte) 0xCE, (byte) 0xCF, 
-/* D- */    (byte) 0xD0, (byte) 0xD1, (byte) 0xD2, (byte) 0xD3, (byte) 0xD4, (byte) 0xD5, (byte) 0xD6, (byte) 0xD7, (byte) 0xD8, (byte) 0xD9, (byte) 0xDA, (byte) 0xDA, (byte) 0xDC, (byte) 0xDC, (byte) 0xDC, (byte) 0xDF, 
-/* E- */    (byte) 0xE0, (byte) 0xE1, (byte) 0xE2, (byte) 0xE3, (byte) 0xE4, (byte) 0xE5, (byte) 0xE6, (byte) 0xE7, (byte) 0xE8, (byte) 0xE9, (byte) 0xEA, (byte) 0xEB, (byte) 0xEC, (byte) 0xED, (byte) 0xEE, (byte) 0xEF, 
-/* F- */    (byte) 0xF0, (byte) 0xF1, (byte) 0xF2, (byte) 0xF3, (byte) 0xF4, (byte) 0xF5, (byte) 0xF6, (byte) 0xF7, (byte) 0xF8, (byte) 0xF9, (byte) 0xFA, (byte) 0xFB, (byte) 0xFC, (byte) 0xFD, (byte) 0xFE, (byte) 0xFF, 
-        };
 
         public String getLanguage()
         {
             return "ar";
-        }
-        /*
-         * Arabic shaping needs to be done manually. Cannot call ArabicShaping class
-         * because CharsetDetector is dealing with bytes not Unicode code points. We could
-         * convert the bytes to Unicode code points but that would leave us dependent
-         * on CharsetICU which we try to avoid. IBM420 converter amongst different versions
-         * of JDK can produce different results and therefore is also avoided.
-         */
-        byte[] unshape(byte[] inputBytes, int inputLen) {
-            byte resultByteArr[] = unshapeLamAlef(inputBytes, inputLen);
-            
-            for (int i=0; i<resultByteArr.length; i++){
-                resultByteArr[i] = unshapeMap[resultByteArr[i]& 0xFF];
-            }
-            return resultByteArr;
-        }
-
-        private byte[] unshapeLamAlef(byte[] inputBytes, int inputLen) {
-            ByteBuffer resultBigBuffer =  ByteBuffer.allocate(inputLen*2);
-            byte unshapedLamAlef[] = {(byte)0xb1, (byte)0x56};
-         
-            for (int i=0; i<inputLen; i++){
-                if (isLamAlef(inputBytes[i]))
-                    resultBigBuffer.put(unshapedLamAlef);
-                else
-                    resultBigBuffer.put(inputBytes[i]);
-            }
-            byte[] resultBuffer = new byte[resultBigBuffer.position()];
-            resultBigBuffer.position(0);
-            resultBigBuffer.get(resultBuffer);
-            return resultBuffer;
-        }
-        
-        private boolean isLamAlef(byte b) {
-            byte shapedLamAlef[] = {(byte)0xb2,(byte)0xb3,(byte)0xb4,(byte)0xb5,(byte)0xb7,(byte)0xb8 };
-            for (int i = 0; i<shapedLamAlef.length; i++)
-                if (b == shapedLamAlef[i])
-                    return true;
-            return false;
         }
                 
     }
@@ -1134,15 +1185,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
         public CharsetMatch match(CharsetDetector det)
         {
-            byte[] prev_fInputBytes = det.fInputBytes;
-            int prev_fInputLen = det.fInputLen;
-            det.fInputBytes = unshape(prev_fInputBytes, prev_fInputLen);
-            det.fInputLen = det.fInputBytes.length;
-
-            int confidence =  match(det, ngrams, byteMap, (byte)0x40);
-            
-            det.fInputBytes = prev_fInputBytes;
-            det.fInputLen = prev_fInputLen;
+        	int confidence =  matchIBM420(det, ngrams, byteMap, (byte)0x40);
             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
         
@@ -1162,15 +1205,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
         public CharsetMatch match(CharsetDetector det)
         {
-            byte[] prev_fInputBytes = det.fInputBytes;
-            int prev_fInputLen = det.fInputLen;
-            det.fInputBytes = unshape(prev_fInputBytes, prev_fInputLen);
-            det.fInputLen = det.fInputBytes.length;
-            
-            int confidence = match(det, ngrams, byteMap, (byte)0x40);
-            
-            det.fInputBytes = prev_fInputBytes;
-            det.fInputLen = prev_fInputLen;
+        	int confidence = matchIBM420(det, ngrams, byteMap, (byte)0x40);
             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
         
