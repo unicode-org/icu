@@ -498,12 +498,14 @@
     <ClCompile Include="compactdecimalformat.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="bocsu.cpp" />
     <ClCompile Include="region.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="uregion.cpp">
       <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="bocsu.cpp">
+      <Filter>transforms</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -807,12 +809,6 @@
     <ClInclude Include="region_impl.h">
       <Filter>formatting</Filter>
     </ClInclude>
-    <ClInclude Include="unicode\region.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
-    <ClInclude Include="unicode\uregion.h">
-      <Filter>formatting</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="i18n.rc">
@@ -1027,7 +1023,6 @@
     <CustomBuild Include="unicode\uspoof.h">
       <Filter>spoof</Filter>
     </CustomBuild>
-    <CustomBuild Include="unicode\currpinf.h" />
     <CustomBuild Include="unicode\alphaindex.h">
       <Filter>collation</Filter>
     </CustomBuild>
@@ -1039,6 +1034,15 @@
     </CustomBuild>
     <CustomBuild Include="unicode\compactdecimalformat.h">
       <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\currpinf.h">
+      <Filter>formatting</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\region.h">
+      <Filter>misc</Filter>
+    </CustomBuild>
+    <CustomBuild Include="unicode\uregion.h">
+      <Filter>misc</Filter>
     </CustomBuild>
   </ItemGroup>
 </Project>
