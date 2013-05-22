@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 
 import com.ibm.icu.impl.Grego;
 import com.ibm.icu.impl.ICUConfig;
+import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
 import com.ibm.icu.impl.ZoneMeta;
@@ -1110,6 +1111,122 @@ abstract public class TimeZone implements Serializable, Cloneable, Freezable<Tim
             throw new IllegalArgumentException("Unknown system zone id: " + id);
         }
         return region;
+    }
+
+    /**
+     * {@icu} Converts a system time zone ID to an equivalent Windows time zone ID. For example,
+     * Windows time zone ID "Pacific Standard Time" is returned for input "America/Los_Angeles".
+     * 
+     * <p>There are system time zones that cannot be mapped to Windows zones. When the input
+     * system time zone ID is unknown or unmappable to a Windows time zone, then this
+     * method returns <code>null</code>.
+     * 
+     * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
+     * Zone-Tzid mapping data<a>. The mapping data is updated time to time. To get the latest changes,
+     * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
+     * Updating the Time Zone Data</a>.
+     * 
+     * @param id A system time zone ID
+     * @return A Windows time zone ID mapped from the input system time zone ID,
+     * or <code>null</code> when the input ID is unknown or unmappable.
+     * @see #getIDForWindowsID(String, String)
+     * 
+     * @draft ICU 52
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static String getWindowsID(String id) {
+        // canonicalize the input ID
+        boolean[] isSystemID = {false};
+        id = getCanonicalID(id, isSystemID);
+        if (!isSystemID[0]) {
+            // mapping data is only applicable to tz database IDs
+            return null; 
+        }
+
+        UResourceBundle top = UResourceBundle.getBundleInstance(
+                ICUResourceBundle.ICU_BASE_NAME, "windowsZones", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle mapTimezones = top.get("mapTimezones");
+
+        UResourceBundleIterator resitr = mapTimezones.getIterator();
+        while (resitr.hasNext()) {
+            UResourceBundle winzone = resitr.next();
+            if (winzone.getType() != UResourceBundle.TABLE) {
+                continue;
+            }
+            UResourceBundleIterator rgitr = winzone.getIterator();
+            while (rgitr.hasNext()) {
+                UResourceBundle regionalData = rgitr.next();
+                if (regionalData.getType() != UResourceBundle.STRING) {
+                    continue;
+                }
+                String[] tzids = regionalData.getString().split(" ");
+                for (String tzid : tzids) {
+                    if (tzid.equals(id)) {
+                        return winzone.getKey();
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * {@icu} Converts a Windows time zone ID to an equivalent system time zone ID
+     * for a region. For example, system time zone ID "America/Los_Angeles" is returned 
+     * for input Windows ID "Pacific Standard Time" and region "US" (or <code>null</code>),
+     * "America/Vancouver" is returned for the same Windows ID "Pacific Standard Time" and
+     * region "CA".
+     * 
+     * <p>Not all Windows time zones can be mapped to system time zones. When the input
+     * Windows time zone ID is unknown or unmappable to a system time zone, then this
+     * method returns <code>null</code>.
+     *
+     * <p>This implementation utilizes <a href="http://unicode.org/cldr/charts/supplemental/zone_tzid.html">
+     * Zone-Tzid mapping data<a>. The mapping data is updated time to time. To get the latest changes,
+     * please read the ICU user guide section <a href="http://userguide.icu-project.org/datetime/timezone#TOC-Updating-the-Time-Zone-Data">
+     * Updating the Time Zone Data</a>.
+     *
+     * @param winid A Windows time zone ID
+     * @param region A region code, or <code>null</code> if no regional preference.
+     * @return A system time zone ID mapped from the input Windows time zone ID,
+     * or <code>null</code> when the input ID is unknown or unmappable.
+     * @see #getWindowsID(String)
+     * 
+     * @draft ICU 52
+     * @provisional This API might change or be removed in a future release.
+     */
+    public static String getIDForWindowsID(String winid, String region) {
+        String id = null;
+
+        UResourceBundle top = UResourceBundle.getBundleInstance(
+                ICUResourceBundle.ICU_BASE_NAME, "windowsZones", ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+        UResourceBundle mapTimezones = top.get("mapTimezones");
+
+        try {
+            UResourceBundle zones = mapTimezones.get(winid);
+            if (region != null) {
+                try {
+                    id = zones.getString(region);
+                    if (id != null) {
+                        // first ID delimited by space is the default one
+                        int endIdx = id.indexOf(' ');
+                        if (endIdx > 0) {
+                            id = id.substring(0, endIdx);
+                        }
+                    }
+                } catch (MissingResourceException e) {
+                    // no explicit region mapping found
+                }
+            }
+            if (id == null) {
+                id = zones.getString("001");
+            }
+        } catch (MissingResourceException e) {
+            // no mapping data found
+        }
+
+        return id;
     }
 
     // Freezable stuffs
