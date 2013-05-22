@@ -1583,6 +1583,138 @@ TimeZone::getCanonicalID(const UnicodeString& id, UnicodeString& canonicalID, UB
     return canonicalID;
 }
 
+#ifndef U_HIDE_DRAFT_API
+UnicodeString&
+TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode& status) {
+    winid.remove();
+    if (U_FAILURE(status)) {
+        return winid;
+    }
+
+    // canonicalize the input ID
+    UnicodeString canonicalID;
+    UBool isSystemID = FALSE;
+
+    getCanonicalID(id, canonicalID, isSystemID, status);
+    if (U_FAILURE(status) || !isSystemID) {
+        // mapping data is only applicable to tz database IDs
+        return winid;
+    }
+
+    UResourceBundle *mapTimezones = ures_openDirect(NULL, "windowsZones", &status);
+    ures_getByKey(mapTimezones, "mapTimezones", mapTimezones, &status);
+
+    if (U_FAILURE(status)) {
+        return winid;
+    }
+
+    UResourceBundle *winzone = NULL;
+    UBool found = FALSE;
+    while (ures_hasNext(mapTimezones) && !found) {
+        winzone = ures_getNextResource(mapTimezones, winzone, &status);
+        if (U_FAILURE(status)) {
+            break;
+        }
+        if (ures_getType(winzone) != URES_TABLE) {
+            continue;
+        }
+        UResourceBundle *regionalData = NULL;
+        while (ures_hasNext(winzone) && !found) {
+            regionalData = ures_getNextResource(winzone, regionalData, &status);
+            if (U_FAILURE(status)) {
+                break;
+            }
+            if (ures_getType(regionalData) != URES_STRING) {
+                continue;
+            }
+            int32_t len;
+            const UChar *tzids = ures_getString(regionalData, &len, &status);
+            if (U_FAILURE(status)) {
+                break;
+            }
+
+            const UChar *start = tzids;
+            UBool hasNext = TRUE;
+            while (hasNext) {
+                const UChar *end = u_strchr(start, (UChar)0x20);
+                if (end == NULL) {
+                    end = tzids + len;
+                    hasNext = FALSE;
+                }
+                if (canonicalID.compare(start, end - start) == 0) {
+                    winid = UnicodeString(ures_getKey(winzone));
+                    found = TRUE;
+                    break;
+                }
+                start = end + 1;
+            }
+        }
+        ures_close(regionalData);
+    }
+    ures_close(winzone);
+
+    return winid;
+}
+
+#define MAX_WINDOWS_ID_SIZE 128
+
+UnicodeString&
+TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, UnicodeString& id, UErrorCode& status) {
+    id.remove();
+    if (U_FAILURE(status)) {
+        return id;
+    }
+
+    UResourceBundle *zones = ures_openDirect(NULL, "windowsZones", &status);
+    ures_getByKey(zones, "mapTimezones", zones, &status);
+    if (U_FAILURE(status)) {
+        return id;
+    }
+
+    UErrorCode tmperr = U_ZERO_ERROR;
+    char winidKey[MAX_WINDOWS_ID_SIZE];
+    int32_t winKeyLen = winid.extract(0, winid.length(), winidKey, sizeof(winidKey) - 1);
+
+    if (winKeyLen == 0 || winKeyLen >= sizeof(winidKey)) {
+        return id;
+    }
+    winidKey[winKeyLen] = 0;
+
+    ures_getByKey(zones, winidKey, zones, &tmperr); // use tmperr, because windows mapping might not
+                                                    // be avaiable by design
+    if (U_FAILURE(tmperr)) {
+        return id;
+    }
+
+    const UChar *tzid = NULL;
+    int32_t len = 0;
+    if (region) {
+        int32_t tzidsLen = 0;
+        const UChar *tzids = ures_getStringByKey(zones, region, &len, &tmperr); // use tmperr, because
+                                                                                // regional mapping is optional
+        if (U_SUCCESS(tmperr)) {
+            // first ID delimited by space is the defasult one
+            const UChar *end = u_strchr(tzids, (UChar)0x20);
+            if (end == NULL) {
+                id.setTo(tzids, -1);
+            } else {
+                id.setTo(tzids, end - tzids);
+            }
+            return id;
+        }
+    }
+
+    tzid = ures_getStringByKey(zones, "001", &len, &status);    // using status, because "001" must be
+                                                                // available at this point
+    if (U_SUCCESS(status)) {
+        id.setTo(tzid, len);
+    }
+
+    return id;
+}
+#endif /* U_HIDE_DRAFT_API */
+
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
