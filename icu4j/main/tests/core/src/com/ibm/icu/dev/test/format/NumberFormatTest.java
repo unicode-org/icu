@@ -3156,6 +3156,14 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 Double.valueOf(123.4567d),
                 null
             },
+            {
+                ULocale.US,
+                "#.##",
+                Integer.valueOf(BigDecimal.ROUND_DOWN),
+                null,
+                Long.valueOf(1234),
+                "1234"
+            },
         };
 
         int testNum = 1;
