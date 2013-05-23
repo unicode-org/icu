@@ -183,7 +183,8 @@ public class TimeUnitFormat extends MeasureFormat {
     }
     
     /**
-     * Set the format used for formatting or parsing. If null or not available, use the getNumberInstance(locale).
+     * Set the format used for formatting or parsing. Passing null is equivalent to passing
+     * {@link NumberFormat#getNumberInstance(ULocale)}.
      * @param format   the number formatter.
      * @return this, for chaining.
      * @stable ICU 4.0
