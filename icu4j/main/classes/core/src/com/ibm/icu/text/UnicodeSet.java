@@ -38,7 +38,7 @@ import com.ibm.icu.util.VersionInfo;
  * in regular expressions. A character specifies a subset of Unicode
  * code points.  Legal code points are U+0000 to U+10FFFF, inclusive.
  *
- * Note: method freeze() will not only makes the set immutable, but
+ * Note: method freeze() will not only make the set immutable, but
  * also makes important methods much higher performance:
  * contains(c), containsNone(...), span(...), spanBack(...) etc.
  * After the object is frozen, any subsequent call that wants to change
