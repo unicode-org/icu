@@ -1200,7 +1200,7 @@ SimpleDateFormat::subFormat(UnicodeString &appendTo,
     DateFormatSymbols::ECapitalizationContextUsageType capContextUsageType = DateFormatSymbols::kCapContextUsageOther;
 
     UBool isHebrewCalendar = (uprv_strcmp(cal.getType(),"hebrew") == 0);
-    UBool isChineseCalendar = (uprv_strcmp(cal.getType(),"chinese") == 0);
+    UBool isChineseCalendar = (uprv_strcmp(cal.getType(),"chinese") == 0 || uprv_strcmp(cal.getType(),"dangi") == 0);
 
     // if the pattern character is unrecognized, signal an error and dump out
     if (patternCharIndex == UDAT_FIELD_COUNT)
@@ -2429,7 +2429,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     if (numericLeapMonthFormatter != NULL) {
         numericLeapMonthFormatter->setFormats((const Format **)&currentNumberFormat, 1);
     }
-    UBool isChineseCalendar = (uprv_strcmp(cal.getType(),"chinese") == 0);
+    UBool isChineseCalendar = (uprv_strcmp(cal.getType(),"chinese") == 0 || uprv_strcmp(cal.getType(),"dangi") == 0);
 
     // If there are any spaces here, skip over them.  If we hit the end
     // of the string, then fail.
