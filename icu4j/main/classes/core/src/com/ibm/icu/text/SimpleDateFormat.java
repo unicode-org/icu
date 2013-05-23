@@ -1450,7 +1450,7 @@ public class SimpleDateFormat extends DateFormat {
 
         switch (patternCharIndex) {
         case 0: // 'G' - ERA
-            if ( cal.getType().equals("chinese")) {
+            if ( cal.getType().equals("chinese") || cal.getType().equals("dangi") ) {
                 // moved from ChineseDateFormat
                 zeroPaddingNumber(currentNumberFormat, buf, value, 1, 9);
             } else {
@@ -2706,6 +2706,7 @@ public class SimpleDateFormat extends DateFormat {
         if (numericLeapMonthFormatter != null) {
             numericLeapMonthFormatter.setFormatByArgumentIndex(0, currentNumberFormat);
         }
+        boolean isChineseCalendar = ( cal.getType().equals("chinese") || cal.getType().equals("dangi") );
 
         // If there are any spaces here, skip over them.  If we hit the end
         // of the string, then fail.
@@ -2731,7 +2732,7 @@ public class SimpleDateFormat extends DateFormat {
             (patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/ && count <= 2) ||
             patternCharIndex == 1 /*'y' YEAR */ || patternCharIndex == 18 /*'Y' YEAR_WOY */ ||
             patternCharIndex == 30 /*'U' YEAR_NAME_FIELD, falls back to numeric */ ||
-            (patternCharIndex == 0 /*'G' ERA */ && cal.getType().equals("chinese")) ||
+            (patternCharIndex == 0 /*'G' ERA */ && isChineseCalendar) ||
             patternCharIndex == 8 /*'S' FRACTIONAL_SECOND */ )
             {
                 // It would be good to unify this with the obeyCount logic below,
@@ -2773,7 +2774,7 @@ public class SimpleDateFormat extends DateFormat {
         switch (patternCharIndex)
             {
             case 0: // 'G' - ERA
-                if ( cal.getType().equals("chinese") ) {
+                if ( isChineseCalendar ) {
                     // Numeric era handling moved from ChineseDateFormat,
                     // If we didn't have a number, already returned -start above
                     cal.set(Calendar.ERA, value);
@@ -2808,7 +2809,7 @@ public class SimpleDateFormat extends DateFormat {
                 /* Skip this for Chinese calendar, moved from ChineseDateFormat */
                 if ( override != null && (override.compareTo("hebr") == 0 || override.indexOf("y=hebr") >= 0) && value < 1000 ) {
                     value += HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
-                } else if (count == 2 && (pos.getIndex() - start) == 2 && !cal.getType().equals("chinese")
+                } else if (count == 2 && (pos.getIndex() - start) == 2 && !isChineseCalendar
                     && UCharacter.isDigit(text.charAt(start))
                     && UCharacter.isDigit(text.charAt(start+1)))
                     {

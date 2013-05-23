@@ -4020,6 +4020,13 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             new MonthPatternItem( "zh_Hant@calendar=chinese", DateFormat.SHORT, "\u58EC\u8FB0/4/2",            "\u58EC\u8FB0/\u958F4/2",         "\u58EC\u8FB0/5/2" ),
             new MonthPatternItem( "fr@calendar=chinese",      DateFormat.LONG,  "2 s\u00ECyu\u00E8 ren-chen",  "2 s\u00ECyu\u00E8bis ren-chen",  "2 w\u01D4yu\u00E8 ren-chen" ),
             new MonthPatternItem( "fr@calendar=chinese",      DateFormat.SHORT, "2/4/29",                      "2/4bis/29",                      "2/5/29" ),
+            new MonthPatternItem( "en@calendar=dangi",        DateFormat.LONG,  "Month3bis 2, ren-chen",       "Month4 2, ren-chen",             "Month5 1, ren-chen" ),
+            new MonthPatternItem( "en@calendar=dangi",        DateFormat.SHORT, "3bis/2/29",                   "4/2/29",                         "5/1/29" ),
+            new MonthPatternItem( "en@calendar=dangi",        -2,               "78x29-3bis-2",                "78x29-4-2",                      "78x29-5-1" ),
+            new MonthPatternItem( "ko@calendar=dangi",        DateFormat.LONG,  "\uC784\uC9C4\uB144 3bis\uC6D4 2\uC77C",
+                                                                                "\uC784\uC9C4\uB144 4\uC6D4 2\uC77C",
+                                                                                "\uC784\uC9C4\uB144 5\uC6D4 1\uC77C" ),
+            new MonthPatternItem( "ko@calendar=dangi",        DateFormat.SHORT, "29. 3bis. 2.",                "29. 4. 2.",                      "29. 5. 1." ),
         };
         //                         style: -1        -2            -3       -4
         final String[] customPatterns = { "y-Ml-d", "G'x'y-Ml-d", "U-M-d", "U MMM d" }; // previously G and l for chinese cal only handled by ChineseDateFormat
