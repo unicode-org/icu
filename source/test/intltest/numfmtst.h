@@ -163,6 +163,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestEnumSet();
 
     void TestSignificantDigits();
+    void TestShowZero();
 
  private:
 
