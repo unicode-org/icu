@@ -1767,6 +1767,14 @@ DecimalFormat::subformat(UnicodeString& appendTo,
             }
         }
 
+        // This handles the special case of formatting 0. For zero only, we count the
+        // zero to the left of the decimal point as one signficant digit. Ordinarily we
+        // do not count any leading 0's as significant. If the number we are formatting
+        // is not zero, then either sigCount or digits.getCount() will be non-zero.
+        if (sigCount == 0 && digits.getCount() == 0) {
+          sigCount = 1;
+        }
+
         // TODO(dlf): this looks like it was a bug, we marked the int field as ending
         // before the zero was generated.
         // Record field information for caller.
@@ -1800,14 +1808,6 @@ DecimalFormat::subformat(UnicodeString& appendTo,
         if (useSigDig && (sigCount == maxSigDig ||
                           (sigCount >= minSigDig && digitIndex == digits.getCount()))) {
             count = 0;
-        }
-
-        // This handles the special case of formatting 0. For zero only, we count the
-        // zero to the left of the decimal point as one signficant digit. Ordinarily we
-        // do not count any leading 0's as significant. If the number we are formatting
-        // is not zero, then either sigCount or digits.getCount() will be non-zero.
-        if (sigCount == 0 && digits.getCount() == 0) {
-          sigCount = 1;
         }
 
         for (i=0; i < count; ++i) {
