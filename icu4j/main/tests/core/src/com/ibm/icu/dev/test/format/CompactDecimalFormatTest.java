@@ -9,6 +9,7 @@ package com.ibm.icu.dev.test.format;
 import java.text.AttributedCharacterIterator;
 import java.text.CharacterIterator;
 import java.text.FieldPosition;
+import java.util.Arrays;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.CompactDecimalFormat;
@@ -24,10 +25,15 @@ public class CompactDecimalFormatTest extends TestFmwk {
 
     Object[][] EnglishTestData = {
             // default is 2 digits of accuracy
-            {0.0d, "0.0"},
+            {0.0d, "0", "knownBug"},
+            {0.01d, "0.0", "knownBug"},
             {0.1d, "0.1"},
             {1d, "1"},
+            {12, "12"},
+            {123, "120"},
             {1234, "1.2K"},
+            {1000, "1K"},
+            {1049, "1K"},
             {12345, "12K"},
             {123456, "120K"},
             {1234567, "1.2M"},
@@ -255,7 +261,11 @@ public class CompactDecimalFormatTest extends TestFmwk {
     public void checkLocale(ULocale locale, CompactStyle style, Object[][] testData) {
         CompactDecimalFormat cdf = getCDFInstance(locale, style);
         for (Object[] row : testData) {
-            assertEquals(locale + " (" + locale.getDisplayName(locale) + ")", row[1], cdf.format(row[0]));
+            if (row.length > 2) {
+                logKnownIssue("10173", "Fix " + Arrays.asList(row));
+                continue;
+            }
+            assertEquals(locale + " (" + locale.getDisplayName(locale) + ") for " + row[0], row[1], cdf.format(row[0]));
         }
     }
 
