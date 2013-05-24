@@ -208,6 +208,7 @@ void addNEWResourceBundleTest(TestNode** root)
     addTest(root, &TestFallbackCodes,         "tsutil/creststn/TestFallbackCodes");
     addTest(root, &TestGetUTF8String,         "tsutil/creststn/TestGetUTF8String");
     addTest(root, &TestCLDRVersion,           "tsutil/creststn/TestCLDRVersion");
+    addTest(root, &TestPreventFallback,       "tsutil/creststn/TestPreventFallback");
 #endif
     addTest(root, &TestFallback,              "tsutil/creststn/TestFallback");
     addTest(root, &TestGetVersion,            "tsutil/creststn/TestGetVersion");
@@ -2006,6 +2007,62 @@ static void record_pass()
 static void record_fail()
 {
     ++fail;
+}
+
+static void TestPreventFallback() {
+    UResourceBundle* theBundle = NULL;
+    const char* testdatapath;
+    UErrorCode status = U_ZERO_ERROR;
+    UResourceBundle* res = NULL;
+    int32_t unused_len = 0;
+
+    testdatapath=loadTestData(&status);
+    if(U_FAILURE(status))
+    {
+        log_data_err("Could not load testdata.dat %s \n",myErrorName(status));
+        return;
+    }
+
+    // In te_IN locale, fallback of string_in_te_no_te_IN_fallback is blocked
+    // with the three empty-set (U+2205) chars.
+    theBundle = ures_open(testdatapath, "te_IN_NE", &status);
+    if(U_FAILURE(status))
+    {
+        log_data_err("Could not open resource bundle te_IN_NE %s \n",myErrorName(status));
+        return;
+    }
+
+    // Fallback is blocked
+    ures_getStringByKeyWithFallback(theBundle, "string_in_te_no_te_IN_fallback", &unused_len, &status);
+    if (status != U_MISSING_RESOURCE_ERROR)
+    {
+        log_err("Expected missing resource error for string_in_te_no_te_IN_fallback.");
+    }
+    status = U_ZERO_ERROR;
+
+    // This fallback should succeed
+    ures_getStringByKeyWithFallback(theBundle, "string_only_in_te", &unused_len, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("Expected to find string_only_in_te %s \n",myErrorName(status));
+    }
+    status = U_ZERO_ERROR;
+    ures_close(theBundle);
+
+    // From te locale, we should be able to fetch string_in_te_no_te_IN_fallback.
+    theBundle = ures_open(testdatapath, "te", &status);
+    if(U_FAILURE(status))
+    {
+        log_data_err("Could not open resource bundle te_IN_NE %s \n",myErrorName(status));
+        return;
+    }
+    ures_getStringByKeyWithFallback(theBundle, "string_in_te_no_te_IN_fallback", &unused_len, &status);
+    if(U_FAILURE(status))
+    {
+        log_err("Expected to find string_in_te_no_te_IN_fallback %s \n",myErrorName(status));
+    }
+    status = U_ZERO_ERROR;
+    ures_close(theBundle);
 }
 
 /**
