@@ -3220,4 +3220,52 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             testNum++;
         }
     }
+    
+    public void TestSignificantDigits() {
+        double input[] = {
+            0, 0,
+            123, -123,
+            12345, -12345,
+            123.45, -123.45,
+            123.44501, -123.44501,
+            0.001234, -0.001234,
+            0.00000000123, -0.00000000123,
+            0.0000000000000000000123, -0.0000000000000000000123,
+            1.2, -1.2,
+            0.0000000012344501, -0.0000000012344501,
+            123445.01, -123445.01,
+            12344501000000000000000000000000000.0, -12344501000000000000000000000000000.0,
+        };
+        String[] expected = {
+            "0.00", "0.00",
+            "123", "-123",
+            "12345", "-12345",
+            "123.45", "-123.45",
+            "123.45", "-123.45",
+            "0.001234", "-0.001234",
+            "0.00000000123", "-0.00000000123",
+            "0.0000000000000000000123", "-0.0000000000000000000123",
+            "1.20", "-1.20",
+            "0.0000000012345", "-0.0000000012345",
+            "123450", "-123450",
+            "12345000000000000000000000000000000", "-12345000000000000000000000000000000",
+        };
+        DecimalFormat numberFormat =
+            (DecimalFormat) NumberFormat.getInstance(ULocale.US);
+        numberFormat.setSignificantDigitsUsed(true);
+        numberFormat.setMinimumSignificantDigits(3);
+        numberFormat.setMaximumSignificantDigits(5);
+        numberFormat.setGroupingUsed(false);
+        for (int i = 0; i < input.length; i++) {
+            assertEquals("TestSignificantDigits", expected[i], numberFormat.format(input[i]));
+        }
+    }
+    
+    public void TestShowZero() {
+        DecimalFormat numberFormat =
+                (DecimalFormat) NumberFormat.getInstance(ULocale.US);
+        numberFormat.setSignificantDigitsUsed(true);
+        numberFormat.setMaximumSignificantDigits(3);
+        assertEquals("TestShowZero", "0", numberFormat.format(0.0));
+    }
 }
