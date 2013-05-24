@@ -25,8 +25,8 @@ public class CompactDecimalFormatTest extends TestFmwk {
 
     Object[][] EnglishTestData = {
             // default is 2 digits of accuracy
-            {0.0d, "0", "knownBug"},
-            {0.01d, "0.0", "knownBug"},
+            {0.0d, "0"},
+            {0.01d, "0.01"},
             {0.1d, "0.1"},
             {1d, "1"},
             {12, "12"},
@@ -261,10 +261,6 @@ public class CompactDecimalFormatTest extends TestFmwk {
     public void checkLocale(ULocale locale, CompactStyle style, Object[][] testData) {
         CompactDecimalFormat cdf = getCDFInstance(locale, style);
         for (Object[] row : testData) {
-            if (row.length > 2) {
-                logKnownIssue("10173", "Fix " + Arrays.asList(row));
-                continue;
-            }
             assertEquals(locale + " (" + locale.getDisplayName(locale) + ") for " + row[0], row[1], cdf.format(row[0]));
         }
     }
