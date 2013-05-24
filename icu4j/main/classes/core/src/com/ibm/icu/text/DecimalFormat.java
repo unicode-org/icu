@@ -1393,6 +1393,14 @@ public class DecimalFormat extends NumberFormat {
         } else if (fieldPosition.getFieldAttribute() == NumberFormat.Field.INTEGER) {
             fieldPosition.setEndIndex(result.length());
         }
+        
+        // This handles the special case of formatting 0. For zero only, we count the
+        // zero to the left of the decimal point as one signficant digit. Ordinarily we
+        // do not count any leading 0's as significant. If the number we are formatting
+        // is not zero, then either sigCount or digits.getCount() will be non-zero.
+        if (sigCount == 0 && digitList.count == 0) {
+          sigCount = 1;
+        }      
 
         // Determine whether or not there are any printable fractional digits. If
         // we've used up the digits we know there aren't.
