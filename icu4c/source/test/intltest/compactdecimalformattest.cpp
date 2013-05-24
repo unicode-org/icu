@@ -29,7 +29,7 @@ static const char *kShortStr = "Short";
 static const char *kLongStr = "Long";
 
 static ExpectedResult kEnglishShort[] = {
-  {0.0, "0.0"},
+  {0.0, "0"},
   {0.17, "0.17"},
   {1.0, "1"},
   {1234.0, "1.2K"},

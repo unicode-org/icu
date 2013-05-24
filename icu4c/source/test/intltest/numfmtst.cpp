@@ -119,6 +119,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFormatFastpaths);
   TESTCASE_AUTO(TestFormattableSize);
   TESTCASE_AUTO(TestSignificantDigits);
+  TESTCASE_AUTO(TestShowZero);
   TESTCASE_AUTO_END;
 }
 
@@ -6730,8 +6731,8 @@ void NumberFormatTest::TestSignificantDigits(void) {
 
     UErrorCode status = U_ZERO_ERROR;
     Locale locale("en_US");
-    DecimalFormat* numberFormat = static_cast<DecimalFormat*>(
-            NumberFormat::createInstance(locale, status));
+    LocalPointer<DecimalFormat> numberFormat(static_cast<DecimalFormat*>(
+            NumberFormat::createInstance(locale, status)));
     numberFormat->setSignificantDigitsUsed(TRUE);
     numberFormat->setMinimumSignificantDigits(3);
     numberFormat->setMaximumSignificantDigits(5);
@@ -6746,6 +6747,21 @@ void NumberFormatTest::TestSignificantDigits(void) {
           errln((UnicodeString)"Expected: '" + expectedResult + "' got '" + result);
         }
         result.remove();
+    }
+}
+
+void NumberFormatTest::TestShowZero() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale locale("en_US");
+    LocalPointer<DecimalFormat> numberFormat(static_cast<DecimalFormat*>(
+            NumberFormat::createInstance(locale, status)));
+    numberFormat->setSignificantDigitsUsed(TRUE);
+    numberFormat->setMaximumSignificantDigits(3);
+    
+    UnicodeString result;
+    numberFormat->format(0.0, result);
+    if (result != "0") {
+        errln((UnicodeString)"Expected: 0, got " + result);
     }
 }
 
