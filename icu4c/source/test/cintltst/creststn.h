@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /***************************************************************************
@@ -44,6 +44,8 @@ static void TestConstruction1(void);
 static void TestAliasConflict(void);
 
 static void TestFallback(void);
+
+static void TestPreventFallback(void);
 
 static void TestBinaryCollationData(void);
 
