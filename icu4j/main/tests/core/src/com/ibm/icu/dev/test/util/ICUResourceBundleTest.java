@@ -630,6 +630,20 @@ public final class ICUResourceBundleTest extends TestFmwk {
             warnln("could not load resource data: " + ex.getMessage());
         }
     }
+    
+    public void TestPreventFallback() {
+        String noFallbackResource = "string_in_te_no_te_IN_fallback";
+        ICUResourceBundle rb = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","te_IN_NE",testLoader);
+        try {
+            rb.getStringWithFallback(noFallbackResource);
+            fail("Expected MissingResourceException.");
+        } catch (MissingResourceException e) {
+            // Expected
+        }
+        rb.getStringWithFallback("string_only_in_te");
+        rb = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata","te",testLoader);
+        rb.getStringWithFallback(noFallbackResource);
+    }
 
     public void TestGetWithFallback(){
         /*
