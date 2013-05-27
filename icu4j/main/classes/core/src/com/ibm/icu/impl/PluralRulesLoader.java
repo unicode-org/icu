@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -23,7 +23,7 @@ import com.ibm.icu.util.UResourceBundle;
 /**
  * Loader for plural rules data.
  */
-public class PluralRulesLoader {
+public class PluralRulesLoader extends PluralRules.Factory {
     private final Map<String, PluralRules> rulesIdToRules;
     // lazy init, use getLocaleIdToRulesIdMap to access
     private Map<String, String> localeIdToCardinalRulesId;

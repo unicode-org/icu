@@ -24,19 +24,15 @@ import com.ibm.icu.util.ULocale;
  * @author markdavis
  *
  */
-public abstract class PluralRulesFactory {
+public abstract class PluralRulesFactory extends PluralRules.Factory {
 
     abstract boolean hasOverride(ULocale locale);
 
-    abstract PluralRules forLocale(ULocale locale, PluralType ordinal);
+    public abstract PluralRules forLocale(ULocale locale, PluralType ordinal);
 
-    PluralRules forLocale(ULocale locale) {
-        return forLocale(locale, PluralType.CARDINAL);
-    }
+    public abstract ULocale[] getAvailableULocales();
 
-    abstract ULocale[] getAvailableULocales();
-
-    abstract ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable);
+    public abstract ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable);
 
     static final PluralRulesFactory NORMAL = new PluralRulesFactoryVanilla();
 
@@ -50,15 +46,15 @@ public abstract class PluralRulesFactory {
             return false;
         }
         @Override
-        PluralRules forLocale(ULocale locale, PluralType ordinal) {
+        public PluralRules forLocale(ULocale locale, PluralType ordinal) {
             return PluralRules.forLocale(locale, ordinal);
         }
         @Override
-        ULocale[] getAvailableULocales() {
+        public ULocale[] getAvailableULocales() {
             return PluralRules.getAvailableULocales();
         }
         @Override
-        ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
+        public ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
             return PluralRules.getFunctionalEquivalent(locale, isAvailable);
         }
     }
@@ -70,7 +66,7 @@ public abstract class PluralRulesFactory {
         }
 
         @Override
-        PluralRules forLocale(ULocale locale, PluralType ordinal) {
+        public PluralRules forLocale(ULocale locale, PluralType ordinal) {
             PluralRules override = ordinal != PluralType.CARDINAL 
                     ? null 
                             : getPluralOverrides().get(locale);
@@ -80,14 +76,14 @@ public abstract class PluralRulesFactory {
         }
 
         @Override
-        ULocale[] getAvailableULocales() {
+        public ULocale[] getAvailableULocales() {
             return PluralRules.getAvailableULocales(); // TODO fix if we add more locales
         }
 
         static final Map<String,ULocale> rulesToULocale = new HashMap();
 
         @Override
-        ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
+        public ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
             if (rulesToULocale.isEmpty()) {
                 for (ULocale locale2 : getAvailableULocales()) {
                     String rules = forLocale(locale2).toString();
@@ -106,9 +102,9 @@ public abstract class PluralRulesFactory {
     static class SamplePatterns {
         final Map<String,String> keywordToPattern = new TreeMap(PluralRules.KEYWORD_COMPARATOR);
         final Map<String,String> keywordToErrors = new HashMap();
-        public void put(String keyword, String sample) {
+        public void put(ULocale locale, String keyword, String sample) {
             if (keywordToPattern.containsKey(keyword)) {
-                throw new IllegalArgumentException("Duplicate keyword <" + keyword + ">");
+                throw new IllegalArgumentException("Duplicate keyword <" + keyword + "> for " + locale);
             } else {
                 keywordToPattern.put(keyword, sample.replace(" ", "\u00A0"));
             }
@@ -173,7 +169,7 @@ public abstract class PluralRulesFactory {
             if (samplePatterns == null) {
                 temp.put(locale, samplePatterns = new SamplePatterns());
             }
-            samplePatterns.put(keyword, sample);
+            samplePatterns.put(locale, keyword, sample);
         }
         for (String[] pair : overrides) {
             for (String locale : pair[0].split("\\s*,\\s*")) {
@@ -206,80 +202,80 @@ public abstract class PluralRulesFactory {
     }
 
 
-    static String[][] OLDRULES = {
-        {"af", "one: n is 1"},
-        {"am", "one: n in 0..1"},
-        {"ar", "zero: n is 0;  one: n is 1;  two: n is 2;  few: n mod 100 in 3..10;  many: n mod 100 in 11..99"},
-        {"az", "other: null"},
-        {"bg", "one: n is 1"},
-        {"bn", "one: n is 1"},
-        {"ca", "one: n is 1"},
-        {"cs", "one: n is 1;  few: n in 2..4"},
-        {"cy", "zero: n is 0;  one: n is 1;  two: n is 2;  few: n is 3;  many: n is 6"},
-        {"da", "one: n is 1"},
-        {"de", "one: n is 1"},
-        {"el", "one: n is 1"},
-        {"en", "one: n is 1"},
-        {"es", "one: n is 1"},
-        {"et", "one: n is 1"},
-        {"eu", "one: n is 1"},
-        {"fa", "other: null"},
-        {"fi", "one: n is 1"},
-        {"fil", "one: n in 0..1"},
-        {"fr", "one: n within 0..2 and n is not 2"},
-        {"gl", "one: n is 1"},
-        {"gu", "one: n is 1"},
-        {"hi", "one: n in 0..1"},
-        {"hr", "one: n mod 10 is 1 and n mod 100 is not 11;  few: n mod 10 in 2..4 and n mod 100 not in 12..14;  many: n mod 10 is 0 or n mod 10 in 5..9 or n mod 100 in 11..14"},
-        {"hu", "other: null"},
-        {"hy", "one: n is 1"},
-        {"id", "other: null"},
-        {"is", "one: n is 1"},
-        {"it", "one: n is 1"},
-        {"he", "one: n is 1;  two: n is 2;  many: n is not 0 and n mod 10 is 0"},
-        {"ja", "other: null"},
-        {"ka", "other: null"},
-        {"kk", "one: n is 1"},
-        {"km", "other: null"},
-        {"kn", "other: null"},
-        {"ko", "other: null"},
-        {"ky", "one: n is 1"},
-        {"lo", "other: null"},
-        {"lt", "one: n mod 10 is 1 and n mod 100 not in 11..19;  few: n mod 10 in 2..9 and n mod 100 not in 11..19"},
-        {"lv", "zero: n is 0;  one: n mod 10 is 1 and n mod 100 is not 11"},
-        {"mk", "one: n mod 10 is 1 and n is not 11"},
-        {"ml", "one: n is 1"},
-        {"mn", "one: n is 1"},
-        {"mr", "one: n is 1"},
-        {"ms", "other: null"},
-        {"my", "other: null"},
-        {"ne", "one: n is 1"},
-        {"nl", "one: n is 1"},
-        {"nb", "one: n is 1"},
-        {"pa", "one: n is 1"},
-        {"pl", "one: n is 1;  few: n mod 10 in 2..4 and n mod 100 not in 12..14;  many: n is not 1 and n mod 10 in 0..1 or n mod 10 in 5..9 or n mod 100 in 12..14"},
-        {"ps", "one: n is 1"},
-        {"pt", "one: n is 1"},
-        {"ro", "one: n is 1;  few: n is 0 or n is not 1 and n mod 100 in 1..19"},
-        {"ru", "one: n mod 10 is 1 and n mod 100 is not 11;  few: n mod 10 in 2..4 and n mod 100 not in 12..14;  many: n mod 10 is 0 or n mod 10 in 5..9 or n mod 100 in 11..14"},
-        {"si", "other: null"},
-        {"sk", "one: n is 1;  few: n in 2..4"},
-        {"sl", "one: n mod 100 is 1;  two: n mod 100 is 2;  few: n mod 100 in 3..4"},
-        {"sq", "one: n is 1"},
-        {"sr", "one: n mod 10 is 1 and n mod 100 is not 11;  few: n mod 10 in 2..4 and n mod 100 not in 12..14;  many: n mod 10 is 0 or n mod 10 in 5..9 or n mod 100 in 11..14"},
-        {"sv", "one: n is 1"},
-        {"sw", "one: n is 1"},
-        {"ta", "one: n is 1"},
-        {"te", "one: n is 1"},
-        {"th", "other: null"},
-        {"tr", "other: null"},
-        {"uk", "one: n mod 10 is 1 and n mod 100 is not 11;  few: n mod 10 in 2..4 and n mod 100 not in 12..14;  many: n mod 10 is 0 or n mod 10 in 5..9 or n mod 100 in 11..14"},
-        {"ur", "one: n is 1"},
-        {"uz", "other: null"},
-        {"vi", "other: null"},
-        {"zh", "other: null"},
-        {"zu", "one: n is 1"},
-    };
+//    static String[][] OLDRULES = {
+//        {"af", "one: n is 1"},
+//        {"am", "one: n in 0..1"},
+//        {"ar", "zero: n is 0;  one: n is 1;  two: n is 2;  few: n mod 100 in 3..10;  many: n mod 100 in 11..99"},
+//        {"az", "other: null"},
+//        {"bg", "one: n is 1"},
+//        {"bn", "one: n is 1"},
+//        {"ca", "one: n is 1"},
+//        {"cs", "one: n is 1;  few: n in 2..4"},
+//        {"cy", "zero: n is 0;  one: n is 1;  two: n is 2;  few: n is 3;  many: n is 6"},
+//        {"da", "one: n is 1"},
+//        {"de", "one: n is 1"},
+//        {"el", "one: n is 1"},
+//        {"en", "one: n is 1"},
+//        {"es", "one: n is 1"},
+//        {"et", "one: n is 1"},
+//        {"eu", "one: n is 1"},
+//        {"fa", "other: null"},
+//        {"fi", "one: n is 1"},
+//        {"fil", "one: n in 0..1"},
+//        {"fr", "one: n within 0..2 and n is not 2"},
+//        {"gl", "one: n is 1"},
+//        {"gu", "one: n is 1"},
+//        {"hi", "one: n in 0..1"},
+//        {"hr", "one: n mod 10 is 1 and n mod 100 is not 11;  few: n mod 10 in 2..4 and n mod 100 not in 12..14;  many: n mod 10 is 0 or n mod 10 in 5..9 or n mod 100 in 11..14"},
+//        {"hu", "other: null"},
+//        {"hy", "one: n is 1"},
+//        {"id", "other: null"},
+//        {"is", "one: n is 1"},
+//        {"it", "one: n is 1"},
+//        {"he", "one: n is 1;  two: n is 2;  many: n is not 0 and n mod 10 is 0"},
+//        {"ja", "other: null"},
+//        {"ka", "other: null"},
+//        {"kk", "one: n is 1"},
+//        {"km", "other: null"},
+//        {"kn", "other: null"},
+//        {"ko", "other: null"},
+//        {"ky", "one: n is 1"},
+//        {"lo", "other: null"},
+//        {"lt", "one: n mod 10 is 1 and n mod 100 not in 11..19;  few: n mod 10 in 2..9 and n mod 100 not in 11..19"},
+//        {"lv", "zero: n is 0;  one: n mod 10 is 1 and n mod 100 is not 11"},
+//        {"mk", "one: n mod 10 is 1 and n is not 11"},
+//        {"ml", "one: n is 1"},
+//        {"mn", "one: n is 1"},
+//        {"mr", "one: n is 1"},
+//        {"ms", "other: null"},
+//        {"my", "other: null"},
+//        {"ne", "one: n is 1"},
+//        {"nl", "one: n is 1"},
+//        {"nb", "one: n is 1"},
+//        {"pa", "one: n is 1"},
+//        {"pl", "one: n is 1;  few: n mod 10 in 2..4 and n mod 100 not in 12..14;  many: n is not 1 and n mod 10 in 0..1 or n mod 10 in 5..9 or n mod 100 in 12..14"},
+//        {"ps", "one: n is 1"},
+//        {"pt", "one: n is 1"},
+//        {"ro", "one: n is 1;  few: n is 0 or n is not 1 and n mod 100 in 1..19"},
+//        {"ru", "one: n mod 10 is 1 and n mod 100 is not 11;  few: n mod 10 in 2..4 and n mod 100 not in 12..14;  many: n mod 10 is 0 or n mod 10 in 5..9 or n mod 100 in 11..14"},
+//        {"si", "other: null"},
+//        {"sk", "one: n is 1;  few: n in 2..4"},
+//        {"sl", "one: n mod 100 is 1;  two: n mod 100 is 2;  few: n mod 100 in 3..4"},
+//        {"sq", "one: n is 1"},
+//        {"sr", "one: n mod 10 is 1 and n mod 100 is not 11;  few: n mod 10 in 2..4 and n mod 100 not in 12..14;  many: n mod 10 is 0 or n mod 10 in 5..9 or n mod 100 in 11..14"},
+//        {"sv", "one: n is 1"},
+//        {"sw", "one: n is 1"},
+//        {"ta", "one: n is 1"},
+//        {"te", "one: n is 1"},
+//        {"th", "other: null"},
+//        {"tr", "other: null"},
+//        {"uk", "one: n mod 10 is 1 and n mod 100 is not 11;  few: n mod 10 in 2..4 and n mod 100 not in 12..14;  many: n mod 10 is 0 or n mod 10 in 5..9 or n mod 100 in 11..14"},
+//        {"ur", "one: n is 1"},
+//        {"uz", "other: null"},
+//        {"vi", "other: null"},
+//        {"zh", "other: null"},
+//        {"zu", "one: n is 1"},
+//    };
 
     static String[][] SAMPLE_PATTERNS = {
         {"und", "zero", "{0} ADD-SAMPLE-ZERO"},
@@ -298,6 +294,8 @@ public abstract class PluralRulesFactory {
         {"ar", "other", "{0} ساعة"},
         {"ar", "two", "ساعتان"},
         {"ar", "zero", "{0} ساعة"},
+        {"az", "one",   "Sizin alış-veriş katınızda {0} X var. Onu almaq istəyirsiniz mi?"},
+        {"az", "other", "Sizin alış-veriş kartınızda {0} X var. Onları almaq istəyirsiniz mi?"},
         {"bg", "one", "{0} ден"},
         {"bg", "other", "{0} дена"},
         {"bn", "one", "সসে {0}টি আপেল নিয়ে সেটা খেল"},
@@ -313,12 +311,12 @@ public abstract class PluralRulesFactory {
         {"cs", "one", "{0} den"},
         {"cs", "other", "{0} dní"},
         {"cs", "many", "{0} dne"}, // added from spreadsheet
-        {"cy", "zero", "{0} cadair, {0} peint"},
-        {"cy", "one", "{0} gadair, {0} peint"},
-        {"cy", "two", "{0} gadair, {0} beint"},
-        {"cy", "few", "{0} cadair, {0} pheint"},
-        {"cy", "many", "{0} chadair, {0} pheint"},
-        {"cy", "other", "{0} cadair, {0} peint"},
+        {"cy", "zero", "{0} cŵn, {0} cathod"},
+        {"cy", "one", "{0} ci, {0} gath"},
+        {"cy", "two", "{0} gi, {0} gath"},
+        {"cy", "few", "{0} chi, {0} cath"},
+        {"cy", "many", "{0} chi, {0} chath"},
+        {"cy", "other", "{0} ci, {0} cath"},
         {"da", "one", "{0} dag"},
         {"da", "other", "{0} dage"},
         {"de", "one", "{0} Tag"},
@@ -354,7 +352,8 @@ public abstract class PluralRulesFactory {
         {"hr", "many", "za {0} mjeseci"},
         {"hr", "one", "za {0} mjesec"},
         {"hr", "other", "za {0} mjeseci"},
-        {"hu", "other", "{0} nap"},
+        {"hu", "one", "A kosárban van {0} X. Meg akarja venni?"},
+        {"hu", "other", "A kosárban van {0} X. Meg akarja venni őket?"},
         {"hy", "one", "այդ {0} ժամը"},
         {"hy", "other", "այդ {0} ժամերը"},
         {"id", "other", "{0} hari"},
@@ -363,10 +362,16 @@ public abstract class PluralRulesFactory {
         {"it", "one", "{0} giorno"},
         {"it", "other", "{0} giorni"},
         {"ja", "other", "{0}日"},
-        {"km", "other", "{0} ថ្ងៃ"}, // 
+        {"ka", "one",   "თქვენი კალათა შეიცავს {0} X-ს. გსურთ მისი შეძენა?"}, // 
+        {"ka", "other", "თქვენი კალათა შეიცავს {0} X-ს. გსურთ მათი შეძენა?"}, // 
+        {"kk", "one",   "Кәрзеңкеде {0} X бар. Оны сатып алғыңыз келе ме?"}, // 
+        {"kk", "other", "Кәрзеңкеде {0} X бар. Оларды сатып алғыңыз келе ме?"}, // 
+        {"km", "other", "{0} ថ្ងៃ"},
         {"kn", "one", "{0} ದಿನ"},
         {"kn", "other", "{0} ದಿನಗಳು"},
         {"ko", "other", "{0}일"},
+        {"ky", "one", "Сиздин дүкөнчүлөө картыңызда {0} X бар. Аны сатып алайын дейсизби?"},
+        {"ky", "other", "Сиздин дүкөнчүлөө картыңызда {0} X бар. Аларды сатып алайын дейсизби?"},
         {"lo", "other", "{0} ມື້"},
         {"lt", "few", "{0} dienos"},
         {"lt", "one", "{0} diena"},
@@ -374,11 +379,16 @@ public abstract class PluralRulesFactory {
         {"lv", "one", "{0} diennakts"},
         {"lv", "other", "{0} diennaktis"},
         {"lv", "zero", "{0} diennakšu"},
+        {"mk", "one", "{0} ден"},
+        {"mk", "other", "{0} дена"},
         {"ml", "one", "{0} വ്യക്തി"},
         {"ml", "other", "{0} വ്യക്തികൾ"},
+        {"mn", "one",   "Таны картанд {0} X байна. Та энийг худалдаж авмаар байна уу?"},
+        {"mn", "other", "Таны картанд {0} Х байна. Та эднийг худалдаж авмаар байна уу?"},
         {"mr", "one", "{0} घर"},
         {"mr", "other", "{0} घरे"},
         {"ms", "other", "{0} hari"},
+        {"my", "other", "{0}ရက္"},
         {"nb", "one", "{0} dag"},
         {"nb", "other", "{0} dager"},
         {"ne", "one", "तपाईंसँग {0} निमन्त्रणा छ"},
@@ -389,6 +399,8 @@ public abstract class PluralRulesFactory {
         //        {"ne", "", "{0} जनाहरू पाहुना बाँकी छ ।"},
         {"nl", "one", "{0} dag"},
         {"nl", "other", "{0} dagen"},
+        {"pa", "one", "{0} ਘੰਟਾ"},
+        {"pa", "other", "{0} ਘੰਟੇ"},
         {"pl", "few", "{0} miesiące"},
         {"pl", "many", "{0} miesięcy"},
         {"pl", "one", "{0} miesiąc"},
@@ -414,6 +426,8 @@ public abstract class PluralRulesFactory {
         {"sl", "one", "{0} ura"},
         {"sl", "other", "{0} ur"},
         {"sl", "two", "{0} uri"},
+        {"sq", "one", "{0} libër"},
+        {"sq", "other", "{0} libra"},
         {"sr", "few", "{0} сата"},
         {"sr", "many", "{0} сати"},
         {"sr", "one", "{0} сат"},
@@ -427,13 +441,16 @@ public abstract class PluralRulesFactory {
         {"te", "one", "{0} రోజు"},
         {"te", "other", "{0} రోజులు"},
         {"th", "other", "{0} วัน"},
-        {"tr", "other", "{0} gün"},
+        {"tr", "one",   "Sizin alış-veriş kartınızda {0} X var. Onu almak istiyor musunuz?"},
+        {"tr", "other", "Sizin alış-veriş kartınızda {0} X var. Onları almak istiyor musunuz?"},
         {"uk", "few", "{0} дні"},
         {"uk", "many", "{0} днів"},
         {"uk", "one", "{0} день"},
         {"uk", "other", "{0} дня"},
         {"ur", "one", "{0} گھنٹہ"},
         {"ur", "other", "{0} گھنٹے"},
+        {"uz", "one",   "Xarid savatingizda {0} X bor. Uni sotib olishni xohlaysizmi?"},
+        {"uz", "other", "Xaridingiz savatida {0} X bor. Ularni sotib olishni xohlaysizmi?"},
         {"vi", "other", "{0} ngày"},
         {"zh", "other", "{0} 天"},
         {"zh_Hant", "other", "{0} 日"},     
@@ -445,12 +462,12 @@ public abstract class PluralRulesFactory {
 
     static String[][] EXTRA_SAMPLE_SOURCE = {
         {"he,iw","10,20"},
-        {"und,az,ka,kk,ky,mk,mn,my,pa,ps,sq,uz","0,0.0,0.1,1,1.0,1.1,2.0,2.1,3,4,5,10,11"},
+        {"und,az,ka,kk,ky,mk,mn,my,pa,sq,uz","0,0.0,0.1,1,1.0,1.1,2.0,2.1,3,4,5,10,11,1.2,1.121"},
     };
 
     static String[][] overrides = {
         {"gu,mr,kn,am,fa", "one: n within 0..1"},
-        {"ta,te", "one: n is 1"},
+        {"ta,te,kk,uz,ky,hu,az,ka,mn,tr", "one: n is 1"},
         {"bn", "one: n within 0..1"},
         {"en,ca,de,et,fi,gl,it,nl,sw,ur", "one: j is 1"},
         {"sv", "one: j is 1 or f is 1"},
@@ -509,6 +526,8 @@ public abstract class PluralRulesFactory {
                 "few: j mod 10 in 2..4 and j mod 100 not in 12..14;  " +
         "many: j mod 10 is 0 or j mod 10 in 5..9 or j mod 100 in 11..14"},
         {"zu", "one: n within 0..1"},
+        {"mk", "one: n mod 10 in 0..1 and n mod 100 not in 0,11 or f mod 10 is 1 and f mod 10 is not 11"},
+        {"pa", "one: n in 0..1"},
     };
 
 }

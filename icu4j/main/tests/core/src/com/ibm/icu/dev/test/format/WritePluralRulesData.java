@@ -53,7 +53,7 @@ public class WritePluralRulesData {
 
     public static void main(String[] args) throws Exception {
         if (args.length == 0) {
-            args = new String[] {"rules"};
+            args = new String[] {"verify"};
         }
         for (String arg : args) {
             if (arg.equalsIgnoreCase("original")) {
@@ -64,19 +64,122 @@ public class WritePluralRulesData {
                 generateSamples(SampleStyle.verify);
             } else if (arg.equalsIgnoreCase("oldSnap")) {
                 generateLOCALE_SNAPSHOT(PluralRulesFactory.NORMAL);
+            } else if (arg.equalsIgnoreCase("ranges")) {
+                generateRanges(PluralRulesFactory.NORMAL);
             } else if (arg.equalsIgnoreCase("newSnap")) {
                 generateLOCALE_SNAPSHOT(PluralRulesFactory.ALTERNATE);
             } else if (arg.equalsIgnoreCase("fromList")) {
                 getOriginalSamples();
             } else {
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException("Bad arg: <" + arg + ">");
             }
         }
     }
 
+    /**
+     * @param normal
+     */
+    private static void generateRanges(PluralRulesFactory normal) {
+        Map<ULocale, SamplePatterns> patternMap = PluralRulesFactory.getLocaleToSamplePatterns();
+        NumberFormat enf = NumberFormat.getInstance(ULocale.ENGLISH);
+
+        for (String localeString : FOCUS_LOCALES) {
+            ULocale locale = new ULocale(localeString);
+            PluralRules pr = normal.forLocale(locale);
+            SamplePatterns patterns = patternMap.get(locale);
+            if (patterns == null) {
+                System.out.println("Skipping " + locale);
+                continue;
+            }
+            System.out.println();
+            NumberFormat nf = NumberFormat.getInstance(new ULocale(localeString + "@numbers=latn"));
+            Map<String,NumberInfo[]> samples = getSampleRanges(pr);
+            
+            Set<String> keywords = pr.getKeywords();
+            for (String keyword1 : keywords) {
+                NumberInfo sample1 = samples.get(keyword1)[0];
+                
+                for (String keyword2 : keywords) {
+                    NumberInfo sample2 = samples.get(keyword2)[1];
+                    if (sample2.source <= sample1.source) {
+                        continue;
+                    }
+                    // pick the pattern for the second item
+                    String pattern = patterns.keywordToPattern.get(keyword2);
+                    if (pattern == null) {
+                        throw new IllegalArgumentException("Missing pattern for <" + keyword2 + "> for " + locale);
+                    }
+                    String formattedRange = format(nf, sample1) + "-" + format(nf, sample2);
+                    String eformattedRange = format(enf, sample1) + "-" + format(enf, sample2);
+                    String result = pattern.contains("{0}") ? pattern.replace("{0}", formattedRange)
+                            : pattern + " " + formattedRange;
+                    System.out.println(locale + "\t"
+                            + eformattedRange + " items\t"
+                            + keyword1 + "\t" + keyword2 + "\t"
+                            + result 
+                            );
+                }
+            }
+        }
+    }
+
+    private static String format(NumberFormat nf, NumberInfo sample1) {
+        nf.setMaximumFractionDigits(sample1.visibleFractionDigitCount);
+        nf.setMinimumFractionDigits(sample1.visibleFractionDigitCount);
+        String format = nf.format(sample1.source);
+        return format;
+    }
+
+    /**
+     * @param pr
+     * @return
+     */
+    private static Map<String, NumberInfo[]> getSampleRanges(PluralRules pr) {
+        Map<String, NumberInfo[]> result = new HashMap();
+        for (int i = 0; i < 1000; ++i) {
+            String keyword = pr.select(i);
+            addRangeMaybe(result, i, keyword);
+        }
+        for (String keyword : pr.getKeywords()) {
+            for (Double x : pr.getSamples(keyword)) {
+                addRangeMaybe(result, x, keyword);
+            }
+        }
+        return result;
+    }
+
+    private static void addRangeMaybe(Map<String, NumberInfo[]> result, double i, String keyword) {
+        NumberInfo[] range = result.get(keyword);
+        if (range == null) {
+            result.put(keyword, range = new NumberInfo[2]);
+            range[0] = new NumberInfo(Double.MAX_VALUE);
+            range[1] = new NumberInfo(Double.MIN_VALUE);
+        }
+        if (i < range[0].source) {
+            range[0] = new NumberInfo(i);
+        }
+        if (i > range[1].source) {
+            range[1] = new NumberInfo(i);
+        }
+    }
+
+    /**
+     * @param samples
+     * @return
+     */
+    private static Double getBiggest(Collection<Double> samples) {
+        Double result = null;
+        for (Double item : samples) {
+            if (result == null || result < item) {
+                result = item;
+            }
+        }
+        return result;
+    }
+
     static final String[] FOCUS_LOCALES = ("af,am,ar,az,bg,bn,ca,cs,cy,da,de,el,en,es,et,eu,fa,fi,fil,fr,gl,gu," +
             "hi,hr,hu,hy,id,is,it,he,ja,ka,kk,km,kn,ko,ky,lo,lt,lv,mk,ml,mn,mr,ms,my,ne,nl,nb," +
-            "pa,pl,ps,pt,ro,ru,si,sk,sl,sq,sr,sv,sw,ta,te,th,tr,uk,ur,uz,vi,zh,zu").split("\\s*,\\s*");
+            "pa,pl,pt,ro,ru,si,sk,sl,sq,sr,sv,sw,ta,te,th,tr,uk,ur,uz,vi,zh,zu").split("\\s*,\\s*");
 
 
     static final String[][] ORIGINAL_SAMPLES = {
@@ -410,7 +513,7 @@ public class WritePluralRulesData {
         }
     }
 
-    static final Set<String> NEW_LOCALES = new HashSet(Arrays.asList("az,ka,kk,ky,mk,mn,my,pa,ps,sq,uz".split("\\s*,\\s*")));
+    static final Set<String> NEW_LOCALES = new HashSet(Arrays.asList("az,ka,kk,ky,mk,mn,my,pa,sq,uz".split("\\s*,\\s*")));
 
 
     enum SampleStyle {original, samples, rules, verify}
