@@ -124,7 +124,7 @@ public class DateTimePatternGeneratorSample {
         SimpleDateFormat format = new SimpleDateFormat(gen.getBestPattern("MMMMddHmm"), locale);
         DateTimePatternGenerator.PatternInfo returnInfo = new DateTimePatternGenerator.PatternInfo();
         // Add '. von' to the existing pattern
-        gen.addPattern("d'. von' MMMM", true, returnInfo);
+        gen.addPattern("dd'. von' MMMM", true, returnInfo);
         // Apply the new pattern
         format.applyPattern(gen.getBestPattern("MMMMddHmm"));
         System.out.println("New Pattern for FRENCH: "+format.toPattern());
