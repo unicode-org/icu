@@ -26,6 +26,7 @@ import java.util.Set;
 
 import com.ibm.icu.text.CompactDecimalDataCache.Data;
 import com.ibm.icu.text.PluralRules.NumberInfo;
+import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -59,7 +60,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     private final Map<String, DecimalFormat.Unit[]> units;
     private final long[] divisor;
-    private final String[] currencyAffixes;
+    private final Map<String, Unit> pluralToCurrencyAffixes;
 
     // null if created internally using explicit prefixes and suffixes.
     private final PluralRules pluralRules;
@@ -124,11 +125,16 @@ public class CompactDecimalFormat extends DecimalFormat {
         CompactDecimalDataCache.Data data = getData(locale, style);
         this.units = data.units;
         this.divisor = data.divisors;
-        DecimalFormat currencyFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
-        currencyAffixes = new String[AFFIX_SIZE];
-        currencyAffixes[CompactDecimalFormat.POSITIVE_PREFIX] = currencyFormat.getPositivePrefix();
-        currencyAffixes[CompactDecimalFormat.POSITIVE_SUFFIX] = currencyFormat.getPositiveSuffix();
-        // TODO fix to get right symbol for the count
+        pluralToCurrencyAffixes = null;
+        
+//        DecimalFormat currencyFormat = (DecimalFormat) NumberFormat.getCurrencyInstance(locale);
+//        // TODO fix to use plural-dependent affixes
+//        Unit currency = new Unit(currencyFormat.getPositivePrefix(), currencyFormat.getPositiveSuffix());
+//        pluralToCurrencyAffixes = new HashMap<String,Unit>();
+//        for (String key : pluralRules.getKeywords()) {
+//            pluralToCurrencyAffixes.put(key, currency);
+//        }
+//        // TODO fix to get right symbol for the count
         
         finishInit(style, format.toPattern(), format.getDecimalFormatSymbols());
     }
@@ -158,7 +164,7 @@ public class CompactDecimalFormat extends DecimalFormat {
      */
     public CompactDecimalFormat(String pattern, DecimalFormatSymbols formatSymbols, 
             CompactStyle style, PluralRules pluralRules,
-            long[] divisor, Map<String,String[][]> pluralAffixes, String[] currencyAffixes, 
+            long[] divisor, Map<String,String[][]> pluralAffixes, Map<String, String[]> currencyAffixes, 
             Collection<String> debugCreationErrors) {
         
         this.pluralRules = pluralRules;
@@ -167,8 +173,15 @@ public class CompactDecimalFormat extends DecimalFormat {
             debugCreationErrors.add("Missmatch in pluralCategories, should be: " + pluralRules.getKeywords() + ", was actually " + this.units.keySet());
         }
         this.divisor = divisor.clone();
-        // TODO fix to get right symbol for the count
-        this.currencyAffixes = currencyAffixes == null ? null : currencyAffixes.clone();
+        if (currencyAffixes == null) {
+            pluralToCurrencyAffixes = null;
+        } else {
+            pluralToCurrencyAffixes = new HashMap<String,Unit>();
+            for (Entry<String, String[]> s : currencyAffixes.entrySet()) {
+                String[] pair = s.getValue();
+                pluralToCurrencyAffixes.put(s.getKey(), new Unit(pair[0], pair[1]));
+            }
+        }
         finishInit(style, pattern, formatSymbols);
     }
 
@@ -196,7 +209,8 @@ public class CompactDecimalFormat extends DecimalFormat {
         CompactDecimalFormat other = (CompactDecimalFormat) obj;
         return mapsAreEqual(units, other.units)
                 && Arrays.equals(divisor, other.divisor)
-                && Arrays.equals(currencyAffixes, other.currencyAffixes)
+                && (pluralToCurrencyAffixes == other.pluralToCurrencyAffixes 
+                || pluralToCurrencyAffixes != null && pluralToCurrencyAffixes.equals(other.pluralToCurrencyAffixes)) 
                 && pluralRules.equals(other.pluralRules);
     }
 
@@ -221,11 +235,18 @@ public class CompactDecimalFormat extends DecimalFormat {
      */
     @Override
     public StringBuffer format(double number, StringBuffer toAppendTo, FieldPosition pos) {
-        Amount amount = toAmount(number);
+        Output<Unit> currencyUnit = new Output<Unit>();
+        Amount amount = toAmount(number, currencyUnit);
+        if (currencyUnit.value != null) {
+            currencyUnit.value.writePrefix(toAppendTo);
+        }
         Unit unit = amount.getUnit();
         unit.writePrefix(toAppendTo);
         super.format(amount.getQty(), toAppendTo, pos);
         unit.writeSuffix(toAppendTo);
+        if (currencyUnit.value != null) {
+            currencyUnit.value.writeSuffix(toAppendTo);
+        }
         return toAppendTo;
     }
 
@@ -240,7 +261,7 @@ public class CompactDecimalFormat extends DecimalFormat {
             throw new IllegalArgumentException();
         }
         Number number = (Number) obj;
-        Amount amount = toAmount(number.doubleValue());
+        Amount amount = toAmount(number.doubleValue(), null);
         return super.formatToCharacterIterator(amount.getQty(), amount.getUnit());
     }
 
@@ -302,7 +323,7 @@ public class CompactDecimalFormat extends DecimalFormat {
     /* INTERNALS */
 
 
-    private Amount toAmount(double number) {
+    private Amount toAmount(double number, Output<Unit> currencyUnit) {
         // We do this here so that the prefix or suffix we choose is always consistent
         // with the rounding we do. This way, 999999 -> 1M instead of 1000K.
         boolean negative = isNumberNegative(number);
@@ -313,6 +334,9 @@ public class CompactDecimalFormat extends DecimalFormat {
         }
         number /= divisor[base];
         String pluralVariant = getPluralForm(number);
+        if (pluralToCurrencyAffixes != null && currencyUnit != null) {
+            currencyUnit.value = pluralToCurrencyAffixes.get(pluralVariant);
+        }
         if (negative) {
             number = -number;
         }
@@ -366,6 +390,8 @@ public class CompactDecimalFormat extends DecimalFormat {
 
         Map<String, DecimalFormat.Unit[]> result = new HashMap<String, DecimalFormat.Unit[]>();
         Map<String,Integer> seen = new HashMap<String,Integer>();
+        
+        String[][] defaultPower10ToAffix = pluralCategoryToPower10ToAffix.get("other");
 
         for (Entry<String, String[][]> pluralCategoryAndPower10ToAffix : pluralCategoryToPower10ToAffix.entrySet()) {
             String pluralCategory = pluralCategoryAndPower10ToAffix.getKey();
@@ -378,6 +404,9 @@ public class CompactDecimalFormat extends DecimalFormat {
             DecimalFormat.Unit[] units = new DecimalFormat.Unit[power10ToAffix.length];
             for (int i = 0; i < power10ToAffix.length; i++) {
                 String[] pair = power10ToAffix[i];
+                if (pair == null) {
+                    pair = defaultPower10ToAffix[i];
+                }
 
                 // we can't have bad pair
                 if (pair.length != 2 || pair[0] == null || pair[1] == null) {
