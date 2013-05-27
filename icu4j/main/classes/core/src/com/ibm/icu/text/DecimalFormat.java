@@ -5767,10 +5767,13 @@ public class DecimalFormat extends NumberFormat {
             Unit other = (Unit) obj;
             return prefix.equals(other.prefix) && suffix.equals(other.suffix);
         }
+        @Override
+        public String toString() {
+            return prefix + "/" + suffix;
+        }
     }
 
     static final Unit NULL_UNIT = new Unit("", "");
-
 
     // Note about rounding implementation
     //

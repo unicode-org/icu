@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -193,7 +194,78 @@ public class PluralRules implements Serializable {
     private transient Map<String, Set<NumberInfo>> _keyFractionSamplesMap;
     private transient Set<NumberInfo> _fractionSamples;
 
+    /**
+     * Provides a factory for returning plural rules
+     * 
+     * @deprecated This API is ICU internal only.
+     * @internal
+     */
+    public static abstract class Factory {
+        /**
+         * Provides access to the predefined <code>PluralRules</code> for a given locale and the plural type.
+         * 
+         * <p>
+         * ICU defines plural rules for many locales based on CLDR <i>Language Plural Rules</i>. For these predefined
+         * rules, see CLDR page at http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
+         * 
+         * @param locale
+         *            The locale for which a <code>PluralRules</code> object is returned.
+         * @param type
+         *            The plural type (e.g., cardinal or ordinal).
+         * @return The predefined <code>PluralRules</code> object for this locale. If there's no predefined rules for
+         *         this locale, the rules for the closest parent in the locale hierarchy that has one will be returned.
+         *         The final fallback always returns the default rules.
+         * @deprecated This API is ICU internal only.
+         * @internal
+         */
+        public abstract PluralRules forLocale(ULocale locale, PluralType type);
 
+        /**
+         * Utility for getting CARDINAL rules.
+         * @param locale
+         * @return plural rules.
+         * @deprecated This API is ICU internal only.
+         * @internal
+         */
+        public final PluralRules forLocale(ULocale locale) {
+            return forLocale(locale, PluralType.CARDINAL);
+        }
+        
+        /**
+         * Returns the locales for which there is plurals data.
+         * 
+         * @deprecated This API is ICU internal only.
+         * @internal
+         */
+        public abstract ULocale[] getAvailableULocales();
+
+        /**
+         * Returns the 'functionally equivalent' locale with respect to plural rules. Calling PluralRules.forLocale with
+         * the functionally equivalent locale, and with the provided locale, returns rules that behave the same. <br/>
+         * All locales with the same functionally equivalent locale have plural rules that behave the same. This is not
+         * exaustive; there may be other locales whose plural rules behave the same that do not have the same equivalent
+         * locale.
+         * 
+         * @param locale
+         *            the locale to check
+         * @param isAvailable
+         *            if not null and of length > 0, this will hold 'true' at index 0 if locale is directly defined
+         *            (without fallback) as having plural rules
+         * @return the functionally-equivalent locale
+         * @deprecated This API is ICU internal only.
+         * @internal
+         */
+        public abstract ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable);
+        
+        /**
+         * Returns the default factory.
+         * @deprecated This API is ICU internal only.
+         * @internal
+         */
+        public static PluralRulesLoader getDefaultFactory() {
+            return PluralRulesLoader.loader;
+        }
+    }
     // Standard keywords.
 
     /**
@@ -1290,7 +1362,7 @@ public class PluralRules implements Serializable {
      * @stable ICU 3.8
      */
     public static PluralRules forLocale(ULocale locale) {
-        return PluralRulesLoader.loader.forLocale(locale, PluralType.CARDINAL);
+        return Factory.getDefaultFactory().forLocale(locale, PluralType.CARDINAL);
     }
 
     /**
@@ -1313,7 +1385,7 @@ public class PluralRules implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static PluralRules forLocale(ULocale locale, PluralType type) {
-        return PluralRulesLoader.loader.forLocale(locale, type);
+        return Factory.getDefaultFactory().forLocale(locale, type);
     }
 
     /*
@@ -1660,7 +1732,7 @@ public class PluralRules implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale[] getAvailableULocales() {
-        return PluralRulesLoader.loader.getAvailableULocales();
+        return Factory.getDefaultFactory().getAvailableULocales();
     }
 
     /**
@@ -1681,7 +1753,7 @@ public class PluralRules implements Serializable {
      * @provisional This API might change or be removed in a future release.
      */
     public static ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable) {
-        return PluralRulesLoader.loader.getFunctionalEquivalent(locale, isAvailable);
+        return Factory.getDefaultFactory().getFunctionalEquivalent(locale, isAvailable);
     }
 
     /**
