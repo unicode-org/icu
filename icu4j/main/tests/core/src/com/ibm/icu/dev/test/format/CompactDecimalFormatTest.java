@@ -186,6 +186,13 @@ public class CompactDecimalFormatTest extends TestFmwk {
             {2000, "2Ks"},
     };
 
+    Object[][] TestACoreCompactFormatListCurrency = {
+            {1000, "1K$"},
+            {1100, "1,1K$"},
+            {1200, "1,2Ks$s"},
+            {2000, "2Ks$s"},
+    };
+
     public void TestACoreCompactFormat() {
         Map<String,String[][]> affixes = new HashMap();
         affixes.put("one", new String[][] {
@@ -202,19 +209,28 @@ public class CompactDecimalFormatTest extends TestFmwk {
                 {"","Bs"}, {"","Bs"}, {"","Bs"}, 
                 {"","Ts"}, {"","Ts"}, {"","Ts"}, 
         });
+
+        Map<String,String[]> currencyAffixes = new HashMap();
+        currencyAffixes.put("one", new String[] {"", "$"});
+        currencyAffixes.put("other", new String[] {"", "$s"});
+
         long[] divisors = new long[] {
                 0,0,0, 
                 1000, 1000, 1000, 
                 1000000, 1000000, 1000000, 
                 1000000000L, 1000000000L, 1000000000L, 
                 1000000000000L, 1000000000000L, 1000000000000L};
-        Collection<String> debugCreationErrors = new LinkedHashSet();
+        checkCore(affixes, null, divisors, TestACoreCompactFormatList);
+        checkCore(affixes, currencyAffixes, divisors, TestACoreCompactFormatListCurrency);
+    }
 
+    private void checkCore(Map<String, String[][]> affixes, Map<String, String[]> currencyAffixes, long[] divisors, Object[][] testItems) {
+        Collection<String> debugCreationErrors = new LinkedHashSet();
         CompactDecimalFormat cdf = new CompactDecimalFormat(
                 "#,###.00", 
                 DecimalFormatSymbols.getInstance(new ULocale("fr")),
                 CompactStyle.SHORT, PluralRules.createRules("one: j is 1 or f is 1"),
-                divisors, affixes, null,
+                divisors, affixes, currencyAffixes,
                 debugCreationErrors
                 );
         if (debugCreationErrors.size() != 0) {
@@ -222,7 +238,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
                 errln("Creation error: " + s);
             }
         } else {
-            checkCdf("special cdf ", cdf, TestACoreCompactFormatList);
+            checkCdf("special cdf ", cdf, testItems);
         }
     }
 
