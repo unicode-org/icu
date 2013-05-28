@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2010-2011, International Business Machines Corporation and    *
+ * Copyright (C) 2010-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -700,7 +700,7 @@ public class LanguageTag {
                 sb.append(SEP).append(_region);
             }
 
-            for (String variant : _extlangs) {
+            for (String variant : _variants) {
                 sb.append(SEP).append(variant);
             }
 
