@@ -2010,6 +2010,7 @@ static void record_fail()
 }
 
 static void TestPreventFallback() {
+/*
     UResourceBundle* theBundle = NULL;
     const char* testdatapath;
     UErrorCode status = U_ZERO_ERROR;
@@ -2063,6 +2064,7 @@ static void TestPreventFallback() {
     }
     status = U_ZERO_ERROR;
     ures_close(theBundle);
+*/
 }
 
 /**
