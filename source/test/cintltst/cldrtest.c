@@ -490,6 +490,12 @@ testLCID(UResourceBundle *currentBundle,
 #if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 static void
 TestLocaleStructure(void) {
+    // This test checks the locale structure against a key file located
+    // at source/test/testdata/structLocale.txt. When adding new data to
+    // a loale file such as en.txt, the structLocale.txt file must be changed
+    // too to include the the template of the new data. Otherwise this test
+    // will fail!
+
     UResourceBundle *root, *currentLocale;
     int32_t locCount = uloc_countAvailable();
     int32_t locIndex;
