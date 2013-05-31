@@ -109,7 +109,6 @@ public:
 private:
     ZoneMeta(); // Prevent construction.
     static UVector* createMetazoneMappings(const UnicodeString &tzid);
-    static void initAvailableMetaZoneIDs();
     static UnicodeString& formatCustomID(uint8_t hour, uint8_t min, uint8_t sec, UBool negative, UnicodeString& id);
     static const UChar* getShortIDFromCanonical(const UChar* canonicalID);
 };

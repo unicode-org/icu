@@ -20,6 +20,7 @@
 
 #include "cmemory.h"
 #include "cstring.h"
+#include "mutex.h"
 #include "uhash.h"
 #include "uassert.h"
 #include "umutex.h"
@@ -1222,33 +1223,25 @@ TimeZoneGenericNames::createInstance(const Locale& locale, UErrorCode& status) {
         return NULL;
     }
 
-    UBool initialized;
-    UMTX_CHECK(&gTZGNLock, gTZGNCoreCacheInitialized, initialized);
-    if (!initialized) {
-        // Create empty hashtable
-        umtx_lock(&gTZGNLock);
-        {
-            if (!gTZGNCoreCacheInitialized) {
-                gTZGNCoreCache = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &status);
-                if (U_SUCCESS(status)) {
-                    uhash_setKeyDeleter(gTZGNCoreCache, uprv_free);
-                    uhash_setValueDeleter(gTZGNCoreCache, deleteTZGNCoreRef);
-                    gTZGNCoreCacheInitialized = TRUE;
-                    ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONEGENERICNAMES, tzgnCore_cleanup);
-                }
+    TZGNCoreRef *cacheEntry = NULL;
+    {
+        Mutex lock(&gTZGNLock);
+
+        if (!gTZGNCoreCacheInitialized) {
+            // Create empty hashtable
+            gTZGNCoreCache = uhash_open(uhash_hashChars, uhash_compareChars, NULL, &status);
+            if (U_SUCCESS(status)) {
+                uhash_setKeyDeleter(gTZGNCoreCache, uprv_free);
+                uhash_setValueDeleter(gTZGNCoreCache, deleteTZGNCoreRef);
+                gTZGNCoreCacheInitialized = TRUE;
+                ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONEGENERICNAMES, tzgnCore_cleanup);
             }
         }
-        umtx_unlock(&gTZGNLock);
-
         if (U_FAILURE(status)) {
             return NULL;
         }
-    }
 
-    // Check the cache, if not available, create new one and cache
-    TZGNCoreRef *cacheEntry = NULL;
-    umtx_lock(&gTZGNLock);
-    {
+        // Check the cache, if not available, create new one and cache
         const char *key = locale.getName();
         cacheEntry = (TZGNCoreRef *)uhash_get(gTZGNCoreCache, key);
         if (cacheEntry == NULL) {
@@ -1302,8 +1295,7 @@ TimeZoneGenericNames::createInstance(const Locale& locale, UErrorCode& status) {
             sweepCache();
             gAccessCount = 0;
         }
-    }
-    umtx_unlock(&gTZGNLock);
+    }  // End of mutex locked block
 
     if (cacheEntry == NULL) {
         delete instance;

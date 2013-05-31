@@ -44,6 +44,7 @@
 #include "putilimp.h"
 #include "utracimp.h"
 #include "cmemory.h"
+#include "uassert.h"
 #include "uenumimp.h"
 #include "ulist.h"
 
@@ -54,6 +55,7 @@ static void ucol_setReorderCodesFromParser(UCollator *coll, UColTokenParser *par
 // static UCA. There is only one. Collators don't use it.
 // It is referenced only in ucol_initUCA and ucol_cleanup
 static UCollator* _staticUCA = NULL;
+static UInitOnce  gStaticUCAInitOnce = U_INITONCE_INITIALIZER;
 // static pointer to udata memory. Inited in ucol_initUCA
 // used for cleanup in ucol_cleanup
 static UDataMemory* UCA_DATA_MEM = NULL;
@@ -70,6 +72,7 @@ ucol_res_cleanup(void)
         ucol_close(_staticUCA);
         _staticUCA = NULL;
     }
+    gStaticUCAInitOnce.reset();
     return TRUE;
 }
 
@@ -106,47 +109,35 @@ isAcceptableUCA(void * /*context*/,
 }
 U_CDECL_END
 
+static void U_CALLCONV ucol_initStaticUCA(UErrorCode &status) {
+    U_ASSERT(_staticUCA == NULL);
+    U_ASSERT(UCA_DATA_MEM == NULL);
+    ucln_i18n_registerCleanup(UCLN_I18N_UCOL_RES, ucol_res_cleanup);
+
+    UDataMemory *result = udata_openChoice(U_ICUDATA_COLL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptableUCA, NULL, &status);
+    if(U_FAILURE(status)){
+        udata_close(result);
+        return;
+    }
+
+    _staticUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), NULL, NULL, &status);
+    if(U_SUCCESS(status)){
+        // Initalize variables for implicit generation
+        uprv_uca_initImplicitConstants(&status);
+        UCA_DATA_MEM = result;
+
+    }else{
+        ucol_close(_staticUCA);
+        _staticUCA = NULL;
+        udata_close(result);
+    }
+}
+
+
 /* do not close UCA returned by ucol_initUCA! */
 UCollator *
 ucol_initUCA(UErrorCode *status) {
-    if(U_FAILURE(*status)) {
-        return NULL;
-    }
-    UBool needsInit;
-    UMTX_CHECK(NULL, (_staticUCA == NULL), needsInit);
-
-    if(needsInit) {
-        UDataMemory *result = udata_openChoice(U_ICUDATA_COLL, UCA_DATA_TYPE, UCA_DATA_NAME, isAcceptableUCA, NULL, status);
-
-        if(U_SUCCESS(*status)){
-            UCollator *newUCA = ucol_initCollator((const UCATableHeader *)udata_getMemory(result), NULL, NULL, status);
-            if(U_SUCCESS(*status)){
-                // Initalize variables for implicit generation
-                uprv_uca_initImplicitConstants(status);
-
-                umtx_lock(NULL);
-                if(_staticUCA == NULL) {
-                    UCA_DATA_MEM = result;
-                    _staticUCA = newUCA;
-                    newUCA = NULL;
-                    result = NULL;
-                }
-                umtx_unlock(NULL);
-
-                ucln_i18n_registerCleanup(UCLN_I18N_UCOL_RES, ucol_res_cleanup);
-                if(newUCA != NULL) {
-                    ucol_close(newUCA);
-                    udata_close(result);
-                }
-            }else{
-                ucol_close(newUCA);
-                udata_close(result);
-            }
-        }
-        else {
-            udata_close(result);
-        }
-    }
+    umtx_initOnce(gStaticUCAInitOnce, &ucol_initStaticUCA, *status);
     return _staticUCA;
 }
 
@@ -155,6 +146,7 @@ ucol_forgetUCA(void)
 {
     _staticUCA = NULL;
     UCA_DATA_MEM = NULL;
+    gStaticUCAInitOnce.reset();
 }
 
 /****************************************************************************/

@@ -20,6 +20,7 @@
 #include "cmemory.h"
 #include "cstring.h"
 #include "uassert.h"
+#include "mutex.h"
 #include "uresimp.h"
 #include "ureslocs.h"
 #include "zonemeta.h"
@@ -290,7 +291,6 @@ static UMutex TextTrieMutex = U_MUTEX_INITIALIZER;
 //               needed for parsing operations, which are less common than formatting,
 //               and the Trie is big, which is why its creation is deferred until first use.
 void TextTrieMap::buildTrie(UErrorCode &status) {
-    umtx_lock(&TextTrieMutex);
     if (fLazyContents != NULL) {
         for (int32_t i=0; i<fLazyContents->size(); i+=2) {
             const UChar *key = (UChar *)fLazyContents->elementAt(i);
@@ -301,17 +301,22 @@ void TextTrieMap::buildTrie(UErrorCode &status) {
         delete fLazyContents;
         fLazyContents = NULL; 
     }
-    umtx_unlock(&TextTrieMutex);
 }
 
 void
 TextTrieMap::search(const UnicodeString &text, int32_t start,
                   TextTrieMapSearchResultHandler *handler, UErrorCode &status) const {
-    UBool trieNeedsInitialization = FALSE;
-    UMTX_CHECK(&TextTrieMutex, fLazyContents != NULL, trieNeedsInitialization);
-    if (trieNeedsInitialization) {
-        TextTrieMap *nonConstThis = const_cast<TextTrieMap *>(this);
-        nonConstThis->buildTrie(status);
+    {
+        // TODO: if locking the mutex for each check proves to be a performance problem,
+        //       add a flag of type atomic_int32_t to class TextTrieMap, and use only
+        //       the ICU atomic safe functions for assigning and testing.
+        //       Don't test the pointer fLazyContents.
+        //       Don't do unless it's really required.
+        Mutex lock(&TextTrieMutex);
+        if (fLazyContents != NULL) {
+            TextTrieMap *nonConstThis = const_cast<TextTrieMap *>(this);
+            nonConstThis->buildTrie(status);
+        }
     }
     if (fNodes == NULL) {
         return;

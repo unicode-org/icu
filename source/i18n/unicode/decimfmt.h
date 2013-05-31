@@ -59,6 +59,7 @@ class CurrencyPluralInfo;
 class Hashtable;
 class UnicodeSet;
 class FieldPositionHandler;
+class DecimalFormatStaticSets;
 
 // explicit template instantiation. see digitlst.h
 #if defined (_MSC_VER)
@@ -1882,15 +1883,15 @@ private:
     int32_t precision() const;
 
     /**
-     *   Initialize all fields of a new DecimalFormatter.
+     *   Initialize all fields of a new DecimalFormatter to a safe default value.
      *      Common code for use by constructors.
      */
-    void init(UErrorCode& status);
+    void init();
 
     /**
      * Do real work of constructing a new DecimalFormat.
      */
-    void construct(UErrorCode&               status,
+    void construct(UErrorCode&              status,
                    UParseError&             parseErr,
                    const UnicodeString*     pattern = 0,
                    DecimalFormatSymbols*    symbolsToAdopt = 0
@@ -2294,6 +2295,9 @@ private:
 #if UCONFIG_HAVE_PARSEALLINPUT
     UNumberFormatAttributeValue fParseAllInput;
 #endif
+
+    // Decimal Format Static Sets singleton.
+    const DecimalFormatStaticSets *fStaticSets;
 
 
 protected:

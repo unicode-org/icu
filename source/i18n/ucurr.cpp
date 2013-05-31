@@ -99,10 +99,8 @@ static const UChar CHOICE_FORMAT_MARK = 0x003D; // Equals sign
 static const UChar EUR_STR[] = {0x0045,0x0055,0x0052,0};
 
 // ISO codes mapping table
-static UHashtable* gIsoCodes = NULL;
-static UBool gIsoCodesInitialized = FALSE;
-
-static UMutex gIsoCodesLock = U_MUTEX_INITIALIZER;
+static const UHashtable* gIsoCodes = NULL;
+static UInitOnce gIsoCodesInitOnce = U_INITONCE_INITIALIZER;
 
 //------------------------------------------------------------
 // Code
@@ -114,11 +112,10 @@ static UBool U_CALLCONV
 isoCodes_cleanup(void)
 {
     if (gIsoCodes != NULL) {
-        uhash_close(gIsoCodes);
+        uhash_close(const_cast<UHashtable *>(gIsoCodes));
         gIsoCodes = NULL;
     }
-    gIsoCodesInitialized = FALSE;
-
+    gIsoCodesInitOnce.reset();
     return TRUE;
 }
 
@@ -1227,6 +1224,8 @@ static CurrencyNameCacheEntry* currCache[CURRENCY_NAME_CACHE_NUM] = {NULL};
 // It is a simple round-robin replacement strategy.
 static int8_t currentCacheEntryIndex = 0;
 
+static UMutex gCurrencyCacheMutex = U_MUTEX_INITIALIZER;
+
 // Cache deletion
 static void
 deleteCurrencyNames(CurrencyNameStruct* currencyNames, int32_t count) {
@@ -1280,9 +1279,9 @@ uprv_parseCurrency(const char* locale,
     CurrencyNameStruct* currencySymbols = NULL;
     CurrencyNameCacheEntry* cacheEntry = NULL;
 
-    umtx_lock(NULL);
+    umtx_lock(&gCurrencyCacheMutex);
     // in order to handle racing correctly,
-    // not putting 'search' in a separate function and using UMTX.
+    // not putting 'search' in a separate function.
     int8_t  found = -1;
     for (int8_t i = 0; i < CURRENCY_NAME_CACHE_NUM; ++i) {
         if (currCache[i]!= NULL &&
@@ -1299,13 +1298,13 @@ uprv_parseCurrency(const char* locale,
         total_currency_symbol_count = cacheEntry->totalCurrencySymbolCount;
         ++(cacheEntry->refCount);
     }
-    umtx_unlock(NULL);
+    umtx_unlock(&gCurrencyCacheMutex);
     if (found == -1) {
         collectCurrencyNames(locale, &currencyNames, &total_currency_name_count, &currencySymbols, &total_currency_symbol_count, ec);
         if (U_FAILURE(ec)) {
             return;
         }
-        umtx_lock(NULL);
+        umtx_lock(&gCurrencyCacheMutex);
         // check again.
         int8_t  found = -1;
         for (int8_t i = 0; i < CURRENCY_NAME_CACHE_NUM; ++i) {
@@ -1350,7 +1349,7 @@ uprv_parseCurrency(const char* locale,
             total_currency_symbol_count = cacheEntry->totalCurrencySymbolCount;
             ++(cacheEntry->refCount);
         }
-        umtx_unlock(NULL);
+        umtx_unlock(&gCurrencyCacheMutex);
     }
 
     int32_t start = pos.getIndex();
@@ -1394,12 +1393,12 @@ uprv_parseCurrency(const char* locale,
     } 
 
     // decrease reference count
-    umtx_lock(NULL);
+    umtx_lock(&gCurrencyCacheMutex);
     --(cacheEntry->refCount);
     if (cacheEntry->refCount == 0) {  // remove 
         deleteCacheEntry(cacheEntry);
     }
-    umtx_unlock(NULL);
+    umtx_unlock(&gCurrencyCacheMutex);
 }
 
 
@@ -1842,7 +1841,7 @@ ucurr_closeCurrencyList(UEnumeration *enumerator) {
 }
 
 static void U_CALLCONV
-ucurr_createCurrencyList(UErrorCode* status){
+ucurr_createCurrencyList(UHashtable *isoCodes, UErrorCode* status){
     UErrorCode localStatus = U_ZERO_ERROR;
 
     // Look up the CurrencyMap element in the root bundle.
@@ -1908,7 +1907,7 @@ ucurr_createCurrencyList(UErrorCode* status){
                     entry->to = toDate;
 
                     localStatus = U_ZERO_ERROR;
-                    uhash_put(gIsoCodes, (UChar *)isoCode, entry, &localStatus);
+                    uhash_put(isoCodes, (UChar *)isoCode, entry, &localStatus);
                 }
             } else {
                 *status = localStatus;
@@ -1933,36 +1932,35 @@ static const UEnumeration gEnumCurrencyList = {
 };
 U_CDECL_END
 
+
+static void U_CALLCONV initIsoCodes(UErrorCode &status) {
+    U_ASSERT(gIsoCodes == NULL);
+    ucln_i18n_registerCleanup(UCLN_I18N_CURRENCY, currency_cleanup);
+
+    UHashtable *isoCodes = uhash_open(uhash_hashUChars, uhash_compareUChars, NULL, &status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    uhash_setValueDeleter(isoCodes, deleteIsoCodeEntry);
+
+    ucurr_createCurrencyList(isoCodes, &status);
+    if (U_FAILURE(status)) {
+        uhash_close(isoCodes);
+        return;
+    }
+    gIsoCodes = isoCodes;  // Note: gIsoCodes is const. Once set up here it is never altered,
+                           //       and read only access is safe without synchronization.
+}
+
+
 U_CAPI UBool U_EXPORT2
 ucurr_isAvailable(const UChar* isoCode, UDate from, UDate to, UErrorCode* eErrorCode) {
-    UErrorCode status = U_ZERO_ERROR;
-    UBool initialized;
-    UMTX_CHECK(&gIsoCodesLock, gIsoCodesInitialized, initialized);
-
-    if (!initialized) {
-        umtx_lock(&gIsoCodesLock);
-        gIsoCodes = uhash_open(uhash_hashUChars, uhash_compareUChars, NULL, &status);
-        if (U_FAILURE(status)) {
-            umtx_unlock(&gIsoCodesLock);
-            return FALSE;
-        }
-        uhash_setValueDeleter(gIsoCodes, deleteIsoCodeEntry);
-
-        ucln_i18n_registerCleanup(UCLN_I18N_CURRENCY, currency_cleanup);
-        ucurr_createCurrencyList(&status);
-        if (U_FAILURE(status)) {
-            umtx_unlock(&gIsoCodesLock);
-            return FALSE;
-        }
-
-        gIsoCodesInitialized = TRUE;
-        umtx_unlock(&gIsoCodesLock);
+    umtx_initOnce(gIsoCodesInitOnce, &initIsoCodes, *eErrorCode);
+    if (U_FAILURE(*eErrorCode)) {
+        return FALSE;
     }
 
-    umtx_lock(&gIsoCodesLock);
     IsoCodeEntry* result = (IsoCodeEntry *) uhash_get(gIsoCodes, isoCode);
-    umtx_unlock(&gIsoCodesLock);
-
     if (result == NULL) {
         return FALSE;
     } else if (from > to) {
@@ -1971,7 +1969,6 @@ ucurr_isAvailable(const UChar* isoCode, UDate from, UDate to, UErrorCode* eError
     } else if  ((from > result->to) || (to < result->from)) {
         return FALSE;
     }
-
     return TRUE;
 }
 
