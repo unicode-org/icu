@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2012, International Business Machines
+ *   Copyright (C) 2005-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -32,13 +32,14 @@
 #define NEW_ARRAY(type,count) (type *) uprv_malloc((count) * sizeof(type))
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
-U_CDECL_BEGIN
 static icu::CharsetRecognizer **fCSRecognizers = NULL;
-
+static UInitOnce gCSRecognizersInitOnce;
 static int32_t fCSRecognizers_size = 0;
 
+U_CDECL_BEGIN
 static UBool U_CALLCONV csdet_cleanup(void)
 {
+    U_NAMESPACE_USE
     if (fCSRecognizers != NULL) {
         for(int32_t r = 0; r < fCSRecognizers_size; r += 1) {
             delete fCSRecognizers[r];
@@ -49,6 +50,7 @@ static UBool U_CALLCONV csdet_cleanup(void)
         fCSRecognizers = NULL;
         fCSRecognizers_size = 0;
     }
+    gCSRecognizersInitOnce.reset();
 
     return TRUE;
 }
@@ -65,96 +67,67 @@ charsetMatchComparator(const void * /*context*/, const void *left, const void *r
     return (*csm_r)->getConfidence() - (*csm_l)->getConfidence();
 }
 
+static void U_CALLCONV initRecognizers(UErrorCode &status) {
+    U_NAMESPACE_USE
+    ucln_i18n_registerCleanup(UCLN_I18N_CSDET, csdet_cleanup);
+    CharsetRecognizer *tempArray[] = {
+        new CharsetRecog_UTF8(),
+
+        new CharsetRecog_UTF_16_BE(),
+        new CharsetRecog_UTF_16_LE(),
+        new CharsetRecog_UTF_32_BE(),
+        new CharsetRecog_UTF_32_LE(),
+
+        new CharsetRecog_8859_1(),
+        new CharsetRecog_8859_2(),
+        new CharsetRecog_8859_5_ru(),
+        new CharsetRecog_8859_6_ar(),
+        new CharsetRecog_8859_7_el(),
+        new CharsetRecog_8859_8_I_he(),
+        new CharsetRecog_8859_8_he(),
+        new CharsetRecog_windows_1251(),
+        new CharsetRecog_windows_1256(),
+        new CharsetRecog_KOI8_R(),
+        new CharsetRecog_8859_9_tr(),
+        new CharsetRecog_sjis(),
+        new CharsetRecog_gb_18030(),
+        new CharsetRecog_euc_jp(),
+        new CharsetRecog_euc_kr(),
+        new CharsetRecog_big5(),
+
+        new CharsetRecog_2022JP(),
+        new CharsetRecog_2022KR(),
+        new CharsetRecog_2022CN(),
+
+        new CharsetRecog_IBM424_he_rtl(),
+        new CharsetRecog_IBM424_he_ltr(),
+        new CharsetRecog_IBM420_ar_rtl(),
+        new CharsetRecog_IBM420_ar_ltr()
+    };
+    int32_t rCount = ARRAY_SIZE(tempArray);
+
+    fCSRecognizers = NEW_ARRAY(CharsetRecognizer *, rCount);
+
+    if (fCSRecognizers == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        fCSRecognizers_size = rCount;
+        for (int32_t r = 0; r < rCount; r += 1) {
+            fCSRecognizers[r] = tempArray[r];
+            if (fCSRecognizers[r] == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+            }
+        }
+    }
+}
+
 U_CDECL_END
 
 U_NAMESPACE_BEGIN
 
 void CharsetDetector::setRecognizers(UErrorCode &status)
 {
-    UBool needsInit;
-    CharsetRecognizer **recognizers;
-
-    if (U_FAILURE(status)) {
-        return;
-    }
-
-    UMTX_CHECK(NULL, (UBool) (fCSRecognizers == NULL), needsInit);
-
-    if (needsInit) {
-        CharsetRecognizer *tempArray[] = {
-            new CharsetRecog_UTF8(),
-
-            new CharsetRecog_UTF_16_BE(),
-            new CharsetRecog_UTF_16_LE(),
-            new CharsetRecog_UTF_32_BE(),
-            new CharsetRecog_UTF_32_LE(),
-
-            new CharsetRecog_8859_1(),
-            new CharsetRecog_8859_2(),
-            new CharsetRecog_8859_5_ru(),
-            new CharsetRecog_8859_6_ar(),
-            new CharsetRecog_8859_7_el(),
-            new CharsetRecog_8859_8_I_he(),
-            new CharsetRecog_8859_8_he(),
-            new CharsetRecog_windows_1251(),
-            new CharsetRecog_windows_1256(),
-            new CharsetRecog_KOI8_R(),
-            new CharsetRecog_8859_9_tr(),
-            new CharsetRecog_sjis(),
-            new CharsetRecog_gb_18030(),
-            new CharsetRecog_euc_jp(),
-            new CharsetRecog_euc_kr(),
-            new CharsetRecog_big5(),
-
-            new CharsetRecog_2022JP(),
-            new CharsetRecog_2022KR(),
-            new CharsetRecog_2022CN(),
-            
-            new CharsetRecog_IBM424_he_rtl(),
-            new CharsetRecog_IBM424_he_ltr(),
-            new CharsetRecog_IBM420_ar_rtl(),
-            new CharsetRecog_IBM420_ar_ltr()
-        };
-        int32_t rCount = ARRAY_SIZE(tempArray);
-        int32_t r;
-
-        recognizers = NEW_ARRAY(CharsetRecognizer *, rCount);
-
-        if (recognizers == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return;
-        } else {
-            for (r = 0; r < rCount; r += 1) {
-                recognizers[r] = tempArray[r];
-
-                if (recognizers[r] == NULL) {
-                    status = U_MEMORY_ALLOCATION_ERROR;
-                    break;
-                }
-            }
-        }
-
-        if (U_SUCCESS(status)) {
-            umtx_lock(NULL);
-            if (fCSRecognizers == NULL) {
-                fCSRecognizers_size = rCount;
-                fCSRecognizers = recognizers;
-            }
-            umtx_unlock(NULL);
-        }
-
-        if (fCSRecognizers != recognizers) {
-            for (r = 0; r < rCount; r += 1) {
-                delete recognizers[r];
-                recognizers[r] = NULL;
-            }
-
-            DELETE_ARRAY(recognizers);
-        }
-
-        recognizers = NULL;
-        ucln_i18n_registerCleanup(UCLN_I18N_CSDET, csdet_cleanup);
-    }
+    umtx_initOnce(gCSRecognizersInitOnce, &initRecognizers, status);
 }
 
 CharsetDetector::CharsetDetector(UErrorCode &status)

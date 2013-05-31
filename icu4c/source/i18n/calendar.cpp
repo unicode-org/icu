@@ -60,6 +60,7 @@
 
 #if !UCONFIG_NO_SERVICE
 static icu::ICULocaleService* gService = NULL;
+static UInitOnce gServiceInitOnce = U_INITONCE_INITIALIZER;
 #endif
 
 // INTERNAL - for cleanup
@@ -71,6 +72,7 @@ static UBool calendar_cleanup(void) {
         delete gService;
         gService = NULL;
     }
+    gServiceInitOnce.reset();
 #endif
     return TRUE;
 }
@@ -517,63 +519,50 @@ CalendarService::~CalendarService() {}
 
 static inline UBool
 isCalendarServiceUsed() {
-    UBool retVal;
-    UMTX_CHECK(NULL, gService != NULL, retVal);
-    return retVal;
+    return !gServiceInitOnce.isReset();
 }
 
 // -------------------------------------
 
+static void U_CALLCONV
+initCalendarService(UErrorCode &status)
+{
+#ifdef U_DEBUG_CALSVC
+    fprintf(stderr, "Spinning up Calendar Service\n");
+#endif
+    ucln_i18n_registerCleanup(UCLN_I18N_CALENDAR, calendar_cleanup);
+    gService = new CalendarService();
+    if (gService == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+#ifdef U_DEBUG_CALSVC
+    fprintf(stderr, "Registering classes..\n");
+#endif
+
+    // Register all basic instances. 
+    gService->registerFactory(new BasicCalendarFactory(),status);
+
+#ifdef U_DEBUG_CALSVC
+    fprintf(stderr, "Done..\n");
+#endif
+
+    if(U_FAILURE(status)) {
+#ifdef U_DEBUG_CALSVC
+        fprintf(stderr, "err (%s) registering classes, deleting service.....\n", u_errorName(status));
+#endif
+        delete gService;
+        gService = NULL;
+    }
+}
+
 static ICULocaleService* 
 getCalendarService(UErrorCode &status)
 {
-    UBool needInit;
-    UMTX_CHECK(NULL, (UBool)(gService == NULL), needInit);
-    if (needInit) {
-#ifdef U_DEBUG_CALSVC
-        fprintf(stderr, "Spinning up Calendar Service\n");
-#endif
-        ICULocaleService * newservice = new CalendarService();
-        if (newservice == NULL) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-            return newservice;
-        }
-#ifdef U_DEBUG_CALSVC
-        fprintf(stderr, "Registering classes..\n");
-#endif
-
-        // Register all basic instances. 
-        newservice->registerFactory(new BasicCalendarFactory(),status);
-
-#ifdef U_DEBUG_CALSVC
-        fprintf(stderr, "Done..\n");
-#endif
-
-        if(U_FAILURE(status)) {
-#ifdef U_DEBUG_CALSVC
-            fprintf(stderr, "err (%s) registering classes, deleting service.....\n", u_errorName(status));
-#endif
-            delete newservice;
-            newservice = NULL;
-        }
-
-        if (newservice) {
-            umtx_lock(NULL);
-            if (gService == NULL) {
-                gService = newservice;
-                newservice = NULL;
-            }
-            umtx_unlock(NULL);
-        }
-        if (newservice) {
-            delete newservice;
-        } else {
-            // we won the contention - we can register the cleanup.
-            ucln_i18n_registerCleanup(UCLN_I18N_CALENDAR, calendar_cleanup);
-        }
-    }
+    umtx_initOnce(gServiceInitOnce, &initCalendarService, status);
     return gService;
 }
+
 
 URegistryKey Calendar::registerFactory(ICUServiceFactory* toAdopt, UErrorCode& status)
 {

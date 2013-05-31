@@ -291,7 +291,11 @@ public:
      * Sets the default time zone (i.e., what's returned by createDefault()) to be the
      * specified time zone.  If NULL is specified for the time zone, the default time
      * zone is set to the default host time zone.  This call adopts the TimeZone object
-     * passed in; the clent is no longer responsible for deleting it.
+     * passed in; the client is no longer responsible for deleting it.
+     *
+     * <p>This function is not thread safe. It is an error for multiple threads
+     * to concurrently attempt to set the default time zone, or for any thread
+     * to attempt to reference the default zone while another thread is setting it.
      *
      * @param zone  A pointer to the new TimeZone object to use as the default.
      * @stable ICU 2.0
@@ -302,6 +306,8 @@ public:
     /**
      * Same as adoptDefault(), except that the TimeZone object passed in is NOT adopted;
      * the caller remains responsible for deleting it.
+     *
+     * <p>See the thread safety note under adoptDefault().
      *
      * @param zone  The given timezone.
      * @system
@@ -863,15 +869,18 @@ private:
      */
     static const UChar* getRegion(const UnicodeString& id);
 
+  public:
     /**
      * Returns the region code associated with the given zone,
      * or NULL if the zone is not known.
      * @param id zone id string
      * @param status Status parameter
      * @return the region associated with the given zone
+     * @internal
      */
     static const UChar* getRegion(const UnicodeString& id, UErrorCode& status);
 
+  private:
     /**
      * Parses the given custom time zone identifier
      * @param id id A string of the form GMT[+-]hh:mm, GMT[+-]hhmm, or
@@ -909,24 +918,6 @@ private:
      */
     static UnicodeString& formatCustomID(int32_t hour, int32_t min, int32_t sec,
         UBool negative, UnicodeString& id);
-
-    /**
-     * Responsible for setting up DEFAULT_ZONE.  Uses routines in TPlatformUtilities
-     * (i.e., platform-specific calls) to get the current system time zone.  Failing
-     * that, uses the platform-specific default time zone.  Failing that, uses GMT.
-     */
-    static void             initDefault(void);
-
-    // See source file for documentation
-    /**
-     * Lookup the given name in our system zone table.  If found,
-     * instantiate a new zone of that name and return it.  If not
-     * found, return 0.
-     * @param name tthe given name of a system time zone.
-     * @return the TimeZone indicated by the 'name'.
-     */
-    static TimeZone*        createSystemTimeZone(const UnicodeString& name);
-    static TimeZone*        createSystemTimeZone(const UnicodeString& name, UErrorCode& ec);
 
     UnicodeString           fID;    // this time zone's ID
 

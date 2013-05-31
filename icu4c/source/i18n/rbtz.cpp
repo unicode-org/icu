@@ -151,16 +151,12 @@ RuleBasedTimeZone::completeConst(UErrorCode& status) const {
     if (U_FAILURE(status)) {
         return;
     }
-    UBool updated;
-    UMTX_CHECK(&gLock, fUpToDate, updated);
-    if (!updated) {
-        umtx_lock(&gLock);
-        if (!fUpToDate) {
-            RuleBasedTimeZone *ncThis = const_cast<RuleBasedTimeZone*>(this);
-            ncThis->complete(status);
-        }
-        umtx_unlock(&gLock);
+    umtx_lock(&gLock);
+    if (!fUpToDate) {
+        RuleBasedTimeZone *ncThis = const_cast<RuleBasedTimeZone*>(this);
+        ncThis->complete(status);
     }
+    umtx_unlock(&gLock);
 }
 
 void
