@@ -136,10 +136,10 @@ static const int32_t ALL_GENERIC_NAME_TYPES = UTZGNM_LOCATION | UTZGNM_LONG | UT
 
 // Time Zone ID/Short ID trie
 static TextTrieMap *gZoneIdTrie = NULL;
-static UBool gZoneIdTrieInitialized = FALSE;
+static UInitOnce gZoneIdTrieInitOnce = U_INITONCE_INITIALIZER;
 
 static TextTrieMap *gShortZoneIdTrie = NULL;
-static UBool gShortZoneIdTrieInitialized = FALSE;
+static UInitOnce    gShortZoneIdTrieInitOnce = U_INITONCE_INITIALIZER;
 
 static UMutex gLock = U_MUTEX_INITIALIZER;
 
@@ -153,13 +153,13 @@ static UBool U_CALLCONV tzfmt_cleanup(void)
         delete gZoneIdTrie;
     }
     gZoneIdTrie = NULL;
-    gZoneIdTrieInitialized = FALSE;
+    gZoneIdTrieInitOnce.reset();
 
     if (gShortZoneIdTrie != NULL) {
         delete gShortZoneIdTrie;
     }
     gShortZoneIdTrie = NULL;
-    gShortZoneIdTrieInitialized = FALSE;
+    gShortZoneIdTrieInitOnce.reset();
 
     return TRUE;
 }
@@ -438,6 +438,7 @@ TimeZoneFormat::operator=(const TimeZoneFormat& other) {
 
     fTimeZoneNames = other.fTimeZoneNames->clone();
     if (other.fTimeZoneGenericNames) {
+        // TODO: this test has dubious thread safety.
         fTimeZoneGenericNames = other.fTimeZoneGenericNames->clone();
     }
 
@@ -1291,18 +1292,12 @@ TimeZoneFormat::getTimeZoneGenericNames(UErrorCode& status) const {
         return NULL;
     }
 
-    UBool create;
-    UMTX_CHECK(&gZoneMetaLock, (fTimeZoneGenericNames == NULL), create);
-    if (create) {
+    umtx_lock(&gLock);
+    if (fTimeZoneGenericNames == NULL) {
         TimeZoneFormat *nonConstThis = const_cast<TimeZoneFormat *>(this);
-        umtx_lock(&gLock);
-        {
-            if (fTimeZoneGenericNames == NULL) {
-                nonConstThis->fTimeZoneGenericNames = TimeZoneGenericNames::createInstance(fLocale, status);
-            }
-        }
-        umtx_unlock(&gLock);
+        nonConstThis->fTimeZoneGenericNames = TimeZoneGenericNames::createInstance(fLocale, status);
     }
+    umtx_unlock(&gLock);
 
     return fTimeZoneGenericNames;
 }
@@ -2634,44 +2629,37 @@ ZoneIdMatchHandler::getMatchLen() {
     return fLen;
 }
 
+
+static void U_CALLCONV initZoneIdTrie(UErrorCode &status) {
+    U_ASSERT(gZoneIdTrie == NULL);
+    ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONEFORMAT, tzfmt_cleanup);
+    gZoneIdTrie = new TextTrieMap(TRUE, NULL);    // No deleter, because values are pooled by ZoneMeta
+    if (gZoneIdTrie == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    StringEnumeration *tzenum = TimeZone::createEnumeration();
+    const UnicodeString *id;
+    while ((id = tzenum->snext(status))) {
+        const UChar* uid = ZoneMeta::findTimeZoneID(*id);
+        if (uid) {
+            gZoneIdTrie->put(uid, const_cast<UChar *>(uid), status);
+        }
+    }
+    delete tzenum;
+}
+
+
 UnicodeString&
 TimeZoneFormat::parseZoneID(const UnicodeString& text, ParsePosition& pos, UnicodeString& tzID) const {
     UErrorCode status = U_ZERO_ERROR;
-    UBool initialized;
-    UMTX_CHECK(&gLock, gZoneIdTrieInitialized, initialized);
-    if (!initialized) {
-        umtx_lock(&gLock);
-        {
-            if (!gZoneIdTrieInitialized) {
-                StringEnumeration *tzenum = TimeZone::createEnumeration();
-                TextTrieMap* trie = new TextTrieMap(TRUE, NULL);    // No deleter, because values are pooled by ZoneMeta
-                if (trie) {
-                    const UnicodeString *id;
-                    while ((id = tzenum->snext(status))) {
-                        const UChar* uid = ZoneMeta::findTimeZoneID(*id);
-                        if (uid) {
-                            trie->put(uid, const_cast<UChar *>(uid), status);
-                        }
-                    }
-                    if (U_SUCCESS(status)) {
-                        gZoneIdTrie = trie;
-                        gZoneIdTrieInitialized = initialized = TRUE;
-                        ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONEFORMAT, tzfmt_cleanup);
-                    } else {
-                        delete trie;
-                    }
-                }
-                delete tzenum;
-            }
-        }
-        umtx_unlock(&gLock);
-    }
+    umtx_initOnce(gZoneIdTrieInitOnce, &initZoneIdTrie, status);
 
     int32_t start = pos.getIndex();
     int32_t len = 0;
     tzID.setToBogus();
 
-    if (initialized) {
+    if (U_SUCCESS(status)) {
         LocalPointer<ZoneIdMatchHandler> handler(new ZoneIdMatchHandler());
         gZoneIdTrie->search(text, start, handler.getAlias(), status); 
         len = handler->getMatchLen();
@@ -2689,47 +2677,39 @@ TimeZoneFormat::parseZoneID(const UnicodeString& text, ParsePosition& pos, Unico
     return tzID;
 }
 
+static void U_CALLCONV initShortZoneIdTrie(UErrorCode &status) {
+    U_ASSERT(gShortZoneIdTrie == NULL);
+    ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONEFORMAT, tzfmt_cleanup);
+    StringEnumeration *tzenum = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, NULL, NULL, status);
+    if (U_SUCCESS(status)) {
+        gShortZoneIdTrie = new TextTrieMap(TRUE, NULL);    // No deleter, because values are pooled by ZoneMeta
+        if (gShortZoneIdTrie == NULL) {
+            status = U_MEMORY_ALLOCATION_ERROR;
+        } else {
+            const UnicodeString *id;
+            while ((id = tzenum->snext(status))) {
+                const UChar* uID = ZoneMeta::findTimeZoneID(*id);
+                const UChar* shortID = ZoneMeta::getShortID(*id);
+                if (shortID && uID) {
+                    gShortZoneIdTrie->put(shortID, const_cast<UChar *>(uID), status);
+                }
+            }
+        }
+    }
+    delete tzenum;
+}
+
+
 UnicodeString&
 TimeZoneFormat::parseShortZoneID(const UnicodeString& text, ParsePosition& pos, UnicodeString& tzID) const {
     UErrorCode status = U_ZERO_ERROR;
-    UBool initialized;
-    UMTX_CHECK(&gLock, gShortZoneIdTrieInitialized, initialized);
-    if (!initialized) {
-        umtx_lock(&gLock);
-        {
-            if (!gShortZoneIdTrieInitialized) {
-                StringEnumeration *tzenum = TimeZone::createTimeZoneIDEnumeration(UCAL_ZONE_TYPE_CANONICAL, NULL, NULL, status);
-                if (U_SUCCESS(status)) {
-                    TextTrieMap* trie = new TextTrieMap(TRUE, NULL);    // No deleter, because values are pooled by ZoneMeta
-                    if (trie) {
-                        const UnicodeString *id;
-                        while ((id = tzenum->snext(status))) {
-                            const UChar* uID = ZoneMeta::findTimeZoneID(*id);
-                            const UChar* shortID = ZoneMeta::getShortID(*id);
-                            if (shortID && uID) {
-                                trie->put(shortID, const_cast<UChar *>(uID), status);
-                            }
-                        }
-                        if (U_SUCCESS(status)) {
-                            gShortZoneIdTrie = trie;
-                            gShortZoneIdTrieInitialized = initialized = TRUE;
-                            ucln_i18n_registerCleanup(UCLN_I18N_TIMEZONEFORMAT, tzfmt_cleanup);
-                        } else {
-                            delete trie;
-                        }
-                    }
-                }
-                delete tzenum;
-            }
-        }
-        umtx_unlock(&gLock);
-    }
+    umtx_initOnce(gShortZoneIdTrieInitOnce, &initShortZoneIdTrie, status);
 
     int32_t start = pos.getIndex();
     int32_t len = 0;
     tzID.setToBogus();
 
-    if (initialized) {
+    if (U_SUCCESS(status)) {
         LocalPointer<ZoneIdMatchHandler> handler(new ZoneIdMatchHandler());
         gShortZoneIdTrie->search(text, start, handler.getAlias(), status); 
         len = handler->getMatchLen();

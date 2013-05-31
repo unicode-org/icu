@@ -119,7 +119,7 @@ OlsonTimeZone::OlsonTimeZone(const UResourceBundle* top,
                              const UResourceBundle* res,
                              const UnicodeString& tzid,
                              UErrorCode& ec) :
-  BasicTimeZone(tzid), finalZone(NULL), transitionRulesInitialized(FALSE)
+  BasicTimeZone(tzid), finalZone(NULL)
 {
     clearTransitionRules();
     U_DEBUG_TZ_MSG(("OlsonTimeZone(%s)\n", ures_getKey((UResourceBundle*)res)));
@@ -658,7 +658,7 @@ OlsonTimeZone::clearTransitionRules(void) {
     historicRuleCount = 0;
     finalZoneWithStartYear = NULL;
     firstTZTransitionIdx = 0;
-    transitionRulesInitialized = FALSE;
+    transitionRulesInitOnce.reset();
 }
 
 void
@@ -689,31 +689,20 @@ OlsonTimeZone::deleteTransitionRules(void) {
 /*
  * Lazy transition rules initializer
  */
-static UMutex gLock = U_MUTEX_INITIALIZER;
 
+static void U_CALLCONV initRules(OlsonTimeZone *This, UErrorCode &status) {
+    This->initTransitionRules(status);
+}
+    
 void
 OlsonTimeZone::checkTransitionRules(UErrorCode& status) const {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    UBool initialized;
-    UMTX_CHECK(&gLock, transitionRulesInitialized, initialized);
-    if (!initialized) {
-        umtx_lock(&gLock);
-        if (!transitionRulesInitialized) {
-            OlsonTimeZone *ncThis = const_cast<OlsonTimeZone*>(this);
-            ncThis->initTransitionRules(status);
-        }
-        umtx_unlock(&gLock);
-    }
+    OlsonTimeZone *ncThis = const_cast<OlsonTimeZone *>(this);
+    umtx_initOnce(ncThis->transitionRulesInitOnce, &initRules, ncThis, status);
 }
 
 void
 OlsonTimeZone::initTransitionRules(UErrorCode& status) {
     if(U_FAILURE(status)) {
-        return;
-    }
-    if (transitionRulesInitialized) {
         return;
     }
     deleteTransitionRules();
@@ -884,7 +873,6 @@ OlsonTimeZone::initTransitionRules(UErrorCode& status) {
         firstFinalTZTransition->adoptFrom(prevRule->clone());
         firstFinalTZTransition->adoptTo(firstFinalRule);
     }
-    transitionRulesInitialized = TRUE;
 }
 
 UBool
