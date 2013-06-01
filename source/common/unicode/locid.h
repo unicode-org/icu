@@ -43,6 +43,9 @@
 
 U_NAMESPACE_BEGIN
 
+// Forward Declarations
+void U_CALLCONV locale_available_init();
+
 /**
  * A <code>Locale</code> object represents a specific geographical, political,
  * or cultural region. An operation that requires a <code>Locale</code> to perform
@@ -738,6 +741,8 @@ private:
      * @internal
      */
     friend Locale *locale_set_default_internal(const char *, UErrorCode& status);
+
+    friend void locale_available_init();
 };
 
 inline UBool

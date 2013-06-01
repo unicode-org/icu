@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -234,10 +234,6 @@ int main(int argc, const char* const argv[])
 
     }  /* End of loop that repeats the entire test, if requested.  (Normally doesn't loop)  */
 
-    if (ALLOCATION_COUNT > 0) {
-        fprintf(stderr, "There were %d blocks leaked!\n", ALLOCATION_COUNT);
-        nerrors++;
-    }
     endTime = uprv_getRawUTCtime();
     diffTime = (int32_t)(endTime - startTime);
     printf("Elapsed Time: %02d:%02d:%02d.%03d\n",
