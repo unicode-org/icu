@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2012, International Business Machines
+*   Copyright (C) 1997-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -183,13 +183,47 @@ typedef size_t uintptr_t;
  */
 #ifdef U_HAVE_GCC_ATOMICS
     /* Use the predefined value. */
-#elif U_GCC_MAJOR_MINOR >= 404
+#elif U_PLATFORM == U_PF_MINGW
+    #define U_HAVE_GCC_ATOMICS 0
+#elif U_GCC_MAJOR_MINOR >= 404 || defined(__clang__)
+    /* TODO: Intel icc and IBM xlc on AIX also support gcc atomics.  (Intel originated them.)
+     *       Add them for these compilers.
+     * Note: Clang sets __GNUC__ defines for version 4.2, so misses the 4.4 test here.
+     */
 #   define U_HAVE_GCC_ATOMICS 1
 #else
 #   define U_HAVE_GCC_ATOMICS 0
 #endif
 
 /** @} */
+
+
+/**
+ * \def U_HAVE_STD_ATOMICS
+ * Defines whether the standard C++11 <atomic> is available.
+ * @internal
+ */
+#ifdef U_HAVE_STD_ATOMICS
+    /* Use the predefined value. */
+#elif defined(__cplusplus) && __cplusplus>=201103L
+    /* C++11, so we should have atomics, except for specific platforms or compilers. */
+
+#if __clang__ && defined(__apple_build_version__) && __clang_major__==4 && __clang_minor__<=1
+    /* Apple Clang 4.1, based on public llvm 3.1.  Atomics are not fully implemented. */
+#   define U_HAVE_STD_ATOMICS 0
+#elif __clang__ && __clang_major__==3 && __clang_minor__<=1
+    /* Clang 3.1. Atomics not fully implemented. */
+#   define U_HAVE_STD_ATOMICS 0
+#else 
+#   define U_HAVE_STD_ATOMICS 1
+#endif
+
+#else
+    /* Not C++ 11 */
+#   define U_HAVE_STD_ATOMICS 0
+#endif
+
+
 
 /*===========================================================================*/
 /** @{ Code alignment                                                        */

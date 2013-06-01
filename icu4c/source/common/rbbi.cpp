@@ -1,6 +1,6 @@
 /*
 ***************************************************************************
-*   Copyright (C) 1999-2012 International Business Machines Corporation
+*   Copyright (C) 1999-2013 International Business Machines Corporation
 *   and others. All rights reserved.
 ***************************************************************************
 */
@@ -1793,6 +1793,7 @@ U_NAMESPACE_END
 // defined in ucln_cmn.h
 
 static icu::UStack *gLanguageBreakFactories = NULL;
+static UInitOnce    gLanguageBreakFactoriesInitOnce = U_INITONCE_INITIALIZER;
 
 /**
  * Release all static memory held by breakiterator.  
@@ -1803,6 +1804,7 @@ static UBool U_CALLCONV breakiterator_cleanup_dict(void) {
         delete gLanguageBreakFactories;
         gLanguageBreakFactories = NULL;
     }
+    gLanguageBreakFactoriesInitOnce.reset();
     return TRUE;
 }
 U_CDECL_END
@@ -1814,35 +1816,28 @@ static void U_CALLCONV _deleteFactory(void *obj) {
 U_CDECL_END
 U_NAMESPACE_BEGIN
 
+static void U_CALLCONV initLanguageFactories() {
+    UErrorCode status = U_ZERO_ERROR;
+    U_ASSERT(gLanguageBreakFactories == NULL);
+    gLanguageBreakFactories = new UStack(_deleteFactory, NULL, status);
+    if (gLanguageBreakFactories != NULL && U_SUCCESS(status)) {
+        ICULanguageBreakFactory *builtIn = new ICULanguageBreakFactory(status);
+        gLanguageBreakFactories->push(builtIn, status);
+#ifdef U_LOCAL_SERVICE_HOOK
+        LanguageBreakFactory *extra = (LanguageBreakFactory *)uprv_svc_hook("languageBreakFactory", &status);
+        if (extra != NULL) {
+            gLanguageBreakFactories->push(extra, status);
+        }
+#endif
+    }
+    ucln_common_registerCleanup(UCLN_COMMON_BREAKITERATOR_DICT, breakiterator_cleanup_dict);
+}
+
+
 static const LanguageBreakEngine*
 getLanguageBreakEngineFromFactory(UChar32 c, int32_t breakType)
 {
-    UBool       needsInit;
-    UErrorCode  status = U_ZERO_ERROR;
-    UMTX_CHECK(NULL, (UBool)(gLanguageBreakFactories == NULL), needsInit);
-    
-    if (needsInit) {
-        UStack  *factories = new UStack(_deleteFactory, NULL, status);
-        if (factories != NULL && U_SUCCESS(status)) {
-            ICULanguageBreakFactory *builtIn = new ICULanguageBreakFactory(status);
-            factories->push(builtIn, status);
-#ifdef U_LOCAL_SERVICE_HOOK
-            LanguageBreakFactory *extra = (LanguageBreakFactory *)uprv_svc_hook("languageBreakFactory", &status);
-            if (extra != NULL) {
-                factories->push(extra, status);
-            }
-#endif
-        }
-        umtx_lock(NULL);
-        if (gLanguageBreakFactories == NULL) {
-            gLanguageBreakFactories = factories;
-            factories = NULL;
-            ucln_common_registerCleanup(UCLN_COMMON_BREAKITERATOR_DICT, breakiterator_cleanup_dict);
-        }
-        umtx_unlock(NULL);
-        delete factories;
-    }
-    
+    umtx_initOnce(gLanguageBreakFactoriesInitOnce, &initLanguageFactories);
     if (gLanguageBreakFactories == NULL) {
         return NULL;
     }

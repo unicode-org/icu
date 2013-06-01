@@ -15,7 +15,6 @@
 
 #include "unicode/utrace.h"
 #include "unicode/uclean.h"
-#include "umutex.h"
 #include "putilimp.h"
 
 /* NOTES:
@@ -122,7 +121,6 @@ int WARN_ON_MISSING_DATA = 0; /* Reduce data errs to warnings? */
 UTraceLevel ICU_TRACE = UTRACE_OFF;  /* ICU tracing level */
 size_t MINIMUM_MEMORY_SIZE_FAILURE = (size_t)-1; /* Minimum library memory allocation window that will fail. */
 size_t MAXIMUM_MEMORY_SIZE_FAILURE = (size_t)-1; /* Maximum library memory allocation window that will fail. */
-int32_t ALLOCATION_COUNT = 0;
 static const char *ARGV_0 = "[ALL]";
 static const char *XML_FILE_NAME=NULL;
 static char XML_PREFIX[256];
@@ -874,7 +872,6 @@ static void *U_CALLCONV ctest_libMalloc(const void *context, size_t size) {
     if (MINIMUM_MEMORY_SIZE_FAILURE <= size && size <= MAXIMUM_MEMORY_SIZE_FAILURE) {
         return NULL;
     }
-    umtx_atomic_inc(&ALLOCATION_COUNT);
     return malloc(size);
 }
 static void *U_CALLCONV ctest_libRealloc(const void *context, void *mem, size_t size) {
@@ -885,16 +882,9 @@ static void *U_CALLCONV ctest_libRealloc(const void *context, void *mem, size_t 
         /*free(mem);*/ /* Realloc doesn't free on failure. */
         return NULL;
     }
-    if (mem == NULL) {
-        /* New allocation. */
-        umtx_atomic_inc(&ALLOCATION_COUNT);
-    }
     return realloc(mem, size);
 }
 static void U_CALLCONV ctest_libFree(const void *context, void *mem) {
-    if (mem != NULL) {
-        umtx_atomic_dec(&ALLOCATION_COUNT);
-    }
     free(mem);
 }
 

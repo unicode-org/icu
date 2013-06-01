@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2011, International Business Machines
+*   Copyright (C) 2009-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -216,7 +216,7 @@ private:
 class U_COMMON_API Normalizer2Impl : public UMemory {
 public:
     Normalizer2Impl() : memory(NULL), normTrie(NULL) {
-        canonIterDataSingleton.fInstance=NULL;
+        canonIterDataSingleton.reset();
     }
     ~Normalizer2Impl();
 
