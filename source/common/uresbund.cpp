@@ -258,13 +258,11 @@ static UBool U_CALLCONV ures_cleanup(void)
 {
     if (cache != NULL) {
         ures_flushCache();
-        if (cache != NULL && uhash_count(cache) == 0) {
-            uhash_close(cache);
-            cache = NULL;
-        }
+        uhash_close(cache);
+        cache = NULL;
     }
     gCacheInitOnce.reset();
-    return (cache == NULL);
+    return TRUE;
 }
 
 /** INTERNAL: Initializes the cache for resources */
