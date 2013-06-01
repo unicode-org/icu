@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2011, International Business Machines Corporation and
+* Copyright (C) 1997-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -271,6 +271,7 @@ U_NAMESPACE_END
 // defined in ucln_cmn.h
 
 static icu::ICULocaleService* gService = NULL;
+static UInitOnce gInitOnce;
 
 /**
  * Release all static memory held by breakiterator.
@@ -282,40 +283,33 @@ static UBool U_CALLCONV breakiterator_cleanup(void) {
         delete gService;
         gService = NULL;
     }
+    gInitOnce.reset();
 #endif
     return TRUE;
 }
 U_CDECL_END
 U_NAMESPACE_BEGIN
 
+static void U_CALLCONV 
+initService(void) {
+    gService = new ICUBreakIteratorService();
+    ucln_common_registerCleanup(UCLN_COMMON_BREAKITERATOR, breakiterator_cleanup);
+}
+
 static ICULocaleService*
 getService(void)
 {
-    UBool needsInit;
-    UMTX_CHECK(NULL, (UBool)(gService == NULL), needsInit);
-
-    if (needsInit) {
-        ICULocaleService  *tService = new ICUBreakIteratorService();
-        umtx_lock(NULL);
-        if (gService == NULL) {
-            gService = tService;
-            tService = NULL;
-            ucln_common_registerCleanup(UCLN_COMMON_BREAKITERATOR, breakiterator_cleanup);
-        }
-        umtx_unlock(NULL);
-        delete tService;
-    }
+    umtx_initOnce(gInitOnce, &initService);
     return gService;
 }
+
 
 // -------------------------------------
 
 static inline UBool
 hasService(void)
 {
-    UBool retVal;
-    UMTX_CHECK(NULL, gService != NULL, retVal);
-    return retVal;
+    return !gInitOnce.isReset() && getService() != NULL;
 }
 
 // -------------------------------------

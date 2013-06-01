@@ -266,7 +266,9 @@
     <ClCompile Include="pkg_icu.cpp" />
     <ClCompile Include="pkgitems.cpp" />
     <ClCompile Include="ppucd.cpp" />
-    <ClCompile Include="swapimpl.cpp" />
+    <ClCompile Include="swapimpl.cpp">
+    	    <DisableLanguageExtensions>false</DisableLanguageExtensions>
+    </ClCompile>
     <ClCompile Include="toolutil.cpp">
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>

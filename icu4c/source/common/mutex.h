@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2012, International Business Machines
+*   Copyright (C) 1997-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -90,27 +90,26 @@ typedef void *InstantiatorFn(const void *context, UErrorCode &errorCode);
  * Define a static SimpleSingleton instance via the STATIC_SIMPLE_SINGLETON macro.
  */
 struct SimpleSingleton {
-    void *fInstance;
+    void      *fInstance;
+    UInitOnce  fInitOnce;
 
     /**
      * Returns the singleton instance, or NULL if it could not be created.
      * Calls the instantiator with the context if the instance has not been
-     * created yet. In a race condition, the duplicate may not be NULL.
-     * The caller must delete the duplicate.
-     * The caller need not initialize the duplicate before the call.
+     * created yet. 
      */
     void *getInstance(InstantiatorFn *instantiator, const void *context,
-                      void *&duplicate,
                       UErrorCode &errorCode);
     /**
      * Resets the fields. The caller must have deleted the singleton instance.
      * Not mutexed.
      * Call this from a cleanup function.
      */
-    void reset() { fInstance=NULL; }
+    void reset() { fInstance=NULL; fInitOnce.reset(); }
 };
 
-#define STATIC_SIMPLE_SINGLETON(name) static SimpleSingleton name={ NULL }
+#define SIMPLE_SINGLETON_INITIALIZER {NULL, U_INITONCE_INITIALIZER}
+#define STATIC_SIMPLE_SINGLETON(name) static SimpleSingleton name = SIMPLE_SINGLETON_INITIALIZER
 
 /**
  * Handy wrapper for a SimpleSingleton.
@@ -127,9 +126,7 @@ public:
     }
     T *getInstance(InstantiatorFn *instantiator, const void *context,
                    UErrorCode &errorCode) {
-        void *duplicate;
-        T *instance=(T *)singleton.getInstance(instantiator, context, duplicate, errorCode);
-        delete (T *)duplicate;
+        T *instance=(T *)singleton.getInstance(instantiator, context, errorCode);
         return instance;
     }
 private:
@@ -143,20 +140,18 @@ private:
  * Define a static TriStateSingleton instance via the STATIC_TRI_STATE_SINGLETON macro.
  */
 struct TriStateSingleton {
-    void *fInstance;
-    UErrorCode fErrorCode;
+    void       *fInstance;
+    UErrorCode  fErrorCode;
+    UInitOnce   fInitOnce;
 
     /**
      * Returns the singleton instance, or NULL if it could not be created.
      * Calls the instantiator with the context if the instance has not been
-     * created yet. In a race condition, the duplicate may not be NULL.
-     * The caller must delete the duplicate.
-     * The caller need not initialize the duplicate before the call.
+     * created yet.
      * The singleton creation is only attempted once. If it fails,
      * the singleton will then always return NULL.
      */
     void *getInstance(InstantiatorFn *instantiator, const void *context,
-                      void *&duplicate,
                       UErrorCode &errorCode);
     /**
      * Resets the fields. The caller must have deleted the singleton instance.
@@ -166,7 +161,7 @@ struct TriStateSingleton {
     void reset();
 };
 
-#define STATIC_TRI_STATE_SINGLETON(name) static TriStateSingleton name={ NULL, U_ZERO_ERROR }
+#define STATIC_TRI_STATE_SINGLETON(name) static TriStateSingleton name={ NULL, U_ZERO_ERROR, U_INITONCE_INITIALIZER }
 
 /**
  * Handy wrapper for a TriStateSingleton.
@@ -183,9 +178,7 @@ public:
     }
     T *getInstance(InstantiatorFn *instantiator, const void *context,
                    UErrorCode &errorCode) {
-        void *duplicate;
-        T *instance=(T *)singleton.getInstance(instantiator, context, duplicate, errorCode);
-        delete (T *)duplicate;
+        T *instance=(T *)singleton.getInstance(instantiator, context, errorCode);
         return instance;
     }
 private:

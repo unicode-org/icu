@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2009-2012, International Business Machines
+*   Copyright (C) 2009-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -1796,10 +1796,8 @@ public:
     CanonIterDataSingleton(SimpleSingleton &s, Normalizer2Impl &ni, UErrorCode &ec) :
         singleton(s), impl(ni), errorCode(ec) {}
     CanonIterData *getInstance(UErrorCode &errorCode) {
-        void *duplicate;
         CanonIterData *instance=
-            (CanonIterData *)singleton.getInstance(createInstance, this, duplicate, errorCode);
-        delete (CanonIterData *)duplicate;
+            (CanonIterData *)singleton.getInstance(createInstance, this, errorCode);
         return instance;
     }
     static void *createInstance(const void *context, UErrorCode &errorCode);

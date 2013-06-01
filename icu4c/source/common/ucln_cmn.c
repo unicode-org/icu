@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2001-2012, International Business Machines
+* Copyright (C) 2001-2013, International Business Machines
 *                Corporation and others. All Rights Reserved.
 ******************************************************************************
 *   file name:  ucln_cmn.c
@@ -58,7 +58,6 @@ u_cleanup(void)
 
     ucln_lib_cleanup();
 
-    umtx_cleanup();
     cmemory_cleanup();       /* undo any heap functions set by u_setMemoryFunctions(). */
     gICUInitialized = FALSE;
     UTRACE_EXIT();           /* Must be before utrace_cleanup(), which turns off tracing. */
