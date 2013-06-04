@@ -1,6 +1,6 @@
 /*
  ****************************************************************************************
- * Copyright (C) 2009-2010, Google, Inc.; International Business Machines Corporation   *
+ * Copyright (C) 2009-2013, Google, Inc.; International Business Machines Corporation   *
  * and others. All Rights Reserved.                                                     *
  ****************************************************************************************
  */
@@ -24,10 +24,10 @@ import com.ibm.icu.impl.Row.R3;
  * example:
  * 
  * <pre>
- * LanguageMatcher matcher = new StandardLanguageMatcher(&quot;fr, en-GB, en&quot;);
+ * LocaleMatcher matcher = new LocaleMatcher("fr, en-GB, en");
  * 
  * // afterwards:
- * matcher.getBestMatch(LanguageCode.US).first == LanguageCode.ENGLISH
+ * matcher.getBestMatch("en-US").toLanguageTag() => "en"
  * </pre>
  * 
  * It takes into account when languages are close to one another, such as fil
