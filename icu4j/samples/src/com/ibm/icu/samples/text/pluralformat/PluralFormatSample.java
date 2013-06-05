@@ -5,11 +5,12 @@
  *******************************************************************************
  */
 package com.ibm.icu.samples.text.pluralformat;
-
+// ---PluralFormatExample
 import java.text.FieldPosition;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.util.ULocale;
+// ---PluralFormatExample
 
 public class PluralFormatSample {
 
