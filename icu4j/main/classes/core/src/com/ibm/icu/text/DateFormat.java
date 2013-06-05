@@ -66,7 +66,7 @@ import com.ibm.icu.util.ULocale.Category;
  * }
  * </pre>
  * <p>
- * To format a number for a different Locale, specify it in the call to getDateInstance().
+ * To format a date for a different Locale, specify it in the call to getDateInstance().
  * 
  * <pre>
  * DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, Locale.FRANCE);
