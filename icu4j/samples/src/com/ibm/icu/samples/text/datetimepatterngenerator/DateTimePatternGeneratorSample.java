@@ -1,11 +1,11 @@
-/*
+﻿/*
  *******************************************************************************
  * Copyright (C) 2013, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
 package com.ibm.icu.samples.text.datetimepatterngenerator;
-
+// ---getBestPatternExample
 import java.util.Date;
 
 import com.ibm.icu.text.DateFormat;
@@ -14,7 +14,7 @@ import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
-
+// ---getBestPatternExample
 /**
  * com.ibm.icu.text.DateTimePatternGenerator Sample Code
  */
@@ -26,7 +26,6 @@ public class DateTimePatternGeneratorSample {
         replaceFieldTypesExample();
     }
     
-
     public static void   getBestPatternExample() {
         System.out.println("========================================================================");
         System.out.println(" getBestPatternExample()");

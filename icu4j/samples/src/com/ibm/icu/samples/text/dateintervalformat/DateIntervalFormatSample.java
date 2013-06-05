@@ -1,4 +1,4 @@
-/*
+﻿/*
  *******************************************************************************
  * Copyright (C) 2013, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
@@ -7,7 +7,7 @@
 package com.ibm.icu.samples.text.dateintervalformat;
 
 
-
+// ---dtitvfmtPreDefinedExample 
 import java.util.Date;
 
 import com.ibm.icu.text.DateFormat;
@@ -17,7 +17,7 @@ import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.DateInterval;
 import com.ibm.icu.util.GregorianCalendar;
 import com.ibm.icu.util.ULocale;
-
+// ---dtitvfmtPreDefinedExample
 public class DateIntervalFormatSample{
 
     public static void main (String[] args){
