@@ -1676,7 +1676,11 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
-     * Convenience overload.
+     * Returns a date/time formatter that uses the SHORT style
+     * for both the date and the time.
+     * 
+     * @param cal   The calendar system for which a date/time format is desired.
+     * @param locale The locale for which the date/time format is desired. 
      * @stable ICU 2.0
      */
     static final public DateFormat getInstance(Calendar cal, Locale locale) {
@@ -1684,7 +1688,11 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
-     * Convenience overload.
+     * Returns a date/time formatter that uses the SHORT style
+     * for both the date and the time.
+     * 
+     * @param cal   The calendar system for which a date/time format is desired.
+     * @param locale The locale for which the date/time format is desired. 
      * @stable ICU 3.2
      * @provisional This API might change or be removed in a future release.
      */
@@ -1693,7 +1701,10 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
-     * Convenience overload.
+     * Returns a default date/time formatter that uses the SHORT style for both the
+     * date and the time.
+     * 
+     * @param cal   The calendar system for which a date/time format is desired.
      * @stable ICU 2.0
      */
     static final public DateFormat getInstance(Calendar cal) {
@@ -1701,7 +1712,14 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
-     * Convenience overload.
+     * Creates a {@link DateFormat} object for the default locale that can be used
+     * to format dates in the calendar system specified by <code>cal</code>.
+     * <p>
+     * @param cal   The calendar system for which a date format is desired.
+     *
+     * @param dateStyle The type of date format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
      * @stable ICU 2.0
      */
     static final public DateFormat getDateInstance(Calendar cal, int dateStyle) {
@@ -1709,7 +1727,19 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
-     * Convenience overload.
+     * Creates a {@link DateFormat} object that can be used to format times in
+     * the calendar system specified by <code>cal</code>.
+     * <p>
+     * <b>Note:</b> When this functionality is moved into the core JDK, this method
+     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
+     * <p>
+     * @param cal   The calendar system for which a time format is desired.
+     *
+     * @param timeStyle The type of time format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @see DateFormat#getTimeInstance
      * @stable ICU 2.0
      */
     static final public DateFormat getTimeInstance(Calendar cal, int timeStyle) {
@@ -1717,7 +1747,23 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
-     * Convenience overload.
+     * Creates a {@link DateFormat} object for the default locale that can be used to format
+     * dates and times in the calendar system specified by <code>cal</code>.
+     * <p>
+     * <b>Note:</b> When this functionality is moved into the core JDK, this method
+     * will probably be replaced by a new overload of {@link DateFormat#getInstance}.
+     * <p>
+     * @param cal   The calendar system for which a date/time format is desired.
+     *
+     * @param dateStyle The type of date format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @param timeStyle The type of time format desired.  This can be
+     *              {@link DateFormat#SHORT}, {@link DateFormat#MEDIUM},
+     *              etc.
+     *
+     * @see DateFormat#getDateTimeInstance
      * @stable ICU 2.0
      */
     static final public DateFormat getDateTimeInstance(Calendar cal, int dateStyle, int timeStyle) {
@@ -1725,7 +1771,13 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
-     * {@icu} Convenience overload.
+     * {@icu} Returns a {@link DateFormat} object that can be used to format dates and times in
+     * the default locale.
+     *
+     * @param skeleton The skeleton that selects the fields to be formatted. (Uses the
+     *              {@link DateTimePatternGenerator}.) This can be {@link DateFormat#ABBR_MONTH},
+     *              {@link DateFormat#MONTH_WEEKDAY_DAY}, etc.
+     *
      * @stable ICU 4.0
      */
     public final static DateFormat getPatternInstance(String skeleton) {
@@ -1733,7 +1785,15 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
-     * {@icu} Convenience overload.
+     * {@icu} Returns a {@link DateFormat} object that can be used to format dates and times in
+     * the given locale.
+     *
+     * @param skeleton The skeleton that selects the fields to be formatted. (Uses the
+     *              {@link DateTimePatternGenerator}.) This can be {@link DateFormat#ABBR_MONTH},
+     *              {@link DateFormat#MONTH_WEEKDAY_DAY}, etc.
+     *
+     * @param locale The locale for which the date/time format is desired.
+     *
      * @stable ICU 4.0
      */
     public final static DateFormat getPatternInstance(String skeleton, Locale locale) {
@@ -1759,7 +1819,18 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
-     * {@icu} Convenience overload.
+     * {@icu} Creates a {@link DateFormat} object that can be used to format dates and
+     * times in the calendar system specified by <code>cal</code>.
+     *
+     * @param cal   The calendar system for which a date/time format is desired.
+     *
+     * @param skeleton The skeleton that selects the fields to be formatted. (Uses the
+     *              {@link DateTimePatternGenerator}.)  This can be
+     *              {@link DateFormat#ABBR_MONTH}, {@link DateFormat#MONTH_WEEKDAY_DAY},
+     *              etc.
+     *
+     * @param locale The locale for which the date/time format is desired.
+     *
      * @stable ICU 4.0
      */
     public final static DateFormat getPatternInstance(Calendar cal, String skeleton, Locale locale) {
