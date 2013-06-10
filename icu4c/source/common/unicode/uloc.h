@@ -800,12 +800,15 @@ uloc_getParent(const char*    localeID,
 
 
 /**
- * Gets the full name for the specified locale.
+ * Gets the full name for the specified locale, like uloc_getName(),
+ * but without keywords.
+ *
  * Note: This has the effect of 'canonicalizing' the string to
  * a certain extent. Upper and lower case are set as needed,
  * and if the components were in 'POSIX' format they are changed to
  * ICU format.  It does NOT map aliased names in any way.
  * See the top of this header file.
+ *
  * This API strips off the keyword part, so "de_DE\@collation=phonebook" 
  * will become "de_DE". 
  * This API supports preflighting.
@@ -856,13 +859,16 @@ uloc_getKeywordValue(const char* localeID,
 
 
 /**
- * Set the value of the specified keyword.
+ * Sets or removes the value of the specified keyword.
+ *
+ * For removing all keywords, use uloc_getBaseName().
+ *
  * NOTE: Unlike almost every other ICU function which takes a
  * buffer, this function will NOT truncate the output text. If a
  * BUFFER_OVERFLOW_ERROR is received, it means that the original
  * buffer is untouched. This is done to prevent incorrect or possibly
  * even malformed locales from being generated and used.
- * 
+ *
  * @param keywordName name of the keyword to be set. Case insensitive.
  * @param keywordValue value of the keyword to be set. If 0-length or
  *  NULL, will result in the keyword being removed. No error is given if 

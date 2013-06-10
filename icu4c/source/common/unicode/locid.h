@@ -421,7 +421,7 @@ public:
     inline const char * getName() const;
 
     /**
-     * Returns the programmatic name of the entire locale as getName would return,
+     * Returns the programmatic name of the entire locale as getName() would return,
      * but without keywords.
      * @return      A pointer to "name".
      * @see getName
@@ -454,7 +454,10 @@ public:
     int32_t getKeywordValue(const char* keywordName, char *buffer, int32_t bufferCapacity, UErrorCode &status) const;
 
     /**
-     * Sets the value for a keyword.
+     * Sets or removes the value for a keyword.
+     *
+     * For removing all keywords, use getBaseName(),
+     * and construct a new Locale if it differs from getName().
      *
      * @param keywordName name of the keyword to be set. Case insensitive.
      * @param keywordValue value of the keyword to be set. If 0-length or
