@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2012, International Business Machines Corporation and   *
-* others. All Rights Reserved.                                               *
+* Copyright (C) 2003-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
 ******************************************************************************
 */
 
@@ -937,7 +937,9 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * {@icu} Returns the (normalized) base name for this locale.
+     * {@icu} Returns the (normalized) base name for this locale,
+     * like {@link #getName()}, but without keywords.
+     *
      * @return the base name as a String.
      * @stable ICU 3.0
      */
@@ -946,7 +948,9 @@ public final class ULocale implements Serializable {
     }
 
     /**
-     * {@icu} Returns the (normalized) base name for the specified locale.
+     * {@icu} Returns the (normalized) base name for the specified locale,
+     * like {@link #getName(String)}, but without keywords.
+     *
      * @param localeID the locale ID as a string
      * @return the base name as a String.
      * @stable ICU 3.0
@@ -1143,10 +1147,13 @@ public final class ULocale implements Serializable {
 
     /**
      * Given a keyword and a value, return a new locale with an updated
-     * keyword and value.  If keyword is null, this removes all keywords from the locale id.
+     * keyword and value.  If the keyword is null, this removes all keywords from the locale id.
      * Otherwise, if the value is null, this removes the value for this keyword from the
      * locale id.  Otherwise, this adds/replaces the value for this keyword in the locale id.
      * The keyword and value must not be empty.
+     *
+     * <p>Related: {@link #getBaseName()} returns the locale ID string with all keywords removed.
+     *
      * @param keyword the keyword to add/remove, or null to remove all keywords.
      * @param value the value to add/set, or null to remove this particular keyword.
      * @return the updated locale
@@ -1158,10 +1165,13 @@ public final class ULocale implements Serializable {
 
     /**
      * Given a locale id, a keyword, and a value, return a new locale id with an updated
-     * keyword and value.  If keyword is null, this removes all keywords from the locale id.
+     * keyword and value.  If the keyword is null, this removes all keywords from the locale id.
      * Otherwise, if the value is null, this removes the value for this keyword from the
      * locale id.  Otherwise, this adds/replaces the value for this keyword in the locale id.
      * The keyword and value must not be empty.
+     *
+     * <p>Related: {@link #getBaseName(String)} returns the locale ID string with all keywords removed.
+     *
      * @param localeID the locale id to modify
      * @param keyword the keyword to add/remove, or null to remove all keywords.
      * @param value the value to add/set, or null to remove this particular keyword.
