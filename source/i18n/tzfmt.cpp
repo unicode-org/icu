@@ -639,6 +639,9 @@ TimeZoneFormat::format(UTimeZoneFormatStyle style, const TimeZone& tz, UDate dat
     if (timeType) {
         *timeType = UTZFMT_TIME_TYPE_UNKNOWN;
     }
+
+    UBool noOffsetFormatFallback = FALSE;
+
     switch (style) {
     case UTZFMT_STYLE_GENERIC_LOCATION:
         formatGeneric(tz, UTZGNM_LOCATION, date, name);
@@ -655,12 +658,33 @@ TimeZoneFormat::format(UTimeZoneFormatStyle style, const TimeZone& tz, UDate dat
     case UTZFMT_STYLE_SPECIFIC_SHORT:
         formatSpecific(tz, UTZNM_SHORT_STANDARD, UTZNM_SHORT_DAYLIGHT, date, name, timeType);
         break;
+
+    case UTZFMT_STYLE_ZONE_ID:
+        tz.getID(name);
+        noOffsetFormatFallback = TRUE;
+        break;
+    case UTZFMT_STYLE_ZONE_ID_SHORT:
+        {
+            const UChar* shortID = ZoneMeta::getShortID(tz);
+            if (shortID == NULL) {
+                shortID = UNKNOWN_SHORT_ZONE_ID;
+            }
+            name.setTo(shortID, -1);
+        }
+        noOffsetFormatFallback = TRUE;
+        break;
+
+    case UTZFMT_STYLE_EXEMPLAR_LOCATION:
+        formatExemplarLocation(tz, name);
+        noOffsetFormatFallback = TRUE;
+        break;
+
     default:
         // will be handled below
         break;
     }
 
-    if (name.isEmpty()) {
+    if (name.isEmpty() && !noOffsetFormatFallback) {
         UErrorCode status = U_ZERO_ERROR;
         int32_t rawOffset, dstOffset;
         tz.getOffset(date, FALSE, rawOffset, dstOffset, status);
@@ -719,25 +743,8 @@ TimeZoneFormat::format(UTimeZoneFormatStyle style, const TimeZone& tz, UDate dat
             case UTZFMT_STYLE_ISO_EXTENDED_LOCAL_FULL:
                 formatOffsetISO8601Extended(offset, FALSE, FALSE, FALSE, name, status);
                 break;
-
-            case UTZFMT_STYLE_ZONE_ID:
-                tz.getID(name);
-                break;
-
-            case UTZFMT_STYLE_ZONE_ID_SHORT:
-                {
-                    const UChar* shortID = ZoneMeta::getShortID(tz);
-                    if (shortID == NULL) {
-                        shortID = UNKNOWN_SHORT_ZONE_ID;
-                    }
-                    name.setTo(shortID, -1);
-                }
-                break;
-
-            case UTZFMT_STYLE_EXEMPLAR_LOCATION:
-                formatExemplarLocation(tz, name);
-                break;
             }
+
             if (timeType) {
                 *timeType = (dstOffset != 0) ? UTZFMT_TIME_TYPE_DAYLIGHT : UTZFMT_TIME_TYPE_STANDARD;
             }
