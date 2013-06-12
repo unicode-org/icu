@@ -888,6 +888,8 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             timeType.value = TimeType.UNKNOWN;
         }
 
+        boolean noOffsetFormatFallback = false;
+
         switch (style) {
         case GENERIC_LOCATION:
             result = getTimeZoneGenericNames().getGenericLocationName(ZoneMeta.getCanonicalCLDRID(tz));
@@ -904,12 +906,29 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         case SPECIFIC_SHORT:
             result = formatSpecific(tz, NameType.SHORT_STANDARD, NameType.SHORT_DAYLIGHT, date, timeType);
             break;
+
+        case ZONE_ID:
+            result = tz.getID();
+            noOffsetFormatFallback = true;
+            break;
+        case ZONE_ID_SHORT:
+            result = ZoneMeta.getShortID(tz);
+            if (result == null) {
+                result = UNKNOWN_SHORT_ZONE_ID;
+            }
+            noOffsetFormatFallback = true;
+            break;
+        case EXEMPLAR_LOCATION:
+            result = formatExemplarLocation(tz);
+            noOffsetFormatFallback = true;
+            break;
+
         default:
             // will be handled below
             break;
         }
 
-        if (result == null) {
+        if (result == null && !noOffsetFormatFallback) {
             int[] offsets = {0, 0};
             tz.getOffset(date, false, offsets);
             int offset = offsets[0] + offsets[1];
@@ -966,21 +985,6 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
 
             case ISO_EXTENDED_LOCAL_FULL:
                 result = formatOffsetISO8601Extended(offset, false, false, false);
-                break;
-
-            case ZONE_ID:
-                result = tz.getID();
-                break;
-
-            case ZONE_ID_SHORT:
-                result = ZoneMeta.getShortID(tz);
-                if (result == null) {
-                    result = UNKNOWN_SHORT_ZONE_ID;
-                }
-                break;
-
-            case EXEMPLAR_LOCATION:
-                result = formatExemplarLocation(tz);
                 break;
             }
             // time type

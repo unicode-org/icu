@@ -692,4 +692,89 @@ public class TimeZoneFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
+
+    public void TestFormat() {
+        final Date dateJan = new Date(1358208000000L);  // 2013-01-15T00:00:00Z
+        final Date dateJul = new Date(1373846400000L);  // 2013-07-15T00:00:00Z
+
+        final Object[][] TESTDATA = {
+            {
+                "en",
+                "America/Los_Angeles", 
+                dateJan,
+                Style.GENERIC_LOCATION,
+                "Los Angeles Time",
+                TimeType.UNKNOWN
+            },
+            {
+                "en",
+                "America/Los_Angeles",
+                dateJan,
+                Style.GENERIC_LONG,
+                "Pacific Time",
+                TimeType.UNKNOWN
+            },
+            {
+                "en",
+                "America/Los_Angeles",
+                dateJan,
+                Style.SPECIFIC_LONG,
+                "Pacific Standard Time",
+                TimeType.STANDARD
+            },
+            {
+                "en",
+                "America/Los_Angeles",
+                dateJul,
+                Style.SPECIFIC_LONG,
+                "Pacific Daylight Time",
+                TimeType.DAYLIGHT
+            },
+            {
+                "ja",
+                "America/Los_Angeles",
+                dateJan,
+                Style.ZONE_ID,
+                "America/Los_Angeles",
+                TimeType.UNKNOWN
+            },
+            {
+                "fr",
+                "America/Los_Angeles",
+                dateJul,
+                Style.ZONE_ID_SHORT,
+                "uslax",
+                TimeType.UNKNOWN
+            },
+            {
+                "en",
+                "America/Los_Angeles",
+                dateJan,
+                Style.EXEMPLAR_LOCATION,
+                "Los Angeles",
+                TimeType.UNKNOWN
+            },
+            {
+                "ja",
+                "Asia/Tokyo",
+                dateJan,
+                Style.GENERIC_LONG,
+                "\u65E5\u672C\u6A19\u6E96\u6642",   // "日本標準時"
+                TimeType.UNKNOWN
+            },
+        };
+
+        for (Object[] testCase : TESTDATA) {
+            TimeZoneFormat tzfmt = TimeZoneFormat.getInstance(new ULocale((String)testCase[0]));
+            TimeZone tz = TimeZone.getTimeZone((String)testCase[1]);
+            Output<TimeType> timeType = new Output<TimeType>();
+            String out = tzfmt.format((Style)testCase[3], tz, ((Date)testCase[2]).getTime(), timeType);
+
+            if (!out.equals((String)testCase[4]) || timeType.value != testCase[5]) {
+                errln("Format result for [locale=" + testCase[0] + ",tzid=" + testCase[1] + ",date=" + testCase[2]
+                        + ",style=" + testCase[3] + "]: expected [output=" + testCase[4] + ",type=" + testCase[5]
+                        + "]; actual [output=" + out + ",type=" + timeType.value + "]");
+            }
+        }
+    }
 }
