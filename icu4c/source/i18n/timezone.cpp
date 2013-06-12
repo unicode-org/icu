@@ -1608,6 +1608,7 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
     UResourceBundle *zones = ures_openDirect(NULL, "windowsZones", &status);
     ures_getByKey(zones, "mapTimezones", zones, &status);
     if (U_FAILURE(status)) {
+        ures_close(zones);
         return id;
     }
 
@@ -1616,6 +1617,7 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
     int32_t winKeyLen = winid.extract(0, winid.length(), winidKey, sizeof(winidKey) - 1);
 
     if (winKeyLen == 0 || winKeyLen >= sizeof(winidKey)) {
+        ures_close(zones);
         return id;
     }
     winidKey[winKeyLen] = 0;
@@ -1623,11 +1625,13 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
     ures_getByKey(zones, winidKey, zones, &tmperr); // use tmperr, because windows mapping might not
                                                     // be avaiable by design
     if (U_FAILURE(tmperr)) {
+        ures_close(zones);
         return id;
     }
 
     const UChar *tzid = NULL;
     int32_t len = 0;
+    UBool gotID = FALSE;
     if (region) {
         int32_t tzidsLen = 0;
         const UChar *tzids = ures_getStringByKey(zones, region, &len, &tmperr); // use tmperr, because
@@ -1640,16 +1644,19 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
             } else {
                 id.setTo(tzids, end - tzids);
             }
-            return id;
+            gotID = TRUE;
         }
     }
 
-    tzid = ures_getStringByKey(zones, "001", &len, &status);    // using status, because "001" must be
+    if (!gotID) {
+        tzid = ures_getStringByKey(zones, "001", &len, &status);    // using status, because "001" must be
                                                                 // available at this point
-    if (U_SUCCESS(status)) {
-        id.setTo(tzid, len);
+        if (U_SUCCESS(status)) {
+            id.setTo(tzid, len);
+        }
     }
 
+    ures_close(zones);
     return id;
 }
 #endif /* U_HIDE_DRAFT_API */
