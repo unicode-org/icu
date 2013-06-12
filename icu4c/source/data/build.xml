@@ -217,13 +217,13 @@
         </cldr-build>
     </target>
     <target name="collation" depends="init,setup" description="builds collation files in ICU text format">
-        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" srcFile=".*xml" destFile=".*txt">
+        <cldr-build toolName="org.unicode.cldr.icu.NewLdml2IcuConverter" srcFile=".*xml" destFile=".*txt">
             <run>
                 <args>
                     <arg name="--sourcedir"       value="${env.CLDR_DIR}/common/collation" />
                     <arg name="--destdir"         value="${env.ICU4C_DIR}/source/data/coll"/>
                     <arg name="--specialsdir"     value="${env.ICU4C_DIR}/source/data/xml/collation"/>
-                    <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="--type"            value="collation"/>
                 </args>
                 <!-- http://ant.apache.org/faq.html#xml-entity-include -->
                 &icu-config;
