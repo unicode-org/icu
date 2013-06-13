@@ -214,8 +214,8 @@ static void makeEquivalent(
 // countEquivalent counts how many strings are equivalent to s.
 // hash stores all the equivalnce relations.
 // countEquivalent does not include s itself in the count.
-static int countEquivalent(const icu::Hashtable &hash, const icu::UnicodeString &s) {
-    int result = 0;
+static int32_t countEquivalent(const icu::Hashtable &hash, const icu::UnicodeString &s) {
+    int32_t result = 0;
     EquivIterator iter(hash, s);
     while (iter.next() != NULL) {
         ++result;
