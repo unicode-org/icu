@@ -3128,8 +3128,8 @@ public class DecimalFormat extends NumberFormat {
     /**
      * {@icu} Returns the rounding increment.
      *
-     * @return A positive rounding increment, or <code>null</code> if rounding is not in
-     * effect.
+     * @return A positive rounding increment, or <code>null</code> if a custom rounding
+     * increment is not in effect.
      * @see #setRoundingIncrement
      * @see #getRoundingMode
      * @see #setRoundingMode
@@ -3142,11 +3142,11 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the rounding increment. This method also controls whether rounding is
-     * enabled.
+     * {@icu} Sets the rounding increment. In the absence of a rounding increment, numbers
+     * will be rounded to the number of digits displayed.
      *
      * @param newValue A positive rounding increment, or <code>null</code> or
-     * <code>BigDecimal(0.0)</code> to disable rounding.
+     * <code>BigDecimal(0.0)</code> to use the default rounding increment.
      * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
@@ -3162,11 +3162,11 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the rounding increment. This method also controls whether rounding is
-     * enabled.
+     * {@icu} Sets the rounding increment. In the absence of a rounding increment, numbers
+     * will be rounded to the number of digits displayed.
      *
      * @param newValue A positive rounding increment, or <code>null</code> or
-     * <code>BigDecimal(0.0)</code> to disable rounding.
+     * <code>BigDecimal(0.0)</code> to use the default rounding increment.
      * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
@@ -3187,10 +3187,11 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
-     * {@icu} Sets the rounding increment. This method also controls whether rounding is
-     * enabled.
+     * {@icu} Sets the rounding increment. In the absence of a rounding increment, numbers
+     * will be rounded to the number of digits displayed.
      *
-     * @param newValue A positive rounding increment, or 0.0 to disable rounding.
+     * @param newValue A positive rounding increment, or 0.0 to use the default
+     * rounding increment.
      * @throws IllegalArgumentException if <code>newValue</code> is < 0.0
      * @see #getRoundingIncrement
      * @see #getRoundingMode
