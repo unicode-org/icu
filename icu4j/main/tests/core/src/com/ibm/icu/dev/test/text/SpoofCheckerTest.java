@@ -9,6 +9,7 @@ package com.ibm.icu.dev.test.text;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.io.StringReader;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.BitSet;
@@ -50,12 +51,12 @@ public class SpoofCheckerTest extends TestFmwk {
     /* (mixed script, confusable */
 
     String scLatin = "sc";   /* "sc", plain ascii. */
-    String goodCyrl = "\u0438\u043B";    // "Cyrillic small letter i and el"  Plain lower case Cyrillic letters, no latin confusables 
+    String goodCyrl = "\u0438\u043B";    // "Cyrillic small letter i and el"  Plain lower case Cyrillic letters, no latin confusables
     String goodGreek = "\u03c0\u03c6";   // "Greek small letter pi and phi"  Plain lower case Greek letters
 
     // Various 1 l I look-alikes
     String lll_Latin_a = "lI1";   // small letter l, cap I, digit 1, all ASCII
-    //  "\uFF29\u217C\u0196"  Full-width I, Small Roman Numeral fifty, Latin Cap Letter IOTA 
+    //  "\uFF29\u217C\u0196"  Full-width I, Small Roman Numeral fifty, Latin Cap Letter IOTA
     String lll_Latin_b = "\uff29\u217c\u0196";
     String lll_Cyrl = "\u0406\u04C0\u0031";  // "\u0406\u04C01"
     /* The skeleton transform for all of the 'lll' lookalikes is ascii lower case letter l. */
@@ -93,13 +94,58 @@ public class SpoofCheckerTest extends TestFmwk {
             fileName = "unicode/confusablesWholeScript.txt";
             confusablesWholeScript = TestUtil.getDataReader(fileName, "UTF-8");
 
-            SpoofChecker rsc = new SpoofChecker.Builder().setData(confusables, confusablesWholeScript).build();
+            SpoofChecker rsc = new SpoofChecker.Builder().setData(confusables, confusablesWholeScript)
+               .build();
             if (rsc == null) {
                 errln("FAIL: null SpoofChecker");
                 return;
-            }            
+            }
             // Check that newly built-from-rules SpoofChecker is able to function.
             checkSkeleton(rsc, "TestOpenFromSourceRules");
+
+            SpoofChecker.CheckResult result = new SpoofChecker.CheckResult();
+            rsc.failsChecks("Hello", result);
+
+            // The checker we just built from source rules should be equivalent to the
+            //  default checker created from prebuilt rules baked into the ICU data.
+            SpoofChecker defaultChecker = new SpoofChecker.Builder().build();
+            assertTrue("Checker built from rules equals default", defaultChecker.equals(rsc));
+
+            SpoofChecker optionChecker = new SpoofChecker.Builder().
+                                    setRestrictionLevel(RestrictionLevel.UNRESTRICTIVE).build();
+            assertFalse("", optionChecker.equals(rsc));
+
+            // Stub source data to build into a test SpoofChecker
+            String stubWSConfusables =
+                "# Stub Whole Script Confusable data\n" +
+                "0561          ; Armn; Cyrl; L #      (ա)  ARMENIAN SMALL LETTER AYB\n";
+
+            String stubConfusables =
+                "# Stub confusables data\n" +
+                "05AD ; 0596 ;  SL  # ( ֭ → ֖ ) HEBREW ACCENT DEHI → HEBREW ACCENT TIPEHA   #\n";
+
+            // Verify that re-using a builder doesn't alter SpoofCheckers that were
+            //  previously created by that builder. (The builder could modify data
+            //  being used by the existing checker)
+
+            SpoofChecker.Builder builder = new SpoofChecker.Builder();
+            SpoofChecker testChecker1 = builder.build();
+            assertTrue("", testChecker1.equals(defaultChecker));
+
+            builder.setData(new StringReader(stubConfusables), new StringReader(stubWSConfusables));
+            builder.setRestrictionLevel(RestrictionLevel.UNRESTRICTIVE);
+            builder.setChecks(SpoofChecker.SINGLE_SCRIPT_CONFUSABLE);
+            Set<ULocale>allowedLocales = new HashSet<ULocale>();
+            allowedLocales.add(ULocale.JAPANESE);
+            allowedLocales.add(ULocale.FRENCH);
+            builder.setAllowedLocales(allowedLocales);
+            SpoofChecker testChecker2 = builder.build();
+            SpoofChecker testChecker3 = builder.build();
+
+            assertTrue("", testChecker1.equals(defaultChecker));
+            assertFalse("", testChecker2.equals(defaultChecker));
+            assertTrue("", testChecker2.equals(testChecker3));
+
         } catch (java.io.IOException e) {
             errln(e.toString());
         } catch (ParseException e) {
@@ -337,20 +383,7 @@ public class SpoofCheckerTest extends TestFmwk {
         int MA = SpoofChecker.ANY_CASE;
         int SA = SpoofChecker.SINGLE_SCRIPT_CONFUSABLE | SpoofChecker.ANY_CASE;
 
-        // A long "identifier" that will overflow implementation stack buffers, forcing heap allocations.
-        //    (in the C implementation)
-        checkSkeleton(
-                sc,
-                SL,
-                " A 1ong \\u02b9identifier' that will overflow implementation stack buffers, forcing heap allocations."
-                        + " A 1ong 'identifier' that will overflow implementation stack buffers, forcing heap allocations."
-                        + " A 1ong 'identifier' that will overflow implementation stack buffers, forcing heap allocations."
-                        + " A 1ong 'identifier' that will overflow implementation stack buffers, forcing heap allocations.",
-                        " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
-                                + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
-                                + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
-                                + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations.",
-                                testName);
+        checkSkeleton(sc, SL, "\\u02b9identifier'",  "'identifier'",  testName);
 
         checkSkeleton(sc, SL, "nochange", "nochange", testName);
         checkSkeleton(sc, MA, "love", "love", testName);
@@ -365,7 +398,7 @@ public class SpoofCheckerTest extends TestFmwk {
         checkSkeleton(sc, SL, "\\uFDFB", "\\u062C\\u0644\\u0020\\u062C\\u0644\\u0627\\u0644\\u0647", testName);
 
         // This mapping exists in the ML and MA tables, does not exist in SL, SA
-        // 0C83 ; 0983 ; ML #  KANNADA SIGN VISARGA to 
+        // 0C83 ; 0983 ; ML #  KANNADA SIGN VISARGA to
         checkSkeleton(sc, SL, "\\u0C83", "\\u0C83", testName);
         checkSkeleton(sc, SA, "\\u0C83", "\\u0C83", testName);
         checkSkeleton(sc, ML, "\\u0C83", "\\u0983", testName);
@@ -385,12 +418,28 @@ public class SpoofCheckerTest extends TestFmwk {
         checkSkeleton(sc, SL, "\\u13CF", "\\u13CF", testName);
         checkSkeleton(sc, SA, "\\u13CF", "\\u13CF", testName);
 
-        // 0022 ; 0027 0027 ; 
+        // 0022 ; 0027 0027 ;
         // all tables
         checkSkeleton(sc, SL, "\"", "\\u0027\\u0027", testName);
         checkSkeleton(sc, SA, "\"", "\\u0027\\u0027", testName);
         checkSkeleton(sc, ML, "\"", "\\u0027\\u0027", testName);
         checkSkeleton(sc, MA, "\"", "\\u0027\\u0027", testName);
+
+        // A long "identifier" that will overflow implementation stack buffers, forcing heap allocations.
+        //    (in the C implementation)
+        checkSkeleton(
+                sc,
+                SL,
+                " A 1ong \\u02b9identifier' that will overflow implementation stack buffers, forcing heap allocations."
+                        + " A 1ong 'identifier' that will overflow implementation stack buffers, forcing heap allocations."
+                        + " A 1ong 'identifier' that will overflow implementation stack buffers, forcing heap allocations."
+                        + " A 1ong 'identifier' that will overflow implementation stack buffers, forcing heap allocations.",
+                        " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
+                                + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
+                                + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations."
+                                + " A long 'identifier' that vvill overflovv irnplernentation stack buffers, forcing heap allocations.",
+                                testName);
+
     }
 
     // Internal function to run a single skeleton test case.
@@ -402,7 +451,7 @@ public class SpoofCheckerTest extends TestFmwk {
         String uExpected = Utility.unescape(expected);
         String actual;
         actual = sc.getSkeleton(type, uInput);
-        assertEquals(testName + "Expected (escaped): " + expected, uExpected, actual);
+        assertEquals(testName + ":  Expected (escaped): " + expected, uExpected, actual);
     }
 
     public void TestAreConfusable() {
@@ -495,7 +544,7 @@ public class SpoofCheckerTest extends TestFmwk {
             assertEquals("Testing spoof mixed numbers for '" + testString + "', ", expected.size() > 1, actualValue);
         }
     }
-    
+
     public void TestIdentifierInfo() {
 //        contains(BitSet, BitSet)
         BitSet bitset12 = IdentifierInfo.set(new BitSet(), UScript.LATIN, UScript.HANGUL);
@@ -505,7 +554,7 @@ public class SpoofCheckerTest extends TestFmwk {
         assertTrue("", !IdentifierInfo.contains(bitset2, bitset12));
 
         assertTrue("", IdentifierInfo.BITSET_COMPARATOR.compare(
-                IdentifierInfo.set(new BitSet(), UScript.ARABIC), 
+                IdentifierInfo.set(new BitSet(), UScript.ARABIC),
                 IdentifierInfo.set(new BitSet(), UScript.LATIN)) < 0);
 //      displayAlternates(Collection<BitSet>)
 //      displayScripts(BitSet)
@@ -538,10 +587,10 @@ public class SpoofCheckerTest extends TestFmwk {
             idInfo.setIdentifierProfile(SpoofChecker.RECOMMENDED);
             idInfo.setIdentifier(testString);
             assertEquals("Identifier " + testString, testString, idInfo.getIdentifier());
-            
+
             RestrictionLevel restrictionLevel = RestrictionLevel.valueOf(test[1]);
             assertEquals("RestrictionLevel " + testString, restrictionLevel, idInfo.getRestrictionLevel());
-            
+
             UnicodeSet numerics = new UnicodeSet(test[2]);
             assertEquals("Numerics " + testString, numerics, idInfo.getNumerics());
 
@@ -559,7 +608,7 @@ public class SpoofCheckerTest extends TestFmwk {
 //        getIdentifierProfile()
 //        setIdentifierProfile(UnicodeSet)
     }
-    
+
     public void TestComparator() {
         Random random = new Random(0);
         for (int i = 0; i < 100; ++i) {
@@ -574,7 +623,7 @@ public class SpoofCheckerTest extends TestFmwk {
             checkComparator(IdentifierInfo.BITSET_COMPARATOR, items);
         }
     }
-    
+
     // Dumb implementation for now
     private <T> void checkComparator(Comparator<T> comparator, T... items) {
         logln("Checking " + Arrays.asList(items));
@@ -598,18 +647,18 @@ public class SpoofCheckerTest extends TestFmwk {
             }
         }
     }
-    
+
     private <T> void checkTransitivity(Comparator<T> comparator, T a, T b, T c) {
         int ab = comparator.compare(a,b);
         int bc = comparator.compare(b,c);
         int ca = comparator.compare(c,a);
-        if (!assertFalse("Transitive: " + a + ", " + b + ", " + c, 
+        if (!assertFalse("Transitive: " + a + ", " + b + ", " + c,
                 ab < 0 && bc < 0 && ca <= 0)) {
             // for debugging
             comparator.compare(a,b);
             comparator.compare(b,c);
             comparator.compare(c,a);
-            assertFalse("Transitive: " + a + ", " + b + ", " + c, 
+            assertFalse("Transitive: " + a + ", " + b + ", " + c,
                     ab < 0 && bc < 0 && ca <= 0);
         }
     }
