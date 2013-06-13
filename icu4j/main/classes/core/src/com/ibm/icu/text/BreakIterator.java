@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -373,6 +373,52 @@ public abstract class BreakIterator implements Cloneable
     public abstract int current();
 
     /**
+     * For RuleBasedBreakIterators, return the status tag from the
+     * break rule that determined the most recently
+     * returned break position.
+     * <p>
+     * For break iterator types that do not support a rule status,
+     * a default value of 0 is returned.
+     * <p>
+     * @return The status from the break rule that determined the most recently
+     *         returned break position.
+     *
+     * @draft ICU 52
+     * @provisional This is a draft API and might change in a future release of ICU.
+     */
+
+    public int  getRuleStatus() {
+        return 0;
+    }
+
+    /**
+     * For RuleBasedBreakIterators, get the status (tag) values from the break rule(s)
+     * that determined the most recently returned break position.
+     * <p>
+     * For break iterator types that do not support rule status,
+     * no values are returned.
+     * <p>
+     * If the size  of the output array is insufficient to hold the data,
+     *  the output will be truncated to the available length.  No exception
+     *  will be thrown.
+     *
+     * @param fillInArray an array to be filled in with the status values.
+     * @return          The number of rule status values from rules that determined
+     *                  the most recent boundary returned by the break iterator.
+     *                  In the event that the array is too small, the return value
+     *                  is the total number of status values that were available,
+     *                  not the reduced number that were actually returned.
+     * @draft ICU 52
+     * @provisional This is a draft API and might change in a future release of ICU.
+     */
+    public int getRuleStatusVec(int[] fillInArray) {
+        if (fillInArray != null && fillInArray.length > 0) {
+            fillInArray[0] = 0;
+        }
+        return 1;
+    }
+
+    /**
      * Returns a CharacterIterator over the text being analyzed.
      * For at least some subclasses of BreakIterator, this is a reference
      * to the <b>actual iterator being used</b> by the BreakIterator,
@@ -422,17 +468,17 @@ public abstract class BreakIterator implements Cloneable
      * @stable ICU 2.4
      */
     public static final int KIND_WORD = 1;
-    /** 
+    /**
      * {@icu}
      * @stable ICU 2.4
      */
     public static final int KIND_LINE = 2;
-    /** 
+    /**
      * {@icu}
      * @stable ICU 2.4
      */
     public static final int KIND_SENTENCE = 3;
-    /** 
+    /**
      * {@icu}
      * @stable ICU 2.4
      */
