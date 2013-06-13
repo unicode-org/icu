@@ -163,12 +163,14 @@ public class LanguageTag {
         }
 
         StringTokenIterator itr;
+        boolean isGrandfathered = false;
 
         // Check if the tag is grandfathered
         String[] gfmap = GRANDFATHERED.get(new AsciiUtil.CaseInsensitiveKey(languageTag));
         if (gfmap != null) {
             // use preferred mapping
             itr = new StringTokenIterator(gfmap[1], SEP);
+            isGrandfathered = true;
         } else {
             itr = new StringTokenIterator(languageTag, SEP);
         }
@@ -185,7 +187,13 @@ public class LanguageTag {
         }
         tag.parsePrivateuse(itr, sts);
 
-        if (!itr.isDone() && !sts.isError()) {
+        if (isGrandfathered) {
+            // Grandfathered tag is replaced with a well-formed tag above.
+            // However, the parsed length must be the original tag length.
+            assert (itr.isDone());
+            assert (!sts.isError());
+            sts._parseLength = languageTag.length();
+        } else if (!itr.isDone() && !sts.isError()) {
             String s = itr.current();
             sts._errorIndex = itr.currentStart();
             if (s.length() == 0) {
