@@ -1305,7 +1305,7 @@ public:
 
     /**
      * Get the rounding increment.
-     * @return A positive rounding increment, or 0.0 if a rounding
+     * @return A positive rounding increment, or 0.0 if a custom rounding
      * increment is not in effect.
      * @see #setRoundingIncrement
      * @see #getRoundingMode
@@ -1317,7 +1317,8 @@ public:
     /**
      * Set the rounding increment.  In the absence of a rounding increment,
      *    numbers will be rounded to the number of digits displayed.
-     * @param newValue A positive rounding increment.
+     * @param newValue A positive rounding increment, or 0.0 to
+     * use the default rounding increment.
      * Negative increments are equivalent to 0.0.
      * @see #getRoundingIncrement
      * @see #getRoundingMode
