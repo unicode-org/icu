@@ -42,7 +42,9 @@
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof(array[0]))
 
 static const UChar EUR[] = {69,85,82,0}; // "EUR"
+static const UChar JPY[] = {0x4A, 0x50, 0x59, 0};
 static const UChar ISO_CURRENCY_USD[] = {0x55, 0x53, 0x44, 0}; // "USD"
+
 
 // *****************************************************************************
 // class NumberFormatTest
@@ -120,6 +122,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestFormattableSize);
   TESTCASE_AUTO(TestSignificantDigits);
   TESTCASE_AUTO(TestShowZero);
+  TESTCASE_AUTO(TestCompatibleCurrencies);
   TESTCASE_AUTO_END;
 }
 
@@ -2613,6 +2616,31 @@ void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
               ", expected " + pos + " " + width + " " + pad);
     }
 }
+
+void NumberFormatTest::TestCompatibleCurrencies() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<NumberFormat> fmt(
+        NumberFormat::createCurrencyInstance(Locale::getUS(), status));
+    if (U_FAILURE(status)) {
+        errln("Could not create number format instance.");
+        return;
+    }
+    expectParseCurrency(*fmt, JPY, "\\u00A51,235");
+    expectParseCurrency(*fmt, JPY, "\\uFFE51,235");
+}
+
+void NumberFormatTest::expectParseCurrency(const NumberFormat &fmt, const UChar* currency, const char *text) {
+    ParsePosition ppos;
+    UnicodeString utext = ctou(text);
+    LocalPointer<CurrencyAmount> currencyAmount(fmt.parseCurrency(utext, ppos));
+    if (!ppos.getIndex()) {
+        errln(UnicodeString("Parse of ") + utext + " should have succeeded.");
+        return;
+    }
+    assertEquals("currency", currency, currencyAmount->getISOCurrency());
+}
+  
+
 void NumberFormatTest::TestJB3832(){
     const char* localeID = "pt_PT@currency=PTE";
     Locale loc(localeID);
