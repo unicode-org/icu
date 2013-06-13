@@ -165,7 +165,9 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestSignificantDigits();
     void TestShowZero();
 
+    void TestCompatibleCurrencies();
  private:
+    void expectParseCurrency(const NumberFormat &fmt, const UChar* currency, const char *text);
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
 
