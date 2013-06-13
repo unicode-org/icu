@@ -1,6 +1,6 @@
 /*
  * Created on May 5, 2004
- * 
+ *
  * Copyright (C) 2004-2013 International Business Machines Corporation and others.
  * All Rights Reserved.
  *
@@ -29,13 +29,13 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class RBBITestExtended extends TestFmwk {
-    
+
     public static void main(String[] args)throws Exception {
         new RBBITestExtended().run(args);
     }
-    
-    
-public RBBITestExtended() { 
+
+
+public RBBITestExtended() {
     }
 
 
@@ -65,7 +65,7 @@ public void TestExtended() {
             errln("Could not open test data file rbbitst.txt");
             return;
         }
-        isr = new InputStreamReader(is, "UTF-8");           
+        isr = new InputStreamReader(is, "UTF-8");
         int c;
         int count = 0;
         for (;;) {
@@ -78,17 +78,17 @@ public void TestExtended() {
                // BOM in the test data file.  Discard it.
                continue;
             }
-           
+
             UTF16.append(testFileBuf, c);
         }
-        
+
     } catch (IOException e) {
         errln(e.toString());
         return;
     }
-    
+
     String testString = testFileBuf.toString();
-    
+
 
     final int  PARSE_COMMENT = 1;
     final int  PARSE_TAG     = 2;
@@ -239,7 +239,7 @@ public void TestExtended() {
                 if (c == -1) {
                     errln("Error in named character in test file at line " + lineNum +
                             ", col " + column);
-                } else {               
+                } else {
                     // Named code point was recognized.  Insert it
                     //   into the test data.
                     UTF16.append(tp.dataToBreak, c);
@@ -247,7 +247,7 @@ public void TestExtended() {
                         tp.srcLine[i] = lineNum;
                         tp.srcCol[i]  = column;
                     }
-                    
+
                  }
                 if (nameEndIdx > charIdx) {
                     charIdx = nameEndIdx+1;
@@ -279,7 +279,7 @@ public void TestExtended() {
             if (c == CH_BACKSLASH) {
                 // Check for \ at end of line, a line continuation.
                 //     Advance over (discard) the newline
-                int cp = UTF16.charAt(testString, charIdx); 
+                int cp = UTF16.charAt(testString, charIdx);
                 if (cp == CH_CR && charIdx<len && UTF16.charAt(testString, charIdx+1) == CH_LF) {
                     // We have a CR LF
                     //  Need an extra increment of the input ptr to move over both of them
@@ -306,7 +306,7 @@ public void TestExtended() {
                         tp.srcLine[i] = lineNum;
                         tp.srcCol[i]  = column;
                     }
-                    
+
                     break;
                 }
 
@@ -320,7 +320,7 @@ public void TestExtended() {
 
             // Normal, non-escaped data char.
             UTF16.append(tp.dataToBreak, c);
- 
+
             // Save the mapping from offset in the data to line/column numbers in
             //   the original input file.  Will be used for better error messages only.
             //   If there's an expected break before this char, the slot in the mapping
@@ -360,13 +360,13 @@ public void TestExtended() {
 
             errln("Syntax Error in test file at line "+ lineNum +", col %d" + column);
             return;
-            
+
             // parseState = PARSE_COMMENT;   // TODO: unreachable.  Don't stop on errors.
             // break;
         }
 
 
- 
+
     }
 }
 
@@ -378,7 +378,7 @@ void executeTest(TestParams t) {
     if (t.bi == null) {
         return;
     }
-    
+
     t.bi.setText(t.dataToBreak.toString());
     //
     //  Run the iterator forward
@@ -396,14 +396,14 @@ void executeTest(TestParams t) {
         //  and this one.
         for (i=prevBP+1; i<bp; i++) {
             if (t.expectedBreaks[i] != 0) {
-                errln("Forward Iteration, break expected, but not found.  Pos=" + i + 
+                errln("Forward Iteration, break expected, but not found.  Pos=" + i +
                     "  File line,col= " + t.srcLine[i] + ", " + t.srcCol[i]);
             }
         }
 
         // Check that the break we did find was expected
         if (t.expectedBreaks[bp] == 0) {
-            errln("Forward Iteration, break found, but not expected.  Pos=" + bp + 
+            errln("Forward Iteration, break found, but not expected.  Pos=" + bp +
                     "  File line,col= " + t.srcLine[bp] + ", " + t.srcCol[bp]);
         } else {
             // The break was expected.
@@ -413,12 +413,16 @@ void executeTest(TestParams t) {
                 expectedTagVal = 0;
             }
             int line = t.srcLine[bp];
-            int rs = ((RuleBasedBreakIterator)t.bi).getRuleStatus();
+            int rs = t.bi.getRuleStatus();
             if (rs != expectedTagVal) {
                 errln("Incorrect status for forward break.  Pos = " + bp +
                         ".  File line,col = " + line + ", " + t.srcCol[bp] + "\n" +
                       "          Actual, Expected status = " + rs + ", " + expectedTagVal);
             }
+            int[] fillInArray = new int[4];
+            int numStatusVals = t.bi.getRuleStatusVec(fillInArray);
+            assertTrue("", numStatusVals >= 1);
+            assertEquals("", expectedTagVal, fillInArray[0]);
         }
 
 
@@ -428,12 +432,12 @@ void executeTest(TestParams t) {
     // Verify that there were no missed expected breaks after the last one found
     for (i=prevBP+1; i<t.dataToBreak.length()+1; i++) {
         if (t.expectedBreaks[i] != 0) {
-            errln("Forward Iteration, break expected, but not found.  Pos=" + i + 
+            errln("Forward Iteration, break expected, but not found.  Pos=" + i +
                     "  File line,col= " + t.srcLine[i] + ", " + t.srcCol[i]);
        }
     }
 
-    
+
     //
     //  Run the iterator backwards, verify that the same breaks are found.
     //
@@ -450,14 +454,14 @@ void executeTest(TestParams t) {
         //  and this one.  (UVector returns zeros for index out of bounds.)
         for (i=prevBP-1; i>bp; i--) {
             if (t.expectedBreaks[i] != 0) {
-                errln("Reverse Itertion, break expected, but not found.  Pos=" + i + 
+                errln("Reverse Itertion, break expected, but not found.  Pos=" + i +
                     "  File line,col= " + t.srcLine[i] + ", " + t.srcCol[i]);
             }
         }
 
         // Check that the break we did find was expected
         if (t.expectedBreaks[bp] == 0) {
-            errln("Reverse Itertion, break found, but not expected.  Pos=" + bp + 
+            errln("Reverse Itertion, break found, but not expected.  Pos=" + bp +
                     "  File line,col= " + t.srcLine[bp] + ", " + t.srcCol[bp]);
         } else {
             // The break was expected.
@@ -467,12 +471,12 @@ void executeTest(TestParams t) {
                 expectedTagVal = 0;
             }
             int line = t.srcLine[bp];
-            int rs = ((RuleBasedBreakIterator)t.bi).getRuleStatus();
+            int rs = t.bi.getRuleStatus();
             if (rs != expectedTagVal) {
                 errln("Incorrect status for reverse break.  Pos=  " + bp +
                         "File line,col= " + line + ", " + t.srcCol[bp] + "\n" +
                       "          Actual, Expected status = " + rs + ", " + expectedTagVal);
-                  }
+            }
         }
 
         prevBP = bp;
@@ -490,7 +494,7 @@ void executeTest(TestParams t) {
         boolean boundaryExpected = (t.expectedBreaks[i] != 0);
         boolean boundaryFound    = t.bi.isBoundary(i);
         if (boundaryExpected != boundaryFound) {
-            errln("isBoundary(" + i + ") incorrect.\n" + 
+            errln("isBoundary(" + i + ") incorrect.\n" +
                   "  File line,col= " + t.srcLine[i] + ", " + t.srcCol[i] +
                   "    Expected, Actual= " + boundaryExpected + ", " + boundaryFound);
         }
