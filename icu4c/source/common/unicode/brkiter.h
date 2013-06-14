@@ -290,6 +290,52 @@ public:
      */
     virtual int32_t next(int32_t n) = 0;
 
+   /**
+     * For RuleBasedBreakIterators, return the status tag from the 
+     * break rule that determined the most recently
+     * returned break position.
+     * <p>
+     * For break iterator types that do not support a rule status,
+     * a default value of 0 is returned.
+     * <p>
+     * @return the status from the break rule that determined the most recently
+     *         returned break position.
+     * @see RuleBaseBreakIterator::getRuleStatus()
+     * @see UWordBreak
+     * @draft ICU 52
+     */
+    virtual int32_t getRuleStatus() const;
+
+   /**
+    * For RuleBasedBreakIterators, get the status (tag) values from the break rule(s) 
+    * that determined the most recently returned break position.
+    * <p>
+    * For break iterator types that do not support rule status,
+    * no values are returned.
+    * <p>
+    * The returned status value(s) are stored into an array provided by the caller.
+    * The values are stored in sorted (ascending) order.
+    * If the capacity of the output array is insufficient to hold the data,
+    *  the output will be truncated to the available length, and a
+    *  U_BUFFER_OVERFLOW_ERROR will be signaled.
+    * <p>
+    * @see RuleBaseBreakIterator::getRuleStatusVec
+    *
+    * @param fillInVec an array to be filled in with the status values.
+    * @param capacity  the length of the supplied vector.  A length of zero causes
+    *                  the function to return the number of status values, in the
+    *                  normal way, without attemtping to store any values.
+    * @param status    receives error codes.
+    * @return          The number of rule status values from rules that determined
+    *                  the most recent boundary returned by the break iterator.
+    *                  In the event of a U_BUFFER_OVERFLOW_ERROR, the return value
+    *                  is the total number of status values that were available,
+    *                  not the reduced number that were actually returned.
+    * @see getRuleStatus
+    * @draft ICU 52
+    */
+    virtual int32_t getRuleStatusVec(int32_t *fillInVec, int32_t capacity, UErrorCode &status);
+
     /**
      * Create BreakIterator for word-breaks using the given locale.
      * Returns an instance of a BreakIterator implementing word breaks.

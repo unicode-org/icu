@@ -438,6 +438,29 @@ BreakIterator::getLocaleID(ULocDataLocaleType type, UErrorCode& status) const {
     return locBased.getLocaleID(type, status);
 }
 
+
+// This implementation of getRuleStatus is a do-nothing stub, here to
+// provide a default implementation for any derived BreakIterator classes that
+// do not implement it themselves.
+int32_t BreakIterator::getRuleStatus() const {
+    return 0;
+}
+
+// This implementation of getRuleStatusVec is a do-nothing stub, here to
+// provide a default implementation for any derived BreakIterator classes that
+// do not implement it themselves.
+int32_t BreakIterator::getRuleStatusVec(int32_t *fillInVec, int32_t capacity, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    if (capacity < 1) {
+        status = U_BUFFER_OVERFLOW_ERROR;
+        return 1;
+    }
+    *fillInVec = 0;
+    return 1;
+}
+
 U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_BREAK_ITERATION */

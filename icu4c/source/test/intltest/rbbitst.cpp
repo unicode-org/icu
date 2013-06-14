@@ -329,7 +329,7 @@ void RBBITest::TestStatusReturn() {
      UErrorCode status=U_ZERO_ERROR;
      UParseError    parseError;
 
-     RuleBasedBreakIterator *bi = new RuleBasedBreakIterator(rulesString1, parseError, status);
+     BreakIterator *bi = new RuleBasedBreakIterator(rulesString1, parseError, status);
      if(U_FAILURE(status)) {
          dataerrln("FAIL : in construction - %s", u_errorName(status));
      } else {
@@ -408,8 +408,7 @@ void RBBITest::TestBug3818() {
                                            0x0E43,0x0E2B,0x0E0D,0x0E48, 0x0E43,0x0E2B,0x0E0D,0x0E48, 0 };
     UnicodeString  thaiStr(thaiWordData);
 
-    RuleBasedBreakIterator* bi =
-        (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale("th"), status);
+    BreakIterator* bi = BreakIterator::createWordInstance(Locale("th"), status);
     if (U_FAILURE(status) || bi == NULL) {
         errcheckln(status, "Fail at file %s, line %d, status = %s", __FILE__, __LINE__, u_errorName(status));
         return;
