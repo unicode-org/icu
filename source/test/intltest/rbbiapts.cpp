@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1999-2012, International Business Machines
+ * Copyright (c) 1999-2013, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************
  *   Date        Name        Description
@@ -658,7 +658,7 @@ void RBBIAPITest::TestRuleStatus() {
 
      UErrorCode status=U_ZERO_ERROR;
 
-     RuleBasedBreakIterator *bi = (RuleBasedBreakIterator *)BreakIterator::createWordInstance(Locale::getEnglish(), status);
+     BreakIterator *bi = BreakIterator::createWordInstance(Locale::getEnglish(), status);
      if(U_FAILURE(status)) {
          errcheckln(status, "Fail : in construction - %s", u_errorName(status));
      } else {
@@ -695,8 +695,7 @@ void RBBIAPITest::TestRuleStatus() {
      testString1 =   "test line. \n";
      // break type    s    s     h
 
-     bi = (RuleBasedBreakIterator *)
-         BreakIterator::createLineInstance(Locale::getEnglish(), status);
+     bi = BreakIterator::createLineInstance(Locale::getEnglish(), status);
      if(U_FAILURE(status)) {
          errcheckln(status, "failed to create word break iterator. - %s", u_errorName(status));
      } else {
@@ -1219,7 +1218,7 @@ void RBBIAPITest::runIndexedTest( int32_t index, UBool exec, const char* &name, 
 //Internal subroutines
 //---------------------------------------------
 
-void RBBIAPITest::doBoundaryTest(RuleBasedBreakIterator& bi, UnicodeString& text, int32_t *boundaries){
+void RBBIAPITest::doBoundaryTest(BreakIterator& bi, UnicodeString& text, int32_t *boundaries){
      logln((UnicodeString)"testIsBoundary():");
         int32_t p = 0;
         UBool isB;
