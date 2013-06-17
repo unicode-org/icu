@@ -166,6 +166,8 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestShowZero();
 
     void TestCompatibleCurrencies();
+    void TestBug9936();
+
  private:
     void expectParseCurrency(const NumberFormat &fmt, const UChar* currency, const char *text);
 

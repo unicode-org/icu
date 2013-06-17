@@ -5225,6 +5225,7 @@ void DecimalFormat::setMinimumSignificantDigits(int32_t min) {
     int32_t max = _max(fMaxSignificantDigits, min);
     fMinSignificantDigits = min;
     fMaxSignificantDigits = max;
+    fUseSignificantDigits = TRUE;
 #if UCONFIG_FORMAT_FASTPATHS_49
     handleChanged();
 #endif
@@ -5239,6 +5240,7 @@ void DecimalFormat::setMaximumSignificantDigits(int32_t max) {
     int32_t min = _min(fMinSignificantDigits, max);
     fMinSignificantDigits = min;
     fMaxSignificantDigits = max;
+    fUseSignificantDigits = TRUE;
 #if UCONFIG_FORMAT_FASTPATHS_49
     handleChanged();
 #endif
