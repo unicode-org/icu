@@ -4951,6 +4951,7 @@ public class DecimalFormat extends NumberFormat {
         int max = Math.max(maxSignificantDigits, min);
         minSignificantDigits = min;
         maxSignificantDigits = max;
+        setSignificantDigitsUsed(true);
     }
 
     /**
@@ -4971,6 +4972,7 @@ public class DecimalFormat extends NumberFormat {
         int min = Math.min(minSignificantDigits, max);
         minSignificantDigits = min;
         maxSignificantDigits = max;
+        setSignificantDigitsUsed(true);
     }
 
     /**

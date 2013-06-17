@@ -3261,6 +3261,25 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
     
+    public void TestBug9936() {
+        DecimalFormat numberFormat =
+            (DecimalFormat) NumberFormat.getInstance(ULocale.US);
+        assertFalse("", numberFormat.areSignificantDigitsUsed());
+        
+        numberFormat.setSignificantDigitsUsed(true);
+        assertTrue("", numberFormat.areSignificantDigitsUsed());
+        
+        numberFormat.setSignificantDigitsUsed(false);
+        assertFalse("", numberFormat.areSignificantDigitsUsed());
+        
+        numberFormat.setMinimumSignificantDigits(3);
+        assertTrue("", numberFormat.areSignificantDigitsUsed());
+
+        numberFormat.setSignificantDigitsUsed(false);
+        numberFormat.setMaximumSignificantDigits(6);
+        assertTrue("", numberFormat.areSignificantDigitsUsed());       
+    }
+    
     public void TestShowZero() {
         DecimalFormat numberFormat =
                 (DecimalFormat) NumberFormat.getInstance(ULocale.US);
