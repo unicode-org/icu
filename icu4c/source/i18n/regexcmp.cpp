@@ -1,7 +1,7 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002-2012 International Business Machines Corporation and others.
+//  Copyright (C) 2002-2013 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -3335,14 +3335,46 @@ int32_t   RegexCompile::maxMatchLength(int32_t start, int32_t end) {
 
         case URX_CTR_INIT:
         case URX_CTR_INIT_NG:
+            // For Loops, recursively call this function on the pattern for the loop body,
+            //   then multiply the result by the maximum loop count.
+            {
+                int32_t  loopEndLoc = URX_VAL(fRXPat->fCompiledPat->elementAti(loc+1));
+                if (loopEndLoc == loc+4) {
+                    // Loop has an empty body. No affect on max match length.
+                    // Continue processing with code after the loop end.
+                    loc = loopEndLoc;
+                    break;
+                }
+                
+                int32_t maxLoopCount = fRXPat->fCompiledPat->elementAti(loc+3);
+                if (maxLoopCount == -1) {
+                    // Unbounded Loop. No upper bound on match length.
+                    currentLen = INT32_MAX;
+                    break;
+                }
+
+                U_ASSERT(loopEndLoc >= loc+4);
+                int32_t  blockLen = maxMatchLength(loc+4, loopEndLoc-1);  // Recursive call.
+                if (blockLen == INT32_MAX) {
+                    currentLen = blockLen;
+                    break;
+                }
+                currentLen += blockLen * maxLoopCount;
+                loc = loopEndLoc;
+                break;
+            }
+
         case URX_CTR_LOOP:
         case URX_CTR_LOOP_NG:
+            // These opcodes will be skipped over by code for URX_CRT_INIT.
+            // We shouldn't encounter them here.
+            U_ASSERT(FALSE);
+            break;
+
         case URX_LOOP_SR_I:
         case URX_LOOP_DOT_I:
         case URX_LOOP_C:
             // For anything to do with loops, make the match length unbounded.
-            //   Note:  INIT instructions are multi-word.  Can ignore because
-            //          INT32_MAX length will stop the per-instruction loop.
             currentLen = INT32_MAX;
             break;
 
