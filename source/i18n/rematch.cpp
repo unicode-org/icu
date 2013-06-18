@@ -1,6 +1,6 @@
 /*
 **************************************************************************
-*   Copyright (C) 2002-2012 International Business Machines Corporation  *
+*   Copyright (C) 2002-2013 International Business Machines Corporation  *
 *   and others. All rights reserved.                                     *
 **************************************************************************
 */
@@ -2827,7 +2827,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
         #ifdef REGEX_RUN_DEBUG
         if (fTraceDebug) {
             UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
-            printf("inputIdx=%d   inputChar=%x   sp=%3d   activeLimit=%d  ", fp->fInputIdx,
+            printf("inputIdx=%ld   inputChar=%x   sp=%3ld   activeLimit=%ld  ", fp->fInputIdx,
                 UTEXT_CURRENT32(fInputText), (int64_t *)fp-fStack->getBuffer(), fActiveLimit);
             fPattern->dumpOp(fp->fPatIdx);
         }
@@ -3492,7 +3492,7 @@ GC_Done:
                 int32_t maxCount = (int32_t)pat[instrOperandLoc+2];
                 U_ASSERT(minCount>=0);
                 U_ASSERT(maxCount>=minCount || maxCount==-1);
-                U_ASSERT(loopLoc>fp->fPatIdx);
+                U_ASSERT(loopLoc>=fp->fPatIdx);
 
                 if (minCount == 0) {
                     fp = StateSave(fp, loopLoc+1, status);
@@ -4211,7 +4211,7 @@ breakFromLoop:
         fMatchStart   = startIdx;
         fMatchEnd     = fp->fInputIdx;
         if (fTraceDebug) {
-            REGEX_RUN_DEBUG_PRINTF(("Match.  start=%d   end=%d\n\n", fMatchStart, fMatchEnd));
+            REGEX_RUN_DEBUG_PRINTF(("Match.  start=%ld   end=%ld\n\n", fMatchStart, fMatchEnd));
         }
     }
     else
@@ -4252,7 +4252,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
 #ifdef REGEX_RUN_DEBUG
     if (fTraceDebug)
     {
-        printf("MatchAt(startIdx=%ld)\n", startIdx);
+        printf("MatchAt(startIdx=%d)\n", startIdx);
         printf("Original Pattern: ");
         UChar32 c = utext_next32From(fPattern->fPattern, 0);
         while (c != U_SENTINEL) {
@@ -4321,7 +4321,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
 #ifdef REGEX_RUN_DEBUG
         if (fTraceDebug) {
             UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
-            printf("inputIdx=%d   inputChar=%x   sp=%3d   activeLimit=%d  ", fp->fInputIdx,
+            printf("inputIdx=%ld   inputChar=%x   sp=%3ld   activeLimit=%ld  ", fp->fInputIdx,
                    UTEXT_CURRENT32(fInputText), (int64_t *)fp-fStack->getBuffer(), fActiveLimit);
             fPattern->dumpOp(fp->fPatIdx);
         }
@@ -4951,7 +4951,7 @@ GC_Done:
                 int32_t maxCount = (int32_t)pat[instrOperandLoc+2];
                 U_ASSERT(minCount>=0);
                 U_ASSERT(maxCount>=minCount || maxCount==-1);
-                U_ASSERT(loopLoc>fp->fPatIdx);
+                U_ASSERT(loopLoc>=fp->fPatIdx);
                 
                 if (minCount == 0) {
                     fp = StateSave(fp, loopLoc+1, status);
@@ -5635,7 +5635,7 @@ breakFromLoop:
         fMatchStart   = startIdx;
         fMatchEnd     = fp->fInputIdx;
         if (fTraceDebug) {
-            REGEX_RUN_DEBUG_PRINTF(("Match.  start=%d   end=%d\n\n", fMatchStart, fMatchEnd));
+            REGEX_RUN_DEBUG_PRINTF(("Match.  start=%ld   end=%ld\n\n", fMatchStart, fMatchEnd));
         }
     }
     else
