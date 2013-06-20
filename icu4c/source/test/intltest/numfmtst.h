@@ -169,7 +169,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestBug9936();
 
  private:
-    void expectParseCurrency(const NumberFormat &fmt, const UChar* currency, const char *text);
+    void expectParseCurrency(const NumberFormat &fmt, const UChar* currency, double amount, const char *text);
 
     static UBool equalValue(const Formattable& a, const Formattable& b);
 

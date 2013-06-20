@@ -80,7 +80,25 @@
 #undef round
 #endif
 
+
 U_NAMESPACE_BEGIN
+
+#ifdef FMT_DEBUG
+#include <stdio.h>
+static void _debugout(const char *f, int l, const UnicodeString& s) {
+    char buf[2000];
+    s.extract((int32_t) 0, s.length(), buf, "utf-8");
+    printf("%s:%d: %s\n", f,l, buf);
+}
+#define debugout(x) _debugout(__FILE__,__LINE__,x)
+#define debug(x) printf("%s:%d: %s\n", __FILE__,__LINE__, x);
+static const UnicodeString dbg_null("<NULL>","");
+#define DEREFSTR(x)   ((x!=NULL)?(*x):(dbg_null))
+#else
+#define debugout(x)
+#define debug(x)
+#endif
+
 
 
 /* == Fastpath calculation. ==
@@ -123,6 +141,15 @@ struct AffixPatternsForCurrency : public UMemory {
 		posSuffixPatternForCurrency = posSuffix;
 		patternType = type;
 	}
+#ifdef FMT_DEBUG
+  void dump() const  {
+    debugout( UnicodeString("AffixPatternsForCurrency( -=\"") +
+              negPrefixPatternForCurrency + (UnicodeString)"\"/\"" +
+              negSuffixPatternForCurrency + (UnicodeString)"\" +=\"" + 
+              posPrefixPatternForCurrency + (UnicodeString)"\"/\"" + 
+              posSuffixPatternForCurrency + (UnicodeString)"\" )");
+  }
+#endif
 };
 
 /* affix for currency formatting when the currency sign in the pattern
@@ -150,6 +177,15 @@ struct AffixesForCurrency : public UMemory {
 		posPrefixForCurrency = posPrefix;
 		posSuffixForCurrency = posSuffix;
 	}
+#ifdef FMT_DEBUG
+  void dump() const {
+    debugout( UnicodeString("AffixesForCurrency( -=\"") +
+              negPrefixForCurrency + (UnicodeString)"\"/\"" +
+              negSuffixForCurrency + (UnicodeString)"\" +=\"" + 
+              posPrefixForCurrency + (UnicodeString)"\"/\"" + 
+              posSuffixForCurrency + (UnicodeString)"\" )");
+  }
+#endif
 };
 
 U_CDECL_BEGIN
@@ -197,21 +233,6 @@ U_CALLCONV decimfmtAffixPatternValueComparator(UHashTok val1, UHashTok val2) {
 
 U_CDECL_END
 
-#ifdef FMT_DEBUG
-#include <stdio.h>
-static void _debugout(const char *f, int l, const UnicodeString& s) {
-    char buf[2000];
-    s.extract((int32_t) 0, s.length(), buf);
-    printf("%s:%d: %s\n", f,l, buf);
-}
-#define debugout(x) _debugout(__FILE__,__LINE__,x)
-#define debug(x) printf("%s:%d: %s\n", __FILE__,__LINE__, x);
-static const UnicodeString dbg_null("<NULL>","");
-#define DEREFSTR(x)   ((x!=NULL)?(*x):(dbg_null))
-#else
-#define debugout(x)
-#define debug(x)
-#endif
 
 
 
@@ -2104,6 +2125,12 @@ DecimalFormat::parseForCurrency(const UnicodeString& text,
         UBool tmpStatus[fgStatusLength];
         ParsePosition tmpPos(origPos);
         DigitList tmpDigitList;
+
+#ifdef FMT_DEBUG
+        debug("trying affix for currency..");
+        affixPtn->dump();
+#endif
+
         UBool result = subparse(text,
                                 &affixPtn->negPrefixPatternForCurrency,
                                 &affixPtn->negSuffixPatternForCurrency,
