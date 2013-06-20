@@ -1103,6 +1103,7 @@ main(int argc, char* argv[])
     UBool quick = TRUE;
     UBool name = FALSE;
     UBool leaks = FALSE;
+    UBool utf8 = FALSE;
     UBool warnOnMissingData = FALSE;
     UBool defaultDataFound = FALSE;
     int32_t threadCount = 1;
@@ -1133,6 +1134,9 @@ main(int argc, char* argv[])
             else if (strcmp("all", str) == 0 ||
                      strcmp("a", str) == 0)
                 all = TRUE;
+            else if (strcmp("utf-8", str) == 0 ||
+                     strcmp("u", str) == 0)
+                utf8 = TRUE;
             else if (strcmp("leaks", str) == 0 ||
                      strcmp("l", str) == 0)
                 leaks = TRUE;
@@ -1243,6 +1247,7 @@ main(int argc, char* argv[])
     fprintf(stdout, "   No error messages (n)    : %s\n", (no_err_msg?        "On" : "Off"));
     fprintf(stdout, "   Exhaustive (e)           : %s\n", (!quick?            "On" : "Off"));
     fprintf(stdout, "   Leaks (l)                : %s\n", (leaks?             "On" : "Off"));
+    fprintf(stdout, "   utf-8 (u)                : %s\n", (utf8?              "On" : "Off"));
     fprintf(stdout, "   notime (T)               : %s\n", (no_time?             "On" : "Off"));
     fprintf(stdout, "   Warn on missing data (w) : %s\n", (warnOnMissingData? "On" : "Off"));
 #if (ICU_USE_THREADS==0)
@@ -1255,6 +1260,9 @@ main(int argc, char* argv[])
     }
     fprintf(stdout, "-----------------------------------------------\n");
 
+    if(utf8) {
+      ucnv_setDefaultName("utf-8");
+    }
     /* Check whether ICU will initialize without forcing the build data directory into
      *  the ICU_DATA path.  Success here means either the data dll contains data, or that
      *  this test program was run with ICU_DATA set externally.  Failure of this check
@@ -1273,6 +1281,9 @@ main(int argc, char* argv[])
         defaultDataFound = TRUE;
     }
     u_cleanup();
+    if(utf8) {
+      ucnv_setDefaultName("utf-8");
+    }
     errorCode = U_ZERO_ERROR;
 
     /* Initialize ICU */
@@ -1291,7 +1302,6 @@ main(int argc, char* argv[])
                 return 1;
             }
     }
-
 
     // initial check for the default converter
     errorCode = U_ZERO_ERROR;
