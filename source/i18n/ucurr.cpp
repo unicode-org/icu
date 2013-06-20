@@ -28,7 +28,11 @@
 #include "ulist.h"
 #include "ureslocs.h"
 
-// #define UCURR_DEBUG 1
+//#define UCURR_DEBUG_EQUIV 1
+#ifdef UCURR_DEBUG_EQUIV
+#include "stdio.h"
+#endif
+//#define UCURR_DEBUG 1
 #ifdef UCURR_DEBUG
 #include "stdio.h"
 #endif
@@ -220,6 +224,13 @@ static int32_t countEquivalent(const icu::Hashtable &hash, const icu::UnicodeStr
     while (iter.next() != NULL) {
         ++result;
     }
+#ifdef UCURR_DEBUG_EQUIV
+ {
+   char tmp[200];
+   s.extract(0,s.length(),tmp, "UTF-8");
+   printf("CountEquivalent('%s') = %d\n", tmp, result);
+ }
+#endif
     return result;
 }
 
@@ -1140,22 +1151,20 @@ collectCurrencyNames(const char* locale,
     for (int32_t index = 0; index < *total_currency_name_count; ++index) {
         printf("index: %d\n", index);
         printf("iso: %s\n", (*currencyNames)[index].IsoCode);
-        printf("currencyName:");
-        for (int32_t i = 0; i < (*currencyNames)[index].currencyNameLen; ++i) {
-            printf("%c", (unsigned char)(*currencyNames)[index].currencyName[i]);
-        }
-        printf("\n");
+        char curNameBuf[1024];
+        memset(curNameBuf, 0, 1024);
+        u_austrncpy(curNameBuf, (*currencyNames)[index].currencyName, (*currencyNames)[index].currencyNameLen);
+        printf("currencyName: %s\n", curNameBuf);
         printf("len: %d\n", (*currencyNames)[index].currencyNameLen);
     }
     printf("currency symbol count: %d\n", *total_currency_symbol_count);
     for (int32_t index = 0; index < *total_currency_symbol_count; ++index) {
         printf("index: %d\n", index);
         printf("iso: %s\n", (*currencySymbols)[index].IsoCode);
-        printf("currencySymbol:");
-        for (int32_t i = 0; i < (*currencySymbols)[index].currencyNameLen; ++i) {
-            printf("%c", (unsigned char)(*currencySymbols)[index].currencyName[i]);
-        }
-        printf("\n");
+        char curNameBuf[1024];
+        memset(curNameBuf, 0, 1024);
+        u_austrncpy(curNameBuf, (*currencySymbols)[index].currencyName, (*currencySymbols)[index].currencyNameLen);
+        printf("currencySymbol: %s\n", curNameBuf);
         printf("len: %d\n", (*currencySymbols)[index].currencyNameLen);
     }
 #endif
@@ -1543,6 +1552,9 @@ uprv_parseCurrency(const char* locale,
 
 #ifdef UCURR_DEBUG
     printf("search in symbols, maxInSymbol = %d, matchIndexInSymbol = %d\n", maxInSymbol, matchIndexInSymbol);
+    if(matchIndexInSymbol != -1) {
+      printf("== ISO=%s\n", currencySymbols[matchIndexInSymbol].IsoCode);
+    }
 #endif
 
     if (max >= maxInSymbol && matchIndex != -1) {
