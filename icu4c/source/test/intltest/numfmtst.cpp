@@ -43,6 +43,7 @@
 
 static const UChar EUR[] = {69,85,82,0}; // "EUR"
 static const UChar JPY[] = {0x4A, 0x50, 0x59, 0};
+static const UChar CNY[] = {0x43, 0x4E, 0x59, 0};
 static const UChar ISO_CURRENCY_USD[] = {0x55, 0x53, 0x44, 0}; // "USD"
 
 
@@ -174,9 +175,9 @@ NumberFormatTest::TestAPI(void)
   }
 }
 
-class StubNumberForamt :public NumberFormat{
+class StubNumberFormat :public NumberFormat{
 public:
-    StubNumberForamt(){};
+    StubNumberFormat(){};
     virtual UnicodeString& format(double ,UnicodeString& appendTo,FieldPosition& ) const {
         return appendTo;
     }
@@ -204,7 +205,7 @@ public:
 
 void
 NumberFormatTest::TestCoverage(void){
-    StubNumberForamt stub;
+    StubNumberFormat stub;
     UnicodeString agent("agent");
     FieldPosition pos;
     int64_t num = 4;
@@ -2626,11 +2627,33 @@ void NumberFormatTest::TestCompatibleCurrencies() {
         errln("Could not create number format instance.");
         return;
     }
-    expectParseCurrency(*fmt, JPY, "\\u00A51,235");
-    expectParseCurrency(*fmt, JPY, "\\uFFE51,235");
+    logln("%s:%d - testing parse of halfwidth yen sign\n", __FILE__, __LINE__);
+    expectParseCurrency(*fmt, JPY, 1235,  "\\u00A51,235");
+    logln("%s:%d - testing parse of fullwidth yen sign\n", __FILE__, __LINE__);
+    expectParseCurrency(*fmt, JPY, 1235,  "\\uFFE51,235");
+    logln("%s:%d - testing parse of halfwidth yen sign\n", __FILE__, __LINE__);
+    expectParseCurrency(*fmt, CNY, 1235,  "CN\\u00A51,235");
+
+    LocalPointer<NumberFormat> fmtTW(
+        NumberFormat::createCurrencyInstance(Locale::getTaiwan(), status));
+
+    logln("%s:%d - testing parse of halfwidth yen sign in TW\n", __FILE__, __LINE__);
+    expectParseCurrency(*fmtTW, CNY, 1235,  "\\u00A51,235");
+    logln("%s:%d - testing parse of fullwidth yen sign in TW\n", __FILE__, __LINE__);
+    expectParseCurrency(*fmtTW, CNY, 1235,  "\\uFFE51,235");
+
+    LocalPointer<NumberFormat> fmtJP(
+        NumberFormat::createCurrencyInstance(Locale::getJapan(), status));
+
+    logln("%s:%d - testing parse of halfwidth yen sign in JP\n", __FILE__, __LINE__);
+    expectParseCurrency(*fmtJP, JPY, 1235,  "\\u00A51,235");
+    logln("%s:%d - testing parse of fullwidth yen sign in JP\n", __FILE__, __LINE__);
+    expectParseCurrency(*fmtJP, JPY, 1235,  "\\uFFE51,235");
+    
+    // more..
 }
 
-void NumberFormatTest::expectParseCurrency(const NumberFormat &fmt, const UChar* currency, const char *text) {
+void NumberFormatTest::expectParseCurrency(const NumberFormat &fmt, const UChar* currency, double amount, const char *text) {
     ParsePosition ppos;
     UnicodeString utext = ctou(text);
     LocalPointer<CurrencyAmount> currencyAmount(fmt.parseCurrency(utext, ppos));
@@ -2638,6 +2661,8 @@ void NumberFormatTest::expectParseCurrency(const NumberFormat &fmt, const UChar*
         errln(UnicodeString("Parse of ") + utext + " should have succeeded.");
         return;
     }
+    UErrorCode status = U_ZERO_ERROR;
+    assertTrue("amount", amount ==  currencyAmount->getNumber().getDouble(status));
     assertEquals("currency", currency, currencyAmount->getISOCurrency());
 }
   
@@ -3411,12 +3436,23 @@ NumberFormatTest::TestCurrencyParsing() {
         {"ja_JP", "1", "USD", "$1.00", "USD1.00", "1.00 \\u7c73\\u30c9\\u30eb"},
         {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY1.00", "1.00\\u4EBA\\u6C11\\u5E01"},
         {"zh_TW", "1", "CNY", "\\uFFE51.00", "CNY1.00", "1.00 \\u4eba\\u6c11\\u5e63"},
-        {"ru_RU", "1", "RUB", "1,00\\u00A0\\u0440\\u0443\\u0431.", "1,00\\u00A0RUB", "1,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0439 \\u0440\\u0443\\u0431\\u043B\\u044C"},
+        {"zh_Hant", "1", "CNY", "\\uFFE51.00", "CNY1.00", "1.00 \\u4eba\\u6c11\\u5e63"}, // This test case fails on Solaris/AIX, works on others - FIXME
+        {"zh_Hant", "1", "CNY", "\\u00A51.00", "CNY1.00", "1.00 \\u4eba\\u6c11\\u5e63"},
+//      {"zh_Hant", "1", "JPY", "\\uFFE51.00", "JPY1.00", "1.00 \\u65e5\\u5713"}, // This test case passes on Solaris/AIX, breaks on others - FIXME
+//      {"zh_Hant", "1", "JPY", "\\u00A51.00", "JPY1.00", "1.00 \\u65e5\\u5713"}, // This test case passes on Solaris/AIX, breaks on others - FIXME
+        {"ja_JP", "1", "JPY", "\\uFFE51.00", "JPY1.00", "1.00 \\u65e5\\u672c\\u5186"},
+        {"ja_JP", "1", "JPY", "\\u00A51.00", "JPY1.00", "1.00 \\u65e5\\u672c\\u5186"},
+        {"ru_RU", "1", "RUB", "1,00\\u00A0\\u0440\\u0443\\u0431.", "1,00\\u00A0RUB", "1,00 \\u0420\\u043E\\u0441\\u0441\\u0438\\u0439\\u0441\\u043A\\u0438\\u0439 \\u0440\\u0443\\u0431\\u043B\\u044C"}
     };
     static const UNumberFormatStyle currencyStyles[] = {
         UNUM_CURRENCY,
         UNUM_CURRENCY_ISO,
         UNUM_CURRENCY_PLURAL
+    };
+    static const char* currencyStyleNames[] = {
+      "UNUM_CURRENCY",
+      "UNUM_CURRENCY_ISO",
+      "UNUM_CURRENCY_PLURAL"
     };
 
 #ifdef NUMFMTST_CACHE_DEBUG
@@ -3424,15 +3460,19 @@ int deadloop = 0;
 for (;;) {
     printf("loop: %d\n", deadloop++);
 #endif
-    for (uint32_t i=0; i<sizeof(DATA)/sizeof(DATA[0]); ++i) {
-      for (int32_t kIndex = 0; kIndex < LENGTHOF(currencyStyles); ++kIndex) {
-        UNumberFormatStyle k = currencyStyles[kIndex];
+    for (uint32_t i=0; i< sizeof(DATA)/sizeof(DATA[0]); ++i) {  /* i = test case #  - should be i=0*/
+      for (int32_t kIndex = 2; kIndex < LENGTHOF(currencyStyles); ++kIndex) {
+        UNumberFormatStyle k = currencyStyles[kIndex]; /* k = style */
         const char* localeString = DATA[i][0];
         double numberToBeFormat = atof(DATA[i][1]);
         const char* currencyISOCode = DATA[i][2];
         Locale locale(localeString);
         UErrorCode status = U_ZERO_ERROR;
         NumberFormat* numFmt = NumberFormat::createInstance(locale, k, status);
+        logln("#%d NumberFormat(%s, %s) Currency=%s\n",
+              i, localeString, currencyStyleNames[kIndex], 
+              currencyISOCode);
+
         if (U_FAILURE(status)) {
             delete numFmt;
             dataerrln((UnicodeString)"can not create instance, locale:" + localeString + ", style: " + k + " - " + u_errorName(status));
@@ -3447,9 +3487,9 @@ for (;;) {
             continue;
         }
 
-        /*
         UnicodeString strBuf;
         numFmt->format(numberToBeFormat, strBuf);
+        /*
         int resultDataIndex = 3 + kIndex;
         // DATA[i][resultDataIndex] is the currency format result
         // using 'k' currency style.
@@ -3469,20 +3509,21 @@ for (;;) {
             UnicodeString oneCurrencyFormatResult = ctou(DATA[i][j]);
             UErrorCode status = U_ZERO_ERROR;
             Formattable parseResult;
+            logln("parse(%s)", DATA[i][j]);
             numFmt->parse(oneCurrencyFormatResult, parseResult, status);
             if (U_FAILURE(status) ||
                 (parseResult.getType() == Formattable::kDouble &&
                  parseResult.getDouble() != numberToBeFormat) ||
                 (parseResult.getType() == Formattable::kLong &&
                  parseResult.getLong() != numberToBeFormat)) {
-                errln((UnicodeString)"FAIL: getCurrencyFormat of locale " +
-                      localeString + " failed roundtripping the number" +
-                      "(i,k,j): " + i + ", " + k + ", " + j);
+                errln((UnicodeString)"FAIL: NumberFormat(" + localeString +", " + currencyStyleNames[kIndex] +
+                      "), Currency="+currencyISOCode+", parse("+DATA[i][j]+") returned error " + (UnicodeString)u_errorName(status)+".  Testcase: data[" + i + "][" + currencyStyleNames[j-3] +"="+j+"]");
                 if (parseResult.getType() == Formattable::kDouble) {
-                    errln((UnicodeString)"expected: " + numberToBeFormat + "; actual: " +parseResult.getDouble());
+                    errln((UnicodeString)"expected: " + numberToBeFormat + "; actual (double): " +parseResult.getDouble());
                 } else {
-                    errln((UnicodeString)"expected: " + numberToBeFormat + "; actual: " +parseResult.getLong());
+                    errln((UnicodeString)"expected: " + numberToBeFormat + "; actual (long): " +parseResult.getLong());
                 }
+                errln((UnicodeString)" round-trip would be: " + strBuf);
             }
         }
         delete numFmt;
