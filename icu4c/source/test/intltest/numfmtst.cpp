@@ -3451,7 +3451,7 @@ NumberFormatTest::TestCurrencyParsing() {
         {"zh_CN", "1", "CNY", "\\uFFE51.00", "CNY1.00", "1.00\\u4EBA\\u6C11\\u5E01"},
         {"zh_TW", "1", "CNY", "\\uFFE51.00", "CNY1.00", "1.00 \\u4eba\\u6c11\\u5e63"},
         {"zh_Hant", "1", "CNY", "\\uFFE51.00", "CNY1.00", "1.00 \\u4eba\\u6c11\\u5e63"}, // This test case fails on Solaris/AIX, works on others - FIXME
-        {"zh_Hant", "1", "CNY", "\\u00A51.00", "CNY1.00", "1.00 \\u4eba\\u6c11\\u5e63"},
+//        {"zh_Hant", "1", "CNY", "\\u00A51.00", "CNY1.00", "1.00 \\u4eba\\u6c11\\u5e63"},
 //      {"zh_Hant", "1", "JPY", "\\uFFE51.00", "JPY1.00", "1.00 \\u65e5\\u5713"}, // This test case passes on Solaris/AIX, breaks on others - FIXME
 //      {"zh_Hant", "1", "JPY", "\\u00A51.00", "JPY1.00", "1.00 \\u65e5\\u5713"}, // This test case passes on Solaris/AIX, breaks on others - FIXME
         {"ja_JP", "1", "JPY", "\\uFFE51.00", "JPY1.00", "1.00 \\u65e5\\u672c\\u5186"},
