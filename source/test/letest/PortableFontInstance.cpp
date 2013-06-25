@@ -19,7 +19,7 @@
 
 #include "PortableFontInstance.h"
 
-#include "letest.h"
+//#include "letest.h"
 #include "sfnt.h"
 
 #include <string.h>
@@ -107,7 +107,7 @@ PortableFontInstance::PortableFontInstance(const char *fileName, float pointSize
 //  const NAMETable *nameTable = NULL;
     le_uint16 numTables = 0;
 
-    fDirectory = (const SFNTDirectory *) NEW_ARRAY(char, dirSize);
+    fDirectory = (const SFNTDirectory *) LE_NEW_ARRAY(char, dirSize);
 
     if (fDirectory == NULL) {
         printf("%s:%d: %s: malloc err\n", __FILE__, __LINE__, fileName);
@@ -197,7 +197,7 @@ PortableFontInstance::~PortableFontInstance()
 
         delete fCMAPMapper;
 
-        DELETE_ARRAY(fDirectory);
+        LE_DELETE_ARRAY(fDirectory);
     }
 }
 
@@ -238,7 +238,7 @@ const void *PortableFontInstance::readTable(LETag tag, le_uint32 *length) const
 
     *length = SWAPL(entry->length);
 
-    void *table = NEW_ARRAY(char, *length);
+    void *table = LE_NEW_ARRAY(char, *length);
 
     if (table != NULL) {
         fseek(fFile, SWAPL(entry->offset), SEEK_SET);
@@ -303,9 +303,9 @@ const char *PortableFontInstance::getNameString(le_uint16 nameID, le_uint16 plat
             SWAPW(nameRecord->languageID) == languageID && SWAPW(nameRecord->nameID) == nameID) {
             char *name = ((char *) fNAMETable) + fNameStringOffset + SWAPW(nameRecord->offset);
             le_uint16 length = SWAPW(nameRecord->length);
-            char *result = NEW_ARRAY(char, length + 2);
+            char *result = LE_NEW_ARRAY(char, length + 2);
 
-            ARRAY_COPY(result, name, length);
+            LE_ARRAY_COPY(result, name, length);
             result[length] = result[length + 1] = 0;
 
             return result;
@@ -336,7 +336,7 @@ const LEUnicode16 *PortableFontInstance::getUnicodeNameString(le_uint16 nameID, 
             SWAPW(nameRecord->languageID) == languageID && SWAPW(nameRecord->nameID) == nameID) {
             LEUnicode16 *name = (LEUnicode16 *) (((char *) fNAMETable) + fNameStringOffset + SWAPW(nameRecord->offset));
             le_uint16 length = SWAPW(nameRecord->length) / 2;
-            LEUnicode16 *result = NEW_ARRAY(LEUnicode16, length + 2);
+            LEUnicode16 *result = LE_NEW_ARRAY(LEUnicode16, length + 2);
 
             for (le_int32 c = 0; c < length; c += 1) {
                 result[c] = SWAPW(name[c]);
@@ -353,12 +353,12 @@ const LEUnicode16 *PortableFontInstance::getUnicodeNameString(le_uint16 nameID, 
 
 void PortableFontInstance::deleteNameString(const char *name) const
 {
-    DELETE_ARRAY(name);
+    LE_DELETE_ARRAY(name);
 }
 
 void PortableFontInstance::deleteNameString(const LEUnicode16 *name) const
 {
-    DELETE_ARRAY(name);
+    LE_DELETE_ARRAY(name);
 }
 
 void PortableFontInstance::getGlyphAdvance(LEGlyphID glyph, LEPoint &advance) const
