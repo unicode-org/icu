@@ -17,7 +17,7 @@
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
 
-#include "layout/CanonShaping.h"
+#include "CanonShaping.h"
 #include "SimpleFontInstance.h"
 
 SimpleFontInstance::SimpleFontInstance(float pointSize, LEErrorCode &status)
