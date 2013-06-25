@@ -712,6 +712,7 @@ static void U_CALLCONV DataDrivenTest(void)
 
             delete engine;
 
+            log_verbose("OK - %4d glyphs: %s\n", actual.glyphCount, id);
 free_expected:
             DELETE_ARRAY(expected.positions);
             DELETE_ARRAY(expected.indices);
