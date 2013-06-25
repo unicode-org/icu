@@ -5,8 +5,8 @@
 *
 ************************************************************************/
 
-#include "LETypes.h"
-#include "LESwaps.h"
+#include "layout/LETypes.h"
+#include "layout/LESwaps.h"
 
 #include "sfnt.h"
 #include "cmaps.h"

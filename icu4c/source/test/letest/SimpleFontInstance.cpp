@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
  *
- *   Copyright (C) 1999-2007, International Business Machines
+ *   Copyright (C) 1999-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  *******************************************************************************
@@ -17,7 +17,7 @@
 #include "layout/LETypes.h"
 #include "layout/LEFontInstance.h"
 
-#include "CanonShaping.h"
+#include "layout/CanonShaping.h"
 #include "SimpleFontInstance.h"
 
 SimpleFontInstance::SimpleFontInstance(float pointSize, LEErrorCode &status)
