@@ -237,7 +237,16 @@ enum ScriptCodes {
     khojScriptCode = 157,
     tirhScriptCode = 158,
 
-    scriptCodeCount = 159
+/**
+ * @stable ICU 52
+ */
+    aghbScriptCode = 159,
+    mahjScriptCode = 160,
+
+/**
+ * @stable ICU 2.2
+ */
+    scriptCodeCount
 };
 
 U_NAMESPACE_END
