@@ -51,7 +51,7 @@ U_NAMESPACE_USE
 //string-concatenation operator (moved from findword test by rtg)
 UnicodeString UCharToUnicodeString(UChar c);
 UnicodeString Int64ToUnicodeString(int64_t num);
-UnicodeString operator+(const UnicodeString& left, int64_t num);
+//UnicodeString operator+(const UnicodeString& left, int64_t num);
 UnicodeString operator+(const UnicodeString& left, long num);
 UnicodeString operator+(const UnicodeString& left, unsigned long num);
 UnicodeString operator+(const UnicodeString& left, double num);

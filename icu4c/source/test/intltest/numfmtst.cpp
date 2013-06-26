@@ -6901,7 +6901,10 @@ UBool NumberFormatTest::testFormattableAsUFormattable(const char *file, int line
   if( assertEquals(fileLine + " isNumeric()", f.isNumeric(), ufmt_isNumeric(u))
       && f.isNumeric()) {
     UErrorCode convStatus = U_ZERO_ERROR;
-    assertTrue(fileLine + " as doubles ==", f.getDouble(convStatus)==ufmt_getDouble(u, &convStatus));
+
+    if(uType != UFMT_INT64) { // may fail to compare
+      assertTrue(fileLine + " as doubles ==", f.getDouble(convStatus)==ufmt_getDouble(u, &convStatus));
+    }
 
     if( assertSuccess(fileLine + " (numeric conversion status)", convStatus) ) {
       StringPiece fDecNum = f.getDecimalNumber(convStatus);
