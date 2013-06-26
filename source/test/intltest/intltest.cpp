@@ -120,11 +120,13 @@ operator+(const UnicodeString& left,
     return left + buffer;
 }
 
+#if 0
 UnicodeString
 operator+(const UnicodeString& left,
           int64_t num) {
   return left + Int64ToUnicodeString(num);
 }
+#endif
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -1784,14 +1786,14 @@ UBool IntlTest::assertEquals(const char* message,
                              int64_t expected,
                              int64_t actual) {
     if (expected != actual) {
-        errln((UnicodeString)"FAIL: " + message + "; got " +
-              actual + 
-              "; expected " + expected );
+        errln((UnicodeString)"FAIL: " + message + "; got int64 " +
+              Int64ToUnicodeString(actual) + 
+              "; expected " + Int64ToUnicodeString(expected) );
         return FALSE;
     }
 #ifdef VERBOSE_ASSERTIONS
     else {
-        logln((UnicodeString)"Ok: " + message + "; got " + actual);
+      logln((UnicodeString)"Ok: " + message + "; got int64 " + Int64ToUnicodeString(actual));
     }
 #endif
     return TRUE;
