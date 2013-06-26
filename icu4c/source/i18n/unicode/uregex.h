@@ -1431,8 +1431,8 @@ uregex_getTimeLimit(const URegularExpression      *regexp,
  * <p>
  * @param   regexp      The compiled regular expression.
  * @param   limit       The maximum size, in bytes, of the matching backtrack stack.
- *                      A value of -1 means no limit.
- *                      The limit must be greater than zero, or -1.
+ *                      A value of zero means no limit.
+ *                      The limit must be greater than or equal to zero.
  * @param   status      A reference to a UErrorCode to receive any errors.
  *
  * @stable ICU 4.0
