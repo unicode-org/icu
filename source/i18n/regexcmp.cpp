@@ -2254,6 +2254,8 @@ void        RegexCompile::compileSet(UnicodeSet *theSet)
 //                      Except for the specific opcodes used, the code is the same
 //                      for all three types (greedy, non-greedy, possessive) of
 //                      intervals.  The opcodes are supplied as parameters.
+//                      (There are two sets of opcodes - greedy & possessive use the
+//                      same ones, while non-greedy has it's own.)
 //
 //                      The code for interval loops has this form:
 //                         0  CTR_INIT   counter loc (in stack frame)
@@ -2275,9 +2277,15 @@ void        RegexCompile::compileInterval(int32_t InitOp,  int32_t LoopOp)
     insertOp(topOfBlock);
 
     // The operands for the CTR_INIT opcode include the index in the matcher data
-    //   of the counter.  Allocate it now.
+    //   of the counter.  Allocate it now. There are two data items
+    //        counterLoc   -->  Loop counter
+    //               +1    -->  Input index (for breaking non-progressing loops)
+    //                          (Only present if unbounded upper limit on loop)
     int32_t   counterLoc = fRXPat->fFrameSize;
     fRXPat->fFrameSize++;
+    if (fIntervalUpper < 0) {
+        fRXPat->fFrameSize++;
+    }
 
     int32_t   op = URX_BUILD(InitOp, counterLoc);
     fRXPat->fCompiledPat->setElementAt(op, topOfBlock);
