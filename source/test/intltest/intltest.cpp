@@ -120,6 +120,12 @@ operator+(const UnicodeString& left,
     return left + buffer;
 }
 
+UnicodeString
+operator+(const UnicodeString& left,
+          int64_t num) {
+  return left + Int64ToUnicodeString(num);
+}
+
 #if !UCONFIG_NO_FORMATTING
 
 /**
@@ -202,6 +208,12 @@ UnicodeString toString(const Formattable& f) {
 // useful when operator+ won't cooperate
 UnicodeString toString(int32_t n) {
     return UnicodeString() + (long)n;
+}
+
+
+
+UnicodeString toString(UBool b) {
+  return b ? UnicodeString("TRUE"):UnicodeString("false");
 }
 
 // stephen - cleaned up 05/05/99
@@ -1768,6 +1780,40 @@ UBool IntlTest::assertEquals(const char* message,
     return TRUE;
 }
 
+UBool IntlTest::assertEquals(const char* message,
+                             int64_t expected,
+                             int64_t actual) {
+    if (expected != actual) {
+        errln((UnicodeString)"FAIL: " + message + "; got " +
+              actual + 
+              "; expected " + expected );
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+        logln((UnicodeString)"Ok: " + message + "; got " + actual);
+    }
+#endif
+    return TRUE;
+}
+
+UBool IntlTest::assertEquals(const char* message,
+                             UBool expected,
+                             UBool actual) {
+    if (expected != actual) {
+        errln((UnicodeString)"FAIL: " + message + "; got " +
+              toString(actual) +
+              "; expected " + toString(expected));
+        return FALSE;
+    }
+#ifdef VERBOSE_ASSERTIONS
+    else {
+      logln((UnicodeString)"Ok: " + message + "; got " + toString(actual));
+    }
+#endif
+    return TRUE;
+}
+
 #if !UCONFIG_NO_FORMATTING
 UBool IntlTest::assertEquals(const char* message,
                              const Formattable& expected,
@@ -1818,6 +1864,21 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
 UBool IntlTest::assertEquals(const UnicodeString& message,
                              const char* expected,
                              const char* actual) {
+    return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertEquals(const UnicodeString& message,
+                             UBool expected,
+                             UBool actual) {
+    return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertEquals(const UnicodeString& message,
+                             int32_t expected,
+                             int32_t actual) {
+    return assertEquals(extractToAssertBuf(message), expected, actual);
+}
+UBool IntlTest::assertEquals(const UnicodeString& message,
+                             int64_t expected,
+                             int64_t actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
 }
 //--------------------------------------------------------------------

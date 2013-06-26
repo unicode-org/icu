@@ -51,21 +51,23 @@ U_NAMESPACE_USE
 //string-concatenation operator (moved from findword test by rtg)
 UnicodeString UCharToUnicodeString(UChar c);
 UnicodeString Int64ToUnicodeString(int64_t num);
-//UnicodeString operator+(const UnicodeString& left, int64_t num); // Some compilers don't allow this because of the long type.
+UnicodeString operator+(const UnicodeString& left, int64_t num);
 UnicodeString operator+(const UnicodeString& left, long num);
 UnicodeString operator+(const UnicodeString& left, unsigned long num);
 UnicodeString operator+(const UnicodeString& left, double num);
-UnicodeString operator+(const UnicodeString& left, char num); 
-UnicodeString operator+(const UnicodeString& left, short num);  
-UnicodeString operator+(const UnicodeString& left, int num);      
-UnicodeString operator+(const UnicodeString& left, unsigned char num);  
-UnicodeString operator+(const UnicodeString& left, unsigned short num);  
-UnicodeString operator+(const UnicodeString& left, unsigned int num);      
+UnicodeString operator+(const UnicodeString& left, char num);
+UnicodeString operator+(const UnicodeString& left, short num);
+UnicodeString operator+(const UnicodeString& left, int num);
+UnicodeString operator+(const UnicodeString& left, unsigned char num);
+UnicodeString operator+(const UnicodeString& left, unsigned short num);
+UnicodeString operator+(const UnicodeString& left, unsigned int num);
 UnicodeString operator+(const UnicodeString& left, float num);
 #if !UCONFIG_NO_FORMATTING
 UnicodeString toString(const Formattable& f); // liu
 UnicodeString toString(int32_t n);
 #endif
+UnicodeString toString(UBool b);
+
 //-----------------------------------------------------------------------------
 
 // Use the TESTCASE macro in subclasses of IntlTest.  Define the
@@ -178,6 +180,13 @@ public:
     void errln(const char *fmt, ...);
     void dataerr(const char *fmt, ...);
     void dataerrln(const char *fmt, ...);
+
+    /**
+     * logs an error (even if status==U_ZERO_ERROR), but
+     * calls dataerrln() or errln() depending on the type of error.
+     * Does not report the status code.
+     * @param status parameter for selecting whether errln or dataerrln is called.
+     */
     void errcheckln(UErrorCode status, const char *fmt, ...);
 
     // Print ALL named errors encountered so far
@@ -236,12 +245,19 @@ protected:
     /* JUnit-like assertions. Each returns TRUE if it succeeds. */
     UBool assertTrue(const char* message, UBool condition, UBool quiet=FALSE, UBool possibleDataError=FALSE, const char *file=NULL, int line=0);
     UBool assertFalse(const char* message, UBool condition, UBool quiet=FALSE);
+    /**
+     * @param possibleDataError - if TRUE, use dataerrln instead of errcheckln on failure
+     * @return TRUE on success, FALSE on failure.
+     */
     UBool assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError=FALSE);
     UBool assertEquals(const char* message, const UnicodeString& expected,
                        const UnicodeString& actual, UBool possibleDataError=FALSE);
     UBool assertEquals(const char* message, const char* expected,
                        const char* actual);
+    UBool assertEquals(const char* message, UBool expected,
+                       UBool actual);
     UBool assertEquals(const char* message, int32_t expected, int32_t actual);
+    UBool assertEquals(const char* message, int64_t expected, int64_t actual);
 #if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,
                        const Formattable& actual);
@@ -255,6 +271,9 @@ protected:
                        const UnicodeString& actual);
     UBool assertEquals(const UnicodeString& message, const char* expected,
                        const char* actual);
+    UBool assertEquals(const UnicodeString& message, UBool expected, UBool actual);
+    UBool assertEquals(const UnicodeString& message, int32_t expected, int32_t actual);
+    UBool assertEquals(const UnicodeString& message, int64_t expected, int64_t actual);
 
     virtual void runIndexedTest( int32_t index, UBool exec, const char* &name, char* par = NULL ); // overide !
 
