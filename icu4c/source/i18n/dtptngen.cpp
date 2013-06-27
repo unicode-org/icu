@@ -205,7 +205,7 @@ static const char* const CLDR_FIELD_APPEND[] = {
 };
 
 static const char* const CLDR_FIELD_NAME[] = {
-    "era", "year", "quarter", "month", "week", "*", "weekday", "day", "*", "*", "dayperiod",
+    "era", "year", "quarter", "month", "week", "*", "weekday", "*", "*", "day", "dayperiod",
     "hour", "minute", "second", "*", "zone"
 };
 
