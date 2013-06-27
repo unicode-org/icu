@@ -4360,9 +4360,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
 
     /**
      * {@icu} Returns whether the given day of the week is a weekday, a
-     * weekend day, or a day that transitions from one to the other,
-     * in this calendar system.  If a transition occurs at midnight,
-     * then the days before and after the transition will have the
+     * weekend day, or a day that transitions from one to the other, for the
+     * locale and calendar system associated with this Calendar (the locale's
+     * region is often the most determinant factor). If a transition occurs at
+     * midnight, then the days before and after the transition will have the
      * type WEEKDAY or WEEKEND.  If a transition occurs at a time
      * other than midnight, then the day of the transition will have
      * the type WEEKEND_ONSET or WEEKEND_CEASE.  In this case, the
@@ -4387,6 +4388,11 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         if (dayOfWeek < SUNDAY || dayOfWeek > SATURDAY) {
             throw new IllegalArgumentException("Invalid day of week");
         }
+        if (weekendOnset == weekendCease) {
+            if (dayOfWeek != weekendOnset)
+                return WEEKDAY;
+            return (weekendOnsetMillis == 0) ? WEEKEND : WEEKEND_ONSET;
+        }
         if (weekendOnset < weekendCease) {
             if (dayOfWeek < weekendOnset || dayOfWeek > weekendCease) {
                 return WEEKDAY;
@@ -4400,7 +4406,7 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             return (weekendOnsetMillis == 0) ? WEEKEND : WEEKEND_ONSET;
         }
         if (dayOfWeek == weekendCease) {
-            return (weekendCeaseMillis == 0) ? WEEKDAY : WEEKEND_CEASE;
+            return (weekendCeaseMillis >= 86400000) ? WEEKEND : WEEKEND_CEASE;
         }
         return WEEKEND;
     }
