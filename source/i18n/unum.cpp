@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2012, International Business Machines
+*   Copyright (C) 1996-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 * Modification History:
@@ -781,6 +781,56 @@ unum_getLocaleByType(const UNumberFormat *fmt,
         return NULL;
     }
     return ((const Format*)fmt)->getLocaleID(type, *status);
+}
+
+U_INTERNAL UFormattable * U_EXPORT2
+unum_parseToUFormattable(const UNumberFormat* fmt,
+                         UFormattable *result,
+                         const UChar* text,
+                         int32_t textLength,
+                         int32_t* parsePos, /* 0 = start */
+                         UErrorCode* status) {
+  if(result == NULL) { // allocate if not allocated.
+    result = ufmt_open(status); // does an error check
+  }
+  if(U_FAILURE(*status)) return result;
+
+  parseRes(*(Formattable::fromUFormattable(result)), fmt, text, textLength, parsePos, status);
+
+  return result;
+}
+
+U_INTERNAL int32_t U_EXPORT2
+unum_formatUFormattable(const UNumberFormat* fmt,
+                        UFormattable *number,
+                        UChar *result,
+                        int32_t resultLength,
+                        UFieldPosition *pos, /* ignored if 0 */
+                        UErrorCode *status) {
+  // cribbed from unum_formatInt64
+    if(U_FAILURE(*status))
+        return -1;
+
+    UnicodeString res;
+    if(!(result==NULL && resultLength==0)) {
+        // NULL destination for pure preflighting: empty dummy string
+        // otherwise, alias the destination buffer
+        res.setTo(result, 0, resultLength);
+    }
+
+    FieldPosition fp;
+
+    if(pos != 0)
+        fp.setField(pos->field);
+
+    ((const NumberFormat*)fmt)->format(*(Formattable::fromUFormattable(number)), res, fp, *status);
+
+    if(pos != 0) {
+        pos->beginIndex = fp.getBeginIndex();
+        pos->endIndex = fp.getEndIndex();
+    }
+
+    return res.extract(result, resultLength, *status);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
