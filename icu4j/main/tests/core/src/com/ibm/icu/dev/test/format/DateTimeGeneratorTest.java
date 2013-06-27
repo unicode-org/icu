@@ -1167,6 +1167,16 @@ public class DateTimeGeneratorTest extends TestFmwk {
               new TestOptionsItem( "be", "Hmm",  "H.mm",    DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
               new TestOptionsItem( "be", "HHmm", "HH.mm",   DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
               new TestOptionsItem( "be", "hhmm", "hh.mm a", DateTimePatternGenerator.MATCH_HOUR_FIELD_LENGTH ),
+              //
+              new TestOptionsItem( "en",                   "yyyy", "yyyy", DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+              new TestOptionsItem( "en",                   "YYYY", "YYYY", DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+              new TestOptionsItem( "en",                   "U",    "y",    DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+              new TestOptionsItem( "en@calendar=japanese", "yyyy", "y G",  DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+              new TestOptionsItem( "en@calendar=japanese", "YYYY", "Y G",  DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+              new TestOptionsItem( "en@calendar=japanese", "U",    "y G",  DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+              new TestOptionsItem( "en@calendar=chinese",  "yyyy", "U",    DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+              new TestOptionsItem( "en@calendar=chinese",  "YYYY", "Y",    DateTimePatternGenerator.MATCH_NO_OPTIONS ),
+              new TestOptionsItem( "en@calendar=chinese",  "U",    "U",    DateTimePatternGenerator.MATCH_NO_OPTIONS ),
           };
 
           for (int i = 0; i < testOptionsData.length; ++i) {
