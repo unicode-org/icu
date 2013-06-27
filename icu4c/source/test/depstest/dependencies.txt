@@ -58,6 +58,7 @@ group: stdlib_qsort
 
 group: pthread
     pthread_mutex_init pthread_mutex_destroy pthread_mutex_lock pthread_mutex_unlock
+    pthread_cond_wait pthread_cond_broadcast
 
 group: system_locale
     getenv
@@ -755,7 +756,7 @@ library: i18n
     uclean_i18n
 
 group: region
-    region.o
+    region.o uregion.o
   deps
     formatting  # Temporary, TODO: Ticket #9982 class Region should use low-level ASCII-integer functions, and probably be moved to the common library.
     resourcebundle
