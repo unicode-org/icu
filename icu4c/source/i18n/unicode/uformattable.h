@@ -101,6 +101,7 @@ U_NAMESPACE_END
 
 #endif
 
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Return the type of this object
  * @param fmt the UFormattable object
@@ -120,7 +121,7 @@ ufmt_getType(UFormattable* fmt, UErrorCode *status);
  */
 U_INTERNAL UBool U_EXPORT2
 ufmt_isNumeric(UFormattable* fmt);
-
+#endif
 
 /**
  * Get the value as a date, converting if need be.
