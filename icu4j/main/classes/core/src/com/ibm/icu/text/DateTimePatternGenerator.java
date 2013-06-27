@@ -1747,7 +1747,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                             adjFieldLen = fieldBuilder.length();
                         }
                     }
-                    char c = (type != HOUR && type != MONTH && type != WEEKDAY && type != YEAR)? reqField.charAt(0): fieldBuilder.charAt(0);
+                    char c = (type != HOUR && type != MONTH && type != WEEKDAY && (type != YEAR || reqField.charAt(0)=='Y'))?
+                                reqField.charAt(0): fieldBuilder.charAt(0);
                     fieldBuilder = new StringBuilder();
                     for (int i = adjFieldLen; i > 0; --i) fieldBuilder.append(c);
                 }
