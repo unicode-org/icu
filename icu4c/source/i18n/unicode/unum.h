@@ -20,6 +20,8 @@
 #include "unicode/uloc.h"
 #include "unicode/umisc.h"
 #include "unicode/parseerr.h"
+#include "unicode/uformattable.h"
+
 /**
  * \file
  * \brief C API: NumberFormat
@@ -559,6 +561,20 @@ unum_formatDoubleCurrency(const UNumberFormat* fmt,
                           UFieldPosition* pos, /* ignored if 0 */
                           UErrorCode* status);
 
+#ifndef U_HIDE_INTERNAL_API
+/**
+ * Format a UFormattable into a string
+ * @internal
+ */
+U_INTERNAL int32_t U_EXPORT2
+unum_formatUFormattable(const UNumberFormat* fmt,
+                        UFormattable *number,
+                        UChar *result,
+                        int32_t resultLength,
+                        UFieldPosition *pos, /* ignored if 0 */
+                        UErrorCode *status);
+#endif
+
 /**
 * Parse a string into an integer using a UNumberFormat.
 * The string will be parsed according to the UNumberFormat's locale.
@@ -692,6 +708,21 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
                          int32_t* parsePos, /* 0 = start */
                          UChar* currency,
                          UErrorCode* status);
+
+#ifndef U_HIDE_INTERNAL_API
+/**
+ * Parse into a UFormattable.
+ * @param result - result formattable.  Will be allocated with ufmt_open() first if NULL is passed in.
+ * @internal
+ */
+U_INTERNAL UFormattable* U_EXPORT2
+unum_parseToUFormattable(const UNumberFormat* fmt,
+                         UFormattable *result,
+                         const UChar* text,
+                         int32_t textLength,
+                         int32_t* parsePos, /* 0 = start */
+                         UErrorCode* status);
+#endif
 
 /**
  * Set the pattern used by a UNumberFormat.  This can only be used
