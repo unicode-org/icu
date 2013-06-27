@@ -1265,6 +1265,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		test/perf/ustrperf/Makefile \
 		test/perf/utfperf/Makefile \
 		test/perf/utrie2perf/Makefile \
+                test/perf/leperf/Makefile \
 		samples/Makefile samples/date/Makefile \
 		samples/cal/Makefile samples/layout/Makefile])
 AC_OUTPUT
