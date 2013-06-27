@@ -18,12 +18,15 @@
 #include "unicode/uenum.h"
 #include "cintltst.h"
 #include "cmemory.h"
+#include "cstring.h"
 
 static void TestKnownRegions(void);
 static void TestGetContainedRegions(void);
 static void TestGetContainedRegionsWithType(void);
 static void TestGetContainingRegion(void);
 static void TestGetContainingRegionWithType(void);
+static void TestGetPreferredValues(void);
+static void TestContains(void);
 
 void addURegionTest(TestNode** root);
 
@@ -36,6 +39,8 @@ void addURegionTest(TestNode** root)
     TESTCASE(TestGetContainedRegionsWithType);
     TESTCASE(TestGetContainingRegion);
     TESTCASE(TestGetContainingRegionWithType);
+    TESTCASE(TestGetPreferredValues);
+    TESTCASE(TestContains);
 }
 
 typedef struct KnownRegion {
@@ -392,7 +397,7 @@ static void TestGetContainedRegions() {
                 continue;
             }
             containedRegions = uregion_getContainedRegions(r, &status);
-            if (containedRegions) {
+            if (containedRegions != NULL) {
                 while ((crID = uenum_next(containedRegions, NULL, &status)) != NULL && U_SUCCESS(status) ) {
                     const URegion *cr = uregion_getRegionFromCode(crID, &status);
                     const URegion *containingRegion = (cr)? uregion_getContainingRegion(cr) : NULL;
@@ -421,7 +426,7 @@ static void TestGetContainedRegionsWithType() {
                 continue;
             }
             containedRegions = uregion_getContainedRegionsOfType(r, URGN_TERRITORY, &status);
-            if (containedRegions) {
+            if (containedRegions != NULL) {
                 while ((crID = uenum_next(containedRegions, NULL, &status)) != NULL && U_SUCCESS(status) ) {
                     const URegion *cr = uregion_getRegionFromCode(crID, &status);
                     const URegion *containingRegion = (cr)? uregion_getContainingRegionOfType(cr, URGN_CONTINENT) : NULL;
@@ -486,5 +491,76 @@ static void TestGetContainingRegionWithType() {
     }
 }
 
+static const char * expectPrefRegions0[] = { "AN","CW","SX","BQ",NULL };        /* Netherlands Antilles */
+static const char * expectPrefRegions1[] = { "CS","RS","ME",NULL };             /* Serbia & Montenegro */
+static const char * expectPrefRegions2[] = { "FQ","AQ","TF",NULL };             /* French Southern and Antarctic Territories */
+static const char * expectPrefRegions3[] = { "NT","IQ","SA",NULL };             /* Neutral Zone */
+static const char * expectPrefRegions4[] = { "PC","FM","MH","MP","PW",NULL };   /* Pacific Islands Trust Territory */
+static const char * expectPrefRegions5[] = { "SU","RU","AM","AZ","BY","EE","GE","KZ","KG","LV","LT","MD","TJ","TM","UA","UZ",NULL }; /* Soviet Union */
+static const char ** expectPrefRegionsTestData[] = {
+    expectPrefRegions0,
+    expectPrefRegions1,
+    expectPrefRegions2,
+    expectPrefRegions3,
+    expectPrefRegions4,
+    expectPrefRegions5,
+    NULL
+};
+
+static void TestGetPreferredValues() {
+    const char *** testDataPtr = expectPrefRegionsTestData;
+    const char ** regionListPtr;
+    while ( (regionListPtr = *testDataPtr++) != NULL ) {
+        UErrorCode status = U_ZERO_ERROR;
+        const char * deprecatedCode = *regionListPtr++;
+        const URegion *r = uregion_getRegionFromCode(deprecatedCode, &status);
+        if ( U_SUCCESS(status) ) {
+            UEnumeration *preferredRegions = uregion_getPreferredValues(r, &status);
+            if ( U_SUCCESS(status) ) {
+                if (preferredRegions != NULL) {
+                    const char * preferredCode;
+                    while ( (preferredCode = *regionListPtr++) != NULL ) {
+                        const char *check;
+                        UBool found = FALSE;
+                        uenum_reset(preferredRegions, &status);
+                        while ((check = uenum_next(preferredRegions, NULL, &status)) != NULL && U_SUCCESS(status) ) {
+                            if ( !uprv_strcmp(check,preferredCode) ) {
+                                found = TRUE;
+                                break;
+                            }
+                        }
+                        if ( !found ) {
+                            log_err("ERROR: uregion_getPreferredValues for region \"%s\" should have contained \"%s\" but it didn't.\n", uregion_getRegionCode(r), preferredCode);
+                        }
+                    }
+                    uenum_close(preferredRegions);
+                }
+            } else {
+                log_err("ERROR: uregion_getPreferredValues failed for region %s.\n", uregion_getRegionCode(r));
+            }
+        } else {
+            log_data_err("ERROR: Known region %s was not recognized.\n", deprecatedCode);
+        }
+    }
+}
+
+static void TestContains() {
+    const KnownRegion * rd;
+    for (rd = knownRegions; rd->code != NULL ; rd++ ) {
+        UErrorCode status = U_ZERO_ERROR;
+        const URegion *r = uregion_getRegionFromCode(rd->code, &status);
+        if ( U_SUCCESS(status) ) {
+            const URegion *c = uregion_getContainingRegion(r);
+            while (c != NULL) {
+                if ( !uregion_contains(c, r) ) {
+                    log_err("ERROR: Region \"%s\" should have contained \"%s\" but it didn't.\n", uregion_getRegionCode(c), uregion_getRegionCode(r) );
+                }
+                c = uregion_getContainingRegion(c);
+            }
+        } else {
+            log_data_err("ERROR: Known region %s was not recognized.\n", rd->code);
+        }
+    }
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
