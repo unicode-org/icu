@@ -883,7 +883,24 @@ public class DateTimeGeneratorTest extends TestFmwk {
       /* Tests the method
        *    public String getAppendItemName(int field)
        */
+      private final class AppendItemName {
+          public int field;
+          public String name;
+          public AppendItemName(int f, String n) {
+              field = f;
+              name = n;
+          }
+      }
+
       public void TestGetAppendItemName(){
+          final AppendItemName[] appendItemNames = {
+              new AppendItemName( DateTimePatternGenerator.YEAR,    "vuosi" ),
+              new AppendItemName( DateTimePatternGenerator.MONTH,   "kuukausi" ),
+              new AppendItemName( DateTimePatternGenerator.WEEKDAY, "viikonp\u00E4iv\u00E4" ),
+              new AppendItemName( DateTimePatternGenerator.DAY,     "p\u00E4iv\u00E4" ),
+              new AppendItemName( DateTimePatternGenerator.HOUR,    "tunti" ),
+          };
+
           DateTimePatternGenerator dtpg = DateTimePatternGenerator.getInstance();
           String[] cases = {"d","u","m","m","y"};
           for(int i=0; i<cases.length; i++){
@@ -892,6 +909,14 @@ public class DateTimeGeneratorTest extends TestFmwk {
                   errln("DateTimePatternGenerator.getAppendItemFormat(int field) " +
                           "did not return as expected. Value set at " + i + " was " +
                           cases[i] + " but got back " + dtpg.getAppendItemName(i));
+              }
+          }
+          
+          DateTimePatternGenerator dtpgfi = DateTimePatternGenerator.getInstance(ULocale.forLanguageTag("fi"));
+          for (AppendItemName appendItemName: appendItemNames) {
+              String name = dtpgfi.getAppendItemName(appendItemName.field);
+              if (!name.equals(appendItemName.name)) {
+                  errln("DateTimePatternGenerator.getAppendItemName returns invalid name for field " + appendItemName.field);
               }
           }
       }
