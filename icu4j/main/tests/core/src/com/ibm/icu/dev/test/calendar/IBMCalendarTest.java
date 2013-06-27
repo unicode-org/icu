@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2000-2012, International Business Machines Corporation and
+ * Copyright (C) 2000-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -83,13 +83,19 @@ public class IBMCalendarTest extends CalendarTest {
                 Calendar.MONDAY,   Calendar.WEEKDAY,
                 Calendar.FRIDAY,   Calendar.WEEKDAY,
                 Calendar.SATURDAY, Calendar.WEEKEND,
-                Calendar.SUNDAY,   Calendar.WEEKEND_CEASE,
+                Calendar.SUNDAY,   Calendar.WEEKEND,
             },
             new Locale("ar", "YE"), new int[] { // Thursday:Friday
                 Calendar.WEDNESDAY,Calendar.WEEKDAY,
                 Calendar.SATURDAY, Calendar.WEEKDAY,
                 Calendar.THURSDAY, Calendar.WEEKEND,
-                Calendar.FRIDAY,   Calendar.WEEKEND_CEASE,
+                Calendar.FRIDAY,   Calendar.WEEKEND,
+            },
+            new Locale("hi", "IN"), new int[] { // Sunday only
+                Calendar.MONDAY,   Calendar.WEEKDAY,
+                Calendar.FRIDAY,   Calendar.WEEKDAY,
+                Calendar.SATURDAY, Calendar.WEEKDAY,
+                Calendar.SUNDAY,   Calendar.WEEKEND,
             },
         };
 
