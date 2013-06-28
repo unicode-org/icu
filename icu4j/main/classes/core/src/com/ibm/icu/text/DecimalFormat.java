@@ -4936,9 +4936,9 @@ public class DecimalFormat extends NumberFormat {
     /**
      * {@icu} Sets the minimum number of significant digits that will be displayed. If
      * <code>min</code> is less than one then it is set to one. If the maximum significant
-     * digits count is less than <code>min</code>, then it is set to
-     * <code>min</code>. This value has no effect unless {@link #areSignificantDigitsUsed()}
-     * returns true.
+     * digits count is less than <code>min</code>, then it is set to <code>min</code>. 
+     * This function also enables the use of significant digits by this formatter - 
+     * {@link #areSignificantDigitsUsed()} will return true.
      *
      * @param min the fewest significant digits to be shown
      * @stable ICU 3.0
@@ -4957,9 +4957,9 @@ public class DecimalFormat extends NumberFormat {
     /**
      * {@icu} Sets the maximum number of significant digits that will be displayed. If
      * <code>max</code> is less than one then it is set to one. If the minimum significant
-     * digits count is greater than <code>max</code>, then it is set to
-     * <code>max</code>. This value has no effect unless {@link #areSignificantDigitsUsed()}
-     * returns true.
+     * digits count is greater than <code>max</code>, then it is set to <code>max</code>.
+     * This function also enables the use of significant digits by this formatter - 
+     * {@link #areSignificantDigitsUsed()} will return true.
      *
      * @param max the most significant digits to be shown
      * @stable ICU 3.0
