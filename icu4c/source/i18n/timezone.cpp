@@ -1592,6 +1592,7 @@ TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode
         ures_close(regionalData);
     }
     ures_close(winzone);
+    ures_close(mapTimezones);
 
     return winid;
 }
