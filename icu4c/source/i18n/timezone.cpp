@@ -1582,7 +1582,7 @@ TimeZone::getWindowsID(const UnicodeString& id, UnicodeString& winid, UErrorCode
                     hasNext = FALSE;
                 }
                 if (canonicalID.compare(start, end - start) == 0) {
-                    winid = UnicodeString(ures_getKey(winzone));
+                    winid = UnicodeString(ures_getKey(winzone), -1 , US_INV);
                     found = TRUE;
                     break;
                 }
@@ -1615,7 +1615,7 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
 
     UErrorCode tmperr = U_ZERO_ERROR;
     char winidKey[MAX_WINDOWS_ID_SIZE];
-    int32_t winKeyLen = winid.extract(0, winid.length(), winidKey, sizeof(winidKey) - 1);
+    int32_t winKeyLen = winid.extract(0, winid.length(), winidKey, sizeof(winidKey) - 1, US_INV);
 
     if (winKeyLen == 0 || winKeyLen >= sizeof(winidKey)) {
         ures_close(zones);
