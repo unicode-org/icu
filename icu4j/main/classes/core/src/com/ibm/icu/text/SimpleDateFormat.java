@@ -2565,7 +2565,7 @@ public class SimpleDateFormat extends DateFormat {
                 }
                 return start + bestMatchLength;
             }
-        return -start;
+        return ~start;
     }
 
     private int regionMatchesWithOptionalDot(String text, int start, String data, int length) {
@@ -2696,7 +2696,7 @@ public class SimpleDateFormat extends DateFormat {
         }
 
         if (patternCharIndex == -1) {
-            return -start;
+            return ~start;
         }
 
         currentNumberFormat = getNumberFormat(ch);
@@ -2712,7 +2712,7 @@ public class SimpleDateFormat extends DateFormat {
         // of the string, then fail.
         for (;;) {
             if (start >= text.length()) {
-                return -start;
+                return ~start;
             }
             int c = UTF16.charAt(text, start);
             if (!UCharacter.isUWhiteSpace(c) || !PatternProps.isWhiteSpace(c)) {
@@ -2755,14 +2755,14 @@ public class SimpleDateFormat extends DateFormat {
                 if (!parsedNumericLeapMonth) {
                     if (obeyCount) {
                         if ((start+count) > text.length()) {
-                            return -start;
+                            return ~start;
                         }
                         number = parseInt(text, count, pos, allowNegative,currentNumberFormat);
                     } else {
                         number = parseInt(text, pos, allowNegative,currentNumberFormat);
                     }
                     if (number == null && patternCharIndex != 30) {
-                        return -start;
+                        return ~start;
                     }
                 }
 
@@ -2847,7 +2847,7 @@ public class SimpleDateFormat extends DateFormat {
                     cal.set(Calendar.YEAR, value);
                     return pos.getIndex();
                 }
-                return -start;
+                return ~start;
             case 2: // 'M' - MONTH
             case 26: // 'L' - STAND_ALONE_MONTH
                 if (count <= 2) { // i.e., M/MM, L/LL
@@ -2957,7 +2957,7 @@ public class SimpleDateFormat extends DateFormat {
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
-                return -start;
+                return ~start;
             }
             case 23: // 'Z' - TIMEZONE_RFC
             {
@@ -2969,7 +2969,7 @@ public class SimpleDateFormat extends DateFormat {
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                     }
-                return -start;
+                return ~start;
                 }
             case 24: // 'v' - TIMEZONE_GENERIC
             {
@@ -2982,7 +2982,7 @@ public class SimpleDateFormat extends DateFormat {
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
-                return -start;
+                return ~start;
             }
             case 29: // 'V' - TIMEZONE_SPECIAL
             {
@@ -3008,7 +3008,7 @@ public class SimpleDateFormat extends DateFormat {
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
-                return -start;
+                return ~start;
             }
             case 31: // 'O' - TIMEZONE_LOCALIZED_GMT_OFFSET
             {
@@ -3020,7 +3020,7 @@ public class SimpleDateFormat extends DateFormat {
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
-                return -start;
+                return ~start;
             }
             case 32: // 'X' - TIMEZONE_ISO
             {
@@ -3049,7 +3049,7 @@ public class SimpleDateFormat extends DateFormat {
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
-                return -start;
+                return ~start;
             }
             case 33: // 'x' - TIMEZONE_ISO_LOCAL
             {
@@ -3078,7 +3078,7 @@ public class SimpleDateFormat extends DateFormat {
                     cal.setTimeZone(tz);
                     return pos.getIndex();
                 }
-                return -start;
+                return ~start;
             }
             case 27: // 'Q' - QUARTER
                 if (count <= 2) { // i.e., Q or QQ.
@@ -3148,7 +3148,7 @@ public class SimpleDateFormat extends DateFormat {
                     cal.set(field, number.intValue());
                     return pos.getIndex();
                 }
-                return -start;
+                return ~start;
             }
     }
 
