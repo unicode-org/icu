@@ -2792,7 +2792,7 @@ public class SimpleDateFormat extends DateFormat {
                 // check return position, if it equals -start, then matchString error
                 // special case the return code so we don't necessarily fail out until we 
                 // verify no year information also
-                if (ps == -start)
+                if (ps == ~start)
                     ps = ISOSpecialEra;
 
                 return ps;  
