@@ -45,7 +45,7 @@ public class PluralRulesTest extends TestFmwk {
 
     static boolean USE_ALT = System.getProperty("alt_plurals") != null;
 
-    PluralRulesFactory factory = USE_ALT ? PluralRulesFactory.ALTERNATE : PluralRulesFactory.NORMAL;
+    PluralRulesFactory factory = PluralRulesFactory.NORMAL;
 
     public static void main(String[] args) throws Exception {
         new PluralRulesTest().run(args);

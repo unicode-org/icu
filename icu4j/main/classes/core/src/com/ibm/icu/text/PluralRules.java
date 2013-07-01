@@ -1235,7 +1235,11 @@ public class PluralRules implements Serializable {
         }
     }
 
-    enum StandardPluralCategories {
+    /**
+     * @deprecated This API is ICU internal only.
+     * @internal
+     */
+    public enum StandardPluralCategories {
         zero,
         one,
         two,

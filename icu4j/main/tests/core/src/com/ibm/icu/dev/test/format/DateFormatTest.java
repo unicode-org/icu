@@ -3666,6 +3666,9 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 fmtRelDateTime.format(cal, dateTimeStr, fp);
                 fmtRelDate.format(cal, dateStr, new FieldPosition(0) );
                 fmtTime.format(cal, timeStr, new FieldPosition(0) );
+                logln(dayOffset + ", " + dateStyle + ", " + dateTimeStr);
+                logln(dayOffset + ", " + dateStyle + ", " + dateStr);
+                logln(dayOffset + ", " + dateStyle + ", " + timeStr);
 
                 // check that dateStr is in dateTimeStr
                 if ( dateTimeStr.toString().indexOf( dateStr.toString() ) < 0 ) {
