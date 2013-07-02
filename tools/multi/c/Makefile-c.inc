@@ -1,4 +1,5 @@
-# Copyright (c) 2008-2012 IBM Corp. and Others. All Rights Reserved
+# -*- makefile -*-
+# Copyright (c) 2008-2013 IBM Corp. and Others. All Rights Reserved
 
 include $(MULTICU_ROOT)/common/Makefile-multi.inc
 
@@ -26,7 +27,9 @@ ifneq (,$(CXX_OBJECTS))
 	@for file in $(CXX_OBJECTS); \
 	do \
 		what=`basename $$file .o` ; \
+		echo tools=$(C_BLD)/$*/icu/source/tools/toolutil ; \
 		echo compiling '(C++)' $*/$$what ; \
+		echo `$(C_INS)/$*/bin/icu-config --cxx` `$(C_INS)/$*/bin/icu-config --cxxflags` $(DEBUGOPT)  -c -o $(C_INS)/$*/tmp/$$what.o $$what.cpp -I $(C_INS)/$*/include -I $(C_BLD)/$*/icu/source/tools/toolutil ; \
 		`$(C_INS)/$*/bin/icu-config --cxx` `$(C_INS)/$*/bin/icu-config --cxxflags` $(DEBUGOPT)  -c -o $(C_INS)/$*/tmp/$$what.o $$what.cpp -I $(C_INS)/$*/include -I $(C_BLD)/$*/icu/source/tools/toolutil  || \
 		$(CXX) $(DEBUGOPT) -c -o $(C_INS)/$*/tmp/$$what.o $${what}.cpp -I $(C_INS)/$*/include -I $(C_BLD)/$*/icu/source/tools/toolutil ; \
 	done
@@ -40,7 +43,8 @@ ifneq (,$(C_OBJECTS))
 	done
 endif
 	@echo linking $*/$$what
-	@`$(C_INS)/$*/bin/icu-config --cxx` `$(C_INS)/$*/bin/icu-config --ldflags `  $(DEBUGOPT) -o $@ $(OBJECTS:%.o=$(C_INS)/$*/tmp/%.o)  -licudata -licuuc -licutu -licui18n -licuio -L$(C_INS)/$*/lib || \
+	@echo `$(C_INS)/$*/bin/icu-config --cxx` `$(C_INS)/$*/bin/icu-config --ldflags `  $(DEBUGOPT) -o $@ $(OBJECTS:%.o=$(C_INS)/$*/tmp/%.o)  -licudata -licuuc -licutu -licui18n -licuio -L$(C_INS)/$*/lib
+	@`$(C_INS)/$*/bin/icu-config --cxx` -Wl,--verbose `$(C_INS)/$*/bin/icu-config --ldflags `  $(DEBUGOPT) -o $@ $(OBJECTS:%.o=$(C_INS)/$*/tmp/%.o)  -licudata -licuuc -licutu -licui18n -licuio -L$(C_INS)/$*/lib || \
 	 $(CXX) $(DEBUGOPT) -o $@ $(OBJECTS:%.o=$(C_INS)/$*/tmp/%.o)  -licudata -licuuc -licutu -licui18n -licuio -L$(C_INS)/$*/lib 
 
 

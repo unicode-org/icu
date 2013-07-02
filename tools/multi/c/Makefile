@@ -1,4 +1,4 @@
-# Copyright (c) 2009-2010 IBM Corp. and Others. All Rights Reserved
+# Copyright (c) 2009-2013 IBM Corp. and Others. All Rights Reserved
 # multicu/c makefile
 
 all:
@@ -68,23 +68,25 @@ $(BLD)/%/$(S_SRC): $(ICUS)/icu4c-%-src.tgz
 $(BLD)/r%/$(S_BLD): $(BLD)/r%/$(S_SRC)
 	-mkdir -p $(INS)
 	-chmod a+rx $(BLD)/r$*/icu/source/configure $(BLD)/r$*/icu/source/runConfigureICU
-	( cd $(BLD)/r$*/icu/source ; `$(ICUCONF) "$(BLD)/r$*/icu/source" "$*"` --enable-renaming --enable-shared --disable-static --enable-release --disable-debug --prefix=$(INS)/r$* )
+	( cd $(BLD)/r$*/icu/source ; env CPPFLAGS="$(XTRA_RICU_CPPFLAGS)" `$(ICUCONF) "$(BLD)/r$*/icu/source" "$*"` --enable-renaming --enable-shared --disable-static --enable-release --disable-debug --prefix=$(INS)/r$* )
 	touch -c $@
 
 $(BLD)/%/$(S_BLD): $(BLD)/%/$(S_SRC)
 	-mkdir -p $(INS)
 	-chmod a+rx $(BLD)/$*/icu/source/configure $(BLD)/$*/icu/source/runConfigureICU
-	( cd $(BLD)/$*/icu/source ; `$(ICUCONF) "$(BLD)/$*/icu/source" "$*"` --disable-renaming --enable-shared --disable-static --enable-release --disable-debug --prefix=$(INS)/$* )
+	( cd $(BLD)/$*/icu/source ; env CPPFLAGS="$(XTRA_ICU_CPPFLAGS)" `$(ICUCONF) "$(BLD)/$*/icu/source" "$*"` --disable-renaming --enable-shared --disable-static --enable-release --disable-debug --prefix=$(INS)/$* )
 	touch -c $@
 
 
 $(INS)/%/bin/$(TARGET): $(INS)/%/$(S_INS) $(SRCS)
-	-rm -rf ./$(BLD)/$*/tmp
+# 	Don't delete the built version.
+#	-rm -rf ./$(BLD)/$*/tmp
 	mkdir ./$(BLD)/$*/tmp
 	@for file in $(OBJECTS); \
 	do \
 		what=`basename $$file .o` ; \
 		echo compiling $*/$$what ; \
+		echo $(CXX) -c -o ./$(BLD)/$*/tmp/$$what.o $$what.cpp -I $(INS)/$*/include -I $(BLD)/$*/icu/source/tools/toolutil ; \
 		$(CXX) -c -o ./$(BLD)/$*/tmp/$$what.o $$what.cpp -I $(INS)/$*/include -I $(BLD)/$*/icu/source/tools/toolutil ; \
 	done
 	$(CXX) -o $@ $(OBJECTS:%.o=./$(BLD)/$*/tmp/%.o)  -licudata -licuuc -licutu -licui18n -L$(INS)/$*/lib 
