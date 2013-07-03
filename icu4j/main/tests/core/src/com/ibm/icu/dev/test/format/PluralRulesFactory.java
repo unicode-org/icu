@@ -16,21 +16,13 @@ import com.ibm.icu.util.ULocale;
  */
 public abstract class PluralRulesFactory extends PluralRules.Factory {
 
-    abstract boolean hasOverride(ULocale locale);
-
-    public abstract PluralRules forLocale(ULocale locale, PluralType ordinal);
-
-    public abstract ULocale[] getAvailableULocales();
-
-    public abstract ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable);
-
     static final PluralRulesFactory NORMAL = new PluralRulesFactoryVanilla();
 
     private PluralRulesFactory() {}
 
     static class PluralRulesFactoryVanilla extends PluralRulesFactory {
         @Override
-        boolean hasOverride(ULocale locale) {
+        public boolean hasOverride(ULocale locale) {
             return false;
         }
         @Override
