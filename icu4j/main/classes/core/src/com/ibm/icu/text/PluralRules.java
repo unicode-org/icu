@@ -265,6 +265,13 @@ public class PluralRules implements Serializable {
         public static PluralRulesLoader getDefaultFactory() {
             return PluralRulesLoader.loader;
         }
+        
+        /**
+         * Returns whether or not there are overrides.
+         * @deprecated This API is ICU internal only.
+         * @internal
+         */
+        public abstract boolean hasOverride(ULocale locale);
     }
     // Standard keywords.
 

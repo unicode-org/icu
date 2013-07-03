@@ -245,4 +245,12 @@ public class PluralRulesLoader extends PluralRules.Factory {
      * The only instance of the loader.
      */
     public static final PluralRulesLoader loader = new PluralRulesLoader();
+
+    /* (non-Javadoc)
+     * @see com.ibm.icu.text.PluralRules.Factory#hasOverride(com.ibm.icu.util.ULocale)
+     */
+    @Override
+    public boolean hasOverride(ULocale locale) {
+        return false;
+    }
 }
