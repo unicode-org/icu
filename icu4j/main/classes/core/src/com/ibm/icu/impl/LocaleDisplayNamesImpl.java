@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2009-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -27,7 +27,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final DisplayContext capitalization;
     private final DataTable langData;
     private final DataTable regionData;
-    private final Appender appender;
+    private final MessageFormat separatorFormat;
     private final MessageFormat format;
     private final MessageFormat keyTypeFormat;
 
@@ -111,9 +111,9 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         // difference in performance.
         String sep = langData.get("localeDisplayPattern", "separator");
         if ("separator".equals(sep)) {
-            sep = ", ";
+            sep = "{0}, {1}";
         }
-        this.appender = new Appender(sep);
+        this.separatorFormat = new MessageFormat(sep);
 
         String pattern = langData.get("localeDisplayPattern", "pattern");
         if ("pattern".equals(pattern)) {
@@ -327,14 +327,14 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
         StringBuilder buf = new StringBuilder();
         if (hasScript) {
-            // first element, don't need appender
+            // first element, don't need appendWithSep
             buf.append(scriptDisplayNameInContext(script));
         }
         if (hasCountry) {
-            appender.append(regionDisplayName(country), buf);
+            appendWithSep(regionDisplayName(country), buf);
         }
         if (hasVariant) {
-            appender.append(variantDisplayName(variant), buf);
+            appendWithSep(variantDisplayName(variant), buf);
         }
 
         Iterator<String> keys = locale.getKeywords();
@@ -345,13 +345,13 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                 String keyDisplayName = keyDisplayName(key);
                 String valueDisplayName = keyValueDisplayName(key, value);
                 if (!valueDisplayName.equals(value)) {
-                    appender.append(valueDisplayName, buf);
+                    appendWithSep(valueDisplayName, buf);
                 } else if (!key.equals(keyDisplayName)) {
                     String keyValue = keyTypeFormat.format(
                         new String[] { keyDisplayName, valueDisplayName });
-                    appender.append(keyValue, buf);
+                    appendWithSep(keyValue, buf);
                 } else {
-                    appender.append(keyDisplayName, buf)
+                    appendWithSep(keyDisplayName, buf)
                         .append("=")
                         .append(valueDisplayName);
                 }
@@ -504,19 +504,14 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         }
     }
 
-    static class Appender {
-        private final String sep;
-
-        Appender(String sep) {
-            this.sep = sep;
+    private StringBuilder appendWithSep(String s, StringBuilder b) {
+        if (b.length() == 0) {
+            b.append(s); 
+        } else {
+            String combined = separatorFormat.format(new String[] { b.toString(), s });
+            b.replace(0, b.length(), combined);
         }
-        StringBuilder append(String s, StringBuilder b) {
-            if (b.length() > 0) {
-                b.append(sep);
-            }
-            b.append(s);
-            return b;
-        }
+        return b;
     }
 
     private static class Cache {
