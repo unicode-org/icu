@@ -7,17 +7,17 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/cy.xml
+ * ICU <specials> source: <path>/common/main/cy.xml
  */
 cy{
-    AuxExemplarCharacters{"[k q v x z]"}
+    AuxExemplarCharacters{"[ă å ã ā æ ç ĕ ē ĭ ī k ñ ŏ ø ō œ q ŭ ū v x z]"}
     ExemplarCharacters{
         "[a á à â ä b c {ch} d {dd} e é è ê ë f {ff} g {ng} h i í ì î ï j l {ll} m n "
         "o ó ò ô ö p {ph} r {rh} s t {th} u ú ù û ü w ẃ ẁ ŵ ẅ y ý ỳ ŷ ÿ]"
     }
     ExemplarCharactersIndex{
-        "[A B C {CH} D {DD} E F {FF} G {NG} H I J L {LL} M N O P {PH} R {RH} S T {TH}"
-        " U W Y]"
+        "[A B C {CH} D {DD} E F {FF} G {NG} H I J K L {LL} M N O P {PH} Q R {RH} S T "
+        "{TH} U V W X Y Z]"
     }
     ExemplarCharactersPunctuation{
         "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
@@ -248,7 +248,7 @@ cy{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.66"}
     calendar{
         generic{
             DateTimePatterns{
@@ -268,6 +268,10 @@ cy{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -281,15 +285,16 @@ cy{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"M/y"}
-                yMEd{"E, d/M/y"}
-                yMMM{"MMM y"}
-                yMMMEd{"E, d MMM y"}
-                yMMMd{"d MMM y"}
-                yMd{"d/M/y"}
-                yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"E, d/M/y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMd{"d MMM y G"}
+                yyyyMd{"d/M/y G"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
                 H{
@@ -354,39 +359,39 @@ cy{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y-y G"}
                 }
                 yM{
-                    M{"M/y – M/y"}
-                    y{"M/y – M/y"}
+                    M{"M/y – M/y G"}
+                    y{"M/y – M/y G"}
                 }
                 yMEd{
-                    M{"E, d/M/y - E, d/M/y"}
-                    d{"E, d/M/y - E, d/M/y"}
-                    y{"E, d/M/y - E, d/M/y"}
+                    M{"E, d/M/y - E, d/M/y G"}
+                    d{"E, d/M/y - E, d/M/y G"}
+                    y{"E, d/M/y - E, d/M/y G"}
                 }
                 yMMM{
-                    M{"MMM - MMM, y"}
-                    y{"MMM y - MMM y"}
+                    M{"MMM - MMM, y G"}
+                    y{"MMM y - MMM y G"}
                 }
                 yMMMEd{
-                    M{"E, d MMM - E, d MMM, y"}
-                    d{"E, d MMM - E, d MMM, y"}
-                    y{"E, d MMM, y - E, d MMM, y"}
+                    M{"E, d MMM - E, d MMM, y G"}
+                    d{"E, d MMM - E, d MMM, y G"}
+                    y{"E, d MMM, y - E, d MMM, y G"}
                 }
                 yMMMM{
-                    M{"MMMM–MMMM y"}
-                    y{"MMMM y – MMMM y"}
+                    M{"MMMM–MMMM y G"}
+                    y{"MMMM y – MMMM y G"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM, y"}
-                    d{"d-d MMM, y"}
-                    y{"d MMM, y - d MMM, y"}
+                    M{"d MMM - d MMM, y G"}
+                    d{"d-d MMM, y G"}
+                    y{"d MMM, y - d MMM, y G"}
                 }
                 yMd{
-                    M{"d/M/y - d/M/y"}
-                    d{"d/M/y - d/M/y"}
-                    y{"d/M/y - d/M/y"}
+                    M{"d/M/y - d/M/y G"}
+                    d{"d/M/y - d/M/y G"}
+                    y{"d/M/y - d/M/y G"}
                 }
             }
         }
@@ -412,6 +417,10 @@ cy{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -820,231 +829,235 @@ cy{
         metric{"Metrig"}
     }
     units{
-        day{
-            few{"{0} diwrnod"}
-            many{"{0} diwrnod"}
-            one{"{0} diwrnod"}
-            other{"{0} diwrnod"}
-            two{"{0} ddiwrnod"}
-            zero{"{0} diwrnod"}
-        }
-        day-future{
-            few{"Ymhen {0} diwrnod"}
-            many{"Ymhen {0} diwrnod"}
-            one{"Ymhen {0} diwrnod"}
-            other{"Ymhen {0} diwrnod"}
-            two{"Ymhen {0} ddiwrnod"}
-            zero{"Ymhen {0} diwrnod"}
-        }
-        day-past{
-            few{"{0} diwrnod yn ôl"}
-            many{"{0} diwrnod yn ôl"}
-            one{"{0} diwrnod yn ôl"}
-            other{"{0} diwrnod yn ôl"}
-            two{"{0} ddiwrnod yn ôl"}
-            zero{"{0} diwrnod yn ôl"}
-        }
-        hour{
-            few{"{0} awr"}
-            many{"{0} awr"}
-            one{"{0} awr"}
-            other{"{0} awr"}
-            two{"{0} awr"}
-            zero{"{0} awr"}
-        }
-        hour-future{
-            few{"Ymhen {0} awr"}
-            many{"Ymhen {0} awr"}
-            one{"Ymhen {0} awr"}
-            other{"Ymhen {0} awr"}
-            two{"Ymhen {0} awr"}
-            zero{"Ymhen {0} awr"}
-        }
-        hour-past{
-            few{"{0} awr yn ôl"}
-            many{"{0} awr yn ôl"}
-            one{"{0} awr yn ôl"}
-            other{"{0} awr yn ôl"}
-            two{"{0} awr yn ôl"}
-            zero{"{0} awr yn ôl"}
-        }
-        minute{
-            few{"{0} munud"}
-            many{"{0} munud"}
-            one{"{0} munud"}
-            other{"{0} munud"}
-            two{"{0} funud"}
-            zero{"{0} munud"}
-        }
-        minute-future{
-            few{"Ymhen {0} munud"}
-            many{"Ymhen {0} munud"}
-            one{"Ymhen {0} munud"}
-            other{"Ymhen {0} munud"}
-            two{"Ymhen {0} funud"}
-            zero{"Ymhen {0} munud"}
-        }
-        minute-past{
-            few{"{0} munud yn ôl"}
-            many{"{0} munud yn ôl"}
-            one{"{0} munud yn ôl"}
-            other{"{0} munud yn ôl"}
-            two{"{0} funud yn ôl"}
-            zero{"{0} munud yn ôl"}
-        }
-        month{
-            few{"{0} mis"}
-            many{"{0} mis"}
-            one{"{0} mis"}
-            other{"{0} mis"}
-            two{"{0} fis"}
-            zero{"{0} mis"}
-        }
-        month-future{
-            few{"Ymhen {0} mis"}
-            many{"Ymhen {0} mis"}
-            one{"Ymhen {0} mis"}
-            other{"Ymhen {0} mis"}
-            two{"Ymhen {0} fis"}
-            zero{"Ymhen {0} mis"}
-        }
-        month-past{
-            few{"{0} mis yn ôl"}
-            many{"{0} mis yn ôl"}
-            one{"{0} mis yn ôl"}
-            other{"{0} mis yn ôl"}
-            two{"{0} fis yn ôl"}
-            zero{"{0} mis yn ôl"}
-        }
-        second{
-            few{"{0} eiliad"}
-            many{"{0} eiliad"}
-            one{"{0} eiliad"}
-            other{"{0} eiliad"}
-            two{"{0} eiliad"}
-            zero{"{0} eiliad"}
-        }
-        second-future{
-            few{"Ymhen {0} eiliad"}
-            many{"Ymhen {0} eiliad"}
-            one{"Ymhen {0} eiliad"}
-            other{"Ymhen {0} eiliad"}
-            two{"Ymhen {0} eiliad"}
-            zero{"Ymhen {0} eiliad"}
-        }
-        second-past{
-            few{"{0} eiliad yn ôl"}
-            many{"{0} eiliad yn ôl"}
-            one{"{0} eiliad yn ôl"}
-            other{"{0} eiliad yn ôl"}
-            two{"{0} eiliad yn ôl"}
-            zero{"{0} eiliad yn ôl"}
-        }
-        week{
-            few{"{0} wythnos"}
-            many{"{0} wythnos"}
-            one{"{0} wythnos"}
-            other{"{0} wythnos"}
-            two{"{0} wythnos"}
-            zero{"{0} wythnos"}
-        }
-        week-future{
-            few{"Ymhen {0} wythnos"}
-            many{"Ymhen {0} wythnos"}
-            one{"Ymhen {0} wythnos"}
-            other{"Ymhen {0} wythnos"}
-            two{"Ymhen {0} wythnos"}
-            zero{"Ymhen {0} wythnos"}
-        }
-        week-past{
-            few{"{0} wythnos yn ôl"}
-            many{"{0} wythnos yn ôl"}
-            one{"{0} wythnos yn ôl"}
-            other{"{0} wythnos yn ôl"}
-            two{"{0} wythnos yn ôl"}
-            zero{"{0} wythnos yn ôl"}
-        }
-        year{
-            few{"{0} blynedd"}
-            many{"{0} blynedd"}
-            one{"{0} blwyddyn"}
-            other{"{0} o flynyddoedd"}
-            two{"{0} flynedd"}
-            zero{"{0} blwyddyn"}
-        }
-        year-future{
-            few{"Ymhen {0} blynedd"}
-            many{"Ymhen {0} blynedd"}
-            one{"Ymhen {0} blwyddyn"}
-            other{"Ymhen {0} o flynyddoedd"}
-            two{"Ymhen {0} flynedd"}
-            zero{"Ymhen {0} o flynyddoedd"}
-        }
-        year-past{
-            few{"{0} blynedd yn ôl"}
-            many{"{0} blynedd yn ôl"}
-            one{"{0} flwyddyn yn ôl"}
-            other{"{0} o flynyddoedd yn ôl"}
-            two{"{0} flynedd yn ôl"}
-            zero{"{0} o flynyddoedd yn ôl"}
+        duration{
+            day{
+                few{"{0} diwrnod"}
+                many{"{0} diwrnod"}
+                one{"{0} diwrnod"}
+                other{"{0} diwrnod"}
+                two{"{0} ddiwrnod"}
+                zero{"{0} diwrnod"}
+            }
+            day-future{
+                few{"Ymhen {0} diwrnod"}
+                many{"Ymhen {0} diwrnod"}
+                one{"Ymhen {0} diwrnod"}
+                other{"Ymhen {0} diwrnod"}
+                two{"Ymhen {0} ddiwrnod"}
+                zero{"Ymhen {0} diwrnod"}
+            }
+            day-past{
+                few{"{0} diwrnod yn ôl"}
+                many{"{0} diwrnod yn ôl"}
+                one{"{0} diwrnod yn ôl"}
+                other{"{0} diwrnod yn ôl"}
+                two{"{0} ddiwrnod yn ôl"}
+                zero{"{0} diwrnod yn ôl"}
+            }
+            hour{
+                few{"{0} awr"}
+                many{"{0} awr"}
+                one{"{0} awr"}
+                other{"{0} awr"}
+                two{"{0} awr"}
+                zero{"{0} awr"}
+            }
+            hour-future{
+                few{"Ymhen {0} awr"}
+                many{"Ymhen {0} awr"}
+                one{"Ymhen {0} awr"}
+                other{"Ymhen {0} awr"}
+                two{"Ymhen {0} awr"}
+                zero{"Ymhen {0} awr"}
+            }
+            hour-past{
+                few{"{0} awr yn ôl"}
+                many{"{0} awr yn ôl"}
+                one{"{0} awr yn ôl"}
+                other{"{0} awr yn ôl"}
+                two{"{0} awr yn ôl"}
+                zero{"{0} awr yn ôl"}
+            }
+            minute{
+                few{"{0} munud"}
+                many{"{0} munud"}
+                one{"{0} munud"}
+                other{"{0} munud"}
+                two{"{0} funud"}
+                zero{"{0} munud"}
+            }
+            minute-future{
+                few{"Ymhen {0} munud"}
+                many{"Ymhen {0} munud"}
+                one{"Ymhen {0} munud"}
+                other{"Ymhen {0} munud"}
+                two{"Ymhen {0} funud"}
+                zero{"Ymhen {0} munud"}
+            }
+            minute-past{
+                few{"{0} munud yn ôl"}
+                many{"{0} munud yn ôl"}
+                one{"{0} munud yn ôl"}
+                other{"{0} munud yn ôl"}
+                two{"{0} funud yn ôl"}
+                zero{"{0} munud yn ôl"}
+            }
+            month{
+                few{"{0} mis"}
+                many{"{0} mis"}
+                one{"{0} mis"}
+                other{"{0} mis"}
+                two{"{0} fis"}
+                zero{"{0} mis"}
+            }
+            month-future{
+                few{"Ymhen {0} mis"}
+                many{"Ymhen {0} mis"}
+                one{"Ymhen {0} mis"}
+                other{"Ymhen {0} mis"}
+                two{"Ymhen {0} fis"}
+                zero{"Ymhen {0} mis"}
+            }
+            month-past{
+                few{"{0} mis yn ôl"}
+                many{"{0} mis yn ôl"}
+                one{"{0} mis yn ôl"}
+                other{"{0} mis yn ôl"}
+                two{"{0} fis yn ôl"}
+                zero{"{0} mis yn ôl"}
+            }
+            second{
+                few{"{0} eiliad"}
+                many{"{0} eiliad"}
+                one{"{0} eiliad"}
+                other{"{0} eiliad"}
+                two{"{0} eiliad"}
+                zero{"{0} eiliad"}
+            }
+            second-future{
+                few{"Ymhen {0} eiliad"}
+                many{"Ymhen {0} eiliad"}
+                one{"Ymhen {0} eiliad"}
+                other{"Ymhen {0} eiliad"}
+                two{"Ymhen {0} eiliad"}
+                zero{"Ymhen {0} eiliad"}
+            }
+            second-past{
+                few{"{0} eiliad yn ôl"}
+                many{"{0} eiliad yn ôl"}
+                one{"{0} eiliad yn ôl"}
+                other{"{0} eiliad yn ôl"}
+                two{"{0} eiliad yn ôl"}
+                zero{"{0} eiliad yn ôl"}
+            }
+            week{
+                few{"{0} wythnos"}
+                many{"{0} wythnos"}
+                one{"{0} wythnos"}
+                other{"{0} wythnos"}
+                two{"{0} wythnos"}
+                zero{"{0} wythnos"}
+            }
+            week-future{
+                few{"Ymhen {0} wythnos"}
+                many{"Ymhen {0} wythnos"}
+                one{"Ymhen {0} wythnos"}
+                other{"Ymhen {0} wythnos"}
+                two{"Ymhen {0} wythnos"}
+                zero{"Ymhen {0} wythnos"}
+            }
+            week-past{
+                few{"{0} wythnos yn ôl"}
+                many{"{0} wythnos yn ôl"}
+                one{"{0} wythnos yn ôl"}
+                other{"{0} wythnos yn ôl"}
+                two{"{0} wythnos yn ôl"}
+                zero{"{0} wythnos yn ôl"}
+            }
+            year{
+                few{"{0} blynedd"}
+                many{"{0} blynedd"}
+                one{"{0} blwyddyn"}
+                other{"{0} o flynyddoedd"}
+                two{"{0} flynedd"}
+                zero{"{0} blwyddyn"}
+            }
+            year-future{
+                few{"Ymhen {0} blynedd"}
+                many{"Ymhen {0} blynedd"}
+                one{"Ymhen {0} blwyddyn"}
+                other{"Ymhen {0} o flynyddoedd"}
+                two{"Ymhen {0} flynedd"}
+                zero{"Ymhen {0} o flynyddoedd"}
+            }
+            year-past{
+                few{"{0} blynedd yn ôl"}
+                many{"{0} blynedd yn ôl"}
+                one{"{0} flwyddyn yn ôl"}
+                other{"{0} o flynyddoedd yn ôl"}
+                two{"{0} flynedd yn ôl"}
+                zero{"{0} o flynyddoedd yn ôl"}
+            }
         }
     }
     unitsShort{
-        day{
-            few{"{0} diwrnod"}
-            many{"{0} diwrnod"}
-            one{"{0} diwrnod"}
-            other{"{0} diwrnod"}
-            two{"{0} ddiwrnod"}
-            zero{"{0} diwrnod"}
-        }
-        hour{
-            few{"{0} awr"}
-            many{"{0} awr"}
-            one{"{0} awr"}
-            other{"{0} awr"}
-            two{"{0} awr"}
-            zero{"{0} awr"}
-        }
-        minute{
-            few{"{0} mun"}
-            many{"{0} mun"}
-            one{"{0} mun"}
-            other{"{0} mun"}
-            two{"{0} mun"}
-            zero{"{0} mun"}
-        }
-        month{
-            few{"{0} mis"}
-            many{"{0} mis"}
-            one{"{0} mis"}
-            other{"{0} mis"}
-            two{"{0} fis"}
-            zero{"{0} mis"}
-        }
-        second{
-            few{"{0} eil"}
-            many{"{0} eil"}
-            one{"{0} eil"}
-            other{"{0} eil"}
-            two{"{0} eil"}
-            zero{"{0} eil"}
-        }
-        week{
-            few{"{0} wythnos"}
-            many{"{0} wythnos"}
-            one{"{0} wythnos"}
-            other{"{0} wythnos"}
-            two{"{0} wythnos"}
-            zero{"{0} wythnos"}
-        }
-        year{
-            few{"{0} bl"}
-            many{"{0} bl"}
-            one{"{0} bl"}
-            other{"{0} bl"}
-            two{"{0} bl"}
-            zero{"{0} bl"}
+        duration{
+            day{
+                few{"{0} diwrnod"}
+                many{"{0} diwrnod"}
+                one{"{0} diwrnod"}
+                other{"{0} diwrnod"}
+                two{"{0} ddiwrnod"}
+                zero{"{0} diwrnod"}
+            }
+            hour{
+                few{"{0} awr"}
+                many{"{0} awr"}
+                one{"{0} awr"}
+                other{"{0} awr"}
+                two{"{0} awr"}
+                zero{"{0} awr"}
+            }
+            minute{
+                few{"{0} mun"}
+                many{"{0} mun"}
+                one{"{0} mun"}
+                other{"{0} mun"}
+                two{"{0} mun"}
+                zero{"{0} mun"}
+            }
+            month{
+                few{"{0} mis"}
+                many{"{0} mis"}
+                one{"{0} mis"}
+                other{"{0} mis"}
+                two{"{0} fis"}
+                zero{"{0} mis"}
+            }
+            second{
+                few{"{0} eil"}
+                many{"{0} eil"}
+                one{"{0} eil"}
+                other{"{0} eil"}
+                two{"{0} eil"}
+                zero{"{0} eil"}
+            }
+            week{
+                few{"{0} wythnos"}
+                many{"{0} wythnos"}
+                one{"{0} wythnos"}
+                other{"{0} wythnos"}
+                two{"{0} wythnos"}
+                zero{"{0} wythnos"}
+            }
+            year{
+                few{"{0} bl"}
+                many{"{0} bl"}
+                one{"{0} bl"}
+                other{"{0} bl"}
+                two{"{0} bl"}
+                zero{"{0} bl"}
+            }
         }
     }
 }

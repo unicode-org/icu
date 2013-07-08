@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ks.xml
+ * ICU <specials> source: <path>/common/main/ks.xml
  */
 ks{
     ExemplarCharacters{
@@ -42,7 +42,7 @@ ks{
         }
         native{"arabext"}
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.86.27"}
     calendar{
         generic{
             DateTimePatterns{
@@ -50,10 +50,10 @@ ks{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, MMMM d, y G",
-                "MMMM d, y G",
-                "MMM d, y G",
-                "M/d/yy GGGGG",
+                "EEEE, MMMM d, Gy",
+                "MMMM d, Gy",
+                "MMM d, Gy",
+                "M/d/Gy",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -62,6 +62,10 @@ ks{
             }
             availableFormats{
                 GGGGyMMMMEEEEdd{"EEEE,dd MMMM GGGGy"}
+                Gy{"Gy"}
+                GyMMM{"MMM Gy"}
+                GyMMMEd{"EEE, MMM d, Gy"}
+                GyMMMd{"MMM d, Gy"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -75,14 +79,16 @@ ks{
                 d{"d"}
                 hm{"h:mm a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"M/y"}
-                yMEd{"EEE, M/d/y"}
-                yMMM{"MMM y"}
-                yMMMEd{"EEE, MMM d, y"}
-                yMMMM{"MMMM y"}
-                yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
+                y{"Gy"}
+                yyyy{"Gy"}
+                yyyyM{"M/Gy"}
+                yyyyMEd{"EEE, M/d/Gy"}
+                yyyyMMM{"MMM Gy"}
+                yyyyMMMEd{"EEE, MMM d, Gy"}
+                yyyyMMMM{"MMMM Gy"}
+                yyyyMMMd{"MMM d, Gy"}
+                yyyyQQQ{"QQQ Gy"}
+                yyyyQQQQ{"QQQQ Gy"}
             }
         }
         gregorian{
@@ -103,6 +109,10 @@ ks{
             }
             availableFormats{
                 GGGGyMMMMEEEEdd{"EEEE,dd MMMM GGGGy"}
+                Gy{"Gy"}
+                GyMMM{"MMM Gy"}
+                GyMMMEd{"EEE, MMM d, Gy"}
+                GyMMMd{"MMM d, Gy"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -288,33 +298,35 @@ ks{
         metric{"میٖٹرِک"}
     }
     units{
-        day{
-            one{"{0} دۄہ"}
-            other{"{0} دۄہ"}
-        }
-        hour{
-            one{"{0} گَنٹہٕ"}
-            other{"{0} گٲنٛٹہٕ"}
-        }
-        minute{
-            one{"{0} مِنَٹ"}
-            other{"{0} مِنَٹ"}
-        }
-        month{
-            one{"{0} ریٚتھ"}
-            other{"{0} ریٚتھ"}
-        }
-        second{
-            one{"{0} سیٚکَنٛڈ"}
-            other{"{0} سیٚکَنٛڈ"}
-        }
-        week{
-            one{"{0} ہَفتہٕ"}
-            other{"{0} ہَفتہٕ"}
-        }
-        year{
-            one{"{0} ؤری"}
-            other{"{0} ؤری"}
+        duration{
+            day{
+                one{"{0} دۄہ"}
+                other{"{0} دۄہ"}
+            }
+            hour{
+                one{"{0} گَنٹہٕ"}
+                other{"{0} گٲنٛٹہٕ"}
+            }
+            minute{
+                one{"{0} مِنَٹ"}
+                other{"{0} مِنَٹ"}
+            }
+            month{
+                one{"{0} ریٚتھ"}
+                other{"{0} ریٚتھ"}
+            }
+            second{
+                one{"{0} سیٚکَنٛڈ"}
+                other{"{0} سیٚکَنٛڈ"}
+            }
+            week{
+                one{"{0} ہَفتہٕ"}
+                other{"{0} ہَفتہٕ"}
+            }
+            year{
+                one{"{0} ؤری"}
+                other{"{0} ؤری"}
+            }
         }
     }
 }

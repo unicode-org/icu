@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sr.xml
+ * ICU <specials> source: <path>/common/main/sr.xml
  */
 sr{
     Keys{
@@ -782,7 +782,7 @@ sr{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.34"}
     codePatterns{
         language{"Језик: {0}"}
         script{"Скрипт: {0}"}
@@ -791,6 +791,6 @@ sr{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

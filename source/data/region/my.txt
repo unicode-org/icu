@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/my.xml
+ * ICU <specials> source: <path>/common/main/my.xml
  */
 my{
     Countries{
@@ -219,5 +219,5 @@ my{
         ZW{"ဇင်ဘာဘွေ"}
         ZZ{"မသိ သို့မဟုတ် မရှိ သော နေရာ"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
 }

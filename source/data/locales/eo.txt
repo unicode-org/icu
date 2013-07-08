@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/eo.xml
+ * ICU <specials> source: <path>/common/main/eo.xml
  */
 eo{
     AuxExemplarCharacters{"[q w x y]"}
@@ -24,7 +24,7 @@ eo{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.27"}
     calendar{
         generic{
             DateTimePatterns{
@@ -35,7 +35,7 @@ eo{
                 "EEEE, d-'a' 'de' MMMM y G",
                 "G y-MMMM-dd",
                 "G y-MMM-dd",
-                "GGGGG yy-MM-dd",
+                "GGGGG y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

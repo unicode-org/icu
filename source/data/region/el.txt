@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/el.xml
+ * ICU <specials> source: <path>/common/main/el.xml
  */
 el{
     Countries{
@@ -302,5 +302,5 @@ el{
         ZW{"Ζιμπάμπουε"}
         ZZ{"Άγνωστη περιοχή"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

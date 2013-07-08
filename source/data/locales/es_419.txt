@@ -70,7 +70,7 @@ es_419{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             availableFormats{
@@ -133,33 +133,35 @@ es_419{
         UK{"Reino Unido"}
     }
     units{
-        day-future{
-            one{"En {0} día"}
-            other{"En {0} días"}
-        }
-        hour-future{
-            one{"En {0} hora"}
-            other{"En {0} horas"}
-        }
-        minute-future{
-            one{"En {0} minuto"}
-            other{"En {0} minutos"}
-        }
-        month-future{
-            one{"En {0} mes"}
-            other{"En {0} meses"}
-        }
-        second-future{
-            one{"En {0} segundo"}
-            other{"En {0} segundos"}
-        }
-        week-future{
-            one{"En {0} semana"}
-            other{"En {0} semanas"}
-        }
-        year-future{
-            one{"En {0} año"}
-            other{"En {0} años"}
+        duration{
+            day-future{
+                one{"En {0} día"}
+                other{"En {0} días"}
+            }
+            hour-future{
+                one{"En {0} hora"}
+                other{"En {0} horas"}
+            }
+            minute-future{
+                one{"En {0} minuto"}
+                other{"En {0} minutos"}
+            }
+            month-future{
+                one{"En {0} mes"}
+                other{"En {0} meses"}
+            }
+            second-future{
+                one{"En {0} segundo"}
+                other{"En {0} segundos"}
+            }
+            week-future{
+                one{"En {0} semana"}
+                other{"En {0} semanas"}
+            }
+            year-future{
+                one{"En {0} año"}
+                other{"En {0} años"}
+            }
         }
     }
 }

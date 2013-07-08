@@ -7,6 +7,10 @@
 // *
 // ***************************************************************************
 pt_PT{
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ – — , ; \\: ! ? . … ' \u0022 « » “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
+        "″]"
+    }
     NumberElements{
         latn{
             patterns{
@@ -122,7 +126,7 @@ pt_PT{
             }
         }
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.88.35"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -429,15 +433,19 @@ pt_PT{
         metric{"Métrico"}
     }
     units{
-        second{
-            one{"{0} segundo"}
-            other{"{0} segundos"}
+        duration{
+            second{
+                one{"{0} segundo"}
+                other{"{0} segundos"}
+            }
         }
     }
     unitsShort{
-        second{
-            one{"{0} s"}
-            other{"{0} s"}
+        duration{
+            second{
+                one{"{0} s"}
+                other{"{0} s"}
+            }
         }
     }
 }

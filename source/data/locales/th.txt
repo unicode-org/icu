@@ -7,20 +7,20 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/th.xml
+ * ICU <specials> source: <path>/common/main/th.xml
  */
 th{
     AuxExemplarCharacters{"[\u200B]"}
     ExemplarCharacters{
-        "[ฯๆ \u0E4E \u0E4C \u0E47 \u0E48 \u0E49 \u0E4A \u0E4B ก ข ฃ ค ฅ ฆ ง จ ฉ ช ซ ฌ"
-        " ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ฤ ล ฦ ว ศ ษ ส ห ฬ อ ฮ \u0E4D "
-        "ะ \u0E31 า ๅ ำ \u0E34 \u0E35 \u0E36 \u0E37 \u0E38 \u0E39 เ แ โ ใ ไ \u0E3A]"
+        "[ฯ ๆ \u0E4E \u0E4C \u0E47 \u0E48 \u0E49 \u0E4A \u0E4B ก ข ฃ ค ฅ ฆ ง จ ฉ ช ซ "
+        "ฌ ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ฤ ล ฦ ว ศ ษ ส ห ฬ อ ฮ \u0E4D"
+        " ะ \u0E31 า ๅ ำ \u0E34 \u0E35 \u0E36 \u0E37 \u0E38 \u0E39 เ แ โ ใ ไ \u0E3A]"
     }
     ExemplarCharactersIndex{
         "[ก ข ฃ ค ฅ ฆ ง จ ฉ ช ซ ฌ ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ฤ ล ฦ"
         " ว ศ ษ ส ห ฬ อ ฮ]"
     }
-    ExemplarCharactersPunctuation{"[! \u0022 # ' ( ) * , \\- . / \\: @ \\[ \\\\ \\] ‐ – — ‘ ’ “ ” … ′ ″]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , \\: ! . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] @ * / # ′ ″]"}
     LocaleScript{
         "Thai",
     }
@@ -28,7 +28,7 @@ th{
         default{"latn"}
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -128,7 +128,7 @@ th{
         }
         native{"thai"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.87.67"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2000,91 +2000,95 @@ th{
         metric{"เมตริก"}
     }
     units{
-        day{
-            other{"{0} วัน"}
-        }
-        day-future{
-            other{"ในอีก {0} วัน"}
-        }
-        day-past{
-            other{"{0} วันที่ผ่านมา"}
-        }
-        hour{
-            other{"{0} ชั่วโมง"}
-        }
-        hour-future{
-            other{"ในอีก {0} ชั่วโมง"}
-        }
-        hour-past{
-            other{"{0} ชั่วโมงที่ผ่านมา"}
-        }
-        minute{
-            other{"{0} นาที"}
-        }
-        minute-future{
-            other{"ในอีก {0} นาที"}
-        }
-        minute-past{
-            other{"{0} นาทีที่ผ่านมา"}
-        }
-        month{
-            other{"{0} เดือน"}
-        }
-        month-future{
-            other{"ในอีก {0} เดือน"}
-        }
-        month-past{
-            other{"{0} เดือนที่ผ่านมา"}
-        }
-        second{
-            other{"{0} วินาที"}
-        }
-        second-future{
-            other{"ในอีก {0} วินาที"}
-        }
-        second-past{
-            other{"{0} วินาทีที่ผ่านมา"}
-        }
-        week{
-            other{"{0} สัปดาห์"}
-        }
-        week-future{
-            other{"ในอีก {0} สัปดาห์"}
-        }
-        week-past{
-            other{"{0} สัปดาห์ที่ผ่านมา"}
-        }
-        year{
-            other{"{0} ปี"}
-        }
-        year-future{
-            other{"ในอีก {0} ปี"}
-        }
-        year-past{
-            other{"{0} ปีที่แล้ว"}
+        duration{
+            day{
+                other{"{0} วัน"}
+            }
+            day-future{
+                other{"ในอีก {0} วัน"}
+            }
+            day-past{
+                other{"{0} วันที่ผ่านมา"}
+            }
+            hour{
+                other{"{0} ชั่วโมง"}
+            }
+            hour-future{
+                other{"ในอีก {0} ชั่วโมง"}
+            }
+            hour-past{
+                other{"{0} ชั่วโมงที่ผ่านมา"}
+            }
+            minute{
+                other{"{0} นาที"}
+            }
+            minute-future{
+                other{"ในอีก {0} นาที"}
+            }
+            minute-past{
+                other{"{0} นาทีที่ผ่านมา"}
+            }
+            month{
+                other{"{0} เดือน"}
+            }
+            month-future{
+                other{"ในอีก {0} เดือน"}
+            }
+            month-past{
+                other{"{0} เดือนที่ผ่านมา"}
+            }
+            second{
+                other{"{0} วินาที"}
+            }
+            second-future{
+                other{"ในอีก {0} วินาที"}
+            }
+            second-past{
+                other{"{0} วินาทีที่ผ่านมา"}
+            }
+            week{
+                other{"{0} สัปดาห์"}
+            }
+            week-future{
+                other{"ในอีก {0} สัปดาห์"}
+            }
+            week-past{
+                other{"{0} สัปดาห์ที่ผ่านมา"}
+            }
+            year{
+                other{"{0} ปี"}
+            }
+            year-future{
+                other{"ในอีก {0} ปี"}
+            }
+            year-past{
+                other{"{0} ปีที่แล้ว"}
+            }
         }
     }
     unitsShort{
-        day{
-            other{"{0} ว"}
-        }
-        hour{
-            other{"{0} ชั่วโมง"}
-        }
-        minute{
-            other{"{0} นา"}
-        }
-        month{
-            other{"{0} ด"}
-        }
-        second{
-            other{"{0} วิ"}
-        }
-        week{
-            other{"{0} สัปดาห์"}
-        }
-        year{
-            other{"{0} ป"}
+        duration{
+            day{
+                other{"{0} ว"}
+            }
+            hour{
+                other{"{0} ชั่วโมง"}
+            }
+            minute{
+                other{"{0} นา"}
+            }
+            month{
+                other{"{0} ด"}
+            }
+            second{
+                other{"{0} วิ"}
+            }
+            week{
+                other{"{0} สัปดาห์"}
+            }
+            year{
+                other{"{0} ป"}
+            }
         }
     }
 }

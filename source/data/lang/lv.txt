@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/lv.xml
+ * ICU <specials> source: <path>/common/main/lv.xml
  */
 lv{
     Keys{
@@ -781,7 +781,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.42"}
     codePatterns{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}
@@ -790,6 +790,6 @@ lv{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

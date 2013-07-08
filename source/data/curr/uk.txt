@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/uk.xml
+ * ICU <specials> source: <path>/common/main/uk.xml
  */
 uk{
     Currencies{
@@ -1548,5 +1548,5 @@ uk{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.33"}
 }

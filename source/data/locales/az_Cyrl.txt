@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/az_Cyrl.xml
+ * ICU <specials> source: <path>/common/main/az_Cyrl.xml
  */
 az_Cyrl{
     %%Parent{"root"}
@@ -35,7 +35,7 @@ az_Cyrl{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.38"}
     calendar{
         generic{
             DateTimePatterns{
@@ -57,9 +57,9 @@ az_Cyrl{
                 MMM{"LLL"}
                 MMMEd{"E, d, MMM"}
                 MMMd{"d MMM"}
-                yMMM{"MMM, y"}
-                yMMMEd{"E, d, MMM, y"}
-                yMMMd{"d MMM, y"}
+                yyyyMMM{"MMM, y G"}
+                yyyyMMMEd{"E, d, MMM, y G"}
+                yyyyMMMd{"d MMM, y G"}
             }
         }
         gregorian{

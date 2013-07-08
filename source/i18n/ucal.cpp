@@ -658,6 +658,11 @@ static const char * const CAL_TYPES[] = {
         "coptic",
         "ethiopic",
         "ethiopic-amete-alem",
+        "iso8601",
+        "dangi",
+        "islamic-umalqura",
+        "islamic-tbla",
+        "islamic-rgsa",
         NULL
 };
 

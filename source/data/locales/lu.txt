@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/lu.xml
+ * ICU <specials> source: <path>/common/main/lu.xml
  */
 lu{
     AuxExemplarCharacters{"[g r x]"}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sq.xml
+ * ICU <specials> source: <path>/common/main/sq.xml
  */
 sq{
     AuxExemplarCharacters{"[w]"}
@@ -17,7 +17,7 @@ sq{
     }
     ExemplarCharactersIndex{
         "[A B C Ç D {DH} E Ë F G {GJ} H I J K L {LL} M N {NJ} O P Q R {RR} S {SH} T {"
-        "TH} U V W X {XH} Y Z {ZH}]"
+        "TH} U V X {XH} Y Z {ZH}]"
     }
     LocaleScript{
         "Latn",
@@ -33,7 +33,7 @@ sq{
             }
         }
     }
-    Version{"2.0.86.82"}
+    Version{"2.0.88.23"}
     calendar{
         generic{
             DateTimePatterns{
@@ -44,7 +44,7 @@ sq{
                 "EEEE, dd MMMM y G",
                 "dd MMMM y G",
                 "G y-MM-dd",
-                "GGGGG yy-MM-dd",
+                "GGGGG y-MM-dd",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -52,6 +52,10 @@ sq{
                 "{1} {0}",
             }
             availableFormats{
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
@@ -68,27 +72,29 @@ sq{
                 hm{"h.mm.a"}
                 hms{"h.mm.ss.a"}
                 ms{"mm.ss"}
-                y{"y"}
-                yM{"M.y"}
-                yMEd{"E, d.M.y"}
-                yMMM{"MMM y"}
-                yMMMEd{"E, d MMM y"}
-                yMMMM{"MMMM y"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M.y G"}
+                yyyyMEd{"E, d.M.y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"d MMM y G"}
             }
             intervalFormats{
                 yMMM{
-                    M{"y-MM – MM"}
-                    y{"MMM y - MMM y"}
+                    M{"MMM - MMM y G"}
+                    y{"MMM y - MMM y G"}
                 }
                 yMMMEd{
-                    M{"E, dd MMM - E, dd MMM y"}
-                    d{"E, dd - E, dd MMM y"}
-                    y{"E, dd MMM y - E, dd MMM y"}
+                    M{"E, dd MMM - E, dd MMM y G"}
+                    d{"E, dd - E, dd MMM y G"}
+                    y{"E, dd MMM y - E, dd MMM y G"}
                 }
                 yMMMd{
-                    M{"dd MMM - dd MMM y"}
-                    d{"dd-dd MMM y"}
-                    y{"dd MMM y - dd MMM y"}
+                    M{"dd MMM - dd MMM y G"}
+                    d{"dd-dd MMM y G"}
+                    y{"dd MMM y - dd MMM y G"}
                 }
             }
         }
@@ -113,6 +119,10 @@ sq{
                 "{1} {0}",
             }
             availableFormats{
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"H"}
                 Hm{"H.mm"}
                 Hms{"H.mm.ss"}
@@ -248,33 +258,35 @@ sq{
         quotationStart{"„"}
     }
     units{
-        day{
-            one{"{0} ditë"}
-            other{"{0} ditë"}
-        }
-        hour{
-            one{"{0} orë"}
-            other{"{0} orë"}
-        }
-        minute{
-            one{"{0} minutë"}
-            other{"{0} minuta"}
-        }
-        month{
-            one{"{0} muaj"}
-            other{"{0} muaj"}
-        }
-        second{
-            one{"{0} sekondë"}
-            other{"{0} sekonda"}
-        }
-        week{
-            one{"{0} javë"}
-            other{"{0} javë"}
-        }
-        year{
-            one{"{0} vit"}
-            other{"{0} vjet"}
+        duration{
+            day{
+                one{"{0} ditë"}
+                other{"{0} ditë"}
+            }
+            hour{
+                one{"{0} orë"}
+                other{"{0} orë"}
+            }
+            minute{
+                one{"{0} minutë"}
+                other{"{0} minuta"}
+            }
+            month{
+                one{"{0} muaj"}
+                other{"{0} muaj"}
+            }
+            second{
+                one{"{0} sekondë"}
+                other{"{0} sekonda"}
+            }
+            week{
+                one{"{0} javë"}
+                other{"{0} javë"}
+            }
+            year{
+                one{"{0} vit"}
+                other{"{0} vjet"}
+            }
         }
     }
 }

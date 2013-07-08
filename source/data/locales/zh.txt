@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/zh.xml
+ * ICU <specials> source: <path>/common/main/zh.xml
  */
 zh{
     AuxExemplarCharacters{"[侣 傣 卑 厘 吕 堤 奎 巽 撤 楔 楠 滕 瑚 甫 盲 禄 粟 脚 钯 铂 锑 镑 魁]"}
@@ -83,7 +83,7 @@ zh{
         finance{"hansfin"}
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -184,7 +184,7 @@ zh{
         native{"hanidec"}
         traditional{"hans"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.97"}
     calendar{
         buddhist{
             eras{
@@ -893,6 +893,9 @@ zh{
                 "{1}{0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            appendItems{
+                Timezone{"{1}{0}"}
             }
             availableFormats{
                 Ed{"d日E"}
@@ -1986,91 +1989,95 @@ zh{
         metric{"公制"}
     }
     units{
-        day{
-            other{"{0}天"}
-        }
-        day-future{
-            other{"{0}天后"}
-        }
-        day-past{
-            other{"{0}天前"}
-        }
-        hour{
-            other{"{0}小时"}
-        }
-        hour-future{
-            other{"{0}小时后"}
-        }
-        hour-past{
-            other{"{0}小时前"}
-        }
-        minute{
-            other{"{0}分钟"}
-        }
-        minute-future{
-            other{"{0}分钟后"}
-        }
-        minute-past{
-            other{"{0}分钟前"}
-        }
-        month{
-            other{"{0}个月"}
-        }
-        month-future{
-            other{"{0}个月后"}
-        }
-        month-past{
-            other{"{0}个月前"}
-        }
-        second{
-            other{"{0}秒钟"}
-        }
-        second-future{
-            other{"{0}秒钟后"}
-        }
-        second-past{
-            other{"{0}秒钟前"}
-        }
-        week{
-            other{"{0}周"}
-        }
-        week-future{
-            other{"{0}周后"}
-        }
-        week-past{
-            other{"{0}周前"}
-        }
-        year{
-            other{"{0}年"}
-        }
-        year-future{
-            other{"{0}年后"}
-        }
-        year-past{
-            other{"{0}年前"}
+        duration{
+            day{
+                other{"{0}天"}
+            }
+            day-future{
+                other{"{0}天后"}
+            }
+            day-past{
+                other{"{0}天前"}
+            }
+            hour{
+                other{"{0}小时"}
+            }
+            hour-future{
+                other{"{0}小时后"}
+            }
+            hour-past{
+                other{"{0}小时前"}
+            }
+            minute{
+                other{"{0}分钟"}
+            }
+            minute-future{
+                other{"{0}分钟后"}
+            }
+            minute-past{
+                other{"{0}分钟前"}
+            }
+            month{
+                other{"{0}个月"}
+            }
+            month-future{
+                other{"{0}个月后"}
+            }
+            month-past{
+                other{"{0}个月前"}
+            }
+            second{
+                other{"{0}秒钟"}
+            }
+            second-future{
+                other{"{0}秒钟后"}
+            }
+            second-past{
+                other{"{0}秒钟前"}
+            }
+            week{
+                other{"{0}周"}
+            }
+            week-future{
+                other{"{0}周后"}
+            }
+            week-past{
+                other{"{0}周前"}
+            }
+            year{
+                other{"{0}年"}
+            }
+            year-future{
+                other{"{0}年后"}
+            }
+            year-past{
+                other{"{0}年前"}
+            }
         }
     }
     unitsShort{
-        day{
-            other{"{0}天"}
-        }
-        hour{
-            other{"{0}小时"}
-        }
-        minute{
-            other{"{0}分"}
-        }
-        month{
-            other{"{0}个月"}
-        }
-        second{
-            other{"{0}秒"}
-        }
-        week{
-            other{"{0}周"}
-        }
-        year{
-            other{"{0}年"}
+        duration{
+            day{
+                other{"{0}天"}
+            }
+            hour{
+                other{"{0}小时"}
+            }
+            minute{
+                other{"{0}分"}
+            }
+            month{
+                other{"{0}个月"}
+            }
+            second{
+                other{"{0}秒"}
+            }
+            week{
+                other{"{0}周"}
+            }
+            year{
+                other{"{0}年"}
+            }
         }
     }
 }

@@ -7,8 +7,8 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/saq.xml
+ * ICU <specials> source: <path>/common/main/saq.xml
  */
 saq{
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
 }

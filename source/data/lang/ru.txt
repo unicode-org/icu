@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ru.xml
+ * ICU <specials> source: <path>/common/main/ru.xml
  */
 ru{
     Keys{
@@ -811,7 +811,7 @@ ru{
         VALENCIA{"Валенсийский"}
         WADEGILE{"Система Уэйда – Джайлза"}
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Язык: {0}"}
         script{"Написание: {0}"}
@@ -820,6 +820,6 @@ ru{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

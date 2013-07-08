@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/te.xml
+ * ICU <specials> source: <path>/common/main/te.xml
  */
 te{
     AuxExemplarCharacters{"[\u200C\u200D ౦ ౧ ౨ ౩ ౪ ౫ ౬ ౭ ౮ ౯]"}
@@ -27,7 +27,7 @@ te{
         default{"latn"}
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -151,7 +151,7 @@ te{
         }
         native{"telu"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -162,7 +162,7 @@ te{
                 "EEEE d MMMM y G",
                 "d MMMM y G",
                 "d MMM y G",
-                "dd-MM-yy GGGGG",
+                "dd-MM-y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -171,6 +171,10 @@ te{
             }
             availableFormats{
                 Ed{"E d"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d, MMM y G"}
+                GyMMMd{"d, MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -187,17 +191,18 @@ te{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"M/y"}
-                yMEd{"E, d/M/y"}
-                yMM{"MM-y"}
-                yMMM{"MMM y"}
-                yMMMEd{"E, d, MMM y"}
-                yMMMM{"MMMM y"}
-                yMMMd{"d, MMM y"}
-                yMd{"d/M/y"}
-                yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"E, d/M/y G"}
+                yyyyMM{"MM-y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d, MMM y G"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"d, MMM y G"}
+                yyyyMd{"d/M/y G"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
                 H{
@@ -281,6 +286,10 @@ te{
             }
             availableFormats{
                 Ed{"E d"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d, MMM y G"}
+                GyMMMd{"d, MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -671,119 +680,123 @@ te{
         metric{"దశాంశం"}
     }
     units{
-        day{
-            one{"{0} రోజు"}
-            other{"{0} days"}
-        }
-        day-future{
-            one{"{0} రోజులో"}
-            other{"{0} రోజుల్లో"}
-        }
-        day-past{
-            one{"{0} రోజు క్రితం"}
-            other{"{0} రోజుల క్రితం"}
-        }
-        hour{
-            one{"{0} గంట"}
-            other{"{0} గంటలు"}
-        }
-        hour-future{
-            one{"{0} గంటలో"}
-            other{"{0} గంటల్లో"}
-        }
-        hour-past{
-            one{"{0} గంట క్రితం"}
-            other{"{0} గంటల క్రితం"}
-        }
-        minute{
-            one{"{0} నిమిషం"}
-            other{"{0} నిమిషాలు"}
-        }
-        minute-future{
-            one{"{0} నిమిషంలో"}
-            other{"{0} నిమిషాల్లో"}
-        }
-        minute-past{
-            one{"{0} నిమిషం క్రితం"}
-            other{"{0} నిమిషాల క్రితం"}
-        }
-        month{
-            one{"{0} నెల"}
-            other{"{0} నెలలు"}
-        }
-        month-future{
-            one{"{0} నెలలో"}
-            other{"{0} నెలల్లో"}
-        }
-        month-past{
-            one{"{0} నెల క్రితం"}
-            other{"{0} నెలల క్రితం"}
-        }
-        second{
-            one{"{0} సెకను"}
-            other{"{0} సెకన్లు"}
-        }
-        second-future{
-            one{"{0} సెకన్‌లో"}
-            other{"{0} సెకన్లలో"}
-        }
-        second-past{
-            one{"{0} సెకను క్రితం"}
-            other{"{0} సెకన్ల క్రితం"}
-        }
-        week{
-            one{"{0} వారం"}
-            other{"{0} weeks"}
-        }
-        week-future{
-            one{"{0} వారంలో"}
-            other{"{0} వారాల్లో"}
-        }
-        week-past{
-            one{"{0} వారం క్రితం"}
-            other{"{0} వారాల క్రితం"}
-        }
-        year{
-            one{"{0} సంవత్సరం"}
-            other{"{0} సంవత్సరాలు"}
-        }
-        year-future{
-            one{"{0} సంవత్సరంలో"}
-            other{"{0} సంవత్సరాల్లో"}
-        }
-        year-past{
-            one{"{0} సంవత్సరం క్రితం"}
-            other{"{0} సంవత్సరాల క్రితం"}
+        duration{
+            day{
+                one{"{0} రోజు"}
+                other{"{0} days"}
+            }
+            day-future{
+                one{"{0} రోజులో"}
+                other{"{0} రోజుల్లో"}
+            }
+            day-past{
+                one{"{0} రోజు క్రితం"}
+                other{"{0} రోజుల క్రితం"}
+            }
+            hour{
+                one{"{0} గంట"}
+                other{"{0} గంటలు"}
+            }
+            hour-future{
+                one{"{0} గంటలో"}
+                other{"{0} గంటల్లో"}
+            }
+            hour-past{
+                one{"{0} గంట క్రితం"}
+                other{"{0} గంటల క్రితం"}
+            }
+            minute{
+                one{"{0} నిమిషం"}
+                other{"{0} నిమిషాలు"}
+            }
+            minute-future{
+                one{"{0} నిమిషంలో"}
+                other{"{0} నిమిషాల్లో"}
+            }
+            minute-past{
+                one{"{0} నిమిషం క్రితం"}
+                other{"{0} నిమిషాల క్రితం"}
+            }
+            month{
+                one{"{0} నెల"}
+                other{"{0} నెలలు"}
+            }
+            month-future{
+                one{"{0} నెలలో"}
+                other{"{0} నెలల్లో"}
+            }
+            month-past{
+                one{"{0} నెల క్రితం"}
+                other{"{0} నెలల క్రితం"}
+            }
+            second{
+                one{"{0} సెకను"}
+                other{"{0} సెకన్లు"}
+            }
+            second-future{
+                one{"{0} సెకన్‌లో"}
+                other{"{0} సెకన్లలో"}
+            }
+            second-past{
+                one{"{0} సెకను క్రితం"}
+                other{"{0} సెకన్ల క్రితం"}
+            }
+            week{
+                one{"{0} వారం"}
+                other{"{0} weeks"}
+            }
+            week-future{
+                one{"{0} వారంలో"}
+                other{"{0} వారాల్లో"}
+            }
+            week-past{
+                one{"{0} వారం క్రితం"}
+                other{"{0} వారాల క్రితం"}
+            }
+            year{
+                one{"{0} సంవత్సరం"}
+                other{"{0} సంవత్సరాలు"}
+            }
+            year-future{
+                one{"{0} సంవత్సరంలో"}
+                other{"{0} సంవత్సరాల్లో"}
+            }
+            year-past{
+                one{"{0} సంవత్సరం క్రితం"}
+                other{"{0} సంవత్సరాల క్రితం"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} రోజు"}
-            other{"{0} days"}
-        }
-        hour{
-            one{"{0} గంట"}
-            other{"{0} గంటలు"}
-        }
-        minute{
-            one{"{0} నిమిషం"}
-            other{"{0} నిమిషాలు"}
-        }
-        month{
-            one{"{0} నెల"}
-            other{"{0} నెలలు"}
-        }
-        second{
-            one{"{0} సెకను"}
-            other{"{0} సెకన్లు"}
-        }
-        week{
-            one{"{0} వా"}
-            other{"{0} వారాలు"}
-        }
-        year{
-            one{"{0} సంవత్సరం"}
-            other{"{0} సంవత్సరాలు"}
+        duration{
+            day{
+                one{"{0} రోజు"}
+                other{"{0} days"}
+            }
+            hour{
+                one{"{0} గంట"}
+                other{"{0} గంటలు"}
+            }
+            minute{
+                one{"{0} నిమిషం"}
+                other{"{0} నిమిషాలు"}
+            }
+            month{
+                one{"{0} నెల"}
+                other{"{0} నెలలు"}
+            }
+            second{
+                one{"{0} సెకను"}
+                other{"{0} సెకన్లు"}
+            }
+            week{
+                one{"{0} వా"}
+                other{"{0} వారాలు"}
+            }
+            year{
+                one{"{0} సంవత్సరం"}
+                other{"{0} సంవత్సరాలు"}
+            }
         }
     }
 }

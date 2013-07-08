@@ -11,7 +11,7 @@ es_UY{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤ #,##0.00;(¤ #,##0.00)"}
+                currencyFormat{"¤ #,##0.00"}
             }
             symbols{
                 decimal{","}
@@ -19,5 +19,5 @@ es_UY{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
 }

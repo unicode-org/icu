@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ne.xml
+ * ICU <specials> source: <path>/common/main/ne.xml
  */
 ne{
     Keys{
@@ -338,5 +338,5 @@ ne{
         AREVELA{"पूर्वी आर्मेनियाली"}
         POSIX{"कम्प्युटर"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

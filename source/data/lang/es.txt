@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/es.xml
+ * ICU <specials> source: <path>/common/main/es.xml
  */
 es{
     Keys{
@@ -819,7 +819,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Dialecto: {0}"}
@@ -828,6 +828,6 @@ es{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{","}
+        separator{"{0}, {1}"}
     }
 }

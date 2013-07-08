@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 pt_PT{
-    Version{"2.0.86.63"}
+    Version{"2.0.88.35"}
     zoneStrings{
         "Africa:Djibouti"{
             ec{"Jibuti"}
@@ -738,7 +738,6 @@ pt_PT{
             ls{"Hora Padrão de Ecaterimburgo"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Hora de {1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/om.xml
+ * ICU <specials> source: <path>/common/main/om.xml
  */
 om{
     Languages{

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sq.xml
+ * ICU <specials> source: <path>/common/main/sq.xml
  */
 sq{
     Languages{
@@ -31,5 +31,5 @@ sq{
         Zxxx{"I pashkruar"}
         Zzzz{"Skript i panjohur"}
     }
-    Version{"2.0.86.82"}
+    Version{"2.0.88.23"}
 }

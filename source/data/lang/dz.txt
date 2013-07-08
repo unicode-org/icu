@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/dz.xml
+ * ICU <specials> source: <path>/common/main/dz.xml
  */
 dz{
     Keys{
@@ -245,7 +245,7 @@ dz{
             tibt{"ང་བཅས་ཀྱི་ཨང་ཡིག"}
         }
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.86.27"}
     codePatterns{
         language{"ཁ་སྐད་: {0}"}
         script{"ཡིག་གཟུགས་: {0}"}
@@ -254,6 +254,6 @@ dz{
     localeDisplayPattern{
         keyTypePattern{"{0}།: {1}"}
         pattern{"{0}། ({1}།)"}
-        separator{"་, "}
+        separator{"{0}་, {1}"}
     }
 }

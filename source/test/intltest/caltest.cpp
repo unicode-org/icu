@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation
+ * Copyright (c) 1997-2013, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 
@@ -334,12 +334,18 @@ CalendarTest::TestGenericAPI()
 
     SimpleTimeZone *zone = new SimpleTimeZone(tzoffset, tzid);
     Calendar *cal = Calendar::createInstance(zone->clone(), status);
-    if (failure(status, "Calendar::createInstance", TRUE)) return;
+    if (U_FAILURE(status)) {
+        dataerrln(UnicodeString("FAIL: Calendar::createInstance with SimpleTimeZone::clone() failed, error ") + u_errorName(status));
+        return;
+    }
 
     if (*zone != cal->getTimeZone()) errln("FAIL: Calendar::getTimeZone failed");
 
     Calendar *cal2 = Calendar::createInstance(cal->getTimeZone(), status);
-    if (failure(status, "Calendar::createInstance")) return;
+    if (U_FAILURE(status)) {
+        errln(UnicodeString("FAIL: Calendar::createInstance with Calendar::getTimeZone() failed, error ") + u_errorName(status));
+        return;
+    }
     cal->setTime(when, status);
     cal2->setTime(when, status);
     if (failure(status, "Calendar::setTime")) return;
@@ -484,17 +490,26 @@ CalendarTest::TestGenericAPI()
         for (i=0; i<count; ++i)
         {
             cal = Calendar::createInstance(loc[i], status);
-            if (failure(status, "Calendar::createInstance")) return;
+            if (U_FAILURE(status)) {
+                errln(UnicodeString("FAIL: Calendar::createInstance with Locale ") + loc[i].getName() + " failed, error " + u_errorName(status));
+                return;
+            }
             delete cal;
         }
     }
 
     cal = Calendar::createInstance(TimeZone::createDefault(), Locale::getEnglish(), status);
-    if (failure(status, "Calendar::createInstance")) return;
+    if (U_FAILURE(status)) {
+        errln(UnicodeString("FAIL: Calendar::createInstance with TimeZone::createDefault() for English failed, error ") + u_errorName(status));
+        return;
+    }
     delete cal;
 
     cal = Calendar::createInstance(*zone, Locale::getEnglish(), status);
-    if (failure(status, "Calendar::createInstance")) return;
+    if (U_FAILURE(status)) {
+        errln(UnicodeString("FAIL: Calendar::createInstance with Calendar::getTimeZone() for English failed, error ") + u_errorName(status));
+        return;
+    }
     delete cal;
 
     GregorianCalendar *gc = new GregorianCalendar(*zone, status);

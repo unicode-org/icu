@@ -301,6 +301,7 @@ metaZones:table(nofallback){
             SM{"Europe/San_Marino"}
             TN{"Africa/Tunis"}
             VA{"Europe/Vatican"}
+            XK{"Europe/Belgrade"}
         }
         Europe_Eastern{
             001{"Europe/Bucharest"}

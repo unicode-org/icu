@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sr_Latn.xml
+ * ICU <specials> source: <path>/common/main/sr_Latn.xml
  */
 sr_Latn{
     %%Parent{"root"}
@@ -29,73 +29,61 @@ sr_Latn{
                 decimalFormat{
                     1000{
                         few{"0 hiljade"}
-                        many{"0 hiljada"}
                         one{"0 hiljada"}
                         other{"0 hiljada"}
                     }
                     10000{
                         few{"00 hiljade"}
-                        many{"00 hiljada"}
                         one{"00 hiljada"}
                         other{"00 hiljada"}
                     }
                     100000{
                         few{"000 hiljade"}
-                        many{"000 hiljada"}
                         one{"000 hiljada"}
                         other{"000 hiljada"}
                     }
                     1000000{
                         few{"0 miliona"}
-                        many{"0 miliona"}
                         one{"0 milion"}
                         other{"0 miliona"}
                     }
                     10000000{
                         few{"00 miliona"}
-                        many{"00 miliona"}
                         one{"00 milion"}
                         other{"00 miliona"}
                     }
                     100000000{
                         few{"000 miliona"}
-                        many{"000 miliona"}
                         one{"000 milion"}
                         other{"000 miliona"}
                     }
                     1000000000{
                         few{"0 milijarde"}
-                        many{"0 milijardi"}
                         one{"0 milijarda"}
                         other{"0 milijardi"}
                     }
                     10000000000{
                         few{"00 milijarde"}
-                        many{"00 milijardi"}
                         one{"00 milijarda"}
                         other{"00 milijardi"}
                     }
                     100000000000{
                         few{"000 milijarde"}
-                        many{"000 milijardi"}
                         one{"000 milijarda"}
                         other{"000 milijardi"}
                     }
                     1000000000000{
                         few{"0 triliona"}
-                        many{"0 triliona"}
                         one{"0 trilion"}
                         other{"0 triliona"}
                     }
                     10000000000000{
                         few{"00 triliona"}
-                        many{"00 triliona"}
                         one{"00 trilion"}
                         other{"00 triliona"}
                     }
                     100000000000000{
                         few{"000 triliona"}
-                        many{"000 triliona"}
                         one{"000 trilion"}
                         other{"000 triliona"}
                     }
@@ -105,73 +93,61 @@ sr_Latn{
                 decimalFormat{
                     1000{
                         few{"0"}
-                        many{"0"}
                         one{"0"}
                         other{"0"}
                     }
                     10000{
                         few{"00K"}
-                        many{"00K"}
                         one{"00 hilj"}
                         other{"00 hilj"}
                     }
                     100000{
                         few{"000K"}
-                        many{"000 hilj"}
                         one{"000 hilj"}
                         other{"000 hilj"}
                     }
                     1000000{
                         few{"0 mil"}
-                        many{"0 mil"}
                         one{"0 mil"}
                         other{"0 mil"}
                     }
                     10000000{
                         few{"00 mil"}
-                        many{"00 mil"}
                         one{"00 mil"}
                         other{"00 mil"}
                     }
                     100000000{
                         few{"000 mil"}
-                        many{"000 mil"}
                         one{"000 mil"}
                         other{"000 mil"}
                     }
                     1000000000{
                         few{"0 mlrd"}
-                        many{"0 mlrd"}
                         one{"0 mlrd"}
                         other{"0 mlrd"}
                     }
                     10000000000{
                         few{"00 mlrd"}
-                        many{"00 mlrd"}
                         one{"00 mlrd"}
                         other{"00 mlrd"}
                     }
                     100000000000{
                         few{"000 mlrd"}
-                        many{"000 mlrd"}
                         one{"000 mlrd"}
                         other{"000 mlrd"}
                     }
                     1000000000000{
                         few{"0 bil"}
-                        many{"0 bil"}
                         one{"0 bil"}
                         other{"0 bil"}
                     }
                     10000000000000{
                         few{"00 bil"}
-                        many{"00 bil"}
                         one{"00 bil"}
                         other{"00 bil"}
                     }
                     100000000000000{
                         few{"000 bil"}
-                        many{"000 bil"}
                         one{"000 bil"}
                         other{"000 bil"}
                     }
@@ -191,7 +167,7 @@ sr_Latn{
             }
         }
     }
-    Version{"2.0.86.79"}
+    Version{"2.0.86.81"}
     calendar{
         buddhist{
             eras{
@@ -1197,175 +1173,151 @@ sr_Latn{
         metric{"Metrički"}
     }
     units{
-        day{
-            few{"{0} dana"}
-            many{"{0} dana"}
-            one{"{0} dan"}
-            other{"{0} dan"}
-        }
-        day-future{
-            few{"za {0} dana"}
-            many{"za {0} dana"}
-            one{"za {0} dan"}
-            other{"za {0} dana"}
-        }
-        day-past{
-            few{"pre {0} dana"}
-            many{"pre {0} dana"}
-            one{"pre {0} dan"}
-            other{"pre {0} dana"}
-        }
-        hour{
-            few{"{0} sata"}
-            many{"{0} sati"}
-            one{"{0} sat"}
-            other{"{0} sat"}
-        }
-        hour-future{
-            few{"za {0} sata"}
-            many{"za {0} sati"}
-            one{"za {0} sat"}
-            other{"za {0} sati"}
-        }
-        hour-past{
-            few{"pre {0} sata"}
-            many{"pre {0} sati"}
-            one{"pre {0} sat"}
-            other{"pre {0} sati"}
-        }
-        minute{
-            few{"{0} minuta"}
-            many{"{0} minuta"}
-            one{"{0} minut"}
-            other{"{0} minut"}
-        }
-        minute-future{
-            few{"za {0} minuta"}
-            many{"za {0} minuta"}
-            one{"za {0} minut"}
-            other{"za {0} minuta"}
-        }
-        minute-past{
-            few{"pre {0} minuta"}
-            many{"pre {0} minuta"}
-            one{"pre {0} minut"}
-            other{"pre {0} minuta"}
-        }
-        month{
-            few{"{0} meseca"}
-            many{"{0} meseci"}
-            one{"{0} mesec"}
-            other{"{0} mesec"}
-        }
-        month-future{
-            few{"za {0} meseca"}
-            many{"za {0} meseci"}
-            one{"za {0} mesec"}
-            other{"za {0} meseci"}
-        }
-        month-past{
-            few{"pre {0} meseca"}
-            many{"pre {0} meseci"}
-            one{"pre {0} mesec"}
-            other{"pre {0} meseci"}
-        }
-        second{
-            few{"{0} sekunde"}
-            many{"{0} sekundi"}
-            one{"{0} sekunda"}
-            other{"{0} sekunda"}
-        }
-        second-future{
-            few{"za {0} sekunde"}
-            many{"za {0} sekundi"}
-            one{"za {0} sekund"}
-            other{"za {0} sekundi"}
-        }
-        second-past{
-            few{"pre {0} sekunde"}
-            many{"pre {0} sekundi"}
-            one{"pre {0} sekund"}
-            other{"pre {0} sekundi"}
-        }
-        week{
-            few{"{0} nedelje"}
-            many{"{0} nedelja"}
-            one{"{0} nedelja"}
-            other{"{0} nedelja"}
-        }
-        week-future{
-            few{"za {0} nedelje"}
-            many{"za {0} nedelja"}
-            one{"za {0} nedelju"}
-            other{"za {0} nedelja"}
-        }
-        week-past{
-            few{"pre {0} nedelje"}
-            many{"pre {0} nedelja"}
-            one{"pre {0} nedelju"}
-            other{"pre {0} nedelja"}
-        }
-        year{
-            few{"{0} godine"}
-            many{"{0} godina"}
-            one{"{0} godina"}
-            other{"{0} godina"}
-        }
-        year-future{
-            few{"za {0} godine"}
-            many{"za {0} godina"}
-            one{"za {0} godinu"}
-            other{"za {0} godina"}
-        }
-        year-past{
-            few{"pre {0} godine"}
-            many{"pre {0} godina"}
-            one{"pre {0} godinu"}
-            other{"pre {0} godina"}
+        duration{
+            day{
+                few{"{0} dana"}
+                one{"{0} dan"}
+                other{"{0} dan"}
+            }
+            day-future{
+                few{"za {0} dana"}
+                one{"za {0} dan"}
+                other{"za {0} dana"}
+            }
+            day-past{
+                few{"pre {0} dana"}
+                one{"pre {0} dan"}
+                other{"pre {0} dana"}
+            }
+            hour{
+                few{"{0} sata"}
+                one{"{0} sat"}
+                other{"{0} sat"}
+            }
+            hour-future{
+                few{"za {0} sata"}
+                one{"za {0} sat"}
+                other{"za {0} sati"}
+            }
+            hour-past{
+                few{"pre {0} sata"}
+                one{"pre {0} sat"}
+                other{"pre {0} sati"}
+            }
+            minute{
+                few{"{0} minuta"}
+                one{"{0} minut"}
+                other{"{0} minut"}
+            }
+            minute-future{
+                few{"za {0} minuta"}
+                one{"za {0} minut"}
+                other{"za {0} minuta"}
+            }
+            minute-past{
+                few{"pre {0} minuta"}
+                one{"pre {0} minut"}
+                other{"pre {0} minuta"}
+            }
+            month{
+                few{"{0} meseca"}
+                one{"{0} mesec"}
+                other{"{0} mesec"}
+            }
+            month-future{
+                few{"za {0} meseca"}
+                one{"za {0} mesec"}
+                other{"za {0} meseci"}
+            }
+            month-past{
+                few{"pre {0} meseca"}
+                one{"pre {0} mesec"}
+                other{"pre {0} meseci"}
+            }
+            second{
+                few{"{0} sekunde"}
+                one{"{0} sekunda"}
+                other{"{0} sekunda"}
+            }
+            second-future{
+                few{"za {0} sekunde"}
+                one{"za {0} sekund"}
+                other{"za {0} sekundi"}
+            }
+            second-past{
+                few{"pre {0} sekunde"}
+                one{"pre {0} sekund"}
+                other{"pre {0} sekundi"}
+            }
+            week{
+                few{"{0} nedelje"}
+                one{"{0} nedelja"}
+                other{"{0} nedelja"}
+            }
+            week-future{
+                few{"za {0} nedelje"}
+                one{"za {0} nedelju"}
+                other{"za {0} nedelja"}
+            }
+            week-past{
+                few{"pre {0} nedelje"}
+                one{"pre {0} nedelju"}
+                other{"pre {0} nedelja"}
+            }
+            year{
+                few{"{0} godine"}
+                one{"{0} godina"}
+                other{"{0} godina"}
+            }
+            year-future{
+                few{"za {0} godine"}
+                one{"za {0} godinu"}
+                other{"za {0} godina"}
+            }
+            year-past{
+                few{"pre {0} godine"}
+                one{"pre {0} godinu"}
+                other{"pre {0} godina"}
+            }
         }
     }
     unitsShort{
-        day{
-            few{"{0} dana"}
-            many{"{0} dana"}
-            one{"{0} dan"}
-            other{"{0} dan"}
-        }
-        hour{
-            few{"{0} sata"}
-            many{"{0} sati"}
-            one{"{0} sat"}
-            other{"{0} sat"}
-        }
-        minute{
-            few{"{0} min"}
-            many{"{0} min"}
-            one{"{0} min"}
-            other{"{0} min"}
-        }
-        month{
-            few{"{0} mes"}
-            many{"{0} mes"}
-            one{"{0} mes"}
-            other{"{0} mes"}
-        }
-        second{
-            few{"{0} sek"}
-            many{"{0} sek"}
-            one{"{0} sek"}
-            other{"{0} sek"}
-        }
-        week{
-            few{"{0} ned"}
-            many{"{0} ned"}
-            one{"{0} ned"}
-            other{"{0} ned"}
-        }
-        year{
-            few{"{0} god"}
-            many{"{0} god"}
-            one{"{0} god"}
-            other{"{0} god"}
+        duration{
+            day{
+                few{"{0} dana"}
+                one{"{0} dan"}
+                other{"{0} dan"}
+            }
+            hour{
+                few{"{0} sata"}
+                one{"{0} sat"}
+                other{"{0} sat"}
+            }
+            minute{
+                few{"{0} min"}
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                few{"{0} mes"}
+                one{"{0} mes"}
+                other{"{0} mes"}
+            }
+            second{
+                few{"{0} sek"}
+                one{"{0} sek"}
+                other{"{0} sek"}
+            }
+            week{
+                few{"{0} ned"}
+                one{"{0} ned"}
+                other{"{0} ned"}
+            }
+            year{
+                few{"{0} god"}
+                one{"{0} god"}
+                other{"{0} god"}
+            }
         }
     }
 }

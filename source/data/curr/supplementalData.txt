@@ -211,6 +211,7 @@ supplementalData:table(nofallback){
         AQ{
             {
                 id{"XXX"}
+                tender{"false"}
             }
         }
         AR{
@@ -1092,6 +1093,7 @@ supplementalData:table(nofallback){
         CP{
             {
                 id{"XXX"}
+                tender{"false"}
             }
         }
         CR{

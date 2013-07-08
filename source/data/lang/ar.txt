@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ar.xml
+ * ICU <specials> source: <path>/common/main/ar.xml
  */
 ar{
     Keys{
@@ -773,7 +773,7 @@ ar{
         VALENCIA{"بلنسية"}
         WADEGILE{"المندرين باللاتينية - ويد–جيلز"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.25"}
     codePatterns{
         language{"اللغة: {0}"}
         script{"نظام الكتابة: {0}"}
@@ -782,6 +782,6 @@ ar{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{"، "}
+        separator{"{0}، {1}"}
     }
 }

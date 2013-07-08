@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bez.xml
+ * ICU <specials> source: <path>/common/main/bez.xml
  */
 bez{
     AuxExemplarCharacters{"[x]"}

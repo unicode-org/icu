@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ar.xml
+ * ICU <specials> source: <path>/common/main/ar.xml
  */
 ar{
-    Version{"2.0.86.71"}
+    Version{"2.0.88.25"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"أبيدجان"}
@@ -1624,9 +1624,9 @@ ar{
             ls{"توقيت بيرو الرسمي"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"ﺕﻮﻘﻴﺗ ﺱﺎﻨﺗ ﺐﻴﻳﺭ ﻮﻤﻴﻛﻮﻟﻮﻧ ﻞﺼﻴﻔﻳ"}
-            lg{"توقيت ﺱﺎﻨﺗ ﺐﻴﻳﺭ ﻮﻤﻴﻛﻮﻟﻮﻧ"}
-            ls{"توقيت ﺱﺎﻨﺗ ﺐﻴﻳﺭ ﻮﻤﻴﻛﻮﻟﻮﻧ الرسمي"}
+            ld{"توقيت سانت بيير وميكولون لصيفي"}
+            lg{"توقيت سانت بيير وميكولون"}
+            ls{"توقيت سانت بيير وميكولون الرسمي"}
         }
         "meta:Reunion"{
             ls{"توقيت ريونيون"}
@@ -1714,7 +1714,6 @@ ar{
             ls{"توقيت يكاترينبورغ الرسمي"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"توقيت {1} ({0})"}
         gmtFormat{"جرينتش{0}"}
         gmtZeroFormat{"جرينتش"}
         hourFormat{"+HH:mm;-HH:mm"}

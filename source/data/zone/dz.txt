@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/dz.xml
+ * ICU <specials> source: <path>/common/main/dz.xml
  */
 dz{
-    Version{"2.0.86.63"}
+    Version{"2.0.86.27"}
     zoneStrings{
         "Africa:Cairo"{
             ec{"ཀཱའི་རོ"}
@@ -549,7 +549,6 @@ dz{
             ls{"ཡེ་ཀ་ཏེ་རིན་བརག་ཚད་ལྡན་ཆུ་ཚོད"}
         }
         fallbackFormat{"{1}། ({0}་)"}
-        fallbackRegionFormat{"{1}་ཆུ་ཚོད། ({0}་)"}
         gmtFormat{"ཇི་ཨེམ་ཏི་{0}"}
         gmtZeroFormat{"ཇི་ཨེམ་ཊི་"}
         hourFormat{"+HH:mm;-HH:mm"}

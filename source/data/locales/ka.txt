@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ka.xml
+ * ICU <specials> source: <path>/common/main/ka.xml
  */
 ka{
     AuxExemplarCharacters{
@@ -128,7 +128,7 @@ ka{
         native{"latn"}
         traditional{"geor"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -139,7 +139,7 @@ ka{
                 "EEEE, dd MMMM, y G",
                 "d MMMM, y G",
                 "d MMM, y G",
-                "dd.MM.yy GGGGG",
+                "dd.MM.y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1}, {0}",
@@ -148,6 +148,10 @@ ka{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"y G"}
+                GyMMM{"MMM, y G"}
+                GyMMMEd{"E, d MMM, y G"}
+                GyMMMd{"d MMM, y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -162,15 +166,16 @@ ka{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"M.y"}
-                yMEd{"E, d.M.y"}
-                yMMM{"MMM, y"}
-                yMMMEd{"E, d MMM, y"}
-                yMMMd{"d MMM, y"}
-                yMd{"d.M.y"}
-                yQQQ{"QQQ, y"}
-                yQQQQ{"QQQQ, y"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M.y G"}
+                yyyyMEd{"E, d.M.y G"}
+                yyyyMMM{"MMM, y G"}
+                yyyyMMMEd{"E, d MMM, y G"}
+                yyyyMMMd{"d MMM, y G"}
+                yyyyMd{"d.M.y G"}
+                yyyyQQQ{"QQQ, y G"}
+                yyyyQQQQ{"QQQQ, y G"}
             }
             intervalFormats{
                 H{
@@ -232,38 +237,38 @@ ka{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"y–y G"}
                 }
                 yM{
-                    M{"MM.y - MM.y"}
-                    y{"MM.y - MM.y"}
+                    M{"MM.y - MM.y G"}
+                    y{"MM.y - MM.y G"}
                 }
                 yMEd{
-                    M{"E, dd.MM.y - E, dd.MM.y"}
-                    d{"E, dd.MM.y - E, dd.MM.y"}
-                    y{"E, dd.MM.y - E, dd.MM.y"}
+                    M{"E, dd.MM.y - E, dd.MM.y G"}
+                    d{"E, dd.MM.y - E, dd.MM.y G"}
+                    y{"E, dd.MM.y - E, dd.MM.y G"}
                 }
                 yMMM{
-                    M{"MMM-MMM y"}
-                    y{"MMM y - MMM y"}
+                    M{"MMM-MMM y G"}
+                    y{"MMM y - MMM y G"}
                 }
                 yMMMEd{
-                    M{"E, d MMM - E, d MMM, y"}
-                    d{"E, d - E, d MMM y"}
-                    y{"E, d MMM, y - E, d MMM, y"}
+                    M{"E, d MMM - E, d MMM, y G"}
+                    d{"E, d - E, d MMM y G"}
+                    y{"E, d MMM, y - E, d MMM, y G"}
                 }
                 yMMMM{
-                    M{"MM - MM.y"}
-                    y{"MM.y - MM.y"}
+                    M{"MM - MM.y G"}
+                    y{"MM.y - MM.y G"}
                 }
                 yMMMd{
                     M{"dd MM - dd MM, y"}
                     y{"dd MMM, y - d MMM, y"}
                 }
                 yMd{
-                    M{"dd.MM.y - dd.MM.y"}
-                    d{"dd.MM.y - dd.MM.y"}
-                    y{"dd.MM.y - dd.MM.y"}
+                    M{"dd.MM.y - dd.MM.y G"}
+                    d{"dd.MM.y - dd.MM.y G"}
+                    y{"dd.MM.y - dd.MM.y G"}
                 }
             }
         }
@@ -289,6 +294,10 @@ ka{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"y G"}
+                GyMMM{"MMM, y G"}
+                GyMMMEd{"E, d MMM, y G"}
+                GyMMMd{"d MMM, y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -632,15 +641,6 @@ ka{
                 }
             }
         }
-        islamic{
-            availableFormats{
-                MMMd{"d MMM"}
-                Md{"d.M."}
-                yM{"M.y"}
-                yMEd{"E, d.M.y"}
-                yMMMEd{"E, d MMM y"}
-            }
-        }
     }
     delimiters{
         alternateQuotationEnd{"“"}
@@ -704,88 +704,95 @@ ka{
         metric{"მეტრული"}
     }
     units{
-        day{
-            other{"{0} დღე"}
-        }
-        day-future{
-            other{"{0} დღეში"}
-        }
-        day-past{
-            other{"{0} დღის წინ"}
-        }
-        hour{
-            other{"{0} საათი"}
-        }
-        hour-future{
-            other{"{0} საათში"}
-        }
-        hour-past{
-            other{"{0} საათის წინ"}
-        }
-        minute{
-            other{"{0} წუთი"}
-        }
-        minute-future{
-            other{"{0} წუთში"}
-        }
-        minute-past{
-            other{"{0} წუთის წინ"}
-        }
-        month{
-            other{"{0} თვე"}
-        }
-        month-future{
-            other{"{0} თვეში"}
-        }
-        month-past{
-            other{"{0} თვის წინ"}
-        }
-        second{
-            other{"{0} წამი"}
-        }
-        second-future{
-            other{"{0} წამში"}
-        }
-        second-past{
-            other{"{0} წამის წინ"}
-        }
-        week{
-            other{"{0} კვირა"}
-        }
-        week-future{
-            other{"{0} კვირაში"}
-        }
-        week-past{
-            other{"{0} კვირის წინ"}
-        }
-        year{
-            other{"{0} წელი"}
-        }
-        year-future{
-            other{"{0} წელიწადში"}
-        }
-        year-past{
-            other{"{0} წლის წინ"}
+        duration{
+            day{
+                other{"{0} დღე"}
+            }
+            day-future{
+                other{"{0} დღეში"}
+            }
+            day-past{
+                other{"{0} დღის წინ"}
+            }
+            hour{
+                other{"{0} საათი"}
+            }
+            hour-future{
+                other{"{0} საათში"}
+            }
+            hour-past{
+                other{"{0} საათის წინ"}
+            }
+            minute{
+                other{"{0} წუთი"}
+            }
+            minute-future{
+                other{"{0} წუთში"}
+            }
+            minute-past{
+                other{"{0} წუთის წინ"}
+            }
+            month{
+                other{"{0} თვე"}
+            }
+            month-future{
+                other{"{0} თვეში"}
+            }
+            month-past{
+                other{"{0} თვის წინ"}
+            }
+            second{
+                other{"{0} წამი"}
+            }
+            second-future{
+                other{"{0} წამში"}
+            }
+            second-past{
+                other{"{0} წამის წინ"}
+            }
+            week{
+                other{"{0} კვირა"}
+            }
+            week-future{
+                other{"{0} კვირაში"}
+            }
+            week-past{
+                other{"{0} კვირის წინ"}
+            }
+            year{
+                other{"{0} წელი"}
+            }
+            year-future{
+                other{"{0} წელიწადში"}
+            }
+            year-past{
+                other{"{0} წლის წინ"}
+            }
         }
     }
     unitsShort{
-        day{
-            other{"{0} დღე"}
-        }
-        minute{
-            other{"{0} წთ"}
-        }
-        month{
-            other{"{0} თვე"}
-        }
-        second{
-            other{"{0} წმ"}
-        }
-        week{
-            other{"{0} კვრ"}
-        }
-        year{
-            other{"{0} წ"}
+        duration{
+            day{
+                other{"{0} დღე"}
+            }
+            hour{
+                other{"{0} საათი"}
+            }
+            minute{
+                other{"{0} წთ"}
+            }
+            month{
+                other{"{0} თვე"}
+            }
+            second{
+                other{"{0} წმ"}
+            }
+            week{
+                other{"{0} კვრ"}
+            }
+            year{
+                other{"{0} წ"}
+            }
         }
     }
 }

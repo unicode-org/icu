@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/nb.xml
+ * ICU <specials> source: <path>/common/main/nb.xml
  */
 nb{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -621,7 +621,6 @@ nb{
             ls{"Russisk (Jekaterinburg) normaltid"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Tidssone for {1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

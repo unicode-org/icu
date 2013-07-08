@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/hi.xml
+ * ICU <specials> source: <path>/common/main/hi.xml
  */
 hi{
     AuxExemplarCharacters{"[\u200C\u200D]"}
@@ -151,7 +151,7 @@ hi{
         }
         native{"deva"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         ethiopic{
             monthNames{
@@ -379,13 +379,13 @@ hi{
             dayNames{
                 format{
                     abbreviated{
-                        "रवि.",
-                        "सोम.",
-                        "मंगल.",
-                        "बुध.",
-                        "बृह.",
-                        "शुक्र.",
-                        "शनि.",
+                        "रवि",
+                        "सोम",
+                        "मंगल",
+                        "बुध",
+                        "गुरु",
+                        "शुक्र",
+                        "शनि",
                     }
                     short{
                         "र",
@@ -401,7 +401,7 @@ hi{
                         "सोमवार",
                         "मंगलवार",
                         "बुधवार",
-                        "बृहस्पतिवार",
+                        "गुरुवार",
                         "शुक्रवार",
                         "शनिवार",
                     }
@@ -967,119 +967,123 @@ hi{
         metric{"मेट्रिक"}
     }
     units{
-        day{
-            one{"{0} दिन"}
-            other{"{0} दिन"}
-        }
-        day-future{
-            one{"{0} दिन में"}
-            other{"{0} दिन में"}
-        }
-        day-past{
-            one{"{0} दिन पहले"}
-            other{"{0} दिन पहले"}
-        }
-        hour{
-            one{"{0} घंटा"}
-            other{"{0} घंटे"}
-        }
-        hour-future{
-            one{"{0} घंटों में"}
-            other{"{0} घंटों में"}
-        }
-        hour-past{
-            one{"{0} घंटे पहले"}
-            other{"{0} घंटे पहले"}
-        }
-        minute{
-            one{"{0} मिनट"}
-            other{"{0} मिनट"}
-        }
-        minute-future{
-            one{"{0} मिनट में"}
-            other{"{0} मिनट में"}
-        }
-        minute-past{
-            one{"{0} मिनट पहले"}
-            other{"{0} मिनट पहले"}
-        }
-        month{
-            one{"{0} महीना"}
-            other{"{0} महीने"}
-        }
-        month-future{
-            one{"{0} माह में"}
-            other{"{0} माह में"}
-        }
-        month-past{
-            one{"{0} माह पहले"}
-            other{"{0} माह पहले"}
-        }
-        second{
-            one{"{0} सेकंड"}
-            other{"{0} सेकंड"}
-        }
-        second-future{
-            one{"{0} सेकंड में"}
-            other{"{0} सेकंड में"}
-        }
-        second-past{
-            one{"{0} सेकंड पहले"}
-            other{"{0} सेकंड पहले"}
-        }
-        week{
-            one{"{0} सप्ताह"}
-            other{"{0} सप्ताह"}
-        }
-        week-future{
-            one{"{0} सप्ताह में"}
-            other{"{0} सप्ताह में"}
-        }
-        week-past{
-            one{"{0} सप्ताह पहले"}
-            other{"{0} सप्ताह पहले"}
-        }
-        year{
-            one{"{0} साल"}
-            other{"{0} साल"}
-        }
-        year-future{
-            one{"{0} वर्ष में"}
-            other{"{0} वर्ष में"}
-        }
-        year-past{
-            one{"{0} वर्ष पहले"}
-            other{"{0} वर्ष पहले"}
+        duration{
+            day{
+                one{"{0} दिन"}
+                other{"{0} दिन"}
+            }
+            day-future{
+                one{"{0} दिन में"}
+                other{"{0} दिन में"}
+            }
+            day-past{
+                one{"{0} दिन पहले"}
+                other{"{0} दिन पहले"}
+            }
+            hour{
+                one{"{0} घंटा"}
+                other{"{0} घंटे"}
+            }
+            hour-future{
+                one{"{0} घंटों में"}
+                other{"{0} घंटों में"}
+            }
+            hour-past{
+                one{"{0} घंटे पहले"}
+                other{"{0} घंटे पहले"}
+            }
+            minute{
+                one{"{0} मिनट"}
+                other{"{0} मिनट"}
+            }
+            minute-future{
+                one{"{0} मिनट में"}
+                other{"{0} मिनट में"}
+            }
+            minute-past{
+                one{"{0} मिनट पहले"}
+                other{"{0} मिनट पहले"}
+            }
+            month{
+                one{"{0} महीना"}
+                other{"{0} महीने"}
+            }
+            month-future{
+                one{"{0} माह में"}
+                other{"{0} माह में"}
+            }
+            month-past{
+                one{"{0} माह पहले"}
+                other{"{0} माह पहले"}
+            }
+            second{
+                one{"{0} सेकंड"}
+                other{"{0} सेकंड"}
+            }
+            second-future{
+                one{"{0} सेकंड में"}
+                other{"{0} सेकंड में"}
+            }
+            second-past{
+                one{"{0} सेकंड पहले"}
+                other{"{0} सेकंड पहले"}
+            }
+            week{
+                one{"{0} सप्ताह"}
+                other{"{0} सप्ताह"}
+            }
+            week-future{
+                one{"{0} सप्ताह में"}
+                other{"{0} सप्ताह में"}
+            }
+            week-past{
+                one{"{0} सप्ताह पहले"}
+                other{"{0} सप्ताह पहले"}
+            }
+            year{
+                one{"{0} साल"}
+                other{"{0} साल"}
+            }
+            year-future{
+                one{"{0} वर्ष में"}
+                other{"{0} वर्ष में"}
+            }
+            year-past{
+                one{"{0} वर्ष पहले"}
+                other{"{0} वर्ष पहले"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} दि."}
-            other{"{0} दि."}
-        }
-        hour{
-            one{"{0} घं."}
-            other{"{0} घंटे"}
-        }
-        minute{
-            one{"{0} मिन."}
-            other{"{0} मिन."}
-        }
-        month{
-            one{"{0} मही."}
-            other{"{0} मही."}
-        }
-        second{
-            one{"{0} सेकं."}
-            other{"{0} सेकं."}
-        }
-        week{
-            one{"{0} सप्त."}
-            other{"{0} सप्त."}
-        }
-        year{
-            one{"{0} साल"}
-            other{"{0} साल"}
+        duration{
+            day{
+                one{"{0} दि."}
+                other{"{0} दि."}
+            }
+            hour{
+                one{"{0} घं."}
+                other{"{0} घंटे"}
+            }
+            minute{
+                one{"{0} मिन."}
+                other{"{0} मिन."}
+            }
+            month{
+                one{"{0} मही."}
+                other{"{0} मही."}
+            }
+            second{
+                one{"{0} सेकं."}
+                other{"{0} सेकं."}
+            }
+            week{
+                one{"{0} सप्त."}
+                other{"{0} सप्त."}
+            }
+            year{
+                one{"{0} साल"}
+                other{"{0} साल"}
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/dav.xml
+ * ICU <specials> source: <path>/common/main/dav.xml
  */
 dav{
     AuxExemplarCharacters{"[q x]"}
@@ -19,11 +19,11 @@ dav{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
     calendar{
         generic{
             DateTimePatterns{

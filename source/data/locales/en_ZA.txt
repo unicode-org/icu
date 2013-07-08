@@ -19,7 +19,7 @@ en_ZA{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.38"}
     calendar{
         generic{
             DateTimePatterns{
@@ -42,10 +42,10 @@ en_ZA{
                 MMMEd{"E dd MMM"}
                 MMMd{"dd MMM"}
                 Md{"MM/dd"}
-                yMEd{"E, y/MM/dd"}
-                yMMMEd{"E, dd MMM y"}
-                yMMMd{"dd MMM y"}
-                yMd{"y/MM/dd"}
+                yyyyMEd{"E, G y/MM/dd"}
+                yyyyMMMEd{"E, dd MMM y G"}
+                yyyyMMMd{"dd MMM y G"}
+                yyyyMd{"G y/MM/dd"}
             }
         }
         gregorian{

@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/uk.xml
+ * ICU <specials> source: <path>/common/main/uk.xml
  */
 uk{
-    Version{"2.0.86.71"}
+    Version{"2.0.88.33"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абіджан"}
@@ -1687,7 +1687,6 @@ uk{
             ls{"за єкатеринбурзьким стандартним часом"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Час: {1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

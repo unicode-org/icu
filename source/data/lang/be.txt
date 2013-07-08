@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/be.xml
+ * ICU <specials> source: <path>/common/main/be.xml
  */
 be{
     Keys{
@@ -187,7 +187,7 @@ be{
             japanese{"японскі каляндар"}
         }
     }
-    Version{"2.0.82.49"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Мова: {0}"}
         script{"Пісьмо: {0}"}
@@ -195,6 +195,6 @@ be{
     }
     localeDisplayPattern{
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

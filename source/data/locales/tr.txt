@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/tr.xml
+ * ICU <specials> source: <path>/common/main/tr.xml
  */
 tr{
     AuxExemplarCharacters{
@@ -26,7 +26,7 @@ tr{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"%#,##0"}
                 scientificFormat{"#E0"}
@@ -125,7 +125,7 @@ tr{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -890,91 +890,95 @@ tr{
         metric{"Metrik"}
     }
     units{
-        day{
-            other{"{0} gün"}
-        }
-        day-future{
-            other{"{0} gün sonra"}
-        }
-        day-past{
-            other{"{0} gün önce"}
-        }
-        hour{
-            other{"{0} saat"}
-        }
-        hour-future{
-            other{"{0} saat sonra"}
-        }
-        hour-past{
-            other{"{0} saat önce"}
-        }
-        minute{
-            other{"{0} dakika"}
-        }
-        minute-future{
-            other{"{0} dakika sonra"}
-        }
-        minute-past{
-            other{"{0} dakika önce"}
-        }
-        month{
-            other{"{0} ay"}
-        }
-        month-future{
-            other{"{0} ay sonra"}
-        }
-        month-past{
-            other{"{0} ay önce"}
-        }
-        second{
-            other{"{0} saniye"}
-        }
-        second-future{
-            other{"{0} saniye sonra"}
-        }
-        second-past{
-            other{"{0} saniye önce"}
-        }
-        week{
-            other{"{0} hafta"}
-        }
-        week-future{
-            other{"{0} hafta sonra"}
-        }
-        week-past{
-            other{"{0} hafta önce"}
-        }
-        year{
-            other{"{0} yıl"}
-        }
-        year-future{
-            other{"{0} yıl sonra"}
-        }
-        year-past{
-            other{"{0} yıl önce"}
+        duration{
+            day{
+                other{"{0} gün"}
+            }
+            day-future{
+                other{"{0} gün sonra"}
+            }
+            day-past{
+                other{"{0} gün önce"}
+            }
+            hour{
+                other{"{0} saat"}
+            }
+            hour-future{
+                other{"{0} saat sonra"}
+            }
+            hour-past{
+                other{"{0} saat önce"}
+            }
+            minute{
+                other{"{0} dakika"}
+            }
+            minute-future{
+                other{"{0} dakika sonra"}
+            }
+            minute-past{
+                other{"{0} dakika önce"}
+            }
+            month{
+                other{"{0} ay"}
+            }
+            month-future{
+                other{"{0} ay sonra"}
+            }
+            month-past{
+                other{"{0} ay önce"}
+            }
+            second{
+                other{"{0} saniye"}
+            }
+            second-future{
+                other{"{0} saniye sonra"}
+            }
+            second-past{
+                other{"{0} saniye önce"}
+            }
+            week{
+                other{"{0} hafta"}
+            }
+            week-future{
+                other{"{0} hafta sonra"}
+            }
+            week-past{
+                other{"{0} hafta önce"}
+            }
+            year{
+                other{"{0} yıl"}
+            }
+            year-future{
+                other{"{0} yıl sonra"}
+            }
+            year-past{
+                other{"{0} yıl önce"}
+            }
         }
     }
     unitsShort{
-        day{
-            other{"{0} gün"}
-        }
-        hour{
-            other{"{0} sa."}
-        }
-        minute{
-            other{"{0} dk."}
-        }
-        month{
-            other{"{0} ay"}
-        }
-        second{
-            other{"{0} sn."}
-        }
-        week{
-            other{"{0} hf."}
-        }
-        year{
-            other{"{0} yıl"}
+        duration{
+            day{
+                other{"{0} gün"}
+            }
+            hour{
+                other{"{0} sa."}
+            }
+            minute{
+                other{"{0} dk."}
+            }
+            month{
+                other{"{0} ay"}
+            }
+            second{
+                other{"{0} sn."}
+            }
+            week{
+                other{"{0} hf."}
+            }
+            year{
+                other{"{0} yıl"}
+            }
         }
     }
 }

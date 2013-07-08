@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ps.xml
+ * ICU <specials> source: <path>/common/main/ps.xml
  */
 ps{
     AuxExemplarCharacters{"[\u200C \u200D]"}
@@ -43,7 +43,7 @@ ps{
         }
         native{"arabext"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.88.97"}
     calendar{
         default{"persian"}
         generic{
@@ -87,6 +87,9 @@ ps{
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
+            }
+            appendItems{
+                Timezone{"{0} ({1})"}
             }
             availableFormats{
                 H{"H"}

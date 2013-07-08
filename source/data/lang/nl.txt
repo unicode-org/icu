@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/nl.xml
+ * ICU <specials> source: <path>/common/main/nl.xml
  */
 nl{
     Keys{
@@ -868,7 +868,7 @@ nl{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Schrift: {0}"}
@@ -877,6 +877,6 @@ nl{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

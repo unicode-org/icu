@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mr.xml
+ * ICU <specials> source: <path>/common/main/mr.xml
  */
 mr{
     Countries{
@@ -302,5 +302,5 @@ mr{
         ZW{"झिम्बाब्वे"}
         ZZ{"अज्ञात वा अवैध प्रदेश"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

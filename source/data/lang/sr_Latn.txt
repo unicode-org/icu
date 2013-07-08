@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sr_Latn.xml
+ * ICU <specials> source: <path>/common/main/sr_Latn.xml
  */
 sr_Latn{
     Keys{
@@ -782,7 +782,7 @@ sr_Latn{
         TARASK{"Taraskijevička ortografija"}
         VALENCIA{"Valencijska"}
     }
-    Version{"2.0.86.79"}
+    Version{"2.0.86.81"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Skript: {0}"}
@@ -791,6 +791,6 @@ sr_Latn{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

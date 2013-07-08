@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/it.xml
+ * ICU <specials> source: <path>/common/main/it.xml
  */
 it{
     AuxExemplarCharacters{"[á â å ä ã æ ç ê ë í î ï ñ ô ö õ ø œ ß ú û ü ÿ]"}
@@ -143,7 +143,7 @@ it{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -178,7 +178,7 @@ it{
                 "EEEE d MMMM y G",
                 "dd MMMM y G",
                 "dd/MMM/y G",
-                "dd/MM/yy GGGGG",
+                "dd/MM/y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -326,7 +326,7 @@ it{
                 "EEEE d MMMM y",
                 "dd MMMM y",
                 "dd/MMM/y",
-                "dd/MM/yy",
+                "dd/MM/y",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -801,119 +801,123 @@ it{
         metric{"metrico"}
     }
     units{
-        day{
-            one{"{0} giorno"}
-            other{"{0} giorni"}
-        }
-        day-future{
-            one{"tra {0} giorno"}
-            other{"tra {0} giorni"}
-        }
-        day-past{
-            one{"{0} giorno fa"}
-            other{"{0} giorni fa"}
-        }
-        hour{
-            one{"{0} ora"}
-            other{"{0} ore"}
-        }
-        hour-future{
-            one{"tra {0} ora"}
-            other{"tra {0} ore"}
-        }
-        hour-past{
-            one{"{0} ora fa"}
-            other{"{0} ore fa"}
-        }
-        minute{
-            one{"{0} minuto"}
-            other{"{0} minuti"}
-        }
-        minute-future{
-            one{"tra {0} minuto"}
-            other{"tra {0} minuti"}
-        }
-        minute-past{
-            one{"{0} minuto fa"}
-            other{"{0} minuti fa"}
-        }
-        month{
-            one{"{0} mese"}
-            other{"{0} mesi"}
-        }
-        month-future{
-            one{"tra {0} mese"}
-            other{"tra {0} mesi"}
-        }
-        month-past{
-            one{"{0} mese fa"}
-            other{"{0} mesi fa"}
-        }
-        second{
-            one{"{0} secondo"}
-            other{"{0} secondi"}
-        }
-        second-future{
-            one{"tra {0} secondo"}
-            other{"tra {0} secondi"}
-        }
-        second-past{
-            one{"{0} secondo fa"}
-            other{"{0} secondi fa"}
-        }
-        week{
-            one{"{0} settimana"}
-            other{"{0} settimane"}
-        }
-        week-future{
-            one{"tra {0} settimana"}
-            other{"tra {0} settimane"}
-        }
-        week-past{
-            one{"{0} settimana fa"}
-            other{"{0} settimane fa"}
-        }
-        year{
-            one{"{0} anno"}
-            other{"{0} anni"}
-        }
-        year-future{
-            one{"tra {0} anno"}
-            other{"tra {0} anni"}
-        }
-        year-past{
-            one{"{0} anno fa"}
-            other{"{0} anni fa"}
+        duration{
+            day{
+                one{"{0} giorno"}
+                other{"{0} giorni"}
+            }
+            day-future{
+                one{"tra {0} giorno"}
+                other{"tra {0} giorni"}
+            }
+            day-past{
+                one{"{0} giorno fa"}
+                other{"{0} giorni fa"}
+            }
+            hour{
+                one{"{0} ora"}
+                other{"{0} ore"}
+            }
+            hour-future{
+                one{"tra {0} ora"}
+                other{"tra {0} ore"}
+            }
+            hour-past{
+                one{"{0} ora fa"}
+                other{"{0} ore fa"}
+            }
+            minute{
+                one{"{0} minuto"}
+                other{"{0} minuti"}
+            }
+            minute-future{
+                one{"tra {0} minuto"}
+                other{"tra {0} minuti"}
+            }
+            minute-past{
+                one{"{0} minuto fa"}
+                other{"{0} minuti fa"}
+            }
+            month{
+                one{"{0} mese"}
+                other{"{0} mesi"}
+            }
+            month-future{
+                one{"tra {0} mese"}
+                other{"tra {0} mesi"}
+            }
+            month-past{
+                one{"{0} mese fa"}
+                other{"{0} mesi fa"}
+            }
+            second{
+                one{"{0} secondo"}
+                other{"{0} secondi"}
+            }
+            second-future{
+                one{"tra {0} secondo"}
+                other{"tra {0} secondi"}
+            }
+            second-past{
+                one{"{0} secondo fa"}
+                other{"{0} secondi fa"}
+            }
+            week{
+                one{"{0} settimana"}
+                other{"{0} settimane"}
+            }
+            week-future{
+                one{"tra {0} settimana"}
+                other{"tra {0} settimane"}
+            }
+            week-past{
+                one{"{0} settimana fa"}
+                other{"{0} settimane fa"}
+            }
+            year{
+                one{"{0} anno"}
+                other{"{0} anni"}
+            }
+            year-future{
+                one{"tra {0} anno"}
+                other{"tra {0} anni"}
+            }
+            year-past{
+                one{"{0} anno fa"}
+                other{"{0} anni fa"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} g"}
-            other{"{0} gg"}
-        }
-        hour{
-            one{"{0} h"}
-            other{"{0} h"}
-        }
-        minute{
-            one{"{0} min"}
-            other{"{0} min"}
-        }
-        month{
-            one{"{0} mese"}
-            other{"{0} mesi"}
-        }
-        second{
-            one{"{0} sec"}
-            other{"{0} sec"}
-        }
-        week{
-            one{"{0} sett."}
-            other{"{0} sett."}
-        }
-        year{
-            one{"{0} anno"}
-            other{"{0} anni"}
+        duration{
+            day{
+                one{"{0} g"}
+                other{"{0} gg"}
+            }
+            hour{
+                one{"{0} h"}
+                other{"{0} h"}
+            }
+            minute{
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                one{"{0} mese"}
+                other{"{0} mesi"}
+            }
+            second{
+                one{"{0} sec"}
+                other{"{0} sec"}
+            }
+            week{
+                one{"{0} sett."}
+                other{"{0} sett."}
+            }
+            year{
+                one{"{0} anno"}
+                other{"{0} anni"}
+            }
         }
     }
 }

@@ -7,8 +7,8 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bem.xml
+ * ICU <specials> source: <path>/common/main/bem.xml
  */
 bem{
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
 }

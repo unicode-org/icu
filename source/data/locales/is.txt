@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/is.xml
+ * ICU <specials> source: <path>/common/main/is.xml
  */
 is{
     AuxExemplarCharacters{"[c q w x z]"}
@@ -19,7 +19,7 @@ is{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -142,7 +142,7 @@ is{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -162,6 +162,10 @@ is{
             }
             availableFormats{
                 Ed{"e d."}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E d. MMM y G"}
+                GyMMMd{"d. MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -178,16 +182,17 @@ is{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"M. y"}
-                yMEd{"E d/M/y"}
-                yMMM{"MMM y"}
-                yMMMEd{"E d. MMM y"}
-                yMMMM{"MMMM y"}
-                yMMMd{"d MMM, y"}
-                yMd{"d/M/y"}
-                yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M. y G"}
+                yyyyMEd{"E d.M.y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E d. MMM y G"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"d. MMM y G"}
+                yyyyMd{"d.M.y G"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
                 H{
@@ -252,39 +257,39 @@ is{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"y–y G"}
                 }
                 yM{
-                    M{"M.y – M.y"}
-                    y{"M.y – M.y"}
+                    M{"M.y – M.y G"}
+                    y{"M.y – M.y G"}
                 }
                 yMEd{
-                    M{"E, d.M.y – E, d.M.y"}
-                    d{"E, d.M.y – E, d.M.y"}
-                    y{"E, d.M.y – E, d.M.y"}
+                    M{"E, d.M.y – E, d.M.y G"}
+                    d{"E, d.M.y – E, d.M.y G"}
+                    y{"E, d.M.y – E, d.M.y G"}
                 }
                 yMMM{
-                    M{"MMM–MMM y"}
-                    y{"MMM y – MMM y"}
+                    M{"MMM–MMM y G"}
+                    y{"MMM y – MMM y G"}
                 }
                 yMMMEd{
-                    M{"E, d. MMM – E, d. MMM y"}
-                    d{"E, d. – E, d. MMM y"}
-                    y{"E, d. MMM y – E, d. MMM y"}
+                    M{"E, d. MMM – E, d. MMM y G"}
+                    d{"E, d. – E, d. MMM y G"}
+                    y{"E, d. MMM y – E, d. MMM y G"}
                 }
                 yMMMM{
-                    M{"MMMM–MMMM y"}
-                    y{"MMMM y – MMMM y"}
+                    M{"MMMM–MMMM y G"}
+                    y{"MMMM y – MMMM y G"}
                 }
                 yMMMd{
-                    M{"d. MMM – d. MMM y"}
-                    d{"d.–d. MMM y"}
-                    y{"d. MMM y – d. MMM y"}
+                    M{"d. MMM – d. MMM y G"}
+                    d{"d.–d. MMM y G"}
+                    y{"d. MMM y – d. MMM y G"}
                 }
                 yMd{
-                    M{"d.M.y – d.M.y"}
-                    d{"d.M.y – d.M.y"}
-                    y{"d.M.y – d.M.y"}
+                    M{"d.M.y – d.M.y G"}
+                    d{"d.M.y – d.M.y G"}
+                    y{"d.M.y – d.M.y G"}
                 }
             }
         }
@@ -310,6 +315,10 @@ is{
             }
             availableFormats{
                 Ed{"e d."}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E d. MMM y G"}
+                GyMMMd{"d. MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -688,119 +697,123 @@ is{
         metric{"Metrakerfi"}
     }
     units{
-        day{
-            one{"{0} dagur"}
-            other{"{0} dagar"}
-        }
-        day-future{
-            one{"Eftir {0} dag"}
-            other{"Eftir {0} daga"}
-        }
-        day-past{
-            one{"Fyrir {0} degi síðan"}
-            other{"Fyrir {0} dögum síðan"}
-        }
-        hour{
-            one{"{0} klukkustund"}
-            other{"{0} klukkustundir"}
-        }
-        hour-future{
-            one{"Eftir {0} klukkustund"}
-            other{"Eftir {0} klukkustundir"}
-        }
-        hour-past{
-            one{"Fyrir {0} klukkustund síðan"}
-            other{"Fyrir {0} klukkustundum síðan"}
-        }
-        minute{
-            one{"{0} mínúta"}
-            other{"{0} mínútur"}
-        }
-        minute-future{
-            one{"Eftir {0} mínútu"}
-            other{"Eftir {0} mínútur"}
-        }
-        minute-past{
-            one{"Fyrir {0} mínútu síðan"}
-            other{"Fyrir {0} mínútum síðan"}
-        }
-        month{
-            one{"{0} mánuður"}
-            other{"{0} mánuðum"}
-        }
-        month-future{
-            one{"Eftir {0} mánuð"}
-            other{"Eftir {0} mánuði"}
-        }
-        month-past{
-            one{"Fyrir {0} mánuði síðan"}
-            other{"Fyrir {0} mánuðum síðan"}
-        }
-        second{
-            one{"{0} sekúnda"}
-            other{"{0} sekúndur"}
-        }
-        second-future{
-            one{"Eftir {0} sekúndu"}
-            other{"Eftir {0} sekúndur"}
-        }
-        second-past{
-            one{"Fyrir {0} sekúndu síðan"}
-            other{"Fyrir {0} sekúndum síðan"}
-        }
-        week{
-            one{"{0} vika"}
-            other{"{0} vikur"}
-        }
-        week-future{
-            one{"Eftir {0} viku"}
-            other{"Eftir {0} vikur"}
-        }
-        week-past{
-            one{"Fyrir {0} viku síðan"}
-            other{"Fyrir {0} vikum síðan"}
-        }
-        year{
-            one{"{0} ár"}
-            other{"{0} ár"}
-        }
-        year-future{
-            one{"Eftir {0} ár"}
-            other{"Eftir {0} ár"}
-        }
-        year-past{
-            one{"Fyrir {0} ári síðan"}
-            other{"Fyrir {0} árum síðan"}
+        duration{
+            day{
+                one{"{0} dagur"}
+                other{"{0} dagar"}
+            }
+            day-future{
+                one{"Eftir {0} dag"}
+                other{"Eftir {0} daga"}
+            }
+            day-past{
+                one{"Fyrir {0} degi síðan"}
+                other{"Fyrir {0} dögum síðan"}
+            }
+            hour{
+                one{"{0} klukkustund"}
+                other{"{0} klukkustundir"}
+            }
+            hour-future{
+                one{"Eftir {0} klukkustund"}
+                other{"Eftir {0} klukkustundir"}
+            }
+            hour-past{
+                one{"Fyrir {0} klukkustund síðan"}
+                other{"Fyrir {0} klukkustundum síðan"}
+            }
+            minute{
+                one{"{0} mínúta"}
+                other{"{0} mínútur"}
+            }
+            minute-future{
+                one{"Eftir {0} mínútu"}
+                other{"Eftir {0} mínútur"}
+            }
+            minute-past{
+                one{"Fyrir {0} mínútu síðan"}
+                other{"Fyrir {0} mínútum síðan"}
+            }
+            month{
+                one{"{0} mánuður"}
+                other{"{0} mánuðum"}
+            }
+            month-future{
+                one{"Eftir {0} mánuð"}
+                other{"Eftir {0} mánuði"}
+            }
+            month-past{
+                one{"Fyrir {0} mánuði síðan"}
+                other{"Fyrir {0} mánuðum síðan"}
+            }
+            second{
+                one{"{0} sekúnda"}
+                other{"{0} sekúndur"}
+            }
+            second-future{
+                one{"Eftir {0} sekúndu"}
+                other{"Eftir {0} sekúndur"}
+            }
+            second-past{
+                one{"Fyrir {0} sekúndu síðan"}
+                other{"Fyrir {0} sekúndum síðan"}
+            }
+            week{
+                one{"{0} vika"}
+                other{"{0} vikur"}
+            }
+            week-future{
+                one{"Eftir {0} viku"}
+                other{"Eftir {0} vikur"}
+            }
+            week-past{
+                one{"Fyrir {0} viku síðan"}
+                other{"Fyrir {0} vikum síðan"}
+            }
+            year{
+                one{"{0} ár"}
+                other{"{0} ár"}
+            }
+            year-future{
+                one{"Eftir {0} ár"}
+                other{"Eftir {0} ár"}
+            }
+            year-past{
+                one{"Fyrir {0} ári síðan"}
+                other{"Fyrir {0} árum síðan"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} dagur"}
-            other{"{0} dagar"}
-        }
-        hour{
-            one{"{0} klst."}
-            other{"{0} klst."}
-        }
-        minute{
-            one{"{0} mín."}
-            other{"{0} mín."}
-        }
-        month{
-            one{"{0} mán."}
-            other{"{0} mán."}
-        }
-        second{
-            one{"{0} sek."}
-            other{"{0} sek."}
-        }
-        week{
-            one{"{0} vika"}
-            other{"{0} vikur"}
-        }
-        year{
-            one{"{0} ár"}
-            other{"{0} ár"}
+        duration{
+            day{
+                one{"{0} dagur"}
+                other{"{0} dagar"}
+            }
+            hour{
+                one{"{0} klst."}
+                other{"{0} klst."}
+            }
+            minute{
+                one{"{0} mín."}
+                other{"{0} mín."}
+            }
+            month{
+                one{"{0} mán."}
+                other{"{0} mán."}
+            }
+            second{
+                one{"{0} sek."}
+                other{"{0} sek."}
+            }
+            week{
+                one{"{0} vika"}
+                other{"{0} vikur"}
+            }
+            year{
+                one{"{0} ár"}
+                other{"{0} ár"}
+            }
         }
     }
 }

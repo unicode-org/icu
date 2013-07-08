@@ -7,35 +7,35 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/jgo.xml
+ * ICU <specials> source: <path>/common/main/jgo.xml
  */
 jgo{
     Keys{
-        currency{"Ŋkɑ́p"}
-        numbers{"Pɛnɔ́mbɑ"}
+        currency{"Ŋkáp"}
+        numbers{"Pɛnɔ́mba"}
     }
     Languages{
         ar{"Alâbɛ"}
         de{"Njáman"}
-        el{"Ŋɡɛlɛ̂k"}
-        en{"Aŋɡɛlúshi"}
+        el{"Ŋgɛlɛ̂k"}
+        en{"Aŋgɛlúshi"}
         fr{"Fɛlánci"}
         jgo{"Ndaꞌa"}
-        und{"cú-pʉɔ yi pɛ́ kɑ́ kɛ́ jí"}
+        und{"cú-pʉɔ yi pɛ́ ká kɛ́ jí"}
         zh{"Shinwâ"}
     }
     Scripts{
         Latn{"mík -ŋwa’nɛ yi ɛ́ líŋɛ́nɛ Latɛ̂ŋ"}
         Zxxx{"ntúu yi pɛ́ ká ŋwa’nε"}
-        Zzzz{"ntɛ-ŋwa’nɛ yí pɛ́ kɑ́ kɛ́ jí"}
+        Zzzz{"ntɛ-ŋwa’nɛ yí pɛ́ ká kɛ́ jí"}
     }
     Types{
         calendar{
-            gregorian{"mɛlɛ́’-mɛkɑ́t"}
+            gregorian{"mɛlɛ́’-mɛkát"}
         }
         numbers{
             latn{"pɛnɔ́mba"}
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.27"}
 }

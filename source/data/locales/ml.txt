@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ml.xml
+ * ICU <specials> source: <path>/common/main/ml.xml
  */
 ml{
     AuxExemplarCharacters{"[\u200C\u200D]"}
@@ -165,7 +165,7 @@ ml{
         }
         native{"mlym"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -176,7 +176,7 @@ ml{
                 "G y, MMMM d, EEEE",
                 "G y, MMMM d",
                 "G y, MMM d",
-                "dd/MM/yy GGGGG",
+                "dd/MM/y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -185,6 +185,10 @@ ml{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"G y"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"G y MMM d, E"}
+                GyMMMd{"G y MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -202,17 +206,18 @@ ml{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"M-y"}
-                yMEd{"d-M-y, E"}
-                yMM{"MM-y"}
-                yMMM{"y MMM"}
-                yMMMEd{"y MMM d, E"}
-                yMMMM{"y MMMM"}
-                yMMMd{"y MMM d"}
-                yMd{"d/M/y"}
-                yQQQ{"y QQQ"}
-                yQQQQ{"y QQQQ"}
+                y{"G y"}
+                yyyy{"G y"}
+                yyyyM{"M-y G"}
+                yyyyMEd{"d-M-y G, E"}
+                yyyyMM{"MM-y G"}
+                yyyyMMM{"G y MMM"}
+                yyyyMMMEd{"G y MMM d, E"}
+                yyyyMMMM{"G y MMMM"}
+                yyyyMMMd{"G y MMM d"}
+                yyyyMd{"d/M/y G"}
+                yyyyQQQ{"G y QQQ"}
+                yyyyQQQQ{"G y QQQQ"}
             }
             intervalFormats{
                 H{
@@ -277,11 +282,11 @@ ml{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"G y-y"}
                 }
                 yM{
-                    M{"M/y – M/y"}
-                    y{"M/y – M/y"}
+                    M{"M/y – M/y G"}
+                    y{"M/y – M/y G"}
                 }
                 yMEd{
                     M{"d/M/y, E - d/M/y, E"}
@@ -289,27 +294,27 @@ ml{
                     y{"d/M/y, E - d/M/y, E"}
                 }
                 yMMM{
-                    M{"y MMM-MMM"}
-                    y{"y MMM - y MMM"}
+                    M{"G y MMM-MMM"}
+                    y{"G y MMM - y MMM"}
                 }
                 yMMMEd{
-                    M{"y MMM d, E - MMM d, E"}
-                    d{"y, MMM d, E - d, E"}
-                    y{"y MMM d, E - y MMM d, E"}
+                    M{"G y MMM d, E - MMM d, E"}
+                    d{"G y, MMM d, E - d, E"}
+                    y{"G y MMM d, E - y MMM d, E"}
                 }
                 yMMMM{
-                    M{"y-MM – MM"}
-                    y{"y-MM – y-MM"}
+                    M{"G y MMMM-MMMM"}
+                    y{"G y MMMM - y MMMM"}
                 }
                 yMMMd{
-                    M{"y MMM d - MMM d"}
-                    d{"y MMM d-d"}
-                    y{"y MMM d - y MMM d"}
+                    M{"G y MMM d - MMM d"}
+                    d{"G y MMM d-d"}
+                    y{"G y MMM d - y MMM d"}
                 }
                 yMd{
-                    M{"d/M/y – d/M/y"}
-                    d{"d/M/y – d/M/y"}
-                    y{"d/M/y – d/M/y"}
+                    M{"d/M/y – d/M/y G"}
+                    d{"d/M/y – d/M/y G"}
+                    y{"d/M/y – d/M/y G"}
                 }
             }
         }
@@ -335,6 +340,10 @@ ml{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"G y"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"G y MMM d, E"}
+                GyMMMd{"G y MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -796,119 +805,123 @@ ml{
         metric{"മെട്രിക്ക്"}
     }
     units{
-        day{
-            one{"{0} ദിവസം"}
-            other{"{0} ദിവസം"}
-        }
-        day-future{
-            one{"{0} ദിവസത്തിൽ"}
-            other{"{0} ദിവസത്തിൽ"}
-        }
-        day-past{
-            one{"{0} ദിവസം മുമ്പ്"}
-            other{"{0} ദിവസം മുമ്പ്"}
-        }
-        hour{
-            one{"{0} മണിക്കൂർ"}
-            other{"{0} മണിക്കൂർ"}
-        }
-        hour-future{
-            one{"{0} മണിക്കൂറിൽ"}
-            other{"{0} മണിക്കൂറിൽ"}
-        }
-        hour-past{
-            one{"{0} മണിക്കൂർ മുമ്പ്"}
-            other{"{0} മണിക്കൂർ മുമ്പ്"}
-        }
-        minute{
-            one{"{0} മിനിട്ട്"}
-            other{"{0} മിനിട്ട്"}
-        }
-        minute-future{
-            one{"{0} മിനിറ്റിൽ"}
-            other{"{0} മിനിറ്റിനുള്ളിൽ"}
-        }
-        minute-past{
-            one{"{0} മിനിറ്റ് മുമ്പ്"}
-            other{"{0} മിനിറ്റ് മുമ്പ്"}
-        }
-        month{
-            one{"{0} മാസം"}
-            other{"{0} മാസം"}
-        }
-        month-future{
-            one{"{0} മാസത്തിൽ"}
-            other{"{0} മാസത്തിൽ"}
-        }
-        month-past{
-            one{"{0} മാസം മുമ്പ്"}
-            other{"{0} മാസം മുമ്പ്"}
-        }
-        second{
-            one{"{0} സെക്കന്റ്"}
-            other{"{0} സെക്കന്റ്"}
-        }
-        second-future{
-            one{"{0} സെക്കൻഡിൽ"}
-            other{"{0} സെക്കൻഡിൽ"}
-        }
-        second-past{
-            one{"{0} സെക്കൻറ് മുമ്പ്"}
-            other{"{0} സെക്കൻറ് മുമ്പ്"}
-        }
-        week{
-            one{"{0} ആഴ്ച"}
-            other{"{0} ആഴ്ച"}
-        }
-        week-future{
-            one{"{0} ആഴ്ചയിൽ"}
-            other{"{0} ആഴ്ചയിൽ"}
-        }
-        week-past{
-            one{"{0} ആഴ്ച മുമ്പ്"}
-            other{"{0} ആഴ്ച മുമ്പ്"}
-        }
-        year{
-            one{"{0} വർഷം"}
-            other{"{0} വർഷം"}
-        }
-        year-future{
-            one{"{0} വർഷത്തിൽ"}
-            other{"{0} വർഷത്തിൽ"}
-        }
-        year-past{
-            one{"{0} വർഷം മുമ്പ്"}
-            other{"{0} വർഷം മുമ്പ്"}
+        duration{
+            day{
+                one{"{0} ദിവസം"}
+                other{"{0} ദിവസം"}
+            }
+            day-future{
+                one{"{0} ദിവസത്തിൽ"}
+                other{"{0} ദിവസത്തിൽ"}
+            }
+            day-past{
+                one{"{0} ദിവസം മുമ്പ്"}
+                other{"{0} ദിവസം മുമ്പ്"}
+            }
+            hour{
+                one{"{0} മണിക്കൂർ"}
+                other{"{0} മണിക്കൂർ"}
+            }
+            hour-future{
+                one{"{0} മണിക്കൂറിൽ"}
+                other{"{0} മണിക്കൂറിൽ"}
+            }
+            hour-past{
+                one{"{0} മണിക്കൂർ മുമ്പ്"}
+                other{"{0} മണിക്കൂർ മുമ്പ്"}
+            }
+            minute{
+                one{"{0} മിനിട്ട്"}
+                other{"{0} മിനിട്ട്"}
+            }
+            minute-future{
+                one{"{0} മിനിറ്റിൽ"}
+                other{"{0} മിനിറ്റിനുള്ളിൽ"}
+            }
+            minute-past{
+                one{"{0} മിനിറ്റ് മുമ്പ്"}
+                other{"{0} മിനിറ്റ് മുമ്പ്"}
+            }
+            month{
+                one{"{0} മാസം"}
+                other{"{0} മാസം"}
+            }
+            month-future{
+                one{"{0} മാസത്തിൽ"}
+                other{"{0} മാസത്തിൽ"}
+            }
+            month-past{
+                one{"{0} മാസം മുമ്പ്"}
+                other{"{0} മാസം മുമ്പ്"}
+            }
+            second{
+                one{"{0} സെക്കന്റ്"}
+                other{"{0} സെക്കന്റ്"}
+            }
+            second-future{
+                one{"{0} സെക്കൻഡിൽ"}
+                other{"{0} സെക്കൻഡിൽ"}
+            }
+            second-past{
+                one{"{0} സെക്കൻറ് മുമ്പ്"}
+                other{"{0} സെക്കൻറ് മുമ്പ്"}
+            }
+            week{
+                one{"{0} ആഴ്ച"}
+                other{"{0} ആഴ്ച"}
+            }
+            week-future{
+                one{"{0} ആഴ്ചയിൽ"}
+                other{"{0} ആഴ്ചയിൽ"}
+            }
+            week-past{
+                one{"{0} ആഴ്ച മുമ്പ്"}
+                other{"{0} ആഴ്ച മുമ്പ്"}
+            }
+            year{
+                one{"{0} വർഷം"}
+                other{"{0} വർഷം"}
+            }
+            year-future{
+                one{"{0} വർഷത്തിൽ"}
+                other{"{0} വർഷത്തിൽ"}
+            }
+            year-past{
+                one{"{0} വർഷം മുമ്പ്"}
+                other{"{0} വർഷം മുമ്പ്"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} ദിവസം‌"}
-            other{"{0} ദിവസം‌"}
-        }
-        hour{
-            one{"{0} മണിക്കൂർ‌"}
-            other{"{0} മണിക്കൂർ"}
-        }
-        minute{
-            one{"{0} മിനിറ്റ്"}
-            other{"{0} മിനിറ്റ്"}
-        }
-        month{
-            one{"{0} മാസം"}
-            other{"{0} മാസം"}
-        }
-        second{
-            one{"{0} സെക്കൻറ്"}
-            other{"{0} സെക്കൻറ്"}
-        }
-        week{
-            one{"{0} ആഴ്‌ച"}
-            other{"{0} ആഴ്‌ച"}
-        }
-        year{
-            one{"{0} വർ‌ഷം"}
-            other{"{0} വർ‌ഷം"}
+        duration{
+            day{
+                one{"{0} ദിവസം‌"}
+                other{"{0} ദിവസം‌"}
+            }
+            hour{
+                one{"{0} മണിക്കൂർ‌"}
+                other{"{0} മണിക്കൂർ"}
+            }
+            minute{
+                one{"{0} മിനിറ്റ്"}
+                other{"{0} മിനിറ്റ്"}
+            }
+            month{
+                one{"{0} മാസം"}
+                other{"{0} മാസം"}
+            }
+            second{
+                one{"{0} സെക്കൻറ്"}
+                other{"{0} സെക്കൻറ്"}
+            }
+            week{
+                one{"{0} ആഴ്‌ച"}
+                other{"{0} ആഴ്‌ച"}
+            }
+            year{
+                one{"{0} വർ‌ഷം"}
+                other{"{0} വർ‌ഷം"}
+            }
         }
     }
 }

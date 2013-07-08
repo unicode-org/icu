@@ -7,6 +7,1582 @@
 // *
 // ***************************************************************************
 supplementalData:table(nofallback){
+    calendarData{
+        buddhist{
+            eras{
+                0{
+                    start:intvector{
+                        -18450,
+                        2114611199,
+                    }
+                }
+            }
+            system{"solar"}
+        }
+        chinese{
+            eras{
+                0{
+                    start:intvector{
+                        -33836,
+                        -1384739841,
+                    }
+                }
+            }
+            system{"lunisolar"}
+        }
+        dangi{
+            eras{
+                0{
+                    start:intvector{
+                        -31602,
+                        1463688191,
+                    }
+                }
+            }
+            system{"lunisolar"}
+        }
+        gregorian{
+            eras{
+                0{
+                    end:intvector{
+                        -14468,
+                        -477728769,
+                    }
+                }
+                1{
+                    start:intvector{
+                        -14460,
+                        993500159,
+                    }
+                }
+            }
+            system{"solar"}
+        }
+        hebrew{
+            eras{
+                0{
+                    start:intvector{
+                        -42096,
+                        1253692415,
+                    }
+                }
+            }
+            system{"lunisolar"}
+        }
+        indian{
+            eras{
+                0{
+                    start:intvector{
+                        -13887,
+                        1426839551,
+                    }
+                }
+            }
+        }
+        islamic{
+            eras{
+                0{
+                    start:intvector{
+                        -9901,
+                        -1410969601,
+                    }
+                }
+            }
+            system{"lunar"}
+        }
+        islamic-civil{
+            eras{
+                0{
+                    start:intvector{
+                        -9901,
+                        -1324569601,
+                    }
+                }
+            }
+            system{"lunar"}
+        }
+        islamic-rgsa{
+            eras{
+                0{
+                    start:intvector{
+                        -9901,
+                        -1410969601,
+                    }
+                }
+            }
+            system{"lunar"}
+        }
+        islamic-tbla{
+            eras{
+                0{
+                    start:intvector{
+                        -9901,
+                        -1410969601,
+                    }
+                }
+            }
+            system{"lunar"}
+        }
+        islamic-umalqura{
+            eras{
+                0{
+                    start:intvector{
+                        -9901,
+                        -1410969601,
+                    }
+                }
+            }
+            system{"lunar"}
+        }
+        japanese{
+            eras{
+                0{
+                    start:intvector{
+                        -9732,
+                        634524671,
+                    }
+                }
+                1{
+                    start:intvector{
+                        -9698,
+                        1658436607,
+                    }
+                }
+                10{
+                    start:intvector{
+                        -9114,
+                        1243935743,
+                    }
+                }
+                100{
+                    start:intvector{
+                        -5884,
+                        -732997633,
+                    }
+                }
+                101{
+                    start:intvector{
+                        -5869,
+                        -962307073,
+                    }
+                }
+                102{
+                    start:intvector{
+                        -5837,
+                        591306751,
+                    }
+                }
+                103{
+                    start:intvector{
+                        -5823,
+                        -70002689,
+                    }
+                }
+                104{
+                    start:intvector{
+                        -5794,
+                        -208054273,
+                    }
+                }
+                105{
+                    start:intvector{
+                        -5787,
+                        1410941951,
+                    }
+                }
+                106{
+                    start:intvector{
+                        -5773,
+                        897399807,
+                    }
+                }
+                107{
+                    start:intvector{
+                        -5764,
+                        -148273153,
+                    }
+                }
+                108{
+                    start:intvector{
+                        -5729,
+                        789238783,
+                    }
+                }
+                109{
+                    start:intvector{
+                        -5663,
+                        -1594370049,
+                    }
+                }
+                11{
+                    start:intvector{
+                        -8970,
+                        -137522177,
+                    }
+                }
+                110{
+                    start:intvector{
+                        -5650,
+                        -577744897,
+                    }
+                }
+                111{
+                    start:intvector{
+                        -5627,
+                        145774591,
+                    }
+                }
+                112{
+                    start:intvector{
+                        -5611,
+                        287097855,
+                    }
+                }
+                113{
+                    start:intvector{
+                        -5600,
+                        216857599,
+                    }
+                }
+                114{
+                    start:intvector{
+                        -5576,
+                        -798924801,
+                    }
+                }
+                115{
+                    start:intvector{
+                        -5556,
+                        -39070721,
+                    }
+                }
+                116{
+                    start:intvector{
+                        -5516,
+                        1196404735,
+                    }
+                }
+                117{
+                    start:intvector{
+                        -5494,
+                        1487924223,
+                    }
+                }
+                118{
+                    start:intvector{
+                        -5475,
+                        2136345599,
+                    }
+                }
+                119{
+                    start:intvector{
+                        -5472,
+                        -1997123585,
+                    }
+                }
+                12{
+                    start:intvector{
+                        -8968,
+                        -1901856769,
+                    }
+                }
+                120{
+                    start:intvector{
+                        -5453,
+                        -311902209,
+                    }
+                }
+                121{
+                    start:intvector{
+                        -5444,
+                        -207873,
+                    }
+                }
+                122{
+                    start:intvector{
+                        -5421,
+                        -1670855681,
+                    }
+                }
+                123{
+                    start:intvector{
+                        -5413,
+                        923573247,
+                    }
+                }
+                124{
+                    start:intvector{
+                        -5402,
+                        -1454434305,
+                    }
+                }
+                125{
+                    start:intvector{
+                        -5395,
+                        250961919,
+                    }
+                }
+                126{
+                    start:intvector{
+                        -5372,
+                        1777114111,
+                    }
+                }
+                127{
+                    start:intvector{
+                        -5371,
+                        -246420481,
+                    }
+                }
+                128{
+                    start:intvector{
+                        -5360,
+                        -2131060737,
+                    }
+                }
+                129{
+                    start:intvector{
+                        -5341,
+                        -1223439361,
+                    }
+                }
+                13{
+                    start:intvector{
+                        -8908,
+                        1216672767,
+                    }
+                }
+                130{
+                    start:intvector{
+                        -5311,
+                        625709055,
+                    }
+                }
+                131{
+                    start:intvector{
+                        -5296,
+                        914799615,
+                    }
+                }
+                132{
+                    start:intvector{
+                        -5241,
+                        -1312168961,
+                    }
+                }
+                133{
+                    start:intvector{
+                        -5238,
+                        -373070849,
+                    }
+                }
+                134{
+                    start:intvector{
+                        -5223,
+                        -688780289,
+                    }
+                }
+                135{
+                    start:intvector{
+                        -5215,
+                        -1870918657,
+                    }
+                }
+                136{
+                    start:intvector{
+                        -5209,
+                        -597522433,
+                    }
+                }
+                137{
+                    start:intvector{
+                        -5186,
+                        212397055,
+                    }
+                }
+                138{
+                    start:intvector{
+                        -5104,
+                        18678783,
+                    }
+                }
+                139{
+                    start:intvector{
+                        -5084,
+                        -233234433,
+                    }
+                }
+                14{
+                    start:intvector{
+                        -8854,
+                        -1812928513,
+                    }
+                }
+                140{
+                    start:intvector{
+                        -5009,
+                        -1725381633,
+                    }
+                }
+                141{
+                    start:intvector{
+                        -4969,
+                        1410893823,
+                    }
+                }
+                142{
+                    start:intvector{
+                        -4928,
+                        1486834687,
+                    }
+                }
+                143{
+                    start:intvector{
+                        -4902,
+                        -1638882305,
+                    }
+                }
+                144{
+                    start:intvector{
+                        -4897,
+                        -908918785,
+                    }
+                }
+                145{
+                    start:intvector{
+                        -4872,
+                        2024666111,
+                    }
+                }
+                146{
+                    start:intvector{
+                        -4859,
+                        -648876033,
+                    }
+                }
+                147{
+                    start:intvector{
+                        -4840,
+                        -1814854657,
+                    }
+                }
+                148{
+                    start:intvector{
+                        -4833,
+                        668141567,
+                    }
+                }
+                149{
+                    start:intvector{
+                        -4798,
+                        -72281089,
+                    }
+                }
+                15{
+                    start:intvector{
+                        -8835,
+                        -1250907137,
+                    }
+                }
+                150{
+                    start:intvector{
+                        -4781,
+                        1537842175,
+                    }
+                }
+                151{
+                    start:intvector{
+                        -4768,
+                        -962899969,
+                    }
+                }
+                152{
+                    start:intvector{
+                        -4740,
+                        -1557984257,
+                    }
+                }
+                153{
+                    start:intvector{
+                        -4730,
+                        -1048457217,
+                    }
+                }
+                154{
+                    start:intvector{
+                        -4705,
+                        1366727679,
+                    }
+                }
+                155{
+                    start:intvector{
+                        -4691,
+                        -1713781761,
+                    }
+                }
+                156{
+                    start:intvector{
+                        -4673,
+                        -917593089,
+                    }
+                }
+                157{
+                    start:intvector{
+                        -4657,
+                        408297471,
+                    }
+                }
+                158{
+                    start:intvector{
+                        -4627,
+                        -1407688705,
+                    }
+                }
+                159{
+                    start:intvector{
+                        -4578,
+                        1089881087,
+                    }
+                }
+                16{
+                    start:intvector{
+                        -8812,
+                        -1366354945,
+                    }
+                }
+                160{
+                    start:intvector{
+                        -4405,
+                        -688828417,
+                    }
+                }
+                161{
+                    start:intvector{
+                        -4392,
+                        1080364031,
+                    }
+                }
+                162{
+                    start:intvector{
+                        -4369,
+                        1742516223,
+                    }
+                }
+                163{
+                    start:intvector{
+                        -4341,
+                        2011431935,
+                    }
+                }
+                164{
+                    start:intvector{
+                        -4327,
+                        1584289791,
+                    }
+                }
+                165{
+                    start:intvector{
+                        -4304,
+                        -147725313,
+                    }
+                }
+                166{
+                    start:intvector{
+                        -4305,
+                        -1123158017,
+                    }
+                }
+                167{
+                    start:intvector{
+                        -4279,
+                        1489859583,
+                    }
+                }
+                168{
+                    start:intvector{
+                        -4268,
+                        555619327,
+                    }
+                }
+                169{
+                    start:intvector{
+                        -4260,
+                        1619880959,
+                    }
+                }
+                17{
+                    start:intvector{
+                        -8736,
+                        79097855,
+                    }
+                }
+                170{
+                    start:intvector{
+                        -4229,
+                        -862272513,
+                    }
+                }
+                171{
+                    start:intvector{
+                        -3980,
+                        1025838079,
+                    }
+                }
+                172{
+                    start:intvector{
+                        -3970,
+                        930565119,
+                    }
+                }
+                173{
+                    start:intvector{
+                        -3886,
+                        1564512255,
+                    }
+                }
+                174{
+                    start:intvector{
+                        -3864,
+                        646431743,
+                    }
+                }
+                175{
+                    start:intvector{
+                        -3824,
+                        1647739903,
+                    }
+                }
+                176{
+                    start:intvector{
+                        -3802,
+                        1593659391,
+                    }
+                }
+                177{
+                    start:intvector{
+                        -3780,
+                        1712378879,
+                    }
+                }
+                178{
+                    start:intvector{
+                        -3764,
+                        1767302143,
+                    }
+                }
+                179{
+                    start:intvector{
+                        -3740,
+                        640087039,
+                    }
+                }
+                18{
+                    start:intvector{
+                        -8725,
+                        -52509697,
+                    }
+                }
+                180{
+                    start:intvector{
+                        -3702,
+                        1159329791,
+                    }
+                }
+                181{
+                    start:intvector{
+                        -3695,
+                        -1405208577,
+                    }
+                }
+                182{
+                    start:intvector{
+                        -3679,
+                        -2127885313,
+                    }
+                }
+                183{
+                    start:intvector{
+                        -3545,
+                        -1711102977,
+                    }
+                }
+                184{
+                    start:intvector{
+                        -3530,
+                        -990012417,
+                    }
+                }
+                185{
+                    start:intvector{
+                        -3508,
+                        658874367,
+                    }
+                }
+                186{
+                    start:intvector{
+                        -3445,
+                        1976734719,
+                    }
+                }
+                187{
+                    start:intvector{
+                        -3423,
+                        -2113113089,
+                    }
+                }
+                188{
+                    start:intvector{
+                        -3295,
+                        -291326977,
+                    }
+                }
+                189{
+                    start:intvector{
+                        -3243,
+                        1330940927,
+                    }
+                }
+                19{
+                    start:intvector{
+                        -8550,
+                        1970380799,
+                    }
+                }
+                190{
+                    start:intvector{
+                        -3214,
+                        1106489343,
+                    }
+                }
+                191{
+                    start:intvector{
+                        -3044,
+                        -142518273,
+                    }
+                }
+                192{
+                    start:intvector{
+                        -3026,
+                        1060637695,
+                    }
+                }
+                193{
+                    start:intvector{
+                        -2937,
+                        -2129618945,
+                    }
+                }
+                194{
+                    start:intvector{
+                        -2913,
+                        2074933247,
+                    }
+                }
+                195{
+                    start:intvector{
+                        -2771,
+                        -1862190081,
+                    }
+                }
+                196{
+                    start:intvector{
+                        -2742,
+                        480325631,
+                    }
+                }
+                197{
+                    start:intvector{
+                        -2605,
+                        -1853961217,
+                    }
+                }
+                198{
+                    start:intvector{
+                        -2541,
+                        68699135,
+                    }
+                }
+                199{
+                    start:intvector{
+                        -2389,
+                        -853297153,
+                    }
+                }
+                2{
+                    start:intvector{
+                        -9537,
+                        504701951,
+                    }
+                }
+                20{
+                    start:intvector{
+                        -8518,
+                        1475427327,
+                    }
+                }
+                200{
+                    start:intvector{
+                        -2365,
+                        240855039,
+                    }
+                }
+                201{
+                    start:intvector{
+                        -2332,
+                        -895233025,
+                    }
+                }
+                202{
+                    start:intvector{
+                        -2313,
+                        -1542811649,
+                    }
+                }
+                203{
+                    start:intvector{
+                        -2289,
+                        -1201226753,
+                    }
+                }
+                204{
+                    start:intvector{
+                        -2269,
+                        -95772673,
+                    }
+                }
+                205{
+                    start:intvector{
+                        -2177,
+                        627003391,
+                    }
+                }
+                206{
+                    start:intvector{
+                        -2118,
+                        375932927,
+                    }
+                }
+                207{
+                    start:intvector{
+                        -2101,
+                        -1333478401,
+                    }
+                }
+                208{
+                    start:intvector{
+                        -2067,
+                        -1951166465,
+                    }
+                }
+                209{
+                    start:intvector{
+                        -1953,
+                        186329087,
+                    }
+                }
+                21{
+                    start:intvector{
+                        -8420,
+                        127032319,
+                    }
+                }
+                210{
+                    start:intvector{
+                        -1901,
+                        1401629695,
+                    }
+                }
+                211{
+                    start:intvector{
+                        -1863,
+                        1056872447,
+                    }
+                }
+                212{
+                    start:intvector{
+                        -1717,
+                        391647231,
+                    }
+                }
+                213{
+                    start:intvector{
+                        -1682,
+                        -1644775425,
+                    }
+                }
+                214{
+                    start:intvector{
+                        -1660,
+                        -2044455937,
+                    }
+                }
+                215{
+                    start:intvector{
+                        -1628,
+                        -984209409,
+                    }
+                }
+                216{
+                    start:intvector{
+                        -1604,
+                        -210624513,
+                    }
+                }
+                217{
+                    start:intvector{
+                        -1511,
+                        -2029783041,
+                    }
+                }
+                218{
+                    start:intvector{
+                        -1449,
+                        -1428155393,
+                    }
+                }
+                219{
+                    start:intvector{
+                        -1387,
+                        876439551,
+                    }
+                }
+                22{
+                    start:intvector{
+                        -8347,
+                        2040819711,
+                    }
+                }
+                220{
+                    start:intvector{
+                        -1330,
+                        -1559663617,
+                    }
+                }
+                221{
+                    start:intvector{
+                        -1241,
+                        38414335,
+                    }
+                }
+                222{
+                    start:intvector{
+                        -1219,
+                        675533823,
+                    }
+                }
+                223{
+                    start:intvector{
+                        -1115,
+                        1896535039,
+                    }
+                }
+                224{
+                    start:intvector{
+                        -1022,
+                        1200576511,
+                    }
+                }
+                225{
+                    start:intvector{
+                        -920,
+                        -22654977,
+                    }
+                }
+                226{
+                    start:intvector{
+                        -896,
+                        -890670081,
+                    }
+                }
+                227{
+                    start:intvector{
+                        -846,
+                        1545532415,
+                    }
+                }
+                228{
+                    start:intvector{
+                        -807,
+                        1485007871,
+                    }
+                }
+                229{
+                    start:intvector{
+                        -800,
+                        623436799,
+                    }
+                }
+                23{
+                    start:intvector{
+                        -8241,
+                        -1760680961,
+                    }
+                }
+                230{
+                    start:intvector{
+                        -778,
+                        828556287,
+                    }
+                }
+                231{
+                    start:intvector{
+                        -770,
+                        2065617919,
+                    }
+                }
+                232{
+                    start:intvector{
+                        -745,
+                        -1603531777,
+                    }
+                }
+                233{
+                    start:intvector{
+                        -422,
+                        408998911,
+                    }
+                }
+                234{
+                    start:intvector{
+                        -317,
+                        -307134465,
+                    }
+                }
+                235{
+                    start:intvector{
+                        139,
+                        -988221441,
+                    }
+                }
+                24{
+                    start:intvector{
+                        -8220,
+                        -1321394177,
+                    }
+                }
+                25{
+                    start:intvector{
+                        -8193,
+                        366256127,
+                    }
+                }
+                26{
+                    start:intvector{
+                        -8177,
+                        1976379391,
+                    }
+                }
+                27{
+                    start:intvector{
+                        -8161,
+                        908102655,
+                    }
+                }
+                28{
+                    start:intvector{
+                        -8029,
+                        2138819583,
+                    }
+                }
+                29{
+                    start:intvector{
+                        -7971,
+                        825916415,
+                    }
+                }
+                3{
+                    start:intvector{
+                        -9430,
+                        72801279,
+                    }
+                }
+                30{
+                    start:intvector{
+                        -7941,
+                        -471669761,
+                    }
+                }
+                31{
+                    start:intvector{
+                        -7875,
+                        -29111297,
+                    }
+                }
+                32{
+                    start:intvector{
+                        -7851,
+                        -1501926401,
+                    }
+                }
+                33{
+                    start:intvector{
+                        -7691,
+                        1614273535,
+                    }
+                }
+                34{
+                    start:intvector{
+                        -7632,
+                        1968003071,
+                    }
+                }
+                35{
+                    start:intvector{
+                        -7580,
+                        1800903679,
+                    }
+                }
+                36{
+                    start:intvector{
+                        -7515,
+                        -262137857,
+                    }
+                }
+                37{
+                    start:intvector{
+                        -7437,
+                        887780351,
+                    }
+                }
+                38{
+                    start:intvector{
+                        -7413,
+                        -2115202049,
+                    }
+                }
+                39{
+                    start:intvector{
+                        -7388,
+                        1941582847,
+                    }
+                }
+                4{
+                    start:intvector{
+                        -9323,
+                        -852466689,
+                    }
+                }
+                40{
+                    start:intvector{
+                        -7358,
+                        -2034403329,
+                    }
+                }
+                41{
+                    start:intvector{
+                        -7346,
+                        1610556415,
+                    }
+                }
+                42{
+                    start:intvector{
+                        -7319,
+                        -626127873,
+                    }
+                }
+                43{
+                    start:intvector{
+                        -7300,
+                        -1360106497,
+                    }
+                }
+                44{
+                    start:intvector{
+                        -7282,
+                        707049471,
+                    }
+                }
+                45{
+                    start:intvector{
+                        -7250,
+                        1335295999,
+                    }
+                }
+                46{
+                    start:intvector{
+                        -7235,
+                        1105986559,
+                    }
+                }
+                47{
+                    start:intvector{
+                        -7221,
+                        -2147322881,
+                    }
+                }
+                48{
+                    start:intvector{
+                        -7204,
+                        -1203366913,
+                    }
+                }
+                49{
+                    start:intvector{
+                        -7195,
+                        -459672577,
+                    }
+                }
+                5{
+                    start:intvector{
+                        -9300,
+                        -622314497,
+                    }
+                }
+                50{
+                    start:intvector{
+                        -7163,
+                        1871541247,
+                    }
+                }
+                51{
+                    start:intvector{
+                        -7134,
+                        91889663,
+                    }
+                }
+                52{
+                    start:intvector{
+                        -7094,
+                        -1905769473,
+                    }
+                }
+                53{
+                    start:intvector{
+                        -7032,
+                        -2081741825,
+                    }
+                }
+                54{
+                    start:intvector{
+                        -7000,
+                        1286271999,
+                    }
+                }
+                55{
+                    start:intvector{
+                        -6972,
+                        345587711,
+                    }
+                }
+                56{
+                    start:intvector{
+                        -6947,
+                        1576205311,
+                    }
+                }
+                57{
+                    start:intvector{
+                        -6918,
+                        -5613569,
+                    }
+                }
+                58{
+                    start:intvector{
+                        -6853,
+                        905279487,
+                    }
+                }
+                59{
+                    start:intvector{
+                        -6827,
+                        1469729791,
+                    }
+                }
+                6{
+                    start:intvector{
+                        -9273,
+                        -724031489,
+                    }
+                }
+                60{
+                    start:intvector{
+                        -6797,
+                        60710911,
+                    }
+                }
+                61{
+                    start:intvector{
+                        -6787,
+                        829437951,
+                    }
+                }
+                62{
+                    start:intvector{
+                        -6738,
+                        -1029326849,
+                    }
+                }
+                63{
+                    start:intvector{
+                        -6696,
+                        515414015,
+                    }
+                }
+                64{
+                    start:intvector{
+                        -6645,
+                        64081919,
+                    }
+                }
+                65{
+                    start:intvector{
+                        -6618,
+                        739964927,
+                    }
+                }
+                66{
+                    start:intvector{
+                        -6579,
+                        -1887526913,
+                    }
+                }
+                67{
+                    start:intvector{
+                        -6555,
+                        1453025279,
+                    }
+                }
+                68{
+                    start:intvector{
+                        -6531,
+                        412210175,
+                    }
+                }
+                69{
+                    start:intvector{
+                        -6509,
+                        271729663,
+                    }
+                }
+                7{
+                    start:intvector{
+                        -9217,
+                        -99800065,
+                    }
+                }
+                70{
+                    start:intvector{
+                        -6486,
+                        1279481855,
+                    }
+                }
+                71{
+                    start:intvector{
+                        -6430,
+                        -836054017,
+                    }
+                }
+                72{
+                    start:intvector{
+                        -6415,
+                        -1929363457,
+                    }
+                }
+                73{
+                    start:intvector{
+                        -6408,
+                        1590432767,
+                    }
+                }
+                74{
+                    start:intvector{
+                        -6395,
+                        1483857919,
+                    }
+                }
+                75{
+                    start:intvector{
+                        -6362,
+                        322737151,
+                    }
+                }
+                76{
+                    start:intvector{
+                        -6347,
+                        -227139585,
+                    }
+                }
+                77{
+                    start:intvector{
+                        -6330,
+                        -60783617,
+                    }
+                }
+                78{
+                    start:intvector{
+                        -6315,
+                        1067274239,
+                    }
+                }
+                79{
+                    start:intvector{
+                        -6293,
+                        1272393727,
+                    }
+                }
+                8{
+                    start:intvector{
+                        -9200,
+                        905523199,
+                    }
+                }
+                80{
+                    start:intvector{
+                        -6259,
+                        -11461633,
+                    }
+                }
+                81{
+                    start:intvector{
+                        -6244,
+                        -672771073,
+                    }
+                }
+                82{
+                    start:intvector{
+                        -6214,
+                        398777343,
+                    }
+                }
+                83{
+                    start:intvector{
+                        -6201,
+                        1501802495,
+                    }
+                }
+                84{
+                    start:intvector{
+                        -6164,
+                        959212543,
+                    }
+                }
+                85{
+                    start:intvector{
+                        -6153,
+                        2098572287,
+                    }
+                }
+                86{
+                    start:intvector{
+                        -6133,
+                        1648826367,
+                    }
+                }
+                87{
+                    start:intvector{
+                        -6088,
+                        -137269249,
+                    }
+                }
+                88{
+                    start:intvector{
+                        -6082,
+                        -678273025,
+                    }
+                }
+                89{
+                    start:intvector{
+                        -6068,
+                        1029552127,
+                    }
+                }
+                9{
+                    start:intvector{
+                        -9155,
+                        -534972417,
+                    }
+                }
+                90{
+                    start:intvector{
+                        -6058,
+                        -1719088129,
+                    }
+                }
+                91{
+                    start:intvector{
+                        -6017,
+                        491820031,
+                    }
+                }
+                92{
+                    start:intvector{
+                        -5990,
+                        -1312864257,
+                    }
+                }
+                93{
+                    start:intvector{
+                        -5979,
+                        -1296704513,
+                    }
+                }
+                94{
+                    start:intvector{
+                        -5957,
+                        -1782785025,
+                    }
+                }
+                95{
+                    start:intvector{
+                        -5952,
+                        -361621505,
+                    }
+                }
+                96{
+                    start:intvector{
+                        -5939,
+                        197970943,
+                    }
+                }
+                97{
+                    start:intvector{
+                        -5928,
+                        -2007236609,
+                    }
+                }
+                98{
+                    start:intvector{
+                        -5912,
+                        -1693113345,
+                    }
+                }
+                99{
+                    start:intvector{
+                        -5903,
+                        -1640619009,
+                    }
+                }
+            }
+            system{"solar"}
+        }
+        persian{
+            eras{
+                0{
+                    start:intvector{
+                        -9897,
+                        305728511,
+                    }
+                }
+            }
+            system{"solar"}
+        }
+        roc{
+            eras{
+                0{
+                    end:intvector{
+                        -427,
+                        -727931905,
+                    }
+                }
+                1{
+                    start:intvector{
+                        -419,
+                        829697023,
+                    }
+                }
+            }
+        }
+    }
     calendarPreferenceData{
         001{
             "gregorian",
@@ -15,17 +1591,20 @@ supplementalData:table(nofallback){
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         AF{
             "persian",
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         BH{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         CN{
             "gregorian",
@@ -39,27 +1618,32 @@ supplementalData:table(nofallback){
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         DZ{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         EG{
             "gregorian",
             "coptic",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         EH{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         ER{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         ET{
             "gregorian",
@@ -74,6 +1658,7 @@ supplementalData:table(nofallback){
             "hebrew",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         IN{
             "gregorian",
@@ -83,17 +1668,20 @@ supplementalData:table(nofallback){
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         IR{
             "persian",
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         JO{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         JP{
             "gregorian",
@@ -103,6 +1691,7 @@ supplementalData:table(nofallback){
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         KR{
             "gregorian",
@@ -112,21 +1701,25 @@ supplementalData:table(nofallback){
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         LB{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         LY{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         MA{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         MO{
             "gregorian",
@@ -136,31 +1729,37 @@ supplementalData:table(nofallback){
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         OM{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         PS{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         QA{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         SA{
             "gregorian",
             "islamic",
-            "islamic-civil",
+            "islamic-umalqura",
+            "islamic-rgsa",
         }
         SD{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         SG{
             "gregorian",
@@ -170,11 +1769,13 @@ supplementalData:table(nofallback){
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         TD{
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         TH{
             "buddhist",
@@ -184,6 +1785,7 @@ supplementalData:table(nofallback){
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
         TW{
             "gregorian",
@@ -194,9 +1796,10 @@ supplementalData:table(nofallback){
             "gregorian",
             "islamic",
             "islamic-civil",
+            "islamic-tbla",
         }
     }
-    cldrVersion{"23.1"}
+    cldrVersion{"24"}
     codeMappings{
         {
             "AA",
@@ -3969,6 +5572,14 @@ supplementalData:table(nofallback){
                 scripts{"Arab"}
             }
         }
+        lkt{
+            primary{
+                scripts{"Latn"}
+            }
+            secondary{
+                territories{"US"}
+            }
+        }
         lmn{
             primary{
                 scripts{"Telu"}
@@ -5199,13 +6810,11 @@ supplementalData:table(nofallback){
                 territories{
                     "AL",
                     "MK",
+                    "XK",
                 }
             }
             secondary{
-                territories{
-                    "RS",
-                    "XK",
-                }
+                territories{"RS"}
             }
         }
         sr{
@@ -7372,6 +8981,17 @@ supplementalData:table(nofallback){
         WS{
             {
                 code{"685"}
+            }
+        }
+        XK{
+            {
+                code{"377"}
+            }
+            {
+                code{"381"}
+            }
+            {
+                code{"386"}
             }
         }
         YE{
@@ -10834,9 +12454,6 @@ supplementalData:table(nofallback){
                 59269300,
                 49608000,
                 56398970,
-            }
-            vai_Latn{
-                populationShareF:int{48260000}
             }
             vai_Vaii{
                 populationShareF:int{48260000}
@@ -15628,6 +17245,22 @@ supplementalData:table(nofallback){
             1,
             86400000,
         }
+        GG:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        GI:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
         GP:intvector{
             2,
             4,
@@ -15686,7 +17319,7 @@ supplementalData:table(nofallback){
         }
         HU:intvector{
             2,
-            1,
+            4,
             7,
             0,
             1,
@@ -15714,6 +17347,14 @@ supplementalData:table(nofallback){
             6,
             0,
             7,
+            86400000,
+        }
+        IM:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
             86400000,
         }
         IN:intvector{
@@ -15749,6 +17390,14 @@ supplementalData:table(nofallback){
             86400000,
         }
         IT:intvector{
+            2,
+            4,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        JE:intvector{
             2,
             4,
             7,
@@ -16199,6 +17848,14 @@ supplementalData:table(nofallback){
         SI:intvector{
             2,
             1,
+            7,
+            0,
+            1,
+            86400000,
+        }
+        SJ:intvector{
+            2,
+            4,
             7,
             0,
             1,

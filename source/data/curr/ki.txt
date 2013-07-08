@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ki.xml
+ * ICU <specials> source: <path>/common/main/ki.xml
  */
 ki{
     Currencies{
@@ -232,5 +232,5 @@ ki{
             "Dola ya Zimbabwe",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/th.xml
+ * ICU <specials> source: <path>/common/main/th.xml
  */
 th{
     Keys{
@@ -916,7 +916,7 @@ th{
         VALLADER{"วัลลาเดอร์"}
         WADEGILE{"การถอดอักษรแบบเวด-ไจลส์"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.87.67"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}
@@ -925,6 +925,6 @@ th{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

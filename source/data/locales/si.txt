@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/si.xml
+ * ICU <specials> source: <path>/common/main/si.xml
  */
 si{
     AuxExemplarCharacters{"[\u200B\u200C\u200D ඎ ඏ ඐ ඦ ෳ]"}
@@ -32,7 +32,7 @@ si{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -52,6 +52,10 @@ si{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"G y"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"G y MMM d, E"}
+                GyMMMd{"G y MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -66,15 +70,16 @@ si{
                 hm{"a h.mm"}
                 hms{"a h.mm.ss"}
                 ms{"mm.ss"}
-                y{"y"}
-                yM{"y-M"}
-                yMEd{"y-M-d, E"}
-                yMMM{"y MMM"}
-                yMMMEd{"y MMM d, E"}
-                yMMMd{"y MMM d"}
-                yMd{"y-M-d"}
-                yQQQ{"y QQQ"}
-                yQQQQ{"y QQQQ"}
+                y{"G y"}
+                yyyy{"G y"}
+                yyyyM{"G y-M"}
+                yyyyMEd{"G y-M-d, E"}
+                yyyyMMM{"G y MMM"}
+                yyyyMMMEd{"G y MMM d, E"}
+                yyyyMMMd{"G y MMM d"}
+                yyyyMd{"G y-M-d"}
+                yyyyQQQ{"G y QQQ"}
+                yyyyQQQQ{"G y QQQQ"}
             }
             intervalFormats{
                 H{
@@ -136,39 +141,39 @@ si{
                     h{"a h - h vv"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"G y–y"}
                 }
                 yM{
-                    M{"M-y - M-y"}
-                    y{"M-y - M-y"}
+                    M{"G y-M – y-M"}
+                    y{"G y-M – y-M"}
                 }
                 yMEd{
-                    M{"E, M-d-y - E, M-d-y"}
-                    d{"E, y-MM-dd – E, y-MM-dd"}
-                    y{"M-d-y, E - M-d-y, E"}
+                    M{"G y-M-d, E – y-M-d, E"}
+                    d{"G y-M-d, E – y-M-d, E"}
+                    y{"G y-M-d, E – y-M-d, E"}
                 }
                 yMMM{
-                    M{"y MMM–MMM"}
-                    y{"y MMM - y MMM"}
+                    M{"G y MMM–MMM"}
+                    y{"G y MMM - y MMM"}
                 }
                 yMMMEd{
-                    M{"y MMM d, E - y MMM d, E"}
-                    d{"y MMM d, E - y MMM d, E"}
-                    y{"y MMM d, E - y MMM d, E"}
+                    M{"G y MMM d, E - y MMM d, E"}
+                    d{"G y MMM d, E - y MMM d, E"}
+                    y{"G y MMM d, E - y MMM d, E"}
                 }
                 yMMMM{
-                    M{"y MMMM - MMMM"}
-                    y{"y MMMM - y MMMM"}
+                    M{"G y MMMM - MMMM"}
+                    y{"G y MMMM - y MMMM"}
                 }
                 yMMMd{
-                    M{"y MMM d - MMM d"}
-                    d{"y MMM d - d"}
-                    y{"y MMM d - y MMM d"}
+                    M{"G y MMM d - MMM d"}
+                    d{"G y MMM d - d"}
+                    y{"G y MMM d - y MMM d"}
                 }
                 yMd{
-                    M{"M-d-y - M-d-y"}
-                    d{"M-d-y - M-d-y"}
-                    y{"M-d-y - M-d-y"}
+                    M{"G y-M-d – y-M-d"}
+                    d{"G y-M-d – y-M-d"}
+                    y{"G y-M-d – y-M-d"}
                 }
             }
         }
@@ -194,6 +199,10 @@ si{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"G y"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"G y MMM d, E"}
+                GyMMMd{"G y MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -597,68 +606,70 @@ si{
         metric{"මෙට්රික්"}
     }
     units{
-        day{
-            other{"දින {0}ක්"}
-        }
-        day-future{
-            other{"දින {0}න්"}
-        }
-        day-past{
-            other{"දින {0} ට පෙර"}
-        }
-        hour{
-            other{"පැය {0}ක්"}
-        }
-        hour-future{
-            other{"පැය {0}ක් තුළ"}
-        }
-        hour-past{
-            other{"පැය {0}ට පෙර"}
-        }
-        minute{
-            other{"විනාඩි {0}ක්"}
-        }
-        minute-future{
-            other{"විනාඩි {0}ක් තුළ"}
-        }
-        minute-past{
-            other{"විනාඩි {0}ට පෙර"}
-        }
-        month{
-            other{"මාස {0}ක්"}
-        }
-        month-future{
-            other{"මාස {0}ක් තුළ"}
-        }
-        month-past{
-            other{"මාස {0}කට පෙර"}
-        }
-        second{
-            other{"විනාඩි {0}ක්"}
-        }
-        second-future{
-            other{"විනාඩි {0}ක් තුළ"}
-        }
-        second-past{
-            other{"විනාඩි {0}කට පෙර"}
-        }
-        week{
-            other{"සති {0}ක්"}
-        }
-        week-future{
-            other{"සති {0}ක් තුළ"}
-        }
-        week-past{
-            other{"සති {0}කට පෙර"}
-        }
-        year{
-            other{"වසර {0}ක්"}
-        }
-        year-future{
-            other{"වසර {0}ක් තුළ"}
-        }
-        year-past{
-            other{"වසර {0}ට පෙර"}
+        duration{
+            day{
+                other{"දින {0}ක්"}
+            }
+            day-future{
+                other{"දින {0}න්"}
+            }
+            day-past{
+                other{"දින {0} ට පෙර"}
+            }
+            hour{
+                other{"පැය {0}ක්"}
+            }
+            hour-future{
+                other{"පැය {0}ක් තුළ"}
+            }
+            hour-past{
+                other{"පැය {0}ට පෙර"}
+            }
+            minute{
+                other{"විනාඩි {0}ක්"}
+            }
+            minute-future{
+                other{"විනාඩි {0}ක් තුළ"}
+            }
+            minute-past{
+                other{"විනාඩි {0}ට පෙර"}
+            }
+            month{
+                other{"මාස {0}ක්"}
+            }
+            month-future{
+                other{"මාස {0}ක් තුළ"}
+            }
+            month-past{
+                other{"මාස {0}කට පෙර"}
+            }
+            second{
+                other{"විනාඩි {0}ක්"}
+            }
+            second-future{
+                other{"විනාඩි {0}ක් තුළ"}
+            }
+            second-past{
+                other{"විනාඩි {0}කට පෙර"}
+            }
+            week{
+                other{"සති {0}ක්"}
+            }
+            week-future{
+                other{"සති {0}ක් තුළ"}
+            }
+            week-past{
+                other{"සති {0}කට පෙර"}
+            }
+            year{
+                other{"වසර {0}ක්"}
+            }
+            year-future{
+                other{"වසර {0}ක් තුළ"}
+            }
+            year-past{
+                other{"වසර {0}ට පෙර"}
+            }
         }
     }
 }

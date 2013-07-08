@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/lt.xml
+ * ICU <specials> source: <path>/common/main/lt.xml
  */
 lt{
-    Version{"2.0.86.71"}
+    Version{"2.0.88.30"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžanas"}
@@ -1439,7 +1439,6 @@ lt{
             ls{"Jekaterinburgo žiemos laikas"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;−HH:mm"}

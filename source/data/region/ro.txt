@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ro.xml
+ * ICU <specials> source: <path>/common/main/ro.xml
  */
 ro{
     Countries{
@@ -107,7 +107,7 @@ ro{
         DM{"Dominica"}
         DO{"Republica Dominicană"}
         DZ{"Algeria"}
-        EA{"Ceuta şi Melilla"}
+        EA{"Ceuta și Melilla"}
         EC{"Ecuador"}
         EE{"Estonia"}
         EG{"Egipt"}
@@ -136,7 +136,7 @@ ro{
         GP{"Guadelupa"}
         GQ{"Guineea Ecuatorială"}
         GR{"Grecia"}
-        GS{"Georgia de Sud şi Insulele Sandwich de Sud"}
+        GS{"Georgia de Sud și Insulele Sandwich de Sud"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guineea-Bissau"}
@@ -302,5 +302,5 @@ ro{
         ZW{"Zimbabwe"}
         ZZ{"Regiune necunoscută"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

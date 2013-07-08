@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/nus.xml
+ * ICU <specials> source: <path>/common/main/nus.xml
  */
 nus{
     Languages{
@@ -57,5 +57,5 @@ nus{
         zh{"Thok cayna"}
         zu{"Thok dhuluni"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
 }

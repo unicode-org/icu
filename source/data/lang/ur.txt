@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ur.xml
+ * ICU <specials> source: <path>/common/main/ur.xml
  */
 ur{
     Keys{
@@ -330,7 +330,7 @@ ur{
             vaii{"وائی ہندسے"}
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"زبان:{0}"}
         script{"رسم الخط:{0}"}
@@ -339,6 +339,6 @@ ur{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{"،"}
+        separator{"{0}،{1}"}
     }
 }

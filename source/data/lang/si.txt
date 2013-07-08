@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/si.xml
+ * ICU <specials> source: <path>/common/main/si.xml
  */
 si{
     Keys{
@@ -239,7 +239,7 @@ si{
             tibt{"ටිබෙට ඉලක්කම්"}
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"{0} භාෂාව: සිංහල"}
         script{"{0} අක්ෂර මාලාව: සිංහල"}
@@ -248,6 +248,6 @@ si{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

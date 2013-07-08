@@ -7,12 +7,16 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/uk.xml
+ * ICU <specials> source: <path>/common/main/uk.xml
  */
 uk{
-    AuxExemplarCharacters{"[ё ъ ы э]"}
+    AuxExemplarCharacters{
+        "[{а\u0301} {е\u0301} ё {є\u0301} {и\u0301} {і\u0301} {ї\u0301} {о\u0301} {у"
+        "\u0301} ъ ы э {ю\u0301} {я\u0301}]"
+    }
     ExemplarCharacters{"[ʼ а б в г ґ д е є ж з и і ї й к л м н о п р с т у ф х ц ч ш щ ь ю я]"}
     ExemplarCharactersIndex{"[А Б В Г Ґ Д Е Є Ж З И І Ї Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ю Я]"}
+    ExemplarCharactersPunctuation{"[\\- – , ; \\: ! ? . ' \u0022 « » „ “ ( ) \\[ \\] \\{ \\} § @ * / \\\\ №]"}
     LocaleScript{
         "Cyrl",
     }
@@ -190,7 +194,7 @@ uk{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.33"}
     calendar{
         coptic{
             monthNames{
@@ -222,7 +226,7 @@ uk{
                 "EEEE, d MMMM y 'р'. G",
                 "d MMMM y 'р'. G",
                 "d MMM y G",
-                "dd.MM.yy GGGGG",
+                "dd.MM.y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -231,6 +235,10 @@ uk{
             }
             availableFormats{
                 Ed{"E, d"}
+                Gy{"y G"}
+                GyMMM{"LLL y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"HH"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
@@ -243,25 +251,23 @@ uk{
                 MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                MMdd{"dd.MM"}
                 Md{"dd.MM"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
-                mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"MM.y"}
-                yMEd{"E, dd.MM.y"}
-                yMM{"MM.y"}
-                yMMM{"LLL y"}
-                yMMMEd{"E, d MMM y"}
-                yMMMM{"LLLL y"}
-                yMMMd{"d MMM y"}
-                yMd{"dd.MM.y"}
-                yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y 'р'."}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"MM.y G"}
+                yyyyMEd{"E, dd.MM.y G"}
+                yyyyMMM{"LLL y G"}
+                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMM{"LLLL y G"}
+                yyyyMMMd{"d MMM y G"}
+                yyyyMd{"dd.MM.y G"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y 'р'. G"}
             }
             intervalFormats{
                 H{
@@ -323,39 +329,39 @@ uk{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"y–y G"}
                 }
                 yM{
-                    M{"MM.y – MM.y"}
-                    y{"MM.y – MM.y"}
+                    M{"MM.y – MM.y G"}
+                    y{"MM.y – MM.y G"}
                 }
                 yMEd{
-                    M{"E, dd.MM.y – E, dd.MM.y"}
-                    d{"E, dd.MM.y – E, dd.MM.y"}
-                    y{"E, dd.MM.y – E, dd.MM.y"}
+                    M{"E, dd.MM.y – E, dd.MM.y G"}
+                    d{"E, dd.MM.y – E, dd.MM.y G"}
+                    y{"E, dd.MM.y – E, dd.MM.y G"}
                 }
                 yMMM{
-                    M{"LLL–LLL y"}
-                    y{"LLL y – LLL y"}
+                    M{"LLL–LLL y G"}
+                    y{"LLL y – LLL y G"}
                 }
                 yMMMEd{
-                    M{"E, d MMM – E, d MMM y"}
-                    d{"E, d – E, d MMM y"}
-                    y{"E, d MMM y – E, d MMM y"}
+                    M{"E, d MMM – E, d MMM y G"}
+                    d{"E, d – E, d MMM y G"}
+                    y{"E, d MMM y – E, d MMM y G"}
                 }
                 yMMMM{
-                    M{"LLLL – LLLL y"}
-                    y{"LLLL y – LLLL y"}
+                    M{"LLLL – LLLL y G"}
+                    y{"LLLL y – LLLL y G"}
                 }
                 yMMMd{
-                    M{"d MMM – d MMM y"}
-                    d{"d–d MMM y"}
-                    y{"d MMM y – d MMM y"}
+                    M{"d MMM – d MMM y G"}
+                    d{"d–d MMM y G"}
+                    y{"d MMM y – d MMM y G"}
                 }
                 yMd{
-                    M{"dd.MM.y – dd.MM.y"}
-                    d{"dd.MM.y – dd.MM.y"}
-                    y{"dd.MM.y – dd.MM.y"}
+                    M{"dd.MM.y – dd.MM.y G"}
+                    d{"dd.MM.y – dd.MM.y G"}
+                    y{"dd.MM.y – dd.MM.y G"}
                 }
             }
         }
@@ -381,6 +387,10 @@ uk{
             }
             availableFormats{
                 Ed{"E, d"}
+                Gy{"y G"}
+                GyMMM{"LLL y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"HH"}
                 HHmm{"HH:mm"}
                 HHmmss{"HH:mm:ss"}
@@ -393,18 +403,15 @@ uk{
                 MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                MMdd{"dd.MM"}
                 Md{"dd.MM"}
                 d{"d"}
                 h{"h a"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
-                mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"MM.y"}
                 yMEd{"E, dd.MM.y"}
-                yMM{"MM.y"}
                 yMMM{"LLL y"}
                 yMMMEd{"E, d MMM y"}
                 yMMMM{"LLLL y"}
@@ -850,175 +857,179 @@ uk{
         metric{"Метрична"}
     }
     units{
-        day{
-            few{"{0} дні"}
-            many{"{0} днів"}
-            one{"{0} день"}
-            other{"{0} дня"}
-        }
-        day-future{
-            few{"Через {0} дні"}
-            many{"Через {0} днів"}
-            one{"Через {0} день"}
-            other{"Через {0} дня"}
-        }
-        day-past{
-            few{"{0} дні тому"}
-            many{"{0} днів тому"}
-            one{"{0} день тому"}
-            other{"{0} дня тому"}
-        }
-        hour{
-            few{"{0} години"}
-            many{"{0} годин"}
-            one{"{0} година"}
-            other{"{0} години"}
-        }
-        hour-future{
-            few{"Через {0} години"}
-            many{"Через {0} годин"}
-            one{"Через {0} годину"}
-            other{"Через {0} години"}
-        }
-        hour-past{
-            few{"{0} години тому"}
-            many{"{0} годин тому"}
-            one{"{0} годину тому"}
-            other{"{0} години тому"}
-        }
-        minute{
-            few{"{0} хвилини"}
-            many{"{0} хвилин"}
-            one{"{0} хвилина"}
-            other{"{0} хвилини"}
-        }
-        minute-future{
-            few{"Через {0} хвилини"}
-            many{"Через {0} хвилин"}
-            one{"Через {0} хвилину"}
-            other{"Через {0} хвилини"}
-        }
-        minute-past{
-            few{"{0} хвилини тому"}
-            many{"{0} хвилин тому"}
-            one{"{0} хвилину тому"}
-            other{"{0} хвилини тому"}
-        }
-        month{
-            few{"{0} місяці"}
-            many{"{0} місяців"}
-            one{"{0} місяць"}
-            other{"{0} місяця"}
-        }
-        month-future{
-            few{"Через {0} місяці"}
-            many{"Через {0} місяців"}
-            one{"Через {0} місяць"}
-            other{"Через {0} місяця"}
-        }
-        month-past{
-            few{"{0} місяці тому"}
-            many{"{0} місяців тому"}
-            one{"{0} місяць тому"}
-            other{"{0} місяця тому"}
-        }
-        second{
-            few{"{0} секунди"}
-            many{"{0} секунд"}
-            one{"{0} секунда"}
-            other{"{0} секунди"}
-        }
-        second-future{
-            few{"Через {0} секунди"}
-            many{"Через {0} секунд"}
-            one{"Через {0} секунду"}
-            other{"Через {0} секунди"}
-        }
-        second-past{
-            few{"{0} секунди тому"}
-            many{"{0} секунд тому"}
-            one{"{0} секунду тому"}
-            other{"{0} секунди тому"}
-        }
-        week{
-            few{"{0} тижні"}
-            many{"{0} тижнів"}
-            one{"{0} тиждень"}
-            other{"{0} тижня"}
-        }
-        week-future{
-            few{"Через {0} тижні"}
-            many{"Через {0} тижнів"}
-            one{"Через {0} тиждень"}
-            other{"Через {0} тижня"}
-        }
-        week-past{
-            few{"{0} тижні тому"}
-            many{"{0} тижнів тому"}
-            one{"{0} тиждень тому"}
-            other{"{0} тижня тому"}
-        }
-        year{
-            few{"{0} роки"}
-            many{"{0} років"}
-            one{"{0} рік"}
-            other{"{0} року"}
-        }
-        year-future{
-            few{"Через {0} роки"}
-            many{"Через {0} років"}
-            one{"Через {0} рік"}
-            other{"Через {0} року"}
-        }
-        year-past{
-            few{"{0} роки тому"}
-            many{"{0} років тому"}
-            one{"{0} рік тому"}
-            other{"{0} року тому"}
+        duration{
+            day{
+                few{"{0} дні"}
+                many{"{0} днів"}
+                one{"{0} день"}
+                other{"{0} дня"}
+            }
+            day-future{
+                few{"Через {0} дні"}
+                many{"Через {0} днів"}
+                one{"Через {0} день"}
+                other{"Через {0} дня"}
+            }
+            day-past{
+                few{"{0} дні тому"}
+                many{"{0} днів тому"}
+                one{"{0} день тому"}
+                other{"{0} дня тому"}
+            }
+            hour{
+                few{"{0} години"}
+                many{"{0} годин"}
+                one{"{0} година"}
+                other{"{0} години"}
+            }
+            hour-future{
+                few{"Через {0} години"}
+                many{"Через {0} годин"}
+                one{"Через {0} годину"}
+                other{"Через {0} години"}
+            }
+            hour-past{
+                few{"{0} години тому"}
+                many{"{0} годин тому"}
+                one{"{0} годину тому"}
+                other{"{0} години тому"}
+            }
+            minute{
+                few{"{0} хвилини"}
+                many{"{0} хвилин"}
+                one{"{0} хвилина"}
+                other{"{0} хвилини"}
+            }
+            minute-future{
+                few{"Через {0} хвилини"}
+                many{"Через {0} хвилин"}
+                one{"Через {0} хвилину"}
+                other{"Через {0} хвилини"}
+            }
+            minute-past{
+                few{"{0} хвилини тому"}
+                many{"{0} хвилин тому"}
+                one{"{0} хвилину тому"}
+                other{"{0} хвилини тому"}
+            }
+            month{
+                few{"{0} місяці"}
+                many{"{0} місяців"}
+                one{"{0} місяць"}
+                other{"{0} місяця"}
+            }
+            month-future{
+                few{"Через {0} місяці"}
+                many{"Через {0} місяців"}
+                one{"Через {0} місяць"}
+                other{"Через {0} місяця"}
+            }
+            month-past{
+                few{"{0} місяці тому"}
+                many{"{0} місяців тому"}
+                one{"{0} місяць тому"}
+                other{"{0} місяця тому"}
+            }
+            second{
+                few{"{0} секунди"}
+                many{"{0} секунд"}
+                one{"{0} секунда"}
+                other{"{0} секунди"}
+            }
+            second-future{
+                few{"Через {0} секунди"}
+                many{"Через {0} секунд"}
+                one{"Через {0} секунду"}
+                other{"Через {0} секунди"}
+            }
+            second-past{
+                few{"{0} секунди тому"}
+                many{"{0} секунд тому"}
+                one{"{0} секунду тому"}
+                other{"{0} секунди тому"}
+            }
+            week{
+                few{"{0} тижні"}
+                many{"{0} тижнів"}
+                one{"{0} тиждень"}
+                other{"{0} тижня"}
+            }
+            week-future{
+                few{"Через {0} тижні"}
+                many{"Через {0} тижнів"}
+                one{"Через {0} тиждень"}
+                other{"Через {0} тижня"}
+            }
+            week-past{
+                few{"{0} тижні тому"}
+                many{"{0} тижнів тому"}
+                one{"{0} тиждень тому"}
+                other{"{0} тижня тому"}
+            }
+            year{
+                few{"{0} роки"}
+                many{"{0} років"}
+                one{"{0} рік"}
+                other{"{0} року"}
+            }
+            year-future{
+                few{"Через {0} роки"}
+                many{"Через {0} років"}
+                one{"Через {0} рік"}
+                other{"Через {0} року"}
+            }
+            year-past{
+                few{"{0} роки тому"}
+                many{"{0} років тому"}
+                one{"{0} рік тому"}
+                other{"{0} року тому"}
+            }
         }
     }
     unitsShort{
-        day{
-            few{"{0} дні"}
-            many{"{0} днів"}
-            one{"{0} день"}
-            other{"{0} дня"}
-        }
-        hour{
-            few{"{0} год."}
-            many{"{0} год."}
-            one{"{0} год."}
-            other{"{0} год."}
-        }
-        minute{
-            few{"{0} хв."}
-            many{"{0} хв."}
-            one{"{0} хв."}
-            other{"{0} хв."}
-        }
-        month{
-            few{"{0} міс."}
-            many{"{0} міс."}
-            one{"{0} міс."}
-            other{"{0} міс."}
-        }
-        second{
-            few{"{0} сек."}
-            many{"{0} сек."}
-            one{"{0} сек."}
-            other{"{0} сек."}
-        }
-        week{
-            few{"{0} тиж."}
-            many{"{0} тиж."}
-            one{"{0} тиж."}
-            other{"{0} тиж."}
-        }
-        year{
-            few{"{0} р."}
-            many{"{0} р."}
-            one{"{0} р."}
-            other{"{0} р."}
+        duration{
+            day{
+                few{"{0} дні"}
+                many{"{0} днів"}
+                one{"{0} день"}
+                other{"{0} дня"}
+            }
+            hour{
+                few{"{0} год."}
+                many{"{0} год."}
+                one{"{0} год."}
+                other{"{0} год."}
+            }
+            minute{
+                few{"{0} хв."}
+                many{"{0} хв."}
+                one{"{0} хв."}
+                other{"{0} хв."}
+            }
+            month{
+                few{"{0} міс."}
+                many{"{0} міс."}
+                one{"{0} міс."}
+                other{"{0} міс."}
+            }
+            second{
+                few{"{0} сек."}
+                many{"{0} сек."}
+                one{"{0} сек."}
+                other{"{0} сек."}
+            }
+            week{
+                few{"{0} тиж."}
+                many{"{0} тиж."}
+                one{"{0} тиж."}
+                other{"{0} тиж."}
+            }
+            year{
+                few{"{0} р."}
+                many{"{0} р."}
+                one{"{0} р."}
+                other{"{0} р."}
+            }
         }
     }
 }

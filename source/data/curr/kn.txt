@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kn.xml
+ * ICU <specials> source: <path>/common/main/kn.xml
  */
 kn{
     Currencies{
@@ -651,5 +651,5 @@ kn{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.89.73"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/nb.xml
+ * ICU <specials> source: <path>/common/main/nb.xml
  */
 nb{
     Keys{
@@ -844,7 +844,7 @@ nb{
         VALENCIA{"valensisk dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}
@@ -853,6 +853,6 @@ nb{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

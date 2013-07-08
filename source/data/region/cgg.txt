@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/cgg.xml
+ * ICU <specials> source: <path>/common/main/cgg.xml
  */
 cgg{
     Countries{
@@ -235,5 +235,5 @@ cgg{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.33"}
 }

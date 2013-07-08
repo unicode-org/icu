@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/gu.xml
+ * ICU <specials> source: <path>/common/main/gu.xml
  */
 gu{
     Keys{
@@ -755,9 +755,9 @@ gu{
         PINYIN{"પિનયિન રોમનાઇઝેશન"}
         WADEGILE{"વેડ-ગિલ્સ રોમનાઇઝેશન"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.73"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
-        separator{","}
+        separator{"{0}, {1}"}
     }
 }

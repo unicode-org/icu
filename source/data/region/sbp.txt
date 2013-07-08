@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sbp.xml
+ * ICU <specials> source: <path>/common/main/sbp.xml
  */
 sbp{
     Countries{

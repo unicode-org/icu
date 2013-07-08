@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ko.xml
+ * ICU <specials> source: <path>/common/main/ko.xml
  */
 ko{
     AuxExemplarCharacters{
@@ -47,7 +47,7 @@ ko{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -146,7 +146,7 @@ ko{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -451,7 +451,7 @@ ko{
                 "y년 M월 d일 EEEE",
                 "y년 M월 d일",
                 "y. M. d.",
-                "yy. M. d.",
+                "y. M. d.",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -1068,91 +1068,95 @@ ko{
         metric{"미터법"}
     }
     units{
-        day{
-            other{"{0}일"}
-        }
-        day-future{
-            other{"{0}일 후"}
-        }
-        day-past{
-            other{"{0}일 전"}
-        }
-        hour{
-            other{"{0}시간"}
-        }
-        hour-future{
-            other{"{0}시간 후"}
-        }
-        hour-past{
-            other{"{0}시간 전"}
-        }
-        minute{
-            other{"{0}분"}
-        }
-        minute-future{
-            other{"{0}분 후"}
-        }
-        minute-past{
-            other{"{0}분 전"}
-        }
-        month{
-            other{"{0}개월"}
-        }
-        month-future{
-            other{"{0}개월 후"}
-        }
-        month-past{
-            other{"{0}개월 전"}
-        }
-        second{
-            other{"{0}초"}
-        }
-        second-future{
-            other{"{0}초 후"}
-        }
-        second-past{
-            other{"{0}초 전"}
-        }
-        week{
-            other{"{0}주"}
-        }
-        week-future{
-            other{"{0}주 후"}
-        }
-        week-past{
-            other{"{0}주 전"}
-        }
-        year{
-            other{"{0}년"}
-        }
-        year-future{
-            other{"{0}년 후"}
-        }
-        year-past{
-            other{"{0}년 전"}
+        duration{
+            day{
+                other{"{0}일"}
+            }
+            day-future{
+                other{"{0}일 후"}
+            }
+            day-past{
+                other{"{0}일 전"}
+            }
+            hour{
+                other{"{0}시간"}
+            }
+            hour-future{
+                other{"{0}시간 후"}
+            }
+            hour-past{
+                other{"{0}시간 전"}
+            }
+            minute{
+                other{"{0}분"}
+            }
+            minute-future{
+                other{"{0}분 후"}
+            }
+            minute-past{
+                other{"{0}분 전"}
+            }
+            month{
+                other{"{0}개월"}
+            }
+            month-future{
+                other{"{0}개월 후"}
+            }
+            month-past{
+                other{"{0}개월 전"}
+            }
+            second{
+                other{"{0}초"}
+            }
+            second-future{
+                other{"{0}초 후"}
+            }
+            second-past{
+                other{"{0}초 전"}
+            }
+            week{
+                other{"{0}주"}
+            }
+            week-future{
+                other{"{0}주 후"}
+            }
+            week-past{
+                other{"{0}주 전"}
+            }
+            year{
+                other{"{0}년"}
+            }
+            year-future{
+                other{"{0}년 후"}
+            }
+            year-past{
+                other{"{0}년 전"}
+            }
         }
     }
     unitsShort{
-        day{
-            other{"{0}일"}
-        }
-        hour{
-            other{"{0}시간"}
-        }
-        minute{
-            other{"{0}분"}
-        }
-        month{
-            other{"{0}개월"}
-        }
-        second{
-            other{"{0}초"}
-        }
-        week{
-            other{"{0}주"}
-        }
-        year{
-            other{"{0}년"}
+        duration{
+            day{
+                other{"{0}일"}
+            }
+            hour{
+                other{"{0}시간"}
+            }
+            minute{
+                other{"{0}분"}
+            }
+            month{
+                other{"{0}개월"}
+            }
+            second{
+                other{"{0}초"}
+            }
+            week{
+                other{"{0}주"}
+            }
+            year{
+                other{"{0}년"}
+            }
         }
     }
 }

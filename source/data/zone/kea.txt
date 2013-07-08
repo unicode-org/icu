@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kea.xml
+ * ICU <specials> source: <path>/common/main/kea.xml
  */
 kea{
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "America:Blanc-Sablon"{
             ec{"Blank-Sablon"}
@@ -73,7 +73,6 @@ kea{
             ls{"Ora Padrãu di Europa Osidental"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Ora di {1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ko.xml
+ * ICU <specials> source: <path>/common/main/ko.xml
  */
 ko{
     Keys{
@@ -880,7 +880,7 @@ ko{
         VAIDIKA{"바이디카"}
         VALLADER{"발라더"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"언어: {0}"}
         script{"스크립트: {0}"}
@@ -889,6 +889,6 @@ ko{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0}({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

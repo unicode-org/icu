@@ -7,11 +7,21 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/am.xml
+ * ICU <specials> source: <path>/common/main/am.xml
  */
 am{
     AuxExemplarCharacters{"[]"}
-    ExemplarCharacters{"[\u135F ሀ-ሆ ለ-ቆ ቈ ቊ-ቍ በ-ኆ ኈ ኊ-ኍ ነ-ኮ ኰ ኲ-ኵ ኸ-ኾ ወ-ዎ ዐ-ዖ ዘ-ዷ ጀ-ጎ ጐ ጒ-ጕ ጠ-ፚ]"}
+    ExemplarCharacters{
+        "[ሀ ሁ ሂ ሃ ሄ ህ ሆ ለ ሉ ሊ ላ ሌ ል ሎ ሏ ሐ ሑ ሒ ሓ ሔ ሕ ሖ ሗ መ ሙ ሚ ማ ሜ ም ሞ ሟ ሠ ሡ ሢ ሣ ሤ ሥ ሦ"
+        " ሧ ረ ሩ ሪ ራ ሬ ር ሮ ሯ ሰ ሱ ሲ ሳ ሴ ስ ሶ ሷ ሸ ሹ ሺ ሻ ሼ ሽ ሾ ሿ ቀ ቁ ቂ ቃ ቄ ቅ ቆ ቈ ቊ ቋ ቌ ቍ በ"
+        " ቡ ቢ ባ ቤ ብ ቦ ቧ ቨ ቩ ቪ ቫ ቬ ቭ ቮ ቯ ተ ቱ ቲ ታ ቴ ት ቶ ቷ ቸ ቹ ቺ ቻ ቼ ች ቾ ቿ ኀ ኁ ኂ ኃ ኄ ኅ ኆ"
+        " ኈ ኊ ኋ ኌ ኍ ነ ኑ ኒ ና ኔ ን ኖ ኗ ኘ ኙ ኚ ኛ ኜ ኝ ኞ ኟ አ ኡ ኢ ኣ ኤ እ ኦ ኧ ከ ኩ ኪ ካ ኬ ክ ኮ ኰ ኲ"
+        " ኳ ኴ ኵ ኸ ኹ ኺ ኻ ኼ ኽ ኾ ወ ዉ ዊ ዋ ዌ ው ዎ ዐ ዑ ዒ ዓ ዔ ዕ ዖ ዘ ዙ ዚ ዛ ዜ ዝ ዞ ዟ ዠ ዡ ዢ ዣ ዤ ዥ"
+        " ዦ ዧ የ ዩ ዪ ያ ዬ ይ ዮ ደ ዱ ዲ ዳ ዴ ድ ዶ ዷ ጀ ጁ ጂ ጃ ጄ ጅ ጆ ጇ ገ ጉ ጊ ጋ ጌ ግ ጎ ጐ ጒ ጓ ጔ ጕ ጠ"
+        " ጡ ጢ ጣ ጤ ጥ ጦ ጧ ጨ ጩ ጪ ጫ ጬ ጭ ጮ ጯ ጰ ጱ ጲ ጳ ጴ ጵ ጶ ጷ ጸ ጹ ጺ ጻ ጼ ጽ ጾ ጿ ፀ ፁ ፂ ፃ ፄ ፅ ፆ"
+        " ፈ ፉ ፊ ፋ ፌ ፍ ፎ ፏ ፐ ፑ ፒ ፓ ፔ ፕ ፖ ፗ]"
+    }
+    ExemplarCharactersPunctuation{"[\‐ – , ! ? . ( ) \\[ \\] « » ‹ › ፡ ። ፣ ፤ ፥ ፦]"}
     LocaleScript{
         "Ethi",
     }
@@ -19,7 +29,7 @@ am{
         default{"latn"}
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -144,7 +154,7 @@ am{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.89.31"}
     calendar{
         ethiopic{
             monthNames{
@@ -828,119 +838,123 @@ am{
         metric{"ሜትሪክ"}
     }
     units{
-        day{
-            one{"{0} ቀናት"}
-            other{"{0} ቀናት"}
-        }
-        day-future{
-            one{"በ {0} ቀናት ውስጥ"}
-            other{"በ {0} ቀናት ውስጥ"}
-        }
-        day-past{
-            one{"ከ{0} ቀናት በፊት"}
-            other{"ከ{0} ቀናት በፊት"}
-        }
-        hour{
-            one{"{0} ሰዓቶች"}
-            other{"{0} ሰዓቶች"}
-        }
-        hour-future{
-            one{"በ{0} ሰዓቶች ውስጥ"}
-            other{"በ{0} ሰዓቶች ውስጥ"}
-        }
-        hour-past{
-            one{"ከ{0} ሰዓት በፊት"}
-            other{"ከ{0} ሰዓት በፊት"}
-        }
-        minute{
-            one{"{0} ደቂቃዎች"}
-            other{"{0} ደቂቃዎች"}
-        }
-        minute-future{
-            one{"በ{0} ደቂቃዎች ውስጥ"}
-            other{"በ{0} ደቂቃዎች ውስጥ"}
-        }
-        minute-past{
-            one{"ከ{0} ደቂቃዎች በፊት"}
-            other{"ከ{0} ደቂቃዎች በፊት"}
-        }
-        month{
-            one{"{0} ወራት"}
-            other{"{0} ወራት"}
-        }
-        month-future{
-            one{"በ{0} ወራት ውስጥ"}
-            other{"በ{0} ወራት ውስጥ"}
-        }
-        month-past{
-            one{"ከ{0} ወራት በፊት"}
-            other{"ከ{0} ወራት በፊት"}
-        }
-        second{
-            one{"{0} ሰከንዶች"}
-            other{"{0} ሰከንዶች"}
-        }
-        second-future{
-            one{"በ{0} ሰከንዶች ውስጥ"}
-            other{"በ{0} ሰከንዶች ውስጥ"}
-        }
-        second-past{
-            one{"ከ{0} ሰከንዶች በፊት"}
-            other{"ከ{0} ሰከንዶች በፊት"}
-        }
-        week{
-            one{"{0} ሳምንታት"}
-            other{"{0} ሳምንታት"}
-        }
-        week-future{
-            one{"በ{0} ሳምንት ውስጥ"}
-            other{"በ{0} ሳምንት ውስጥ"}
-        }
-        week-past{
-            one{"ከ{0} ሳምንታት በፊት"}
-            other{"ከ{0} ሳምንታት በፊት"}
-        }
-        year{
-            one{"{0} ዓመታት"}
-            other{"{0} ዓመታት"}
-        }
-        year-future{
-            one{"በ{0} ዓመታት ውስጥ"}
-            other{"በ{0} ዓመታት ውስጥ"}
-        }
-        year-past{
-            one{"ከ{0} ዓመታት በፊት"}
-            other{"ከ{0} ዓመታት በፊት"}
+        duration{
+            day{
+                one{"{0} ቀናት"}
+                other{"{0} ቀናት"}
+            }
+            day-future{
+                one{"በ {0} ቀናት ውስጥ"}
+                other{"በ {0} ቀናት ውስጥ"}
+            }
+            day-past{
+                one{"ከ{0} ቀናት በፊት"}
+                other{"ከ{0} ቀናት በፊት"}
+            }
+            hour{
+                one{"{0} ሰዓቶች"}
+                other{"{0} ሰዓቶች"}
+            }
+            hour-future{
+                one{"በ{0} ሰዓቶች ውስጥ"}
+                other{"በ{0} ሰዓቶች ውስጥ"}
+            }
+            hour-past{
+                one{"ከ{0} ሰዓት በፊት"}
+                other{"ከ{0} ሰዓት በፊት"}
+            }
+            minute{
+                one{"{0} ደቂቃዎች"}
+                other{"{0} ደቂቃዎች"}
+            }
+            minute-future{
+                one{"በ{0} ደቂቃዎች ውስጥ"}
+                other{"በ{0} ደቂቃዎች ውስጥ"}
+            }
+            minute-past{
+                one{"ከ{0} ደቂቃዎች በፊት"}
+                other{"ከ{0} ደቂቃዎች በፊት"}
+            }
+            month{
+                one{"{0} ወራት"}
+                other{"{0} ወራት"}
+            }
+            month-future{
+                one{"በ{0} ወራት ውስጥ"}
+                other{"በ{0} ወራት ውስጥ"}
+            }
+            month-past{
+                one{"ከ{0} ወራት በፊት"}
+                other{"ከ{0} ወራት በፊት"}
+            }
+            second{
+                one{"{0} ሰከንዶች"}
+                other{"{0} ሰከንዶች"}
+            }
+            second-future{
+                one{"በ{0} ሰከንዶች ውስጥ"}
+                other{"በ{0} ሰከንዶች ውስጥ"}
+            }
+            second-past{
+                one{"ከ{0} ሰከንዶች በፊት"}
+                other{"ከ{0} ሰከንዶች በፊት"}
+            }
+            week{
+                one{"{0} ሳምንታት"}
+                other{"{0} ሳምንታት"}
+            }
+            week-future{
+                one{"በ{0} ሳምንት ውስጥ"}
+                other{"በ{0} ሳምንት ውስጥ"}
+            }
+            week-past{
+                one{"ከ{0} ሳምንታት በፊት"}
+                other{"ከ{0} ሳምንታት በፊት"}
+            }
+            year{
+                one{"{0} ዓመታት"}
+                other{"{0} ዓመታት"}
+            }
+            year-future{
+                one{"በ{0} ዓመታት ውስጥ"}
+                other{"በ{0} ዓመታት ውስጥ"}
+            }
+            year-past{
+                one{"ከ{0} ዓመታት በፊት"}
+                other{"ከ{0} ዓመታት በፊት"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} ቀናት"}
-            other{"{0} ቀናት"}
-        }
-        hour{
-            one{"{0} ሰዓት"}
-            other{"{0} ሰዓቶች"}
-        }
-        minute{
-            one{"{0} ደቂቃዎች"}
-            other{"{0} ደቂቃዎች"}
-        }
-        month{
-            one{"{0} ወራት"}
-            other{"{0} ወራት"}
-        }
-        second{
-            one{"{0} ሰከንዶች"}
-            other{"{0} ሰከንዶች"}
-        }
-        week{
-            one{"{0} ሳምንቶች"}
-            other{"{0} ሳምንቶች"}
-        }
-        year{
-            one{"{0} ዓመታት"}
-            other{"{0} ዓመታት"}
+        duration{
+            day{
+                one{"{0} ቀናት"}
+                other{"{0} ቀናት"}
+            }
+            hour{
+                one{"{0} ሰዓት"}
+                other{"{0} ሰዓቶች"}
+            }
+            minute{
+                one{"{0} ደቂቃዎች"}
+                other{"{0} ደቂቃዎች"}
+            }
+            month{
+                one{"{0} ወራት"}
+                other{"{0} ወራት"}
+            }
+            second{
+                one{"{0} ሰከንዶች"}
+                other{"{0} ሰከንዶች"}
+            }
+            week{
+                one{"{0} ሳምንቶች"}
+                other{"{0} ሳምንቶች"}
+            }
+            year{
+                one{"{0} ዓመታት"}
+                other{"{0} ዓመታት"}
+            }
         }
     }
 }

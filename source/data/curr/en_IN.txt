@@ -13,5 +13,5 @@ en_IN{
             "US Dollar",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.27"}
 }

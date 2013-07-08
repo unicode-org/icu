@@ -14,9 +14,9 @@ zh_Hans_SG{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.27"}
     calendar{
-        buddhist{
+        generic{
             DateTimePatterns{
                 "zzzzah:mm:ss",
                 "ahh:mm:ssz",
@@ -32,31 +32,14 @@ zh_Hans_SG{
                 "{1} {0}",
                 "{1} {0}",
             }
-        }
-        generic{
-            DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
-                "ah:mm:ss",
-                "ahh:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy年M月d日",
-                "dd/MM/yyGGGGG",
-                "{1} {0}",
-                "{1}{0}",
-                "{1}{0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
             availableFormats{
                 MEd{"M-dE"}
                 MMMMdd{"M月d日"}
                 MMdd{"MM-dd"}
                 Md{"M-d"}
-                yM{"y年M月"}
-                yMEd{"y年M月d日，E"}
-                yMd{"y年M月d日"}
+                yyyyM{"y年M月"}
+                yyyyMEd{"y年M月d日，E"}
+                yyyyMd{"y年M月d日"}
             }
             intervalFormats{
                 Hmv{
@@ -151,61 +134,6 @@ zh_Hans_SG{
                     d{"d/M/y至d/M/y"}
                     y{"d/M/y至d/M/y"}
                 }
-            }
-        }
-        islamic{
-            DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
-                "ah:mm:ss",
-                "ahh:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy年M月d日",
-                "Gd/M/yy",
-                "{1} {0}",
-                "{1}{0}",
-                "{1}{0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-            availableFormats{
-                Hm{"HH:mm"}
-                Hms{"HH:mm:ss"}
-            }
-        }
-        japanese{
-            DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
-                "ah:mm:ss",
-                "ahh:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy年M月d日",
-                "Gd/M/yy",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
-            }
-        }
-        roc{
-            DateTimePatterns{
-                "zzzzah:mm:ss",
-                "ahh:mm:ssz",
-                "ah:mm:ss",
-                "ahh:mm",
-                "Gy年M月d日EEEE",
-                "Gy年M月d日",
-                "Gy年M月d日",
-                "Gd/M/yy",
-                "{1} {0}",
-                "{1}{0}",
-                "{1}{0}",
-                "{1} {0}",
-                "{1} {0}",
             }
         }
     }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mg.xml
+ * ICU <specials> source: <path>/common/main/mg.xml
  */
 mg{
     Languages{

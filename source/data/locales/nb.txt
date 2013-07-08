@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/nb.xml
+ * ICU <specials> source: <path>/common/main/nb.xml
  */
 nb{
     AuxExemplarCharacters{"[á ǎ ã č ç đ è ê í ń ñ ŋ š ŧ ü ž ä ö]"}
@@ -143,7 +143,7 @@ nb{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -788,119 +788,123 @@ nb{
         metric{"metrisk"}
     }
     units{
-        day{
-            one{"{0} dag"}
-            other{"{0} dager"}
-        }
-        day-future{
-            one{"om {0} dag"}
-            other{"om {0} dager"}
-        }
-        day-past{
-            one{"for {0} dag siden"}
-            other{"{0} dager siden"}
-        }
-        hour{
-            one{"{0} time"}
-            other{"{0} timer"}
-        }
-        hour-future{
-            one{"om {0} time"}
-            other{"om {0} timer"}
-        }
-        hour-past{
-            one{"for {0} time siden"}
-            other{"{0} timer siden"}
-        }
-        minute{
-            one{"{0} minutt"}
-            other{"{0} minutter"}
-        }
-        minute-future{
-            one{"om {0} minutt"}
-            other{"om {0} minutter"}
-        }
-        minute-past{
-            one{"for {0} minutt siden"}
-            other{"{0} minutter siden"}
-        }
-        month{
-            one{"{0} måned"}
-            other{"{0} måneder"}
-        }
-        month-future{
-            one{"om {0} måned"}
-            other{"om {0} måneder"}
-        }
-        month-past{
-            one{"for {0} måned siden"}
-            other{"{0} måneder siden"}
-        }
-        second{
-            one{"{0} sekund"}
-            other{"{0} sekunder"}
-        }
-        second-future{
-            one{"om {0} sekund"}
-            other{"om {0} sekunder"}
-        }
-        second-past{
-            one{"for {0} sekund siden"}
-            other{"{0} sekunder siden"}
-        }
-        week{
-            one{"{0} uke"}
-            other{"{0} uker"}
-        }
-        week-future{
-            one{"om {0} uke"}
-            other{"om {0} uker"}
-        }
-        week-past{
-            one{"for {0} uke siden"}
-            other{"{0} uker siden"}
-        }
-        year{
-            one{"{0} år"}
-            other{"{0} år"}
-        }
-        year-future{
-            one{"om {0} år"}
-            other{"om {0} år"}
-        }
-        year-past{
-            one{"for {0} år siden"}
-            other{"{0} år siden"}
+        duration{
+            day{
+                one{"{0} dag"}
+                other{"{0} dager"}
+            }
+            day-future{
+                one{"om {0} dag"}
+                other{"om {0} dager"}
+            }
+            day-past{
+                one{"for {0} dag siden"}
+                other{"{0} dager siden"}
+            }
+            hour{
+                one{"{0} time"}
+                other{"{0} timer"}
+            }
+            hour-future{
+                one{"om {0} time"}
+                other{"om {0} timer"}
+            }
+            hour-past{
+                one{"for {0} time siden"}
+                other{"{0} timer siden"}
+            }
+            minute{
+                one{"{0} minutt"}
+                other{"{0} minutter"}
+            }
+            minute-future{
+                one{"om {0} minutt"}
+                other{"om {0} minutter"}
+            }
+            minute-past{
+                one{"for {0} minutt siden"}
+                other{"{0} minutter siden"}
+            }
+            month{
+                one{"{0} måned"}
+                other{"{0} måneder"}
+            }
+            month-future{
+                one{"om {0} måned"}
+                other{"om {0} måneder"}
+            }
+            month-past{
+                one{"for {0} måned siden"}
+                other{"{0} måneder siden"}
+            }
+            second{
+                one{"{0} sekund"}
+                other{"{0} sekunder"}
+            }
+            second-future{
+                one{"om {0} sekund"}
+                other{"om {0} sekunder"}
+            }
+            second-past{
+                one{"for {0} sekund siden"}
+                other{"{0} sekunder siden"}
+            }
+            week{
+                one{"{0} uke"}
+                other{"{0} uker"}
+            }
+            week-future{
+                one{"om {0} uke"}
+                other{"om {0} uker"}
+            }
+            week-past{
+                one{"for {0} uke siden"}
+                other{"{0} uker siden"}
+            }
+            year{
+                one{"{0} år"}
+                other{"{0} år"}
+            }
+            year-future{
+                one{"om {0} år"}
+                other{"om {0} år"}
+            }
+            year-past{
+                one{"for {0} år siden"}
+                other{"{0} år siden"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} dag"}
-            other{"{0} dager"}
-        }
-        hour{
-            one{"{0} t"}
-            other{"{0} t"}
-        }
-        minute{
-            one{"{0} min"}
-            other{"{0} min"}
-        }
-        month{
-            one{"{0} md."}
-            other{"{0} md."}
-        }
-        second{
-            one{"{0} sek"}
-            other{"{0} sek"}
-        }
-        week{
-            one{"{0} uke"}
-            other{"{0} uker"}
-        }
-        year{
-            one{"{0} år"}
-            other{"{0} år"}
+        duration{
+            day{
+                one{"{0} dag"}
+                other{"{0} dager"}
+            }
+            hour{
+                one{"{0} t"}
+                other{"{0} t"}
+            }
+            minute{
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                one{"{0} md."}
+                other{"{0} md."}
+            }
+            second{
+                one{"{0} sek"}
+                other{"{0} sek"}
+            }
+            week{
+                one{"{0} uke"}
+                other{"{0} uker"}
+            }
+            year{
+                one{"{0} år"}
+                other{"{0} år"}
+            }
         }
     }
 }

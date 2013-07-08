@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/et.xml
+ * ICU <specials> source: <path>/common/main/et.xml
  */
 et{
     Keys{
@@ -820,7 +820,7 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Keel: {0}"}
         script{"Skript: {0}"}
@@ -829,6 +829,6 @@ et{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{","}
+        separator{"{0}, {1}"}
     }
 }

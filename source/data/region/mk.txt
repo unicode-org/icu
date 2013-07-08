@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mk.xml
+ * ICU <specials> source: <path>/common/main/mk.xml
  */
 mk{
     Countries{
@@ -301,5 +301,5 @@ mk{
         ZW{"Зимбабве"}
         ZZ{"Непознат регион"}
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.88.26"}
 }

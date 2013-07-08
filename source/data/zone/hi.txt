@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/hi.xml
+ * ICU <specials> source: <path>/common/main/hi.xml
  */
 hi{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"एबिजान"}
@@ -1809,7 +1809,6 @@ hi{
             ls{"येकातेरिनबर्ग मानक समय"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} समय ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

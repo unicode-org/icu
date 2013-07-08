@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sv.xml
+ * ICU <specials> source: <path>/common/main/sv.xml
  */
 sv{
     AuxExemplarCharacters{"[á â ã ā ç ë í î ï ī ñ ó ú ÿ ü æ ø]"}
@@ -147,7 +147,7 @@ sv{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -1306,6 +1306,16 @@ sv{
             }
         }
     }
+    contextTransforms{
+        displayName:intvector{
+            1,
+            1,
+        }
+        languages:intvector{
+            1,
+            1,
+        }
+    }
     delimiters{
         alternateQuotationEnd{"’"}
         alternateQuotationStart{"’"}
@@ -1383,119 +1393,123 @@ sv{
         metric{"SI-enheter"}
     }
     units{
-        day{
-            one{"{0} dygn"}
-            other{"{0} dygn"}
-        }
-        day-future{
-            one{"om {0} dagar"}
-            other{"om {0} dag"}
-        }
-        day-past{
-            one{"för {0} dagar sedan"}
-            other{"för {0} dag sedan"}
-        }
-        hour{
-            one{"{0} timme"}
-            other{"{0} timmar"}
-        }
-        hour-future{
-            one{"om {0} timme"}
-            other{"om {0} timmar"}
-        }
-        hour-past{
-            one{"för {0} timme sedan"}
-            other{"för {0} timmar sedan"}
-        }
-        minute{
-            one{"{0} minut"}
-            other{"{0} minuter"}
-        }
-        minute-future{
-            one{"om {0} minut"}
-            other{"om {0} minuter"}
-        }
-        minute-past{
-            one{"för {0} minut sedan"}
-            other{"för {0} minuter sedan"}
-        }
-        month{
-            one{"{0} månad"}
-            other{"{0} månader"}
-        }
-        month-future{
-            one{"om {0} månad"}
-            other{"om {0} månader"}
-        }
-        month-past{
-            one{"för {0} månad sedan"}
-            other{"för {0} månader sedan"}
-        }
-        second{
-            one{"{0} sekund"}
-            other{"{0} sekunder"}
-        }
-        second-future{
-            one{"om {0} sekund"}
-            other{"om {0} sekunder"}
-        }
-        second-past{
-            one{"för {0} sekund sedan"}
-            other{"för {0} sekunder sedan"}
-        }
-        week{
-            one{"{0} vecka"}
-            other{"{0} veckor"}
-        }
-        week-future{
-            one{"om {0} vecka"}
-            other{"om {0} veckor"}
-        }
-        week-past{
-            one{"för {0} vecka sedan"}
-            other{"för {0} veckor sedan"}
-        }
-        year{
-            one{"{0} år"}
-            other{"{0} år"}
-        }
-        year-future{
-            one{"om {0} år"}
-            other{"om {0} år"}
-        }
-        year-past{
-            one{"för {0} år sedan"}
-            other{"för {0} år sedan"}
+        duration{
+            day{
+                one{"{0} dygn"}
+                other{"{0} dygn"}
+            }
+            day-future{
+                one{"om {0} dagar"}
+                other{"om {0} dag"}
+            }
+            day-past{
+                one{"för {0} dagar sedan"}
+                other{"för {0} dag sedan"}
+            }
+            hour{
+                one{"{0} timme"}
+                other{"{0} timmar"}
+            }
+            hour-future{
+                one{"om {0} timme"}
+                other{"om {0} timmar"}
+            }
+            hour-past{
+                one{"för {0} timme sedan"}
+                other{"för {0} timmar sedan"}
+            }
+            minute{
+                one{"{0} minut"}
+                other{"{0} minuter"}
+            }
+            minute-future{
+                one{"om {0} minut"}
+                other{"om {0} minuter"}
+            }
+            minute-past{
+                one{"för {0} minut sedan"}
+                other{"för {0} minuter sedan"}
+            }
+            month{
+                one{"{0} månad"}
+                other{"{0} månader"}
+            }
+            month-future{
+                one{"om {0} månad"}
+                other{"om {0} månader"}
+            }
+            month-past{
+                one{"för {0} månad sedan"}
+                other{"för {0} månader sedan"}
+            }
+            second{
+                one{"{0} sekund"}
+                other{"{0} sekunder"}
+            }
+            second-future{
+                one{"om {0} sekund"}
+                other{"om {0} sekunder"}
+            }
+            second-past{
+                one{"för {0} sekund sedan"}
+                other{"för {0} sekunder sedan"}
+            }
+            week{
+                one{"{0} vecka"}
+                other{"{0} veckor"}
+            }
+            week-future{
+                one{"om {0} vecka"}
+                other{"om {0} veckor"}
+            }
+            week-past{
+                one{"för {0} vecka sedan"}
+                other{"för {0} veckor sedan"}
+            }
+            year{
+                one{"{0} år"}
+                other{"{0} år"}
+            }
+            year-future{
+                one{"om {0} år"}
+                other{"om {0} år"}
+            }
+            year-past{
+                one{"för {0} år sedan"}
+                other{"för {0} år sedan"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} d"}
-            other{"{0} d"}
-        }
-        hour{
-            one{"{0} tim"}
-            other{"{0} tim"}
-        }
-        minute{
-            one{"{0} min"}
-            other{"{0} min"}
-        }
-        month{
-            one{"{0} mån"}
-            other{"{0} mån"}
-        }
-        second{
-            one{"{0} s"}
-            other{"{0} s"}
-        }
-        week{
-            one{"{0} v"}
-            other{"{0} v"}
-        }
-        year{
-            one{"{0} år"}
-            other{"{0} år"}
+        duration{
+            day{
+                one{"{0} d"}
+                other{"{0} d"}
+            }
+            hour{
+                one{"{0} tim"}
+                other{"{0} tim"}
+            }
+            minute{
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                one{"{0} mån"}
+                other{"{0} mån"}
+            }
+            second{
+                one{"{0} s"}
+                other{"{0} s"}
+            }
+            week{
+                one{"{0} v"}
+                other{"{0} v"}
+            }
+            year{
+                one{"{0} år"}
+                other{"{0} år"}
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/fi.xml
+ * ICU <specials> source: <path>/common/main/fi.xml
  */
 fi{
     Countries{
@@ -302,5 +302,5 @@ fi{
         ZW{"Zimbabwe"}
         ZZ{"tuntematon alue"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

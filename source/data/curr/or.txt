@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/or.xml
+ * ICU <specials> source: <path>/common/main/or.xml
  */
 or{
     Currencies{
@@ -16,5 +16,5 @@ or{
             "ଟଙକା",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.78"}
 }

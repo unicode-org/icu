@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sn.xml
+ * ICU <specials> source: <path>/common/main/sn.xml
  */
 sn{
     Currencies{
@@ -236,5 +236,5 @@ sn{
             "Dora re Zimbabwe",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
 }

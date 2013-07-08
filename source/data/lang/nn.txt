@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/nn.xml
+ * ICU <specials> source: <path>/common/main/nn.xml
  */
 nn{
     Keys{
@@ -730,7 +730,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"2.0.82.47"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}
@@ -738,6 +738,6 @@ nn{
     }
     localeDisplayPattern{
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

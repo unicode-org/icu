@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mua.xml
+ * ICU <specials> source: <path>/common/main/mua.xml
  */
 mua{
     Currencies{
@@ -236,5 +236,5 @@ mua{
             "Solai Zimbabwe",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
 }

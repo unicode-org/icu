@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/te.xml
+ * ICU <specials> source: <path>/common/main/te.xml
  */
 te{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"అబిడ్జాన్"}
@@ -1848,7 +1848,6 @@ te{
             ls{"ఎకటేరిన్బర్గ్ ప్రామాణిక సమయం"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} సమయం ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

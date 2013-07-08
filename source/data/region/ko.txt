@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ko.xml
+ * ICU <specials> source: <path>/common/main/ko.xml
  */
 ko{
     Countries{
@@ -302,5 +302,5 @@ ko{
         ZW{"짐바브웨"}
         ZZ{"알수없거나 유효하지 않은 지역"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

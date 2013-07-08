@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ta.xml
+ * ICU <specials> source: <path>/common/main/ta.xml
  */
 ta{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"அபிட்ஜான்"}
@@ -1848,7 +1848,6 @@ ta{
             ls{"யேகாடெரின்பர்க் தர நேரம்"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} ({0}) நேரம்"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

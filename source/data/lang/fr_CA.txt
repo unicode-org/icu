@@ -76,5 +76,5 @@ fr_CA{
             tibt{"Chiffres tibétains"}
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kn.xml
+ * ICU <specials> source: <path>/common/main/kn.xml
  */
 kn{
-    Version{"2.0.86.71"}
+    Version{"2.0.89.73"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"ಅಬಿದ್‌ಜನ್"}
@@ -1809,7 +1809,6 @@ kn{
             ls{"ಯೇಕಟರಿನ್‌ಬರ್ಗ್ ಸ್ಟ್ಯಾಂಡರ್ಡ್ ಸಮಯ"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} ಸಮಯ ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
