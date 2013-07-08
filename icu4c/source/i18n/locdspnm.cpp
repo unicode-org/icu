@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2010-2012, International Business Machines Corporation and
+* Copyright (C) 2010-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -271,7 +271,7 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
     UDialectHandling dialectHandling;
     ICUDataTable langData;
     ICUDataTable regionData;
-    UnicodeString sep;
+    MessageFormat *separatorFormat;
     MessageFormat *format;
     MessageFormat *keyTypeFormat;
     UDisplayContext capitalizationContext;
@@ -333,6 +333,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
     : dialectHandling(dialectHandling)
     , langData(U_ICUDATA_LANG, locale)
     , regionData(U_ICUDATA_REGION, locale)
+    , separatorFormat(NULL)
     , format(NULL)
     , keyTypeFormat(NULL)
     , capitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
@@ -345,6 +346,7 @@ LocaleDisplayNamesImpl::LocaleDisplayNamesImpl(const Locale& locale,
     : dialectHandling(ULDN_STANDARD_NAMES)
     , langData(U_ICUDATA_LANG, locale)
     , regionData(U_ICUDATA_REGION, locale)
+    , separatorFormat(NULL)
     , format(NULL)
     , keyTypeFormat(NULL)
     , capitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
@@ -373,17 +375,19 @@ LocaleDisplayNamesImpl::initialize(void) {
         ? regionData.getLocale()
         : langData.getLocale();
 
+    UnicodeString sep;
     langData.getNoFallback("localeDisplayPattern", "separator", sep);
     if (sep.isBogus()) {
-        sep = UnicodeString(", ", -1, US_INV);
+        sep = UnicodeString("{0}, {1}", -1, US_INV);
     }
+    UErrorCode status = U_ZERO_ERROR;
+    separatorFormat = new MessageFormat(sep, status);
 
     UnicodeString pattern;
     langData.getNoFallback("localeDisplayPattern", "pattern", pattern);
     if (pattern.isBogus()) {
         pattern = UnicodeString("{0} ({1})", -1, US_INV);
     }
-    UErrorCode status = U_ZERO_ERROR;
     format = new MessageFormat(pattern, status);
 
     UnicodeString ktPattern;
@@ -444,6 +448,7 @@ LocaleDisplayNamesImpl::initialize(void) {
 }
 
 LocaleDisplayNamesImpl::~LocaleDisplayNamesImpl() {
+    delete separatorFormat;
     delete format;
     delete keyTypeFormat;
  }
@@ -639,10 +644,21 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
 
 UnicodeString&
 LocaleDisplayNamesImpl::appendWithSep(UnicodeString& buffer, const UnicodeString& src) const {
-    if (!buffer.isEmpty()) {
-        buffer.append(sep);
+    if (buffer.isEmpty()) {
+        buffer.setTo(src);
+    } else {
+        UnicodeString combined;
+        Formattable data[] = {
+          buffer,
+          src
+        };
+        FieldPosition fpos;
+        UErrorCode status = U_ZERO_ERROR;
+        separatorFormat->format(data, 2, combined, fpos, status);
+        if (U_SUCCESS(status)) {
+            buffer.setTo(combined);
+        }
     }
-    buffer.append(src);
     return buffer;
 }
 
