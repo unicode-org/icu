@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/dz.xml
+ * ICU <specials> source: <path>/common/main/dz.xml
  */
 dz{
     Countries{
@@ -300,5 +300,5 @@ dz{
         ZW{"ཛིམ་བྷབ་ཝེ"}
         ZZ{"ངོ་མ་ཤེས་པའི་ལུང་ཕྱོགས"}
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.86.27"}
 }

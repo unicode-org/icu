@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/am.xml
+ * ICU <specials> source: <path>/common/main/am.xml
  */
 am{
     Keys{
@@ -346,7 +346,7 @@ am{
             vaii{"የቫይ አሃዞች"}
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.89.31"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}
@@ -355,6 +355,6 @@ am{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{","}
+        separator{"{0},{1}"}
     }
 }

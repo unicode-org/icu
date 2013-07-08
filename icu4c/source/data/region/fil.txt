@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/fil.xml
+ * ICU <specials> source: <path>/common/main/fil.xml
  */
 fil{
     Countries{
@@ -302,5 +302,5 @@ fil{
         ZW{"Zimbabwe"}
         ZZ{"Hindi kilala o Hindi wastong Rehiyon"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

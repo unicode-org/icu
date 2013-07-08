@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/to.xml
+ * ICU <specials> source: <path>/common/main/to.xml
  */
 to{
     Keys{
@@ -244,7 +244,7 @@ to{
             traditional{"tukufakaholo"}
         }
     }
-    Version{"2.0.82.57"}
+    Version{"2.0.88.31"}
     codePatterns{
         language{"Lea: {0}"}
         script{"Tohinima Fakaha: {0}"}

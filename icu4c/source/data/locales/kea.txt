@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kea.xml
+ * ICU <specials> source: <path>/common/main/kea.xml
  */
 kea{
     AuxExemplarCharacters{
@@ -72,7 +72,7 @@ kea{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -651,68 +651,70 @@ kea{
         metric{"Metriku"}
     }
     units{
-        day{
-            other{"{0} dia"}
-        }
-        day-future{
-            other{"di li {0} dia"}
-        }
-        day-past{
-            other{"a ten {0} dia"}
-        }
-        hour{
-            other{"{0} ora"}
-        }
-        hour-future{
-            other{"di li {0} ora"}
-        }
-        hour-past{
-            other{"a ten {0} ora"}
-        }
-        minute{
-            other{"{0} minutu"}
-        }
-        minute-future{
-            other{"di li {0} minutu"}
-        }
-        minute-past{
-            other{"a ten {0} minutu"}
-        }
-        month{
-            other{"{0} mes"}
-        }
-        month-future{
-            other{"di li {0} mes"}
-        }
-        month-past{
-            other{"a ten {0} mes"}
-        }
-        second{
-            other{"{0} sigundu"}
-        }
-        second-future{
-            other{"di li {0} sigundu"}
-        }
-        second-past{
-            other{"a ten {0} sigundu"}
-        }
-        week{
-            other{"{0} simana"}
-        }
-        week-future{
-            other{"di li {0} simana"}
-        }
-        week-past{
-            other{"a ten {0} simana"}
-        }
-        year{
-            other{"{0} anu"}
-        }
-        year-future{
-            other{"di li {0} anu"}
-        }
-        year-past{
-            other{"a ten {0} anu"}
+        duration{
+            day{
+                other{"{0} dia"}
+            }
+            day-future{
+                other{"di li {0} dia"}
+            }
+            day-past{
+                other{"a ten {0} dia"}
+            }
+            hour{
+                other{"{0} ora"}
+            }
+            hour-future{
+                other{"di li {0} ora"}
+            }
+            hour-past{
+                other{"a ten {0} ora"}
+            }
+            minute{
+                other{"{0} minutu"}
+            }
+            minute-future{
+                other{"di li {0} minutu"}
+            }
+            minute-past{
+                other{"a ten {0} minutu"}
+            }
+            month{
+                other{"{0} mes"}
+            }
+            month-future{
+                other{"di li {0} mes"}
+            }
+            month-past{
+                other{"a ten {0} mes"}
+            }
+            second{
+                other{"{0} sigundu"}
+            }
+            second-future{
+                other{"di li {0} sigundu"}
+            }
+            second-past{
+                other{"a ten {0} sigundu"}
+            }
+            week{
+                other{"{0} simana"}
+            }
+            week-future{
+                other{"di li {0} simana"}
+            }
+            week-past{
+                other{"a ten {0} simana"}
+            }
+            year{
+                other{"{0} anu"}
+            }
+            year-future{
+                other{"di li {0} anu"}
+            }
+            year-past{
+                other{"a ten {0} anu"}
+            }
         }
     }
 }

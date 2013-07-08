@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/gu.xml
+ * ICU <specials> source: <path>/common/main/gu.xml
  */
 gu{
     Countries{
@@ -302,5 +302,5 @@ gu{
         ZW{"ઝિમ્બાબ્વે"}
         ZZ{"અજ્ઞાત અથવા અમાન્ય પ્રદેશ"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.73"}
 }

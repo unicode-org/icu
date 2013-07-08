@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/uz_Arab.xml
+ * ICU <specials> source: <path>/common/main/uz_Arab.xml
  */
 uz_Arab{
     Languages{

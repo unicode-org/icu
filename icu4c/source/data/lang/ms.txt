@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ms.xml
+ * ICU <specials> source: <path>/common/main/ms.xml
  */
 ms{
     Keys{
@@ -329,7 +329,7 @@ ms{
             vaii{"Digit Vai"}
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}
@@ -338,6 +338,6 @@ ms{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{","}
+        separator{"{0}, {1}"}
     }
 }

@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sr.xml
+ * ICU <specials> source: <path>/common/main/sr.xml
  */
 sr{
-    Version{"2.0.86.71"}
+    Version{"2.0.88.34"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиџан"}
@@ -1847,7 +1847,6 @@ sr{
             ls{"Јекатеринбург стандардно време"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Време у земљи: {1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HHmm;-HHmm"}

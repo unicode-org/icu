@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mr.xml
+ * ICU <specials> source: <path>/common/main/mr.xml
  */
 mr{
     Currencies{
@@ -648,5 +648,5 @@ mr{
             "झांबियन क्वाचा",
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

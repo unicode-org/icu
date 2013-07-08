@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ro.xml
+ * ICU <specials> source: <path>/common/main/ro.xml
  */
 ro{
     AuxExemplarCharacters{"[á à å ä ç é è ê ë ñ ö q ş ţ ü w y]"}
@@ -167,28 +167,9 @@ ro{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
-            DateTimePatterns{
-                "HH:mm:ss zzzz",
-                "HH:mm:ss z",
-                "HH:mm:ss",
-                "HH:mm",
-                "EEEE, d MMMM, y G",
-                "d MMMM y G",
-                "d MMM y G",
-                "d/M/y",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-                "{1}, {0}",
-            }
-            availableFormats{
-                MMMEd{"E d MMM"}
-                MMMd{"d MMM"}
-            }
             eras{
                 abbreviated{
                     "e.b.",
@@ -280,6 +261,10 @@ ro{
             }
             availableFormats{
                 Ed{"E d"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -290,23 +275,22 @@ ro{
                 MMMMEd{"E, d MMMM"}
                 MMMMd{"d MMMM"}
                 MMMd{"d MMM"}
-                MMdd{"dd.MM"}
                 Md{"dd.MM"}
                 d{"d"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"MM.y"}
-                yMEd{"E, dd.MM.y"}
-                yMM{"MM.y"}
-                yMMM{"MMM y"}
-                yMMMEd{"E, d MMM y"}
-                yMMMM{"MMMM y"}
-                yMMMd{"d MMM y"}
-                yMd{"dd.MM.y"}
-                yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"MM.y G"}
+                yyyyMEd{"E, dd.MM.y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"d MMM y G"}
+                yyyyMd{"dd.MM.y G"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
                 H{
@@ -368,39 +352,39 @@ ro{
                     h{"h-h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y-y G"}
                 }
                 yM{
-                    M{"MM.y - MM.y"}
-                    y{"MM.y - MM.y"}
+                    M{"MM.y - MM.y G"}
+                    y{"MM.y - MM.y G"}
                 }
                 yMEd{
-                    M{"E, dd.MM.y - E, dd.MM.y"}
-                    d{"E, dd.MM.y - E, dd.MM.y"}
-                    y{"E, dd.MM.y - E, dd.MM.y"}
+                    M{"E, dd.MM.y - E, dd.MM.y G"}
+                    d{"E, dd.MM.y - E, dd.MM.y G"}
+                    y{"E, dd.MM.y - E, dd.MM.y G"}
                 }
                 yMMM{
-                    M{"MMM-MMM y"}
-                    y{"MMM y - MMM y"}
+                    M{"MMM-MMM y G"}
+                    y{"MMM y - MMM y G"}
                 }
                 yMMMEd{
-                    M{"E, d MMM - E, d MMM y"}
-                    d{"E, d MMM - E, d MMM y"}
-                    y{"E, d MMM y - E, d MMM y"}
+                    M{"E, d MMM - E, d MMM y G"}
+                    d{"E, d MMM - E, d MMM y G"}
+                    y{"E, d MMM y - E, d MMM y G"}
                 }
                 yMMMM{
-                    M{"MMMM-MMMM y"}
-                    y{"MMMM y – MMMM y"}
+                    M{"MMMM-MMMM y G"}
+                    y{"MMMM y – MMMM y G"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM y"}
-                    d{"d-d MMM y"}
-                    y{"d MMM y - d MMM y"}
+                    M{"d MMM - d MMM y G"}
+                    d{"d-d MMM y G"}
+                    y{"d MMM y - d MMM y G"}
                 }
                 yMd{
-                    M{"dd.MM.y - dd.MM.y"}
-                    d{"dd.MM.y - dd.MM.y"}
-                    y{"dd.MM.y - dd.MM.y"}
+                    M{"dd.MM.y - dd.MM.y G"}
+                    d{"dd.MM.y - dd.MM.y G"}
+                    y{"dd.MM.y - dd.MM.y G"}
                 }
             }
         }
@@ -426,6 +410,10 @@ ro{
             }
             availableFormats{
                 Ed{"E d"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -843,8 +831,10 @@ ro{
             }
         }
         islamic{
-            availableFormats{
-                yMEd{"E, dd.MM.y"}
+            eras{
+                abbreviated{
+                    "AH",
+                }
             }
         }
     }
@@ -913,8 +903,8 @@ ro{
     }
     listPattern{
         standard{
-            2{"{0} şi {1}"}
-            end{"{0} şi {1}"}
+            2{"{0} și {1}"}
+            end{"{0} și {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
@@ -925,147 +915,151 @@ ro{
         metric{"metric"}
     }
     units{
-        day{
-            few{"{0} zile"}
-            one{"{0} zi"}
-            other{"{0} de zile"}
-        }
-        day-future{
-            few{"În {0} zile"}
-            one{"În {0} zi"}
-            other{"În {0} de zile"}
-        }
-        day-past{
-            few{"Acum {0} zile"}
-            one{"În urmă cu {0} zi"}
-            other{"Acum {0} de zile"}
-        }
-        hour{
-            few{"{0} ore"}
-            one{"{0} oră"}
-            other{"{0} de ore"}
-        }
-        hour-future{
-            few{"În {0} ore"}
-            one{"În {0} oră"}
-            other{"În {0} de ore"}
-        }
-        hour-past{
-            few{"Acum {0} ore"}
-            one{"În urmă cu {0} oră"}
-            other{"Acum {0} de ore"}
-        }
-        minute{
-            few{"{0} minute"}
-            one{"{0} minut"}
-            other{"{0} de minute"}
-        }
-        minute-future{
-            few{"În {0} minute"}
-            one{"În {0} minut"}
-            other{"În {0} de minute"}
-        }
-        minute-past{
-            few{"Acum {0} minute"}
-            one{"În urmă cu {0} minut"}
-            other{"Acum {0} de minute"}
-        }
-        month{
-            few{"{0} luni"}
-            one{"{0} lună"}
-            other{"{0} de luni"}
-        }
-        month-future{
-            few{"În {0} luni"}
-            one{"În {0} lună"}
-            other{"În {0} de luni"}
-        }
-        month-past{
-            few{"Acum {0} luni"}
-            one{"În urmă cu {0} lună"}
-            other{"Acum {0} de luni"}
-        }
-        second{
-            few{"{0} secunde"}
-            one{"{0} secundă"}
-            other{"{0} de secunde"}
-        }
-        second-future{
-            few{"În {0} secunde"}
-            one{"În {0} secundă"}
-            other{"În {0} de secunde"}
-        }
-        second-past{
-            few{"Acum {0} secunde"}
-            one{"În urmă cu {0} secundă"}
-            other{"Acum {0} de secunde"}
-        }
-        week{
-            few{"{0} săptămâni"}
-            one{"{0} săptămână"}
-            other{"{0} de săptămâni"}
-        }
-        week-future{
-            few{"În {0} săptămâni"}
-            one{"În {0} săptămână"}
-            other{"În {0} de săptămâni"}
-        }
-        week-past{
-            few{"Acum {0} săptămâni"}
-            one{"În urmă cu {0} săptămână"}
-            other{"Acum {0} de săptămâni"}
-        }
-        year{
-            few{"{0} ani"}
-            one{"{0} an"}
-            other{"{0} de ani"}
-        }
-        year-future{
-            few{"În {0} ani"}
-            one{"În {0} an"}
-            other{"În {0} de ani"}
-        }
-        year-past{
-            few{"Acum {0} ani"}
-            one{"În urmă cu {0} an"}
-            other{"Acum {0} de ani"}
+        duration{
+            day{
+                few{"{0} zile"}
+                one{"{0} zi"}
+                other{"{0} de zile"}
+            }
+            day-future{
+                few{"În {0} zile"}
+                one{"În {0} zi"}
+                other{"În {0} de zile"}
+            }
+            day-past{
+                few{"Acum {0} zile"}
+                one{"În urmă cu {0} zi"}
+                other{"Acum {0} de zile"}
+            }
+            hour{
+                few{"{0} ore"}
+                one{"{0} oră"}
+                other{"{0} de ore"}
+            }
+            hour-future{
+                few{"În {0} ore"}
+                one{"În {0} oră"}
+                other{"În {0} de ore"}
+            }
+            hour-past{
+                few{"Acum {0} ore"}
+                one{"În urmă cu {0} oră"}
+                other{"Acum {0} de ore"}
+            }
+            minute{
+                few{"{0} minute"}
+                one{"{0} minut"}
+                other{"{0} de minute"}
+            }
+            minute-future{
+                few{"În {0} minute"}
+                one{"În {0} minut"}
+                other{"În {0} de minute"}
+            }
+            minute-past{
+                few{"Acum {0} minute"}
+                one{"În urmă cu {0} minut"}
+                other{"Acum {0} de minute"}
+            }
+            month{
+                few{"{0} luni"}
+                one{"{0} lună"}
+                other{"{0} de luni"}
+            }
+            month-future{
+                few{"În {0} luni"}
+                one{"În {0} lună"}
+                other{"În {0} de luni"}
+            }
+            month-past{
+                few{"Acum {0} luni"}
+                one{"În urmă cu {0} lună"}
+                other{"Acum {0} de luni"}
+            }
+            second{
+                few{"{0} secunde"}
+                one{"{0} secundă"}
+                other{"{0} de secunde"}
+            }
+            second-future{
+                few{"În {0} secunde"}
+                one{"În {0} secundă"}
+                other{"În {0} de secunde"}
+            }
+            second-past{
+                few{"Acum {0} secunde"}
+                one{"În urmă cu {0} secundă"}
+                other{"Acum {0} de secunde"}
+            }
+            week{
+                few{"{0} săptămâni"}
+                one{"{0} săptămână"}
+                other{"{0} de săptămâni"}
+            }
+            week-future{
+                few{"În {0} săptămâni"}
+                one{"În {0} săptămână"}
+                other{"În {0} de săptămâni"}
+            }
+            week-past{
+                few{"Acum {0} săptămâni"}
+                one{"În urmă cu {0} săptămână"}
+                other{"Acum {0} de săptămâni"}
+            }
+            year{
+                few{"{0} ani"}
+                one{"{0} an"}
+                other{"{0} de ani"}
+            }
+            year-future{
+                few{"În {0} ani"}
+                one{"În {0} an"}
+                other{"În {0} de ani"}
+            }
+            year-past{
+                few{"Acum {0} ani"}
+                one{"În urmă cu {0} an"}
+                other{"Acum {0} de ani"}
+            }
         }
     }
     unitsShort{
-        day{
-            few{"{0} zile"}
-            one{"{0} zi"}
-            other{"{0} zile"}
-        }
-        hour{
-            few{"{0} ore"}
-            one{"{0} oră"}
-            other{"{0} ore"}
-        }
-        minute{
-            few{"{0} min."}
-            one{"{0} min."}
-            other{"{0} min."}
-        }
-        month{
-            few{"{0} luni"}
-            one{"{0} lună"}
-            other{"{0} luni"}
-        }
-        second{
-            few{"{0} sec."}
-            one{"{0} sec."}
-            other{"{0} sec."}
-        }
-        week{
-            few{"{0} săpt."}
-            one{"{0} săpt."}
-            other{"{0} săpt."}
-        }
-        year{
-            few{"{0} ani"}
-            one{"{0} an"}
-            other{"{0} ani"}
+        duration{
+            day{
+                few{"{0} zile"}
+                one{"{0} zi"}
+                other{"{0} zile"}
+            }
+            hour{
+                few{"{0} ore"}
+                one{"{0} oră"}
+                other{"{0} ore"}
+            }
+            minute{
+                few{"{0} min."}
+                one{"{0} min."}
+                other{"{0} min."}
+            }
+            month{
+                few{"{0} luni"}
+                one{"{0} lună"}
+                other{"{0} luni"}
+            }
+            second{
+                few{"{0} sec."}
+                one{"{0} sec."}
+                other{"{0} sec."}
+            }
+            week{
+                few{"{0} săpt."}
+                one{"{0} săpt."}
+                other{"{0} săpt."}
+            }
+            year{
+                few{"{0} ani"}
+                one{"{0} an"}
+                other{"{0} ani"}
+            }
         }
     }
 }

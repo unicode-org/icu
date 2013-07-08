@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sv.xml
+ * ICU <specials> source: <path>/common/main/sv.xml
  */
 sv{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -945,7 +945,6 @@ sv{
             ls{"Jekaterinburgnormaltid"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1}tid ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/seh.xml
+ * ICU <specials> source: <path>/common/main/seh.xml
  */
 seh{
     ExemplarCharacters{

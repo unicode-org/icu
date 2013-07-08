@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/hu.xml
+ * ICU <specials> source: <path>/common/main/hu.xml
  */
 hu{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addisz-Abeba"}
@@ -1182,7 +1182,6 @@ hu{
             ls{"Jekatyerinburgi zónaidő"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} idő ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

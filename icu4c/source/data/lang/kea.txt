@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kea.xml
+ * ICU <specials> source: <path>/common/main/kea.xml
  */
 kea{
     Languages{
@@ -193,7 +193,7 @@ kea{
             latn{"Numerus Arabikus"}
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Lingua: {0}"}
         script{"Skrita: {0}"}
@@ -202,6 +202,6 @@ kea{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

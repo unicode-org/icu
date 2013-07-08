@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/hu.xml
+ * ICU <specials> source: <path>/common/main/hu.xml
  */
 hu{
     Countries{
@@ -302,5 +302,5 @@ hu{
         ZW{"Zimbabwe"}
         ZZ{"Ismeretlen vagy érvénytelen körzet"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

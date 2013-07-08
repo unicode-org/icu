@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/zh.xml
+ * ICU <specials> source: <path>/common/main/zh.xml
  */
 zh{
-    Version{"2.0.86.71"}
+    Version{"2.0.88.97"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比让"}
@@ -1852,7 +1852,6 @@ zh{
             ls{"叶卡捷琳堡标准时间"}
         }
         fallbackFormat{"{1}（{0}）"}
-        fallbackRegionFormat{"{1}时间（{0}）"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HHmm;-HHmm"}

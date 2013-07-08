@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/brx.xml
+ * ICU <specials> source: <path>/common/main/brx.xml
  */
 brx{
     Currencies{
@@ -1080,5 +1080,5 @@ brx{
             "ज़ीम्बाबवेई डॉलर",
         }
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.85.93"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/rw.xml
+ * ICU <specials> source: <path>/common/main/rw.xml
  */
 rw{
     Languages{

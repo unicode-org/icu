@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/agq.xml
+ * ICU <specials> source: <path>/common/main/agq.xml
  */
 agq{
     AuxExemplarCharacters{"[q r x]"}

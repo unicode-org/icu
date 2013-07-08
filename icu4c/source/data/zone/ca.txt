@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ca.xml
+ * ICU <specials> source: <path>/common/main/ca.xml
  */
 ca{
-    Version{"2.0.86.71"}
+    Version{"2.0.87.47"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -922,7 +922,6 @@ ca{
             ls{"Hora estàndard d'Ekaterinburg"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Hora de: {1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

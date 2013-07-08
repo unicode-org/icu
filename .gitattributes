@@ -466,6 +466,7 @@ icu4c/source/data/curr/ar.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/ar_DJ.txt svneol=native#text/plain
 icu4c/source/data/curr/ar_ER.txt svneol=native#text/plain
 icu4c/source/data/curr/ar_SO.txt svneol=native#text/plain
+icu4c/source/data/curr/ar_SS.txt -text
 icu4c/source/data/curr/as.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/asa.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/az.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -491,6 +492,7 @@ icu4c/source/data/curr/bs_Cyrl.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/bs_Latn.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/bs_Latn_BA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/ca.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/curr/ca_FR.txt -text
 icu4c/source/data/curr/cgg.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/chr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/cs.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -537,6 +539,7 @@ icu4c/source/data/curr/en_LC.txt svneol=native#text/plain
 icu4c/source/data/curr/en_LR.txt svneol=native#text/plain
 icu4c/source/data/curr/en_LS.txt svneol=native#text/plain
 icu4c/source/data/curr/en_MG.txt svneol=native#text/plain
+icu4c/source/data/curr/en_MO.txt -text
 icu4c/source/data/curr/en_MT.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/curr/en_MU.txt svneol=native#text/plain
 icu4c/source/data/curr/en_MW.txt svneol=native#text/plain
@@ -1208,6 +1211,7 @@ icu4c/source/data/locales/ar_QA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/ar_SA.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/ar_SD.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/ar_SO.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/locales/ar_SS.txt -text
 icu4c/source/data/locales/ar_SY.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/ar_TD.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/ar_TN.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1253,6 +1257,8 @@ icu4c/source/data/locales/bs_Latn_BA.txt svneol=native#text/plain%3Bcharset%3Dut
 icu4c/source/data/locales/ca.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/ca_AD.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/ca_ES.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/locales/ca_FR.txt -text
+icu4c/source/data/locales/ca_IT.txt -text
 icu4c/source/data/locales/cgg.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/cgg_UG.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/chr.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -1327,6 +1333,7 @@ icu4c/source/data/locales/en_LR.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/en_LS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/en_MG.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/en_MH.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/locales/en_MO.txt -text
 icu4c/source/data/locales/en_MP.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/en_MT.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/locales/en_MU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -2771,6 +2778,7 @@ icu4c/source/data/zone/en_LR.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/en_LS.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/en_MG.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/en_MH.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/zone/en_MO.txt -text
 icu4c/source/data/zone/en_MP.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/en_MU.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/en_MW.txt svneol=native#text/plain%3Bcharset%3Dutf-8

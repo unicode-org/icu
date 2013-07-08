@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/am.xml
+ * ICU <specials> source: <path>/common/main/am.xml
  */
 am{
-    Version{"2.0.86.71"}
+    Version{"2.0.89.31"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"አቢጃን"}
@@ -1808,7 +1808,6 @@ am{
             ls{"የየካተሪንበርግ መደበኛ ሰዓት አቆጣጠር"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} ሰዓት({0})"}
         gmtFormat{"ጂ ኤም ቲ{0}"}
         gmtZeroFormat{"ጂ ኤም ቲ"}
         hourFormat{"+HHmm;-HHmm"}

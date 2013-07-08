@@ -103,7 +103,6 @@ likelySubtags:table(nofallback){
     el{"el_Grek_GR"}
     en{"en_Latn_US"}
     eo{"eo_Latn_001"}
-    eo_Latn{"eo_Latn_SM"}
     es{"es_Latn_ES"}
     et{"et_Latn_EE"}
     eu{"eu_Latn_ES"}
@@ -135,8 +134,7 @@ likelySubtags:table(nofallback){
     gsw{"gsw_Latn_CH"}
     gu{"gu_Gujr_IN"}
     guz{"guz_Latn_KE"}
-    gv{"gv_Latn_GB"}
-    gv_Latn{"gv_Latn_IM"}
+    gv{"gv_Latn_IM"}
     gwi{"gwi_Latn_CA"}
     ha{"ha_Latn_NG"}
     ha_CM{"ha_Arab_CM"}
@@ -154,8 +152,7 @@ likelySubtags:table(nofallback){
     ht{"ht_Latn_HT"}
     hu{"hu_Latn_HU"}
     hy{"hy_Armn_AM"}
-    ia{"ia_Latn_FR"}
-    ia_Latn{"ia_Latn_SE"}
+    ia{"ia_Latn_001"}
     ibb{"ibb_Latn_NG"}
     id{"id_Latn_ID"}
     ig{"ig_Latn_NG"}
@@ -249,6 +246,7 @@ likelySubtags:table(nofallback){
     lif{"lif_Deva_NP"}
     lis{"lis_Lisu_CN"}
     lki{"lki_Arab_IR"}
+    lkt{"lkt_Latn_US"}
     lmn{"lmn_Telu_IN"}
     ln{"ln_Latn_CD"}
     lo{"lo_Laoo_LA"}
@@ -331,7 +329,6 @@ likelySubtags:table(nofallback){
     pag{"pag_Latn_PH"}
     pam{"pam_Latn_PH"}
     pap{"pap_Latn_BQ"}
-    pap_Latn{"pap_Latn_CW"}
     pau{"pau_Latn_PW"}
     pl{"pl_Latn_PL"}
     pon{"pon_Latn_FM"}
@@ -369,7 +366,6 @@ likelySubtags:table(nofallback){
     ses{"ses_Latn_ML"}
     sg{"sg_Latn_CF"}
     shi{"shi_Tfng_MA"}
-    shi_MA{"shi_Latn_MA"}
     shn{"shn_Mymr_MM"}
     si{"si_Sinh_LK"}
     sid{"sid_Latn_ET"}
@@ -803,6 +799,8 @@ likelySubtags:table(nofallback){
     und_YT{"fr_Latn_YT"}
     und_Yiii{"ii_Yiii_CN"}
     unr{"unr_Beng_IN"}
+    unr_Deva{"unr_Deva_NP"}
+    unr_NP{"unr_Deva_NP"}
     unx{"unx_Beng_IN"}
     ur{"ur_Arab_PK"}
     uz{"uz_Cyrl_UZ"}
@@ -826,17 +824,16 @@ likelySubtags:table(nofallback){
     yao{"yao_Latn_MZ"}
     yap{"yap_Latn_FM"}
     yav{"yav_Latn_CM"}
-    yi{"yi_Hebr_IL"}
-    yi_Hebr{"yi_Hebr_UA"}
+    yi{"yi_Hebr_UA"}
     yo{"yo_Latn_NG"}
     za{"za_Latn_CN"}
+    zgh{"zgh_Tfng_MA"}
     zh{"zh_Hans_CN"}
     zh_AU{"zh_Hant_AU"}
     zh_BN{"zh_Hant_BN"}
     zh_GB{"zh_Hant_GB"}
     zh_GF{"zh_Hant_GF"}
     zh_HK{"zh_Hant_HK"}
-    zh_Hani{"zh_Hans_CN"}
     zh_Hant{"zh_Hant_TW"}
     zh_ID{"zh_Hant_ID"}
     zh_MO{"zh_Hant_MO"}

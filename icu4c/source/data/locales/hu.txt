@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/hu.xml
+ * ICU <specials> source: <path>/common/main/hu.xml
  */
 hu{
     AuxExemplarCharacters{"[à ă â å ä ã ā æ ç è ĕ ê ë ē ì ĭ î ï ī ñ ò ŏ ô ø ō œ q ù ŭ û ū w x y ÿ]"}
@@ -129,7 +129,7 @@ hu{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -1223,91 +1223,95 @@ hu{
         metric{"metrikus"}
     }
     units{
-        day{
-            other{"{0} nap"}
-        }
-        day-future{
-            other{"{0} nap múlva"}
-        }
-        day-past{
-            other{"{0} napja"}
-        }
-        hour{
-            other{"{0} óra"}
-        }
-        hour-future{
-            other{"{0} óra múlva"}
-        }
-        hour-past{
-            other{"{0} órával ezelőtt"}
-        }
-        minute{
-            other{"{0} perc"}
-        }
-        minute-future{
-            other{"{0} perc múlva"}
-        }
-        minute-past{
-            other{"{0} perccel ezelőtt"}
-        }
-        month{
-            other{"{0} hónap"}
-        }
-        month-future{
-            other{"{0} hónap múlva"}
-        }
-        month-past{
-            other{"{0} hónappal ezelőtt"}
-        }
-        second{
-            other{"{0} másodperc"}
-        }
-        second-future{
-            other{"{0} másodperc múlva"}
-        }
-        second-past{
-            other{"{0} másodperccel ezelőtt"}
-        }
-        week{
-            other{"{0} hét"}
-        }
-        week-future{
-            other{"{0} hét múlva"}
-        }
-        week-past{
-            other{"{0} héttel ezelőtt"}
-        }
-        year{
-            other{"{0} év"}
-        }
-        year-future{
-            other{"{0} év múlva"}
-        }
-        year-past{
-            other{"{0} évvel ezelőtt"}
+        duration{
+            day{
+                other{"{0} nap"}
+            }
+            day-future{
+                other{"{0} nap múlva"}
+            }
+            day-past{
+                other{"{0} napja"}
+            }
+            hour{
+                other{"{0} óra"}
+            }
+            hour-future{
+                other{"{0} óra múlva"}
+            }
+            hour-past{
+                other{"{0} órával ezelőtt"}
+            }
+            minute{
+                other{"{0} perc"}
+            }
+            minute-future{
+                other{"{0} perc múlva"}
+            }
+            minute-past{
+                other{"{0} perccel ezelőtt"}
+            }
+            month{
+                other{"{0} hónap"}
+            }
+            month-future{
+                other{"{0} hónap múlva"}
+            }
+            month-past{
+                other{"{0} hónappal ezelőtt"}
+            }
+            second{
+                other{"{0} másodperc"}
+            }
+            second-future{
+                other{"{0} másodperc múlva"}
+            }
+            second-past{
+                other{"{0} másodperccel ezelőtt"}
+            }
+            week{
+                other{"{0} hét"}
+            }
+            week-future{
+                other{"{0} hét múlva"}
+            }
+            week-past{
+                other{"{0} héttel ezelőtt"}
+            }
+            year{
+                other{"{0} év"}
+            }
+            year-future{
+                other{"{0} év múlva"}
+            }
+            year-past{
+                other{"{0} évvel ezelőtt"}
+            }
         }
     }
     unitsShort{
-        day{
-            other{"{0} nap"}
-        }
-        hour{
-            other{"{0} ó"}
-        }
-        minute{
-            other{"{0} p"}
-        }
-        month{
-            other{"{0} hónap"}
-        }
-        second{
-            other{"{0} mp"}
-        }
-        week{
-            other{"{0} hét"}
-        }
-        year{
-            other{"{0} év"}
+        duration{
+            day{
+                other{"{0} nap"}
+            }
+            hour{
+                other{"{0} ó"}
+            }
+            minute{
+                other{"{0} p"}
+            }
+            month{
+                other{"{0} hónap"}
+            }
+            second{
+                other{"{0} mp"}
+            }
+            week{
+                other{"{0} hét"}
+            }
+            year{
+                other{"{0} év"}
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mt.xml
+ * ICU <specials> source: <path>/common/main/mt.xml
  */
 mt{
     AuxExemplarCharacters{"[c y]"}
@@ -28,7 +28,7 @@ mt{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -215,5 +215,15 @@ mt{
     }
     measurementSystemNames{
         metric{"Metriku"}
+    }
+    units{
+        duration{
+            year-past{
+                few{"{0} snin ilu"}
+                many{"{0} snin ilu"}
+                one{"{0} sena ilu"}
+                other{"{0} snin ilu"}
+            }
+        }
     }
 }

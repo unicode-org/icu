@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/gu.xml
+ * ICU <specials> source: <path>/common/main/gu.xml
  */
 gu{
     AuxExemplarCharacters{"[\u200C\u200D ૰]"}
@@ -17,8 +17,12 @@ gu{
         "\u0AC4 \u0AC5 \u0AC7 \u0AC8 ૉ ો ૌ \u0ACD]"
     }
     ExemplarCharactersIndex{
-        "[અ આ ઇ ઈ ઉ ઊ ઋ એ ઐ ઓ ઔ ક ખ ગ ઘ ઙ ચ છ જ ઝ ઞ ટ ઠ ડ ઢ ણ ત થ દ ધ ન પ ફ બ ભ મ ય ર"
-        " લ વ શ ષ સ હ ળ]"
+        "[અ આ ઇ ઈ ઉ ઊ ઋ એ ઍ ઐ ઓ ઑ ઔ {અં} {અઃ} ક ખ ગ ઘ ઙ ચ છ જ ઝ ઞ ટ ઠ ડ ઢ ણ ત થ દ ધ ન"
+        " પ ફ બ ભ મ ય ર લ વ શ ષ સ હ ળ {ક્ષ} {ત્ર} {જ્ઞ}]"
+    }
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
+        "″]"
     }
     LocaleScript{
         "Gujr",
@@ -27,7 +31,7 @@ gu{
         default{"latn"}
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -151,7 +155,7 @@ gu{
         }
         native{"gujr"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.73"}
     calendar{
         generic{
             DateTimePatterns{
@@ -162,7 +166,7 @@ gu{
                 "EEEE, d MMMM, y G",
                 "d MMMM, y G",
                 "d MMM, y G",
-                "d-MM-yy GGGGG",
+                "d-MM-y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -171,6 +175,10 @@ gu{
             }
             availableFormats{
                 Ed{"E d"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, MMM d, y G"}
+                GyMMMd{"d, MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -187,17 +195,18 @@ gu{
                 hm{"hh:mm a"}
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"M/y"}
-                yMEd{"E, M/d/y"}
-                yMM{"MM-y"}
-                yMMM{"MMM y"}
-                yMMMEd{"E, MMM d, y"}
-                yMMMM{"MMMM y"}
-                yMMMd{"d, MMM y"}
-                yMd{"d/M/y"}
-                yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"E, M/d/y G"}
+                yyyyMM{"MM-y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, MMM d, y G"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"d, MMM y G"}
+                yyyyMd{"d/M/y G"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
                 H{
@@ -259,39 +268,39 @@ gu{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"y–y G"}
                 }
                 yM{
-                    M{"M/y – M/y"}
-                    y{"M/y – M/y"}
+                    M{"M/y – M/y G"}
+                    y{"M/y – M/y G"}
                 }
                 yMEd{
-                    M{"E,d/M/y- E,d/M/y"}
-                    d{"E,d/M/y- E,d/M/y"}
-                    y{"E,d/M/y-E,d/M/y"}
+                    M{"E,d/M/y- E,d/M/y G"}
+                    d{"E,d/M/y- E,d/M/y G"}
+                    y{"E,d/M/y-E,d/M/y G"}
                 }
                 yMMM{
-                    M{"MMM–MMM y"}
-                    y{"MMM y – MMM y"}
+                    M{"MMM–MMM y G"}
+                    y{"MMM y – MMM y G"}
                 }
                 yMMMEd{
-                    M{"E,d MMM-E,d MMM y"}
-                    d{"E, d MMM-E, d MMM y"}
-                    y{"E, d MMM y-E, d MMM y"}
+                    M{"E,d MMM-E,d MMM y G"}
+                    d{"E, d MMM-E, d MMM y G"}
+                    y{"E, d MMM y-E, d MMM y G"}
                 }
                 yMMMM{
-                    M{"MMMM–MMMM y"}
-                    y{"MMMM y – MMMM y"}
+                    M{"MMMM–MMMM y G"}
+                    y{"MMMM y – MMMM y G"}
                 }
                 yMMMd{
-                    M{"d MMM-d MMM y"}
-                    d{"d-d MMM,y"}
-                    y{"d MMM,y-d MMM,y"}
+                    M{"d MMM-d MMM y G"}
+                    d{"d-d MMM,y G"}
+                    y{"d MMM,y-d MMM,y G"}
                 }
                 yMd{
-                    M{"d/M/y-d/M/y"}
-                    d{"d/M/y-d/M/y"}
-                    y{"d/M/y-d/M/y"}
+                    M{"d/M/y-d/M/y G"}
+                    d{"d/M/y-d/M/y G"}
+                    y{"d/M/y-d/M/y G"}
                 }
             }
         }
@@ -317,6 +326,10 @@ gu{
             }
             availableFormats{
                 Ed{"E d"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, MMM d, y G"}
+                GyMMMd{"d, MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -743,119 +756,123 @@ gu{
         metric{"મેટ્રિક"}
     }
     units{
-        day{
-            one{"{0} દિવસ"}
-            other{"{0} દિવસ"}
-        }
-        day-future{
-            one{"{0} દિવસમાં"}
-            other{"{0} દિવસમાં"}
-        }
-        day-past{
-            one{"{0} દિવસ પહેલા"}
-            other{"{0} દિવસ પહેલા"}
-        }
-        hour{
-            one{"{0} કલાક"}
-            other{"{0} કલાક"}
-        }
-        hour-future{
-            one{"{0} કલાકમાં"}
-            other{"{0} કલાકમાં"}
-        }
-        hour-past{
-            one{"{0} કલાક પહેલા"}
-            other{"{0} કલાક પહેલા"}
-        }
-        minute{
-            one{"{0} મિનિટ"}
-            other{"{0} મિનિટ"}
-        }
-        minute-future{
-            one{"{0} મિનિટમાં"}
-            other{"{0} મિનિટમાં"}
-        }
-        minute-past{
-            one{"{0} મિનિટ પહેલા"}
-            other{"{0} મિનિટ પહેલા"}
-        }
-        month{
-            one{"{0} મહિનો"}
-            other{"{0} મહિનો"}
-        }
-        month-future{
-            one{"{0} મહિનામાં"}
-            other{"{0} મહિનામાં"}
-        }
-        month-past{
-            one{"{0} મહિના પહેલા"}
-            other{"{0} મહિના પહેલા"}
-        }
-        second{
-            one{"{0} સેકંડ"}
-            other{"{0} સેકંડ"}
-        }
-        second-future{
-            one{"{0} સેકંડમાં"}
-            other{"{0} સેકંડમાં"}
-        }
-        second-past{
-            one{"{0} સેકંડ પહેલા"}
-            other{"{0} સેકંડ પહેલા"}
-        }
-        week{
-            one{"{0} અઠવાડિયું"}
-            other{"{0} અઠવાડિયા"}
-        }
-        week-future{
-            one{"{0} અઠવાડિયામાં"}
-            other{"{0} અઠવાડિયામાં"}
-        }
-        week-past{
-            one{"{0} અઠવાડિયા પહેલા"}
-            other{"{0} અઠવાડિયા પહેલા"}
-        }
-        year{
-            one{"{0} વર્ષ"}
-            other{"{0} વર્ષ"}
-        }
-        year-future{
-            one{"{0} વર્ષમાં"}
-            other{"{0} વર્ષમાં"}
-        }
-        year-past{
-            one{"{0} વર્ષ પહેલા"}
-            other{"{0} વર્ષ પહેલા"}
+        duration{
+            day{
+                one{"{0} દિવસ"}
+                other{"{0} દિવસ"}
+            }
+            day-future{
+                one{"{0} દિવસમાં"}
+                other{"{0} દિવસમાં"}
+            }
+            day-past{
+                one{"{0} દિવસ પહેલા"}
+                other{"{0} દિવસ પહેલા"}
+            }
+            hour{
+                one{"{0} કલાક"}
+                other{"{0} કલાક"}
+            }
+            hour-future{
+                one{"{0} કલાકમાં"}
+                other{"{0} કલાકમાં"}
+            }
+            hour-past{
+                one{"{0} કલાક પહેલા"}
+                other{"{0} કલાક પહેલા"}
+            }
+            minute{
+                one{"{0} મિનિટ"}
+                other{"{0} મિનિટ"}
+            }
+            minute-future{
+                one{"{0} મિનિટમાં"}
+                other{"{0} મિનિટમાં"}
+            }
+            minute-past{
+                one{"{0} મિનિટ પહેલા"}
+                other{"{0} મિનિટ પહેલા"}
+            }
+            month{
+                one{"{0} મહિનો"}
+                other{"{0} મહિનો"}
+            }
+            month-future{
+                one{"{0} મહિનામાં"}
+                other{"{0} મહિનામાં"}
+            }
+            month-past{
+                one{"{0} મહિના પહેલા"}
+                other{"{0} મહિના પહેલા"}
+            }
+            second{
+                one{"{0} સેકંડ"}
+                other{"{0} સેકંડ"}
+            }
+            second-future{
+                one{"{0} સેકંડમાં"}
+                other{"{0} સેકંડમાં"}
+            }
+            second-past{
+                one{"{0} સેકંડ પહેલા"}
+                other{"{0} સેકંડ પહેલા"}
+            }
+            week{
+                one{"{0} અઠવાડિયું"}
+                other{"{0} અઠવાડિયા"}
+            }
+            week-future{
+                one{"{0} અઠવાડિયામાં"}
+                other{"{0} અઠવાડિયામાં"}
+            }
+            week-past{
+                one{"{0} અઠવાડિયા પહેલા"}
+                other{"{0} અઠવાડિયા પહેલા"}
+            }
+            year{
+                one{"{0} વર્ષ"}
+                other{"{0} વર્ષ"}
+            }
+            year-future{
+                one{"{0} વર્ષમાં"}
+                other{"{0} વર્ષમાં"}
+            }
+            year-past{
+                one{"{0} વર્ષ પહેલા"}
+                other{"{0} વર્ષ પહેલા"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} દિવસ"}
-            other{"{0} દિવસ"}
-        }
-        hour{
-            one{"{0} કલાક"}
-            other{"{0} કલાક"}
-        }
-        minute{
-            one{"{0} મિનિટ"}
-            other{"{0} મિનિટ"}
-        }
-        month{
-            one{"{0} મહિનો"}
-            other{"{0} મહિનો"}
-        }
-        second{
-            one{"{0} સેકંડ"}
-            other{"{0} સેકંડ"}
-        }
-        week{
-            one{"{0} અઠ."}
-            other{"{0} અઠ."}
-        }
-        year{
-            one{"{0} વર્ષ"}
-            other{"{0} વર્ષ"}
+        duration{
+            day{
+                one{"{0} દિવસ"}
+                other{"{0} દિવસ"}
+            }
+            hour{
+                one{"{0} કલાક"}
+                other{"{0} કલાક"}
+            }
+            minute{
+                one{"{0} મિનિટ"}
+                other{"{0} મિનિટ"}
+            }
+            month{
+                one{"{0} મહિનો"}
+                other{"{0} મહિનો"}
+            }
+            second{
+                one{"{0} સેકંડ"}
+                other{"{0} સેકંડ"}
+            }
+            week{
+                one{"{0} અઠ."}
+                other{"{0} અઠ."}
+            }
+            year{
+                one{"{0} વર્ષ"}
+                other{"{0} વર્ષ"}
+            }
         }
     }
 }

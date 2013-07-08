@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bg.xml
+ * ICU <specials> source: <path>/common/main/bg.xml
  */
 bg{
     Keys{
@@ -772,7 +772,7 @@ bg{
         VALENCIA{"Валенсиански"}
         WADEGILE{"Уейд-Джайлс романизация"}
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.88.32"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}
@@ -780,6 +780,6 @@ bg{
     }
     localeDisplayPattern{
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

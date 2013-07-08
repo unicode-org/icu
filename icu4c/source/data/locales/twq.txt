@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/twq.xml
+ * ICU <specials> source: <path>/common/main/twq.xml
  */
 twq{
     AuxExemplarCharacters{"[v]"}

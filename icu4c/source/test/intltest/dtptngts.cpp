@@ -174,7 +174,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("1/13"),                                            // 04: Md    -> M/d
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 05: MMMd  -> M\u6708d\u65E5
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 06: MMMMd  -> M\u6708d\u65E5
-        UnicodeString("1999/1Q"),                                         // 07: yQQQ  -> yQQQ
+        CharsToUnicodeString("1999\\u5E741Q"),                            // 07: yQQQ  -> y\u5E74QQQ
         CharsToUnicodeString("\\u5348\\u5F8C11:58"),                      // 08: hhmm
         UnicodeString("23:58"),                                           // 09: HHmm  -> HH:mm
         UnicodeString("23:58"),                                           // 10: jjmm
@@ -192,7 +192,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("1/13"),                                            // 04: Md    -> M/d
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 05: MMMd  -> M\u6708d\u65E5
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 06: MMMMd  -> M\u6708d\u65E5
-        CharsToUnicodeString("\\u5E73\\u621011/1Q"),                      // 07: yQQQ  -> Gy/QQQ
+        CharsToUnicodeString("\\u5E73\\u6210 11 1Q"),                     // 07: yQQQ  -> G y QQQ (probably a CLDR error)
         CharsToUnicodeString("\\u5348\\u5F8C11:58"),                      // 08: hhmm  ->
         UnicodeString("23:58"),                                           // 09: HHmm  -> HH:mm          (as for ja)
         UnicodeString("23:58"),                                           // 10: jjmm

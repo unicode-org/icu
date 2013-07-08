@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kk.xml
+ * ICU <specials> source: <path>/common/main/kk.xml
  */
 kk{
     Countries{
@@ -93,5 +93,5 @@ kk{
         ZA{"Оңтүстік Африка республикасы"}
         ZZ{"Белгісіз аймақ"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
 }

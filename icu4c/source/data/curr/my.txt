@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/my.xml
+ * ICU <specials> source: <path>/common/main/my.xml
  */
 my{
     Currencies{
@@ -328,5 +328,5 @@ my{
             "ဇင်ဘာဘွေ ဒေါ်လာ",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
 }

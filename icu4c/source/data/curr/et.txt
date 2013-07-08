@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/et.xml
+ * ICU <specials> source: <path>/common/main/et.xml
  */
 et{
     Currencies{
@@ -263,7 +263,7 @@ et{
             "kr",
             "Eesti kroon",
             {
-                "#,##0.00 ¤;(#,##0.00 ¤)",
+                "#,##0.00 ¤",
                 ".",
                 " ",
             }
@@ -1619,5 +1619,5 @@ et{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.85.93"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/pa_Arab.xml
+ * ICU <specials> source: <path>/common/main/pa_Arab.xml
  */
 pa_Arab{
     Countries{

@@ -739,15 +739,17 @@ TestConsistentCountryInfo(void) {
 
 static int32_t
 findStringSetMismatch(const char *currLoc, const UChar *string, int32_t langSize,
-                      const UChar *exemplarCharacters, int32_t exemplarLen,
+                      USet * mergedExemplarSet,
                       UBool ignoreNumbers, UChar* badCharPtr) {
     UErrorCode errorCode = U_ZERO_ERROR;
-    USet *origSet = uset_openPatternOptions(exemplarCharacters, exemplarLen, USET_CASE_INSENSITIVE, &errorCode);
-    USet *exemplarSet = createFlattenSet(origSet, &errorCode);
+    USet *exemplarSet;
     int32_t strIdx;
-    uset_close(origSet);
+    if (mergedExemplarSet == NULL) {
+        return -1;
+    }
+    exemplarSet = createFlattenSet(mergedExemplarSet, &errorCode);
     if (U_FAILURE(errorCode)) {
-        log_err("%s: error uset_openPattern returned %s\n", currLoc, u_errorName(errorCode));
+        log_err("%s: error createFlattenSet returned %s\n", currLoc, u_errorName(errorCode));
         return -1;
     }
 
@@ -881,8 +883,6 @@ static void VerifyTranslation(void) {
     int32_t locCount = uloc_countAvailable();
     int32_t locIndex;
     UErrorCode errorCode = U_ZERO_ERROR;
-    int32_t exemplarLen;
-    const UChar *exemplarCharacters;
     const char *currLoc;
     UScriptCode scripts[USCRIPT_CODE_LIMIT];
     int32_t numScripts;
@@ -900,6 +900,7 @@ static void VerifyTranslation(void) {
         return;
     }
     for (locIndex = 0; locIndex < locCount; locIndex++) {
+        USet * mergedExemplarSet = NULL;
         errorCode=U_ZERO_ERROR;
         currLoc = uloc_getAvailable(locIndex);
         currentLocale = ures_open(NULL, currLoc, &errorCode);
@@ -917,16 +918,39 @@ static void VerifyTranslation(void) {
             ures_close(currentLocale);
             continue;
         }
-        exemplarCharacters = ures_getStringByKey(currentLocale, "ExemplarCharacters", &exemplarLen, &errorCode);
-        if (U_FAILURE(errorCode)) {
-            log_err("error ures_getStringByKey returned %s\n", u_errorName(errorCode));
+        {
+            UErrorCode exemplarStatus = U_ZERO_ERROR;
+            ULocaleData * uld = ulocdata_open(currLoc, &exemplarStatus);
+            if (U_SUCCESS(exemplarStatus)) {
+                USet * exemplarSet = ulocdata_getExemplarSet(uld, NULL, USET_ADD_CASE_MAPPINGS, ULOCDATA_ES_STANDARD, &exemplarStatus);
+                if (U_SUCCESS(exemplarStatus)) {
+                    mergedExemplarSet = uset_cloneAsThawed(exemplarSet);
+                    uset_close(exemplarSet);
+                    exemplarSet = ulocdata_getExemplarSet(uld, NULL, USET_ADD_CASE_MAPPINGS, ULOCDATA_ES_AUXILIARY, &exemplarStatus);
+                    if (U_SUCCESS(exemplarStatus)) {
+                        uset_addAll(mergedExemplarSet, exemplarSet);
+                        uset_close(exemplarSet);
+                    }
+                    exemplarStatus = U_ZERO_ERROR;
+                    exemplarSet = ulocdata_getExemplarSet(uld, NULL, 0, ULOCDATA_ES_PUNCTUATION, &exemplarStatus);
+                    if (U_SUCCESS(exemplarStatus)) {
+                        uset_addAll(mergedExemplarSet, exemplarSet);
+                        uset_close(exemplarSet);
+                    }
+                } else {
+                    log_err("error ulocdata_getExemplarSet (main) for locale %s returned %s\n", currLoc, u_errorName(errorCode));
+                }
+                ulocdata_close(uld);
+            } else {
+                log_err("error ulocdata_open for locale %s returned %s\n", currLoc, u_errorName(errorCode));
+            }
         }
-        else if (getTestOption(QUICK_OPTION) && exemplarLen > 2048) {
+        if (mergedExemplarSet == NULL /*|| (getTestOption(QUICK_OPTION) && uset_size() > 2048)*/) {
             log_verbose("skipping test for %s\n", currLoc);
         }
-        else if (uprv_strncmp(currLoc,"bem",3) == 0 || uprv_strncmp(currLoc,"mgo",3) == 0 || uprv_strncmp(currLoc,"nl",2) == 0) {
-            log_verbose("skipping test for %s, some month and country names known to use aux exemplars\n", currLoc);
-        }
+        //else if (uprv_strncmp(currLoc,"bem",3) == 0 || uprv_strncmp(currLoc,"mgo",3) == 0 || uprv_strncmp(currLoc,"nl",2) == 0) {
+        //    log_verbose("skipping test for %s, some month and country names known to use aux exemplars\n", currLoc);
+        //}
         else {
             UChar langBuffer[128];
             int32_t langSize;
@@ -937,7 +961,7 @@ static void VerifyTranslation(void) {
                 log_err("error uloc_getDisplayLanguage returned %s\n", u_errorName(errorCode));
             }
             else {
-                strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE, &badChar);
+                strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, mergedExemplarSet, FALSE, &badChar);
                 if (strIdx >= 0) {
                     log_err("getDisplayLanguage(%s) at index %d returned characters not in the exemplar characters: %04X.\n",
                         currLoc, strIdx, badChar);
@@ -947,8 +971,10 @@ static void VerifyTranslation(void) {
             if (U_FAILURE(errorCode)) {
                 log_err("error uloc_getDisplayCountry returned %s\n", u_errorName(errorCode));
             }
-            else if (uprv_strstr(currLoc, "ti_") != currLoc || isICUVersionAtLeast(52, 0, 2)) { /* TODO: FIX or REMOVE this test!  Was: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) - but CldrBug:3058 is wontfix */
-              strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, exemplarCharacters, exemplarLen, FALSE, &badChar);
+            else if ((uprv_strstr(currLoc, "ti_") != currLoc && uprv_strstr(currLoc, "sr_Latn_XK") != currLoc) || isICUVersionAtLeast(52, 0, 2)) {
+              /* TODO: FIX or REMOVE this test!  Was: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) - but CldrBug:3058 is wontfix */
+              /* For sr_Latn_XK we need to wait until the names get updated from sr[_Cyrl] later in CLDR 24 */
+              strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, mergedExemplarSet, FALSE, &badChar);
                 if (strIdx >= 0) {
                     log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters: %04X.\n",
                         currLoc, strIdx, badChar);
@@ -979,7 +1005,7 @@ static void VerifyTranslation(void) {
                         continue;
                     }
                     if (uprv_strstr(currLoc, "uz_Arab") != currLoc || isICUVersionAtLeast(52, 0, 2)) { /* TODO: FIX or REMOVE this test! */
-                        strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE, &badChar);
+                        strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, mergedExemplarSet, TRUE, &badChar);
                         if (strIdx >= 0) {
                             log_err("getDayNames(%s, %d) at index %d returned characters not in the exemplar characters: %04X.\n",
                                 currLoc, idx, strIdx, badChar);
@@ -1010,7 +1036,7 @@ static void VerifyTranslation(void) {
                         continue;
                     }
                     if (uprv_strstr(currLoc, "uz_Arab") != currLoc || isICUVersionAtLeast(52, 0, 2)) { /* TODO: FIX or REMOVE this test! */
-                        strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, exemplarCharacters, exemplarLen, TRUE, &badChar);
+                        strIdx = findStringSetMismatch(currLoc, fromBundleStr, langSize, mergedExemplarSet, TRUE, &badChar);
                         if (strIdx >= 0) {
                             log_err("getMonthNames(%s, %d) at index %d returned characters not in the exemplar characters: %04X.\n",
                                 currLoc, idx, strIdx, badChar);
@@ -1066,6 +1092,9 @@ static void VerifyTranslation(void) {
                    log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                }
            }
+        }
+        if (mergedExemplarSet != NULL) {
+            uset_close(mergedExemplarSet);
         }
         ures_close(currentLocale);
     }

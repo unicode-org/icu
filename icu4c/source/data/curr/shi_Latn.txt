@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/shi_Latn.xml
+ * ICU <specials> source: <path>/common/main/shi_Latn.xml
  */
 shi_Latn{
     Currencies{

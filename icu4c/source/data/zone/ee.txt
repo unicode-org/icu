@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ee.xml
+ * ICU <specials> source: <path>/common/main/ee.xml
  */
 ee{
-    Version{"2.0.86.63"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidzan nutomegaƒoƒome"}
@@ -1227,7 +1227,6 @@ ee{
         "meta:Suriname"{
             ls{"Suriname gaƒoƒome"}
         }
-        fallbackRegionFormat{"{1} gaƒoƒo ({0})"}
         regionFormat{"{0} gaƒoƒo"}
     }
 }

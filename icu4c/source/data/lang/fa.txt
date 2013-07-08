@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/fa.xml
+ * ICU <specials> source: <path>/common/main/fa.xml
  */
 fa{
     Keys{
@@ -732,7 +732,7 @@ fa{
         SAAHO{"ساهویی"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.97"}
     codePatterns{
         language{"زبان: {0}"}
         script{"خط: {0}"}
@@ -741,6 +741,6 @@ fa{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{"، "}
+        separator{"{0}، {1}"}
     }
 }

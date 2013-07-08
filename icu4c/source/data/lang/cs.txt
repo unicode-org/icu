@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/cs.xml
+ * ICU <specials> source: <path>/common/main/cs.xml
  */
 cs{
     Keys{
@@ -757,7 +757,7 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}
@@ -766,6 +766,6 @@ cs{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{","}
+        separator{"{0},{1}"}
     }
 }

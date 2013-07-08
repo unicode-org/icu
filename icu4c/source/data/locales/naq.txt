@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/naq.xml
+ * ICU <specials> source: <path>/common/main/naq.xml
  */
 naq{
     AuxExemplarCharacters{"[j l v]"}

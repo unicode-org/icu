@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bs.xml
+ * ICU <specials> source: <path>/common/main/bs.xml
  */
 bs{
     Currencies{
@@ -2834,5 +2834,5 @@ bs{
             other{"zimbabvejskih dolara (2008)"}
         }
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.85.93"}
 }

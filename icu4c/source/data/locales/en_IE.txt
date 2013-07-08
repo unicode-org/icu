@@ -8,13 +8,9 @@
 // ***************************************************************************
 en_IE{
     %%Parent{"en_GB"}
-    Version{"2.0.82.45"}
+    Version{"2.0.86.27"}
     calendar{
         generic{
-            AmPmMarkers{
-                "a.m.",
-                "p.m.",
-            }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
                 "HH:mm:ss z",
@@ -33,9 +29,9 @@ en_IE{
             availableFormats{
                 MEd{"E, d/M"}
                 Md{"d/M"}
-                yMEd{"E, d/M/y"}
-                yMMMEd{"E d MMM y"}
-                yMd{"d/M/y"}
+                yyyyMEd{"E, d/M/y G"}
+                yyyyMMMEd{"E d MMM y G"}
+                yyyyMd{"d/M/y G"}
             }
             intervalFormats{
                 Hm{
@@ -80,32 +76,32 @@ en_IE{
                     m{"h:mm-h:mm a v"}
                 }
                 yM{
-                    M{"MM/y - MM/y"}
-                    y{"MM/y - MM/y"}
+                    M{"MM/y - MM/y G"}
+                    y{"MM/y - MM/y G"}
                 }
                 yMEd{
-                    M{"E dd/MM/y - E dd/MM/y"}
-                    d{"E dd/MM/y - E dd/MM/y"}
-                    y{"E dd/MM/y - E dd/MM/y"}
+                    M{"E dd/MM/y - E dd/MM/y G"}
+                    d{"E dd/MM/y - E dd/MM/y G"}
+                    y{"E dd/MM/y - E dd/MM/y G"}
                 }
                 yMMM{
-                    M{"MMM-MMM y"}
-                    y{"MMM y - MMM y"}
+                    M{"MMM-MMM y G"}
+                    y{"MMM y - MMM y G"}
                 }
                 yMMMEd{
-                    M{"E d MMM - E d MMM y"}
-                    d{"E d - E d MMM y"}
-                    y{"E d MMM y - E d MMM y"}
+                    M{"E d MMM - E d MMM y G"}
+                    d{"E d - E d MMM y G"}
+                    y{"E d MMM y - E d MMM y G"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM y"}
-                    d{"d-d MMM y"}
-                    y{"d MMM y - d MMM y"}
+                    M{"d MMM - d MMM y G"}
+                    d{"d-d MMM y G"}
+                    y{"d MMM y - d MMM y G"}
                 }
                 yMd{
-                    M{"dd/MM/y - dd/MM/y"}
-                    d{"dd/MM/y - dd/MM/y"}
-                    y{"dd/MM/y - dd/MM/y"}
+                    M{"dd/MM/y - dd/MM/y G"}
+                    d{"dd/MM/y - dd/MM/y G"}
+                    y{"dd/MM/y - dd/MM/y G"}
                 }
             }
         }

@@ -21,7 +21,7 @@ ee{
         SpelloutRules{
             "%spellout-numbering-year:",
             "x.x: =#,###0.#=;",
-            "0: \u0192e =%spellout-numbering=;",
+            "0: =%spellout-numbering=;",
             "%spellout-numbering:",
             "0: =%spellout-cardinal=;",
             "%%after-hundreds:",
@@ -78,17 +78,19 @@ ee{
             "1000000000000: bili\u0254n <%spellout-cardinal<[>%%after-billions>];",
             "1000000000000000000: =#,##0=;",
             "%spellout-cardinal:",
-            "-x: >> xle\u0303yimegbee;",
-            "x.x: << ewoliawo \u0192e >>;",
+            "-x: >> xl\u1EBDyimegbee;",
+            "0.x: kak\u025B >>;",
+            "x.x: << kple kak\u025B >>;",
             "0: \u0256ekeo;",
             "1: \u0256eka;",
             "2: =%%spellout-base=;",
             "%spellout-ordinal:",
-            "-x: >> xle\u0303yimegbee;",
+            "-x: >> xl\u1EBDyimegbee;",
+            "x.x: =#,##0.0=lia;",
             "0: \u0256ekeolia;",
             "1: gb\u00E3t\u0254;",
             "2: =%spellout-cardinal=lia;",
         }
     }
-    Version{"2.0.82.42"}
+    Version{"2.0.85.0"}
 }

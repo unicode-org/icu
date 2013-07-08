@@ -1547,25 +1547,25 @@ void TestGregorianChange() {
 
 static void TestGetKeywordValuesForLocale() {
 #define PREFERRED_SIZE 15
-#define MAX_NUMBER_OF_KEYWORDS 4
+#define MAX_NUMBER_OF_KEYWORDS 5
     const char *PREFERRED[PREFERRED_SIZE][MAX_NUMBER_OF_KEYWORDS+1] = {
-            { "root",        "gregorian", NULL, NULL, NULL },
-            { "und",         "gregorian", NULL, NULL, NULL },
-            { "en_US",       "gregorian", NULL, NULL, NULL },
-            { "en_029",      "gregorian", NULL, NULL, NULL },
-            { "th_TH",       "buddhist", "gregorian", NULL, NULL },
-            { "und_TH",      "buddhist", "gregorian", NULL, NULL },
-            { "en_TH",       "buddhist", "gregorian", NULL, NULL },
-            { "he_IL",       "gregorian", "hebrew", "islamic", "islamic-civil" },
-            { "ar_EG",       "gregorian", "coptic", "islamic", "islamic-civil" },
-            { "ja",          "gregorian", "japanese", NULL, NULL },
-            { "ps_Guru_IN",  "gregorian", "indian", NULL, NULL },
-            { "th@calendar=gregorian", "buddhist", "gregorian", NULL, NULL },
-            { "en@calendar=islamic",   "gregorian", NULL, NULL, NULL },
-            { "zh_TW",       "gregorian", "roc", "chinese", NULL },
-            { "ar_IR",       "persian", "gregorian", "islamic", "islamic-civil" },
+            { "root",        "gregorian", NULL, NULL, NULL, NULL },
+            { "und",         "gregorian", NULL, NULL, NULL, NULL },
+            { "en_US",       "gregorian", NULL, NULL, NULL, NULL },
+            { "en_029",      "gregorian", NULL, NULL, NULL, NULL },
+            { "th_TH",       "buddhist", "gregorian", NULL, NULL, NULL },
+            { "und_TH",      "buddhist", "gregorian", NULL, NULL, NULL },
+            { "en_TH",       "buddhist", "gregorian", NULL, NULL, NULL },
+            { "he_IL",       "gregorian", "hebrew", "islamic", "islamic-civil", "islamic-tbla" },
+            { "ar_EG",       "gregorian", "coptic", "islamic", "islamic-civil", "islamic-tbla" },
+            { "ja",          "gregorian", "japanese", NULL, NULL, NULL },
+            { "ps_Guru_IN",  "gregorian", "indian", NULL, NULL, NULL },
+            { "th@calendar=gregorian", "buddhist", "gregorian", NULL, NULL, NULL },
+            { "en@calendar=islamic",   "gregorian", NULL, NULL, NULL, NULL },
+            { "zh_TW",       "gregorian", "roc", "chinese", NULL, NULL },
+            { "ar_IR",       "persian", "gregorian", "islamic", "islamic-civil", "islamic-tbla" },
     };
-    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 4, 4, 2, 2, 2, 1, 3, 4 };
+    const int32_t EXPECTED_SIZE[PREFERRED_SIZE] = { 1, 1, 1, 1, 2, 2, 2, 5, 5, 2, 2, 2, 1, 3, 5 };
     UErrorCode status = U_ZERO_ERROR;
     int32_t i, size, j;
     UEnumeration *all, *pref;

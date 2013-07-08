@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bem.xml
+ * ICU <specials> source: <path>/common/main/bem.xml
  */
 bem{
     AuxExemplarCharacters{"[d h q r v x z]"}
@@ -19,11 +19,11 @@ bem{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
     calendar{
         generic{
             DateTimePatterns{

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ksf.xml
+ * ICU <specials> source: <path>/common/main/ksf.xml
  */
 ksf{
     AuxExemplarCharacters{"[q x]"}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/fil.xml
+ * ICU <specials> source: <path>/common/main/fil.xml
  */
 fil{
     Keys{
@@ -336,7 +336,7 @@ fil{
         PINYIN{"Pinyin Romanization"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}
@@ -344,6 +344,6 @@ fil{
     }
     localeDisplayPattern{
         pattern{"{0} ({1})"}
-        separator{","}
+        separator{"{0}, {1}"}
     }
 }

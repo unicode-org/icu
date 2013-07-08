@@ -1,6 +1,6 @@
 /*********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2010-2012, International Business Machines Corporation and
+ * Copyright (c) 2010-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *********************************************************************/
 
@@ -296,9 +296,9 @@ static const LocNameDispContextItem ctxtItems[] = {
     { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en_US, esFor_en_US_T },
     { "es", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, esFor_en_US_DT },
 
-    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en,    daFor_en   },
-    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, daFor_en_US   },
-    { "da", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, daFor_en_US_D  },
+    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en,    daFor_en_T },
+    { "da", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, daFor_en_US_T },
+    { "da", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, daFor_en_US_DT },
     { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en,    esFor_en_T },
     { "es", UDISPCTX_STANDARD_NAMES, UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,       en_US, esFor_en_US_T },
     { "es", UDISPCTX_DIALECT_NAMES,  UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, en_US, esFor_en_US_DT },

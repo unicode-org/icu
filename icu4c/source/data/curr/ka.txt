@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ka.xml
+ * ICU <specials> source: <path>/common/main/ka.xml
  */
 ka{
     Currencies{
@@ -1325,5 +1325,5 @@ ka{
     CurrencyUnitPatterns{
         other{"{0} {1}"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

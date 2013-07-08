@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/en.xml
+ * ICU <specials> source: <path>/common/main/en.xml
  */
 en{
     Keys{
@@ -177,12 +177,13 @@ en{
         en_AU{"Australian English"}
         en_CA{"Canadian English"}
         en_GB{"British English"}
-        en_US{"U.S. English"}
+        en_US{"American English"}
         enm{"Middle English"}
         eo{"Esperanto"}
         es{"Spanish"}
         es_419{"Latin American Spanish"}
         es_ES{"European Spanish"}
+        es_MX{"Mexican Spanish"}
         et{"Estonian"}
         eu{"Basque"}
         ewo{"Ewondo"}
@@ -316,7 +317,7 @@ en{
         kut{"Kutenai"}
         kv{"Komi"}
         kw{"Cornish"}
-        ky{"Kirghiz"}
+        ky{"Kyrgyz"}
         la{"Latin"}
         lad{"Ladino"}
         lag{"Langi"}
@@ -599,6 +600,7 @@ en{
         zap{"Zapotec"}
         zbl{"Blissymbols"}
         zen{"Zenaga"}
+        zgh{"Standard Moroccan Tamazight"}
         zh{"Chinese"}
         zh_Hans{"Simplified Chinese"}
         zh_Hant{"Traditional Chinese"}
@@ -610,6 +612,8 @@ en{
     }
     LanguagesShort{
         az{"Azeri"}
+        en_GB{"U.K. English"}
+        en_US{"U.S. English"}
     }
     Scripts{
         Afak{"Afaka"}
@@ -787,7 +791,10 @@ en{
             hebrew{"Hebrew Calendar"}
             indian{"Indian National Calendar"}
             islamic{"Islamic Calendar"}
-            islamic-civil{"Islamic-Civil Calendar"}
+            islamic-civil{"Islamic Calendar [tabular, civil epoch]"}
+            islamic-rgsa{"Islamic Calendar [Saudi Arabia, sighting]"}
+            islamic-tbla{"Islamic Calendar [tabular, astronomical epoch]"}
+            islamic-umalqura{"Islamic Calendar [Umm al-Qura]"}
             iso8601{"ISO-8601 Calendar"}
             japanese{"Japanese Calendar"}
             persian{"Persian Calendar"}
@@ -797,6 +804,7 @@ en{
             big5han{"Traditional Chinese Sort Order - Big5"}
             dictionary{"Dictionary Sort Order"}
             ducet{"Default Unicode Sort Order"}
+            eor{"European Ordering Rules"}
             gb2312han{"Simplified Chinese Sort Order - GB2312"}
             phonebook{"Phonebook Sort Order"}
             phonetic{"Phonetic Sort Order"}
@@ -925,7 +933,7 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.89.25"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}
@@ -933,6 +941,6 @@ en{
     }
     localeDisplayPattern{
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

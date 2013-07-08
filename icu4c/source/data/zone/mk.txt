@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mk.xml
+ * ICU <specials> source: <path>/common/main/mk.xml
  */
 mk{
-    Version{"2.0.86.63"}
+    Version{"2.0.88.26"}
     zoneStrings{
         "Africa:Ceuta"{
             ec{"Сеута"}
@@ -1128,7 +1128,6 @@ mk{
             ls{"Стандардно време во Екатеринбург"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

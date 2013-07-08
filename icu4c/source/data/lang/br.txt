@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/br.xml
+ * ICU <specials> source: <path>/common/main/br.xml
  */
 br{
     Keys{

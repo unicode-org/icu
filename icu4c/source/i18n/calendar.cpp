@@ -168,6 +168,9 @@ static const char * const gCalTypes[] = {
     "ethiopic-amete-alem",
     "iso8601",
     "dangi",
+    "islamic-umalqura",
+    "islamic-tbla",
+    "islamic-rgsa",
     NULL
 };
 
@@ -188,7 +191,10 @@ typedef enum ECalType {
     CALTYPE_ETHIOPIC,
     CALTYPE_ETHIOPIC_AMETE_ALEM,
     CALTYPE_ISO8601,
-    CALTYPE_DANGI
+    CALTYPE_DANGI,
+    CALTYPE_ISLAMIC_UMALQURA,
+    CALTYPE_ISLAMIC_TBLA,
+    CALTYPE_ISLAMIC_RGSA
 } ECalType;
 
 U_NAMESPACE_BEGIN
@@ -349,6 +355,10 @@ static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UEr
         case CALTYPE_DANGI:
             cal = new DangiCalendar(loc, status);
             break;
+        case CALTYPE_ISLAMIC_UMALQURA:
+        case CALTYPE_ISLAMIC_TBLA:
+        case CALTYPE_ISLAMIC_RGSA:
+            // Need to add handling for these, meanwhile fall through to default
         default:
             status = U_UNSUPPORTED_ERROR;
     }

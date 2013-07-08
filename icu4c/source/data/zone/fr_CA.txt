@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fr_CA{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Ndjamena"{
             ec{"Ndjamena"}
@@ -94,7 +94,6 @@ fr_CA{
             sg{"HT"}
             ss{"HNT"}
         }
-        fallbackRegionFormat{"Heure de {1} ({0})"}
         regionFormat{"Heure de {0}"}
     }
 }

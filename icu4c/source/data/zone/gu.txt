@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/gu.xml
+ * ICU <specials> source: <path>/common/main/gu.xml
  */
 gu{
-    Version{"2.0.86.71"}
+    Version{"2.0.88.73"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"આબિદ્જાન"}
@@ -1848,7 +1848,6 @@ gu{
             ls{"યેકાટેરીન્બર્ગ માનક સમય"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} સમય ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ro.xml
+ * ICU <specials> source: <path>/common/main/ro.xml
  */
 ro{
     Keys{
@@ -15,7 +15,7 @@ ro{
         colAlternate{"Ordonare cu simbolurile ignorate"}
         colBackwards{"Ordonare inversă după accent"}
         colCaseFirst{"Ordonare după majuscule/minuscule"}
-        colCaseLevel{"Ordonare care ţine seama de majuscule/minuscule"}
+        colCaseLevel{"Ordonare care ține seama de majuscule/minuscule"}
         colHiraganaQuaternary{"Ordonare după kana"}
         colNormalization{"Ordonare normalizată"}
         colNumeric{"Ordonare numerică"}
@@ -25,7 +25,7 @@ ro{
         numbers{"Numere"}
         timezone{"Fusul orar"}
         va{"Varianta locală"}
-        variableTop{"Ordonaţi ca simboluri"}
+        variableTop{"Ordonați ca simboluri"}
         x{"Utilizare privată"}
     }
     Languages{
@@ -681,7 +681,7 @@ ro{
     }
     Scripts%stand-alone{
         Hans{"alfabet han simplificat"}
-        Hant{"alfabet han tradiţional"}
+        Hant{"alfabet han tradițional"}
     }
     Types{
         calendar{
@@ -701,7 +701,7 @@ ro{
         }
         collation{
             big5han{"sortare pentru chineza tradițională - Big5"}
-            dictionary{"Ordine de sortare a dicţionarului"}
+            dictionary{"Ordine de sortare a dicționarului"}
             ducet{"Ordine de sortare Unicode implicită"}
             gb2312han{"sortare pentru chineza simplificată - GB2312"}
             phonebook{"sortare după cartea de telefon"}
@@ -709,7 +709,7 @@ ro{
             pinyin{"sortare pinyin"}
             reformed{"Ordine de sortare reformată"}
             search{"Căutare cu scop general"}
-            searchjl{"Căutaţi în funcţie de consoana iniţială hangul"}
+            searchjl{"Căutați în funcție de consoana inițială hangul"}
             stroke{"ordine de sortare după trasare"}
             traditional{"sortare tradițională"}
             unihan{"Ordine de sortare a liniilor ideogramelor"}
@@ -717,29 +717,29 @@ ro{
         numbers{
             arab{"Cifre indo-arabe"}
             arabext{"Cifre indo-arabe extinse"}
-            armn{"Numerale armeneşti"}
-            armnlow{"Numerale armeneşti cu minuscule"}
+            armn{"Numerale armenești"}
+            armnlow{"Numerale armenești cu minuscule"}
             beng{"Cifre bengaleze"}
             deva{"Cifre devanagari"}
             ethi{"Numerale etiopiene"}
             finance{"Sistemul numeric financiar"}
-            fullwide{"Cifre cu lăţimea întreagă"}
+            fullwide{"Cifre cu lățimea întreagă"}
             geor{"Numerale georgiene"}
-            grek{"Numerale greceşti"}
-            greklow{"Numerale greceşti cu minuscule"}
+            grek{"Numerale grecești"}
+            greklow{"Numerale grecești cu minuscule"}
             gujr{"Cifre gujarati"}
             guru{"Cifre gurmukhi"}
-            hanidec{"Numerale zecimale chinezeşti"}
-            hans{"Numerale chinezeşti simplificate"}
-            hansfin{"Numerale financiare chinezeşti simplificate"}
-            hant{"Numerale chinezeşti tradiţionale"}
-            hantfin{"Numerale financiare chinezeşti tradiţionale"}
+            hanidec{"Numerale zecimale chinezești"}
+            hans{"Numerale chinezești simplificate"}
+            hansfin{"Numerale financiare chinezești simplificate"}
+            hant{"Numerale chinezești tradiționale"}
+            hantfin{"Numerale financiare chinezești tradiționale"}
             hebr{"Numerale ebraice"}
             jpan{"Numerale japoneze"}
             jpanfin{"Numerale financiare japoneze"}
             khmr{"Cifre khmeră"}
             knda{"Cifre kannada"}
-            laoo{"Cifre laoţiene"}
+            laoo{"Cifre laoțiene"}
             latn{"Cifre occidentale"}
             mlym{"Cifre malayalam"}
             mong{"Cifre mongole"}
@@ -753,7 +753,7 @@ ro{
             telu{"Cifre telugu"}
             thai{"Cifre thailandeze"}
             tibt{"Cifre tibetane"}
-            traditional{"Numere tradiţionale"}
+            traditional{"Numere tradiționale"}
             vaii{"Cifre Vai"}
         }
     }
@@ -762,7 +762,7 @@ ro{
         SCOTLAND{"engleză standard scoțiană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Limbă: {0}"}
         script{"Scriere: {0}"}
@@ -771,6 +771,6 @@ ro{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ksb.xml
+ * ICU <specials> source: <path>/common/main/ksb.xml
  */
 ksb{
     Languages{

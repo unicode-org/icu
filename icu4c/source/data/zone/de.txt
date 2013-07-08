@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/de.xml
+ * ICU <specials> source: <path>/common/main/de.xml
  */
 de{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -954,7 +954,6 @@ de{
             ls{"Jekaterinburg-Normalzeit"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} Zeit ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

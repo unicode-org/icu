@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ses.xml
+ * ICU <specials> source: <path>/common/main/ses.xml
  */
 ses{
     Languages{

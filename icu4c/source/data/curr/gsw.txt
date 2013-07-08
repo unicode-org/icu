@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/gsw.xml
+ * ICU <specials> source: <path>/common/main/gsw.xml
  */
 gsw{
     Currencies{
@@ -2138,5 +2138,5 @@ gsw{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
 }

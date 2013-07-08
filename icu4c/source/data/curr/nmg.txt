@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/nmg.xml
+ * ICU <specials> source: <path>/common/main/nmg.xml
  */
 nmg{
     Currencies{

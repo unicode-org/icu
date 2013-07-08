@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/nl.xml
+ * ICU <specials> source: <path>/common/main/nl.xml
  */
 nl{
     AuxExemplarCharacters{"[à â å ã æ ç è ê î ñ ô ø œ ù û ÿ]"}
@@ -149,7 +149,7 @@ nl{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -925,119 +925,123 @@ nl{
         metric{"Metriek"}
     }
     units{
-        day{
-            one{"{0} dag"}
-            other{"{0} dagen"}
-        }
-        day-future{
-            one{"Over {0} dag"}
-            other{"Over {0} dagen"}
-        }
-        day-past{
-            one{"{0} dag geleden"}
-            other{"{0} dagen geleden"}
-        }
-        hour{
-            one{"{0} uur"}
-            other{"{0} uur"}
-        }
-        hour-future{
-            one{"Over {0} uur"}
-            other{"Over {0} uur"}
-        }
-        hour-past{
-            one{"{0} uur geleden"}
-            other{"{0} uur geleden"}
-        }
-        minute{
-            one{"{0} minuut"}
-            other{"{0} minuten"}
-        }
-        minute-future{
-            one{"Over {0} minuut"}
-            other{"Over {0} minuten"}
-        }
-        minute-past{
-            one{"{0} minuut geleden"}
-            other{"{0} minuten geleden"}
-        }
-        month{
-            one{"{0} maand"}
-            other{"{0} maanden"}
-        }
-        month-future{
-            one{"Over {0} maand"}
-            other{"Over {0} maanden"}
-        }
-        month-past{
-            one{"{0} maand geleden"}
-            other{"{0} maanden geleden"}
-        }
-        second{
-            one{"{0} seconde"}
-            other{"{0} seconden"}
-        }
-        second-future{
-            one{"Over {0} seconde"}
-            other{"Over {0} seconden"}
-        }
-        second-past{
-            one{"{0} seconde geleden"}
-            other{"{0} seconden geleden"}
-        }
-        week{
-            one{"{0} week"}
-            other{"{0} weken"}
-        }
-        week-future{
-            one{"Over {0} week"}
-            other{"Over {0} weken"}
-        }
-        week-past{
-            one{"{0} week geleden"}
-            other{"{0} weken geleden"}
-        }
-        year{
-            one{"{0} jaar"}
-            other{"{0} jaar"}
-        }
-        year-future{
-            one{"Over {0} jaar"}
-            other{"Over {0} jaar"}
-        }
-        year-past{
-            one{"{0} jaar geleden"}
-            other{"{0} jaar geleden"}
+        duration{
+            day{
+                one{"{0} dag"}
+                other{"{0} dagen"}
+            }
+            day-future{
+                one{"Over {0} dag"}
+                other{"Over {0} dagen"}
+            }
+            day-past{
+                one{"{0} dag geleden"}
+                other{"{0} dagen geleden"}
+            }
+            hour{
+                one{"{0} uur"}
+                other{"{0} uur"}
+            }
+            hour-future{
+                one{"Over {0} uur"}
+                other{"Over {0} uur"}
+            }
+            hour-past{
+                one{"{0} uur geleden"}
+                other{"{0} uur geleden"}
+            }
+            minute{
+                one{"{0} minuut"}
+                other{"{0} minuten"}
+            }
+            minute-future{
+                one{"Over {0} minuut"}
+                other{"Over {0} minuten"}
+            }
+            minute-past{
+                one{"{0} minuut geleden"}
+                other{"{0} minuten geleden"}
+            }
+            month{
+                one{"{0} maand"}
+                other{"{0} maanden"}
+            }
+            month-future{
+                one{"Over {0} maand"}
+                other{"Over {0} maanden"}
+            }
+            month-past{
+                one{"{0} maand geleden"}
+                other{"{0} maanden geleden"}
+            }
+            second{
+                one{"{0} seconde"}
+                other{"{0} seconden"}
+            }
+            second-future{
+                one{"Over {0} seconde"}
+                other{"Over {0} seconden"}
+            }
+            second-past{
+                one{"{0} seconde geleden"}
+                other{"{0} seconden geleden"}
+            }
+            week{
+                one{"{0} week"}
+                other{"{0} weken"}
+            }
+            week-future{
+                one{"Over {0} week"}
+                other{"Over {0} weken"}
+            }
+            week-past{
+                one{"{0} week geleden"}
+                other{"{0} weken geleden"}
+            }
+            year{
+                one{"{0} jaar"}
+                other{"{0} jaar"}
+            }
+            year-future{
+                one{"Over {0} jaar"}
+                other{"Over {0} jaar"}
+            }
+            year-past{
+                one{"{0} jaar geleden"}
+                other{"{0} jaar geleden"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} dag"}
-            other{"{0} dagen"}
-        }
-        hour{
-            one{"{0} u"}
-            other{"{0} u"}
-        }
-        minute{
-            one{"{0} min."}
-            other{"{0} min."}
-        }
-        month{
-            one{"{0} mnd"}
-            other{"{0} mnd"}
-        }
-        second{
-            one{"{0} sec."}
-            other{"{0} sec."}
-        }
-        week{
-            one{"{0} wk"}
-            other{"{0} wkn"}
-        }
-        year{
-            one{"{0} jr"}
-            other{"{0} jr"}
+        duration{
+            day{
+                one{"{0} dag"}
+                other{"{0} dagen"}
+            }
+            hour{
+                one{"{0} u"}
+                other{"{0} u"}
+            }
+            minute{
+                one{"{0} min."}
+                other{"{0} min."}
+            }
+            month{
+                one{"{0} mnd"}
+                other{"{0} mnd"}
+            }
+            second{
+                one{"{0} sec."}
+                other{"{0} sec."}
+            }
+            week{
+                one{"{0} wk"}
+                other{"{0} wkn"}
+            }
+            year{
+                one{"{0} jr"}
+                other{"{0} jr"}
+            }
         }
     }
 }

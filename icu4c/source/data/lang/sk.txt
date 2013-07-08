@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/sk.xml
+ * ICU <specials> source: <path>/common/main/sk.xml
  */
 sk{
     Keys{
@@ -625,8 +625,8 @@ sk{
         Guru{"Gurmukhi"}
         Hang{"Hangul"}
         Hani{"Han"}
-        Hans{"Zjednodušené čínske"}
-        Hant{"Tradičné čínske"}
+        Hans{"zjednodušené"}
+        Hant{"tradičné"}
         Hebr{"hebrejský"}
         Hira{"Hiragana"}
         Jpan{"japonské"}
@@ -737,7 +737,7 @@ sk{
     Variants{
         SCOTLAND{"škótska štandardná angličtina"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}
@@ -746,6 +746,6 @@ sk{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{","}
+        separator{"{0}, {1}"}
     }
 }

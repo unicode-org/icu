@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/to.xml
+ * ICU <specials> source: <path>/common/main/to.xml
  */
 to{
-    Version{"2.0.82.57"}
+    Version{"2.0.88.31"}
     zoneStrings{
         "America:Anchorage"{
             ec{"Houa Puleʻanga fakataha ʻAmelika (Anchorage)"}
@@ -98,7 +98,6 @@ to{
             ls{"houa fakaʻuvea mo futuna"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Houa {1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Houa {0}"}

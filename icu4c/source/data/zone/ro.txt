@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ro.xml
+ * ICU <specials> source: <path>/common/main/ro.xml
  */
 ro{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -571,9 +571,9 @@ ro{
             ls{"Ora Guianei"}
         }
         "meta:Hawaii_Aleutian"{
-            ld{"Ora de vară a insulelor Aleutine şi a Hawaiului"}
-            lg{"Ora insulelor Aleutine şi a Hawaiului"}
-            ls{"Ora standard a insulelor Aleutine şi a Hawaiului"}
+            ld{"Ora de vară a insulelor Aleutine și a Hawaiului"}
+            lg{"Ora insulelor Aleutine și a Hawaiului"}
+            ls{"Ora standard a insulelor Aleutine și a Hawaiului"}
         }
         "meta:Hong_Kong"{
             ld{"Ora de vară din Hong Kong"}
@@ -619,9 +619,9 @@ ro{
             ls{"Ora standard a Japoniei"}
         }
         "meta:Kamchatka"{
-            ld{"Ora de vară din Petropavlovsk-Kamciaţki"}
-            lg{"Ora din Petropavlovsk-Kamciaţki"}
-            ls{"Ora standard din Petropavlovsk-Kamciaţki"}
+            ld{"Ora de vară din Petropavlovsk-Kamciațki"}
+            lg{"Ora din Petropavlovsk-Kamciațki"}
+            ls{"Ora standard din Petropavlovsk-Kamciațki"}
         }
         "meta:Kazakhstan_Eastern"{
             ls{"Ora regiunii estice din Kazahstan"}
@@ -713,9 +713,9 @@ ro{
             ls{"Ora standard din Filipine"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Ora de vară din Saint-Pierre şi Miquelon"}
-            lg{"Ora din Saint-Pierre şi Miquelon"}
-            ls{"Ora standard din Saint-Pierre şi Miquelon"}
+            ld{"Ora de vară din Saint-Pierre și Miquelon"}
+            lg{"Ora din Saint-Pierre și Miquelon"}
+            ls{"Ora standard din Saint-Pierre și Miquelon"}
         }
         "meta:Ponape"{
             ls{"Ora din Ponape"}
@@ -819,7 +819,6 @@ ro{
             ls{"Ora standard din Ekaterinburg"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Ora din {1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;−HH:mm"}

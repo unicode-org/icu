@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/hi.xml
+ * ICU <specials> source: <path>/common/main/hi.xml
  */
 hi{
     Countries{
@@ -302,5 +302,5 @@ hi{
         ZW{"ज़िम्बाब्वे"}
         ZZ{"अज्ञात क्षेत्र"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

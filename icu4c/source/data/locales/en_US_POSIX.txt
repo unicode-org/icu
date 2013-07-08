@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/en_US_POSIX.xml
+ * ICU <specials> source: <path>/common/main/en_US_POSIX.xml
  */
 en_US_POSIX{
     NumberElements{

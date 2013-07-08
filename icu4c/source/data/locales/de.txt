@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/de.xml
+ * ICU <specials> source: <path>/common/main/de.xml
  */
 de{
     AuxExemplarCharacters{
@@ -149,7 +149,7 @@ de{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -847,119 +847,123 @@ de{
         metric{"Metrisch"}
     }
     units{
-        day{
-            one{"{0} Tag"}
-            other{"{0} Tage"}
-        }
-        day-future{
-            one{"In {0} Tag"}
-            other{"In {0} Tagen"}
-        }
-        day-past{
-            one{"Vor {0} Tag"}
-            other{"Vor {0} Tagen"}
-        }
-        hour{
-            one{"{0} Stunde"}
-            other{"{0} Stunden"}
-        }
-        hour-future{
-            one{"In {0} Stunde"}
-            other{"In {0} Stunden"}
-        }
-        hour-past{
-            one{"Vor {0} Stunde"}
-            other{"Vor {0} Stunden"}
-        }
-        minute{
-            one{"{0} Minute"}
-            other{"{0} Minuten"}
-        }
-        minute-future{
-            one{"In {0} Minute"}
-            other{"In {0} Minuten"}
-        }
-        minute-past{
-            one{"Vor {0} Minute"}
-            other{"Vor {0} Minuten"}
-        }
-        month{
-            one{"{0} Monat"}
-            other{"{0} Monate"}
-        }
-        month-future{
-            one{"In {0} Monat"}
-            other{"In {0} Monaten"}
-        }
-        month-past{
-            one{"Vor {0} Monat"}
-            other{"Vor {0} Monaten"}
-        }
-        second{
-            one{"{0} Sekunde"}
-            other{"{0} Sekunden"}
-        }
-        second-future{
-            one{"In {0} Sekunde"}
-            other{"In {0} Sekunden"}
-        }
-        second-past{
-            one{"Vor {0} Sekunde"}
-            other{"Vor {0} Sekunden"}
-        }
-        week{
-            one{"{0} Woche"}
-            other{"{0} Wochen"}
-        }
-        week-future{
-            one{"In {0} Woche"}
-            other{"In {0} Wochen"}
-        }
-        week-past{
-            one{"Vor {0} Woche"}
-            other{"Vor {0} Wochen"}
-        }
-        year{
-            one{"{0} Jahr"}
-            other{"{0} Jahre"}
-        }
-        year-future{
-            one{"In {0} Jahr"}
-            other{"In {0} Jahren"}
-        }
-        year-past{
-            one{"Vor {0} Jahr"}
-            other{"Vor {0} Jahren"}
+        duration{
+            day{
+                one{"{0} Tag"}
+                other{"{0} Tage"}
+            }
+            day-future{
+                one{"In {0} Tag"}
+                other{"In {0} Tagen"}
+            }
+            day-past{
+                one{"Vor {0} Tag"}
+                other{"Vor {0} Tagen"}
+            }
+            hour{
+                one{"{0} Stunde"}
+                other{"{0} Stunden"}
+            }
+            hour-future{
+                one{"In {0} Stunde"}
+                other{"In {0} Stunden"}
+            }
+            hour-past{
+                one{"Vor {0} Stunde"}
+                other{"Vor {0} Stunden"}
+            }
+            minute{
+                one{"{0} Minute"}
+                other{"{0} Minuten"}
+            }
+            minute-future{
+                one{"In {0} Minute"}
+                other{"In {0} Minuten"}
+            }
+            minute-past{
+                one{"Vor {0} Minute"}
+                other{"Vor {0} Minuten"}
+            }
+            month{
+                one{"{0} Monat"}
+                other{"{0} Monate"}
+            }
+            month-future{
+                one{"In {0} Monat"}
+                other{"In {0} Monaten"}
+            }
+            month-past{
+                one{"Vor {0} Monat"}
+                other{"Vor {0} Monaten"}
+            }
+            second{
+                one{"{0} Sekunde"}
+                other{"{0} Sekunden"}
+            }
+            second-future{
+                one{"In {0} Sekunde"}
+                other{"In {0} Sekunden"}
+            }
+            second-past{
+                one{"Vor {0} Sekunde"}
+                other{"Vor {0} Sekunden"}
+            }
+            week{
+                one{"{0} Woche"}
+                other{"{0} Wochen"}
+            }
+            week-future{
+                one{"In {0} Woche"}
+                other{"In {0} Wochen"}
+            }
+            week-past{
+                one{"Vor {0} Woche"}
+                other{"Vor {0} Wochen"}
+            }
+            year{
+                one{"{0} Jahr"}
+                other{"{0} Jahre"}
+            }
+            year-future{
+                one{"In {0} Jahr"}
+                other{"In {0} Jahren"}
+            }
+            year-past{
+                one{"Vor {0} Jahr"}
+                other{"Vor {0} Jahren"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} Tag"}
-            other{"{0} Tage"}
-        }
-        hour{
-            one{"{0} Std."}
-            other{"{0} Std."}
-        }
-        minute{
-            one{"{0} Min."}
-            other{"{0} Min."}
-        }
-        month{
-            one{"{0} Monat"}
-            other{"{0} Monate"}
-        }
-        second{
-            one{"{0} Sek."}
-            other{"{0} Sek."}
-        }
-        week{
-            one{"{0} Woche"}
-            other{"{0} Wochen"}
-        }
-        year{
-            one{"{0} Jahr"}
-            other{"{0} Jahre"}
+        duration{
+            day{
+                one{"{0} Tag"}
+                other{"{0} Tage"}
+            }
+            hour{
+                one{"{0} Std."}
+                other{"{0} Std."}
+            }
+            minute{
+                one{"{0} Min."}
+                other{"{0} Min."}
+            }
+            month{
+                one{"{0} Monat"}
+                other{"{0} Monate"}
+            }
+            second{
+                one{"{0} Sek."}
+                other{"{0} Sek."}
+            }
+            week{
+                one{"{0} Woche"}
+                other{"{0} Wochen"}
+            }
+            year{
+                one{"{0} Jahr"}
+                other{"{0} Jahre"}
+            }
         }
     }
 }

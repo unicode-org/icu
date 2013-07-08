@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/zh_Hant.xml
+ * ICU <specials> source: <path>/common/main/zh_Hant.xml
  */
 zh_Hant{
     Keys{
@@ -20,7 +20,7 @@ zh_Hant{
         colNormalization{"正規化排序"}
         colNumeric{"數字排序"}
         colStrength{"排序強度"}
-        collation{"校對"}
+        collation{"排序"}
         currency{"貨幣"}
         numbers{"數字"}
         timezone{"時區"}
@@ -553,7 +553,7 @@ zh_Hant{
         und{"不確定語言"}
         ur{"烏爾都文"}
         uz{"烏茲別克文"}
-        vai{"越南文（Vai）"}
+        vai{"瓦伊文"}
         ve{"溫達文"}
         vi{"越南文"}
         vo{"沃拉普克文"}
@@ -776,15 +776,16 @@ zh_Hant{
             roc{"民國曆"}
         }
         collation{
-            big5han{"繁體中文排序 (Big5)"}
+            big5han{"繁體中文排序 - Big5"}
             dictionary{"字典排序"}
             ducet{"預設 Unicode 排序"}
-            gb2312han{"簡體中文排序 (GB2312)"}
+            gb2312han{"簡體中文排序 - GB2312"}
             phonebook{"電話簿排序"}
-            phonetic{"注音排序順序"}
+            phonetic{"發音排序"}
             pinyin{"拼音排序"}
             reformed{"改良排序"}
             search{"一般用途搜尋"}
+            standard{"標準排序"}
             stroke{"筆畫排序"}
             traditional{"傳統排序"}
             unihan{"部首筆畫排序"}
@@ -905,7 +906,7 @@ zh_Hant{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}
@@ -914,6 +915,6 @@ zh_Hant{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0}（{1}）"}
-        separator{"，"}
+        separator{"{0}，{1}"}
     }
 }
