@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/nus.xml
+ * ICU <specials> source: <path>/common/main/nus.xml
  */
 nus{
     ExemplarCharacters{
@@ -22,7 +22,7 @@ nus{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
             }
@@ -32,7 +32,7 @@ nus{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
     calendar{
         generic{
             DateTimePatterns{

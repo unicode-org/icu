@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/zu.xml
+ * ICU <specials> source: <path>/common/main/zu.xml
  */
 zu{
     AuxExemplarCharacters{
@@ -26,7 +26,7 @@ zu{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -149,7 +149,7 @@ zu{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -670,119 +670,123 @@ zu{
         metric{"i-Metric"}
     }
     units{
-        day{
-            one{"usuku olungu-{0}"}
-            other{"{0} izinsuku"}
-        }
-        day-future{
-            one{"Osukwini olungu-{0}"}
-            other{"Ezinsukwini ezingu-{0}"}
-        }
-        day-past{
-            one{"osukwini olungu-{0} olwedlule"}
-            other{"ezinsukwini ezingu-{0} ezedlule."}
-        }
-        hour{
-            one{"ihora elingu-{0}"}
-            other{"{0} amahora"}
-        }
-        hour-future{
-            one{"Ehoreni elingu-{0}"}
-            other{"Emahoreni angu-{0}"}
-        }
-        hour-past{
-            one{"ehoreni eligu-{0} eledluli"}
-            other{"emahoreni angu-{0} edlule"}
-        }
-        minute{
-            one{"iminithi elingu-{0}"}
-            other{"{0} amaminithi"}
-        }
-        minute-future{
-            one{"Kumunithi engu-{0}"}
-            other{"Emaminithini angu-{0}"}
-        }
-        minute-past{
-            one{"eminithini elingu-{0} eledlule"}
-            other{"amaminithi angu-{0} adlule"}
-        }
-        month{
-            one{"inyana engu-{0}"}
-            other{"{0} izinyanga"}
-        }
-        month-future{
-            one{"Enyangeni engu-{0}"}
-            other{"Ezinyangeni ezingu-{0}"}
-        }
-        month-past{
-            one{"enyangeni engu-{0} eyedlule"}
-            other{"ezinyangeni ezingu-{0} ezedlule"}
-        }
-        second{
-            one{"isekhondi elingu-{0}"}
-            other{"{0} amasekhondi"}
-        }
-        second-future{
-            one{"Kusekhondi elingu-{0}"}
-            other{"Kumasekhondi angu-{0}"}
-        }
-        second-past{
-            one{"isekhondi elingu-{0} eledlule"}
-            other{"amasekhondi angu-{0} adlule"}
-        }
-        week{
-            one{"iviki elingu-{0}"}
-            other{"{0} amaviki"}
-        }
-        week-future{
-            one{"Evikini elingu-{0}"}
-            other{"Emavikini angu-{0}"}
-        }
-        week-past{
-            one{"evikini elingu-{0} eledlule"}
-            other{"amaviki angu-{0} adlule"}
-        }
-        year{
-            one{"unyaka ongu-{0}"}
-            other{"{0} iminyaka"}
-        }
-        year-future{
-            one{"Onyakeni ongu-{0}"}
-            other{"Eminyakeni engu-{0}"}
-        }
-        year-past{
-            one{"enyakeni ongu-{0} owedlule"}
-            other{"iminyaka engu-{0} eyedlule"}
+        duration{
+            day{
+                one{"usuku olungu-{0}"}
+                other{"{0} izinsuku"}
+            }
+            day-future{
+                one{"Osukwini olungu-{0}"}
+                other{"Ezinsukwini ezingu-{0}"}
+            }
+            day-past{
+                one{"osukwini olungu-{0} olwedlule"}
+                other{"ezinsukwini ezingu-{0} ezedlule."}
+            }
+            hour{
+                one{"ihora elingu-{0}"}
+                other{"{0} amahora"}
+            }
+            hour-future{
+                one{"Ehoreni elingu-{0}"}
+                other{"Emahoreni angu-{0}"}
+            }
+            hour-past{
+                one{"ehoreni eligu-{0} eledluli"}
+                other{"emahoreni angu-{0} edlule"}
+            }
+            minute{
+                one{"iminithi elingu-{0}"}
+                other{"{0} amaminithi"}
+            }
+            minute-future{
+                one{"Kumunithi engu-{0}"}
+                other{"Emaminithini angu-{0}"}
+            }
+            minute-past{
+                one{"eminithini elingu-{0} eledlule"}
+                other{"amaminithi angu-{0} adlule"}
+            }
+            month{
+                one{"inyana engu-{0}"}
+                other{"{0} izinyanga"}
+            }
+            month-future{
+                one{"Enyangeni engu-{0}"}
+                other{"Ezinyangeni ezingu-{0}"}
+            }
+            month-past{
+                one{"enyangeni engu-{0} eyedlule"}
+                other{"ezinyangeni ezingu-{0} ezedlule"}
+            }
+            second{
+                one{"isekhondi elingu-{0}"}
+                other{"{0} amasekhondi"}
+            }
+            second-future{
+                one{"Kusekhondi elingu-{0}"}
+                other{"Kumasekhondi angu-{0}"}
+            }
+            second-past{
+                one{"isekhondi elingu-{0} eledlule"}
+                other{"amasekhondi angu-{0} adlule"}
+            }
+            week{
+                one{"iviki elingu-{0}"}
+                other{"{0} amaviki"}
+            }
+            week-future{
+                one{"Evikini elingu-{0}"}
+                other{"Emavikini angu-{0}"}
+            }
+            week-past{
+                one{"evikini elingu-{0} eledlule"}
+                other{"amaviki angu-{0} adlule"}
+            }
+            year{
+                one{"unyaka ongu-{0}"}
+                other{"{0} iminyaka"}
+            }
+            year-future{
+                one{"Onyakeni ongu-{0}"}
+                other{"Eminyakeni engu-{0}"}
+            }
+            year-past{
+                one{"enyakeni ongu-{0} owedlule"}
+                other{"iminyaka engu-{0} eyedlule"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"usuku olungu-{0}"}
-            other{"{0} izinsuku"}
-        }
-        hour{
-            one{"ihora elingu-{0}"}
-            other{"{0} amahora"}
-        }
-        minute{
-            one{"iminithi elingu-{0}"}
-            other{"{0} amaminithi"}
-        }
-        month{
-            one{"inyanga engu-{0}"}
-            other{"{0} izinyanga"}
-        }
-        second{
-            one{"isekhondi elingu-{0}"}
-            other{"{0} amasekhondi"}
-        }
-        week{
-            one{"iviki elingu-{0}"}
-            other{"{0} amaviki"}
-        }
-        year{
-            one{"unyaka ongu-{0}"}
-            other{"{0} iminyaka"}
+        duration{
+            day{
+                one{"usuku olungu-{0}"}
+                other{"{0} izinsuku"}
+            }
+            hour{
+                one{"ihora elingu-{0}"}
+                other{"{0} amahora"}
+            }
+            minute{
+                one{"iminithi elingu-{0}"}
+                other{"{0} amaminithi"}
+            }
+            month{
+                one{"inyanga engu-{0}"}
+                other{"{0} izinyanga"}
+            }
+            second{
+                one{"isekhondi elingu-{0}"}
+                other{"{0} amasekhondi"}
+            }
+            week{
+                one{"iviki elingu-{0}"}
+                other{"{0} amaviki"}
+            }
+            year{
+                one{"unyaka ongu-{0}"}
+                other{"{0} iminyaka"}
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kea.xml
+ * ICU <specials> source: <path>/common/main/kea.xml
  */
 kea{
     Countries{
@@ -301,5 +301,5 @@ kea{
         ZW{"Zimbabui"}
         ZZ{"Rejiãu Diskonxedu"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
 }

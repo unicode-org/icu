@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mgo.xml
+ * ICU <specials> source: <path>/common/main/mgo.xml
  */
 mgo{
     AuxExemplarCharacters{"[c h l q v x]"}
@@ -44,7 +44,7 @@ mgo{
         }
         native{"latn"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -319,65 +319,67 @@ mgo{
         }
     }
     units{
-        day{
-            one{"{0} d"}
-            other{"{0} d"}
-        }
-        day-future{
-            one{"+{0} d"}
-            other{"+{0} d"}
-        }
-        day-past{
-            one{"-{0} d"}
-            other{"-{0} d"}
-        }
-        hour{
-            one{"{0} h"}
-            other{"{0} h"}
-        }
-        hour-future{
-            one{"+{0} h"}
-            other{"+{0} h"}
-        }
-        hour-past{
-            one{"-{0} h"}
-            other{"-{0} h"}
-        }
-        minute{
-            one{"{0} min"}
-            other{"{0} min"}
-        }
-        minute-future{
-            one{"+{0} min"}
-            other{"+{0} min"}
-        }
-        minute-past{
-            one{"-{0} min"}
-            other{"-{0} min"}
-        }
-        month{
-            one{"{0} m"}
-            other{"{0} m"}
-        }
-        month-future{
-            one{"+{0} m"}
-            other{"+{0} m"}
-        }
-        month-past{
-            one{"-{0} m"}
-            other{"-{0} m"}
-        }
-        second{
-            one{"{0} s"}
-            other{"{0} s"}
-        }
-        second-future{
-            one{"+{0} s"}
-            other{"+{0} s"}
-        }
-        second-past{
-            one{"-{0} s"}
-            other{"-{0} s"}
+        duration{
+            day{
+                one{"{0} d"}
+                other{"{0} d"}
+            }
+            day-future{
+                one{"+{0} d"}
+                other{"+{0} d"}
+            }
+            day-past{
+                one{"-{0} d"}
+                other{"-{0} d"}
+            }
+            hour{
+                one{"{0} h"}
+                other{"{0} h"}
+            }
+            hour-future{
+                one{"+{0} h"}
+                other{"+{0} h"}
+            }
+            hour-past{
+                one{"-{0} h"}
+                other{"-{0} h"}
+            }
+            minute{
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            minute-future{
+                one{"+{0} min"}
+                other{"+{0} min"}
+            }
+            minute-past{
+                one{"-{0} min"}
+                other{"-{0} min"}
+            }
+            month{
+                one{"{0} m"}
+                other{"{0} m"}
+            }
+            month-future{
+                one{"+{0} m"}
+                other{"+{0} m"}
+            }
+            month-past{
+                one{"-{0} m"}
+                other{"-{0} m"}
+            }
+            second{
+                one{"{0} s"}
+                other{"{0} s"}
+            }
+            second-future{
+                one{"+{0} s"}
+                other{"+{0} s"}
+            }
+            second-past{
+                one{"-{0} s"}
+                other{"-{0} s"}
+            }
         }
     }
 }

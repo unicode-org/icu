@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ur.xml
+ * ICU <specials> source: <path>/common/main/ur.xml
  */
 ur{
     Currencies{
@@ -702,5 +702,5 @@ ur{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

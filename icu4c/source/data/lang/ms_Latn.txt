@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ms_Latn.xml
+ * ICU <specials> source: <path>/common/main/ms_Latn.xml
  */
 ms_Latn{
     Version{"2.0.82.68"}

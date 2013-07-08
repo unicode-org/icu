@@ -886,16 +886,17 @@ static const char *lenientCurrencyTestCases[] = {
         "1000.00"
 };
 
+// changed from () to - per cldrbug 5674
 static const char *lenientNegativeCurrencyTestCases[] = {
-        "($1,000)",
-        "($ 1,000)",
-        "($1000)",
-        "($ 1000)",
-        "($1 000.00)",
-        "($ 1 000.00)",
-        "( $ 1,000.00 )",
-        "($ 1\\u00A0000.00)",
-        "(1000.00)"
+        "-$1,000",
+        "-$ 1,000",
+        "-$1000",
+        "-$ 1000",
+        "-$1 000.00",
+        "-$ 1 000.00",
+        "- $ 1,000.00 ",
+        "-$ 1\\u00A0000.00",
+        "-1000.00"
 };
 
 static const char *lenientPercentTestCases[] = {
@@ -7056,7 +7057,7 @@ void NumberFormatTest::TestSignificantDigits(void) {
     
     UnicodeString result;
     UnicodeString expectedResult;
-    for (int i = 0; i < sizeof(input)/sizeof(double); ++i) {
+    for (unsigned int i = 0; i < sizeof(input)/sizeof(double); ++i) {
         numberFormat->format(input[i], result);
         UnicodeString expectedResult(expected[i]);
         if (result != expectedResult) {

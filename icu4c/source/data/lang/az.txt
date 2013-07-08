@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/az.xml
+ * ICU <specials> source: <path>/common/main/az.xml
  */
 az{
     Languages{
@@ -653,7 +653,7 @@ az{
             pinyin{"Pinyin təqvimi"}
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.88.36"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Yazı: {0}"}

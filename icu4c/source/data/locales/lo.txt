@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/lo.xml
+ * ICU <specials> source: <path>/common/main/lo.xml
  */
 lo{
     AuxExemplarCharacters{"[\u200B ໐ ໑ ໒ ໓ ໔ ໕ ໖ ໗ ໘ ໙]"}
@@ -209,7 +209,7 @@ lo{
         }
         native{"laoo"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -653,6 +653,10 @@ lo{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"G y"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"E, G y MMM d"}
+                GyMMMd{"G y MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -667,15 +671,16 @@ lo{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"y-M"}
-                yMEd{"E, y-M-d"}
-                yMMM{"y MMM"}
-                yMMMEd{"E, y MMM d"}
-                yMMMd{"y MMM d"}
-                yMd{"y-M-d"}
-                yQQQ{"y QQQ"}
-                yQQQQ{"y QQQQ"}
+                y{"G y"}
+                yyyy{"G y"}
+                yyyyM{"G y-M"}
+                yyyyMEd{"E, G y-M-d"}
+                yyyyMMM{"G y MMM"}
+                yyyyMMMEd{"E, G y MMM d"}
+                yyyyMMMd{"G y MMM d"}
+                yyyyMd{"G y-M-d"}
+                yyyyQQQ{"G y QQQ"}
+                yyyyQQQQ{"G y QQQQ"}
             }
             intervalFormats{
                 H{
@@ -737,39 +742,39 @@ lo{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"G y–y"}
                 }
                 yM{
-                    M{"y-MM – MM"}
-                    y{"y-MM – y-MM"}
+                    M{"G y-MM – MM"}
+                    y{"G y-MM – y-MM"}
                 }
                 yMEd{
-                    M{"E, y-MM-dd – E, y-MM-dd"}
-                    d{"E, y-MM-dd – E, y-MM-dd"}
-                    y{"E, y-MM-dd – E, y-MM-dd"}
+                    M{"E, G y-MM-dd – E, y-MM-dd"}
+                    d{"E, G y-MM-dd – E, y-MM-dd"}
+                    y{"E, G y-MM-dd – E, y-MM-dd"}
                 }
                 yMMM{
-                    M{"y-MM – MM"}
-                    y{"y-MM – y-MM"}
+                    M{"G y-MM – MM"}
+                    y{"G y-MM – y-MM"}
                 }
                 yMMMEd{
-                    M{"E, y-MM-dd – E, y-MM-dd"}
-                    d{"E, y-MM-dd – E, y-MM-dd"}
-                    y{"E, y-MM-dd – E, y-MM-dd"}
+                    M{"E, G y-MM-dd – E, y-MM-dd"}
+                    d{"E, G y-MM-dd – E, y-MM-dd"}
+                    y{"E, G y-MM-dd – E, y-MM-dd"}
                 }
                 yMMMM{
-                    M{"y-MM – MM"}
-                    y{"y-MM – y-MM"}
+                    M{"G y-MM – MM"}
+                    y{"G y-MM – y-MM"}
                 }
                 yMMMd{
-                    M{"y-MM-dd – MM-d"}
-                    d{"y-MM-d – d"}
-                    y{"y-MM-dd – y-MM-dd"}
+                    M{"G y-MM-dd – MM-d"}
+                    d{"G y-MM-d – d"}
+                    y{"G y-MM-dd – y-MM-dd"}
                 }
                 yMd{
-                    M{"y-MM-dd – MM-dd"}
-                    d{"y-MM-dd – dd"}
-                    y{"y-MM-dd – y-MM-dd"}
+                    M{"G y-MM-dd – MM-dd"}
+                    d{"G y-MM-dd – dd"}
+                    y{"G y-MM-dd – y-MM-dd"}
                 }
             }
         }
@@ -795,6 +800,10 @@ lo{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"G y"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"E, G y MMM d"}
+                GyMMMd{"G y MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -1840,68 +1849,70 @@ lo{
         metric{"ເມຕິກ"}
     }
     units{
-        day{
-            other{"{0} ມື້"}
-        }
-        day-future{
-            other{"+{0} ມື້"}
-        }
-        day-past{
-            other{"-{0} ມື້"}
-        }
-        hour{
-            other{"{0} ຊົ່ວໂມງ"}
-        }
-        hour-future{
-            other{"+{0} ໃນອີກ 0 ຊົ່ວໂມງ"}
-        }
-        hour-past{
-            other{"-{0} ຊົ່ວໂມງ"}
-        }
-        minute{
-            other{"{0} ນາທີ"}
-        }
-        minute-future{
-            other{"{0} ໃນອີກ 0 ນາທີ"}
-        }
-        minute-past{
-            other{"-{0} ນາທີທີ່ຜ່ານມາ"}
-        }
-        month{
-            other{"{0} ເດືອນ"}
-        }
-        month-future{
-            other{"+{0} ໃນອີກ 0 ເດືອນ"}
-        }
-        month-past{
-            other{"-{0} 0ເດືອນທີ່ຜ່ານມາ"}
-        }
-        second{
-            other{"{0} ວິນາທີ"}
-        }
-        second-future{
-            other{"+{0} ໃນອີກ0ວິນາທີ"}
-        }
-        second-past{
-            other{"-{0} 0ວິນາທີທີ່ຜ່ານມາ"}
-        }
-        week{
-            other{"{0} ອາທິດ"}
-        }
-        week-future{
-            other{"+{0} ໃນອີກ0ອາທິດ"}
-        }
-        week-past{
-            other{"-{0} ອາທິດທີ່ຜ່ານມາ"}
-        }
-        year{
-            other{"{0} ປີ"}
-        }
-        year-future{
-            other{"+{0} ໃນອີກ0ປີ"}
-        }
-        year-past{
-            other{"-{0} ປີທີ່ແລ້ວ"}
+        duration{
+            day{
+                other{"{0} ມື້"}
+            }
+            day-future{
+                other{"+{0} ມື້"}
+            }
+            day-past{
+                other{"-{0} ມື້"}
+            }
+            hour{
+                other{"{0} ຊົ່ວໂມງ"}
+            }
+            hour-future{
+                other{"+{0} ໃນອີກ 0 ຊົ່ວໂມງ"}
+            }
+            hour-past{
+                other{"-{0} ຊົ່ວໂມງ"}
+            }
+            minute{
+                other{"{0} ນາທີ"}
+            }
+            minute-future{
+                other{"{0} ໃນອີກ 0 ນາທີ"}
+            }
+            minute-past{
+                other{"-{0} ນາທີທີ່ຜ່ານມາ"}
+            }
+            month{
+                other{"{0} ເດືອນ"}
+            }
+            month-future{
+                other{"+{0} ໃນອີກ 0 ເດືອນ"}
+            }
+            month-past{
+                other{"-{0} 0ເດືອນທີ່ຜ່ານມາ"}
+            }
+            second{
+                other{"{0} ວິນາທີ"}
+            }
+            second-future{
+                other{"+{0} ໃນອີກ0ວິນາທີ"}
+            }
+            second-past{
+                other{"-{0} 0ວິນາທີທີ່ຜ່ານມາ"}
+            }
+            week{
+                other{"{0} ອາທິດ"}
+            }
+            week-future{
+                other{"+{0} ໃນອີກ0ອາທິດ"}
+            }
+            week-past{
+                other{"-{0} ອາທິດທີ່ຜ່ານມາ"}
+            }
+            year{
+                other{"{0} ປີ"}
+            }
+            year-future{
+                other{"+{0} ໃນອີກ0ປີ"}
+            }
+            year-past{
+                other{"-{0} ປີທີ່ແລ້ວ"}
+            }
         }
     }
 }

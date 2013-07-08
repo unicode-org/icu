@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/fi.xml
+ * ICU <specials> source: <path>/common/main/fi.xml
  */
 fi{
     AuxExemplarCharacters{"[á à â ã č ç đ é è ê ë ǧ ǥ ȟ í î ï ǩ ń ñ ŋ ô õ œ ř ß ŧ ú ù û ÿ ü ʒ ǯ æ ø]"}
@@ -142,7 +142,7 @@ fi{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -906,119 +906,123 @@ fi{
         metric{"metrinen"}
     }
     units{
-        day{
-            one{"{0} päivä"}
-            other{"{0} päivää"}
-        }
-        day-future{
-            one{"{0} päivän päästä"}
-            other{"{0} päivän päästä"}
-        }
-        day-past{
-            one{"{0} päivä sitten"}
-            other{"{0} päivää sitten"}
-        }
-        hour{
-            one{"{0} tunti"}
-            other{"{0} tuntia"}
-        }
-        hour-future{
-            one{"{0} tunnin päästä"}
-            other{"{0} tunnin päästä"}
-        }
-        hour-past{
-            one{"{0} tunti sitten"}
-            other{"{0} tuntia sitten"}
-        }
-        minute{
-            one{"{0} minuutti"}
-            other{"{0} minuuttia"}
-        }
-        minute-future{
-            one{"{0} minuutin päästä"}
-            other{"{0} minuutin päästä"}
-        }
-        minute-past{
-            one{"{0} minuutti sitten"}
-            other{"{0} minuuttia sitten"}
-        }
-        month{
-            one{"{0} kuukausi"}
-            other{"{0} kuukautta"}
-        }
-        month-future{
-            one{"{0} kuukauden päästä"}
-            other{"{0} kuukauden päästä"}
-        }
-        month-past{
-            one{"{0} kuukausi sitten"}
-            other{"{0} kuukautta sitten"}
-        }
-        second{
-            one{"{0} sekunti"}
-            other{"{0} sekuntia"}
-        }
-        second-future{
-            one{"{0} sekunnin päästä"}
-            other{"{0} sekunnin päästä"}
-        }
-        second-past{
-            one{"{0} sekunti sitten"}
-            other{"{0} sekuntia sitten"}
-        }
-        week{
-            one{"{0} viikko"}
-            other{"{0} viikkoa"}
-        }
-        week-future{
-            one{"{0} viikon päästä"}
-            other{"{0} viikon päästä"}
-        }
-        week-past{
-            one{"{0} viikko sitten"}
-            other{"{0} viikkoa sitten"}
-        }
-        year{
-            one{"{0} vuosi"}
-            other{"{0} vuotta"}
-        }
-        year-future{
-            one{"{0} vuoden päästä"}
-            other{"{0} vuoden päästä"}
-        }
-        year-past{
-            one{"{0} vuosi sitten"}
-            other{"{0} vuotta sitten"}
+        duration{
+            day{
+                one{"{0} päivä"}
+                other{"{0} päivää"}
+            }
+            day-future{
+                one{"{0} päivän päästä"}
+                other{"{0} päivän päästä"}
+            }
+            day-past{
+                one{"{0} päivä sitten"}
+                other{"{0} päivää sitten"}
+            }
+            hour{
+                one{"{0} tunti"}
+                other{"{0} tuntia"}
+            }
+            hour-future{
+                one{"{0} tunnin päästä"}
+                other{"{0} tunnin päästä"}
+            }
+            hour-past{
+                one{"{0} tunti sitten"}
+                other{"{0} tuntia sitten"}
+            }
+            minute{
+                one{"{0} minuutti"}
+                other{"{0} minuuttia"}
+            }
+            minute-future{
+                one{"{0} minuutin päästä"}
+                other{"{0} minuutin päästä"}
+            }
+            minute-past{
+                one{"{0} minuutti sitten"}
+                other{"{0} minuuttia sitten"}
+            }
+            month{
+                one{"{0} kuukausi"}
+                other{"{0} kuukautta"}
+            }
+            month-future{
+                one{"{0} kuukauden päästä"}
+                other{"{0} kuukauden päästä"}
+            }
+            month-past{
+                one{"{0} kuukausi sitten"}
+                other{"{0} kuukautta sitten"}
+            }
+            second{
+                one{"{0} sekunti"}
+                other{"{0} sekuntia"}
+            }
+            second-future{
+                one{"{0} sekunnin päästä"}
+                other{"{0} sekunnin päästä"}
+            }
+            second-past{
+                one{"{0} sekunti sitten"}
+                other{"{0} sekuntia sitten"}
+            }
+            week{
+                one{"{0} viikko"}
+                other{"{0} viikkoa"}
+            }
+            week-future{
+                one{"{0} viikon päästä"}
+                other{"{0} viikon päästä"}
+            }
+            week-past{
+                one{"{0} viikko sitten"}
+                other{"{0} viikkoa sitten"}
+            }
+            year{
+                one{"{0} vuosi"}
+                other{"{0} vuotta"}
+            }
+            year-future{
+                one{"{0} vuoden päästä"}
+                other{"{0} vuoden päästä"}
+            }
+            year-past{
+                one{"{0} vuosi sitten"}
+                other{"{0} vuotta sitten"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} pv"}
-            other{"{0} pv"}
-        }
-        hour{
-            one{"{0} t"}
-            other{"{0} t"}
-        }
-        minute{
-            one{"{0} min"}
-            other{"{0} min"}
-        }
-        month{
-            one{"{0} kk"}
-            other{"{0} kk"}
-        }
-        second{
-            one{"{0} s"}
-            other{"{0} s"}
-        }
-        week{
-            one{"{0} vk"}
-            other{"{0} vk"}
-        }
-        year{
-            one{"{0} v"}
-            other{"{0} v"}
+        duration{
+            day{
+                one{"{0} pv"}
+                other{"{0} pv"}
+            }
+            hour{
+                one{"{0} t"}
+                other{"{0} t"}
+            }
+            minute{
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                one{"{0} kk"}
+                other{"{0} kk"}
+            }
+            second{
+                one{"{0} s"}
+                other{"{0} s"}
+            }
+            week{
+                one{"{0} vk"}
+                other{"{0} vk"}
+            }
+            year{
+                one{"{0} v"}
+                other{"{0} v"}
+            }
         }
     }
 }

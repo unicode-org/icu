@@ -52,6 +52,9 @@ icu4c/icu4c.css -text
 icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
+icu4c/source/data/curr/ar_SS.txt -text
+icu4c/source/data/curr/ca_FR.txt -text
+icu4c/source/data/curr/en_MO.txt -text
 icu4c/source/data/curr/pool.res -text
 icu4c/source/data/in/coll/invuca.icu -text
 icu4c/source/data/in/coll/ucadata.icu -text
@@ -65,10 +68,15 @@ icu4c/source/data/in/unames.icu -text
 icu4c/source/data/in/uprops.icu -text
 icu4c/source/data/in/uts46.nrm -text
 icu4c/source/data/lang/pool.res -text
+icu4c/source/data/locales/ar_SS.txt -text
+icu4c/source/data/locales/ca_FR.txt -text
+icu4c/source/data/locales/ca_IT.txt -text
+icu4c/source/data/locales/en_MO.txt -text
 icu4c/source/data/locales/pool.res -text
 icu4c/source/data/makedata.vcxproj -text
 icu4c/source/data/makedata.vcxproj.filters -text
 icu4c/source/data/region/pool.res -text
+icu4c/source/data/zone/en_MO.txt -text
 icu4c/source/data/zone/pool.res -text
 icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/to.xml
+ * ICU <specials> source: <path>/common/main/to.xml
  */
 to{
     Countries{
@@ -297,5 +297,5 @@ to{
         ZW{"Simipapuei"}
         ZZ{"Potu fonua taʻeʻiloa pe hala"}
     }
-    Version{"2.0.82.57"}
+    Version{"2.0.88.31"}
 }

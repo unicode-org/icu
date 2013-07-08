@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mr.xml
+ * ICU <specials> source: <path>/common/main/mr.xml
  */
 mr{
     Keys{
@@ -756,9 +756,9 @@ mr{
         PINYIN{"पिनयिन रोमनायझेशन"}
         WADEGILE{"वादे-गिलेस रोमनायझेशन"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
-        separator{","}
+        separator{"{0}, {1}"}
     }
 }

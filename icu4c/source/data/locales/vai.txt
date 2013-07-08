@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/vai.xml
+ * ICU <specials> source: <path>/common/main/vai.xml
  */
 vai{
     ExemplarCharacters{
@@ -21,7 +21,7 @@ vai{
         default{"latn"}
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
             }
             symbols{
@@ -31,7 +31,7 @@ vai{
         }
         native{"vaii"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
     calendar{
         generic{
             DateTimePatterns{

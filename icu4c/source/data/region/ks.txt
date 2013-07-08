@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ks.xml
+ * ICU <specials> source: <path>/common/main/ks.xml
  */
 ks{
     Countries{
@@ -288,5 +288,5 @@ ks{
         ZW{"زِمبابے"}
         ZZ{"نامعلوٗم تہٕ نالَگہار عَلاقہٕ"}
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.86.27"}
 }

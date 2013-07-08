@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kn.xml
+ * ICU <specials> source: <path>/common/main/kn.xml
  */
 kn{
     Keys{
@@ -750,9 +750,9 @@ kn{
             vaii{"ವಾಯ್ ಅಂಕೆಗಳು"}
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.89.73"}
     localeDisplayPattern{
         pattern{"{0} ({1})"}
-        separator{","}
+        separator{"{0}, {1}"}
     }
 }

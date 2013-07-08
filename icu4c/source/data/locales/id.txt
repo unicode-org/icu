@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/id.xml
+ * ICU <specials> source: <path>/common/main/id.xml
  */
 id{
     AuxExemplarCharacters{"[å q x z]"}
@@ -119,7 +119,7 @@ id{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -553,7 +553,7 @@ id{
             }
             availableFormats{
                 Ed{"E, d"}
-                Gy{"G y"}
+                Gy{"y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
@@ -1748,91 +1748,95 @@ id{
         metric{"Metrik"}
     }
     units{
-        day{
-            other{"{0} hari"}
-        }
-        day-future{
-            other{"Dalam {0} hari"}
-        }
-        day-past{
-            other{"{0} hari yang lalu"}
-        }
-        hour{
-            other{"{0} jam"}
-        }
-        hour-future{
-            other{"Dalam {0} jam"}
-        }
-        hour-past{
-            other{"{0} jam yang lalu"}
-        }
-        minute{
-            other{"{0} menit"}
-        }
-        minute-future{
-            other{"Dalam {0} menit"}
-        }
-        minute-past{
-            other{"{0} menit yang lalu"}
-        }
-        month{
-            other{"{0} bulan"}
-        }
-        month-future{
-            other{"Dalam {0} bulan"}
-        }
-        month-past{
-            other{"{0} bulan yang lalu"}
-        }
-        second{
-            other{"{0} detik"}
-        }
-        second-future{
-            other{"Dalam {0} detik"}
-        }
-        second-past{
-            other{"{0} detik yang lalu"}
-        }
-        week{
-            other{"{0} minggu"}
-        }
-        week-future{
-            other{"Dalam {0} minggu"}
-        }
-        week-past{
-            other{"{0} minggu yang lalu"}
-        }
-        year{
-            other{"{0} tahun"}
-        }
-        year-future{
-            other{"Dalam {0} tahun"}
-        }
-        year-past{
-            other{"{0} tahun yang lalu"}
+        duration{
+            day{
+                other{"{0} hari"}
+            }
+            day-future{
+                other{"Dalam {0} hari"}
+            }
+            day-past{
+                other{"{0} hari yang lalu"}
+            }
+            hour{
+                other{"{0} jam"}
+            }
+            hour-future{
+                other{"Dalam {0} jam"}
+            }
+            hour-past{
+                other{"{0} jam yang lalu"}
+            }
+            minute{
+                other{"{0} menit"}
+            }
+            minute-future{
+                other{"Dalam {0} menit"}
+            }
+            minute-past{
+                other{"{0} menit yang lalu"}
+            }
+            month{
+                other{"{0} bulan"}
+            }
+            month-future{
+                other{"Dalam {0} bulan"}
+            }
+            month-past{
+                other{"{0} bulan yang lalu"}
+            }
+            second{
+                other{"{0} detik"}
+            }
+            second-future{
+                other{"Dalam {0} detik"}
+            }
+            second-past{
+                other{"{0} detik yang lalu"}
+            }
+            week{
+                other{"{0} minggu"}
+            }
+            week-future{
+                other{"Dalam {0} minggu"}
+            }
+            week-past{
+                other{"{0} minggu yang lalu"}
+            }
+            year{
+                other{"{0} tahun"}
+            }
+            year-future{
+                other{"Dalam {0} tahun"}
+            }
+            year-past{
+                other{"{0} tahun yang lalu"}
+            }
         }
     }
     unitsShort{
-        day{
-            other{"{0} hr"}
-        }
-        hour{
-            other{"{0} jam"}
-        }
-        minute{
-            other{"{0} mnt"}
-        }
-        month{
-            other{"{0} bln"}
-        }
-        second{
-            other{"{0} dtk"}
-        }
-        week{
-            other{"{0} mggu"}
-        }
-        year{
-            other{"{0} thn"}
+        duration{
+            day{
+                other{"{0} hr"}
+            }
+            hour{
+                other{"{0} jam"}
+            }
+            minute{
+                other{"{0} mnt"}
+            }
+            month{
+                other{"{0} bln"}
+            }
+            second{
+                other{"{0} dtk"}
+            }
+            week{
+                other{"{0} mggu"}
+            }
+            year{
+                other{"{0} thn"}
+            }
         }
     }
 }

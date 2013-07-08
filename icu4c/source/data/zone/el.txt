@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/el.xml
+ * ICU <specials> source: <path>/common/main/el.xml
  */
 el{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Αμπιτζάν"}
@@ -1830,7 +1830,6 @@ el{
             ls{"Χειμερινή ώρα Γεκατερίνμπουργκ"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Ώρα {1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

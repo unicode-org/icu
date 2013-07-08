@@ -7,12 +7,13 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bg.xml
+ * ICU <specials> source: <path>/common/main/bg.xml
  */
 bg{
     AuxExemplarCharacters{"[{а\u0300} ѐ ё ѝ {о\u0300} {у\u0300} {ъ\u0300} ы ѣ э {ю\u0300} {я\u0300} ѫ]"}
     ExemplarCharacters{"[а б в г д е ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ь ю я]"}
     ExemplarCharactersIndex{"[А Б В Г Д Е Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ю Я]"}
+    ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . … ' ‚ ‘ \u0022 „ “ ( ) \\[ \\] § * / ″ №]"}
     LocaleScript{
         "Cyrl",
     }
@@ -142,7 +143,7 @@ bg{
             }
         }
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.88.32"}
     calendar{
         generic{
             DateTimePatterns{
@@ -153,7 +154,7 @@ bg{
                 "dd MMMM y G, EEEE",
                 "dd MMMM y G",
                 "dd.MM.y G",
-                "dd.MM.yy GGGGG",
+                "dd.MM.y GGGGG",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -162,6 +163,10 @@ bg{
             }
             availableFormats{
                 Ed{"E, d"}
+                Gy{"y 'г'. G"}
+                GyMMM{"MMM y 'г'. G"}
+                GyMMMEd{"E, d MMM y 'г'. G"}
+                GyMMMd{"dd MMM y"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -170,27 +175,25 @@ bg{
                 MMM{"LLL"}
                 MMMEd{"d MMM, E"}
                 MMMMd{"d MMMM"}
-                MMMMdd{"dd MMMM"}
                 MMMd{"d MMM"}
-                MMdd{"dd.MM"}
                 Md{"d.M"}
                 d{"d"}
                 h{"h"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
-                mmss{"mm:ss"}
                 ms{"mm:ss"}
-                y{"y 'г'."}
-                yM{"M.y 'г'."}
-                yMEd{"E, d.MM.y 'г'."}
-                yMM{"MM.y"}
-                yMMM{"MMM y 'г'."}
-                yMMMEd{"E, d MMM y 'г'."}
-                yMMMM{"MMMM y"}
-                yMMMd{"dd MMM y"}
-                yMd{"dd.MM.y"}
-                yQQQ{"QQQ y 'г'."}
-                yQQQQ{"QQQQ y 'г'."}
+                y{"y 'г'. G"}
+                yyyy{"y 'г'. G"}
+                yyyyM{"M.y 'г'. G"}
+                yyyyMEd{"E, d.MM.y 'г'. G"}
+                yyyyMM{"MM.y G"}
+                yyyyMMM{"MMM y 'г'. G"}
+                yyyyMMMEd{"E, d MMM y 'г'. G"}
+                yyyyMMMM{"MMMM y G"}
+                yyyyMMMd{"dd MMM y"}
+                yyyyMd{"dd.MM.y G"}
+                yyyyQQQ{"QQQ y 'г'. G"}
+                yyyyQQQQ{"QQQQ y 'г'. G"}
             }
             intervalFormats{
                 H{
@@ -252,11 +255,11 @@ bg{
                     h{"h-h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y-y G"}
                 }
                 yM{
-                    M{"MM.y - MM.y"}
-                    y{"MM.y - MM.y"}
+                    M{"MM.y - MM.y G"}
+                    y{"MM.y - MM.y G"}
                 }
                 yMEd{
                     M{"dd.MM.y, E - dd.MM.y, E"}
@@ -264,8 +267,8 @@ bg{
                     y{"dd.MM.y, E - dd.MM.y, E"}
                 }
                 yMMM{
-                    M{"MMM-MMM y"}
-                    y{"MMM y - MMM y"}
+                    M{"MMM-MMM y G"}
+                    y{"MMM y - MMM y G"}
                 }
                 yMMMEd{
                     M{"d MMM y, E - d MMM y, E"}
@@ -273,18 +276,18 @@ bg{
                     y{"d MMM y, E - d MMM y, E"}
                 }
                 yMMMM{
-                    M{"MMMM–MMMM y 'г'."}
-                    y{"MMMM y 'г'. – MMMM y 'г'."}
+                    M{"MMMM–MMMM y 'г'. G"}
+                    y{"MMMM y 'г'. – MMMM y 'г'. G"}
                 }
                 yMMMd{
-                    M{"dd MMM - dd MMM y"}
-                    d{"dd-dd MMM y"}
-                    y{"dd MMM y - dd MMM y"}
+                    M{"dd MMM - dd MMM y G"}
+                    d{"dd-dd MMM y G"}
+                    y{"dd MMM y - dd MMM y G"}
                 }
                 yMd{
-                    M{"dd.MM.y - dd.MM.y"}
-                    d{"dd.MM.y - dd.MM.y"}
-                    y{"dd.MM.y - dd.MM.y"}
+                    M{"dd.MM.y - dd.MM.y G"}
+                    d{"dd.MM.y - dd.MM.y G"}
+                    y{"dd.MM.y - dd.MM.y G"}
                 }
             }
         }
@@ -310,6 +313,10 @@ bg{
             }
             availableFormats{
                 Ed{"E, d"}
+                Gy{"y 'г'. G"}
+                GyMMM{"MMM y 'г'. G"}
+                GyMMMEd{"E, d MMM y 'г'. G"}
+                GyMMMd{"dd MMM y"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -320,13 +327,11 @@ bg{
                 MMMMd{"d MMMM"}
                 MMMMdd{"dd MMMM"}
                 MMMd{"d MMM"}
-                MMdd{"dd.MM"}
                 Md{"d.M"}
                 d{"d"}
                 h{"h"}
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
-                mmss{"mm:ss"}
                 ms{"mm:ss"}
                 y{"y 'г'."}
                 yM{"M.y 'г'."}
@@ -725,119 +730,123 @@ bg{
         metric{"Метрична"}
     }
     units{
-        day{
-            one{"{0} ден"}
-            other{"{0} дена"}
-        }
-        day-future{
-            one{"След {0} дни"}
-            other{"След {0} дни"}
-        }
-        day-past{
-            one{"Преди {0} ден"}
-            other{"Преди {0} дни"}
-        }
-        hour{
-            one{"{0} час"}
-            other{"{0} часа"}
-        }
-        hour-future{
-            one{"След {0} час"}
-            other{"След {0} часа"}
-        }
-        hour-past{
-            one{"Преди {0} час"}
-            other{"Преди {0} часа"}
-        }
-        minute{
-            one{"{0} минута"}
-            other{"{0} минути"}
-        }
-        minute-future{
-            one{"След {0} минута"}
-            other{"След {0} минути"}
-        }
-        minute-past{
-            one{"Преди {0} минута"}
-            other{"Преди {0} минути"}
-        }
-        month{
-            one{"{0} месец"}
-            other{"{0} месеца"}
-        }
-        month-future{
-            one{"След {0} месец"}
-            other{"След {0} месеца"}
-        }
-        month-past{
-            one{"Преди {0} месец"}
-            other{"Преди {0} месеца"}
-        }
-        second{
-            one{"{0} секунда"}
-            other{"{0} секунди"}
-        }
-        second-future{
-            one{"След {0} секунда"}
-            other{"След {0} секунди"}
-        }
-        second-past{
-            one{"Преди {0} секунда"}
-            other{"Преди {0} секунди"}
-        }
-        week{
-            one{"{0} седмица"}
-            other{"{0} седмици"}
-        }
-        week-future{
-            one{"След {0} седмица"}
-            other{"След {0} седмици"}
-        }
-        week-past{
-            one{"Преди {0} седмица"}
-            other{"Преди {0} седмици"}
-        }
-        year{
-            one{"{0} година"}
-            other{"{0} години"}
-        }
-        year-future{
-            one{"След {0} година"}
-            other{"След {0} години"}
-        }
-        year-past{
-            one{"Преди {0} година"}
-            other{"Преди {0} години"}
+        duration{
+            day{
+                one{"{0} ден"}
+                other{"{0} дена"}
+            }
+            day-future{
+                one{"След {0} дни"}
+                other{"След {0} дни"}
+            }
+            day-past{
+                one{"Преди {0} ден"}
+                other{"Преди {0} дни"}
+            }
+            hour{
+                one{"{0} час"}
+                other{"{0} часа"}
+            }
+            hour-future{
+                one{"След {0} час"}
+                other{"След {0} часа"}
+            }
+            hour-past{
+                one{"Преди {0} час"}
+                other{"Преди {0} часа"}
+            }
+            minute{
+                one{"{0} минута"}
+                other{"{0} минути"}
+            }
+            minute-future{
+                one{"След {0} минута"}
+                other{"След {0} минути"}
+            }
+            minute-past{
+                one{"Преди {0} минута"}
+                other{"Преди {0} минути"}
+            }
+            month{
+                one{"{0} месец"}
+                other{"{0} месеца"}
+            }
+            month-future{
+                one{"След {0} месец"}
+                other{"След {0} месеца"}
+            }
+            month-past{
+                one{"Преди {0} месец"}
+                other{"Преди {0} месеца"}
+            }
+            second{
+                one{"{0} секунда"}
+                other{"{0} секунди"}
+            }
+            second-future{
+                one{"След {0} секунда"}
+                other{"След {0} секунди"}
+            }
+            second-past{
+                one{"Преди {0} секунда"}
+                other{"Преди {0} секунди"}
+            }
+            week{
+                one{"{0} седмица"}
+                other{"{0} седмици"}
+            }
+            week-future{
+                one{"След {0} седмица"}
+                other{"След {0} седмици"}
+            }
+            week-past{
+                one{"Преди {0} седмица"}
+                other{"Преди {0} седмици"}
+            }
+            year{
+                one{"{0} година"}
+                other{"{0} години"}
+            }
+            year-future{
+                one{"След {0} година"}
+                other{"След {0} години"}
+            }
+            year-past{
+                one{"Преди {0} година"}
+                other{"Преди {0} години"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} дн."}
-            other{"{0} дн."}
-        }
-        hour{
-            one{"{0} ч"}
-            other{"{0} ч"}
-        }
-        minute{
-            one{"{0} мин"}
-            other{"{0} мин"}
-        }
-        month{
-            one{"{0} мес."}
-            other{"{0} мес."}
-        }
-        second{
-            one{"{0} сек"}
-            other{"{0} сек"}
-        }
-        week{
-            one{"{0} седм."}
-            other{"{0} седм."}
-        }
-        year{
-            one{"{0} год."}
-            other{"{0} год."}
+        duration{
+            day{
+                one{"{0} дн."}
+                other{"{0} дн."}
+            }
+            hour{
+                one{"{0} ч"}
+                other{"{0} ч"}
+            }
+            minute{
+                one{"{0} мин"}
+                other{"{0} мин"}
+            }
+            month{
+                one{"{0} мес."}
+                other{"{0} мес."}
+            }
+            second{
+                one{"{0} сек"}
+                other{"{0} сек"}
+            }
+            week{
+                one{"{0} седм."}
+                other{"{0} седм."}
+            }
+            year{
+                one{"{0} год."}
+                other{"{0} год."}
+            }
         }
     }
 }

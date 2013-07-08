@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ml.xml
+ * ICU <specials> source: <path>/common/main/ml.xml
  */
 ml{
     Countries{
@@ -302,5 +302,5 @@ ml{
         ZW{"സിംബാബ്വേ"}
         ZZ{"അറിയപ്പെടാത്തതോ നിലവിലില്ലാത്തതോ ആയ പ്രദേശം"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

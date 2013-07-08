@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/eu.xml
+ * ICU <specials> source: <path>/common/main/eu.xml
  */
 eu{
     AuxExemplarCharacters{
@@ -22,7 +22,7 @@ eu{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
+                currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"% #,##0"}
                 scientificFormat{"#E0"}
@@ -145,7 +145,7 @@ eu{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -662,119 +662,123 @@ eu{
         metric{"Metriko"}
     }
     units{
-        day{
-            one{"{0} eguna"}
-            other{"{0} egun"}
-        }
-        day-future{
-            one{"{0} egun barru"}
-            other{"{0} egun barru"}
-        }
-        day-past{
-            one{"Duela {0} egun"}
-            other{"Duela {0} egun"}
-        }
-        hour{
-            one{"{0} ordua"}
-            other{"{0} h"}
-        }
-        hour-future{
-            one{"{0} ordu barru"}
-            other{"{0} ordu barru"}
-        }
-        hour-past{
-            one{"Duela {0} ordubete"}
-            other{"Duela {0} ordu"}
-        }
-        minute{
-            one{"{0} minutu"}
-            other{"{0} minutu"}
-        }
-        minute-future{
-            one{"{0} minutu barru"}
-            other{"{0} minutu barru"}
-        }
-        minute-past{
-            one{"Duela {0} minutu"}
-            other{"Duela {0} minutu"}
-        }
-        month{
-            one{"{0} hilabete"}
-            other{"{0} hilabete"}
-        }
-        month-future{
-            one{"{0} hilabete barru"}
-            other{"{0} hilabete barru"}
-        }
-        month-past{
-            one{"Duela {0} hilabete"}
-            other{"Duela {0} hilabete"}
-        }
-        second{
-            one{"{0} segundo"}
-            other{"{0} s"}
-        }
-        second-future{
-            one{"{0} segundo barru"}
-            other{"{0} segundo barru"}
-        }
-        second-past{
-            one{"Duela {0} segundo"}
-            other{"Duela {0} segundo"}
-        }
-        week{
-            one{"{0} aste"}
-            other{"{0} aste"}
-        }
-        week-future{
-            one{"{0} aste barru"}
-            other{"{0} aste barru"}
-        }
-        week-past{
-            one{"Duela {0} aste"}
-            other{"Duela {0} aste"}
-        }
-        year{
-            one{"{0} urtea"}
-            other{"{0} urte"}
-        }
-        year-future{
-            one{"{0} urte barru"}
-            other{"{0} urte barru"}
-        }
-        year-past{
-            one{"Duela {0} urte"}
-            other{"Duela {0} urte"}
+        duration{
+            day{
+                one{"{0} eguna"}
+                other{"{0} egun"}
+            }
+            day-future{
+                one{"{0} egun barru"}
+                other{"{0} egun barru"}
+            }
+            day-past{
+                one{"Duela {0} egun"}
+                other{"Duela {0} egun"}
+            }
+            hour{
+                one{"{0} ordua"}
+                other{"{0} h"}
+            }
+            hour-future{
+                one{"{0} ordu barru"}
+                other{"{0} ordu barru"}
+            }
+            hour-past{
+                one{"Duela {0} ordubete"}
+                other{"Duela {0} ordu"}
+            }
+            minute{
+                one{"{0} minutu"}
+                other{"{0} minutu"}
+            }
+            minute-future{
+                one{"{0} minutu barru"}
+                other{"{0} minutu barru"}
+            }
+            minute-past{
+                one{"Duela {0} minutu"}
+                other{"Duela {0} minutu"}
+            }
+            month{
+                one{"{0} hilabete"}
+                other{"{0} hilabete"}
+            }
+            month-future{
+                one{"{0} hilabete barru"}
+                other{"{0} hilabete barru"}
+            }
+            month-past{
+                one{"Duela {0} hilabete"}
+                other{"Duela {0} hilabete"}
+            }
+            second{
+                one{"{0} segundo"}
+                other{"{0} s"}
+            }
+            second-future{
+                one{"{0} segundo barru"}
+                other{"{0} segundo barru"}
+            }
+            second-past{
+                one{"Duela {0} segundo"}
+                other{"Duela {0} segundo"}
+            }
+            week{
+                one{"{0} aste"}
+                other{"{0} aste"}
+            }
+            week-future{
+                one{"{0} aste barru"}
+                other{"{0} aste barru"}
+            }
+            week-past{
+                one{"Duela {0} aste"}
+                other{"Duela {0} aste"}
+            }
+            year{
+                one{"{0} urtea"}
+                other{"{0} urte"}
+            }
+            year-future{
+                one{"{0} urte barru"}
+                other{"{0} urte barru"}
+            }
+            year-past{
+                one{"Duela {0} urte"}
+                other{"Duela {0} urte"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} egun"}
-            other{"{0} egun"}
-        }
-        hour{
-            one{"{0} ordu"}
-            other{"{0} ordu"}
-        }
-        minute{
-            one{"{0} minutu"}
-            other{"{0} minutu"}
-        }
-        month{
-            one{"{0} hilabete"}
-            other{"{0} hilabete"}
-        }
-        second{
-            one{"{0} seg."}
-            other{"{0} seg."}
-        }
-        week{
-            one{"{0} aste"}
-            other{"{0} aste"}
-        }
-        year{
-            one{"{0} urte"}
-            other{"{0} urte"}
+        duration{
+            day{
+                one{"{0} egun"}
+                other{"{0} egun"}
+            }
+            hour{
+                one{"{0} ordu"}
+                other{"{0} ordu"}
+            }
+            minute{
+                one{"{0} minutu"}
+                other{"{0} minutu"}
+            }
+            month{
+                one{"{0} hilabete"}
+                other{"{0} hilabete"}
+            }
+            second{
+                one{"{0} seg."}
+                other{"{0} seg."}
+            }
+            week{
+                one{"{0} aste"}
+                other{"{0} aste"}
+            }
+            year{
+                one{"{0} urte"}
+                other{"{0} urte"}
+            }
         }
     }
 }

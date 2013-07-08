@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bs.xml
+ * ICU <specials> source: <path>/common/main/bs.xml
  */
 bs{
     AuxExemplarCharacters{"[q w x y]"}
@@ -23,7 +23,7 @@ bs{
             }
         }
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -34,7 +34,7 @@ bs{
                 "EEEE, dd. MMMM y. G",
                 "dd. MMMM y. G",
                 "dd.MM.y. G",
-                "dd.MM.yy. GGGGG",
+                "dd.MM.y. GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -43,6 +43,10 @@ bs{
             }
             availableFormats{
                 Ed{"E, dd."}
+                Gy{"y. G"}
+                GyMMM{"MMM y. G"}
+                GyMMMEd{"E, dd. MMM y. G"}
+                GyMMMd{"dd. MMM y. G"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -55,15 +59,16 @@ bs{
                 hm{"hh:mm a"}
                 hms{"hh:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y."}
-                yM{"MM.y."}
-                yMEd{"E, dd.MM.y."}
-                yMMM{"MMM y."}
-                yMMMEd{"E, dd. MMM y."}
-                yMMMd{"dd. MMM y."}
-                yMd{"dd.MM.y."}
-                yQQQ{"y QQQ"}
-                yQQQQ{"y QQQQ"}
+                y{"y. G"}
+                yyyy{"y. G"}
+                yyyyM{"MM.y. G"}
+                yyyyMEd{"E, dd.MM.y. G"}
+                yyyyMMM{"MMM y. G"}
+                yyyyMMMEd{"E, dd. MMM y. G"}
+                yyyyMMMd{"dd. MMM y. G"}
+                yyyyMd{"dd.MM.y. G"}
+                yyyyQQQ{"G y QQQ"}
+                yyyyQQQQ{"G y QQQQ"}
             }
         }
         gregorian{
@@ -88,6 +93,10 @@ bs{
             }
             availableFormats{
                 Ed{"E, dd."}
+                Gy{"y. G"}
+                GyMMM{"MMM y. G"}
+                GyMMMEd{"E, dd. MMM y. G"}
+                GyMMMd{"dd. MMM y. G"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
                 M{"L"}
@@ -307,55 +316,95 @@ bs{
         metric{"Metrički"}
     }
     units{
-        day{
-            few{"{0} dana"}
-            many{"{0} dana"}
-            one{"{0} dan"}
-            other{"{0} dana"}
-        }
-        hour{
-            few{"{0} sata"}
-            many{"{0} sati"}
-            one{"{0} sat"}
-            other{"{0} sati"}
-        }
-        minute{
-            few{"{0} minute"}
-            many{"{0} minuta"}
-            one{"{0} minut"}
-            other{"{0} minuta"}
-        }
-        month{
-            few{"{0} meseca"}
-            many{"{0} meseci"}
-            one{"{0} mesec"}
-            other{"{0} meseci"}
-        }
-        second{
-            few{"{0} sekunde"}
-            many{"{0} sekundi"}
-            one{"{0} sekunda"}
-            other{"{0} sekundi"}
-        }
-        week{
-            few{"{0} nedelje"}
-            many{"{0} nedelja"}
-            one{"{0} nedelja"}
-            other{"{0} nedelja"}
-        }
-        year{
-            few{"{0} godine"}
-            many{"{0} godina"}
-            one{"{0} godina"}
-            other{"{0} godina"}
+        duration{
+            day{
+                few{"{0} dana"}
+                many{"{0} dana"}
+                one{"{0} dan"}
+                other{"{0} dana"}
+            }
+            hour{
+                few{"{0} sata"}
+                many{"{0} sati"}
+                one{"{0} sat"}
+                other{"{0} sati"}
+            }
+            minute{
+                few{"{0} minute"}
+                many{"{0} minuta"}
+                one{"{0} minut"}
+                other{"{0} minuta"}
+            }
+            month{
+                few{"{0} meseca"}
+                many{"{0} meseci"}
+                one{"{0} mesec"}
+                other{"{0} meseci"}
+            }
+            second{
+                few{"{0} sekunde"}
+                many{"{0} sekundi"}
+                one{"{0} sekunda"}
+                other{"{0} sekundi"}
+            }
+            week{
+                few{"{0} nedelje"}
+                many{"{0} nedelja"}
+                one{"{0} nedelja"}
+                other{"{0} nedelja"}
+            }
+            year{
+                few{"{0} godine"}
+                many{"{0} godina"}
+                one{"{0} godina"}
+                other{"{0} godina"}
+            }
         }
     }
     unitsShort{
-        year{
-            few{"{0} god"}
-            many{"{0} god"}
-            one{"{0} god"}
-            other{"{0} god"}
+        duration{
+            day{
+                few{"{0} dana"}
+                many{"{0} dana"}
+                one{"{0} dan"}
+                other{"{0} dan"}
+            }
+            hour{
+                few{"{0} sata"}
+                many{"{0} sati"}
+                one{"{0} sat"}
+                other{"{0} sat"}
+            }
+            minute{
+                few{"{0} min"}
+                many{"{0} min"}
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                few{"{0} mes"}
+                many{"{0} mes"}
+                one{"{0} mes"}
+                other{"{0} mes"}
+            }
+            second{
+                few{"{0} sek"}
+                many{"{0} sek"}
+                one{"{0} sek"}
+                other{"{0} sek"}
+            }
+            week{
+                few{"{0} ned"}
+                many{"{0} ned"}
+                one{"{0} ned"}
+                other{"{0} ned"}
+            }
+            year{
+                few{"{0} god"}
+                many{"{0} god"}
+                one{"{0} god"}
+                other{"{0} god"}
+            }
         }
     }
 }

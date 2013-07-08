@@ -7,12 +7,16 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/az.xml
+ * ICU <specials> source: <path>/common/main/az.xml
  */
 az{
     AuxExemplarCharacters{"[w]"}
     ExemplarCharacters{"[a b c ç d e ə f g ğ h x ı i İ j k q l m n o ö p r s ş t u ü v y z]"}
     ExemplarCharactersIndex{"[A B C Ç D E Ə F G Ğ H X I İ J K Q L M N O Ö P R S Ş T U Ü V W Y Z]"}
+    ExemplarCharactersPunctuation{
+        "[\\- ‐ – — , ; \\: ! ? . … ' ‹ › \u0022 « » ( ) \\[ \\] § @ * / \\& # † ‡ ′ "
+        "″]"
+    }
     LocaleScript{
         "Latn",
     }
@@ -35,7 +39,7 @@ az{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.88.36"}
     calendar{
         generic{
             DateTimePatterns{
@@ -54,12 +58,15 @@ az{
                 "{1} {0}",
             }
             availableFormats{
+                GyMMM{"MMM, y G"}
+                GyMMMEd{"E, d, MMM, y G"}
+                GyMMMd{"d MMM, y G"}
                 MMM{"LLL"}
                 MMMEd{"E, d, MMM"}
                 MMMd{"d MMM"}
-                yMMM{"MMM, y"}
-                yMMMEd{"E, d, MMM, y"}
-                yMMMd{"d MMM, y"}
+                yyyyMMM{"MMM, y G"}
+                yyyyMMMEd{"E, d, MMM, y G"}
+                yyyyMMMd{"d MMM, y G"}
             }
         }
         gregorian{
@@ -79,6 +86,9 @@ az{
                 "{1} {0}",
             }
             availableFormats{
+                GyMMM{"MMM, y G"}
+                GyMMMEd{"E, d, MMM, y G"}
+                GyMMMd{"d MMM, y G"}
                 MMM{"LLL"}
                 MMMEd{"E, d, MMM"}
                 MMMd{"d MMM"}
@@ -227,26 +237,28 @@ az{
         metric{"metr"}
     }
     units{
-        day{
-            other{"{0} gün"}
-        }
-        hour{
-            other{"{0} saat"}
-        }
-        minute{
-            other{"{0} dəqiqə"}
-        }
-        month{
-            other{"{0} ay"}
-        }
-        second{
-            other{"{0} saniyə"}
-        }
-        week{
-            other{"{0} həftə"}
-        }
-        year{
-            other{"{0} il"}
+        duration{
+            day{
+                other{"{0} gün"}
+            }
+            hour{
+                other{"{0} saat"}
+            }
+            minute{
+                other{"{0} dəqiqə"}
+            }
+            month{
+                other{"{0} ay"}
+            }
+            second{
+                other{"{0} saniyə"}
+            }
+            week{
+                other{"{0} həftə"}
+            }
+            year{
+                other{"{0} il"}
+            }
         }
     }
 }

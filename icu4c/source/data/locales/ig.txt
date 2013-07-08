@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ig.xml
+ * ICU <specials> source: <path>/common/main/ig.xml
  */
 ig{
     ExemplarCharacters{
@@ -21,11 +21,11 @@ ig{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
     calendar{
         generic{
             DateTimePatterns{

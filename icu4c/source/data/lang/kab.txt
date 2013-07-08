@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kab.xml
+ * ICU <specials> source: <path>/common/main/kab.xml
  */
 kab{
     Languages{

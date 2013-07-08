@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ne.xml
+ * ICU <specials> source: <path>/common/main/ne.xml
  */
 ne{
     Countries{
@@ -302,5 +302,5 @@ ne{
         ZW{"जिम्बाबे"}
         ZZ{"अपरिचित क्षेत्र"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

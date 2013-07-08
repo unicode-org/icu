@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/af.xml
+ * ICU <specials> source: <path>/common/main/af.xml
  */
 af{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -635,7 +635,6 @@ af{
             ls{"Jekaterinburg-standaardtyd"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1}-tyd ({0})"}
         gmtFormat{"MGT{0}"}
         gmtZeroFormat{"MGT"}
         hourFormat{"+HH:mm;-HH:mm"}

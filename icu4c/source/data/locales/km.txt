@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/km.xml
+ * ICU <specials> source: <path>/common/main/km.xml
  */
 km{
     AuxExemplarCharacters{"[\u17B4\u17B5\u200B ឝ ឞ]"}
@@ -25,7 +25,7 @@ km{
         default{"latn"}
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -125,7 +125,7 @@ km{
         }
         native{"khmr"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -145,6 +145,10 @@ km{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -159,15 +163,16 @@ km{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"M-y"}
-                yMEd{"E, d-M-y"}
-                yMMM{"MMM y"}
-                yMMMEd{"E, d MMM y"}
-                yMMMd{"d MMM y"}
-                yMd{"d-M-y"}
-                yQQQ{"QQQ y"}
-                yQQQQ{"QQQQ y"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M-y G"}
+                yyyyMEd{"E, d-M-y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, d MMM y G"}
+                yyyyMMMd{"d MMM y G"}
+                yyyyMd{"d-M-y G"}
+                yyyyQQQ{"QQQ y G"}
+                yyyyQQQQ{"QQQQ y G"}
             }
             intervalFormats{
                 H{
@@ -229,39 +234,39 @@ km{
                     h{"h-h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y-y G"}
                 }
                 yM{
-                    M{"M/y - M/y"}
-                    y{"M/y - M/y"}
+                    M{"M/y - M/y G"}
+                    y{"M/y - M/y G"}
                 }
                 yMEd{
-                    M{"E, d/M/y - E, d/M/y"}
-                    d{"E, d/M/y - E, d/M/y"}
-                    y{"E, d/M/y - E, d/M/y"}
+                    M{"E, d/M/y - E, d/M/y G"}
+                    d{"E, d/M/y - E, d/M/y G"}
+                    y{"E, d/M/y - E, d/M/y G"}
                 }
                 yMMM{
-                    M{"MM – MM-y"}
-                    y{"MM-y – MM-y"}
+                    M{"MM – MM-y G"}
+                    y{"MM-y – MM-y G"}
                 }
                 yMMMEd{
-                    M{"E, dd MMM y - E, dd MMM y"}
-                    d{"E, dd MMM y - E, dd MMM y"}
-                    y{"E, dd-MM-y – E, dd MMM y"}
+                    M{"E, dd MMM y - E, dd MMM y G"}
+                    d{"E, dd MMM y - E, dd MMM y G"}
+                    y{"E, dd-MM-y – E, dd MMM y G"}
                 }
                 yMMMM{
-                    M{"MM – MM y"}
-                    y{"MM-y – MM-y"}
+                    M{"MM – MM y G"}
+                    y{"MM-y – MM-y G"}
                 }
                 yMMMd{
                     M{"d MMM y – d MMM"}
-                    d{"d-d MMM y"}
-                    y{"d MMM y - d MMM y"}
+                    d{"d-d MMM y G"}
+                    y{"d MMM y - d MMM y G"}
                 }
                 yMd{
-                    M{"d/M/y - d/M/y"}
-                    d{"d/M/y - d/M/y"}
-                    y{"d/M/y - d/M/y"}
+                    M{"d/M/y - d/M/y G"}
+                    d{"d/M/y - d/M/y G"}
+                    y{"d/M/y - d/M/y G"}
                 }
             }
         }
@@ -287,6 +292,10 @@ km{
             }
             availableFormats{
                 Ed{"d E"}
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, d MMM y G"}
+                GyMMMd{"d MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -686,68 +695,70 @@ km{
         metric{"ម៉ែត្រ"}
     }
     units{
-        day{
-            other{"{0} ថ្ងៃ"}
-        }
-        day-future{
-            other{"ក្នុង​រយៈ​ពេល {0} ថ្ងៃ"}
-        }
-        day-past{
-            other{"{0} ថ្ងៃ​មុន"}
-        }
-        hour{
-            other{"{0} ម៉ោង"}
-        }
-        hour-future{
-            other{"ក្នុង​រយៈ​ពេល {0} ម៉ោង"}
-        }
-        hour-past{
-            other{"{0} ម៉ោង​មុន"}
-        }
-        minute{
-            other{"{0} នាទី"}
-        }
-        minute-future{
-            other{"ក្នុង​រយៈពេល {0} នាទី"}
-        }
-        minute-past{
-            other{"{0} នាទី​មុន"}
-        }
-        month{
-            other{"{0} ខែ"}
-        }
-        month-future{
-            other{"ក្នុង​រយៈ​ពេល {0} ខែ"}
-        }
-        month-past{
-            other{"{0} នាទី​មុន"}
-        }
-        second{
-            other{"{0} វិនាទី"}
-        }
-        second-future{
-            other{"ក្នុង​រយៈពេល {0} វិនាទី"}
-        }
-        second-past{
-            other{"{0} វិនាទី​មុន"}
-        }
-        week{
-            other{"{0} សប្ដាហ៍"}
-        }
-        week-future{
-            other{"ក្នុង​រយៈ​ពេល {0} សប្ដាហ៍"}
-        }
-        week-past{
-            other{"{0} សប្ដាហ៍​មុន"}
-        }
-        year{
-            other{"{0} ឆ្នាំ"}
-        }
-        year-future{
-            other{"ក្នុង​រយៈ​ពេល {0} ឆ្នាំ"}
-        }
-        year-past{
-            other{"{0} ឆ្នាំ​មុន"}
+        duration{
+            day{
+                other{"{0} ថ្ងៃ"}
+            }
+            day-future{
+                other{"ក្នុង​រយៈ​ពេល {0} ថ្ងៃ"}
+            }
+            day-past{
+                other{"{0} ថ្ងៃ​មុន"}
+            }
+            hour{
+                other{"{0} ម៉ោង"}
+            }
+            hour-future{
+                other{"ក្នុង​រយៈ​ពេល {0} ម៉ោង"}
+            }
+            hour-past{
+                other{"{0} ម៉ោង​មុន"}
+            }
+            minute{
+                other{"{0} នាទី"}
+            }
+            minute-future{
+                other{"ក្នុង​រយៈពេល {0} នាទី"}
+            }
+            minute-past{
+                other{"{0} នាទី​មុន"}
+            }
+            month{
+                other{"{0} ខែ"}
+            }
+            month-future{
+                other{"ក្នុង​រយៈ​ពេល {0} ខែ"}
+            }
+            month-past{
+                other{"{0} នាទី​មុន"}
+            }
+            second{
+                other{"{0} វិនាទី"}
+            }
+            second-future{
+                other{"ក្នុង​រយៈពេល {0} វិនាទី"}
+            }
+            second-past{
+                other{"{0} វិនាទី​មុន"}
+            }
+            week{
+                other{"{0} សប្ដាហ៍"}
+            }
+            week-future{
+                other{"ក្នុង​រយៈ​ពេល {0} សប្ដាហ៍"}
+            }
+            week-past{
+                other{"{0} សប្ដាហ៍​មុន"}
+            }
+            year{
+                other{"{0} ឆ្នាំ"}
+            }
+            year-future{
+                other{"ក្នុង​រយៈ​ពេល {0} ឆ្នាំ"}
+            }
+            year-past{
+                other{"{0} ឆ្នាំ​មុន"}
+            }
         }
     }
 }

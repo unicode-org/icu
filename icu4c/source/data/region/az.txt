@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/az.xml
+ * ICU <specials> source: <path>/common/main/az.xml
  */
 az{
     Countries{
@@ -289,5 +289,5 @@ az{
         ZW{"Zimbabve"}
         ZZ{"bilinmir"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.88.36"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/he.xml
+ * ICU <specials> source: <path>/common/main/he.xml
  */
 he{
     Keys{
@@ -755,7 +755,7 @@ he{
         POSIX{"מחשב"}
         SCOTLAND{"אנגלית סקוטית סטנדרטית"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.67"}
     codePatterns{
         language{"שפה:‏ {0}"}
         script{"כתב: {0}"}
@@ -764,6 +764,6 @@ he{
     localeDisplayPattern{
         keyTypePattern{"{0}:‏ {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

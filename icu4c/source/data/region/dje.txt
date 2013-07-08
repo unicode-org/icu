@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/dje.xml
+ * ICU <specials> source: <path>/common/main/dje.xml
  */
 dje{
     Countries{

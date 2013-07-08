@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/jgo.xml
+ * ICU <specials> source: <path>/common/main/jgo.xml
  */
 jgo{
     AuxExemplarCharacters{"[e o q r x]"}
@@ -49,7 +49,7 @@ jgo{
         }
         native{"latn"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.27"}
     calendar{
         generic{
             DateTimePatterns{
@@ -71,7 +71,7 @@ jgo{
                 Ed{"E d"}
                 MEd{"E, d.M"}
                 Md{"d.M"}
-                yMd{"M.d.y"}
+                yyyyMd{"M.d.y G"}
             }
             intervalFormats{
                 fallback{"{0} – {1}"}
@@ -280,79 +280,81 @@ jgo{
     listPattern{
         standard{
             2{"{0} pɔp {1}"}
-            end{"{0}, ḿbɛn ŋ́ɡɛ {1}"}
-            middle{"{0}, ŋ́ɡɛ {1}"}
-            start{"{0}, ŋ́ɡɛ {1}"}
+            end{"{0}, ḿbɛn ŋ́gɛ {1}"}
+            middle{"{0}, ŋ́gɛ {1}"}
+            start{"{0}, ŋ́gɛ {1}"}
         }
     }
     units{
-        day{
-            one{"{0} lɛ́Ꞌ"}
-            other{"{0} lɛ́Ꞌ"}
-        }
-        day-future{
-            one{"Nǔu lɛ́Ꞌ {0}"}
-            other{"Nǔu lɛ́Ꞌ {0}"}
-        }
-        day-past{
-            one{"Ɛ́ gɛ́ mɔ́ lɛ́Ꞌ {0}"}
-            other{"Ɛ́ gɛ́ mɔ́ lɛ́Ꞌ {0}"}
-        }
-        hour{
-            one{"{0} háwa"}
-            other{"{0} háwa"}
-        }
-        hour-future{
-            one{"nǔu háwa {0}"}
-            other{"nǔu háwa {0}"}
-        }
-        hour-past{
-            one{"ɛ́ gɛ mɔ́ {0} háwa"}
-            other{"ɛ́ gɛ mɔ́ {0} háwa"}
-        }
-        minute{
-            one{"{0} minút"}
-            other{"{0} minút"}
-        }
-        minute-future{
-            one{"nǔu {0} minút"}
-            other{"nǔu {0} minút"}
-        }
-        minute-past{
-            one{"ɛ́ gɛ́ mɔ́ minút {0}"}
-            other{"ɛ́ gɛ́ mɔ́ minút {0}"}
-        }
-        month{
-            one{"pɛsaŋ {0}"}
-            other{"pɛsaŋ {0}"}
-        }
-        month-future{
-            one{"Nǔu {0} saŋ"}
-            other{"Nǔu {0} saŋ"}
-        }
-        month-past{
-            one{"ɛ́ gɛ́ mɔ́ pɛsaŋ {0}"}
-            other{"ɛ́ gɛ́ mɔ́ pɛsaŋ {0}"}
-        }
-        week-future{
-            one{"Nǔu ŋgap-mbi {0}"}
-            other{"Nǔu ŋgap-mbi {0}"}
-        }
-        week-past{
-            one{"Ɛ́ gɛ́ mɔ {0} ŋgap-mbi"}
-            other{"Ɛ́ gɛ́ mɔ {0} ŋgap-mbi"}
-        }
-        year{
-            one{"ŋguꞋ {0}"}
-            other{"ŋguꞋ {0}"}
-        }
-        year-future{
-            one{"Nǔu ŋguꞋ {0}"}
-            other{"Nǔu ŋguꞋ {0}"}
-        }
-        year-past{
-            one{"Ɛ́gɛ́ mɔ́ ŋguꞋ {0}"}
-            other{"Ɛ́gɛ́ mɔ́ ŋguꞋ {0}"}
+        duration{
+            day{
+                one{"{0} lɛ́Ꞌ"}
+                other{"{0} lɛ́Ꞌ"}
+            }
+            day-future{
+                one{"Nǔu lɛ́Ꞌ {0}"}
+                other{"Nǔu lɛ́Ꞌ {0}"}
+            }
+            day-past{
+                one{"Ɛ́ gɛ́ mɔ́ lɛ́Ꞌ {0}"}
+                other{"Ɛ́ gɛ́ mɔ́ lɛ́Ꞌ {0}"}
+            }
+            hour{
+                one{"{0} háwa"}
+                other{"{0} háwa"}
+            }
+            hour-future{
+                one{"nǔu háwa {0}"}
+                other{"nǔu háwa {0}"}
+            }
+            hour-past{
+                one{"ɛ́ gɛ mɔ́ {0} háwa"}
+                other{"ɛ́ gɛ mɔ́ {0} háwa"}
+            }
+            minute{
+                one{"{0} minút"}
+                other{"{0} minút"}
+            }
+            minute-future{
+                one{"nǔu {0} minút"}
+                other{"nǔu {0} minút"}
+            }
+            minute-past{
+                one{"ɛ́ gɛ́ mɔ́ minút {0}"}
+                other{"ɛ́ gɛ́ mɔ́ minút {0}"}
+            }
+            month{
+                one{"pɛsaŋ {0}"}
+                other{"pɛsaŋ {0}"}
+            }
+            month-future{
+                one{"Nǔu {0} saŋ"}
+                other{"Nǔu {0} saŋ"}
+            }
+            month-past{
+                one{"ɛ́ gɛ́ mɔ́ pɛsaŋ {0}"}
+                other{"ɛ́ gɛ́ mɔ́ pɛsaŋ {0}"}
+            }
+            week-future{
+                one{"Nǔu ŋgap-mbi {0}"}
+                other{"Nǔu ŋgap-mbi {0}"}
+            }
+            week-past{
+                one{"Ɛ́ gɛ́ mɔ {0} ŋgap-mbi"}
+                other{"Ɛ́ gɛ́ mɔ {0} ŋgap-mbi"}
+            }
+            year{
+                one{"ŋguꞋ {0}"}
+                other{"ŋguꞋ {0}"}
+            }
+            year-future{
+                one{"Nǔu ŋguꞋ {0}"}
+                other{"Nǔu ŋguꞋ {0}"}
+            }
+            year-past{
+                one{"Ɛ́gɛ́ mɔ́ ŋguꞋ {0}"}
+                other{"Ɛ́gɛ́ mɔ́ ŋguꞋ {0}"}
+            }
         }
     }
 }

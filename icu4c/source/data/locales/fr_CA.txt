@@ -11,7 +11,7 @@ fr_CA{
         279,
         216,
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -245,61 +245,63 @@ fr_CA{
         UK{"R-U"}
     }
     units{
-        day-future{
-            one{"Dans {0} jour"}
-            other{"Dans {0} jours"}
-        }
-        day-past{
-            one{"Il y a {0} jour"}
-            other{"Il y a {0} jours"}
-        }
-        hour-future{
-            one{"Dans {0} heure"}
-            other{"Dans {0} heures"}
-        }
-        hour-past{
-            one{"Il y a {0} heure"}
-            other{"Il y a {0} heures"}
-        }
-        minute-future{
-            one{"Dans {0} minute"}
-            other{"Dans {0} minutes"}
-        }
-        minute-past{
-            one{"Il y a {0} minute"}
-            other{"Il y a {0} minutes"}
-        }
-        month-future{
-            one{"Dans {0} mois"}
-            other{"Dans {0} mois"}
-        }
-        month-past{
-            one{"Il y a {0} mois"}
-            other{"Il y a {0} mois"}
-        }
-        second-future{
-            one{"Dans {0} seconde"}
-            other{"Dans {0} secondes"}
-        }
-        second-past{
-            one{"Il y a {0} seconde"}
-            other{"Il y a {0} secondes"}
-        }
-        week-future{
-            one{"Dans {0} semaine"}
-            other{"Dans {0} semaines"}
-        }
-        week-past{
-            one{"Il y a {0} semaine"}
-            other{"Il y a {0} semaines"}
-        }
-        year-future{
-            one{"Dans {0} an"}
-            other{"Dans {0} ans"}
-        }
-        year-past{
-            one{"Il y a {0} an"}
-            other{"Il y a {0} ans"}
+        duration{
+            day-future{
+                one{"Dans {0} jour"}
+                other{"Dans {0} jours"}
+            }
+            day-past{
+                one{"Il y a {0} jour"}
+                other{"Il y a {0} jours"}
+            }
+            hour-future{
+                one{"Dans {0} heure"}
+                other{"Dans {0} heures"}
+            }
+            hour-past{
+                one{"Il y a {0} heure"}
+                other{"Il y a {0} heures"}
+            }
+            minute-future{
+                one{"Dans {0} minute"}
+                other{"Dans {0} minutes"}
+            }
+            minute-past{
+                one{"Il y a {0} minute"}
+                other{"Il y a {0} minutes"}
+            }
+            month-future{
+                one{"Dans {0} mois"}
+                other{"Dans {0} mois"}
+            }
+            month-past{
+                one{"Il y a {0} mois"}
+                other{"Il y a {0} mois"}
+            }
+            second-future{
+                one{"Dans {0} seconde"}
+                other{"Dans {0} secondes"}
+            }
+            second-past{
+                one{"Il y a {0} seconde"}
+                other{"Il y a {0} secondes"}
+            }
+            week-future{
+                one{"Dans {0} semaine"}
+                other{"Dans {0} semaines"}
+            }
+            week-past{
+                one{"Il y a {0} semaine"}
+                other{"Il y a {0} semaines"}
+            }
+            year-future{
+                one{"Dans {0} an"}
+                other{"Dans {0} ans"}
+            }
+            year-past{
+                one{"Il y a {0} an"}
+                other{"Il y a {0} ans"}
+            }
         }
     }
 }

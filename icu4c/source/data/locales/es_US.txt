@@ -13,13 +13,9 @@ es_US{
         279,
         216,
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.27"}
     calendar{
         generic{
-            AmPmMarkers{
-                "AM",
-                "PM",
-            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",
@@ -36,16 +32,23 @@ es_US{
                 "{1} {0}",
             }
             availableFormats{
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, MMM d, y G"}
+                GyMMMd{"MMM d, y G"}
                 MEd{"E, MM/dd"}
                 MMMEd{"E, MMM d"}
                 MMMd{"MMM d"}
                 MMd{"MM/d"}
                 Md{"M/d"}
-                yM{"M/y"}
-                yMEd{"E, M/d/y"}
-                yMMMEd{"E, MMM d, y"}
-                yMMMd{"MMM d, y"}
-                yMd{"M/d/y"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"E, M/d/y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, MMM d, y G"}
+                yyyyMMMd{"MMM d, y G"}
+                yyyyMd{"M/d/y G"}
             }
         }
         gregorian{
@@ -69,6 +72,10 @@ es_US{
                 "{1} {0}",
             }
             availableFormats{
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, MMM d, y G"}
+                GyMMMd{"MMM d, y G"}
                 MEd{"E, MM/dd"}
                 MMMEd{"E, MMM d"}
                 MMMd{"MMM d"}

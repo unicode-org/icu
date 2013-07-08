@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/vi.xml
+ * ICU <specials> source: <path>/common/main/vi.xml
  */
 vi{
     Countries{
@@ -301,5 +301,5 @@ vi{
         ZW{"Zimbabwe"}
         ZZ{"Vùng Chưa biết hoặc không Hợp lệ"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

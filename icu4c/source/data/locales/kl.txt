@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kl.xml
+ * ICU <specials> source: <path>/common/main/kl.xml
  */
 kl{
     ExemplarCharacters{
@@ -29,7 +29,7 @@ kl{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
     calendar{
         gregorian{
             dayNames{
@@ -119,33 +119,35 @@ kl{
         }
     }
     units{
-        day{
-            one{"{0} ulloq unnuarlu"}
-            other{"{0} ulloq unnuarlu"}
-        }
-        hour{
-            one{"{0} nalunaaquttap-akunnera"}
-            other{"{0} nalunaaquttap-akunnera"}
-        }
-        minute{
-            one{"{0} minutsi"}
-            other{"{0} minutsi"}
-        }
-        month{
-            one{"{0} qaammat"}
-            other{"{0} qaammat"}
-        }
-        second{
-            one{"{0} sekundi"}
-            other{"{0} sekundi"}
-        }
-        week{
-            one{"{0} sapaatip-akunnera"}
-            other{"{0} sapaatip-akunnera"}
-        }
-        year{
-            one{"{0} ukioq"}
-            other{"{0} ukioq"}
+        duration{
+            day{
+                one{"{0} ulloq unnuarlu"}
+                other{"{0} ulloq unnuarlu"}
+            }
+            hour{
+                one{"{0} nalunaaquttap-akunnera"}
+                other{"{0} nalunaaquttap-akunnera"}
+            }
+            minute{
+                one{"{0} minutsi"}
+                other{"{0} minutsi"}
+            }
+            month{
+                one{"{0} qaammat"}
+                other{"{0} qaammat"}
+            }
+            second{
+                one{"{0} sekundi"}
+                other{"{0} sekundi"}
+            }
+            week{
+                one{"{0} sapaatip-akunnera"}
+                other{"{0} sapaatip-akunnera"}
+            }
+            year{
+                one{"{0} ukioq"}
+                other{"{0} ukioq"}
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kde.xml
+ * ICU <specials> source: <path>/common/main/kde.xml
  */
 kde{
     Currencies{
@@ -236,5 +236,5 @@ kde{
             "Dola ya Zimbabwe",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
 }

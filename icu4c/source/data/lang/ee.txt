@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ee.xml
+ * ICU <specials> source: <path>/common/main/ee.xml
  */
 ee{
     Keys{
@@ -298,7 +298,7 @@ ee{
             tibt{"tibet digitwo"}
         }
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"gbegbɔgblɔ {0}"}
         script{"gbeŋɔŋlɔ {0}"}

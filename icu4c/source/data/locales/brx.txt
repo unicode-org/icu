@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/brx.xml
+ * ICU <specials> source: <path>/common/main/brx.xml
  */
 brx{
     AuxExemplarCharacters{"[\u200C\u200D]"}
@@ -47,7 +47,7 @@ brx{
         }
         native{"deva"}
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -290,33 +290,35 @@ brx{
         metric{"मिथार खिलमिथार"}
     }
     units{
-        day{
-            one{"{0} सान"}
-            other{"{0} सान"}
-        }
-        hour{
-            one{"{0} रिंगा"}
-            other{"{0} घंटे"}
-        }
-        minute{
-            one{"{0} मिन."}
-            other{"{0} मिन."}
-        }
-        month{
-            one{"{0} महीना"}
-            other{"{0} महीने"}
-        }
-        second{
-            one{"{0} सेकं."}
-            other{"{0} सेकं."}
-        }
-        week{
-            one{"{0} सप्ताह"}
-            other{"{0} सप्ताह"}
-        }
-        year{
-            one{"{0} साल"}
-            other{"{0} साल"}
+        duration{
+            day{
+                one{"{0} सान"}
+                other{"{0} सान"}
+            }
+            hour{
+                one{"{0} रिंगा"}
+                other{"{0} घंटे"}
+            }
+            minute{
+                one{"{0} मिन."}
+                other{"{0} मिन."}
+            }
+            month{
+                one{"{0} महीना"}
+                other{"{0} महीने"}
+            }
+            second{
+                one{"{0} सेकं."}
+                other{"{0} सेकं."}
+            }
+            week{
+                one{"{0} सप्ताह"}
+                other{"{0} सप्ताह"}
+            }
+            year{
+                one{"{0} साल"}
+                other{"{0} साल"}
+            }
         }
     }
 }

@@ -270,7 +270,7 @@ static void TestNumberFormat()
     result = 0;
 
     log_verbose("\nTesting unum_formatDouble()\n");
-    u_uastrcpy(temp1, "($10,456.37)");
+    u_uastrcpy(temp1, "-$10,456.37");
     resultlength=0;
     pos2.field = UNUM_FRACTION_FIELD;
     resultlengthneeded=unum_formatDouble(cur_def, d, NULL, resultlength, &pos2, &status);

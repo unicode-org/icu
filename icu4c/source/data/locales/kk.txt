@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kk.xml
+ * ICU <specials> source: <path>/common/main/kk.xml
  */
 kk{
     AuxExemplarCharacters{"[]"}
@@ -85,7 +85,7 @@ kk{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -96,7 +96,7 @@ kk{
                 "EEEE, d MMMM y 'ж'. G",
                 "d MMMM y 'ж'. G",
                 "dd.MM.y G",
-                "dd.MM.yy GGGGG",
+                "dd.MM.y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -159,35 +159,35 @@ kk{
                     h{"h-h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y-y G"}
                 }
                 yM{
-                    M{"MM.y - MM.y"}
-                    y{"MM.y - MM.y"}
+                    M{"MM.y - MM.y G"}
+                    y{"MM.y - MM.y G"}
                 }
                 yMEd{
-                    M{"E, dd.MM.y - E, dd.MM.y"}
-                    d{"E, dd.MM.y - E, dd.MM.y"}
-                    y{"E, dd.MM.y - E, dd.MM.y"}
+                    M{"E, dd.MM.y - E, dd.MM.y G"}
+                    d{"E, dd.MM.y - E, dd.MM.y G"}
+                    y{"E, dd.MM.y - E, dd.MM.y G"}
                 }
                 yMMM{
-                    M{"MMM-MMM y 'ж'."}
-                    y{"MMM y 'ж'. - MMM y 'ж'."}
+                    M{"MMM-MMM y 'ж'. G"}
+                    y{"MMM y 'ж'. - MMM y 'ж'. G"}
                 }
                 yMMMEd{
-                    M{"E, d MMM - E, d MMM y 'ж'."}
-                    d{"E, d - E, d MMM y 'ж'."}
-                    y{"E, d MMM y 'ж'. - E, d MMM y 'ж'."}
+                    M{"E, d MMM - E, d MMM y 'ж'. G"}
+                    d{"E, d - E, d MMM y 'ж'. G"}
+                    y{"E, d MMM y 'ж'. - E, d MMM y 'ж'. G"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM y 'ж'."}
-                    d{"d-d MMM y 'ж'."}
-                    y{"d MMM y 'ж'. - d MMM y 'ж'."}
+                    M{"d MMM - d MMM y 'ж'. G"}
+                    d{"d-d MMM y 'ж'. G"}
+                    y{"d MMM y 'ж'. - d MMM y 'ж'. G"}
                 }
                 yMd{
-                    M{"dd.MM.y - dd.MM.y"}
-                    d{"dd.MM.y - dd.MM.y"}
-                    y{"dd.MM.y - dd.MM.y"}
+                    M{"dd.MM.y - dd.MM.y G"}
+                    d{"dd.MM.y - dd.MM.y G"}
+                    y{"dd.MM.y - dd.MM.y G"}
                 }
             }
         }
@@ -356,89 +356,91 @@ kk{
         metric{"метрикалық жүйе"}
     }
     units{
-        day{
-            one{"{0} тәулік"}
-            other{"{0} тәулік"}
-        }
-        day-future{
-            one{"{0} күннен кейін"}
-            other{"{0} күннен кейін"}
-        }
-        day-past{
-            one{"{0} күн бұрын"}
-            other{"{0} күн бұрын"}
-        }
-        hour{
-            one{"{0} сағат"}
-            other{"{0} сағат"}
-        }
-        hour-future{
-            one{"{0} сағаттан кейін"}
-            other{"{0} сағаттан кейін"}
-        }
-        hour-past{
-            one{"{0} сағат бұрын"}
-            other{"{0} сағат бұрын"}
-        }
-        minute{
-            one{"{0} минут"}
-            other{"{0} минут"}
-        }
-        minute-future{
-            one{"{0} минуттан кейін"}
-            other{"{0} минуттан кейін"}
-        }
-        minute-past{
-            one{"{0} минут бұрын"}
-            other{"{0} минут бұрын"}
-        }
-        month{
-            one{"{0} ай"}
-            other{"{0} ай"}
-        }
-        month-future{
-            one{"{0} айдан кейін"}
-            other{"{0} айдан кейін"}
-        }
-        month-past{
-            one{"{0} ай бұрын"}
-            other{"{0} ай бұрын"}
-        }
-        second{
-            one{"{0} секунд"}
-            other{"{0} секунд"}
-        }
-        second-future{
-            one{"{0} секундтан кейін"}
-            other{"{0} секундтан кейін"}
-        }
-        second-past{
-            one{"{0} секунд бұрын"}
-            other{"{0} секунд бұрын"}
-        }
-        week{
-            one{"{0} апта"}
-            other{"{0} апта"}
-        }
-        week-future{
-            one{"{0} аптадан кейін"}
-            other{"{0} аптадан кейін"}
-        }
-        week-past{
-            one{"{0} апта бұрын"}
-            other{"{0} апта бұрын"}
-        }
-        year{
-            one{"{0} жыл"}
-            other{"{0} жыл"}
-        }
-        year-future{
-            one{"{0} жылдан кейін"}
-            other{"{0} жылдан кейін"}
-        }
-        year-past{
-            one{"{0} жыл бұрын"}
-            other{"{0} жыл бұрын"}
+        duration{
+            day{
+                one{"{0} тәулік"}
+                other{"{0} тәулік"}
+            }
+            day-future{
+                one{"{0} күннен кейін"}
+                other{"{0} күннен кейін"}
+            }
+            day-past{
+                one{"{0} күн бұрын"}
+                other{"{0} күн бұрын"}
+            }
+            hour{
+                one{"{0} сағат"}
+                other{"{0} сағат"}
+            }
+            hour-future{
+                one{"{0} сағаттан кейін"}
+                other{"{0} сағаттан кейін"}
+            }
+            hour-past{
+                one{"{0} сағат бұрын"}
+                other{"{0} сағат бұрын"}
+            }
+            minute{
+                one{"{0} минут"}
+                other{"{0} минут"}
+            }
+            minute-future{
+                one{"{0} минуттан кейін"}
+                other{"{0} минуттан кейін"}
+            }
+            minute-past{
+                one{"{0} минут бұрын"}
+                other{"{0} минут бұрын"}
+            }
+            month{
+                one{"{0} ай"}
+                other{"{0} ай"}
+            }
+            month-future{
+                one{"{0} айдан кейін"}
+                other{"{0} айдан кейін"}
+            }
+            month-past{
+                one{"{0} ай бұрын"}
+                other{"{0} ай бұрын"}
+            }
+            second{
+                one{"{0} секунд"}
+                other{"{0} секунд"}
+            }
+            second-future{
+                one{"{0} секундтан кейін"}
+                other{"{0} секундтан кейін"}
+            }
+            second-past{
+                one{"{0} секунд бұрын"}
+                other{"{0} секунд бұрын"}
+            }
+            week{
+                one{"{0} апта"}
+                other{"{0} апта"}
+            }
+            week-future{
+                one{"{0} аптадан кейін"}
+                other{"{0} аптадан кейін"}
+            }
+            week-past{
+                one{"{0} апта бұрын"}
+                other{"{0} апта бұрын"}
+            }
+            year{
+                one{"{0} жыл"}
+                other{"{0} жыл"}
+            }
+            year-future{
+                one{"{0} жылдан кейін"}
+                other{"{0} жылдан кейін"}
+            }
+            year-past{
+                one{"{0} жыл бұрын"}
+                other{"{0} жыл бұрын"}
+            }
         }
     }
 }

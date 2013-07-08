@@ -70,21 +70,21 @@ format:table(nofallback) {
                     "",
                     "DATE=RELATIVE_SHORT",
                     "RELATIVE_ADD:DATE=1", // one day from now
-                    "Tomorrow"
+                    "tomorrow"
                },
                {
                     "en_US@calendar=gregorian",         
                     "",
                     "DATE=RELATIVE_SHORT",
                     "RELATIVE_MILLIS=0", // today
-                    "Today"
+                    "today"
                },
                {
                     "en_US@calendar=gregorian",         
                     "",
                     "DATE=RELATIVE_SHORT",
                     "RELATIVE_ADD:DATE=-1", // one day before now
-                    "Yesterday"
+                    "yesterday"
                },
                // date only, out of relative range
                {
@@ -131,7 +131,7 @@ format:table(nofallback) {
                     "GMT",
                     "DATE=RELATIVE_FULL,TIME=LONG",
                     "RELATIVE_ADD:DATE=-1,HOUR_OF_DAY=17,MINUTE=0,SECOND=0", // one day before now at specified time
-                    "Yesterday at 5:00:00 PM GMT"
+                    "yesterday at 5:00:00 PM GMT"
                },
                // formats with relative day, combined using ", "
                {
@@ -139,7 +139,7 @@ format:table(nofallback) {
                     "GMT",
                     "DATE=RELATIVE_MEDIUM,TIME=SHORT",
                     "RELATIVE_ADD:DATE=-1,HOUR_OF_DAY=17,MINUTE=0,SECOND=0", // one day before now at specified time
-                    "Yesterday, 5:00 PM"
+                    "yesterday, 5:00 PM"
                },
                // normal formats that have quoted literals, combined
                {

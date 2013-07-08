@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/be.xml
+ * ICU <specials> source: <path>/common/main/be.xml
  */
 be{
     Countries{
@@ -274,5 +274,5 @@ be{
         ZW{"Зімбабвэ"}
         ZZ{"Невядомы рэгіён"}
     }
-    Version{"2.0.82.49"}
+    Version{"2.0.85.93"}
 }

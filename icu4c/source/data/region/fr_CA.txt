@@ -13,5 +13,5 @@ fr_CA{
         ST{"Sao Tomé-et-Principe"}
         XK{"Kosovo"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

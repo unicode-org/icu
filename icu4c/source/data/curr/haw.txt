@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/haw.xml
+ * ICU <specials> source: <path>/common/main/haw.xml
  */
 haw{
     Currencies{
@@ -16,5 +16,5 @@ haw{
             "USD",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
 }

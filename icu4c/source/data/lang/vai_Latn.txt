@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/vai_Latn.xml
+ * ICU <specials> source: <path>/common/main/vai_Latn.xml
  */
 vai_Latn{
     Languages{
@@ -57,5 +57,5 @@ vai_Latn{
         zh{"Chaniĩ"}
         zu{"Zúlu"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
 }

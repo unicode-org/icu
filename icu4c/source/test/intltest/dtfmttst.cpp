@@ -2365,9 +2365,9 @@ void DateFormatTest::TestRelative(int daysdelta,
 void DateFormatTest::TestRelative(void)
 {
     Locale en("en");
-    TestRelative( 0, en, "Today");
-    TestRelative(-1, en, "Yesterday");
-    TestRelative( 1, en, "Tomorrow");
+    TestRelative( 0, en, "today");
+    TestRelative(-1, en, "yesterday");
+    TestRelative( 1, en, "tomorrow");
     TestRelative( 2, en, NULL);
     TestRelative( -2, en, NULL);
     TestRelative( 3, en, NULL);
@@ -3874,12 +3874,12 @@ void DateFormatTest::TestMonthPatterns()
 
     const MonthPatternItem items[] = {
         // locale                     date style;           expected formats for the 3 dates above
-        { "root@calendar=chinese",    DateFormat::kLong,  { UnicodeString("ren-chen Month4 2"),  UnicodeString("ren-chen Month4bis 2"),  UnicodeString("ren-chen Month5 2") } },
+        { "root@calendar=chinese",    DateFormat::kLong,  { UnicodeString("ren-chen M04 2"),  UnicodeString("ren-chen M04bis 2"),  UnicodeString("ren-chen M05 2") } },
         { "root@calendar=chinese",    DateFormat::kShort, { UnicodeString("29-04-02"),      UnicodeString("29-04bis-02"),           UnicodeString("29-05-02") } },
         { "root@calendar=chinese",    -1,                 { UnicodeString("29-4-2"),        UnicodeString("29-4bis-2"),             UnicodeString("29-5-2") } },
         { "root@calendar=chinese",    -2,                 { UnicodeString("78x29-4-2"),     UnicodeString("78x29-4bis-2"),          UnicodeString("78x29-5-2") } },
         { "root@calendar=chinese",    -3,                 { UnicodeString("ren-chen-4-2"),  UnicodeString("ren-chen-4bis-2"),       UnicodeString("ren-chen-5-2") } },
-        { "root@calendar=chinese",    -4,                 { UnicodeString("ren-chen Month4 2"),  UnicodeString("ren-chen Month4bis 2"),  UnicodeString("ren-chen Month5 2") } },
+        { "root@calendar=chinese",    -4,                 { UnicodeString("ren-chen M04 2"),  UnicodeString("ren-chen M04bis 2"),   UnicodeString("ren-chen M05 2") } },
         { "en@calendar=gregorian",    -3,                 { UnicodeString("2012-4-22"),     UnicodeString("2012-5-22"),             UnicodeString("2012-6-20") } },
         { "en@calendar=chinese",      DateFormat::kLong,  { UnicodeString("Month4 2, ren-chen"), UnicodeString("Month4bis 2, ren-chen"), UnicodeString("Month5 2, ren-chen") } },
         { "en@calendar=chinese",      DateFormat::kShort, { UnicodeString("4/2/29"),        UnicodeString("4bis/2/29"),             UnicodeString("5/2/29") } },

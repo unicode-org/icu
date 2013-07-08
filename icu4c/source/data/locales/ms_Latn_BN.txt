@@ -29,7 +29,7 @@ ms_Latn_BN{
                 "dd MMMM y G",
                 "d MMMM y G",
                 "dd/MM/y G",
-                "d/MM/yy GGGGG",
+                "d/MM/y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bs_Cyrl.xml
+ * ICU <specials> source: <path>/common/main/bs_Cyrl.xml
  */
 bs_Cyrl{
-    Version{"2.0.86.63"}
+    Version{"2.0.86.38"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиџан"}
@@ -1838,7 +1838,6 @@ bs_Cyrl{
             ls{"Јекатеринбург стандардно време"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"Време у земљи: {1} ({0})"}
         gmtFormat{"GMT{0}"}
         hourFormat{"+HHmm;-HHmm"}
         regionFormat{"Време у земљи: {0}"}

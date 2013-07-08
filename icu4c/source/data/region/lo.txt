@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/lo.xml
+ * ICU <specials> source: <path>/common/main/lo.xml
  */
 lo{
     Countries{
@@ -291,5 +291,5 @@ lo{
         ZW{"ຊິມບັບເວ"}
         ZZ{"ຂົງເຂດທີ່ບໍ່ຮູ້ຈັກ"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/rwk.xml
+ * ICU <specials> source: <path>/common/main/rwk.xml
  */
 rwk{
     Countries{

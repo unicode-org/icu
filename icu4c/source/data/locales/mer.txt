@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mer.xml
+ * ICU <specials> source: <path>/common/main/mer.xml
  */
 mer{
     ExemplarCharacters{"[a b c d e f g h i ĩ j k l m n o p q r s t u ũ v w x y z]"}
@@ -18,11 +18,11 @@ mer{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.84.55"}
     calendar{
         generic{
             DateTimePatterns{

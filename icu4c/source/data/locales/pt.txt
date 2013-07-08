@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/pt.xml
+ * ICU <specials> source: <path>/common/main/pt.xml
  */
 pt{
     AuxExemplarCharacters{"[ª ă å ä ā æ è ĕ ë ē ì ĭ î ï ī ñ º ŏ ö ø ō œ ù ŭ û ü ū ÿ]"}
@@ -23,7 +23,7 @@ pt{
         default{"latn"}
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
@@ -147,7 +147,7 @@ pt{
         }
         native{"latn"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             eras{
@@ -1208,119 +1208,123 @@ pt{
         metric{"métrico"}
     }
     units{
-        day{
-            one{"{0} dia"}
-            other{"{0} dias"}
-        }
-        day-future{
-            one{"Dentro de {0} dia"}
-            other{"Dentro de {0} dias"}
-        }
-        day-past{
-            one{"Há {0} dia"}
-            other{"Há {0} dias"}
-        }
-        hour{
-            one{"{0} hora"}
-            other{"{0} horas"}
-        }
-        hour-future{
-            one{"Dentro de {0} hora"}
-            other{"Dentro de {0} horas"}
-        }
-        hour-past{
-            one{"Há {0} hora"}
-            other{"Há {0} horas"}
-        }
-        minute{
-            one{"{0} minuto"}
-            other{"{0} minutos"}
-        }
-        minute-future{
-            one{"Dentro de {0} minuto"}
-            other{"Dentro de {0} minutos"}
-        }
-        minute-past{
-            one{"Há {0} minuto"}
-            other{"Há {0} minutos"}
-        }
-        month{
-            one{"{0} mês"}
-            other{"{0} meses"}
-        }
-        month-future{
-            one{"Dentro de {0} mês"}
-            other{"Dentro de {0} meses"}
-        }
-        month-past{
-            one{"Há {0} mês"}
-            other{"Há {0} meses"}
-        }
-        second{
-            one{"{0} segundo"}
-            other{"{0} segundos"}
-        }
-        second-future{
-            one{"Dentro de {0} segundo"}
-            other{"Dentro de {0} segundos"}
-        }
-        second-past{
-            one{"Há {0} segundo"}
-            other{"Há {0} segundos"}
-        }
-        week{
-            one{"{0} semana"}
-            other{"{0} semanas"}
-        }
-        week-future{
-            one{"Dentro de {0} semana"}
-            other{"Dentro de {0} semanas"}
-        }
-        week-past{
-            one{"Há {0} semana"}
-            other{"Há {0} semanas"}
-        }
-        year{
-            one{"{0} ano"}
-            other{"{0} anos"}
-        }
-        year-future{
-            one{"Dentro de {0} ano"}
-            other{"Dentro de {0} anos"}
-        }
-        year-past{
-            one{"Há {0} ano"}
-            other{"Há {0} anos"}
+        duration{
+            day{
+                one{"{0} dia"}
+                other{"{0} dias"}
+            }
+            day-future{
+                one{"Dentro de {0} dia"}
+                other{"Dentro de {0} dias"}
+            }
+            day-past{
+                one{"Há {0} dia"}
+                other{"Há {0} dias"}
+            }
+            hour{
+                one{"{0} hora"}
+                other{"{0} horas"}
+            }
+            hour-future{
+                one{"Dentro de {0} hora"}
+                other{"Dentro de {0} horas"}
+            }
+            hour-past{
+                one{"Há {0} hora"}
+                other{"Há {0} horas"}
+            }
+            minute{
+                one{"{0} minuto"}
+                other{"{0} minutos"}
+            }
+            minute-future{
+                one{"Dentro de {0} minuto"}
+                other{"Dentro de {0} minutos"}
+            }
+            minute-past{
+                one{"Há {0} minuto"}
+                other{"Há {0} minutos"}
+            }
+            month{
+                one{"{0} mês"}
+                other{"{0} meses"}
+            }
+            month-future{
+                one{"Dentro de {0} mês"}
+                other{"Dentro de {0} meses"}
+            }
+            month-past{
+                one{"Há {0} mês"}
+                other{"Há {0} meses"}
+            }
+            second{
+                one{"{0} segundo"}
+                other{"{0} segundos"}
+            }
+            second-future{
+                one{"Dentro de {0} segundo"}
+                other{"Dentro de {0} segundos"}
+            }
+            second-past{
+                one{"Há {0} segundo"}
+                other{"Há {0} segundos"}
+            }
+            week{
+                one{"{0} semana"}
+                other{"{0} semanas"}
+            }
+            week-future{
+                one{"Dentro de {0} semana"}
+                other{"Dentro de {0} semanas"}
+            }
+            week-past{
+                one{"Há {0} semana"}
+                other{"Há {0} semanas"}
+            }
+            year{
+                one{"{0} ano"}
+                other{"{0} anos"}
+            }
+            year-future{
+                one{"Dentro de {0} ano"}
+                other{"Dentro de {0} anos"}
+            }
+            year-past{
+                one{"Há {0} ano"}
+                other{"Há {0} anos"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} dia"}
-            other{"{0} dias"}
-        }
-        hour{
-            one{"{0} h"}
-            other{"{0} h"}
-        }
-        minute{
-            one{"{0} min"}
-            other{"{0} min"}
-        }
-        month{
-            one{"{0} mês"}
-            other{"{0} meses"}
-        }
-        second{
-            one{"{0} seg"}
-            other{"{0} seg"}
-        }
-        week{
-            one{"{0} sem."}
-            other{"{0} sem."}
-        }
-        year{
-            one{"{0} ano"}
-            other{"{0} anos"}
+        duration{
+            day{
+                one{"{0} dia"}
+                other{"{0} dias"}
+            }
+            hour{
+                one{"{0} h"}
+                other{"{0} h"}
+            }
+            minute{
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                one{"{0} mês"}
+                other{"{0} meses"}
+            }
+            second{
+                one{"{0} seg"}
+                other{"{0} seg"}
+            }
+            week{
+                one{"{0} sem."}
+                other{"{0} sem."}
+            }
+            year{
+                one{"{0} ano"}
+                other{"{0} anos"}
+            }
         }
     }
 }

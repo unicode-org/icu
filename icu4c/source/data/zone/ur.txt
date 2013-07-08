@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ur.xml
+ * ICU <specials> source: <path>/common/main/ur.xml
  */
 ur{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"عابدجان"}
@@ -1808,7 +1808,6 @@ ur{
             ls{"یکیترنگبرگ کا معیاری وقت"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} وقت ({0})"}
         gmtFormat{"GMT {0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

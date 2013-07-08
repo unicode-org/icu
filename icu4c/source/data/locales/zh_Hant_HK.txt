@@ -10,11 +10,11 @@ zh_Hant_HK{
     NumberElements{
         latn{
             patterns{
-                currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
+                currencyFormat{"¤#,##0.00"}
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             availableFormats{
@@ -97,20 +97,22 @@ zh_Hant_HK{
         metric{"十進制"}
     }
     units{
-        day-future{
-            other{"{0} 日後"}
-        }
-        day-past{
-            other{"{0} 日前"}
-        }
-        hour{
-            other{"{0}時"}
-        }
-        month-past{
-            other{"{0} 月前"}
-        }
-        week{
-            other{"{0}星期"}
+        duration{
+            day-future{
+                other{"{0} 日後"}
+            }
+            day-past{
+                other{"{0} 日前"}
+            }
+            hour{
+                other{"{0}時"}
+            }
+            month-past{
+                other{"{0} 月前"}
+            }
+            week{
+                other{"{0}星期"}
+            }
         }
     }
 }

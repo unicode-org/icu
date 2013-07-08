@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/pt.xml
+ * ICU <specials> source: <path>/common/main/pt.xml
  */
 pt{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Algiers"{
             ec{"Argel"}
@@ -1032,7 +1032,6 @@ pt{
             ls{"Horário Padrão de Ecaterimburgo"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} Horário ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"Horário de Greenwich"}
         hourFormat{"+HH:mm;-HH:mm"}

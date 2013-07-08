@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mn.xml
+ * ICU <specials> source: <path>/common/main/mn.xml
  */
 mn{
     AuxExemplarCharacters{"[ә җ ӊ һ]"}
@@ -145,7 +145,7 @@ mn{
             }
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     calendar{
         generic{
             DateTimePatterns{
@@ -165,6 +165,10 @@ mn{
             }
             availableFormats{
                 Ed{"dd E"}
+                Gy{"G y"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"E, G y MMM d"}
+                GyMMMd{"G y MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -179,15 +183,16 @@ mn{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"y-M"}
-                yMEd{"E, y-M-d"}
-                yMMM{"y MMM"}
-                yMMMEd{"E, y MMM d"}
-                yMMMd{"y MMM d"}
-                yMd{"y-M-d"}
-                yQQQ{"y QQQ"}
-                yQQQQ{"y 'оны' QQQQ"}
+                y{"G y"}
+                yyyy{"G y"}
+                yyyyM{"G y-M"}
+                yyyyMEd{"E, G y-M-d"}
+                yyyyMMM{"G y MMM"}
+                yyyyMMMEd{"E, G y MMM d"}
+                yyyyMMMd{"G y MMM d"}
+                yyyyMd{"G y-M-d"}
+                yyyyQQQ{"G y QQQ"}
+                yyyyQQQQ{"G y 'оны' QQQQ"}
             }
             intervalFormats{
                 H{
@@ -249,39 +254,39 @@ mn{
                     h{"h–h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"G y–y"}
                 }
                 yM{
-                    M{"y/MM-MM"}
-                    y{"y/MM - y/MM"}
+                    M{"G y/MM-MM"}
+                    y{"G y/MM - y/MM"}
                 }
                 yMEd{
-                    M{"E, y/MM/dd – E, y/MM/dd"}
-                    d{"E, y/MM/dd – E, y/MM/dd"}
-                    y{"E, y/MM/dd – E, y/MM/dd"}
+                    M{"E, G y/MM/dd – E, y/MM/dd"}
+                    d{"E, G y/MM/dd – E, y/MM/dd"}
+                    y{"E, G y/MM/dd – E, y/MM/dd"}
                 }
                 yMMM{
-                    M{"y/MM-MM"}
-                    y{"y/MM - y/MM"}
+                    M{"G y/MM-MM"}
+                    y{"G y/MM - y/MM"}
                 }
                 yMMMEd{
-                    M{"E, y/MM/dd – E, y/MM/dd"}
-                    d{"E, y/MM/dd – E, y/MM/dd"}
-                    y{"E, y/MM/dd – E, y/MM/dd"}
+                    M{"E, G y/MM/dd – E, y/MM/dd"}
+                    d{"E, G y/MM/dd – E, y/MM/dd"}
+                    y{"E, G y/MM/dd – E, y/MM/dd"}
                 }
                 yMMMM{
-                    M{"y 'оны' MM-MM-'р' 'сар'"}
-                    y{"y/MM -y/MM"}
+                    M{"G y 'оны' MM-MM-'р' 'сар'"}
+                    y{"G y/MM -y/MM"}
                 }
                 yMMMd{
-                    M{"y/MM/dd - MM/dd"}
-                    d{"y/MM/d-d"}
-                    y{"y/MM/dd - y/MM/dd"}
+                    M{"G y/MM/dd - MM/dd"}
+                    d{"G y/MM/d-d"}
+                    y{"G y/MM/dd - y/MM/dd"}
                 }
                 yMd{
-                    M{"y/MM/dd -MM/dd"}
-                    d{"y/MM/dd-dd"}
-                    y{"y/MM/dd - y/MM/dd"}
+                    M{"G y/MM/dd -MM/dd"}
+                    d{"G y/MM/dd-dd"}
+                    y{"G y/MM/dd - y/MM/dd"}
                 }
             }
         }
@@ -307,6 +312,10 @@ mn{
             }
             availableFormats{
                 Ed{"dd E"}
+                Gy{"G y"}
+                GyMMM{"G y MMM"}
+                GyMMMEd{"E, G y MMM d"}
+                GyMMMd{"G y MMM d"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -714,115 +723,123 @@ mn{
         metric{"метрийн"}
     }
     units{
-        day{
-            one{"{0} өдөр"}
-            other{"{0} өдөр"}
-        }
-        day-future{
-            one{"{0} өдөрт"}
-            other{"{0} өдөрт"}
-        }
-        day-past{
-            one{"{0} өдрийн өмнө"}
-            other{"{0} өдрийн өмнө"}
-        }
-        hour{
-            one{"{0} цаг"}
-            other{"{0} цаг"}
-        }
-        hour-future{
-            one{"{0} цагт"}
-            other{"{0} цагт"}
-        }
-        hour-past{
-            one{"{0} цагийн өмнө"}
-            other{"{0} цагийн өмнө"}
-        }
-        minute{
-            one{"{0} минут"}
-            other{"{0} минут"}
-        }
-        minute-future{
-            one{"{0} минутанд"}
-            other{"{0} минутанд"}
-        }
-        minute-past{
-            one{"{0} минутын өмнө"}
-            other{"{0} минутын өмнө"}
-        }
-        month{
-            one{"{0} сар"}
-            other{"{0} сар"}
-        }
-        month-future{
-            one{"{0} сард"}
-            other{"{0} сард"}
-        }
-        month-past{
-            one{"{0} сарын өмнө"}
-            other{"{0} сарын өмнө"}
-        }
-        second{
-            one{"{0} хором"}
-            other{"{0} хором"}
-        }
-        second-future{
-            one{"{0} хоромд"}
-            other{"{0} хоромд"}
-        }
-        second-past{
-            one{"{0} хормын өмнө"}
-            other{"{0} хормын өмнө"}
-        }
-        week{
-            one{"{0} долоо хоног"}
-            other{"{0} долоо хоног"}
-        }
-        week-future{
-            one{"{0} долоо хоногт"}
-            other{"{0} долоо хоногт"}
-        }
-        year{
-            one{"{0} жил"}
-            other{"{0} жил"}
-        }
-        year-future{
-            one{"{0} жилд"}
-            other{"{0} жилд"}
-        }
-        year-past{
-            one{"{0} жилийн өмнө"}
-            other{"{0} жилийн өмнө"}
+        duration{
+            day{
+                one{"{0} өдөр"}
+                other{"{0} өдөр"}
+            }
+            day-future{
+                one{"{0} өдөрт"}
+                other{"{0} өдөрт"}
+            }
+            day-past{
+                one{"{0} өдрийн өмнө"}
+                other{"{0} өдрийн өмнө"}
+            }
+            hour{
+                one{"{0} цаг"}
+                other{"{0} цаг"}
+            }
+            hour-future{
+                one{"{0} цагт"}
+                other{"{0} цагт"}
+            }
+            hour-past{
+                one{"{0} цагийн өмнө"}
+                other{"{0} цагийн өмнө"}
+            }
+            minute{
+                one{"{0} минут"}
+                other{"{0} минут"}
+            }
+            minute-future{
+                one{"{0} минутанд"}
+                other{"{0} минутанд"}
+            }
+            minute-past{
+                one{"{0} минутын өмнө"}
+                other{"{0} минутын өмнө"}
+            }
+            month{
+                one{"{0} сар"}
+                other{"{0} сар"}
+            }
+            month-future{
+                one{"{0} сард"}
+                other{"{0} сард"}
+            }
+            month-past{
+                one{"{0} сарын өмнө"}
+                other{"{0} сарын өмнө"}
+            }
+            second{
+                one{"{0} хором"}
+                other{"{0} хором"}
+            }
+            second-future{
+                one{"{0} хоромд"}
+                other{"{0} хоромд"}
+            }
+            second-past{
+                one{"{0} хормын өмнө"}
+                other{"{0} хормын өмнө"}
+            }
+            week{
+                one{"{0} долоо хоног"}
+                other{"{0} долоо хоног"}
+            }
+            week-future{
+                one{"{0} долоо хоногт"}
+                other{"{0} долоо хоногт"}
+            }
+            week-past{
+                one{"{0} долоо хоногийн өмнө"}
+                other{"{0} долоо хоногийн өмнө"}
+            }
+            year{
+                one{"{0} жил"}
+                other{"{0} жил"}
+            }
+            year-future{
+                one{"{0} жилд"}
+                other{"{0} жилд"}
+            }
+            year-past{
+                one{"{0} жилийн өмнө"}
+                other{"{0} жилийн өмнө"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} өдөр"}
-            other{"{0} өдөр"}
-        }
-        hour{
-            one{"{0} цаг"}
-            other{"{0} цаг"}
-        }
-        minute{
-            one{"{0} мин"}
-            other{"{0} мин"}
-        }
-        month{
-            one{"{0} сар"}
-            other{"{0} сар"}
-        }
-        second{
-            one{"{0} хором"}
-            other{"{0} хором"}
-        }
-        week{
-            one{"{0} долоо хоног"}
-            other{"{0} долоо хоног"}
-        }
-        year{
-            one{"{0} жил"}
-            other{"{0} жил"}
+        duration{
+            day{
+                one{"{0} өдөр"}
+                other{"{0} өдөр"}
+            }
+            hour{
+                one{"{0} цаг"}
+                other{"{0} цаг"}
+            }
+            minute{
+                one{"{0} мин"}
+                other{"{0} мин"}
+            }
+            month{
+                one{"{0} сар"}
+                other{"{0} сар"}
+            }
+            second{
+                one{"{0} хором"}
+                other{"{0} хором"}
+            }
+            week{
+                one{"{0} долоо хоног"}
+                other{"{0} долоо хоног"}
+            }
+            year{
+                one{"{0} жил"}
+                other{"{0} жил"}
+            }
         }
     }
 }

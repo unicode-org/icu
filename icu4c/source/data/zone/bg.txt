@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bg.xml
+ * ICU <specials> source: <path>/common/main/bg.xml
  */
 bg{
-    Version{"2.0.86.63"}
+    Version{"2.0.88.32"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиджан"}
@@ -1808,7 +1808,6 @@ bg{
             ls{"Екатеринбург – стандартно време"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} време ({0})"}
         gmtFormat{"Гриинуич{0}"}
         gmtZeroFormat{"Гриинуич"}
         hourFormat{"+HHmm;-HHmm"}

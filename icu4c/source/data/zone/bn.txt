@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/bn.xml
+ * ICU <specials> source: <path>/common/main/bn.xml
  */
 bn{
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"আবিদজান"}
@@ -1809,7 +1809,6 @@ bn{
             ls{"ইয়েকাতেরিনবুর্গ মানক সময়"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} সময় ({0})"}
         gmtFormat{"গ্রীনিচ মান সময় {0}"}
         gmtZeroFormat{"গ্রীনিচ মান সময়"}
         hourFormat{"+HH:mm;-HH:mm"}

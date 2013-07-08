@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/am.xml
+ * ICU <specials> source: <path>/common/main/am.xml
  */
 am{
     Countries{
@@ -302,5 +302,5 @@ am{
         ZW{"ዚምቧቤ"}
         ZZ{"ያልታወቀ ክልል"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.89.31"}
 }

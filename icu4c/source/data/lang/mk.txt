@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/mk.xml
+ * ICU <specials> source: <path>/common/main/mk.xml
  */
 mk{
     Keys{
@@ -699,7 +699,7 @@ mk{
         PINYIN{"Пинјин романизација"}
         WADEGILE{"Вејд-Џајлс романизација"}
     }
-    Version{"2.0.86.63"}
+    Version{"2.0.88.26"}
     codePatterns{
         language{"Јазик: {0}"}
         script{"Писмо: {0}"}
@@ -708,6 +708,6 @@ mk{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

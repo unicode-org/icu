@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/kl.xml
+ * ICU <specials> source: <path>/common/main/kl.xml
  */
 kl{
     Currencies{
@@ -26,5 +26,5 @@ kl{
             other{"euro"}
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
 }

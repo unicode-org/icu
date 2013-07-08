@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/ja.xml
+ * ICU <specials> source: <path>/common/main/ja.xml
  */
 ja{
     Keys{
@@ -892,7 +892,7 @@ ja{
         VALLADER{"ヴァラダー"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
     codePatterns{
         language{"言語: {0}"}
         script{"文字: {0}"}
@@ -901,6 +901,6 @@ ja{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0}({1})"}
-        separator{"，"}
+        separator{"{0}，{1}"}
     }
 }

@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/cy.xml
+ * ICU <specials> source: <path>/common/main/cy.xml
  */
 cy{
     Keys{
@@ -278,7 +278,7 @@ cy{
             tibt{"Digidau Tibetaidd"}
         }
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.66"}
     codePatterns{
         language{"Iaith: {0}"}
         script{"Sgript: {0}"}
@@ -287,6 +287,6 @@ cy{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{", "}
+        separator{"{0}, {1}"}
     }
 }

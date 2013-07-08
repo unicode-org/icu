@@ -7,10 +7,10 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/root.xml
+ * ICU <specials> source: <path>/common/main/root.xml
  */
 root{
-    Version{"2.0.82.45"}
+    Version{"2.0.89.24"}
     zoneStrings{
         "Africa:Asmera"{
             ec{"Asmara"}
@@ -106,7 +106,6 @@ root{
             ec{"Chuuk"}
         }
         fallbackFormat{"{1} ({0})"}
-        fallbackRegionFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}

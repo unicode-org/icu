@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/pa_Guru.xml
+ * ICU <specials> source: <path>/common/main/pa_Guru.xml
  */
 pa_Guru{
     LocaleScript{

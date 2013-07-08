@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/te.xml
+ * ICU <specials> source: <path>/common/main/te.xml
  */
 te{
     Countries{
@@ -302,5 +302,5 @@ te{
         ZW{"జింబాబ్వే"}
         ZZ{"తెలియని లేదా చెల్లని ప్రాంతం"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.85.93"}
 }

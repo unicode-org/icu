@@ -12,7 +12,7 @@ es_PR{
         279,
         216,
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.38"}
     calendar{
         generic{
             DateTimePatterns{
@@ -33,9 +33,9 @@ es_PR{
             availableFormats{
                 MEd{"E, MM/dd"}
                 Md{"MM/dd"}
-                yM{"MM/y"}
-                yMEd{"E MM/dd/y"}
-                yMd{"MM/dd/y"}
+                yyyyM{"MM/y G"}
+                yyyyMEd{"E MM/dd/y G"}
+                yyyyMd{"MM/dd/y G"}
             }
         }
         gregorian{

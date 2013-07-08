@@ -17,7 +17,7 @@ en_IN{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.86.27"}
     calendar{
         generic{
             DateTimePatterns{
@@ -28,7 +28,7 @@ en_IN{
                 "EEEE d MMMM y G",
                 "d MMMM y G",
                 "dd-MMM-y G",
-                "dd/MM/yy GGGGG",
+                "dd/MM/y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -36,9 +36,9 @@ en_IN{
                 "{1} {0}",
             }
             availableFormats{
-                yMEd{"E d/M/y"}
-                yMMMEd{"E d MMM, y"}
-                yMd{"d/M/y"}
+                yyyyMEd{"E d/M/y G"}
+                yyyyMMMEd{"E d MMM, y G"}
+                yyyyMd{"d/M/y G"}
             }
         }
         gregorian{

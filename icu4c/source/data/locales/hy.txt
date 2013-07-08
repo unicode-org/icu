@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/hy.xml
+ * ICU <specials> source: <path>/common/main/hy.xml
  */
 hy{
     AuxExemplarCharacters{"[]"}
@@ -148,7 +148,7 @@ hy{
         native{"latn"}
         traditional{"armn"}
     }
-    Version{"2.0.86.71"}
+    Version{"2.0.88.97"}
     calendar{
         generic{
             DateTimePatterns{
@@ -159,7 +159,7 @@ hy{
                 "d MMMM, y թ. G, EEEE",
                 "dd MMMM, y թ. G",
                 "dd MMM, y թ. G",
-                "dd.MM.yy GGGGG",
+                "dd.MM.y GGGGG",
                 "{1}, {0}",
                 "{1}, {0}",
                 "{1}, {0}",
@@ -168,6 +168,10 @@ hy{
             }
             availableFormats{
                 Ed{"d, ccc"}
+                Gy{"y G"}
+                GyMMM{"G y թ. LLL"}
+                GyMMMEd{"d MMM, y թ. G, E"}
+                GyMMMd{"d MMM, y թ. G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -182,15 +186,16 @@ hy{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"y"}
-                yM{"MM.y"}
-                yMEd{"d.MM.y թ., E"}
-                yMMM{"y թ. LLL"}
-                yMMMEd{"d MMM, y թ., E"}
-                yMMMd{"d MMM, y թ."}
-                yMd{"dd.MM.y"}
-                yQQQ{"y թ, QQQ"}
-                yQQQQ{"y թ, QQQQ"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"MM.y G"}
+                yyyyMEd{"d.MM.y թ. G, E"}
+                yyyyMMM{"G y թ. LLL"}
+                yyyyMMMEd{"d MMM, y թ. G, E"}
+                yyyyMMMd{"d MMM, y թ. G"}
+                yyyyMd{"dd.MM.y G"}
+                yyyyQQQ{"G y թ, QQQ"}
+                yyyyQQQQ{"G y թ, QQQQ"}
             }
             intervalFormats{
                 H{
@@ -252,39 +257,39 @@ hy{
                     h{"h-h a v"}
                 }
                 y{
-                    y{"y-y"}
+                    y{"y-y G"}
                 }
                 yM{
-                    M{"MM.y - MM.y"}
-                    y{"MM.y - MM.y"}
+                    M{"MM.y - MM.y G"}
+                    y{"MM.y - MM.y G"}
                 }
                 yMEd{
-                    M{"ccc, dd.MM.y - ccc, dd.MM.y"}
-                    d{"ccc, dd.MM.y - ccc, dd.MM.y"}
-                    y{"ccc, dd.MM.y - ccc, dd.MM.y"}
+                    M{"ccc, dd.MM.y - ccc, dd.MM.y G"}
+                    d{"ccc, dd.MM.y - ccc, dd.MM.y G"}
+                    y{"ccc, dd.MM.y - ccc, dd.MM.y G"}
                 }
                 yMMM{
-                    M{"MMM-MMM y թ."}
-                    y{"MMM y - MMM y թ."}
+                    M{"MMM-MMM y թ. G"}
+                    y{"MMM y - MMM y թ. G"}
                 }
                 yMMMEd{
-                    M{"E, d MMM - E, d MMM, y թ."}
-                    d{"E, d MMM - E, d MMM, y թ."}
-                    y{"E, d MMM, y - E, d MMM, y թ."}
+                    M{"E, d MMM - E, d MMM, y թ. G"}
+                    d{"E, d MMM - E, d MMM, y թ. G"}
+                    y{"E, d MMM, y - E, d MMM, y թ. G"}
                 }
                 yMMMM{
-                    M{"y թ. MMM – MMM"}
-                    y{"MMM y - MMM y թ"}
+                    M{"G y թ. MMM – MMM"}
+                    y{"MMM y - MMM y թ G"}
                 }
                 yMMMd{
-                    M{"dd MMM - dd MMM, y թ."}
-                    d{"dd-dd MMM, y թ."}
-                    y{"dd MMM, y - dd MMM, y թ."}
+                    M{"dd MMM - dd MMM, y թ. G"}
+                    d{"dd-dd MMM, y թ. G"}
+                    y{"dd MMM, y - dd MMM, y թ. G"}
                 }
                 yMd{
-                    M{"dd.MM.y - dd.MM.y"}
-                    d{"dd.MM.y - dd.MM.y"}
-                    y{"dd.MM.y - dd.MM.y"}
+                    M{"dd.MM.y - dd.MM.y G"}
+                    d{"dd.MM.y - dd.MM.y G"}
+                    y{"dd.MM.y - dd.MM.y G"}
                 }
             }
         }
@@ -308,8 +313,15 @@ hy{
                 "{1}, {0}",
                 "{1}, {0}",
             }
+            appendItems{
+                Timezone{"{0}, {1}"}
+            }
             availableFormats{
                 Ed{"d, ccc"}
+                Gy{"y G"}
+                GyMMM{"G y թ. LLL"}
+                GyMMMEd{"d MMM, y թ. G, E"}
+                GyMMMd{"d MMM, y թ. G"}
                 H{"H"}
                 Hm{"H:mm"}
                 Hms{"H:mm:ss"}
@@ -654,119 +666,123 @@ hy{
         metric{"Մետրիկ"}
     }
     units{
-        day{
-            one{"{0} օր"}
-            other{"{0} օր"}
-        }
-        day-future{
-            one{"{0} օր անց"}
-            other{"{0} օր անց"}
-        }
-        day-past{
-            one{"{0} օր առաջ"}
-            other{"{0} օր առաջ"}
-        }
-        hour{
-            one{"{0} ժամ"}
-            other{"{0} ժամ"}
-        }
-        hour-future{
-            one{"{0} ժամ անց"}
-            other{"{0} ժամ անց"}
-        }
-        hour-past{
-            one{"{0} ժամ առաջ"}
-            other{"{0} ժամ առաջ"}
-        }
-        minute{
-            one{"{0} րոպե"}
-            other{"{0} րոպե"}
-        }
-        minute-future{
-            one{"{0} րոպե անց"}
-            other{"{0} րոպե անց"}
-        }
-        minute-past{
-            one{"{0} րոպե առաջ"}
-            other{"{0} րոպե առաջ"}
-        }
-        month{
-            one{"{0} ամիս"}
-            other{"{0} ամիս"}
-        }
-        month-future{
-            one{"{0} ամիս անց"}
-            other{"{0} ամիս անց"}
-        }
-        month-past{
-            one{"{0} ամիս առաջ"}
-            other{"{0} ամիս առաջ"}
-        }
-        second{
-            one{"{0} վայրկյան"}
-            other{"{0} վայրկյան"}
-        }
-        second-future{
-            one{"{0} վայրկյան անց"}
-            other{"{0} վայրկյան անց"}
-        }
-        second-past{
-            one{"{0} վայրկյան առաջ"}
-            other{"{0} վայրկյան առաջ"}
-        }
-        week{
-            one{"{0} շաբաթ"}
-            other{"{0} շաբաթ"}
-        }
-        week-future{
-            one{"{0} շաբաթ անց"}
-            other{"{0} շաբաթ անց"}
-        }
-        week-past{
-            one{"{0} շաբաթ առաջ"}
-            other{"{0} շաբաթ առաջ"}
-        }
-        year{
-            one{"{0} տարի"}
-            other{"{0} տարի"}
-        }
-        year-future{
-            one{"{0} տարի անց"}
-            other{"{0} տարի անց"}
-        }
-        year-past{
-            one{"{0} տարի առաջ"}
-            other{"{0} տարի առաջ"}
+        duration{
+            day{
+                one{"{0} օր"}
+                other{"{0} օր"}
+            }
+            day-future{
+                one{"{0} օր անց"}
+                other{"{0} օր անց"}
+            }
+            day-past{
+                one{"{0} օր առաջ"}
+                other{"{0} օր առաջ"}
+            }
+            hour{
+                one{"{0} ժամ"}
+                other{"{0} ժամ"}
+            }
+            hour-future{
+                one{"{0} ժամ անց"}
+                other{"{0} ժամ անց"}
+            }
+            hour-past{
+                one{"{0} ժամ առաջ"}
+                other{"{0} ժամ առաջ"}
+            }
+            minute{
+                one{"{0} րոպե"}
+                other{"{0} րոպե"}
+            }
+            minute-future{
+                one{"{0} րոպե անց"}
+                other{"{0} րոպե անց"}
+            }
+            minute-past{
+                one{"{0} րոպե առաջ"}
+                other{"{0} րոպե առաջ"}
+            }
+            month{
+                one{"{0} ամիս"}
+                other{"{0} ամիս"}
+            }
+            month-future{
+                one{"{0} ամիս անց"}
+                other{"{0} ամիս անց"}
+            }
+            month-past{
+                one{"{0} ամիս առաջ"}
+                other{"{0} ամիս առաջ"}
+            }
+            second{
+                one{"{0} վայրկյան"}
+                other{"{0} վայրկյան"}
+            }
+            second-future{
+                one{"{0} վայրկյան անց"}
+                other{"{0} վայրկյան անց"}
+            }
+            second-past{
+                one{"{0} վայրկյան առաջ"}
+                other{"{0} վայրկյան առաջ"}
+            }
+            week{
+                one{"{0} շաբաթ"}
+                other{"{0} շաբաթ"}
+            }
+            week-future{
+                one{"{0} շաբաթ անց"}
+                other{"{0} շաբաթ անց"}
+            }
+            week-past{
+                one{"{0} շաբաթ առաջ"}
+                other{"{0} շաբաթ առաջ"}
+            }
+            year{
+                one{"{0} տարի"}
+                other{"{0} տարի"}
+            }
+            year-future{
+                one{"{0} տարի անց"}
+                other{"{0} տարի անց"}
+            }
+            year-past{
+                one{"{0} տարի առաջ"}
+                other{"{0} տարի առաջ"}
+            }
         }
     }
     unitsShort{
-        day{
-            one{"{0} օր"}
-            other{"{0} օր"}
-        }
-        hour{
-            one{"{0} ժ."}
-            other{"{0} ժամ"}
-        }
-        minute{
-            one{"{0} ր."}
-            other{"{0} ր."}
-        }
-        month{
-            one{"{0} ամս"}
-            other{"{0} ամս"}
-        }
-        second{
-            one{"{0} վրկ"}
-            other{"{0} վրկ"}
-        }
-        week{
-            one{"{0} շբթ."}
-            other{"{0} շբթ."}
-        }
-        year{
-            one{"{0} տ."}
-            other{"{0} տ."}
+        duration{
+            day{
+                one{"{0} օր"}
+                other{"{0} օր"}
+            }
+            hour{
+                one{"{0} ժ."}
+                other{"{0} ժամ"}
+            }
+            minute{
+                one{"{0} ր."}
+                other{"{0} ր."}
+            }
+            month{
+                one{"{0} ամս"}
+                other{"{0} ամս"}
+            }
+            second{
+                one{"{0} վրկ"}
+                other{"{0} վրկ"}
+            }
+            week{
+                one{"{0} շբթ."}
+                other{"{0} շբթ."}
+            }
+            year{
+                one{"{0} տ."}
+                other{"{0} տ."}
+            }
         }
     }
 }

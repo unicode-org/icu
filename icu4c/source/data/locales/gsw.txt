@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/gsw.xml
+ * ICU <specials> source: <path>/common/main/gsw.xml
  */
 gsw{
     AuxExemplarCharacters{"[á à ă â å ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ø ō œ ú ù ŭ û ū ÿ]"}
@@ -37,7 +37,7 @@ gsw{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.93"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -519,33 +519,35 @@ gsw{
         metric{"metrisch"}
     }
     units{
-        day{
-            one{"{0} Taag"}
-            other{"{0} Tääg"}
-        }
-        hour{
-            one{"{0} Schtund"}
-            other{"{0} Schtunde"}
-        }
-        minute{
-            one{"{0} Minuute"}
-            other{"{0} Minuute"}
-        }
-        month{
-            one{"{0} Monet"}
-            other{"{0} Mönet"}
-        }
-        second{
-            one{"{0} Sekunde"}
-            other{"{0} Sekunde"}
-        }
-        week{
-            one{"{0} Wuche"}
-            other{"{0} Wuche"}
-        }
-        year{
-            one{"{0} Jahr"}
-            other{"{0} Jahr"}
+        duration{
+            day{
+                one{"{0} Taag"}
+                other{"{0} Tääg"}
+            }
+            hour{
+                one{"{0} Schtund"}
+                other{"{0} Schtunde"}
+            }
+            minute{
+                one{"{0} Minuute"}
+                other{"{0} Minuute"}
+            }
+            month{
+                one{"{0} Monet"}
+                other{"{0} Mönet"}
+            }
+            second{
+                one{"{0} Sekunde"}
+                other{"{0} Sekunde"}
+            }
+            week{
+                one{"{0} Wuche"}
+                other{"{0} Wuche"}
+            }
+            year{
+                one{"{0} Jahr"}
+                other{"{0} Jahr"}
+            }
         }
     }
 }

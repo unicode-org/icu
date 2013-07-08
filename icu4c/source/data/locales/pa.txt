@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/main/pa.xml
+ * ICU <specials> source: <path>/common/main/pa.xml
  */
 pa{
     AuxExemplarCharacters{"[\u200C\u200D ਃ \u0A02 \u0A01 {ਲ\u0A3C}]"}
@@ -31,7 +31,7 @@ pa{
         }
         native{"guru"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.85.78"}
     calendar{
         generic{
             DateTimePatterns{
@@ -53,8 +53,8 @@ pa{
                 HHmmss{"HH:mm:ss"}
                 Md{"d/M"}
                 mmss{"mm:ss"}
-                yMMM{"MMM y"}
-                yQQQ{"QQQ y"}
+                yMMM{"MMM y G"}
+                yQQQ{"QQQ y G"}
             }
         }
         gregorian{
