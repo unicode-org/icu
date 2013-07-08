@@ -361,7 +361,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "1\u670813\u65E5"},
         new String[] {"MMMMd", "1\u670813\u65E5"},
-        new String[] {"yQQQ", "1999/1Q"}, // now current data produces y/QQQ => 1999/1Q
+        new String[] {"yQQQ", "1999\u5E741Q"},
         new String[] {"hhmm", "\u5348\u5F8C11:58"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
@@ -378,7 +378,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"Md", "1/13"},
         new String[] {"MMMd", "1\u670813\u65E5"},
         new String[] {"MMMMd", "1\u670813\u65E5"},
-        new String[] {"yQQQ", "\u5E73\u621011/1Q"},
+        new String[] {"yQQQ", "\u5E73\u6210 11 1Q"}, // (probably a CLDR error)
         new String[] {"hhmm", "\u5348\u5F8C11:58"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},

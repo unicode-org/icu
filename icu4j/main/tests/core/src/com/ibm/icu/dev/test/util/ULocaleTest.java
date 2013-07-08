@@ -1045,13 +1045,13 @@ public class ULocaleTest extends TestFmwk {
             final TestContextItem[] items = {
                 new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "en",    "engelsk" ),
                 new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "en",    "Engelsk" ),
-                new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en",    "engelsk" ),
+                new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en",    "Engelsk" ),
                 new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "en_US", "engelsk (USA)" ),
                 new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "en_US", "Engelsk (USA)" ),
-                new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en_US", "engelsk (USA)" ),
+                new TestContextItem( "da", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en_US", "Engelsk (USA)" ),
                 new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "en_US", "amerikansk engelsk" ),
                 new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "en_US", "Amerikansk engelsk" ),
-                new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en_US", "amerikansk engelsk" ),
+                new TestContextItem( "da", DisplayContext.DIALECT_NAMES,  DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en_US", "Amerikansk engelsk" ),
                 new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE,    "en",    "ingl\u00E9s" ),
                 new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, "en",    "Ingl\u00E9s" ),
                 new TestContextItem( "es", DisplayContext.STANDARD_NAMES, DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU,       "en",    "Ingl\u00E9s" ),
@@ -1324,7 +1324,7 @@ public class ULocaleTest extends TestFmwk {
         h[0].put("japanese", "Japanese Calendar");
         h[0].put("buddhist", "Buddhist Calendar");
         h[0].put("islamic", "Islamic Calendar");
-        h[0].put("islamic-civil", "Islamic-Civil Calendar" );
+        h[0].put("islamic-civil", "Islamic Calendar [tabular, civil epoch]" );
         h[0].put("hebrew", "Hebrew Calendar");
         h[0].put("chinese", "Chinese Calendar");
         h[0].put("gregorian", "Gregorian Calendar" );
@@ -3166,8 +3166,8 @@ public class ULocaleTest extends TestFmwk {
                 "zh_HK"
             }, {
                 "zh_Hani",
-                "zh_Hans_CN",
-                "zh"
+                "zh_Hani_CN",
+                "zh_Hani"
             }, {
                 "zh_Hant",
                 "zh_Hant_TW",

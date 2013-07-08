@@ -1737,6 +1737,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         "ethiopic-amete-alem",
         "iso8601",
         "dangi",
+        "islamic-umalqura",
+        "islamic-tbla",
+        "islamic-rgsa",
     };
 
     // must be in the order of calTypes above
@@ -1755,6 +1758,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
     private static final int CALTYPE_ETHIOPIC_AMETE_ALEM = 12;
     private static final int CALTYPE_ISO8601 = 13;
     private static final int CALTYPE_DANGI = 14;
+    private static final int CALTYPE_ISLAMIC_UMALQURA = 15;
+    private static final int CALTYPE_ISLAMIC_TBLA = 16;
+    private static final int CALTYPE_ISLAMIC_RGSA = 17;
     private static final int CALTYPE_UNKNOWN = -1;
 
     private static int getCalendarTypeForLocale(ULocale l) {
@@ -1908,6 +1914,10 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             cal.setFirstDayOfWeek(MONDAY);
             cal.setMinimalDaysInFirstWeek(4);
             break;
+        case CALTYPE_ISLAMIC_UMALQURA:
+        case CALTYPE_ISLAMIC_TBLA:
+        case CALTYPE_ISLAMIC_RGSA:
+            // Need to add handling for these, meanwhile fall through to default
         default:
             // we must not get here, because unknown type is mapped to
             // Gregorian at the beginning of this method.
