@@ -444,22 +444,22 @@ public class CollationServiceTest extends TestFmwk {
     
     public void TestGetKeywordValues(){
         final String[][] PREFERRED = {
-            {"und",             "standard", "search"},
-            {"en_US",           "standard", "search"},
-            {"en_029",          "standard", "search"},
-            {"de_DE",           "standard", "phonebook", "search"},
-            {"de_Latn_DE",      "standard", "phonebook", "search"},
-            {"zh",              "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "search", "standard"},
-            {"zh_Hans",         "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "search", "standard"},
-            {"zh_CN",           "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "search", "standard"},
-            {"zh_Hant",         "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "search", "standard"},
-            {"zh_TW",           "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "search", "standard"},
-            {"zh__PINYIN",      "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "search", "standard"},
-            {"es_ES",           "standard", "search", "traditional"},
-            {"es__TRADITIONAL", "traditional", "search", "standard"},
-            {"und@collation=phonebook",     "standard", "search"},
-            {"de_DE@collation=big5han",     "standard", "phonebook", "search"},
-            {"zzz@collation=xxx",           "standard", "search"},
+            {"und",             "standard", "eor", "search"},
+            {"en_US",           "standard", "eor", "search"},
+            {"en_029",          "standard", "eor", "search"},
+            {"de_DE",           "standard", "phonebook", "search", "eor"},
+            {"de_Latn_DE",      "standard", "phonebook", "search", "eor"},
+            {"zh",              "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard"},
+            {"zh_Hans",         "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard"},
+            {"zh_CN",           "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard"},
+            {"zh_Hant",         "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "eor", "search", "standard"},
+            {"zh_TW",           "stroke", "big5han", "gb2312han", "pinyin", "zhuyin", "eor", "search", "standard"},
+            {"zh__PINYIN",      "pinyin", "big5han", "gb2312han", "stroke", "zhuyin", "eor", "search", "standard"},
+            {"es_ES",           "standard", "search", "traditional", "eor"},
+            {"es__TRADITIONAL", "traditional", "search", "standard", "eor"},
+            {"und@collation=phonebook",     "standard", "eor", "search"},
+            {"de_DE@collation=big5han",     "standard", "phonebook", "search", "eor"},
+            {"zzz@collation=xxx",           "standard", "eor", "search"},
         };
 
         for (int i = 0; i < PREFERRED.length; i++) {

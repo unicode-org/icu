@@ -130,7 +130,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "en", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "dMMMM", "October 10 \\u2013 November 10", 
             
-            "en", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "MMMMy", "October\\u2013November 2007", 
+            "en", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "MMMMy", "October \\u2013 November 2007", 
             
             "en", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "EEEEdMMMM", "Wednesday, October 10 \\u2013 Saturday, November 10", 
             
@@ -416,7 +416,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "zh", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "EEEEdMMMM", "10\\u670810\\u65e5\\u661f\\u671f\\u4e09\\u81f311\\u670810\\u65e5\\u661f\\u671f\\u516d", 
             
-            "zh", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hmv", "2007/10/10 \\u4E0A\\u534810:10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4 \\u2013 2007/11/10 \\u4E0A\\u534810:10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4", 
+            "zh", "2007 10 10 10:10:10", "2007 11 10 10:10:10", "hmv", "2007/10/10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4\\u4E0A\\u534810:10 \\u2013 2007/11/10 \\u6D1B\\u6749\\u77F6\\u65F6\\u95F4\\u4E0A\\u534810:10", 
             
             "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "EEEEdMMMMy", "2007\\u5e7411\\u670810\\u65e5\\u661f\\u671f\\u516d\\u81f320\\u65e5\\u661f\\u671f\\u4e8c", 
             
@@ -449,7 +449,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "MMMM", "\\u5341\\u4E00\\u6708", // (fixed expected result per ticket 6872<-6626 and others)
             
-            "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "hmz", "2007/11/10 \\u4e0a\\u534810:10 GMT-8 \\u2013 2007/11/20 \\u4e0a\\u534810:10 GMT-8", 
+            "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "hmz", "2007/11/10 GMT-8\\u4e0a\\u534810:10 \\u2013 2007/11/20 GMT-8\\u4e0a\\u534810:10", 
             
             "zh", "2007 11 10 10:10:10", "2007 11 20 10:10:10", "h", "2007/11/10 \\u4e0a\\u534810\\u65f6 \\u2013 2007/11/20 \\u4e0a\\u534810\\u65f6", 
             
@@ -475,7 +475,7 @@ public class DateIntervalFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             
             "zh", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "h", "\\u4e0a\\u534810\\u65f6", 
             
-            "zh", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hz", "\\u4e0a\\u534810\\u65f6 GMT-8", 
+            "zh", "2007 01 10 10:00:10", "2007 01 10 10:20:10", "hz", "GMT-8\\u4e0a\\u534810\\u65f6", 
             
             "zh", "2007 01 10 10:10:10", "2007 01 10 10:10:20", "EEEEdMMMMy", "2007\\u5e741\\u670810\\u65e5\\u661f\\u671f\\u4e09", // (fixed expected result per ticket 6872<-6626)
             

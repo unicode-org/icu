@@ -500,7 +500,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             // format result using PLURALCURRENCYSTYLE,
             {"en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollar"},
             {"en_US", "1234.56", "USD", "$1,234.56", "USD1,234.56", "1,234.56 US dollars"},
-            {"en_US", "-1234.56", "USD", "($1,234.56)", "(USD1,234.56)", "-1,234.56 US dollars"},
+            {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD1,234.56", "-1,234.56 US dollars"},
             {"zh_CN", "1", "USD", "US$1.00", "USD1.00", "1.00\u7F8E\u5143"},
             {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD1,234.56", "1,234.56\u7F8E\u5143"},
             {"zh_CN", "1", "CNY", "\uFFE51.00", "CNY1.00", "1.00\u4EBA\u6C11\u5E01"},
