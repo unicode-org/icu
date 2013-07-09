@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import com.ibm.icu.text.CompactDecimalDataCache.Data;
 import com.ibm.icu.text.PluralRules.NumberInfo;

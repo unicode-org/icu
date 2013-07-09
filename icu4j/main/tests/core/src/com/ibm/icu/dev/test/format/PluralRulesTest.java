@@ -32,8 +32,8 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.KeywordStatus;
-import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.text.PluralRules.NumberInfo;
+import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 

@@ -20,7 +20,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -33,7 +32,6 @@ import java.util.TreeSet;
 import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.PluralRulesLoader;
 import com.ibm.icu.impl.Utility;
-import com.ibm.icu.text.PluralRules.NumberInfo;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 

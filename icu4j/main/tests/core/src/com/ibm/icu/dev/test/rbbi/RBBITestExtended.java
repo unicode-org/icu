@@ -16,7 +16,6 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.text.BreakIterator;
-import com.ibm.icu.text.RuleBasedBreakIterator;
 import com.ibm.icu.text.UTF16;
 import com.ibm.icu.util.ULocale;
 
