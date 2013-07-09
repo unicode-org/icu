@@ -1118,6 +1118,7 @@ main(int argc, char* argv[])
     UBool name = FALSE;
     UBool leaks = FALSE;
     UBool utf8 = FALSE;
+    const char *summary_file = NULL;
     UBool warnOnMissingData = FALSE;
     UBool defaultDataFound = FALSE;
     int32_t threadCount = 1;
@@ -1157,6 +1158,8 @@ main(int argc, char* argv[])
             else if (strcmp("notime", str) == 0 ||
                      strcmp("T", str) == 0)
                 no_time = TRUE;
+            else if (strncmp("E", str, 1) == 0)
+                summary_file = str+1;
             else if (strcmp("x", str)==0) {
               if(++i>=argc) {
                 printf("* Error: '-x' option requires an argument. usage: '-x outfile.xml'.\n");
@@ -1432,6 +1435,16 @@ main(int argc, char* argv[])
     }else{
         fprintf(stdout, "Errors in total: %ld.\n", (long)major.getErrors());
         major.printErrors();
+
+        if(summary_file != NULL) {
+          FILE *summf = fopen(summary_file, "w");
+          if( summf != NULL) {
+            char buf[10000];
+            int32_t length = errorList.extract(0, errorList.length(), buf, sizeof(buf));
+            fwrite(buf, sizeof(*buf), length, (FILE*)summf);
+            fclose(summf);
+          }
+        }
 
 
         if (major.getDataErrors() != 0) {
