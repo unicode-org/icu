@@ -450,17 +450,21 @@ public class PluralRules implements Serializable {
     }
 
     /**
-     * @deprecated This API is ICU internal only.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static class NumberInfo implements Comparable<NumberInfo> {
-        public final double source;
-        public final int visibleFractionDigitCount;
-        public final long fractionalDigits;
-        public final long intValue;
-        public final boolean hasIntegerValue;
-        public final boolean isNegative;
+        private final double source;
+        private final int visibleFractionDigitCount;
+        private final long fractionalDigits;
+        private final long intValue;
+        private final boolean hasIntegerValue;
+        private final boolean isNegative;
 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public NumberInfo(double n, int v, long f) {
             isNegative = n < 0;
             source = isNegative ? -n : n;
@@ -483,8 +487,12 @@ public class PluralRules implements Serializable {
             //            }
         }
 
-        // Ugly, but for samples we don't care.
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public NumberInfo(double n, int v) {
+            // Ugly, but for samples we don't care.
             this(n,v,getFractionalDigits(n, v));
         }
 
@@ -498,22 +506,38 @@ public class PluralRules implements Serializable {
             }
         }
 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public NumberInfo(double n) {
             this(n, decimals(n));
         }
 
-        // Ugly, but for samples we don't care.
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public static int decimals(double n) {
+            // Ugly, but for samples we don't care.
             String temp = String.valueOf(n);
             return temp.endsWith(".0") ? 0 : temp.length() - temp.indexOf('.') - 1;
         }
 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public NumberInfo(long n) {
             this(n,0);
         }
 
-        // Ugly, but for samples we don't care.
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public NumberInfo (String n) {
+            // Ugly, but for samples we don't care.
             this(Double.parseDouble(n), getVisibleFractionCount(n));
         }
 
@@ -527,6 +551,10 @@ public class PluralRules implements Serializable {
             }
         }
 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public double get(Operand operand) {
             switch(operand) {
             default: return source;
@@ -536,12 +564,18 @@ public class PluralRules implements Serializable {
             }
         }
 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public static Operand getOperand(String t) {
             return Operand.valueOf(t);
         }
 
         /**
          * We're not going to care about NaN.
+         * @internal
+         * @deprecated This API is ICU internal only.
          */
         public int compareTo(NumberInfo other) {
             if (intValue != other.intValue) {
@@ -559,6 +593,11 @@ public class PluralRules implements Serializable {
             }
             return 0;
         }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         @Override
         public boolean equals(Object arg0) {
             if (arg0 == null) {
@@ -573,16 +612,30 @@ public class PluralRules implements Serializable {
             NumberInfo other = (NumberInfo)arg0;
             return source == other.source && visibleFractionDigitCount == other.visibleFractionDigitCount && fractionalDigits == other.fractionalDigits;
         }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         @Override
         public int hashCode() {
             // TODO Auto-generated method stub
             return (int)(fractionalDigits + 37 * (visibleFractionDigitCount + (int)(37 * source)));
         }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         @Override
         public String toString() {
             return String.format("%." + visibleFractionDigitCount + "f", source);
         }
 
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public boolean hasIntegerValue() {
             return hasIntegerValue;
         }
@@ -1304,11 +1357,6 @@ public class PluralRules implements Serializable {
         return toAddTo;
     }
 
-    /**
-     * @param ints
-     * @param base
-     * @return
-     */
     private Integer getDifferentCategory(List<Integer> ints, String keyword) {
         for (int i = ints.size() - 1; i >= 0; --i) {
             Integer other = ints.get(i);

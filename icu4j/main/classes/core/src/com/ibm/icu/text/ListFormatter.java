@@ -150,6 +150,8 @@ final public class ListFormatter {
      * Returns the pattern to use for a particular item count.
      * @param count the item count.
      * @return the pattern with {0}, {1}, {2}, etc.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String createPatternForNumItems(int count) {
         ArrayList<String> list = new ArrayList<String>();
