@@ -1287,10 +1287,22 @@ public class ULocaleTest extends TestFmwk {
         target = "German (Currency: XYZ)";
         assertEquals("currency", target, name);
         
+        name = dn.localeDisplayName("de@collation=phonebook;currency=XYZ");
+        target = "German (Phonebook Sort Order, Currency: XYZ)";
+        assertEquals("currency", target, name);
+        
+        name = dn.localeDisplayName("de_Latn_DE");
+        target = "German (Latin, Germany)";
+        assertEquals("currency", target, name);
+        
         name = tdn.localeDisplayName("de@currency=XYZ");
         target = "德文（貨幣: XYZ）";  // \u5FB7\u6587\uFF08\u8CA8\u5E63: XYZ\uFF09
         assertEquals("currency", target, name);
         
+        name = tdn.localeDisplayName("de@collation=phonebook;currency=XYZ");
+        target = "德文（電話簿排序，貨幣: XYZ）"; // \u5FB7\u6587\uFF08\u96FB\u8A71\u7C3F\u6392\u5E8F\uFF09，\u5FB7\u6587\uFF08\u8CA8\u5E63: XYZ\uFF09
+        assertEquals("collation", target, name);
+
         name = dn.localeDisplayName("de@foo=bar");
         target = "German (foo=bar)";
         assertEquals("foo", target, name);
