@@ -54,7 +54,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     private static final long serialVersionUID = 4716293295276629682L;
 
-    private static final int POSITIVE_PREFIX = 0, POSITIVE_SUFFIX = 1, AFFIX_SIZE = 2;
+//    private static final int POSITIVE_PREFIX = 0, POSITIVE_SUFFIX = 1, AFFIX_SIZE = 2;
     private static final CompactDecimalDataCache cache = new CompactDecimalDataCache();
 
     private final Map<String, DecimalFormat.Unit[]> units;
@@ -149,12 +149,14 @@ public class CompactDecimalFormat extends DecimalFormat {
      *            overridden by default.
      * @param formatSymbols
      *            Decimal format symbols, typically from a locale.
-     * @param prefix
-     *            An array of prefix values, one for each power of 10 from 0 to 14
-     * @param suffix
-     *            An array of prefix values, one for each power of 10 from 0 to 14
+     * @param style
+     *            compact style.
      * @param divisor
      *            An array of prefix values, one for each power of 10 from 0 to 14
+     * @param pluralAffixes
+     *            A map from plural categories to affixes.
+     * @param currencyAffixes
+     *            A map from plural categories to currency affixes. 
      * @param debugCreationErrors
      *            A collection of strings for debugging. If null on input, then any errors found will be added to that
      *            collection instead of throwing exceptions.
@@ -477,10 +479,10 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * Return the NumberInfo for the number, given this formatter's settings.
-     * @param number
-     * @return
+     * @param number The number.
+     * @return The NumberInfo for the given number.
      * @internal
-     * @deprecated
+     * @deprecated This API is ICU internal only.
      */
     public NumberInfo getNumberInfo(double number) {
         if (getMaximumFractionDigits() == 0 && !areSignificantDigitsUsed()) {

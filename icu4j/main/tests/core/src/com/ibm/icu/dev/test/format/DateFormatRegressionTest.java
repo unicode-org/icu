@@ -1204,15 +1204,15 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
     
     public void TestT10110() {
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat("Gy年M月d日E", new Locale("zh_Hans"));       
-            Object parsed = formatter.parseObject("610000");
+            SimpleDateFormat formatter = new SimpleDateFormat("Gy年M月d日E", new Locale("zh_Hans"));
+            /* Object parsed = */ formatter.parseObject("610000");
         }
         catch(ParseException pe) {
             return;
         }
         catch(Throwable t) {
-                errln("ParseException not thrown for bad pattern! exception was: " + t.getLocalizedMessage());
-                return;
+            errln("ParseException not thrown for bad pattern! exception was: " + t.getLocalizedMessage());
+            return;
         }
         errln("No exception thrown at all for bad pattern!");
     }

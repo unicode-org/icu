@@ -190,7 +190,6 @@ public class PluralRulesTest extends TestFmwk {
                 for (NumberInfo sample : samples) {
                     collisionTest.clear();
                     for (Entry<String, PluralRules> entry: keywordToRule.entrySet()) {
-                        String keyword = entry.getKey();
                         PluralRules rule = entry.getValue();
                         String foundKeyword = rule.select(sample);
                         if (foundKeyword.equals("other")) {
@@ -696,8 +695,9 @@ public class PluralRulesTest extends TestFmwk {
             logln(locale + "\tsize:\t" + size.value);
             max = Math.max(max, size.value);
             if (!assertEquals(locale + "\tPlural rules before and after serialization", item, item2)) {
+                // for debugging
                 PluralRules item3 = serializeAndDeserialize(item, size); 
-                item.equals(item2);
+                item.equals(item3);
             }
         }
         logln("max \tsize:\t" + max);

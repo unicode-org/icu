@@ -220,7 +220,7 @@ public class PluralRules implements Serializable {
 
         /**
          * Utility for getting CARDINAL rules.
-         * @param locale
+         * @param locale the locale
          * @return plural rules.
          * @deprecated This API is ICU internal only.
          * @internal
@@ -1320,6 +1320,7 @@ public class PluralRules implements Serializable {
         return 37;
     }
 
+    @SuppressWarnings("unused")
     private boolean addConditional(Set<NumberInfo> toAddTo, Set<NumberInfo> others, double trial) {
         boolean added;
         NumberInfo toAdd = new NumberInfo(trial);
@@ -1444,10 +1445,10 @@ public class PluralRules implements Serializable {
 
     
     /**
-     * Given a number, returns the keyword of the first rule that applies to
+     * Given a number information, returns the keyword of the first rule that applies to
      * the number.
      *
-     * @param number The number for which the rule has to be determined.
+     * @param sample The number information for which the rule has to be determined.
      * @return The keyword of the selected rule.
      * @internal
      * @deprecated This API is ICU internal only.
@@ -1970,14 +1971,12 @@ public class PluralRules implements Serializable {
                     throws IOException {
         throw new NotSerializableException();
     }
+
     private void readObject(ObjectInputStream in
             ) throws IOException, ClassNotFoundException {
         throw new NotSerializableException();
     }
-    private void readObjectNoData( 
-            ) throws ObjectStreamException {
-        throw new NotSerializableException();
-    }
+
     private Object writeReplace() throws ObjectStreamException {
         return new PluralRulesSerialProxy(toString());
     }

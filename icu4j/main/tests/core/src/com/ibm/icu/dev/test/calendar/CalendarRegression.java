@@ -2342,23 +2342,22 @@ public class CalendarRegression extends com.ibm.icu.dev.test.TestFmwk {
     public void TestT9968() {
         SimpleDateFormat sdf0 = new SimpleDateFormat("-MMMM");
         ParsePosition pos0 = new ParsePosition(0);
-        Date d0 = sdf0.parse("-September", pos0);
-        logln("sdf0: "+pos0.getErrorIndex() + "/" + pos0.getIndex());    
+        /* Date d0 = */ sdf0.parse("-September", pos0);
+        logln("sdf0: " + pos0.getErrorIndex() + "/" + pos0.getIndex());
         assertTrue("Fail: failed a good test", pos0.getErrorIndex() == -1);
 
         SimpleDateFormat sdf1 = new SimpleDateFormat("-MMMM");
         ParsePosition pos1 = new ParsePosition(0);
-        Date d1 = sdf1.parse("-????", pos1);
-        logln("sdf1: "+pos1.getErrorIndex() + "/" + pos1.getIndex());    
+        /* Date d1 = */ sdf1.parse("-????", pos1);
+        logln("sdf1: " + pos1.getErrorIndex() + "/" + pos1.getIndex());
         assertTrue("Fail: failed to detect bad parse", pos1.getErrorIndex() == 1);
 
         SimpleDateFormat sdf2 = new SimpleDateFormat("MMMM");
         ParsePosition pos2 = new ParsePosition(0);
-        Date d2 = sdf2.parse("????", pos2);
-        logln("sdf2: "+pos2.getErrorIndex() + "/" + pos2.getIndex());    
+        /* Date d2 = */ sdf2.parse("????", pos2);
+        logln("sdf2: " + pos2.getErrorIndex() + "/" + pos2.getIndex());
         assertTrue("Fail: failed to detect bad parse", pos2.getErrorIndex() == 0);
-        
-    }    
+    }
 }
 
 //eof

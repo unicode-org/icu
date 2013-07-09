@@ -711,11 +711,12 @@ public class Currency extends MeasureUnit implements Serializable {
             this.currencyString = currencyString;
         }
 
-        private String getISOCode() {
+        public String getISOCode() {
             return isoCode;
         }
 
-        private String getCurrencyString() {
+        @SuppressWarnings("unused")
+        public String getCurrencyString() {
             return currencyString;
         }
     }
