@@ -604,6 +604,7 @@ icu4c/source/test/testmap/testmap
 icu4c/source/test/testmap/testmap.plg
 icu4c/source/test/thaitest/Makefile
 icu4c/source/test/threadtest/Makefile
+icu4c/source/test/tmp
 icu4c/source/tools/Makefile
 icu4c/source/tools/ctestfw/*.ao
 icu4c/source/tools/ctestfw/*.d

@@ -1,5 +1,5 @@
 ## Makefile.in for ICU tests
-## Copyright (c) 1999-2011, International Business Machines Corporation and
+## Copyright (c) 1999-2013, International Business Machines Corporation and
 ## others. All Rights Reserved.
 
 ## Source directory information
@@ -14,6 +14,10 @@ include $(top_builddir)/icudefs.mk
 subdir = test
 
 @ICUIO_TRUE@IOTEST = iotest
+
+# status dir
+STATUS_TMP = tmp
+STATUS_FULL = $(shell pwd)/$(STATUS_TMP)
 
 ## Files to remove for 'make clean'
 CLEANFILES = *~
@@ -42,6 +46,7 @@ clean: clean-recursive clean-local
 distclean : distclean-recursive distclean-local
 	$(RMV) hdrtst/Makefile
 	$(RMV) perf/convperf/Makefile
+	$(RMV) $(STATUS_TMP)
 
 dist: dist-recursive dist-local
 check: everything check-recursive check-local
@@ -70,17 +75,29 @@ all-recursive install-recursive clean-recursive distclean-recursive dist-recursi
 	fi
 
 xcheck-recursive check-recursive check-exhaustive-recursive:
+	@$(MKINSTALLDIRS) $(STATUS_TMP)
+	@mystatus=$(STATUS_FULL)/status.$$$$.deleteme ; \
+	$(RMV) "$$mystatus".* ; \
 	@goods=; \
 	bads=; \
 	target=`echo $@ | sed s/-recursive//`; \
 	list='$(SUBDIRS)'; for subdir in $$list; do \
 	  echo "$(MAKE)[$(MAKELEVEL)]: Making \`$$target' in \`$$subdir'"; \
 	  local_target="$$target"; \
-	  if (cd $$subdir && $(MAKE) $$local_target); then \
+	  if (cd $$subdir && $(MAKE) $$local_target TEST_STATUS_FILE="$$mystatus.$$subdir" ); then \
 	    goods="$$goods $$subdir"; \
           else \
             bads="$$bads $$subdir"; \
           fi; \
+	done; \
+	for subdir in $$list; do \
+	  if [ -f "$$mystatus.$$subdir" ]; then \
+	    echo "-------------" ; \
+	    echo "| SUBTEST SUMMARY: $$subdir" ; \
+	    cat "$$mystatus.$$subdir" ; \
+	    echo "| END SUMMARY:     $$subdir" ; \
+	    $(RMV) "$$mystatus.$$subdir" ; \
+	  fi; \
 	done; \
 	echo "---------------"; \
 	echo "ALL TESTS SUMMARY:"; \

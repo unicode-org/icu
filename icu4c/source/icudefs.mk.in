@@ -306,5 +306,10 @@ else
 cross_buildroot = $(top_builddir)
 endif
 
+# for tests
+ifneq ($(TEST_STATUS_FILE),)
+TEST_OUTPUT_OPTS="-E$(TEST_STATUS_FILE)"
+endif
+
 # optional include at top
 -include $(top_builddir)/icudefs.local
