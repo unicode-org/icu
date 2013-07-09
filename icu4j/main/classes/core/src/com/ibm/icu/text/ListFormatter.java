@@ -161,8 +161,8 @@ final public class ListFormatter {
     
     /**
      * Returns the locale of this object.
-     * @deprecated
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public ULocale getLocale() {
         return locale;
