@@ -1,10 +1,4 @@
 /*
-TODO
-* copy C++ apidoc concerning error codes to appropriate wrapper functions
-*/
-
-
-/*
 ********************************************************************************
 * Copyright (C) 2013, International Business Machines Corporation and others.
 * All Rights Reserved.
@@ -15,7 +9,7 @@ TODO
 * Modification History:
 *
 *   Date        Name        Description
-*   2013 Jul 7  srl         New
+*   2013 Jun 7  srl         New
 ********************************************************************************
 */
 
@@ -101,27 +95,25 @@ U_NAMESPACE_END
 
 #endif
 
-#ifndef U_HIDE_INTERNAL_API
 /**
  * Return the type of this object
  * @param fmt the UFormattable object
  * @status status code - U_ILLEGAL_ARGUMENT_ERROR is returned if the UFormattable contains data not supported by
  * the API
  * @return the value as a UFormattableType
- * @internal
+ * @draft ICU 52
  */
-U_INTERNAL UFormattableType U_EXPORT2
+U_DRAFT UFormattableType U_EXPORT2
 ufmt_getType(UFormattable* fmt, UErrorCode *status);
 
 /**
- * Return the type of this object
+ * Return whether the object is numeric.
  * @param fmt the UFormattable object
  * @return true if the object is a double, long, or int64 value.
- * @internal
+ * @draft ICU 52
  */
-U_INTERNAL UBool U_EXPORT2
+U_DRAFT UBool U_EXPORT2
 ufmt_isNumeric(UFormattable* fmt);
-#endif
 
 /**
  * Get the value as a date, converting if need be.

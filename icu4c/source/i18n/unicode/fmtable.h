@@ -608,6 +608,15 @@ public:
     static inline Formattable *fromUFormattable(UFormattable *fmt);
 
     /**
+     * Convert the UFormattable to a Formattable.  Internally, this is a reinterpret_cast.
+     * @param fmt a valid UFormattable
+     * @return the UFormattable as a Formattable object pointer.  This is an alias to the original
+     * UFormattable, and so is only valid while the original argument remains in scope.
+     * @draft ICU 52
+     */
+    static inline const Formattable *fromUFormattable(const UFormattable *fmt);
+
+    /**
      * Convert this object pointer to a UFormattable.
      * @return this object as a UFormattable pointer.   This is an alias to the original UFormattable,
      * and so is only valid while the original argument remains in scope.
@@ -721,6 +730,10 @@ inline UFormattable* Formattable::toUFormattable() {
 
 inline Formattable* Formattable::fromUFormattable(UFormattable *fmt) {
   return reinterpret_cast<Formattable *>(fmt);
+}
+
+inline const Formattable* Formattable::fromUFormattable(const UFormattable *fmt) {
+  return reinterpret_cast<const Formattable *>(fmt);
 }
 
 
