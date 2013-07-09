@@ -356,10 +356,6 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * Manufacture the unit list from arrays
-     * @param pluralCategoryToPower10ToAffix
-     * @param divisor
-     * @param debugCreationErrors
-     * @return
      */
     private Map<String, DecimalFormat.Unit[]> otherPluralVariant(Map<String, String[][]> pluralCategoryToPower10ToAffix, 
             long[] divisor, Collection<String> debugCreationErrors) {

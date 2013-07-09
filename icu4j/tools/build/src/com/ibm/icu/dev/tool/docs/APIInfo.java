@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2005-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -297,10 +297,10 @@ class APIInfo {
      * APIInfo.  Throws IOException if EOF is encountered before the
      * token is complete (i.e. before the separator character is
      * encountered) or if the token exceeds the maximum length of
-     * 255 chars.
+     * 511 chars.
      */
     public static String readToken(BufferedReader r) throws IOException {
-        char[] buf = new char[256];
+        char[] buf = new char[512];
         int i = 0;
         for (; i < buf.length; ++i) {
             int c = r.read();
