@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  * File TMSGFMT.CPP
@@ -541,8 +541,8 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
     UErrorCode err = U_ZERO_ERROR;
     UnicodeString t1("{0, plural, one{C''est # fichier} other{Ce sont # fichiers}} dans la liste."); 
     UnicodeString t2("{argument, plural, one{C''est # fichier} other {Ce sont # fichiers}} dans la liste.");
-    UnicodeString t3("There {0, plural, one{is # zavod}few{are {0, number,###.0} zavoda} other{are # zavodov}} in the directory.");
-    UnicodeString t4("There {argument, plural, one{is # zavod}few{are {argument, number,###.0} zavoda} other{are #zavodov}} in the directory.");
+    UnicodeString t3("There {0, plural, one{is # zavod}few{are # zavoda} other{are {0, number,###.0} zavodov}} in the directory.");
+    UnicodeString t4("There {argument, plural, one{is # zavod}few{are # zavoda} other{are {argument, number,###.0} zavodov}} in the directory.");
     UnicodeString t5("{0, plural, one {{0, number,C''est #,##0.0# fichier}} other {Ce sont # fichiers}} dans la liste.");
     MessageFormat* mfNum = new MessageFormat(t1, Locale("fr"), err);
     if (U_FAILURE(err)) {
@@ -596,7 +596,7 @@ void TestMessageFormat::testMsgFormatPlural(/* char* par */)
         errln("TestMessageFormat::testMsgFormatPlural #2");
         logln(UnicodeString("The results of argumentName and argumentIndex are not the same."));
     }
-    if ( numResult1 != UnicodeString("There are 4,0 zavoda in the directory.")) {
+    if ( numResult1 != UnicodeString("There are 4,0 zavodov in the directory.")) {
         errln("TestMessageFormat::testMsgFormatPlural #2");
         logln(UnicodeString("The results of argumentName and argumentIndex are not the same."));
     }
