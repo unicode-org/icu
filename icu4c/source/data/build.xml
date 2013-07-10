@@ -122,7 +122,6 @@
                     <arg name="--specialsdir"     value="${env.ICU4C_DIR}/source/data/xml/main"/>
                     <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="--type" value="locales"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
 		<remapper>
 		  <remap sourcePath="/Keys" targetDir="lang" />
@@ -273,13 +272,13 @@
         </cldr-build>
     </target>
     <target name="rbnf" depends="init,setup" description="builds rbnf files in ICU text format">
-        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" srcFile=".*xml" destFile=".*txt">
+        <cldr-build toolName="org.unicode.cldr.icu.NewLdml2IcuConverter" srcFile=".*xml" destFile=".*txt">
             <run>
                 <args>
                     <arg name="--sourcedir"       value="${env.CLDR_DIR}/common/rbnf" />
                     <arg name="--destdir"         value="${env.ICU4C_DIR}/source/data/rbnf"/>
                     <arg name="--specialsdir"     value="${env.ICU4C_DIR}/source/data/xml/rbnf"/>
-                    <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="--type" value="rbnf" />
                 </args>
                 <!-- http://ant.apache.org/faq.html#xml-entity-include -->
                 &icu-config;
@@ -309,7 +308,6 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="supplementalData"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
 		<remapper>
 		  <remap sourcePath="/CurrencyMap" targetDir="curr" />
@@ -326,7 +324,6 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="metadata"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
             </run>
         </cldr-build>
@@ -339,7 +336,6 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="metaZones"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
             </run>
         </cldr-build>
@@ -352,7 +348,6 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="windowsZones"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
             </run>
         </cldr-build>
@@ -365,7 +360,6 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="likelySubtags"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
             </run>
         </cldr-build>
@@ -378,7 +372,6 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="plurals"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
             </run>
         </cldr-build>
@@ -391,7 +384,6 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="numberingSystems"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
             </run>
         </cldr-build>
@@ -404,7 +396,6 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="genderList"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
             </run>
         </cldr-build>
@@ -417,7 +408,6 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="postalCodeData"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
             </run>
         </cldr-build>
@@ -430,18 +420,17 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/supplemental" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="dayPeriods"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
             </run>
         </cldr-build>
     </target>
     <target name="brkitr" depends="init,setup" description="builds break iterator files in ICU text format">
-        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" srcFile=".*xml" destFile=".*txt">
+        <cldr-build toolName="org.unicode.cldr.icu.NewLdml2IcuConverter" srcFile=".*xml" destFile=".*txt">
             <run>
                 <args>
                     <arg name="--sourcedir"       value="${env.ICU4C_DIR}/source/data/xml/brkitr"/>
                     <arg name="--destdir"         value="${env.ICU4C_DIR}/source/data/brkitr"/>
-                    <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="--type" value="brkitr" />
                 </args>
                 <!-- The entity include is not required for this target -->
                 <!-- http://ant.apache.org/faq.html#xml-entity-include
@@ -471,7 +460,6 @@
                     <arg name="-s" value="${env.CLDR_DIR}/common/bcp47" />
                     <arg name="-d" value="${env.ICU4C_DIR}/source/data/misc"/>
                     <arg name="-t" value="keyTypeData"/>
-                    <arg name="--cldrVersion" value="24.0"/>
                 </args>
             </run>
         </cldr-build>
