@@ -139,9 +139,9 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         public int parse(CharsetDetector det, byte spaceCh)
         {
             
-        	this.spaceChar = spaceCh;
+            this.spaceChar = spaceCh;
             
-        	parseCharacters(det);
+            parseCharacters(det);
             
             // TODO: Is this OK? The buffer could have ended in the middle of a word...
             addByte(spaceChar);
@@ -164,8 +164,8 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         
     static class NGramParser_IBM420 extends NGramParser
     {
-    	private byte alef = 0x00;
-    	
+        private byte alef = 0x00;
+        
         protected static byte[] unshapeMap = {
 /*                 -0           -1           -2           -3           -4           -5           -6           -7           -8           -9           -A           -B           -C           -D           -E           -F   */
 /* 0- */    (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, (byte) 0x40, 
@@ -187,30 +187,30 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         };
     
 
-    	public NGramParser_IBM420(int[] theNgramList, byte[] theByteMap)
+        public NGramParser_IBM420(int[] theNgramList, byte[] theByteMap)
         {
-    	   super(theNgramList, theByteMap);
+           super(theNgramList, theByteMap);
         }
-    	
-    	private byte isLamAlef(byte b) {
-         	if(b == 0xb2 || b == 0xb3){
-         		return 0x47;        		
-         	}else if(b == 0xb4 || b == 0xb5){
-         		return 0x49;
-         	}else if(b == 0xb8 || b == 0xb9){
-         		return 0x56;
-         	}else
-         		return 0x00;
+        
+        private byte isLamAlef(byte b) {
+             if(b == (byte)0xb2 || b == (byte)0xb3){
+                 return (byte)0x47;
+             }else if(b == (byte)0xb4 || b == (byte)0xb5){
+                 return (byte)0x49;
+             }else if(b == (byte)0xb8 || b == (byte)0xb9){
+                 return (byte)0x56;
+             }else
+                 return (byte)0x00;
          }
-    	
-    	/*
+        
+        /*
          * Arabic shaping needs to be done manually. Cannot call ArabicShaping class
          * because CharsetDetector is dealing with bytes not Unicode code points. We could
          * convert the bytes to Unicode code points but that would leave us dependent
          * on CharsetICU which we try to avoid. IBM420 converter amongst different versions
          * of JDK can produce different results and therefore is also avoided.
-         */    	
-    	 private int nextByte(CharsetDetector det)
+         */
+         private int nextByte(CharsetDetector det)
          {
              if (byteIndex >= det.fInputLen || det.fInputBytes[byteIndex] == 0) {
                  return -1;
@@ -218,19 +218,19 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
             int next;
              
             alef = isLamAlef(det.fInputBytes[byteIndex]);
-            if(alef != 0x00)
-            	next = 0xB1 & 0xFF;
+            if(alef != (byte)0x00)
+                next = 0xB1 & 0xFF;
             else
-            	next = unshapeMap[det.fInputBytes[byteIndex]& 0xFF] & 0xFF;
+                next = unshapeMap[det.fInputBytes[byteIndex]& 0xFF] & 0xFF;
             
             byteIndex++;
              
             return next;
          }
-    	 
-    	 protected void parseCharacters(CharsetDetector det)
+         
+         protected void parseCharacters(CharsetDetector det)
          {
-         	 int b;
+              int b;
              boolean ignoreSpace = false;
              
              while ((b = nextByte(det)) >= 0) {
@@ -244,8 +244,8 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
                      
                      ignoreSpace = (mb == spaceChar);
                  }
-                 if(alef != 0x00){
-                	 mb = byteMap[alef & 0xFF];
+                 if(alef != (byte)0x00){
+                     mb = byteMap[alef & 0xFF];
                      
                      // TODO: 0x20 might not be a space in all character sets...
                      if (mb != 0) {
@@ -255,12 +255,12 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
                          
                          ignoreSpace = (mb == spaceChar);
                      }
-                	 
+                     
                  }
              }
         }
     }
-    	
+        
      
     int match(CharsetDetector det, int[] ngrams,  byte[] byteMap)
     {
@@ -274,7 +274,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
     }
     
     int matchIBM420(CharsetDetector det, int[] ngrams,  byte[] byteMap, byte spaceChar){
-    	NGramParser_IBM420 parser = new NGramParser_IBM420(ngrams, byteMap);
+        NGramParser_IBM420 parser = new NGramParser_IBM420(ngrams, byteMap);
         return parser.parse(det, spaceChar);
     }
     
@@ -1185,7 +1185,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
         public CharsetMatch match(CharsetDetector det)
         {
-        	int confidence =  matchIBM420(det, ngrams, byteMap, (byte)0x40);
+            int confidence =  matchIBM420(det, ngrams, byteMap, (byte)0x40);
             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
         
@@ -1205,7 +1205,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         }
         public CharsetMatch match(CharsetDetector det)
         {
-        	int confidence = matchIBM420(det, ngrams, byteMap, (byte)0x40);
+            int confidence = matchIBM420(det, ngrams, byteMap, (byte)0x40);
             return confidence == 0 ? null : new CharsetMatch(det, this, confidence);
         }
         
