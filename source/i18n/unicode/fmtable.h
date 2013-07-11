@@ -62,6 +62,8 @@ class DigitList;
  * within a Formattable.
  *
  * <p>The Formattable class is not suitable for subclassing.
+ *
+ * <p>See UFormattable for a C wrapper.
  */
 class U_I18N_API Formattable : public UObject {
 public:
@@ -280,7 +282,7 @@ public:
 
     /**
      * Returns TRUE if the data type of this Formattable object
-     * is kDouble, kLong, kInt64 or kDecimalNumber.
+     * is kDouble, kLong, or kInt64
      * @return TRUE if this is a pure numeric object
      * @stable ICU 3.0
      */
@@ -322,7 +324,7 @@ public:
      * as appropriate, is returned and the status is set to
      * U_INVALID_FORMAT_ERROR.  If this object is of type kInt64 and
      * it fits within a long, then no precision is lost.  If it is of
-     * type kDouble or kDecimalNumber, then a conversion is peformed, with
+     * type kDouble, then a conversion is peformed, with
      * truncation of any fractional part.  If the type is kObject and
      * the object is a Measure, then the result of
      * getNumber().getLong(status) is returned.  If this object is
@@ -608,7 +610,7 @@ public:
     static inline Formattable *fromUFormattable(UFormattable *fmt);
 
     /**
-     * Convert the UFormattable to a Formattable.  Internally, this is a reinterpret_cast.
+     * Convert the const UFormattable to a const Formattable.  Internally, this is a reinterpret_cast.
      * @param fmt a valid UFormattable
      * @return the UFormattable as a Formattable object pointer.  This is an alias to the original
      * UFormattable, and so is only valid while the original argument remains in scope.

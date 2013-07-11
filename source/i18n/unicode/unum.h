@@ -464,6 +464,7 @@ unum_formatInt64(const UNumberFormat *fmt,
 * Format a double using a UNumberFormat.
 * The double will be formatted according to the UNumberFormat's locale.
 * @param fmt The formatter to use.
+* @param number The number to format.
 * @param result A pointer to a buffer to receive the NULL-terminated formatted number. If
 * the formatted number fits into dest but cannot be NULL-terminated (length == resultLength)
 * then the error code is set to U_STRING_NOT_TERMINATED_WARNING. If the formatted number
@@ -562,7 +563,23 @@ unum_formatDoubleCurrency(const UNumberFormat* fmt,
                           UErrorCode* status);
 
 /**
- * Format a UFormattable into a string
+ * Format a UFormattable into a string.
+ * @param fmt the formatter to use
+ * @param number the number to format, as a UFormattable
+ * @param result A pointer to a buffer to receive the NULL-terminated formatted number. If
+ * the formatted number fits into dest but cannot be NULL-terminated (length == resultLength)
+ * then the error code is set to U_STRING_NOT_TERMINATED_WARNING. If the formatted number
+ * doesn't fit into result then the error code is set to U_BUFFER_OVERFLOW_ERROR.
+ * @param resultLength the maximum number of UChars to write to result
+ * @param pos a pointer to a UFieldPosition.  On input,
+ * position->field is read.  On output, position->beginIndex and
+ * position->endIndex indicate the beginning and ending indices of
+ * field number position->field, if such a field exists.  This
+ * parameter may be NULL, in which case it is ignored.
+ * @param status a pointer to an input-output UErrorCode
+ * @return the total buffer size needed; if greater than resultLength,
+ * the output was truncated.
+ * @see unum_parseToUFormattable
  * @draft ICU 52
  */
 U_DRAFT int32_t U_EXPORT2
@@ -708,8 +725,21 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
                          UErrorCode* status);
 
 /**
- * Parse into a UFormattable.
- * @param result - result formattable.  Will be allocated with ufmt_open() first if NULL is passed in.
+ * Parse a UChar string into a UFormattable.
+ * Example code:
+ * \snippet test/cintltst/cnumtst.c unum_parseToUFormattable
+ * @param fmt the formatter to use
+ * @param result the UFormattable to hold the result. If NULL, a new UFormattable will be allocated (which the caller must close with ufmt_close).
+ * @param text the text to parse
+ * @param textLength the length of text, or -1 if null-terminated
+ * @param parsePos a pointer to an offset index into text at which to
+ * begin parsing. On output, *parsePos will point after the last
+ * parsed character.  This parameter may be 0, in which case parsing
+ * begins at offset 0.
+ * @param status a pointer to an input-output UErrorCode
+ * @return the UFormattable.  Will be ==result unless NULL was passed in for result, in which case it will be the newly opened UFormattable.
+ * @see ufmt_getType
+ * @see ufmt_close
  * @draft ICU 52
  */
 U_DRAFT UFormattable* U_EXPORT2
