@@ -367,11 +367,34 @@ public class LocaleDataTest extends TestFmwk{
     }
 
     public void TestLocaleDisplayPattern(){
-        LocaleData ld = LocaleData.getInstance();
-        logln("Default locale "+ " LocaleDisplayPattern:" + ld.getLocaleDisplayPattern());
-        logln("Default locale "+ " LocaleSeparator:" + ld.getLocaleSeparator());
+        ULocale locale = ULocale.ENGLISH;
+        LocaleData ld = LocaleData.getInstance(locale);
+        String pattern = ld.getLocaleDisplayPattern();
+        String separator = ld.getLocaleSeparator();
+        logln("LocaleDisplayPattern for locale " + locale + ": " + pattern);
+        if (!pattern.equals("{0} ({1})")) {
+          errln("Unexpected LocaleDisplayPattern for locale: "+ locale);
+        }
+        logln("LocaleSeparator for locale " + locale + ": " + separator);
+        if (!separator.equals(", ")) {
+          errln("Unexpected LocaleSeparator for locale: "+ locale);
+        }
+
+        locale = ULocale.CHINESE;
+        ld = LocaleData.getInstance(locale);
+        pattern = ld.getLocaleDisplayPattern();
+        separator = ld.getLocaleSeparator();
+        logln("LocaleDisplayPattern for locale " + locale + ": " + pattern);
+        if (!pattern.equals("{0}\uFF08{1}\uFF09")) {
+          errln("Unexpected LocaleDisplayPattern for locale: "+ locale);
+        }
+        logln("LocaleSeparator for locale " + locale + ": " + separator);
+        if (!separator.equals("\u3001")) {
+          errln("Unexpected LocaleSeparator for locale: "+ locale);
+        }
+
         for(int i = 0; i < availableLocales.length; i++){
-          ULocale locale = availableLocales[i];
+          locale = availableLocales[i];
           ld = LocaleData.getInstance(locale);
           logln(locale.toString() + " LocaleDisplayPattern:" + ld.getLocaleDisplayPattern());
           logln(locale.toString() + " LocaleSeparator:" + ld.getLocaleSeparator());

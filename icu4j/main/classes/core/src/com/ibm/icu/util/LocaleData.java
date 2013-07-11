@@ -387,8 +387,15 @@ public final class LocaleData {
      * @stable ICU 4.2
      */ 
     public String getLocaleSeparator() {
+      String sub0 = "{0}";
+      String sub1 = "{1}";
       ICUResourceBundle locDispBundle = (ICUResourceBundle) langBundle.get(LOCALE_DISPLAY_PATTERN);
       String  localeSeparator = locDispBundle.getStringWithFallback(SEPARATOR);
+      int index0 = localeSeparator.indexOf(sub0);
+      int index1 = localeSeparator.indexOf(sub1);
+      if (index0 >= 0 && index1 >= 0 && index0 <= index1) {
+          return localeSeparator.substring(index0 + sub0.length(), index1);
+      }
       return localeSeparator;
     }
     
