@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2012, International Business Machines
+* Copyright (c) 2004-2013, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -1297,12 +1297,12 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
                     "There {0, plural, one{is # zavod}few{are {0, " +
                       "number,###.0} zavoda} other{are # zavodov}} in the " +
                       "directory.",
-                    new ULocale("ru"));
+                    new ULocale("uk"));
             MessageFormat mfAlpha = new MessageFormat (
                     "There {argument, plural, one{is # zavod}few{" +
                       "are {argument, number,###.0} zavoda} other{are # " + 
                       "zavodov}} in the directory.",
-                    new ULocale("ru"));
+                    new ULocale("uk"));
             Object objArray[] = {new Long(4)};
             HashMap objMap = new HashMap();
             objMap.put("argument", objArray[0]);
