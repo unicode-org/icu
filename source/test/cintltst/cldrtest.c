@@ -1223,26 +1223,58 @@ static void TestExemplarSet(void){
     }
 }
 
+enum { kUBufMax = 32 };
 static void TestLocaleDisplayPattern(void){
-    UErrorCode status = U_ZERO_ERROR;
-    UChar pattern[32] = {0,};
-    UChar separator[32] = {0,};
-    ULocaleData *uld = ulocdata_open(uloc_getDefault(), &status);
+    UErrorCode status;
+    UChar pattern[kUBufMax] = {0,};
+    UChar separator[kUBufMax] = {0,};
+    ULocaleData *uld;
+    static const UChar enExpectPat[] = { 0x007B,0x0030,0x007D,0x0020,0x0028,0x007B,0x0031,0x007D,0x0029,0 }; /* "{0} ({1})" */
+    static const UChar enExpectSep[] = { 0x002C,0x0020,0 }; /* ", " */
+    static const UChar zhExpectPat[] = { 0x007B,0x0030,0x007D,0xFF08,0x007B,0x0031,0x007D,0xFF09,0 };
+    static const UChar zhExpectSep[] = { 0x3001,0 };
 
-    if(U_FAILURE(status)){
-        log_data_err("ulocdata_open error");
-        return;
-    }
-    ulocdata_getLocaleDisplayPattern(uld, pattern, 32, &status);
-    if (U_FAILURE(status)){
-        log_err("ulocdata_getLocaleDisplayPattern error!");
-    }
     status = U_ZERO_ERROR;
-    ulocdata_getLocaleSeparator(uld, separator, 32, &status);
-    if (U_FAILURE(status)){
-        log_err("ulocdata_getLocaleSeparator error!");
+    uld = ulocdata_open("en", &status);
+    if(U_FAILURE(status)){
+        log_data_err("ulocdata_open en error %s", u_errorName(status));
+    } else {
+        ulocdata_getLocaleDisplayPattern(uld, pattern, kUBufMax, &status);
+        if (U_FAILURE(status)){
+            log_err("ulocdata_getLocaleDisplayPattern en error %s", u_errorName(status));
+        } else if (u_strcmp(pattern, enExpectPat) != 0) {
+             log_err("ulocdata_getLocaleDisplayPattern en returns unexpected pattern");
+        }
+        status = U_ZERO_ERROR;
+        ulocdata_getLocaleSeparator(uld, separator, kUBufMax, &status);
+        if (U_FAILURE(status)){
+            log_err("ulocdata_getLocaleSeparator en error %s", u_errorName(status));
+        } else if (u_strcmp(separator, enExpectSep) != 0) {
+             log_err("ulocdata_getLocaleSeparator en returns unexpected string ");
+        }
+        ulocdata_close(uld);
     }
-    ulocdata_close(uld);
+
+    status = U_ZERO_ERROR;
+    uld = ulocdata_open("zh", &status);
+    if(U_FAILURE(status)){
+        log_data_err("ulocdata_open zh error %s", u_errorName(status));
+    } else {
+        ulocdata_getLocaleDisplayPattern(uld, pattern, kUBufMax, &status);
+        if (U_FAILURE(status)){
+            log_err("ulocdata_getLocaleDisplayPattern zh error %s", u_errorName(status));
+        } else if (u_strcmp(pattern, zhExpectPat) != 0) {
+             log_err("ulocdata_getLocaleDisplayPattern zh returns unexpected pattern");
+        }
+        status = U_ZERO_ERROR;
+        ulocdata_getLocaleSeparator(uld, separator, kUBufMax, &status);
+        if (U_FAILURE(status)){
+            log_err("ulocdata_getLocaleSeparator zh error %s", u_errorName(status));
+        } else if (u_strcmp(separator, zhExpectSep) != 0) {
+             log_err("ulocdata_getLocaleSeparator zh returns unexpected string ");
+        }
+        ulocdata_close(uld);
+    }
 }
 
 static void TestCoverage(void){
