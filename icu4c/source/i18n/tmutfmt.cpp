@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, Google, International Business Machines Corporation
+ * Copyright (C) 2008-2013, Google, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -440,6 +440,7 @@ TimeUnitFormat::readFromCurrentLocale(UTimeUnitFormatStyle style, const char* ke
     UResourceBundle *rb, *unitsRes;
     rb = ures_open(NULL, fLocale.getName(), &status);
     unitsRes = ures_getByKey(rb, key, NULL, &status);
+    unitsRes = ures_getByKey(unitsRes, "duration", unitsRes, &status);
     if (U_FAILURE(status)) {
         ures_close(unitsRes);
         ures_close(rb);
