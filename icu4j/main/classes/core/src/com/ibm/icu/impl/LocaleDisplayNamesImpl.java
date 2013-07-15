@@ -337,23 +337,27 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         }
 
         if (resultName == null) {
-            resultName = localeIdName(lang);
+            resultName = localeIdName(lang)
+                    .replace(formatOpenParen, formatReplaceOpenParen)
+                    .replace(formatCloseParen, formatReplaceCloseParen);
         }
 
         StringBuilder buf = new StringBuilder();
         if (hasScript) {
             // first element, don't need appendWithSep
-            buf.append(scriptDisplayNameInContext(script));
+            buf.append(scriptDisplayNameInContext(script)
+                    .replace(formatOpenParen, formatReplaceOpenParen)
+                    .replace(formatCloseParen, formatReplaceCloseParen));
         }
         if (hasCountry) {
-            String regionDisplayName = regionDisplayName(country);
-            regionDisplayName = regionDisplayName
+            appendWithSep(regionDisplayName(country)
                     .replace(formatOpenParen, formatReplaceOpenParen)
-                    .replace(formatCloseParen, formatReplaceCloseParen);
-            appendWithSep(regionDisplayName, buf);
+                    .replace(formatCloseParen, formatReplaceCloseParen), buf);
         }
         if (hasVariant) {
-            appendWithSep(variantDisplayName(variant), buf);
+            appendWithSep(variantDisplayName(variant)
+                    .replace(formatOpenParen, formatReplaceOpenParen)
+                    .replace(formatCloseParen, formatReplaceCloseParen), buf);
         }
 
         Iterator<String> keys = locale.getKeywords();
@@ -361,8 +365,12 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             while (keys.hasNext()) {
                 String key = keys.next();
                 String value = locale.getKeywordValue(key);
-                String keyDisplayName = keyDisplayName(key);
-                String valueDisplayName = keyValueDisplayName(key, value);
+                String keyDisplayName = keyDisplayName(key)
+                        .replace(formatOpenParen, formatReplaceOpenParen)
+                        .replace(formatCloseParen, formatReplaceCloseParen);
+                String valueDisplayName = keyValueDisplayName(key, value)
+                        .replace(formatOpenParen, formatReplaceOpenParen)
+                        .replace(formatCloseParen, formatReplaceCloseParen);
                 if (!valueDisplayName.equals(value)) {
                     appendWithSep(valueDisplayName, buf);
                 } else if (!key.equals(keyDisplayName)) {
