@@ -1084,26 +1084,30 @@ public class ULocaleTest extends TestFmwk {
     }
 
     private boolean checkName(String name, String language, String script, String country, String variant, ULocale dl) {
-        if (language.length() > 0 && name.indexOf(language) == -1) {
-            errln("loc: " + dl + " name '" + name + "' does not contain language '" + language + "'");
+        if (!checkInclusion(dl, name, language, "language")) {
             return false;
         }
-        if (script.length() > 0 && name.indexOf(script) == -1) {
-            errln("loc: " + dl + " name '" + name + "' does not contain script '" + script + "'");
+        if (!checkInclusion(dl, name, script, "script")) {
             return false;
         }
-        if (country.length() > 0 && name.indexOf(country) == -1) {
-            String country2 = country.replace('(', '[').replace(')',']').replace('（', '［').replace('）','］');
+        if (!checkInclusion(dl, name, country, "country")) {
+            return false;
+        }
+        if (!checkInclusion(dl, name, variant, "variant")) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean checkInclusion(ULocale dl, String name, String substring, String substringName) {
+        if (substring.length() > 0 && name.indexOf(substring) == -1) {
+            String country2 = substring.replace('(', '[').replace(')',']').replace('（', '［').replace('）','］');
             if (name.indexOf(country2) == -1) {
-                errln("loc: " + dl + " name '" + name + "' does not contain country '" + country + "'");
+                errln("loc: " + dl + " name '" + name + "' does not contain " +
+                		substringName +
+                		" '" + substring + "'");
                 return false;
-//            } else {
-//                System.out.println("loc: " + dl + " name '" + name + "' does not contain country '" + country + "'");
             }
-        }
-        if (variant.length() > 0 && name.indexOf(variant) == -1) {
-            errln("loc: " + dl + " name '" + name + "' does not contain variant '" + variant + "'");
-            return false;
         }
         return true;
     }
@@ -1125,7 +1129,6 @@ public class ULocaleTest extends TestFmwk {
                 script = ULocale.getDisplayScriptInContext(localeID, testLocale);
                 country = ULocale.getDisplayCountry(localeID, testLocale);
                 variant = ULocale.getDisplayVariant(localeID, testLocale);
-
                 if (!checkName(name, language, script, country, variant, new ULocale(testLocale))) {
                     break;
                 }
