@@ -30,6 +30,10 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     private final MessageFormat separatorFormat;
     private final MessageFormat format;
     private final MessageFormat keyTypeFormat;
+    private final char formatOpenParen;
+    private final char formatReplaceOpenParen;
+    private final char formatCloseParen;
+    private final char formatReplaceCloseParen;
 
     private static final Cache cache = new Cache();
 
@@ -44,7 +48,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         KEY, 
         TYPE 
     }
-     /**
+    /**
      * Capitalization transforms. For each usage type, the first array element indicates
      * whether to titlecase for uiListOrMenu context, the second indicates whether to
      * titlecase for stand-alone context.
@@ -78,7 +82,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
 
     public LocaleDisplayNamesImpl(ULocale locale, DialectHandling dialectHandling) {
         this(locale, (dialectHandling==DialectHandling.STANDARD_NAMES)? DisplayContext.STANDARD_NAMES: DisplayContext.DIALECT_NAMES,
-             DisplayContext.CAPITALIZATION_NONE);
+                DisplayContext.CAPITALIZATION_NONE);
     }
 
     public LocaleDisplayNamesImpl(ULocale locale, DisplayContext... contexts) {
@@ -86,15 +90,15 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         DisplayContext capitalization = DisplayContext.CAPITALIZATION_NONE;
         for (DisplayContext contextItem : contexts) {
             switch (contextItem.type()) {
-                case DIALECT_HANDLING:
-                    dialectHandling = (contextItem.value()==DisplayContext.STANDARD_NAMES.value())?
-                                      DialectHandling.STANDARD_NAMES: DialectHandling.DIALECT_NAMES;
-                    break;
-                case CAPITALIZATION:
-                    capitalization = contextItem;
-                    break;
-                default:
-                    break;
+            case DIALECT_HANDLING:
+                dialectHandling = (contextItem.value()==DisplayContext.STANDARD_NAMES.value())?
+                        DialectHandling.STANDARD_NAMES: DialectHandling.DIALECT_NAMES;
+                break;
+            case CAPITALIZATION:
+                capitalization = contextItem;
+                break;
+            default:
+                break;
             }
         }
 
@@ -120,7 +124,18 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             pattern = "{0} ({1})";
         }
         this.format = new MessageFormat(pattern);
-        
+        if (pattern.contains("（")) {
+            formatOpenParen = '（';
+            formatCloseParen = '）';
+            formatReplaceOpenParen = '［';
+            formatReplaceCloseParen = '］';
+        } else  {
+            formatOpenParen = '(';
+            formatCloseParen = ')';
+            formatReplaceOpenParen = '[';
+            formatReplaceCloseParen = ']';
+        }
+
         String keyTypePattern = langData.get("localeDisplayPattern", "keyTypePattern");
         if ("keyTypePattern".equals(keyTypePattern)) {
             keyTypePattern = "{0}={1}";
@@ -142,7 +157,7 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             ICUResourceBundle rb = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
             UResourceBundle contextTransformsBundle = null;
             try {
-               contextTransformsBundle = (UResourceBundle)rb.getWithFallback("contextTransforms");
+                contextTransformsBundle = (UResourceBundle)rb.getWithFallback("contextTransforms");
             }
             catch (MissingResourceException e) {
                 contextTransformsBundle = null; // probably redundant
@@ -181,15 +196,15 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
     public DisplayContext getContext(DisplayContext.Type type) {
         DisplayContext result;
         switch (type) {
-            case DIALECT_HANDLING:
-                result = (dialectHandling==DialectHandling.STANDARD_NAMES)? DisplayContext.STANDARD_NAMES: DisplayContext.DIALECT_NAMES;
-                break;
-            case CAPITALIZATION:
-                result = capitalization;
-                break;
-            default:
-                result = DisplayContext.STANDARD_NAMES; // hmm, we should do something else here
-                break;
+        case DIALECT_HANDLING:
+            result = (dialectHandling==DialectHandling.STANDARD_NAMES)? DisplayContext.STANDARD_NAMES: DisplayContext.DIALECT_NAMES;
+            break;
+        case CAPITALIZATION:
+            result = capitalization;
+            break;
+        default:
+            result = DisplayContext.STANDARD_NAMES; // hmm, we should do something else here
+            break;
         }
         return result;
     }
@@ -198,19 +213,19 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
         String result = name;
         boolean titlecase = false;
         switch (capitalization) {
-            case CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
-                titlecase = true;
-                break;
-            case CAPITALIZATION_FOR_UI_LIST_OR_MENU:
-            case CAPITALIZATION_FOR_STANDALONE:
-                if (capitalizationUsage != null) {
-                    boolean[] transforms = capitalizationUsage.get(usage);
-                    titlecase = (capitalization==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
-                                transforms[0]: transforms[1];
-                }
-                break;
-            default:
-                break;
+        case CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE:
+            titlecase = true;
+            break;
+        case CAPITALIZATION_FOR_UI_LIST_OR_MENU:
+        case CAPITALIZATION_FOR_STANDALONE:
+            if (capitalizationUsage != null) {
+                boolean[] transforms = capitalizationUsage.get(usage);
+                titlecase = (capitalization==DisplayContext.CAPITALIZATION_FOR_UI_LIST_OR_MENU)?
+                        transforms[0]: transforms[1];
+            }
+            break;
+        default:
+            break;
         }
         if (titlecase) {
             // TODO: Fix this titlecase hack when we figure out something better to do.
@@ -237,12 +252,12 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             if ( stopPos > 0 && stopPos < len ) {
                 String firstWord = name.substring(0, stopPos);
                 String firstWordTitleCase = UCharacter.toTitleCase(locale, firstWord, null,
-                                            UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+                        UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
                 result = firstWordTitleCase.concat(name.substring(stopPos));
             } else {
                 // no stopPos, titlecase the whole text
                 result = UCharacter.toTitleCase(locale, name, null,
-                         UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
+                        UCharacter.TITLECASE_NO_LOWERCASE | UCharacter.TITLECASE_NO_BREAK_ADJUSTMENT);
             }
         }
         return result;
@@ -331,7 +346,11 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             buf.append(scriptDisplayNameInContext(script));
         }
         if (hasCountry) {
-            appendWithSep(regionDisplayName(country), buf);
+            String regionDisplayName = regionDisplayName(country);
+            regionDisplayName = regionDisplayName
+                    .replace(formatOpenParen, formatReplaceOpenParen)
+                    .replace(formatCloseParen, formatReplaceCloseParen);
+            appendWithSep(regionDisplayName, buf);
         }
         if (hasVariant) {
             appendWithSep(variantDisplayName(variant), buf);
@@ -348,12 +367,12 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
                     appendWithSep(valueDisplayName, buf);
                 } else if (!key.equals(keyDisplayName)) {
                     String keyValue = keyTypeFormat.format(
-                        new String[] { keyDisplayName, valueDisplayName });
+                            new String[] { keyDisplayName, valueDisplayName });
                     appendWithSep(keyValue, buf);
                 } else {
                     appendWithSep(keyDisplayName, buf)
-                        .append("=")
-                        .append(valueDisplayName);
+                    .append("=")
+                    .append(valueDisplayName);
                 }
             }
         }
@@ -533,15 +552,15 @@ public class LocaleDisplayNamesImpl extends LocaleDisplayNames {
             DisplayContext capitalizationIn = DisplayContext.CAPITALIZATION_NONE;
             for (DisplayContext contextItem : contexts) {
                 switch (contextItem.type()) {
-                    case DIALECT_HANDLING:
-                        dialectHandlingIn = (contextItem.value()==DisplayContext.STANDARD_NAMES.value())?
-                                            DialectHandling.STANDARD_NAMES: DialectHandling.DIALECT_NAMES;
-                        break;
-                    case CAPITALIZATION:
-                        capitalizationIn = contextItem;
-                        break;
-                    default:
-                        break;
+                case DIALECT_HANDLING:
+                    dialectHandlingIn = (contextItem.value()==DisplayContext.STANDARD_NAMES.value())?
+                            DialectHandling.STANDARD_NAMES: DialectHandling.DIALECT_NAMES;
+                    break;
+                case CAPITALIZATION:
+                    capitalizationIn = contextItem;
+                    break;
+                default:
+                    break;
                 }
             }
             if (!(dialectHandlingIn == this.dialectHandling && capitalizationIn == this.capitalization && locale.equals(this.locale))) {
