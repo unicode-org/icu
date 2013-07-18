@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2012, International Business Machines Corporation and
+* Copyright (C) 2007-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 ********************************************************************************
 
@@ -368,7 +368,7 @@ void PluralRulesTest::testGetSamples() {
         continue;
       }
       if (count == 0) {
-        errln("no samples for keyword");
+        errln(UNICODE_STRING_SIMPLE("no samples for keyword ") + *keyword + UNICODE_STRING_SIMPLE(" in locale ") + locales[i].getName() );
       }
       if (count > LENGTHOF(values)) {
         errln(UNICODE_STRING_SIMPLE("getSamples()=") + count +
