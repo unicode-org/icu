@@ -2722,7 +2722,15 @@ _CXX_CXXSUFFIX=cpp
 export _CXX_CXXSUFFIX
 
 # Accumulate #defines
+
+# CONFIG_CPPFLAGS: These are defines that are set for ICU Build time only.
+# They are only needed for building ICU itself. Example: platform stuff
 CONFIG_CPPFLAGS=""
+# UCONFIG_CPPFLAGS: These are defines which are set for ICU build time,
+# and also a notice is output that they need to be set
+# for end-users of ICU also. uconfig.h.prepend is generated
+# with, for example, "#define U_DISABLE_RENAMING 1"
+# Example: ICU configuration stuff
 UCONFIG_CPPFLAGS=""
 
 # Check whether to build debug libraries
@@ -5668,8 +5676,9 @@ then
 	U_HAVE_ATOMIC=1
 else
         U_HAVE_ATOMIC=0
-        CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_ATOMIC=0"
 fi
+# Make this available via CPPFLAGS
+CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_ATOMIC=${U_HAVE_ATOMIC}"
 
 
 ac_ext=c
