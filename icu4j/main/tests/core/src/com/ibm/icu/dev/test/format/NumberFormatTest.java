@@ -3301,6 +3301,9 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {"sl", "USD", "2", "2 ameriška dolarja"},
                 {"sl", "USD", "3", "3 ameriški dolarji"},
                 {"sl", "USD", "5", "5 ameriških dolarjev"},
+                {"ru", "RUB", "1", "1 российский рубль"},
+                {"ru", "RUB", "2", "2 российского рубля"},
+                {"ru", "RUB", "5", "5 российских рублей"},
         };
         for (String test[] : tests) {
             DecimalFormat numberFormat = (DecimalFormat) DecimalFormat.getInstance(new ULocale(test[0]), NumberFormat.PLURALCURRENCYSTYLE);
