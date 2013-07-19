@@ -34,6 +34,8 @@ import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
+import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.PluralRules.NumberInfo;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
@@ -3286,5 +3288,35 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         numberFormat.setSignificantDigitsUsed(true);
         numberFormat.setMaximumSignificantDigits(3);
         assertEquals("TestShowZero", "0", numberFormat.format(0.0));
+    }
+    
+    public void TestCurrencyPlurals() {
+        String[][] tests = {
+                {"en", "USD", "1", "1 US dollar"},
+                {"en", "USD", "1.0", "1.0 US dollars"},
+                {"en", "USD", "1.00", "1.00 US dollars"},
+                {"en", "AUD", "1", "1 Australian dollar"},
+                {"en", "AUD", "1.00", "1.00 Australian dollars"},
+                {"sl", "USD", "1", "1 ameriški dolar"},
+                {"sl", "USD", "2", "2 ameriška dolarja"},
+                {"sl", "USD", "3", "3 ameriški dolarji"},
+                {"sl", "USD", "5", "5 ameriških dolarjev"},
+        };
+        for (String test[] : tests) {
+            DecimalFormat numberFormat = (DecimalFormat) DecimalFormat.getInstance(new ULocale(test[0]), NumberFormat.PLURALCURRENCYSTYLE);
+            numberFormat.setCurrency(Currency.getInstance(test[1]));
+            double number = Double.parseDouble(test[2]);
+            int dotPos = test[2].indexOf('.');
+            int decimals = dotPos < 0 ? 0 : test[2].length() - dotPos - 1;
+            int digits = dotPos < 0 ? test[2].length() : test[2].length() - 1;
+            numberFormat.setMaximumFractionDigits(decimals);
+            numberFormat.setMinimumFractionDigits(decimals);
+            String actual = numberFormat.format(number);
+            assertEquals(test[0] + "\t" + test[1] + "\t" + test[2], test[3], actual);
+            numberFormat.setMaximumSignificantDigits(digits);
+            numberFormat.setMinimumSignificantDigits(digits);
+            actual = numberFormat.format(number);
+            assertEquals(test[0] + "\t" + test[1] + "\t" + test[2], test[3], actual);
+        }
     }
 }
