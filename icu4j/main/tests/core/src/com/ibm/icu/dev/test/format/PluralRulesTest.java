@@ -135,6 +135,11 @@ public class PluralRulesTest extends TestFmwk {
     }
 
     private static String[][] operandTestData = {
+        {"a: n 3", "FAIL"},
+        {"a: !n!≠!1,2; b: not n is 3..5; c:n≠5", "a:1,2; b:6,7; c:3,4"},
+        {"a: !n!≠!1,2; b: n!=3..5; c:n≠5", "a:1,2; b:6,7; c:3,4"},
+        {"a: t is 1", "a:1.1,1.1000,99.100; other:1.2,1.0"},
+        {"a: f is 1", "a:1.1; other:1.1000,99.100"},
         {"a: i is 2; b:i is 3", 
         "b: 3.5; a: 2.5"},
         {"a: f is 0; b:f is 50", 
@@ -156,13 +161,21 @@ public class PluralRulesTest extends TestFmwk {
             String categoriesAndExpected = pair[1].trim();
 
             //            logln("pattern[" + i + "] " + pattern);
+            boolean FAIL_EXPECTED = categoriesAndExpected.equalsIgnoreCase("fail");
             try {
+                logln(pattern);
                 PluralRules rules = PluralRules.createRules(pattern);
-                logln(rules.toString());
-                checkCategoriesAndExpected(pattern, categoriesAndExpected, rules);
+                if (FAIL_EXPECTED) {
+                    assertNull("Should fail with 'null' return.", rules);
+                } else {
+                    logln(rules.toString());
+                    checkCategoriesAndExpected(pattern, categoriesAndExpected, rules);
+                }
             } catch (Exception e) {
-                e.printStackTrace();
-                throw new RuntimeException(e.getMessage());
+                if (!FAIL_EXPECTED) {
+                    e.printStackTrace();
+                    throw new RuntimeException(e.getMessage());
+                }
             }
         }
     }
@@ -234,14 +247,14 @@ public class PluralRulesTest extends TestFmwk {
         { "a:n in 2;b:n in 5",
         "b: n in 5;a: n in 2;" },
 
-//        { "a: n is 5",
-//        "a: n in 2..6 and n not in 2..4 and n is not 6" },
-//        { "a: n in 2..3",
-//            "a: n is 2 or n is 3",
-//        "a: n is 3 and n in 2..5 or n is 2" },
-//        { "a: n is 12; b:n mod 10 in 2..3",
-//            "b: n mod 10 in 2..3 and n is not 12; a: n in 12..12",
-//        "b: n is 13; a: n is 12; b: n mod 10 is 2 or n mod 10 is 3" },
+        //        { "a: n is 5",
+        //        "a: n in 2..6 and n not in 2..4 and n is not 6" },
+        //        { "a: n in 2..3",
+        //            "a: n is 2 or n is 3",
+        //        "a: n is 3 and n in 2..5 or n is 2" },
+        //        { "a: n is 12; b:n mod 10 in 2..3",
+        //            "b: n mod 10 in 2..3 and n is not 12; a: n in 12..12",
+        //        "b: n is 13; a: n is 12; b: n mod 10 is 2 or n mod 10 is 3" },
     };
 
     private static String[][] inequalityTestData = {

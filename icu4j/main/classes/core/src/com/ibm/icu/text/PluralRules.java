@@ -33,6 +33,7 @@ import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.PluralRulesLoader;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Output;
+import com.ibm.icu.util.StringTokenizer;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -95,23 +96,24 @@ import com.ibm.icu.util.ULocale;
  * keyword       = &lt;identifier&gt;
  * condition     = and_condition ('or' and_condition)*
  * and_condition = relation ('and' relation)*
- * relation      = is_relation | in_relation | within_relation | 'n' <EOL>
- * is_relation   = expr 'is' ('not')? value
- * in_relation   = expr ('not')? 'in' range_list
- * within_relation = expr ('not')? 'within' range_list
- * expr          = ('n' | 'i' | 'f' | 'v') ('mod' value)?
+ * relation      = not? expr not? rel not? range_list
+ * expr          = ('n' | 'i' | 'f' | 'v' | 't') (mod value)?
+ * not           = 'not' | '!'
+ * rel           = 'in' | 'is' | '=' | '≠' | 'within'
+ * mod           = 'mod' | '%'
  * range_list    = (range | value) (',' range_list)*
- * value         = digit+ ('.' digit+)?
+ * value         = digit+
  * digit         = 0|1|2|3|4|5|6|7|8|9
  * range         = value'..'value
  * </pre>
- * 
+ * <p>Each <b>not</b> term inverts the meaning; however, there should not be more than one of them.</p>
  * <p>
- * The i, f, and v values are defined as follows:
+ * The i, f, t, and v values are defined as follows:
  * </p>
  * <ul>
  * <li>i to be the integer digits.</li>
  * <li>f to be the visible fractional digits, as an integer.</li>
+ * <li>t to be the visible fractional digits—without trailing zeros—as an integer.</li>
  * <li>v to be the number of visible fraction digits.</li>
  * <li>j is defined to only match integers. That is j is 3 fails if v != 0 (eg for 3.1 or 3.0).</li>
  * </ul>
@@ -228,7 +230,7 @@ public class PluralRules implements Serializable {
         public final PluralRules forLocale(ULocale locale) {
             return forLocale(locale, PluralType.CARDINAL);
         }
-        
+
         /**
          * Returns the locales for which there is plurals data.
          * 
@@ -254,7 +256,7 @@ public class PluralRules implements Serializable {
          * @internal
          */
         public abstract ULocale getFunctionalEquivalent(ULocale locale, boolean[] isAvailable);
-        
+
         /**
          * Returns the default factory.
          * @deprecated This API is ICU internal only.
@@ -263,7 +265,7 @@ public class PluralRules implements Serializable {
         public static PluralRulesLoader getDefaultFactory() {
             return PluralRulesLoader.loader;
         }
-        
+
         /**
          * Returns whether or not there are overrides.
          * @deprecated This API is ICU internal only.
@@ -445,6 +447,7 @@ public class PluralRules implements Serializable {
         n,
         i,
         f,
+        t,
         v,
         j;
     }
@@ -457,6 +460,7 @@ public class PluralRules implements Serializable {
         private final double source;
         private final int visibleFractionDigitCount;
         private final long fractionalDigits;
+        private final long fractionalDigitsWithoutTrailingZeros;
         private final long intValue;
         private final boolean hasIntegerValue;
         private final boolean isNegative;
@@ -485,6 +489,15 @@ public class PluralRules implements Serializable {
             //                    throw new IllegalArgumentException();
             //                }
             //            }
+            if (f == 0) {
+                fractionalDigitsWithoutTrailingZeros = 0;
+            } else {
+                long fdwtz = f;
+                while ((fdwtz%10) == 0) {
+                    fdwtz /= 10;
+                }
+                fractionalDigitsWithoutTrailingZeros = fdwtz;
+            }
         }
 
         /**
@@ -492,7 +505,6 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         public NumberInfo(double n, int v) {
-            // Ugly, but for samples we don't care.
             this(n,v,getFractionalDigits(n, v));
         }
 
@@ -519,7 +531,7 @@ public class PluralRules implements Serializable {
          * @deprecated This API is ICU internal only.
          */
         public static int decimals(double n) {
-            // Ugly, but for samples we don't care.
+            // Ugly...
             String temp = String.valueOf(n);
             return temp.endsWith(".0") ? 0 : temp.length() - temp.indexOf('.') - 1;
         }
@@ -560,6 +572,7 @@ public class PluralRules implements Serializable {
             default: return source;
             case i: return intValue;
             case f: return fractionalDigits;
+            case t: return fractionalDigitsWithoutTrailingZeros;
             case v: return visibleFractionDigitCount;
             }
         }
@@ -699,6 +712,36 @@ public class PluralRules implements Serializable {
         public String getConstraint();
     }
 
+    static class SimpleTokenizer {
+        static final UnicodeSet BREAK_AND_IGNORE = new UnicodeSet(0x09, 0x0a, 0x0c, 0x0d, 0x20, 0x20).freeze();
+        static final UnicodeSet BREAK_AND_KEEP = new UnicodeSet('!', '!', '%', '%', '=', '=', '≠', '≠').freeze();
+        static String[] split(String source) {
+            int last = -1;
+            List<String> result = new ArrayList<String>();
+            for (int i = 0; i < source.length(); ++i) {
+                char ch = source.charAt(i);
+                if (BREAK_AND_IGNORE.contains(ch)) {
+                    if (last >= 0) {
+                        result.add(source.substring(last,i));
+                        last = -1;
+                    }
+                } else if (BREAK_AND_KEEP.contains(ch)) {
+                    if (last >= 0) {
+                        result.add(source.substring(last,i));
+                    }
+                    result.add(source.substring(i,i+1));
+                    last = -1;
+                } else if (last < 0) {
+                    last = i;
+                }
+            }
+            if (last >= 0) {
+                result.add(source.substring(last));
+            }
+            return result.toArray(new String[result.size()]);
+        }
+    }
+    
     //    /*
     //     * A list of rules to apply in order.
     //     */
@@ -728,26 +771,28 @@ public class PluralRules implements Serializable {
 
     /*
      * syntax:
-     * condition :     or_condition
-     *                 and_condition
-     * or_condition :  and_condition 'or' condition
-     * and_condition : relation
-     *                 relation 'and' relation
-     * relation :      is_relation
-     *                 in_relation
-     *                 within_relation
-     *                 'n' EOL
-     * is_relation :   expr 'is' value
-     *                 expr 'is' 'not' value
-     * in_relation :   expr 'in' range
-     *                 expr 'not' 'in' range
-     * within_relation : expr 'within' range
-     *                   expr 'not' 'within' range
-     * expr :          'n'
-     *                 'n' 'mod' value
-     * value :         digit+
-     * digit :         0|1|2|3|4|5|6|7|8|9
-     * range :         value'..'value
+     * condition :       or_condition
+     *                   and_condition
+     * or_condition :    and_condition 'or' condition
+     * and_condition :   relation
+     *                   relation 'and' relation
+     * relation :        in_relation
+     *                   within_relation
+     * in_relation :     not? expr not? in not? range
+     * within_relation : not? expr not? 'within' not? range
+     * not :             'not'
+     *                   '!'
+     * expr :            'n'
+     *                   'n' mod value
+     * mod :             'mod'
+     *                   '%'
+     * in :              'in'
+     *                   'is'
+     *                   '='
+     *                   '≠'
+     * value :           digit+
+     * digit :           0|1|2|3|4|5|6|7|8|9
+     * range :           value'..'value
      */
     private static Constraint parseConstraint(String description)
             throws ParseException {
@@ -763,20 +808,22 @@ public class PluralRules implements Serializable {
                 Constraint newConstraint = NO_CONSTRAINT;
 
                 String condition = and_together[j].trim();
-                String[] tokens = Utility.splitWhitespace(condition);
+                String[] tokens = SimpleTokenizer.split(condition);
 
                 int mod = 0;
                 boolean inRange = true;
                 boolean integersOnly = true;
                 double lowBound = Long.MAX_VALUE;
                 double highBound = Long.MIN_VALUE;
-                double[] vals = null;
-
-                boolean isRange = false;
+                long[] vals = null;
 
                 int x = 0;
                 String t = tokens[x++];
                 Operand operand;
+                if ("not".equals(t) || "!".equals(t)) {
+                    inRange = !inRange;
+                    t = nextToken(tokens, x++, condition);
+                }
                 try {
                     operand = NumberInfo.getOperand(t);
                 } catch (Exception e) {
@@ -784,60 +831,54 @@ public class PluralRules implements Serializable {
                 }
                 if (x < tokens.length) {
                     t = tokens[x++];
-                    if ("mod".equals(t)) {
+                    if ("mod".equals(t) || "%".equals(t)) {
                         mod = Integer.parseInt(tokens[x++]);
                         t = nextToken(tokens, x++, condition);
                     }
-                    if ("is".equals(t)) {
+                    if ("not".equals(t) || "!".equals(t)) {
+                        inRange = !inRange;
                         t = nextToken(tokens, x++, condition);
-                        if ("not".equals(t)) {
-                            inRange = false;
-                            t = nextToken(tokens, x++, condition);
-                        }
+                    }
+                    if ("is".equals(t) || "in".equals(t) || "=".equals(t)) {
+                        t = nextToken(tokens, x++, condition);
+                    } else if ("≠".equals(t) || "!=".equals(t)) {
+                        inRange = !inRange;
+                        t = nextToken(tokens, x++, condition);
+                    } else if ("within".equals(t)) {
+                        integersOnly = false;
+                        t = nextToken(tokens, x++, condition);
                     } else {
-                        isRange = true;
-                        if ("not".equals(t)) {
-                            inRange = false;
-                            t = nextToken(tokens, x++, condition);
-                        }
-                        if ("in".equals(t)) {
-                            t = nextToken(tokens, x++, condition);
-                        } else if ("within".equals(t)) {
-                            integersOnly = false;
-                            t = nextToken(tokens, x++, condition);
-                        } else {
-                            throw unexpected(t, condition);
-                        }
+                        throw unexpected(t, condition);
+                    }
+                    if ("not".equals(t) || "!".equals(t)) {
+                        inRange = !inRange;
+                        t = nextToken(tokens, x++, condition);
                     }
 
-                    if (isRange) {
-                        String[] range_list = Utility.splitString(t, ",");
-                        vals = new double[range_list.length * 2];
-                        for (int k1 = 0, k2 = 0; k1 < range_list.length; ++k1, k2 += 2) {
-                            String range = range_list[k1];
-                            String[] pair = Utility.splitString(range, "..");
-                            double low, high;
-                            if (pair.length == 2) {
-                                low = Double.parseDouble(pair[0]);
-                                high = Double.parseDouble(pair[1]);
-                                if (low > high) {
-                                    throw unexpected(range, condition);
-                                }
-                            } else if (pair.length == 1) {
-                                low = high = Double.parseDouble(pair[0]);
-                            } else {
+                    String[] range_list = Utility.splitString(t, ",");
+                    vals = new long[range_list.length * 2];
+                    for (int k1 = 0, k2 = 0; k1 < range_list.length; ++k1, k2 += 2) {
+                        String range = range_list[k1];
+                        String[] pair = Utility.splitString(range, "..");
+                        long low, high;
+                        if (pair.length == 2) {
+                            low = Long.parseLong(pair[0]);
+                            high = Long.parseLong(pair[1]);
+                            if (low > high) {
                                 throw unexpected(range, condition);
                             }
-                            vals[k2] = low;
-                            vals[k2+1] = high;
-                            lowBound = Math.min(lowBound, low);
-                            highBound = Math.max(highBound, high);
+                        } else if (pair.length == 1) {
+                            low = high = Long.parseLong(pair[0]);
+                        } else {
+                            throw unexpected(range, condition);
                         }
-                        if (vals.length == 2) {
-                            vals = null;
-                        }
-                    } else {
-                        lowBound = highBound = Double.parseDouble(t);
+                        vals[k2] = low;
+                        vals[k2+1] = high;
+                        lowBound = Math.min(lowBound, low);
+                        highBound = Math.max(highBound, high);
+                    }
+                    if (vals.length == 2) {
+                        vals = null;
                     }
 
                     if (x != tokens.length) {
@@ -943,11 +984,11 @@ public class PluralRules implements Serializable {
         private final boolean integersOnly;
         private final double lowerBound;
         private final double upperBound;
-        private final double[] range_list;
+        private final long[] range_list;
         private final Operand operand;
 
         RangeConstraint(int mod, boolean inRange, Operand operand, boolean integersOnly,
-                double lowBound, double highBound, double[] vals) {
+                double lowBound, double highBound, long[] vals) {
             this.mod = mod;
             this.inRange = inRange;
             this.integersOnly = integersOnly;
@@ -1491,7 +1532,7 @@ public class PluralRules implements Serializable {
         return rules.select(new NumberInfo(number, countVisibleFractionDigits, fractionaldigits));
     }
 
-    
+
     /**
      * Given a number information, returns the keyword of the first rule that applies to
      * the number.

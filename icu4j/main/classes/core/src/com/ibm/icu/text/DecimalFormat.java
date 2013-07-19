@@ -27,6 +27,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
+import com.ibm.icu.text.PluralRules.NumberInfo;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
@@ -1216,18 +1217,62 @@ public class DecimalFormat extends NumberFormat {
     private StringBuffer subformat(int number, StringBuffer result, FieldPosition fieldPosition,
                                    boolean isNegative, boolean isInteger, boolean parseAttr) {
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
-            return subformat(currencyPluralInfo.select(number), result, fieldPosition, isNegative,
+            // compute the plural category from the digitList plus other settings
+            return subformat(getPluralCategory(number), result, fieldPosition, isNegative,
                              isInteger, parseAttr);
         } else {
             return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
         }
     }
 
+    /**
+     * This is ugly, but don't see a better way to do it without major restructuring of the code.
+     */
+    private String getPluralCategory(double number) {
+        // get the visible fractions and the number of fraction digits.
+        int fractionalDigitsInDigitList = digitList.count - digitList.decimalAt;
+        int v;
+        long f;
+        int maxFractionalDigits;
+        int minFractionalDigits;
+        if (useSignificantDigits) {
+            maxFractionalDigits = maxSignificantDigits - digitList.decimalAt;
+            minFractionalDigits = minSignificantDigits - digitList.decimalAt;
+            if (minFractionalDigits < 0) {
+                minFractionalDigits = 0;
+            }
+            if (maxFractionalDigits < 0) {
+                maxFractionalDigits = 0;
+            }
+        } else {
+            maxFractionalDigits = getMaximumFractionDigits();
+            minFractionalDigits = getMinimumFractionDigits();
+        }
+        v = fractionalDigitsInDigitList;
+        if (v < minFractionalDigits) {
+            v = minFractionalDigits;
+        } else if (v > maxFractionalDigits) {
+            v = maxFractionalDigits;
+        }
+        f = 0;
+        if (v > 0) {
+            for (int i = digitList.decimalAt; i < digitList.count; ++i) {
+                f *= 10;
+                f += digitList.digits[i];
+            }
+            for (int i = v; i < fractionalDigitsInDigitList; ++i) {
+                f *= 10;
+            }
+        }
+        return currencyPluralInfo.select(new NumberInfo(number, v, f));
+    }
+
     private StringBuffer subformat(double number, StringBuffer result, FieldPosition fieldPosition,
                                    boolean isNegative,
             boolean isInteger, boolean parseAttr) {
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
-            return subformat(currencyPluralInfo.select(number), result, fieldPosition, isNegative,
+            // compute the plural category from the digitList plus other settings
+            return subformat(getPluralCategory(number), result, fieldPosition, isNegative,
                              isInteger, parseAttr);
         } else {
             return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
