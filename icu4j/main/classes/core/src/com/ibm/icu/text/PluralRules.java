@@ -457,13 +457,41 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * @deprecated This API is ICU internal only.
      */
     public static class NumberInfo implements Comparable<NumberInfo> {
-        private final double source;
-        private final int visibleFractionDigitCount;
-        private final long fractionalDigits;
-        private final long fractionalDigitsWithoutTrailingZeros;
-        private final long intValue;
-        private final boolean hasIntegerValue;
-        private final boolean isNegative;
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public final double source;
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public final int visibleFractionDigitCount;
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public final long fractionalDigits;
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public final long fractionalDigitsWithoutTrailingZeros;
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public final long intValue;
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public final boolean hasIntegerValue;
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public final boolean isNegative;
 
         /**
          * @internal
