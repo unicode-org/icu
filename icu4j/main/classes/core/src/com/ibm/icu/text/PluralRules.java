@@ -171,7 +171,7 @@ import com.ibm.icu.util.ULocale;
  * 
  * @stable ICU 3.8
  */
-public class PluralRules implements Serializable {
+public class PluralRules implements Serializable, Comparable<PluralRules> {
     /**
      * @internal
      * @deprecated This API is ICU internal only.
@@ -870,6 +870,9 @@ public class PluralRules implements Serializable {
                         } else if (pair.length == 1) {
                             low = high = Long.parseLong(pair[0]);
                         } else {
+                            throw unexpected(range, condition);
+                        }
+                        if (mod != 0 && high >= mod) {
                             throw unexpected(range, condition);
                         }
                         vals[k2] = low;
@@ -2068,5 +2071,12 @@ public class PluralRules implements Serializable {
 
     private Object writeReplace() throws ObjectStreamException {
         return new PluralRulesSerialProxy(toString());
+    }
+
+    /* @internal
+     * @deprecated
+     */
+    public int compareTo(PluralRules other) {
+            return toString().compareTo(other.toString());
     }
 }

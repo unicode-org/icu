@@ -27,8 +27,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.util.CollectionUtilities;
+import com.ibm.icu.dev.util.Relation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.KeywordStatus;
@@ -318,7 +321,7 @@ public class PluralRulesTest extends TestFmwk {
         rules = factory.forLocale(ULocale.createCanonical("ru"));
         assertEquals("ru 0", PluralRules.KEYWORD_MANY, rules.select(0));
         assertEquals("ru 1", PluralRules.KEYWORD_ONE, rules.select(1));
-        assertEquals("ru 2", PluralRules.KEYWORD_FEW, rules.select(2));
+        assertEquals("ru 2", PluralRules.KEYWORD_OTHER, rules.select(2));
     }
 
     public void testFunctionalEquivalent() {
@@ -618,6 +621,9 @@ public class PluralRulesTest extends TestFmwk {
     }
 
     public void TestLocales() {
+        if (false) {
+            generateLOCALE_SNAPSHOT();
+        }
         for (String test : LOCALE_SNAPSHOT) {
             test = test.trim();
             String[] parts = test.split("\\s*;\\s*");
@@ -634,51 +640,104 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    /**
+     * 
+     */
+    private void generateLOCALE_SNAPSHOT() {
+        Comparator c = new CollectionUtilities.CollectionComparator<Comparable>();
+        Relation<Set<StandardPluralCategories>,PluralRules> setsToRules 
+        = Relation.of(new TreeMap<Set<StandardPluralCategories>,Set<PluralRules>>(c), TreeSet.class);
+        Relation<PluralRules,ULocale> data = Relation.of(new TreeMap<PluralRules,Set<ULocale>>(), TreeSet.class);
+        for (ULocale locale : PluralRules.getAvailableULocales()) {
+            PluralRules pr = PluralRules.forLocale(locale);
+            EnumSet<StandardPluralCategories> set = getCanonicalSet(pr.getKeywords());
+            setsToRules.put(set, pr);
+            data.put(pr, locale);
+        }
+        for (Entry<Set<StandardPluralCategories>, Set<PluralRules>> entry1 : setsToRules.keyValuesSet()) {
+            Set<StandardPluralCategories> set = entry1.getKey();
+            Set<PluralRules> rules = entry1.getValue();
+            System.out.println("\n        // " + set);
+            for (PluralRules rule : rules) {
+                Set<ULocale> locales = data.get(rule);
+                System.out.print("        \"" + CollectionUtilities.join(locales, ","));
+                for (StandardPluralCategories spc : set) {
+                    Collection<NumberInfo> samples = rule.getFractionSamples(spc.toString());
+                    System.out.print("; " + spc + ": " + CollectionUtilities.join(samples, ", "));
+                }
+                System.out.println("\",");
+            }
+        }
+    }
+
+    /**
+     * @param keywords
+     * @return
+     */
+    private EnumSet<StandardPluralCategories> getCanonicalSet(Set<String> keywords) {
+        EnumSet<StandardPluralCategories> result = EnumSet.noneOf(StandardPluralCategories.class);
+        for (String s : keywords) {
+            result.add(StandardPluralCategories.valueOf(s));
+        }
+        return result;
+    }
+
     static final String[] LOCALE_SNAPSHOT = {
         // [other]
-        "az,bm,bo,dz,fa,hu,id,ig,ii,ja,jv,ka,kde,kea,km,kn,ko,lo,ms,my,sah,ses,sg,th,to,tr,vi,wo,yo,zh; other: 0, 0.0, 0.1, 1, 1.0, 3, 7",
+        "bm,bo,dz,id,ig,ii,ja,jv,kde,kea,km,ko,lkt,lo,ms,my,sah,ses,sg,th,to,vi,wo,yo,zh; other: 0, 0.0, 0.00, 0.1, 0.37, 1, 1.99, 2",
 
         // [one, other]
-        "af,asa,ast,bem,bez,bg,bn,brx,ca,cgg,chr,ckb,da,de,dv,ee,el,en,eo,es,et,eu,fi,fo,fur,fy,gl,gsw,gu,ha,haw,hy,is,it,jgo,jmc,kaj,kcg,kk,kkj,kl,ks,ksb,ku,ky,lb,lg,mas,mgo,ml,mn,mr,nah,nb,nd,ne,nl,nn,nnh,no,nr,ny,nyn,om,or,os,pa,pap,ps,pt,rm,rof,rwk,saq,seh,sn,so,sq,ss,ssy,st,sv,sw,syr,ta,te,teo,tig,tk,tn,ts,ur,ve,vo,vun,wae,xh,xog,zu;    one: 1, 1.0;    other: 0, 0.0, 0.1, 0.5, 3, 7",
-        "ak,am,bh,fil,guw,hi,ln,mg,nso,ti,tl,wa;    one: 0, 0.0, 1, 1.0;    other: 0.1, 0.5, 3, 7",
-        "ff,fr,kab; one: 0, 0.0, 0.1, 0.5, 1, 1.0, 1.5; other: 2, 5",
-        "gv;    one: 0, 0.0, 1, 1.0, 11, 12, 20, 21, 22, 31, 32, 40, 60;    other: 0.1, 15.5, 39.5, 59",
-        "mk;    one: 1, 1.0, 21, 31;    other: 0, 0.0, 0.1, 10.5, 11, 26, 30",
-        "tzm;   one: 0, 0.0, 1, 1.0, 11, 98, 99;    other: 0.1, 0.5, 10",
-
-        // [one, few, other]
-        "cs,sk; one: 1, 1.0;    few: 2, 3, 4;   other: 0, 0.0, 0.1, 0.5, 5",
-        "lt;    one: 1, 1.0, 21, 31;    few: 22, 29, 32, 39, 65;    other: 0, 0.0, 0.1, 11, 12, 19, 110, 111, 119, 211, 219, 311, 318.5, 319",
-        "mo,ro; one: 1, 1.0;    few: 0, 0.0, 101, 118, 119, 201, 219, 301, 318, 319;    other: 0.1, 160",
-        "shi;   one: 0, 0.0, 0.1, 0.5, 1, 1.0;  few: 2, 9, 10;  other: 1.5, 5.5",
-
-        // [one, two, other]
-        "iu,kw,naq,se,sma,smi,smj,smn,sms;  one: 1, 1.0;    two: 2; other: 0, 0.0, 0.1, 0.5, 1.5, 5",
+        "fil,tl; one: 0, 1; other: 0.0, 0.00, 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
+        "ca,de,en,et,fi,gl,it,nl,sw,ur,yi; one: 1; other: 0, 0.0, 0.00, 0.01, 0.1, 0.10, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99, 2, 3",
+        "da,sv; one: 0.01, 0.1, 1; other: 0, 0.0, 0.00, 0.10, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99, 2, 3",
+        "is; one: 0.1, 0.31, 1, 31; other: 0, 0.0, 0.00, 1.0, 1.00, 1.11, 1.99, 2, 11, 111, 311",
+        "mk; one: 0.1, 0.31, 1, 11, 31; other: 0, 0.0, 0.00, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99, 2, 3",
+        "ak,bh,guw,ln,mg,nso,pa,ti,wa; one: 0, 0.0, 0.00, 1; other: 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
+        "tzm; one: 0, 0.0, 0.00, 1, 11, 99; other: 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.11, 3",
+        "af,asa,ast,az,bem,bez,bg,brx,cgg,chr,ckb,dv,ee,el,eo,es,eu,fo,fur,fy,gsw,ha,haw,hu,jgo,jmc,ka,kaj,kcg,kk,kkj,kl,ks,ksb,ku,ky,lb,lg,mas,mgo,ml,mn,nah,nb,nd,ne,nn,nnh,no,nr,ny,nyn,om,or,os,pap,ps,rm,rof,rwk,saq,seh,sn,so,sq,ss,ssy,st,syr,ta,te,teo,tig,tk,tn,tr,ts,ve,vo,vun,wae,xh,xog; one: 1, 1.0, 1.00; other: 0, 0.0, 0.00, 0.01, 0.1, 0.10, 1.03, 1.3, 1.30, 1.99, 2, 3",
+        "pt; one: 0.01, 0.1, 1, 1.0, 1.00; other: 0, 0.0, 0.00, 0.10, 1.03, 1.3, 1.30, 1.99, 2, 3",
+        "am,bn,fa,gu,hi,kn,mr,zu; one: 0, 0.0, 0.00, 0.03, 0.1, 0.3, 0.30, 0.5, 1; other: 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
+        "ff,fr,hy,kab; one: 0, 0.0, 0.00, 0.02, 0.1, 0.2, 0.20, 1, 1.99; other: 2, 2.0, 2.00, 2.01, 2.1, 2.10",
 
         // [zero, one, other]
-        "ksh;   zero: 0, 0.0;   one: 1, 1.0;    other: 0.1, 0.5, 3, 7",
-        "lag;   zero: 0, 0.0;   one: 0.1, 0.5, 1, 1.0, 1.5; other: 2, 5",
-        "lv;    zero: 0, 0.0;   one: 1, 1.0, 21, 31, 161;   other: 0.1, 11, 110, 111, 211, 310, 311",
+        "ksh; zero: 0, 0.0, 0.00; one: 1, 1.0, 1.00; other: 0.03, 0.1, 0.3, 0.30, 1.03, 1.3, 1.30, 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
+        "lag; zero: 0, 0.0, 0.00; one: 0.02, 0.1, 0.2, 0.20, 1, 1.0, 1.00, 1.02, 1.2, 1.20, 1.99; other: 2, 2.0, 2.00, 2.01, 2.1, 2.10",
+        "lv; zero: 0, 0.0, 0.00, 10, 30; one: 0.1, 0.31, 1, 1.0, 1.00, 21, 31, 41; other: 1.30, 1.99, 2, 2.0, 2.00, 2.30, 11, 29, 49, 111, 311",
 
-        // [one, few, many, other]
-        "be,bs,hr,ru,sh,sr,uk;  one: 1, 1.0, 21, 31;    few: 22, 24, 32, 34;    many: 0, 0.0, 10, 11, 12, 14, 15, 19, 20, 25, 29, 30, 35, 39, 110, 111, 112, 114, 211, 212, 214, 311, 312, 314; other: 0.1, 9.5, 15.5",
-        "mt;    one: 1, 1.0;    few: 0, 0.0, 102, 109, 110, 202, 210, 302, 310; many: 111, 119, 211, 219, 311, 319; other: 0.1, 55.5, 101",
-        "pl;    one: 1, 1.0;    few: 22, 24, 32, 34;    many: 0, 0.0, 10, 11, 12, 14, 15, 19, 20, 21, 25, 29, 30, 31, 35, 39, 112, 114, 212, 214, 312, 314; other: 0.1, 5.5, 9.5, 15.5",
+        // [one, two, other]
+        "iu,kw,naq,se,sma,smi,smj,smn,sms; one: 1, 1.0, 1.00; two: 2, 2.0, 2.00; other: 0, 0.0, 0.00, 0.02, 0.1, 0.2, 0.20, 1.04, 1.4, 1.40, 1.99, 2.04, 2.4, 2.40, 3, 4",
 
-        // [one, two, many, other]
-        "he;    one: 1, 1.0;    two: 2; many: 10, 20, 30;   other: 0, 0.0, 0.1, 5.5, 19, 29",
+        // [one, few, other]
+        "mo,ro; one: 1; few: 0, 0.1, 1.0, 1.00, 1.319, 1.99, 2, 21.0, 21.00, 21.319, 101, 119, 119.0, 119.00, 119.20, 301, 319; other: 20, 21",
+        "bs,hr,sh,sr; one: 0.1, 0.31, 1, 31, 34.31; few: 2, 32, 34; other: 0, 0.0, 0.00, 1.0, 1.00, 1.112, 1.99, 11, 12, 14, 34.0, 34.00, 111, 112, 114, 311, 312, 314",
+        "shi; one: 0, 0.0, 0.00, 0.1, 0.12, 0.5, 1; few: 2, 2.0, 2.00, 10; other: 1.99, 2.12, 11, 11.0, 11.00, 11.10, 12",
+
+        // [one, many, other]
+        "ru; one: 1, 31; many: 0, 10, 11, 15, 19, 30, 35, 39, 111, 114, 311, 314; other: 0.0, 0.00, 0.1, 0.31, 1.0, 1.00, 1.30, 1.99, 2, 2.0, 2.00, 2.30, 3",
 
         // [one, two, few, other]
-        "gd;    one: 1, 1.0, 11;    two: 2, 12; few: 3, 10, 13, 19; other: 0, 0.0, 0.1, 5.5, 11.5, 12.5",
-        "sl;    one: 1, 1.0, 101, 201, 301; two: 102, 202, 302; few: 103, 104, 203, 204, 303, 304;  other: 0, 0.0, 0.1, 103.5, 152.5, 203.5",
+        "sl; one: 1, 101, 301; two: 2, 102, 302; few: 0.0, 0.00, 0.1, 0.303, 1.0, 1.00, 1.303, 1.99, 102.0, 102.00, 102.303, 103, 104, 303, 304, 304.0, 304.00, 304.302; other: 0",
+        "gd; one: 1, 1.0, 1.00, 11; two: 2, 2.0, 2.00, 12; few: 3, 19, 19.0, 19.00; other: 0, 0.0, 0.00, 0.1, 0.12, 1.12, 1.99, 2.11, 19.12, 20, 21",
+        "gv; one: 1, 1.0, 1.00, 11, 31; two: 2, 2.0, 2.00, 12, 32; few: 0, 0.0, 0.00, 100, 160, 300, 360; other: 0.1, 0.31, 1.360, 1.99, 2.31, 3, 3.0, 3.00, 3.31, 4",
+
+        // [one, two, many, other]
+        "he; one: 1; two: 2; many: 30; other: 0, 0.0, 0.00, 0.1, 0.30, 1.0, 1.00, 1.30, 1.99, 2.0, 2.00, 2.30, 10, 30.0, 30.00, 30.10",
+
+        // [one, few, many, other]
+        "cs,sk; one: 1; few: 2, 4; many: 0.0, 0.00, 0.04, 0.1, 0.4, 0.40, 1.0, 1.00, 1.05, 1.5, 1.50, 1.99, 2.0, 2.00, 2.05, 2.5, 2.50; other: 0, 5",
+        "pl; one: 1; few: 2, 32, 34; many: 0, 10, 11, 12, 14, 15, 19, 30, 31, 35, 39, 112, 114, 312, 314; other: 0.0, 0.00, 0.1, 0.32, 1.0, 1.00, 1.1, 1.2, 1.30, 1.99, 34.0, 34.00, 34.30",
+        "uk; one: 1, 31; few: 2, 32, 34; many: 0, 10, 11, 12, 14, 15, 19, 30, 35, 39, 111, 112, 114, 311, 312, 314; other: 0.0, 0.00, 0.1, 0.31, 1.0, 1.00, 1.1, 1.2, 1.30, 1.99, 34.0, 34.00, 34.30",
+        "mt; one: 1, 1.0, 1.00; few: 0, 0.0, 0.00, 2, 102, 110, 302, 310; many: 111, 119, 311, 311.0, 311.00, 319; other: 0.1, 0.20, 1.302, 1.99, 20, 21, 21.0, 21.00, 21.302, 311.302",
+        "be; one: 1, 1.0, 1.00, 31; few: 2, 32, 34, 34.0, 34.00; many: 0, 0.0, 0.00, 10, 11, 12, 14, 15, 19, 30, 35, 39, 111, 112, 114, 311, 312, 314; other: 0.1, 0.31, 1.1, 1.2, 1.30, 1.99, 34.30",
+        "lt; one: 1, 1.0, 1.00, 31; few: 2, 2.0, 2.00, 32, 39; many: 0.1, 0.31, 1.19, 1.99, 2.31; other: 0, 0.0, 0.00, 10, 11, 12, 19, 111, 119, 311, 319",
 
         // [one, two, few, many, other]
-        "br;    one: 1, 1.0, 21, 31;    two: 22, 32;    few: 23, 24, 29, 33, 34, 39, 369, 389;  many: 1000000, 2000000, 3000000;    other: 0, 0.0, 0.1, 11, 12, 13, 14, 19, 110, 111, 112, 119, 170, 171, 172, 179, 190, 191, 192, 199, 210, 211, 212, 219, 270, 271, 272, 279, 290, 291, 292, 299, 310, 311, 312, 319, 334.5, 370, 371, 372, 379, 390, 391, 392, 399",
-        "ga;    one: 1, 1.0;    two: 2; few: 3, 6;  many: 7, 8, 9, 10;  other: 0, 0.0, 0.1, 6.5",
+        "ga; one: 1, 1.0, 1.00; two: 2, 2.0, 2.00; few: 3, 3.0, 3.00, 6; many: 7, 7.0, 7.00, 10; other: 0, 0.0, 0.00, 0.1, 0.10, 1.12, 1.99, 2.12, 3.12, 7.12, 11, 12",
+        "br; one: 1, 1.0, 1.00, 31; two: 2, 2.0, 2.00, 32; few: 33, 33.0, 33.00, 39; many: 1000000, 3000000, 3000000.0, 3000000.00; other: 0, 0.0, 0.00, 0.1, 0.39, 1.112, 1.99, 2.112, 11, 12, 13, 19, 33.112, 110, 111, 112, 191, 192, 199, 310, 311, 312, 391, 392, 399, 3000000.112",
 
         // [zero, one, two, few, many, other]
-        "ar;    zero: 0, 0.0;   one: 1, 1.0;    two: 2; few: 103, 109, 110, 203, 210, 303, 310; many: 111, 150, 199, 211, 298, 299, 311, 399;   other: 0.1",
-        "cy;    zero: 0, 0.0;   one: 1, 1.0;    two: 2; few: 3; many: 6;    other: 0.1, 2.5, 3.5, 5",
+        "cy; zero: 0, 0.0, 0.00; one: 1, 1.0, 1.00; two: 2, 2.0, 2.00; few: 3, 3.0, 3.00; many: 6, 6.0, 6.00; other: 0.06, 0.1, 0.6, 0.60, 1.06, 1.6, 1.60, 1.99, 2.06, 2.6, 2.60, 3.06, 3.6, 3.60, 4, 4.0, 4.00, 4.06, 4.6, 4.60, 5, 6.05, 6.5, 6.50",
+        "ar; zero: 0, 0.0, 0.00; one: 1, 1.0, 1.00; two: 2, 2.0, 2.00; few: 103, 103.0, 103.00, 110, 303, 310; many: 111, 199, 311, 311.0, 311.00, 399; other: 0.1, 0.303, 1.303, 1.99, 2.303, 100, 100.0, 100.00, 100.303, 101, 103.399, 311.303",
     };
 
     private <T extends Serializable> T serializeAndDeserialize(T original, Output<Integer> size) { 
