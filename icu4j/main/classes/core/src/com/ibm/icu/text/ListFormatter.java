@@ -149,11 +149,16 @@ final public class ListFormatter {
     /**
      * Returns the pattern to use for a particular item count.
      * @param count the item count.
-     * @return the pattern with {0}, {1}, {2}, etc.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @return the pattern with {0}, {1}, {2}, etc. For English,
+     * getPatternForNumItems(3) == "{0}, {1}, and {2}"
+     * @throws IllegalArgumentException when count is 0 or negative.
+     * @draft ICU 52
+     * @provisional This API might change or be removed in a future release.
      */
-    public String createPatternForNumItems(int count) {
+    public String getPatternForNumItems(int count) {
+        if (count <= 0) {
+            throw new IllegalArgumentException("count must be > 0");
+        }
         ArrayList<String> list = new ArrayList<String>();
         for (int i = 0; i < count; i++) {
             list.add(String.format("{%d}", i));
