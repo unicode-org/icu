@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2012, International Business Machines Corporation and
+* Copyright (C) 2007-2013, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -12,6 +12,7 @@
 #include "unicode/plurrule.h"
 #include "unicode/upluralrules.h"
 #include "unicode/ures.h"
+#include "cmath"
 #include "cmemory.h"
 #include "cstring.h"
 #include "hash.h"
@@ -23,6 +24,8 @@
 #include "ustrfmt.h"
 #include "locutil.h"
 #include "uassert.h"
+#include "uvectr32.h"
+#include "stdio.h"
 
 #if !UCONFIG_NO_FORMATTING
 
@@ -42,6 +45,11 @@ static const UChar PK_MOD[]={LOW_M,LOW_O,LOW_D,0};
 static const UChar PK_AND[]={LOW_A,LOW_N,LOW_D,0};
 static const UChar PK_OR[]={LOW_O,LOW_R,0};
 static const UChar PK_VAR_N[]={LOW_N,0};
+static const UChar PK_VAR_I[]={LOW_I,0};
+static const UChar PK_VAR_F[]={LOW_F,0};
+static const UChar PK_VAR_T[]={LOW_T,0};
+static const UChar PK_VAR_V[]={LOW_V,0};
+static const UChar PK_VAR_J[]={LOW_J,0};
 static const UChar PK_WITHIN[]={LOW_W,LOW_I,LOW_T,LOW_H,LOW_I,LOW_N,0};
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralRules)
@@ -179,16 +187,16 @@ PluralRules::forLocale(const Locale& locale, UPluralType type, UErrorCode& statu
 
 UnicodeString
 PluralRules::select(int32_t number) const {
-    if (mRules == NULL) {
-        return UnicodeString(TRUE, PLURAL_DEFAULT_RULE, -1);
-    }
-    else {
-        return mRules->select(number);
-    }
+    return select(NumberInfo(number));
 }
 
 UnicodeString
 PluralRules::select(double number) const {
+    return select(NumberInfo(number));
+}
+
+UnicodeString
+PluralRules::select(const NumberInfo &number) const {
     if (mRules == NULL) {
         return UnicodeString(TRUE, PLURAL_DEFAULT_RULE, -1);
     }
@@ -295,7 +303,6 @@ PluralRules::getKeywordOther() const {
 
 UBool
 PluralRules::operator==(const PluralRules& other) const  {
-    int32_t limit;
     const UnicodeString *ptrKeyword;
     UErrorCode status= U_ZERO_ERROR;
 
@@ -327,17 +334,6 @@ PluralRules::operator==(const PluralRules& other) const  {
         return FALSE;
     }
 
-    if ((limit=this->getRepeatLimit()) != other.getRepeatLimit()) {
-        return FALSE;
-    }
-    UnicodeString myKeyword, otherKeyword;
-    for (int32_t i=0; i<limit; ++i) {
-        myKeyword = this->select(i);
-        otherKeyword = other.select(i);
-        if (myKeyword!=otherKeyword) {
-            return FALSE;
-        }
-    }
     return TRUE;
 }
 
@@ -352,6 +348,8 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
     AndConstraint *curAndConstraint=NULL;
     OrConstraint *orNode=NULL;
     RuleChain *lastChain=NULL;
+    int32_t  rangeLowIdx = -1;   // Indices in the UVector of ranges of the
+    int32_t  rangeHiIdx  = -1;   //    low and hi values currently being parsed.
 
     if (U_FAILURE(status)) {
         return;
@@ -387,20 +385,23 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
             break;
         case tIs:
             U_ASSERT(curAndConstraint != NULL);
-            curAndConstraint->rangeHigh=-1;
+            U_ASSERT(curAndConstraint->value == -1);
+            U_ASSERT(curAndConstraint->rangeList == NULL);
             break;
         case tNot:
             U_ASSERT(curAndConstraint != NULL);
-            curAndConstraint->notIn=TRUE;
+            curAndConstraint->negated=TRUE;
             break;
         case tIn:
-            U_ASSERT(curAndConstraint != NULL);
-            curAndConstraint->rangeHigh=PLURAL_RANGE_HIGH;
-            curAndConstraint->integerOnly = TRUE;
-            break;
         case tWithin:
             U_ASSERT(curAndConstraint != NULL);
-            curAndConstraint->rangeHigh=PLURAL_RANGE_HIGH;
+            curAndConstraint->rangeList = new UVector32(status);
+            curAndConstraint->rangeList->addElement(-1, status);  // range Low
+            curAndConstraint->rangeList->addElement(-1, status);  // range Hi
+            rangeLowIdx = 0;
+            rangeHiIdx  = 1;
+            curAndConstraint->value=PLURAL_RANGE_HIGH;
+            curAndConstraint->integerOnly = (type == tIn);
             break;
         case tNumber:
             U_ASSERT(curAndConstraint != NULL);
@@ -409,17 +410,46 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
                 curAndConstraint->opNum=getNumberValue(token);
             }
             else {
-                if (curAndConstraint->rangeLow == -1) {
-                    curAndConstraint->rangeLow=getNumberValue(token);
-                }
-                else {
-                    curAndConstraint->rangeHigh=getNumberValue(token);
+                if (curAndConstraint->rangeList == NULL) {
+                    // this is for an 'is' rule
+                    curAndConstraint->value = getNumberValue(token);
+                } else {
+                    // this is for an 'in' or 'within' rule
+                    if (curAndConstraint->rangeList->elementAti(rangeLowIdx) == -1) {
+                        curAndConstraint->rangeList->setElementAt(getNumberValue(token), rangeLowIdx);
+                        curAndConstraint->rangeList->setElementAt(getNumberValue(token), rangeHiIdx);
+                    }
+                    else {
+                        curAndConstraint->rangeList->setElementAt(getNumberValue(token), rangeHiIdx);
+                    }
                 }
             }
+            break;
+        case tComma:
+            // TODO: rule syntax checking is inadequate, can happen with badly formed rules.
+            //       The fix is a redone parser.
+            if (curAndConstraint == NULL || curAndConstraint->rangeList == NULL) {
+                status = U_PARSE_ERROR;
+                break;
+            }
+            U_ASSERT(curAndConstraint->rangeList->size() >= 2);
+            rangeLowIdx = curAndConstraint->rangeList->size();
+            curAndConstraint->rangeList->addElement(-1, status);  // range Low
+            rangeHiIdx = curAndConstraint->rangeList->size();
+            curAndConstraint->rangeList->addElement(-1, status);  // range Hi
             break;
         case tMod:
             U_ASSERT(curAndConstraint != NULL);
             curAndConstraint->op=AndConstraint::MOD;
+            break;
+        case tVariableN:
+        case tVariableI:
+        case tVariableF:
+        case tVariableT:
+        case tVariableV:
+        case tVariableJ:
+            U_ASSERT(curAndConstraint != NULL);
+            curAndConstraint->digitsType = type;
             break;
         case tKeyword:
             if (ruleChain==NULL) {
@@ -442,6 +472,9 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
             break;
         }
         prevType=type;
+        if (U_FAILURE(status)) {
+            break;
+        }
     }
 }
 
@@ -478,16 +511,6 @@ PluralRules::getNextLocale(const UnicodeString& localeData, int32_t* curIndex, U
     *curIndex=i;
 }
 
-
-int32_t
-PluralRules::getRepeatLimit() const {
-    if (mRules!=NULL) {
-        return mRules->getRepeatLimit();
-    }
-    else {
-        return 0;
-    }
-}
 
 int32_t
 PluralRules::getKeywordIndex(const UnicodeString& keyword,
@@ -574,10 +597,7 @@ PluralRules::initSamples(UErrorCode& status) {
     MaybeStackArray<SampleRecord, 10> newSamples;
     int32_t sampleCount = 0;
 
-    int32_t limit = getRepeatLimit() * MAX_SAMPLES * 2;
-    if (limit < 10) {
-        limit = 10;
-    }
+    int32_t limit = 10;
 
     for (int i = 0, keywordsRemaining = maxIndex;
           keywordsRemaining > 0 && i < limit;
@@ -589,7 +609,7 @@ PluralRules::initSamples(UErrorCode& status) {
         int32_t found = -1;
         while (rc != NULL) {
             if (rc->ruleHeader != NULL) {
-                if (rc->ruleHeader->isFulfilled(val)) {
+                if (rc->ruleHeader->isFulfilled(NumberInfo(val))) {
                     found = n;
                     break;
                 }
@@ -659,8 +679,8 @@ PluralRules::initSamples(UErrorCode& status) {
 void
 PluralRules::addRules(RuleChain& rules) {
     RuleChain *newRule = new RuleChain(rules);
+    U_ASSERT(this->mRules == NULL);
     this->mRules=newRule;
-    newRule->setRepeatLimit();
 }
 
 UnicodeString
@@ -758,10 +778,11 @@ PluralRules::getRuleFromResource(const Locale& locale, UPluralType type, UErrorC
 AndConstraint::AndConstraint() {
     op = AndConstraint::NONE;
     opNum=-1;
-    rangeLow=-1;
-    rangeHigh=-1;
-    notIn=FALSE;
-    integerOnly=FALSE;
+    value = -1;
+    rangeList = NULL;
+    negated = FALSE;
+    integerOnly = FALSE;
+    digitsType = none;
     next=NULL;
 }
 
@@ -769,10 +790,16 @@ AndConstraint::AndConstraint() {
 AndConstraint::AndConstraint(const AndConstraint& other) {
     this->op = other.op;
     this->opNum=other.opNum;
-    this->rangeLow=other.rangeLow;
-    this->rangeHigh=other.rangeHigh;
+    this->value=other.value;
+    this->rangeList=NULL;
+    if (other.rangeList != NULL) {
+        UErrorCode status = U_ZERO_ERROR;
+        this->rangeList = new UVector32(status);
+        this->rangeList->assign(*other.rangeList, status);
+    }
     this->integerOnly=other.integerOnly;
-    this->notIn=other.notIn;
+    this->negated=other.negated;
+    this->digitsType = other.digitsType;
     if (other.next==NULL) {
         this->next=NULL;
     }
@@ -789,78 +816,45 @@ AndConstraint::~AndConstraint() {
 
 
 UBool
-AndConstraint::isFulfilled(double number) {
-    UBool result=TRUE;
-    double value=number;
-
-    // arrrrrrgh
-    if ((rangeHigh == -1 || integerOnly) && number != uprv_floor(number)) {
-      return notIn;
-    }
-
-    if ( op == MOD ) {
-        value = (int32_t)value % opNum;
-    }
-    if ( rangeHigh == -1 ) {
-        if ( rangeLow == -1 ) {
-            result = TRUE; // empty rule
-        }
-        else {
-            if ( value == rangeLow ) {
-                result = TRUE;
-            }
-            else {
-                result = FALSE;
-            }
-        }
-    }
-    else {
-        if ((rangeLow <= value) && (value <= rangeHigh)) {
-            if (integerOnly) {
-                if ( value != (int32_t)value) {
-                    result = FALSE;
-                }
-                else {
-                    result = TRUE;
-                }
-            }
-            else {
-                result = TRUE;
-            }
-        }
-        else {
+AndConstraint::isFulfilled(const NumberInfo &number) {
+    UBool result = TRUE;
+    double n = number.get(digitsType);  // pulls n | i | v | f value for the number.
+                                        // Will always be positive.
+                                        // May be non-integer (n option only)
+    do {
+        if ((integerOnly && n != uprv_floor(n)) ||
+                (digitsType == tVariableJ && number.getVisibleFractionDigitCount()) != 0) {
             result = FALSE;
+            break;
         }
+
+        if (op == MOD) {
+            n = std::fmod(n, opNum);
+        }
+        if (rangeList == NULL) {
+            result = value == -1 ||    // empty rule
+                     n == value;       //  'is' rule
+            break;
+        }
+        result = FALSE;                // 'in' or 'within' rule
+        for (int32_t r=0; r<rangeList->size(); r+=2) {
+            if (rangeList->elementAti(r) <= n && n <= rangeList->elementAti(r+1)) {
+                result = TRUE;
+                break;
+            }
+        }
+    } while (FALSE);
+
+    if (negated) {
+        result = !result;
     }
-    if (notIn) {
-        return !result;
-    }
-    else {
-        return result;
-    }
+    return result;
 }
 
 UBool 
 AndConstraint::isLimited() {
-    return (rangeHigh == -1 || integerOnly) && !notIn && op != MOD;
+    return (rangeList == NULL || integerOnly) && !negated && op != MOD;
 }
-
-int32_t
-AndConstraint::updateRepeatLimit(int32_t maxLimit) {
-
-    if ( op == MOD ) {
-        return uprv_max(opNum, maxLimit);
-    }
-    else {
-        if ( rangeHigh == -1 ) {
-            return uprv_max(rangeLow, maxLimit);
-        }
-        else{
-            return uprv_max(rangeHigh, maxLimit);
-        }
-    }
-}
-
 
 AndConstraint*
 AndConstraint::add()
@@ -906,14 +900,14 @@ OrConstraint::add()
         while (curOrConstraint->next!=NULL) {
             curOrConstraint = curOrConstraint->next;
         }
-        curOrConstraint->next = NULL;
+        U_ASSERT(curOrConstraint->childNode == NULL);
         curOrConstraint->childNode = new AndConstraint();
     }
     return curOrConstraint->childNode;
 }
 
 UBool
-OrConstraint::isFulfilled(double number) {
+OrConstraint::isFulfilled(const NumberInfo &number) {
     OrConstraint* orRule=this;
     UBool result=FALSE;
 
@@ -950,11 +944,9 @@ OrConstraint::isLimited() {
 RuleChain::RuleChain() {
     ruleHeader=NULL;
     next = NULL;
-    repeatLimit=0;
 }
 
 RuleChain::RuleChain(const RuleChain& other) {
-    this->repeatLimit = other.repeatLimit;
     this->keyword=other.keyword;
     if (other.ruleHeader != NULL) {
         this->ruleHeader = new OrConstraint(*(other.ruleHeader));
@@ -980,21 +972,15 @@ RuleChain::~RuleChain() {
     }
 }
 
+
 UnicodeString
-RuleChain::select(double number) const {
-
-   if ( ruleHeader != NULL ) {
-       if (ruleHeader->isFulfilled(number)) {
-           return keyword;
+RuleChain::select(const NumberInfo &number) const {
+    for (const RuleChain *rules = this; rules != NULL; rules = rules->next) {
+       if (rules->ruleHeader->isFulfilled(number)) {
+           return rules->keyword;
        }
-   }
-   if ( next != NULL ) {
-       return next->select(number);
-   }
-   else {
-       return UnicodeString(TRUE, PLURAL_KEYWORD_OTHER, 5);
-   }
-
+    }
+    return UnicodeString(TRUE, PLURAL_KEYWORD_OTHER, 5);
 }
 
 void
@@ -1007,12 +993,12 @@ RuleChain::dumpRules(UnicodeString& result) {
         while ( orRule != NULL ) {
             AndConstraint* andRule=orRule->childNode;
             while ( andRule != NULL ) {
-                if ( (andRule->op==AndConstraint::NONE) && (andRule->rangeHigh==-1) ) {
+                if ( (andRule->op==AndConstraint::NONE) && (andRule->rangeList==NULL) ) {
                     result += UNICODE_STRING_SIMPLE(" n is ");
-                    if (andRule->notIn) {
+                    if (andRule->negated) {
                         result += UNICODE_STRING_SIMPLE("not ");
                     }
-                    uprv_itou(digitString,16, andRule->rangeLow,10,0);
+                    uprv_itou(digitString,16, andRule->value,10,0);
                     result += UnicodeString(digitString);
                 }
                 else {
@@ -1024,31 +1010,26 @@ RuleChain::dumpRules(UnicodeString& result) {
                     else {
                         result += UNICODE_STRING_SIMPLE("  n ");
                     }
-                    if (andRule->rangeHigh==-1) {
-                        if (andRule->notIn) {
+                    if (andRule->rangeList==NULL) {
+                        if (andRule->negated) {
                             result += UNICODE_STRING_SIMPLE(" is not ");
-                            uprv_itou(digitString,16, andRule->rangeLow,10,0);
+                            uprv_itou(digitString,16, andRule->value,10,0);
                             result += UnicodeString(digitString);
                         }
                         else {
                             result += UNICODE_STRING_SIMPLE(" is ");
-                            uprv_itou(digitString,16, andRule->rangeLow,10,0);
+                            uprv_itou(digitString,16, andRule->value,10,0);
                             result += UnicodeString(digitString);
                         }
                     }
                     else {
-                        if (andRule->notIn) {
+                        if (andRule->negated) {
                             if ( andRule->integerOnly ) {
                                 result += UNICODE_STRING_SIMPLE("  not in ");
                             }
                             else {
                                 result += UNICODE_STRING_SIMPLE("  not within ");
                             }
-                            uprv_itou(digitString,16, andRule->rangeLow,10,0);
-                            result += UnicodeString(digitString);
-                            result += UNICODE_STRING_SIMPLE(" .. ");
-                            uprv_itou(digitString,16, andRule->rangeHigh,10,0);
-                            result += UnicodeString(digitString);
                         }
                         else {
                             if ( andRule->integerOnly ) {
@@ -1057,10 +1038,19 @@ RuleChain::dumpRules(UnicodeString& result) {
                             else {
                                 result += UNICODE_STRING_SIMPLE(" within ");
                             }
-                            uprv_itou(digitString,16, andRule->rangeLow,10,0);
+                        }
+                        for (int32_t r=0; r<andRule->rangeList->size(); r+=2) {
+                            int32_t rangeLo = andRule->rangeList->elementAti(r);
+                            int32_t rangeHi = andRule->rangeList->elementAti(r+1);
+                            uprv_itou(digitString,16, rangeLo, 10, 0);
                             result += UnicodeString(digitString);
-                            result += UNICODE_STRING_SIMPLE(" .. ");
-                            uprv_itou(digitString,16, andRule->rangeHigh,10,0);
+                            if (rangeLo != rangeHi) {
+                                result += UNICODE_STRING_SIMPLE(" .. ");
+                                uprv_itou(digitString,16, rangeHi, 10,0);
+                            }
+                            if (r+2 <= andRule->rangeList->size()) {
+                                result += UNICODE_STRING_SIMPLE(", ");
+                            }
                         }
                     }
                 }
@@ -1078,33 +1068,6 @@ RuleChain::dumpRules(UnicodeString& result) {
     }
 }
 
-int32_t
-RuleChain::getRepeatLimit () {
-    return repeatLimit;
-}
-
-void
-RuleChain::setRepeatLimit () {
-    int32_t limit=0;
-
-    if ( next != NULL ) {
-        next->setRepeatLimit();
-        limit = next->repeatLimit;
-    }
-
-    if ( ruleHeader != NULL ) {
-        OrConstraint* orRule=ruleHeader;
-        while ( orRule != NULL ) {
-            AndConstraint* andRule=orRule->childNode;
-            while ( andRule != NULL ) {
-                limit = andRule->updateRepeatLimit(limit);
-                andRule = andRule->next;
-            }
-            orRule = orRule->next;
-        }
-    }
-    repeatLimit = limit;
-}
 
 UErrorCode
 RuleChain::getKeywords(int32_t capacityOfKeywords, UnicodeString* keywords, int32_t& arraySize) const {
@@ -1153,29 +1116,33 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
     switch(prevType) {
     case none:
     case tSemiColon:
-        if (curType!=tKeyword) {
+        if (curType!=tKeyword && curType != tEOF) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
-    case tVariableN :
+    case tVariableN:
+    case tVariableI:
+    case tVariableF:
+    case tVariableT:
+    case tVariableV:
+    case tVariableJ:
         if (curType != tIs && curType != tMod && curType != tIn &&
             curType != tNot && curType != tWithin) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
-    case tZero:
-    case tOne:
-    case tTwo:
-    case tFew:
-    case tMany:
-    case tOther:
     case tKeyword:
         if (curType != tColon) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
-    case tColon :
-        if (curType != tVariableN) {
+    case tColon:
+        if (!(curType == tVariableN ||
+              curType == tVariableI ||
+              curType == tVariableF ||
+              curType == tVariableT ||
+              curType == tVariableV ||
+              curType == tVariableJ)) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
@@ -1193,18 +1160,32 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
     case tDot:
     case tIn:
     case tWithin:
-    case tAnd:
+    case tAnd:   // TODO: split of And and Or, which are different.
     case tOr:
-        if (curType != tNumber && curType != tVariableN) {
+        if (curType != tNumber && 
+                curType != tVariableN &&
+                curType != tVariableI &&
+                curType != tVariableF &&
+                curType != tVariableT &&
+                curType != tVariableV &&
+                curType != tVariableJ) {
+            status = U_UNEXPECTED_TOKEN;
+        }
+        break;
+    case tComma:
+        if (curType != tNumber) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
     case tNumber:
         if (curType != tDot && curType != tSemiColon && curType != tIs && curType != tNot &&
-            curType != tIn && curType != tWithin && curType != tAnd && curType != tOr)
+            curType != tIn && curType != tWithin && curType != tAnd && curType != tOr && 
+            curType != tComma && curType != tEOF)
         {
             status = U_UNEXPECTED_TOKEN;
         }
+        // TODO: a comma following a number that is not part of a range will be allowed.
+        //       It's not the only case of this sort of thing. Parser needs a re-write.
         break;
     default:
         status = U_UNEXPECTED_TOKEN;
@@ -1243,10 +1224,17 @@ RuleParser::getNextToken(const UnicodeString& ruleData,
             }
             else {
                 *ruleIndex=*ruleIndex+1;
+                if (*ruleIndex >= ruleData.length()) {
+                    type = tEOF;
+                }
             }
             break; // consective space
         case tColon:
         case tSemiColon:
+        case tComma:
+        case tIn:   // scanned '='
+        case tNot:  // scanned '!'
+        case tMod:  // scanned '%'
             if ( *ruleIndex != curIndex ) {
                 token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
                 *ruleIndex=curIndex;
@@ -1274,22 +1262,22 @@ RuleParser::getNextToken(const UnicodeString& ruleData,
                 return;
              }
          case tDot:
-             if (prevType==none) {  // first dot
+             if (prevType==none) {         // first dot
                 prevType=type;
-                continue;
+                break;
              }
-             else {
-                 if ( *ruleIndex != curIndex ) {
-                    token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
-                    *ruleIndex=curIndex;  // letter
-                    type=prevType;
-                    getKeyType(token, type, status);
-                    return;
-                 }
-                 else {  // two consective dots
-                    *ruleIndex=curIndex+2;
-                    return;
-                 }
+             else if (prevType == tDot) {  // two consecutive dots. Return them
+                *ruleIndex=curIndex+1;     //   without looking to see what follows.
+                return;
+             } else {
+                // Encountered '.' while parsing something else
+                // Return the something else.
+                U_ASSERT( *ruleIndex != curIndex );
+                token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
+                *ruleIndex=curIndex;
+                type=prevType;
+                getKeyType(token, type, status);
+                return;
              }
          default:
              status = U_UNEXPECTED_TOKEN;
@@ -1336,6 +1324,18 @@ RuleParser::inRange(UChar ch, tokenType& type) {
     case DOT:
         type = tDot;
         return TRUE;
+    case COMMA:
+        type = tComma;
+        return TRUE;
+    case EXCLAMATION:
+        type = tNot;
+        return TRUE;
+    case EQUALS:
+        type = tIn;
+        return TRUE;
+    case PERCENT_SIGN:
+        type = tMod;
+        return TRUE;
     default :
         type = none;
         return FALSE;
@@ -1353,6 +1353,21 @@ RuleParser::getKeyType(const UnicodeString& token, tokenType& keyType, UErrorCod
     }
     else if (0 == token.compare(PK_VAR_N, 1)) {
         keyType = tVariableN;
+    }
+    else if (0 == token.compare(PK_VAR_I, 1)) {
+        keyType = tVariableI;
+    }
+    else if (0 == token.compare(PK_VAR_F, 1)) {
+        keyType = tVariableF;
+    }
+    else if (0 == token.compare(PK_VAR_T, 1)) {
+        keyType = tVariableT;
+    }
+    else if (0 == token.compare(PK_VAR_V, 1)) {
+        keyType = tVariableV;
+    }
+    else if (0 == token.compare(PK_VAR_J, 1)) {
+        keyType = tVariableJ;
     }
     else if (0 == token.compare(PK_IS, 2)) {
         keyType = tIs;
@@ -1431,6 +1446,106 @@ PluralKeywordEnumeration::count(UErrorCode& /*status*/) const {
 }
 
 PluralKeywordEnumeration::~PluralKeywordEnumeration() {
+}
+
+
+
+NumberInfo::NumberInfo(double n, int32_t v, int64_t f) {
+    init(n, v, f);
+    // check values. TODO make into unit test.
+    //            
+    //            long visiblePower = (int) Math.pow(10, v);
+    //            if (fractionalDigits > visiblePower) {
+    //                throw new IllegalArgumentException();
+    //            }
+    //            double fraction = intValue + (fractionalDigits / (double) visiblePower);
+    //            if (fraction != source) {
+    //                double diff = Math.abs(fraction - source)/(Math.abs(fraction) + Math.abs(source));
+    //                if (diff > 0.00000001d) {
+    //                    throw new IllegalArgumentException();
+    //                }
+    //            }
+}
+
+NumberInfo::NumberInfo(double n, int32_t v) {
+    // Ugly, but for samples we don't care.
+    init(n, v, getFractionalDigits(n, v));
+}
+
+NumberInfo::NumberInfo(double n) {
+    int64_t numFractionDigits = decimals(n);
+    init(n, numFractionDigits, getFractionalDigits(n, numFractionDigits));
+}
+
+void NumberInfo::init(double n, int32_t v, int64_t f) {
+    isNegative = n < 0;
+    source = fabs(n);
+    visibleFractionDigitCount = v;
+    fractionalDigits = f;
+    intValue = (int64_t)source;
+    hasIntegerValue = source == intValue;   // TODO: problems with negative values. From Java.
+    if (f == 0) {
+         fractionalDigitsWithoutTrailingZeros = 0;
+    } else {
+        int64_t fdwtz = f;
+        while ((fdwtz%10) == 0) {
+            fdwtz /= 10;
+        }
+        fractionalDigitsWithoutTrailingZeros = fdwtz;
+    }
+}
+
+int32_t NumberInfo::decimals(double n) {
+    // Count the number of decimal digits in the fraction part of the number.
+    // TODO: there must be a better way. Sloppy port from ICU4J.
+    //       This fails with numbers like 0.0001234567890123456, which kick over
+    //       into exponential format in the output from printf.
+    //       printf has no format specification to stay in fixed point form,
+    //         not print trailing fraction zeros, not print a fixed number of (possibly noise)
+    //         fraction digits, and print all significant digits.
+    if (n == trunc(n)) {
+        return 0;
+    }
+    n = fabs(n);
+    char  buf[30] = {0};
+    sprintf(buf, "%1.15g\n", n);
+    int lastDig = 0;
+    for (int i=17; i>=0; --i) {
+        if (buf[i] != 0 && lastDig == 0) lastDig = i;
+        if (buf[i] == 'e') {
+           return 0;
+        }
+        if (buf[i] == '.' || buf[i] == ',') {
+           return lastDig - i - 1;
+       }
+    }
+    return 0;
+}
+
+int32_t NumberInfo::getFractionalDigits(double n, int32_t v) {
+    // TODO: int32_t is suspect. Port from Java.
+    if (v == 0) {
+        return 0;
+    } else {
+        int32_t base = (int32_t) pow(10, v);
+        int64_t scaled = floor(n * base + 0.5);
+        return (int)fmod(scaled, base);
+    }
+}
+
+
+double NumberInfo::get(tokenType operand) const {
+    switch(operand) {
+        default:         return source;
+        case tVariableI: return intValue;
+        case tVariableF: return fractionalDigits;
+        case tVariableT: return fractionalDigitsWithoutTrailingZeros; 
+        case tVariableV: return visibleFractionDigitCount;
+    }
+}
+
+int32_t NumberInfo::getVisibleFractionDigitCount() const {
+    return visibleFractionDigitCount;
 }
 
 U_NAMESPACE_END

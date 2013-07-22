@@ -38,6 +38,7 @@
 U_NAMESPACE_BEGIN
 
 class Hashtable;
+class NumberInfo;
 class RuleChain;
 class RuleParser;
 class PluralKeywordEnumeration;
@@ -89,19 +90,80 @@ class PluralKeywordEnumeration;
  * is_relation   = expr 'is' ('not')? value
  * in_relation   = expr ('not')? 'in' range_list
  * within_relation = expr ('not')? 'within' range
- * expr          = 'n' ('mod' value)?
+ * expr          = ('n' | 'i' | 'f' | 'v' | 'j') ('mod' value)?
  * range_list    = (range | value) (',' range_list)*
- * value         = digit+
+ * value         = digit+  ('.' digit+)?
  * digit         = 0|1|2|3|4|5|6|7|8|9
  * range         = value'..'value
  * \endcode
  * </pre></p>
  * <p>
+ * <p>
+ * The i, f, and v values are defined as follows:
+ * </p>
+ * <ul>
+ * <li>i to be the integer digits.</li>
+ * <li>f to be the visible fractional digits, as an integer.</li>
+ * <li>v to be the number of visible fraction digits.</li>
+ * <li>j is defined to only match integers. That is j is 3 fails if v != 0 (eg for 3.1 or 3.0).</li>
+ * </ul>
+ * <p>
+ * Examples are in the following table:
+ * </p>
+ * <table border='1' style="border-collapse:collapse">
+ * <tbody>
+ * <tr>
+ * <th>n</th>
+ * <th>i</th>
+ * <th>f</th>
+ * <th>v</th>
+ * </tr>
+ * <tr>
+ * <td>1.0</td>
+ * <td>1</td>
+ * <td align="right">0</td>
+ * <td>1</td>
+ * </tr>
+ * <tr>
+ * <td>1.00</td>
+ * <td>1</td>
+ * <td align="right">0</td>
+ * <td>2</td>
+ * </tr>
+ * <tr>
+ * <td>1.3</td>
+ * <td>1</td>
+ * <td align="right">3</td>
+ * <td>1</td>
+ * </tr>
+ * <tr>
+ * <td>1.03</td>
+ * <td>1</td>
+ * <td align="right">3</td>
+ * <td>2</td>
+ * </tr>
+ * <tr>
+ * <td>1.23</td>
+ * <td>1</td>
+ * <td align="right">23</td>
+ * <td>2</td>
+ * </tr>
+ * </tbody>
+ * </table>
+ * <p>
+ * The difference between 'in' and 'within' is that 'in' only includes integers in the specified range, while 'within'
+ * includes all values. Using 'within' with a range_list consisting entirely of values is the same as using 'in' (it's
+ * not an error).
+ * </p>
+
  * An "identifier" is a sequence of characters that do not have the
  * Unicode Pattern_Syntax or Pattern_White_Space properties.
  * <p>
  * The difference between 'in' and 'within' is that 'in' only includes
- * integers in the specified range, while 'within' includes all values.</p>
+ * integers in the specified range, while 'within' includes all values.
+ * Using 'within' with a range_list consisting entirely of values is the 
+ * same as using 'in' (it's not an error).
+ *</p>
  * <p>
  * Keywords
  * could be defined by users or from ICU locale data. There are 6
@@ -219,6 +281,40 @@ public:
      * @draft ICU 50
      */
     static PluralRules* U_EXPORT2 forLocale(const Locale& locale, UPluralType type, UErrorCode& status);
+
+    /**
+     * Return a StringEnumeration over the locales for which there is plurals data.
+     * @return a StringEnumeration over the locales available.
+     * @internal
+     */
+    static StringEnumeration* U_EXPORT2 getAvailableLocales(void);
+
+    /**
+     * Returns the 'functionally equivalent' locale with respect to plural rules. 
+     * Calling PluralRules.forLocale with the functionally equivalent locale, and with 
+     * the provided locale, returns rules that behave the same. <br/>
+     * All locales with the same functionally equivalent locale have plural rules that 
+     * behave the same. This is not exaustive; there may be other locales whose plural 
+     * rules behave the same that do not have the same equivalent locale.
+     * 
+     * @param locale        the locale to check
+     * @param isAvailable   if not NULL the boolean will be set to TRUE if locale is directly
+     *                      defined (without fallback) as having plural rules.
+     * @param status        The error code.
+     * @return              the functionally-equivalent locale
+     * @internal
+     */
+    static Locale getFunctionalEquivalent(const Locale &locale, UBool *isAvailable,
+                                          UErrorCode &status);
+
+    /**
+     * Returns whether or not there are overrides.
+     * @param locale       the locale to check.
+     * @return
+     * @internal
+     */
+    static UBool hasOverride(const Locale &locale);
+
 #endif /* U_HIDE_DRAFT_API */
 
     /**
@@ -242,6 +338,11 @@ public:
      * @stable ICU 4.0
      */
     UnicodeString select(double number) const;
+    
+    /**
+      * @internal
+      */
+    UnicodeString select(const NumberInfo &number) const;
 
     /**
      * Returns a list of all rule keywords used in this <code>PluralRules</code>
