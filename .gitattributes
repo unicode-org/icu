@@ -3125,6 +3125,10 @@ icu4c/source/samples/date/date.vcxproj.filters -text
 icu4c/source/samples/date/readme.txt svneol=native#text/plain
 icu4c/source/samples/datefmt/datefmt.vcxproj -text
 icu4c/source/samples/datefmt/datefmt.vcxproj.filters -text
+icu4c/source/samples/dtitvfmtsample/dtitvfmtsample.vcxproj -text
+icu4c/source/samples/dtitvfmtsample/dtitvfmtsample.vcxproj.filters -text
+icu4c/source/samples/dtptngsample/dtptngsample.vcxproj -text
+icu4c/source/samples/dtptngsample/dtptngsample.vcxproj.filters -text
 icu4c/source/samples/layout/Sample.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/samples/layout/layout.vcxproj -text
 icu4c/source/samples/layout/layout.vcxproj.filters -text
@@ -3136,6 +3140,8 @@ icu4c/source/samples/msgfmt/msgfmt.vcxproj.filters -text
 icu4c/source/samples/numfmt/numfmt.vcxproj -text
 icu4c/source/samples/numfmt/numfmt.vcxproj.filters -text
 icu4c/source/samples/numfmt/readme.txt svneol=native#text/plain
+icu4c/source/samples/plurfmtsample/plurfmtsample.vcxproj -text
+icu4c/source/samples/plurfmtsample/plurfmtsample.vcxproj.filters -text
 icu4c/source/samples/props/props.vcxproj -text
 icu4c/source/samples/props/props.vcxproj.filters -text
 icu4c/source/samples/props/readme.txt svneol=native#text/plain
