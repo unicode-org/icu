@@ -117,8 +117,17 @@ public class ListFormatterTest extends TestFmwk {
         assertEquals(
                 "createPatternForNumItems",
                 "{0}, {1}, and {2}",
-                listFormatter.createPatternForNumItems(3));
-        
+                listFormatter.getPatternForNumItems(3));        
+    }
+    
+    public void TestGetPatternForNumItemsException() {
+        ListFormatter listFormatter = ListFormatter.getInstance(ULocale.ENGLISH);
+        try {
+            listFormatter.getPatternForNumItems(0);
+            fail("IllegalArgumentException expected.");
+        } catch (IllegalArgumentException expected) {
+            // expected.
+        }
     }
     
     public void TestGetLocale() {
