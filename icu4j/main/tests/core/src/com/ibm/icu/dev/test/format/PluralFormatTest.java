@@ -101,14 +101,20 @@ public class PluralFormatTest extends TestFmwk {
     Map changes = new HashMap();
     changes.put(new Integer(0), "zero");
     changes.put(new Integer(1), "one");
-    changes.put(new Integer(2), "other");
-    for (int i = 0; i < 20; ++i) {
-      if (i == 11) {
-        continue;
+    for (int i = 2; i < 20; ++i) {
+      if (i < 10) {
+        changes.put(new Integer(i), "other");
+      } else {
+        changes.put(new Integer(i), "zero");
       }
       changes.put(new Integer(i*10), "zero");
-      changes.put(new Integer(i*10 + 1), "one");
-      changes.put(new Integer(i*10 + 2), "other");
+      if (i == 11) {
+        changes.put(new Integer(i*10 + 1), "zero");
+        changes.put(new Integer(i*10 + 2), "zero");
+      } else {
+        changes.put(new Integer(i*10 + 1), "one");
+        changes.put(new Integer(i*10 + 2), "other");
+      }
     }
     helperTestRules(localeIDs, testPattern, changes);
   }
