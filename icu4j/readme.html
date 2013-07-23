@@ -14,12 +14,17 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 51</h3>
-(Last Update: 2013-Mar-15)
+<h3>Read Me for ICU4J 52 Milestone 1</h3>
+(Last Update: 2013-July-23)
 <hr size="2" width="100%">
 
-<p><b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
-of inherited API and introduces new API or functionality.
+<p><!-- <b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
+of inherited API and introduces new API or functionality. -->
+<b>Note:</b> This is a development milestone release of ICU4J 52.
+The contents of this document may not reflect the recent changes done
+for ICU 52 development. This milestone is intended for those wishing
+to get an early look at ICU 50 new features and API changes. It is not
+recommended for production use.
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -125,34 +130,10 @@ found in ICU4J.</p>
 
 <h3 class="doc"><a name="changes"></a>Changes In This Release</h3>
 
-<p>See the <a href="http://sites.google.com/site/icusite/download/51">ICU 51 download page</a>
+<p>See the <a href="http://sites.google.com/site/icusite/download/milestone">ICU Milestone download page</a>
 about new features in this release.
 The list of API changes since the previous ICU4J release is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-51/APIChangeReport.html">here</a>.</p>
-
-<h4>Date format pattern "V"</h4>
-<p>The date format pattern "V" was introduced in ICU 3.8 (inherited from CLDR 1.5) as
-a variation of pattern "z" to support time zone abbreviation format such as "PST".
-The pattern "z" prints out a time zone abbreviation only when it is commonly used for a locale.
-The pattern "V" was slightly different from pattern "z" and the pattern designates
-a time zone abbreviation even it is not commonly used for a locale. For example, time
-zone abbreviation "AEST" for Australian Eastern Standard Time might not be well recognized
-by people in the United States. For the zone, pattern "z" does not use "AEST" (instead, use
-UTC offset format "GMT+10:00, as the fallback) , while pattern "V" used to print out "AEST".
-In CLDR 21, the data used for checking commonly used or not was completely removed (CLDR
-ticket <a href="http://unicode.org/cldr/trac/ticket/4052">#4052</a>), so the difference
-between pattern "z" and "V" is no longer available since ICU 49 (based on CLDR 21 specification).</p>
-
-<p>In CLDR 23, the CLDR technical committee decided to reuse the semantically deprecated
-pattern "V" for a different purpose. With the new specification, the date format pattern
-"V" is used for short time zone IDs, such as "uslax" for zone America/Los_Angeles. ICU 51
-implements the new specification. So existing ICU users currently using custom date format
-patterns with pattern "V" are suggested to change them to pattern "z".</p>
-
-<p>Note that the existing pattern "VVVV" for a time zone's generic location name is not
-affected by the new specification and the pattern "VVVV" continues to work as same as
-previous ICU releases.</p>
-
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-52-0-1/APIChangeReport.html">here</a>.</p>
 
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
@@ -176,12 +157,12 @@ mean that projects using ICU become subject to GPL.
 <p>
  The IBM version contains the essential text of the license, omitting the
 X-specific trademarks and copyright notices. The full copy of <a
- href="http://source.icu-project.org/repos/icu/icu4j/tags/release-51/main/shared/licenses/license.html">ICU's license</a> is included in the download
+ href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-52-0-1/main/shared/licenses/license.html">ICU's license</a> is included in the download
 package.
 </p>
 <h3 class="doc"><a name="PlatformDependencies"></a>Platform Dependencies</h3>
 <p>
-ICU4J 51 depends on J2SE 5.0 functionality.  Therefore, ICU4J only runs on
+ICU4J 52 depends on J2SE 5.0 functionality.  Therefore, ICU4J only runs on
 JRE version 5.0 or later.
 The table below shows the operating systems and JRE/VM versions currently
 used by the ICU development team to test ICU4J.
@@ -860,54 +841,54 @@ from release to release, so clients should not depend on the exact
 organization
 of the data in ICU4J.</p>
 <ul>
-  <li>The primary <b>locale data</b> is under the directory <tt>icudt51b</tt>,
+  <li>The primary <b>locale data</b> is under the directory <tt>icudt52b</tt>,
   as a set of <tt>".res"</tt> files whose names are the locale identifiers. 
   Locale naming is documented the <code>com.ibm.icu.util.ULocale</code>
   class, and the use of these names in searching for resources is documented 
   in <code>com.ibm.icu.util.UResourceBundle</code>.</li>
 
-  <li>The <b>collation data</b> is under the directory <tt>icudt51b/coll</tt>,
+  <li>The <b>collation data</b> is under the directory <tt>icudt52b/coll</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>currency display name data</b> is under the directory <tt>icudt51b/curr</tt>,
+  <li>The <b>currency display name data</b> is under the directory <tt>icudt52b/curr</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>language display name data</b> is under the directory <tt>icudt51b/lang</tt>,
+  <li>The <b>language display name data</b> is under the directory <tt>icudt52b/lang</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
-  <li>The <b>region display name data</b> is under the directory <tt>icudt51b/region</tt>,
+  <li>The <b>region display name data</b> is under the directory <tt>icudt52b/region</tt>,
   as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>rule-based transliterator data</b> is under the directory
-  <tt>icudt51b/translit</tt>, as a set of <tt>".res"</tt> files.</li>
+  <tt>icudt52b/translit</tt>, as a set of <tt>".res"</tt> files.</li>
 
   <li>The <b>rule-based number format data</b> is under the directory
-  <tt>icudt51b/rbnf</tt>, as a set of <tt>".res"</tt> files.
+  <tt>icudt52b/rbnf</tt>, as a set of <tt>".res"</tt> files.
 
   <li>The <b>break iterator data</b> is directly under the
-  directory <tt>icudt51b</tt>, as a set of <tt>".brk"</tt> files, named according to the
+  directory <tt>icudt52b</tt>, as a set of <tt>".brk"</tt> files, named according to the
   type of break and the locale where there are locale-specific versions.</li>
 
-  <li>The <b>holiday data</b> is under the directory <tt>icudt51b</tt>,
+  <li>The <b>holiday data</b> is under the directory <tt>icudt52b</tt>,
   as a set of <tt>".class"</tt> files, named <tt>"HolidayBundle_"</tt>
   followed by the locale ID.</li>
 
   <li>The <b>character property data</b> and default <b>unicode collation algorithm
-  (UCA) data</b> is found under the directory <tt>icudt51b</tt>, as a set of
+  (UCA) data</b> is found under the directory <tt>icudt52b</tt>, as a set of
   <tt>".icu"</tt> files. </li>
 
-  <li>The <b>normalization data</b> is found under the directory <tt>icudt51b</tt>,
+  <li>The <b>normalization data</b> is found under the directory <tt>icudt52b</tt>,
   as a set of <tt>".nrm"</tt> files. </li>
 
   <li>The <b>character set converter data</b> is under the directory
-  <tt>icudt51b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
+  <tt>icudt52b</tt>, as a set of <tt>".cnv"</tt> files.  These files are
   currently included only in icu-charset.jar.</li>
 
   <li>The <b>time zone rule data</b> is under the directory 
-  <tt>icudt51b</tt>, as <tt>zoneinfo64.res</tt>.</li>
+  <tt>icudt52b</tt>, as <tt>zoneinfo64.res</tt>.</li>
 
   <li>The <b>time zone display name data</b> is under the directory
-  <tt>icudt51b/zone</tt>, as a set of <tt>".res"</tt> files.</li>
+  <tt>icudt52b/zone</tt>, as a set of <tt>".res"</tt> files.</li>
 </ul>
 <p>
 Some of the data files alias or otherwise reference data from other
@@ -1002,9 +983,9 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version 'release-23'</li>
-    <li>Checkout ICU4C with tag 'release-51'</li>
-    <li>Checkout ICU4J with tag 'release-51'</li>
+    <li>Checkout or download CLDR version 'icu-52-0-1'</li>
+    <li>Checkout ICU4C with tag 'milestone-52-0-1'</li>
+    <li>Checkout ICU4J with tag 'milestone-52-0-1'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
@@ -1016,7 +997,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 51.1 includes time zone data version 2013b, which is the latest one as of
+<p>ICU4J 52m1 includes time zone data version 2013d, which is the latest one as of
 the release date. However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
