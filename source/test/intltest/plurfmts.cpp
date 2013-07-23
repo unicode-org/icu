@@ -358,10 +358,11 @@ PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
     for (int32_t i=2; i<20; ++i) {
         pluralResults[i]= (i < 10)? PFT_OTHER: PFT_ZERO;
         pluralResults[i*10] = PFT_ZERO;
-        pluralResults[i*10+1] = PFT_ONE;
-        pluralResults[i*10+2] = PFT_OTHER;
+        pluralResults[i*10+1] = PFT_ONE; // note override after loop
+        pluralResults[i*10+2] = PFT_OTHER; // note override after loop
     }
     pluralResults[111]= PFT_ZERO;
+    pluralResults[112]= PFT_ZERO;
     helperTestResults(zeroSingularLocales, 1, testPattern, pluralResults);
     
     // ======== Test singular dual locales.
@@ -382,7 +383,7 @@ PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
     uprv_memset(pluralResults, -1, sizeof(pluralResults));
     pluralResults[0]= PFT_FEW;
     for (int32_t i=1; i<20; ++i) {
-        pluralResults[i] = PFT_FEW;
+        pluralResults[i] = PFT_FEW; // note override after loop
         pluralResults[100+i] = PFT_FEW;
     }
     pluralResults[1]= PFT_ONE;
@@ -482,7 +483,7 @@ PluralFormatTest::pluralFormatLocaleTest(/*char *par*/)
     uprv_memset(pluralResults, -1, sizeof(pluralResults));
     for (int32_t i=0; i<20; ++i) {
         pluralResults[i*10+0] = PFT_MANY;
-        pluralResults[i*10+1] = PFT_MANY;
+        pluralResults[i*10+1] = PFT_MANY; // note override after loop
         if ((i==1)||(i==11)) {
             pluralResults[i*10+2] = PFT_MANY;
             pluralResults[i*10+3] = PFT_MANY;
