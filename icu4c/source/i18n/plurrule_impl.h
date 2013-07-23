@@ -128,7 +128,7 @@ private:
     UBool isValidKeyword(const UnicodeString& token);
 };
 
-class NumberInfo: public UMemory {
+class U_I18N_API NumberInfo: public UMemory {
   public:
     /**
       * @param n   the number
