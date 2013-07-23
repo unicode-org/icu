@@ -70,6 +70,7 @@
 #include "hash.h"
 #include "decfmtst.h"
 #include "dcfmtimp.h"
+#include "plurrule_impl.h"
 
 /*
  * On certain platforms, round is a macro defined in math.h
@@ -4074,7 +4075,15 @@ int32_t DecimalFormat::appendAffix(UnicodeString& buf, double number,
 
     const UnicodeString* affix;
     if (fCurrencySignCount == fgCurrencySignCountInPluralFormat) {
-        UnicodeString pluralCount = fCurrencyPluralInfo->getPluralRules()->select(number);
+        // TODO: get an accurate count of visible fraction digits.
+        UnicodeString pluralCount;
+        int32_t minFractionDigits = this->getMinimumFractionDigits();
+        if (minFractionDigits > 0) {
+            NumberInfo ni(number, this->getMinimumFractionDigits());
+            pluralCount = fCurrencyPluralInfo->getPluralRules()->select(ni);
+        } else {
+            pluralCount = fCurrencyPluralInfo->getPluralRules()->select(number);
+        }
         AffixesForCurrency* oneSet;
         if (fStyle == UNUM_CURRENCY_PLURAL) {
             oneSet = (AffixesForCurrency*)fPluralAffixesForCurrency->get(pluralCount);
