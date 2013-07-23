@@ -1503,7 +1503,7 @@ int32_t NumberInfo::decimals(double n) {
     //       printf has no format specification to stay in fixed point form,
     //         not print trailing fraction zeros, not print a fixed number of (possibly noise)
     //         fraction digits, and print all significant digits.
-    if (n == trunc(n)) {
+    if (n == floor(n)) {
         return 0;
     }
     n = fabs(n);
@@ -1527,8 +1527,8 @@ int32_t NumberInfo::getFractionalDigits(double n, int32_t v) {
     if (v == 0) {
         return 0;
     } else {
-        int32_t base = (int32_t) pow(10, v);
-        int64_t scaled = floor(n * base + 0.5);
+        int32_t base = (int32_t) pow(10.0, v);
+        double scaled = floor(n * base + 0.5);
         return (int)fmod(scaled, base);
     }
 }
@@ -1537,9 +1537,9 @@ int32_t NumberInfo::getFractionalDigits(double n, int32_t v) {
 double NumberInfo::get(tokenType operand) const {
     switch(operand) {
         default:         return source;
-        case tVariableI: return intValue;
-        case tVariableF: return fractionalDigits;
-        case tVariableT: return fractionalDigitsWithoutTrailingZeros; 
+        case tVariableI: return (double)intValue;
+        case tVariableF: return (double)fractionalDigits;
+        case tVariableT: return (double)fractionalDigitsWithoutTrailingZeros; 
         case tVariableV: return visibleFractionDigitCount;
     }
 }
