@@ -381,8 +381,8 @@ public class TimeUnitFormat extends MeasureFormat {
         timeUnitToCountToPatterns = new HashMap<TimeUnit, Map<String, Object[]>>();
 
         Set<String> pluralKeywords = pluralRules.getKeywords();
-        setup("units", timeUnitToCountToPatterns, FULL_NAME, pluralKeywords);
-        setup("unitsShort", timeUnitToCountToPatterns, ABBREVIATED_NAME, pluralKeywords);
+        setup("units/duration", timeUnitToCountToPatterns, FULL_NAME, pluralKeywords);
+        setup("unitsShort/duration", timeUnitToCountToPatterns, ABBREVIATED_NAME, pluralKeywords);
         isReady = true;
     }
     
