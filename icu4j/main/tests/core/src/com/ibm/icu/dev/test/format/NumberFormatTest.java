@@ -23,7 +23,6 @@ import java.util.Set;
 
 import com.ibm.icu.dev.test.TestUtil;
 import com.ibm.icu.impl.LocaleUtility;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.impl.data.ResourceReader;
 import com.ibm.icu.impl.data.TokenIterator;
 import com.ibm.icu.math.BigDecimal;
@@ -34,8 +33,6 @@ import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.NumberFormat.NumberFormatFactory;
 import com.ibm.icu.text.NumberFormat.SimpleNumberFormatFactory;
-import com.ibm.icu.text.PluralRules;
-import com.ibm.icu.text.PluralRules.NumberInfo;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
