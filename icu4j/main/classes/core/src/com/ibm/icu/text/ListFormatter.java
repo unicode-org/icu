@@ -13,6 +13,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+
+import javax.management.StandardEmitterMBean;
 
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
@@ -34,6 +37,43 @@ final public class ListFormatter {
     private final String middle;
     private final String end;
     private final ULocale locale;
+    
+    /**
+     * Indicates the style of Listformatter
+     * @deprecated internal use only.
+     * @internal
+     */
+    public enum Style {
+        /**
+         * Standard style.
+         * @deprecated
+         * @internal
+         */
+        STANDARD("standard"),
+        /**
+         * Style for full durations
+         * @deprecated
+         * @internal
+         */
+        DURATION("duration"),
+        /**
+         * Style for durations in abbrevated form
+         * @deprecated
+         * @internal
+         */
+        DURATION_SHORT("duration-short");
+        
+        private final String name;
+        
+        Style(String name) {
+            this.name = name;
+        }
+        
+        public String getName() {
+            return name;
+        }
+        
+    }
 
     /**
      * <b>Internal:</b> Create a ListFormatter from component strings,
@@ -75,7 +115,7 @@ final public class ListFormatter {
      * @provisional This API might change or be removed in a future release.
      */
     public static ListFormatter getInstance(ULocale locale) {
-      return cache.get(locale);
+      return getInstance(locale, Style.STANDARD);
     }
 
     /**
@@ -88,7 +128,20 @@ final public class ListFormatter {
      * @provisional This API might change or be removed in a future release.
      */
     public static ListFormatter getInstance(Locale locale) {
-        return getInstance(ULocale.forLocale(locale));
+        return getInstance(ULocale.forLocale(locale), Style.STANDARD);
+    }
+    
+    /**
+     * Create a list formatter that is appropriate for a locale and style.
+     *
+     * @param locale the locale in question.
+     * @param style the style
+     * @return ListFormatter
+     * @deprecated Internal use only.
+     * @internal
+     */
+    public static ListFormatter getInstance(ULocale locale, Style style) {
+        return cache.get(locale, style.getName());
     }
 
     /**
@@ -199,28 +252,39 @@ final public class ListFormatter {
     }
 
     private static class Cache {
-        private final ICUCache<ULocale, ListFormatter> cache =
-            new SimpleCache<ULocale, ListFormatter>();
+        private final ICUCache<String, ListFormatter> cache =
+            new SimpleCache<String, ListFormatter>();
 
-        public ListFormatter get(ULocale locale) {
-            ListFormatter result = cache.get(locale);
+        public ListFormatter get(ULocale locale, String style) {
+            String key = String.format("%s:%s", locale.toString(), style);
+            ListFormatter result = cache.get(key);
             if (result == null) {
-                result = load(locale);
-                cache.put(locale, result);
+                result = load(locale, style);
+                cache.put(key, result);
             }
             return result;
         }
 
-        private static ListFormatter load(ULocale ulocale) {
+        private static ListFormatter load(ULocale ulocale, String style) {
             ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
                     getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
-            r = r.getWithFallback("listPattern/standard");
-            return new ListFormatter(
-                r.getWithFallback("2").getString(),
-                r.getWithFallback("start").getString(),
-                r.getWithFallback("middle").getString(),
-                r.getWithFallback("end").getString(),
-                ulocale);
+            // TODO(Travis Keep): This try-catch is a hack to cover missing aliases
+            // for listPattern/duration and listPattern/duration-narrow in root.txt.
+            try {
+                return new ListFormatter(
+                    r.getWithFallback("listPattern/" + style + "/2").getString(),
+                    r.getWithFallback("listPattern/" + style + "/start").getString(),
+                    r.getWithFallback("listPattern/" + style + "/middle").getString(),
+                    r.getWithFallback("listPattern/" + style + "/end").getString(),
+                    ulocale);
+            } catch (MissingResourceException e) {
+                return new ListFormatter(
+                        r.getWithFallback("listPattern/standard/2").getString(),
+                        r.getWithFallback("listPattern/standard/start").getString(),
+                        r.getWithFallback("listPattern/standard/middle").getString(),
+                        r.getWithFallback("listPattern/standard/end").getString(),
+                        ulocale);
+            }
         }
     }
 
