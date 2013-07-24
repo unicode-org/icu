@@ -26,68 +26,40 @@ import java.util.NoSuchElementException;
 public final class TimePeriod implements Iterable<TimeUnitAmount> {
     
     private final TimeUnitAmount[] fields;
-    private final int size;
+    private final int length;
     private final int hash;
-    
-    private TimePeriod(TimeUnitAmount[] fields, int size, int hash) {
-        this.fields = fields;
-        this.size = size;
-        this.hash = hash;
-    }
        
     /**
-     * Returns a new TimePeriod that matches the given time unit amounts.
-     * @param amounts the TimeUnitAmounts. Must be non-empty. Normalization of the
-     *   amounts and inclusion/exclusion of 0 amounts is up to caller. The Number
-     *   in each TimeUnitAmount must either be a Byte, Short, Integer, Long, Float,
-     *   Double, BigInteger, or BigDecimal or it must implement Cloneable and have
-     *   a public clone method.
-     * @return the new TimePeriod object
-     * @throws IllegalArgumentException if multiple TimeUnitAmount objects match
-     * the same time unit or if any but the smallest TimeUnit has a fractional value
-     * Or if amounts is empty.
-     * @draft ICU 52
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static TimePeriod forAmounts(TimeUnitAmount ...amounts) {
-        return forAmounts(Arrays.asList(amounts));      
-    }
-
-    /**
-     * Returns a new TimePeriod that matches the given time unit amounts.
+     * Constructor.
      * @param amounts the TimeUnitAmounts. Must be non-empty. Normalization of the
      *   amounts and inclusion/exclusion of 0 amounts is up to caller. The Number
      *   object in each TimeUnitAmount must not change. Otherwise the created
      *   TimePeriod object may not work as expected.
-     * @return the new TimePeriod object
      * @throws IllegalArgumentException if multiple TimeUnitAmount objects match
      * the same time unit or if any but the smallest TimeUnit has a fractional value
      * Or if amounts is empty.
      * @draft ICU 52
      * @provisional This API might change or be removed in a future release.
      */
-    public static TimePeriod forAmounts(Iterable<TimeUnitAmount> amounts) {
-        TimeUnitAmount[] fields = new TimeUnitAmount[TimeUnit.TIME_UNIT_COUNT];
-        int size = 0;
+    public TimePeriod(TimeUnitAmount ...amounts) {
+        fields = new TimeUnitAmount[TimeUnit.TIME_UNIT_COUNT];
+        int tempSize = 0;
         for (TimeUnitAmount tua : amounts) {
             int index = tua.getTimeUnit().getIndex();
             if (fields[index] != null) {
                 throw new IllegalArgumentException(
                         "Only one TimeUnitAmount per unit allowed.");
             }
-            // This line is necessary to guarantee immutability of the TimePeriod
-            // class. A Number object, which is in TimeUnitAmount, need not be immutable,
-            // but Double is immutable.
             fields[index] = tua;
-            size++;
+            tempSize++;
         }
-        if (size == 0) {
+        length = tempSize;
+        if (length == 0) {
             throw new IllegalArgumentException(
                     "There must be at least one TimeUnitAmount.");
         }
-        TimePeriod result = new TimePeriod(fields, size, computeHash(fields));
         boolean fractionalFieldEncountered = false;
-        for (TimeUnitAmount tua : result) {
+        for (TimeUnitAmount tua : this) {
             if (fractionalFieldEncountered) {
                 throw new IllegalArgumentException(
                     "Only the smallest time unit can have a fractional amount.");
@@ -97,7 +69,7 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
                 fractionalFieldEncountered = true;
             }
         }
-        return result;
+        hash = computeHash(fields);  
     }
         
     /**
@@ -126,11 +98,10 @@ public final class TimePeriod implements Iterable<TimeUnitAmount> {
 
     /**
      * Returns the number of TimeUnitAmount objects in this object.
-     * @internal
-     * @deprecated This API is ICU internal only.
+     * @draft ICU 52
      */
-    public int size() {
-      return size;
+    public int length() {
+      return length;
     }
     
     /**

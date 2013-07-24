@@ -6,8 +6,10 @@
  */
 package com.ibm.icu.text;
 
+import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -20,6 +22,7 @@ import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.util.TimePeriod;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
+import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
@@ -96,9 +99,9 @@ public class TimeUnitFormat extends MeasureFormat {
     private transient Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns;
     private transient PluralRules pluralRules;
     private transient ListFormatter listFormatter;
-    private transient MessageFormat hourMinute;
-    private transient MessageFormat minuteSecond;
-    private transient MessageFormat hourMinuteSecond;
+    private transient DateFormat hourMinute;
+    private transient DateFormat minuteSecond;
+    private transient DateFormat hourMinuteSecond;
     private transient boolean isReady;
     private int style;
 
@@ -132,8 +135,7 @@ public class TimeUnitFormat extends MeasureFormat {
     }
 
     /**
-     * Create TimeUnitFormat given a ULocale and a formatting style: full or
-     * abbreviated.
+     * Create TimeUnitFormat given a ULocale and a formatting style.
      * @param locale   locale of this time unit formatter.
      * @param style    format style, either FULL_NAME or ABBREVIATED_NAME style.
      * @throws IllegalArgumentException if the style is not FULL_NAME or
@@ -150,8 +152,7 @@ public class TimeUnitFormat extends MeasureFormat {
     }
 
     /**
-     * Create TimeUnitFormat given a Locale and a formatting style: full or
-     * abbreviated.
+     * Create TimeUnitFormat given a Locale and a formatting style.
      * @stable ICU 4.2
      */
     public TimeUnitFormat(Locale locale, int style) {
@@ -226,11 +227,17 @@ public class TimeUnitFormat extends MeasureFormat {
      */
     public StringBuffer format(Object obj, StringBuffer toAppendTo,
             FieldPosition pos) {
-        if ( !(obj instanceof TimeUnitAmount) ) {
-            throw new IllegalArgumentException("can not format non TimeUnitAmount object");
+        if ( !(obj instanceof TimeUnitAmount) && !(obj instanceof TimePeriod)) {
+            throw new IllegalArgumentException(
+                    "can only format TimeUnitAmount or TimePeriod objects");
         }
         if (!isReady) {
             setup();
+        }
+        if (obj instanceof TimePeriod) {
+            // TODO: set FieldPosition, see ICU tickets 10156 and 10157.
+            toAppendTo.append(formatTimePeriod((TimePeriod) obj));
+            return toAppendTo;
         }
         TimeUnitAmount amount = (TimeUnitAmount) obj;
         Map<String, Object[]> countToPattern = timeUnitToCountToPatterns.get(amount.getTimeUnit());
@@ -242,13 +249,7 @@ public class TimeUnitFormat extends MeasureFormat {
         return pattern.format(new Object[]{amount.getNumber()}, toAppendTo, pos);
     }
     
-    /**
-     * Formats a TimePeriod. Currently there is no way to parse a formatted TimePeriod.
-     * @param timePeriod the TimePeriod to format.
-     * @return the formatted string.
-     * @draft ICU 52
-     */
-    public String formatTimePeriod(TimePeriod timePeriod) {
+    private String formatTimePeriod(TimePeriod timePeriod) {
         if (!isReady) {
             setup();
         }
@@ -258,7 +259,7 @@ public class TimeUnitFormat extends MeasureFormat {
                 return result;
             }
         }
-        String[] items = new String[timePeriod.size()];
+        String[] items = new String[timePeriod.length()];
         int idx = 0;
         for (TimeUnitAmount amount : timePeriod) {
             items[idx++] = format(amount);
@@ -267,7 +268,12 @@ public class TimeUnitFormat extends MeasureFormat {
     }
 
     /**
-     * Parse a TimeUnitAmount.
+     * Parse a TimeUnitAmount. Parsing TimePeriod objects is not supported.
+     * If parseObject is called on a formatted TimePeriod string, it try to parse it
+     * as a TimeUnitAmount. For example,
+     * <code>parseObject("5 hours and 34 minutes", pos)</code>
+     * returns a TimeUnitAmount representing 5 hours and updates pos to point to the
+     * space after the s in hours.
      * @see java.text.Format#parseObject(java.lang.String, java.text.ParsePosition)
      * @stable ICU 4.0
      */
@@ -373,75 +379,112 @@ public class TimeUnitFormat extends MeasureFormat {
             format = NumberFormat.getNumberInstance(locale);
         }
         pluralRules = PluralRules.forLocale(locale);
-        listFormatter = ListFormatter.getInstance(locale);
-        DateTimePatternGenerator df = DateTimePatternGenerator.getInstance(locale);
-        hourMinute = getPattern(df, "hm", locale, "{0}", "{1,number,00.###}", null);
-        minuteSecond = getPattern(df, "ms", locale, null, "{1}", "{2,number,00.###}");
-        hourMinuteSecond = getPattern(df, "hms", locale, "{0}", "{1,number,00}", "{2,number,00.###}");
+        if (style == FULL_NAME) {
+          listFormatter = ListFormatter.getInstance(locale, ListFormatter.Style.DURATION);
+        } else {
+          listFormatter = ListFormatter.getInstance(locale, ListFormatter.Style.DURATION_SHORT);
+        }
+        hourMinute = loadNumericDurationFormat(locale, "hm");
+        minuteSecond = loadNumericDurationFormat(locale, "ms");
+        hourMinuteSecond = loadNumericDurationFormat(locale, "hms");
         timeUnitToCountToPatterns = new HashMap<TimeUnit, Map<String, Object[]>>();
-
         Set<String> pluralKeywords = pluralRules.getKeywords();
         setup("units/duration", timeUnitToCountToPatterns, FULL_NAME, pluralKeywords);
         setup("unitsShort/duration", timeUnitToCountToPatterns, ABBREVIATED_NAME, pluralKeywords);
         isReady = true;
     }
     
-    private MessageFormat getPattern(DateTimePatternGenerator dtpg, String skeleton, ULocale locale, 
-            String h, String m, String s) {
-        String pat = dtpg.getBestPattern(skeleton);
-        StringBuilder buffer = new StringBuilder();
-        for (Object item : new DateTimePatternGenerator.FormatParser().set(pat).getItems()) {
-            if (item instanceof DateTimePatternGenerator.VariableField) {
-                DateTimePatternGenerator.VariableField fld = (DateTimePatternGenerator.VariableField)item;
-                switch (fld.getType()) {
-                case DateTimePatternGenerator.HOUR: buffer.append(h); break;
-                case DateTimePatternGenerator.MINUTE: buffer.append(m); break;
-                case DateTimePatternGenerator.SECOND: buffer.append(s); break;
-                }
-            } else {
-                buffer.append(item);
-            }
-        }
-        return new MessageFormat(buffer.toString(), locale);
+    // type is one of "hm", "ms" or "hms"
+    private static DateFormat loadNumericDurationFormat(ULocale ulocale, String type) {
+        ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
+                getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, ulocale);
+        r = r.getWithFallback(String.format("durationUnits/%s", type));
+        // We replace 'h' with 'H' because 'h' does not make sense in the context of durations.
+        DateFormat result = new SimpleDateFormat(r.getString().replace("h", "H"));
+        result.setTimeZone(TimeZone.GMT_ZONE);
+        return result;
     }
     
     private String formatPeriodAsNumeric(TimePeriod timePeriod) {
         TimeUnit biggestUnit = null, smallestUnit = null;
+        Number smallestUnitAmount = null;
         for (TimeUnitAmount tua : timePeriod) {
             if (biggestUnit == null) {
                 biggestUnit = tua.getTimeUnit();
             }
             smallestUnit = tua.getTimeUnit();
+            smallestUnitAmount = tua.getNumber();
         }
-        // We have to trim the result of  MessageFormat.format() not sure why.
+        long millis = (long) (((getAmountOrZero(timePeriod, TimeUnit.HOUR) * 60.0
+                + getAmountOrZero(timePeriod, TimeUnit.MINUTE)) * 60.0
+                + getAmountOrZero(timePeriod, TimeUnit.SECOND)) * 1000.0);
+        Date d = new Date(millis);
         if (biggestUnit == TimeUnit.HOUR && smallestUnit == TimeUnit.SECOND) {
-            return hourMinuteSecond.format(new Object[]{
-                    getZeroedAmount(timePeriod, TimeUnit.HOUR),
-                    getZeroedAmount(timePeriod, TimeUnit.MINUTE),
-                    getZeroedAmount(timePeriod, TimeUnit.SECOND)}).trim();
-            
+            return numericFormat(
+                    d, hourMinuteSecond, DateFormat.Field.SECOND, smallestUnitAmount);
         }
         if (biggestUnit == TimeUnit.MINUTE && smallestUnit == TimeUnit.SECOND) {
-            return minuteSecond.format(new Object[]{
-                    null,
-                    getZeroedAmount(timePeriod, TimeUnit.MINUTE),
-                    getZeroedAmount(timePeriod, TimeUnit.SECOND)}).trim();
-            
+            return numericFormat(
+                    d, minuteSecond, DateFormat.Field.SECOND, smallestUnitAmount);          
         }
         if (biggestUnit == TimeUnit.HOUR && smallestUnit == TimeUnit.MINUTE) {
-            return hourMinute.format(new Object[]{
-                    getZeroedAmount(timePeriod, TimeUnit.HOUR),
-                    getZeroedAmount(timePeriod, TimeUnit.MINUTE)}).trim();            
+            return numericFormat(d, hourMinute, DateFormat.Field.MINUTE, smallestUnitAmount);
         }
         return null;
     }
-    
-    private Number getZeroedAmount(TimePeriod timePeriod, TimeUnit timeUnit) {
+
+    /**
+     * numericFormat allows us to show fractional durations using numeric
+     * style e.g 12:34:56.7. This function is necessary because there is no way to express
+     * fractions of durations other than seconds with current DateFormat objects.
+     * 
+     * After formatting the duration using a DateFormat object in the usual way, it
+     * replaces the smallest field in the formatted string with the exact fractional
+     * amount of that smallest field formatted with this object's NumberFormat object.
+     * 
+     * @param duration The duration to format in milliseconds. The loss of precision here
+     * is ok because we also pass in the exact amount of the smallest field.
+     * @param formatter formats the date.
+     * @param smallestField the smallest defined field in duration to be formatted.
+     * @param smallestAmount the exact fractional value of the smallest amount. 
+     * @return duration formatted numeric style.
+     */
+    private String numericFormat(
+            Date duration,
+            DateFormat formatter,
+            DateFormat.Field smallestField,
+            Number smallestAmount) {
+        // Format the smallest amount ahead of time.
+        String smallestAmountFormatted = format.format(smallestAmount);
+        
+        // Format the duration using the provided DateFormat object. The smallest
+        // field in this result will be missing the fractional part.
+        AttributedCharacterIterator iterator = formatter.formatToCharacterIterator(duration);
+        
+        // The final formatted duration will be written here.
+        StringBuilder builder = new StringBuilder();
+        
+        // iterate through formatted text copying to 'builder' one character at a time.
+        // When we get to the smallest amount, skip over it and copy
+        // 'smallestAmountFormatted' to the builder instead.
+        for (iterator.first(); iterator.getIndex() < iterator.getEndIndex();) {
+            if (iterator.getAttributes().containsKey(smallestField)) {
+                builder.append(smallestAmountFormatted);
+                iterator.setIndex(iterator.getRunLimit(smallestField));
+            } else {
+                builder.append(iterator.current());
+                iterator.next();
+            }
+        }
+        return builder.toString();
+    }
+
+    private static double getAmountOrZero(TimePeriod timePeriod, TimeUnit timeUnit) {
         TimeUnitAmount tua = timePeriod.getAmount(timeUnit);
         if (tua == null) {
-            return Double.valueOf(0);
+            return 0.0;
         }
-        return tua.getNumber();
+        return tua.getNumber().doubleValue();
     }
 
     private void setup(String resourceKey, Map<TimeUnit, Map<String, Object[]>> timeUnitToCountToPatterns,
