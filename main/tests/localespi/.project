@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>icu4j-localespi-tests</name>
+	<comment></comment>
+	<projects>
+		<project>icu4j-collate</project>
+		<project>icu4j-core</project>
+		<project>icu4j-currdata</project>
+		<project>icu4j-langdata</project>
+		<project>icu4j-regiondata</project>
+		<project>icu4j-shared</project>
+		<project>icu4j-test-framework</project>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.jdt.core.javabuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+	</natures>
+</projectDescription>
