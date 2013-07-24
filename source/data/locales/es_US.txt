@@ -1,0 +1,92 @@
+﻿// ***************************************************************************
+// *
+// * Copyright (C) 2013 International Business Machines
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/main/es_US.xml
+// *
+// ***************************************************************************
+es_US{
+    %%Parent{"es_419"}
+    MeasurementSystem:int{1}
+    PaperSize:intvector{
+        279,
+        216,
+    }
+    Version{"2.0.86.27"}
+    calendar{
+        generic{
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d 'de' MMMM 'de' y G",
+                "d 'de' MMMM 'de' y G",
+                "MMM d, y G",
+                "M/d/yy GGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, MMM d, y G"}
+                GyMMMd{"MMM d, y G"}
+                MEd{"E, MM/dd"}
+                MMMEd{"E, MMM d"}
+                MMMd{"MMM d"}
+                MMd{"MM/d"}
+                Md{"M/d"}
+                y{"y G"}
+                yyyy{"y G"}
+                yyyyM{"M/y G"}
+                yyyyMEd{"E, M/d/y G"}
+                yyyyMMM{"MMM y G"}
+                yyyyMMMEd{"E, MMM d, y G"}
+                yyyyMMMd{"MMM d, y G"}
+                yyyyMd{"M/d/y G"}
+            }
+        }
+        gregorian{
+            AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            DateTimePatterns{
+                "h:mm:ss a zzzz",
+                "h:mm:ss a z",
+                "h:mm:ss a",
+                "h:mm a",
+                "EEEE, d 'de' MMMM 'de' y",
+                "d 'de' MMMM 'de' y",
+                "MMM d, y",
+                "M/d/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                Gy{"y G"}
+                GyMMM{"MMM y G"}
+                GyMMMEd{"E, MMM d, y G"}
+                GyMMMd{"MMM d, y G"}
+                MEd{"E, MM/dd"}
+                MMMEd{"E, MMM d"}
+                MMMd{"MMM d"}
+                MMd{"MM/d"}
+                Md{"M/d"}
+                yM{"M/y"}
+                yMEd{"E, M/d/y"}
+                yMMMEd{"E, MMM d, y"}
+                yMMMd{"MMM d, y"}
+                yMd{"M/d/y"}
+            }
+        }
+    }
+}
