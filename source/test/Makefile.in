@@ -93,9 +93,9 @@ xcheck-recursive check-recursive check-exhaustive-recursive:
 	for subdir in $$list; do \
 	  if [ -f "$$mystatus.$$subdir" ]; then \
 	    echo "-------------" ; \
-	    echo "| SUBTEST SUMMARY: $$subdir" ; \
+	    echo "| ***     FAILING TEST SUMMARY FOR:              $$subdir  " ; \
 	    cat "$$mystatus.$$subdir" ; \
-	    echo "| END SUMMARY:     $$subdir" ; \
+	    echo "| *** END FAILING TEST SUMMARY FOR:              $$subdir" ; \
 	    $(RMV) "$$mystatus.$$subdir" ; \
 	  fi; \
 	done; \
