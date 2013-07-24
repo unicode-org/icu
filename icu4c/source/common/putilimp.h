@@ -197,7 +197,6 @@ typedef size_t uintptr_t;
 
 /** @} */
 
-
 /**
  * \def U_HAVE_STD_ATOMICS
  * Defines whether the standard C++11 <atomic> is available.
@@ -213,8 +212,16 @@ typedef size_t uintptr_t;
 #elif __clang__ && __clang_major__==3 && __clang_minor__<=1
     /* Clang 3.1. Atomics not fully implemented. */
 #   define U_HAVE_STD_ATOMICS 0
-#else 
-#   define U_HAVE_STD_ATOMICS 1
+#else
+#   if defined(U_HAVE_ATOMIC) /* autoconf detected or manually set */
+#       if U_HAVE_ATOMIC
+#          define U_HAVE_STD_ATOMICS 1 /* #include <atomic> works */
+#       else
+#          define U_HAVE_STD_ATOMICS 0 /* #include <atomic> doesn't work. */
+#       endif
+#   else
+#       define U_HAVE_STD_ATOMICS 0  /* Default: do not use */
+#   endif
 #endif
 
 #else
