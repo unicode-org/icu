@@ -809,6 +809,7 @@ AndConstraint::AndConstraint(const AndConstraint& other) {
 }
 
 AndConstraint::~AndConstraint() {
+    delete rangeList;
     if (next!=NULL) {
         delete next;
     }
