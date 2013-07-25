@@ -126,6 +126,8 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestShowZero);
   TESTCASE_AUTO(TestCompatibleCurrencies);
   TESTCASE_AUTO(TestBug9936);
+  TESTCASE_AUTO(TestParseNegativeWithFaLocale);
+  TESTCASE_AUTO(TestParseNegativeWithAlternateMinusSign);
   TESTCASE_AUTO_END;
 }
 
@@ -7116,6 +7118,34 @@ void NumberFormatTest::TestBug9936() {
         errln("File %s, Line %d: areSignificantDigitsUsed() was FALSE, expected TRUE.\n", __FILE__, __LINE__);
     }
  
+}
+
+void NumberFormatTest::TestParseNegativeWithFaLocale() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat *test = (DecimalFormat *) NumberFormat::createInstance("fa", status);
+    test->setLenient(TRUE);
+    Formattable af;
+    ParsePosition ppos;
+    test->parse(UnicodeString("-0.5"), af, ppos);
+    if (ppos.getIndex() == 0) {
+        errln("Expected -0.5 to parse for farse.");
+    }
+    delete test;
+}
+
+void NumberFormatTest::TestParseNegativeWithAlternateMinusSign() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat *test = (DecimalFormat *) NumberFormat::createInstance("en", status);
+    test->setLenient(TRUE);
+    Formattable af;
+    ParsePosition ppos;
+    UnicodeString value("\\u208B0.5");
+    value = value.unescape();
+    test->parse(value, af, ppos);
+    if (ppos.getIndex() == 0) {
+        errln(UnicodeString("Expected ") + value + UnicodeString(" to parse."));
+    }
+    delete test;
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
