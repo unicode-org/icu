@@ -476,6 +476,8 @@ AC_SUBST(U_HAVE_STD_STRING)
 
 
 AC_MSG_CHECKING([[if #include <atomic> works]])
+OLD_CXXFLAGS="${CXXFLAGS}"
+CXXFLAGS="${CXXFLAGS} -std=c++11"
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <atomic>]], [[]])], [ac_cv_header_atomic=yes], [ac_cv_header_atomic=no])
 AC_MSG_RESULT($ac_cv_header_atomic)
 if test $ac_cv_header_atomic = yes
@@ -484,6 +486,7 @@ then
 else
         U_HAVE_ATOMIC=0
 fi
+CXXFLAGS="${OLD_CXXFLAGS}"
 # Make this available via CPPFLAGS
 CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_ATOMIC=${U_HAVE_ATOMIC}"
 AC_SUBST(U_HAVE_ATOMIC)
