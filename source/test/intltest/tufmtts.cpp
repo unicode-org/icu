@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2008-2012, International Business Machines Corporation and
+ * Copyright (c) 2008-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -11,6 +11,7 @@
 #include "unicode/tmutamt.h"
 #include "unicode/tmutfmt.h"
 #include "tufmtts.h"
+#include "unicode/timeperiod.h"
 #include "unicode/ustring.h"
 
 //TODO: put as compilation flag
@@ -20,6 +21,45 @@
 #include <iostream>
 #endif
 
+struct TimePeriodResult {
+    TimePeriod timePeriod;
+    const char* result;
+};
+
+class TimeUnitAmountSubClass : public TimeUnitAmount {
+  public:
+    TimeUnitAmountSubClass(double amount, TimeUnit::UTimeUnitFields timeUnitField, int ex, UErrorCode &status) : TimeUnitAmount(amount, timeUnitField, status), extra(ex) { }
+
+    TimeUnitAmountSubClass(const TimeUnitAmountSubClass &that)
+    : TimeUnitAmount(that), extra(that.extra) { }
+
+    TimeUnitAmountSubClass &operator=(const TimeUnitAmountSubClass &that) {
+      TimeUnitAmount::operator=(that);
+      extra = that.extra;
+      return *this;
+    }
+
+    virtual UObject* clone() const {
+      return new TimeUnitAmountSubClass(*this);
+    }
+
+    virtual ~TimeUnitAmountSubClass() { }
+    int extra;
+};
+
+static TimePeriod create1m59_9996s(UErrorCode &status);
+static TimePeriod create19m(UErrorCode &status);
+static TimePeriod create19m28s(UErrorCode &status);
+static TimePeriod create19m29s(UErrorCode &status);
+static TimePeriod create1h23_5s(UErrorCode &status);
+static TimePeriod create1h23s(UErrorCode &status);
+static TimePeriod create1h23_5m(UErrorCode &status);
+static TimePeriod create1h0m23s(UErrorCode &status);
+static TimePeriod create5h17m(UErrorCode &status);
+static TimePeriod create2y5M3w4d(UErrorCode &status);
+static TimePeriod create0h0m17s(UErrorCode &status);
+static TimePeriod create6h56_92m(UErrorCode &status);
+
 void TimeUnitTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ ) {
     if (exec) logln("TestSuite TimeUnitTest");
     switch (index) {
@@ -27,6 +67,11 @@ void TimeUnitTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         TESTCASE(1, testAPI);
         TESTCASE(2, testGreekWithFallback);
         TESTCASE(3, testGreekWithSanitization);
+        TESTCASE(4, testFormatPeriodEn);
+        TESTCASE(5, testTimePeriodForAmounts);
+        TESTCASE(6, testTimeUnitAmountSubClass);
+        TESTCASE(7, testTimePeriodEquals);
+        TESTCASE(8, testTimePeriodLength);
         default: name = ""; break;
     }
 }
@@ -342,5 +387,315 @@ void TimeUnitTest::testGreekWithSanitization() {
     delete timeUnitFormat;
 }
 
+void TimeUnitTest::testFormatPeriodEn() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    TimePeriodResult fullResults[] = {
+        {create1m59_9996s(status), "1 minute, 59.9996 seconds"},
+        {create19m(status), "19 minutes"},
+        {create1h23_5s(status), "1 hour, 23.5 seconds"},
+        {create1h23_5m(status), "1 hour, 23.5 minutes"},
+        {create1h0m23s(status), "1 hour, 0 minutes, 23 seconds"},
+        {create2y5M3w4d(status), "2 years, 5 months, 3 weeks, 4 days"}};
+  
+    TimePeriodResult abbrevResults[] = {
+        {create1m59_9996s(status), "1 min, 59.9996 secs"},
+        {create19m(status), "19 mins"},
+        {create1h23_5s(status), "1 hr, 23.5 secs"},
+        {create1h23_5m(status), "1 hr, 23.5 mins"},
+        {create1h0m23s(status), "1 hr, 0 mins, 23 secs"},
+        {create2y5M3w4d(status), "2 yrs, 5 mths, 3 wks, 4 days"}};
+  
+    TimePeriodResult numericResults[] = {
+        {create1m59_9996s(status), "1:59.9996"},
+        {create19m(status), "19 mins"},
+        {create1h23_5s(status), "1:00:23.5"},
+        {create1h0m23s(status), "1:00:23"},
+        {create5h17m(status), "5:17"},
+        {create19m28s(status), "19:28"},
+        {create2y5M3w4d(status), "2 yrs, 5 mths, 3 wks, 4 days"},
+        {create0h0m17s(status), "0:00:17"},
+        {create6h56_92m(status), "6:56.92"}};
+
+   if (U_FAILURE(status)) {
+      dataerrln("Unable to create time periods - %s", u_errorName(status));
+      return;
+    }
+
+    LocalPointer<NumberFormat> nf(NumberFormat::createInstance(Locale::getEnglish(), status));
+    if (U_FAILURE(status)) {
+        dataerrln("Unable to create NumberFormat object - %s", u_errorName(status));
+        return;
+    }
+    nf->setMaximumFractionDigits(4);
+    {
+        TimeUnitFormat tuf(Locale::getEnglish(), UTMUTFMT_FULL_STYLE, status);
+        tuf.setNumberFormat(*nf, status);
+        if (U_FAILURE(status)) {
+            dataerrln("Unable to create TimeUnitFormat object - %s", u_errorName(status));
+            return;
+        }
+        verifyFormatTimePeriod(
+            tuf,
+            fullResults,
+            sizeof(fullResults) / sizeof(TimePeriodResult));
+    }
+    {
+        TimeUnitFormat tuf(Locale::getEnglish(), UTMUTFMT_ABBREVIATED_STYLE, status);
+        tuf.setNumberFormat(*nf, status);
+        if (U_FAILURE(status)) {
+            dataerrln("Unable to create TimeUnitFormat object - %s", u_errorName(status));
+            return;
+        }
+        verifyFormatTimePeriod(
+            tuf,
+            abbrevResults,
+            sizeof(abbrevResults) / sizeof(TimePeriodResult));
+    }
+    {
+        TimeUnitFormat tuf(Locale::getEnglish(), UTMUTFMT_NUMERIC_STYLE, status);
+        tuf.setNumberFormat(*nf, status);
+        if (U_FAILURE(status)) {
+            dataerrln("Unable to create TimeUnitFormat object - %s", u_errorName(status));
+            return;
+        }
+        verifyFormatTimePeriod(
+            tuf,
+            numericResults,
+            sizeof(numericResults) / sizeof(TimePeriodResult));
+    }
+}
+
+void TimeUnitTest::testTimePeriodLength() {
+   UErrorCode status = U_ZERO_ERROR;
+   int32_t actual = create1h23_5m(status).length();
+    if (U_FAILURE(status)) {
+      dataerrln("Unable to create time period object - %s", u_errorName(status));
+      return;
+    }
+   if (actual != 2) {
+       errln("Expected 2, got %d", actual);
+    }
+}
+
+void TimeUnitTest::testTimePeriodForAmounts() {
+    UErrorCode status = U_ZERO_ERROR;
+    TimeUnitAmount _5h(5.0, TimeUnit::UTIMEUNIT_HOUR, status);
+    TimeUnitAmount _3_5h(3.5, TimeUnit::UTIMEUNIT_HOUR, status);
+    TimeUnitAmount _3h(3.0, TimeUnit::UTIMEUNIT_HOUR, status);
+    TimeUnitAmount _5m(5.0, TimeUnit::UTIMEUNIT_MINUTE, status);
+    if (U_FAILURE(status)) {
+      dataerrln("Unable to alocate time unit amounts - %s", u_errorName(status));
+      return;
+    }
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        TimeUnitAmount *amounts[] = {&_3h, &_5h};
+        int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+        TimePeriod(amounts, len, status);
+        if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+            errln("Expected U_ILLEGAL_ARGUMENT_ERROR for 3h + 5h, got %s", u_errorName(status));
+        }
+    } 
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        TimePeriod(NULL, 0, status);
+        if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+            errln("Expected U_ILLEGAL_ARGUMENT_ERROR for empty time period, got %s", u_errorName(status));
+        }
+    } 
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        TimeUnitAmount *amounts[] = {&_3_5h, &_5m};
+        int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+        TimePeriod(amounts, len, status);
+        if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+            errln("Expected U_ILLEGAL_ARGUMENT_ERROR for 3.5h + 5m, got %s", u_errorName(status));
+        }
+    } 
+}
+
+void TimeUnitTest::testTimePeriodEquals() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    TimePeriod _1h23s = create1h23s(status);
+
+    // Same variable
+    verifyEquals(_1h23s, _1h23s);
+
+    // Different variables same value
+    verifyEquals(_1h23s, TimePeriod(_1h23s));
+
+    // Different fields
+    verifyNotEqual(_1h23s, create1h0m23s(status));
+
+    // Same fields different values
+    verifyNotEqual(create19m28s(status), create19m29s(status));
+
+    if (U_FAILURE(status)) {
+        errln("Failure creating TimePeriods, got %s", u_errorName(status));
+    }
+}
+
+void TimeUnitTest::testTimeUnitAmountSubClass() {
+    UErrorCode status = U_ZERO_ERROR;
+    TimeUnitAmountSubClass _6h(6.0, TimeUnit::UTIMEUNIT_HOUR, 1, status);
+    TimeUnitAmountSubClass _5m(5.0, TimeUnit::UTIMEUNIT_MINUTE, 2, status);
+    if (U_FAILURE(status)) {
+      dataerrln("Unable to alocate time unit amounts - %s", u_errorName(status));
+      return;
+    }
+    {
+        UErrorCode status = U_ZERO_ERROR;
+        TimeUnitAmount *amounts[] = {&_6h, &_5m};
+        int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+        TimePeriod period(amounts, len, status);
+        if (2 != ((const TimeUnitAmountSubClass *) period.getAmount(TimeUnit::UTIMEUNIT_MINUTE))->extra) {
+            errln("Expected polymorphic behavior.");
+        }
+    } 
+}
+
+void TimeUnitTest::verifyFormatTimePeriod(
+        const TimeUnitFormat& tuf,
+        const TimePeriodResult* timePeriodResults,
+        int32_t numResults) {
+    for (int32_t i = 0; i < numResults; i++) {
+        UnicodeString expected(timePeriodResults[i].result, -1, US_INV);
+        expected = expected.unescape();
+        UErrorCode status = U_ZERO_ERROR;
+        Formattable formattable(new TimePeriod(timePeriodResults[i].timePeriod));
+        UnicodeString actual;
+        FieldPosition pos(0);
+        tuf.format(formattable, actual, pos, status);
+        if (U_FAILURE(status)) {
+            dataerrln("Unable to format time period - %s", u_errorName(status));
+            return;
+        }
+        if (actual != expected) {
+            errln(UnicodeString("Fail: Expected: ") + expected
+                + UnicodeString(" Got: ") + actual);
+        }
+    }
+}
+
+void TimeUnitTest::verifyEquals(const TimePeriod& lhs, const TimePeriod& rhs) {
+  if (lhs != rhs) {
+    errln("Expected equal.");
+    return;
+  }
+  if (!(lhs == rhs)) {
+    errln("Expected not not equal.");
+  }
+}
+
+void TimeUnitTest::verifyNotEqual(const TimePeriod& lhs, const TimePeriod& rhs) {
+  if (lhs == rhs) {
+    errln("Expected not equal.");
+    return;
+  }
+  if (!(lhs != rhs)) {
+    errln("Expected not not not equal.");
+  }
+}
+
+static TimePeriod create1m59_9996s(UErrorCode &status) {
+  TimeUnitAmount minutes(1.0, TimeUnit::UTIMEUNIT_MINUTE, status);
+  TimeUnitAmount seconds(59.9996, TimeUnit::UTIMEUNIT_SECOND, status);
+  TimeUnitAmount *amounts[] = {&minutes, &seconds};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create19m(UErrorCode &status) {
+  TimeUnitAmount minutes(19.0, TimeUnit::UTIMEUNIT_MINUTE, status);
+  TimeUnitAmount *amounts[] = {&minutes};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create19m28s(UErrorCode &status) {
+  TimeUnitAmount minutes(19.0, TimeUnit::UTIMEUNIT_MINUTE, status);
+  TimeUnitAmount seconds(28.0, TimeUnit::UTIMEUNIT_SECOND, status);
+  TimeUnitAmount *amounts[] = {&minutes, &seconds};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create19m29s(UErrorCode &status) {
+  TimeUnitAmount minutes(19.0, TimeUnit::UTIMEUNIT_MINUTE, status);
+  TimeUnitAmount seconds(29.0, TimeUnit::UTIMEUNIT_SECOND, status);
+  TimeUnitAmount *amounts[] = {&minutes, &seconds};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create1h23_5s(UErrorCode &status) {
+  TimeUnitAmount hours(1.0, TimeUnit::UTIMEUNIT_HOUR, status);
+  TimeUnitAmount seconds(23.5, TimeUnit::UTIMEUNIT_SECOND, status);
+  TimeUnitAmount *amounts[] = {&hours, &seconds};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create1h23_5m(UErrorCode &status) {
+  TimeUnitAmount hours(1.0, TimeUnit::UTIMEUNIT_HOUR, status);
+  TimeUnitAmount seconds(23.5, TimeUnit::UTIMEUNIT_MINUTE, status);
+  TimeUnitAmount *amounts[] = {&hours, &seconds};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create1h0m23s(UErrorCode &status) {
+  TimeUnitAmount hours(1.0, TimeUnit::UTIMEUNIT_HOUR, status);
+  TimeUnitAmount minutes(0.0, TimeUnit::UTIMEUNIT_MINUTE, status);
+  TimeUnitAmount seconds(23.0, TimeUnit::UTIMEUNIT_SECOND, status);
+  TimeUnitAmount *amounts[] = {&hours, &minutes, &seconds};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create1h23s(UErrorCode &status) {
+  TimeUnitAmount hours(1.0, TimeUnit::UTIMEUNIT_HOUR, status);
+  TimeUnitAmount seconds(23.0, TimeUnit::UTIMEUNIT_SECOND, status);
+  TimeUnitAmount *amounts[] = {&hours, &seconds};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create5h17m(UErrorCode &status) {
+  TimeUnitAmount hours(5.0, TimeUnit::UTIMEUNIT_HOUR, status);
+  TimeUnitAmount minutes(17.0, TimeUnit::UTIMEUNIT_MINUTE, status);
+  TimeUnitAmount *amounts[] = {&hours, &minutes};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create2y5M3w4d(UErrorCode &status) {
+  TimeUnitAmount years(2.0, TimeUnit::UTIMEUNIT_YEAR, status);
+  TimeUnitAmount months(5.0, TimeUnit::UTIMEUNIT_MONTH, status);
+  TimeUnitAmount weeks(3.0, TimeUnit::UTIMEUNIT_WEEK, status);
+  TimeUnitAmount days(4.0, TimeUnit::UTIMEUNIT_DAY, status);
+  TimeUnitAmount *amounts[] = {&years, &months, &weeks, &days};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create0h0m17s(UErrorCode &status) {
+  TimeUnitAmount hours(0.0, TimeUnit::UTIMEUNIT_HOUR, status);
+  TimeUnitAmount minutes(0.0, TimeUnit::UTIMEUNIT_MINUTE, status);
+  TimeUnitAmount seconds(17.0, TimeUnit::UTIMEUNIT_SECOND, status);
+  TimeUnitAmount *amounts[] = {&hours, &minutes, &seconds};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
+
+static TimePeriod create6h56_92m(UErrorCode &status) {
+  TimeUnitAmount hours(6.0, TimeUnit::UTIMEUNIT_HOUR, status);
+  TimeUnitAmount minutes(56.92, TimeUnit::UTIMEUNIT_MINUTE, status);
+  TimeUnitAmount *amounts[] = {&hours, &minutes};
+  int32_t len = sizeof(amounts) / sizeof(TimeUnitAmount*);
+  return TimePeriod(amounts, len, status); 
+}
 
 #endif
