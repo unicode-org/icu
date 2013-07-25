@@ -175,7 +175,7 @@ void ListFormatterTest::TestOutOfOrderPatterns() {
 
     ListFormatData data("{1} after {0}", "{1} after the first {0}",
                         "{1} after {0}", "{1} in the last after {0}");
-    ListFormatter formatter(data);
+    ListFormatter formatter(&data);
 
     UnicodeString input1[] = {one};
     CheckFormatting(&formatter, input1, 1, results[0]);

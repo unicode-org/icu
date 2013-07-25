@@ -60,12 +60,26 @@ struct ListFormatData : public UMemory {
 class U_COMMON_API ListFormatter : public UObject{
 
   public:
+
+    /**
+     * Copy constructor.
+     * @draft ICU 52
+     */
+    ListFormatter(const ListFormatter&);
+
+    /**
+     * Assignment operator.
+     * @draft ICU 52
+     */
+    ListFormatter& operator=(const ListFormatter& other);
+
     /**
      * Creates a ListFormatter appropriate for the default locale.
      *
      * @param errorCode ICU error code, set if no data available for default locale.
      * @return Pointer to a ListFormatter object for the default locale,
      *     created from internal data derived from CLDR data.
+     * @deprecated
      * @draft ICU 50
      */
     static ListFormatter* createInstance(UErrorCode& errorCode);
@@ -77,10 +91,22 @@ class U_COMMON_API ListFormatter : public UObject{
      * @param errorCode ICU error code, set if no data available for the given locale.
      * @return A ListFormatter object created from internal data derived from
      *     CLDR data.
+     * @deprecated
      * @draft ICU 50
      */
     static ListFormatter* createInstance(const Locale& locale, UErrorCode& errorCode);
 
+    /**
+     * Creates a ListFormatter appropriate for a locale and style.
+     *
+     * @param locale The locale.
+     * @param style the style, either "standard", "duration", or "duration-short"
+     * @param errorCode ICU error code, set if no data available for the given locale.
+     * @return A ListFormatter object created from internal data derived from
+     *     CLDR data.
+     * @internal
+     */
+    static ListFormatter* createInstance(const Locale& locale, const char* style, UErrorCode& errorCode);
 
     /**
      * Destructor.
@@ -106,20 +132,17 @@ class U_COMMON_API ListFormatter : public UObject{
     /**
      * @internal constructor made public for testing.
      */
-    ListFormatter(const ListFormatData& listFormatterData);
+    ListFormatter(const ListFormatData* listFormatterData);
 
   private:
     static void initializeHash(UErrorCode& errorCode);
-    static const ListFormatData* getListFormatData(const Locale& locale, UErrorCode& errorCode);
+    static const ListFormatData* getListFormatData(const Locale& locale, const char *style, UErrorCode& errorCode);
 
     ListFormatter();
-    ListFormatter(const ListFormatter&);
-
-    ListFormatter& operator = (const ListFormatter&);
     void addNewString(const UnicodeString& pattern, UnicodeString& originalString,
                       const UnicodeString& newString, UErrorCode& errorCode) const;
 
-    const ListFormatData& data;
+    const ListFormatData* data;
 };
 
 U_NAMESPACE_END
