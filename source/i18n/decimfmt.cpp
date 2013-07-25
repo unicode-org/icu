@@ -282,6 +282,61 @@ static const char fgLatn[]="latn";
 static const char fgPatterns[]="patterns";
 static const char fgDecimalFormat[]="decimalFormat";
 static const char fgCurrencyFormat[]="currencyFormat";
+
+static UChar32 gMinusSigns[] = {
+    0x002D,
+    0x207B,
+    0x208B,
+    0x2212,
+    0x2796,
+    0xFE63,
+    0xFF0D};
+
+static UChar32 gPlusSigns[] = {
+    0x002B,
+    0x207A,
+    0x208A,
+    0x2795,
+    0xfB29,
+    0xFE62,
+    0xFF0B};
+
+static UnicodeSet *gMinusSignsSet = NULL;
+static UnicodeSet *gPlusSignsSet = NULL;
+
+static UInitOnce gSignsInitOnce = U_INITONCE_INITIALIZER;
+
+static void initSigns(const UChar32 *raw, int32_t len, UnicodeSet *s) {
+    for (int32_t i = 0; i < len; ++i) {
+        s->add(raw[i]);
+    }
+}
+
+static void U_CALLCONV initSigns() {
+    U_ASSERT(gMinusSignsSet == NULL);
+    U_ASSERT(gPlusSignsSet == NULL);
+    gMinusSignsSet = new UnicodeSet();
+    gPlusSignsSet = new UnicodeSet();
+    initSigns(
+            gMinusSigns,
+            sizeof(gMinusSigns) / sizeof(gMinusSigns[0]),
+            gMinusSignsSet);
+    initSigns(
+            gPlusSigns,
+            sizeof(gPlusSigns) / sizeof(gPlusSigns[0]),
+            gPlusSignsSet);
+}
+
+static const UnicodeSet* getMinusSigns() {
+    umtx_initOnce(gSignsInitOnce, &initSigns);
+    return gMinusSignsSet;
+}
+
+static const UnicodeSet* getPlusSigns() {
+    umtx_initOnce(gSignsInitOnce, &initSigns);
+    return gPlusSignsSet;
+}
+
 static const UChar fgTripleCurrencySign[] = {0xA4, 0xA4, 0xA4, 0};
 
 inline int32_t _min(int32_t a, int32_t b) { return (a<b) ? a : b; }
@@ -2850,6 +2905,12 @@ int32_t DecimalFormat::compareAffix(const UnicodeString& text,
     return compareSimpleAffix(*patternToCompare, text, pos, isLenient());
 }
 
+static UBool equalWithSignCompatibility(UChar32 lhs, UChar32 rhs) {
+  return lhs == rhs
+      || (getMinusSigns()->contains(lhs) && getMinusSigns()->contains(rhs))
+      || (getPlusSigns()->contains(lhs) && getPlusSigns()->contains(rhs));
+}
+
 /**
  * Return the length matched by the given affix, or -1 if none.
  * Runs of white space in the affix, match runs of white space in
@@ -2966,7 +3027,7 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
             UChar32 c = affix.char32At(i);
             int32_t len = U16_LENGTH(c);
 
-            if (input.char32At(pos) != c) {
+            if (!equalWithSignCompatibility(input.char32At(pos), c)) {
                 return -1;
             }
 
