@@ -15,8 +15,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 
-import javax.management.StandardEmitterMBean;
-
 import com.ibm.icu.impl.ICUCache;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
