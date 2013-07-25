@@ -5630,6 +5630,8 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if #include <atomic> works" >&5
 $as_echo_n "checking if #include <atomic> works... " >&6; }
+OLD_CXXFLAGS="${CXXFLAGS}"
+CXXFLAGS="${CXXFLAGS} -std=c++11"
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <atomic>
@@ -5655,6 +5657,7 @@ then
 else
         U_HAVE_ATOMIC=0
 fi
+CXXFLAGS="${OLD_CXXFLAGS}"
 # Make this available via CPPFLAGS
 CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_ATOMIC=${U_HAVE_ATOMIC}"
 
