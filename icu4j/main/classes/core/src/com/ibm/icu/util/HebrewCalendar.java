@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and
+ * Copyright (C) 1996-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -49,8 +49,8 @@ import com.ibm.icu.util.ULocale.Category;
  *      by Nachum Dershowitz & Edward Reingold, Cambridge University Press, 1997, pages 85-91.
  *
  * <li>Hebrew Calendar Science and Myths,
- *      <a href="http://www.geocities.com/Athens/1584/">
- *      http://www.geocities.com/Athens/1584/</a>
+ *      <a href="http://web.archive.org/web/20090423084613/http://www.geocities.com/Athens/1584/">
+ *      http://web.archive.org/web/20090423084613/http://www.geocities.com/Athens/1584/</a>
  *
  * <li>The Calendar FAQ,
  *      <a href="http://www.faqs.org/faqs/calendars/faq/">
