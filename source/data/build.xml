@@ -17,56 +17,40 @@
         <!-- Load environment variables -->
         <property environment="env"/>
 
-        <condition property="is.icu4j.classes.set" >
-            <or>
-                <isset property="env.ICU4J_CLASSES" />
-                <isset property="env.ICU4J_JAR" />
-            </or>
-        </condition >
-        <fail unless="is.icu4j.classes.set" message="Please set the ICU4J_CLASSES or ICU4J_JAR environment variable."/>
+    	<!-- Ant won't set properties that have already been set, so environment variables that have been set before won't be clobbered. -->
+    	<property name="env.ICU4C_DIR" location="../.."/>
 
-        <condition property="is.icu4c.dir.set" >
-            <isset property="env.ICU4C_DIR" />
-        </condition >
-        <fail unless="is.icu4c.dir.set" message="Please set the ICU4C_DIR environment variable."/>
-
-        <condition property="is.cldr.dir.set" >
+    	<condition property="is.cldr.dir.set" >
             <isset property="env.CLDR_DIR" />
         </condition >
-        <fail unless="is.cldr.dir.set" message="Please set the CLDR_DIR environment variable."/>
+        <fail unless="is.cldr.dir.set" message="Please set the CLDR_DIR environment variable to the top level ICU source dir (containing 'common')."/>
 
-        <condition property="is.cldr.classes.set" >
+        <available property="cldrtools.dir" value="${env.CLDR_DIR}/cldr-tools" file="${env.CLDR_DIR}/cldr-tools" type="dir"/>
+        <available property="cldrtools.dir" value="${env.CLDR_DIR}/java/tools" file="${env.CLDR_DIR}/java/tools" type="dir"/>
+        <fail unless="cldrtools.dir" message="Please make sure that the CLDR tools directory is checked out into CLDR_DIR"/>
+
+        <available property="env.CLDR_CLASSES" value="${cldrtools.dir}/classes" file="${cldrtools.dir}/classes" type="dir"/>
+        <available property="cldrtools.jar" value="${cldrtools.dir}/cldr.jar" file="${cldrtools.dir}/cldr.jar" type="file"/>
+        <condition property="is.cldr.classes.set">
             <or>
                 <isset property="env.CLDR_CLASSES" />
-                <isset property="env.CLDR_JAR" />
+                <isset property="cldrtools.jar" />
             </or>
-        </condition >
-        <fail unless="is.cldr.classes.set" message="Please set the CLDR_CLASSES or CLDR_JAR environment variable."/>
+        </condition>
+        <fail unless="is.cldr.classes.set" message="CLDR classes not found in ${cldrtools.dir}. Please either set the CLDR_CLASSES environment variable or build cldr.jar."/>
 
-        <condition property="is.utilities.classes.set" >
-            <or>
-                <isset property="env.ICU4J_CLASSES" />
-                <isset property="env.UTILITIES_JAR" />
-            </or>
-        </condition >
-        <fail unless="is.utilities.classes.set" message="Please set the ICU4J_CLASSES or UTILITIES_JAR environment variable."/>
-
-        <echo message="java home: ${java.home}"/>
+    	<echo message="java home: ${java.home}"/>
         <echo message="java version: ${java.version}"/>
         <echo message="ant java version: ${ant.java.version}"/>
         <echo message="${ant.version}"/>
     </target>
     <target name="setup">
-
-        <echo message="${env.CLDR_CLASSES}"/>
         <taskdef name="cldr-build" classname="org.unicode.cldr.ant.CLDRBuild">
             <classpath>
                 <pathelement path="${java.class.path}/"/>
-                <pathelement path="${env.ICU4J_CLASSES}"/>
                 <pathelement path="${env.CLDR_CLASSES}"/>
-                <pathelement location="${env.ICU4J_JAR}"/>
-                <pathelement location="${env.CLDR_JAR}"/>
-                <pathelement location="${env.UTILITIES_JAR}"/>
+                <pathelement location="${cldrtools.jar}"/>
+                <fileset dir="${cldrtools.dir}/libs" includes="*.jar"/>
             </classpath>
         </taskdef>
     </target>
