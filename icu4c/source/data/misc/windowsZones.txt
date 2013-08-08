@@ -137,7 +137,7 @@ windowsZones:table(nofallback){
         }
         "Central Pacific Standard Time"{
             001{"Pacific/Guadalcanal"}
-            AQ{"Antarctica/Macquarie"}
+            AU{"Antarctica/Macquarie"}
             FM{"Pacific/Ponape Pacific/Kosrae"}
             NC{"Pacific/Noumea"}
             SB{"Pacific/Guadalcanal"}
@@ -211,6 +211,8 @@ windowsZones:table(nofallback){
                 "America/Toronto America/Iqaluit America/Montreal America/Nipigon Ame"
                 "rica/Pangnirtung America/Thunder_Bay"
             }
+            CU{"America/Havana"}
+            HT{"America/Port-au-Prince"}
             TC{"America/Grand_Turk"}
             US{
                 "America/New_York America/Detroit America/Indiana/Petersburg America/"
@@ -222,7 +224,6 @@ windowsZones:table(nofallback){
         "Egypt Standard Time"{
             001{"Africa/Cairo"}
             EG{"Africa/Cairo"}
-            PS{"Asia/Gaza Asia/Hebron"}
         }
         "Ekaterinburg Standard Time"{
             001{"Asia/Yekaterinburg"}
@@ -319,6 +320,10 @@ windowsZones:table(nofallback){
             001{"Asia/Seoul"}
             KP{"Asia/Pyongyang"}
             KR{"Asia/Seoul"}
+        }
+        "Libya Standard Time"{
+            001{"Africa/Tripoli"}
+            LY{"Africa/Tripoli"}
         }
         "Magadan Standard Time"{
             001{"Asia/Magadan"}
@@ -442,7 +447,6 @@ windowsZones:table(nofallback){
             CA{"America/Coral_Harbour"}
             CO{"America/Bogota"}
             EC{"America/Guayaquil"}
-            HT{"America/Port-au-Prince"}
             JM{"America/Jamaica"}
             KY{"America/Cayman"}
             PA{"America/Panama"}
@@ -640,7 +644,6 @@ windowsZones:table(nofallback){
             IT{"Europe/Rome"}
             LI{"Europe/Vaduz"}
             LU{"Europe/Luxembourg"}
-            LY{"Africa/Tripoli"}
             MC{"Europe/Monaco"}
             MT{"Europe/Malta"}
             NL{"Europe/Amsterdam"}
