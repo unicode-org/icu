@@ -10,11 +10,6 @@
 		<language type="ga"/>
 	</identity>
     <rbnf>
-        <rulesetGrouping type="SpelloutRules">
-            <ruleset type="lenient-parse" access="private">
-                <rbnfrule value="0">&amp; ' ' , ',' ;</rbnfrule>
-            </ruleset>
-        </rulesetGrouping>
         <rulesetGrouping type="DurationRules">
             <ruleset type="with-words">
                 <rbnfrule value="0">=0= soicind;</rbnfrule>
