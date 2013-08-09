@@ -256,13 +256,13 @@
         </cldr-build>
     </target>
     <target name="rbnf" depends="init,setup" description="builds rbnf files in ICU text format">
-        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" srcFile=".*xml" destFile=".*txt">
+        <cldr-build toolName="org.unicode.cldr.icu.NewLdml2IcuConverter" srcFile=".*xml" destFile=".*txt">
             <run>
                 <args>
                     <arg name="--sourcedir"       value="${env.CLDR_DIR}/common/rbnf" />
                     <arg name="--destdir"         value="${env.ICU4C_DIR}/source/data/rbnf"/>
                     <arg name="--specialsdir"     value="${env.ICU4C_DIR}/source/data/xml/rbnf"/>
-                    <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="--type" value="rbnf" />
                 </args>
                 <!-- http://ant.apache.org/faq.html#xml-entity-include -->
                 &icu-config;
@@ -409,12 +409,12 @@
         </cldr-build>
     </target>
     <target name="brkitr" depends="init,setup" description="builds break iterator files in ICU text format">
-        <cldr-build toolName="org.unicode.cldr.icu.LDML2ICUConverter" srcFile=".*xml" destFile=".*txt">
+        <cldr-build toolName="org.unicode.cldr.icu.NewLdml2IcuConverter" srcFile=".*xml" destFile=".*txt">
             <run>
                 <args>
                     <arg name="--sourcedir"       value="${env.ICU4C_DIR}/source/data/xml/brkitr"/>
                     <arg name="--destdir"         value="${env.ICU4C_DIR}/source/data/brkitr"/>
-                    <arg name="--supplementaldir" value="${env.CLDR_DIR}/common/supplemental" />
+                    <arg name="--type" value="brkitr" />
                 </args>
                 <!-- The entity include is not required for this target -->
                 <!-- http://ant.apache.org/faq.html#xml-entity-include
