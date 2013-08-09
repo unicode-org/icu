@@ -18,6 +18,7 @@
 #include "cmemory.h"
 #include "uvector.h"
 #include "gregoimp.h"
+#include "uassert.h"
 
 U_NAMESPACE_BEGIN
 
@@ -2109,8 +2110,13 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
                         if (U_FAILURE(status)) {
                             goto cleanupWriteZone;
                         }
-                        writeFinalRule(w, TRUE, finalDstRule,
-                                dstFromOffset - dstFromDSTSavings, dstFromDSTSavings, dstStartTime, status);
+                        UDate nextStart;
+                        UBool nextStartAvail = finalDstRule->getNextStart(dstUntilTime, dstFromOffset - dstFromDSTSavings, dstFromDSTSavings, false, nextStart);
+                        U_ASSERT(nextStartAvail);
+                        if (nextStartAvail) {
+                            writeFinalRule(w, TRUE, finalDstRule,
+                                    dstFromOffset - dstFromDSTSavings, dstFromDSTSavings, nextStart, status);
+                        }
                     }
                 }
                 if (U_FAILURE(status)) {
@@ -2138,7 +2144,7 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
                     // Use a single rule if possible
                     if (isEquivalentDateRule(stdMonth, stdWeekInMonth, stdDayOfWeek, finalStdRule->getRule())) {
                         writeZonePropsByDOW(w, FALSE, stdName, stdFromOffset, stdToOffset,
-                                stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, MAX_MILLIS, status);                            
+                                stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, MAX_MILLIS, status);
                     } else {
                         // Not equivalent rule - write out two different rules
                         writeZonePropsByDOW(w, FALSE, stdName, stdFromOffset, stdToOffset,
@@ -2146,8 +2152,13 @@ VTimeZone::writeZone(VTZWriter& w, BasicTimeZone& basictz,
                         if (U_FAILURE(status)) {
                             goto cleanupWriteZone;
                         }
-                        writeFinalRule(w, FALSE, finalStdRule,
-                                stdFromOffset - stdFromDSTSavings, stdFromDSTSavings, stdStartTime, status);
+                        UDate nextStart;
+                        UBool nextStartAvail = finalStdRule->getNextStart(stdUntilTime, stdFromOffset - stdFromDSTSavings, stdFromDSTSavings, false, nextStart);
+                        U_ASSERT(nextStartAvail);
+                        if (nextStartAvail) {
+                            writeFinalRule(w, FALSE, finalStdRule,
+                                    stdFromOffset - stdFromDSTSavings, stdFromDSTSavings, nextStart, status);
+                        }
                     }
                 }
                 if (U_FAILURE(status)) {
