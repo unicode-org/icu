@@ -14,8 +14,8 @@
 *   created by: George Rhoten
 */
 
-#ifndef __UCLN_CMN_H__
-#define __UCLN_CMN_H__
+#ifndef __UCLN_IN_H__
+#define __UCLN_IN_H__
 
 #include "unicode/utypes.h"
 #include "ucln.h"

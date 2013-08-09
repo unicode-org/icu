@@ -85,7 +85,6 @@ inline int32_t umtx_atomic_dec(atomic_int32_t *var) {
 typedef volatile LONG atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) val
 
-#ifdef __cplusplus
 inline int32_t umtx_loadAcquire(atomic_int32_t &var) {
     return InterlockedCompareExchange(&var, 0, 0);
 }
@@ -102,8 +101,6 @@ inline int32_t umtx_atomic_inc(atomic_int32_t *var) {
 inline int32_t umtx_atomic_dec(atomic_int32_t *var) {
     return InterlockedDecrement(var);
 }
-#endif /* __cplusplus */
-
 
 
 #elif U_HAVE_GCC_ATOMICS
@@ -113,7 +110,6 @@ inline int32_t umtx_atomic_dec(atomic_int32_t *var) {
 typedef int32_t atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) val
 
-#ifdef __cplusplus
 inline int32_t umtx_loadAcquire(atomic_int32_t &var) {
     int32_t val = var;
     __sync_synchronize();
@@ -133,8 +129,6 @@ inline int32_t umtx_atomic_dec(atomic_int32_t *p)  {
    return __sync_sub_and_fetch(p, 1);
 }
 
-#endif /* __cplusplus */
-
 #else
 
 /*
@@ -147,11 +141,9 @@ inline int32_t umtx_atomic_dec(atomic_int32_t *p)  {
 typedef int32_t atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) val
 
-#ifdef __cplusplus
 U_INTERNAL int32_t U_EXPORT2 umtx_loadAcquire(atomic_int32_t &var);
 
 U_INTERNAL void U_EXPORT2 umtx_storeRelease(atomic_int32_t &var, int32_t val);
-#endif /* __cplusplus */
 
 U_INTERNAL int32_t U_EXPORT2 umtx_atomic_inc(atomic_int32_t *p);
 
@@ -171,19 +163,14 @@ U_INTERNAL int32_t U_EXPORT2 umtx_atomic_dec(atomic_int32_t *p);
 struct UInitOnce {
     atomic_int32_t   fState;
     UErrorCode       fErrCode;
-#ifdef __cplusplus
     void reset() {fState = 0; fState=0;};
     UBool isReset() {return umtx_loadAcquire(fState) == 0;};
 // Note: isReset() is used by service registration code.
 //                 Thread safety of this usage needs review.
-#endif
 };
-typedef struct UInitOnce UInitOnce;
+
 #define U_INITONCE_INITIALIZER {ATOMIC_INT32_T_INITIALIZER(0), U_ZERO_ERROR}
 
-#ifdef __cplusplus
-// TODO: get all ICU files using umutex converted to C++,
-//       then remove the __cpluplus conditionals from this file.
 
 U_CAPI UBool U_EXPORT2 umtx_initImplPreInit(UInitOnce &);
 U_CAPI void  U_EXPORT2 umtx_initImplPostInit(UInitOnce &, UBool success);
@@ -261,7 +248,6 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (*fp)(T, UErrorCode &)
     }
 }
 
-#endif /*  __cplusplus */
 
 
 

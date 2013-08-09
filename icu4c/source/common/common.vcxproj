@@ -345,7 +345,9 @@
     <ClCompile Include="udata.cpp" />
     <ClCompile Include="udatamem.c" />
     <ClCompile Include="udataswp.c" />
-    <ClCompile Include="uinit.c" />
+    <ClCompile Include="uinit.cpp">
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+    </ClCompile>
     <ClCompile Include="umapfile.c">
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</DisableLanguageExtensions>
       <DisableLanguageExtensions Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</DisableLanguageExtensions>
