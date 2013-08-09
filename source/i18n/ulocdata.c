@@ -17,7 +17,6 @@
 #include "cmemory.h"
 #include "unicode/ustring.h"
 #include "unicode/ulocdata.h"
-#include "umutex.h"
 #include "uresimp.h"
 #include "ureslocs.h"
 

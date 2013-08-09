@@ -22,7 +22,6 @@
 #include "unicode/putil.h"
 #include "cstring.h"
 #include "cintltst.h"
-#include "umutex.h"
 #include "uassert.h"
 #include "cmemory.h"
 #include "unicode/uchar.h"
