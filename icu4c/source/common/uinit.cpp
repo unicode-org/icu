@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2012, International Business Machines                   *
+* Copyright (C) 2001-2013, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -19,13 +19,25 @@
 #include "unicode/uclean.h"
 #include "cmemory.h"
 #include "icuplugimp.h"
-#include "ucln.h"
+#include "ucln_cmn.h"
 #include "ucnv_io.h"
+#include "umutex.h"
 #include "utracimp.h"
 
+static UInitOnce gICUInitOnce = U_INITONCE_INITIALIZER;
+
+static UBool U_CALLCONV uinit_cleanup() {
+    gICUInitOnce.reset();
+    return TRUE;
+}
+
 static void U_CALLCONV
-initData(UErrorCode *status)
+initData(UErrorCode &status)
 {
+    /* initialize plugins */
+    uplug_init(&status);
+
+#if !UCONFIG_NO_CONVERSION
     /*
      * 2005-may-02
      *
@@ -38,9 +50,9 @@ initData(UErrorCode *status)
      * for errors there, to make sure that the actual items they need are
      * available.
      */
-#if !UCONFIG_NO_CONVERSION
-    ucnv_io_countKnownConverters(status);
+    ucnv_io_countKnownConverters(&status);
 #endif
+    ucln_common_registerCleanup(UCLN_COMMON_UINIT, uinit_cleanup);
 }
 
 /*
@@ -49,10 +61,6 @@ initData(UErrorCode *status)
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
     UTRACE_ENTRY_OC(UTRACE_U_INIT);
-
-    /* initialize plugins */
-    uplug_init(status);
-    ucln_mutexedInit(initData, status);
-
+    umtx_initOnce(gICUInitOnce, &initData, *status);
     UTRACE_EXIT_STATUS(*status);
 }

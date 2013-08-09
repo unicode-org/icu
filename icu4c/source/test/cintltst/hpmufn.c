@@ -14,7 +14,6 @@
 #include "unicode/uchar.h"
 #include "unicode/ures.h"
 #include "cintltst.h"
-#include "umutex.h"
 #include "unicode/utrace.h"
 #include <stdlib.h>
 #include <string.h>

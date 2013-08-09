@@ -16,7 +16,7 @@
 #include "unicode/uclean.h"
 #include "utracimp.h"
 #include "ucln_cmn.h"
-#include "umutex.h"
+#include "cmutex.h"
 #include "ucln.h"
 #include "cmemory.h"
 #include "uassert.h"
@@ -25,25 +25,9 @@
 #define UCLN_TYPE_IS_COMMON
 #include "ucln_imp.h"
 
-static UBool gICUInitialized = FALSE;
-static UMutex  gICUInitMutex = U_MUTEX_INITIALIZER;
-
 static cleanupFunc *gCommonCleanupFunctions[UCLN_COMMON_COUNT];
 static cleanupFunc *gLibCleanupFunctions[UCLN_COMMON];
 
-U_CFUNC UBool ucln_mutexedInit(initFunc *func, UErrorCode *status) {
-    UBool initialized = FALSE;
-    umtx_lock(&gICUInitMutex);
-    if (!gICUInitialized && U_SUCCESS(*status)) {
-        if (func != NULL) {
-            func(status);
-        }
-        gICUInitialized = TRUE;    /* TODO:  don't set if U_FAILURE? */
-        initialized = TRUE;
-    }
-    umtx_unlock(&gICUInitMutex);
-    return initialized;
-}
 
 /************************************************
  The cleanup order is important in this function.
@@ -59,7 +43,6 @@ u_cleanup(void)
     ucln_lib_cleanup();
 
     cmemory_cleanup();       /* undo any heap functions set by u_setMemoryFunctions(). */
-    gICUInitialized = FALSE;
     UTRACE_EXIT();           /* Must be before utrace_cleanup(), which turns off tracing. */
 /*#if U_ENABLE_TRACING*/
     utrace_cleanup();

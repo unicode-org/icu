@@ -259,7 +259,7 @@
     <ClCompile Include="udataswp.c">
       <Filter>data &amp; memory</Filter>
     </ClCompile>
-    <ClCompile Include="uinit.c">
+    <ClCompile Include="uinit.cpp">
       <Filter>data &amp; memory</Filter>
     </ClCompile>
     <ClCompile Include="umapfile.c">
