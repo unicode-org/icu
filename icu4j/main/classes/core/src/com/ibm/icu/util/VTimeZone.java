@@ -1424,8 +1424,15 @@ public class VTimeZone extends BasicTimeZone {
                             // Not equivalent rule - write out two different rules
                             writeZonePropsByDOW(w, true, dstName, dstFromOffset, dstToOffset,
                                     dstMonth, dstWeekInMonth, dstDayOfWeek, dstStartTime, dstUntilTime);
-                            writeFinalRule(w, true, finalDstRule,
-                                    dstFromOffset - dstFromDSTSavings, dstFromDSTSavings, dstStartTime);
+
+                            Date nextStart = finalDstRule.getNextStart(dstUntilTime,
+                                    dstFromOffset - dstFromDSTSavings, dstFromDSTSavings, false);
+
+                            assert nextStart != null;
+                            if (nextStart != null) {
+                                writeFinalRule(w, true, finalDstRule,
+                                        dstFromOffset - dstFromDSTSavings, dstFromDSTSavings, nextStart.getTime());
+                            }
                         }
                     }
                 }
@@ -1447,13 +1454,21 @@ public class VTimeZone extends BasicTimeZone {
                         // Use a single rule if possible
                         if (isEquivalentDateRule(stdMonth, stdWeekInMonth, stdDayOfWeek, finalStdRule.getRule())) {
                             writeZonePropsByDOW(w, false, stdName, stdFromOffset, stdToOffset,
-                                    stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, MAX_TIME);                            
+                                    stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, MAX_TIME);
                         } else {
                             // Not equivalent rule - write out two different rules
                             writeZonePropsByDOW(w, false, stdName, stdFromOffset, stdToOffset,
                                     stdMonth, stdWeekInMonth, stdDayOfWeek, stdStartTime, stdUntilTime);
-                            writeFinalRule(w, false, finalStdRule,
-                                    stdFromOffset - stdFromDSTSavings, stdFromDSTSavings, stdStartTime);
+
+                            Date nextStart = finalStdRule.getNextStart(stdUntilTime,
+                                    stdFromOffset - stdFromDSTSavings, stdFromDSTSavings, false);
+
+                            assert nextStart != null;
+                            if (nextStart != null) {
+                                writeFinalRule(w, false, finalStdRule,
+                                        stdFromOffset - stdFromDSTSavings, stdFromDSTSavings, nextStart.getTime());
+                                
+                            }
                         }
                     }
                 }
