@@ -6,11 +6,16 @@
 // * Source File: <path>/common/main/en_MO.xml
 // *
 // ***************************************************************************
+// Note: This file was manually edited to override America_Mountain.
+//       See #10281 for the details.
 en_MO{
     Version{"2.0.84.72"}
     zoneStrings{
         "Europe:London"{
             sd{"∅∅∅"}
+        }
+        "meta:America_Mountain"{
+            ss{"∅∅∅"}
         }
         "meta:Europe_Central"{
             sd{"∅∅∅"}
