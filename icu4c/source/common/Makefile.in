@@ -103,7 +103,7 @@ uarrsort.o brkiter.o ubrk.o brkeng.o dictbe.o \
 rbbi.o rbbidata.o rbbinode.o rbbirb.o rbbiscan.o rbbisetb.o rbbistbl.o rbbitblb.o \
 serv.o servnotf.o servls.o servlk.o servlkf.o servrbf.o servslkf.o \
 uidna.o usprep.o uts46.o punycode.o \
-util.o util_props.o parsepos.o locbased.o cwchar.o wintz.o mutex.o dtintrv.o ucnvsel.o propsvec.o \
+util.o util_props.o parsepos.o locbased.o cwchar.o wintz.o dtintrv.o ucnvsel.o propsvec.o \
 ulist.o uloc_tag.o icudataver.o icuplug.o listformatter.o
 
 ## Header files to install
