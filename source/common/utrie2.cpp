@@ -733,10 +733,4 @@ uint16_t ForwardUTrie2StringIterator::next16() {
     return result;
 }
 
-UTrie2 *UTrie2Singleton::getInstance(InstantiatorFn *instantiator, const void *context,
-                                     UErrorCode &errorCode) {
-    UTrie2 *instance=(UTrie2 *)singleton.getInstance(instantiator, context, errorCode);
-    return instance;
-}
-
 U_NAMESPACE_END
