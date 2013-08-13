@@ -2188,12 +2188,13 @@ static void TestUFormattable(void) {
       UFormattable *ufmt = ufmt_open(&status);
       unum_parseToUFormattable(unum, ufmt, str, -1, NULL, &status);
       if (ufmt_isNumeric(ufmt)) {
-	result = ufmt_getLong(ufmt, &status); /* == 123 */
+          result = ufmt_getLong(ufmt, &status); /* == 123 */
       } /* else { ... } */
       ufmt_close(ufmt);
       //! [unum_parseToUFormattable]
       assertTrue("result == 123", (result == 123));
     }
+    unum_close(unum);
   }
   // test with explicitly created ufmt_open
   {
