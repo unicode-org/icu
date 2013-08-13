@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2008-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2008-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -224,7 +224,7 @@ public class TimeZoneJDK extends com.ibm.icu.util.TimeZone {
     public com.ibm.icu.util.TimeZone cloneAsThawed() {
         TimeZoneJDK tz = (TimeZoneJDK)super.cloneAsThawed();
         tz.fJdkTz = (TimeZone)fJdkTz.clone();
-        tz.fJdkCal = (java.util.GregorianCalendar)fJdkCal.clone();
+        tz.fJdkCal = null;  // To be instantiated when necessary
         tz.fIsFrozen = false;
         return tz;
     }
