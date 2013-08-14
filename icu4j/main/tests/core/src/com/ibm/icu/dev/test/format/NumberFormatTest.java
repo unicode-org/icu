@@ -2804,13 +2804,6 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
     }
 
     /*
-     * Tests the method protected Currency getEffectiveCurrency()
-     */
-    public void TestGetEffectiveCurrency() {
-        // TODO: Tests the method
-    }
-
-    /*
      * Tests the method public int getRoundingMode() public void setRoundingMode(int roundingMode)
      */
     public void TestRoundingMode() {
