@@ -639,9 +639,11 @@ TimeUnitFormat::loadNumericDurationFormat(const char *pattern, UErrorCode& statu
         return NULL;
     }
     if (U_FAILURE(status)) {
+        ures_close(rb);
         delete result;
         return NULL;
     }
+    ures_close(rb);
     result->setTimeZone(*TimeZone::getGMT());
     return result;
 }
