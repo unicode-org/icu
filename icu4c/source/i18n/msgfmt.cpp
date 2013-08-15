@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************
  *
@@ -537,6 +537,7 @@ void MessageFormat::setArgStartFormat(int32_t argStart,
                                       UErrorCode& status) {
     if (U_FAILURE(status)) {
         delete formatter;
+        return;
     }
     if (cachedFormatters == NULL) {
         cachedFormatters=uhash_open(uhash_hashLong, uhash_compareLong,
