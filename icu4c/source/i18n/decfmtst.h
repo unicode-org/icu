@@ -51,6 +51,11 @@ public:
     UnicodeSet *fDefaultGroupingSeparators;
     UnicodeSet *fStrictDefaultGroupingSeparators;
 
+    UnicodeSet *fMinusSigns;
+    UnicodeSet *fPlusSigns;
+private:
+    void cleanup();
+
 };
 
 
