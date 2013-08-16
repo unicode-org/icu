@@ -25,6 +25,7 @@ import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.text.DateFormatSymbols;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.SimpleDateFormat;
+import com.ibm.icu.util.IslamicCalendar.CalculationType;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
@@ -1882,9 +1883,13 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
         case CALTYPE_ISLAMIC_CIVIL:
             cal = new IslamicCalendar(zone, locale);
             break;
+        case CALTYPE_ISLAMIC_UMALQURA :
+        	cal=new IslamicCalendar (zone,locale);
+        	((IslamicCalendar)cal).setType(CalculationType.ISLAMIC_UMALQURA);
+        	break;
         case CALTYPE_ISLAMIC:
             cal = new IslamicCalendar(zone, locale);
-            ((IslamicCalendar)cal).setCivil(false);
+            ((IslamicCalendar)cal).setType(CalculationType.ISLAMIC);
             break;
         case CALTYPE_HEBREW:
             cal = new HebrewCalendar(zone, locale);
@@ -1914,10 +1919,9 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
             cal.setFirstDayOfWeek(MONDAY);
             cal.setMinimalDaysInFirstWeek(4);
             break;
-        case CALTYPE_ISLAMIC_UMALQURA:
         case CALTYPE_ISLAMIC_TBLA:
         case CALTYPE_ISLAMIC_RGSA:
-            // Need to add handling for these, meanwhile fall through to default
+         // Need to add handling for these, meanwhile fall through to default
         default:
             // we must not get here, because unknown type is mapped to
             // Gregorian at the beginning of this method.
