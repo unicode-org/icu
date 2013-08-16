@@ -33,8 +33,8 @@ if ($OnWindows) {
     $p1 = "cd ".$ICUPrevious."/bin && ".$ICUPathPrevious."/charperf/$WindowsPlatform/Release/charperf.exe";
     $p2 = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/charperf/$WindowsPlatform/Release/charperf.exe";
 } else {
-    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."source/lib:".$ICUPrevious."source/tools/ctestfw ".$ICUPathPrevious."/charperf/charperf";
-    $p2 = "LD_LIBRARY_PATH=".$ICULatest."source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/charperf/charperf";
+    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."/source/lib:".$ICUPrevious."/source/tools/ctestfw ".$ICUPathPrevious."/charperf/charperf";
+    $p2 = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."/source/tools/ctestfw ".$ICUPathLatest."/charperf/charperf";
 }
 
 my $dataFiles = "";

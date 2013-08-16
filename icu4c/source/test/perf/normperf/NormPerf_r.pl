@@ -34,8 +34,8 @@ if ($OnWindows) {
     $p1 = "cd ".$ICUPrevious."/bin && ".$ICUPathPrevious."/normperf/$WindowsPlatform/Release/normperf.exe";
     $p2 = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/normperf/$WindowsPlatform/Release/normperf.exe";
 } else {
-    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."source/lib:".$ICUPrevious."source/tools/ctestfw ".$ICUPathPrevious."/normperf/normperf";
-    $p2 = "LD_LIBRARY_PATH=".$ICULatest."source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/normperf/normperf";
+    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."/source/lib:".$ICUPrevious."source/tools/ctestfw ".$ICUPathPrevious."/normperf/normperf";
+    $p2 = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/normperf/normperf";
 }
 
 my $dataFiles = {
