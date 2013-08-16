@@ -313,7 +313,6 @@ public class IslamicCalendar extends Calendar {
      *                  <code>false</code> to use the astronomical calendar.
      * @stable ICU 2.8
      */
-    @Deprecated
     public void setCivil(boolean beCivil)
     {
         if (beCivil && cType != CalculationType.ISLAMIC_CIVIL) {
@@ -340,7 +339,6 @@ public class IslamicCalendar extends Calendar {
      * @stable ICU 2.8
      * 
      */
-    @Deprecated
     public boolean isCivil() {
     	if(cType == CalculationType.ISLAMIC_CIVIL){
     		return true;
@@ -628,7 +626,6 @@ public class IslamicCalendar extends Calendar {
      * astronomical calculations for the time of the new moon.
      *
      * @serial
-     * @deprecated
      */
    private boolean civil = true;
     
