@@ -80,9 +80,11 @@ U_NAMESPACE_BEGIN
 const char *IslamicCalendar::getType() const { 
     if(civil==CIVIL) {
         return "islamic-civil";
-    } else {
+    } else if(civil==ASTRONOMICAL){
         return "islamic";
-    }
+    } else {
+		return "islamic-umalqura";
+	}
 }
 
 Calendar* IslamicCalendar::clone() const {
@@ -195,12 +197,21 @@ UBool IslamicCalendar::civilLeapYear(int32_t year)
 * Return the day # on which the given year starts.  Days are counted
 * from the Hijri epoch, origin 0.
 */
-int32_t IslamicCalendar::yearStart(int32_t year) {
-    if (civil == CIVIL) {
+int32_t IslamicCalendar::yearStart(int32_t year) const{
+    if (civil == CIVIL ||
+		(civil == UMALQURA && year < UMALQURA_YEAR_START)) 
+	{
         return (year-1)*354 + ClockMath::floorDivide((3+11*year),30);
-    } else {
+    } else if(civil==ASTRONOMICAL){
         return trueMonthStart(12*(year-1));
-    }
+    } else {
+		int32_t ys = yearStart(UMALQURA_YEAR_START-1);
+		ys+= handleGetYearLength(UMALQURA_YEAR_START-1);
+		for(int i=UMALQURA_YEAR_START; i< year; i++){  
+        	ys+= handleGetYearLength(i);
+        }
+		return ys;
+	}
 }
 
 /**
@@ -214,9 +225,15 @@ int32_t IslamicCalendar::monthStart(int32_t year, int32_t month) const {
     if (civil == CIVIL) {
         return (int32_t)uprv_ceil(29.5*month)
             + (year-1)*354 + (int32_t)ClockMath::floorDivide((3+11*year),30);
-    } else {
+    } else if(civil==ASTRONOMICAL){
         return trueMonthStart(12*(year-1) + month);
-    }
+    } else {
+		int32_t ms = yearStart(year);
+        for(int i=0; i< month; i++){
+        	ms+= handleGetMonthLength(year, i);
+        }
+		return ms;
+	}
 }
 
 /**
@@ -323,15 +340,18 @@ int32_t IslamicCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
 
     int32_t length = 0;
 
-    if (civil == CIVIL) {
+    if (civil == CIVIL ||
+		(civil == UMALQURA && (extendedYear<UMALQURA_YEAR_START || extendedYear>UMALQURA_YEAR_END)) ) {
         length = 29 + (month+1) % 2;
         if (month == DHU_AL_HIJJAH && civilLeapYear(extendedYear)) {
             length++;
         }
-    } else {
+    } else if(civil == ASTRONOMICAL){
         month = 12*(extendedYear-1) + month;
         length =  trueMonthStart(month+1) - trueMonthStart(month) ;
-    }
+    } else {
+        length = getUmalqura_MonthLength(extendedYear - UMALQURA_YEAR_START, month);
+	}
     return length;
 }
 
@@ -340,12 +360,18 @@ int32_t IslamicCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
 * @draft ICU 2.4
 */
 int32_t IslamicCalendar::handleGetYearLength(int32_t extendedYear) const {
-    if (civil == CIVIL) {
+    if (civil == CIVIL ||
+		(civil == UMALQURA && (extendedYear<UMALQURA_YEAR_START || extendedYear>UMALQURA_YEAR_END)) ) {
         return 354 + (civilLeapYear(extendedYear) ? 1 : 0);
-    } else {
+    } else if(civil == ASTRONOMICAL){
         int32_t month = 12*(extendedYear-1);
         return (trueMonthStart(month + 12) - trueMonthStart(month));
-    }
+    } else {
+		int len = 0;
+		for(int i=0; i<12; i++)
+        	len += handleGetMonthLength(extendedYear, i);
+		return len;
+	}
 }
 
 //-------------------------------------------------------------------------
@@ -404,7 +430,7 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
         month = (int32_t)uprv_ceil((days - 29 - yearStart(year)) / 29.5 );
         month = month<11?month:11;
         startDate = monthStart(year, month);
-    } else {
+    } else if(civil == ASTRONOMICAL){
         // Guess at the number of elapsed full months since the epoch
         int32_t months = (int32_t)uprv_floor((double)days / CalendarAstronomer::SYNODIC_MONTH);
 
@@ -429,12 +455,44 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
 
         year = months / 12 + 1;
         month = months % 12;
-    }
+    } else if(civil == UMALQURA){
+		int32_t umalquraStartdays = yearStart(UMALQURA_YEAR_START) ;
+		if( days < umalquraStartdays){
+        		//Use Civil calculation
+        		year  = (int)ClockMath::floorDivide( (double)(30 * days + 10646) , 10631.0 );
+				month = (int32_t)uprv_ceil((days - 29 - yearStart(year)) / 29.5 );
+				month = month<11?month:11;
+				startDate = monthStart(year, month);
+        	}else{
+        		int y =UMALQURA_YEAR_START-1, m =0;
+        		long d = 1;
+        		while(d > 0){ 
+        			y++; 
+        			d = days - yearStart(y) +1;
+        			if(d == handleGetYearLength(y)){
+        				m=11;
+        				break;
+        			}else if(d < handleGetYearLength(y) ){
+    					int monthLen = handleGetMonthLength(y, m); 
+    					m=0;
+    					while(d > monthLen){
+    						d -= monthLen;
+    						m++;
+    						monthLen = handleGetMonthLength(y, m);    						
+    					}
+    					break;
+        			}        			       			
+        		}        		
+        		year = y;
+				month = m;
+        	}
+	}
 
-    dayOfMonth = (days - monthStart(year, month)) + 1;
+	dayOfMonth = (days - monthStart(year, month)) + 1;
 
-    // Now figure out the day of the year.
-    dayOfYear = (days - monthStart(year, 0) + 1);
+	// Now figure out the day of the year.
+	dayOfYear = (days - monthStart(year, 0) + 1);
+	
 
     internalSet(UCAL_ERA, 0);
     internalSet(UCAL_YEAR, year);
@@ -466,12 +524,29 @@ static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
 static int32_t         gSystemDefaultCenturyStartYear   = -1;
 static UInitOnce       gSystemDefaultCenturyInit        = U_INITONCE_INITIALIZER;
 
+
 UBool IslamicCalendar::haveDefaultCentury() const
 {
     return TRUE;
 }
 
-static void U_CALLCONV initializeSystemDefaultCentury()
+UDate IslamicCalendar::defaultCenturyStart() const
+{
+    // lazy-evaluate systemDefaultCenturyStart
+    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
+    return gSystemDefaultCenturyStart;
+}
+
+int32_t IslamicCalendar::defaultCenturyStartYear() const
+{
+    // lazy-evaluate systemDefaultCenturyStartYear
+    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
+    return gSystemDefaultCenturyStartYear;
+}
+
+
+void U_CALLCONV
+IslamicCalendar::initializeSystemDefaultCentury()
 {
     // initialize systemDefaultCentury and systemDefaultCenturyYear based
     // on the current time.  They'll be set to 80 years before
@@ -483,23 +558,12 @@ static void U_CALLCONV initializeSystemDefaultCentury()
         calendar.add(UCAL_YEAR, -80, status);
 
         gSystemDefaultCenturyStart = calendar.getTime(status);
-        gSystemDefaultCenturyStartYear = calendar.get(UCAL_YEAR, status);    
+        gSystemDefaultCenturyStartYear = calendar.get(UCAL_YEAR, status);
     }
     // We have no recourse upon failure unless we want to propagate the failure
     // out.
 }
 
-UDate IslamicCalendar::defaultCenturyStart() const {
-    // lazy-evaluate systemDefaultCenturyStart
-    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStart;
-}
-
-int32_t IslamicCalendar::defaultCenturyStartYear() const {
-    // lazy-evaluate systemDefaultCenturyStartYear
-    umtx_initOnce(gSystemDefaultCenturyInit, &initializeSystemDefaultCentury);
-    return gSystemDefaultCenturyStartYear;
-}
 
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(IslamicCalendar)
