@@ -14,7 +14,7 @@ if ($OnWindows) {
     $p = "cd ".$ICULatest."/bin && ".$ICUPathLatest . "/collationperf/$WindowsPlatform/Release/collationperf.exe";
 }
 else {
-    $p = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest . "/collationperf/collperf";
+    $p = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."/source/tools/ctestfw ".$ICUPathLatest . "/collationperf/collperf";
 }
 
 my @locale = (
