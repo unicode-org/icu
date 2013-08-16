@@ -81,18 +81,20 @@ U_NAMESPACE_BEGIN
  * @author Steven R. Loomis
  * @internal
  */
-class IslamicCalendar : public Calendar {
+class U_I18N_API IslamicCalendar : public Calendar {
  public:
   //-------------------------------------------------------------------------
   // Constants...
   //-------------------------------------------------------------------------
+  
   /**
-   * Calendar type - civil or religious
+   * Calendar type - civil or religious or um alqura
    * @internal 
    */
   enum ECivil {
     ASTRONOMICAL,
-    CIVIL
+    CIVIL,
+	UMALQURA
   };
   
   /**
@@ -239,7 +241,7 @@ class IslamicCalendar : public Calendar {
    * Return the day # on which the given year starts.  Days are counted
    * from the Hijri epoch, origin 0.
    */
-  int32_t yearStart(int32_t year);
+  int32_t yearStart(int32_t year) const;
 
   /**
    * Return the day # on which the given month starts.  Days are counted
@@ -363,7 +365,7 @@ class IslamicCalendar : public Calendar {
    * @return   The class ID for all objects of this class.
    * @internal
    */
-  U_I18N_API static UClassID U_EXPORT2 getStaticClassID(void);
+  /*U_I18N_API*/ static UClassID U_EXPORT2 getStaticClassID(void);
 
   /**
    * return the calendar type, "buddhist".
@@ -409,6 +411,133 @@ class IslamicCalendar : public Calendar {
    * @internal
    */
   virtual int32_t defaultCenturyStartYear() const;
+
+ private: // default century stuff.
+  /**
+   * The system maintains a static default century start date.  This is initialized
+   * the first time it is used.  Before then, it is set to SYSTEM_DEFAULT_CENTURY to
+   * indicate an uninitialized state.  Once the system default century date and year
+   * are set, they do not change.
+   */
+  static UDate         fgSystemDefaultCenturyStart;
+
+  /**
+   * See documentation for systemDefaultCenturyStart.
+   */
+  static int32_t          fgSystemDefaultCenturyStartYear;
+
+  
+  /**
+   * Default value that indicates the defaultCenturyStartYear is unitialized
+   */
+  static const int32_t    fgSystemDefaultCenturyYear;
+
+  /**
+   * start of default century, as a date
+   */
+  static const UDate        fgSystemDefaultCentury;
+
+  static const int32_t UMALQURA_YEAR_START = 1318;
+  static const int32_t UMALQURA_YEAR_END = 1480;
+  
+
+  static const int getUmalqura_MonthLength(int i, int j){
+
+    static const int UMALQURA_MONTHLENGTH[] = {    	    	
+        //* 1318 -1322 */ "0101 0111 0100", "1001 0111 0110", "0100 1011 0111", "0010 0101 0111", "0101 0010 1011",
+                               0x0574,           0x0975,           0x06A7,           0x0257,           0x052B,            
+        //* 1323 -1327 */ "0110 1001 0101", "0110 1100 1010", "1010 1101 0101", "0101 0101 1011", "0010 0101 1101",                 
+                               0x0695,           0x06CA,           0x0AD5,           0x055B,           0x025B,                  
+        //* 1328 -1332 */ "1001 0010 1101", "1100 1001 0101", "1101 0100 1010", "1110 1010 0101", "0110 1101 0010",                 
+                               0x092D,           0x0C95,           0x0D4A,           0x0E5B,           0x025B,                  
+        //* 1333 -1337 */ "1010 1101 0101", "0101 0101 1010", "1010 1010 1011", "0100 0100 1011", "0110 1010 0101",                 
+                               0x0AD5,           0x055A,           0x0AAB,           0x044B,           0x06A5,                  
+        //* 1338 -1342 */ "0111 0101 0010", "1011 1010 1001", "0011 0111 0100", "1010 1011 0110", "0101 0101 0110",                  
+                               0x0752,           0x0BA9,           0x0374,           0x0AB6,           0x0556,                  
+        //* 1343 -1347 */ "1010 1010 1010", "1101 0101 0010", "1101 1010 1001", "0101 1101 0100", "1010 1110 1010", 
+                               0x0AAA,           0x0D52,           0x0DA9,           0x05D4,           0x0AEA,                  
+        //* 1348 -1352 */ "0100 1101 1101", "0010 0110 1110", "1001 0010 1110", "1010 1010 0110", "1101 0101 0100", 
+                               0x04DD,           0x026E,           0x092E,           0x0AA6,           0x0D54,                  
+        //* 1353 -1357 */ "0101 1010 1010", "0101 1011 0101", "0010 1011 0100", "1001 0011 0111", "0100 1001 1011", 
+                               0x05AA,           0x05B5,           0x02B4,           0x0937,           0x049B,                  
+        //* 1358 -1362 */ "1010 0100 1011", "1011 0010 0101", "1011 0101 0100", "1011 0110 1010", "0101 0110 1101", 
+                               0x0A4B,           0x0B25,           0x0B54,           0x0B6A,           0x056D,                  
+        //* 1363 -1367 */ "0100 1010 1101", "1010 0101 0101", "1101 0010 0101", "1110 1001 0010", "1110 1100 1001", 
+                               0x04AD,           0x0A55,           0x0D25,           0x0E92,           0x0EC9,                  
+        //* 1368 -1372 */ "0110 1101 0100", "1010 1110 1010", "0101 0110 1011", "0100 1010 1011", "0110 1000 0101", 
+                               0x06D4,           0x0ADA,           0x056B,           0x04AB,           0x0685,                  
+        //* 1373 -1377 */ "1011 0100 1001", "1011 1010 0100", "1011 1011 0010", "0101 1011 0101", "0010 1011 1010", 
+                               0x0B49,           0x0BA4,           0x0BB2,           0x05B5,           0x02BA,                  
+        //* 1378 -1382 */ "1001 0101 1011", "0100 1010 1011", "0101 0101 0101", "0110 1011 0010", "0110 1101 1001", 
+                               0x095B,           0x04AB,           0x0555,           0x06B2,           0x06D9,                  
+        //* 1383 -1387 */ "0010 1110 1100", "1001 0110 1110", "0100 1010 1110", "1010 0101 0110", "1101 0010 1010", 
+                               0x02EC,           0x096E,           0x04AE,           0x0A56,           0x0D2A,                  
+        //* 1388 -1392 */ "1101 0101 0101", "0101 1010 1010", "1010 1011 0101", "0100 1011 1011", "0000 0101 1011", 
+                               0x0D55,           0x05AA,           0x0AB5,           0x04BB,           0x005B,                  
+        //* 1393 -1397 */ "1001 0010 1011", "1010 1001 0101", "0011 0100 1010", "1011 1010 0101", "0101 1010 1010", 
+                               0x092B,           0x0A95,           0x034A,           0x0BA5,           0x05AA,                  
+        //* 1398 -1402 */ "1010 1011 0101", "0101 0101 0110", "1010 1001 0110", "1101 0100 1010", "1110 1010 0101", 
+                               0x0AB5,           0x0556,           0x0A96,           0x0B4A,           0x0EA5,                  
+        //* 1403 -1407 */ "0111 0101 0010", "0110 1110 1001", "0011 0110 1010", "1010 1010 1101", "0101 0101 0101", 
+                               0x0752,           0x06E9,           0x036A,           0x0AAD,           0x0555,                  
+        //* 1408 -1412 */ "1010 1010 0101", "1011 0101 0010", "1011 1010 1001", "0101 1011 0100", "1001 1011 1010", 
+                               0x0AA5,           0x0B52,           0x0BA9,           0x05B4,           0x09BA,                  
+        //* 1413 -1417 */ "0100 1101 1011", "0010 0101 1101", "0101 0010 1101", "1010 1010 0101", "1010 1101 0100", 
+                               0x04DB,           0x025D,           0x052D,           0x0AA5,           0x0AD4,              
+        //* 1418 -1422 */ "1010 1110 1010", "0101 0110 1101", "0100 1011 1101", "0010 0011 1101", "1001 0001 1101", 
+                               0x0AEA,           0x056D,           0x04BD,           0x023D,           0x091D,                  
+        //* 1423 -1427 */ "1010 1001 0101", "1011 0100 1010", "1011 0101 1010", "0101 0110 1101", "0010 1011 0110", 
+                               0x0A95,           0x0B4A,           0x0B5A,           0x056D,           0x02B6,                  
+        //* 1428 -1432 */ "1001 0011 1011", "0100 1001 1011", "0110 0101 0101", "0110 1010 1001", "0111 0101 0100", 
+                               0x093B,           0x049B,           0x0655,           0x06A9,           0x0754,                  
+        //* 1433 -1437 */ "1011 0110 1010", "0101 0110 1100", "1010 1010 1101", "0101 0101 0101", "1011 0010 1001", 
+                               0x0B6A,           0x056C,           0x0AAD,           0x0555,           0x0B29,                  
+        //* 1438 -1442 */ "1011 1001 0010", "1011 1010 1001", "0101 1101 0100", "1010 1101 1010", "0101 0101 1010", 
+                               0x0B92,           0x0BA9,           0x05D4,           0x0ADA,           0x055A,                  
+        //* 1443 -1447 */ "1010 1010 1011", "0101 1001 0101", "0111 0100 1001", "0111 0110 0100", "1011 1010 1010", 
+                               0x0AAB,           0x0595,           0x0749,           0x0764,           0x0BAA,                  
+        //* 1448 -1452 */ "0101 1011 0101", "0010 1011 0110", "1010 0101 0110", "1110 0100 1101", "1011 0010 0101",
+                               0x05B5,           0x02B6,           0x0A56,           0x0E4D,           0x0B25,                  
+        //* 1453 -1457 */ "1011 0101 0010", "1011 0110 1010", "0101 1010 1101", "0010 1010 1110", "1001 0010 1111",
+                               0x0B52,           0x0B6A,           0x05AD,           0x02AE,           0x092F,                  
+        //* 1458 -1462 */ "0100 1001 0111", "0110 0100 1011", "0110 1010 0101", "0110 1010 1100", "1010 1101 0110",
+                               0x0497,           0x064B,           0x06A5,           0x06AC,           0x0AD6,                  
+        //* 1463 -1467 */ "0101 0101 1101", "0100 1001 1101", "1010 0100 1101", "1101 0001 0110", "1101 1001 0101",
+                               0x055D,           0x049D,           0x0A4D,           0x0D16,           0x0D95,                  
+        //* 1468 -1472 */ "0101 1010 1010", "0101 1011 0101", "0010 1001 1010", "1001 0101 1011", "0100 1010 1100",
+                               0x05AA,           0x05B5,           0x029A,           0x095B,           0x04AC,                  
+        //* 1473 -1477 */ "0101 1001 0101", "0110 1100 1010", "0110 1110 0100", "1010 1110 1010", "0100 1111 0101",
+                               0x0595,           0x06CA,           0x06E4,           0x0AEA,           0x04F5,                  
+        //* 1478 -1480 */ "0010 1011 0110", "1001 0101 0110", "1010 1010 1010"   
+                               0x02B6,           0x0956,           0x0AAA                  
+    };
+
+        int mask = (int) (0x01 << (11 - j));            // set mask for bit corresponding to month
+        if((UMALQURA_MONTHLENGTH[i] & mask) == 0 )    
+        	return 29;
+        else
+        	return 30;
+  }
+
+ 
+  /**
+   * Returns the beginning date of the 100-year window that dates 
+   * with 2-digit years are considered to fall within.
+   */
+  UDate         internalGetDefaultCenturyStart(void) const;
+
+  /**
+   * Returns the first year of the 100-year window that dates with 
+   * 2-digit years are considered to fall within.
+   */
+  int32_t          internalGetDefaultCenturyStartYear(void) const;
+
+  /**
+   * Initializes the 100-year window that dates with 2-digit years
+   * are considered to fall within so that its start date is 80 years
+   * before the current time.
+   */
+  static void  initializeSystemDefaultCentury(void);
 };
 
 U_NAMESPACE_END
