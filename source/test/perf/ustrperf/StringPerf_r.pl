@@ -33,8 +33,8 @@ if ($OnWindows) {
     $p1 = "cd ".$ICUPrevious."/bin && ".$ICUPathPrevious."/ustrperf/$WindowsPlatform/Release/stringperf.exe -b -u"; # Previous
     $p2 = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/ustrperf/$WindowsPlatform/Release/stringperf.exe -b -u"; # Latest
 } else {
-    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."source/lib:".$ICUPrevious."source/tools/ctestfw ".$ICUPathPrevious."/ustrperf/stringperf -b -u"; # Previous
-    $p2 = "LD_LIBRARY_PATH=".$ICULatest."source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/ustrperf/stringperf -b -u"; # Latest
+    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."/source/lib:".$ICUPrevious."source/tools/ctestfw ".$ICUPathPrevious."/ustrperf/stringperf -b -u"; # Previous
+    $p2 = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/ustrperf/stringperf -b -u"; # Latest
 }
 
 my $dataFiles = {

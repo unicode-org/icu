@@ -33,7 +33,7 @@ my $p;
 if ($OnWindows) {
     $p = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/charperf/$WindowsPlatform/Release/charperf.exe";
 } else {
-    $p = "LD_LIBRARY_PATH=".$ICULatest."source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/charperf/charperf";
+    $p = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."/source/tools/ctestfw ".$ICUPathLatest."/charperf/charperf";
 }
 
 my $tests = { 

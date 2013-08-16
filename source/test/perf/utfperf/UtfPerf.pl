@@ -33,8 +33,8 @@ if ($OnWindows) {
     $p1 = "cd ".$ICUPrevious."/bin && ".$ICUPathPrevious."/utfperf/$WindowsPlatform/Release/utfperf.exe -e gb18030"; # Previous
     $p2 = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/utfperf/$WindowsPlatform/Release/utfperf.exe -e gb18030"; # Latest
 } else {
-    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."source/lib:".$ICUPrevious."source/tools/ctestfw ".$ICUPathPrevious."/utfperf/utfperf -e gb18030"; # Previous
-    $p2 = "LD_LIBRARY_PATH=".$ICULatest."source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/utfperf/utfperf -e gb18030"; # Latest
+    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."/source/lib:".$ICUPrevious."source/tools/ctestfw ".$ICUPathPrevious."/utfperf/utfperf -e gb18030"; # Previous
+    $p2 = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/utfperf/utfperf -e gb18030"; # Latest
 }
 
 my $tests = { 

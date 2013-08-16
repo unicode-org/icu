@@ -30,7 +30,7 @@ my $p;
 if ($OnWindows) {
     $p = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/unisetperf/$WindowsPlatform/Release/unisetperf.exe";
 } else {
-    $p = "LD_LIBRARY_PATH=".$ICULatest."source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/unisetperf/unisetperf";
+    $p = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/unisetperf/unisetperf";
 }
 
 my $tests = {
