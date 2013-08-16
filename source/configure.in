@@ -155,6 +155,12 @@ if test "$GCC" = yes; then
     fi
 fi
 
+# Check if CXXFLAGS has a "-std=" setting, do not override it later if does. -std=c++11, for example.
+CXX_STD_SET="no"
+if [ echo "$CXXFLAGS" | grep '\-std=' >/dev/null 2>&1 ]; then
+    CXX_STD_SET="yes"
+fi
+
 AC_PROG_CPP
 
 AC_PROG_INSTALL
@@ -477,16 +483,19 @@ AC_SUBST(U_HAVE_STD_STRING)
 
 AC_MSG_CHECKING([[if #include <atomic> works]])
 OLD_CXXFLAGS="${CXXFLAGS}"
-CXXFLAGS="${CXXFLAGS} -std=c++11"
+if [[ $CXX_STD_SET = no ]]; then
+    CXXFLAGS="${CXXFLAGS} -std=c++0x"
+fi
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[#include <atomic>]], [[]])], [ac_cv_header_atomic=yes], [ac_cv_header_atomic=no])
 AC_MSG_RESULT($ac_cv_header_atomic)
 if test $ac_cv_header_atomic = yes
 then
 	U_HAVE_ATOMIC=1
+        CXX_STD_SET="yes"
 else
         U_HAVE_ATOMIC=0
+        CXXFLAGS="${OLD_CXXFLAGS}"
 fi
-CXXFLAGS="${OLD_CXXFLAGS}"
 # Make this available via CPPFLAGS
 CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_ATOMIC=${U_HAVE_ATOMIC}"
 AC_SUBST(U_HAVE_ATOMIC)
@@ -998,7 +1007,9 @@ static const char16_t test[] = u"This is a UTF16 literal string.";
     if test "$GXX" = yes; then
         OLD_CXXFLAGS="${CXXFLAGS}"
         # -Wno-return-type-c-linkage is desired so that stable ICU API is not warned about.
-        CXXFLAGS="${CXXFLAGS} -std=c++11"
+        if [[ ${CXX_STD_SET} = "no" ]]; then
+            CXXFLAGS="${CXXFLAGS} -std=c++0x"
+        fi
         AC_LANG_PUSH([C++])
         AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
 static const char16_t test[] = u"This is a UTF16 literal string.";
@@ -1010,6 +1021,7 @@ static const char16_t test[] = u"This is a UTF16 literal string.";
             else
                 CHECK_UTF16_STRING_RESULT="C++ only";
             fi
+            CXX_STD_SET="yes"
         else
             CXXFLAGS="${OLD_CXXFLAGS}"
         fi

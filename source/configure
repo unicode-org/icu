@@ -3628,6 +3628,12 @@ if test "$GCC" = yes; then
     fi
 fi
 
+# Check if CXXFLAGS has a "-std=" setting, do not override it later if does. -std=c++11, for example.
+CXX_STD_SET="no"
+if  echo "$CXXFLAGS" | grep '\-std=' >/dev/null 2>&1 ; then
+    CXX_STD_SET="yes"
+fi
+
 ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -5631,7 +5637,9 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking if #include <atomic> works" >&5
 $as_echo_n "checking if #include <atomic> works... " >&6; }
 OLD_CXXFLAGS="${CXXFLAGS}"
-CXXFLAGS="${CXXFLAGS} -std=c++11"
+if [ $CXX_STD_SET = no ]; then
+    CXXFLAGS="${CXXFLAGS} -std=c++0x"
+fi
 cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 #include <atomic>
@@ -5654,10 +5662,11 @@ $as_echo "$ac_cv_header_atomic" >&6; }
 if test $ac_cv_header_atomic = yes
 then
 	U_HAVE_ATOMIC=1
+        CXX_STD_SET="yes"
 else
         U_HAVE_ATOMIC=0
+        CXXFLAGS="${OLD_CXXFLAGS}"
 fi
-CXXFLAGS="${OLD_CXXFLAGS}"
 # Make this available via CPPFLAGS
 CONFIG_CPPFLAGS="${CONFIG_CPPFLAGS} -DU_HAVE_ATOMIC=${U_HAVE_ATOMIC}"
 
@@ -7069,7 +7078,9 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
     if test "$GXX" = yes; then
         OLD_CXXFLAGS="${CXXFLAGS}"
         # -Wno-return-type-c-linkage is desired so that stable ICU API is not warned about.
-        CXXFLAGS="${CXXFLAGS} -std=c++11"
+        if [ ${CXX_STD_SET} = "no" ]; then
+            CXXFLAGS="${CXXFLAGS} -std=c++0x"
+        fi
         ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -7107,6 +7118,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
             else
                 CHECK_UTF16_STRING_RESULT="C++ only";
             fi
+            CXX_STD_SET="yes"
         else
             CXXFLAGS="${OLD_CXXFLAGS}"
         fi
