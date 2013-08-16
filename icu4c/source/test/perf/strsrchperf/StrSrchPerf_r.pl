@@ -38,8 +38,8 @@ if ($OnWindows) {
     $p2 = "cd ".$ICULatest."/bin && ".$ICUPathLatest . "/strsrchperf/$WindowsPlatform/Release/strsrchperf.exe -b";
 }
 else {
-    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."source/lib:".$ICUPrevious."source/tools/ctestfw ".$ICUPathPrevious . "/strsrchperf/strsrchperf -b";
-    $p2 = "LD_LIBRARY_PATH=".$ICULatest."source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest . "/strsrchperf/strsrchperf -b";
+    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."/source/lib:".$ICUPrevious."source/tools/ctestfw ".$ICUPathPrevious . "/strsrchperf/strsrchperf -b";
+    $p2 = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest . "/strsrchperf/strsrchperf -b";
 }
 
 my $dataFiles = {
