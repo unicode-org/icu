@@ -20,6 +20,7 @@
 #include "unicode/ustring.h"
 #include "cstring.h"
 #include "unicode/localpointer.h"
+#include "islamcal.h"
 
 #define mkcstr(U) u_austrcpy(calloc(8, u_strlen(U) + 1), U)
 
@@ -279,6 +280,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
             TestCloneLocale();
           }
           break;
+		case 31:
+          name = "Test8449";
+          if(exec) {
+            logln("Test8449---"); logln("");
+            Test8449();
+          }
+          break;
         default: name = ""; break;
     }
 }
@@ -334,18 +342,12 @@ CalendarTest::TestGenericAPI()
 
     SimpleTimeZone *zone = new SimpleTimeZone(tzoffset, tzid);
     Calendar *cal = Calendar::createInstance(zone->clone(), status);
-    if (U_FAILURE(status)) {
-        dataerrln(UnicodeString("FAIL: Calendar::createInstance with SimpleTimeZone::clone() failed, error ") + u_errorName(status));
-        return;
-    }
+    if (failure(status, "Calendar::createInstance", TRUE)) return;
 
     if (*zone != cal->getTimeZone()) errln("FAIL: Calendar::getTimeZone failed");
 
     Calendar *cal2 = Calendar::createInstance(cal->getTimeZone(), status);
-    if (U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: Calendar::createInstance with Calendar::getTimeZone() failed, error ") + u_errorName(status));
-        return;
-    }
+    if (failure(status, "Calendar::createInstance")) return;
     cal->setTime(when, status);
     cal2->setTime(when, status);
     if (failure(status, "Calendar::setTime")) return;
@@ -490,26 +492,17 @@ CalendarTest::TestGenericAPI()
         for (i=0; i<count; ++i)
         {
             cal = Calendar::createInstance(loc[i], status);
-            if (U_FAILURE(status)) {
-                errln(UnicodeString("FAIL: Calendar::createInstance with Locale ") + loc[i].getName() + " failed, error " + u_errorName(status));
-                return;
-            }
+            if (failure(status, "Calendar::createInstance")) return;
             delete cal;
         }
     }
 
     cal = Calendar::createInstance(TimeZone::createDefault(), Locale::getEnglish(), status);
-    if (U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: Calendar::createInstance with TimeZone::createDefault() for English failed, error ") + u_errorName(status));
-        return;
-    }
+    if (failure(status, "Calendar::createInstance")) return;
     delete cal;
 
     cal = Calendar::createInstance(*zone, Locale::getEnglish(), status);
-    if (U_FAILURE(status)) {
-        errln(UnicodeString("FAIL: Calendar::createInstance with Calendar::getTimeZone() for English failed, error ") + u_errorName(status));
-        return;
-    }
+    if (failure(status, "Calendar::createInstance")) return;
     delete cal;
 
     GregorianCalendar *gc = new GregorianCalendar(*zone, status);
@@ -2730,6 +2723,128 @@ void CalendarTest::TestCloneLocale(void) {
   }
   TEST_CHECK_STATUS;
 }
+
+void CalendarTest::setAndTestCalendar(Calendar* cal, int32_t initMonth, int32_t initDay, int32_t initYear, UErrorCode& status) {
+        cal->clear();
+        cal->setLenient(FALSE);
+        cal->set(initYear, initMonth, initDay);
+        int32_t day = cal->get(UCAL_DAY_OF_MONTH, status);
+        int32_t month = cal->get(UCAL_MONTH, status);
+        int32_t year = cal->get(UCAL_YEAR, status);
+        if(U_FAILURE(status))
+            return;
+
+        if(initDay != day || initMonth != month || initYear != year)
+        {
+            errln(" year init values:\tmonth %i\tday %i\tyear %i", initMonth, initDay, initYear);
+            errln("values post set():\tmonth %i\tday %i\tyear %i",month, day, year);
+        }
+}
+
+void CalendarTest::setAndTestWholeYear(Calendar* cal, int32_t startYear, UErrorCode& status) {
+        for(int32_t startMonth = 0; startMonth < 12; startMonth++) {
+            for(int32_t startDay = 1; startDay < 31; startDay++ ) {                
+                    setAndTestCalendar(cal, startMonth, startDay, startYear, status);
+                    if(U_FAILURE(status) && startDay == 30) {
+                        status = U_ZERO_ERROR;
+                        continue;
+                    }
+                    TEST_CHECK_STATUS;
+            }
+        }
+}
+          
+        
+void CalendarTest::Test8449() {
+               
+    UErrorCode status = U_ZERO_ERROR;
+    Locale islamicLoc("ar_SA@calendar=islamic-umalqura"); 
+	Calendar* tstCal = Calendar::createInstance(islamicLoc, status);
+    
+    IslamicCalendar* iCal = (IslamicCalendar*)tstCal;
+    if(strcmp(iCal->getType(), "islamic-umalqura") != 0) {
+        errln("wrong type of calendar created - %s", iCal->getType());
+    }
+   
+
+    int32_t firstYear = 1318;
+    //*  use either 1 or 2 leading slashes to toggle
+    int32_t lastYear = 1368;    // just enough to be pretty sure
+    /*/
+    int32_t lastYear = 1480;    // the whole shootin' match
+    //*/
+        
+    tstCal->clear();
+    tstCal->setLenient(FALSE);
+        
+    int32_t day=0, month=0, year=0, initDay = 27, initMonth = IslamicCalendar::RAJAB, initYear = 1434;
+    
+    for( int32_t startYear = firstYear; startYear <= lastYear; startYear++) {
+        setAndTestWholeYear(tstCal, startYear, status);
+        status = U_ZERO_ERROR;
+    }
+    
+    initMonth = IslamicCalendar::RABI_2;
+    initDay = 5;
+    int32_t loopCnt = 25;
+    tstCal->clear();
+    setAndTestCalendar( tstCal, initMonth, initDay, initYear, status);
+    TEST_CHECK_STATUS;
+    
+    for(int x=1; x<=loopCnt; x++) {
+        day = tstCal->get(UCAL_DAY_OF_MONTH,status);
+        month = tstCal->get(UCAL_MONTH,status);
+        year = tstCal->get(UCAL_YEAR,status);
+        TEST_CHECK_STATUS;
+        tstCal->roll(UCAL_DAY_OF_MONTH, TRUE, status);
+        TEST_CHECK_STATUS;
+    }
+    
+    if(day != (initDay + loopCnt - 1) || month != IslamicCalendar::RABI_2 || year != 1434)
+        errln("invalid values for RABI_2 date after roll of " + loopCnt);
+        
+    
+    status = U_ZERO_ERROR;
+    tstCal->clear();
+    initMonth = 2;
+    initDay = 30;
+    setAndTestCalendar( tstCal, initMonth, initDay, initYear, status);      
+    if(U_SUCCESS(status)) {
+        errln("error NOT detected status %i",status);
+        errln("      init values:\tmonth %i\tday %i\tyear %i", initMonth, initDay, initYear);
+        int32_t day = tstCal->get(UCAL_DAY_OF_MONTH, status);
+        int32_t month = tstCal->get(UCAL_MONTH, status);
+        int32_t year = tstCal->get(UCAL_YEAR, status);
+        errln("values post set():\tmonth %i\tday %i\tyear %i",month, day, year);
+    }
+
+    status = U_ZERO_ERROR;        
+    tstCal->clear();
+    initMonth = 3;
+    initDay = 30;
+    setAndTestCalendar( tstCal, initMonth, initDay, initYear, status);
+    TEST_CHECK_STATUS;
+       
+    SimpleDateFormat* formatter = new SimpleDateFormat("yyyy-MM-dd", Locale::getUS(), status);            
+    UDate date = formatter->parse("1975-05-06", status);
+    Calendar* is_cal = Calendar::createInstance(islamicLoc, status);
+    is_cal->setTime(date, status);
+    int32_t is_day = is_cal->get(UCAL_DAY_OF_MONTH,status);
+    int32_t is_month = is_cal->get(UCAL_MONTH,status);
+    int32_t is_year = is_cal->get(UCAL_YEAR,status);
+    TEST_CHECK_STATUS;
+    if(is_day != 29 || is_month != IslamicCalendar::RABI_2 || is_year != 1395)
+        errln("unexpected conversion date month %i not %i or day %i not 20 or year %i not 1395", is_month, IslamicCalendar::RABI_2, is_day, is_year);
+        
+    UDate date2 = is_cal->getTime(status);
+    TEST_CHECK_STATUS;
+    if(date2 != date) {
+        errln("before(%f) and after(%f) dates don't match up!",date, date2);
+    }
+
+}            
+
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
