@@ -242,8 +242,8 @@ public: // package
     /*
      * utility methods for Test8449
      */
-    void CalendarTest::setAndTestCalendar(Calendar* cal, int32_t initMonth, int32_t initDay, int32_t initYear, UErrorCode& status);
-    void CalendarTest::setAndTestWholeYear(Calendar* cal, int32_t startYear, UErrorCode& status);
+    void setAndTestCalendar(Calendar* cal, int32_t initMonth, int32_t initDay, int32_t initYear, UErrorCode& status);
+    void setAndTestWholeYear(Calendar* cal, int32_t startYear, UErrorCode& status);
 
 };
 
