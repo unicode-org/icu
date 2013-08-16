@@ -28,7 +28,7 @@ my $p;
 if ($OnWindows) {
     $p = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/collperf/$WindowsPlatform/Release/collperf.exe";
 } else {
-    $p = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/collperf/collperf";
+    $p = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."/source/tools/ctestfw ".$ICUPathLatest."/collperf/collperf";
 }
 
 # programs
