@@ -33,7 +33,7 @@ my $p;
 if ($OnWindows) {
     $p = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/ustrperf/$WindowsPlatform/Release/stringperf.exe -l -u";
 } else {
-    $p = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."source/tools/ctestfw ".$ICUPathLatest."/ustrperf/stringperf -l -u";
+    $p = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."/source/tools/ctestfw ".$ICUPathLatest."/ustrperf/stringperf -l -u";
 }
 
 my $tests = { 
