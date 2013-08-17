@@ -26,7 +26,7 @@
         <fail unless="is.cldr.dir.set" message="Please set the CLDR_DIR environment variable to the top level ICU source dir (containing 'common')."/>
 
         <available property="cldrtools.dir" value="${env.CLDR_DIR}/cldr-tools" file="${env.CLDR_DIR}/cldr-tools" type="dir"/>
-        <available property="cldrtools.dir" value="${env.CLDR_DIR}/java/tools" file="${env.CLDR_DIR}/java/tools" type="dir"/>
+        <available property="cldrtools.dir" value="${env.CLDR_DIR}/tools/java" file="${env.CLDR_DIR}/tools/java" type="dir"/>
         <fail unless="cldrtools.dir" message="Please make sure that the CLDR tools directory is checked out into CLDR_DIR"/>
 
         <available property="env.CLDR_CLASSES" value="${cldrtools.dir}/classes" file="${cldrtools.dir}/classes" type="dir"/>
