@@ -2842,6 +2842,9 @@ void CalendarTest::Test8449() {
         errln("before(%f) and after(%f) dates don't match up!",date, date2);
     }
 
+    delete is_cal;
+    delete formatter;
+    delete tstCal;
 }            
 
 
