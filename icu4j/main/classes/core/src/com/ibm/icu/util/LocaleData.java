@@ -10,6 +10,7 @@ import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UnicodeSet;
+import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
@@ -275,6 +276,36 @@ public final class LocaleData {
     }
 
     /**
+     * Utility for getMeasurementSystem and getPaperSize
+     */
+    private static UResourceBundle measurementTypeBundleForLocale(ULocale locale, String measurementType){
+        // Much of this is taken from getCalendarType in impl/CalendarUtil.java
+        UResourceBundle measTypeBundle = null;
+    	ULocale fullLoc = ULocale.addLikelySubtags(locale);
+    	String region = fullLoc.getCountry();
+		try {
+			UResourceBundle rb = UResourceBundle.getBundleInstance(
+									ICUResourceBundle.ICU_BASE_NAME,
+									"supplementalData",
+									ICUResourceBundle.ICU_DATA_CLASS_LOADER);
+			UResourceBundle measurementData = rb.get("measurementData");
+			UResourceBundle measDataBundle = null;
+			try {
+				measDataBundle = measurementData.get(region);
+				measTypeBundle = measDataBundle.get(measurementType);
+			} catch (MissingResourceException mre) {
+				// use "001" as fallback
+				measDataBundle = measurementData.get("001");
+				measTypeBundle = measDataBundle.get(measurementType);
+			}
+		} catch (MissingResourceException mre) {
+			// fall through
+		}
+		return measTypeBundle;
+    }
+
+
+    /**
      * Enumeration for representing the measurement systems.
      * @stable ICU 2.8
      */
@@ -310,8 +341,7 @@ public final class LocaleData {
      * @stable ICU 3.0
      */
     public static final MeasurementSystem getMeasurementSystem(ULocale locale){
-        UResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-        UResourceBundle sysBundle = bundle.get(MEASUREMENT_SYSTEM);
+        UResourceBundle sysBundle = measurementTypeBundleForLocale(locale, MEASUREMENT_SYSTEM);
         
         int system = sysBundle.getInt();
         if(MeasurementSystem.US.equals(system)){
@@ -364,8 +394,7 @@ public final class LocaleData {
      * @stable ICU 3.0
      */
     public static final PaperSize getPaperSize(ULocale locale){
-        UResourceBundle bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
-        UResourceBundle obj = bundle.get(PAPER_SIZE);
+        UResourceBundle obj = measurementTypeBundleForLocale(locale, PAPER_SIZE);
         int[] size = obj.getIntVector();
         return new PaperSize(size[0], size[1]);
     }

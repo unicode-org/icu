@@ -45,13 +45,14 @@ public class LocaleDataTest extends TestFmwk{
             if(lang.equals("in")){
                 continue;
             }
-            if(locale.toString().indexOf("_BZ") >= 0 || locale.toString().indexOf("_CA") >= 0 ||
-               locale.toString().indexOf("_CL") >= 0 || locale.toString().indexOf("_CO") >= 0 ||
-               locale.toString().indexOf("_CR") >= 0 || locale.toString().indexOf("_GT") >= 0 ||
-               locale.toString().indexOf("_MX") >= 0 || locale.toString().indexOf("_NI") >= 0 ||
-               locale.toString().indexOf("_PA") >= 0 || locale.toString().indexOf("_PH") >= 0 ||
-               locale.toString().indexOf("_PR") >= 0 || locale.toString().indexOf("_SV") >= 0 ||
-               locale.toString().indexOf("_US") >= 0 || locale.toString().indexOf("_VE") >= 0 ){
+            ULocale fullLoc = ULocale.addLikelySubtags(locale);
+            if(fullLoc.toString().indexOf("_BZ") >= 0 || fullLoc.toString().indexOf("_CA") >= 0 ||
+               fullLoc.toString().indexOf("_CL") >= 0 || fullLoc.toString().indexOf("_CO") >= 0 ||
+               fullLoc.toString().indexOf("_CR") >= 0 || fullLoc.toString().indexOf("_GT") >= 0 ||
+               fullLoc.toString().indexOf("_MX") >= 0 || fullLoc.toString().indexOf("_NI") >= 0 ||
+               fullLoc.toString().indexOf("_PA") >= 0 || fullLoc.toString().indexOf("_PH") >= 0 ||
+               fullLoc.toString().indexOf("_PR") >= 0 || fullLoc.toString().indexOf("_SV") >= 0 ||
+               fullLoc.toString().indexOf("_US") >= 0 || fullLoc.toString().indexOf("_VE") >= 0 ){
                 if(paperSize.getHeight()!= 279 || paperSize.getWidth() != 216 ){
                     errln("PaperSize did not return the expected value for locale "+ locale+
                           " Expected height: 279 width: 216."+
@@ -81,7 +82,8 @@ public class LocaleDataTest extends TestFmwk{
             if(lang.equals("in")){
                 continue;
             }           
-            if(locale.toString().indexOf("_US") >= 0 || locale.toString().indexOf("_MM") >= 0 || locale.toString().indexOf("_LR") >= 0){
+            ULocale fullLoc = ULocale.addLikelySubtags(locale);
+            if(fullLoc.toString().indexOf("_US") >= 0 || fullLoc.toString().indexOf("_MM") >= 0 || fullLoc.toString().indexOf("_LR") >= 0){
                 if(ms == LocaleData.MeasurementSystem.US){
                     logln("Got the expected measurement system for locale: " + locale);
                 }else{
