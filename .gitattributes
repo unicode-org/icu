@@ -3753,6 +3753,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/NumberingSystem.java svneol=native#
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralRules.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralRulesSerialProxy.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/text/PluralSamples.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/Quantifier.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RBBIDataWrapper.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RBBINode.java svneol=native#text/plain%3Bcharset%3Dutf-8

@@ -708,6 +708,8 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.util.IllformedLocaleException", new ExceptionTests.IllformedLocaleExceptionHandler());
         map.put("com.ibm.icu.impl.locale.LocaleSyntaxException", new ExceptionTests.LocaleSyntaxExceptionHandler());
         map.put("com.ibm.icu.impl.IllegalIcuArgumentException", new ExceptionTests.IllegalIcuArgumentExceptionHandler());
+
+        map.put("com.ibm.icu.text.PluralRules$FixedDecimal", new ExceptionTests.FixedDecimalExceptionHandler());
     }
     
     public SerializableTest()

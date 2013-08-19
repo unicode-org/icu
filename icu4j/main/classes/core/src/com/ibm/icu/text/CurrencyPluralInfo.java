@@ -246,7 +246,7 @@ public class CurrencyPluralInfo implements Cloneable, Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    String select(PluralRules.NumberInfo numberInfo) {
+    String select(PluralRules.FixedDecimal numberInfo) {
         return pluralRules.select(numberInfo);
     }
 
