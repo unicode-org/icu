@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.ibm.icu.text.CompactDecimalDataCache.Data;
-import com.ibm.icu.text.PluralRules.NumberInfo;
+import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
@@ -480,14 +480,14 @@ public class CompactDecimalFormat extends DecimalFormat {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public NumberInfo getNumberInfo(double number) {
+    public FixedDecimal getNumberInfo(double number) {
         if (getMaximumFractionDigits() == 0 && !areSignificantDigitsUsed()) {
-            return new NumberInfo(number, 0, 0); 
+            return new FixedDecimal(number, 0, 0); 
         }
         // TODO Fix hack, where we are formatting just to get the fraction digits
         StringBuffer temp = new StringBuffer();
         UFieldPosition pos = new UFieldPosition();
         super.format(number, temp, pos);
-        return new NumberInfo(number, pos.getCountVisibleFractionDigits(), pos.getFractionDigits());
+        return new FixedDecimal(number, pos.getCountVisibleFractionDigits(), pos.getFractionDigits());
     }
 }

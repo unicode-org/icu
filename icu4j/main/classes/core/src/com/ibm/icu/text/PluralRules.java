@@ -17,19 +17,13 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.TreeSet;
 
-import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.PluralRulesLoader;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Output;
@@ -111,8 +105,8 @@ import com.ibm.icu.util.ULocale;
  * </p>
  * <ul>
  * <li>i to be the integer digits.</li>
- * <li>f to be the visible fractional digits, as an integer.</li>
- * <li>t to be the visible fractional digits—without trailing zeros—as an integer.</li>
+ * <li>f to be the visible decimal digits, as an integer.</li>
+ * <li>t to be the visible decimal digits—without trailing zeros—as an integer.</li>
  * <li>v to be the number of visible fraction digits.</li>
  * <li>j is defined to only match integers. That is j is 3 fails if v != 0 (eg for 3.1 or 3.0).</li>
  * </ul>
@@ -171,6 +165,10 @@ import com.ibm.icu.util.ULocale;
  * @stable ICU 3.8
  */
 public class PluralRules implements Serializable, Comparable<PluralRules> {
+
+    static final UnicodeSet ALLOWED_ID = new UnicodeSet("[a-z]").freeze();
+
+    // TODO Remove RulesList by moving its API and fields into PluralRules.
     /**
      * @internal
      * @deprecated This API is ICU internal only.
@@ -185,13 +183,7 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
     private static final long serialVersionUID = 1;
 
     private final RuleList rules;
-    private final Set<String> keywords;
-    private int repeatLimit; // for equality test
-    private transient int hashCode;
-    private transient Map<String, List<Double>> _keySamplesMap;
-    private transient Map<String, Boolean> _keyLimitedMap;
-    private transient Map<String, Set<NumberInfo>> _keyFractionSamplesMap;
-    private transient Set<NumberInfo> _fractionSamples;
+    private final transient Set<String> keywords;
 
     /**
      * Provides a factory for returning plural rules
@@ -345,69 +337,23 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
     private static final Constraint NO_CONSTRAINT = new Constraint() {
         private static final long serialVersionUID = 9163464945387899416L;
 
-        public boolean isFulfilled(NumberInfo n) {
+        public boolean isFulfilled(FixedDecimal n) {
             return true;
         }
 
-        public boolean isLimited() {
+        public boolean isLimited(SampleType sampleType) {
             return false;
         }
 
         public String toString() {
-            return "n is any";
-        }
-
-        public int updateRepeatLimit(int limit) {
-            return limit;
-        }
-
-        public void getMentionedValues(Set<NumberInfo> toAddTo) {
-            toAddTo.add(new NumberInfo(0));
-            toAddTo.add(new NumberInfo(9999.9999));
-        }
-    };
-
-    /*
-     * The default rule that always returns "other".
-     */
-    private static final Rule DEFAULT_RULE = new Rule() {
-        private static final long serialVersionUID = -5677499073940822149L;
-
-        public String getKeyword() {
-            return KEYWORD_OTHER;
-        }
-
-        public boolean appliesTo(NumberInfo n) {
-            return true;
-        }
-
-        public boolean isLimited() {
-            return false;
-        }
-
-        public String toString() {
-            return null;
-        }
-
-        public int updateRepeatLimit(int limit) {
-            return limit;
-        }
-
-        public void getMentionedValues(Set<NumberInfo> toAddTo) {
-        }
-
-        public String getConstraint() {
-            return null;
+            return "";
         }
     };
 
     /**
-     * The default rules that accept any number and return
-     * {@link #KEYWORD_OTHER}.
-     * @stable ICU 3.8
+     * 
      */
-    public static final PluralRules DEFAULT =
-            new PluralRules(new RuleList().addRule(DEFAULT_RULE));
+    private static final Rule DEFAULT_RULE = new Rule("other", NO_CONSTRAINT, null, null);
 
     /**
      * Parses a plural rules description and returns a PluralRules.
@@ -420,11 +366,7 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             throws ParseException {
 
         description = description.trim();
-        if (description.length() == 0) {
-            return DEFAULT;
-        }
-
-        return new PluralRules(parseRuleChain(description));
+        return description.length() == 0 ? DEFAULT : new PluralRules(parseRuleChain(description));
     }
 
     /**
@@ -437,10 +379,17 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
     public static PluralRules createRules(String description) {
         try {
             return parseDescription(description);
-        } catch(ParseException e) {
+        } catch(Exception e) {
             return null;
         }
     }
+
+    /**
+     * The default rules that accept any number and return
+     * {@link #KEYWORD_OTHER}.
+     * @stable ICU 3.8
+     */
+    public static final PluralRules DEFAULT = new PluralRules(new RuleList().addRule(DEFAULT_RULE));
 
     private enum Operand {
         n,
@@ -448,6 +397,8 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         f,
         t,
         v,
+        w,
+        /**@deprecated*/
         j;
     }
 
@@ -455,54 +406,101 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public static class NumberInfo implements Comparable<NumberInfo> {
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
+    public static class FixedDecimal extends Number implements Comparable<FixedDecimal> {
+        private static final long serialVersionUID = -4756200506571685661L;
         public final double source;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        public final int visibleFractionDigitCount;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        public final long fractionalDigits;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        public final long fractionalDigitsWithoutTrailingZeros;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        public final long intValue;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
+        public final int visibleDecimalDigitCount;
+        public final int visibleDecimalDigitCountWithoutTrailingZeros;
+        public final long decimalDigits;
+        public final long decimalDigitsWithoutTrailingZeros;
+        public final long integerValue;
         public final boolean hasIntegerValue;
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
         public final boolean isNegative;
+        private final int baseFactor;
 
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        public NumberInfo(double n, int v, long f) {
+        public double getSource() {
+            return source;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public int getVisibleDecimalDigitCount() {
+            return visibleDecimalDigitCount;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public int getVisibleDecimalDigitCountWithoutTrailingZeros() {
+            return visibleDecimalDigitCountWithoutTrailingZeros;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public long getDecimalDigits() {
+            return decimalDigits;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public long getDecimalDigitsWithoutTrailingZeros() {
+            return decimalDigitsWithoutTrailingZeros;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public long getIntegerValue() {
+            return integerValue;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public boolean isHasIntegerValue() {
+            return hasIntegerValue;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public boolean isNegative() {
+            return isNegative;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public int getBaseFactor() {
+            return baseFactor;
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public FixedDecimal(double n, int v, long f) {
             isNegative = n < 0;
             source = isNegative ? -n : n;
-            visibleFractionDigitCount = v;
-            fractionalDigits = f;
-            intValue = (long)n;
-            hasIntegerValue = source == intValue;
+            visibleDecimalDigitCount = v;
+            decimalDigits = f;
+            integerValue = (long)n;
+            hasIntegerValue = source == integerValue;
             // check values. TODO make into unit test.
             //            
             //            long visiblePower = (int) Math.pow(10, v);
@@ -517,21 +515,26 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             //                }
             //            }
             if (f == 0) {
-                fractionalDigitsWithoutTrailingZeros = 0;
+                decimalDigitsWithoutTrailingZeros = 0;
+                visibleDecimalDigitCountWithoutTrailingZeros = 0;
             } else {
                 long fdwtz = f;
+                int trimmedCount = v;
                 while ((fdwtz%10) == 0) {
                     fdwtz /= 10;
+                    --trimmedCount;
                 }
-                fractionalDigitsWithoutTrailingZeros = fdwtz;
+                decimalDigitsWithoutTrailingZeros = fdwtz;
+                visibleDecimalDigitCountWithoutTrailingZeros = trimmedCount;
             }
+            baseFactor = (int) Math.pow(10, v);
         }
 
         /**
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        public NumberInfo(double n, int v) {
+        public FixedDecimal(double n, int v) {
             this(n,v,getFractionalDigits(n, v));
         }
 
@@ -539,9 +542,9 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             if (v == 0) {
                 return 0;
             } else {
-                int base = (int) Math.pow(10, v);
-                long scaled = Math.round(n * base);
-                return (int) (scaled % base);
+                int baseFactor = (int) Math.pow(10, v);
+                long scaled = Math.round(n * baseFactor);
+                return (int) (scaled % baseFactor);
             }
         }
 
@@ -549,8 +552,16 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        public NumberInfo(double n) {
+        public FixedDecimal(double n) {
             this(n, decimals(n));
+        }
+
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
+        public FixedDecimal(long n) {
+            this(n,0);
         }
 
         /**
@@ -567,15 +578,7 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        public NumberInfo(long n) {
-            this(n,0);
-        }
-
-        /**
-         * @internal
-         * @deprecated This API is ICU internal only.
-         */
-        public NumberInfo (String n) {
+        public FixedDecimal (String n) {
             // Ugly, but for samples we don't care.
             this(Double.parseDouble(n), getVisibleFractionCount(n));
         }
@@ -597,10 +600,11 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         public double get(Operand operand) {
             switch(operand) {
             default: return source;
-            case i: return intValue;
-            case f: return fractionalDigits;
-            case t: return fractionalDigitsWithoutTrailingZeros;
-            case v: return visibleFractionDigitCount;
+            case i: return integerValue;
+            case f: return decimalDigits;
+            case t: return decimalDigitsWithoutTrailingZeros;
+            case v: return visibleDecimalDigitCount;
+            case w: return visibleDecimalDigitCountWithoutTrailingZeros;
             }
         }
 
@@ -617,17 +621,17 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        public int compareTo(NumberInfo other) {
-            if (intValue != other.intValue) {
-                return intValue < other.intValue ? -1 : 1;
+        public int compareTo(FixedDecimal other) {
+            if (integerValue != other.integerValue) {
+                return integerValue < other.integerValue ? -1 : 1;
             }
             if (source != other.source) {
                 return source < other.source ? -1 : 1;
             }
-            if (visibleFractionDigitCount != other.visibleFractionDigitCount) {
-                return visibleFractionDigitCount < other.visibleFractionDigitCount ? -1 : 1;
+            if (visibleDecimalDigitCount != other.visibleDecimalDigitCount) {
+                return visibleDecimalDigitCount < other.visibleDecimalDigitCount ? -1 : 1;
             }
-            long diff = fractionalDigits - other.fractionalDigits;
+            long diff = decimalDigits - other.decimalDigits;
             if (diff != 0) {
                 return diff < 0 ? -1 : 1;
             }
@@ -646,11 +650,11 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             if (arg0 == this) {
                 return true;
             }
-            if (!(arg0 instanceof NumberInfo)) {
+            if (!(arg0 instanceof FixedDecimal)) {
                 return false;
             }
-            NumberInfo other = (NumberInfo)arg0;
-            return source == other.source && visibleFractionDigitCount == other.visibleFractionDigitCount && fractionalDigits == other.fractionalDigits;
+            FixedDecimal other = (FixedDecimal)arg0;
+            return source == other.source && visibleDecimalDigitCount == other.visibleDecimalDigitCount && decimalDigits == other.decimalDigits;
         }
 
         /**
@@ -660,7 +664,7 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         @Override
         public int hashCode() {
             // TODO Auto-generated method stub
-            return (int)(fractionalDigits + 37 * (visibleFractionDigitCount + (int)(37 * source)));
+            return (int)(decimalDigits + 37 * (visibleDecimalDigitCount + (int)(37 * source)));
         }
 
         /**
@@ -669,7 +673,7 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
          */
         @Override
         public String toString() {
-            return String.format("%." + visibleFractionDigitCount + "f", source);
+            return String.format("%." + visibleDecimalDigitCount + "f", source);
         }
 
         /**
@@ -679,8 +683,179 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         public boolean hasIntegerValue() {
             return hasIntegerValue;
         }
+
+        @Override
+        public int intValue() {
+            // TODO Auto-generated method stub
+            return (int)integerValue;
+        }
+
+        @Override
+        public long longValue() {
+            return integerValue;
+        }
+
+        @Override
+        public float floatValue() {
+            return (float) source;
+        }
+
+        @Override
+        public double doubleValue() {
+            return source;
+        }
+
+        public long getShiftedValue() {
+            return integerValue * baseFactor + decimalDigits;
+        }
+
+        private void writeObject(
+                ObjectOutputStream out)
+                        throws IOException {
+            throw new NotSerializableException();
+        }
+
+        private void readObject(ObjectInputStream in
+                ) throws IOException, ClassNotFoundException {
+            throw new NotSerializableException();
+        }
     }
 
+    /**
+     * Selection parameter for either integer-only or decimal-only.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public enum SampleType {INTEGER, DECIMAL}
+
+    /**
+     * A range of NumberInfo that includes all values with the same visibleFractionDigitCount.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public static class FixedDecimalRange {
+        public final FixedDecimal start;
+        public final FixedDecimal end;
+        public FixedDecimalRange(FixedDecimal start, FixedDecimal end) {
+            if (start.visibleDecimalDigitCount != end.visibleDecimalDigitCount) {
+                throw new IllegalArgumentException("Ranges must have the same number of visible decimals: " + start + "~" + end);
+            }
+            this.start = start;
+            this.end = end;
+        }
+        @Override
+        public String toString() {
+            return start + (end == start ? "" : "~" + end);
+        }
+    }
+
+    /**
+     * A list of NumberInfo that includes all values with the same visibleFractionDigitCount.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public static class FixedDecimalSamples {
+        public final SampleType sampleType;
+        public final Set<FixedDecimalRange> samples;
+        public final boolean bounded;
+        /**
+         * The samples must be immutable.
+         * @param sampleType
+         * @param samples
+         */
+        private FixedDecimalSamples(SampleType sampleType, Set<FixedDecimalRange> samples, boolean bounded) {
+            super();
+            this.sampleType = sampleType;
+            this.samples = samples;
+            this.bounded = bounded;
+        }
+        /**
+         * Parse a list of the form described in CLDR. The source must be trimmed.
+         * @param source
+         * @return
+         */
+        static FixedDecimalSamples parse(String source) {
+            SampleType sampleType2;
+            boolean bounded2 = true;
+            boolean haveBound = false;
+            Set<FixedDecimalRange> samples2 = new LinkedHashSet<FixedDecimalRange>();
+
+            if (source.startsWith("integer")) {
+                sampleType2 = SampleType.INTEGER;
+            } else if (source.startsWith("decimal")) {
+                sampleType2 = SampleType.DECIMAL;
+            } else {
+                throw new IllegalArgumentException("Samples must start with 'integer' or 'decimal'");
+            }
+            source = source.substring(7).trim(); // remove both
+
+            for (String range : source.split(",\\s*")) {
+                if (range.equals("…")) {
+                    bounded2 = false;
+                    haveBound = true;
+                    continue;
+                }
+                if (haveBound) {
+                    throw new IllegalArgumentException("Can only have … at the end of samples: " + range);
+                }
+                String[] rangeParts = range.split("\\s*~\\s*");
+                switch (rangeParts.length) {
+                case 1: 
+                    FixedDecimal sample = new FixedDecimal(rangeParts[0]);
+                    samples2.add(new FixedDecimalRange(sample, sample));
+                    break;
+                case 2:
+                    FixedDecimal start = new FixedDecimal(rangeParts[0]);
+                    FixedDecimal end = new FixedDecimal(rangeParts[1]);
+                    samples2.add(new FixedDecimalRange(start, end));
+                    break;
+                default: throw new IllegalArgumentException("Ill-formed number range: " + range);
+                }
+            }
+            return new FixedDecimalSamples(sampleType2, Collections.unmodifiableSet(samples2), bounded2);
+        }
+
+        public void addSamples(Set<Double> result) {
+            for (FixedDecimalRange item : samples) {
+                // we have to convert to longs so we don't get strange double issues
+                long startDouble = item.start.getShiftedValue();
+                long endDouble = item.end.getShiftedValue();
+
+                for (long d = startDouble; d <= endDouble; d += 1) {
+                    result.add(d/(double)item.start.baseFactor);
+                }
+            }
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder b = new StringBuilder("@").append(sampleType.toString().toLowerCase(Locale.ENGLISH));
+            boolean first = true;
+            for (FixedDecimalRange item : samples) {
+                if (first) {
+                    first = false;
+                } else {
+                    b.append(",");
+                }
+                b.append(' ').append(item);
+            }
+            if (!bounded) {
+                b.append(", …");
+            }
+            return b.toString();
+        }
+        
+        public Set<FixedDecimalRange> getSamples() {
+            return samples;
+        }
+        
+        public void getStartEndSamples(Set<FixedDecimal> target) {
+            for (FixedDecimalRange item : samples) {
+                target.add(item.start);
+                target.add(item.end);
+            }
+        }
+    }
 
     /*
      * A constraint on a number.
@@ -690,53 +865,13 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
          * Returns true if the number fulfills the constraint.
          * @param n the number to test, >= 0.
          */
-        boolean isFulfilled(NumberInfo n);
+        boolean isFulfilled(FixedDecimal n);
 
         /*
          * Returns false if an unlimited number of values fulfills the
          * constraint.
          */
-        boolean isLimited();
-
-        /*
-         * Returns the larger of limit or the limit of this constraint.
-         * If the constraint is a simple range test, this is the higher
-         * end of the range; if it is a modulo test, this is the modulus.
-         *
-         * @param limit the target limit
-         * @return the new limit
-         */
-        int updateRepeatLimit(int limit);
-
-        /**
-         * Gets samples of significant numbers
-         */
-        void getMentionedValues(Set<NumberInfo> toAddTo);
-
-    }
-
-    /*
-     * A pluralization rule.
-     */
-    private interface Rule extends Serializable {
-        /* Returns the keyword that names this rule. */
-        String getKeyword();
-
-        /* Returns true if the rule applies to the number. */
-        boolean appliesTo(NumberInfo n);
-
-        /* Returns false if an unlimited number of values generate this rule. */
-        boolean isLimited();
-
-        /* Returns the larger of limit and this rule's limit. */
-        int updateRepeatLimit(int limit);
-
-        /**
-         * Gets samples of significant numbers
-         */
-        void getMentionedValues(Set<NumberInfo> toAddTo);
-
-        public String getConstraint();
+        boolean isLimited(SampleType sampleType);
     }
 
     static class SimpleTokenizer {
@@ -768,33 +903,6 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             return result.toArray(new String[result.size()]);
         }
     }
-    
-    //    /*
-    //     * A list of rules to apply in order.
-    //     */
-    //    private class RuleList extends Serializable {
-    //        /* Returns the keyword of the first rule that applies to the number. */
-    //        String select(NumberInfo n);
-    //
-    //        /* Returns the set of defined keywords. */
-    //        Set<String> getKeywords();
-    //
-    //        /* Return the value at which this rulelist starts repeating. */
-    //        int getRepeatLimit();
-    //
-    //        /* Return true if the values for this keyword are limited. */
-    //        boolean isLimited(String keyword);
-    //
-    //        /**
-    //         * Get mentioned samples
-    //         */
-    //        Set<NumberInfo> getMentionedValues(Set<NumberInfo> toAddTo);
-    //
-    //        /**
-    //         * keyword: rules mapping
-    //         */
-    //        String getRules(String keyword);
-    //    }
 
     /*
      * syntax:
@@ -846,13 +954,10 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
 
                 int x = 0;
                 String t = tokens[x++];
+                boolean hackForCompatibility = false;
                 Operand operand;
-                if ("not".equals(t) || "!".equals(t)) {
-                    inRange = !inRange;
-                    t = nextToken(tokens, x++, condition);
-                }
                 try {
-                    operand = NumberInfo.getOperand(t);
+                    operand = FixedDecimal.getOperand(t);
                 } catch (Exception e) {
                     throw unexpected(t, condition);
                 }
@@ -862,14 +967,18 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
                         mod = Integer.parseInt(tokens[x++]);
                         t = nextToken(tokens, x++, condition);
                     }
-                    if ("not".equals(t) || "!".equals(t)) {
+                    if ("not".equals(t)) {
                         inRange = !inRange;
                         t = nextToken(tokens, x++, condition);
+                    } else if ("!".equals(t)) {
+                        inRange = !inRange;
+                        t = nextToken(tokens, x++, condition);
+                        if (!"=".equals(t)) {
+                            throw unexpected(t, condition);
+                        }
                     }
                     if ("is".equals(t) || "in".equals(t) || "=".equals(t)) {
-                        t = nextToken(tokens, x++, condition);
-                    } else if ("≠".equals(t) || "!=".equals(t)) {
-                        inRange = !inRange;
+                        hackForCompatibility = "is".equals(t);
                         t = nextToken(tokens, x++, condition);
                     } else if ("within".equals(t)) {
                         integersOnly = false;
@@ -877,7 +986,10 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
                     } else {
                         throw unexpected(t, condition);
                     }
-                    if ("not".equals(t) || "!".equals(t)) {
+                    if ("not".equals(t)) {
+                        if (!inRange || !hackForCompatibility) {
+                            throw unexpected(t, condition);
+                        }
                         inRange = !inRange;
                         t = nextToken(tokens, x++, condition);
                     }
@@ -933,7 +1045,6 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
                 result = new OrConstraint(result, andConstraint);
             }
         }
-
         return result;
     }
 
@@ -960,6 +1071,9 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * keyword: <identifier>
      */
     private static Rule parseRule(String description) throws ParseException {
+        if (description.length() == 0) {
+            return DEFAULT_RULE;
+        }
         int x = description.indexOf(':');
         if (x == -1) {
             throw new ParseException("missing ':' in rule description '" +
@@ -973,14 +1087,47 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         }
 
         description = description.substring(x+1).trim();
-        if (description.length() == 0) {
-            throw new ParseException("missing constraint in '" +
-                    description + "'", x+1);
+        String[] constraintOrSamples = description.split("\\s*@\\s*");
+        boolean sampleFailure = false;
+        FixedDecimalSamples integerSamples = null, decimalSamples = null;
+        switch (constraintOrSamples.length) {
+        case 1: break;
+        case 2: 
+            integerSamples = FixedDecimalSamples.parse(constraintOrSamples[1]);
+            if (integerSamples.sampleType == SampleType.DECIMAL) {
+                decimalSamples = integerSamples;
+                integerSamples = null;
+            }
+            break;
+        case 3:
+            integerSamples = FixedDecimalSamples.parse(constraintOrSamples[1]);
+            decimalSamples = FixedDecimalSamples.parse(constraintOrSamples[2]);
+            if (integerSamples.sampleType != SampleType.INTEGER || decimalSamples.sampleType != SampleType.DECIMAL) {
+                throw new IllegalArgumentException("Must have @integer then @decimal in " + description);
+            }
+            break;
+        default: 
+            throw new IllegalArgumentException("Too many samples in " + description);
         }
-        Constraint constraint = parseConstraint(description);
-        Rule rule = new ConstrainedRule(keyword, constraint);
-        return rule;
+        if (sampleFailure) {
+            throw new IllegalArgumentException("Ill-formed samples—'@' characters.");
+        }
+
+        // 'other' is special, and must have no rules; all other keywords must have rules.
+        boolean isOther = keyword.equals("other");
+        if (isOther != (constraintOrSamples[0].length() == 0)) {
+            throw new IllegalArgumentException("The keyword 'other' must have no constraints, just samples.");
+        }
+
+        Constraint constraint;
+        if (isOther) {
+            constraint = NO_CONSTRAINT;
+        } else {
+            constraint = parseConstraint(constraintOrSamples[0]);
+        }
+        return new Rule(keyword, constraint, integerSamples, decimalSamples);
     }
+
 
     /*
      * Syntax:
@@ -995,8 +1142,15 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             description = description.substring(0,description.length()-1);
         }
         String[] rules = Utility.split(description, ';');
+        boolean haveOther = false;
         for (int i = 0; i < rules.length; ++i) {
-            result.addRule(parseRule(rules[i].trim()));
+            Rule rule = parseRule(rules[i].trim());
+            haveOther |= rule.keyword.equals("other");
+            result.hasExplicitBoundingInfo |= rule.integerSamples != null || rule.decimalSamples != null;
+            result.addRule(rule);
+        }
+        if (!haveOther) {
+            result.addRule(parseRule("other:"));
         }
         return result;
     }
@@ -1028,50 +1182,42 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             this.operand = operand;
         }
 
-        public void getMentionedValues(Set<NumberInfo> toAddTo) {
-            addRanges(toAddTo, mod);
-            if (mod != 0) {
-                //addRanges(toAddTo, mod*2);
-                addRanges(toAddTo, mod*3);
-            }
-        }
+        //        private void addRanges(Set<FixedDecimal> toAddTo, int offset) {
+        //            toAddTo.add(new FixedDecimal(lowerBound + offset));
+        //            if (upperBound != lowerBound) {
+        //                toAddTo.add(new FixedDecimal(upperBound + offset));
+        //            }
+        //            //            if (range_list != null) {
+        //            //                // add from each range
+        //            //                for (int i = 0; i < range_list.length; i += 2) {
+        //            //                    double lower = range_list[i];
+        //            //                    double upper = range_list[i+1];
+        //            //                    if (lower != lowerBound) {
+        //            //                        toAddTo.add(new NumberInfo(lower + offset)); 
+        //            //                    }
+        //            //                    if (upper != upperBound) {
+        //            //                        toAddTo.add(new NumberInfo(upper + offset)); 
+        //            //                    }
+        //            //                }
+        //            //            }
+        //            if (!integersOnly) {
+        //                double average = (lowerBound + upperBound) / 2.0d;
+        //                toAddTo.add(new FixedDecimal(average + offset));
+        //                //                if (range_list != null) {
+        //                //                    // we will just add one value from the middle
+        //                //                    for (int i = 0; i < range_list.length; i += 2) {
+        //                //                        double lower = range_list[i];
+        //                //                        double upper = range_list[i+1];
+        //                //                        toAddTo.add(new NumberInfo((lower + upper) / 2.0d + offset)); 
+        //                //                    }
+        //                //                }
+        //            }
+        //        }
 
-        private void addRanges(Set<NumberInfo> toAddTo, int offset) {
-            toAddTo.add(new NumberInfo(lowerBound + offset));
-            if (upperBound != lowerBound) {
-                toAddTo.add(new NumberInfo(upperBound + offset));
-            }
-            //            if (range_list != null) {
-            //                // add from each range
-            //                for (int i = 0; i < range_list.length; i += 2) {
-            //                    double lower = range_list[i];
-            //                    double upper = range_list[i+1];
-            //                    if (lower != lowerBound) {
-            //                        toAddTo.add(new NumberInfo(lower + offset)); 
-            //                    }
-            //                    if (upper != upperBound) {
-            //                        toAddTo.add(new NumberInfo(upper + offset)); 
-            //                    }
-            //                }
-            //            }
-            if (!integersOnly) {
-                double average = (lowerBound + upperBound) / 2.0d;
-                toAddTo.add(new NumberInfo(average + offset));
-                //                if (range_list != null) {
-                //                    // we will just add one value from the middle
-                //                    for (int i = 0; i < range_list.length; i += 2) {
-                //                        double lower = range_list[i];
-                //                        double upper = range_list[i+1];
-                //                        toAddTo.add(new NumberInfo((lower + upper) / 2.0d + offset)); 
-                //                    }
-                //                }
-            }
-        }
-
-        public boolean isFulfilled(NumberInfo number) {
+        public boolean isFulfilled(FixedDecimal number) {
             double n = number.get(operand);
             if ((integersOnly && (n - (long)n) != 0.0
-                    || operand == Operand.j && number.visibleFractionDigitCount != 0)) {
+                    || operand == Operand.j && number.visibleDecimalDigitCount != 0)) {
                 return !inRange;
             }
             if (mod != 0) {
@@ -1087,13 +1233,27 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             return inRange == test;
         }
 
-        public boolean isLimited() {
-            return integersOnly && inRange && mod == 0;
-        }
+        public boolean isLimited(SampleType sampleType) {
+            switch (sampleType) {
+            case INTEGER: 
+                boolean hasFraction = (operand == Operand.f || operand == Operand.t) 
+                && !(lowerBound == upperBound || lowerBound == 0d);
 
-        public int updateRepeatLimit(int limit) {
-            int mylimit = mod == 0 ? (int)upperBound : mod;
-            return Math.max(mylimit, limit);
+                return hasFraction // will be empty
+                        || (operand == Operand.n || operand == Operand.i || operand == Operand.j)
+                        && mod == 0 
+                        && inRange;
+
+            case DECIMAL:
+                boolean noFraction =
+                (operand == Operand.v || operand == Operand.w || operand == Operand.f || operand == Operand.t)
+                && lowerBound == upperBound && lowerBound == 0d;
+                return  (noFraction || operand == Operand.n || operand == Operand.j)
+                        && (integersOnly || lowerBound == upperBound)
+                        && mod == 0 
+                        && inRange;
+            }
+            return false;
         }
 
         public String toString() {
@@ -1146,10 +1306,6 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             this.a = a;
             this.b = b;
         }
-
-        public int updateRepeatLimit(int limit) {
-            return a.updateRepeatLimit(b.updateRepeatLimit(limit));
-        }
     }
 
     /* A constraint representing the logical and of two constraints. */
@@ -1160,19 +1316,16 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             super(a, b);
         }
 
-        public boolean isFulfilled(NumberInfo n) {
-            return a.isFulfilled(n) && b.isFulfilled(n);
+        public boolean isFulfilled(FixedDecimal n) {
+            return a.isFulfilled(n) 
+                    && b.isFulfilled(n);
         }
 
-        public boolean isLimited() {
+        public boolean isLimited(SampleType sampleType) {
             // we ignore the case where both a and b are unlimited but no values
             // satisfy both-- we still consider this 'unlimited'
-            return a.isLimited() || b.isLimited();
-        }
-
-        public void getMentionedValues(Set<NumberInfo> toAddTo) {
-            a.getMentionedValues(toAddTo);
-            b.getMentionedValues(toAddTo);
+            return a.isLimited(sampleType) 
+                    || b.isLimited(sampleType);
         }
 
         public String toString() {
@@ -1188,18 +1341,16 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             super(a, b);
         }
 
-        public boolean isFulfilled(NumberInfo n) {
-            return a.isFulfilled(n) || b.isFulfilled(n);
+        public boolean isFulfilled(FixedDecimal n) {
+            return a.isFulfilled(n) 
+                    || b.isFulfilled(n);
         }
 
-        public boolean isLimited() {
-            return a.isLimited() && b.isLimited();
+        public boolean isLimited(SampleType sampleType) {
+            return a.isLimited(sampleType) 
+                    && b.isLimited(sampleType);
         }
 
-        public void getMentionedValues(Set<NumberInfo> toAddTo) {
-            a.getMentionedValues(toAddTo);
-            b.getMentionedValues(toAddTo);
-        }
         public String toString() {
             return a.toString() + " or " + b.toString();
         }
@@ -1209,55 +1360,55 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * Implementation of Rule that uses a constraint.
      * Provides 'and' and 'or' to combine constraints.  Immutable.
      */
-    private static class ConstrainedRule implements Rule, Serializable {
+    private static class Rule implements Serializable {
         private static final long serialVersionUID = 1;
         private final String keyword;
         private final Constraint constraint;
+        private final FixedDecimalSamples integerSamples;
+        private final FixedDecimalSamples decimalSamples;
 
-        public ConstrainedRule(String keyword, Constraint constraint) {
+        public Rule(String keyword, Constraint constraint, FixedDecimalSamples integerSamples, FixedDecimalSamples decimalSamples) {
             this.keyword = keyword;
             this.constraint = constraint;
+            this.integerSamples = integerSamples;
+            this.decimalSamples = decimalSamples;
         }
 
         @SuppressWarnings("unused")
         public Rule and(Constraint c) {
-            return new ConstrainedRule(keyword, new AndConstraint(constraint, c));
+            return new Rule(keyword, new AndConstraint(constraint, c), integerSamples, decimalSamples);
         }
 
         @SuppressWarnings("unused")
         public Rule or(Constraint c) {
-            return new ConstrainedRule(keyword, new OrConstraint(constraint, c));
+            return new Rule(keyword, new OrConstraint(constraint, c), integerSamples, decimalSamples);
         }
 
         public String getKeyword() {
             return keyword;
         }
 
-        public boolean appliesTo(NumberInfo n) {
+        public boolean appliesTo(FixedDecimal n) {
             return constraint.isFulfilled(n);
         }
 
-        public int updateRepeatLimit(int limit) {
-            return constraint.updateRepeatLimit(limit);
-        }
-
-        public boolean isLimited() {
-            return constraint.isLimited();
+        public boolean isLimited(SampleType sampleType) {
+            return constraint.isLimited(sampleType);
         }
 
         public String toString() {
-            return keyword + ": " + constraint.toString();
+            return keyword + ": " + constraint.toString() 
+                    + (integerSamples == null ? "" : " " + integerSamples.toString())
+                    + (decimalSamples == null ? "" : " " + decimalSamples.toString());
+        }
+
+        @Override
+        public int hashCode() {
+            return keyword.hashCode() ^ constraint.hashCode();
         }
 
         public String getConstraint() {
             return constraint.toString();
-        }
-
-        /**
-         * Gets samples of significant numbers
-         */
-        public void getMentionedValues(Set<NumberInfo> toAddTo) {
-            constraint.getMentionedValues(toAddTo);
         }
     }
 
@@ -1266,15 +1417,22 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * Immutable, but supports chaining with 'addRule'.
      */
     private static class RuleList implements Serializable {
+        private boolean hasExplicitBoundingInfo = false;
         private static final long serialVersionUID = 1;
         private final List<Rule> rules = new ArrayList<Rule>();
 
         public RuleList addRule(Rule nextRule) {
+            String keyword = nextRule.getKeyword();
+            for (Rule rule : rules) {
+                if (keyword.equals(rule.getKeyword())) {
+                    throw new IllegalArgumentException("Duplicate keyword: " + keyword);
+                }
+            }
             rules.add(nextRule);
             return this;
         }
 
-        private Rule selectRule(NumberInfo n) {
+        private Rule selectRule(FixedDecimal n) {
             for (Rule rule : rules) {
                 if (rule.appliesTo(n)) {
                     return rule;
@@ -1283,7 +1441,7 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             return null;
         }
 
-        public String select(NumberInfo n) {
+        public String select(FixedDecimal n) {
             Rule r = selectRule(n);
             if (r == null) {
                 return KEYWORD_OTHER;
@@ -1292,7 +1450,7 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         }
 
         public Set<String> getKeywords() {
-            Set<String> result = new HashSet<String>();
+            Set<String> result = new LinkedHashSet<String>();
             for (Rule rule : rules) {
                 result.add(rule.getKeyword());
             }
@@ -1300,13 +1458,18 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             return result;
         }
 
-        public boolean isLimited(String keyword) {
+        public boolean isLimited(String keyword, SampleType sampleType) {
+            if (hasExplicitBoundingInfo) {
+                FixedDecimalSamples mySamples = getDecimalSamples(keyword, sampleType);
+                return mySamples == null ? true : mySamples.bounded;
+            }
+
             // if all rules with this keyword are limited, it's limited,
             // and if there's no rule with this keyword, it's unlimited
             boolean result = false;
             for (Rule rule : rules) {
                 if (keyword.equals(rule.getKeyword())) {
-                    if (!rule.isLimited()) {
+                    if (!rule.isLimited(sampleType)) {
                         return false;
                     }
                     result = true;
@@ -1315,49 +1478,39 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
             return result;
         }
 
-        public int getRepeatLimit() {
-            int result = 0;
-            for (Rule rule : rules) {
-                result = rule.updateRepeatLimit(result);
-            }
-            return result;
-        }
-
         public String toString() {
             StringBuilder builder = new StringBuilder();
-            Map<String, String> ordered = new TreeMap<String, String>(KEYWORD_COMPARATOR);
             for (Rule rule : rules) {
-                String keyword = rule.getKeyword();
-                if (keyword.equals("other")) {
-                    continue;
-                }
-                String constraint = rule.getConstraint();
-                ordered.put(keyword, constraint);
-            }
-            for (Entry<String, String> entry : ordered.entrySet()) {
                 if (builder.length() != 0) {
                     builder.append(CATEGORY_SEPARATOR);
                 }
-                builder.append(entry.getKey()).append(KEYWORD_RULE_SEPARATOR).append(entry.getValue());
+                builder.append(rule);
             }
             return builder.toString();
         }
-
-        /* (non-Javadoc)
-         * @see com.ibm.icu.text.PluralRules.RuleList#getMentionedSamples(java.util.Set)
-         */
-        public Set<NumberInfo> getMentionedValues(Set<NumberInfo> toAddTo) {
-            for (Rule rule : rules) {
-                rule.getMentionedValues(toAddTo);
-            }
-            return toAddTo;
-        }
-
 
         public String getRules(String keyword) {
             for (Rule rule : rules) {
                 if (rule.getKeyword().equals(keyword)) {
                     return rule.getConstraint();
+                }
+            }
+            return null;
+        }
+
+        public boolean select(FixedDecimal sample, String keyword) {
+            for (Rule rule : rules) {
+                if (rule.getKeyword().equals(keyword) && rule.appliesTo(sample)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public FixedDecimalSamples getDecimalSamples(String keyword, SampleType sampleType) {
+            for (Rule rule : rules) {
+                if (rule.getKeyword().equals(keyword)) {
+                    return sampleType == SampleType.INTEGER ? rule.integerSamples : rule.decimalSamples;
                 }
             }
             return null;
@@ -1386,63 +1539,10 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         }
     }
 
-    private static final int[] TENS = {1, 10, 100, 1000, 10000, 100000, 1000000};
-
-    private static final int LIMIT_FRACTION_SAMPLES = 3;
-
-    private Set<NumberInfo> fractions(Set<NumberInfo> original) {
-        Set<NumberInfo> toAddTo = new HashSet<NumberInfo>();
-
-        Set<Integer> result = new HashSet<Integer>();
-        for (NumberInfo base1 : original) {
-            result.add((int)base1.intValue);
-        }
-        List<Integer> ints = new ArrayList<Integer>(result);
-        Set<String> keywords = new HashSet<String>();
-
-        for (int j = 0; j < ints.size(); ++j) {
-            Integer base = ints.get(j);
-            String keyword = select(base);
-            if (keywords.contains(keyword)) {
-                continue;
-            }
-            keywords.add(keyword);
-            toAddTo.add(new NumberInfo(base,1)); // add .0
-            toAddTo.add(new NumberInfo(base,2)); // add .00
-            Integer fract = getDifferentCategory(ints, keyword);
-            if (fract >= TENS[LIMIT_FRACTION_SAMPLES-1]) { // make sure that we always get the value
-                toAddTo.add(new NumberInfo(base + "." + fract));
-            } else {
-                for (int visibleFractions = 1; visibleFractions < LIMIT_FRACTION_SAMPLES; ++visibleFractions) {
-                    for (int i = 1; i <= visibleFractions; ++i) {
-                        // with visible fractions = 3, and fract = 1, then we should get x.10, 0.01
-                        // with visible fractions = 3, and fract = 15, then we should get x.15, x.15
-                        if (fract >= TENS[i]) {
-                            continue;
-                        }
-                        toAddTo.add(new NumberInfo(base + fract/(double)TENS[i], visibleFractions));
-                    }
-                }
-            }
-        }
-        return toAddTo;
-    }
-
-    private Integer getDifferentCategory(List<Integer> ints, String keyword) {
-        for (int i = ints.size() - 1; i >= 0; --i) {
-            Integer other = ints.get(i);
-            String keywordOther = select(other);
-            if (!keywordOther.equals(keyword)) {
-                return other;
-            }
-        }
-        return 37;
-    }
-
     @SuppressWarnings("unused")
-    private boolean addConditional(Set<NumberInfo> toAddTo, Set<NumberInfo> others, double trial) {
+    private boolean addConditional(Set<FixedDecimal> toAddTo, Set<FixedDecimal> others, double trial) {
         boolean added;
-        NumberInfo toAdd = new NumberInfo(trial);
+        FixedDecimal toAdd = new FixedDecimal(trial);
         if (!toAddTo.contains(toAdd) && !others.contains(toAdd)) {
             others.add(toAdd);
             added = true;
@@ -1452,20 +1552,6 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         return added;
     }
 
-
-    /**
-     * @deprecated This API is ICU internal only.
-     * @internal
-     */
-    public static final Comparator<String> KEYWORD_COMPARATOR = new Comparator<String> () {
-        public int compare(String arg0, String arg1) {
-            StandardPluralCategories a = StandardPluralCategories.forString(arg0);
-            StandardPluralCategories b = StandardPluralCategories.forString(arg1);
-            return a == null 
-                    ? (b == null ? arg0.compareTo(arg1) : -1)
-                            : (b == null ? 1 : a.compareTo(b));
-        }
-    };
 
 
     // -------------------------------------------------------------------------
@@ -1524,7 +1610,7 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * @return true if the token is a valid keyword.
      */
     private static boolean isValidKeyword(String token) {
-        return PatternProps.isIdentifier(token);
+        return ALLOWED_ID.containsAll(token);
     }
 
     /*
@@ -1532,11 +1618,13 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      */
     private PluralRules(RuleList rules) {
         this.rules = rules;
-        TreeSet<String> temp = new TreeSet<String>(KEYWORD_COMPARATOR);
-        temp.addAll(rules.getKeywords());
-        this.keywords = Collections.unmodifiableSet(new LinkedHashSet<String>(temp));
+        this.keywords = Collections.unmodifiableSet(rules.getKeywords());
     }
 
+    @Override
+    public int hashCode() {
+        return rules.hashCode();
+    }
     /**
      * Given a number, returns the keyword of the first rule that applies to
      * the number.
@@ -1546,7 +1634,7 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * @stable ICU 4.0
      */
     public String select(double number) {
-        return rules.select(new NumberInfo(number));
+        return rules.select(new FixedDecimal(number));
     }
 
     /**
@@ -1559,9 +1647,8 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * @deprecated This API is ICU internal only.
      */
     public String select(double number, int countVisibleFractionDigits, long fractionaldigits) {
-        return rules.select(new NumberInfo(number, countVisibleFractionDigits, fractionaldigits));
+        return rules.select(new FixedDecimal(number, countVisibleFractionDigits, fractionaldigits));
     }
-
 
     /**
      * Given a number information, returns the keyword of the first rule that applies to
@@ -1572,8 +1659,21 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public String select(NumberInfo sample) {
+    public String select(FixedDecimal sample) {
         return rules.select(sample);
+    }
+
+
+    /**
+     * Given a number information, and keyword, return whether the keyword would match the number.
+     *
+     * @param sample The number information for which the rule has to be determined.
+     * @param keyword The keyword to filter on
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public boolean matches(FixedDecimal sample, String keyword) {
+        return rules.select(sample, keyword);
     }
 
     /**
@@ -1613,24 +1713,15 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * @stable ICU 4.8
      */
     public Collection<Double> getAllKeywordValues(String keyword) {
-        // HACK for now
-        if (!keywords.contains(keyword)) {
-            return Collections.<Double>emptyList();
-        }
-        Collection<Double> result = getKeySamplesMap().get(keyword);
-
-        // We depend on MAX_SAMPLES here.  It's possible for a conjunction
-        // of unlimited rules that 'looks' unlimited to return a limited
-        // number of values.  There's no bounds to this limited number, in
-        // general, because you can construct arbitrarily complex rules.  Since
-        // we always generate 3 samples if a rule is really unlimited, that's
-        // where we put the cutoff.
-        if (result.size() > 2 && !getKeyLimitedMap().get(keyword)) {
+        if (!isLimited(keyword, SampleType.INTEGER) 
+                || !isLimited(keyword, SampleType.DECIMAL)) {
             return null;
         }
-        return result;
+        TreeSet<Double> result = new TreeSet<Double>();
+        result.addAll(getSamples(keyword, SampleType.INTEGER));
+        result.addAll(getSamples(keyword, SampleType.DECIMAL));
+        return Collections.unmodifiableSet(result);
     }
-
 
     /**
      * Returns a list of values for which select() would return that keyword,
@@ -1643,10 +1734,70 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * @stable ICU 4.8
      */
     public Collection<Double> getSamples(String keyword) {
+        Set<Double> result = new TreeSet<Double>();
+        result.addAll(getSamples(keyword, SampleType.INTEGER));
+        result.addAll(getSamples(keyword, SampleType.DECIMAL));
+        return result.size() == 0 ? null : Collections.unmodifiableSet(result);
+    }
+
+    /**
+     * Returns a list of values for which select() would return that keyword,
+     * or empty if the keyword is not defined. The returned collection is unmodifiable.
+     * The returned list is not complete, and there might be additional values that
+     * would return the keyword.
+     *
+     * @param keyword the keyword to test
+     * @return a list of values matching the keyword.
+     * @deprecated ICU internal only
+     * @internal 
+     */
+    public Collection<Double> getSamples(String keyword, SampleType sampleType) {
         if (!keywords.contains(keyword)) {
-            return null;
+            return Collections.emptySet();
         }
-        return getKeySamplesMap().get(keyword);
+        Set<Double> result = new TreeSet<Double>();
+
+        if (rules.hasExplicitBoundingInfo) {
+            FixedDecimalSamples samples = rules.getDecimalSamples(keyword, sampleType);
+            if (samples != null) {
+                samples.addSamples(result);
+            }
+            return Collections.unmodifiableSet(result);
+        }
+
+        // hack in case the rule is created without explicit samples
+        int maxCount = isLimited(keyword, sampleType) ? Integer.MAX_VALUE : 20;
+
+        switch (sampleType) {
+        case INTEGER:
+            for (int i = 0; i < 200; ++i) {
+                if (!addSample(keyword, i, maxCount, result)) {
+                    break;
+                }
+            }
+            addSample(keyword, 1000000, maxCount, result); // hack for Welsh
+            break;
+        case DECIMAL:
+            for (int i = 0; i < 2000; ++i) {
+                if (!addSample(keyword, new FixedDecimal(i/10d, 1), maxCount, result)) {
+                    break;
+                }
+            }
+            addSample(keyword, new FixedDecimal(1000000d, 1), maxCount, result); // hack for Welsh
+            break;
+        }
+        return Collections.unmodifiableSet(result);
+    }
+
+    public boolean addSample(String keyword, Number sample, int maxCount, Set<Double> result) {
+        String selectedKeyword = sample instanceof FixedDecimal ? select((FixedDecimal)sample) : select(sample.doubleValue());
+        if (selectedKeyword.equals(keyword)) {
+            result.add(sample.doubleValue());
+            if (--maxCount < 0) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -1660,198 +1811,8 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public Collection<NumberInfo> getFractionSamples(String keyword) {
-        if (!keywords.contains(keyword)) {
-            return null;
-        }
-        initKeyMaps();
-        return _keyFractionSamplesMap.get(keyword);
-    }
-
-    /**
-     * Returns a list of values that includes at least one value for each keyword.
-     *
-     * @return a list of values
-     * @internal
-     */
-    public Collection<NumberInfo> getFractionSamples() {
-        initKeyMaps();
-        return _fractionSamples;
-    }
-
-    private Map<String, Boolean> getKeyLimitedMap() {
-        initKeyMaps();
-        return _keyLimitedMap;
-    }
-
-    private Map<String, List<Double>> getKeySamplesMap() {
-        initKeyMaps();
-        return _keySamplesMap;
-    }
-
-    private synchronized void initKeyMaps() {
-        // ensure both _keySamplesMap and _keyLimitedMap are initialized.
-        if (_keySamplesMap == null) {
-            // If this were allowed to vary on a per-call basis, we'd have to recheck and
-            // possibly rebuild the samples cache.  Doesn't seem worth it.
-            // This 'max samples' value only applies to keywords that are unlimited, for
-            // other keywords all the matching values are returned.  This might be a lot.
-            final int MAX_SAMPLES = 3;
-
-            Map<String, Boolean> temp = new HashMap<String, Boolean>();
-            for (String k : keywords) {
-                temp.put(k, rules.isLimited(k));
-            }
-            _keyLimitedMap = temp;
-
-            Map<String, List<Double>> sampleMap = new HashMap<String, List<Double>>();
-            int keywordsRemaining = keywords.size();
-
-            int limit = Math.max(5, getRepeatLimit() * MAX_SAMPLES) * 2;
-
-            for (int i = 0; keywordsRemaining > 0 && i < limit; ++i) {
-                double val = i / 2.0;
-                String keyword = select(val);
-                boolean keyIsLimited = _keyLimitedMap.get(keyword);
-
-                List<Double> list = sampleMap.get(keyword);
-                if (list == null) {
-                    list = new ArrayList<Double>(MAX_SAMPLES);
-                    sampleMap.put(keyword, list);
-                } else if (!keyIsLimited && list.size() == MAX_SAMPLES) {
-                    continue;
-                }
-                list.add(Double.valueOf(val));
-
-                if (!keyIsLimited && list.size() == MAX_SAMPLES) {
-                    --keywordsRemaining;
-                }
-            }
-
-            // collect explicit samples
-            Map<String, Set<NumberInfo>> sampleFractionMap = new HashMap<String, Set<NumberInfo>>();
-            Set<NumberInfo> mentioned = rules.getMentionedValues(new TreeSet<NumberInfo>());
-            // make sure that there is at least one 'other' value
-            Map<String, Set<NumberInfo>> foundKeywords = new HashMap<String, Set<NumberInfo>>();
-            for (NumberInfo s : mentioned) {
-                String keyword = this.select(s);
-                addRelation(foundKeywords, keyword, s);
-            }
-            main:
-                if (foundKeywords.size() != keywords.size()) {
-                    for (int i = 1; i < 1000; ++i) {
-                        boolean done = addIfNotPresent(i, mentioned, foundKeywords);
-                        if (done) break main;
-                    }
-                    // if we are not done, try tenths
-                    for (int i = 10; i < 1000; ++i) {
-                        boolean done = addIfNotPresent(i/10d, mentioned, foundKeywords);
-                        if (done) break main;
-                    }
-                    System.out.println("Failed to find sample for each keyword: " + foundKeywords + "\n\t" + rules + "\n\t" + mentioned);
-                }
-            mentioned.add(new NumberInfo(0)); // always there
-            mentioned.add(new NumberInfo(1)); // always there
-            mentioned.add(new NumberInfo(2)); // always there
-            mentioned.add(new NumberInfo(0.1,1)); // always there
-            mentioned.add(new NumberInfo(1.99,2)); // always there
-            mentioned.addAll(fractions(mentioned));
-            //            Set<NumberInfo> toAddTo = mentioned;
-            //            {
-            //                // once done, manufacture values for the OTHER case
-            //                int otherCount = 2;
-            //                for (int i = 0; i < 1000; ++i) {
-            //                }
-            //                NumberInfo last = null;
-            //                Set<NumberInfo> others = new LinkedHashSet<NumberInfo>();
-            //                for (NumberInfo s : toAddTo) {
-            //                    double trial;
-            //                    if (last == null) {
-            //                        trial = s.source-0.5;
-            //                    } else {
-            //                        double diff = s.source - last.source;
-            //                        if (diff > 1.0d) {
-            //                            trial = Math.floor(s.source);
-            //                            if (trial == s.source) {
-            //                                --trial;
-            //                            }
-            //                        } else {
-            //                            trial = (s.source + last.source) / 2;
-            //                        }                     
-            //                    }
-            //                    if (trial >= 0) {
-            //                        addConditional(toAddTo, others, trial);
-            //                    }
-            //                    last = s;
-            //                }
-            //                double trial = last == null ? 0 : last.source;
-            //                double fraction = 0;
-            //                while (otherCount > 0) {
-            //                    if (addConditional(toAddTo, others, trial = trial * 2 + 1 + fraction)) {
-            //                        --otherCount;
-            //                    }
-            //                    fraction += 0.125;
-            //                }
-            //                toAddTo.addAll(others);
-            //                others.clear();
-            //                toAddTo.addAll(fractions(toAddTo, others));
-            //
-            //            }
-            for (NumberInfo s : mentioned) {
-                String keyword = select(s);
-                Set<NumberInfo> list = sampleFractionMap.get(keyword);
-                if (list == null) {
-                    list = new LinkedHashSet<NumberInfo>(); // will be sorted because the iteration is
-                    sampleFractionMap.put(keyword, list);
-                }
-                list.add(s);
-            }
-
-            if (keywordsRemaining > 0) {
-                for (String k : keywords) {
-                    if (!sampleMap.containsKey(k)) {
-                        sampleMap.put(k, Collections.<Double>emptyList());
-                    }
-                    if (!sampleFractionMap.containsKey(k)) {
-                        sampleFractionMap.put(k, Collections.<NumberInfo>emptySet());
-                    }
-                }
-            }
-
-            // Make lists immutable so we can return them directly
-            for (Entry<String, List<Double>> entry : sampleMap.entrySet()) {
-                sampleMap.put(entry.getKey(), Collections.unmodifiableList(entry.getValue()));
-            }
-            for (Entry<String, Set<NumberInfo>> entry : sampleFractionMap.entrySet()) {
-                sampleFractionMap.put(entry.getKey(), Collections.unmodifiableSet(entry.getValue()));
-            }
-            _keySamplesMap = sampleMap;
-            _keyFractionSamplesMap = sampleFractionMap;
-            _fractionSamples = Collections.unmodifiableSet(mentioned);
-        }
-    }
-
-    private void addRelation(Map<String, Set<NumberInfo>> foundKeywords, String keyword, NumberInfo s) {
-        Set<NumberInfo> set = foundKeywords.get(keyword);
-        if (set == null) {
-            foundKeywords.put(keyword, set = new HashSet<NumberInfo>());
-        }
-        set.add(s);
-    }
-
-    private boolean addIfNotPresent(double d, Set<NumberInfo> mentioned, Map<String, Set<NumberInfo>> foundKeywords) {
-        NumberInfo numberInfo = new NumberInfo(d);
-        String keyword = this.select(numberInfo);
-        if (!foundKeywords.containsKey(keyword) || keyword.equals("other")) {
-            addRelation(foundKeywords, keyword, numberInfo);
-            mentioned.add(numberInfo);
-            if (keyword.equals("other")) {
-                if (foundKeywords.get("other").size() > 1) {
-                    return true;
-                }
-            }
-        }
-        return false;
+    public FixedDecimalSamples getDecimalSamples(String keyword, SampleType sampleType) {
+        return rules.getDecimalSamples(keyword, sampleType);
     }
 
     /**
@@ -1893,26 +1854,6 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         return rules.toString();
     }
 
-
-    /**
-     * {@inheritDoc}
-     * @stable ICU 3.8
-     */
-    public int hashCode() {
-        if (hashCode == 0) {
-            // cache it
-            int newHashCode = keywords.hashCode();
-            for (int i = 0; i < 12; ++i) {
-                newHashCode = newHashCode * 31 + select(i).hashCode();
-            }
-            if (newHashCode == 0) {
-                newHashCode = 1;
-            }
-            hashCode = newHashCode;
-        }
-        return hashCode;
-    }
-
     /**
      * {@inheritDoc}
      * @stable ICU 3.8
@@ -1927,45 +1868,9 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      * @return true if this and rhs are equal.
      * @stable ICU 3.8
      */
+    // TODO Optimize this
     public boolean equals(PluralRules rhs) {
-        if (rhs == null) {
-            return false;
-        }
-        if (rhs == this) {
-            return true;
-        }
-
-        if (hashCode() != rhs.hashCode()) {
-            return false;
-        }
-
-        if (!rhs.getKeywords().equals(keywords)) {
-            return false;
-        }
-
-        for (String keyword : rhs.getKeywords()) {
-            String rules2 = getRules(keyword);
-            String rules3 = rhs.getRules(keyword);
-            if (rules2 != rules3) {
-                if (rules2 == null || !rules2.equals(rules3)) {
-                    return false;
-                }
-            }
-        }
-        //        int limit = Math.max(getRepeatLimit(), rhs.getRepeatLimit());
-        //        for (int i = 0; i < limit * 2; ++i) {
-        //            if (!select(i).equals(rhs.select(i))) {
-        //                return false;
-        //            }
-        //        }
-        return true;
-    }
-
-    private int getRepeatLimit() {
-        if (repeatLimit == 0) {
-            repeatLimit = rules.getRepeatLimit() + 1;
-        }
-        return repeatLimit;
+        return rhs != null && toString().equals(rhs.toString());
     }
 
     /**
@@ -2030,14 +1935,14 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
      */
     public KeywordStatus getKeywordStatus(String keyword, int offset, Set<Double> explicits,
             Output<Double> uniqueValue) {
-
         if (uniqueValue != null) {
             uniqueValue.value = null;
         }
 
-        if (!rules.getKeywords().contains(keyword)) {
+        if (!keywords.contains(keyword)) {
             return KeywordStatus.INVALID;
         }
+
         Collection<Double> values = getAllKeywordValues(keyword);
         if (values == null) {
             return KeywordStatus.UNBOUNDED;
@@ -2100,10 +2005,27 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         return new PluralRulesSerialProxy(toString());
     }
 
-    /* @internal
-     * @deprecated
+    /**
+     * @internal
+     * @deprecated internal
      */
     public int compareTo(PluralRules other) {
-            return toString().compareTo(other.toString());
+        return toString().compareTo(other.toString());
+    }
+
+    /**
+     * @internal
+     * @deprecated internal
+     */
+    public Boolean isLimited(String keyword) {
+        return rules.isLimited(keyword, SampleType.INTEGER);
+    }
+
+    /**
+     * @internal
+     * @deprecated internal
+     */
+    public boolean isLimited(String keyword, SampleType sampleType) {
+        return rules.isLimited(keyword, sampleType);
     }
 }

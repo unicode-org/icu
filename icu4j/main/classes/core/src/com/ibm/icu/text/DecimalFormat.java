@@ -27,7 +27,7 @@ import com.ibm.icu.impl.Utility;
 import com.ibm.icu.lang.UCharacter;
 import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.math.MathContext;
-import com.ibm.icu.text.PluralRules.NumberInfo;
+import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.ULocale;
@@ -1264,7 +1264,7 @@ public class DecimalFormat extends NumberFormat {
                 f *= 10;
             }
         }
-        return currencyPluralInfo.select(new NumberInfo(number, v, f));
+        return currencyPluralInfo.select(new FixedDecimal(number, v, f));
     }
 
     private StringBuffer subformat(double number, StringBuffer result, FieldPosition fieldPosition,
