@@ -1078,18 +1078,43 @@ static void VerifyTranslation(void) {
                    log_err("ulocdata_getPaperSize did not return expected data for locale %s \n", currLoc);
                }
            }
-            /* test that the MeasurementSystem works API works */
+            /* test that the MeasurementSystem API works */
            {
-               UMeasurementSystem measurementSystem = ulocdata_getMeasurementSystem(currLoc, &errorCode);
-               if(U_FAILURE(errorCode)){
+               char fullLoc[ULOC_FULLNAME_CAPACITY];
+               UMeasurementSystem measurementSystem;
+               int32_t height = 0, width = 0;
+
+               uloc_addLikelySubtags(currLoc, fullLoc, ULOC_FULLNAME_CAPACITY, &errorCode);
+
+               errorCode = U_ZERO_ERROR;
+               measurementSystem = ulocdata_getMeasurementSystem(currLoc, &errorCode);
+               if (U_FAILURE(errorCode)) {
                    log_err("ulocdata_getMeasurementSystem failed for locale %s with error: %s \n", currLoc, u_errorName(errorCode));
-               }
-               if(strstr(currLoc, "_US")!=NULL || strstr(currLoc, "_MM")!=NULL || strstr(currLoc, "_LR")!=NULL){
-                   if(measurementSystem != UMS_US){
-                        log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
+               } else {
+                   if ( strstr(fullLoc, "_US")!=NULL || strstr(fullLoc, "_MM")!=NULL || strstr(fullLoc, "_LR")!=NULL ) {
+                       if(measurementSystem != UMS_US){
+                            log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
+                       }
+                   } else if (measurementSystem != UMS_SI) {
+                       log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
                    }
-               }else if(measurementSystem != UMS_SI){
-                   log_err("ulocdata_getMeasurementSystem did not return expected data for locale %s \n", currLoc);
+               }
+               
+               errorCode = U_ZERO_ERROR;
+               ulocdata_getPaperSize(currLoc, &height, &width, &errorCode);
+               if (U_FAILURE(errorCode)) {
+                   log_err("ulocdata_getPaperSize failed for locale %s with error: %s \n", currLoc, u_errorName(errorCode));
+               } else {
+                   if ( strstr(fullLoc, "_US")!=NULL || strstr(fullLoc, "_BZ")!=NULL || strstr(fullLoc, "_CA")!=NULL || strstr(fullLoc, "_CL")!=NULL ||
+                        strstr(fullLoc, "_CO")!=NULL || strstr(fullLoc, "_CR")!=NULL || strstr(fullLoc, "_GT")!=NULL || strstr(fullLoc, "_MX")!=NULL ||
+                        strstr(fullLoc, "_NI")!=NULL || strstr(fullLoc, "_PA")!=NULL || strstr(fullLoc, "_PH")!=NULL || strstr(fullLoc, "_PR")!=NULL ||
+                        strstr(fullLoc, "_SV")!=NULL || strstr(fullLoc, "_VE")!=NULL ) {
+                       if (height != 279 || width != 216) {
+                            log_err("ulocdata_getPaperSize did not return expected data for locale %s \n", currLoc);
+                       }
+                   } else if (height != 297 || width != 210) {
+                       log_err("ulocdata_getPaperSize did not return expected data for locale %s \n", currLoc);
+                   }
                }
            }
         }
