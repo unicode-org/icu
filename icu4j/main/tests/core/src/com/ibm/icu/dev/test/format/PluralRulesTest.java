@@ -34,9 +34,12 @@ import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.dev.util.Relation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.PluralRules.FixedDecimalRange;
+import com.ibm.icu.text.PluralRules.FixedDecimalSamples;
 import com.ibm.icu.text.PluralRules.KeywordStatus;
-import com.ibm.icu.text.PluralRules.NumberInfo;
+import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.text.PluralRules.PluralType;
+import com.ibm.icu.text.PluralRules.SampleType;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
@@ -52,6 +55,33 @@ public class PluralRulesTest extends TestFmwk {
 
     public static void main(String[] args) throws Exception {
         new PluralRulesTest().run(args);
+    }
+
+    public void testNewSamples() {
+        String description = "one: n is 3 or f is 5 @integer  3,19, @decimal 3.50 ~ 3.53,   …; other:  @decimal 99~103, 999, …";
+        PluralRules test = PluralRules.createRules(description);
+
+        checkNewSamples(description, test, "one", PluralRules.SampleType.INTEGER, "@integer 3, 19", true, new FixedDecimal(3));
+        checkNewSamples(description, test, "one", PluralRules.SampleType.DECIMAL, "@decimal 3.50~3.53, …", false, new FixedDecimal(3.5,2));
+        Collection<Double> oldSamples = test.getSamples("one");
+        assertEquals("getSamples; " + "one" + "; " + description, new TreeSet(Arrays.asList(3d, 19d, 3.5d, 3.51d, 3.52d, 3.53d)), oldSamples);
+
+        checkNewSamples(description, test, "other", PluralRules.SampleType.INTEGER, "", true, null);
+        checkNewSamples(description, test, "other", PluralRules.SampleType.DECIMAL, "@decimal 99~103, 999, …", false, new FixedDecimal(99d));
+        Collection<Double> oldSamples2 = test.getSamples("other");
+        assertEquals("getSamples; " + "other" + "; " + description, new TreeSet(Arrays.asList(99d, 100d, 101d, 102d, 103d, 999d)), oldSamples2);
+    }
+
+    public void checkNewSamples(String description, PluralRules test, String keyword, SampleType sampleType, 
+            String samplesString, boolean isBounded, FixedDecimal firstInRange) {
+        String title = description + ", " + sampleType;
+        FixedDecimalSamples samples = test.getDecimalSamples(keyword, sampleType);
+        if (samples != null) {
+            assertEquals("samples; " + title, samplesString, samples.toString());
+            assertEquals("bounded; " + title, isBounded, samples.bounded);
+            assertEquals("first; " + title, firstInRange, samples.samples.iterator().next().start);
+        }
+        assertEquals("limited: " + title, isBounded, test.isLimited(keyword, sampleType));
     }
 
     private static final String[] parseTestData = {
@@ -139,8 +169,8 @@ public class PluralRulesTest extends TestFmwk {
 
     private static String[][] operandTestData = {
         {"a: n 3", "FAIL"},
-        {"a: !n!≠!1,2; b: not n is 3..5; c:n≠5", "a:1,2; b:6,7; c:3,4"},
-        {"a: !n!≠!1,2; b: n!=3..5; c:n≠5", "a:1,2; b:6,7; c:3,4"},
+        {"a: n=1,2; b: n != 3..5; c:n!=5", "a:1,2; b:6,7; c:3,4"},
+        {"a: n=1,2; b: n!=3..5; c:n!=5", "a:1,2; b:6,7; c:3,4"},
         {"a: t is 1", "a:1.1,1.1000,99.100; other:1.2,1.0"},
         {"a: f is 1", "a:1.1; other:1.1000,99.100"},
         {"a: i is 2; b:i is 3", 
@@ -171,7 +201,7 @@ public class PluralRulesTest extends TestFmwk {
                 if (FAIL_EXPECTED) {
                     assertNull("Should fail with 'null' return.", rules);
                 } else {
-                    logln(rules.toString());
+                    logln(rules == null ? "null rules" : rules.toString());
                     checkCategoriesAndExpected(pattern, categoriesAndExpected, rules);
                 }
             } catch (Exception e) {
@@ -187,9 +217,16 @@ public class PluralRulesTest extends TestFmwk {
         main:
             for (ULocale locale : factory.getAvailableULocales()) {
                 PluralRules rules = factory.forLocale(locale);
-                Collection<NumberInfo> samples = rules.getFractionSamples();
                 Map<String,PluralRules> keywordToRule = new HashMap<String,PluralRules>();
+                Collection<FixedDecimalSamples> samples = new LinkedHashSet<FixedDecimalSamples>();
+
                 for (String keyword : rules.getKeywords()) {
+                    for (SampleType sampleType : SampleType.values()) {
+                        FixedDecimalSamples samples2 = rules.getDecimalSamples(keyword, sampleType);
+                        if (samples2 != null) {
+                            samples.add(samples2);
+                        }
+                    }
                     if (keyword.equals("other")) {
                         continue;
                     }
@@ -202,21 +239,30 @@ public class PluralRulesTest extends TestFmwk {
                     }
                     keywordToRule.put(keyword, singleRule);
                 }
-                Map<NumberInfo, String> collisionTest = new TreeMap();
-                for (NumberInfo sample : samples) {
-                    collisionTest.clear();
-                    for (Entry<String, PluralRules> entry: keywordToRule.entrySet()) {
-                        PluralRules rule = entry.getValue();
-                        String foundKeyword = rule.select(sample);
-                        if (foundKeyword.equals("other")) {
-                            continue;
-                        }
-                        String old = collisionTest.get(sample);
-                        if (old != null) {
-                            errln(locale + "\tNon-unique rules: " + sample + " => " + old + " & " + foundKeyword);
-                            rule.select(sample);
-                        } else {
-                            collisionTest.put(sample, foundKeyword);
+                Map<FixedDecimal, String> collisionTest = new TreeMap();
+                for (FixedDecimalSamples sample3 : samples) {
+                    Set<FixedDecimalRange> samples2 = sample3.getSamples();
+                    if (samples2 == null) {
+                        continue;
+                    }
+                    for (FixedDecimalRange sample : samples2) {
+                        for (int i = 0; i < 1; ++i) {
+                            FixedDecimal item = i == 0 ? sample.start : sample.end;
+                            collisionTest.clear();
+                            for (Entry<String, PluralRules> entry: keywordToRule.entrySet()) {
+                                PluralRules rule = entry.getValue();
+                                String foundKeyword = rule.select(item);
+                                if (foundKeyword.equals("other")) {
+                                    continue;
+                                }
+                                String old = collisionTest.get(item);
+                                if (old != null) {
+                                    errln(locale + "\tNon-unique rules: " + item + " => " + old + " & " + foundKeyword);
+                                    rule.select(item);
+                                } else {
+                                    collisionTest.put(item, foundKeyword);
+                                }
+                            }
                         }
                     }
                 }
@@ -247,8 +293,10 @@ public class PluralRulesTest extends TestFmwk {
     private static String[][] equalityTestData = {
         // once we add fractions, we had to retract the "test all possibilities" for equality,
         // so we only have a limited set of equality tests now.
-        { "a:n in 2;b:n in 5",
-        "b: n in 5;a: n in 2;" },
+        { "c: n%11!=5", "c: n mod 11 is not 5" },
+        { "c: n not is 7", "c: n != 7" },
+        { "a:n in 2;", "a: n = 2" },
+        { "b:n not in 5;", "b: n not = 5" },
 
         //        { "a: n is 5",
         //        "a: n in 2..6 and n not in 2..4 and n is not 6" },
@@ -278,7 +326,7 @@ public class PluralRulesTest extends TestFmwk {
             int start = shouldBeEqual ? i : i + 1;
             for (int j = start; j < objects.length; ++j) {
                 Object rhs = objects[j];
-                if (shouldBeEqual != lhs.equals(rhs)) {
+                if (rhs == null || shouldBeEqual != lhs.equals(rhs)) {
                     String msg = shouldBeEqual ? "should be equal" : "should not be equal";
                     fail(id + " " + msg + " (" + i + ", " + j + "):\n    " + lhs + "\n    " + rhs);
                 }
@@ -415,9 +463,10 @@ public class PluralRulesTest extends TestFmwk {
      * Tests getUniqueKeywordValue()
      */
     public void TestGetUniqueKeywordValue() {
+        assertRuleKeyValue("a: n is 1", "not_defined", PluralRules.NO_UNIQUE_VALUE); // key not defined
+        assertRuleValue("n within 2..2", 2);
         assertRuleValue("n is 1", 1);
         assertRuleValue("n in 2..2", 2);
-        assertRuleValue("n within 2..2", 2);
         assertRuleValue("n in 3..4", PluralRules.NO_UNIQUE_VALUE);
         assertRuleValue("n within 3..4", PluralRules.NO_UNIQUE_VALUE);
         assertRuleValue("n is 2 or n is 2", 2);
@@ -426,7 +475,6 @@ public class PluralRulesTest extends TestFmwk {
         assertRuleValue("n is 2 and n is 3", PluralRules.NO_UNIQUE_VALUE);
         assertRuleValue("n is 2 or n in 2..3", PluralRules.NO_UNIQUE_VALUE);
         assertRuleValue("n is 2 and n in 2..3", 2);
-        assertRuleKeyValue("a: n is 1", "not_defined", PluralRules.NO_UNIQUE_VALUE); // key not defined
         assertRuleKeyValue("a: n is 1", "other", PluralRules.NO_UNIQUE_VALUE); // key matches default rule
         assertRuleValue("n in 2,3", PluralRules.NO_UNIQUE_VALUE);
         assertRuleValue("n in 2,3..6 and n not in 2..3,5..6", 4);
@@ -449,12 +497,18 @@ public class PluralRulesTest extends TestFmwk {
                 Collection<Double> list = rules.getSamples(keyword);
                 logln("keyword: " + keyword + ", samples: " + list);
 
-                assertNotNull("list is not null", list);
+                assertNotNull("keyword: " + keyword + ", rules: " + rules + ": list is not null", list);
                 if (list != null) {
-                    assertTrue("list is not empty", !list.isEmpty());
-
-                    for (double value : list) {
-                        assertEquals("value " + value + " matches keyword", keyword, rules.select(value));
+                    if (!assertTrue(locale + "Testing getSamples.isEmpty for " + keyword + ", in " + rules.getRules(keyword), !list.isEmpty())) {
+                        int debugHere = 0;
+                        rules.getSamples(keyword);
+                    }
+                    if (rules.toString().contains(": j")) {
+                        // hack until we remove j
+                    } else {
+                        for (double value : list) {
+                            assertEquals(locale + " value " + value + " matching keyword", keyword, rules.select(value));
+                        }
                     }
                 }
             }
@@ -470,30 +524,33 @@ public class PluralRulesTest extends TestFmwk {
     public void TestGetAllKeywordValues() {
         // data is pairs of strings, the rule, and the expected values as arguments
         String[] data = {
-                "a: n in 2..5", "a: 2,3,4,5; other: null; b:",
+                "a: n mod 3 is 0", "a: null",
+                "a: n in 2..5 and n within 5..8", "a: 5",
+                "a: n in 2..5", "a: 2,3,4,5; other: null",
                 "a: n not in 2..5", "a: null; other: null",
                 "a: n within 2..5", "a: null; other: null",
                 "a: n not within 2..5", "a: null; other: null",
                 "a: n in 2..5 or n within 6..8", "a: null", // ignore 'other' here on out, always null
                 "a: n in 2..5 and n within 6..8", "a:",
-                "a: n in 2..5 and n within 5..8", "a: 5",
-                "a: n within 2..5 and n within 6..8", "a:", // our sampling catches these
-                "a: n within 2..5 and n within 5..8", "a: 5", // ''
-                "a: n within 1..2 and n within 2..3 or n within 3..4 and n within 4..5", "a: 2,4",
-                "a: n within 1..2 and n within 2..3 or n within 3..4 and n within 4..5 " +
-                        "or n within 5..6 and n within 6..7", "a: null", // but not this...
-                        "a: n mod 3 is 0", "a: null",
-                        "a: n mod 3 is 0 and n within 1..2", "a:",
-                        "a: n mod 3 is 0 and n within 0..5", "a: 0,3",
-                        "a: n mod 3 is 0 and n within 0..6", "a: null", // similarly with mod, we don't catch...
-                        "a: n mod 3 is 0 and n in 3..12", "a: 3,6,9,12",
-                        "a: n in 2,4..6 and n is not 5", "a: 2,4,6",
+                // we no longer support 'degenerate' rules
+                //                "a: n within 2..5 and n within 6..8", "a:", // our sampling catches these
+                //                "a: n within 2..5 and n within 5..8", "a: 5", // ''
+                //                "a: n within 1..2 and n within 2..3 or n within 3..4 and n within 4..5", "a: 2,4",
+                //                "a: n mod 3 is 0 and n within 0..5", "a: 0,3",
+                "a: n within 1..2 and n within 2..3 or n within 3..4 and n within 4..5 or n within 5..6 and n within 6..7", "a: null", // but not this...
+                "a: n mod 3 is 0 and n within 1..2", "a: null",
+                "a: n mod 3 is 0 and n within 0..6", "a: null", // similarly with mod, we don't catch...
+                "a: n mod 3 is 0 and n in 3..12", "a: 3,6,9,12",
+                "a: n in 2,4..6 and n is not 5", "a: 2,4,6",
         };
         for (int i = 0; i < data.length; i += 2) {
             String ruleDescription = data[i];
             String result = data[i+1];
 
             PluralRules p = PluralRules.createRules(ruleDescription);
+            if (p == null) { // for debugging
+                PluralRules.createRules(ruleDescription);
+            }
             for (String ruleResult : result.split(";")) {
                 String[] ruleAndValues = ruleResult.split(":");
                 String keyword = ruleAndValues[0].trim();
@@ -503,18 +560,18 @@ public class PluralRulesTest extends TestFmwk {
                 }
                 Collection<Double> values;
                 if (valueList == null || valueList.length() == 0) {
-                    values = Collections.<Double>emptyList();
+                    values = Collections.EMPTY_SET;
                 } else if ("null".equals(valueList)) {
                     values = null;
                 } else {
-                    values = new ArrayList<Double>();
+                    values = new TreeSet<Double>();
                     for (String value : valueList.split(",")) {
                         values.add(Double.parseDouble(value));
                     }
                 }
 
                 Collection<Double> results = p.getAllKeywordValues(keyword);
-                assertEquals("keyword '" + keyword + "'", values, results);
+                assertEquals(keyword + " in " + ruleDescription, values, results);
 
                 if (results != null) {
                     try {
@@ -662,8 +719,9 @@ public class PluralRulesTest extends TestFmwk {
                 Set<ULocale> locales = data.get(rule);
                 System.out.print("        \"" + CollectionUtilities.join(locales, ","));
                 for (StandardPluralCategories spc : set) {
-                    Collection<NumberInfo> samples = rule.getFractionSamples(spc.toString());
-                    System.out.print("; " + spc + ": " + CollectionUtilities.join(samples, ", "));
+                    String keyword = spc.toString();
+                    FixedDecimalSamples samples = rule.getDecimalSamples(keyword, SampleType.INTEGER);
+                    System.out.print("; " + spc + ": " + samples);
                 }
                 System.out.println("\",");
             }
