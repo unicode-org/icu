@@ -393,7 +393,7 @@ DecimalFormat::init() {
     fFormatWidth = 0;
     fPadPosition = kPadBeforePrefix;
     fStyle = UNUM_DECIMAL;
-    fCurrencySignCount = 0;
+    fCurrencySignCount = fgCurrencySignCountZero;
     fAffixPatternsForCurrency = NULL;
     fAffixesForCurrency = NULL;
     fPluralAffixesForCurrency = NULL;
@@ -548,7 +548,7 @@ DecimalFormat::construct(UErrorCode&            status,
 
     // If it was a currency format, apply the appropriate rounding by
     // resetting the currency. NOTE: this copies fCurrency on top of itself.
-    if (fCurrencySignCount > fgCurrencySignCountZero) {
+    if (fCurrencySignCount != fgCurrencySignCountZero) {
         setCurrencyInternally(getCurrency(), status);
     }
 #if UCONFIG_FORMAT_FASTPATHS_49
@@ -1103,8 +1103,8 @@ void DecimalFormat::handleChanged() {
     debug("No format fastpath: fDecimalSeparatorAlwaysShown");
   } else if(getMinimumFractionDigits()>0) {
     debug("No format fastpath: fMinFractionDigits>0");
-  } else if(fCurrencySignCount > fgCurrencySignCountZero) {
-    debug("No format fastpath: fCurrencySignCount > fgCurrencySignCountZero");
+  } else if(fCurrencySignCount != fgCurrencySignCountZero) {
+    debug("No format fastpath: fCurrencySignCount != fgCurrencySignCountZero");
   } else if(fRoundingIncrement!=0) {
     debug("No format fastpath: fRoundingIncrement!=0");
   } else {
@@ -1572,16 +1572,16 @@ DecimalFormat::subformat(UnicodeString& appendTo,
     localizedDigits[9] = getConstSymbol(DecimalFormatSymbols::kNineDigitSymbol).char32At(0);
 
     const UnicodeString *grouping ;
-    if(fCurrencySignCount > fgCurrencySignCountZero) {
-        grouping = &getConstSymbol(DecimalFormatSymbols::kMonetaryGroupingSeparatorSymbol);
-    }else{
+    if(fCurrencySignCount == fgCurrencySignCountZero) {
         grouping = &getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
+    }else{
+        grouping = &getConstSymbol(DecimalFormatSymbols::kMonetaryGroupingSeparatorSymbol);
     }
     const UnicodeString *decimal;
-    if(fCurrencySignCount > fgCurrencySignCountZero) {
-        decimal = &getConstSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol);
-    } else {
+    if(fCurrencySignCount == fgCurrencySignCountZero) {
         decimal = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
+    } else {
+        decimal = &getConstSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol);
     }
     UBool useSigDig = areSignificantDigitsUsed();
     int32_t maxIntDig = getMaximumIntegerDigits();
@@ -2017,7 +2017,7 @@ void DecimalFormat::parse(const UnicodeString& text,
         return;    // no way to report error from here.
     }
 
-    if (fCurrencySignCount > fgCurrencySignCountZero) {
+    if (fCurrencySignCount != fgCurrencySignCountZero) {
         if (!parseForCurrency(text, parsePosition, *digits,
                               status, currency)) {
           return;
@@ -2162,16 +2162,21 @@ DecimalFormat::parseForCurrency(const UnicodeString& text,
     // and the parse stops at "\u00A4".
     // We will just use simple affix comparison (look for exact match)
     // to pass it.
+    //
+    // TODO: We should parse against simple affix first when
+    // output currency is not requested. After the complex currency
+    // parsing implementation was introduced, the default currency
+    // instance parsing slowed down because of the new code flow.
+    // I filed #10312 - Yoshito
     UBool tmpStatus_2[fgStatusLength];
     ParsePosition tmpPos_2(origPos);
     DigitList tmpDigitList_2;
-    // set currencySignCount to 0 so that compareAffix function will
-    // fall to compareSimpleAffix path, not compareComplexAffix path.
-    // ?? TODO: is it right? need "false"?
+
+    // Disable complex currency parsing and try it again.
     UBool result = subparse(text,
                             &fNegativePrefix, &fNegativeSuffix,
                             &fPositivePrefix, &fPositiveSuffix,
-                            FALSE, UCURR_SYMBOL_NAME,
+                            FALSE /* disable complex currency parsing */, UCURR_SYMBOL_NAME,
                             tmpPos_2, tmpDigitList_2, tmpStatus_2,
                             currency);
     if (result) {
@@ -2207,7 +2212,7 @@ DecimalFormat::parseForCurrency(const UnicodeString& text,
  * @param negSuffix negative suffix.
  * @param posPrefix positive prefix.
  * @param posSuffix positive suffix.
- * @param currencyParsing whether it is currency parsing or not.
+ * @param complexCurrencyParsing whether it is complex currency parsing or not.
  * @param type the currency type to parse against, LONG_NAME only or not.
  * @param parsePosition The position at which to being parsing.  Upon
  * return, the first unparsed character.
@@ -2224,7 +2229,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
                               const UnicodeString* negSuffix,
                               const UnicodeString* posPrefix,
                               const UnicodeString* posSuffix,
-                              UBool currencyParsing,
+                              UBool complexCurrencyParsing,
                               int8_t type,
                               ParsePosition& parsePosition,
                               DigitList& digits, UBool* status,
@@ -2242,7 +2247,8 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
     int32_t textLength = text.length(); // One less pointer to follow
     UBool strictParse = !isLenient();
     UChar32 zero = getConstSymbol(DecimalFormatSymbols::kZeroDigitSymbol).char32At(0);
-    const UnicodeString *groupingString = &getConstSymbol(DecimalFormatSymbols::kGroupingSeparatorSymbol);
+    const UnicodeString *groupingString = &getConstSymbol(fCurrencySignCount == fgCurrencySignCountZero ?
+        DecimalFormatSymbols::kGroupingSeparatorSymbol : DecimalFormatSymbols::kMonetaryGroupingSeparatorSymbol);
     UChar32 groupingChar = groupingString->char32At(0);
     int32_t groupingStringLength = groupingString->length();
     int32_t groupingCharLength   = U16_LENGTH(groupingChar);
@@ -2264,7 +2270,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
     // UBool fastParseHadDecimal = FALSE; /* true if fast parse saw a decimal point. */
     const DecimalFormatInternal &data = internalData(fReserved);
     if((data.fFastParseStatus==kFastpathYES) &&
-       !currencyParsing &&
+       fCurrencySignCount == fgCurrencySignCountZero &&
        //       (negPrefix!=NULL&&negPrefix->isEmpty()) ||
        text.length()>0 &&
        text.length()<32 &&
@@ -2383,8 +2389,8 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
     }
 
     // Match positive and negative prefixes; prefer longest match.
-    int32_t posMatch = compareAffix(text, position, FALSE, TRUE, posPrefix, currencyParsing, type, currency);
-    int32_t negMatch = compareAffix(text, position, TRUE,  TRUE, negPrefix, currencyParsing, type, currency);
+    int32_t posMatch = compareAffix(text, position, FALSE, TRUE, posPrefix, complexCurrencyParsing, type, currency);
+    int32_t negMatch = compareAffix(text, position, TRUE,  TRUE, negPrefix, complexCurrencyParsing, type, currency);
     if (posMatch >= 0 && negMatch >= 0) {
         if (posMatch > negMatch) {
             negMatch = -1;
@@ -2439,7 +2445,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
         int32_t gs2 = fGroupingSize2 == 0 ? fGroupingSize : fGroupingSize2;
 
         const UnicodeString *decimalString;
-        if (fCurrencySignCount > fgCurrencySignCountZero) {
+        if (fCurrencySignCount != fgCurrencySignCountZero) {
             decimalString = &getConstSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol);
         } else {
             decimalString = &getConstSymbol(DecimalFormatSymbols::kDecimalSeparatorSymbol);
@@ -2712,10 +2718,10 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
 
     // Match positive and negative suffixes; prefer longest match.
     if (posMatch >= 0 || (!strictParse && negMatch < 0)) {
-        posSuffixMatch = compareAffix(text, position, FALSE, FALSE, posSuffix, currencyParsing, type, currency);
+        posSuffixMatch = compareAffix(text, position, FALSE, FALSE, posSuffix, complexCurrencyParsing, type, currency);
     }
     if (negMatch >= 0) {
-        negSuffixMatch = compareAffix(text, position, TRUE, FALSE, negSuffix, currencyParsing, type, currency);
+        negSuffixMatch = compareAffix(text, position, TRUE, FALSE, negSuffix, complexCurrencyParsing, type, currency);
     }
     if (posSuffixMatch >= 0 && negSuffixMatch >= 0) {
         if (posSuffixMatch > negSuffixMatch) {
@@ -2806,7 +2812,7 @@ int32_t DecimalFormat::skipPadding(const UnicodeString& text, int32_t position) 
  * @param isNegative
  * @param isPrefix
  * @param affixPat affix pattern used for currency affix comparison.
- * @param currencyParsing whether it is currency parsing or not
+ * @param copmplexCurrencyParsing whether it is currency parsing or not
  * @param type the currency type to parse against, LONG_NAME only or not.
  * @param currency return value for parsed currency, for generic
  * currency parsing mode, or null for normal parsing. In generic
@@ -2819,13 +2825,13 @@ int32_t DecimalFormat::compareAffix(const UnicodeString& text,
                                     UBool isNegative,
                                     UBool isPrefix,
                                     const UnicodeString* affixPat,
-                                    UBool currencyParsing,
+                                    UBool copmplexCurrencyParsing,
                                     int8_t type,
                                     UChar* currency) const
 {
     const UnicodeString *patternToCompare;
     if (fCurrencyChoice != NULL || currency != NULL ||
-        (fCurrencySignCount > fgCurrencySignCountZero && currencyParsing)) {
+        (fCurrencySignCount != fgCurrencySignCountZero && copmplexCurrencyParsing)) {
 
         if (affixPat != NULL) {
             return compareComplexAffix(*affixPat, text, pos, type, currency);
@@ -3044,7 +3050,7 @@ int32_t DecimalFormat::compareComplexAffix(const UnicodeString& affixPat,
     int32_t start = pos;
     U_ASSERT(currency != NULL ||
              (fCurrencyChoice != NULL && *getCurrency() != 0) ||
-             fCurrencySignCount > fgCurrencySignCountZero);
+             fCurrencySignCount != fgCurrencySignCountZero);
 
     for (int32_t i=0;
          i<affixPat.length() && pos >= 0; ) {
@@ -3285,7 +3291,7 @@ DecimalFormat::adoptCurrencyPluralInfo(CurrencyPluralInfo* toAdopt)
         delete fCurrencyPluralInfo;
         fCurrencyPluralInfo = toAdopt;
         // re-set currency affix patterns and currency affixes.
-        if (fCurrencySignCount > fgCurrencySignCountZero) {
+        if (fCurrencySignCount != fgCurrencySignCountZero) {
             UErrorCode status = U_ZERO_ERROR;
             if (fAffixPatternsForCurrency) {
                 deleteHashForAffixPattern();
@@ -5118,7 +5124,7 @@ DecimalFormat::applyPatternWithoutExpandAffix(const UnicodeString& pattern,
         setMaximumFractionDigits(kDoubleFractionDigits);
 
         fUseExponentialNotation = FALSE;
-        fCurrencySignCount = 0;
+        fCurrencySignCount = fgCurrencySignCountZero;
         setGroupingUsed(FALSE);
         fGroupingSize = 0;
         fGroupingSize2 = 0;
@@ -5325,7 +5331,7 @@ void DecimalFormat::setCurrencyInternally(const UChar* theCurrency,
 
     double rounding = 0.0;
     int32_t frac = 0;
-    if (fCurrencySignCount > fgCurrencySignCountZero && isCurr) {
+    if (fCurrencySignCount != fgCurrencySignCountZero && isCurr) {
         rounding = ucurr_getRoundingIncrement(theCurrency, &ec);
         frac = ucurr_getDefaultFractionDigits(theCurrency, &ec);
     }
@@ -5333,7 +5339,7 @@ void DecimalFormat::setCurrencyInternally(const UChar* theCurrency,
     NumberFormat::setCurrency(theCurrency, ec);
     if (U_FAILURE(ec)) return;
 
-    if (fCurrencySignCount > fgCurrencySignCountZero) {
+    if (fCurrencySignCount != fgCurrencySignCountZero) {
         // NULL or empty currency is *legal* and indicates no currency.
         if (isCurr) {
             setRoundingIncrement(rounding);

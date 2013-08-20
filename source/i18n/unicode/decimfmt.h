@@ -1982,7 +1982,7 @@ private:
                    const UnicodeString* negSuffix,
                    const UnicodeString* posPrefix,
                    const UnicodeString* posSuffix,
-                   UBool currencyParsing,
+                   UBool complexCurrencyParsing,
                    int8_t type,
                    ParsePosition& parsePosition,
                    DigitList& digits, UBool* status,
@@ -2006,7 +2006,7 @@ private:
                          UBool isNegative,
                          UBool isPrefix,
                          const UnicodeString* affixPat,
-                         UBool currencyParsing,
+                         UBool complexCurrencyParsing,
                          int8_t type,
                          UChar* currency) const;
 
