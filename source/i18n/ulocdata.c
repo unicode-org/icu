@@ -209,6 +209,9 @@ static UResourceBundle * measurementTypeBundleForLocale(const char *localeID, co
         }
         if (*status == U_MISSING_RESOURCE_ERROR) {
             *status = U_ZERO_ERROR;
+            if (measDataBundle != NULL) {
+                ures_close(measDataBundle);
+            }
             measDataBundle = ures_getByKey(rb, "001", NULL, status);
             measTypeBundle = ures_getByKey(measDataBundle, measurementType, NULL, status);
         }
