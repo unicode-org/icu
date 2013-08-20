@@ -128,6 +128,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestBug9936);
   TESTCASE_AUTO(TestParseNegativeWithFaLocale);
   TESTCASE_AUTO(TestParseNegativeWithAlternateMinusSign);
+  TESTCASE_AUTO(TestCustomCurrecySignAndSeparator);
   TESTCASE_AUTO_END;
 }
 
@@ -7146,6 +7147,25 @@ void NumberFormatTest::TestParseNegativeWithAlternateMinusSign() {
         errln(UnicodeString("Expected ") + value + UnicodeString(" to parse."));
     }
     delete test;
+}
+
+void NumberFormatTest::TestCustomCurrecySignAndSeparator() {
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormatSymbols custom(Locale::getUS(), status);
+    CHECK(status, "DecimalFormatSymbols constructor");
+
+    custom.setSymbol(DecimalFormatSymbols::kCurrencySymbol, "*");
+    custom.setSymbol(DecimalFormatSymbols::kMonetaryGroupingSeparatorSymbol, "^");
+    custom.setSymbol(DecimalFormatSymbols::kMonetarySeparatorSymbol, ":");
+
+    UnicodeString pat(" #,##0.00");
+    pat.insert(0, (UChar)0x00A4);
+
+    DecimalFormat fmt(pat, custom, status);
+    CHECK(status, "DecimalFormat constructor");
+
+    UnicodeString numstr("* 1^234:56");
+    expect2(fmt, (Formattable)((double)1234.56), numstr);
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
