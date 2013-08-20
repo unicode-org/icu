@@ -3312,4 +3312,17 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             assertEquals(test[0] + "\t" + test[1] + "\t" + test[2], test[3], actual);
         }
     }
+
+    public void TestCustomCurrecySignAndSeparator() {
+        DecimalFormatSymbols custom = new DecimalFormatSymbols(ULocale.US);
+
+        custom.setCurrencySymbol("*");
+        custom.setMonetaryGroupingSeparator('^');
+        custom.setMonetaryDecimalSeparator(':');
+
+        DecimalFormat fmt = new DecimalFormat("\u00A4 #,##0.00", custom);
+
+        final String numstr = "* 1^234:56";
+        expect2(fmt, 1234.56, numstr);
+    }
 }
