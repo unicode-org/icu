@@ -678,6 +678,13 @@ _getKeywords(const char *localeID,
                     keywordList[numKeywords].keyword[n++] = uprv_tolower(pos[i]);
                 }
             }
+
+            /* zero-length keyword is an error. */
+            if (n == 0) {
+                *status = U_INVALID_FORMAT_ERROR;
+                return 0;
+            }
+
             keywordList[numKeywords].keyword[n] = 0;
             keywordList[numKeywords].keywordLen = n;
             /* now grab the value part. First we skip the '=' */
@@ -686,8 +693,15 @@ _getKeywords(const char *localeID,
             while(*equalSign == ' ') {
                 equalSign++;
             }
+
+            /* Premature end or zero-length value */
+            if (!equalSign || equalSign == semicolon) {
+                *status = U_INVALID_FORMAT_ERROR;
+                return 0;
+            }
+
             keywordList[numKeywords].valueStart = equalSign;
-            
+
             pos = semicolon;
             i = 0;
             if(pos) {
