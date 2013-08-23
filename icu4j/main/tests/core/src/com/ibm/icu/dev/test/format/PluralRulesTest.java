@@ -57,19 +57,99 @@ public class PluralRulesTest extends TestFmwk {
         new PluralRulesTest().run(args);
     }
 
-    public void testNewSamples() {
-        String description = "one: n is 3 or f is 5 @integer  3,19, @decimal 3.50 ~ 3.53,   …; other:  @decimal 99~103, 999, …";
+    public void testSyntaxRestrictions() {
+        Object[][] shouldFail = {
+                {"a:n in 3..10,13..19"},
+
+                // = and != always work
+                {"a:n=1"},
+                {"a:n=1,3"},
+                {"a:n!=1"},
+                {"a:n!=1,3"},
+
+                // with spacing
+                {"a: n = 1"},
+                {"a: n = 1, 3"},
+                {"a: n != 1"},
+                {"a: n != 1, 3"},
+                {"a: n ! = 1"},
+                {"a: n ! = 1, 3"},
+                {"a: n = 1 , 3"},
+                {"a: n != 1 , 3"},
+                {"a: n ! = 1 , 3"},
+                {"a: n = 1 .. 3"},
+                {"a: n != 1 .. 3"},
+                {"a: n ! = 1 .. 3"},
+                
+                // more complicated
+                {"a:n in 3 .. 10 , 13 .. 19"},
+
+                // singles have special exceptions
+                {"a: n is 1"},
+                {"a: n is not 1"},
+                {"a: n not is 1", ParseException.class}, // hacked to fail
+                {"a: n in 1"},
+                {"a: n not in 1"},
+                
+                // multiples also have special exceptions
+                // TODO enable the following once there is an update to CLDR
+                // {"a: n is 1,3", ParseException.class},
+                {"a: n is not 1,3", ParseException.class}, // hacked to fail
+                {"a: n not is 1,3", ParseException.class}, // hacked to fail
+                {"a: n in 1,3"},
+                {"a: n not in 1,3"},
+
+                // disallow not with =
+                {"a: n not= 1", ParseException.class}, // hacked to fail
+                {"a: n not= 1,3", ParseException.class}, // hacked to fail
+
+                // disallow double negatives
+                {"a: n ! is not 1", ParseException.class},
+                {"a: n ! is not 1", ParseException.class},
+                {"a: n not not in 1", ParseException.class},
+                {"a: n is not not 1", NumberFormatException.class},
+
+                // disallow screwy cases
+                {null, NullPointerException.class},
+                {"djkl;", ParseException.class},
+                {"a: n = 1 .", ParseException.class},
+                {"a: n = 1 ..", ParseException.class},
+                {"a: n = 1 2", ParseException.class},
+                {"a: n = 1 ,", ParseException.class},
+                {"a:n in 3 .. 10 , 13 .. 19 ,", ParseException.class},
+        };
+        for (Object[] shouldFailTest : shouldFail) {
+            String rules = (String) shouldFailTest[0];
+            Class exception = shouldFailTest.length < 2 ? null : (Class) shouldFailTest[1];
+            Class actualException = null;
+            try {
+                PluralRules test = PluralRules.parseDescription(rules);
+            } catch (Exception e) {
+                actualException = e.getClass();
+            }
+            assertEquals("Exception " + rules, exception, actualException);
+        }
+    }
+    public void testSamples() {
+        String description = "one: n is 3 or f is 5 @integer  3,19, @decimal 3.50 ~ 3.53,   …; other:  @decimal 99.0~99.2, 999.0, …";
         PluralRules test = PluralRules.createRules(description);
 
         checkNewSamples(description, test, "one", PluralRules.SampleType.INTEGER, "@integer 3, 19", true, new FixedDecimal(3));
         checkNewSamples(description, test, "one", PluralRules.SampleType.DECIMAL, "@decimal 3.50~3.53, …", false, new FixedDecimal(3.5,2));
-        Collection<Double> oldSamples = test.getSamples("one");
-        assertEquals("getSamples; " + "one" + "; " + description, new TreeSet(Arrays.asList(3d, 19d, 3.5d, 3.51d, 3.52d, 3.53d)), oldSamples);
+        checkOldSamples(description, test, "one", SampleType.INTEGER, 3d, 19d);
+        checkOldSamples(description, test, "one", SampleType.DECIMAL, 3.5d, 3.51d, 3.52d, 3.53d);
 
         checkNewSamples(description, test, "other", PluralRules.SampleType.INTEGER, "", true, null);
-        checkNewSamples(description, test, "other", PluralRules.SampleType.DECIMAL, "@decimal 99~103, 999, …", false, new FixedDecimal(99d));
-        Collection<Double> oldSamples2 = test.getSamples("other");
-        assertEquals("getSamples; " + "other" + "; " + description, new TreeSet(Arrays.asList(99d, 100d, 101d, 102d, 103d, 999d)), oldSamples2);
+        checkNewSamples(description, test, "other", PluralRules.SampleType.DECIMAL, "@decimal 99.0~99.2, 999.0, …", false, new FixedDecimal(99d,1));
+        checkOldSamples(description, test, "other", SampleType.INTEGER);
+        checkOldSamples(description, test, "other", SampleType.DECIMAL, 99d, 99.1, 99.2d, 999d);
+    }
+
+    public void checkOldSamples(String description, PluralRules rules, String keyword, SampleType sampleType, Double... expected) {
+        Collection<Double> oldSamples = rules.getSamples(keyword, sampleType);
+        if (!assertEquals("getOldSamples; " + keyword + "; " + description, new HashSet(Arrays.asList(expected)), oldSamples)) {
+            rules.getSamples(keyword, sampleType);
+        }
     }
 
     public void checkNewSamples(String description, PluralRules test, String keyword, SampleType sampleType, 
@@ -269,7 +349,7 @@ public class PluralRulesTest extends TestFmwk {
             }
     }
 
-    private void checkCategoriesAndExpected(String title, String categoriesAndExpected, PluralRules rules) {
+    private void checkCategoriesAndExpected(String title1, String categoriesAndExpected, PluralRules rules) {
         for (String categoryAndExpected : categoriesAndExpected.split("\\s*;\\s*")) {
             String[] categoryFromExpected = categoryAndExpected.split("\\s*:\\s*");
             String expected = categoryFromExpected[0];
@@ -285,7 +365,8 @@ public class PluralRulesTest extends TestFmwk {
                     fractionaldigits = Integer.parseInt(value.substring(decimalPos));
                 }
                 String result = rules.select(number, countVisibleFractionDigits, fractionaldigits);
-                assertEquals("testing <" + title + "> with <" + value + ">", expected, result);
+                ULocale locale = null;
+                assertEquals(getAssertMessage(title1, locale, rules, expected) + "; value: " + value, expected, result);
             }
         }
     }
@@ -294,9 +375,9 @@ public class PluralRulesTest extends TestFmwk {
         // once we add fractions, we had to retract the "test all possibilities" for equality,
         // so we only have a limited set of equality tests now.
         { "c: n%11!=5", "c: n mod 11 is not 5" },
-        { "c: n not is 7", "c: n != 7" },
+        { "c: n is not 7", "c: n != 7" },
         { "a:n in 2;", "a: n = 2" },
-        { "b:n not in 5;", "b: n not = 5" },
+        { "b:n not in 5;", "b: n != 5" },
 
         //        { "a: n is 5",
         //        "a: n in 2..6 and n not in 2..4 and n is not 6" },
@@ -496,10 +577,16 @@ public class PluralRulesTest extends TestFmwk {
             for (String keyword : keywords) {
                 Collection<Double> list = rules.getSamples(keyword);
                 logln("keyword: " + keyword + ", samples: " + list);
-
-                assertNotNull("keyword: " + keyword + ", rules: " + rules + ": list is not null", list);
-                if (list != null) {
-                    if (!assertTrue(locale + "Testing getSamples.isEmpty for " + keyword + ", in " + rules.getRules(keyword), !list.isEmpty())) {
+                // with fractions, the samples can be empty and thus the list null. In that case, however, there will be FixedDecimal values.
+                // So patch the test for that.
+                if (list.size() == 0) {
+                    // when the samples (meaning integer samples) are null, then then integerSamples must be, and the decimalSamples must not be
+                    FixedDecimalSamples integerSamples = rules.getDecimalSamples(keyword, SampleType.INTEGER);
+                    FixedDecimalSamples decimalSamples = rules.getDecimalSamples(keyword, SampleType.DECIMAL);
+                    assertTrue(getAssertMessage("List is not null", locale, rules, keyword), 
+                            integerSamples == null && decimalSamples != null && decimalSamples.samples.size() != 0);
+                } else {
+                    if (!assertTrue(getAssertMessage("Test getSamples.isEmpty", locale, rules, keyword), !list.isEmpty())) {
                         int debugHere = 0;
                         rules.getSamples(keyword);
                     }
@@ -507,14 +594,35 @@ public class PluralRulesTest extends TestFmwk {
                         // hack until we remove j
                     } else {
                         for (double value : list) {
-                            assertEquals(locale + " value " + value + " matching keyword", keyword, rules.select(value));
+                            assertEquals(getAssertMessage("Match keyword", locale, rules, keyword) +  "; value '" + value + "'", keyword, rules.select(value));
                         }
                     }
                 }
             }
 
-            assertNull("list is null", rules.getSamples("@#$%^&*"));
+            assertNull(locale + ", list is null", rules.getSamples("@#$%^&*"));
+            assertNull(locale + ", list is null", rules.getSamples("@#$%^&*", SampleType.DECIMAL));
         }
+    }
+
+    public String getAssertMessage(String message, ULocale locale, PluralRules rules, String keyword) {
+        String ruleString = "";
+        if (keyword != null) { 
+            if (keyword.equals("other")) {
+                for (String keyword2 : rules.getKeywords()) {
+                    ruleString += " NOR " + rules.getRules(keyword2).split("@")[0];
+                }
+            } else {
+                String rule = rules.getRules(keyword);
+                ruleString = rule == null ? null : rule.split("@")[0];
+            }
+            ruleString =  "; rule: '" + keyword + ": " + ruleString + "'";
+            //            !keyword.equals("other") ? "'; keyword: '" + keyword + "'; rule: '" + rules.getRules(keyword) + "'"
+            //                    : "'; keyword: '" + keyword + "'; rules: '" + rules.toString() + "'";
+        }
+        return message 
+                + (locale == null ? "" : "; locale: '" + locale + "'")
+                + ruleString;
     }
 
     /**
@@ -524,22 +632,22 @@ public class PluralRulesTest extends TestFmwk {
     public void TestGetAllKeywordValues() {
         // data is pairs of strings, the rule, and the expected values as arguments
         String[] data = {
-                "a: n mod 3 is 0", "a: null",
+                "other: ; a: n mod 3 is 0", "a: null",
                 "a: n in 2..5 and n within 5..8", "a: 5",
                 "a: n in 2..5", "a: 2,3,4,5; other: null",
                 "a: n not in 2..5", "a: null; other: null",
-                "a: n within 2..5", "a: null; other: null",
+                "a: n within 2..5", "a: 2,3,4,5; other: null",
                 "a: n not within 2..5", "a: null; other: null",
-                "a: n in 2..5 or n within 6..8", "a: null", // ignore 'other' here on out, always null
-                "a: n in 2..5 and n within 6..8", "a:",
+                "a: n in 2..5 or n within 6..8", "a: 2,3,4,5,6,7,8", // ignore 'other' here on out, always null
+                "a: n in 2..5 and n within 6..8", "a: null",
                 // we no longer support 'degenerate' rules
                 //                "a: n within 2..5 and n within 6..8", "a:", // our sampling catches these
                 //                "a: n within 2..5 and n within 5..8", "a: 5", // ''
                 //                "a: n within 1..2 and n within 2..3 or n within 3..4 and n within 4..5", "a: 2,4",
                 //                "a: n mod 3 is 0 and n within 0..5", "a: 0,3",
-                "a: n within 1..2 and n within 2..3 or n within 3..4 and n within 4..5 or n within 5..6 and n within 6..7", "a: null", // but not this...
+                "a: n within 1..2 and n within 2..3 or n within 3..4 and n within 4..5 or n within 5..6 and n within 6..7", "a: 2,4,6", // but not this...
                 "a: n mod 3 is 0 and n within 1..2", "a: null",
-                "a: n mod 3 is 0 and n within 0..6", "a: null", // similarly with mod, we don't catch...
+                "a: n mod 3 is 0 and n within 0..6", "a: 0,3,6",
                 "a: n mod 3 is 0 and n in 3..12", "a: 3,6,9,12",
                 "a: n in 2,4..6 and n is not 5", "a: 2,4,6",
         };
@@ -571,7 +679,7 @@ public class PluralRulesTest extends TestFmwk {
                 }
 
                 Collection<Double> results = p.getAllKeywordValues(keyword);
-                assertEquals(keyword + " in " + ruleDescription, values, results);
+                assertEquals(keyword + " in " + ruleDescription, values, results == null ? null : new HashSet(results));
 
                 if (results != null) {
                     try {
@@ -590,37 +698,73 @@ public class PluralRulesTest extends TestFmwk {
         assertEquals("PluralRules(en-ordinal).select(2)", "two", pr.select(2));
     }
 
+    public void TestLimitedAndSamplesConsistency() {
+        for (ULocale locale : PluralRules.getAvailableULocales()) {
+            ULocale loc2 = PluralRules.getFunctionalEquivalent(locale, null);
+            if (!loc2.equals(locale)) {
+                continue; // only need "unique" rules
+            }
+            for (PluralType type : PluralType.values()) {
+                PluralRules rules = PluralRules.forLocale(locale, type);
+                for (SampleType sampleType : SampleType.values()) {
+                    for (String keyword : rules.getKeywords()) {
+                        boolean isLimited = rules.isLimited(keyword, sampleType);
+                        boolean computeLimited = rules.computeLimited(keyword, sampleType);
+                        if (!keyword.equals("other")) {
+                            assertEquals(getAssertMessage("computeLimited == isLimited", locale, rules, keyword), computeLimited, isLimited);
+                        }
+                        Collection<Double> samples = rules.getSamples(keyword, sampleType);
+                        FixedDecimalSamples decimalSamples = rules.getDecimalSamples(keyword, sampleType);
+                        assertNotNull(getAssertMessage("Samples must not be null", locale, rules, keyword), samples);
+                        //assertNotNull(getAssertMessage("Decimal samples must be null if unlimited", locale, rules, keyword), decimalSamples);
+                    }
+                }
+            }
+        }
+    }
+
     public void TestKeywords() {
         Set<String> possibleKeywords = new LinkedHashSet(Arrays.asList("zero", "one", "two", "few", "many", "other"));
-        Object[][] tests = {
+        Object[][][] tests = {
                 // format is locale, explicits, then triples of keyword, status, unique value.
-                {"en", null, 
-                    "one", KeywordStatus.UNIQUE, 1.0d, 
-                    "other", KeywordStatus.UNBOUNDED, null},
-                    {"pl", null, 
-                        "one", KeywordStatus.UNIQUE, 1.0d, 
-                        "few", KeywordStatus.UNBOUNDED, null, 
-                        "many", KeywordStatus.UNBOUNDED, null, 
-                        "other", KeywordStatus.UNBOUNDED, null},
-                        {"en", new HashSet<Double>(Arrays.asList(1.0d)), // check that 1 is suppressed
-                            "one", KeywordStatus.SUPPRESSED, null, 
-                            "other", KeywordStatus.UNBOUNDED, null},
+                {{"en", null}, 
+                    {"one", KeywordStatus.UNIQUE, 1.0d}, 
+                    {"other", KeywordStatus.UNBOUNDED, null}
+                },
+                {{"pl", null}, 
+                    {"one", KeywordStatus.UNIQUE, 1.0d}, 
+                    {"few", KeywordStatus.UNBOUNDED, null}, 
+                    {"many", KeywordStatus.UNBOUNDED, null}, 
+                    {"other", KeywordStatus.SUPPRESSED, null, KeywordStatus.UNBOUNDED, null} // note that it is suppressed in INTEGER but not DECIMAL
+                },
+                {{"en", new HashSet<Double>(Arrays.asList(1.0d))}, // check that 1 is suppressed
+                    {"one", KeywordStatus.SUPPRESSED, null}, 
+                    {"other", KeywordStatus.UNBOUNDED, null}
+                },
         };
         Output<Double> uniqueValue = new Output<Double>();
-        for (Object[] test : tests) {
-            ULocale locale = new ULocale((String) test[0]);
+        for (Object[][] test : tests) {
+            ULocale locale = new ULocale((String) test[0][0]);
             // NumberType numberType = (NumberType) test[1];
-            Set<Double> explicits = (Set<Double>) test[1];
+            Set<Double> explicits = (Set<Double>) test[0][1];
             PluralRules pluralRules = factory.forLocale(locale);
             LinkedHashSet<String> remaining = new LinkedHashSet(possibleKeywords);
-            for (int i = 2; i < test.length; i += 3) {
-                String keyword = (String) test[i];
-                KeywordStatus statusExpected = (KeywordStatus) test[i+1];
-                Double uniqueExpected = test[i+2] == null ? null : (Double) test[i+2];
+            for (int i = 1; i < test.length; ++i) {
+                Object[] row = test[i];
+                String keyword = (String) row[0];
+                KeywordStatus statusExpected = (KeywordStatus) row[1];
+                Double uniqueExpected = (Double) row[2];
                 remaining.remove(keyword);
                 KeywordStatus status = pluralRules.getKeywordStatus(keyword, 0, explicits, uniqueValue);
-                assertEquals("Keyword Status for " + locale + ", " + keyword, statusExpected, status);
-                assertEquals("Unique Value for " + locale + ", " + keyword, uniqueExpected, uniqueValue.value);
+                assertEquals(getAssertMessage("Unique Value", locale, pluralRules, keyword), uniqueExpected, uniqueValue.value);
+                assertEquals(getAssertMessage("Keyword Status", locale, pluralRules, keyword), statusExpected, status);
+                if (row.length > 3) {
+                    statusExpected = (KeywordStatus) row[3];
+                    uniqueExpected = (Double) row[4];
+                    status = pluralRules.getKeywordStatus(keyword, 0, explicits, uniqueValue, SampleType.DECIMAL);
+                    assertEquals(getAssertMessage("Unique Value - decimal", locale, pluralRules, keyword), uniqueExpected, uniqueValue.value);
+                    assertEquals(getAssertMessage("Keyword Status - decimal", locale, pluralRules, keyword), statusExpected, status);
+                }
             }
             for (String keyword : remaining) {
                 KeywordStatus status = pluralRules.getKeywordStatus(keyword, 0, null, uniqueValue);
@@ -747,13 +891,18 @@ public class PluralRulesTest extends TestFmwk {
         // [one, other]
         "fil,tl; one: 0, 1; other: 0.0, 0.00, 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
         "ca,de,en,et,fi,gl,it,nl,sw,ur,yi; one: 1; other: 0, 0.0, 0.00, 0.01, 0.1, 0.10, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99, 2, 3",
-        "da,sv; one: 0.01, 0.1, 1; other: 0, 0.0, 0.00, 0.10, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99, 2, 3",
-        "is; one: 0.1, 0.31, 1, 31; other: 0, 0.0, 0.00, 1.0, 1.00, 1.11, 1.99, 2, 11, 111, 311",
+        // danish is now: one: n is 1 or t is not 0 and i is 0,1 @integer 1 @decimal 0.1~0.8
+        "da; one: 0.01, 0.1, 1, 0.10, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99; other: 0, 0.0, 0.00, 2, 2.2, 2.9, 3",
+        // swedish is now: one: i is 1 and v is 0 @integer 1
+        "sv; one: 1; other: 0.01, 0.1, 0, 0.0, 0.00, 0.10, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99, 2, 3",
+        // icelandic is now: one: t is 0 and i mod 10 is 1 and i mod 100 is not 11 or t is not 0
+        "is; one: 0.1, 0.31, 1, 31, 1.0, 1.00, 1.11, 1.99; other: 0, 0.0, 0.00, 2, 11, 111, 311",
         "mk; one: 0.1, 0.31, 1, 11, 31; other: 0, 0.0, 0.00, 1.0, 1.00, 1.03, 1.3, 1.30, 1.99, 2, 3",
         "ak,bh,guw,ln,mg,nso,pa,ti,wa; one: 0, 0.0, 0.00, 1; other: 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
         "tzm; one: 0, 0.0, 0.00, 1, 11, 99; other: 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.11, 3",
         "af,asa,ast,az,bem,bez,bg,brx,cgg,chr,ckb,dv,ee,el,eo,es,eu,fo,fur,fy,gsw,ha,haw,hu,jgo,jmc,ka,kaj,kcg,kk,kkj,kl,ks,ksb,ku,ky,lb,lg,mas,mgo,ml,mn,nah,nb,nd,ne,nn,nnh,no,nr,ny,nyn,om,or,os,pap,ps,rm,rof,rwk,saq,seh,sn,so,sq,ss,ssy,st,syr,ta,te,teo,tig,tk,tn,tr,ts,ve,vo,vun,wae,xh,xog; one: 1, 1.0, 1.00; other: 0, 0.0, 0.00, 0.01, 0.1, 0.10, 1.03, 1.3, 1.30, 1.99, 2, 3",
-        "pt; one: 0.01, 0.1, 1, 1.0, 1.00; other: 0, 0.0, 0.00, 0.10, 1.03, 1.3, 1.30, 1.99, 2, 3",
+        // pt is now: one: i is 1 and v is 0 or f is 1 
+        "pt; one: 0.01, 0.1, 1; other: 0, 0.0, 0.00, 0.10, 1.03, 1.3, 1.30, 1.99, 2, 3, 1.0, 1.00",
         "am,bn,fa,gu,hi,kn,mr,zu; one: 0, 0.0, 0.00, 0.03, 0.1, 0.3, 0.30, 0.5, 1; other: 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
         "ff,fr,hy,kab; one: 0, 0.0, 0.00, 0.02, 0.1, 0.2, 0.20, 1, 1.99; other: 2, 2.0, 2.00, 2.01, 2.1, 2.10",
 
