@@ -20,6 +20,7 @@ import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
+import com.ibm.icu.text.PluralRules.SampleType;
 import com.ibm.icu.text.UFieldPosition;
 import com.ibm.icu.util.ULocale;
 
@@ -195,13 +196,10 @@ public class PluralFormatUnitTest extends TestFmwk {
             Set<String> keywords = rules.getKeywords();
             for (String keyword : keywords) {
                 Collection<Double> list = rules.getSamples(keyword);
-                // TODO: the locales excepted here have legitimately have no integer
-                //       sample values. How best to handle this?
-                if (localeName.equals("be") && keyword.equals("other")) continue;
-                if (localeName.equals("cs") && keyword.equals("many")) continue;
-                if (localeName.equals("lt") && keyword.equals("many")) continue;
-                if (localeName.equals("pl") && keyword.equals("other")) continue;
-                if (localeName.equals("uk") && keyword.equals("other")) continue;
+                if (list.size() == 0) {
+                    // if there aren't any integer samples, get the decimal ones.
+                    list = rules.getSamples(keyword, SampleType.DECIMAL);
+                }
 
                 if (list == null || list.size() == 0) {
                     errln("Empty list for " + localeName + " : " + keyword);
