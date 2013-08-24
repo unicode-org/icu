@@ -195,6 +195,14 @@ public class PluralFormatUnitTest extends TestFmwk {
             Set<String> keywords = rules.getKeywords();
             for (String keyword : keywords) {
                 Collection<Double> list = rules.getSamples(keyword);
+                // TODO: the locales excepted here have legitimately have no integer
+                //       sample values. How best to handle this?
+                if (localeName.equals("be") && keyword.equals("other")) continue;
+                if (localeName.equals("cs") && keyword.equals("many")) continue;
+                if (localeName.equals("lt") && keyword.equals("many")) continue;
+                if (localeName.equals("pl") && keyword.equals("other")) continue;
+                if (localeName.equals("uk") && keyword.equals("other")) continue;
+
                 if (list == null || list.size() == 0) {
                     errln("Empty list for " + localeName + " : " + keyword);
                 } else {
