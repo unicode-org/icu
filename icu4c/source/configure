@@ -7383,12 +7383,21 @@ fi
 # Now that we're done using CPPFLAGS etc. for tests, we can change it
 # for build.
 
+if test "${CC}" == "clang"; then
+   CLANGCFLAGS="-Qunused-arguments"
+else
+   CLANGCFLAGS=""
+fi
+
+if test "${CXX}" == "clang++"; then
+   CLANGCXXFLAGS="-Qunused-arguments"
+else
+   CLANGCXXFLAGS=""
+fi
+
 CPPFLAGS="$CPPFLAGS \$(THREADSCPPFLAGS)"
-CFLAGS="$CFLAGS \$(THREADSCFLAGS)"
-CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS)"
-
-
-
+CFLAGS="$CFLAGS \$(THREADSCFLAGS) $CLANGCFLAGS"
+CXXFLAGS="$CXXFLAGS \$(THREADSCXXFLAGS) $CLANGCXXFLAGS"
 
 # append all config cppflags
 CPPFLAGS="$CPPFLAGS $CONFIG_CPPFLAGS $UCONFIG_CPPFLAGS"
