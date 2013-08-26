@@ -33,7 +33,9 @@ import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.dev.util.Relation;
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules;
+import com.ibm.icu.text.UFieldPosition;
 import com.ibm.icu.text.PluralRules.FixedDecimalRange;
 import com.ibm.icu.text.PluralRules.FixedDecimalSamples;
 import com.ibm.icu.text.PluralRules.KeywordStatus;
@@ -123,7 +125,7 @@ public class PluralRulesTest extends TestFmwk {
             Class exception = shouldFailTest.length < 2 ? null : (Class) shouldFailTest[1];
             Class actualException = null;
             try {
-                PluralRules test = PluralRules.parseDescription(rules);
+                PluralRules.parseDescription(rules);
             } catch (Exception e) {
                 actualException = e.getClass();
             }
@@ -587,7 +589,6 @@ public class PluralRulesTest extends TestFmwk {
                             integerSamples == null && decimalSamples != null && decimalSamples.samples.size() != 0);
                 } else {
                     if (!assertTrue(getAssertMessage("Test getSamples.isEmpty", locale, rules, keyword), !list.isEmpty())) {
-                        int debugHere = 0;
                         rules.getSamples(keyword);
                     }
                     if (rules.toString().contains(": j")) {
@@ -698,6 +699,44 @@ public class PluralRulesTest extends TestFmwk {
         assertEquals("PluralRules(en-ordinal).select(2)", "two", pr.select(2));
     }
 
+    public void TestBasicFraction() {
+        String[][] tests = {
+                {"en", "one: j is 1"},
+                {"1", "0", "1", "one"},                
+                {"1", "2", "1.00", "other"},                
+        };
+        ULocale locale = null;
+        NumberFormat nf = null;
+        PluralRules pr = null;
+
+        for (String[] row : tests) {
+            switch(row.length) {
+            case 2:
+                locale = ULocale.forLanguageTag(row[0]);
+                nf = NumberFormat.getInstance(locale);
+                pr = PluralRules.createRules(row[1]);
+                break;
+            case 4:
+                double n = Double.parseDouble(row[0]);
+                int minFracDigits = Integer.parseInt(row[1]);
+                nf.setMinimumFractionDigits(minFracDigits);
+                String expectedFormat = row[2];
+                String expectedKeyword = row[3];
+                
+                UFieldPosition pos = new UFieldPosition();
+                String formatted = nf.format(1.0, new StringBuffer(), pos).toString();
+                int countVisibleFractionDigits = pos.getCountVisibleFractionDigits();
+                long fractionDigits = pos.getFractionDigits();
+                String keyword = pr.select(n, countVisibleFractionDigits, fractionDigits);
+                assertEquals("Formatted " + n + "\t" + minFracDigits, expectedFormat, formatted);
+                assertEquals("Keyword " + n + "\t" + minFracDigits, expectedKeyword, keyword);
+                break;
+            default:
+                throw new RuntimeException();
+            }
+        }
+    }
+
     public void TestLimitedAndSamplesConsistency() {
         for (ULocale locale : PluralRules.getAvailableULocales()) {
             ULocale loc2 = PluralRules.getFunctionalEquivalent(locale, null);
@@ -714,8 +753,8 @@ public class PluralRulesTest extends TestFmwk {
                             assertEquals(getAssertMessage("computeLimited == isLimited", locale, rules, keyword), computeLimited, isLimited);
                         }
                         Collection<Double> samples = rules.getSamples(keyword, sampleType);
-                        FixedDecimalSamples decimalSamples = rules.getDecimalSamples(keyword, sampleType);
                         assertNotNull(getAssertMessage("Samples must not be null", locale, rules, keyword), samples);
+                        /*FixedDecimalSamples decimalSamples = */ rules.getDecimalSamples(keyword, sampleType);
                         //assertNotNull(getAssertMessage("Decimal samples must be null if unlimited", locale, rules, keyword), decimalSamples);
                     }
                 }

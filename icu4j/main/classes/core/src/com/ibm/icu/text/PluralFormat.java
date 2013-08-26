@@ -14,6 +14,7 @@ import java.text.ParsePosition;
 import java.util.Map;
 
 import com.ibm.icu.impl.Utility;
+import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
@@ -386,13 +387,14 @@ public class PluralFormat extends UFormat {
      * @param pattern A MessagePattern.
      * @param partIndex the index of the first PluralFormat argument style part.
      * @param selector the PluralSelector for mapping the number (minus offset) to a keyword.
+     * @param context worker object for the selector.
      * @param number a number to be matched to one of the PluralFormat argument's explicit values,
      *        or mapped via the PluralSelector.
      * @return the sub-message start part index.
      */
     /*package*/ static int findSubMessage(
             MessagePattern pattern, int partIndex,
-            PluralSelector selector, double number) {
+            PluralSelector selector, Object context, double number) {
         int count=pattern.countParts();
         double offset;
         MessagePattern.Part part=pattern.getPart(partIndex);
@@ -402,7 +404,7 @@ public class PluralFormat extends UFormat {
         } else {
             offset=0;
         }
-        // The keyword is null until we need to match against non-explicit, not-"other" value.
+        // The keyword is null until we need to match against a non-explicit, not-"other" value.
         // Then we get the keyword from the selector.
         // (In other words, we never call the selector if we match against an explicit value,
         // or if the only non-explicit keyword is "other".)
@@ -454,7 +456,7 @@ public class PluralFormat extends UFormat {
                     }
                 } else {
                     if(keyword==null) {
-                        keyword=selector.select(number-offset);
+                        keyword=selector.select(context, number-offset);
                         if(msgStart!=0 && keyword.equals("other")) {
                             // We have already seen an "other" sub-message.
                             // Do not match "other" again.
@@ -488,18 +490,21 @@ public class PluralFormat extends UFormat {
         /**
          * Given a number, returns the appropriate PluralFormat keyword.
          *
+         * @param context worker object for the selector.
          * @param number The number to be plural-formatted.
          * @return The selected PluralFormat keyword.
          */
-        public String select(double number);
+        public String select(Object context, double number);
     }
 
     // See PluralSelector:
     // We could avoid this adapter class if we made PluralSelector public
     // (or at least publicly visible) and had PluralRules implement PluralSelector.
     private final class PluralSelectorAdapter implements PluralSelector {
-        public String select(double number) {
-            return pluralRules.select(number);
+        public String select(Object context, double number) {
+            FixedDecimal dec = (FixedDecimal) context;
+            assert dec.source == number;
+            return pluralRules.select(dec);
         }
     }
     transient private PluralSelectorAdapter pluralRulesWrapper = new PluralSelectorAdapter();
@@ -515,51 +520,7 @@ public class PluralFormat extends UFormat {
      * @stable ICU 4.0
      */
     public final String format(double number) {
-        // If no pattern was applied, return the formatted number.
-        if (msgPattern == null || msgPattern.countParts() == 0) {
-            return numberFormat.format(number);
-        }
-
-        // Get the appropriate sub-message.
-        int partIndex = findSubMessage(msgPattern, 0, pluralRulesWrapper, number);
-        // Replace syntactic # signs in the top level of this sub-message
-        // (not in nested arguments) with the formatted number-offset.
-        number -= offset;
-        StringBuilder result = null;
-        int prevIndex = msgPattern.getPart(partIndex).getLimit();
-        for (;;) {
-            MessagePattern.Part part = msgPattern.getPart(++partIndex);
-            MessagePattern.Part.Type type = part.getType();
-            int index = part.getIndex();
-            if (type == MessagePattern.Part.Type.MSG_LIMIT) {
-                if (result == null) {
-                    return pattern.substring(prevIndex, index);
-                } else {
-                    return result.append(pattern, prevIndex, index).toString();
-                }
-            } else if (type == MessagePattern.Part.Type.REPLACE_NUMBER ||
-                        // JDK compatibility mode: Remove SKIP_SYNTAX.
-                        (type == MessagePattern.Part.Type.SKIP_SYNTAX && msgPattern.jdkAposMode())) {
-                if (result == null) {
-                    result = new StringBuilder();
-                }
-                result.append(pattern, prevIndex, index);
-                if (type == MessagePattern.Part.Type.REPLACE_NUMBER) {
-                    result.append(numberFormat.format(number));
-                }
-                prevIndex = part.getLimit();
-            } else if (type == MessagePattern.Part.Type.ARG_START) {
-                if (result == null) {
-                    result = new StringBuilder();
-                }
-                result.append(pattern, prevIndex, index);
-                prevIndex = index;
-                partIndex = msgPattern.getLimitPartIndex(partIndex);
-                index = msgPattern.getPart(partIndex).getLimit();
-                MessagePattern.appendReducedApostrophes(pattern, prevIndex, index, result);
-                prevIndex = index;
-            }
-        }
+        return format(number, number);
     }
 
     /**
@@ -581,11 +542,73 @@ public class PluralFormat extends UFormat {
      */
     public StringBuffer format(Object number, StringBuffer toAppendTo,
             FieldPosition pos) {
-        if (number instanceof Number) {
-            toAppendTo.append(format(((Number) number).doubleValue()));
-            return toAppendTo;
+        if (!(number instanceof Number)) {
+            throw new IllegalArgumentException("'" + number + "' is not a Number");
         }
-        throw new IllegalArgumentException("'" + number + "' is not a Number");
+        Number numberObject = (Number) number;
+        toAppendTo.append(format(numberObject, numberObject.doubleValue()));
+        return toAppendTo;
+    }
+
+    private final String format(Number numberObject, double number) {
+        // If no pattern was applied, return the formatted number.
+        if (msgPattern == null || msgPattern.countParts() == 0) {
+            return numberFormat.format(numberObject);
+        }
+
+        // Get the appropriate sub-message.
+        // Select it based on the formatted number-offset.
+        double numberMinusOffset = number - offset;
+        String numberString;
+        if (offset == 0) {
+            numberString = numberFormat.format(numberObject);  // could be BigDecimal etc.
+        } else {
+            numberString = numberFormat.format(numberMinusOffset);
+        }
+        FixedDecimal dec;
+        if(numberFormat instanceof DecimalFormat) {
+            dec = ((DecimalFormat) numberFormat).getFixedDecimal(numberMinusOffset);
+        } else {
+            dec = new FixedDecimal(numberMinusOffset);
+        }
+        int partIndex = findSubMessage(msgPattern, 0, pluralRulesWrapper, dec, number);
+        // Replace syntactic # signs in the top level of this sub-message
+        // (not in nested arguments) with the formatted number-offset.
+        StringBuilder result = null;
+        int prevIndex = msgPattern.getPart(partIndex).getLimit();
+        for (;;) {
+            MessagePattern.Part part = msgPattern.getPart(++partIndex);
+            MessagePattern.Part.Type type = part.getType();
+            int index = part.getIndex();
+            if (type == MessagePattern.Part.Type.MSG_LIMIT) {
+                if (result == null) {
+                    return pattern.substring(prevIndex, index);
+                } else {
+                    return result.append(pattern, prevIndex, index).toString();
+                }
+            } else if (type == MessagePattern.Part.Type.REPLACE_NUMBER ||
+                        // JDK compatibility mode: Remove SKIP_SYNTAX.
+                        (type == MessagePattern.Part.Type.SKIP_SYNTAX && msgPattern.jdkAposMode())) {
+                if (result == null) {
+                    result = new StringBuilder();
+                }
+                result.append(pattern, prevIndex, index);
+                if (type == MessagePattern.Part.Type.REPLACE_NUMBER) {
+                    result.append(numberString);
+                }
+                prevIndex = part.getLimit();
+            } else if (type == MessagePattern.Part.Type.ARG_START) {
+                if (result == null) {
+                    result = new StringBuilder();
+                }
+                result.append(pattern, prevIndex, index);
+                prevIndex = index;
+                partIndex = msgPattern.getLimitPartIndex(partIndex);
+                index = msgPattern.getPart(partIndex).getLimit();
+                MessagePattern.appendReducedApostrophes(pattern, prevIndex, index, result);
+                prevIndex = index;
+            }
+        }
     }
 
     /**

@@ -1218,7 +1218,8 @@ public class DecimalFormat extends NumberFormat {
                                    boolean isNegative, boolean isInteger, boolean parseAttr) {
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
             // compute the plural category from the digitList plus other settings
-            return subformat(getPluralCategory(number), result, fieldPosition, isNegative,
+            return subformat(currencyPluralInfo.select(getFixedDecimal(number)),
+                             result, fieldPosition, isNegative,
                              isInteger, parseAttr);
         } else {
             return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
@@ -1228,7 +1229,7 @@ public class DecimalFormat extends NumberFormat {
     /**
      * This is ugly, but don't see a better way to do it without major restructuring of the code.
      */
-    private String getPluralCategory(double number) {
+    /*package*/ FixedDecimal getFixedDecimal(double number) {
         // get the visible fractions and the number of fraction digits.
         int fractionalDigitsInDigitList = digitList.count - digitList.decimalAt;
         int v;
@@ -1264,7 +1265,7 @@ public class DecimalFormat extends NumberFormat {
                 f *= 10;
             }
         }
-        return currencyPluralInfo.select(new FixedDecimal(number, v, f));
+        return new FixedDecimal(number, v, f);
     }
 
     private StringBuffer subformat(double number, StringBuffer result, FieldPosition fieldPosition,
@@ -1272,7 +1273,8 @@ public class DecimalFormat extends NumberFormat {
             boolean isInteger, boolean parseAttr) {
         if (currencySignCount == CURRENCY_SIGN_COUNT_IN_PLURAL_FORMAT) {
             // compute the plural category from the digitList plus other settings
-            return subformat(getPluralCategory(number), result, fieldPosition, isNegative,
+            return subformat(currencyPluralInfo.select(getFixedDecimal(number)),
+                             result, fieldPosition, isNegative,
                              isInteger, parseAttr);
         } else {
             return subformat(result, fieldPosition, isNegative, isInteger, parseAttr);
