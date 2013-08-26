@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2012, International Business Machines
+* Copyright (c) 2004-2013, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -36,7 +36,7 @@ import com.ibm.icu.impl.PatternProps;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.MessagePattern.ArgType;
 import com.ibm.icu.text.MessagePattern.Part;
-import com.ibm.icu.text.PluralFormat.PluralSelector;
+import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
@@ -409,7 +409,8 @@ public class MessageFormat extends UFormat {
         this.ulocale = locale;
         // Invalidate all stock formatters. They are no longer valid since
         // the locale has changed.
-        stockNumberFormatter = stockDateFormatter = null;
+        stockDateFormatter = null;
+        stockNumberFormatter = null;
         pluralProvider = null;
         ordinalProvider = null;
         applyPattern(existingPattern);                              /*ibm.3550*/
@@ -1439,8 +1440,10 @@ public class MessageFormat extends UFormat {
         }
         
         other.msgPattern = msgPattern == null ? null : (MessagePattern)msgPattern.clone();
-        other.stockDateFormatter = stockDateFormatter == null ? null : (Format) stockDateFormatter.clone();
-        other.stockNumberFormatter = stockNumberFormatter == null ? null : (Format) stockNumberFormatter.clone();
+        other.stockDateFormatter =
+                stockDateFormatter == null ? null : (DateFormat) stockDateFormatter.clone();
+        other.stockNumberFormatter =
+                stockNumberFormatter == null ? null : (NumberFormat) stockNumberFormatter.clone();
 
         other.pluralProvider = null;
         other.ordinalProvider = null;
@@ -1559,11 +1562,25 @@ public class MessageFormat extends UFormat {
      * Stock formatters. Those are used when a format is not explicitly mentioned in
      * the message. The format is inferred from the argument.
      */
-    private transient Format stockDateFormatter;
-    private transient Format stockNumberFormatter;
+    private transient DateFormat stockDateFormatter;
+    private transient NumberFormat stockNumberFormatter;
 
     private transient PluralSelectorProvider pluralProvider;
     private transient PluralSelectorProvider ordinalProvider;
+
+    private DateFormat getStockDateFormatter() {
+        if (stockDateFormatter == null) {
+            stockDateFormatter = DateFormat.getDateTimeInstance(
+                    DateFormat.SHORT, DateFormat.SHORT, ulocale);//fix
+        }
+        return stockDateFormatter;
+    }
+    private NumberFormat getStockNumberFormatter() {
+        if (stockNumberFormatter == null) {
+            stockNumberFormatter = NumberFormat.getInstance(ulocale);
+        }
+        return stockNumberFormatter;
+    }
 
     // *Important*: All fields must be declared *transient*.
     // See the longer comment above ulocale.
@@ -1575,7 +1592,7 @@ public class MessageFormat extends UFormat {
      * <p>Exactly one of args and argsMap must be null, the other non-null.
      *
      * @param msgStart      Index to msgPattern part to start formatting from.
-     * @param pluralNumber  Zero except when formatting a plural argument sub-message
+     * @param pluralNumber  null except when formatting a plural argument sub-message.
      *                      where a '#' is replaced by the format string for this number.
      * @param args          The formattable objects array. Non-null iff numbered values are used.
      * @param argsMap       The key-value map of formattable objects. Non-null iff named values are used.
@@ -1583,7 +1600,7 @@ public class MessageFormat extends UFormat {
      *                      The result (string & attributes) is appended to existing contents.
      * @param fp            Field position status.
      */
-    private void format(int msgStart, double pluralNumber,
+    private void format(int msgStart, PluralSelectorContext pluralNumber,
                         Object[] args, Map<String, Object> argsMap,
                         AppendableWrapper dest, FieldPosition fp) {
         String msgString=msgPattern.getPatternString();
@@ -1598,10 +1615,13 @@ public class MessageFormat extends UFormat {
             }
             prevIndex=part.getLimit();
             if(type==Part.Type.REPLACE_NUMBER) {
-                if (stockNumberFormatter == null) {
-                    stockNumberFormatter = NumberFormat.getInstance(ulocale);
+                if(pluralNumber.forReplaceNumber) {
+                    // number-offset was already formatted.
+                    dest.formatAndAppend(pluralNumber.formatter,
+                            pluralNumber.number, pluralNumber.numberString);
+                } else {
+                    dest.formatAndAppend(getStockNumberFormatter(), pluralNumber.number);
                 }
-                dest.formatAndAppend(stockNumberFormatter, pluralNumber);
                 continue;
             }
             if(type!=Part.Type.ARG_START) {
@@ -1613,6 +1633,7 @@ public class MessageFormat extends UFormat {
             Object arg;
             String noArg=null;
             Object argId=null;
+            String argName=msgPattern.getSubstring(part);
             if(args!=null) {
                 int argNumber=part.getValue();  // ARG_NUMBER
                 if (dest.attributes != null) {
@@ -1626,18 +1647,12 @@ public class MessageFormat extends UFormat {
                     noArg="{"+argNumber+"}";
                 }
             } else {
-                String key;
-                if(part.getType()==MessagePattern.Part.Type.ARG_NAME) {
-                    key=msgPattern.getSubstring(part);
-                } else /* ARG_NUMBER */ {
-                    key=Integer.toString(part.getValue());
-                }
-                argId = key;
-                if(argsMap!=null && argsMap.containsKey(key)) {
-                    arg=argsMap.get(key);
+                argId = argName;
+                if(argsMap!=null && argsMap.containsKey(argName)) {
+                    arg=argsMap.get(argName);
                 } else {
                     arg=null;
-                    noArg="{"+key+"}";
+                    noArg="{"+argName+"}";
                 }
             }
             ++i;
@@ -1647,6 +1662,15 @@ public class MessageFormat extends UFormat {
                 dest.append(noArg);
             } else if (arg == null) {
                 dest.append("null");
+            } else if(pluralNumber!=null && pluralNumber.numberArgIndex==(i-2)) {
+                if(pluralNumber.offset == 0) {
+                    // The number was already formatted with this formatter.
+                    dest.formatAndAppend(pluralNumber.formatter, pluralNumber.number, pluralNumber.numberString);
+                } else {
+                    // Do not use the formatted (number-offset) string for a named argument
+                    // that formats the number without subtracting the offset.
+                    dest.formatAndAppend(pluralNumber.formatter, arg);
+                }
             } else if(cachedFormatters!=null && (formatter=cachedFormatters.get(i - 2))!=null) {
                 // Handles all ArgType.SIMPLE, and formatters from setFormat() and its siblings.
                 if (    formatter instanceof ChoiceFormat ||
@@ -1658,7 +1682,7 @@ public class MessageFormat extends UFormat {
                     if (subMsgString.indexOf('{') >= 0 ||
                             (subMsgString.indexOf('\'') >= 0 && !msgPattern.jdkAposMode())) {
                         MessageFormat subMsgFormat = new MessageFormat(subMsgString, ulocale);
-                        subMsgFormat.format(0, 0, args, argsMap, dest, null);
+                        subMsgFormat.format(0, null, args, argsMap, dest, null);
                     } else if (dest.attributes == null) {
                         dest.append(subMsgString);
                     } else {
@@ -1680,17 +1704,10 @@ public class MessageFormat extends UFormat {
                 // any argument which got reset to null via setFormat() or its siblings.
                 if (arg instanceof Number) {
                     // format number if can
-                    if (stockNumberFormatter == null) {
-                        stockNumberFormatter = NumberFormat.getInstance(ulocale);
-                    }
-                    dest.formatAndAppend(stockNumberFormatter, arg);
+                    dest.formatAndAppend(getStockNumberFormatter(), arg);
                  } else if (arg instanceof Date) {
                     // format a Date if can
-                    if (stockDateFormatter == null) {
-                        stockDateFormatter = DateFormat.getDateTimeInstance(
-                                DateFormat.SHORT, DateFormat.SHORT, ulocale);//fix
-                    }
-                    dest.formatAndAppend(stockDateFormatter, arg);
+                    dest.formatAndAppend(getStockDateFormatter(), arg);
                 } else {
                     dest.append(arg.toString());
                 }
@@ -1700,30 +1717,33 @@ public class MessageFormat extends UFormat {
                 }
                 double number = ((Number)arg).doubleValue();
                 int subMsgStart=findChoiceSubMessage(msgPattern, i, number);
-                formatComplexSubMessage(subMsgStart, 0, args, argsMap, dest);
+                formatComplexSubMessage(subMsgStart, null, args, argsMap, dest);
             } else if(argType.hasPluralStyle()) {
                 if (!(arg instanceof Number)) {
                     throw new IllegalArgumentException("'" + arg + "' is not a Number");
                 }
-                double number = ((Number)arg).doubleValue();
-                PluralSelector selector;
+                PluralSelectorProvider selector;
                 if(argType == ArgType.PLURAL) {
                     if (pluralProvider == null) {
-                        pluralProvider = new PluralSelectorProvider(ulocale, PluralType.CARDINAL);
+                        pluralProvider = new PluralSelectorProvider(this, PluralType.CARDINAL);
                     }
                     selector = pluralProvider;
                 } else {
                     if (ordinalProvider == null) {
-                        ordinalProvider = new PluralSelectorProvider(ulocale, PluralType.ORDINAL);
+                        ordinalProvider = new PluralSelectorProvider(this, PluralType.ORDINAL);
                     }
                     selector = ordinalProvider;
                 }
-                int subMsgStart=PluralFormat.findSubMessage(msgPattern, i, selector, number);
+                Number number = (Number)arg;
                 double offset=msgPattern.getPluralOffset(i);
-                formatComplexSubMessage(subMsgStart, number-offset, args, argsMap, dest);
+                PluralSelectorContext context =
+                        new PluralSelectorContext(i, argName, number, offset);
+                int subMsgStart=PluralFormat.findSubMessage(
+                        msgPattern, i, selector, context, number.doubleValue());
+                formatComplexSubMessage(subMsgStart, context, args, argsMap, dest);
             } else if(argType==ArgType.SELECT) {
                 int subMsgStart=SelectFormat.findSubMessage(msgPattern, i, arg.toString());
-                formatComplexSubMessage(subMsgStart, 0, args, argsMap, dest);
+                formatComplexSubMessage(subMsgStart, null, args, argsMap, dest);
             } else {
                 // This should never happen.
                 throw new IllegalStateException("unexpected argType "+argType);
@@ -1735,7 +1755,7 @@ public class MessageFormat extends UFormat {
     }
 
     private void formatComplexSubMessage(
-            int msgStart, double pluralNumber,
+            int msgStart, PluralSelectorContext pluralNumber,
             Object[] args, Map<String, Object> argsMap,
             AppendableWrapper dest) {
         if (!msgPattern.jdkAposMode()) {
@@ -1768,10 +1788,12 @@ public class MessageFormat extends UFormat {
                 }
                 sb.append(msgString, prevIndex, index);
                 if (type == Part.Type.REPLACE_NUMBER) {
-                    if (stockNumberFormatter == null) {
-                        stockNumberFormatter = NumberFormat.getInstance(ulocale);
+                    if(pluralNumber.forReplaceNumber) {
+                        // number-offset was already formatted.
+                        sb.append(pluralNumber.numberString);
+                    } else {
+                        sb.append(getStockNumberFormatter().format(pluralNumber.number));
                     }
-                    sb.append(stockNumberFormatter.format(pluralNumber));
                 }
                 prevIndex = part.getLimit();
             } else if (type == Part.Type.ARG_START) {
@@ -1789,7 +1811,7 @@ public class MessageFormat extends UFormat {
         if (subMsgString.indexOf('{') >= 0) {
             MessageFormat subMsgFormat = new MessageFormat("", ulocale);
             subMsgFormat.applyPattern(subMsgString, MessagePattern.ApostropheMode.DOUBLE_REQUIRED);
-            subMsgFormat.format(0, 0, args, argsMap, dest, null);
+            subMsgFormat.format(0, null, args, argsMap, dest, null);
         } else {
             dest.append(subMsgString);
         }
@@ -1947,23 +1969,145 @@ public class MessageFormat extends UFormat {
     }
 
     /**
+     * Finds the "other" sub-message.
+     * @param partIndex the index of the first PluralFormat argument style part.
+     * @return the "other" sub-message start part index.
+     */
+    private int findOtherSubMessage(int partIndex) {
+        int count=msgPattern.countParts();
+        MessagePattern.Part part=msgPattern.getPart(partIndex);
+        if(part.getType().hasNumericValue()) {
+            ++partIndex;
+        }
+        // Iterate over (ARG_SELECTOR [ARG_INT|ARG_DOUBLE] message) tuples
+        // until ARG_LIMIT or end of plural-only pattern.
+        do {
+            part=msgPattern.getPart(partIndex++);
+            MessagePattern.Part.Type type=part.getType();
+            if(type==MessagePattern.Part.Type.ARG_LIMIT) {
+                break;
+            }
+            assert type==MessagePattern.Part.Type.ARG_SELECTOR;
+            // part is an ARG_SELECTOR followed by an optional explicit value, and then a message
+            if(msgPattern.partSubstringMatches(part, "other")) {
+                return partIndex;
+            }
+            if(msgPattern.getPartType(partIndex).hasNumericValue()) {
+                ++partIndex;  // skip the numeric-value part of "=1" etc.
+            }
+            partIndex=msgPattern.getLimitPartIndex(partIndex);
+        } while(++partIndex<count);
+        return 0;
+    }
+
+    /**
+     * Returns the ARG_START index of the first occurrence of the plural number in a sub-message.
+     * Returns -1 if it is a REPLACE_NUMBER.
+     * Returns 0 if there is neither.
+     */
+    private int findFirstPluralNumberArg(int msgStart, String argName) {
+        for(int i=msgStart+1;; ++i) {
+            Part part=msgPattern.getPart(i);
+            Part.Type type=part.getType();
+            if(type==Part.Type.MSG_LIMIT) {
+                return 0;
+            }
+            if(type==Part.Type.REPLACE_NUMBER) {
+                return -1;
+            }
+            if(type==Part.Type.ARG_START) {
+                ArgType argType=part.getArgType();
+                if(argName.length()!=0 && (argType==ArgType.NONE || argType==ArgType.SIMPLE)) {
+                    part=msgPattern.getPart(i+1);  // ARG_NUMBER or ARG_NAME
+                    if(msgPattern.partSubstringMatches(part, argName)) {
+                        return i;
+                    }
+                }
+                i=msgPattern.getLimitPartIndex(i);
+            }
+        }
+    }
+
+    /**
+     * Mutable input/output values for the PluralSelectorProvider.
+     * Separate so that it is possible to make MessageFormat Freezable.
+     */
+    private static final class PluralSelectorContext {
+        private PluralSelectorContext(int start, String name, Number num, double off) {
+            startIndex = start;
+            argName = name;
+            // number needs to be set even when select() is not called.
+            // Keep it as a Number/Formattable:
+            // For format() methods, and to preserve information (e.g., BigDecimal).
+            if(off == 0) {
+                number = num;
+            } else {
+                number = num.doubleValue() - off;
+            }
+            offset = off;
+        }
+        @Override
+        public String toString() {
+            throw new AssertionError("PluralSelectorContext being formatted, rather than its number");
+        }
+
+        // Input values for plural selection with decimals.
+        int startIndex;
+        String argName;
+        /** argument number - plural offset */
+        Number number;
+        double offset;
+        // Output values for plural selection with decimals.
+        /** -1 if REPLACE_NUMBER, 0 arg not found, >0 ARG_START index */
+        int numberArgIndex;
+        Format formatter;
+        /** formatted argument number - plural offset */
+        String numberString;
+        /** true if number-offset was formatted with the stock number formatter */
+        boolean forReplaceNumber;
+    }
+
+    /**
      * This provider helps defer instantiation of a PluralRules object
      * until we actually need to select a keyword.
      * For example, if the number matches an explicit-value selector like "=1"
      * we do not need any PluralRules.
      */
     private static final class PluralSelectorProvider implements PluralFormat.PluralSelector {
-        public PluralSelectorProvider(ULocale loc, PluralType type) {
-            locale=loc;
-            this.type=type;
+        public PluralSelectorProvider(MessageFormat mf, PluralType type) {
+            msgFormat = mf;
+            this.type = type;
         }
-        public String select(double number) {
+        public String select(Object ctx, double number) {
             if(rules == null) {
-                rules = PluralRules.forLocale(locale, type);
+                rules = PluralRules.forLocale(msgFormat.ulocale, type);
             }
-            return rules.select(number);
+            // Select a sub-message according to how the number is formatted,
+            // which is specified in the selected sub-message.
+            // We avoid this circle by looking at how
+            // the number is formatted in the "other" sub-message
+            // which must always be present and usually contains the number.
+            // Message authors should be consistent across sub-messages.
+            PluralSelectorContext context = (PluralSelectorContext)ctx;
+            int otherIndex = msgFormat.findOtherSubMessage(context.startIndex);
+            context.numberArgIndex = msgFormat.findFirstPluralNumberArg(otherIndex, context.argName);
+            if(context.numberArgIndex > 0 && msgFormat.cachedFormatters != null) {
+                context.formatter = msgFormat.cachedFormatters.get(context.numberArgIndex);
+            }
+            if(context.formatter == null) {
+                context.formatter = msgFormat.getStockNumberFormatter();
+                context.forReplaceNumber = true;
+            }
+            assert context.number.doubleValue() == number;  // argument number minus the offset
+            context.numberString = context.formatter.format(context.number);
+            if(context.formatter instanceof DecimalFormat) {
+                FixedDecimal dec = ((DecimalFormat)context.formatter).getFixedDecimal(number);
+                return rules.select(dec);
+            } else {
+                return rules.select(number);
+            }
         }
-        private ULocale locale;
+        private MessageFormat msgFormat;
         private PluralRules rules;
         private PluralType type;
     }
@@ -1991,7 +2135,7 @@ public class MessageFormat extends UFormat {
                 "This method is not available in MessageFormat objects " +
                 "that use alphanumeric argument names.");
         }
-        format(0, 0, arguments, argsMap, dest, fp);
+        format(0, null, arguments, argsMap, dest, fp);
     }
 
     private void resetPattern() {
@@ -2486,6 +2630,14 @@ public class MessageFormat extends UFormat {
                     start = runLimit;
                     formattedArg.setIndex(start);
                 }
+            }
+        }
+
+        public void formatAndAppend(Format formatter, Object arg, String argString) {
+            if (attributes == null && argString != null) {
+                append(argString);
+            } else {
+                formatAndAppend(formatter, arg);
             }
         }
 

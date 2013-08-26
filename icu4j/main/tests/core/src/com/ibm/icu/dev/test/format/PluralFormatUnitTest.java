@@ -15,13 +15,14 @@ import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.text.DecimalFormat;
+import com.ibm.icu.text.DecimalFormatSymbols;
 import com.ibm.icu.text.MessageFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.text.PluralRules.SampleType;
-import com.ibm.icu.text.UFieldPosition;
 import com.ibm.icu.util.ULocale;
 
 /**
@@ -302,7 +303,7 @@ public class PluralFormatUnitTest extends TestFmwk {
         PluralFormat pf = new PluralFormat(ULocale.ENGLISH, pluralStyle);
         MessageFormat mf = new MessageFormat("{0,plural," + pluralStyle + "}", ULocale.ENGLISH);
         Integer args[] = new Integer[1];
-        for (int i = 0; i < 7; ++i) {
+        for (int i = 0; i <= 7; ++i) {
             String result = pf.format(i);
             assertEquals("PluralFormat.format(value " + i + ")", targets[i], result);
             args[0] = i;
@@ -346,43 +347,18 @@ public class PluralFormatUnitTest extends TestFmwk {
         assertEquals("PluralFormat.format(456)", "456th file", pf.format(456));
         assertEquals("PluralFormat.format(111)", "111th file", pf.format(111));
     }
-    
-    public void TestBasicFraction() {
-        String[][] tests = {
-                {"en", "one: j is 1"},
-                {"1", "0", "1", "one"},                
-                {"1", "2", "1.00", "other"},                
-        };
-        ULocale locale = null;
-        NumberFormat nf = null;
-        PluralRules pr = null;
 
-        for (String[] row : tests) {
-            switch(row.length) {
-            case 2:
-                locale = ULocale.forLanguageTag(row[0]);
-                nf = NumberFormat.getInstance(locale);
-                pr = PluralRules.createRules(row[1]);
-                break;
-            case 4:
-                double n = Double.parseDouble(row[0]);
-                int minFracDigits = Integer.parseInt(row[1]);
-                nf.setMinimumFractionDigits(minFracDigits);
-                String expectedFormat = row[2];
-                String expectedKeyword = row[3];
-                
-                UFieldPosition pos = new UFieldPosition();
-                String formatted = nf.format(1.0, new StringBuffer(), pos).toString();
-                int countVisibleFractionDigits = pos.getCountVisibleFractionDigits();
-                long fractionDigits = pos.getFractionDigits();
-                String keyword = pr.select(n, countVisibleFractionDigits, fractionDigits);
-                assertEquals("Formatted " + n + "\t" + minFracDigits, expectedFormat, formatted);
-                assertEquals("Keyword " + n + "\t" + minFracDigits, expectedKeyword, keyword);
-                break;
-            default:
-                throw new RuntimeException();
-            }
-        }
+    public void TestDecimals() {
+        // Simple number replacement.
+        PluralFormat pf = new PluralFormat(ULocale.ENGLISH, "one{one meter}other{# meters}");
+        assertEquals("simple format(1)", "one meter", pf.format(1));
+        assertEquals("simple format(1.5)", "1.5 meters", pf.format(1.5));
+
+        PluralFormat pf2 = new PluralFormat(ULocale.ENGLISH,
+                "offset:1 one{another meter}other{another # meters}");
+        pf2.setNumberFormat(new DecimalFormat("0.0", new DecimalFormatSymbols(ULocale.ENGLISH)));
+        assertEquals("offset-decimals format(1)", "another 0.0 meters", pf2.format(1));
+        assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format(2));
+        assertEquals("offset-decimals format(2.5)", "another 1.5 meters", pf2.format(2.5));
     }
-
 }

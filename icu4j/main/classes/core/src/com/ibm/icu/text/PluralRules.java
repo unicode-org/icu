@@ -27,7 +27,6 @@ import java.util.TreeSet;
 import java.util.regex.Pattern;
 
 import com.ibm.icu.impl.PluralRulesLoader;
-import com.ibm.icu.impl.Utility;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 

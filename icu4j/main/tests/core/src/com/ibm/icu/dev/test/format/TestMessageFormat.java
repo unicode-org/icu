@@ -1861,4 +1861,73 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         assertEquals("plural-and-ordinal format(3) failed", "3 files, 3rd file",
                      m.format(args, result, ignore).toString());
     }
+
+    public void TestDecimals() {
+        // Simple number replacement.
+        MessageFormat m = new MessageFormat(
+                "{0,plural,one{one meter}other{# meters}}",
+                ULocale.ENGLISH);
+        Object[] args = new Object[] { 1 };
+        FieldPosition ignore = null;
+        StringBuffer result = new StringBuffer();
+        assertEquals("simple format(1)", "one meter",
+                m.format(args, result, ignore).toString());
+        
+        args[0] = 1.5;
+        result.delete(0, result.length());
+        assertEquals("simple format(1.5)", "1.5 meters",
+                m.format(args, result, ignore).toString());
+
+        // Simple but explicit.
+        MessageFormat m0 = new MessageFormat(
+                "{0,plural,one{one meter}other{{0} meters}}",
+                ULocale.ENGLISH);
+        args[0] = 1;
+        result.delete(0, result.length());
+        assertEquals("explicit format(1)", "one meter",
+                m0.format(args, result, ignore).toString());
+        
+        args[0] = 1.5;
+        result.delete(0, result.length());
+        assertEquals("explicit format(1.5)", "1.5 meters",
+                m0.format(args, result, ignore).toString());
+
+        // With offset and specific simple format with optional decimals.
+        MessageFormat m1 = new MessageFormat(
+                "{0,plural,offset:1 one{another meter}other{{0,number,00.#} meters}}",
+                ULocale.ENGLISH);
+        args[0] = 1;
+        result.delete(0, result.length());
+        assertEquals("offset format(1)", "01 meters",
+                m1.format(args, result, ignore).toString());
+
+        args[0] = 2;
+        result.delete(0, result.length());
+        assertEquals("offset format(1)", "another meter",
+                m1.format(args, result, ignore).toString());
+
+        args[0] = 2.5;
+        result.delete(0, result.length());
+        assertEquals("offset format(1)", "02.5 meters",
+                m1.format(args, result, ignore).toString());
+
+        // With offset and specific simple format with forced decimals.
+        MessageFormat m2 = new MessageFormat(
+                "{0,plural,offset:1 one{another meter}other{{0,number,0.0} meters}}",
+                ULocale.ENGLISH);
+        args[0] = 1;
+        result.delete(0, result.length());
+        assertEquals("offset-decimals format(1)", "1.0 meters",
+                m2.format(args, result, ignore).toString());
+
+        args[0] = 2;
+        result.delete(0, result.length());
+        assertEquals("offset-decimals format(1)", "2.0 meters",
+                m2.format(args, result, ignore).toString());
+
+        args[0] = 2.5;
+        result.delete(0, result.length());
+        assertEquals("offset-decimals format(1)", "2.5 meters",
+                m2.format(args, result, ignore).toString());
+    }
 }
