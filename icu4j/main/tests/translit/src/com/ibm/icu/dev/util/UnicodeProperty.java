@@ -211,13 +211,13 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     // return getValue(codepoint);
     // }
 
-    public List getNameAliases(List result) {
+    public List<String> getNameAliases(List<String> result) {
         if (result == null)
             result = new ArrayList(1);
         return _getNameAliases(result);
     }
 
-    public List getValueAliases(String valueAlias, List result) {
+    public List<String> getValueAliases(String valueAlias, List<String> result) {
         if (result == null)
             result = new ArrayList(1);
         result = _getValueAliases(valueAlias, result);
@@ -230,7 +230,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
         return result;
     }
 
-    public List getAvailableValues(List result) {
+    public List<String> getAvailableValues(List<String> result) {
         if (result == null)
             result = new ArrayList(1);
         return _getAvailableValues(result);
@@ -240,22 +240,22 @@ public abstract class UnicodeProperty extends UnicodeLabel {
 
     protected abstract String _getValue(int codepoint);
 
-    protected abstract List _getNameAliases(List result);
+    protected abstract List<String> _getNameAliases(List<String> result);
 
-    protected abstract List _getValueAliases(String valueAlias, List result);
+    protected abstract List<String> _getValueAliases(String valueAlias, List<String> result);
 
-    protected abstract List _getAvailableValues(List result);
+    protected abstract List<String> _getAvailableValues(List<String> result);
 
     // conveniences
-    public final List getNameAliases() {
+    public final List<String> getNameAliases() {
         return getNameAliases(null);
     }
 
-    public final List getValueAliases(String valueAlias) {
+    public final List<String> getValueAliases(String valueAlias) {
         return getValueAliases(valueAlias, null);
     }
 
-    public final List getAvailableValues() {
+    public final List<String> getAvailableValues() {
         return getAvailableValues(null);
     }
 
@@ -728,7 +728,7 @@ public abstract class UnicodeProperty extends UnicodeLabel {
     static public class Factory {
         static boolean DEBUG = false;
 
-        Map canonicalNames = new TreeMap();
+        Map<String, UnicodeProperty> canonicalNames = new TreeMap<String, UnicodeProperty>();
 
         Map skeletonNames = new TreeMap();
 
@@ -754,11 +754,11 @@ public abstract class UnicodeProperty extends UnicodeLabel {
             .get(toSkeleton(propertyAlias));
         }
 
-        public final List getAvailableNames() {
+        public final List<String> getAvailableNames() {
             return getAvailableNames(null);
         }
 
-        public final List getAvailableNames(List result) {
+        public final List<String> getAvailableNames(List<String> result) {
             if (result == null)
                 result = new ArrayList(1);
             Iterator it = canonicalNames.keySet().iterator();
