@@ -38,10 +38,11 @@
 U_NAMESPACE_BEGIN
 
 class Hashtable;
-class NumberInfo;
+class FixedDecimal;
 class RuleChain;
-class RuleParser;
+class PluralRuleParser;
 class PluralKeywordEnumeration;
+class AndConstraint;
 
 /**
  * Defines rules for mapping non-negative numeric values onto a small set of
@@ -287,7 +288,7 @@ public:
      * @return a StringEnumeration over the locales available.
      * @internal
      */
-    static StringEnumeration* U_EXPORT2 getAvailableLocales(void);
+    static StringEnumeration* U_EXPORT2 getAvailableLocales(UErrorCode &status);
 
     /**
      * Returns the 'functionally equivalent' locale with respect to plural rules. 
@@ -342,7 +343,7 @@ public:
     /**
       * @internal
       */
-    UnicodeString select(const NumberInfo &number) const;
+    UnicodeString select(const FixedDecimal &number) const;
 
     /**
      * Returns a list of all rule keywords used in this <code>PluralRules</code>
@@ -433,6 +434,12 @@ public:
     UnicodeString getKeywordOther() const;
 
     /**
+     *
+     * @internal
+     */
+     UnicodeString getRules() const;
+
+    /**
      * Compares the equality of two PluralRules objects.
      *
      * @param other The other PluralRules object to be compared with.
@@ -471,28 +478,14 @@ public:
 
 private:
     RuleChain  *mRules;
-    RuleParser *mParser;
-    double     *mSamples;
-    int32_t    *mSampleInfo;
-    int32_t    mSampleInfoCount;
 
     PluralRules();   // default constructor not implemented
-    int32_t getRepeatLimit() const;
-    void parseDescription(UnicodeString& ruleData, RuleChain& rules, UErrorCode &status);
-    void getNextLocale(const UnicodeString& localeData, int32_t* curIndex, UnicodeString& localeName);
-    void addRules(RuleChain& rules);
-    int32_t getNumberValue(const UnicodeString& token) const;
-    UnicodeString getRuleFromResource(const Locale& locale, UPluralType type, UErrorCode& status);
+    void            parseDescription(const UnicodeString& ruleData, UErrorCode &status);
+    int32_t         getNumberValue(const UnicodeString& token) const;
+    UnicodeString   getRuleFromResource(const Locale& locale, UPluralType type, UErrorCode& status);
+    RuleChain      *rulesForKeyword(const UnicodeString &keyword) const;
 
-    static const int32_t MAX_SAMPLES = 3;
-
-    int32_t getSamplesInternal(const UnicodeString &keyword, double *dest,
-                               int32_t destCapacity, UBool includeUnlimited,
-                               UErrorCode& status);
-    int32_t getKeywordIndex(const UnicodeString& keyword,
-                            UErrorCode& status) const;
-    void initSamples(UErrorCode& status);
-
+    friend class PluralRuleParser;
 };
 
 U_NAMESPACE_END

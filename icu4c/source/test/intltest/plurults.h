@@ -32,6 +32,9 @@ private:
     void testGetAllKeywordValues();
     void testOrdinal();
     void testSelect();
+    void testAvailbleLocales();
+    void testParseErrors();
+    void testFixedDecimal();
 
     void assertRuleValue(const UnicodeString& rule, double expected);
     void assertRuleKeyValue(const UnicodeString& rule, const UnicodeString& key,
