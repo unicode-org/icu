@@ -1,5 +1,5 @@
 # SpecialCasing-6.3.0.txt
-# Date: 2013-03-12, 22:36:00 GMT [LI temp]
+# Date: 2013-05-08, 13:54:51 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2013 Unicode, Inc.
@@ -273,3 +273,4 @@ FB17; FB17; 0544 056D; 0544 053D; # ARMENIAN SMALL LIGATURE MEN XEH
 # 0131; 0131; 0049; 0049; tr; # LATIN SMALL LETTER DOTLESS I
 
 # EOF
+
