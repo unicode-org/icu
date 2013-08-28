@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.format.MeasureUnitTest;
+import com.ibm.icu.dev.test.format.PluralRulesTest;
 import com.ibm.icu.impl.JavaTimeZone;
 import com.ibm.icu.impl.OlsonTimeZone;
 import com.ibm.icu.impl.TimeZoneAdapter;
@@ -417,10 +419,14 @@ public class SerializableTest extends TestFmwk.TestGroup
         
         public boolean hasSameBehavior(Object a, Object b)
         {
+            
             Currency curr_a = (Currency) a;
             Currency curr_b = (Currency) b;
             
-            return curr_a.getCurrencyCode().equals(curr_b.getCurrencyCode());
+            return a == b 
+                    || a != null && b != null 
+                    && curr_a.getCurrencyCode() != null
+                    && curr_a.getCurrencyCode().equals(curr_b.getCurrencyCode());
             
         }
     }
@@ -709,7 +715,10 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.impl.locale.LocaleSyntaxException", new ExceptionTests.LocaleSyntaxExceptionHandler());
         map.put("com.ibm.icu.impl.IllegalIcuArgumentException", new ExceptionTests.IllegalIcuArgumentExceptionHandler());
 
-        map.put("com.ibm.icu.text.PluralRules$FixedDecimal", new ExceptionTests.FixedDecimalExceptionHandler());
+        map.put("com.ibm.icu.text.PluralRules$FixedDecimal", new PluralRulesTest.FixedDecimalHandler());
+        map.put("com.ibm.icu.util.MeasureUnit", new MeasureUnitTest.MeasureUnitHandler());
+        map.put("com.ibm.icu.util.TimeUnit", new MeasureUnitTest.MeasureUnitHandler());
+        map.put("com.ibm.icu.text.GeneralMeasureFormat", new MeasureUnitTest.GeneralMeasureFormatHandler());
     }
     
     public SerializableTest()

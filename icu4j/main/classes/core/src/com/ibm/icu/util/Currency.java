@@ -6,6 +6,8 @@
  */
 package com.ibm.icu.util;
 
+import java.io.IOException;
+import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.text.ParsePosition;
@@ -30,6 +32,7 @@ import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.CurrencyMetaInfo;
 import com.ibm.icu.text.CurrencyMetaInfo.CurrencyDigits;
 import com.ibm.icu.text.CurrencyMetaInfo.CurrencyFilter;
+import com.ibm.icu.util.MeasureUnit.MeasureUnitProxy;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
@@ -53,18 +56,12 @@ import com.ibm.icu.util.ULocale.Category;
  * @stable ICU 2.2
  */
 public class Currency extends MeasureUnit implements Serializable {
-    // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = -5839973855554750484L;
     private static final boolean DEBUG = ICUDebug.enabled("currency");
 
     // Cache to save currency name trie
     private static ICUCache<ULocale, List<TextTrieMap<CurrencyStringInfo>>> CURRENCY_NAME_CACHE =
         new SimpleCache<ULocale, List<TextTrieMap<CurrencyStringInfo>>>();
-
-    /**
-     * ISO 4217 3-letter code.
-     */
-    private String isoCode;
 
     /**
      * Selector for getName() indicating a symbolic name for a
@@ -192,7 +189,7 @@ public class Currency extends MeasureUnit implements Serializable {
         List<String> list = info.currencies(CurrencyFilter.all());
         HashSet<Currency> resultSet = new HashSet<Currency>(list.size());
         for (String code : list) {
-            resultSet.add(new Currency(code));
+            resultSet.add(getInstance(code));
         }
         return resultSet;
     }
@@ -207,7 +204,7 @@ public class Currency extends MeasureUnit implements Serializable {
         
         String variant = loc.getVariant();
         if ("EURO".equals(variant)) {
-            return new Currency(EUR_STR);
+            return getInstance(EUR_STR);
         }
         
         String code = currencyCodeCache.get(loc);
@@ -230,7 +227,7 @@ public class Currency extends MeasureUnit implements Serializable {
             }
             currencyCodeCache.put(loc, code);
         }
-        return new Currency(code);
+        return getInstance(code);
     }
 
     /**
@@ -250,9 +247,10 @@ public class Currency extends MeasureUnit implements Serializable {
             throw new IllegalArgumentException(
                     "The input currency code is not 3-letter alphabetic code.");
         }
-        return new Currency(theISOCode.toUpperCase(Locale.ENGLISH));
+        return (Currency) MeasureUnit.addUnit("currency", theISOCode.toUpperCase(Locale.ENGLISH), CURRENCY_FACTORY);
     }
-
+    
+    
     private static boolean isAlpha3Code(String code) {
         if (code.length() != 3) {
             return false;
@@ -397,36 +395,11 @@ public class Currency extends MeasureUnit implements Serializable {
     private static final String[] EMPTY_STRING_ARRAY = new String[0];
 
     /**
-     * Return a hashcode for this currency.
-     * @stable ICU 2.2
-     */
-    public int hashCode() {
-        return isoCode.hashCode();
-    }
-
-    /**
-     * Return true if rhs is a Currency instance,
-     * is non-null, and has the same currency code.
-     * @stable ICU 2.2
-     */
-    public boolean equals(Object rhs) {
-        if (rhs == null) return false;
-        if (rhs == this) return true;
-        try {
-            Currency c = (Currency) rhs;
-            return isoCode.equals(c.isoCode);
-        }
-        catch (ClassCastException e) {
-            return false;
-        }
-    }
-
-    /**
      * Returns the ISO 4217 3-letter code for this currency object.
      * @stable ICU 2.2
      */
     public String getCurrencyCode() {
-        return isoCode;
+        return code;
     }
 
     /**
@@ -437,19 +410,19 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 49
      */
     public int getNumericCode() {
-        int code = 0;
+        int result = 0;
         try {
             UResourceBundle bundle = UResourceBundle.getBundleInstance(
                     ICUResourceBundle.ICU_BASE_NAME,
                     "currencyNumericCodes",
                     ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle codeMap = bundle.get("codeMap");
-            UResourceBundle numCode = codeMap.get(isoCode);
-            code = numCode.getInt();
+            UResourceBundle numCode = codeMap.get(code);
+            result = numCode.getInt();
         } catch (MissingResourceException e) {
             // fall through
         }
-        return code;
+        return result;
     }
 
     /**
@@ -533,7 +506,7 @@ public class Currency extends MeasureUnit implements Serializable {
         }
 
         CurrencyDisplayNames names = CurrencyDisplayNames.getInstance(locale);
-        return nameStyle == SYMBOL_NAME ? names.getSymbol(isoCode) : names.getName(isoCode);
+        return nameStyle == SYMBOL_NAME ? names.getSymbol(code) : names.getName(code);
     }
 
     /**
@@ -582,7 +555,7 @@ public class Currency extends MeasureUnit implements Serializable {
         }
         
         CurrencyDisplayNames names = CurrencyDisplayNames.getInstance(locale);
-        return names.getPluralName(isoCode, pluralCount);
+        return names.getPluralName(code, pluralCount);
     }
 
     /**
@@ -759,7 +732,7 @@ public class Currency extends MeasureUnit implements Serializable {
      */
     public int getDefaultFractionDigits() {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-        CurrencyDigits digits = info.currencyDigits(isoCode);
+        CurrencyDigits digits = info.currencyDigits(code);
         return digits.fractionDigits;
     }
 
@@ -771,7 +744,7 @@ public class Currency extends MeasureUnit implements Serializable {
      */
     public double getRoundingIncrement() {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-        CurrencyDigits digits = info.currencyDigits(isoCode);
+        CurrencyDigits digits = info.currencyDigits(code);
 
         int data1 = digits.roundingIncrement;
 
@@ -798,7 +771,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 2.2
      */
     public String toString() {
-        return isoCode;
+        return code;
     }
 
     /**
@@ -809,7 +782,7 @@ public class Currency extends MeasureUnit implements Serializable {
      * @stable ICU 3.4
      */
     protected Currency(String theISOCode) {
-        isoCode = theISOCode;
+        super("currency", theISOCode);
     }
 
     // POW10[i] = 10^i
@@ -926,6 +899,10 @@ public class Currency extends MeasureUnit implements Serializable {
             }
             return Collections.unmodifiableSet(result);
         }
+    }
+    
+    private Object writeReplace() throws ObjectStreamException {
+        return new MeasureUnitProxy(type, code);
     }
 }
 //eof

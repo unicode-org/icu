@@ -13,6 +13,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.Enumeration;
@@ -114,9 +117,12 @@ public class CompatibilityTest extends TestFmwk
                 }catch (MissingResourceException e){
                     warnln("Could not load the data. "+e.getMessage());
                 } catch (Exception e) {
-                  e.printStackTrace();
-                    errln("Exception: " + e.toString());
-                    
+                    if (e.getMessage() == null 
+                            || !e.getMessage().contains("com.ibm.icu.util.Currency")) {
+                        StringWriter b = new StringWriter();
+                        e.printStackTrace(new PrintWriter(b));
+                        assertNull("", b.toString());
+                    }
                 }
             }
         }
@@ -150,6 +156,12 @@ public class CompatibilityTest extends TestFmwk
         {"ICU_51.1", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
         {"ICU_51.1", "com.ibm.icu.text.PluralFormat.dat"},
         {"ICU_51.1", "com.ibm.icu.text.PluralRules.dat"},
+        
+        // Currency format changed in 52, which means NumberFormat did also
+        {"ICU_3.6",     "com.ibm.icu.util.Currency.dat"},
+        {"ICU_3.6",     "com.ibm.icu.text.NumberFormat.dat"},
+        {"ICU_51.1",     "com.ibm.icu.util.Currency.dat"},
+        {"ICU_51.1",     "com.ibm.icu.text.NumberFormat.dat"},
         
         {"ICU_3.6",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
         {"ICU_3.8.1",   "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
