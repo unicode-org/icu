@@ -1,5 +1,5 @@
 # DerivedCoreProperties-6.3.0.txt
-# Date: 2013-04-11, 08:36:26 GMT [MD]
+# Date: 2013-08-26, 23:09:02 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2013 Unicode, Inc.
@@ -83,7 +83,10 @@
 21DD          ; Math
 21E4..21E5    ; Math
 21F4..22FF    ; Math
-2308..230B    ; Math
+2308          ; Math
+2309          ; Math
+230A          ; Math
+230B          ; Math
 2320..2321    ; Math
 237C          ; Math
 239B..23B3    ; Math
@@ -2321,8 +2324,11 @@ FF21..FF3A    ; Uppercase
 1D756..1D76E  ; Uppercase
 1D790..1D7A8  ; Uppercase
 1D7CA         ; Uppercase
+1F130..1F149  ; Uppercase
+1F150..1F169  ; Uppercase
+1F170..1F189  ; Uppercase
 
-# Total code points: 1483
+# Total code points: 1561
 
 # ================================================
 
@@ -2461,19 +2467,23 @@ FF41..FF5A    ; Cased
 1D78A..1D7A8  ; Cased
 1D7AA..1D7C2  ; Cased
 1D7C4..1D7CB  ; Cased
+1F130..1F149  ; Cased
+1F150..1F169  ; Cased
+1F170..1F189  ; Cased
 
-# Total code points: 3448
+# Total code points: 3526
 
 # ================================================
 
 # Derived Property:   Case_Ignorable (CI)
 #  As defined by Unicode Standard Definition D136
 #  C is defined to be case-ignorable if
-#    Word_Break(C) = MidLetter or MidNumLet, or
+#    Word_Break(C) = MidLetter or MidNumLet or Single_Quote, or
 #    General_Category(C) = Nonspacing_Mark (Mn), Enclosing_Mark (Me), Format (Cf), Modifier_Letter (Lm), or Modifier_Symbol (Sk).
 
-0027          ; Case_Ignorable  # patch to make tests pass; derivation should add WB=SQ
+0027          ; Case_Ignorable
 002E          ; Case_Ignorable
+003A          ; Case_Ignorable
 005E          ; Case_Ignorable
 0060          ; Case_Ignorable
 00A8          ; Case_Ignorable
@@ -2761,11 +2771,14 @@ ABED          ; Case_Ignorable
 FB1E          ; Case_Ignorable
 FBB2..FBC1    ; Case_Ignorable
 FE00..FE0F    ; Case_Ignorable
+FE13          ; Case_Ignorable
 FE20..FE26    ; Case_Ignorable
 FE52          ; Case_Ignorable
+FE55          ; Case_Ignorable
 FEFF          ; Case_Ignorable
 FF07          ; Case_Ignorable
 FF0E          ; Case_Ignorable
+FF1A          ; Case_Ignorable
 FF3E          ; Case_Ignorable
 FF40          ; Case_Ignorable
 FF70          ; Case_Ignorable
@@ -2805,7 +2818,7 @@ E0001         ; Case_Ignorable
 E0020..E007F  ; Case_Ignorable
 E0100..E01EF  ; Case_Ignorable
 
-# Total code points: 1801
+# Total code points: 1806
 
 # ================================================
 
@@ -9290,7 +9303,10 @@ E0100..E01EF  ; Grapheme_Extend
 21D5..21F3    ; Grapheme_Base
 21F4..22FF    ; Grapheme_Base
 2300..2307    ; Grapheme_Base
-2308..230B    ; Grapheme_Base
+2308          ; Grapheme_Base
+2309          ; Grapheme_Base
+230A          ; Grapheme_Base
+230B          ; Grapheme_Base
 230C..231F    ; Grapheme_Base
 2320..2321    ; Grapheme_Base
 2322..2328    ; Grapheme_Base
