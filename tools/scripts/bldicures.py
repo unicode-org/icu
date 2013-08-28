@@ -2,6 +2,8 @@
 #
 # Copyright (C) 2013 IBM Corporation and Others. All Rights Reserved.
 #
+print "NOTE: this tool is a TECHNOLOGY PREVIEW and not a supported ICU tool."
+#
 # @author Steven R. Loomis <srl@icu-project.org>
 #
 # Yet Another Resource Builder
