@@ -20,9 +20,12 @@
 #include "unicode/format.h"
 #include "unicode/locid.h"
 #include "unicode/parseerr.h"
+#include "unicode/ures.h"
 #include "unicode/utypes.h"
 #include "uvector.h"
 #include "hash.h"
+
+class PluralRulesTest;
 
 U_NAMESPACE_BEGIN
 
@@ -51,6 +54,7 @@ static const UChar U_NINE          = ((UChar)0x0039);
 static const UChar COLON           = ((UChar)0x003A);
 static const UChar SEMI_COLON      = ((UChar)0x003B);
 static const UChar EQUALS          = ((UChar)0x003D);
+static const UChar AT              = ((UChar)0x0040);
 static const UChar CAP_A           = ((UChar)0x0041);
 static const UChar CAP_B           = ((UChar)0x0042);
 static const UChar CAP_R           = ((UChar)0x0052);
@@ -58,6 +62,8 @@ static const UChar CAP_Z           = ((UChar)0x005A);
 static const UChar LOWLINE         = ((UChar)0x005F);
 static const UChar LEFTBRACE       = ((UChar)0x007B);
 static const UChar RIGHTBRACE      = ((UChar)0x007D);
+static const UChar TILDE           = ((UChar)0x007E);
+static const UChar ELLIPSIS        = ((UChar)0x2026);
 
 static const UChar LOW_A           = ((UChar)0x0061);
 static const UChar LOW_B           = ((UChar)0x0062);
@@ -90,45 +96,78 @@ static const int32_t PLURAL_RANGE_HIGH = 0x7fffffff;
 
 enum tokenType {
   none,
-  tLetter,
   tNumber,
   tComma,
   tSemiColon,
   tSpace,
   tColon,
+  tAt,           // '@'
   tDot,
+  tDot2,
+  tEllipsis,
   tKeyword,
   tAnd,
   tOr,
-  tMod,
-  tNot,
-  tIn,
+  tMod,          // 'mod' or '%'
+  tNot,          //  'not' only.
+  tIn,           //  'in'  only.
+  tEqual,        //  '='   only.
+  tNotEqual,     //  '!='
+  tTilde,
   tWithin,
+  tIs,
   tVariableN,
   tVariableI,
   tVariableF,
   tVariableV,
-  tVariableJ,
   tVariableT,
-  tIs,
+  tDecimal,
+  tInteger,
   tEOF
 };
 
 
-class RuleParser : public UMemory {
+class PluralRuleParser: public UMemory {
 public:
-    RuleParser();
-    virtual ~RuleParser();
-    void getNextToken(const UnicodeString& ruleData, int32_t *ruleIndex, UnicodeString& token,
-                            tokenType& type, UErrorCode &status);
-    void checkSyntax(tokenType prevType, tokenType curType, UErrorCode &status);
+    PluralRuleParser();
+    virtual ~PluralRuleParser();
+
+    void parse(const UnicodeString &rules, PluralRules *dest, UErrorCode &status);
+    void getNextToken(UErrorCode &status);
+    void checkSyntax(UErrorCode &status);
+    static int32_t getNumberValue(const UnicodeString &token);
+
 private:
-    void getKeyType(const UnicodeString& token, tokenType& type, UErrorCode &status);
-    UBool inRange(UChar ch, tokenType& type);
-    UBool isValidKeyword(const UnicodeString& token);
+    static tokenType getKeyType(const UnicodeString& token, tokenType type);
+    static tokenType charType(UChar ch);
+    static UBool isValidKeyword(const UnicodeString& token);
+
+    const UnicodeString  *ruleSrc;  // The rules string.
+    int32_t        ruleIndex;       // String index in the input rules, the current parse position.
+    UnicodeString  token;           // Token most recently scanned.
+    tokenType      type;
+    tokenType      prevType;
+
+                                    // The items currently being parsed & built.
+                                    // Note: currentChain may not be the last RuleChain in the
+                                    //       list because the "other" chain is forced to the end.
+    AndConstraint *curAndConstraint;
+    RuleChain     *currentChain;
+
+    int32_t        rangeLowIdx;     // Indices in the UVector of ranges of the
+    int32_t        rangeHiIdx;      //    low and hi values currently being parsed.
+
+    enum EParseState {
+       kKeyword,
+       kExpr,
+       kValue,
+       kRangeList,
+       kSamples
+    };
+
 };
 
-class U_I18N_API NumberInfo: public UMemory {
+class U_I18N_API FixedDecimal: public UMemory {
   public:
     /**
       * @param n   the number
@@ -136,22 +175,22 @@ class U_I18N_API NumberInfo: public UMemory {
       * @param f   The fraction digits.
       *
       */
-    NumberInfo(double  n, int32_t v, int64_t f);
-    NumberInfo(double n, int32_t);
-    explicit NumberInfo(double n);
+    FixedDecimal(double  n, int32_t v, int64_t f);
+    FixedDecimal(double n, int32_t);
+    explicit FixedDecimal(double n);
+    FixedDecimal(const UnicodeString &s, UErrorCode &ec);
 
     double get(tokenType operand) const;
     int32_t getVisibleFractionDigitCount() const;
 
-  private:
     void init(double n, int32_t v, int64_t f);
-    static int32_t getFractionalDigits(double n, int32_t v);
+    static int64_t getFractionalDigits(double n, int32_t v);
     static int32_t decimals(double n);
 
     double      source;
-    int32_t     visibleFractionDigitCount;
-    int64_t     fractionalDigits;
-    int64_t     fractionalDigitsWithoutTrailingZeros;
+    int32_t     visibleDecimalDigitCount;
+    int64_t     decimalDigits;
+    int64_t     decimalDigitsWithoutTrailingZeros;
     int64_t     intValue;
     UBool       hasIntegerValue;
     UBool       isNegative;
@@ -177,8 +216,7 @@ public:
     virtual ~AndConstraint();
     AndConstraint* add();
     // UBool isFulfilled(double number);
-    UBool isFulfilled(const NumberInfo &number);
-    UBool isLimited();
+    UBool isFulfilled(const FixedDecimal &number);
 };
 
 class OrConstraint : public UMemory  {
@@ -191,24 +229,28 @@ public:
     virtual ~OrConstraint();
     AndConstraint* add();
     // UBool isFulfilled(double number);
-    UBool isFulfilled(const NumberInfo &number);
-    UBool isLimited();
+    UBool isFulfilled(const FixedDecimal &number);
 };
 
 class RuleChain : public UMemory  {
 public:
-    OrConstraint *ruleHeader;
-    UnicodeString keyword;
+    UnicodeString   fKeyword;
+    RuleChain      *fNext;
+    OrConstraint   *ruleHeader;
+    UnicodeString   fDecimalSamples;  // Samples strings from rule source
+    UnicodeString   fIntegerSamples;  //   without @decimal or @integer, otherwise unprocessed.
+    UBool           fDecimalSamplesUnbounded;
+    UBool           fIntegerSamplesUnbounded;
+
+
     RuleChain();
     RuleChain(const RuleChain& other);
-    RuleChain *next;
-
     virtual ~RuleChain();
-    UnicodeString select(const NumberInfo &number) const;
-    void dumpRules(UnicodeString& result);
-    UBool isLimited();
-    UErrorCode getKeywords(int32_t maxArraySize, UnicodeString *keywords, int32_t& arraySize) const;
-    UBool isKeyword(const UnicodeString& keyword) const;
+
+    UnicodeString select(const FixedDecimal &number) const;
+    void          dumpRules(UnicodeString& result);
+    UErrorCode    getKeywords(int32_t maxArraySize, UnicodeString *keywords, int32_t& arraySize) const;
+    UBool         isKeyword(const UnicodeString& keyword) const;
 };
 
 class PluralKeywordEnumeration : public StringEnumeration {
@@ -221,10 +263,23 @@ public:
     virtual void reset(UErrorCode& status);
     virtual int32_t count(UErrorCode& status) const;
 private:
-    int32_t pos;
-    UVector fKeywordNames;
+    int32_t         pos;
+    UVector         fKeywordNames;
 };
 
+
+class U_I18N_API PluralAvailableLocalesEnumeration: public StringEnumeration {
+  public:
+    PluralAvailableLocalesEnumeration(UErrorCode &status);
+    virtual ~PluralAvailableLocalesEnumeration();
+    virtual const char* next(int32_t *resultLength, UErrorCode& status);
+    virtual void reset(UErrorCode& status);
+    virtual int32_t count(UErrorCode& status) const;
+  private:
+    UErrorCode      fOpenStatus;
+    UResourceBundle *fLocales;
+    UResourceBundle *fRes;
+};
 
 U_NAMESPACE_END
 

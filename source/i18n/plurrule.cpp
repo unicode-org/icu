@@ -15,25 +15,24 @@
 #include "unicode/plurrule.h"
 #include "unicode/upluralrules.h"
 #include "unicode/ures.h"
+#include "charstr.h"
 #include "cmemory.h"
 #include "cstring.h"
+#include "digitlst.h"
 #include "hash.h"
+#include "locutil.h"
 #include "mutex.h"
 #include "patternprops.h"
 #include "plurrule_impl.h"
 #include "putilimp.h"
 #include "ucln_in.h"
 #include "ustrfmt.h"
-#include "locutil.h"
 #include "uassert.h"
 #include "uvectr32.h"
 
 #if !UCONFIG_NO_FORMATTING
 
 U_NAMESPACE_BEGIN
-
-// shared by all instances when lazy-initializing samples
-static UMutex pluralMutex = U_MUTEX_INITIALIZER;
 
 #define ARRAY_SIZE(array) (int32_t)(sizeof array  / sizeof array[0])
 
@@ -52,43 +51,27 @@ static const UChar PK_VAR_T[]={LOW_T,0};
 static const UChar PK_VAR_V[]={LOW_V,0};
 static const UChar PK_VAR_J[]={LOW_J,0};
 static const UChar PK_WITHIN[]={LOW_W,LOW_I,LOW_T,LOW_H,LOW_I,LOW_N,0};
+static const UChar PK_DECIMAL[]={LOW_D,LOW_E,LOW_C,LOW_I,LOW_M,LOW_A,LOW_L,0};
+static const UChar PK_INTEGER[]={LOW_I,LOW_N,LOW_T,LOW_E,LOW_G,LOW_E,LOW_R,0};
 
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralRules)
 UOBJECT_DEFINE_RTTI_IMPLEMENTATION(PluralKeywordEnumeration)
 
-PluralRules::PluralRules(UErrorCode& status)
+PluralRules::PluralRules(UErrorCode& /*status*/)
 :   UObject(),
-    mRules(NULL),
-    mParser(NULL),
-    mSamples(NULL),
-    mSampleInfo(NULL),
-    mSampleInfoCount(0)
+    mRules(NULL)
 {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    mParser = new RuleParser();
-    if (mParser==NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-    }
 }
 
 PluralRules::PluralRules(const PluralRules& other)
 : UObject(other),
-    mRules(NULL),
-  mParser(NULL),
-  mSamples(NULL),
-  mSampleInfo(NULL),
-  mSampleInfoCount(0)
+    mRules(NULL)
 {
     *this=other;
 }
 
 PluralRules::~PluralRules() {
     delete mRules;
-    delete mParser;
-    uprv_free(mSamples);
-    uprv_free(mSampleInfo);
 }
 
 PluralRules*
@@ -106,42 +89,43 @@ PluralRules::operator=(const PluralRules& other) {
         else {
             mRules = new RuleChain(*other.mRules);
         }
-        delete mParser;
-        mParser = new RuleParser();
-
-        uprv_free(mSamples);
-        mSamples = NULL;
-
-        uprv_free(mSampleInfo);
-        mSampleInfo = NULL;
-        mSampleInfoCount = 0;
     }
 
     return *this;
 }
 
+StringEnumeration* PluralRules::getAvailableLocales(UErrorCode &status) {
+    StringEnumeration *result = new PluralAvailableLocalesEnumeration(status);
+    if (result == NULL && U_SUCCESS(status)) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    }
+    if (U_FAILURE(status)) {
+        delete result;
+        result = NULL;
+    }
+    return result;
+}
+
+
 PluralRules* U_EXPORT2
 PluralRules::createRules(const UnicodeString& description, UErrorCode& status) {
-    RuleChain   rules;
-
     if (U_FAILURE(status)) {
         return NULL;
     }
+
+    PluralRuleParser parser;
     PluralRules *newRules = new PluralRules(status);
-    if ( (newRules != NULL)&& U_SUCCESS(status) ) {
-        newRules->parseDescription((UnicodeString &)description, rules, status);
-        if (U_SUCCESS(status)) {
-            newRules->addRules(rules);
-        }
+    if (U_SUCCESS(status) && newRules == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
     }
+    parser.parse(description, newRules, status);
     if (U_FAILURE(status)) {
         delete newRules;
-        return NULL;
+        newRules = NULL;
     }
-    else {
-        return newRules;
-    }
+    return newRules;
 }
+
 
 PluralRules* U_EXPORT2
 PluralRules::createDefaultRules(UErrorCode& status) {
@@ -155,7 +139,6 @@ PluralRules::forLocale(const Locale& locale, UErrorCode& status) {
 
 PluralRules* U_EXPORT2
 PluralRules::forLocale(const Locale& locale, UPluralType type, UErrorCode& status) {
-    RuleChain   rChain;
     if (U_FAILURE(status)) {
         return NULL;
     }
@@ -169,35 +152,36 @@ PluralRules::forLocale(const Locale& locale, UPluralType type, UErrorCode& statu
         return NULL;
     }
     UnicodeString locRule = newObj->getRuleFromResource(locale, type, status);
-    if ((locRule.length() != 0) && U_SUCCESS(status)) {
-        newObj->parseDescription(locRule, rChain, status);
-        if (U_SUCCESS(status)) {
-            newObj->addRules(rChain);
-        }
-    }
-    if (U_FAILURE(status)||(locRule.length() == 0)) {
-        // use default plural rule
+    // TODO: which errors, if any, should be returned?
+    if (locRule.length() == 0) {
+        // Locales with no specific rules (all numbers have the "other" category
+        //   will return a U_MISSING_RESOURCE_ERROR at this point. This is not
+        //   an error.
+        locRule =  UnicodeString(PLURAL_DEFAULT_RULE);
         status = U_ZERO_ERROR;
-        UnicodeString defRule = UnicodeString(PLURAL_DEFAULT_RULE);
-        newObj->parseDescription(defRule, rChain, status);
-        newObj->addRules(rChain);
     }
+    PluralRuleParser parser;
+    parser.parse(locRule, newObj, status);
+        //  TODO: should rule parse errors be returned, or
+        //        should we silently use default rules?
+        //        Original impl used default rules.
+        //        Ask the question to ICU Core.
 
     return newObj;
 }
 
 UnicodeString
 PluralRules::select(int32_t number) const {
-    return select(NumberInfo(number));
+    return select(FixedDecimal(number));
 }
 
 UnicodeString
 PluralRules::select(double number) const {
-    return select(NumberInfo(number));
+    return select(FixedDecimal(number));
 }
 
 UnicodeString
-PluralRules::select(const NumberInfo &number) const {
+PluralRules::select(const FixedDecimal &number) const {
     if (mRules == NULL) {
         return UnicodeString(TRUE, PLURAL_DEFAULT_RULE, -1);
     }
@@ -219,66 +203,120 @@ PluralRules::getKeywords(UErrorCode& status) const {
 }
 
 double
-PluralRules::getUniqueKeywordValue(const UnicodeString& keyword) {
-  double val = 0.0;
-  UErrorCode status = U_ZERO_ERROR;
-  int32_t count = getSamplesInternal(keyword, &val, 1, FALSE, status);
-  return count == 1 ? val : UPLRULES_NO_UNIQUE_VALUE;
+PluralRules::getUniqueKeywordValue(const UnicodeString& /* keyword */) {
+  // Not Implemented.
+  return UPLRULES_NO_UNIQUE_VALUE;
 }
 
 int32_t
-PluralRules::getAllKeywordValues(const UnicodeString &keyword, double *dest,
-                                 int32_t destCapacity, UErrorCode& error) {
-    return getSamplesInternal(keyword, dest, destCapacity, FALSE, error);
+PluralRules::getAllKeywordValues(const UnicodeString & /* keyword */, double * /* dest */,
+                                 int32_t /* destCapacity */, UErrorCode& error) {
+    error = U_UNSUPPORTED_ERROR;
+    return 0;
 }
+
+    
+static double scaleForInt(double d) {
+    double scale = 1.0;
+    while (d != floor(d)) {
+        d = d * 10.0;
+        scale = scale * 10.0;
+    }
+    return scale;
+}
+
+static int32_t
+getSamplesFromString(const UnicodeString &samples, double *dest,
+                        int32_t destCapacity, UErrorCode& status) {
+    int32_t sampleCount = 0;
+    int32_t sampleStartIdx = 0;
+    int32_t sampleEndIdx = 0;
+
+    //std::string ss;  // TODO: debugging.
+    // std::cout << "PluralRules::getSamples(), samples = \"" << samples.toUTF8String(ss) << "\"\n";
+    for (sampleCount = 0; sampleCount < destCapacity && sampleStartIdx < samples.length(); ) {
+        sampleEndIdx = samples.indexOf(COMMA, sampleStartIdx);
+        if (sampleEndIdx == -1) {
+            sampleEndIdx = samples.length();
+        }
+        const UnicodeString &sampleRange = samples.tempSubStringBetween(sampleStartIdx, sampleEndIdx);
+        // ss.erase();
+        // std::cout << "PluralRules::getSamples(), samplesRange = \"" << sampleRange.toUTF8String(ss) << "\"\n";
+        int32_t tildeIndex = sampleRange.indexOf(TILDE);
+        if (tildeIndex < 0) {
+            FixedDecimal fixed(sampleRange, status);
+            double sampleValue = fixed.source;
+            if (fixed.visibleDecimalDigitCount == 0 || sampleValue != floor(sampleValue)) {
+                dest[sampleCount++] = sampleValue;
+            }
+        } else {
+            
+            FixedDecimal fixedLo(sampleRange.tempSubStringBetween(0, tildeIndex), status);
+            FixedDecimal fixedHi(sampleRange.tempSubStringBetween(tildeIndex+1), status);
+            double rangeLo = fixedLo.source;
+            double rangeHi = fixedHi.source;
+            if (U_FAILURE(status)) {
+                break;
+            }
+            if (rangeHi < rangeLo) {
+                status = U_INVALID_FORMAT_ERROR;
+                break;
+            }
+
+            // For ranges of samples with fraction decimal digits, scale the number up so that we
+            //   are adding one in the units place. Avoids roundoffs from repetitive adds of tenths.
+
+            double scale = scaleForInt(rangeLo); 
+            double t = scaleForInt(rangeHi);
+            if (t > scale) {
+                scale = t;
+            }
+            rangeLo *= scale;
+            rangeHi *= scale;
+            for (double n=rangeLo; n<=rangeHi; n+=1) {
+                // Hack Alert: don't return any decimal samples with integer values that
+                //    originated from a format with trailing decimals.
+                //    This API is returning doubles, which can't distinguish having displayed
+                //    zeros to the right of the decimal.
+                //    This results in test failures with values mapping back to a different keyword.
+                double sampleValue = n/scale;
+                if (!(sampleValue == floor(sampleValue) && fixedLo.visibleDecimalDigitCount > 0)) {
+                    dest[sampleCount++] = sampleValue;
+                }
+                if (sampleCount >= destCapacity) {
+                    break;
+                }
+            }
+        }
+        sampleStartIdx = sampleEndIdx + 1;
+    }
+    return sampleCount;
+}
+
 
 int32_t
 PluralRules::getSamples(const UnicodeString &keyword, double *dest,
                         int32_t destCapacity, UErrorCode& status) {
-    return getSamplesInternal(keyword, dest, destCapacity, TRUE, status);
-}
-
-int32_t
-PluralRules::getSamplesInternal(const UnicodeString &keyword, double *dest,
-                                int32_t destCapacity, UBool includeUnlimited,
-                                UErrorCode& status) {
-    initSamples(status);
-    if (U_FAILURE(status)) {
-        return -1;
-    }
-    if (destCapacity < 0 || (dest == NULL && destCapacity > 0)) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return -1;
-    }
-
-    int32_t index = getKeywordIndex(keyword, status);
-    if (index == -1) {
+    RuleChain *rc = rulesForKeyword(keyword);
+    if (rc == NULL || destCapacity == 0 || U_FAILURE(status)) {
         return 0;
     }
+    int32_t numSamples = getSamplesFromString(rc->fIntegerSamples, dest, destCapacity, status);
+    if (numSamples == 0) { 
+        numSamples = getSamplesFromString(rc->fDecimalSamples, dest, destCapacity, status);
+    }
+    return numSamples;
+}
+    
 
-    const int32_t LIMIT_MASK = 0x1 << 31;
-
-    if (!includeUnlimited) {
-        if ((mSampleInfo[index] & LIMIT_MASK) == 0) {
-            return -1;
+RuleChain *PluralRules::rulesForKeyword(const UnicodeString &keyword) const {
+    RuleChain *rc;
+    for (rc = mRules; rc != NULL; rc = rc->fNext) {
+        if (rc->fKeyword == keyword) {
+            break;
         }
     }
-
-    int32_t start = index == 0 ? 0 : mSampleInfo[index - 1] & ~LIMIT_MASK;
-    int32_t limit = mSampleInfo[index] & ~LIMIT_MASK;
-    int32_t len = limit - start;
-    if (len <= destCapacity) {
-        destCapacity = len;
-    } else if (includeUnlimited) {
-        len = destCapacity;  // no overflow, and don't report more than we copy
-    } else {
-        status = U_BUFFER_OVERFLOW_ERROR;
-        return len;
-    }
-    for (int32_t i = 0; i < destCapacity; ++i, ++start) {
-        dest[i] = mSamples[start];
-    }
-    return len;
+    return rc;
 }
 
 
@@ -287,14 +325,7 @@ PluralRules::isKeyword(const UnicodeString& keyword) const {
     if (0 == keyword.compare(PLURAL_KEYWORD_OTHER, 5)) {
         return true;
     }
-    else {
-        if (mRules==NULL) {
-            return false;
-        }
-        else {
-            return mRules->isKeyword(keyword);
-        }
-    }
+    return rulesForKeyword(keyword) != NULL;
 }
 
 UnicodeString
@@ -338,30 +369,22 @@ PluralRules::operator==(const PluralRules& other) const  {
     return TRUE;
 }
 
-void
-PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode &status)
-{
-    int32_t ruleIndex=0;
-    UnicodeString token;
-    tokenType type;
-    tokenType prevType=none;
-    RuleChain *ruleChain=NULL;
-    AndConstraint *curAndConstraint=NULL;
-    OrConstraint *orNode=NULL;
-    RuleChain *lastChain=NULL;
-    int32_t  rangeLowIdx = -1;   // Indices in the UVector of ranges of the
-    int32_t  rangeHiIdx  = -1;   //    low and hi values currently being parsed.
 
+void
+PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErrorCode &status)
+{
     if (U_FAILURE(status)) {
         return;
     }
-    UnicodeString ruleData = data.toLower("");
-    while (ruleIndex< ruleData.length()) {
-        mParser->getNextToken(ruleData, &ruleIndex, token, type, status);
+    U_ASSERT(ruleIndex == 0);    // Parsers are good for a single use only!
+    ruleSrc = &ruleData;
+
+    while (ruleIndex< ruleSrc->length()) {
+        getNextToken(status);
         if (U_FAILURE(status)) {
             return;
         }
-        mParser->checkSyntax(prevType, type, status);
+        checkSyntax(status);
         if (U_FAILURE(status)) {
             return;
         }
@@ -371,18 +394,17 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
             curAndConstraint = curAndConstraint->add();
             break;
         case tOr:
-            lastChain = &rules;
-            while (lastChain->next !=NULL) {
-                lastChain = lastChain->next;
+            {
+                U_ASSERT(currentChain != NULL);
+                OrConstraint *orNode=currentChain->ruleHeader;
+                while (orNode->next != NULL) {
+                    orNode = orNode->next;
+                }
+                orNode->next= new OrConstraint();
+                orNode=orNode->next;
+                orNode->next=NULL;
+                curAndConstraint = orNode->add();
             }
-            orNode=lastChain->ruleHeader;
-            while (orNode->next != NULL) {
-                orNode = orNode->next;
-            }
-            orNode->next= new OrConstraint();
-            orNode=orNode->next;
-            orNode->next=NULL;
-            curAndConstraint = orNode->add();
             break;
         case tIs:
             U_ASSERT(curAndConstraint != NULL);
@@ -393,8 +415,12 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
             U_ASSERT(curAndConstraint != NULL);
             curAndConstraint->negated=TRUE;
             break;
+
+        case tNotEqual:
+            curAndConstraint->negated=TRUE;
         case tIn:
         case tWithin:
+        case tEqual:
             U_ASSERT(curAndConstraint != NULL);
             curAndConstraint->rangeList = new UVector32(status);
             curAndConstraint->rangeList->addElement(-1, status);  // range Low
@@ -422,15 +448,23 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
                     }
                     else {
                         curAndConstraint->rangeList->setElementAt(getNumberValue(token), rangeHiIdx);
+                        if (curAndConstraint->rangeList->elementAti(rangeLowIdx) > 
+                                curAndConstraint->rangeList->elementAti(rangeHiIdx)) {
+                            // Range Lower bound > Range Upper bound.
+                            // U_UNEXPECTED_TOKEN seems a little funny, but it is consistently
+                            // used for all plural rule parse errors.
+                            status = U_UNEXPECTED_TOKEN;
+                            break;
+                        }
                     }
                 }
             }
             break;
         case tComma:
             // TODO: rule syntax checking is inadequate, can happen with badly formed rules.
-            //       The fix is a redone parser.
+            //       Catch cases like "n mod 10, is 1" here instead.
             if (curAndConstraint == NULL || curAndConstraint->rangeList == NULL) {
-                status = U_PARSE_ERROR;
+                status = U_UNEXPECTED_TOKEN;
                 break;
             }
             U_ASSERT(curAndConstraint->rangeList->size() >= 2);
@@ -448,27 +482,65 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
         case tVariableF:
         case tVariableT:
         case tVariableV:
-        case tVariableJ:
             U_ASSERT(curAndConstraint != NULL);
             curAndConstraint->digitsType = type;
             break;
         case tKeyword:
-            if (ruleChain==NULL) {
-                ruleChain = &rules;
+            {
+            RuleChain *newChain = new RuleChain;
+            if (newChain == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                break;
             }
-            else {
-                while (ruleChain->next!=NULL){
-                    ruleChain=ruleChain->next;
+            newChain->fKeyword = token;
+            if (prules->mRules == NULL) {
+                prules->mRules = newChain;
+            } else {
+                // The new rule chain goes at the end of the linked list of rule chains,
+                //   unless there is an "other" keyword & chain. "other" must remain last.
+                RuleChain *insertAfter = prules->mRules;
+                while (insertAfter->fNext!=NULL && 
+                       insertAfter->fNext->fKeyword.compare(PLURAL_KEYWORD_OTHER, 5) != 0 ){
+                    insertAfter=insertAfter->fNext;
                 }
-                ruleChain=ruleChain->next=new RuleChain();
+                newChain->fNext = insertAfter->fNext;
+                insertAfter->fNext = newChain;
             }
-            if (ruleChain->ruleHeader != NULL) {
-                delete ruleChain->ruleHeader;
-            }
-            orNode = ruleChain->ruleHeader = new OrConstraint();
+            OrConstraint *orNode = new OrConstraint();
+            newChain->ruleHeader = orNode;
             curAndConstraint = orNode->add();
-            ruleChain->keyword = token;
+            currentChain = newChain;
+            }
             break;
+
+        case tInteger:
+            for (;;) {
+                getNextToken(status);
+                if (U_FAILURE(status) || type == tSemiColon || type == tEOF || type == tAt) {
+                    break;
+                }
+                if (type == tEllipsis) {
+                    currentChain->fIntegerSamplesUnbounded = TRUE;
+                    continue;
+                }
+                currentChain->fIntegerSamples.append(token);
+            }
+            break;
+
+        case tDecimal:
+            for (;;) {
+                getNextToken(status);
+                if (U_FAILURE(status) || type == tSemiColon || type == tEOF || type == tAt) {
+                    break;
+                }
+                if (type == tEllipsis) {
+                    currentChain->fDecimalSamplesUnbounded = TRUE;
+                    continue;
+                }
+                currentChain->fDecimalSamples.append(token);
+            }
+            break;
+                
         default:
             break;
         }
@@ -477,211 +549,6 @@ PluralRules::parseDescription(UnicodeString& data, RuleChain& rules, UErrorCode 
             break;
         }
     }
-}
-
-int32_t
-PluralRules::getNumberValue(const UnicodeString& token) const {
-    int32_t i;
-    char digits[128];
-
-    i = token.extract(0, token.length(), digits, ARRAY_SIZE(digits), US_INV);
-    digits[i]='\0';
-
-    return((int32_t)atoi(digits));
-}
-
-
-void
-PluralRules::getNextLocale(const UnicodeString& localeData, int32_t* curIndex, UnicodeString& localeName) {
-    int32_t i=*curIndex;
-
-    localeName.remove();
-    while (i< localeData.length()) {
-       if ( (localeData.charAt(i)!= SPACE) && (localeData.charAt(i)!= COMMA) ) {
-           break;
-       }
-       i++;
-    }
-
-    while (i< localeData.length()) {
-       if ( (localeData.charAt(i)== SPACE) || (localeData.charAt(i)== COMMA) ) {
-           break;
-       }
-       localeName+=localeData.charAt(i++);
-    }
-    *curIndex=i;
-}
-
-
-int32_t
-PluralRules::getKeywordIndex(const UnicodeString& keyword,
-                             UErrorCode& status) const {
-    if (U_SUCCESS(status)) {
-        int32_t n = 0;
-        RuleChain* rc = mRules;
-        while (rc != NULL) {
-            if (rc->ruleHeader != NULL) {
-                if (rc->keyword == keyword) {
-                    return n;
-                }
-                ++n;
-            }
-            rc = rc->next;
-        }
-        if (0 == keyword.compare(PLURAL_KEYWORD_OTHER, 5)) {
-            return n;
-        }
-    }
-    return -1;
-}
-
-typedef struct SampleRecord {
-    int32_t ruleIndex;
-    double  value;
-} SampleRecord;
-
-void
-PluralRules::initSamples(UErrorCode& status) {
-    if (U_FAILURE(status)) {
-        return;
-    }
-    Mutex lock(&pluralMutex);
-
-    if (mSamples) {
-        return;
-    }
-
-    // Note, the original design let you have multiple rules with the same keyword.  But
-    // we don't use that in our data and existing functions in this implementation don't
-    // fully support it (for example, the returned keywords is a list and not a set).
-    //
-    // So I don't support this here either.  If you ask for samples, or for all values,
-    // you will get information about the first rule with that keyword, not all rules with
-    // that keyword.
-
-    int32_t maxIndex = 0;
-    int32_t otherIndex = -1; // the value -1 will indicate we added 'other' at end
-    RuleChain* rc = mRules;
-    while (rc != NULL) {
-        if (rc->ruleHeader != NULL) {
-            if (otherIndex == -1 && 0 == rc->keyword.compare(PLURAL_KEYWORD_OTHER, 5)) {
-                otherIndex = maxIndex;
-            }
-            ++maxIndex;
-        }
-        rc = rc->next;
-    }
-    if (otherIndex == -1) {
-        ++maxIndex;
-    }
-
-    LocalMemory<int32_t> newSampleInfo;
-    if (NULL == newSampleInfo.allocateInsteadAndCopy(maxIndex)) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-
-    const int32_t LIMIT_MASK = 0x1 << 31;
-
-    rc = mRules;
-    int32_t n = 0;
-    while (rc != NULL) {
-        if (rc->ruleHeader != NULL) {
-            newSampleInfo[n++] = rc->ruleHeader->isLimited() ? LIMIT_MASK : 0;
-        }
-        rc = rc->next;
-    }
-    if (otherIndex == -1) {
-        newSampleInfo[maxIndex - 1] = 0; // unlimited
-    }
-
-    MaybeStackArray<SampleRecord, 10> newSamples;
-    int32_t sampleCount = 0;
-
-    int32_t limit = 10;
-
-    for (int i = 0, keywordsRemaining = maxIndex;
-          keywordsRemaining > 0 && i < limit;
-          ++i) {
-        double val = i / 2.0;
-
-        n = 0;
-        rc = mRules;
-        int32_t found = -1;
-        while (rc != NULL) {
-            if (rc->ruleHeader != NULL) {
-                if (rc->ruleHeader->isFulfilled(NumberInfo(val))) {
-                    found = n;
-                    break;
-                }
-                ++n;
-            }
-            rc = rc->next;
-        }
-        if (found == -1) {
-            // 'other'.  If there is an 'other' rule, the rule set is bad since nothing
-            // should leak through, but we don't bother to report that here.
-            found = otherIndex == -1 ? maxIndex - 1 : otherIndex;
-        }
-        if (newSampleInfo[found] == MAX_SAMPLES) { // limit flag not set
-            continue;
-        }
-        newSampleInfo[found] += 1; // won't impact limit flag
-
-        if (sampleCount == newSamples.getCapacity()) {
-            int32_t newCapacity = sampleCount < 20 ? 128 : sampleCount * 2;
-            if (NULL == newSamples.resize(newCapacity, sampleCount)) {
-                status = U_MEMORY_ALLOCATION_ERROR;
-                return;
-            }
-        }
-        newSamples[sampleCount].ruleIndex = found;
-        newSamples[sampleCount].value = val;
-        ++sampleCount;
-
-        if (newSampleInfo[found] == MAX_SAMPLES) { // limit flag not set
-            --keywordsRemaining;
-        }
-    }
-
-    // sort the values by index, leaving order otherwise unchanged
-    // this is just a selection sort for simplicity
-    LocalMemory<double> values;
-    if (NULL == values.allocateInsteadAndCopy(sampleCount)) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
-    for (int i = 0, j = 0; i < maxIndex; ++i) {
-        for (int k = 0; k < sampleCount; ++k) {
-            if (newSamples[k].ruleIndex == i) {
-                values[j++] = newSamples[k].value;
-            }
-        }
-    }
-
-    // convert array of mask/lengths to array of mask/limits
-    limit = 0;
-    for (int i = 0; i < maxIndex; ++i) {
-        int32_t info = newSampleInfo[i];
-        int32_t len = info & ~LIMIT_MASK;
-        limit += len;
-        // if a rule is 'unlimited' but has fewer than MAX_SAMPLES samples,
-        // it's not really unlimited, so mark it as limited
-        int32_t mask = len < MAX_SAMPLES ? LIMIT_MASK : info & LIMIT_MASK;
-        newSampleInfo[i] = limit | mask;
-    }
-
-    // ok, we've got good data
-    mSamples = values.orphan();
-    mSampleInfo = newSampleInfo.orphan();
-    mSampleInfoCount = maxIndex;
-}
-
-void
-PluralRules::addRules(RuleChain& rules) {
-    RuleChain *newRule = new RuleChain(rules);
-    U_ASSERT(this->mRules == NULL);
-    this->mRules=newRule;
 }
 
 UnicodeString
@@ -739,42 +606,42 @@ PluralRules::getRuleFromResource(const Locale& locale, UPluralType type, UErrorC
     }
 
     char setKey[256];
-    UChar result[256];
     u_UCharsToChars(s, setKey, resLen + 1);
     // printf("\n PluralRule: %s\n", setKey);
-
 
     LocalUResourceBundlePointer ruleRes(ures_getByKey(rb.getAlias(), "rules", NULL, &errCode));
     if(U_FAILURE(errCode)) {
         return emptyStr;
     }
-    resLen=0;
     LocalUResourceBundlePointer setRes(ures_getByKey(ruleRes.getAlias(), setKey, NULL, &errCode));
     if (U_FAILURE(errCode)) {
         return emptyStr;
     }
 
     int32_t numberKeys = ures_getSize(setRes.getAlias());
-    char *key=NULL;
-    int32_t len=0;
-    for(int32_t i=0; i<numberKeys; ++i) {
-        int32_t keyLen;
-        resLen=0;
-        s=ures_getNextString(setRes.getAlias(), &resLen, (const char**)&key, &errCode);
-        keyLen = (int32_t)uprv_strlen(key);
-        u_charsToUChars(key, result+len, keyLen);
-        len += keyLen;
-        result[len++]=COLON;
-        uprv_memcpy(result+len, s, resLen*sizeof(UChar));
-        len += resLen;
-        result[len++]=SEMI_COLON;
+    UnicodeString result;
+    const char *key=NULL;
+    for(int32_t i=0; i<numberKeys; ++i) {   // Keys are zero, one, few, ...
+        UnicodeString rules = ures_getNextUnicodeString(setRes.getAlias(), &key, &errCode);
+        UnicodeString uKey(key, -1, US_INV);
+        result.append(uKey);
+        result.append(COLON);
+        result.append(rules);
+        result.append(SEMI_COLON);
     }
-    result[len++]=0;
-    u_UCharsToChars(result, setKey, len);
-    // printf(" Rule: %s\n", setKey);
-
-    return UnicodeString(result);
+    return result;
 }
+
+
+UnicodeString
+PluralRules::getRules() const {
+    UnicodeString rules;
+    if (mRules != NULL) {
+        mRules->dumpRules(rules);
+    }
+    return rules;
+}
+
 
 AndConstraint::AndConstraint() {
     op = AndConstraint::NONE;
@@ -818,14 +685,17 @@ AndConstraint::~AndConstraint() {
 
 
 UBool
-AndConstraint::isFulfilled(const NumberInfo &number) {
+AndConstraint::isFulfilled(const FixedDecimal &number) {
     UBool result = TRUE;
+    if (digitsType == none) {
+        // An empty AndConstraint, created by a rule with a keyword but no following expression.
+        return TRUE;
+    }
     double n = number.get(digitsType);  // pulls n | i | v | f value for the number.
                                         // Will always be positive.
                                         // May be non-integer (n option only)
     do {
-        if ((integerOnly && n != uprv_floor(n)) ||
-                (digitsType == tVariableJ && number.getVisibleFractionDigitCount()) != 0) {
+        if (integerOnly && n != uprv_floor(n)) {
             result = FALSE;
             break;
         }
@@ -853,10 +723,6 @@ AndConstraint::isFulfilled(const NumberInfo &number) {
     return result;
 }
 
-UBool 
-AndConstraint::isLimited() {
-    return (rangeList == NULL || integerOnly) && !negated && op != MOD;
-}
 
 AndConstraint*
 AndConstraint::add()
@@ -909,7 +775,7 @@ OrConstraint::add()
 }
 
 UBool
-OrConstraint::isFulfilled(const NumberInfo &number) {
+OrConstraint::isFulfilled(const FixedDecimal &number) {
     OrConstraint* orRule=this;
     UBool result=FALSE;
 
@@ -926,63 +792,56 @@ OrConstraint::isFulfilled(const NumberInfo &number) {
     return result;
 }
 
-UBool
-OrConstraint::isLimited() {
-    for (OrConstraint *orc = this; orc != NULL; orc = orc->next) {
-        UBool result = FALSE;
-        for (AndConstraint *andc = orc->childNode; andc != NULL; andc = andc->next) {
-            if (andc->isLimited()) {
-                result = TRUE;
-                break;
-            }
-        }
-        if (result == FALSE) {
-            return FALSE;
-        }
-    }
-    return TRUE;
+
+RuleChain::RuleChain(): fKeyword(), fNext(NULL), ruleHeader(NULL), fDecimalSamples(), fIntegerSamples(), 
+                        fDecimalSamplesUnbounded(FALSE), fIntegerSamplesUnbounded(FALSE) {
 }
 
-RuleChain::RuleChain() {
-    ruleHeader=NULL;
-    next = NULL;
-}
-
-RuleChain::RuleChain(const RuleChain& other) {
-    this->keyword=other.keyword;
+RuleChain::RuleChain(const RuleChain& other) : 
+        fKeyword(other.fKeyword), fNext(NULL), ruleHeader(NULL), fDecimalSamples(other.fDecimalSamples),
+        fIntegerSamples(other.fIntegerSamples), fDecimalSamplesUnbounded(other.fDecimalSamplesUnbounded), 
+        fIntegerSamplesUnbounded(other.fIntegerSamplesUnbounded) {
     if (other.ruleHeader != NULL) {
         this->ruleHeader = new OrConstraint(*(other.ruleHeader));
     }
-    else {
-        this->ruleHeader = NULL;
-    }
-    if (other.next != NULL ) {
-        this->next = new RuleChain(*other.next);
-    }
-    else
-    {
-        this->next = NULL;
+    if (other.fNext != NULL ) {
+        this->fNext = new RuleChain(*other.fNext);
     }
 }
 
 RuleChain::~RuleChain() {
-    if (next != NULL) {
-        delete next;
-    }
-    if ( ruleHeader != NULL ) {
-        delete ruleHeader;
-    }
+    delete fNext;
+    delete ruleHeader;
 }
 
 
 UnicodeString
-RuleChain::select(const NumberInfo &number) const {
-    for (const RuleChain *rules = this; rules != NULL; rules = rules->next) {
+RuleChain::select(const FixedDecimal &number) const {
+    for (const RuleChain *rules = this; rules != NULL; rules = rules->fNext) {
        if (rules->ruleHeader->isFulfilled(number)) {
-           return rules->keyword;
+           return rules->fKeyword;
        }
     }
     return UnicodeString(TRUE, PLURAL_KEYWORD_OTHER, 5);
+}
+
+static UnicodeString tokenString(tokenType tok) {
+    UnicodeString s;
+    switch (tok) {
+      case tVariableN:
+        s.append(LOW_N); break;
+      case tVariableI:
+        s.append(LOW_I); break;
+      case tVariableF:
+        s.append(LOW_F); break;
+      case tVariableV:
+        s.append(LOW_V); break;
+      case tVariableT:
+        s.append(LOW_T); break;
+      default:
+        s.append(TILDE);
+    }
+    return s;
 }
 
 void
@@ -990,13 +849,18 @@ RuleChain::dumpRules(UnicodeString& result) {
     UChar digitString[16];
 
     if ( ruleHeader != NULL ) {
-        result +=  keyword;
+        result +=  fKeyword;
+        result += COLON;
+        result += SPACE;
         OrConstraint* orRule=ruleHeader;
         while ( orRule != NULL ) {
             AndConstraint* andRule=orRule->childNode;
             while ( andRule != NULL ) {
-                if ( (andRule->op==AndConstraint::NONE) && (andRule->rangeList==NULL) ) {
-                    result += UNICODE_STRING_SIMPLE(" n is ");
+                if ((andRule->op==AndConstraint::NONE) &&  (andRule->rangeList==NULL) && (andRule->value == -1)) {
+                    // Empty Rules.
+                } else if ( (andRule->op==AndConstraint::NONE) && (andRule->rangeList==NULL) ) {
+                    result += tokenString(andRule->digitsType);
+                    result += UNICODE_STRING_SIMPLE(" is ");
                     if (andRule->negated) {
                         result += UNICODE_STRING_SIMPLE("not ");
                     }
@@ -1004,13 +868,12 @@ RuleChain::dumpRules(UnicodeString& result) {
                     result += UnicodeString(digitString);
                 }
                 else {
+                    result += tokenString(andRule->digitsType);
+                    result += SPACE;
                     if (andRule->op==AndConstraint::MOD) {
-                        result += UNICODE_STRING_SIMPLE("  n mod ");
+                        result += UNICODE_STRING_SIMPLE("mod ");
                         uprv_itou(digitString,16, andRule->opNum,10,0);
                         result += UnicodeString(digitString);
-                    }
-                    else {
-                        result += UNICODE_STRING_SIMPLE("  n ");
                     }
                     if (andRule->rangeList==NULL) {
                         if (andRule->negated) {
@@ -1027,10 +890,10 @@ RuleChain::dumpRules(UnicodeString& result) {
                     else {
                         if (andRule->negated) {
                             if ( andRule->integerOnly ) {
-                                result += UNICODE_STRING_SIMPLE("  not in ");
+                                result += UNICODE_STRING_SIMPLE(" not in ");
                             }
                             else {
-                                result += UNICODE_STRING_SIMPLE("  not within ");
+                                result += UNICODE_STRING_SIMPLE(" not within ");
                             }
                         }
                         else {
@@ -1046,27 +909,27 @@ RuleChain::dumpRules(UnicodeString& result) {
                             int32_t rangeHi = andRule->rangeList->elementAti(r+1);
                             uprv_itou(digitString,16, rangeLo, 10, 0);
                             result += UnicodeString(digitString);
-                            if (rangeLo != rangeHi) {
-                                result += UNICODE_STRING_SIMPLE(" .. ");
-                                uprv_itou(digitString,16, rangeHi, 10,0);
-                            }
-                            if (r+2 <= andRule->rangeList->size()) {
+                            result += UNICODE_STRING_SIMPLE("..");
+                            uprv_itou(digitString,16, rangeHi, 10,0);
+                            result += UnicodeString(digitString);
+                            if (r+2 < andRule->rangeList->size()) {
                                 result += UNICODE_STRING_SIMPLE(", ");
                             }
                         }
                     }
                 }
                 if ( (andRule=andRule->next) != NULL) {
-                    result.append(PK_AND, 3);
+                    result += UNICODE_STRING_SIMPLE(" and ");
                 }
             }
             if ( (orRule = orRule->next) != NULL ) {
-                result.append(PK_OR, 2);
+                result += UNICODE_STRING_SIMPLE(" or ");
             }
         }
     }
-    if ( next != NULL ) {
-        next->dumpRules(result);
+    if ( fNext != NULL ) {
+        result += UNICODE_STRING_SIMPLE("; ");
+        fNext->dumpRules(result);
     }
 }
 
@@ -1074,14 +937,14 @@ RuleChain::dumpRules(UnicodeString& result) {
 UErrorCode
 RuleChain::getKeywords(int32_t capacityOfKeywords, UnicodeString* keywords, int32_t& arraySize) const {
     if ( arraySize < capacityOfKeywords-1 ) {
-        keywords[arraySize++]=keyword;
+        keywords[arraySize++]=fKeyword;
     }
     else {
         return U_BUFFER_OVERFLOW_ERROR;
     }
 
-    if ( next != NULL ) {
-        return next->getKeywords(capacityOfKeywords, keywords, arraySize);
+    if ( fNext != NULL ) {
+        return fNext->getKeywords(capacityOfKeywords, keywords, arraySize);
     }
     else {
         return U_ZERO_ERROR;
@@ -1090,12 +953,12 @@ RuleChain::getKeywords(int32_t capacityOfKeywords, UnicodeString* keywords, int3
 
 UBool
 RuleChain::isKeyword(const UnicodeString& keywordParam) const {
-    if ( keyword == keywordParam ) {
+    if ( fKeyword == keywordParam ) {
         return TRUE;
     }
 
-    if ( next != NULL ) {
-        return next->isKeyword(keywordParam);
+    if ( fNext != NULL ) {
+        return fNext->isKeyword(keywordParam);
     }
     else {
         return FALSE;
@@ -1103,22 +966,44 @@ RuleChain::isKeyword(const UnicodeString& keywordParam) const {
 }
 
 
-RuleParser::RuleParser() {
+PluralRuleParser::PluralRuleParser() : 
+        ruleIndex(0), token(), type(none), prevType(none), 
+        curAndConstraint(NULL), currentChain(NULL), rangeLowIdx(-1), rangeHiIdx(-1)  
+{
 }
 
-RuleParser::~RuleParser() {
+PluralRuleParser::~PluralRuleParser() {
 }
+
+
+int32_t
+PluralRuleParser::getNumberValue(const UnicodeString& token) {
+    int32_t i;
+    char digits[128];
+
+    i = token.extract(0, token.length(), digits, ARRAY_SIZE(digits), US_INV);
+    digits[i]='\0';
+
+    return((int32_t)atoi(digits));
+}
+
 
 void
-RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &status)
+PluralRuleParser::checkSyntax(UErrorCode &status)
 {
     if (U_FAILURE(status)) {
         return;
     }
+    if (!(prevType==none || prevType==tSemiColon)) {
+        type = getKeyType(token, type);  // Switch token type from tKeyword if we scanned a reserved word,
+                                               //   and we are not at the start of a rule, where a
+                                               //   keyword is expected.
+    }
+
     switch(prevType) {
     case none:
     case tSemiColon:
-        if (curType!=tKeyword && curType != tEOF) {
+        if (type!=tKeyword && type != tEOF) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
@@ -1127,67 +1012,76 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
     case tVariableF:
     case tVariableT:
     case tVariableV:
-    case tVariableJ:
-        if (curType != tIs && curType != tMod && curType != tIn &&
-            curType != tNot && curType != tWithin) {
+        if (type != tIs && type != tMod && type != tIn &&
+            type != tNot && type != tWithin && type != tEqual && type != tNotEqual) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
     case tKeyword:
-        if (curType != tColon) {
+        if (type != tColon) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
     case tColon:
-        if (!(curType == tVariableN ||
-              curType == tVariableI ||
-              curType == tVariableF ||
-              curType == tVariableT ||
-              curType == tVariableV ||
-              curType == tVariableJ)) {
+        if (!(type == tVariableN ||
+              type == tVariableI ||
+              type == tVariableF ||
+              type == tVariableT ||
+              type == tVariableV ||
+              type == tAt)) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
     case tIs:
-        if ( curType != tNumber && curType != tNot) {
+        if ( type != tNumber && type != tNot) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
     case tNot:
-        if (curType != tNumber && curType != tIn && curType != tWithin) {
+        if (type != tNumber && type != tIn && type != tWithin) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
     case tMod:
-    case tDot:
+    case tDot2:
     case tIn:
     case tWithin:
-    case tAnd:   // TODO: split of And and Or, which are different.
+    case tEqual:
+    case tNotEqual:
+        if (type != tNumber) {
+            status = U_UNEXPECTED_TOKEN;
+        }
+        break;
+    case tAnd:
     case tOr:
-        if (curType != tNumber && 
-                curType != tVariableN &&
-                curType != tVariableI &&
-                curType != tVariableF &&
-                curType != tVariableT &&
-                curType != tVariableV &&
-                curType != tVariableJ) {
+        if ( type != tVariableN &&
+             type != tVariableI &&
+             type != tVariableF &&
+             type != tVariableT &&
+             type != tVariableV) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
     case tComma:
-        if (curType != tNumber) {
+        if (type != tNumber) {
             status = U_UNEXPECTED_TOKEN;
         }
         break;
     case tNumber:
-        if (curType != tDot && curType != tSemiColon && curType != tIs && curType != tNot &&
-            curType != tIn && curType != tWithin && curType != tAnd && curType != tOr && 
-            curType != tComma && curType != tEOF)
+        if (type != tDot2  && type != tSemiColon && type != tIs       && type != tNot    &&
+            type != tIn    && type != tEqual     && type != tNotEqual && type != tWithin && 
+            type != tAnd   && type != tOr        && type != tComma    && type != tAt     && 
+            type != tEOF)
         {
             status = U_UNEXPECTED_TOKEN;
         }
         // TODO: a comma following a number that is not part of a range will be allowed.
         //       It's not the only case of this sort of thing. Parser needs a re-write.
+        break;
+    case tAt:
+        if (type != tDecimal && type != tInteger) {
+            status = U_UNEXPECTED_TOKEN;
+        }
         break;
     default:
         status = U_UNEXPECTED_TOKEN;
@@ -1195,215 +1089,176 @@ RuleParser::checkSyntax(tokenType prevType, tokenType curType, UErrorCode &statu
     }
 }
 
-void
-RuleParser::getNextToken(const UnicodeString& ruleData,
-                         int32_t *ruleIndex,
-                         UnicodeString& token,
-                         tokenType& type,
-                         UErrorCode &status)
-{
-    int32_t curIndex= *ruleIndex;
-    UChar ch;
-    tokenType prevType=none;
 
+/*
+ *  Scan the next token from the input rules.
+ *     rules and returned token type are in the parser state variables.
+ */
+void
+PluralRuleParser::getNextToken(UErrorCode &status)
+{
     if (U_FAILURE(status)) {
         return;
     }
-    while (curIndex<ruleData.length()) {
-        ch = ruleData.charAt(curIndex);
-        if ( !inRange(ch, type) ) {
-            status = U_ILLEGAL_CHARACTER;
-            return;
+
+    UChar ch;
+    while (ruleIndex < ruleSrc->length()) {
+        ch = ruleSrc->charAt(ruleIndex);
+        type = charType(ch);
+        if (type != tSpace) {
+            break;
         }
-        switch (type) {
-        case tSpace:
-            if ( *ruleIndex != curIndex ) { // letter
-                token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
-                *ruleIndex=curIndex;
-                type=prevType;
-                getKeyType(token, type, status);
-                return;
-            }
-            else {
-                *ruleIndex=*ruleIndex+1;
-                if (*ruleIndex >= ruleData.length()) {
-                    type = tEOF;
-                }
-            }
-            break; // consective space
-        case tColon:
-        case tSemiColon:
-        case tComma:
-        case tIn:   // scanned '='
-        case tNot:  // scanned '!'
-        case tMod:  // scanned '%'
-            if ( *ruleIndex != curIndex ) {
-                token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
-                *ruleIndex=curIndex;
-                type=prevType;
-                getKeyType(token, type, status);
-                return;
-            }
-            else {
-                *ruleIndex=curIndex+1;
-                return;
-            }
-        case tLetter:
-             if ((type==prevType)||(prevType==none)) {
-                prevType=type;
-                break;
-             }
-             break;
-        case tNumber:
-             if ((type==prevType)||(prevType==none)) {
-                prevType=type;
-                break;
-             }
-             else {
-                *ruleIndex=curIndex+1;
-                return;
-             }
-         case tDot:
-             if (prevType==none) {         // first dot
-                prevType=type;
-                break;
-             }
-             else if (prevType == tDot) {  // two consecutive dots. Return them
-                *ruleIndex=curIndex+1;     //   without looking to see what follows.
-                return;
-             } else {
-                // Encountered '.' while parsing something else
-                // Return the something else.
-                U_ASSERT( *ruleIndex != curIndex );
-                token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
-                *ruleIndex=curIndex;
-                type=prevType;
-                getKeyType(token, type, status);
-                return;
-             }
-         default:
-             status = U_UNEXPECTED_TOKEN;
-             return;
-        }
-        curIndex++;
+        ++(ruleIndex);
     }
-    if ( curIndex>=ruleData.length() ) {
-        if ( (type == tLetter)||(type == tNumber) ) {
-            token=UnicodeString(ruleData, *ruleIndex, curIndex-*ruleIndex);
-            getKeyType(token, type, status);
-            if (U_FAILURE(status)) {
-                return;
-            }
-        }
-        *ruleIndex = ruleData.length();
+    if (ruleIndex >= ruleSrc->length()) {
+        type = tEOF;
+        return;
     }
+    int32_t curIndex= ruleIndex;
+        
+    switch (type) {
+      case tColon:
+      case tSemiColon:
+      case tComma:
+      case tEllipsis:
+      case tTilde:   // scanned '~'
+      case tAt:      // scanned '@'
+      case tEqual:   // scanned '='
+      case tMod:     // scanned '%'
+        // Single character tokens.
+        ++curIndex;
+        break;
+
+      case tNotEqual:  // scanned '!'
+        if (ruleSrc->charAt(curIndex+1) == EQUALS) {
+            curIndex += 2;
+        } else {
+            type = none;
+            curIndex += 1;
+        }
+        break;
+
+      case tKeyword:
+         while (type == tKeyword && ++curIndex < ruleSrc->length()) {
+             ch = ruleSrc->charAt(curIndex);
+             type = charType(ch);
+         }
+         type = tKeyword;
+         break;
+
+      case tNumber:
+         while (type == tNumber && ++curIndex < ruleSrc->length()) {
+             ch = ruleSrc->charAt(curIndex);
+             type = charType(ch);
+         }
+         type = tNumber;
+         break;
+
+       case tDot:
+         // We could be looking at either ".." in a range, or "..." at the end of a sample.
+         if (curIndex+1 >= ruleSrc->length() || ruleSrc->charAt(curIndex+1) != DOT) {
+             ++curIndex;
+             break; // Single dot
+         }
+         if (curIndex+2 >= ruleSrc->length() || ruleSrc->charAt(curIndex+2) != DOT) {
+             curIndex += 2;
+             type = tDot2;
+             break; // double dot
+         }
+         type = tEllipsis;
+         curIndex += 3;
+         break;     // triple dot
+
+       default:
+         status = U_UNEXPECTED_TOKEN;
+         ++curIndex;
+         break;
+    }
+
+    U_ASSERT(ruleIndex <= ruleSrc->length());
+    U_ASSERT(curIndex <= ruleSrc->length());
+    token=UnicodeString(*ruleSrc, ruleIndex, curIndex-ruleIndex);
+    ruleIndex = curIndex;
 }
 
-UBool
-RuleParser::inRange(UChar ch, tokenType& type) {
-    if ((ch>=CAP_A) && (ch<=CAP_Z)) {
-        // we assume all characters are in lower case already.
-        return FALSE;
-    }
-    if ((ch>=LOW_A) && (ch<=LOW_Z)) {
-        type = tLetter;
-        return TRUE;
-    }
+tokenType
+PluralRuleParser::charType(UChar ch) {
     if ((ch>=U_ZERO) && (ch<=U_NINE)) {
-        type = tNumber;
-        return TRUE;
+        return tNumber;
+    }
+    if (ch>=LOW_A && ch<=LOW_Z) {
+        return tKeyword;
     }
     switch (ch) {
     case COLON:
-        type = tColon;
-        return TRUE;
+        return tColon;
     case SPACE:
-        type = tSpace;
-        return TRUE;
+        return tSpace;
     case SEMI_COLON:
-        type = tSemiColon;
-        return TRUE;
+        return tSemiColon;
     case DOT:
-        type = tDot;
-        return TRUE;
+        return tDot;
     case COMMA:
-        type = tComma;
-        return TRUE;
+        return tComma;
     case EXCLAMATION:
-        type = tNot;
-        return TRUE;
+        return tNotEqual;
     case EQUALS:
-        type = tIn;
-        return TRUE;
+        return tEqual;
     case PERCENT_SIGN:
-        type = tMod;
-        return TRUE;
+        return tMod;
+    case AT:
+        return tAt;
+    case ELLIPSIS:
+        return tEllipsis;
+    case TILDE:
+        return tTilde;
     default :
-        type = none;
-        return FALSE;
+        return none;
     }
 }
 
 
-void
-RuleParser::getKeyType(const UnicodeString& token, tokenType& keyType, UErrorCode &status)
+//  Set token type for reserved words in the Plural Rule syntax.
+
+tokenType 
+PluralRuleParser::getKeyType(const UnicodeString &token, tokenType keyType)
 {
-    if (U_FAILURE(status)) {
-        return;
+    if (keyType != tKeyword) {
+        return keyType;
     }
-    if ( keyType==tNumber) {
-    }
-    else if (0 == token.compare(PK_VAR_N, 1)) {
+
+    if (0 == token.compare(PK_VAR_N, 1)) {
         keyType = tVariableN;
-    }
-    else if (0 == token.compare(PK_VAR_I, 1)) {
+    } else if (0 == token.compare(PK_VAR_I, 1)) {
         keyType = tVariableI;
-    }
-    else if (0 == token.compare(PK_VAR_F, 1)) {
+    } else if (0 == token.compare(PK_VAR_F, 1)) {
         keyType = tVariableF;
-    }
-    else if (0 == token.compare(PK_VAR_T, 1)) {
+    } else if (0 == token.compare(PK_VAR_T, 1)) {
         keyType = tVariableT;
-    }
-    else if (0 == token.compare(PK_VAR_V, 1)) {
+    } else if (0 == token.compare(PK_VAR_V, 1)) {
         keyType = tVariableV;
-    }
-    else if (0 == token.compare(PK_VAR_J, 1)) {
-        keyType = tVariableJ;
-    }
-    else if (0 == token.compare(PK_IS, 2)) {
+    } else if (0 == token.compare(PK_IS, 2)) {
         keyType = tIs;
-    }
-    else if (0 == token.compare(PK_AND, 3)) {
+    } else if (0 == token.compare(PK_AND, 3)) {
         keyType = tAnd;
-    }
-    else if (0 == token.compare(PK_IN, 2)) {
+    } else if (0 == token.compare(PK_IN, 2)) {
         keyType = tIn;
-    }
-    else if (0 == token.compare(PK_WITHIN, 6)) {
+    } else if (0 == token.compare(PK_WITHIN, 6)) {
         keyType = tWithin;
-    }
-    else if (0 == token.compare(PK_NOT, 3)) {
+    } else if (0 == token.compare(PK_NOT, 3)) {
         keyType = tNot;
-    }
-    else if (0 == token.compare(PK_MOD, 3)) {
+    } else if (0 == token.compare(PK_MOD, 3)) {
         keyType = tMod;
-    }
-    else if (0 == token.compare(PK_OR, 2)) {
+    } else if (0 == token.compare(PK_OR, 2)) {
         keyType = tOr;
+    } else if (0 == token.compare(PK_DECIMAL, 7)) {
+        keyType = tDecimal;
+    } else if (0 == token.compare(PK_INTEGER, 7)) {
+        keyType = tInteger;
     }
-    else if ( isValidKeyword(token) ) {
-        keyType = tKeyword;
-    }
-    else {
-        status = U_UNEXPECTED_TOKEN;
-    }
+    return keyType;
 }
 
-UBool
-RuleParser::isValidKeyword(const UnicodeString& token) {
-    return PatternProps::isIdentifier(token.getBuffer(), token.length());
-}
 
 PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode& status)
         : pos(0), fKeywordNames(status) {
@@ -1414,14 +1269,14 @@ PluralKeywordEnumeration::PluralKeywordEnumeration(RuleChain *header, UErrorCode
     UBool  addKeywordOther=TRUE;
     RuleChain *node=header;
     while(node!=NULL) {
-        fKeywordNames.addElement(new UnicodeString(node->keyword), status);
+        fKeywordNames.addElement(new UnicodeString(node->fKeyword), status);
         if (U_FAILURE(status)) {
             return;
         }
-        if (0 == node->keyword.compare(PLURAL_KEYWORD_OTHER, 5)) {
+        if (0 == node->fKeyword.compare(PLURAL_KEYWORD_OTHER, 5)) {
             addKeywordOther= FALSE;
         }
-        node=node->next;
+        node=node->fNext;
     }
 
     if (addKeywordOther) {
@@ -1452,15 +1307,15 @@ PluralKeywordEnumeration::~PluralKeywordEnumeration() {
 
 
 
-NumberInfo::NumberInfo(double n, int32_t v, int64_t f) {
+FixedDecimal::FixedDecimal(double n, int32_t v, int64_t f) {
     init(n, v, f);
     // check values. TODO make into unit test.
     //            
     //            long visiblePower = (int) Math.pow(10, v);
-    //            if (fractionalDigits > visiblePower) {
+    //            if (decimalDigits > visiblePower) {
     //                throw new IllegalArgumentException();
     //            }
-    //            double fraction = intValue + (fractionalDigits / (double) visiblePower);
+    //            double fraction = intValue + (decimalDigits / (double) visiblePower);
     //            if (fraction != source) {
     //                double diff = Math.abs(fraction - source)/(Math.abs(fraction) + Math.abs(source));
     //                if (diff > 0.00000001d) {
@@ -1469,85 +1324,193 @@ NumberInfo::NumberInfo(double n, int32_t v, int64_t f) {
     //            }
 }
 
-NumberInfo::NumberInfo(double n, int32_t v) {
+FixedDecimal::FixedDecimal(double n, int32_t v) {
     // Ugly, but for samples we don't care.
     init(n, v, getFractionalDigits(n, v));
 }
 
-NumberInfo::NumberInfo(double n) {
+FixedDecimal::FixedDecimal(double n) {
     int64_t numFractionDigits = decimals(n);
     init(n, numFractionDigits, getFractionalDigits(n, numFractionDigits));
 }
 
-void NumberInfo::init(double n, int32_t v, int64_t f) {
+// Create a FixedDecimal from a UnicodeString containing a number.
+//    Inefficient, but only used for samples, so simplicity trumps efficiency.
+
+FixedDecimal::FixedDecimal(const UnicodeString &num, UErrorCode &status) {
+    CharString cs;
+    cs.appendInvariantChars(num, status);
+    DigitList dl;
+    dl.set(cs.toStringPiece(), status);
+    if (U_FAILURE(status)) {
+        init(0, 0, 0);
+        return;
+    }
+    int32_t decimalPoint = num.indexOf(DOT);
+    double n = dl.getDouble();
+    if (decimalPoint == -1) {
+        init(n, 0, 0);
+    } else {
+        int32_t v = num.length() - decimalPoint - 1;
+        init(n, v, getFractionalDigits(n, v));
+    }
+}
+
+
+void FixedDecimal::init(double n, int32_t v, int64_t f) {
     isNegative = n < 0;
     source = fabs(n);
-    visibleFractionDigitCount = v;
-    fractionalDigits = f;
+    visibleDecimalDigitCount = v;
+    decimalDigits = f;
     intValue = (int64_t)source;
-    hasIntegerValue = source == intValue;   // TODO: problems with negative values. From Java.
+    hasIntegerValue = (source == intValue);
     if (f == 0) {
-         fractionalDigitsWithoutTrailingZeros = 0;
+         decimalDigitsWithoutTrailingZeros = 0;
     } else {
         int64_t fdwtz = f;
         while ((fdwtz%10) == 0) {
             fdwtz /= 10;
         }
-        fractionalDigitsWithoutTrailingZeros = fdwtz;
+        decimalDigitsWithoutTrailingZeros = fdwtz;
     }
 }
 
-int32_t NumberInfo::decimals(double n) {
-    // Count the number of decimal digits in the fraction part of the number.
-    // TODO: there must be a better way. Sloppy port from ICU4J.
-    //       This fails with numbers like 0.0001234567890123456, which kick over
-    //       into exponential format in the output from printf.
-    //       printf has no format specification to stay in fixed point form,
-    //         not print trailing fraction zeros, not print a fixed number of (possibly noise)
-    //         fraction digits, and print all significant digits.
-    if (n == floor(n)) {
+int32_t FixedDecimal::decimals(double n) {
+    // Count the number of decimal digits in the fraction part of the number, excluding trailing zeros.
+    n = fabs(n);
+    double scaledN = n;
+    for (int ndigits=0; ndigits<=3; ndigits++) {
+        // fastpath the common cases, integers or fractions with 3 or fewer digits
+        if (scaledN == floor(scaledN)) {
+            return ndigits;
+        }
+        scaledN *= 10;
+    }
+    char  buf[30] = {0};
+    sprintf(buf, "%1.15e", n);
+    // formatted number looks like this: 1.234567890123457e-01
+    int exponent = atoi(buf+18);
+    int numFractionDigits = 15;
+    for (int i=16; ; --i) {
+        if (buf[i] != '0') {
+            break;
+        }
+        --numFractionDigits; 
+    }
+    numFractionDigits -= exponent;   // Fraction part of fixed point representation.
+    return numFractionDigits;
+}
+
+
+// Get the fraction digits of a double, represented as an integer.
+//    v is the number of visible fraction digits in the displayed form of the number.
+//       Example: n = 1001.234, v = 6, result = 234000
+//    TODO: need to think through how this is used in the plural rule context.
+//          This function can easily encounter integer overflow, 
+//          and can easily return noise digits when the precision of a double is exceeded.
+
+int64_t FixedDecimal::getFractionalDigits(double n, int32_t v) {
+    if (v == 0 || n == floor(n)) {
         return 0;
     }
     n = fabs(n);
-    char  buf[30] = {0};
-    sprintf(buf, "%1.15g\n", n);
-    int lastDig = 0;
-    for (int i=17; i>=0; --i) {
-        if (buf[i] != 0 && lastDig == 0) lastDig = i;
-        if (buf[i] == 'e') {
-           return 0;
-        }
-        if (buf[i] == '.' || buf[i] == ',') {
-           return lastDig - i - 1;
-       }
-    }
-    return 0;
-}
-
-int32_t NumberInfo::getFractionalDigits(double n, int32_t v) {
-    // TODO: int32_t is suspect. Port from Java.
-    if (v == 0) {
-        return 0;
-    } else {
-        int32_t base = (int32_t) pow(10.0, v);
-        double scaled = floor(n * base + 0.5);
-        return (int)fmod(scaled, base);
-    }
+    double fract = n - floor(n);
+    switch (v) {
+      case 1: return (int64_t)(fract*10.0 + 0.5);
+      case 2: return (int64_t)(fract*100.0 + 0.5);
+      case 3: return (int64_t)(fract*1000.0 + 0.5);
+      default:
+          double scaled = floor(fract * pow(10, v) + 0.5);
+          if (scaled > INT64_MAX) {
+              return INT64_MAX;
+          } else {
+              return (int64_t)scaled;
+          }
+      }
 }
 
 
-double NumberInfo::get(tokenType operand) const {
+double FixedDecimal::get(tokenType operand) const {
     switch(operand) {
-        default:         return source;
+        case tVariableN: return source;
         case tVariableI: return (double)intValue;
-        case tVariableF: return (double)fractionalDigits;
-        case tVariableT: return (double)fractionalDigitsWithoutTrailingZeros; 
-        case tVariableV: return visibleFractionDigitCount;
+        case tVariableF: return (double)decimalDigits;
+        case tVariableT: return (double)decimalDigitsWithoutTrailingZeros; 
+        case tVariableV: return visibleDecimalDigitCount;
+        default:
+             U_ASSERT(FALSE);  // unexpected.
+             return source;
     }
 }
 
-int32_t NumberInfo::getVisibleFractionDigitCount() const {
-    return visibleFractionDigitCount;
+int32_t FixedDecimal::getVisibleFractionDigitCount() const {
+    return visibleDecimalDigitCount;
+}
+
+
+
+PluralAvailableLocalesEnumeration::PluralAvailableLocalesEnumeration(UErrorCode &status) {
+    fLocales = NULL;
+    fRes = NULL;
+    fOpenStatus = status;
+    if (U_FAILURE(status)) {
+        return;
+    }
+    fOpenStatus = U_ZERO_ERROR;
+    LocalUResourceBundlePointer rb(ures_openDirect(NULL, "plurals", &fOpenStatus));
+    fLocales = ures_getByKey(rb.getAlias(), "locales", NULL, &fOpenStatus);
+}
+
+PluralAvailableLocalesEnumeration::~PluralAvailableLocalesEnumeration() {
+    ures_close(fLocales);
+    ures_close(fRes);
+    fLocales = NULL;
+    fRes = NULL;
+}
+
+const char *PluralAvailableLocalesEnumeration::next(int32_t *resultLength, UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return NULL;
+    }
+    if (U_FAILURE(fOpenStatus)) {
+        status = fOpenStatus;
+        return NULL;
+    }
+    fRes = ures_getNextResource(fLocales, fRes, &status);
+    if (fRes == NULL || U_FAILURE(status)) {
+        if (status == U_INDEX_OUTOFBOUNDS_ERROR) {
+            status = U_ZERO_ERROR;
+        }
+        return NULL;
+    }
+    const char *result = ures_getKey(fRes);
+    if (resultLength != NULL) {
+        *resultLength = uprv_strlen(result);
+    }
+    return result;
+}
+
+
+void PluralAvailableLocalesEnumeration::reset(UErrorCode &status) {
+    if (U_FAILURE(status)) {
+       return;
+    }
+    if (U_FAILURE(fOpenStatus)) {
+        status = fOpenStatus;
+        return;
+    }
+    ures_resetIterator(fLocales);
+}
+
+int32_t PluralAvailableLocalesEnumeration::count(UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return 0;
+    }
+    if (U_FAILURE(fOpenStatus)) {
+        status = fOpenStatus;
+        return 0;
+    }
+    return ures_getSize(fLocales);
 }
 
 U_NAMESPACE_END

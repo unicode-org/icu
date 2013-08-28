@@ -4102,7 +4102,7 @@ int32_t DecimalFormat::appendAffix(UnicodeString& buf, double number,
         UnicodeString pluralCount;
         int32_t minFractionDigits = this->getMinimumFractionDigits();
         if (minFractionDigits > 0) {
-            NumberInfo ni(number, this->getMinimumFractionDigits());
+            FixedDecimal ni(number, this->getMinimumFractionDigits());
             pluralCount = fCurrencyPluralInfo->getPluralRules()->select(ni);
         } else {
             pluralCount = fCurrencyPluralInfo->getPluralRules()->select(number);
