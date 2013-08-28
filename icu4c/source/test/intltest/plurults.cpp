@@ -17,13 +17,15 @@
 #include <stdarg.h>
 #include <string.h>
 
+#include "unicode/localpointer.h"
+#include "unicode/plurrule.h"
+#include "unicode/stringpiece.h"
+
 #include "cmemory.h"
 #include "digitlst.h"
 #include "plurrule_impl.h"
 #include "plurults.h"
-#include "unicode/localpointer.h"
-#include "unicode/plurrule.h"
-#include "unicode/stringpiece.h"
+#include "uhash.h"
 
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof(array[0]))
 
@@ -40,14 +42,36 @@ void PluralRulesTest::runIndexedTest( int32_t index, UBool exec, const char* &na
     if (exec) logln("TestSuite PluralRulesAPI");
     TESTCASE_AUTO_BEGIN;
     TESTCASE_AUTO(testAPI);
-    TESTCASE_AUTO(testGetUniqueKeywordValue);
+    // TESTCASE_AUTO(testGetUniqueKeywordValue);
     TESTCASE_AUTO(testGetSamples);
     TESTCASE_AUTO(testWithin);
     TESTCASE_AUTO(testGetAllKeywordValues);
     TESTCASE_AUTO(testOrdinal);
     TESTCASE_AUTO(testSelect);
+    TESTCASE_AUTO(testAvailbleLocales);
+    TESTCASE_AUTO(testParseErrors);
+    TESTCASE_AUTO(testFixedDecimal);
     TESTCASE_AUTO_END;
 }
+
+
+// Quick and dirty class for putting UnicodeStrings in char * messages.
+//   TODO: something like this should be generally available.
+class US {
+  private:
+    char *buf;
+  public:
+    US(const UnicodeString &us) {
+       int32_t bufLen = us.extract((int32_t)0, us.length(), (char *)NULL, (uint32_t)0) + 1;
+       buf = (char *)uprv_malloc(bufLen);
+       us.extract(0, us.length(), buf, bufLen); };
+    const char *cstr() {return buf;};
+    ~US() { uprv_free(buf);};
+};
+
+
+
+
 
 #define PLURAL_TEST_NUM    18
 /**
@@ -334,6 +358,8 @@ PluralRulesTest::assertRuleKeyValue(const UnicodeString& rule,
   }
 }
 
+// TODO: UniqueKeywordValue() is not currently supported.
+//       If it never will be, this test code should be removed.
 void PluralRulesTest::testGetUniqueKeywordValue() {
   assertRuleValue("n is 1", 1);
   assertRuleValue("n in 2..2", 2);
@@ -351,7 +377,6 @@ void PluralRulesTest::testGetUniqueKeywordValue() {
 }
 
 void PluralRulesTest::testGetSamples() {
-#if 0
   // TODO: fix samples, re-enable this test.
 
   // no get functional equivalent API in ICU4C, so just
@@ -360,7 +385,7 @@ void PluralRulesTest::testGetSamples() {
   int32_t numLocales;
   const Locale* locales = Locale::getAvailableLocales(numLocales);
 
-  double values[4];
+  double values[1000];
   for (int32_t i = 0; U_SUCCESS(status) && i < numLocales; ++i) {
     PluralRules *rules = PluralRules::forLocale(locales[i], status);
     if (U_FAILURE(status)) {
@@ -373,7 +398,7 @@ void PluralRulesTest::testGetSamples() {
     }
     const UnicodeString* keyword;
     while (NULL != (keyword = keywords->snext(status))) {
-      int32_t count = rules->getSamples(*keyword, values, 4, status);
+      int32_t count = rules->getSamples(*keyword, values, LENGTHOF(values), status);
       if (U_FAILURE(status)) {
         errln(UNICODE_STRING_SIMPLE("getSamples() failed for locale ") +
               locales[i].getName() +
@@ -381,7 +406,8 @@ void PluralRulesTest::testGetSamples() {
         continue;
       }
       if (count == 0) {
-        errln(UNICODE_STRING_SIMPLE("no samples for keyword ") + *keyword + UNICODE_STRING_SIMPLE(" in locale ") + locales[i].getName() );
+        // TODO: Lots of these. 
+        //   errln(UNICODE_STRING_SIMPLE("no samples for keyword ") + *keyword + UNICODE_STRING_SIMPLE(" in locale ") + locales[i].getName() );
       }
       if (count > LENGTHOF(values)) {
         errln(UNICODE_STRING_SIMPLE("getSamples()=") + count +
@@ -395,8 +421,12 @@ void PluralRulesTest::testGetSamples() {
           errln("got 'no unique value' among values");
         } else {
           UnicodeString resultKeyword = rules->select(values[j]);
+          // if (strcmp(locales[i].getName(), "uk") == 0) {    // Debug only.
+          //     std::cout << "  uk " << US(resultKeyword).cstr() << " " << values[j] << std::endl;
+          // }
           if (*keyword != resultKeyword) {
-            errln("keywords don't match");
+            errln("file %s, line %d, Locale %s, sample for keyword \"%s\":  %g, select(%g) returns keyword \"%s\"",
+                __FILE__, __LINE__, locales[i].getName(), US(*keyword).cstr(), values[j], values[j], US(resultKeyword).cstr());
           }
         }
       }
@@ -404,7 +434,6 @@ void PluralRulesTest::testGetSamples() {
     delete keywords;
     delete rules;
   }
-#endif
 }
 
 void PluralRulesTest::testWithin() {
@@ -570,22 +599,6 @@ void PluralRulesTest::testOrdinal() {
 }
 
 
-// Quick and dirty class for putting UnicodeStrings in char * messages.
-//   TODO: something like this should be generally available.
-class US {
-  private:
-    char *buf;
-  public:
-    US(const UnicodeString &us) {
-       int32_t bufLen = us.extract((int32_t)0, us.length(), (char *)NULL, (uint32_t)0) + 1;
-       buf = (char *)uprv_malloc(bufLen);
-       us.extract(0, us.length(), buf, bufLen); };
-    const char *cstr() {return buf;};
-    ~US() { uprv_free(buf);};
-};
-
-
-
 static const char * END_MARK = "999.999";    // Mark end of varargs data.
 
 void PluralRulesTest::checkSelect(const LocalPointer<PluralRules> &rules, UErrorCode &status, 
@@ -627,7 +640,7 @@ void PluralRulesTest::checkSelect(const LocalPointer<PluralRules> &rules, UError
         const char *decimalPoint = strchr(num, '.');
         int fractionDigitCount = decimalPoint == NULL ? 0 : (num + strlen(num) - 1) - decimalPoint;
         int fractionDigits = fractionDigitCount == 0 ? 0 : atoi(decimalPoint + 1);
-        NumberInfo ni(numDbl, fractionDigitCount, fractionDigits);
+        FixedDecimal ni(numDbl, fractionDigitCount, fractionDigits);
         
         UnicodeString actualKeyword = rules->select(ni);
         if (actualKeyword != UnicodeString(keyword)) {
@@ -724,11 +737,38 @@ void PluralRulesTest::testSelect() {
     checkSelect(pr, status, __LINE__, "a", "1.120", "0.000", "11123.100", "0123.124", ".666", END_MARK);
     checkSelect(pr, status, __LINE__, "other", "1.1212", "122.12", "1.1", "122", "0.0000", END_MARK);
 
-    pr.adoptInstead(PluralRules::createRules("a: j is 123", status));
+    pr.adoptInstead(PluralRules::createRules("a: v is 0 and i is 123", status));
     checkSelect(pr, status, __LINE__, "a", "123", "123.", END_MARK);
     checkSelect(pr, status, __LINE__, "other", "123.0", "123.1", "123.123", "0.123", END_MARK);
-    
-    // Test cases from ICU4J PluralRulesTest.parseTestData
+
+    // The reserved words from the rule syntax will also function as keywords.
+    pr.adoptInstead(PluralRules::createRules("a: n is 21; n: n is 22; i: n is 23; f: n is 24;"
+                                             "t: n is 25; v: n is 26; w: n is 27; j: n is 28"
+                                             , status));
+    checkSelect(pr, status, __LINE__, "other", "20", "29", END_MARK);
+    checkSelect(pr, status, __LINE__, "a", "21", END_MARK);
+    checkSelect(pr, status, __LINE__, "n", "22", END_MARK);
+    checkSelect(pr, status, __LINE__, "i", "23", END_MARK);
+    checkSelect(pr, status, __LINE__, "f", "24", END_MARK);
+    checkSelect(pr, status, __LINE__, "t", "25", END_MARK);
+    checkSelect(pr, status, __LINE__, "v", "26", END_MARK);
+    checkSelect(pr, status, __LINE__, "w", "27", END_MARK);
+    checkSelect(pr, status, __LINE__, "j", "28", END_MARK);
+
+
+    pr.adoptInstead(PluralRules::createRules("not: n=31; and: n=32; or: n=33; mod: n=34;"
+                                             "in: n=35; within: n=36;is:n=37"
+                                             , status));
+    checkSelect(pr, status, __LINE__, "other",  "30", "39", END_MARK);
+    checkSelect(pr, status, __LINE__, "not",    "31", END_MARK);
+    checkSelect(pr, status, __LINE__, "and",    "32", END_MARK);
+    checkSelect(pr, status, __LINE__, "or",     "33", END_MARK);
+    checkSelect(pr, status, __LINE__, "mod",    "34", END_MARK);
+    checkSelect(pr, status, __LINE__, "in",     "35", END_MARK);
+    checkSelect(pr, status, __LINE__, "within", "36", END_MARK);
+    checkSelect(pr, status, __LINE__, "is",     "37", END_MARK);
+
+// Test cases from ICU4J PluralRulesTest.parseTestData
 
     pr.adoptInstead(PluralRules::createRules("a: n is 1", status));
     checkSelect(pr, status, __LINE__, "a", "1", END_MARK);
@@ -782,7 +822,7 @@ void PluralRulesTest::testSelect() {
     pr.adoptInstead(PluralRules::createRules("a: n in 2..6, 3..7", status));
     checkSelect(pr, status, __LINE__, "a", "2", "3", "4", "5", "6", "7", END_MARK);
 
-    // Extended Syntax. Still in flux, Java plural rules is looser.
+    // Extended Syntax, with '=', '!=' and '%' operators. 
     pr.adoptInstead(PluralRules::createRules("a: n = 1..8 and n!= 2,3,4,5", status));
     checkSelect(pr, status, __LINE__, "a", "1", "6", "7", "8", END_MARK);
     checkSelect(pr, status, __LINE__, "other", "0", "2", "3", "4", "5", "9", END_MARK);
@@ -790,5 +830,173 @@ void PluralRulesTest::testSelect() {
     checkSelect(pr, status, __LINE__, "a", "2", "6", "7", "8", END_MARK);
     checkSelect(pr, status, __LINE__, "other", "1", "21", "211", "91", END_MARK);
 }
+
+
+void PluralRulesTest::testAvailbleLocales() {
+    
+    // Hash set of (char *) strings.
+    UErrorCode status = U_ZERO_ERROR;
+    UHashtable *localeSet = uhash_open(uhash_hashUnicodeString, uhash_compareUnicodeString, uhash_compareLong, &status);
+    uhash_setKeyDeleter(localeSet, uprv_deleteUObject);
+    if (U_FAILURE(status)) {
+        errln("file %s,  line %d: Error status = %s", __FILE__, __LINE__, u_errorName(status));
+        return;
+    }
+
+    // Check that each locale returned by the iterator is unique.
+    StringEnumeration *localesEnum = PluralRules::getAvailableLocales(status);
+    int localeCount = 0;
+    for (;;) {
+        const char *locale = localesEnum->next(NULL, status);
+        if (U_FAILURE(status)) {
+            errln("file %s,  line %d: Error status = %s", __FILE__, __LINE__, u_errorName(status));
+            return;
+        }
+        if (locale == NULL) {
+            break;
+        }
+        localeCount++;
+        int32_t oldVal = uhash_puti(localeSet, new UnicodeString(locale), 1, &status);
+        if (oldVal != 0) {
+            errln("file %s,  line %d: locale %s was seen before.", __FILE__, __LINE__, locale);
+        }
+    }
+
+    // Reset the iterator, verify that we get the same count.
+    localesEnum->reset(status);
+    int32_t localeCount2 = 0;
+    while (localesEnum->next(NULL, status) != NULL) {
+        if (U_FAILURE(status)) {
+            errln("file %s,  line %d: Error status = %s", __FILE__, __LINE__, u_errorName(status));
+            break;
+        }
+        localeCount2++;
+    }
+    if (localeCount != localeCount2) {
+        errln("file %s,  line %d: locale counts differ. They are (%d, %d)", 
+            __FILE__, __LINE__, localeCount, localeCount2);
+    }
+
+    // Instantiate plural rules for each available locale.
+    localesEnum->reset(status);
+    for (;;) {
+        status = U_ZERO_ERROR;
+        const char *localeName = localesEnum->next(NULL, status);
+        if (U_FAILURE(status)) {
+            errln("file %s,  line %d: Error status = %s, locale = %s",
+                __FILE__, __LINE__, u_errorName(status), localeName);
+            return;
+        }
+        if (localeName == NULL) {
+            break;
+        }
+        Locale locale = Locale::createFromName(localeName);
+        PluralRules *pr = PluralRules::forLocale(locale, status);
+        if (U_FAILURE(status)) {
+            errln("file %s,  line %d: Error %s creating plural rules for locale %s", 
+                __FILE__, __LINE__, u_errorName(status), localeName);
+            continue;
+        }
+        if (pr == NULL) {
+            errln("file %s, line %d: Null plural rules for locale %s", __FILE__, __LINE__, localeName);
+            continue;
+        }
+
+        // Pump some numbers through the plural rules.  Can't check for correct results, 
+        // mostly this to tickle any asserts or crashes that may be lurking.
+        for (double n=0; n<120.0; n+=0.5) {
+            UnicodeString keyword = pr->select(n);
+            if (keyword.length() == 0) {
+                errln("file %s, line %d, empty keyword for n = %g, locale %s",
+                    __FILE__, __LINE__, n, localeName);
+            }
+        }
+        delete pr;
+    }
+
+    uhash_close(localeSet);
+    delete localesEnum;
+
+}
+
+
+void PluralRulesTest::testParseErrors() {
+    // Test rules with syntax errors.
+    // Creation of PluralRules from them should fail.
+
+    static const char *testCases[] = {
+            "a: n mod 10, is 1",
+            "a: q is 13",
+            "a  n is 13",
+            "a: n is 13,",
+            "a: n is 13, 15,   b: n is 4",
+            "a: n is 1, 3, 4.. ",
+            "a: n within 5..4",
+            "A: n is 13",          // Uppercase keywords not allowed.
+            "a: n ! = 3",          // spaces in != operator
+            "a: n = not 3",        // '=' not exact equivalent of 'is'
+            "a: n ! in 3..4"       // '!' not exact equivalent of 'not'
+            "a: n % 37 ! in 3..4"
+
+            };
+    for (int i=0; i<LENGTHOF(testCases); i++) {
+        const char *rules = testCases[i];
+        UErrorCode status = U_ZERO_ERROR;
+        PluralRules *pr = PluralRules::createRules(UnicodeString(rules), status);
+        if (U_SUCCESS(status)) {
+            errln("file %s, line %d, expected failure with \"%s\".", __FILE__, __LINE__, rules);
+        }
+        if (pr != NULL) {
+            errln("file %s, line %d, expected NULL. Rules: \"%s\"", __FILE__, __LINE__, rules);
+        }
+    }
+    return;
+}
+
+
+void PluralRulesTest::testFixedDecimal() {
+    struct DoubleTestCase {
+        double n;
+        int32_t fractionDigitCount;
+        int64_t fractionDigits;
+    };
+
+    // Check that the internal functions for extracting the decimal fraction digits from
+    //   a double value are working.
+    static DoubleTestCase testCases[] = {
+        {1.0, 0, 0},
+        {123456.0, 0, 0},
+        {1.1, 1, 1},
+        {1.23, 2, 23},
+        {1.234, 3, 234},
+        {1.2345, 4, 2345},
+        {1.23456, 5, 23456},
+        {.1234, 4, 1234},
+        {.01234, 5, 1234},
+        {.001234, 6, 1234},
+        {.0001234, 7, 1234},
+        {100.1234, 4, 1234},
+        {100.01234, 5, 1234},
+        {100.001234, 6, 1234},
+        {100.0001234, 7, 1234}
+    };
+
+    for (int i=0; i<LENGTHOF(testCases); ++i) {
+        DoubleTestCase &tc = testCases[i];
+        int32_t numFractionDigits = FixedDecimal::decimals(tc.n);
+        if (numFractionDigits != tc.fractionDigitCount) {
+            errln("file %s, line %d: decimals(%g) expected %d, actual %d",
+                   __FILE__, __LINE__, tc.n, tc.fractionDigitCount, numFractionDigits);
+            continue;
+        }
+        int64_t actualFractionDigits = FixedDecimal::getFractionalDigits(tc.n, numFractionDigits);
+        if (actualFractionDigits != tc.fractionDigits) {
+            errln("file %s, line %d: getFractionDigits(%g, %d): expected %ld, got %ld",
+                  __FILE__, __LINE__, tc.n, numFractionDigits, tc.fractionDigits, actualFractionDigits);
+        }
+    }
+}
+
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
