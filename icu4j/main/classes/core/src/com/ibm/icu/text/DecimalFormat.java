@@ -917,9 +917,14 @@ public class DecimalFormat extends NumberFormat {
         if (Double.isInfinite(number)) {
             return number;
         }
-        DigitList dl = new DigitList();
-        dl.set(number, precision(false), false);
-        return dl.getDouble();
+        return toDigitList(number).getDouble();
+    }
+    
+    @Deprecated
+    DigitList toDigitList(double number) {
+        DigitList result = new DigitList();
+        result.set(number, precision(false), false);
+        return result;
     }
 
     /**
@@ -1231,14 +1236,18 @@ public class DecimalFormat extends NumberFormat {
      */
     /*package*/ FixedDecimal getFixedDecimal(double number) {
         // get the visible fractions and the number of fraction digits.
-        int fractionalDigitsInDigitList = digitList.count - digitList.decimalAt;
+       return getFixedDecimal(number, digitList);
+    }
+    
+    FixedDecimal getFixedDecimal(double number, DigitList dl) {
+        int fractionalDigitsInDigitList = dl.count - dl.decimalAt;
         int v;
         long f;
         int maxFractionalDigits;
         int minFractionalDigits;
         if (useSignificantDigits) {
-            maxFractionalDigits = maxSignificantDigits - digitList.decimalAt;
-            minFractionalDigits = minSignificantDigits - digitList.decimalAt;
+            maxFractionalDigits = maxSignificantDigits - dl.decimalAt;
+            minFractionalDigits = minSignificantDigits - dl.decimalAt;
             if (minFractionalDigits < 0) {
                 minFractionalDigits = 0;
             }
@@ -1257,9 +1266,9 @@ public class DecimalFormat extends NumberFormat {
         }
         f = 0;
         if (v > 0) {
-            for (int i = digitList.decimalAt; i < digitList.count; ++i) {
+            for (int i = Math.max(0, dl.decimalAt); i < dl.count; ++i) {
                 f *= 10;
-                f += digitList.digits[i];
+                f += (dl.digits[i] - '0');
             }
             for (int i = v; i < fractionalDigitsInDigitList; ++i) {
                 f *= 10;

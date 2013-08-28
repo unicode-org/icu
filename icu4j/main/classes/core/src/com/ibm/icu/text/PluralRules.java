@@ -494,6 +494,10 @@ public class PluralRules implements Serializable, Comparable<PluralRules> {
         /**
          * @internal
          * @deprecated This API is ICU internal only.
+         * @param n is the original number
+         * @param v number of digits to the right of the decimal place. e.g 1.00 = 2 25. = 0
+         * @param f Corresponds to f in the plural rules grammar.
+         *   The digits to the right of the decimal place as an integer. e.g 1.10 = 10
          */
         public FixedDecimal(double n, int v, long f) {
             isNegative = n < 0;

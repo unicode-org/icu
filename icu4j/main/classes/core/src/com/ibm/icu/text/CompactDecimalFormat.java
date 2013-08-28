@@ -334,7 +334,7 @@ public class CompactDecimalFormat extends DecimalFormat {
             base = CompactDecimalDataCache.MAX_DIGITS - 1;
         }
         number /= divisor[base];
-        String pluralVariant = getPluralForm(number);
+        String pluralVariant = getPluralForm(getFixedDecimal(number, toDigitList(number)));
         if (pluralToCurrencyAffixes != null && currencyUnit != null) {
             currencyUnit.value = pluralToCurrencyAffixes.get(pluralVariant);
         }
@@ -429,11 +429,11 @@ public class CompactDecimalFormat extends DecimalFormat {
         return result;
     }
 
-    private String getPluralForm(double number) {
+    private String getPluralForm(FixedDecimal fixedDecimal) {
         if (pluralRules == null) {
             return CompactDecimalDataCache.OTHER;
         }
-        return pluralRules.select(getNumberInfo(number));
+        return pluralRules.select(fixedDecimal);
     }
 
     /**
@@ -471,23 +471,5 @@ public class CompactDecimalFormat extends DecimalFormat {
         public Unit getUnit() {
             return unit;
         }
-    }
-
-    /**
-     * Return the NumberInfo for the number, given this formatter's settings.
-     * @param number The number.
-     * @return The NumberInfo for the given number.
-     * @internal
-     * @deprecated This API is ICU internal only.
-     */
-    public FixedDecimal getNumberInfo(double number) {
-        if (getMaximumFractionDigits() == 0 && !areSignificantDigitsUsed()) {
-            return new FixedDecimal(number, 0, 0); 
-        }
-        // TODO Fix hack, where we are formatting just to get the fraction digits
-        StringBuffer temp = new StringBuffer();
-        UFieldPosition pos = new UFieldPosition();
-        super.format(number, temp, pos);
-        return new FixedDecimal(number, pos.getCountVisibleFractionDigits(), pos.getFractionDigits());
     }
 }
