@@ -131,7 +131,7 @@ set(ICU_SRC_DIR /home/mscherer/svn.icu/uni63/src)
 
 * generate core properties data files
 - ~/svn.icutools/trunk/dbg/unicode/c$ genprops/genprops ~/svn.icu/uni63/src
-- ~/svn.icutools/trunk/dbg/unicode/c$ genuca/genuca -i ~/svn.icu/uni63/dbg/data/out/build/icudt51l ~/svn.icu/uni63/src
+- ~/svn.icutools/trunk/dbg/unicode/c$ genuca/genuca -i ~/svn.icu/uni63/dbg/data/out/build/icudt52l ~/svn.icu/uni63/src
 - rebuild ICU (make install) & tools
 - run genuca again (see step above) so that it picks up the new case mappings and nfc.nrm
 - rebuild ICU (make install) & tools
@@ -149,35 +149,35 @@ set(ICU_SRC_DIR /home/mscherer/svn.icu/uni63/src)
 - ~/svn.icu/uni63/dbg$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
   output:
     ...
-    Unicode .icu files built to ./out/build/icudt51l
-    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt51b
-    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt51b
+    Unicode .icu files built to ./out/build/icudt52l
+    mkdir -p ./out/icu4j/com/ibm/icu/impl/data/icudt52b
+    mkdir -p ./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt52b
     echo pnames.icu ubidi.icu ucase.icu uprops.icu > ./out/icu4j/add.txt
-    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt51l.dat ./out/icu4j/icudt51b.dat -a ./out/icu4j/add.txt -s ./out/build/icudt51l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt51b
-    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt51b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt51b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt51b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt51b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt51b"
-    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt51b/
+    LD_LIBRARY_PATH=../lib:../stubdata:../tools/ctestfw:$LD_LIBRARY_PATH  ../bin/icupkg ./out/tmp/icudt52l.dat ./out/icu4j/icudt52b.dat -a ./out/icu4j/add.txt -s ./out/build/icudt52l -x '*' -tb -d ./out/icu4j/com/ibm/icu/impl/data/icudt52b
+    mv ./out/icu4j/"com/ibm/icu/impl/data/icudt52b/zoneinfo64.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt52b/metaZones.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt52b/timezoneTypes.res" ./out/icu4j/"com/ibm/icu/impl/data/icudt52b/windowsZones.res" "./out/icu4j/tzdata/com/ibm/icu/impl/data/icudt52b"
+    jar cf ./out/icu4j/icudata.jar -C ./out/icu4j com/ibm/icu/impl/data/icudt52b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icudata.jar /tmp/icu4j/main/shared/data
-    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt51b/
+    jar cf ./out/icu4j/icutzdata.jar -C ./out/icu4j/tzdata com/ibm/icu/impl/data/icudt52b/
     mkdir -p /tmp/icu4j/main/shared/data
     cp ./out/icu4j/icutzdata.jar /tmp/icu4j/main/shared/data
     make[1]: Leaving directory `/home/mscherer/svn.icu/uni63/dbg/data'
 - copy the big-endian Unicode data files to another location,
   separate from the other data files
-    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt51b/coll
-    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt51b/brkitr
-    ~/svn.icu/uni63/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt51b/*.icu /tmp/icu4j/com/ibm/icu/impl/data/icudt51b
-    ~/svn.icu/uni63/dbg/data/out/icu4j$ rm /tmp/icu4j/com/ibm/icu/impl/data/icudt51b/cnvalias.icu
-    ~/svn.icu/uni63/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt51b/*.nrm /tmp/icu4j/com/ibm/icu/impl/data/icudt51b
-    ~/svn.icu/uni63/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt51b/coll/*.icu /tmp/icu4j/com/ibm/icu/impl/data/icudt51b/coll
-    ~/svn.icu/uni63/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt51b/brkitr/* /tmp/icu4j/com/ibm/icu/impl/data/icudt51b/brkitr
+    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt52b/coll
+    mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt52b/brkitr
+    ~/svn.icu/uni63/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt52b/*.icu /tmp/icu4j/com/ibm/icu/impl/data/icudt52b
+    ~/svn.icu/uni63/dbg/data/out/icu4j$ rm /tmp/icu4j/com/ibm/icu/impl/data/icudt52b/cnvalias.icu
+    ~/svn.icu/uni63/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt52b/*.nrm /tmp/icu4j/com/ibm/icu/impl/data/icudt52b
+    ~/svn.icu/uni63/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt52b/coll/*.icu /tmp/icu4j/com/ibm/icu/impl/data/icudt52b/coll
+    ~/svn.icu/uni63/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt52b/brkitr/* /tmp/icu4j/com/ibm/icu/impl/data/icudt52b/brkitr
 - refresh ICU4J
-    ~/svn.icu/uni63/dbg/data/out/icu4j$ jar uf ~/svn.icu4j/trunk/src/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/icudt51b
+    ~/svn.icu/uni63/dbg/data/out/icu4j$ jar uf ~/svn.icu4j/trunk/src/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/icudt52b
 
 * refresh Java test .txt files
 - copy new .txt files into ICU4J's main/tests/core/src/com/ibm/icu/dev/data/unicode
 
-* UCA -- TODO: mostly skipped for ICU 52m1 / Unicode 6.3 beta, except update coll/* files
+* UCA -- mostly skipped for ICU 52 / Unicode 6.3, except update coll/* files
 
 - get output from Mark's tools; look in http://www.unicode.org/Public/UCA/<beta version>/
 - CLDR root files for ICU are in CollationAuxiliary.zip; unpack that
@@ -195,9 +195,9 @@ set(ICU_SRC_DIR /home/mscherer/svn.icu/uni63/src)
 - refresh ICU4J collation data:
   (subset of instructions above for properties data refresh, except copies all coll/*)
     ~/svn.icu/uni63/dbg$ make ICU4J_ROOT=/tmp/icu4j icu4j-data-install
-    ~/svn.icu/uni63/dbg$ mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt51b/coll
-    ~/svn.icu/uni63/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt51b/coll/* /tmp/icu4j/com/ibm/icu/impl/data/icudt51b/coll
-    ~/svn.icu/uni63/dbg/data/out/icu4j$ jar uf ~/svn.icu4j/trunk/src/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/icudt51b
+    ~/svn.icu/uni63/dbg$ mkdir -p /tmp/icu4j/com/ibm/icu/impl/data/icudt52b/coll
+    ~/svn.icu/uni63/dbg/data/out/icu4j$ cp com/ibm/icu/impl/data/icudt52b/coll/* /tmp/icu4j/com/ibm/icu/impl/data/icudt52b/coll
+    ~/svn.icu/uni63/dbg/data/out/icu4j$ jar uf ~/svn.icu4j/trunk/src/main/shared/data/icudata.jar -C /tmp/icu4j com/ibm/icu/impl/data/icudt52b
 - run all tests with the *_SHORT.txt or the full files (the full ones have comments, useful for debugging)
 - note on intltest: if collate/UCAConformanceTest fails, then
   utility/MultithreadTest/TestCollators will fail as well;
