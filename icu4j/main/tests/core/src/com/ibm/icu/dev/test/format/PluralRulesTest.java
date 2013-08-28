@@ -30,6 +30,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.dev.test.serializable.SerializableTest;
 import com.ibm.icu.dev.util.CollectionUtilities;
 import com.ibm.icu.dev.util.Relation;
 import com.ibm.icu.impl.Utility;
@@ -42,6 +43,8 @@ import com.ibm.icu.text.PluralRules.KeywordStatus;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.text.PluralRules.SampleType;
+import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
@@ -1020,4 +1023,26 @@ public class PluralRulesTest extends TestFmwk {
         }
         logln("max \tsize:\t" + max);
     }
+    
+    public static class FixedDecimalHandler implements SerializableTest.Handler
+    {
+        public Object[] getTestObjects()
+        {
+            FixedDecimal items[] = {
+                    new FixedDecimal(3d),
+                    new FixedDecimal(3d, 2),
+                    new FixedDecimal(3.1d, 1),
+                    new FixedDecimal(3.1d, 2),
+            };
+            return items;
+        }
+
+        public boolean hasSameBehavior(Object a, Object b)
+        {
+            FixedDecimal a1 = (FixedDecimal) a;
+            FixedDecimal b1 = (FixedDecimal) b;
+            return a1.equals(b1);
+        }
+    }
+
 }

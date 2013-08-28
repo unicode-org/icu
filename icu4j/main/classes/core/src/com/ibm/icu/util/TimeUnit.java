@@ -6,6 +6,7 @@
  */
 package com.ibm.icu.util;
 
+
 /**
  * Measurement unit for time units.
  * @see TimeUnitAmount
@@ -14,10 +15,11 @@ package com.ibm.icu.util;
  * @stable ICU 4.0
  */
 public class TimeUnit extends MeasureUnit {
+    private static final long serialVersionUID = -2839973855554750484L;
+
     /** 
      * Supports selected time duration units
      */
-    private final String name;
     private final int index;
 
     // Total number of time units. Adjust as necessary.
@@ -42,7 +44,7 @@ public class TimeUnit extends MeasureUnit {
     // idx must be sequential and must order time units from largest to smallest.
     // e.g YEAR is 0; MONTH is 1; ...; SECOND is 6.
     private TimeUnit(String name, int idx) {
-        this.name = name;
+        super("duration", name);
         this.index = idx;
         values[idx] = this; // store in values array
     }
@@ -55,16 +57,6 @@ public class TimeUnit extends MeasureUnit {
         return values.clone();
     }
 
-    /**
-     * A string representation for debugging.
-     * It is for debugging purpose. The value might change.
-     * Please do not count on the value.
-     * @stable ICU 4.0
-     */
-    public String toString() {
-        return name;
-    }
-    
     // Returns the index for this TimeUnit. Something between 0 inclusive and
     // number of time units exclusive. Smaller time units have larger indexes.
     int getIndex() {

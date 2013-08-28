@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2005-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2005-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -110,7 +110,7 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
             try {
                 /*Field uid = */c.getDeclaredField("serialVersionUID");
             } catch (Exception e) {
-                errln("No serialVersionUID");
+                errln("No serialVersionUID for " + name);
             }
             
             if (inputStream == null) {

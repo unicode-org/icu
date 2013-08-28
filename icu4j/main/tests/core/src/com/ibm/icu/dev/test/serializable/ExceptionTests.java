@@ -150,18 +150,6 @@ public class ExceptionTests
             return exceptions;
         }
     }
-    
-    static class FixedDecimalExceptionHandler extends ExceptionHandler
-    {
-        public Object[] getTestObjects()
-        {
-            IllegalIcuArgumentException[] exceptions = {
-                new IllegalIcuArgumentException("Bad argument FOO")
-            };
-            return exceptions;
-        }
-    }
-
 
     public static void main(String[] args)
     {

@@ -20,7 +20,7 @@ package com.ibm.icu.util;
  * <p>Measure objects are parsed and formatted by subclasses of
  * MeasureFormat.
  *
- * <p>Measure objects are immutable.
+ * <p>Measure objects are immutable. All subclasses must guarantee that.
  *
  * @see java.lang.Number
  * @see com.ibm.icu.util.MeasureUnit
@@ -28,7 +28,7 @@ package com.ibm.icu.util;
  * @author Alan Liu
  * @stable ICU 3.0
  */
-public abstract class Measure {
+public class Measure {
     
     private final Number number;
 
@@ -40,7 +40,7 @@ public abstract class Measure {
      * @param unit the unit
      * @stable ICU 3.0
      */
-    protected Measure(Number number, MeasureUnit unit) {
+    public Measure(Number number, MeasureUnit unit) {
         if (number == null || unit == null) {
             throw new NullPointerException();
         }
