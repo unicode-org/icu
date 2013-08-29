@@ -31,7 +31,7 @@ struct UInitOnce;
 
 /****************************************************************************
  *
- *   Low Level Atomic Operations. 
+ *   Low Level Atomic Operations.
  *      Compiler dependent. Not operating system dependent.
  *
  ****************************************************************************/
@@ -46,20 +46,20 @@ typedef std::atomic<int32_t> atomic_int32_t;
 
 inline int32_t umtx_loadAcquire(atomic_int32_t &var) {
     return var.load(std::memory_order_acquire);
-};
+}
 
 inline void umtx_storeRelease(atomic_int32_t &var, int32_t val) {
     var.store(val, std::memory_order_release);
-};
+}
 
 inline int32_t umtx_atomic_inc(atomic_int32_t *var) {
     return var->fetch_add(1) + 1;
 }
-     
+
 inline int32_t umtx_atomic_dec(atomic_int32_t *var) {
     return var->fetch_sub(1) - 1;
 }
-     
+
 
 #elif U_PLATFORM_HAS_WIN32_API
 
@@ -203,7 +203,7 @@ inline void umtx_initOnce(UInitOnce &uio, void (*fp)()) {
 inline void umtx_initOnce(UInitOnce &uio, void (*fp)(UErrorCode &), UErrorCode &errCode) {
     if (U_FAILURE(errCode)) {
         return;
-    }    
+    }
     if (umtx_loadAcquire(uio.fState) != 2 && umtx_initImplPreInit(uio)) {
         // We run the initialization.
         (*fp)(errCode);
@@ -234,7 +234,7 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (*fp)(T), T context) {
 template<class T> void umtx_initOnce(UInitOnce &uio, void (*fp)(T, UErrorCode &), T context, UErrorCode &errCode) {
     if (U_FAILURE(errCode)) {
         return;
-    }    
+    }
     if (umtx_loadAcquire(uio.fState) != 2 && umtx_initImplPreInit(uio)) {
         // We run the initialization.
         (*fp)(context, errCode);
@@ -270,12 +270,12 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (*fp)(T, UErrorCode &)
 /* For CRITICAL_SECTION */
 
 /*
- *   Note: there is an earlier include of windows.h in this file, but it is in 
+ *   Note: there is an earlier include of windows.h in this file, but it is in
  *         different conditionals.
  *         This one is needed if we are using C++11 for atomic ops, but
  *         win32 APIs for Critical Sections.
  */
- 
+
 # define WIN32_LEAN_AND_MEAN
 # define VC_EXTRALEAN
 # define NOUSER
@@ -317,8 +317,8 @@ typedef struct UMutex UMutex;
 
 #else
 
-/* 
- *  Unknow platform type. 
+/*
+ *  Unknow platform type.
  *      This is an error condition. ICU requires mutexes.
  */
 
@@ -327,7 +327,7 @@ typedef struct UMutex UMutex;
 #endif
 
 
-    
+
 /**************************************************************************************
  *
  *  Mutex Implementation function declaratations.
@@ -341,7 +341,7 @@ typedef struct UMutex UMutex;
  *              the global ICU mutex.  Recursive locks are an error
  *              and may cause a deadlock on some platforms.
  */
-U_INTERNAL void U_EXPORT2 umtx_lock(UMutex* mutex); 
+U_INTERNAL void U_EXPORT2 umtx_lock(UMutex* mutex);
 
 /* Unlock a mutex.
  * @param mutex The given mutex to be unlocked.  Pass NULL to specify
