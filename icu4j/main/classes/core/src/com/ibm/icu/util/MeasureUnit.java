@@ -378,7 +378,7 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
         }
 
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-            byte version = in.readByte(); // version
+            /* byte version = */ in.readByte(); // version
             type = in.readUTF();
             code = in.readUTF();
             // allow for more data from future version
