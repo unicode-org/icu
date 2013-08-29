@@ -122,7 +122,7 @@ public class CompatibilityTest extends TestFmwk
     }
 
     private static final String[][] SKIP_CASES = {
-        // ICU 52 PluralRules/PluralFormat/CurrencyPluralInfo are not
+        // ICU 52+ PluralRules/PluralFormat/CurrencyPluralInfo are not
         // serialization-compatible with previous versions. 
         {"ICU_50.1", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
         {"ICU_51.1", "com.ibm.icu.text.CurrencyPluralInfo.dat"},
@@ -133,14 +133,10 @@ public class CompatibilityTest extends TestFmwk
         {"ICU_50.1", "com.ibm.icu.text.PluralRules.dat"},
         {"ICU_51.1", "com.ibm.icu.text.PluralRules.dat"},
 
-        // Currency format changed in 52
-        {"ICU_3.6",     "com.ibm.icu.util.Currency.dat"},
-        {"ICU_50.1",     "com.ibm.icu.util.Currency.dat"},
-        {"ICU_51.1",     "com.ibm.icu.util.Currency.dat"},
-
+        // RuleBasedNumberFormat
         {"ICU_3.6",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
 
-        // ICU 4.8 MessageFormat is not serialization-compatible with previous versions.
+        // ICU 4.8+ MessageFormat is not serialization-compatible with previous versions.
         {"ICU_3.6",     "com.ibm.icu.text.MessageFormat.dat"},
     };
 

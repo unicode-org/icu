@@ -1,7 +1,7 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2013, Google Inc, International Business Machines Corporation and         *
- * others. All Rights Reserved.                                                *
+ * Copyright (C) 2004-2013, Google Inc, International Business Machines        *
+ * Corporation and others. All Rights Reserved.                                *
  *******************************************************************************
  */
 package com.ibm.icu.util;
@@ -14,7 +14,6 @@ import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -399,6 +398,8 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
     }
 
     static final class MeasureUnitProxy implements Externalizable {
+        private static final long serialVersionUID = -3910681415330989598L;
+
         private String type;
         private String code;
 
