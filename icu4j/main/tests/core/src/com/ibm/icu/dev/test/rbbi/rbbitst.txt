@@ -662,6 +662,11 @@ Bangkok)•</data>
 \u0e22\u0e07•\
 \u0e43\u0e2b\u0e21\u0e48•</data>
 
+# Test for #10296
+<line>
+<data>•ใช•มั้ย•</data>
+<data>•มั๊ยล่ะ•ที่รัก•</data>
+
 ####################################################################################
 #
 #  Tailored (locale specific) breaking.
