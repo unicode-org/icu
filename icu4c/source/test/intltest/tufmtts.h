@@ -14,12 +14,6 @@
 #include "unicode/locid.h"
 #include "intltest.h"
 
-U_NAMESPACE_BEGIN
-class TimeUnitFormat;
-class TimePeriod;
-U_NAMESPACE_END
-struct TimePeriodResult;
-
 /**
  * Test basic functionality of various API functions
  **/
@@ -55,26 +49,6 @@ public:
      * As of CLDR shiped in ICU4.8, Greek is one such language.
      */
     void testGreekWithSanitization();
-
-    void testFormatPeriodEn();
-
-    void testTimePeriodLength();
-
-    void testTimePeriodEquals();
-
-    void testTimePeriodForAmounts();
-
-    void testTimeUnitAmountSubClass();
-
-    void verifyEquals(const TimePeriod&, const TimePeriod&);
-
-    void verifyNotEqual(const TimePeriod&, const TimePeriod&);
-
-    void verifyFormatTimePeriod(
-        const TimeUnitFormat& tuf,
-        const TimePeriodResult* timePeriodResults,
-        int32_t numResults);
-
 
 };
 
