@@ -6,7 +6,6 @@
  */
 package com.ibm.icu.util;
 
-import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
@@ -32,7 +31,6 @@ import com.ibm.icu.text.CurrencyDisplayNames;
 import com.ibm.icu.text.CurrencyMetaInfo;
 import com.ibm.icu.text.CurrencyMetaInfo.CurrencyDigits;
 import com.ibm.icu.text.CurrencyMetaInfo.CurrencyFilter;
-import com.ibm.icu.util.MeasureUnit.MeasureUnitProxy;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
