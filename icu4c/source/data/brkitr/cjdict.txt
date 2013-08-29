@@ -1,5 +1,5 @@
 ﻿ # 
- # Copyright (C) 2012,  Google Inc, International Business Machines Corporation 
+ # Copyright (C) 2012-2013,  Google Inc, International Business Machines Corporation 
  # and others. All Rights Reserved. 
  # 
  # Note: This data file (cjdict.txt) was originally developed by Chromium project.
@@ -20531,6 +20531,7 @@
 オーシャン	94
 オース	102
 オースチン	117
+オーストラリア	88
 オーストラリアドル	122
 オーストラリアン	116
 オーストリアシリング	156

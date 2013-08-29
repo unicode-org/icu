@@ -762,6 +762,8 @@ Bangkok)•</data>
 <locale root>
 <word>
 <data>•私<400>達<400>に<400>一<400>〇<400>〇〇<400>の<400>コンピュータ<400>が<400>ある<400>。<0>奈々<400>は<400>ワード<400>で<400>ある<400>。•</data>
+# The following test is for #10300
+<data>•例えば<400>オーストラリア<400>。•</data>
 
 # UBreakIteratorType UBRK_SENTENCE, Locale "el"
 # Add break after Greek question mark (cldrbug #2069).
