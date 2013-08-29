@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2006-2012, International Business Machines Corporation
+ * Copyright (C) 2006-2013, International Business Machines Corporation
  * and others. All Rights Reserved.
  *******************************************************************************
  */
@@ -667,7 +667,8 @@ CjkBreakEngine::CjkBreakEngine(DictionaryMatcher *adoptDictionary, LanguageType 
             cjSet.addAll(fHanWordSet);
             cjSet.addAll(fKatakanaWordSet);
             cjSet.addAll(fHiraganaWordSet);
-            cjSet.add(UNICODE_STRING_SIMPLE("\\uff70\\u30fc"));
+            cjSet.add(0xFF70); // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
+            cjSet.add(0x30FC); // KATAKANA-HIRAGANA PROLONGED SOUND MARK
             setCharacters(cjSet);
         }
     }
