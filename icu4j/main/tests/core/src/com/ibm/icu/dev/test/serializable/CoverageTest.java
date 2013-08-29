@@ -159,6 +159,10 @@ public class CoverageTest extends CompatibilityTest implements URLHandler.URLVis
                                 out.close();
                                 byteOut.close();
                             } catch (IOException e) {
+                                if (str.equals("/text/PluralRules$FixedDecimal.class")
+                                        && logKnownIssue("10268", "Serializable interface is not implemented in PluralRules$FixedDecimal")) {
+                                    return;
+                                }
                                 warnln("Error writing test objects: " + e.toString());
                                 return;
                             }
