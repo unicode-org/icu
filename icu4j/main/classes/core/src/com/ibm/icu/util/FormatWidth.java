@@ -8,10 +8,26 @@ package com.ibm.icu.util;
 
 /**
  * General purpose formatting width enum.
+ * @internal
+ * @deprecated This API is ICU internal only.
  */
 public enum FormatWidth {
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     WIDE("units"), 
+    
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     SHORT("unitsShort"), 
+    
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     NARROW("unitsNarrow");
 
     /**
