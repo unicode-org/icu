@@ -61,7 +61,10 @@ static UMutex   globalMutex = U_MUTEX_INITIALIZER;
 
 U_CAPI UBool U_EXPORT2 umtx_initImplPreInit(UInitOnce &uio) {
     for (;;) {
-        int32_t previousState = InterlockedCompareExchange( 
+        int32_t previousState = InterlockedCompareExchange(
+#if (U_PLATFORM == U_PF_MINGW) || (U_PLATFORM == U_PF_CYGWIN)
+           (LONG volatile *) // this is the type given in the API doc for this function.
+#endif
             &uio.fState,  //  Destination
             1,            //  Exchange Value
             0);           //  Compare value
@@ -131,7 +134,7 @@ umtx_unlock(UMutex* mutex)
 //
 //-------------------------------------------------------------------------------------------
 
-# include <pthread.h> 
+# include <pthread.h>
 
 // Each UMutex consists of a pthread_mutex_t.
 // All are statically initialized and ready for use.
@@ -206,7 +209,7 @@ UBool umtx_initImplPreInit(UInitOnce &uio) {
 // This function is called by the thread that ran an initialization function,
 // just after completing the function.
 //   Some threads may be waiting on the condition, requiring the broadcast wakeup.
-//   Some threads may be racing to test the fState variable outside of the mutex, 
+//   Some threads may be racing to test the fState variable outside of the mutex,
 //   requiring the use of store/release when changing its value.
 //
 //   success: True:  the inialization succeeded. No further calls to the init
@@ -227,7 +230,7 @@ void umtx_initOnceReset(UInitOnce &uio) {
     // Not a thread safe function, we can use an ordinary assignment.
     uio.fState = 0;
 }
-        
+
 // End of POSIX specific umutex implementation.
 
 #else  // Platform #define chain.
@@ -292,8 +295,8 @@ umtx_storeRelease(atomic_int32_t &var, int32_t val) {
 //
 //--------------------------------------------------------------------------
 
-U_DEPRECATED void U_EXPORT2 
-u_setMutexFunctions(const void * /*context */, UMtxInitFn *, UMtxFn *, 
+U_DEPRECATED void U_EXPORT2
+u_setMutexFunctions(const void * /*context */, UMtxInitFn *, UMtxFn *,
                     UMtxFn *,  UMtxFn *, UErrorCode *status) {
     if (U_SUCCESS(*status)) {
         *status = U_UNSUPPORTED_ERROR;
@@ -311,4 +314,3 @@ u_setAtomicIncDecFunctions(const void * /*context */, UMtxAtomicFn *, UMtxAtomic
     }
     return;
 }
-
