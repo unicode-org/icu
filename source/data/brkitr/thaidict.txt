@@ -1,4 +1,4 @@
-﻿  #  	Copyright (c) 2006-2012 International Business Machines Corporation,
+﻿  #  	Copyright (c) 2006-2013 International Business Machines Corporation,
   #  	Apple Computer, Inc., and others. All Rights Reserved.
 กก
 กกขนาก
@@ -12656,6 +12656,8 @@
 มั่ว
 มั่วสุม
 มั้ม
+มั้ย
+มั๊ยล่ะ
 มา
 มาก
 มากกว่า
