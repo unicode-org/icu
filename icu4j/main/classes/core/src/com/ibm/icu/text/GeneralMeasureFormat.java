@@ -31,8 +31,8 @@ import com.ibm.icu.util.FormatWidth;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.ULocale;
-import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.ULocale.Category;
+import com.ibm.icu.util.UResourceBundle;
 
 /**
  * Mutable class for formatting GeneralMeasures, or sequences of them.
@@ -536,6 +536,8 @@ public class GeneralMeasureFormat extends MeasureFormat {
     }
 
     static class GeneralMeasureProxy implements Externalizable {
+        private static final long serialVersionUID = -6033308329886716770L;
+
         private ULocale locale;
         private FormatWidth length;
         private NumberFormat numberFormat;
@@ -559,7 +561,7 @@ public class GeneralMeasureFormat extends MeasureFormat {
         }
 
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-            byte version = in.readByte(); // version
+            /* byte version = */ in.readByte(); // version
             locale = (ULocale) in.readObject();
             length = (FormatWidth) in.readObject();
             numberFormat = (NumberFormat) in.readObject();

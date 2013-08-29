@@ -21,11 +21,9 @@ import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.dev.test.serializable.SerializableTest;
-import com.ibm.icu.impl.CurrencyData.CurrencyFormatInfo;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.GeneralMeasureFormat;
-import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.FormatWidth;

@@ -781,6 +781,10 @@ public class Currency extends MeasureUnit implements Serializable {
      */
     protected Currency(String theISOCode) {
         super("currency", theISOCode);
+
+        // isoCode is kept for readResolve() and Currency class no longer
+        // use it. So this statement actually does not have any effect.
+        isoCode = code; 
     }
 
     // POW10[i] = 10^i
@@ -901,6 +905,16 @@ public class Currency extends MeasureUnit implements Serializable {
     
     private Object writeReplace() throws ObjectStreamException {
         return new MeasureUnitProxy(type, code);
+    }
+
+    // For backward compatibility only
+    /**
+     * ISO 4217 3-letter code.
+     */
+    private final String isoCode;
+
+    private Object readResolve() throws ObjectStreamException {
+        return Currency.getInstance(isoCode);
     }
 }
 //eof
