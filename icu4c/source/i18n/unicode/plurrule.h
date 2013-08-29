@@ -291,24 +291,6 @@ public:
     static StringEnumeration* U_EXPORT2 getAvailableLocales(UErrorCode &status);
 
     /**
-     * Returns the 'functionally equivalent' locale with respect to plural rules. 
-     * Calling PluralRules.forLocale with the functionally equivalent locale, and with 
-     * the provided locale, returns rules that behave the same. <br/>
-     * All locales with the same functionally equivalent locale have plural rules that 
-     * behave the same. This is not exaustive; there may be other locales whose plural 
-     * rules behave the same that do not have the same equivalent locale.
-     * 
-     * @param locale        the locale to check
-     * @param isAvailable   if not NULL the boolean will be set to TRUE if locale is directly
-     *                      defined (without fallback) as having plural rules.
-     * @param status        The error code.
-     * @return              the functionally-equivalent locale
-     * @internal
-     */
-    static Locale getFunctionalEquivalent(const Locale &locale, UBool *isAvailable,
-                                          UErrorCode &status);
-
-    /**
      * Returns whether or not there are overrides.
      * @param locale       the locale to check.
      * @return
