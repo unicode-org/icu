@@ -1421,8 +1421,8 @@ int64_t FixedDecimal::getFractionalDigits(double n, int32_t v) {
       case 3: return (int64_t)(fract*1000.0 + 0.5);
       default:
           double scaled = floor(fract * pow(10.0, v) + 0.5);
-          if (scaled > INT64_MAX) {
-              return INT64_MAX;
+          if (scaled > U_INT64_MAX) {
+              return U_INT64_MAX;
           } else {
               return (int64_t)scaled;
           }
