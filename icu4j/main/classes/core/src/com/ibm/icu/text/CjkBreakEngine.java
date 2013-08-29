@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012, International Business Machines Corporation and         *
+ * Copyright (C) 2012-2013, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -46,7 +46,8 @@ class CjkBreakEngine implements LanguageBreakEngine {
             fWordSet.addAll(fHanWordSet);
             fWordSet.addAll(fKatakanaWordSet);
             fWordSet.addAll(fHiraganaWordSet);
-            fWordSet.add("\\uff70\\u30fc");
+            fWordSet.add(0xFF70); // HALFWIDTH KATAKANA-HIRAGANA PROLONGED SOUND MARK
+            fWordSet.add(0x30FC); // KATAKANA-HIRAGANA PROLONGED SOUND MARK
         }
     }
 
