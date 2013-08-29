@@ -276,9 +276,7 @@ void CompactDecimalFormatTest::TestSwahiliShortNegative() {
 }
 
 void CompactDecimalFormatTest::TestArabicLong() {
-  // TODO(andy) This test unexpectedly started failing with the new plural rules.
-  //            Rules for "ar" didn't change.
-  // CheckLocale("ar", UNUM_LONG, kArabicLong, LENGTHOF(kArabicLong));
+  CheckLocale("ar", UNUM_LONG, kArabicLong, LENGTHOF(kArabicLong));
 }
 
 void CompactDecimalFormatTest::TestSignificantDigits() {

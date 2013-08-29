@@ -428,7 +428,7 @@ PluralRuleParser::parse(const UnicodeString& ruleData, PluralRules *prules, UErr
             rangeLowIdx = 0;
             rangeHiIdx  = 1;
             curAndConstraint->value=PLURAL_RANGE_HIGH;
-            curAndConstraint->integerOnly = (type == tIn);
+            curAndConstraint->integerOnly = (type != tWithin);
             break;
         case tNumber:
             U_ASSERT(curAndConstraint != NULL);
