@@ -37,6 +37,8 @@ import com.ibm.icu.util.ULocale.Category;
 /**
  * Mutable class for formatting GeneralMeasures, or sequences of them.
  * @author markdavis
+ * @internal
+ * @deprecated This API is ICU internal only.
  */
 public class GeneralMeasureFormat extends MeasureFormat {
 
@@ -78,9 +80,8 @@ public class GeneralMeasureFormat extends MeasureFormat {
     private static final long serialVersionUID = 7922671801770278517L;
 
     /**
-     * @param styleToCountToFormat2 
-     * @param rules2 
-     * @param rules2
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected GeneralMeasureFormat(ULocale locale, FormatWidth style, 
             Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat,
@@ -97,8 +98,8 @@ public class GeneralMeasureFormat extends MeasureFormat {
      * Create a format from the locale and length
      * @param locale   locale of this time unit formatter.
      * @param length the desired length
-     * @draft ICU 52
-     * @provisional This API might change or be removed in a future release.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static GeneralMeasureFormat getInstance(ULocale locale, FormatWidth length) {
         return getInstance(locale, length, NumberFormat.getInstance(locale));
@@ -108,8 +109,8 @@ public class GeneralMeasureFormat extends MeasureFormat {
      * Create a format from the locale and length
      * @param locale   locale of this time unit formatter.
      * @param length the desired length
-     * @draft ICU 52
-     * @provisional This API might change or be removed in a future release.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static GeneralMeasureFormat getInstance(ULocale locale, FormatWidth length,
             NumberFormat decimalFormat) {
@@ -128,8 +129,8 @@ public class GeneralMeasureFormat extends MeasureFormat {
      * Return a formatter for CurrencyAmount objects in the given
      * locale.
      * @param locale desired locale
-     * @return a formatter object
-     * @stable ICU 3.0
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static MeasureFormat getCurrencyFormat(ULocale locale) {
         return new CurrencyFormat(locale);
@@ -139,8 +140,8 @@ public class GeneralMeasureFormat extends MeasureFormat {
      * Return a formatter for CurrencyAmount objects in the default
      * <code>FORMAT</code> locale.
      * @return a formatter object
-     * @see Category#FORMAT
-     * @stable ICU 3.0
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static MeasureFormat getCurrencyFormat() {
         return getCurrencyFormat(ULocale.getDefault(Category.FORMAT));
@@ -148,6 +149,8 @@ public class GeneralMeasureFormat extends MeasureFormat {
 
     /**
      * @return the locale of the format.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public ULocale getLocale() {
         return locale;
@@ -155,6 +158,8 @@ public class GeneralMeasureFormat extends MeasureFormat {
 
     /**
      * @return the desired length for the format
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public FormatWidth getLength() {
         return length;
@@ -232,73 +237,80 @@ public class GeneralMeasureFormat extends MeasureFormat {
         return unitToStyleToCountToFormat;
     }
 
-    /* (non-Javadoc)
-     * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @SuppressWarnings("unchecked")
     @Override
-    public StringBuffer format(Object arg0, StringBuffer arg1, FieldPosition arg2) {
-        if (arg0 instanceof Collection) {
-            Collection<Measure> coll = (Collection<Measure>) arg0;
-            return format(arg1, arg2, coll.toArray(new Measure[coll.size()]));
-        } else if (arg0 instanceof Measure[]) {
-            return format(arg1, arg2, (Measure[]) arg0);
+    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
+        if (obj instanceof Collection) {
+            Collection<Measure> coll = (Collection<Measure>) obj;
+            return format(toAppendTo, pos, coll.toArray(new Measure[coll.size()]));
+        } else if (obj instanceof Measure[]) {
+            return format(toAppendTo, pos, (Measure[]) obj);
         } else {
-            return format((Measure) arg0, arg1, arg2);
+            return format((Measure) obj, toAppendTo, pos);
         }
     }
 
     /**
      * Format a general measure (type-safe).
      * @param measure the measure to format
-     * @param stringBuffer as in {@link #format(Object, StringBuffer, FieldPosition)}
-     * @param fieldPosition as in {@link #format(Object, StringBuffer, FieldPosition)}
+     * @param toAppendTo as in {@link #format(Object, StringBuffer, FieldPosition)}
+     * @param pos as in {@link #format(Object, StringBuffer, FieldPosition)}
      * @return passed-in buffer with appended text.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    public StringBuffer format(Measure measure, StringBuffer stringBuffer, FieldPosition fieldPosition) {
+    public StringBuffer format(Measure measure, StringBuffer toAppendTo, FieldPosition pos) {
         Number n = measure.getNumber();
         MeasureUnit unit = measure.getUnit();        
-        UFieldPosition pos = new UFieldPosition(fieldPosition.getFieldAttribute(), fieldPosition.getField());
-        StringBuffer formattedNumber = numberFormat.format(n, new StringBuffer(), pos);
-        String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), pos.getCountVisibleFractionDigits(), pos.getFractionDigits()));
+        UFieldPosition fpos = new UFieldPosition(pos.getFieldAttribute(), pos.getField());
+        StringBuffer formattedNumber = numberFormat.format(n, new StringBuffer(), fpos);
+        String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
 
         Map<FormatWidth, Map<String, PatternData>> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
         Map<String, PatternData> countToFormat = styleToCountToFormat.get(length);
         PatternData messagePatternData = countToFormat.get(keyword);
 
-        stringBuffer.append(messagePatternData.prefix);
+        toAppendTo.append(messagePatternData.prefix);
         if (messagePatternData.suffix != null) { // there is a number (may not happen with, say, Arabic dual)
             // Fix field position
-            fieldPosition.setBeginIndex(pos.getBeginIndex() + messagePatternData.prefix.length());
-            fieldPosition.setEndIndex(pos.getEndIndex() + messagePatternData.prefix.length());
-            stringBuffer.append(formattedNumber);
-            stringBuffer.append(messagePatternData.suffix);
+            pos.setBeginIndex(fpos.getBeginIndex() + messagePatternData.prefix.length());
+            pos.setEndIndex(fpos.getEndIndex() + messagePatternData.prefix.length());
+            toAppendTo.append(formattedNumber);
+            toAppendTo.append(messagePatternData.suffix);
         }
-        return stringBuffer;
+        return toAppendTo;
     }
 
 
     /**
      * Format a sequence of measures.
-     * @param stringBuffer as in {@link #format(Object, StringBuffer, FieldPosition)}
-     * @param fieldPosition as in {@link #format(Object, StringBuffer, FieldPosition)}
+     * @param toAppendto as in {@link #format(Object, StringBuffer, FieldPosition)}
+     * @param pos as in {@link #format(Object, StringBuffer, FieldPosition)}
      * @param measures a sequence of one or more measures.
      * @return passed-in buffer with appended text.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    public StringBuffer format(StringBuffer stringBuffer, FieldPosition fieldPosition, Measure... measures) {
+    public StringBuffer format(StringBuffer toAppendto, FieldPosition pos, Measure... measures) {
         StringBuffer[] results = new StringBuffer[measures.length];
         for (int i = 0; i < measures.length; ++i) {
-            results[i] = format(measures[i], new StringBuffer(), fieldPosition);
+            results[i] = format(measures[i], new StringBuffer(), pos);
         }
         ListFormatter listFormatter = ListFormatter.getInstance(locale, 
                 length == FormatWidth.WIDE ? ListFormatter.Style.DURATION : ListFormatter.Style.DURATION_SHORT);
-        return stringBuffer.append(listFormatter.format(results));
+        return toAppendto.append(listFormatter.format((Object[]) results));
     }
 
     /**
      * Format a sequence of measures.
      * @param measures a sequence of one or more measures.
      * @return passed-in buffer with appended text.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String format(Measure... measures) {
         StringBuffer result = format(new StringBuffer(), new FieldPosition(0), measures);
@@ -428,6 +440,11 @@ public class GeneralMeasureFormat extends MeasureFormat {
             return size;
         }
     }
+    
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     @Override
     public Measure parseObject(String toParse, ParsePosition parsePosition) {
         if (parseData == null) {
@@ -489,6 +506,10 @@ public class GeneralMeasureFormat extends MeasureFormat {
         }
     };
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null || obj.getClass() != GeneralMeasureFormat.class) {
@@ -500,6 +521,10 @@ public class GeneralMeasureFormat extends MeasureFormat {
                 && numberFormat.equals(other.numberFormat);
     }
     
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     @Override
     public int hashCode() {
         // TODO Auto-generated method stub

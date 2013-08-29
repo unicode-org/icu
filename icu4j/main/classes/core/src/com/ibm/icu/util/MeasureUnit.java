@@ -12,10 +12,12 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
@@ -38,10 +40,21 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
     private static final Map<String, Map<String,MeasureUnit>> cache 
     = new HashMap<String, Map<String,MeasureUnit>>();
 
-    protected final String type;
-    protected final String code;
     /**
-     * @param code
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected final String type;
+    
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected final String code;
+    
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     protected MeasureUnit(String type, String code) {
         this.type = type;
@@ -50,31 +63,40 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
 
     /**
      * Create an instance of a measurement unit.
+     * <p>
+     * Warning: Currently, the values of the parameters depend on the structure of
+     * ICU resource bundles. Do not use this function unless you know what you are
+     * doing.
+     * 
      * @param type the type, such as "length"
      * @param code the code, such as "meter"
      * @return the unit.
-     * @draft ICU 52
-     * @provisional This API might change or be removed in a future release.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static MeasureUnit getInstance(String type, String code) {
-        Map<String, MeasureUnit> tmp = cache.get(type);
-        if (tmp != null) {
-            MeasureUnit result = tmp.get(code);
-            if (result != null) {
-                return result;
+        synchronized (MeasureUnit.class){ 
+            Map<String, MeasureUnit> tmp = cache.get(type);
+            if (tmp != null) {
+                MeasureUnit result = tmp.get(code);
+                if (result != null) {
+                    return result;
+                }
             }
         }
-        if (type == null || !ASCII.containsAll(type) || code == null || ASCII_HYPHEN.containsAll(code)) {
+        if (type == null || !ASCII.containsAll(type) || code == null || !ASCII_HYPHEN.containsAll(code)) {
             throw new NullPointerException("The type or code are invalid.");
         }
-        synchronized (MeasureUnit.class) {
-            return (Currency) MeasureUnit.addUnit(type, code, UNIT_FACTORY);
-        }
+        return MeasureUnit.addUnit(type, code, UNIT_FACTORY);
     }
 
     static final UnicodeSet ASCII = new UnicodeSet('a', 'z').freeze();
     static final UnicodeSet ASCII_HYPHEN = new UnicodeSet('-', '-', 'a', 'z').freeze();
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     protected interface Factory {
         MeasureUnit create(String type, String code);
     }
@@ -152,7 +174,11 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
     }
 
     // Must only be called at static initialization, or inside synchronized block.
-    protected static MeasureUnit addUnit(String type, String unitName, Factory factory) {
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    protected synchronized static MeasureUnit addUnit(String type, String unitName, Factory factory) {
         Map<String, MeasureUnit> tmp = cache.get(type);
         if (tmp == null) {
             cache.put(type, tmp = new HashMap<String, MeasureUnit>());
@@ -170,25 +196,31 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
     /**
      * Get all of the available general units' types.
      * @return available units
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    public static Set<String> getAvailableTypes() {
-        return Collections.unmodifiableSet(cache.keySet());
+    public synchronized static Set<String> getAvailableTypes() {
+        return new HashSet<String>(cache.keySet());
     }
 
     /**
      * Get all of the available general units for a given type.
      * @return available units
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    public static Collection<MeasureUnit> getAvailable(String type) {
+    public synchronized static Collection<MeasureUnit> getAvailable(String type) {
         Map<String, MeasureUnit> units = cache.get(type);
-        return units == null ? null : Collections.unmodifiableCollection(units.values());
+        return units == null ? null : new ArrayList<MeasureUnit>(units.values());
     }
 
     /**
      * Get all of the available general units.
      * @return available units
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    public static Set<MeasureUnit> getAvailable() {
+    public synchronized static Set<MeasureUnit> getAvailable() {
         Set<MeasureUnit> result = new TreeSet<MeasureUnit>();
         for (String type : new TreeSet<String>(MeasureUnit.getAvailableTypes())) {
             for (MeasureUnit unit : MeasureUnit.getAvailable(type)) {
@@ -199,8 +231,8 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
     }
 
     /**
-     * Return a hashcode for this currency.
-     * @stable ICU 2.2
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     public int hashCode() {
@@ -208,9 +240,8 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
     }
 
     /**
-     * Return true if rhs is a Currency instance,
-     * is non-null, and has the same currency code.
-     * @stable ICU 2.2
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     @Override
     public boolean equals(Object rhs) {
@@ -225,6 +256,8 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
         }
     }
     /**
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public int compareTo(MeasureUnit other) {
         int diff;
@@ -233,6 +266,10 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
                         : code.compareTo(other.code);
     }
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     @Override
     public String toString() {
         return type + "-" + code;
@@ -240,6 +277,8 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
 
     /**
      * @return the type for this unit
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String getType() {
         return type;
@@ -247,6 +286,8 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
 
     /**
      * @return the code for this unit.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public String getCode() {
         return code;
@@ -254,8 +295,8 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
 
     /** 
      * Useful constants. Not necessarily complete: see {@link #getAvailable()}.
-     * @draft ICU 52
-     * @provisional This API might change or be removed in a future release.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static final MeasureUnit
     /** Constant for unit of acceleration: g-force */
