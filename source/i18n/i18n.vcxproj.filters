@@ -249,9 +249,6 @@
     <ClCompile Include="taiwncal.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
-    <ClCompile Include="timeperiod.cpp">
-      <Filter>formatting</Filter>
-    </ClCompile>
     <ClCompile Include="timezone.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -943,9 +940,6 @@
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\smpdtfmt.h">
-      <Filter>formatting</Filter>
-    </CustomBuild>
- <CustomBuild Include="unicode\timeperiod.h">
       <Filter>formatting</Filter>
     </CustomBuild>
     <CustomBuild Include="unicode\timezone.h">

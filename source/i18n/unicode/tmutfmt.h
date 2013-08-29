@@ -37,8 +37,6 @@ enum UTimeUnitFormatStyle {
     UTMUTFMT_FULL_STYLE,
     /** @stable ICU 4.8 */
     UTMUTFMT_ABBREVIATED_STYLE,
-    /** @draft ICU 52 */
-    UTMUTFMT_NUMERIC_STYLE,
     /** @stable ICU 4.8 */
     UTMUTFMT_FORMAT_STYLE_COUNT
 };
@@ -46,11 +44,8 @@ typedef enum UTimeUnitFormatStyle UTimeUnitFormatStyle; /**< @stable ICU 4.8 */
 
 U_NAMESPACE_BEGIN
 
-class DateFormat;
 class Hashtable;
 class UVector;
-class TimePeriod;
-class ListFormatter;
 
 /**
  * Format or parse a TimeUnitAmount, using plural rules for the units where available.
@@ -192,18 +187,6 @@ public:
                              ParsePosition& pos) const;
 
     /**
-      * Format a time period.
-      * @param timePeriod the time period to format.
-      * @param toAppendTo where the formatted string is stored.
-      * @param status any error is stored here
-      * @return a reference to toAppendto
-      * @draft ICU 52
-      */
-    UnicodeString& formatTimePeriod(const TimePeriod &timePeriod,
-                                          UnicodeString& toAppendTo,
-                                          UErrorCode& status) const;
-
-    /**
      * Return the class ID for this class. This is useful only for comparing to
      * a return value from getDynamicClassID(). For example:
      * <pre>
@@ -234,14 +217,7 @@ private:
     Locale        fLocale;
     Hashtable*    fTimeUnitToCountToPatterns[TimeUnit::UTIMEUNIT_FIELD_COUNT];
     PluralRules*  fPluralRules;
-    ListFormatter *fListFormatter;
-    DateFormat *fHourMinute;
-    DateFormat *fHourMinuteSecond;
-    DateFormat *fMinuteSecond;
     UTimeUnitFormatStyle fStyle;
-
-    UBool formatTimePeriodAsNumeric(
-            const TimePeriod& timePeriod, UnicodeString& toAppendTo, UErrorCode& status) const;
 
     void create(const Locale& locale, UTimeUnitFormatStyle style, UErrorCode& status);
 
@@ -276,18 +252,6 @@ private:
     // get time unit name, such as "year", from time unit field enum, such as
     // UTIMEUNIT_YEAR.
     static const char* getTimeUnitName(TimeUnit::UTimeUnitFields field, UErrorCode& status);
-
-    void numericFormat(
-            double date,
-            const DateFormat &dateFormat,
-            int32_t smallestField,
-            const Formattable& smallestAmount,
-            UnicodeString& toAppendto,
-            UErrorCode& status) const;
-
-    DateFormat *loadNumericDurationFormat(
-            const char *pattern,
-            UErrorCode& status) const;
 
 };
 
