@@ -1058,6 +1058,17 @@ AC_ARG_ENABLE(layout,
 	layout=true)
 ICU_CONDITIONAL(LAYOUT, test "$layout" = true)
 
+# Enable/disable tools
+AC_ARG_ENABLE(tools,
+	[  --enable-tools         build ICU's tools [default=yes]],
+	[case "${enableval}" in
+		yes) tools=true ;;
+		no)  tools=false ;;
+		*) AC_MSG_ERROR(bad value ${enableval} for --enable-tools) ;;
+		esac],
+	tools=true)
+ICU_CONDITIONAL(TOOLS, test "$tools" = true)
+
 AC_ARG_WITH(data-packaging,
 	[  --with-data-packaging=type specify how to package ICU data (files, archive, library, static, auto) [default=auto]],
 	[case "${withval}" in
@@ -1379,6 +1390,12 @@ if test -n "$UCONFIG_CPPFLAGS"; then
    \echo  "/* End of ${HDRFILE} ------------ */" >> "${HDRFILE}"
    echo >> "${HDRFILE}"
    echo '--------------- end ' "${HDRFILE}"
+fi
+
+if test "$tools" = false;
+then
+        echo "## Note: you have disabled ICU's tools. This ICU cannot build its own data or tests."
+        echo "## Expect build failures in the 'data', 'test', and other directories."
 fi
 
 $as_unset _CXX_CXXSUFFIX

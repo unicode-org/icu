@@ -618,6 +618,7 @@ ICULIBSUFFIX
 DATA_PACKAGING_MODE
 thepkgicudatadir
 pkgicudatadir
+TOOLS_TRUE
 LAYOUT_TRUE
 ICUIO_TRUE
 EXTRAS_TRUE
@@ -752,6 +753,7 @@ enable_weak_threads
 enable_extras
 enable_icuio
 enable_layout
+enable_tools
 with_data_packaging
 with_library_suffix
 enable_tests
@@ -1398,6 +1400,7 @@ Optional Features:
   --enable-extras         build ICU extras default=yes
   --enable-icuio          build ICU's icuio library default=yes
   --enable-layout         build ICU's layout library default=yes
+  --enable-tools         build ICU's tools default=yes
   --enable-tests          build ICU tests default=yes
   --enable-samples        build ICU samples default=yes
 
@@ -7199,6 +7202,25 @@ else
   LAYOUT_TRUE='#'
 fi
 
+# Enable/disable tools
+# Check whether --enable-tools was given.
+if test "${enable_tools+set}" = set; then :
+  enableval=$enable_tools; case "${enableval}" in
+		yes) tools=true ;;
+		no)  tools=false ;;
+		*) as_fn_error $? "bad value ${enableval} for --enable-tools" "$LINENO" 5 ;;
+		esac
+else
+  tools=true
+fi
+
+
+if test "$tools" = true; then
+  TOOLS_TRUE=
+else
+  TOOLS_TRUE='#'
+fi
+
 
 # Check whether --with-data-packaging was given.
 if test "${with_data_packaging+set}" = set; then :
@@ -8717,6 +8739,12 @@ if test -n "$UCONFIG_CPPFLAGS"; then
    \echo  "/* End of ${HDRFILE} ------------ */" >> "${HDRFILE}"
    echo >> "${HDRFILE}"
    echo '--------------- end ' "${HDRFILE}"
+fi
+
+if test "$tools" = false;
+then
+        echo "## Note: you have disabled ICU's tools. This ICU cannot build its own data or tests."
+        echo "## Expect build failures in the 'data', 'test', and other directories."
 fi
 
 $as_unset _CXX_CXXSUFFIX
