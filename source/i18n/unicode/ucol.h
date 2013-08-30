@@ -64,12 +64,12 @@ typedef struct UCollator UCollator;
 
 /**
  * UCOL_LESS is returned if source string is compared to be less than target
- * string in the u_strcoll() method.
+ * string in the ucol_strcoll() method.
  * UCOL_EQUAL is returned if source string is compared to be equal to target
- * string in the u_strcoll() method.
+ * string in the ucol_strcoll() method.
  * UCOL_GREATER is returned if source string is compared to be greater than
- * target string in the u_strcoll() method.
- * @see u_strcoll()
+ * target string in the ucol_strcoll() method.
+ * @see ucol_strcoll()
  * <p>
  * Possible values for a comparison result 
  * @stable ICU 2.0
