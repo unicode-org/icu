@@ -1,5 +1,5 @@
 ﻿  #  	Copyright (c) 2006-2013 International Business Machines Corporation,
-  #  	Apple Computer, Inc., and others. All Rights Reserved.
+  #  	Apple Inc., and others. All Rights Reserved.
 กก
 กกขนาก
 กกช้าง
