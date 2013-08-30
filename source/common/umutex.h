@@ -28,6 +28,9 @@
 struct UMutex;
 struct UInitOnce;
 
+// Stringify macros, to allow #include of user supplied atomic & mutex files.
+#define U_MUTEX_STR(s) #s
+#define U_MUTEX_XSTR(s) U_MUTEX_STR(s)
 
 /****************************************************************************
  *
@@ -35,28 +38,31 @@ struct UInitOnce;
  *      Compiler dependent. Not operating system dependent.
  *
  ****************************************************************************/
-#if U_HAVE_STD_ATOMICS
+#if defined (U_USER_ATOMICS_H)
+#include U_MUTEX_XSTR(U_USER_ATOMICS_H)
+
+#elif U_HAVE_STD_ATOMICS
 
 //  C++11 atomics are available.
 
 #include <atomic>
 
-typedef std::atomic<int32_t> atomic_int32_t;
+typedef std::atomic<int32_t> u_atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) ATOMIC_VAR_INIT(val)
 
-inline int32_t umtx_loadAcquire(atomic_int32_t &var) {
+inline int32_t umtx_loadAcquire(u_atomic_int32_t &var) {
     return var.load(std::memory_order_acquire);
 }
 
-inline void umtx_storeRelease(atomic_int32_t &var, int32_t val) {
+inline void umtx_storeRelease(u_atomic_int32_t &var, int32_t val) {
     var.store(val, std::memory_order_release);
 }
 
-inline int32_t umtx_atomic_inc(atomic_int32_t *var) {
+inline int32_t umtx_atomic_inc(u_atomic_int32_t *var) {
     return var->fetch_add(1) + 1;
 }
 
-inline int32_t umtx_atomic_dec(atomic_int32_t *var) {
+inline int32_t umtx_atomic_dec(u_atomic_int32_t *var) {
     return var->fetch_sub(1) - 1;
 }
 
@@ -82,23 +88,23 @@ inline int32_t umtx_atomic_dec(atomic_int32_t *var) {
 # endif
 # include <windows.h>
 
-typedef volatile LONG atomic_int32_t;
+typedef volatile LONG u_atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) val
 
-inline int32_t umtx_loadAcquire(atomic_int32_t &var) {
+inline int32_t umtx_loadAcquire(u_atomic_int32_t &var) {
     return InterlockedCompareExchange(&var, 0, 0);
 }
 
-inline void umtx_storeRelease(atomic_int32_t &var, int32_t val) {
+inline void umtx_storeRelease(u_atomic_int32_t &var, int32_t val) {
     InterlockedExchange(&var, val);
 }
 
 
-inline int32_t umtx_atomic_inc(atomic_int32_t *var) {
+inline int32_t umtx_atomic_inc(u_atomic_int32_t *var) {
     return InterlockedIncrement(var);
 }
 
-inline int32_t umtx_atomic_dec(atomic_int32_t *var) {
+inline int32_t umtx_atomic_dec(u_atomic_int32_t *var) {
     return InterlockedDecrement(var);
 }
 
@@ -107,25 +113,25 @@ inline int32_t umtx_atomic_dec(atomic_int32_t *var) {
 /*
  * gcc atomic ops. These are available on several other compilers as well.
  */
-typedef int32_t atomic_int32_t;
+typedef int32_t u_atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) val
 
-inline int32_t umtx_loadAcquire(atomic_int32_t &var) {
+inline int32_t umtx_loadAcquire(u_atomic_int32_t &var) {
     int32_t val = var;
     __sync_synchronize();
     return val;
 }
 
-inline void umtx_storeRelease(atomic_int32_t &var, int32_t val) {
+inline void umtx_storeRelease(u_atomic_int32_t &var, int32_t val) {
     __sync_synchronize();
     var = val;
 }
 
-inline int32_t umtx_atomic_inc(atomic_int32_t *p)  {
+inline int32_t umtx_atomic_inc(u_atomic_int32_t *p)  {
    return __sync_add_and_fetch(p, 1);
 }
 
-inline int32_t umtx_atomic_dec(atomic_int32_t *p)  {
+inline int32_t umtx_atomic_dec(u_atomic_int32_t *p)  {
    return __sync_sub_and_fetch(p, 1);
 }
 
@@ -138,16 +144,16 @@ inline int32_t umtx_atomic_dec(atomic_int32_t *p)  {
 
 #define U_NO_PLATFORM_ATOMICS
 
-typedef int32_t atomic_int32_t;
+typedef int32_t u_atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) val
 
-U_INTERNAL int32_t U_EXPORT2 umtx_loadAcquire(atomic_int32_t &var);
+U_INTERNAL int32_t U_EXPORT2 umtx_loadAcquire(u_atomic_int32_t &var);
 
-U_INTERNAL void U_EXPORT2 umtx_storeRelease(atomic_int32_t &var, int32_t val);
+U_INTERNAL void U_EXPORT2 umtx_storeRelease(u_atomic_int32_t &var, int32_t val);
 
-U_INTERNAL int32_t U_EXPORT2 umtx_atomic_inc(atomic_int32_t *p);
+U_INTERNAL int32_t U_EXPORT2 umtx_atomic_inc(u_atomic_int32_t *p);
 
-U_INTERNAL int32_t U_EXPORT2 umtx_atomic_dec(atomic_int32_t *p);
+U_INTERNAL int32_t U_EXPORT2 umtx_atomic_dec(u_atomic_int32_t *p);
 
 #endif  /* Low Level Atomic Ops Platfrom Chain */
 
@@ -161,9 +167,9 @@ U_INTERNAL int32_t U_EXPORT2 umtx_atomic_dec(atomic_int32_t *p);
  *************************************************************************************************/
 
 struct UInitOnce {
-    atomic_int32_t   fState;
+    u_atomic_int32_t   fState;
     UErrorCode       fErrCode;
-    void reset() {fState = 0; fState=0;};
+    void reset() {fState = 0;};
     UBool isReset() {return umtx_loadAcquire(fState) == 0;};
 // Note: isReset() is used by service registration code.
 //                 Thread safety of this usage needs review.
@@ -173,7 +179,7 @@ struct UInitOnce {
 
 
 U_CAPI UBool U_EXPORT2 umtx_initImplPreInit(UInitOnce &);
-U_CAPI void  U_EXPORT2 umtx_initImplPostInit(UInitOnce &, UBool success);
+U_CAPI void  U_EXPORT2 umtx_initImplPostInit(UInitOnce &);
 
 template<class T> void umtx_initOnce(UInitOnce &uio, T *obj, void (T::*fp)()) {
     if (umtx_loadAcquire(uio.fState) == 2) {
@@ -181,7 +187,7 @@ template<class T> void umtx_initOnce(UInitOnce &uio, T *obj, void (T::*fp)()) {
     }
     if (umtx_initImplPreInit(uio)) {
         (obj->*fp)();
-        umtx_initImplPostInit(uio, TRUE);
+        umtx_initImplPostInit(uio);
     }
 }
 
@@ -194,7 +200,7 @@ inline void umtx_initOnce(UInitOnce &uio, void (*fp)()) {
     }
     if (umtx_initImplPreInit(uio)) {
         (*fp)();
-        umtx_initImplPostInit(uio, TRUE);
+        umtx_initImplPostInit(uio);
     }
 }
 
@@ -208,7 +214,7 @@ inline void umtx_initOnce(UInitOnce &uio, void (*fp)(UErrorCode &), UErrorCode &
         // We run the initialization.
         (*fp)(errCode);
         uio.fErrCode = errCode;
-        umtx_initImplPostInit(uio, TRUE);
+        umtx_initImplPostInit(uio);
     } else {
         // Someone else already ran the initialization.
         if (U_FAILURE(uio.fErrCode)) {
@@ -225,7 +231,7 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (*fp)(T), T context) {
     }
     if (umtx_initImplPreInit(uio)) {
         (*fp)(context);
-        umtx_initImplPostInit(uio, TRUE);
+        umtx_initImplPostInit(uio);
     }
 }
 
@@ -239,7 +245,7 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (*fp)(T, UErrorCode &)
         // We run the initialization.
         (*fp)(context, errCode);
         uio.fErrCode = errCode;
-        umtx_initImplPostInit(uio, TRUE);
+        umtx_initImplPostInit(uio);
     } else {
         // Someone else already ran the initialization.
         if (U_FAILURE(uio.fErrCode)) {
@@ -259,7 +265,11 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (*fp)(T, UErrorCode &)
  *
  *************************************************************************************************/
 
-#if U_PLATFORM_HAS_WIN32_API
+#if defined(U_USER_MUTEX_H)
+// #inlcude "U_USER_MUTEX_H"
+#include U_MUTEX_XSTR(U_USER_MUTEX_H)
+
+#elif U_PLATFORM_HAS_WIN32_API
 
 /* Windows Definitions.
  *    Windows comes first in the platform chain.

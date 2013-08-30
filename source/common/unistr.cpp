@@ -118,11 +118,11 @@ operator+ (const UnicodeString &s1, const UnicodeString &s2) {
 
 void
 UnicodeString::addRef()
-{  umtx_atomic_inc((atomic_int32_t *)fUnion.fFields.fArray - 1);}
+{  umtx_atomic_inc((u_atomic_int32_t *)fUnion.fFields.fArray - 1);}
 
 int32_t
 UnicodeString::removeRef()
-{ return umtx_atomic_dec((atomic_int32_t *)fUnion.fFields.fArray - 1);}
+{ return umtx_atomic_dec((u_atomic_int32_t *)fUnion.fFields.fArray - 1);}
 
 int32_t
 UnicodeString::refCount() const 
@@ -1679,10 +1679,10 @@ UnicodeString::cloneArrayIfNeeded(int32_t newCapacity,
       // release the old array
       if(flags & kRefCounted) {
         // the array is refCounted; decrement and release if 0
-        atomic_int32_t *pRefCount = ((atomic_int32_t *)oldArray - 1);
+        u_atomic_int32_t *pRefCount = ((u_atomic_int32_t *)oldArray - 1);
         if(umtx_atomic_dec(pRefCount) == 0) {
           if(pBufferToDelete == 0) {
-              // Note: cast to (void *) is needed with MSVC, where atomic_int32_t
+              // Note: cast to (void *) is needed with MSVC, where u_atomic_int32_t
               // is defined as volatile. (Volatile has useful non-standard behavior
               //   with this compiler.)
             uprv_free((void *)pRefCount);
