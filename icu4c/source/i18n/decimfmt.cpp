@@ -1976,6 +1976,11 @@ void DecimalFormat::parse(const UnicodeString& text,
     // clear any old contents in the result.  In particular, clears any DigitList
     //   that it may be holding.
     result.setLong(0);
+    if (currency != NULL) {
+        for (int32_t ci=0; ci<4; ci++) {
+            currency[ci] = 0;
+        }
+    }
 
     // Handle NaN as a special case:
 
