@@ -1,4 +1,4 @@
-# Copyright (c) 2002-2012  International Business Machines Corporation and
+# Copyright (c) 2002-2013  International Business Machines Corporation and
 # others. All Rights Reserved.
 #
 #  file:  line_fi.txt
@@ -348,6 +348,10 @@ $BBcm $LB20NonBreaks $CM*;
 #  
 $HLcm ($HYcm | $BAcm | $HHcm) [^$CB]?;
 
+# LB 21b (forward) Don't break between SY and HL
+# (break between HL and SY already disallowed by LB 13 above)
+$SYcm $HLcm;
+
 # LB 22
 ($ALcm | $HLcm) $INcm;
 $CM+     $INcm;     #  by rule 10, any otherwise unattached CM behaves as AL
@@ -585,6 +589,8 @@ $CM* [$LB20NonBreaks-$CM] $CM* $BB;                   #  BB x .
 # LB21a
 [^$CB] $CM* ($HY | $BA | $HH) $CM* $HL;
 
+# LB21b (reverse)
+$CM* $HL $CM* $SY;
 
 # LB 22
 $CM* $IN $CM* ($ALPlus | $HL);
