@@ -95,6 +95,9 @@ CONFIG_CPPFLAGS=""
 # with, for example, "#define U_DISABLE_RENAMING 1"
 # Example: ICU configuration stuff
 UCONFIG_CPPFLAGS=""
+# UCONFIG_CFLAGS: contains a copy of anything that needs to be set by end users
+# such as -std
+UCONFIG_CFLAGS=""
 
 # Check whether to build debug libraries
 AC_MSG_CHECKING([whether to build debug libraries])
@@ -478,6 +481,7 @@ if [[ "$GXX" = yes ]]; then
         AC_MSG_RESULT($cxx11_okay)
         if [[ $cxx11_okay = yes ]]; then
             AC_MSG_NOTICE([Adding CXXFLAGS option --std=c++0x])
+            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} --std=c++0x"
         else
             CXXFLAGS="$OLD_CXXFLAGS"
         fi
@@ -567,7 +571,9 @@ if test $threads = true; then
         CXXFLAGS="${CXXFLAGS} -mt"
         if test x"`${CXX} ${CXXFLAGS} 2>&1`" != x""; then
            CXXFLAGS="${OLD_CXXFLAGS}"
-       fi
+        else
+           UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -mt"
+        fi
       ;;
     esac
     ;;
@@ -959,6 +965,7 @@ case "${host}" in
             CFLAGS="${OLD_CFLAGS}"
             CXXFLAGS="${OLD_CXXFLAGS}"
         else
+            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -qutf"
             CHECK_UTF16_STRING_RESULT="-qutf"
         fi
     fi
@@ -975,7 +982,8 @@ case "${host}" in
             CXXFLAGS="${OLD_CXXFLAGS}"
         else
             CHECK_UTF16_STRING_RESULT="-xustr=ascii_utf16_ushort"
-
+            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -xustr=ascii_utf16_ushort"
+            UCONFIG_CFLAGS="${UCONFIG_CFLAGS} -xustr=ascii_utf16_ushort"
             # Since we can't detect the availability of this UTF-16 syntax at compile time,
             # we depend on configure telling us that we can use it.
             # Since we can't ensure ICU users use -xustr=ascii_utf16_ushort,
@@ -1009,6 +1017,7 @@ if test "$CHECK_UTF16_STRING_RESULT" = "unknown"; then
 static const char16_t test[] = u"This is a UTF16 literal string.";
         ]], [[]])],[CC_UTF16_STRING=1],[CC_UTF16_STRING=0])
         if test "$CC_UTF16_STRING" = 1; then
+            UCONFIG_CFLAGS="${UCONFIG_CFLAGS} -std=gnu99"
             CHECK_UTF16_STRING_RESULT="C only";
         else
             CFLAGS="${OLD_CFLAGS}"
@@ -1360,6 +1369,7 @@ else
 AC_MSG_RESULT([too old or test failed - try upgrading GNU Make])
 fi
 
+AC_SUBST(UCONFIG_CPPFLAGS)
 if test -n "$UCONFIG_CPPFLAGS"; then
    HDRFILE="uconfig.h.prepend"
    echo "*** WARNING: You must set the following flags before code compiled against this ICU will function properly:"
@@ -1395,6 +1405,15 @@ if test -n "$UCONFIG_CPPFLAGS"; then
    \echo  "/* End of ${HDRFILE} ------------ */" >> "${HDRFILE}"
    echo >> "${HDRFILE}"
    echo '--------------- end ' "${HDRFILE}"
+fi
+
+AC_SUBST(UCONFIG_CFLAGS)
+if test -n "$UCONFIG_CFLAGS"; then
+   echo "C   apps may want to build with CFLAGS   = ${UCONFIG_CFLAGS}"
+fi
+AC_SUBST(UCONFIG_CXXFLAGS)
+if test -n "$UCONFIG_CXXFLAGS"; then
+   echo "C++ apps may want to build with CXXFLAGS = ${UCONFIG_CXXFLAGS}"
 fi
 
 if test "$tools" = false;
