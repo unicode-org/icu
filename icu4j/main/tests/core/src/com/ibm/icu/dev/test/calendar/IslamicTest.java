@@ -6,6 +6,11 @@
  */
 package com.ibm.icu.dev.test.calendar;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.Locale;
 
@@ -425,6 +430,67 @@ public class IslamicTest extends CalendarTest {
             
         }catch(Exception e){
             errln(e.getLocalizedMessage());
+        }
+    }
+    
+    public void TestSerialization8449() {
+        try {
+            ByteArrayOutputStream icuStream = new ByteArrayOutputStream();
+    
+            IslamicCalendar tstCalendar = new IslamicCalendar();
+            tstCalendar.setCivil(false);
+            
+            long expectMillis = 1187912520931L; // with seconds (not ms) cleared.
+            tstCalendar.setTimeInMillis(expectMillis);
+            
+            logln("instantiated: "+tstCalendar);
+            logln("getMillis: "+tstCalendar.getTimeInMillis());
+            tstCalendar.set(IslamicCalendar.SECOND, 0);
+            logln("setSecond=0: "+tstCalendar);
+            {
+                long gotMillis = tstCalendar.getTimeInMillis();
+                if(gotMillis != expectMillis) {
+                    errln("expect millis "+expectMillis+" but got "+gotMillis);
+                } else {
+                    logln("getMillis: "+gotMillis);
+                }
+            }
+            ObjectOutputStream icuOut = new ObjectOutputStream(icuStream);
+            icuOut.writeObject(tstCalendar);
+            icuOut.flush();
+            icuOut.close();
+            
+            ObjectInputStream icuIn = new ObjectInputStream(new ByteArrayInputStream(icuStream.toByteArray()));
+            tstCalendar = null;
+            tstCalendar = (IslamicCalendar)icuIn.readObject();
+            
+            logln("serialized back in: "+tstCalendar);
+            {
+                long gotMillis = tstCalendar.getTimeInMillis();
+                if(gotMillis != expectMillis) {
+                    errln("expect millis "+expectMillis+" but got "+gotMillis);
+                } else {
+                    logln("getMillis: "+gotMillis);
+                }
+            }
+            
+            tstCalendar.set(IslamicCalendar.SECOND, 0);
+                    
+            logln("setSecond=0: "+tstCalendar);
+            {
+                long gotMillis = tstCalendar.getTimeInMillis();
+                if(gotMillis != expectMillis) {
+                    errln("expect millis "+expectMillis+" after stream and setSecond but got "+gotMillis);
+                } else {
+                    logln("getMillis after stream and setSecond: "+gotMillis);
+                }
+            }
+        } catch(IOException e) {
+            errln(e.toString());
+            e.printStackTrace();
+        } catch(ClassNotFoundException cnf) {
+            errln(cnf.toString());
+            cnf.printStackTrace();
         }
     }
     

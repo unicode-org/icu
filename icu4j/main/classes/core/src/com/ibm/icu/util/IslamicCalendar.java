@@ -5,6 +5,8 @@
  *******************************************************************************
  */
 package com.ibm.icu.util;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Date;
 import java.util.Locale;
 
@@ -315,6 +317,8 @@ public class IslamicCalendar extends Calendar {
      */
     public void setCivil(boolean beCivil)
     {
+        civil = beCivil;
+        
         if (beCivil && cType != CalculationType.ISLAMIC_CIVIL) {
             // The fields of the calendar will become invalid, because the calendar
             // rules are different
@@ -322,8 +326,8 @@ public class IslamicCalendar extends Calendar {
             cType = CalculationType.ISLAMIC_CIVIL;
             clear();
             setTimeInMillis(m);
-        }else if(!beCivil && cType != CalculationType.ISLAMIC){
-        	 // The fields of the calendar will become invalid, because the calendar
+        } else if(!beCivil && cType != CalculationType.ISLAMIC) {
+            // The fields of the calendar will become invalid, because the calendar
             // rules are different
             long m = getTimeInMillis();
             cType = CalculationType.ISLAMIC;
@@ -340,8 +344,8 @@ public class IslamicCalendar extends Calendar {
      * 
      */
     public boolean isCivil() {
-    	if(cType == CalculationType.ISLAMIC_CIVIL){
-    		return true;
+    	if(cType == CalculationType.ISLAMIC_CIVIL) {
+            return true;
     	}
         return false;
     }
@@ -383,7 +387,7 @@ public class IslamicCalendar extends Calendar {
     /*
      * bit map array where a bit turned on represents a month with 30 days. 
      */
-    private static final int[] UMALQURA_MONTHLENGTH ={
+    private static final int[] UMALQURA_MONTHLENGTH = {
         //* 1318 -1322 */ "0101 0111 0100", "1001 0111 0110", "0100 1011 0111", "0010 0101 0111", "0101 0010 1011",
                                0x0574,           0x0975,           0x06A7,           0x0257,           0x052B,            
         //* 1323 -1327 */ "0110 1001 0101", "0110 1100 1010", "1010 1101 0101", "0101 0101 1011", "0010 0101 1101",                 
@@ -491,7 +495,6 @@ public class IslamicCalendar extends Calendar {
     private final static boolean civilLeapYear(int year)
     {
         return (14 + 11 * year) % 30 < 11;
-        
     }
     
     /**
@@ -499,20 +502,20 @@ public class IslamicCalendar extends Calendar {
      * from the Hijri epoch, origin 0.
      */
     private long yearStart(int year) {
-    	long ys = 0;
+        long ys = 0;
     	 if (cType == CalculationType.ISLAMIC_CIVIL
          		|| (cType == CalculationType.ISLAMIC_UMALQURA && year < UMALQURA_YEAR_START )) {
-            ys = (year-1)*354 + (long)Math.floor((3+11*year)/30.0);
-        }else if(cType == CalculationType.ISLAMIC){
-            ys = trueMonthStart(12*(year-1));
-        }else if(cType == CalculationType.ISLAMIC_UMALQURA){
-        	ys = yearStart(UMALQURA_YEAR_START -1);  
-        	ys += handleGetYearLength(UMALQURA_YEAR_START -1);
-        	for(int i=UMALQURA_YEAR_START; i< year; i++){  
-        		ys+= handleGetYearLength(i);
-        	}
+             ys = (year-1)*354 + (long)Math.floor((3+11*year)/30.0);
+        } else if(cType == CalculationType.ISLAMIC) {
+             ys = trueMonthStart(12*(year-1));
+        } else if(cType == CalculationType.ISLAMIC_UMALQURA){
+             ys = yearStart(UMALQURA_YEAR_START -1);  
+             ys += handleGetYearLength(UMALQURA_YEAR_START -1);
+        	for(int i=UMALQURA_YEAR_START; i< year; i++) {  
+                ys+= handleGetYearLength(i);
+            }
         }    	
-    	return ys;
+        return ys;
     }
     
     /**
@@ -532,14 +535,15 @@ public class IslamicCalendar extends Calendar {
          		|| (cType == CalculationType.ISLAMIC_UMALQURA && year < UMALQURA_YEAR_START )) {
             ms = (long)Math.ceil(29.5*realMonth)
                     + (realYear-1)*354 + (long)Math.floor((3+11*realYear)/30.0);
-        }else if(cType == CalculationType.ISLAMIC){
+        } else if(cType == CalculationType.ISLAMIC) {
             ms = trueMonthStart(12*(realYear-1) + realMonth);
-        }else if(cType == CalculationType.ISLAMIC_UMALQURA){
-        	ms = yearStart(year);
-        	for(int i=0; i< month; i++){
-        		ms+= handleGetMonthLength(year, i);
-        	}
+        } else if(cType == CalculationType.ISLAMIC_UMALQURA) {
+            ms = yearStart(year);
+        	for(int i=0; i< month; i++) {
+                ms+= handleGetMonthLength(year, i);
+            }
         }
+        
         return ms;
     }
     
@@ -627,8 +631,14 @@ public class IslamicCalendar extends Calendar {
      *
      * @serial
      */
-   private boolean civil = true;
+    private boolean civil = true;
     
+    /**
+     * determines the type of calculation to use for this instance
+     * 
+     * @serial
+     * @draft ICU 52
+     */
     private CalculationType cType = CalculationType.ISLAMIC_CIVIL;
 
     //----------------------------------------------------------------------
@@ -651,17 +661,17 @@ public class IslamicCalendar extends Calendar {
             length = 29 + (month+1) % 2;
             if (month == DHU_AL_HIJJAH && civilLeapYear(extendedYear)) {
                 length++;
-            }
-        } else if (cType == CalculationType.ISLAMIC){
+            } 
+        } else if (cType == CalculationType.ISLAMIC) {
             month = 12*(extendedYear-1) + month;
             length = (int)( trueMonthStart(month+1) - trueMonthStart(month) );
         }else if (cType == CalculationType.ISLAMIC_UMALQURA){            
             int idx = (extendedYear - UMALQURA_YEAR_START);     // calculate year offset into bit map array
-            int mask = (int) (0x01 << (11 - month));            // set mask for bit corresponding to month            
+            int mask = (0x01 << (11 - month));                  // set mask for bit corresponding to month            
             if((UMALQURA_MONTHLENGTH[idx] & mask) == 0 )    
-        		return 29;
-        	else
-        		return 30;
+                length = 29;
+            else
+                length = 30;
         }
         return length;
     }
@@ -671,17 +681,18 @@ public class IslamicCalendar extends Calendar {
      * @stable ICU 2.8
      */
     protected int handleGetYearLength(int extendedYear) {
-    	int length =0; 
+        int length =0; 
         if (cType == CalculationType.ISLAMIC_CIVIL
         		|| (cType == CalculationType.ISLAMIC_UMALQURA && (extendedYear < UMALQURA_YEAR_START  || extendedYear > UMALQURA_YEAR_END) )) {
             length =  354 + (civilLeapYear(extendedYear) ? 1 : 0);
-        } else if (cType == CalculationType.ISLAMIC){
+        } else if (cType == CalculationType.ISLAMIC) {
             int month = 12*(extendedYear-1);
             length =  (int)(trueMonthStart(month + 12) - trueMonthStart(month));
-        }else if (cType == CalculationType.ISLAMIC_UMALQURA){
-        	for(int i=0; i<12; i++)
-        		length += handleGetMonthLength(extendedYear, i);
+        } else if (cType == CalculationType.ISLAMIC_UMALQURA) {
+            for(int i=0; i<12; i++)
+                length += handleGetMonthLength(extendedYear, i);
         }
+        
         return length;
     }
     
@@ -731,8 +742,8 @@ public class IslamicCalendar extends Calendar {
      * @stable ICU 2.8
      */
     protected void handleComputeFields(int julianDay) {
-    	int year =0, month=0, dayOfMonth=0, dayOfYear=0;
-    	long monthStart;
+        int year =0, month=0, dayOfMonth=0, dayOfYear=0;
+        long monthStart;
         long days = julianDay - 1948440;
 
         if (cType == CalculationType.ISLAMIC_CIVIL) {
@@ -760,36 +771,36 @@ public class IslamicCalendar extends Calendar {
 
             year = months / 12 + 1;
             month = months % 12;
-        } else if (cType == CalculationType.ISLAMIC_UMALQURA){        	
-        	long umalquraStartdays = yearStart(UMALQURA_YEAR_START)  ; 
-        	if( days < umalquraStartdays){
-        		//Use Civil calculation
-        		year  = (int)Math.floor( (30 * days + 10646) / 10631.0 );
+        } else if (cType == CalculationType.ISLAMIC_UMALQURA) {
+            long umalquraStartdays = yearStart(UMALQURA_YEAR_START);
+        	if( days < umalquraStartdays) {
+                // Use Civil calculation
+                year  = (int)Math.floor( (30 * days + 10646) / 10631.0 );
                 month = (int)Math.ceil((days - 29 - yearStart(year)) / 29.5 );
                 month = Math.min(month, 11);
-        	}else{
-        		int y =UMALQURA_YEAR_START-1, m =0;
-        		long d = 1;
-        		while(d > 0){ 
-        			y++; 
-        			d = days - yearStart(y) +1;
-        			if(d == handleGetYearLength(y)){
-        				m=11;
-        				break;
-        			}else if(d < handleGetYearLength(y) ){
-    					int monthLen = handleGetMonthLength(y, m); 
-    					m=0;
-    					while(d > monthLen){
-    						d -= monthLen;
-    						m++;
-    						monthLen = handleGetMonthLength(y, m);    						
-    					}
-    					break;
-        			}        			       			
-        		}        		
-        		year = y;
-				month = m;
-        	}
+        	} else {
+                int y =UMALQURA_YEAR_START-1, m =0;
+                long d = 1;
+        		while(d > 0) { 
+                    y++; 
+                    d = days - yearStart(y) +1;
+        			if(d == handleGetYearLength(y)) {
+                        m=11;
+                        break;
+        			} else if(d < handleGetYearLength(y) ) {
+                        int monthLen = handleGetMonthLength(y, m); 
+                        m=0;
+    					while(d > monthLen) {
+                            d -= monthLen;
+                            m++;
+                            monthLen = handleGetMonthLength(y, m);
+                        }
+                        break;
+                    }
+                }
+                year = y;
+                month = m;
+            }
         }
 
        
@@ -807,14 +818,26 @@ public class IslamicCalendar extends Calendar {
         internalSet(DAY_OF_YEAR, dayOfYear);       
     }    
     
+    /**
+     *  enumeration of available calendar calculation types
+     *  
+     * @draft ICU 52
+     */
     public enum CalculationType {ISLAMIC, ISLAMIC_CIVIL, ISLAMIC_UMALQURA};
     
     /**
      * sets the calculation type for this calendar.
-     * @see #cType
+     * 
+     * @draft ICU 52
      */
-    public void setType(CalculationType type){
-    	cType = type;   	
+    public void setType(CalculationType type) {
+        cType = type;
+        
+        // ensure civil property is up-to-date
+        if(cType == CalculationType.ISLAMIC_CIVIL) 
+            civil = true;
+        else
+            civil = false;
     }
 
     /**
@@ -824,13 +847,27 @@ public class IslamicCalendar extends Calendar {
     public String getType() {
         if(cType == CalculationType.ISLAMIC_CIVIL) {
             return "islamic-civil";
-        } else if (cType == CalculationType.ISLAMIC){
+        } else if (cType == CalculationType.ISLAMIC) {
             return "islamic";
-        }else {
-        	return "islamic-umalqura";
+        } else {
+            return "islamic-umalqura";
         }
     }
 
+    private void readObject(ObjectInputStream in) throws IOException,ClassNotFoundException 
+    {
+            in.defaultReadObject();
+            
+            if(cType != CalculationType.ISLAMIC_CIVIL)
+                return;     // we've serialized something new, nothing else to do
+            
+            // new calculation type is civil (default) but civil is false. This will only happen
+            // when deserializing a non-civil calender so need to adjust new CalculationType to match 
+            // serialized form
+            if(!civil)
+                cType = CalculationType.ISLAMIC;  
+    }
+    
     /*
     private static CalendarFactory factory;
     public static CalendarFactory factory() {
