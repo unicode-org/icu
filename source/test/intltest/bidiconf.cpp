@@ -43,7 +43,7 @@ private:
 
     UBool parseLevels(const char *&start);
     UBool parseOrdering(const char *start);
-    UBool parseInputStringFromBiDiClasses(const char *&start, UBool parseChars);
+    UBool parseInputStringFromBiDiClasses(const char *&start);
 
     UBool checkLevels(const UBiDiLevel actualLevels[], int32_t actualCount);
     UBool checkOrdering(UBiDi *ubidi);
@@ -155,7 +155,7 @@ UBool BiDiConformanceTest::parseOrdering(const char *start) {
     return TRUE;
 }
 
-static const UChar pseudoCharFromBiDiClass[U_CHAR_DIRECTION_COUNT]={
+static const UChar charFromBiDiClass[U_CHAR_DIRECTION_COUNT]={
     0x6c,   // 'l' for L
     0x52,   // 'R' for R
     0x33,   // '3' for EN
@@ -182,38 +182,12 @@ static const UChar pseudoCharFromBiDiClass[U_CHAR_DIRECTION_COUNT]={
     0x2e    // '.' for PDI
 };
 
-static const UChar realCharFromBiDiClass[U_CHAR_DIRECTION_COUNT]={
-    0x006c,   // 'l' for L
-    0x05d0,   // Hebrew Letter Alef for R
-    0x0033,   // '3' for EN
-    0x002d,   // '-' for ES
-    0x0025,   // '%' for ET
-    0x0669,   // Arabic-Indic '9' for AN
-    0x002c,   // ',' for CS
-    0x000d,   // CR  for B
-    0x0009,   // Tab for S
-    0x0020,   // ' ' for WS
-    0x003d,   // '=' for ON
-    0x202a,   // LRE
-    0x202d,   // LRO
-    0x0630,   // Arabic Letter Thal for AL
-    0x202b,   // RLE
-    0x202e,   // RLO
-    0x202c,   // PDF
-    0x05b9,   // Hebrew Point Holam for NSM
-    0x00ad,   // Soft Hyphen for BN
-    0x2068,   // FSI
-    0x2066,   // LRI
-    0x2067,   // RLI
-    0x2069    // PDI
-};
-
 U_CDECL_BEGIN
 
 static UCharDirection U_CALLCONV
 biDiConfUBiDiClassCallback(const void * /*context*/, UChar32 c) {
     for(int i=0; i<U_CHAR_DIRECTION_COUNT; ++i) {
-        if(c==pseudoCharFromBiDiClass[i]) {
+        if(c==charFromBiDiClass[i]) {
             return (UCharDirection)i;
         }
     }
@@ -224,21 +198,11 @@ biDiConfUBiDiClassCallback(const void * /*context*/, UChar32 c) {
 
 U_CDECL_END
 
-static int32_t hexdigit(char c) {
-    if(c>='0' && c<='9')
-        return c - '0';
-    if(c>='A' && c<='F')
-        return c - ('A'-10);
-    if(c>='a' && c<='f')
-        return c - ('a'-10);
-    return -1;
-}
-
 static const int8_t biDiClassNameLengths[U_CHAR_DIRECTION_COUNT+1]={
     1, 1, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 3, 2, 3, 3, 3, 3, 2, 3, 3, 3, 3, 0
 };
 
-UBool BiDiConformanceTest::parseInputStringFromBiDiClasses(const char *&start, UBool parseChars) {
+UBool BiDiConformanceTest::parseInputStringFromBiDiClasses(const char *&start) {
     inputString.remove();
     /*
      * Lengthy but fast BiDi class parser.
@@ -247,24 +211,6 @@ UBool BiDiConformanceTest::parseInputStringFromBiDiClasses(const char *&start, U
      * but that makes this test take significantly more time.
      */
     while(*start!=0 && *(start=u_skipWhitespace(start))!=0 && *start!=';') {
-        int32_t d1, d2, hexnum;
-        // First look for an hexa value of at least 2 digits
-        if(parseChars && (d1=hexdigit(start[0]))>=0 && (d2=hexdigit(start[1]))>=0) {
-            const char *saveStart=start;
-            hexnum=(d1<<4) + d2;
-            start+=2;
-            while((d1=hexdigit(start[0]))>=0) {
-                hexnum=(hexnum<<4) + d1;
-                start++;
-            }
-            if(hexnum<=0 || hexnum>0xffff ||
-               (!U_IS_INV_WHITESPACE(start[0]) && start[0]!=';' && start[0]!=0)) {
-                errln("\nError on line %d: Invalid hexa number at %s", (int)lineNumber, saveStart);
-                return FALSE;
-            }
-            inputString.append(hexnum);
-            continue;
-        }
         UCharDirection biDiClass=U_CHAR_DIRECTION_COUNT;
         // Compare each character once until we have a match on
         // a complete, short BiDi class name.
@@ -336,28 +282,10 @@ UBool BiDiConformanceTest::parseInputStringFromBiDiClasses(const char *&start, U
         int8_t biDiClassNameLength=biDiClassNameLengths[biDiClass];
         char c=start[biDiClassNameLength];
         if(biDiClass<U_CHAR_DIRECTION_COUNT && (U_IS_INV_WHITESPACE(c) || c==';' || c==0)) {
-            if(parseChars) {
-                inputString.append(realCharFromBiDiClass[biDiClass]);
-            } else {
-                inputString.append(pseudoCharFromBiDiClass[biDiClass]);
-            }
+            inputString.append(charFromBiDiClass[biDiClass]);
             start+=biDiClassNameLength;
             continue;
         }
-#if 0
-        // Accept any single character
-        // Not currently supported:
-        // This parser reads the .txt file as is, with the default charset.
-        // We could at most support "invariant" characters,
-        // and would have to convert them to Unicode using invariant-character functions.
-        // If we need to support Unicode characters, then we would have to
-        // rewrite the code for reading and parsing to read UTF-8.
-        if(parseChars && (U_IS_INV_WHITESPACE(start[1]) || start[1]==';' || start[1]==0)) {
-            inputString.append(start[0]);
-            start++;
-            continue;
-        }
-#endif
         errln("\nError on line %d: BiDi class string not recognized at %s", (int)lineNumber, start);
         printErrorLine();
         return FALSE;
@@ -416,7 +344,7 @@ void BiDiConformanceTest::TestBidiTest() {
             }
             // Skip unknown @Xyz: ...
         } else {
-            if(!parseInputStringFromBiDiClasses(start, FALSE)) {
+            if(!parseInputStringFromBiDiClasses(start)) {
                 return;
             }
             start=u_skipWhitespace(start);
@@ -487,27 +415,7 @@ Lines which represent test cases consist of 4 or 5 fields separated by a
 semicolon.  Each field consists of tokens separated by whitespace (space
 or Tab).  Whitespace before and after semicolons is optional.
 
-Field 0: A sequence of tokens where each token may be one of the following:
-    - an hexadecimal number of at least 2 digits representing a code point
-    - a bidi property value, which must be one of (case sensitive)
-        L    (translated to 'l'),
-        R    (translated to Hebrew Letter Alef),
-        EN   (translated to '3'),
-        ES   (translated to '-'),
-        ET   (translated to '%'),
-        AN   (translated to Arabic-Indic '9'),
-        CS   (translated to ','),
-        B    (translated to CR),
-        S    (translated to Tab),
-        WS   (translated to space),
-        ON   (translated to '='),
-        LRE, LRO,
-        AL   (translated to Arabic Letter Thal),
-        RLE, RLO, PDF,
-        NSM  (translated to Hebrew Point Holam),
-        BN   (translated to Soft Hyphen),
-        FSI, LRI, RLI, PDI
-    - a single character which represents itself
+Field 0: A sequence of hexadecimal code point values separated by space
 
 Field 1: A value representing the paragraph direction, as follows:
     - 0 represents left-to-right
@@ -586,11 +494,17 @@ void BiDiConformanceTest::TestBidiCharacterTest() {
         if(*start==0) {
             continue;  // Skip empty and comment-only lines.
         }
-        if(!parseInputStringFromBiDiClasses(start, TRUE)) {
+        // Parse the code point string in field 0.
+        UChar *buffer=inputString.getBuffer(200);
+        int32_t length=u_parseString(start, buffer, inputString.getCapacity(), NULL, errorCode);
+        if(errorCode.logIfFailureAndReset("Invalid string in field 0")) {
+            errln("Input line %d: %s", (int)lineNumber, line);
+            inputString.remove();
             continue;
         }
-        start=u_skipWhitespace(start);
-        if(*start!=';') {
+        inputString.releaseBuffer(length);
+        start=strchr(start, ';');
+        if(start==NULL) {
             errorCount++;
             errln("\nError on line %d: Missing ; separator on line: %s", (int)lineNumber, line);
             continue;
