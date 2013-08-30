@@ -602,7 +602,10 @@ ac_includes_default="\
 # include <unistd.h>
 #endif"
 
-ac_subst_vars='LTLIBOBJS
+ac_subst_vars='UCONFIG_CXXFLAGS
+UCONFIG_CFLAGS
+UCONFIG_CPPFLAGS
+LTLIBOBJS
 LIBOBJS
 LIBCXXFLAGS
 LIBCFLAGS
@@ -2712,6 +2715,9 @@ CONFIG_CPPFLAGS=""
 # with, for example, "#define U_DISABLE_RENAMING 1"
 # Example: ICU configuration stuff
 UCONFIG_CPPFLAGS=""
+# UCONFIG_CFLAGS: contains a copy of anything that needs to be set by end users
+# such as -std
+UCONFIG_CFLAGS=""
 
 # Check whether to build debug libraries
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether to build debug libraries" >&5
@@ -5646,6 +5652,7 @@ $as_echo "$cxx11_okay" >&6; }
         if [ $cxx11_okay = yes ]; then
             { $as_echo "$as_me:${as_lineno-$LINENO}: Adding CXXFLAGS option --std=c++0x" >&5
 $as_echo "$as_me: Adding CXXFLAGS option --std=c++0x" >&6;}
+            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} --std=c++0x"
         else
             CXXFLAGS="$OLD_CXXFLAGS"
         fi
@@ -5937,7 +5944,9 @@ fi
         CXXFLAGS="${CXXFLAGS} -mt"
         if test x"`${CXX} ${CXXFLAGS} 2>&1`" != x""; then
            CXXFLAGS="${OLD_CXXFLAGS}"
-       fi
+        else
+           UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -mt"
+        fi
       ;;
     esac
     ;;
@@ -7031,6 +7040,7 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
             CFLAGS="${OLD_CFLAGS}"
             CXXFLAGS="${OLD_CXXFLAGS}"
         else
+            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -qutf"
             CHECK_UTF16_STRING_RESULT="-qutf"
         fi
     fi
@@ -7063,7 +7073,8 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
             CXXFLAGS="${OLD_CXXFLAGS}"
         else
             CHECK_UTF16_STRING_RESULT="-xustr=ascii_utf16_ushort"
-
+            UCONFIG_CXXFLAGS="${UCONFIG_CXXFLAGS} -xustr=ascii_utf16_ushort"
+            UCONFIG_CFLAGS="${UCONFIG_CFLAGS} -xustr=ascii_utf16_ushort"
             # Since we can't detect the availability of this UTF-16 syntax at compile time,
             # we depend on configure telling us that we can use it.
             # Since we can't ensure ICU users use -xustr=ascii_utf16_ushort,
@@ -7113,6 +7124,7 @@ else
 fi
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
         if test "$CC_UTF16_STRING" = 1; then
+            UCONFIG_CFLAGS="${UCONFIG_CFLAGS} -std=gnu99"
             CHECK_UTF16_STRING_RESULT="C only";
         else
             CFLAGS="${OLD_CFLAGS}"
@@ -8720,6 +8732,7 @@ else
 $as_echo "too old or test failed - try upgrading GNU Make" >&6; }
 fi
 
+
 if test -n "$UCONFIG_CPPFLAGS"; then
    HDRFILE="uconfig.h.prepend"
    echo "*** WARNING: You must set the following flags before code compiled against this ICU will function properly:"
@@ -8755,6 +8768,15 @@ if test -n "$UCONFIG_CPPFLAGS"; then
    \echo  "/* End of ${HDRFILE} ------------ */" >> "${HDRFILE}"
    echo >> "${HDRFILE}"
    echo '--------------- end ' "${HDRFILE}"
+fi
+
+
+if test -n "$UCONFIG_CFLAGS"; then
+   echo "C   apps may want to build with CFLAGS   = ${UCONFIG_CFLAGS}"
+fi
+
+if test -n "$UCONFIG_CXXFLAGS"; then
+   echo "C++ apps may want to build with CXXFLAGS = ${UCONFIG_CXXFLAGS}"
 fi
 
 if test "$tools" = false;
