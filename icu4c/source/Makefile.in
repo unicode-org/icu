@@ -34,6 +34,7 @@ subdir = .
 @EXTRAS_TRUE@EXTRA = extra
 @TESTS_TRUE@TEST = test
 @SAMPLES_TRUE@SAMPLE = samples
+@TOOLS_TRUE@TOOLS = tools
 
 ## pkgconfig setup. Always have uc and i18n. Others are optional.
 ALL_PKGCONFIG_SUFFIX=uc i18n
@@ -55,7 +56,7 @@ INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/conf
 LOCAL_BUILT_FILES = icudefs.mk config/icucross.mk config/icucross.inc
 
 DOCDIRS = common i18n
-SUBDIRS =  stubdata common i18n $(LAYOUT) tools data $(ICUIO) $(EXTRA) $(SAMPLE) $(TEST)
+SUBDIRS =  stubdata common i18n $(LAYOUT) $(TOOLS) data $(ICUIO) $(EXTRA) $(SAMPLE) $(TEST)
 
 SECTION = 1
 
@@ -127,7 +128,7 @@ $(DOCZIP): doc
 endif
 
 LOCAL_SUBDIRS = $(SUBDIRS)
-CLEAN_FIRST_SUBDIRS = tools
+CLEAN_FIRST_SUBDIRS = $(TOOLS)
 
 $(LIBDIR) $(BINDIR):
 	-$(MKINSTALLDIRS) $@
