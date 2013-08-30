@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2007-2012, International Business Machines Corporation and
+ * Copyright (c) 2007-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -345,6 +345,8 @@ U_CAPI const char *udbg_getPlatform(void)
     return "unknown";
 #elif U_PLATFORM == U_PF_DARWIN
     return "Darwin";
+#elif U_PLATFORM == U_PF_BSD
+    return "BSD";
 #elif U_PLATFORM == U_PF_QNX
     return "QNX";
 #elif U_PLATFORM == U_PF_LINUX
