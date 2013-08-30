@@ -35,7 +35,7 @@ public:
     ~RegularExpression();
     int32_t           fMagic;
     RegexPattern     *fPat;
-    atomic_int32_t   *fPatRefCount;
+    u_atomic_int32_t *fPatRefCount;
     UChar            *fPatString;
     int32_t           fPatStringLen;
     RegexMatcher     *fMatcher;
@@ -123,7 +123,7 @@ uregex_open( const  UChar          *pattern,
     }
 
     RegularExpression  *re     = new RegularExpression;
-    atomic_int32_t     *refC   = (atomic_int32_t *)uprv_malloc(sizeof(int32_t));
+    u_atomic_int32_t   *refC   = (u_atomic_int32_t *)uprv_malloc(sizeof(int32_t));
     UChar              *patBuf = (UChar *)uprv_malloc(sizeof(UChar)*(actualPatLen+1));
     if (re == NULL || refC == NULL || patBuf == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;
@@ -207,7 +207,7 @@ uregex_openUText(UText          *pattern,
     UErrorCode lengthStatus = U_ZERO_ERROR;
     int32_t pattern16Length = utext_extract(pattern, 0, patternNativeLength, NULL, 0, &lengthStatus);
     
-    atomic_int32_t     *refC   = (atomic_int32_t *)uprv_malloc(sizeof(int32_t));
+    u_atomic_int32_t   *refC   = (u_atomic_int32_t *)uprv_malloc(sizeof(int32_t));
     UChar              *patBuf = (UChar *)uprv_malloc(sizeof(UChar)*(pattern16Length+1));
     if (re == NULL || refC == NULL || patBuf == NULL) {
         *status = U_MEMORY_ALLOCATION_ERROR;

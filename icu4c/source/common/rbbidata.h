@@ -181,7 +181,7 @@ public:
     UTrie               fTrie;
 
 private:
-    atomic_int32_t      fRefCount;
+    u_atomic_int32_t    fRefCount;
     UDataMemory        *fUDataMem;
     UnicodeString       fRuleString;
     UBool               fDontFreeData;
