@@ -557,6 +557,7 @@ public class RBBITestMonkey extends TestFmwk {
         UnicodeSet  fSY;
         UnicodeSet  fAI;
         UnicodeSet  fAL;
+        UnicodeSet  fHL;
         UnicodeSet  fID;
         UnicodeSet  fSA;
         UnicodeSet  fJL;
@@ -605,6 +606,7 @@ public class RBBITestMonkey extends TestFmwk {
             fSY    = new UnicodeSet("[\\p{Line_break=SY}]");
             fAI    = new UnicodeSet("[\\p{Line_break=AI}]");
             fAL    = new UnicodeSet("[\\p{Line_break=AL}]");
+            fHL    = new UnicodeSet("[\\p{Line_break=HL}]");
             fID    = new UnicodeSet("[\\p{Line_break=ID}]");
             fSA    = new UnicodeSet("[\\p{Line_break=SA}]");
             fJL    = new UnicodeSet("[\\p{Line_break=JL}]");
@@ -657,6 +659,7 @@ public class RBBITestMonkey extends TestFmwk {
             fSets.add(fSY);
             fSets.add(fAI);
             fSets.add(fAL);
+            fSets.add(fHL);
             fSets.add(fID);
             fSets.add(fWJ);
             fSets.add(fSA);
@@ -679,6 +682,7 @@ public class RBBITestMonkey extends TestFmwk {
             int    prevChar;  //  Character at above position.  Note that prevChar
                               //   and thisChar may not be adjacent because combining
                               //   characters between them will be ignored.
+            int    prevCharX2; //  Character before prevChar, more contex for LB 21a
             
             int    nextPos;   //  Index of the next character following pos.
                               //     Usually skips over combining marks.
@@ -695,7 +699,7 @@ public class RBBITestMonkey extends TestFmwk {
             //                           while the invalid values shift out and the "this" and
             //                           "prev" positions are filled in with good values.
             pos      = prevPos   = -1;    // Invalid value, serves as flag for initial loop iteration.
-            thisChar = prevChar  = 0;
+            thisChar = prevChar  = prevCharX2 = 0;
             nextPos  = startPos;
             
             
@@ -706,6 +710,7 @@ public class RBBITestMonkey extends TestFmwk {
             //  "prevPos" can be arbitrarily far before "pos".
             for (;;) {
                 // Advance to the next position to be tested.
+                prevCharX2 = prevChar;
                 prevPos   = pos;
                 prevChar  = thisChar;
                 pos       = nextPos;
@@ -920,8 +925,19 @@ public class RBBITestMonkey extends TestFmwk {
                     continue;
                 }
                 
-                // LB 22
+                 // LB 21a, HL (HY | BA) x
+                if (fHL.contains(prevCharX2) && (fHY.contains(prevChar) || fBA.contains(prevChar))) {
+                    continue;
+                }
+
+                 // LB 21b, SY x HL
+                if (fSY.contains(prevChar) && fHL.contains(thisChar)) {
+                    continue;
+                }
+                
+               // LB 22
                 if (fAL.contains(prevChar) && fIN.contains(thisChar) ||
+                        fHL.contains(prevChar) && fIN.contains(thisChar) ||
                         fID.contains(prevChar) && fIN.contains(thisChar) ||
                         fIN.contains(prevChar) && fIN.contains(thisChar) ||
                         fNU.contains(prevChar) && fIN.contains(thisChar) )   {
@@ -934,8 +950,10 @@ public class RBBITestMonkey extends TestFmwk {
                 //          NU x AL
                 if (fID.contains(prevChar) && fPO.contains(thisChar) ||
                         fAL.contains(prevChar) && fNU.contains(thisChar) ||
-                        fNU.contains(prevChar) && fAL.contains(thisChar) )   {
-                    continue;
+                        fHL.contains(prevChar) && fNU.contains(thisChar) ||
+                        fNU.contains(prevChar) && fAL.contains(thisChar) ||
+                        fNU.contains(prevChar) && fHL.contains(thisChar) )   {
+                   continue;
                 }
                 
                 // LB 24  Do not break between prefix and letters or ideographs.
@@ -943,8 +961,8 @@ public class RBBITestMonkey extends TestFmwk {
                 //        PR x AL
                 //        PO x AL
                 if (fPR.contains(prevChar) && fID.contains(thisChar) ||
-                    fPR.contains(prevChar) && fAL.contains(thisChar) ||
-                    fPO.contains(prevChar) && fAL.contains(thisChar))  {
+                    fPR.contains(prevChar) && (fAL.contains(thisChar) || fHL.contains(thisChar)) ||
+                    fPO.contains(prevChar) && (fAL.contains(thisChar) || fHL.contains(thisChar)))  {
                     continue;
                 }
                 
@@ -1011,22 +1029,22 @@ public class RBBITestMonkey extends TestFmwk {
                 
                 
                 // LB 28 Do not break between alphabetics
-                if (fAL.contains(prevChar) && fAL.contains(thisChar)) {
+                if ((fAL.contains(prevChar) || fHL.contains(prevChar)) && (fAL.contains(thisChar) || fHL.contains(thisChar))) {
                     continue;
                 }
                 
                 // LB 29  Do not break between numeric punctuation and alphabetics
-                if (fIS.contains(prevChar) && fAL.contains(thisChar)) {
+                if (fIS.contains(prevChar) && (fAL.contains(thisChar) || fHL.contains(thisChar))) {
                     continue;
                 }
                 
                 // LB 30    Do not break between letters, numbers, or ordinary symbols and opening or closing punctuation.
                 //          (AL | NU) x OP
                 //          CP x (AL | NU)
-                if ((fAL.contains(prevChar) || fNU.contains(prevChar)) && fOP.contains(thisChar)) {
+                if ((fAL.contains(prevChar) || fHL.contains(prevChar) || fNU.contains(prevChar)) && fOP.contains(thisChar)) {
                     continue;
                 }
-                if (fCP.contains(prevChar) && (fAL.contains(thisChar) || fNU.contains(thisChar))) {
+                if (fCP.contains(prevChar) && (fAL.contains(thisChar) || fHL.contains(thisChar) || fNU.contains(thisChar))) {
                     continue;
                 }
 
