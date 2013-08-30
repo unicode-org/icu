@@ -1,4 +1,4 @@
-# Copyright (C) 2010, International Business Machines Corporation. All Rights Reserved.
+# Copyright (C) 2010-2013, International Business Machines Corporation. All Rights Reserved.
 
 prefix = @prefix@
 exec_prefix = @exec_prefix@
@@ -11,9 +11,6 @@ baselibs = @LIBS@
 #sbindir = @sbindir@
 #mandir = @mandir@
 #sysconfdir = @sysconfdir@
-CFLAGS = @CFLAGS@ 
-#CXXFLAGS = @CXXFLAGS@ 
-DEFS = @DEFS@ 
 UNICODE_VERSION=@UNICODE_VERSION@
 ICUPREFIX=icu
 ICULIBSUFFIX=@ICULIBSUFFIX@
