@@ -242,7 +242,7 @@ class SpoofData: public UMemory {
                                                     //   we are done.
 
     uint32_t                    fMemLimit;          // Limit of available raw data space
-    atomic_int32_t              fRefCount;
+    u_atomic_int32_t            fRefCount;
 
     // Confusable data
     int32_t                     *fCFUKeys;
