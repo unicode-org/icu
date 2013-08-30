@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2010, International Business Machines
+*   Copyright (C) 2001-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -164,7 +164,9 @@ public class TestInverse extends BidiTest {
             printUnicode(visualDest.toCharArray(), null);
             log("\n");
         } catch (Exception e) {
-            errln("inverse Bidi: *** failed");
+            errln("\ninverse Bidi: *** failed");
+            errln("   error message: " + e.getMessage());
+            e.printStackTrace();
             visualDest = null;
         }
 

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2007, International Business Machines
+*   Copyright (C) 2007-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -79,7 +79,7 @@ public class TestClassOverride extends BidiTest {
                 errln("Bidi classifier is not yet set, but reported as not null");
             }
         } else {
-            Class expectedClass = this.classifier.getClass();
+            Class<?> expectedClass = this.classifier.getClass();
             assertTrue("null Bidi classifier", actualClassifier != null);
             if (actualClassifier == null) {
                 return;

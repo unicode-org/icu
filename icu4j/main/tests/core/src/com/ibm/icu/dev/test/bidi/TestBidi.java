@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2007-2010, International Business Machines
+*   Copyright (C) 2007-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -436,13 +436,15 @@ public class TestBidi extends BidiTest {
 
         int[] map = Bidi.reorderLogical(null);
         assertTrue("\nWe should have got a null map #1", map == null);
-        map = Bidi.reorderLogical(new byte[] {0,99,99});
+        map = Bidi.reorderLogical(new byte[] {0,126, 127});
         assertTrue("\nWe should have got a null map #2", map == null);
         map = Bidi.reorderVisual(null);
         assertTrue("\nWe should have got a null map #3", map == null);
+        map = Bidi.reorderVisual(new byte[] {0, -1, 4});
+        assertTrue("\nWe should have got a null map #4", map == null);
 
         map = Bidi.invertMap(null);
-        assertTrue("\nWe should have got a null map #4", map == null);
+        assertTrue("\nWe should have got a null map #5", map == null);
         map = Bidi.invertMap(new int[] {0,1,-1,5,4});
         assertTrue("\nUnexpected inverted Map",
                    Arrays.equals(map, new int[] {0,1,-1,-1,4,3}));
@@ -513,7 +515,7 @@ public class TestBidi extends BidiTest {
         /* check exceeding para level */
         bidi = new Bidi();
         bidi.setPara("A\u202a\u05d0\u202aC\u202c\u05d1\u202cE", (byte)(Bidi.MAX_EXPLICIT_LEVEL - 1), null);
-        assertEquals("\nWrong level at index 2", 61, bidi.getLevelAt(2));
+        assertEquals("\nWrong level at index 2", Bidi.MAX_EXPLICIT_LEVEL, bidi.getLevelAt(2));
 
         /* check 1-char runs with RUNS_ONLY */
         bidi.setReorderingMode(Bidi.REORDER_RUNS_ONLY);
