@@ -398,6 +398,11 @@ AC_ARG_ENABLE(tracing,
 AC_MSG_RESULT($enabled)
 AC_SUBST(U_ENABLE_TRACING)
 
+# check if elf.h is present.
+AC_CHECK_HEADERS([elf.h])
+if test "x$ac_cv_header_elf_h" = "xyes"; then
+    CONFIG_CPPFLAGS="$CONFIG_CPPFLAGS -DU_HAVE_ELF_H=1";
+fi
 
 U_ENABLE_DYLOAD=1
 enable=yes
