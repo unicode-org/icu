@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2001-2007, International Business Machines
+*   Copyright (C) 2001-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 */
@@ -44,23 +44,23 @@ public class TestStreaming extends BidiTest {
                      "02468\r"  +
                      "ghi",
             6, new int[] { 6, 6 },
-            new int[][] {{ 6, 4, 6, 1, 6, 3}, { 4, 6, 6, 1, 6, 3 }},
-            new String[] {"6, 4, 6, 1, 6, 3", "4, 6, 6, 1, 6, 3"}
+            new int[][] {{ 4, 6, 6, 1, 6, 3}, { 4, 6, 6, 1, 6, 3 }},
+            new String[] {"4, 6, 6, 1, 6, 3",  "4, 6, 6, 1, 6, 3"}
         ),
         new TestCase("abcd\nfgh\r12345\n456",
             6, new int[] { 4, 4 },
-            new int[][] {{ 6, 3, 6, 3 }, { 5, 4, 6, 3 }},
-            new String[] {"6, 3, 6, 3", "5, 4, 6, 3"}
+            new int[][] {{ 5, 4, 6, 3 }, { 5, 4, 6, 3 }},
+            new String[] {"5, 4, 6, 3",   "5, 4, 6, 3"}
         ),
         new TestCase("abcd\nfgh\r12345\n45\r",
             6, new int[] { 4, 4 },
-            new int[][] {{ 6, 3, 6, 3 }, { 5, 4, 6, 3 }},
-            new String[] {"6, 3, 6, 3", "5, 4, 6, 3"}
+            new int[][] {{ 5, 4, 6, 3 }, { 5, 4, 6, 3 }},
+            new String[] {"5, 4, 6, 3",   "5, 4, 6, 3"}
         ),
         new TestCase("abcde\nfghi",
-            10, new int[] { 1, 2 },
-            new int[][] {{ 10 }, { 6, 4 }},
-            new String[] {"10", "6, 4"}
+            10, new int[] { 2, 2 },
+            new int[][] {{ 6, 4 }, { 6, 4 }},
+            new String[] {"6, 4",   "6, 4"}
         )
     };
     static final int MAXLOOPS = 20;
