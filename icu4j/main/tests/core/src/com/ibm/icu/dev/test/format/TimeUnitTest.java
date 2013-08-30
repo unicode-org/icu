@@ -13,7 +13,6 @@ import java.util.Locale;
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.TimeUnitFormat;
-import com.ibm.icu.util.TimePeriod;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
@@ -23,40 +22,6 @@ import com.ibm.icu.util.ULocale;
  *
  */
 public class TimeUnitTest extends TestFmwk {
-    private static final TimePeriod _19m = new TimePeriod(
-            new TimeUnitAmount(19.0, TimeUnit.MINUTE));
-    private static final TimePeriod _19m_28s = new TimePeriod(
-            new TimeUnitAmount(19.0, TimeUnit.MINUTE),
-            new TimeUnitAmount(28.0, TimeUnit.SECOND));
-    private static final TimePeriod _1h_23_5s = new TimePeriod(
-            new TimeUnitAmount(1.0, TimeUnit.HOUR),
-            new TimeUnitAmount(23.5, TimeUnit.SECOND));
-    private static final TimePeriod _1h_23_5m = new TimePeriod(
-            new TimeUnitAmount(1.0, TimeUnit.HOUR),
-            new TimeUnitAmount(23.5, TimeUnit.MINUTE));
-    private static final TimePeriod _1h_0m_23s = new TimePeriod(
-            new TimeUnitAmount(1.0, TimeUnit.HOUR),
-            new TimeUnitAmount(0.0, TimeUnit.MINUTE),
-            new TimeUnitAmount(23.0, TimeUnit.SECOND));
-    private static final TimePeriod _5h_17m = new TimePeriod(
-            new TimeUnitAmount(5.0, TimeUnit.HOUR),
-            new TimeUnitAmount(17.0, TimeUnit.MINUTE));
-    private static final TimePeriod _2y_5M_3w_4d = new TimePeriod(
-            new TimeUnitAmount(2.0, TimeUnit.YEAR),
-            new TimeUnitAmount(5.0, TimeUnit.MONTH),
-            new TimeUnitAmount(3.0, TimeUnit.WEEK),
-            new TimeUnitAmount(4.0, TimeUnit.DAY));
-    private static final TimePeriod _0h_0m_17s = new TimePeriod(
-            new TimeUnitAmount(0.0, TimeUnit.HOUR),
-            new TimeUnitAmount(0.0, TimeUnit.MINUTE),
-            new TimeUnitAmount(17.0, TimeUnit.SECOND));
-    private static final TimePeriod _6h_56_92m = new TimePeriod(
-            new TimeUnitAmount(6.0, TimeUnit.HOUR),
-            new TimeUnitAmount(56.92, TimeUnit.MINUTE));
-    private static final TimePeriod _1m_59_9996s = new TimePeriod(
-            new TimeUnitAmount(1.0, TimeUnit.MINUTE),
-            new TimeUnitAmount(59.9996, TimeUnit.SECOND));
-            
     public static void main(String[] args) throws Exception{
         new TimeUnitTest().run(args);
     }
@@ -68,11 +33,10 @@ public class TimeUnitTest extends TestFmwk {
             TimeUnitFormat[] formats = new TimeUnitFormat[] {
                 new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.FULL_NAME),
                 new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.ABBREVIATED_NAME),
-                new TimeUnitFormat(new ULocale(locales[locIndex]), TimeUnitFormat.NUMERIC)
                 
             };
             for (int style = TimeUnitFormat.FULL_NAME;
-                 style <= TimeUnitFormat.NUMERIC;
+                 style <= TimeUnitFormat.ABBREVIATED_NAME;
                  ++style) {
                 final TimeUnit[] values = TimeUnit.values();
                 for (int j = 0; j < values.length; ++j) {
@@ -85,7 +49,7 @@ public class TimeUnitTest extends TestFmwk {
                         logln(tests[i] + " => " + formatted);
                         try {
                             // Style should not matter when parsing.
-                            for (int parseStyle = TimeUnitFormat.FULL_NAME; parseStyle <= TimeUnitFormat.NUMERIC; parseStyle++) {
+                            for (int parseStyle = TimeUnitFormat.FULL_NAME; parseStyle <= TimeUnitFormat.ABBREVIATED_NAME; parseStyle++) {
                                 TimeUnitAmount result = (TimeUnitAmount) formats[parseStyle].parseObject(formatted);
                                 if (result == null || !source.equals(result)) {
                                     errln("No round trip: " + source + " => " + formatted + " => " + result);
@@ -101,7 +65,6 @@ public class TimeUnitTest extends TestFmwk {
     }
 
     public void TestAPI() {
-        try {
         TimeUnitFormat format = new TimeUnitFormat();
         format.setLocale(new ULocale("pt_BR"));
         formatParsing(format);
@@ -124,9 +87,6 @@ public class TimeUnitTest extends TestFmwk {
         format = new TimeUnitFormat(new Locale("ja"));
         format.setNumberFormat(NumberFormat.getNumberInstance(new Locale("en")));
         formatParsing(format);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /*
@@ -367,106 +327,5 @@ public class TimeUnitTest extends TestFmwk {
         TimeUnitFormat tuf1 = new TimeUnitFormat();
         tuf1.setNumberFormat(NumberFormat.getInstance());
         tuf1.parseObject("", new ParsePosition(0));
-    }
-    
-    public void TestFormatPeriodEn() {
-        Object[][] fullData = {
-                {_1m_59_9996s, "1 minute, 59.9996 seconds"},
-                {_19m, "19 minutes"},
-                {_1h_23_5s, "1 hour, 23.5 seconds"},
-                {_1h_23_5m, "1 hour, 23.5 minutes"},
-                {_1h_0m_23s, "1 hour, 0 minutes, 23 seconds"},
-                {_2y_5M_3w_4d, "2 years, 5 months, 3 weeks, 4 days"}};
-        Object[][] abbrevData = {
-                {_1m_59_9996s, "1 min, 59.9996 secs"},
-                {_19m, "19 mins"},
-                {_1h_23_5s, "1 hr, 23.5 secs"},
-                {_1h_23_5m, "1 hr, 23.5 mins"},
-                {_1h_0m_23s, "1 hr, 0 mins, 23 secs"},
-                {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, 4 days"}};
-        Object[][] numericData = {
-                {_1m_59_9996s, "1:59.9996"},
-                {_19m, "19 mins"},
-                {_1h_23_5s, "1:00:23.5"},
-                {_1h_0m_23s, "1:00:23"},
-                {_1h_23_5m, "1:23.5"},
-                {_5h_17m, "5:17"},
-                {_19m_28s, "19:28"},
-                {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, 4 days"},
-                {_0h_0m_17s, "0:00:17"},
-                {_6h_56_92m, "6:56.92"}};
-        TimeUnitFormat tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);
-        NumberFormat nf = NumberFormat.getNumberInstance(ULocale.ENGLISH);
-        nf.setMaximumFractionDigits(4);
-        tuf.setNumberFormat(nf);
-        verifyFormatPeriod("en FULL", tuf, fullData);
-        tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.ABBREVIATED_NAME);
-        tuf.setNumberFormat(nf);
-        verifyFormatPeriod("en ABBREV", tuf, abbrevData);       
-        tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.NUMERIC);
-        tuf.setNumberFormat(nf);
-        verifyFormatPeriod("en NUMERIC", tuf, numericData);
-    }
-    
-    public void TestTimePeriodLength() {
-        assertEquals("length", 2, new TimePeriod(
-                new TimeUnitAmount(3.0, TimeUnit.HOUR),
-                new TimeUnitAmount(5.0, TimeUnit.MINUTE)).length()); 
-    }
-    
-    public void TestTimePeriodForAmounts() {
-        try {
-            new TimePeriod(
-                    new TimeUnitAmount(3.0, TimeUnit.HOUR),
-                    new TimeUnitAmount(5.0, TimeUnit.HOUR));
-            errln("Expected IllegalArgumentException on duplicate TimeUnits.");
-        } catch (IllegalArgumentException e) {
-            // expected
-        }
-        try {
-            new TimePeriod();
-            errln("Expected IllegalArgumentException on missing TimeUnitAmounts.");
-        } catch (IllegalArgumentException e) {
-            // expected
-        }
-        try {
-            new TimePeriod(
-                    new TimeUnitAmount(3.5, TimeUnit.HOUR),
-                    new TimeUnitAmount(5.0, TimeUnit.MINUTE));
-            errln("Expected IllegalArgumentException. Only smallest time unit can have a fractional amount.");
-        } catch (IllegalArgumentException e) {
-            // expected
-        }
-    }
-    
-    public void TestTimePeriodEqualsHashCode() {
-        TimePeriod our_19m_28s = new TimePeriod(
-                new TimeUnitAmount(28.0, TimeUnit.SECOND),
-                new TimeUnitAmount(19.0, TimeUnit.MINUTE));
-        assertEquals("TimePeriod equals", _19m_28s, our_19m_28s);
-        assertEquals("Hash code", _19m_28s.hashCode(), our_19m_28s.hashCode());
-        TimePeriod our_19m_29s = new TimePeriod(
-                new TimeUnitAmount(29.0, TimeUnit.SECOND),
-                new TimeUnitAmount(19.0, TimeUnit.MINUTE));
-        assertNotEquals("TimePeriod not equals", _19m_28s, our_19m_29s);
-        
-        // It may be possible for non-equal objects to have equal hashCodes, but we
-        // are betting on the probability of that to be miniscule.
-        assertNotEquals("TimePeriod hash not equals", _19m_28s.hashCode(), our_19m_29s.hashCode());
-    }
-    
-    private void verifyFormatPeriod(String desc, TimeUnitFormat tuf, Object[][] testData) {
-        StringBuilder builder = new StringBuilder();
-        boolean failure = false;
-        for (Object[] testCase : testData) {
-            String actual = tuf.format(testCase[0]);
-            if (!testCase[1].equals(actual)) {
-                builder.append(String.format("%s: Expected: '%s', got: '%s'\n", desc, testCase[1], actual));
-                failure = true;
-            }
-        }
-        if (failure) {
-            errln(builder.toString());
-        }
     }
 }
