@@ -5420,6 +5420,22 @@ fi
 $as_echo "$enabled" >&6; }
 
 
+# check if elf.h is present.
+for ac_header in elf.h
+do :
+  ac_fn_c_check_header_mongrel "$LINENO" "elf.h" "ac_cv_header_elf_h" "$ac_includes_default"
+if test "x$ac_cv_header_elf_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_ELF_H 1
+_ACEOF
+
+fi
+
+done
+
+if test "x$ac_cv_header_elf_h" = "xyes"; then
+    CONFIG_CPPFLAGS="$CONFIG_CPPFLAGS -DU_HAVE_ELF_H=1";
+fi
 
 U_ENABLE_DYLOAD=1
 enable=yes
