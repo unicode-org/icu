@@ -182,7 +182,7 @@ typedef enum UDateFormatStyle {
 #endif  /* U_HIDE_DRAFT_API */
 } UDateFormatStyle;
 
-// Skeletons for dates.
+/* Skeletons for dates. */
 
 /**
  * Constant for date skeleton with year.
@@ -331,7 +331,7 @@ typedef enum UDateFormatStyle {
  */
 #define UDAT_NUM_MONTH_WEEKDAY_DAY      "MEd"
 
-// Skeletons for times.
+/* Skeletons for times. */
 
 /**
  * Constant for date skeleton with hour, with the locale's preferred hour format (12 or 24).
@@ -390,7 +390,7 @@ typedef enum UDateFormatStyle {
  */
 #define UDAT_MINUTE_SECOND              "ms"
 
-// Skeletons for time zones.
+/* Skeletons for time zones. */
 
 #ifndef U_HIDE_DRAFT_API
 /**
@@ -443,7 +443,7 @@ typedef enum UDateFormatStyle {
 #define UDAT_ABBR_UTC_TZ "ZZZZ"
 #endif  /* U_HIDE_DRAFT_API */
 
-// deprecated skeleton constants
+/* deprecated skeleton constants */
 
 #ifndef U_HIDE_DEPRECATED_API 
 /**
