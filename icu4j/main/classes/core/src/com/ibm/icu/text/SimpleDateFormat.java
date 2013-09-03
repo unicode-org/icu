@@ -2512,10 +2512,10 @@ public class SimpleDateFormat extends DateFormat {
      * number indicating matching failure, otherwise.  As a side effect,
      * sets the <code>cal</code> field <code>field</code> to the index
      * of the best match, if matching succeeded.
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    protected int matchString(String text, int start, int field, String[] data, String monthPattern, Calendar cal)
+    private int matchString(String text, int start, int field, String[] data, String monthPattern, Calendar cal)
     {
         int i = 0;
         int count = data.length;
@@ -2675,10 +2675,10 @@ public class SimpleDateFormat extends DateFormat {
      * number indicating matching failure, otherwise.  As a side effect,
      * set the appropriate field of <code>cal</code> with the parsed
      * value.
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @internal
+     * @deprecated This API is ICU internal only.
      */
-    protected int subParse(String text, int start, char ch, int count,
+    private int subParse(String text, int start, char ch, int count,
                            boolean obeyCount, boolean allowNegative,
                            boolean[] ambiguousYear, Calendar cal, MessageFormat numericLeapMonthFormatter)
     {
