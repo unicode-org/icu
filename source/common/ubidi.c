@@ -966,7 +966,6 @@ directionFromFlags(UBiDi *pBiDi) {
  */
 static UBiDiDirection
 resolveExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
-    if(U_FAILURE(*pErrorCode)) { return UBIDI_LTR; }
     DirProp *dirProps=pBiDi->dirProps;
     UBiDiLevel *levels=pBiDi->levels;
     const UChar *text=pBiDi->text;
@@ -977,6 +976,8 @@ resolveExplicitLevels(UBiDi *pBiDi, UErrorCode *pErrorCode) {
     UBiDiLevel level=GET_PARALEVEL(pBiDi, 0);
     UBiDiDirection direction;
     pBiDi->isolateCount=0;
+
+    if(U_FAILURE(*pErrorCode)) { return UBIDI_LTR; }
 
     /* determine if the text is mixed-directional or single-directional */
     direction=directionFromFlags(pBiDi);
