@@ -12,6 +12,7 @@ import java.util.Locale;
 
 import com.ibm.icu.impl.CalendarAstronomer;
 import com.ibm.icu.impl.CalendarCache;
+import com.ibm.icu.impl.CalendarUtil;
 import com.ibm.icu.util.ULocale.Category;
 
 /**
@@ -167,6 +168,15 @@ public class IslamicCalendar extends Calendar {
 
     private static final long HIJRA_MILLIS = -42521587200000L;    // 7/16/622 AD 00:00
 
+    /**
+     * Friday EPOC
+     */
+    private static final long CIVIL_EPOC = 1948440;
+    /**
+     * Thursday EPOC
+     */
+    private static final long ASTRONOMICAL_EPOC = 1948439;
+
     //-------------------------------------------------------------------------
     // Constructors...
     //-------------------------------------------------------------------------
@@ -228,8 +238,7 @@ public class IslamicCalendar extends Calendar {
      */
     public IslamicCalendar(TimeZone zone, Locale aLocale)
     {
-        super(zone, aLocale);
-        setTimeInMillis(System.currentTimeMillis());
+        this(zone, ULocale.forLocale(aLocale));
     }
 
     /**
@@ -243,6 +252,7 @@ public class IslamicCalendar extends Calendar {
     public IslamicCalendar(TimeZone zone, ULocale locale)
     {
         super(zone, locale);
+        setCalcTypeForLocale(locale);
         setTimeInMillis(System.currentTimeMillis());
     }
 
@@ -504,6 +514,7 @@ public class IslamicCalendar extends Calendar {
     private long yearStart(int year) {
         long ys = 0;
     	 if (cType == CalculationType.ISLAMIC_CIVIL
+    	        || cType == CalculationType.ISLAMIC_TBLA
          		|| (cType == CalculationType.ISLAMIC_UMALQURA && year < UMALQURA_YEAR_START )) {
              ys = (year-1)*354 + (long)Math.floor((3+11*year)/30.0);
         } else if(cType == CalculationType.ISLAMIC) {
@@ -532,6 +543,7 @@ public class IslamicCalendar extends Calendar {
         int realMonth = month % 12;
         long ms = 0;
         if (cType == CalculationType.ISLAMIC_CIVIL
+                || cType == CalculationType.ISLAMIC_TBLA
          		|| (cType == CalculationType.ISLAMIC_UMALQURA && year < UMALQURA_YEAR_START )) {
             ms = (long)Math.ceil(29.5*realMonth)
                     + (realYear-1)*354 + (long)Math.floor((3+11*realYear)/30.0);
@@ -656,7 +668,8 @@ public class IslamicCalendar extends Calendar {
 
         int length = 0;
         
-        if (cType == CalculationType.ISLAMIC_CIVIL 
+        if (cType == CalculationType.ISLAMIC_CIVIL
+                || cType == CalculationType.ISLAMIC_TBLA
         		|| (cType == CalculationType.ISLAMIC_UMALQURA && (extendedYear < UMALQURA_YEAR_START  || extendedYear > UMALQURA_YEAR_END) )) {
             length = 29 + (month+1) % 2;
             if (month == DHU_AL_HIJJAH && civilLeapYear(extendedYear)) {
@@ -683,6 +696,7 @@ public class IslamicCalendar extends Calendar {
     protected int handleGetYearLength(int extendedYear) {
         int length =0; 
         if (cType == CalculationType.ISLAMIC_CIVIL
+                || cType == CalculationType.ISLAMIC_TBLA
         		|| (cType == CalculationType.ISLAMIC_UMALQURA && (extendedYear < UMALQURA_YEAR_START  || extendedYear > UMALQURA_YEAR_END) )) {
             length =  354 + (civilLeapYear(extendedYear) ? 1 : 0);
         } else if (cType == CalculationType.ISLAMIC) {
@@ -744,9 +758,12 @@ public class IslamicCalendar extends Calendar {
     protected void handleComputeFields(int julianDay) {
         int year =0, month=0, dayOfMonth=0, dayOfYear=0;
         long monthStart;
-        long days = julianDay - 1948440;
+        long days = julianDay - CIVIL_EPOC;
 
-        if (cType == CalculationType.ISLAMIC_CIVIL) {
+        if (cType == CalculationType.ISLAMIC_CIVIL || cType == CalculationType.ISLAMIC_TBLA) {
+            if (cType == CalculationType.ISLAMIC_TBLA) {
+                days = julianDay - ASTRONOMICAL_EPOC;
+            }
             // Use the civil calendar approximation, which is just arithmetic
             year  = (int)Math.floor( (30 * days + 10646) / 10631.0 );
             month = (int)Math.ceil((days - 29 - yearStart(year)) / 29.5 );
@@ -823,7 +840,7 @@ public class IslamicCalendar extends Calendar {
      *  
      * @draft ICU 52
      */
-    public enum CalculationType {ISLAMIC, ISLAMIC_CIVIL, ISLAMIC_UMALQURA};
+    public enum CalculationType {ISLAMIC, ISLAMIC_CIVIL, ISLAMIC_UMALQURA, ISLAMIC_TBLA};
     
     /**
      * sets the calculation type for this calendar.
@@ -841,12 +858,30 @@ public class IslamicCalendar extends Calendar {
     }
 
     /**
+     * set type based on locale
+     */
+    private void setCalcTypeForLocale(ULocale locale) {
+        String localeCalType = CalendarUtil.getCalendarType(locale);
+        if("islamic-civil".equals(localeCalType)) 
+            setType(CalculationType.ISLAMIC_CIVIL);
+        else if("islamic-umalqura".equals(localeCalType)) 
+            setType(CalculationType.ISLAMIC_UMALQURA);
+        else if("islamic-tbla".equals(localeCalType)) 
+            setType(CalculationType.ISLAMIC_TBLA);
+        else
+            setType(CalculationType.ISLAMIC);       // needs to be last so it's always the default
+    }
+
+    
+    /**
      * {@inheritDoc}
      * @stable ICU 3.8
      */
     public String getType() {
         if(cType == CalculationType.ISLAMIC_CIVIL) {
             return "islamic-civil";
+        } else if (cType == CalculationType.ISLAMIC_TBLA) {
+            return "islamic-tbla";
         } else if (cType == CalculationType.ISLAMIC) {
             return "islamic";
         } else {
