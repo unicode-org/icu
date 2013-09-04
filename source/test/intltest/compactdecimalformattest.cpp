@@ -164,7 +164,7 @@ static ExpectedResult kSwahiliShortNegative[] = {
   {-1.23456789E15, "T-1200"}};
 
 static ExpectedResult kArabicLong[] = {
-  {-5300.0, "\\u0665\\u066B\\u0663- \\u0623\\u0644\\u0641"}};
+  {-5300.0, "\\u200F-\\u0665\\u066B\\u0663 \\u0623\\u0644\\u0641"}};
 
 
 class CompactDecimalFormatTest : public IntlTest {

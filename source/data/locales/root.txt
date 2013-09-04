@@ -25,11 +25,11 @@ root{
                 group{"٬"}
                 infinity{"∞"}
                 list{"؛"}
-                minusSign{"-"}
+                minusSign{"‏-"}
                 nan{"NaN"}
                 perMille{"؉"}
                 percentSign{"٪"}
-                plusSign{"+"}
+                plusSign{"‏+"}
                 superscriptingExponent{"×"}
             }
         }
@@ -40,11 +40,11 @@ root{
                 group{"٬"}
                 infinity{"∞"}
                 list{"؛"}
-                minusSign{"-"}
+                minusSign{"‎-‎"}
                 nan{"NaN"}
                 perMille{"؉"}
                 percentSign{"٪"}
-                plusSign{"+"}
+                plusSign{"‎+‎"}
                 superscriptingExponent{"×"}
             }
         }

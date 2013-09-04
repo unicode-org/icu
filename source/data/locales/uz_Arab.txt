@@ -11,7 +11,7 @@
  */
 uz_Arab{
     %%Parent{"root"}
-    AuxExemplarCharacters{"[\u200C\u200D ټ ځ څ ډ ړ ږ ښ ګ ڼ ي ۍ ې]"}
+    AuxExemplarCharacters{"[\u200C\u200D\u200E\u200F ټ ځ څ ډ ړ ږ ښ ګ ڼ ي ۍ ې]"}
     ExemplarCharacters{
         "[\u064B \u064C \u064D \u064E \u064F \u0650 \u0651 \u0652 \u0654 \u0670 ء آ أ"
         " ؤ ئ ا ب پ ة ت ث ج چ ح خ د ذ ر ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن ه و ۇ ۉ ی]"
@@ -33,7 +33,8 @@ uz_Arab{
             symbols{
                 decimal{","}
                 group{"."}
-                minusSign{"−"}
+                minusSign{"‎−"}
+                plusSign{"‎+"}
             }
         }
         native{"arabext"}

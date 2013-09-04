@@ -2840,7 +2840,7 @@ int32_t DecimalFormat::skipPadding(const UnicodeString& text, int32_t position) 
  * @param isNegative
  * @param isPrefix
  * @param affixPat affix pattern used for currency affix comparison.
- * @param copmplexCurrencyParsing whether it is currency parsing or not
+ * @param complexCurrencyParsing whether it is currency parsing or not
  * @param type the currency type to parse against, LONG_NAME only or not.
  * @param currency return value for parsed currency, for generic
  * currency parsing mode, or null for normal parsing. In generic
@@ -2853,13 +2853,13 @@ int32_t DecimalFormat::compareAffix(const UnicodeString& text,
                                     UBool isNegative,
                                     UBool isPrefix,
                                     const UnicodeString* affixPat,
-                                    UBool copmplexCurrencyParsing,
+                                    UBool complexCurrencyParsing,
                                     int8_t type,
                                     UChar* currency) const
 {
     const UnicodeString *patternToCompare;
     if (fCurrencyChoice != NULL || currency != NULL ||
-        (fCurrencySignCount != fgCurrencySignCountZero && copmplexCurrencyParsing)) {
+        (fCurrencySignCount != fgCurrencySignCountZero && complexCurrencyParsing)) {
 
         if (affixPat != NULL) {
             return compareComplexAffix(*affixPat, text, pos, type, currency);
@@ -2901,6 +2901,28 @@ static UBool equalWithSignCompatibility(UChar32 lhs, UChar32 rhs) {
         (plusSigns->contains(lhs) && plusSigns->contains(rhs));
 }
 
+// check for LRM 0x200E, RLM 0x200F, ALM 0x061C
+#define IS_BIDI_MARK(c) (c==0x200E || c==0x200F || c==0x061C)
+
+// The following assumes any marks are at the beginning or end of the affix
+UnicodeString& DecimalFormat::trimMarksFromAffix(const UnicodeString& affix, UnicodeString& trimmedAffix) {
+    int32_t first = 0;
+    int32_t last = affix.length() - 1;
+    if (last > 0) {
+        UChar c = affix.charAt(0);
+        if (IS_BIDI_MARK(c)) {
+            first++;
+        }
+        if (last > first) {
+            c = affix.charAt(last);
+            if (IS_BIDI_MARK(c)) {
+                last--;
+            }
+        }
+    }
+    return trimmedAffix.setTo(affix, first, last + 1 - first);
+}
+
 /**
  * Return the length matched by the given affix, or -1 if none.
  * Runs of white space in the affix, match runs of white space in
@@ -2916,8 +2938,10 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
                                           int32_t pos,
                                           UBool lenient) {
     int32_t start = pos;
-    UChar32 affixChar = affix.char32At(0);
-    int32_t affixLength = affix.length();
+    UnicodeString trimmedAffix;
+    trimMarksFromAffix(affix, trimmedAffix);
+    UChar32 affixChar = trimmedAffix.char32At(0);
+    int32_t affixLength = trimmedAffix.length();
     int32_t inputLength = input.length();
     int32_t affixCharLength = U16_LENGTH(affixChar);
     UnicodeSet *affixSet;
@@ -2930,17 +2954,20 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
     if (!lenient) {
         affixSet = staticSets->fStrictDashEquivalents;
         
-        // If the affix is exactly one character long and that character
+        // If the trimmedAffix is exactly one character long and that character
         // is in the dash set and the very next input character is also
         // in the dash set, return a match.
         if (affixCharLength == affixLength && affixSet->contains(affixChar))  {
-            if (affixSet->contains(input.char32At(pos))) {
-                return 1;
+            UChar32 ic = input.char32At(pos);
+            if (affixSet->contains(ic)) {
+                pos += U16_LENGTH(ic);
+                pos = skipBidiMarks(input, pos); // skip any trailing bidi marks
+                return pos - start;
             }
         }
 
         for (int32_t i = 0; i < affixLength; ) {
-            UChar32 c = affix.char32At(i);
+            UChar32 c = trimmedAffix.char32At(i);
             int32_t len = U16_LENGTH(c);
             if (PatternProps::isWhiteSpace(c)) {
                 // We may have a pattern like: \u200F \u0020
@@ -2950,23 +2977,29 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
                 // match of the run of Pattern_White_Space in the pattern,
                 // then match any extra characters.
                 UBool literalMatch = FALSE;
-                while (pos < inputLength &&
-                       input.char32At(pos) == c) {
-                    literalMatch = TRUE;
-                    i += len;
-                    pos += len;
-                    if (i == affixLength) {
-                        break;
-                    }
-                    c = affix.char32At(i);
-                    len = U16_LENGTH(c);
-                    if (!PatternProps::isWhiteSpace(c)) {
+                while (pos < inputLength) {
+                    UChar32 ic = input.char32At(pos);
+                    if (ic == c) {
+                        literalMatch = TRUE;
+                        i += len;
+                        pos += len;
+                        if (i == affixLength) {
+                            break;
+                        }
+                        c = trimmedAffix.char32At(i);
+                        len = U16_LENGTH(c);
+                        if (!PatternProps::isWhiteSpace(c)) {
+                            break;
+                        }
+                    } else if (IS_BIDI_MARK(ic)) {
+                        pos ++; // just skip over this input text
+                    } else {
                         break;
                     }
                 }
 
                 // Advance over run in pattern
-                i = skipPatternWhiteSpace(affix, i);
+                i = skipPatternWhiteSpace(trimmedAffix, i);
 
                 // Advance over run in input text
                 // Must see at least one white space char in input,
@@ -2979,14 +3012,23 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
 
                 // If we skip UWhiteSpace in the input text, we need to skip it in the pattern.
                 // Otherwise, the previous lines may have skipped over text (such as U+00A0) that
-                // is also in the affix.
-                i = skipUWhiteSpace(affix, i);
+                // is also in the trimmedAffix.
+                i = skipUWhiteSpace(trimmedAffix, i);
             } else {
-                if (pos < inputLength &&
-                    input.char32At(pos) == c) {
-                    i += len;
-                    pos += len;
-                } else {
+                UBool match = FALSE;
+                while (pos < inputLength) {
+                    UChar32 ic = input.char32At(pos);
+                    if (!match && ic == c) {
+                        i += len;
+                        pos += len;
+                        match = TRUE;
+                    } else if (IS_BIDI_MARK(ic)) {
+                        pos++; // just skip over this input text
+                    } else {
+                        break;
+                    }
+                }
+                if (!match) {
                     return -1;
                 }
             }
@@ -2997,33 +3039,37 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
         affixSet = staticSets->fDashEquivalents;
 
         if (affixCharLength == affixLength && affixSet->contains(affixChar))  {
-            pos = skipUWhiteSpace(input, pos);
+            pos = skipUWhiteSpaceAndMarks(input, pos);
+            UChar32 ic = input.char32At(pos);
             
-            if (affixSet->contains(input.char32At(pos))) {
-                return pos - start + 1;
+            if (affixSet->contains(ic)) {
+                pos += U16_LENGTH(ic);
+                pos = skipBidiMarks(input, pos);
+                return pos - start;
             }
         }
 
         for (int32_t i = 0; i < affixLength; )
         {
-            //i = skipRuleWhiteSpace(affix, i);
-            i = skipUWhiteSpace(affix, i);
-            pos = skipUWhiteSpace(input, pos);
+            //i = skipRuleWhiteSpace(trimmedAffix, i);
+            i = skipUWhiteSpace(trimmedAffix, i);
+            pos = skipUWhiteSpaceAndMarks(input, pos);
 
             if (i >= affixLength || pos >= inputLength) {
                 break;
             }
 
-            UChar32 c = affix.char32At(i);
-            int32_t len = U16_LENGTH(c);
+            UChar32 c = trimmedAffix.char32At(i);
+            UChar32 ic = input.char32At(pos);
 
-            if (!equalWithSignCompatibility(input.char32At(pos), c)) {
+            if (!equalWithSignCompatibility(ic, c)) {
                 return -1;
             }
 
             match = TRUE;
-            i += len;
-            pos += len;
+            i += U16_LENGTH(c);
+            pos += U16_LENGTH(ic);
+            pos = skipBidiMarks(input, pos);
         }
 
         if (affixLength > 0 && ! match) {
@@ -3053,6 +3099,35 @@ int32_t DecimalFormat::skipUWhiteSpace(const UnicodeString& text, int32_t pos) {
             break;
         }
         pos += U16_LENGTH(c);
+    }
+    return pos;
+}
+
+/**
+ * Skip over a run of zero or more isUWhiteSpace() characters or bidi marks at pos
+ * in text.
+ */
+int32_t DecimalFormat::skipUWhiteSpaceAndMarks(const UnicodeString& text, int32_t pos) {
+    while (pos < text.length()) {
+        UChar32 c = text.char32At(pos);
+        if (!u_isUWhiteSpace(c) && !IS_BIDI_MARK(c)) { // u_isUWhiteSpace doesn't include LRM,RLM,ALM
+            break;
+        }
+        pos += U16_LENGTH(c);
+    }
+    return pos;
+}
+
+/**
+ * Skip over a run of zero or more bidi marks at pos in text.
+ */
+int32_t DecimalFormat::skipBidiMarks(const UnicodeString& text, int32_t pos) {
+    while (pos < text.length()) {
+        UChar c = text.charAt(pos);
+        if (!IS_BIDI_MARK(c)) {
+            break;
+        }
+        pos++;
     }
     return pos;
 }

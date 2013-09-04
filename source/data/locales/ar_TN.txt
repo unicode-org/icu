@@ -12,7 +12,7 @@ ar_TN{
         latn{
             patterns{
                 currencyFormat{"¤#0.00"}
-                decimalFormat{"#0.###;#0.###-"}
+                decimalFormat{"#0.###"}
             }
             symbols{
                 decimal{","}

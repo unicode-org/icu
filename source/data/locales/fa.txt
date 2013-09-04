@@ -28,11 +28,11 @@ fa{
                 group{"٬"}
                 infinity{"∞"}
                 list{"؛"}
-                minusSign{"−"}
+                minusSign{"‎−"}
                 nan{"ناعدد"}
                 perMille{"؉"}
                 percentSign{"٪"}
-                plusSign{"+"}
+                plusSign{"‎+‎"}
             }
         }
         default{"arabext"}
@@ -129,11 +129,11 @@ fa{
                 group{","}
                 infinity{"∞"}
                 list{";"}
-                minusSign{"−"}
+                minusSign{"‎−"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
-                plusSign{"+"}
+                plusSign{"‎+"}
             }
         }
         native{"arabext"}

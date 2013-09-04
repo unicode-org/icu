@@ -2019,6 +2019,8 @@ private:
                          int8_t type,
                          UChar* currency) const;
 
+    static UnicodeString& trimMarksFromAffix(const UnicodeString& affix, UnicodeString& trimmedAffix);
+
     static int32_t compareSimpleAffix(const UnicodeString& affix,
                                       const UnicodeString& input,
                                       int32_t pos,
@@ -2027,6 +2029,10 @@ private:
     static int32_t skipPatternWhiteSpace(const UnicodeString& text, int32_t pos);
 
     static int32_t skipUWhiteSpace(const UnicodeString& text, int32_t pos);
+
+    static int32_t skipUWhiteSpaceAndMarks(const UnicodeString& text, int32_t pos);
+
+    static int32_t skipBidiMarks(const UnicodeString& text, int32_t pos);
 
     int32_t compareComplexAffix(const UnicodeString& affixPat,
                                 const UnicodeString& input,
