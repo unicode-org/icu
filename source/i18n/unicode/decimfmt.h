@@ -1451,7 +1451,7 @@ public:
      * @see #setExponentSignAlwaysShown
      * @stable ICU 2.0
      */
-    virtual UBool isScientificNotation(void);
+    virtual UBool isScientificNotation(void) const;
 
     /**
      * Set whether or not scientific notation is used. When scientific notation
@@ -1508,7 +1508,7 @@ public:
      * @see #setExponentSignAlwaysShown
      * @stable ICU 2.0
      */
-    virtual UBool isExponentSignAlwaysShown(void);
+    virtual UBool isExponentSignAlwaysShown(void) const;
 
     /**
      * Set whether the exponent sign is always shown.  This has no effect
