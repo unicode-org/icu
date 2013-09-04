@@ -2228,10 +2228,10 @@ static void TestUFormattable(void) {
       u_uastrcpy(buffer, pattern);
       unum_parseToUFormattable(unum, ufmt, buffer, -1, NULL, &status);
       if(assertSuccess("unum_parseToUFormattable[3.14159]", &status)) {
-        assertTrue("ufmt_getDouble()=3.14159", ufmt_getDouble(ufmt, &status) == 3.14159);
+        assertTrue("ufmt_getDouble()==3.14159", withinErr(ufmt_getDouble(ufmt, &status), 3.14159, 1e-15));
+        assertSuccess("ufmt_getDouble()", &status);
         assertTrue("ufmt_getType()=UFMT_DOUBLE", ufmt_getType(ufmt, &status) == UFMT_DOUBLE);
         log_verbose("double = %g\n", ufmt_getDouble(ufmt, &status));
-        assertSuccess("ufmt_getDouble()", &status);
       }
       unum_formatUFormattable(unum, ufmt, out2k, 2048, NULL, &status);
       if(assertSuccess("unum_formatUFormattable(3.14159)", &status)) {
