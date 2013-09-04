@@ -1020,6 +1020,25 @@ DecimalFormat::clone() const
     return new DecimalFormat(*this);
 }
 
+
+FixedDecimal
+DecimalFormat::getFixedDecimal(double number, UErrorCode &status) {
+    DigitList digits;
+    digits.set(number);
+    UBool isNegative;
+    _round(digits, digits, isNegative, status);
+    double roundedNum = digits.getDouble();
+    FixedDecimal result(roundedNum);
+    int32_t numTrailingFractionZeros = this->getMinimumFractionDigits() - result.visibleDecimalDigitCount;
+    if (numTrailingFractionZeros > 0) {
+        double scaleFactor = pow(10.0, numTrailingFractionZeros);
+        result.decimalDigits *= scaleFactor;
+        result.visibleDecimalDigitCount += numTrailingFractionZeros;
+    }
+    return result;
+}
+
+
 //------------------------------------------------------------------------------
 
 UnicodeString&
@@ -1389,6 +1408,10 @@ DecimalFormat::_round(const DigitList &number, DigitList &adjustedNum, UBool& is
     if (U_FAILURE(status)) {
         return adjustedNum;
     }
+
+    // note: number and adjustedNum may refer to the same DigitList, in cases where a copy
+    //       is not needed by the caller.
+
     adjustedNum = number;
     isNegative = false;
     if (number.isNaN()) {

@@ -29,6 +29,9 @@ class PluralRulesTest;
 
 U_NAMESPACE_BEGIN
 
+class AndConstraint;
+class RuleChain;
+
 static const UChar DOT             = ((UChar)0x002E);
 static const UChar SINGLE_QUOTE    = ((UChar)0x0027);
 static const UChar SLASH           = ((UChar)0x002F);
@@ -179,6 +182,7 @@ class U_I18N_API FixedDecimal: public UMemory {
     FixedDecimal(double n, int32_t);
     explicit FixedDecimal(double n);
     FixedDecimal(const UnicodeString &s, UErrorCode &ec);
+    FixedDecimal(const FixedDecimal &other);
 
     double get(tokenType operand) const;
     int32_t getVisibleFractionDigitCount() const;
@@ -194,6 +198,7 @@ class U_I18N_API FixedDecimal: public UMemory {
     int64_t     intValue;
     UBool       hasIntegerValue;
     UBool       isNegative;
+    UBool       isNanOrInfinity;
 };
 
 class AndConstraint : public UMemory  {

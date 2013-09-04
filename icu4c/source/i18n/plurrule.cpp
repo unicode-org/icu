@@ -1357,6 +1357,18 @@ FixedDecimal::FixedDecimal(const UnicodeString &num, UErrorCode &status) {
 }
 
 
+FixedDecimal::FixedDecimal(const FixedDecimal &other) {
+    source = other.source;
+    visibleDecimalDigitCount = other.visibleDecimalDigitCount;
+    decimalDigits = other.decimalDigits;
+    decimalDigitsWithoutTrailingZeros = other.decimalDigitsWithoutTrailingZeros;
+    intValue = other.intValue;
+    hasIntegerValue = other.hasIntegerValue;
+    isNegative = other.isNegative;
+    isNanOrInfinity = other.isNanOrInfinity;
+}
+
+
 void FixedDecimal::init(double n, int32_t v, int64_t f) {
     isNegative = n < 0;
     source = fabs(n);
@@ -1372,6 +1384,9 @@ void FixedDecimal::init(double n, int32_t v, int64_t f) {
             fdwtz /= 10;
         }
         decimalDigitsWithoutTrailingZeros = fdwtz;
+    }
+    if (uprv_isNaN(n)) {
+        isNanOrInfinity = TRUE;
     }
 }
 
