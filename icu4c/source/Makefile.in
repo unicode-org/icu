@@ -56,7 +56,7 @@ INSTALLED_BUILT_FILES = $(top_builddir)/config/Makefile.inc $(top_builddir)/conf
 LOCAL_BUILT_FILES = icudefs.mk config/icucross.mk config/icucross.inc
 
 DOCDIRS = common i18n
-SUBDIRS =  stubdata common i18n $(LAYOUT) $(TOOLS) data $(ICUIO) $(EXTRA) $(SAMPLE) $(TEST)
+SUBDIRS =  stubdata common i18n $(LAYOUT) $(ICUIO) $(TOOLS) data $(EXTRA) $(SAMPLE) $(TEST)
 
 SECTION = 1
 
