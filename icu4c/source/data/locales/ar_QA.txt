@@ -11,7 +11,7 @@ ar_QA{
         latn{
             patterns{
                 currencyFormat{"¤#0.00"}
-                decimalFormat{"#0.###;#0.###-"}
+                decimalFormat{"#0.###"}
             }
         }
     }

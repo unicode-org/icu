@@ -187,11 +187,11 @@ he{
                 group{","}
                 infinity{"∞"}
                 list{";"}
-                minusSign{"-"}
+                minusSign{"‎-"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
-                plusSign{"+"}
+                plusSign{"‎+"}
             }
         }
         native{"latn"}

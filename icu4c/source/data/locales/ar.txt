@@ -24,7 +24,7 @@ ar{
         arab{
             patterns{
                 currencyFormat{"¤ #0.00;¤ #0.00-"}
-                decimalFormat{"#0.###;#0.###-"}
+                decimalFormat{"#0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
@@ -34,18 +34,18 @@ ar{
                 group{"٬"}
                 infinity{"∞"}
                 list{"؛"}
-                minusSign{"-"}
+                minusSign{"‏-"}
                 nan{"ليس رقم"}
                 perMille{"؉"}
                 percentSign{"٪"}
-                plusSign{"+"}
+                plusSign{"‏+"}
             }
         }
         default{"arab"}
         latn{
             patterns{
                 currencyFormat{"¤ #,##0.00;¤ #,##0.00-"}
-                decimalFormat{"#,##0.###;#,##0.###-"}
+                decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
                 scientificFormat{"#E0"}
             }
@@ -255,11 +255,11 @@ ar{
                 group{","}
                 infinity{"∞"}
                 list{";"}
-                minusSign{"-"}
+                minusSign{"‎-"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
-                plusSign{"+"}
+                plusSign{"‎+"}
             }
         }
         native{"arab"}
