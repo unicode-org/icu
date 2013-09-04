@@ -111,7 +111,7 @@ typedef size_t uintptr_t;
 #   define U_TZSET tzset
 #endif
 
-#ifdef U_TIMEZONE
+#if defined(U_TIMEZONE) || defined(U_HAVE_TIMEZONE)
     /* Use the predefined value. */
 #elif U_PLATFORM == U_PF_ANDROID
 #   define U_TIMEZONE timezone
