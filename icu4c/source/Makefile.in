@@ -224,8 +224,8 @@ xcheck-local: $(top_builddir)/config/icu-config $(top_builddir)/config/Makefile.
 	@test "passed" = "$(shell $(MAKE) --no-print-directory -f $(top_builddir)/config/Makefile.inc SELFCHECK=1 selfcheck)" || (echo "FAIL: Makefile.inc could not run properly." ; exit 1 )
 	@echo "PASS: config selfcheck OK"
 
-#$(srcdir)/configure : $(srcdir)/configure.in $(top_srcdir)/aclocal.m4
-#	cd $(srcdir) && $(AUTOCONF)
+#$(srcdir)/configure : $(srcdir)/configure.ac $(top_srcdir)/aclocal.m4
+#	cd $(srcdir) && aclocal && $(AUTOCONF)
 
 icudefs.mk: $(srcdir)/icudefs.mk.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
