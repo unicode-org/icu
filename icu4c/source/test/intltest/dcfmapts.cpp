@@ -10,10 +10,13 @@
 
 #include "dcfmapts.h"
 
-#include "unicode/decimfmt.h"
-#include "unicode/dcfmtsym.h"
-#include "unicode/parseerr.h"
 #include "unicode/currpinf.h"
+#include "unicode/dcfmtsym.h"
+#include "unicode/decimfmt.h"
+#include "unicode/localpointer.h"
+#include "unicode/parseerr.h"
+
+#include "plurrule_impl.h"
 
 #define LENGTHOF(array) ((int32_t)(sizeof(array)/sizeof((array)[0])))
 
@@ -62,7 +65,13 @@ void IntlTestDecimalFormatAPI::runIndexedTest( int32_t index, UBool exec, const 
                TestScale();
             }
             break;
-        default: name = ""; break;
+         case 5: name = "TestFixedDecimal";
+            if(exec) {
+               logln((UnicodeString)"TestFixedDecimal ---");
+               TestFixedDecimal();
+            }
+            break;
+       default: name = ""; break;
     }
 }
 
@@ -553,7 +562,8 @@ void IntlTestDecimalFormatAPI::TestScale()
         }
         pat.setAttribute(UNUM_SCALE,testData[i].inputScale,status);
         pat.format(testData[i].inputValue, resultStr);
-        message = UnicodeString("Unexpected output for ") + testData[i].inputValue + UnicodeString(" and scale ") + testData[i].inputScale + UnicodeString(". Got: ");
+        message = UnicodeString("Unexpected output for ") + testData[i].inputValue + UnicodeString(" and scale ") + 
+                  testData[i].inputScale + UnicodeString(". Got: ");
         exp = testData[i].expectedOutput;
         verifyString(message, resultStr, exp);
         message.remove();
@@ -561,4 +571,69 @@ void IntlTestDecimalFormatAPI::TestScale()
         exp.remove();
     }
 }
+
+
+#define ASSERT_SUCCESS(status) {if (U_FAILURE(status)) {  \
+           errln("file %s, line %d: Error status is %s", __FILE__, __LINE__, u_errorName(status)); \
+           status = U_ZERO_ERROR; }}
+
+#define ASSERT_EQUAL(expect, actual) {if ((expect) != (actual)) { \
+           errln("file %s, line %d: Expected %g, got %g", __FILE__, __LINE__, (double)(expect), (double)(actual)); }}
+         
+
+void IntlTestDecimalFormatAPI::TestFixedDecimal() {
+    UErrorCode status = U_ZERO_ERROR;
+
+    LocalPointer<DecimalFormat> df(new DecimalFormat("###", status));
+    ASSERT_SUCCESS(status);
+    FixedDecimal fd = df->getFixedDecimal(44, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(44, fd.source);
+    ASSERT_EQUAL(0, fd.visibleDecimalDigitCount);
+
+    df.adoptInstead(new DecimalFormat("###.00##", status));
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(123.456, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(3, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(456, fd.decimalDigits);
+    ASSERT_EQUAL(456, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(123, fd.intValue);
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    df.adoptInstead(new DecimalFormat("###", status));
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(123.456, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(0, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(0, fd.decimalDigits);
+    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(123, fd.intValue);
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    df.adoptInstead(new DecimalFormat("###.0", status));
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(123.01, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(1, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(0, fd.decimalDigits);
+    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(123, fd.intValue);
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    df.adoptInstead(new DecimalFormat("###.0", status));
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(123.06, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(1, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(1, fd.decimalDigits);
+    ASSERT_EQUAL(1, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(123, fd.intValue);
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+}
+    
 #endif /* #if !UCONFIG_NO_FORMATTING */

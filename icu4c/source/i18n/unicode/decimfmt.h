@@ -60,6 +60,7 @@ class Hashtable;
 class UnicodeSet;
 class FieldPositionHandler;
 class DecimalFormatStaticSets;
+class FixedDecimal;
 
 // explicit template instantiation. see digitlst.h
 #if defined (_MSC_VER)
@@ -1851,6 +1852,14 @@ public:
      * @deprecated ICU 3.4. This string has no public purpose. Please don't use it.
      */
     static const char fgNumberPatterns[];
+
+    /**
+     *  Get a FixedDecimal corresponding to a double as it would be
+     *  formatted by this DecimalFormat.
+     *  Internal, not intended for public use.
+     *  @internal
+     */
+     FixedDecimal getFixedDecimal(double number, UErrorCode &status);
 
 public:
 
