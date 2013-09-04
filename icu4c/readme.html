@@ -215,6 +215,15 @@
 
     <p>To see which APIs are new or changed in this release, view the <a href="APIChangeReport.html">ICU4C API Change Report</a>. </p>
 
+    <!-- ICU 52 items -->
+    <h3>DecimalFormat - two functions marked as const</h3>
+    <p>
+      <tt>DecimalFormat::isScientificNotation</tt> and <tt>DecimalFormat::isExponentSignAlwaysShown</tt>
+      are now const member functions. DecimalFormat is not recommended for subclassing.
+    </p>
+
+    <!-- end ICU 52 items -->
+
     <p>The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>.
     For more news about this release, see the
