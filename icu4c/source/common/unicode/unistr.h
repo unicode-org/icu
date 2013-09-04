@@ -341,7 +341,8 @@ public:
   /**
    * Compare the characters bitwise in the range
    * [<TT>start</TT>, <TT>start + length</TT>) with the characters
-   * in <TT>text</TT>
+   * in the <b>entire string</b> <TT>text</TT>.
+   * (The parameters "start" and "length" are not applied to the other text "text".)
    * @param start the offset at which the compare operation begins
    * @param length the number of characters of text to compare.
    * @param text the other text to be compared against this string.
