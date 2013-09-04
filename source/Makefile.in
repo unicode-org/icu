@@ -90,6 +90,9 @@ xcheck: all xcheck-recursive
 xperf: all xperf-recursive
 check-exhaustive: all check-exhaustive-recursive
 
+pcheck: all tests
+	@$(MAKE) -C test pcheck
+
 check-exhaustive-local: check-local
 
 xcheck-recursive: all xcheck-local
