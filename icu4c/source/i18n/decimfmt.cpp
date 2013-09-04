@@ -2615,7 +2615,7 @@ UBool DecimalFormat::subparse(const UnicodeString& text,
             else {
 
                 if(!fBoolFlags.contains(UNUM_PARSE_NO_EXPONENT) || // don't parse if this is set unless..
-                    fUseExponentialNotation /* should be:  isScientificNotation() but it is not const (?!) see bug #9619 */) { // .. it's an exponent format - ignore setting and parse anyways
+                   isScientificNotation()) { // .. it's an exponent format - ignore setting and parse anyways
                     const UnicodeString *tmp;
                     tmp = &getConstSymbol(DecimalFormatSymbols::kExponentialSymbol);
                     // TODO: CASE
@@ -3679,7 +3679,7 @@ void DecimalFormat::setPadPosition(EPadPosition padPos) {
  * @see #isExponentSignAlwaysShown
  * @see #setExponentSignAlwaysShown
  */
-UBool DecimalFormat::isScientificNotation() {
+UBool DecimalFormat::isScientificNotation() const {
     return fUseExponentialNotation;
 }
 
@@ -3742,7 +3742,7 @@ void DecimalFormat::setMinimumExponentDigits(int8_t minExpDig) {
  * @see #getMinimumExponentDigits
  * @see #setExponentSignAlwaysShown
  */
-UBool DecimalFormat::isExponentSignAlwaysShown() {
+UBool DecimalFormat::isExponentSignAlwaysShown() const {
     return fExponentSignAlwaysShown;
 }
 
