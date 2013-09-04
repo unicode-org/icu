@@ -1,6 +1,7 @@
-# aclocal.m4 for ICU
 # Copyright (c) 1999-2013, International Business Machines Corporation and
 # others. All Rights Reserved.
+# acinclude.m4 for ICU
+# Don't edit aclocal.m4, do edit acinclude.m4
 # Stephen F. Booth
 
 # @TOP@
