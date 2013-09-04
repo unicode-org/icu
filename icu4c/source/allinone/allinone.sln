@@ -11,6 +11,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "date", "..\samples\date\date.vcxproj", "{38B5751A-C6F9-4409-950C-F4F9DA17275F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "derb", "..\tools\genrb\derb.vcxproj", "{D3065ADB-8820-4CC7-9B6C-9510833961A3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{C2B04507-2521-4801-BF0D-5FD79D6D518C} = {C2B04507-2521-4801-BF0D-5FD79D6D518C}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "genbrk", "..\tools\genbrk\genbrk.vcxproj", "{C2BE5000-7501-4E87-9724-B8D82494FAE6}"
 EndProject
