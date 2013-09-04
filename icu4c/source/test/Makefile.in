@@ -20,7 +20,7 @@ STATUS_TMP = tmp
 STATUS_FULL = $(shell pwd)/$(STATUS_TMP)
 
 ## Files to remove for 'make clean'
-CLEANFILES = *~
+CLEANFILES = *~ $(STATUS_TMP)
 
 SUBDIRS = testdata intltest $(IOTEST) cintltst
 
@@ -107,6 +107,50 @@ xcheck-recursive check-recursive check-exhaustive-recursive:
 	else \
 	  echo "All tests OK: $$goods"; \
 	fi
+
+# pcheck = parallel check. We don't care about the output interleaving,
+# just run it as fast as possible.
+# todo would be to merge this code into the above non-parallel check.
+STATUS_NUM:=$(shell echo $$$$)
+MYSTATUS_R=$(STATUS_FULL)/status.$(STATUS_NUM).deleteme
+STATUS_FILES=$(SUBDIRS:%=$(MYSTATUS_R).%)
+
+pcheck_setup: testdata
+	@$(MKINSTALLDIRS) $(STATUS_TMP)
+	$(RMV) "$(MYSTATUS_R)".*
+	@echo Beginning parallel make. Output may be interleaved!
+
+$(STATUS_FULL)/status.$(STATUS_NUM).deleteme.%: pcheck_setup
+	@$(MAKE) -C $* TEST_STATUS_FILE=$@ check || ( echo "FAILED: $* (other tests may still be running..)" ; touch $@.FAIL ; false )
+	-@touch $@.PASS
+	-@echo "PASSED: $* (other tests may still be running..)"
+
+# print out status
+pcheck: $(STATUS_FILES)
+	@goods= ; \
+	bads= ; \
+	echo "---------------"; \
+	for subdir in $(SUBDIRS); do \
+		if [ -f "$(MYSTATUS_R).$$subdir.FAIL" ]; \
+		then \
+			bads="$$bads $$subdir" ; \
+		elif [ -f "$(MYSTATUS_R).$$subdir.PASS" ]; \
+		then \
+			goods="$$goods $$subdir" ; \
+		else \
+			echo "*** subtest did not complete - $$subdir" ; \
+			bads="$$bads $$subdir" ; \
+		fi ; \
+	done ; \
+	echo "ALL TESTS SUMMARY:"; \
+        if test ! "x$$bads" = "x"; then \
+	  echo "(to get non-interleaved err output, use \"$(MAKE) check\" instead.)" ; \
+	  echo "ok: $$goods"; \
+	  echo "===== ERRS: $$bads"; exit 1; \
+	else \
+	  echo "All tests OK: $$goods"; \
+	fi
+	-@$(RMV) "$(MYSTATUS_R)".*
 
 all-local:
 
