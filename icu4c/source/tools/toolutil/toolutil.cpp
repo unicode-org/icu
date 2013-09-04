@@ -201,6 +201,18 @@ uprv_mkdir(const char *pathname, UErrorCode *status) {
     }
 }
 
+#if !UCONFIG_NO_FILE_IO
+U_CAPI UBool U_EXPORT2
+uprv_fileExists(const char *file) {
+  struct stat stat_buf;
+  if (stat(file, &stat_buf) == 0) {
+    return TRUE;
+  } else {
+    return FALSE;
+  }
+}
+#endif
+
 /*U_CAPI UDate U_EXPORT2
 uprv_getModificationDate(const char *pathname, UErrorCode *status)
 {

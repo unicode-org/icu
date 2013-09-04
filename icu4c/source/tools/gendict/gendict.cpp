@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2002-2012, International Business Machines
+*   Copyright (C) 2002-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *
@@ -37,13 +37,14 @@
 #include <string.h>
 
 #include "putilimp.h"
-UDate startTime = -1.0;
+UDate startTime;
 
 static int elapsedTime() {
   return (int)uprv_floor((uprv_getRawUTCtime()-startTime)/1000.0);
 }
 
 #if U_PLATFORM_IMPLEMENTS_POSIX && !U_PLATFORM_HAS_WIN32_API
+
 #include <signal.h>
 #include <unistd.h>
 
@@ -64,9 +65,6 @@ static void install_watchdog(const char *toolName, const char *outFileName) {
   wToolname=toolName;
   wOutname=outFileName;
 
-  if(startTime<0) { // uninitialized
-    startTime = uprv_getRawUTCtime();
-  }
   signal(SIGALRM, &alarm_fn);
 
   alarm(firstSeconds); // set the alarm
@@ -301,6 +299,7 @@ int  main(int argc, char **argv) {
     const char *outFileName  = argv[2];
     const char *wordFileName = argv[1];
 
+    startTime = uprv_getRawUTCtime(); // initialize start timer
     // set up the watchdog
     install_watchdog(progName, outFileName);
 
