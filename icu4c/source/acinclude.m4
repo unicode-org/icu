@@ -1,12 +1,12 @@
 # aclocal.m4 for ICU
-# Copyright (c) 1999-2012, International Business Machines Corporation and
+# Copyright (c) 1999-2013, International Business Machines Corporation and
 # others. All Rights Reserved.
 # Stephen F. Booth
 
 # @TOP@
 
 # ICU_CHECK_MH_FRAG
-AC_DEFUN(ICU_CHECK_MH_FRAG, [
+AC_DEFUN([ICU_CHECK_MH_FRAG], [
 	AC_CACHE_CHECK(
 		[which Makefile fragment to use for ${host}],
 		[icu_cv_host_frag],
@@ -75,7 +75,7 @@ esac
 ])
 
 # ICU_CONDITIONAL - similar example taken from Automake 1.4
-AC_DEFUN(ICU_CONDITIONAL,
+AC_DEFUN([ICU_CONDITIONAL],
 [AC_SUBST($1_TRUE)
 if $2; then
   $1_TRUE=
@@ -84,7 +84,7 @@ else
 fi])
 
 # ICU_PROG_LINK - Make sure that the linker is usable
-AC_DEFUN(ICU_PROG_LINK,
+AC_DEFUN([ICU_PROG_LINK],
 [
 case "${host}" in
     *-*-cygwin*|*-*-mingw*)
@@ -99,7 +99,7 @@ esac])
 #            [, ACTION-IF-NOT-FOUND [, OTHER-LIBRARIES]]])
 # Search for a library defining FUNC, then see if it's not already available.
 
-AC_DEFUN(AC_SEARCH_LIBS_FIRST,
+AC_DEFUN([AC_SEARCH_LIBS_FIRST],
 [AC_PREREQ([2.13])
 AC_CACHE_CHECK([for library containing $1], [ac_cv_search_$1],
 [ac_func_search_save_LIBS="$LIBS"
@@ -124,7 +124,7 @@ fi])
 
 
 # Check if we can build and use 64-bit libraries
-AC_DEFUN(AC_CHECK_64BIT_LIBS,
+AC_DEFUN([AC_CHECK_64BIT_LIBS],
 [
     BITS_REQ=nochange
     ENABLE_64BIT_LIBS=unknown
@@ -438,7 +438,7 @@ AC_DEFUN(AC_CHECK_64BIT_LIBS,
 ])
 
 # Strict compilation options.
-AC_DEFUN(AC_CHECK_STRICT_COMPILE,
+AC_DEFUN([AC_CHECK_STRICT_COMPILE],
 [
     AC_MSG_CHECKING([whether strict compiling is on])
     AC_ARG_ENABLE(strict,[  --enable-strict         compile with strict compiler options [default=yes]], [
