@@ -458,6 +458,10 @@ ArgExtractor::number(void) const {
   return num;
 }
 
+// TODO: Thread safety problem? the function of ArgExtractor appears to be to temporarily
+//       setCurrency() on the number formatter, then restore it after the format() is complete.
+//       Another thread could be using the formatter.
+
 ArgExtractor::ArgExtractor(const NumberFormat& nf, const Formattable& obj, UErrorCode& status)
     : ncnf((NumberFormat*) &nf), num(&obj), setCurr(FALSE) {
 

@@ -28,6 +28,7 @@ public:
     void testRoundingInc(/*char *par*/);
     void TestCurrencyPluralInfo();
     void TestScale();
+    void TestFixedDecimal();
 private:
     /*Helper functions */
     void verify(const UnicodeString& message, const UnicodeString& got, double expected);
