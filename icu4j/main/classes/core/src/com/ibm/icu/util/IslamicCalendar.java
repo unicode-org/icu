@@ -868,8 +868,10 @@ public class IslamicCalendar extends Calendar {
             setType(CalculationType.ISLAMIC_UMALQURA);
         else if("islamic-tbla".equals(localeCalType)) 
             setType(CalculationType.ISLAMIC_TBLA);
-        else
-            setType(CalculationType.ISLAMIC);       // needs to be last so it's always the default
+        else if(localeCalType.startsWith("islamic"))
+            setType(CalculationType.ISLAMIC);       // needs to be last so it's always the default if it's islamic-something-unhandled  
+        else 
+            setType(CalculationType.ISLAMIC_CIVIL); // default for any non-islamic calendar locale
     }
 
     
