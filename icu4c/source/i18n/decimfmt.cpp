@@ -2904,23 +2904,24 @@ static UBool equalWithSignCompatibility(UChar32 lhs, UChar32 rhs) {
 // check for LRM 0x200E, RLM 0x200F, ALM 0x061C
 #define IS_BIDI_MARK(c) (c==0x200E || c==0x200F || c==0x061C)
 
-// The following assumes any marks are at the beginning or end of the affix
+#define TRIM_BUFLEN 32
 UnicodeString& DecimalFormat::trimMarksFromAffix(const UnicodeString& affix, UnicodeString& trimmedAffix) {
-    int32_t first = 0;
-    int32_t last = affix.length() - 1;
-    if (last > 0) {
-        UChar c = affix.charAt(0);
-        if (IS_BIDI_MARK(c)) {
-            first++;
-        }
-        if (last > first) {
-            c = affix.charAt(last);
-            if (IS_BIDI_MARK(c)) {
-                last--;
-            }
+    UChar trimBuf[TRIM_BUFLEN];
+    int32_t affixLen = affix.length();
+    int32_t affixPos, trimLen = 0;
+    
+    for (affixPos = 0; affixPos < affixLen; affixPos++) {
+        UChar c = affix.charAt(affixPos);
+        if (!IS_BIDI_MARK(c)) {
+        	if (trimLen < TRIM_BUFLEN) {
+        		trimBuf[trimLen++] = c;
+        	} else {
+        		trimLen = 0;
+        		break;
+        	}
         }
     }
-    return trimmedAffix.setTo(affix, first, last + 1 - first);
+    return (trimLen > 0)? trimmedAffix.setTo(trimBuf, trimLen): trimmedAffix.setTo(affix);
 }
 
 /**
@@ -2939,6 +2940,8 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
                                           UBool lenient) {
     int32_t start = pos;
     UnicodeString trimmedAffix;
+    // For more efficiency we should keep lazily-created trimmed affixes around in
+    // instance variables instead of trimming each time they are used (the next step)
     trimMarksFromAffix(affix, trimmedAffix);
     UChar32 affixChar = trimmedAffix.char32At(0);
     int32_t affixLength = trimmedAffix.length();

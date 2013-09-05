@@ -3092,7 +3092,7 @@ void NumberFormatTest::TestNumberingSystems() {
         { "en_US@numbers=thai", 1234.567, FALSE, "\\u0E51,\\u0E52\\u0E53\\u0E54.\\u0E55\\u0E56\\u0E57" },
         { "en_US@numbers=hebr", 5678.0, TRUE, "\\u05D4\\u05F3\\u05EA\\u05E8\\u05E2\\u05F4\\u05D7" },
         { "en_US@numbers=arabext", 1234.567, FALSE, "\\u06F1\\u066c\\u06F2\\u06F3\\u06F4\\u066b\\u06F5\\u06F6\\u06F7" },
-        { "ar_EG", 1234.567, FALSE, "\\u0661\\u0662\\u0663\\u0664\\u066b\\u0665\\u0666\\u0667" },
+        { "ar_EG", 1234.567, FALSE, "\\u0661\\u066C\\u0662\\u0663\\u0664\\u066b\\u0665\\u0666\\u0667" },
         { "th_TH@numbers=traditional", 1234.567, FALSE, "\\u0E51,\\u0E52\\u0E53\\u0E54.\\u0E55\\u0E56\\u0E57" }, // fall back to native per TR35
         { "ar_MA", 1234.567, FALSE, "1.234,567" },
         { "en_US@numbers=hanidec", 1234.567, FALSE, "\\u4e00,\\u4e8c\\u4e09\\u56db.\\u4e94\\u516d\\u4e03" },
