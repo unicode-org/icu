@@ -890,7 +890,7 @@ void IntlTest::dataerr( const UnicodeString &message )
 
 void IntlTest::dataerrln( const UnicodeString &message )
 {
-    IncDataErrorCount();
+    int32_t errCount = IncDataErrorCount();
     UnicodeString msg;
     if (!warn_on_missing_data) {
         IncErrorCount();
@@ -899,7 +899,7 @@ void IntlTest::dataerrln( const UnicodeString &message )
         msg = UnicodeString("[DATA] " + message);
     }
 
-    if (!no_err_msg) LL_message( msg + " - (Are you missing data?)", TRUE );
+    if (!no_err_msg && (errCount==1)) LL_message( msg + " - (Are you missing data?)", TRUE );
 }
 
 void IntlTest::errcheckln(UErrorCode status, const UnicodeString &message ) {
