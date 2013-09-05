@@ -1022,19 +1022,42 @@ DecimalFormat::clone() const
 
 
 FixedDecimal
-DecimalFormat::getFixedDecimal(double number, UErrorCode &status) {
-    DigitList digits;
-    digits.set(number);
-    UBool isNegative;
-    _round(digits, digits, isNegative, status);
-    double roundedNum = digits.getDouble();
-    FixedDecimal result(roundedNum);
-    int32_t numTrailingFractionZeros = this->getMinimumFractionDigits() - result.visibleDecimalDigitCount;
+DecimalFormat::getFixedDecimal(double number, UErrorCode &status) const {
+    FixedDecimal result;
+    int32_t minFractionDigits = getMinimumFractionDigits();
+
+    if (fMultiplier == NULL && fScale == 0 && fRoundingIncrement == 0 && areSignificantDigitsUsed() == FALSE &&
+            result.quickInit(number) && result.visibleDecimalDigitCount <= getMaximumFractionDigits()) {
+        // Fast Path. Construction of an exact FixedDecimal directly from the double, without passing
+        //   through a DigitList, was successful, and the formatter is doing nothing tricky with rounding.
+        // printf("getFixedDecimal(%g): taking fast path.\n", number);
+    } else {
+        // Slow path. Create a DigitList, and have this formatter round it according to the
+        //     requirements of the format, and fill the fixedDecimal from that.
+        DigitList digits;
+        digits.set(number);
+        UBool isNegative;
+        _round(digits, digits, isNegative, status);
+        double roundedNum = digits.getDouble();
+        result.init(roundedNum);
+
+        if (areSignificantDigitsUsed()) {
+            minFractionDigits = getMinimumSignificantDigits() - digits.getDecimalAt();
+            if (minFractionDigits < 0) {
+                minFractionDigits = 0;
+            }
+        }
+    }
+
+    // Adjust result for trailing zeros to the right of the decimal. Needed for both fast & slow paths.
+
+    int32_t numTrailingFractionZeros = minFractionDigits - result.visibleDecimalDigitCount;
     if (numTrailingFractionZeros > 0) {
         double scaleFactor = pow(10.0, numTrailingFractionZeros);
         result.decimalDigits *= scaleFactor;
         result.visibleDecimalDigitCount += numTrailingFractionZeros;
     }
+
     return result;
 }
 
