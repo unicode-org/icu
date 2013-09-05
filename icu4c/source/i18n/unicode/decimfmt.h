@@ -1859,7 +1859,7 @@ public:
      *  Internal, not intended for public use.
      *  @internal
      */
-     FixedDecimal getFixedDecimal(double number, UErrorCode &status);
+     FixedDecimal getFixedDecimal(double number, UErrorCode &status) const;
 
 public:
 

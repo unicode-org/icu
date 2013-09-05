@@ -181,6 +181,7 @@ class U_I18N_API FixedDecimal: public UMemory {
     FixedDecimal(double  n, int32_t v, int64_t f);
     FixedDecimal(double n, int32_t);
     explicit FixedDecimal(double n);
+    FixedDecimal();
     FixedDecimal(const UnicodeString &s, UErrorCode &ec);
     FixedDecimal(const FixedDecimal &other);
 
@@ -188,6 +189,9 @@ class U_I18N_API FixedDecimal: public UMemory {
     int32_t getVisibleFractionDigitCount() const;
 
     void init(double n, int32_t v, int64_t f);
+    void init(double n);
+    UBool quickInit(double n);  // Try a fast-path only initialization,
+                                //    return TRUE if successful.
     static int64_t getFractionalDigits(double n, int32_t v);
     static int32_t decimals(double n);
 
