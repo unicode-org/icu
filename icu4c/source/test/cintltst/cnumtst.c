@@ -290,8 +290,10 @@ static void TestNumberFormat()
     }
     if(result && u_strcmp(result, temp1)==0)
         log_verbose("Pass: Number Formatting using unum_formatDouble() Successful\n");
-    else
-        log_err("FAIL: Error in number formatting using unum_formatDouble()\n");
+    else {
+      log_err("FAIL: Error in number formatting using unum_formatDouble() - got '%s' expected '%s'\n",
+              aescstrdup(result, -1), aescstrdup(temp1, -1));
+    }
     if(pos2.beginIndex == 9 && pos2.endIndex == 11)
         log_verbose("Pass: Complete number formatting using unum_format() successful\n");
     else
@@ -336,12 +338,13 @@ static void TestNumberFormat()
         unum_formatDoubleCurrency(cur_def, a, temp, result, resultlength, &pos2, &status);
     }
     if (U_FAILURE(status)) {
-        log_err("Error in formatting using unum_formatDouble(.....): %s\n", myErrorName(status));
+        log_err("Error in formatting using unum_formatDoubleCurrency(.....): %s\n", myErrorName(status));
     }
     if (result && u_strcmp(result, temp1)==0) {
-        log_verbose("Pass: Number Formatting using unum_formatDouble() Successful\n");
+        log_verbose("Pass: Number Formatting using unum_formatDoubleCurrency() Successful\n");
     } else {
-        log_err("FAIL: Error in number formatting using unum_formatDouble()\n");
+        log_err("FAIL: Error in number formatting using unum_formatDoubleCurrency() - got '%s' expected '%s'\n",
+                aescstrdup(result, -1), aescstrdup(temp1, -1));
     }
     if (pos2.beginIndex == 1 && pos2.endIndex == 6) {
         log_verbose("Pass: Complete number formatting using unum_format() successful\n");
@@ -364,7 +367,7 @@ static void TestNumberFormat()
         if (d1!=a1) {
             log_err("Fail: Error in parsing currency, got %f, expected %f\n", d1, a1);
         } else {
-            log_verbose("Pass: parsed currency ammount successfully\n");
+            log_verbose("Pass: parsed currency amount successfully\n");
         }
         if (u_strcmp(temp2, temp)==0) {
             log_verbose("Pass: parsed correct currency\n");

@@ -433,24 +433,30 @@ NumberFormat::format(const StringPiece &decimalNum,
     return toAppendTo;
 }
 
-// -------------------------------------
+/**
+ *
 // Formats the number object and save the format
 // result in the toAppendTo string buffer.
 
 // utility to save/restore state, used in two overloads
 // of format(const Formattable&...) below.
-
+*
+* Old purpose of ArgExtractor was to avoid const. Not thread safe!
+*
+* keeping it around as a shim.
+*/
 class ArgExtractor {
-  NumberFormat *ncnf;
   const Formattable* num;
-  UBool setCurr;
   UChar save[4];
+  UBool fWasCurrency;
 
  public:
   ArgExtractor(const NumberFormat& nf, const Formattable& obj, UErrorCode& status);
   ~ArgExtractor();
 
   const Formattable* number(void) const;
+  const UChar *iso(void) const;
+  const UBool wasCurrency(void) const;
 };
 
 inline const Formattable*
@@ -458,33 +464,34 @@ ArgExtractor::number(void) const {
   return num;
 }
 
-// TODO: Thread safety problem? the function of ArgExtractor appears to be to temporarily
-//       setCurrency() on the number formatter, then restore it after the format() is complete.
-//       Another thread could be using the formatter.
+inline const UBool
+ArgExtractor::wasCurrency(void) const {
+  return fWasCurrency;
+}
 
-ArgExtractor::ArgExtractor(const NumberFormat& nf, const Formattable& obj, UErrorCode& status)
-    : ncnf((NumberFormat*) &nf), num(&obj), setCurr(FALSE) {
+inline const UChar *
+ArgExtractor::iso(void) const {
+  return save;
+}
+
+ArgExtractor::ArgExtractor(const NumberFormat& nf, const Formattable& obj, UErrorCode& /*status*/)
+  : num(&obj), fWasCurrency(FALSE) {
 
     const UObject* o = obj.getObject(); // most commonly o==NULL
     const CurrencyAmount* amt;
     if (o != NULL && (amt = dynamic_cast<const CurrencyAmount*>(o)) != NULL) {
         // getISOCurrency() returns a pointer to internal storage, so we
         // copy it to retain it across the call to setCurrency().
-        const UChar* curr = amt->getISOCurrency();
-        u_strcpy(save, nf.getCurrency());
-        setCurr = (u_strcmp(curr, save) != 0);
-        if (setCurr) {
-            ncnf->setCurrency(curr, status);
-        }
+        //const UChar* curr = amt->getISOCurrency();
+        u_strcpy(save, amt->getISOCurrency());
         num = &amt->getNumber();
+        fWasCurrency=TRUE;
+    } else {
+      save[0]=0;
     }
 }
 
 ArgExtractor::~ArgExtractor() {
-    if (setCurr) {
-        UErrorCode ok = U_ZERO_ERROR;
-        ncnf->setCurrency(save, ok); // always restore currency
-    }
 }
 
 UnicodeString& NumberFormat::format(const DigitList &number,
@@ -530,6 +537,16 @@ NumberFormat::format(const Formattable& obj,
 
     ArgExtractor arg(*this, obj, status);
     const Formattable *n = arg.number();
+    const UChar *iso = arg.iso();
+
+    if(arg.wasCurrency() && u_strcmp(iso, getCurrency())) {
+      // trying to format a different currency.
+      // Right now, we clone.
+      LocalPointer<NumberFormat> cloneFmt((NumberFormat*)this->clone());
+      cloneFmt->setCurrency(iso, status);
+      // next line should NOT recurse, because n is numeric whereas obj was a wrapper around currency amount.
+      return cloneFmt->format(*n, appendTo, pos, status);
+    }
 
     if (n->isNumeric() && n->getDigitList() != NULL) {
         // Decimal Number.  We will have a DigitList available if the value was
@@ -575,6 +592,16 @@ NumberFormat::format(const Formattable& obj,
 
     ArgExtractor arg(*this, obj, status);
     const Formattable *n = arg.number();
+    const UChar *iso = arg.iso();
+
+    if(arg.wasCurrency() && u_strcmp(iso, getCurrency())) {
+      // trying to format a different currency.
+      // Right now, we clone.
+      LocalPointer<NumberFormat> cloneFmt((NumberFormat*)this->clone());
+      cloneFmt->setCurrency(iso, status);
+      // next line should NOT recurse, because n is numeric whereas obj was a wrapper around currency amount.
+      return cloneFmt->format(*n, appendTo, posIter, status);
+    }
 
     if (n->isNumeric() && n->getDigitList() != NULL) {
         // Decimal Number

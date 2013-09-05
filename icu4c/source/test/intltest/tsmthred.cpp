@@ -627,7 +627,7 @@ UnicodeString showDifference(const UnicodeString& expected, const UnicodeString&
 //
 //-------------------------------------------------------------------------------------------
 
-const int kFormatThreadIterations = 20;  // # of iterations per thread
+const int kFormatThreadIterations = 100;  // # of iterations per thread
 const int kFormatThreadThreads    = 10;  // # of threads to spawn   
 const int kFormatThreadPatience   = 60;  // time in seconds to wait for all threads
 
@@ -645,7 +645,7 @@ struct FormatThreadTestData
 
 // "Someone from {2} is receiving a #{0} error - {1}. Their telephone call is costing {3 number,currency}."
 
-void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, const Locale& theLocale,
+static void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, const Locale& theLocale,
                      UErrorCode inStatus0, /* statusString 1 */ const Locale &inCountry2, double currency3, // these numbers are the message arguments.
                      UnicodeString &result)
 {
@@ -679,6 +679,102 @@ void formatErrorMessage(UErrorCode &realStatus, const UnicodeString& pattern, co
     delete fmt;
 }
 
+/**
+ * Class for thread-safe (theoretically) format.
+ * 
+ *
+ * Its constructor, destructor, and init/fini are NOT thread safe.
+ */
+class ThreadSafeFormat {
+public:
+  /* give a unique offset to each thread */
+  ThreadSafeFormat();
+  UBool doStuff(int32_t offset, UnicodeString &appendErr, UErrorCode &status);
+private:
+  LocalPointer<NumberFormat> fFormat; // formtter - default constructed currency
+  Formattable  fYDDThing;    // Formattable currency - YDD
+  Formattable  fBBDThing;   // Formattable currency - BBD
+
+  // statics
+private:
+  static LocalPointer<NumberFormat> gFormat;
+  static NumberFormat *createFormat(UErrorCode &status);
+  static Formattable gYDDThing, gBBDThing;
+public:
+  static void init(UErrorCode &status); // avoid static init.
+  static void fini(UErrorCode &status); // avoid static fini
+};
+
+LocalPointer<NumberFormat> ThreadSafeFormat::gFormat;
+Formattable ThreadSafeFormat::gYDDThing;
+Formattable ThreadSafeFormat::gBBDThing;
+UnicodeString gYDDStr, gBBDStr;
+NumberFormat *ThreadSafeFormat::createFormat(UErrorCode &status) {
+  LocalPointer<NumberFormat> fmt(NumberFormat::createCurrencyInstance(Locale::getUS(), status));
+  return fmt.orphan();
+}
+
+
+static const UChar kYDD[] = { 0x59, 0x44, 0x44, 0x00 };
+static const UChar kBBD[] = { 0x42, 0x42, 0x44, 0x00 };
+static const UChar kUSD[] = { 0x55, 0x53, 0x44, 0x00 };
+
+void ThreadSafeFormat::init(UErrorCode &status) {
+  gFormat.adoptInstead(createFormat(status));
+  gYDDThing.adoptObject(new CurrencyAmount(123.456, kYDD, status));
+  gBBDThing.adoptObject(new CurrencyAmount(987.654, kBBD, status));
+  gFormat->format(gYDDThing, gYDDStr, NULL, status);
+  gFormat->format(gBBDThing, gBBDStr, NULL, status);
+}
+
+void ThreadSafeFormat::fini(UErrorCode &status) {
+  gFormat.orphan();
+}
+
+ThreadSafeFormat::ThreadSafeFormat() {
+}
+
+UBool ThreadSafeFormat::doStuff(int32_t offset, UnicodeString &appendErr, UErrorCode &status) {
+  UBool okay = TRUE;
+  if(fFormat.isNull()) {
+    fFormat.adoptInstead(createFormat(status));
+  }
+
+  if(u_strcmp(fFormat->getCurrency(), kUSD)) {
+    appendErr.append("fFormat currency != ")
+      .append(kUSD)
+      .append(", =")
+      .append(fFormat->getCurrency())
+      .append("! ");
+    okay = FALSE;
+  }
+
+  if(u_strcmp(gFormat->getCurrency(), kUSD)) {
+    appendErr.append("gFormat currency != ")
+      .append(kUSD)
+      .append(", =")
+      .append(gFormat->getCurrency())
+      .append("! ");
+    okay = FALSE;
+  }
+  UnicodeString str;
+  const UnicodeString *o=NULL;
+  Formattable f;
+  const NumberFormat *nf = NULL; // only operate on it as const.
+  switch(offset%4) {
+  case 0:  f = gYDDThing;  o = &gYDDStr;  nf = gFormat.getAlias();  break;
+  case 1:  f = gBBDThing;  o = &gBBDStr;  nf = gFormat.getAlias();  break;
+  case 2:  f = gYDDThing;  o = &gYDDStr;  nf = fFormat.getAlias();  break;
+  case 3:  f = gBBDThing;  o = &gBBDStr;  nf = fFormat.getAlias();  break;
+  }
+  nf->format(f, str, NULL, status);
+
+  if(*o != str) {
+    appendErr.append(showDifference(*o, str));
+    okay = FALSE;
+  }
+  return okay;
+}
 
 UBool U_CALLCONV isAcceptable(void *, const char *, const char *, const UDataInfo *) {
     return TRUE;
@@ -693,6 +789,8 @@ class FormatThreadTest : public ThreadWithStatus
 public:
     int     fNum;
     int     fTraceInfo;
+
+    ThreadSafeFormat fTSF;
 
     FormatThreadTest() // constructor is NOT multithread safe.
         : ThreadWithStatus(),
@@ -894,8 +992,16 @@ public:
                 error("PatternFormat: \n" + showDifference(expected,result));
                 goto cleanupAndReturn;
             }
+            // test the Thread Safe Format
+            UnicodeString appendErr;
+            if(!fTSF.doStuff(fNum, appendErr, status)) {
+              error(appendErr);
+              goto cleanupAndReturn;
+            }
         }   /*  end of for loop */
-        
+
+
+
 cleanupAndReturn:
         //  while (fNum == 4) {SimpleThread::sleep(10000);}   // Force a failure by preventing thread from finishing
         fTraceInfo = 2;
@@ -913,6 +1019,11 @@ void MultithreadTest::TestThreadedIntl()
     UnicodeString theErr;
     UBool   haveDisplayedInfo[kFormatThreadThreads];
     static const int32_t PATIENCE_SECONDS = 45;
+
+    UErrorCode threadSafeErr = U_ZERO_ERROR;
+
+    ThreadSafeFormat::init(threadSafeErr);
+    assertSuccess("initializing ThreadSafeFormat", threadSafeErr);
 
     //
     //  Create and start the test threads
@@ -936,13 +1047,18 @@ void MultithreadTest::TestThreadedIntl()
     UBool   stillRunning;
     UDate startTime, endTime;
     startTime = Calendar::getNow();
+    double lastComplaint = 0;
     do {
         /*  Spin until the test threads  complete. */
         stillRunning = FALSE;
         endTime = Calendar::getNow();
-        if (((int32_t)(endTime - startTime)/U_MILLIS_PER_SECOND) > PATIENCE_SECONDS) {
+        double elapsedSeconds =  ((int32_t)(endTime - startTime)/U_MILLIS_PER_SECOND);
+        if (elapsedSeconds > PATIENCE_SECONDS) {
             errln("Patience exceeded. Test is taking too long.");
             return;
+        } else if((elapsedSeconds-lastComplaint) > 2.0) {
+            infoln("%.1f seconds elapsed (still waiting..)", elapsedSeconds);
+            lastComplaint = elapsedSeconds;
         }
         /*
          The following sleep must be here because the *BSD operating systems
@@ -967,6 +1083,8 @@ void MultithreadTest::TestThreadedIntl()
     //
     //  All threads have finished.
     //
+    ThreadSafeFormat::fini(threadSafeErr);
+    assertSuccess("finalizing ThreadSafeFormat", threadSafeErr);
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
