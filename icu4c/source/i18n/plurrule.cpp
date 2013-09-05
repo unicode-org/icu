@@ -1330,9 +1330,13 @@ FixedDecimal::FixedDecimal(double n, int32_t v) {
 }
 
 FixedDecimal::FixedDecimal(double n) {
-    int64_t numFractionDigits = decimals(n);
-    init(n, numFractionDigits, getFractionalDigits(n, numFractionDigits));
+    init(n);
 }
+
+FixedDecimal::FixedDecimal() {
+    init(0, 0, 0);
+}
+
 
 // Create a FixedDecimal from a UnicodeString containing a number.
 //    Inefficient, but only used for samples, so simplicity trumps efficiency.
@@ -1369,6 +1373,12 @@ FixedDecimal::FixedDecimal(const FixedDecimal &other) {
 }
 
 
+void FixedDecimal::init(double n) {
+    int64_t numFractionDigits = decimals(n);
+    init(n, numFractionDigits, getFractionalDigits(n, numFractionDigits));
+}
+
+
 void FixedDecimal::init(double n, int32_t v, int64_t f) {
     isNegative = n < 0;
     source = fabs(n);
@@ -1390,17 +1400,43 @@ void FixedDecimal::init(double n, int32_t v, int64_t f) {
     }
 }
 
+
+//  Fast path only exact initialization. Return true if successful.
+//     Note: Do not multiply by 10 each time through loop, rounding cruft can build
+//           up that makes the check for an integer result fail.
+//           A single multiply of the original number works more reliably.
+static int p10[] = {1, 10, 100, 1000, 10000};
+UBool FixedDecimal::quickInit(double n) {
+    UBool success = FALSE;
+    n = fabs(n);
+    int32_t numFractionDigits;
+    for (numFractionDigits = 0; numFractionDigits <= 3; numFractionDigits++) {
+        double scaledN = n * p10[numFractionDigits];
+        if (scaledN == floor(scaledN)) {
+            success = TRUE;
+            break;
+        }
+    }
+    if (success) {
+        init(n, numFractionDigits, getFractionalDigits(n, numFractionDigits));
+    }
+    return success;
+}
+
+
+
 int32_t FixedDecimal::decimals(double n) {
     // Count the number of decimal digits in the fraction part of the number, excluding trailing zeros.
+    // fastpath the common cases, integers or fractions with 3 or fewer digits
     n = fabs(n);
-    double scaledN = n;
     for (int ndigits=0; ndigits<=3; ndigits++) {
-        // fastpath the common cases, integers or fractions with 3 or fewer digits
+        double scaledN = n * p10[ndigits];
         if (scaledN == floor(scaledN)) {
             return ndigits;
         }
-        scaledN *= 10;
     }
+
+    // Slow path, convert with sprintf, parse converted output.
     char  buf[30] = {0};
     sprintf(buf, "%1.15e", n);
     // formatted number looks like this: 1.234567890123457e-01

@@ -634,6 +634,32 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_EQUAL(123, fd.intValue);
     ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
     ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    df.adoptInstead(new DecimalFormat("@@@@@", status));  // Significant Digits
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(123, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(0, fd.decimalDigits);
+    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(123, fd.intValue);
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    df.adoptInstead(new DecimalFormat("@@@@@", status));  // Significant Digits
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(1.23, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(4, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(2300, fd.decimalDigits);
+    ASSERT_EQUAL(23, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(1, fd.intValue);
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+
+
+
 }
     
 #endif /* #if !UCONFIG_NO_FORMATTING */
