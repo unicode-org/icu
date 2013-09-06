@@ -47,6 +47,15 @@ tmp-new: $(NEW_ICU)/source/configure
 	mkdir -p $(NEW_ICU_BUILD)/
 	( cd $(NEW_ICU_BUILD)/ && $(NEW_ICU)/source/configure )
 
+inplace-old: $(OLD_ICU)/source/configure
+	mkdir -p $(OLD_ICU_BUILD)/
+	( cd $(OLD_ICU_BUILD)/ && ./configure )
+
+# auto "build" the "old" icu into OLD_ICU_BUILD
+inplace-new: $(NEW_ICU)/source/configure
+	mkdir -p $(NEW_ICU_BUILD)/
+	( cd $(NEW_ICU_BUILD)/ && ./configure )
+
 
 ifneq ($(NOTSET),)
 check-vars:
