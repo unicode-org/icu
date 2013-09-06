@@ -510,7 +510,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 // test locale without currency information 
                 {"root", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, 
                 {"root@numbers=latn", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers 
-                {"root@numbers=arab", "-1.23", "USD", "-US$ ١٫٢٣", "-USD ١٫٢٣", "-١٫٢٣ USD"}, // ensure that the root locale is still used with modifiers 
+                {"root@numbers=arab", "-1.23", "USD", "\u200F-US$ ١٫٢٣", "\u200F-USD ١٫٢٣", "\u200F-١٫٢٣ USD"}, // ensure that the root locale is still used with modifiers 
                 // test choice format 
                 {"es_AR", "1", "INR", "₹1,00", "INR1,00", "1,00 rupia india"}, 
                 {"ar_EG", "1", "USD", "US$ ١٫٠٠", "USD ١٫٠٠", "١٫٠٠ دولار أمريكي"}, 
@@ -1400,7 +1400,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 new TestNumberingSystemItem( "en_US@numbers=hebr",        5678.0,   true,  "\u05D4\u05F3\u05EA\u05E8\u05E2\u05F4\u05D7" ),
                 new TestNumberingSystemItem( "en_US@numbers=arabext",     1234.567, false, "\u06F1\u066c\u06F2\u06F3\u06F4\u066b\u06F5\u06F6\u06F7" ),
                 new TestNumberingSystemItem( "de_DE@numbers=foobar",      1234.567, false, "1.234,567" ),
-                new TestNumberingSystemItem( "ar_EG",                     1234.567, false, "\u0661\u0662\u0663\u0664\u066b\u0665\u0666\u0667" ),
+                new TestNumberingSystemItem( "ar_EG",                     1234.567, false, "\u0661\u066C\u0662\u0663\u0664\u066b\u0665\u0666\u0667" ),
                 new TestNumberingSystemItem( "th_TH@numbers=traditional", 1234.567, false, "\u0E51,\u0E52\u0E53\u0E54.\u0E55\u0E56\u0E57" ), // fall back to native per TR35
                 new TestNumberingSystemItem( "ar_MA",                     1234.567, false, "1.234,567" ),
                 new TestNumberingSystemItem( "en_US@numbers=hanidec",     1234.567, false, "\u4e00,\u4e8c\u4e09\u56db.\u4e94\u516d\u4e03" ),
@@ -3313,7 +3313,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         }
     }
 
-    public void TestCustomCurrecySignAndSeparator() {
+    public void TestCustomCurrencySignAndSeparator() {
         DecimalFormatSymbols custom = new DecimalFormatSymbols(ULocale.US);
 
         custom.setCurrencySymbol("*");
@@ -3324,5 +3324,122 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
         final String numstr = "* 1^234:56";
         expect2(fmt, 1234.56, numstr);
+    }
+
+    public void TestParseSignsAndMarks() {
+        class SignsAndMarksItem {
+            public String locale;
+            public boolean lenient;
+            public String numString;
+            public double value;
+             // Simple constructor
+            public SignsAndMarksItem(String loc, boolean lnt, String numStr, double val) {
+                locale = loc;
+                lenient = lnt;
+                numString = numStr;
+                value = val;
+            }
+        };
+        final SignsAndMarksItem[] items = {
+            // *** Note, ICU4J lenient number parsing does not handle arbitrary whitespace, but can
+            // treat some whitespace as a grouping separator. The cases marked *** below depend
+            // on isGroupingUsed() being set for the locale, which in turn depends on grouping
+            // separators being present in the decimalFormat pattern for the locale (& num sys).
+            //
+            //                    locale                lenient numString                               value
+            new SignsAndMarksItem("en",                 false,  "12",                                    12 ),
+            new SignsAndMarksItem("en",                 true,   "12",                                    12 ),
+            new SignsAndMarksItem("en",                 false,  "-23",                                  -23 ),
+            new SignsAndMarksItem("en",                 true,   "-23",                                  -23 ),
+            new SignsAndMarksItem("en",                 true,   "- 23",                                 -23 ), // ***
+            new SignsAndMarksItem("en",                 false,  "\u200E-23",                            -23 ),
+            new SignsAndMarksItem("en",                 true,   "\u200E-23",                            -23 ),
+            new SignsAndMarksItem("en",                 true,   "\u200E- 23",                           -23 ), // ***
+
+            new SignsAndMarksItem("en@numbers=arab",    false,  "\u0663\u0664",                          34 ),
+            new SignsAndMarksItem("en@numbers=arab",    true,   "\u0663\u0664",                          34 ),
+            new SignsAndMarksItem("en@numbers=arab",    false,  "-\u0664\u0665",                        -45 ),
+            new SignsAndMarksItem("en@numbers=arab",    true,   "-\u0664\u0665",                        -45 ),
+            new SignsAndMarksItem("en@numbers=arab",    true,   "- \u0664\u0665",                       -45 ), // ***
+            new SignsAndMarksItem("en@numbers=arab",    false,  "\u200F-\u0664\u0665",                  -45 ),
+            new SignsAndMarksItem("en@numbers=arab",    true,   "\u200F-\u0664\u0665",                  -45 ),
+            new SignsAndMarksItem("en@numbers=arab",    true,   "\u200F- \u0664\u0665",                 -45 ), // ***
+
+            new SignsAndMarksItem("en@numbers=arabext", false,  "\u06F5\u06F6",                          56 ),
+            new SignsAndMarksItem("en@numbers=arabext", true,   "\u06F5\u06F6",                          56 ),
+            new SignsAndMarksItem("en@numbers=arabext", false,  "-\u06F6\u06F7",                        -67 ),
+            new SignsAndMarksItem("en@numbers=arabext", true,   "-\u06F6\u06F7",                        -67 ),
+            new SignsAndMarksItem("en@numbers=arabext", true,   "- \u06F6\u06F7",                       -67 ), // ***
+            new SignsAndMarksItem("en@numbers=arabext", false,  "\u200E-\u200E\u06F6\u06F7",            -67 ),
+            new SignsAndMarksItem("en@numbers=arabext", true,   "\u200E-\u200E\u06F6\u06F7",            -67 ),
+            new SignsAndMarksItem("en@numbers=arabext", true,   "\u200E-\u200E \u06F6\u06F7",           -67 ), // ***
+ 
+            new SignsAndMarksItem("he",                 false,  "12",                                    12 ),
+            new SignsAndMarksItem("he",                 true,   "12",                                    12 ),
+            new SignsAndMarksItem("he",                 false,  "-23",                                  -23 ),
+            new SignsAndMarksItem("he",                 true,   "-23",                                  -23 ),
+            new SignsAndMarksItem("he",                 true,   "- 23",                                 -23 ), // ***
+            new SignsAndMarksItem("he",                 false,  "\u200E-23",                            -23 ),
+            new SignsAndMarksItem("he",                 true,   "\u200E-23",                            -23 ),
+            new SignsAndMarksItem("he",                 true,   "\u200E- 23",                           -23 ), // ***
+
+            new SignsAndMarksItem("ar",                 false,  "\u0663\u0664",                          34 ),
+            new SignsAndMarksItem("ar",                 true,   "\u0663\u0664",                          34 ),
+            new SignsAndMarksItem("ar",                 false,  "-\u0664\u0665",                        -45 ),
+            new SignsAndMarksItem("ar",                 true,   "-\u0664\u0665",                        -45 ),
+            new SignsAndMarksItem("ar",                 true,   "- \u0664\u0665",                       -45 ), // ***
+            new SignsAndMarksItem("ar",                 false,  "\u200F-\u0664\u0665",                  -45 ),
+            new SignsAndMarksItem("ar",                 true,   "\u200F-\u0664\u0665",                  -45 ),
+            new SignsAndMarksItem("ar",                 true,   "\u200F- \u0664\u0665",                 -45 ), // ***
+
+            new SignsAndMarksItem("ar_MA",              false,  "12",                                    12 ),
+            new SignsAndMarksItem("ar_MA",              true,   "12",                                    12 ),
+            new SignsAndMarksItem("ar_MA",              false,  "-23",                                  -23 ),
+            new SignsAndMarksItem("ar_MA",              true,   "-23",                                  -23 ),
+            new SignsAndMarksItem("ar_MA",              true,   "- 23",                                 -23 ), // ***
+            new SignsAndMarksItem("ar_MA",              false,  "\u200E-23",                            -23 ),
+            new SignsAndMarksItem("ar_MA",              true,   "\u200E-23",                            -23 ),
+            new SignsAndMarksItem("ar_MA",              true,   "\u200E- 23",                           -23 ), // ***
+
+            new SignsAndMarksItem("fa",                 false,  "\u06F5\u06F6",                          56 ),
+            new SignsAndMarksItem("fa",                 true,   "\u06F5\u06F6",                          56 ),
+            new SignsAndMarksItem("fa",                 false,  "\u2212\u06F6\u06F7",                   -67 ),
+            new SignsAndMarksItem("fa",                 true,   "\u2212\u06F6\u06F7",                   -67 ),
+            new SignsAndMarksItem("fa",                 true,   "\u2212 \u06F6\u06F7",                  -67 ), // ***
+            new SignsAndMarksItem("fa",                 false,  "\u200E\u2212\u200E\u06F6\u06F7",       -67 ),
+            new SignsAndMarksItem("fa",                 true,   "\u200E\u2212\u200E\u06F6\u06F7",       -67 ),
+            new SignsAndMarksItem("fa",                 true,   "\u200E\u2212\u200E \u06F6\u06F7",      -67 ), // ***
+
+            new SignsAndMarksItem("ps",                 false,  "\u06F5\u06F6",                          56 ),
+            new SignsAndMarksItem("ps",                 true,   "\u06F5\u06F6",                          56 ),
+            new SignsAndMarksItem("ps",                 false,  "-\u06F6\u06F7",                        -67 ),
+            new SignsAndMarksItem("ps",                 true,   "-\u06F6\u06F7",                        -67 ),
+            new SignsAndMarksItem("ps",                 true,   "- \u06F6\u06F7",                       -67 ), // ***
+            new SignsAndMarksItem("ps",                 false,  "\u200E-\u200E\u06F6\u06F7",            -67 ),
+            new SignsAndMarksItem("ps",                 true,   "\u200E-\u200E\u06F6\u06F7",            -67 ),
+            new SignsAndMarksItem("ps",                 true,   "\u200E-\u200E \u06F6\u06F7",           -67 ), // ***
+            new SignsAndMarksItem("ps",                 false,  "-\u200E\u06F6\u06F7",                  -67 ),
+            new SignsAndMarksItem("ps",                 true,   "-\u200E\u06F6\u06F7",                  -67 ),
+            new SignsAndMarksItem("ps",                 true,   "-\u200E \u06F6\u06F7",                 -67 ), // ***
+        };
+        for (SignsAndMarksItem item: items) {
+            ULocale locale = new ULocale(item.locale);
+            NumberFormat numfmt = NumberFormat.getInstance(locale);
+            if (numfmt != null) {
+                numfmt.setParseStrict(!item.lenient);
+                ParsePosition ppos = new ParsePosition(0);
+                Number num = numfmt.parse(item.numString, ppos);
+                if (num != null && ppos.getIndex() == item.numString.length()) {
+                    double parsedValue = num.doubleValue();
+                    if (parsedValue != item.value) {
+                        errln("FAIL: locale " + item.locale + ", lenient " + item.lenient + ", parse of \"" + item.numString + "\" gives value " + parsedValue);
+                    }
+                } else {
+                    errln("FAIL: locale " + item.locale + ", lenient " + item.lenient + ", parse of \"" + item.numString + "\" gives position " + ppos.getIndex());
+                }
+            } else {
+                errln("FAIL: NumberFormat.getInstance for locale " + item.locale);
+            }
+        }
     }
 }

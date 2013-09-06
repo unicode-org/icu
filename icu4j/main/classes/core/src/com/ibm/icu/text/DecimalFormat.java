@@ -2761,6 +2761,35 @@ public class DecimalFormat extends NumberFormat {
     }
 
     /**
+     * Check for bidi marks: LRM, RLM, ALM
+     */
+    private static boolean isBidiMark(int c) {
+        return (c==0x200E || c==0x200F || c==0x061C);
+    }
+
+    /**
+     * Remove bidi marks from affix
+     */
+    private static final int TRIM_BUFLEN = 32;
+    private static String trimMarksFromAffix(String affix) {
+        char[] trimBuf = new char[TRIM_BUFLEN];
+        int affixLen = affix.length();
+        int affixPos, trimLen = 0;
+        for (affixPos = 0; affixPos < affixLen; affixPos++) {
+            char c = affix.charAt(affixPos);
+            if (!isBidiMark(c)) {
+                if (trimLen < TRIM_BUFLEN) {
+                    trimBuf[trimLen++] = c;
+                } else {
+                    trimLen = 0;
+                    break;
+                }
+            }
+        }
+        return (trimLen > 0)? new String(trimBuf, 0, trimLen): affix;
+    }
+
+    /**
      * Return the length matched by the given affix, or -1 if none. Runs of white space in
      * the affix, match runs of white space in the input. Pattern white space and input
      * white space are determined differently; see code.
@@ -2772,8 +2801,12 @@ public class DecimalFormat extends NumberFormat {
      */
     private static int compareSimpleAffix(String affix, String input, int pos) {
         int start = pos;
-        for (int i = 0; i < affix.length();) {
-            int c = UTF16.charAt(affix, i);
+        // Affixes here might consist of sign, currency symbol and related spacing, etc.
+        // For more efficiency we should keep lazily-created trimmed affixes around in
+        // instance variables instead of trimming each time they are used (the next step).
+        String trimmedAffix = trimMarksFromAffix(affix);
+        for (int i = 0; i < trimmedAffix.length();) {
+            int c = UTF16.charAt(trimmedAffix, i);
             int len = UTF16.getCharCount(c);
             if (PatternProps.isWhiteSpace(c)) {
                 // We may have a pattern like: \u200F and input text like: \u200F Note
@@ -2781,22 +2814,29 @@ public class DecimalFormat extends NumberFormat {
                 // UWhiteSpace. So we have to first do a direct match of the run of RULE
                 // whitespace in the pattern, then match any extra characters.
                 boolean literalMatch = false;
-                while (pos < input.length() && UTF16.charAt(input, pos) == c) {
-                    literalMatch = true;
-                    i += len;
-                    pos += len;
-                    if (i == affix.length()) {
-                        break;
-                    }
-                    c = UTF16.charAt(affix, i);
-                    len = UTF16.getCharCount(c);
-                    if (!PatternProps.isWhiteSpace(c)) {
+                while (pos < input.length()) {
+                    int ic = UTF16.charAt(input, pos);
+                    if (ic == c) {
+                        literalMatch = true;
+                        i += len;
+                        pos += len;
+                        if (i == trimmedAffix.length()) {
+                            break;
+                        }
+                        c = UTF16.charAt(trimmedAffix, i);
+                        len = UTF16.getCharCount(c);
+                        if (!PatternProps.isWhiteSpace(c)) {
+                            break;
+                        }
+                    } else if (isBidiMark(ic)) {
+                        pos++; // just skip over this input text
+                    } else {
                         break;
                     }
                 }
 
-                // Advance over run in affix
-                i = skipPatternWhiteSpace(affix, i);
+                // Advance over run in trimmedAffix
+                i = skipPatternWhiteSpace(trimmedAffix, i);
 
                 // Advance over run in input text. Must see at least one white space char
                 // in input, unless we've already matched some characters literally.
@@ -2807,13 +2847,23 @@ public class DecimalFormat extends NumberFormat {
                 }
                 // If we skip UWhiteSpace in the input text, we need to skip it in the
                 // pattern.  Otherwise, the previous lines may have skipped over text
-                // (such as U+00A0) that is also in the affix.
-                i = skipUWhiteSpace(affix, i);
+                // (such as U+00A0) that is also in the trimmedAffix.
+                i = skipUWhiteSpace(trimmedAffix, i);
             } else {
-                if (pos < input.length() && equalWithSignCompatibility(UTF16.charAt(input, pos), c)) {
-                    i += len;
-                    pos += len;
-                } else {
+                boolean match = false;
+                while (pos < input.length()) {
+                    int ic = UTF16.charAt(input, pos);
+                    if (!match && equalWithSignCompatibility(ic, c)) {
+                        i += len;
+                        pos += len;
+                        match = true;
+                    } else if (isBidiMark(ic)) {
+                        pos++; // just skip over this input text
+                    } else {
+                        break;
+                    }
+                }
+                if (!match) {
                     return -1;
                 }
             }
@@ -2855,7 +2905,21 @@ public class DecimalFormat extends NumberFormat {
         return pos;
     }
 
-    /**
+     /**
+     * Skips over a run of zero or more bidi marks at pos in text.
+     */
+    private static int skipBidiMarks(String text, int pos) {
+        while (pos < text.length()) {
+            int c = UTF16.charAt(text, pos);
+            if (!isBidiMark(c)) {
+                break;
+            }
+            pos += UTF16.getCharCount(c);
+        }
+        return pos;
+    }
+
+   /**
      * Returns the length matched by the given affix, or -1 if none.
      *
      * @param affixPat pattern string
@@ -2972,9 +3036,10 @@ public class DecimalFormat extends NumberFormat {
      * white space in text.
      */
     static final int match(String text, int pos, int ch) {
-        if (pos >= text.length()) {
+        if (pos < 0 || pos >= text.length()) {
             return -1;
         }
+        pos = skipBidiMarks(text, pos);
         if (PatternProps.isWhiteSpace(ch)) {
             // Advance over run of white space in input text
             // Must see at least one white space char in input
@@ -2985,7 +3050,11 @@ public class DecimalFormat extends NumberFormat {
             }
             return pos;
         }
-        return (pos >= 0 && UTF16.charAt(text, pos) == ch) ? (pos + UTF16.getCharCount(ch)) : -1;
+        if (pos >= text.length() || UTF16.charAt(text, pos) != ch) {
+            return -1;
+        }
+        pos = skipBidiMarks(text, pos + UTF16.getCharCount(ch));
+        return pos;
     }
 
     /**
@@ -4031,8 +4100,9 @@ public class DecimalFormat extends NumberFormat {
                 c = symbols.getPerMill();
                 break;
             case PATTERN_MINUS:
-                c = symbols.getMinusSign();
-                break;
+                String minusString = symbols.getMinusString();
+                buffer.append(minusString);
+                continue;
             }
             buffer.append(c);
         }

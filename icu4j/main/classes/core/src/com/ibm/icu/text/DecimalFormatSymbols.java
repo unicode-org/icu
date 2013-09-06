@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -404,6 +404,16 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
+     * Returns the string used to represent minus sign.
+     * @return the minus sign string
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public String getMinusString() {
+        return minusString;
+    }
+
+    /**
      * Sets the character used to represent minus sign. If no explicit
      * negative format is specified, one is formed by prefixing
      * minusSign to the positive format.
@@ -412,6 +422,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      */
     public void setMinusSign(char minusSign) {
         this.minusSign = minusSign;
+        // Also updates minusString
+        char[] minusArray = { minusSign };
+        minusString = new String(minusArray);
     }
 
     /**
@@ -568,6 +581,16 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     }
 
     /**
+     * Returns the string used to represent plus sign.
+     * @return the plus sign string
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public String getPlusString() {
+        return plusString;
+    }
+
+    /**
      * {@icu} Sets the localized plus sign.
      * @param plus the plus sign, used in localized patterns and formatted
      * strings
@@ -578,6 +601,9 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      */
     public void setPlusSign(char plus) {
         plusSign = plus;
+        // Also updates plusString
+        char[] plusArray = { plusSign };
+        plusString = new String(plusArray);
     }
 
     /**
@@ -763,6 +789,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         perMill == other.perMill &&
         digit == other.digit &&
         minusSign == other.minusSign &&
+        minusString.equals(other.minusString) &&
         patternSeparator == other.patternSeparator &&
         infinity.equals(other.infinity) &&
         NaN.equals(other.NaN) &&
@@ -770,6 +797,7 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         intlCurrencySymbol.equals(other.intlCurrencySymbol) &&
         padEscape == other.padEscape &&
         plusSign == other.plusSign &&
+        plusString.equals(other.plusString) &&
         exponentSeparator.equals(other.exponentSeparator) &&
         monetarySeparator == other.monetarySeparator &&
         monetaryGroupingSeparator == other.monetaryGroupingSeparator);
@@ -784,6 +812,13 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
             result = result * 37 + groupingSeparator;
             result = result * 37 + decimalSeparator;
             return result;
+    }
+
+    /**
+     * Check for bidi marks: LRM, RLM, ALM
+     */
+    private static boolean isBidiMark(char c) {
+        return (c=='\u200E' || c=='\u200F' || c=='\u061C');
     }
 
     /**
@@ -874,8 +909,10 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
         groupingSeparator = numberElements[1].charAt(0);
         patternSeparator = numberElements[2].charAt(0);
         percent = numberElements[3].charAt(0);
-        minusSign = numberElements[4].charAt(0);
-        plusSign  =numberElements[5].charAt(0);
+        minusString = numberElements[4];
+        minusSign = (minusString.length() > 1 && isBidiMark(minusString.charAt(0)))? minusString.charAt(1): minusString.charAt(0);
+        plusString = numberElements[5];
+        plusSign = (plusString.length() > 1 && isBidiMark(plusString.charAt(0)))? plusString.charAt(1): plusString.charAt(0);
         exponentSeparator = numberElements[6];
         perMill = numberElements[7].charAt(0);
         infinity = numberElements[8];
@@ -999,6 +1036,17 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
                 currencySpcAfterSym = new String[CURRENCY_SPC_INSERT+1];
             }
             initSpacingInfo(CurrencyData.CurrencySpacingInfo.DEFAULT);
+        }
+        if (serialVersionOnStream < 7) {
+            // Set minusString,plusString from minusSign,plusSign
+            if (minusString == null) {
+                char[] minusArray = { minusSign };
+                minusString = new String(minusArray);
+            }
+            if (plusString == null) {
+                char[] plusArray = { plusSign };
+                plusString = new String(plusArray);
+            }
         }
         serialVersionOnStream = currentSerialVersion;
 
@@ -1172,9 +1220,17 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
 
     /**
      * The requested ULocale.  We keep the old locale for serialization compatibility.
-     * @since IDU 3.2
+     * @since ICU 3.2
      */
     private ULocale ulocale;
+
+    /**
+     * String versions of some number symbols.
+     * @serial
+     * @since ICU 52
+     */
+    private String minusString = null;
+    private String plusString = null;
 
     // Proclaim JDK 1.1 FCS compatibility
     private static final long serialVersionUID = 5772796243397350300L;
@@ -1189,7 +1245,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
     // - 4 for ICU 3.2, which includes the ULocale field
     // - 5 for ICU 3.6, which includes the monetaryGroupingSeparator field
     // - 6 for ICU 4.2, which includes the currencySpc* fields
-    private static final int currentSerialVersion = 6;
+    // - 7 for ICU 52, which includes the minusString and plusString fields
+    private static final int currentSerialVersion = 7;
 
     /**
      * Describes the version of <code>DecimalFormatSymbols</code> present on the stream.
@@ -1205,7 +1262,8 @@ public class DecimalFormatSymbols implements Cloneable, Serializable {
      * <li><b>4</b>: Version for ICU 3.2, which adds ulocale.
      * <li><b>5</b>: Version for ICU 3.6, which adds monetaryGroupingSeparator.
      * <li><b>6</b>: Version for ICU 4.2, which adds currencySpcBeforeSym and 
-     * currencySpcAfterSym.
+     *      currencySpcAfterSym.
+     * <li><b>7</b>: Version for ICU 52, which adds minusString and plusString.
      * </ul>
      * When streaming out a <code>DecimalFormatSymbols</code>, the most recent format
      * (corresponding to the highest allowable <code>serialVersionOnStream</code>)
