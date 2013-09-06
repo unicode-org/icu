@@ -817,10 +817,12 @@ RuleChain::~RuleChain() {
 
 UnicodeString
 RuleChain::select(const FixedDecimal &number) const {
-    for (const RuleChain *rules = this; rules != NULL; rules = rules->fNext) {
-       if (rules->ruleHeader->isFulfilled(number)) {
-           return rules->fKeyword;
-       }
+    if (!number.isNanOrInfinity) {
+        for (const RuleChain *rules = this; rules != NULL; rules = rules->fNext) {
+             if (rules->ruleHeader->isFulfilled(number)) {
+                 return rules->fKeyword;
+             }
+        }
     }
     return UnicodeString(TRUE, PLURAL_KEYWORD_OTHER, 5);
 }
@@ -1382,6 +1384,11 @@ void FixedDecimal::init(double n) {
 void FixedDecimal::init(double n, int32_t v, int64_t f) {
     isNegative = n < 0;
     source = fabs(n);
+    isNanOrInfinity = uprv_isNaN(source) || uprv_isPositiveInfinity(source);
+    if (isNanOrInfinity) {
+        v = 0;
+        f = 0;
+    }
     visibleDecimalDigitCount = v;
     decimalDigits = f;
     intValue = (int64_t)source;
@@ -1395,9 +1402,6 @@ void FixedDecimal::init(double n, int32_t v, int64_t f) {
         }
         decimalDigitsWithoutTrailingZeros = fdwtz;
     }
-    if (uprv_isNaN(n)) {
-        isNanOrInfinity = TRUE;
-    }
 }
 
 
@@ -1405,7 +1409,7 @@ void FixedDecimal::init(double n, int32_t v, int64_t f) {
 //     Note: Do not multiply by 10 each time through loop, rounding cruft can build
 //           up that makes the check for an integer result fail.
 //           A single multiply of the original number works more reliably.
-static int p10[] = {1, 10, 100, 1000, 10000};
+static int32_t p10[] = {1, 10, 100, 1000, 10000};
 UBool FixedDecimal::quickInit(double n) {
     UBool success = FALSE;
     n = fabs(n);
