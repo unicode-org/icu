@@ -622,6 +622,7 @@ public:
      * Convert this object pointer to a UFormattable.
      * @return this object as a UFormattable pointer.   This is an alias to the original UFormattable,
      * and so is only valid while the original argument remains in scope.
+     * @draft ICU 52
      */
     inline UFormattable *toUFormattable();
 
@@ -663,6 +664,7 @@ public:
      * Internal function to return the CharString pointer.
      * @param status error code
      * @return pointer to the CharString - may become invalid if the object is modified
+     * @internal
      */
     CharString *internalGetCharString(UErrorCode &status);
 
