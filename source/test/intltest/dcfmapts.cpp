@@ -16,6 +16,7 @@
 #include "unicode/localpointer.h"
 #include "unicode/parseerr.h"
 
+#include "putilimp.h"
 #include "plurrule_impl.h"
 
 #define LENGTHOF(array) ((int32_t)(sizeof(array)/sizeof((array)[0])))
@@ -657,9 +658,14 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
     ASSERT_EQUAL(FALSE, fd.isNegative);
 
-
-
-
+    fd = df->getFixedDecimal(uprv_getInfinity(), status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(TRUE, fd.isNanOrInfinity);
+    fd = df->getFixedDecimal(0.0, status);
+    ASSERT_EQUAL(FALSE, fd.isNanOrInfinity);
+    fd = df->getFixedDecimal(uprv_getNaN(), status);
+    ASSERT_EQUAL(TRUE, fd.isNanOrInfinity);
+    ASSERT_SUCCESS(status);
 }
     
 #endif /* #if !UCONFIG_NO_FORMATTING */
