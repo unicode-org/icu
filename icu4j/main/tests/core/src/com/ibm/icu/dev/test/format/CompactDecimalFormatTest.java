@@ -270,7 +270,7 @@ public class CompactDecimalFormatTest extends TestFmwk {
         NumberFormat cdf =
                 CompactDecimalFormat.getInstance(
                         ULocale.forLanguageTag("ar"), CompactStyle.LONG);
-        assertEquals("Arabic Long", "\u0665\u066B\u0663- \u0623\u0644\u0641", cdf.format(-5300));
+        assertEquals("Arabic Long", "\u200F-\u0665\u066B\u0663 \u0623\u0644\u0641", cdf.format(-5300));
     }
 
     public void TestCsShort() {
