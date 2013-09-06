@@ -20,6 +20,7 @@ root{
         Hira:process(dependency){"cjdict.dict"}
         Kata:process(dependency){"cjdict.dict"}
         Khmr:process(dependency){"khmerdict.dict"}
+        Laoo:process(dependency){"laodict.dict"}
         Thai:process(dependency){"thaidict.dict"}
     }
 }
