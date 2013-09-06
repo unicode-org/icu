@@ -42,7 +42,7 @@ IEEE390=1#M#
 endif
 
 ifeq (${IEEE390}, 1)
-ICU_IEEE          = -Wc,'FLOAT(IEEE)'
+ICU_IEEE          =#M#
 else
 ICU_IEEE          = -Wc,'FLOAT(IEEE)' -DIEEE_754=0#M#
 endif
