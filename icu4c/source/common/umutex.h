@@ -24,9 +24,13 @@
 
 
 
-// Forward Declarations
+// Forward Declarations. UMutex is not in the ICU namespace (yet) because
+//                       there are some remaining references from plain C.
 struct UMutex;
+
+U_NAMESPACE_BEGIN
 struct UInitOnce;
+U_NAMESPACE_END
 
 // Stringify macros, to allow #include of user supplied atomic & mutex files.
 #define U_MUTEX_STR(s) #s
@@ -47,6 +51,8 @@ struct UInitOnce;
 
 #include <atomic>
 
+U_NAMESPACE_BEGIN
+
 typedef std::atomic<int32_t> u_atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) ATOMIC_VAR_INIT(val)
 
@@ -65,7 +71,7 @@ inline int32_t umtx_atomic_inc(u_atomic_int32_t *var) {
 inline int32_t umtx_atomic_dec(u_atomic_int32_t *var) {
     return var->fetch_sub(1) - 1;
 }
-
+U_NAMESPACE_END
 
 #elif U_PLATFORM_HAS_WIN32_API
 
@@ -88,6 +94,7 @@ inline int32_t umtx_atomic_dec(u_atomic_int32_t *var) {
 # endif
 # include <windows.h>
 
+U_NAMESPACE_BEGIN
 typedef volatile LONG u_atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) val
 
@@ -107,12 +114,15 @@ inline int32_t umtx_atomic_inc(u_atomic_int32_t *var) {
 inline int32_t umtx_atomic_dec(u_atomic_int32_t *var) {
     return InterlockedDecrement(var);
 }
+U_NAMESPACE_END
 
 
 #elif U_HAVE_GCC_ATOMICS
 /*
  * gcc atomic ops. These are available on several other compilers as well.
  */
+
+U_NAMESPACE_BEGIN
 typedef int32_t u_atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) val
 
@@ -134,6 +144,7 @@ inline int32_t umtx_atomic_inc(u_atomic_int32_t *p)  {
 inline int32_t umtx_atomic_dec(u_atomic_int32_t *p)  {
    return __sync_sub_and_fetch(p, 1);
 }
+U_NAMESPACE_END
 
 #else
 
@@ -144,16 +155,23 @@ inline int32_t umtx_atomic_dec(u_atomic_int32_t *p)  {
 
 #define U_NO_PLATFORM_ATOMICS
 
+U_NAMESPACE_BEGIN
 typedef int32_t u_atomic_int32_t;
 #define ATOMIC_INT32_T_INITIALIZER(val) val
 
-U_INTERNAL int32_t U_EXPORT2 umtx_loadAcquire(u_atomic_int32_t &var);
+U_COMMON_API int32_t U_EXPORT2 
+umtx_loadAcquire(u_atomic_int32_t &var);
 
-U_INTERNAL void U_EXPORT2 umtx_storeRelease(u_atomic_int32_t &var, int32_t val);
+U_COMMON_API void U_EXPORT2 
+umtx_storeRelease(u_atomic_int32_t &var, int32_t val);
 
-U_INTERNAL int32_t U_EXPORT2 umtx_atomic_inc(u_atomic_int32_t *p);
+U_COMMON_API int32_t U_EXPORT2 
+umtx_atomic_inc(u_atomic_int32_t *p);
 
-U_INTERNAL int32_t U_EXPORT2 umtx_atomic_dec(u_atomic_int32_t *p);
+U_COMMON_API int32_t U_EXPORT2 
+umtx_atomic_dec(u_atomic_int32_t *p);
+
+U_NAMESAPCE_END
 
 #endif  /* Low Level Atomic Ops Platfrom Chain */
 
@@ -165,6 +183,8 @@ U_INTERNAL int32_t U_EXPORT2 umtx_atomic_dec(u_atomic_int32_t *p);
  *     These are platform neutral.
  *
  *************************************************************************************************/
+
+U_NAMESPACE_BEGIN
 
 struct UInitOnce {
     u_atomic_int32_t   fState;
@@ -178,8 +198,8 @@ struct UInitOnce {
 #define U_INITONCE_INITIALIZER {ATOMIC_INT32_T_INITIALIZER(0), U_ZERO_ERROR}
 
 
-U_CAPI UBool U_EXPORT2 umtx_initImplPreInit(UInitOnce &);
-U_CAPI void  U_EXPORT2 umtx_initImplPostInit(UInitOnce &);
+U_COMMON_API UBool U_EXPORT2 umtx_initImplPreInit(UInitOnce &);
+U_COMMON_API void  U_EXPORT2 umtx_initImplPostInit(UInitOnce &);
 
 template<class T> void umtx_initOnce(UInitOnce &uio, T *obj, void (T::*fp)()) {
     if (umtx_loadAcquire(uio.fState) == 2) {
@@ -254,6 +274,7 @@ template<class T> void umtx_initOnce(UInitOnce &uio, void (*fp)(T, UErrorCode &)
     }
 }
 
+U_NAMESPACE_END
 
 
 
@@ -323,7 +344,6 @@ struct UMutex {
 };
 typedef struct UMutex UMutex;
 #define U_MUTEX_INITIALIZER  {PTHREAD_MUTEX_INITIALIZER}
-
 
 #else
 
