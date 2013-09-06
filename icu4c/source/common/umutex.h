@@ -171,7 +171,7 @@ umtx_atomic_inc(u_atomic_int32_t *p);
 U_COMMON_API int32_t U_EXPORT2 
 umtx_atomic_dec(u_atomic_int32_t *p);
 
-U_NAMESAPCE_END
+U_NAMESPACE_END
 
 #endif  /* Low Level Atomic Ops Platfrom Chain */
 
