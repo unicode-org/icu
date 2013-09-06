@@ -107,7 +107,7 @@ U_COMMON_API void U_EXPORT2 umtx_initImplPostInit(UInitOnce &uio) {
     umtx_storeRelease(uio.fState, 2);
 }
 
-U_NAMESAPCE_END
+U_NAMESPACE_END
 
 static void winMutexInit(CRITICAL_SECTION *cs) {
     InitializeCriticalSection(cs);
