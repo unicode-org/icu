@@ -1024,6 +1024,17 @@ DecimalFormat::clone() const
 FixedDecimal
 DecimalFormat::getFixedDecimal(double number, UErrorCode &status) const {
     FixedDecimal result;
+
+    if (U_FAILURE(status)) {
+        return result;
+    }
+
+    if (uprv_isNaN(number) || uprv_isPositiveInfinity(fabs(number))) {
+        // For NaN and Infinity the state of the formatter is ignored.
+        result.init(number);
+        return result;
+    }
+
     int32_t minFractionDigits = getMinimumFractionDigits();
 
     if (fMultiplier == NULL && fScale == 0 && fRoundingIncrement == 0 && areSignificantDigitsUsed() == FALSE &&

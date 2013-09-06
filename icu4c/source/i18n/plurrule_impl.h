@@ -170,13 +170,19 @@ private:
 
 };
 
+/**
+ * class FixedDecimal serves to communicate the properties
+ * of a formatted number from a decimal formatter to PluralRules::select()
+ *
+ * see DecimalFormat::getFixedDecimal()
+ * @internal
+ */
 class U_I18N_API FixedDecimal: public UMemory {
   public:
     /**
-      * @param n   the number
-      * @param v   The number of visible fraction digits
-      * @param f   The fraction digits.
-      *
+      * @param n   the number, e.g. 12.345
+      * @param v   The number of visible fraction digits, e.g. 3
+      * @param f   The fraction digits, e.g. 345
       */
     FixedDecimal(double  n, int32_t v, int64_t f);
     FixedDecimal(double n, int32_t);
