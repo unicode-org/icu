@@ -25,6 +25,7 @@
 #include "cmemory.h"
 #include "ucln_cmn.h"
 
+
 // The ICU global mutex. Used when ICU implementation code passes NULL for the mutex pointer.
 static UMutex   globalMutex = U_MUTEX_INITIALIZER;
 
@@ -63,7 +64,9 @@ static UMutex   globalMutex = U_MUTEX_INITIALIZER;
 //   the caller needs to call the Init function.
 //
 
-U_CAPI UBool U_EXPORT2 umtx_initImplPreInit(UInitOnce &uio) {
+U_NAMESPACE_BEGIN
+
+U_COMMON_API UBool U_EXPORT2 umtx_initImplPreInit(UInitOnce &uio) {
     for (;;) {
         int32_t previousState = InterlockedCompareExchange(
 #if (U_PLATFORM == U_PF_MINGW) || (U_PLATFORM == U_PF_CYGWIN)
@@ -100,10 +103,11 @@ U_CAPI UBool U_EXPORT2 umtx_initImplPreInit(UInitOnce &uio) {
 //            False: the initializtion failed. The next call to umtx_initOnce()
 //                   will retry the initialization.
 
-U_CAPI void U_EXPORT2 umtx_initImplPostInit(UInitOnce &uio) {
+U_COMMON_API void U_EXPORT2 umtx_initImplPostInit(UInitOnce &uio) {
     umtx_storeRelease(uio.fState, 2);
 }
 
+U_NAMESAPCE_END
 
 static void winMutexInit(CRITICAL_SECTION *cs) {
     InitializeCriticalSection(cs);
@@ -165,6 +169,8 @@ umtx_unlock(UMutex* mutex)
     U_ASSERT(sysErr == 0);
 }
 
+U_NAMESPACE_BEGIN
+
 static pthread_mutex_t initMutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_cond_t initCondition = PTHREAD_COND_INITIALIZER;
 
@@ -177,7 +183,8 @@ static pthread_cond_t initCondition = PTHREAD_COND_INITIALIZER;
 //   that knows the C++ types involved. This function returns TRUE if
 //   the caller needs to call the Init function.
 //
-UBool umtx_initImplPreInit(UInitOnce &uio) {
+U_COMMON_API UBool U_EXPORT2
+umtx_initImplPreInit(UInitOnce &uio) {
     pthread_mutex_lock(&initMutex);
     int32_t state = uio.fState;
     if (state == 0) {
@@ -196,7 +203,7 @@ UBool umtx_initImplPreInit(UInitOnce &uio) {
     }
 }
 
-        
+
 
 // This function is called by the thread that ran an initialization function,
 // just after completing the function.
@@ -204,12 +211,15 @@ UBool umtx_initImplPreInit(UInitOnce &uio) {
 //   Some threads may be racing to test the fState variable outside of the mutex,
 //   requiring the use of store/release when changing its value.
 
-void umtx_initImplPostInit(UInitOnce &uio) {
+U_COMMON_API void U_EXPORT2
+umtx_initImplPostInit(UInitOnce &uio) {
     pthread_mutex_lock(&initMutex);
     umtx_storeRelease(uio.fState, 2);
     pthread_cond_broadcast(&initCondition);
     pthread_mutex_unlock(&initMutex);
 }
+
+U_NAMESPACE_END
 
 // End of POSIX specific umutex implementation.
 
@@ -233,7 +243,9 @@ void umtx_initImplPostInit(UInitOnce &uio) {
 #if defined U_NO_PLATFORM_ATOMICS
 static UMutex   gIncDecMutex = U_MUTEX_INITIALIZER;
 
-U_INTERNAL int32_t U_EXPORT2
+U_NAMESPACE_BEGIN
+
+U_COMMON_API int32_t U_EXPORT2
 umtx_atomic_inc(u_atomic_int32_t *p)  {
     int32_t retVal;
     umtx_lock(&gIncDecMutex);
@@ -243,7 +255,7 @@ umtx_atomic_inc(u_atomic_int32_t *p)  {
 }
 
 
-U_INTERNAL int32_t U_EXPORT2
+U_COMMON_API int32_t U_EXPORT2
 umtx_atomic_dec(u_atomic_int32_t *p) {
     int32_t retVal;
     umtx_lock(&gIncDecMutex);
@@ -252,7 +264,7 @@ umtx_atomic_dec(u_atomic_int32_t *p) {
     return retVal;
 }
 
-U_INTERNAL int32_t U_EXPORT2
+U_COMMON_API int32_t U_EXPORT2
 umtx_loadAcquire(u_atomic_int32_t &var) {
     int32_t val = var;
     umtx_lock(&gIncDecMutex);
@@ -260,13 +272,14 @@ umtx_loadAcquire(u_atomic_int32_t &var) {
     return val;
 }
 
-U_INTERNAL void U_EXPORT2
+U_COMMON_API void U_EXPORT2
 umtx_storeRelease(u_atomic_int32_t &var, int32_t val) {
     umtx_lock(&gIncDecMutex);
     umtx_unlock(&gIncDecMutex);
     var = val;
 }
 
+U_NAMESPACE_END
 #endif
 
 //--------------------------------------------------------------------------
