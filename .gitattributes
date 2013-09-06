@@ -4822,6 +4822,11 @@ tools/release/java/.project -text
 tools/release/java/Makefile -text
 tools/release/java/build.xml svneol=native#text/xml
 tools/release/java/icu4c.css -text
+tools/release/java/lib/LICENSE.txt -text
+tools/release/java/lib/README.TXT -text
+tools/release/java/lib/serializer.jar -text
+tools/release/java/lib/xalan.jar -text
+tools/release/java/lib/xercesImpl.jar -text
 tools/release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCFunc_xml.xslt -text
 tools/release/java/src/com/ibm/icu/dev/tools/docs/dumpAllCppFunc_xml.xslt -text
 tools/release/java/src/com/ibm/icu/dev/tools/docs/genreport_xml.xslt -text
