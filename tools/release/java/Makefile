@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011 IBM and Others. All Rights Reserved
+# Copyright (C) 2009-2013 IBM and Others. All Rights Reserved
 
 #
 #
@@ -6,7 +6,7 @@
 #Usage:
 # make OLD_ICU=/xsrl/E/401m40  NEW_ICU=/xsrl/E/icu4ct42
 #
-# you can put the OLD_ICU=xx and NEW_ICU=yy in separate lines in Makefile.local 
+# you can put the OLD_ICU=xx and NEW_ICU=yy in separate lines in Makefile.local
 #
 
 ANT=ant
@@ -37,6 +37,16 @@ endif
 
 all: $(TARGET) $(LOCAL_TARGET)
 
+# auto "build" the "old" icu into OLD_ICU_BUILD
+tmp-old: $(OLD_ICU)/source/configure
+	mkdir -p $(OLD_ICU_BUILD)/
+	( cd $(OLD_ICU_BUILD)/ && $(OLD_ICU)/source/configure )
+
+# auto "build" the "old" icu into OLD_ICU_BUILD
+tmp-new: $(NEW_ICU)/source/configure
+	mkdir -p $(NEW_ICU_BUILD)/
+	( cd $(NEW_ICU_BUILD)/ && $(NEW_ICU)/source/configure )
+
 
 ifneq ($(NOTSET),)
 check-vars:
@@ -46,7 +56,7 @@ else
 check-vars:
 endif
 
-.PHONY: check-vars classes clean-docs
+.PHONY: check-vars classes clean-docs tmp-old
 
 .PRECIOUS: $(TARGET) $(OLD_ICU_BUILD)/$(DOXYFILE) $(NEW_ICU_BUILD)/$(DOXYFILE)
 
@@ -58,18 +68,19 @@ UVERSIONH=$(XML)/uversion_8h.xml
 clean-docs: | check-vars
 	-rm -rf "$(OLD_ICU_BUILD)/$(XML)" "$(NEW_ICU_BUILD)/$(XML)"
 
-$(TARGET): check-vars $(OLD_ICU_BUILD)/$(XML) $(NEW_ICU_BUILD)/$(XML) 
+$(TARGET): check-vars $(OLD_ICU_BUILD)/$(XML) $(NEW_ICU_BUILD)/$(XML)
 	echo "Remember to run the non-ascii file detector if you get errors."
 	$(ANT) -Dolddir="$(OLD_ICU_BUILD)/$(XML)" -Dnewdir="$(NEW_ICU_BUILD)/$(XML)" $(ANT_TARGET)
+	echo "If you get no-changes, see the readme- may need to add xalan/xerces jars."
 
-# check-vars $(OLD_ICU_BUILD)/$(XML) $(NEW_ICU_BUILD)/$(XML) 
+# check-vars $(OLD_ICU_BUILD)/$(XML) $(NEW_ICU_BUILD)/$(XML)
 APIChangeReport.xml:
 	echo "Remember to run the non-ascii file detector if you get errors."
 	$(ANT) -Dolddir="$(OLD_ICU_BUILD)/$(XML)" -Dnewdir="$(NEW_ICU_BUILD)/$(XML)" $(ANT_TARGET)_xml
 
 %/doc/xml:	%/Doxyfile
 # don't care what GENERATE_XML is set to previously - set it to yes.
-	@echo running doxyugen .. 
+	@echo running doxygen ..
 	( cd "$*/" && ( (cat ./Doxyfile | grep -v '^GENERATE_') ;  echo 'GENERATE_XML=YES')  | $(DOXYGEN) -  )
 	@echo doxygen done in $*
 

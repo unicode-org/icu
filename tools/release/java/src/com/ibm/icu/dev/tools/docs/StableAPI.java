@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2006-2012, International Business Machines
+ * Copyright (c) 2006-2013, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Created on 2006-7-24 ?
@@ -344,7 +344,7 @@ public class StableAPI {
                         int min = vers.length>1?Integer.parseInt(vers[1]):0;
                         int micr = vers.length>2?Integer.parseInt(vers[2]):0;
                         int patch = vers.length>3?Integer.parseInt(vers[3]):0;
-                        
+                        System.err.println(" == ["+vers.toString()+"] " + maj + " . " + min + " . " + micr + " . " + patch );
                         if(maj >= 49) {
                             // new scheme: 49 and following. 
                             String truncVersion = "ICU " +maj;
@@ -356,7 +356,7 @@ public class StableAPI {
                                 result = "ICU "+(maj);
                                 System.err.println("    .. " + milestoneOf + " is the release of " + truncVersion);
                             } else {
-                                milestoneOf = " (update "+micr+"."+patch+")";
+                                milestoneOf = " (update #"+(min-1)+": "+result.substring(4)+")";
                                 result = "ICU "+(maj);
                                 System.err.println("    .. " + milestoneOf + " is an update to  " + truncVersion);
                             }
