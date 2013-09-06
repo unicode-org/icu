@@ -1,4 +1,4 @@
-# Copyright (C) 2009-2011 IBM and Others. All Rights Reserved
+# Copyright (C) 2009-2013 IBM and Others. All Rights Reserved
 
 API Change Report:
 
@@ -12,6 +12,7 @@ Requirements:
      but an older Doxygen may work for the API Change Report.
   - Java JDK 1.5+
   - Apache Ant
+  - Note: if you have trouble with null output, put xalan.jar and xercesImpl.jar from <http://xalan.apache.org/xalan-j/downloads.html#latest-release> into ./lib/
 
 To use the utility:
  1. Put both old and new ICU source trees on your system
