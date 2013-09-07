@@ -29,7 +29,7 @@ mua{
             }
         }
     }
-    Version{"2.0.84.55"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{

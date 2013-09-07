@@ -52,6 +52,7 @@ et{
         anp{"angika"}
         apa{"apatši keel"}
         ar{"araabia"}
+        ar_001{"araabia (tänapäevane)"}
         arc{"aramea"}
         arn{"araukaani"}
         arp{"arapaho"}
@@ -176,7 +177,7 @@ et{
         enm{"keskinglise"}
         eo{"esperanto"}
         es{"hispaania"}
-        es_ES{"hispaania (Ibeeria)"}
+        es_ES{"hispaania (Euroopa)"}
         et{"eesti"}
         eu{"baski"}
         ewo{"evondo"}
@@ -434,7 +435,7 @@ et{
         pro{"vanaprovansi"}
         ps{"puštu"}
         pt{"portugali"}
-        pt_PT{"portugali (Ibeeria)"}
+        pt_PT{"portugali (Euroopa)"}
         qu{"ketšua"}
         raj{"radžastani"}
         rap{"rapanui"}
@@ -587,6 +588,7 @@ et{
         zap{"sapoteegi"}
         zbl{"blissümbolid"}
         zen{"zenaga"}
+        zgh{"tamasikti (Maroko)"}
         zh{"hiina"}
         zh_Hans{"hiina keel - lihtsustatud"}
         zh_Hant{"hiina keel - traditsiooniline"}
@@ -598,6 +600,7 @@ et{
     }
     LanguagesShort{
         az{"aseri"}
+        en_US{"inglise (USA)"}
     }
     Scripts{
         Arab{"araabia"}
@@ -738,6 +741,7 @@ et{
             reformed{"Reformitud sortimisjärjestus"}
             search{"Üldeesmärgiline otsing"}
             searchjl{"Otsing hanguli alguskonsonandi alusel"}
+            standard{"Standardne sortimisjärjestus"}
             stroke{"elementide kirjutamise järjekorras"}
             traditional{"traditsiooniline"}
             unihan{"Radikaal-kriipsude sortimisjärjestus"}
@@ -820,7 +824,7 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Keel: {0}"}
         script{"Skript: {0}"}

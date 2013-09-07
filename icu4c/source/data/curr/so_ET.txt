@@ -13,5 +13,5 @@ so_ET{
             "Birta Itoobbiya",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.90.61"}
 }

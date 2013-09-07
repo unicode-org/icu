@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/nn.xml
  */
 nn{
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "America:Belem"{
             ec{"Belém"}
@@ -114,6 +114,7 @@ nn{
         }
         "meta:GMT"{
             ls{"greenwich middeltid"}
+            ss{"GMT"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

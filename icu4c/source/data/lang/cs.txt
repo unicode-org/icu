@@ -52,6 +52,7 @@ cs{
         anp{"angika"}
         apa{"apačské jazyky"}
         ar{"arabština"}
+        ar_001{"arabština (moderní standardní)"}
         arc{"aramejština"}
         arn{"araukánština"}
         arp{"arapažština"}
@@ -87,6 +88,7 @@ cs{
         bi{"bislamština"}
         bik{"bikolština"}
         bin{"bini"}
+        bkm{"kom"}
         bla{"siksika"}
         bm{"bambarština"}
         bn{"bengálština"}
@@ -148,6 +150,7 @@ cs{
         de{"němčina"}
         de_CH{"němčina standardní (Švýcarsko)"}
         del{"delawarština"}
+        den{"slejvština (athabaský jazyk)"}
         dgr{"dogrib"}
         din{"dinkština"}
         dje{"zarmština"}
@@ -155,7 +158,8 @@ cs{
         dra{"drávidské jazyky"}
         dsb{"dolnolužická srbština"}
         dua{"dualština"}
-        dv{"divehi"}
+        dum{"holandština (středověká)"}
+        dv{"maledivština"}
         dyo{"jola-fonyi"}
         dyu{"djula"}
         dz{"dzongkä"}
@@ -169,7 +173,7 @@ cs{
         elx{"elamitština"}
         en{"angličtina"}
         en_US{"angličtina (USA)"}
-        enm{"středověká angličtina"}
+        enm{"angličtina (středověká)"}
         eo{"esperanto"}
         es{"španělština"}
         es_ES{"španělština (Evropa)"}
@@ -179,7 +183,7 @@ cs{
         fa{"perština"}
         fan{"fang"}
         fat{"fantština"}
-        ff{"fulahština"}
+        ff{"fulbština"}
         fi{"finština"}
         fil{"filipínština"}
         fiu{"ugrofinské jazyky"}
@@ -187,11 +191,11 @@ cs{
         fo{"faerština"}
         fon{"fonština"}
         fr{"francouzština"}
-        frm{"středověká francouzština"}
-        fro{"starofrancouzština"}
+        frm{"francouzština (středověká)"}
+        fro{"francouzština (stará)"}
         frr{"fríština (severní)"}
         frs{"fríština (východní)"}
-        fur{"furlandština"}
+        fur{"furlanština"}
         fy{"fríština"}
         ga{"irština"}
         gaa{"gaština"}
@@ -220,7 +224,7 @@ cs{
         haw{"havajština"}
         he{"hebrejština"}
         hi{"hindština"}
-        hil{"hiligaynonština"}
+        hil{"hiligajnonština"}
         him{"himáčalština"}
         hit{"chetitština"}
         hmn{"hmongština"}
@@ -238,6 +242,7 @@ cs{
         id{"indonéština"}
         ie{"interlingue"}
         ig{"igboština"}
+        ii{"s'-čchuan i"}
         ijo{"idžo"}
         ik{"inupiakština"}
         ilo{"ilokánština"}
@@ -252,7 +257,8 @@ cs{
         iu{"inuktitutština"}
         ja{"japonština"}
         jbo{"lojban"}
-        jmc{"machame"}
+        jgo{"ngomba"}
+        jmc{"mašame"}
         jpr{"judeoperština"}
         jrb{"judeoarabština"}
         jv{"javánština"}
@@ -274,11 +280,13 @@ cs{
         kha{"khásí"}
         khi{"kojsanské jazyky"}
         kho{"chotánština"}
+        khq{"koyra chiini"}
         ki{"kikujština"}
         kj{"kuaňamština"}
         kk{"kazaština"}
         kkj{"kako"}
         kl{"grónština"}
+        kln{"kalendžin"}
         km{"khmérština"}
         kmb{"kimbundština"}
         kn{"kannadština"}
@@ -294,10 +302,10 @@ cs{
         ks{"kašmírština"}
         ksb{"shambala"}
         ksf{"bafia"}
-        ksh{"kölsch"}
+        ksh{"kolínština"}
         ku{"kurdština"}
         kum{"kumyčtina"}
-        kut{"kutenai"}
+        kut{"kutenajština"}
         kv{"komijština"}
         kw{"kornština"}
         ky{"kyrgyzština"}
@@ -320,7 +328,7 @@ cs{
         lui{"luiseňo"}
         lun{"lundština"}
         luo{"luoština"}
-        lus{"lišáí"}
+        lus{"mizoština"}
         luy{"luhja"}
         lv{"lotyština"}
         mad{"madurština"}
@@ -338,13 +346,16 @@ cs{
         mer{"meru"}
         mfe{"mauricijská kreolština"}
         mg{"malgaština"}
+        mga{"irština (středověká)"}
+        mgh{"makhuwa-meetto"}
         mh{"maršálština"}
         mi{"maorština"}
         mic{"micmac"}
         min{"minangkabau"}
         mis{"různé jazyky"}
         mk{"makedonština"}
-        ml{"malabarština"}
+        mkh{"mon-khmerské jazyky"}
+        ml{"malajálamština"}
         mn{"mongolština"}
         mnc{"mandžuština"}
         mni{"manipurština"}
@@ -358,6 +369,7 @@ cs{
         mua{"mundang"}
         mul{"složené (víceřádkové) jazyky"}
         mun{"mundské jazyky"}
+        mus{"kríkština"}
         mwl{"mirandština"}
         mwr{"márvárština"}
         my{"barmština"}
@@ -368,16 +380,19 @@ cs{
         nah{"nahuatl"}
         nai{"severoamerické indiánské jazyky"}
         nap{"neapolština"}
+        naq{"nama"}
         nb{"norština (bokmål)"}
         nd{"ndebele (Zimbabwe)"}
         nds{"dolnoněmčina"}
         ne{"nepálština"}
         new{"névárština"}
         ng{"ndondština"}
+        nia{"nias"}
         nic{"nigero-kordofánské jazyky"}
         niu{"niueština"}
         nl{"nizozemština"}
         nl_BE{"vlámština"}
+        nmg{"kwasio"}
         nn{"norština (nynorsk)"}
         nnh{"ngiemboon"}
         no{"norština"}
@@ -392,8 +407,8 @@ cs{
         nwc{"newarština (klasická)"}
         ny{"ňandžština"}
         nym{"ňamwežština"}
-        nyn{"nyankole"}
-        nyo{"nyorština"}
+        nyn{"ňankolština"}
+        nyo{"ňorština"}
         nzi{"nzima"}
         oc{"okcitánština"}
         oj{"odžibvejština"}
@@ -423,8 +438,8 @@ cs{
         pt_PT{"portugalština (Evropa)"}
         qu{"kečuánština"}
         raj{"rádžastánština"}
-        rap{"rapanuiština"}
-        rar{"rarotongaština"}
+        rap{"rapanujština"}
+        rar{"rarotongánština"}
         rm{"rétorománština"}
         rn{"kirundština"}
         ro{"rumunština"}
@@ -433,7 +448,7 @@ cs{
         rom{"romština"}
         ru{"ruština"}
         rup{"arumunština"}
-        rw{"kinyarwandština"}
+        rw{"kiňarwandština"}
         rwk{"rwa"}
         sa{"sanskrt"}
         sad{"sandawština"}
@@ -457,9 +472,10 @@ cs{
         sem{"semitské jazyky"}
         ses{"koyraboro senni"}
         sg{"sangština"}
-        sga{"staroirština"}
+        sga{"irština (stará)"}
         sgn{"znakové jazyky"}
         sh{"srbochorvatština"}
+        shi{"tachelhit"}
         shn{"šanština"}
         shu{"arabština (čadská)"}
         si{"sinhálština"}
@@ -479,7 +495,7 @@ cs{
         snk{"sonikština"}
         so{"somálština"}
         sog{"sogdština"}
-        son{"songhajština"}
+        son{"songajština"}
         sq{"albánština"}
         sr{"srbština"}
         srn{"sranan tongo"}
@@ -518,6 +534,7 @@ cs{
         tmh{"tamašek"}
         tn{"setswanština"}
         to{"tongánština"}
+        tog{"tonžština (nyasa)"}
         tpi{"tok pisin"}
         tr{"turečtina"}
         trv{"taroko"}
@@ -529,13 +546,15 @@ cs{
         tut{"altajské jazyky"}
         tvl{"tuvalština"}
         tw{"twi"}
+        twq{"tasawaq"}
         ty{"tahitština"}
         tyv{"tuvinština"}
-        tzm{"tamazight (Střední Maroko)"}
+        tzm{"tamazight (střední Maroko)"}
         udm{"udmurtština"}
         ug{"ujgurština"}
         uga{"ugaritština"}
         uk{"ukrajinština"}
+        umb{"umbundu"}
         und{"neznámý jazyk"}
         ur{"urdština"}
         uz{"uzbečtina"}
@@ -543,10 +562,13 @@ cs{
         ve{"venda"}
         vi{"vietnamština"}
         vo{"volapuk"}
+        vot{"votština"}
+        vun{"vunjo"}
         wa{"valonština"}
         wae{"němčina (walser)"}
         wak{"wakašské jazyky"}
-        wal{"walamština"}
+        wal{"wolajtština"}
+        war{"warajština"}
         was{"waština"}
         wen{"lužickosrbské jazyky"}
         wo{"wolofština"}
@@ -554,8 +576,8 @@ cs{
         xh{"xhoština"}
         xog{"sogština"}
         yao{"jaoština"}
-        yap{"yapese"}
-        yav{"yangben"}
+        yap{"japština"}
+        yav{"jangbenština"}
         ybb{"yemba"}
         yi{"jidiš"}
         yo{"jorubština"}
@@ -565,6 +587,7 @@ cs{
         zap{"zapotéčtina"}
         zbl{"bliss systém"}
         zen{"zenaga"}
+        zgh{"tamazight (standardní marocký)"}
         zh{"čínština"}
         zh_Hans{"čínština (zjednodušená)"}
         znd{"zandština"}
@@ -575,11 +598,18 @@ cs{
     }
     LanguagesShort{
         az{"ázerbájdžánština"}
+        en_GB{"angličtina (VB)"}
+        en_US{"angličtina (USA)"}
     }
     Scripts{
+        Afak{"afaka"}
         Arab{"arabské"}
+        Armi{"aramejské (imperiální)"}
         Armn{"arménské"}
+        Avst{"avestánské"}
         Bali{"balijské"}
+        Bamu{"bamumské"}
+        Bass{"bassa vah"}
         Batk{"batacké"}
         Beng{"bengálské"}
         Blis{"blissovo písmo"}
@@ -587,23 +617,29 @@ cs{
         Brah{"bráhmí"}
         Brai{"braillovo písmo"}
         Bugi{"buginské"}
-        Buhd{"buhid"}
+        Buhd{"buhidské"}
+        Cakm{"čakma"}
         Cans{"slabičné písmo kanadských domorodců"}
+        Cari{"karijské"}
         Cham{"čam"}
         Cher{"čerokí"}
-        Cirt{"cirth"}
+        Cirt{"kirt"}
         Copt{"koptské"}
+        Cprt{"kyperské"}
         Cyrl{"cyrilice"}
         Cyrs{"cyrilce - staroslověnská"}
         Deva{"dévanágárí"}
         Dsrt{"deseret"}
+        Dupl{"Duployého těsnopis"}
         Egyd{"egyptské démotické"}
         Egyh{"egyptské hieratické"}
         Egyp{"egyptské hieroglyfy"}
         Ethi{"etiopské"}
+        Geok{"gruzínské chutsuri"}
         Geor{"gruzínské"}
         Glag{"hlaholice"}
         Goth{"gotické"}
+        Gran{"grantha"}
         Grek{"řecké"}
         Gujr{"gudžarátí"}
         Guru{"gurmukhi"}
@@ -614,49 +650,87 @@ cs{
         Hant{"tradiční"}
         Hebr{"hebrejské"}
         Hira{"hiragana"}
+        Hluw{"anatolské hieroglyfy"}
         Hmng{"hmongské"}
-        Hrkt{"katakana nebo hiragana"}
+        Hrkt{"japonské slabičné"}
         Hung{"staromaďarské"}
         Inds{"harappské"}
         Ital{"etruské"}
         Java{"javánské"}
         Jpan{"japonské"}
+        Jurc{"džürčenské"}
         Kali{"kayah li"}
         Kana{"katakana"}
         Khar{"kháróšthí"}
         Khmr{"khmerské"}
         Knda{"kannadské"}
         Kore{"korejské"}
+        Kthi{"kaithi"}
+        Lana{"lanna"}
         Laoo{"laoské"}
         Latf{"latinka - lomená"}
         Latg{"latinka - galská"}
         Latn{"latinka"}
         Lepc{"lepčské"}
+        Limb{"limbu"}
         Lina{"lineární A"}
         Linb{"lineární B"}
+        Lisu{"Fraserovo"}
+        Loma{"loma"}
+        Lyci{"lýkijské"}
+        Lydi{"lýdské"}
         Mand{"mandejské"}
+        Mani{"manichejské"}
         Maya{"mayské hieroglyfy"}
+        Mend{"mendské"}
+        Merc{"meroitické psací"}
         Mero{"meroitické"}
         Mlym{"malajlámské"}
         Mong{"mongolské"}
+        Moon{"Moonovo"}
+        Mroo{"mro"}
+        Mtei{"mejtej majek (manipurské)"}
         Mymr{"myanmarské"}
+        Narb{"staroseveroarabské"}
+        Nbat{"nabatejské"}
+        Nkoo{"n’ko"}
         Ogam{"ogamské"}
+        Olck{"santálské (ol chiki)"}
         Orkh{"orchonské"}
         Orya{"uríské"}
         Osma{"osmanské"}
+        Palm{"palmýrské"}
         Perm{"staropermské"}
+        Phag{"phags-pa"}
+        Phli{"pahlavské klínové"}
+        Phlp{"pahlavské žalmové"}
+        Phlv{"pahlavské knižní"}
         Phnx{"fénické"}
         Plrd{"pollardova fonetická abeceda"}
+        Prti{"parthské klínové"}
+        Rjng{"redžanské"}
         Roro{"rongorongo"}
         Runr{"runové"}
-        Shaw{"shawova abeceda"}
+        Samr{"samařské"}
+        Sarb{"starojihoarabské"}
+        Saur{"saurášterské"}
+        Shaw{"Shawova abeceda"}
+        Shrd{"šáradá"}
         Sinh{"sinhálské"}
+        Sora{"sora sompeng"}
+        Sund{"sundánské"}
+        Sylo{"sylhetské"}
         Syrc{"syrské"}
         Syre{"syrské - estrangelo"}
         Syrj{"syrské - západní"}
         Syrn{"syrské - východní"}
         Tagb{"tagbanwa"}
+        Takr{"takrí"}
+        Tale{"tai le"}
+        Talu{"tai lü nové"}
         Taml{"tamilské"}
+        Tang{"tangut"}
+        Tavt{"tai viet"}
         Telu{"telugské"}
         Teng{"tengwar"}
         Tfng{"berberské"}
@@ -670,6 +744,7 @@ cs{
         Xpeo{"staroperské klínové písmo"}
         Xsux{"sumero-akkadské klínové písmo"}
         Yiii{"yi"}
+        Zmth{"matematický zápis"}
         Zsym{"symboly"}
         Zxxx{"bez zápisu"}
         Zyyy{"obecné"}
@@ -702,13 +777,15 @@ cs{
             gb2312han{"Řazení pro zjednodušenou čínštinu – GB2312"}
             phonebook{"Řazení jako v telefonním seznamu"}
             phonetic{"Fonetické řazení"}
-            pinyin{"Řazení podle pinyinu"}
+            pinyin{"Řazení podle pchin-jinu"}
             reformed{"Reformované řazení"}
             search{"Obecné hledání"}
             searchjl{"Vyhledávat podle počáteční souhlásky písma hangul"}
+            standard{"Standardní řazení"}
             stroke{"Řazení podle tahů"}
             traditional{"Tradiční řazení"}
             unihan{"Řazení podle radikálů"}
+            zhuyin{"Ču-jin"}
         }
         numbers{
             arab{"Arabsko-indické číslice"}
@@ -757,7 +834,7 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.98"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}
@@ -766,6 +843,6 @@ cs{
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
-        separator{"{0},{1}"}
+        separator{"{0}, {1}"}
     }
 }

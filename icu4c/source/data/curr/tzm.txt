@@ -205,7 +205,7 @@ tzm{
         }
         UGX{
             "UGX",
-            "Cilin Uɣandi (1966-1987)",
+            "Cilin Uɣandi (1966–1987)",
         }
         USD{
             "US$",
@@ -225,7 +225,7 @@ tzm{
         }
         ZMK{
             "ZMK",
-            "Kwača Uzambi (1968-2012)",
+            "Kwača Uzambi (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +236,5 @@ tzm{
             "Ḍular Uzimbabwi",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

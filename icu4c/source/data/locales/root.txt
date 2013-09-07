@@ -16,7 +16,6 @@ root{
     LocaleScript{
         "Zyyy",
     }
-    MeasurementSystem:int{0}
     NumberElements{
         arab{
             symbols{
@@ -116,11 +115,7 @@ root{
         }
         native{"latn"}
     }
-    PaperSize:intvector{
-        297,
-        210,
-    }
-    Version{"2.0.89.24"}
+    Version{"2.0.93.8"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -1121,6 +1116,7 @@ root{
                         "11",
                         "12",
                         "13",
+                        "7",
                     }
                     wide:alias{"/LOCALE/calendar/hebrew/monthNames/format/wide"}
                 }
@@ -1873,6 +1869,14 @@ root{
                 "0"{"today"}
                 "1"{"tomorrow"}
             }
+            relativeTime{
+                future{
+                    other{"+{0} d"}
+                }
+                past{
+                    other{"-{0} d"}
+                }
+            }
         }
         dayperiod{
             dn{"Dayperiod"}
@@ -1889,9 +1893,25 @@ root{
         }
         hour{
             dn{"Hour"}
+            relativeTime{
+                future{
+                    other{"+{0} h"}
+                }
+                past{
+                    other{"-{0} h"}
+                }
+            }
         }
         minute{
             dn{"Minute"}
+            relativeTime{
+                future{
+                    other{"+{0} min"}
+                }
+                past{
+                    other{"-{0} min"}
+                }
+            }
         }
         mon{
             relative{
@@ -1907,6 +1927,14 @@ root{
                 "0"{"this month"}
                 "1"{"next month"}
             }
+            relativeTime{
+                future{
+                    other{"+{0} m"}
+                }
+                past{
+                    other{"-{0} m"}
+                }
+            }
         }
         sat{
             relative{
@@ -1917,6 +1945,17 @@ root{
         }
         second{
             dn{"Second"}
+            relative{
+                "0"{"now"}
+            }
+            relativeTime{
+                future{
+                    other{"+{0} s"}
+                }
+                past{
+                    other{"-{0} s"}
+                }
+            }
         }
         sun{
             relative{
@@ -1953,6 +1992,14 @@ root{
                 "0"{"this week"}
                 "1"{"next week"}
             }
+            relativeTime{
+                future{
+                    other{"+{0} w"}
+                }
+                past{
+                    other{"-{0} w"}
+                }
+            }
         }
         weekday{
             dn{"Day of the Week"}
@@ -1964,6 +2011,14 @@ root{
                 "0"{"this year"}
                 "1"{"next year"}
             }
+            relativeTime{
+                future{
+                    other{"+{0} y"}
+                }
+                past{
+                    other{"-{0} y"}
+                }
+            }
         }
         zone{
             dn{"Zone"}
@@ -1974,17 +2029,29 @@ root{
         lines{"top-to-bottom"}
     }
     listPattern{
-        duration-short{
-            2:alias{"/LOCALE/listPattern/standard/2"}
-            end:alias{"/LOCALE/listPattern/standard/end"}
-            middle:alias{"/LOCALE/listPattern/standard/middle"}
-            start:alias{"/LOCALE/listPattern/standard/start"}
-        }
         standard{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
+        }
+        unit{
+            2:alias{"/LOCALE/listPattern/unit-short/2"}
+            end:alias{"/LOCALE/listPattern/unit-short/end"}
+            middle:alias{"/LOCALE/listPattern/unit-short/middle"}
+            start:alias{"/LOCALE/listPattern/unit-short/start"}
+        }
+        unit-narrow{
+            2:alias{"/LOCALE/listPattern/unit-short/2"}
+            end:alias{"/LOCALE/listPattern/unit-short/end"}
+            middle:alias{"/LOCALE/listPattern/unit-short/middle"}
+            start:alias{"/LOCALE/listPattern/unit-short/start"}
+        }
+        unit-short{
+            2:alias{"/LOCALE/listPattern/standard/2"}
+            end:alias{"/LOCALE/listPattern/standard/end"}
+            middle:alias{"/LOCALE/listPattern/standard/middle"}
+            start:alias{"/LOCALE/listPattern/standard/start"}
         }
     }
     measurementSystemNames{
@@ -1996,18 +2063,18 @@ root{
     unitsShort{
         acceleration{
             g-force{
-                other{"{0} g"}
+                other{"{0} G"}
             }
         }
         angle{
-            degree{
-                other{"{0}°"}
-            }
-            minute{
+            arc-minute{
                 other{"{0}′"}
             }
-            second{
+            arc-second{
                 other{"{0}″"}
+            }
+            degree{
+                other{"{0}°"}
             }
         }
         area{
@@ -2034,20 +2101,8 @@ root{
             day{
                 other{"{0} d"}
             }
-            day-future{
-                other{"+{0} d"}
-            }
-            day-past{
-                other{"-{0} d"}
-            }
             hour{
                 other{"{0} h"}
-            }
-            hour-future{
-                other{"+{0} h"}
-            }
-            hour-past{
-                other{"-{0} h"}
             }
             millisecond{
                 other{"{0} ms"}
@@ -2055,47 +2110,17 @@ root{
             minute{
                 other{"{0} min"}
             }
-            minute-future{
-                other{"+{0} min"}
-            }
-            minute-past{
-                other{"-{0} min"}
-            }
             month{
                 other{"{0} m"}
-            }
-            month-future{
-                other{"+{0} m"}
-            }
-            month-past{
-                other{"-{0} m"}
             }
             second{
                 other{"{0} s"}
             }
-            second-future{
-                other{"+{0} s"}
-            }
-            second-past{
-                other{"-{0} s"}
-            }
             week{
                 other{"{0} w"}
             }
-            week-future{
-                other{"+{0} w"}
-            }
-            week-past{
-                other{"-{0} w"}
-            }
             year{
                 other{"{0} y"}
-            }
-            year-future{
-                other{"+{0} y"}
-            }
-            year-past{
-                other{"-{0} y"}
             }
         }
         length{

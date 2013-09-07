@@ -30,15 +30,16 @@ gl{
     }
     Languages{
         ab{"abkhazo"}
-        ach{"Acoli"}
+        ach{"acoli"}
         af{"afrikaans"}
         afa{"lingua afro-asiática"}
-        ak{"Akán"}
+        ak{"akán"}
         alg{"lingua algonquina"}
         am{"amárico"}
         an{"aragonés"}
         apa{"lingua apache"}
         ar{"árabe"}
+        ar_001{"árabe estándar moderno"}
         arc{"arameo"}
         art{"lingua artificial"}
         as{"assamés"}
@@ -48,20 +49,20 @@ gl{
         az{"azerbaiano"}
         bat{"lingua báltica"}
         be{"bielorruso"}
-        bem{"Bemba"}
+        bem{"bemba"}
         bg{"búlgaro"}
-        bh{"Bihariano"}
+        bh{"bihari"}
         bn{"bengalí"}
         bo{"tibetano"}
-        br{"Bretón"}
+        br{"bretón"}
         bs{"bosnio"}
         ca{"catalán"}
         cai{"lingua india centroamericana"}
         cau{"lingua caucásica"}
         cel{"lingua céltica"}
-        chr{"Cheroqui"}
-        ckb{"Kurdo soraní"}
-        co{"Corso"}
+        chr{"cheroqui"}
+        ckb{"curdo soraní"}
+        co{"corso"}
         cs{"checo"}
         cu{"eslavo eclesiástico"}
         cy{"galés"}
@@ -71,7 +72,7 @@ gl{
         de_CH{"alto alemán suízo"}
         dv{"divehi"}
         dz{"dzongkha"}
-        ee{"Ewé"}
+        ee{"ewé"}
         efi{"ibibio"}
         egy{"exipcio antigo"}
         el{"grego"}
@@ -79,11 +80,12 @@ gl{
         en_AU{"inglés australiano"}
         en_CA{"inglés canadiano"}
         en_GB{"inglés británico"}
-        en_US{"inglés americano"}
+        en_US{"inglés dos Estados Unidos"}
         eo{"esperanto"}
         es{"español"}
         es_419{"español latinoamericano"}
         es_ES{"castelán"}
+        es_MX{"español de México"}
         et{"estoniano"}
         eu{"éuscaro"}
         fa{"persa"}
@@ -97,7 +99,7 @@ gl{
         fr_CH{"francés suízo"}
         fy{"frisón"}
         ga{"irlandés"}
-        gaa{"Ga"}
+        gaa{"ga"}
         gd{"gaélico escocés"}
         gem{"lingua xermánica"}
         gl{"galego"}
@@ -113,7 +115,7 @@ gl{
         ht{"haitiano"}
         hu{"húngaro"}
         hy{"armenio"}
-        ia{"Interlingua"}
+        ia{"interlingua"}
         id{"indonesio"}
         ig{"ibo"}
         inc{"lingua índica"}
@@ -123,24 +125,24 @@ gl{
         ja{"xaponés"}
         jv{"xavanés"}
         ka{"xeorxiano"}
-        kg{"Congolés"}
+        kg{"kongo"}
         kk{"casaco"}
         km{"cambodiano"}
         kn{"kannada"}
         ko{"coreano"}
         ks{"cachemir"}
         ku{"kurdo"}
-        ky{"kyrgiz"}
+        ky{"quirguiz"}
         la{"latín"}
         lb{"luxemburgués"}
-        lg{"Ganda"}
+        lg{"ganda"}
         ln{"lingala"}
         lo{"laotiano"}
-        loz{"Lozi"}
+        loz{"lozi"}
         lt{"lituano"}
-        lua{"Luba-Lulua"}
+        lua{"luba-lulua"}
         lv{"letón"}
-        mfe{"Crioulo mauritano"}
+        mfe{"crioulo mauritano"}
         mg{"malgaxe"}
         mi{"maorí"}
         mis{"lingua miscelánea"}
@@ -160,12 +162,12 @@ gl{
         nl_BE{"flamenco"}
         nn{"noruegués nynorsk"}
         no{"noruegués"}
-        nso{"Sesotho sa leboa"}
+        nso{"sesotho sa leboa"}
         nub{"lingua nubia"}
         ny{"chewa"}
-        nyn{"Nyankole"}
-        oc{"Occitano"}
-        om{"Oromo"}
+        nyn{"nyankole"}
+        oc{"occitano"}
+        om{"oromo"}
         or{"oriya"}
         os{"osetio"}
         pa{"punjabi"}
@@ -174,7 +176,7 @@ gl{
         ps{"paxtún"}
         pt{"portugués"}
         pt_BR{"portugués brasileiro"}
-        pt_PT{"Portugués europeo"}
+        pt_PT{"portugués europeo"}
         qu{"quechua"}
         rm{"romanche"}
         rn{"rundi"}
@@ -213,14 +215,14 @@ gl{
         ti{"tigriña"}
         tk{"turcomano"}
         tl{"tagalo"}
-        tlh{"Clingon"}
+        tlh{"klingon"}
         tn{"tswana"}
         to{"tonganés"}
         tpi{"tok pisin"}
         tr{"turco"}
         ts{"xitsonga"}
         tt{"tártaro"}
-        tum{"Tumbuka"}
+        tum{"tumbuka"}
         tut{"lingua altaica"}
         ty{"tahitiano"}
         ug{"uigur"}
@@ -232,8 +234,9 @@ gl{
         vi{"vietnamita"}
         wo{"wólof"}
         xh{"xhosa"}
-        yi{"Yiddish"}
+        yi{"yiddish"}
         yo{"ioruba"}
+        zgh{"tamazight de Marrocos estándar"}
         zh{"chinés"}
         zh_Hans{"chinés simplificado"}
         zh_Hant{"chinés tradicional"}
@@ -242,6 +245,8 @@ gl{
     }
     LanguagesShort{
         az{"acerbaixano"}
+        en_GB{"inglés R.U."}
+        en_US{"inglés EUA"}
     }
     Scripts{
         Arab{"Árabe"}
@@ -291,33 +296,36 @@ gl{
     }
     Types{
         calendar{
-            buddhist{"calendario budista"}
-            chinese{"calendario chinés"}
+            buddhist{"Calendario budista"}
+            chinese{"Calendario chinés"}
             coptic{"Calendario cóptico"}
+            dangi{"Calendario dangi"}
             ethiopic{"Calendario etíope"}
             ethiopic-amete-alem{"Calendario Amete Alem etíope"}
             gregorian{"Calendario gregoriano"}
-            hebrew{"calendario hebreo"}
+            hebrew{"Calendario hebreo"}
             indian{"Calendario nacional indio"}
-            islamic{"calendario islámico"}
-            islamic-civil{"calendario islámico civil"}
-            japanese{"calendario xaponés"}
+            islamic{"Calendario islámico"}
+            islamic-civil{"Calendario islámico (civil, tabular)"}
+            islamic-rgsa{"Calendario islámico (Arabia Saudita,"}
+            japanese{"Calendario xaponés"}
             persian{"Calendario persa"}
             roc{"Calendario Minguo"}
         }
         collation{
-            big5han{"orde chinesa tradicional - Big5"}
+            big5han{"Orde de clasificación chinesa tradicional - Big5"}
             dictionary{"Criterio de ordenación do dicionario"}
             ducet{"Criterio de ordenación Unicode predeterminado"}
-            gb2312han{"orde chinesa simplificada - GB2312"}
-            phonebook{"orde da guía telefónica"}
+            gb2312han{"orde de clasifcación chinesa simplificada - GB2312"}
+            phonebook{"orde de clasificación da guía telefónica"}
             phonetic{"Orde de clasificación fonética"}
-            pinyin{"orde pinyin"}
+            pinyin{"Orde de clasificación pinyin"}
             reformed{"Criterio de ordenación reformado"}
             search{"Busca de uso xeral"}
             searchjl{"Clasificar por consonante inicial hangul"}
-            stroke{"orde polo número de trazos"}
-            traditional{"orde tradicional"}
+            standard{"Criterio de ordenación estándar"}
+            stroke{"Orde de clasificación polo número de trazos"}
+            traditional{"Orde de clasificación tradicional"}
             unihan{"Criterio de ordenación radical-trazo"}
         }
         numbers{
@@ -363,13 +371,14 @@ gl{
             vaii{"Díxitos Vai"}
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Alfabeto: {0}"}
         territory{"Rexión: {0}"}
     }
     localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
         separator{"{0}, {1}"}
     }

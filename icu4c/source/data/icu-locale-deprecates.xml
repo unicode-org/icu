@@ -51,7 +51,7 @@
     <alias from="tl_PH" to="fil_PH"/>
     <alias from="tzm_MA" to="tzm_Latn_MA"/>
     <alias from="uz_AF" to="uz_Arab_AF"/>
-    <alias from="uz_UZ" to="uz_Cyrl_UZ"/>
+    <alias from="uz_UZ" to="uz_Latn_UZ"/>
     <alias from="vai_LR" to="vai_Vaii_LR"/>
     <alias from="zh_CN" to="zh_Hans_CN"/>
     <alias from="zh_HK" to="zh_Hant_HK"/>

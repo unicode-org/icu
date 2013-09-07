@@ -37,7 +37,7 @@ gsw{
             }
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -291,6 +291,10 @@ gsw{
                     "v. Chr.",
                     "n. Chr.",
                 }
+                narrow{
+                    "v. Chr.",
+                    "n. Chr.",
+                }
                 wide{
                     "v. Chr.",
                     "n. Chr.",
@@ -466,6 +470,11 @@ gsw{
         quotationEnd{"»"}
         quotationStart{"«"}
     }
+    durationUnits{
+        hm{"h:mm"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
+    }
     fields{
         day{
             dn{"Tag"}
@@ -547,6 +556,50 @@ gsw{
             year{
                 one{"{0} Jahr"}
                 other{"{0} Jahr"}
+            }
+        }
+    }
+    unitsShort{
+        area{
+            acre{
+                one{"{0} ac"}
+                other{"{0} ac"}
+            }
+            square-foot{
+                one{"{0} ft²"}
+                other{"{0} ft²"}
+            }
+            square-mile{
+                one{"{0} mi²"}
+                other{"{0} mi²"}
+            }
+        }
+        length{
+            mile{
+                one{"{0} mi"}
+                other{"{0} mi"}
+            }
+            yard{
+                one{"{0} yd"}
+                other{"{0} yd"}
+            }
+        }
+        pressure{
+            inch-hg{
+                one{"{0} inHg"}
+                other{"{0} inHg"}
+            }
+        }
+        speed{
+            mile-per-hour{
+                one{"{0} mi/h"}
+                other{"{0} mi/h"}
+            }
+        }
+        volume{
+            cubic-mile{
+                one{"{0} mi³"}
+                other{"{0} mi³"}
             }
         }
     }

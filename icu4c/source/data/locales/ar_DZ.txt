@@ -8,6 +8,12 @@
 // ***************************************************************************
 ar_DZ{
     NumberElements{
+        arab{
+            symbols{
+                decimal{"٫"}
+                group{"٬"}
+            }
+        }
         default{"latn"}
         latn{
             symbols{
@@ -16,7 +22,7 @@ ar_DZ{
             }
         }
     }
-    Version{"2.0.86.38"}
+    Version{"2.0.92.80"}
     calendar{
         generic{
             DateTimePatterns{

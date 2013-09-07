@@ -7,15 +7,12 @@
 // *
 // ***************************************************************************
 en_ZA{
+    %%Parent{"en_001"}
     Currencies{
-        USD{
-            "US$",
-            "US Dollar",
-        }
         ZAR{
             "R",
             "South African Rand",
         }
     }
-    Version{"2.0.86.38"}
+    Version{"2.0.91.70"}
 }

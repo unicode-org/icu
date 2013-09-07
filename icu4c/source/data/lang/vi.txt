@@ -20,7 +20,7 @@ vi{
         colNormalization{"Sắp xếp theo chuẩn hóa"}
         colNumeric{"Sắp xếp theo số"}
         colStrength{"Cường độ sắp xếp"}
-        collation{"Sắp xếp"}
+        collation{"Thứ tự sắp xếp"}
         currency{"Tiền tệ"}
         numbers{"Số"}
         timezone{"Múi giờ"}
@@ -52,6 +52,7 @@ vi{
         anp{"Tiếng Angika"}
         apa{"Ngôn ngữ Apache"}
         ar{"Tiếng Ả Rập"}
+        ar_001{"Tiếng Ả Rập Hiện đại"}
         arc{"Tiếng Aramaic"}
         arn{"Tiếng Araucanian"}
         arp{"Tiếng Arapaho"}
@@ -65,7 +66,7 @@ vi{
         av{"Tiếng Avaric"}
         awa{"Tiếng Awadhi"}
         ay{"Tiếng Aymara"}
-        az{"Tiếng Ai-déc-bai-gian"}
+        az{"Tiếng Azerbaijan"}
         ba{"Tiếng Bashkir"}
         bad{"Tiếng Banda"}
         bai{"Ngôn ngữ Bamileke"}
@@ -75,13 +76,13 @@ vi{
         bat{"Ngôn ngữ Baltic"}
         bax{"Tiếng Bamun"}
         bbj{"Tiếng Ghomala"}
-        be{"Tiếng Bê-la-rút"}
+        be{"Tiếng Belarus"}
         bej{"Tiếng Beja"}
         bem{"Tiếng Bemba"}
         ber{"Tiếng Berber"}
         bez{"Tiếng Bena"}
         bfd{"Tiếng Bafut"}
-        bg{"Tiếng Bun-ga-ri"}
+        bg{"Tiếng Bulgaria"}
         bh{"Tiếng Bihari"}
         bho{"Tiếng Bhojpuri"}
         bi{"Tiếng Bislama"}
@@ -104,7 +105,7 @@ vi{
         bum{"Tiếng Bulu"}
         byn{"Tiếng Blin"}
         byv{"Tiếng Medumba"}
-        ca{"Tiếng Ca-ta-lăng"}
+        ca{"Tiếng Catalan"}
         cad{"Tiếng Caddo"}
         cai{"Ngôn ngữ Thổ dân Trung Mỹ"}
         car{"Tiếng Carib"}
@@ -127,6 +128,7 @@ vi{
         chy{"Tiếng Cheyenne"}
         ckb{"Tiếng Kurd Sorani"}
         cmc{"Ngôn ngữ Chamic"}
+        co{"Tiếng Corse"}
         cop{"Tiếng Coptic"}
         cpe{"Tiếng Creole hoặc Pidgin gốc Anh"}
         cpf{"Tiếng Creole hoặc Pidgin gốc Pháp"}
@@ -139,14 +141,14 @@ vi{
         cu{"Tiếng Slavơ Nhà thờ"}
         cus{"Tiếng Cushit"}
         cv{"Tiếng Chuvash"}
-        cy{"Tiếng Xentơ"}
+        cy{"Tiếng Wales"}
         da{"Tiếng Đan Mạch"}
         dak{"Tiếng Dakota"}
         dar{"Tiếng Dargwa"}
         dav{"Tiếng Taita"}
         day{"Tiếng Dayak"}
         de{"Tiếng Đức"}
-        de_CH{"Tiếng Đức Chuẩn (Thụy Sĩ)"}
+        de_CH{"Tiếng Thượng Giéc-man (Thụy Sĩ)"}
         del{"Tiếng Delaware"}
         den{"Tiếng Slave"}
         dgr{"Tiếng Dogrib"}
@@ -170,7 +172,6 @@ vi{
         el{"Tiếng Hy Lạp"}
         elx{"Tiếng Elamite"}
         en{"Tiếng Anh"}
-        en_CA{"Tiếng Anh (Canada)"}
         en_GB{"Tiếng Anh (Anh)"}
         en_US{"Tiếng Anh (Mỹ)"}
         enm{"Tiếng Anh Trung cổ"}
@@ -178,7 +179,7 @@ vi{
         es{"Tiếng Tây Ban Nha"}
         es_419{"Tiếng Tây Ban Nha (Mỹ La tinh)"}
         es_ES{"Tiếng Tây Ban Nha (I-bê-ri)"}
-        et{"Tiếng E-xtô-ni-a"}
+        et{"Tiếng Estonia"}
         eu{"Tiếng Basque"}
         ewo{"Tiếng Ewondo"}
         fa{"Tiếng Ba Tư"}
@@ -192,14 +193,14 @@ vi{
         fo{"Tiếng Faore"}
         fon{"Tiếng Fon"}
         fr{"Tiếng Pháp"}
-        fr_CA{"Tiếng Pháp (Canada)"}
         frm{"Tiếng Pháp Trung cổ"}
         fro{"Tiếng Pháp cổ"}
         frr{"Tiếng Frisian Miền Bắc"}
         frs{"Tiếng Frisian Miền Đông"}
         fur{"Tiếng Friulian"}
-        fy{"Tiếng Frisian"}
+        fy{"Tiếng Frisia"}
         ga{"Tiếng Ai-len"}
+        gaa{"Tiếng Ga"}
         gay{"Tiếng Gayo"}
         gba{"Tiếng Gbaya"}
         gd{"Tiếng Xentơ (Xcốt len)"}
@@ -215,7 +216,7 @@ vi{
         got{"Tiếng Gô-tích"}
         grb{"Tiếng Grebo"}
         grc{"Tiếng Hy Lạp cổ"}
-        gsw{"Tiếng Đức Thụy Sĩ"}
+        gsw{"Tiếng Đức (Thụy Sĩ)"}
         gu{"Tiếng Gujarati"}
         guz{"Tiếng Gusii"}
         gv{"Tiếng Manx"}
@@ -223,24 +224,24 @@ vi{
         ha{"Tiếng Hausa"}
         hai{"Tiếng Haida"}
         haw{"Tiếng Hawaii"}
-        he{"Tiếng Hê-brơ"}
-        hi{"Tiếng Hin-đi"}
+        he{"Tiếng Do Thái"}
+        hi{"Tiếng Hindi"}
         hil{"Tiếng Hiligaynon"}
         him{"Tiếng Himachali"}
         hit{"Tiếng Hittite"}
         hmn{"Tiếng Hmông"}
         ho{"Tiếng Hiri Motu"}
-        hr{"Tiếng Crô-a-ti-a"}
+        hr{"Tiếng Croatia"}
         hsb{"Tiếng Thượng Sorbia"}
         ht{"Tiếng Haiti"}
-        hu{"Tiếng Hung-ga-ri"}
+        hu{"Tiếng Hungary"}
         hup{"Tiếng Hupa"}
-        hy{"Tiếng Ác-mê-ni"}
+        hy{"Tiếng Armenia"}
         hz{"Tiếng Herero"}
         ia{"Tiếng Khoa Học Quốc Tế"}
         iba{"Tiếng Iban"}
         ibb{"Tiếng Ibibio"}
-        id{"Tiếng In-đô-nê-xia"}
+        id{"Tiếng Indonesia"}
         ie{"Tiếng Interlingue"}
         ig{"Tiếng Igbo"}
         ii{"Tiếng Di Tứ Xuyên"}
@@ -253,7 +254,7 @@ vi{
         io{"Tiếng Ido"}
         ira{"Ngôn ngữ Iran"}
         iro{"Ngôn ngữ Iroquoia"}
-        is{"Tiếng Ai-xơ-len"}
+        is{"Tiếng Iceland"}
         it{"Tiếng Ý"}
         iu{"Tiếng Inuktitut"}
         ja{"Tiếng Nhật"}
@@ -261,8 +262,8 @@ vi{
         jmc{"Tiếng Machame"}
         jpr{"Tiếng Judeo-Ba Tư"}
         jrb{"Tiếng Judeo-Ả Rập"}
-        jv{"Tiếng Gia-va"}
-        ka{"Tiếng Georgian"}
+        jv{"Tiếng Java"}
+        ka{"Tiếng Gruzia"}
         kaa{"Tiếng Kara-Kalpak"}
         kab{"Tiếng Kabyle"}
         kac{"Tiếng Kachin"}
@@ -288,7 +289,7 @@ vi{
         kln{"Tiếng Kalenjin"}
         km{"Tiếng Campuchia"}
         kmb{"Tiếng Kimbundu"}
-        kn{"Tiếng Kan-na-đa"}
+        kn{"Tiếng Kannada"}
         ko{"Tiếng Hàn Quốc"}
         kok{"Tiếng Konkani"}
         kos{"Tiếng Kosrae"}
@@ -329,7 +330,7 @@ vi{
         luo{"Tiếng Luo"}
         lus{"Tiếng Lushai"}
         luy{"Tiếng Luyia"}
-        lv{"Tiếng Lát-vi-a"}
+        lv{"Tiếng Latvia"}
         mad{"Tiếng Madura"}
         maf{"Tiếng Mafa"}
         mag{"Tiếng Magahi"}
@@ -352,7 +353,7 @@ vi{
         mic{"Tiếng Micmac"}
         min{"Tiếng Minangkabau"}
         mis{"Ngôn ngữ Khác"}
-        mk{"Tiếng Ma-xê-đô-ni-a"}
+        mk{"Tiếng Macedonia"}
         mkh{"Ngôn ngữ Mon-Khmer"}
         ml{"Tiếng Malayalam"}
         mn{"Tiếng Mông Cổ"}
@@ -363,8 +364,8 @@ vi{
         moh{"Tiếng Mohawk"}
         mos{"Tiếng Mossi"}
         mr{"Tiếng Marathi"}
-        ms{"Tiếng Ma-lay-xi-a"}
-        mt{"Tiếng Mantơ"}
+        ms{"Tiếng Malaysia"}
+        mt{"Tiếng Malt"}
         mua{"Tiếng Mundang"}
         mul{"Nhiều Ngôn ngữ"}
         mun{"Ngôn ngữ Munda"}
@@ -383,7 +384,7 @@ vi{
         nb{"Tiếng Na Uy (Bokmål)"}
         nd{"Bắc Ndebele"}
         nds{"Tiếng Hạ Giéc-man"}
-        ne{"Tiếng Nê-pan"}
+        ne{"Tiếng Nepal"}
         new{"Tiếng Newari"}
         ng{"Tiếng Ndonga"}
         nia{"Tiếng Nias"}
@@ -417,7 +418,7 @@ vi{
         osa{"Tiếng Osage"}
         ota{"Tiếng Thổ Nhĩ Kỳ Ottoman"}
         oto{"Ngôn ngữ Otomia"}
-        pa{"Tiếng Punjabi"}
+        pa{"Tiếng Punjab"}
         paa{"Ngôn ngữ Papua"}
         pag{"Tiếng Pangasinan"}
         pal{"Tiếng Pahlavi"}
@@ -432,7 +433,7 @@ vi{
         pon{"Tiếng Pohnpeian"}
         pra{"Ngôn ngữ Prakrit"}
         pro{"Tiếng Provençal cổ"}
-        ps{"Tiếng Pa-tô"}
+        ps{"Tiếng Pashto"}
         pt{"Tiếng Bồ Đào Nha"}
         pt_BR{"Tiếng Bồ Đào Nha (Braxin)"}
         pt_PT{"Tiếng Bồ Đào Nha (I-bê-ri)"}
@@ -442,7 +443,7 @@ vi{
         rar{"Tiếng Rarotongan"}
         rm{"Tiếng Romansh"}
         rn{"Tiếng Rundi"}
-        ro{"Tiếng Ru-ma-ni"}
+        ro{"Tiếng Romania"}
         roa{"Ngôn ngữ Roman"}
         rof{"Tiếng Rombo"}
         rom{"Tiếng Rumani"}
@@ -465,7 +466,7 @@ vi{
         sc{"Tiếng Sardinia"}
         scn{"Tiếng Sicilia"}
         sco{"Tiếng Scots"}
-        sd{"Tiếng Sin-hi"}
+        sd{"Tiếng Sindhi"}
         se{"Bắc Sami"}
         see{"Tiếng Seneca"}
         seh{"Tiếng Sena"}
@@ -483,8 +484,8 @@ vi{
         sid{"Tiếng Sidamo"}
         sio{"Ngôn ngữ Sioua"}
         sit{"Ngôn ngữ Sino-Tây Tạng"}
-        sk{"Tiếng Xlô-vác"}
-        sl{"Tiếng Xlô-ven"}
+        sk{"Tiếng Slovak"}
+        sl{"Tiếng Slovenia"}
         sla{"Ngôn ngữ Slavơ"}
         sm{"Tiếng Samoa"}
         sma{"TIếng Sami Miền Nam"}
@@ -494,18 +495,18 @@ vi{
         sms{"Tiếng Skolt Sami"}
         sn{"Tiếng Shona"}
         snk{"Tiếng Soninke"}
-        so{"Tiếng Xô-ma-li"}
+        so{"Tiếng Somali"}
         sog{"Tiếng Sogdien"}
         son{"Tiếng Songhai"}
         sq{"Tiếng An-ba-ni"}
-        sr{"Tiếng Séc-bi"}
+        sr{"Tiếng Serbia"}
         srn{"Tiếng Sranan Tongo"}
         srr{"Tiếng Serer"}
         ss{"Tiếng Swati"}
         ssa{"Ngôn ngữ Nilo-Sahara"}
         ssy{"Tiếng Saho"}
         st{"Tiếng Sesotho"}
-        su{"Tiếng Xu đăng"}
+        su{"Tiếng Sudan"}
         suk{"Tiếng Sukuma"}
         sus{"Tiếng Susu"}
         sux{"Tiếng Sumeria"}
@@ -527,7 +528,7 @@ vi{
         ti{"Tiếng Tigrigya"}
         tig{"Tiếng Tigre"}
         tiv{"Tiếng Tiv"}
-        tk{"Tiếng Tuôc-men"}
+        tk{"Tiếng Turk"}
         tkl{"Tiếng Tokelau"}
         tl{"Tiếng Tagalog"}
         tlh{"Tiếng Klingon"}
@@ -552,13 +553,13 @@ vi{
         tyv{"Tiếng Tuvinian"}
         tzm{"Tiếng Tamazight Miền Trung Ma-rốc"}
         udm{"Tiếng Udmurt"}
-        ug{"Tiếng Uighur"}
+        ug{"Tiếng Duy Ngô Nhĩ"}
         uga{"Tiếng Ugaritic"}
-        uk{"Tiếng U-crai-na"}
+        uk{"Tiếng Ucraina"}
         umb{"Tiếng Umbundu"}
-        und{"Tiếng không xác định"}
+        und{"Ngôn ngữ không xác định"}
         ur{"Tiếng Uđu"}
-        uz{"Tiếng U-dơ-bếch"}
+        uz{"Tiếng Uzbek"}
         vai{"Tiếng Vai"}
         ve{"Tiếng Venda"}
         vi{"Tiếng Việt"}
@@ -588,6 +589,7 @@ vi{
         zap{"Tiếng Zapotec"}
         zbl{"Ký hiệu Blissymbols"}
         zen{"Tiếng Zenaga"}
+        zgh{"Tiếng Tamazight Chuẩn của Ma-rốc"}
         zh{"Tiếng Trung"}
         zh_Hans{"Tiếng Trung (Giản thể)"}
         zh_Hant{"Tiếng Trung (Phồn thể)"}
@@ -599,6 +601,8 @@ vi{
     }
     LanguagesShort{
         az{"Tiếng Azeri"}
+        en_GB{"Tiếng Anh (Anh)"}
+        en_US{"Tiếng Anh (Mỹ)"}
     }
     Scripts{
         Afak{"Chữ Afaka"}
@@ -635,7 +639,7 @@ vi{
         Egyp{"Chữ tượng hình Ai Cập"}
         Ethi{"Chữ Ethiopia"}
         Geok{"Chữ Khutsuri Georgia"}
-        Geor{"Chữ Georgia"}
+        Geor{"Chữ Gruzia"}
         Glag{"Chữ Glagolitic"}
         Goth{"Chữ Gô-tích"}
         Gran{"Chữ Grantha"}
@@ -656,7 +660,7 @@ vi{
         Inds{"Chữ Indus"}
         Ital{"Chữ Italic cổ"}
         Java{"Chữ Java"}
-        Jpan{"Nhật Bản"}
+        Jpan{"Chữ Nhật Bản"}
         Jurc{"Chữ Jurchen"}
         Kali{"Chữ Kayah Li"}
         Kana{"Chữ Katakana"}
@@ -664,7 +668,7 @@ vi{
         Khmr{"Chữ Khơ-me"}
         Khoj{"Chữ Khojki"}
         Knda{"Chữ Kannada"}
-        Kore{"Hàn Quốc"}
+        Kore{"Chữ Hàn Quốc"}
         Kpel{"Chữ Kpelle"}
         Kthi{"Chữ Kaithi"}
         Lana{"Chữ Lanna"}
@@ -769,6 +773,7 @@ vi{
             buddhist{"Lịch Phật Giáo"}
             chinese{"Lịch Trung Quốc"}
             coptic{"Lịch Copts"}
+            dangi{"Lịch Dangi"}
             ethiopic{"Lịch Ethiopia"}
             ethiopic-amete-alem{"Lịch Ethiopic Amete Alem"}
             gregorian{"Lịch Gregory"}
@@ -776,6 +781,10 @@ vi{
             indian{"Lịch Quốc gia Ấn Độ"}
             islamic{"Lịch Islamic"}
             islamic-civil{"Lịch Islamic-Civil"}
+            islamic-rgsa{"Lịch Hồi Giáo - Ả Rập Xê-út"}
+            islamic-tbla{"Lịch Hồi Giáo - Thiên văn"}
+            islamic-umalqura{"Lịch Hồi Giáo - Umm al-Qura"}
+            iso8601{"Lịch ISO-8601"}
             japanese{"Lịch Nhật Bản"}
             persian{"Lịch Ba Tư"}
             roc{"Lịch Trung Hoa Dân Quốc"}
@@ -790,23 +799,27 @@ vi{
             pinyin{"Thứ tự sắp xếp theo bính âm"}
             reformed{"Thứ tự sắp xếp đã sửa đổi"}
             search{"Tìm kiếm mục đích chung"}
+            standard{"Thứ tự sắp xếp chuẩn"}
             stroke{"Thứ tự sắp xếp theo nét chữ"}
             traditional{"Thứ tự sắp xếp truyền thống"}
             unihan{"Trình tự sắp xếp theo bộ-nét"}
+            zhuyin{"Thứ tự sắp xếp Zhuyin"}
         }
         numbers{
-            arab{"Chữ số A rập - Ấn Độ"}
-            arabext{"Chữ số A rập - Ấn Độ mở rộng"}
+            arab{"Chữ số Ả Rập - Ấn Độ"}
+            arabext{"Chữ số Ả Rập - Ấn Độ mở rộng"}
             armn{"Chữ số Armeni"}
             armnlow{"Chữ số Armenia viết thường"}
             bali{"Chữ số Bali"}
             beng{"Chữ số Bangladesh"}
+            brah{"Chữ số Brahmi"}
+            cakm{"Chữ số Chakma"}
             cham{"Chữ số Chăm"}
             deva{"Chữ số Devanagari"}
             ethi{"Chữ số Ethiopia"}
             finance{"Chữ số dùng trong tài chính"}
             fullwide{"Chữ số có độ rộng đầy đủ"}
-            geor{"Chữ số Gregory"}
+            geor{"Chữ số Gruzia"}
             grek{"Chữ số Hy Lạp"}
             greklow{"Chữ số Hy Lạp viết thường"}
             gujr{"Chữ số Gujarati"}
@@ -821,7 +834,7 @@ vi{
             jpan{"Chữ số Nhật Bản"}
             jpanfin{"Chữ số dùng trong tài chính của tiếng Nhật"}
             kali{"Chữ số Kayah Li"}
-            khmr{"Chữ số Khmer"}
+            khmr{"Chữ số Khơ-me"}
             knda{"Chữ số Kannada"}
             lana{"Chữ số Hora Thái Đam"}
             lanatham{"Chữ số Tham Thái Đam"}
@@ -838,10 +851,14 @@ vi{
             nkoo{"Chữ số N'Ko"}
             olck{"Chữ số Ol Chiki"}
             orya{"Chữ số Oriya"}
+            osma{"Chữ số Osmanya"}
             roman{"Chữ số La mã"}
             romanlow{"Chữ số La Mã viết thường"}
             saur{"Chữ số Saurashtra"}
+            shrd{"Chữ số Sharada"}
+            sora{"Chữ số Sora Sompeng"}
             sund{"Chữ số Sudan"}
+            takr{"Chữ số Takri"}
             talu{"Chữ số Thái Lặc mới"}
             taml{"Chữ số Tamil"}
             tamldec{"Chữ số Tamil"}
@@ -865,21 +882,29 @@ vi{
         AREVMDA{"Tiếng Armenia Miền Tây"}
         BAKU1926{"Bảng chữ cái La-tinh Tiếng Turk Hợp nhất"}
         BISKE{"Phương ngữ San Giorgio/Bila"}
+        BOHORIC{"Bảng chữ cái Bohorič"}
         BOONT{"Tiếng Boontling"}
+        DAJNKO{"Bảng chữ cái Dajnko"}
+        EMODENG{"Tiếng Anh Hiện đại Thời kỳ đầu"}
         FONIPA{"Ngữ âm học IPA"}
         FONUPA{"Ngữ âm học UPA"}
+        HEPBURN{"La mã hóa Hepburn"}
         KKCOR{"Phép chính tả Chung"}
+        KSCOR{"Phép chính tả Chuẩn"}
         LIPAW{"Phương ngữ Lipovaz của người Resian"}
+        METELKO{"Bảng chữ cái Metelko"}
         MONOTON{"Đơn âm"}
         NDYUKA{"Phương ngữ Ndyuka"}
         NEDIS{"Phương ngữ Natisone"}
         NJIVA{"Phương ngữ Gniva/Njiva"}
+        NULIK{"Tiếng Volapük Hiện đại"}
         OSOJS{"Phương ngữ Oseacco/Osojane"}
         PAMAKA{"Phương ngữ Pamaka"}
         PINYIN{"La Mã hóa Bính âm"}
         POLYTON{"Đa âm"}
         POSIX{"Máy tính"}
         REVISED{"Phép chính tả Sửa đổi"}
+        RIGIK{"Tiếng Volapük Cổ điển"}
         ROZAJ{"Tiếng Resian"}
         SAAHO{"Tiếng Saho"}
         SCOTLAND{"Tiếng Anh chuẩn tại Scotland"}
@@ -891,7 +916,7 @@ vi{
         VALENCIA{"Tiếng Valencia"}
         WADEGILE{"La Mã hóa Wade-Giles"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Ngôn ngữ: {0}"}
         script{"Chữ viết: {0}"}

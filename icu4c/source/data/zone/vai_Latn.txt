@@ -10,5 +10,6 @@
  * ICU <specials> source: <path>/common/main/vai_Latn.xml
  */
 vai_Latn{
-    Version{"2.0.84.55"}
+    %%Parent{"root"}
+    Version{"2.0.92.87"}
 }

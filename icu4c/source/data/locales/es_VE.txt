@@ -19,9 +19,5 @@ es_VE{
             }
         }
     }
-    PaperSize:intvector{
-        279,
-        216,
-    }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

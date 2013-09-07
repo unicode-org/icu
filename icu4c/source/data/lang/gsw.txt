@@ -695,7 +695,7 @@ gsw{
         SOLBA{"Solbica-Mundart"}
         TARASK{"Taraskievica-Rächtschriibig"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Schpraach: {0}"}
         script{"Schrift: {0}"}

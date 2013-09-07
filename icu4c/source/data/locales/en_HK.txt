@@ -8,14 +8,7 @@
 // ***************************************************************************
 en_HK{
     %%Parent{"en_GB"}
-    NumberElements{
-        latn{
-            patterns{
-                currencyFormat{"¤#,##0.00"}
-            }
-        }
-    }
-    Version{"2.0.86.27"}
+    Version{"2.0.92.80"}
     calendar{
         generic{
             DateTimePatterns{

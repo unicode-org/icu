@@ -193,7 +193,7 @@ sl{
         MH{"Marshallovi otoki"}
         MK{"Makedonija"}
         ML{"Mali"}
-        MM{"Mjanmar [Burma]"}
+        MM{"Mjanmar (Burma)"}
         MN{"Mongolija"}
         MO{"Posebno administrativno območje LR Kitajske Macao"}
         MP{"Severni Marianski otoki"}
@@ -302,5 +302,5 @@ sl{
         ZW{"Zimbabve"}
         ZZ{"Neznano ali neveljavno območje"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

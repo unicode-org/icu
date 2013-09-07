@@ -36,6 +36,7 @@ af{
         ak{"Akan"}
         am{"Amharies"}
         ar{"Arabies"}
+        ar_001{"Moderne Standaard Arabies"}
         arc{"Aramees"}
         art{"Kunsmatige taal"}
         as{"Assamees"}
@@ -75,6 +76,7 @@ af{
         es{"Spaans"}
         es_419{"Latyns-Amerikaanse Spaans"}
         es_ES{"Europese Spaans"}
+        es_MX{"Meksikaanse Spaans"}
         et{"Estnies"}
         eu{"Baskies"}
         fa{"Persies"}
@@ -97,7 +99,7 @@ af{
         gsw{"Switserse Duits"}
         gu{"Gudjarati"}
         ha{"Hausa"}
-        haw{"Hawaies"}
+        haw{"Hawaiies"}
         he{"Hebreeus"}
         hi{"Hindi"}
         hr{"Kroaties"}
@@ -212,6 +214,7 @@ af{
         xh{"Xhosa"}
         yi{"Jiddisj"}
         yo{"Yoruba"}
+        zgh{"Standaard Marokkaanse Tamazight"}
         zh{"Sjinees"}
         zh_Hans{"Vereenvoudigde Chinees"}
         zh_Hant{"Tradisionele Chinees"}
@@ -220,6 +223,8 @@ af{
     }
     LanguagesShort{
         az{"Azeri"}
+        en_GB{"Engels (GB)"}
+        en_US{"Engels (US)"}
     }
     Scripts{
         Arab{"Arabies"}
@@ -293,6 +298,7 @@ af{
             reformed{"Gereformeerde sorteervolgorde"}
             search{"Algemenedoel-soektog"}
             searchjl{"Soek volgens Hangul-beginkonsonant"}
+            standard{"Standaard sorteervolgorde"}
             stroke{"Slag-sorteervolgorde"}
             traditional{"Tradisionele sorteervolgorde"}
             unihan{"Radikale-slag-sorteervolgorde"}
@@ -331,7 +337,8 @@ af{
             orya{"Oriya-syfers"}
             roman{"Romeinse syfers"}
             romanlow{"Romeinse kleinletter-syfers"}
-            taml{"Tamil-syfers"}
+            taml{"Tradisionele Tamil-syfers"}
+            tamldec{"Tamil-syfers"}
             telu{"Telugu-syfers"}
             thai{"Thaise syfers"}
             tibt{"Tibettaanse syfers"}
@@ -339,13 +346,14 @@ af{
             vaii{"Vai-syfers"}
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Skrif: {0}"}
-        territory{"Omgewing: {0}"}
+        territory{"Streek: {0}"}
     }
     localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
         separator{"{0},{1}"}
     }

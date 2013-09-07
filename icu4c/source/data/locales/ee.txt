@@ -77,7 +77,7 @@ ee{
             }
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.93.8"}
     calendar{
         generic{
             DateTimePatterns{
@@ -599,6 +599,16 @@ ee{
                 "1"{"etsɔ si gbɔna"}
                 "2"{"nyitsɔ si gbɔna"}
             }
+            relativeTime{
+                future{
+                    one{"le ŋkeke {0} wo me"}
+                    other{"le ŋkeke {0} wo me"}
+                }
+                past{
+                    one{"ŋkeke {0} si wo va yi"}
+                    other{"ŋkeke {0} si wo va yi"}
+                }
+            }
         }
         dayperiod{
             dn{"ŋkekea me"}
@@ -608,24 +618,84 @@ ee{
         }
         hour{
             dn{"gaƒoƒo"}
+            relativeTime{
+                future{
+                    one{"le gaƒoƒo {0} wo me"}
+                    other{"le gaƒoƒo {0} wo me"}
+                }
+                past{
+                    one{"gaƒoƒo {0} si wo va yi"}
+                    other{"gaƒoƒo {0} si wo va yi"}
+                }
+            }
         }
         minute{
             dn{"Mintigaƒoƒo"}
+            relativeTime{
+                future{
+                    one{"le aɖabaƒoƒo {0} wo me"}
+                    other{"le aɖabaƒoƒo {0} wo me"}
+                }
+                past{
+                    one{"aɖabaƒoƒo {0} si wo va yi"}
+                    other{"aɖabaƒoƒo {0} si wo va yi"}
+                }
+            }
         }
         month{
             dn{"Xleti"}
+            relativeTime{
+                future{
+                    one{"le ɣleti {0} wo me"}
+                    other{"le ɣleti {0} wo me"}
+                }
+                past{
+                    one{"ɣleti {0} si wo va yi"}
+                    other{"ɣleti {0} si wo va yi"}
+                }
+            }
         }
         second{
             dn{"sekend"}
+            relativeTime{
+                future{
+                    one{"le sekend {0} wo me"}
+                    other{"le sekend {0} wo me"}
+                }
+                past{
+                    one{"sekend {0} si wo va yi"}
+                    other{"sekend {0} si wo va yi"}
+                }
+            }
         }
         week{
             dn{"kɔsiɖa ɖeka"}
+            relativeTime{
+                future{
+                    one{"le kɔsiɖa {0} wo me"}
+                    other{"le kɔsiɖa {0} wo me"}
+                }
+                past{
+                    one{"kɔsiɖa {0} si wo va yi"}
+                    other{"kɔsiɖa {0} si wo va yi"}
+                }
+            }
         }
         weekday{
             dn{"kɔsiɖa me ŋkeke"}
         }
         year{
             dn{"ƒe"}
+            relativeTime{
+                future{
+                    one{"le ƒe {0} wo me"}
+                    other{"le ƒe {0} wo me"}
+                }
+                past{
+                    one{"ƒe {0} si wo va yi"}
+                    other{"ƒe {0} si wo va yi"}
+                }
+            }
         }
         zone{
             dn{"nutomegaƒoƒome"}
@@ -648,85 +718,29 @@ ee{
                 one{"ŋkeke {0} wo"}
                 other{"ŋkeke {0} wo"}
             }
-            day-future{
-                one{"le ŋkeke {0} wo me"}
-                other{"le ŋkeke {0} wo me"}
-            }
-            day-past{
-                one{"ŋkeke {0} si wo va yi"}
-                other{"ŋkeke {0} si wo va yi"}
-            }
             hour{
                 one{"gaƒoƒo {0} wo"}
                 other{"gaƒoƒo {0} wo"}
-            }
-            hour-future{
-                one{"le gaƒoƒo {0} wo me"}
-                other{"le gaƒoƒo {0} wo me"}
-            }
-            hour-past{
-                one{"gaƒoƒo {0} si wo va yi"}
-                other{"gaƒoƒo {0} si wo va yi"}
             }
             minute{
                 one{"aɖabaƒoƒo {0} wo"}
                 other{"aɖabaƒoƒo {0} wo"}
             }
-            minute-future{
-                one{"le aɖabaƒoƒo {0} wo me"}
-                other{"le aɖabaƒoƒo {0} wo me"}
-            }
-            minute-past{
-                one{"aɖabaƒoƒo {0} si wo va yi"}
-                other{"aɖabaƒoƒo {0} si wo va yi"}
-            }
             month{
                 one{"ɣleti {0} wo"}
                 other{"ɣleti {0} wo"}
-            }
-            month-future{
-                one{"le ɣleti {0} wo me"}
-                other{"le ɣleti {0} wo me"}
-            }
-            month-past{
-                one{"ɣleti {0} si wo va yi"}
-                other{"ɣleti {0} si wo va yi"}
             }
             second{
                 one{"sekend {0} wo"}
                 other{"sekend {0} wo"}
             }
-            second-future{
-                one{"le sekend {0} wo me"}
-                other{"le sekend {0} wo me"}
-            }
-            second-past{
-                one{"sekend {0} si wo va yi"}
-                other{"sekend {0} si wo va yi"}
-            }
             week{
                 one{"kɔsiɖa {0} wo"}
                 other{"kɔsiɖa {0} wo"}
             }
-            week-future{
-                one{"le kɔsiɖa {0} wo me"}
-                other{"le kɔsiɖa {0} wo me"}
-            }
-            week-past{
-                one{"kɔsiɖa {0} si wo va yi"}
-                other{"kɔsiɖa {0} si wo va yi"}
-            }
             year{
                 one{"ƒe {0} wo"}
                 other{"ƒe {0} wo"}
-            }
-            year-future{
-                one{"le ƒe {0} wo me"}
-                other{"le ƒe {0} wo me"}
-            }
-            year-past{
-                one{"ƒe {0} si wo va yi"}
-                other{"ƒe {0} si wo va yi"}
             }
         }
     }

@@ -81,7 +81,7 @@ en{
         BY{"Belarus"}
         BZ{"Belize"}
         CA{"Canada"}
-        CC{"Cocos [Keeling] Islands"}
+        CC{"Cocos (Keeling) Islands"}
         CD{"Congo - Kinshasa"}
         CF{"Central African Republic"}
         CG{"Congo - Brazzaville"}
@@ -193,7 +193,7 @@ en{
         MH{"Marshall Islands"}
         MK{"Macedonia"}
         ML{"Mali"}
-        MM{"Myanmar [Burma]"}
+        MM{"Myanmar (Burma)"}
         MN{"Mongolia"}
         MO{"Macau SAR China"}
         MP{"Northern Mariana Islands"}
@@ -302,5 +302,5 @@ en{
         ZW{"Zimbabwe"}
         ZZ{"Unknown Region"}
     }
-    Version{"2.0.89.25"}
+    Version{"2.0.92.87"}
 }

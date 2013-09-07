@@ -7,15 +7,26 @@
 // *
 // ***************************************************************************
 en_AU{
+    %%Parent{"en_GB"}
     Currencies{
         AUD{
             "$",
             "Australian Dollar",
+        }
+        EUR{
+            "€",
+            "Euro",
         }
         USD{
             "US$",
             "US Dollar",
         }
     }
-    Version{"2.0.82.45"}
+    CurrencyPlurals{
+        EUR{
+            one{"euro"}
+            other{"euro"}
+        }
+    }
+    Version{"2.0.92.87"}
 }

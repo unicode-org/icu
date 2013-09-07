@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/fa.xml
  */
 fa{
-    Version{"2.0.88.97"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"آبیجان"}
@@ -86,6 +86,9 @@ fa{
         }
         "Africa:Johannesburg"{
             ec{"ژوهانسبورگ"}
+        }
+        "Africa:Juba"{
+            ec{"جوبا"}
         }
         "Africa:Kampala"{
             ec{"کامپالا"}
@@ -169,7 +172,7 @@ fa{
             ec{"ایدک"}
         }
         "America:Anchorage"{
-            ec{"انکریج"}
+            ec{"انکوریج"}
         }
         "America:Anguilla"{
             ec{"آنگوئیلا"}
@@ -209,6 +212,9 @@ fa{
         }
         "America:Bahia"{
             ec{"بایا"}
+        }
+        "America:Bahia_Banderas"{
+            ec{"باهیا باندراس"}
         }
         "America:Barbados"{
             ec{"باربادوس"}
@@ -259,7 +265,7 @@ fa{
             ec{"شیکاگو"}
         }
         "America:Chihuahua"{
-            ec{"چیئوائوا"}
+            ec{"چیواوا"}
         }
         "America:Coral_Harbour"{
             ec{"اتکوکان"}
@@ -269,6 +275,9 @@ fa{
         }
         "America:Costa_Rica"{
             ec{"کاستاریکا"}
+        }
+        "America:Creston"{
+            ec{"کرستون"}
         }
         "America:Cuiaba"{
             ec{"کویاوا"}
@@ -384,6 +393,9 @@ fa{
         "America:Kentucky:Monticello"{
             ec{"مانتیسلو، کنتاکی"}
         }
+        "America:Kralendijk"{
+            ec{"کرالندیک"}
+        }
         "America:La_Paz"{
             ec{"لاپاز"}
         }
@@ -414,6 +426,9 @@ fa{
         "America:Martinique"{
             ec{"مارتینیک"}
         }
+        "America:Matamoros"{
+            ec{"ماتاموروس"}
+        }
         "America:Mazatlan"{
             ec{"ماساتلان"}
         }
@@ -425,6 +440,9 @@ fa{
         }
         "America:Merida"{
             ec{"مریدا"}
+        }
+        "America:Metlakatla"{
+            ec{"متالاکاتلا"}
         }
         "America:Mexico_City"{
             ec{"مکزیکوسیتی"}
@@ -442,7 +460,7 @@ fa{
             ec{"مونته‌ویدئو"}
         }
         "America:Montreal"{
-            ec{"مونرئال"}
+            ec{"مونترئال"}
         }
         "America:Montserrat"{
             ec{"مونتسرات"}
@@ -470,6 +488,9 @@ fa{
         }
         "America:North_Dakota:New_Salem"{
             ec{"نیوسالم، داکوتای شمالی"}
+        }
+        "America:Ojinaga"{
+            ec{"اخیناگا"}
         }
         "America:Panama"{
             ec{"پاناما"}
@@ -513,6 +534,9 @@ fa{
         "America:Rio_Branco"{
             ec{"ریوبرانکو"}
         }
+        "America:Santa_Isabel"{
+            ec{"سانتا ایزابل"}
+        }
         "America:Santarem"{
             ec{"سنتارم"}
         }
@@ -530,6 +554,9 @@ fa{
         }
         "America:Shiprock"{
             ec{"شیپراک"}
+        }
+        "America:Sitka"{
+            ec{"سیتکا"}
         }
         "America:St_Barthelemy"{
             ec{"سنت بارتلمی"}
@@ -593,6 +620,9 @@ fa{
         }
         "Antarctica:DumontDUrville"{
             ec{"دومون دورویل"}
+        }
+        "Antarctica:Macquarie"{
+            ec{"مکواری"}
         }
         "Antarctica:Mawson"{
             ec{"ماوسون"}
@@ -693,6 +723,9 @@ fa{
         "Asia:Harbin"{
             ec{"هاربین"}
         }
+        "Asia:Hebron"{
+            ec{"الخلیل"}
+        }
         "Asia:Hong_Kong"{
             ec{"هنگ‌کنگ"}
         }
@@ -726,6 +759,9 @@ fa{
         "Asia:Katmandu"{
             ec{"کاتماندو"}
         }
+        "Asia:Khandyga"{
+            ec{"خاندیگا"}
+        }
         "Asia:Krasnoyarsk"{
             ec{"کراسنویارسک"}
         }
@@ -755,6 +791,9 @@ fa{
         }
         "Asia:Nicosia"{
             ec{"نیکوزیا"}
+        }
+        "Asia:Novokuznetsk"{
+            ec{"نوووکوزنتسک"}
         }
         "Asia:Novosibirsk"{
             ec{"نووسیبیریسک"}
@@ -827,6 +866,9 @@ fa{
         }
         "Asia:Urumqi"{
             ec{"ارومچی"}
+        }
+        "Asia:Ust-Nera"{
+            ec{"اوست نرا"}
         }
         "Asia:Vientiane"{
             ec{"وینتیان"}
@@ -938,6 +980,9 @@ fa{
         }
         "Europe:Budapest"{
             ec{"بوداپست"}
+        }
+        "Europe:Busingen"{
+            ec{"بازنگن"}
         }
         "Europe:Chisinau"{
             ec{"کیشیناو"}

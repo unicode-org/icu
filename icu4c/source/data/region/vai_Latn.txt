@@ -10,6 +10,7 @@
  * ICU <specials> source: <path>/common/main/vai_Latn.xml
  */
 vai_Latn{
+    %%Parent{"root"}
     Countries{
         AD{"Aŋdóra"}
         AE{"Yunaitɛ Arabhi Ɛmire"}
@@ -236,5 +237,5 @@ vai_Latn{
         ZM{"Zambiya"}
         ZW{"Zimbabhuwe"}
     }
-    Version{"2.0.84.55"}
+    Version{"2.0.92.87"}
 }

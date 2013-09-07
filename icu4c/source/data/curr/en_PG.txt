@@ -7,15 +7,12 @@
 // *
 // ***************************************************************************
 en_PG{
+    %%Parent{"en_001"}
     Currencies{
         PGK{
             "K",
             "Papua New Guinean Kina",
         }
-        USD{
-            "US$",
-            "US Dollar",
-        }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.91.70"}
 }

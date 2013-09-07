@@ -11,19 +11,19 @@
  */
 dz{
     AuxExemplarCharacters{
-        "[\u0F7E ཊ \u0F9A ཋ \u0F9B ཌ \u0F9C ཎ \u0F9E \u0FBA \u0FBB \u0FBC ཥ \u0F80 "
-        "\u0F7B \u0F7D \u0F84]"
+        "[\u0F84 ཊ ཋ ཌ ཎ \u0F7E ཥ \u0F80 \u0F7B \u0F7D \u0F9A \u0F9B \u0F9C \u0F9E "
+        "\u0FBA \u0FBB \u0FBC]"
     }
     ExemplarCharacters{
-        "[ཀ \u0F90 ཁ \u0F91 ག \u0F92 ང \u0F94 ཅ ཆ ཇ \u0F97 ཉ \u0F99 ཏ \u0F9F ཐ \u0FA0"
-        " ད \u0FA1 ན \u0FA3 པ \u0FA4 ཕ \u0FA5 བ \u0FA6 མ \u0FA8 ཙ \u0FA9 ཚ \u0FAA ཛ "
-        "\u0FAB ཝ \u0FAD ཞ ཟ འ ཡ \u0FB1 ར \u0FB2 ལ \u0FB3 ཤ \u0FB5 ས \u0FB6 ཧ \u0FB7 "
-        "ཨ \u0F72 \u0F74 \u0F7A \u0F7C]"
+        "[ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཨ \u0F72 \u0F74 "
+        "\u0F7A \u0F7C \u0F90 \u0F91 \u0F92 \u0F94 \u0F97 \u0F99 \u0F9F \u0FA0 \u0FA1"
+        " \u0FA3 \u0FA4 \u0FA5 \u0FA6 \u0FA8 \u0FA9 \u0FAA \u0FAB \u0FAD \u0FB1 "
+        "\u0FB2 \u0FB3 \u0FB5 \u0FB6 \u0FB7]"
     }
     ExemplarCharactersIndex{"[ཀ ཁ ག ང ཅ ཆ ཇ ཉ ཏ ཐ ད ན པ ཕ བ མ ཙ ཚ ཛ ཝ ཞ ཟ འ ཡ ར ལ ཤ ས ཧ ཨ]"}
     ExemplarCharactersPunctuation{
-        "[\\- ‐ – — , ; \\: ༔ ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] ༼ ༽ § @ * / \\& # "
-        "† ‡ ༄ ༅ ༆ ༈ ༉ ༊ ࿐ ࿑ ༌ ། ༎ ༏ ༐ ༑ ༒ ࿒ ࿓ ࿔ ༴ ༶ ྾ ྿]"
+        "[\\- ‐ – — , ; \\: ! ? . … ' ‘ ’ \u0022 “ ” ( ) \\[ \\] ༼ ༽ § @ * / \\& # † "
+        "‡ ༄ ༅ ༆ ༈ ༉ ༊ ࿐ ࿑ ༒ ࿒ ࿓ ࿔ ༶ ྾ ྿ ༌ ། ༎ ༏ ༐ ༑ ༔ ༴]"
     }
     LocaleScript{
         "Tibt",
@@ -106,7 +106,7 @@ dz{
             }
         }
     }
-    Version{"2.0.86.27"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{
@@ -630,6 +630,14 @@ dz{
                 "1"{"ནངས་པ་"}
                 "2"{"གནངས་ཚེ"}
             }
+            relativeTime{
+                future{
+                    other{"ཉིནམ་ {0} ནང་"}
+                }
+                past{
+                    other{"ཉིནམ་ {0} ཧེ་མ་"}
+                }
+            }
         }
         dayperiod{
             dn{"སྔ་ཆ/ཕྱི་ཆ་"}
@@ -639,24 +647,72 @@ dz{
         }
         hour{
             dn{"ཆུ་ཚོད"}
+            relativeTime{
+                future{
+                    other{"ཆུ་ཚོད་ {0} ནང་"}
+                }
+                past{
+                    other{"ཆུ་ཚོད་ {0} ཧེ་མ་"}
+                }
+            }
         }
         minute{
             dn{"སྐར་མ"}
+            relativeTime{
+                future{
+                    other{"སྐར་མ་ {0} ནང་"}
+                }
+                past{
+                    other{"སྐར་མ་ {0} ཧེ་མ་"}
+                }
+            }
         }
         month{
             dn{"ཟླ་ཝ་"}
+            relativeTime{
+                future{
+                    other{"ཟླཝ་ {0} ནང་"}
+                }
+                past{
+                    other{"ཟླཝ་ {0} ཧེ་མ་"}
+                }
+            }
         }
         second{
             dn{"སྐར་ཆཱ་"}
+            relativeTime{
+                future{
+                    other{"སྐར་ཆ་ {0} ནང་"}
+                }
+                past{
+                    other{"སྐར་ཆ་ {0} ཧེ་མ་"}
+                }
+            }
         }
         week{
             dn{"བདུན་ཕྲག"}
+            relativeTime{
+                future{
+                    other{"བངུན་ཕྲག་ {0} ནང་"}
+                }
+                past{
+                    other{"བངུན་ཕྲག་ {0} ཧེ་མ་"}
+                }
+            }
         }
         weekday{
             dn{"བདུན་ཕྲག་གི་ཉིམ"}
         }
         year{
             dn{"ལོ"}
+            relativeTime{
+                future{
+                    other{"ལོ་འཁོར་ {0} ནང་"}
+                }
+                past{
+                    other{"ལོ་འཁོར་ {0} ཧེ་མ་"}
+                }
+            }
         }
         zone{
             dn{"དུས་ཀུལ"}
@@ -680,65 +736,23 @@ dz{
             day{
                 other{"ཉིན་ཞག་ {0}"}
             }
-            day-future{
-                other{"ཉིནམ་ {0} ནང་"}
-            }
-            day-past{
-                other{"ཉིནམ་ {0} ཧེ་མ་"}
-            }
             hour{
                 other{"ཆུ་ཚོད་ {0}"}
             }
-            hour-future{
-                other{"ཆུ་ཚོད་ {0} ནང་"}
-            }
-            hour-past{
-                other{"ཆུ་ཚོད་ {0} ཧེ་མ་"}
-            }
             minute{
-                other{"སྐར་ཆ་ {0}"}
-            }
-            minute-future{
-                other{"སྐར་ཆ་ {0} ནང་"}
-            }
-            minute-past{
-                other{"སྐར་ཆ་ {0} ཧེ་མ་"}
+                other{"སྐར་མ་ {0}"}
             }
             month{
                 other{"ཟླཝ་ {0}"}
             }
-            month-future{
-                other{"ཟླཝ་ {0} ནང་"}
-            }
-            month-past{
-                other{"ཟླཝ་ {0} ཧེ་མ་"}
-            }
             second{
                 other{"སྐར་ཆ་ {0}"}
-            }
-            second-future{
-                other{"སྐར་ཆ་ {0} ནང་"}
-            }
-            second-past{
-                other{"བངུན་ཕྲག་ {0} ཧེ་མ་"}
             }
             week{
                 other{"བངུན་ཕྲག་ {0}"}
             }
-            week-future{
-                other{"བངུན་ཕྲག་ {0} ནང་"}
-            }
-            week-past{
-                other{"བངུན་ཕྲག་ {0} ཧེ་མ་"}
-            }
             year{
                 other{"ལོ་འཁོར་ {0}"}
-            }
-            year-future{
-                other{"ལོ་འཁོར་ {0} ནང་"}
-            }
-            year-past{
-                other{"ལོ་འཁོར་ {0} ཧེ་མ་"}
             }
         }
     }

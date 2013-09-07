@@ -40,7 +40,7 @@ is{
         151{"Austur-Evrópa"}
         154{"Norður-Evrópa"}
         155{"Vestur-Evrópa"}
-        419{"Latín-Ameríka"}
+        419{"Rómanska Ameríka"}
         AC{"Ascension-eyja"}
         AD{"Andorra"}
         AE{"Sameinuðu arabísku furstadæmin"}
@@ -81,14 +81,14 @@ is{
         BY{"Hvíta-Rússland"}
         BZ{"Belís"}
         CA{"Kanada"}
-        CC{"Kókoseyjar"}
+        CC{"Kókoseyjar (Keeling)"}
         CD{"Kongó-Kinshasa"}
         CF{"Mið-Afríkulýðveldið"}
         CG{"Kongó-Brazzaville"}
         CH{"Sviss"}
         CI{"Fílabeinsströndin"}
-        CK{"Cookseyjar"}
-        CL{"Chíle"}
+        CK{"Cooks-eyjar"}
+        CL{"Síle"}
         CM{"Kamerún"}
         CN{"Kína"}
         CO{"Kólumbía"}
@@ -96,7 +96,7 @@ is{
         CR{"Kostaríka"}
         CU{"Kúba"}
         CV{"Grænhöfðaeyjar"}
-        CW{"Curacao"}
+        CW{"Curaçao"}
         CX{"Jólaey"}
         CY{"Kýpur"}
         CZ{"Tékkland"}
@@ -119,7 +119,7 @@ is{
         FI{"Finnland"}
         FJ{"Fídjieyjar"}
         FK{"Falklandseyjar"}
-        FM{"Mikrónesía"}
+        FM{"Míkrónesía (FM)"}
         FO{"Færeyjar"}
         FR{"Frakkland"}
         GA{"Gabon"}
@@ -193,7 +193,7 @@ is{
         MH{"Marshalleyjar"}
         MK{"Makedónía"}
         ML{"Malí"}
-        MM{"Mjanmar [Búrma]"}
+        MM{"Mjanmar (Búrma)"}
         MN{"Mongólía"}
         MO{"Sjálfstjórnarsvæðið Makaó"}
         MP{"Norður-Maríanaeyjar"}
@@ -213,7 +213,7 @@ is{
         NF{"Norfolkeyja"}
         NG{"Nígería"}
         NI{"Níkaragva"}
-        NL{"Niðurlönd"}
+        NL{"Holland"}
         NO{"Noregur"}
         NP{"Nepal"}
         NR{"Nárú"}
@@ -228,7 +228,7 @@ is{
         PK{"Pakistan"}
         PL{"Pólland"}
         PM{"Sankti Pierre og Miquelon"}
-        PN{"Pitcairneyjar"}
+        PN{"Pitcairn-eyjar"}
         PR{"Púertó Ríkó"}
         PS{"Heimastjórnarsvæði Palestínumanna"}
         PT{"Portúgal"}
@@ -243,7 +243,7 @@ is{
         RW{"Rúanda"}
         SA{"Sádi-Arabía"}
         SB{"Salómonseyjar"}
-        SC{"Seychelleseyjar"}
+        SC{"Seychelles-eyjar"}
         SD{"Súdan"}
         SE{"Svíþjóð"}
         SG{"Singapúr"}
@@ -285,7 +285,7 @@ is{
         US{"Bandaríkin"}
         UY{"Úrúgvæ"}
         UZ{"Úsbekistan"}
-        VA{"Páfagarður"}
+        VA{"Páfastóll"}
         VC{"Sankti Vinsent og Grenadíneyjar"}
         VE{"Venesúela"}
         VG{"Bresku Jómfrúaeyjar"}
@@ -302,5 +302,5 @@ is{
         ZW{"Simbabve"}
         ZZ{"Óþekkt svæði"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

@@ -11,9 +11,18 @@ ar_SA{
         latn{
             patterns{
                 currencyFormat{"¤#0.00"}
-                decimalFormat{"#0.###"}
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
+    calendar{
+        islamic{
+            availableFormats{
+                MEd{"E, M/d"}
+                MMMEd{"E, MMM d"}
+                MMMd{"MMM d"}
+                Md{"M/d"}
+            }
+        }
+    }
 }

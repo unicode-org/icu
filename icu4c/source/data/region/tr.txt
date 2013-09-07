@@ -81,7 +81,7 @@ tr{
         BY{"Beyaz Rusya"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Cocos [Keeling] Adaları"}
+        CC{"Cocos (Keeling) Adaları"}
         CD{"Kongo - Kinşasa"}
         CF{"Orta Afrika Cumhuriyeti"}
         CG{"Kongo - Brazavil"}
@@ -193,7 +193,7 @@ tr{
         MH{"Marshall Adaları"}
         MK{"Makedonya"}
         ML{"Mali"}
-        MM{"Myanmar [Burma]"}
+        MM{"Myanmar (Burma)"}
         MN{"Moğolistan"}
         MO{"Çin Makao ÖYB"}
         MP{"Kuzey Mariana Adaları"}
@@ -302,5 +302,5 @@ tr{
         ZW{"Zimbabve"}
         ZZ{"Bilinmeyen Bölge"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

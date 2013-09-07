@@ -35,7 +35,7 @@ az_Cyrl{
             }
         }
     }
-    Version{"2.0.86.38"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{
@@ -44,9 +44,9 @@ az_Cyrl{
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d, MMMM, y G",
-                "d MMMM , y G",
+                "d MMMM, y G",
                 "d MMM, y G",
-                "GGGGG y-MM-dd",
+                "dd.MM.y GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -54,12 +54,17 @@ az_Cyrl{
                 "{1} {0}",
             }
             availableFormats{
+                MEd{"E, dd.MM"}
                 MMM{"LLL"}
                 MMMEd{"E, d, MMM"}
                 MMMd{"d MMM"}
+                Md{"dd.MM"}
+                yyyyM{"MM.y G"}
+                yyyyMEd{"E, dd.MM.y G"}
                 yyyyMMM{"MMM, y G"}
                 yyyyMMMEd{"E, d, MMM, y G"}
                 yyyyMMMd{"d MMM, y G"}
+                yyyyMd{"dd.MM.y G"}
             }
         }
         gregorian{
@@ -69,9 +74,9 @@ az_Cyrl{
                 "HH:mm:ss",
                 "HH:mm",
                 "EEEE, d, MMMM, y",
-                "d MMMM , y",
+                "d MMMM, y",
                 "d MMM, y",
-                "y-MM-dd",
+                "dd.MM.yy",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
@@ -79,12 +84,17 @@ az_Cyrl{
                 "{1} {0}",
             }
             availableFormats{
+                MEd{"E, dd.MM"}
                 MMM{"LLL"}
                 MMMEd{"E, d, MMM"}
                 MMMd{"d MMM"}
+                Md{"dd.MM"}
+                yM{"MM.y"}
+                yMEd{"E, dd.MM.y"}
                 yMMM{"MMM, y"}
                 yMMMEd{"E, d, MMM, y"}
                 yMMMd{"d MMM, y"}
+                yMd{"dd.MM.y"}
             }
             dayNames{
                 format{

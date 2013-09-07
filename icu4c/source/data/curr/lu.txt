@@ -225,7 +225,7 @@ lu{
         }
         ZMK{
             "ZMK",
-            "Kwasha wa Zambi (1968-2012)",
+            "Kwasha wa Zambi (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +236,5 @@ lu{
             "Ndola wa Zimbabwe",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

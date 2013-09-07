@@ -142,7 +142,7 @@ sv{
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
         HK{"Hongkong (S.A.R. Kina)"}
-        HM{"Heard- och McDonaldöarna"}
+        HM{"Heardön och McDonaldöarna"}
         HN{"Honduras"}
         HR{"Kroatien"}
         HT{"Haiti"}
@@ -153,7 +153,7 @@ sv{
         IL{"Israel"}
         IM{"Isle of Man"}
         IN{"Indien"}
-        IO{"Brittiska Indiska oceanöarna"}
+        IO{"Brittiska territoriet i Indiska oceanen"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Island"}
@@ -193,7 +193,7 @@ sv{
         MH{"Marshallöarna"}
         MK{"Makedonien"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar (Burma)"}
         MN{"Mongoliet"}
         MO{"Macao (S.A.R. Kina)"}
         MP{"Nordmarianerna"}
@@ -230,12 +230,12 @@ sv{
         PM{"S:t Pierre och Miquelon"}
         PN{"Pitcairnöarna"}
         PR{"Puerto Rico"}
-        PS{"Palestinska territoriet"}
+        PS{"Palestinska territorierna"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
-        QO{"Yttre öar i Oceanien"}
+        QO{"yttre öar i Oceanien"}
         RE{"Réunion"}
         RO{"Rumänien"}
         RS{"Serbien"}
@@ -259,12 +259,13 @@ sv{
         SS{"Sydsudan"}
         ST{"São Tomé och Príncipe"}
         SV{"El Salvador"}
+        SX{"Sint Maarten"}
         SY{"Syrien"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
         TC{"Turks- och Caicosöarna"}
         TD{"Tchad"}
-        TF{"Franska Sydterritorierna"}
+        TF{"Franska sydterritorierna"}
         TG{"Togo"}
         TH{"Thailand"}
         TJ{"Tadzjikistan"}
@@ -301,5 +302,5 @@ sv{
         ZW{"Zimbabwe"}
         ZZ{"okänd region"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

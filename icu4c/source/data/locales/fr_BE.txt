@@ -14,7 +14,7 @@ fr_BE{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.90.61"}
     calendar{
         generic{
             DateTimePatterns{
@@ -27,8 +27,8 @@ fr_BE{
                 "d MMM y G",
                 "d/MM/yy GGGGG",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1} 'à' {0}",
+                "{1} 'à' {0}",
                 "{1} {0}",
                 "{1} {0}",
             }

@@ -221,7 +221,7 @@ ksf{
         }
         ZMK{
             "ZMK",
-            "mɔni mǝ á zambí (1968-2012)",
+            "mɔni mǝ á zambí (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -232,5 +232,5 @@ ksf{
             "mɔni mǝ á zimbabwɛ́",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/hu.xml
  */
 hu{
-    Version{"2.0.85.93"}
+    Version{"2.0.93.17"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addisz-Abeba"}
@@ -57,14 +57,8 @@ hu{
         "America:Asuncion"{
             ec{"Asunción"}
         }
-        "America:Barbados"{
-            ec{"Barbadosz"}
-        }
         "America:Belem"{
             ec{"Belém"}
-        }
-        "America:Belize"{
-            ec{"Beliz"}
         }
         "America:Bogota"{
             ec{"Bogotá"}
@@ -73,7 +67,7 @@ hu{
             ec{"Cancún"}
         }
         "America:Cayman"{
-            ec{"Kajmán"}
+            ec{"Kajmán-szigetek"}
         }
         "America:Coral_Harbour"{
             ec{"Atikokan"}
@@ -83,9 +77,6 @@ hu{
         }
         "America:Cuiaba"{
             ec{"Cuiabá"}
-        }
-        "America:Danmarkshavn"{
-            ec{"Danmarks Havn"}
         }
         "America:Dominica"{
             ec{"Dominika"}
@@ -97,7 +88,7 @@ hu{
             ec{"Salvador"}
         }
         "America:Godthab"{
-            ec{"Godthåb"}
+            ec{"Nuuk"}
         }
         "America:Havana"{
             ec{"Havanna"}
@@ -123,9 +114,6 @@ hu{
         "America:Indiana:Winamac"{
             ec{"Winamac, Indiana"}
         }
-        "America:Jamaica"{
-            ec{"Jamaika"}
-        }
         "America:Kentucky:Monticello"{
             ec{"Monticello, Kentucky"}
         }
@@ -144,9 +132,6 @@ hu{
         "America:Mexico_City"{
             ec{"Mexikóváros"}
         }
-        "America:Montreal"{
-            ec{"Montréal"}
-        }
         "America:North_Dakota:Beulah"{
             ec{"Beulah, Észak-Dakota"}
         }
@@ -163,7 +148,7 @@ hu{
             ec{"São Paulo"}
         }
         "America:Scoresbysund"{
-            ec{"Scoresby Sound"}
+            ec{"Ittoqqortoormiit"}
         }
         "America:St_Barthelemy"{
             ec{"Saint Barthélemy"}
@@ -249,9 +234,6 @@ hu{
         "Asia:Irkutsk"{
             ec{"Irkutszk"}
         }
-        "Asia:Jakarta"{
-            ec{"Dzsakarta"}
-        }
         "Asia:Jerusalem"{
             ec{"Jeruzsálem"}
         }
@@ -266,6 +248,9 @@ hu{
         }
         "Asia:Katmandu"{
             ec{"Katmandu"}
+        }
+        "Asia:Khandyga"{
+            ec{"Handiga"}
         }
         "Asia:Krasnoyarsk"{
             ec{"Krasznojarszk"}
@@ -284,6 +269,9 @@ hu{
         }
         "Asia:Makassar"{
             ec{"Makasar"}
+        }
+        "Asia:Novokuznetsk"{
+            ec{"Novokuznyeck"}
         }
         "Asia:Novosibirsk"{
             ec{"Novoszibirszk"}
@@ -342,6 +330,9 @@ hu{
         "Asia:Urumqi"{
             ec{"Ürümqi"}
         }
+        "Asia:Ust-Nera"{
+            ec{"Uszty-Nyera"}
+        }
         "Asia:Vientiane"{
             ec{"Vientián"}
         }
@@ -373,13 +364,16 @@ hu{
             ec{"Reykjavík"}
         }
         "Atlantic:South_Georgia"{
-            ec{"Dél-Georgia"}
+            ec{"Déli-Georgia"}
         }
         "Atlantic:St_Helena"{
             ec{"Szent Ilona"}
         }
         "Etc:Unknown"{
             ec{"Ismeretlen város"}
+        }
+        "Europe:Amsterdam"{
+            ec{"Amszterdam"}
         }
         "Europe:Athens"{
             ec{"Athén"}
@@ -395,6 +389,9 @@ hu{
         }
         "Europe:Bucharest"{
             ec{"Bukarest"}
+        }
+        "Europe:Busingen"{
+            ec{"Büsingen"}
         }
         "Europe:Copenhagen"{
             ec{"Koppenhága"}
@@ -490,10 +487,10 @@ hu{
             ec{"Zürich"}
         }
         "Indian:Christmas"{
-            ec{"Karácsony"}
+            ec{"Karácsony-sziget"}
         }
         "Indian:Cocos"{
-            ec{"Kókusz"}
+            ec{"Kókusz-sziget"}
         }
         "Indian:Comoro"{
             ec{"Komoró"}
@@ -925,9 +922,9 @@ hu{
             ls{"Line-szigeteki idő"}
         }
         "meta:Lord_Howe"{
-            ld{"Lord howei nyári idő"}
-            lg{"Lord howei idő"}
-            ls{"Lord howei zónaidő"}
+            ld{"Lord Howe-i nyári idő"}
+            lg{"Lord Howe-i idő"}
+            ls{"Lord Howe-i zónaidő"}
         }
         "meta:Macau"{
             ld{"Macaui nyári idő"}
@@ -973,7 +970,7 @@ hu{
             ls{"Moszkvai zónaidő"}
         }
         "meta:Myanmar"{
-            ls{"Myanmari idő"}
+            ls{"Mianmari idő"}
         }
         "meta:Nauru"{
             ls{"Naurui idő"}

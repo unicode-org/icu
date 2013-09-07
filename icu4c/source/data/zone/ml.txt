@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ml.xml
  */
 ml{
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"അബിദ്‌ജാൻ‌"}
@@ -22,7 +22,7 @@ ml{
             ec{"അഡിസ് അബാബ"}
         }
         "Africa:Algiers"{
-            ec{"അൾ‌ജീസ്"}
+            ec{"അൾജിയേഴ്‌സ്"}
         }
         "Africa:Asmera"{
             ec{"അസ്‍മാര"}
@@ -64,7 +64,7 @@ ml{
             ec{"ഡാക്കർ‌"}
         }
         "Africa:Dar_es_Salaam"{
-            ec{"ദാറുസ് സലാം"}
+            ec{"ദാർ എസ് സലാം"}
         }
         "Africa:Djibouti"{
             ec{"ദിബൌട്ടി"}
@@ -86,6 +86,9 @@ ml{
         }
         "Africa:Johannesburg"{
             ec{"ജോഹന്നാസ്ബർ‌ഗ്"}
+        }
+        "Africa:Juba"{
+            ec{"ജുബ"}
         }
         "Africa:Kampala"{
             ec{"കമ്പാല"}
@@ -210,6 +213,9 @@ ml{
         "America:Bahia"{
             ec{"ബഹിയ"}
         }
+        "America:Bahia_Banderas"{
+            ec{"ബഹിയ ബൻഡാരസ്"}
+        }
         "America:Barbados"{
             ec{"ബാർബഡോസ്"}
         }
@@ -235,13 +241,13 @@ ml{
             ec{"ബ്യൂനസ് ഐറിസ്"}
         }
         "America:Cambridge_Bay"{
-            ec{"കെയ്ന്പ്രിഡ്ജ് ബേ"}
+            ec{"കേംബ്രിഡ്‌ജ് ബേ"}
         }
         "America:Campo_Grande"{
             ec{"ക്യാന്പോ ഗ്രാൻഡെ"}
         }
         "America:Cancun"{
-            ec{"കൻകൂൻ"}
+            ec{"കാൻകൂൺ"}
         }
         "America:Caracas"{
             ec{"കരാക്കസ്"}
@@ -270,8 +276,11 @@ ml{
         "America:Costa_Rica"{
             ec{"കോസ്റ്റ റിക്ക"}
         }
+        "America:Creston"{
+            ec{"ക്രെസ്റ്റൺ"}
+        }
         "America:Cuiaba"{
-            ec{"കുയ്ബ"}
+            ec{"കുയ്‌ബ"}
         }
         "America:Curacao"{
             ec{"കുറാക്കാവോ"}
@@ -379,10 +388,13 @@ ml{
             ec{"ജുജുയ്"}
         }
         "America:Juneau"{
-            ec{"ജുനിയു"}
+            ec{"ജൂനോ"}
         }
         "America:Kentucky:Monticello"{
             ec{"മോണ്ടിസെല്ലോ, കെൻറക്കി"}
+        }
+        "America:Kralendijk"{
+            ec{"കാർലൻഡിജെക്ക്"}
         }
         "America:La_Paz"{
             ec{"ലാ പാസ്"}
@@ -403,7 +415,7 @@ ml{
             ec{"മാസിയോ"}
         }
         "America:Managua"{
-            ec{"മണാഗ്വ"}
+            ec{"മനാഗ്വ"}
         }
         "America:Manaus"{
             ec{"മനൌസ്"}
@@ -413,6 +425,9 @@ ml{
         }
         "America:Martinique"{
             ec{"മാർട്ടിനിക്"}
+        }
+        "America:Matamoros"{
+            ec{"മറ്റാമൊറോസ്"}
         }
         "America:Mazatlan"{
             ec{"മാസറ്റ്ലാൻ"}
@@ -425,6 +440,9 @@ ml{
         }
         "America:Merida"{
             ec{"മെരിഡ"}
+        }
+        "America:Metlakatla"{
+            ec{"മെറ്റ്‌ലാകാറ്റ്‌ല"}
         }
         "America:Mexico_City"{
             ec{"മെക്സിക്കോ സിറ്റി"}
@@ -442,7 +460,7 @@ ml{
             ec{"മൊണ്ടെ‌വീഡിയോ"}
         }
         "America:Montreal"{
-            ec{"മോണ്ട്രിയാൽ"}
+            ec{"മോൺട്രിയാൽ"}
         }
         "America:Montserrat"{
             ec{"മൊണ്ടെസരത്ത്"}
@@ -470,6 +488,9 @@ ml{
         }
         "America:North_Dakota:New_Salem"{
             ec{"ന്യൂ സെയ്‌ലം, നോർത്ത് ഡക്കോട്ട"}
+        }
+        "America:Ojinaga"{
+            ec{"ഒജിൻഗ"}
         }
         "America:Panama"{
             ec{"പനാമ"}
@@ -513,6 +534,9 @@ ml{
         "America:Rio_Branco"{
             ec{"റിയോ ബ്രാങ്കോ"}
         }
+        "America:Santa_Isabel"{
+            ec{"സാന്ത ഇസബേൽ"}
+        }
         "America:Santarem"{
             ec{"സാൻററെം"}
         }
@@ -530,6 +554,9 @@ ml{
         }
         "America:Shiprock"{
             ec{"ഷിപ്പ്റോക്ക്"}
+        }
+        "America:Sitka"{
+            ec{"സിറ്റ്‌കാ"}
         }
         "America:St_Barthelemy"{
             ec{"സെൻറ് ബർത്തലെമി"}
@@ -594,6 +621,9 @@ ml{
         "Antarctica:DumontDUrville"{
             ec{"ഡ്യൂമണ്ട് ഡി യുർവിൽ"}
         }
+        "Antarctica:Macquarie"{
+            ec{"മക്വയറി"}
+        }
         "Antarctica:Mawson"{
             ec{"മാവ്സൺ"}
         }
@@ -634,7 +664,7 @@ ml{
             ec{"അഖ്തൌ"}
         }
         "Asia:Aqtobe"{
-            ec{"അഖ്തോബ്"}
+            ec{"അഖ്‌തോബ്"}
         }
         "Asia:Ashgabat"{
             ec{"ആഷ്‌ഗാബട്ട്"}
@@ -649,7 +679,7 @@ ml{
             ec{"ബാക്കു"}
         }
         "Asia:Bangkok"{
-            ec{"ബാങ്കോംഗ്"}
+            ec{"ബാങ്കോക്ക്"}
         }
         "Asia:Beirut"{
             ec{"ബെയ്‌റൂട്ട്"}
@@ -693,6 +723,9 @@ ml{
         "Asia:Harbin"{
             ec{"ഹാർബിൻ"}
         }
+        "Asia:Hebron"{
+            ec{"ഹെബ്‌റോൺ"}
+        }
         "Asia:Hong_Kong"{
             ec{"ഹോങ്കോംഗ്"}
         }
@@ -724,7 +757,10 @@ ml{
             ec{"കാഷ്ഗർ"}
         }
         "Asia:Katmandu"{
-            ec{"കാത്‍മണ്ഡു"}
+            ec{"കാഠ്‌മണ്ഡു"}
+        }
+        "Asia:Khandyga"{
+            ec{"കച്ചൻഗ"}
         }
         "Asia:Krasnoyarsk"{
             ec{"ക്രാസ്നോയാസ്ക്"}
@@ -756,6 +792,9 @@ ml{
         "Asia:Nicosia"{
             ec{"നിക്കോഷ്യ"}
         }
+        "Asia:Novokuznetsk"{
+            ec{"നോവോകുസെൻസ്‌ക്"}
+        }
         "Asia:Novosibirsk"{
             ec{"നൊവോസിബിർസ്ക്"}
         }
@@ -766,7 +805,7 @@ ml{
             ec{"ഓറൽ"}
         }
         "Asia:Phnom_Penh"{
-            ec{"ഫനോം പെഞ്ച്"}
+            ec{"നാം പെൻ"}
         }
         "Asia:Pontianak"{
             ec{"പൊൻറിയാനക്"}
@@ -796,16 +835,16 @@ ml{
             ec{"സമർക്കന്ദ്"}
         }
         "Asia:Seoul"{
-            ec{"സിയോൾ‌"}
+            ec{"സിയൂൾ"}
         }
         "Asia:Shanghai"{
-            ec{"ഷംഗായി"}
+            ec{"ഷാങ്‌ഹായി"}
         }
         "Asia:Singapore"{
             ec{"സിംഗപ്പൂർ"}
         }
         "Asia:Taipei"{
-            ec{"തായ്‌പി"}
+            ec{"തായ്‌പെയ്"}
         }
         "Asia:Tashkent"{
             ec{"താഷ്‌ക്കൻറ്"}
@@ -828,8 +867,11 @@ ml{
         "Asia:Urumqi"{
             ec{"ഉറുംഖി"}
         }
+        "Asia:Ust-Nera"{
+            ec{"യുസ്-നേര"}
+        }
         "Asia:Vientiane"{
-            ec{"വിയെൻറൈൻ"}
+            ec{"വെന്റിയാൻ"}
         }
         "Asia:Vladivostok"{
             ec{"വ്ളാഡിവോസ്റ്റോക്"}
@@ -910,7 +952,7 @@ ml{
             ec{"സിഡ്നി"}
         }
         "Etc:Unknown"{
-            ec{"അറിയപ്പെടാത്ത നഗരം"}
+            ec{"അജ്ഞാത നഗരം"}
         }
         "Europe:Amsterdam"{
             ec{"ആം‌സ്റ്റർ‌ഡാം"}
@@ -939,6 +981,9 @@ ml{
         "Europe:Budapest"{
             ec{"ബുഡാപെസ്റ്റ്"}
         }
+        "Europe:Busingen"{
+            ec{"ബുസിൻജൻ"}
+        }
         "Europe:Chisinau"{
             ec{"ചിസിനാവു"}
         }
@@ -947,6 +992,7 @@ ml{
         }
         "Europe:Dublin"{
             ec{"ഡബ്ലിൻ"}
+            ld{"ഐറിഷ് വേനൽക്കാലം"}
         }
         "Europe:Gibraltar"{
             ec{"ജിബ്രാൾട്ടർ"}
@@ -980,6 +1026,7 @@ ml{
         }
         "Europe:London"{
             ec{"ലണ്ടൻ‌"}
+            ld{"ബ്രിട്ടീഷ് വേനൽക്കാലം"}
         }
         "Europe:Luxembourg"{
             ec{"ലക്‌സംബർഗ്"}
@@ -1108,7 +1155,7 @@ ml{
             ec{"മയോട്ടി"}
         }
         "Indian:Reunion"{
-            ec{"പുനഃസംഘടന"}
+            ec{"റീയൂണിയൻ"}
         }
         "Pacific:Apia"{
             ec{"ആപിയ"}
@@ -1117,13 +1164,13 @@ ml{
             ec{"ഓക്ക്‌‌ലാൻറ്"}
         }
         "Pacific:Chatham"{
-            ec{"ചാത്തം"}
+            ec{"ചാതം"}
         }
         "Pacific:Easter"{
             ec{"ഈസ്റ്റർ"}
         }
         "Pacific:Efate"{
-            ec{"ഇഫാത്"}
+            ec{"ഇഫാതെ"}
         }
         "Pacific:Enderbury"{
             ec{"എൻഡബറി"}
@@ -1144,7 +1191,7 @@ ml{
             ec{"ഗാന്പിയർ"}
         }
         "Pacific:Guadalcanal"{
-            ec{"ഗ്വാദൽ കനാൽ"}
+            ec{"ഗ്വാഡോ കനാൽ"}
         }
         "Pacific:Guam"{
             ec{"ഗ്വാം"}
@@ -1474,7 +1521,7 @@ ml{
             ls{"ഗാലപ്പാഗോസ് സമയം"}
         }
         "meta:Gambier"{
-            ls{"ഗാന്പിയർ സമയം"}
+            ls{"ഗാമ്പിയർ സമയം"}
         }
         "meta:Georgia"{
             ld{"ജോർജ്ജിയ വേനൽക്കാല സമയം"}
@@ -1682,9 +1729,9 @@ ml{
             ls{"നോവോസിബിർസ്ക് സ്റ്റാൻഡേർഡ് സമയം"}
         }
         "meta:Omsk"{
-            ld{"ഓംസ്ക് വേനൽക്കാല സമയം"}
-            lg{"ഓംസ്ക്ക് സമയം"}
-            ls{"ഓംസ്ക് സ്റ്റാൻഡേർഡ് സമയം"}
+            ld{"ഓംസ്‌ക്ക് വേനൽക്കാല സമയം"}
+            lg{"ഓംസ്‌ക്ക് സമയം"}
+            ls{"ഓംസ്‌ക്ക് സ്റ്റാൻഡേർഡ് സമയം"}
         }
         "meta:Pakistan"{
             ld{"പാകിസ്ഥാൻ വേനൽക്കാല സമയം"}
@@ -1756,7 +1803,7 @@ ml{
             ls{"സെയ്ഷെൽസ് സമയം"}
         }
         "meta:Singapore"{
-            ls{"സിങ്കപ്പൂർ സ്റ്റാൻഡേർഡ് സമയം"}
+            ls{"സിംഗപ്പൂർ സ്റ്റാൻഡേർഡ് സമയം"}
         }
         "meta:Solomon"{
             ls{"സോളമൻ ദ്വീപുകൾ സമയം"}
@@ -1774,9 +1821,9 @@ ml{
             ls{"തഹിതി സമയം"}
         }
         "meta:Taipei"{
-            ld{"തായ്‌പേയ് പകൽ സമയം"}
-            lg{"തായ്‌പേയ് സമയം"}
-            ls{"തായ്‌പേയ് സ്റ്റാൻഡേർഡ് സമയം"}
+            ld{"തായ്‌പെയ് പകൽ സമയം"}
+            lg{"തായ്‌പെയ് സമയം"}
+            ls{"തായ്‌പെയ് സ്റ്റാൻഡേർഡ് സമയം"}
         }
         "meta:Tajikistan"{
             ls{"തജികിസ്ഥാൻ സമയം"}
@@ -1790,7 +1837,7 @@ ml{
             ls{"റ്റോംഗാ സ്റ്റാൻഡേർഡ് സമയം"}
         }
         "meta:Truk"{
-            ls{"ട്രക്ക് സമയം"}
+            ls{"ചൂക്ക് സമയം"}
         }
         "meta:Turkmenistan"{
             ld{"തുർക്ക്മെനിസ്ഥാൻ വേനൽക്കാല സമയം"}
@@ -1838,9 +1885,9 @@ ml{
             ls{"വാലിസ് ആൻഡ് ഫ്യൂചുന സമയം"}
         }
         "meta:Yakutsk"{
-            ld{"യാകസ്ക് വേനൽക്കാല സമയം"}
-            lg{"യ‍കുറ്റ്സ്ക് സമയം"}
-            ls{"യാകസ്ക് സ്റ്റാൻഡേർഡ് സമയം"}
+            ld{"യാകസ്‌ക്ക് വേനൽക്കാല സമയം"}
+            lg{"യാകസ്‌ക്ക് സമയം"}
+            ls{"യാകസ്‌ക്ക് സ്റ്റാൻഡേർഡ് സമയം"}
         }
         "meta:Yekaterinburg"{
             ld{"യെക്കാറ്ററിൻബർഗ് വേനൽക്കാല സമയം"}

@@ -7,12 +7,20 @@
 // *
 // ***************************************************************************
 en_GB{
+    %%Parent{"en_001"}
+    Keys{
+        colCaseLevel{"Case-Sensitive Sorting"}
+        colNormalization{"Normalised Sorting"}
+    }
     Languages{
         arn{"Araucanian"}
         bax{"Bamum"}
-        en_US{"US English"}
         tzm{"Central Morocco Tamazight"}
         wal{"Walamo"}
+    }
+    LanguagesShort{
+        en_GB{"UK English"}
+        en_US{"US English"}
     }
     Scripts{
         Thai{"Thai"}
@@ -22,8 +30,5 @@ en_GB{
             fullwide{"Full-Width Digits"}
         }
     }
-    Version{"2.0.85.35"}
-    localeDisplayPattern{
-        keyTypePattern{"{0}: {1}"}
-    }
+    Version{"2.0.92.80"}
 }

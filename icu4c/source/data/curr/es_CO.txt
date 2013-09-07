@@ -7,11 +7,16 @@
 // *
 // ***************************************************************************
 es_CO{
+    %%Parent{"es_419"}
     Currencies{
         COP{
             "$",
             "peso colombiano",
         }
+        USD{
+            "US$",
+            "dólar estadounidense",
+        }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.8"}
 }

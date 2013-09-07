@@ -29,7 +29,7 @@ pt{
         034{"Ásia do Sul"}
         035{"Ásia Centro-Oriental"}
         039{"Europa do Sul"}
-        053{"Austrália e Nova Zelândia"}
+        053{"Australásia"}
         054{"Melanésia"}
         057{"Região da Micronésia"}
         061{"Polinésia"}
@@ -57,31 +57,32 @@ pt{
         AT{"Áustria"}
         AU{"Austrália"}
         AW{"Aruba"}
-        AX{"Ilhas Aland"}
+        AX{"Ilhas Åland"}
         AZ{"Azerbaijão"}
-        BA{"Bósnia-Herzegovina"}
+        BA{"Bósnia e Herzegovina"}
         BB{"Barbados"}
         BD{"Bangladesh"}
         BE{"Bélgica"}
         BF{"Burquina Faso"}
         BG{"Bulgária"}
-        BH{"Bahrain"}
+        BH{"Bahrein"}
         BI{"Burundi"}
         BJ{"Benin"}
         BL{"São Bartolomeu"}
         BM{"Bermudas"}
         BN{"Brunei"}
         BO{"Bolívia"}
+        BQ{"Países Baixos Caribenhos"}
         BR{"Brasil"}
         BS{"Bahamas"}
         BT{"Butão"}
         BV{"Ilha Bouvet"}
         BW{"Botsuana"}
-        BY{"Belarus"}
+        BY{"Bielorrússia"}
         BZ{"Belize"}
         CA{"Canadá"}
         CC{"Ilhas Coco"}
-        CD{"Congo-Kinshasa"}
+        CD{"Congo - Kinshasa"}
         CF{"República Centro-Africana"}
         CG{"Congo - Brazzaville"}
         CH{"Suíça"}
@@ -95,6 +96,7 @@ pt{
         CR{"Costa Rica"}
         CU{"Cuba"}
         CV{"Cabo Verde"}
+        CW{"Curaçao"}
         CX{"Ilhas Natal"}
         CY{"Chipre"}
         CZ{"República Tcheca"}
@@ -170,7 +172,7 @@ pt{
         KR{"Coreia do Sul"}
         KW{"Kuwait"}
         KY{"Ilhas Caiman"}
-        KZ{"Casaquistão"}
+        KZ{"Cazaquistão"}
         LA{"Laos"}
         LB{"Líbano"}
         LC{"Santa Lúcia"}
@@ -191,7 +193,7 @@ pt{
         MH{"Ilhas Marshall"}
         MK{"Macedônia"}
         ML{"Mali"}
-        MM{"Mianmar [Birmânia]"}
+        MM{"Mianmar (Birmânia)"}
         MN{"Mongólia"}
         MO{"Macau, RAE da China"}
         MP{"Ilhas Marianas do Norte"}
@@ -283,7 +285,7 @@ pt{
         US{"Estados Unidos"}
         UY{"Uruguai"}
         UZ{"Uzbequistão"}
-        VA{"Vaticano"}
+        VA{"Cidade do Vaticano"}
         VC{"São Vicente e Granadinas"}
         VE{"Venezuela"}
         VG{"Ilhas Virgens Britânicas"}
@@ -300,5 +302,5 @@ pt{
         ZW{"Zimbábue"}
         ZZ{"Região desconhecida"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

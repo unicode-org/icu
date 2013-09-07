@@ -2536,10 +2536,21 @@ supplementalData:table(nofallback){
         LV{
             {
                 from:intvector{
+                    323,
+                    1259963392,
+                }
+                id{"EUR"}
+            }
+            {
+                from:intvector{
                     172,
                     -1803742208,
                 }
                 id{"LVL"}
+                to:intvector{
+                    323,
+                    1259963391,
+                }
             }
             {
                 from:intvector{
@@ -2918,17 +2929,6 @@ supplementalData:table(nofallback){
                     2016347136,
                 }
                 id{"MVR"}
-            }
-            {
-                from:intvector{
-                    -169,
-                    3073024,
-                }
-                id{"MVP"}
-                to:intvector{
-                    84,
-                    2102747135,
-                }
             }
         }
         MW{
@@ -4711,6 +4711,14 @@ supplementalData:table(nofallback){
                 tender{"false"}
             }
             {
+                id{"XRE"}
+                tender{"false"}
+                to:intvector{
+                    219,
+                    -886405121,
+                }
+            }
+            {
                 id{"XSU"}
                 tender{"false"}
             }
@@ -4732,244 +4740,384 @@ supplementalData:table(nofallback){
         ADP:intvector{
             0,
             0,
+            0,
+            0,
         }
         AFN:intvector{
+            0,
+            0,
             0,
             0,
         }
         ALL:intvector{
             0,
             0,
+            0,
+            0,
         }
         AMD:intvector{
+            0,
+            0,
             0,
             0,
         }
         BHD:intvector{
             3,
             0,
+            3,
+            0,
         }
         BIF:intvector{
+            0,
+            0,
             0,
             0,
         }
         BYR:intvector{
             0,
             0,
+            0,
+            0,
+        }
+        CAD:intvector{
+            2,
+            0,
+            2,
+            5,
+        }
+        CHF:intvector{
+            2,
+            0,
+            2,
+            5,
         }
         CLF:intvector{
+            0,
+            0,
             0,
             0,
         }
         CLP:intvector{
             0,
             0,
+            0,
+            0,
         }
         COP:intvector{
+            0,
+            0,
             0,
             0,
         }
         CRC:intvector{
             0,
             0,
+            0,
+            0,
         }
         DEFAULT:intvector{
+            2,
+            0,
             2,
             0,
         }
         DJF:intvector{
             0,
             0,
+            0,
+            0,
         }
         ESP:intvector{
+            0,
+            0,
             0,
             0,
         }
         GNF:intvector{
             0,
             0,
+            0,
+            0,
         }
         GYD:intvector{
+            0,
+            0,
             0,
             0,
         }
         HUF:intvector{
             0,
             0,
+            0,
+            0,
         }
         IDR:intvector{
+            0,
+            0,
             0,
             0,
         }
         IQD:intvector{
             0,
             0,
+            0,
+            0,
         }
         IRR:intvector{
+            0,
+            0,
             0,
             0,
         }
         ISK:intvector{
             0,
             0,
+            0,
+            0,
         }
         ITL:intvector{
+            0,
+            0,
             0,
             0,
         }
         JOD:intvector{
             3,
             0,
+            3,
+            0,
         }
         JPY:intvector{
+            0,
+            0,
             0,
             0,
         }
         KMF:intvector{
             0,
             0,
+            0,
+            0,
         }
         KPW:intvector{
+            0,
+            0,
             0,
             0,
         }
         KRW:intvector{
             0,
             0,
+            0,
+            0,
         }
         KWD:intvector{
+            3,
+            0,
             3,
             0,
         }
         LAK:intvector{
             0,
             0,
+            0,
+            0,
         }
         LBP:intvector{
+            0,
+            0,
             0,
             0,
         }
         LUF:intvector{
             0,
             0,
+            0,
+            0,
         }
         LYD:intvector{
+            3,
+            0,
             3,
             0,
         }
         MGA:intvector{
             0,
             0,
+            0,
+            0,
         }
         MGF:intvector{
+            0,
+            0,
             0,
             0,
         }
         MMK:intvector{
             0,
             0,
+            0,
+            0,
         }
         MNT:intvector{
+            0,
+            0,
             0,
             0,
         }
         MRO:intvector{
             0,
             0,
+            0,
+            0,
         }
         MUR:intvector{
+            0,
+            0,
             0,
             0,
         }
         OMR:intvector{
             3,
             0,
+            3,
+            0,
         }
         PKR:intvector{
+            0,
+            0,
             0,
             0,
         }
         PYG:intvector{
             0,
             0,
+            0,
+            0,
         }
         RSD:intvector{
+            0,
+            0,
             0,
             0,
         }
         RWF:intvector{
             0,
             0,
+            0,
+            0,
         }
         SLL:intvector{
+            0,
+            0,
             0,
             0,
         }
         SOS:intvector{
             0,
             0,
+            0,
+            0,
         }
         STD:intvector{
+            0,
+            0,
             0,
             0,
         }
         SYP:intvector{
             0,
             0,
+            0,
+            0,
         }
         TMM:intvector{
+            0,
+            0,
             0,
             0,
         }
         TND:intvector{
             3,
             0,
+            3,
+            0,
         }
         TRL:intvector{
+            0,
+            0,
+            0,
+            0,
+        }
+        TWD:intvector{
+            2,
+            0,
             0,
             0,
         }
         TZS:intvector{
             0,
             0,
+            0,
+            0,
         }
         UGX:intvector{
+            0,
+            0,
             0,
             0,
         }
         UZS:intvector{
             0,
             0,
+            0,
+            0,
         }
         VND:intvector{
+            0,
+            0,
             0,
             0,
         }
         VUV:intvector{
             0,
             0,
+            0,
+            0,
         }
         XAF:intvector{
+            0,
+            0,
             0,
             0,
         }
         XOF:intvector{
             0,
             0,
+            0,
+            0,
         }
         XPF:intvector{
+            0,
+            0,
             0,
             0,
         }
         YER:intvector{
             0,
             0,
+            0,
+            0,
         }
         ZMK:intvector{
             0,
             0,
+            0,
+            0,
         }
         ZWD:intvector{
+            0,
+            0,
             0,
             0,
         }

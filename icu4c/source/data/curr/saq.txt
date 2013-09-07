@@ -221,7 +221,7 @@ saq{
         }
         ZMK{
             "ZMK",
-            "Njilingi eel Zambia (1968-2012)",
+            "Njilingi eel Zambia (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -232,5 +232,5 @@ saq{
             "Dola eel Zimbabwe",
         }
     }
-    Version{"2.0.84.55"}
+    Version{"2.0.92.87"}
 }

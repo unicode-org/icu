@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2012, International Business Machines
+*   Copyright (C) 2010-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucharstrietest.cpp
@@ -182,7 +182,7 @@ void UCharsTrieTest::TestBranches() {
         { "zz", (int32_t)0x80000000 }
     };
     for(int32_t length=2; length<=LENGTHOF(data); ++length) {
-        infoln("TestBranches length=%d", (int)length);
+        logln("TestBranches length=%d", (int)length);
         checkData(data, length);
     }
 }
@@ -373,7 +373,7 @@ UCharsTrie *UCharsTrieTest::buildLargeTrie(int32_t numUniqueFirst) {
         builder_->add(gen.getString(), gen.getValue(), errorCode);
         gen.next();
     }
-    infoln("buildLargeTrie(%ld) added %ld strings", (long)numUniqueFirst, (long)gen.getIndex());
+    logln("buildLargeTrie(%ld) added %ld strings", (long)numUniqueFirst, (long)gen.getIndex());
     UnicodeString trieUChars;
     builder_->buildUnicodeString(USTRINGTRIE_BUILD_FAST, trieUChars, errorCode);
     logln("serialized trie size: %ld UChars\n", (long)trieUChars.length());

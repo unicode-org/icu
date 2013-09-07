@@ -153,7 +153,7 @@ en{
             }
         }
     }
-    Version{"2.0.89.25"}
+    Version{"2.0.92.87"}
     calendar{
         buddhist{
             eras{
@@ -236,28 +236,28 @@ en{
             }
             intervalFormats{
                 H{
-                    H{"HH–HH"}
+                    H{"HH – HH"}
                 }
                 Hm{
-                    H{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
                 }
                 Hmv{
-                    H{"HH:mm–HH:mm v"}
-                    m{"HH:mm–HH:mm v"}
+                    H{"HH:mm – HH:mm v"}
+                    m{"HH:mm – HH:mm v"}
                 }
                 Hv{
-                    H{"HH–HH v"}
+                    H{"HH – HH v"}
                 }
                 M{
-                    M{"M–M"}
+                    M{"M – M"}
                 }
                 MEd{
                     M{"E, M/d – E, M/d"}
                     d{"E, M/d – E, M/d"}
                 }
                 MMM{
-                    M{"MMM–MMM"}
+                    M{"MMM – MMM"}
                 }
                 MMMEd{
                     M{"E, MMM d – E, MMM d"}
@@ -265,36 +265,36 @@ en{
                 }
                 MMMd{
                     M{"MMM d – MMM d"}
-                    d{"MMM d–d"}
+                    d{"MMM d – d"}
                 }
                 Md{
                     M{"M/d – M/d"}
                     d{"M/d – M/d"}
                 }
                 d{
-                    d{"d–d"}
+                    d{"d – d"}
                 }
                 fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
-                    h{"h–h a"}
+                    h{"h – h a"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
+                    h{"h:mm – h:mm a"}
+                    m{"h:mm – h:mm a"}
                 }
                 hmv{
                     a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
                 }
                 hv{
                     a{"h a – h a v"}
-                    h{"h–h a v"}
+                    h{"h – h a v"}
                 }
                 y{
-                    y{"U–U"}
+                    y{"U – U"}
                 }
                 yM{
                     M{"M/y – M/y"}
@@ -306,7 +306,7 @@ en{
                     y{"E, M/d/y – E, M/d/y"}
                 }
                 yMMM{
-                    M{"MMM–MMM U"}
+                    M{"MMM – MMM U"}
                     y{"MMM U – MMM U"}
                 }
                 yMMMEd{
@@ -320,7 +320,7 @@ en{
                 }
                 yMMMd{
                     M{"MMM d – MMM d, U"}
-                    d{"MMM d–d, U"}
+                    d{"MMM d – d, U"}
                     y{"MMM d, U – MMM d, U"}
                 }
                 yMd{
@@ -428,28 +428,28 @@ en{
             }
             intervalFormats{
                 H{
-                    H{"HH–HH"}
+                    H{"HH – HH"}
                 }
                 Hm{
-                    H{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
                 }
                 Hmv{
-                    H{"HH:mm–HH:mm v"}
-                    m{"HH:mm–HH:mm v"}
+                    H{"HH:mm – HH:mm v"}
+                    m{"HH:mm – HH:mm v"}
                 }
                 Hv{
-                    H{"HH–HH v"}
+                    H{"HH – HH v"}
                 }
                 M{
-                    M{"M–M"}
+                    M{"M – M"}
                 }
                 MEd{
                     M{"E, M/d – E, M/d"}
                     d{"E, M/d – E, M/d"}
                 }
                 MMM{
-                    M{"MMM–MMM"}
+                    M{"MMM – MMM"}
                 }
                 MMMEd{
                     M{"E, MMM d – E, MMM d"}
@@ -457,36 +457,36 @@ en{
                 }
                 MMMd{
                     M{"MMM d – MMM d"}
-                    d{"MMM d–d"}
+                    d{"MMM d – d"}
                 }
                 Md{
                     M{"M/d – M/d"}
                     d{"M/d – M/d"}
                 }
                 d{
-                    d{"d–d"}
+                    d{"d – d"}
                 }
                 fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
-                    h{"h–h a"}
+                    h{"h – h a"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
+                    h{"h:mm – h:mm a"}
+                    m{"h:mm – h:mm a"}
                 }
                 hmv{
                     a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
                 }
                 hv{
                     a{"h a – h a v"}
-                    h{"h–h a v"}
+                    h{"h – h a v"}
                 }
                 y{
-                    y{"y–y G"}
+                    y{"y – y G"}
                 }
                 yM{
                     M{"M/y – M/y GGGGG"}
@@ -498,7 +498,7 @@ en{
                     y{"E, M/d/y – E, M/d/y GGGGG"}
                 }
                 yMMM{
-                    M{"MMM–MMM y G"}
+                    M{"MMM – MMM y G"}
                     y{"MMM y – MMM y G"}
                 }
                 yMMMEd{
@@ -512,7 +512,7 @@ en{
                 }
                 yMMMd{
                     M{"MMM d – MMM d, y G"}
-                    d{"MMM d–d, y G"}
+                    d{"MMM d – d, y G"}
                     y{"MMM d, y – MMM d, y G"}
                 }
                 yMd{
@@ -647,28 +647,28 @@ en{
             }
             intervalFormats{
                 H{
-                    H{"HH–HH"}
+                    H{"HH – HH"}
                 }
                 Hm{
-                    H{"HH:mm–HH:mm"}
-                    m{"HH:mm–HH:mm"}
+                    H{"HH:mm – HH:mm"}
+                    m{"HH:mm – HH:mm"}
                 }
                 Hmv{
-                    H{"HH:mm–HH:mm v"}
-                    m{"HH:mm–HH:mm v"}
+                    H{"HH:mm – HH:mm v"}
+                    m{"HH:mm – HH:mm v"}
                 }
                 Hv{
-                    H{"HH–HH v"}
+                    H{"HH – HH v"}
                 }
                 M{
-                    M{"M–M"}
+                    M{"M – M"}
                 }
                 MEd{
                     M{"E, M/d – E, M/d"}
                     d{"E, M/d – E, M/d"}
                 }
                 MMM{
-                    M{"MMM–MMM"}
+                    M{"MMM – MMM"}
                 }
                 MMMEd{
                     M{"E, MMM d – E, MMM d"}
@@ -676,36 +676,36 @@ en{
                 }
                 MMMd{
                     M{"MMM d – MMM d"}
-                    d{"MMM d–d"}
+                    d{"MMM d – d"}
                 }
                 Md{
                     M{"M/d – M/d"}
                     d{"M/d – M/d"}
                 }
                 d{
-                    d{"d–d"}
+                    d{"d – d"}
                 }
                 fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
-                    h{"h–h a"}
+                    h{"h – h a"}
                 }
                 hm{
                     a{"h:mm a – h:mm a"}
-                    h{"h:mm–h:mm a"}
-                    m{"h:mm–h:mm a"}
+                    h{"h:mm – h:mm a"}
+                    m{"h:mm – h:mm a"}
                 }
                 hmv{
                     a{"h:mm a – h:mm a v"}
-                    h{"h:mm–h:mm a v"}
-                    m{"h:mm–h:mm a v"}
+                    h{"h:mm – h:mm a v"}
+                    m{"h:mm – h:mm a v"}
                 }
                 hv{
                     a{"h a – h a v"}
-                    h{"h–h a v"}
+                    h{"h – h a v"}
                 }
                 y{
-                    y{"y–y"}
+                    y{"y – y"}
                 }
                 yM{
                     M{"M/y – M/y"}
@@ -717,7 +717,7 @@ en{
                     y{"E, M/d/y – E, M/d/y"}
                 }
                 yMMM{
-                    M{"MMM–MMM y"}
+                    M{"MMM – MMM y"}
                     y{"MMM y – MMM y"}
                 }
                 yMMMEd{
@@ -731,7 +731,7 @@ en{
                 }
                 yMMMd{
                     M{"MMM d – MMM d, y"}
-                    d{"MMM d–d, y"}
+                    d{"MMM d – d, y"}
                     y{"MMM d, y – MMM d, y"}
                 }
                 yMd{
@@ -867,6 +867,16 @@ en{
                 "0"{"today"}
                 "1"{"tomorrow"}
             }
+            relativeTime{
+                future{
+                    one{"in {0} day"}
+                    other{"in {0} days"}
+                }
+                past{
+                    one{"{0} day ago"}
+                    other{"{0} days ago"}
+                }
+            }
         }
         dayperiod{
             dn{"AM/PM"}
@@ -883,9 +893,29 @@ en{
         }
         hour{
             dn{"Hour"}
+            relativeTime{
+                future{
+                    one{"in {0} hour"}
+                    other{"in {0} hours"}
+                }
+                past{
+                    one{"{0} hour ago"}
+                    other{"{0} hours ago"}
+                }
+            }
         }
         minute{
             dn{"Minute"}
+            relativeTime{
+                future{
+                    one{"in {0} minute"}
+                    other{"in {0} minutes"}
+                }
+                past{
+                    one{"{0} minute ago"}
+                    other{"{0} minutes ago"}
+                }
+            }
         }
         mon{
             relative{
@@ -901,6 +931,16 @@ en{
                 "0"{"this month"}
                 "1"{"next month"}
             }
+            relativeTime{
+                future{
+                    one{"in {0} month"}
+                    other{"in {0} months"}
+                }
+                past{
+                    one{"{0} month ago"}
+                    other{"{0} months ago"}
+                }
+            }
         }
         sat{
             relative{
@@ -911,6 +951,19 @@ en{
         }
         second{
             dn{"Second"}
+            relative{
+                "0"{"now"}
+            }
+            relativeTime{
+                future{
+                    one{"in {0} second"}
+                    other{"in {0} seconds"}
+                }
+                past{
+                    one{"{0} second ago"}
+                    other{"{0} seconds ago"}
+                }
+            }
         }
         sun{
             relative{
@@ -947,6 +1000,16 @@ en{
                 "0"{"this week"}
                 "1"{"next week"}
             }
+            relativeTime{
+                future{
+                    one{"in {0} week"}
+                    other{"in {0} weeks"}
+                }
+                past{
+                    one{"{0} week ago"}
+                    other{"{0} weeks ago"}
+                }
+            }
         }
         weekday{
             dn{"Day of the Week"}
@@ -958,33 +1021,43 @@ en{
                 "0"{"this year"}
                 "1"{"next year"}
             }
+            relativeTime{
+                future{
+                    one{"in {0} year"}
+                    other{"in {0} years"}
+                }
+                past{
+                    one{"{0} year ago"}
+                    other{"{0} years ago"}
+                }
+            }
         }
         zone{
             dn{"Time Zone"}
         }
     }
     listPattern{
-        duration{
+        standard{
+            2{"{0} and {1}"}
+            end{"{0}, and {1}"}
+            middle{"{0}, {1}"}
+            start{"{0}, {1}"}
+        }
+        unit{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
-        duration-narrow{
+        unit-narrow{
             2{"{0} {1}"}
             end{"{0} {1}"}
             middle{"{0} {1}"}
             start{"{0} {1}"}
         }
-        duration-short{
+        unit-short{
             2{"{0}, {1}"}
             end{"{0}, {1}"}
-            middle{"{0}, {1}"}
-            start{"{0}, {1}"}
-        }
-        standard{
-            2{"{0} and {1}"}
-            end{"{0}, and {1}"}
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
@@ -1002,17 +1075,17 @@ en{
             }
         }
         angle{
+            arc-minute{
+                one{"{0} arcminute"}
+                other{"{0} arcminutes"}
+            }
+            arc-second{
+                one{"{0} arcsecond"}
+                other{"{0} arcseconds"}
+            }
             degree{
                 one{"{0} degree"}
                 other{"{0} degrees"}
-            }
-            minute{
-                one{"{0} minute"}
-                other{"{0} minutes"}
-            }
-            second{
-                one{"{0} second"}
-                other{"{0} seconds"}
             }
         }
         area{
@@ -1046,25 +1119,9 @@ en{
                 one{"{0} day"}
                 other{"{0} days"}
             }
-            day-future{
-                one{"In {0} day"}
-                other{"In {0} days"}
-            }
-            day-past{
-                one{"{0} day ago"}
-                other{"{0} days ago"}
-            }
             hour{
                 one{"{0} hour"}
                 other{"{0} hours"}
-            }
-            hour-future{
-                one{"In {0} hour"}
-                other{"In {0} hours"}
-            }
-            hour-past{
-                one{"{0} hour ago"}
-                other{"{0} hours ago"}
             }
             millisecond{
                 one{"{0} millisecond"}
@@ -1074,61 +1131,21 @@ en{
                 one{"{0} minute"}
                 other{"{0} minutes"}
             }
-            minute-future{
-                one{"In {0} minute"}
-                other{"In {0} minutes"}
-            }
-            minute-past{
-                one{"{0} minute ago"}
-                other{"{0} minutes ago"}
-            }
             month{
                 one{"{0} month"}
                 other{"{0} months"}
-            }
-            month-future{
-                one{"In {0} month"}
-                other{"In {0} months"}
-            }
-            month-past{
-                one{"{0} month ago"}
-                other{"{0} months ago"}
             }
             second{
                 one{"{0} second"}
                 other{"{0} seconds"}
             }
-            second-future{
-                one{"In {0} second"}
-                other{"In {0} seconds"}
-            }
-            second-past{
-                one{"{0} second ago"}
-                other{"{0} seconds ago"}
-            }
             week{
                 one{"{0} week"}
                 other{"{0} weeks"}
             }
-            week-future{
-                one{"In {0} week"}
-                other{"In {0} weeks"}
-            }
-            week-past{
-                one{"{0} week ago"}
-                other{"{0} weeks ago"}
-            }
             year{
                 one{"{0} year"}
                 other{"{0} years"}
-            }
-            year-future{
-                one{"In {0} year"}
-                other{"In {0} years"}
-            }
-            year-past{
-                one{"{0} year ago"}
-                other{"{0} years ago"}
             }
         }
         length{
@@ -1261,22 +1278,22 @@ en{
     unitsShort{
         acceleration{
             g-force{
-                one{"{0} g"}
-                other{"{0} g"}
+                one{"{0} G"}
+                other{"{0} G"}
             }
         }
         angle{
+            arc-minute{
+                one{"{0} arcmin"}
+                other{"{0} arcmin"}
+            }
+            arc-second{
+                one{"{0} arcsec"}
+                other{"{0} arcsecs"}
+            }
             degree{
                 one{"{0} deg"}
                 other{"{0} deg"}
-            }
-            minute{
-                one{"{0} min"}
-                other{"{0} min"}
-            }
-            second{
-                one{"{0} sec"}
-                other{"{0} secs"}
             }
         }
         area{
@@ -1310,25 +1327,9 @@ en{
                 one{"{0} day"}
                 other{"{0} days"}
             }
-            day-future{
-                one{"In {0} day"}
-                other{"In {0} days"}
-            }
-            day-past{
-                one{"{0} day ago"}
-                other{"{0} days ago"}
-            }
             hour{
                 one{"{0} hr"}
                 other{"{0} hrs"}
-            }
-            hour-future{
-                one{"In {0} hr"}
-                other{"In {0} hrs"}
-            }
-            hour-past{
-                one{"{0} hr ago"}
-                other{"{0} hrs ago"}
             }
             millisecond{
                 one{"{0} ms"}
@@ -1338,61 +1339,21 @@ en{
                 one{"{0} min"}
                 other{"{0} mins"}
             }
-            minute-future{
-                one{"In {0} min"}
-                other{"In {0} mins"}
-            }
-            minute-past{
-                one{"{0} min ago"}
-                other{"{0} mins ago"}
-            }
             month{
                 one{"{0} mth"}
                 other{"{0} mths"}
-            }
-            month-future{
-                one{"In {0} mth"}
-                other{"In {0} mths"}
-            }
-            month-past{
-                one{"{0} mth ago"}
-                other{"{0} mths ago"}
             }
             second{
                 one{"{0} sec"}
                 other{"{0} secs"}
             }
-            second-future{
-                one{"In {0} sec"}
-                other{"In {0} secs"}
-            }
-            second-past{
-                one{"{0} sec ago"}
-                other{"{0} secs ago"}
-            }
             week{
                 one{"{0} wk"}
                 other{"{0} wks"}
             }
-            week-future{
-                one{"In {0} wk"}
-                other{"In {0} wks"}
-            }
-            week-past{
-                one{"{0} wk ago"}
-                other{"{0} wks ago"}
-            }
             year{
                 one{"{0} yr"}
                 other{"{0} yrs"}
-            }
-            year-future{
-                one{"In {0} yr"}
-                other{"In {0} yrs"}
-            }
-            year-past{
-                one{"{0} yr ago"}
-                other{"{0} yrs ago"}
             }
         }
         length{

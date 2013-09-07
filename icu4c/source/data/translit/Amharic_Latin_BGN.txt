@@ -7,7 +7,7 @@
 # File: Amharic_Latin_BGN.txt
 # Generated from CLDR 
 #
-:: [ሀሁሂሃሄህሆለሉሊላሌልሎሏሐሑሒሓሔሕሖመሙሚማሜምሞሟሠሡሢሣሤሥሦረሩሪራሬርሮሯሰሱሲሳሴስሶሷሸሹሺሻሼሽሾሿቀቁቂቃቄቅቆቈቊቋቌቍቐቑቒቓቔቕቖቘቚቛቜቝበቡቢባቤብቦቧቨቩቪቫቬቭቮቯተቱቲታቴትቶቷቸቹቺቻቼችቾቿኀኁኂኃኄኅኆኈኊኋኌኍነኑኒናኔንኖኗኘኙኚኛኜኝኞኟአኡኢኣኤእኦኧከኩኪካኬክኮኰኲኳኴኵኸኹኺኻኼኽኾወዉዊዋዌውዎዘዙዚዛዜዝዞዟዠዡዢዣዤዥዦዧደዱዲዳዴድዶዷጀጁጂጃጄጅጆጇገጉጊጋጌግጎጐጒጓጔጕጠጡጢጣጤጥጦጧጨጩጪጫጬጭጮጯጰጱጲጳጴጵጶጷጸጹጺጻጼጽጾጿፀፁፂፃፄፅፆፈፉፊፋፌፍፎፏፐፑፒፓፔፕፖፗፘፙፚ፩፪፫፬፭፮፯፰፱፲፳፴፵፶፷፸፹፺፻] ;
+:: [ሀ-᎙] ;
 :: NFD (NFC) ;
 $ejective = ’;
 $glottal  = ’;
@@ -207,7 +207,7 @@ $wordBoundary{ኧ → e ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ዝ → zi ; # ETHIOPIC SYLLABLE ZE
 ዞ → zo ; # ETHIOPIC SYLLABLE ZO
 ዟ → zwa ; # ETHIOPIC SYLLABLE ZWA
-ዠ → zhā ; # ETHIOPIC SYLLABLE ZHA
+ዠ → zhe ; # ETHIOPIC SYLLABLE ZHA
 ዡ → zhu ; # ETHIOPIC SYLLABLE ZHU
 ዢ → zhī ; # ETHIOPIC SYLLABLE ZHI
 ዣ → zha ; # ETHIOPIC SYLLABLE ZHAA
@@ -215,6 +215,13 @@ $wordBoundary{ኧ → e ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ዥ → zhi ; # ETHIOPIC SYLLABLE ZHE
 ዦ → zho ; # ETHIOPIC SYLLABLE ZHO
 ዧ → zhwa ; # ETHIOPIC SYLLABLE ZHWA
+የ → ye ; # ETHIOPIC SYLLABLE YA
+ዩ → yu ; # ETHIOPIC SYLLABLE YU
+ዪ → yī ; # ETHIOPIC SYLLABLE YI
+ያ → ya ; # ETHIOPIC SYLLABLE YAA
+ዬ → yē ; # ETHIOPIC SYLLABLE YEE
+ይ → yi ; # ETHIOPIC SYLLABLE YE
+ዮ → yo ; # ETHIOPIC SYLLABLE YO
 ደ → de ; # ETHIOPIC SYLLABLE DA
 ዱ → du ; # ETHIOPIC SYLLABLE DU
 ዲ → dī ; # ETHIOPIC SYLLABLE DI

@@ -10,6 +10,7 @@
  * ICU <specials> source: <path>/common/main/shi_Latn.xml
  */
 shi_Latn{
+    %%Parent{"root"}
     Countries{
         AD{"andura"}
         AE{"limarat"}
@@ -237,5 +238,5 @@ shi_Latn{
         ZM{"zambya"}
         ZW{"zimbabwi"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

@@ -101,12 +101,12 @@ dyo{
         KE{"Keniya"}
         KH{"Kamboj"}
         KM{"Komor"}
-        LC{"Tansani"}
+        LC{"Saŋ Lusia"}
         LK{"Siri Lanka"}
         LR{"Liberia"}
         MG{"Madagaskaar"}
         ML{"Mali"}
-        NF{"San Marin"}
+        NF{"Ecinkey yati Noorfok"}
         SA{"Abari Saudi"}
         SD{"Sudan"}
         SG{"Singapur"}
@@ -120,5 +120,5 @@ dyo{
         TG{"Togo"}
         TH{"Tailand"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

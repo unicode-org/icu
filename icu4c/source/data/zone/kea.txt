@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/kea.xml
  */
 kea{
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "America:Blanc-Sablon"{
             ec{"Blank-Sablon"}

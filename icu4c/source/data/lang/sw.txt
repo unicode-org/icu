@@ -70,6 +70,7 @@ sw{
         es{"Kihispania"}
         es_419{"Kihispania cha Amerika ya Kilatinini"}
         es_ES{"Kihispania cha Ulaya"}
+        es_MX{"Kihispania cha Meksiko"}
         et{"Kiestonia"}
         eu{"Kibasque"}
         fa{"Kiajemi"}
@@ -189,7 +190,7 @@ sw{
         tt{"Kitatari"}
         tum{"Kitumbuka"}
         ty{"Kitahiti"}
-        ug{"Kiuigur"}
+        ug{"Kiuiguri"}
         uk{"Kiukrania"}
         und{"Lugha Isiyojulikana"}
         ur{"Kiurdu"}
@@ -200,6 +201,7 @@ sw{
         xh{"Kixhosa"}
         yi{"Kiyidi"}
         yo{"Kiyoruba"}
+        zgh{"Tamaziti Msingi ya Kimoroko"}
         zh{"Kichina"}
         zh_Hans{"Kichina Rahisi"}
         zh_Hant{"Kichina cha Jadi"}
@@ -319,7 +321,8 @@ sw{
             orya{"Nambari za Kioriya"}
             roman{"Nambari za Kirumi"}
             romanlow{"Nambari Ndogo za Kirumi"}
-            taml{"Nambari za Kitamil"}
+            taml{"Nambari za Kitamili"}
+            tamldec{"Nambari za Kitamili"}
             telu{"Nambari za Kitelugu"}
             thai{"Nambari za Kitai"}
             tibt{"Nambari za Kitibeti"}
@@ -327,8 +330,14 @@ sw{
             vaii{"Dijiti za Vai"}
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
+    codePatterns{
+        language{"{0}"}
+        script{"{0}"}
+        territory{"{0}"}
+    }
     localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
         separator{"{0}, {1}"}
     }

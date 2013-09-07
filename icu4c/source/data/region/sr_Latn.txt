@@ -10,6 +10,7 @@
  * ICU <specials> source: <path>/common/main/sr_Latn.xml
  */
 sr_Latn{
+    %%Parent{"root"}
     Countries{
         001{"Svet"}
         002{"Afrika"}
@@ -193,7 +194,7 @@ sr_Latn{
         MH{"Maršalska Ostrva"}
         MK{"Makedonija"}
         ML{"Mali"}
-        MM{"Mijanmar [Burma]"}
+        MM{"Mijanmar (Burma)"}
         MN{"Mongolija"}
         MO{"Makao S. A. R. Kina"}
         MP{"Severna Marijanska Ostrva"}
@@ -294,6 +295,7 @@ sr_Latn{
         VU{"Vanuatu"}
         WF{"Valis i Futuna Ostrva"}
         WS{"Samoa"}
+        XK{"Kosovo"}
         YE{"Jemen"}
         YT{"Majote"}
         ZA{"Južnoafrička Republika"}
@@ -301,5 +303,5 @@ sr_Latn{
         ZW{"Zimbabve"}
         ZZ{"Nepoznata ili nevažeća oblast"}
     }
-    Version{"2.0.86.81"}
+    Version{"2.0.92.87"}
 }

@@ -298,7 +298,7 @@ ee{
             tibt{"tibet digitwo"}
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.93.8"}
     codePatterns{
         language{"gbegbɔgblɔ {0}"}
         script{"gbeŋɔŋlɔ {0}"}

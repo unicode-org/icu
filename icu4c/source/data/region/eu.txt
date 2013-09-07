@@ -29,8 +29,8 @@ eu{
         034{"Asia hegoaldea"}
         035{"Asia hego-ekialdea"}
         039{"Europa hegoaldea"}
-        053{"Australia eta Zeelanda Berria"}
-        054{"Melanesiera"}
+        053{"Australasia"}
+        054{"Melanesia"}
         057{"Mikronesia eskualdea"}
         061{"Polinesia"}
         142{"Asia"}
@@ -41,7 +41,7 @@ eu{
         154{"Europa iparraldea"}
         155{"Europa mendebaldea"}
         419{"Latinoamerika"}
-        AC{"Ascension Uhartea"}
+        AC{"Ascension uhartea"}
         AD{"Andorra"}
         AE{"Arabiar Emirrerri Batuak"}
         AF{"Afganistan"}
@@ -71,8 +71,8 @@ eu{
         BL{"San Bartolome"}
         BM{"Bermuda"}
         BN{"Brunei"}
-        BO{"Bolibia"}
-        BQ{"Karibeko Holanda"}
+        BO{"Bolivia"}
+        BQ{"Karibeko Herbehereak"}
         BR{"Brasil"}
         BS{"Bahamak"}
         BT{"Bhutan"}
@@ -81,7 +81,7 @@ eu{
         BY{"Bielorrusia"}
         BZ{"Belize"}
         CA{"Kanada"}
-        CC{"Cocos [Keeling] uharteak"}
+        CC{"Cocos (Keeling) uharteak"}
         CD{"Kongoko Errepublika Demokratikoa"}
         CF{"Afrika Erdiko Errepublika"}
         CG{"Kongo (Brazzaville)"}
@@ -99,7 +99,7 @@ eu{
         CW{"Curaçao"}
         CX{"Christmas uhartea"}
         CY{"Zipre"}
-        CZ{"Txekiar errepublika"}
+        CZ{"Txekiar Errepublika"}
         DE{"Alemania"}
         DG{"Diego Garcia"}
         DJ{"Djibuti"}
@@ -120,7 +120,7 @@ eu{
         FJ{"Fiji"}
         FK{"Malvinak"}
         FM{"Mikronesia"}
-        FO{"Faroe Uharteak"}
+        FO{"Faroe uharteak"}
         FR{"Frantzia"}
         GA{"Gabon"}
         GB{"Erresuma Batua"}
@@ -142,7 +142,7 @@ eu{
         GW{"Ginea-Bissau"}
         GY{"Guyana"}
         HK{"Hong Kong AEB Txina"}
-        HM{"Heard eta McDonald Uharteak"}
+        HM{"Heard eta McDonald uharteak"}
         HN{"Honduras"}
         HR{"Kroazia"}
         HT{"Haiti"}
@@ -153,7 +153,7 @@ eu{
         IL{"Israel"}
         IM{"Man uhartea"}
         IN{"India"}
-        IO{"Indiako Ozeanoko Britainiar Lurraldea"}
+        IO{"Indiako Ozeanoko lurralde britainiarra"}
         IQ{"Irak"}
         IR{"Iran"}
         IS{"Islandia"}
@@ -162,7 +162,7 @@ eu{
         JM{"Jamaika"}
         JO{"Jordania"}
         JP{"Japonia"}
-        KE{"Kenia"}
+        KE{"Kenya"}
         KG{"Kirgizistan"}
         KH{"Kanbodia"}
         KI{"Kiribati"}
@@ -171,7 +171,7 @@ eu{
         KP{"Ipar Korea"}
         KR{"Hego Korea"}
         KW{"Kuwait"}
-        KY{"Kaiman Uharteak"}
+        KY{"Kaiman uharteak"}
         KZ{"Kazakhstan"}
         LA{"Laos"}
         LB{"Libano"}
@@ -195,7 +195,7 @@ eu{
         ML{"Mali"}
         MM{"Myanmar"}
         MN{"Mongolia"}
-        MO{"Makau"}
+        MO{"Macau AEB Txina"}
         MP{"Iparraldeko Mariana uharteak"}
         MQ{"Martinika"}
         MR{"Mauritania"}
@@ -205,7 +205,7 @@ eu{
         MV{"Maldivak"}
         MW{"Malawi"}
         MX{"Mexiko"}
-        MY{"Malasia"}
+        MY{"Malaysia"}
         MZ{"Mozambike"}
         NA{"Namibia"}
         NC{"Kaledonia Berria"}
@@ -234,7 +234,7 @@ eu{
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguai"}
-        QA{"Katar"}
+        QA{"Qatar"}
         QO{"Mugaz kanpoko Ozeania"}
         RE{"Reunion"}
         RO{"Errumania"}
@@ -265,9 +265,9 @@ eu{
         TA{"Tristan da Cunha"}
         TC{"Turk eta Caicos uharteak"}
         TD{"Txad"}
-        TF{"Frantziaren Lurralde Australak"}
+        TF{"Hegoaldeko lurralde frantsesak"}
         TG{"Togo"}
-        TH{"Tailandia"}
+        TH{"Thailandia"}
         TJ{"Tadjikistan"}
         TK{"Tokelau"}
         TL{"Ekialdeko Timor"}
@@ -281,7 +281,7 @@ eu{
         TZ{"Tanzania"}
         UA{"Ukraina"}
         UG{"Uganda"}
-        UM{"Estatu Batuetatik urruti dauden uharte txikiak"}
+        UM{"Ameriketako Estatu Batuetako Kanpoaldeko Uharte Txikiak"}
         US{"Ameriketako Estatu Batuak"}
         UY{"Uruguai"}
         UZ{"Uzbekistan"}
@@ -302,5 +302,5 @@ eu{
         ZW{"Zimbabwe"}
         ZZ{"Eskualde ezezaguna"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

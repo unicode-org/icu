@@ -10,11 +10,11 @@
  * ICU <specials> source: <path>/xml/collation/ja.xml
  */
 ja{
-    Version{"2.0.89.0"}
+    Version{"2.0.92.40"}
     collations{
         standard{
             Sequence{
-                "[strength 3][hiraganaQ on][reorder Kana Hani]"
+                "[strength 3][hiraganaQ on][reorder Latn Kana Hani]"
                 "&ヽ"
                 "=ゝ"
                 "&[before 3]ァ"
@@ -349,7 +349,7 @@ ja{
                 "&Y=Ｙ"
                 "&Z=Ｚ"
                 "&'['=［"
-                "&''=＼"
+                "&'\\\\'=＼"
                 "&']'=］"
                 "&'^'=＾"
                 "&'_'=＿"
@@ -459,7 +459,7 @@ ja{
         }
         unihan{
             Sequence{
-                "[strength 3][hiraganaQ on][reorder Kana Hani]"
+                "[strength 3][hiraganaQ on][reorder Latn Kana Hani]"
                 "&ヽ"
                 "=ゝ"
                 "&[before 3]ァ"
@@ -794,7 +794,7 @@ ja{
                 "&Y=Ｙ"
                 "&Z=Ｚ"
                 "&'['=［"
-                "&''=＼"
+                "&'\\\\'=＼"
                 "&']'=］"
                 "&'^'=＾"
                 "&'_'=＿"

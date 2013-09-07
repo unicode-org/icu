@@ -225,7 +225,7 @@ sn{
         }
         ZMK{
             "ZMK",
-            "Kwacha ye Zambia (1968-2012)",
+            "Kwacha ye Zambia (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +236,5 @@ sn{
             "Dora re Zimbabwe",
         }
     }
-    Version{"2.0.84.55"}
+    Version{"2.0.92.87"}
 }

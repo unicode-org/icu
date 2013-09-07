@@ -8,10 +8,18 @@
 // ***************************************************************************
 fr_CA{
     Countries{
+        053{"Australie et Nouvelle-Zélande"}
         AC{"Île de l'Ascension"}
+        BL{"Saint-Barthélémy"}
+        BY{"Bélarus"}
+        FM{"Micronésie"}
         GS{"Géorgie du Sud et les îles Sandwich du Sud"}
-        ST{"Sao Tomé-et-Principe"}
-        XK{"Kosovo"}
+        IO{"Territoire britannique de l'océan Indien"}
+        MF{"Saint-Martin"}
+        PS{"Territoire palestinien"}
+        RE{"Réunion"}
+        TC{"Îles Turks et Caïques"}
+        UM{"Îles éloignées des États-Unis"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.80"}
 }

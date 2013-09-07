@@ -31,7 +31,7 @@ kok{
         }
         native{"deva"}
     }
-    Version{"2.0.85.78"}
+    Version{"2.0.92.87"}
     calendar{
         gregorian{
             AmPmMarkers{

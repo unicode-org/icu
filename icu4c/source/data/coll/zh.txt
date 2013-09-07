@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/xml/collation/zh.xml
  */
 zh{
-    Version{"2.0.89.62"}
+    Version{"2.0.92.25"}
     collations{
         big5han{
             Sequence{
@@ -2066,6 +2066,9 @@ zh{
                 "&龜<<<⿔"
                 "&龟<<<⻳"
                 "&龠<<<⿕"
+                "&虫<重庆/庆"
+                "&弞<沈阳/阳"
+                "&銺<藏文/文"
             }
             Version{"24"}
         }
@@ -8062,10 +8065,14 @@ zh{
         zhuyin{
             Sequence{
                 "[reorder Hani Bopo]"
-                "&[last primary ignorable]<<ˉ"
-                "<ˊ<ˇ<ˋ<˙"
-                "<˪"
-                "<˫"
+                "&[last primary ignorable]"
+                "<<ˉ"
+                "<<ˊ"
+                "<<ˇ"
+                "<<ˋ"
+                "<<˙"
+                "<<˪"
+                "<<˫"
                 "&[before 2]a<<ā<<<Ā<<á<<<Á<<ǎ<<<Ǎ<<à<<<À"
                 "&[before 2]e<<ē<<<Ē<<é<<<É<<ě<<<Ě<<è<<<È"
                 "&e<<ê̄<<<Ê̄<<ế<<<Ế<<ê̌<<<Ê̌<<ề<<<Ề"

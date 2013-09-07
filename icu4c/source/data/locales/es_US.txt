@@ -8,12 +8,7 @@
 // ***************************************************************************
 es_US{
     %%Parent{"es_419"}
-    MeasurementSystem:int{1}
-    PaperSize:intvector{
-        279,
-        216,
-    }
-    Version{"2.0.86.27"}
+    Version{"2.0.92.80"}
     calendar{
         generic{
             DateTimePatterns{
@@ -26,27 +21,28 @@ es_US{
                 "MMM d, y G",
                 "M/d/yy GGGGG",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
-                Gy{"y G"}
-                GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
+                GyMMMM{"MMMM 'de' y G"}
+                GyMMMMEd{"E, d 'de' MMMM 'de' y G"}
+                GyMMMMd{"d 'de' MMMM 'de' y G"}
                 GyMMMd{"MMM d, y G"}
                 MEd{"E, MM/dd"}
                 MMMEd{"E, MMM d"}
+                MMMMEd{"E, d 'de' MMMM"}
                 MMMd{"MMM d"}
                 MMd{"MM/d"}
                 Md{"M/d"}
-                y{"y G"}
-                yyyy{"y G"}
                 yyyyM{"M/y G"}
                 yyyyMEd{"E, M/d/y G"}
-                yyyyMMM{"MMM y G"}
                 yyyyMMMEd{"E, MMM d, y G"}
+                yyyyMMMMEd{"E, d 'de' MMMM 'de' y G"}
+                yyyyMMMMd{"d 'de' MMMM 'de' y G"}
                 yyyyMMMd{"MMM d, y G"}
                 yyyyMd{"M/d/y G"}
             }
@@ -66,24 +62,28 @@ es_US{
                 "MMM d, y",
                 "M/d/yy",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
             availableFormats{
-                Gy{"y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
+                GyMMMM{"MMMM 'de' y G"}
+                GyMMMMEd{"E, d 'de' MMMM 'de' y G"}
+                GyMMMMd{"d 'de' MMMM 'de' y G"}
                 GyMMMd{"MMM d, y G"}
                 MEd{"E, MM/dd"}
                 MMMEd{"E, MMM d"}
+                MMMMEd{"E, d 'de' MMMM"}
                 MMMd{"MMM d"}
                 MMd{"MM/d"}
                 Md{"M/d"}
-                yM{"M/y"}
                 yMEd{"E, M/d/y"}
                 yMMMEd{"E, MMM d, y"}
+                yMMMMEd{"E, d 'de' MMMM 'de' y"}
+                yMMMMd{"d 'de' MMMM 'de' y"}
                 yMMMd{"MMM d, y"}
                 yMd{"M/d/y"}
             }

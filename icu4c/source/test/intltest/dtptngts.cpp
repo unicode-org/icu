@@ -150,20 +150,20 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
 
         // es                                                 // 4 es
         UnicodeString("1/1999"),                              // 00: yM    -> "M/y"
-        UnicodeString("ene 1999"),                            // 01: yMMM  -> "MMM y"
+        UnicodeString("ene. de 1999"),                        // 01: yMMM  -> "MMM 'de' y"
         UnicodeString("13/1/1999"),                           // 02: yMd   -> "d/M/y"
-        UnicodeString("13 ene 1999"),                         // 03: yMMMd -> "d MMM y"
+        UnicodeString("13 de ene. de 1999"),                  // 03: yMMMd -> "d 'de' MMM 'de' y"
         UnicodeString("13/1"),                                // 04: Md    -> "d/M"
-        UnicodeString("13 ene"),                              // 05: MMMd  -> "d MMM"
+        UnicodeString("13 de ene."),                          // 05: MMMd  -> "d 'de' MMM"
         UnicodeString("13 de enero"),                         // 06: MMMMd -> "d 'de' MMMM"
         UnicodeString("T1 1999"),                             // 07: yQQQ  -> "QQQ y"
-        UnicodeString("11:58 p.m."),                          // 08: hhmm  -> "hh:mm a"
+        UnicodeString("11:58 p. m."),                         // 08: hhmm  -> "hh:mm a"
         UnicodeString("23:58"),                               // 09: HHmm  -> "HH:mm"
         UnicodeString("23:58"),                               // 10: jjmm  -> "HH:mm"
         UnicodeString("58:59"),                               // 11: mmss  -> "mm:ss"
         UnicodeString("enero de 1999"),                       // 12: yyyyMMMM -> "MMMM 'de' yyyy"
-        CharsToUnicodeString("mi\\u00E9 13 ene"),             // 13: MMMEd -> "E d MMM"
-        CharsToUnicodeString("mi\\u00E9 13"),                 // 14: Ed    -> "EEE d"
+        CharsToUnicodeString("mi\\u00E9. 13 de ene."),        // 13: MMMEd -> "E d 'de' MMM"
+        CharsToUnicodeString("mi\\u00E9. 13"),                // 14: Ed    -> "EEE d"
         UnicodeString("23:58:59,123"),                        // 15: jmmssSSS -> "H:mm:ss,SSS"
 
         // ja                                                             // 5 ja
@@ -174,7 +174,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("1/13"),                                            // 04: Md    -> M/d
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 05: MMMd  -> M\u6708d\u65E5
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 06: MMMMd  -> M\u6708d\u65E5
-        CharsToUnicodeString("1999\\u5E741Q"),                            // 07: yQQQ  -> y\u5E74QQQ
+        CharsToUnicodeString("1999/Q1"),                                  // 07: yQQQ  -> y/QQQ
         CharsToUnicodeString("\\u5348\\u5F8C11:58"),                      // 08: hhmm
         UnicodeString("23:58"),                                           // 09: HHmm  -> HH:mm
         UnicodeString("23:58"),                                           // 10: jjmm
@@ -192,7 +192,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAPI(/*char *par*/)
         UnicodeString("1/13"),                                            // 04: Md    -> M/d
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 05: MMMd  -> M\u6708d\u65E5
         CharsToUnicodeString("1\\u670813\\u65E5"),                        // 06: MMMMd  -> M\u6708d\u65E5
-        CharsToUnicodeString("\\u5E73\\u6210 11 1Q"),                     // 07: yQQQ  -> G y QQQ (probably a CLDR error)
+        CharsToUnicodeString("\\u5E73\\u6210 11 Q1"),                     // 07: yQQQ  -> G y QQQ
         CharsToUnicodeString("\\u5348\\u5F8C11:58"),                      // 08: hhmm  ->
         UnicodeString("23:58"),                                           // 09: HHmm  -> HH:mm          (as for ja)
         UnicodeString("23:58"),                                           // 10: jjmm

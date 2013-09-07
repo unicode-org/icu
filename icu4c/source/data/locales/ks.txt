@@ -10,6 +10,7 @@
  * ICU <specials> source: <path>/common/main/ks.xml
  */
 ks{
+    AuxExemplarCharacters{"[\u200E\u200F]"}
     ExemplarCharacters{
         "[\u06EA\u06ED \u064E \u064F \u0650 \u0654 \u0655 \u0656 \u0657 \u065A \u065B"
         " ء آ أ ٲ ؤ ا ٮ ب پ ت ث ٹ ج چ ح خ د ذ ڈ ر ز ڑ ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن"
@@ -33,16 +34,16 @@ ks{
                 group{","}
                 infinity{"?"}
                 list{";"}
-                minusSign{"-"}
+                minusSign{"‎-"}
                 nan{"NaN"}
                 perMille{"‰"}
                 percentSign{"%"}
-                plusSign{"+"}
+                plusSign{"‎+"}
             }
         }
         native{"arabext"}
     }
-    Version{"2.0.86.27"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{

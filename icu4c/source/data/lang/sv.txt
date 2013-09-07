@@ -52,6 +52,7 @@ sv{
         anp{"angika"}
         apa{"apachespråk"}
         ar{"arabiska"}
+        ar_001{"modern standardarabiska"}
         arc{"arameiska"}
         arn{"araukanska"}
         arp{"arapaho"}
@@ -119,7 +120,7 @@ sv{
         chb{"chibcha"}
         chg{"chagatai"}
         chk{"chuukesiska"}
-        chm{"mari"}
+        chm{"mariska"}
         chn{"chinook"}
         cho{"choctaw"}
         chp{"chipewyan"}
@@ -181,6 +182,7 @@ sv{
         es{"spanska"}
         es_419{"latinamerikansk spanska"}
         es_ES{"europeisk spanska"}
+        es_MX{"mexikansk spanska"}
         et{"estniska"}
         eu{"baskiska"}
         ewo{"ewondo"}
@@ -191,7 +193,7 @@ sv{
         fi{"finska"}
         fil{"filippinska"}
         fiu{"finskugriskt språk"}
-        fj{"fidjianska"}
+        fj{"fijianska"}
         fo{"färöiska"}
         fon{"fonspråket"}
         fr{"franska"}
@@ -263,6 +265,7 @@ sv{
         iu{"inuktitut"}
         ja{"japanska"}
         jbo{"lojban"}
+        jgo{"ngomba"}
         jmc{"kimashami"}
         jpr{"judisk persiska"}
         jrb{"judisk arabiska"}
@@ -353,9 +356,10 @@ sv{
         mg{"malagassiska"}
         mga{"medeliriska"}
         mgh{"makhuwa-meetto"}
+        mgo{"meta’"}
         mh{"marshalliska"}
         mi{"maori"}
-        mic{"mic-mac"}
+        mic{"mi’kmaq"}
         min{"minangkabau"}
         mis{"annat språk"}
         mk{"makedonska"}
@@ -594,6 +598,7 @@ sv{
         zap{"zapotek"}
         zbl{"blissymboler"}
         zen{"zenaga"}
+        zgh{"marockansk standard-tamazight"}
         zh{"kinesiska"}
         zh_Hans{"förenklad kinesiska"}
         zh_Hant{"traditionell kinesiska"}
@@ -604,7 +609,8 @@ sv{
         zza{"zazaiska"}
     }
     LanguagesShort{
-        az{"azerbajdzjanska"}
+        az{"azeriska"}
+        en_GB{"engelska (UK)"}
     }
     Scripts{
         Afak{"afakiska"}
@@ -775,6 +781,7 @@ sv{
             buddhist{"buddistisk kalender"}
             chinese{"kinesisk kalender"}
             coptic{"koptisk kalender"}
+            dangi{"koreansk kalender"}
             ethiopic{"etiopisk kalender"}
             ethiopic-amete-alem{"etiopisk amete-alem-kalender"}
             gregorian{"gregoriansk kalender"}
@@ -782,6 +789,10 @@ sv{
             indian{"indisk kalender"}
             islamic{"islamisk kalender"}
             islamic-civil{"islamisk civil kalender"}
+            islamic-rgsa{"islamisk kalender, Saudi-Arabien"}
+            islamic-tbla{"islamisk kalender, astronomisk"}
+            islamic-umalqura{"islamisk kalender, Umm al-Qura"}
+            iso8601{"ISO 8601-kalender"}
             japanese{"japansk kalender"}
             persian{"persisk kalender"}
             roc{"kinesiska republikens kalender"}
@@ -790,15 +801,19 @@ sv{
             big5han{"big5-sorteringsordning"}
             dictionary{"ordbokssorteringsordning"}
             ducet{"grundläggande Unicode-sorteringsordning"}
+            eor{"sorteringsordning för flerspråkliga europeiska dokument"}
             gb2312han{"gb2312-sorteringsordning"}
             phonebook{"telefonkatalogssorteringsordning"}
-            phonetic{"Fonetisk sorteringsordning"}
+            phonetic{"fonetisk sorteringsordning"}
             pinyin{"pinyin-sorteringsordning"}
             reformed{"reformerad sorteringsordning"}
             search{"allmän sökning"}
+            searchjl{"söksorteringsordning för att söka på inledande Hangul-konsonant"}
+            standard{"normal sorteringsordning"}
             stroke{"strecksorteringsordning"}
             traditional{"traditionell ordning"}
             unihan{"radikal-streck-sorteringsordning"}
+            zhuyin{"zhuyin-sorteringsordning"}
         }
         numbers{
             arab{"indo-arabiska siffror"}
@@ -807,6 +822,8 @@ sv{
             armnlow{"små armeniska numeraler"}
             bali{"balinesiska siffror"}
             beng{"bengaliska siffror"}
+            brah{"brahmiska siffror"}
+            cakm{"chakma-siffror"}
             cham{"chamiska siffror"}
             deva{"devanagariska siffror"}
             ethi{"etiopiska numeraler"}
@@ -844,17 +861,22 @@ sv{
             nkoo{"n-kå-siffor"}
             olck{"ol chiki-siffror"}
             orya{"oriyiska siffror"}
+            osma{"osmanya-siffror"}
             roman{"romerska numeraler"}
             romanlow{"små romerska numeraler"}
             saur{"saurashtra-siffror"}
+            shrd{"sharada-siffror"}
+            sora{"sora sompeng-siffror"}
             sund{"sundanesiska siffror"}
+            takr{"takri-siffror"}
             talu{"ny tai lü-siffror"}
-            taml{"tamilska numeraler"}
+            taml{"traditionella tamilska numeraler"}
             tamldec{"tamilska siffror"}
             telu{"telugiska siffror"}
             thai{"thailändska siffror"}
             tibt{"tibetanska siffror"}
             traditional{"Traditionella siffror"}
+            vaii{"vai-siffror"}
         }
     }
     Variants{
@@ -872,7 +894,10 @@ sv{
         BAUDDHA{"bauddha-dialekt"}
         BISCAYAN{"Biscaya-dialekt"}
         BISKE{"Bila-dialekt"}
+        BOHORIC{"Bohorič-alfabetet"}
         BOONT{"boontling"}
+        DAJNKO{"Dajnko-alfabetet"}
+        EMODENG{"tidig modern engelska"}
         FONIPA{"internationell fonetisk notation - IPA"}
         FONUPA{"uralisk fonetisk notation"}
         FONXSAMP{"X-SAMPA fonetisk notation"}
@@ -882,13 +907,16 @@ sv{
         JAUER{"jauer-dialekt"}
         JYUTPING{"jyutping"}
         KKCOR{"vanlig stavning"}
+        KSCOR{"standardstavning"}
         LAUKIKA{"laukika-dialekt"}
         LIPAW{"Lipovaz-dialekt"}
         LUNA1918{"1918 års stavning"}
+        METELKO{"Metelko-alfabetet"}
         MONOTON{"monotonisk stavning"}
         NDYUKA{"Ndyuka-dialekt"}
         NEDIS{"natisonsk dialekt"}
         NJIVA{"Njiva-dialekt"}
+        NULIK{"nulik-stavning"}
         OSOJS{"Osojane-dialekt"}
         PAMAKA{"Pamaka-dialekt"}
         PETR1708{"1708 års stavning"}
@@ -896,6 +924,7 @@ sv{
         POLYTON{"polytonisk stavning"}
         PUTER{"puter-dialekt"}
         REVISED{"reformerad stavning"}
+        RIGIK{"rigik-stavning"}
         ROZAJ{"resisk dialekt"}
         RUMGR{"grischun-dialekt"}
         SAAHO{"saho-dialekt"}
@@ -914,11 +943,11 @@ sv{
         VALLADER{"vallader-dialekt"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"språk: {0}"}
         script{"skrift: {0}"}
-        territory{"område: {0}"}
+        territory{"region: {0}"}
     }
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}

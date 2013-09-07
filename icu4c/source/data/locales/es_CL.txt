@@ -19,15 +19,11 @@ es_CL{
             }
         }
     }
-    PaperSize:intvector{
-        279,
-        216,
-    }
-    Version{"2.0.86.38"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{
-                "HH:mm:ss zzzz",
+                "H:mm:ss (zzzz)",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -36,8 +32,8 @@ es_CL{
                 "dd-MM-y G",
                 "dd-MM-y GGGGG",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
@@ -51,7 +47,7 @@ es_CL{
         }
         gregorian{
             DateTimePatterns{
-                "HH:mm:ss zzzz",
+                "H:mm:ss (zzzz)",
                 "H:mm:ss z",
                 "H:mm:ss",
                 "H:mm",
@@ -60,8 +56,8 @@ es_CL{
                 "dd-MM-y",
                 "dd-MM-yy",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1}, {0}",
+                "{1}, {0}",
                 "{1} {0}",
                 "{1} {0}",
             }

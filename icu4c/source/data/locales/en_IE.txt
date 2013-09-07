@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_IE{
     %%Parent{"en_GB"}
-    Version{"2.0.86.27"}
+    Version{"2.0.92.80"}
     calendar{
         generic{
             DateTimePatterns{

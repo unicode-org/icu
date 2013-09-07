@@ -35,6 +35,7 @@ ms{
         ak{"Akan"}
         am{"Amharic"}
         ar{"Arab"}
+        ar_001{"Arab Standard Moden"}
         as{"Assam"}
         ay{"Aymara"}
         az{"Azerbaijan"}
@@ -65,11 +66,12 @@ ms{
         en_AU{"Inggeris Australia"}
         en_CA{"Inggeris Kanada"}
         en_GB{"Inggeris British"}
-        en_US{"Bahasa Inggeris AS"}
+        en_US{"Inggeris AS"}
         eo{"Esperanto"}
         es{"Sepanyol"}
         es_419{"Sepanyol Amerika Latin"}
         es_ES{"Sepanyol Eropah"}
+        es_MX{"Sepanyol Mexico"}
         et{"Estonia"}
         eu{"Basque"}
         fa{"Parsi"}
@@ -98,6 +100,7 @@ ms{
         hy{"Armenia"}
         ia{"Interlingua"}
         id{"Indonesia"}
+        ie{"Interlingue"}
         ig{"Igbo"}
         is{"Iceland"}
         it{"Itali"}
@@ -137,6 +140,7 @@ ms{
         nl{"Belanda"}
         nl_BE{"Flemish"}
         nn{"Nynorsk Norway"}
+        no{"Norway"}
         nso{"Sotho Utara"}
         ny{"Nyanja"}
         nyn{"Nyankole"}
@@ -174,6 +178,7 @@ ms{
         su{"Sunda"}
         sv{"Sweden"}
         sw{"Swahili"}
+        swb{"Comoria"}
         ta{"Tamil"}
         te{"Telugu"}
         tet{"Tetum"}
@@ -189,6 +194,7 @@ ms{
         ts{"Tsonga"}
         tt{"Tatar"}
         tum{"Tumbuka"}
+        tw{"Twi"}
         ty{"Tahiti"}
         ug{"Uighur"}
         uk{"Ukraine"}
@@ -201,14 +207,18 @@ ms{
         xh{"Xhosa"}
         yi{"Yiddish"}
         yo{"Yoruba"}
+        zgh{"Tamazight Maghribi Standard"}
         zh{"Cina"}
         zh_Hans{"Cina Ringkas"}
         zh_Hant{"Cina Tradisional"}
         zu{"Zulu"}
-        zxx{"Tidak kandungan linguistik"}
+        zxx{"Tiada kandungan linguistik"}
+        zza{"Zaza"}
     }
     LanguagesShort{
         az{"Azeri"}
+        en_GB{"Inggeris U.K."}
+        en_US{"Inggeris A.S."}
     }
     Scripts{
         Arab{"Arab"}
@@ -282,6 +292,7 @@ ms{
             reformed{"Aturan Isih Pembaharuan"}
             search{"Carian Tujuan Umum"}
             searchjl{"Cari Mengikut Konsonan Awal Hangul"}
+            standard{"Urutan Isihan Standard"}
             stroke{"Aturan Isih Coretan"}
             traditional{"Aturan Isih Tradisional"}
             unihan{"Aturan Isih Coretan Radikal"}
@@ -329,11 +340,11 @@ ms{
             vaii{"Digit Vai"}
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
-        language{"{0}"}
-        script{"{0}"}
-        territory{"{0}"}
+        language{"Bahasa: {0}"}
+        script{"Skrip: {0}"}
+        territory{"Kawasan: {0}"}
     }
     localeDisplayPattern{
         keyTypePattern{"{0}: {1}"}
