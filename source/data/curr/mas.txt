@@ -221,7 +221,7 @@ mas{
         }
         ZMK{
             "ZMK",
-            "Iropiyianí e Sambia (1968-2012)",
+            "Iropiyianí e Sambia (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -232,5 +232,5 @@ mas{
             "Iropiyianí e Simbabwe",
         }
     }
-    Version{"2.0.84.55"}
+    Version{"2.0.92.87"}
 }

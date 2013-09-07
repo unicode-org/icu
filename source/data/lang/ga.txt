@@ -156,5 +156,5 @@ ga{
         zh_Hant{"Sínis Thraidisiúnta"}
         zu{"Súlúis"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

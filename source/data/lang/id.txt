@@ -35,7 +35,7 @@ id{
         ach{"Acoli"}
         ada{"Adangme"}
         ady{"Adygei"}
-        ae{"Avestan"}
+        ae{"Avesta"}
         af{"Afrikaans"}
         afa{"Rumpun Bahasa Afro-Asia"}
         afh{"Afrihili"}
@@ -52,6 +52,7 @@ id{
         anp{"Angika"}
         apa{"Rumpun Bahasa Apache"}
         ar{"Arab"}
+        ar_001{"Arab Standar Modern"}
         arc{"Aram"}
         arn{"Araukan"}
         arp{"Arapaho"}
@@ -83,7 +84,7 @@ id{
         bfd{"Bafut"}
         bg{"Bulgar"}
         bh{"Bihari"}
-        bho{"Bhojpur"}
+        bho{"Bhojpuri"}
         bi{"Bislama"}
         bik{"Bikol"}
         bin{"Bini"}
@@ -175,13 +176,14 @@ id{
         en_AU{"Inggris Australia"}
         en_CA{"Inggris Kanada"}
         en_GB{"Inggris Inggris"}
-        en_US{"Inggris A.S."}
+        en_US{"Inggris Amerika"}
         enm{"Inggris Abad Pertengahan"}
         eo{"Esperanto"}
         es{"Spanyol"}
         es_419{"Spanyol Amerika Latin"}
         es_ES{"Spanyol Eropa"}
-        et{"Estonia"}
+        es_MX{"Spanyol Meksiko"}
+        et{"Esti"}
         eu{"Bask"}
         ewo{"Ewondo"}
         fa{"Persia"}
@@ -333,7 +335,7 @@ id{
         lui{"Luiseno"}
         lun{"Lunda"}
         luo{"Luo"}
-        lus{"Lushai"}
+        lus{"Mizo"}
         luy{"Luyia"}
         lv{"Latvi"}
         mad{"Madura"}
@@ -349,6 +351,7 @@ id{
         mdr{"Mandar"}
         men{"Mende"}
         mer{"Meru"}
+        mfe{"Morisien"}
         mg{"Malagasi"}
         mga{"Irlandia Abad Pertengahan"}
         mgh{"Makhuwa-Meetto"}
@@ -456,7 +459,7 @@ id{
         rup{"Makedo-Rumania"}
         rw{"Kinyarwanda"}
         rwk{"Rwa"}
-        sa{"Sansekerta"}
+        sa{"Sanskerta"}
         sad{"Sandawe"}
         sah{"Sakha"}
         sai{"Rumpun Bahasa Indian Amerika Selatan"}
@@ -557,7 +560,7 @@ id{
         tyv{"Tuvinia"}
         tzm{"Tamazight Maroko Tengah"}
         udm{"Udmurt"}
-        ug{"Uighur"}
+        ug{"Uyghur"}
         uga{"Ugarit"}
         uk{"Ukraina"}
         umb{"Umbundu"}
@@ -593,6 +596,7 @@ id{
         zap{"Zapotek"}
         zbl{"Blissymbol"}
         zen{"Zenaga"}
+        zgh{"Tamazight Maroko Standar"}
         zh{"China"}
         zh_Hans{"China (Aksara Sederhana)"}
         zh_Hant{"China (Aksara Tradisional)"}
@@ -604,6 +608,8 @@ id{
     }
     LanguagesShort{
         az{"Azeri"}
+        en_GB{"Inggris U.K."}
+        en_US{"Inggris A.S."}
     }
     Scripts{
         Afak{"Afaka"}
@@ -788,13 +794,16 @@ id{
         collation{
             big5han{"Urutan Sortir China Tradisional - Big5"}
             dictionary{"Urutan Sortir Kamus"}
-            ducet{"Urutan Sortir Unicode Bawaan"}
+            ducet{"Urutan Sortir Unicode Default"}
+            eor{"Aturan Pengurutan Eropa"}
             gb2312han{"Urutan Sortir China Aks. Sederhana - GB2312"}
             phonebook{"Urutan Sortir Buku Telepon"}
             phonetic{"Urutan Sortir Fonetik"}
             pinyin{"Urutan Sortir Pinyin"}
             reformed{"Urutan Sortir yang Diubah Bentuknya"}
             search{"Pencarian Tujuan Umum"}
+            searchjl{"Pencarian Menurut Konsonan Awal Hangul"}
+            standard{"Urutan Sortir Standar"}
             stroke{"Urutan Sortir Guratan"}
             traditional{"Urutan Sortir Tradisional"}
             unihan{"Urutan Sortir Guratan Radikal"}
@@ -854,6 +863,7 @@ id{
             thai{"Angka Thai"}
             tibt{"Angka Tibet"}
             traditional{"Angka Tradisional"}
+            vaii{"Angka Vai"}
         }
     }
     Variants{
@@ -898,7 +908,7 @@ id{
         VALENCIA{"Valencia"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.93.8"}
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}

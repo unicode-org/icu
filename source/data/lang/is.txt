@@ -47,6 +47,7 @@ is{
         ang{"fornenska"}
         apa{"apatsjamál"}
         ar{"arabíska"}
+        ar_001{"stöðluð nútímaarabíska"}
         arc{"arameíska"}
         arn{"arákaníska"}
         arp{"arapahó"}
@@ -156,8 +157,9 @@ is{
         enm{"miðenska"}
         eo{"esperantó"}
         es{"spænska"}
-        es_419{"latnesk-amerísk spænska"}
+        es_419{"rómanskamerísk spænska"}
         es_ES{"evrópsk spænska"}
+        es_MX{"mexíkósk spænska"}
         et{"eistneska"}
         eu{"baskneska"}
         ewo{"evondó"}
@@ -166,7 +168,7 @@ is{
         fat{"fantí"}
         ff{"fúla"}
         fi{"finnska"}
-        fil{"filipínska"}
+        fil{"filippseyska"}
         fiu{"finnskúgrísk mál (önnur)"}
         fj{"fídjeyska"}
         fo{"færeyska"}
@@ -179,7 +181,7 @@ is{
         frr{"norðurfrísneska"}
         frs{"austurfrísneska"}
         fur{"fríúlska"}
-        fy{"frísneska"}
+        fy{"vesturfrísneska"}
         ga{"írska"}
         gaa{"ga"}
         gay{"gajó"}
@@ -514,62 +516,63 @@ is{
         zap{"sapótek"}
         zbl{"blisstákn"}
         zen{"senaga"}
+        zgh{"staðlað marokkóskt tamazight"}
         zh{"kínverska"}
         zh_Hans{"kínverska (einfölduð)"}
         zh_Hant{"kínverska (hefðbundin)"}
         znd{"sande"}
         zu{"súlú"}
         zun{"súní"}
-        zxx{"ekkert tungutengt efni"}
+        zxx{"ekkert tungumálaefni"}
     }
     LanguagesShort{
         az{"azeri"}
     }
     Scripts{
-        Arab{"arabísk"}
-        Armn{"armenska"}
-        Beng{"bengalska"}
-        Bopo{"Bopomofo"}
-        Brai{"Blindraletur"}
-        Cyrl{"kyrillísk"}
-        Deva{"Devanagari"}
-        Ethi{"eþíópísk"}
-        Geor{"georgrísk"}
-        Grek{"grísk"}
-        Gujr{"Gujarati"}
-        Guru{"Gurmukhi"}
+        Arab{"arabískt"}
+        Armn{"armenskt"}
+        Beng{"bengalskt"}
+        Bopo{"bopomofo"}
+        Brai{"blindraletur"}
+        Cyrl{"kyrillískt"}
+        Deva{"devanagari"}
+        Ethi{"eþíópískt"}
+        Geor{"georgískt"}
+        Grek{"grískt"}
+        Gujr{"gújaratí"}
+        Guru{"gurmukhi"}
         Hang{"hangul"}
-        Hani{"kínversk"}
-        Hans{"Einfaldað"}
-        Hant{"Hefðbundið"}
-        Hebr{"hebreska"}
+        Hani{"kínverskt"}
+        Hans{"einfaldað"}
+        Hant{"hefðbundið"}
+        Hebr{"hebreskt"}
         Hira{"hiragana"}
         Hrkt{"katakana eða hiragana"}
-        Jpan{"japönsk"}
+        Jpan{"japanskt"}
         Kana{"katakana"}
-        Khmr{"Khmer"}
-        Knda{"Kannada"}
-        Kore{"Kóreskt"}
-        Laoo{"Lao"}
-        Latn{"latnesk"}
-        Mlym{"Malayalam"}
-        Mong{"Mongólskt"}
-        Mymr{"Myanmar"}
-        Orya{"Oriya"}
-        Sinh{"Sinhala"}
-        Taml{"Tamílskt"}
-        Telu{"Telúgú"}
-        Thaa{"Thaana"}
-        Thai{"Taílenskt"}
-        Tibt{"Tíbeskt"}
-        Zsym{"Tákn"}
-        Zxxx{"Óskrifað"}
-        Zyyy{"Almennt"}
-        Zzzz{"Óþekkt letur"}
+        Khmr{"kmer"}
+        Knda{"kannada"}
+        Kore{"kóreskt"}
+        Laoo{"lao"}
+        Latn{"latneskt"}
+        Mlym{"malalajam"}
+        Mong{"mongólskt"}
+        Mymr{"mjanmarskt"}
+        Orya{"oriya"}
+        Sinh{"sinhala"}
+        Taml{"tamílskt"}
+        Telu{"telúgú"}
+        Thaa{"thaana"}
+        Thai{"taílenskt"}
+        Tibt{"tíbeskt"}
+        Zsym{"tákn"}
+        Zxxx{"óskrifað"}
+        Zyyy{"almennt"}
+        Zzzz{"óþekkt letur"}
     }
     Scripts%stand-alone{
-        Hans{"Einfaldað han"}
-        Hant{"Hefðbundið han"}
+        Hans{"einfaldað han"}
+        Hant{"hefðbundið han"}
     }
     Types{
         calendar{
@@ -590,7 +593,7 @@ is{
         collation{
             big5han{"hefðbundin kínversk röðun - Big5"}
             dictionary{"Orðabókarröð"}
-            ducet{"Sjálfgefin Unicode-röð"}
+            ducet{"Sjálfgefin Unicode-röðun"}
             gb2312han{"einfölduð kínversk röðun - GB2312"}
             phonebook{"Símaskráarröðun"}
             phonetic{"Hljóðfræðileg röð"}
@@ -598,6 +601,7 @@ is{
             reformed{"Endurbætt röð"}
             search{"Almenn leit"}
             searchjl{"Leita eftir upphafssamhljóða í Hangul"}
+            standard{"Stöðluð röðun"}
             stroke{"Strikaröðun"}
             traditional{"Hefðbundin"}
             unihan{"Röðun eftir grunnstrikum"}
@@ -637,6 +641,7 @@ is{
             roman{"Rómverskir tölustafir"}
             romanlow{"Rómverkar lágstafatölur"}
             taml{"Tamílskir tölustafir"}
+            tamldec{"Tamílskar tölur"}
             telu{"Tölur í telúgú"}
             thai{"Tælenskar tölur"}
             tibt{"Tíbeskir tölustafir"}
@@ -644,7 +649,7 @@ is{
             vaii{"Vai-tölustafir"}
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"tungumál: {0}"}
         script{"leturgerð: {0}"}

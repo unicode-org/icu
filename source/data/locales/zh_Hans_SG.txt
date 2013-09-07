@@ -14,9 +14,9 @@ zh_Hans_SG{
             }
         }
     }
-    Version{"2.0.86.27"}
+    Version{"2.0.92.87"}
     calendar{
-        generic{
+        buddhist{
             DateTimePatterns{
                 "zzzzah:mm:ss",
                 "ahh:mm:ssz",
@@ -27,8 +27,51 @@ zh_Hans_SG{
                 "Gy年M月d日",
                 "Gd/M/yy",
                 "{1} {0}",
-                "{1}{0}",
-                "{1}{0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
+        chinese{
+            DateTimePatterns{
+                "zzzzah:mm:ss",
+                "ahh:mm:ssz",
+                "ah:mm:ss",
+                "ahh:mm",
+                {
+                    "U年MMMd日EEEE",
+                    "hanidec",
+                }
+                {
+                    "U年MMMd日",
+                    "hanidec",
+                }
+                {
+                    "U年MMMd日",
+                    "hanidec",
+                }
+                "U-M-d",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
+        generic{
+            DateTimePatterns{
+                "zzzzah:mm:ss",
+                "ahh:mm:ssz",
+                "ah:mm:ss",
+                "ahh:mm",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gy年M月d日",
+                "dd/MM/yyGGGGG",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
@@ -37,9 +80,8 @@ zh_Hans_SG{
                 MMMMdd{"M月d日"}
                 MMdd{"MM-dd"}
                 Md{"M-d"}
-                yyyyM{"y年M月"}
-                yyyyMEd{"y年M月d日，E"}
-                yyyyMd{"y年M月d日"}
+                yyyyMEd{"Gy年M月d日，E"}
+                yyyyMd{"Gy年M月d日"}
             }
             intervalFormats{
                 Hmv{
@@ -94,6 +136,7 @@ zh_Hans_SG{
             }
             availableFormats{
                 MEd{"M-dE"}
+                MMM{"M月"}
                 MMMMdd{"M月d日"}
                 MMdd{"MM-dd"}
                 Md{"M-d"}
@@ -120,6 +163,9 @@ zh_Hans_SG{
                     M{"M-d至M-d"}
                     d{"M-d至M-d"}
                 }
+                d{
+                    d{"d日至d日"}
+                }
                 fallback{"{0}至{1}"}
                 yM{
                     M{"y年M月至y年M月"}
@@ -136,10 +182,118 @@ zh_Hans_SG{
                 }
             }
         }
+        islamic{
+            DateTimePatterns{
+                "zzzzah:mm:ss",
+                "ahh:mm:ssz",
+                "ah:mm:ss",
+                "ahh:mm",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gy年M月d日",
+                "Gd/M/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+        }
+        japanese{
+            DateTimePatterns{
+                "zzzzah:mm:ss",
+                "ahh:mm:ssz",
+                "ah:mm:ss",
+                "ahh:mm",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gy年M月d日",
+                "Gd/M/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MEd{"M/dE"}
+                Md{"M/d"}
+            }
+        }
+        roc{
+            DateTimePatterns{
+                "zzzzah:mm:ss",
+                "ahh:mm:ssz",
+                "ah:mm:ss",
+                "ahh:mm",
+                "Gy年M月d日EEEE",
+                "Gy年M月d日",
+                "Gy年M月d日",
+                "Gd/M/yy",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+                "{1} {0}",
+            }
+            availableFormats{
+                MEd{"M-dE"}
+                MMM{"M月"}
+                Md{"M-d"}
+            }
+        }
     }
     fields{
-        era{
-            dn{"纪元"}
+        second{
+            relativeTime{
+                future{
+                    other{"{0}秒后"}
+                }
+                past{
+                    other{"{0}秒前"}
+                }
+            }
+        }
+    }
+    units{
+        duration{
+            second{
+                other{"{0}秒"}
+            }
+        }
+    }
+    unitsShort{
+        length{
+            centimeter{
+                other{"{0}厘米"}
+            }
+            foot{
+                other{"{0}英尺"}
+            }
+            inch{
+                other{"{0}英寸"}
+            }
+            kilometer{
+                other{"{0}公里"}
+            }
+            light-year{
+                other{"{0}光年"}
+            }
+            meter{
+                other{"{0}米"}
+            }
+            mile{
+                other{"{0}英里"}
+            }
+            millimeter{
+                other{"{0}毫米"}
+            }
+            picometer{
+                other{"{0}皮米"}
+            }
+            yard{
+                other{"{0}码"}
+            }
         }
     }
 }

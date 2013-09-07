@@ -57,7 +57,7 @@ nl{
         AT{"Oostenrijk"}
         AU{"Australië"}
         AW{"Aruba"}
-        AX{"Ålandeilanden"}
+        AX{"Åland"}
         AZ{"Azerbeidzjan"}
         BA{"Bosnië en Herzegovina"}
         BB{"Barbados"}
@@ -193,7 +193,7 @@ nl{
         MH{"Marshalleilanden"}
         MK{"Macedonië"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar (Birma)"}
         MN{"Mongolië"}
         MO{"Macao SAR van China"}
         MP{"Noordelijke Marianeneilanden"}
@@ -227,7 +227,7 @@ nl{
         PH{"Filipijnen"}
         PK{"Pakistan"}
         PL{"Polen"}
-        PM{"Saint Pierre en Miquelon"}
+        PM{"Saint-Pierre en Miquelon"}
         PN{"Pitcairneilanden"}
         PR{"Puerto Rico"}
         PS{"Palestijnse gebieden"}
@@ -249,7 +249,7 @@ nl{
         SG{"Singapore"}
         SH{"Sint-Helena"}
         SI{"Slovenië"}
-        SJ{"Svalbard en Jan Mayen"}
+        SJ{"Spitsbergen en Jan Mayen"}
         SK{"Slowakije"}
         SL{"Sierra Leone"}
         SM{"San Marino"}
@@ -302,5 +302,5 @@ nl{
         ZW{"Zimbabwe"}
         ZZ{"Onbekend gebied"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.93.8"}
 }

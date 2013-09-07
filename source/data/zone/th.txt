@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/th.xml
  */
 th{
-    Version{"2.0.87.67"}
+    Version{"2.0.93.18"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"อาบีจาน"}
@@ -86,6 +86,9 @@ th{
         }
         "Africa:Johannesburg"{
             ec{"โจฮันเนสเบอร์ก"}
+        }
+        "Africa:Juba"{
+            ec{"จูบา"}
         }
         "Africa:Kampala"{
             ec{"คัมพาลา"}
@@ -210,6 +213,9 @@ th{
         "America:Bahia"{
             ec{"บาเยีย"}
         }
+        "America:Bahia_Banderas"{
+            ec{"บาเอียบันเดรัส"}
+        }
         "America:Barbados"{
             ec{"บาร์เบโดส"}
         }
@@ -269,6 +275,9 @@ th{
         }
         "America:Costa_Rica"{
             ec{"คอสตาริกา"}
+        }
+        "America:Creston"{
+            ec{"เครสตัน"}
         }
         "America:Cuiaba"{
             ec{"กุยาบา"}
@@ -384,6 +393,9 @@ th{
         "America:Kentucky:Monticello"{
             ec{"มอนติเซลโล, เคนตักกี"}
         }
+        "America:Kralendijk"{
+            ec{"คราเลนดิจค์"}
+        }
         "America:La_Paz"{
             ec{"ลาปาซ"}
         }
@@ -414,6 +426,9 @@ th{
         "America:Martinique"{
             ec{"มาร์ตินีก"}
         }
+        "America:Matamoros"{
+            ec{"มาตาโมรอส"}
+        }
         "America:Mazatlan"{
             ec{"มาซาทลาน"}
         }
@@ -425,6 +440,9 @@ th{
         }
         "America:Merida"{
             ec{"เมรีดา"}
+        }
+        "America:Metlakatla"{
+            ec{"เมทลากาตละ"}
         }
         "America:Mexico_City"{
             ec{"เม็กซิโกซิตี"}
@@ -471,6 +489,9 @@ th{
         "America:North_Dakota:New_Salem"{
             ec{"นิวเซเลม, นอร์ทดาโคตา"}
         }
+        "America:Ojinaga"{
+            ec{"โอจินากา"}
+        }
         "America:Panama"{
             ec{"ปานามา"}
         }
@@ -481,7 +502,7 @@ th{
             ec{"ปารามาริโบ"}
         }
         "America:Phoenix"{
-            ec{"ฟีนิกซ์"}
+            ec{"ฟินิกซ์"}
         }
         "America:Port-au-Prince"{
             ec{"ปอร์โตแปรงซ์"}
@@ -513,6 +534,9 @@ th{
         "America:Rio_Branco"{
             ec{"รีโอบรังโก"}
         }
+        "America:Santa_Isabel"{
+            ec{"ซานตาอิซาเบล"}
+        }
         "America:Santarem"{
             ec{"ซันตาเรม"}
         }
@@ -530,6 +554,9 @@ th{
         }
         "America:Shiprock"{
             ec{"ชิปร็อก"}
+        }
+        "America:Sitka"{
+            ec{"ซิตกา"}
         }
         "America:St_Barthelemy"{
             ec{"เซนต์บาร์เธเลมี"}
@@ -593,6 +620,9 @@ th{
         }
         "Antarctica:DumontDUrville"{
             ec{"ดูมองต์ดูร์วิลล์"}
+        }
+        "Antarctica:Macquarie"{
+            ec{"แมคควอรี"}
         }
         "Antarctica:Mawson"{
             ec{"มาว์ซัน"}
@@ -682,7 +712,7 @@ th{
             ec{"ดิลี"}
         }
         "Asia:Dubai"{
-            ec{"ดูใบ"}
+            ec{"ดูไบ"}
         }
         "Asia:Dushanbe"{
             ec{"ดูชานเบ"}
@@ -692,6 +722,9 @@ th{
         }
         "Asia:Harbin"{
             ec{"ฮาร์บิน"}
+        }
+        "Asia:Hebron"{
+            ec{"เฮบรอน"}
         }
         "Asia:Hong_Kong"{
             ec{"ฮ่องกง"}
@@ -709,7 +742,7 @@ th{
             ec{"จายาปุระ"}
         }
         "Asia:Jerusalem"{
-            ec{"เยรูซาเร็ม"}
+            ec{"เยรูซาเลม"}
         }
         "Asia:Kabul"{
             ec{"คาบูล"}
@@ -725,6 +758,9 @@ th{
         }
         "Asia:Katmandu"{
             ec{"กาตมันดุ"}
+        }
+        "Asia:Khandyga"{
+            ec{"ฮันดืยกา"}
         }
         "Asia:Krasnoyarsk"{
             ec{"ครัสโนยาร์สก์"}
@@ -755,6 +791,9 @@ th{
         }
         "Asia:Nicosia"{
             ec{"นิโคเซีย"}
+        }
+        "Asia:Novokuznetsk"{
+            ec{"โนโวคุซเนตสค์"}
         }
         "Asia:Novosibirsk"{
             ec{"โนโวซิบิร์สก์"}
@@ -827,6 +866,9 @@ th{
         }
         "Asia:Urumqi"{
             ec{"อุรุมชี"}
+        }
+        "Asia:Ust-Nera"{
+            ec{"อุสต์เนรา"}
         }
         "Asia:Vientiane"{
             ec{"เวียงจันทน์"}
@@ -910,7 +952,7 @@ th{
             ec{"ซิดนีย์"}
         }
         "Etc:Unknown"{
-            ec{"ไม่ทราบเมือง"}
+            ec{"เมืองที่ไม่รู้จัก"}
         }
         "Europe:Amsterdam"{
             ec{"อัมสเตอดัม"}
@@ -938,6 +980,9 @@ th{
         }
         "Europe:Budapest"{
             ec{"บูดาเปส"}
+        }
+        "Europe:Busingen"{
+            ec{"บุสซิงเง็น"}
         }
         "Europe:Chisinau"{
             ec{"คีชีเนา"}
@@ -1311,7 +1356,7 @@ th{
         "meta:Argentina_Western"{
             ld{"เวลาฤดูร้อนทางตะวันตกของอาร์เจนตินา"}
             lg{"เวลาตะวันตกของอาร์เจนตินา"}
-            ls{"เวลามาตรฐานของอาร์เจนตินาฝั่งตะวันตก"}
+            ls{"เวลามาตรฐานทางตะวันตกของอาร์เจนตินา"}
         }
         "meta:Armenia"{
             ld{"เวลาฤดูร้อนอาร์เมเนีย"}
@@ -1326,22 +1371,22 @@ th{
         "meta:Australia_Central"{
             ld{"เวลาออมแสงทางตอนกลางของออสเตรเลีย"}
             lg{"เวลาออสเตรเลียกลาง"}
-            ls{"เวลามาตรฐานออสเตรเลียกลาง"}
+            ls{"เวลามาตรฐานทางตอนกลางของออสเตรเลีย"}
         }
         "meta:Australia_CentralWestern"{
             ld{"เวลาออมแสงทางตะวันตกตอนกลางของออสเตรเลีย"}
-            lg{"เวลาออสเตรเลียตะวันตกกลาง"}
-            ls{"เวลามาตรฐานออสเตรเลียตะวันตกกลาง"}
+            lg{"เวลาทางตะวันตกตอนกลางของออสเตรเลีย"}
+            ls{"เวลามาตรฐานทางตะวันตกตอนกลางของออสเตรเลีย"}
         }
         "meta:Australia_Eastern"{
             ld{"เวลาออมแสงทางตะวันออกของออสเตรเลีย"}
             lg{"เวลาออสเตรเลียตะวันออก"}
-            ls{"เวลามาตรฐานออสเตรเลียตะวันออก"}
+            ls{"เวลามาตรฐานทางตะวันออกของออสเตรเลีย"}
         }
         "meta:Australia_Western"{
             ld{"เวลาออมแสงทางตะวันตกของออสเตรเลีย"}
             lg{"เวลาออสเตรเลียตะวันตก"}
-            ls{"เวลามาตรฐานออสเตรเลียตะวันตก"}
+            ls{"เวลามาตรฐานทางตะวันตกของออสเตรเลีย"}
         }
         "meta:Azerbaijan"{
             ld{"เวลาฤดูร้อนอาเซอร์ไบจาน"}
@@ -1508,6 +1553,11 @@ th{
         "meta:Guyana"{
             ls{"เวลากายอานา"}
         }
+        "meta:Hawaii_Aleutian"{
+            ld{"เวลาออมแสงฮาวาย-อะลูเชียน"}
+            lg{"เวลาฮาวาย-อะลูเชียน"}
+            ls{"เวลามาตรฐานฮาวาย-อะลูเชียน"}
+        }
         "meta:Hong_Kong"{
             ld{"เวลาฤดูร้อนฮ่องกง"}
             lg{"เวลาฮ่องกง"}
@@ -1664,6 +1714,9 @@ th{
         "meta:Niue"{
             ls{"เวลานีอูเอ"}
         }
+        "meta:Norfolk"{
+            ls{"เวลาเกาะนอร์ฟอล์ก"}
+        }
         "meta:Noronha"{
             ld{"เวลาฤดูร้อนของหมู่เกาะเฟอร์นันโด"}
             lg{"เวลาหมู่เกาะเฟอร์นันโด"}
@@ -1679,7 +1732,7 @@ th{
         }
         "meta:Omsk"{
             ld{"เวลาฤดูร้อนออมสค์"}
-            lg{"เวลาออมสก์"}
+            lg{"เวลาออมสค์"}
             ls{"เวลามาตรฐานออมสค์"}
         }
         "meta:Pakistan"{
@@ -1708,6 +1761,9 @@ th{
             lg{"เวลาฟิลิปปินส์"}
             ls{"เวลามาตรฐานฟิลิปปินส์"}
         }
+        "meta:Phoenix_Islands"{
+            ls{"เวลาหมู่เกาะฟินิกซ์"}
+        }
         "meta:Pierre_Miquelon"{
             ld{"เวลาออมแสงของแซงปีแยร์และมีเกอลง"}
             lg{"เวลาแซงปีแยร์และมีเกอลง"}
@@ -1726,6 +1782,9 @@ th{
         }
         "meta:Reunion"{
             ls{"เวลาเรอูนียง"}
+        }
+        "meta:Rothera"{
+            ls{"เวลาโรธีรา"}
         }
         "meta:Sakhalin"{
             ld{"เวลาฤดูร้อนซาคาลิน"}
@@ -1756,6 +1815,9 @@ th{
         }
         "meta:Suriname"{
             ls{"เวลาซูรินาเม"}
+        }
+        "meta:Syowa"{
+            ls{"เวลาโซวา"}
         }
         "meta:Tahiti"{
             ls{"เวลาตาฮีตี"}
@@ -1831,13 +1893,13 @@ th{
         }
         "meta:Yekaterinburg"{
             ld{"เวลาฤดูร้อนเยคาเตรินบูร์ก"}
-            lg{"เวลาเยกาเตรินบุร์ก"}
-            ls{"เวลามาตรฐานเยคาเทรินเบิร์ก"}
+            lg{"เวลาเยคาเตรินบูร์ก"}
+            ls{"เวลามาตรฐานเยคาเตรินบูร์ก"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"เวลา {0}"}
+        regionFormat{"เวลา{0}"}
     }
 }

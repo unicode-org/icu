@@ -10,6 +10,7 @@
  * ICU <specials> source: <path>/common/main/shi_Latn.xml
  */
 shi_Latn{
+    %%Parent{"root"}
     Currencies{
         AED{
             "AED",
@@ -225,7 +226,7 @@ shi_Latn{
         }
         ZMK{
             "ZMK",
-            "akwaca n zambya (1968-2012)",
+            "akwaca n zambya (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +237,5 @@ shi_Latn{
             "adular n zimbabwi",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

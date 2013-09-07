@@ -37,6 +37,7 @@ mt{
         anp{"Angika"}
         apa{"Lingwi Apaċi"}
         ar{"Għarbi"}
+        ar_001{"Għarbi Standard Modern"}
         arc{"Aramajk"}
         arn{"Arawkanjan"}
         arp{"Arapaħo"}
@@ -271,7 +272,7 @@ mt{
         lun{"Lunda"}
         luo{"Luwa"}
         lus{"Luxaj"}
-        lv{"Latvjan (Lettix)"}
+        lv{"Latvjan"}
         mad{"Maduriż"}
         mag{"Magaħi"}
         mai{"Majtili"}
@@ -444,7 +445,7 @@ mt{
         tli{"Tlingit"}
         tmh{"Tamaxek"}
         tn{"Zwana"}
-        to{"Tongan (Gżejjer ta’ Tonga)"}
+        to{"Tongan"}
         tog{"Tonga (Njasa)"}
         tpi{"Tok Pisin"}
         tr{"Tork"}
@@ -496,13 +497,17 @@ mt{
     Scripts{
         Arab{"Għarbi"}
         Grek{"Grieg"}
-        Hans{"Ħan Sempliċi"}
-        Hant{"Ħan Tradizzjonali"}
+        Hans{"Sempliċi"}
+        Hant{"Tradizzjonali"}
         Latn{"Latin"}
         Xpeo{"Persjan Antik"}
         Zxxx{"Mhux Miktub"}
         Zyyy{"Komuni"}
-        Zzzz{"Skritt Mhux Magħruf jew Mhux Validu"}
+        Zzzz{"Skritt Mhux Magħruf"}
+    }
+    Scripts%stand-alone{
+        Hans{"Ħan Sempliċi"}
+        Hant{"Ħan Tradizzjonali"}
     }
     Types{
         calendar{
@@ -526,7 +531,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Lingwa: {0}"}
         script{"Skritt: {0}"}

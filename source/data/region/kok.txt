@@ -13,5 +13,5 @@ kok{
     Countries{
         IN{"भारत"}
     }
-    Version{"2.0.85.78"}
+    Version{"2.0.92.87"}
 }

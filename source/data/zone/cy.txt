@@ -10,10 +10,19 @@
  * ICU <specials> source: <path>/common/main/cy.xml
  */
 cy{
-    Version{"2.0.88.66"}
+    Version{"2.0.93.7"}
     zoneStrings{
+        "Africa:Algiers"{
+            ec{"Alger"}
+        }
         "Africa:Asmera"{
-            ec{"Asmara"}
+            ec{"Asmera"}
+        }
+        "Africa:El_Aaiun"{
+            ec{"El Aaiún"}
+        }
+        "Africa:Lome"{
+            ec{"Lomé"}
         }
         "Africa:Ndjamena"{
             ec{"N'Djamena"}
@@ -21,17 +30,44 @@ cy{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
         }
+        "America:Argentina:Tucuman"{
+            ec{"Tucumán"}
+        }
+        "America:Asuncion"{
+            ec{"Asunción"}
+        }
+        "America:Bahia_Banderas"{
+            ec{"Bae Banderas"}
+        }
+        "America:Belem"{
+            ec{"Belém"}
+        }
+        "America:Bogota"{
+            ec{"Bogotá"}
+        }
+        "America:Cancun"{
+            ec{"Cancún"}
+        }
         "America:Coral_Harbour"{
             ec{"Atikokan"}
+        }
+        "America:Cordoba"{
+            ec{"Córdoba"}
+        }
+        "America:Cuiaba"{
+            ec{"Cuiabá"}
         }
         "America:Curacao"{
             ec{"Curaçao"}
         }
+        "America:Eirunepe"{
+            ec{"Eirunepé"}
+        }
         "America:Godthab"{
-            ec{"Godthab"}
+            ec{"Nuuk"}
         }
         "America:Havana"{
-            ec{"Habana"}
+            ec{"La Habana"}
         }
         "America:Indiana:Knox"{
             ec{"Knox, Indiana"}
@@ -58,10 +94,19 @@ cy{
             ec{"Monticello, Kentucky"}
         }
         "America:Lower_Princes"{
-            ec{"Lower Prince's Quarter"}
+            ec{"Lower Prince's Quarter/Beneden Prinsen Kwartier"}
+        }
+        "America:Maceio"{
+            ec{"Maceió"}
+        }
+        "America:Mazatlan"{
+            ec{"Mazatlán"}
         }
         "America:Mexico_City"{
-            ec{"Dinas Mecsico"}
+            ec{"Dinas México"}
+        }
+        "America:Montreal"{
+            ec{"Montréal"}
         }
         "America:New_York"{
             ec{"Efrog Newydd"}
@@ -75,11 +120,23 @@ cy{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Gogledd Dakota"}
         }
+        "America:Panama"{
+            ec{"Panamá"}
+        }
+        "America:Santarem"{
+            ec{"Santarém"}
+        }
+        "America:Sao_Paulo"{
+            ec{"São Paulo"}
+        }
         "America:Scoresbysund"{
-            ec{"Scoresbysund"}
+            ec{"Ittoqqortoormiit"}
+        }
+        "America:Shiprock"{
+            ec{"Shiprock/Naatʼáanii Nééz"}
         }
         "America:St_Barthelemy"{
-            ec{"St. Barthelemy"}
+            ec{"St. Barthélemy"}
         }
         "America:St_Johns"{
             ec{"St. John’s"}
@@ -108,14 +165,23 @@ cy{
         "Asia:Aqtobe"{
             ec{"Aqtöbe"}
         }
-        "Asia:Calcutta"{
-            ec{"Kolkata"}
+        "Asia:Ashgabat"{
+            ec{"Ashkabad"}
         }
-        "Asia:Hovd"{
-            ec{"Khovd"}
+        "Asia:Calcutta"{
+            ec{"Calcutta"}
+        }
+        "Asia:Choibalsan"{
+            ec{"Choybalsan"}
+        }
+        "Asia:Dhaka"{
+            ec{"Dacca"}
+        }
+        "Asia:Gaza"{
+            ec{"Gasa"}
         }
         "Asia:Jerusalem"{
-            ec{"Jeriwsalem"}
+            ec{"Jerwsalem"}
         }
         "Asia:Katmandu"{
             ec{"Kathmandu"}
@@ -127,7 +193,7 @@ cy{
             ec{"Yangon"}
         }
         "Asia:Saigon"{
-            ec{"Dinas Ho Chi Minh"}
+            ec{"Dinas Hô Chi Minh"}
         }
         "Asia:Sakhalin"{
             ec{"Sachalin"}
@@ -135,14 +201,29 @@ cy{
         "Asia:Samarkand"{
             ec{"Samarcand"}
         }
+        "Asia:Seoul"{
+            ec{"Sǒul"}
+        }
+        "Asia:Taipei"{
+            ec{"Taibei"}
+        }
+        "Asia:Tbilisi"{
+            ec{"Tiflis"}
+        }
+        "Asia:Thimphu"{
+            ec{"Thimbu"}
+        }
+        "Asia:Tokyo"{
+            ec{"Tōkyō"}
+        }
         "Asia:Ulaanbaatar"{
             ec{"Ulan Bator"}
         }
         "Asia:Urumqi"{
             ec{"Ürümqi"}
         }
-        "Asia:Yekaterinburg"{
-            ec{"Ekaterinburg"}
+        "Atlantic:Canary"{
+            ec{"yr Ynysoedd Dedwydd"}
         }
         "Atlantic:Cape_Verde"{
             ec{"Cabo Verde"}
@@ -174,43 +255,58 @@ cy{
         "Europe:Bucharest"{
             ec{"Bucureşti"}
         }
+        "Europe:Busingen"{
+            ec{"Büsingen"}
+        }
         "Europe:Chisinau"{
             ec{"Chişinău"}
+        }
+        "Europe:Copenhagen"{
+            ec{"København"}
         }
         "Europe:Dublin"{
             ec{"Dulyn"}
             ld{"Amser Haf Iwerddon"}
         }
+        "Europe:Guernsey"{
+            ec{"Ynys y Garn"}
+        }
         "Europe:Isle_of_Man"{
             ec{"Ynys Manaw"}
+        }
+        "Europe:Lisbon"{
+            ec{"Lisboa"}
         }
         "Europe:London"{
             ec{"Llundain"}
             ld{"Amser Haf Prydain"}
         }
-        "Europe:Luxembourg"{
-            ec{"Lwcsembwrg"}
-        }
         "Europe:Moscow"{
-            ec{"Moscfa"}
+            ec{"Moskva"}
         }
         "Europe:Prague"{
-            ec{"Prag"}
+            ec{"Praha"}
         }
         "Europe:Rome"{
             ec{"Rhufain"}
         }
-        "Europe:Tirane"{
-            ec{"Tirana"}
+        "Europe:Sofia"{
+            ec{"Sofiya"}
         }
-        "Europe:Uzhgorod"{
-            ec{"Uzhhorod"}
+        "Europe:Tirane"{
+            ec{"Tiranë"}
         }
         "Europe:Vatican"{
             ec{"y Fatican"}
         }
         "Europe:Vienna"{
-            ec{"Fienna"}
+            ec{"Wien"}
+        }
+        "Europe:Warsaw"{
+            ec{"Warszawa"}
+        }
+        "Europe:Zaporozhye"{
+            ec{"Zaporizhzhya"}
         }
         "Europe:Zurich"{
             ec{"Zürich"}
@@ -218,8 +314,23 @@ cy{
         "Indian:Christmas"{
             ec{"Ynys y Nadolig"}
         }
+        "Indian:Kerguelen"{
+            ec{"Kerguélen"}
+        }
         "Indian:Mahe"{
             ec{"Mahé"}
+        }
+        "Indian:Reunion"{
+            ec{"Réunion"}
+        }
+        "Pacific:Easter"{
+            ec{"Ynys y Pasg"}
+        }
+        "Pacific:Efate"{
+            ec{"Éfaté"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marquises"}
         }
         "Pacific:Noumea"{
             ec{"Nouméa"}
@@ -253,9 +364,9 @@ cy{
             ls{"Amser Safonol Alaska"}
         }
         "meta:Amazon"{
-            ld{"Amser Haf Amazon"}
-            lg{"Amser Amazon"}
-            ls{"Amser Safonol Amazon"}
+            ld{"Amser Haf Amazonas"}
+            lg{"Amser Amazonas"}
+            ls{"Amser Safonol Amazonas"}
         }
         "meta:America_Central"{
             ld{"Amser Haf Canolbarth Gogledd America"}
@@ -283,14 +394,14 @@ cy{
             ls{"Amser Safonol Arabaidd"}
         }
         "meta:Argentina"{
-            ld{"Amser Haf yr Ariannin"}
+            ld{"Amser Haf Ariannin"}
             lg{"Amser yr Ariannin"}
-            ls{"Amser Safonol yr Ariannin"}
+            ls{"Amser Safonol Ariannin"}
         }
         "meta:Argentina_Western"{
-            ld{"Amser Haf Gorllewin yr Ariannin"}
-            lg{"Amser Gorllewin yr Ariannin"}
-            ls{"Amser Safonol Gorllewin yr Ariannin"}
+            ld{"Amser Haf Gorllewin Ariannin"}
+            lg{"Amser Gorllewin Ariannin"}
+            ls{"Amser Safonol Gorllewin Ariannin"}
         }
         "meta:Armenia"{
             ld{"Amser Haf Armenia"}
@@ -341,7 +452,7 @@ cy{
             ls{"Amser Bhutan"}
         }
         "meta:Bolivia"{
-            ls{"Amser Bolifia"}
+            ls{"Amser Bolivia"}
         }
         "meta:Brasilia"{
             ld{"Amser Haf Brasília"}
@@ -380,7 +491,7 @@ cy{
             ls{"Amser Safonol Choibalsan"}
         }
         "meta:Christmas"{
-            ls{"Amser Ynys y Nadolig"}
+            ls{"Amser Ynys Christmas"}
         }
         "meta:Cocos"{
             ls{"Amser Ynysoedd Cocos"}
@@ -421,16 +532,25 @@ cy{
             ld{"Amser Haf Canolbarth Ewrop"}
             lg{"Amser Canolbarth Ewrop"}
             ls{"Amser Safonol Canolbarth Ewrop"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Amser Haf Dwyrain Ewrop"}
             lg{"Amser Dwyrain Ewrop"}
             ls{"Amser Safonol Dwyrain Ewrop"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Amser Haf Gorllewin Ewrop"}
             lg{"Amser Gorllewin Ewrop"}
             ls{"Amser Safonol Gorllewin Ewrop"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Amser Haf Ynysoedd Falklands/Malvinas"}
@@ -438,9 +558,9 @@ cy{
             ls{"Amser Safonol Ynysoedd Falklands/Malvinas"}
         }
         "meta:Fiji"{
-            ld{"Amser Haf Ffiji"}
-            lg{"Amser Ffiji"}
-            ls{"Amser Safonol Ffiji"}
+            ld{"Amser Haf Fiji"}
+            lg{"Amser Fiji"}
+            ls{"Amser Safonol Fiji"}
         }
         "meta:French_Guiana"{
             ls{"Amser Guyane Ffrengig"}
@@ -449,7 +569,8 @@ cy{
             ls{"Amser Deheuol ac Antarctig Frengig"}
         }
         "meta:GMT"{
-            ls{"Greenwich Mean Time"}
+            ls{"Amser Safonol Greenwich"}
+            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Amser Galapagos"}
@@ -541,8 +662,8 @@ cy{
             ls{"Amser Gorllewin Kazakstan"}
         }
         "meta:Korea"{
-            ld{"Amser Haf Corea"}
-            lg{"Amser Corea"}
+            ld{"Amser Haf Korea"}
+            lg{"Amser Korea"}
             ls{"Amser Safonol Corea"}
         }
         "meta:Kosrae"{
@@ -579,7 +700,7 @@ cy{
             ls{"Amser Y Maldives"}
         }
         "meta:Marquesas"{
-            ls{"Amser Marquesas"}
+            ls{"Amser Marquises"}
         }
         "meta:Marshall_Islands"{
             ls{"Amser Ynysoedd Marshall"}
@@ -598,9 +719,9 @@ cy{
             ls{"Amser Safonol Ulan Bator"}
         }
         "meta:Moscow"{
-            ld{"Amser Haf Moscfa"}
-            lg{"Amser Moscfa"}
-            ls{"Amser Safonol Moscfa"}
+            ld{"Amser Haf Moskfa"}
+            lg{"Amser Moskfa"}
+            ls{"Amser Safonol Moskfa"}
         }
         "meta:Myanmar"{
             ls{"Amser Myanmar"}
@@ -648,9 +769,9 @@ cy{
             ls{"Amser Safonol Omsk"}
         }
         "meta:Pakistan"{
-            ld{"Amser Haf Pacistan"}
+            ld{"Amser Haf Pakistan"}
             lg{"Amser Pacistan"}
-            ls{"Amser Safonol Pacistan"}
+            ls{"Amser Safonol Pakistan"}
         }
         "meta:Palau"{
             ls{"Amser Palau"}
@@ -715,6 +836,9 @@ cy{
         "meta:South_Georgia"{
             ls{"Amser De Georgia"}
         }
+        "meta:Suriname"{
+            ls{"Amser Suriname"}
+        }
         "meta:Syowa"{
             ls{"Amser Syowa"}
         }
@@ -722,9 +846,9 @@ cy{
             ls{"Amser Tahiti"}
         }
         "meta:Taipei"{
-            ld{"Amser Haf Taipei"}
-            lg{"Amser Taipei"}
-            ls{"Amser Safonol Taipei"}
+            ld{"Amser Haf Taibei"}
+            lg{"Amser Taibei"}
+            ls{"Amser Safonol Taibei"}
         }
         "meta:Tajikistan"{
             ls{"Amser Tajikistan"}
@@ -746,7 +870,7 @@ cy{
             ls{"Amser Safonol Turkmenistan"}
         }
         "meta:Tuvalu"{
-            ls{"Amser Twfalw"}
+            ls{"Amser Tuvalu"}
         }
         "meta:Uruguay"{
             ld{"Amser Haf Uruguay"}
@@ -791,9 +915,9 @@ cy{
             ls{"Amser Safonol Yakutsk"}
         }
         "meta:Yekaterinburg"{
-            ld{"Amser Haf Ekaterinburg"}
-            lg{"Amser Ekaterinburg"}
-            ls{"Amser Safonol Ekaterinburg"}
+            ld{"Amser Haf Yekaterinburg"}
+            lg{"Amser Yekaterinburg"}
+            ls{"Amser Safonol Yekaterinburg"}
         }
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}

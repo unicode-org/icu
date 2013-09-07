@@ -10,6 +10,7 @@
  * ICU <specials> source: <path>/common/main/bs_Cyrl.xml
  */
 bs_Cyrl{
+    %%Parent{"root"}
     Keys{
         calendar{"Календар"}
         collation{"Сортирање"}
@@ -762,7 +763,7 @@ bs_Cyrl{
         TARASK{"Тараскијевичка ортографија"}
         VALENCIA{"Валенцијска"}
     }
-    Version{"2.0.86.38"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

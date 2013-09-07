@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/gu.xml
  */
 gu{
-    Version{"2.0.88.73"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"આબિદ્જાન"}
@@ -86,6 +86,9 @@ gu{
         }
         "Africa:Johannesburg"{
             ec{"જોહાન્સબર્ગ"}
+        }
+        "Africa:Juba"{
+            ec{"જુબા"}
         }
         "Africa:Kampala"{
             ec{"કમ્પાલા"}
@@ -210,6 +213,9 @@ gu{
         "America:Bahia"{
             ec{"બાહિયા"}
         }
+        "America:Bahia_Banderas"{
+            ec{"બહિયા બાંદ્રાસ"}
+        }
         "America:Barbados"{
             ec{"બારબાડોસ"}
         }
@@ -270,6 +276,9 @@ gu{
         "America:Costa_Rica"{
             ec{"કોસ્ટા રિકા"}
         }
+        "America:Creston"{
+            ec{"ક્રેસ્ટન"}
+        }
         "America:Cuiaba"{
             ec{"ક્યુએબા"}
         }
@@ -310,7 +319,7 @@ gu{
             ec{"ગ્લેસ બે"}
         }
         "America:Godthab"{
-            ec{"ગોડ્થાબ"}
+            ec{"નૂક"}
         }
         "America:Goose_Bay"{
             ec{"ગૂસ બે"}
@@ -384,6 +393,9 @@ gu{
         "America:Kentucky:Monticello"{
             ec{"મોંટીસેલો,કેન્ટુકી"}
         }
+        "America:Kralendijk"{
+            ec{"ક્રાલેન્ડિક"}
+        }
         "America:La_Paz"{
             ec{"લા પેઝ"}
         }
@@ -414,6 +426,9 @@ gu{
         "America:Martinique"{
             ec{"માર્ટીનીક"}
         }
+        "America:Matamoros"{
+            ec{"માતામોરોસ"}
+        }
         "America:Mazatlan"{
             ec{"મઝત્લાન"}
         }
@@ -425,6 +440,9 @@ gu{
         }
         "America:Merida"{
             ec{"મેરિદા"}
+        }
+        "America:Metlakatla"{
+            ec{"મેટ્લાકાટ્લા"}
         }
         "America:Mexico_City"{
             ec{"મેક્સિકો સિટી"}
@@ -471,6 +489,9 @@ gu{
         "America:North_Dakota:New_Salem"{
             ec{"નવું સેલમ,ઉત્તર ડેકોટા"}
         }
+        "America:Ojinaga"{
+            ec{"ઓજિનાગા"}
+        }
         "America:Panama"{
             ec{"પનામા"}
         }
@@ -513,6 +534,9 @@ gu{
         "America:Rio_Branco"{
             ec{"રિયો બ્રાંકો"}
         }
+        "America:Santa_Isabel"{
+            ec{"સાંતા ઇસાબેલ"}
+        }
         "America:Santarem"{
             ec{"સેન્તારેમ"}
         }
@@ -530,6 +554,9 @@ gu{
         }
         "America:Shiprock"{
             ec{"શિપરોક"}
+        }
+        "America:Sitka"{
+            ec{"સિટ્કા"}
         }
         "America:St_Barthelemy"{
             ec{"સેંટ બાર્થેલેમી"}
@@ -593,6 +620,9 @@ gu{
         }
         "Antarctica:DumontDUrville"{
             ec{"દુમોન્ત દી'ઉર્વિલ"}
+        }
+        "Antarctica:Macquarie"{
+            ec{"મેક્વેરી"}
         }
         "Antarctica:Mawson"{
             ec{"મોસન"}
@@ -693,6 +723,9 @@ gu{
         "Asia:Harbin"{
             ec{"હારબિન"}
         }
+        "Asia:Hebron"{
+            ec{"હેબ્રોન"}
+        }
         "Asia:Hong_Kong"{
             ec{"હોંગકોંગ"}
         }
@@ -726,6 +759,9 @@ gu{
         "Asia:Katmandu"{
             ec{"કથમન્ડુ"}
         }
+        "Asia:Khandyga"{
+            ec{"ખંડિગા"}
+        }
         "Asia:Krasnoyarsk"{
             ec{"ક્રિસ્નોયાર્સ્ક"}
         }
@@ -755,6 +791,9 @@ gu{
         }
         "Asia:Nicosia"{
             ec{"નિકોસિયા"}
+        }
+        "Asia:Novokuznetsk"{
+            ec{"નોવોકુઝ્નેત્સ્ક"}
         }
         "Asia:Novosibirsk"{
             ec{"નોવોસીર્બિર્સ્ક"}
@@ -827,6 +866,9 @@ gu{
         }
         "Asia:Urumqi"{
             ec{"ઉરુમ્કી"}
+        }
+        "Asia:Ust-Nera"{
+            ec{"ઉસ્ત-નેરા"}
         }
         "Asia:Vientiane"{
             ec{"વિયેનટિયેન"}
@@ -939,6 +981,9 @@ gu{
         "Europe:Budapest"{
             ec{"બુડાપેસ્ટ"}
         }
+        "Europe:Busingen"{
+            ec{"બિઝેન્ગન"}
+        }
         "Europe:Chisinau"{
             ec{"ચિસીનાઉ"}
         }
@@ -947,6 +992,7 @@ gu{
         }
         "Europe:Dublin"{
             ec{"ડબલિન"}
+            ld{"આઇરિશ ગ્રીષ્મ સમય"}
         }
         "Europe:Gibraltar"{
             ec{"જીબ્રાલ્ટર"}
@@ -980,6 +1026,7 @@ gu{
         }
         "Europe:London"{
             ec{"લંડન"}
+            ld{"બ્રિટિશ ગ્રીષ્મ સમય"}
         }
         "Europe:Luxembourg"{
             ec{"લક્ઝમબર્ગ"}
@@ -1262,24 +1309,24 @@ gu{
             ls{"એમેઝોન માનક સમય"}
         }
         "meta:America_Central"{
-            ld{"મધ્ય દિવસ સમય"}
-            lg{"મધ્ય સમય"}
-            ls{"મધ્ય પ્રમાણભૂત સમય"}
+            ld{"ઉત્તર અમેરિકન મધ્ય દિવસ સમય"}
+            lg{"ઉત્તર અમેરિકન મધ્ય સમય"}
+            ls{"ઉત્તર અમેરિકન મધ્ય પ્રમાણભૂત સમય"}
         }
         "meta:America_Eastern"{
-            ld{"પૂર્વી દિવસ સમય"}
-            lg{"પૂર્વી સમય"}
-            ls{"પૂર્વી પ્રમાણભૂત સમય"}
+            ld{"ઉત્તર અમેરિકન પૂર્વી દિવસ સમય"}
+            lg{"ઉત્તર અમેરિકન પૂર્વી સમય"}
+            ls{"ઉત્તર અમેરિકન પૂર્વી પ્રમાણભૂત સમય"}
         }
         "meta:America_Mountain"{
-            ld{"માઉન્ટન દિવસ સમય"}
-            lg{"માઉન્ટન સમય"}
-            ls{"માઉન્ટન પ્રમાણભૂત સમય"}
+            ld{"ઉત્તર અમેરિકન માઉન્ટન દિવસ સમય"}
+            lg{"ઉત્તર અમેરિકન માઉન્ટન સમય"}
+            ls{"ઉત્તર અમેરિકન માઉન્ટન પ્રમાણભૂત સમય"}
         }
         "meta:America_Pacific"{
-            ld{"પેસિફિક દિવસ સમય"}
-            lg{"પેસિફિક સમય"}
-            ls{"પેસિફિક પ્રમાણભૂત સમય"}
+            ld{"ઉત્તર અમેરિકન પેસિફિક દિવસ સમય"}
+            lg{"ઉત્તર અમેરિકન પેસિફિક સમય"}
+            ls{"ઉત્તર અમેરિકન પેસિફિક પ્રમાણભૂત સમય"}
         }
         "meta:Anadyr"{
             ld{"અનાડિર ગ્રીષ્મ સમય"}
@@ -1394,9 +1441,9 @@ gu{
             ls{"ચીન માનક સમય"}
         }
         "meta:Choibalsan"{
-            ld{"ચોઇબાલ્સેન ગ્રીષ્મ સમય"}
+            ld{"ચોઇબાલ્સન ગ્રીષ્મ સમય"}
             lg{"ચોઇબાલ્સન સમય"}
-            ls{"ચોઇબાલ્સાન માનક સમય"}
+            ls{"ચોઇબાલ્સન માનક સમય"}
         }
         "meta:Christmas"{
             ls{"ક્રિસમસ આઇલેન્ડ સમય"}

@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/mn.xml
  */
 mn{
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абижан"}
@@ -759,6 +759,9 @@ mn{
         "Asia:Katmandu"{
             ec{"Катманду"}
         }
+        "Asia:Khandyga"{
+            ec{"Кандяга"}
+        }
         "Asia:Krasnoyarsk"{
             ec{"Красноярск"}
         }
@@ -863,6 +866,9 @@ mn{
         }
         "Asia:Urumqi"{
             ec{"Үрүмчи"}
+        }
+        "Asia:Ust-Nera"{
+            ec{"Уст-Нера"}
         }
         "Asia:Vientiane"{
             ec{"Вьентьян"}
@@ -974,6 +980,9 @@ mn{
         }
         "Europe:Budapest"{
             ec{"Будапешт"}
+        }
+        "Europe:Busingen"{
+            ec{"Бусинген"}
         }
         "Europe:Chisinau"{
             ec{"Кишинёв"}
@@ -1292,7 +1301,7 @@ mn{
         "meta:America_Central"{
             ld{"Хойд Америкийн зуны цаг"}
             lg{"Хойд Америкийн төв цаг"}
-            ls{"Хойд Америкийн төв стандарт цаг"}
+            ls{"Хойд Америкийн стандарт төвийн цаг"}
         }
         "meta:America_Eastern"{
             ld{"Хойд Америкийн зүүн эргийн зуны цаг"}
@@ -1335,9 +1344,9 @@ mn{
             ls{"Атлантын стандарт цаг"}
         }
         "meta:Australia_Central"{
-            ld{"Австралийн төв зуны цаг"}
+            ld{"Төв Австралийн зуны цаг"}
             lg{"Төв Австралийн цаг"}
-            ls{"Австралийн төв стандарт цаг"}
+            ls{"Төв Австралийн стандарт цаг"}
         }
         "meta:Australia_CentralWestern"{
             ld{"Австралийн төв баруун эргийн зуны цаг"}
@@ -1747,6 +1756,9 @@ mn{
         "meta:South_Georgia"{
             ls{"Өмнөд Жоржийн цаг"}
         }
+        "meta:Suriname"{
+            ls{"Суринамын цаг"}
+        }
         "meta:Syowa"{
             ls{"Сёвагийн цаг"}
         }
@@ -1818,9 +1830,9 @@ mn{
             ls{"Уоллис ба Футунагийн цаг"}
         }
         "meta:Yakutsk"{
-            ld{"Якутскийн зуны цаг"}
-            lg{"Якутскийн цаг"}
-            ls{"Якутскийн стандарт цаг"}
+            ld{"Якутийн зуны цаг"}
+            lg{"Якутийн цаг"}
+            ls{"Якутийн стандарт цаг"}
         }
         "meta:Yekaterinburg"{
             ld{"Екатеринбургийн зуны цаг"}
@@ -1831,6 +1843,6 @@ mn{
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
-        regionFormat{"{0}"}
+        regionFormat{"{0}-н цагаар"}
     }
 }

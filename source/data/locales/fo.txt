@@ -28,7 +28,7 @@ fo{
             }
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{
@@ -132,8 +132,21 @@ fo{
                         "4. kvartal",
                     }
                 }
+                stand-alone{
+                    wide{
+                        "1. kvartal",
+                        "2. kvartal",
+                        "3. kvartal",
+                        "4. kvartal",
+                    }
+                }
             }
         }
+    }
+    durationUnits{
+        hm{"h:mm"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
     }
     listPattern{
         standard{
@@ -166,10 +179,6 @@ fo{
             week{
                 one{"{0} vika"}
                 other{"{0} vikur"}
-            }
-            year{
-                one{"{0} ár"}
-                other{"{0} ár"}
             }
         }
     }

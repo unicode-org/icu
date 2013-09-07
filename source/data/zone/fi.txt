@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/fi.xml
  */
 fi{
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -47,6 +47,9 @@ fi{
         }
         "America:Asuncion"{
             ec{"Asunción"}
+        }
+        "America:Bahia_Banderas"{
+            ec{"Bahía de Banderas"}
         }
         "America:Bogota"{
             ec{"Bogotá"}
@@ -159,6 +162,9 @@ fi{
         "Antarctica:DumontDUrville"{
             ec{"Dumont d’Urville"}
         }
+        "Antarctica:Macquarie"{
+            ec{"Macquariensaari"}
+        }
         "Antarctica:South_Pole"{
             ec{"Etelänapa"}
         }
@@ -200,6 +206,9 @@ fi{
         }
         "Asia:Katmandu"{
             ec{"Kathmandu"}
+        }
+        "Asia:Khandyga"{
+            ec{"Handyga"}
         }
         "Asia:Krasnoyarsk"{
             ec{"Krasnojarsk"}
@@ -382,6 +391,9 @@ fi{
         "Indian:Kerguelen"{
             ec{"Kerguelensaaret"}
         }
+        "Indian:Mahe"{
+            ec{"Mahé"}
+        }
         "Indian:Maldives"{
             ec{"Malediivit"}
         }
@@ -396,6 +408,12 @@ fi{
         }
         "Pacific:Fiji"{
             ec{"Fidži"}
+        }
+        "Pacific:Gambier"{
+            ec{"Gambiersaaret"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marquesassaaret"}
         }
         "Pacific:Noumea"{
             ec{"Nouméa"}
@@ -421,7 +439,7 @@ fi{
             ls{"Itä-Afrikan aika"}
         }
         "meta:Africa_Southern"{
-            ls{"Etelä-Afrikan normaaliaika"}
+            ls{"Etelä-Afrikan aika"}
         }
         "meta:Africa_Western"{
             ld{"Länsi-Afrikan kesäaika"}
@@ -1035,6 +1053,6 @@ fi{
         gmtFormat{"UTC{0}"}
         gmtZeroFormat{"UTC"}
         hourFormat{"+H.mm;-H.mm"}
-        regionFormat{"Aikavyöhyke: {0}"}
+        regionFormat{"aikavyöhyke: {0}"}
     }
 }

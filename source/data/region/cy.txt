@@ -11,7 +11,7 @@
  */
 cy{
     Countries{
-        001{"y Byd"}
+        001{"Y Byd"}
         002{"Affrica"}
         003{"Gogledd America"}
         005{"De America"}
@@ -22,9 +22,9 @@ cy{
         015{"Gogledd Affrica"}
         017{"Canol Affrica"}
         018{"Deheudir Affrica"}
-        019{"yr Amerig"}
+        019{"Yr Amerig"}
         021{"America i'r Gogledd o Mecsico"}
-        029{"y Caribî"}
+        029{"Y Caribî"}
         030{"Dwyrain Asia"}
         034{"De Asia"}
         035{"De-Ddwyrain Asia"}
@@ -43,15 +43,16 @@ cy{
         419{"America Ladin"}
         AC{"Ynys Ascension"}
         AD{"Andorra"}
-        AE{"Yr Emiraethau Arabaidd Unedig"}
+        AE{"Emiradau Arabaidd Unedig"}
         AF{"Afghanistan"}
         AG{"Antigua a Barbuda"}
         AI{"Anguilla"}
         AL{"Albania"}
         AM{"Armenia"}
+        AN{"Ynysoedd Caribî yr Iseldiroedd"}
         AO{"Angola"}
-        AQ{"Yr Antarctig"}
-        AR{"yr Ariannin"}
+        AQ{"Antarctica"}
+        AR{"Yr Ariannin"}
         AS{"Samoa America"}
         AT{"Awstria"}
         AU{"Awstralia"}
@@ -71,24 +72,24 @@ cy{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolifia"}
-        BQ{"Iseldiroedd y Caribî"}
+        BQ{"Antilles yr Iseldiroedd"}
         BR{"Brasil"}
-        BS{"y Bahamas"}
+        BS{"Y Bahamas"}
         BT{"Bhutan"}
         BV{"Ynys Bouvet"}
         BW{"Botswana"}
         BY{"Belarws"}
         BZ{"Belize"}
         CA{"Canada"}
-        CC{"Ynysoedd Cocos [Keeling]"}
-        CD{"y Congo - Kinshasa"}
+        CC{"Ynysoedd Cocos (Keeling)"}
+        CD{"Y Congo - Kinshasa"}
         CF{"Gweriniaeth Canolbarth Affrica"}
-        CG{"y Congo - Brazzaville"}
-        CH{"y Swistir"}
+        CG{"Y Congo - Brazzaville"}
+        CH{"Y Swistir"}
         CI{"Côte d’Ivoire"}
         CK{"Ynysoedd Cook"}
         CL{"Chile"}
-        CM{"y Camerŵn"}
+        CM{"Camerŵn"}
         CN{"Tsieina"}
         CO{"Colombia"}
         CP{"Ynys Clipperton"}
@@ -99,7 +100,7 @@ cy{
         CX{"Ynys y Nadolig"}
         CY{"Cyprus"}
         CZ{"Gweriniaeth Tsiec"}
-        DE{"yr Almaen"}
+        DE{"Yr Almaen"}
         DG{"Diego Garcia"}
         DJ{"Djibouti"}
         DK{"Denmarc"}
@@ -109,27 +110,27 @@ cy{
         EA{"Ceuta a Melilla"}
         EC{"Ecuador"}
         EE{"Estonia"}
-        EG{"yr Aifft"}
-        EH{"Gorllewin y Sahara"}
+        EG{"Yr Aifft"}
+        EH{"Gorllewin Sahara"}
         ER{"Eritrea"}
         ES{"Sbaen"}
         ET{"Ethiopia"}
-        EU{"yr Undeb Ewropeaidd"}
-        FI{"y Ffindir"}
-        FJ{"Ffiji"}
+        EU{"Yr Undeb Ewropeaidd"}
+        FI{"Y Ffindir"}
+        FJ{"Fiji"}
         FK{"Ynysoedd y Falkland/Malvinas"}
         FM{"Micronesia"}
         FO{"Føroyar"}
         FR{"Ffrainc"}
         GA{"Gabon"}
-        GB{"y Deyrnas Unedig"}
+        GB{"Y Deyrnas Unedig"}
         GD{"Grenada"}
         GE{"Georgia"}
         GF{"Guyane Ffrengig"}
-        GG{"Guernsey"}
+        GG{"Ynys y Garn"}
         GH{"Ghana"}
         GI{"Gibraltar"}
-        GL{"yr Ynys Las"}
+        GL{"Yr Ynys Las"}
         GM{"Gambia"}
         GN{"Guinée"}
         GP{"Guadeloupe"}
@@ -146,7 +147,7 @@ cy{
         HR{"Croatia"}
         HT{"Haiti"}
         HU{"Hwngari"}
-        IC{"yr Ynysoedd Dedwydd"}
+        IC{"Yr Ynysoedd Dedwydd"}
         ID{"Indonesia"}
         IE{"Iwerddon"}
         IL{"Israel"}
@@ -156,10 +157,10 @@ cy{
         IQ{"Irac"}
         IR{"Iran"}
         IS{"Gwlad yr Iâ"}
-        IT{"yr Eidal"}
+        IT{"Yr Eidal"}
         JE{"Jersey"}
         JM{"Jamaica"}
-        JO{"Gwlad yr Iorddonen"}
+        JO{"Gwlad Iorddonen"}
         JP{"Japan"}
         KE{"Kenya"}
         KG{"Kyrgyzstan"}
@@ -167,8 +168,8 @@ cy{
         KI{"Kiribati"}
         KM{"Comoros"}
         KN{"Saint Kitts a Nevis"}
-        KP{"Gogledd Corea"}
-        KR{"De Corea"}
+        KP{"Gogledd Korea"}
+        KR{"De Korea"}
         KW{"Kuwait"}
         KY{"Ynysoedd Cayman"}
         KZ{"Kazakstan"}
@@ -179,10 +180,10 @@ cy{
         LK{"Sri Lanka"}
         LR{"Liberia"}
         LS{"Lesotho"}
-        LT{"Lithwania"}
+        LT{"Lithuania"}
         LU{"Lwcsembwrg"}
         LV{"Latfia"}
-        LY{"Libia"}
+        LY{"Libya"}
         MA{"Moroco"}
         MC{"Monaco"}
         MD{"Moldofa"}
@@ -192,7 +193,7 @@ cy{
         MH{"Ynysoedd Marshall"}
         MK{"Macedonia"}
         ML{"Mali"}
-        MM{"Myanmar [Burma]"}
+        MM{"Myanmar (Burma)"}
         MN{"Mongolia"}
         MO{"Macau RhGA Tsieina"}
         MP{"Ynysoedd Gogledd Mariana"}
@@ -201,7 +202,7 @@ cy{
         MS{"Montserrat"}
         MT{"Malta"}
         MU{"Mauritius"}
-        MV{"y Maldives"}
+        MV{"Y Maldives"}
         MW{"Malawi"}
         MX{"Mecsico"}
         MY{"Malaysia"}
@@ -211,8 +212,8 @@ cy{
         NE{"Niger"}
         NF{"Ynys Norfolk"}
         NG{"Nigeria"}
-        NI{"Nicaragwa"}
-        NL{"yr Iseldiroedd"}
+        NI{"Nicaragua"}
+        NL{"Yr Iseldiroedd"}
         NO{"Norwy"}
         NP{"Nepal"}
         NR{"Nauru"}
@@ -222,9 +223,9 @@ cy{
         PA{"Panama"}
         PE{"Periw"}
         PF{"Polynesia Ffrengig"}
-        PG{"Papua Gini Newydd"}
+        PG{"Papua Guinea Newydd"}
         PH{"Pilipinas"}
-        PK{"Pacistan"}
+        PK{"Pakistan"}
         PL{"Gwlad Pwyl"}
         PM{"Saint-Pierre-et-Miquelon"}
         PN{"Ynysoedd Pitcairn"}
@@ -243,7 +244,7 @@ cy{
         SA{"Saudi Arabia"}
         SB{"Ynysoedd Solomon"}
         SC{"Seychelles"}
-        SD{"y Swdan"}
+        SD{"Swdan"}
         SE{"Sweden"}
         SG{"Singapore"}
         SH{"Saint Helena"}
@@ -254,13 +255,13 @@ cy{
         SM{"San Marino"}
         SN{"Sénégal"}
         SO{"Somalia"}
-        SR{"Surinam"}
-        SS{"De Sudan"}
+        SR{"Suriname"}
+        SS{"De Swdan"}
         ST{"São Tomé a Príncipe"}
         SV{"El Salvador"}
         SX{"Sint Maarten"}
         SY{"Syria"}
-        SZ{"Swaziland"}
+        SZ{"Gwlad Swazi"}
         TA{"Tristan da Cunha"}
         TC{"Ynysoedd Turks a Caicos"}
         TD{"Tchad"}
@@ -275,16 +276,16 @@ cy{
         TO{"Tonga"}
         TR{"Twrci"}
         TT{"Trinidad a Tobago"}
-        TV{"Twfalw"}
+        TV{"Tuvalu"}
         TW{"Taiwan"}
-        TZ{"Tanzanïa"}
+        TZ{"Tanzania"}
         UA{"Wcráin"}
         UG{"Uganda"}
         UM{"Ynysoedd Pellennig UDA"}
-        US{"yr Unol Daleithiau"}
+        US{"Yr Unol Daleithiau"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
-        VA{"y Fatican"}
+        VA{"Y Fatican"}
         VC{"Saint Vincent a’r Grenadines"}
         VE{"Venezuela"}
         VG{"Ynysoedd Gwyryf Prydain"}
@@ -301,5 +302,5 @@ cy{
         ZW{"Zimbabwe"}
         ZZ{"Rhanbarth Anhysbys"}
     }
-    Version{"2.0.88.66"}
+    Version{"2.0.93.7"}
 }

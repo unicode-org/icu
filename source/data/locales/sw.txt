@@ -17,6 +17,10 @@ sw{
     }
     NumberElements{
         latn{
+            miscPatterns{
+                atLeast{"⩾{0}"}
+                range{"{0}–{1}"}
+            }
             patterns{
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
@@ -138,10 +142,11 @@ sw{
                 perMille{"‰"}
                 percentSign{"%"}
                 plusSign{"+"}
+                superscriptingExponent{"×"}
             }
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{
@@ -163,7 +168,7 @@ sw{
                 Ed{"d E"}
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
-                GyMMMEd{"E, MMM d, y G"}
+                GyMMMEd{"E, d MMM y G"}
                 GyMMMd{"d MMM y G"}
                 H{"HH"}
                 Hm{"HH:mm"}
@@ -184,7 +189,7 @@ sw{
                 yyyyM{"M/y G"}
                 yyyyMEd{"E, d/M/y G"}
                 yyyyMMM{"MMM y G"}
-                yyyyMMMEd{"E, MMM d, y G"}
+                yyyyMMMEd{"E, d MMM y G"}
                 yyyyMMMM{"MMMM y G"}
                 yyyyMMMd{"d MMM y G"}
                 yyyyMd{"d/M/y G"}
@@ -231,6 +236,7 @@ sw{
                 d{
                     d{"d - d"}
                 }
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h – h a"}
@@ -266,9 +272,9 @@ sw{
                     y{"MMM y - MMM y G"}
                 }
                 yMMMEd{
-                    M{"E, d MMM - E, d MMM y G"}
+                    M{"E, d MMM - E, d MMM y"}
                     d{"E, d MMM - E, d MMM y G"}
-                    y{"E, d MMM y - E, d MMM y G"}
+                    y{"E, d MMM y - E, d MMM y"}
                 }
                 yMMMM{
                     M{"MMMM-MMMM y G"}
@@ -288,8 +294,8 @@ sw{
         }
         gregorian{
             AmPmMarkers{
-                "asubuhi",
-                "alasiri",
+                "AM",
+                "PM",
             }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
@@ -306,8 +312,15 @@ sw{
                 "{1} {0}",
                 "{1} {0}",
             }
+            appendItems{
+                Timezone{"{0} {1}"}
+            }
             availableFormats{
+                EHm{"E HH:mm"}
+                EHms{"E HH:mm:ss"}
                 Ed{"d E"}
+                Ehm{"E h:mm a"}
+                Ehms{"E h:mm:ss a"}
                 Gy{"y G"}
                 GyMMM{"MMM y G"}
                 GyMMMEd{"E, MMM d, y G"}
@@ -324,7 +337,9 @@ sw{
                 MMMd{"d MMM"}
                 Md{"d-M"}
                 d{"d"}
+                h{"h a"}
                 hm{"h:mm a"}
+                hms{"h:mm:ss a"}
                 ms{"mm:ss"}
                 y{"y"}
                 yM{"M/y"}
@@ -424,12 +439,12 @@ sw{
                     M{"MMM - MMM"}
                 }
                 MMMEd{
-                    M{"E, d MMM - E, d MMM"}
-                    d{"E, d MMM - E, d MMM"}
+                    M{"E, MMM d- E, MMM d"}
+                    d{"E, MMM d- E, MMM d"}
                 }
                 MMMd{
-                    M{"d MMM - d MMM"}
-                    d{"d - d MMM"}
+                    M{"MMM d – MMM d"}
+                    d{"MMM d–d"}
                 }
                 Md{
                     M{"d/M - d/M"}
@@ -438,6 +453,7 @@ sw{
                 d{
                     d{"d - d"}
                 }
+                fallback{"{0} – {1}"}
                 h{
                     a{"h a – h a"}
                     h{"h – h a"}
@@ -473,18 +489,18 @@ sw{
                     y{"MMM y - MMM y"}
                 }
                 yMMMEd{
-                    M{"E, d MMM - E, d MMM y"}
-                    d{"E, d MMM - E, d MMM y"}
-                    y{"E, d MMM y - E, d MMM y"}
+                    M{"E, MMM d- E, MMM d y"}
+                    d{"E, MMM d - E, MMM d y"}
+                    y{"E, MMM d y - E, MMM d y"}
                 }
                 yMMMM{
                     M{"MMMM-MMMM y"}
                     y{"MMMM y – MMMM y"}
                 }
                 yMMMd{
-                    M{"d MMM - d MMM y"}
-                    d{"d - d MMM y"}
-                    y{"d MMM y - d MMM y"}
+                    M{"MMM d - d, y"}
+                    d{"MMM d - d, y"}
+                    y{"MMM d y - MMM d y"}
                 }
                 yMd{
                     M{"d/M/y - d/M/y"}
@@ -584,15 +600,30 @@ sw{
         quotationEnd{"”"}
         quotationStart{"“"}
     }
+    durationUnits{
+        hm{"h:mm"}
+        hms{"h:mm:ss"}
+        ms{"m:ss"}
+    }
     fields{
         day{
             dn{"Siku"}
             relative{
-                "-1"{"Jana"}
-                "-2"{"Mtondo"}
-                "0"{"Leo"}
-                "1"{"Kesho"}
-                "2"{"Kesho kutwa"}
+                "-1"{"jana"}
+                "-2"{"juzi"}
+                "0"{"leo"}
+                "1"{"kesho"}
+                "2"{"kesho kutwa"}
+            }
+            relativeTime{
+                future{
+                    one{"Baada ya siku {0}"}
+                    other{"Baada ya siku {0}"}
+                }
+                past{
+                    one{"Siku {0} iliyopita"}
+                    other{"Siku {0} zilizopita"}
+                }
             }
         }
         dayperiod{
@@ -601,29 +632,131 @@ sw{
         era{
             dn{"Enzi"}
         }
+        fri{
+            relative{
+                "-1"{"Ijumaa iliyopita"}
+                "0"{"Ijumaa hii"}
+                "1"{"Ijumaa ijayo"}
+            }
+        }
         hour{
             dn{"Saa"}
+            relativeTime{
+                future{
+                    one{"Baada ya saa {0}"}
+                    other{"Baada ya saa {0}"}
+                }
+                past{
+                    one{"Saa {0} iliyopita"}
+                    other{"Saa {0} zilizopita"}
+                }
+            }
         }
         minute{
             dn{"Dakika"}
+            relativeTime{
+                future{
+                    one{"Baada ya dakika {0}"}
+                    other{"Baada ya dakika {0}"}
+                }
+                past{
+                    one{"Dakika {0} iliyopita"}
+                    other{"Dakika {0} zilizopita"}
+                }
+            }
+        }
+        mon{
+            relative{
+                "-1"{"Jumatatu iliyopita"}
+                "0"{"Jumatatu hii"}
+                "1"{"Jumatatu ijayo"}
+            }
         }
         month{
             dn{"Mwezi"}
             relative{
-                "-1"{"Mwezi uliopita"}
-                "0"{"Mwezi huu"}
-                "1"{"Mwezi ujao"}
+                "-1"{"mwezi uliopita"}
+                "0"{"mwezi huu"}
+                "1"{"mwezi ujao"}
+            }
+            relativeTime{
+                future{
+                    one{"Baada ya mwezi {0}"}
+                    other{"Baada ya miezi {0}"}
+                }
+                past{
+                    one{"Miezi {0} iliyopita"}
+                    other{"Miezi {0} iliyopita"}
+                }
+            }
+        }
+        sat{
+            relative{
+                "-1"{"Jumamosi iliyopita"}
+                "0"{"Jumamosi hii"}
+                "1"{"Jumamosi ijayo"}
             }
         }
         second{
             dn{"Sekunde"}
+            relative{
+                "0"{"sasa"}
+            }
+            relativeTime{
+                future{
+                    one{"Baada ya sekunde {0}"}
+                    other{"Baada ya sekunde {0}"}
+                }
+                past{
+                    one{"Sekunde {0} iliyopita"}
+                    other{"Sekunde {0} zilizopita"}
+                }
+            }
+        }
+        sun{
+            relative{
+                "-1"{"Jumapili iliyopita"}
+                "0"{"Jumapili hii"}
+                "1"{"Jumapili ijayo"}
+            }
+        }
+        thu{
+            relative{
+                "-1"{"Alhamisi iliyopita"}
+                "0"{"Alhamisi hii"}
+                "1"{"Alhamisi ijayo"}
+            }
+        }
+        tue{
+            relative{
+                "-1"{"Jumanne iliyopita"}
+                "0"{"Jumanne hii"}
+                "1"{"Jumanne ijayo"}
+            }
+        }
+        wed{
+            relative{
+                "-1"{"Jumatano iliyopita"}
+                "0"{"Jumatano hii"}
+                "1"{"Jumatano ijayo"}
+            }
         }
         week{
             dn{"Wiki"}
             relative{
-                "-1"{"Wiki iliyopita"}
-                "0"{"Wiki hii"}
-                "1"{"Wiki ijayo"}
+                "-1"{"wiki iliyopita"}
+                "0"{"wiki hii"}
+                "1"{"wiki ijayo"}
+            }
+            relativeTime{
+                future{
+                    one{"Baada ya wiki {0}"}
+                    other{"Baada ya wiki {0}"}
+                }
+                past{
+                    one{"Wiki {0} iliyopita"}
+                    other{"Wiki {0} zilizopita"}
+                }
             }
         }
         weekday{
@@ -632,9 +765,19 @@ sw{
         year{
             dn{"Mwaka"}
             relative{
-                "-1"{"Mwaka uliopita"}
-                "0"{"Mwaka huu"}
-                "1"{"Mwaka ujao"}
+                "-1"{"mwaka uliopita"}
+                "0"{"mwaka huu"}
+                "1"{"mwaka ujao"}
+            }
+            relativeTime{
+                future{
+                    one{"Baada ya mwaka {0}"}
+                    other{"Baada ya miaka {0}"}
+                }
+                past{
+                    one{"Mwaka {0} uliopita"}
+                    other{"Miaka {0} iliyopita"}
+                }
             }
         }
         zone{
@@ -648,6 +791,9 @@ sw{
             middle{"{0}, {1}"}
             start{"{0}, {1}"}
         }
+        unit{
+            2{"{0} na {1}"}
+        }
     }
     measurementSystemNames{
         UK{"Uingereza"}
@@ -655,94 +801,260 @@ sw{
         metric{"Mfumo wa Mita"}
     }
     units{
+        acceleration{
+            g-force{
+                one{"Mvuto wa graviti{0}"}
+                other{"Mvuto wa graviti {0}"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"Dakika {0}′"}
+                other{"Dakika {0}′"}
+            }
+            arc-second{
+                one{"Sekunde {0}″"}
+                other{"Sekunde {0}″"}
+            }
+            degree{
+                one{"Digrii {0}°"}
+                other{"Digrii {0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"Ekari {0}"}
+                other{"Ekari {0}"}
+            }
+            hectare{
+                one{"Hektari {0}"}
+                other{"Hektari {0}"}
+            }
+            square-foot{
+                one{"Futi {0} ya mraba"}
+                other{"Futi {0} za mraba"}
+            }
+            square-kilometer{
+                one{"Kilomita {0} ya mraba"}
+                other{"Kilomita {0} za mraba"}
+            }
+            square-meter{
+                one{"Mita {0} ya mraba"}
+                other{"Mita {0} za mraba"}
+            }
+            square-mile{
+                one{"Maili {0} ya mraba"}
+                other{"Maili {0} za mraba"}
+            }
+        }
         duration{
             day{
                 one{"siku {0}"}
                 other{"siku {0}"}
             }
-            day-future{
-                one{"Baada ya siku {0}"}
-                other{"Baada ya siku {0}"}
-            }
-            day-past{
-                one{"Siku {0} iliyopita"}
-                other{"Siku {0} zilizopita"}
-            }
             hour{
                 one{"saa {0}"}
-                other{"masaa {0}"}
+                other{"saa {0}"}
             }
-            hour-future{
-                one{"Baada ya saa {0}"}
-                other{"Baada ya masaa {0}"}
-            }
-            hour-past{
-                one{"Saa {0} lililopita"}
-                other{"Masaa {0} yaliyopita"}
+            millisecond{
+                one{"millisekunde {0}"}
+                other{"millisekunde {0}"}
             }
             minute{
                 one{"dakika {0}"}
                 other{"dakika {0}"}
             }
-            minute-future{
-                one{"Baada ya dakika {0}"}
-                other{"Baada ya dakika {0}"}
-            }
-            minute-past{
-                one{"Dakina {0} iliyopita"}
-                other{"Dakika {0} zilizopita"}
-            }
             month{
                 one{"mwezi {0}"}
                 other{"miezi {0}"}
-            }
-            month-future{
-                one{"Baada ya mwezi {0}"}
-                other{"Baada ya miezi {0}"}
-            }
-            month-past{
-                one{"Miezi {0} iliyopita"}
-                other{"Miezi {0} iliyopita"}
             }
             second{
                 one{"sekunde {0}"}
                 other{"sekunde {0}"}
             }
-            second-future{
-                one{"Baada ya sekunde {0}"}
-                other{"Baada ya sekunde {0}"}
-            }
-            second-past{
-                one{"Sekunde {0} iliyopita"}
-                other{"Sekunde {0} zilizopita"}
-            }
             week{
                 one{"wiki {0}"}
                 other{"wiki {0}"}
-            }
-            week-future{
-                one{"Baada ya wiki {0}"}
-                other{"Baada ya wiki {0}"}
-            }
-            week-past{
-                one{"Wiki {0} iliyopita"}
-                other{"Wiki {0} zilizopita"}
             }
             year{
                 one{"mwaka {0}"}
                 other{"miaka {0}"}
             }
-            year-future{
-                one{"Baada ya mwaka {0}"}
-                other{"Baada ya miaka {0}"}
+        }
+        length{
+            centimeter{
+                one{"Sentimita {0}"}
+                other{"Sentimita {0}"}
             }
-            year-past{
-                one{"Mwaka {0} uliopita"}
-                other{"Miaka {0} iliyopita"}
+            foot{
+                one{"Futi {0}"}
+                other{"Futi {0}"}
+            }
+            inch{
+                one{"Inchi {0}"}
+                other{"Inchi {0}"}
+            }
+            kilometer{
+                one{"Kilomita {0}"}
+                other{"Kilomita {0}"}
+            }
+            light-year{
+                one{"Mwaka wa mwanga {0}"}
+                other{"Miaka ya mwanga {0}"}
+            }
+            meter{
+                one{"Mita {0}"}
+                other{"Mita {0}"}
+            }
+            mile{
+                one{"Maili {0}"}
+                other{"Maili {0}"}
+            }
+            millimeter{
+                one{"Millimita {0}"}
+                other{"Millimita {0}"}
+            }
+            picometer{
+                one{"Pikomita {0}"}
+                other{"Pikomita {0}"}
+            }
+            yard{
+                one{"Yadi {0}"}
+                other{"Yadi {0}"}
+            }
+        }
+        mass{
+            gram{
+                one{"Gramu {0}"}
+                other{"Gramu {0}"}
+            }
+            kilogram{
+                one{"Kilogramu {0}"}
+                other{"Kilogramu {0}"}
+            }
+            ounce{
+                one{"Aunsi {0}"}
+                other{"Aunsi {0}"}
+            }
+            pound{
+                one{"Ratili {0}"}
+                other{"Ratili {0}"}
+            }
+        }
+        power{
+            horsepower{
+                one{"Kipimo cha Hospawa {0}"}
+                other{"Kipimo cha Hospawa {0}"}
+            }
+            kilowatt{
+                one{"Kilowati {0}"}
+                other{"Kilowati {0}"}
+            }
+            watt{
+                one{"Wati {0}"}
+                other{"Wati {0}"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"Hektopaskali {0}"}
+                other{"Hektopaskali {0}"}
+            }
+            inch-hg{
+                one{"Inchi za zebaki {0}"}
+                other{"Inchi za zebaki {0}"}
+            }
+            millibar{
+                one{"Kipimo cha milibari {0}"}
+                other{"Kipimo cha milibari {0}"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"Kilomita {0} kwa saa"}
+                other{"Kilomita {0} kwa saa"}
+            }
+            meter-per-second{
+                one{"Mita {0} kwa sekunde"}
+                other{"Mita {0} kwa sekunde"}
+            }
+            mile-per-hour{
+                one{"Maili {0} kwa saa"}
+                other{"Maili {0} kwa saa"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"Nyuzi za Selisiasi {0}"}
+                other{"Nyuzi za Selisiasi {0}"}
+            }
+            fahrenheit{
+                one{"Nyuzi za Farenheiti {0}"}
+                other{"Nyuzi za Farenheiti {0}"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"Kilomita {0} ya ujazo"}
+                other{"Kilomita {0} ya ujazo"}
+            }
+            cubic-mile{
+                one{"Maili {0} ya ujazo"}
+                other{"Maili {0} ya ujazo"}
+            }
+            liter{
+                one{"Lita {0}"}
+                other{"Lita {0}"}
             }
         }
     }
     unitsShort{
+        acceleration{
+            g-force{
+                one{"G {0}"}
+                other{"G {0}"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"Dakika{0}′"}
+                other{"Dakika {0}′"}
+            }
+            arc-second{
+                one{"Sekunde {0}″"}
+                other{"Sekunde {0}″"}
+            }
+            degree{
+                one{"Digrii {0}°"}
+                other{"Digrii {0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"Ekari {0}"}
+                other{"Ekari {0}"}
+            }
+            hectare{
+                one{"Hektari {0}"}
+                other{"Hektari {0}"}
+            }
+            square-foot{
+                one{"ft² {0}"}
+                other{"ft² {0}"}
+            }
+            square-kilometer{
+                one{"km² {0}"}
+                other{"km² {0}"}
+            }
+            square-meter{
+                one{"m² {0}"}
+                other{"m² {0}"}
+            }
+            square-mile{
+                one{"mi² {0}"}
+                other{"mi² {0}"}
+            }
+        }
         duration{
             day{
                 one{"siku {0}"}
@@ -750,7 +1062,11 @@ sw{
             }
             hour{
                 one{"saa {0}"}
-                other{"masaa {0}"}
+                other{"saa {0}"}
+            }
+            millisecond{
+                one{"ms {0}"}
+                other{"ms {0}"}
             }
             minute{
                 one{"dakika {0}"}
@@ -771,6 +1087,132 @@ sw{
             year{
                 one{"mwaka {0}"}
                 other{"miaka {0}"}
+            }
+        }
+        length{
+            centimeter{
+                one{"Sentimita {0}"}
+                other{"Sentimita {0}"}
+            }
+            foot{
+                one{"Futi {0}"}
+                other{"Futi {0}"}
+            }
+            inch{
+                one{"Inchi {0}"}
+                other{"Inchi {0}"}
+            }
+            kilometer{
+                one{"Kilomita {0}"}
+                other{"Kilomita {0}"}
+            }
+            light-year{
+                one{"ly {0}"}
+                other{"ly {0}"}
+            }
+            meter{
+                one{"Mita {0}"}
+                other{"Mita {0}"}
+            }
+            mile{
+                one{"Maili {0}"}
+                other{"Maili {0}"}
+            }
+            millimeter{
+                one{"Millimita {0}"}
+                other{"Millimita {0}"}
+            }
+            picometer{
+                one{"Pikomita {0}"}
+                other{"Pikomita {0}"}
+            }
+            yard{
+                one{"Yadi {0}"}
+                other{"Yadi {0}"}
+            }
+        }
+        mass{
+            gram{
+                one{"Gramu {0}"}
+                other{"Gramu {0}"}
+            }
+            kilogram{
+                one{"kg {0}"}
+                other{"kg {0}"}
+            }
+            ounce{
+                one{"Aunsi {0}"}
+                other{"Aunsi {0}"}
+            }
+            pound{
+                one{"Ratili {0}"}
+                other{"Ratili {0}"}
+            }
+        }
+        power{
+            horsepower{
+                one{"hp {0}"}
+                other{"hp {0}"}
+            }
+            kilowatt{
+                one{"Kilowati {0}"}
+                other{"Kilowati {0}"}
+            }
+            watt{
+                one{"Wati {0}"}
+                other{"Wati {0}"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"hPa {0}"}
+                other{"hPa {0}"}
+            }
+            inch-hg{
+                one{"{0} inHg"}
+                other{"{0} inHg"}
+            }
+            millibar{
+                one{"mbar {0}"}
+                other{"mbar {0}"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"km {0}/saa"}
+                other{"km {0}/saa"}
+            }
+            meter-per-second{
+                one{"m {0}/s"}
+                other{"m {0}/s"}
+            }
+            mile-per-hour{
+                one{"mi {0}/saa"}
+                other{"mi {0}/saa"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°C"}
+                other{"{0}°C"}
+            }
+            fahrenheit{
+                one{"{0}°F"}
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"km³ {0}"}
+                other{"km³ {0}"}
+            }
+            cubic-mile{
+                one{"mi³ {0}"}
+                other{"mi³ {0}"}
+            }
+            liter{
+                one{"Lita {0}"}
+                other{"Lita {0}"}
             }
         }
     }

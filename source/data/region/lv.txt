@@ -23,7 +23,7 @@ lv{
         017{"Vidusāfrika"}
         018{"Dienvidāfrika"}
         019{"Amerika"}
-        021{"Ziemeļamerika — ASV, Kanāda un Grenlande"}
+        021{"Amerikas ziemeļu daļa"}
         029{"Karību jūras reģions"}
         030{"Austrumāzija"}
         034{"Dienvidāzija"}
@@ -105,7 +105,7 @@ lv{
         DJ{"Džibutija"}
         DK{"Dānija"}
         DM{"Dominika"}
-        DO{"Dominikānas Republika"}
+        DO{"Dominikāna"}
         DZ{"Alžīrija"}
         EA{"Seūta un Melilja"}
         EC{"Ekvadora"}
@@ -193,7 +193,7 @@ lv{
         MH{"Māršala salas"}
         MK{"Maķedonija"}
         ML{"Mali"}
-        MM{"Mjanma [Birma]"}
+        MM{"Mjanma (Birma)"}
         MN{"Mongolija"}
         MO{"Ķīnas īpašās pārvaldes apgabals Makao"}
         MP{"Ziemeļu Marianas salas"}
@@ -247,7 +247,7 @@ lv{
         SD{"Sudāna"}
         SE{"Zviedrija"}
         SG{"Singapūra"}
-        SH{"Sv. Helēnas sala"}
+        SH{"Sv.Helēnas sala"}
         SI{"Slovēnija"}
         SJ{"Svalbāra un Jana Majena sala"}
         SK{"Slovākija"}
@@ -265,7 +265,7 @@ lv{
         TA{"Tristana da Kuņas salas"}
         TC{"Tērksas un Kaikosas salas"}
         TD{"Čada"}
-        TF{"Franču dienvidu teritorijas"}
+        TF{"Francijas Dienvidjūru Zemes"}
         TG{"Togo"}
         TH{"Taizeme"}
         TJ{"Tadžikistāna"}
@@ -281,7 +281,7 @@ lv{
         TZ{"Tanzānija"}
         UA{"Ukraina"}
         UG{"Uganda"}
-        UM{"ASV Mazās Aizjūras salas"}
+        UM{"ASV Aizjūras salas"}
         US{"Amerikas Savienotās Valstis"}
         UY{"Urugvaja"}
         UZ{"Uzbekistāna"}
@@ -302,5 +302,5 @@ lv{
         ZW{"Zimbabve"}
         ZZ{"nezināms reģions"}
     }
-    Version{"2.0.88.42"}
+    Version{"2.0.92.87"}
 }

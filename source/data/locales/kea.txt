@@ -11,10 +11,10 @@
  */
 kea{
     AuxExemplarCharacters{
-        "[á à ă â å ä ã ā æ c ç é è ĕ ê ë ē h í ì ĭ î ï ī ñ ó ò ŏ ô ö õ ø ō œ q ú ù ŭ"
-        " û ü ū w y ÿ]"
+        "[á à ă â å ä ã ā æ c ç é è ĕ ê ë ẽ ē h í ì ĭ î ï ĩ ī ñ ó ò ŏ ô ö õ ø ō œ q {"
+        "rr} ú ù ŭ û ü ũ ū w y ÿ]"
     }
-    ExemplarCharacters{"[a b d {dj} e f g i j k l {lh} m n {nh} o p r s t {tx} u v x z]"}
+    ExemplarCharacters{"[a b d {dj} e f g i j k l {lh} m n {n\u0308} {nh} o p r s t {tx} u v x z]"}
     ExemplarCharactersIndex{"[A B D E F G H I J K L M N O P R S T U V X Z]"}
     LocaleScript{
         "Latn",
@@ -72,7 +72,7 @@ kea{
             }
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{
@@ -605,6 +605,14 @@ kea{
                 "0"{"Oji"}
                 "1"{"Manha"}
             }
+            relativeTime{
+                future{
+                    other{"di li {0} dia"}
+                }
+                past{
+                    other{"a ten {0} dia"}
+                }
+            }
         }
         dayperiod{
             dn{"am/pm"}
@@ -614,24 +622,72 @@ kea{
         }
         hour{
             dn{"Ora"}
+            relativeTime{
+                future{
+                    other{"di li {0} ora"}
+                }
+                past{
+                    other{"a ten {0} ora"}
+                }
+            }
         }
         minute{
             dn{"Minutu"}
+            relativeTime{
+                future{
+                    other{"di li {0} minutu"}
+                }
+                past{
+                    other{"a ten {0} minutu"}
+                }
+            }
         }
         month{
             dn{"Mes"}
+            relativeTime{
+                future{
+                    other{"di li {0} mes"}
+                }
+                past{
+                    other{"a ten {0} mes"}
+                }
+            }
         }
         second{
             dn{"Sigundu"}
+            relativeTime{
+                future{
+                    other{"di li {0} sigundu"}
+                }
+                past{
+                    other{"a ten {0} sigundu"}
+                }
+            }
         }
         week{
             dn{"Simana"}
+            relativeTime{
+                future{
+                    other{"di li {0} simana"}
+                }
+                past{
+                    other{"a ten {0} simana"}
+                }
+            }
         }
         weekday{
             dn{"Dia di simana"}
         }
         year{
             dn{"Anu"}
+            relativeTime{
+                future{
+                    other{"di li {0} anu"}
+                }
+                past{
+                    other{"a ten {0} anu"}
+                }
+            }
         }
         zone{
             dn{"Ora lokal"}
@@ -655,65 +711,23 @@ kea{
             day{
                 other{"{0} dia"}
             }
-            day-future{
-                other{"di li {0} dia"}
-            }
-            day-past{
-                other{"a ten {0} dia"}
-            }
             hour{
                 other{"{0} ora"}
-            }
-            hour-future{
-                other{"di li {0} ora"}
-            }
-            hour-past{
-                other{"a ten {0} ora"}
             }
             minute{
                 other{"{0} minutu"}
             }
-            minute-future{
-                other{"di li {0} minutu"}
-            }
-            minute-past{
-                other{"a ten {0} minutu"}
-            }
             month{
                 other{"{0} mes"}
-            }
-            month-future{
-                other{"di li {0} mes"}
-            }
-            month-past{
-                other{"a ten {0} mes"}
             }
             second{
                 other{"{0} sigundu"}
             }
-            second-future{
-                other{"di li {0} sigundu"}
-            }
-            second-past{
-                other{"a ten {0} sigundu"}
-            }
             week{
                 other{"{0} simana"}
             }
-            week-future{
-                other{"di li {0} simana"}
-            }
-            week-past{
-                other{"a ten {0} simana"}
-            }
             year{
                 other{"{0} anu"}
-            }
-            year-future{
-                other{"di li {0} anu"}
-            }
-            year-past{
-                other{"a ten {0} anu"}
             }
         }
     }

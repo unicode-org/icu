@@ -81,7 +81,7 @@ gl{
         BY{"Bielorrusia"}
         BZ{"Belice"}
         CA{"Canadá"}
-        CC{"Illas Cocos [Keeling]"}
+        CC{"Illas Cocos (Keeling)"}
         CD{"República Democrática do Congo"}
         CF{"República Africana Central"}
         CG{"Congo"}
@@ -193,7 +193,7 @@ gl{
         MH{"Illas Marshall"}
         MK{"Macedonia"}
         ML{"Mali"}
-        MM{"Myanmar [Birmania]"}
+        MM{"Myanmar (Birmania)"}
         MN{"Mongolia"}
         MO{"Macau RAE de China"}
         MP{"Illas Marianas do norte"}
@@ -257,7 +257,7 @@ gl{
         SO{"Somalia"}
         SR{"Surinam"}
         SS{"Sudán do sur"}
-        ST{"Santo Tomé e Príncipe"}
+        ST{"San Tomé e Príncipe"}
         SV{"El Salvador"}
         SX{"Sint Maarten"}
         SY{"Siria"}
@@ -302,5 +302,5 @@ gl{
         ZW{"Cimbabue"}
         ZZ{"Rexión descoñecida"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

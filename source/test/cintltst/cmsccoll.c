@@ -1419,6 +1419,8 @@ static void RamsRulesTest(void) {
                 uprv_strcmp("en_US_POSIX", locName)==0 ||
                 uprv_strcmp("fa", locName)==0 ||            /* Add in #10222 with CLDR 24 integration */
                 uprv_strcmp("fa_AF", locName)==0 ||         /* Add due to import per cldrbug 5647 */
+                uprv_strcmp("gl", locName)==0 ||            /* Add due to import per cldrbug 5647 */
+                uprv_strcmp("gl_ES", locName)==0 ||         /* Add due to import per cldrbug 5647 */
                 uprv_strcmp("he", locName)==0 ||            /* Add due to new tailoring of \u05F3 vs \u0027 per cldrbug 5576 */
                 uprv_strcmp("he_IL", locName)==0 ||         /* Add due to new tailoring of \u05F3 vs \u0027 per cldrbug 5576 */
                 uprv_strcmp("km", locName)==0 ||
@@ -4596,7 +4598,7 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
     n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "de",
                                      &isAvailable, &ec);
     if (assertSuccess("getFunctionalEquivalent", &ec)) {
-        assertEquals("getFunctionalEquivalent(de)", "de", loc);
+        assertEquals("getFunctionalEquivalent(de)", "root", loc);
         assertTrue("getFunctionalEquivalent(de).isAvailable==TRUE",
                    isAvailable == TRUE);
     }
@@ -4604,7 +4606,7 @@ ucol_getFunctionalEquivalent(char* result, int32_t resultCapacity,
     n = ucol_getFunctionalEquivalent(loc, sizeof(loc), "collation", "de_DE",
                                      &isAvailable, &ec);
     if (assertSuccess("getFunctionalEquivalent", &ec)) {
-        assertEquals("getFunctionalEquivalent(de_DE)", "de", loc);
+        assertEquals("getFunctionalEquivalent(de_DE)", "root", loc);
         assertTrue("getFunctionalEquivalent(de_DE).isAvailable==TRUE",
                    isAvailable == TRUE);
     }

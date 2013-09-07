@@ -57,7 +57,7 @@ ro{
         AT{"Austria"}
         AU{"Australia"}
         AW{"Aruba"}
-        AX{"Insulele Aland"}
+        AX{"Insulele Åland"}
         AZ{"Azerbaidjan"}
         BA{"Bosnia și Herțegovina"}
         BB{"Barbados"}
@@ -78,15 +78,15 @@ ro{
         BT{"Bhutan"}
         BV{"Insula Bouvet"}
         BW{"Botswana"}
-        BY{"Bielorusia"}
+        BY{"Belarus"}
         BZ{"Belize"}
         CA{"Canada"}
-        CC{"Insulele Cocos"}
+        CC{"Insulele Cocos (Keeling)"}
         CD{"Republica Democrată Congo"}
         CF{"Republica Centrafricană"}
         CG{"Congo"}
         CH{"Elveția"}
-        CI{"Coasta de Fildeș"}
+        CI{"Côte d’Ivoire"}
         CK{"Insulele Cook"}
         CL{"Chile"}
         CM{"Camerun"}
@@ -123,7 +123,7 @@ ro{
         FO{"Insulele Feroe"}
         FR{"Franța"}
         GA{"Gabon"}
-        GB{"Marea Britanie"}
+        GB{"Regatul Unit"}
         GD{"Grenada"}
         GE{"Georgia"}
         GF{"Guyana Franceză"}
@@ -167,7 +167,7 @@ ro{
         KH{"Cambodgia"}
         KI{"Kiribati"}
         KM{"Comore"}
-        KN{"Sfântul Kitts și Nevis"}
+        KN{"Saint Kitts și Nevis"}
         KP{"Coreea de Nord"}
         KR{"Coreea de Sud"}
         KW{"Kuweit"}
@@ -193,7 +193,7 @@ ro{
         MH{"Insulele Marshall"}
         MK{"Macedonia"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar (Birmania)"}
         MN{"Mongolia"}
         MO{"R.A.S. Macao a Chinei"}
         MP{"Insulele Mariane de Nord"}
@@ -213,7 +213,7 @@ ro{
         NF{"Insulele Norfolk"}
         NG{"Nigeria"}
         NI{"Nicaragua"}
-        NL{"Olanda"}
+        NL{"Țările de Jos"}
         NO{"Norvegia"}
         NP{"Nepal"}
         NR{"Nauru"}
@@ -223,20 +223,20 @@ ro{
         PA{"Panama"}
         PE{"Peru"}
         PF{"Polinezia Franceză"}
-        PG{"Papua Noua Guinee"}
+        PG{"Papua-Noua Guinee"}
         PH{"Filipine"}
         PK{"Pakistan"}
         PL{"Polonia"}
-        PM{"Sfântul Pierre și Miquelon"}
-        PN{"Pitcairn"}
-        PR{"Porto Rico"}
-        PS{"Teritoriul Palestinian"}
+        PM{"Saint-Pierre și Miquelon"}
+        PN{"Insulele Pitcairn"}
+        PR{"Puerto Rico"}
+        PS{"Teritoriile Palestiniene"}
         PT{"Portugalia"}
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
         QO{"Oceania Periferică"}
-        RE{"Reunion"}
+        RE{"Réunion"}
         RO{"România"}
         RS{"Serbia"}
         RU{"Rusia"}
@@ -259,7 +259,7 @@ ro{
         SS{"Sudanul de Sud"}
         ST{"Sao Tome și Principe"}
         SV{"El Salvador"}
-        SX{"Sint Maarten"}
+        SX{"Sint-Maarten"}
         SY{"Siria"}
         SZ{"Swaziland"}
         TA{"Tristan da Cunha"}
@@ -275,7 +275,7 @@ ro{
         TN{"Tunisia"}
         TO{"Tonga"}
         TR{"Turcia"}
-        TT{"Trinidad-Tobago"}
+        TT{"Trinidad și Tobago"}
         TV{"Tuvalu"}
         TW{"Taiwan"}
         TZ{"Tanzania"}
@@ -285,8 +285,8 @@ ro{
         US{"Statele Unite ale Americii"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
-        VA{"Vatican"}
-        VC{"Sfântul Vincent și Grenadine"}
+        VA{"Statul Cetății Vaticanului"}
+        VC{"Saint Vincent și Grenadine"}
         VE{"Venezuela"}
         VG{"Insulele Virgine Britanice"}
         VI{"Insulele Virgine S.U.A."}
@@ -302,5 +302,5 @@ ro{
         ZW{"Zimbabwe"}
         ZZ{"Regiune necunoscută"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

@@ -20,7 +20,7 @@ hu{
         colNormalization{"Normalizált rendezés"}
         colNumeric{"Numerikus rendezés"}
         colStrength{"Rendezés erőssége"}
-        collation{"Rendezés"}
+        collation{"Rendezési sorrend"}
         currency{"Pénznem"}
         numbers{"Számok"}
         timezone{"Időzóna"}
@@ -52,6 +52,7 @@ hu{
         anp{"angika"}
         apa{"apacs nyelvek"}
         ar{"arab"}
+        ar_001{"modern szabányos arab"}
         arc{"arámi"}
         arn{"araucani"}
         arp{"arapaho"}
@@ -181,6 +182,7 @@ hu{
         es{"spanyol"}
         es_419{"latin-amerikai spanyol"}
         es_ES{"európai spanyol"}
+        es_MX{"spanyol (mexikói)"}
         et{"észt"}
         eu{"baszk"}
         ewo{"evondo"}
@@ -263,6 +265,7 @@ hu{
         iu{"inuktitut"}
         ja{"japán"}
         jbo{"lojban"}
+        jgo{"ngomba"}
         jmc{"machame"}
         jpr{"zsidó-perzsa"}
         jrb{"zsidó-arab"}
@@ -353,6 +356,7 @@ hu{
         mg{"málgas"}
         mga{"közép ír"}
         mgh{"makua-metó"}
+        mgo{"meta'"}
         mh{"marshalli"}
         mi{"maori"}
         mic{"mikmak"}
@@ -562,7 +566,7 @@ hu{
         uga{"ugariti"}
         uk{"ukrán"}
         umb{"umbundu"}
-        und{"ismeretlen vagy érvénytelen nyelv"}
+        und{"ismeretlen nyelv"}
         ur{"urdu"}
         uz{"üzbég"}
         vai{"vai"}
@@ -594,6 +598,7 @@ hu{
         zap{"zapoték"}
         zbl{"Bliss jelképrendszer"}
         zen{"zenaga"}
+        zgh{"marokkói tamazight"}
         zh{"kínai"}
         zh_Hans{"egyszerűsített kínai"}
         zh_Hant{"hagyományos kínai"}
@@ -605,6 +610,7 @@ hu{
     }
     LanguagesShort{
         az{"azeri"}
+        en_US{"angol (USA)"}
     }
     Scripts{
         Arab{"Arab"}
@@ -645,8 +651,8 @@ hu{
         Hang{"Hangul"}
         Hani{"Han"}
         Hano{"Hanunoo"}
-        Hans{"Egyszerűsített Han"}
-        Hant{"Hagyományos Han"}
+        Hans{"Egyszerűsített"}
+        Hant{"Hagyományos"}
         Hebr{"Héber"}
         Hira{"Hiragana"}
         Hmng{"Pahawh hmong"}
@@ -735,10 +741,10 @@ hu{
         Zsym{"Szimbólum"}
         Zxxx{"Íratlan nyelvek kódja"}
         Zyyy{"Meghatározatlan"}
-        Zzzz{"Ismeretlen vagy érvénytelen írásrendszer"}
+        Zzzz{"Ismeretlen írásrendszer"}
     }
     Scripts%stand-alone{
-        Hans{"Egyszerűsített kínai"}
+        Hans{"Egyszerűsített Han"}
         Hant{"Hagyományos kínai"}
     }
     Types{
@@ -768,6 +774,7 @@ hu{
             reformed{"Átalakított rendezési elv"}
             search{"Általános célú keresés"}
             searchjl{"Keresés hangul kezdő mássalhangzó szerint"}
+            standard{"Normál rendezési sorrend"}
             stroke{"Vonássorrend"}
             traditional{"Hagyományos"}
             unihan{"Szótővonás rendezési sorrend"}
@@ -806,7 +813,7 @@ hu{
             orya{"Orija számjegyek"}
             roman{"Római számok"}
             romanlow{"Római kisbetűs számok"}
-            taml{"Tamil számok"}
+            taml{"Tamil hagyományos számok"}
             tamldec{"Tamil számjegyek"}
             telu{"Telugu számjegyek"}
             thai{"Thai számjegyek"}
@@ -873,7 +880,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.93.17"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

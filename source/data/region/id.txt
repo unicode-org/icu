@@ -42,7 +42,7 @@ id{
         155{"Eropa Barat"}
         419{"Amerika Latin"}
         AC{"Pulau Ascension"}
-        AD{"Andora"}
+        AD{"Andorra"}
         AE{"Uni Emirat Arab"}
         AF{"Afganistan"}
         AG{"Antigua dan Barbuda"}
@@ -136,7 +136,7 @@ id{
         GP{"Guadeloupe"}
         GQ{"Guinea Ekuatorial"}
         GR{"Yunani"}
-        GS{"Kepulauan South Sandwich dan South Georgia"}
+        GS{"Georgia Selatan dan Kepulauan Sandwich Selatan"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinea-Bissau"}
@@ -171,7 +171,7 @@ id{
         KP{"Korea Utara"}
         KR{"Korea Selatan"}
         KW{"Kuwait"}
-        KY{"Kepulauan Kayman"}
+        KY{"Kepulauan Cayman"}
         KZ{"Kazakstan"}
         LA{"Laos"}
         LB{"Lebanon"}
@@ -193,7 +193,7 @@ id{
         MH{"Kepulauan Marshall"}
         MK{"Makedonia"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar (Burma)"}
         MN{"Mongolia"}
         MO{"Makau SAR China"}
         MP{"Kepulauan Mariana Utara"}
@@ -230,7 +230,7 @@ id{
         PM{"Saint Pierre dan Miquelon"}
         PN{"Kepulauan Pitcairn"}
         PR{"Puerto Riko"}
-        PS{"Otoritas Palestina"}
+        PS{"Wilayah Palestina"}
         PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguay"}
@@ -265,7 +265,7 @@ id{
         TA{"Tristan da Cunha"}
         TC{"Kepulauan Turks dan Caicos"}
         TD{"Cad"}
-        TF{"Teritori Kutub Selatan Prancis"}
+        TF{"Wilayah Kutub Selatan Prancis"}
         TG{"Togo"}
         TH{"Thailand"}
         TJ{"Tajikistan"}
@@ -302,5 +302,5 @@ id{
         ZW{"Zimbabwe"}
         ZZ{"Wilayah Tidak Dikenal"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.93.8"}
 }

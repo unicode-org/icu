@@ -7,11 +7,7 @@
 // *
 // ***************************************************************************
 fr_CA{
-    PaperSize:intvector{
-        279,
-        216,
-    }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.80"}
     calendar{
         generic{
             DateTimePatterns{
@@ -24,8 +20,8 @@ fr_CA{
                 "G y-MM-dd",
                 "GGGGG yy-MM-dd",
                 "{1} {0}",
-                "{1} {0}",
-                "{1} {0}",
+                "{1} 'à' {0}",
+                "{1} 'à' {0}",
                 "{1} {0}",
                 "{1} {0}",
             }
@@ -179,9 +175,6 @@ fr_CA{
                 hv{
                     h{"h–h a v"}
                 }
-                y{
-                    y{"y–y"}
-                }
                 yM{
                     M{"y-MM – y-MM"}
                     y{"y-MM – y-MM"}
@@ -198,9 +191,6 @@ fr_CA{
                     M{"'du' E d MMM 'au' E d MMM y"}
                     d{"'du' E d 'au' E d MMM y"}
                     y{"'du' E d MMM y 'au' E d MMM y"}
-                }
-                yMMMM{
-                    M{"MMMM – MMMM y"}
                 }
                 yMMMd{
                     M{"'du' d MMM 'au' d MMM y"}
@@ -219,11 +209,69 @@ fr_CA{
         alternateQuotationStart{"‹"}
     }
     fields{
+        day{
+            relativeTime{
+                future{
+                    one{"Dans {0} jour"}
+                    other{"Dans {0} jours"}
+                }
+                past{
+                    one{"Il y a {0} jour"}
+                    other{"Il y a {0} jours"}
+                }
+            }
+        }
+        hour{
+            relativeTime{
+                future{
+                    one{"Dans {0} heure"}
+                    other{"Dans {0} heures"}
+                }
+                past{
+                    one{"Il y a {0} heure"}
+                    other{"Il y a {0} heures"}
+                }
+            }
+        }
+        minute{
+            relativeTime{
+                future{
+                    one{"Dans {0} minute"}
+                    other{"Dans {0} minutes"}
+                }
+                past{
+                    one{"Il y a {0} minute"}
+                    other{"Il y a {0} minutes"}
+                }
+            }
+        }
         month{
             relative{
                 "-1"{"Le mois dernier"}
                 "0"{"Ce mois-ci"}
                 "1"{"Le mois prochain"}
+            }
+            relativeTime{
+                future{
+                    one{"Dans {0} mois"}
+                    other{"Dans {0} mois"}
+                }
+                past{
+                    one{"Il y a {0} mois"}
+                    other{"Il y a {0} mois"}
+                }
+            }
+        }
+        second{
+            relativeTime{
+                future{
+                    one{"Dans {0} seconde"}
+                    other{"Dans {0} secondes"}
+                }
+                past{
+                    one{"Il y a {0} seconde"}
+                    other{"Il y a {0} secondes"}
+                }
             }
         }
         week{
@@ -232,6 +280,16 @@ fr_CA{
                 "0"{"Cette semaine"}
                 "1"{"La semaine prochaine"}
             }
+            relativeTime{
+                future{
+                    one{"Dans {0} semaine"}
+                    other{"Dans {0} semaines"}
+                }
+                past{
+                    one{"Il y a {0} semaine"}
+                    other{"Il y a {0} semaines"}
+                }
+            }
         }
         year{
             relative{
@@ -239,69 +297,19 @@ fr_CA{
                 "0"{"Cette année"}
                 "1"{"L'année prochaine"}
             }
+            relativeTime{
+                future{
+                    one{"Dans {0} an"}
+                    other{"Dans {0} ans"}
+                }
+                past{
+                    one{"Il y a {0} an"}
+                    other{"Il y a {0} ans"}
+                }
+            }
         }
     }
     measurementSystemNames{
         UK{"R-U"}
-    }
-    units{
-        duration{
-            day-future{
-                one{"Dans {0} jour"}
-                other{"Dans {0} jours"}
-            }
-            day-past{
-                one{"Il y a {0} jour"}
-                other{"Il y a {0} jours"}
-            }
-            hour-future{
-                one{"Dans {0} heure"}
-                other{"Dans {0} heures"}
-            }
-            hour-past{
-                one{"Il y a {0} heure"}
-                other{"Il y a {0} heures"}
-            }
-            minute-future{
-                one{"Dans {0} minute"}
-                other{"Dans {0} minutes"}
-            }
-            minute-past{
-                one{"Il y a {0} minute"}
-                other{"Il y a {0} minutes"}
-            }
-            month-future{
-                one{"Dans {0} mois"}
-                other{"Dans {0} mois"}
-            }
-            month-past{
-                one{"Il y a {0} mois"}
-                other{"Il y a {0} mois"}
-            }
-            second-future{
-                one{"Dans {0} seconde"}
-                other{"Dans {0} secondes"}
-            }
-            second-past{
-                one{"Il y a {0} seconde"}
-                other{"Il y a {0} secondes"}
-            }
-            week-future{
-                one{"Dans {0} semaine"}
-                other{"Dans {0} semaines"}
-            }
-            week-past{
-                one{"Il y a {0} semaine"}
-                other{"Il y a {0} semaines"}
-            }
-            year-future{
-                one{"Dans {0} an"}
-                other{"Dans {0} ans"}
-            }
-            year-past{
-                one{"Il y a {0} an"}
-                other{"Il y a {0} ans"}
-            }
-        }
     }
 }

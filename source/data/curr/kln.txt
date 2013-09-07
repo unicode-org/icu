@@ -221,7 +221,7 @@ kln{
         }
         ZMK{
             "ZMK",
-            "Kwachaitab Zambia (1968-2012)",
+            "Kwachaitab Zambia (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -232,5 +232,5 @@ kln{
             "Dolaitab ya Zimbabwe",
         }
     }
-    Version{"2.0.84.55"}
+    Version{"2.0.92.87"}
 }

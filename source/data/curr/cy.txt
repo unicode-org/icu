@@ -35,6 +35,10 @@ cy{
             "AOA",
             "Kwanza Angola",
         }
+        ARS{
+            "ARS",
+            "Peso yr Ariannin",
+        }
         AUD{
             "A$",
             "Doler Awstralia",
@@ -301,7 +305,7 @@ cy{
         }
         KRW{
             "₩",
-            "Won De Corea",
+            "Won De Korea",
         }
         KWD{
             "KWD",
@@ -389,7 +393,7 @@ cy{
         }
         MXN{
             "MX$",
-            "Peso Mecsico",
+            "Peso México",
         }
         MYR{
             "MYR",
@@ -633,7 +637,7 @@ cy{
         }
         ZMK{
             "ZMK",
-            "Kwacha Zambia (1968-2012)",
+            "Kwacha Zambia (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -874,11 +878,11 @@ cy{
             zero{"Peso Chile"}
         }
         CNY{
-            few{"Yuan Tsieina"}
-            many{"Yuan Tsieina"}
-            one{"Yuan Tsieina"}
+            few{"Yuan China"}
+            many{"Yuan China"}
+            one{"Yuan China"}
             other{"Yuan Tsieina"}
-            two{"Yuan Tsieina"}
+            two{"Yuan China"}
             zero{"Yuan Tsieina"}
         }
         COP{
@@ -1226,12 +1230,12 @@ cy{
             zero{"Won Gogledd Corea"}
         }
         KRW{
-            few{"Won De Corea"}
-            many{"Won De Corea"}
-            one{"Won De Corea"}
-            other{"Won De Corea"}
-            two{"Won De Corea"}
-            zero{"Won De Corea"}
+            few{"Won De Korea"}
+            many{"Won De Korea"}
+            one{"Won De Korea"}
+            other{"Won De Korea"}
+            two{"Won De Korea"}
+            zero{"Won De Korea"}
         }
         KWD{
             few{"Dinar Kuwait"}
@@ -1402,12 +1406,12 @@ cy{
             zero{"Kwacha Malawi"}
         }
         MXN{
-            few{"Peso Mecsico"}
-            many{"Peso Mecsico"}
-            one{"Peso Mecsico"}
-            other{"Peso Mecsico"}
-            two{"Peso Mecsico"}
-            zero{"Peso Mecsico"}
+            few{"Peso México"}
+            many{"Peso México"}
+            one{"Peso México"}
+            other{"Peso México"}
+            two{"Peso México"}
+            zero{"Peso México"}
         }
         MYR{
             few{"Ringgit Malaysia"}
@@ -1890,12 +1894,12 @@ cy{
             zero{"Rand De Affrica"}
         }
         ZMK{
-            few{"Kwacha Zambia (1968-2012)"}
-            many{"Kwacha Zambia (1968-2012)"}
-            one{"Kwacha Zambia (1968-2012)"}
-            other{"Kwacha Zambia (1968-2012)"}
-            two{"Kwacha Zambia (1968-2012)"}
-            zero{"Kwacha Zambia (1968-2012)"}
+            few{"Kwacha Zambia (1968–2012)"}
+            many{"Kwacha Zambia (1968–2012)"}
+            one{"Kwacha Zambia (1968–2012)"}
+            other{"Kwacha Zambia (1968–2012)"}
+            two{"Kwacha Zambia (1968–2012)"}
+            zero{"Kwacha Zambia (1968–2012)"}
         }
         ZMW{
             few{"Kwacha Zambia"}
@@ -1914,5 +1918,5 @@ cy{
         two{"{0} {1}"}
         zero{"{0} {1}"}
     }
-    Version{"2.0.88.66"}
+    Version{"2.0.93.7"}
 }

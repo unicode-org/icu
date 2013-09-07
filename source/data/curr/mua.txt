@@ -225,7 +225,7 @@ mua{
         }
         ZMK{
             "ZMK",
-            "Solai Zambiya (1968-2012)",
+            "Solai Zambiya (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +236,5 @@ mua{
             "Solai Zimbabwe",
         }
     }
-    Version{"2.0.84.55"}
+    Version{"2.0.92.87"}
 }

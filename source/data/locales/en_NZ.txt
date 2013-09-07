@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_NZ{
     %%Parent{"en_GB"}
-    Version{"2.0.86.38"}
+    Version{"2.0.90.61"}
     calendar{
         generic{
             DateTimePatterns{

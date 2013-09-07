@@ -20,7 +20,7 @@ es{
         colNormalization{"Orden con normalización"}
         colNumeric{"Orden numérico"}
         colStrength{"Intensidad de orden"}
-        collation{"intercalación"}
+        collation{"orden"}
         currency{"moneda"}
         numbers{"números"}
         timezone{"Zona horaria"}
@@ -36,7 +36,7 @@ es{
         ada{"adangme"}
         ady{"adigeo"}
         ae{"avéstico"}
-        af{"afrikaans"}
+        af{"afrikáans"}
         afa{"lengua afroasiática"}
         afh{"afrihili"}
         agq{"aghem"}
@@ -52,6 +52,7 @@ es{
         anp{"angika"}
         apa{"lenguas apache"}
         ar{"árabe"}
+        ar_001{"árabe estándar moderno"}
         arc{"arameo"}
         arn{"araucano"}
         arp{"arapaho"}
@@ -179,7 +180,7 @@ es{
         enm{"inglés medieval"}
         eo{"esperanto"}
         es{"español"}
-        es_419{"español latinoamericano"}
+        es_419{"español de América"}
         es_ES{"español de España"}
         et{"estonio"}
         eu{"vasco"}
@@ -191,7 +192,7 @@ es{
         fi{"finés"}
         fil{"filipino"}
         fiu{"lengua finoúgria"}
-        fj{"fidjiano"}
+        fj{"fiyiano"}
         fo{"feroés"}
         fon{"fon"}
         fr{"francés"}
@@ -353,6 +354,7 @@ es{
         mg{"malgache"}
         mga{"irlandés medieval"}
         mgh{"makhuwa-meetto"}
+        mgo{"meta'"}
         mh{"marshalés"}
         mi{"maorí"}
         mic{"micmac"}
@@ -594,6 +596,7 @@ es{
         zap{"zapoteco"}
         zbl{"símbolos Bliss"}
         zen{"zenaga"}
+        zgh{"tamazight"}
         zh{"chino"}
         zh_Hans{"chino simplificado"}
         zh_Hant{"chino tradicional"}
@@ -644,8 +647,8 @@ es{
         Hang{"hangul"}
         Hani{"han"}
         Hano{"hanunoo"}
-        Hans{"han simplificado"}
-        Hant{"han tradicional"}
+        Hans{"simplificado"}
+        Hant{"tradicional"}
         Hebr{"hebreo"}
         Hira{"hiragana"}
         Hmng{"pahawh hmong"}
@@ -758,6 +761,7 @@ es{
             reformed{"orden reformado"}
             search{"búsqueda de uso general"}
             searchjl{"Buscar por consonante inicial de hangul"}
+            standard{"orden estándar"}
             stroke{"orden de los trazos"}
             traditional{"orden tradicional"}
             unihan{"orden por radical-trazos"}
@@ -819,7 +823,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Dialecto: {0}"}

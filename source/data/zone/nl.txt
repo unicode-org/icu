@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/nl.xml
  */
 nl{
-    Version{"2.0.85.93"}
+    Version{"2.0.93.8"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -39,14 +39,14 @@ nl{
         "America:Asuncion"{
             ec{"Asunción"}
         }
+        "America:Bahia_Banderas"{
+            ec{"Bahía de Banderas"}
+        }
         "America:Belem"{
             ec{"Belém"}
         }
         "America:Bogota"{
             ec{"Bogotá"}
-        }
-        "America:Cancun"{
-            ec{"Cancún"}
         }
         "America:Coral_Harbour"{
             ec{"Atikokan"}
@@ -62,6 +62,9 @@ nl{
         }
         "America:El_Salvador"{
             ec{"Salvador"}
+        }
+        "America:Godthab"{
+            ec{"Nuuk"}
         }
         "America:Indiana:Knox"{
             ec{"Knox, Indiana"}
@@ -102,17 +105,14 @@ nl{
         "America:Mexico_City"{
             ec{"Mexico-stad"}
         }
-        "America:Montreal"{
-            ec{"Montréal"}
-        }
         "America:North_Dakota:Beulah"{
             ec{"Beulah, Noord-Dakota"}
         }
         "America:North_Dakota:Center"{
-            ec{"Center, North Dakota"}
+            ec{"Center, Noord-Dakota"}
         }
         "America:North_Dakota:New_Salem"{
-            ec{"New Salem, North Dakota"}
+            ec{"New Salem, Noord-Dakota"}
         }
         "America:Porto_Velho"{
             ec{"Pôrto Velho"}
@@ -120,8 +120,11 @@ nl{
         "America:Sao_Paulo"{
             ec{"São Paulo"}
         }
+        "America:Scoresbysund"{
+            ec{"Ittoqqortoormiit"}
+        }
         "America:St_Barthelemy"{
-            ec{"Saint Barthélemy"}
+            ec{"Saint-Barthélemy"}
         }
         "America:St_Johns"{
             ec{"St. John’s"}
@@ -168,6 +171,9 @@ nl{
         "Asia:Bishkek"{
             ec{"Bisjkek"}
         }
+        "Asia:Calcutta"{
+            ec{"Calcutta"}
+        }
         "Asia:Dushanbe"{
             ec{"Dusjanbe"}
         }
@@ -195,6 +201,9 @@ nl{
         "Asia:Manila"{
             ec{"Manilla"}
         }
+        "Asia:Phnom_Penh"{
+            ec{"Phnom-Penh"}
+        }
         "Asia:Riyadh"{
             ec{"Riyad"}
         }
@@ -215,9 +224,6 @@ nl{
         }
         "Asia:Tokyo"{
             ec{"Tokio"}
-        }
-        "Asia:Ulaanbaatar"{
-            ec{"Ulaanbaator"}
         }
         "Asia:Yakutsk"{
             ec{"Jakoetsk"}
@@ -247,7 +253,7 @@ nl{
             ec{"Sint-Helena"}
         }
         "Etc:Unknown"{
-            ec{"Onbekend"}
+            ec{"Onbekende stad"}
         }
         "Europe:Athens"{
             ec{"Athene"}
@@ -357,6 +363,9 @@ nl{
         }
         "Pacific:Ponape"{
             ec{"Pohnpei"}
+        }
+        "Pacific:Truk"{
+            ec{"Chuuk"}
         }
         "meta:Acre"{
             ld{"Acre-zomertijd"}
@@ -498,7 +507,7 @@ nl{
         }
         "meta:Brasilia"{
             ld{"Braziliaanse zomertijd"}
-            lg{"Brasilia-tijd"}
+            lg{"Braziliaanse tijd"}
             ls{"Braziliaanse standaardtijd"}
         }
         "meta:Brunei"{
@@ -528,8 +537,8 @@ nl{
             ls{"Chinese standaardtijd"}
         }
         "meta:Choibalsan"{
-            ld{"Choibalsan-zomertijd"}
-            lg{"Choibalsan-tijd"}
+            ld{"Tsjojbalsan zomertijd"}
+            lg{"Tsjojbalsan tijd"}
             ls{"Tsjojbalsan standaardtijd"}
         }
         "meta:Christmas"{
@@ -568,7 +577,7 @@ nl{
             ls{"Paaseilandse standaardtijd"}
         }
         "meta:Ecuador"{
-            ls{"Ecuadoriaanse tijd"}
+            ls{"Ecuadoraanse tijd"}
         }
         "meta:Europe_Central"{
             ld{"Midden-Europese zomertijd"}
@@ -657,12 +666,12 @@ nl{
             ls{"Hongkongse standaardtijd"}
         }
         "meta:Hovd"{
-            ld{"Hovd-zomertijd"}
-            lg{"Hovd-tijd"}
+            ld{"Hovd zomertijd"}
+            lg{"Hovd tijd"}
             ls{"Hovd standaardtijd"}
         }
         "meta:India"{
-            ls{"Indiaase standaardtijd"}
+            ls{"Indiase tijd"}
         }
         "meta:Indian_Ocean"{
             ls{"Indische Oceaan-tijd"}
@@ -733,9 +742,9 @@ nl{
             ls{"Line-eilandse tijd"}
         }
         "meta:Lord_Howe"{
-            ld{"Lord Howe-zomertijd"}
-            lg{"Lord Howe-tijd"}
-            ls{"Lord Howe-standaardtijd"}
+            ld{"Lord Howe-eilandse zomertijd"}
+            lg{"Lord Howe-eilandse tijd"}
+            ls{"Lord Howe-eilandse standaardtijd"}
         }
         "meta:Macau"{
             ld{"Macause zomertijd"}
@@ -771,7 +780,7 @@ nl{
             ls{"Mawson tijd"}
         }
         "meta:Mongolia"{
-            ld{"Ulaanbaatar-zomertijd"}
+            ld{"Ulaanbaatar zomertijd"}
             lg{"Ulaanbaatar tijd"}
             ls{"Ulaanbaatar standaardtijd"}
         }
@@ -881,7 +890,7 @@ nl{
         }
         "meta:Sakhalin"{
             ld{"Sachalin-zomertijd"}
-            lg{"Sakhalin-tijd"}
+            lg{"Sachalin-tijd"}
             ls{"Sachalin-standaardtijd"}
         }
         "meta:Samara"{
@@ -916,9 +925,9 @@ nl{
             ls{"Tahitiaanse tijd"}
         }
         "meta:Taipei"{
-            ld{"Taipei-zomertijd"}
-            lg{"Taipei-tijd"}
-            ls{"Taipei-standaardtijd"}
+            ld{"Taipei zomertijd"}
+            lg{"Taipei tijd"}
+            ls{"Taipei standaardtijd"}
         }
         "meta:Tajikistan"{
             ls{"Tadzjiekse tijd"}

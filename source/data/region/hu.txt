@@ -97,7 +97,7 @@ hu{
         CU{"Kuba"}
         CV{"Zöld-foki Köztársaság"}
         CW{"Curaçao"}
-        CX{"Karácsony-szigetek"}
+        CX{"Karácsony-sziget"}
         CY{"Ciprus"}
         CZ{"Csehország"}
         DE{"Németország"}
@@ -117,7 +117,7 @@ hu{
         ET{"Etiópia"}
         EU{"Európai Unió"}
         FI{"Finnország"}
-        FJ{"Fidzsi"}
+        FJ{"Fidzsi-szigetek"}
         FK{"Falkland-szigetek"}
         FM{"Mikronézia"}
         FO{"Feröer-szigetek"}
@@ -136,13 +136,13 @@ hu{
         GP{"Guadeloupe"}
         GQ{"Egyenlítői-Guinea"}
         GR{"Görögország"}
-        GS{"Dél Grúzia és a Déli Szendvics-szigetek"}
+        GS{"Déli-Georgia és Déli-Sandwich-szigetek"}
         GT{"Guatemala"}
         GU{"Guam"}
         GW{"Guinea-Bissau"}
         GY{"Guyana"}
         HK{"Hongkong SAR Kína"}
-        HM{"Heard és McDonald Szigetek"}
+        HM{"Heard-sziget és McDonald-szigetek"}
         HN{"Honduras"}
         HR{"Horvátország"}
         HT{"Haiti"}
@@ -193,7 +193,7 @@ hu{
         MH{"Marshall-szigetek"}
         MK{"Macedónia"}
         ML{"Mali"}
-        MM{"Mianmar [Burma]"}
+        MM{"Mianmar (Burma)"}
         MN{"Mongólia"}
         MO{"Makaó SAR Kína"}
         MP{"Északi Mariana-szigetek"}
@@ -239,7 +239,7 @@ hu{
         RE{"Reunion"}
         RO{"Románia"}
         RS{"Szerbia"}
-        RU{"Oroszországi Föderáció"}
+        RU{"Oroszország"}
         RW{"Ruanda"}
         SA{"Szaúd-Arábia"}
         SB{"Salamon-szigetek"}
@@ -247,7 +247,7 @@ hu{
         SD{"Szudán"}
         SE{"Svédország"}
         SG{"Szingapúr"}
-        SH{"Szent Helena"}
+        SH{"Szent Ilona"}
         SI{"Szlovénia"}
         SJ{"Spitzbergák és Jan Mayen-szigetek"}
         SK{"Szlovákia"}
@@ -268,7 +268,7 @@ hu{
         TF{"Francia Déli Területek"}
         TG{"Togo"}
         TH{"Thaiföld"}
-        TJ{"Tadzsikisztán"}
+        TJ{"Tádzsikisztán"}
         TK{"Tokelau"}
         TL{"Kelet-Timor"}
         TM{"Türkmenisztán"}
@@ -300,7 +300,7 @@ hu{
         ZA{"Dél-afrikai Köztársaság"}
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
-        ZZ{"Ismeretlen vagy érvénytelen körzet"}
+        ZZ{"Ismeretlen körzet"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.93.17"}
 }

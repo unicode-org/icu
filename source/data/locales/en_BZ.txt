@@ -7,29 +7,19 @@
 // *
 // ***************************************************************************
 en_BZ{
-    NumberElements{
-        latn{
-            patterns{
-                currencyFormat{"¤#,##0.00"}
-            }
-        }
-    }
-    PaperSize:intvector{
-        279,
-        216,
-    }
-    Version{"2.0.86.38"}
+    %%Parent{"en_001"}
+    Version{"2.0.92.80"}
     calendar{
         generic{
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, MMMM d, y G",
-                "MMMM d, y G",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE dd MMMM y G",
+                "dd MMMM y G",
                 "dd-MMM-y G",
-                "M/d/y GGGGG",
+                "dd/MM/y GGGGG",
                 "{1}, {0}",
                 "{1} 'at' {0}",
                 "{1} 'at' {0}",
@@ -37,22 +27,27 @@ en_BZ{
                 "{1}, {0}",
             }
             availableFormats{
+                MEd{"E dd/MM"}
                 MMMEd{"E dd MMM"}
                 MMMd{"dd MMM"}
+                Md{"dd/MM"}
+                yyyyM{"MM/y G"}
+                yyyyMEd{"E dd/MM/y G"}
                 yyyyMMMEd{"E dd MMM y G"}
                 yyyyMMMd{"dd MMM y G"}
+                yyyyMd{"dd/MM/y G"}
             }
         }
         gregorian{
             DateTimePatterns{
-                "h:mm:ss a zzzz",
-                "h:mm:ss a z",
-                "h:mm:ss a",
-                "h:mm a",
-                "EEEE, MMMM d, y",
-                "MMMM d, y",
+                "HH:mm:ss zzzz",
+                "HH:mm:ss z",
+                "HH:mm:ss",
+                "HH:mm",
+                "EEEE dd MMMM y",
+                "dd MMMM y",
                 "dd-MMM-y",
-                "M/d/yy",
+                "dd/MM/yy",
                 "{1}, {0}",
                 "{1} 'at' {0}",
                 "{1} 'at' {0}",
@@ -60,10 +55,15 @@ en_BZ{
                 "{1}, {0}",
             }
             availableFormats{
+                MEd{"E dd/MM"}
                 MMMEd{"E dd MMM"}
                 MMMd{"dd MMM"}
+                Md{"dd/MM"}
+                yM{"MM/y"}
+                yMEd{"E dd/MM/y"}
                 yMMMEd{"E dd MMM y"}
                 yMMMd{"dd MMM y"}
+                yMd{"dd/MM/y"}
             }
         }
     }

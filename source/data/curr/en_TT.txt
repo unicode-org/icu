@@ -7,15 +7,12 @@
 // *
 // ***************************************************************************
 en_TT{
+    %%Parent{"en_001"}
     Currencies{
         TTD{
             "$",
             "Trinidad and Tobago Dollar",
         }
-        USD{
-            "US$",
-            "US Dollar",
-        }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.80"}
 }

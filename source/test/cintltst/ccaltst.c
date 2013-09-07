@@ -1676,7 +1676,7 @@ static const TestWeekendDates weekendDates_en_US[] = {
     { 2000, UCAL_MARCH, 20,  0,  0, 0 }, /* Mon 00:00        */
     { 2000, UCAL_MARCH, 20,  8,  0, 0 }, /* Mon 08:00        */
 };
-static const TestWeekendDates weekendDates_ar_YE[] = {
+static const TestWeekendDates weekendDates_ar_OM[] = {
     { 2000, UCAL_MARCH, 15, 23,  0, 0 }, /* Wed 23:00        */
     { 2000, UCAL_MARCH, 16,  0, -1, 0 }, /* Wed 23:59:59.999 */
     { 2000, UCAL_MARCH, 16,  0,  0, 1 }, /* Thu 00:00        */
@@ -1688,7 +1688,7 @@ static const TestWeekendDates weekendDates_ar_YE[] = {
 };
 static const TestWeekendDatesList testDates[] = {
     { "en_US", weekendDates_en_US, sizeof(weekendDates_en_US)/sizeof(weekendDates_en_US[0]) },
-    { "ar_YE", weekendDates_ar_YE, sizeof(weekendDates_ar_YE)/sizeof(weekendDates_ar_YE[0]) },
+    { "ar_OM", weekendDates_ar_OM, sizeof(weekendDates_ar_OM)/sizeof(weekendDates_ar_OM[0]) },
 };
 
 typedef struct {
@@ -1708,7 +1708,7 @@ static const TestDaysOfWeek daysOfWeek_en_US[] = {
     { UCAL_SATURDAY, UCAL_WEEKEND,       0        },
     { UCAL_SUNDAY,   UCAL_WEEKEND,       0        },
 };
-static const TestDaysOfWeek daysOfWeek_ar_YE[] = { /* Thursday:Friday */
+static const TestDaysOfWeek daysOfWeek_ar_OM[] = { /* Thursday:Friday */
     { UCAL_WEDNESDAY,UCAL_WEEKDAY,       0        },
     { UCAL_SATURDAY, UCAL_WEEKDAY,       0        },
     { UCAL_THURSDAY, UCAL_WEEKEND,       0        },
@@ -1722,7 +1722,7 @@ static const TestDaysOfWeek daysOfWeek_hi_IN[] = { /* Sunday only */
 };
 static const TestDaysOfWeekList testDays[] = {
     { "en_US", daysOfWeek_en_US, sizeof(daysOfWeek_en_US)/sizeof(daysOfWeek_en_US[0]) },
-    { "ar_YE", daysOfWeek_ar_YE, sizeof(daysOfWeek_ar_YE)/sizeof(daysOfWeek_ar_YE[0]) },
+    { "ar_OM", daysOfWeek_ar_OM, sizeof(daysOfWeek_ar_OM)/sizeof(daysOfWeek_ar_OM[0]) },
     { "hi_IN", daysOfWeek_hi_IN, sizeof(daysOfWeek_hi_IN)/sizeof(daysOfWeek_hi_IN[0]) },
 };
 

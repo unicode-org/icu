@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/hy.xml
  */
 hy{
-    Version{"2.0.88.97"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Աբիջան"}
@@ -319,7 +319,7 @@ hy{
             ec{"Գլեյս Բեյ"}
         }
         "America:Godthab"{
-            ec{"Գոդթաբ"}
+            ec{"Նուուկ"}
         }
         "America:Goose_Bay"{
             ec{"Գուս Բեյ"}
@@ -759,6 +759,9 @@ hy{
         "Asia:Katmandu"{
             ec{"Կատմանդու"}
         }
+        "Asia:Khandyga"{
+            ec{"Խանդիգա"}
+        }
         "Asia:Krasnoyarsk"{
             ec{"Կրասնոյարսկ"}
         }
@@ -863,6 +866,9 @@ hy{
         }
         "Asia:Urumqi"{
             ec{"Ուրումչի"}
+        }
+        "Asia:Ust-Nera"{
+            ec{"Ուստ-Ներա"}
         }
         "Asia:Vientiane"{
             ec{"Վյենտյան"}
@@ -974,6 +980,9 @@ hy{
         }
         "Europe:Budapest"{
             ec{"Բուդապեշտ"}
+        }
+        "Europe:Busingen"{
+            ec{"Բյուզինգեն"}
         }
         "Europe:Chisinau"{
             ec{"Քիշնև"}
@@ -1233,7 +1242,7 @@ hy{
             ec{"Պիտկեռն"}
         }
         "Pacific:Ponape"{
-            ec{"Պոնապե կղզի"}
+            ec{"Պոնպեի"}
         }
         "Pacific:Port_Moresby"{
             ec{"Պորտ Մորսբի"}
@@ -1280,9 +1289,9 @@ hy{
             ls{"Արևմտաաֆրիկյան ստանդարտ ժամանակ"}
         }
         "meta:Alaska"{
-            ld{"Ալյասկա, ամառային ժամանակ"}
+            ld{"Ալյասկայի ամառային ժամանակ"}
             lg{"Ալյասկայի ժամանակ"}
-            ls{"Ալյասկա, ստանդարտ ժամանակ"}
+            ls{"Ալյասկայի ստանդարտ ժամանակ"}
         }
         "meta:Amazon"{
             ld{"Ամազոնյան ամառային ժամանակ"}
@@ -1495,7 +1504,7 @@ hy{
             ls{"Վրաստանի ստանդարտ ժամանակ"}
         }
         "meta:Gilbert_Islands"{
-            ls{"Ջլիբերթի կղզիների ժամանակ"}
+            ls{"Ջիլբերթի կղզիների ժամանակ"}
         }
         "meta:Greenland_Eastern"{
             ld{"Արևելյան Գրենլանդիայի ամառային ժամանակ"}
@@ -1714,7 +1723,7 @@ hy{
             ls{"Սեն Պիեր և Միկելոնի ստանդարտ ժամանակ"}
         }
         "meta:Pitcairn"{
-            ls{"Պիտկերնի ժամանակ"}
+            ls{"Պիտկեռնի ժամանակ"}
         }
         "meta:Ponape"{
             ls{"Պոնապե կղզու ժամանակ"}
@@ -1746,6 +1755,9 @@ hy{
         }
         "meta:South_Georgia"{
             ls{"Հարավային Ջորջիայի ժամանակ"}
+        }
+        "meta:Suriname"{
+            ls{"Սուրինամի ժամանակ"}
         }
         "meta:Syowa"{
             ls{"Սյովայի ժամանակ"}

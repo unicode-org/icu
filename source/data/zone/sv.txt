@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/sv.xml
  */
 sv{
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -18,20 +18,44 @@ sv{
         "Africa:Algiers"{
             ec{"Alger"}
         }
+        "Africa:Asmera"{
+            ec{"Asmera"}
+        }
         "Africa:Cairo"{
             ec{"Kairo"}
         }
-        "Africa:Porto-Novo"{
-            ec{"Porto Novo"}
+        "Africa:Dar_es_Salaam"{
+            ec{"Dar es-Salaam"}
+        }
+        "Africa:El_Aaiun"{
+            ec{"El-Aaiún"}
+        }
+        "Africa:Lome"{
+            ec{"Lomé"}
+        }
+        "Africa:Ndjamena"{
+            ec{"N'Djamena"}
         }
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
         }
-        "America:Argentina:Ushuaia"{
-            ec{"Ushuaïa"}
+        "America:Adak"{
+            ec{"Adak Island"}
+        }
+        "America:Araguaina"{
+            ec{"Araguaína"}
+        }
+        "America:Argentina:Rio_Gallegos"{
+            ec{"Río Gallegos"}
+        }
+        "America:Argentina:Tucuman"{
+            ec{"Tucumán"}
         }
         "America:Asuncion"{
             ec{"Asunción"}
+        }
+        "America:Bahia_Banderas"{
+            ec{"Bahía de Banderas"}
         }
         "America:Belem"{
             ec{"Belém"}
@@ -42,6 +66,12 @@ sv{
         "America:Cancun"{
             ec{"Cancún"}
         }
+        "America:Cayman"{
+            ec{"Caymanöarna"}
+        }
+        "America:Coral_Harbour"{
+            ec{"Atikokan"}
+        }
         "America:Cordoba"{
             ec{"Córdoba"}
         }
@@ -51,23 +81,41 @@ sv{
         "America:Curacao"{
             ec{"Curaçao"}
         }
-        "America:Danmarkshavn"{
-            ec{"Danmarkshamn"}
-        }
         "America:Eirunepe"{
             ec{"Eirunepé"}
         }
-        "America:El_Salvador"{
-            ec{"San Salvador"}
-        }
         "America:Godthab"{
-            ec{"Godthåb"}
+            ec{"Nuuk"}
         }
         "America:Havana"{
             ec{"Havanna"}
         }
+        "America:Indiana:Knox"{
+            ec{"Knox, Indiana"}
+        }
+        "America:Indiana:Marengo"{
+            ec{"Marengo, Indiana"}
+        }
+        "America:Indiana:Petersburg"{
+            ec{"Petersburg, Indiana"}
+        }
+        "America:Indiana:Tell_City"{
+            ec{"Tell City, Indiana"}
+        }
+        "America:Indiana:Vevay"{
+            ec{"Vevay, Indiana"}
+        }
+        "America:Indiana:Vincennes"{
+            ec{"Vincennes, Indiana"}
+        }
+        "America:Indiana:Winamac"{
+            ec{"Winamac, Indiana"}
+        }
         "America:Jujuy"{
             ec{"San Salvador de Jujuy"}
+        }
+        "America:Kentucky:Monticello"{
+            ec{"Monticello, Kentucky"}
         }
         "America:Lower_Princes"{
             ec{"Lower Prince’s Quarter"}
@@ -84,11 +132,20 @@ sv{
         "America:Montreal"{
             ec{"Montréal"}
         }
+        "America:Noronha"{
+            ec{"Fernando de Noronha"}
+        }
+        "America:North_Dakota:Beulah"{
+            ec{"Beulah, North Dakota"}
+        }
         "America:North_Dakota:Center"{
             ec{"Center, North Dakota"}
         }
-        "America:Regina"{
-            ec{"Régina"}
+        "America:North_Dakota:New_Salem"{
+            ec{"New Salem, North Dakota"}
+        }
+        "America:Santarem"{
+            ec{"Santarém"}
         }
         "America:Sao_Paulo"{
             ec{"São Paulo"}
@@ -100,7 +157,7 @@ sv{
             ec{"S:t Barthélemy"}
         }
         "America:St_Johns"{
-            ec{"St. Johns"}
+            ec{"S:t Johns"}
         }
         "America:St_Kitts"{
             ec{"S:t Kitts"}
@@ -109,13 +166,10 @@ sv{
             ec{"S:t Lucia"}
         }
         "America:St_Thomas"{
-            ec{"Saint Thomas"}
+            ec{"S:t Thomas"}
         }
         "America:St_Vincent"{
-            ec{"Saint Vincent"}
-        }
-        "America:Tegucigalpa"{
-            ec{"Tequciqalpa"}
+            ec{"S:t Vincent"}
         }
         "America:Thule"{
             ec{"Qaanaaq"}
@@ -124,19 +178,25 @@ sv{
             ec{"Dumont d’Urville"}
         }
         "Antarctica:South_Pole"{
-            ec{"sydpolen"}
+            ec{"Amundsen-Scott-basen"}
         }
         "Asia:Almaty"{
             ec{"Alma-Ata"}
         }
-        "Asia:Anadyr"{
-            ec{"Anadir"}
+        "Asia:Aqtau"{
+            ec{"Aktau"}
         }
         "Asia:Aqtobe"{
             ec{"Aqtöbe"}
         }
+        "Asia:Ashgabat"{
+            ec{"Asjchabad"}
+        }
         "Asia:Baghdad"{
             ec{"Bagdad"}
+        }
+        "Asia:Bishkek"{
+            ec{"Bisjkek"}
         }
         "Asia:Calcutta"{
             ec{"Kolkata"}
@@ -147,20 +207,23 @@ sv{
         "Asia:Damascus"{
             ec{"Damaskus"}
         }
-        "Asia:Dhaka"{
-            ec{"Dacca"}
-        }
         "Asia:Dushanbe"{
             ec{"Dusjanbe"}
         }
         "Asia:Hong_Kong"{
             ec{"Hongkong"}
         }
+        "Asia:Hovd"{
+            ec{"Chovd"}
+        }
         "Asia:Kamchatka"{
             ec{"Kamtjatka"}
         }
         "Asia:Katmandu"{
-            ec{"Kathmandu"}
+            ec{"Katmandu"}
+        }
+        "Asia:Khandyga"{
+            ec{"Chandyga"}
         }
         "Asia:Krasnoyarsk"{
             ec{"Krasnojarsk"}
@@ -174,6 +237,9 @@ sv{
         "Asia:Muscat"{
             ec{"Muskat"}
         }
+        "Asia:Saigon"{
+            ec{"Ho Chi Minh-staden"}
+        }
         "Asia:Sakhalin"{
             ec{"Sachalin"}
         }
@@ -186,11 +252,11 @@ sv{
         "Asia:Tehran"{
             ec{"Teheran"}
         }
-        "Asia:Thimphu"{
-            ec{"Thimpu"}
-        }
         "Asia:Ulaanbaatar"{
             ec{"Ulan Bator"}
+        }
+        "Asia:Urumqi"{
+            ec{"Ürümqi"}
         }
         "Asia:Yakutsk"{
             ec{"Jakutsk"}
@@ -234,6 +300,12 @@ sv{
         "Europe:Bucharest"{
             ec{"Bukarest"}
         }
+        "Europe:Busingen"{
+            ec{"Büsingen am Hochrhein"}
+        }
+        "Europe:Chisinau"{
+            ec{"Chișinău"}
+        }
         "Europe:Copenhagen"{
             ec{"Köpenhamn"}
         }
@@ -255,23 +327,17 @@ sv{
         "Europe:Moscow"{
             ec{"Moskva"}
         }
-        "Europe:Podgorica"{
-            ec{"Podgorika"}
-        }
         "Europe:Prague"{
             ec{"Prag"}
         }
         "Europe:Rome"{
             ec{"Rom"}
         }
-        "Europe:Tallinn"{
-            ec{"Tallin"}
-        }
         "Europe:Tirane"{
             ec{"Tirana"}
         }
         "Europe:Uzhgorod"{
-            ec{"Uzjgorod"}
+            ec{"Uzjhorod"}
         }
         "Europe:Vatican"{
             ec{"Vatikanen"}
@@ -288,6 +354,9 @@ sv{
         "Europe:Zurich"{
             ec{"Zürich"}
         }
+        "Indian:Chagos"{
+            ec{"Chagosöarna"}
+        }
         "Indian:Christmas"{
             ec{"Julön"}
         }
@@ -296,6 +365,12 @@ sv{
         }
         "Indian:Comoro"{
             ec{"Komorerna"}
+        }
+        "Indian:Kerguelen"{
+            ec{"Kerguelenöarna"}
+        }
+        "Indian:Mahe"{
+            ec{"Mahé"}
         }
         "Indian:Maldives"{
             ec{"Maldiverna"}
@@ -308,6 +383,33 @@ sv{
         }
         "Pacific:Galapagos"{
             ec{"Galápagos"}
+        }
+        "Pacific:Gambier"{
+            ec{"Gambieröarna"}
+        }
+        "Pacific:Johnston"{
+            ec{"Johnstonatollen"}
+        }
+        "Pacific:Marquesas"{
+            ec{"Marquesasöarna"}
+        }
+        "Pacific:Midway"{
+            ec{"Midwayöarna"}
+        }
+        "Pacific:Noumea"{
+            ec{"Nouméa"}
+        }
+        "Pacific:Pitcairn"{
+            ec{"Pitcairnöarna"}
+        }
+        "Pacific:Ponape"{
+            ec{"Pohnpei"}
+        }
+        "Pacific:Truk"{
+            ec{"Chuuk"}
+        }
+        "Pacific:Wallis"{
+            ec{"Wallisön"}
         }
         "meta:Acre"{
             ld{"västbrasiliansk sommartid"}
@@ -333,7 +435,7 @@ sv{
         }
         "meta:Alaska"{
             ld{"Alaska, sommartid"}
-            lg{"alaskatid"}
+            lg{"Alaskatid"}
             ls{"Alaska, normaltid"}
         }
         "meta:Almaty"{
@@ -343,13 +445,13 @@ sv{
         }
         "meta:Amazon"{
             ld{"Amazonassommartid"}
-            lg{"amazonastid"}
+            lg{"Amazonastid"}
             ls{"Amazonasnormaltid"}
         }
         "meta:America_Central"{
-            ld{"Central, sommartid"}
+            ld{"centralnordamerikansk sommartid"}
             lg{"centralnordamerikansk tid"}
-            ls{"Central, normaltid"}
+            ls{"centralnordamerikansk normaltid"}
         }
         "meta:America_Eastern"{
             ld{"Eastern, sommartid"}
@@ -397,7 +499,7 @@ sv{
             ls{"västargentinsk normaltid"}
         }
         "meta:Armenia"{
-            ld{"armenisk somartid"}
+            ld{"armenisk sommartid"}
             lg{"armenisk tid"}
             ls{"armenisk normaltid"}
         }
@@ -449,7 +551,7 @@ sv{
         }
         "meta:Brasilia"{
             ld{"Brasiliasommartid"}
-            lg{"brasiliansk tid"}
+            lg{"Brasiliatid"}
             ls{"Brasilianormaltid"}
         }
         "meta:Brunei"{
@@ -525,17 +627,17 @@ sv{
             ls{"ecuadoriansk tid"}
         }
         "meta:Europe_Central"{
-            ld{"Centraleuropa, sommartid"}
+            ld{"centraleuropeisk sommartid"}
             lg{"centraleuropeisk tid"}
-            ls{"Centraleuropa, normaltid"}
+            ls{"centraleuropeisk normaltid"}
             sd{"CEST"}
             sg{"CET"}
             ss{"CET"}
         }
         "meta:Europe_Eastern"{
-            ld{"Östeuropa, sommartid"}
+            ld{"östeuropeisk sommartid"}
             lg{"östeuropeisk tid"}
-            ls{"Östeuropa, normaltid"}
+            ls{"östeuropeisk normaltid"}
             sd{"EEST"}
             sg{"EET"}
             ss{"EET"}
@@ -549,9 +651,9 @@ sv{
             ss{"WET"}
         }
         "meta:Falkland"{
-            ld{"falklandsöarnas sommartid"}
-            lg{"falklandsöarnas tid"}
-            ls{"falklandsöarnas normaltid"}
+            ld{"Falklandsöarnas sommartid"}
+            lg{"Falklandsöarnas tid"}
+            ls{"Falklandsöarnas normaltid"}
         }
         "meta:Fiji"{
             ld{"Fijisommartid"}
@@ -613,7 +715,7 @@ sv{
         }
         "meta:Hovd"{
             ld{"Hovdsommartid"}
-            lg{"Hovdtid"}
+            lg{"Chovdtid"}
             ls{"Hovdnormaltid"}
         }
         "meta:India"{
@@ -645,9 +747,9 @@ sv{
             ls{"Irkutsknormaltid"}
         }
         "meta:Israel"{
-            ld{"Israel, sommartid"}
+            ld{"israelisk sommartid"}
             lg{"israelisk tid"}
-            ls{"Israel, normaltid"}
+            ls{"israelisk normaltid"}
         }
         "meta:Japan"{
             ld{"japansk sommartid"}
@@ -813,9 +915,9 @@ sv{
             ls{"Enderburytid"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"S:t Pierre och Miquelonsommartid"}
+            ld{"S:t Pierre och Miquelon, sommartid"}
             lg{"S:t Pierre och Miquelontid"}
-            ls{"S:t Pierre och Miquelonnormalid"}
+            ls{"S:t Pierre och Miquelon, normaltid"}
         }
         "meta:Pitcairn"{
             ls{"Pitcairntid"}
@@ -887,7 +989,7 @@ sv{
             ls{"Tonganormaltid"}
         }
         "meta:Truk"{
-            ls{"Truktid"}
+            ls{"Chuuktid"}
         }
         "meta:Turkmenistan"{
             ld{"turkmensk sommartid"}
@@ -929,7 +1031,7 @@ sv{
             ls{"Vostoktid"}
         }
         "meta:Wake"{
-            ls{"Waketid"}
+            ls{"Wakeöarnas tid"}
         }
         "meta:Wallis"{
             ls{"Wallis- och Futunaöarnas tid"}
@@ -947,7 +1049,7 @@ sv{
         fallbackFormat{"{1} ({0})"}
         gmtFormat{"GMT{0}"}
         gmtZeroFormat{"GMT"}
-        hourFormat{"+HH:mm;-HH:mm"}
+        hourFormat{"+HH:mm;−HH:mm"}
         regionFormat{"{0}tid"}
     }
 }

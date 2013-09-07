@@ -228,7 +228,7 @@ it{
         PK{"Pakistan"}
         PL{"Polonia"}
         PM{"Saint Pierre e Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Isole Pitcairn"}
         PR{"Portorico"}
         PS{"Territori palestinesi"}
         PT{"Portogallo"}
@@ -281,7 +281,7 @@ it{
         TZ{"Tanzania"}
         UA{"Ucraina"}
         UG{"Uganda"}
-        UM{"Isole periferiche agli USA"}
+        UM{"Isole minori lontane dagli USA"}
         US{"Stati Uniti"}
         UY{"Uruguay"}
         UZ{"Uzbekistan"}
@@ -302,5 +302,5 @@ it{
         ZW{"Zimbabwe"}
         ZZ{"Regione non valida o sconosciuta"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

@@ -132,9 +132,9 @@ fo{
         VE{"Venesuela"}
         WS{"Sámoa"}
         YE{"Jemen"}
-        ZA{"Suðurafrika"}
+        ZA{"Suðurafrikalýðveldið"}
         ZM{"Sambia"}
         ZW{"Simbabvi"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

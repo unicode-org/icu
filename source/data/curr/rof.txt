@@ -221,7 +221,7 @@ rof{
         }
         ZMK{
             "ZMK",
-            "heleri sa Zambia (1968-2012)",
+            "heleri sa Zambia (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -232,5 +232,5 @@ rof{
             "heleri sa Zimbabwe",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

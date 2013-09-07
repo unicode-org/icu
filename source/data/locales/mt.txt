@@ -28,7 +28,7 @@ mt{
             }
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{
@@ -77,6 +77,15 @@ mt{
                         "Ħam",
                         "Ġim",
                         "Sib",
+                    }
+                    narrow{
+                        "Ħ",
+                        "T",
+                        "T",
+                        "E",
+                        "Ħ",
+                        "Ġ",
+                        "S",
                     }
                     wide{
                         "Il-Ħadd",
@@ -156,6 +165,20 @@ mt{
                         "N",
                         "D",
                     }
+                    wide{
+                        "Jannar",
+                        "Frar",
+                        "Marzu",
+                        "April",
+                        "Mejju",
+                        "Ġunju",
+                        "Lulju",
+                        "Awwissu",
+                        "Settembru",
+                        "Ottubru",
+                        "Novembru",
+                        "Diċembru",
+                    }
                 }
             }
             quarters{
@@ -166,11 +189,37 @@ mt{
                         "K3",
                         "K4",
                     }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
                     wide{
                         "K1",
                         "K2",
                         "K3",
                         "K4",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "K1",
+                        "K2",
+                        "K3",
+                        "K4",
+                    }
+                    narrow{
+                        "1",
+                        "2",
+                        "3",
+                        "4",
+                    }
+                    wide{
+                        "1el kwart",
+                        "2ni kwart",
+                        "3et kwart",
+                        "4ba' kwart",
                     }
                 }
             }
@@ -180,7 +229,7 @@ mt{
         day{
             dn{"Jum"}
             relative{
-                "-1"{"Lbieraħ"}
+                "-1"{"Ilbieraħ"}
                 "0"{"Illum"}
                 "1"{"Għada"}
             }
@@ -194,36 +243,63 @@ mt{
         minute{
             dn{"Minuta"}
         }
+        mon{
+            relative{
+                "-1"{"It-Tnejn li għadda"}
+                "1"{"It-Tnejn li ġej"}
+            }
+        }
         month{
             dn{"Xahar"}
+            relative{
+                "-1"{"Ix-xahar li għadda"}
+                "0"{"Dan ix-xahar"}
+                "1"{"Ix-xahar id-dieħel"}
+            }
         }
         second{
             dn{"Sekonda"}
         }
+        sun{
+            relative{
+                "-1"{"Il-Ħadd li għadda"}
+                "0"{"Dan il-Ħadd"}
+                "1"{"Il-Ħadd li ġej"}
+            }
+        }
         week{
             dn{"Ġimgħa"}
+            relative{
+                "-1"{"Il-ġimgħa li għaddiet"}
+                "0"{"Din il-ġimgħa"}
+                "1"{"Il-ġimgħa d-dieħla"}
+            }
         }
         weekday{
             dn{"Jum tal-Ġimgħa"}
         }
         year{
             dn{"Sena"}
+            relative{
+                "-1"{"Is-sena li għaddiet"}
+                "1"{"Is-sena d-dieħla"}
+            }
+            relativeTime{
+                past{
+                    few{"{0} snin ilu"}
+                    many{"{0} snin ilu"}
+                    one{"{0} sena ilu"}
+                    other{"{0} snin ilu"}
+                }
+            }
         }
         zone{
             dn{"Żona"}
         }
     }
     measurementSystemNames{
+        UK{"UK"}
+        US{"US"}
         metric{"Metriku"}
-    }
-    units{
-        duration{
-            year-past{
-                few{"{0} snin ilu"}
-                many{"{0} snin ilu"}
-                one{"{0} sena ilu"}
-                other{"{0} snin ilu"}
-            }
-        }
     }
 }

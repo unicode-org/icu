@@ -8,7 +8,7 @@
 // ***************************************************************************
 en_PK{
     %%Parent{"en_GB"}
-    Version{"2.0.86.27"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{
@@ -16,7 +16,7 @@ en_PK{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, d MMMM y G",
+                "EEEE d MMMM y G",
                 "d MMMM y G",
                 "dd-MMM-y G",
                 "dd/MM/y GGGGG",
@@ -33,7 +33,7 @@ en_PK{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, d MMMM y",
+                "EEEE d MMMM y",
                 "d MMMM y",
                 "dd-MMM-y",
                 "dd/MM/y",

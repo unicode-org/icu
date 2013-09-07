@@ -31,10 +31,10 @@ zu{
     Languages{
         ab{"isi-Abkhazian"}
         ach{"Isi-Acoli"}
-        af{"isiBhunu"}
+        af{"isi-Afrikaans"}
         ak{"I-Akan"}
         am{"isi-Amharic"}
-        ar{"isi-Alabhu"}
+        ar{"isi-Arabic"}
         as{"isi-Assamese"}
         ay{"isi-Aymara"}
         az{"isi-Azerbaijani"}
@@ -53,7 +53,7 @@ zu{
         cs{"isi-Czech"}
         cy{"isi-Welsh"}
         da{"isi-Danish"}
-        de{"isiJalimani"}
+        de{"isi-German"}
         de_AT{"isi-Austrian German"}
         de_CH{"isi-Swiss High German"}
         dv{"isi-Divehi"}
@@ -67,9 +67,10 @@ zu{
         en_GB{"i-British English"}
         en_US{"i-U.S. English"}
         eo{"isi-Esperanto"}
-        es{"isiSpeyini"}
+        es{"isi-Spanish"}
         es_419{"isi-Latin American Spanish"}
         es_ES{"Isipenishi saseYurophu"}
+        es_MX{"isi-Mexican Spanish"}
         et{"isi-Estonia"}
         eu{"isi-Basque"}
         fa{"isi-Persian"}
@@ -91,7 +92,7 @@ zu{
         ha{"isi-Hausa"}
         haw{"isi-Hawaiian"}
         he{"isi-Hebrew"}
-        hi{"isiHindi"}
+        hi{"isi-Hindi"}
         hr{"isi-Croatian"}
         ht{"isi-Haitian"}
         hu{"isi-Hungarian"}
@@ -281,6 +282,7 @@ zu{
             reformed{"Ukuhlunga okwenziwe kabusha"}
             search{"Usesho olujwayelekile"}
             searchjl{"Sesha nge-Hangul Ongwaqa Basekuqaleni"}
+            standard{"I-oda yokuhlunga ejwayelekile"}
             stroke{"Ukuhlunga kwe-Stroke"}
             traditional{"Ukuhlunga ngokisiko"}
             unihan{"Ukuhlunga kwe-Radical-Stroke"}
@@ -327,8 +329,14 @@ zu{
             vaii{"Izinhlazu Zezinombolo ze-Vai"}
         }
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
+    codePatterns{
+        language{"{0}"}
+        script{"{0}"}
+        territory{"{0}"}
+    }
     localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
         separator{"{0}, {1}"}
     }

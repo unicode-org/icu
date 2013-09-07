@@ -13,5 +13,10 @@ kl{
     Languages{
         kl{"kalaallisut"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
+    localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
+        pattern{"{0} ({1})"}
+        separator{"{0}, {1}"}
+    }
 }

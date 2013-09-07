@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/rbnf/es.xml
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/rbnf/es.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/es.xml
+ * ICU <specials> source: <path>/xml/rbnf/es.xml
  */
 es{
     RBNFRules{
@@ -149,7 +149,7 @@ es{
             "80: ochenta[ y >>];",
             "90: noventa[ y >>];",
             "100: cien;",
-            "101: cienta >>;",
+            "101: ciento >>;",
             "200: dos\u00ADcientas[ >>];",
             "300: tres\u00ADcientas[ >>];",
             "400: cuatro\u00ADcientas[ >>];",
@@ -316,5 +316,5 @@ es{
             "1000000000000000000: =#,##0=\u00AA;",
         }
     }
-    Version{"2.0.82.42"}
+    Version{"2.0.90.25"}
 }

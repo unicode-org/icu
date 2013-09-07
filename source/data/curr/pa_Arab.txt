@@ -10,6 +10,7 @@
  * ICU <specials> source: <path>/common/main/pa_Arab.xml
  */
 pa_Arab{
+    %%Parent{"root"}
     Currencies{
         EUR{
             "€",
@@ -24,5 +25,5 @@ pa_Arab{
             "روپئیہ",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.75"}
 }

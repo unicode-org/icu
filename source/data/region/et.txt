@@ -228,9 +228,9 @@ et{
         PK{"Pakistan"}
         PL{"Poola"}
         PM{"Saint Pierre ja Miquelon"}
-        PN{"Pitcairn"}
+        PN{"Pitcairni saared"}
         PR{"Puerto Rico"}
-        PS{"Palestiina ala"}
+        PS{"Palestiina alad"}
         PT{"Portugal"}
         PW{"Belau"}
         PY{"Paraguay"}
@@ -294,11 +294,13 @@ et{
         VU{"Vanuatu"}
         WF{"Wallis ja Futuna"}
         WS{"Samoa"}
+        XK{"Kosovo"}
         YE{"Jeemen"}
         YT{"Mayotte"}
         ZA{"Lõuna-Aafrika Vabariik"}
         ZM{"Sambia"}
         ZW{"Zimbabwe"}
+        ZZ{"Tundmatu piirkond"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

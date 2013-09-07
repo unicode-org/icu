@@ -80,7 +80,7 @@ ee{
         BY{"Belarus nutome"}
         BZ{"Belize nutome"}
         CA{"Kanada nutome"}
-        CC{"Kokos [Kiling] fudomekpo nutome"}
+        CC{"Kokos (Kiling) fudomekpo nutome"}
         CD{"Kongo Kinshasa nutome"}
         CF{"Titina Afrika repɔblik nutome"}
         CG{"Kongo Brazzaville nutome"}
@@ -191,7 +191,7 @@ ee{
         MH{"Marshal ƒudomekpowo nutome"}
         MK{"Makedonia nutome"}
         ML{"Mali nutome"}
-        MM{"Myanmar [Burma] nutome"}
+        MM{"Myanmar (Burma) nutome"}
         MN{"Mongolia nutome"}
         MO{"Macau SAR Tsaina nutome"}
         MP{"Dziehe Marina ƒudomekpowo nutome"}
@@ -296,5 +296,5 @@ ee{
         ZW{"Zimbabwe nutome"}
         ZZ{"nutome manya"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.93.8"}
 }

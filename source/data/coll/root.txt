@@ -11,7 +11,7 @@
  */
 root{
     UCARules:process(uca_rules){"../unidata/UCARules.txt"}
-    Version{"2.0.89.62"}
+    Version{"2.0.92.44"}
     collations{
         default{"standard"}
         eor{
@@ -556,7 +556,7 @@ root{
         }
         search{
             Sequence{
-                "[normalization on][suppressContractions [เ-ไ ເ-ໄ]]"
+                "[normalization on][suppressContractions [เ-ไ ເ-ໄ ꪵ ꪶ ꪹ ꪻ ꪼ]]"
                 "&'='<'≠'"
                 "&ا"
                 "<<<ﺎ<<<ﺍ"
