@@ -1,0 +1,3 @@
+# Copyright (C) 2008, International Business Machines Corporation and others. All Rights Reserved.
+# icu4j number formatter
+com.ibm.icu.impl.javaspi.text.NumberFormatProviderICU
