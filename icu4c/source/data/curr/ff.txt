@@ -221,7 +221,7 @@ ff{
         }
         ZMK{
             "ZMK",
-            "Kuwacca Sammbi (1968-2012)",
+            "Kuwacca Sammbi (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -232,5 +232,5 @@ ff{
             "Dolaar Simbaabuwe",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

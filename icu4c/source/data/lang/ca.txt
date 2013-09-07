@@ -20,7 +20,7 @@ ca{
         colNormalization{"Ordenació normalitzada"}
         colNumeric{"Ordenació numèrica"}
         colStrength{"Força de l'ordenació"}
-        collation{"ordre alfabètic"}
+        collation{"ordenació"}
         currency{"moneda"}
         numbers{"xifres"}
         timezone{"Zona horària"}
@@ -52,6 +52,7 @@ ca{
         anp{"angika"}
         apa{"llengua apatxe"}
         ar{"àrab"}
+        ar_001{"àrab estàndard modern"}
         arc{"arameu"}
         arn{"araucà"}
         arp{"arapaho"}
@@ -179,8 +180,9 @@ ca{
         enm{"anglès mitjà"}
         eo{"esperanto"}
         es{"espanyol"}
-        es_419{"espanyol d'Hispanoamèrica"}
-        es_ES{"espanyol d'Espanya"}
+        es_419{"espanyol hispanoamericà"}
+        es_ES{"espanyol europeu"}
+        es_MX{"espanyol de Mèxic"}
         et{"estonià"}
         eu{"basc"}
         ewo{"ewondo"}
@@ -360,7 +362,7 @@ ca{
         mis{"llengua miscel·lània"}
         mk{"macedoni"}
         mkh{"llengua monkhmer"}
-        ml{"malaialam"}
+        ml{"malaiàlam"}
         mn{"mongol"}
         mnc{"manxú"}
         mni{"manipurí"}
@@ -440,7 +442,7 @@ ca{
         pro{"provençal antic"}
         ps{"paixtu"}
         pt{"portuguès"}
-        pt_BR{"portuguès de Brasil"}
+        pt_BR{"portuguès del Brasil"}
         pt_PT{"portuguès de Portugal"}
         qu{"quítxua"}
         raj{"rajasthani"}
@@ -594,6 +596,7 @@ ca{
         zap{"zapoteca"}
         zbl{"símbols Bliss"}
         zen{"zenaga"}
+        zgh{"amazic estàndard marroquí"}
         zh{"xinès"}
         zh_Hans{"xinès simplificat"}
         zh_Hant{"xinès tradicional"}
@@ -605,6 +608,8 @@ ca{
     }
     LanguagesShort{
         az{"àzeri"}
+        en_GB{"anglès (GB)"}
+        en_US{"anglès (EUA)"}
     }
     Scripts{
         Afak{"afaka"}
@@ -620,7 +625,7 @@ ca{
         Blis{"símbols Bliss"}
         Bopo{"bopomofo"}
         Brah{"brahmi"}
-        Brai{"Braille"}
+        Brai{"braille"}
         Bugi{"buginès"}
         Buhd{"buhid"}
         Cakm{"chakma"}
@@ -692,7 +697,7 @@ ca{
         Mend{"mende"}
         Merc{"cursiva meroítica"}
         Mero{"meroític"}
-        Mlym{"malaialam"}
+        Mlym{"malaiàlam"}
         Mong{"mongol"}
         Moon{"moon"}
         Mroo{"mro"}
@@ -767,8 +772,8 @@ ca{
         Zzzz{"escriptura desconeguda"}
     }
     Scripts%stand-alone{
-        Hans{"xinès simplificat"}
-        Hant{"xinès tradicional"}
+        Hans{"han simplificat"}
+        Hant{"han tradicional"}
     }
     Types{
         calendar{
@@ -783,45 +788,82 @@ ca{
             islamic{"calendari musulmà"}
             islamic-civil{"calendari civil islàmic"}
             japanese{"calendari japonès"}
+            persian{"calendari persa"}
             roc{"calendari de la República de Xina"}
         }
         collation{
             big5han{"ordre del xinès tradicional - Big5"}
+            dictionary{"ordenació de diccionari"}
             ducet{"ordenació Unicode predeterminada"}
+            eor{"normes europees d'ordenació"}
             gb2312han{"ordre del xinès simplificat - GB2312"}
             phonebook{"ordre de la guia telefònica"}
             phonetic{"Ordenació fonètica"}
             pinyin{"ordre pinyin"}
+            reformed{"ordenació reformada"}
             search{"cerca de propòsit general"}
+            searchjl{"cerca per consonant inicial del hangul"}
+            standard{"ordenació estàndard"}
             stroke{"ordre dels traços"}
             traditional{"ordre tradicional"}
+            unihan{"ordenació per quantitat de traços radicals"}
         }
         numbers{
+            arab{"dígits àrabs i índics"}
+            arabext{"dígits àrabs i índics ampliats"}
+            armn{"numerals armenis"}
+            armnlow{"numerals armenis en minúscules"}
             bali{"dígits balinesos"}
+            beng{"dígits bengalins"}
             cham{"dígits txams"}
             deva{"dígits devanagaris"}
+            ethi{"numerals etiòpics"}
             finance{"Numerals financers"}
+            fullwide{"dígits d'amplada completa"}
+            geor{"numerals georgians"}
+            grek{"numerals grecs"}
+            greklow{"numerals grecs en minúscules"}
+            gujr{"dígits gujarati"}
+            guru{"dígits gurmukhi"}
+            hanidec{"numerals decimals xinesos"}
+            hans{"numerals xinesos simplificats"}
+            hansfin{"numerals financers xinesos simplificats"}
+            hant{"numerals xinesos tradicionals"}
+            hantfin{"numerals financers xinesos tradicionals"}
+            hebr{"numerals hebreus"}
             java{"dígits javanesos"}
+            jpan{"numerals japonesos"}
+            jpanfin{"numerals financers japonesos"}
             kali{"dígits kayah"}
+            khmr{"dígits khmer"}
+            knda{"dígits kannada"}
             lana{"dígits tai tham hora"}
             lanatham{"dígits tai tham tham"}
-            latn{"Nombres aràbics"}
+            laoo{"dígits lao"}
+            latn{"dígits aràbics"}
             lepc{"dígits lepcha"}
             limb{"dígits limbu"}
+            mlym{"dígits malaiàlam"}
             mong{"dígits mongols"}
             mtei{"dígits meitei mayek"}
+            mymr{"dígits de Myanmar"}
             mymrshan{"dígits shan de Myanmar"}
             native{"Dígits natius"}
             nkoo{"dígits n'ko"}
             olck{"dígits ol chiki"}
-            roman{"xifres romanes"}
-            romanlow{"xifres romanes minúscules"}
+            orya{"dígits oriya"}
+            roman{"numerals romans"}
+            romanlow{"numerals romans en minúscules"}
             saur{"dígits saurashtra"}
             sund{"dígits sudanesos"}
             talu{"dígits tai lue nous"}
             taml{"numerals tamils tradicionals"}
             tamldec{"dígits tamils"}
+            telu{"dígits telugu"}
+            thai{"dígits thai"}
+            tibt{"dígits tibetans"}
             traditional{"Numerals tradicionals"}
+            vaii{"dígits vai"}
         }
     }
     Variants{
@@ -861,7 +903,7 @@ ca{
         PETR1708{"ortografia russa 1708-1917"}
         PINYIN{"romanització Pinyin"}
         POLYTON{"politònic"}
-        POSIX{"ordenador"}
+        POSIX{"ordinador"}
         PUTER{"alt engiadinès"}
         REVISED{"ortografia revisada"}
         ROZAJ{"resià"}
@@ -882,7 +924,7 @@ ca{
         VALLADER{"baix engiadinès"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.0.87.47"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escriptura: {0}"}

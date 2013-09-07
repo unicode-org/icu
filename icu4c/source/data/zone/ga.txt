@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ga.xml
  */
 ga{
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Europe:Dublin"{
             ec{"Baile Átha Cliath"}
@@ -21,6 +21,21 @@ ga{
             ec{"Londain"}
             ld{"Am Samhraidh na Breataine"}
             sd{"ASB"}
+        }
+        "meta:Europe_Central"{
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
+        }
+        "meta:Europe_Eastern"{
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
+        }
+        "meta:Europe_Western"{
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:GMT"{
             ls{"Meán-Am Greenwich"}

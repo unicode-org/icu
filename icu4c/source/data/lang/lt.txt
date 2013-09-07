@@ -20,7 +20,7 @@ lt{
         colNormalization{"Normalizuotas rikiavimas"}
         colNumeric{"Skaitinis rikiavimas"}
         colStrength{"Rikiavimo intensyvumas"}
-        collation{"lyginimas"}
+        collation{"rikiavimas"}
         currency{"valiuta"}
         numbers{"skaičiai"}
         timezone{"Laiko juosta"}
@@ -52,6 +52,7 @@ lt{
         anp{"angikų"}
         apa{"apačių kalba"}
         ar{"arabų"}
+        ar_001{"šiuolaikinė standartinė arabų"}
         arc{"aramaikų"}
         arn{"araukanų"}
         arp{"arapahų"}
@@ -148,7 +149,7 @@ lt{
         day{"bidayuh kalba"}
         de{"vokiečių"}
         de_AT{"Austrijos vokiečių"}
-        de_CH{"aukštoji Šveicarijos vokiečių"}
+        de_CH{"Šveicarijos aukštutinė vokiečių"}
         del{"delavero"}
         den{"slave"}
         dgr{"dogribų"}
@@ -174,13 +175,14 @@ lt{
         en{"anglų"}
         en_AU{"Australijos anglų"}
         en_CA{"Kanados anglų"}
-        en_GB{"anglų (britų)"}
-        en_US{"anglų (amerikiečių)"}
+        en_GB{"Didžiosios Britanijos anglų"}
+        en_US{"Jungtinių Valstijų anglų"}
         enm{"Vidurio Anglijos"}
         eo{"esperanto"}
         es{"ispanų"}
         es_419{"Lotynų Amerikos ispanų"}
         es_ES{"Europos ispanų"}
+        es_MX{"Meksikos ispanų"}
         et{"estų"}
         eu{"baskų"}
         ewo{"evondo"}
@@ -189,7 +191,7 @@ lt{
         fat{"fanti"}
         ff{"fulahų"}
         fi{"suomių"}
-        fil{"tagalų"}
+        fil{"filipiniečių"}
         fiu{"finougrų kalba"}
         fj{"fidžių"}
         fo{"farerų"}
@@ -227,7 +229,7 @@ lt{
         gwi{"gvičino"}
         ha{"hausų"}
         hai{"haido"}
-        haw{"havajų"}
+        haw{"havajiečių"}
         he{"hebrajų"}
         hi{"hindi"}
         hil{"hiligainon"}
@@ -237,7 +239,7 @@ lt{
         ho{"hiri motu"}
         hr{"kroatų"}
         hsb{"viršutinė sorbian"}
-        ht{"haičio"}
+        ht{"Haičio"}
         hu{"vengrų"}
         hup{"hupa"}
         hy{"armėnų"}
@@ -245,7 +247,7 @@ lt{
         ia{"interlingva"}
         iba{"iban"}
         ibb{"ibibio"}
-        id{"indonieziečių"}
+        id{"indoneziečių"}
         ie{"interkalba"}
         ig{"igbų"}
         ii{"sičuan ji"}
@@ -386,10 +388,10 @@ lt{
         nai{"Šiaurės Amerikos indėnų kalba"}
         nap{"neapoliečių"}
         naq{"namų"}
-        nb{"Norvegijos būkmolų"}
+        nb{"Norvegijos rašytinė – būkmolų"}
         nd{"šiaurės ndebelų"}
         nds{"Žemutinės Vokietijos"}
-        ne{"nepalų"}
+        ne{"nepaliečių"}
         new{"nevari"}
         ng{"ndongų"}
         nia{"nias"}
@@ -457,7 +459,7 @@ lt{
         rup{"aromanių"}
         rw{"kinjarvanda"}
         rwk{"rwa"}
-        sa{"sanskrito"}
+        sa{"sanskritas"}
         sad{"sandavi"}
         sah{"jakutų"}
         sai{"Pietų Amerikos indėnų kalba"}
@@ -500,7 +502,7 @@ lt{
         sms{"skolt sami"}
         sn{"šona"}
         snk{"soninke"}
-        so{"somalių"}
+        so{"somaliečių"}
         sog{"sogdien"}
         son{"songhai"}
         sq{"albanų"}
@@ -516,7 +518,7 @@ lt{
         sus{"susu"}
         sux{"šumerų"}
         sv{"švedų"}
-        sw{"svahilių"}
+        sw{"suahilių"}
         swb{"Comorian"}
         swc{"Kongo svahili"}
         syc{"klasikinė siriečių"}
@@ -594,8 +596,9 @@ lt{
         zap{"zapotekų"}
         zbl{"„Bliss“ simbolių"}
         zen{"zenaga"}
+        zgh{"standartinė Maroko tamazigtų"}
         zh{"kinų"}
-        zh_Hans{"supaprastina kinų"}
+        zh_Hans{"supaprastintoji kinų"}
         zh_Hant{"tradicinė kinų"}
         znd{"zande"}
         zu{"zulų"}
@@ -605,6 +608,7 @@ lt{
     }
     LanguagesShort{
         az{"azeri"}
+        en_GB{"anglų (JK)"}
     }
     Scripts{
         Arab{"arabų"}
@@ -660,11 +664,11 @@ lt{
         Kana{"katakana"}
         Khar{"karošti"}
         Khmr{"khmerų"}
-        Knda{"kanadiečių"}
+        Knda{"kanadų"}
         Kore{"korėjiečių"}
         Kthi{"kaithi"}
         Lana{"lana"}
-        Laoo{"lao"}
+        Laoo{"laosiečių"}
         Latf{"fraktur lotynų"}
         Latg{"gėlų lotynų"}
         Latn{"lotynų"}
@@ -760,13 +764,14 @@ lt{
         collation{
             big5han{"įprasta kiniška rūšiavimo tvarka - Big5"}
             dictionary{"žodyno rūšiavimo tvarka"}
-            ducet{"numatytojo unikodo rūšiavimo tvarka"}
+            ducet{"numatytasis unikodo rikiavimas"}
             gb2312han{"supaprastinta kiniška rūšiavimo tvarka - GB2312"}
             phonebook{"telefonų knygos rūšiavimo tvarka"}
             phonetic{"Fonetinė rikiavimo tvarka"}
             pinyin{"supaprastinta kiniškų hieroglifų rūšiavimo tvarka"}
             reformed{"reformuota rūšiavimo tvarka"}
-            search{"bendro tikslo paieška"}
+            search{"bendroji paieška"}
+            standard{"standartinis rikiavimas"}
             stroke{"Įprasta kiniško požymio rūšiavimo tvarka"}
             traditional{"įprasta rūšiavimo tvarka"}
             unihan{"Šaknies ženklų ir brūkšnių rūšiavimo tvarka"}
@@ -803,9 +808,9 @@ lt{
             latn{"lotyniški skaitmenys"}
             mlym{"malajalių skaitmenys"}
             mong{"mongolų skaitmenys"}
-            mymr{"Mianmariečių k. skaitmenys"}
+            mymr{"mianmariečių skaitmenys"}
             native{"Vietiniai skaitmenys"}
-            orya{"Oriya skaitmenys"}
+            orya{"orijų skaitmenys"}
             roman{"romėniški skaitmenys"}
             romanlow{"romėniški skaitmenys mažosiomis raidėmis"}
             taml{"tradicinės tamilų skaitmenys"}
@@ -851,7 +856,7 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.88.30"}
+    Version{"2.0.93.19"}
     codePatterns{
         language{"Kalba: {0}"}
         script{"Rašmenys: {0}"}

@@ -9,10 +9,8 @@
 zh_Hans_SG{
     Countries{
         CP{"克利柏顿岛"}
-        FM{"密克罗尼西亚"}
-        GP{"瓜德罗普"}
         ME{"黑山"}
         PM{"圣皮埃尔和密克隆"}
     }
-    Version{"2.0.86.27"}
+    Version{"2.0.92.87"}
 }

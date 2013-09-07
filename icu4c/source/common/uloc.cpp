@@ -93,7 +93,7 @@ locale_getKeywords(const char *localeID,
  * The range qaa-qtz is reserved for local use
  */
 /* Generated using org.unicode.cldr.icu.GenerateISO639LanguageTables */
-/* ISO639 table version is 20130123 */
+/* ISO639 table version is 20130531 */
 static const char * const LANGUAGES[] = {
     "aa",  "ab",  "ace", "ach", "ada", "ady", "ae",  "af",  
     "afa", "afh", "agq", "ain", "ak",  "akk", "ale", "alg", 
@@ -173,8 +173,8 @@ static const char * const LANGUAGES[] = {
     "wa",  "wae", "wak", "wal", "war", "was", "wen", "wo",  
     "xal", "xh",  "xog", 
     "yao", "yap", "yav", "ybb", "yi",  "yo",  "ypk", "yue", 
-    "za",  "zap", "zbl", "zen", "zh",  "znd", "zu",  "zun", 
-    "zxx", "zza", 
+    "za",  "zap", "zbl", "zen", "zgh", "zh",  "znd", "zu",  
+    "zun", "zxx", "zza", 
 NULL,
     "in",  "iw",  "ji",  "jw",  "sh",    /* obsolete language codes */
 NULL
@@ -204,7 +204,7 @@ static const char* const REPLACEMENT_LANGUAGES[]={
  * the two lists in LANGUAGES.
  */
 /* Generated using org.unicode.cldr.icu.GenerateISO639LanguageTables */
-/* ISO639 table version is 20130123 */
+/* ISO639 table version is 20130531 */
 static const char * const LANGUAGES_3[] = {
     "aar", "abk", "ace", "ach", "ada", "ady", "ave", "afr", 
     "afa", "afh", "agq", "ain", "aka", "akk", "ale", "alg", 
@@ -284,8 +284,8 @@ static const char * const LANGUAGES_3[] = {
     "wln", "wae", "wak", "wal", "war", "was", "wen", "wol", 
     "xal", "xho", "xog", 
     "yao", "yap", "yav", "ybb", "yid", "yor", "ypk", "yue", 
-    "zha", "zap", "zbl", "zen", "zho", "znd", "zul", "zun", 
-    "zxx", "zza", 
+    "zha", "zap", "zbl", "zen", "zgh", "zho", "znd", "zul", 
+    "zun", "zxx", "zza", 
 NULL,
 /*  "in",  "iw",  "ji",  "jw",  "sh",                          */
     "ind", "heb", "yid", "jaw", "srp",

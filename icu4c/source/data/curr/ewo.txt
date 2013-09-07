@@ -205,7 +205,7 @@ ewo{
         }
         UGX{
             "UGX",
-            "Silíŋ yá Ugandá (1966-1987)",
+            "Silíŋ yá Ugandá (1966–1987)",
         }
         USD{
             "US$",
@@ -225,7 +225,7 @@ ewo{
         }
         ZMK{
             "ZMK",
-            "Kwatsa yá Zambí (1968-2012)",
+            "Kwatsa yá Zambí (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +236,5 @@ ewo{
             "Dolár yá Zimbabwé",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

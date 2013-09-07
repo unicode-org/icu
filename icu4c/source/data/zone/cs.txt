@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/cs.xml
  */
 cs{
-    Version{"2.0.85.93"}
+    Version{"2.0.92.98"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -87,6 +87,9 @@ cs{
         "America:El_Salvador"{
             ec{"Salvador"}
         }
+        "America:Godthab"{
+            ec{"Nuuk"}
+        }
         "America:Indiana:Knox"{
             ec{"Knox, Indiana"}
         }
@@ -123,6 +126,9 @@ cs{
         "America:Mexico_City"{
             ec{"México"}
         }
+        "America:Montreal"{
+            ec{"Montréal"}
+        }
         "America:North_Dakota:Beulah"{
             ec{"Beulah, Severní Dakota"}
         }
@@ -138,6 +144,9 @@ cs{
         "America:Sao_Paulo"{
             ec{"São Paulo"}
         }
+        "America:Scoresbysund"{
+            ec{"Ittoqqortoormiit"}
+        }
         "America:St_Barthelemy"{
             ec{"Saint-Barthélemy"}
         }
@@ -151,13 +160,13 @@ cs{
             ec{"Svatá Lucie"}
         }
         "America:St_Thomas"{
-            ec{"St. Thomas"}
+            ec{"Svatý Tomáš (Karibik)"}
         }
         "America:St_Vincent"{
             ec{"Svatý Vincenc"}
         }
         "Antarctica:DumontDUrville"{
-            ec{"Dumont d'Urville"}
+            ec{"Dumont d’Urville"}
         }
         "Antarctica:South_Pole"{
             ec{"Jižní pól"}
@@ -228,6 +237,9 @@ cs{
         "Asia:Katmandu"{
             ec{"Káthmándú"}
         }
+        "Asia:Khandyga"{
+            ec{"Chandyga"}
+        }
         "Asia:Krasnoyarsk"{
             ec{"Krasnojarsk"}
         }
@@ -242,6 +254,9 @@ cs{
         }
         "Asia:Nicosia"{
             ec{"Nikósie"}
+        }
+        "Asia:Novokuznetsk"{
+            ec{"Novokuzněck"}
         }
         "Asia:Oral"{
             ec{"Uralsk"}
@@ -337,7 +352,7 @@ cs{
             ec{"Neznámé město"}
         }
         "Europe:Athens"{
-            ec{"Atény"}
+            ec{"Athény"}
         }
         "Europe:Belgrade"{
             ec{"Bělehrad"}
@@ -522,24 +537,24 @@ cs{
             ls{"Amazonský standardní čas"}
         }
         "meta:America_Central"{
-            ld{"Centrální letní čas"}
-            lg{"Centrální čas"}
-            ls{"Centrální standardní čas"}
+            ld{"Severoamerický centrální letní čas"}
+            lg{"Severoamerický centrální čas"}
+            ls{"Severoamerický centrální standardní čas"}
         }
         "meta:America_Eastern"{
-            ld{"Východní letní čas"}
-            lg{"Východní čas"}
-            ls{"Východní standardní čas"}
+            ld{"Severoamerický východní letní čas"}
+            lg{"Severoamerický východní čas"}
+            ls{"Severoamerický východní standardní čas"}
         }
         "meta:America_Mountain"{
-            ld{"Horský letní čas"}
-            lg{"Horský čas"}
-            ls{"Horský standardní čas"}
+            ld{"Severoamerický horský letní čas"}
+            lg{"Severoamerický horský čas"}
+            ls{"Severoamerický horský standardní čas"}
         }
         "meta:America_Pacific"{
-            ld{"Pacifický letní čas"}
-            lg{"Pacifický čas"}
-            ls{"Pacifický standardní čas"}
+            ld{"Severoamerický pacifický letní čas"}
+            lg{"Severoamerický pacifický čas"}
+            ls{"Severoamerický pacifický standardní čas"}
         }
         "meta:Anadyr"{
             ld{"Anadyrský letní čas"}
@@ -849,6 +864,9 @@ cs{
         "meta:Lanka"{
             ls{"Srílanský čas"}
         }
+        "meta:Line_Islands"{
+            ls{"Čas Rovníkových ostrovů"}
+        }
         "meta:Lord_Howe"{
             ld{"Letní čas ostrova lorda Howa"}
             lg{"Čas ostrova lorda Howa"}
@@ -868,7 +886,7 @@ cs{
             ls{"Magadanský standardní čas"}
         }
         "meta:Malaysia"{
-            ls{"Malajsijský čas"}
+            ls{"Malajský čas"}
         }
         "meta:Maldives"{
             ls{"Maledivský čas"}
@@ -975,9 +993,9 @@ cs{
             ls{"Čas Fénixových ostrovů"}
         }
         "meta:Pierre_Miquelon"{
-            ld{"Svatý Pierre a Miquelon letní čas"}
-            lg{"Svatý Pierre a Miquelon čas"}
-            ls{"Svatý Pierre a Miquelon standardní čas"}
+            ld{"Pierre-miquelonský letní čas"}
+            lg{"Pierre-miquelonský čas"}
+            ls{"Pierre-miquelonský standardní čas"}
         }
         "meta:Pitcairn"{
             ls{"Čas Pitcairnova ostrova"}

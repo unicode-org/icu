@@ -2099,10 +2099,10 @@ static void TestFallback()
     (void)junk;    /* Suppress set but not used warning. */
 
     /* OK first one. This should be a Default value. */
-    subResource = ures_getByKey(fr_FR, "MeasurementSystem", NULL, &status);
+    subResource = ures_getByKey(fr_FR, "layout", NULL, &status);
     if(status != U_USING_DEFAULT_WARNING)
     {
-        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get CurrencyMap from fr_FR, got %s\n", 
+        log_data_err("Expected U_USING_DEFAULT_ERROR when trying to get layout from fr_FR, got %s\n", 
             u_errorName(status));
     }
 
@@ -2129,7 +2129,7 @@ static void TestFallback()
         UResourceBundle* tResB;
         UResourceBundle* zoneResource;
         const UChar* version = NULL;
-        static const UChar versionStr[] = { 0x0032, 0x002E, 0x0030, 0x002E, 0x0038, 0x0032, 0x002E, 0x0034, 0x0035, 0x0000};
+        static const UChar versionStr[] = { 0x0032, 0x002E, 0x0030, 0x002E, 0x0039, 0x0030, 0x002E, 0x0036, 0x0031, 0x0000};
 
         if(err != U_ZERO_ERROR){
             log_data_err("Expected U_ZERO_ERROR when trying to test no_NO_NY aliased to nn_NO for Version err=%s\n",u_errorName(err));
@@ -2623,10 +2623,10 @@ static void TestGetFunctionalEquivalentOf(const char *path, const char *resName,
 static void TestGetFunctionalEquivalent(void) {
     static const char * const collCases[] = {
         /*   avail   locale          equiv   */
-        "f",    "de_US_CALIFORNIA",               "de",
+        "f",    "sv_US_CALIFORNIA",               "sv",
         "f",    "zh_TW@collation=stroke",         "zh@collation=stroke", /* alias of zh_Hant_TW */
         "t",    "zh_Hant_TW@collation=stroke",    "zh@collation=stroke",
-        "f",    "de_CN@collation=pinyin",         "de",
+        "f",    "sv_CN@collation=pinyin",         "sv",
         "t",    "zh@collation=pinyin",            "zh",
         "f",    "zh_CN@collation=pinyin",         "zh", /* alias of zh_Hans_CN */
         "t",    "zh_Hans_CN@collation=pinyin",    "zh",
@@ -2640,8 +2640,8 @@ static void TestGetFunctionalEquivalent(void) {
         "t",    "zh_Hant_MO",                     "zh@collation=stroke",
         "f",    "zh_TW_STROKE",                   "zh@collation=stroke",
         "f",    "zh_TW_STROKE@collation=big5han", "zh@collation=big5han",
-        "f",    "de_CN@calendar=japanese",        "de",
-        "t",    "de@calendar=japanese",           "de",
+        "f",    "sv_CN@calendar=japanese",        "sv",
+        "t",    "sv@calendar=japanese",           "sv",
         "f",    "zh_TW@collation=big5han",        "zh@collation=big5han", /* alias of zh_Hant_TW */
         "t",    "zh_Hant_TW@collation=big5han",   "zh@collation=big5han",
         "f",    "zh_TW@collation=gb2312han",      "zh@collation=gb2312han", /* alias of zh_Hant_TW */
@@ -2654,8 +2654,8 @@ static void TestGetFunctionalEquivalent(void) {
         "t",    "zh@collation=gb2312han",         "zh@collation=gb2312han",
         "t",    "hi@collation=standard",          "hi",
         "f",    "hi_AU@collation=standard;currency=CHF;calendar=buddhist",    "hi",
-        "t",    "de_DE@collation=pinyin",         "de", /* bug 4582 tests */
-        "f",    "de_DE_BONN@collation=pinyin",    "de",
+        "t",    "sv_SE@collation=pinyin",         "sv", /* bug 4582 tests */
+        "f",    "sv_SE_BONN@collation=pinyin",    "sv",
         "t",    "nl",                             "root",
         "t",    "nl_NL",                          "root",
         "f",    "nl_NL_EEXT",                     "root",

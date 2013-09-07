@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/rbnf/mt.xml
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/rbnf/mt.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/mt.xml
+ * ICU <specials> source: <path>/xml/rbnf/mt.xml
  */
 mt{
     RBNFRules{
@@ -37,6 +37,8 @@ mt{
             "& ':' = '.' = ' ' = '-';",
         }
         SpelloutRules{
+            "%%lenient-parse:",
+            "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-numbering-year:",
             "x.x: =#,###0.#=;",
             "0: =%spellout-numbering=;",
@@ -205,8 +207,6 @@ mt{
             "%%and-typeA-masculine:",
             "0: ;",
             "1: ' u =%spellout-cardinal-masculine=;",
-            "%%lenient-parse:",
-            "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%spellout-cardinal-feminine:",
             "-x: minus >>;",
             "x.x: << punt >>;",
@@ -274,5 +274,5 @@ mt{
             "10: g\u0127axart;",
         }
     }
-    Version{"2.0.82.42"}
+    Version{"2.0.90.20"}
 }

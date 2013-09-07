@@ -173,7 +173,7 @@ nmg{
         }
         SDP{
             "SDP",
-            "Mɔn Sudan (1957-1998)",
+            "Mɔn Sudan (1957–1998)",
         }
         SHP{
             "SHP",
@@ -225,7 +225,7 @@ nmg{
         }
         ZMK{
             "ZMK",
-            "Mɔn Zambia (1968-2012)",
+            "Mɔn Zambia (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -233,8 +233,8 @@ nmg{
         }
         ZWD{
             "ZWD",
-            "Dɔ́llɔ Zimbabwǝ (1980-2008)",
+            "Dɔ́llɔ Zimbabwǝ (1980–2008)",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

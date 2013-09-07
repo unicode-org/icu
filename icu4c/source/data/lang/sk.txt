@@ -52,6 +52,7 @@ sk{
         anp{"angika"}
         apa{"apačské jazyky"}
         ar{"arabčina"}
+        ar_001{"moderná štandardná arabčina"}
         arc{"aramejčina"}
         arn{"araukánčina"}
         arp{"arapaho"}
@@ -181,6 +182,7 @@ sk{
         es{"španielčina"}
         es_419{"latinskoamerická španielčina"}
         es_ES{"iberská španielčina"}
+        es_MX{"mexická španielčina"}
         et{"estónčina"}
         eu{"baskičtina"}
         ewo{"ewondo"}
@@ -263,6 +265,7 @@ sk{
         iu{"inuktitut"}
         ja{"japončina"}
         jbo{"lojban"}
+        jgo{"ngomba"}
         jmc{"machame"}
         jpr{"židovská perzština"}
         jrb{"židovská arabčina"}
@@ -353,6 +356,7 @@ sk{
         mg{"malgaština"}
         mga{"stredná írčina"}
         mgh{"makhuwa-meetto"}
+        mgo{"meta’"}
         mh{"kajin-majol"}
         mi{"maorijčina"}
         mic{"mikmakčina"}
@@ -594,6 +598,7 @@ sk{
         zap{"zapotéčtina"}
         zbl{"systém Bliss"}
         zen{"zenaga"}
+        zgh{"štandardný marocký tamazight"}
         zh{"čínština"}
         zh_Hans{"zjednodušená čínština"}
         zh_Hant{"tradičná čínština"}
@@ -605,56 +610,58 @@ sk{
     }
     LanguagesShort{
         az{"azerčina"}
+        en_GB{"angličtina (UK)"}
+        en_US{"angličtina (USA)"}
     }
     Scripts{
         Arab{"arabské"}
-        Armn{"Arménsky"}
+        Armn{"arménske"}
         Bali{"balijský"}
-        Beng{"bengálsky"}
-        Bopo{"Bopomofo"}
-        Brai{"Braillovo písmo"}
-        Cyrl{"Cyrilika"}
-        Deva{"Dévanágarí"}
+        Beng{"bengálske"}
+        Bopo{"bopomofo"}
+        Brai{"braillovo písmo"}
+        Cyrl{"cyrilika"}
+        Deva{"dévanágarí"}
         Egyp{"egyptské hieroglyfy"}
-        Ethi{"etiópsky"}
-        Geor{"Gruzínčina"}
+        Ethi{"etiópske"}
+        Geor{"gruzínske"}
         Glag{"hlaholika"}
         Goth{"gotický"}
-        Grek{"Grécky"}
-        Gujr{"Gudžarátčina"}
-        Guru{"Gurmukhi"}
-        Hang{"Hangul"}
-        Hani{"Han"}
-        Hans{"zjednodušené"}
+        Grek{"grécke"}
+        Gujr{"gudžarátí"}
+        Guru{"gurmukhi"}
+        Hang{"hangul"}
+        Hani{"han"}
+        Hans{"Zjednodušené čínske"}
         Hant{"tradičné"}
-        Hebr{"hebrejský"}
-        Hira{"Hiragana"}
+        Hebr{"hebrejské"}
+        Hira{"hiragana"}
         Jpan{"japonské"}
-        Kana{"Katakana"}
-        Khmr{"kmérsky"}
-        Knda{"Kannadčina"}
+        Kana{"katakana"}
+        Khmr{"khmérske"}
+        Knda{"kannadské"}
         Kore{"kórejské"}
-        Laoo{"Lao"}
+        Laoo{"laoské"}
         Latn{"latinka"}
         Lina{"lineárna A"}
         Linb{"lineárna B"}
         Maya{"mayské hieroglyfy"}
-        Mlym{"Malajámčina"}
-        Mong{"mongolský"}
-        Mymr{"Mjanmarsko"}
-        Orya{"Oríjčina"}
+        Mlym{"malajálamske"}
+        Mong{"mongolské"}
+        Mymr{"mjanmarské"}
+        Orya{"uríjske"}
         Osma{"osmanský"}
         Runr{"Runové písmo"}
-        Sinh{"Sinhálske písmo"}
-        Taml{"Tamilčina"}
-        Telu{"Telugčina"}
-        Thaa{"Tána"}
-        Thai{"Thajčina"}
-        Tibt{"tibetský"}
-        Zsym{"Symboly"}
-        Zxxx{"Nepísané"}
-        Zyyy{"Obecný"}
-        Zzzz{"Neznáme písmo"}
+        Sinh{"sinhálske"}
+        Taml{"tamilské"}
+        Telu{"telugské"}
+        Thaa{"tána"}
+        Thai{"thajské"}
+        Tibt{"tibetské"}
+        Zsym{"symboly"}
+        Zxxx{"bez zápisu"}
+        Zyyy{"všeobecné"}
+        Zzzz{"neznáme písmo"}
     }
     Scripts%stand-alone{
         Hans{"han – zjednodušené"}
@@ -687,6 +694,7 @@ sk{
             reformed{"Reformované usporiadanie"}
             search{"Všeobecné vyhľadávanie"}
             searchjl{"Hľadať podľa počiatočnej spoluhlásky písma Hangul"}
+            standard{"Štandardné poradie"}
             stroke{"Tiedenie podľa ťahov"}
             traditional{"Tradičné"}
             unihan{"Usporiadanie podľa znakov radikál"}
@@ -737,7 +745,7 @@ sk{
     Variants{
         SCOTLAND{"škótska štandardná angličtina"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}

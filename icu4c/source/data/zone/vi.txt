@@ -10,13 +10,22 @@
  * ICU <specials> source: <path>/common/main/vi.xml
  */
 vi{
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Africa:Asmera"{
             ec{"Asmara"}
         }
+        "Africa:Sao_Tome"{
+            ec{"São Tomé"}
+        }
         "America:Coral_Harbour"{
             ec{"Atikokan"}
+        }
+        "America:Curacao"{
+            ec{"Curaçao"}
+        }
+        "America:Godthab"{
+            ec{"Nuuk"}
         }
         "America:Indiana:Knox"{
             ec{"Knox, Indiana"}
@@ -54,6 +63,12 @@ vi{
         "America:North_Dakota:New_Salem"{
             ec{"New Salem, Bắc Dakota"}
         }
+        "America:Scoresbysund"{
+            ec{"Ittoqqortoormiit"}
+        }
+        "America:St_Barthelemy"{
+            ec{"Saint Barthélemy"}
+        }
         "America:St_Johns"{
             ec{"St. John’s"}
         }
@@ -70,7 +85,7 @@ vi{
             ec{"St. Vincent"}
         }
         "Antarctica:DumontDUrville"{
-            ec{"Dumont D'Urville"}
+            ec{"Dumont d’Urville"}
         }
         "Asia:Calcutta"{
             ec{"Kolkata"}
@@ -121,7 +136,7 @@ vi{
             ec{"St. Helena"}
         }
         "Etc:Unknown"{
-            ec{"Không rõ"}
+            ec{"Thành phố Không xác định"}
         }
         "Europe:Dublin"{
             ld{"Giờ Mùa Hè Ai-len"}
@@ -217,9 +232,9 @@ vi{
             ls{"Giờ Chuẩn Aqtobe"}
         }
         "meta:Arabian"{
-            ld{"Giờ Mùa Hè A-rập"}
+            ld{"Giờ Mùa Hè Ả Rập"}
             lg{"Giờ Ả Rập"}
-            ls{"Giờ Chuẩn A-rập"}
+            ls{"Giờ chuẩn Ả Rập"}
         }
         "meta:Argentina"{
             ld{"Giờ Mùa Hè Argentina"}
@@ -343,7 +358,7 @@ vi{
             ls{"Giờ Davis"}
         }
         "meta:DumontDUrville"{
-            ls{"Giờ Dumont-d'Urville"}
+            ls{"Giờ Dumont-d’Urville"}
         }
         "meta:East_Timor"{
             ls{"Giờ Đông Timor"}
@@ -388,7 +403,7 @@ vi{
             ls{"Giờ Nam Cực và Nam Nước Pháp"}
         }
         "meta:GMT"{
-            ls{"Giờ Trung Bình Greenwich"}
+            ls{"Giờ Trung bình Greenwich"}
         }
         "meta:Galapagos"{
             ls{"Giờ Galapagos"}
@@ -448,13 +463,13 @@ vi{
             ls{"Giờ Đông Dương"}
         }
         "meta:Indonesia_Central"{
-            ls{"Giờ Miền Trung Indonexia"}
+            ls{"Giờ Miền Trung Indonesia"}
         }
         "meta:Indonesia_Eastern"{
-            ls{"Giờ Miền Đông Indonexia"}
+            ls{"Giờ Miền Đông Indonesia"}
         }
         "meta:Indonesia_Western"{
-            ls{"Giờ Miền Tây Indonexia"}
+            ls{"Giờ Miền Tây Indonesia"}
         }
         "meta:Iran"{
             ld{"Giờ Mùa Hè Iran"}
@@ -520,7 +535,7 @@ vi{
             ls{"Giờ Chuẩn Ma Cao"}
         }
         "meta:Macquarie"{
-            ls{"Giờ Macquarie"}
+            ls{"Giờ đảo Macquarie"}
         }
         "meta:Magadan"{
             ld{"Giờ mùa hè Magadan"}
@@ -563,6 +578,9 @@ vi{
         "meta:Nauru"{
             ls{"Giờ Nauru"}
         }
+        "meta:Nepal"{
+            ls{"Giờ Nepal"}
+        }
         "meta:New_Caledonia"{
             ld{"Giờ Mùa Hè New Caledonia"}
             lg{"Giờ New Caledonia"}
@@ -582,7 +600,7 @@ vi{
             ls{"Giờ Niue"}
         }
         "meta:Norfolk"{
-            ls{"Giờ Quần Đảo Norfolk"}
+            ls{"Giờ đảo Norfolk"}
         }
         "meta:Noronha"{
             ld{"Giờ Mùa Hè Fernando de Noronha"}
@@ -664,7 +682,7 @@ vi{
             ls{"Giờ Chuẩn Samara"}
         }
         "meta:Samoa"{
-            ld{"Giờ mùa hè Samoa"}
+            ld{"Giờ ban ngày Samoa"}
             lg{"Giờ Samoa"}
             ls{"Giờ Chuẩn Samoa"}
         }
@@ -672,7 +690,7 @@ vi{
             ls{"Giờ Seychelles"}
         }
         "meta:Singapore"{
-            ls{"Giờ Chuẩn Singapo"}
+            ls{"Giờ Singapore"}
         }
         "meta:Solomon"{
             ls{"Giờ Quần Đảo Solomon"}

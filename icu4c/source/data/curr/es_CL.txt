@@ -7,11 +7,16 @@
 // *
 // ***************************************************************************
 es_CL{
+    %%Parent{"es_419"}
     Currencies{
         CLP{
             "$",
             "peso chileno",
         }
+        USD{
+            "US$",
+            "dólar estadounidense",
+        }
     }
-    Version{"2.0.86.38"}
+    Version{"2.0.92.87"}
 }

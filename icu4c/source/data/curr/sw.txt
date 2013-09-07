@@ -413,7 +413,7 @@ sw{
         }
         MZM{
             "MZM",
-            "metikali ya Msumbiji",
+            "metikali ya Msumbiji (1980–2006)",
         }
         MZN{
             "MZN",
@@ -657,7 +657,7 @@ sw{
         }
         ZMK{
             "ZMK",
-            "kwacha ya Zambia (1968-2012)",
+            "kwacha ya Zambia (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -668,9 +668,19 @@ sw{
             "dola ya Zimbabwe",
         }
     }
+    CurrencyPlurals{
+        BMD{
+            one{"Dola ya Bermuda"}
+            other{"Dola ya Bermuda"}
+        }
+        MZM{
+            one{"metikali ya Msumbiji (1980–2006)"}
+            other{"metikali ya Msumbiji (1980–2006)"}
+        }
+    }
     CurrencyUnitPatterns{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

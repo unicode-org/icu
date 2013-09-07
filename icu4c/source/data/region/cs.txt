@@ -31,7 +31,7 @@ cs{
         039{"Jižní Evropa"}
         053{"Australasie"}
         054{"Melanésie"}
-        057{"Mikronésie oblast"}
+        057{"Mikronésie (region)"}
         061{"Polynésie"}
         142{"Asie"}
         143{"Střední Asie"}
@@ -41,7 +41,7 @@ cs{
         154{"Severní Evropa"}
         155{"Západní Evropa"}
         419{"Latinská Amerika"}
-        AC{"Ostrov Ascension"}
+        AC{"Ascension"}
         AD{"Andorra"}
         AE{"Spojené arabské emiráty"}
         AF{"Afghánistán"}
@@ -57,7 +57,7 @@ cs{
         AT{"Rakousko"}
         AU{"Austrálie"}
         AW{"Aruba"}
-        AX{"Alandy"}
+        AX{"Ålandy"}
         AZ{"Ázerbájdžán"}
         BA{"Bosna a Hercegovina"}
         BB{"Barbados"}
@@ -97,7 +97,7 @@ cs{
         CU{"Kuba"}
         CV{"Kapverdy"}
         CW{"Curaçao"}
-        CX{"Vánoční ostrovy"}
+        CX{"Vánoční ostrov"}
         CY{"Kypr"}
         CZ{"Česká republika"}
         DE{"Německo"}
@@ -167,7 +167,7 @@ cs{
         KH{"Kambodža"}
         KI{"Kiribati"}
         KM{"Komory"}
-        KN{"Svatý Kitts a Nevis"}
+        KN{"Svatý Kryštof a Nevis"}
         KP{"Severní Korea"}
         KR{"Jižní Korea"}
         KW{"Kuvajt"}
@@ -193,7 +193,7 @@ cs{
         MH{"Marshallovy ostrovy"}
         MK{"Makedonie"}
         ML{"Mali"}
-        MM{"Myanmar"}
+        MM{"Myanmar (Barma)"}
         MN{"Mongolsko"}
         MO{"Macao - ZAO Číny"}
         MP{"Severní Mariany"}
@@ -227,7 +227,7 @@ cs{
         PH{"Filipíny"}
         PK{"Pákistán"}
         PL{"Polsko"}
-        PM{"Svatý Pierre a Miquelon"}
+        PM{"Saint-Pierre a Miquelon"}
         PN{"Pitcairnovy ostrovy"}
         PR{"Portoriko"}
         PS{"Palestinská území"}
@@ -263,9 +263,9 @@ cs{
         SY{"Sýrie"}
         SZ{"Svazijsko"}
         TA{"Tristan da Cunha"}
-        TC{"Ostrovy Turks a Caicos"}
+        TC{"Turks a Caicos"}
         TD{"Čad"}
-        TF{"Francouzská jižní teritoria"}
+        TF{"Francouzská jižní území"}
         TG{"Togo"}
         TH{"Thajsko"}
         TJ{"Tádžikistán"}
@@ -302,5 +302,5 @@ cs{
         ZW{"Zimbabwe"}
         ZZ{"Neznámá oblast"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.98"}
 }

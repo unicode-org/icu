@@ -10,7 +10,8 @@
  * ICU <specials> source: <path>/common/main/sr_Latn.xml
  */
 sr_Latn{
-    Version{"2.0.86.81"}
+    %%Parent{"root"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abidžan"}
@@ -74,6 +75,9 @@ sr_Latn{
         }
         "Africa:Johannesburg"{
             ec{"Johanesburg"}
+        }
+        "Africa:Juba"{
+            ec{"Džuba"}
         }
         "Africa:Khartoum"{
             ec{"Kartum"}
@@ -147,6 +151,9 @@ sr_Latn{
         "America:Asuncion"{
             ec{"Asunsion"}
         }
+        "America:Bahia_Banderas"{
+            ec{"Baija Banderas"}
+        }
         "America:Blanc-Sablon"{
             ec{"Blank-Sejblon"}
         }
@@ -188,6 +195,9 @@ sr_Latn{
         }
         "America:Costa_Rica"{
             ec{"Kostarika"}
+        }
+        "America:Creston"{
+            ec{"Kreston"}
         }
         "America:Cuiaba"{
             ec{"Kuiaba"}
@@ -273,6 +283,9 @@ sr_Latn{
         "America:Kentucky:Monticello"{
             ec{"Montičelo, Kentaki"}
         }
+        "America:Kralendijk"{
+            ec{"Kralendajk"}
+        }
         "America:Los_Angeles"{
             ec{"Los Anđeles"}
         }
@@ -333,6 +346,9 @@ sr_Latn{
         "America:North_Dakota:New_Salem"{
             ec{"Novi Salem, Severna Datkoa"}
         }
+        "America:Ojinaga"{
+            ec{"Ohinaga"}
+        }
         "America:Paramaribo"{
             ec{"Paramirbo"}
         }
@@ -362,6 +378,9 @@ sr_Latn{
         }
         "America:Rio_Branco"{
             ec{"Rio Branko"}
+        }
+        "America:Santa_Isabel"{
+            ec{"Santa Izabel"}
         }
         "America:Santiago"{
             ec{"Santijago"}
@@ -431,6 +450,9 @@ sr_Latn{
         }
         "Antarctica:DumontDUrville"{
             ec{"Dimon d’Urvil"}
+        }
+        "Antarctica:Macquarie"{
+            ec{"Mekvori"}
         }
         "Antarctica:Mawson"{
             ec{"Moson"}
@@ -531,6 +553,9 @@ sr_Latn{
         "Asia:Katmandu"{
             ec{"Katmandu"}
         }
+        "Asia:Khandyga"{
+            ec{"Handiga"}
+        }
         "Asia:Krasnoyarsk"{
             ec{"Krasnojarsk"}
         }
@@ -551,6 +576,9 @@ sr_Latn{
         }
         "Asia:Nicosia"{
             ec{"Nikozija"}
+        }
+        "Asia:Novokuznetsk"{
+            ec{"Novokuznjeck"}
         }
         "Asia:Phnom_Penh"{
             ec{"Pnom Pen"}
@@ -696,6 +724,9 @@ sr_Latn{
         "Europe:Budapest"{
             ec{"Budimpešta"}
         }
+        "Europe:Busingen"{
+            ec{"Bisingen"}
+        }
         "Europe:Chisinau"{
             ec{"Kišinjev"}
         }
@@ -704,6 +735,7 @@ sr_Latn{
         }
         "Europe:Dublin"{
             ec{"Dablin"}
+            ld{"irsko letnje vreme"}
         }
         "Europe:Guernsey"{
             ec{"Gernzi"}
@@ -719,6 +751,9 @@ sr_Latn{
         }
         "Europe:Lisbon"{
             ec{"Lisabon"}
+        }
+        "Europe:London"{
+            ld{"britansko letnje vreme"}
         }
         "Europe:Luxembourg"{
             ec{"Luksemburg"}
@@ -1410,7 +1445,7 @@ sr_Latn{
             ls{"Južna Džordžija vreme"}
         }
         "meta:Suriname"{
-            ls{"Surinam vreme"}
+            ls{"Surinam"}
         }
         "meta:Syowa"{
             ls{"Šova vreme"}

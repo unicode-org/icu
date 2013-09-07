@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/xml/collation/de.xml
  */
 de{
-    Version{"2.0.89.0"}
+    Version{"2.0.92.44"}
     collations{
         phonebook{
             Sequence{
@@ -22,7 +22,7 @@ de{
         }
         search{
             Sequence{
-                "[normalization on][suppressContractions [เ-ไ ເ-ໄ]]"
+                "[normalization on][suppressContractions [เ-ไ ເ-ໄ ꪵ ꪶ ꪹ ꪻ ꪼ]]"
                 "&'='<'≠'"
                 "&ا"
                 "<<<ﺎ<<<ﺍ"
@@ -137,10 +137,6 @@ de{
                 "&OE<<ö<<<Ö"
                 "&UE<<ü<<<Ü"
             }
-            Version{"24"}
-        }
-        standard{
-            Sequence{""}
             Version{"24"}
         }
     }

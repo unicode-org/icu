@@ -225,7 +225,7 @@ kde{
         }
         ZMK{
             "ZMK",
-            "Kwacha ya Zambia (1968-2012)",
+            "Kwacha ya Zambia (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +236,5 @@ kde{
             "Dola ya Zimbabwe",
         }
     }
-    Version{"2.0.84.55"}
+    Version{"2.0.92.87"}
 }

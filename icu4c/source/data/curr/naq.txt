@@ -225,7 +225,7 @@ naq{
         }
         ZMK{
             "ZMK",
-            "Zambian Kwachab (1968-2012)",
+            "Zambian Kwachab (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +236,5 @@ naq{
             "Zimbabwe Dollari",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

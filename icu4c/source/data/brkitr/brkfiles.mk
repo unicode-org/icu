@@ -38,7 +38,8 @@ BRK_DICT_SOURCE = cjdict.txt khmerdict.txt laodict.txt thaidict.txt
 
 
 # List of break iterator files (brk).
-BRK_SOURCE = char.txt line.txt line_fi.txt line_ja.txt sent.txt sent_el.txt title.txt word.txt word_POSIX.txt
+BRK_SOURCE = char.txt line.txt line_fi.txt line_ja.txt\
+ sent.txt sent_el.txt title.txt word.txt word_POSIX.txt
 
 
 # Ordinary resources

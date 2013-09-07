@@ -131,7 +131,7 @@ mt{
         GU{"Gwam"}
         GW{"Ginea-Bissaw"}
         GY{"Gujana"}
-        HK{"Ħong Kong S.A.R., Ċina"}
+        HK{"Ħong Kong S.A.R. Ċina"}
         HM{"Heard Island and McDonald Islands"}
         HN{"Ħonduras"}
         HR{"Kroazja"}
@@ -216,7 +216,7 @@ mt{
         PM{"Saint Pierre and Miquelon"}
         PN{"Pitcairn"}
         PR{"Puerto Rico"}
-        PS{"Palestinian Territory"}
+        PS{"Territorju Palestinjan"}
         PT{"Portugall"}
         PW{"Palau"}
         PY{"Paragwaj"}
@@ -280,7 +280,7 @@ mt{
         ZA{"Afrika t’Isfel"}
         ZM{"Żambja"}
         ZW{"Żimbabwe"}
-        ZZ{"Reġjun Mhux Magħruf jew Mhux Validu"}
+        ZZ{"Reġjun Mhux Magħruf"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

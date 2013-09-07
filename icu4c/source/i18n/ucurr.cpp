@@ -50,7 +50,7 @@ typedef struct IsoCodeEntry {
 // defaults encoded in the meta data resource bundle.  If there is a
 // configuration/build error and these are not available, we use these
 // hard-coded defaults (which should be identical).
-static const int32_t LAST_RESORT_DATA[] = { 2, 0 };
+static const int32_t LAST_RESORT_DATA[] = { 2, 0, 2, 0 };
 
 // POW10[i] = 10^i, i=0..MAX_POW10
 static const int32_t POW10[] = { 1, 10, 100, 1000, 10000, 100000,
@@ -296,9 +296,11 @@ myUCharsToChars(char* resultOfLen4, const UChar* currency) {
 
 /**
  * Internal function to look up currency data.  Result is an array of
- * two integers.  The first is the fraction digits.  The second is the
+ * four integers.  The first is the fraction digits.  The second is the
  * rounding increment, or 0 if none.  The rounding increment is in
- * units of 10^(-fraction_digits).
+ * units of 10^(-fraction_digits).  The third and fourth are the same
+ * except that they are those used in cash transations ( cashDigits
+ * and cashRounding ).
  */
 static const int32_t*
 _findMetaData(const UChar* currency, UErrorCode& ec) {
@@ -339,7 +341,7 @@ _findMetaData(const UChar* currency, UErrorCode& ec) {
 
     int32_t len;
     const int32_t *data = ures_getIntVector(rb, &len, &ec);
-    if (U_FAILURE(ec) || len != 2) {
+    if (U_FAILURE(ec) || len != 4) {
         // Config/build error; return hard-coded defaults
         if (U_SUCCESS(ec)) {
             ec = U_INVALID_FORMAT_ERROR;

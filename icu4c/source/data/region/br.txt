@@ -72,7 +72,7 @@ br{
         BM{"Bermuda"}
         BN{"Brunei"}
         BO{"Bolivia"}
-        BQ{"Antilhez nederlandat"}
+        BQ{"Nederlandat Karib"}
         BR{"Brazil"}
         BS{"Bahamas"}
         BT{"Bhoutan"}
@@ -193,7 +193,7 @@ br{
         MH{"Inizi Marshall"}
         MK{"Makedonia"}
         ML{"Mali"}
-        MM{"Myanmar [Birmania]"}
+        MM{"Myanmar (Birmania)"}
         MN{"Mongolia"}
         MO{"Macau RMD Sina"}
         MP{"Inizi Mariana an Norzh"}
@@ -301,5 +301,5 @@ br{
         ZW{"Zimbabwe"}
         ZZ{"Rannved dianav"}
     }
-    Version{"2.0.82.57"}
+    Version{"2.0.92.75"}
 }

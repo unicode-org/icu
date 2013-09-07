@@ -701,9 +701,9 @@ root {
             }
         }
 
-        JapaneseKana-Latin/BGN {
+        Katakana-Latin/BGN {
             file {
-                resource:process(transliterator) {"JapaneseKana_Latin_BGN.txt"}
+                resource:process(transliterator) {"Katakana_Latin_BGN.txt"}
                 direction {"FORWARD"}
             }
         }
@@ -1644,6 +1644,19 @@ root {
             file {
                 resource:process(transliterator) {"tr_Upper.txt"}
                 direction {"FORWARD"}
+            }
+        }
+
+        uz_Cyrl-uz_Latn {
+            file {
+                resource:process(transliterator) {"uz_Cyrl_uz_Latn.txt"}
+                direction {"FORWARD"}
+            }
+        }
+        uz_Latn-uz_Cyrl {
+            file {
+                resource:process(transliterator) {"uz_Cyrl_uz_Latn.txt"}
+                direction {"REVERSE"}
             }
         }
 

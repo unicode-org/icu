@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/rbnf/fr_BE.xml
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/rbnf/fr_BE.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/fr_BE.xml
+ * ICU <specials> source: <path>/xml/rbnf/fr_BE.xml
  */
 fr_BE{
     RBNFRules{
@@ -47,11 +47,11 @@ fr_BE{
             "12: =%spellout-cardinal-masculine=;",
             "%%cents-m:",
             "0: s;",
-            "1: -=%spellout-cardinal-masculine=;",
+            "1: ' =%spellout-cardinal-masculine=;",
             "%%spellout-leading:",
             "0: =%spellout-cardinal-masculine=;",
-            "100: cent[->>];",
-            "200: <<-cent[->>];",
+            "100: cent[ >>];",
+            "200: << cent[ >>];",
             "1000: =%spellout-cardinal-masculine=;",
             "%spellout-cardinal-masculine:",
             "-x: moins >>;",
@@ -82,10 +82,10 @@ fr_BE{
             "70: septante[->%%et-un>];",
             "80: quatre-vingt>%%cents-m>;",
             "90: nonante[->%%et-un>];",
-            "100: cent[->>];",
-            "200: <<-cent>%%cents-m>;",
-            "1000: mille[->>];",
-            "2000: <%%spellout-leading<-mille[->>];",
+            "100: cent[ >>];",
+            "200: << cent>%%cents-m>;",
+            "1000: mille[ >>];",
+            "2000: <%%spellout-leading< mille[ >>];",
             "1000000: un million[ >>];",
             "2000000: <%%spellout-leading< millions[ >>];",
             "1000000000: un milliard[ >>];",
@@ -102,7 +102,7 @@ fr_BE{
             "12: =%spellout-cardinal-feminine=;",
             "%%cents-f:",
             "0: s;",
-            "1: -=%spellout-cardinal-feminine=;",
+            "1: ' =%spellout-cardinal-feminine=;",
             "%spellout-cardinal-feminine:",
             "-x: moins >>;",
             "x.x: << virgule >>;",
@@ -117,10 +117,10 @@ fr_BE{
             "70: septante[->%%et-une>];",
             "80: quatre-vingt>%%cents-f>;",
             "90: nonante[->%%et-une>];",
-            "100: cent[->>];",
-            "200: <%spellout-cardinal-masculine<-cent>%%cents-f>;",
-            "1000: mille[->>];",
-            "2000: <%%spellout-leading<-mille[->>];",
+            "100: cent[ >>];",
+            "200: <%spellout-cardinal-masculine< cent>%%cents-f>;",
+            "1000: mille[ >>];",
+            "2000: <%%spellout-leading< mille[ >>];",
             "1000000: un million[ >>];",
             "2000000: <%%spellout-leading< millions[ >>];",
             "1000000000: un milliard[ >>];",
@@ -138,9 +138,15 @@ fr_BE{
             "%%cents-o:",
             "0: i\u00E8me;",
             "1: -=%%et-unieme=;",
+            "2: ' =%%spellout-ordinal=;",
+            "11: -et-onzi\u00E8me;",
+            "12: ' =%%spellout-ordinal=;",
             "%%mille-o:",
             "0: i\u00E8me;",
             "1: e-=%%et-unieme=;",
+            "2: e =%%spellout-ordinal=;",
+            "11: e-et-onzi\u00E8me;",
+            "12: e =%%spellout-ordinal=;",
             "%%spellout-ordinal:",
             "1: uni\u00E8me;",
             "2: deuxi\u00E8me;",
@@ -175,13 +181,13 @@ fr_BE{
             "90: nonanti\u00E8me;",
             "91: nonante->%%et-unieme>;",
             "100: cent>%%cents-o>;",
-            "200: <%spellout-cardinal-masculine<-cent>%%cents-o>;",
+            "200: <%spellout-cardinal-masculine< cent>%%cents-o>;",
             "1000: mill>%%mille-o>;",
-            "2000: <%%spellout-leading<-mill>%%mille-o>;",
-            "1000000: <%%spellout-leading<-million>%%cents-o>;",
-            "1000000000: <%%spellout-leading<-milliard>%%cents-o>;",
-            "1000000000000: <%%spellout-leading<-billion>%%cents-o>;",
-            "1000000000000000: <%%spellout-leading<-billiard>%%cents-o>;",
+            "2000: <%%spellout-leading< mill>%%mille-o>;",
+            "1000000: <%%spellout-leading< million>%%cents-o>;",
+            "1000000000: <%%spellout-leading< milliard>%%cents-o>;",
+            "1000000000000: <%%spellout-leading< billion>%%cents-o>;",
+            "1000000000000000: <%%spellout-leading< billiard>%%cents-o>;",
             "1000000000000000000: =#,##0=;",
             "%spellout-ordinal-masculine-plural:",
             "0: =%spellout-ordinal-masculine=s;",
@@ -201,5 +207,5 @@ fr_BE{
             "2: =%%spellout-ordinal=;",
         }
     }
-    Version{"2.0.82.42"}
+    Version{"2.0.90.54"}
 }

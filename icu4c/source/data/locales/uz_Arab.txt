@@ -39,7 +39,7 @@ uz_Arab{
         }
         native{"arabext"}
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
     layout{
         characters{"right-to-left"}
     }

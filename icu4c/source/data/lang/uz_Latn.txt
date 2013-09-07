@@ -10,23 +10,5 @@
  * ICU <specials> source: <path>/common/main/uz_Latn.xml
  */
 uz_Latn{
-    Languages{
-        ar{"arabcha"}
-        de{"olmoncha"}
-        en{"inglizcha"}
-        es{"ispancha"}
-        fr{"fransuzcha"}
-        hi{"hindcha"}
-        it{"italyancha"}
-        ja{"yaponcha"}
-        pt{"portugalcha"}
-        ru{"ruscha"}
-        uz{"oʻzbekcha"}
-        zh{"xitoycha"}
-    }
-    Scripts{
-        Cyrl{"Kiril"}
-        Latn{"Lotin"}
-    }
-    Version{"2.0.82.45"}
+    Version{"2.0.91.29"}
 }

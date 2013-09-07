@@ -7,11 +7,8 @@
 // *
 // ***************************************************************************
 zh_Hans_SG{
-    Version{"2.0.86.27"}
+    Version{"2.0.92.87"}
     zoneStrings{
-        "America:Grand_Turk"{
-            ec{"大特克"}
-        }
         "America:Menominee"{
             ec{"梅诺米尼"}
         }
@@ -36,9 +33,6 @@ zh_Hans_SG{
         "Europe:Zaporozhye"{
             ec{"扎波罗什"}
         }
-        "Indian:Antananarivo"{
-            ec{"安塔那那利佛"}
-        }
         "meta:Cocos"{
             ls{"科科斯岛时间"}
         }
@@ -51,6 +45,9 @@ zh_Hans_SG{
         "meta:Gilbert_Islands"{
             ls{"吉尔柏特群岛时间"}
         }
+        "meta:Malaysia"{
+            ss{"MYT"}
+        }
         "meta:Phoenix_Islands"{
             ls{"凤凰岛时间"}
         }
@@ -58,6 +55,9 @@ zh_Hans_SG{
             ld{"圣皮埃尔和密克隆夏令时间"}
             lg{"圣皮埃尔和密克隆时间"}
             ls{"圣皮埃尔和密克隆标准时间"}
+        }
+        "meta:Singapore"{
+            ss{"SGT"}
         }
         "meta:South_Georgia"{
             ls{"南乔治亚时间"}

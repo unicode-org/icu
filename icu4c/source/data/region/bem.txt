@@ -13,5 +13,5 @@ bem{
     Countries{
         ZM{"Zambia"}
     }
-    Version{"2.0.84.55"}
+    Version{"2.0.92.87"}
 }

@@ -826,7 +826,7 @@ et{
         }
         VEB{
             "VEB",
-            "Venezuela bolívar (1871-2008)",
+            "Venezuela bolívar (1871–2008)",
         }
         VEF{
             "VEF",
@@ -938,7 +938,7 @@ et{
         }
         ZMK{
             "ZMK",
-            "Sambia kvatša (1968-2012)",
+            "Sambia kvatša (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -1543,8 +1543,8 @@ et{
             other{"Usbekistani sommi"}
         }
         VEB{
-            one{"Venezuela bolívar (1871-2008)"}
-            other{"Venezuela boliivarit (1871-2008)"}
+            one{"Venezuela bolívar (1871–2008)"}
+            other{"Venezuela boliivarit (1871–2008)"}
         }
         VEF{
             one{"Venezuela bolívar"}
@@ -1607,8 +1607,8 @@ et{
             other{"LAVi randi"}
         }
         ZMK{
-            one{"Sambia kvatša (1968-2012)"}
-            other{"Sambia kvatšat (1968-2012)"}
+            one{"Sambia kvatša (1968–2012)"}
+            other{"Sambia kvatšat (1968–2012)"}
         }
         ZMW{
             one{"Sambia kvatša"}
@@ -1619,5 +1619,5 @@ et{
         one{"{0} {1}"}
         other{"{0} {1}"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

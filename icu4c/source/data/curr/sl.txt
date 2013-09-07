@@ -204,7 +204,7 @@ sl{
             "belizejski dolar",
         }
         CAD{
-            "CA$",
+            "CAD",
             "kanadski dolar",
         }
         CDF{
@@ -645,7 +645,7 @@ sl{
         }
         MXP{
             "MXP",
-            "mehiški srebrni peso (1861-1992)",
+            "mehiški srebrni peso (1861–1992)",
         }
         MXV{
             "MXV",
@@ -957,7 +957,7 @@ sl{
         }
         VEB{
             "VEB",
-            "venezuelski bolivar (1871-2008)",
+            "venezuelski bolivar (1871–2008)",
         }
         VEF{
             "VEF",
@@ -1077,7 +1077,7 @@ sl{
         }
         ZMK{
             "ZMK",
-            "zambijska kvača (1968-2012)",
+            "zambijska kvača (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -1112,6 +1112,30 @@ sl{
             one{"bosansko-hercegovska konvertibilna marka"}
             other{"bosansko-hercegovskih konvertibilnih mark"}
             two{"bosansko-hercegovski konvertibilni marki"}
+        }
+        BMD{
+            few{"bermudski dolar"}
+            one{"bermudski dolar"}
+            other{"bermudski dolar"}
+            two{"bermudski dolar"}
+        }
+        BZD{
+            few{"belizejski dolar"}
+            one{"belizejski dolar"}
+            other{"belizejski dolar"}
+            two{"belizejski dolar"}
+        }
+        CAD{
+            few{"kanadski dolar"}
+            one{"kanadski dolar"}
+            other{"kanadski dolar"}
+            two{"kanadski dolar"}
+        }
+        CRC{
+            few{"kostariški kolon"}
+            one{"kostariški kolon"}
+            other{"kostariški kolon"}
+            two{"kostariški kolon"}
         }
         DKK{
             few{"danske krone"}
@@ -1150,5 +1174,5 @@ sl{
         other{"{0} {1}"}
         two{"{0} {1}"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

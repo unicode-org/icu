@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/de.xml
  */
 de{
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -39,11 +39,17 @@ de{
         "Africa:Khartoum"{
             ec{"Khartum"}
         }
+        "Africa:Lome"{
+            ec{"Lomé"}
+        }
         "Africa:Mogadishu"{
             ec{"Mogadischu"}
         }
         "Africa:Ouagadougou"{
             ec{"Wagadugu"}
+        }
+        "Africa:Porto-Novo"{
+            ec{"Porto Novo"}
         }
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -53,6 +59,9 @@ de{
         }
         "America:Asuncion"{
             ec{"Asunción"}
+        }
+        "America:Bogota"{
+            ec{"Bogotá"}
         }
         "America:Cayman"{
             ec{"Kaimaninseln"}
@@ -65,6 +74,9 @@ de{
         }
         "America:El_Salvador"{
             ec{"Salvador"}
+        }
+        "America:Godthab"{
+            ec{"Nuuk"}
         }
         "America:Havana"{
             ec{"Havanna"}
@@ -113,6 +125,12 @@ de{
         }
         "America:Port_of_Spain"{
             ec{"Port-of-Spain"}
+        }
+        "America:Sao_Paulo"{
+            ec{"São Paulo"}
+        }
+        "America:Scoresbysund"{
+            ec{"Ittoqqortoormiit"}
         }
         "America:St_Barthelemy"{
             ec{"Saint-Barthélemy"}
@@ -186,6 +204,9 @@ de{
         "Asia:Nicosia"{
             ec{"Nikosia"}
         }
+        "Asia:Novokuznetsk"{
+            ec{"Nowokuznetsk"}
+        }
         "Asia:Novosibirsk"{
             ec{"Nowosibirsk"}
         }
@@ -249,6 +270,9 @@ de{
         "Atlantic:Faeroe"{
             ec{"Färöer"}
         }
+        "Atlantic:Reykjavik"{
+            ec{"Reyk­ja­vík"}
+        }
         "Atlantic:South_Georgia"{
             ec{"Süd-Georgien"}
         }
@@ -269,6 +293,9 @@ de{
         }
         "Europe:Bucharest"{
             ec{"Bukarest"}
+        }
+        "Europe:Busingen"{
+            ec{"Büsingen"}
         }
         "Europe:Chisinau"{
             ec{"Kischinau"}
@@ -640,9 +667,9 @@ de{
             ls{"Hong-Kong-Normalzeit"}
         }
         "meta:Hovd"{
-            ld{"Hovd-Sommerzeit"}
-            lg{"Hovd-Zeit"}
-            ls{"Hovd-Normalzeit"}
+            ld{"Chowd-Sommerzeit"}
+            lg{"Chowd-Zeit"}
+            ls{"Chowd-Normalzeit"}
         }
         "meta:India"{
             ls{"Indische Zeit"}
@@ -783,17 +810,17 @@ de{
             ls{"Niue-Zeit"}
         }
         "meta:Norfolk"{
-            ls{"Norfolkinseln-Zeit"}
+            ls{"Norfolkinsel-Zeit"}
         }
         "meta:Noronha"{
-            ld{"Fernando de Noronha Sommerzeit"}
+            ld{"Fernando de Noronha-Sommerzeit"}
             lg{"Fernando de Noronha-Zeit"}
             ls{"Fernando de Noronha-Normalzeit"}
         }
         "meta:Novosibirsk"{
-            ld{"Novosibirsk-Sommerzeit"}
-            lg{"Novosibirsk-Zeit"}
-            ls{"Novosibirsk-Normalzeit"}
+            ld{"Nowosibirsk-Sommerzeit"}
+            lg{"Nowosibirsk-Zeit"}
+            ls{"Nowosibirsk-Normalzeit"}
         }
         "meta:Omsk"{
             ld{"Omsk-Sommerzeit"}
@@ -841,7 +868,7 @@ de{
             ls{"Ponape-Zeit"}
         }
         "meta:Reunion"{
-            ls{"Reunion-Zeit"}
+            ls{"Réunion-Zeit"}
         }
         "meta:Rothera"{
             ls{"Rothera-Zeit"}
@@ -864,6 +891,9 @@ de{
         "meta:Seychelles"{
             ls{"Seychellen-Zeit"}
         }
+        "meta:Singapore"{
+            ls{"Singapur-Zeit"}
+        }
         "meta:Solomon"{
             ls{"Salomoninseln-Zeit"}
         }
@@ -880,9 +910,9 @@ de{
             ls{"Tahiti-Zeit"}
         }
         "meta:Taipei"{
-            ld{"Taipei-Sommerzeit"}
-            lg{"Taipei-Zeit"}
-            ls{"Taipei-Normalzeit"}
+            ld{"Taipeh-Sommerzeit"}
+            lg{"Taipeh-Zeit"}
+            ls{"Taipeh-Normalzeit"}
         }
         "meta:Tajikistan"{
             ls{"Tadschikistan-Zeit"}
@@ -935,7 +965,7 @@ de{
             ls{"Wolgograd-Normalzeit"}
         }
         "meta:Vostok"{
-            ls{"Vostok-Zeit"}
+            ls{"Wostok-Zeit"}
         }
         "meta:Wake"{
             ls{"Wake-Insel-Zeit"}
@@ -944,9 +974,9 @@ de{
             ls{"Wallis-und-Futuna-Zeit"}
         }
         "meta:Yakutsk"{
-            ld{"Yakutsk-Sommerzeit"}
-            lg{"Yakutsk-Zeit"}
-            ls{"Yakutsk-Normalzeit"}
+            ld{"Jakutsk-Sommerzeit"}
+            lg{"Jakutsk-Zeit"}
+            ls{"Jakutsk-Normalzeit"}
         }
         "meta:Yekaterinburg"{
             ld{"Jekaterinburg-Sommerzeit"}

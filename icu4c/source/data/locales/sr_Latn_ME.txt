@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 sr_Latn_ME{
-    Version{"2.0.82.45"}
+    Version{"2.0.90.61"}
     calendar{
         generic{
             DateTimePatterns{
@@ -18,7 +18,7 @@ sr_Latn_ME{
                 "EEEE, dd. MMMM y. G",
                 "d.MM.y. G",
                 "dd.MM.y. G",
-                "d.M.yy. GGGGG",
+                "d.M.y. GGGGG",
                 "{1} {0}",
                 "{1} {0}",
                 "{1} {0}",

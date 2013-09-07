@@ -225,7 +225,7 @@ bas{
         }
         ZMK{
             "ZMK",
-            "Kwàca sàmbià (1968-2012)",
+            "Kwàca sàmbià (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +236,5 @@ bas{
             "Dɔ̀lâr sìmbàbwê",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

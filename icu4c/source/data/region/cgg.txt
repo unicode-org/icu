@@ -235,5 +235,5 @@ cgg{
         ZM{"Zambia"}
         ZW{"Zimbabwe"}
     }
-    Version{"2.0.85.33"}
+    Version{"2.0.92.87"}
 }

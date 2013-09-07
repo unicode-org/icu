@@ -43,10 +43,6 @@ ak{
             "CDF",
             "Kongo Frank",
         }
-        CHF{
-            "CHF",
-            "Sweden Frank",
-        }
         CNY{
             "CN¥",
             "Yuan",
@@ -85,7 +81,7 @@ ak{
         }
         GHC{
             "GHC",
-            "Ghana Sidi (1979-2007)",
+            "Ghana Sidi (1979–2007)",
         }
         GHS{
             "GH₵",
@@ -225,7 +221,7 @@ ak{
         }
         ZMK{
             "ZMK",
-            "Zambia Kwacha (1968-2012)",
+            "Zambia Kwacha (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +232,5 @@ ak{
             "Zimbabwe Dɔla",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

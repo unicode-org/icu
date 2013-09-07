@@ -221,7 +221,7 @@ xog{
         }
         ZMK{
             "ZMK",
-            "Kwaca ey'eZambya (1968-2012)",
+            "Kwaca ey'eZambya (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -232,5 +232,5 @@ xog{
             "Doola ey'eZimbabwe",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

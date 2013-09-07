@@ -11,7 +11,7 @@
  */
 lv{
     Keys{
-        calendar{"kalendārs"}
+        calendar{"Kalendārs"}
         colAlternate{"Kārtošana, ignorējot simbolus"}
         colBackwards{"Diakritisko zīmju kārtošana apgrieztā secībā"}
         colCaseFirst{"Lielo/mazo burtu kārtošana"}
@@ -52,6 +52,7 @@ lv{
         anp{"angika"}
         apa{"apaču valodas"}
         ar{"arābu"}
+        ar_001{"mūsdienu standarta arābu"}
         arc{"aramiešu"}
         arn{"araukāņu"}
         arp{"arapahu"}
@@ -181,6 +182,7 @@ lv{
         es{"spāņu"}
         es_419{"Latīņamerikas spāņu"}
         es_ES{"Eiropas spāņu"}
+        es_MX{"Meksikas spāņu"}
         et{"igauņu"}
         eu{"basku"}
         ewo{"evondu"}
@@ -263,6 +265,7 @@ lv{
         iu{"inuītu"}
         ja{"japāņu"}
         jbo{"ložbans"}
+        jgo{"jgo"}
         jmc{"mačamu"}
         jpr{"jūdpersiešu"}
         jrb{"jūdarābu"}
@@ -353,6 +356,7 @@ lv{
         mg{"malagasu"}
         mga{"vidusīru"}
         mgh{"makua-meetto"}
+        mgo{"mgo"}
         mh{"māršaliešu"}
         mi{"maoru"}
         mic{"mikmaku"}
@@ -594,6 +598,7 @@ lv{
         zap{"sapoteku"}
         zbl{"blissimbolika"}
         zen{"zenagu"}
+        zgh{"standarta marokāņu berberu"}
         zh{"ķīniešu"}
         zh_Hans{"ķīniešu vienkāršotā"}
         zh_Hant{"ķīniešu tradicionālā"}
@@ -605,6 +610,7 @@ lv{
     }
     LanguagesShort{
         az{"azerbaidžāņu"}
+        en_US{"angļu (ASV)"}
     }
     Scripts{
         Arab{"arābu"}
@@ -644,7 +650,7 @@ lv{
         Khmr{"khmeru"}
         Knda{"kannaru"}
         Kore{"korejiešu"}
-        Laoo{"lao"}
+        Laoo{"laosiešu"}
         Latn{"latīņu"}
         Lina{"lineārā A"}
         Linb{"lineārā B"}
@@ -661,7 +667,7 @@ lv{
         Roro{"rongorongo"}
         Runr{"rūnu raksts"}
         Samr{"samariešu"}
-        Sinh{"sinhalas"}
+        Sinh{"singāļu"}
         Sund{"zundu"}
         Syrc{"sīriešu"}
         Syrj{"rietumsīriešu"}
@@ -713,6 +719,7 @@ lv{
             reformed{"Reformētā kārtošanas secība"}
             search{"Vispārīga meklēšana"}
             searchjl{"Meklēt pēc Hangul sākuma līdzskaņa"}
+            standard{"Standarta kārtošanas secība"}
             stroke{"Stroke kārtošanas secība"}
             traditional{"tradicionālā kārtošanas secība"}
             unihan{"Radikālā kārtošanas secība pēc vilkumu skaita"}
@@ -781,7 +788,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.0.88.42"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}

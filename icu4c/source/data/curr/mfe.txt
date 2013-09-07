@@ -225,7 +225,7 @@ mfe{
         }
         ZMK{
             "ZMK",
-            "kwacha zanbien (1968-2012)",
+            "kwacha zanbien (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -236,5 +236,5 @@ mfe{
             "dolar zimbawe",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.75"}
 }

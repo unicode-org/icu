@@ -3904,6 +3904,10 @@ structLocale:table(nofallback){
             2,
             2,
         }
+        tense:intvector{  
+            2,
+            2,
+        }
         type:intvector{  
             2,
             2,
@@ -3914,6 +3918,11 @@ structLocale:table(nofallback){
         quotationEnd{""}
         alternateQuotationEnd{""}
         alternateQuotationStart{""}
+    }
+    durationUnits{
+        hm{""}
+        hms{""}
+        ms{""}
     }
     fields{
         day{
@@ -3926,6 +3935,24 @@ structLocale:table(nofallback){
                 "1"{""}
                 "2"{""}
                 "3"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         dayperiod{
@@ -3958,6 +3985,24 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         minute{
             dn{"Minute"}
@@ -3965,6 +4010,24 @@ structLocale:table(nofallback){
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         mon{
@@ -3981,6 +4044,24 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         sat{
             relative{
@@ -3995,6 +4076,24 @@ structLocale:table(nofallback){
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         sun{
@@ -4032,6 +4131,24 @@ structLocale:table(nofallback){
                 "0"{""}
                 "1"{""}
             }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+            }
         }
         weekday{
             dn{"Day of the Week"}
@@ -4047,6 +4164,24 @@ structLocale:table(nofallback){
                 "-1"{""}
                 "0"{""}
                 "1"{""}
+            }
+            relativeTime{
+                future{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
+                past{
+                    zero{""}
+                    one{""}
+                    two{""}
+                    few{""}
+                    many{""}
+                    other{""}
+                }
             }
         }
         zone{
@@ -4646,6 +4781,7 @@ structLocale:table(nofallback){
         zap{""}
         zbl{""}
         zen{""}
+        zgh{""}
         zh{""}
         zh_Hans{""}
         zh_Hant{""}
@@ -4666,6 +4802,7 @@ structLocale:table(nofallback){
         arab{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -4892,6 +5029,7 @@ structLocale:table(nofallback){
         arabext{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -5118,6 +5256,7 @@ structLocale:table(nofallback){
         bali{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -5344,6 +5483,7 @@ structLocale:table(nofallback){
         beng{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -5570,6 +5710,7 @@ structLocale:table(nofallback){
         cham{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -5797,6 +5938,7 @@ structLocale:table(nofallback){
         deva{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -6247,6 +6389,7 @@ structLocale:table(nofallback){
         gujr{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -6473,6 +6616,7 @@ structLocale:table(nofallback){
         guru{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -6699,6 +6843,7 @@ structLocale:table(nofallback){
         hanidec{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -6925,6 +7070,7 @@ structLocale:table(nofallback){
         java{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -7151,6 +7297,7 @@ structLocale:table(nofallback){
         kali{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -7377,6 +7524,7 @@ structLocale:table(nofallback){
         khmr{
              miscPatterns{
                 atLeast{""}
+                range{""}
             }
            patterns{
                 currencyFormat{""}
@@ -7603,6 +7751,7 @@ structLocale:table(nofallback){
         knda{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -7829,6 +7978,7 @@ structLocale:table(nofallback){
         lana{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -8278,6 +8428,7 @@ structLocale:table(nofallback){
         laoo{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -8504,6 +8655,7 @@ structLocale:table(nofallback){
         latn{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -8730,6 +8882,7 @@ structLocale:table(nofallback){
         lepc{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -8956,6 +9109,7 @@ structLocale:table(nofallback){
         limb{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -9182,6 +9336,7 @@ structLocale:table(nofallback){
         mlym{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -9408,6 +9563,7 @@ structLocale:table(nofallback){
         mong{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -9634,6 +9790,7 @@ structLocale:table(nofallback){
         mtei{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -9860,6 +10017,7 @@ structLocale:table(nofallback){
         mymr{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -10310,6 +10468,7 @@ structLocale:table(nofallback){
         nkoo{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -10536,6 +10695,7 @@ structLocale:table(nofallback){
         olck{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -10762,6 +10922,7 @@ structLocale:table(nofallback){
         orya{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -10988,6 +11149,7 @@ structLocale:table(nofallback){
         saur{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -11214,6 +11376,7 @@ structLocale:table(nofallback){
         sund{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -11440,6 +11603,7 @@ structLocale:table(nofallback){
         talu{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -11666,6 +11830,7 @@ structLocale:table(nofallback){
         tamldec{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -11892,6 +12057,7 @@ structLocale:table(nofallback){
         telu{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -12118,6 +12284,7 @@ structLocale:table(nofallback){
         thai{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -12344,6 +12511,7 @@ structLocale:table(nofallback){
         tibt{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -12571,6 +12739,7 @@ structLocale:table(nofallback){
         vaii{
             miscPatterns{
                 atLeast{""}
+                range{""}
             }
             patterns{
                 currencyFormat{""}
@@ -12940,6 +13109,7 @@ structLocale:table(nofallback){
             buddhist{""}
             chinese{""}
             coptic{""}
+            dangi{""}
             ethiopic{""}
             ethiopic-amete-alem{""}
             gregorian{""}
@@ -13765,6 +13935,375 @@ structLocale:table(nofallback){
                         "",
                         "",
                         "",
+                    }
+                }
+            }
+        }
+        dangi{
+            AmPmMarkers{
+                "",
+                "",
+            }
+            availableFormats{
+                HHmm{""}
+                HHmmss{""}
+                KKmm{"KK:mm a"}
+                KKmmss{"KK:mm:ss a"}
+                MMMM{""}
+                MMMdd{""}
+                mmssSS{""}
+                ww{""}
+                yyMM{""}
+                yyMMMEEEd{""}
+                yyMMMd{""}
+                yyMd{""}
+                yyQQQQ{""}
+            }
+            DateTimePatterns{
+                "",
+                "",
+                "",
+                "",
+                "A2",
+                "A2",
+                "A2",
+                "A2",
+                "",
+                "A4",
+                "A4",
+                "A4",
+                "A4",
+            }
+            cyclicNameSets{
+                dayParts{
+                    format{
+                        abbreviated{
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                        }
+                    }
+                }
+                years{
+                    format{
+                        abbreviated{
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                        }
+                    }
+                }
+                zodiacs{
+                    format{
+                        abbreviated{
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                        }
+                    }
+                }
+            }
+            intervalFormats{
+                H{
+                    H{""}
+                }
+                Hm{
+                    H{""}
+                    m{""}
+                }
+                Hmv{
+                    H{""}
+                    m{""}
+                }
+                Hv{
+                    H{""}
+                }
+                M{
+                    M{""}
+                }
+                MEd{
+                    M{""}
+                    d{""}
+                }
+                MMM{
+                    M{""}
+                }
+                MMMEd{
+                    M{""}
+                    d{""}
+                }
+                MMMEEEEd{
+                    M{""}
+                    d{""}
+                }
+                MMMM{
+                    M{""}
+                }
+                MMMd{
+                    M{""}
+                    d{""}
+                }
+                Md{
+                    M{""}
+                    d{""}
+                }
+                d{
+                    d{""}
+                }
+                fallback{""}
+                h{
+                    a{""}
+                    h{""}
+                }
+                hm{
+                    a{""}
+                    h{""}
+                    m{""}
+                }
+                hmv{
+                    a{""}
+                    h{""}
+                    m{""}
+                }
+                hv{
+                    a{""}
+                    h{""}
+                }
+                y{
+                    y{""}
+                }
+                yM{
+                    M{""}
+                    y{""}
+                }
+                yMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMM{
+                    M{""}
+                    y{""}
+                }
+                yMMMEEEEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMEd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMMMM{
+                    M{""}
+                    y{""}
+                }
+                yMMMd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+                yMd{
+                    M{""}
+                    d{""}
+                    y{""}
+                }
+            }
+            monthNames{
+                default{""}
+                format{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    default{""}
+                    narrow{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                    wide{
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                    }
+                }
+            }
+            monthPatterns{
+                format{
+                    abbreviated{
+                        leap{""}
+                    }
+                    narrow{
+                        leap{""}
+                    }
+                    wide{
+                        leap{""}
+                    }
+                }
+                numeric{
+                    all{
+                        leap{""}
+                    }
+                }
+                stand-alone{
+                    abbreviated{
+                        leap{""}
+                    }
+                    narrow{
+                        leap{""}
+                    }
+                    wide{
+                        leap{""}
                     }
                 }
             }
@@ -16610,19 +17149,19 @@ structLocale:table(nofallback){
         lines{""}
     }
     listPattern{
-        duration{
+        unit{
             2{""}
             end{""}
             middle{""}
             start{""}
         }
-        duration-narrow{
+        unit-narrow{
             2{""}
             end{""}
             middle{""}
             start{""}
         }
-        duration-short{
+        unit-short{
             2{""}
             end{""}
             middle{""}
@@ -16671,7 +17210,7 @@ structLocale:table(nofallback){
                 many{""}
                 other{""}
             }
-            minute{
+            arc-minute{
                 zero{""}
                 one{""}
                 two{""}
@@ -16679,7 +17218,7 @@ structLocale:table(nofallback){
                 many{""}
                 other{""}
             }
-            second{
+            arc-second{
                 zero{""}
                 one{""}
                 two{""}
@@ -17175,7 +17714,7 @@ structLocale:table(nofallback){
                 many{""}
                 other{""}
             }
-            minute{
+            arc-minute{
                 zero{""}
                 one{""}
                 two{""}
@@ -17183,7 +17722,7 @@ structLocale:table(nofallback){
                 many{""}
                 other{""}
             }
-            second{
+            arc-second{
                 zero{""}
                 one{""}
                 two{""}

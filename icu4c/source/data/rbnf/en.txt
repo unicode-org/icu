@@ -1,13 +1,13 @@
 ﻿// ***************************************************************************
 // *
 // * Copyright (C) 2013 International Business Machines
-// * Corporation and others.  All Rights Reserved.
-// * Tool: com.ibm.icu.dev.tool.cldr.LDML2ICUConverter.java
-// * Source File:<path>/common/rbnf/en.xml
+// * Corporation and others. All Rights Reserved.
+// * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
+// * Source File: <path>/common/rbnf/en.xml
 // *
 // ***************************************************************************
 /**
- *  ICU <specials> source: <path>/xml/rbnf/en.xml
+ * ICU <specials> source: <path>/xml/rbnf/en.xml
  */
 en{
     RBNFRules{
@@ -147,8 +147,6 @@ en{
             "1000000000000: << trillion[>%%commas>];",
             "1000000000000000: << quadrillion[>%%commas>];",
             "1000000000000000000: =#,##0=;",
-            "%%lenient-parse:",
-            "&[last primary ignorable ] << ' ' << ',' << '-' << '\u00AD';",
             "%%tieth:",
             "0: tieth;",
             "1: ty-=%spellout-ordinal=;",

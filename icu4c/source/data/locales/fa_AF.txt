@@ -7,7 +7,7 @@
 // *
 // ***************************************************************************
 fa_AF{
-    AuxExemplarCharacters{"[\u0656 \u0670 \u200C \u200D ټ ځ څ ډ ړ ږ ښ ګ ڼ ي]"}
+    AuxExemplarCharacters{"[\u200C \u200D \u0656 \u0670 ټ ځ څ ډ ړ ږ ښ ګ ڼ ي]"}
     NumberElements{
         latn{
             patterns{
@@ -15,7 +15,7 @@ fa_AF{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.80"}
     calendar{
         gregorian{
             monthNames{

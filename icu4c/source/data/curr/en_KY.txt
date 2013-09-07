@@ -7,15 +7,12 @@
 // *
 // ***************************************************************************
 en_KY{
+    %%Parent{"en_001"}
     Currencies{
         KYD{
             "$",
             "Cayman Islands Dollar",
         }
-        USD{
-            "US$",
-            "US Dollar",
-        }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.91.70"}
 }

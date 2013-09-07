@@ -29,7 +29,7 @@ de{
         034{"Südasien"}
         035{"Südostasien"}
         039{"Südeuropa"}
-        053{"Australien und Neuseeland"}
+        053{"Australasien"}
         054{"Melanesien"}
         057{"Mikronesisches Inselgebiet"}
         061{"Polynesien"}
@@ -57,7 +57,7 @@ de{
         AT{"Österreich"}
         AU{"Australien"}
         AW{"Aruba"}
-        AX{"Alandinseln"}
+        AX{"Åland-Inseln"}
         AZ{"Aserbaidschan"}
         BA{"Bosnien und Herzegowina"}
         BB{"Barbados"}
@@ -270,7 +270,7 @@ de{
         TH{"Thailand"}
         TJ{"Tadschikistan"}
         TK{"Tokelau"}
-        TL{"Osttimor"}
+        TL{"Timor-Leste"}
         TM{"Turkmenistan"}
         TN{"Tunesien"}
         TO{"Tonga"}
@@ -302,5 +302,5 @@ de{
         ZW{"Simbabwe"}
         ZZ{"Unbekannte Region"}
     }
-    Version{"2.0.85.93"}
+    Version{"2.0.92.87"}
 }

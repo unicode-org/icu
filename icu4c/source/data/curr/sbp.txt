@@ -221,7 +221,7 @@ sbp{
         }
         ZMK{
             "ZMK",
-            "Ihela ya Sambiya (1968-2012)",
+            "Ihela ya Sambiya (1968–2012)",
         }
         ZMW{
             "ZMW",
@@ -232,5 +232,5 @@ sbp{
             "Ihela ya Simbabwe",
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
 }

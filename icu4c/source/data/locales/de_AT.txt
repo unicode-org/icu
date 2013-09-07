@@ -14,7 +14,7 @@ de_AT{
             }
         }
     }
-    Version{"2.0.82.45"}
+    Version{"2.0.92.87"}
     calendar{
         generic{
             DateTimePatterns{
@@ -52,9 +52,9 @@ de_AT{
             monthNames{
                 format{
                     abbreviated{
-                        "Jän",
+                        "Jän.",
                         "Feb.",
-                        "Mär.",
+                        "März",
                         "Apr.",
                         "Mai",
                         "Juni",
@@ -95,8 +95,27 @@ de_AT{
                         "Nov",
                         "Dez",
                     }
+                    wide{
+                        "Jänner",
+                        "Februar",
+                        "März",
+                        "April",
+                        "Mai",
+                        "Juni",
+                        "Juli",
+                        "August",
+                        "September",
+                        "Oktober",
+                        "November",
+                        "Dezember",
+                    }
                 }
             }
         }
+    }
+    measurementSystemNames{
+        UK{"Englisches Maßsystem"}
+        US{"Angloamerikanisches Maßsystem"}
+        metric{"Internationales Maßsystem (SI)"}
     }
 }

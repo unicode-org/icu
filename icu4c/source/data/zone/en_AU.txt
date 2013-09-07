@@ -7,11 +7,9 @@
 // *
 // ***************************************************************************
 en_AU{
-    Version{"2.0.82.45"}
+    %%Parent{"en_GB"}
+    Version{"2.0.92.87"}
     zoneStrings{
-        "Europe:London"{
-            sd{"∅∅∅"}
-        }
         "meta:Australia_Central"{
             sd{"ACDT"}
             sg{"ACT"}

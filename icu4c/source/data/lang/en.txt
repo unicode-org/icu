@@ -791,10 +791,10 @@ en{
             hebrew{"Hebrew Calendar"}
             indian{"Indian National Calendar"}
             islamic{"Islamic Calendar"}
-            islamic-civil{"Islamic Calendar [tabular, civil epoch]"}
-            islamic-rgsa{"Islamic Calendar [Saudi Arabia, sighting]"}
-            islamic-tbla{"Islamic Calendar [tabular, astronomical epoch]"}
-            islamic-umalqura{"Islamic Calendar [Umm al-Qura]"}
+            islamic-civil{"Islamic Calendar (tabular, civil epoch)"}
+            islamic-rgsa{"Islamic Calendar (Saudi Arabia, sighting)"}
+            islamic-tbla{"Islamic Calendar (tabular, astronomical epoch)"}
+            islamic-umalqura{"Islamic Calendar (Umm al-Qura)"}
             iso8601{"ISO-8601 Calendar"}
             japanese{"Japanese Calendar"}
             persian{"Persian Calendar"}
@@ -933,13 +933,14 @@ en{
         VALENCIA{"Valencian"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.89.25"}
+    Version{"2.0.92.87"}
     codePatterns{
         language{"Language: {0}"}
         script{"Script: {0}"}
         territory{"Region: {0}"}
     }
     localeDisplayPattern{
+        keyTypePattern{"{0}: {1}"}
         pattern{"{0} ({1})"}
         separator{"{0}, {1}"}
     }
