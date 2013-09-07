@@ -344,7 +344,7 @@ public class CollationServiceTest extends TestFmwk {
                                                          new ULocale("de"),
                                                          isAvailable);
         if (assertTrue("getFunctionalEquivalent(de)!=null", equiv!=null)) {
-            assertEquals("getFunctionalEquivalent(de)", "de", equiv.toString());
+            assertEquals("getFunctionalEquivalent(de)", "root", equiv.toString());
         }
         assertTrue("getFunctionalEquivalent(de).isAvailable==true",
                    isAvailable[0] == true);
@@ -353,7 +353,7 @@ public class CollationServiceTest extends TestFmwk {
                                                  new ULocale("de_DE"),
                                                  isAvailable);
         if (assertTrue("getFunctionalEquivalent(de_DE)!=null", equiv!=null)) {
-            assertEquals("getFunctionalEquivalent(de_DE)", "de", equiv.toString());
+            assertEquals("getFunctionalEquivalent(de_DE)", "root", equiv.toString());
         }
         assertTrue("getFunctionalEquivalent(de_DE).isAvailable==true",
                    isAvailable[0] == true);
@@ -367,22 +367,24 @@ public class CollationServiceTest extends TestFmwk {
     public void TestGetFunctionalEquivalent() {
         String kw[] = Collator.getKeywords();
         final String DATA[] = { 
-                          "de", "de", "t",
-                          "de@collation=direct", "de", "t",
-                          "de@collation=traditional", "de", "t",
-                          "de@collation=gb2312han", "de", "t",
-                          "de@collation=stroke", "de", "t",
-                          "de@collation=pinyin", "de", "t",
-                          "de@collation=phonebook", "de@collation=phonebook", "t",
-                          "de@collation=big5han", "de", "t",
-                          "de_AT", "de", "t",
-                          "de_AT@collation=direct", "de", "t",
-                          "de_AT@collation=traditional", "de", "t",
-                          "de_AT@collation=gb2312han", "de", "t",
-                          "de_AT@collation=stroke", "de", "t",
-                          "de_AT@collation=pinyin", "de", "t",
-                          "de_AT@collation=phonebook", "de@collation=phonebook", "t",
-                          "de_AT@collation=big5han", "de", "t",
+                          "sv", "sv", "t",
+                          "sv@collation=direct", "sv", "t",
+                          "sv@collation=traditional", "sv", "t",
+                          "sv@collation=gb2312han", "sv", "t",
+                          "sv@collation=stroke", "sv", "t",
+                          "sv@collation=pinyin", "sv", "t",
+                          "sv@collation=standard", "sv@collation=standard", "t",
+                          "sv@collation=reformed", "sv", "t",
+                          "sv@collation=big5han", "sv", "t",
+                          "sv_FI", "sv", "t",
+                          "sv_FI@collation=direct", "sv", "t",
+                          "sv_FI@collation=traditional", "sv", "t",
+                          "sv_FI@collation=gb2312han", "sv", "t",
+                          "sv_FI@collation=stroke", "sv", "t",
+                          "sv_FI@collation=pinyin", "sv", "t",
+                          "sv_FI@collation=standard", "sv@collation=standard", "t",
+                          "sv_FI@collation=reformed", "sv", "t",
+                          "sv_FI@collation=big5han", "sv", "t",
                           "nl", "root", "t",
                           "nl@collation=direct", "root", "t",
                           "nl_BE", "root", "t",

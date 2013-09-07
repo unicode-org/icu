@@ -500,10 +500,10 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {"en_US", "1", "USD", "$1.00", "USD1.00", "1.00 US dollars"}, 
                 {"en_US", "1234.56", "USD", "$1,234.56", "USD1,234.56", "1,234.56 US dollars"}, 
                 {"en_US", "-1234.56", "USD", "-$1,234.56", "-USD1,234.56", "-1,234.56 US dollars"}, 
-                {"zh_CN", "1", "USD", "US$1.00", "USD1.00", "1.00美元"}, 
-                {"zh_CN", "1234.56", "USD", "US$1,234.56", "USD1,234.56", "1,234.56美元"}, 
-                {"zh_CN", "1", "CNY", "￥1.00", "CNY1.00", "1.00人民币"}, 
-                {"zh_CN", "1234.56", "CNY", "￥1,234.56", "CNY1,234.56", "1,234.56人民币"}, 
+                {"zh_CN", "1", "USD", "US$\u00A01.00", "USD\u00A01.00", "1.00美元"}, 
+                {"zh_CN", "1234.56", "USD", "US$\u00A01,234.56", "USD\u00A01,234.56", "1,234.56美元"}, 
+                {"zh_CN", "1", "CNY", "￥\u00A01.00", "CNY\u00A01.00", "1.00人民币"}, 
+                {"zh_CN", "1234.56", "CNY", "￥\u00A01,234.56", "CNY\u00A01,234.56", "1,234.56人民币"}, 
                 {"ru_RU", "1", "RUB", "1,00 руб.", "1,00 RUB", "1,00 российского рубля"}, 
                 {"ru_RU", "2", "RUB", "2,00 руб.", "2,00 RUB", "2,00 российского рубля"}, 
                 {"ru_RU", "5", "RUB", "5,00 руб.", "5,00 RUB", "5,00 российского рубля"}, 
@@ -511,8 +511,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {"root", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, 
                 {"root@numbers=latn", "-1.23", "USD", "-US$ 1.23", "-USD 1.23", "-1.23 USD"}, // ensure that the root locale is still used with modifiers 
                 {"root@numbers=arab", "-1.23", "USD", "\u200F-US$ ١٫٢٣", "\u200F-USD ١٫٢٣", "\u200F-١٫٢٣ USD"}, // ensure that the root locale is still used with modifiers 
-                // test choice format 
-                {"es_AR", "1", "INR", "₹1,00", "INR1,00", "1,00 rupia india"}, 
+                {"es_AR", "1", "INR", "INR1,00", "INR1,00", "1,00 rupia india"}, 
                 {"ar_EG", "1", "USD", "US$ ١٫٠٠", "USD ١٫٠٠", "١٫٠٠ دولار أمريكي"}, 
         };
 
@@ -1400,7 +1399,7 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 new TestNumberingSystemItem( "en_US@numbers=hebr",        5678.0,   true,  "\u05D4\u05F3\u05EA\u05E8\u05E2\u05F4\u05D7" ),
                 new TestNumberingSystemItem( "en_US@numbers=arabext",     1234.567, false, "\u06F1\u066c\u06F2\u06F3\u06F4\u066b\u06F5\u06F6\u06F7" ),
                 new TestNumberingSystemItem( "de_DE@numbers=foobar",      1234.567, false, "1.234,567" ),
-                new TestNumberingSystemItem( "ar_EG",                     1234.567, false, "\u0661\u066C\u0662\u0663\u0664\u066b\u0665\u0666\u0667" ),
+                new TestNumberingSystemItem( "ar_EG",                     1234.567, false, "\u0661\u066c\u0662\u0663\u0664\u066b\u0665\u0666\u0667" ),
                 new TestNumberingSystemItem( "th_TH@numbers=traditional", 1234.567, false, "\u0E51,\u0E52\u0E53\u0E54.\u0E55\u0E56\u0E57" ), // fall back to native per TR35
                 new TestNumberingSystemItem( "ar_MA",                     1234.567, false, "1.234,567" ),
                 new TestNumberingSystemItem( "en_US@numbers=hanidec",     1234.567, false, "\u4e00,\u4e8c\u4e09\u56db.\u4e94\u516d\u4e03" ),
@@ -3004,8 +3003,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String[] DATA = {
                 "es", "CO", "", "1.250,75",
                 "es", "CR", "", "1.250,75",
-                "es", "ES", "", "1.250,75",
-                "es", "GQ", "", "1.250,75",
+                "es", "ES", "", "1\u00A0250,75",
+                "es", "GQ", "", "1\u00A0250,75",
                 "es", "MX", "", "1,250.75",
                 "es", "US", "", "1,250.75",
                 "es", "VE", "", "1.250,75",
