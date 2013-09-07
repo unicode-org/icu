@@ -1218,7 +1218,7 @@ public class ULocaleTest extends TestFmwk {
                     errln ("FAIL: getDisplayKeyword methods failed for the default locale.");
                 }
                 if (!s1.equals(h[0].get(key))) {
-                    warnln("Locale " + localeID + " getDisplayKeyword for key: " + key +
+                    errln("Locale " + localeID + " getDisplayKeyword for key: " + key +
                             " in English expected \"" + h[0].get(key) + "\" saw \"" + s1 + "\" instead");
                 } else {
                     logln("OK: getDisplayKeyword for key: " + key + " in English got " + s1);
@@ -1231,7 +1231,7 @@ public class ULocaleTest extends TestFmwk {
                     errln ("one of the getDisplayKeyword methods failed.");
                 }
                 if (!s1.equals(h[1].get(key))) {
-                    warnln("Locale " + localeID + " getDisplayKeyword for key: " + key +
+                    errln("Locale " + localeID + " getDisplayKeyword for key: " + key +
                             " in Chinese expected \"" + h[1].get(key) + "\" saw \"" + s1 + "\" instead");
                 } else {
                     logln("OK: getDisplayKeyword for key: " + key + " in Chinese got " + s1);
@@ -1251,7 +1251,7 @@ public class ULocaleTest extends TestFmwk {
                     errln ("FAIL: getDisplayKeyword methods failed for the default locale.");
                 }
                 if (!ss1.equals(h[0].get(type))) {
-                    warnln(" Locale " + localeID + " getDisplayKeywordValue for key: " + key +
+                    errln(" Locale " + localeID + " getDisplayKeywordValue for key: " + key +
                             " in English expected \"" + h[0].get(type) + "\" saw \"" + ss1 + "\" instead");
                 } else {
                     logln("OK: getDisplayKeywordValue for key: " + key + " in English got " + ss1);
@@ -1263,10 +1263,10 @@ public class ULocaleTest extends TestFmwk {
                 ss2 = ULocale.getDisplayKeywordValue(localeID, key, "zh_Hans");
                 ss3 = ULocale.getDisplayKeywordValue(localeID, key, ULocale.CHINA);
                 if (!ss1.equals(ss2) || !ss1.equals(ss3)) {
-                    warnln ("one of the getDisplayKeywordValue methods failed.");
+                    errln ("one of the getDisplayKeywordValue methods failed.");
                 }
                 if (!ss1.equals(h[1].get(type))) {
-                    warnln("Locale " + localeID + " getDisplayKeywordValue for key: " + key +
+                    errln("Locale " + localeID + " getDisplayKeywordValue for key: " + key +
                             " in Chinese expected \"" + h[1].get(type) + "\" saw \"" + ss1 + "\" instead");
                 } else {
                     logln("OK: getDisplayKeywordValue for key: " + key + " in Chinese got " + ss1);
@@ -1304,11 +1304,11 @@ public class ULocaleTest extends TestFmwk {
         assertEquals("currency", target, name);
 
         name = tdn.localeDisplayName("de@currency=XYZ");
-        target = "德文（貨幣: XYZ）";  // \u5FB7\u6587\uFF08\u8CA8\u5E63: XYZ\uFF09
+        target = "德文（貨幣：XYZ）";  // \u5FB7\u6587\uFF08\u8CA8\u5E63: XYZ\uFF09
         assertEquals("currency", target, name);
 
         name = tdn.localeDisplayName("de@collation=phonebook;currency=XYZ");
-        target = "德文（電話簿排序，貨幣: XYZ）"; // \u5FB7\u6587\uFF08\u96FB\u8A71\u7C3F\u6392\u5E8F\uFF09，\u5FB7\u6587\uFF08\u8CA8\u5E63: XYZ\uFF09
+        target = "德文（電話簿排序，貨幣：XYZ）"; // \u5FB7\u6587\uFF08\u96FB\u8A71\u7C3F\u6392\u5E8F\uFF09，\u5FB7\u6587\uFF08\u8CA8\u5E63: XYZ\uFF09
         assertEquals("collation", target, name);
 
         name = dn.localeDisplayName("de@foo=bar");
@@ -1325,7 +1325,7 @@ public class ULocaleTest extends TestFmwk {
         assertEquals("foobar", target, name);
 
         name = tdn.localeDisplayName(locale);
-        target = "德文（私人使用: foobar）"; // \u5FB7\u6587\uFF08\u79C1\u4EBA\u4F7F\u7528: foobar\uFF09
+        target = "德文（私人使用：foobar）"; // \u5FB7\u6587\uFF08\u79C1\u4EBA\u4F7F\u7528: foobar\uFF09
         assertEquals("foobar", target, name);
     }
 
@@ -1344,13 +1344,13 @@ public class ULocaleTest extends TestFmwk {
         h[0].put("japanese", "Japanese Calendar");
         h[0].put("buddhist", "Buddhist Calendar");
         h[0].put("islamic", "Islamic Calendar");
-        h[0].put("islamic-civil", "Islamic Calendar [tabular, civil epoch]" );
+        h[0].put("islamic-civil", "Islamic Calendar (tabular, civil epoch)" );
         h[0].put("hebrew", "Hebrew Calendar");
         h[0].put("chinese", "Chinese Calendar");
         h[0].put("gregorian", "Gregorian Calendar" );
 
         //display in S-Chinese
-        h[1].put("collation", "\u6392\u5E8F\u987A\u5E8F");
+        h[1].put("collation", "\u6392\u5E8F");
         h[1].put("calendar", "\u65E5\u5386");
         h[1].put("currency", "\u8D27\u5E01");
         h[1].put("phonebook", "\u7535\u8BDD\u7C3F\u6392\u5E8F\u987A\u5E8F");
@@ -2070,7 +2070,7 @@ public class ULocaleTest extends TestFmwk {
                     "pa_PK"
                 }, {
                     "pap",
-                    "pap_Latn_BQ",
+                    "pap_Latn_AW",
                     "pap"
                 }, {
                     "pau",
@@ -2260,10 +2260,6 @@ public class ULocaleTest extends TestFmwk {
                     "und_AM",
                     "hy_Armn_AM",
                     "hy"
-                }, {
-                    "und_AN",
-                    "pap_Latn_AN",
-                    "pap_AN"
                 }, {
                     "und_AO",
                     "pt_Latn_AO",
@@ -2594,8 +2590,8 @@ public class ULocaleTest extends TestFmwk {
                     "hu"
                 }, {
                     "und_Hani",
-                    "zh_Hans_CN",
-                    "zh"
+                    "zh_Hani_CN",
+                    "zh_Hani"
                 }, {
                     "und_Hans",
                     "zh_Hans_CN",
@@ -3014,7 +3010,7 @@ public class ULocaleTest extends TestFmwk {
                     "si"
                 }, {
                     "und_Syrc",
-                    "syr_Syrc_SY",
+                    "syr_Syrc_IQ",
                     "syr"
                 }, {
                     "und_TD",
@@ -3094,7 +3090,7 @@ public class ULocaleTest extends TestFmwk {
                     "es_UY"
                 }, {
                     "und_UZ",
-                    "uz_Cyrl_UZ",
+                    "uz_Latn_UZ",
                     "uz"
                 }, {
                     "und_VA",
@@ -3138,7 +3134,7 @@ public class ULocaleTest extends TestFmwk {
                     "ur"
                 }, {
                     "uz",
-                    "uz_Cyrl_UZ",
+                    "uz_Latn_UZ",
                     "uz"
                 }, {
                     "uz_AF",

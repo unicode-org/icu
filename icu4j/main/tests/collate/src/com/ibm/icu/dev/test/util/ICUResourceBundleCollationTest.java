@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2009-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2009-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -28,10 +28,10 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
     public void TestFunctionalEquivalent(){
        String[] collCases = {
        //  avail   locale                               equiv
-           "f",     "de_US_CALIFORNIA",                 "de",
+           "f",     "sv_US_CALIFORNIA",                 "sv",
            "f",     "zh_TW@collation=stroke",           "zh@collation=stroke", /* alias of zh_Hant_TW */
            "t",     "zh_Hant_TW@collation=stroke",      "zh@collation=stroke",
-           "f",     "de_CN@collation=pinyin",           "de",
+           "f",     "sv_CN@collation=pinyin",           "sv",
            "t",     "zh@collation=pinyin",              "zh",
            "f",     "zh_CN@collation=pinyin",           "zh", /* alias of zh_Hans_CN */
            "t",     "zh_Hans_CN@collation=pinyin",      "zh",
@@ -45,8 +45,8 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
            "t",     "zh_Hant_MO",                       "zh@collation=stroke",
            "f",     "zh_TW_STROKE",                     "zh@collation=stroke",
            "f",     "zh_TW_STROKE@collation=big5han",   "zh@collation=big5han",
-           "f",     "de_CN@calendar=japanese",          "de",
-           "t",     "de@calendar=japanese",             "de",
+           "f",     "sv_CN@calendar=japanese",          "sv",
+           "t",     "sv@calendar=japanese",             "sv",
            "f",     "zh_TW@collation=big5han",          "zh@collation=big5han", /* alias of zh_Hant_TW */
            "t",     "zh_Hant_TW@collation=big5han",     "zh@collation=big5han",
            "f",     "zh_TW@collation=gb2312han",        "zh@collation=gb2312han", /* alias of zh_Hant_TW */
@@ -59,8 +59,8 @@ public final class ICUResourceBundleCollationTest extends TestFmwk {
            "t",     "zh@collation=gb2312han",           "zh@collation=gb2312han",
            "t",     "hi@collation=standard",            "hi",
            "f",     "hi_AU@collation=standard;currency=CHF;calendar=buddhist",  "hi",
-           "t",     "de_DE@collation=pinyin",           "de", /* bug 4582 tests */
-           "f",     "de_DE_BONN@collation=pinyin",      "de",
+           "t",     "sv_SE@collation=pinyin",           "sv", /* bug 4582 tests */
+           "f",     "sv_SE_BONN@collation=pinyin",      "sv",
            "t",     "nl",                               "root",
            "t",     "nl_NL",                            "root",
            "f",     "nl_NL_EEXT",                       "root",

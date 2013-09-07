@@ -887,10 +887,10 @@ public final class ICUResourceBundleTest extends TestFmwk {
         } 
         */
         
-        logln("Test to verify loading status of get(int)");
+        logln("Test to verify root loading status of get()");
         bundle = (ICUResourceBundle)UResourceBundle.getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, "te_IN");
-        ICUResourceBundle ms = (ICUResourceBundle) bundle.get("MeasurementSystem");
-        assertRootLoadingStatus("base/MeasurementSystem/te_IN", ms.getLoadingStatus());
+        ICUResourceBundle ms = (ICUResourceBundle) bundle.get("layout");
+        assertRootLoadingStatus("base/layout/te_IN", ms.getLoadingStatus());
                 
         logln("Test to verify loading status of getwithFallback");
         bundle = (ICUResourceBundle) UResourceBundle.getBundleInstance("com/ibm/icu/dev/data/testdata", "sh_YU", testLoader);
