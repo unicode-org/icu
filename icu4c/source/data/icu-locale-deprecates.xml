@@ -20,6 +20,7 @@
     <alias from="iw_IL" to="he_IL"/>
     <alias from="ja_JP_TRADITIONAL" to="ja_JP" rbpath="/calendar/default" value="japanese"/>
     <alias from="kk_KZ" to="kk_Cyrl_KZ" />
+    <alias from="ky_KG" to="ky_Cyrl_KG" />
     <alias from="ks_IN" to="ks_Arab_IN" />
     <alias from="mo" to="ro_MD"/>
     <alias from="mn_MN" to="mn_Cyrl_MN"/>
