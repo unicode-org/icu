@@ -29,14 +29,14 @@ GENRB_CLDR_VERSION = 24
 GENRB_SYNTHETIC_ALIAS = az_AZ.txt bs_BA.txt en_NH.txt en_RH.txt\
  ha_GH.txt ha_NE.txt ha_NG.txt in.txt in_ID.txt\
  iw.txt iw_IL.txt ja_JP_TRADITIONAL.txt kk_KZ.txt ks_IN.txt\
- mn_MN.txt mo.txt ms_BN.txt ms_MY.txt ms_SG.txt\
- no.txt no_NO.txt no_NO_NY.txt pa_IN.txt pa_PK.txt\
- sh.txt sh_BA.txt sh_CS.txt sh_YU.txt shi_MA.txt\
- sr_BA.txt sr_CS.txt sr_Cyrl_CS.txt sr_Cyrl_YU.txt sr_Latn_CS.txt\
- sr_Latn_YU.txt sr_ME.txt sr_RS.txt sr_XK.txt sr_YU.txt\
- th_TH_TRADITIONAL.txt tl.txt tl_PH.txt tzm_MA.txt uz_AF.txt\
- uz_UZ.txt vai_LR.txt zh_CN.txt zh_HK.txt zh_MO.txt\
- zh_SG.txt zh_TW.txt
+ ky_KG.txt mn_MN.txt mo.txt ms_BN.txt ms_MY.txt\
+ ms_SG.txt no.txt no_NO.txt no_NO_NY.txt pa_IN.txt\
+ pa_PK.txt sh.txt sh_BA.txt sh_CS.txt sh_YU.txt\
+ shi_MA.txt sr_BA.txt sr_CS.txt sr_Cyrl_CS.txt sr_Cyrl_YU.txt\
+ sr_Latn_CS.txt sr_Latn_YU.txt sr_ME.txt sr_RS.txt sr_XK.txt\
+ sr_YU.txt th_TH_TRADITIONAL.txt tl.txt tl_PH.txt tzm_MA.txt\
+ uz_AF.txt uz_UZ.txt vai_LR.txt zh_CN.txt zh_HK.txt\
+ zh_MO.txt zh_SG.txt zh_TW.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.

@@ -31,19 +31,19 @@ ZONE_SYNTHETIC_ALIAS = az_AZ.txt az_Latn_AZ.txt bs_BA.txt bs_Latn_BA.txt\
  ha_Latn_NE.txt ha_Latn_NG.txt ha_NE.txt ha_NG.txt he_IL.txt\
  id_ID.txt in.txt in_ID.txt iw.txt iw_IL.txt\
  ja_JP.txt ja_JP_TRADITIONAL.txt kk_Cyrl_KZ.txt kk_KZ.txt ks_Arab_IN.txt\
- ks_IN.txt mn_Cyrl_MN.txt mn_MN.txt mo.txt ms_BN.txt\
- ms_Latn_BN.txt ms_Latn_MY.txt ms_Latn_SG.txt ms_MY.txt ms_SG.txt\
- nb_NO.txt nn_NO.txt no.txt no_NO.txt no_NO_NY.txt\
- pa_Arab_PK.txt pa_Guru_IN.txt pa_IN.txt pa_PK.txt ro_MD.txt\
- sh.txt sh_BA.txt sh_CS.txt sh_YU.txt shi_MA.txt\
- shi_Tfng_MA.txt sr_BA.txt sr_CS.txt sr_Cyrl_BA.txt sr_Cyrl_CS.txt\
- sr_Cyrl_RS.txt sr_Cyrl_XK.txt sr_Cyrl_YU.txt sr_Latn_BA.txt sr_Latn_CS.txt\
- sr_Latn_ME.txt sr_Latn_RS.txt sr_Latn_YU.txt sr_ME.txt sr_RS.txt\
- sr_XK.txt sr_YU.txt th_TH.txt th_TH_TRADITIONAL.txt tl.txt\
- tl_PH.txt tzm_Latn_MA.txt tzm_MA.txt uz_AF.txt uz_Arab_AF.txt\
- uz_Latn_UZ.txt uz_UZ.txt vai_LR.txt vai_Vaii_LR.txt zh_CN.txt\
- zh_HK.txt zh_Hans_CN.txt zh_Hant_TW.txt zh_MO.txt zh_SG.txt\
- zh_TW.txt
+ ks_IN.txt ky_Cyrl_KG.txt ky_KG.txt mn_Cyrl_MN.txt mn_MN.txt\
+ mo.txt ms_BN.txt ms_Latn_BN.txt ms_Latn_MY.txt ms_Latn_SG.txt\
+ ms_MY.txt ms_SG.txt nb_NO.txt nn_NO.txt no.txt\
+ no_NO.txt no_NO_NY.txt pa_Arab_PK.txt pa_Guru_IN.txt pa_IN.txt\
+ pa_PK.txt ro_MD.txt sh.txt sh_BA.txt sh_CS.txt\
+ sh_YU.txt shi_MA.txt shi_Tfng_MA.txt sr_BA.txt sr_CS.txt\
+ sr_Cyrl_BA.txt sr_Cyrl_CS.txt sr_Cyrl_RS.txt sr_Cyrl_XK.txt sr_Cyrl_YU.txt\
+ sr_Latn_BA.txt sr_Latn_CS.txt sr_Latn_ME.txt sr_Latn_RS.txt sr_Latn_YU.txt\
+ sr_ME.txt sr_RS.txt sr_XK.txt sr_YU.txt th_TH.txt\
+ th_TH_TRADITIONAL.txt tl.txt tl_PH.txt tzm_Latn_MA.txt tzm_MA.txt\
+ uz_AF.txt uz_Arab_AF.txt uz_Latn_UZ.txt uz_UZ.txt vai_LR.txt\
+ vai_Vaii_LR.txt zh_CN.txt zh_HK.txt zh_Hans_CN.txt zh_Hant_TW.txt\
+ zh_MO.txt zh_SG.txt zh_TW.txt
 
 
 # All aliases (to not be included under 'installed'), but not including root.
