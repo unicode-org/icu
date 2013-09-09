@@ -639,27 +639,30 @@ uprv_timezone()
 #else
     time_t t, t1, t2;
     struct tm tmrec;
-    UBool dst_checked;
     int32_t tdiff = 0;
 
     time(&t);
     uprv_memcpy( &tmrec, localtime(&t), sizeof(tmrec) );
-    dst_checked = (tmrec.tm_isdst != 0); /* daylight savings time is checked*/
+#if U_PLATFORM != U_PF_IPHONE
+    UBool dst_checked = (tmrec.tm_isdst != 0); /* daylight savings time is checked*/
+#endif
     t1 = mktime(&tmrec);                 /* local time in seconds*/
     uprv_memcpy( &tmrec, gmtime(&t), sizeof(tmrec) );
     t2 = mktime(&tmrec);                 /* GMT (or UTC) in seconds*/
     tdiff = t2 - t1;
+
+#if U_PLATFORM != U_PF_IPHONE
     /* imitate NT behaviour, which returns same timezone offset to GMT for
        winter and summer.
        This does not work on all platforms. For instance, on glibc on Linux
        and on Mac OS 10.5, tdiff calculated above remains the same
-       regardless of whether DST is in effect or not. However, U_TIMEZONE
-       is defined on those platforms and this code is not reached so that
-       we can leave this alone. If there's a platform behaving
-       like glibc that uses this code, we need to add platform-dependent
-       preprocessor here. */
+       regardless of whether DST is in effect or not. iOS is another
+       platform where this does not work. Linux + glibc and Mac OS 10.5
+       have U_TIMEZONE defined so that this code is not reached.
+    */
     if (dst_checked)
         tdiff += 3600;
+#endif
     return tdiff;
 #endif
 }
@@ -672,7 +675,7 @@ uprv_timezone()
 extern U_IMPORT char *U_TZNAME[];
 #endif
 
-#if !UCONFIG_NO_FILE_IO && (U_PLATFORM_IS_DARWIN_BASED || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM == U_PF_SOLARIS)
+#if !UCONFIG_NO_FILE_IO && ((U_PLATFORM_IS_DARWIN_BASED && (U_PLATFORM != U_PF_IPHONE)) || U_PLATFORM_IS_LINUX_BASED || U_PLATFORM == U_PF_BSD || U_PLATFORM == U_PF_SOLARIS)
 /* These platforms are likely to use Olson timezone IDs. */
 #define CHECK_LOCALTIME_LINK 1
 #if U_PLATFORM_IS_DARWIN_BASED
