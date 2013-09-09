@@ -455,30 +455,22 @@ ibm-1089_P100-1995 { UTR22* }
 # ISO Greek (with euro update). This is really ISO_8859-7:2003
 ibm-9005_X110-2007 { UTR22* }
                         ibm-9005 { IBM* }
-                        ISO-8859-7 { MIME* IANA WINDOWS }
-                        greek { IANA WINDOWS }
-                        greek8 { IANA WINDOWS }
-                        ELOT_928 { IANA WINDOWS }
-                        ECMA-118 { IANA WINDOWS }
-                        csISOLatinGreek { IANA WINDOWS }
-                        iso-ir-126 { IANA WINDOWS }
-                        ISO_8859-7:1987 { IANA* WINDOWS }
+                        ISO-8859-7 { MIME* IANA JAVA* WINDOWS }
+                        8859_7 { JAVA }
+                        greek { IANA JAVA WINDOWS }
+                        greek8 { IANA JAVA WINDOWS }
+                        ELOT_928 { IANA JAVA WINDOWS }
+                        ECMA-118 { IANA JAVA WINDOWS }
+                        csISOLatinGreek { IANA JAVA WINDOWS }
+                        iso-ir-126 { IANA JAVA WINDOWS }
+                        ISO_8859-7:1987 { IANA* JAVA WINDOWS }
                         windows-28597 { WINDOWS* }
                         sun_eu_greek # For Solaris
 
 # ISO Greek (w/o euro update)
 # JDK 1.5 has these aliases.
 ibm-813_P100-1995 { UTR22* }
-                        ibm-813 { IBM* JAVA }
-                        ISO-8859-7 { JAVA* }
-                        greek { JAVA }
-                        greek8 { JAVA }
-                        ELOT_928 { JAVA }
-                        ECMA-118 { JAVA }
-                        csISOLatinGreek { JAVA }
-                        iso-ir-126 { JAVA }
-                        ISO_8859-7:1987 { JAVA }
-                        8859_7 { JAVA }
+                        ibm-813 { IBM* JAVA* }
                         cp813 { JAVA }
                         813 { JAVA }
 
