@@ -44,7 +44,6 @@
 #include "ucln_cmn.h"
 #include "ustr_cnv.h"
 
-U_NAMESPACE_BEGIN
 
 #if 0
 #include <stdio.h>
@@ -1701,7 +1700,5 @@ ucnv_swap(const UDataSwapper *ds,
 }
 
 #endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
-
-U_NAMESPACE_END
 
 #endif
