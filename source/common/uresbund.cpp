@@ -1119,7 +1119,6 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     return resB;
 }
 
-U_CAPI
 UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status) {
     UBool isStackObject;
     if(U_FAILURE(*status) || r == original) {
