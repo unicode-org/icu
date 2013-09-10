@@ -44,7 +44,7 @@ TODO: This cache should probably be removed when the deprecated code is
       completely removed.
 */
 static UHashtable *cache = NULL;
-static UInitOnce   gCacheInitOnce;
+static icu::UInitOnce gCacheInitOnce;
 
 static UMutex resbMutex = U_MUTEX_INITIALIZER;
 

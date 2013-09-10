@@ -184,7 +184,7 @@ void DecimalFormatStaticSets::cleanup() { // Be sure to clean up newly added fie
 }
 
 static DecimalFormatStaticSets *gStaticSets;
-static UInitOnce gStaticSetsInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gStaticSetsInitOnce = U_INITONCE_INITIALIZER;
 
 
 //------------------------------------------------------------------------------

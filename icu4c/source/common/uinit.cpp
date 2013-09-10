@@ -1,11 +1,9 @@
 /*
 ******************************************************************************
-*                                                                            *
-* Copyright (C) 2001-2013, International Business Machines                   *
-*                Corporation and others. All Rights Reserved.                *
-*                                                                            *
+* Copyright (C) 2001-2013, International Business Machines
+*                Corporation and others. All Rights Reserved.
 ******************************************************************************
-*   file name:  uinit.c
+*   file name:  uinit.cpp
 *   encoding:   US-ASCII
 *   tab size:   8 (not used)
 *   indentation:4

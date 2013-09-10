@@ -175,7 +175,7 @@ static const char DATA_NAME[] = "cnvalias";
 static const char DATA_TYPE[] = "icu";
 
 static UDataMemory *gAliasData=NULL;
-static UInitOnce    gAliasDataInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gAliasDataInitOnce = U_INITONCE_INITIALIZER;
 
 enum {
     tocLengthIndex=0,

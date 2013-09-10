@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1997-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 *
 * File GREGOCAL.CPP
@@ -1271,7 +1271,7 @@ GregorianCalendar::getType() const {
  */
 static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
 static int32_t         gSystemDefaultCenturyStartYear   = -1;
-static UInitOnce       gSystemDefaultCenturyInit        = U_INITONCE_INITIALIZER;
+static icu::UInitOnce  gSystemDefaultCenturyInit        = U_INITONCE_INITIALIZER;
 
 
 UBool GregorianCalendar::haveDefaultCentury() const

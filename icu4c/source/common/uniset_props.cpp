@@ -105,7 +105,7 @@ struct Inclusion {
 static Inclusion gInclusions[UPROPS_SRC_COUNT]; // cached getInclusions()
 
 static UnicodeSet *uni32Singleton;
-static UInitOnce  uni32InitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce uni32InitOnce = U_INITONCE_INITIALIZER;
 
 //----------------------------------------------------------------
 // Inclusions list
