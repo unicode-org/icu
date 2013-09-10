@@ -989,9 +989,18 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
                     if (skelLen <= 0) {
                         break;
                     }
+                    if (skelLen > FIELD_LENGTH_MAX) {
+                        continue;
+                    }
                     UnicodeString skeleton(skelBuf, skelLen, US_INV);
                     UnicodeString pattern = dtpg->getBestPattern(skeleton, status);
-                    if (U_SUCCESS(status)) {
+                    if (U_FAILURE(status)) {
+                        errln("DateTimePatternGenerator getBestPattern for locale %s, skelChar %c skelLength %d fails: %s",
+                              locale.getName(), testDataPtr->patternChar, skelLen, u_errorName(status));
+                    } else if (pattern.length() <= 0) {
+                        errln("DateTimePatternGenerator getBestPattern for locale %s, skelChar %c skelLength %d produces 0-length pattern",
+                              locale.getName(), testDataPtr->patternChar, skelLen);
+                    } else {
                         // test that resulting pattern has at least one char in mustIncludeOneOf
                         UnicodeString mustIncludeOneOf(testDataPtr->mustIncludeOneOf, -1, US_INV);
                         int32_t patIndx, patLen = pattern.length();
@@ -1013,9 +1022,6 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
                                     ", produces pattern without required chars: " + pattern);
                         }
                         
-                    } else {
-                        errln("DateTimePatternGenerator getBestPattern for locale %s, skelChar %c skelLength %d fails: %s",
-                              locale.getName(), testDataPtr->patternChar, skelLen, u_errorName(status));
                     }
                 }
             }
