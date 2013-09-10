@@ -29,6 +29,7 @@ void IntlTestDateTimePatternGeneratorAPI::runIndexedTest( int32_t index, UBool e
     switch (index) {
         TESTCASE(0, testAPI);
         TESTCASE(1, testOptions);
+        TESTCASE(2, testAllFieldPatterns);
         default: name = ""; break;
     }
 }
@@ -890,4 +891,139 @@ void IntlTestDateTimePatternGeneratorAPI::testOptions(/*char *par*/)
     }
 }
 
+/**
+ * Test that DTPG can handle all valid pattern character / length combinations
+ *
+ */
+#define FIELD_LENGTHS_COUNT 6
+#define FIELD_LENGTH_MAX 8
+#define MUST_INCLUDE_COUNT 5
+
+typedef struct AllFieldsTestItem {
+    char patternChar;
+    int8_t fieldLengths[FIELD_LENGTHS_COUNT+1]; // up to FIELD_LENGTHS_COUNT lengths to try
+                                                // (length <=FIELD_LENGTH_MAX) plus 0 terminator
+    char mustIncludeOneOf[MUST_INCLUDE_COUNT+1];// resulting pattern must include at least one of
+                                                // these as a pattern char (0-terminated list)
+} AllFieldsTestItem;
+
+void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
+{
+    const char * localeNames[] = {
+        "root",
+        "root@calendar=japanese",
+        "root@calendar=chinese",
+        "en",
+        "en@calendar=japanese",
+        "en@calendar=chinese",
+        NULL // terminator
+    };
+    AllFieldsTestItem testData[] = {
+        //pat   fieldLengths    generated pattern must
+        //chr   to test         include one of these
+        { 'G',  {1,2,3,4,5,0},  "G"    }, // era
+        // year
+        { 'y',  {1,2,3,4,0},    "yU"   }, // year
+        { 'Y',  {1,2,3,4,0},    "Y"    }, // year for week of year
+        { 'u',  {1,2,3,4,5,0},  "yuU"  }, // extended year
+        { 'U',  {1,2,3,4,5,0},  "yU"   }, // cyclic year name
+        // quarter
+        { 'Q',  {1,2,3,4,0},    "Qq"   }, // x
+        { 'q',  {1,2,3,4,0},    "Qq"   }, // standalone
+        // month
+        { 'M',  {1,2,3,4,5,0},  "ML"   }, // x
+        { 'L',  {1,2,3,4,5,0},  "ML"   }, // standalone
+        // week
+        { 'w',  {1,2,0},        "w"    }, // week of year
+        { 'W',  {1,0},          "W"    }, // week of month
+        // day
+        { 'd',  {1,2,0},        "d"    }, // day of month
+        { 'D',  {1,2,3,0},      "D"    }, // day of year
+        { 'F',  {1,0},          "F"    }, // day of week in month
+        { 'g',  {7,0},          "g"    }, // modified julian day
+        // weekday
+        { 'E',  {1,2,3,4,5,6},  "Eec"  }, // day of week
+        { 'e',  {1,2,3,4,5,6},  "Eec"  }, // local day of week
+        { 'c',  {1,2,3,4,5,6},  "Eec"  }, // standalone local day of week
+        // day period
+    //  { 'a',  {1,0},          "a"    }, // am or pm   // not clear this one is supposed to work (it doesn't)
+        // hour
+        { 'h',  {1,2,0},        "hK"   }, // 12 (1-12)
+        { 'H',  {1,2,0},        "Hk"   }, // 24 (0-23)
+        { 'K',  {1,2,0},        "hK"   }, // 12 (0-11)
+        { 'k',  {1,2,0},        "Hk"   }, // 24 (1-24)
+        { 'j',  {1,2,0},        "hHKk" }, // locale default
+        // minute
+        { 'm',  {1,2,0},        "m"    }, // x
+        // second & fractions
+        { 's',  {1,2,0},        "s"    }, // x
+        { 'S',  {1,2,3,4,0},    "S"    }, // fractional second
+        { 'A',  {8,0},          "A"    }, // milliseconds in day
+        // zone
+        { 'z',  {1,2,3,4,0},    "z"    }, // x
+        { 'Z',  {1,2,3,4,5,0},  "Z"    }, // x
+        { 'O',  {1,4,0},        "O"    }, // x
+        { 'v',  {1,4,0},        "v"    }, // x
+        { 'V',  {1,2,3,4,0},    "V"    }, // x
+        { 'X',  {1,2,3,4,5,0},  "X"    }, // x
+        { 'x',  {1,2,3,4,5,0},  "x"    }, // x
+    };
+    
+    const char ** localeNamesPtr = localeNames;
+    const char * localeName;
+    while ( (localeName = *localeNamesPtr++) != NULL) {
+        UErrorCode status = U_ZERO_ERROR;
+        Locale locale = Locale::createFromName(localeName);
+        DateTimePatternGenerator * dtpg = DateTimePatternGenerator::createInstance(locale, status);
+        if (U_SUCCESS(status)) {
+            const AllFieldsTestItem * testDataPtr = testData;
+            int itemCount = sizeof(testData) / sizeof(testData[0]);
+            for (; itemCount-- > 0; ++testDataPtr) {
+                char skelBuf[FIELD_LENGTH_MAX];
+                int32_t chrIndx, lenIndx;
+                for (chrIndx = 0; chrIndx < FIELD_LENGTH_MAX; chrIndx++) {
+                    skelBuf[chrIndx] = testDataPtr->patternChar;
+                }
+                for (lenIndx = 0; lenIndx < FIELD_LENGTHS_COUNT; lenIndx++) {
+                    int32_t skelLen = testDataPtr->fieldLengths[lenIndx];
+                    if (skelLen <= 0) {
+                        break;
+                    }
+                    UnicodeString skeleton(skelBuf, skelLen, US_INV);
+                    UnicodeString pattern = dtpg->getBestPattern(skeleton, status);
+                    if (U_SUCCESS(status)) {
+                        // test that resulting pattern has at least one char in mustIncludeOneOf
+                        UnicodeString mustIncludeOneOf(testDataPtr->mustIncludeOneOf, -1, US_INV);
+                        int32_t patIndx, patLen = pattern.length();
+                        UBool inQuoted = FALSE;
+                        for (patIndx = 0; patIndx < patLen; patIndx++) {
+                            UChar c = pattern.charAt(patIndx);
+                            if (c == 0x27) {
+                                inQuoted = !inQuoted;
+                            } else if (!inQuoted && c <= 0x007A &&c >= 0x0041) {
+                                if (mustIncludeOneOf.indexOf(c) >= 0) {
+                                    break;
+                                }
+                            }
+                        }
+                        if (patIndx >= patLen) {
+                            errln(UnicodeString("DateTimePatternGenerator getBestPattern for locale ") +
+                                    UnicodeString(locale.getName(),-1,US_INV) +
+                                    ", skeleton " + skeleton +
+                                    ", produces pattern without required chars: " + pattern);
+                        }
+                        
+                    } else {
+                        errln("DateTimePatternGenerator getBestPattern for locale %s, skelChar %c skelLength %d fails: %s",
+                              locale.getName(), testDataPtr->patternChar, skelLen, u_errorName(status));
+                    }
+                }
+            }
+            delete dtpg;
+        } else {
+            dataerrln("Create DateTimePatternGenerator instance for locale(%s) fails: %s",
+                      locale.getName(), u_errorName(status));
+        }
+    }
+}
 #endif /* #if !UCONFIG_NO_FORMATTING */
