@@ -156,32 +156,33 @@ static void TestUDataOpen(){
        *   If packaging mode == dll, the file may not exist.  So, if the file is 
        *   missing, skip this test without error.
        */
-      icuDataFilePath = (char *)malloc(strlen(path) + 10);
+      icuDataFilePath = (char *)uprv_malloc(strlen(path) + 10);
       strcpy(icuDataFilePath, path);
       strcat(icuDataFilePath, ".dat");
       /* lots_of_mallocs(); */
       if (uprv_fileExists(icuDataFilePath))
-	{
-	  int i;
-	  log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
-	  for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
+      {
+          int i;
+          log_verbose("Testing udata_open() on %s\n", icuDataFilePath);
+          for(i=0; i<sizeof(memMap)/sizeof(memMap[0]); i++){
             /* lots_of_mallocs(); */
             status=U_ZERO_ERROR;
             result=udata_open(path, memMap[i][1], memMap[i][0], &status);
             if(U_FAILURE(status)) {
-	      log_data_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", path, memMap[i][0], memMap[i][1], myErrorName(status));
+                log_data_err("FAIL: udata_open() failed for path = %s, name=%s, type=%s, \n errorcode=%s\n", path, memMap[i][0], memMap[i][1], myErrorName(status));
             } else {
-	      log_verbose("PASS: udata_open worked for path = %s, name=%s, type=%s\n",  path, memMap[i][0], memMap[i][1]);
-	      udata_close(result);
+                log_verbose("PASS: udata_open worked for path = %s, name=%s, type=%s\n",  path, memMap[i][0], memMap[i][1]);
+                udata_close(result);
             }
-	  }
-	}
+          }
+      }
       else
-	{
-	  /* lots_of_mallocs(); */
-	  log_verbose("Skipping tests of udata_open() on %s.  File not present in this configuration.\n",
-		      icuDataFilePath);
-	}
+      {
+          /* lots_of_mallocs(); */
+          log_verbose("Skipping tests of udata_open() on %s.  File not present in this configuration.\n",
+                  icuDataFilePath);
+      }
+      uprv_free(icuDataFilePath);
     }
     /* try again, adding /tmp */
     {
