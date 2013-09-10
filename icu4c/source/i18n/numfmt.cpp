@@ -140,11 +140,11 @@ static const char *gFormatKeys[UNUM_FORMAT_STYLE_COUNT] = {
 // Static hashtable cache of NumberingSystem objects used by NumberFormat
 static UHashtable * NumberingSystem_cache = NULL;
 static UMutex nscacheMutex = U_MUTEX_INITIALIZER;
-static UInitOnce gNSCacheInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gNSCacheInitOnce = U_INITONCE_INITIALIZER;
 
 #if !UCONFIG_NO_SERVICE
 static icu::ICULocaleService* gService = NULL;
-static UInitOnce gServiceInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gServiceInitOnce = U_INITONCE_INITIALIZER;
 #endif
 
 /**

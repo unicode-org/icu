@@ -22,7 +22,7 @@
 
 // --- The cache --
 static icu::TimeZone *gDangiCalendarZoneAstroCalc = NULL;
-static UInitOnce gDangiCalendarInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gDangiCalendarInitOnce = U_INITONCE_INITIALIZER;
 
 /**
  * The start year of the Korean traditional calendar (Dan-gi) is the inaugural

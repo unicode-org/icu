@@ -266,12 +266,13 @@ ICUBreakIteratorService::~ICUBreakIteratorService() {}
 
 // -------------------------------------
 
+// defined in ucln_cmn.h
 U_NAMESPACE_END
 
-// defined in ucln_cmn.h
-
+static icu::UInitOnce gInitOnce;
 static icu::ICULocaleService* gService = NULL;
-static UInitOnce gInitOnce;
+
+
 
 /**
  * Release all static memory held by breakiterator.

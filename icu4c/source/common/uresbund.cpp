@@ -36,6 +36,7 @@
 #include "putilimp.h"
 #include "uassert.h"
 
+U_NAMESPACE_BEGIN
 
 /*
 Static cache for already opened resource bundles - mostly for keeping fallback info
@@ -1119,6 +1120,7 @@ static UResourceBundle *init_resb_result(const ResourceData *rdata, Resource r,
     return resB;
 }
 
+U_CAPI
 UResourceBundle *ures_copyResb(UResourceBundle *r, const UResourceBundle *original, UErrorCode *status) {
     UBool isStackObject;
     if(U_FAILURE(*status) || r == original) {
@@ -2877,4 +2879,5 @@ ures_getVersionByKey(const UResourceBundle* res, const char *key, UVersionInfo v
   } 
 }
 
+U_NAMESPACE_END
 /* eof */

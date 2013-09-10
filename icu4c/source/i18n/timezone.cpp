@@ -111,14 +111,14 @@ static const int32_t       GMT_ID_LENGTH = 3;
 static const int32_t       UNKNOWN_ZONE_ID_LENGTH = 11;
 
 static icu::TimeZone* DEFAULT_ZONE = NULL;
-static UInitOnce gDefaultZoneInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gDefaultZoneInitOnce = U_INITONCE_INITIALIZER;
 
 static icu::TimeZone* _GMT = NULL;
 static icu::TimeZone* _UNKNOWN_ZONE = NULL;
-static UInitOnce gStaticZonesInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gStaticZonesInitOnce = U_INITONCE_INITIALIZER;
 
 static char TZDATA_VERSION[16];
-static UInitOnce gTZDataVersionInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gTZDataVersionInitOnce = U_INITONCE_INITIALIZER;
 
 static int32_t* MAP_SYSTEM_ZONES = NULL;
 static int32_t* MAP_CANONICAL_SYSTEM_ZONES = NULL;
@@ -128,9 +128,9 @@ static int32_t LEN_SYSTEM_ZONES = 0;
 static int32_t LEN_CANONICAL_SYSTEM_ZONES = 0;
 static int32_t LEN_CANONICAL_SYSTEM_LOCATION_ZONES = 0;
 
-static UInitOnce gSystemZonesInitOnce = U_INITONCE_INITIALIZER;
-static UInitOnce gCanonicalZonesInitOnce = U_INITONCE_INITIALIZER;
-static UInitOnce gCanonicalLocationZonesInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gSystemZonesInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gCanonicalZonesInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gCanonicalLocationZonesInitOnce = U_INITONCE_INITIALIZER;
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV timeZone_cleanup(void)

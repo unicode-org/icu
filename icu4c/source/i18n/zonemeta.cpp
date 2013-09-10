@@ -31,21 +31,21 @@ static UMutex gZoneMetaLock = U_MUTEX_INITIALIZER;
 
 // CLDR Canonical ID mapping table
 static UHashtable *gCanonicalIDCache = NULL;
-static UInitOnce   gCanonicalIDCacheInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce   gCanonicalIDCacheInitOnce = U_INITONCE_INITIALIZER;
 
 // Metazone mapping table
 static UHashtable *gOlsonToMeta = NULL;
-static UInitOnce   gOlsonToMetaInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce   gOlsonToMetaInitOnce = U_INITONCE_INITIALIZER;
 
 // Available metazone IDs vector and table
 static icu::UVector *gMetaZoneIDs = NULL;
 static UHashtable *gMetaZoneIDTable = NULL;
-static UInitOnce   gMetaZoneIDsInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce   gMetaZoneIDsInitOnce = U_INITONCE_INITIALIZER;
 
 // Country info vectors
 static icu::UVector *gSingleZoneCountries = NULL;
 static icu::UVector *gMultiZonesCountries = NULL;
-static UInitOnce gCountryInfoVectorsInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gCountryInfoVectorsInitOnce = U_INITONCE_INITIALIZER;
 
 U_CDECL_BEGIN
 

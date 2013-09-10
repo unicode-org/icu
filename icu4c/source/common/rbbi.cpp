@@ -1788,12 +1788,13 @@ int32_t RuleBasedBreakIterator::checkDictionary(int32_t startPos,
     return (reverse ? startPos : endPos);
 }
 
-U_NAMESPACE_END
-
 // defined in ucln_cmn.h
 
+U_NAMESPACE_END
+
+
 static icu::UStack *gLanguageBreakFactories = NULL;
-static UInitOnce    gLanguageBreakFactoriesInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce    gLanguageBreakFactoriesInitOnce = U_INITONCE_INITIALIZER;
 
 /**
  * Release all static memory held by breakiterator.  
