@@ -539,7 +539,7 @@ ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
  * Load a non-algorithmic converter.
  * If pkg==NULL, then this function must be called inside umtx_lock(&cnvCacheMutex).
  */
-U_CAPI UConverterSharedData *
+UConverterSharedData *
 ucnv_load(UConverterLoadArgs *pArgs, UErrorCode *err) {
     UConverterSharedData *mySharedConverterData;
 
@@ -889,7 +889,7 @@ ucnv_canCreateConverter(const char *converterName, UErrorCode *err) {
     return U_SUCCESS(*err);
 }
 
-U_CAPI UConverter *
+UConverter *
 ucnv_createAlgorithmicConverter(UConverter *myUConverter,
                                 UConverterType type,
                                 const char *locale, uint32_t options,
