@@ -24,6 +24,8 @@
 #include "umutex.h"
 #include "utracimp.h"
 
+U_NAMESPACE_BEGIN
+
 static UInitOnce gICUInitOnce = U_INITONCE_INITIALIZER;
 
 static UBool U_CALLCONV uinit_cleanup() {
@@ -64,3 +66,5 @@ u_init(UErrorCode *status) {
     umtx_initOnce(gICUInitOnce, &initData, *status);
     UTRACE_EXIT_STATUS(*status);
 }
+
+U_NAMESPACE_END

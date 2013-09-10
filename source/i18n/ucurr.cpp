@@ -113,11 +113,11 @@ static const UChar EUR_STR[] = {0x0045,0x0055,0x0052,0};
 
 // ISO codes mapping table
 static const UHashtable* gIsoCodes = NULL;
-static UInitOnce gIsoCodesInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gIsoCodesInitOnce = U_INITONCE_INITIALIZER;
 
 // Currency symbol equivalances
 static const icu::Hashtable* gCurrSymbolsEquiv = NULL;
-static UInitOnce gCurrSymbolsEquivInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gCurrSymbolsEquivInitOnce = U_INITONCE_INITIALIZER;
 
 // EquivIterator iterates over all strings that are equivalent to a given
 // string, s. Note that EquivIterator will never yield s itself.
