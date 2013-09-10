@@ -60,7 +60,7 @@
 
 #if !UCONFIG_NO_SERVICE
 static icu::ICULocaleService* gService = NULL;
-static UInitOnce gServiceInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gServiceInitOnce = U_INITONCE_INITIALIZER;
 #endif
 
 // INTERNAL - for cleanup

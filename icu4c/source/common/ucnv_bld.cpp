@@ -44,7 +44,7 @@
 #include "ucln_cmn.h"
 #include "ustr_cnv.h"
 
-
+U_NAMESPACE_BEGIN
 
 #if 0
 #include <stdio.h>
@@ -540,7 +540,7 @@ ucnv_deleteSharedConverterData(UConverterSharedData * deadSharedData)
  * Load a non-algorithmic converter.
  * If pkg==NULL, then this function must be called inside umtx_lock(&cnvCacheMutex).
  */
-UConverterSharedData *
+U_CAPI UConverterSharedData *
 ucnv_load(UConverterLoadArgs *pArgs, UErrorCode *err) {
     UConverterSharedData *mySharedConverterData;
 
@@ -890,7 +890,7 @@ ucnv_canCreateConverter(const char *converterName, UErrorCode *err) {
     return U_SUCCESS(*err);
 }
 
-UConverter *
+U_CAPI UConverter *
 ucnv_createAlgorithmicConverter(UConverter *myUConverter,
                                 UConverterType type,
                                 const char *locale, uint32_t options,
@@ -1701,5 +1701,7 @@ ucnv_swap(const UDataSwapper *ds,
 }
 
 #endif /* #if !UCONFIG_NO_LEGACY_CONVERSION */
+
+U_NAMESPACE_END
 
 #endif

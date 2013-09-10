@@ -33,7 +33,7 @@
 #define DELETE_ARRAY(array) uprv_free((void *) (array))
 
 static icu::CharsetRecognizer **fCSRecognizers = NULL;
-static UInitOnce gCSRecognizersInitOnce;
+static icu::UInitOnce gCSRecognizersInitOnce;
 static int32_t fCSRecognizers_size = 0;
 
 U_CDECL_BEGIN

@@ -42,7 +42,7 @@
 
 static const InverseUCATableHeader* _staticInvUCA = NULL;
 static UDataMemory* invUCA_DATA_MEM = NULL;
-static UInitOnce    gStaticInvUCAInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce    gStaticInvUCAInitOnce = U_INITONCE_INITIALIZER;
 
 U_CDECL_BEGIN
 static UBool U_CALLCONV

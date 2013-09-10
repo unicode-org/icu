@@ -54,7 +54,7 @@ static icu::CalendarAstronomer *gChineseCalendarAstro = NULL;
 static icu::CalendarCache *gChineseCalendarWinterSolsticeCache = NULL;
 static icu::CalendarCache *gChineseCalendarNewYearCache = NULL;
 static icu::TimeZone *gChineseCalendarZoneAstroCalc = NULL;
-static UInitOnce gChineseCalendarZoneAstroCalcInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gChineseCalendarZoneAstroCalcInitOnce = U_INITONCE_INITIALIZER;
 
 /**
  * The start year of the Chinese calendar, the 61st year of the reign
