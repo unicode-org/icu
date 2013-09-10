@@ -1953,10 +1953,19 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         {'v', ZONE, LONG - 2*DELTA, 4},
         {'z', ZONE, SHORT, 1, 3},
         {'z', ZONE, LONG, 4},
-        {'Z', ZONE, SHORT - DELTA, 1, 3},
+        {'Z', ZONE, NARROW - DELTA, 1, 3},
         {'Z', ZONE, LONG - DELTA, 4},
-        {'V', ZONE, SHORT - DELTA, 1, 3},
-        {'V', ZONE, LONG - DELTA, 4},
+        {'Z', ZONE, SHORT - DELTA, 5},
+        {'O', ZONE, SHORT - DELTA, 1},
+        {'O', ZONE, LONG - DELTA, 4},
+        {'V', ZONE, SHORT - DELTA, 1},
+        {'V', ZONE, LONG - DELTA, 2},
+        {'X', ZONE, NARROW - DELTA, 1},
+        {'X', ZONE, SHORT - DELTA, 2},
+        {'X', ZONE, LONG - DELTA, 4},
+        {'x', ZONE, NARROW - DELTA, 1},
+        {'x', ZONE, SHORT - DELTA, 2},
+        {'x', ZONE, LONG - DELTA, 4},
     };
 
     private static class DateTimeMatcher implements Comparable<DateTimeMatcher> {

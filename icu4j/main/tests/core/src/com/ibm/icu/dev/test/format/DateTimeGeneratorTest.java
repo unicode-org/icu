@@ -538,7 +538,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
     }
     
     public void TestVariableCharacters() {
-        UnicodeSet valid = new UnicodeSet("[G   y   Y   u   Q   q   M   L  l  w   W   d   D   F   g   E   e   c   a   h   H   K   k   m   s   S   A   z   Z   v   V   U]");
+        UnicodeSet valid = new UnicodeSet("[G y Y u U Q q M L l w W d D F g E e c a h H K k m s S A z Z O v V X x]");
         for (char c = 0; c < 0xFF; ++c) {
             boolean works = false;
             try {
@@ -1215,4 +1215,123 @@ public class DateTimeGeneratorTest extends TestFmwk {
               }
           }
       }
+
+    /**
+     * Test that DTPG can handle all valid pattern character / length combinations
+     */
+    private final class AllFieldsTestItem {
+        public char patternChar;
+        public int[] fieldLengths;
+        public String mustIncludeOneOf;
+        // Simple constructor
+        public AllFieldsTestItem(char pC, int[] fL, String mI) {
+            patternChar = pC;
+            fieldLengths = fL;
+            mustIncludeOneOf = mI;
+        }
+    }
+    public void TestAllFieldPatterns() {
+        String[] localeNames = {
+            "root",
+            "root@calendar=japanese",
+            "root@calendar=chinese",
+            "en",
+            "en@calendar=japanese",
+            "en@calendar=chinese",
+        };
+        final AllFieldsTestItem[] testItems = {
+            //                     pat   fieldLengths             generated pattern must
+            //                     chr   to test                  include one of these
+            new AllFieldsTestItem( 'G',  new int[]{1,2,3,4,5},    "G"    ), // era
+            // year
+            new AllFieldsTestItem( 'y',  new int[]{1,2,3,4},      "yU"   ), // year
+            new AllFieldsTestItem( 'Y',  new int[]{1,2,3,4},      "Y"    ), // year for week of year
+            new AllFieldsTestItem( 'u',  new int[]{1,2,3,4,5},    "yuU"  ), // extended year
+            new AllFieldsTestItem( 'U',  new int[]{1,2,3,4,5},    "yU"   ), // cyclic year name
+            // quarter
+            new AllFieldsTestItem( 'Q',  new int[]{1,2,3,4},      "Qq"   ), // x
+            new AllFieldsTestItem( 'q',  new int[]{1,2,3,4},      "Qq"   ), // standalone
+            // month
+            new AllFieldsTestItem( 'M',  new int[]{1,2,3,4,5},    "ML"   ), // x
+            new AllFieldsTestItem( 'L',  new int[]{1,2,3,4,5},    "ML"   ), // standalone
+            // week
+            new AllFieldsTestItem( 'w',  new int[]{1,2},          "w"    ), // week of year
+            new AllFieldsTestItem( 'W',  new int[]{1},            "W"    ), // week of month
+            // day
+            new AllFieldsTestItem( 'd',  new int[]{1,2},          "d"    ), // day of month
+            new AllFieldsTestItem( 'D',  new int[]{1,2,3},        "D"    ), // day of year
+            new AllFieldsTestItem( 'F',  new int[]{1},            "F"    ), // day of week in month
+            new AllFieldsTestItem( 'g',  new int[]{7},            "g"    ), // modified julian day
+            // weekday
+            new AllFieldsTestItem( 'E',  new int[]{1,2,3,4,5,6},  "Eec"  ), // day of week
+            new AllFieldsTestItem( 'e',  new int[]{1,2,3,4,5,6},  "Eec"  ), // local day of week
+            new AllFieldsTestItem( 'c',  new int[]{1,2,3,4,5,6},  "Eec"  ), // standalone local day of week
+            // day period
+        //  new AllFieldsTestItem( 'a',  new int[]{1},            "a"    ), // am or pm   // not clear this one is supposed to work (it doesn't)
+            // hour
+            new AllFieldsTestItem( 'h',  new int[]{1,2},          "hK"   ), // 12 (1-12)
+            new AllFieldsTestItem( 'H',  new int[]{1,2},          "Hk"   ), // 24 (0-23)
+            new AllFieldsTestItem( 'K',  new int[]{1,2},          "hK"   ), // 12 (0-11)
+            new AllFieldsTestItem( 'k',  new int[]{1,2},          "Hk"   ), // 24 (1-24)
+            new AllFieldsTestItem( 'j',  new int[]{1,2},          "hHKk" ), // locale default
+            // minute
+            new AllFieldsTestItem( 'm',  new int[]{1,2},          "m"    ), // x
+            // second & fractions
+            new AllFieldsTestItem( 's',  new int[]{1,2},          "s"    ), // x
+            new AllFieldsTestItem( 'S',  new int[]{1,2,3,4},      "S"    ), // fractional second
+            new AllFieldsTestItem( 'A',  new int[]{8},            "A"    ), // milliseconds in day
+            // zone
+            new AllFieldsTestItem( 'z',  new int[]{1,2,3,4},      "z"    ), // x
+            new AllFieldsTestItem( 'Z',  new int[]{1,2,3,4,5},    "Z"    ), // x
+            new AllFieldsTestItem( 'O',  new int[]{1,4},          "O"    ), // x
+            new AllFieldsTestItem( 'v',  new int[]{1,4},          "v"    ), // x
+            new AllFieldsTestItem( 'V',  new int[]{1,2,3,4},      "V"    ), // x
+            new AllFieldsTestItem( 'X',  new int[]{1,2,3,4,5},    "X"    ), // x
+            new AllFieldsTestItem( 'x',  new int[]{1,2,3,4,5},    "x"    ), // x
+        };
+        final int FIELD_LENGTH_MAX = 8;
+
+        for (String localeName: localeNames) {
+            ULocale uloc = new ULocale(localeName);
+            DateTimePatternGenerator dtpgen = DateTimePatternGenerator.getInstance(uloc);
+            for (AllFieldsTestItem testItem: testItems) {
+            	char[] skelBuf = new char[FIELD_LENGTH_MAX];
+            	for (int chrIndx = 0; chrIndx < FIELD_LENGTH_MAX; chrIndx++) {
+            	    skelBuf[chrIndx] = testItem.patternChar;
+            	}
+            	for (int lenIndx = 0; lenIndx < testItem.fieldLengths.length; lenIndx++) {
+            	    int skelLen = testItem.fieldLengths[lenIndx];
+            	    if (skelLen > FIELD_LENGTH_MAX) {
+            	        continue;
+            	    };
+            	    String skeleton = new String(skelBuf, 0, skelLen);
+            	    String pattern = dtpgen.getBestPattern(skeleton);
+            	    if (pattern.length() <= 0) {
+                        errln("DateTimePatternGenerator getBestPattern for locale " + localeName +
+                              ", skeleton " + skeleton + ", produces 0-length pattern");
+            	    } else {
+            	        // test that resulting pattern has at least one char in mustIncludeOneOf
+            	        boolean inQuoted = false;
+            	        int patIndx, patLen = pattern.length();
+            	        for (patIndx = 0; patIndx < patLen; patIndx++) {
+            	            char c = pattern.charAt(patIndx);
+            	            if (c == '\'') {
+            	                inQuoted = !inQuoted;
+            	            } else if (!inQuoted && c <= 'z' && c >= 'A') {
+            	                if (testItem.mustIncludeOneOf.indexOf(c) >= 0) {
+            	                    break;
+            	                }
+            	            }
+            	        }
+            	        if (patIndx >= patLen) {
+                            errln("DateTimePatternGenerator getBestPattern for locale " + localeName +
+                                  ", skeleton " + skeleton +
+                                  ", produces pattern without required chars: " + pattern);
+            	        }
+            	    }
+            	}
+            }
+        }
+    }
+
 }
