@@ -1009,7 +1009,7 @@ void IntlTestDateTimePatternGeneratorAPI::testAllFieldPatterns(/*char *par*/)
                             UChar c = pattern.charAt(patIndx);
                             if (c == 0x27) {
                                 inQuoted = !inQuoted;
-                            } else if (!inQuoted && c <= 0x007A &&c >= 0x0041) {
+                            } else if (!inQuoted && c <= 0x007A && c >= 0x0041) {
                                 if (mustIncludeOneOf.indexOf(c) >= 0) {
                                     break;
                                 }
