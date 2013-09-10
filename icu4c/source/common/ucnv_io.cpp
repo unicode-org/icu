@@ -161,8 +161,6 @@
  *
  */
 
-U_NAMESPACE_BEGIN
-
 /**
  * Used by the UEnumeration API
  */
@@ -1338,8 +1336,6 @@ ucnv_swapAliases(const UDataSwapper *ds,
 
 #endif
 
-
-U_NAMESPACE_END
 
 /*
  * Hey, Emacs, please set the following:
