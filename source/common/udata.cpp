@@ -107,7 +107,7 @@ static UDataMemory *gCommonICUDataArray[10] = { NULL };
 static UBool gHaveTriedToLoadCommonData = FALSE;  /* See extendICUData(). */
 
 static UHashtable  *gCommonDataCache = NULL;  /* Global hash table of opened ICU data files.  */
-static UInitOnce    gCommonDataCacheInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gCommonDataCacheInitOnce = U_INITONCE_INITIALIZER;
 
 static UDataFileAccess  gDataFileAccess = UDATA_DEFAULT_ACCESS;
 

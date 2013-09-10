@@ -55,7 +55,7 @@ static void ucol_setReorderCodesFromParser(UCollator *coll, UColTokenParser *par
 // static UCA. There is only one. Collators don't use it.
 // It is referenced only in ucol_initUCA and ucol_cleanup
 static UCollator* _staticUCA = NULL;
-static UInitOnce  gStaticUCAInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gStaticUCAInitOnce = U_INITONCE_INITIALIZER;
 // static pointer to udata memory. Inited in ucol_initUCA
 // used for cleanup in ucol_cleanup
 static UDataMemory* UCA_DATA_MEM = NULL;

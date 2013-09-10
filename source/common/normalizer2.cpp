@@ -458,10 +458,10 @@ static Norm2AllModes *nfkc_cfSingleton;
 static Normalizer2   *noopSingleton;
 static UHashtable    *cache=NULL;
 
-static UInitOnce nfcInitOnce = U_INITONCE_INITIALIZER;
-static UInitOnce nfkcInitOnce = U_INITONCE_INITIALIZER;
-static UInitOnce nfkc_cfInitOnce = U_INITONCE_INITIALIZER;
-static UInitOnce noopInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce nfcInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce nfkcInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce nfkc_cfInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce noopInitOnce = U_INITONCE_INITIALIZER;
 
 // UInitOnce singleton initialization function
 static void U_CALLCONV initSingletons(const char *what, UErrorCode &errorCode) {

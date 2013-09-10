@@ -42,7 +42,7 @@ U_CDECL_BEGIN
 Static cache for already opened StringPrep profiles
 */
 static UHashtable *SHARED_DATA_HASHTABLE = NULL;
-static UInitOnce   gSharedDataInitOnce;
+static icu::UInitOnce gSharedDataInitOnce;
 
 static UMutex usprepMutex = U_MUTEX_INITIALIZER;
 
