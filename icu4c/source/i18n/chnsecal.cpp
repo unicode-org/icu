@@ -838,7 +838,7 @@ ChineseCalendar::inDaylightTime(UErrorCode& status) const
 
 static UDate     gSystemDefaultCenturyStart       = DBL_MIN;
 static int32_t   gSystemDefaultCenturyStartYear   = -1;
-static UInitOnce gSystemDefaultCenturyInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gSystemDefaultCenturyInitOnce = U_INITONCE_INITIALIZER;
 
 
 UBool ChineseCalendar::haveDefaultCentury() const

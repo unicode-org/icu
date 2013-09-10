@@ -167,7 +167,7 @@ static UMutex cnvCacheMutex = U_MUTEX_INITIALIZER;  /* Mutex for synchronizing c
 
 static const char **gAvailableConverters = NULL;
 static uint16_t gAvailableConverterCount = 0;
-static UInitOnce gAvailableConvertersInitOnce = U_INITONCE_INITIALIZER;
+static icu::UInitOnce gAvailableConvertersInitOnce = U_INITONCE_INITIALIZER;
 
 #if !U_CHARSET_IS_UTF8
 

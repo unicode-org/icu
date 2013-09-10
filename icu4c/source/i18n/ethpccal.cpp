@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2003 - 2013, International Business Machines Corporation and  *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2003 - 2013, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 
@@ -141,7 +141,7 @@ EthiopicCalendar::handleGetLimit(UCalendarDateFields field, ELimitType limitType
  */
 static UDate           gSystemDefaultCenturyStart       = DBL_MIN;
 static int32_t         gSystemDefaultCenturyStartYear   = -1;
-static UInitOnce       gSystemDefaultCenturyInit        = U_INITONCE_INITIALIZER;
+static icu::UInitOnce  gSystemDefaultCenturyInit        = U_INITONCE_INITIALIZER;
 
 static void U_CALLCONV initializeSystemDefaultCentury()
 {
