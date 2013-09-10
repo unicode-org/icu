@@ -36,7 +36,6 @@
 #include "putilimp.h"
 #include "uassert.h"
 
-U_NAMESPACE_BEGIN
 
 /*
 Static cache for already opened resource bundles - mostly for keeping fallback info
@@ -2879,5 +2878,4 @@ ures_getVersionByKey(const UResourceBundle* res, const char *key, UVersionInfo v
   } 
 }
 
-U_NAMESPACE_END
 /* eof */
