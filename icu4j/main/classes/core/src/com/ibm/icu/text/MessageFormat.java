@@ -1592,7 +1592,7 @@ public class MessageFormat extends UFormat {
      * <p>Exactly one of args and argsMap must be null, the other non-null.
      *
      * @param msgStart      Index to msgPattern part to start formatting from.
-     * @param pluralNumber  null except when formatting a plural argument sub-message.
+     * @param pluralNumber  null except when formatting a plural argument sub-message
      *                      where a '#' is replaced by the format string for this number.
      * @param args          The formattable objects array. Non-null iff numbered values are used.
      * @param argsMap       The key-value map of formattable objects. Non-null iff named values are used.
@@ -1631,7 +1631,7 @@ public class MessageFormat extends UFormat {
             ArgType argType=part.getArgType();
             part=msgPattern.getPart(++i);
             Object arg;
-            String noArg=null;
+            boolean noArg=false;
             Object argId=null;
             String argName=msgPattern.getSubstring(part);
             if(args!=null) {
@@ -1644,7 +1644,7 @@ public class MessageFormat extends UFormat {
                     arg=args[argNumber];
                 } else {
                     arg=null;
-                    noArg="{"+argNumber+"}";
+                    noArg=true;
                 }
             } else {
                 argId = argName;
@@ -1652,14 +1652,14 @@ public class MessageFormat extends UFormat {
                     arg=argsMap.get(argName);
                 } else {
                     arg=null;
-                    noArg="{"+argName+"}";
+                    noArg=true;
                 }
             }
             ++i;
             int prevDestLength=dest.length;
             Format formatter = null;
-            if (noArg != null) {
-                dest.append(noArg);
+            if (noArg) {
+                dest.append("{"+argName+"}");
             } else if (arg == null) {
                 dest.append("null");
             } else if(pluralNumber!=null && pluralNumber.numberArgIndex==(i-2)) {
