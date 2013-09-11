@@ -728,7 +728,7 @@ void ThreadSafeFormat::init(UErrorCode &status) {
 }
 
 void ThreadSafeFormat::fini(UErrorCode &status) {
-  gFormat.orphan();
+  gFormat.adoptInstead(NULL);
 }
 
 ThreadSafeFormat::ThreadSafeFormat() {
