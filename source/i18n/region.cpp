@@ -14,7 +14,7 @@
 */
 
 /**
- * \file 
+ * \file
  * \brief C++ API: Region classes (territory containment)
  */
 
@@ -73,7 +73,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(RegionNameEnumeration)
  * Initializes the region data from the ICU resource bundles.  The region data
  * contains the basic relationships such as which regions are known, what the numeric
  * codes are, any known aliases, and the territory containment data.
- * 
+ *
  * If the region data has already loaded, then this method simply returns without doing
  * anything meaningful.
  */
@@ -90,7 +90,7 @@ void Region::loadRegionData() {
         return;
     }
 
-   
+
     UErrorCode status = U_ZERO_ERROR;
 
     UResourceBundle* regionCodes = NULL;
@@ -118,7 +118,7 @@ void Region::loadRegionData() {
     UResourceBundle *rb = ures_openDirect(NULL,"metadata",&status);
     regionCodes = ures_getByKey(rb,"regionCodes",NULL,&status);
     territoryAlias = ures_getByKey(rb,"territoryAlias",NULL,&status);
-    
+
     UResourceBundle *rb2 = ures_openDirect(NULL,"supplementalData",&status);
     codeMappings = ures_getByKey(rb2,"codeMappings",NULL,&status);
 
@@ -232,7 +232,7 @@ void Region::loadRegionData() {
                 }
                 UnicodeString *code3 = new UnicodeString(codeMapping3Letter);
                 uhash_put(regionAliases,(void *)code3, (void *)r,&status);
-            }                    
+            }
         }
         ures_close(mapping);
     }
@@ -286,14 +286,14 @@ void Region::loadRegionData() {
         for ( int j = 0 ; j < ures_getSize(mapping); j++ ) {
             UnicodeString child = ures_getUnicodeStringByIndex(mapping,j,&status);
             Region *childRegion = (Region *) uhash_get(regionIDMap,(void *)&child);
-            if ( parentRegion != NULL && childRegion != NULL ) {                    
+            if ( parentRegion != NULL && childRegion != NULL ) {
 
                 // Add the child region to the set of regions contained by the parent
                 if (parentRegion->containedRegions == NULL) {
                     parentRegion->containedRegions = new UVector(uprv_deleteUObject, uhash_compareUnicodeString, status);
                 }
 
-                UnicodeString *childStr = new UnicodeString(status);
+                UnicodeString *childStr = new UnicodeString();
                 childStr->fastCopyFrom(childRegion->idStr);
                 parentRegion->containedRegions->addElement((void *)childStr,status);
 
@@ -306,7 +306,7 @@ void Region::loadRegionData() {
             }
         }
         ures_close(mapping);
-    }     
+    }
 
     // Create the availableRegions lists
     int32_t pos = -1;
@@ -392,7 +392,7 @@ UBool
 Region::operator!=(const Region &that) const {
         return (idStr != that.idStr);
 }
- 
+
 /**
  * Returns a pointer to a Region using the given region code.  The region code can be either 2-letter ISO code,
  * 3-letter ISO code,  UNM.49 numeric code, or other valid Unicode Region Code as defined by the LDML specification.
@@ -442,7 +442,7 @@ Region::getInstance(const char *region_code, UErrorCode &status) {
  * Returns a pointer to a Region using the given numeric region code. If the numeric region code is not recognized,
  * the appropriate error code will be set ( U_ILLEGAL_ARGUMENT_ERROR ).
  */
-const Region* U_EXPORT2 
+const Region* U_EXPORT2
 Region::getInstance (int32_t code, UErrorCode &status) {
 
     loadRegionData();
@@ -458,7 +458,7 @@ Region::getInstance (int32_t code, UErrorCode &status) {
         UErrorCode fs = U_ZERO_ERROR;
         UnicodeString pat = UNICODE_STRING_SIMPLE("00#");
         DecimalFormat *df = new DecimalFormat(pat,fs);
-        
+
         UnicodeString id;
         id.remove();
         df->format(code,id);
@@ -488,14 +488,14 @@ Region::getInstance (int32_t code, UErrorCode &status) {
  */
 StringEnumeration* U_EXPORT2
 Region::getAvailable(URegionType type) {
-    
+
     loadRegionData();
     UErrorCode status = U_ZERO_ERROR;
     return new RegionNameEnumeration(availableRegions[type],status);
 
-    return NULL; 
+    return NULL;
 }
-   
+
 /**
  * Returns a pointer to the region that contains this region.  Returns NULL if this region is code "001" (World)
  * or "ZZ" (Unknown region). For example, calling this method with region "IT" (Italy) returns the
@@ -555,7 +555,7 @@ Region::getContainedRegions( URegionType type ) const {
 
     UErrorCode status = U_ZERO_ERROR;
     UVector *result = new UVector(NULL, uhash_compareChars, status);
- 
+
     StringEnumeration *cr = getContainedRegions();
 
     for ( int32_t i = 0 ; i < cr->count(status) ; i++ ) {
@@ -578,7 +578,7 @@ Region::getContainedRegions( URegionType type ) const {
     delete result;
     return resultEnumeration;
 }
- 
+
 /**
  * Returns true if this region contains the supplied other region anywhere in the region hierarchy.
  */
@@ -619,7 +619,7 @@ Region::getPreferredValues() const {
         return NULL;
     }
 }
- 
+
 
 /**
  * Return this region's canonical region code.
@@ -649,16 +649,16 @@ RegionNameEnumeration::RegionNameEnumeration(UVector *fNameList, UErrorCode& sta
         for ( int32_t i = 0 ; i < fNameList->size() ; i++ ) {
             UnicodeString* this_region_name = (UnicodeString *)fNameList->elementAt(i);
             UnicodeString* new_region_name = new UnicodeString(*this_region_name);
-            fRegionNames->addElement((void *)new_region_name,status);          
+            fRegionNames->addElement((void *)new_region_name,status);
         }
     }
-    else { 
+    else {
         fRegionNames = NULL;
     }
 }
 
 const UnicodeString*
-RegionNameEnumeration::snext(UErrorCode& status) { 
+RegionNameEnumeration::snext(UErrorCode& status) {
   if (U_FAILURE(status) || (fRegionNames==NULL)) {
     return NULL;
   }
