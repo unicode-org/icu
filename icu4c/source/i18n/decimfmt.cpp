@@ -1064,7 +1064,7 @@ DecimalFormat::getFixedDecimal(double number, UErrorCode &status) const {
 
     int32_t numTrailingFractionZeros = minFractionDigits - result.visibleDecimalDigitCount;
     if (numTrailingFractionZeros > 0) {
-        double scaleFactor = pow(10.0, numTrailingFractionZeros);
+      double scaleFactor = pow(10.0, (double)numTrailingFractionZeros);
         result.decimalDigits *= scaleFactor;
         result.visibleDecimalDigitCount += numTrailingFractionZeros;
     }
@@ -1534,7 +1534,7 @@ DecimalFormat::_round(const DigitList &number, DigitList &adjustedNum, UBool& is
 
     if (fScale != 0) {
         DigitList ten;
-        ten.set(10);
+        ten.set((int32_t)10);
         if (fScale > 0) {
             for (int32_t i = fScale ; i > 0 ; i--) {
                 adjustedNum.mult(ten, status);
@@ -2179,7 +2179,7 @@ void DecimalFormat::parse(const UnicodeString& text,
 
         if (fScale != 0) {
             DigitList ten;
-            ten.set(10);
+            ten.set((int32_t)10);
             if (fScale > 0) {
                 for (int32_t i = fScale; i > 0; i--) {
                     UErrorCode ec = U_ZERO_ERROR;
