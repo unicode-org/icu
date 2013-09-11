@@ -48,7 +48,8 @@ The following names can be supplied as the argument for platform:
     Linux/ECC           Use the Intel ECC compiler on Linux
     Linux/ICC           Use the Intel ICC compiler on Linux
     Linux/VA            Use the IBM Visual Age compiler on Power PC Linux
-    MacOSX              Use the GNU gcc/g++ compilers on MacOS X (Darwin)
+    MacOSX              Use the default compilers on MacOS X (Darwin)
+    MacOSX/GCC          Use the GNU gcc/g++ compilers on MacOSX (Darwin)
     MinGW               Use the GNU gcc/g++ compilers on MinGW
     QNX                 Use the QNX QCC compiler on QNX/Neutrino
     Solaris             Use the Sun cc/CC compilers on Solaris
@@ -290,11 +291,21 @@ case $platform in
         ;;
     MacOSX)
         THE_OS="MacOS X (Darwin)"
+        THE_COMP="the default"
+        RELEASE_CFLAGS='-O2'
+        RELEASE_CXXFLAGS='-O2'
+        DEBUG_CFLAGS='-g -O0'
+        DEBUG_CXXFLAGS='-g -O0'
+        ;;
+    MacOSX/GCC)
+        THE_OS="MacOS X (Darwin)"
         THE_COMP="the GNU C++"
         RELEASE_CFLAGS='-O2'
         RELEASE_CXXFLAGS='-O2'
         DEBUG_CFLAGS='-g -O0'
         DEBUG_CXXFLAGS='-g -O0'
+	CC=gcc; export CC
+	CXX=g++; export CXX
         ;;
     MinGW)
         THE_OS="MinGW"
