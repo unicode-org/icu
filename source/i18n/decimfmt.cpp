@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 1997-2013, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 *
 * File DECIMFMT.CPP
@@ -1035,6 +1035,7 @@ DecimalFormat::getFixedDecimal(double number, UErrorCode &status) const {
         return result;
     }
 
+    result.source = number;
     int32_t minFractionDigits = getMinimumFractionDigits();
 
     if (fMultiplier == NULL && fScale == 0 && fRoundingIncrement == 0 && areSignificantDigitsUsed() == FALSE &&
@@ -1085,7 +1086,7 @@ DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) co
     
     DigitList *digits = number.getDigitList();
     if (digits == NULL || digits->getCount() <= 15) {
-        return getFixedDecimal(number.getDouble(), status);
+        return getFixedDecimal(number.getDouble(status), status);
     }
 
     // We have an incoming DigitList in the formattable, and it holds more digits than
