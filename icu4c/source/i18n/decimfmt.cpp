@@ -1073,6 +1073,73 @@ DecimalFormat::getFixedDecimal(double number, UErrorCode &status) const {
 }
 
 
+FixedDecimal
+DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) const {
+    if (U_FAILURE(status)) {
+        return FixedDecimal();
+    }
+    if (!number.isNumeric()) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return FixedDecimal();
+    }
+    
+    DigitList *digits = number.getDigitList();
+    if (digits == NULL || digits->getCount() <= 15) {
+        return getFixedDecimal(number.getDouble(), status);
+    }
+
+    // We have an incoming DigitList in the formattable, and it holds more digits than
+    // a double can safely represent. 
+    // Compute the fields of the fixed decimal directly from the digit list.
+       
+    FixedDecimal result;
+    result.source = digits->getDouble();
+
+    // Round the number according to the requirements of this Format.
+    DigitList roundedNum;
+    _round(*digits, roundedNum, result.isNegative, status);
+
+    // The int64_t fields in FixedDecimal can easily overflow.
+    // In deciding what to discard in this event, consider that fixedDecimal
+    //   is being used only with PluralRules, and those rules mostly look at least significant
+    //   few digits of the integer part, and whether the fraction part is zero or not.
+    // 
+    // So, in case of overflow when filling in the fields of the FixedDecimal object,
+    //    for the integer part, discard the most significant digits.
+    //    for the fraction part, discard the least significant digits,
+    //                           don't truncate the fraction value to zero.
+    // For simplicity, the int64_t fields are limited to 18 decimal digits, even
+    // though they could hold most (but not all) 19 digit values.
+
+    // Integer Digits.
+    int32_t di = roundedNum.getDecimalAt()-18;  // Take at most 18 digits.
+    if (di < 0) {
+        di = 0;
+    }
+    result.intValue = 0;
+    for (; di<roundedNum.getDecimalAt(); di++) {
+        result.intValue = result.intValue * 10 + (roundedNum.getDigit(di) & 0x0f);
+    }
+    
+    // Fraction digits.
+    result.visibleDecimalDigitCount = result.decimalDigits = result.decimalDigitsWithoutTrailingZeros = 0;
+    for (di = roundedNum.getDecimalAt(); di < roundedNum.getCount(); di++) {
+        result.visibleDecimalDigitCount++;
+        if (result.decimalDigits <  100000000000000000LL) {
+                   //              9223372036854775807    Largest 64 bit signed integer
+            int32_t digitVal = roundedNum.getDigit(di) & 0x0f;  // getDigit() returns a char, '0'-'9'.
+            result.decimalDigits = result.decimalDigits * 10 + digitVal;
+            if (digitVal > 0) {
+                result.decimalDigitsWithoutTrailingZeros = result.decimalDigits;
+            }
+        }
+    }
+
+    result.hasIntegerValue = (result.decimalDigits == 0);
+    return result;
+}
+
+
 //------------------------------------------------------------------------------
 
 UnicodeString&
