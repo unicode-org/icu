@@ -1872,7 +1872,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         StringBuffer result = new StringBuffer();
         assertEquals("simple format(1)", "one meter",
                 m.format(args, result, ignore).toString());
-        
+
         args[0] = 1.5;
         result.delete(0, result.length());
         assertEquals("simple format(1.5)", "1.5 meters",
@@ -1886,7 +1886,7 @@ public class TestMessageFormat extends com.ibm.icu.dev.test.TestFmwk {
         result.delete(0, result.length());
         assertEquals("explicit format(1)", "one meter",
                 m0.format(args, result, ignore).toString());
-        
+
         args[0] = 1.5;
         result.delete(0, result.length());
         assertEquals("explicit format(1.5)", "1.5 meters",
