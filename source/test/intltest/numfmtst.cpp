@@ -7273,6 +7273,7 @@ void NumberFormatTest::TestParseSignsAndMarks() {
         } else {
             dataerrln("FAIL: NumberFormat::createInstance for locale % gives error %s", itemPtr->locale, u_errorName(status));
         }
+        delete numfmt;
     }
 }
 
