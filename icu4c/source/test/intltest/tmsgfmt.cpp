@@ -67,6 +67,7 @@ TestMessageFormat::runIndexedTest(int32_t index, UBool exec,
     TESTCASE_AUTO(testGetFormatNames);
     TESTCASE_AUTO(TestTrimArgumentName);
     TESTCASE_AUTO(TestSelectOrdinal);
+    TESTCASE_AUTO(TestDecimals);
     TESTCASE_AUTO_END;
 }
 
@@ -1890,6 +1891,76 @@ void TestMessageFormat::TestSelectOrdinal() {
                  m.format(args, 1, result.remove(), ignore, errorCode), TRUE);
 
     errorCode.logDataIfFailureAndReset("");
+}
+
+void TestMessageFormat::TestDecimals() {
+    IcuTestErrorCode errorCode(*this, "TestDecimals");
+    // Simple number replacement.
+    MessageFormat m(
+            "{0,plural,one{one meter}other{# meters}}",
+            Locale::getEnglish(), errorCode);
+    Formattable args[1] = { (int32_t)1 };
+    FieldPosition ignore;
+    UnicodeString result;
+    assertEquals("simple format(1)", "one meter",
+            m.format(args, 1, result, ignore, errorCode));
+
+    args[0] = 1.5;
+    result.remove();
+    assertEquals("simple format(1.5)", "1.5 meters",
+            m.format(args, 1, result, ignore, errorCode));
+
+    // Simple but explicit.
+    MessageFormat m0(
+            "{0,plural,one{one meter}other{{0} meters}}",
+            Locale::getEnglish(), errorCode);
+    args[0] = 1;
+    result.remove();
+    assertEquals("explicit format(1)", "one meter",
+            m0.format(args, 1, result, ignore, errorCode));
+
+    args[0] = 1.5;
+    result.remove();
+    assertEquals("explicit format(1.5)", "1.5 meters",
+            m0.format(args, 1, result, ignore, errorCode));
+
+    // With offset and specific simple format with optional decimals.
+    MessageFormat m1(
+            "{0,plural,offset:1 one{another meter}other{{0,number,00.#} meters}}",
+            Locale::getEnglish(), errorCode);
+    args[0] = 1;
+    result.remove();
+    assertEquals("offset format(1)", "01 meters",
+            m1.format(args, 1, result, ignore, errorCode));
+
+    args[0] = 2;
+    result.remove();
+    assertEquals("offset format(1)", "another meter",
+            m1.format(args, 1, result, ignore, errorCode));
+
+    args[0] = 2.5;
+    result.remove();
+    assertEquals("offset format(1)", "02.5 meters",
+            m1.format(args, 1, result, ignore, errorCode));
+
+    // With offset and specific simple format with forced decimals.
+    MessageFormat m2(
+            "{0,plural,offset:1 one{another meter}other{{0,number,0.0} meters}}",
+            Locale::getEnglish(), errorCode);
+    args[0] = 1;
+    result.remove();
+    assertEquals("offset-decimals format(1)", "1.0 meters",
+            m2.format(args, 1, result, ignore, errorCode));
+
+    args[0] = 2;
+    result.remove();
+    assertEquals("offset-decimals format(1)", "2.0 meters",
+            m2.format(args, 1, result, ignore, errorCode));
+
+    args[0] = 2.5;
+    result.remove();
+    assertEquals("offset-decimals format(1)", "2.5 meters",
+            m2.format(args, 1, result, ignore, errorCode));
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
