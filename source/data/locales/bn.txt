@@ -11,6 +11,14 @@
  */
 bn{
     AuxExemplarCharacters{"[\u200C\u200D ৲ ৳ ৴ ৵ ৶ ৷ ৸ ৹ ৰ ৱ]"}
+    Ellipsis{
+        final{"{0} …"}
+        initial{"… {0}"}
+        medial{"{0} … {1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{
         "[\u09BC ৺ অ আ ই ঈ উ ঊ ঋ ৠ ঌ ৡ এ ঐ ও ঔ ং ঃ \u0981 ক {ক\u09CDষ} খ গ ঘ ঙ চ ছ জ "
         "ঝ ঞ ট ঠ ড {ড\u09BC} ঢ {ঢ\u09BC} ণ ত ৎ থ দ ধ ন প ফ ব ভ ম য {য\u09BC} র ল শ ষ "
@@ -23,6 +31,7 @@ bn{
     LocaleScript{
         "Beng",
     }
+    MoreInformation{"?"}
     NumberElements{
         beng{
             symbols{
@@ -36,6 +45,7 @@ bn{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"#,##,##0.00¤;(#,##,##0.00¤)"}
                 currencyFormat{"#,##,##0.00¤;(#,##,##0.00¤)"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##,##0%"}
@@ -313,6 +323,10 @@ bn{
         }
         gregorian{
             AmPmMarkers{
+                "পূর্বাহ্ণ",
+                "অপরাহ্ণ",
+            }
+            AmPmMarkersNarrow{
                 "পূর্বাহ্ণ",
                 "অপরাহ্ণ",
             }
@@ -983,6 +997,18 @@ bn{
         US{"মার্কিন"}
         metric{"মেট্রিক"}
     }
+    transformNames{
+        BGN{"BGN"}
+        Numeric{"সাংখিক"}
+        Tone{"স্বরভঙ্গি"}
+        UNGEGN{"UNGEGN"}
+        x-Accents{"অ্যাসেন্টস"}
+        x-Fullwidth{"পূর্ণচওড়া"}
+        x-Halfwidth{"অর্ধচওড়া"}
+        x-Jamo{"জ্যামো"}
+        x-Pinyin{"পিনইন"}
+        x-Publishing{"প্রকাশনা"}
+    }
     units{
         acceleration{
             g-force{
@@ -1029,6 +1055,9 @@ bn{
                 one{"{0} বর্গ মাইল"}
                 other{"{0} বর্গ মাইল"}
             }
+        }
+        compound{
+            per{"{1} প্রতি {0}"}
         }
         duration{
             day{
@@ -1191,6 +1220,217 @@ bn{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0} জি-বল"}
+                other{"{0} জি-বল"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0}মিনিট"}
+                other{"{0}মিনিট"}
+            }
+            arc-second{
+                one{"{0}সেকেন্ড"}
+                other{"{0}সেকেন্ড"}
+            }
+            degree{
+                one{"{0}ডিগ্রী"}
+                other{"{0}ডিগ্রী"}
+            }
+        }
+        area{
+            acre{
+                one{"{0} একর"}
+                other{"{0} একর"}
+            }
+            hectare{
+                one{"{0} হেক্টর"}
+                other{"{0} হেক্টর"}
+            }
+            square-foot{
+                one{"{0} বর্গ ফুট"}
+                other{"{0} বর্গ ফুট"}
+            }
+            square-kilometer{
+                one{"{0} বর্গ কিমি"}
+                other{"{0} বর্গ কিমি"}
+            }
+            square-meter{
+                one{"{0} m²"}
+                other{"{0} m²"}
+            }
+            square-mile{
+                one{"{0} বর্গ মাইল"}
+                other{"{0} বর্গ মাইল"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0} দিন"}
+                other{"{0} দিন"}
+            }
+            hour{
+                one{"{0} ঘন্টা"}
+                other{"{0} ঘন্টা"}
+            }
+            millisecond{
+                one{"{0} ms"}
+                other{"{0} ms"}
+            }
+            minute{
+                one{"{0} মিনিট"}
+                other{"{0} মিনিট"}
+            }
+            month{
+                one{"{0} মাস"}
+                other{"{0} মাস"}
+            }
+            second{
+                one{"{0} সেকেন্ড"}
+                other{"{0} সেকেন্ড"}
+            }
+            week{
+                one{"{0} সপ্তাহ"}
+                other{"{0} সপ্তাহ"}
+            }
+            year{
+                one{"{0} বছর"}
+                other{"{0} বছর"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} সেমি"}
+                other{"{0} সেমি"}
+            }
+            foot{
+                one{"{0} ফুট"}
+                other{"{0} ফুট"}
+            }
+            inch{
+                one{"{0} ইঞ্চি"}
+                other{"{0} ইঞ্চি"}
+            }
+            kilometer{
+                one{"{0} কিমি"}
+                other{"{0} কিমি"}
+            }
+            light-year{
+                one{"{0} আলোকবর্ষ"}
+                other{"{0} আলোকবর্ষ"}
+            }
+            meter{
+                one{"{0} মিটার"}
+                other{"{0} মিটার"}
+            }
+            mile{
+                one{"{0} মাইল"}
+                other{"{0} মাইল"}
+            }
+            millimeter{
+                one{"{0} মিমি"}
+                other{"{0} মিমি"}
+            }
+            picometer{
+                one{"{0} পিমি"}
+                other{"{0} পিমি"}
+            }
+            yard{
+                one{"{0} গজ"}
+                other{"{0} গজ"}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} গ্রাম"}
+                other{"{0} গ্রাম"}
+            }
+            kilogram{
+                one{"{0} কেজি"}
+                other{"{0} কেজি"}
+            }
+            ounce{
+                one{"{0} আউন্স"}
+                other{"{0} আউন্স"}
+            }
+            pound{
+                one{"{0} পাউন্ড"}
+                other{"{0} পাউন্ড"}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0} hp"}
+                other{"{0} hp"}
+            }
+            kilowatt{
+                one{"{0} kW"}
+                other{"{0} kW"}
+            }
+            watt{
+                one{"{0} ওয়াট"}
+                other{"{0} ওয়াট"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0} hPa"}
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                one{"{0} inHg"}
+                other{"{0} inHg"}
+            }
+            millibar{
+                one{"{0} mb"}
+                other{"{0} mb"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0}kph"}
+                other{"{0}kpm"}
+            }
+            meter-per-second{
+                one{"{0}m/s"}
+                other{"{0}m/s"}
+            }
+            mile-per-hour{
+                one{"{0}mph"}
+                other{"{0}mph"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            fahrenheit{
+                one{"{0}°F"}
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0}km³"}
+                other{"{0}km³"}
+            }
+            cubic-mile{
+                one{"{0}mi³"}
+                other{"{0}mi³"}
+            }
+            liter{
+                one{"{0} লিটার"}
+                other{"{0} লিটার"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1237,6 +1477,9 @@ bn{
                 one{"{0} বর্গ মাইল"}
                 other{"{0} বর্গ মাইল"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

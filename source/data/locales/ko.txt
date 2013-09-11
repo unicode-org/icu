@@ -33,6 +33,14 @@ ko{
         " 頸 顆 顧 飢 餃 館 饉 饋 饑 駒 駕 駱 騎 騏 騫 驅 驕 驚 驥 骨 高 鬼 魁 鮫 鯤 鯨 鱇 鳩 鵑 鵠 鷄 鷗 鸞 麒 麴 黔 鼓 龕"
         " 龜]"
     }
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{"[가-힣]"}
     ExemplarCharactersIndex{"[ㄱ ㄴ ㄷ ㄹ ㅁ ㅂ ㅅ ㅇ ㅈ ㅊ ㅋ ㅌ ㅍ ㅎ]"}
     ExemplarCharactersPunctuation{
@@ -44,6 +52,7 @@ ko{
         "Hang",
         "Hani",
     }
+    MoreInformation{"?"}
     NumberElements{
         latn{
             miscPatterns{
@@ -51,6 +60,7 @@ ko{
                 range{"{0}-{1}"}
             }
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00;(¤#,##0.00)"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -1563,6 +1573,18 @@ ko{
         US{"미국"}
         metric{"미터법"}
     }
+    transformNames{
+        BGN{"미국 지명위원회(BGN)"}
+        Numeric{"숫자"}
+        Tone{"성조"}
+        UNGEGN{"유엔지명전문가회의(UNGEGN)"}
+        x-Accents{"악센트"}
+        x-Fullwidth{"전각"}
+        x-Halfwidth{"반각"}
+        x-Jamo{"자모"}
+        x-Pinyin{"병음"}
+        x-Publishing{"게시"}
+    }
     units{
         acceleration{
             g-force{
@@ -1599,6 +1621,9 @@ ko{
             square-mile{
                 other{"{0}제곱마일"}
             }
+        }
+        compound{
+            per{"{1}당 {0}"}
         }
         duration{
             day{
@@ -1725,6 +1750,171 @@ ko{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                other{"{0}G"}
+            }
+        }
+        angle{
+            arc-minute{
+                other{"{0}′"}
+            }
+            arc-second{
+                other{"{0}″"}
+            }
+            degree{
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                other{"{0}ac"}
+            }
+            hectare{
+                other{"{0}ha"}
+            }
+            square-foot{
+                other{"{0}ft²"}
+            }
+            square-kilometer{
+                other{"{0}km²"}
+            }
+            square-meter{
+                other{"{0}m²"}
+            }
+            square-mile{
+                other{"{0}mi²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                other{"{0}일"}
+            }
+            hour{
+                other{"{0}시간"}
+            }
+            millisecond{
+                other{"{0}ms"}
+            }
+            minute{
+                other{"{0}분"}
+            }
+            month{
+                other{"{0}개월"}
+            }
+            second{
+                other{"{0}초"}
+            }
+            week{
+                other{"{0}주"}
+            }
+            year{
+                other{"{0}년"}
+            }
+        }
+        length{
+            centimeter{
+                other{"{0}cm"}
+            }
+            foot{
+                other{"{0}′"}
+            }
+            inch{
+                other{"{0}″"}
+            }
+            kilometer{
+                other{"{0}km"}
+            }
+            light-year{
+                other{"{0}ly"}
+            }
+            meter{
+                other{"{0}m"}
+            }
+            mile{
+                other{"{0}mi"}
+            }
+            millimeter{
+                other{"{0}mm"}
+            }
+            picometer{
+                other{"{0}pm"}
+            }
+            yard{
+                other{"{0}yd"}
+            }
+        }
+        mass{
+            gram{
+                other{"{0}g"}
+            }
+            kilogram{
+                other{"{0}kg"}
+            }
+            ounce{
+                other{"{0}oz"}
+            }
+            pound{
+                other{"{0}lb"}
+            }
+        }
+        power{
+            horsepower{
+                other{"{0}HP"}
+            }
+            kilowatt{
+                other{"{0}kW"}
+            }
+            watt{
+                other{"{0}W"}
+            }
+        }
+        pressure{
+            hectopascal{
+                other{"{0}hPa"}
+            }
+            inch-hg{
+                other{"{0}\u0022Hg"}
+            }
+            millibar{
+                other{"{0}mb"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                other{"{0}km/h"}
+            }
+            meter-per-second{
+                other{"{0}m/s"}
+            }
+            mile-per-hour{
+                other{"{0}mph"}
+            }
+        }
+        temperature{
+            celsius{
+                other{"{0}°"}
+            }
+            fahrenheit{
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                other{"{0}km³"}
+            }
+            cubic-mile{
+                other{"{0}mi³"}
+            }
+            liter{
+                other{"{0}ℓ"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1761,6 +1951,9 @@ ko{
             square-mile{
                 other{"{0}mi²"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

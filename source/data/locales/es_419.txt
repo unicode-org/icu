@@ -169,4 +169,7 @@ es_419{
     measurementSystemNames{
         UK{"Reino Unido"}
     }
+    transformNames{
+        Numeric{"Numéricas"}
+    }
 }

@@ -711,6 +711,42 @@ pt{
             persian{"Calendário persa"}
             roc{"Calendário da República da China"}
         }
+        colAlternate{
+            non-ignorable{"Classificar símbolos"}
+            shifted{"Classificar ignorando símbolos"}
+        }
+        colBackwards{
+            no{"Classificar acentos normalmente"}
+            yes{"Classificação reversa de acentos"}
+        }
+        colCaseFirst{
+            lower{"Classificar por minúsculas"}
+            no{"Classificação normal de maiúsculas e minúsculas"}
+            upper{"Classificar por maiúsculas"}
+        }
+        colCaseLevel{
+            no{"Classificação sem diferenciação de maiúsculas e minúsculas"}
+            yes{"Classificação com diferenciação de maiúsculas e minúsculas"}
+        }
+        colHiraganaQuaternary{
+            no{"Classificar kana separadamente"}
+            yes{"Classificar kana diferentemente"}
+        }
+        colNormalization{
+            no{"Classificar sem normalização"}
+            yes{"Classificar Unicode normalizado"}
+        }
+        colNumeric{
+            no{"Classificar dígitos individualmente"}
+            yes{"Classificar dígitos numericamente"}
+        }
+        colStrength{
+            identical{"Classificar tudo"}
+            primary{"Classificar somente letras básicas"}
+            quaternary{"Classificar acentos/maiúsculas e minúsculas/largura/kana"}
+            secondary{"Classificar acentos"}
+            tertiary{"Classificar acentos/maiúsculas e minúsculas/largura"}
+        }
         collation{
             big5han{"Ordem do Chinês Tradicional - Big5"}
             dictionary{"Ordem do dicionário"}

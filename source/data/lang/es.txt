@@ -750,6 +750,42 @@ es{
             persian{"calendario persa"}
             roc{"calendario de la República de China"}
         }
+        colAlternate{
+            non-ignorable{"Ordenar símbolos"}
+            shifted{"Ordenar ignorando símbolos"}
+        }
+        colBackwards{
+            no{"Ordenar acentos normalmente"}
+            yes{"Ordenar acentos con inversión"}
+        }
+        colCaseFirst{
+            lower{"Ordenar empezando por minúsculas"}
+            no{"Ordenar siguiendo orden normal de mayúsculas y minúsculas"}
+            upper{"Ordenar empezando por mayúsculas"}
+        }
+        colCaseLevel{
+            no{"Ordenar sin distinguir entre mayúsculas y minúsculas"}
+            yes{"Ordenar distinguiendo entre mayúsculas y minúsculas"}
+        }
+        colHiraganaQuaternary{
+            no{"Ordenar caracteres kana por separado"}
+            yes{"Ordenar diferenciando caracteres kana"}
+        }
+        colNormalization{
+            no{"Ordenar sin normalización"}
+            yes{"Ordenar con normalización Unicode"}
+        }
+        colNumeric{
+            no{"Ordenar dígitos individualmente"}
+            yes{"Ordenar dígitos numéricamente"}
+        }
+        colStrength{
+            identical{"Ordenar todo"}
+            primary{"Ordenar solo letras base"}
+            quaternary{"Ordenar acentos/mayúsculas y minúsculas/ancho/kana"}
+            secondary{"Ordenar acentos"}
+            tertiary{"Ordenar acentos/mayúsculas y minúsculas/ancho"}
+        }
         collation{
             big5han{"orden del chino tradicional - Big5"}
             dictionary{"orden de diccionario"}

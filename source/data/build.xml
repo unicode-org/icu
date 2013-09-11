@@ -108,6 +108,7 @@
 		  <remap sourcePath="/codePatterns" targetDir="lang" />
 		  <remap sourcePath="/localeDisplayPattern" targetDir="lang" />
 		  <remap sourcePath="/Countries" targetDir="region" />
+		  <remap sourcePath="/CountriesShort" targetDir="region" />
 		  <remap sourcePath="/Currencies" targetDir="curr" />
 		  <remap sourcePath="/CurrencyPlurals" targetDir="curr" />
 		  <remap sourcePath="/CurrencyUnitPatterns" targetDir="curr" />

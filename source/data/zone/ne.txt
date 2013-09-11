@@ -1844,5 +1844,7 @@ ne{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} समय"}
+        regionFormatDaylight{"{0} (+१)"}
+        regionFormatStandard{"{0} (+०)"}
     }
 }

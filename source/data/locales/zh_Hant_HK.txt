@@ -10,6 +10,7 @@ zh_Hant_HK{
     NumberElements{
         latn{
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
             }
         }
@@ -344,6 +345,11 @@ zh_Hant_HK{
         US{"美國"}
         metric{"十進制"}
     }
+    transformNames{
+        Numeric{"數值"}
+        x-Accents{"重音"}
+        x-Jamo{"韓文"}
+    }
     units{
         area{
             square-meter{
@@ -379,6 +385,53 @@ zh_Hant_HK{
             }
             fahrenheit{
                 other{"華氏{0}度"}
+            }
+        }
+    }
+    unitsNarrow{
+        area{
+            square-foot{
+                other{"{0} ft²"}
+            }
+            square-mile{
+                other{"{0}mi²"}
+            }
+        }
+        length{
+            centimeter{
+                other{"{0} 厘米"}
+            }
+            millimeter{
+                other{"{0} 毫米"}
+            }
+        }
+        mass{
+            ounce{
+                other{"{0} 安士"}
+            }
+        }
+        pressure{
+            inch-hg{
+                other{"{0}\u0022 Hg"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                other{"{0}kph"}
+            }
+            meter-per-second{
+                other{"{0}m/s"}
+            }
+            mile-per-hour{
+                other{"{0}mph"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                other{"{0}km³"}
+            }
+            cubic-mile{
+                other{"{0}mi³"}
             }
         }
     }

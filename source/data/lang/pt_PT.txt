@@ -384,6 +384,42 @@ pt_PT{
             islamic-civil{"Calendário Islâmico/Civil"}
             persian{"Calendário Persa"}
         }
+        colAlternate{
+            non-ignorable{"Ordenar Símbolos"}
+            shifted{"Ordenar Símbolos Ignorados"}
+        }
+        colBackwards{
+            no{"Ordenar Acentos Normalmente"}
+            yes{"Ordenar Acentos Inversamente"}
+        }
+        colCaseFirst{
+            lower{"Ordenar Minúsculas Primeiro"}
+            no{"Ordenar Disposição de Tipo de Letra Normal"}
+            upper{"Ordenar Maiúsculas Primeiro"}
+        }
+        colCaseLevel{
+            no{"Ordenar Insensível a Maiúsculas/Minúsculas"}
+            yes{"Ordenar Sensível a Maiúsculas/Minúsculas"}
+        }
+        colHiraganaQuaternary{
+            no{"Ordenar Kana Separadamente"}
+            yes{"Ordenar Kana Diferentemente"}
+        }
+        colNormalization{
+            no{"Ordenar Sem Normalização"}
+            yes{"Ordenar Unicode Normalizado"}
+        }
+        colNumeric{
+            no{"Ordenar Dígitos Individualmente"}
+            yes{"Ordenar Dígitos Numericamente"}
+        }
+        colStrength{
+            identical{"Ordenar Tudo"}
+            primary{"Ordenar Apenas Letras Básicas"}
+            quaternary{"Ordenar Acentos/Tipo de Letra/Largura/Kana"}
+            secondary{"Ordenar Acentos"}
+            tertiary{"Ordenar Acentos/Tipo de Letra/Largura"}
+        }
         collation{
             dictionary{"Ordenação do Dicionário"}
             ducet{"Ordenação Unicode Predefinida"}

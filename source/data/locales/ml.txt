@@ -11,6 +11,14 @@
  */
 ml{
     AuxExemplarCharacters{"[\u200C\u200D]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{
         "[\u200C\u200D ഃ അ ആ ഇ ഈ ഉ ഊ ഋ ൠ ഌ ൡ എ ഏ ഐ ഒ ഓ ഔ ക ൿ ഖ ഗ ഘ ങ ച ഛ ജ ഝ ഞ ട ഠ ഡ "
         "ഢ ണ ൺ ത ഥ ദ ധ ന ൻ പ ഫ ബ ഭ മ ം യ ര ർ ല ൽ വ ശ ഷ സ ഹ ള ൾ ഴ റ ാ ി ീ \u0D41 "
@@ -23,6 +31,7 @@ ml{
     LocaleScript{
         "Mlym",
     }
+    MoreInformation{"?"}
     NumberElements{
         default{"latn"}
         latn{
@@ -325,6 +334,10 @@ ml{
         }
         gregorian{
             AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            AmPmMarkersNarrow{
                 "AM",
                 "PM",
             }
@@ -979,6 +992,18 @@ ml{
         US{"യുഎസ്സ്"}
         metric{"മെട്രിക്ക്"}
     }
+    transformNames{
+        BGN{"BGN"}
+        Numeric{"സംഖ്യാപരമായ"}
+        Tone{"ശബ്ദം"}
+        UNGEGN{"UNGEGN"}
+        x-Accents{"ആൿസൻറുകൾ‌"}
+        x-Fullwidth{"പൂർണവീതി"}
+        x-Halfwidth{"ഹാഫ്‍വിഡ്ത്ത്"}
+        x-Jamo{"ജാമോ"}
+        x-Pinyin{"പിൻയിൻ"}
+        x-Publishing{"പ്രസിദ്ധീകരിക്കുന്നു"}
+    }
     units{
         acceleration{
             g-force{
@@ -1025,6 +1050,9 @@ ml{
                 one{"{0} ചതുരശ്ര മൈൽ"}
                 other{"{0} ചതുരശ്ര മൈൽ"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{
@@ -1187,6 +1215,213 @@ ml{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0} ജി"}
+                other{"{0} ജി"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"{0} ഏ"}
+                other{"{0} ഏക്ക"}
+            }
+            hectare{
+                one{"{0} ഹെ"}
+                other{"{0} ഹെ"}
+            }
+            square-foot{
+                one{"{0} ച. അടി"}
+                other{"{0} ച.അടി"}
+            }
+            square-kilometer{
+                one{"{0} ച.കിമീ"}
+                other{"{0} ച.കിമീ"}
+            }
+            square-meter{
+                one{"{0} ച.മീ"}
+                other{"{0} ച.മീ"}
+            }
+            square-mile{
+                one{"{0} ച.മൈ"}
+                other{"{0} ച.മൈ"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0} ദി"}
+                other{"{0} ദി"}
+            }
+            hour{
+                one{"{0} മ"}
+                other{"{0} മ"}
+            }
+            millisecond{
+                one{"{0} മിസെ"}
+                other{"{0} മിസെ"}
+            }
+            minute{
+                one{"{0} മി"}
+                other{"{0} മി"}
+            }
+            month{
+                one{"{0} മാ"}
+                other{"{0} മാ"}
+            }
+            second{
+                one{"{0} സെ"}
+                other{"{0} സെ"}
+            }
+            week{
+                one{"{0} ആ"}
+                other{"{0} ആ"}
+            }
+            year{
+                one{"{0} വ"}
+                other{"{0} വ"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} സെമി"}
+                other{"{0} സെമി"}
+            }
+            foot{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            inch{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            kilometer{
+                one{"{0} കിമി"}
+                other{"{0} കിമി"}
+            }
+            light-year{
+                one{"{0} പ്ര.വ"}
+                other{"{0} പ്ര.വ"}
+            }
+            meter{
+                one{"{0} മീ"}
+                other{"{0} മീ"}
+            }
+            mile{
+                one{"{0} മൈ"}
+                other{"{0} മൈ"}
+            }
+            millimeter{
+                one{"{0} മിമീ"}
+                other{"{0} മിമീ"}
+            }
+            picometer{
+                one{"{0} പൈ.മീ"}
+                other{"{0} പൈ.മീ"}
+            }
+            yard{
+                one{"{0} യാ"}
+                other{"{0} യാ"}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} ഗ്രാം"}
+                other{"{0} ഗ്രാം"}
+            }
+            ounce{
+                one{"{0} ഔ"}
+                other{"{0} ഔ"}
+            }
+            pound{
+                one{"{0} പൗ"}
+                other{"{0} പൗ"}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0} hp"}
+                other{"{0} hp"}
+            }
+            kilowatt{
+                one{"{0}kW"}
+                other{"{0}kW"}
+            }
+            watt{
+                one{"{0} വാ"}
+                other{"{0} വാ"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0} hPa"}
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                one{"{0}\u0022 Hg"}
+                other{"{0}\u0022 Hg"}
+            }
+            millibar{
+                one{"{0} മിബാ"}
+                other{"{0} മിബാ"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0}കിമീ/മ"}
+                other{"{0}കിമീ/മ"}
+            }
+            meter-per-second{
+                one{"{0} മീ/സെ"}
+                other{"{0} മീ/സെ"}
+            }
+            mile-per-hour{
+                one{"{0} മൈ/മ"}
+                other{"{0} മൈ/മ"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°സെ"}
+                other{"{0}°സെ"}
+            }
+            fahrenheit{
+                one{"{0}°ഫാ"}
+                other{"{0}°ഫാ"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0} കിമീ³"}
+                other{"{0} കിമീ³"}
+            }
+            cubic-mile{
+                one{"{0} മൈ³"}
+                other{"{0} മൈ³"}
+            }
+            liter{
+                one{"{0} ലി"}
+                other{"{0} ലി"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1233,6 +1468,9 @@ ml{
                 one{"{0} ചതു.മൈ"}
                 other{"{0} ചതു.മൈ"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

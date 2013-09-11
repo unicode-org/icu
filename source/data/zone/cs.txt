@@ -1129,5 +1129,7 @@ cs{
         gmtZeroFormat{"GMT"}
         hourFormat{"+H:mm;-H:mm"}
         regionFormat{"Časové pásmo {0}"}
+        regionFormatDaylight{"{0} (+1)"}
+        regionFormatStandard{"{0} (+0)"}
     }
 }

@@ -11,6 +11,14 @@
  */
 zh{
     AuxExemplarCharacters{"[仂 侣 傈 傣 僳 卑 卞 厘 吕 坝 堤 奎 屿 巽 撤 楔 楠 滕 瑚 甫 盲 碑 禄 粟 脚 艮 谬 钯 铂 锑 镑 魁]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0}…"}
+        word-initial{"…{0}"}
+        word-medial{"{0}…{1}"}
+    }
     ExemplarCharacters{
         "[一 丁 七 万-与 丑 专 且 世 丘-业 东 丝 丢 两 严 丧 个 中 丰 串 临 丸-主 丽 举 乃 久 么 义 之-乐 乔 乖 乘 乙 九 也"
         "-乡 书 买 乱 乾 了 予 争 事 二 于 亏 云 互 五 井 亚 些 亡 交-亨 享 京 亮 亲 人 亿-仁 仅 仇 今 介 仍 从 仔 他 付 仙"
@@ -78,6 +86,7 @@ zh{
     LocaleScript{
         "Hani",
     }
+    MoreInformation{"？"}
     NumberElements{
         default{"latn"}
         finance{"hansfin"}
@@ -87,6 +96,7 @@ zh{
                 range{"{0}-{1}"}
             }
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤ #,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -916,6 +926,10 @@ zh{
         }
         gregorian{
             AmPmMarkers{
+                "上午",
+                "下午",
+            }
+            AmPmMarkersNarrow{
                 "上午",
                 "下午",
             }
@@ -2240,6 +2254,18 @@ zh{
         US{"美制"}
         metric{"公制"}
     }
+    transformNames{
+        BGN{"美国地名委员会 (BGN)"}
+        Numeric{"数字"}
+        Tone{"音调"}
+        UNGEGN{"联合国地名专家组 (UNGEGN)"}
+        x-Accents{"重音符号"}
+        x-Fullwidth{"全角"}
+        x-Halfwidth{"半角"}
+        x-Jamo{"韩文字母"}
+        x-Pinyin{"拼音"}
+        x-Publishing{"印刷体"}
+    }
     units{
         acceleration{
             g-force{
@@ -2276,6 +2302,9 @@ zh{
             square-mile{
                 other{"{0}平方英里"}
             }
+        }
+        compound{
+            per{"{0}每{1}"}
         }
         duration{
             day{
@@ -2402,6 +2431,171 @@ zh{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                other{"{0}G"}
+            }
+        }
+        angle{
+            arc-minute{
+                other{"{0}′"}
+            }
+            arc-second{
+                other{"{0}″"}
+            }
+            degree{
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                other{"{0}ac"}
+            }
+            hectare{
+                other{"{0}ha"}
+            }
+            square-foot{
+                other{"{0}ft²"}
+            }
+            square-kilometer{
+                other{"{0}km²"}
+            }
+            square-meter{
+                other{"{0}m²"}
+            }
+            square-mile{
+                other{"{0}mi²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                other{"{0}天"}
+            }
+            hour{
+                other{"{0}小时"}
+            }
+            millisecond{
+                other{"{0}毫秒"}
+            }
+            minute{
+                other{"{0}分钟"}
+            }
+            month{
+                other{"{0}个月"}
+            }
+            second{
+                other{"{0}秒"}
+            }
+            week{
+                other{"{0}周"}
+            }
+            year{
+                other{"{0}年"}
+            }
+        }
+        length{
+            centimeter{
+                other{"{0}cm"}
+            }
+            foot{
+                other{"{0}′"}
+            }
+            inch{
+                other{"{0}″"}
+            }
+            kilometer{
+                other{"{0}km"}
+            }
+            light-year{
+                other{"{0}ly"}
+            }
+            meter{
+                other{"{0}m"}
+            }
+            mile{
+                other{"{0}mi"}
+            }
+            millimeter{
+                other{"{0}mm"}
+            }
+            picometer{
+                other{"{0}pm"}
+            }
+            yard{
+                other{"{0}yd"}
+            }
+        }
+        mass{
+            gram{
+                other{"{0}克"}
+            }
+            kilogram{
+                other{"{0}千克"}
+            }
+            ounce{
+                other{"{0}盎司"}
+            }
+            pound{
+                other{"{0}磅"}
+            }
+        }
+        power{
+            horsepower{
+                other{"{0}hp"}
+            }
+            kilowatt{
+                other{"{0}kW"}
+            }
+            watt{
+                other{"{0}W"}
+            }
+        }
+        pressure{
+            hectopascal{
+                other{"{0}hPa"}
+            }
+            inch-hg{
+                other{"{0}\u0022 Hg"}
+            }
+            millibar{
+                other{"{0}mb"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                other{"{0}km/h"}
+            }
+            meter-per-second{
+                other{"{0}m/s"}
+            }
+            mile-per-hour{
+                other{"{0}mi/h"}
+            }
+        }
+        temperature{
+            celsius{
+                other{"{0}°"}
+            }
+            fahrenheit{
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                other{"{0}km³"}
+            }
+            cubic-mile{
+                other{"{0}mi³"}
+            }
+            liter{
+                other{"{0}l"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -2438,6 +2632,9 @@ zh{
             square-mile{
                 other{"{0} mi²"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

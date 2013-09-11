@@ -1715,5 +1715,7 @@ lv{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Laika josla: {0}"}
+        regionFormatDaylight{"{0}: vasaras laiks"}
+        regionFormatStandard{"{0}: standarta laiks"}
     }
 }

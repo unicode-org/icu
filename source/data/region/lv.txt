@@ -302,5 +302,12 @@ lv{
         ZW{"Zimbabve"}
         ZZ{"nezināms reģions"}
     }
+    CountriesShort{
+        GB{"Lielbritānija"}
+        HK{"Honkonga"}
+        MO{"Makao"}
+        PS{"Palestīna"}
+        US{"ASV"}
+    }
     Version{"2.0.92.87"}
 }

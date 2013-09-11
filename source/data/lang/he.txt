@@ -697,6 +697,42 @@ he{
             persian{"לוח השנה הפרסי"}
             roc{"לוח השנה הסיני Minguo"}
         }
+        colAlternate{
+            non-ignorable{"מיין סמלים"}
+            shifted{"מיין תוך התעלמות מסמלים"}
+        }
+        colBackwards{
+            no{"מיין הטעמות בצורה רגילה"}
+            yes{"מיין לפי הטעמות בסדר הפוך"}
+        }
+        colCaseFirst{
+            lower{"מיין תחילה לפי אותיות קטנות"}
+            no{"מיין לפי סדר רישיות רגיל"}
+            upper{"מיין תחילה לפי אותיות רישיות"}
+        }
+        colCaseLevel{
+            no{"מיין באופן שאינו תלוי רישיות"}
+            yes{"מיין באופן תלוי רישיות"}
+        }
+        colHiraganaQuaternary{
+            no{"מיין קאנה בנפרד"}
+            yes{"מיין קאנה אחרת"}
+        }
+        colNormalization{
+            no{"מיין ללא נורמליזציה"}
+            yes{"מיין לפי Unicode מנורמל"}
+        }
+        colNumeric{
+            no{"מיין ספרות בנפרד"}
+            yes{"מיין ספרות לפי סדר מספרי"}
+        }
+        colStrength{
+            identical{"מיין הכל"}
+            primary{"מיין תוך התעלמות מהטעמות"}
+            quaternary{"מיין לפי הטעמות/רישיות/רוחב/קאנה"}
+            secondary{"מיין לפי הטעמות"}
+            tertiary{"מיין הטעמות/רישיות/רוחב"}
+        }
         collation{
             big5han{"מיון סינית מסורתית"}
             dictionary{"סדר מיון במילון"}

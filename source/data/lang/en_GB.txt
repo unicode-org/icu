@@ -26,6 +26,10 @@ en_GB{
         Thai{"Thai"}
     }
     Types{
+        colNormalization{
+            no{"Sort Without Normalisation"}
+            yes{"Sort Unicode Normalised"}
+        }
         numbers{
             fullwide{"Full-Width Digits"}
         }

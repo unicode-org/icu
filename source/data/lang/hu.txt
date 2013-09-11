@@ -763,6 +763,42 @@ hu{
             persian{"Perzsa naptár"}
             roc{"Kínai köztársasági naptár"}
         }
+        colAlternate{
+            non-ignorable{"Szimbólumok rendezése"}
+            shifted{"Rendezés szimbólumok figyelmen kívül hagyásával"}
+        }
+        colBackwards{
+            no{"Ékezetek normál rendezése"}
+            yes{"Ékezetek szerinti fordított rendezés"}
+        }
+        colCaseFirst{
+            lower{"Kisbetűs szavak rendezése előre"}
+            no{"Kisbetűs-nagybetűs szavak normál rendezése"}
+            upper{"Nagybetűs szavak rendezése előre"}
+        }
+        colCaseLevel{
+            no{"Kis- és nagybetűket meg nem különböztető rendezés"}
+            yes{"Rendezés kisbetű-nagybetű szerint"}
+        }
+        colHiraganaQuaternary{
+            no{"Kanák rendezése külön"}
+            yes{"Kanák megkülönböztető rendezése"}
+        }
+        colNormalization{
+            no{"Rendezés normalizálás nélkül"}
+            yes{"Unicode szerinti normalizált rendezés"}
+        }
+        colNumeric{
+            no{"Számjegyek egyedi rendezése"}
+            yes{"Számjegyek numerikus rendezése"}
+        }
+        colStrength{
+            identical{"Összes rendezése"}
+            primary{"Csak az alapbetűk rendezése"}
+            quaternary{"Ékezetek/kisbetű-nagybetű/szélesség/kanák rendezése"}
+            secondary{"Ékezetek rendezése"}
+            tertiary{"Ékezetek/kisbetű-nagybetű/szélesség rendezése"}
+        }
         collation{
             big5han{"Hagyományos kínai sorrend - Big5"}
             dictionary{"Szótári rendezési sorrend"}

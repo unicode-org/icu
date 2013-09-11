@@ -312,6 +312,42 @@ gl{
             persian{"Calendario persa"}
             roc{"Calendario Minguo"}
         }
+        colAlternate{
+            non-ignorable{"Clasificar símbolos"}
+            shifted{"Clasificar ignorando símbolos"}
+        }
+        colBackwards{
+            no{"Clasificar acentos con normalidade"}
+            yes{"Clasificar acentos invertidos"}
+        }
+        colCaseFirst{
+            lower{"Clasificar primeiro as minúsculas"}
+            no{"Clasificar orde de maiúsculas e minúsculas normal"}
+            upper{"Clasificar primeiro as maiúsculas"}
+        }
+        colCaseLevel{
+            no{"Clasificar sen distinguir entre maiúsculas e minúsculas"}
+            yes{"Clasificar distinguindo entre maiúsculas e minúsculas"}
+        }
+        colHiraganaQuaternary{
+            no{"Clasificar Kana por separado"}
+            yes{"Clasificar Kana de modo diferente"}
+        }
+        colNormalization{
+            no{"Clasificar sen normalización"}
+            yes{"Clasificar Unicode normalizado"}
+        }
+        colNumeric{
+            no{"Clasificar díxitos individualmente"}
+            yes{"Clasificar díxitos numericamente"}
+        }
+        colStrength{
+            identical{"Clasificar todo"}
+            primary{"Clasificar só letras de base"}
+            quaternary{"Clasificar acentos/maiúsculas e minúsculas/ancho/kana"}
+            secondary{"Clasificar acentos"}
+            tertiary{"Clasificar acentos/maiúsculas e minúsculas/ancho"}
+        }
         collation{
             big5han{"Orde de clasificación chinesa tradicional - Big5"}
             dictionary{"Criterio de ordenación do dicionario"}

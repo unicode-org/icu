@@ -302,5 +302,12 @@ sv{
         ZW{"Zimbabwe"}
         ZZ{"okänd region"}
     }
+    CountriesShort{
+        GB{"Storbritannien"}
+        HK{"Hongkong"}
+        MO{"Macao"}
+        PS{"Palestina"}
+        US{"USA"}
+    }
     Version{"2.0.92.87"}
 }

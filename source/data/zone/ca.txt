@@ -1013,5 +1013,7 @@ ca{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Hora de: {0}"}
+        regionFormatDaylight{"Horari d'estiu, {0}"}
+        regionFormatStandard{"Hora estàndard, {0}"}
     }
 }

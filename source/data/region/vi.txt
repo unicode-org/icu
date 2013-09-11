@@ -302,5 +302,12 @@ vi{
         ZW{"Zimbabwe"}
         ZZ{"Vùng Chưa biết hoặc không Hợp lệ"}
     }
+    CountriesShort{
+        GB{"Vương quốc Anh"}
+        HK{"Hồng Kông"}
+        MO{"Macao"}
+        PS{"Palestine"}
+        US{"Hoa Kỳ"}
+    }
     Version{"2.0.92.87"}
 }

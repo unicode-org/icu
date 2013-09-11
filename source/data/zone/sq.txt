@@ -1459,5 +1459,7 @@ sq{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Ora: {0}"}
+        regionFormatDaylight{"Ora verore: {0}"}
+        regionFormatStandard{"Ora standarde: {0}"}
     }
 }

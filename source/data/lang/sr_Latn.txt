@@ -701,6 +701,42 @@ sr_Latn{
             persian{"persijski kalendar"}
             roc{"Kalendar Republike Kine"}
         }
+        colAlternate{
+            non-ignorable{"Sortiraj simbole"}
+            shifted{"Sortiranje uz ignorisanje simbola"}
+        }
+        colBackwards{
+            no{"Sortiraj akcente normalno"}
+            yes{"Sortiraj akcente obrnuto"}
+        }
+        colCaseFirst{
+            lower{"Sortiraj prvo mala slova"}
+            no{"Sortiraj normalan redosled velikih i malih slova"}
+            upper{"Sortiraj prvo velika slova"}
+        }
+        colCaseLevel{
+            no{"Sortiraj bez obzira na velika i mala slova"}
+            yes{"Sortiraj mala i velika slova"}
+        }
+        colHiraganaQuaternary{
+            no{"Sortiraj kana simbole odvojeno"}
+            yes{"Sortiraj kana simbole drugačije"}
+        }
+        colNormalization{
+            no{"Sortiraj bez normalizacije"}
+            yes{"Sortiraj Unicode normalizovano"}
+        }
+        colNumeric{
+            no{"Sortiraj cifre pojedinačno"}
+            yes{"Sortiraj cifre numerički"}
+        }
+        colStrength{
+            identical{"Sortiraj sve"}
+            primary{"Sortiraj samo osnovna slova"}
+            quaternary{"Sortiraj akcente/mala i velika slova/širinu/kana simbole"}
+            secondary{"Sortiraj akcente"}
+            tertiary{"Sortiraj akcente/mala i velika slova/širinu"}
+        }
         collation{
             big5han{"Tradicionalno kinesko sortiranje"}
             dictionary{"Redosled sortiranja u rečniku"}

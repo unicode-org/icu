@@ -716,5 +716,7 @@ ms{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Waktu {0}"}
+        regionFormatDaylight{"Waktu Siang {0}"}
+        regionFormatStandard{"Waktu Piawai {0}"}
     }
 }

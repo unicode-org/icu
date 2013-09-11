@@ -1847,5 +1847,7 @@ kk{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} уақыты"}
+        regionFormatDaylight{"{0} күндізгі уақыты"}
+        regionFormatStandard{"{0} стандартты уақыты"}
     }
 }

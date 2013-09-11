@@ -11,10 +11,19 @@
  */
 sw{
     AuxExemplarCharacters{"[c q x]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{"[a b {ch} d e f g h i j k l m n o p r s t u v w y z]"}
     LocaleScript{
         "Latn",
     }
+    MoreInformation{"?"}
     NumberElements{
         latn{
             miscPatterns{
@@ -22,6 +31,7 @@ sw{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -800,6 +810,18 @@ sw{
         US{"Marekani"}
         metric{"Mfumo wa Mita"}
     }
+    transformNames{
+        BGN{"BGN"}
+        Numeric{"Ya Nambari"}
+        Tone{"Sauti"}
+        UNGEGN{"UNGEGN"}
+        x-Accents{"Rangi za Kuangaza"}
+        x-Fullwidth{"Upana kamili"}
+        x-Halfwidth{"Nusu upana"}
+        x-Jamo{"Kijamo"}
+        x-Pinyin{"Kipinyin"}
+        x-Publishing{"Inachapishwa"}
+    }
     units{
         acceleration{
             g-force{
@@ -846,6 +868,9 @@ sw{
                 one{"Maili {0} ya mraba"}
                 other{"Maili {0} za mraba"}
             }
+        }
+        compound{
+            per{"{0}kwa kila{1}"}
         }
         duration{
             day{
@@ -1008,6 +1033,217 @@ sw{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"G {0}"}
+                other{"G {0}"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"Ekari {0}"}
+                other{"Ekari {0}"}
+            }
+            hectare{
+                one{"ha {0}"}
+                other{"ha {0}"}
+            }
+            square-foot{
+                one{"ft² {0}"}
+                other{"ft² {0}"}
+            }
+            square-kilometer{
+                one{"km² {0}"}
+                other{"km² {0}"}
+            }
+            square-meter{
+                one{"m² {0}"}
+                other{"m² {0}"}
+            }
+            square-mile{
+                one{"mi² {0}"}
+                other{"mi² {0}"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"siku {0}"}
+                other{"siku {0}"}
+            }
+            hour{
+                one{"saa {0}"}
+                other{"saa {0}"}
+            }
+            millisecond{
+                one{"ms {0}"}
+                other{"ms {0}"}
+            }
+            minute{
+                one{"dakika {0}"}
+                other{"dakika {0}"}
+            }
+            month{
+                one{"mwezi {0}"}
+                other{"miezi {0}"}
+            }
+            second{
+                one{"s {0}"}
+                other{"s {0}"}
+            }
+            week{
+                one{"wiki {0}"}
+                other{"wiki {0}"}
+            }
+            year{
+                one{"mwaka {0}"}
+                other{"miaka {0}"}
+            }
+        }
+        length{
+            centimeter{
+                one{"cm {0}"}
+                other{"cm {0}"}
+            }
+            foot{
+                one{"Futi {0}"}
+                other{"Futi {0}"}
+            }
+            inch{
+                one{"Inchi {0}"}
+                other{"Inchi {0}"}
+            }
+            kilometer{
+                one{"km {0}"}
+                other{"km {0}"}
+            }
+            light-year{
+                one{"ly {0}"}
+                other{"ly {0}"}
+            }
+            meter{
+                one{"Mita {0}"}
+                other{"Mita {0}"}
+            }
+            mile{
+                one{"Maili {0}"}
+                other{"Maili {0}"}
+            }
+            millimeter{
+                one{"mm {0}"}
+                other{"mm {0}"}
+            }
+            picometer{
+                one{"pm {0}"}
+                other{"pm {0}"}
+            }
+            yard{
+                one{"Yadi {0}"}
+                other{"Yadi {0}"}
+            }
+        }
+        mass{
+            gram{
+                one{"g {0}"}
+                other{"g {0}"}
+            }
+            kilogram{
+                one{"kg {0}"}
+                other{"kg {0}"}
+            }
+            ounce{
+                one{"Aunsi {0}"}
+                other{"Aunsi {0}"}
+            }
+            pound{
+                one{"Ratili {0}"}
+                other{"Ratili {0}"}
+            }
+        }
+        power{
+            horsepower{
+                one{"hp {0}"}
+                other{"hp {0}"}
+            }
+            kilowatt{
+                one{"kW {0}"}
+                other{"kW {0}"}
+            }
+            watt{
+                one{"Wati {0}"}
+                other{"Wati {0}"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"hPa {0}"}
+                other{"hPa {0}"}
+            }
+            inch-hg{
+                one{"{0} inHg"}
+                other{"{0} inHg"}
+            }
+            millibar{
+                one{"mbar {0}"}
+                other{"mbar {0}"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"km {0}/saa"}
+                other{"km {0}/saa"}
+            }
+            meter-per-second{
+                one{"m {0}/s"}
+                other{"m {0}/s"}
+            }
+            mile-per-hour{
+                one{"mi {0}/saa"}
+                other{"mi {0}/saa"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            fahrenheit{
+                one{"{0}°F"}
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"km³ {0}"}
+                other{"km³ {0}"}
+            }
+            cubic-mile{
+                one{"mi³ {0}"}
+                other{"mi³ {0}"}
+            }
+            liter{
+                one{"Lita {0}"}
+                other{"Lita {0}"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1054,6 +1290,9 @@ sw{
                 one{"mi² {0}"}
                 other{"mi² {0}"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

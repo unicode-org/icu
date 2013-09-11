@@ -1872,5 +1872,7 @@ uk{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Час: {0}"}
+        regionFormatDaylight{"Час: {0}, літній"}
+        regionFormatStandard{"Час: {0}, стандартний"}
     }
 }

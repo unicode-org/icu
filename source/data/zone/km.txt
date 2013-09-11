@@ -1844,5 +1844,7 @@ km{
         gmtZeroFormat{"ម៉ោង​សកល"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"ម៉ោង​នៅ​ {0}"}
+        regionFormatDaylight{"ម៉ោង​ពេល​ថ្ងៃ​នៅ​{0}"}
+        regionFormatStandard{"ម៉ោង​ស្តង់ដារ​នៅ​{0}"}
     }
 }

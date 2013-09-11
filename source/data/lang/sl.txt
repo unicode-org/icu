@@ -671,6 +671,42 @@ sl{
             persian{"Perzijski koledar"}
             roc{"kitajski državni koledar"}
         }
+        colAlternate{
+            non-ignorable{"Razvrščanje simbolov"}
+            shifted{"Razvrščanje s prezrtjem simbolov"}
+        }
+        colBackwards{
+            no{"Navadno razvrščanje naglasov"}
+            yes{"Obratno razvrščanje naglasov"}
+        }
+        colCaseFirst{
+            lower{"Razvrščanje malih črk najprej"}
+            no{"Razvrščanje v običajnem zaporedju velikih/malih črk"}
+            upper{"Razvrščanje velikih črk najprej"}
+        }
+        colCaseLevel{
+            no{"Razvrščanje ne glede na velike/male črke"}
+            yes{"Razvrščanje ob upoštevanju velikih/malih črk"}
+        }
+        colHiraganaQuaternary{
+            no{"Razvrščanje kana ločeno"}
+            yes{"Razvrščanje kana različno"}
+        }
+        colNormalization{
+            no{"Razvrščanje brez normaliziranja"}
+            yes{"Normalizirano razvrščanje Unicode"}
+        }
+        colNumeric{
+            no{"Ločeno razvrščanje številk"}
+            yes{"Številsko razvrščanje števk"}
+        }
+        colStrength{
+            identical{"Razvrščanje vsega"}
+            primary{"Razvrščanje samo osnovnih črk"}
+            quaternary{"Razvrščanje po naglasih/velikih črkah/malih črkah/širini/kana"}
+            secondary{"Razvrščanje naglasov"}
+            tertiary{"Razvrščanje po naglasih/velikih črkah/malih črkah/širini"}
+        }
         collation{
             big5han{"razvrščanje po sistemu tradicionalne kitajščine - Big5"}
             dictionary{"Vrstni red razvrščanja v slovarju"}

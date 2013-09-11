@@ -292,6 +292,42 @@ am{
             persian{"የፐርሽያ የቀን አቆጣጠር"}
             roc{"የሚንጉ የቀን አቆጣጠር"}
         }
+        colAlternate{
+            non-ignorable{"ምልክቶችን ደርድር"}
+            shifted{"ችላ ባይ ምልክቶችን ደርድር"}
+        }
+        colBackwards{
+            no{"የፊደል ጭረቶችን እንደመደበኛ ደርድር"}
+            yes{"የፊደል ጭረቶች በኋሊዮሽ ደርድር"}
+        }
+        colCaseFirst{
+            lower{"ንዑስ ሆሄ መጀመሪያ ደርድር"}
+            no{"መደበኛ የመልከፊደል አቀማመጥ ደርድር"}
+            upper{"አቢይ ሆሄ መጀመሪያ ደርድር"}
+        }
+        colCaseLevel{
+            no{"ያለመልከፊደል ትብ ደርድር"}
+            yes{"በመልከፊደል ትብ ደርድር"}
+        }
+        colHiraganaQuaternary{
+            no{"ካና ለይተህ ደርድር"}
+            yes{"ካና ለይተህ ደርድር"}
+        }
+        colNormalization{
+            no{"ያለመደበኛ ሁኔታ ደርድር"}
+            yes{"ዩኒኮድ በመደበኛ ሁኔታ ደርድር"}
+        }
+        colNumeric{
+            no{"አሃዞችን በየግል ደርድር"}
+            yes{"አሃዞች በቁጥር ደርድር"}
+        }
+        colStrength{
+            identical{"ሁሉንም ደርድር"}
+            primary{"የመሠረት ፊደላት ብቻ ደርድር"}
+            quaternary{"የፊደል ጭረቶች/መልከፊደል/ስፋት/ካና ደርድር"}
+            secondary{"የፊደል ጭረቶችን ደርድር"}
+            tertiary{"የፊደል ጭረቶች/መልከፊደል/ስፋት ደርድር"}
+        }
         collation{
             big5han{"የባህላዊ ቻይንኛ የድርድር ቅደም ተከተል - ትልቅ5"}
             dictionary{"የመዝገበ ቃላት የድርድር ቅደም ተከተል"}

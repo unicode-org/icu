@@ -302,5 +302,12 @@ hu{
         ZW{"Zimbabwe"}
         ZZ{"Ismeretlen körzet"}
     }
+    CountriesShort{
+        GB{"UK"}
+        HK{"Hongkong"}
+        MO{"Makaó"}
+        PS{"Palesztina"}
+        US{"USA"}
+    }
     Version{"2.0.93.17"}
 }

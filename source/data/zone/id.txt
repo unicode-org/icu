@@ -912,5 +912,7 @@ id{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH.mm;-HH.mm"}
         regionFormat{"Waktu {0}"}
+        regionFormatDaylight{"Waktu Terang {0}"}
+        regionFormatStandard{"Waktu Standar {0}"}
     }
 }

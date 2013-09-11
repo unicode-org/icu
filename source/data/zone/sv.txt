@@ -1051,5 +1051,7 @@ sv{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;−HH:mm"}
         regionFormat{"{0}tid"}
+        regionFormatDaylight{"{0} (sommartid)"}
+        regionFormatStandard{"{0} (normaltid)"}
     }
 }

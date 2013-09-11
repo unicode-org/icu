@@ -1003,5 +1003,7 @@ nb{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH.mm;-HH.mm"}
         regionFormat{"tidssone for {0}"}
+        regionFormatDaylight{"sommertid – {0}"}
+        regionFormatStandard{"normaltid – {0}"}
     }
 }

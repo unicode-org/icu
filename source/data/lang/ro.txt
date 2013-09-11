@@ -703,6 +703,42 @@ ro{
             persian{"calendar persan"}
             roc{"calendar al Republicii Chineze"}
         }
+        colAlternate{
+            non-ignorable{"Ordonați simbolurile"}
+            shifted{"Ordonați ignorând simbolurile"}
+        }
+        colBackwards{
+            no{"Ordonați accentele în mod normal"}
+            yes{"Ordonați după accente în ordine inversă"}
+        }
+        colCaseFirst{
+            lower{"Ordonați întâi minusculele"}
+            no{"Ordonați după dimensiunea normală a literei"}
+            upper{"Ordonați mai întâi majusculele"}
+        }
+        colCaseLevel{
+            no{"Ordonați neținând seama de diferența dintre majuscule/minuscule"}
+            yes{"Ordonați ținând seama de diferența dintre majuscule/minuscule"}
+        }
+        colHiraganaQuaternary{
+            no{"Ordonați caracterele kana separat"}
+            yes{"Ordonați kana diferențiat"}
+        }
+        colNormalization{
+            no{"Ordonați fără normalizare"}
+            yes{"Ordonați caracterele unicode normalizat"}
+        }
+        colNumeric{
+            no{"Ordonați cifrele individual"}
+            yes{"Ordonați cifrele în ordine numerică"}
+        }
+        colStrength{
+            identical{"Ordonați-le pe toate"}
+            primary{"Ordonați numai literele de bază"}
+            quaternary{"Ordonați după accente/dimensiunea literei/lățime/kana"}
+            secondary{"Ordonați după accent"}
+            tertiary{"Ordonați după accente/dimensiunea literei/lățime"}
+        }
         collation{
             big5han{"sortare pentru chineza tradițională - Big5"}
             dictionary{"Ordine de sortare a dicționarului"}

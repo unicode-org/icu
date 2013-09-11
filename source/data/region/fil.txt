@@ -302,5 +302,12 @@ fil{
         ZW{"Zimbabwe"}
         ZZ{"Hindi Kilalang Rehiyon"}
     }
+    CountriesShort{
+        GB{"U.K."}
+        HK{"Hong Kong"}
+        MO{"Macau"}
+        PS{"Palestine"}
+        US{"U.S."}
+    }
     Version{"2.0.92.87"}
 }

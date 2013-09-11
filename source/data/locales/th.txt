@@ -11,6 +11,14 @@
  */
 th{
     AuxExemplarCharacters{"[\u200B]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{
         "[\u0E4E \u0E47 \u0E48 \u0E49 \u0E4A \u0E4B \u0E4C \u0E4D ๆ ก ข ฃ ค ฅ ฆ ง จ ฉ"
         " ช ซ ฌ ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ฤ ล ฦ ว ศ ษ ส ห ฬ อ ฮ ฯ"
@@ -24,6 +32,7 @@ th{
     LocaleScript{
         "Thai",
     }
+    MoreInformation{"?"}
     NumberElements{
         default{"latn"}
         latn{
@@ -32,6 +41,7 @@ th{
                 range{"{0}-{1}"}
             }
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -2379,6 +2389,18 @@ th{
         US{"อเมริกัน"}
         metric{"เมตริก"}
     }
+    transformNames{
+        BGN{"ชื่อมาตรฐานอังกฤษ (BGN)"}
+        Numeric{"ตัวเลข"}
+        Tone{"ระดับเสียง"}
+        UNGEGN{"ชื่อภูมิศาสตร์มาตรฐาน UN (UNGEGN)"}
+        x-Accents{"สำเนียง"}
+        x-Fullwidth{"ตัวเต็ม"}
+        x-Halfwidth{"ตัวย่อ"}
+        x-Jamo{"จาโม"}
+        x-Pinyin{"พินอิน"}
+        x-Publishing{"เพื่อเผยแพร่"}
+    }
     units{
         acceleration{
             g-force{
@@ -2415,6 +2437,9 @@ th{
             square-mile{
                 other{"{0} ตารางไมล์"}
             }
+        }
+        compound{
+            per{"{0}ต่อ{1}"}
         }
         duration{
             day{
@@ -2541,6 +2566,171 @@ th{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                other{"{0}G"}
+            }
+        }
+        angle{
+            arc-minute{
+                other{"{0}นาที"}
+            }
+            arc-second{
+                other{"{0}วิ"}
+            }
+            degree{
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                other{"{0}เอเคอร์"}
+            }
+            hectare{
+                other{"{0}เฮกตาร์"}
+            }
+            square-foot{
+                other{"{0}ตร.ฟุต"}
+            }
+            square-kilometer{
+                other{"{0}ตร.กม."}
+            }
+            square-meter{
+                other{"{0}ตร.ม."}
+            }
+            square-mile{
+                other{"{0}ตร.ไมล์"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                other{"{0}วัน"}
+            }
+            hour{
+                other{"{0}ชม."}
+            }
+            millisecond{
+                other{"{0} มิลลิวิ"}
+            }
+            minute{
+                other{"{0}นาที"}
+            }
+            month{
+                other{"{0}เดือน"}
+            }
+            second{
+                other{"{0}วิ"}
+            }
+            week{
+                other{"{0}สัปดาห์"}
+            }
+            year{
+                other{"{0}ปี"}
+            }
+        }
+        length{
+            centimeter{
+                other{"{0}ซม."}
+            }
+            foot{
+                other{"{0}′"}
+            }
+            inch{
+                other{"{0}″"}
+            }
+            kilometer{
+                other{"{0}กม."}
+            }
+            light-year{
+                other{"{0}ปีแสง"}
+            }
+            meter{
+                other{"{0}ม."}
+            }
+            mile{
+                other{"{0}ไมล์"}
+            }
+            millimeter{
+                other{"{0}มม."}
+            }
+            picometer{
+                other{"{0}พิโกเมตร"}
+            }
+            yard{
+                other{"{0}หลา"}
+            }
+        }
+        mass{
+            gram{
+                other{"{0}ก."}
+            }
+            kilogram{
+                other{"{0}กก."}
+            }
+            ounce{
+                other{"{0}ออนซ์"}
+            }
+            pound{
+                other{"{0}#"}
+            }
+        }
+        power{
+            horsepower{
+                other{"{0}แรงม้า"}
+            }
+            kilowatt{
+                other{"{0}กิโลวัตต์"}
+            }
+            watt{
+                other{"{0}วัตต์"}
+            }
+        }
+        pressure{
+            hectopascal{
+                other{"{0}hPa"}
+            }
+            inch-hg{
+                other{"{0}\u0022 Hg"}
+            }
+            millibar{
+                other{"{0}มิลลิบาร์"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                other{"{0}กม./ชม."}
+            }
+            meter-per-second{
+                other{"{0}ม./วิ"}
+            }
+            mile-per-hour{
+                other{"{0}ไมล์/ชม."}
+            }
+        }
+        temperature{
+            celsius{
+                other{"{0}°"}
+            }
+            fahrenheit{
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                other{"{0}ลบ.กม."}
+            }
+            cubic-mile{
+                other{"{0}ลบ.ไมล์"}
+            }
+            liter{
+                other{"{0}ลิตร"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -2577,6 +2767,9 @@ th{
             square-mile{
                 other{"{0} ตร.ไมล์"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

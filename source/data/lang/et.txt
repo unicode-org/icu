@@ -730,6 +730,42 @@ et{
             persian{"Pärsia kalender"}
             roc{"Hiina Vabariigi kalender"}
         }
+        colAlternate{
+            non-ignorable{"Sümbolite sortimine"}
+            shifted{"Sordi sümboleid eirates"}
+        }
+        colBackwards{
+            no{"Tavajärjestuses rõhumärkide alusel"}
+            yes{"Vastupidine sortimine rõhumärkide alusel"}
+        }
+        colCaseFirst{
+            lower{"Järjestus alates väiketähtedest"}
+            no{"Tõstutundlikkuse alusel sortimine"}
+            upper{"Järjestus alates suurtähtedest"}
+        }
+        colCaseLevel{
+            no{"Tõstutundlikkuseta sortimine"}
+            yes{"Tõstutundlikkuse alusel sortimine"}
+        }
+        colHiraganaQuaternary{
+            no{"Kana-kirjasüsteemi eraldi sortimine"}
+            yes{"Kana-kirjasüsteemi sortimine eraldi"}
+        }
+        colNormalization{
+            no{"Normeerimata sortimine"}
+            yes{"Normeeritud Unicode'i alusel sortimine"}
+        }
+        colNumeric{
+            no{"Numbrite eraldi sortimine"}
+            yes{"Numbrite alusel sortimine"}
+        }
+        colStrength{
+            identical{"Sordi kõik"}
+            primary{"Ainult põhitähestiku alusel sortimine"}
+            quaternary{"Rõhumärkide/algustähe/laiuse/kana-süsteemi alusel sortimine"}
+            secondary{"Rõhumärkide sortimine"}
+            tertiary{"Rõhumärkide/algustähe/laiuse alusel sortimine"}
+        }
         collation{
             big5han{"hiina traditsiooniline - big5"}
             dictionary{"Sõnastiku sortimisjärjestus"}

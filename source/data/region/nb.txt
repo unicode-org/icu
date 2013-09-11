@@ -302,5 +302,12 @@ nb{
         ZW{"Zimbabwe"}
         ZZ{"ukjent område"}
     }
+    CountriesShort{
+        GB{"Storbritannia"}
+        HK{"Hongkong"}
+        MO{"Macao"}
+        PS{"Palestina"}
+        US{"USA"}
+    }
     Version{"2.0.92.87"}
 }

@@ -302,5 +302,12 @@ et{
         ZW{"Zimbabwe"}
         ZZ{"Tundmatu piirkond"}
     }
+    CountriesShort{
+        GB{"Suurbritannia"}
+        HK{"Hongkong"}
+        MO{"Macau"}
+        PS{"Palestiina"}
+        US{"USA"}
+    }
     Version{"2.0.92.87"}
 }

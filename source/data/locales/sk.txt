@@ -11,6 +11,14 @@
  */
 sk{
     AuxExemplarCharacters{"[à ă â å ā æ ç è ĕ ê ë ē ì ĭ î ï ī ñ ò ŏ ö ø ō œ ř ù ŭ û ü ū ÿ]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"… {0}"}
+        medial{"{0}… {1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{
         "[a á ä b c č d ď e é f g h {ch} i í j k l ĺ ľ m n ň o ó ô p q r ŕ s š t ť u "
         "ú v w x y ý z ž]"
@@ -20,6 +28,7 @@ sk{
     LocaleScript{
         "Latn",
     }
+    MoreInformation{"?"}
     NumberElements{
         latn{
             miscPatterns{
@@ -27,6 +36,7 @@ sk{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"#,##0.00 ¤;(#,##0.00 ¤)"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0 %"}
@@ -969,6 +979,18 @@ sk{
         US{"americký"}
         metric{"metrický"}
     }
+    transformNames{
+        BGN{"BGN"}
+        Numeric{"Číslice"}
+        Tone{"Tón"}
+        UNGEGN{"UNGEGN"}
+        x-Accents{"Diakritika"}
+        x-Fullwidth{"Celá šírka"}
+        x-Halfwidth{"Polovičná šírka"}
+        x-Jamo{"Jamo"}
+        x-Pinyin{"Pinyin"}
+        x-Publishing{"Uverejnenie"}
+    }
     units{
         acceleration{
             g-force{
@@ -1035,6 +1057,9 @@ sk{
                 one{"{0} míľa štvorcová"}
                 other{"{0} míľ štvorcových"}
             }
+        }
+        compound{
+            per{"{0} za {1}"}
         }
         duration{
             day{
@@ -1269,6 +1294,309 @@ sk{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                few{"{0}G"}
+                many{"{0}G"}
+                one{"{0}G"}
+                other{"{0}G"}
+            }
+        }
+        angle{
+            arc-minute{
+                few{"{0}′"}
+                many{"{0}′"}
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                few{"{0}″"}
+                many{"{0}″"}
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                few{"{0}°"}
+                many{"{0}°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                few{"{0}ac"}
+                many{"{0}ac"}
+                one{"{0}ac"}
+                other{"{0}ac"}
+            }
+            hectare{
+                few{"{0}ha"}
+                many{"{0}ha"}
+                one{"{0}ha"}
+                other{"{0}ha"}
+            }
+            square-foot{
+                few{"{0}ft²"}
+                many{"{0}ft²"}
+                one{"{0}ft²"}
+                other{"{0}ft²"}
+            }
+            square-kilometer{
+                few{"{0} km²"}
+                many{"{0} km²"}
+                one{"{0} km²"}
+                other{"{0} km²"}
+            }
+            square-meter{
+                few{"{0} m²"}
+                many{"{0} m²"}
+                one{"{0} m²"}
+                other{"{0} m²"}
+            }
+            square-mile{
+                few{"{0}mi²"}
+                many{"{0}mi²"}
+                one{"{0}mi²"}
+                other{"{0}mi²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                few{"{0}d."}
+                many{"{0}d."}
+                one{"{0}d."}
+                other{"{0}d."}
+            }
+            hour{
+                few{"{0}h"}
+                many{"{0}h"}
+                one{"{0}h"}
+                other{"{0}h"}
+            }
+            millisecond{
+                few{"{0}ms"}
+                many{"{0}ms"}
+                one{"{0}ms"}
+                other{"{0}ms"}
+            }
+            minute{
+                few{"{0}min"}
+                many{"{0}min"}
+                one{"{0}min"}
+                other{"{0}min"}
+            }
+            month{
+                few{"{0}mes."}
+                many{"{0}mes."}
+                one{"{0}mes."}
+                other{"{0}mes."}
+            }
+            second{
+                few{"{0}s"}
+                many{"{0}s"}
+                one{"{0}s"}
+                other{"{0}s"}
+            }
+            week{
+                few{"{0}týžd."}
+                many{"{0}týžd."}
+                one{"{0}týžd."}
+                other{"{0}týžd."}
+            }
+            year{
+                few{"{0}r."}
+                many{"{0}r."}
+                one{"{0}r."}
+                other{"{0}r."}
+            }
+        }
+        length{
+            centimeter{
+                few{"{0}cm"}
+                many{"{0}cm"}
+                one{"{0}cm"}
+                other{"{0}cm"}
+            }
+            foot{
+                few{"{0}′"}
+                many{"{0}′"}
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            inch{
+                few{"{0}in"}
+                many{"{0}in"}
+                one{"{0}in"}
+                other{"{0}in"}
+            }
+            kilometer{
+                few{"{0}km"}
+                many{"{0}km"}
+                one{"{0}km"}
+                other{"{0}km"}
+            }
+            light-year{
+                few{"{0}ly"}
+                many{"{0}ly"}
+                one{"{0}ly"}
+                other{"{0}ly"}
+            }
+            meter{
+                few{"{0}m"}
+                many{"{0}m"}
+                one{"{0}m"}
+                other{"{0}m"}
+            }
+            mile{
+                few{"{0}mi"}
+                many{"{0}mi"}
+                one{"{0}mi"}
+                other{"{0}mi"}
+            }
+            millimeter{
+                few{"{0}mm"}
+                many{"{0}mm"}
+                one{"{0}mm"}
+                other{"{0}mm"}
+            }
+            picometer{
+                few{"{0}pm"}
+                many{"{0}pm"}
+                one{"{0}pm"}
+                other{"{0}pm"}
+            }
+            yard{
+                few{"{0}yd"}
+                many{"{0}yd"}
+                one{"{0}yd"}
+                other{"{0}yd"}
+            }
+        }
+        mass{
+            gram{
+                few{"{0}g"}
+                many{"{0}g"}
+                one{"{0}g"}
+                other{"{0}g"}
+            }
+            kilogram{
+                few{"{0}kg"}
+                many{"{0}kg"}
+                one{"{0}kg"}
+                other{"{0}kg"}
+            }
+            ounce{
+                few{"{0}oz"}
+                many{"{0}oz"}
+                one{"{0}oz"}
+                other{"{0}oz"}
+            }
+            pound{
+                few{"{0}lb"}
+                many{"{0}lb"}
+                one{"{0}lb"}
+                other{"{0}lb"}
+            }
+        }
+        power{
+            horsepower{
+                few{"{0}hp"}
+                many{"{0}hp"}
+                one{"{0}hp"}
+                other{"{0}hp"}
+            }
+            kilowatt{
+                few{"{0}kW"}
+                many{"{0}kW"}
+                one{"{0}kW"}
+                other{"{0}kW"}
+            }
+            watt{
+                few{"{0}W"}
+                many{"{0}W"}
+                one{"{0}W"}
+                other{"{0}W"}
+            }
+        }
+        pressure{
+            hectopascal{
+                few{"{0}hPa"}
+                many{"{0}hPa"}
+                one{"{0}hPa"}
+                other{"{0}hPa"}
+            }
+            inch-hg{
+                few{"{0}\u0022 Hg"}
+                many{"{0}\u0022 Hg"}
+                one{"{0}\u0022 Hg"}
+                other{"{0}\u0022 Hg"}
+            }
+            millibar{
+                few{"{0}mb"}
+                many{"{0}mb"}
+                one{"{0}mb"}
+                other{"{0}mb"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                few{"{0}km/h"}
+                many{"{0}km/h"}
+                one{"{0}km/h"}
+                other{"{0}km/h"}
+            }
+            meter-per-second{
+                few{"{0}m/s"}
+                many{"{0}m/s"}
+                one{"{0}m/s"}
+                other{"{0}m/s"}
+            }
+            mile-per-hour{
+                few{"{0}mph"}
+                many{"{0}mph"}
+                one{"{0}mph"}
+                other{"{0}mph"}
+            }
+        }
+        temperature{
+            celsius{
+                few{"{0}°"}
+                many{"{0}°"}
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            fahrenheit{
+                few{"{0}°F"}
+                many{"{0}°F"}
+                one{"{0}°F"}
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                few{"{0}km³"}
+                many{"{0}km³"}
+                one{"{0}km³"}
+                other{"{0}km³"}
+            }
+            cubic-mile{
+                few{"{0}mi³"}
+                many{"{0}mi³"}
+                one{"{0}mi³"}
+                other{"{0}mi³"}
+            }
+            liter{
+                few{"{0}l"}
+                many{"{0}l"}
+                one{"{0}l"}
+                other{"{0}l"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1335,6 +1663,9 @@ sk{
                 one{"{0} mi²"}
                 other{"{0} mi²"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

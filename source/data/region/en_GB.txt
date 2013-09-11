@@ -16,5 +16,9 @@ en_GB{
         US{"United States"}
         VC{"Saint Vincent and the Grenadines"}
     }
+    CountriesShort{
+        GB{"UK"}
+        US{"US"}
+    }
     Version{"2.0.92.80"}
 }

@@ -272,6 +272,42 @@ sw{
             persian{"Kalenda ya Kiajemi"}
             roc{"Kalenda ya Minguo"}
         }
+        colAlternate{
+            non-ignorable{"Panga Alama"}
+            shifted{"Panga Alama za Kupuuza"}
+        }
+        colBackwards{
+            no{"Panga Viinitoni kwa Kawaida"}
+            yes{"Panga Viinitoni Kumegeuzwa"}
+        }
+        colCaseFirst{
+            lower{"Panga Herufi ndogo Kwanza"}
+            no{"Panga Utaratibu wa Herufi ya Kawaida"}
+            upper{"Panga Herufi kubwa Kwanza"}
+        }
+        colCaseLevel{
+            no{"Panga Isiyoathiriwa na Herufi"}
+            yes{"Panga kwa Inayoathiriwa na Herufi"}
+        }
+        colHiraganaQuaternary{
+            no{"Panga Kana Kando"}
+            yes{"Panga Kana Kitofauti"}
+        }
+        colNormalization{
+            no{"Panga Bila Ukawaida"}
+            yes{"Upangaji Msimbosare Umekawaidishwa"}
+        }
+        colNumeric{
+            no{"Panga Tarakimu Kivyake"}
+            yes{"Panga Dijiti kwa Namba"}
+        }
+        colStrength{
+            identical{"Panga Zote"}
+            primary{"Panga Herufi Msingi Tu"}
+            quaternary{"Panga Viinitoni/Herufi/Upana/Kana"}
+            secondary{"Panga Viinitoni"}
+            tertiary{"Panga Viinitoni/Herufi/Upana"}
+        }
         collation{
             big5han{"Mpangilio wa Kichina cha Jadi - Big5"}
             dictionary{"Mpangilio wa Kamusi"}

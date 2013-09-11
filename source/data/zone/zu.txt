@@ -621,5 +621,7 @@ zu{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Isikhathi sase-{0}"}
+        regionFormatDaylight{"{0} Isikhathi sasemini"}
+        regionFormatStandard{"{0} Isikhathi esijwayelekile"}
     }
 }

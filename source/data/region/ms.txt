@@ -302,5 +302,12 @@ ms{
         ZW{"Zimbabwe"}
         ZZ{"Wilayah Tidak Diketahui"}
     }
+    CountriesShort{
+        GB{"GB"}
+        HK{"Hong Kong"}
+        MO{"Macau"}
+        PS{"Palestin"}
+        US{"A.S"}
+    }
     Version{"2.0.92.87"}
 }

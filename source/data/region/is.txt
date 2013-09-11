@@ -302,5 +302,11 @@ is{
         ZW{"Simbabve"}
         ZZ{"Óþekkt svæði"}
     }
+    CountriesShort{
+        HK{"Hong Kong"}
+        MO{"Makaó"}
+        PS{"Palestína"}
+        US{"BNA"}
+    }
     Version{"2.0.92.87"}
 }

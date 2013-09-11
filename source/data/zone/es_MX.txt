@@ -1833,5 +1833,7 @@ es_MX{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Hora de {0}"}
+        regionFormatDaylight{"(horario de verano de {0})"}
+        regionFormatStandard{"(horario estándar de {0})"}
     }
 }

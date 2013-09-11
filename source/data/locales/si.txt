@@ -11,6 +11,14 @@
  */
 si{
     AuxExemplarCharacters{"[\u200B\u200C\u200D ඎ ඏ ඐ ඦ ෳ]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{
         "[අ ආ ඇ ඈ ඉ ඊ උ ඌ ඍ එ ඒ ඓ ඔ ඕ ඖ ං ඃ ක ඛ ග ඝ ඞ ඟ ච ඡ ජ ඣ ඥ ඤ ට ඨ ඩ ඪ ණ ඬ ත ථ ද"
         " ධ න ඳ ප ඵ බ භ ම ඹ ය ර ල ව ශ ෂ ස හ ළ ෆ ා ැ ෑ \u0DD2 \u0DD3 \u0DD4 \u0DD6 ෘ ෲ"
@@ -23,6 +31,7 @@ si{
     LocaleScript{
         "Sinh",
     }
+    MoreInformation{"?"}
     NumberElements{
         latn{
             miscPatterns{
@@ -30,6 +39,7 @@ si{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -925,6 +935,9 @@ si{
                 other{"වර්ග සැතපුම් {0}"}
             }
         }
+        compound{
+            per{"{1} ට {0} බැගින්"}
+        }
         duration{
             day{
                 one{"දින {0}"}
@@ -1086,6 +1099,217 @@ si{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0} G"}
+                other{"{0} G"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"මිනිත්තු {0}"}
+                other{"මිනිත්තු {0}"}
+            }
+            arc-second{
+                one{"තත් {0}"}
+                other{"තත් {0}"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"අක්කර {0}"}
+                other{"අක්කර {0}"}
+            }
+            hectare{
+                one{"{0} ha"}
+                other{"{0} ha"}
+            }
+            square-foot{
+                one{"{0} ft²"}
+                other{"{0} ft²"}
+            }
+            square-kilometer{
+                one{"{0} km²"}
+                other{"{0} km²"}
+            }
+            square-meter{
+                one{"{0} m²"}
+                other{"{0} m²"}
+            }
+            square-mile{
+                one{"{0} mi²"}
+                other{"{0} mi²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"දින {0}"}
+                other{"දින {0}"}
+            }
+            hour{
+                one{"පැය {0}"}
+                other{"පැය {0}"}
+            }
+            millisecond{
+                one{"මි.ත {0}"}
+                other{"මි.ත {0}"}
+            }
+            minute{
+                one{"මිනිත්තු {0}"}
+                other{"මිනිත්තු {0}"}
+            }
+            month{
+                one{"මාස {0}"}
+                other{"මාස {0}"}
+            }
+            second{
+                one{"තත්පර {0}"}
+                other{"තත්පර {0}"}
+            }
+            week{
+                one{"සති {0}"}
+                other{"සති {0}"}
+            }
+            year{
+                one{"වසර {0}"}
+                other{"වසර {0}"}
+            }
+        }
+        length{
+            centimeter{
+                one{"සෙ.මී {0}"}
+                other{"සෙ.මී {0}"}
+            }
+            foot{
+                one{"{0}'"}
+                other{"{0}'"}
+            }
+            inch{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            kilometer{
+                one{"කි.මී {0}"}
+                other{"කි.මී {0}"}
+            }
+            light-year{
+                one{"ආ.ව {0}"}
+                other{"ආ.ව {0}"}
+            }
+            meter{
+                one{"මී {0}"}
+                other{"මී {0}"}
+            }
+            mile{
+                one{"සැත {0}"}
+                other{"සැත {0}"}
+            }
+            millimeter{
+                one{"මිමී {0}"}
+                other{"මිමී {0}"}
+            }
+            picometer{
+                one{"පිමී {0}"}
+                other{"පිමී {0}"}
+            }
+            yard{
+                one{"යාර {0}"}
+                other{"යාර {0}"}
+            }
+        }
+        mass{
+            gram{
+                one{"ග්‍රෑ. {0}"}
+                other{"ග්‍රෑ. {0}"}
+            }
+            kilogram{
+                one{"කි.ග්‍රෑ. {0}"}
+                other{"කි.ග්‍රෑ. {0}"}
+            }
+            ounce{
+                one{"අවුන්ස {0}"}
+                other{"අවුන්ස {0}"}
+            }
+            pound{
+                one{"රා. {0}"}
+                other{"රා. {0}"}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0} hp"}
+                other{"{0} hp"}
+            }
+            kilowatt{
+                one{"{0} kW"}
+                other{"{0} kW"}
+            }
+            watt{
+                one{"{0} W"}
+                other{"{0} W"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0} hPa"}
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                one{"රසදිය {0}\u0022"}
+                other{"රසදිය {0}\u0022"}
+            }
+            millibar{
+                one{"මි.බා. {0}"}
+                other{"මි.බා. {0}"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"කිමී/පැ {0}"}
+                other{"කිමී/පැ {0}"}
+            }
+            meter-per-second{
+                one{"මී/තත් {0}"}
+                other{"මී/තත් {0}"}
+            }
+            mile-per-hour{
+                one{"පැ/සැ {0}"}
+                other{"පැ/සැ {0}"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"සෙල්. {0}°"}
+                other{"සෙල්. {0}°"}
+            }
+            fahrenheit{
+                one{"ෆැර. {0}°"}
+                other{"ෆැර. {0}°"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0} km³"}
+                other{"{0} km³"}
+            }
+            cubic-mile{
+                one{"{0} mi³"}
+                other{"{0} mi³"}
+            }
+            liter{
+                one{"{0} l"}
+                other{"{0} l"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1132,6 +1356,9 @@ si{
                 one{"ව.සැ {0}"}
                 other{"ව.සැ {0}"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

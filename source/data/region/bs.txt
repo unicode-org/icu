@@ -291,5 +291,9 @@ bs{
         ZW{"Zimbabve"}
         ZZ{"Nepoznata ili nevažeća oblast"}
     }
+    CountriesShort{
+        HK{"Hong Kong"}
+        MO{"Makao"}
+    }
     Version{"2.0.92.78"}
 }

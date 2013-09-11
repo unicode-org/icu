@@ -798,6 +798,42 @@ it{
             persian{"Calendario persiano"}
             roc{"Calendario Minguo"}
         }
+        colAlternate{
+            non-ignorable{"Ordina simboli"}
+            shifted{"Ordina ignorando i simboli"}
+        }
+        colBackwards{
+            no{"Ordina accenti normalmente"}
+            yes{"Ordina accenti capovolti"}
+        }
+        colCaseFirst{
+            lower{"Ordina prima lettere minuscole"}
+            no{"Ordina lettere maiuscole/minuscole normalmente"}
+            upper{"Ordina prima lettere minuscole"}
+        }
+        colCaseLevel{
+            no{"Ordina senza distinzione tra maiuscole e minuscole"}
+            yes{"Ordina distinzione tra maiuscole e minuscole"}
+        }
+        colHiraganaQuaternary{
+            no{"Ordina Kana separatamente"}
+            yes{"Ordina Kana diversamente"}
+        }
+        colNormalization{
+            no{"Ordina senza normalizzazione"}
+            yes{"Ordina Unicode normalizzato"}
+        }
+        colNumeric{
+            no{"Ordina cifre individualmente"}
+            yes{"Ordina cifre numericamente"}
+        }
+        colStrength{
+            identical{"Ordina tutto"}
+            primary{"Ordina solo lettere di base"}
+            quaternary{"Ordina accenti/lettere/larghezza/Kana"}
+            secondary{"Ordina accenti"}
+            tertiary{"Ordina accenti/lettere/larghezza"}
+        }
         collation{
             big5han{"cinese tradizionale"}
             dictionary{"Ordinamento dizionario"}

@@ -297,5 +297,12 @@ pt_PT{
         ZW{"Zimbabué"}
         ZZ{"Região desconhecida ou inválida"}
     }
+    CountriesShort{
+        GB{"RU"}
+        HK{"Hong Kong"}
+        MO{"Macau"}
+        PS{"Palestina"}
+        US{"EUA"}
+    }
     Version{"2.0.92.87"}
 }

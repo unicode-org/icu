@@ -789,6 +789,42 @@ nl{
             persian{"Perzische kalender"}
             roc{"Kalender van de Chinese Republiek"}
         }
+        colAlternate{
+            non-ignorable{"Symbolen sorteren"}
+            shifted{"Sorteren zonder symbolen"}
+        }
+        colBackwards{
+            no{"Normaal sorteren op accenten"}
+            yes{"Omgekeerd sorteren op accenten"}
+        }
+        colCaseFirst{
+            lower{"Eerst sorteren op kleine letters"}
+            no{"Sorteervolgorde algemeen hoofdlettergebruik"}
+            upper{"Eerst sorteren op hoofdletters"}
+        }
+        colCaseLevel{
+            no{"Niet hoofdlettergevoelig sorteren"}
+            yes{"Hoofdlettergevoelig sorteren"}
+        }
+        colHiraganaQuaternary{
+            no{"Kana afzonderlijk sorteren"}
+            yes{"Kana anders sorteren"}
+        }
+        colNormalization{
+            no{"Zonder normalisatie sorteren"}
+            yes{"Unicode genormaliseerd sorteren"}
+        }
+        colNumeric{
+            no{"Cijfers afzonderlijk sorteren"}
+            yes{"Cijfers numeriek sorteren"}
+        }
+        colStrength{
+            identical{"Alles sorteren"}
+            primary{"Alleen sorteren op letters"}
+            quaternary{"Sorteren op accenten/hoofdlettergebruik/breedte/Kana"}
+            secondary{"Sorteren op accenten"}
+            tertiary{"Sorteren op accenten/hoofdlettergebruik/breedte"}
+        }
         collation{
             big5han{"Traditioneel-Chinese sorteervolgorde - Big5"}
             dictionary{"Woordenboeksorteervolgorde"}

@@ -11,6 +11,14 @@
  */
 ta{
     AuxExemplarCharacters{"[\u200C\u200D]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{
         "[அ ஆ இ ஈ உ ஊ எ ஏ ஐ ஒ ஓ ஔ ஃ க ங ச ஞ ட ண த ந ப ம ய ர ல வ ழ ள ற ன ஜ ஷ ஸ ஹ ா ி "
         "\u0BC0 ு ூ ெ ே ை ொ ோ ௌ \u0BCD]"
@@ -22,6 +30,7 @@ ta{
     LocaleScript{
         "Taml",
     }
+    MoreInformation{"?"}
     NumberElements{
         default{"latn"}
         latn{
@@ -30,6 +39,7 @@ ta{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤ #,##,##0.00"}
                 decimalFormat{"#,##,##0.###"}
                 percentFormat{"#,##,##0%"}
@@ -416,6 +426,10 @@ ta{
             AmPmMarkers{
                 "முற்பகல்",
                 "பிற்பகல்",
+            }
+            AmPmMarkersNarrow{
+                "AM",
+                "PM",
             }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
@@ -993,6 +1007,18 @@ ta{
         US{"யூஎஸ்"}
         metric{"மெட்ரிக்"}
     }
+    transformNames{
+        BGN{"BGN"}
+        Numeric{"எண்"}
+        Tone{"டோன்"}
+        UNGEGN{"UNGEGN"}
+        x-Accents{"ஒலிப்புகள்"}
+        x-Fullwidth{"முழு அகலம்"}
+        x-Halfwidth{"அரை அகலம்"}
+        x-Jamo{"ஜமோ"}
+        x-Pinyin{"பின்யின்"}
+        x-Publishing{"வெளியிடுகிறது"}
+    }
     units{
         acceleration{
             g-force{
@@ -1039,6 +1065,9 @@ ta{
                 one{"{0} சதுர மைல்"}
                 other{"{0} சதுர மைல்"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{
@@ -1201,6 +1230,217 @@ ta{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0} ஜி.ஃபோ."}
+                other{"{0} ஜி.ஃபோ."}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0}நிமி."}
+                other{"{0}நிமி."}
+            }
+            arc-second{
+                one{"{0}வி."}
+                other{"{0}வி."}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"{0} ஏக்."}
+                other{"{0} ஏக்."}
+            }
+            hectare{
+                one{"{0} ஹெக்."}
+                other{"{0} ஹெக்."}
+            }
+            square-foot{
+                one{"{0} ச.அ."}
+                other{"{0} ச.அ."}
+            }
+            square-kilometer{
+                one{"{0} ச.கிமீ."}
+                other{"{0} ச.கிமீ."}
+            }
+            square-meter{
+                one{"{0} ச.மீ."}
+                other{"{0} ச.மீ."}
+            }
+            square-mile{
+                one{"{0} ச. மை."}
+                other{"{0} ச. மை."}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0} நா"}
+                other{"{0} நா"}
+            }
+            hour{
+                one{"{0} ம.நே."}
+                other{"{0} ம.நே."}
+            }
+            millisecond{
+                one{"{0} மி.வி."}
+                other{"{0} மி.வி."}
+            }
+            minute{
+                one{"{0} நிமி."}
+                other{"{0} நிமி."}
+            }
+            month{
+                one{"{0} மா"}
+                other{"{0} மா"}
+            }
+            second{
+                one{"{0} வி."}
+                other{"{0} வி."}
+            }
+            week{
+                one{"{0} வா"}
+                other{"{0} வா"}
+            }
+            year{
+                one{"{0} ஆ"}
+                other{"{0} ஆ"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} செ.மீ."}
+                other{"{0} செ.மீ."}
+            }
+            foot{
+                one{"{0} அடி"}
+                other{"{0} அடி"}
+            }
+            inch{
+                one{"{0} அங்."}
+                other{"{0} அங்."}
+            }
+            kilometer{
+                one{"{0} கி.மீ."}
+                other{"{0} கி.மீ."}
+            }
+            light-year{
+                one{"{0} ஒ.ஆ."}
+                other{"{0} ஒ.ஆ."}
+            }
+            meter{
+                one{"{0} மீ."}
+                other{"{0} மீ."}
+            }
+            mile{
+                one{"{0} மை."}
+                other{"{0} மை."}
+            }
+            millimeter{
+                one{"{0} மி.மீ."}
+                other{"{0} மி.மீ."}
+            }
+            picometer{
+                one{"{0} பை.மீ."}
+                other{"{0} பை.மீ."}
+            }
+            yard{
+                one{"{0} நீட்."}
+                other{"{0} நீட்."}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} கி."}
+                other{"{0} கி."}
+            }
+            kilogram{
+                one{"{0} கி.கி."}
+                other{"{0} கி.கி."}
+            }
+            ounce{
+                one{"{0} அவு."}
+                other{"{0} அவு."}
+            }
+            pound{
+                one{"{0} பவு."}
+                other{"{0} பவு."}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0} கு.வே."}
+                other{"{0} கு.வே."}
+            }
+            kilowatt{
+                one{"{0} கி.வா."}
+                other{"{0} கி.வா."}
+            }
+            watt{
+                one{"{0} வா."}
+                other{"{0} வா."}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0} ஹெ.பா."}
+                other{"{0} ஹெ.பா."}
+            }
+            inch-hg{
+                one{"{0} பா.அங்."}
+                other{"{0} பா.அங்."}
+            }
+            millibar{
+                one{"{0} மி.பா."}
+                other{"{0} மி.பா."}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0} கி.மீ./ம."}
+                other{"{0} கி.மீ./ம"}
+            }
+            meter-per-second{
+                one{"{0} மீ/வி"}
+                other{"{0} மீ/வி"}
+            }
+            mile-per-hour{
+                one{"{0} மை/ம.நே."}
+                other{"{0} மை/ம.நே."}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°செ."}
+                other{"{0}°செ."}
+            }
+            fahrenheit{
+                one{"{0}°ஃபா."}
+                other{"{0}°ஃபா."}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0} க.கி.மீ."}
+                other{"{0} க.கி.மீ."}
+            }
+            cubic-mile{
+                one{"{0} க.மை."}
+                other{"{0} க.மை."}
+            }
+            liter{
+                one{"{0} லி."}
+                other{"{0} லி."}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1247,6 +1487,9 @@ ta{
                 one{"{0} ச. மை."}
                 other{"{0} ச. மை."}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

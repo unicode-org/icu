@@ -23,9 +23,11 @@ ee{
     LocaleScript{
         "Latn",
     }
+    MoreInformation{"..."}
     NumberElements{
         latn{
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
             }
             patternsShort{
@@ -741,6 +743,22 @@ ee{
             year{
                 one{"ƒe {0} wo"}
                 other{"ƒe {0} wo"}
+            }
+        }
+    }
+    unitsNarrow{
+        duration{
+            hour{
+                one{"g {0}"}
+                other{"g {0}"}
+            }
+            minute{
+                one{"a {0}"}
+                other{"a {0}"}
+            }
+            second{
+                one{"s {0}"}
+                other{"s {0}"}
             }
         }
     }

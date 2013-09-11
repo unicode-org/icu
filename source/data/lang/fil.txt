@@ -280,6 +280,42 @@ fil{
             persian{"Kalendaryong Persian"}
             roc{"Kalendaryong Minguo"}
         }
+        colAlternate{
+            non-ignorable{"Pag-uri-uriin ang Mga Simbolo"}
+            shifted{"Pag-uri-uriin ang Mga Ignoring Symbol"}
+        }
+        colBackwards{
+            no{"Pag-uri-uriin ang Mga Accent nang Normal"}
+            yes{"Pag-uri-uriin ang Mga Accent nang Baliktad"}
+        }
+        colCaseFirst{
+            lower{"Lowercase Muna ang Pag-uri-uriin"}
+            no{"Pag-uri-uriin ang Ayos ng Normal na Case"}
+            upper{"Uppercase Muna ang Pag-uri-uriin"}
+        }
+        colCaseLevel{
+            no{"Pag-uri-uriin ang Hindi Case Sensitive"}
+            yes{"Pag-uri-uriin ang Case Sensitive"}
+        }
+        colHiraganaQuaternary{
+            no{"Pag-uri-uriin ang Kana nang Hiwalay"}
+            yes{"Pag-uri-uriin ang Kana nang Naiiba"}
+        }
+        colNormalization{
+            no{"Pag-uri-uriin nang Walang Pag-normalize"}
+            yes{"Pag-uri-uriin ang Unicode nang Normalized"}
+        }
+        colNumeric{
+            no{"Pag-uri-uriin ang Mga Digit nang Indibidwal"}
+            yes{"Pag-uri-uriin ang Mga Digit nang Numerical"}
+        }
+        colStrength{
+            identical{"Pag-uri-uriin Lahat"}
+            primary{"Mga Base na Titik Lang ang Pag-uri-uriin"}
+            quaternary{"Pag-uri-uriin ang Mga Accent/Case/Lapad/Kana"}
+            secondary{"Pag-uri-uriin ang Mga Accent"}
+            tertiary{"Pag-uri-uriin ang Mga Accent/Case/Lapad"}
+        }
         collation{
             big5han{"Pagkakasunod-sunod ng Pag-uuri ng Tradisyunal na Chinese - Big5"}
             dictionary{"Pagkakasunud-sunod ng Pag-uuri ng Diksyunaryo"}
