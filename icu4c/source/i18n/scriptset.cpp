@@ -196,7 +196,7 @@ UnicodeString &ScriptSet::displayScripts(UnicodeString &dest) const {
     UBool firstTime = TRUE;
     for (int32_t i = nextSetBit(0); i >= 0; i = nextSetBit(i + 1)) {
         if (!firstTime) {
-            dest.append(0x20);
+            dest.append((UChar)0x20);
         }
         firstTime = FALSE;
         const char *scriptName = uscript_getShortName((UScriptCode(i)));
