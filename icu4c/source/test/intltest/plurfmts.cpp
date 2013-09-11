@@ -8,12 +8,14 @@
 
 #if !UCONFIG_NO_FORMATTING
 
-#include "plurults.h"
-#include "plurfmts.h"
-#include "cmemory.h"
+#include "unicode/dcfmtsym.h"
+#include "unicode/decimfmt.h"
 #include "unicode/msgfmt.h"
-#include "unicode/plurrule.h"
 #include "unicode/plurfmt.h"
+#include "unicode/plurrule.h"
+#include "cmemory.h"
+#include "plurfmts.h"
+#include "plurults.h"
 
 #define PLURAL_PATTERN_DATA 4
 #define PLURAL_TEST_ARRAY_SIZE 256
@@ -38,6 +40,7 @@ void PluralFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(pluralFormatExtendedTest);
     TESTCASE_AUTO(pluralFormatExtendedParseTest);
     TESTCASE_AUTO(ordinalFormatTest);
+    TESTCASE_AUTO(TestDecimals);
     TESTCASE_AUTO_END;
 }
 
@@ -567,7 +570,7 @@ PluralFormatTest::pluralFormatExtendedTest(void) {
     dataerrln("Failed to apply pattern - %s", u_errorName(status));
     return;
   }
-  for (int32_t i = 0; i < 7; ++i) {
+  for (int32_t i = 0; i <= 7; ++i) {
     UnicodeString result = pf.format(i, status);
     if (U_FAILURE(status)) {
       errln("PluralFormat.format(value %d) failed - %s", i, u_errorName(status));
@@ -663,6 +666,22 @@ PluralFormatTest::ordinalFormatTest(void) {
 }
 
 void
+PluralFormatTest::TestDecimals() {
+    IcuTestErrorCode errorCode(*this, "TestDecimals");
+    // Simple number replacement.
+    PluralFormat pf(Locale::getEnglish(), "one{one meter}other{# meters}", errorCode);
+    assertEquals("simple format(1)", "one meter", pf.format(1, errorCode));
+    assertEquals("simple format(1.5)", "1.5 meters", pf.format(1.5, errorCode));
+    PluralFormat pf2(Locale::getEnglish(),
+            "offset:1 one{another meter}other{another # meters}", errorCode);
+    DecimalFormat df("0.0", new DecimalFormatSymbols(Locale::getEnglish(), errorCode), errorCode);
+    pf2.setNumberFormat(&df, errorCode);
+    assertEquals("offset-decimals format(1)", "another 0.0 meters", pf2.format(1, errorCode));
+    assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format(2, errorCode));
+    assertEquals("offset-decimals format(2.5)", "another 1.5 meters", pf2.format(2.5, errorCode));
+}
+
+void
 PluralFormatTest::numberFormatTest(PluralFormat* plFmt, 
                                    NumberFormat *numFmt,
                                    int32_t start,
@@ -707,7 +726,6 @@ PluralFormatTest::numberFormatTest(PluralFormat* plFmt,
             }
             else {
                 errln( *message+UnicodeString("  got:")+plResult+UnicodeString("  expecting:")+numResult);
-                
             }
         }
     }

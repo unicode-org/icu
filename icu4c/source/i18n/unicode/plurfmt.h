@@ -6,10 +6,6 @@
 *
 
 * File PLURFMT.H
-*
-* Modification History:*
-*   Date        Name        Description
-*
 ********************************************************************************
 */
 
@@ -543,11 +539,12 @@ private:
         /**
          * Given a number, returns the appropriate PluralFormat keyword.
          *
+         * @param context worker object for the selector.
          * @param number The number to be plural-formatted.
          * @param ec Error code.
          * @return The selected PluralFormat keyword.
          */
-        virtual UnicodeString select(double number, UErrorCode& ec) const = 0;
+        virtual UnicodeString select(void *context, double number, UErrorCode& ec) const = 0;
     };
 
     /**
@@ -560,7 +557,7 @@ private:
 
         virtual ~PluralSelectorAdapter();
 
-        virtual UnicodeString select(double number, UErrorCode& /*ec*/) const;
+        virtual UnicodeString select(void *context, double number, UErrorCode& /*ec*/) const;
 
         void reset();
 
@@ -585,11 +582,17 @@ private:
      */
     void copyObjects(const PluralFormat& other);
 
+    UnicodeString& format(const Formattable& numberObject, double number,
+                          UnicodeString& appendTo,
+                          FieldPosition& pos,
+                          UErrorCode& status) const;
+
     /**
      * Finds the PluralFormat sub-message for the given number, or the "other" sub-message.
      * @param pattern A MessagePattern.
      * @param partIndex the index of the first PluralFormat argument style part.
      * @param selector the PluralSelector for mapping the number (minus offset) to a keyword.
+     * @param context worker object for the selector.
      * @param number a number to be matched to one of the PluralFormat argument's explicit values,
      *        or mapped via the PluralSelector.
      * @param ec ICU error code.
@@ -597,7 +600,7 @@ private:
      */
     static int32_t findSubMessage(
          const MessagePattern& pattern, int32_t partIndex,
-         const PluralSelector& selector, double number, UErrorCode& ec);
+         const PluralSelector& selector, void *context, double number, UErrorCode& ec);
 
     friend class MessageFormat;
 };

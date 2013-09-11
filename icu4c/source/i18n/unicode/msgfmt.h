@@ -874,13 +874,13 @@ private:
       */
     class U_I18N_API PluralSelectorProvider : public PluralFormat::PluralSelector {
     public:
-        PluralSelectorProvider(const Locale* loc, UPluralType type);
+        PluralSelectorProvider(const MessageFormat &mf, UPluralType type);
         virtual ~PluralSelectorProvider();
-        virtual UnicodeString select(double number, UErrorCode& ec) const;
+        virtual UnicodeString select(void *ctx, double number, UErrorCode& ec) const;
 
-        void reset(const Locale* loc);
+        void reset();
     private:
-        const Locale* locale;
+        const MessageFormat &msgFormat;
         PluralRules* rules;
         UPluralType type;
     };
@@ -956,7 +956,7 @@ private:
      * AppendableWrapper, updates the field position.
      *
      * @param msgStart      Index to msgPattern part to start formatting from.
-     * @param pluralNumber  Zero except when formatting a plural argument sub-message
+     * @param plNumber      NULL except when formatting a plural argument sub-message
      *                      where a '#' is replaced by the format string for this number.
      * @param arguments     The formattable objects array. (Must not be NULL.)
      * @param argumentNames NULL if numbered values are used. Otherwise the same
@@ -969,7 +969,7 @@ private:
      * @param success       The error code status.
      */
     void format(int32_t msgStart,
-                double pluralNumber,
+                const void *plNumber,
                 const Formattable* arguments,
                 const UnicodeString *argumentNames,
                 int32_t cnt,
@@ -1008,6 +1008,20 @@ private:
     FieldPosition* updateMetaData(AppendableWrapper& dest, int32_t prevLength,
                                   FieldPosition* fp, const Formattable* argId) const;
 
+    /**
+     * Finds the "other" sub-message.
+     * @param partIndex the index of the first PluralFormat argument style part.
+     * @return the "other" sub-message start part index.
+     */
+    int32_t findOtherSubMessage(int32_t partIndex) const;
+
+    /**
+     * Returns the ARG_START index of the first occurrence of the plural number in a sub-message.
+     * Returns -1 if it is a REPLACE_NUMBER.
+     * Returns 0 if there is neither.
+     */
+    int32_t findFirstPluralNumberArg(int32_t msgStart, const UnicodeString &argName) const;
+
     Format* getCachedFormatter(int32_t argumentNumber) const;
 
     UnicodeString getLiteralStringUntilNextArgument(int32_t from) const;
@@ -1015,7 +1029,7 @@ private:
     void copyObjects(const MessageFormat& that, UErrorCode& ec);
 
     void formatComplexSubMessage(int32_t msgStart,
-                                 double pluralNumber,
+                                 const void *plNumber,
                                  const Formattable* arguments,
                                  const UnicodeString *argumentNames,
                                  int32_t cnt,
