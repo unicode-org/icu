@@ -1861,6 +1861,14 @@ public:
      */
      FixedDecimal getFixedDecimal(double number, UErrorCode &status) const;
 
+    /**
+     *  Get a FixedDecimal corresponding to a formattable as it would be
+     *  formatted by this DecimalFormat.
+     *  Internal, not intended for public use.
+     *  @internal
+     */
+     FixedDecimal getFixedDecimal(const Formattable &number, UErrorCode &status) const;
+
 public:
 
     /**

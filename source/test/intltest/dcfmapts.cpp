@@ -13,8 +13,10 @@
 #include "unicode/currpinf.h"
 #include "unicode/dcfmtsym.h"
 #include "unicode/decimfmt.h"
+#include "unicode/fmtable.h"
 #include "unicode/localpointer.h"
 #include "unicode/parseerr.h"
+#include "unicode/stringpiece.h"
 
 #include "putilimp.h"
 #include "plurrule_impl.h"
@@ -666,6 +668,82 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     fd = df->getFixedDecimal(uprv_getNaN(), status);
     ASSERT_EQUAL(TRUE, fd.isNanOrInfinity);
     ASSERT_SUCCESS(status);
+
+    // Test Big Decimal input.
+    // 22 digits before and after decimal, will exceed the precision of a double
+    //    and force DecimalFormat::getFixedDecimal() to work with a digit list.
+    df.adoptInstead(new DecimalFormat("#####################0.00####################", status));
+    ASSERT_SUCCESS(status);
+    Formattable fable("12.34", status);
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(fable, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(34, fd.decimalDigits);
+    ASSERT_EQUAL(34, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(12, fd.intValue);
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    fable.setDecimalNumber("12.345678901234567890123456789", status);
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(fable, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(22, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(345678901234567890LL, fd.decimalDigits);
+    ASSERT_EQUAL(34567890123456789LL, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(12, fd.intValue);
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    // On field overflow, Integer part is truncated on the left, fraction part on the right.
+    fable.setDecimalNumber("123456789012345678901234567890.123456789012345678901234567890", status);
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(fable, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(22, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(123456789012345678LL, fd.decimalDigits);
+    ASSERT_EQUAL(123456789012345678LL, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(345678901234567890LL, fd.intValue);
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    // Digits way to the right of the decimal but within the format's precision aren't truncated
+    fable.setDecimalNumber("1.0000000000000000000012", status);
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(fable, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(22, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(12, fd.decimalDigits);
+    ASSERT_EQUAL(12, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(1, fd.intValue);
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    // Digits beyond the precision of the format are rounded away
+    fable.setDecimalNumber("1.000000000000000000000012", status);
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(fable, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(0, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(0, fd.decimalDigits);
+    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(1, fd.intValue);
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    // Negative numbers come through
+    fable.setDecimalNumber("-1.0000000000000000000012", status);
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(fable, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(22, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(12, fd.decimalDigits);
+    ASSERT_EQUAL(12, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(1, fd.intValue);
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
+    ASSERT_EQUAL(TRUE, fd.isNegative);
+
 }
     
 #endif /* #if !UCONFIG_NO_FORMATTING */

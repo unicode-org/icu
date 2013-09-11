@@ -127,7 +127,7 @@ public:
      * Creates a Formattable object of an appropriate numeric type from a
      * a decimal number in string form.  The Formattable will retain the
      * full precision of the input in decimal format, even when it exceeds
-     * what can be represented by a double of int64_t.
+     * what can be represented by a double or int64_t.
      *
      * @param number  the unformatted (not localized) string representation
      *                     of the Decimal number.
