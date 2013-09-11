@@ -971,15 +971,6 @@ static void VerifyTranslation(void) {
             if (U_FAILURE(errorCode)) {
                 log_err("error uloc_getDisplayCountry returned %s\n", u_errorName(errorCode));
             }
-            else if ((uprv_strstr(currLoc, "ti_") != currLoc && uprv_strstr(currLoc, "sr_Latn_XK") != currLoc) || isICUVersionAtLeast(52, 0, 2)) {
-              /* TODO: FIX or REMOVE this test!  Was: restore DisplayCountry test for ti_* when cldrbug 3058 is fixed) - but CldrBug:3058 is wontfix */
-              /* For sr_Latn_XK we need to wait until the names get updated from sr[_Cyrl] later in CLDR 24 */
-              strIdx = findStringSetMismatch(currLoc, langBuffer, langSize, mergedExemplarSet, FALSE, &badChar);
-                if (strIdx >= 0) {
-                    log_err("getDisplayCountry(%s) at index %d returned characters not in the exemplar characters: %04X.\n",
-                        currLoc, strIdx, badChar);
-                }
-            }
             {
                 UResourceBundle* cal = ures_getByKey(currentLocale, "calendar", NULL, &errorCode);
                 UResourceBundle* greg = ures_getByKeyWithFallback(cal, "gregorian", NULL, &errorCode);
