@@ -800,6 +800,42 @@ en{
             persian{"Persian Calendar"}
             roc{"Minguo Calendar"}
         }
+        colAlternate{
+            non-ignorable{"Sort Symbols"}
+            shifted{"Sort Ignoring Symbols"}
+        }
+        colBackwards{
+            no{"Sort Accents Normally"}
+            yes{"Sort Accents Reversed"}
+        }
+        colCaseFirst{
+            lower{"Sort Lowercase First"}
+            no{"Sort Normal Case Order"}
+            upper{"Sort Uppercase First"}
+        }
+        colCaseLevel{
+            no{"Sort Case Insensitive"}
+            yes{"Sort Case Sensitive"}
+        }
+        colHiraganaQuaternary{
+            no{"Sort Kana Separately"}
+            yes{"Sort Kana Differently"}
+        }
+        colNormalization{
+            no{"Sort Without Normalization"}
+            yes{"Sort Unicode Normalized"}
+        }
+        colNumeric{
+            no{"Sort Digits Individually"}
+            yes{"Sort Digits Numerically"}
+        }
+        colStrength{
+            identical{"Sort All"}
+            primary{"Sort Base Letters Only"}
+            quaternary{"Sort Accents/Case/Width/Kana"}
+            secondary{"Sort Accents"}
+            tertiary{"Sort Accents/Case/Width"}
+        }
         collation{
             big5han{"Traditional Chinese Sort Order - Big5"}
             dictionary{"Dictionary Sort Order"}

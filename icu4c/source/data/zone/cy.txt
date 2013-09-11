@@ -924,5 +924,7 @@ cy{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Amser {0}"}
+        regionFormatDaylight{"Amser Haf {0}"}
+        regionFormatStandard{"Amser Safonol {0}"}
     }
 }

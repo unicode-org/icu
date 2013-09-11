@@ -830,5 +830,7 @@ eu{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}
+        regionFormatDaylight{"{0} (udako ordua)"}
+        regionFormatStandard{"{0} (ordu estandarra)"}
     }
 }

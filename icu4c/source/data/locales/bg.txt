@@ -11,12 +11,21 @@
  */
 bg{
     AuxExemplarCharacters{"[{а\u0300} ѐ ё ѝ {о\u0300} {у\u0300} {ъ\u0300} ы ѣ э {ю\u0300} {я\u0300} ѫ]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}… {1}"}
+        word-final{"{0}…"}
+        word-initial{"…{0}"}
+        word-medial{"{0}… {1}"}
+    }
     ExemplarCharacters{"[а б в г д е ж з и й к л м н о п р с т у ф х ц ч ш щ ъ ь ю я]"}
     ExemplarCharactersIndex{"[А Б В Г Д Е Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ю Я]"}
     ExemplarCharactersPunctuation{"[\\- ‐ – — , ; \\: ! ? . … ' ‘ ‚ \u0022 “ „ ( ) \\[ \\] § * / ″ №]"}
     LocaleScript{
         "Cyrl",
     }
+    MoreInformation{"?"}
     NumberElements{
         latn{
             miscPatterns{
@@ -955,6 +964,18 @@ bg{
         US{"американска"}
         metric{"метрична"}
     }
+    transformNames{
+        BGN{"АКГН (BGN)"}
+        Numeric{"Цифрови"}
+        Tone{"Интонация"}
+        UNGEGN{"ГЕСГИООН (UNGEGN)"}
+        x-Accents{"Диакритични знаци"}
+        x-Fullwidth{"С пълна ширина"}
+        x-Halfwidth{"С половин ширина"}
+        x-Jamo{"Джамо"}
+        x-Pinyin{"Пинин"}
+        x-Publishing{"Типографски"}
+    }
     units{
         acceleration{
             g-force{
@@ -1001,6 +1022,9 @@ bg{
                 one{"{0} квадратна миля"}
                 other{"{0} квадратни мили"}
             }
+        }
+        compound{
+            per{"{0} в {1}"}
         }
         duration{
             day{
@@ -1163,6 +1187,217 @@ bg{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0} G"}
+                other{"{0} G"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"{0} акър"}
+                other{"{0} акра"}
+            }
+            hectare{
+                one{"{0} ha"}
+                other{"{0} ha"}
+            }
+            square-foot{
+                one{"{0} кв. фут"}
+                other{"{0} кв. фута"}
+            }
+            square-kilometer{
+                one{"{0} km²"}
+                other{"{0} km²"}
+            }
+            square-meter{
+                one{"{0} m²"}
+                other{"{0} m²"}
+            }
+            square-mile{
+                one{"{0} кв. миля"}
+                other{"{0} кв. мили"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0} д"}
+                other{"{0} д"}
+            }
+            hour{
+                one{"{0} h"}
+                other{"{0} h"}
+            }
+            millisecond{
+                one{"{0} ms"}
+                other{"{0} ms"}
+            }
+            minute{
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                one{"{0} м"}
+                other{"{0} м"}
+            }
+            second{
+                one{"{0} s"}
+                other{"{0} s"}
+            }
+            week{
+                one{"{0} седм."}
+                other{"{0} седм."}
+            }
+            year{
+                one{"{0} г"}
+                other{"{0} г"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} cm"}
+                other{"{0} cm"}
+            }
+            foot{
+                one{"{0} фут"}
+                other{"{0} фута"}
+            }
+            inch{
+                one{"{0}\u0022"}
+                other{"{0}\u0022"}
+            }
+            kilometer{
+                one{"{0} km"}
+                other{"{0} km"}
+            }
+            light-year{
+                one{"{0} св.г."}
+                other{"{0} св.г."}
+            }
+            meter{
+                one{"{0} m"}
+                other{"{0} m"}
+            }
+            mile{
+                one{"{0} миля"}
+                other{"{0} мили"}
+            }
+            millimeter{
+                one{"{0} mm"}
+                other{"{0} mm"}
+            }
+            picometer{
+                one{"{0} pm"}
+                other{"{0} pm"}
+            }
+            yard{
+                one{"{0} ярд"}
+                other{"{0} ярда"}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} g"}
+                other{"{0} g"}
+            }
+            kilogram{
+                one{"{0} kg"}
+                other{"{0} kg"}
+            }
+            ounce{
+                one{"{0} унц."}
+                other{"{0} унц."}
+            }
+            pound{
+                one{"{0} фунт"}
+                other{"{0} фунта"}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0} к.с."}
+                other{"{0} к.с."}
+            }
+            kilowatt{
+                one{"{0} kW"}
+                other{"{0} kW"}
+            }
+            watt{
+                one{"{0} W"}
+                other{"{0} W"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0} hPa"}
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                one{"{0} inHg"}
+                other{"{0} inHg"}
+            }
+            millibar{
+                one{"{0} mbar"}
+                other{"{0} mbar"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0} km/h"}
+                other{"{0} km/h"}
+            }
+            meter-per-second{
+                one{"{0} m/s"}
+                other{"{0} m/s"}
+            }
+            mile-per-hour{
+                one{"{0} миля/ч"}
+                other{"{0} мили/ч"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0} °"}
+                other{"{0} °"}
+            }
+            fahrenheit{
+                one{"{0} °F"}
+                other{"{0} °F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0} km³"}
+                other{"{0} km³"}
+            }
+            cubic-mile{
+                one{"{0} куб. миля"}
+                other{"{0} куб. мили"}
+            }
+            liter{
+                one{"{0} l"}
+                other{"{0} l"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1209,6 +1444,9 @@ bg{
                 one{"{0} кв. миля"}
                 other{"{0} кв. мили"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

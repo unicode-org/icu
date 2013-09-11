@@ -708,6 +708,48 @@ lv{
             persian{"Persiešu kalendārs"}
             roc{"Ķīnas Republikas kalendārs"}
         }
+        colAlternate{
+            non-ignorable{"Kārtot simbolus"}
+            shifted{"Kārtot, ignorējot simbolus"}
+        }
+        colBackwards{
+            no{"Kārtot diakritiskās zīmes parastā secībā"}
+            yes{"Kārtot diakritiskās zīmes apgrieztā secībā"}
+        }
+        colCaseFirst{
+            lower{"Kārtot pēc pirmā mazā burta"}
+            no{"Kārtot burtu reģistra parastā secībā"}
+            upper{"Kārtot pēc pirmā lielā burta"}
+        }
+        colCaseLevel{
+            no{"Kārtot reģistrnejutīgas rakstzīmes"}
+            yes{"Kārtot reģistrjutīgās rakstzīmes"}
+        }
+        colHiraganaQuaternary{
+            no{"Kārtot kana rakstzīmes atsevišķi"}
+            yes{"Kārtot kana rakstzīmes, norādot atšķirības"}
+        }
+        colNormalization{
+            no{"Kārtot bez normalizēšanas"}
+            yes{"Kārtot unikodu normalizējot"}
+        }
+        colNumeric{
+            no{"Kārtot ciparus atsevišķi"}
+            yes{"Kārtot ciparus skaitliskā secībā"}
+        }
+        colStrength{
+            identical{"Kārtot visus"}
+            primary{"Kārtot tikai pamata burtus"}
+            quaternary{
+                "Kārtot diakritiskās zīmes/reģistrjutīgās rakstzīmes/rakstzīmes pēc p"
+                "latuma/Kana rakstzīmes"
+            }
+            secondary{"Kārtot diakritiskās zīmes"}
+            tertiary{
+                "Kārtot diakritiskās zīmes/reģistrjutīgās rakstzīmes/rakstzīmes pēc p"
+                "latuma"
+            }
+        }
         collation{
             big5han{"tradicionālās ķīniešu valodas kārtošanas secība - Big5"}
             dictionary{"Vārdnīcas kārtošanas secība"}

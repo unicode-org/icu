@@ -1865,5 +1865,7 @@ ar{
         gmtZeroFormat{"جرينتش"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"توقيت {0}"}
+        regionFormatDaylight{"توقيت {0} الصيفي"}
+        regionFormatStandard{"توقيت {0} الرسمي"}
     }
 }

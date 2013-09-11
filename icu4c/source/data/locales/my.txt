@@ -29,6 +29,7 @@ my{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"¤ #,##0.00"}
                 currencyFormat{"¤ #,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -869,6 +870,9 @@ my{
                 other{"{0}စတုရန်းမိုင်"}
             }
         }
+        compound{
+            per{"{0}လျှင်{1}နှုန်း"}
+        }
         duration{
             day{
                 other{"{0}ရက်"}
@@ -994,6 +998,171 @@ my{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                other{"{0} G"}
+            }
+        }
+        angle{
+            arc-minute{
+                other{"{0}′"}
+            }
+            arc-second{
+                other{"{0}″"}
+            }
+            degree{
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                other{"{0} ac"}
+            }
+            hectare{
+                other{"{0} ha"}
+            }
+            square-foot{
+                other{"{0} ft²"}
+            }
+            square-kilometer{
+                other{"{0} km²"}
+            }
+            square-meter{
+                other{"{0} m²"}
+            }
+            square-mile{
+                other{"{0} mi²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                other{"{0}ရက်"}
+            }
+            hour{
+                other{"{0}နာရီ"}
+            }
+            millisecond{
+                other{"{0} ms"}
+            }
+            minute{
+                other{"{0}မိနစ်"}
+            }
+            month{
+                other{"{0}လ"}
+            }
+            second{
+                other{"{0} s"}
+            }
+            week{
+                other{"{0}ပတ်"}
+            }
+            year{
+                other{"{0} y"}
+            }
+        }
+        length{
+            centimeter{
+                other{"{0} cm"}
+            }
+            foot{
+                other{"{0} '"}
+            }
+            inch{
+                other{"{0} ″"}
+            }
+            kilometer{
+                other{"{0} km"}
+            }
+            light-year{
+                other{"{0} အလင်းနှစ်"}
+            }
+            meter{
+                other{"{0} m"}
+            }
+            mile{
+                other{"{0}မိုင်"}
+            }
+            millimeter{
+                other{"{0} mm"}
+            }
+            picometer{
+                other{"{0} pm"}
+            }
+            yard{
+                other{"{0} ကိုက်"}
+            }
+        }
+        mass{
+            gram{
+                other{"{0} g"}
+            }
+            kilogram{
+                other{"{0} kg"}
+            }
+            ounce{
+                other{"{0} oz"}
+            }
+            pound{
+                other{"{0} lb"}
+            }
+        }
+        power{
+            horsepower{
+                other{"{0} hp"}
+            }
+            kilowatt{
+                other{"{0} kW"}
+            }
+            watt{
+                other{"{0} W"}
+            }
+        }
+        pressure{
+            hectopascal{
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                other{"{0} inHg"}
+            }
+            millibar{
+                other{"{0} mbar"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                other{"{0} km/h"}
+            }
+            meter-per-second{
+                other{"{0} m/s"}
+            }
+            mile-per-hour{
+                other{"{0} mi/h"}
+            }
+        }
+        temperature{
+            celsius{
+                other{"{0}°"}
+            }
+            fahrenheit{
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                other{"{0} km³"}
+            }
+            cubic-mile{
+                other{"{0} mi³"}
+            }
+            liter{
+                other{"{0} l"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1030,6 +1199,9 @@ my{
             square-mile{
                 other{"{0} mi²"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

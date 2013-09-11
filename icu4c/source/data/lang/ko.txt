@@ -786,6 +786,42 @@ ko{
             persian{"페르시안력"}
             roc{"대만력"}
         }
+        colAlternate{
+            non-ignorable{"기호 정렬"}
+            shifted{"기호 무시 정렬"}
+        }
+        colBackwards{
+            no{"악센트 일반 정렬"}
+            yes{"악센트 역순 정렬"}
+        }
+        colCaseFirst{
+            lower{"첫 소문자 정렬"}
+            no{"일반 대/소문자 정렬 순서"}
+            upper{"대문자 우선 정렬"}
+        }
+        colCaseLevel{
+            no{"대/소문자 무시 정렬"}
+            yes{"대/소문자 구분 정렬"}
+        }
+        colHiraganaQuaternary{
+            no{"가나 별도 정렬"}
+            yes{"가나를 다르게 정렬"}
+        }
+        colNormalization{
+            no{"표준화 없이 정렬"}
+            yes{"유니코드 표준화 정렬"}
+        }
+        colNumeric{
+            no{"숫자별 정렬"}
+            yes{"숫자 정렬"}
+        }
+        colStrength{
+            identical{"모두 정렬"}
+            primary{"기본 문자만 정렬"}
+            quaternary{"악센트/대소문자/전반각/가나 정렬"}
+            secondary{"악센트 정렬"}
+            tertiary{"악센트/대소문자/전반각 정렬"}
+        }
         collation{
             big5han{"중국어 번체 정렬 순서 (Big5)"}
             dictionary{"사전 정렬순"}

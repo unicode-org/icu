@@ -1231,5 +1231,7 @@ pl{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Czas: {0}"}
+        regionFormatDaylight{"{0} (czas letni)"}
+        regionFormatStandard{"{0} (czas standardowy)"}
     }
 }

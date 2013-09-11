@@ -301,5 +301,9 @@ kea{
         ZW{"Zimbabui"}
         ZZ{"Rejiãu Diskonxedu"}
     }
+    CountriesShort{
+        HK{"Ong Kong"}
+        MO{"Makau"}
+    }
     Version{"2.0.92.87"}
 }

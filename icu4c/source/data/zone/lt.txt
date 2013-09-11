@@ -1800,5 +1800,7 @@ lt{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;−HH:mm"}
         regionFormat{"Laikas: {0}"}
+        regionFormatDaylight{"Vasaros laikas: {0}"}
+        regionFormatStandard{"Standartinis laikas: {0}"}
     }
 }

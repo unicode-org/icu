@@ -10,6 +10,7 @@ zh_Hans_SG{
     NumberElements{
         latn{
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
             }
         }
@@ -256,9 +257,46 @@ zh_Hans_SG{
         }
     }
     units{
+        compound{
+            per{"{0}/{1}"}
+        }
         duration{
             second{
                 other{"{0}秒"}
+            }
+        }
+    }
+    unitsNarrow{
+        length{
+            centimeter{
+                other{"{0}厘米"}
+            }
+            foot{
+                other{"{0}英尺"}
+            }
+            inch{
+                other{"{0}英寸"}
+            }
+            kilometer{
+                other{"{0}公里"}
+            }
+            light-year{
+                other{"{0}光年"}
+            }
+            meter{
+                other{"{0}米"}
+            }
+            mile{
+                other{"{0}英里"}
+            }
+            millimeter{
+                other{"{0}毫米"}
+            }
+            picometer{
+                other{"{0}皮米"}
+            }
+            yard{
+                other{"{0}码"}
             }
         }
     }

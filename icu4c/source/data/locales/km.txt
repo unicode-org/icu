@@ -11,6 +11,14 @@
  */
 km{
     AuxExemplarCharacters{"[\u17B4\u17B5\u200B ឝ ឞ]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{
         "[\u17CC \u17CE \u17CF \u17D1 \u17D0 ៈ \u17CB \u17C9 \u17CA \u17CD ក ខ គ ឃ ង "
         "ច ឆ ជ ឈ ញ ដ ឋ ឌ ឍ ណ ត ថ ទ ធ ន ប ផ ព ភ ម យ រ ឫ ឬ ល ឭ ឮ វ ស ហ ឡ អ ឲ ឪ {អា} ឥ ឦ"
@@ -21,6 +29,7 @@ km{
     LocaleScript{
         "Khmr",
     }
+    MoreInformation{"?"}
     NumberElements{
         default{"latn"}
         latn{
@@ -29,6 +38,7 @@ km{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -893,6 +903,9 @@ km{
                 other{"{0} ម៉ាយល៍​ការ៉េ"}
             }
         }
+        compound{
+            per{"{0}​ក្នុង​មួយ​{1}"}
+        }
         duration{
             day{
                 other{"{0} ថ្ងៃ"}
@@ -1018,6 +1031,171 @@ km{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                other{"{0} ក.ទ."}
+            }
+        }
+        angle{
+            arc-minute{
+                other{"{0}′"}
+            }
+            arc-second{
+                other{"{0}″"}
+            }
+            degree{
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                other{"{0} អា"}
+            }
+            hectare{
+                other{"{0} ហ."}
+            }
+            square-foot{
+                other{"{0} ហ្វ²."}
+            }
+            square-kilometer{
+                other{"{0} គ.ម²."}
+            }
+            square-meter{
+                other{"{0} ម²."}
+            }
+            square-mile{
+                other{"{0} ម៉²."}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                other{"{0} ថ្ងៃ"}
+            }
+            hour{
+                other{"{0} ម៉."}
+            }
+            millisecond{
+                other{"{0} មិ.វិ."}
+            }
+            minute{
+                other{"{0} ន."}
+            }
+            month{
+                other{"{0} ខែ"}
+            }
+            second{
+                other{"{0} វិ."}
+            }
+            week{
+                other{"{0} សប្ដាហ៍"}
+            }
+            year{
+                other{"{0} ឆ្នាំ"}
+            }
+        }
+        length{
+            centimeter{
+                other{"{0} ស.ម."}
+            }
+            foot{
+                other{"{0}′"}
+            }
+            inch{
+                other{"{0}″"}
+            }
+            kilometer{
+                other{"{0} គ.ម"}
+            }
+            light-year{
+                other{"{0} ឆ្នាំ​ពន្លឺ"}
+            }
+            meter{
+                other{"{0} ម."}
+            }
+            mile{
+                other{"{0} ម៉."}
+            }
+            millimeter{
+                other{"{0} ម.ម."}
+            }
+            picometer{
+                other{"{0} ព.ម."}
+            }
+            yard{
+                other{"{0} យ៉."}
+            }
+        }
+        mass{
+            gram{
+                other{"{0} ក."}
+            }
+            kilogram{
+                other{"{0} គ.ក."}
+            }
+            ounce{
+                other{"{0} អ."}
+            }
+            pound{
+                other{"{0}#"}
+            }
+        }
+        power{
+            horsepower{
+                other{"{0} សេះ"}
+            }
+            kilowatt{
+                other{"{0} គ.វ."}
+            }
+            watt{
+                other{"{0} វ."}
+            }
+        }
+        pressure{
+            hectopascal{
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                other{"{0}\u0022 Hg"}
+            }
+            millibar{
+                other{"{0} ម.ប."}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                other{"{0} គ.ម./ម៉"}
+            }
+            meter-per-second{
+                other{"{0} ម./វិ."}
+            }
+            mile-per-hour{
+                other{"{0} ម៉./ម៉"}
+            }
+        }
+        temperature{
+            celsius{
+                other{"{0}°"}
+            }
+            fahrenheit{
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                other{"{0} គ.ម³."}
+            }
+            cubic-mile{
+                other{"{0} ម៉³."}
+            }
+            liter{
+                other{"{0} ល."}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1054,6 +1232,9 @@ km{
             square-mile{
                 other{"{0} ម៉²."}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

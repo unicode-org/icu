@@ -1532,5 +1532,7 @@ sr_Latn{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HHmm;-HHmm"}
         regionFormat{"Vreme u zemlji: {0}"}
+        regionFormatDaylight{"{0}, letnje vreme"}
+        regionFormatStandard{"{0}, standardno vreme"}
     }
 }

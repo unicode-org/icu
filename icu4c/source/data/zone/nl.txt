@@ -1003,5 +1003,7 @@ nl{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}-tijd"}
+        regionFormatDaylight{"Zomertijd {0}"}
+        regionFormatStandard{"Standaardtijd {0}"}
     }
 }

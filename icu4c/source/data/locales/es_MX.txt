@@ -8,6 +8,15 @@
 // ***************************************************************************
 es_MX{
     %%Parent{"es_419"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"… {0}"}
+        medial{"{0}… {1}"}
+        word-final{"{0}…"}
+        word-initial{"… {0}"}
+        word-medial{"{0}… {1}"}
+    }
+    MoreInformation{"[...]"}
     NumberElements{
         latn{
             miscPatterns{
@@ -850,6 +859,9 @@ es_MX{
                 other{"{0} millas cuadradas"}
             }
         }
+        compound{
+            per{"{0} por {1}"}
+        }
         duration{
             day{
                 one{"{0} día"}
@@ -1011,6 +1023,55 @@ es_MX{
             }
         }
     }
+    unitsNarrow{
+        angle{
+            arc-minute{
+                one{"{0}'"}
+                other{"{0}'"}
+            }
+            arc-second{
+                one{"{0}\u0022"}
+                other{"{0}\u0022"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0} d"}
+                other{"{0} d"}
+            }
+            hour{
+                one{"{0} h"}
+                other{"{0} h"}
+            }
+            millisecond{
+                one{"{0} ms"}
+                other{"{0} ms"}
+            }
+            minute{
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                one{"{0} m"}
+                other{"{0} m"}
+            }
+            week{
+                one{"{0} sem"}
+                other{"{0} sem"}
+            }
+            year{
+                one{"{0}a"}
+                other{"{0} a"}
+            }
+        }
+    }
     unitsShort{
         angle{
             arc-minute{
@@ -1051,6 +1112,9 @@ es_MX{
                 one{"{0} mi²"}
                 other{"{0} mi²"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

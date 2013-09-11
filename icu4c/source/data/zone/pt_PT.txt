@@ -1910,5 +1910,7 @@ pt_PT{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Hora de {0}"}
+        regionFormatDaylight{"Hora de Verão de {0}"}
+        regionFormatStandard{"Hora Padrão de {0}"}
     }
 }

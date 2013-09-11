@@ -988,5 +988,7 @@ de{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} Zeit"}
+        regionFormatDaylight{"{0} Sommerzeit"}
+        regionFormatStandard{"{0} Normalzeit"}
     }
 }

@@ -794,6 +794,42 @@ fi{
             persian{"persialainen kalenteri"}
             roc{"Kiinan tasavallan kalenteri"}
         }
+        colAlternate{
+            non-ignorable{"Lajittele symbolit"}
+            shifted{"Lajittele symbolit ohittaen"}
+        }
+        colBackwards{
+            no{"Lajittele painomerkit normaalisti"}
+            yes{"Lajittele painomerkit käänteisesti"}
+        }
+        colCaseFirst{
+            lower{"Lajittele pienet kirjaimet ensin"}
+            no{"Lajittele isot ja pienet kirjaimet normaalisti"}
+            upper{"Lajittele isot kirjaimet ensin"}
+        }
+        colCaseLevel{
+            no{"Lajittele ilman isojen ja pienten kirjainten erottelua"}
+            yes{"Lajittele isojen ja pienten kirjainten mukaan"}
+        }
+        colHiraganaQuaternary{
+            no{"Lajittele kana-merkit erikseen"}
+            yes{"Lajittele kana-merkit erikseen"}
+        }
+        colNormalization{
+            no{"Lajittele ilman normalisointia"}
+            yes{"Lajittele Unicode normalisoituna"}
+        }
+        colNumeric{
+            no{"Lajittele numerot erikseen"}
+            yes{"Lajittele numerot numeerisesti"}
+        }
+        colStrength{
+            identical{"Lajittele kaikki"}
+            primary{"Lajittele vain peruskirjaimet"}
+            quaternary{"Lajittele painomerkit/koko/leveys/kana-merkit"}
+            secondary{"Lajittele painomerkit"}
+            tertiary{"Lajittele painomerkit/koko/leveys"}
+        }
         collation{
             big5han{"perinteinen kiinalainen järjestys Big5"}
             dictionary{"sanakirjajärjestys"}

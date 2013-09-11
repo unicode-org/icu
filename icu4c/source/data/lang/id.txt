@@ -791,6 +791,42 @@ id{
             persian{"Kalender Persia"}
             roc{"Kalendar Minguo"}
         }
+        colAlternate{
+            non-ignorable{"Sortir Simbol"}
+            shifted{"Sortir Abaikan Simbol"}
+        }
+        colBackwards{
+            no{"Sortir Aksen Secara Normal"}
+            yes{"Sortir Aksen Terbalik"}
+        }
+        colCaseFirst{
+            lower{"Sortir Huruf Kecil Dahulu"}
+            no{"Sortir Urutan Ukuran Huruf Normal"}
+            upper{"Sortir Huruf Besar Dahulu"}
+        }
+        colCaseLevel{
+            no{"Sortir Tidak Peka Huruf Besar"}
+            yes{"Sortir Peka Huruf Besar"}
+        }
+        colHiraganaQuaternary{
+            no{"Sortir Kana Secara Terpisah"}
+            yes{"Sortir Kana Secara Berbeda"}
+        }
+        colNormalization{
+            no{"Sortir Tanpa Normalisasi"}
+            yes{"Sortir Unicode Dinormalisasi"}
+        }
+        colNumeric{
+            no{"Sortir Digit Satu Per Satu"}
+            yes{"Sortir Digit Secara Numerik"}
+        }
+        colStrength{
+            identical{"Sortir Semua"}
+            primary{"Sortir Huruf Dasar Saja"}
+            quaternary{"Sortir Aksen/Ukuran Huruf/Lebar/Kana"}
+            secondary{"Sortir Aksen"}
+            tertiary{"Sortir Aksen/Ukuran Huruf/Lebar"}
+        }
         collation{
             big5han{"Urutan Sortir China Tradisional - Big5"}
             dictionary{"Urutan Sortir Kamus"}

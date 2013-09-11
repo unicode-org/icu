@@ -783,6 +783,42 @@ zh_Hant{
             persian{"波斯曆"}
             roc{"民國曆"}
         }
+        colAlternate{
+            non-ignorable{"排序符號"}
+            shifted{"略過符號排序"}
+        }
+        colBackwards{
+            no{"正常排序重音"}
+            yes{"依反向重音排序"}
+        }
+        colCaseFirst{
+            lower{"優先排序小寫"}
+            no{"正常大小寫順序排序"}
+            upper{"優先排序大寫"}
+        }
+        colCaseLevel{
+            no{"不分大小寫排序"}
+            yes{"依大小寫排序"}
+        }
+        colHiraganaQuaternary{
+            no{"個別排序假名"}
+            yes{"分別排序假名"}
+        }
+        colNormalization{
+            no{"非正規化排序"}
+            yes{"依正規化排序 Unicode"}
+        }
+        colNumeric{
+            no{"個別排序數字"}
+            yes{"依數字順序排序數字"}
+        }
+        colStrength{
+            identical{"全部排序"}
+            primary{"僅排序基礎字母"}
+            quaternary{"排序重音/大小寫/全半形/假名"}
+            secondary{"排序重音"}
+            tertiary{"排序重音/大小寫/全半形"}
+        }
         collation{
             big5han{"繁體中文排序 (Big5)"}
             dictionary{"字典排序"}

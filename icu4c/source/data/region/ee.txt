@@ -296,5 +296,9 @@ ee{
         ZW{"Zimbabwe nutome"}
         ZZ{"nutome manya"}
     }
+    CountriesShort{
+        HK{"Hɔng Kɔng nutome"}
+        MO{"Macau nutome"}
+    }
     Version{"2.0.93.8"}
 }

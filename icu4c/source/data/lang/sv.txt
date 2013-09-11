@@ -797,6 +797,42 @@ sv{
             persian{"persisk kalender"}
             roc{"kinesiska republikens kalender"}
         }
+        colAlternate{
+            non-ignorable{"sortera symboler"}
+            shifted{"Sortera oavsett symboler"}
+        }
+        colBackwards{
+            no{"sortera accenter normalt"}
+            yes{"sortera accenter omvänt"}
+        }
+        colCaseFirst{
+            lower{"Sortera gemener först"}
+            no{"Ordna normalt efter skiftläge"}
+            upper{"Sortera versaler först"}
+        }
+        colCaseLevel{
+            no{"Sortera oavsett skiftläge"}
+            yes{"Sortera efter skiftläge"}
+        }
+        colHiraganaQuaternary{
+            no{"Sortera kana separat"}
+            yes{"Sortera efter kana"}
+        }
+        colNormalization{
+            no{"sortera utan normalisering"}
+            yes{"sortera med Unicode-normalisering"}
+        }
+        colNumeric{
+            no{"Sortera siffror för sig"}
+            yes{"Sortera siffror numeriskt"}
+        }
+        colStrength{
+            identical{"Sortera alla"}
+            primary{"Sortera endast efter grundbokstäver"}
+            quaternary{"Sortera efter accent/skiftläge/bredd/kana"}
+            secondary{"Sortera accenter"}
+            tertiary{"Sortera accenter/skiftläge/bredd"}
+        }
         collation{
             big5han{"big5-sorteringsordning"}
             dictionary{"ordbokssorteringsordning"}

@@ -11,6 +11,14 @@
  */
 hy{
     AuxExemplarCharacters{"[]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{
         "[ա բ գ դ ե զ է ը թ ժ ի լ խ ծ կ հ ձ ղ ճ մ յ ն շ ո չ պ ջ ռ ս վ տ ր ց ւ փ ք և օ"
         " ֆ]"
@@ -19,6 +27,7 @@ hy{
     LocaleScript{
         "Armn",
     }
+    MoreInformation{"?"}
     NumberElements{
         default{"latn"}
         latn{
@@ -930,6 +939,9 @@ hy{
                 other{"{0} քառակուսի մղոն"}
             }
         }
+        compound{
+            per{"{0}/{1}"}
+        }
         duration{
             day{
                 one{"{0} օր"}
@@ -1091,6 +1103,217 @@ hy{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0}G"}
+                other{"{0}G"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"{0}ակր"}
+                other{"{0}ակր"}
+            }
+            hectare{
+                one{"{0}հա"}
+                other{"{0}հա"}
+            }
+            square-foot{
+                one{"{0}ֆտ²"}
+                other{"{0}ֆտ²"}
+            }
+            square-kilometer{
+                one{"{0} կմ²"}
+                other{"{0} կմ²"}
+            }
+            square-meter{
+                one{"{0} մ²"}
+                other{"{0} մ²"}
+            }
+            square-mile{
+                one{"{0}մղ²"}
+                other{"{0}մղ²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0}օ."}
+                other{"{0}օ."}
+            }
+            hour{
+                one{"{0} ժ."}
+                other{"{0} ժ."}
+            }
+            millisecond{
+                one{"{0}մվ"}
+                other{"{0}մվ"}
+            }
+            minute{
+                one{"{0} ր."}
+                other{"{0} ր."}
+            }
+            month{
+                one{"{0} ա."}
+                other{"{0} ա."}
+            }
+            second{
+                one{"{0} վ."}
+                other{"{0} վ."}
+            }
+            week{
+                one{"{0} շ."}
+                other{"{0} շ."}
+            }
+            year{
+                one{"{0}տ."}
+                other{"{0}տ."}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} սմ"}
+                other{"{0} սմ"}
+            }
+            foot{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            inch{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            kilometer{
+                one{"{0} կմ"}
+                other{"{0} կմ"}
+            }
+            light-year{
+                one{"{0} լ. տ."}
+                other{"{0} լ. տ."}
+            }
+            meter{
+                one{"{0} մ"}
+                other{"{0} մ"}
+            }
+            mile{
+                one{"{0} մղ"}
+                other{"{0} մղ"}
+            }
+            millimeter{
+                one{"{0} մմ"}
+                other{"{0} մմ"}
+            }
+            picometer{
+                one{"{0} պմ"}
+                other{"{0} պմ"}
+            }
+            yard{
+                one{"{0} յդ."}
+                other{"{0} յդ."}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} գր"}
+                other{"{0} գր"}
+            }
+            kilogram{
+                one{"{0} կգ"}
+                other{"{0} կգ"}
+            }
+            ounce{
+                one{"{0} ունց"}
+                other{"{0} ունց"}
+            }
+            pound{
+                one{"{0}#"}
+                other{"{0}#"}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0}ձ/ու"}
+                other{"{0}ձ/ու"}
+            }
+            kilowatt{
+                one{"{0}կՎ"}
+                other{"{0}կՎ"}
+            }
+            watt{
+                one{"{0}Վ"}
+                other{"{0}Վ"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0} հՊա"}
+                other{"{0} հՊա"}
+            }
+            inch-hg{
+                one{"{0}\u0022 ս. ս."}
+                other{"{0}\u0022 ս. ս"}
+            }
+            millibar{
+                one{"{0} մբ"}
+                other{"{0} մբ"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0}կմ/ժ"}
+                other{"{0}կմ/ժ"}
+            }
+            meter-per-second{
+                one{"{0}մ/վ"}
+                other{"{0}մ/վ"}
+            }
+            mile-per-hour{
+                one{"{0}մղ/ժ"}
+                other{"{0}մղ/ժ"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            fahrenheit{
+                one{"{0}°F"}
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0}կմ³"}
+                other{"{0}կմ³"}
+            }
+            cubic-mile{
+                one{"{0}մղ³"}
+                other{"{0}մղ³"}
+            }
+            liter{
+                one{"{0}լ."}
+                other{"{0}լ."}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1137,6 +1360,9 @@ hy{
                 one{"{0} քռ. մղ."}
                 other{"{0} քռ. մղ."}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

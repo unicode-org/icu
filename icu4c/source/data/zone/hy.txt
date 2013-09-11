@@ -1844,5 +1844,7 @@ hy{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Ժամանակ՝ {0}"}
+        regionFormatDaylight{"{0}, ամառային ժամանակ"}
+        regionFormatStandard{"{0}, ստանդարտ ժամանակ"}
     }
 }

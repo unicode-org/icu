@@ -797,6 +797,42 @@ tr{
             persian{"Farsça Takvim"}
             roc{"Çin Cumhuriyeti Takvimi"}
         }
+        colAlternate{
+            non-ignorable{"Sembolleri Sıralama"}
+            shifted{"Sembolleri Yoksayarak Sıralama"}
+        }
+        colBackwards{
+            no{"Aksanları Normal Olarak Sıralama"}
+            yes{"Aksanları Ters Sıralama"}
+        }
+        colCaseFirst{
+            lower{"Önce Küçük Harfleri Sıralama"}
+            no{"Normal Büyük/Küçük Harf Düzeninde Sıralama"}
+            upper{"Önce Büyük Harfleri Sıralama"}
+        }
+        colCaseLevel{
+            no{"Büyük/Küçük Harfe Duyarlı Olmadan Sıralama"}
+            yes{"Büyük/Küçük Harfe Duyarla Sıralama"}
+        }
+        colHiraganaQuaternary{
+            no{"Kana'yı Ayrı Sıralama"}
+            yes{"Kana'yı Farklı Sıralama"}
+        }
+        colNormalization{
+            no{"Normalleştirme Olmadan Sıralama"}
+            yes{"Unicode Normalleştirilmiş Olarak Sıralama"}
+        }
+        colNumeric{
+            no{"Rakamları Ayrı Sıralama"}
+            yes{"Rakamları Sayısal Olarak Sıralama"}
+        }
+        colStrength{
+            identical{"Tümünü Sıralama"}
+            primary{"Yalnızca Taban Harflerini Sıralama"}
+            quaternary{"Aksanları/Büyük-Küçük Harfleri/Genişliği/Kana'yı Sıralama"}
+            secondary{"Aksanları Sıralama"}
+            tertiary{"Aksanları/Büyük-Küçük Harfleri/Genişliği Sıralama"}
+        }
         collation{
             big5han{"Geleneksel Çince Sıralaması - Big5"}
             dictionary{"Sözlük Sıralama Düzeni"}

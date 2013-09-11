@@ -1904,5 +1904,7 @@ ja{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}時間"}
+        regionFormatDaylight{"{0}夏時間"}
+        regionFormatStandard{"{0}標準時"}
     }
 }

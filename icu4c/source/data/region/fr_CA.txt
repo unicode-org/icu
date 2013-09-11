@@ -21,5 +21,8 @@ fr_CA{
         TC{"Îles Turks et Caïques"}
         UM{"Îles éloignées des États-Unis"}
     }
+    CountriesShort{
+        GB{"GB"}
+    }
     Version{"2.0.92.80"}
 }

@@ -270,6 +270,42 @@ eu{
             persian{"Egutegi persiarra"}
             roc{"Txinako Errepublikako egutegia"}
         }
+        colAlternate{
+            non-ignorable{"Ordenatu ikurrak"}
+            shifted{"Ordenatu ikurrei ez ikusi eginda"}
+        }
+        colBackwards{
+            no{"Ordenatu azentuak modu normalean"}
+            yes{"Ordenatu azentuak alderantziz"}
+        }
+        colCaseFirst{
+            lower{"Ordenatu minuskulak lehenik"}
+            no{"Ordenatu maiuskulak modu normalean"}
+            upper{"Ordenatu maiuskulak lehenik"}
+        }
+        colCaseLevel{
+            no{"Ordenatu maiuskulak eta minuskulak bereizi gabe"}
+            yes{"Ordenatu maiuskulak eta minuskulak bereizita"}
+        }
+        colHiraganaQuaternary{
+            no{"Ordenatu kanak bereizita"}
+            yes{"Ordenatu kanak desberdin"}
+        }
+        colNormalization{
+            no{"Ordenatu arauak kontuan hartu gabe"}
+            yes{"Ordenatu Unicode arauen arabera"}
+        }
+        colNumeric{
+            no{"Ordenatu digituak banaka"}
+            yes{"Ordenatu digituak zenbakien arabera"}
+        }
+        colStrength{
+            identical{"Ordenatu guztiak"}
+            primary{"Ordenatu oinarrizko hizkiak soilik"}
+            quaternary{"Ordenatu azentuak / maiuskula eta minuskulak / zabalera / kanak"}
+            secondary{"Ordenatu azentuak"}
+            tertiary{"Ordenatu azentuak / maiuskula eta minuskulak / zabalera"}
+        }
         collation{
             big5han{"Txinera tradizionalaren alfabetoa-Big5"}
             dictionary{"Hurrenkera alfabetikoa"}

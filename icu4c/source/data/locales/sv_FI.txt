@@ -92,4 +92,12 @@ sv_FI{
             }
         }
     }
+    unitsNarrow{
+        speed{
+            kilometer-per-hour{
+                one{"{0} km/h"}
+                other{"{0} km/h"}
+            }
+        }
+    }
 }

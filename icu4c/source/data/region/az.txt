@@ -302,5 +302,12 @@ az{
         ZW{"Zimbabve"}
         ZZ{"Naməlum Region"}
     }
+    CountriesShort{
+        GB{"B.K."}
+        HK{"Honq Konq"}
+        MO{"Makao"}
+        PS{"Fələstin"}
+        US{"A.B.Ş."}
+    }
     Version{"2.0.92.87"}
 }

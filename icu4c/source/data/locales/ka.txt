@@ -14,6 +14,14 @@ ka{
         "[ⴀ ⴁ ⴂ ⴃ ⴄ ⴅ ⴆ ჱ ⴡ ⴇ ⴈ ⴉ ⴊ ⴋ ⴌ ჲ ⴢ ⴍ ⴎ ⴏ ⴐ ⴑ ⴒ ჳ ⴣ ⴓ ⴔ ⴕ ⴖ ⴗ ⴘ ⴙ ⴚ ⴛ ⴜ ⴝ ⴞ ჴ"
         " ⴤ ⴟ ⴠ ჵ ⴥ ჶ ჷ ჸ ჹ ჺ]"
     }
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{"[ა ბ გ დ ე ვ ზ თ ი კ ლ მ ნ ო პ ჟ რ ს ტ უ ფ ქ ღ ყ შ ჩ ც ძ წ ჭ ხ ჯ ჰ]"}
     ExemplarCharactersIndex{"[ა ბ გ დ ე ვ ზ თ ი კ ლ მ ნ ო პ ჟ რ ს ტ უ ფ ქ ღ ყ შ ჩ ც ძ წ ჭ ხ ჯ ჰ]"}
     ExemplarCharactersPunctuation{
@@ -23,6 +31,7 @@ ka{
     LocaleScript{
         "Geor",
     }
+    MoreInformation{"?"}
     NumberElements{
         default{"latn"}
         latn{
@@ -31,6 +40,7 @@ ka{
                 range{"{0}-{1}"}
             }
             patterns{
+                accountingFormat{"#,##0.00 ¤"}
                 currencyFormat{"#,##0.00 ¤"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0 %"}
@@ -306,6 +316,10 @@ ka{
             AmPmMarkers{
                 "დილის",
                 "საღამოს",
+            }
+            AmPmMarkersNarrow{
+                "AM",
+                "PM",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -938,6 +952,9 @@ ka{
                 other{"{0} კვადრატული მილი"}
             }
         }
+        compound{
+            per{"{0}/{1}"}
+        }
         duration{
             day{
                 one{"{0} დღე"}
@@ -1099,6 +1116,217 @@ ka{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0} ინ. ძ."}
+                other{"{0} ინ. ძ."}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0} წთ"}
+                other{"{0} წთ"}
+            }
+            arc-second{
+                one{"{0} წმ"}
+                other{"{0} წმ"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"{0} აკრი"}
+                other{"{0} აკრი"}
+            }
+            hectare{
+                one{"{0} ჰა"}
+                other{"{0} ჰა"}
+            }
+            square-foot{
+                one{"{0} ფტ²"}
+                other{"{0} ფტ²"}
+            }
+            square-kilometer{
+                one{"{0} კმ²"}
+                other{"{0} კმ²"}
+            }
+            square-meter{
+                one{"{0} მ²"}
+                other{"{0} მ²"}
+            }
+            square-mile{
+                one{"{0} მილი²"}
+                other{"{0} მილი²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0} დღე"}
+                other{"{0} დღე"}
+            }
+            hour{
+                one{"{0} სთ"}
+                other{"{0} სთ"}
+            }
+            millisecond{
+                one{"{0} მწ"}
+                other{"{0} მწ"}
+            }
+            minute{
+                one{"{0} წთ"}
+                other{"{0} წთ"}
+            }
+            month{
+                one{"{0} თვე"}
+                other{"{0} თვე"}
+            }
+            second{
+                one{"{0} წმ"}
+                other{"{0} წმ"}
+            }
+            week{
+                one{"{0} კვრ"}
+                other{"{0} კვრ"}
+            }
+            year{
+                one{"{0} წ"}
+                other{"{0} წ"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} სმ"}
+                other{"{0} სმ"}
+            }
+            foot{
+                one{"{0} ფტ"}
+                other{"{0} ფტ"}
+            }
+            inch{
+                one{"{0} დმ"}
+                other{"{0} დმ"}
+            }
+            kilometer{
+                one{"{0} კმ"}
+                other{"{0} კმ"}
+            }
+            light-year{
+                one{"{0} სწ"}
+                other{"{0} სწ"}
+            }
+            meter{
+                one{"{0}მ"}
+                other{"{0}მ"}
+            }
+            mile{
+                one{"{0} მილი"}
+                other{"{0} მილი"}
+            }
+            millimeter{
+                one{"{0} მმ"}
+                other{"{0} მმ"}
+            }
+            picometer{
+                one{"{0} პმ"}
+                other{"{0} პმ"}
+            }
+            yard{
+                one{"{0} იარდი"}
+                other{"{0} იარდი"}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} გ"}
+                other{"{0} გ"}
+            }
+            kilogram{
+                one{"{0} კგ"}
+                other{"{0} კგ"}
+            }
+            ounce{
+                one{"{0} უნც"}
+                other{"{0} უნც"}
+            }
+            pound{
+                one{"{0} ფნტ"}
+                other{"{0} ფნტ"}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0}ცხ.ძ."}
+                other{"{0}ცხ.ძ."}
+            }
+            kilowatt{
+                one{"{0} კვტ"}
+                other{"{0} კვტ"}
+            }
+            watt{
+                one{"{0} ვტ"}
+                other{"{0} ვტ"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0} ჰპა"}
+                other{"{0} ჰპა"}
+            }
+            inch-hg{
+                one{"{0} ვრც. დმ."}
+                other{"{0} ვრც. დმ."}
+            }
+            millibar{
+                one{"{0} მბრ"}
+                other{"{0} მბრ"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0} კმ/სთ"}
+                other{"{0} კმ/სთ"}
+            }
+            meter-per-second{
+                one{"{0} მ/წმ"}
+                other{"{0} მ/წმ"}
+            }
+            mile-per-hour{
+                one{"{0} მილი/სთ"}
+                other{"{0} მილი/სთ"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            fahrenheit{
+                one{"{0}°F"}
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0} კმ³"}
+                other{"{0} კმ³"}
+            }
+            cubic-mile{
+                one{"{0} მილი³"}
+                other{"{0} მილი³"}
+            }
+            liter{
+                one{"{0}ლ"}
+                other{"{0}ლ"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1145,6 +1373,9 @@ ka{
                 one{"{0} მილი²"}
                 other{"{0} მილი²"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

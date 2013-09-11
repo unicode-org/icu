@@ -1892,5 +1892,7 @@ ko{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} 시간"}
+        regionFormatDaylight{"{0} 일광 절약 시간"}
+        regionFormatStandard{"{0} 표준시"}
     }
 }

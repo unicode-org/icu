@@ -301,6 +301,14 @@ structLocale:table(nofallback){
         ZW{""}
         ZZ{""}
     }
+    CountriesShort{
+        GB{""}
+        HK{""}
+        MO{""}
+        PS{""}
+        SA{""}
+        US{""}
+    }
     Currencies{
         ADP{
             "",
@@ -3924,6 +3932,14 @@ structLocale:table(nofallback){
         hms{""}
         ms{""}
     }
+    Ellipsis{
+        final{""}
+        initial{""}
+        medial{""}
+        word-final{""}
+        word-initial{""}
+        word-medial{""}
+    }
     fields{
         day{
             dn{"Day"}
@@ -4798,6 +4814,7 @@ structLocale:table(nofallback){
         "",
     }
     MeasurementSystem:int{0}
+    MoreInformation{""}
     NumberElements{
         arab{
             miscPatterns{
@@ -4805,6 +4822,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -5032,6 +5050,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -5259,6 +5278,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -5486,6 +5506,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -5713,6 +5734,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -5941,6 +5963,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -6165,6 +6188,7 @@ structLocale:table(nofallback){
         finance{""}
         fullwide{
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -6392,6 +6416,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -6619,6 +6644,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -6846,6 +6872,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -7073,6 +7100,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -7300,6 +7328,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -7527,6 +7556,7 @@ structLocale:table(nofallback){
                 range{""}
             }
            patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -7754,6 +7784,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -7981,6 +8012,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -8204,6 +8236,7 @@ structLocale:table(nofallback){
         }
         lanatham{
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -8431,6 +8464,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -8658,6 +8692,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -8885,6 +8920,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -9112,6 +9148,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -9339,6 +9376,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -9566,6 +9604,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -9793,6 +9832,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -10020,6 +10060,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -10243,6 +10284,7 @@ structLocale:table(nofallback){
         }
         mymrshan{
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -10471,6 +10513,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -10698,6 +10741,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -10925,6 +10969,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -11152,6 +11197,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -11379,6 +11425,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -11606,6 +11653,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -11833,6 +11881,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -12060,6 +12109,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -12287,6 +12337,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -12514,6 +12565,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -12742,6 +12794,7 @@ structLocale:table(nofallback){
                 range{""}
             }
             patterns{
+                accountingFormat{""}
                 currencyFormat{""}
                 decimalFormat{""}
                 percentFormat{""}
@@ -13181,6 +13234,10 @@ structLocale:table(nofallback){
                 "",
                 "",
             }
+            AmPmMarkersNarrow{
+                "",
+                "",
+            }
             availableFormats{
                 HHmm{""}
                 HHmmss{""}
@@ -13332,6 +13389,10 @@ structLocale:table(nofallback){
        }
         chinese{
             AmPmMarkers{
+                "",
+                "",
+            }
+            AmPmMarkersNarrow{
                 "",
                 "",
             }
@@ -13704,6 +13765,10 @@ structLocale:table(nofallback){
                 "",
                 "",
             }
+            AmPmMarkersNarrow{
+                "",
+                "",
+            }
             availableFormats{
                 HHmm{""}
                 HHmmss{""}
@@ -13941,6 +14006,10 @@ structLocale:table(nofallback){
         }
         dangi{
             AmPmMarkers{
+                "",
+                "",
+            }
+            AmPmMarkersNarrow{
                 "",
                 "",
             }
@@ -14314,6 +14383,10 @@ structLocale:table(nofallback){
                 "",
                 "",
             }
+            AmPmMarkersNarrow{
+                "",
+                "",
+            }
             availableFormats{
                 HHmm{""}
                 HHmmss{""}
@@ -14551,6 +14624,10 @@ structLocale:table(nofallback){
         }
         generic{
             AmPmMarkers{
+                "",
+                "",
+            }
+            AmPmMarkersNarrow{
                 "",
                 "",
             }
@@ -14830,6 +14907,10 @@ structLocale:table(nofallback){
         }
         gregorian{
             AmPmMarkers{
+                "",
+                "",
+            }
+            AmPmMarkersNarrow{
                 "",
                 "",
             }
@@ -15229,6 +15310,10 @@ structLocale:table(nofallback){
                 "",
                 "",
             }
+            AmPmMarkersNarrow{
+                "",
+                "",
+            }
             DateTimePatterns{
                 "A2",
                 "A2",
@@ -15488,6 +15573,10 @@ structLocale:table(nofallback){
                 "",
                 "",
             }
+            AmPmMarkersNarrow{
+                "",
+                "",
+            }
             availableFormats{
                 HHmm{""}
                 HHmmss{""}
@@ -15732,6 +15821,10 @@ structLocale:table(nofallback){
         }
         islamic{
             AmPmMarkers{
+                "",
+                "",
+            }
+            AmPmMarkersNarrow{
                 "",
                 "",
             }
@@ -15986,6 +16079,10 @@ structLocale:table(nofallback){
                 "",
                 "",
             }
+            AmPmMarkersNarrow{
+                "",
+                "",
+            }
             availableFormats{
                 HHmm{""}
                 HHmmss{""}
@@ -16235,6 +16332,10 @@ structLocale:table(nofallback){
         islamic-civil:alias{"structLocale/calendar/islamic"}
         japanese{
             AmPmMarkers{
+                "",
+                "",
+            }
+            AmPmMarkersNarrow{
                 "",
                 "",
             }
@@ -16990,6 +17091,10 @@ structLocale:table(nofallback){
                 "",
                 "",
             }
+            AmPmMarkersNarrow{
+                "",
+                "",
+            }
             availableFormats{
                 HHmm{""}
                 HHmmss{""}
@@ -17190,6 +17295,18 @@ structLocale:table(nofallback){
         yesexpr{""}
         noexpr{""}
     }
+    transformNames{
+        BGN{""}
+        Numeric{""}
+        Tone{""}
+        UNGEGN{""}
+        x-Accents{""}
+        x-Fullwidth{""}
+        x-Halfwidth{""}
+        x-Jamo{""}
+        x-Pinyin{""}
+        x-Publishing{""}
+    }
     units{
         acceleration{
             g-force{
@@ -17276,6 +17393,516 @@ structLocale:table(nofallback){
                 many{""}
                 other{""}
             }
+        }
+        compound{
+            per{""}
+        }
+        duration{
+            day{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            day-future{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            day-past{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            hour{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            hour-future{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            hour-past{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            millisecond{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            minute{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            minute-future{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            minute-past{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            month{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            month-future{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            month-past{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            second{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            second-future{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            second-past{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            week{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            week-future{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            week-past{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            year{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            year-future{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            year-past{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+        length{
+            centimeter{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            foot{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            inch{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            kilometer{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            light-year{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            meter{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            mile{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            millimeter{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            picometer{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            yard{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+        mass{
+            gram{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            kilogram{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            ounce{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            pound{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+        power{
+            horsepower{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            kilowatt{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            watt{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+        pressure{
+            hectopascal{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            inch-hg{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            millibar{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            meter-per-second{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            mile-per-hour{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+        temperature{
+            celsius{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            fahrenheit{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            cubic-mile{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            liter{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+    }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+        angle{
+            degree{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            arc-minute{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            arc-second{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+        area{
+            acre{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            hectare{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            square-foot{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            square-kilometer{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            square-meter{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+            square-mile{
+                zero{""}
+                one{""}
+                two{""}
+                few{""}
+                many{""}
+                other{""}
+            }
+        }
+        compound{
+            per{""}
         }
         duration{
             day{
@@ -17780,6 +18407,9 @@ structLocale:table(nofallback){
                 many{""}
                 other{""}
             }
+        }
+        compound{
+            per{""}
         }
         duration{
             day{

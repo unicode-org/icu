@@ -302,5 +302,12 @@ fr{
         ZW{"Zimbabwe"}
         ZZ{"région indéterminée"}
     }
+    CountriesShort{
+        GB{"R.-U."}
+        HK{"Hong Kong"}
+        MO{"Macao"}
+        PS{"Palestine"}
+        US{"É.-U."}
+    }
     Version{"2.0.93.10"}
 }

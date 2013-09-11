@@ -312,4 +312,10 @@ fr_CA{
     measurementSystemNames{
         UK{"R-U"}
     }
+    transformNames{
+        Numeric{"Chiffres"}
+        x-Fullwidth{"Pleine largeur"}
+        x-Halfwidth{"Demie largeur"}
+        x-Publishing{"Édition"}
+    }
 }

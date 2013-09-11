@@ -920,5 +920,7 @@ it{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Ora {0}"}
+        regionFormatDaylight{"Ora legale: {0}"}
+        regionFormatStandard{"Ora standard: {0}"}
     }
 }

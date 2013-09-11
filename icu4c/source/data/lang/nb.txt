@@ -796,6 +796,42 @@ nb{
             persian{"persisk kalender"}
             roc{"kalender for Republikken Kina"}
         }
+        colAlternate{
+            non-ignorable{"Sortér symboler"}
+            shifted{"Ignorer symboler under sortering"}
+        }
+        colBackwards{
+            no{"Sortér aksenttegn normalt"}
+            yes{"Sortér aksenttegn i motsatt rekkefølge"}
+        }
+        colCaseFirst{
+            lower{"Sortér små bokstaver først"}
+            no{"Sortér store og små bokstaver i vanlig rekkefølge"}
+            upper{"Sortér store bokstaver først"}
+        }
+        colCaseLevel{
+            no{"Sortér uavhengig av store og små bokstaver."}
+            yes{"Sortér med skille mellom små og store bokstaver"}
+        }
+        colHiraganaQuaternary{
+            no{"Sortér kana separat"}
+            yes{"Sortér med skille mellom forskjellige varianter av kana"}
+        }
+        colNormalization{
+            no{"Sortér uten normalisering"}
+            yes{"Sortér Unicode normalisert"}
+        }
+        colNumeric{
+            no{"Sortér sifre individuelt"}
+            yes{"Sortér sifre numerisk"}
+        }
+        colStrength{
+            identical{"Sortér alle"}
+            primary{"Sortér bare basisbokstaver"}
+            quaternary{"Sortér aksenttegn / små og store bokstaver / bredde / kana"}
+            secondary{"Sortér aksenttegn"}
+            tertiary{"Sortér aksenttegn / små og store bokstaver / bredde"}
+        }
         collation{
             big5han{"tradisjonell kinesisk sortering - Big 5"}
             dictionary{"ordlistesortering"}

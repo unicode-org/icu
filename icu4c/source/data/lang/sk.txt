@@ -683,6 +683,42 @@ sk{
             persian{"Perzský kalendár"}
             roc{"Kalendár Čínskej republiky"}
         }
+        colAlternate{
+            non-ignorable{"Radiť symboly"}
+            shifted{"Pri radení ignorovať symboly"}
+        }
+        colBackwards{
+            no{"Normálne radenie akcentov"}
+            yes{"Radiť akcenty opačne"}
+        }
+        colCaseFirst{
+            lower{"Najprv radiť malé písmená"}
+            no{"Normálne radenie veľkých a malých písmen"}
+            upper{"Najprv radiť veľké písmená"}
+        }
+        colCaseLevel{
+            no{"Pri radení nerozlišovať veľké a malé písmená"}
+            yes{"Pri radení rozlišovať veľké a malé písmená"}
+        }
+        colHiraganaQuaternary{
+            no{"Radiť slabičné písma (kana) samostatne"}
+            yes{"Radiť slabičné písma (kana) inak"}
+        }
+        colNormalization{
+            no{"Radiť bez normalizácie"}
+            yes{"Radenie podľa normalizovaného kódovania Unicode"}
+        }
+        colNumeric{
+            no{"Radiť číslice jednotlivo"}
+            yes{"Numerické radenie číslic"}
+        }
+        colStrength{
+            identical{"Radiť všetko"}
+            primary{"Radiť iba základné písmená"}
+            quaternary{"Radiť akcenty/veľké a malé písmená/šírku/kana"}
+            secondary{"Radiť akcenty"}
+            tertiary{"Radiť akcenty/veľké a malé písmená/šírku"}
+        }
         collation{
             big5han{"Tradičný čínsky Big5"}
             dictionary{"Usporiadanie slovníka"}

@@ -791,6 +791,42 @@ ca{
             persian{"calendari persa"}
             roc{"calendari de la República de Xina"}
         }
+        colAlternate{
+            non-ignorable{"Ordena els símbols"}
+            shifted{"Ordena sense tenir en compte els símbols"}
+        }
+        colBackwards{
+            no{"Ordena els accents de manera normal"}
+            yes{"Ordena amb ordre invers dels accents"}
+        }
+        colCaseFirst{
+            lower{"Mostra primer les minúscules"}
+            no{"Ordena per tipus de lletra normal"}
+            upper{"Ordena amb majúscules primer"}
+        }
+        colCaseLevel{
+            no{"Ordena sense distingir majúscules i minúscules"}
+            yes{"Ordena amb detecció de majúscules i minúscules"}
+        }
+        colHiraganaQuaternary{
+            no{"Ordena els caràcters kana de manera independent"}
+            yes{"Ordena els caràcters kana de manera diferent"}
+        }
+        colNormalization{
+            no{"Ordena sense normalització"}
+            yes{"Ordena per caràcters Unicode normalitzats"}
+        }
+        colNumeric{
+            no{"Ordena els dígits individualment"}
+            yes{"Ordena els dígits numèricament"}
+        }
+        colStrength{
+            identical{"Ordena-ho tot"}
+            primary{"Ordena només les lletres de base"}
+            quaternary{"Ordena per accents/majúscules/amplada/kana"}
+            secondary{"Ordena els accents"}
+            tertiary{"Ordena per accent/majúscules/amplada"}
+        }
         collation{
             big5han{"ordre del xinès tradicional - Big5"}
             dictionary{"ordenació de diccionari"}

@@ -14,6 +14,11 @@ ur{
         "[؀؁؂؃\u200C\u200D\u200E\u200F \u064B \u064C \u064D \u064E \u064F \u0650 "
         "\u0651 \u0652 \u0654 \u0656 \u0657 \u0658 \u0670 ۃ ٻ ٺ ټ ٽ ي]"
     }
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+    }
     ExemplarCharacters{
         "[ا أ آ ب پ ت ٹ ث ج چ ح خ د ڈ ذ ر ڑ ز ژ س ش ص ض ط ظ ع غ ف ق ک گ ل م ن ں و ؤ ہ"
         " ۂ ھ ء ی ئ ے ة ه]"
@@ -26,6 +31,7 @@ ur{
     LocaleScript{
         "Arab",
     }
+    MoreInformation{"؟"}
     NumberElements{
         arabext{
             symbols{
@@ -855,6 +861,18 @@ ur{
         US{"ریاستہائے متحدہ"}
         metric{"پیمانہ"}
     }
+    transformNames{
+        BGN{"BGN"}
+        Numeric{"عددی"}
+        Tone{"ٹون"}
+        UNGEGN{"UNGEGN"}
+        x-Accents{"لہجے"}
+        x-Fullwidth{"پورا عرض"}
+        x-Halfwidth{"نصف عرض"}
+        x-Jamo{"جامو"}
+        x-Pinyin{"پن یِن"}
+        x-Publishing{"اشاعت"}
+    }
     units{
         acceleration{
             g-force{
@@ -901,6 +919,9 @@ ur{
                 one{"{0} سکویر میل"}
                 other{"{0} سکویر میل"}
             }
+        }
+        compound{
+            per{"{0} فی {1}"}
         }
         duration{
             day{
@@ -1063,6 +1084,209 @@ ur{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0}G"}
+                other{"{0}G"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0} منٹ"}
+                other{"{0} منٹ"}
+            }
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                one{"{0} ڈگری"}
+                other{"{0} ڈگری"}
+            }
+        }
+        area{
+            acre{
+                one{"{0} ایکڑ"}
+                other{"{0} ایکڑ"}
+            }
+            hectare{
+                one{"{0} ہیکٹر"}
+                other{"{0} ہیکٹر"}
+            }
+            square-foot{
+                one{"{0}ft²"}
+                other{"{0}ft²"}
+            }
+            square-kilometer{
+                one{"{0} km²"}
+                other{"{0} km²"}
+            }
+            square-meter{
+                one{"{0} m²"}
+                other{"{0} m²"}
+            }
+            square-mile{
+                one{"{0}mi²"}
+                other{"{0}mi²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0} دن"}
+                other{"{0} دن"}
+            }
+            hour{
+                one{"{0} گھنٹے"}
+                other{"{0} گھنٹے"}
+            }
+            millisecond{
+                one{"{0} ms"}
+                other{"{0} ms"}
+            }
+            second{
+                one{"{0}s"}
+                other{"{0}s"}
+            }
+            week{
+                one{"{0} ہفتے"}
+                other{"{0} ہفتے"}
+            }
+            year{
+                one{"{0} سال"}
+                other{"{0} سال"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0}cm"}
+                other{"{0}cm"}
+            }
+            foot{
+                one{"'{0}"}
+                other{"{0}′"}
+            }
+            inch{
+                one{"{0} انچ"}
+                other{"{0} انچ"}
+            }
+            kilometer{
+                one{"{0}km"}
+                other{"{0}km"}
+            }
+            light-year{
+                one{"{0}ly"}
+                other{"{0}ly"}
+            }
+            meter{
+                one{"{0} میٹر"}
+                other{"{0} میٹر"}
+            }
+            mile{
+                one{"{0} میل"}
+                other{"{0} میل"}
+            }
+            millimeter{
+                one{"{0} ملیمیٹر"}
+                other{"{0} ملیمیٹر"}
+            }
+            picometer{
+                one{"{0}pm"}
+                other{"{0}pm"}
+            }
+            yard{
+                one{"{0} یارڈ"}
+                other{"{0} یارڈ"}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} گرام"}
+                other{"{0} گرام"}
+            }
+            kilogram{
+                one{"{0}kg"}
+                other{"{0}kg"}
+            }
+            ounce{
+                one{"{0} ونس"}
+                other{"{0} ونس"}
+            }
+            pound{
+                one{"{0} پونڈ"}
+                other{"{0} پونڈ"}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0}hp"}
+                other{"{0}hp"}
+            }
+            kilowatt{
+                one{"{0}kW"}
+                other{"{0}kW"}
+            }
+            watt{
+                one{"{0} واٹ"}
+                other{"{0} واٹ"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0}hPa"}
+                other{"{0}hPa"}
+            }
+            inch-hg{
+                one{"{0} انچ مرکری"}
+                other{"{0} انچ مرکری"}
+            }
+            millibar{
+                one{"{0}mb"}
+                other{"{0}mb"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0}kph"}
+                other{"{0}kph"}
+            }
+            meter-per-second{
+                one{"{0}m/s"}
+                other{"{0}m/s"}
+            }
+            mile-per-hour{
+                one{"{0}mph"}
+                other{"{0}mph"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}‎°"}
+                other{"{0}‎°"}
+            }
+            fahrenheit{
+                one{"{0}‎°F"}
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0}km³"}
+                other{"{0}km³"}
+            }
+            cubic-mile{
+                one{"{0}mi³"}
+                other{"{0}mi³"}
+            }
+            liter{
+                one{"{0} لیٹر"}
+                other{"{0} لیٹر"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1109,6 +1333,9 @@ ur{
                 one{"{0} سکویر میل"}
                 other{"{0} سکویر میل"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

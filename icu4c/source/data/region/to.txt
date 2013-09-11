@@ -302,5 +302,12 @@ to{
         ZW{"Simipapuei"}
         ZZ{"Potu fonua taʻeʻiloa pe hala"}
     }
+    CountriesShort{
+        GB{"Pilitānia"}
+        HK{"Hongi Kongi"}
+        MO{"Makau"}
+        PS{"Palesitaine"}
+        US{"ʻAmelika"}
+    }
     Version{"2.0.92.87"}
 }

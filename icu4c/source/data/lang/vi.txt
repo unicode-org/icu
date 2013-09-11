@@ -789,6 +789,42 @@ vi{
             persian{"Lịch Ba Tư"}
             roc{"Lịch Trung Hoa Dân Quốc"}
         }
+        colAlternate{
+            non-ignorable{"Sắp xếp biểu tượng"}
+            shifted{"Sắp xếp biểu tượng bỏ qua"}
+        }
+        colBackwards{
+            no{"Sắp xếp dấu trọng âm bình thường"}
+            yes{"Sắp xếp dấu trọng âm đảo ngược"}
+        }
+        colCaseFirst{
+            lower{"Sắp xếp chữ thường đầu tiên"}
+            no{"Sắp xếp thứ tự chữ cái bình thường"}
+            upper{"Sắp xếp chữ hoa đầu tiên"}
+        }
+        colCaseLevel{
+            no{"Sắp xếp không phân biệt chữ hoa/chữ thường"}
+            yes{"Sắp xếp phân biệt chữ hoa/chữ thường"}
+        }
+        colHiraganaQuaternary{
+            no{"Sắp xếp chữ Kana riêng biệt"}
+            yes{"Sắp xếp chữ Kana khác nhau"}
+        }
+        colNormalization{
+            no{"Sắp xếp không theo chuẩn hóa"}
+            yes{"Sắp xếp unicode được chuẩn hóa"}
+        }
+        colNumeric{
+            no{"Sắp xếp từng chữ số"}
+            yes{"Sắp xếp chữ số theo số"}
+        }
+        colStrength{
+            identical{"Sắp xếp tất cả"}
+            primary{"Chỉ sắp xếp chữ cái cơ sở"}
+            quaternary{"Sắp xếp dấu trọng âm/chữ cái/độ rộng/chữ Kana"}
+            secondary{"Sắp xếp dấu trọng âm"}
+            tertiary{"Sắp xếp dấu trọng âm/chữ cái/độ rộng"}
+        }
         collation{
             big5han{"Thứ tự sắp xếp theo tiếng Trung phồn thể - Big5"}
             dictionary{"Thứ tự sắp xếp theo từ điển"}

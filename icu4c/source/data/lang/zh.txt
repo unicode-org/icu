@@ -794,6 +794,42 @@ zh{
             persian{"波斯日历"}
             roc{"民国日历"}
         }
+        colAlternate{
+            non-ignorable{"对符号进行排序"}
+            shifted{"忽略符号进行排序"}
+        }
+        colBackwards{
+            no{"对重音进行正常排序"}
+            yes{"对重音进行逆向排序"}
+        }
+        colCaseFirst{
+            lower{"先对小写字母进行排序"}
+            no{"对正常大小写顺序进行排序"}
+            upper{"先对大写字母进行排序"}
+        }
+        colCaseLevel{
+            no{"不区分大小写进行排序"}
+            yes{"区分大小写进行排序"}
+        }
+        colHiraganaQuaternary{
+            no{"对假名进行单独排序"}
+            yes{"对假名进行区别排序"}
+        }
+        colNormalization{
+            no{"非规范化排序"}
+            yes{"对 Unicode 进行规范化排序"}
+        }
+        colNumeric{
+            no{"对数字进行单独排序"}
+            yes{"按数字顺序对数字进行排序"}
+        }
+        colStrength{
+            identical{"对所有内容进行排序"}
+            primary{"只对基本字母进行排序"}
+            quaternary{"对重音/大小写/长度/假名进行排序"}
+            secondary{"对重音进行排序"}
+            tertiary{"对重音/大小写/长度进行排序"}
+        }
         collation{
             big5han{"繁体中文排序 - Big5"}
             dictionary{"字典排序顺序"}

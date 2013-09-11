@@ -1860,5 +1860,7 @@ bn{
         gmtZeroFormat{"গ্রীনিচ মান সময়"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} সময়"}
+        regionFormatDaylight{"{0} দিবালোক সময়"}
+        regionFormatStandard{"{0} আদর্শ সময়"}
     }
 }

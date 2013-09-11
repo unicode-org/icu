@@ -1183,5 +1183,7 @@ hu{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} idő"}
+        regionFormatDaylight{"{0} nyári idő"}
+        regionFormatStandard{"{0} zónaidő"}
     }
 }

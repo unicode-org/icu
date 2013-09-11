@@ -714,5 +714,7 @@ sw{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Saa za {0}"}
+        regionFormatDaylight{"Saa za Mchana za {0}"}
+        regionFormatStandard{"Saa za Msingi za {0}"}
     }
 }

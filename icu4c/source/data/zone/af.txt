@@ -871,5 +871,7 @@ af{
         gmtZeroFormat{"MGT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}-tyd"}
+        regionFormatDaylight{"{0}-dagligtyd"}
+        regionFormatStandard{"{0}-standaardtyd"}
     }
 }
