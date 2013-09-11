@@ -302,5 +302,11 @@ es_MX{
         ZW{"Zimbabue"}
         ZZ{"Región desconocida"}
     }
+    CountriesShort{
+        HK{"Hong Kong"}
+        MO{"Macao"}
+        PS{"Palestina"}
+        US{"EE. UU."}
+    }
     Version{"2.0.92.87"}
 }

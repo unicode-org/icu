@@ -297,5 +297,9 @@ nn{
         ZW{"Zimbabwe"}
         ZZ{"ukjent område"}
     }
+    CountriesShort{
+        HK{"Hongkong"}
+        MO{"Macao"}
+    }
     Version{"2.0.92.87"}
 }

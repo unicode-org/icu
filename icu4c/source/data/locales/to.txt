@@ -14,6 +14,14 @@ to{
         "[à ă â å ä æ b c ç d è ĕ ê ë g ì ĭ î ï j ñ ò ŏ ô ö ø œ q r ù ŭ û ü w x y ÿ z"
         "]"
     }
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{"[a á ā e é ē f h i í ī k l m n {ng} o ó ō p s t u ú ū v ʻ]"}
     ExemplarCharactersIndex{"[A E F H I K L M N {NG} O P S T U V ʻ]"}
     ExemplarCharactersPunctuation{
@@ -23,6 +31,7 @@ to{
     LocaleScript{
         "Latn",
     }
+    MoreInformation{"?"}
     NumberElements{
         latn{
             miscPatterns{
@@ -30,6 +39,7 @@ to{
                 range{"{0}—{1}"}
             }
             patterns{
+                accountingFormat{"¤ #,##0.00"}
                 currencyFormat{"¤ #,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -232,6 +242,10 @@ to{
         }
         gregorian{
             AmPmMarkers{
+                "AM",
+                "PM",
+            }
+            AmPmMarkersNarrow{
                 "AM",
                 "PM",
             }
@@ -856,6 +870,9 @@ to{
                 other{"maile sikuea ʻe {0}"}
             }
         }
+        compound{
+            per{"{0} ʻi he {1}"}
+        }
         duration{
             day{
                 other{"ʻaho ʻe {0}"}
@@ -981,6 +998,171 @@ to{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                other{"{0} G"}
+            }
+        }
+        angle{
+            arc-minute{
+                other{"{0}′"}
+            }
+            arc-second{
+                other{"{0}″"}
+            }
+            degree{
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                other{"{0} ac"}
+            }
+            hectare{
+                other{"{0}ha"}
+            }
+            square-foot{
+                other{"{0}ft²"}
+            }
+            square-kilometer{
+                other{"{0}km²"}
+            }
+            square-meter{
+                other{"{0}m²"}
+            }
+            square-mile{
+                other{"{0} mi²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                other{"ʻaho ʻe {0}"}
+            }
+            hour{
+                other{"{0}h"}
+            }
+            millisecond{
+                other{"{0}ms"}
+            }
+            minute{
+                other{"{0}m"}
+            }
+            month{
+                other{"{0}m"}
+            }
+            second{
+                other{"{0}s"}
+            }
+            week{
+                other{"uike ʻe {0}"}
+            }
+            year{
+                other{"{0}t"}
+            }
+        }
+        length{
+            centimeter{
+                other{"{0} cm"}
+            }
+            foot{
+                other{"{0}ft"}
+            }
+            inch{
+                other{"{0} in"}
+            }
+            kilometer{
+                other{"{0}km"}
+            }
+            light-year{
+                other{"{0}tm"}
+            }
+            meter{
+                other{"{0}m"}
+            }
+            mile{
+                other{"{0} mi"}
+            }
+            millimeter{
+                other{"{0}mm"}
+            }
+            picometer{
+                other{"{0}pm"}
+            }
+            yard{
+                other{"{0} yd"}
+            }
+        }
+        mass{
+            gram{
+                other{"{0} g"}
+            }
+            kilogram{
+                other{"{0} kg"}
+            }
+            ounce{
+                other{"{0} oz"}
+            }
+            pound{
+                other{"{0} lb"}
+            }
+        }
+        power{
+            horsepower{
+                other{"{0}hp"}
+            }
+            kilowatt{
+                other{"{0}kW"}
+            }
+            watt{
+                other{"{0}W"}
+            }
+        }
+        pressure{
+            hectopascal{
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                other{"{0} inHg"}
+            }
+            millibar{
+                other{"{0} mbar"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                other{"{0}km/h"}
+            }
+            meter-per-second{
+                other{"{0}m/s"}
+            }
+            mile-per-hour{
+                other{"{0} mi/h"}
+            }
+        }
+        temperature{
+            celsius{
+                other{"{0}°"}
+            }
+            fahrenheit{
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                other{"{0}km³"}
+            }
+            cubic-mile{
+                other{"{0}ma³"}
+            }
+            liter{
+                other{"{0}l"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1017,6 +1199,9 @@ to{
             square-mile{
                 other{"{0} mi²"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

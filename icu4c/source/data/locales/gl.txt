@@ -11,6 +11,11 @@
  */
 gl{
     AuxExemplarCharacters{"[ª à â ä ã ç è ê ë ì î ï º ò ô ö õ ù û]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+    }
     ExemplarCharacters{"[a á b c d e é f g h i í j k l m n ñ o ó p q r s t u ú ü v w x y z]"}
     ExemplarCharactersIndex{"[A B C D E F G H I J K L M N Ñ O P Q R S T U V W X Y Z]"}
     ExemplarCharactersPunctuation{
@@ -20,6 +25,7 @@ gl{
     LocaleScript{
         "Latn",
     }
+    MoreInformation{"?"}
     NumberElements{
         latn{
             miscPatterns{
@@ -27,6 +33,7 @@ gl{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -314,6 +321,10 @@ gl{
             AmPmMarkers{
                 "a.m.",
                 "p.m.",
+            }
+            AmPmMarkersNarrow{
+                "a",
+                "p",
             }
             DateTimePatterns{
                 "HH:mm:ss zzzz",
@@ -893,6 +904,18 @@ gl{
         US{"americano"}
         metric{"métrico decimal"}
     }
+    transformNames{
+        BGN{"BGN"}
+        Numeric{"Numérico"}
+        Tone{"Ton"}
+        UNGEGN{"UNGEGN"}
+        x-Accents{"Acentos"}
+        x-Fullwidth{"Ancho completo"}
+        x-Halfwidth{"Ancho medio"}
+        x-Jamo{"Jamo"}
+        x-Pinyin{"Pinyin"}
+        x-Publishing{"Publicación"}
+    }
     units{
         duration{
             day{
@@ -972,6 +995,88 @@ gl{
             liter{
                 one{"{0} litro"}
                 other{"{0} litros"}
+            }
+        }
+    }
+    unitsNarrow{
+        duration{
+            day{
+                one{"{0} d"}
+                other{"{0} d"}
+            }
+            hour{
+                one{"{0} h"}
+                other{"{0} h"}
+            }
+            millisecond{
+                one{"{0} ms"}
+                other{"{0} ms"}
+            }
+            minute{
+                one{"{0} m"}
+                other{"{0} m"}
+            }
+            month{
+                one{"{0} m"}
+                other{"{0} m"}
+            }
+            second{
+                one{"{0} s"}
+                other{"{0} s"}
+            }
+            week{
+                one{"{0} s"}
+                other{"{0} s"}
+            }
+            year{
+                one{"{0} a"}
+                other{"{0} a"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} cm"}
+                other{"{0} cm"}
+            }
+            kilometer{
+                one{"{0} km"}
+                other{"{0} km"}
+            }
+            meter{
+                one{"{0} m"}
+                other{"{0} m"}
+            }
+            millimeter{
+                one{"{0} mm"}
+                other{"{0} mm"}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} g"}
+                other{"{0} g"}
+            }
+            kilogram{
+                one{"{0} kg"}
+                other{"{0} kg"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0} km/h"}
+                other{"{0} km/h"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        volume{
+            liter{
+                one{"{0} l"}
+                other{"{0} l"}
             }
         }
     }

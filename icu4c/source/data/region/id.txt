@@ -302,5 +302,12 @@ id{
         ZW{"Zimbabwe"}
         ZZ{"Wilayah Tidak Dikenal"}
     }
+    CountriesShort{
+        GB{"GB"}
+        HK{"Hong Kong"}
+        MO{"Makau"}
+        PS{"Palestina"}
+        US{"A.S."}
+    }
     Version{"2.0.93.8"}
 }

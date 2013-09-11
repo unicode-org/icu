@@ -12,6 +12,10 @@
 bs_Cyrl{
     %%Parent{"root"}
     AuxExemplarCharacters{"[]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+    }
     ExemplarCharacters{"[а б в г д ђ е ж з и ј к л љ м н њ о п р с т ћ у ф х ц ч џ ш]"}
     ExemplarCharactersIndex{"[А Б В Г Д Ђ Е Ж З И Ј К Л Љ М Н Њ О П Р С Т Ћ У Ф Х Ц Ч Џ Ш]"}
     LocaleScript{
@@ -1222,6 +1226,18 @@ bs_Cyrl{
         UK{"империјални"}
         US{"САД"}
         metric{"Метрички"}
+    }
+    transformNames{
+        BGN{"БГН (BGN)"}
+        Numeric{"Нумеричка"}
+        Tone{"Тон"}
+        UNGEGN{"УНГЕГН (BGN)"}
+        x-Accents{"Акценти"}
+        x-Fullwidth{"пуна ширина"}
+        x-Halfwidth{"пола ширине"}
+        x-Jamo{"Џамо"}
+        x-Pinyin{"Пинјин"}
+        x-Publishing{"Издавачки"}
     }
     units{
         duration{

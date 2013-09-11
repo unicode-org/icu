@@ -11,6 +11,14 @@
  */
 uz{
     AuxExemplarCharacters{"[c w]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{
         "[a {aʼ} b {ch} d e {eʼ} f g {gʻ} h i {iʼ} j k l m n o {oʻ} p q r s {sh} t u "
         "{uʼ} v x y z]"
@@ -23,6 +31,7 @@ uz{
     LocaleScript{
         "Latn",
     }
+    MoreInformation{"?"}
     NumberElements{
         arabext{
             patterns{
@@ -929,6 +938,9 @@ uz{
                 other{"{0} mi²"}
             }
         }
+        compound{
+            per{"{0}/{1}"}
+        }
         duration{
             day{
                 one{"{0} kun"}
@@ -1090,6 +1102,217 @@ uz{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0} G"}
+                other{"{0} G"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"{0} ac"}
+                other{"{0} ac"}
+            }
+            hectare{
+                one{"{0} ha"}
+                other{"{0} ha"}
+            }
+            square-foot{
+                one{"{0} ft²"}
+                other{"{0} ft²"}
+            }
+            square-kilometer{
+                one{"{0} km²"}
+                other{"{0} km²"}
+            }
+            square-meter{
+                one{"{0} m²"}
+                other{"{0} m²"}
+            }
+            square-mile{
+                one{"{0} mi²"}
+                other{"{0} mi²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0} k"}
+                other{"{0} k"}
+            }
+            hour{
+                one{"{0} s"}
+                other{"{0} s"}
+            }
+            millisecond{
+                one{"{0} ms"}
+                other{"{0} ms"}
+            }
+            minute{
+                one{"{0} daq"}
+                other{"{0} daq"}
+            }
+            month{
+                one{"{0} oy"}
+                other{"{0} oy"}
+            }
+            second{
+                one{"{0} son"}
+                other{"{0} son"}
+            }
+            week{
+                one{"{0} haft"}
+                other{"{0} haft"}
+            }
+            year{
+                one{"{0} y"}
+                other{"{0} y"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} cm"}
+                other{"{0} cm"}
+            }
+            foot{
+                one{"{0} fut"}
+                other{"{0} fut"}
+            }
+            inch{
+                one{"{0} dyuym"}
+                other{"{0} dyuym"}
+            }
+            kilometer{
+                one{"{0} km"}
+                other{"{0} km"}
+            }
+            light-year{
+                one{"{0} yo.y."}
+                other{"{0} yo.y."}
+            }
+            meter{
+                one{"{0} m"}
+                other{"{0} m"}
+            }
+            mile{
+                one{"{0} milya"}
+                other{"{0} milya"}
+            }
+            millimeter{
+                one{"{0} mm"}
+                other{"{0} mm"}
+            }
+            picometer{
+                one{"{0} pm"}
+                other{"{0} pm"}
+            }
+            yard{
+                one{"{0} yard"}
+                other{"{0} yard"}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} g"}
+                other{"{0} g"}
+            }
+            kilogram{
+                one{"{0} kg"}
+                other{"{0} kg"}
+            }
+            ounce{
+                one{"{0} untsiya"}
+                other{"{0} untsiya"}
+            }
+            pound{
+                one{"{0} funt"}
+                other{"{0} funt"}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0} hp"}
+                other{"{0} hp"}
+            }
+            kilowatt{
+                one{"{0} kW"}
+                other{"{0} kW"}
+            }
+            watt{
+                one{"{0} W"}
+                other{"{0} W"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0} hPa"}
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                one{"{0} inHg"}
+                other{"{0} inHg"}
+            }
+            millibar{
+                one{"{0} mbar"}
+                other{"{0} mbar"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0} km/h"}
+                other{"{0} km/h"}
+            }
+            meter-per-second{
+                one{"{0} m/s"}
+                other{"{0} m/s"}
+            }
+            mile-per-hour{
+                one{"{0} mi/h"}
+                other{"{0} mi/h"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+            fahrenheit{
+                one{"{0}°F"}
+                other{"{0}°F"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0} km³"}
+                other{"{0} km³"}
+            }
+            cubic-mile{
+                one{"{0} mi³"}
+                other{"{0} mi³"}
+            }
+            liter{
+                one{"{0} l"}
+                other{"{0} l"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1136,6 +1359,9 @@ uz{
                 one{"{0} mi²"}
                 other{"{0} mi²"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

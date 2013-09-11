@@ -687,5 +687,7 @@ uz{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} vaqti"}
+        regionFormatDaylight{"{0} kunduzgi vaqti"}
+        regionFormatStandard{"{0} standart vaqti"}
     }
 }

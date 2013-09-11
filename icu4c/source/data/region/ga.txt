@@ -273,5 +273,9 @@ ga{
         ZW{"An tSiombáib"}
         ZZ{"Réigiún Anaithnid nó Neamhbhailí"}
     }
+    CountriesShort{
+        HK{"Hong Cong"}
+        MO{"Macáó"}
+    }
     Version{"2.0.92.87"}
 }

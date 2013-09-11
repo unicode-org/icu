@@ -1898,5 +1898,7 @@ sr{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HHmm;-HHmm"}
         regionFormat{"Време у земљи: {0}"}
+        regionFormatDaylight{"{0}, летње време"}
+        regionFormatStandard{"{0}, стандардно време"}
     }
 }

@@ -786,5 +786,7 @@ vi{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Giờ {0}"}
+        regionFormatDaylight{"Giờ ban ngày {0}"}
+        regionFormatStandard{"Giờ chuẩn {0}"}
     }
 }

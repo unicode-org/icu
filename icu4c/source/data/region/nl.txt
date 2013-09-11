@@ -302,5 +302,12 @@ nl{
         ZW{"Zimbabwe"}
         ZZ{"Onbekend gebied"}
     }
+    CountriesShort{
+        GB{"VK"}
+        HK{"Hongkong"}
+        MO{"Macao"}
+        PS{"Palestina"}
+        US{"VS"}
+    }
     Version{"2.0.93.8"}
 }

@@ -1053,5 +1053,7 @@ gl{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Horario de {0}"}
+        regionFormatDaylight{"Horario de verán de {0}"}
+        regionFormatStandard{"Horario estándar de {0}"}
     }
 }

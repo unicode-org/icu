@@ -287,6 +287,42 @@ af{
             persian{"Persiese kalender"}
             roc{"Minguo-kalender"}
         }
+        colAlternate{
+            non-ignorable{"Sorteer simbole"}
+            shifted{"Sorteer ignoreersimbole"}
+        }
+        colBackwards{
+            no{"Sorteer aksente gewoonweg"}
+            yes{"Sorteer aksente omgekeerd"}
+        }
+        colCaseFirst{
+            lower{"Sorteer kleinletters veerste"}
+            no{"Sorteer gewone letterorde"}
+            upper{"Sorteer hoofletters eerste"}
+        }
+        colCaseLevel{
+            no{"Sorteer nie kassensitief nie"}
+            yes{"Sorteer kassensitief"}
+        }
+        colHiraganaQuaternary{
+            no{"Sorteer Kana afsonderlik"}
+            yes{"Sorteer Kana anders"}
+        }
+        colNormalization{
+            no{"Sorteer sonder normalisering"}
+            yes{"Sorteer Unicode genormaliseer"}
+        }
+        colNumeric{
+            no{"Sorteer syfers individueel"}
+            yes{"Sorteer syfers numeries"}
+        }
+        colStrength{
+            identical{"Sorteer almal"}
+            primary{"Sorteer slegs basisletters"}
+            quaternary{"Sorteer aksente/kas/breedte/Kana"}
+            secondary{"Sorteer aksente"}
+            tertiary{"Sorteer aksente/kas/breedte"}
+        }
         collation{
             big5han{"Tradisionele Chinese sorteervolgorde - Groot5"}
             dictionary{"Woordeboek-sorteervolgorde"}

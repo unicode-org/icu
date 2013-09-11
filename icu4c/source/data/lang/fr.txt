@@ -766,6 +766,48 @@ fr{
             persian{"Calendrier persan"}
             roc{"Calendrier républicain chinois"}
         }
+        colAlternate{
+            non-ignorable{"Trier les symboles"}
+            shifted{"Trier en ignorant les symboles"}
+        }
+        colBackwards{
+            no{"Trier les caractères accentués normalement"}
+            yes{"Trier les caractères accentués dans l'ordre inverse"}
+        }
+        colCaseFirst{
+            lower{"Trier avec les minuscules d'abord"}
+            no{"Trier sans ordre lié à la casse"}
+            upper{"Trier avec les majuscules d'abord"}
+        }
+        colCaseLevel{
+            no{"Trier sans tenir compte de la casse"}
+            yes{"Trier en tenant compte de la casse"}
+        }
+        colHiraganaQuaternary{
+            no{"Trier les caractères Kana séparément"}
+            yes{"Trier les caractères Kana différemment"}
+        }
+        colNormalization{
+            no{"Trier sans normalisation"}
+            yes{"Trier avec normalisation Unicode"}
+        }
+        colNumeric{
+            no{"Trier les chiffres individuellement"}
+            yes{"Trier les chiffres par ordre numérique"}
+        }
+        colStrength{
+            identical{"Tout trier"}
+            primary{"Ne trier que les lettres de base"}
+            quaternary{
+                "Trier en tenant compte des caractères accentués, de la casse, de la "
+                "largeur et des caractères Kana"
+            }
+            secondary{"Trier en tenant compte des caractères accentués"}
+            tertiary{
+                "Trier en tenant compte des caractères accentués, de la casse et de l"
+                "a largeur"
+            }
+        }
         collation{
             big5han{"Ordre chinois traditionnel - Big5"}
             dictionary{"Ordre du dictionnaire"}

@@ -302,5 +302,11 @@ eu{
         ZW{"Zimbabwe"}
         ZZ{"Eskualde ezezaguna"}
     }
+    CountriesShort{
+        HK{"Hong Kong"}
+        MO{"Macau"}
+        PS{"Palestina"}
+        US{"AEB"}
+    }
     Version{"2.0.92.87"}
 }

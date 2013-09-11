@@ -302,5 +302,12 @@ fi{
         ZW{"Zimbabwe"}
         ZZ{"tuntematon alue"}
     }
+    CountriesShort{
+        GB{"Britannia"}
+        HK{"Hongkong"}
+        MO{"Macao"}
+        PS{"Palestiina"}
+        US{"USA"}
+    }
     Version{"2.0.92.87"}
 }

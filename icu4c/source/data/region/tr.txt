@@ -302,5 +302,12 @@ tr{
         ZW{"Zimbabve"}
         ZZ{"Bilinmeyen Bölge"}
     }
+    CountriesShort{
+        GB{"BK"}
+        HK{"Hong Kong"}
+        MO{"Makao"}
+        PS{"Filistin"}
+        US{"ABD"}
+    }
     Version{"2.0.92.87"}
 }

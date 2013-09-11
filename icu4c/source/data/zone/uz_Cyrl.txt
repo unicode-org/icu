@@ -685,5 +685,7 @@ uz_Cyrl{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} вақти"}
+        regionFormatDaylight{"{0} кундузги вақти"}
+        regionFormatStandard{"{0} стандарт вақти"}
     }
 }

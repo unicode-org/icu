@@ -1054,5 +1054,7 @@ fi{
         gmtZeroFormat{"UTC"}
         hourFormat{"+H.mm;-H.mm"}
         regionFormat{"aikavyöhyke: {0}"}
+        regionFormatDaylight{"{0} (kesäaika)"}
+        regionFormatStandard{"{0} (normaaliaika)"}
     }
 }

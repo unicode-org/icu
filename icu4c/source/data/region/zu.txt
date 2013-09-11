@@ -302,5 +302,10 @@ zu{
         ZW{"i-Zimbabwe"}
         ZZ{"iSifunda esingaziwa"}
     }
+    CountriesShort{
+        HK{"i-Hong Kong"}
+        MO{"i-Macau"}
+        PS{"i-Phalestine"}
+    }
     Version{"2.0.92.87"}
 }

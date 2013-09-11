@@ -999,5 +999,7 @@ hr{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm; -HH:mm"}
         regionFormat{"{0}"}
+        regionFormatDaylight{"{0}, ljetno vrijeme"}
+        regionFormatStandard{"{0}, standardno vrijeme"}
     }
 }

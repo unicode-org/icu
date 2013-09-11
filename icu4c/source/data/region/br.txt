@@ -301,5 +301,9 @@ br{
         ZW{"Zimbabwe"}
         ZZ{"Rannved dianav"}
     }
+    CountriesShort{
+        HK{"Hong Kong"}
+        MO{"Macau"}
+    }
     Version{"2.0.92.75"}
 }

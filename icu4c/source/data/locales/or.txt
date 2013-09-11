@@ -69,6 +69,10 @@ or{
                 "am",
                 "pm",
             }
+            AmPmMarkersNarrow{
+                "am",
+                "pm",
+            }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
                 "h:mm:ss a z",

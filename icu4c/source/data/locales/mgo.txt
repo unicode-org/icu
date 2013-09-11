@@ -11,6 +11,11 @@
  */
 mgo{
     AuxExemplarCharacters{"[c h l q v x]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+    }
     ExemplarCharacters{
         "[a à b {ch} d e è ə {ə\u0300} f g {gh} i ì j k m n ŋ o ò ɔ {ɔ\u0300} p r s t"
         " u ù w y z ʼ]"
@@ -20,6 +25,7 @@ mgo{
     LocaleScript{
         "Latn",
     }
+    MoreInformation{"?"}
     NumberElements{
         default{"latn"}
         latn{

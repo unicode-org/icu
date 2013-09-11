@@ -11,6 +11,13 @@
  */
 ne{
     AuxExemplarCharacters{"[\u200C\u200D]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
     ExemplarCharacters{
         "[\u093C \u0901 \u0902 ः ॐ अ आ इ ई उ ऊ ऋ ऌ ऍ ए ऐ ऑ ओ औ क ख ग घ ङ च छ ज झ ञ ट "
         "ठ ड ढ ण त थ द ध न प फ ब भ म य र ल ळ व श ष स ह ऽ ा ि ी \u0941 \u0942 \u0943 "
@@ -19,6 +26,7 @@ ne{
     LocaleScript{
         "Deva",
     }
+    MoreInformation{"?"}
     NumberElements{
         default{"deva"}
         deva{
@@ -47,6 +55,7 @@ ne{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"¤ #,##0.00"}
                 currencyFormat{"¤ #,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -915,6 +924,9 @@ ne{
                 other{"{0} बर्ग माईल"}
             }
         }
+        compound{
+            per{"{0}/{1}"}
+        }
         duration{
             day{
                 one{"{0} दिन"}
@@ -1076,6 +1088,217 @@ ne{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0} G"}
+                other{"{0} G"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"{0} एकर"}
+                other{"{0} एकर"}
+            }
+            hectare{
+                one{"{0} हे."}
+                other{"{0} हे."}
+            }
+            square-foot{
+                one{"{0} ब.फु."}
+                other{"{0} ब.फु."}
+            }
+            square-kilometer{
+                one{"{0} ब.कि.मि."}
+                other{"{0} ब.कि.मि."}
+            }
+            square-meter{
+                one{"{0} ब.मि."}
+                other{"{0} ब.मि."}
+            }
+            square-mile{
+                one{"{0} बर्ग माईल"}
+                other{"{0} बर्ग माईल"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0} दिन"}
+                other{"{0} दिन"}
+            }
+            hour{
+                one{"{0} घण्टा"}
+                other{"{0} घण्टा"}
+            }
+            millisecond{
+                one{"{0} मिली से."}
+                other{"{0} मिली से."}
+            }
+            minute{
+                one{"{0} मिनेट"}
+                other{"{0} मिनेट"}
+            }
+            month{
+                one{"{0} महिना"}
+                other{"{0} महिना"}
+            }
+            second{
+                one{"{0} सेकेण्ड"}
+                other{"{0} सेकेण्ड"}
+            }
+            week{
+                one{"{0} हप्ता"}
+                other{"{0} सप्ताह"}
+            }
+            year{
+                one{"{0} वर्ष"}
+                other{"{0} वर्ष"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} से.मी."}
+                other{"{0} से.मी."}
+            }
+            foot{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            inch{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            kilometer{
+                one{"{0} कि.मी."}
+                other{"{0} कि.मी."}
+            }
+            light-year{
+                one{"{0} ly"}
+                other{"{0} ly"}
+            }
+            meter{
+                one{"{0} मि."}
+                other{"{0} मि."}
+            }
+            mile{
+                one{"{0} माईल"}
+                other{"{0} माईल"}
+            }
+            millimeter{
+                one{"{0} मिमि."}
+                other{"{0} मिमि."}
+            }
+            picometer{
+                one{"{0} pm"}
+                other{"{0} pm"}
+            }
+            yard{
+                one{"{0} गज"}
+                other{"{0} गज"}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} ग्राम"}
+                other{"{0} ग्राम"}
+            }
+            kilogram{
+                one{"{0} किलो"}
+                other{"{0} किलो"}
+            }
+            ounce{
+                one{"{0} आऊन्स"}
+                other{"{0} आऊन्स"}
+            }
+            pound{
+                one{"{0} पाउण्ड"}
+                other{"{0} पाउण्ड"}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0} घोडा"}
+                other{"{0} घोडा"}
+            }
+            kilowatt{
+                one{"किलो वाट"}
+                other{"{0} किलो वाट"}
+            }
+            watt{
+                one{"{0} वाट"}
+                other{"{0} वाट"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0} hPa"}
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                one{"{0} ईञ्‍च पारो"}
+                other{"{0} ईञ्‍च पारो"}
+            }
+            millibar{
+                one{"{0} मिलीबार"}
+                other{"{0} मिलीबार"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0} km/h"}
+                other{"{0} km/h"}
+            }
+            meter-per-second{
+                one{"{0} m/s"}
+                other{"{0} m/s"}
+            }
+            mile-per-hour{
+                one{"{0} mi/h"}
+                other{"{0} mi/h"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°से"}
+                other{"{0}°से"}
+            }
+            fahrenheit{
+                one{"{0}°फ"}
+                other{"{0}°फ"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0} km³"}
+                other{"{0} km³"}
+            }
+            cubic-mile{
+                one{"{0} घन माईल"}
+                other{"{0} घन माईल"}
+            }
+            liter{
+                one{"{0} लि."}
+                other{"{0} लि."}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1122,6 +1345,9 @@ ne{
                 one{"{0} बर्ग माईल"}
                 other{"{0} बर्ग माईल"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

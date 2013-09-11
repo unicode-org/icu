@@ -252,6 +252,47 @@ lkt{
             }
         }
     }
+    unitsNarrow{
+        duration{
+            day{
+                other{"{0}-čháŋ"}
+            }
+            hour{
+                other{"Owápȟe {0}"}
+            }
+            month{
+                other{"Wí {0}"}
+            }
+            second{
+                other{"Okpí {0}"}
+            }
+            week{
+                other{"okó {0}"}
+            }
+            year{
+                other{"ómakȟa {0}"}
+            }
+        }
+        length{
+            foot{
+                other{"siíyutȟapi {0}"}
+            }
+            inch{
+                other{"{0}″"}
+            }
+            mile{
+                other{"{0} makh"}
+            }
+            yard{
+                other{"čhaéglepi {0}"}
+            }
+        }
+        mass{
+            pound{
+                other{"{0}#"}
+            }
+        }
+    }
     unitsShort{
         duration{
             day{

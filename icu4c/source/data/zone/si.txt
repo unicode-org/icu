@@ -1847,5 +1847,7 @@ si{
         gmtZeroFormat{"ග්‍රිමවේ"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} වේලාව"}
+        regionFormatDaylight{"{0} දිවාආලෝක වේලාව"}
+        regionFormatStandard{"{0} සම්මත වේලාව"}
     }
 }

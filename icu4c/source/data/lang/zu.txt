@@ -271,6 +271,42 @@ zu{
             persian{"i-Persian Calendar"}
             roc{"i-Minguo Calender"}
         }
+        colAlternate{
+            non-ignorable{"Hlela Izimpawu"}
+            shifted{"Hlela Ukuziba Izimpawu"}
+        }
+        colBackwards{
+            no{"Hlela Izindlela Zokuphimisela Ngokujwayelekile"}
+            yes{"Ukuhlelwa Kokuphimisela Kuhlehlisiwe"}
+        }
+        colCaseFirst{
+            lower{"Hlela Okwezinhlamvu Eziphansi Kuqala"}
+            no{"Hlela Ngokwenhlamvu Ezejwayelekile"}
+            upper{"Hlela Izinhlamvu Ezinkulu Kuqala"}
+        }
+        colCaseLevel{
+            no{"Hlela Okungancikile Ezinkinobhweni"}
+            yes{"Hlela Okuncike Ekumeni Kwezinkinobho"}
+        }
+        colHiraganaQuaternary{
+            no{"Hlela i-Kana Eceleni"}
+            yes{"Hlela i-Kana Ngendlela Ehlukile"}
+        }
+        colNormalization{
+            no{"Hlela Ngaphandle Kokulinganisa"}
+            yes{"Ukuhlelwa Khekhodi Enye Kulinganisiwe"}
+        }
+        colNumeric{
+            no{"Hlela Izinhlamvu Zenombolo Ngazinye"}
+            yes{"Hlela Izinhlamvu Ngokwezinombolo"}
+        }
+        colStrength{
+            identical{"Hlela konke"}
+            primary{"Hlela Izinhlamvu Zaphansi Kuphela"}
+            quaternary{"Hlola Ukuphimisela/Ukuma kwezinhlamvu/Ububanzi/i-Kana"}
+            secondary{"Hlela Ukuphimisela"}
+            tertiary{"Hlela Ukuphimisela/Ukuma kwezinhlamvu/Ububanzi"}
+        }
         collation{
             big5han{"Ukuhlunga kwe-Traditional Chinese - Big5"}
             dictionary{"Ukuhlunga kwesichazimazwi"}

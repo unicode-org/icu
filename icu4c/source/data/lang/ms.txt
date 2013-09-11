@@ -281,6 +281,42 @@ ms{
             persian{"Kalendar Parsi"}
             roc{"Kalendar Minguo"}
         }
+        colAlternate{
+            non-ignorable{"Isih Simbol"}
+            shifted{"Isih Mengabaikan Simbol"}
+        }
+        colBackwards{
+            no{"Isih Aksen Secara Biasa"}
+            yes{"Isih Aksen Terbalik"}
+        }
+        colCaseFirst{
+            lower{"Isih Huruf Kecil Dahulu"}
+            no{"Isih Urutan Atur Biasa"}
+            upper{"Isih Huruf Besar Dahulu"}
+        }
+        colCaseLevel{
+            no{"Isih Tidak Sensitif Atur"}
+            yes{"Isih Sensitif Atur"}
+        }
+        colHiraganaQuaternary{
+            no{"Isih Kana Berasingan"}
+            yes{"Isih Kana Secara Berbeza"}
+        }
+        colNormalization{
+            no{"Isih Tanpa Penormalan"}
+            yes{"Isih Unikod Ternormal"}
+        }
+        colNumeric{
+            no{"Isih Digit Secara Berasingan"}
+            yes{"Isih Digit Mengikut Nombor"}
+        }
+        colStrength{
+            identical{"Isih Semua"}
+            primary{"Isih Huruf Asas Sahaja"}
+            quaternary{"Isih Aksen/Atur/Lebar/Kana"}
+            secondary{"Isih Aksen"}
+            tertiary{"Isih Aksen/Atur/Lebar"}
+        }
         collation{
             big5han{"Aturan Isih Cina Tradisional - Big5"}
             dictionary{"Aturan Isih Kamus"}

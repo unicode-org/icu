@@ -698,5 +698,7 @@ en{
         gmtFormat{"GMT{0}"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} Time"}
+        regionFormatDaylight{"{0} Daylight Time"}
+        regionFormatStandard{"{0} Standard Time"}
     }
 }

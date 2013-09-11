@@ -1852,5 +1852,7 @@ my{
         gmtZeroFormat{"ဂရင်းနစ်စံတော်ချိန်"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}အချိန်"}
+        regionFormatDaylight{"{0} (+1)"}
+        regionFormatStandard{"{0} (စံတော်ချိန်)"}
     }
 }

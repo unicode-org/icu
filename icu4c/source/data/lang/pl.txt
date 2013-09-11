@@ -766,6 +766,42 @@ pl{
             persian{"Kalendarz perski"}
             roc{"kalendarz Republiki Chińskiej"}
         }
+        colAlternate{
+            non-ignorable{"Sortowanie symboli"}
+            shifted{"Sortowanie ignorujące symbole"}
+        }
+        colBackwards{
+            no{"Zwykłe sortowanie znaków akcentowanych"}
+            yes{"Sortowanie znaków akcentowanych w odwróconej kolejności"}
+        }
+        colCaseFirst{
+            lower{"Sortowanie od małych liter"}
+            no{"Sortowanie z zachowaniem zwykłej kolejności wielkości liter"}
+            upper{"Sortowanie od wielkich liter"}
+        }
+        colCaseLevel{
+            no{"Sortowanie bez rozróżniania wielkości liter"}
+            yes{"Sortowanie z rozróżnianiem wielkości liter"}
+        }
+        colHiraganaQuaternary{
+            no{"Osobne sortowanie kana"}
+            yes{"Inne sortowanie kana"}
+        }
+        colNormalization{
+            no{"Sortowanie bez normalizacji"}
+            yes{"Sortowanie z normalizacją unicode"}
+        }
+        colNumeric{
+            no{"Oddzielne sortowanie cyfr"}
+            yes{"Numeryczne sortowanie cyfr"}
+        }
+        colStrength{
+            identical{"Sortuj wszystko"}
+            primary{"Sortowanie tylko liter podstawowych"}
+            quaternary{"Sortowanie znaków akcentowanych/wielkości liter/szerokości/kana"}
+            secondary{"Sortowanie znaków akcentowanych"}
+            tertiary{"Sortowanie znaków akcentowanych/wielkości liter/szerokości"}
+        }
         collation{
             big5han{"chiński tradycyjny porządek sortowania - Big5"}
             dictionary{"sortowanie słownikowe"}

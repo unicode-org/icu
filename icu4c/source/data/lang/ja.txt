@@ -787,6 +787,42 @@ ja{
             persian{"ペルシア暦"}
             roc{"中華民国暦"}
         }
+        colAlternate{
+            non-ignorable{"記号で並べ替え"}
+            shifted{"記号を無視して並べ替え"}
+        }
+        colBackwards{
+            no{"アクセント（順方向）で並べ替え"}
+            yes{"アクセント（逆方向）で並べ替え"}
+        }
+        colCaseFirst{
+            lower{"小文字優先で並べ替え"}
+            no{"大文字小文字を通常の順序で並べ替え"}
+            upper{"大文字優先で並べ替え"}
+        }
+        colCaseLevel{
+            no{"大文字小文字を区別しないで並べ替え"}
+            yes{"大文字小文字を区別して並べ替え"}
+        }
+        colHiraganaQuaternary{
+            no{"仮名を区別しないで並べ替え"}
+            yes{"仮名を区別して並べ替え"}
+        }
+        colNormalization{
+            no{"正規化しないで並べ替え"}
+            yes{"Unicode 正規化で並べ替え"}
+        }
+        colNumeric{
+            no{"数値を独立して並べ替え"}
+            yes{"数値を数値として並べ替え"}
+        }
+        colStrength{
+            identical{"すべてを区別して並べ替え"}
+            primary{"基本文字のみで並べ替え"}
+            quaternary{"アクセント/大文字小文字/全角半角/仮名で並べ替え"}
+            secondary{"アクセントで並べ替え"}
+            tertiary{"アクセント/大文字小文字/全角半角で並べ替え"}
+        }
         collation{
             big5han{"繁体字中国語順(Big5)"}
             dictionary{"辞書順"}

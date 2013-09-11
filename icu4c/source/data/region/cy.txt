@@ -302,5 +302,12 @@ cy{
         ZW{"Zimbabwe"}
         ZZ{"Rhanbarth Anhysbys"}
     }
+    CountriesShort{
+        GB{"DU"}
+        HK{"Hong Kong"}
+        MO{"Macau"}
+        PS{"Palesteina"}
+        US{"UDA"}
+    }
     Version{"2.0.93.7"}
 }

@@ -921,5 +921,7 @@ ro{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Ora din {0}"}
+        regionFormatDaylight{"Ora de vară din {0}"}
+        regionFormatStandard{"Ora standard din {0}"}
     }
 }

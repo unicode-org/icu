@@ -761,6 +761,48 @@ lt{
             persian{"persų kalendorius"}
             roc{"Kinijos Respublikos kalendorius"}
         }
+        colAlternate{
+            non-ignorable{"Rikiuoti simbolius"}
+            shifted{"Rikiuoti nepaisant simbolių"}
+        }
+        colBackwards{
+            no{"Rikiuoti diakritinius ženklus įprastai"}
+            yes{"Rikiuoti diakritinius ženklus atvirkščiai"}
+        }
+        colCaseFirst{
+            lower{"Rikiuoti suteikiant pirmumą mažosioms raidėms"}
+            no{"Rikiuoti įprasta didžiųjų ir mažųjų raidžių tvarka"}
+            upper{"Rikiuoti suteikiant pirmumą didžiosioms raidėms"}
+        }
+        colCaseLevel{
+            no{"Rikiuoti neskiriant didžiųjų ir mažųjų raidžių"}
+            yes{"Rikiuoti skiriant didžiąsias ir mažąsias raides"}
+        }
+        colHiraganaQuaternary{
+            no{"Rikiuoti kanos ženklus atskirai"}
+            yes{"Rikiuoti kanos ženklus kitaip"}
+        }
+        colNormalization{
+            no{"Rikiuoti nenormalizuojant"}
+            yes{"Rikiuoti normalizuojant unikodą"}
+        }
+        colNumeric{
+            no{"Rikiuoti skaitmenis atskirai"}
+            yes{"Rikiuoti skaitmenis pagal skaičius"}
+        }
+        colStrength{
+            identical{"Rikiuoti viską"}
+            primary{"Rikiuoti tik pagal pamatines raides"}
+            quaternary{
+                "Rikiuoti pagal didžiąsias ir mažąsias raides / plotį / diakritinius "
+                "/ kanos ženklus"
+            }
+            secondary{"Rikiuoti diakritinius ženklus"}
+            tertiary{
+                "Rikiuoti pagal diakritinius ženklus / didžiąsias ir mažąsias raides "
+                "/ plotį"
+            }
+        }
         collation{
             big5han{"įprasta kiniška rūšiavimo tvarka - Big5"}
             dictionary{"žodyno rūšiavimo tvarka"}

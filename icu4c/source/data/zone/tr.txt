@@ -1075,5 +1075,7 @@ tr{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} Saati"}
+        regionFormatDaylight{"{0} Yaz Saati"}
+        regionFormatStandard{"{0} Standart Saati"}
     }
 }

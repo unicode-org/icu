@@ -11,6 +11,11 @@
  */
 am{
     AuxExemplarCharacters{"[]"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+    }
     ExemplarCharacters{
         "[ሀ ሁ ሂ ሃ ሄ ህ ሆ ለ ሉ ሊ ላ ሌ ል ሎ ሏ ሐ ሑ ሒ ሓ ሔ ሕ ሖ ሗ መ ሙ ሚ ማ ሜ ም ሞ ሟ ሠ ሡ ሢ ሣ ሤ ሥ ሦ"
         " ሧ ረ ሩ ሪ ራ ሬ ር ሮ ሯ ሰ ሱ ሲ ሳ ሴ ስ ሶ ሷ ሸ ሹ ሺ ሻ ሼ ሽ ሾ ሿ ቀ ቁ ቂ ቃ ቄ ቅ ቆ ቈ ቊ ቋ ቌ ቍ በ"
@@ -25,6 +30,7 @@ am{
     LocaleScript{
         "Ethi",
     }
+    MoreInformation{"?"}
     NumberElements{
         default{"latn"}
         latn{
@@ -33,6 +39,7 @@ am{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -993,6 +1000,18 @@ am{
         US{"ዩ ኤስ"}
         metric{"ሜትሪክ"}
     }
+    transformNames{
+        BGN{"ቢ ጂ ኤን"}
+        Numeric{"አሃዛዊ"}
+        Tone{"የድምፅ ቃና"}
+        UNGEGN{"UNGEGN"}
+        x-Accents{"ትእምርት"}
+        x-Fullwidth{"ሙሉ ወርድ"}
+        x-Halfwidth{"ሃልፍዊድዝ"}
+        x-Jamo{"ጃሞ"}
+        x-Pinyin{"ፒንዪን"}
+        x-Publishing{"ማሳተም"}
+    }
     units{
         acceleration{
             g-force{
@@ -1039,6 +1058,9 @@ am{
                 one{"{0} ካሬ ማይል"}
                 other{"{0} ካሬ ማይል"}
             }
+        }
+        compound{
+            per{"{0} በ{1}"}
         }
         duration{
             day{
@@ -1201,6 +1223,217 @@ am{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0} ጂ"}
+                other{"{0} ጂ"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        area{
+            acre{
+                one{"{0} ኤክር"}
+                other{"{0} ኤክር"}
+            }
+            hectare{
+                one{"{0} ሄክታር"}
+                other{"{0} ሄክታር"}
+            }
+            square-foot{
+                one{"{0} ጫማ²"}
+                other{"{0} ጫማ²"}
+            }
+            square-kilometer{
+                one{"{0} ኪሜ²"}
+                other{"{0} ኪሜ²"}
+            }
+            square-meter{
+                one{"{0} ሜ²"}
+                other{"{0} ሜ²"}
+            }
+            square-mile{
+                one{"{0} ማይል²"}
+                other{"{0} ማይል²"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0} ቀ"}
+                other{"{0} ቀ"}
+            }
+            hour{
+                one{"{0} ሰ"}
+                other{"{0} ሰ"}
+            }
+            millisecond{
+                one{"{0} ሚሴ"}
+                other{"{0} ሚሴ"}
+            }
+            minute{
+                one{"{0} ደ"}
+                other{"{0} ደ"}
+            }
+            month{
+                one{"{0} ወር"}
+                other{"{0} ወር"}
+            }
+            second{
+                one{"{0} ሴ"}
+                other{"{0} ሴ"}
+            }
+            week{
+                one{"{0} ሳምንት"}
+                other{"{0} ሳምንት"}
+            }
+            year{
+                one{"{0} ዓመት"}
+                other{"{0} y"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} ሴሜ"}
+                other{"{0} ሴሜ"}
+            }
+            foot{
+                one{"{0} ጫማ"}
+                other{"{0} ጫማ"}
+            }
+            inch{
+                one{"{0} ኢንች"}
+                other{"{0} ኢንች"}
+            }
+            kilometer{
+                one{"{0} ኪሜ"}
+                other{"{0} ኪሜ"}
+            }
+            light-year{
+                one{"{0} ly"}
+                other{"{0} ly"}
+            }
+            meter{
+                one{"{0} ሜ"}
+                other{"{0} ሜ"}
+            }
+            mile{
+                one{"{0} ማይል"}
+                other{"{0} ማይል"}
+            }
+            millimeter{
+                one{"{0} ሚሜ"}
+                other{"{0} ሚሜ"}
+            }
+            picometer{
+                one{"{0} ፒሜ"}
+                other{"{0} ፒሜ"}
+            }
+            yard{
+                one{"{0} ያርድ"}
+                other{"{0} ያርድ"}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} ግ"}
+                other{"{0} ግ"}
+            }
+            kilogram{
+                one{"{0} ኪግ"}
+                other{"{0} ኪግ"}
+            }
+            ounce{
+                one{"{0} አውንስ"}
+                other{"{0} አውንስ"}
+            }
+            pound{
+                one{"{0} ፓውንድ"}
+                other{"{0} ፓውንድ"}
+            }
+        }
+        power{
+            horsepower{
+                one{"{0} የፈረስ ኃይል"}
+                other{"{0} የፈረስ ኃይል"}
+            }
+            kilowatt{
+                one{"{0} ኪዋ"}
+                other{"{0} ኪዋ"}
+            }
+            watt{
+                one{"{0} ዋ"}
+                other{"{0} ዋ"}
+            }
+        }
+        pressure{
+            hectopascal{
+                one{"{0} hPa"}
+                other{"{0} hPa"}
+            }
+            inch-hg{
+                one{"{0} inHg"}
+                other{"{0} inHg"}
+            }
+            millibar{
+                one{"{0} ሚባ"}
+                other{"{0} ሚባ"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0} ኪሜ/ሰ"}
+                other{"{0} ኪሜ/ሰ"}
+            }
+            meter-per-second{
+                one{"{0} ሜ/ሴ"}
+                other{"{0} ሜ/ሴ"}
+            }
+            mile-per-hour{
+                one{"{0} ማይል/ሰ"}
+                other{"{0} ማይል/ሰ"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°ሴ"}
+                other{"{0}°ሴ"}
+            }
+            fahrenheit{
+                one{"{0}°ፋ"}
+                other{"{0}°ፋ"}
+            }
+        }
+        volume{
+            cubic-kilometer{
+                one{"{0} ኪሜ³"}
+                other{"{0} ኪሜ³"}
+            }
+            cubic-mile{
+                one{"{0} ማይል³"}
+                other{"{0} ማይል³"}
+            }
+            liter{
+                one{"{0} ሊ"}
+                other{"{0} ሊ"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -1247,6 +1480,9 @@ am{
                 one{"{0} ካሬ ማይል"}
                 other{"{0} ካሬ ማይል"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

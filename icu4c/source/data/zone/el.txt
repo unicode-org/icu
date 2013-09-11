@@ -1879,5 +1879,7 @@ el{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"Ώρα ({0})"}
+        regionFormatDaylight{"Θερινή ώρα ({0})"}
+        regionFormatStandard{"Χειμερινή ώρα ({0})"}
     }
 }

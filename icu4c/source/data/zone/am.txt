@@ -1857,5 +1857,7 @@ am{
         gmtZeroFormat{"ጂ ኤም ቲ"}
         hourFormat{"+HHmm;-HHmm"}
         regionFormat{"{0} ጊዜ"}
+        regionFormatDaylight{"{0} የቀን ብርሃን ሰዓት"}
+        regionFormatStandard{"{0} መደበኛ ሰዓት"}
     }
 }

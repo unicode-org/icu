@@ -302,5 +302,12 @@ ro{
         ZW{"Zimbabwe"}
         ZZ{"Regiune necunoscută"}
     }
+    CountriesShort{
+        GB{"Regatul Unit"}
+        HK{"Hong Kong"}
+        MO{"Macao"}
+        PS{"Palestina"}
+        US{"S.U.A."}
+    }
     Version{"2.0.92.87"}
 }

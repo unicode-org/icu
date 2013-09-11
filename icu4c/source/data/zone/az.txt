@@ -1499,5 +1499,7 @@ az{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} Vaxtı"}
+        regionFormatDaylight{"{0} Yay Vaxtı"}
+        regionFormatStandard{"{0} Standart Vaxtı"}
     }
 }

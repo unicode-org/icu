@@ -590,6 +590,42 @@ is{
             persian{"Persneskt tímatal"}
             roc{"kínverskt dagatal"}
         }
+        colAlternate{
+            non-ignorable{"Raða táknum"}
+            shifted{"Raða óháð táknum"}
+        }
+        colBackwards{
+            no{"Raða áherslum eðlilega"}
+            yes{"Raða öfugt eftir áherslum"}
+        }
+        colCaseFirst{
+            lower{"Raða lágstöfum fyrst"}
+            no{"Raða eðlilega eftir hástöfum og lágstöfum"}
+            upper{"Raða hástöfum fyrst"}
+        }
+        colCaseLevel{
+            no{"Raða óháð hástöfum og lágstöfum"}
+            yes{"Raða stafrétt"}
+        }
+        colHiraganaQuaternary{
+            no{"Raða Kana sér"}
+            yes{"Raða Kana öðruvísi"}
+        }
+        colNormalization{
+            no{"Raða án stöðlunar"}
+            yes{"Raða Unicode með stöðluðum hætti"}
+        }
+        colNumeric{
+            no{"Raða tölustöfum sér"}
+            yes{"Raða tölustöfum tölulega"}
+        }
+        colStrength{
+            identical{"Raða öllu"}
+            primary{"Raða aðeins grunnstöfum"}
+            quaternary{"Raða áherslum/hástaf eða lágstaf/breidd/Kana"}
+            secondary{"Raða áherslum"}
+            tertiary{"Raða áherslum/hástaf eða lágstaf/breidd"}
+        }
         collation{
             big5han{"hefðbundin kínversk röðun - Big5"}
             dictionary{"Orðabókarröð"}

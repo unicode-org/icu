@@ -14,6 +14,11 @@ zu{
         "[á à ă â å ä ã ā æ ç é è ĕ ê ë ē í ì ĭ î ï ī ñ ó ò ŏ ô ö ø ō œ ú ù ŭ û ü ū ÿ"
         "]"
     }
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}…{1}"}
+    }
     ExemplarCharacters{
         "[a b {bh} c {ch} d {dl} {dy} e f g {gc} {gq} {gx} h {hh} {hl} i j k {kh} {kl"
         "} {kp} l m n {nc} {ngc} {ngq} {ngx} {nhl} {nk} {nkc} {nkq} {nkx} {nq} {ntsh}"
@@ -23,9 +28,11 @@ zu{
     LocaleScript{
         "Latn",
     }
+    MoreInformation{"?"}
     NumberElements{
         latn{
             patterns{
+                accountingFormat{"¤#,##0.00;(¤#,##0.00)"}
                 currencyFormat{"¤#,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}
@@ -307,6 +314,10 @@ zu{
             AmPmMarkers{
                 "Ekuseni",
                 "Ntambama",
+            }
+            AmPmMarkersNarrow{
+                "a",
+                "p",
             }
             DateTimePatterns{
                 "h:mm:ss a zzzz",
@@ -873,6 +884,18 @@ zu{
         US{"i-US"}
         metric{"i-Metric"}
     }
+    transformNames{
+        BGN{"I-BGN"}
+        Numeric{"Okwezinombolo"}
+        Tone{"Ithoni"}
+        UNGEGN{"I-UNGEGN"}
+        x-Accents{"Ama-Accent"}
+        x-Fullwidth{"i-Fullwidth"}
+        x-Halfwidth{"Ubude obuhhafu"}
+        x-Jamo{"i-Jamo"}
+        x-Pinyin{"i-Pinyin"}
+        x-Publishing{"Ukushicilela"}
+    }
     units{
         acceleration{
             g-force{
@@ -893,6 +916,9 @@ zu{
                 one{"{0}°"}
                 other{"{0}°"}
             }
+        }
+        compound{
+            per{"{0} nge-{1}"}
         }
         duration{
             day{
@@ -975,6 +1001,111 @@ zu{
             }
         }
     }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0} G"}
+                other{"{0} G"}
+            }
+        }
+        angle{
+            arc-minute{
+                one{"{0}′"}
+                other{"{0}′"}
+            }
+            arc-second{
+                one{"{0}″"}
+                other{"{0}″"}
+            }
+            degree{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        compound{
+            per{"{0}/{1}"}
+        }
+        duration{
+            day{
+                one{"{0}"}
+                other{"{0} suku"}
+            }
+            hour{
+                one{"{0} hora"}
+                other{"{0} hora"}
+            }
+            millisecond{
+                one{"{0} ms"}
+                other{"{0} ms"}
+            }
+            minute{
+                one{"{0} min"}
+                other{"{0} min"}
+            }
+            month{
+                one{"{0} m"}
+                other{"{0} m"}
+            }
+            second{
+                one{"{0} s"}
+                other{"{0} s"}
+            }
+            week{
+                one{"{0} w"}
+                other{"{0} w"}
+            }
+            year{
+                one{"{0} y"}
+                other{"{0} y"}
+            }
+        }
+        length{
+            centimeter{
+                one{"{0} cm"}
+                other{"{0} cm"}
+            }
+            kilometer{
+                one{"{0} km"}
+                other{"{0} km"}
+            }
+            meter{
+                one{"{0} m"}
+                other{"{0} m"}
+            }
+            millimeter{
+                one{"{0} mm"}
+                other{"{0} mm"}
+            }
+        }
+        mass{
+            gram{
+                one{"{0} g"}
+                other{"{0} g"}
+            }
+            kilogram{
+                one{"{0} kg"}
+                other{"{0} kg"}
+            }
+        }
+        speed{
+            kilometer-per-hour{
+                one{"{0} km/h"}
+                other{"{0} km/h"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°"}
+                other{"{0}°"}
+            }
+        }
+        volume{
+            liter{
+                one{"{0} l"}
+                other{"{0} l"}
+            }
+        }
+    }
     unitsShort{
         acceleration{
             g-force{
@@ -995,6 +1126,9 @@ zu{
                 one{"{0}°"}
                 other{"{0}°"}
             }
+        }
+        compound{
+            per{"{0}/{1}"}
         }
         duration{
             day{

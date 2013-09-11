@@ -791,6 +791,42 @@ hr{
             persian{"Perzijski kalendar"}
             roc{"kalendar Republike Kine"}
         }
+        colAlternate{
+            non-ignorable{"Poredaj simbole"}
+            shifted{"Poredaj zanemarujući simbole"}
+        }
+        colBackwards{
+            no{"Poredaj naglaske normalno"}
+            yes{"Poredaj naglaske obrnuto"}
+        }
+        colCaseFirst{
+            lower{"Prvo poredaj mala slova"}
+            no{"Poredaj po normalnom poretku veličine slova"}
+            upper{"Poredaj prvo velika slova"}
+        }
+        colCaseLevel{
+            no{"Poredaj zanemarujući veličinu"}
+            yes{"Poredaj u skladu s veličinom slova"}
+        }
+        colHiraganaQuaternary{
+            no{"Poredaj pismo kana zasebno"}
+            yes{"Poredaj pismo kana drugačije"}
+        }
+        colNormalization{
+            no{"Poredaj bez normalizacije"}
+            yes{"Poredaj unikod normalizirano"}
+        }
+        colNumeric{
+            no{"Poredaj znamenke pojedinačno"}
+            yes{"Poredaj znamenke numerički"}
+        }
+        colStrength{
+            identical{"Poredaj sve"}
+            primary{"Poredaj samo po osnovnim slovima"}
+            quaternary{"Poredaj po naglascima/veličini/širini/pismu kana"}
+            secondary{"Poredaj po naglasku"}
+            tertiary{"Poredaj po naglascima/veličini/širini"}
+        }
         collation{
             big5han{"razvrstavanje prema tradicionalnom kineskom - Big5"}
             dictionary{"rječničko razvrstavanje"}

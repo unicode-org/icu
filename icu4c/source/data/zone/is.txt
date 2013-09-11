@@ -973,5 +973,7 @@ is{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}"}
+        regionFormatDaylight{"{0} (sumartími)"}
+        regionFormatStandard{"{0} (staðaltími)"}
     }
 }

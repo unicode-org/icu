@@ -302,5 +302,12 @@ hr{
         ZW{"Zimbabve"}
         ZZ{"nepoznato područje"}
     }
+    CountriesShort{
+        GB{"UK"}
+        HK{"Hong Kong"}
+        MO{"Makao"}
+        PS{"Palestina"}
+        US{"SAD"}
+    }
     Version{"2.0.92.87"}
 }

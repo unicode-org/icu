@@ -1899,5 +1899,7 @@ mr{
         gmtZeroFormat{"[GMT]"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0} वेळ"}
+        regionFormatDaylight{"{0} सूर्यप्रकाश वेळ"}
+        regionFormatStandard{"{0} प्रमाण वेळ"}
     }
 }

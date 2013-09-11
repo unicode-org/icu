@@ -302,5 +302,12 @@ sl{
         ZW{"Zimbabve"}
         ZZ{"Neznano ali neveljavno območje"}
     }
+    CountriesShort{
+        GB{"ZK"}
+        HK{"Hongkong"}
+        MO{"Macao"}
+        PS{"Palestina"}
+        US{"ZDA"}
+    }
     Version{"2.0.92.87"}
 }

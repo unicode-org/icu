@@ -8,6 +8,15 @@
 // ***************************************************************************
 en_GB{
     %%Parent{"en_001"}
+    Ellipsis{
+        final{"{0}…"}
+        initial{"…{0}"}
+        medial{"{0}… {1}"}
+        word-final{"{0} …"}
+        word-initial{"… {0}"}
+        word-medial{"{0} … {1}"}
+    }
+    MoreInformation{"?"}
     NumberElements{
         latn{
             miscPatterns{
@@ -771,6 +780,32 @@ en_GB{
             liter{
                 one{"{0} litre"}
                 other{"{0} litres"}
+            }
+        }
+    }
+    unitsNarrow{
+        acceleration{
+            g-force{
+                one{"{0}G"}
+                other{"{0}G"}
+            }
+        }
+        duration{
+            millisecond{
+                one{"{0} ms"}
+                other{"{0} ms"}
+            }
+        }
+        mass{
+            pound{
+                one{"{0}lb"}
+                other{"{0}lb"}
+            }
+        }
+        temperature{
+            celsius{
+                one{"{0}°"}
+                other{"{0}°"}
             }
         }
     }

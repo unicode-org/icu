@@ -1901,5 +1901,7 @@ zh{
         gmtZeroFormat{"GMT"}
         hourFormat{"+HH:mm;-HH:mm"}
         regionFormat{"{0}时间"}
+        regionFormatDaylight{"{0}夏令时间"}
+        regionFormatStandard{"{0}标准时间"}
     }
 }
