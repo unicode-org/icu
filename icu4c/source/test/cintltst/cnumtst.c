@@ -26,11 +26,13 @@
 #include "unicode/uloc.h"
 #include "unicode/umisc.h"
 #include "unicode/unum.h"
+#include "unicode/unumsys.h"
 #include "unicode/ustring.h"
 
 #include "cintltst.h"
 #include "cnumtst.h"
 #include "cmemory.h"
+#include "cstring.h"
 #include "putilimp.h"
 #include <stdio.h>
 
@@ -52,6 +54,7 @@ static void TestParseCurrency(void);
 static void TestMaxInt(void);
 static void TestNoExponent(void);
 static void TestUFormattable(void);
+static void TestUNumberingSystem(void);
 
 #define TESTCASE(x) addTest(root, &x, "tsformat/cnumtst/" #x)
 
@@ -75,6 +78,7 @@ void addNumForTest(TestNode** root)
     TESTCASE(TestMaxInt);
     TESTCASE(TestNoExponent);
     TESTCASE(TestUFormattable);
+    TESTCASE(TestUNumberingSystem);
 }
 
 /* test Parse int 64 */
@@ -2282,6 +2286,78 @@ static void TestUFormattable(void) {
     unum_close(unum);
     ufmt_close(ufmt); // was implicitly opened for us by the first unum_parseToUFormattable()
   }
+}
+
+typedef struct {
+    const char * locale;
+    const char * numsys;
+    int32_t      radix;
+    UBool        isAlgorithmic;
+} NumSysTestItem;
+
+static const NumSysTestItem numSysTestItems[] = {
+    //locale                         numsys    radix isAlgorithmic
+    { "en",                          "latn",    10,  FALSE },
+    { "en@numbers=roman",            "roman",   10,  TRUE  },
+    { "en@numbers=finance",          "latn",    10,  FALSE },
+    { "ar",                          "arab",    10,  FALSE },
+    { "fa",                          "arabext", 10,  FALSE },
+    { "zh_Hant@numbers=traditional", "hant",    10,  TRUE  },
+    { NULL,                          NULL,       0,  FALSE },
+};
+
+static void TestUNumberingSystem(void) {
+    const NumSysTestItem * itemPtr;
+    UNumberingSystem * unumsys;
+    UEnumeration * uenum;
+    const char * numsys;
+    UErrorCode status;
+    
+    for (itemPtr = numSysTestItems; itemPtr->locale != NULL; itemPtr++) {
+        status = U_ZERO_ERROR;
+        unumsys = unumsys_open(itemPtr->locale, &status);
+        if ( U_SUCCESS(status) ) {
+            int32_t radix = unumsys_getRadix(unumsys);
+            UBool isAlgorithmic = unumsys_isAlgorithmic(unumsys);
+            numsys = unumsys_getName(unumsys);
+            if ( uprv_strcmp(numsys, itemPtr->numsys) != 0 || radix != itemPtr->radix || !isAlgorithmic != !itemPtr->isAlgorithmic ) {
+                log_err("unumsys name/radix/isAlgorithmic for locale %s, expected %s/%d/%d, got %s/%d/%d\n", 
+                        itemPtr->locale, itemPtr->numsys, itemPtr->radix, itemPtr->isAlgorithmic, numsys, radix, isAlgorithmic);
+            }
+            unumsys_close(unumsys);
+        } else {
+            log_data_err("unumsys_open for locale %s fails with status %s\n", itemPtr->locale, myErrorName(status));
+        }
+    }
+    
+    status = U_ZERO_ERROR;
+    uenum = unumsys_openAvailableNames(&status);
+    if ( U_SUCCESS(status) ) {
+        int32_t numsysCount = 0;
+        // sanity check for a couple of number systems that must be in the enumeration
+        UBool foundLatn = FALSE;
+        UBool foundArab = FALSE;
+        while ( (numsys = uenum_next(uenum, NULL, &status)) != NULL && U_SUCCESS(status) ) {
+            status = U_ZERO_ERROR;
+            unumsys = unumsys_openByName(numsys, &status);
+            if ( U_SUCCESS(status) ) {
+                numsysCount++;
+                if ( uprv_strcmp(numsys, "latn") ) foundLatn = TRUE;
+                if ( uprv_strcmp(numsys, "arab") ) foundArab = TRUE;
+                unumsys_close(unumsys);
+            } else {
+                log_err("unumsys_openAvailableNames includes %s but unumsys_openByName on it fails with status %s\n",
+                        numsys, myErrorName(status));
+            }
+        }
+        uenum_close(uenum);
+        if ( numsysCount < 40 || !foundLatn || !foundArab ) {
+            log_err("unumsys_openAvailableNames results incomplete: numsysCount %d, foundLatn %d, foundArab %d\n",
+                    numsysCount, foundLatn, foundArab);
+        }
+    } else {
+        log_data_err("unumsys_openAvailableNames fails with status %s\n", myErrorName(status));
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
