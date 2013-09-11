@@ -339,8 +339,6 @@
  */
 #ifdef U_HAVE_STD_STRING
     /* Use the predefined value. */
-#elif U_PLATFORM == U_PF_ANDROID
-#   define U_HAVE_STD_STRING 0
 #else
 #   define U_HAVE_STD_STRING 1
 #endif
