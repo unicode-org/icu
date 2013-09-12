@@ -477,10 +477,10 @@ void UnicodeTest::TestScriptMetadata() {
             UChar32 firstChar = sample.char32At(0);
             UScriptCode charScript = getCharScript(sc);
             assertEquals("script(sample(script))",
-                         charScript, uscript_getScript(firstChar, errorCode));
-            assertEquals("RTL vs. set", rtl.contains(firstChar), uscript_isRightToLeft(sc));
-            assertEquals("cased vs. set", cased.contains(firstChar), uscript_isCased(sc));
-            assertEquals("encoded, has characters", sc == charScript, !scriptSet.isEmpty());
+                         (int32_t)charScript, (int32_t)uscript_getScript(firstChar, errorCode));
+            assertEquals("RTL vs. set", (UBool)rtl.contains(firstChar), (UBool)uscript_isRightToLeft(sc));
+            assertEquals("cased vs. set", (UBool)cased.contains(firstChar), (UBool)uscript_isCased(sc));
+            assertEquals("encoded, has characters", (UBool)(sc == charScript), (UBool)(!scriptSet.isEmpty()));
             if(uscript_isRightToLeft(sc)) {
                 rtl.removeAll(scriptSet);
             }

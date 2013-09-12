@@ -2768,11 +2768,8 @@ void CalendarTest::Test8449() {
    
 
     int32_t firstYear = 1318;
-    //*  use either 1 or 2 leading slashes to toggle
     int32_t lastYear = 1368;    // just enough to be pretty sure
-    /*/
-    int32_t lastYear = 1480;    // the whole shootin' match
-    //*/
+    //int32_t lastYear = 1480;    // the whole shootin' match
         
     tstCal->clear();
     tstCal->setLenient(FALSE);
@@ -2796,7 +2793,7 @@ void CalendarTest::Test8449() {
         month = tstCal->get(UCAL_MONTH,status);
         year = tstCal->get(UCAL_YEAR,status);
         TEST_CHECK_STATUS;
-        tstCal->roll(UCAL_DAY_OF_MONTH, TRUE, status);
+        tstCal->roll(UCAL_DAY_OF_MONTH, (UBool)TRUE, status);
         TEST_CHECK_STATUS;
     }
     

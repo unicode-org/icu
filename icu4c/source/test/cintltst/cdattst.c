@@ -886,17 +886,17 @@ static void TestDateFormatCalendar() {
 
 
 /**
- * Test parsing two digit year against "YY" vs. "YYYY" patterns 
+ * Test parsing two digit year against "YY" vs. "YYYY" patterns
  */
 static void TestCalendarDateParse() {
 
-	int32_t result;
-	UErrorCode ec = U_ZERO_ERROR;
+    int32_t result;
+    UErrorCode ec = U_ZERO_ERROR;
     UDateFormat* simpleDateFormat = 0;
-	int parsePos = 0;
-    int twoDigitCenturyStart = 75;
-    int currentTwoDigitYear = 0;
-    int startCentury = 0;
+    int32_t parsePos = 0;
+    int32_t twoDigitCenturyStart = 75;
+    int32_t currentTwoDigitYear = 0;
+    int32_t startCentury = 0;
     UCalendar* tempCal = 0;
     UCalendar* calendar = 0;
 
@@ -919,18 +919,18 @@ static void TestCalendarDateParse() {
     currentTwoDigitYear = getCurrentYear() % 100;
     startCentury = getCurrentYear() - currentTwoDigitYear;
     if (twoDigitCenturyStart > currentTwoDigitYear) {
-    	startCentury -= 100;
+      startCentury -= 100;
     }
-	tempCal = ucal_open(NULL, -1, NULL, UCAL_GREGORIAN, &ec);
-	ucal_setMillis(tempCal, 0, &ec);
-	ucal_setDateTime(tempCal, startCentury + twoDigitCenturyStart, UCAL_JANUARY, 1, 0, 0, 0, &ec);
-	udat_set2DigitYearStart(simpleDateFormat, ucal_getMillis(tempCal, &ec), &ec);
+    tempCal = ucal_open(NULL, -1, NULL, UCAL_GREGORIAN, &ec);
+    ucal_setMillis(tempCal, 0, &ec);
+    ucal_setDateTime(tempCal, startCentury + twoDigitCenturyStart, UCAL_JANUARY, 1, 0, 0, 0, &ec);
+    udat_set2DigitYearStart(simpleDateFormat, ucal_getMillis(tempCal, &ec), &ec);
 
-	calendar = ucal_open(NULL, -1, NULL, UCAL_GREGORIAN, &ec);
-	ucal_setMillis(calendar, 0, &ec);
-	ucal_setDateTime(calendar, twoDigitCenturyStart, UCAL_JANUARY, 1, 0, 0, 0, &ec);
+    calendar = ucal_open(NULL, -1, NULL, UCAL_GREGORIAN, &ec);
+    ucal_setMillis(calendar, 0, &ec);
+    ucal_setDateTime(calendar, twoDigitCenturyStart, UCAL_JANUARY, 1, 0, 0, 0, &ec);
 
-	udat_parseCalendar(simpleDateFormat, calendar, text, u_strlen(text), &parsePos, &ec);
+    udat_parseCalendar(simpleDateFormat, calendar, text, u_strlen(text), &parsePos, &ec);
 
     /* Check result */
     result = ucal_get(calendar, UCAL_YEAR, &ec);
@@ -946,7 +946,7 @@ static void TestCalendarDateParse() {
 
     parsePos = 0;
     udat_applyPattern(simpleDateFormat, 0, pattern2, u_strlen(pattern2));
-	udat_parseCalendar(simpleDateFormat, calendar, text, u_strlen(text), &parsePos, &ec);
+    udat_parseCalendar(simpleDateFormat, calendar, text, u_strlen(text), &parsePos, &ec);
 
     /* Check result */
     result = ucal_get(calendar, UCAL_YEAR, &ec);

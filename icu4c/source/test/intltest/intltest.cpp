@@ -1724,15 +1724,16 @@ UBool IntlTest::assertFalse(const char* message, UBool condition, UBool quiet) {
     return !condition;
 }
 
-UBool IntlTest::assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError) {
+UBool IntlTest::assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError, const char *file, int line) {
     if (U_FAILURE(ec)) {
         if (possibleDataError) {
-            dataerrln("FAIL: %s (%s)", message, u_errorName(ec));
+          dataerrln("FAIL: %s:%d: %s (%s)", file, line, message, u_errorName(ec));
         } else {
-            errcheckln(ec, "FAIL: %s (%s)", message, u_errorName(ec));
+          errcheckln(ec, "FAIL: %s:%d: %s (%s)", file, line, message, u_errorName(ec));
         }
-        
         return FALSE;
+    } else {
+      logln("OK: %s:%d: %s - (%s)", file, line, message, u_errorName(ec));
     }
     return TRUE;
 }
