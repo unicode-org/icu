@@ -747,7 +747,7 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
     ASSERT_EQUAL(30, fd.decimalDigits);
     ASSERT_EQUAL(3, fd.decimalDigitsWithoutTrailingZeros);
-    ASSERT_EQUAL(100000000000000000, fd.intValue);
+    ASSERT_EQUAL(100000000000000000LL, fd.intValue);
     ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
     ASSERT_EQUAL(FALSE, fd.isNegative);
 
