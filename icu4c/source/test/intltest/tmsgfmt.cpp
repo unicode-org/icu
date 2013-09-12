@@ -1905,7 +1905,7 @@ void TestMessageFormat::TestDecimals() {
     assertEquals("simple format(1)", "one meter",
             m.format(args, 1, result, ignore, errorCode));
 
-    args[0] = 1.5;
+    args[0] = (double)1.5;
     result.remove();
     assertEquals("simple format(1.5)", "1.5 meters",
             m.format(args, 1, result, ignore, errorCode));
@@ -1914,12 +1914,12 @@ void TestMessageFormat::TestDecimals() {
     MessageFormat m0(
             "{0,plural,one{one meter}other{{0} meters}}",
             Locale::getEnglish(), errorCode);
-    args[0] = 1;
+    args[0] = (int32_t)1;
     result.remove();
     assertEquals("explicit format(1)", "one meter",
             m0.format(args, 1, result, ignore, errorCode));
 
-    args[0] = 1.5;
+    args[0] = (double)1.5;
     result.remove();
     assertEquals("explicit format(1.5)", "1.5 meters",
             m0.format(args, 1, result, ignore, errorCode));
@@ -1928,17 +1928,17 @@ void TestMessageFormat::TestDecimals() {
     MessageFormat m1(
             "{0,plural,offset:1 one{another meter}other{{0,number,00.#} meters}}",
             Locale::getEnglish(), errorCode);
-    args[0] = 1;
+    args[0] = (int32_t)1;
     result.remove();
     assertEquals("offset format(1)", "01 meters",
             m1.format(args, 1, result, ignore, errorCode));
 
-    args[0] = 2;
+    args[0] = (int32_t)2;
     result.remove();
     assertEquals("offset format(1)", "another meter",
             m1.format(args, 1, result, ignore, errorCode));
 
-    args[0] = 2.5;
+    args[0] = (double)2.5;
     result.remove();
     assertEquals("offset format(1)", "02.5 meters",
             m1.format(args, 1, result, ignore, errorCode));
@@ -1947,17 +1947,17 @@ void TestMessageFormat::TestDecimals() {
     MessageFormat m2(
             "{0,plural,offset:1 one{another meter}other{{0,number,0.0} meters}}",
             Locale::getEnglish(), errorCode);
-    args[0] = 1;
+    args[0] = (int32_t)1;
     result.remove();
     assertEquals("offset-decimals format(1)", "1.0 meters",
             m2.format(args, 1, result, ignore, errorCode));
 
-    args[0] = 2;
+    args[0] = (int32_t)2;
     result.remove();
     assertEquals("offset-decimals format(1)", "2.0 meters",
             m2.format(args, 1, result, ignore, errorCode));
 
-    args[0] = 2.5;
+    args[0] = (double)2.5;
     result.remove();
     assertEquals("offset-decimals format(1)", "2.5 meters",
             m2.format(args, 1, result, ignore, errorCode));

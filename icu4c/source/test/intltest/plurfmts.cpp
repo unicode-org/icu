@@ -670,14 +670,14 @@ PluralFormatTest::TestDecimals() {
     IcuTestErrorCode errorCode(*this, "TestDecimals");
     // Simple number replacement.
     PluralFormat pf(Locale::getEnglish(), "one{one meter}other{# meters}", errorCode);
-    assertEquals("simple format(1)", "one meter", pf.format(1, errorCode));
+    assertEquals("simple format(1)", "one meter", pf.format((int32_t)1, errorCode));
     assertEquals("simple format(1.5)", "1.5 meters", pf.format(1.5, errorCode));
     PluralFormat pf2(Locale::getEnglish(),
             "offset:1 one{another meter}other{another # meters}", errorCode);
     DecimalFormat df("0.0", new DecimalFormatSymbols(Locale::getEnglish(), errorCode), errorCode);
     pf2.setNumberFormat(&df, errorCode);
-    assertEquals("offset-decimals format(1)", "another 0.0 meters", pf2.format(1, errorCode));
-    assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format(2, errorCode));
+    assertEquals("offset-decimals format(1)", "another 0.0 meters", pf2.format((int32_t)1, errorCode));
+    assertEquals("offset-decimals format(2)", "another 1.0 meters", pf2.format((int32_t)2, errorCode));
     assertEquals("offset-decimals format(2.5)", "another 1.5 meters", pf2.format(2.5, errorCode));
 }
 
