@@ -44,6 +44,7 @@
 #define CAP_F             ((UChar)0x0046)
 #define CAP_G             ((UChar)0x0047)
 #define CAP_H             ((UChar)0x0048)
+#define CAP_J             ((UChar)0x004A)
 #define CAP_K             ((UChar)0x004B)
 #define CAP_L             ((UChar)0x004C)
 #define CAP_M             ((UChar)0x004D)

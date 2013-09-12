@@ -772,25 +772,43 @@ DateTimePatternGenerator::getBestPattern(const UnicodeString& patternForm, UDate
     const UnicodeString *bestPattern=NULL;
     UnicodeString dtFormat;
     UnicodeString resultPattern;
+    int32_t flags = kDTPGNoFlags;
 
     int32_t dateMask=(1<<UDATPG_DAYPERIOD_FIELD) - 1;
     int32_t timeMask=(1<<UDATPG_FIELD_COUNT) - 1 - dateMask;
 
+    // Replace hour metacharacters 'j' and 'J', set flags as necessary
     UnicodeString patternFormCopy = UnicodeString(patternForm);
-    patternFormCopy.findAndReplace(UnicodeString(LOW_J), UnicodeString(fDefaultHourFormatChar));
+    int32_t patPos, patLen = patternFormCopy.length();
+    UBool inQuoted = FALSE;
+    for (patPos = 0; patPos < patLen; patPos++) {
+        UChar patChr = patternFormCopy.charAt(patPos);
+        if (patChr == SINGLE_QUOTE) {
+            inQuoted = !inQuoted;
+        } else if (!inQuoted) {
+            if (patChr == LOW_J) {
+                patternFormCopy.setCharAt(patPos, fDefaultHourFormatChar);
+            } else if (patChr == CAP_J) {
+                // Get pattern for skeleton with H, then replace H or k
+                // with fDefaultHourFormatChar (if different)
+                patternFormCopy.setCharAt(patPos, CAP_H);
+                flags |= kDTPGSkeletonUsesCapJ;
+            }
+        }
+    }
 
     resultPattern.remove();
     dtMatcher->set(patternFormCopy, fp);
     const PtnSkeleton* specifiedSkeleton=NULL;
     bestPattern=getBestRaw(*dtMatcher, -1, distanceInfo, &specifiedSkeleton);
     if ( distanceInfo->missingFieldMask==0 && distanceInfo->extraFieldMask==0 ) {
-        resultPattern = adjustFieldTypes(*bestPattern, specifiedSkeleton, FALSE, options);
+        resultPattern = adjustFieldTypes(*bestPattern, specifiedSkeleton, flags, options);
 
         return resultPattern;
     }
     int32_t neededFields = dtMatcher->getFieldMask();
-    UnicodeString datePattern=getBestAppending(neededFields & dateMask, options);
-    UnicodeString timePattern=getBestAppending(neededFields & timeMask, options);
+    UnicodeString datePattern=getBestAppending(neededFields & dateMask, flags, options);
+    UnicodeString timePattern=getBestAppending(neededFields & timeMask, flags, options);
     if (datePattern.length()==0) {
         if (timePattern.length()==0) {
             resultPattern.remove();
@@ -823,7 +841,7 @@ DateTimePatternGenerator::replaceFieldTypes(const UnicodeString& pattern,
                                             UDateTimePatternMatchOptions options,
                                             UErrorCode& /*status*/) {
     dtMatcher->set(skeleton, fp);
-    UnicodeString result = adjustFieldTypes(pattern, NULL, FALSE, options);
+    UnicodeString result = adjustFieldTypes(pattern, NULL, kDTPGNoFlags, options);
     return result;
 }
 
@@ -1030,7 +1048,7 @@ DateTimePatternGenerator::getBestRaw(DateTimeMatcher& source,
 UnicodeString
 DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                                            const PtnSkeleton* specifiedSkeleton,
-                                           UBool fixFractionalSeconds,
+                                           int32_t flags,
                                            UDateTimePatternMatchOptions options) {
     UnicodeString newPattern;
     fp->set(pattern);
@@ -1054,7 +1072,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
             }
             const dtTypeElem *row = &dtTypes[canonicalIndex];
             int32_t typeValue = row->field;
-            if (fixFractionalSeconds && typeValue == UDATPG_SECOND_FIELD) {
+            if ((flags & kDTPGFixFractionalSeconds) != 0 && typeValue == UDATPG_SECOND_FIELD) {
                 UnicodeString newField=dtMatcher->skeleton.original[UDATPG_FRACTIONAL_SECOND_FIELD];
                 field = field + decimal + newField;
             } else if (dtMatcher->skeleton.type[typeValue]!=0) {
@@ -1102,6 +1120,9 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
                     UChar c = (typeValue!= UDATPG_HOUR_FIELD && typeValue!= UDATPG_MONTH_FIELD &&
                                typeValue!= UDATPG_WEEKDAY_FIELD && (typeValue!= UDATPG_YEAR_FIELD || reqField.charAt(0)==CAP_Y))?
                         reqField.charAt(0): field.charAt(0);
+                    if (typeValue == UDATPG_HOUR_FIELD && (flags & kDTPGSkeletonUsesCapJ) != 0) {
+                        c = fDefaultHourFormatChar;
+                    }
                     field.remove();
                     for (int32_t i=adjFieldLen; i>0; --i) {
                         field+=c;
@@ -1114,7 +1135,7 @@ DateTimePatternGenerator::adjustFieldTypes(const UnicodeString& pattern,
 }
 
 UnicodeString
-DateTimePatternGenerator::getBestAppending(int32_t missingFields, UDateTimePatternMatchOptions options) {
+DateTimePatternGenerator::getBestAppending(int32_t missingFields, int32_t flags, UDateTimePatternMatchOptions options) {
     UnicodeString  resultPattern, tempPattern;
     UErrorCode err=U_ZERO_ERROR;
     int32_t lastMissingFieldMask=0;
@@ -1122,7 +1143,7 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields, UDateTimePatte
         resultPattern=UnicodeString();
         const PtnSkeleton* specifiedSkeleton=NULL;
         tempPattern = *getBestRaw(*dtMatcher, missingFields, distanceInfo, &specifiedSkeleton);
-        resultPattern = adjustFieldTypes(tempPattern, specifiedSkeleton, FALSE, options);
+        resultPattern = adjustFieldTypes(tempPattern, specifiedSkeleton, flags, options);
         if ( distanceInfo->missingFieldMask==0 ) {
             return resultPattern;
         }
@@ -1132,13 +1153,13 @@ DateTimePatternGenerator::getBestAppending(int32_t missingFields, UDateTimePatte
             }
             if (((distanceInfo->missingFieldMask & UDATPG_SECOND_AND_FRACTIONAL_MASK)==UDATPG_FRACTIONAL_MASK) &&
                 ((missingFields & UDATPG_SECOND_AND_FRACTIONAL_MASK) == UDATPG_SECOND_AND_FRACTIONAL_MASK)) {
-                resultPattern = adjustFieldTypes(resultPattern, specifiedSkeleton, TRUE, options);
+                resultPattern = adjustFieldTypes(resultPattern, specifiedSkeleton, flags | kDTPGFixFractionalSeconds, options);
                 distanceInfo->missingFieldMask &= ~UDATPG_FRACTIONAL_MASK;
                 continue;
             }
             int32_t startingMask = distanceInfo->missingFieldMask;
             tempPattern = *getBestRaw(*dtMatcher, distanceInfo->missingFieldMask, distanceInfo, &specifiedSkeleton);
-            tempPattern = adjustFieldTypes(tempPattern, specifiedSkeleton, FALSE, options);
+            tempPattern = adjustFieldTypes(tempPattern, specifiedSkeleton, flags, options);
             int32_t foundMask=startingMask& ~distanceInfo->missingFieldMask;
             int32_t topField=getTopBitNumber(foundMask);
             UnicodeString appendName;
