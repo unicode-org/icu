@@ -1120,11 +1120,11 @@ DecimalFormat::getFixedDecimal(DigitList &number, UErrorCode &status) const {
         // More than 18 digits integer digits, but the least significant 18 are all zero.
         // We don't want to return zero as the int part, but want to keep zeros
         //   for several of the least significant digits.
-        result.intValue = 100000000000000000;
+        result.intValue = 100000000000000000LL;
     }
     
     // Fraction digits.
-    result.visibleDecimalDigitCount = result.decimalDigits = result.decimalDigitsWithoutTrailingZeros = 0;
+    result.decimalDigits = result.decimalDigitsWithoutTrailingZeros = result.visibleDecimalDigitCount = 0;
     for (di = number.getDecimalAt(); di < number.getCount(); di++) {
         result.visibleDecimalDigitCount++;
         if (result.decimalDigits <  100000000000000000LL) {
