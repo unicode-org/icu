@@ -198,6 +198,7 @@ class U_I18N_API FixedDecimal: public UMemory {
     void init(double n);
     UBool quickInit(double n);  // Try a fast-path only initialization,
                                 //    return TRUE if successful.
+    void adjustForMinFractionDigits(int32_t min);
     static int64_t getFractionalDigits(double n, int32_t v);
     static int32_t decimals(double n);
 

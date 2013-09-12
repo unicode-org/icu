@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and
-* others. All Rights Reserved.
+* Copyright (C) 1997-2013, International Business Machines Corporation and    *
+* others. All Rights Reserved.                                                *
 *******************************************************************************
 *
 * File DECIMFMT.CPP
@@ -1035,41 +1035,19 @@ DecimalFormat::getFixedDecimal(double number, UErrorCode &status) const {
         return result;
     }
 
-    result.source = number;
-    int32_t minFractionDigits = getMinimumFractionDigits();
-
     if (fMultiplier == NULL && fScale == 0 && fRoundingIncrement == 0 && areSignificantDigitsUsed() == FALSE &&
             result.quickInit(number) && result.visibleDecimalDigitCount <= getMaximumFractionDigits()) {
         // Fast Path. Construction of an exact FixedDecimal directly from the double, without passing
         //   through a DigitList, was successful, and the formatter is doing nothing tricky with rounding.
         // printf("getFixedDecimal(%g): taking fast path.\n", number);
+        result.adjustForMinFractionDigits(getMinimumFractionDigits());
     } else {
         // Slow path. Create a DigitList, and have this formatter round it according to the
         //     requirements of the format, and fill the fixedDecimal from that.
         DigitList digits;
         digits.set(number);
-        UBool isNegative;
-        _round(digits, digits, isNegative, status);
-        double roundedNum = digits.getDouble();
-        result.init(roundedNum);
-
-        if (areSignificantDigitsUsed()) {
-            minFractionDigits = getMinimumSignificantDigits() - digits.getDecimalAt();
-            if (minFractionDigits < 0) {
-                minFractionDigits = 0;
-            }
-        }
+        result = getFixedDecimal(digits, status);
     }
-
-    // Adjust result for trailing zeros to the right of the decimal. Needed for both fast & slow paths.
-
-    int32_t numTrailingFractionZeros = minFractionDigits - result.visibleDecimalDigitCount;
-    if (numTrailingFractionZeros > 0) {
-      double scaleFactor = pow(10.0, (double)numTrailingFractionZeros);
-        result.decimalDigits *= scaleFactor;
-        result.visibleDecimalDigitCount += numTrailingFractionZeros;
-    }
-
     return result;
 }
 
@@ -1083,22 +1061,38 @@ DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) co
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return FixedDecimal();
     }
-    
-    DigitList *digits = number.getDigitList();
-    if (digits == NULL || digits->getCount() <= 15) {
+
+    DigitList *dl = number.getDigitList();
+    if (dl != NULL) {
+        DigitList clonedDL(*dl);
+        return getFixedDecimal(clonedDL, status);
+    }
+
+    Formattable::Type type = number.getType();
+    if (type == Formattable::kDouble || type == Formattable::kLong || 
+            (type == Formattable::kInt64 && number.getInt64() == (int64_t)number.getDouble(status))) {
         return getFixedDecimal(number.getDouble(status), status);
     }
 
-    // We have an incoming DigitList in the formattable, and it holds more digits than
-    // a double can safely represent. 
-    // Compute the fields of the fixed decimal directly from the digit list.
-       
-    FixedDecimal result;
-    result.source = digits->getDouble();
+    // The only case left is type==int64_t, with a value with more digits than a double can represent.
+    // Any formattable originating as a big decimal will have had a pre-existing digit list.
+    // Any originating as a double or int32 will have been handled as a double.
 
+    U_ASSERT(type == Formattable::kInt64);
+    DigitList digits;
+    digits.set(number.getInt64());
+    return getFixedDecimal(digits, status);
+}
+
+
+// Create a fixed decimal from a DigitList.
+//    The digit list may be modified.
+//    Internal function only.
+FixedDecimal
+DecimalFormat::getFixedDecimal(DigitList &number, UErrorCode &status) const {
     // Round the number according to the requirements of this Format.
-    DigitList roundedNum;
-    _round(*digits, roundedNum, result.isNegative, status);
+    FixedDecimal result;
+    _round(number, number, result.isNegative, status);
 
     // The int64_t fields in FixedDecimal can easily overflow.
     // In deciding what to discard in this event, consider that fixedDecimal
@@ -1113,22 +1107,29 @@ DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) co
     // though they could hold most (but not all) 19 digit values.
 
     // Integer Digits.
-    int32_t di = roundedNum.getDecimalAt()-18;  // Take at most 18 digits.
+    int32_t di = number.getDecimalAt()-18;  // Take at most 18 digits.
     if (di < 0) {
         di = 0;
     }
     result.intValue = 0;
-    for (; di<roundedNum.getDecimalAt(); di++) {
-        result.intValue = result.intValue * 10 + (roundedNum.getDigit(di) & 0x0f);
+    for (; di<number.getDecimalAt(); di++) {
+        result.intValue = result.intValue * 10 + (number.getDigit(di) & 0x0f);
+    }
+    if (result.intValue == 0 && number.getDecimalAt()-18 > 0) {
+        // The number is something like 100000000000000000000000.
+        // More than 18 digits integer digits, but the least significant 18 are all zero.
+        // We don't want to return zero as the int part, but want to keep zeros
+        //   for several of the least significant digits.
+        result.intValue = 100000000000000000;
     }
     
     // Fraction digits.
     result.visibleDecimalDigitCount = result.decimalDigits = result.decimalDigitsWithoutTrailingZeros = 0;
-    for (di = roundedNum.getDecimalAt(); di < roundedNum.getCount(); di++) {
+    for (di = number.getDecimalAt(); di < number.getCount(); di++) {
         result.visibleDecimalDigitCount++;
         if (result.decimalDigits <  100000000000000000LL) {
                    //              9223372036854775807    Largest 64 bit signed integer
-            int32_t digitVal = roundedNum.getDigit(di) & 0x0f;  // getDigit() returns a char, '0'-'9'.
+            int32_t digitVal = number.getDigit(di) & 0x0f;  // getDigit() returns a char, '0'-'9'.
             result.decimalDigits = result.decimalDigits * 10 + digitVal;
             if (digitVal > 0) {
                 result.decimalDigitsWithoutTrailingZeros = result.decimalDigits;
@@ -1137,6 +1138,21 @@ DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) co
     }
 
     result.hasIntegerValue = (result.decimalDigits == 0);
+
+    // Trailing fraction zeros. The format specification may require more trailing
+    //    zeros than the numeric value. Add any such on now.
+
+    int32_t minFractionDigits;
+    if (areSignificantDigitsUsed()) {
+        minFractionDigits = getMinimumSignificantDigits() - number.getDecimalAt();
+        if (minFractionDigits < 0) {
+            minFractionDigits = 0;
+        }
+    } else {
+        minFractionDigits = getMinimumFractionDigits();
+    }
+    result.adjustForMinFractionDigits(minFractionDigits);
+
     return result;
 }
 
@@ -1535,7 +1551,7 @@ DecimalFormat::_round(const DigitList &number, DigitList &adjustedNum, UBool& is
 
     if (fScale != 0) {
         DigitList ten;
-        ten.set((int32_t)10);
+        ten.set(10);
         if (fScale > 0) {
             for (int32_t i = fScale ; i > 0 ; i--) {
                 adjustedNum.mult(ten, status);
@@ -2180,7 +2196,7 @@ void DecimalFormat::parse(const UnicodeString& text,
 
         if (fScale != 0) {
             DigitList ten;
-            ten.set((int32_t)10);
+            ten.set(10);
             if (fScale > 0) {
                 for (int32_t i = fScale; i > 0; i--) {
                     UErrorCode ec = U_ZERO_ERROR;

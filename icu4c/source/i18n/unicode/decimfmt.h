@@ -1869,6 +1869,14 @@ public:
      */
      FixedDecimal getFixedDecimal(const Formattable &number, UErrorCode &status) const;
 
+    /**
+     *  Get a FixedDecimal corresponding to a DigitList as it would be
+     *  formatted by this DecimalFormat. Note: the DigitList may be modified.
+     *  Internal, not intended for public use.
+     *  @internal
+     */
+     FixedDecimal getFixedDecimal(DigitList &number, UErrorCode &status) const;
+
 public:
 
     /**

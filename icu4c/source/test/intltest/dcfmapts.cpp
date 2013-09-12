@@ -725,7 +725,7 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_SUCCESS(status);
     fd = df->getFixedDecimal(fable, status);
     ASSERT_SUCCESS(status);
-    ASSERT_EQUAL(0, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
     ASSERT_EQUAL(0, fd.decimalDigits);
     ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
     ASSERT_EQUAL(1, fd.intValue);
@@ -743,6 +743,54 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_EQUAL(1, fd.intValue);
     ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
     ASSERT_EQUAL(TRUE, fd.isNegative);
+
+    // MinFractionDigits from format larger than from number.
+    fable.setDecimalNumber("1000000000000000000000.3", status);
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(fable, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(30, fd.decimalDigits);
+    ASSERT_EQUAL(3, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(100000000000000000, fd.intValue);
+    ASSERT_EQUAL(FALSE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    // Test some int64_t values that are out of the range of a double
+    fable.setInt64(4503599627370496LL);
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(fable, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(0, fd.decimalDigits);
+    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(4503599627370496LL, fd.intValue);
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    fable.setInt64(4503599627370497LL);
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(fable, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(0, fd.decimalDigits);
+    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
+    ASSERT_EQUAL(4503599627370497LL, fd.intValue);
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
+
+    fable.setInt64(9223372036854775807LL);
+    ASSERT_SUCCESS(status);
+    fd = df->getFixedDecimal(fable, status);
+    ASSERT_SUCCESS(status);
+    ASSERT_EQUAL(2, fd.visibleDecimalDigitCount);
+    ASSERT_EQUAL(0, fd.decimalDigits);
+    ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
+    // note: going through DigitList path to FixedDecimal, which is trimming
+    //       int64_t fields to 18 digits. See ticket Ticket #10374
+    ASSERT_EQUAL(223372036854775807LL, fd.intValue);
+    ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
+    ASSERT_EQUAL(FALSE, fd.isNegative);
 
 }
     
