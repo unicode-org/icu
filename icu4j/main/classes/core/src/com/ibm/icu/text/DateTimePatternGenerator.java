@@ -381,24 +381,39 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * getBestPattern which takes optional skip matcher
      */
     private String getBestPattern(String skeleton, DateTimeMatcher skipMatcher, int options) {
-        //if (!isComplete) complete();
-        // if skeleton contains meta hour field 'j', then
-        // replace it with the default hour format char
-        skeleton = skeleton.replaceAll("j", String.valueOf(defaultHourFormatChar));
+        int flags = DTPG_FLAGS_NONE;
+        // Replace hour metacharacters 'j' and 'J', set flags as necessary
+        StringBuilder skeletonCopy = new StringBuilder(skeleton);
+        boolean inQuoted = false;
+        for (int patPos = 0; patPos < skeletonCopy.length(); patPos++) {
+            char patChr = skeletonCopy.charAt(patPos);
+            if (patChr == '\'') {
+                inQuoted = !inQuoted;
+            } else if (!inQuoted) {
+                if (patChr == 'j') {
+                    skeletonCopy.setCharAt(patPos, defaultHourFormatChar);
+                } else if (patChr == 'J') {
+                	// Get pattern for skeleton with H, then (in adjustFieldTypes)
+                	// replace H or k with defaultHourFormatChar
+                	skeletonCopy.setCharAt(patPos, 'H');
+                	flags |= DTPG_FLAGS_SKELETON_USES_CAP_J;
+                }
+            }
+        }
 
         String datePattern, timePattern;
         synchronized(this) {
-            current.set(skeleton, fp, false);
+            current.set(skeletonCopy.toString(), fp, false);
             PatternWithMatcher bestWithMatcher = getBestRaw(current, -1, _distanceInfo, skipMatcher);
             if (_distanceInfo.missingFieldMask == 0 && _distanceInfo.extraFieldMask == 0) {
                 // we have a good item. Adjust the field types
-                return adjustFieldTypes(bestWithMatcher, current, false, options);
+                return adjustFieldTypes(bestWithMatcher, current, flags, options);
             }
             int neededFields = current.getFieldMask();
 
             // otherwise break up by date and time.
-            datePattern = getBestAppending(current, neededFields & DATE_MASK, _distanceInfo, skipMatcher, options);
-            timePattern = getBestAppending(current, neededFields & TIME_MASK, _distanceInfo, skipMatcher, options);
+            datePattern = getBestAppending(current, neededFields & DATE_MASK, _distanceInfo, skipMatcher, flags, options);
+            timePattern = getBestAppending(current, neededFields & TIME_MASK, _distanceInfo, skipMatcher, flags, options);
         }
 
         if (datePattern == null) return timePattern == null ? "" : timePattern;
@@ -665,7 +680,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     public String replaceFieldTypes(String pattern, String skeleton, int options) {
         synchronized (this) { // synchronized since a getter must be thread-safe
             PatternWithMatcher patternNoMatcher = new PatternWithMatcher(pattern, null);
-            return adjustFieldTypes(patternNoMatcher, current.set(skeleton, fp, false), false, options);
+            return adjustFieldTypes(patternNoMatcher, current.set(skeleton, fp, false), DTPG_FLAGS_NONE, options);
         }
     }
 
@@ -1568,11 +1583,11 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * We only get called here if we failed to find an exact skeleton. We have broken it into date + time, and look for the pieces.
      * If we fail to find a complete skeleton, we compose in a loop until we have all the fields.
      */
-    private String getBestAppending(DateTimeMatcher source, int missingFields, DistanceInfo distInfo, DateTimeMatcher skipMatcher, int options) {
+    private String getBestAppending(DateTimeMatcher source, int missingFields, DistanceInfo distInfo, DateTimeMatcher skipMatcher, int flags, int options) {
         String resultPattern = null;
         if (missingFields != 0) {
             PatternWithMatcher resultPatternWithMatcher = getBestRaw(source, missingFields, distInfo, skipMatcher);
-            resultPattern = adjustFieldTypes(resultPatternWithMatcher, source, false, options);
+            resultPattern = adjustFieldTypes(resultPatternWithMatcher, source, flags, options);
 
             while (distInfo.missingFieldMask != 0) { // precondition: EVERY single field must work!
 
@@ -1581,14 +1596,14 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 if ((distInfo.missingFieldMask & SECOND_AND_FRACTIONAL_MASK) == FRACTIONAL_MASK
                         && (missingFields & SECOND_AND_FRACTIONAL_MASK) == SECOND_AND_FRACTIONAL_MASK) {
                     resultPatternWithMatcher.pattern = resultPattern;
-                    resultPattern = adjustFieldTypes(resultPatternWithMatcher, source, true, options);
+                    resultPattern = adjustFieldTypes(resultPatternWithMatcher, source, flags | DTPG_FLAGS_FIX_FRACTIONAL_SECONDS, options);
                     distInfo.missingFieldMask &= ~FRACTIONAL_MASK; // remove bit
                     continue;
                 }
 
                 int startingMask = distInfo.missingFieldMask;
                 PatternWithMatcher tempWithMatcher = getBestRaw(source, distInfo.missingFieldMask, distInfo, skipMatcher);
-                String temp = adjustFieldTypes(tempWithMatcher, source, false, options);
+                String temp = adjustFieldTypes(tempWithMatcher, source, flags, options);
                 int foundMask = startingMask & ~distInfo.missingFieldMask;
                 int topField = getTopBitNumber(foundMask);
                 resultPattern = MessageFormat.format(getAppendFormat(topField), new Object[]{resultPattern, temp, getAppendName(topField)});
@@ -1681,7 +1696,12 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * @param fixFractionalSeconds TODO
      * 
      */
-    private String adjustFieldTypes(PatternWithMatcher patternWithMatcher, DateTimeMatcher inputRequest, boolean fixFractionalSeconds, int options) {
+    // flags values
+    private static final int DTPG_FLAGS_NONE = 0;
+    private static final int DTPG_FLAGS_FIX_FRACTIONAL_SECONDS = 1;
+    private static final int DTPG_FLAGS_SKELETON_USES_CAP_J = 2;
+
+    private String adjustFieldTypes(PatternWithMatcher patternWithMatcher, DateTimeMatcher inputRequest, int flags, int options) {
         fp.set(patternWithMatcher.pattern);
         StringBuilder newPattern = new StringBuilder();
         for (Object item : fp.getItems()) {
@@ -1697,7 +1717,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 //                int type = types[canonicalIndex][1];
                 int type = variableField.getType();
 
-                if (fixFractionalSeconds && type == SECOND) {
+                if ((flags & DTPG_FLAGS_FIX_FRACTIONAL_SECONDS) != 0 && type == SECOND) {
                     String newField = inputRequest.original[FRACTIONAL_SECOND];
                     fieldBuilder.append(decimal);
                     fieldBuilder.append(newField);
@@ -1749,6 +1769,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     }
                     char c = (type != HOUR && type != MONTH && type != WEEKDAY && (type != YEAR || reqField.charAt(0)=='Y'))?
                                 reqField.charAt(0): fieldBuilder.charAt(0);
+                    if (type == HOUR && (flags & DTPG_FLAGS_SKELETON_USES_CAP_J) != 0) {
+                        c = defaultHourFormatChar;
+                    }
                     fieldBuilder = new StringBuilder();
                     for (int i = adjFieldLen; i > 0; --i) fieldBuilder.append(c);
                 }
