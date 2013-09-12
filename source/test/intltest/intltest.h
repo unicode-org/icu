@@ -125,6 +125,9 @@ UnicodeString toString(UBool b);
 #define TEST_ASSERT_TRUE(x) \
   assertTrue(#x, (x), FALSE, FALSE, __FILE__, __LINE__)
 
+#define TEST_ASSERT_STATUS(x) \
+  assertSuccess(#x, (x), FALSE, __FILE__, __LINE__)
+
 class IntlTest : public TestLog {
 public:
 
@@ -249,7 +252,7 @@ protected:
      * @param possibleDataError - if TRUE, use dataerrln instead of errcheckln on failure
      * @return TRUE on success, FALSE on failure.
      */
-    UBool assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError=FALSE);
+    UBool assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError=FALSE, const char *file=NULL, int line=0);
     UBool assertEquals(const char* message, const UnicodeString& expected,
                        const UnicodeString& actual, UBool possibleDataError=FALSE);
     UBool assertEquals(const char* message, const char* expected,
