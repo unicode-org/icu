@@ -1485,6 +1485,22 @@ int64_t FixedDecimal::getFractionalDigits(double n, int32_t v) {
 }
 
 
+void FixedDecimal::adjustForMinFractionDigits(int32_t minFractionDigits) {
+    int32_t numTrailingFractionZeros = minFractionDigits - visibleDecimalDigitCount;
+    if (numTrailingFractionZeros > 0) {
+        for (int32_t i=0; i<numTrailingFractionZeros; i++) {
+            // Do not let the decimalDigits value overflow if there are many trailing zeros.
+            // Limit the value to 18 digits, the most that a 64 bit int can fully represent.
+            if (decimalDigits >= 100000000000000000LL) {
+                break;
+            }
+            decimalDigits *= 10;
+        }
+        visibleDecimalDigitCount += numTrailingFractionZeros;
+    }
+}
+        
+
 double FixedDecimal::get(tokenType operand) const {
     switch(operand) {
         case tVariableN: return source;
