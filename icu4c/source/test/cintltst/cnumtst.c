@@ -2289,22 +2289,35 @@ static void TestUFormattable(void) {
 }
 
 typedef struct {
-    const char * locale;
-    const char * numsys;
+    const char*  locale;
+    const char*  numsys;
     int32_t      radix;
     UBool        isAlgorithmic;
+    const UChar* description;
 } NumSysTestItem;
 
+
+static const UChar latnDesc[]    = {0x0030,0x0031,0x0032,0x0033,0x0034,0x0035,0x0036,0x0037,0x0038,0x0039,0}; // 0123456789
+static const UChar romanDesc[]   = {0x25,0x72,0x6F,0x6D,0x61,0x6E,0x2D,0x75,0x70,0x70,0x65,0x72,0}; // %roman-upper
+static const UChar arabDesc[]    = {0x0660,0x0661,0x0662,0x0663,0x0664,0x0665,0x0666,0x0667,0x0668,0x0669,0}; //
+static const UChar arabextDesc[] = {0x06F0,0x06F1,0x06F2,0x06F3,0x06F4,0x06F5,0x06F6,0x06F7,0x06F8,0x06F9,0}; //
+static const UChar hanidecDesc[] = {0x3007,0x4E00,0x4E8C,0x4E09,0x56DB,0x4E94,0x516D,0x4E03,0x516B,0x4E5D,0}; //
+static const UChar hantDesc[]    = {0x7A,0x68,0x5F,0x48,0x61,0x6E,0x74,0x2F,0x53,0x70,0x65,0x6C,0x6C,0x6F,0x75,0x74,
+                                    0x52,0x75,0x6C,0x65,0x73,0x2F,0x25,0x73,0x70,0x65,0x6C,0x6C,0x6F,0x75,0x74,0x2D,
+                                    0x63,0x61,0x72,0x64,0x69,0x6E,0x61,0x6C,0}; // zh_Hant/SpelloutRules/%spellout-cardinal
+
 static const NumSysTestItem numSysTestItems[] = {
-    //locale                         numsys    radix isAlgorithmic
-    { "en",                          "latn",    10,  FALSE },
-    { "en@numbers=roman",            "roman",   10,  TRUE  },
-    { "en@numbers=finance",          "latn",    10,  FALSE },
-    { "ar",                          "arab",    10,  FALSE },
-    { "fa",                          "arabext", 10,  FALSE },
-    { "zh_Hant@numbers=traditional", "hant",    10,  TRUE  },
-    { NULL,                          NULL,       0,  FALSE },
+    //locale                         numsys    radix isAlgo  description
+    { "en",                          "latn",    10,  FALSE,  latnDesc },
+    { "en@numbers=roman",            "roman",   10,  TRUE,   romanDesc },
+    { "en@numbers=finance",          "latn",    10,  FALSE,  latnDesc },
+    { "ar",                          "arab",    10,  FALSE,  arabDesc },
+    { "fa",                          "arabext", 10,  FALSE,  arabextDesc },
+    { "zh_Hans@numbers=hanidec",     "hanidec", 10,  FALSE,  hanidecDesc },
+    { "zh_Hant@numbers=traditional", "hant",    10,  TRUE,   hantDesc },
+    { NULL,                          NULL,       0,  FALSE,  NULL },
 };
+enum { kNumSysDescripBufMax = 64 };
 
 static void TestUNumberingSystem(void) {
     const NumSysTestItem * itemPtr;
@@ -2317,12 +2330,17 @@ static void TestUNumberingSystem(void) {
         status = U_ZERO_ERROR;
         unumsys = unumsys_open(itemPtr->locale, &status);
         if ( U_SUCCESS(status) ) {
-            int32_t radix = unumsys_getRadix(unumsys);
+            UChar ubuf[kNumSysDescripBufMax];
+            int32_t ulen, radix = unumsys_getRadix(unumsys);
             UBool isAlgorithmic = unumsys_isAlgorithmic(unumsys);
             numsys = unumsys_getName(unumsys);
             if ( uprv_strcmp(numsys, itemPtr->numsys) != 0 || radix != itemPtr->radix || !isAlgorithmic != !itemPtr->isAlgorithmic ) {
                 log_err("unumsys name/radix/isAlgorithmic for locale %s, expected %s/%d/%d, got %s/%d/%d\n", 
                         itemPtr->locale, itemPtr->numsys, itemPtr->radix, itemPtr->isAlgorithmic, numsys, radix, isAlgorithmic);
+            }
+            ulen = unumsys_getDescription(unumsys, ubuf, kNumSysDescripBufMax, &status);
+            if ( U_FAILURE(status) || u_strcmp(ubuf, itemPtr->description) != 0 ) {
+                log_err("unumsys description for locale %s, description unexpected and/or status %\n", myErrorName(status));
             }
             unumsys_close(unumsys);
         } else {
