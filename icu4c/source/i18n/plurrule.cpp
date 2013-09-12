@@ -1388,11 +1388,15 @@ void FixedDecimal::init(double n, int32_t v, int64_t f) {
     if (isNanOrInfinity) {
         v = 0;
         f = 0;
+        intValue = 0;
+        hasIntegerValue = FALSE;
+    } else {
+        intValue = (int64_t)source;
+        hasIntegerValue = (source == intValue);
     }
+
     visibleDecimalDigitCount = v;
     decimalDigits = f;
-    intValue = (int64_t)source;
-    hasIntegerValue = (source == intValue);
     if (f == 0) {
          decimalDigitsWithoutTrailingZeros = 0;
     } else {
