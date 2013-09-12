@@ -783,7 +783,10 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     ASSERT_EQUAL(0, fd.decimalDigitsWithoutTrailingZeros);
     // note: going through DigitList path to FixedDecimal, which is trimming
     //       int64_t fields to 18 digits. See ticket Ticket #10374
-    ASSERT_EQUAL(223372036854775807LL, fd.intValue);
+    // ASSERT_EQUAL(223372036854775807LL, fd.intValue);
+    if (!(fd.intValue == 223372036854775807LL || fd.intValue == 9223372036854775807LL)) {
+        errln("File %s, Line %d, fd.intValue = %lld", __FILE__, __LINE__, fd.intValue);
+    }
     ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
     ASSERT_EQUAL(FALSE, fd.isNegative);
 
