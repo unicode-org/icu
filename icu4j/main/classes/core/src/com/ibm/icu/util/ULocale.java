@@ -107,7 +107,7 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
  * @author Ram Viswanadha
  * @stable ICU 2.8
  */
-public final class ULocale implements Serializable, Comparable<ULocale> {
+public final class ULocale implements Serializable {
     // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = 3715177670352309217L;
 
@@ -4155,13 +4155,5 @@ public final class ULocale implements Serializable, Comparable<ULocale> {
             }
             return val;
         }
-    }
-
-    /*
-     * @internal
-     * @deprecated
-     */
-    public int compareTo(ULocale other) {
-        return toLanguageTag().compareTo(other.toLanguageTag());
     }
 }

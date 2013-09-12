@@ -165,7 +165,7 @@ import com.ibm.icu.util.ULocale;
  * 
  * @stable ICU 3.8
  */
-public class PluralRules implements Serializable, Comparable<PluralRules> {
+public class PluralRules implements Serializable {
 
     static final UnicodeSet ALLOWED_ID = new UnicodeSet("[a-z]").freeze();
 
