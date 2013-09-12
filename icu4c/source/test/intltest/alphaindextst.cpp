@@ -7,6 +7,8 @@
 //   file:  alphaindex.cpp
 //          Alphabetic Index Tests.
 //
+//   Note: please... no character literals cast to UChars.. use (UChar)0xZZZZ
+
 #include <stdio.h>  // for sprintf
 
 #include "intltest.h"
@@ -579,18 +581,18 @@ void AlphabeticIndexTest::TestPinyinFirst() {
     }
     int32_t reorderCodes[] = { USCRIPT_HAN };
     coll->setReorderCodes(reorderCodes, LENGTHOF(reorderCodes), status);
-    TEST_CHECK_STATUS; 
+    TEST_CHECK_STATUS;
     AlphabeticIndex index(coll.orphan(), status);
-    TEST_CHECK_STATUS; 
+    TEST_CHECK_STATUS;
     assertEquals("getBucketCount()", 1, index.getBucketCount(status));   // ... (underflow only)
     index.addLabels(Locale::getChinese(), status);
     assertEquals("getBucketCount()", 28, index.getBucketCount(status));  // ... A-Z ...
-    int bucketIndex = index.getBucketIndex(UnicodeString((UChar)0x897f), status);
-    assertEquals("getBucketIndex(U+897F)", 'X' - 'A' + 1, bucketIndex);
+    int32_t bucketIndex = index.getBucketIndex(UnicodeString((UChar)0x897f), status);
+    assertEquals("getBucketIndex(U+897F)", (int32_t)((UChar)0x0058/*X*/ - (UChar)0x0041/*A*/ + 1), (int32_t)bucketIndex);
     bucketIndex = index.getBucketIndex("i", status);
     assertEquals("getBucketIndex(i)", 9, bucketIndex);
     bucketIndex = index.getBucketIndex(UnicodeString((UChar)0x03B1), status);
-    assertEquals("getBucketIndex(Greek alpha)", 27, bucketIndex);
+    assertEquals("getBucketIndex(Greek alpha)", (int32_t)27, bucketIndex);
     // TODO: Test with an unassigned code point (not just U+FFFF)
     // when unassigned code points are not in the Hani reordering group any more.
     // String unassigned = UTF16.valueOf(0x50005);
@@ -645,16 +647,16 @@ void AlphabeticIndexTest::TestNoLabels() {
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<RuleBasedCollator> coll(
         static_cast<RuleBasedCollator *>(Collator::createInstance(Locale::getRoot(), status)));
-    TEST_CHECK_STATUS; 
+    TEST_CHECK_STATUS;
     AlphabeticIndex index(coll.orphan(), status);
-    TEST_CHECK_STATUS; 
+    TEST_CHECK_STATUS;
     index.addRecord(UnicodeString((UChar)0x897f), NULL, status);
     index.addRecord("i", NULL, status);
     index.addRecord(UnicodeString((UChar)0x03B1), NULL, status);
     assertEquals("getBucketCount()", 1, index.getBucketCount(status));  // ...
     TEST_ASSERT(index.nextBucket(status));
-    assertEquals("underflow label type", U_ALPHAINDEX_UNDERFLOW, index.getBucketLabelType());
-    assertEquals("all records in the underflow bucket", 3, index.getBucketRecordCount());
+    assertEquals("underflow label type", (int32_t)U_ALPHAINDEX_UNDERFLOW, index.getBucketLabelType());
+    assertEquals("all records in the underflow bucket", (int32_t)3, index.getBucketRecordCount());
 }
 
 void AlphabeticIndexTest::TestChineseZhuyin() {
