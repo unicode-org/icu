@@ -187,7 +187,24 @@ public:
      *                  failure code upon return.
      * @stable ICU 2.0
      */
-    DecimalFormatSymbols( UErrorCode& status);
+    DecimalFormatSymbols(UErrorCode& status);
+
+    /**
+     * Creates a DecimalFormatSymbols object with last-resort data.
+     * Intended for callers who cache the symbols data and
+     * set all symbols on the resulting object.
+     *
+     * The last-resort symbols are similar to those for the root data,
+     * except that the grouping separators are empty,
+     * the NaN symbol is U+FFFD rather than "NaN",
+     * and the CurrencySpacing patterns are empty.
+     *
+     * @param status    Input/output parameter, set to success or
+     *                  failure code upon return.
+     * @return last-resort symbols
+     * @draft ICU 52
+     */
+    static DecimalFormatSymbols* createWithLastResortData(UErrorCode& status);
 
     /**
      * Copy constructor.
@@ -311,7 +328,7 @@ public:
     static UClassID U_EXPORT2 getStaticClassID();
 
 private:
-    DecimalFormatSymbols(); // default constructor not implemented
+    DecimalFormatSymbols();
 
     /**
      * Initializes the symbols from the LocaleElements resource bundle.
