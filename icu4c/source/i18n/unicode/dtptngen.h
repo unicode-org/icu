@@ -467,7 +467,7 @@ private:
     enum {
         kDTPGNoFlags = 0,
         kDTPGFixFractionalSeconds = 1,
-        kDTPGSkeletonUsesCapJ = 2,
+        kDTPGSkeletonUsesCapJ = 2
     };
 
     void initData(const Locale &locale, UErrorCode &status);
