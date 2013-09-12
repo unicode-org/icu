@@ -20,6 +20,7 @@
 
 #include "putilimp.h"
 #include "plurrule_impl.h"
+#include <stdio.h>
 
 #define LENGTHOF(array) ((int32_t)(sizeof(array)/sizeof((array)[0])))
 
