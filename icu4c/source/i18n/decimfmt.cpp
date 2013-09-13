@@ -1069,9 +1069,20 @@ DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) co
     }
 
     Formattable::Type type = number.getType();
-    if (type == Formattable::kDouble || type == Formattable::kLong || 
-            (type == Formattable::kInt64 && number.getInt64() == (int64_t)number.getDouble(status))) {
+    if (type == Formattable::kDouble || type == Formattable::kLong) { 
         return getFixedDecimal(number.getDouble(status), status);
+    }
+
+    if (type == Formattable::kInt64) {
+        double fdv = number.getDouble(status);
+        // Note: conversion of int64_t -> double rounds with some compilers to
+        //       values beyond what can be represented as a 64 bit int. Subsequent
+        //       testing or conversion with int64_t produces bad results.
+        //       So filter the problematic values, route them to DigitList.
+        if (fdv != (double)U_INT64_MAX && fdv != (double)U_INT64_MIN &&
+                number.getInt64() == (int64_t)fdv) {
+            return getFixedDecimal(number.getDouble(status), status);
+        }
     }
 
     // The only case left is type==int64_t, with a value with more digits than a double can represent.
