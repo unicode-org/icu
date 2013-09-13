@@ -2271,6 +2271,15 @@ void CollationAPITest::TestClone() {
 }
 
 void CollationAPITest::TestIterNumeric() {
+    // Regression test for ticket #9915.
+    // The collation code sometimes masked the continuation marker away
+    // but later tested the result for isContinuation().
+    // This test case failed because the third bytes of the computed numeric-collation primaries
+    // were permutated with the script reordering table.
+    // It should have been possible to reproduce this with the root collator
+    // and characters with appropriate 3-byte primary weights.
+    // The effectiveness of this test depends completely on the collation elements
+    // and on the implementation code.
     IcuTestErrorCode errorCode(*this, "TestIterNumeric");
     RuleBasedCollator coll(UnicodeString("[reorder Hang Hani]"), errorCode);
     if(errorCode.logIfFailureAndReset("RuleBasedCollator constructor")) {
