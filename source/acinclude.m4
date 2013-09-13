@@ -456,9 +456,18 @@ AC_DEFUN([AC_CHECK_STRICT_COMPILE],
     then
         if test "$GCC" = yes
         then
-            # Do not use -ansi. It limits us to C90, and it breaks some platforms.
-            # We use -std=c99 to disable the gnu99 defaults and its associated warnings
-            CFLAGS="$CFLAGS -Wall -std=c99 -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
+            case "${host}" in
+            *-*-solaris*)
+                # Don't use -std=c99 option on Solaris/GCC
+                ;;
+            *)
+                # Do not use -ansi. It limits us to C90, and it breaks some platforms.
+                # We use -std=c99 to disable the gnu99 defaults and its associated warnings
+                CFLAGS="$CFLAGS -std=c99"
+                ;;
+            esac
+            
+            CFLAGS="$CFLAGS -Wall -pedantic -Wshadow -Wpointer-arith -Wmissing-prototypes -Wwrite-strings"
         else
             case "${host}" in
             *-*-cygwin)
