@@ -257,7 +257,7 @@
     a time zone abbreviation even it is not commonly used for a locale. For example, time
     zone abbreviation "AEST" for Australian Eastern Standard Time might not be well recognized
     by people in the United States. For the zone, pattern "z" does not use "AEST" (instead, use
-    UTC offset format "GMT+10:00, as the fallback) , while pattern "V" used to print out "AEST".
+    UTC offset format "GMT+10:00", as the fallback) , while pattern "V" used to print out "AEST".
     In CLDR 21, the data used for checking commonly used or not was completely removed (CLDR
     ticket <a href="http://unicode.org/cldr/trac/ticket/4052">#4052</a>), so the difference
     between pattern "z" and "V" is no longer available since ICU 49 (based on CLDR 21 specification).</p>
@@ -1244,47 +1244,59 @@ Data set name type  : PDS</samp>
 
     <ol>
       <li>
+        Copy the ICU source .tgz to the IBM i environment, as binary.
+        Also, copy the <a href='as_is/os400/unpax-icu.sh'>unpax-icu.sh</a> script into the same directory, as a text file.
+      </li>
+
+      <li>
         Create target library. This library will be the target for the
         resulting modules, programs and service programs. You will specify this
         library on the OUTPUTDIR environment variable.
 <pre>
 <samp>CRTLIB LIB(<i>libraryname</i>)
-ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>') REPLACE(*YES)   </samp>
-</pre>
+ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>') REPLACE(*YES)   </samp></pre>
       </li>
 
       <li>
       Set up the following environment variables and job characteristics in your build process
 <pre>
 <samp>ADDENVVAR ENVVAR(MAKE) VALUE('gmake') REPLACE(*YES)
-CHGJOB CCSID(37)</samp>
-</pre></li>
+CHGJOB CCSID(37)</samp></pre></li>
 
-      <li>Run <tt>'QSH'</tt></li>
-      
-      <li>Run: <br /><tt>export PATH=/QIBM/ProdData/DeveloperTools/qsh/bin:$PATH:/QOpenSys/usr/bin</tt>
+      <li>Fire up the QSH (all subsequent commands are run inside the qsh session.)</i>
+        <pre><samp>qsh</samp></pre>
       </li>
 
-      <li>Run <b><tt>gzip -d</tt></b> on the ICU source code compressed tar archive
-      (icu-<i>X</i>.<i>Y</i>.tgz).</li>
+      <li>Set up the PATH: <pre><samp>export PATH=/QIBM/ProdData/DeveloperTools/qsh/bin:$PATH:/QOpenSys/usr/bin</samp></pre>
+      </li>
 
-      <li>Run <a href='as_is/os400/unpax-icu.sh'>unpax-icu.sh</a> on the tar file generated from the previous step.</li>
+      <li>Unpack the ICU source code archive:
+        <pre><samp>gzip -d icu-<i>X</i>.<i>Y</i>.tgz</samp></pre>
+          </li>
 
-      <li>Change your current directory to icu/as_is/os400.</li>
-      <li>Run <tt>qsh bldiculd.sh</tt> to build the program ICULD which ICU will use for linkage.</li>
+      <li>Run unpax-icu.sh on the tar file generated from the previous step.
+        <pre><samp>unpax-icu.sh icu.tar</samp></pre></li>
 
-      <li>Change your current directory to icu/source.</li>
+      <li>Build the program ICULD which ICU will use for linkage.
+        <pre><samp>cd icu/as_is/os400
+qsh bldiculd.sh
+cd ../../..</pre></samp>
+        </li>
 
-      <li>Run <tt>'./runConfigureICU IBMi'</tt>  (See <a href="#HowToConfigureICU">configuration
-      note</a> for details). Note that --with-data-packaging=archive and setting the --prefix are recommended, building in default (dll) mode is currently not supported.</li>
+      <li>Change into the 'source' directory, and configure ICU.  (See <a href="#HowToConfigureICU">configuration
+      note</a> for details). Note that --with-data-packaging=archive and setting the --prefix are recommended, building in default (dll) mode is currently not supported.
+        <pre><samp>cd icu/source
+./runConfigureICU IBMi --prefix=<i>/path/to/somewhere</i> --with-data-packaging=archive</samp></pre>
+</li>
 
-      <li>Run <tt>'gmake'</tt> to build ICU. (Do not use the -j option)</li>
+      <li>Build ICU. <i>(Note: Do not use the -j option)</i> <pre><samp>gmake</samp></pre></li>
 
-      <li>Run <tt>'gmake check QIBM_MULTI_THREADED=Y'</tt> to build and run the tests.
-      You can look at the <a href=
+      <li>Test ICU. <pre><samp>gmake check</samp></pre>  
+        <smaller>(The <tt> QIBM_MULTI_THREADED=Y</tt> flag will be automatically applied to intltest -
+          you can look at the <a href=
       "http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/apis/concept4.htm">
       iSeries Information Center</a> for more details regarding the running of multiple threads
-      on IBM i.</li>
+      on IBM i.)</smaller></li>
     </ol>
 
       <!-- cross -->

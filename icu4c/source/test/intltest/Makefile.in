@@ -92,15 +92,16 @@ clean-local:
 distclean-local: clean-local
 	$(RMV) Makefile
 
+# note- intltest gets $(THREADSENVFLAGS) so that it runs threaded on OS400
 check-local: all-local
-	$(INVOKE) ./$(TARGET) $(TEST_OUTPUT_OPTS) $(INTLTEST_OPTS)
+	$(THREADSENVFLAGS) $(INVOKE) ./$(TARGET) $(TEST_OUTPUT_OPTS) $(INTLTEST_OPTS)
 
 check-exhaustive-local: all-local
-	$(INVOKE) ./$(TARGET) $(TEST_OUTPUT_OPTS) -e
+	$(THREADSENVFLAGS) $(INVOKE) ./$(TARGET) $(TEST_OUTPUT_OPTS) -e
 
 TESTXML=$(top_builddir)/test-$(TARGET).xml
 xcheck-local: all-local
-	$(INVOKE) ./$(TARGET) $(TEST_OUTPUT_OPTS) $(INTLTEST_OPTS) -x $(TESTXML)
+	$(THREADSENVFLAGS) $(INVOKE) ./$(TARGET) $(TEST_OUTPUT_OPTS) $(INTLTEST_OPTS) -x $(TESTXML)
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
