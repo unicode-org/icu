@@ -424,8 +424,12 @@ class APIInfo {
     }
 
     public void print(PrintWriter pw, boolean detail, boolean html, boolean withStatus) {
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
+        format(buf, detail, html, withStatus);
+        pw.print(buf.toString());
+    }
 
+    public void format(StringBuilder buf, boolean detail, boolean html, boolean withStatus) {
         // remove all occurrences of icu packages from the param string
         // fortunately, all the packages have 4 chars (lang, math, text, util).
         String xsig = sig;
@@ -519,8 +523,6 @@ class APIInfo {
             buf.append(xsig.substring(n));
             break;
         }
-
-        pw.print(buf.toString());
     }
 
     public void println(PrintWriter pw, boolean detail, boolean html) {

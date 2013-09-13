@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2010, International Business Machines Corporation and         *
+ * Copyright (C) 2010-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -144,10 +144,53 @@ public class CollectAPI {
         pw.close();
     }
 
+    void writeTSV(String outfile, BitSet filter) throws IOException {
+        FileOutputStream fos = new FileOutputStream(outfile);
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos, "UTF-8")));
+
+        for (APIInfo info : _apidata.set) {
+            if (!filter.get(info.getVal(APIInfo.STA))) {
+                continue;
+            }
+            StringBuilder buf = new StringBuilder();
+
+            // package
+            buf.append(info.getPackageName());
+            buf.append("\t");
+
+            // class
+            String className = info.getClassName();
+            if (className.length() == 0) {
+                className = info.getName();
+            }
+            buf.append(className);
+            buf.append("\t");
+
+            // signature, etc
+            info.format(buf, false, false, false);
+            buf.append("\t");
+
+            // status
+            buf.append(APIInfo.getTypeValName(APIInfo.STA, info.getVal(APIInfo.STA)));
+            buf.append("\t");
+
+            // version
+            String statusVer = info.getStatusVersion();
+            if (statusVer.length() == 0) {
+                statusVer = "[N/A]";
+            }
+            buf.append(statusVer);
+
+            pw.println(buf.toString());
+        }
+        pw.close();
+    }
+
     public static void main(String[] args) {
-        String apifile = null;
-        String outfile = "api.html";
+        String apifile = null; 
+        String outfile = null;
         BitSet filter = new BitSet(MAXSTATE + 1);
+        boolean isTSV = false;
 
         // default filter
         filter.set(APIInfo.STA_STABLE);
@@ -186,6 +229,8 @@ public class CollectAPI {
                 }
                 i++;
                 outfile = args[i];
+            } else if (args[i].equals("-t")) {
+                isTSV = true;
             } else {
                 apifile = args[i];
                 if (i + 1 != args.length) {
@@ -203,7 +248,17 @@ public class CollectAPI {
         CollectAPI collection = new CollectAPI(apifile);
 
         try {
-            collection.writeHTML(outfile, filter);
+            if (isTSV) {
+                if (outfile == null) {
+                    outfile = "api.tsv";
+                }
+                collection.writeTSV(outfile, filter);
+            } else {
+                if (outfile == null) {
+                    outfile = "api.html";
+                }
+                collection.writeHTML(outfile, filter);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
