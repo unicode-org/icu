@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2012, International Business Machines
+*   Copyright (C) 1998-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -937,7 +937,6 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
                     data = (uint8_t *)uprv_malloc(len);
                     intStatus = U_ZERO_ERROR;
                     len = ucol_cloneBinary(coll, data, len, &intStatus);
-                    /*data = ucol_cloneRuleData(coll, &len, &intStatus);*/
 
                     /* tailoring rules version */
                     /* This is wrong! */

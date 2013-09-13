@@ -764,68 +764,6 @@ ucol_close(UCollator *coll)
     UTRACE_EXIT();
 }
 
-/* This one is currently used by genrb & tests. After constructing from rules (tailoring),*/
-/* you should be able to get the binary chunk to write out...  Doesn't look very full now */
-U_CFUNC uint8_t* U_EXPORT2
-ucol_cloneRuleData(const UCollator *coll, int32_t *length, UErrorCode *status)
-{
-    uint8_t *result = NULL;
-    if(U_FAILURE(*status)) {
-        return NULL;
-    }
-    if(coll->hasRealData == TRUE) {
-        *length = coll->image->size;
-        result = (uint8_t *)uprv_malloc(*length);
-        /* test for NULL */
-        if (result == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-        uprv_memcpy(result, coll->image, *length);
-    } else {
-        *length = (int32_t)(paddedsize(sizeof(UCATableHeader))+paddedsize(sizeof(UColOptionSet)));
-        result = (uint8_t *)uprv_malloc(*length);
-        /* test for NULL */
-        if (result == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-
-        /* build the UCATableHeader with minimal entries */
-        /* do not copy the header from the UCA file because its values are wrong! */
-        /* uprv_memcpy(result, UCA->image, sizeof(UCATableHeader)); */
-
-        /* reset everything */
-        uprv_memset(result, 0, *length);
-
-        /* set the tailoring-specific values */
-        UCATableHeader *myData = (UCATableHeader *)result;
-        myData->size = *length;
-
-        /* offset for the options, the only part of the data that is present after the header */
-        myData->options = sizeof(UCATableHeader);
-
-        /* need to always set the expansion value for an upper bound of the options */
-        myData->expansion = myData->options + sizeof(UColOptionSet);
-
-        myData->magic = UCOL_HEADER_MAGIC;
-        myData->isBigEndian = U_IS_BIG_ENDIAN;
-        myData->charSetFamily = U_CHARSET_FAMILY;
-
-        /* copy UCA's version; genrb will override all but the builder version with tailoring data */
-        uprv_memcpy(myData->version, coll->image->version, sizeof(UVersionInfo));
-
-        uprv_memcpy(myData->UCAVersion, coll->image->UCAVersion, sizeof(UVersionInfo));
-        uprv_memcpy(myData->UCDVersion, coll->image->UCDVersion, sizeof(UVersionInfo));
-        uprv_memcpy(myData->formatVersion, coll->image->formatVersion, sizeof(UVersionInfo));
-        myData->jamoSpecial = coll->image->jamoSpecial;
-
-        /* copy the collator options */
-        uprv_memcpy(result+paddedsize(sizeof(UCATableHeader)), coll->options, sizeof(UColOptionSet));
-    }
-    return result;
-}
-
 void ucol_setOptionsFromHeader(UCollator* result, UColOptionSet * opts, UErrorCode *status) {
     if(U_FAILURE(*status)) {
         return;
