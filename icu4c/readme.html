@@ -24,7 +24,7 @@
     <!--<p><b>Note:</b> This is a release candidate version of ICU4C 52.
     It is not recommended for production use.</p>-->
 
-    <p>Last updated: 2013-Mar-15<br />
+    <p>Last updated: 2013-Sep-13<br />
      Copyright &copy; 1997-2013 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -222,6 +222,14 @@
       are now const member functions. DecimalFormat is not recommended for subclassing.
     </p>
 
+    <h3>CollationElementIterator protected methods became private</h3>
+    <p>The C++ CollationElementIterator (CEI) had two protected constructors
+    (called only by RuleBasedCollator CEI factory methods)
+    and a protected assignment operator.
+    The class documentation says "CollationElementIterator should not be subclassed",
+    and it cannot be subclassed effectively.
+    The protected methods were made private and might be removed altogether.
+    For details see <a href="http://bugs.icu-project.org/trac/ticket/10251">ticket #10251</a>.</p>
     <!-- end ICU 52 items -->
 
     <p>The following list concentrates on <em>changes that affect existing
