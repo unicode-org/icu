@@ -15,12 +15,12 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.Map.Entry;
 
-import com.ibm.icu.text.PluralRules.KeywordStatus;
 import com.ibm.icu.text.PluralRules.FixedDecimal;
+import com.ibm.icu.text.PluralRules.KeywordStatus;
 import com.ibm.icu.text.PluralRules.StandardPluralCategories;
 import com.ibm.icu.util.Output;
 

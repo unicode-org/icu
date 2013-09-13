@@ -10,7 +10,6 @@ import java.util.MissingResourceException;
 
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.text.UnicodeSet;
-import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 
 /**

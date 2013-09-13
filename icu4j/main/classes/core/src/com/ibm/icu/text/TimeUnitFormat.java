@@ -6,10 +6,8 @@
  */
 package com.ibm.icu.text;
 
-import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;

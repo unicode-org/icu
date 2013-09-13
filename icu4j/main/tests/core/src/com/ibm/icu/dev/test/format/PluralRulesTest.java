@@ -36,15 +36,13 @@ import com.ibm.icu.dev.util.Relation;
 import com.ibm.icu.impl.Utility;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.PluralRules;
-import com.ibm.icu.text.UFieldPosition;
+import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.text.PluralRules.FixedDecimalRange;
 import com.ibm.icu.text.PluralRules.FixedDecimalSamples;
 import com.ibm.icu.text.PluralRules.KeywordStatus;
-import com.ibm.icu.text.PluralRules.FixedDecimal;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.text.PluralRules.SampleType;
-import com.ibm.icu.util.Currency;
-import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.text.UFieldPosition;
 import com.ibm.icu.util.Output;
 import com.ibm.icu.util.ULocale;
 
