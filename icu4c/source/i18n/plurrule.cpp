@@ -1382,7 +1382,7 @@ void FixedDecimal::init(double n) {
 
 
 void FixedDecimal::init(double n, int32_t v, int64_t f) {
-    isNegative = n < 0;
+    isNegative = n < 0.0;
     source = fabs(n);
     isNanOrInfinity = uprv_isNaN(source) || uprv_isPositiveInfinity(source);
     if (isNanOrInfinity) {
@@ -1469,7 +1469,7 @@ int32_t FixedDecimal::decimals(double n) {
 //          and can easily return noise digits when the precision of a double is exceeded.
 
 int64_t FixedDecimal::getFractionalDigits(double n, int32_t v) {
-    if (v == 0 || n == floor(n)) {
+    if (v == 0 || n == floor(n) || uprv_isNaN(n) || uprv_isPositiveInfinity(n)) {
         return 0;
     }
     n = fabs(n);
