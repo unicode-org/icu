@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2012, International Business Machines Corporation and         *
+ * Copyright (C) 2012-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -47,14 +47,29 @@ public class CurrencyDataParser {
 
     private static class Handler extends DefaultHandler {
         private enum ElementType {
-            ENTITY,
-            CURRENCY,
-            ALPHABETIC_CODE,
-            NUMERIC_CODE,
-            MINOR_UNIT,
-            WITHDRAWAL_DATE,
-            REMARK,
-            OTHER
+            ENTITY("CtryNm"),
+            CURRENCY("CcyNm"),
+            ALPHABETIC_CODE("Ccy"),
+            NUMERIC_CODE("CcyNbr"),
+            MINOR_UNIT("CcyMnrUnts"),
+            WITHDRAWAL_DATE("WthdrwlDt"),
+            REMARK("Remark"),   // obsolete
+            OTHER("Other");     // place holder
+
+            private String elemName;
+
+            ElementType(String elemName) {
+                this.elemName = elemName;
+            }
+
+            public static ElementType forName(String name) {
+                for (ElementType type : values()) {
+                    if (type.elemName.equals(name)) {
+                        return type;
+                    }
+                }
+                return OTHER;
+            }
         };
 
         Collection<CurrencyDataEntry> isoCurrencies = new LinkedList<CurrencyDataEntry>();
@@ -66,7 +81,7 @@ public class CurrencyDataParser {
 
         public Handler(boolean historic) {
             this.historic = historic;
-            currElemName = historic ? "ISO_CURRENCY_HISTORIC" : "ISO_CURRENCY";
+            currElemName = historic ? "HstrcCcyNtry" : "CcyNtry";
         }
 
         public Collection<CurrencyDataEntry> getParsedISOCurrencies() {
@@ -79,7 +94,7 @@ public class CurrencyDataParser {
                 elem = ElementType.OTHER;
             } else {
                 try {
-                    elem = ElementType.valueOf(qName);
+                    elem = ElementType.forName(qName);
                 } catch (IllegalArgumentException e) {
                     elem = ElementType.OTHER;
                 }
