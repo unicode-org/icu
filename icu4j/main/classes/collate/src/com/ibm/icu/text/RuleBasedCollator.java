@@ -3429,29 +3429,26 @@ public final class RuleBasedCollator extends Collator {
             int hiraganaresult = 0;
             while (true) {
                 int sorder = 0;
+                int sPrimary;
                 // We fetch CEs until we hit a non ignorable primary or end.
                 do {
                     sorder = buffer.m_srcUtilColEIter_.next();
                     buffer.m_srcUtilCEBuffer_ = append(buffer.m_srcUtilCEBuffer_, buffer.m_srcUtilCEBufferSize_, sorder);
                     buffer.m_srcUtilCEBufferSize_++;
-                    sorder &= CE_PRIMARY_MASK_;
-                } while (sorder == CollationElementIterator.IGNORABLE);
+                    sPrimary = sorder & CE_PRIMARY_MASK_;
+                } while (sPrimary == CollationElementIterator.IGNORABLE);
 
                 int torder = 0;
+                int tPrimary;
                 do {
                     torder = buffer.m_tgtUtilColEIter_.next();
                     buffer.m_tgtUtilCEBuffer_ = append(buffer.m_tgtUtilCEBuffer_, buffer.m_tgtUtilCEBufferSize_, torder);
                     buffer.m_tgtUtilCEBufferSize_++;
-                    torder &= CE_PRIMARY_MASK_;
-                } while (torder == CollationElementIterator.IGNORABLE);
-
-                if (!isContinuation(sorder) && m_leadBytePermutationTable_ != null) {
-                    sorder = (m_leadBytePermutationTable_[((sorder >> 24) + 256) % 256] << 24) | (sorder & 0x00FFFFFF);
-                    torder = (m_leadBytePermutationTable_[((torder >> 24) + 256) % 256] << 24) | (torder & 0x00FFFFFF);
-                }
+                    tPrimary = torder & CE_PRIMARY_MASK_;
+                } while (tPrimary == CollationElementIterator.IGNORABLE);
 
                 // if both primaries are the same
-                if (sorder == torder) {
+                if (sPrimary == tPrimary) {
                     // and there are no more CEs, we advance to the next level
                     // see if we are at the end of either string
                     if (buffer.m_srcUtilCEBuffer_[buffer.m_srcUtilCEBufferSize_ - 1] == CollationElementIterator.NULLORDER) {
@@ -3471,8 +3468,12 @@ public final class RuleBasedCollator extends Collator {
                         }
                     }
                 } else {
+                    if (!isContinuation(sorder) && m_leadBytePermutationTable_ != null) {
+                        sPrimary = (m_leadBytePermutationTable_[sPrimary >>> 24] << 24) | (sPrimary & 0x00FFFFFF);
+                        tPrimary = (m_leadBytePermutationTable_[tPrimary >>> 24] << 24) | (tPrimary & 0x00FFFFFF);
+                    }
                     // if two primaries are different, we are done
-                    return endPrimaryCompare(sorder, torder, buffer);
+                    return endPrimaryCompare(sPrimary, tPrimary, buffer);
                 }
             }
             // no primary difference... do the rest from the buffers
@@ -3815,20 +3816,20 @@ public final class RuleBasedCollator extends Collator {
             int sorder = CollationElementIterator.IGNORABLE;
             int torder = CollationElementIterator.IGNORABLE;
             while ((sorder & CE_REMOVE_CASE_) == CollationElementIterator.IGNORABLE) {
-                sorder = buffer.m_srcUtilCEBuffer_[soffset++] & m_mask3_;
+                sorder = buffer.m_srcUtilCEBuffer_[soffset++];
                 if (!isContinuation(sorder)) {
-                    sorder ^= m_caseSwitch_;
+                    sorder = (sorder & m_mask3_) ^ m_caseSwitch_;
                 } else {
-                    sorder &= CE_REMOVE_CASE_;
+                    sorder = (sorder & m_mask3_) & CE_REMOVE_CASE_;
                 }
             }
 
             while ((torder & CE_REMOVE_CASE_) == CollationElementIterator.IGNORABLE) {
-                torder = buffer.m_tgtUtilCEBuffer_[toffset++] & m_mask3_;
+                torder = buffer.m_tgtUtilCEBuffer_[toffset++];
                 if (!isContinuation(torder)) {
-                    torder ^= m_caseSwitch_;
+                    torder = (torder & m_mask3_) ^ m_caseSwitch_;
                 } else {
-                    torder &= CE_REMOVE_CASE_;
+                    torder = (torder & m_mask3_) & CE_REMOVE_CASE_;
                 }
             }
 

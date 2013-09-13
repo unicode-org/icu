@@ -1149,7 +1149,23 @@ public class CollationAPITest extends TestFmwk {
                            " s: " + c.getStrength() +
                            " u: " + c.isUpperCaseFirst());
     }
-    
+
+    public void TestIterNumeric() throws Exception {  // misnomer for Java, but parallel with C++ test
+        // Regression test for ticket #9915.
+        // The collation code sometimes masked the continuation marker away
+        // but later tested the result for isContinuation().
+        // This test case failed because the third bytes of the computed numeric-collation primaries
+        // were permutated with the script reordering table.
+        // It should have been possible to reproduce this with the root collator
+        // and characters with appropriate 3-byte primary weights.
+        // The effectiveness of this test depends completely on the collation elements
+        // and on the implementation code.
+        RuleBasedCollator coll = new RuleBasedCollator("[reorder Hang Hani]");
+        coll.setNumericCollation(true);
+        int result = coll.compare("40", "72");
+        assertTrue("40<72", result < 0);
+    }
+
     /*
      * Tests the method public void setStrength(int newStrength)
      */
