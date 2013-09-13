@@ -283,12 +283,7 @@ public:
     */
     static UClassID U_EXPORT2 getStaticClassID();
 
-protected:
-  
-    // CollationElementIterator protected constructors --------------------------
-    /**
-    * @stable ICU 2.0
-    */
+private:
     friend class RuleBasedCollator;
 
     /**
@@ -299,7 +294,6 @@ protected:
     * @param sourceText    the source string.
     * @param order         the collation object.
     * @param status        the error code status.
-    * @stable ICU 2.0
     */
     CollationElementIterator(const UnicodeString& sourceText,
         const RuleBasedCollator* order, UErrorCode& status);
@@ -312,23 +306,18 @@ protected:
     * @param sourceText    the source string.
     * @param order         the collation object.
     * @param status        the error code status.
-    * @stable ICU 2.0
     */
     CollationElementIterator(const CharacterIterator& sourceText,
         const RuleBasedCollator* order, UErrorCode& status);
-
-    // CollationElementIterator protected methods -------------------------------
 
     /**
     * Assignment operator
     *
     * @param other    the object to be copied
-    * @stable ICU 2.0
     */
     const CollationElementIterator&
         operator=(const CollationElementIterator& other);
 
-private:
     CollationElementIterator(); // default constructor not implemented
 
     // CollationElementIterator private data members ----------------------------
@@ -342,7 +331,6 @@ private:
     * Indicates if m_data_ belongs to this object.
     */
     UBool isDataOwned_;
-
 };
 
 // CollationElementIterator inline method defination --------------------------
