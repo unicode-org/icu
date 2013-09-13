@@ -899,7 +899,9 @@ void IntlTest::dataerrln( const UnicodeString &message )
         msg = UnicodeString("[DATA] " + message);
     }
 
-    if (!no_err_msg && (errCount==1)) LL_message( msg + " - (Are you missing data?)", TRUE );
+    if (!no_err_msg && ( errCount == 1 )) {
+      LL_message( msg + " - (Are you missing data?)", TRUE ); // only show this message the first time
+    }
 }
 
 void IntlTest::errcheckln(UErrorCode status, const UnicodeString &message ) {
