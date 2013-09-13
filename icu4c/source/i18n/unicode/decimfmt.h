@@ -2037,10 +2037,12 @@ private:
 
     static UnicodeString& trimMarksFromAffix(const UnicodeString& affix, UnicodeString& trimmedAffix);
 
-    static int32_t compareSimpleAffix(const UnicodeString& affix,
+    UBool equalWithSignCompatibility(UChar32 lhs, UChar32 rhs) const;
+
+    int32_t compareSimpleAffix(const UnicodeString& affix,
                                       const UnicodeString& input,
                                       int32_t pos,
-                                      UBool lenient);
+                                      UBool lenient) const;
 
     static int32_t skipPatternWhiteSpace(const UnicodeString& text, int32_t pos);
 

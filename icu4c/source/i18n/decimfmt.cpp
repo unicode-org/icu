@@ -3003,18 +3003,13 @@ int32_t DecimalFormat::compareAffix(const UnicodeString& text,
     return compareSimpleAffix(*patternToCompare, text, pos, isLenient());
 }
 
-static UBool equalWithSignCompatibility(UChar32 lhs, UChar32 rhs) {
+UBool DecimalFormat::equalWithSignCompatibility(UChar32 lhs, UChar32 rhs) const {
     if (lhs == rhs) {
         return TRUE;
     }
-    UErrorCode status = U_ZERO_ERROR;
-    const DecimalFormatStaticSets* staticSets = DecimalFormatStaticSets::getStaticSets(status);
-    if (U_FAILURE(status)) {
-        // This is the best we can do
-        return FALSE;
-    }
-    const UnicodeSet *minusSigns = staticSets->fMinusSigns;
-    const UnicodeSet *plusSigns = staticSets->fPlusSigns;
+    U_ASSERT(fStaticSets != NULL); // should already be loaded
+    const UnicodeSet *minusSigns = fStaticSets->fMinusSigns;
+    const UnicodeSet *plusSigns = fStaticSets->fPlusSigns;
     return (minusSigns->contains(lhs) && minusSigns->contains(rhs)) ||
         (plusSigns->contains(lhs) && plusSigns->contains(rhs));
 }
@@ -3027,7 +3022,7 @@ UnicodeString& DecimalFormat::trimMarksFromAffix(const UnicodeString& affix, Uni
     UChar trimBuf[TRIM_BUFLEN];
     int32_t affixLen = affix.length();
     int32_t affixPos, trimLen = 0;
-    
+
     for (affixPos = 0; affixPos < affixLen; affixPos++) {
         UChar c = affix.charAt(affixPos);
         if (!IS_BIDI_MARK(c)) {
@@ -3055,7 +3050,7 @@ UnicodeString& DecimalFormat::trimMarksFromAffix(const UnicodeString& affix, Uni
 int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
                                           const UnicodeString& input,
                                           int32_t pos,
-                                          UBool lenient) {
+                                          UBool lenient) const {
     int32_t start = pos;
     UnicodeString trimmedAffix;
     // For more efficiency we should keep lazily-created trimmed affixes around in
@@ -3068,13 +3063,14 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
     UnicodeSet *affixSet;
     UErrorCode status = U_ZERO_ERROR;
 
-    const DecimalFormatStaticSets *staticSets = DecimalFormatStaticSets::getStaticSets(status);
+    U_ASSERT(fStaticSets != NULL); // should already be loaded
+
     if (U_FAILURE(status)) {
         return -1;
     }
     if (!lenient) {
-        affixSet = staticSets->fStrictDashEquivalents;
-        
+        affixSet = fStaticSets->fStrictDashEquivalents;
+
         // If the trimmedAffix is exactly one character long and that character
         // is in the dash set and the very next input character is also
         // in the dash set, return a match.
@@ -3156,13 +3152,13 @@ int32_t DecimalFormat::compareSimpleAffix(const UnicodeString& affix,
         }
     } else {
         UBool match = FALSE;
-        
-        affixSet = staticSets->fDashEquivalents;
+
+        affixSet = fStaticSets->fDashEquivalents;
 
         if (affixCharLength == affixLength && affixSet->contains(affixChar))  {
             pos = skipUWhiteSpaceAndMarks(input, pos);
             UChar32 ic = input.char32At(pos);
-            
+
             if (affixSet->contains(ic)) {
                 pos += U16_LENGTH(ic);
                 pos = skipBidiMarks(input, pos);
