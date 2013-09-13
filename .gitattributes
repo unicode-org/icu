@@ -4426,6 +4426,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/TestDataElements_te.jav
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/TestMessages.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/resources/testmessages.properties -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/thai6.ucs -text
+icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/BidiCharacterTest.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/BidiTest.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/CompositionExclusions.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/data/unicode/NormalizationCorrections.txt svneol=native#text/plain
@@ -4568,7 +4569,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TimeUnitTest.java svneol=n
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TimeZoneAliases.txt svneol=native#text/plain
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TimeZoneFormatTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/WriteNumberFormatSerialTestData.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/plurals.txt svneol=native#text/plain
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/plurals.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/impl/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/iterator/TestUCharacterIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/lang/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
