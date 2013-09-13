@@ -6757,12 +6757,14 @@ ucol_setReorderCodes(UCollator* coll,
         uprv_free(coll->reorderCodes);
     }
     coll->reorderCodes = NULL;
+    coll->freeReorderCodesOnClose = FALSE;
     coll->reorderCodesLength = 0;
     if (reorderCodesLength == 0) {
         if (coll->leadBytePermutationTable != NULL && coll->freeLeadBytePermutationTableOnClose == TRUE) {
             uprv_free(coll->leadBytePermutationTable);
         }
         coll->leadBytePermutationTable = NULL;
+        coll->freeLeadBytePermutationTableOnClose = FALSE;
         return;
     }
     coll->reorderCodes = (int32_t*) uprv_malloc(reorderCodesLength * sizeof(int32_t));

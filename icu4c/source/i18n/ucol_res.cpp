@@ -1049,10 +1049,13 @@ void ucol_setReorderCodesFromParser(UCollator *coll, UColTokenParser *parser, UE
     if (coll->reorderCodes != NULL && coll->freeReorderCodesOnClose == TRUE) {
         uprv_free(coll->reorderCodes);
     }
-    
+    coll->reorderCodes = NULL;
+    coll->freeReorderCodesOnClose = FALSE;
+
     if (coll->defaultReorderCodes != NULL && coll->freeDefaultReorderCodesOnClose == TRUE) {
         uprv_free(coll->defaultReorderCodes);
     }
+    coll->freeDefaultReorderCodesOnClose = FALSE;
     coll->defaultReorderCodesLength = parser->reorderCodesLength;
     coll->defaultReorderCodes =  (int32_t*) uprv_malloc(coll->defaultReorderCodesLength * sizeof(int32_t));
     if (coll->defaultReorderCodes == NULL) {
@@ -1154,9 +1157,7 @@ U_CFUNC void U_EXPORT2
 ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
     uint16_t leadBytesSize = 256;
     uint16_t leadBytes[256];
-    int32_t internalReorderCodesLength = coll->reorderCodesLength + (UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST);
-    int32_t* internalReorderCodes;
-    
+
     // The lowest byte that hasn't been assigned a mapping
     int toBottom = 0x03;
     // The highest byte that hasn't been assigned a mapping - don't include the special or trailing
@@ -1184,6 +1185,7 @@ ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
                 uprv_free(coll->leadBytePermutationTable);
             }
             coll->leadBytePermutationTable = NULL;
+            coll->freeLeadBytePermutationTableOnClose = FALSE;
             coll->reorderCodesLength = 0;
         }
         return;
@@ -1199,46 +1201,50 @@ ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
             uprv_free(coll->reorderCodes);
         }
         coll->reorderCodes = NULL;
-        
+        coll->freeReorderCodesOnClose = FALSE;
+
         if (coll->leadBytePermutationTable != NULL && coll->freeLeadBytePermutationTableOnClose == TRUE) {
             uprv_free(coll->leadBytePermutationTable);
         }
         coll->leadBytePermutationTable = NULL;
+        coll->freeLeadBytePermutationTableOnClose = FALSE;
 
         if (coll->defaultReorderCodesLength == 0) {
             return;
         }
         
         coll->reorderCodes = (int32_t*)uprv_malloc(coll->defaultReorderCodesLength * sizeof(int32_t));
-        coll->freeReorderCodesOnClose = TRUE;
         if (coll->reorderCodes == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
+        coll->freeReorderCodesOnClose = TRUE;
         coll->reorderCodesLength = coll->defaultReorderCodesLength;
-        uprv_memcpy(coll->defaultReorderCodes, coll->reorderCodes, coll->reorderCodesLength * sizeof(int32_t));
-    }     
+        uprv_memcpy(coll->reorderCodes, coll->defaultReorderCodes, coll->reorderCodesLength * sizeof(int32_t));
+    }
 
     if (coll->leadBytePermutationTable == NULL) {
         coll->leadBytePermutationTable = (uint8_t*)uprv_malloc(256*sizeof(uint8_t));
-        coll->freeLeadBytePermutationTableOnClose = TRUE;
         if (coll->leadBytePermutationTable == NULL) {
             *status = U_MEMORY_ALLOCATION_ERROR;
             return;
         }
+        coll->freeLeadBytePermutationTableOnClose = TRUE;
     }
 
-    // prefill the reordering codes with the leading entries
-    internalReorderCodes = (int32_t*)uprv_malloc(internalReorderCodesLength * sizeof(int32_t));
-    if (internalReorderCodes == NULL) {
+    int32_t internalReorderCodesLength = coll->reorderCodesLength + (UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST);
+    LocalMemory<int32_t> internalReorderCodes((int32_t*)uprv_malloc(internalReorderCodesLength * sizeof(int32_t)));
+    if (internalReorderCodes.isNull()) {
         *status = U_MEMORY_ALLOCATION_ERROR;
         if (coll->leadBytePermutationTable != NULL && coll->freeLeadBytePermutationTableOnClose == TRUE) {
             uprv_free(coll->leadBytePermutationTable);
         }
         coll->leadBytePermutationTable = NULL;
+        coll->freeLeadBytePermutationTableOnClose = FALSE;
         return;
     }
-    
+
+    // prefill the reordering codes with the leading entries
     for (uint32_t codeIndex = 0; codeIndex < (UCOL_REORDER_CODE_LIMIT - UCOL_REORDER_CODE_FIRST); codeIndex++) {
         internalReorderCodes[codeIndex] = UCOL_REORDER_CODE_FIRST + codeIndex;
     }
@@ -1282,10 +1288,8 @@ ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
                     uprv_free(coll->leadBytePermutationTable);
                 }
                 coll->leadBytePermutationTable = NULL;
+                coll->freeLeadBytePermutationTableOnClose = FALSE;
                 coll->reorderCodesLength = 0;
-                if (internalReorderCodes != NULL) {
-                    uprv_free(internalReorderCodes);
-                }
                 return;
             }
             fromTheBottom = false;
@@ -1304,10 +1308,8 @@ ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
                         uprv_free(coll->leadBytePermutationTable);
                     }
                     coll->leadBytePermutationTable = NULL;
+                    coll->freeLeadBytePermutationTableOnClose = FALSE;
                     coll->reorderCodesLength = 0;
-                    if (internalReorderCodes != NULL) {
-                        uprv_free(internalReorderCodes);
-                    }
                     return;
                 }
    
@@ -1326,10 +1328,8 @@ ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
                         uprv_free(coll->leadBytePermutationTable);
                     }
                     coll->leadBytePermutationTable = NULL;
+                    coll->freeLeadBytePermutationTableOnClose = FALSE;
                     coll->reorderCodesLength = 0;
-                    if (internalReorderCodes != NULL) {
-                        uprv_free(internalReorderCodes);
-                    }
                     return;
                 }
 
@@ -1375,10 +1375,6 @@ ucol_buildPermutationTable(UCollator *coll, UErrorCode *status) {
         fprintf(stdout, "\t%02x = %02x\n", i, coll->leadBytePermutationTable[i]);
     } 
 #endif
-
-    if (internalReorderCodes != NULL) {
-        uprv_free(internalReorderCodes);
-    }
 
     // force a regen of the latin one table since it is affected by the script reordering
     coll->latinOneRegenTable = TRUE;

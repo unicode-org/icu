@@ -6149,14 +6149,15 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
     UErrorCode status = U_ZERO_ERROR;
     UCollator  *myCollation;
     UChar rules[90];
-    int32_t rulesReorderCodes[2] = {USCRIPT_HAN, USCRIPT_GREEK};
-    int32_t reorderCodes[3] = {USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
+    static const int32_t rulesReorderCodes[2] = {USCRIPT_HAN, USCRIPT_GREEK};
+    static const int32_t reorderCodes[3] = {USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
+    static const int32_t onlyDefault[1] = {UCOL_REORDER_CODE_DEFAULT};
     UCollationResult collResult;
     int32_t retrievedReorderCodesLength;
     int32_t retrievedReorderCodes[10];
-    UChar greekString[] = { 0x03b1 };
-    UChar punctuationString[] = { 0x203e };
-    UChar hanString[] = { 0x65E5, 0x672C };
+    static const UChar greekString[] = { 0x03b1 };
+    static const UChar punctuationString[] = { 0x203e };
+    static const UChar hanString[] = { 0x65E5, 0x672C };
     int loopIndex;
 
     log_verbose("Testing non-lead bytes in a sort key with and without reordering\n");
@@ -6187,18 +6188,17 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
     }
     collResult = ucol_strcoll(myCollation, greekString, LEN(greekString), hanString, LEN(hanString));
     if (collResult != UCOL_GREATER) {
-        log_err_status(status, "ERROR: collation result should have been UCOL_LESS\n");
+        log_err_status(status, "ERROR: collation result should have been UCOL_GREATER\n");
         return;
     }
-    
 
-    /* set the reorderding */
+    /* set the reordering */
     ucol_setReorderCodes(myCollation, reorderCodes, LEN(reorderCodes), &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: setting reorder codes: %s\n", myErrorName(status));
         return;
     }
-    
+
     /* get the reordering */
     retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, NULL, 0, &status);
     if (status != U_BUFFER_OVERFLOW_ERROR) {
@@ -6231,7 +6231,7 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
         log_err_status(status, "ERROR: collation result should have been UCOL_LESS\n");
         return;
     }
-    
+
     /* clear the reordering */
     ucol_setReorderCodes(myCollation, NULL, 0, &status);    
     if (U_FAILURE(status)) {
@@ -6250,6 +6250,28 @@ static void TestReorderingAPIWithRuleCreatedCollator(void)
     if (collResult != UCOL_GREATER) {
         log_err_status(status, "ERROR: collation result should have been UCOL_GREATER\n");
         return;
+    }
+
+    /* reset the reordering */
+    ucol_setReorderCodes(myCollation, onlyDefault, 1, &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: setting reorder codes to {default}: %s\n", myErrorName(status));
+        return;
+    }
+    retrievedReorderCodesLength = ucol_getReorderCodes(myCollation, retrievedReorderCodes, LEN(retrievedReorderCodes), &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: getting reorder codes: %s\n", myErrorName(status));
+        return;
+    }
+    if (retrievedReorderCodesLength != LEN(rulesReorderCodes)) {
+        log_err_status(status, "ERROR: retrieved reorder codes length was %d but should have been %d\n", retrievedReorderCodesLength, LEN(rulesReorderCodes));
+        return;
+    }
+    for (loopIndex = 0; loopIndex < retrievedReorderCodesLength; loopIndex++) {
+        if (retrievedReorderCodes[loopIndex] != rulesReorderCodes[loopIndex]) {
+            log_err_status(status, "ERROR: retrieved reorder code doesn't match set reorder code at index %d\n", loopIndex);
+            return;
+        }
     }
 
     ucol_close(myCollation);
