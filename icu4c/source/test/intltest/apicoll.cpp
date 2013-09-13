@@ -2270,6 +2270,20 @@ void CollationAPITest::TestClone() {
     delete c2;
 }
 
+void CollationAPITest::TestIterNumeric() {
+    IcuTestErrorCode errorCode(*this, "TestIterNumeric");
+    RuleBasedCollator coll(UnicodeString("[reorder Hang Hani]"), errorCode);
+    if(errorCode.logIfFailureAndReset("RuleBasedCollator constructor")) {
+        return;
+    }
+    coll.setAttribute(UCOL_NUMERIC_COLLATION, UCOL_ON, errorCode);
+    UCharIterator iter40, iter72;
+    uiter_setUTF8(&iter40, "\x34\x30", 2);
+    uiter_setUTF8(&iter72, "\x37\x32", 2);
+    UCollationResult result = coll.compare(iter40, iter72, errorCode);
+    assertEquals("40<72", UCOL_LESS, result);
+}
+
  void CollationAPITest::dump(UnicodeString msg, RuleBasedCollator* c, UErrorCode& status) {
     const char* bigone = "One";
     const char* littleone = "one";
@@ -2307,6 +2321,7 @@ void CollationAPITest::runIndexedTest( int32_t index, UBool exec, const char* &n
     TESTCASE_AUTO(TestSubclass);
     TESTCASE_AUTO(TestNULLCharTailoring);
     TESTCASE_AUTO(TestClone);
+    TESTCASE_AUTO(TestIterNumeric);
     TESTCASE_AUTO_END;
 }
 
