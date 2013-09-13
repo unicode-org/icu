@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 1996-2012, International Business Machines
+*   Copyright (C) 1996-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   file name:  ucol.cpp
@@ -7223,28 +7223,29 @@ ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
     // Non shifted primary processing is quite simple
     if(!shifted) {
         for(;;) {
-
             // We fetch CEs until we hit a non ignorable primary or end.
+            uint32_t sPrimary;
             do {
                 // We get the next CE
                 sOrder = ucol_IGetNextCE(coll, sColl, status);
                 // Stuff it in the buffer
                 UCOL_CEBUF_PUT(&sCEs, sOrder, sColl, status);
                 // And keep just the primary part.
-                sOrder &= UCOL_PRIMARYMASK;
-            } while(sOrder == 0);
+                sPrimary = sOrder & UCOL_PRIMARYMASK;
+            } while(sPrimary == 0);
 
             // see the comments on the above block
+            uint32_t tPrimary;
             do {
                 tOrder = ucol_IGetNextCE(coll, tColl, status);
                 UCOL_CEBUF_PUT(&tCEs, tOrder, tColl, status);
-                tOrder &= UCOL_PRIMARYMASK;
-            } while(tOrder == 0);
+                tPrimary = tOrder & UCOL_PRIMARYMASK;
+            } while(tPrimary == 0);
 
             // if both primaries are the same
-            if(sOrder == tOrder) {
+            if(sPrimary == tPrimary) {
                 // and there are no more CEs, we advance to the next level
-                if(sOrder == UCOL_NO_MORE_CES_PRIMARY) {
+                if(sPrimary == UCOL_NO_MORE_CES_PRIMARY) {
                     break;
                 }
                 if(doHiragana && hirResult == UCOL_EQUAL) {
@@ -7257,11 +7258,11 @@ ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
                 // only need to check one for continuation
                 // if one is then the other must be or the preceding CE would be a prefix of the other
                 if (coll->leadBytePermutationTable != NULL && !isContinuation(sOrder)) {
-                    sOrder = (coll->leadBytePermutationTable[sOrder>>24] << 24) | (sOrder & 0x00FFFFFF);
-                    tOrder = (coll->leadBytePermutationTable[tOrder>>24] << 24) | (tOrder & 0x00FFFFFF);
+                    sPrimary = (coll->leadBytePermutationTable[sPrimary>>24] << 24) | (sPrimary & 0x00FFFFFF);
+                    tPrimary = (coll->leadBytePermutationTable[tPrimary>>24] << 24) | (tPrimary & 0x00FFFFFF);
                 }
                 // if two primaries are different, we are done
-                result = (sOrder < tOrder) ?  UCOL_LESS: UCOL_GREATER;
+                result = (sPrimary < tPrimary) ?  UCOL_LESS: UCOL_GREATER;
                 goto commonReturn;
             }
         } // no primary difference... do the rest from the buffers
@@ -7270,7 +7271,7 @@ ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
             UBool sInShifted = FALSE;
             UBool tInShifted = FALSE;
             // This version of code can be refactored. However, it seems easier to understand this way.
-            // Source loop. Sam as the target loop.
+            // Source loop. Same as the target loop.
             for(;;) {
                 sOrder = ucol_IGetNextCE(coll, sColl, status);
                 if(sOrder == UCOL_NO_MORE_CES) {
@@ -7553,8 +7554,9 @@ ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
         tCE = tCEs.buf;
         for(;;) {
             while((secS & UCOL_REMOVE_CASE) == 0) {
-                secS = *(sCE++) & tertiaryMask;
-                if(!isContinuation(secS)) {
+                sOrder = *sCE++;
+                secS = sOrder & tertiaryMask;
+                if(!isContinuation(sOrder)) {
                     secS ^= caseSwitch;
                 } else {
                     secS &= UCOL_REMOVE_CASE;
@@ -7562,8 +7564,9 @@ ucol_strcollRegular(collIterate *sColl, collIterate *tColl, UErrorCode *status)
             }
 
             while((secT & UCOL_REMOVE_CASE)  == 0) {
-                secT = *(tCE++) & tertiaryMask;
-                if(!isContinuation(secT)) {
+                tOrder = *tCE++;
+                secT = tOrder & tertiaryMask;
+                if(!isContinuation(tOrder)) {
                     secT ^= caseSwitch;
                 } else {
                     secT &= UCOL_REMOVE_CASE;
