@@ -1280,12 +1280,12 @@ public class PluralRules implements Serializable {
             StringBuilder result = new StringBuilder();
             result.append(operand);
             if (mod != 0) {
-                result.append(" mod ").append(mod);
+                result.append(" % ").append(mod);
             }
             boolean isList = lowerBound != upperBound;
             result.append(
-                    !isList ? (inRange ? " is " : " is not ")
-                            : integersOnly ? (inRange ? " in " : " not in ")
+                    !isList ? (inRange ? " = " : " != ")
+                            : integersOnly ? (inRange ? " = " : " != ")
                                     : (inRange ? " within " : " not within ") 
                     );
             if (range_list != null) {
