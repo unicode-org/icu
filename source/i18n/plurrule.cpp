@@ -1376,7 +1376,7 @@ FixedDecimal::FixedDecimal(const FixedDecimal &other) {
 
 
 void FixedDecimal::init(double n) {
-    int64_t numFractionDigits = decimals(n);
+    int32_t numFractionDigits = decimals(n);
     init(n, numFractionDigits, getFractionalDigits(n, numFractionDigits));
 }
 
