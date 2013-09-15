@@ -34,29 +34,31 @@ typedef uint32_t Flags;
     See UCharDirection in uchar.h .
 */
 enum {
-    L=  U_LEFT_TO_RIGHT,
-    R=  U_RIGHT_TO_LEFT,
-    EN= U_EUROPEAN_NUMBER,
-    ES= U_EUROPEAN_NUMBER_SEPARATOR,
-    ET= U_EUROPEAN_NUMBER_TERMINATOR,
-    AN= U_ARABIC_NUMBER,
-    CS= U_COMMON_NUMBER_SEPARATOR,
-    B=  U_BLOCK_SEPARATOR,
-    S=  U_SEGMENT_SEPARATOR,
-    WS= U_WHITE_SPACE_NEUTRAL,
-    ON= U_OTHER_NEUTRAL,
-    LRE=U_LEFT_TO_RIGHT_EMBEDDING,
-    LRO=U_LEFT_TO_RIGHT_OVERRIDE,
-    AL= U_RIGHT_TO_LEFT_ARABIC,
-    RLE=U_RIGHT_TO_LEFT_EMBEDDING,
-    RLO=U_RIGHT_TO_LEFT_OVERRIDE,
-    PDF=U_POP_DIRECTIONAL_FORMAT,
-    NSM=U_DIR_NON_SPACING_MARK,
-    BN= U_BOUNDARY_NEUTRAL,
-    FSI=U_FIRST_STRONG_ISOLATE,
-    LRI=U_LEFT_TO_RIGHT_ISOLATE,
-    RLI=U_RIGHT_TO_LEFT_ISOLATE,
-    PDI=U_POP_DIRECTIONAL_ISOLATE,
+    L=  U_LEFT_TO_RIGHT,                /*  0 */
+    R=  U_RIGHT_TO_LEFT,                /*  1 */
+    EN= U_EUROPEAN_NUMBER,              /*  2 */
+    ES= U_EUROPEAN_NUMBER_SEPARATOR,    /*  3 */
+    ET= U_EUROPEAN_NUMBER_TERMINATOR,   /*  4 */
+    AN= U_ARABIC_NUMBER,                /*  5 */
+    CS= U_COMMON_NUMBER_SEPARATOR,      /*  6 */
+    B=  U_BLOCK_SEPARATOR,              /*  7 */
+    S=  U_SEGMENT_SEPARATOR,            /*  8 */
+    WS= U_WHITE_SPACE_NEUTRAL,          /*  9 */
+    ON= U_OTHER_NEUTRAL,                /* 10 */
+    LRE=U_LEFT_TO_RIGHT_EMBEDDING,      /* 11 */
+    LRO=U_LEFT_TO_RIGHT_OVERRIDE,       /* 12 */
+    AL= U_RIGHT_TO_LEFT_ARABIC,         /* 13 */
+    RLE=U_RIGHT_TO_LEFT_EMBEDDING,      /* 14 */
+    RLO=U_RIGHT_TO_LEFT_OVERRIDE,       /* 15 */
+    PDF=U_POP_DIRECTIONAL_FORMAT,       /* 16 */
+    NSM=U_DIR_NON_SPACING_MARK,         /* 17 */
+    BN= U_BOUNDARY_NEUTRAL,             /* 18 */
+    FSI=U_FIRST_STRONG_ISOLATE,         /* 19 */
+    LRI=U_LEFT_TO_RIGHT_ISOLATE,        /* 20 */
+    RLI=U_RIGHT_TO_LEFT_ISOLATE,        /* 21 */
+    PDI=U_POP_DIRECTIONAL_ISOLATE,      /* 22 */
+    ENL,                                /* 23 */
+    ENR,                                /* 24 */
     dirPropCount
 };
 
@@ -75,7 +77,7 @@ enum {
 #define MASK_LTR (DIRPROP_FLAG(L)|DIRPROP_FLAG(EN)|DIRPROP_FLAG(AN)|DIRPROP_FLAG(LRE)|DIRPROP_FLAG(LRO)|DIRPROP_FLAG(LRI))
 #define MASK_RTL (DIRPROP_FLAG(R)|DIRPROP_FLAG(AL)|DIRPROP_FLAG(RLE)|DIRPROP_FLAG(RLO)|DIRPROP_FLAG(RLI))
 #define MASK_R_AL (DIRPROP_FLAG(R)|DIRPROP_FLAG(AL))
-#define MASK_STRONG (DIRPROP_FLAG(L)|DIRPROP_FLAG(R)|DIRPROP_FLAG(AL))
+#define MASK_STRONG_EN_AN (DIRPROP_FLAG(L)|DIRPROP_FLAG(R)|DIRPROP_FLAG(AL)|DIRPROP_FLAG(EN)|DIRPROP_FLAG(AN))
 
 /* explicit embedding codes */
 #define MASK_EXPLICIT (DIRPROP_FLAG(LRE)|DIRPROP_FLAG(LRO)|DIRPROP_FLAG(RLE)|DIRPROP_FLAG(RLO)|DIRPROP_FLAG(PDF))
@@ -159,17 +161,21 @@ enum {                                  /* flags for Opening.flags */
 typedef struct Opening {
     int32_t position;                   /* position of opening bracket */
     int32_t match;                      /* matching char or -position of closing bracket */
-    int32_t lastStrongPos;              /* position of last strong char found before opening */
-    DirProp lastStrong;                 /* bidi class of last strong char before opening */
+    int32_t contextPos;                 /* position of last strong char found before opening */
     uint16_t flags;                     /* bits for L or R/AL found within the pair */
+    UBiDiDirection contextDir;          /* L or R according to last strong char before opening */
+    uint8_t filler;                     /* to complete a nice multiple of 4 chars */
 } Opening;
 
 typedef struct IsoRun {
     int32_t  lastStrongPos;             /* position of last strong char found in this run */
+    int32_t  contextPos;                /* position of last char defining context */
     uint16_t start;                     /* index of first opening entry for this run */
     uint16_t limit;                     /* index after last opening entry for this run */
     UBiDiLevel level;                   /* level of this run */
     DirProp lastStrong;                 /* bidi class of last strong char found in this run */
+    UBiDiDirection contextDir;          /* L or R to use as context for following openings */
+    uint8_t filler;                     /* to complete a nice multiple of 4 chars */
 } IsoRun;
 
 typedef struct BracketData {
@@ -182,6 +188,7 @@ typedef struct BracketData {
     /* array of nested isolated sequence entries; can never excess UBIDI_MAX_EXPLICIT_LEVEL
        + 1 for index 0, + 1 for before the first isolated sequence */
     IsoRun  isoRuns[UBIDI_MAX_EXPLICIT_LEVEL+2];
+    UBool isNumbersSpecial;             /* reordering mode for NUMBERS_SPECIAL */
 } BracketData;
 
 typedef struct Isolate {
