@@ -525,17 +525,21 @@ public class Bidi {
     static class Opening {
         int   position;                 /* position of opening bracket */
         int   match;                    /* matching char or -position of closing bracket */
-        int   lastStrongPos;            /* position of last strong char found before opening */
-        byte  lastStrong;               /* bidi class of last strong char before opening */
-        byte  flags;                    /* bits for L or R/AL found within the pair */
+        int   contextPos;               /* position of last strong char found before opening */
+        short flags;                    /* bits for L or R/AL found within the pair */
+        byte  contextDir;               /* L or R according to last strong char before opening */
+        byte  filler;                   /* to complete a nice multiple of 4 bytes */
     }
 
     static class IsoRun {
         int   lastStrongPos;            /* position of last strong char found in this run */
+        int   contextPos;               /* position of last char defining context */
         short start;                    /* index of first opening entry for this run */
         short limit;                    /* index after last opening entry for this run */
         byte  level;                    /* level of this run */
         byte  lastStrong;               /* bidi class of last strong char found in this run */
+        byte  contextDir;               /* L or R to use as context for following openings */
+        byte  filler;                   /* to complete a nice multiple of 4 bytes */
     }
 
     static class BracketData {
@@ -544,6 +548,7 @@ public class Bidi {
         /* array of nested isolated sequence entries; can never excess UBIDI_MAX_EXPLICIT_LEVEL
            + 1 for index 0, + 1 for before the first isolated sequence */
         IsoRun[]  isoRuns = new IsoRun[MAX_EXPLICIT_LEVEL+2];
+        boolean   isNumbersSpecial;     /*reordering mode for NUMBERS_SPECIAL */
     }
 
     static class Isolate {
@@ -945,29 +950,31 @@ public class Bidi {
      *   is easier with the same names for the Bidi types in the code as there.
      *   See UCharacterDirection
      */
-    static final byte L   = UCharacterDirection.LEFT_TO_RIGHT;
-    static final byte R   = UCharacterDirection.RIGHT_TO_LEFT;
-    static final byte EN  = UCharacterDirection.EUROPEAN_NUMBER;
-    static final byte ES  = UCharacterDirection.EUROPEAN_NUMBER_SEPARATOR;
-    static final byte ET  = UCharacterDirection.EUROPEAN_NUMBER_TERMINATOR;
-    static final byte AN  = UCharacterDirection.ARABIC_NUMBER;
-    static final byte CS  = UCharacterDirection.COMMON_NUMBER_SEPARATOR;
-    static final byte B   = UCharacterDirection.BLOCK_SEPARATOR;
-    static final byte S   = UCharacterDirection.SEGMENT_SEPARATOR;
-    static final byte WS  = UCharacterDirection.WHITE_SPACE_NEUTRAL;
-    static final byte ON  = UCharacterDirection.OTHER_NEUTRAL;
-    static final byte LRE = UCharacterDirection.LEFT_TO_RIGHT_EMBEDDING;
-    static final byte LRO = UCharacterDirection.LEFT_TO_RIGHT_OVERRIDE;
-    static final byte AL  = UCharacterDirection.RIGHT_TO_LEFT_ARABIC;
-    static final byte RLE = UCharacterDirection.RIGHT_TO_LEFT_EMBEDDING;
-    static final byte RLO = UCharacterDirection.RIGHT_TO_LEFT_OVERRIDE;
-    static final byte PDF = UCharacterDirection.POP_DIRECTIONAL_FORMAT;
-    static final byte NSM = UCharacterDirection.DIR_NON_SPACING_MARK;
-    static final byte BN  = UCharacterDirection.BOUNDARY_NEUTRAL;
-    static final byte FSI = UCharacterDirection.FIRST_STRONG_ISOLATE;
-    static final byte LRI = UCharacterDirection.LEFT_TO_RIGHT_ISOLATE;
-    static final byte RLI = UCharacterDirection.RIGHT_TO_LEFT_ISOLATE;
-    static final byte PDI = UCharacterDirection.POP_DIRECTIONAL_ISOLATE;
+    static final byte L   = UCharacterDirection.LEFT_TO_RIGHT;                  /*  0 */
+    static final byte R   = UCharacterDirection.RIGHT_TO_LEFT;                  /*  1 */
+    static final byte EN  = UCharacterDirection.EUROPEAN_NUMBER;                /*  2 */
+    static final byte ES  = UCharacterDirection.EUROPEAN_NUMBER_SEPARATOR;      /*  3 */
+    static final byte ET  = UCharacterDirection.EUROPEAN_NUMBER_TERMINATOR;     /*  4 */
+    static final byte AN  = UCharacterDirection.ARABIC_NUMBER;                  /*  5 */
+    static final byte CS  = UCharacterDirection.COMMON_NUMBER_SEPARATOR;        /*  6 */
+    static final byte B   = UCharacterDirection.BLOCK_SEPARATOR;                /*  7 */
+    static final byte S   = UCharacterDirection.SEGMENT_SEPARATOR;              /*  8 */
+    static final byte WS  = UCharacterDirection.WHITE_SPACE_NEUTRAL;            /*  9 */
+    static final byte ON  = UCharacterDirection.OTHER_NEUTRAL;                  /* 10 */
+    static final byte LRE = UCharacterDirection.LEFT_TO_RIGHT_EMBEDDING;        /* 11 */
+    static final byte LRO = UCharacterDirection.LEFT_TO_RIGHT_OVERRIDE;         /* 12 */
+    static final byte AL  = UCharacterDirection.RIGHT_TO_LEFT_ARABIC;           /* 13 */
+    static final byte RLE = UCharacterDirection.RIGHT_TO_LEFT_EMBEDDING;        /* 14 */
+    static final byte RLO = UCharacterDirection.RIGHT_TO_LEFT_OVERRIDE;         /* 15 */
+    static final byte PDF = UCharacterDirection.POP_DIRECTIONAL_FORMAT;         /* 16 */
+    static final byte NSM = UCharacterDirection.DIR_NON_SPACING_MARK;           /* 17 */
+    static final byte BN  = UCharacterDirection.BOUNDARY_NEUTRAL;               /* 18 */
+    static final byte FSI = UCharacterDirection.FIRST_STRONG_ISOLATE;           /* 19 */
+    static final byte LRI = UCharacterDirection.LEFT_TO_RIGHT_ISOLATE;          /* 20 */
+    static final byte RLI = UCharacterDirection.RIGHT_TO_LEFT_ISOLATE;          /* 21 */
+    static final byte PDI = UCharacterDirection.POP_DIRECTIONAL_ISOLATE;        /* 22 */
+    static final byte ENL = PDI + 1;                                            /* 23 */
+    static final byte ENR = ENL + 1;                                            /* 24 */
 
     /**
      * Value returned by <code>BidiClassifier</code> when there is no need to
@@ -1149,6 +1156,7 @@ public class Bidi {
     static final int DirPropFlagLR(byte level) { return DirPropFlagLR[level & 1]; }
     static final int DirPropFlagE(byte level)  { return DirPropFlagE[level & 1]; }
     static final int DirPropFlagO(byte level)  { return DirPropFlagO[level & 1]; }
+    static final byte DirFromStrong(byte strong) { return strong == L ? L : R; }
 
     /*  are there any characters that are LTR or RTL? */
     static final int MASK_LTR =
@@ -1156,7 +1164,7 @@ public class Bidi {
     static final int MASK_RTL = DirPropFlag(R)|DirPropFlag(AL)|DirPropFlag(RLE)|DirPropFlag(RLO)|DirPropFlag(RLI);
 
     static final int MASK_R_AL = DirPropFlag(R)|DirPropFlag(AL);
-    static final int MASK_STRONG = DirPropFlag(L)|DirPropFlag(R)|DirPropFlag(AL);
+    static final int MASK_STRONG_EN_AN = DirPropFlag(L)|DirPropFlag(R)|DirPropFlag(AL)|DirPropFlag(EN)|DirPropFlag(AN);
     /* explicit embedding codes */
     static final int MASK_EXPLICIT = DirPropFlag(LRE)|DirPropFlag(LRO)|DirPropFlag(RLE)|DirPropFlag(RLO)|DirPropFlag(PDF);
     static final int MASK_BN_EXPLICIT = DirPropFlag(BN)|MASK_EXPLICIT;
@@ -2040,9 +2048,11 @@ public class Bidi {
         bd.isoRuns[0].start = 0;
         bd.isoRuns[0].limit = 0;
         bd.isoRuns[0].level = GetParaLevelAt(0);
-        bd.isoRuns[0].lastStrong = (byte)(GetParaLevelAt(0) & 1);
-        bd.isoRuns[0].lastStrongPos = 0;
+        bd.isoRuns[0].lastStrong = bd.isoRuns[0].contextDir = (byte)(GetParaLevelAt(0) & 1);
+        bd.isoRuns[0].lastStrongPos = bd.isoRuns[0].contextPos = 0;
         bd.openings = new Opening[SIMPLE_OPENINGS_SIZE];
+        bd.isNumbersSpecial = reorderingMode == REORDER_NUMBERS_SPECIAL ||
+                              reorderingMode == REORDER_INVERSE_FOR_NUMBERS_SPECIAL;
     }
 
     /* paragraph boundary */
@@ -2050,17 +2060,23 @@ public class Bidi {
         bd.isoRunLast = 0;
         bd.isoRuns[0].limit = 0;
         bd.isoRuns[0].level = level;
-        bd.isoRuns[0].lastStrong = (byte)(level & 1);
-        bd.isoRuns[0].lastStrongPos = 0;
+        bd.isoRuns[0].lastStrong = bd.isoRuns[0].contextDir = (byte)(level & 1);
+        bd.isoRuns[0].lastStrongPos = bd.isoRuns[0].contextPos = 0;
     }
 
     /* LRE, LRO, RLE, RLO, PDF */
-    private void bracketProcessBoundary(BracketData bd, byte level) {
+    private void bracketProcessBoundary(BracketData bd, int lastCcPos,
+                                        byte contextLevel, byte embeddingLevel) {
         IsoRun pLastIsoRun = bd.isoRuns[bd.isoRunLast];
+        if ((DirPropFlag(dirProps[lastCcPos]) & MASK_ISO) != 0) /* after an isolate */
+            return;
+        if ((embeddingLevel & ~LEVEL_OVERRIDE) >
+            (contextLevel & ~LEVEL_OVERRIDE))         /* not a PDF */
+            contextLevel = embeddingLevel;
         pLastIsoRun.limit = pLastIsoRun.start;
-        pLastIsoRun.level = level;
-        pLastIsoRun.lastStrong = (byte)(level & 1);
-        pLastIsoRun.lastStrongPos = 0;
+        pLastIsoRun.level = embeddingLevel;
+        pLastIsoRun.lastStrong = pLastIsoRun.contextDir = (byte)(contextLevel & 1);
+        pLastIsoRun.lastStrongPos = pLastIsoRun.contextPos = lastCcPos;
     }
 
     /* LRI or RLI */
@@ -2074,8 +2090,8 @@ public class Bidi {
             pLastIsoRun = bd.isoRuns[bd.isoRunLast] = new IsoRun();
         pLastIsoRun.start = pLastIsoRun.limit = lastLimit;
         pLastIsoRun.level = level;
-        pLastIsoRun.lastStrong = (byte)(level & 1);
-        pLastIsoRun.lastStrongPos = 0;
+        pLastIsoRun.lastStrong = pLastIsoRun.contextDir = (byte)(level & 1);
+        pLastIsoRun.lastStrongPos = pLastIsoRun.contextPos = 0;
     }
 
     /* PDI */
@@ -2103,8 +2119,8 @@ public class Bidi {
             pOpening = bd.openings[pLastIsoRun.limit]= new Opening();
         pOpening.position = position;
         pOpening.match = match;
-        pOpening.lastStrong = pLastIsoRun.lastStrong;
-        pOpening.lastStrongPos = pLastIsoRun.lastStrongPos;
+        pOpening.contextDir = pLastIsoRun.contextDir;
+        pOpening.contextPos = pLastIsoRun.contextPos;
         pOpening.flags = 0;
         pLastIsoRun.limit++;
     }
@@ -2119,11 +2135,11 @@ public class Bidi {
             qOpening = bd.openings[k];
             if (qOpening.match >= 0)    /* not an N0c match */
                 continue;
-            if (newPropPosition <= qOpening.lastStrongPos)
+            if (newPropPosition < qOpening.contextPos)
                 break;
             if (newPropPosition >= qOpening.position)
                 continue;
-            if (newProp == qOpening.lastStrong || (newProp == R && qOpening.lastStrong == AL))
+            if (newProp == qOpening.contextDir)
                 break;
             openingPosition = qOpening.position;
             dirProps[openingPosition] = dirProps[newPropPosition];
@@ -2135,21 +2151,38 @@ public class Bidi {
         }
     }
 
-    /* handle strong characters and candidates for closing brackets */
+    /* handle strong characters, digits and candidates for closing brackets */
     private void bracketProcessChar(BracketData bd, int position, byte dirProp) {
         IsoRun pLastIsoRun;
         Opening pOpening, qOpening;
         byte newProp;
         byte direction;
-        byte flag;
+        short flag;
         int i, k;
         boolean stable;
         char c, match;
-        if ((DirPropFlag(dirProp) & MASK_STRONG) != 0) { /* L, R or AL */
+        if ((DirPropFlag(dirProp) & MASK_STRONG_EN_AN) != 0) { /* L, R, AL, EN or AN */
             pLastIsoRun = bd.isoRuns[bd.isoRunLast];
+            /* AN after R or AL becomes R or AL; after L or L+AN, it is kept as-is */
+            if (dirProp == AN && (pLastIsoRun.lastStrong == R || pLastIsoRun.lastStrong == AL))
+                dirProp = pLastIsoRun.lastStrong;
+            /* EN after L or L+AN becomes L; after R or AL, it becomes R or AL */
+            if (dirProp == EN) {
+                if (pLastIsoRun.lastStrong == L || pLastIsoRun.lastStrong == AN) {
+                    dirProp = L;
+                    if (!bd.isNumbersSpecial)
+                        dirProps[position] = ENL;
+                }
+                else {
+                    dirProp = pLastIsoRun.lastStrong;   /* may be R or AL */
+                    if (!bd.isNumbersSpecial)
+                        dirProps[position] = dirProp == AL ? AN : ENR;
+                }
+            }
             pLastIsoRun.lastStrong = dirProp;
-            pLastIsoRun.lastStrongPos = position;
-            if (dirProp == AL)
+            pLastIsoRun.contextDir = DirFromStrong(dirProp);
+            pLastIsoRun.lastStrongPos = pLastIsoRun.contextPos = position;
+            if (dirProp == AL || dirProp == AN)
                 dirProp = R;
             flag = (byte)DirPropFlag(dirProp);
             /* strong characters found after an unmatched opening bracket
@@ -2196,9 +2229,8 @@ public class Bidi {
                 newProp = direction;
             }
             else if ((pOpening.flags & (FOUND_L | FOUND_R)) != 0) {     /* N0c */
-                if ((direction == 1 && pOpening.lastStrong == L) ||
-                    (direction == 0 && pOpening.lastStrong != L)) {
-                    newProp = (byte)(direction ^ 1);                    /* N0c1 */
+                if (direction != pOpening.contextDir) {
+                    newProp = pOpening.contextDir;                      /* N0c1 */
                     /* it is stable if there is no preceding text or in
                        conditions too complicated and not worth checking */
                     stable = (i == pLastIsoRun.start);
@@ -2209,15 +2241,11 @@ public class Bidi {
             else {
                 newProp = BN;                                           /* N0d */
             }
-            if (newProp == L) {
-                dirProps[pOpening.position] = L;
-                dirProps[position] = L;
-                pLastIsoRun.lastStrong = L;
-            }
-            else if (newProp == R) {
-                dirProps[pOpening.position] = pOpening.lastStrong == AL ? AL : R;
-                dirProps[position] = pLastIsoRun.lastStrong == AL ? AL : R;
-                pLastIsoRun.lastStrong = dirProps[position];
+            if (newProp != BN) {
+                dirProps[pOpening.position] = newProp;
+                dirProps[position] = newProp;
+                pLastIsoRun.contextDir = newProp;
+                pLastIsoRun.contextPos = position;
             }
             /* Update nested N0c pairs that may be affected */
             if (newProp == direction)
@@ -2309,7 +2337,8 @@ public class Bidi {
  * This limits the scope of the implicit rules in effectively
  * the same way as the run limits.
  *
- * Instead, this implementation does not modify these codes.
+ * Instead, this implementation does not modify these codes, except for
+ * paired brackets whose properties (ON) may be replaced by L or R.
  * On one hand, the paragraph has to be scanned for same-level-runs, but
  * on the other hand, this saves another loop to reset these codes,
  * or saves making and modifying a copy of dirProps[].
@@ -2395,6 +2424,8 @@ public class Bidi {
         /* (X1) level is set for all codes, embeddingLevel keeps track of the push/pop operations */
         /* both variables may carry the LEVEL_OVERRIDE flag to indicate the override status */
         byte embeddingLevel = level, newLevel;
+        byte previousLevel = level; /* previous level for regular (not CC) characters */
+        int lastCcPos = 0;          /* index of last effective LRx,RLx, PDx */
 
         short[] stack = new short[MAX_EXPLICIT_LEVEL + 2];  /* we never push anything >= MAX_EXPLICIT_LEVEL
                                                                but we need one more entry as base */
@@ -2424,6 +2455,7 @@ public class Bidi {
                     newLevel = (byte)(((embeddingLevel & ~LEVEL_OVERRIDE) + 1) | 1); /* least greater odd level */
                 if (newLevel <= MAX_EXPLICIT_LEVEL && overflowIsolateCount == 0 &&
                                                       overflowEmbeddingCount == 0) {
+                    lastCcPos = i;
                     embeddingLevel = newLevel;
                     if (dirProp == LRO || dirProp == RLO)
                         embeddingLevel |= LEVEL_OVERRIDE;
@@ -2433,7 +2465,6 @@ public class Bidi {
                        since this has already been done for newLevel which is
                        the source for embeddingLevel.
                      */
-                    bracketProcessBoundary(bracketData, embeddingLevel);
                 } else {
                     dirProps[i] |= IGNORE_CC;
                     if (overflowIsolateCount == 0)
@@ -2454,14 +2485,19 @@ public class Bidi {
                     break;
                 }
                 if (stackLast > 0 && stack[stackLast] < ISOLATE) {   /* not an isolate entry */
+                    lastCcPos = i;
                     stackLast--;
                     embeddingLevel = (byte)stack[stackLast];
-                    bracketProcessBoundary(bracketData, embeddingLevel);
                 } else
                     dirProps[i] |= IGNORE_CC;
                 break;
             case LRI:
             case RLI:
+                if (embeddingLevel != previousLevel) {
+                    bracketProcessBoundary(bracketData, lastCcPos,
+                                           previousLevel, embeddingLevel);
+                    previousLevel = embeddingLevel;
+                }
                 /* (X5a, X5b) */
                 flags |= DirPropFlag(ON) | DirPropFlag(BN) | DirPropFlagLR(embeddingLevel);
                 level = embeddingLevel;
@@ -2471,6 +2507,8 @@ public class Bidi {
                     newLevel=(byte)(((embeddingLevel&~LEVEL_OVERRIDE)+1)|1); /* least greater odd level */
                 if (newLevel <= MAX_EXPLICIT_LEVEL && overflowIsolateCount == 0
                                                    && overflowEmbeddingCount == 0) {
+                    lastCcPos = i;
+                    previousLevel = embeddingLevel;
                     validIsolateCount++;
                     if (validIsolateCount > isolateCount)
                         isolateCount = validIsolateCount;
@@ -2484,12 +2522,17 @@ public class Bidi {
                 }
                 break;
             case PDI:
+                if (embeddingLevel != previousLevel) {
+                    bracketProcessBoundary(bracketData, lastCcPos,
+                                           previousLevel, embeddingLevel);
+                }
                 /* (X6a) */
                 if (overflowIsolateCount > 0) {
                     dirProps[i] |= IGNORE_CC;
                     overflowIsolateCount--;
                 }
                 else if (validIsolateCount > 0) {
+                    lastCcPos = i;
                     overflowEmbeddingCount = 0;
                     while (stack[stackLast] < ISOLATE)  /* pop embedding entries */
                         stackLast--;                    /* until the last isolate entry */
@@ -2498,8 +2541,8 @@ public class Bidi {
                     bracketProcessPDI(bracketData);
                 } else
                     dirProps[i] |= IGNORE_CC;
-                embeddingLevel = (byte)stack[stackLast];
-                level = embeddingLevel;
+                embeddingLevel = (byte)(stack[stackLast] & ~ISOLATE);
+                previousLevel = level = embeddingLevel;
                 flags |= DirPropFlag(ON) | DirPropFlag(BN) | DirPropFlagLR(embeddingLevel);
                 break;
             case B:
@@ -2511,7 +2554,7 @@ public class Bidi {
                     validIsolateCount = 0;
                     stackLast = 0;
                     stack[0] = level;   /* initialize base entry to para level, no override, no isolate */
-                    embeddingLevel = GetParaLevelAt(i + 1);
+                    previousLevel = embeddingLevel = GetParaLevelAt(i + 1);
                     bracketProcessB(bracketData, embeddingLevel);
                 }
                 flags |= DirPropFlag(B);
@@ -2524,6 +2567,11 @@ public class Bidi {
             default:
                 /* all other types get the "real" level */
                 level = embeddingLevel;
+                if (embeddingLevel != previousLevel) {
+                    bracketProcessBoundary(bracketData, lastCcPos,
+                                           previousLevel, embeddingLevel);
+                    previousLevel = embeddingLevel;
+                }
                 if ((level & LEVEL_OVERRIDE) != 0)
                     flags |= DirPropFlagLR(level);
                 else
@@ -2633,7 +2681,7 @@ public class Bidi {
     /*********************************************************************/
     /* Definitions and type for properties state tables                  */
     /*********************************************************************/
-    private static final int IMPTABPROPS_COLUMNS = 14;
+    private static final int IMPTABPROPS_COLUMNS = 16;
     private static final int IMPTABPROPS_RES = IMPTABPROPS_COLUMNS - 1;
     private static short GetStateProps(short cell) {
         return (short)(cell & 0x1f);
@@ -2644,8 +2692,8 @@ public class Bidi {
 
     private static final short groupProp[] =          /* dirProp regrouped */
     {
-        /*  L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  FSI LRI RLI PDI */
-            0,  1,  2,  7,  8,  3,  9,  6,  5,  4,  4,  10, 10, 12, 10, 10, 10, 11, 10, 4,  4,  4,  4
+        /*  L   R   EN  ES  ET  AN  CS  B   S   WS  ON  LRE LRO AL  RLE RLO PDF NSM BN  FSI LRI RLI PDI ENL ENR */
+            0,  1,  2,  7,  8,  3,  9,  6,  5,  4,  4,  10, 10, 12, 10, 10, 10, 11, 10, 4,  4,  4,  4,  13, 14
     };
     private static final short _L  = 0;
     private static final short _R  = 1;
@@ -2691,25 +2739,31 @@ public class Bidi {
     /*                                                                   */
     private static final short impTabProps[][] =
     {
-/*                        L,     R,    EN,    AN,    ON,     S,     B,    ES,    ET,    CS,    BN,   NSM,    AL,  Res */
-/* 0 Init        */ {     1,     2,     4,     5,     7,    15,    17,     7,     9,     7,     0,     7,     3,  _ON },
-/* 1 L           */ {     1,  32+2,  32+4,  32+5,  32+7, 32+15, 32+17,  32+7,  32+9,  32+7,     1,     1,  32+3,   _L },
-/* 2 R           */ {  32+1,     2,  32+4,  32+5,  32+7, 32+15, 32+17,  32+7,  32+9,  32+7,     2,     2,  32+3,   _R },
-/* 3 AL          */ {  32+1,  32+2,  32+6,  32+6,  32+8, 32+16, 32+17,  32+8,  32+8,  32+8,     3,     3,     3,   _R },
-/* 4 EN          */ {  32+1,  32+2,     4,  32+5,  32+7, 32+15, 32+17, 64+10,    11, 64+10,     4,     4,  32+3,  _EN },
-/* 5 AN          */ {  32+1,  32+2,  32+4,     5,  32+7, 32+15, 32+17,  32+7,  32+9, 64+12,     5,     5,  32+3,  _AN },
-/* 6 AL:EN/AN    */ {  32+1,  32+2,     6,     6,  32+8, 32+16, 32+17,  32+8,  32+8, 64+13,     6,     6,  32+3,  _AN },
-/* 7 ON          */ {  32+1,  32+2,  32+4,  32+5,     7, 32+15, 32+17,     7, 64+14,     7,     7,     7,  32+3,  _ON },
-/* 8 AL:ON       */ {  32+1,  32+2,  32+6,  32+6,     8, 32+16, 32+17,     8,     8,     8,     8,     8,  32+3,  _ON },
-/* 9 ET          */ {  32+1,  32+2,     4,  32+5,     7, 32+15, 32+17,     7,     9,     7,     9,     9,  32+3,  _ON },
-/*10 EN+ES/CS    */ {  96+1,  96+2,     4,  96+5, 128+7, 96+15, 96+17, 128+7,128+14, 128+7,    10, 128+7,  96+3,  _EN },
-/*11 EN+ET       */ {  32+1,  32+2,     4,  32+5,  32+7, 32+15, 32+17,  32+7,    11,  32+7,    11,    11,  32+3,  _EN },
-/*12 AN+CS       */ {  96+1,  96+2,  96+4,     5, 128+7, 96+15, 96+17, 128+7,128+14, 128+7,    12, 128+7,  96+3,  _AN },
-/*13 AL:EN/AN+CS */ {  96+1,  96+2,     6,     6, 128+8, 96+16, 96+17, 128+8, 128+8, 128+8,    13, 128+8,  96+3,  _AN },
-/*14 ON+ET       */ {  32+1,  32+2, 128+4,  32+5,     7, 32+15, 32+17,     7,    14,     7,    14,    14,  32+3,  _ON },
-/*15 S           */ {  32+1,  32+2,  32+4,  32+5,  32+7,    15, 32+17,  32+7,  32+9,  32+7,    15,  32+7,  32+3,   _S },
-/*16 AL:S        */ {  32+1,  32+2,  32+6,  32+6,  32+8,    16, 32+17,  32+8,  32+8,  32+8,    16,  32+8,  32+3,   _S },
-/*17 B           */ {  32+1,  32+2,  32+4,  32+5,  32+7, 32+15,    17,  32+7,  32+9,  32+7,    17,  32+7,  32+3,   _B }
+/*                        L,     R,    EN,    AN,    ON,     S,     B,    ES,    ET,    CS,    BN,   NSM,    AL,   ENL,   ENR ,  Res */
+/* 0 Init        */ {     1,     2,     4,     5,     7,    15,    17,     7,     9,     7,     0,     7,     3,    18,    21,  _ON },
+/* 1 L           */ {     1,  32+2,  32+4,  32+5,  32+7, 32+15, 32+17,  32+7,  32+9,  32+7,     1,     1,  32+3, 32+18, 32+21,   _L },
+/* 2 R           */ {  32+1,     2,  32+4,  32+5,  32+7, 32+15, 32+17,  32+7,  32+9,  32+7,     2,     2,  32+3, 32+18, 32+21,   _R },
+/* 3 AL          */ {  32+1,  32+2,  32+6,  32+6,  32+8, 32+16, 32+17,  32+8,  32+8,  32+8,     3,     3,     3, 32+18, 32+21,   _R },
+/* 4 EN          */ {  32+1,  32+2,     4,  32+5,  32+7, 32+15, 32+17, 64+10,    11, 64+10,     4,     4,  32+3,    18,    21,  _EN },
+/* 5 AN          */ {  32+1,  32+2,  32+4,     5,  32+7, 32+15, 32+17,  32+7,  32+9, 64+12,     5,     5,  32+3, 32+18, 32+21,  _AN },
+/* 6 AL:EN/AN    */ {  32+1,  32+2,     6,     6,  32+8, 32+16, 32+17,  32+8,  32+8, 64+13,     6,     6,  32+3,    18,    21,  _AN },
+/* 7 ON          */ {  32+1,  32+2,  32+4,  32+5,     7, 32+15, 32+17,     7, 64+14,     7,     7,     7,  32+3, 32+18, 32+21,  _ON },
+/* 8 AL:ON       */ {  32+1,  32+2,  32+6,  32+6,     8, 32+16, 32+17,     8,     8,     8,     8,     8,  32+3, 32+18, 32+21,  _ON },
+/* 9 ET          */ {  32+1,  32+2,     4,  32+5,     7, 32+15, 32+17,     7,     9,     7,     9,     9,  32+3,    18,    21,  _ON },
+/*10 EN+ES/CS    */ {  96+1,  96+2,     4,  96+5, 128+7, 96+15, 96+17, 128+7,128+14, 128+7,    10, 128+7,  96+3,    18,    21,  _EN },
+/*11 EN+ET       */ {  32+1,  32+2,     4,  32+5,  32+7, 32+15, 32+17,  32+7,    11,  32+7,    11,    11,  32+3,    18,    21,  _EN },
+/*12 AN+CS       */ {  96+1,  96+2,  96+4,     5, 128+7, 96+15, 96+17, 128+7,128+14, 128+7,    12, 128+7,  96+3, 96+18, 96+21,  _AN },
+/*13 AL:EN/AN+CS */ {  96+1,  96+2,     6,     6, 128+8, 96+16, 96+17, 128+8, 128+8, 128+8,    13, 128+8,  96+3,    18,    21,  _AN },
+/*14 ON+ET       */ {  32+1,  32+2, 128+4,  32+5,     7, 32+15, 32+17,     7,    14,     7,    14,    14,  32+3,128+18,128+21,  _ON },
+/*15 S           */ {  32+1,  32+2,  32+4,  32+5,  32+7,    15, 32+17,  32+7,  32+9,  32+7,    15,  32+7,  32+3, 32+18, 32+21,   _S },
+/*16 AL:S        */ {  32+1,  32+2,  32+6,  32+6,  32+8,    16, 32+17,  32+8,  32+8,  32+8,    16,  32+8,  32+3, 32+18, 32+21,   _S },
+/*17 B           */ {  32+1,  32+2,  32+4,  32+5,  32+7, 32+15,    17,  32+7,  32+9,  32+7,    17,  32+7,  32+3, 32+18, 32+21,   _B },
+/*18 ENL         */ {  32+1,  32+2,    18,  32+5,  32+7, 32+15, 32+17, 64+19,    20, 64+19,    18,    18,  32+3,    18,    21,   _L },
+/*19 ENL+ES/CS   */ {  96+1,  96+2,    18,  96+5, 128+7, 96+15, 96+17, 128+7,128+14, 128+7,    19, 128+7,  96+3,    18,    21,   _L },
+/*20 ENL+ET      */ {  32+1,  32+2,    18,  32+5,  32+7, 32+15, 32+17,  32+7,    20,  32+7,    20,    20,  32+3,    18,    21,   _L },
+/*21 ENR         */ {  32+1,  32+2,    21,  32+5,  32+7, 32+15, 32+17, 64+22,    23, 64+22,    21,    21,  32+3,    18,    21,  _AN },
+/*22 ENR+ES/CS   */ {  96+1,  96+2,    21,  96+5, 128+7, 96+15, 96+17, 128+7,128+14, 128+7,    22, 128+7,  96+3,    18,    21,  _AN },
+/*23 ENR+ET      */ {  32+1,  32+2,    21,  32+5,  32+7, 32+15, 32+17,  32+7,    23,  32+7,    23,    23,  32+3,    18,    21,  _AN }
     };
 
     /*********************************************************************/
