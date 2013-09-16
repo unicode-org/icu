@@ -4209,11 +4209,11 @@ void DateFormatTest::TestDateFormatLeniency() {
     const TestDateFormatLeniencyItem items[] = {
         //locale    leniency    parse String                    pattern                             expected result
         { "en",     true,       UnicodeString("2008-07 02"),    UnicodeString("yyyy-LLLL dd"),      UnicodeString("2008-July 02") },
-        { "en",     false,      UnicodeString("2008-07 02"),    UnicodeString("yyyy-LLLL dd"),      NULL },
+        { "en",     false,      UnicodeString("2008-07 02"),    UnicodeString("yyyy-LLLL dd"),      UnicodeString("") },
         { "en",     true,       UnicodeString("2008-Jan 02"),   UnicodeString("yyyy-LLL. dd"),      UnicodeString("2008-Jan 02") },
-        { "en",     false,      UnicodeString("2008-Jan 02"),   UnicodeString("yyyy-LLL. dd"),      NULL },
+        { "en",     false,      UnicodeString("2008-Jan 02"),   UnicodeString("yyyy-LLL. dd"),      UnicodeString("") },
         { "en",     true,       UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("2008-Jan 02") },
-        { "en",     false,      UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  NULL },
+        { "en",     false,      UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("") },
         // terminator
         { NULL,     true,       UnicodeString(""),              UnicodeString(""),                  UnicodeString("") }                
     };
@@ -4235,7 +4235,7 @@ void DateFormatTest::TestDateFormatLeniency() {
            UDate d = sdmft->parse(itemPtr->parseString, pos);
            
            if(pos.getErrorIndex() > -1)
-               if(itemPtr->expectedResult != NULL) {
+               if(itemPtr->expectedResult.length() != 0) {
                    errln("error: unexpected error - " + itemPtr->parseString + " - error index " + pos.getErrorIndex() + " - leniency " + itemPtr->leniency);
                     continue;
                } else
