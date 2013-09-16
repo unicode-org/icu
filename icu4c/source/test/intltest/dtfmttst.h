@@ -228,6 +228,9 @@ public:
 */
 
     void TestDotAndAtLeniency();
+
+    void TestDateFormatLeniency();
+
 private:
     UBool showParse(DateFormat &format, const UnicodeString &formattedString);
 
