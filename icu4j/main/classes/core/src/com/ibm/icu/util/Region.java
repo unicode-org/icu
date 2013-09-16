@@ -115,14 +115,6 @@ public class Region implements Comparable<Region> {
         DEPRECATED,
     }
 
-    /**
-     * A constant used for unknown numeric region code.
-     * @see #getNumericCode()
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
-     */
-    public static final int UNDEFINED_NUMERIC_CODE = -1;
-
     private String id;
     private int code;
     private RegionType type;
@@ -207,7 +199,7 @@ public class Region implements Comparable<Region> {
                 numericCodeMap.put(r.code, r);
                 r.type = RegionType.SUBCONTINENT;
             } else {
-                r.code = UNDEFINED_NUMERIC_CODE;
+                r.code = -1;
             }
             regions.add(r);
         }
@@ -233,7 +225,7 @@ public class Region implements Comparable<Region> {
                         r.code = Integer.valueOf(aliasFrom).intValue();
                         numericCodeMap.put(r.code, r);
                     } else {
-                        r.code = UNDEFINED_NUMERIC_CODE;
+                        r.code = -1;
                     }
                     regions.add(r);
                 }
@@ -563,12 +555,12 @@ public class Region implements Comparable<Region> {
         return id;
     }
 
-    /** Returns the numeric code for this region
+    /**
+     * Returns the numeric code for this region
      * 
-     * @return The numeric code for this region.   Returns UNDEFINED_NUMERIC_CODE (-1) if the
-     * given region does not have a numeric code assigned to it.  This is a very rare case and
-     * only occurs for a few very small territories.
-     *
+     * @return The numeric code for this region. Returns a negative value if the given region does not have a numeric
+     *         code assigned to it. This is a very rare case and only occurs for a few very small territories.
+     * 
      * @draft ICU 50
      * @provisional This API might change or be removed in a future release.
      */
