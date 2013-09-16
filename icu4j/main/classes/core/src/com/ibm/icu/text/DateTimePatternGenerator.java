@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -381,7 +382,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * getBestPattern which takes optional skip matcher
      */
     private String getBestPattern(String skeleton, DateTimeMatcher skipMatcher, int options) {
-        int flags = DTPG_FLAGS_NONE;
+        EnumSet<DTPGflags> flags = EnumSet.noneOf(DTPGflags.class);
         // Replace hour metacharacters 'j' and 'J', set flags as necessary
         StringBuilder skeletonCopy = new StringBuilder(skeleton);
         boolean inQuoted = false;
@@ -396,7 +397,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 	// Get pattern for skeleton with H, then (in adjustFieldTypes)
                 	// replace H or k with defaultHourFormatChar
                 	skeletonCopy.setCharAt(patPos, 'H');
-                	flags |= DTPG_FLAGS_SKELETON_USES_CAP_J;
+                	flags.add(DTPGflags.SKELETON_USES_CAP_J);
                 }
             }
         }
@@ -680,7 +681,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
     public String replaceFieldTypes(String pattern, String skeleton, int options) {
         synchronized (this) { // synchronized since a getter must be thread-safe
             PatternWithMatcher patternNoMatcher = new PatternWithMatcher(pattern, null);
-            return adjustFieldTypes(patternNoMatcher, current.set(skeleton, fp, false), DTPG_FLAGS_NONE, options);
+            return adjustFieldTypes(patternNoMatcher, current.set(skeleton, fp, false), EnumSet.noneOf(DTPGflags.class), options);
         }
     }
 
@@ -1583,7 +1584,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * We only get called here if we failed to find an exact skeleton. We have broken it into date + time, and look for the pieces.
      * If we fail to find a complete skeleton, we compose in a loop until we have all the fields.
      */
-    private String getBestAppending(DateTimeMatcher source, int missingFields, DistanceInfo distInfo, DateTimeMatcher skipMatcher, int flags, int options) {
+    private String getBestAppending(DateTimeMatcher source, int missingFields, DistanceInfo distInfo, DateTimeMatcher skipMatcher, EnumSet<DTPGflags> flags, int options) {
         String resultPattern = null;
         if (missingFields != 0) {
             PatternWithMatcher resultPatternWithMatcher = getBestRaw(source, missingFields, distInfo, skipMatcher);
@@ -1596,7 +1597,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 if ((distInfo.missingFieldMask & SECOND_AND_FRACTIONAL_MASK) == FRACTIONAL_MASK
                         && (missingFields & SECOND_AND_FRACTIONAL_MASK) == SECOND_AND_FRACTIONAL_MASK) {
                     resultPatternWithMatcher.pattern = resultPattern;
-                    resultPattern = adjustFieldTypes(resultPatternWithMatcher, source, flags | DTPG_FLAGS_FIX_FRACTIONAL_SECONDS, options);
+                    flags.add(DTPGflags.FIX_FRACTIONAL_SECONDS);
+                    resultPattern = adjustFieldTypes(resultPatternWithMatcher, source, flags, options);
                     distInfo.missingFieldMask &= ~FRACTIONAL_MASK; // remove bit
                     continue;
                 }
@@ -1697,11 +1699,9 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
      * 
      */
     // flags values
-    private static final int DTPG_FLAGS_NONE = 0;
-    private static final int DTPG_FLAGS_FIX_FRACTIONAL_SECONDS = 1;
-    private static final int DTPG_FLAGS_SKELETON_USES_CAP_J = 2;
+    private enum DTPGflags { FIX_FRACTIONAL_SECONDS, SKELETON_USES_CAP_J };
 
-    private String adjustFieldTypes(PatternWithMatcher patternWithMatcher, DateTimeMatcher inputRequest, int flags, int options) {
+    private String adjustFieldTypes(PatternWithMatcher patternWithMatcher, DateTimeMatcher inputRequest, EnumSet<DTPGflags> flags, int options) {
         fp.set(patternWithMatcher.pattern);
         StringBuilder newPattern = new StringBuilder();
         for (Object item : fp.getItems()) {
@@ -1717,7 +1717,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 //                int type = types[canonicalIndex][1];
                 int type = variableField.getType();
 
-                if ((flags & DTPG_FLAGS_FIX_FRACTIONAL_SECONDS) != 0 && type == SECOND) {
+                if (flags.contains(DTPGflags.FIX_FRACTIONAL_SECONDS) && type == SECOND) {
                     String newField = inputRequest.original[FRACTIONAL_SECOND];
                     fieldBuilder.append(decimal);
                     fieldBuilder.append(newField);
@@ -1769,7 +1769,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                     }
                     char c = (type != HOUR && type != MONTH && type != WEEKDAY && (type != YEAR || reqField.charAt(0)=='Y'))?
                                 reqField.charAt(0): fieldBuilder.charAt(0);
-                    if (type == HOUR && (flags & DTPG_FLAGS_SKELETON_USES_CAP_J) != 0) {
+                    if (type == HOUR && flags.contains(DTPGflags.SKELETON_USES_CAP_J)) {
                         c = defaultHourFormatChar;
                     }
                     fieldBuilder = new StringBuilder();
