@@ -11,6 +11,7 @@ import java.text.Format;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.Date;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -443,6 +444,28 @@ public abstract class DateFormat extends UFormat {
      */
 
     public final static int FIELD_COUNT = 34; // must == DateFormatSymbols.patternChars.length()
+
+    
+    /**
+     * boolean attributes
+     * <br/>
+     * PARSE_ALLOW_WHITESPACE - indicates whitespace tolerance. Also included is trailing dot tolerance.
+     * <br/>
+     * PARSE_ALLOW_NUMERIC - indicates tolerance of numeric data when String data may be assumed. eg: YEAR_NAME_FIELD
+     * 
+     * @internal ICU 5.2 technology preview
+     */
+    public enum BooleanAttribute { 
+        /** indicates whitespace tolerance. Also included is trailing dot tolerance. */
+        PARSE_ALLOW_WHITESPACE,
+        /** indicates tolerance of numeric data when String data may be assumed. eg: YEAR_NAME_FIELD */
+        PARSE_ALLOW_NUMERIC 
+    };
+    
+    /**
+     * boolean attributes for this instance. Inclusion in this is indicates a true condition.
+     */
+    private EnumSet<BooleanAttribute> booleanAttributes = EnumSet.allOf(BooleanAttribute.class); 
 
     // Proclaim serial compatibility with 1.1 FCS
     private static final long serialVersionUID = 7218322306649953788L;
@@ -1434,8 +1457,12 @@ public abstract class DateFormat extends UFormat {
      * lenient parsing, the parser may use heuristics to interpret inputs that
      * do not precisely match this object's format.  With strict parsing,
      * inputs must match this object's format.
+     * <br/><br/> 
+     * <b>Note:</b> This method is specific to the encapsulated Calendar object. DateFormat 
+     * leniency aspects are controlled by setBooleanAttribute.
      * @param lenient when true, parsing is lenient
      * @see com.ibm.icu.util.Calendar#setLenient
+     * @see #setBooleanAttribute(BooleanAttribute, boolean)
      * @stable ICU 2.0
      */
     public void setLenient(boolean lenient)
@@ -1444,7 +1471,7 @@ public abstract class DateFormat extends UFormat {
     }
 
     /**
-     * Returns whether date/time parsing is lenient.
+     * Returns whether date/time parsing in the encapsulated Calendar object is lenient.
      * @stable ICU 2.0
      */
     public boolean isLenient()
@@ -1452,6 +1479,41 @@ public abstract class DateFormat extends UFormat {
         return calendar.isLenient();
     }
 
+    /**
+     * set a boolean attribute for this instance. Aspects of DateFormat leniency are controlled by
+     * boolean attributes. 
+     * 
+     * @see BooleanAttribute
+     * @internal ICU 5.2 technology preview
+     */
+    public DateFormat setBooleanAttribute(BooleanAttribute key, boolean value) 
+    {
+        if(booleanAttributes.contains(key) && value == false)
+            booleanAttributes.remove(key);
+        
+        if(value == true && !booleanAttributes.contains(key))
+            booleanAttributes.add(key);
+        
+        return this;
+    }
+    
+    /**
+     * get the current value for the specified BooleanAttribute for this instance
+     *
+     * if attribute is missing false is returned.
+     * 
+     * @see BooleanAttribute
+     * @internal ICU 5.2 technology preview
+     */
+    public boolean getBooleanAttribute(BooleanAttribute key) 
+    {
+        if(booleanAttributes.contains(key))
+            return true;
+        else 
+            return false;
+    }
+    
+    
     /**
      * Overrides hashCode.
      * @stable ICU 2.0
