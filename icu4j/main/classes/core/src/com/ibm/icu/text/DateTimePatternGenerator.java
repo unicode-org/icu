@@ -1597,6 +1597,7 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
                 if ((distInfo.missingFieldMask & SECOND_AND_FRACTIONAL_MASK) == FRACTIONAL_MASK
                         && (missingFields & SECOND_AND_FRACTIONAL_MASK) == SECOND_AND_FRACTIONAL_MASK) {
                     resultPatternWithMatcher.pattern = resultPattern;
+                    flags = EnumSet.copyOf(flags);
                     flags.add(DTPGflags.FIX_FRACTIONAL_SECONDS);
                     resultPattern = adjustFieldTypes(resultPatternWithMatcher, source, flags, options);
                     distInfo.missingFieldMask &= ~FRACTIONAL_MASK; // remove bit
