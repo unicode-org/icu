@@ -28,6 +28,7 @@
 #include "unicode/numfmt.h"
 #include "unicode/format.h"
 #include "unicode/locid.h"
+#include "unicode/enumset.h"
 
 /**
  * \file
@@ -38,6 +39,13 @@ U_NAMESPACE_BEGIN
 
 class TimeZone;
 class DateTimePatternGenerator;
+
+// explicit template instantiation. see digitlst.h
+#if defined (_MSC_VER)
+template class U_I18N_API EnumSet<UDateFormatBooleanAttribute,
+            0, 
+            UDAT_BOOLEAN_ATTRIBUTE_COUNT>;
+#endif
 
 /**
  * DateFormat is an abstract class for a family of classes that convert dates and
@@ -572,7 +580,7 @@ public:
     static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
     /**
-     * Returns true if the formatter is set for lenient parsing.
+     * Returns true if the encapsulated Calendar object is set for lenient parsing.
      * @stable ICU 2.0
      */
     virtual UBool isLenient(void) const;
@@ -582,6 +590,9 @@ public:
      * parsing, the parser may use heuristics to interpret inputs that do not
      * precisely match this object's format. With strict parsing, inputs must
      * match this object's format.
+     *
+     * Note: This method is specific to the encapsulated Calendar object.  DateFormat
+     * leniency aspects are controlled by setBooleanAttribute.
      *
      * @param lenient  True specifies date/time interpretation to be lenient.
      * @see Calendar::setLenient
@@ -662,6 +673,32 @@ public:
      */
     virtual void setTimeZone(const TimeZone& zone);
 
+   /**
+     * Set an boolean attribute on this DateFormat.
+     * May return U_UNSUPPORTED_ERROR if this instance does not support
+     * the specified attribute.
+     * @param attr the attribute to set
+     * @param newvalue new value
+     * @param status the error type
+     * @return *this - for chaining (example: format.setAttribute(...).setAttribute(...) )
+     * @internal ICU 5.2 technology preview
+     */
+
+    virtual DateFormat&  U_EXPORT2 setBooleanAttribute(UDateFormatBooleanAttribute attr,
+    									UBool newvalue,
+    									UErrorCode &status);
+
+    /**
+     * Get an boolean from this DateFormat
+     * May return U_UNSUPPORTED_ERROR if this instance does not support
+     * the specified attribute.
+     * @param attr the attribute to set
+     * @param status the error type
+     * @return the attribute value. Undefined if there is an error.
+     * @internal ICU 5.2 technology preview
+     */
+    virtual UBool U_EXPORT2 getBooleanAttribute(UDateFormatBooleanAttribute attr, UErrorCode &status) const;
+
 protected:
     /**
      * Default constructor.  Creates a DateFormat with no Calendar or NumberFormat
@@ -699,6 +736,7 @@ protected:
      */
     NumberFormat* fNumberFormat;
 
+
 private:
     /**
      * Gets the date/time formatter with the given formatting styles for the
@@ -709,6 +747,13 @@ private:
      * @return a date/time formatter, or 0 on failure.
      */
     static DateFormat* U_EXPORT2 create(EStyle timeStyle, EStyle dateStyle, const Locale& inLocale);
+
+     
+    /**
+     * enum set of active boolean attributes for this instance
+     */
+    EnumSet<UDateFormatBooleanAttribute, 0, UDAT_BOOLEAN_ATTRIBUTE_COUNT> fBoolFlags;
+
 
 public:
 #ifndef U_HIDE_OBSOLETE_API

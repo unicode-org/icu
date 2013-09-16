@@ -826,6 +826,50 @@ udat_open(UDateFormatStyle  timeStyle,
 U_STABLE void U_EXPORT2 
 udat_close(UDateFormat* format);
 
+
+/**
+ * DateFormat boolean attributes
+ * @internal ICU 5.2 technology preview
+ */
+typedef enum UDateFormatBooleanAttribute {
+    /** indicates whether whitespace is allowed. Includes trailing dot tolerance. */
+    UDAT_PARSE_ALLOW_WHITESPACE,
+    /** indicates tolerance of numeric data when String data may be assumed. eg: UDAT_YEAR_NAME_FIELD,
+     * 		UDAT_STANDALONE_MONTH_FIELD, UDAT_DAY_OF_WEEK_FIELD */
+    UDAT_PARSE_ALLOW_NUMERIC,
+    /** count boolean date format constants */
+    UDAT_BOOLEAN_ATTRIBUTE_COUNT
+} UDateFormatBooleanAttribute;
+
+
+/**
+ * Get a boolean attribute associated with a UDateFormat.
+ * An example would be a true value for a key of UDAT_PARSE_ALLOW_WHITESPACE indicating allowing whitespace leniency.
+ * If the formatter does not understand the attribute, -1 is returned.
+ * @param fmt The formatter to query.
+ * @param attr The attribute to query; e.g. UDAT_PARSE_ALLOW_WHITESPACE.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return The value of attr.
+ * @internal ICU 5.2 technology preview
+ */
+U_INTERNAL UBool U_EXPORT2
+udat_getBooleanAttribute(const UDateFormat* fmt, UDateFormatBooleanAttribute attr, UErrorCode* status);
+
+/**
+ * Set a boolean attribute associated with a UDateFormat.
+ * An example of a boolean attribute is parse leniency control.  If the formatter does not understand
+ * the attribute, the call is ignored.
+ * @param fmt The formatter to set.
+ * @param attr The attribute to set; one of UDAT_PARSE_ALLOW_WHITESPACE or UDAT_PARSE_ALLOW_NUMERIC
+ * @param newValue The new value of attr.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @internal ICU 5.2 technology preview
+ */
+U_INTERNAL void U_EXPORT2
+udat_setBooleanAttribute(UDateFormat *fmt, UDateFormatBooleanAttribute attr, UBool, UErrorCode* status);
+
+
+
 #if U_SHOW_CPLUSPLUS_API
 
 U_NAMESPACE_BEGIN

@@ -248,6 +248,7 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
       fOverrideList(NULL),
       fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
     initializeDefaultCentury();
 }
@@ -266,6 +267,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 {
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
     initializeDefaultCentury();
@@ -286,6 +288,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 {
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
     initializeDefaultCentury();
@@ -309,6 +312,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
 
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
@@ -331,6 +335,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
 
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
@@ -356,6 +361,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
 
     initializeCalendar(NULL,fLocale,status);
     initialize(fLocale, status);
@@ -378,6 +384,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
 
     initializeCalendar(NULL, fLocale, status);
     initialize(fLocale, status);
@@ -398,6 +405,7 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
     fOverrideList(NULL),
     fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
     construct(timeStyle, dateStyle, fLocale, status);
     if(U_SUCCESS(status)) {
       initializeDefaultCentury();
@@ -438,6 +446,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
 
     initialize(fLocale, status);
     if(U_SUCCESS(status)) {
@@ -456,6 +465,8 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
     fOverrideList(NULL),
     fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
+    UErrorCode status = U_ZERO_ERROR;
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
     *this = other;
 }
 
@@ -1689,8 +1700,6 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     int32_t saveHebrewMonth = -1;
     int32_t count = 0;
 
-    UBool lenient = isLenient();
-
     // hack, reset tztype, cast away const
     ((SimpleDateFormat*)this)->tztype = UTZFMT_TIME_TYPE_UNKNOWN;
 
@@ -1838,7 +1847,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
             abutPat = -1; // End of any abutting fields
             
-            if (! matchLiterals(fPattern, i, text, pos, lenient)) {
+            if (! matchLiterals(fPattern, i, text, pos, getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status))) {
                 status = U_PARSE_ERROR;
                 goto ExitParse;
             }
@@ -1846,7 +1855,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
     }
 
     // Special hack for trailing "." after non-numeric field.
-    if (text.charAt(pos) == 0x2e && lenient) {
+    if (text.charAt(pos) == 0x2e && getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status)) {
         // only do if the last field is not numeric
         if (isAfterNonNumericField(fPattern, fPattern.length())) {
             pos++; // skip the extra "."
@@ -2407,11 +2416,11 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
     int32_t value = 0;
     int32_t i;
     int32_t ps = 0;
+    UErrorCode status = U_ZERO_ERROR;
     ParsePosition pos(0);
     UDateFormatField patternCharIndex = DateFormatSymbols::getPatternCharIndex(ch);
     NumberFormat *currentNumberFormat;
     UnicodeString temp;
-    UBool lenient = isLenient();
     UBool gotNumber = FALSE;
 
 #if defined (U_DEBUG_CAL)
@@ -2517,7 +2526,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 txtLoc = checkIntSuffix(text, txtLoc, patLoc+1, FALSE);
             }
 
-            if (!lenient) {
+            if (!getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status)) {
                 // Check the range of the value
                 int32_t bias = gFieldRangeBias[patternCharIndex];
                 if (bias >= 0 && (value > cal.getMaximum(field) + bias || value < cal.getMinimum(field) + bias)) {
@@ -2653,7 +2662,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 return newStart;
             }
         }
-        if (gotNumber && (lenient || value > fSymbols->fShortYearNamesCount)) {
+        if (gotNumber && (getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC,status) || value > fSymbols->fShortYearNamesCount)) {
             cal.set(UCAL_YEAR, value);
             return pos.getIndex();
         }
@@ -2714,7 +2723,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
                 }
                 newStart = matchString(text, start, UCAL_MONTH, fSymbols->fStandaloneShortMonths, fSymbols->fStandaloneShortMonthsCount, shortMonthPat, cal); // try LLL
             }
-            if (newStart > 0 || !lenient)  // currently we do not try to parse MMMMM/LLLLL: #8860
+            if (newStart > 0 || !getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))  // currently we do not try to parse MMMMM/LLLLL: #8860
                 return newStart;
             // else we allowing parsing as number, below
         }
@@ -2779,7 +2788,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                    fSymbols->fNarrowWeekdays, fSymbols->fNarrowWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
-            else if (!lenient || patternCharIndex == UDAT_DAY_OF_WEEK_FIELD)
+            else if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status) || patternCharIndex == UDAT_DAY_OF_WEEK_FIELD)
                 return newStart;
             // else we allowing parsing as number, below
         }
@@ -2805,7 +2814,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             else if ((newStart = matchString(text, start, UCAL_DAY_OF_WEEK,
                                           fSymbols->fStandaloneShorterWeekdays, fSymbols->fStandaloneShorterWeekdaysCount, NULL, cal)) > 0)
                 return newStart;
-            else if (!lenient)
+            else if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))
                 return newStart;
             // else we allowing parsing as number, below
         }
@@ -2845,7 +2854,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             else if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
                                           fSymbols->fShortQuarters, fSymbols->fShortQuartersCount, cal)) > 0)
                 return newStart;
-            else if (!lenient)
+            else if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))
                 return newStart;
             // else we allowing parsing as number, below
         }
@@ -2871,7 +2880,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
             else if ((newStart = matchQuarterString(text, start, UCAL_MONTH,
                                           fSymbols->fStandaloneShortQuarters, fSymbols->fStandaloneShortQuartersCount, cal)) > 0)
                 return newStart;
-            else if (!lenient)
+            else if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status))
                 return newStart;
             // else we allowing parsing as number, below
         }
@@ -3038,7 +3047,7 @@ int32_t SimpleDateFormat::subParse(const UnicodeString& text, int32_t& start, UC
         // Don't need suffix processing here (as in number processing at the beginning of the function);
         // the new fields being handled as numeric values (month, weekdays, quarters) should not have suffixes.
 
-        if (!lenient) {
+        if (!getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status)) {
             // Check the range of the value
             int32_t bias = gFieldRangeBias[patternCharIndex];
             if (bias >= 0 && (value > cal.getMaximum(field) + bias || value < cal.getMinimum(field) + bias)) {
