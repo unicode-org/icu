@@ -1,7 +1,7 @@
 /*
  ********************************************************************************
  *
- *   Copyright (C) 1996-2010, International Business Machines
+ *   Copyright (C) 1996-2013, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *
  ********************************************************************************
@@ -298,5 +298,16 @@ ctest_xml_fini(void);
 T_CTEST_API int32_t
 T_CTEST_EXPORT2
 ctest_xml_testcase(const char *classname, const char *name, const char *time, const char *failMsg);
+
+
+/**
+ * Log a known issue.
+ * @param ticket ticket number such as "12345" for ICU tickets or "cldr:6636" for CLDR tickets.
+ * @param fmt ...  sprintf-style format, optional message. can be NULL.
+ * @return TRUE unless known issues should be tested
+ */
+T_CTEST_API UBool
+T_CTEST_EXPORT2
+log_knownIssue(const char *ticket, const char *fmt, ...);
 
 #endif

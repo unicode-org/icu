@@ -1,6 +1,6 @@
 /*
 ************************************************************************
-* Copyright (c) 2008-2011, International Business Machines
+* Copyright (c) 2008-2013, International Business Machines
 * Corporation and others.  All Rights Reserved.
 ************************************************************************
 */
@@ -102,5 +102,19 @@ U_CAPI int32_t udbg_getSystemParameterValueByIndex(int32_t i, char *buffer, int3
  * Write ICU info as XML
  */
 U_CAPI void udbg_writeIcuInfo(FILE *f);
+
+/**
+ * \def UDBG_KNOWNISSUE_LEN
+ * Length of output buffer for udbg_knownIssueURLFrom
+ */
+#define UDBG_KNOWNISSUE_LEN 255
+
+/**
+ * Convert a "known issue" string into a URL
+ * @param ticket ticket string such as "10245" or "cldrbug:5013"
+ * @param buf output buffer - must be UDBG_KNOWNISSUE_LEN in size
+ * @return pointer to output buffer, or NULL on err
+ */
+U_CAPI char *udbg_knownIssueURLFrom(const char *ticket, char *buf);
 
 #endif
