@@ -580,3 +580,22 @@ U_CAPI void udbg_writeIcuInfo(FILE *out) {
   }
   fprintf(out, " </icuSystemParams>\n");
 }
+
+#define ICU_TRAC_URL "http://bugs.icu-project.org/trac/ticket/"
+#define CLDR_TRAC_URL "http://unicode.org/cldr/trac/ticket/"
+#define CLDR_TICKET_PREFIX "cldrbug:"
+
+U_CAPI char *udbg_knownIssueURLFrom(const char *ticket, char *buf) {
+  if( ticket==NULL ) {
+    return NULL;
+  }
+
+  if( !strncmp(ticket, CLDR_TICKET_PREFIX, strlen(CLDR_TICKET_PREFIX)) ) {
+    strcpy( buf, CLDR_TRAC_URL );
+    strcat( buf, ticket+strlen(CLDR_TICKET_PREFIX) );
+  } else {
+    strcpy( buf, ICU_TRAC_URL );
+    strcat( buf, ticket );
+  }
+  return buf;
+}

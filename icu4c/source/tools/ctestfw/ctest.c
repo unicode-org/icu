@@ -88,6 +88,7 @@ static void help ( const char *argv0 );
  */
 static void vlog_err(const char *prefix, const char *pattern, va_list ap);
 static void vlog_verbose(const char *prefix, const char *pattern, va_list ap);
+static UBool vlog_knownIssue(const char *ticket, const char *pattern, va_list ap);
 
 /**
  * Log test structure, with indent
@@ -679,6 +680,30 @@ static void vlog_err(const char *prefix, const char *pattern, va_list ap)
     GLOBAL_PRINT_COUNT++;
 }
 
+static UBool vlog_knownIssue(const char *ticket, const char *pattern, va_list ap)
+{
+    /* fputs("!", stdout); /\* col 1 - bang *\/ */
+    /* fprintf(stdout, "%-*s", INDENT_LEVEL,"" ); */
+    /* if(prefix) { */
+    /*     fputs(prefix, stdout); */
+    /* } */
+    char buf[2048], url[1024];
+    vsprintf(buf, pattern, ap);
+
+    printf("KNOWN ISSUE: #%s %s\n", ticket, buf);
+
+    /* fflush(stdout); */
+    /* va_end(ap); */
+    /* if((*pattern==0) || (pattern[strlen(pattern)-1]!='\n')) { */
+    /* 	HANGING_OUTPUT=1; */
+    /* } else { */
+    /* 	HANGING_OUTPUT=0; */
+    /* } */
+    /* GLOBAL_PRINT_COUNT++; */
+    return TRUE;
+}
+
+
 void T_CTEST_EXPORT2
 vlog_info(const char *prefix, const char *pattern, va_list ap)
 {
@@ -764,6 +789,13 @@ log_err(const char* pattern, ...)
     }
     va_start(ap, pattern);
     vlog_err(NULL, pattern, ap);
+}
+
+UBool T_CTEST_EXPORT2
+log_knownIssue(const char *ticket, const char *pattern, ...) {
+  va_list ap;
+  va_start(ap, pattern);
+  return vlog_knownIssue(ticket, pattern, ap);
 }
 
 void T_CTEST_EXPORT2

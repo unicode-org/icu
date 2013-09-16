@@ -156,6 +156,10 @@ public:
 
     virtual void logln( void );
 
+    UBool logKnownIssue( const char *ticket, const UnicodeString &message );
+    UBool logKnownIssue( const char *ticket );
+    UBool logKnownIssue( const char *ticket, const char *fmt, ...);
+
     virtual void info( const UnicodeString &message );
 
     virtual void infoln( const UnicodeString &message );
@@ -194,6 +198,9 @@ public:
 
     // Print ALL named errors encountered so far
     void printErrors(); 
+
+    // print known issues. return TRUE if there were any.
+    UBool printKnownIssues();
         
     virtual void usage( void ) ;
 
@@ -216,26 +223,26 @@ public:
     /**
      * Returns true if u_getVersion() < major.minor.
      */
-    static UBool isICUVersionBefore(int major, int minor) {
+    UBool isICUVersionBefore(int major, int minor) {
         return isICUVersionBefore(major, minor, 0);
     }
 
     /**
      * Returns true if u_getVersion() < major.minor.milli.
      */
-    static UBool isICUVersionBefore(int major, int minor, int milli);
+    UBool isICUVersionBefore(int major, int minor, int milli);
 
     /**
      * Returns true if u_getVersion() >= major.minor.
      */
-    static UBool isICUVersionAtLeast(int major, int minor) {
+    UBool isICUVersionAtLeast(int major, int minor) {
         return isICUVersionAtLeast(major, minor, 0);
     }
 
     /**
      * Returns true if u_getVersion() >= major.minor.milli.
      */
-    static UBool isICUVersionAtLeast(int major, int minor, int milli) {
+    UBool isICUVersionAtLeast(int major, int minor, int milli) {
         return !isICUVersionBefore(major, minor, milli);
     }
 
@@ -307,6 +314,7 @@ private:
     char*       testPath;           // specifies subtests
     
     char basePath[1024];
+    char currName[1024]; // current test name
 
     //FILE *testoutfp;
     void *testoutfp;
