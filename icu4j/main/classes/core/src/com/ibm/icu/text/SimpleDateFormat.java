@@ -2211,7 +2211,7 @@ public class SimpleDateFormat extends DateFormat {
         // Special hack for trailing "." after non-numeric field.
         if (pos < text.length()) {
             char extra = text.charAt(pos);
-            if (extra == '.' && isLenient() && items.length != 0) {
+            if (extra == '.' && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE) && items.length != 0) {
                 // only do if the last field is not numeric
                 Object lastItem = items[items.length - 1];
                 if (lastItem instanceof PatternItem && !((PatternItem)lastItem).isNumeric) {
@@ -2426,7 +2426,7 @@ public class SimpleDateFormat extends DateFormat {
                      ++pos;
                 }
             } else if (pch != ich) {
-                if (ich == '.' && pos == originalPos && 0 < itemIndex && isLenient()) {
+                if (ich == '.' && pos == originalPos && 0 < itemIndex && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE)) {
                     Object before = items[itemIndex-1];
                     if (before instanceof PatternItem) {
                         boolean isNumeric = ((PatternItem) before).isNumeric;
@@ -2435,6 +2435,9 @@ public class SimpleDateFormat extends DateFormat {
                             continue;
                         }
                     }
+                } else if ((pch == ' ' || pch == '.') && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE)) {
+                    ++idx;
+                    continue;
                 }
                 break;
             }
@@ -2442,7 +2445,7 @@ public class SimpleDateFormat extends DateFormat {
             ++pos;
         }
         complete[0] = idx == plen;
-        if (complete[0] == false && isLenient() && 0 < itemIndex && itemIndex < items.length - 1) {
+        if (complete[0] == false && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE) && 0 < itemIndex && itemIndex < items.length - 1) {
             // If fully lenient, accept " "* for any text between a date and a time field
             // We don't go more lenient, because we don't want to accept "12/31" for "12:31".
             // People may be trying to parse for a date, then for a time.
@@ -2687,7 +2690,6 @@ public class SimpleDateFormat extends DateFormat {
         int value = 0;
         int i;
         ParsePosition pos = new ParsePosition(0);
-        boolean lenient = isLenient();
 
         //int patternCharIndex = DateFormatSymbols.patternChars.indexOf(ch);c
         int patternCharIndex = -1;
@@ -2843,7 +2845,7 @@ public class SimpleDateFormat extends DateFormat {
                         return newStart;
                     }
                 }
-                if ( number != null && (lenient || formatData.shortYearNames == null || value > formatData.shortYearNames.length) ) {
+                if ( number != null && (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC) || formatData.shortYearNames == null || value > formatData.shortYearNames.length) ) {
                     cal.set(Calendar.YEAR, value);
                     return pos.getIndex();
                 }

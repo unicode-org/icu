@@ -4274,7 +4274,66 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         return ok;
     }
 
+    public void TestDateFormatLeniency() {
+        // For details see http://bugs.icu-project.org/trac/ticket/10261
+        
+        class TestDateFormatLeniencyItem {
+            public boolean leniency;
+            public String parseString;
+            public String pattern;
+            public String expectedResult;   // null indicates expected error
+             // Simple constructor
+            public TestDateFormatLeniencyItem(boolean len, String parString, String patt, String expResult) {
+                leniency = len;
+                pattern = patt;
+                parseString = parString;
+                expectedResult = expResult;
+            }
+        };
+
+        final TestDateFormatLeniencyItem[] items = {
+            //                             leniency    parse String       pattern                 expected result
+            new TestDateFormatLeniencyItem(true,       "2008-Jan 02",     "yyyy-LLL. dd",         "2008-Jan. 02"),
+            new TestDateFormatLeniencyItem(false,      "2008-Jan 03",     "yyyy-LLL. dd",         null),
+            new TestDateFormatLeniencyItem(true,       "2008-Jan--04",    "yyyy-MMM' -- 'dd",     "2008-Jan -- 04"),
+            new TestDateFormatLeniencyItem(false,      "2008-Jan--05",    "yyyy-MMM' -- 'dd",     null),
+            new TestDateFormatLeniencyItem(true,       "2008-12-31",      "yyyy-mm-dd",           "2008-12-31")
+        };
+
+        StringBuffer result = new StringBuffer();
+        Date d = new Date();
+        Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US); 
+        SimpleDateFormat sdfmt = new SimpleDateFormat();
+        ParsePosition p = new ParsePosition(0);
+        for (TestDateFormatLeniencyItem item: items) {
+            cal.clear();
+            sdfmt.setCalendar(cal);
+            sdfmt.applyPattern(item.pattern);
+            sdfmt.setLenient(item.leniency);
+            sdfmt.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE, item.leniency);
+            sdfmt.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC, item.leniency);
+            result.setLength(0);
+            p.setIndex(0);
+            p.setErrorIndex(-1);
+            d = sdfmt.parse(item.parseString, p);
+            if(item.expectedResult == null) {
+                if(p.getErrorIndex() != -1)
+                    continue;
+                else
+                    errln("error: unexpected parse success..."+item.parseString + " w/ lenient="+item.leniency+" should have faile");
+            }
+            if(p.getErrorIndex() != -1) {
+                errln("error: parse error for string " +item.parseString + " -- idx["+p.getIndex()+"] errIdx["+p.getErrorIndex()+"]");
+                continue;
+            }
+            cal.setTime(d);
+            result = sdfmt.format(cal, result, new FieldPosition(0));
+            if(!result.toString().equalsIgnoreCase(item.expectedResult)) {
+                errln("error: unexpected format result. expected - " + item.expectedResult + "  but result was - " + result);
+            } else {
+                logln("formatted results match! - " + result.toString());
+            }
+        }
+    }
+
 }
-
-
-
