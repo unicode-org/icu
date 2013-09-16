@@ -38,6 +38,7 @@
 #include "putilimp.h" // for uprv_getRawUTCtime()
 #include "unicode/locid.h"
 #include "unicode/ctest.h" // for str_timeDelta
+#include "udbgutil.h"
 
 #ifdef XP_MAC_CONSOLE
 #include <console.h>
@@ -49,6 +50,7 @@ static char* _testDataPath=NULL;
 
 // Static list of errors found
 static UnicodeString errorList;
+static UnicodeString knownList;
 
 //-----------------------------------------------------------------------------
 //convenience classes to ease porting code that uses the Java
@@ -547,6 +549,7 @@ IntlTest::IntlTest()
     LL_indentlevel = indentLevel_offset;
     numProps = 0;
     strcpy(basePath, "/");
+    currName[0]=0;
 }
 
 void IntlTest::setCaller( IntlTest* callingTest )
@@ -741,7 +744,9 @@ UBool IntlTest::runTestLoop( char* testname, char* par, char *baseName )
             strcpy(saveBaseLoc,name);
             strcat(saveBaseLoc,"/");
 
+            strcpy(currName, name); // set
             this->runIndexedTest( index, TRUE, name, par );
+            currName[0]=0; // reset
 
             UDate timeStop = uprv_getRawUTCtime();
             rval = TRUE; // at least one test has been called
@@ -941,6 +946,37 @@ void IntlTest::logln(const char *fmt, ...)
     }
 }
 
+UBool IntlTest::logKnownIssue(const char *ticket, const char *fmt, ...)
+{
+    char buffer[4000];
+    va_list ap;
+
+    va_start(ap, fmt);
+    /* sprintf it just to make sure that the information is valid */
+    vsprintf(buffer, fmt, ap);
+    va_end(ap);
+    return logKnownIssue(ticket, UnicodeString(buffer, ""));
+}
+
+UBool IntlTest::logKnownIssue(const char *ticket) {
+  return logKnownIssue(ticket, UnicodeString());
+}
+
+UBool IntlTest::logKnownIssue(const char *ticket, const UnicodeString &msg) {
+  knownList.append(UnicodeString(ticket, ""));
+  knownList.append(UnicodeString(" ",""));
+  knownList.append(UnicodeString(basePath, ""));
+  knownList.append(UnicodeString(currName, ""));
+  knownList.append(UnicodeString(" ",""));
+  char URL[UDBG_KNOWNISSUE_LEN];
+  knownList.append(UnicodeString(udbg_knownIssueURLFrom(ticket, URL), ""));
+  knownList.append(UnicodeString(" ",""));
+  knownList.append(msg);
+  knownList.append(UnicodeString("\n", ""));
+
+  return true;
+}
+
 /* convenience functions that include sprintf formatting */
 void IntlTest::info(const char *fmt, ...)
 {
@@ -1018,6 +1054,17 @@ void IntlTest::errcheckln(UErrorCode status, const char *fmt, ...)
 void IntlTest::printErrors()
 {
      IntlTest::LL_message(errorList, TRUE);
+}
+
+UBool IntlTest::printKnownIssues()
+{
+  if(knownList.length()>0) {
+    IntlTest::LL_message( UnicodeString("KNOWN ISSUES:\n", ""), TRUE );
+    IntlTest::LL_message( knownList, TRUE );
+    return TRUE;
+  } else {
+    return FALSE;
+  }
 }
 
 void IntlTest::LL_message( UnicodeString message, UBool newline )
@@ -1423,6 +1470,7 @@ main(int argc, char* argv[])
     }
 
     fprintf(stdout, "\n--------------------------------------\n");
+    major.printKnownIssues();
     if (major.getErrors() == 0) {
         /* Call it twice to make sure that the defaults were reset. */
         /* Call it before the OK message to verify proper cleanup. */
@@ -1908,7 +1956,13 @@ UBool IntlTest::isICUVersionBefore(int major, int minor, int milli) {
     UVersionInfo iv;
     UVersionInfo ov = { (uint8_t)major, (uint8_t)minor, (uint8_t)milli, 0 };
     u_getVersion(iv);
-    return uprv_memcmp(iv, ov, U_MAX_VERSION_LENGTH) < 0;
+    logKnownIssue("9744", "fix call to isICUVersionBefore");
+    return TRUE;
+    if( uprv_memcmp(iv, ov, U_MAX_VERSION_LENGTH) < 0 ) {
+      return FALSE;
+    } else {
+      return FALSE;
+    }
 }
 
 #if !UCONFIG_NO_FORMATTING

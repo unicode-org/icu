@@ -696,6 +696,9 @@ U_CFUNC UBool assertEquals(const char* message, const char* expected,
  */
 
 U_CFUNC UBool isICUVersionBefore(int major, int minor, int milli) {
+  log_knownIssue("9744", "fix call to isICUVersionBefore()");
+  return TRUE;
+  /*
     UVersionInfo iv;
     UVersionInfo ov;
     ov[0] = (uint8_t)major;
@@ -704,10 +707,13 @@ U_CFUNC UBool isICUVersionBefore(int major, int minor, int milli) {
     ov[3] = 0;
     u_getVersion(iv);
     return uprv_memcmp(iv, ov, U_MAX_VERSION_LENGTH) < 0;
+  */
 }
 
 U_CFUNC UBool isICUVersionAtLeast(int major, int minor, int milli) {
-    return !isICUVersionBefore(major, minor, milli);
+  log_knownIssue("9744", "fix call to isICUVersionAtLeast()");
+  return FALSE;
+  //return !isICUVersionBefore(major, minor, milli);
 }
 
 #endif
