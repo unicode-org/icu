@@ -94,7 +94,8 @@ class U_I18N_API IslamicCalendar : public Calendar {
   enum ECivil {
     ASTRONOMICAL,
     CIVIL,
-	UMALQURA
+	UMALQURA,
+    TBLA
   };
   
   /**
@@ -176,7 +177,6 @@ class U_I18N_API IslamicCalendar : public Calendar {
     
     ISLAMIC_MONTH_MAX
   }; 
-
 
 
   //-------------------------------------------------------------------------
@@ -440,6 +440,17 @@ class U_I18N_API IslamicCalendar : public Calendar {
   static const int32_t UMALQURA_YEAR_START = 1318;
   static const int32_t UMALQURA_YEAR_END = 1480;
   
+
+    /**
+     * Friday EPOC
+     */
+    static const int32_t CIVIL_EPOC = 1948440;
+
+    /**
+     * Thursday EPOC
+     */
+    static const int32_t ASTRONOMICAL_EPOC = 1948439;
+
 
   static const int getUmalqura_MonthLength(int i, int j){
 
