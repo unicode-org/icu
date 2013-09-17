@@ -1174,6 +1174,14 @@ UnicodeStringTest::TestMiscellaneous()
         errln("UnicodeString(shared buffer).remove().getTerminatedBuffer() "
               "modified another copy of the string!");
     }
+
+    // ticket #9740
+    test1.setTo(TRUE, ucs, 3);
+    assertEquals("length of read-only alias", 3, test1.length());
+    test1.trim();
+    assertEquals("length of read-only alias after trim()", 2, test1.length());
+    assertEquals("length of terminated buffer of read-only alias + trim()",
+                 2, u_strlen(test1.getTerminatedBuffer()));
 }
 
 void
