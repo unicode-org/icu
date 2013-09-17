@@ -96,8 +96,8 @@ static const UChar gSlash = 0x2f;
 // be 99,999 which has 5 digits.
 // On IEEE754 systems gMaxIntegerDigits is 308 + possible denormalized 15 digits + rounding digit
 // With big decimal, the max exponent is 999,999,999 and the max number of digits is the same, 999,999,999
-const int32_t NumberFormat::gDefaultMaxIntegerDigits = 2000000000;
-const int32_t NumberFormat::gDefaultMinIntegerDigits = 127;
+const int32_t icu::NumberFormat::gDefaultMaxIntegerDigits = 2000000000;
+const int32_t icu::NumberFormat::gDefaultMinIntegerDigits = 127;
 
 static const UChar * const gLastResortNumberPatterns[UNUM_FORMAT_STYLE_COUNT] = {
     NULL,  // UNUM_PATTERN_DECIMAL
