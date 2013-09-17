@@ -110,6 +110,30 @@ void ListFormatterTest::TestEnglish() {
     CheckFourCases("en", one, two, three, four, results);
 }
 
+void ListFormatterTest::Test9946() {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    LocalPointer<ListFormatter> formatter(ListFormatter::createInstance(Locale("en"), errorCode));
+    if (U_FAILURE(errorCode)) {
+        dataerrln(
+            "ListFormatter::createInstance(Locale(\"en\"), errorCode) failed in Test9946: %s",
+            u_errorName(errorCode));
+        return;
+    }
+    UnicodeString data[3] = {"{0}", "{1}", "{2}"};
+    UnicodeString actualResult;
+    formatter->format(data, 3, actualResult, errorCode);
+    if (U_FAILURE(errorCode)) {
+        dataerrln(
+            "ListFormatter::createInstance(Locale(\"en\"), errorCode) failed in Test9946: %s",
+            u_errorName(errorCode));
+        return;
+    }
+    UnicodeString expected("{0}, {1}, and {2}");
+    if (expected != actualResult) {
+        errln("Expected " + expected + ", got " + actualResult);
+    }
+}
+
 void ListFormatterTest::TestEnglishUS() {
     UnicodeString results[4] = {
         one,
@@ -201,6 +225,7 @@ void ListFormatterTest::runIndexedTest(int32_t index, UBool exec,
         case 5: name = "TestMalayalam"; if (exec) TestMalayalam(); break;
         case 6: name = "TestZulu"; if (exec) TestZulu(); break;
         case 7: name = "TestOutOfOrderPatterns"; if (exec) TestOutOfOrderPatterns(); break;
+        case 8: name = "Test9946"; if (exec) Test9946(); break;
 
         default: name = ""; break;
     }
