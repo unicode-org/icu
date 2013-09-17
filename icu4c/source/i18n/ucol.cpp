@@ -556,11 +556,10 @@ ucol_cloneBinary(const UCollator *coll,
 }
 
 U_CAPI UCollator* U_EXPORT2
-ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, UErrorCode *status)
+ucol_safeClone(const UCollator *coll, void * /*stackBuffer*/, int32_t * pBufferSize, UErrorCode *status)
 {
     UCollator * localCollator;
     int32_t bufferSizeNeeded = (int32_t)sizeof(UCollator);
-    char *stackBufferChars = (char *)stackBuffer;
     int32_t imageSize = 0;
     int32_t rulesSize = 0;
     int32_t rulesPadding = 0;
@@ -571,15 +570,14 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     int32_t* defaultReorderCodes;
     int32_t* reorderCodes;
     uint8_t* leadBytePermutationTable;
-    UBool colAllocated = FALSE;
     UBool imageAllocated = FALSE;
 
     if (status == NULL || U_FAILURE(*status)){
-        return 0;
+        return NULL;
     }
-    if ((stackBuffer && !pBufferSize) || !coll){
+    if (coll == NULL) {
        *status = U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
+        return NULL;
     }
 
     if (coll->rules && coll->freeRulesOnClose) {
@@ -599,41 +597,23 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     if (coll->leadBytePermutationTable) {
         bufferSizeNeeded += 256 * sizeof(uint8_t);
     }
-    
-    if (stackBuffer && *pBufferSize <= 0) { /* 'preflighting' request - set needed size into *pBufferSize */
-        *pBufferSize =  bufferSizeNeeded;
-        return 0;
+
+    if (pBufferSize != NULL) {
+        int32_t inputSize = *pBufferSize;
+        *pBufferSize = 1;
+        if (inputSize == 0) {
+            return NULL;  // preflighting for deprecated functionality
+        }
     }
 
-    /* Pointers on 64-bit platforms need to be aligned
-     * on a 64-bit boundry in memory.
-     */
-    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
-        int32_t offsetUp = (int32_t)U_ALIGNMENT_OFFSET_UP(stackBufferChars);
-        if (*pBufferSize > offsetUp) {
-            *pBufferSize -= offsetUp;
-            stackBufferChars += offsetUp;
-        }
-        else {
-            /* prevent using the stack buffer but keep the size > 0 so that we do not just preflight */
-            *pBufferSize = 1;
-        }
+    char *stackBufferChars = (char *)uprv_malloc(bufferSizeNeeded);
+    // Null pointer check.
+    if (stackBufferChars == NULL) {
+        *status = U_MEMORY_ALLOCATION_ERROR;
+        return NULL;
     }
-    stackBuffer = (void *)stackBufferChars;
+    *status = U_SAFECLONE_ALLOCATED_WARNING;
 
-    if (stackBuffer == NULL || *pBufferSize < bufferSizeNeeded) {
-        /* allocate one here...*/
-        stackBufferChars = (char *)uprv_malloc(bufferSizeNeeded);
-        // Null pointer check.
-        if (stackBufferChars == NULL) {
-            *status = U_MEMORY_ALLOCATION_ERROR;
-            return NULL;
-        }
-        colAllocated = TRUE;
-        if (U_SUCCESS(*status)) {
-            *status = U_SAFECLONE_ALLOCATED_WARNING;
-        }
-    }
     localCollator = (UCollator *)stackBufferChars;
     rules = (UChar *)(stackBufferChars + sizeof(UCollator) + rulesPadding);
     defaultReorderCodes = (int32_t*)((uint8_t*)rules + rulesSize);
@@ -702,7 +682,7 @@ ucol_safeClone(const UCollator *coll, void *stackBuffer, int32_t * pBufferSize, 
     localCollator->validLocale = NULL;
     localCollator->requestedLocale = NULL;
     localCollator->ucaRules = coll->ucaRules; // There should only be one copy here.
-    localCollator->freeOnClose = colAllocated;
+    localCollator->freeOnClose = TRUE;
     localCollator->freeImageOnClose = imageAllocated;
     return localCollator;
 }

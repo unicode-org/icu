@@ -486,6 +486,8 @@ public:
                                          UnicodeString& name);
 
     /**
+     * Deprecated functionality. Use clone() instead.
+     *
      * Thread safe client-buffer-based cloning operation
      *    Do NOT call delete on a safeclone, since 'new' is not used to create it.
      * @param stackBuffer user allocated space for the new clone. If NULL new memory will be allocated.
@@ -500,19 +502,23 @@ public:
      *  necessary.
      * @return pointer to the new clone
      *
-     * @stable ICU 2.0
+     * @deprecated ICU 52. Use clone() instead.
      */
     virtual BreakIterator *  createBufferClone(void *stackBuffer,
                                                int32_t &BufferSize,
                                                UErrorCode &status) = 0;
 
+#ifndef U_HIDE_DEPRECATED_API
+
     /**
      *   Determine whether the BreakIterator was created in user memory by
      *   createBufferClone(), and thus should not be deleted.  Such objects
      *   must be closed by an explicit call to the destructor (not delete).
-     *  @stable ICU 2.0
+     * @deprecated ICU 52. Always delete the BreakIterator.
      */
     inline UBool isBufferClone(void);
+
+#endif /* U_HIDE_DEPRECATED_API */
 
 #if !UCONFIG_NO_SERVICE
     /**
@@ -610,9 +616,7 @@ protected:
     /** @internal */
     BreakIterator();
     /** @internal */
-    UBool fBufferClone;
-    /** @internal */
-    BreakIterator (const BreakIterator &other) : UObject(other), fBufferClone(FALSE) {}
+    BreakIterator (const BreakIterator &other) : UObject(other) {}
 
 private:
 
@@ -627,10 +631,14 @@ private:
     BreakIterator& operator=(const BreakIterator&);
 };
 
+#ifndef U_HIDE_DEPRECATED_API
+
 inline UBool BreakIterator::isBufferClone()
 {
-    return fBufferClone;
+    return FALSE;
 }
+
+#endif /* U_HIDE_DEPRECATED_API */
 
 U_NAMESPACE_END
 
@@ -638,4 +646,3 @@ U_NAMESPACE_END
 
 #endif // _BRKITER
 //eof
-

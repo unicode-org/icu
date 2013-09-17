@@ -270,7 +270,6 @@ RuleBasedBreakIterator::operator=(const RuleBasedBreakIterator& that) {
 //-----------------------------------------------------------------------------
 void RuleBasedBreakIterator::init() {
     UErrorCode  status    = U_ZERO_ERROR;
-    fBufferClone          = FALSE;
     fText                 = utext_openUChars(NULL, NULL, 0, &status);
     fCharIter             = NULL;
     fSCharIter            = NULL;
@@ -1515,19 +1514,7 @@ const uint8_t  *RuleBasedBreakIterator::getBinaryRules(uint32_t &length) {
 }
 
 
-
-
-//-------------------------------------------------------------------------------
-//
-//  BufferClone       TODO:  In my (Andy) opinion, this function should be deprecated.
-//                    Saving one heap allocation isn't worth the trouble.
-//                    Cloning shouldn't be done in tight loops, and
-//                    making the clone copy involves other heap operations anyway.
-//                    And the application code for correctly dealing with buffer
-//                    size problems and the eventual object destruction is ugly.
-//
-//-------------------------------------------------------------------------------
-BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
+BreakIterator *  RuleBasedBreakIterator::createBufferClone(void * /*stackBuffer*/,
                                    int32_t &bufferSize,
                                    UErrorCode &status)
 {
@@ -1535,51 +1522,18 @@ BreakIterator *  RuleBasedBreakIterator::createBufferClone(void *stackBuffer,
         return NULL;
     }
 
-    //
-    //  If user buffer size is zero this is a preflight operation to
-    //    obtain the needed buffer size, allowing for worst case misalignment.
-    //
     if (bufferSize == 0) {
-        bufferSize = sizeof(RuleBasedBreakIterator) + U_ALIGNMENT_OFFSET_UP(0);
+        bufferSize = 1;  // preflighting for deprecated functionality
         return NULL;
     }
 
-
-    //
-    //  Check the alignment and size of the user supplied buffer.
-    //  Allocate heap memory if the user supplied memory is insufficient.
-    //
-    char    *buf   = (char *)stackBuffer;
-    uint32_t s      = bufferSize;
-
-    if (stackBuffer == NULL) {
-        s = 0;   // Ignore size, force allocation if user didn't give us a buffer.
+    BreakIterator *clonedBI = clone();
+    if (clonedBI == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+    } else {
+        status = U_SAFECLONE_ALLOCATED_WARNING;
     }
-    if (U_ALIGNMENT_OFFSET(stackBuffer) != 0) {
-        uint32_t offsetUp = (uint32_t)U_ALIGNMENT_OFFSET_UP(buf);
-        s   -= offsetUp;
-        buf += offsetUp;
-    }
-    if (s < sizeof(RuleBasedBreakIterator)) {
-        // Not enough room in the caller-supplied buffer.
-        // Do a plain-vanilla heap based clone and return that, along with
-        //   a warning that the clone was allocated.
-        RuleBasedBreakIterator *clonedBI = new RuleBasedBreakIterator(*this);
-        if (clonedBI == 0) {
-            status = U_MEMORY_ALLOCATION_ERROR;
-        } else {
-            status = U_SAFECLONE_ALLOCATED_WARNING;
-        }
-        return clonedBI;
-    }
-
-    //
-    //  Clone the source BI into the caller-supplied buffer.
-    //
-    RuleBasedBreakIterator *clone = new(buf) RuleBasedBreakIterator(*this);
-    clone->fBufferClone = TRUE;   // Flag to prevent deleting storage on close (From C code)
-
-    return clone;
+    return (RuleBasedBreakIterator *)clonedBI;
 }
 
 
