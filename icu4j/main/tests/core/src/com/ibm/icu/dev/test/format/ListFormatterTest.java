@@ -134,6 +134,11 @@ public class ListFormatterTest extends TestFmwk {
         assertEquals(
                 "getLocale", ULocale.ENGLISH, ListFormatter.getInstance(ULocale.ENGLISH).getLocale());
     }
+    
+    public void Test9946() {
+        ListFormatter listFormatter = ListFormatter.getInstance(ULocale.ENGLISH);
+        assertEquals("bug 9946", "{0}, {1}, and {2}", listFormatter.format("{0}", "{1}", "{2}"));
+    }
 
     private boolean isDefaultLocaleEnglishLike() {
         ULocale defaultLocale = ULocale.getDefault(ULocale.Category.FORMAT);
