@@ -1096,9 +1096,9 @@ IntlTestRBNF::TestEnglishSpellout()
         doTest(formatter, testData, TRUE);
 
 #if !UCONFIG_NO_COLLATION
-        /* Skipping this test until #9503 is fixed.
-        formatter->setLenient(TRUE);
-        static const char* lpTestData[][2] = {
+        if( !logKnownIssue("9503") ) {
+          formatter->setLenient(TRUE);
+          static const char* lpTestData[][2] = {
             { "fifty-7", "57" },
             { " fifty-7", "57" },
             { "  fifty-7", "57" },
@@ -1106,9 +1106,9 @@ IntlTestRBNF::TestEnglishSpellout()
             { "fifteen hundred and zero", "1,500" },
             { "FOurhundred     thiRTY six", "436" },
             { NULL, NULL}
-        };
-        doLenientParseTest(formatter, lpTestData);
-        */
+          };
+          doLenientParseTest(formatter, lpTestData);
+        }
 #endif
     }
     delete formatter;
