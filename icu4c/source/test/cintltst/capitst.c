@@ -85,6 +85,7 @@ void addCollAPITest(TestNode** root)
     addTest(root, &TestOpenVsOpenRules, "tscoll/capitst/TestOpenVsOpenRules");
     addTest(root, &TestBengaliSortKey, "tscoll/capitst/TestBengaliSortKey");
     addTest(root, &TestGetKeywordValuesForLocale, "tscoll/capitst/TestGetKeywordValuesForLocale");
+    addTest(root, &TestStrcollNull, "tscoll/capitst/TestStrcollNull");
 }
 
 void TestGetSetAttr(void) {
@@ -2406,5 +2407,106 @@ static void TestGetKeywordValuesForLocale(void) {
     }
 }
 
+static void TestStrcollNull(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll;
+
+    const UChar u16asc[] = {0x0049, 0x0042, 0x004D, 0};
+    const int32_t u16ascLen = 3;
+
+    const UChar u16han[] = {0x5c71, 0x5ddd, 0};
+    const int32_t u16hanLen = 2;
+
+    const char u8asc[] = {0x49, 0x42, 0x4D, 0};
+    const int32_t u8ascLen = 3;
+
+    const char u8han[] = {0xE5, 0xB1, 0xB1, 0xE5, 0xB7, 0x9D, 0};
+    const int32_t u8hanLen = 6;
+
+    coll = ucol_open(NULL, &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "Default Collator creation failed.: %s\n", myErrorName(status));
+        return;
+    }
+
+    /* UChar API */
+    if (ucol_strcoll(coll, NULL, 0, NULL, 0) != 0) {
+        log_err("ERROR : ucol_strcoll NULL/0 and NULL/0");
+    }
+
+    if (ucol_strcoll(coll, NULL, -1, NULL, 0) != 0) {
+        /* No error arg, should return equal without crash */
+        log_err("ERROR : ucol_strcoll NULL/-1 and NULL/0");
+    }
+
+    if (ucol_strcoll(coll, u16asc, -1, NULL, 10) != 0) {
+        /* No error arg, should return equal without crash */
+        log_err("ERROR : ucol_strcoll u16asc/u16ascLen and NULL/10");
+    }
+
+    if (ucol_strcoll(coll, u16asc, -1, NULL, 0) <= 0) {
+        log_err("ERROR : ucol_strcoll u16asc/-1 and NULL/0");
+    }
+    if (ucol_strcoll(coll, NULL, 0, u16asc, -1) >= 0) {
+        log_err("ERROR : ucol_strcoll NULL/0 and u16asc/-1");
+    }
+    if (ucol_strcoll(coll, u16asc, u16ascLen, NULL, 0) <= 0) {
+        log_err("ERROR : ucol_strcoll u16asc/u16ascLen and NULL/0");
+    }
+
+    if (ucol_strcoll(coll, u16han, -1, NULL, 0) <= 0) {
+        log_err("ERROR : ucol_strcoll u16han/-1 and NULL/0");
+    }
+    if (ucol_strcoll(coll, NULL, 0, u16han, -1) >= 0) {
+        log_err("ERROR : ucol_strcoll NULL/0 and u16han/-1");
+    }
+    if (ucol_strcoll(coll, NULL, 0, u16han, u16hanLen) >= 0) {
+        log_err("ERROR : ucol_strcoll NULL/0 and u16han/u16hanLen");
+    }
+
+    /* UTF-8 API */
+    status = U_ZERO_ERROR;
+    if (ucol_strcollUTF8(coll, NULL, 0, NULL, 0, &status) != 0 || U_FAILURE(status)) {
+        log_err("ERROR : ucol_strcollUTF8 NULL/0 and NULL/0");
+    }
+    status = U_ZERO_ERROR;
+    ucol_strcollUTF8(coll, NULL, -1, NULL, 0, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ERROR: ucol_strcollUTF8 NULL/-1 and NULL/0, should return U_ILLEGAL_ARGUMENT_ERROR");
+    }
+    status = U_ZERO_ERROR;
+    ucol_strcollUTF8(coll, u8asc, u8ascLen, NULL, 10, &status);
+    if (status != U_ILLEGAL_ARGUMENT_ERROR) {
+        log_err("ERROR: ucol_strcollUTF8 u8asc/u8ascLen and NULL/10, should return U_ILLEGAL_ARGUMENT_ERROR");
+    }
+
+    status = U_ZERO_ERROR;
+    if (ucol_strcollUTF8(coll, u8asc, -1, NULL, 0, &status) <= 0  || U_FAILURE(status)) {
+        log_err("ERROR : ucol_strcollUTF8 u8asc/-1 and NULL/0");
+    }
+    status = U_ZERO_ERROR;
+    if (ucol_strcollUTF8(coll, NULL, 0, u8asc, -1, &status) >= 0  || U_FAILURE(status)) {
+        log_err("ERROR : ucol_strcollUTF8 NULL/0 and u8asc/-1");
+    }
+    status = U_ZERO_ERROR;
+    if (ucol_strcollUTF8(coll, u8asc, u8ascLen, NULL, 0, &status) <= 0 || U_FAILURE(status)) {
+        log_err("ERROR : ucol_strcollUTF8 u8asc/u8ascLen and NULL/0");
+    }
+
+    status = U_ZERO_ERROR;
+    if (ucol_strcollUTF8(coll, u8han, -1, NULL, 0, &status) <= 0 || U_FAILURE(status)) {
+        log_err("ERROR : ucol_strcollUTF8 u8han/-1 and NULL/0");
+    }
+    status = U_ZERO_ERROR;
+    if (ucol_strcollUTF8(coll, NULL, 0, u8han, -1, &status) >= 0 || U_FAILURE(status)) {
+        log_err("ERROR : ucol_strcollUTF8 NULL/0 and u8han/-1");
+    }
+    status = U_ZERO_ERROR;
+    if (ucol_strcollUTF8(coll, NULL, 0, u8han, u8hanLen, &status) >= 0 || U_FAILURE(status)) {
+        log_err("ERROR : ucol_strcollUTF8 NULL/0 and u8han/u8hanLen");
+    }
+
+    ucol_close(coll);
+}
 
 #endif /* #if !UCONFIG_NO_COLLATION */

@@ -8477,7 +8477,7 @@ ucol_strcoll( const UCollator    *coll,
         UTRACE_DATA2(UTRACE_VERBOSE, "target string = %vh ", target, targetLength);
     }
 
-    if(source == NULL || target == NULL) {
+    if((source == NULL && sourceLength != 0) || (target == NULL && targetLength != 0)) {
         // do not crash, but return. Should have
         // status argument to return error.
         UTRACE_EXIT_VALUE(UCOL_EQUAL);
@@ -8613,7 +8613,7 @@ ucol_strcollUTF8(
         return UCOL_EQUAL;
     }
 
-    if(source == NULL || target == NULL) {
+    if((source == NULL && sourceLength != 0) || (target == NULL && targetLength != 0)) {
         *status = U_ILLEGAL_ARGUMENT_ERROR;
         UTRACE_EXIT_VALUE_STATUS(UCOL_EQUAL, *status);
         return UCOL_EQUAL;
