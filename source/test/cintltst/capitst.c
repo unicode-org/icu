@@ -36,7 +36,6 @@ static void TestAttribute(void);
 static void TestDefault(void);
 static void TestDefaultKeyword(void);
 static void TestBengaliSortKey(void);
-        int TestBufferSize();    /* defined in "colutil.c" */
 
 
 static char* U_EXPORT2 ucol_sortKeyToString(const UCollator *coll, const uint8_t *sortkey, char *buffer, uint32_t len) {
@@ -650,11 +649,6 @@ void TestSafeClone() {
     const char sampleRuleChars[] = "&Z < CH";
     UChar sampleRule[sizeof(sampleRuleChars)];
 
-    if (TestBufferSize()) {
-        log_err("U_COL_SAFECLONE_BUFFERSIZE should be larger than sizeof(UCollator)\n");
-        return;
-    }
-
     u_uastrcpy(test1, "abCda");
     u_uastrcpy(test2, "abcda");
     u_uastrcpy(sampleRule, sampleRuleChars);
@@ -675,28 +669,30 @@ void TestSafeClone() {
     /* Check the various error & informational states: */
 
     /* Null status - just returns NULL */
-    if (0 != ucol_safeClone(someCollators[0], buffer[0], &bufferSize, 0))
+    if (NULL != ucol_safeClone(someCollators[0], buffer[0], &bufferSize, NULL))
     {
         log_err("FAIL: Cloned Collator failed to deal correctly with null status\n");
     }
     /* error status - should return 0 & keep error the same */
     err = U_MEMORY_ALLOCATION_ERROR;
-    if (0 != ucol_safeClone(someCollators[0], buffer[0], &bufferSize, &err) || err != U_MEMORY_ALLOCATION_ERROR)
+    if (NULL != ucol_safeClone(someCollators[0], buffer[0], &bufferSize, &err) || err != U_MEMORY_ALLOCATION_ERROR)
     {
         log_err("FAIL: Cloned Collator failed to deal correctly with incoming error status\n");
     }
     err = U_ZERO_ERROR;
 
-    /* Null buffer size pointer - just returns NULL & set error to U_ILLEGAL_ARGUMENT_ERROR*/
-    if (0 != ucol_safeClone(someCollators[0], buffer[0], 0, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
+    /* Null buffer size pointer is ok */
+    if (NULL == (col = ucol_safeClone(someCollators[0], buffer[0], NULL, &err)) || U_FAILURE(err))
     {
         log_err("FAIL: Cloned Collator failed to deal correctly with null bufferSize pointer\n");
     }
+    ucol_close(col);
     err = U_ZERO_ERROR;
 
     /* buffer size pointer is 0 - fill in pbufferSize with a size */
     bufferSize = 0;
-    if (0 != ucol_safeClone(someCollators[0], buffer[0], &bufferSize, &err) || U_FAILURE(err) || bufferSize <= 0)
+    if (NULL != ucol_safeClone(someCollators[0], buffer[0], &bufferSize, &err) ||
+            U_FAILURE(err) || bufferSize <= 0)
     {
         log_err("FAIL: Cloned Collator failed a sizing request ('preflighting')\n");
     }
@@ -706,14 +702,16 @@ void TestSafeClone() {
         log_err("FAIL: Pre-calculated buffer size is too small\n");
     }
     /* Verify we can use this run-time calculated size */
-    if (0 == (col = ucol_safeClone(someCollators[0], buffer[0], &bufferSize, &err)) || U_FAILURE(err))
+    if (NULL == (col = ucol_safeClone(someCollators[0], buffer[0], &bufferSize, &err)) || U_FAILURE(err))
     {
         log_err("FAIL: Collator can't be cloned with run-time size\n");
     }
     if (col) ucol_close(col);
     /* size one byte too small - should allocate & let us know */
-    --bufferSize;
-    if (0 == (col = ucol_safeClone(someCollators[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_WARNING)
+    if (bufferSize > 1) {
+        --bufferSize;
+    }
+    if (NULL == (col = ucol_safeClone(someCollators[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_WARNING)
     {
         log_err("FAIL: Cloned Collator failed to deal correctly with too-small buffer size\n");
     }
@@ -723,7 +721,7 @@ void TestSafeClone() {
 
 
     /* Null buffer pointer - return Collator & set error to U_SAFECLONE_ALLOCATED_ERROR */
-    if (0 == (col = ucol_safeClone(someCollators[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_WARNING)
+    if (NULL == (col = ucol_safeClone(someCollators[0], 0, &bufferSize, &err)) || err != U_SAFECLONE_ALLOCATED_WARNING)
     {
         log_err("FAIL: Cloned Collator failed to deal correctly with null buffer pointer\n");
     }
@@ -731,7 +729,7 @@ void TestSafeClone() {
     err = U_ZERO_ERROR;
 
     /* Null Collator - return NULL & set U_ILLEGAL_ARGUMENT_ERROR */
-    if (0 != ucol_safeClone(0, buffer[0], &bufferSize, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
+    if (NULL != ucol_safeClone(NULL, buffer[0], &bufferSize, &err) || err != U_ILLEGAL_ARGUMENT_ERROR)
     {
         log_err("FAIL: Cloned Collator failed to deal correctly with null Collator pointer\n");
     }
@@ -768,14 +766,9 @@ void TestSafeClone() {
         bufferSize = U_COL_SAFECLONE_BUFFERSIZE;
         err = U_ZERO_ERROR;
         someClonedCollators[idx] = ucol_safeClone(someCollators[idx], buffer[idx], &bufferSize, &err);
-        if (someClonedCollators[idx] == NULL
-            || someClonedCollators[idx] < (UCollator *)buffer[idx]
-            || someClonedCollators[idx] > (UCollator *)(buffer[idx]+(U_COL_SAFECLONE_BUFFERSIZE-1)))
-        {
-            /* TODO: The use of U_COL_SAFECLONE_BUFFERSIZE will be deprecated per #9932.
-               In the meantime, just turn the following former error into a log message. */
-            log_verbose("NOTE: Cloned collator did not use provided buffer, index %d, status %s, clone NULL? %d\n",
-                                                        idx, myErrorName(err), someClonedCollators[idx] == NULL);
+        if (U_FAILURE(err)) {
+            log_err("FAIL: Unable to clone collator %d - %s\n", idx, u_errorName(err));
+            continue;
         }
         if (!ucol_equals(someClonedCollators[idx], someCollators[idx])) {
             log_err("FAIL: Cloned collator is not equal to original at index = %d.\n", idx);

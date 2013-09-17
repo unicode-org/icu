@@ -242,7 +242,6 @@
     <ClCompile Include="citertst.c" />
     <ClCompile Include="cjaptst.c" />
     <ClCompile Include="cmsccoll.c" />
-    <ClCompile Include="colutil.c" />
     <ClCompile Include="cturtst.c" />
     <ClCompile Include="encoll.c" />
     <ClCompile Include="usrchdat.c">
