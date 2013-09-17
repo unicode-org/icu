@@ -1064,7 +1064,7 @@ void IntlTest::printErrors()
 UBool IntlTest::printKnownIssues()
 {
   if(knownList != NULL) {
-    udbg_knownIssue_print(knownList, NULL);
+    udbg_knownIssue_print(knownList);
     udbg_knownIssue_close(knownList);
     return TRUE;
   } else {
