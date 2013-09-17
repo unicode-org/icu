@@ -1,6 +1,6 @@
 /*
  ******************************************************************************
- * Copyright (C) 1996-2010, International Business Machines Corporation and   *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and   *
  * others. All Rights Reserved.                                               *
  ******************************************************************************
  */
@@ -21,6 +21,7 @@ package com.ibm.icu.dev.test.charset;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.ibm.icu.charset.CharsetICU;
@@ -31,147 +32,95 @@ import com.ibm.icu.text.UTF16;
 import com.ibm.icu.text.UnicodeSet;
 
 public class TestSelection extends TestFmwk {
-    private Object[] availableCharsetNames;
-
-    private int findIndex(String charsetName) {
-        int index = -1;
-        Charset set1 = CharsetICU.forNameICU(charsetName);
-        for (int i = 0; i < availableCharsetNames.length; i++) {
-            Charset set2 = CharsetICU.forNameICU((String) availableCharsetNames[i]);
-            if (set1.compareTo(set2) == 0) {
-                index = i;
-                break;
-            }
-        }
-        if (index == -1) {
-            throw new IllegalArgumentException(
-                    "findIndex cannot find the charsetName passed in");
-        }
-        return index;
-    }
-
-    private void fillBool(List result, boolean[] toFill) {
-        for (int i = 0; i < result.size(); i++) {
-            String name = (String) result.get(i);
-            toFill[findIndex(name)] = true;
-        }
-    }
-
-    private void verifyResultUTF16(String s, List encodings, List result,
-            UnicodeSet excludedEncodings, int mappingTypes) {
-        boolean[] resultsFromSystem = new boolean[availableCharsetNames.length];
-        boolean[] resultsManually = new boolean[availableCharsetNames.length];
-        for (int i = 0; i < availableCharsetNames.length; i++) {
-            resultsFromSystem[i] = resultsManually[i] = false;
-        }
-
-        int numOfEncodings = encodings.size();
-        for (int i = 0; i < numOfEncodings; i++) {
-            resultsManually[findIndex((String) encodings.get(i))] = true;
-            UnicodeSet unicodePointSet = new UnicodeSet();
-            Charset testCharset = CharsetICU.forNameICU((String) encodings
-                    .get(i));
-            ((CharsetICU) testCharset).getUnicodeSet(unicodePointSet,
-                    mappingTypes);
-            int ch;
-            int index = 0;
-            while (index < s.length()) {
-                ch = UTF16.charAt(s, index);
-                if (!excludedEncodings.contains(ch)
-                        && !unicodePointSet.contains(ch)) {
-                    resultsManually[findIndex((String) encodings.get(i))] = false;
-                    break;
-                }
-                index += UTF16.getCharCount(ch);
-            }
-        }
-
-        // fill the bool for the selector results
-        fillBool(result, resultsFromSystem);
-        for (int i = 0; i < availableCharsetNames.length; i++) {
-            if (resultsManually[i] != resultsFromSystem[i]) {
-                errln("failure in charset selector! Charset "
-                        + (String) availableCharsetNames[i]
-                        + " had conflicting results manual: "
-                        + resultsManually[i] + ", system: "
-                        + resultsFromSystem[i] + "\n");
-            }
-        }
-    }
-
-    protected void init() {
-        availableCharsetNames = CharsetProviderICU.getAvailableNames();
-    }
 
     public static void main(String[] args) throws Exception {
         new TestSelection().run(args);
     }
 
     public void TestConversionUTF16() {
-        /*
-         * test cases are separated by a -1 each line is one test case including
-         * encodings to check for I'd like to generate this array randomly but
-         * not sure if this is an allowed practice in ICU
-         */
-        int encodingsTestCases[] = { 
-                90, 92, 93, 94, 95, 96,
-                -1, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111,
-                -1, 1, 3, 7, 9, 11, 13, 12, 15, 19, 20, 22, 24, -1, 0, 1, 2, 3,
-                4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-                21, 22, 23, 24, 25, -1, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,
-                22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52,
-                54, 56, -1, 1, 5, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
-                23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, -1,
-                0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17,
-                18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33,
-                34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49,
-                50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65,
-                66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81,
-                82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97,
-                98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110,
-                111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122,
-                123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134,
-                135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146,
-                147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158,
-                159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170,
-                171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182,
-                183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194,
-                195, 196, 197, 198, 199, 200, -1, 1, -1 };
-
-        UnicodeSet[] excludedSets = new UnicodeSet[3];
-        excludedSets[0] = new UnicodeSet();
-        for (int i = 1; i < 3; i++) {
-            excludedSets[i] = new UnicodeSet(i * 30, i * 30 + 500);
+        List<String> testEncodings;
+        if (getInclusion() < 6) {
+            testEncodings = Arrays.asList(
+                    "Big5",
+                    "EUC-JP",
+                    "EUC-KR",
+                    "GB2312",
+                    "ISO-2022-JP",
+                    "ISO-2022-KR",
+                    "ISO-8859-1",
+                    "ISO-8859-10",
+                    "ISO-8859-13",
+                    "ISO-8859-14",
+                    "ISO-8859-15",
+                    "ISO-8859-2",
+                    "ISO-8859-3",
+                    "ISO-8859-4",
+                    "ISO-8859-5",
+                    "ISO-8859-6",
+                    "ISO-8859-7",
+                    "ISO-8859-8",
+                    "ISO-8859-9",
+                    "KOI8-R",
+                    "Shift_JIS",
+                    "TIS-620",
+                    "UTF-16",
+                    "UTF-32",
+                    "UTF-8",
+                    "windows-1250",
+                    "windows-1251",
+                    "windows-1252",
+                    "windows-1253",
+                    "windows-1254",
+                    "windows-1255",
+                    "windows-1256",
+                    "windows-1257",
+                    "windows-1258"
+            );
+        } else {
+            testEncodings = Arrays.asList(CharsetProviderICU.getAvailableNames());
         }
-        
-        for (int excludedSetId = 0; excludedSetId < 3; excludedSetId++) {
-            for (int testCaseIdx = 0, prev = 0; testCaseIdx < encodingsTestCases.length; testCaseIdx++) {
-                if (encodingsTestCases[testCaseIdx] != -1)
-                    continue;
-                List encodings = new ArrayList();
-                for (int i = prev; i < testCaseIdx; i++) {
-                    encodings.add(availableCharsetNames[encodingsTestCases[i]]);
-                }
-                CharsetSelector sel = new CharsetSelector(encodings,
-                        excludedSets[excludedSetId], CharsetICU.ROUNDTRIP_SET);
 
-                List result;
-                for (int i = 0; i < texts.length; i++) {
-                    result = sel.selectForString(texts[i]);
-                    verifyResultUTF16(texts[i], encodings, result,
-                            excludedSets[excludedSetId],
-                            CharsetICU.ROUNDTRIP_SET);
-                    
-                    // Return after running one test when we are not running exhaustive tests
-                    if (getInclusion() < 6) {
-                      return;    
-                    }
-                }
-                prev = testCaseIdx + 1;
+        UnicodeSet[] excludedSets = new UnicodeSet[] {
+                UnicodeSet.EMPTY,           // empty set
+                new UnicodeSet(30, 500),    // arbitrary code range for testing
+        };
+
+        for (UnicodeSet excluded : excludedSets) {
+            CharsetSelector sel = new CharsetSelector(testEncodings, excluded, CharsetICU.ROUNDTRIP_SET);
+            for (int i = 0; i < texts.length; i++) {
+                List<String> result = sel.selectForString(texts[i]);
+                verifyResultUTF16(texts[i], testEncodings, result, excluded, CharsetICU.ROUNDTRIP_SET);
             }
         }
     }
-    
+
+    private void verifyResultUTF16(String s, List<String> encodings, List<String> result,
+            UnicodeSet excluded, int mappingType) {
+        for (String enc : encodings) {
+            UnicodeSet unicodePointSet = new UnicodeSet();
+            Charset testCharset = CharsetICU.forNameICU(enc);
+            ((CharsetICU) testCharset).getUnicodeSet(unicodePointSet, mappingType);
+
+            boolean manualResult = true;
+            int index = 0;
+            while (index < s.length()) {
+                int ch = UTF16.charAt(s, index);
+                if (!excluded.contains(ch) && !unicodePointSet.contains(ch)) {
+                    manualResult = false;
+                    break;
+                }
+                index += UTF16.getCharCount(ch);
+            }
+
+            boolean selectResult = result.contains(enc);
+            if (selectResult != manualResult) {
+                errln("failure in charset selector! Charset " + enc
+                        + " had conflicting results manual: " + manualResult
+                        + ", selectForString(): " + selectResult + "\n");
+            }
+        }
+    }
+
     /* This test is to provide better code coverage for CharsetSelector */
     public void TestCharsetSelectorCodeCoverage() {
         List emptyList = new ArrayList();
