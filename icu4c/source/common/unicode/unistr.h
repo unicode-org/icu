@@ -2846,7 +2846,7 @@ public:
    * @see getBuffer()
    * @stable ICU 2.2
    */
-  inline const UChar *getTerminatedBuffer();
+  const UChar *getTerminatedBuffer();
 
   //========================================
   // Constructors
@@ -4282,48 +4282,6 @@ UnicodeString::setArray(UChar *array, int32_t len, int32_t capacity) {
   fUnion.fFields.fCapacity = capacity;
 }
 
-inline const UChar *
-UnicodeString::getTerminatedBuffer() {
-  if(!isWritable()) {
-    return 0;
-  } else {
-    UChar *array = getArrayStart();
-    int32_t len = length();
-    if(len < getCapacity() && ((fFlags&kRefCounted) == 0 || refCount() == 1)) {
-      /*
-       * kRefCounted: Do not write the NUL if the buffer is shared.
-       * That is mostly safe, except when the length of one copy was modified
-       * without copy-on-write, e.g., via truncate(newLength) or remove(void).
-       * Then the NUL would be written into the middle of another copy's string.
-       */
-      if(!(fFlags&kBufferIsReadonly)) {
-        /*
-         * We must not write to a readonly buffer, but it is known to be
-         * NUL-terminated if len<capacity.
-         * A shared, allocated buffer (refCount()>1) must not have its contents
-         * modified, but the NUL at [len] is beyond the string contents,
-         * and multiple string objects and threads writing the same NUL into the
-         * same location is harmless.
-         * In all other cases, the buffer is fully writable and it is anyway safe
-         * to write the NUL.
-         *
-         * Note: An earlier version of this code tested whether there is a NUL
-         * at [len] already, but, while safe, it generated lots of warnings from
-         * tools like valgrind and Purify.
-         */
-        array[len] = 0;
-      }
-      return array;
-    } else if(cloneArrayIfNeeded(len+1)) {
-      array = getArrayStart();
-      array[len] = 0;
-      return array;
-    } else {
-      return 0;
-    }
-  }
-}
-
 inline UnicodeString&
 UnicodeString::operator= (UChar ch)
 { return doReplace(0, length(), &ch, 0, 1); }
@@ -4456,9 +4414,7 @@ inline UnicodeString&
 UnicodeString::remove()
 {
   // remove() of a bogus string makes the string empty and non-bogus
-  // we also un-alias a read-only alias to deal with NUL-termination
-  // issues with getTerminatedBuffer()
-  if(fFlags & (kIsBogus|kBufferIsReadonly)) {
+  if(isBogus()) {
     setToEmpty();
   } else {
     fShortLength = 0;
@@ -4497,9 +4453,6 @@ UnicodeString::truncate(int32_t targetLength)
     return FALSE;
   } else if((uint32_t)targetLength < (uint32_t)length()) {
     setLength(targetLength);
-    if(fFlags&kBufferIsReadonly) {
-      fUnion.fFields.fCapacity = targetLength;  // not NUL-terminated any more
-    }
     return TRUE;
   } else {
     return FALSE;
