@@ -1051,7 +1051,11 @@ DecimalFormat::getFixedDecimal(double number, UErrorCode &status) const {
     return result;
 }
 
-
+// MSVC optimizer bug? 
+// turn off optimization as it causes different behavior in the int64->double->int64 conversion
+#if defined (_MSC_VER)
+#pragma optimize ( "", off )
+#endif
 FixedDecimal
 DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) const {
     if (U_FAILURE(status)) {
@@ -1094,6 +1098,10 @@ DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) co
     digits.set(number.getInt64());
     return getFixedDecimal(digits, status);
 }
+// end workaround MSVC optimizer bug
+#if defined (_MSC_VER)
+#pragma optimize ( "", on )
+#endif
 
 
 // Create a fixed decimal from a DigitList.
