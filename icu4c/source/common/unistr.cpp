@@ -117,23 +117,19 @@ operator+ (const UnicodeString &s1, const UnicodeString &s2) {
 //========================================
 
 void
-UnicodeString::addRef()
-{  umtx_atomic_inc((u_atomic_int32_t *)fUnion.fFields.fArray - 1);}
+UnicodeString::addRef() {
+  umtx_atomic_inc((u_atomic_int32_t *)fUnion.fFields.fArray - 1);
+}
 
 int32_t
-UnicodeString::removeRef()
-{ return umtx_atomic_dec((u_atomic_int32_t *)fUnion.fFields.fArray - 1);}
+UnicodeString::removeRef() {
+  return umtx_atomic_dec((u_atomic_int32_t *)fUnion.fFields.fArray - 1);
+}
 
 int32_t
-UnicodeString::refCount() const 
-{ 
-    umtx_lock(NULL);
-    // Note: without the lock to force a memory barrier, we might see a very
-    //       stale value on some multi-processor systems.
-    int32_t  count = *((int32_t *)fUnion.fFields.fArray - 1);
-    umtx_unlock(NULL);
-    return count;
- }
+UnicodeString::refCount() const {
+  return umtx_loadAcquire(*((u_atomic_int32_t *)fUnion.fFields.fArray - 1));
+}
 
 void
 UnicodeString::releaseArray() {
