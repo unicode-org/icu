@@ -95,8 +95,9 @@ static const UChar gSlash = 0x2f;
 // If the maximum base 10 exponent were 4, then the largest number would
 // be 99,999 which has 5 digits.
 // On IEEE754 systems gMaxIntegerDigits is 308 + possible denormalized 15 digits + rounding digit
-static const int32_t gMaxIntegerDigits = DBL_MAX_10_EXP + DBL_DIG + 1;
-static const int32_t gMinIntegerDigits = 127;
+// With big decimal, the max exponent is 999,999,999 and the max number of digits is the same, 999,999,999
+const int32_t NumberFormat::gDefaultMaxIntegerDigits = 2000000000;
+const int32_t NumberFormat::gDefaultMinIntegerDigits = 127;
 
 static const UChar * const gLastResortNumberPatterns[UNUM_FORMAT_STYLE_COUNT] = {
     NULL,  // UNUM_PATTERN_DECIMAL
@@ -215,7 +216,7 @@ SimpleNumberFormatFactory::getSupportedIDs(int32_t &count, UErrorCode& status) c
 // default constructor
 NumberFormat::NumberFormat()
 :   fGroupingUsed(TRUE),
-    fMaxIntegerDigits(gMaxIntegerDigits),
+    fMaxIntegerDigits(gDefaultMaxIntegerDigits),
     fMinIntegerDigits(1),
     fMaxFractionDigits(3), // invariant, >= minFractionDigits
     fMinFractionDigits(0),
@@ -1046,7 +1047,7 @@ int32_t NumberFormat::getMaximumIntegerDigits() const
 void
 NumberFormat::setMaximumIntegerDigits(int32_t newValue)
 {
-    fMaxIntegerDigits = uprv_max(0, uprv_min(newValue, gMaxIntegerDigits));
+    fMaxIntegerDigits = uprv_max(0, uprv_min(newValue, gDefaultMaxIntegerDigits));
     if(fMinIntegerDigits > fMaxIntegerDigits)
         fMinIntegerDigits = fMaxIntegerDigits;
 }
@@ -1068,7 +1069,7 @@ NumberFormat::getMinimumIntegerDigits() const
 void
 NumberFormat::setMinimumIntegerDigits(int32_t newValue)
 {
-    fMinIntegerDigits = uprv_max(0, uprv_min(newValue, gMinIntegerDigits));
+    fMinIntegerDigits = uprv_max(0, uprv_min(newValue, gDefaultMinIntegerDigits));
     if(fMinIntegerDigits > fMaxIntegerDigits)
         fMaxIntegerDigits = fMinIntegerDigits;
 }
@@ -1090,7 +1091,7 @@ NumberFormat::getMaximumFractionDigits() const
 void
 NumberFormat::setMaximumFractionDigits(int32_t newValue)
 {
-    fMaxFractionDigits = uprv_max(0, uprv_min(newValue, gMaxIntegerDigits));
+    fMaxFractionDigits = uprv_max(0, uprv_min(newValue, gDefaultMaxIntegerDigits));
     if(fMaxFractionDigits < fMinFractionDigits)
         fMinFractionDigits = fMaxFractionDigits;
 }
@@ -1112,7 +1113,7 @@ NumberFormat::getMinimumFractionDigits() const
 void
 NumberFormat::setMinimumFractionDigits(int32_t newValue)
 {
-    fMinFractionDigits = uprv_max(0, uprv_min(newValue, gMinIntegerDigits));
+    fMinFractionDigits = uprv_max(0, uprv_min(newValue, gDefaultMinIntegerDigits));
     if (fMaxFractionDigits < fMinFractionDigits)
         fMaxFractionDigits = fMinFractionDigits;
 }

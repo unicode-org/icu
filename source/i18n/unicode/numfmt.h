@@ -1004,6 +1004,12 @@ private:
     int32_t     fMinIntegerDigits;
     int32_t     fMaxFractionDigits;
     int32_t     fMinFractionDigits;
+
+  protected:
+    static const int32_t gDefaultMaxIntegerDigits;
+    static const int32_t gDefaultMinIntegerDigits;
+ 
+  private:
     UBool      fParseIntegerOnly;
     UBool      fLenient; // TRUE => lenient parse is enabled
 

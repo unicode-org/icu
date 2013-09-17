@@ -5270,7 +5270,7 @@ DecimalFormat::applyPatternWithoutExpandAffix(const UnicodeString& pattern,
                 setMinimumIntegerDigits(minInt);
                 setMaximumIntegerDigits(fUseExponentialNotation
                     ? digitLeftCount + getMinimumIntegerDigits()
-                    : kDoubleIntegerDigits);
+                    : NumberFormat::gDefaultMaxIntegerDigits);
                 setMaximumFractionDigits(decimalPos >= 0
                     ? (digitTotalCount - decimalPos) : 0);
                 setMinimumFractionDigits(decimalPos >= 0
@@ -5461,11 +5461,11 @@ DecimalFormat::applyPatternInternally(const UnicodeString& pluralCount,
 
 /**
  * Sets the maximum number of digits allowed in the integer portion of a
- * number. This override limits the integer digit count to 309.
+ * number. 
  * @see NumberFormat#setMaximumIntegerDigits
  */
 void DecimalFormat::setMaximumIntegerDigits(int32_t newValue) {
-    NumberFormat::setMaximumIntegerDigits(_min(newValue, kDoubleIntegerDigits));
+    NumberFormat::setMaximumIntegerDigits(_min(newValue, gDefaultMaxIntegerDigits));
 #if UCONFIG_FORMAT_FASTPATHS_49
     handleChanged();
 #endif
