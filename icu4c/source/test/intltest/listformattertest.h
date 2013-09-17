@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2012, International Business Machines
+*   Copyright (C) 2012-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -35,6 +35,7 @@ class ListFormatterTest : public IntlTest {
     void TestMalayalam();
     void TestZulu();
     void TestOutOfOrderPatterns();
+    void Test9946();
 
   private:
     void CheckFormatting(const ListFormatter* formatter, UnicodeString data[], int32_t data_size, const UnicodeString& expected_result);
