@@ -323,9 +323,14 @@ static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UEr
         case CALTYPE_PERSIAN:
             cal = new PersianCalendar(loc, status);
             break;
+        case CALTYPE_ISLAMIC_TBLA:
+            cal = new IslamicCalendar(loc, status, IslamicCalendar::TBLA);
+            break;
         case CALTYPE_ISLAMIC_CIVIL:
             cal = new IslamicCalendar(loc, status, IslamicCalendar::CIVIL);
             break;
+        case CALTYPE_ISLAMIC_RGSA:
+            // default any region specific not handled individually to islamic
         case CALTYPE_ISLAMIC:
             cal = new IslamicCalendar(loc, status, IslamicCalendar::ASTRONOMICAL);
             break;
@@ -358,9 +363,6 @@ static Calendar *createStandardCalendar(ECalType calType, const Locale &loc, UEr
         case CALTYPE_DANGI:
             cal = new DangiCalendar(loc, status);
             break;
-        case CALTYPE_ISLAMIC_TBLA:
-        case CALTYPE_ISLAMIC_RGSA:
-            // Need to add handling for these, meanwhile fall through to default
         default:
             status = U_UNSUPPORTED_ERROR;
     }

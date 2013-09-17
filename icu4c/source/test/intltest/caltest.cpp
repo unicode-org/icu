@@ -3,7 +3,6 @@
  * Copyright (c) 1997-2013, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
-
 #include "unicode/utypes.h"
 
 #if !UCONFIG_NO_FORMATTING
@@ -285,6 +284,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
           if(exec) {
             logln("Test8449---"); logln("");
             Test8449();
+          }
+          break;
+		case 32:
+          name = "Test10249";
+          if(exec) {
+            logln("Test10249---"); logln("");
+            Test10249();
           }
           break;
         default: name = ""; break;
@@ -2844,6 +2850,36 @@ void CalendarTest::Test8449() {
     delete tstCal;
 }            
 
+void CalendarTest::Test10249() {
+    UErrorCode status = U_ZERO_ERROR;
+    Locale islamicLoc("ar_SA@calendar=islamic-civil"); 
+    Locale tblaLoc("ar_SA@calendar=islamic-tbla"); 
+    SimpleDateFormat* formatter = new SimpleDateFormat("yyyy-MM-dd", Locale::getUS(), status);            
+    UDate date = formatter->parse("1975-05-06", status);
+
+   	Calendar* tstCal = Calendar::createInstance(islamicLoc, status);
+    tstCal->setTime(date, status);
+    int32_t is_day = tstCal->get(UCAL_DAY_OF_MONTH,status);
+    int32_t is_month = tstCal->get(UCAL_MONTH,status);
+    int32_t is_year = tstCal->get(UCAL_YEAR,status);
+    TEST_CHECK_STATUS;
+    delete tstCal;
+
+   	tstCal = Calendar::createInstance(tblaLoc, status);
+    tstCal->setTime(date, status);
+    int32_t tbla_day = tstCal->get(UCAL_DAY_OF_MONTH,status);
+    int32_t tbla_month = tstCal->get(UCAL_MONTH,status);
+    int32_t tbla_year = tstCal->get(UCAL_YEAR,status);
+    TEST_CHECK_STATUS;
+
+    if(tbla_month != is_month || tbla_year != is_year)
+        errln("unexpected difference between islamic and tbla month %d : %d and/or year %d : %d",tbla_month,is_month,tbla_year,is_year);
+
+    if(tbla_day - is_day != 1)
+        errln("unexpected day difference between islamic and tbla: %d : %d ",tbla_day,is_day);
+    delete tstCal;
+    delete formatter;
+}
 
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

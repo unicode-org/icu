@@ -220,6 +220,7 @@ public: // package
     void Test3785(void);
     void Test1624(void);
     void Test8449(void);
+    void Test10249(void);
 
     /**
      * Test the time stamp array recalculation during heavy Calendar usage

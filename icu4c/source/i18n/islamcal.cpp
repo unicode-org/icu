@@ -82,6 +82,8 @@ const char *IslamicCalendar::getType() const {
         return "islamic-civil";
     } else if(civil==ASTRONOMICAL){
         return "islamic";
+    } else if(civil==TBLA){
+        return "islamic-tbla";
     } else {
 		return "islamic-umalqura";
 	}
@@ -198,7 +200,7 @@ UBool IslamicCalendar::civilLeapYear(int32_t year)
 * from the Hijri epoch, origin 0.
 */
 int32_t IslamicCalendar::yearStart(int32_t year) const{
-    if (civil == CIVIL ||
+    if (civil == CIVIL || civil == TBLA ||
 		(civil == UMALQURA && year < UMALQURA_YEAR_START)) 
 	{
         return (year-1)*354 + ClockMath::floorDivide((3+11*year),30);
@@ -222,7 +224,7 @@ int32_t IslamicCalendar::yearStart(int32_t year) const{
 * @param year  The hijri month, 0-based
 */
 int32_t IslamicCalendar::monthStart(int32_t year, int32_t month) const {
-    if (civil == CIVIL) {
+    if (civil == CIVIL || civil == TBLA) {
         return (int32_t)uprv_ceil(29.5*month)
             + (year-1)*354 + (int32_t)ClockMath::floorDivide((3+11*year),30);
     } else if(civil==ASTRONOMICAL){
@@ -340,7 +342,7 @@ int32_t IslamicCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
 
     int32_t length = 0;
 
-    if (civil == CIVIL ||
+    if (civil == CIVIL || civil == TBLA ||
 		(civil == UMALQURA && (extendedYear<UMALQURA_YEAR_START || extendedYear>UMALQURA_YEAR_END)) ) {
         length = 29 + (month+1) % 2;
         if (month == DHU_AL_HIJJAH && civilLeapYear(extendedYear)) {
@@ -360,7 +362,7 @@ int32_t IslamicCalendar::handleGetMonthLength(int32_t extendedYear, int32_t mont
 * @draft ICU 2.4
 */
 int32_t IslamicCalendar::handleGetYearLength(int32_t extendedYear) const {
-    if (civil == CIVIL ||
+    if (civil == CIVIL || civil == TBLA ||
 		(civil == UMALQURA && (extendedYear<UMALQURA_YEAR_START || extendedYear>UMALQURA_YEAR_END)) ) {
         return 354 + (civilLeapYear(extendedYear) ? 1 : 0);
     } else if(civil == ASTRONOMICAL){
@@ -422,9 +424,11 @@ int32_t IslamicCalendar::handleGetExtendedYear() {
 void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status) {
     int32_t year, month, dayOfMonth, dayOfYear;
     UDate startDate;
-    int32_t days = julianDay - 1948440;
+    int32_t days = julianDay - CIVIL_EPOC;
 
-    if (civil == CIVIL) {
+    if (civil == CIVIL || civil == TBLA) {
+        if(civil == TBLA)
+            days = julianDay - ASTRONOMICAL_EPOC;
         // Use the civil calendar approximation, which is just arithmetic
         year  = (int)ClockMath::floorDivide( (double)(30 * days + 10646) , 10631.0 );
         month = (int32_t)uprv_ceil((days - 29 - yearStart(year)) / 29.5 );
