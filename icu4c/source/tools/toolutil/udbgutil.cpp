@@ -599,3 +599,178 @@ U_CAPI char *udbg_knownIssueURLFrom(const char *ticket, char *buf) {
   }
   return buf;
 }
+
+
+#if !U_HAVE_STD_STRING
+const char *warning = "WARNING: Don't have std::string (STL) - known issue logs will be deficient.";
+
+U_CAPI void *udbg_knownIssue_openU(void *ptr, const char *ticket, char *where, const UChar *msg, UBool *firstForTicket,
+                                   UBool *firstForWhere) {
+  if(ptr==NULL) {
+    puts(warning);
+  }
+  printf("%s\tKnown Issue #%s\n", where, ticket);
+
+  return (void*)warning;
+}
+
+U_CAPI void *udbg_knownIssue_open(void *ptr, const char *ticket, char *where, const char *msg, UBool *firstForTicket,
+                                   UBool *firstForWhere) {
+  if(ptr==NULL) {
+    puts(warning);
+  }
+  if(msg==NULL) msg = "";
+  printf("%s\tKnown Issue #%s  \"%s\n", where, ticket, msg);
+
+  return (void*)warning;
+}
+
+U_CAPI UBool udbg_knownIssue_print(void *ptr, FILE *output) {
+  puts(warning);
+  return FALSE;
+}
+
+U_CAPI void udbg_knownIssue_close(void *ptr) {
+  // nothing to do
+}
+#else
+
+#include <set>
+#include <map>
+#include <string>
+#include <ostream>
+#include <iostream>
+
+class KnownIssues {
+public:
+  KnownIssues();
+  ~KnownIssues();
+  void add(const char *ticket, const char *where, const UChar *msg, UBool *firstForTicket, UBool *firstForWhere);
+  void add(const char *ticket, const char *where, const char *msg, UBool *firstForTicket, UBool *firstForWhere);
+  UBool print(FILE *output) ;
+private:
+  std::map< std::string, 
+            std::map < std::string, std::set < std::string > > > fTable;
+};
+
+KnownIssues::KnownIssues()
+  : fTable()
+{
+}
+
+KnownIssues::~KnownIssues()
+{
+}
+
+void KnownIssues::add(const char *ticket, const char *where, const UChar *msg, UBool *firstForTicket, UBool *firstForWhere)
+{
+  if(fTable.find(ticket) == fTable.end()) {
+    if(firstForTicket!=NULL) *firstForTicket = TRUE;
+    fTable[ticket] = std::map < std::string, std::set < std::string > >();
+  } else {
+    if(firstForTicket!=NULL) *firstForTicket = FALSE;
+  }
+  if(where==NULL) return;
+
+  if(fTable[ticket].find(where) == fTable[ticket].end()) {
+    if(firstForWhere!=NULL) *firstForWhere = TRUE;
+    fTable[ticket][where] = std::set < std::string >();
+  } else {
+    if(firstForWhere!=NULL) *firstForWhere = FALSE;
+  }
+  if(msg==NULL || !*msg) return;
+
+  std::string str;
+  fTable[ticket][where].insert(UnicodeString(msg).toUTF8String(str));
+}
+
+void KnownIssues::add(const char *ticket, const char *where, const char *msg, UBool *firstForTicket, UBool *firstForWhere)
+{
+  if(fTable.find(ticket) == fTable.end()) {
+    if(firstForTicket!=NULL) *firstForTicket = TRUE;
+    fTable[ticket] = std::map < std::string, std::set < std::string > >();
+  } else {
+    if(firstForTicket!=NULL) *firstForTicket = FALSE;
+  }
+  if(where==NULL) return;
+
+  if(fTable[ticket].find(where) == fTable[ticket].end()) {
+    if(firstForWhere!=NULL) *firstForWhere = TRUE;
+    fTable[ticket][where] = std::set < std::string >();
+  } else {
+    if(firstForWhere!=NULL) *firstForWhere = FALSE;
+  }
+  if(msg==NULL || !*msg) return;
+
+  std::string str(msg);
+  fTable[ticket][where].insert(str);
+}
+
+UBool KnownIssues::print(FILE *output) 
+{
+  if(fTable.empty()) {
+    return FALSE;
+  }
+
+  std::cout << "KNOWN ISSUES" << std::endl;
+  for( std::map<  std::string,
+          std::map <  std::string,  std::set <  std::string > > >::iterator i = fTable.begin();
+       i != fTable.end();
+       i++ ) {
+    char URL[1024];
+    std::cout << '#' << (*i).first << " <" << udbg_knownIssueURLFrom( (*i).first.c_str(), URL ) << ">" << std::endl;
+
+    for( std::map< std::string, std::set < std::string > >::iterator ii = (*i).second.begin();
+         ii != (*i).second.end();
+         ii++ ) {
+      std::cout << "  " << (*ii).first << std::endl;
+      for ( std::set < std::string >::iterator iii = (*ii).second.begin();
+            iii != (*ii).second.end();
+            iii++ ) {
+        std::cout << "     " << '"' << (*iii) << '"' << std::endl;
+      }
+    }
+  }
+  return TRUE;
+}
+
+U_CAPI void *udbg_knownIssue_openU(void *ptr, const char *ticket, char *where, const UChar *msg, UBool *firstForTicket,
+                                   UBool *firstForWhere) {
+  KnownIssues *t = static_cast<KnownIssues*>(ptr);
+  if(t==NULL) {
+    t = new KnownIssues();
+  }
+
+  t->add(ticket, where, msg, firstForTicket, firstForWhere);
+
+  return static_cast<void*>(t);
+}
+
+U_CAPI void *udbg_knownIssue_open(void *ptr, const char *ticket, char *where, const char *msg, UBool *firstForTicket,
+                                   UBool *firstForWhere) {
+  KnownIssues *t = static_cast<KnownIssues*>(ptr);
+  if(t==NULL) {
+    t = new KnownIssues();
+  }
+
+  t->add(ticket, where, msg, firstForTicket, firstForWhere);
+
+  return static_cast<void*>(t);
+}
+
+U_CAPI UBool udbg_knownIssue_print(void *ptr, FILE *output) {
+  KnownIssues *t = static_cast<KnownIssues*>(ptr);
+  if(t==NULL) {
+    return FALSE;
+  } else {
+    t->print(output);
+    return TRUE;
+  }
+}
+
+U_CAPI void udbg_knownIssue_close(void *ptr) {
+  KnownIssues *t = static_cast<KnownIssues*>(ptr);
+  delete t;
+}
+
+#endif

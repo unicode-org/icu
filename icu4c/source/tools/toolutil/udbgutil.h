@@ -117,4 +117,36 @@ U_CAPI void udbg_writeIcuInfo(FILE *f);
  */
 U_CAPI char *udbg_knownIssueURLFrom(const char *ticket, char *buf);
 
+/**
+ * Open (or reopen) a 'known issue' table.
+ * @param ptr pointer to 'table'. Opaque.
+ * @return new or existing ptr
+ */
+U_CAPI void *udbg_knownIssue_openU(void *ptr, const char *ticket, char *where, const UChar *msg, UBool *firstForTicket,
+                                   UBool *firstForWhere);
+
+
+/**
+ * Open (or reopen) a 'known issue' table.
+ * @param ptr pointer to 'table'. Opaque.
+ * @return new or existing ptr
+ */
+U_CAPI void *udbg_knownIssue_open(void *ptr, const char *ticket, char *where, const char *msg, UBool *firstForTicket,
+                                   UBool *firstForWhere);
+
+/**
+ * Print 'known issue' table.
+ * @param ptr pointer from udbg_knownIssue
+ * @param output file to print to
+ * @return TRUE if there were any issues.
+ */
+U_CAPI UBool udbg_knownIssue_print(void *ptr, FILE *output);
+
+/**
+ * Close 'known issue' table.
+ * @param ptr
+ */
+U_CAPI void udbg_knownIssue_close(void *ptr);
+
+
 #endif
