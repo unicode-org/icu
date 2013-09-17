@@ -941,8 +941,8 @@ public class PluralRulesTest extends TestFmwk {
         "ak,bh,guw,ln,mg,nso,pa,ti,wa; one: 0, 0.0, 0.00, 1; other: 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
         "tzm; one: 0, 0.0, 0.00, 1, 11, 99; other: 0.03, 0.1, 0.3, 0.30, 1.99, 2, 2.0, 2.00, 2.11, 3",
         "af,asa,ast,az,bem,bez,bg,brx,cgg,chr,ckb,dv,ee,el,eo,es,eu,fo,fur,fy,gsw,ha,haw,hu,jgo,jmc,ka,kaj,kcg,kk,kkj,kl,ks,ksb,ku,ky,lb,lg,mas,mgo,ml,mn,nah,nb,nd,ne,nn,nnh,no,nr,ny,nyn,om,or,os,pap,ps,rm,rof,rwk,saq,seh,sn,so,sq,ss,ssy,st,syr,ta,te,teo,tig,tk,tn,tr,ts,ve,vo,vun,wae,xh,xog; one: 1, 1.0, 1.00; other: 0, 0.0, 0.00, 0.01, 0.1, 0.10, 1.03, 1.3, 1.30, 1.99, 2, 3",
-        // pt is now: one: i is 1 and v is 0 or f is 1 
-        "pt; one: 0.01, 0.1, 1; other: 0, 0.0, 0.00, 0.10, 1.03, 1.3, 1.30, 1.99, 2, 3, 1.0, 1.00",
+        // pt is now: i = 1 and v = 0 or i = 0 and t = 1
+        "pt; one:  0.1, 0.01, 0.10, 0.001, 0.010, 0.100, 0.0001, 0.0010, 0.0100, 0.1000, 1; other: 0.0, 0.2, 0.3, 1.6, 10.0, 100.0, 1000.0, 10000.0, 100000.0, 1000000.0",
         "am,bn,fa,gu,hi,kn,mr,zu; one: 0, 0.0, 0.00, 0.03, 0.1, 0.3, 0.30, 0.5, 1; other: 1.99, 2, 2.0, 2.00, 2.01, 2.1, 2.10, 3",
         "ff,fr,hy,kab; one: 0, 0.0, 0.00, 0.02, 0.1, 0.2, 0.20, 1, 1.99; other: 2, 2.0, 2.00, 2.01, 2.1, 2.10",
 
