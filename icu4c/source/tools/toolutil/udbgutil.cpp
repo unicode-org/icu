@@ -682,7 +682,7 @@ void KnownIssues::add(const char *ticket, const char *where, const UChar *msg, U
   if(msg==NULL || !*msg) return;
 
   std::string str;
-  fTable[ticket][where].insert(UnicodeString(msg).toUTF8String(str));
+  fTable[ticket][where].insert(icu::UnicodeString(msg).toUTF8String(str));
 }
 
 void KnownIssues::add(const char *ticket, const char *where, const char *msg, UBool *firstForTicket, UBool *firstForWhere)
