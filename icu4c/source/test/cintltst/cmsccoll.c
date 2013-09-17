@@ -4071,10 +4071,10 @@ static void TestSettings(void) {
 static int32_t TestEqualsForCollator(const char* locName, UCollator *source, UCollator *target) {
     UErrorCode status = U_ZERO_ERROR;
     int32_t errorNo = 0;
-    /*const UChar *sourceRules = NULL;*/
-    /*int32_t sourceRulesLen = 0;*/
+    const UChar *sourceRules = NULL;
+    int32_t sourceRulesLen = 0;
+    UParseError parseError;
     UColAttributeValue french = UCOL_OFF;
-    int32_t cloneSize = 0;
 
     if(!ucol_equals(source, target)) {
         log_err("Same collators, different address not equal\n");
@@ -4082,11 +4082,7 @@ static int32_t TestEqualsForCollator(const char* locName, UCollator *source, UCo
     }
     ucol_close(target);
     if(uprv_strcmp(ucol_getLocaleByType(source, ULOC_REQUESTED_LOCALE, &status), ucol_getLocaleByType(source, ULOC_ACTUAL_LOCALE, &status)) == 0) {
-        /* currently, safeClone is implemented through getRules/openRules
-        * so it is the same as the test below - I will comment that test out.
-        */
-        /* real thing */
-        target = ucol_safeClone(source, NULL, &cloneSize, &status);
+        target = ucol_safeClone(source, NULL, NULL, &status);
         if(U_FAILURE(status)) {
             log_err("Error creating clone\n");
             errorNo++;
@@ -4112,21 +4108,19 @@ static int32_t TestEqualsForCollator(const char* locName, UCollator *source, UCo
             errorNo++;
         }
         ucol_close(target);
-        /* commented out since safeClone uses exactly the same technique */
-        /*
+
         sourceRules = ucol_getRules(source, &sourceRulesLen);
         target = ucol_openRules(sourceRules, sourceRulesLen, UCOL_DEFAULT, UCOL_DEFAULT, &parseError, &status);
         if(U_FAILURE(status)) {
-        log_err("Error instantiating target from rules\n");
-        errorNo++;
-        return errorNo;
+            log_err("Error instantiating target from rules - %s\n", u_errorName(status));
+            errorNo++;
+            return errorNo;
         }
         if(!ucol_equals(source, target)) {
-        log_err("Collator different from collator that was created from the same rules\n");
-        errorNo++;
+            log_err("Collator different from collator that was created from the same rules\n");
+            errorNo++;
         }
         ucol_close(target);
-        */
     }
     return errorNo;
 }
@@ -6367,7 +6361,6 @@ static void TestReorderingAcrossCloning(void)
     UCollator  *myCollation;
     int32_t reorderCodes[3] = {USCRIPT_GREEK, USCRIPT_HAN, UCOL_REORDER_CODE_PUNCTUATION};
     UCollator *clonedCollation;
-    int32_t bufferSize;
     int32_t retrievedReorderCodesLength;
     int32_t retrievedReorderCodes[10];
     int loopIndex;
@@ -6390,7 +6383,7 @@ static void TestReorderingAcrossCloning(void)
     }
     
     /* clone the collator */
-    clonedCollation = ucol_safeClone(myCollation, NULL, &bufferSize, &status);
+    clonedCollation = ucol_safeClone(myCollation, NULL, NULL, &status);
     if (U_FAILURE(status)) {
         log_err_status(status, "ERROR: cloning collator: %s\n", myErrorName(status));
         return;

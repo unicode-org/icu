@@ -209,8 +209,7 @@ RuleBasedCollator& RuleBasedCollator::operator=(const RuleBasedCollator& that)
     if (this == &that) { return *this; }
 
     UErrorCode intStatus = U_ZERO_ERROR;
-    int32_t buffersize = U_COL_SAFECLONE_BUFFERSIZE;
-    UCollator *ucol = ucol_safeClone(that.ucollator, NULL, &buffersize, &intStatus);
+    UCollator *ucol = ucol_safeClone(that.ucollator, NULL, NULL, &intStatus);
     if (U_FAILURE(intStatus)) { return *this; }
 
     if (dataIsOwned) {

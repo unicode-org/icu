@@ -204,7 +204,6 @@ BreakIterator::getAvailableLocales(int32_t& count)
 
 BreakIterator::BreakIterator()
 {
-    fBufferClone = FALSE;
     *validLocale = *actualLocale = 0;
 }
 
