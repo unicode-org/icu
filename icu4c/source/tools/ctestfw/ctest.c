@@ -694,11 +694,6 @@ static void vlog_err(const char *prefix, const char *pattern, va_list ap)
 
 static UBool vlog_knownIssue(const char *ticket, const char *pattern, va_list ap)
 {
-    /* fputs("!", stdout); /\* col 1 - bang *\/ */
-    /* fprintf(stdout, "%-*s", INDENT_LEVEL,"" ); */
-    /* if(prefix) { */
-    /*     fputs(prefix, stdout); */
-    /* } */
     char buf[2048], url[1024];
     UBool firstForTicket;
     UBool firstForWhere;
@@ -707,7 +702,8 @@ static UBool vlog_knownIssue(const char *ticket, const char *pattern, va_list ap
     if(pattern==NULL) pattern="";
 
     vsprintf(buf, pattern, ap);
-    knownList = udbg_knownIssue_open(knownList, ticket, gTestName, buf, &firstForTicket, &firstForWhere);
+    knownList = udbg_knownIssue_open(knownList, ticket, gTestName, buf,
+                                     &firstForTicket, &firstForWhere);
 
     if(firstForTicket || firstForWhere) {
       log_info("(Known issue #%s) %s", ticket, buf);
@@ -715,16 +711,6 @@ static UBool vlog_knownIssue(const char *ticket, const char *pattern, va_list ap
       log_verbose("(Known issue #%s) %s", ticket, buf);
     }
 
-    /*printf("KNOWN ISSUE: #%s %s\n", ticket, buf); */
-
-    /* fflush(stdout); */
-    /* va_end(ap); */
-    /* if((*pattern==0) || (pattern[strlen(pattern)-1]!='\n')) { */
-    /* 	HANGING_OUTPUT=1; */
-    /* } else { */
-    /* 	HANGING_OUTPUT=0; */
-    /* } */
-    /* GLOBAL_PRINT_COUNT++; */
     return TRUE;
 }
 

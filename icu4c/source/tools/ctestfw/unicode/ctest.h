@@ -225,6 +225,16 @@ T_CTEST_API void T_CTEST_EXPORT2
 log_data_err(const char *pattern, ...);
 
 /**
+ * Log a known issue.
+ * @param ticket ticket number such as "12345" for ICU tickets or "cldrbug:6636" for CLDR tickets.
+ * @param fmt ...  sprintf-style format, optional message. can be NULL.
+ * @return TRUE if known issue test should be skipped, FALSE if it should be run
+ */
+T_CTEST_API UBool
+T_CTEST_EXPORT2
+log_knownIssue(const char *ticket, const char *fmt, ...);
+
+/**
  * Initialize the variables above. This allows the test to set up accordingly
  * before running the tests.
  * This must be called before runTests.
@@ -298,16 +308,5 @@ ctest_xml_fini(void);
 T_CTEST_API int32_t
 T_CTEST_EXPORT2
 ctest_xml_testcase(const char *classname, const char *name, const char *time, const char *failMsg);
-
-
-/**
- * Log a known issue.
- * @param ticket ticket number such as "12345" for ICU tickets or "cldr:6636" for CLDR tickets.
- * @param fmt ...  sprintf-style format, optional message. can be NULL.
- * @return TRUE unless known issues should be tested
- */
-T_CTEST_API UBool
-T_CTEST_EXPORT2
-log_knownIssue(const char *ticket, const char *fmt, ...);
 
 #endif

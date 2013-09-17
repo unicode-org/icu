@@ -1958,23 +1958,6 @@ UBool IntlTest::assertEquals(const UnicodeString& message,
                              int64_t actual) {
     return assertEquals(extractToAssertBuf(message), expected, actual);
 }
-//--------------------------------------------------------------------
-// Time bomb - allows temporary behavior that expires at a given
-//             release
-//--------------------------------------------------------------------
-
-UBool IntlTest::isICUVersionBefore(int major, int minor, int milli) {
-    UVersionInfo iv;
-    UVersionInfo ov = { (uint8_t)major, (uint8_t)minor, (uint8_t)milli, 0 };
-    u_getVersion(iv);
-    logKnownIssue("9744", "fix call to isICUVersionBefore");
-    return TRUE;
-    if( uprv_memcmp(iv, ov, U_MAX_VERSION_LENGTH) < 0 ) {
-      return FALSE;
-    } else {
-      return FALSE;
-    }
-}
 
 #if !UCONFIG_NO_FORMATTING
 UBool IntlTest::assertEquals(const UnicodeString& message,
