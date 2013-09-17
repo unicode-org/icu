@@ -172,6 +172,7 @@ NumberFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const cha
         CASE(62,Test9109);
         CASE(63,Test9780);
         CASE(64,Test9677);
+        CASE(65,Test10361);
 
         default: name = ""; break;
     }
@@ -2986,5 +2987,37 @@ void NumberFormatRegressionTest::Test9677(void) {
   }
 }
 
+void NumberFormatRegressionTest::Test10361(void) {
+    // DecimalFormat/NumberFormat were artificially limiting the number of digits,
+    //    preventing formatting of big decimals.
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<DecimalFormat> df(new DecimalFormat("###.##", status));
+    TEST_CHECK_STATUS(status);
+
+    // Create a decimal number with a million digits.
+    const int32_t NUMSIZE=1000000;
+    char *num = new char[NUMSIZE];
+    for (int32_t i=0; i<NUMSIZE; i++) {
+        num[i] = '0' + (i+1) % 10;
+    }
+    num[NUMSIZE-3] = '.';
+    num[NUMSIZE-1] = 0;
+
+    UnicodeString    s;
+    Formattable      fmtable;
+    fmtable.setDecimalNumber(num, status);
+    TEST_CHECK_STATUS(status);
+
+    FieldPosition pos(UNUM_DECIMAL_SEPARATOR_FIELD);
+    df->format(fmtable, s, pos, status);
+    TEST_CHECK_STATUS(status);
+    TEST_ASSERT(999999 == s.length());
+    TEST_ASSERT(999997 == pos.getBeginIndex());
+    TEST_ASSERT(999998 == pos.getEndIndex());
+
+    UnicodeString expected(num, -1, US_INV);
+    TEST_ASSERT(expected == s);
+    delete [] num;
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
