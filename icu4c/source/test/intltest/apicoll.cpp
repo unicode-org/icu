@@ -2290,7 +2290,7 @@ void CollationAPITest::TestIterNumeric() {
     uiter_setUTF8(&iter40, "\x34\x30", 2);
     uiter_setUTF8(&iter72, "\x37\x32", 2);
     UCollationResult result = coll.compare(iter40, iter72, errorCode);
-    assertEquals("40<72", UCOL_LESS, result);
+    assertEquals("40<72", (int32_t)UCOL_LESS, (int32_t)result);
 }
 
  void CollationAPITest::dump(UnicodeString msg, RuleBasedCollator* c, UErrorCode& status) {
