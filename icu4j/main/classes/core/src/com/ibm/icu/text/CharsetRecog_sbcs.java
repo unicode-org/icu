@@ -783,10 +783,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
 
         public String getName()
         {
-            // return "ISO-8859-8-I";
-            // ICU4C returns ISO-8859-8-I
-            // Ticket #9364 to resolve the difference.
-            return "ISO-8859-8";
+            return "ISO-8859-8-I";
         }
 
         public String getLanguage()
@@ -796,9 +793,7 @@ abstract class CharsetRecog_sbcs extends CharsetRecognizer {
         
         public CharsetMatch match(CharsetDetector det)
         {
-            // ICU4C returns ISO-8859-8-I
-            // Ticket #9364 to resolve the difference.
-            String name = det.fC1Bytes ? "windows-1255" : "ISO-8859-8";
+            String name = det.fC1Bytes ? "windows-1255" : "ISO-8859-8-I";
             int confidence = match(det, ngrams, byteMap);
             return confidence == 0 ? null : new CharsetMatch(det, this, confidence, name, "he");
         }

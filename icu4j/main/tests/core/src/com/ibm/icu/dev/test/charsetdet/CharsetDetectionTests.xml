@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- Copyright (c) 2005-2007 IBM Corporation and others. All rights reserved -->
+<!-- Copyright (c) 2005-2013 IBM Corporation and others. All rights reserved -->
 <!-- See individual test cases for their specific copyright. -->
 
 <charset-detection-tests>
@@ -118,7 +118,7 @@
 
     </test-case>
 
-    <test-case id="IUC10-he" encodings="UTF-8 UTF-32BE UTF-32LE ISO-8859-8/he">
+    <test-case id="IUC10-he" encodings="UTF-8 UTF-32BE UTF-32LE ISO-8859-8-I/he">
     <!-- Copyright © 1991-2005 Unicode, Inc. All rights reserved. -->
 
     אירופה, תוכנה והאינטרנט:
