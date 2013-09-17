@@ -1797,7 +1797,7 @@ public:
    * For a bogus string, getBuffer() and getTerminatedBuffer() return NULL, and
    * length() returns 0.
    *
-   * @return TRUE if the string is valid, FALSE otherwise
+   * @return TRUE if the string is bogus/invalid, FALSE otherwise
    * @see setToBogus()
    * @stable ICU 2.0
    */
