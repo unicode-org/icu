@@ -156,8 +156,34 @@ public:
 
     virtual void logln( void );
 
+    /**
+     * Replaces isICUVersionAtLeast and isICUVersionBefore
+     * log that an issue is known.
+     * Usually used this way:   
+     * <code>if( ... && logKnownIssue("12345", "some bug")) continue; </code>
+     * @param ticket ticket string, "12345" or "cldrbug:1234"
+     * @param message optional message string
+     * @return true if test should be skipped
+     */
     UBool logKnownIssue( const char *ticket, const UnicodeString &message );
+    /**
+     * Replaces isICUVersionAtLeast and isICUVersionBefore
+     * log that an issue is known.
+     * Usually used this way:
+     * <code>if( ... && logKnownIssue("12345", "some bug")) continue; </code>
+     * @param ticket ticket string, "12345" or "cldrbug:1234"
+     * @return true if test should be skipped
+     */
     UBool logKnownIssue( const char *ticket );
+    /**
+     * Replaces isICUVersionAtLeast and isICUVersionBefore
+     * log that an issue is known.
+     * Usually used this way:
+     * <code>if( ... && logKnownIssue("12345", "some bug")) continue; </code>
+     * @param ticket ticket string, "12345" or "cldrbug:1234"
+     * @param message optional message string
+     * @return true if test should be skipped
+     */
     UBool logKnownIssue( const char *ticket, const char *fmt, ...);
 
     virtual void info( const UnicodeString &message );
@@ -167,7 +193,7 @@ public:
     virtual void infoln( void );
 
     virtual void err(void);
-    
+
     virtual void err( const UnicodeString &message );
 
     virtual void errln( const UnicodeString &message );
@@ -175,7 +201,7 @@ public:
     virtual void dataerr( const UnicodeString &message );
 
     virtual void dataerrln( const UnicodeString &message );
-    
+
     void errcheckln(UErrorCode status, const UnicodeString &message );
 
     // convenience functions: sprintf() + errln() etc.
@@ -219,32 +245,6 @@ public:
      * Convenience method using a global seed.
      */
     static float random();
-
-    /**
-     * Returns true if u_getVersion() < major.minor.
-     */
-    UBool isICUVersionBefore(int major, int minor) {
-        return isICUVersionBefore(major, minor, 0);
-    }
-
-    /**
-     * Returns true if u_getVersion() < major.minor.milli.
-     */
-    UBool isICUVersionBefore(int major, int minor, int milli);
-
-    /**
-     * Returns true if u_getVersion() >= major.minor.
-     */
-    UBool isICUVersionAtLeast(int major, int minor) {
-        return isICUVersionAtLeast(major, minor, 0);
-    }
-
-    /**
-     * Returns true if u_getVersion() >= major.minor.milli.
-     */
-    UBool isICUVersionAtLeast(int major, int minor, int milli) {
-        return !isICUVersionBefore(major, minor, milli);
-    }
 
     enum { kMaxProps = 16 };
 

@@ -132,17 +132,9 @@ U_CFUNC UBool assertTrue(const char* msg, int condition);
 U_CFUNC UBool assertEquals(const char* msg, const char* expectedString,
                            const char* actualString);
 
-/**
- * Returns true if u_getVersion() < major.minor.milli.
- * @deprecated use log_KnownIssue
+/*
+ * note - isICUVersionBefore and isICUVersionAtLeast have been removed.
+ * use log_knownIssue() instead.
  */
-U_CFUNC UBool isICUVersionBefore(int major, int minor, int milli);
-
-/**
- * Returns true if u_getVersion() >= major.minor.milli.
- * @deprecated use log_KnownIssue
- */
-U_CFUNC UBool isICUVersionAtLeast(int major, int minor, int milli);
-
 
 #endif

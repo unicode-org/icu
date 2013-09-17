@@ -5211,17 +5211,17 @@ TestTailor6179(void)
         }
         log_err("\n");
     }
-if(isICUVersionAtLeast(52, 0, 2)) {  /* TODO: debug & fix, see ticket #8982 */
-    tLen = u_strlen(tData2[1]);
-    rLen = ucol_getSortKey(coll, tData2[1], tLen, resColl, 100);
-    if (rLen != LEN(firstSecondaryIgnCE) || uprv_memcmp(resColl, firstSecondaryIgnCE, rLen) != 0) {
+    if(!log_knownIssue("8982", "debug and fix")) { /* TODO: debug & fix, see ticket #8982 */
+      tLen = u_strlen(tData2[1]);
+      rLen = ucol_getSortKey(coll, tData2[1], tLen, resColl, 100);
+      if (rLen != LEN(firstSecondaryIgnCE) || uprv_memcmp(resColl, firstSecondaryIgnCE, rLen) != 0) {
         log_err("Bad result for &[lsi]<<<a...: Data[%d] :%s  \tlen: %d key: ", 1, tData2[1], rLen);
         for(i = 0; i<rLen; i++) {
-            log_err(" %02X", resColl[i]);
+          log_err(" %02X", resColl[i]);
         }
         log_err("\n");
+      }
     }
-}
     ucol_close(coll);
 }
 
