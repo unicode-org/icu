@@ -519,7 +519,7 @@ runTests ( const TestNode *root )
     ON_LINE=FALSE; /* just in case */
 
     if(knownList != NULL) {
-      if( udbg_knownIssue_print(knownList, NULL) ) {
+      if( udbg_knownIssue_print(knownList) ) {
         fprintf(stdout, "(To run suppressed tests, use the -K option.) \n\n");
       }
       udbg_knownIssue_close(knownList);
@@ -694,7 +694,7 @@ static void vlog_err(const char *prefix, const char *pattern, va_list ap)
 
 static UBool vlog_knownIssue(const char *ticket, const char *pattern, va_list ap)
 {
-    char buf[2048], url[1024];
+    char buf[2048];
     UBool firstForTicket;
     UBool firstForWhere;
 

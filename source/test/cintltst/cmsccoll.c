@@ -1435,9 +1435,10 @@ static void RamsRulesTest(void) {
                 uprv_strcmp("zh", locName)==0 ||
                 uprv_strcmp("zh_Hant", locName)==0
             ) {
-                log_verbose("Don't know how to test %s. "
-                            "TODO: Fix ticket #6040 and reenable RamsRulesTest for this locale.\n", locName);
+              if(log_knownIssue("6040", NULL)) {
+                log_verbose("Can't test %s - TODO: Fix ticket #6040 and reenable RamsRulesTest for this locale.\n", locName);
                 continue;
+              }
             }
             log_verbose("Testing locale %s\n", locName);
             status = U_ZERO_ERROR;
@@ -6775,6 +6776,7 @@ static void TestImportRulesFiWithEor(void)
   doTestOneTestCase(fiStdTests, LEN(fiStdTests), fiStdRules, LEN(fiStdRules));
   doTestOneTestCase(fiEorTests, LEN(fiEorTests), eorFiStdRules, LEN(eorFiStdRules));
 
+  log_knownIssue("8962", NULL);
   /* TODO: Fix ICU ticket #8962 by uncommenting the following test after fi.txt is updated with the following rule:
         eor{
             Sequence{
