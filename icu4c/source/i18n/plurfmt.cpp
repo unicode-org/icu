@@ -489,6 +489,7 @@ PluralFormat::PluralSelectorAdapter::~PluralSelectorAdapter() {
 
 UnicodeString PluralFormat::PluralSelectorAdapter::select(void *context, double number,
                                                           UErrorCode& /*ec*/) const {
+    (void)number;  // unused except in the assertion
     FixedDecimal *dec=static_cast<FixedDecimal *>(context);
     U_ASSERT(dec->source==number);
     return pluralRules->select(*dec);
