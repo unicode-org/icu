@@ -16,6 +16,7 @@
 #include "unicode/utrace.h"
 #include "unicode/uclean.h"
 #include "putilimp.h"
+#include "udbgutil.h"
 
 /* NOTES:
    3/20/1999 srl - strncpy called w/o setting nulls at the end
@@ -110,6 +111,9 @@ static int ERROR_COUNT = 0; /* Count of errors from all tests. */
 static int ONE_ERROR = 0; /* were there any other errors? */
 static int DATA_ERROR_COUNT = 0; /* count of data related errors or warnings */
 static int INDENT_LEVEL = 0;
+static UBool NO_KNOWN = FALSE;
+static void *knownList = NULL;
+static char gTestName[1024] = "";
 static UBool ON_LINE = FALSE; /* are we on the top line with our test name? */
 static UBool HANGING_OUTPUT = FALSE; /* did the user leave us without a trailing \n ? */
 static int GLOBAL_PRINT_COUNT = 0; /* global count of printouts */
@@ -380,6 +384,7 @@ static void iterateTestsWithLevel ( const TestNode* root,
 #if SHOW_TIMES
         startTime = uprv_getRawUTCtime();
 #endif
+        strcpy(gTestName, pathToFunction);
         root->test();   /* PERFORM THE TEST ************************/
 #if SHOW_TIMES
         stopTime = uprv_getRawUTCtime();
@@ -512,6 +517,13 @@ runTests ( const TestNode *root )
     /*print out result summary*/
 
     ON_LINE=FALSE; /* just in case */
+
+    if(knownList != NULL) {
+      if( udbg_knownIssue_print(knownList, NULL) ) {
+        fprintf(stdout, "(To run suppressed tests, use the -K option.) \n\n");
+      }
+      udbg_knownIssue_close(knownList);
+    }
 
     if (ERROR_COUNT)
     {
@@ -688,9 +700,22 @@ static UBool vlog_knownIssue(const char *ticket, const char *pattern, va_list ap
     /*     fputs(prefix, stdout); */
     /* } */
     char buf[2048], url[1024];
-    vsprintf(buf, pattern, ap);
+    UBool firstForTicket;
+    UBool firstForWhere;
 
-    printf("KNOWN ISSUE: #%s %s\n", ticket, buf);
+    if(NO_KNOWN) return FALSE;
+    if(pattern==NULL) pattern="";
+
+    vsprintf(buf, pattern, ap);
+    knownList = udbg_knownIssue_open(knownList, ticket, gTestName, buf, &firstForTicket, &firstForWhere);
+
+    if(firstForTicket || firstForWhere) {
+      log_info("(Known issue #%s) %s", ticket, buf);
+    } else {
+      log_verbose("(Known issue #%s) %s", ticket, buf);
+    }
+
+    /*printf("KNOWN ISSUE: #%s %s\n", ticket, buf); */
 
     /* fflush(stdout); */
     /* va_end(ap); */
@@ -967,6 +992,10 @@ initArgs( int argc, const char* const argv[], ArgHandlerPtr argHandler, void *co
         {
             QUICK = 0;
         }
+        else if (strcmp( argv[i], "-K") ==0)
+        {
+            NO_KNOWN = 1;
+        }
         else if (strncmp( argv[i], "-E",2) ==0)
         {
 	    SUMMARY_FILE=argv[i]+2;
@@ -1164,6 +1193,7 @@ static void help ( const char *argv0 )
     printf("    -v  To turn ON verbosity(same as -verbose)\n");
     printf("    -x file.xml   Write junit format output to file.xml\n");
     printf("    -h  To print this message\n");
+    printf("    -K  to turn OFF suppressing known issues\n");
     printf("    -n  To turn OFF printing error messages\n");
     printf("    -w  Don't fail on data-loading errs, just warn. Useful if\n"
            "        user has reduced/changed the common set of ICU data \n");
