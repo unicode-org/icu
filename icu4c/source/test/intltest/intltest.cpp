@@ -50,7 +50,8 @@ static char* _testDataPath=NULL;
 
 // Static list of errors found
 static UnicodeString errorList;
-static UnicodeString knownList;
+static void *knownList = NULL; // known issues
+static UBool noKnownIssues = FALSE; // if TRUE, don't emit known issues
 
 //-----------------------------------------------------------------------------
 //convenience classes to ease porting code that uses the Java
@@ -963,18 +964,22 @@ UBool IntlTest::logKnownIssue(const char *ticket) {
 }
 
 UBool IntlTest::logKnownIssue(const char *ticket, const UnicodeString &msg) {
-  knownList.append(UnicodeString(ticket, ""));
-  knownList.append(UnicodeString(" ",""));
-  knownList.append(UnicodeString(basePath, ""));
-  knownList.append(UnicodeString(currName, ""));
-  knownList.append(UnicodeString(" ",""));
-  char URL[UDBG_KNOWNISSUE_LEN];
-  knownList.append(UnicodeString(udbg_knownIssueURLFrom(ticket, URL), ""));
-  knownList.append(UnicodeString(" ",""));
-  knownList.append(msg);
-  knownList.append(UnicodeString("\n", ""));
+  if(noKnownIssues) return FALSE;
 
-  return true;
+  char fullpath[2048];
+  strcpy(fullpath, basePath);
+  strcat(fullpath, currName);
+  UnicodeString msg2 =msg;
+  UBool firstForTicket, firstForWhere;
+  knownList = udbg_knownIssue_openU(knownList, ticket, fullpath, msg2.getTerminatedBuffer(), &firstForTicket, &firstForWhere);
+
+  if(firstForTicket || firstForWhere) {
+    infoln(UnicodeString("(Known issue #","") + UnicodeString(ticket,"")+ UnicodeString(") \"","") + msg);
+  } else {
+    logln(UnicodeString("(Known issue #","") + UnicodeString(ticket,"")+ UnicodeString(") \"","") + msg);
+  }
+
+  return TRUE;
 }
 
 /* convenience functions that include sprintf formatting */
@@ -1058,9 +1063,9 @@ void IntlTest::printErrors()
 
 UBool IntlTest::printKnownIssues()
 {
-  if(knownList.length()>0) {
-    IntlTest::LL_message( UnicodeString("KNOWN ISSUES:\n", ""), TRUE );
-    IntlTest::LL_message( knownList, TRUE );
+  if(knownList != NULL) {
+    udbg_knownIssue_print(knownList, NULL);
+    udbg_knownIssue_close(knownList);
     return TRUE;
   } else {
     return FALSE;
@@ -1201,6 +1206,9 @@ main(int argc, char* argv[])
             else if (strcmp("utf-8", str) == 0 ||
                      strcmp("u", str) == 0)
                 utf8 = TRUE;
+            else if (strcmp("noknownissues", str) == 0 ||
+                     strcmp("K", str) == 0)
+                noKnownIssues = TRUE;
             else if (strcmp("leaks", str) == 0 ||
                      strcmp("l", str) == 0)
                 leaks = TRUE;
@@ -1315,6 +1323,7 @@ main(int argc, char* argv[])
     fprintf(stdout, "   Leaks (l)                : %s\n", (leaks?             "On" : "Off"));
     fprintf(stdout, "   utf-8 (u)                : %s\n", (utf8?              "On" : "Off"));
     fprintf(stdout, "   notime (T)               : %s\n", (no_time?             "On" : "Off"));
+    fprintf(stdout, "   noknownissues (K)        : %s\n", (noKnownIssues?      "On" : "Off"));
     fprintf(stdout, "   Warn on missing data (w) : %s\n", (warnOnMissingData? "On" : "Off"));
 #if (ICU_USE_THREADS==0)
     fprintf(stdout, "   Threads                  : Disabled\n");
@@ -1470,7 +1479,9 @@ main(int argc, char* argv[])
     }
 
     fprintf(stdout, "\n--------------------------------------\n");
-    major.printKnownIssues();
+    if( major.printKnownIssues() ) {
+      fprintf(stdout, " To run suppressed tests, use the -K option. \n");
+    }
     if (major.getErrors() == 0) {
         /* Call it twice to make sure that the defaults were reset. */
         /* Call it before the OK message to verify proper cleanup. */
