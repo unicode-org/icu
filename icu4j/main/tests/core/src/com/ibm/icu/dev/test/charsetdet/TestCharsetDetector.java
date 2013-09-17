@@ -98,7 +98,38 @@ public class TestCharsetDetector extends TestFmwk
             CheckAssert(charsetNames[i].equals("") == false); 
             // System.out.println("\"" + charsetNames[i] + "\"");
         }
-     }
+
+        final String[] defDisabled = {
+            "IBM420_rtl", "IBM420_ltr",
+            "IBM424_rtl", "IBM424_ltr"
+        };
+        String[] activeCharsetNames = det.getDetectableCharsets();
+        for (String cs : activeCharsetNames) {
+            // the charset must be included in all list
+            boolean found = false;
+            for (String cs0 : charsetNames) {
+                if (cs0.equals(cs)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                errln(cs + " is not included in the all charset list." );
+            }
+
+            // some charsets are disabled by default
+            found = false;
+            for (String cs1 : defDisabled) {
+                if (cs1.equals(cs)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (found) {
+                errln(cs + " should not be included in the default charset list.");
+            }
+        }
+    }
 
     public void TestInputFilter() throws Exception
     {
@@ -484,6 +515,10 @@ public class TestCharsetDetector extends TestFmwk
         "\u0627\u062C\u062A\u0645\u0627\u0639\u064A\u0629.";
 
         CharsetDetector det = new CharsetDetector();
+        det.setDetectableCharset("IBM424_rtl", true);
+        det.setDetectableCharset("IBM424_ltr", true);
+        det.setDetectableCharset("IBM420_rtl", true);
+        det.setDetectableCharset("IBM420_ltr", true);
         CharsetMatch m;
         String charsetMatch;
         byte[] bytes;
@@ -603,7 +638,7 @@ public class TestCharsetDetector extends TestFmwk
         
         CharsetMatch m = _test1255(s);
         String charsetMatch = m.getName();
-        CheckAssert(charsetMatch.equals("ISO-8859-8"));
+        CheckAssert(charsetMatch.equals("ISO-8859-8-I"));
         CheckAssert(m.getLanguage().equals("he"));
         
         m = _test1255_reverse(s);
@@ -654,6 +689,10 @@ public class TestCharsetDetector extends TestFmwk
     private CharsetMatch _testIBM424_he_rtl(String s) throws Exception {
         byte [] bytes = s.getBytes("IBM424");
         CharsetDetector det = new CharsetDetector();
+        det.setDetectableCharset("IBM424_rtl", true);
+        det.setDetectableCharset("IBM424_ltr", true);
+        det.setDetectableCharset("IBM420_rtl", true);
+        det.setDetectableCharset("IBM420_ltr", true);
         det.setText(bytes);
         CharsetMatch m = det.detect();
         return m;
@@ -669,6 +708,10 @@ public class TestCharsetDetector extends TestFmwk
         byte [] bytes = ltrStrBuf.toString().getBytes("IBM424");
         
         CharsetDetector det = new CharsetDetector();
+        det.setDetectableCharset("IBM424_rtl", true);
+        det.setDetectableCharset("IBM424_ltr", true);
+        det.setDetectableCharset("IBM420_rtl", true);
+        det.setDetectableCharset("IBM420_ltr", true);
         det.setText(bytes);
         CharsetMatch m = det.detect();
         return m;
