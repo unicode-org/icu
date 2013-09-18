@@ -3322,8 +3322,7 @@ public class SimpleDateFormat extends DateFormat {
      * 
      * @return the time zone formatter which this date/time
      * formatter uses.
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public TimeZoneFormat getTimeZoneFormat() {
         return tzFormat().freeze();
@@ -3333,8 +3332,7 @@ public class SimpleDateFormat extends DateFormat {
      * {@icu} Allows you to set the time zone formatter.
      * 
      * @param tzfmt the new time zone formatter
-     * @draft ICU 49
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 49
      */
     public void setTimeZoneFormat(TimeZoneFormat tzfmt) {
         if (tzfmt.isFrozen()) {

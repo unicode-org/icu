@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2010-2012, International Business Machines
+*   Copyright (C) 2010-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2010aug21
@@ -837,16 +837,14 @@ public final class MessagePattern implements Cloneable, Freezable<MessagePattern
         /**
          * The argument is an ordinal-number PluralFormat
          * with the same style parts sequence and semantics as {@link ArgType#PLURAL}.
-         * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 50
          */
         SELECTORDINAL;
 
         /**
          * @return true if the argument type has a plural style part sequence and semantics,
          * for example {@link ArgType#PLURAL} and {@link ArgType#SELECTORDINAL}.
-         * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 50
          */
         public boolean hasPluralStyle() {
             return this == PLURAL || this == SELECTORDINAL;
