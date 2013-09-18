@@ -113,7 +113,7 @@ static const struct AssemblyType {
     int8_t      hexType; /* HEX_0X or HEX_0h */
 } assemblyHeader[] = {
     // For gcc assemblers, the meaning of .align changes depending on the
-    // hardware, so we use .balign 16 which always means either 16 bytes
+    // hardware, so we use .balign 16 which always means 16 bytes.
     // https://sourceware.org/binutils/docs/as/Pseudo-Ops.html
     {"gcc",
         ".globl %s\n"
