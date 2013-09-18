@@ -1250,13 +1250,13 @@ fi
 # for build.
 
 if test "${CC}" == "clang"; then
-   CLANGCFLAGS="-Qunused-arguments"
+   CLANGCFLAGS="-Qunused-arguments -Wno-parentheses-equality"
 else
    CLANGCFLAGS=""
 fi
 
 if test "${CXX}" == "clang++"; then
-   CLANGCXXFLAGS="-Qunused-arguments"
+   CLANGCXXFLAGS="-Qunused-arguments -Wno-parentheses-equality"
 else
    CLANGCXXFLAGS=""
 fi

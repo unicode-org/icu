@@ -23,6 +23,7 @@
 #include "astro.h" // CalendarAstronomer
 #include "uhash.h"
 #include "ucln_in.h"
+#include "uassert.h"
 
 static const UDate HIJRA_MILLIS = -42521587200000.0;    // 7/16/622 AD 00:00
 
@@ -84,9 +85,12 @@ const char *IslamicCalendar::getType() const {
         return "islamic";
     } else if(civil==TBLA){
         return "islamic-tbla";
+    } else if(civil==UMALQURA){
+      return "islamic-umalqura";
     } else {
-		return "islamic-umalqura";
-	}
+      U_ASSERT(false); // out of range
+      return "islamic-unknown";
+    }
 }
 
 Calendar* IslamicCalendar::clone() const {
@@ -459,7 +463,7 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
 
         year = months / 12 + 1;
         month = months % 12;
-    } else if(civil == UMALQURA){
+    } else if(civil == UMALQURA) {
 		int32_t umalquraStartdays = yearStart(UMALQURA_YEAR_START) ;
 		if( days < umalquraStartdays){
         		//Use Civil calculation
@@ -490,7 +494,10 @@ void IslamicCalendar::handleComputeFields(int32_t julianDay, UErrorCode &status)
         		year = y;
 				month = m;
         	}
-	}
+    } else { // invalid 'civil'
+      U_ASSERT(false); // should not get here, out of range
+      year=month=0;
+    }
 
 	dayOfMonth = (days - monthStart(year, month)) + 1;
 

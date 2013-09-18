@@ -285,13 +285,13 @@ void CharsetDetectionTest::ConstructionTest()
     LocalUEnumerationPointer eActive(ucsdet_getDetectableCharsets(csd.getAlias(), status));
     const char *activeName = NULL;
 
-    while (activeName = uenum_next(eActive.getAlias(), NULL, status)) {
+    while ((activeName = uenum_next(eActive.getAlias(), NULL, status))) {
         // the charset must be included in all list
         UBool found = FALSE;
 
         const char *name = NULL;
         uenum_reset(e.getAlias(), status);
-        while (name = uenum_next(e.getAlias(), NULL, status)) {
+        while ((name = uenum_next(e.getAlias(), NULL, status))) {
             if (strcmp(activeName, name) == 0) {
                 found = TRUE;
                 break;

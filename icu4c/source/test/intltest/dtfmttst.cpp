@@ -4232,15 +4232,16 @@ void DateFormatTest::TestDateFormatLeniency() {
            SimpleDateFormat * sdmft = new SimpleDateFormat(itemPtr->pattern, locale, status);
            sdmft->setLenient(itemPtr->leniency);
            sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
-           UDate d = sdmft->parse(itemPtr->parseString, pos);
-           
+           /*UDate d = */sdmft->parse(itemPtr->parseString, pos);
+
            delete sdmft;
            if(pos.getErrorIndex() > -1)
                if(itemPtr->expectedResult.length() != 0) {
-                   errln("error: unexpected error - " + itemPtr->parseString + " - error index " + pos.getErrorIndex() + " - leniency " + itemPtr->leniency);
-                    continue;
-               } else
-                   continue;
+                 errln("error: unexpected error - " + itemPtr->parseString + " - error index " + pos.getErrorIndex() + " - leniency " + itemPtr->leniency);
+                 continue;
+               } else {
+                 continue;
+               }
         }
     }
     delete cal;
