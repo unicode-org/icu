@@ -1043,4 +1043,42 @@ public class PluralRulesTest extends TestFmwk {
         }
     }
 
+    public void TestSerial() {
+        PluralRules s = PluralRules.forLocale(ULocale.ENGLISH);
+        checkStreamingEquality(s);
+    }
+
+    public void checkStreamingEquality(PluralRules s) {
+        try {
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOut);
+            objectOutputStream.writeObject(s);
+            objectOutputStream.close();
+            byte[] contents = byteOut.toByteArray();
+            logln(s.getClass() + ": " + showBytes(contents));
+            ByteArrayInputStream byteIn = new ByteArrayInputStream(contents);
+            ObjectInputStream objectInputStream = new ObjectInputStream(byteIn);
+            Object obj = objectInputStream.readObject();
+            assertEquals("Streamed Object equals ", s, obj);
+        } catch (Exception e) {
+            assertNull("TestSerial", e);
+        }
+    }
+
+    /**
+     * @param contents
+     * @return
+     */
+    private String showBytes(byte[] contents) {
+        StringBuilder b = new StringBuilder('[');
+        for (int i = 0; i < contents.length; ++i) {
+            int item = contents[i] & 0xFF;
+            if (item >= 0x20 && item <= 0x7F) {
+                b.append((char) item);
+            } else {
+                b.append('(').append(Utility.hex(item, 2)).append(')');
+            }
+        }
+        return b.append(']').toString();
+    }
 }
