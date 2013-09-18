@@ -112,15 +112,14 @@ static const struct AssemblyType {
     const char *footer;
     int8_t      hexType; /* HEX_0X or HEX_0h */
 } assemblyHeader[] = {
-    // For gcc assemblers, the meaning of .align changes depending on the hardware, so
-    // the best we can do is .align 8 which means either 8 bytes or 256 bytes depending
-    // on the architecture.
-    // http://ftp.gnu.org/old-gnu/Manuals/gas-2.9.1/html_chapter/as_7.html
+    // For gcc assemblers, the meaning of .align changes depending on the
+    // hardware, so we use .balign 16 which always means either 16 bytes
+    // https://sourceware.org/binutils/docs/as/Pseudo-Ops.html
     {"gcc",
         ".globl %s\n"
         "\t.section .note.GNU-stack,\"\",%%progbits\n"
         "\t.section .rodata\n"
-        "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
+        "\t.balign 16\n" 
         "\t.type %s,%%object\n"
         "%s:\n\n",
 
@@ -132,7 +131,7 @@ static const struct AssemblyType {
         ".globl _%s\n"
         "\t.data\n"
         "\t.const\n"
-        "\t.align 8\n"
+        "\t.balign 16\n"
         "_%s:\n\n",
 
         ".long ","",HEX_0X
@@ -140,7 +139,7 @@ static const struct AssemblyType {
     {"gcc-cygwin",
         ".globl _%s\n"
         "\t.section .rodata\n"
-        "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
+        "\t.balign 16\n"
         "_%s:\n\n",
 
         ".long ","",HEX_0X
@@ -148,7 +147,7 @@ static const struct AssemblyType {
     {"gcc-mingw64",
         ".globl %s\n"
         "\t.section .rodata\n"
-        "\t.align 8\n" /* Either align 8 bytes or 2^8 (256) bytes. 8 bytes is needed. */
+        "\t.balign 16\n"
         "%s:\n\n",
 
         ".long ","",HEX_0X
@@ -185,7 +184,6 @@ static const struct AssemblyType {
 
         ".long ","",HEX_0X
     },
-// TODO: is the aCC assembler relevant today.
     {"aCC-ia64",
         "\t.file   \"%s.s\"\n"
         "\t.type   %s,@object\n"
