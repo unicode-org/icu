@@ -97,6 +97,10 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
      * @deprecated This API is ICU internal only.
      */
     protected interface Factory {
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         MeasureUnit create(String type, String code);
     }
 

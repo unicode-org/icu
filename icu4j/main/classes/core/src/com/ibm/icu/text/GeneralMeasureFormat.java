@@ -462,7 +462,7 @@ public class GeneralMeasureFormat extends MeasureFormat {
     }
 
 
-    /**
+    /*
      * @param prefixSet
      * @param suffixSet
      * @return
@@ -476,7 +476,7 @@ public class GeneralMeasureFormat extends MeasureFormat {
         return 0;
     }
 
-    /**
+    /*
      * @param suffix
      * @param arg0
      * @param arg1

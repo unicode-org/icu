@@ -38,26 +38,26 @@ final public class ListFormatter {
     
     /**
      * Indicates the style of Listformatter
-     * @deprecated internal use only.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public enum Style {
         /**
          * Standard style.
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         STANDARD("standard"),
         /**
          * Style for full durations
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         DURATION("duration"),
         /**
          * Style for durations in abbrevated form
-         * @deprecated
          * @internal
+         * @deprecated This API is ICU internal only.
          */
         DURATION_SHORT("duration-short");
         
@@ -66,7 +66,10 @@ final public class ListFormatter {
         Style(String name) {
             this.name = name;
         }
-        
+        /**
+         * @internal
+         * @deprecated This API is ICU internal only.
+         */
         public String getName() {
             return name;
         }
@@ -90,6 +93,7 @@ final public class ListFormatter {
      *            string for the end of a list items, containing {0} for the
      *            first part of the list, and {1} for the last item.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public ListFormatter(String two, String start, String middle, String end) {
         this(two, start, middle, end, null);
@@ -135,8 +139,8 @@ final public class ListFormatter {
      * @param locale the locale in question.
      * @param style the style
      * @return ListFormatter
-     * @deprecated Internal use only.
      * @internal
+     * @deprecated This API is ICU internal only.
      */
     public static ListFormatter getInstance(ULocale locale, Style style) {
         return cache.get(locale, style.getName());
