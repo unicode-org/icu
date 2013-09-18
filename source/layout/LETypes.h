@@ -302,7 +302,7 @@ typedef struct LEPoint LEPoint;
 /**
  * Range check for overflow
  */
-#define LE_RANGE_CHECK(type, count, ptrfn) (( (LE_UINTPTR_MAX / sizeof(type)) < count ) ? NULL : (ptrfn))
+#define LE_RANGE_CHECK(type, count, ptrfn) (( (LE_UINTPTR_MAX / sizeof(type)) < (size_t)count ) ? NULL : (ptrfn))
 /**
  * A convenience macro to get the length of an array.
  *

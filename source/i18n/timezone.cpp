@@ -1617,7 +1617,7 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
     char winidKey[MAX_WINDOWS_ID_SIZE];
     int32_t winKeyLen = winid.extract(0, winid.length(), winidKey, sizeof(winidKey) - 1, US_INV);
 
-    if (winKeyLen == 0 || winKeyLen >= sizeof(winidKey)) {
+    if (winKeyLen == 0 || winKeyLen >= (int32_t)sizeof(winidKey)) {
         ures_close(zones);
         return id;
     }
@@ -1634,7 +1634,6 @@ TimeZone::getIDForWindowsID(const UnicodeString& winid, const char* region, Unic
     int32_t len = 0;
     UBool gotID = FALSE;
     if (region) {
-        int32_t tzidsLen = 0;
         const UChar *tzids = ures_getStringByKey(zones, region, &len, &tmperr); // use tmperr, because
                                                                                 // regional mapping is optional
         if (U_SUCCESS(tmperr)) {

@@ -2802,11 +2802,10 @@ void CalendarTest::Test8449() {
         tstCal->roll(UCAL_DAY_OF_MONTH, (UBool)TRUE, status);
         TEST_CHECK_STATUS;
     }
-    
+
     if(day != (initDay + loopCnt - 1) || month != IslamicCalendar::RABI_2 || year != 1434)
-        errln("invalid values for RABI_2 date after roll of " + loopCnt);
-        
-    
+      errln("invalid values for RABI_2 date after roll of %d", loopCnt);
+
     status = U_ZERO_ERROR;
     tstCal->clear();
     initMonth = 2;

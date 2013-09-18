@@ -743,6 +743,10 @@ TimeZoneFormat::format(UTimeZoneFormatStyle style, const TimeZone& tz, UDate dat
             case UTZFMT_STYLE_ISO_EXTENDED_LOCAL_FULL:
                 formatOffsetISO8601Extended(offset, FALSE, FALSE, FALSE, name, status);
                 break;
+
+            default:
+              // UTZFMT_STYLE_ZONE_ID, UTZFMT_STYLE_ZONE_ID_SHORT, UTZFMT_STYLE_EXEMPLAR_LOCATION
+              break;
             }
 
             if (timeType) {

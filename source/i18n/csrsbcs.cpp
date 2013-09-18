@@ -20,7 +20,7 @@
 U_NAMESPACE_BEGIN
 
 NGramParser::NGramParser(const int32_t *theNgramList, const uint8_t *theCharMap)
-  :byteIndex(0), ngram(0)
+ : ngram(0), byteIndex(0)
 {
     ngramList = theNgramList;
     charMap   = theCharMap;

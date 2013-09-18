@@ -530,7 +530,7 @@ DateFormat::setBooleanAttribute(UDateFormatBooleanAttribute attr,
 //----------------------------------------------------------------------
 
 UBool 
-DateFormat::getBooleanAttribute(UDateFormatBooleanAttribute attr, UErrorCode &status) const {
+DateFormat::getBooleanAttribute(UDateFormatBooleanAttribute attr, UErrorCode &/*status*/) const {
 
     return fBoolFlags.get(attr);
 }
