@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011-2012, International Business Machines
+*   Copyright (C) 2011-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2011jan05
@@ -61,6 +61,9 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
      * Builds a BytesTrie for the add()ed data.
      * Once built, no further data can be add()ed until clear() is called.
      *
+     * <p>A BytesTrie cannot be empty. At least one (byte sequence, value) pair
+     * must have been add()ed.
+     *
      * <p>Multiple calls to build() or buildByteBuffer() return tries or buffers
      * which share the builder's byte array, without rebuilding.
      * <em>The byte array must not be modified via the buildByteBuffer() result object.</em>
@@ -77,6 +80,9 @@ public final class BytesTrieBuilder extends StringTrieBuilder {
     /**
      * Builds a BytesTrie for the add()ed data and byte-serializes it.
      * Once built, no further data can be add()ed until clear() is called.
+     *
+     * <p>A BytesTrie cannot be empty. At least one (byte sequence, value) pair
+     * must have been add()ed.
      *
      * <p>Multiple calls to build() or buildByteBuffer() return tries or buffers
      * which share the builder's byte array, without rebuilding.

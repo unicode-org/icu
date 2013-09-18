@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-*   Copyright (C) 2011-2012, International Business Machines
+*   Copyright (C) 2011-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *******************************************************************************
 *   created on: 2011jan07
@@ -46,6 +46,9 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
      * Builds a CharsTrie for the add()ed data.
      * Once built, no further data can be add()ed until clear() is called.
      *
+     * <p>A CharsTrie cannot be empty. At least one (string, value) pair
+     * must have been add()ed.
+     *
      * <p>Multiple calls to build() or buildCharSequence() return tries or sequences
      * which share the builder's char array, without rebuilding.
      * After clear() has been called, a new array will be used.
@@ -60,6 +63,9 @@ public final class CharsTrieBuilder extends StringTrieBuilder {
     /**
      * Builds a CharsTrie for the add()ed data and char-serializes it.
      * Once built, no further data can be add()ed until clear() is called.
+     *
+     * <p>A CharsTrie cannot be empty. At least one (string, value) pair
+     * must have been add()ed.
      *
      * <p>Multiple calls to build() or buildCharSequence() return tries or sequences
      * which share the builder's char array, without rebuilding.
