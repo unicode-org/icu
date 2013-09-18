@@ -2005,7 +2005,6 @@ static void TestPreventFallback() {
     UResourceBundle* theBundle = NULL;
     const char* testdatapath;
     UErrorCode status = U_ZERO_ERROR;
-    UResourceBundle* res = NULL;
     int32_t unused_len = 0;
 
     testdatapath=loadTestData(&status);

@@ -457,7 +457,7 @@ class ArgExtractor {
 
   const Formattable* number(void) const;
   const UChar *iso(void) const;
-  const UBool wasCurrency(void) const;
+  UBool wasCurrency(void) const;
 };
 
 inline const Formattable*
@@ -465,7 +465,7 @@ ArgExtractor::number(void) const {
   return num;
 }
 
-inline const UBool
+inline UBool
 ArgExtractor::wasCurrency(void) const {
   return fWasCurrency;
 }
@@ -475,7 +475,7 @@ ArgExtractor::iso(void) const {
   return save;
 }
 
-ArgExtractor::ArgExtractor(const NumberFormat& nf, const Formattable& obj, UErrorCode& /*status*/)
+ArgExtractor::ArgExtractor(const NumberFormat& /*nf*/, const Formattable& obj, UErrorCode& /*status*/)
   : num(&obj), fWasCurrency(FALSE) {
 
     const UObject* o = obj.getObject(); // most commonly o==NULL

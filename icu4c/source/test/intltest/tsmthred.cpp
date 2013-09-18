@@ -727,7 +727,7 @@ void ThreadSafeFormat::init(UErrorCode &status) {
   gFormat->format(gBBDThing, gBBDStr, NULL, status);
 }
 
-void ThreadSafeFormat::fini(UErrorCode &status) {
+void ThreadSafeFormat::fini(UErrorCode &/*status*/) {
   gFormat.adoptInstead(NULL);
 }
 

@@ -94,7 +94,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
   enum ECivil {
     ASTRONOMICAL,
     CIVIL,
-	UMALQURA,
+    UMALQURA,
     TBLA
   };
   
@@ -452,7 +452,7 @@ class U_I18N_API IslamicCalendar : public Calendar {
     static const int32_t ASTRONOMICAL_EPOC = 1948439;
 
 
-  static const int getUmalqura_MonthLength(int i, int j){
+  static int getUmalqura_MonthLength(int i, int j){
 
     static const int UMALQURA_MONTHLENGTH[] = {    	    	
         //* 1318 -1322 */ "0101 0111 0100", "1001 0111 0110", "0100 1011 0111", "0010 0101 0111", "0101 0010 1011",

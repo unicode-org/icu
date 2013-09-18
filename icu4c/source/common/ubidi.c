@@ -634,10 +634,10 @@ getDirProps(UBiDi *pBiDi) {
 
 /* determine the paragraph level at position index */
 U_CFUNC UBiDiLevel
-ubidi_getParaLevelAtIndex(const UBiDi *pBiDi, int32_t index) {
+ubidi_getParaLevelAtIndex(const UBiDi *pBiDi, int32_t pindex) {
     int32_t i;
     for(i=0; i<pBiDi->paraCount; i++)
-        if(index<pBiDi->paras[i].limit)
+        if(pindex<pBiDi->paras[i].limit)
             break;
     if(i>=pBiDi->paraCount)
         i=pBiDi->paraCount-1;
