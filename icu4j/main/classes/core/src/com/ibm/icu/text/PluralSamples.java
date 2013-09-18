@@ -27,15 +27,27 @@ import com.ibm.icu.util.Output;
 /**
  * @author markdavis
  * Refactor samples as first step to moving into CLDR
+ * 
+ * @internal
+ * @deprecated This API is ICU internal only.
  */
 public class PluralSamples {
 
     private PluralRules pluralRules;
     private final Map<String, List<Double>> _keySamplesMap;
+
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     public final Map<String, Boolean> _keyLimitedMap;
     private final Map<String, Set<FixedDecimal>> _keyFractionSamplesMap;
     private final Set<FixedDecimal> _fractionSamples;
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     public PluralSamples(PluralRules pluralRules) {
         this.pluralRules = pluralRules;
         Set<String> keywords = pluralRules.getKeywords();
@@ -222,10 +234,7 @@ public class PluralSamples {
         return 37;
     }
 
-    /**
-     * @deprecated This API is ICU internal only.
-     * @internal
-     */
+    @SuppressWarnings("unused")
     private static final Comparator<String> KEYWORD_COMPARATOR = new Comparator<String> () {
         public int compare(String arg0, String arg1) {
             StandardPluralCategories a = StandardPluralCategories.forString(arg0);
@@ -236,6 +245,10 @@ public class PluralSamples {
         }
     };
 
+    /**
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
     public KeywordStatus getStatus(String keyword, int offset, Set<Double> explicits, Output<Double> uniqueValue) {
         if (uniqueValue != null) {
             uniqueValue.value = null;
