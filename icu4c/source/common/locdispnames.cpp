@@ -483,6 +483,11 @@ uloc_getDisplayName(const char *locale,
     const UChar *pattern;
     int32_t patLen = 0;
     int32_t sub0Pos, sub1Pos;
+    
+    UChar formatOpenParen         = 0x0028; // (
+    UChar formatReplaceOpenParen  = 0x005B; // [
+    UChar formatCloseParen        = 0x0029; // )
+    UChar formatReplaceCloseParen = 0x005D; // ]
 
     UBool haveLang = TRUE; /* assume true, set false if we find we don't have
                               a lang component in the locale */
@@ -543,6 +548,7 @@ uloc_getDisplayName(const char *locale,
         patLen=defaultPatLen;
         sub0Pos=defaultSub0Pos;
         sub1Pos=defaultSub1Pos;
+        // use default formatOpenParen etc. set above
     } else { /* non-default pattern */
         UChar *p0=u_strstr(pattern, sub0);
         UChar *p1=u_strstr(pattern, sub1);
@@ -555,6 +561,12 @@ uloc_getDisplayName(const char *locale,
         if (sub1Pos < sub0Pos) { /* a very odd pattern */
             int32_t t=sub0Pos; sub0Pos=sub1Pos; sub1Pos=t;
             langi=1;
+        }
+        if (u_strchr(pattern, 0xFF08) != NULL) {
+            formatOpenParen         = 0xFF08; // fullwidth (
+            formatReplaceOpenParen  = 0xFF3B; // fullwidth [
+            formatCloseParen        = 0xFF09; // fullwidth )
+            formatReplaceCloseParen = 0xFF3D; // fullwidth ]
         }
     }
 
@@ -677,7 +689,14 @@ uloc_getDisplayName(const char *locale,
                     if (len>0) {
                         /* we addeed a component, so add separator and write it if there's room. */
                         if(len+sepLen<=cap) {
-                            p+=len;
+                            const UChar * plimit = p + len;
+                            for (; p < plimit; p++) {
+                                if (*p == formatOpenParen) {
+                                    *p = formatReplaceOpenParen;
+                                } else if (*p == formatCloseParen) {
+                                    *p = formatReplaceCloseParen;
+                                }
+                            }
                             for(int32_t i=0;i<sepLen;++i) {
                                 *p++=separator[i];
                             }

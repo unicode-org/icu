@@ -33,6 +33,7 @@
 #include "unicode/ustring.h"
 #include "unicode/utypes.h"
 #include "unicode/ulocdata.h"
+#include "unicode/uldnames.h"
 #include "unicode/parseerr.h" /* may not be included with some uconfig switches */
 #include "udbgutil.h"
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
@@ -41,6 +42,7 @@ static void TestNullDefault(void);
 static void TestNonexistentLanguageExemplars(void);
 static void TestLocDataErrorCodeChaining(void);
 static void TestLanguageExemplarsFallbacks(void);
+static void TestDisplayNameBrackets(void);
 
 static void TestUnicodeDefines(void);
 
@@ -245,6 +247,7 @@ void addLocaleTest(TestNode** root)
     TESTCASE(TestTrailingNull);
     TESTCASE(TestUnicodeDefines);
     TESTCASE(TestEnglishExemplarCharacters);
+    TESTCASE(TestDisplayNameBrackets);
 }
 
 
@@ -1020,6 +1023,81 @@ setUpDataTable();
     }
 cleanUpDataTable();
 }
+
+/*------------------------------
+ * TestDisplayNameBrackets
+ */
+
+typedef struct {
+    const char * displayLocale;
+    const char * namedRegion;
+    const char * namedLocale;
+    const char * regionName;
+    const char * localeName;
+} DisplayNameBracketsItem;
+
+static const DisplayNameBracketsItem displayNameBracketsItems[] = {
+    { "en", "CC", "en_CC",      "Cocos (Keeling) Islands",  "English (Cocos [Keeling] Islands)"  },
+    { "en", "MM", "my_MM",      "Myanmar (Burma)",          "Burmese (Myanmar [Burma])"          },
+    { "en", "MM", "my_Mymr_MM", "Myanmar (Burma)",          "Burmese (Myanmar, Myanmar [Burma])" },
+    { "zh", "CC", "en_CC",      "\\u79D1\\u79D1\\u65AF\\uFF08\\u57FA\\u6797\\uFF09\\u7FA4\\u5C9B", "\\u82F1\\u6587\\uFF08\\u79D1\\u79D1\\u65AF\\uFF3B\\u57FA\\u6797\\uFF3D\\u7FA4\\u5C9B\\uFF09" },
+    { "zh", "CG", "fr_CG",      "\\u521A\\u679C\\uFF08\\u5E03\\uFF09",                             "\\u6CD5\\u6587\\uFF08\\u521A\\u679C\\uFF3B\\u5E03\\uFF3D\\uFF09" },
+    { NULL, NULL, NULL,         NULL,                       NULL                                 }
+};
+
+enum { kDisplayNameBracketsMax = 128 };
+
+static void TestDisplayNameBrackets()
+{
+    const DisplayNameBracketsItem * itemPtr = displayNameBracketsItems;
+    for (; itemPtr->displayLocale != NULL; itemPtr++) {
+        ULocaleDisplayNames * uldn;
+        UErrorCode status;
+        UChar expectRegionName[kDisplayNameBracketsMax];
+        UChar expectLocaleName[kDisplayNameBracketsMax];
+        UChar getName[kDisplayNameBracketsMax];
+        int32_t ulen;
+        
+        (void) u_unescape(itemPtr->regionName, expectRegionName, kDisplayNameBracketsMax);
+        (void) u_unescape(itemPtr->localeName, expectLocaleName, kDisplayNameBracketsMax);
+
+        status = U_ZERO_ERROR;
+        ulen = uloc_getDisplayCountry(itemPtr->namedLocale, itemPtr->displayLocale, getName, kDisplayNameBracketsMax, &status);
+        if ( U_FAILURE(status) || u_strcmp(getName, expectRegionName) != 0 ) {
+            log_err("uloc_getDisplayCountry for displayLocale %s and namedLocale %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedLocale, myErrorName(status));
+        }
+
+        status = U_ZERO_ERROR;
+        ulen = uloc_getDisplayName(itemPtr->namedLocale, itemPtr->displayLocale, getName, kDisplayNameBracketsMax, &status);
+        if ( U_FAILURE(status) || u_strcmp(getName, expectLocaleName) != 0 ) {
+            log_err("uloc_getDisplayName for displayLocale %s and namedLocale %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedLocale, myErrorName(status));
+        }
+
+        status = U_ZERO_ERROR;
+        uldn = uldn_open(itemPtr->displayLocale, ULDN_STANDARD_NAMES, &status);
+        if (U_SUCCESS(status)) {
+            status = U_ZERO_ERROR;
+            ulen = uldn_regionDisplayName(uldn, itemPtr->namedRegion, getName, kDisplayNameBracketsMax, &status);
+            if ( U_FAILURE(status) || u_strcmp(getName, expectRegionName) != 0 ) {
+                log_err("uldn_regionDisplayName for displayLocale %s and namedRegion %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedRegion, myErrorName(status));
+            }
+
+            status = U_ZERO_ERROR;
+            ulen = uldn_localeDisplayName(uldn, itemPtr->namedLocale, getName, kDisplayNameBracketsMax, &status);
+            if ( U_FAILURE(status) || u_strcmp(getName, expectLocaleName) != 0 ) {
+                log_err("uldn_localeDisplayName for displayLocale %s and namedLocale %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedLocale, myErrorName(status));
+            }
+
+            uldn_close(uldn);
+        } else {
+            log_data_err("uldn_open fails for displayLocale %s, status=%s\n", itemPtr->displayLocale, u_errorName(status));
+        }
+    }
+}
+
+/*------------------------------
+ * TestISOFunctions
+ */
 
 #if !UCONFIG_NO_FILE_IO && !UCONFIG_NO_LEGACY_CONVERSION
 /* test for uloc_getISOLanguages, uloc_getISOCountries */

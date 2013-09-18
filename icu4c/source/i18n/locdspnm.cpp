@@ -275,6 +275,10 @@ class LocaleDisplayNamesImpl : public LocaleDisplayNames {
     MessageFormat *format;
     MessageFormat *keyTypeFormat;
     UDisplayContext capitalizationContext;
+    UnicodeString formatOpenParen;
+    UnicodeString formatReplaceOpenParen;
+    UnicodeString formatCloseParen;
+    UnicodeString formatReplaceCloseParen;
 
     // Constants for capitalization context usage types.
     enum CapContextUsage {
@@ -389,6 +393,17 @@ LocaleDisplayNamesImpl::initialize(void) {
         pattern = UnicodeString("{0} ({1})", -1, US_INV);
     }
     format = new MessageFormat(pattern, status);
+    if (pattern.indexOf((UChar)0xFF08) >= 0) {
+        formatOpenParen.setTo(0xFF08);         // fullwidth (
+        formatReplaceOpenParen.setTo(0xFF3B);  // fullwidth [
+        formatCloseParen.setTo(0xFF09);        // fullwidth )
+        formatReplaceCloseParen.setTo(0xFF3D); // fullwidth ]
+    } else {
+        formatOpenParen.setTo(0x0028);         // (
+        formatReplaceOpenParen.setTo(0x005B);  // [
+        formatCloseParen.setTo(0x0029);        // )
+        formatReplaceCloseParen.setTo(0x005D); // ]
+    }
 
     UnicodeString ktPattern;
     langData.get("localeDisplayPattern", "keyTypePattern", ktPattern);
@@ -596,6 +611,8 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
   if (hasVariant) {
     appendWithSep(resultRemainder, variantDisplayName(variant, temp));
   }
+  resultRemainder.findAndReplace(formatOpenParen, formatReplaceOpenParen);
+  resultRemainder.findAndReplace(formatCloseParen, formatReplaceCloseParen);
 
   e = locale.createKeywords(status);
   if (e && U_SUCCESS(status)) {
@@ -605,7 +622,11 @@ LocaleDisplayNamesImpl::localeDisplayName(const Locale& locale,
     while ((key = e->next((int32_t *)0, status)) != NULL) {
       locale.getKeywordValue(key, value, ULOC_KEYWORD_AND_VALUES_CAPACITY, status);
       keyDisplayName(key, temp);
+      temp.findAndReplace(formatOpenParen, formatReplaceOpenParen);
+      temp.findAndReplace(formatCloseParen, formatReplaceCloseParen);
       keyValueDisplayName(key, value, temp2);
+      temp2.findAndReplace(formatOpenParen, formatReplaceOpenParen);
+      temp2.findAndReplace(formatCloseParen, formatReplaceCloseParen);
       if (temp2 != UnicodeString(value, -1, US_INV)) {
         appendWithSep(resultRemainder, temp2);
       } else if (temp != UnicodeString(key, -1, US_INV)) {
