@@ -351,7 +351,7 @@ public class GeneralMeasureFormat extends MeasureFormat {
             }
             bs.set(unitIndex);
         }
-        public static ParseData of(ULocale locale,
+        public static synchronized ParseData of(ULocale locale,
                 Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat) {
             ParseData result = localeToParseData.get(locale);
             if (result == null) {
