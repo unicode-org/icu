@@ -90,8 +90,7 @@ public class CompactDecimalFormat extends DecimalFormat {
      *
      * @param locale the desired locale
      * @param style the compact style
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public static CompactDecimalFormat getInstance(ULocale locale, CompactStyle style) {
         return new CompactDecimalFormat(locale, style);
@@ -103,8 +102,7 @@ public class CompactDecimalFormat extends DecimalFormat {
      *
      * @param locale the desired locale
      * @param style the compact style
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public static CompactDecimalFormat getInstance(Locale locale, CompactStyle style) {
         return new CompactDecimalFormat(ULocale.forLocale(locale), style);
@@ -253,8 +251,7 @@ public class CompactDecimalFormat extends DecimalFormat {
 
     /**
      * {@inheritDoc}
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     @Override
     public AttributedCharacterIterator formatToCharacterIterator(Object obj) {

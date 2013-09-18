@@ -230,8 +230,7 @@ public class PluralFormat extends UFormat {
      * @param ulocale the default number formatting will be done using this
      *        locale.
      * @param type The plural type (e.g., cardinal or ordinal).
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public PluralFormat(ULocale ulocale, PluralType type) {
         init(null, type, ulocale);
@@ -311,8 +310,7 @@ public class PluralFormat extends UFormat {
      * @param type The plural type (e.g., cardinal or ordinal).
      * @param  pattern the pattern for this <code>PluralFormat</code>.
      * @throws IllegalArgumentException if the pattern is invalid.
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public PluralFormat(ULocale ulocale, PluralType type, String pattern) {
         init(null, type, ulocale);

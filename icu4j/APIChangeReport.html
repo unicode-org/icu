@@ -2,38 +2,129 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>ICU4J API Comparison: ICU4J 51.1 with ICU4J 52.0.1</title>
+<title>ICU4J API Comparison: ICU4J 51.1 with ICU4J 52.1</title>
 <!-- Copyright 2013, IBM, All Rights Reserved. -->
 </head>
 <body>
-<h1>ICU4J API Comparison: ICU4J 51.1 with ICU4J 52.0.1</h1>
+<h1>ICU4J API Comparison: ICU4J 51.1 with ICU4J 52.1</h1>
 
 <hr/>
 <h2>Removed from ICU4J 51.1</h2>
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
-ListFormatter
+SimpleDateFormat
 <ul>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>format</i>(java.util.Collection<java.lang.Object>)</li>
+<li><span style='color:orange'>(draft)</span> protected int <i>matchString</i>(java.lang.String, int, int, java.lang.String[], java.lang.String, Calendar)</li>
+<li><span style='color:orange'>(draft)</span> protected int <i>subParse</i>(java.lang.String, int, char, int, boolean, boolean, boolean[], Calendar, MessageFormat)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+Currency
+<ul>
+<li><span style='color:green'>(stable)</span> public boolean <i>equals</i>(java.lang.Object)</li>
+<li><span style='color:green'>(stable)</span> public int <i>hashCode</i>()</li>
+</ul>
+Region
+<ul>
+<li><span style='color:orange'>(draft)</span> public static final int UNDEFINED_NUMERIC_CODE</li>
+</ul>
+TimeUnit
+<ul>
+<li><span style='color:green'>(stable)</span> public java.lang.String <i>toString</i>()</li>
 </ul>
 </ul>
 
 
 <hr/>
-<h2>Deprecated or Obsoleted in ICU4J 52.0.1</h2>
+<h2>Deprecated or Obsoleted in ICU4J 52.1</h2>
 <p>(no API obsoleted)</p>
 
 <hr/>
-<h2>Changed in ICU4J 52.0.1 (old, new)</h2>
-<p>(no API changed)</p>
+<h2>Changed in ICU4J 52.1 (old, new)</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+ListFormatter
+<ul>
+<li>    <span style='color:orange'>(draft)</span> public java.lang.String <i>format</i>(java.util.Collection<java.lang.Object>)</br>
+<span style='color:orange'>(draft)</span> public java.lang.String <i>format</i>(java.util.Collection<?>)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li>    <span style='color:green'>(stable)</span> public abstract class <i>MeasureUnit</i> extends java.lang.Object</br>
+<span style='color:green'>(stable)</span> public class <i>MeasureUnit</i> extends java.lang.Object implements java.lang.Comparable, java.io.Serializable</li>
+</ul>
+
 
 <hr/>
-<h2>Promoted to stable in ICU4J 52.0.1</h2>
-<p>(no API promoted to stable)</p>
+<h2>Promoted to stable in ICU4J 52.1</h2>
+
+<h3>Package com.ibm.icu.text</h3>
+<ul>
+<li><span style='color:green'>(stable)</span> public static final class <i>PluralRules.PluralType</i></li>
+<li><span style='color:green'>(stable)</span> public class <i>TimeZoneFormat</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>TimeZoneFormat.GMTOffsetPatternType</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>TimeZoneFormat.ParseOption</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>TimeZoneFormat.Style</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>TimeZoneFormat.TimeType</i></li>
+<li><span style='color:green'>(stable)</span> public abstract class <i>TimeZoneNames</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>TimeZoneNames.NameType</i></li>
+CompactDecimalFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public java.text.AttributedCharacterIterator <i>formatToCharacterIterator</i>(java.lang.Object)</li>
+<li><span style='color:green'>(stable)</span> public static CompactDecimalFormat <i>getInstance</i>(ULocale, CompactDecimalFormat.CompactStyle)</li>
+<li><span style='color:green'>(stable)</span> public static CompactDecimalFormat <i>getInstance</i>(java.util.Locale, CompactDecimalFormat.CompactStyle)</li>
+</ul>
+DateFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String ABBR_GENERIC_TZ</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String ABBR_QUARTER</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String ABBR_SPECIFIC_TZ</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String ABBR_UTC_TZ</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String ABBR_WEEKDAY</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String GENERIC_TZ</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String HOUR24</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String LOCATION_TZ</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String MINUTE</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String QUARTER</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String SECOND</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String SPECIFIC_TZ</li>
+<li><span style='color:green'>(stable)</span> public static final java.lang.String WEEKDAY</li>
+</ul>
+MessagePattern.ArgType
+<ul>
+<li><span style='color:green'>(stable)</span> public boolean <i>hasPluralStyle</i>()</li>
+</ul>
+PluralFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public <i>PluralFormat</i>(ULocale, PluralRules.PluralType)</li>
+<li><span style='color:green'>(stable)</span> public <i>PluralFormat</i>(ULocale, PluralRules.PluralType, java.lang.String)</li>
+</ul>
+PluralRules
+<ul>
+<li><span style='color:green'>(stable)</span> public static PluralRules <i>forLocale</i>(ULocale, PluralRules.PluralType)</li>
+</ul>
+SimpleDateFormat
+<ul>
+<li><span style='color:green'>(stable)</span> public TimeZoneFormat <i>getTimeZoneFormat</i>()</li>
+<li><span style='color:green'>(stable)</span> public void <i>setTimeZoneFormat</i>(TimeZoneFormat)</li>
+</ul>
+</ul>
+
+<h3>Package com.ibm.icu.util</h3>
+<ul>
+<li><span style='color:green'>(stable)</span> public class <i>Region</i></li>
+<li><span style='color:green'>(stable)</span> public static final class <i>Region.RegionType</i></li>
+</ul>
+
 
 <hr/>
-<h2>Added in ICU4J 52.0.1</h2>
+<h2>Added in ICU4J 52.1</h2>
 
 <h3>Package com.ibm.icu.lang</h3>
 <ul>
@@ -70,6 +161,7 @@ UScript
 
 <h3>Package com.ibm.icu.text</h3>
 <ul>
+<li><span style='color:orange'>(draft)</span> public class <i>PluralSamples</i></li>
 BreakIterator
 <ul>
 <li><span style='color:orange'>(draft)</span> public int <i>getRuleStatus</i>()</li>
@@ -77,18 +169,63 @@ BreakIterator
 </ul>
 ListFormatter
 <ul>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>format</i>(java.util.Collection<?>)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getPatternForNumItems</i>(int)</li>
 </ul>
-TimeUnitFormat
+ListFormatter.Style
 <ul>
-<li><span style='color:orange'>(draft)</span> public static final int NUMERIC</li>
-<li><span style='color:orange'>(draft)</span> public java.lang.String <i>formatTimePeriod</i>(TimePeriod)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>getName</i>()</li>
+</ul>
+PluralRules
+<ul>
+<li><span style='color:orange'>(draft)</span> public boolean <i>addSample</i>(java.lang.String, java.lang.Number, int, java.util.Set<java.lang.Double>)</li>
+<li><span style='color:green'>(stable)</span> public java.util.Collection<java.lang.Double> <i>getAllKeywordValues</i>(java.lang.String, PluralRules.SampleType)</li>
+</ul>
+PluralRules.FixedDecimal
+<ul>
+<li><span style='color:orange'>(draft)</span> public final long decimalDigits</li>
+<li><span style='color:orange'>(draft)</span> public final long decimalDigitsWithoutTrailingZeros</li>
+<li><span style='color:orange'>(draft)</span> public final boolean hasIntegerValue</li>
+<li><span style='color:orange'>(draft)</span> public final long integerValue</li>
+<li><span style='color:orange'>(draft)</span> public final boolean isNegative</li>
+<li><span style='color:orange'>(draft)</span> public final double source</li>
+<li><span style='color:orange'>(draft)</span> public final int visibleDecimalDigitCount</li>
+<li><span style='color:orange'>(draft)</span> public final int visibleDecimalDigitCountWithoutTrailingZeros</li>
+<li><span style='color:orange'>(draft)</span> public double <i>doubleValue</i>()</li>
+<li><span style='color:orange'>(draft)</span> public float <i>floatValue</i>()</li>
+<li><span style='color:orange'>(draft)</span> public long <i>getShiftedValue</i>()</li>
+<li><span style='color:orange'>(draft)</span> public int <i>intValue</i>()</li>
+<li><span style='color:orange'>(draft)</span> public long <i>longValue</i>()</li>
+</ul>
+PluralRules.FixedDecimalRange
+<ul>
+<li><span style='color:orange'>(draft)</span> public final PluralRules.FixedDecimal end</li>
+<li><span style='color:orange'>(draft)</span> public final PluralRules.FixedDecimal start</li>
+<li><span style='color:orange'>(draft)</span> public <i>PluralRules.FixedDecimalRange</i>(PluralRules.FixedDecimal, PluralRules.FixedDecimal)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>toString</i>()</li>
+</ul>
+PluralRules.FixedDecimalSamples
+<ul>
+<li><span style='color:orange'>(draft)</span> public final boolean bounded</li>
+<li><span style='color:orange'>(draft)</span> public final PluralRules.SampleType sampleType</li>
+<li><span style='color:orange'>(draft)</span> public final java.util.Set<PluralRules.FixedDecimalRange> samples</li>
+<li><span style='color:orange'>(draft)</span> public java.util.Set<java.lang.Double> <i>addSamples</i>(java.util.Set<java.lang.Double>)</li>
+<li><span style='color:orange'>(draft)</span> public java.util.Set<PluralRules.FixedDecimalRange> <i>getSamples</i>()</li>
+<li><span style='color:orange'>(draft)</span> public void <i>getStartEndSamples</i>(java.util.Set<PluralRules.FixedDecimal>)</li>
+<li><span style='color:orange'>(draft)</span> public java.lang.String <i>toString</i>()</li>
 </ul>
 </ul>
 
 <h3>Package com.ibm.icu.util</h3>
 <ul>
-<li><span style='color:orange'>(draft)</span> public final class <i>TimePeriod</i></li>
+<li><span style='color:orange'>(draft)</span> public static final class <i>IslamicCalendar.CalculationType</i></li>
+IslamicCalendar
+<ul>
+<li><span style='color:orange'>(draft)</span> public void <i>setType</i>(IslamicCalendar.CalculationType)</li>
+</ul>
+MeasureUnit.Factory
+<ul>
+<li><span style='color:orange'>(draft)</span> public MeasureUnit <i>create</i>(java.lang.String, java.lang.String)</li>
+</ul>
 TimeZone
 <ul>
 <li><span style='color:orange'>(draft)</span> public static java.lang.String <i>getIDForWindowsID</i>(java.lang.String, java.lang.String)</li>
@@ -101,6 +238,6 @@ VersionInfo
 </ul>
 
 <hr/>
-<p><i><font size="-1">Contents generated by ReportAPI tool on Tue Jul 09 18:14:18 EDT 2013<br/>Copyright (C) 2013, International Business Machines Corporation, All Rights Reserved.</font></i></p>
+<p><i><font size="-1">Contents generated by ReportAPI tool on Wed Sep 18 14:55:01 EDT 2013<br/>Copyright (C) 2013, International Business Machines Corporation, All Rights Reserved.</font></i></p>
 </body>
 </html>

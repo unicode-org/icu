@@ -314,20 +314,17 @@ public class PluralRules implements Serializable {
 
     /**
      * Type of plurals and PluralRules.
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public enum PluralType {
         /**
          * Plural rules for cardinal numbers: 1 file vs. 2 files.
-         * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 50
          */
         CARDINAL,
         /**
          * Plural rules for ordinal numbers: 1st file, 2nd file, 3rd file, 4th file, etc.
-         * @draft ICU 50
-         * @provisional This API might change or be removed in a future release.
+         * @stable ICU 50
          */
         ORDINAL
     };
@@ -1635,8 +1632,7 @@ public class PluralRules implements Serializable {
      *   for the closest parent in the locale hierarchy that has one will
      *   be returned.  The final fallback always returns the default
      *   rules.
-     * @draft ICU 50
-     * @provisional This API might change or be removed in a future release.
+     * @stable ICU 50
      */
     public static PluralRules forLocale(ULocale locale, PluralType type) {
         return Factory.getDefaultFactory().forLocale(locale, type);
