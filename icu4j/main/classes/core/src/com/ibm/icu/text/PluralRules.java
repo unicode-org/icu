@@ -1977,7 +1977,7 @@ public class PluralRules implements Serializable {
      * @param uniqueValue
      *            If non null, set to the unique value.
      * @return the KeywordStatus
-     * @draft ICU 52
+     * @draft ICU 50
      * @provisional This API might change or be removed in a future release.
      */
     public KeywordStatus getKeywordStatus(String keyword, int offset, Set<Double> explicits,
@@ -1997,7 +1997,7 @@ public class PluralRules implements Serializable {
      * @param uniqueValue
      *            If non null, set to the unique value.
      * @return the KeywordStatus
-     * @draft ICU 50
+     * @internal
      * @provisional This API might change or be removed in a future release.
      */
     public KeywordStatus getKeywordStatus(String keyword, int offset, Set<Double> explicits,
