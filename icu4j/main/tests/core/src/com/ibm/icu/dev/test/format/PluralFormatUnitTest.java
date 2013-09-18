@@ -23,7 +23,6 @@ import com.ibm.icu.text.PluralFormat;
 import com.ibm.icu.text.PluralRules;
 import com.ibm.icu.text.PluralRules.PluralType;
 import com.ibm.icu.text.PluralRules.SampleType;
-import com.ibm.icu.text.UFieldPosition;
 import com.ibm.icu.util.ULocale;
 
 /**
