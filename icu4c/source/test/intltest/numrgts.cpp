@@ -2991,7 +2991,8 @@ void NumberFormatRegressionTest::Test10361(void) {
     // DecimalFormat/NumberFormat were artificially limiting the number of digits,
     //    preventing formatting of big decimals.
     UErrorCode status = U_ZERO_ERROR;
-    LocalPointer<DecimalFormat> df(new DecimalFormat("###.##", status));
+    DecimalFormatSymbols symbols(Locale::getEnglish(), status);
+    LocalPointer<DecimalFormat> df(new DecimalFormat("###.##", symbols, status));
     TEST_CHECK_STATUS(status);
 
     // Create a decimal number with a million digits.
