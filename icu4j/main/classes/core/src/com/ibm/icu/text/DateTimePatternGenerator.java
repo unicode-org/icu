@@ -1695,9 +1695,8 @@ public class DateTimePatternGenerator implements Freezable<DateTimePatternGenera
         return bestPatternWithMatcher;
     }
 
-    /**
+    /*
      * @param fixFractionalSeconds TODO
-     * 
      */
     // flags values
     private enum DTPGflags { FIX_FRACTIONAL_SECONDS, SKELETON_USES_CAP_J };

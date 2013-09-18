@@ -1049,9 +1049,9 @@ public final class AlphabeticIndex<V> implements Iterable<Bucket<V>> {
         boolean hasInvisibleBuckets = false;
 
         // Helper arrays for Chinese Pinyin collation.
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         Bucket<V>[] asciiBuckets = new Bucket[26];
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings({ "rawtypes", "unchecked" })
         Bucket<V>[] pinyinBuckets = new Bucket[26];
         boolean hasPinyin = false;
 
