@@ -826,9 +826,9 @@ uspoof_areConfusableUTF8(const USpoofChecker *sc,
  * USpoofChecker.
  *
  * @param sc      The USpoofChecker
- * @param id1     The first of the two identifiers to be compared for 
+ * @param s1     The first of the two identifiers to be compared for 
  *                confusability.  The strings are in UTF-8 format.
- * @param id2     The second of the two identifiers to be compared for 
+ * @param s2     The second of the two identifiers to be compared for 
  *                confusability.  The strings are in UTF-8 format.
  * @param status  The error code, set if an error occurred while attempting to
  *                perform the check.

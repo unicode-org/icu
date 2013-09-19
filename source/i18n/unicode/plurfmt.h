@@ -193,7 +193,6 @@ public:
      */
     PluralFormat(const Locale& locale, const PluralRules& rules, UErrorCode& status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a new <code>PluralFormat</code> for the plural type.
      * The standard number formatting will be done using the given locale.
@@ -202,10 +201,9 @@ public:
      * @param type    The plural type (e.g., cardinal or ordinal).
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
-     * @draft ICU 50
+     * @stable ICU 50
      */
     PluralFormat(const Locale& locale, UPluralType type, UErrorCode& status);
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Creates a new cardinal-number <code>PluralFormat</code> for a given pattern string.
@@ -269,7 +267,6 @@ public:
                  const UnicodeString& pattern,
                  UErrorCode& status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a new <code>PluralFormat</code> for a plural type, a
      * pattern and a locale.
@@ -281,13 +278,12 @@ public:
      *                errors are returned to status if the pattern is invalid.
      * @param status  output param set to success/failure code on exit, which
      *                must not indicate a failure before the function call.
-     * @draft ICU 50
+     * @stable ICU 50
      */
     PluralFormat(const Locale& locale,
                  UPluralType type,
                  const UnicodeString& pattern,
                  UErrorCode& status);
-#endif /* U_HIDE_DRAFT_API */
 
     /**
       * copy constructor.
@@ -531,7 +527,7 @@ public:
 private:
 #endif
      /**
-      * @internal 
+      * @internal
       */
     class U_I18N_API PluralSelector : public UMemory {
       public:
@@ -543,6 +539,7 @@ private:
          * @param number The number to be plural-formatted.
          * @param ec Error code.
          * @return The selected PluralFormat keyword.
+         * @internal
          */
         virtual UnicodeString select(void *context, double number, UErrorCode& ec) const = 0;
     };
@@ -557,7 +554,7 @@ private:
 
         virtual ~PluralSelectorAdapter();
 
-        virtual UnicodeString select(void *context, double number, UErrorCode& /*ec*/) const;
+        virtual UnicodeString select(void *context, double number, UErrorCode& /*ec*/) const; /**< @internal */
 
         void reset();
 
@@ -585,7 +582,7 @@ private:
     UnicodeString& format(const Formattable& numberObject, double number,
                           UnicodeString& appendTo,
                           FieldPosition& pos,
-                          UErrorCode& status) const;
+                          UErrorCode& status) const; /**< @internal */
 
     /**
      * Finds the PluralFormat sub-message for the given number, or the "other" sub-message.
@@ -600,7 +597,7 @@ private:
      */
     static int32_t findSubMessage(
          const MessagePattern& pattern, int32_t partIndex,
-         const PluralSelector& selector, void *context, double number, UErrorCode& ec);
+         const PluralSelector& selector, void *context, double number, UErrorCode& ec); /**< @internal */
 
     friend class MessageFormat;
 };

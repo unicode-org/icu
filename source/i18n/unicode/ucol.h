@@ -533,7 +533,6 @@ ucol_strcoll(    const    UCollator    *coll,
         const    UChar        *target,
         int32_t            targetLength);
 
-#ifndef U_HIDE_DRAFT_API
 /** 
 * Compare two strings in UTF-8. 
 * The strings will be compared using the options already specified. 
@@ -550,9 +549,9 @@ ucol_strcoll(    const    UCollator    *coll,
 * @see ucol_greater 
 * @see ucol_greaterOrEqual 
 * @see ucol_equal 
-* @draft ICU 50 
+* @stable ICU 50 
 */ 
-U_DRAFT UCollationResult U_EXPORT2
+U_STABLE UCollationResult U_EXPORT2
 ucol_strcollUTF8(
         const UCollator *coll,
         const char      *source,
@@ -560,7 +559,6 @@ ucol_strcollUTF8(
         const char      *target,
         int32_t         targetLength,
         UErrorCode      *status);
-#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Determine if one string is greater than another.

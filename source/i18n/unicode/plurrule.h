@@ -264,7 +264,6 @@ public:
      */
     static PluralRules* U_EXPORT2 forLocale(const Locale& locale, UErrorCode& status);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Provides access to the predefined <code>PluralRules</code> for a given
      * locale and the plural type.
@@ -279,7 +278,7 @@ public:
      *                the rules for the closest parent in the locale hierarchy
      *                that has one will  be returned.  The final fallback always
      *                returns the default 'other' rules.
-     * @draft ICU 50
+     * @stable ICU 50
      */
     static PluralRules* U_EXPORT2 forLocale(const Locale& locale, UPluralType type, UErrorCode& status);
 
@@ -297,8 +296,6 @@ public:
      * @internal
      */
     static UBool hasOverride(const Locale &locale);
-
-#endif /* U_HIDE_DRAFT_API */
 
     /**
      * Given a number, returns the keyword of the first rule that applies to
@@ -321,7 +318,7 @@ public:
      * @stable ICU 4.0
      */
     UnicodeString select(double number) const;
-    
+
     /**
       * @internal
       */
