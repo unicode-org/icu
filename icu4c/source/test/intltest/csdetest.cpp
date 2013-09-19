@@ -814,7 +814,7 @@ void CharsetDetectionTest::Ticket6394Test() {
 //               similar Windows and non-Windows SBCS encodings. State was kept in the shared
 //               Charset Recognizer objects, and could be overwritten.
 void CharsetDetectionTest::Ticket6954Test() {
-#if !UCONFIG_NO_CONVERSION
+#if !UCONFIG_NO_CONVERSION && !UCONFIG_NO_FORMATTING
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString sISO = "This is a small sample of some English text. Just enough to be sure that it detects correctly.";
     UnicodeString ssWindows("This is another small sample of some English text. Just enough to be sure that it detects correctly."

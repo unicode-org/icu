@@ -1073,6 +1073,7 @@ static void TestDisplayNameBrackets()
             log_data_err("uloc_getDisplayName for displayLocale %s and namedLocale %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedLocale, myErrorName(status));
         }
 
+#if !UCONFIG_NO_FORMATTING
         status = U_ZERO_ERROR;
         uldn = uldn_open(itemPtr->displayLocale, ULDN_STANDARD_NAMES, &status);
         if (U_SUCCESS(status)) {
@@ -1092,6 +1093,7 @@ static void TestDisplayNameBrackets()
         } else {
             log_data_err("uldn_open fails for displayLocale %s, status=%s\n", itemPtr->displayLocale, u_errorName(status));
         }
+#endif
     }
 }
 
