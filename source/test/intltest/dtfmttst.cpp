@@ -4230,6 +4230,10 @@ void DateFormatTest::TestDateFormatLeniency() {
            status = U_ZERO_ERROR;
            ParsePosition pos(0);
            SimpleDateFormat * sdmft = new SimpleDateFormat(itemPtr->pattern, locale, status);
+           if (U_FAILURE(status)) {
+               dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
+               continue;
+           }
            sdmft->setLenient(itemPtr->leniency);
            sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
            /*UDate d = */sdmft->parse(itemPtr->parseString, pos);

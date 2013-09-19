@@ -3131,7 +3131,7 @@ void RegexTest::Extended() {
     UnicodeString   matchString;   // The marked up string to be used as input
 
     if (U_FAILURE(status)){
-        dataerrln("Construct RegexMatcher() error.");
+        dataerrln("Construct RegexMatcher() error - %s", u_errorName(status));
         delete [] testData;
         return;
     }
@@ -3594,7 +3594,7 @@ void RegexTest::regex_find(const UnicodeString &pattern,
     //   G option in test means that capture group data is not available in the
     //     expected results, so the check needs to be suppressed.
     if (isMatch == FALSE && groupStarts.size() != 0) {
-        errln("Error at line %d:  Match expected, but none found.", line);
+        dataerrln("Error at line %d:  Match expected, but none found.", line);
         failed = TRUE;
         goto cleanupAndReturn;
     } else if (UTF8Matcher != NULL && isUTF8Match == FALSE && groupStarts.size() != 0) {

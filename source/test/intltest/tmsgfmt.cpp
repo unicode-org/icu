@@ -655,7 +655,7 @@ void TestMessageFormat::internalFormat(MessageFormat* msgFmt ,
         //Format with passed arguments
         msgFmt->format( args , numOfArgs , result, ignore, status);
         if (U_FAILURE(status)) {
-            dataerrln( "%serror while formatting with ErrorCode as %s" ,errMsg, u_errorName(status) );
+            dataerrln( "%s error while formatting with ErrorCode as %s" ,errMsg, u_errorName(status) );
         }
         //Compare expected with obtained result
         if ( result!= expected ) {
@@ -671,7 +671,7 @@ MessageFormat* TestMessageFormat::internalCreate(
     //Create the MessageFormat with simple SelectFormat
     MessageFormat* msgFmt = new MessageFormat(pattern, locale, status);
     if (U_FAILURE(status)) {
-        dataerrln( "%serror while constructing with ErrorCode as %s" ,errMsg, u_errorName(status) );
+        dataerrln( "%s error while constructing with ErrorCode as %s" ,errMsg, u_errorName(status) );
         logln(UnicodeString("TestMessageFormat::testMsgFormatSelect #1 with error code ")+(int32_t)status);
         return NULL;
     }
@@ -753,6 +753,7 @@ void TestMessageFormat::testMsgFormatSelect(/* char* par */)
     //Nested patterns with plural, number ,choice ,select format etc.
     //Select Format with embedded number format
     UnicodeString t4("{0} est {1, select, female {{2,number,integer} all\\u00E9e} other {all\\u00E9}} \\u00E0 Paris.");
+    err = U_ZERO_ERROR;
     //Create the MessageFormat with Select Format with embedded number format (nested pattern)
     MessageFormat* msgFmt4 = internalCreate(t4.unescape(), Locale("fr"),err,(char*)"From TestMessageFormat::TestSelectFormat create t4");
     if (!U_FAILURE(err)) {
@@ -772,7 +773,6 @@ void TestMessageFormat::testMsgFormatSelect(/* char* par */)
     }
     delete msgFmt4;
 
-    err = U_ZERO_ERROR;
     //Plural format with embedded select format
     UnicodeString t5("{0} {1, plural, one {est {2, select, female {all\\u00E9e} other {all\\u00E9}}} other {sont {2, select, female {all\\u00E9es} other {all\\u00E9s}}}} \\u00E0 Paris.");
     err = U_ZERO_ERROR;
@@ -1903,12 +1903,12 @@ void TestMessageFormat::TestDecimals() {
     FieldPosition ignore;
     UnicodeString result;
     assertEquals("simple format(1)", "one meter",
-            m.format(args, 1, result, ignore, errorCode));
+            m.format(args, 1, result, ignore, errorCode), TRUE);
 
     args[0] = (double)1.5;
     result.remove();
     assertEquals("simple format(1.5)", "1.5 meters",
-            m.format(args, 1, result, ignore, errorCode));
+            m.format(args, 1, result, ignore, errorCode), TRUE);
 
     // Simple but explicit.
     MessageFormat m0(
@@ -1917,12 +1917,12 @@ void TestMessageFormat::TestDecimals() {
     args[0] = (int32_t)1;
     result.remove();
     assertEquals("explicit format(1)", "one meter",
-            m0.format(args, 1, result, ignore, errorCode));
+            m0.format(args, 1, result, ignore, errorCode), TRUE);
 
     args[0] = (double)1.5;
     result.remove();
     assertEquals("explicit format(1.5)", "1.5 meters",
-            m0.format(args, 1, result, ignore, errorCode));
+            m0.format(args, 1, result, ignore, errorCode), TRUE);
 
     // With offset and specific simple format with optional decimals.
     MessageFormat m1(
@@ -1931,17 +1931,17 @@ void TestMessageFormat::TestDecimals() {
     args[0] = (int32_t)1;
     result.remove();
     assertEquals("offset format(1)", "01 meters",
-            m1.format(args, 1, result, ignore, errorCode));
+            m1.format(args, 1, result, ignore, errorCode), TRUE);
 
     args[0] = (int32_t)2;
     result.remove();
     assertEquals("offset format(1)", "another meter",
-            m1.format(args, 1, result, ignore, errorCode));
+            m1.format(args, 1, result, ignore, errorCode), TRUE);
 
     args[0] = (double)2.5;
     result.remove();
     assertEquals("offset format(1)", "02.5 meters",
-            m1.format(args, 1, result, ignore, errorCode));
+            m1.format(args, 1, result, ignore, errorCode), TRUE);
 
     // With offset and specific simple format with forced decimals.
     MessageFormat m2(
@@ -1950,17 +1950,18 @@ void TestMessageFormat::TestDecimals() {
     args[0] = (int32_t)1;
     result.remove();
     assertEquals("offset-decimals format(1)", "1.0 meters",
-            m2.format(args, 1, result, ignore, errorCode));
+            m2.format(args, 1, result, ignore, errorCode), TRUE);
 
     args[0] = (int32_t)2;
     result.remove();
     assertEquals("offset-decimals format(1)", "2.0 meters",
-            m2.format(args, 1, result, ignore, errorCode));
+            m2.format(args, 1, result, ignore, errorCode), TRUE);
 
     args[0] = (double)2.5;
     result.remove();
     assertEquals("offset-decimals format(1)", "2.5 meters",
-            m2.format(args, 1, result, ignore, errorCode));
+            m2.format(args, 1, result, ignore, errorCode), TRUE);
+    errorCode.reset();
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

@@ -2188,7 +2188,7 @@ static void TestUFormattable(void) {
   {
     UErrorCode status = U_ZERO_ERROR;
     UNumberFormat *unum = unum_open(UNUM_DEFAULT, NULL, -1, "en_US_POSIX", NULL, &status);
-    if(assertSuccess("calling ufmt_open()", &status)) {
+    if(assertSuccessCheck("calling ufmt_open()", &status, TRUE)) {
       //! [unum_parseToUFormattable]
       const UChar str[] = { 0x0031, 0x0032, 0x0033, 0x0000 }; /* 123 */
       int32_t result = 0;
@@ -2213,7 +2213,7 @@ static void TestUFormattable(void) {
 
     ufmt = ufmt_open(&status);
     unum = unum_open(UNUM_DEFAULT, NULL, -1, "en_US_POSIX", NULL, &status);
-    if(assertSuccess("calling ufmt_open()", &status)) {
+    if(assertSuccessCheck("calling ufmt_open()", &status, TRUE)) {
 
       pattern = "31337";
       log_verbose("-- pattern: %s\n", pattern);
@@ -2261,7 +2261,7 @@ static void TestUFormattable(void) {
     u_uastrcpy(buffer, pattern);
 
     unum = unum_open(UNUM_DEFAULT, NULL, -1, "en_US_POSIX", NULL, &status);
-    if(assertSuccess("calling ufmt_open()", &status)) {
+    if(assertSuccessCheck("calling ufmt_open()", &status, TRUE)) {
 
       ufmt = unum_parseToUFormattable(unum, NULL, /* will be unum_open()'ed for us */
                                    buffer, -1, NULL, &status);
@@ -2335,12 +2335,12 @@ static void TestUNumberingSystem(void) {
             UBool isAlgorithmic = unumsys_isAlgorithmic(unumsys);
             numsys = unumsys_getName(unumsys);
             if ( uprv_strcmp(numsys, itemPtr->numsys) != 0 || radix != itemPtr->radix || !isAlgorithmic != !itemPtr->isAlgorithmic ) {
-                log_err("unumsys name/radix/isAlgorithmic for locale %s, expected %s/%d/%d, got %s/%d/%d\n", 
+                log_data_err("unumsys name/radix/isAlgorithmic for locale %s, expected %s/%d/%d, got %s/%d/%d\n",
                         itemPtr->locale, itemPtr->numsys, itemPtr->radix, itemPtr->isAlgorithmic, numsys, radix, isAlgorithmic);
             }
             ulen = unumsys_getDescription(unumsys, ubuf, kNumSysDescripBufMax, &status);
             if ( U_FAILURE(status) || u_strcmp(ubuf, itemPtr->description) != 0 ) {
-                log_err("unumsys description for locale %s, description unexpected and/or status %\n", myErrorName(status));
+                log_data_err("unumsys description for locale %s, description unexpected and/or status %\n", myErrorName(status));
             }
             unumsys_close(unumsys);
         } else {
