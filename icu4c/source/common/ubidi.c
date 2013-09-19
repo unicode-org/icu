@@ -910,7 +910,7 @@ bracketProcessChar(BracketData *bd, int32_t position, DirProp dirProp) {
     match=u_getBidiPairedBracket(c);    /* get the matching char */
     if(match==c)                        /* if no matching char */
         return TRUE;
-    if(u_getIntPropertyValue(c, UCHAR_BIDI_PAIRED_BRACKET_TYPE)!=U_BPT_OPEN)
+    if(ubidi_getPairedBracketType(bd->pBiDi->bdp, c)!=U_BPT_OPEN)
         return TRUE;                    /* not an opening bracket */
     /* special case: process synonyms
        create an opening entry for each synonym */
