@@ -86,27 +86,27 @@ public class StableAPI {
     private File leftDir = null;
 //    private String leftStatus;
     private String leftMilestone = "";
-    
+
     private String rightVer;
     private File rightDir = null;
 //    private String rightStatus;
     private String rightMilestone = "";
 
-    private InputStream dumpCppXsltStream = null; 
+    private InputStream dumpCppXsltStream = null;
 	private InputStream dumpCXsltStream = null;
 	private InputStream reportXslStream = null;
 	private static final String CXSLT = "dumpAllCFunc.xslt";
-	private static final String CPPXSLT = "dumpAllCppFunc.xslt"; 
+	private static final String CPPXSLT = "dumpAllCppFunc.xslt";
 	private static final String RPTXSLT = "genReport.xslt";
 
     private File dumpCppXslt;
     private File dumpCXslt;
     private File reportXsl;
     private File resultFile;
-    
+
 
     static Map<String,Set<String>> simplifications = new TreeMap<String,Set<String>>();
-    
+
     static void addSimplification(String prototype0, String prototype) {
         Set<String> s = simplifications.get(prototype);
         if(s==null) {
@@ -126,15 +126,15 @@ public class StableAPI {
         return output;
     }
 
-    
-    final private static String nul = "None"; 
+
+    final private static String notFound = "(missing)";
 
     public static void main(String[] args) throws TransformerException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-        
+
         StableAPI t = new StableAPI();
-        t.run(args); 
+        t.run(args);
     }
-    
+
     private void run(String[] args) throws XPathExpressionException, TransformerException, ParserConfigurationException, SAXException, IOException {
         this.parseArgs(args);
         Set<JoinedFunction> full = new TreeSet<JoinedFunction>();
@@ -143,17 +143,17 @@ public class StableAPI {
         Set<JoinedFunction> setCpp = this.getFullList(dumpCppXsltStream, CPPXSLT);
         full.addAll(setCpp);
         System.out.println("read "+setCpp.size() +" C++.  Reading C:");
-        
+
         Set<JoinedFunction> setC = this.getFullList(dumpCXsltStream, CXSLT);
         full.addAll(setC);
 
         System.out.println("read "+setC.size() +" C. Setting node:");
-        
+
         Node fullList = this.setToNode(full);
 //        t.dumpNode(fullList,"");
-        
+
         System.out.println("Node set. Reporting:");
-        
+
         this.reportSelectedFun(fullList);
         System.out.println("Done. Please check " + this.resultFile);
 
@@ -197,7 +197,7 @@ public class StableAPI {
             } else {
                 System.out.println("Unknown option: "+arg);
                printUsage();
-            } 
+            }
         }
 
         dumpCppXsltStream = loadStream(CPPXSLT, "--cppxslt", dumpCppXslt);
@@ -218,7 +218,7 @@ public class StableAPI {
 	    	} catch (IOException ioe) {
 	    		throw new RuntimeException("Error: Could not load " + argName +" " + argFile.getPath() + " - " + ioe.toString(), ioe);
 	    	}
-    	} else {    	
+    	} else {
         	stream = StableAPI.class.getResourceAsStream(name);
         	if(stream == null) {
         		throw new InternalError("No resource found for " + StableAPI.class.getPackage().getName()+"/"+ name + " -   use " + argName);
@@ -230,7 +230,7 @@ public class StableAPI {
 	}
 
     private static Set<String> warnSet = new TreeSet<String>();
-    
+
     private static void warn(String what) {
         if(!warnSet.contains(what)) {
                System.out.println("Warning: "+what);
@@ -239,10 +239,10 @@ public class StableAPI {
                }
                warnSet.add(what);
         }
-    } 
-    
+    }
+
     private static boolean didWarnSuperTrim = false;
-    
+
     private static String trimICU(String ver) {
         final String ICU_ = ICU_SPACE_PREFIX;
         final String ICU = "ICU";
@@ -257,7 +257,7 @@ public class StableAPI {
                 warn("Trimming text before 'ICU ': " + ver.substring(0,icuidx1+ICU.length()));
                 ver = ver.substring(icuidx1+ICU.length()).trim();
             }
-            
+
             // always trim anything after a version #
             {
                 int n;
@@ -272,10 +272,10 @@ public class StableAPI {
                     }
                 }
             }
-        } 
+        }
         return ver;
     }
-    
+
     private String setVer(String prevVer, String whichVer, File dir) {
 	    String UVERSION = UVERSIONA;
     	if(dir==null) {
@@ -314,17 +314,17 @@ public class StableAPI {
                 }
                 Node name = (Node)xpath.evaluate(NAME_XPATH, ln, XPathConstants.NODE);
                 if(name==null) continue;
-                
+
                // System.err.println("Gotta node: " + name);
-                
+
                 Node nameVal = name.getFirstChild();
                 if(nameVal==null) nameVal = name;
-                
+
                 String nameStr = nameVal.getNodeValue();
                 if(nameStr==null) continue;
 
                // System.err.println("Gotta name: " + nameStr);
-                
+
                 if(nameStr.trim().equals(U_ICU_VERSION)) {
                     Node initializer = (Node)xpath.evaluate(INITIALIZER_XPATH, ln, XPathConstants.NODE);
                     if(initializer==null) System.err.println("initializer with no value");
@@ -335,8 +335,8 @@ public class StableAPI {
                     System.err.println("Detected "+whichVer + " version: " + result);
 
                     String milestoneOf = "";
-                    
-                    // TODO:  #1 use UVersionInfo. (this tool doesn't depend on ICU4J yet) 
+
+                    // TODO:  #1 use UVersionInfo. (this tool doesn't depend on ICU4J yet)
                     //        #2 move this to a utility function: strip/"explain" an ICU version #.
                     if(result.startsWith("ICU ")) {
                         String vers[] = result.substring(4).split("\\.");
@@ -346,7 +346,7 @@ public class StableAPI {
                         int patch = vers.length>3?Integer.parseInt(vers[3]):0;
                         System.err.println(" == ["+vers.toString()+"] " + maj + " . " + min + " . " + micr + " . " + patch );
                         if(maj >= 49) {
-                            // new scheme: 49 and following. 
+                            // new scheme: 49 and following.
                             String truncVersion = "ICU " +maj;
                             if(min == 0) {
                                 milestoneOf = " (m"+micr+")";
@@ -384,7 +384,7 @@ public class StableAPI {
                         }
                     }
                 }
-                
+
             }
             //dumpNode(defines,"");
         } catch(Throwable t) {
@@ -392,14 +392,14 @@ public class StableAPI {
             System.err.println("Warning: Couldn't get " + whichVer+  " version from "+ UVERSION + " - reverting to " + prevVer);
             result = prevVer;
         }
-        
+
         if(result != null) {
-        	
+
         }
-        
+
         if(prevVer != null) {
             if(result != null) {
-                if(!result.equals(prevVer)) { 
+                if(!result.equals(prevVer)) {
                     System.err.println("Note: Detected " + result + " version but we'll use your requested --"+whichVer+"ver "+prevVer);
                     result = prevVer;
                     if(!rightMilestone.isEmpty()&&whichVer.equals("new")) {
@@ -424,18 +424,18 @@ public class StableAPI {
                 }
             }
         }
-        
+
         if(result == null) {
         	System.err.println("prevVer="+prevVer);
             System.err.println("Error: You'll need to use the option  \"--"+whichVer+"ver\"  because we could not detect an ICU version in " + UVERSION );
             throw new InternalError("Error: You'll need to use the option  \"--"+whichVer+"ver\"  because we could not detect an ICU version in " + UVERSION );
         }
-        
-        
-        
+
+
+
         return result;
     }
-    
+
     private static void printUsage(){
         System.out.println("Usage: StableAPI option* target*");
         System.out.println();
@@ -458,14 +458,14 @@ public class StableAPI {
     		return "(Node: " + node.toString() + " )";
 //    		return node.getFirstChild().getAttributes().getNamedItem(attrName).getNodeValue();
     	}
-    	
+
         try {
         	return node.getAttributes().getNamedItem(attrName).getNodeValue();
         } catch(NullPointerException npe) {
         	if(node.getAttributes()==null)  {
         		throw new InternalError("[no attributes Can't get attr "+attrName +" out of node " + node.getNodeName()+":"+node.getNodeType()+":"+node.getNodeValue()+"@"+node.getTextContent());
         	} else if(node.getAttributes().getNamedItem(attrName)==null) {
-        		return null; 
+        		return null;
         		//throw new InternalError("No attribute named: "+attrName);
         	} else {
         		System.err.println("Can't get attr "+attrName+": "+npe.toString());
@@ -474,11 +474,11 @@ public class StableAPI {
         	throw new InternalError("Can't get attr "+attrName);
         }
     }
-    
+
     static String getAttr(NamedNodeMap attrList, String attrName){
         return attrList.getNamedItem(attrName).getNodeValue();
     }
-    
+
     static class Function implements Comparable<Function> {
         public String prototype;
         public String id;
@@ -492,17 +492,17 @@ public class StableAPI {
         static Function fromXml(Node n){
             Function f = new Function();
             f.prototype = getAttr(n, "prototype");
-            
+
             if("yes".equals(getAttr(n, "static"))&&!f.prototype.contains("static")) {
             	f.prototype = "static ".concat(f.prototype);
             }
-             
+
             f.id = getAttr(n, "id");
             f.status = getAttr(n, "status");
             f.version = trimICU(getAttr(n, "version"));
             f.file = getAttr(n, "file");
             f.purifyPrototype();
-            
+
             f.simplifyPrototype();
 
             if(f.file == null) {
@@ -513,7 +513,7 @@ public class StableAPI {
             f.comparableName = f.comparableName();
             return f;
         }
-        
+
         /**
          * Convert string to basename.
          * @param str
@@ -524,7 +524,7 @@ public class StableAPI {
             str = i == -1 ? str : str.substring(i+1);
             return str;
         }
-        
+
 
         static private String replList[] = {  "[ ]*\\([ ]*void[ ]*\\)[ ]*",   "()",  // cleanup
                                               " , ", ", ",                // cleanup
@@ -539,16 +539,16 @@ public class StableAPI {
         /**
          * these are noted as deltas.
          */
-        static private String simplifyList[] = { 
+        static private String simplifyList[] = {
             "[ ]*=[ ]*0[ ]*$", "",      // remove pure virtual - TODO: notify about this difference, separately
             "\\)[ ]*const[ ]*$", ")",  // TODO: notify about this difference, separately - remove const from function type
         };
 
         /**
          * Special cases:
-         * 
+         *
          * Remove the status attribute embedded in the C prototype
-         * 
+         *
          * Remove the virtual keyword in Cpp prototype
          */
         private void purifyPrototype(){
@@ -559,12 +559,12 @@ public class StableAPI {
                 prototype = prototype.replaceAll(s,"");
                 prototype = prototype.trim();
             }
-            
+
             for (int i = 0; i < replList.length; i+= 2) {
                 prototype = prototype.replaceAll(replList[i+0],replList[i+1]);
             }
-            
-            
+
+
             prototype = prototype.trim();
 
             // Now, remove parameter names!
@@ -572,20 +572,20 @@ public class StableAPI {
             StringBuffer in = new StringBuffer(prototype);
             int openParen = in.indexOf("(");
             int closeParen = in.lastIndexOf(")");
-            
+
             if(openParen==-1 || closeParen==-1) return; // exit, malformed?
             if(openParen+1==closeParen) return; // exit: ()
-            
+
             out.append(in, 0, openParen+1); // prelude
-                        
+
             for(int left = openParen+1; left<closeParen;) {
             	int right = in.indexOf(",", left+1); // right edge
             	if(right>=closeParen || right==-1 )  right=closeParen; // found last comma
-            	
+
             //	System.err.println("Considering  " + left + " / " + right + " - " + closeParen +  " : "  + in.substring(left, right));
-            	
-            	if(left==right) continue; 
-            	
+
+            	if(left==right) continue;
+
             	// find variable name
             	int rightCh = right-1;
             	if(rightCh==left) { // 1 ch- break
@@ -601,7 +601,7 @@ public class StableAPI {
             	while(nameStartCh>left && Character.isJavaIdentifierPart(in.charAt(nameStartCh))) {
             		nameStartCh--;
             	}
-            	
+
             	// now, did we find something to skip?
             	if(nameStartCh>left && nameEndCh>nameStartCh) {
             		out.append(in, left, nameStartCh+1);
@@ -609,15 +609,15 @@ public class StableAPI {
             		// pass through
             		out.append(in, left, right);
             	}
-            	
+
             	left = right;
             }
-            
+
             out.append(in, closeParen, in.length()); // postlude
-            
+
             // Delete any doubled whitespace.
             for(int p=1;p<out.length();p++) {
-                char prev = out.charAt(p-1); 
+                char prev = out.charAt(p-1);
             	if(Character.isWhitespace(prev)) {
             		while (out.length()>p&&(Character.isWhitespace(out.charAt(p)))) {
             			out.deleteCharAt(p);
@@ -632,7 +632,7 @@ public class StableAPI {
             		}
             	}
             }
-            
+
           //  System.err.println(prototype+" -> " + out.toString());
             prototype = out.toString();
         }
@@ -656,11 +656,11 @@ public class StableAPI {
 		public int compareTo(Function o) {
 			return comparableName.compareTo(((Function)o).comparableName);
 		}
-		public String comparableName() { 
+		public String comparableName() {
 			return file+"|"+prototype+"|"+status+"|"+version+"|"+id;
 		}
     }
-    
+
     static class JoinedFunction implements Comparable<JoinedFunction> {
         public String prototype;
         public String leftRefId;
@@ -671,30 +671,30 @@ public class StableAPI {
         public String rightRefId;
         public String rightStatus;
         public String rightFile;
-        
+
         public String comparableName;
-        
+
         static JoinedFunction fromLeftFun(Function left){
             JoinedFunction u = new JoinedFunction();
             u.prototype = left.prototype;
             u.leftRefId = left.id;
             u.leftStatus = left.status;
             u.leftFile = left.file;
-            u.rightRefId = nul;
+            u.rightRefId = notFound;
            // u.rightVersion = nul;
             u.leftVersion = left.version;
-            u.rightStatus = nul;
-            u.rightFile = nul;
+            u.rightStatus = notFound;
+            u.rightFile = notFound;
             u.comparableName = left.comparableName;
             return u;
         }
-    
+
         static JoinedFunction fromRightFun(Function right){
             JoinedFunction u = new JoinedFunction();
             u.prototype = right.prototype;
-            u.leftRefId = nul;
-            u.leftStatus = nul;
-            u.leftFile = nul;
+            u.leftRefId = notFound;
+            u.leftStatus = notFound;
+            u.leftFile = notFound;
            // u.leftVersion = nul;
             u.rightVersion = right.version;
             u.rightRefId = right.id;
@@ -703,7 +703,7 @@ public class StableAPI {
             u.comparableName = right.comparableName;
             return u;
         }
-        
+
         static JoinedFunction fromTwoFun(Function left, Function right){
             if (!left.equals(right)) throw new Error();
             JoinedFunction u = new JoinedFunction();
@@ -724,29 +724,29 @@ public class StableAPI {
             Element  ele = doc.createElement("func");
             ele.setAttribute("prototype", formatCode(prototype));
 //            ele.setAttribute("leftRefId", leftRefId);
-            
+
             ele.setAttribute("leftStatus", leftStatus);
 //            ele.setAttribute("rightRefId", rightRefId);
             ele.setAttribute("rightStatus", rightStatus);
             ele.setAttribute("leftVersion", leftVersion);
 //            ele.setAttribute("rightRefId", rightRefId);
             ele.setAttribute("rightVersion", rightVersion);
-            
-            
-//            String f = rightRefId.equals(nul) ? leftRefId : rightRefId;
+
+
+//            String f = rightRefId.equals(notFound) ? leftRefId : rightRefId;
 //            int tail = f.indexOf("_");
 //            f = tail != -1 ? f.substring(0, tail) : f;
 //            f = f.startsWith("class") ? f.replaceFirst("class","") : f;
-            String f = rightFile.equals(nul) ? leftFile : rightFile;
+            String f = rightFile.equals(notFound) ? leftFile : rightFile;
             ele.setAttribute("file", f);
             return ele;
         }
-        
+
 
 		public int compareTo(JoinedFunction o) {
 			return comparableName.compareTo(o.comparableName);
 		}
-		
+
         public boolean equals(Function right){
             return this.prototype.equals(right.prototype);
         }
@@ -776,7 +776,7 @@ public class StableAPI {
 			t = transFac.newTransformer(ss);
 		} catch (TransformerConfigurationException e) {
 			e.printStackTrace();
-			throw new InternalError("Couldn't make transformer for " + name + " - " + e.getMessageAndLocation());			
+			throw new InternalError("Couldn't make transformer for " + name + " - " + e.getMessageAndLocation());
 		}
     	if(t == null) {
     		throw new InternalError("Couldn't make transformer for " + name);
@@ -793,8 +793,8 @@ public class StableAPI {
         report.setParameter("rightMilestone", rightMilestone);
         report.setParameter("leftMilestone", leftMilestone);
         report.setParameter("dateTime", new GregorianCalendar().getTime());
-        report.setParameter("nul", nul);
-        
+        report.setParameter("notFound", notFound);
+
         DOMSource src = new DOMSource(joinedNode);
 
         Result res = new StreamResult(resultFile);
@@ -802,7 +802,7 @@ public class StableAPI {
         report.transform(src, res);
 //        dumpNode(res.getNode(),"");
     }
-    
+
     private Set<JoinedFunction> getFullList(InputStream dumpXsltStream, String dumpXsltFile) throws TransformerException, ParserConfigurationException, XPathExpressionException, SAXException, IOException{
         // prepare transformer
         XPath xpath = XPathFactory.newInstance().newXPath();
@@ -825,9 +825,9 @@ public class StableAPI {
         	System.err.flush();
         	throw new InternalError("getFullList("+dumpXsltFile.toString()+") returned a null left "+expression);
         }
-        
+
         xpath.reset(); // reuse
-        
+
         DOMSource rightIndex = new DOMSource(getDocument(new File(rightDir,INDEX_XML)));
         DOMResult rightResult = new DOMResult();
         transformer.setParameter(DOC_FOLDER, rightDir);
@@ -839,8 +839,8 @@ public class StableAPI {
         	throw new InternalError("getFullList("+dumpXsltFile.toString()+") returned a null right "+expression);
         }
 //        dumpNode(rightList,"");
-        
-        
+
+
         Set<Function> leftSet = nodeToSet(leftList);
         Set<Function> rightSet = nodeToSet(rightList);
         Set<JoinedFunction> joined = fullJoin(leftSet, rightSet);
@@ -878,7 +878,7 @@ public class StableAPI {
             JoinedFunction fun = iter.next();
             root.appendChild(fun.toXml(doc));
         }
-        
+
         // add the 'changed' stuff
         Element root2 = doc.createElement("simplifications");
         root.appendChild(root2);
@@ -888,9 +888,9 @@ public class StableAPI {
         		Element baseElement = doc.createElement("base");
         		baseElement.appendChild(doc.createTextNode(simplification));
         		subSimplification.appendChild(baseElement);
-        		
+
         		root2.appendChild(subSimplification);
-        		
+
         		for(String change : simplifications.get(simplification)) {
         			Element changeElement = doc.createElement("change");
         			changeElement.appendChild(doc.createTextNode(change));
@@ -898,13 +898,13 @@ public class StableAPI {
         		}
 	       	}
         }
-        
+
         return doc;
     }
 
     /**
-     * full-join two Set on 'prototype' 
-     * 
+     * full-join two Set on 'prototype'
+     *
      * @param left     Set<Fun>
      * @param right    Set<Fun>
      * @return          Set<JoinedFun>
@@ -936,7 +936,7 @@ public class StableAPI {
                     joined.add(JoinedFunction.fromTwoFun(f1, f2));
                     right.remove(f2);
                     break;
-                } 
+                }
             }
         }
 
@@ -944,19 +944,19 @@ public class StableAPI {
             Function f = iter.next();
             left.remove(f);
         }
-        
+
         for (Iterator<Function> iter = left.iterator(); iter.hasNext();) {
             Function f = iter.next();
             joined.add(JoinedFunction.fromLeftFun(f));
         }
-        
+
         for (Iterator<Function> iter = right.iterator(); iter.hasNext();) {
             Function f = iter.next();
             joined.add(JoinedFunction.fromRightFun(f));
         }
         return joined;
     }
-    
+
     private static void dumpNode(Node n) {
     	dumpNode(n,"");
     }
@@ -991,7 +991,7 @@ public class StableAPI {
 		}
 		System.out.println(opre + "</" + n.getNodeName() + ">");
 	}
-    
+
     private static DocumentBuilder theBuilder = null;
     private static DocumentBuilderFactory dbf  = null;
     private synchronized static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
@@ -1001,7 +1001,7 @@ public class StableAPI {
     	}
     	return theBuilder;
     }
-    
+
     private static Document getDocument(File file) throws ParserConfigurationException, SAXException, IOException{
         FileInputStream fis = new FileInputStream(file);
         InputSource inputSource = new InputSource(fis);
@@ -1010,16 +1010,16 @@ public class StableAPI {
     }
     static boolean tried = false;
     static Formatter aFormatter = null;
-    
+
     public interface Formatter {
     	public String formatCode(String s);
     }
-    
+
 
     public static String format_keywords[] = {
     	"enum","#define","static"
     };
-    
+
     /**
      * Attempt to use a pretty formatter
      * @param prototype2
@@ -1045,7 +1045,7 @@ public class StableAPI {
 						}
 						return str;
 					}
-					
+
 				};
 			}
 			tried = true;
@@ -1059,13 +1059,13 @@ public class StableAPI {
 
     public static String HTMLSafe(String s) {
         if(s==null) return null;
-        
-        return 
+
+        return
             s.replaceAll("&","&amp;")
              .replaceAll("<","&lt;")
              .replaceAll(">","&gt;")
              .replaceAll("\"","&quot;");
     }
-    
-	
+
+
 }
