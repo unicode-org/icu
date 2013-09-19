@@ -123,7 +123,7 @@ typedef enum URegionType {
  * @draft ICU 52
  */
 struct URegion;
-typedef struct URegion URegion;
+typedef struct URegion URegion; /**< @draft ICU 52 */
 
 /**
  * Returns a pointer to a URegion for the specified region code: A 2-letter or 3-letter ISO 3166

@@ -16,7 +16,9 @@
 /**
  * \file
  * \brief C API: Display context types (enum values)
- *
+ */
+
+/**
  * Display context types, for getting values of a particular setting.
  * Note, the specific numeric values are internal and may change.
  * @draft ICU 51

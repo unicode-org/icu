@@ -44,7 +44,7 @@
 U_NAMESPACE_BEGIN
 
 // Forward Declarations
-void U_CALLCONV locale_available_init();
+void U_CALLCONV locale_available_init(); /**< @internal */
 
 /**
  * A <code>Locale</code> object represents a specific geographical, political,
@@ -745,6 +745,9 @@ private:
      */
     friend Locale *locale_set_default_internal(const char *, UErrorCode& status);
 
+    /**
+     * @internal
+     */
     friend void locale_available_init();
 };
 

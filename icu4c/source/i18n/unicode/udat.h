@@ -169,17 +169,15 @@ typedef enum UDateFormatStyle {
     /** No style */
     UDAT_NONE = -1,
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Use the pattern given in the parameter to udat_open
      * @see udat_open
-     * @draft ICU 50
+     * @stable ICU 50
      */
     UDAT_PATTERN = -2,
 
     /** @internal alias to UDAT_PATTERN */
     UDAT_IGNORE = UDAT_PATTERN
-#endif  /* U_HIDE_DRAFT_API */
 } UDateFormatStyle;
 
 /* Skeletons for dates. */
