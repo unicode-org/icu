@@ -827,15 +827,24 @@ udat_close(UDateFormat* format);
 
 /**
  * DateFormat boolean attributes
- * @internal ICU 5.2 technology preview
+ * @internal ICU technology preview
  */
 typedef enum UDateFormatBooleanAttribute {
-    /** indicates whether whitespace is allowed. Includes trailing dot tolerance. */
+    /**
+     * indicates whether whitespace is allowed. Includes trailing dot tolerance.
+     * @internal ICU technology preview
+     */
     UDAT_PARSE_ALLOW_WHITESPACE,
-    /** indicates tolerance of numeric data when String data may be assumed. eg: UDAT_YEAR_NAME_FIELD,
-     * 		UDAT_STANDALONE_MONTH_FIELD, UDAT_DAY_OF_WEEK_FIELD */
+    /**
+     * indicates tolerance of numeric data when String data may be assumed. eg: UDAT_YEAR_NAME_FIELD,
+     * 		UDAT_STANDALONE_MONTH_FIELD, UDAT_DAY_OF_WEEK_FIELD
+     * @internal ICU technology preview
+     */
     UDAT_PARSE_ALLOW_NUMERIC,
-    /** count boolean date format constants */
+    /**
+     * count boolean date format constants
+     * @internal ICU technology preview
+     */
     UDAT_BOOLEAN_ATTRIBUTE_COUNT
 } UDateFormatBooleanAttribute;
 
@@ -848,7 +857,7 @@ typedef enum UDateFormatBooleanAttribute {
  * @param attr The attribute to query; e.g. UDAT_PARSE_ALLOW_WHITESPACE.
  * @param status A pointer to an UErrorCode to receive any errors
  * @return The value of attr.
- * @internal ICU 5.2 technology preview
+ * @internal technology preview
  */
 U_INTERNAL UBool U_EXPORT2
 udat_getBooleanAttribute(const UDateFormat* fmt, UDateFormatBooleanAttribute attr, UErrorCode* status);
@@ -861,7 +870,7 @@ udat_getBooleanAttribute(const UDateFormat* fmt, UDateFormatBooleanAttribute att
  * @param attr The attribute to set; one of UDAT_PARSE_ALLOW_WHITESPACE or UDAT_PARSE_ALLOW_NUMERIC
  * @param newValue The new value of attr.
  * @param status A pointer to an UErrorCode to receive any errors
- * @internal ICU 5.2 technology preview
+ * @internal ICU technology preview
  */
 U_INTERNAL void U_EXPORT2
 udat_setBooleanAttribute(UDateFormat *fmt, UDateFormatBooleanAttribute attr, UBool, UErrorCode* status);
