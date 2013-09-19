@@ -528,6 +528,7 @@ public class StableAPI {
 
         static private String replList[] = {  "[ ]*\\([ ]*void[ ]*\\)[ ]*",   "()",  // cleanup
                                               " , ", ", ",                // cleanup
+                                              "[ ]*\\*[ ]*", "* ",
                                               "[ ]*=[ ]*0[ ]*$", "=0",      // cleanup pure virtual
                                               "\\)[ ]*const", ") const",  // This just cleans up the spacing.
 
