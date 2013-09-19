@@ -350,7 +350,6 @@ private:
     void setCurrencyForSymbols();
 
 public:
-#ifndef U_HIDE_INTERNAL_API
     /**
      * _Internal_ function - more efficient version of getSymbol,
      * returning a const reference to one of the symbol strings.
@@ -364,6 +363,7 @@ public:
      */
     inline const UnicodeString &getConstSymbol(ENumberFormatSymbol symbol) const;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Returns that pattern stored in currecy info. Internal API for use by NumberFormat API.
      * @internal
@@ -458,10 +458,12 @@ DecimalFormatSymbols::getLocale() const {
     return locale;
 }
 
+#ifndef U_HIDE_INTERNAL_API
 inline const UChar*
 DecimalFormatSymbols::getCurrencyPattern() const {
     return currPattern;
 }
+#endif /* U_HIDE_INTERNAL_API */
 
 U_NAMESPACE_END
 

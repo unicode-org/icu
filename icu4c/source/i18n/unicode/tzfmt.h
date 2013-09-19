@@ -190,13 +190,11 @@ typedef enum UTimeZoneFormatGMTOffsetPatternType {
     UTZFMT_PAT_NEGATIVE_H,
 #endif /* U_HIDE_DRAFT_API */
 
-#ifndef U_HIDE_INTERNAL_API
     /**
      * Number of UTimeZoneFormatGMTOffsetPatternType types.
      * @internal
      */
     UTZFMT_PAT_COUNT
-#endif  /* U_HIDE_INTERNAL_API */
 } UTimeZoneFormatGMTOffsetPatternType;
 
 /**

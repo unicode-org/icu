@@ -846,10 +846,12 @@ inline void RuleBasedCollator::setUCollator(UCollator     *collator)
     setRuleStringFromCollator();
 }
 
+#ifndef U_HIDE_INTERNAL_API
 inline const UCollator * RuleBasedCollator::getUCollator()
 {
     return ucollator;
 }
+#endif  /* U_HIDE_INTERNAL_API */
 
 U_NAMESPACE_END
 

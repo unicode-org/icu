@@ -54,12 +54,10 @@ U_STABLE int32_t U_EXPORT2
 u_strlen(const UChar *s);
 #endif
 
-#ifndef U_HIDE_INTERNAL_API
 /**
  * \def U_STRING_CASE_MAPPER_DEFINED
  * @internal
  */
-
 #ifndef U_STRING_CASE_MAPPER_DEFINED
 #define U_STRING_CASE_MAPPER_DEFINED
 
@@ -74,7 +72,6 @@ UStringCaseMapper(const UCaseMap *csm,
                   UErrorCode *pErrorCode);
 
 #endif
-#endif  /* U_HIDE_INTERNAL_API */
 
 U_NAMESPACE_BEGIN
 
