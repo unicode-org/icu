@@ -880,7 +880,7 @@ typedef enum UNumberFormatAttribute {
    * @draft ICU 51 */
   UNUM_SCALE = UNUM_LENIENT_PARSE + 2,
 #endif /* U_HIDE_DRAFT_API */
-#ifndef U_HIDE_INTERNAL_API
+
   /** Count of "regular" numeric attributes.
    * @internal */
   UNUM_NUMERIC_ATTRIBUTE_COUNT,
@@ -889,7 +889,6 @@ typedef enum UNumberFormatAttribute {
    * All items after this one are stored in boolean form.
    * @internal */
   UNUM_MAX_NONBOOLEAN_ATTRIBUTE = 0x0FFF,
-#endif  /* U_HIDE_INTERNAL_API */
 
   /** If 1, specifies that if setting the "max integer digits" attribute would truncate a value, set an error status rather than silently truncating.
    * For example,  formatting the value 1234 with 4 max int digits would succeed, but formatting 12345 would fail. There is no effect on parsing.
@@ -905,11 +904,9 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_PARSE_NO_EXPONENT,
 
-#ifndef U_HIDE_INTERNAL_API
   /** Limit of boolean attributes.
    * @internal */
   UNUM_LIMIT_BOOLEAN_ATTRIBUTE
-#endif  /* U_HIDE_INTERNAL_API */
 } UNumberFormatAttribute;
 
 /**

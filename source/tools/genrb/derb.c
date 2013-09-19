@@ -27,6 +27,8 @@
 #include "toolutil.h"
 #include "ustrfmt.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 #define DERB_VERSION "1.1"
 
 #define DERB_DEFAULT_TRUNC 80
@@ -666,6 +668,14 @@ static const char *getEncodingName(const char *encoding) {
 static void reportError(const char *pname, UErrorCode *status, const char *when) {
   u_fprintf(ustderr, "%s: error %d while %s: %s\n", pname, *status, when, u_errorName(*status));
 }
+
+#else
+extern int
+main(int argc, char* argv[]) {
+    /* Changing stdio.h ustdio.h requires that formatting not be disabled. */
+    return 3;
+}
+#endif /* !UCONFIG_NO_FORMATTING */
 
 /*
  * Local Variables:

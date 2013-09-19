@@ -33,7 +33,6 @@ U_NAMESPACE_BEGIN
 class CharString;
 class DigitList;
 
-#ifndef U_HIDE_INTERNAL_API
 /**
  * \def UNUM_INTERNAL_STACKARRAY_SIZE
  * @internal
@@ -43,7 +42,6 @@ class DigitList;
 #else
 #define UNUM_INTERNAL_STACKARRAY_SIZE 128
 #endif
-#endif  /* U_HIDE_INTERNAL_API */
 
 /**
  * Formattable objects can be passed to the Format class or
@@ -724,9 +722,11 @@ inline UnicodeString& Formattable::getString(void) {
     return *fValue.fString;
 }
 
+#ifndef U_HIDE_DEPRECATED_API
 inline int32_t Formattable::getLong(UErrorCode* status) const {
     return getLong(*status);
 }
+#endif  /* U_HIDE_DEPRECATED_API */
 
 inline UFormattable* Formattable::toUFormattable() {
   return (UFormattable*)(this);
