@@ -681,7 +681,7 @@ public:
      * @param newvalue new value
      * @param status the error type
      * @return *this - for chaining (example: format.setAttribute(...).setAttribute(...) )
-     * @internal ICU 5.2 technology preview
+     * @internal ICU technology preview
      */
 
     virtual DateFormat&  U_EXPORT2 setBooleanAttribute(UDateFormatBooleanAttribute attr,
@@ -695,7 +695,7 @@ public:
      * @param attr the attribute to set
      * @param status the error type
      * @return the attribute value. Undefined if there is an error.
-     * @internal ICU 5.2 technology preview
+     * @internal ICU technology preview
      */
     virtual UBool U_EXPORT2 getBooleanAttribute(UDateFormatBooleanAttribute attr, UErrorCode &status) const;
 
