@@ -736,7 +736,7 @@ group: platform
     ucln_cmn.o  # for putil.o which calls ucln_common_registerCleanup
     udataswp.o  # for uinvchar.o; TODO: move uinvchar.o swapper functions to udataswp.o?
     umath.o
-    mutex.o umutex.o
+    umutex.o
     utrace.o
   deps
     # The "platform" group has no ICU dependencies.
@@ -767,6 +767,7 @@ group: localedata
   deps
     uniset_props resourcebundle
     uset_props  # TODO: change to using C++ UnicodeSet, remove this dependency
+    loclikely
 
 group: genderinfo
     gender.o
@@ -810,7 +811,7 @@ group: formatting
     curramt.o currfmt.o currpinf.o currunit.o
     # decimalformat
     dcfmtsym.o decfmtst.o decimfmt.o compactdecimalformat.o
-    numfmt.o numsys.o unum.o winnmfmt.o
+    numfmt.o numsys.o unumsys.o unum.o winnmfmt.o
     # rbnf
     nfrs.o nfrule.o nfsubs.o rbnf.o
     # measureformat
@@ -862,7 +863,8 @@ group: format
 group: pluralrules
     plurrule.o upluralrules.o
   deps
-    patternprops resourcebundle uvector
+    digitlist  # plurals depend on decimals
+    patternprops resourcebundle uvector uvector32
     unistr_case_locale
 
 group: regex_cnv
