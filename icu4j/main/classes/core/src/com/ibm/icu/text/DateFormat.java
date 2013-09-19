@@ -453,12 +453,18 @@ public abstract class DateFormat extends UFormat {
      * <br/>
      * PARSE_ALLOW_NUMERIC - indicates tolerance of numeric data when String data may be assumed. eg: YEAR_NAME_FIELD
      * 
-     * @internal ICU 5.2 technology preview
+     * @internal ICU technology preview
      */
     public enum BooleanAttribute { 
-        /** indicates whitespace tolerance. Also included is trailing dot tolerance. */
+        /** 
+         * indicates whitespace tolerance. Also included is trailing dot tolerance. 
+         * @internal ICU technology preview
+         */
         PARSE_ALLOW_WHITESPACE,
-        /** indicates tolerance of numeric data when String data may be assumed. eg: YEAR_NAME_FIELD */
+        /** 
+         * indicates tolerance of numeric data when String data may be assumed. eg: YEAR_NAME_FIELD 
+         * @internal ICU technology preview
+         */
         PARSE_ALLOW_NUMERIC 
     };
     
@@ -1471,7 +1477,7 @@ public abstract class DateFormat extends UFormat {
      * boolean attributes. 
      * 
      * @see BooleanAttribute
-     * @internal ICU 5.2 technology preview
+     * @internal ICU technology preview
      */
     public DateFormat setBooleanAttribute(BooleanAttribute key, boolean value) 
     {
@@ -1490,14 +1496,11 @@ public abstract class DateFormat extends UFormat {
      * if attribute is missing false is returned.
      * 
      * @see BooleanAttribute
-     * @internal ICU 5.2 technology preview
+     * @internal ICU technology preview
      */
     public boolean getBooleanAttribute(BooleanAttribute key) 
     {
-        if(booleanAttributes.contains(key))
-            return true;
-        else 
-            return false;
+        return booleanAttributes.contains(key);
     }
     
     
