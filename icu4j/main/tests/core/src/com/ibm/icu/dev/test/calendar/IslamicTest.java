@@ -494,25 +494,34 @@ public class IslamicTest extends CalendarTest {
         }
     }
     
-    public void Test10249() {
+    public void TestIslamicTabularDates() {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
         try {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");            
-            Date date = formatter.parse("1975-05-06");
-            IslamicCalendar is_cal = new IslamicCalendar();
-            is_cal.setType(CalculationType.ISLAMIC_CIVIL);
-            is_cal.setTime(date);
-            IslamicCalendar is_cal2 = new IslamicCalendar();
-            is_cal2.setType(CalculationType.ISLAMIC_TBLA);
-            is_cal2.setTime(date);
-            
-            int is_day = is_cal.get(Calendar.DAY_OF_MONTH);
-            int is_day2 = is_cal2.get(Calendar.DAY_OF_MONTH);
-            if(is_day2 - is_day != 1)
-                errln("unexpected difference between civil and tbla: "+is_day2+" : "+is_day);
-
+            date = formatter.parse("1975-05-06");
         }catch(Exception e){
-            errln(e.getLocalizedMessage());
+            errln("unable to parse test date string - errMsg:" +e.getLocalizedMessage());
         }
+
+        IslamicCalendar is_cal = new IslamicCalendar();
+        is_cal.setType(CalculationType.ISLAMIC_CIVIL);
+        is_cal.setTime(date);
+        IslamicCalendar is_cal2 = new IslamicCalendar();
+        is_cal2.setType(CalculationType.ISLAMIC_TBLA);
+        is_cal2.setTime(date);
+
+        int is_month = is_cal.get(Calendar.MONTH);
+        int is_month2 = is_cal2.get(Calendar.MONTH);
+        int is_year = is_cal.get(Calendar.YEAR);
+        int is_year2 = is_cal2.get(Calendar.YEAR);
+        if( (is_month != is_month2) || (is_year != is_year2))
+            errln("unexpected difference between islamic and tbla month "+is_month+" : "+is_month2+" and/or year "+is_year+" : "+is_year2);
+        
+        int is_day = is_cal.get(Calendar.DAY_OF_MONTH);
+        int is_day2 = is_cal2.get(Calendar.DAY_OF_MONTH);
+        if(is_day2 - is_day != 1)
+            errln("unexpected difference between civil and tbla: "+is_day2+" : "+is_day);
+
     }
 
     public void TestCreationByLocale() {
