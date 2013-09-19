@@ -7047,6 +7047,8 @@ void NumberFormatTest::TestSignificantDigits(void) {
     Locale locale("en_US");
     LocalPointer<DecimalFormat> numberFormat(static_cast<DecimalFormat*>(
             NumberFormat::createInstance(locale, status)));
+    CHECK_DATA(status,"NumberFormat::createInstance")
+
     numberFormat->setSignificantDigitsUsed(TRUE);
     numberFormat->setMinimumSignificantDigits(3);
     numberFormat->setMaximumSignificantDigits(5);
@@ -7069,6 +7071,8 @@ void NumberFormatTest::TestShowZero() {
     Locale locale("en_US");
     LocalPointer<DecimalFormat> numberFormat(static_cast<DecimalFormat*>(
             NumberFormat::createInstance(locale, status)));
+    CHECK_DATA(status, "NumberFormat::createInstance")
+
     numberFormat->setSignificantDigitsUsed(TRUE);
     numberFormat->setMaximumSignificantDigits(3);
     
@@ -7085,7 +7089,7 @@ void NumberFormatTest::TestBug9936() {
     LocalPointer<DecimalFormat> numberFormat(static_cast<DecimalFormat*>(
             NumberFormat::createInstance(locale, status)));
     if (U_FAILURE(status)) {
-        errln("File %s, Line %d: status = %s.\n", __FILE__, __LINE__, u_errorName(status));
+        dataerrln("File %s, Line %d: status = %s.\n", __FILE__, __LINE__, u_errorName(status));
         return;
     }
         
@@ -7118,6 +7122,7 @@ void NumberFormatTest::TestBug9936() {
 void NumberFormatTest::TestParseNegativeWithFaLocale() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *test = (DecimalFormat *) NumberFormat::createInstance("fa", status);
+    CHECK_DATA(status, "NumberFormat::createInstance")
     test->setLenient(TRUE);
     Formattable af;
     ParsePosition ppos;
@@ -7133,6 +7138,7 @@ void NumberFormatTest::TestParseNegativeWithFaLocale() {
 void NumberFormatTest::TestParseNegativeWithAlternateMinusSign() {
     UErrorCode status = U_ZERO_ERROR;
     DecimalFormat *test = (DecimalFormat *) NumberFormat::createInstance("en", status);
+    CHECK_DATA(status, "NumberFormat::createInstance")
     test->setLenient(TRUE);
     Formattable af;
     ParsePosition ppos;

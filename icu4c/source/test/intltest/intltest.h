@@ -270,7 +270,7 @@ protected:
     UBool assertEquals(const char* message, int64_t expected, int64_t actual);
 #if !UCONFIG_NO_FORMATTING
     UBool assertEquals(const char* message, const Formattable& expected,
-                       const Formattable& actual);
+                       const Formattable& actual, UBool possibleDataError=FALSE);
     UBool assertEquals(const UnicodeString& message, const Formattable& expected,
                        const Formattable& actual);
 #endif
@@ -278,7 +278,7 @@ protected:
     UBool assertFalse(const UnicodeString& message, UBool condition, UBool quiet=FALSE);
     UBool assertSuccess(const UnicodeString& message, UErrorCode ec);
     UBool assertEquals(const UnicodeString& message, const UnicodeString& expected,
-                       const UnicodeString& actual);
+                       const UnicodeString& actual, UBool possibleDataError=FALSE);
     UBool assertEquals(const UnicodeString& message, const char* expected,
                        const char* actual);
     UBool assertEquals(const UnicodeString& message, UBool expected, UBool actual);

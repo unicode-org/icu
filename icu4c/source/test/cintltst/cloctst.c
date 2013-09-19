@@ -1064,13 +1064,13 @@ static void TestDisplayNameBrackets()
         status = U_ZERO_ERROR;
         ulen = uloc_getDisplayCountry(itemPtr->namedLocale, itemPtr->displayLocale, getName, kDisplayNameBracketsMax, &status);
         if ( U_FAILURE(status) || u_strcmp(getName, expectRegionName) != 0 ) {
-            log_err("uloc_getDisplayCountry for displayLocale %s and namedLocale %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedLocale, myErrorName(status));
+            log_data_err("uloc_getDisplayCountry for displayLocale %s and namedLocale %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedLocale, myErrorName(status));
         }
 
         status = U_ZERO_ERROR;
         ulen = uloc_getDisplayName(itemPtr->namedLocale, itemPtr->displayLocale, getName, kDisplayNameBracketsMax, &status);
         if ( U_FAILURE(status) || u_strcmp(getName, expectLocaleName) != 0 ) {
-            log_err("uloc_getDisplayName for displayLocale %s and namedLocale %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedLocale, myErrorName(status));
+            log_data_err("uloc_getDisplayName for displayLocale %s and namedLocale %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedLocale, myErrorName(status));
         }
 
         status = U_ZERO_ERROR;
@@ -1079,13 +1079,13 @@ static void TestDisplayNameBrackets()
             status = U_ZERO_ERROR;
             ulen = uldn_regionDisplayName(uldn, itemPtr->namedRegion, getName, kDisplayNameBracketsMax, &status);
             if ( U_FAILURE(status) || u_strcmp(getName, expectRegionName) != 0 ) {
-                log_err("uldn_regionDisplayName for displayLocale %s and namedRegion %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedRegion, myErrorName(status));
+                log_data_err("uldn_regionDisplayName for displayLocale %s and namedRegion %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedRegion, myErrorName(status));
             }
 
             status = U_ZERO_ERROR;
             ulen = uldn_localeDisplayName(uldn, itemPtr->namedLocale, getName, kDisplayNameBracketsMax, &status);
             if ( U_FAILURE(status) || u_strcmp(getName, expectLocaleName) != 0 ) {
-                log_err("uldn_localeDisplayName for displayLocale %s and namedLocale %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedLocale, myErrorName(status));
+                log_data_err("uldn_localeDisplayName for displayLocale %s and namedLocale %s returns unexpected name or status %s\n", itemPtr->displayLocale, itemPtr->namedLocale, myErrorName(status));
             }
 
             uldn_close(uldn);

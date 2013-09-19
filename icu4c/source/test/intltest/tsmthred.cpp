@@ -723,6 +723,9 @@ void ThreadSafeFormat::init(UErrorCode &status) {
   gFormat.adoptInstead(createFormat(status));
   gYDDThing.adoptObject(new CurrencyAmount(123.456, kYDD, status));
   gBBDThing.adoptObject(new CurrencyAmount(987.654, kBBD, status));
+  if (U_FAILURE(status)) {
+      return;
+  }
   gFormat->format(gYDDThing, gYDDStr, NULL, status);
   gFormat->format(gBBDThing, gBBDStr, NULL, status);
 }
@@ -1023,7 +1026,7 @@ void MultithreadTest::TestThreadedIntl()
     UErrorCode threadSafeErr = U_ZERO_ERROR;
 
     ThreadSafeFormat::init(threadSafeErr);
-    assertSuccess("initializing ThreadSafeFormat", threadSafeErr);
+    assertSuccess("initializing ThreadSafeFormat", threadSafeErr, TRUE);
 
     //
     //  Create and start the test threads
@@ -1084,7 +1087,7 @@ void MultithreadTest::TestThreadedIntl()
     //  All threads have finished.
     //
     ThreadSafeFormat::fini(threadSafeErr);
-    assertSuccess("finalizing ThreadSafeFormat", threadSafeErr);
+    assertSuccess("finalizing ThreadSafeFormat", threadSafeErr, TRUE);
 }
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

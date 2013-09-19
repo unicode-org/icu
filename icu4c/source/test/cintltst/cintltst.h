@@ -117,6 +117,12 @@ U_CFUNC UBool ctest_resetICU(void);
 U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec);
 
 /**
+ * Assert that the given UErrorCode succeeds, and return TRUE if it does.
+ * Give data error if UErrorCode fails and possibleDataError is TRUE.
+ */
+U_CFUNC UBool assertSuccessCheck(const char* msg, UErrorCode* ec, UBool possibleDataError);
+
+/**
  * Assert that the UBool is TRUE, and return TRUE if it does.
  *
  * NOTE: Use 'int condition' rather than 'UBool condition' so the

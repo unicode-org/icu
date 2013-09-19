@@ -2282,7 +2282,7 @@ void CollationAPITest::TestIterNumeric() {
     // and on the implementation code.
     IcuTestErrorCode errorCode(*this, "TestIterNumeric");
     RuleBasedCollator coll(UnicodeString("[reorder Hang Hani]"), errorCode);
-    if(errorCode.logIfFailureAndReset("RuleBasedCollator constructor")) {
+    if(errorCode.logDataIfFailureAndReset("RuleBasedCollator constructor")) {
         return;
     }
     coll.setAttribute(UCOL_NUMERIC_COLLATION, UCOL_ON, errorCode);

@@ -578,7 +578,7 @@ void IntlTestDecimalFormatAPI::TestScale()
 
 
 #define ASSERT_EQUAL(expect, actual) { char tmp[200]; sprintf(tmp, "(%g==%g)", (double)(expect), (double)(actual)); \
-    assertTrue(tmp, ((expect)==(actual)), FALSE, FALSE, __FILE__, __LINE__); }
+    assertTrue(tmp, ((expect)==(actual)), FALSE, TRUE, __FILE__, __LINE__); }
 
 void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     UErrorCode status = U_ZERO_ERROR;
@@ -786,7 +786,7 @@ void IntlTestDecimalFormatAPI::TestFixedDecimal() {
     //       int64_t fields to 18 digits. See ticket Ticket #10374
     // ASSERT_EQUAL(223372036854775807LL, fd.intValue);
     if (!(fd.intValue == 223372036854775807LL || fd.intValue == 9223372036854775807LL)) {
-        errln("File %s, Line %d, fd.intValue = %lld", __FILE__, __LINE__, fd.intValue);
+        dataerrln("File %s, Line %d, fd.intValue = %lld", __FILE__, __LINE__, fd.intValue);
     }
     ASSERT_EQUAL(TRUE, fd.hasIntegerValue);
     ASSERT_EQUAL(FALSE, fd.isNegative);
