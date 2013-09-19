@@ -292,10 +292,10 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
           }
           break;
 		case 32:
-          name = "Test10249";
+          name = "TestIslamicTabularDates";
           if(exec) {
-            logln("Test10249---"); logln("");
-            Test10249();
+            logln("TestIslamicTabularDates---"); logln("");
+            TestIslamicTabularDates();
           }
           break;
         default: name = ""; break;
@@ -2854,7 +2854,7 @@ void CalendarTest::Test8449() {
     delete tstCal;
 }            
 
-void CalendarTest::Test10249() {
+void CalendarTest::TestIslamicTabularDates() {
     UErrorCode status = U_ZERO_ERROR;
     Locale islamicLoc("ar_SA@calendar=islamic-civil"); 
     Locale tblaLoc("ar_SA@calendar=islamic-tbla"); 
