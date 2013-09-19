@@ -37,33 +37,31 @@
  * http://unicode.org/repos/cldr-tmp/trunk/diff/supplemental/language_plural_rules.html
  */
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Type of plurals and PluralRules.
- * @draft ICU 50
+ * @stable ICU 50
  */
 enum UPluralType {
     /**
      * Plural rules for cardinal numbers: 1 file vs. 2 files.
-     * @draft ICU 50
+     * @stable ICU 50
      */
     UPLURAL_TYPE_CARDINAL,
     /**
      * Plural rules for ordinal numbers: 1st file, 2nd file, 3rd file, 4th file, etc.
-     * @draft ICU 50
+     * @stable ICU 50
      */
     UPLURAL_TYPE_ORDINAL,
     /**
      * Number of Plural rules types.
-     * @draft ICU 50
+     * @stable ICU 50
      */
     UPLURAL_TYPE_COUNT
 };
 /**
- * @draft ICU 50
+ * @stable ICU 50
  */
 typedef enum UPluralType UPluralType;
-#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Opaque UPluralRules object for use in C programs.
@@ -84,7 +82,6 @@ typedef struct UPluralRules UPluralRules;  /**< C typedef for struct UPluralRule
 U_STABLE UPluralRules* U_EXPORT2
 uplrules_open(const char *locale, UErrorCode *status);
 
-#ifndef U_HIDE_DRAFT_API
 /**
  * Opens a new UPluralRules object using the predefined plural rules for a
  * given locale and the plural type.
@@ -92,11 +89,10 @@ uplrules_open(const char *locale, UErrorCode *status);
  * @param type The plural type (e.g., cardinal or ordinal).
  * @param status A pointer to a UErrorCode to receive any errors.
  * @return A UPluralRules for the specified locale, or NULL if an error occurred.
- * @draft ICU 50
+ * @stable ICU 50
  */
 U_DRAFT UPluralRules* U_EXPORT2
 uplrules_openForType(const char *locale, UPluralType type, UErrorCode *status);
-#endif /* U_HIDE_DRAFT_API */
 
 /**
  * Closes a UPluralRules object. Once closed it may no longer be used.

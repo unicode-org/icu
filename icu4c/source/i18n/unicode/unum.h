@@ -891,21 +891,19 @@ typedef enum UNumberFormatAttribute {
   UNUM_MAX_NONBOOLEAN_ATTRIBUTE = 0x0FFF,
 #endif  /* U_HIDE_INTERNAL_API */
 
-#ifndef U_HIDE_DRAFT_API
   /** If 1, specifies that if setting the "max integer digits" attribute would truncate a value, set an error status rather than silently truncating.
    * For example,  formatting the value 1234 with 4 max int digits would succeed, but formatting 12345 would fail. There is no effect on parsing.
    * Default: 0 (not set)
-   * @draft ICU 50
+   * @stable ICU 50
    */
   UNUM_FORMAT_FAIL_IF_MORE_THAN_MAX_DIGITS = 0x1000,
   /** 
    * if this attribute is set to 1, specifies that, if the pattern doesn't contain an exponent, the exponent will not be parsed. If the pattern does contain an exponent, this attribute has no effect.
    * Has no effect on formatting.
    * Default: 0 (unset)
-   * @draft ICU 50
+   * @stable ICU 50
    */
   UNUM_PARSE_NO_EXPONENT,
-#endif /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_INTERNAL_API
   /** Limit of boolean attributes.

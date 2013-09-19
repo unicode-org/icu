@@ -36,7 +36,7 @@
 U_CDECL_BEGIN
 // Forward declaration.
 struct UHashtable;
-typedef struct UHashtable UHashtable;
+typedef struct UHashtable UHashtable; /**< @internal */
 U_CDECL_END
 
 U_NAMESPACE_BEGIN

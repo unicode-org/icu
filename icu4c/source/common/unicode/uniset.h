@@ -23,7 +23,7 @@
 U_NAMESPACE_BEGIN
 
 // Forward Declarations.
-void UnicodeSet_initInclusion(int32_t src, UErrorCode &status);
+void UnicodeSet_initInclusion(int32_t src, UErrorCode &status); /**< @internal */
 
 class BMPSet;
 class ParsePosition;
