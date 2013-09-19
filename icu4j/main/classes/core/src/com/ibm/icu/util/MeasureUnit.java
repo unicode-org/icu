@@ -169,7 +169,7 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
                     ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle codeMap = bundle.get("codeMap");
             for (Enumeration<String> it = codeMap.getKeys(); it.hasMoreElements();) {
-                MeasureUnit.addUnit("currency", it.nextElement(), Currency.CURRENCY_FACTORY);
+                MeasureUnit.addUnit("currency", it.nextElement(), CURRENCY_FACTORY);
             }
         } catch (MissingResourceException e) {
             // fall through
