@@ -2376,7 +2376,7 @@ void TestGetWindowsTimeZoneID() {
         if (U_FAILURE(status)) {
             log_data_err("FAIL: Windows ID for America/New_York, status %s\n", u_errorName(status)); 
         } else if (len != u_strlen(winEastern) || u_strncmp(winID, winEastern, len) != 0) {
-            log_err("FAIL: Windows ID for America/New_York\n");
+            log_data_err("FAIL: Windows ID for America/New_York\n");
         }
     }
     {
@@ -2385,7 +2385,7 @@ void TestGetWindowsTimeZoneID() {
         if (U_FAILURE(status)) {
             log_data_err("FAIL: Windows ID for America/Toronto, status %s\n", u_errorName(status)); 
         } else if (len != u_strlen(winEastern) || u_strncmp(winID, winEastern, len) != 0) {
-            log_err("FAIL: Windows ID for America/Toronto\n");
+            log_data_err("FAIL: Windows ID for America/Toronto\n");
         }
     }
     {
@@ -2394,7 +2394,7 @@ void TestGetWindowsTimeZoneID() {
         if (U_FAILURE(status)) {
             log_data_err("FAIL: Windows ID for Bogus, status %s\n", u_errorName(status)); 
         } else if (len != 0) {
-            log_err("FAIL: Windows ID for Bogus\n");
+            log_data_err("FAIL: Windows ID for Bogus\n");
         }
     }
 }

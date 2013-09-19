@@ -905,8 +905,12 @@ void IntlTest::dataerrln( const UnicodeString &message )
         msg = UnicodeString("[DATA] " + message);
     }
 
-    if (!no_err_msg && ( errCount == 1 )) {
-      LL_message( msg + " - (Are you missing data?)", TRUE ); // only show this message the first time
+    if (!no_err_msg) {
+      if ( errCount == 1) {
+          LL_message( msg + " - (Are you missing data?)", TRUE ); // only show this message the first time
+      } else {
+          LL_message( msg , TRUE );
+      }
     }
 }
 
@@ -1894,11 +1898,18 @@ UBool IntlTest::assertEquals(const char* message,
 #if !UCONFIG_NO_FORMATTING
 UBool IntlTest::assertEquals(const char* message,
                              const Formattable& expected,
-                             const Formattable& actual) {
+                             const Formattable& actual,
+                             UBool possibleDataError) {
     if (expected != actual) {
-        errln((UnicodeString)"FAIL: " + message + "; got " +
-              toString(actual) +
-              "; expected " + toString(expected));
+        if (possibleDataError) {
+            dataerrln((UnicodeString)"FAIL: " + message + "; got " +
+                  toString(actual) +
+                  "; expected " + toString(expected));
+        } else {
+            errln((UnicodeString)"FAIL: " + message + "; got " +
+                  toString(actual) +
+                  "; expected " + toString(expected));
+        }
         return FALSE;
     }
 #ifdef VERBOSE_ASSERTIONS
@@ -1934,8 +1945,9 @@ UBool IntlTest::assertSuccess(const UnicodeString& message, UErrorCode ec) {
 
 UBool IntlTest::assertEquals(const UnicodeString& message,
                              const UnicodeString& expected,
-                             const UnicodeString& actual) {
-    return assertEquals(extractToAssertBuf(message), expected, actual);
+                             const UnicodeString& actual,
+                             UBool possibleDataError) {
+    return assertEquals(extractToAssertBuf(message), expected, actual, possibleDataError);
 }
 
 UBool IntlTest::assertEquals(const UnicodeString& message,

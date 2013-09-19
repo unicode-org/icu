@@ -1205,7 +1205,7 @@ void DateIntervalFormatTest::testYearFormats() {
     {
         LocalPointer<DateIntervalFormat> dif(DateIntervalFormat::createInstance("yyyyMd", enLocale, status));
         if (U_FAILURE(status)) {
-            errln("Failure encountered: %s", u_errorName(status));
+            dataerrln("Failure encountered: %s", u_errorName(status));
             return;
         }
         UnicodeString actual;

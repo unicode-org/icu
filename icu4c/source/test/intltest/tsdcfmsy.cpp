@@ -217,7 +217,7 @@ void IntlTestDecimalFormatSymbols::testLastResortData() {
         return;
     }
     DecimalFormatSymbols root(Locale::getRoot(), errorCode);
-    if(errorCode.logIfFailureAndReset("DecimalFormatSymbols(root) failed")) {
+    if(errorCode.logDataIfFailureAndReset("DecimalFormatSymbols(root) failed")) {
         return;
     }
     // Note: It is not necessary that the last resort data matches the root locale,

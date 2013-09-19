@@ -652,13 +652,22 @@ static void ctst_freeAll() {
 
 #define VERBOSE_ASSERTIONS
 
-U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec) {
+U_CFUNC UBool assertSuccessCheck(const char* msg, UErrorCode* ec, UBool possibleDataError) {
     U_ASSERT(ec!=NULL);
     if (U_FAILURE(*ec)) {
-        log_err_status(*ec, "FAIL: %s (%s)\n", msg, u_errorName(*ec));
+        if (possibleDataError) {
+            log_data_err("FAIL: %s (%s)\n", msg, u_errorName(*ec));
+        } else {
+            log_err_status(*ec, "FAIL: %s (%s)\n", msg, u_errorName(*ec));
+        }
         return FALSE;
     }
     return TRUE;
+}
+
+U_CFUNC UBool assertSuccess(const char* msg, UErrorCode* ec) {
+    U_ASSERT(ec!=NULL);
+    return assertSuccessCheck(msg, ec, FALSE);
 }
 
 /* if 'condition' is a UBool, the compiler complains bitterly about

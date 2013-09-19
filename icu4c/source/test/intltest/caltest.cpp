@@ -23,8 +23,13 @@
 
 #define mkcstr(U) u_austrcpy(calloc(8, u_strlen(U) + 1), U)
 
-#define TEST_CHECK_STATUS {if (U_FAILURE(status)) {errln("%s:%d: Test failure.  status=%s", \
-                                                              __FILE__, __LINE__, u_errorName(status)); return;}}
+#define TEST_CHECK_STATUS { \
+    if (U_FAILURE(status)) { \
+        if (status == U_MISSING_RESOURCE_ERROR) { \
+            dataerrln("%s:%d: Test failure.  status=%s", __FILE__, __LINE__, u_errorName(status)); \
+        } else { \
+            errln("%s:%d: Test failure.  status=%s", __FILE__, __LINE__, u_errorName(status)); \
+        } return;}}
 
 #define TEST_ASSERT(expr) {if ((expr)==FALSE) {errln("%s:%d: Test failure \n", __FILE__, __LINE__);};}
 

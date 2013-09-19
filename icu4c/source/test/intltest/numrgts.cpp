@@ -2697,11 +2697,14 @@ void NumberFormatRegressionTest::TestJ691(void) {
 //   Error Checking / Reporting macros
 //
 //---------------------------------------------------------------------------
-#define TEST_CHECK_STATUS(status) \
-    if (U_FAILURE(status)) {\
-        errln("File %s, Line %d.  status=%s\n", __FILE__, __LINE__, u_errorName(status));\
-        return;\
-    }
+#define TEST_CHECK_STATUS(status) { \
+    if (U_FAILURE(status)) { \
+        if (status == U_MISSING_RESOURCE_ERROR) { \
+            dataerrln("File %s, Line %d: status=%s", __FILE__, __LINE__, u_errorName(status)); \
+        } else { \
+            errln("File %s, Line %d: status=%s", __FILE__, __LINE__, u_errorName(status)); \
+        } return; \
+    }}
 
 #define TEST_ASSERT(expr) \
     if ((expr)==FALSE) {\

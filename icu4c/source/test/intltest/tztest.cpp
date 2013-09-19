@@ -2328,7 +2328,7 @@ void TimeZoneTest::TestGetWindowsID(void) {
 
         TimeZone::getWindowsID(UnicodeString(TESTDATA[i].id), windowsID, sts);
         assertSuccess(TESTDATA[i].id, sts);
-        assertEquals(TESTDATA[i].id, UnicodeString(TESTDATA[i].winid), windowsID);
+        assertEquals(TESTDATA[i].id, UnicodeString(TESTDATA[i].winid), windowsID, TRUE);
     }
 }
 
@@ -2357,7 +2357,7 @@ void TimeZoneTest::TestGetIDForWindowsID(void) {
         TimeZone::getIDForWindowsID(UnicodeString(TESTDATA[i].winid), TESTDATA[i].region,
                                     id, sts);
         assertSuccess(UnicodeString(TESTDATA[i].winid) + "/" + TESTDATA[i].region, sts);
-        assertEquals(UnicodeString(TESTDATA[i].winid) + "/" + TESTDATA[i].region, TESTDATA[i].id, id);
+        assertEquals(UnicodeString(TESTDATA[i].winid) + "/" + TESTDATA[i].region, TESTDATA[i].id, id, TRUE);
     }
 }
 

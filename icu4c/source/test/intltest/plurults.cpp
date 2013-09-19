@@ -849,7 +849,7 @@ void PluralRulesTest::testAvailbleLocales() {
     for (;;) {
         const char *locale = localesEnum->next(NULL, status);
         if (U_FAILURE(status)) {
-            errln("file %s,  line %d: Error status = %s", __FILE__, __LINE__, u_errorName(status));
+            dataerrln("file %s,  line %d: Error status = %s", __FILE__, __LINE__, u_errorName(status));
             return;
         }
         if (locale == NULL) {
