@@ -553,13 +553,13 @@ unum_formatDecimal(    const    UNumberFormat*  fmt,
  * @see UFieldPosition
  * @stable ICU 3.0
  */
-U_STABLE int32_t U_EXPORT2 
+U_STABLE int32_t U_EXPORT2
 unum_formatDoubleCurrency(const UNumberFormat* fmt,
                           double number,
                           UChar* currency,
                           UChar* result,
                           int32_t resultLength,
-                          UFieldPosition* pos, /* ignored if 0 */
+                          UFieldPosition* pos,
                           UErrorCode* status);
 
 /**
@@ -578,7 +578,7 @@ unum_formatDoubleCurrency(const UNumberFormat* fmt,
  * parameter may be NULL, in which case it is ignored.
  * @param status a pointer to an input-output UErrorCode
  * @return the total buffer size needed; if greater than resultLength,
- * the output was truncated.
+ * the output was truncated. Will return 0 on error.
  * @see unum_parseToUFormattable
  * @draft ICU 52
  */
@@ -587,7 +587,7 @@ unum_formatUFormattable(const UNumberFormat* fmt,
                         const UFormattable *number,
                         UChar *result,
                         int32_t resultLength,
-                        UFieldPosition *pos, /* ignored if 0 */
+                        UFieldPosition *pos,
                         UErrorCode *status);
 
 /**

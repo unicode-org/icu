@@ -218,7 +218,7 @@ UnicodeString toString(int32_t n) {
 
 
 UnicodeString toString(UBool b) {
-  return b ? UnicodeString("TRUE"):UnicodeString("false");
+  return b ? UnicodeString("TRUE"):UnicodeString("FALSE");
 }
 
 // stephen - cleaned up 05/05/99
