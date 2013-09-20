@@ -401,7 +401,7 @@ Formattable::getLong(UErrorCode& status) const
     switch (fType) {
     case Formattable::kLong: 
         return (int32_t)fValue.fInt64;
-    case Formattable::kInt64: 
+    case Formattable::kInt64:
         if (fValue.fInt64 > INT32_MAX) {
             status = U_INVALID_FORMAT_ERROR;
             return INT32_MAX;
@@ -893,8 +893,11 @@ FormattableStreamer::streamOut(ostream& stream, const Formattable& obj)
 
 #endif
 
-/* ---- UFormattable stuff ---- */
+U_NAMESPACE_END
 
+/* ---- UFormattable implementation ---- */
+
+U_NAMESPACE_USE
 
 U_DRAFT UFormattable* U_EXPORT2
 ufmt_open(UErrorCode *status) {
@@ -917,49 +920,24 @@ ufmt_close(UFormattable *fmt) {
 }
 
 U_INTERNAL UFormattableType U_EXPORT2
-ufmt_getType(UFormattable *fmt, UErrorCode *status) {
+ufmt_getType(const UFormattable *fmt, UErrorCode *status) {
   if(U_FAILURE(*status)) {
     return (UFormattableType)-1;
   }
-  Formattable *obj = Formattable::fromUFormattable(fmt);
-  switch( obj->getType() ) {
-  case Formattable::kDate:
-    return UFMT_DATE;
-    break;
-  case Formattable::kDouble:
-    return UFMT_DOUBLE;
-    break;
-  case Formattable::kLong:
-    return UFMT_LONG;
-    break;
-  case Formattable::kString:
-    return UFMT_STRING;
-    break;
-  case Formattable::kArray:
-    return UFMT_ARRAY;
-    break;
-  case Formattable::kInt64:
-    return UFMT_INT64;
-    break;
-  case Formattable::kObject:
-    return UFMT_OBJECT;
-    break;
-  default:
-    *status = U_ILLEGAL_ARGUMENT_ERROR;
-    return (UFormattableType)-1; // invalid
-  }
+  const Formattable *obj = Formattable::fromUFormattable(fmt);
+  return (UFormattableType)obj->getType();
 }
 
 
 U_INTERNAL UBool U_EXPORT2
-ufmt_isNumeric(UFormattable *fmt) {
-  Formattable *obj = Formattable::fromUFormattable(fmt);
+ufmt_isNumeric(const UFormattable *fmt) {
+  const Formattable *obj = Formattable::fromUFormattable(fmt);
   return obj->isNumeric();
 }
 
 U_DRAFT UDate U_EXPORT2
-ufmt_getDate(UFormattable *fmt, UErrorCode *status) {
-  Formattable *obj = Formattable::fromUFormattable(fmt);
+ufmt_getDate(const UFormattable *fmt, UErrorCode *status) {
+  const Formattable *obj = Formattable::fromUFormattable(fmt);
 
   return obj->getDate(*status);
 }
@@ -980,8 +958,8 @@ ufmt_getLong(UFormattable *fmt, UErrorCode *status) {
 
 
 U_DRAFT const void *U_EXPORT2
-ufmt_getObject(UFormattable *fmt, UErrorCode *status) {
-  Formattable *obj = Formattable::fromUFormattable(fmt);
+ufmt_getObject(const UFormattable *fmt, UErrorCode *status) {
+  const Formattable *obj = Formattable::fromUFormattable(fmt);
 
   const void *ret = obj->getObject();
   if( ret==NULL &&
@@ -1013,8 +991,8 @@ ufmt_getUChars(UFormattable *fmt, int32_t *len, UErrorCode *status) {
 }
 
 U_DRAFT int32_t U_EXPORT2
-ufmt_getArrayLength(UFormattable* fmt, UErrorCode *status) {
-  Formattable *obj = Formattable::fromUFormattable(fmt);
+ufmt_getArrayLength(const UFormattable* fmt, UErrorCode *status) {
+  const Formattable *obj = Formattable::fromUFormattable(fmt);
 
   int32_t count;
   (void)obj->getArray(count, *status);
@@ -1057,34 +1035,11 @@ ufmt_getDecNumChars(UFormattable *fmt, int32_t *len, UErrorCode *status) {
   }
 }
 
-// make-a-copy version
-// U_DRAFT int32_t U_EXPORT2
-// ufmt_getDecNumChars(UFormattable *fmt, char *buf, int32_t len, UErrorCode *status) {
-//   if(U_FAILURE(*status)) {
-//     return 0;
-//   }
-//   Formattable *obj = Formattable::fromUFormattable(fmt);
-//   CharString *charString = obj->internalGetCharString(*status);
-//   if(U_FAILURE(*status)) {
-//     return 0;
-//   }
-//   if(charString == NULL) {
-//     *status = U_MEMORY_ALLOCATION_ERROR;
-//     return 0;
-//   } else {
-//     return charString->extract(buf, len, *status);
-//   }
-// }
-
-
 U_DRAFT int64_t U_EXPORT2
 ufmt_getInt64(UFormattable *fmt, UErrorCode *status) {
   Formattable *obj = Formattable::fromUFormattable(fmt);
   return obj->getInt64(*status);
 }
-
-
-U_NAMESPACE_END
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
