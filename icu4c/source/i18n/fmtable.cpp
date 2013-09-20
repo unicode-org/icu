@@ -922,7 +922,7 @@ ufmt_close(UFormattable *fmt) {
 U_INTERNAL UFormattableType U_EXPORT2
 ufmt_getType(const UFormattable *fmt, UErrorCode *status) {
   if(U_FAILURE(*status)) {
-    return (UFormattableType)-1;
+    return (UFormattableType)UFMT_COUNT;
   }
   const Formattable *obj = Formattable::fromUFormattable(fmt);
   return (UFormattableType)obj->getType();
