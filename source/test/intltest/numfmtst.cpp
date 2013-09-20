@@ -6832,6 +6832,7 @@ UBool NumberFormatTest::testFormattableAsUFormattable(const char *file, int line
       const UChar* uch = ufmt_getUChars(u, &len, &valueStatus);
       if(U_SUCCESS(valueStatus)) {
         UnicodeString str2(uch, len);
+        assertTrue("UChar* NULL-terminated", uch[len]==0);
         exactMatch = (str == str2);
       }
       triedExact = TRUE;

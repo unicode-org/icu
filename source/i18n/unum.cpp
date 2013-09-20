@@ -790,13 +790,20 @@ unum_parseToUFormattable(const UNumberFormat* fmt,
                          int32_t textLength,
                          int32_t* parsePos, /* 0 = start */
                          UErrorCode* status) {
-  if(result == NULL) { // allocate if not allocated.
-    result = ufmt_open(status); // does an error check
+  UFormattable *newFormattable = NULL;
+  if (U_FAILURE(*status)) return result;
+  if (fmt == NULL) {
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return result;
   }
-  if(U_FAILURE(*status)) return result;
-
+  if (result == NULL) { // allocate if not allocated.
+    newFormattable = result = ufmt_open(status);
+  }
   parseRes(*(Formattable::fromUFormattable(result)), fmt, text, textLength, parsePos, status);
-
+  if (U_FAILURE(*status) && newFormattable != NULL) {
+    ufmt_close(newFormattable);
+    result = NULL; // deallocate if there was a parse error
+  }
   return result;
 }
 
@@ -807,16 +814,15 @@ unum_formatUFormattable(const UNumberFormat* fmt,
                         int32_t resultLength,
                         UFieldPosition *pos, /* ignored if 0 */
                         UErrorCode *status) {
-  // cribbed from unum_formatInt64
-    if(U_FAILURE(*status))
-        return -1;
-
-    UnicodeString res;
-    if(!(result==NULL && resultLength==0)) {
-        // NULL destination for pure preflighting: empty dummy string
-        // otherwise, alias the destination buffer
-        res.setTo(result, 0, resultLength);
+    if (U_FAILURE(*status)) {
+      return 0;
     }
+    if (fmt == NULL || number==NULL ||
+        (result==NULL ? resultLength!=0 : resultLength<0)) {
+      *status = U_ILLEGAL_ARGUMENT_ERROR;
+      return 0;
+    }
+    UnicodeString res(result, 0, resultLength);
 
     FieldPosition fp;
 

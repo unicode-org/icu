@@ -25,8 +25,8 @@
  * See {@link unum_parseToUFormattable} for example code.
  */
 
-#ifndef FORMATTABLE_H
-#define FORMATTABLE_H
+#ifndef UFORMATTABLE_H
+#define UFORMATTABLE_H
 
 #include "unicode/utypes.h"
 
@@ -45,10 +45,10 @@ typedef enum UFormattableType {
   UFMT_DATE = 0, /**< ufmt_getDate() will return without conversion. @see ufmt_getDate*/
   UFMT_DOUBLE,   /**< ufmt_getDouble() will return without conversion.  @see ufmt_getDouble*/
   UFMT_LONG,     /**< ufmt_getLong() will return without conversion. @see ufmt_getLong */
-  UFMT_INT64,    /**< ufmt_getInt64() will return without conversion. @see ufmt_getInt64 */
-  UFMT_OBJECT,   /**< ufmt_getObject() will return without conversion.  @see ufmt_getObject*/
   UFMT_STRING,   /**< ufmt_getUChars() will return without conversion.  @see ufmt_getUChars*/
   UFMT_ARRAY,    /**< ufmt_countArray() and ufmt_getArray() will return the value.  @see ufmt_getArrayItemByIndex */
+  UFMT_INT64,    /**< ufmt_getInt64() will return without conversion. @see ufmt_getInt64 */
+  UFMT_OBJECT,   /**< ufmt_getObject() will return without conversion.  @see ufmt_getObject*/
   UFMT_COUNT     /**< Count of defined UFormattableType values */
 } UFormattableType;
 
@@ -76,7 +76,7 @@ ufmt_open(UErrorCode* status);
 
 /**
  * Cleanup any additional memory allocated by this UFormattable.
- * @param fmt the formatter 
+ * @param fmt the formatter
  * @draft ICU 52
  * @see ufmt_open
  */
@@ -113,7 +113,7 @@ U_NAMESPACE_END
  * @draft ICU 52
  */
 U_DRAFT UFormattableType U_EXPORT2
-ufmt_getType(UFormattable* fmt, UErrorCode *status);
+ufmt_getType(const UFormattable* fmt, UErrorCode *status);
 
 /**
  * Return whether the object is numeric.
@@ -124,7 +124,7 @@ ufmt_getType(UFormattable* fmt, UErrorCode *status);
  * @draft ICU 52
  */
 U_DRAFT UBool U_EXPORT2
-ufmt_isNumeric(UFormattable* fmt);
+ufmt_isNumeric(const UFormattable* fmt);
 
 /**
  * Gets the UDate value of this object.  If the type is not of type UFMT_DATE,
@@ -137,12 +137,12 @@ ufmt_isNumeric(UFormattable* fmt);
  * @see icu::Formattable::getDate(UErrorCode&) const
  */
 U_DRAFT UDate U_EXPORT2
-ufmt_getDate(UFormattable* fmt, UErrorCode *status);
+ufmt_getDate(const UFormattable* fmt, UErrorCode *status);
 
 /**
  * Gets the double value of this object. If the type is not a UFMT_DOUBLE, or
  * if there are additional significant digits than fit in a double type,
- * a conversion is performed with  possible loss of precision. 
+ * a conversion is performed with  possible loss of precision.
  * If the type is UFMT_OBJECT and the
  * object is a Measure, then the result of
  * getNumber().getDouble(status) is returned.  If this object is
@@ -201,7 +201,7 @@ ufmt_getInt64(UFormattable* fmt, UErrorCode *status);
 
 /**
  * Returns a pointer to the UObject contained within this
- * formattable (as a const void*), or NULL if this object 
+ * formattable (as a const void*), or NULL if this object
  * is not of type UFMT_OBJECT.
  * @param fmt the UFormattable object
  * @param status the error code - any conversion or format errors
@@ -210,7 +210,7 @@ ufmt_getInt64(UFormattable* fmt, UErrorCode *status);
  * @see icu::Formattable::getObject() const
  */
 U_DRAFT const void *U_EXPORT2
-ufmt_getObject(UFormattable* fmt, UErrorCode *status);
+ufmt_getObject(const UFormattable* fmt, UErrorCode *status);
 
 /**
  * Gets the string value of this object as a UChar string. If the type is not a
@@ -236,7 +236,7 @@ ufmt_getUChars(UFormattable* fmt, int32_t *len, UErrorCode *status);
  * @see ufmt_getArrayItemByIndex
  */
 U_DRAFT int32_t U_EXPORT2
-ufmt_getArrayLength(UFormattable* fmt, UErrorCode *status);
+ufmt_getArrayLength(const UFormattable* fmt, UErrorCode *status);
 
 /**
  * Get the specified value from the array of UFormattables. Invalid if the object is not an array type UFMT_ARRAY
@@ -258,7 +258,7 @@ ufmt_getArrayItemByIndex(UFormattable* fmt, int32_t n, UErrorCode *status);
  * the limits of a double floating point or a 64 bit int.
  *
  * This function is not thread safe, and therfore is not declared const,
- * even though it is logically const. 
+ * even though it is logically const.
  * The resulting buffer is owned by the UFormattable and is invalid if any other functions are
  * called on the UFormattable.
  *
