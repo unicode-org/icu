@@ -2219,7 +2219,7 @@ static void TestUFormattable(void) {
       log_verbose("-- pattern: %s\n", pattern);
       u_uastrcpy(buffer, pattern);
       unum_parseToUFormattable(unum, ufmt, buffer, -1, NULL, &status);
-      if(assertSuccess("unum_parseToUFormattable[31337]", &status)) {
+      if(assertSuccess("unum_parseToUFormattable(31337)", &status)) {
         assertTrue("ufmt_getLong()=31337", ufmt_getLong(ufmt, &status) == 31337);
         assertTrue("ufmt_getType()=UFMT_LONG", ufmt_getType(ufmt, &status) == UFMT_LONG);
         log_verbose("long = %d\n", ufmt_getLong(ufmt, &status));
@@ -2234,7 +2234,7 @@ static void TestUFormattable(void) {
       log_verbose("-- pattern: %s\n", pattern);
       u_uastrcpy(buffer, pattern);
       unum_parseToUFormattable(unum, ufmt, buffer, -1, NULL, &status);
-      if(assertSuccess("unum_parseToUFormattable[3.14159]", &status)) {
+      if(assertSuccess("unum_parseToUFormattable(3.14159)", &status)) {
         assertTrue("ufmt_getDouble()==3.14159", withinErr(ufmt_getDouble(ufmt, &status), 3.14159, 1e-15));
         assertSuccess("ufmt_getDouble()", &status);
         assertTrue("ufmt_getType()=UFMT_DOUBLE", ufmt_getType(ufmt, &status) == UFMT_DOUBLE);

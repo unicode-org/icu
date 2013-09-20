@@ -596,8 +596,8 @@ unum_formatUFormattable(const UNumberFormat* fmt,
 * @param fmt The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
-* @param parsePos If not 0, on input a pointer to an integer specifying the offset at which
-* to begin parsing.  If not 0, on output the offset at which parsing ended.
+* @param parsePos If not NULL, on input a pointer to an integer specifying the offset at which
+* to begin parsing.  If not NULL, on output the offset at which parsing ended.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The value of the parsed integer
 * @see unum_parseInt64
@@ -620,8 +620,8 @@ unum_parse(    const   UNumberFormat*  fmt,
 * @param fmt The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
-* @param parsePos If not 0, on input a pointer to an integer specifying the offset at which
-* to begin parsing.  If not 0, on output the offset at which parsing ended.
+* @param parsePos If not NULL, on input a pointer to an integer specifying the offset at which
+* to begin parsing.  If not NULL, on output the offset at which parsing ended.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The value of the parsed integer
 * @see unum_parse
@@ -644,8 +644,8 @@ unum_parseInt64(const UNumberFormat*  fmt,
 * @param fmt The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
-* @param parsePos If not 0, on input a pointer to an integer specifying the offset at which
-* to begin parsing.  If not 0, on output the offset at which parsing ended.
+* @param parsePos If not NULL, on input a pointer to an integer specifying the offset at which
+* to begin parsing.  If not NULL, on output the offset at which parsing ended.
 * @param status A pointer to an UErrorCode to receive any errors
 * @return The value of the parsed double
 * @see unum_parse
@@ -672,8 +672,8 @@ unum_parseDouble(    const   UNumberFormat*  fmt,
 * @param fmt The formatter to use.
 * @param text The text to parse.
 * @param textLength The length of text, or -1 if null-terminated.
-* @param parsePos If not 0, on input a pointer to an integer specifying the offset at which
-*                 to begin parsing.  If not 0, on output the offset at which parsing ended.
+* @param parsePos If not NULL, on input a pointer to an integer specifying the offset at which
+*                 to begin parsing.  If not NULL, on output the offset at which parsing ended.
 * @param outBuf A (char *) buffer to receive the parsed number as a string.  The output string
 *               will be nul-terminated if there is sufficient space.
 * @param outBufLength The size of the output buffer.  May be zero, in which case
@@ -705,7 +705,7 @@ unum_parseDecimal(const   UNumberFormat*  fmt,
  * @param textLength the length of text, or -1 if null-terminated
  * @param parsePos a pointer to an offset index into text at which to
  * begin parsing. On output, *parsePos will point after the last
- * parsed character.  This parameter may be 0, in which case parsing
+ * parsed character.  This parameter may be NULL, in which case parsing
  * begins at offset 0.
  * @param currency a pointer to the buffer to receive the parsed null-
  * terminated currency.  This buffer must have a capacity of at least
@@ -734,7 +734,7 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
  * @param textLength the length of text, or -1 if null-terminated
  * @param parsePos a pointer to an offset index into text at which to
  * begin parsing. On output, *parsePos will point after the last
- * parsed character.  This parameter may be 0, in which case parsing
+ * parsed character.  This parameter may be NULL in which case parsing
  * begins at offset 0.
  * @param status a pointer to an input-output UErrorCode
  * @return the UFormattable.  Will be ==result unless NULL was passed in for result, in which case it will be the newly opened UFormattable.

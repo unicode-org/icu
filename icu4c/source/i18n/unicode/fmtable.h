@@ -624,6 +624,14 @@ public:
      */
     inline UFormattable *toUFormattable();
 
+    /**
+     * Convert this object pointer to a UFormattable.
+     * @return this object as a UFormattable pointer.   This is an alias to this object,
+     * and so is only valid while this object remains in scope.
+     * @draft ICU 52
+     */
+    inline const UFormattable *toUFormattable() const;
+
 #ifndef U_HIDE_DEPRECATED_API
     /**
      * Deprecated variant of getLong(UErrorCode&).
@@ -730,6 +738,10 @@ inline int32_t Formattable::getLong(UErrorCode* status) const {
 
 inline UFormattable* Formattable::toUFormattable() {
   return reinterpret_cast<UFormattable*>(this);
+}
+
+inline const UFormattable* Formattable::toUFormattable() const {
+  return reinterpret_cast<const UFormattable*>(this);
 }
 
 inline Formattable* Formattable::fromUFormattable(UFormattable *fmt) {
