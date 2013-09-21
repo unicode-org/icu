@@ -792,7 +792,7 @@ unum_parseToUFormattable(const UNumberFormat* fmt,
                          UErrorCode* status) {
   UFormattable *newFormattable = NULL;
   if (U_FAILURE(*status)) return result;
-  if (fmt == NULL) {
+  if (fmt == NULL || (text==NULL && textLength!=0)) {
     *status = U_ILLEGAL_ARGUMENT_ERROR;
     return result;
   }
