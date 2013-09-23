@@ -1047,7 +1047,6 @@ private:
      * for public consumption.
      * @param listCount  Output parameter to receive the size of array
      * @return           The array of formattable types in the pattern
-     * @internal
      */
     const Formattable::Type* getArgTypeList(int32_t& listCount) const {
         listCount = argTypeCount;
@@ -1062,7 +1061,6 @@ private:
     /**
      * A DummyFormatter that we use solely to store a NULL value. UHash does
      * not support storing NULL values.
-     * @internal
      */
     class U_I18N_API DummyFormat : public Format {
     public:

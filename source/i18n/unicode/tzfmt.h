@@ -194,7 +194,7 @@ typedef enum UTimeZoneFormatGMTOffsetPatternType {
      * Number of UTimeZoneFormatGMTOffsetPatternType types.
      * @internal
      */
-    UTZFMT_PAT_COUNT
+    UTZFMT_PAT_COUNT = 6
 } UTimeZoneFormatGMTOffsetPatternType;
 
 /**

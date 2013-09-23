@@ -370,7 +370,6 @@ private:
      * or in a UText, using
      * <code>utext_openUChars(UText *ut, const UChar *text, int64_t textLength, UErrorCode *status);</code>
      *
-     * @internal
      */
     RegexMatcher *matcher(const UChar *input,
         UErrorCode          &status) const;
@@ -728,7 +727,6 @@ private:
      * or in a UText, using
      * <code>utext_openUChars(UText *ut, const UChar *text, int64_t textLength, UErrorCode *status);</code>
      *
-     * @internal
      */
     RegexMatcher(const UnicodeString &regexp, const UChar *input,
         uint32_t flags, UErrorCode &status);
@@ -1133,7 +1131,6 @@ private:
      * or in a UText, using
      * <code>utext_openUChars(UText *ut, const UChar *text, int64_t textLength, UErrorCode *status);</code>
      *
-     * @internal
      */
     RegexMatcher &reset(const UChar *input);
 public:

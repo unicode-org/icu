@@ -373,7 +373,7 @@ ucsdet_isInputFilterEnabled(const UCharsetDetector *ucsd);
 U_STABLE  UBool U_EXPORT2
 ucsdet_enableInputFilter(UCharsetDetector *ucsd, UBool filter);
 
-
+#ifndef U_HIDE_INTERNAL_API
 /**
   *  Get an iterator over the set of detectable charsets -
   *  over the charsets that are enabled by the specified charset detector.
@@ -387,7 +387,7 @@ ucsdet_enableInputFilter(UCharsetDetector *ucsd, UBool filter);
   *  the specified charset detector.
   *  @internal
   */
-U_DRAFT UEnumeration * U_EXPORT2
+U_INTERNAL UEnumeration * U_EXPORT2
 ucsdet_getDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status);
 
 /**
@@ -403,8 +403,9 @@ ucsdet_getDetectableCharsets(const UCharsetDetector *ucsd,  UErrorCode *status);
   *   is not supported, U_ILLEGAL_ARGUMENT_ERROR is set.
   * @internal
   */
-U_DRAFT void U_EXPORT2
+U_INTERNAL void U_EXPORT2
 ucsdet_setDetectableCharset(UCharsetDetector *ucsd, const char *encoding, UBool enabled, UErrorCode *status);
+#endif  /* U_HIDE_INTERNAL_API */
 
 #endif
 #endif   /* __UCSDET_H */

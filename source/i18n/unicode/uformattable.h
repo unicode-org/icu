@@ -32,6 +32,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#ifndef U_HIDE_DRAFT_API
+
 #include "unicode/localpointer.h"
 
 /**
@@ -274,6 +276,7 @@ ufmt_getArrayItemByIndex(UFormattable* fmt, int32_t n, UErrorCode *status);
  */
 U_DRAFT const char * U_EXPORT2
 ufmt_getDecNumChars(UFormattable *fmt, int32_t *len, UErrorCode *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif
 
