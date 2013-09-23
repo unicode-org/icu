@@ -131,6 +131,16 @@
  *   <li>   Align any particular field, or find out where it is for selection
  *          on the screen.
  * </ul>
+ * <p><strong>Date and Time Patterns:</strong></p>
+ *
+ * <p>Date and time formats are specified by <em>date and time pattern</em> strings.
+ * Within date and time pattern strings, all unquoted ASCII letters [A-Za-z] are reserved
+ * as pattern letters representing calendar fields. <code>UDateFormat</code> supports
+ * the date and time formatting algorithm and pattern letters defined by
+ * <a href="http://www.unicode.org/reports/tr35/tr35-dates.html#Date_Field_Symbol_Table">UTS#35
+ * Unicode Locale Data Markup Language (LDML)</a> and further documented for ICU in the
+ * <a href="https://sites.google.com/site/icuprojectuserguide/formatparse/datetime?pli=1#TOC-Date-Field-Symbol-Table">ICU
+ * User Guide</a>.</p>
  */
 
 /** A date formatter.
