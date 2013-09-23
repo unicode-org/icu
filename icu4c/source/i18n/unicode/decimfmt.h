@@ -1851,6 +1851,7 @@ public:
      */
     static const char fgNumberPatterns[];
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      *  Get a FixedDecimal corresponding to a double as it would be
      *  formatted by this DecimalFormat.
@@ -1874,6 +1875,7 @@ public:
      *  @internal
      */
      FixedDecimal getFixedDecimal(DigitList &number, UErrorCode &status) const;
+#endif  /* U_HIDE_INTERNAL_API */
 
 public:
 

@@ -688,7 +688,6 @@ public:
      * (Gregorian) 00:00:00 UTC, that is, October 4, 1582 (Julian) is followed
      * by October 15, 1582 (Gregorian).  This corresponds to Julian day number
      * 2299161. This is measured from the standard epoch, not in Julian Days.
-     * @internal
      */
     UDate                fGregorianCutover;
 
@@ -751,20 +750,20 @@ public:
  public: // internal implementation
 
     /**
-     * @internal 
      * @return TRUE if this calendar has the notion of a default century
+     * @internal 
      */
     virtual UBool haveDefaultCentury() const;
 
     /**
-     * @internal
      * @return the start of the default century
+     * @internal
      */
     virtual UDate defaultCenturyStart() const;
 
     /**
-     * @internal 
      * @return the beginning year of the default century
+     * @internal 
      */
     virtual int32_t defaultCenturyStartYear() const;
 };

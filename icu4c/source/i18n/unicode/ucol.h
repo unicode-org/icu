@@ -302,6 +302,7 @@ typedef enum {
       * @stable ICU 2.0
       */
      UCOL_STRENGTH,  
+#ifndef U_HIDE_DEPRECATED_API
      /** When turned on, this attribute positions Hiragana before all  
       * non-ignorables on quaternary level This is a sneaky way to produce JIS
       * sort order.
@@ -312,7 +313,8 @@ typedef enum {
       * Since ICU 50, this attribute is not settable any more via API functions.
       * @deprecated ICU 50 Implementation detail, cannot be set via API, might be removed from implementation.
       */
-     UCOL_HIRAGANA_QUATERNARY_MODE,
+     UCOL_HIRAGANA_QUATERNARY_MODE = UCOL_STRENGTH + 1,
+#endif  /* U_HIDE_DEPRECATED_API */
      /** When turned on, this attribute generates a collation key
       * for the numeric value of substrings of digits.
       * This is a way to get '100' to sort AFTER '2'. Note that the longest
@@ -322,7 +324,7 @@ typedef enum {
       * separate digit substring associated with a separate collation element.
       * @stable ICU 2.8
       */
-     UCOL_NUMERIC_COLLATION, 
+     UCOL_NUMERIC_COLLATION = UCOL_STRENGTH + 2, 
      /**
       * The number of UColAttribute constants.
       * @stable ICU 2.0

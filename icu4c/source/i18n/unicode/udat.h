@@ -848,7 +848,7 @@ typedef enum UDateFormatBooleanAttribute {
     UDAT_BOOLEAN_ATTRIBUTE_COUNT
 } UDateFormatBooleanAttribute;
 
-
+#ifndef U_HIDE_INTERNAL_API
 /**
  * Get a boolean attribute associated with a UDateFormat.
  * An example would be a true value for a key of UDAT_PARSE_ALLOW_WHITESPACE indicating allowing whitespace leniency.
@@ -874,6 +874,8 @@ udat_getBooleanAttribute(const UDateFormat* fmt, UDateFormatBooleanAttribute att
  */
 U_INTERNAL void U_EXPORT2
 udat_setBooleanAttribute(UDateFormat *fmt, UDateFormatBooleanAttribute attr, UBool, UErrorCode* status);
+
+#endif  /* U_HIDE_INTERNAL_API */
 
 
 

@@ -189,6 +189,7 @@ public:
      */
     DecimalFormatSymbols(UErrorCode& status);
 
+#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a DecimalFormatSymbols object with last-resort data.
      * Intended for callers who cache the symbols data and
@@ -205,6 +206,7 @@ public:
      * @draft ICU 52
      */
     static DecimalFormatSymbols* createWithLastResortData(UErrorCode& status);
+#endif  /* U_HIDE_DRAFT_API */
 
     /**
      * Copy constructor.
@@ -350,6 +352,7 @@ private:
     void setCurrencyForSymbols();
 
 public:
+#ifndef U_HIDE_INTERNAL_API
     /**
      * _Internal_ function - more efficient version of getSymbol,
      * returning a const reference to one of the symbol strings.
@@ -363,7 +366,6 @@ public:
      */
     inline const UnicodeString &getConstSymbol(ENumberFormatSymbol symbol) const;
 
-#ifndef U_HIDE_INTERNAL_API
     /**
      * Returns that pattern stored in currecy info. Internal API for use by NumberFormat API.
      * @internal
@@ -418,6 +420,8 @@ DecimalFormatSymbols::getSymbol(ENumberFormatSymbol symbol) const {
     return *strPtr;
 }
 
+#ifndef U_HIDE_INTERNAL_API
+
 inline const UnicodeString &
 DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
     const UnicodeString *strPtr;
@@ -428,6 +432,8 @@ DecimalFormatSymbols::getConstSymbol(ENumberFormatSymbol symbol) const {
     }
     return *strPtr;
 }
+
+#endif  /* U_HIDE_INTERNAL_API */
 
 
 // -------------------------------------
