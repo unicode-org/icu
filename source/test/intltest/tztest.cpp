@@ -1956,11 +1956,24 @@ void TimeZoneTest::TestCanonicalID() {
         const char *alias;
         const char *zone;
     } excluded1[] = {
+        {"Africa/Khartoum", "Africa/Juba"},
         {"America/Shiprock", "America/Denver"}, // America/Shiprock is defined as a Link to America/Denver in tzdata
-        {"America/Marigot", "America/Guadeloupe"}, 
-        {"America/St_Barthelemy", "America/Guadeloupe"},
-        {"America/Lower_Princes", "America/Curacao"},
-        {"America/Kralendijk", "America/Curacao"},
+        {"America/Dominica", "America/Anguilla"},
+        {"America/Grenada", "America/Anguilla"},
+        {"America/Guadeloupe", "America/Anguilla"},
+        {"America/Marigot", "America/Anguilla"},
+        {"America/Montserrat", "America/Anguilla"},
+        {"America/Port_of_Spain", "America/Anguilla"},
+        {"America/St_Barthelemy", "America/Anguilla"},
+        {"America/St_Kitts", "America/Anguilla"},
+        {"America/St_Lucia", "America/Anguilla"},
+        {"America/St_Thomas", "America/Anguilla"},
+        {"America/St_Vincent", "America/Anguilla"},
+        {"America/Tortola", "America/Anguilla"},
+        {"America/Virgin", "America/Anguilla"},
+        {"America/Curacao", "America/Aruba"},
+        {"America/Kralendijk", "America/Aruba"},
+        {"America/Lower_Princes", "America/Aruba"},
         {"Antarctica/South_Pole", "Antarctica/McMurdo"},
         {"Atlantic/Jan_Mayen", "Europe/Oslo"},
         {"Arctic/Longyearbyen", "Europe/Oslo"},
@@ -1977,6 +1990,9 @@ void TimeZoneTest::TestCanonicalID() {
         {"Europe/Mariehamn", "Europe/Helsinki"},
         {"Europe/San_Marino", "Europe/Rome"},
         {"Europe/Vatican", "Europe/Rome"},
+        {"Europe/Vaduz", "Europe/Zurich"},
+        {"Pacific/Auckland", "Antarctica/McMurdo"},
+        {"Pacific/Johnston", "Pacific/Honolulu"},
         {0, 0}
     };
 
