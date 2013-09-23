@@ -5250,6 +5250,7 @@ public class DecimalFormat extends NumberFormat {
     * The default value is 1000.
     * @param newValue the new limit
     * @draft ICU 51
+    * @provisional This API might change or be removed in a future release.
     */
     public void setParseMaxDigits(int newValue) {
         if (newValue > 0) {
@@ -5262,6 +5263,7 @@ public class DecimalFormat extends NumberFormat {
     * number.
     *
     * @draft ICU 51
+    * @provisional This API might change or be removed in a future release.
     */
     public int getParseMaxDigits() {
         return PARSE_MAX_EXPONENT;
