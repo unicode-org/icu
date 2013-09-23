@@ -951,6 +951,12 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
             case ISO_EXTENDED_LOCAL_FULL:
                 result = formatOffsetISO8601Extended(offset, false, false, false);
                 break;
+
+            default:
+                // Other cases are handled earlier and never comes into this
+                // switch statement.
+                assert false;
+                break;
             }
             // time type
             if (timeType != null) {
@@ -1188,6 +1194,10 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
                     break;
                 case GENERIC_SHORT:
                     genericNameTypes = EnumSet.of(GenericNameType.SHORT, GenericNameType.LOCATION);
+                    break;
+                default:
+                    // style cannot be other than above cases
+                    assert false;
                     break;
                 }
                 GenericMatchInfo bestGeneric = getTimeZoneGenericNames().findBestMatch(text, startIdx, genericNameTypes);
@@ -1787,8 +1797,10 @@ public class TimeZoneFormat extends UFormat implements Freezable<TimeZoneFormat>
         case LONG_DAYLIGHT:
         case SHORT_DAYLIGHT:
             return TimeType.DAYLIGHT;
+
+        default:
+            return TimeType.UNKNOWN;
         }
-        return TimeType.UNKNOWN;
     }
 
     /**
