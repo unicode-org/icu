@@ -797,8 +797,9 @@ public class TimeZoneGenericNames implements Serializable, Freezable<TimeZoneGen
         case SHORT_GENERIC:
             nameType = GenericNameType.SHORT;
             break;
+        default:
+            throw new IllegalArgumentException("Unexpected MatchInfo name type - " + matchInfo.nameType());
         }
-        assert(nameType != null);
 
         String tzID = matchInfo.tzID();
         if (tzID == null) {
