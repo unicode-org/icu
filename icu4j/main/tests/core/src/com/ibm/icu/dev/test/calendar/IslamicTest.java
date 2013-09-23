@@ -347,7 +347,7 @@ public class IslamicTest extends CalendarTest {
     }
     
     
-    public void Test8449() {
+    public void TestIslamicUmAlQura() {
         int firstYear = 1318;
         //*  use either 1 or 2 leading slashes to toggle
         int lastYear = 1368;    // just enough to be pretty sure
