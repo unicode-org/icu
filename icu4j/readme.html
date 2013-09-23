@@ -14,17 +14,17 @@ h4.doc { text-decoration: underline }
 <body style="background-color: rgb(255, 255, 255);" lang="EN-US"
  link="#0000ff" vlink="#800080">
 <h2>International Components for Unicode for Java (ICU4J)</h2>
-<h3>Read Me for ICU4J 52 Milestone 1</h3>
-(Last Update: 2013-July-23)
+<h3>Read Me for ICU4J 52 Release Candidate</h3>
+(Last Update: 2013-Sep-23)
 <hr size="2" width="100%">
 
 <p><!-- <b>Note:</b> This is major release of ICU4J. It contains bug fixes and adds implementations
 of inherited API and introduces new API or functionality. -->
-<b>Note:</b> This is a development milestone release of ICU4J 52.
+<b>Note:</b> This is a release candidate version of ICU4J 52.
 The contents of this document may not reflect the recent changes done
-for ICU 52 development. This milestone is intended for those wishing
-to get an early look at ICU 50 new features and API changes. It is not
-recommended for production use.
+for ICU 52 development. This release candidate version is intended for those
+planning to integrate ICU4J 52 to software, or to evaluate new features and
+API changes. It is not recommended for production use.
 </p>
 <p>For the most recent release, see the <a
  href="http://www.icu-project.org/download/"> ICU4J
@@ -130,10 +130,10 @@ found in ICU4J.</p>
 
 <h3 class="doc"><a name="changes"></a>Changes In This Release</h3>
 
-<p>See the <a href="http://sites.google.com/site/icusite/download/milestone">ICU Milestone download page</a>
+<p>See the <a href="http://sites.google.com/site/icusite/download/52">ICU 52 download page</a>
 about new features in this release.
 The list of API changes since the previous ICU4J release is available
-<a href="http://source.icu-project.org/repos/icu/icu4j/tags/milestone-52-0-1/APIChangeReport.html">here</a>.</p>
+<a href="http://source.icu-project.org/repos/icu/icu4j/tags/release-52-rc/APIChangeReport.html">here</a>.</p>
 
 <h3 class="doc"><a name="license"></a>License Information</h3>
 <p>
@@ -646,7 +646,7 @@ info:
      [echo] Java Home:    C:\jdk1.7.0\jre
      [echo] Java Version: 1.7.0
      [echo] Ant Home:     C:\ant
-     [echo] Ant Version:  Apache Ant(TM) version 1.8.4 compiled on May 22 2012
+     [echo] Ant Version:  Apache Ant(TM) version 1.9.2 compiled on July 8 2013
      [echo] OS:           Windows 7
      [echo] OS Version:   6.1
      [echo] OS Arch:      amd64
@@ -667,7 +667,7 @@ core:
      [echo] compiler arg:   -Xlint:all,-deprecation,-dep-ann,-options
      [echo] ----------------------------------------------------
     [mkdir] Created dir: C:\icu4j\main\classes\core\out\bin
-    [javac] Compiling 347 source files to C:\icu4j\main\classes\core\out\bin
+    [javac] Compiling 353 source files to C:\icu4j\main\classes\core\out\bin
     [javac] Note: Some input files use or override a deprecated API.
     [javac] Note: Recompile with -Xlint:deprecation for details.
 
@@ -732,7 +732,7 @@ jar:
      [copy] Copying 1 file to C:\icu4j
 
 BUILD SUCCESSFUL
-Total time: 2 minutes 12 seconds</pre>
+Total time: 1 minute 51 seconds</pre>
 </blockquote>
 <I>Note: The above output is an example. The numbers are likely to be different with the current version ICU4J.</I>
 <p>The following are some targets that you can provide to <b>ant</b>.
@@ -983,9 +983,9 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 <h5> Generating Data from CLDR </h5>
 <I> Note: This procedure assumes that all 3 sources are present</I>
 <ol>
-    <li>Checkout or download CLDR version 'icu-52-0-1'</li>
-    <li>Checkout ICU4C with tag 'milestone-52-0-1'</li>
-    <li>Checkout ICU4J with tag 'milestone-52-0-1'</li>
+    <li>Checkout or download CLDR version 'release-24'</li>
+    <li>Checkout ICU4C with tag 'release-52-rc'</li>
+    <li>Checkout ICU4J with tag 'release-52-rc'</li>
     <li>cd to <I>$icu4c_root</I>/source/data directory</li>
     <li>Follow the instructions in <I>$icu4c_root</I>/source/data/cldr-icu-readme.txt</li>
     <li>Rebuild ICU4C with the newly generated data.</li>
@@ -997,7 +997,7 @@ ICU4J data is built by ICU4C tools. Please see "icu4j-readme.txt" in <I>$icu4c_r
 </ol>
 
 <h3 class="doc"><a name="timezone"></a>About ICU4J Time Zone</h3>
-<p>ICU4J 52m1 includes time zone data version 2013d, which is the latest one as of
+<p>ICU4J 52rc includes time zone data version 2013e, which is the latest one as of
 the release date. However, time zone data is frequently updated in response
 to changes made by local governments around the world.  If you need to update
 the time zone data, please refer the ICU user guide topic
