@@ -284,14 +284,14 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
             TestCloneLocale();
           }
           break;
-		case 31:
-          name = "Test8449";
+        case 31:
+          name = "TestIslamicUmAlQura";
           if(exec) {
-            logln("Test8449---"); logln("");
-            Test8449();
+            logln("TestIslamicUmAlQura---"); logln("");
+            TestIslamicUmAlQura();
           }
           break;
-		case 32:
+        case 32:
           name = "TestIslamicTabularDates";
           if(exec) {
             logln("TestIslamicTabularDates---"); logln("");
@@ -2766,11 +2766,11 @@ void CalendarTest::setAndTestWholeYear(Calendar* cal, int32_t startYear, UErrorC
 }
           
         
-void CalendarTest::Test8449() {
+void CalendarTest::TestIslamicUmAlQura() {
                
     UErrorCode status = U_ZERO_ERROR;
     Locale islamicLoc("ar_SA@calendar=islamic-umalqura"); 
-	Calendar* tstCal = Calendar::createInstance(islamicLoc, status);
+    Calendar* tstCal = Calendar::createInstance(islamicLoc, status);
     
     IslamicCalendar* iCal = (IslamicCalendar*)tstCal;
     if(strcmp(iCal->getType(), "islamic-umalqura") != 0) {
@@ -2861,7 +2861,7 @@ void CalendarTest::TestIslamicTabularDates() {
     SimpleDateFormat* formatter = new SimpleDateFormat("yyyy-MM-dd", Locale::getUS(), status);            
     UDate date = formatter->parse("1975-05-06", status);
 
-   	Calendar* tstCal = Calendar::createInstance(islamicLoc, status);
+    Calendar* tstCal = Calendar::createInstance(islamicLoc, status);
     tstCal->setTime(date, status);
     int32_t is_day = tstCal->get(UCAL_DAY_OF_MONTH,status);
     int32_t is_month = tstCal->get(UCAL_MONTH,status);
@@ -2869,7 +2869,7 @@ void CalendarTest::TestIslamicTabularDates() {
     TEST_CHECK_STATUS;
     delete tstCal;
 
-   	tstCal = Calendar::createInstance(tblaLoc, status);
+    tstCal = Calendar::createInstance(tblaLoc, status);
     tstCal->setTime(date, status);
     int32_t tbla_day = tstCal->get(UCAL_DAY_OF_MONTH,status);
     int32_t tbla_month = tstCal->get(UCAL_MONTH,status);
