@@ -219,7 +219,7 @@ public: // package
     void Test6703(void);
     void Test3785(void);
     void Test1624(void);
-    void Test8449(void);
+    void TestIslamicUmAlQura(void);
     void TestIslamicTabularDates(void);
 
     /**
@@ -241,7 +241,7 @@ public: // package
     void TestCloneLocale(void);
 
     /*
-     * utility methods for Test8449
+     * utility methods for TestIslamicUmAlQura
      */
     void setAndTestCalendar(Calendar* cal, int32_t initMonth, int32_t initDay, int32_t initYear, UErrorCode& status);
     void setAndTestWholeYear(Calendar* cal, int32_t startYear, UErrorCode& status);
