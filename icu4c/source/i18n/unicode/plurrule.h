@@ -282,6 +282,7 @@ public:
      */
     static PluralRules* U_EXPORT2 forLocale(const Locale& locale, UPluralType type, UErrorCode& status);
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Return a StringEnumeration over the locales for which there is plurals data.
      * @return a StringEnumeration over the locales available.
@@ -296,6 +297,7 @@ public:
      * @internal
      */
     static UBool hasOverride(const Locale &locale);
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Given a number, returns the keyword of the first rule that applies to
@@ -319,10 +321,12 @@ public:
      */
     UnicodeString select(double number) const;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
       * @internal
       */
     UnicodeString select(const FixedDecimal &number) const;
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Returns a list of all rule keywords used in this <code>PluralRules</code>
@@ -412,11 +416,13 @@ public:
      */
     UnicodeString getKeywordOther() const;
 
+#ifndef U_HIDE_INTERNAL_API
     /**
      *
      * @internal
      */
      UnicodeString getRules() const;
+#endif  /* U_HIDE_INTERNAL_API */
 
     /**
      * Compares the equality of two PluralRules objects.

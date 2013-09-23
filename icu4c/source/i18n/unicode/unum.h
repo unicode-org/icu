@@ -233,7 +233,7 @@ typedef enum UNumberFormatRoundingMode {
      */
     UNUM_FOUND_HALFEVEN = UNUM_ROUND_HALFEVEN,
 #endif  /* U_HIDE_DEPRECATED_API */
-    UNUM_ROUND_HALFDOWN,
+    UNUM_ROUND_HALFDOWN = UNUM_ROUND_HALFEVEN + 1,
     UNUM_ROUND_HALFUP,
     /** 
       * ROUND_UNNECESSARY reports an error if formatted result is not exact.
@@ -562,6 +562,7 @@ unum_formatDoubleCurrency(const UNumberFormat* fmt,
                           UFieldPosition* pos,
                           UErrorCode* status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Format a UFormattable into a string.
  * @param fmt the formatter to use
@@ -589,6 +590,7 @@ unum_formatUFormattable(const UNumberFormat* fmt,
                         int32_t resultLength,
                         UFieldPosition *pos,
                         UErrorCode *status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
 * Parse a string into an integer using a UNumberFormat.
@@ -724,6 +726,7 @@ unum_parseDoubleCurrency(const UNumberFormat* fmt,
                          UChar* currency,
                          UErrorCode* status);
 
+#ifndef U_HIDE_DRAFT_API
 /**
  * Parse a UChar string into a UFormattable.
  * Example code:
@@ -749,6 +752,7 @@ unum_parseToUFormattable(const UNumberFormat* fmt,
                          int32_t textLength,
                          int32_t* parsePos, /* 0 = start */
                          UErrorCode* status);
+#endif  /* U_HIDE_DRAFT_API */
 
 /**
  * Set the pattern used by a UNumberFormat.  This can only be used
@@ -866,7 +870,7 @@ typedef enum UNumberFormatAttribute {
    * This is an internal ICU API. Do not use.
    * @internal
    */
-  UNUM_PARSE_ALL_INPUT,
+  UNUM_PARSE_ALL_INPUT = UNUM_LENIENT_PARSE + 1,
 #endif
 #ifndef U_HIDE_DRAFT_API
   /** 
@@ -881,14 +885,16 @@ typedef enum UNumberFormatAttribute {
   UNUM_SCALE = UNUM_LENIENT_PARSE + 2,
 #endif /* U_HIDE_DRAFT_API */
 
+#ifndef U_HIDE_INTERNAL_API
   /** Count of "regular" numeric attributes.
    * @internal */
-  UNUM_NUMERIC_ATTRIBUTE_COUNT,
+  UNUM_NUMERIC_ATTRIBUTE_COUNT = UNUM_LENIENT_PARSE + 3,
 
   /** One below the first bitfield-boolean item.
    * All items after this one are stored in boolean form.
    * @internal */
   UNUM_MAX_NONBOOLEAN_ATTRIBUTE = 0x0FFF,
+#endif  /* U_HIDE_INTERNAL_API */
 
   /** If 1, specifies that if setting the "max integer digits" attribute would truncate a value, set an error status rather than silently truncating.
    * For example,  formatting the value 1234 with 4 max int digits would succeed, but formatting 12345 would fail. There is no effect on parsing.
@@ -904,9 +910,11 @@ typedef enum UNumberFormatAttribute {
    */
   UNUM_PARSE_NO_EXPONENT,
 
+#ifndef U_HIDE_INTERNAL_API
   /** Limit of boolean attributes.
    * @internal */
   UNUM_LIMIT_BOOLEAN_ATTRIBUTE
+#endif  /* U_HIDE_INTERNAL_API */
 } UNumberFormatAttribute;
 
 /**

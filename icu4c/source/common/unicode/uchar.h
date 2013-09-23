@@ -521,9 +521,11 @@ typedef enum UProperty {
     /** String property Case_Folding.
         Corresponds to u_strFoldCase in ustring.h. @stable ICU 2.4 */
     UCHAR_CASE_FOLDING=0x4002,
+#ifndef U_HIDE_DEPRECATED_API
     /** Deprecated string property ISO_Comment.
         Corresponds to u_getISOComment. @deprecated ICU 49 */
     UCHAR_ISO_COMMENT=0x4003,
+#endif  /* U_HIDE_DEPRECATED_API */
     /** String property Lowercase_Mapping.
         Corresponds to u_strToLower in ustring.h. @stable ICU 2.4 */
     UCHAR_LOWERCASE_MAPPING=0x4004,
@@ -545,11 +547,13 @@ typedef enum UProperty {
     /** String property Titlecase_Mapping.
         Corresponds to u_strToTitle in ustring.h. @stable ICU 2.4 */
     UCHAR_TITLECASE_MAPPING=0x400A,
+#ifndef U_HIDE_DEPRECATED_API
     /** String property Unicode_1_Name.
         This property is of little practical value.
         Beginning with ICU 49, ICU APIs return an empty string for this property.
         Corresponds to u_charName(U_UNICODE_10_CHAR_NAME). @deprecated ICU 49 */
     UCHAR_UNICODE_1_NAME=0x400B,
+#endif  /* U_HIDE_DEPRECATED_API */
     /** String property Uppercase_Mapping.
         Corresponds to u_strToUpper in ustring.h. @stable ICU 2.4 */
     UCHAR_UPPERCASE_MAPPING=0x400C,

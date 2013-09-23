@@ -27,6 +27,7 @@ U_NAMESPACE_BEGIN
  * An obsolete subclass of RuleBasedBreakIterator. Handling of dictionary-
  * based break iteration has been folded into the base class. This class
  * is deprecated as of ICU 3.6.
+ * @deprecated ICU 3.6
  */
 typedef RuleBasedBreakIterator DictionaryBasedBreakIterator;
 

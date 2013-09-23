@@ -870,6 +870,7 @@ private:
     static const UChar* getRegion(const UnicodeString& id);
 
   public:
+#ifndef U_HIDE_INTERNAL_API
     /**
      * Returns the region code associated with the given zone,
      * or NULL if the zone is not known.
@@ -879,6 +880,7 @@ private:
      * @internal
      */
     static const UChar* getRegion(const UnicodeString& id, UErrorCode& status);
+#endif  /* U_HIDE_INTERNAL_API */
 
   private:
     /**

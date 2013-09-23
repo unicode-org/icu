@@ -575,7 +575,6 @@ private:
      * Also, the first date appears in an interval pattern could be
      * the earlier date or the later date.
      * And such information is saved in the interval pattern as well.
-     * @internal ICU 4.0
      */
     struct PatternInfo {
         UnicodeString firstPart;
@@ -620,7 +619,6 @@ private:
      * @param dtItvInfo the DateIntervalInfo object to be adopted.
      * @param skeleton  the skeleton of the date formatter
      * @param status    output param set to success/failure code on exit
-     * @internal ICU 4.0
      */
     DateIntervalFormat(const Locale& locale, DateIntervalInfo* dtItvInfo,
                        const UnicodeString* skeleton, UErrorCode& status);
@@ -637,7 +635,6 @@ private:
      * @param skeleton  the skeleton of this formatter.
      * @param status    Output param set to success/failure code.
      * @return          a date time interval formatter which the caller owns.
-     * @internal ICU 4.0
      */
     static DateIntervalFormat* U_EXPORT2 create(const Locale& locale,
                                                 DateIntervalInfo* dtitvinf,
@@ -655,7 +652,6 @@ private:
      *                  If it is failure, the returned date formatter will
      *                  be NULL.
      * @return          a simple date formatter which the caller owns.
-     * @internal ICU 4.0
      */
     static SimpleDateFormat* U_EXPORT2 createSDFPatternInstance(
                                         const UnicodeString& skeleton,
@@ -685,7 +681,6 @@ private:
      *                          On output: the offsets of the alignment field.
      * @param status            output param set to success/failure code on exit
      * @return                  Reference to 'appendTo' parameter.
-     * @internal ICU 4.0
      */
     UnicodeString& fallbackFormat(Calendar& fromCalendar,
                                   Calendar& toCalendar,
@@ -728,7 +723,6 @@ private:
      *
      *
      * @param status    output param set to success/failure code on exit
-     * @internal ICU 4.0
      */
     void initializePattern(UErrorCode& status);
 
@@ -740,7 +734,6 @@ private:
      * @param field      the largest different calendar field
      * @param skeleton   a skeleton
      * @param status     output param set to success/failure code on exit
-     * @internal ICU 4.0
      */
     void setFallbackPattern(UCalendarDateFields field,
                             const UnicodeString& skeleton,
@@ -771,7 +764,6 @@ private:
      *  @param normalizedTime         Output parameter for normalized time only
      *                                skeleton.
      *
-     * @internal ICU 4.0
      */
     static void  U_EXPORT2 getDateTimeSkeleton(const UnicodeString& skeleton,
                                     UnicodeString& date,
@@ -803,7 +795,6 @@ private:
      * @return               whether the resource is found for the skeleton.
      *                       TRUE if interval pattern found for the skeleton,
      *                       FALSE otherwise.
-     * @internal ICU 4.0
      */
     UBool setSeparateDateTimePtn(const UnicodeString& dateSkeleton,
                                  const UnicodeString& timeSkeleton);
@@ -833,7 +824,6 @@ private:
      *                              through extending skeleton or not.
      *                              TRUE if interval pattern is found by
      *                              extending skeleton, FALSE otherwise.
-     * @internal ICU 4.0
      */
     UBool setIntervalPattern(UCalendarDateFields field,
                              const UnicodeString* skeleton,
@@ -869,7 +859,6 @@ private:
      *                                 1 means only field width differs
      *                                 2 means v/z exchange
      * @param adjustedIntervalPattern  adjusted interval pattern
-     * @internal ICU 4.0
      */
     static void U_EXPORT2 adjustFieldWidth(
                             const UnicodeString& inputSkeleton,
@@ -889,7 +878,6 @@ private:
      * @param datePattern    date pattern
      * @param field          time calendar field: AM_PM, HOUR, MINUTE
      * @param status         output param set to success/failure code on exit
-     * @internal ICU 4.0
      */
     void concatSingleDate2TimeInterval(const UChar* format,
                                        int32_t formatLen,
@@ -902,7 +890,6 @@ private:
      * @param field      calendar field need to check
      * @param skeleton   given skeleton on which to check the calendar field
      * @return           true if field present in a skeleton.
-     * @internal ICU 4.0
      */
     static UBool U_EXPORT2 fieldExistsInSkeleton(UCalendarDateFields field,
                                                  const UnicodeString& skeleton);
@@ -912,7 +899,6 @@ private:
      * Split interval patterns into 2 part.
      * @param intervalPattern  interval pattern
      * @return the index in interval pattern which split the pattern into 2 part
-     * @internal ICU 4.0
      */
     static int32_t  U_EXPORT2 splitPatternInto2Part(const UnicodeString& intervalPattern);
 
@@ -921,7 +907,6 @@ private:
      * Break interval patterns as 2 part and save them into pattern info.
      * @param field            calendar field
      * @param intervalPattern  interval pattern
-     * @internal ICU 4.0
      */
     void setIntervalPattern(UCalendarDateFields field,
                             const UnicodeString& intervalPattern);
@@ -932,7 +917,6 @@ private:
      * @param field            calendar field
      * @param intervalPattern  interval pattern
      * @param laterDateFirst   whether later date appear first in interval pattern
-     * @internal ICU 4.0
      */
     void setIntervalPattern(UCalendarDateFields field,
                             const UnicodeString& intervalPattern,
@@ -947,7 +931,6 @@ private:
      * @param secondPart       the second part in interval pattern
      * @param laterDateFirst   whether the first date in intervalPattern
      *                         is earlier date or later date
-     * @internal ICU 4.0
      */
     void setPatternInfo(UCalendarDateFields field,
                         const UnicodeString* firstPart,

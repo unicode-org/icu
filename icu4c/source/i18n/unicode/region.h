@@ -199,8 +199,6 @@ private:
 
     /**
      * Default Constructor. Internal - use factory methods only.
-     *
-     * @internal
      */
     Region();
 
@@ -212,7 +210,6 @@ private:
      * 
      * If the region data has already loaded, then this method simply returns without doing
      * anything meaningful.
-     * @internal
      */
 
     static void loadRegionData();
