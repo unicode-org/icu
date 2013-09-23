@@ -1475,11 +1475,28 @@ public class TimeZoneTest extends TestFmwk
         // Some canonical IDs in CLDR are defined as "Link"
         // in Olson tzdata.
         final String[][] excluded1 = {
+                {"Africa/Khartoum", "Africa/Juba"},
                 {"America/Shiprock", "America/Denver"}, // America/Shiprock is defined as a Link to America/Denver in tzdata
                 {"America/Kralendijk", "America/Curacao"},
                 {"America/Lower_Princes", "America/Curacao"},
                 {"America/Marigot", "America/Guadeloupe"},
                 {"America/St_Barthelemy", "America/Guadeloupe"},
+                {"America/Dominica", "America/Anguilla"},
+                {"America/Grenada", "America/Anguilla"},
+                {"America/Guadeloupe", "America/Anguilla"},
+                {"America/Marigot", "America/Anguilla"},
+                {"America/Montserrat", "America/Anguilla"},
+                {"America/Port_of_Spain", "America/Anguilla"},
+                {"America/St_Barthelemy", "America/Anguilla"},
+                {"America/St_Kitts", "America/Anguilla"},
+                {"America/St_Lucia", "America/Anguilla"},
+                {"America/St_Thomas", "America/Anguilla"},
+                {"America/St_Vincent", "America/Anguilla"},
+                {"America/Tortola", "America/Anguilla"},
+                {"America/Virgin", "America/Anguilla"},
+                {"America/Curacao", "America/Aruba"},
+                {"America/Kralendijk", "America/Aruba"},
+                {"America/Lower_Princes", "America/Aruba"},
                 {"Antarctica/South_Pole", "Antarctica/McMurdo"},
                 {"Atlantic/Jan_Mayen", "Europe/Oslo"},
                 {"Arctic/Longyearbyen", "Europe/Oslo"},
@@ -1496,6 +1513,9 @@ public class TimeZoneTest extends TestFmwk
                 {"Europe/Mariehamn", "Europe/Helsinki"},
                 {"Europe/San_Marino", "Europe/Rome"},
                 {"Europe/Vatican", "Europe/Rome"},
+                {"Europe/Vaduz", "Europe/Zurich"},
+                {"Pacific/Auckland", "Antarctica/McMurdo"},
+                {"Pacific/Johnston", "Pacific/Honolulu"},
         };
 
         // Following IDs are aliases of Etc/GMT in CLDR,
