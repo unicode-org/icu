@@ -2771,23 +2771,31 @@ public class DecimalFormat extends NumberFormat {
      * Remove bidi marks from affix
      */
     private static final int TRIM_BUFLEN = 32;
-    private static String trimMarksFromAffix(String affix) {
-        char[] trimBuf = new char[TRIM_BUFLEN];
-        int affixLen = affix.length();
-        int affixPos, trimLen = 0;
-        for (affixPos = 0; affixPos < affixLen; affixPos++) {
-            char c = affix.charAt(affixPos);
-            if (!isBidiMark(c)) {
-                if (trimLen < TRIM_BUFLEN) {
-                    trimBuf[trimLen++] = c;
-                } else {
-                    trimLen = 0;
-                    break;
-                }
-            }
-        }
-        return (trimLen > 0)? new String(trimBuf, 0, trimLen): affix;
-    }
+    private static String trimMarksFromAffix(String affix) { 
+        boolean hasBidiMark = false; 
+        int idx = 0; 
+        for (; idx < affix.length(); idx++) { 
+            if (isBidiMark(affix.charAt(idx))) { 
+                hasBidiMark = true; 
+                break; 
+            } 
+        } 
+        if (!hasBidiMark) { 
+            return affix; 
+        } 
+
+        StringBuilder buf = new StringBuilder(); 
+        buf.append(affix, 0, idx); 
+        idx++;  // skip the first Bidi mark 
+        for (; idx < affix.length(); idx++) { 
+            char c = affix.charAt(idx); 
+            if (!isBidiMark(c)) { 
+                buf.append(c); 
+            } 
+        } 
+
+        return buf.toString(); 
+    } 
 
     /**
      * Return the length matched by the given affix, or -1 if none. Runs of white space in
@@ -2804,7 +2812,7 @@ public class DecimalFormat extends NumberFormat {
         // Affixes here might consist of sign, currency symbol and related spacing, etc.
         // For more efficiency we should keep lazily-created trimmed affixes around in
         // instance variables instead of trimming each time they are used (the next step).
-        String trimmedAffix = trimMarksFromAffix(affix);
+        String trimmedAffix = (affix.length() > 1)? trimMarksFromAffix(affix): affix;
         for (int i = 0; i < trimmedAffix.length();) {
             int c = UTF16.charAt(trimmedAffix, i);
             int len = UTF16.getCharCount(c);
