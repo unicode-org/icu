@@ -1,0 +1,32 @@
+/*
+ *
+ * (C) Copyright IBM Corp. 1998-2011. All Rights Reserved.
+ *
+ * WARNING: THIS FILE IS MACHINE GENERATED. DO NOT HAND EDIT IT UNLESS
+ * YOU REALLY KNOW WHAT YOU'RE DOING.
+ *
+ * Generated on: 11/01/2011 04:08:11 PM PDT
+ */
+
+ICU Version=49.0
+Total Script=157
+Total Language=71
+Scripts={
+	 ICU_2.2=40
+	 ICUCanadian_2.6=1
+	 ICUCanadian_2.2=5
+	 ICU_2.6=8
+	 ICU_3.0=1
+	 ICU_3.4=7
+	 ICU_3.6=42
+	 ICU_3.8=12
+	 ICU_4.0=14
+         ICU_4.4=4
+         ICU_4.6=13
+         ICU_4.8=9
+         ICU_49.0=2
+        }
+Languages={
+	   ICU_2.6=30
+	   ICU_4.0=42
+          }
