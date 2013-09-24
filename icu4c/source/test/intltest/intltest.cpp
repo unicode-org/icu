@@ -1790,6 +1790,9 @@ UBool IntlTest::assertFalse(const char* message, UBool condition, UBool quiet) {
 }
 
 UBool IntlTest::assertSuccess(const char* message, UErrorCode ec, UBool possibleDataError, const char *file, int line) {
+    if( file==NULL ) {
+      file = ""; // prevent failure if no file given
+    }
     if (U_FAILURE(ec)) {
         if (possibleDataError) {
           dataerrln("FAIL: %s:%d: %s (%s)", file, line, message, u_errorName(ec));
