@@ -75,14 +75,13 @@ class U_COMMON_API ListFormatter : public UObject{
      */
     ListFormatter& operator=(const ListFormatter& other);
 
-#ifndef U_HIDE_DEPRECATED_API
     /**
      * Creates a ListFormatter appropriate for the default locale.
      *
      * @param errorCode ICU error code, set if no data available for default locale.
      * @return Pointer to a ListFormatter object for the default locale,
      *     created from internal data derived from CLDR data.
-     * @deprecated ICU 52 (was draft ICU 50)
+     * @draft ICU 50
      */
     static ListFormatter* createInstance(UErrorCode& errorCode);
 
@@ -93,10 +92,9 @@ class U_COMMON_API ListFormatter : public UObject{
      * @param errorCode ICU error code, set if no data available for the given locale.
      * @return A ListFormatter object created from internal data derived from
      *     CLDR data.
-     * @deprecated ICU 52 (was draft ICU 50)
+     * @draft ICU 50
      */
     static ListFormatter* createInstance(const Locale& locale, UErrorCode& errorCode);
-#endif  /* U_HIDE_DEPRECATED_API */
 
 #ifndef U_HIDE_INTERNAL_API
     /**
