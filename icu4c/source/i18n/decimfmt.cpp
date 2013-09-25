@@ -1078,6 +1078,7 @@ DecimalFormat::getFixedDecimal(const Formattable &number, UErrorCode &status) co
     }
 
     if (type == Formattable::kInt64) {
+        // "volatile" here is a workaround to avoid optimization issues.
         volatile double fdv = number.getDouble(status);
         // Note: conversion of int64_t -> double rounds with some compilers to
         //       values beyond what can be represented as a 64 bit int. Subsequent
