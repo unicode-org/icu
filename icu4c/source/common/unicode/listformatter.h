@@ -75,7 +75,6 @@ class U_COMMON_API ListFormatter : public UObject{
      */
     ListFormatter& operator=(const ListFormatter& other);
 
-#ifndef U_HIDE_DRAFT_API
     /**
      * Creates a ListFormatter appropriate for the default locale.
      *
@@ -96,7 +95,6 @@ class U_COMMON_API ListFormatter : public UObject{
      * @draft ICU 50
      */
     static ListFormatter* createInstance(const Locale& locale, UErrorCode& errorCode);
-#endif  /* U_HIDE_DRAFT_API */
 
 #ifndef U_HIDE_INTERNAL_API
     /**
