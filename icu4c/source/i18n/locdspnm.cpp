@@ -394,15 +394,15 @@ LocaleDisplayNamesImpl::initialize(void) {
     }
     format = new MessageFormat(pattern, status);
     if (pattern.indexOf((UChar)0xFF08) >= 0) {
-        formatOpenParen.setTo(0xFF08);         // fullwidth (
-        formatReplaceOpenParen.setTo(0xFF3B);  // fullwidth [
-        formatCloseParen.setTo(0xFF09);        // fullwidth )
-        formatReplaceCloseParen.setTo(0xFF3D); // fullwidth ]
+        formatOpenParen.setTo((UChar)0xFF08);         // fullwidth (
+        formatReplaceOpenParen.setTo((UChar)0xFF3B);  // fullwidth [
+        formatCloseParen.setTo((UChar)0xFF09);        // fullwidth )
+        formatReplaceCloseParen.setTo((UChar)0xFF3D); // fullwidth ]
     } else {
-        formatOpenParen.setTo(0x0028);         // (
-        formatReplaceOpenParen.setTo(0x005B);  // [
-        formatCloseParen.setTo(0x0029);        // )
-        formatReplaceCloseParen.setTo(0x005D); // ]
+        formatOpenParen.setTo((UChar)0x0028);         // (
+        formatReplaceOpenParen.setTo((UChar)0x005B);  // [
+        formatCloseParen.setTo((UChar)0x0029);        // )
+        formatReplaceCloseParen.setTo((UChar)0x005D); // ]
     }
 
     UnicodeString ktPattern;
