@@ -1,5 +1,5 @@
 # DerivedCoreProperties-6.3.0.txt
-# Date: 2013-08-26, 23:09:02 GMT [MD]
+# Date: 2013-09-25, 18:58:40 GMT [MD]
 #
 # Unicode Character Database
 # Copyright (c) 1991-2013 Unicode, Inc.
@@ -2324,11 +2324,8 @@ FF21..FF3A    ; Uppercase
 1D756..1D76E  ; Uppercase
 1D790..1D7A8  ; Uppercase
 1D7CA         ; Uppercase
-1F130..1F149  ; Uppercase
-1F150..1F169  ; Uppercase
-1F170..1F189  ; Uppercase
 
-# Total code points: 1561
+# Total code points: 1483
 
 # ================================================
 
@@ -2467,11 +2464,8 @@ FF41..FF5A    ; Cased
 1D78A..1D7A8  ; Cased
 1D7AA..1D7C2  ; Cased
 1D7C4..1D7CB  ; Cased
-1F130..1F149  ; Cased
-1F150..1F169  ; Cased
-1F170..1F189  ; Cased
 
-# Total code points: 3526
+# Total code points: 3448
 
 # ================================================
 
