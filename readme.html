@@ -3,7 +3,7 @@
 
 <html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US">
   <head>
-    <title>ReadMe for ICU 52 (DRAFT)</title>
+    <title>ReadMe for ICU 52</title>
     <meta name="COPYRIGHT" content=
     "Copyright (c) 1997-2013 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
@@ -16,15 +16,15 @@
 
   <body class="draft">
     <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 52 (DRAFT) ReadMe</h1>
+     <abbr title="International Components for Unicode">ICU</abbr> 52 ReadMe</h1>
 
     <!--<p><b>Note:</b> This is a development milestone release of ICU4C 52.
     This milestone is intended for those wishing to get an early look at ICU 52 new features and API changes.
     It is not recommended for production use.</p>-->
-    <p><b>Note:</b> This is a release candidate version of ICU4C 52.
-    It is not recommended for production use.</p>
+    <!--<p><b>Note:</b> This is a release candidate version of ICU4C 52.
+    It is not recommended for production use.</p>-->
 
-    <p>Last updated: 2013-Sep-23<br />
+    <p>Last updated: 2013-Sep-30<br />
      Copyright &copy; 1997-2013 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
@@ -44,7 +44,7 @@
       <li><a href="#SourceCode">ICU Source Code Organization</a></li>
 
       <li>
-        <a href="#HowToBuild">How To Build And Install ICU</a> 
+        <a href="#HowToBuild">How To Build And Install ICU</a>
 
         <ul >
           <li><a href="#RecBuild">Recommended Build Options</a></li>
@@ -69,7 +69,7 @@
       <li><a href="#HowToPackage">How To Package ICU</a></li>
 
       <li>
-        <a href="#ImportantNotes">Important Notes About Using ICU</a> 
+        <a href="#ImportantNotes">Important Notes About Using ICU</a>
 
         <ul >
           <li><a href="#ImportantNotesMultithreaded">Using ICU in a Multithreaded
@@ -82,7 +82,7 @@
       </li>
 
       <li>
-        <a href="#PlatformDependencies">Platform Dependencies</a> 
+        <a href="#PlatformDependencies">Platform Dependencies</a>
 
         <ul >
           <li><a href="#PlatformDependenciesNew">Porting To A New
@@ -775,7 +775,7 @@
       "#HowToBuildWindowsCommandLine">command line note below</a> if you want to
       build from the command line instead.</li>
 
-      <li>Set the active platform to "Win32" or "x64" (See <a href="#HowToBuildWindowsPlatform">Windows platform note</a> below) 
+      <li>Set the active platform to "Win32" or "x64" (See <a href="#HowToBuildWindowsPlatform">Windows platform note</a> below)
       and configuration to "Debug" or "Release" (See <a href="#HowToBuildWindowsConfig">Windows configuration note</a> below).</li>
 
       <li>Choose the "Build" menu and select "Rebuild Solution". If you want to
@@ -802,7 +802,7 @@
 				<br/>  or <br />
 		<tt><i>&lt;ICU&gt;</i>\source\allinone\icucheck.bat  <b>x64</b> <b>Release</b>
 		</tt></li>
-	</ul>	
+	</ul>
 
          <h4>Running the Tests from within Visual Studio</h4>
 
@@ -841,10 +841,10 @@
     use Cygwin with this compiler to build ICU, and you can refer to the <a href=
     "#HowToBuildCygwin">How To Build And Install On Windows with Cygwin</a>
     section for more details.</p>
-    
+
     <p><a name="HowToBuildWindowsPlatform" id=
     "HowToBuildWindowsPlatform"><strong>Setting Active Platform
-    Note:</strong></a> Even though you are able to select "x64" as the active platform, if your operating system is 
+    Note:</strong></a> Even though you are able to select "x64" as the active platform, if your operating system is
     not a 64 bit version of Windows, the build will fail. To set the active platform, two different possibilities are:</p>
 
     <ul>
@@ -871,7 +871,7 @@
     </ul>
 
     <p><a name="HowToBuildWindowsBatch" id="HowToBuildWindowsBatch"><strong>Batch
-    Configuration Note:</strong></a> If you want to build the Win32 and x64 platforms and 
+    Configuration Note:</strong></a> If you want to build the Win32 and x64 platforms and
     Debug and Release configurations at the same time, choose "Build" menu, and select "Batch
     Build...". Click the "Select All" button, and then click the "Rebuild"
     button.</p>
@@ -888,7 +888,7 @@
       <li>Microsoft Visual C++ (when gcc isn't used).</li>
 
       <li>
-        Cygwin with the following installed: 
+        Cygwin with the following installed:
 
         <ul>
           <li>bash</li>
@@ -953,7 +953,7 @@
     "HowToWindowsConfigureICU"><strong>Configuring ICU on Windows
     NOTE:</strong></a> </p>
     <p>
-    Ensure that the order of the PATH is MSVC, Cygwin, and then other PATHs. The configure 
+    Ensure that the order of the PATH is MSVC, Cygwin, and then other PATHs. The configure
     script needs certain tools in Cygwin (e.g. grep).
     </p>
     <p>
@@ -1045,7 +1045,7 @@
     you may want to give runConfigureICU. If you are not using the
     runConfigureICU script, or your platform is not supported by the script, you
     may need to set your CC, CXX, CFLAGS and CXXFLAGS environment variables, and
-    type <tt>"./configure"</tt>. 
+    type <tt>"./configure"</tt>.
     HP-UX users, please see this <a href="#ImportantNotesHPUX">note regarding
     HP-UX multithreaded build issues</a> with newer compilers. Solaris users,
     please see this <a href="#ImportantNotesSolaris">note regarding Solaris
@@ -1141,7 +1141,7 @@
 
 <pre><samp>export _CXX_PSYSIX="CEE.SCEELIB(C128N)":"CBC.SCLBSID(IOSTREAM,COMPLEX)"</samp></pre>
       </li>
-      
+
 
       <li>The rest of the instructions for building and testing ICU on z/OS with
       UNIX System Services are the same as the <a href="#HowToBuildUNIX">How To
@@ -1299,7 +1299,7 @@ cd ../../..</pre></samp>
 
       <li>Build ICU. <i>(Note: Do not use the -j option)</i> <pre><samp>gmake</samp></pre></li>
 
-      <li>Test ICU. <pre><samp>gmake check</samp></pre>  
+      <li>Test ICU. <pre><samp>gmake check</samp></pre>
         <smaller>(The <tt> QIBM_MULTI_THREADED=Y</tt> flag will be automatically applied to intltest -
           you can look at the <a href=
       "http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/apis/concept4.htm">
@@ -1325,7 +1325,7 @@ cd ../../..</pre></samp>
 				<th align="left">/buildB</th><td>an empty directory, it will contain ICU built for B<br />(HaikuOS in this case)</td>
 			</tr>
 		</table>
-		
+
 		<ol>
 		<li>Check out or unpack the ICU source code into the /icu directory.You will have the directories /icu/source, etc.</li>
 		<li>Build ICU in /buildA normally (using runConfigureICU or configure):
@@ -1720,7 +1720,7 @@ gnumake</pre>
          <strong>unicode/p<i>XXXX</i>.h</strong> (others: pwin32.h, ppalmos.h,
         ..): Platform-dependent typedefs and defines:<br />
         <br />
-         
+
 
         <ul>
           <li>Generic types like UBool, int8_t, int16_t, int32_t, int64_t,
@@ -1738,7 +1738,7 @@ gnumake</pre>
         <strong>unicode/putil.h, putil.c</strong>: platform-dependent
         implementations of various functions that are platform dependent:<br />
         <br />
-         
+
 
         <ul>
           <li>uprv_isNaN, uprv_isInfinite, uprv_getNaN and uprv_getInfinity for
@@ -1788,4 +1788,3 @@ gnumake</pre>
      USA</p>
   </body>
 </html>
-
