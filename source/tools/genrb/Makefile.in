@@ -63,7 +63,7 @@ all-local: $(TARGET) $(DERB) $(MAN_FILES)
 install-local: all-local install-man
 	$(MKINSTALLDIRS) $(DESTDIR)$(bindir)
 	$(INSTALL) $(TARGET) $(DESTDIR)$(bindir)
-	$(INSTALL) $(DERB) $(DESTDIR)$(bindir)
+@ICUIO_TRUE@	$(INSTALL) $(DERB) $(DESTDIR)$(bindir)
 
 install-man: $(MAN_FILES)
 	$(MKINSTALLDIRS) $(DESTDIR)$(mandir)/man$(SECTION)
