@@ -1,9 +1,11 @@
-# Copyright (C) 2007-2012 International Business Machines Corporation and Others. All Rights Reserved.
+# Copyright (C) 2007-2013 International Business Machines Corporation and Others. All Rights Reserved.
 
 # Review module.
 # TODO: refactor ticket manipulation items into ticketmgr.
 
 import re
+
+import traceback
 
 from trac.core import Component, implements
 from trac.core import ComponentManager
@@ -13,7 +15,8 @@ from trac.web import IRequestHandler
 from trac.web.chrome import add_stylesheet, add_script, ITemplateProvider, add_ctxtnav
 from trac.versioncontrol import Changeset
 from trac.web.api import IRequestFilter
-from trac.wiki import wiki_to_html, wiki_to_oneliner, IWikiSyntaxProvider
+from trac.wiki import wiki_to_html, format_to_oneliner, IWikiSyntaxProvider
+from trac.mimeview import Context
             
 from genshi.builder import tag
 #from trac.env import IEnvironmentSetupParticipant
@@ -180,6 +183,7 @@ class ReviewModule(Component):
         #ticketlist = {}  # dict of ticket->???
         #revlist = {} # dict of revision->
         repos = self.env.get_repository()
+        context = Context.from_request(req, False)
 
         new_path = req.args.get('new_path')
         new_rev = req.args.get('new')
@@ -243,6 +247,14 @@ class ReviewModule(Component):
             revision['author'] = chgset.author
             revision['num'] =  rev
             revision['comment'] =  message #wiki_to_oneliner( message, self.env, db, shorten=False )
+            try:
+                revision['comment_wiki'] = format_to_oneliner( self.env, context, message, shorten=False )
+            except Exception, e:
+                self.env.log.warn(e)
+                revision['comment_wiki'] = "%s (could not format - %s)" % (message, str(e))
+                #return system_message(_('HTML parsing error: %(message)s',
+                #                    message=escape(e.msg)), line)
+
             rbranches = revision['branches'] = []
             for chg in chgset.get_changes():
                 path = chg[0]
