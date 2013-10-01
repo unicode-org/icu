@@ -92,8 +92,8 @@ class ReviewModule(Component):
         else:
             str = ' %d commits.' % len(revs)
             href = req.href.review(req.args['ticket'])
-            a = tag.a('Review', href=href)
-            li = tag.li(a + str)
+            a = tag.a('Review' + str, href=href)
+            li = tag.li(a)
             els.append(li)            
         
         ul = tag.ul(els, class_='review')
