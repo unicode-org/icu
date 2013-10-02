@@ -2229,27 +2229,28 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 					finalRuleYear = rp->r_hiyear + 1;
 				}
 			}
-			if (finalRule1 != NULL && finalRule2 == NULL) {
-				error("only one max rule found (ICU)");
-				exit(EXIT_FAILURE);
-			}
 			if (finalRule1 != NULL) {
-				if (finalRule1->r_stdoff == finalRule2->r_stdoff) {
-					/* America/Resolute in 2009a uses a pair of rules
-					 * which does not change the offset.  ICU ignores
-					 * such rules without actual time transitions. */
-					finalRuleYear = finalRuleIndex = -1;
-					finalRule1 = finalRule2 = NULL; 
+				if (finalRule2 == NULL) {
+					warning("only one max rule found (ICU)");
+					finalRule1 = NULL;
 				} else {
-					/* Swap if necessary so finalRule1 occurs before
-					 * finalRule2 */
-					if (finalRule1->r_month > finalRule2->r_month) {
-						const struct rule* t = finalRule1;
-						finalRule1 = finalRule2;
-						finalRule2 = t;
+					if (finalRule1->r_stdoff == finalRule2->r_stdoff) {
+						/* America/Resolute in 2009a uses a pair of rules
+						 * which does not change the offset.  ICU ignores
+						 * such rules without actual time transitions. */
+						finalRuleYear = finalRuleIndex = -1;
+						finalRule1 = finalRule2 = NULL; 
+					} else {
+						/* Swap if necessary so finalRule1 occurs before
+						 * finalRule2 */
+						if (finalRule1->r_month > finalRule2->r_month) {
+							const struct rule* t = finalRule1;
+							finalRule1 = finalRule2;
+							finalRule2 = t;
+						}
+						/* Add final rule to our list */
+						finalRuleIndex = add_icu_final_rules(finalRule1, finalRule2);
 					}
-					/* Add final rule to our list */
-					finalRuleIndex = add_icu_final_rules(finalRule1, finalRule2);
 				}
 			}
 		}
