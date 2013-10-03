@@ -2255,8 +2255,6 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 					if (max_year < finalRuleYear) {
 						max_year = finalRuleYear;
 					}
-
-printf("hi - finalRuleYear to %d\n", finalRuleYear);
 				}
 			}
 			if (finalRule1 != NULL) {
