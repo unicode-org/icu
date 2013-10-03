@@ -2283,7 +2283,6 @@ wp = ecpyalloc(_("no POSIX environment variable for zone"));
 				}
 			}
 		}
-printf("zone: %s, finalRuleYear: %d\n", zpfirst->z_name, finalRuleYear);
 #endif
 
 		if (zp->z_nrules == 0) {
