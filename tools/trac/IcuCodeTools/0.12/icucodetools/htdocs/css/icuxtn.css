@@ -2,7 +2,9 @@
 
 /* @override http://unicode.org/cldr/trac/chrome/icucodetools/css/icuxtn.css */
 
-table.icureview tr:hover {
+table.icureview tr:hover,
+table.icureview tr:hover td,
+table.icureview tr:hover th {
     background-color: yellow !important;
 }
 
