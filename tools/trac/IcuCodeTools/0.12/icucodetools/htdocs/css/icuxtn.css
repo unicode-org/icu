@@ -3,7 +3,7 @@
 /* @override http://unicode.org/cldr/trac/chrome/icucodetools/css/icuxtn.css */
 
 table.icureview tr:hover {
-    background-color: yellow;
+    background-color: yellow !important;
 }
 
 table.icureview {
