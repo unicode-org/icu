@@ -7,6 +7,7 @@
 package com.ibm.icu.text;
 
 import java.text.FieldPosition;
+import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.HashMap;
 import java.util.Locale;
@@ -189,18 +190,6 @@ public class TimeUnitFormat extends MeasureFormat {
         } else {
             this.format = format;
         }
-        // reset the number formatter in the timeUnitToCountToPatterns map
-        if (isReady == false) {
-            return this;
-        }
-        for (Map<String, Object[]> countToPattern : timeUnitToCountToPatterns.values()) {
-            for (Object[] pair : countToPattern.values()) {
-                MessageFormat pattern = (MessageFormat)pair[FULL_NAME];
-                pattern.setFormatByArgumentIndex(0, format);
-                pattern = (MessageFormat)pair[ABBREVIATED_NAME];
-                pattern.setFormatByArgumentIndex(0, format);
-            }
-        }
         return this;
     }
 
@@ -221,10 +210,16 @@ public class TimeUnitFormat extends MeasureFormat {
         }
         TimeUnitAmount amount = (TimeUnitAmount) obj;
         Map<String, Object[]> countToPattern = timeUnitToCountToPatterns.get(amount.getTimeUnit());
-        double number = amount.getNumber().doubleValue();
-        String count = pluralRules.select(number);
+        String formattedNumber = format.format(amount.getNumber());
+        double doubleNumber = amount.getNumber().doubleValue();
+        String count;
+        if (format instanceof DecimalFormat) {
+            count = pluralRules.select(((DecimalFormat) format).getFixedDecimal(doubleNumber));
+        } else {
+            count = pluralRules.select(doubleNumber);
+        }
         MessageFormat pattern = (MessageFormat)(countToPattern.get(count))[style];
-        return pattern.format(new Object[]{amount.getNumber()}, toAppendTo, pos);
+        return pattern.format(new Object[]{formattedNumber}, toAppendTo, pos);
     }
     
     /**
@@ -264,10 +259,17 @@ public class TimeUnitFormat extends MeasureFormat {
                     // pattern with Number as beginning,
                     // such as "{0} d".
                     // check to make sure that the timeUnit is consistent
-                    temp = (Number)((Object[])parsed)[0];
-                    String select = pluralRules.select(temp.doubleValue());
-                    if (!count.equals(select)) {
-                        continue;
+                    Object tempObj = ((Object[])parsed)[0];
+                    if (tempObj instanceof Number) {
+                        temp = (Number) tempObj;
+                    } else {
+                     // Since we now format the number ourselves, parseObject will likely give us back a String for
+                     // the number. When this happens we must parse the formatted number ourselves.
+                        try {
+                            temp = format.parse((String) tempObj.toString());
+                        } catch (ParseException e) {
+                            continue;
+                        }
                     }
                 }
                 int parseDistance = pos.getIndex() - oldPos;
@@ -377,9 +379,6 @@ public class TimeUnitFormat extends MeasureFormat {
                         continue;
                     String pattern = oneUnitRes.get(pluralIndex).getString();
                     final MessageFormat messageFormat = new MessageFormat(pattern, locale);
-                    if (format != null) {
-                        messageFormat.setFormatByArgumentIndex(0, format);
-                    }
                     // save both full name and abbreviated name in one table
                     // is good space-wise, but it degrades performance, 
                     // since it needs to check whether the needed space 
@@ -457,9 +456,6 @@ public class TimeUnitFormat extends MeasureFormat {
                 ICUResourceBundle oneUnitRes = unitsRes.getWithFallback(srcTimeUnitName);
                 String pattern = oneUnitRes.getStringWithFallback(searchPluralCount);
                 final MessageFormat messageFormat = new MessageFormat(pattern, locale);
-                if (format != null) {
-                    messageFormat.setFormatByArgumentIndex(0, format);
-                }
                 Object[] pair = countToPatterns.get(srcPluralCount);
                 if (pair == null) {
                     pair = new Object[2];
@@ -502,9 +498,6 @@ public class TimeUnitFormat extends MeasureFormat {
                 messageFormat = new MessageFormat(DEFAULT_PATTERN_FOR_MONTH, locale);
             } else if ( timeUnit == TimeUnit.YEAR ) {
                 messageFormat = new MessageFormat(DEFAULT_PATTERN_FOR_YEAR, locale);
-            }
-            if (format != null && messageFormat != null) {
-                messageFormat.setFormatByArgumentIndex(0, format);
             }
             Object[] pair = countToPatterns.get(srcPluralCount);
             if (pair == null) {

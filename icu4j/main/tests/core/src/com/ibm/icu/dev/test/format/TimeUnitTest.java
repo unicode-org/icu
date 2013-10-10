@@ -11,6 +11,7 @@ import java.text.ParsePosition;
 import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
+import com.ibm.icu.math.BigDecimal;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.TimeUnitFormat;
 import com.ibm.icu.util.TimeUnit;
@@ -24,6 +25,30 @@ import com.ibm.icu.util.ULocale;
 public class TimeUnitTest extends TestFmwk {
     public static void main(String[] args) throws Exception{
         new TimeUnitTest().run(args);
+    }
+    
+    public void Test10219FractionalPlurals() {
+        TimeUnitFormat tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);
+        String[] expected = {"1 minute", "1.5 minutes", "1.58 minutes"};
+        for (int i = 2; i >= 0; i--) {
+            NumberFormat nf = NumberFormat.getNumberInstance(ULocale.ENGLISH);
+            nf.setRoundingMode(BigDecimal.ROUND_DOWN);
+            nf.setMaximumFractionDigits(i);
+            tuf.setNumberFormat(nf);
+            assertEquals("Test10219", expected[i], tuf.format(new TimeUnitAmount(1.588, TimeUnit.MINUTE)));
+        }   
+    }
+    
+    public void Test10219FactionalPluralsParse() throws ParseException {
+        TimeUnitFormat tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);
+        ParsePosition ppos = new ParsePosition(0);
+        String parseString = "1 minutes";
+        tuf.parseObject(parseString, ppos);
+        
+        // Parsing should go all the way to the end of the string.
+        // We want the longest match, and we don't care if the plural form of the unit
+        // matches the plural form of the number.
+        assertEquals("Test10219FractionalPluralParse", parseString.length(), ppos.getIndex());
     }
 
     public void TestBasic() {
