@@ -130,6 +130,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestParseNegativeWithAlternateMinusSign);
   TESTCASE_AUTO(TestCustomCurrencySignAndSeparator);
   TESTCASE_AUTO(TestParseSignsAndMarks);
+  TESTCASE_AUTO(Test10419RoundingWith0FractionDigits);
   TESTCASE_AUTO_END;
 }
 
@@ -7281,6 +7282,40 @@ void NumberFormatTest::TestParseSignsAndMarks() {
             dataerrln("FAIL: NumberFormat::createInstance for locale % gives error %s", itemPtr->locale, u_errorName(status));
         }
         delete numfmt;
+    }
+}
+
+typedef struct {
+  DecimalFormat::ERoundingMode mode;
+  double value;
+  UnicodeString expected;
+} Test10419Data;
+
+
+// Tests that rounding works right when fractional digits is set to 0.
+void NumberFormatTest::Test10419RoundingWith0FractionDigits() {
+    const Test10419Data items[] = {
+        { DecimalFormat::kRoundCeiling, 1.488,  "2"},
+        { DecimalFormat::kRoundDown, 1.588,  "1"},
+        { DecimalFormat::kRoundFloor, 1.888,  "1"},
+        { DecimalFormat::kRoundHalfDown, 1.5,  "1"},
+        { DecimalFormat::kRoundHalfEven, 2.5,  "2"},
+        { DecimalFormat::kRoundHalfUp, 2.5,  "3"},
+        { DecimalFormat::kRoundUp, 1.5,  "2"},
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<DecimalFormat> decfmt((DecimalFormat *) NumberFormat::createInstance(Locale("en_US"), status));
+    if (U_FAILURE(status)) {
+        dataerrln("Failure creating DecimalFormat %s", u_errorName(status));
+        return;
+    }
+    for (int32_t i = 0; i < sizeof(items) / sizeof(items[0]); ++i) {
+        decfmt->setRoundingMode(items[i].mode);
+        decfmt->setMaximumFractionDigits(0);
+        UnicodeString actual;
+        if (items[i].expected != decfmt->format(items[i].value, actual)) {
+            errln("Expected " + items[i].expected + ", got " + actual);
+        }
     }
 }
 
