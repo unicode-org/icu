@@ -2548,7 +2548,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
             
             // force success on fallback
-            text = "08/15/58 " + TimeZone.getDefault().getID();
+            text = "08/15/58 " + TimeZone.getDefault().getDisplayName(true, TimeZone.SHORT);
             try {
                 fmt.parse(text);
                 logln("found default tz");

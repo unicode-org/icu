@@ -47,7 +47,7 @@ public class TestFmwk extends AbstractTestLog {
     /**
      * The default time zone for all of our tests. Used in Target.run();
      */
-    private final static TimeZone defaultTimeZone = TimeZone.getTimeZone("PST");
+    private final static TimeZone defaultTimeZone = TimeZone.getTimeZone("America/Los_Angeles");
 
     /**
      * The default locale used for all of our tests. Used in Target.run();
