@@ -7,6 +7,7 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/decimfmt.h"
 #include "unicode/tmunit.h"
 #include "unicode/tmutamt.h"
 #include "unicode/tmutfmt.h"
@@ -27,8 +28,26 @@ void TimeUnitTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
         TESTCASE(1, testAPI);
         TESTCASE(2, testGreekWithFallback);
         TESTCASE(3, testGreekWithSanitization);
+        TESTCASE(4, test10219Plurals);
         default: name = ""; break;
     }
+}
+
+// This function is more lenient than equals operator as it considers integer 3 hours and
+// double 3.0 hours to be equal
+static UBool tmaEqual(const TimeUnitAmount& left, const TimeUnitAmount& right) {
+    if (left.getTimeUnitField() != right.getTimeUnitField()) {
+        return FALSE;
+    }
+    UErrorCode status = U_ZERO_ERROR;
+    if (!left.getNumber().isNumeric() || !right.getNumber().isNumeric()) {
+        return FALSE;
+    }
+    UBool result = left.getNumber().getDouble(status) == right.getNumber().getDouble(status);
+    if (U_FAILURE(status)) {
+        return FALSE;
+    }
+    return result;
 }
 
 /**
@@ -78,14 +97,14 @@ void TimeUnitTest::testBasic() {
                 Formattable result;
                 ((Format*)formats[style])->parseObject(formatted, result, status);
                 if (!assertSuccess("parseObject()", status)) return;
-                if (result != formattable) {
+                if (!tmaEqual(*((TimeUnitAmount *)result.getObject()), *((TimeUnitAmount *) formattable.getObject()))) {
                     dataerrln("No round trip: ");
                 }
                 // other style parsing
                 Formattable result_1;
                 ((Format*)formats[1-style])->parseObject(formatted, result_1, status);
                 if (!assertSuccess("parseObject()", status)) return;
-                if (result_1 != formattable) {
+                if (!tmaEqual(*((TimeUnitAmount *)result_1.getObject()), *((TimeUnitAmount *) formattable.getObject()))) {
                     dataerrln("No round trip: ");
                 }
             }
@@ -352,6 +371,56 @@ void TimeUnitTest::testGreekWithSanitization() {
 
     delete numberFmt;
     delete timeUnitFormat;
+}
+
+void TimeUnitTest::test10219Plurals() {
+    Locale usLocale("en_US");
+    UnicodeString expected[3] = {"1 minute", "1.5 minutes", "1.58 minutes"};
+    UErrorCode status = U_ZERO_ERROR;
+    TimeUnitFormat tuf(usLocale, status);
+    if (U_FAILURE(status)) {
+        dataerrln("generating TimeUnitFormat Object failed: %s", u_errorName(status));
+        return;
+    }
+    LocalPointer<DecimalFormat> nf((DecimalFormat *) NumberFormat::createInstance(usLocale, status));
+    if (U_FAILURE(status)) {
+        dataerrln("generating NumberFormat Object failed: %s", u_errorName(status));
+        return;
+    }
+    for (int32_t i = 0; i < sizeof(expected) / sizeof(expected[0]); ++i) {
+        nf->setMaximumFractionDigits(i);
+        nf->setRoundingMode(DecimalFormat::kRoundDown);
+        tuf.setNumberFormat(*nf, status);
+        if (U_FAILURE(status)) {
+            dataerrln("setting NumberFormat failed: %s", u_errorName(status));
+            return;
+        }
+        UnicodeString actual;
+        Formattable fmt;
+        LocalPointer<TimeUnitAmount> tamt(new TimeUnitAmount(1.588, TimeUnit::UTIMEUNIT_MINUTE, status));
+        if (U_FAILURE(status)) {
+            dataerrln("generating TimeUnitAmount Object failed: %s", u_errorName(status));
+            return;
+        }
+        fmt.adoptObject(tamt.orphan());
+        tuf.format(fmt, actual, status);
+        if (U_FAILURE(status)) {
+            dataerrln("Actual formatting failed: %s", u_errorName(status));
+            return;
+        }
+        if (expected[i] != actual) {
+            errln("Expected " + expected[i] + ", got " + actual);
+        }
+    }
+
+    // test parsing
+    Formattable result;
+    ParsePosition pos;
+    UnicodeString formattedString = "1 minutes";
+    tuf.parseObject(formattedString, result, pos);
+    if (formattedString.length() != pos.getIndex()) {
+        errln("Expect parsing to go all the way to the end of the string.");
+    }
 }
 
 #endif
