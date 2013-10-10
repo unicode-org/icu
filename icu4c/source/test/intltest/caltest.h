@@ -240,6 +240,8 @@ public: // package
 
     void TestCloneLocale(void);
 
+    void TestHebrewMonthValidation(void);
+
     /*
      * utility methods for TestIslamicUmAlQura
      */
