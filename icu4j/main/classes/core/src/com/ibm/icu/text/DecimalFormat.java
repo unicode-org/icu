@@ -5978,6 +5978,8 @@ public class DecimalFormat extends NumberFormat {
             } else {
                 if (getMaximumFractionDigits() > 0) {
                     actualRoundingIncrementICU = BigDecimal.ONE.movePointLeft(getMaximumFractionDigits());
+                }  else {
+                    actualRoundingIncrementICU = BigDecimal.ONE;
                 }
             }
         }

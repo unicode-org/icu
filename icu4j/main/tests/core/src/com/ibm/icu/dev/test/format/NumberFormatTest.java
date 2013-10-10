@@ -18,7 +18,9 @@ import java.text.FieldPosition;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import com.ibm.icu.dev.test.TestUtil;
@@ -41,6 +43,24 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
 
     public static void main(String[] args) throws Exception {
         new NumberFormatTest().run(args);
+    }
+    
+    public void Test10419RoundingWith0FractionDigits() {
+        Object[][] data = new Object[][]{
+                {BigDecimal.ROUND_CEILING, 1.488, "2"},
+                {BigDecimal.ROUND_DOWN, 1.588, "1"},
+                {BigDecimal.ROUND_FLOOR, 1.588, "1"},
+                {BigDecimal.ROUND_HALF_DOWN, 1.5, "1"},
+                {BigDecimal.ROUND_HALF_EVEN, 2.5, "2"},
+                {BigDecimal.ROUND_HALF_UP, 2.5, "3"},
+                {BigDecimal.ROUND_UP, 1.5, "2"},
+        };
+        NumberFormat nff = NumberFormat.getNumberInstance(ULocale.ENGLISH);
+        nff.setMaximumFractionDigits(0);
+        for (Object[] item : data) {
+          nff.setRoundingMode(((Integer) item[0]).intValue());
+          assertEquals("Test10419", item[2], nff.format(item[1]));
+        }
     }
 
     public void TestParseNegativeWithFaLocale() {
