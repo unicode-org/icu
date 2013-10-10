@@ -11,6 +11,8 @@
 
 #if !UCONFIG_NO_FORMATTING
 
+#include "unicode/decimfmt.h"
+#include "plurrule_impl.h"
 #include "uvector.h"
 #include "charstr.h"
 #include "cmemory.h"
@@ -207,17 +209,32 @@ TimeUnitFormat::format(const Formattable& obj, UnicodeString& toAppendTo,
         const TimeUnitAmount* amount = dynamic_cast<const TimeUnitAmount*>(formatObj);
         if (amount != NULL){
             Hashtable* countToPattern = fTimeUnitToCountToPatterns[amount->getTimeUnitField()];
-            double number;
             const Formattable& amtNumber = amount->getNumber();
-            if (amtNumber.getType() == Formattable::kDouble) {
-                number = amtNumber.getDouble();
-            } else if (amtNumber.getType() == Formattable::kLong) {
-                number = amtNumber.getLong();
-            } else {
-                status = U_ILLEGAL_ARGUMENT_ERROR;
+            UnicodeString formattedNumber;
+            fNumberFormat->format(amtNumber, formattedNumber, status);
+            if (U_FAILURE(status)) {
                 return toAppendTo;
             }
-            UnicodeString count = fPluralRules->select(number);
+            UnicodeString count;
+            const DecimalFormat* decfmt = dynamic_cast<const DecimalFormat*>(fNumberFormat);
+            if (decfmt != NULL) {
+                FixedDecimal fd = decfmt->getFixedDecimal(amtNumber, status);
+                if (U_FAILURE(status)) {
+                    return toAppendTo;
+                }
+                count = fPluralRules->select(fd);
+            } else {
+                if (amtNumber.getType() == Formattable::kDouble) {
+                    count = fPluralRules->select(amtNumber.getDouble());
+                } else if (amtNumber.getType() == Formattable::kLong) {
+                    count = fPluralRules->select(amtNumber.getLong());
+                } else if (amtNumber.getType() == Formattable::kInt64) {
+                    count = fPluralRules->select((double) amtNumber.getInt64());
+                } else {
+                    status = U_ILLEGAL_ARGUMENT_ERROR;
+                    return toAppendTo;
+                }
+            }
 #ifdef TMUTFMT_DEBUG
             char result[1000];
             count.extract(0, count.length(), result, "UTF-8");
@@ -225,7 +242,7 @@ TimeUnitFormat::format(const Formattable& obj, UnicodeString& toAppendTo,
 #endif
             MessageFormat* pattern = ((MessageFormat**)countToPattern->get(count))[fStyle];
             Formattable formattable[1];
-            formattable[0].setDouble(number);
+            formattable[0].setString(formattedNumber);
             return pattern->format(formattable, 1, toAppendTo, pos, status);
         }
     }
@@ -238,7 +255,7 @@ void
 TimeUnitFormat::parseObject(const UnicodeString& source, 
                             Formattable& result,
                             ParsePosition& pos) const {
-    double resultNumber = -1; 
+    Formattable resultNumber(0.0); 
     UBool withNumberFormat = false;
     TimeUnit::UTimeUnitFields resultTimeUnit = TimeUnit::UTIMEUNIT_FIELD_COUNT;
     int32_t oldPos = pos.getIndex();
@@ -282,24 +299,19 @@ TimeUnitFormat::parseObject(const UnicodeString& source,
     #ifdef TMUTFMT_DEBUG
                 std::cout << "parsed.getType: " << parsed.getType() << "\n";
     #endif
-                double tmpNumber = 0;
+                Formattable tmpNumber(0.0);
                 if (pattern->getArgTypeCount() != 0) {
-                    // pattern with Number as beginning, such as "{0} d".
-                    // check to make sure that the timeUnit is consistent
                     Formattable& temp = parsed[0];
-                    if (temp.getType() == Formattable::kDouble) {
-                        tmpNumber = temp.getDouble();
-                    } else if (temp.getType() == Formattable::kLong) {
-                        tmpNumber = temp.getLong();
+                    if (temp.getType() == Formattable::kString) {
+                        UnicodeString tmpString;
+                        UErrorCode pStatus = U_ZERO_ERROR;
+                        fNumberFormat->parse(temp.getString(tmpString), tmpNumber, pStatus);
+                        if (U_FAILURE(pStatus)) {
+                            continue;
+                        }
+                    } else if (temp.isNumeric()) {
+                        tmpNumber = temp;
                     } else {
-                        continue;
-                    }
-                    UnicodeString select = fPluralRules->select(tmpNumber);
-    #ifdef TMUTFMT_DEBUG
-                    select.extract(0, select.length(), res, "UTF-8");
-                    std::cout << "parse plural select count: " << res << "\n"; 
-    #endif
-                    if (*count != select) {
                         continue;
                     }
                 }
@@ -327,15 +339,15 @@ TimeUnitFormat::parseObject(const UnicodeString& source,
     if (withNumberFormat == false && longestParseDistance != 0) {
         // set the number using plurrual count
         if (0 == countOfLongestMatch->compare(PLURAL_COUNT_ZERO, 4)) {
-            resultNumber = 0;
+            resultNumber = Formattable(0.0);
         } else if (0 == countOfLongestMatch->compare(PLURAL_COUNT_ONE, 3)) {
-            resultNumber = 1;
+            resultNumber = Formattable(1.0);
         } else if (0 == countOfLongestMatch->compare(PLURAL_COUNT_TWO, 3)) {
-            resultNumber = 2;
+            resultNumber = Formattable(2.0);
         } else {
             // should not happen.
             // TODO: how to handle?
-            resultNumber = 3;
+            resultNumber = Formattable(3.0);
         }
     }
     if (longestParseDistance == 0) {
@@ -505,9 +517,6 @@ TimeUnitFormat::readFromCurrentLocale(UTimeUnitFormatStyle style, const char* ke
                 }
                 MessageFormat* messageFormat = new MessageFormat(pattern, fLocale, err);
                 if ( U_SUCCESS(err) ) {
-                  if (fNumberFormat != NULL) {
-                    messageFormat->setFormat(0, *fNumberFormat);
-                  }
                   MessageFormat** formatters = (MessageFormat**)countToPatterns->get(pluralCountUniStr);
                   if (formatters == NULL) {
                     formatters = (MessageFormat**)uprv_malloc(UTMUTFMT_FORMAT_STYLE_COUNT*sizeof(MessageFormat*));
@@ -643,9 +652,6 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
             //found
             MessageFormat* messageFormat = new MessageFormat(UnicodeString(TRUE, pattern, ptLength), fLocale, err);
             if (U_SUCCESS(err)) {
-                if (fNumberFormat != NULL) {
-                    messageFormat->setFormat(0, *fNumberFormat);
-                }
                 MessageFormat** formatters = (MessageFormat**)countToPatterns->get(srcPluralCount);
                 if (formatters == NULL) {
                     formatters = (MessageFormat**)uprv_malloc(UTMUTFMT_FORMAT_STYLE_COUNT*sizeof(MessageFormat*));
@@ -722,9 +728,6 @@ TimeUnitFormat::searchInLocaleChain(UTimeUnitFormatStyle style, const char* key,
             messageFormat = new MessageFormat(UnicodeString(TRUE, pattern, -1), fLocale, err);
         }
         if (U_SUCCESS(err)) {
-            if (fNumberFormat != NULL && messageFormat != NULL) {
-                messageFormat->setFormat(0, *fNumberFormat);
-            }
             MessageFormat** formatters = (MessageFormat**)countToPatterns->get(srcPluralCount);
             if (formatters == NULL) {
                 formatters = (MessageFormat**)uprv_malloc(UTMUTFMT_FORMAT_STYLE_COUNT*sizeof(MessageFormat*));
@@ -766,20 +769,6 @@ TimeUnitFormat::setNumberFormat(const NumberFormat& format, UErrorCode& status){
     }
     delete fNumberFormat;
     fNumberFormat = (NumberFormat*)format.clone();
-    // reset the number formatter in the fTimeUnitToCountToPatterns map
-    for (TimeUnit::UTimeUnitFields i = TimeUnit::UTIMEUNIT_YEAR;
-         i < TimeUnit::UTIMEUNIT_FIELD_COUNT;
-         i = (TimeUnit::UTimeUnitFields)(i+1)) {
-        int32_t pos = -1;
-        const UHashElement* elem = NULL;
-        while ((elem = fTimeUnitToCountToPatterns[i]->nextElement(pos)) != NULL){
-            const UHashTok keyTok = elem->value;
-            MessageFormat** pattern = (MessageFormat**)keyTok.pointer;
-
-            pattern[UTMUTFMT_FULL_STYLE]->setFormat(0, format);
-            pattern[UTMUTFMT_ABBREVIATED_STYLE]->setFormat(0, format);
-        }
-    }
 }
 
 
