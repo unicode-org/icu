@@ -746,6 +746,21 @@ public class HebrewCalendar extends Calendar {
         return (int)(startOfYear(eyear+1) - startOfYear(eyear));
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * Overrides {@link Calendar#validateField(int)} to provide
+     * special handling for month validation for Hebrew calendar.
+     * @internal
+     */
+    protected void validateField(int field) {
+        if (field == MONTH && !isLeapYear(handleGetExtendedYear()) && internalGet(MONTH) == ADAR_1) {
+            throw new IllegalArgumentException("MONTH cannot be ADAR_1(5) except leap years");
+        }
+
+        super.validateField(field);
+    }
+
     //-------------------------------------------------------------------------
     // Functions for converting from milliseconds to field values
     //-------------------------------------------------------------------------
