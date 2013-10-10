@@ -11,7 +11,7 @@
 
   <groupId>com.ibm.icu</groupId>
   <artifactId>icu4j</artifactId>
-  <version>52-SNAPSHOT</version>
+  <version>53-SNAPSHOT</version>
 
   <name>ICU4J</name>
   <description>
