@@ -1713,6 +1713,16 @@ protected:
      */
     virtual int32_t handleGetExtendedYearFromWeekFields(int32_t yearWoy, int32_t woy);
 
+    /**
+     * Validate a single field of this calendar.  Subclasses should
+     * override this method to validate any calendar-specific fields.
+     * Generic fields can be handled by
+     * <code>Calendar::validateField()</code>.
+     * @see #validateField(int, int, int, int&)
+     * @internal
+     */
+    virtual void validateField(UCalendarDateFields field, UErrorCode &status);
+
 #ifndef U_HIDE_INTERNAL_API
     /**
      * Compute the Julian day from fields.  Will determine whether to use
@@ -2291,16 +2301,6 @@ private:
      * @internal
      */
     void validateFields(UErrorCode &status);
-
-    /**
-     * Validate a single field of this calendar.  Subclasses should
-     * override this method to validate any calendar-specific fields.
-     * Generic fields can be handled by
-     * <code>Calendar::validateField()</code>.
-     * @see #validateField(int, int, int, int&)
-     * @internal
-     */
-    virtual void validateField(UCalendarDateFields field, UErrorCode &status);
 
     /**
      * Validate a single field of this calendar given its minimum and
