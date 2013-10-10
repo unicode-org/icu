@@ -145,10 +145,10 @@ public class MeasureUnitTest extends TestFmwk {
     public void testExamples() {
         GeneralMeasureFormat fmtFr = GeneralMeasureFormat.getInstance(ULocale.FRENCH, FormatWidth.SHORT);
         Measure measure = new Measure(23, MeasureUnit.CELSIUS);
-        assertEquals("", "23°C", fmtFr.format(measure));
+        assertEquals("", "23 °C", fmtFr.format(measure));
 
         Measure measureF = new Measure(70, MeasureUnit.FAHRENHEIT);
-        assertEquals("", "70°F", fmtFr.format(measureF));
+        assertEquals("", "70 °F", fmtFr.format(measureF));
 
         GeneralMeasureFormat fmtFrFull = GeneralMeasureFormat.getInstance(ULocale.FRENCH, FormatWidth.WIDE);
         if (!logKnownIssue("8474", "needs latest CLDR data")) {
@@ -159,7 +159,7 @@ public class MeasureUnitTest extends TestFmwk {
         }
         // Degenerate case
         GeneralMeasureFormat fmtEn = GeneralMeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
-        assertEquals("", "1 inch, 2 feet", fmtEn.format(new Measure(1, MeasureUnit.INCH),
+        assertEquals("", "1 inch and 2 feet", fmtEn.format(new Measure(1, MeasureUnit.INCH),
                 new Measure(2, MeasureUnit.FOOT)));
 
         logln("Show all currently available units");

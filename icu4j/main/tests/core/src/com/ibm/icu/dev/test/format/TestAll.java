@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2004-2012, International Business Machines
+ * Copyright (c) 2004-2013, International Business Machines
  * Corporation and others.  All Rights Reserved.
  * Copyright (C) 2010 , Yahoo! Inc.                                            
  *******************************************************************************
@@ -29,6 +29,7 @@ public class TestAll extends TestGroup {
                   "com.ibm.icu.dev.test.format.BigNumberFormatTest",
                   "DataDrivenFormatTest",
                   "ListFormatterTest",
+                  "MeasureUnitTest",
                   "TestAll$PluralFormat",
                   "TestAll$MessageFormat",
                   "TestAll$SelectFormat"
