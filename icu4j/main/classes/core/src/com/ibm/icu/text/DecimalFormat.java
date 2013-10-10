@@ -2770,7 +2770,6 @@ public class DecimalFormat extends NumberFormat {
     /**
      * Remove bidi marks from affix
      */
-    private static final int TRIM_BUFLEN = 32;
     private static String trimMarksFromAffix(String affix) { 
         boolean hasBidiMark = false; 
         int idx = 0; 
