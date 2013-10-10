@@ -298,6 +298,13 @@ void CalendarTest::runIndexedTest( int32_t index, UBool exec, const char* &name,
             TestIslamicTabularDates();
           }
           break;
+        case 33:
+          name = "TestHebrewMonthValidation";
+          if(exec) {
+            logln("TestHebrewMonthValidation---"); logln("");
+            TestHebrewMonthValidation();
+          }
+          break;
         default: name = ""; break;
     }
 }
@@ -2771,7 +2778,7 @@ void CalendarTest::TestIslamicUmAlQura() {
     UErrorCode status = U_ZERO_ERROR;
     Locale islamicLoc("ar_SA@calendar=islamic-umalqura"); 
     Calendar* tstCal = Calendar::createInstance(islamicLoc, status);
-    
+
     IslamicCalendar* iCal = (IslamicCalendar*)tstCal;
     if(strcmp(iCal->getType(), "islamic-umalqura") != 0) {
         errln("wrong type of calendar created - %s", iCal->getType());
@@ -2858,7 +2865,7 @@ void CalendarTest::TestIslamicTabularDates() {
     UErrorCode status = U_ZERO_ERROR;
     Locale islamicLoc("ar_SA@calendar=islamic-civil"); 
     Locale tblaLoc("ar_SA@calendar=islamic-tbla"); 
-    SimpleDateFormat* formatter = new SimpleDateFormat("yyyy-MM-dd", Locale::getUS(), status);            
+    SimpleDateFormat* formatter = new SimpleDateFormat("yyyy-MM-dd", Locale::getUS(), status);
     UDate date = formatter->parse("1975-05-06", status);
 
     Calendar* tstCal = Calendar::createInstance(islamicLoc, status);
@@ -2885,6 +2892,32 @@ void CalendarTest::TestIslamicTabularDates() {
     delete formatter;
 }
 
+void CalendarTest::TestHebrewMonthValidation() {
+    UErrorCode status = U_ZERO_ERROR;
+    LocalPointer<Calendar>  cal(Calendar::createInstance(Locale::createFromName("he_IL@calendar=hebrew"), status));
+    if (failure(status, "Calendar::createInstance, locale:he_IL@calendar=hebrew", TRUE)) return;
+    Calendar *pCal = cal.getAlias();
+
+    UDate d;
+    pCal->setLenient(FALSE);
+
+    // 5776 is a leap year and has month Adar I
+    pCal->set(5776, HebrewCalendar::ADAR_1, 1);
+    d = pCal->getTime(status);
+    if (U_FAILURE(status)) {
+        errln("Fail: 5776 Adar I 1 is a valid date.");
+    }
+    status = U_ZERO_ERROR;
+
+    // 5777 is NOT a lear year and does not have month Adar I
+    pCal->set(5777, HebrewCalendar::ADAR_1, 1);
+    d = pCal->getTime(status);
+    if (status == U_ILLEGAL_ARGUMENT_ERROR) {
+        logln("Info: U_ILLEGAL_ARGUMENT_ERROR, because 5777 Adar I 1 is not a valid date.");
+    } else {
+        errln("Fail: U_ILLEGAL_ARGUMENT_ERROR should be set for input date 5777 Adar I 1.");
+    }
+}
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 
