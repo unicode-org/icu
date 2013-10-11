@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2011, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -40,7 +40,6 @@ import com.ibm.icu.dev.demo.impl.DemoUtility;
 import com.ibm.icu.text.SimpleDateFormat;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Holiday;
-import com.ibm.icu.util.SimpleTimeZone;
 
 /**
  * CalendarDemo demonstrates how Calendar works.
@@ -331,7 +330,6 @@ public class HolidayCalendarDemo extends DemoApplet
             SimpleDateFormat f = new SimpleDateFormat("MMMM yyyyy",
                                                         calendarPanel.getDisplayLocale());
             f.setCalendar(calendarPanel.getCalendar());
-            f.setTimeZone(new SimpleTimeZone(0, "UTC"));        // JDK 1.1.2 workaround
             monthLabel.setText( f.format( calendarPanel.firstOfMonth() ));
         }
         
@@ -501,16 +499,6 @@ public class HolidayCalendarDemo extends DemoApplet
 
         private void calculate()
         {
-            //
-            // As a workaround for JDK 1.1.3 and below, where Calendars and time
-            // zones are a bit goofy, always set my calendar's time zone to UTC.
-            // You would think I would want to do this in the "set" function above,
-            // but if I do that, the program hangs when this class is loaded,
-            // perhaps due to some sort of static initialization ordering problem.
-            // So I do it here instead.
-            //
-            fCalendar.setTimeZone(new SimpleTimeZone(0, "UTC"));
-
             Calendar c = (Calendar)fCalendar.clone(); // Temporary copy
 
             fStartOfMonth = startOfMonth(fStartOfMonth);
