@@ -680,8 +680,11 @@ uregex_group(URegularExpression *regexp2,
         }
         return fullLength;
     } else {
+        int32_t result = 0;
         UText *groupText = uregex_groupUTextDeep(regexp2, groupNum, NULL, status);
-        int32_t result = utext_extract(groupText, 0, utext_nativeLength(groupText), dest, destCapacity, status);
+        if (U_SUCCESS(*status)) {
+            result = utext_extract(groupText, 0, utext_nativeLength(groupText), dest, destCapacity, status);
+        }
         utext_close(groupText);
         return result;
     }

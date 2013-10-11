@@ -27,6 +27,7 @@
 #include "unicode/uchar.h"
 #include "unicode/ucnv.h"
 #include "unicode/uniset.h"
+#include "unicode/uregex.h"
 #include "unicode/ustring.h"
 #include "regextst.h"
 #include "uvector.h"
@@ -131,6 +132,9 @@ void RegexTest::runIndexedTest( int32_t index, UBool exec, const char* &name, ch
         case 21: name = "Bug 9283";
             if (exec) Bug9283();
             break;
+        case 22: name = "Bug10459";
+            if (exec) Bug10459();
+            break;
 
         default: name = "";
             break; //needed to end loop
@@ -207,6 +211,7 @@ const char* RegexTest::extractToAssertBuf(const UnicodeString& message) {
   return ASSERT_BUF;
 }
 
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 #define REGEX_VERBOSE_TEXT(text) {char buf[200];utextToPrintable(buf,sizeof(buf)/sizeof(buf[0]),text);logln("%s:%d: UText %s=\"%s\"", __FILE__, __LINE__, #text, buf);}
 
@@ -5227,6 +5232,37 @@ void RegexTest::CheckInvBufSize() {
   } else {
     logln("%s: INV_BUFSIZ is %d, usage %d\n", __FILE__, INV_BUFSIZ, inv_next);
   }
+}
+
+
+void RegexTest::Bug10459() {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString patternString("(txt)");
+    UnicodeString txtString("txt");
+
+    UText *utext_pat = utext_openUnicodeString(NULL, &patternString, &status);
+    REGEX_CHECK_STATUS;
+    UText *utext_txt = utext_openUnicodeString(NULL, &txtString, &status);
+    REGEX_CHECK_STATUS;
+
+    URegularExpression *icu_re = uregex_openUText(utext_pat, 0, NULL, &status);
+    REGEX_CHECK_STATUS;
+ 
+    uregex_setUText(icu_re, utext_txt, &status);
+    REGEX_CHECK_STATUS;
+
+    // The bug was that calling uregex_group() before doing a matching operation
+    //   was causing a segfault. Only for Regular Expressions created from UText.
+    //   It should set an U_REGEX_INVALID_STATE.
+
+    UChar buf[100];
+    int32_t len = uregex_group(icu_re, 0, buf, LENGTHOF(buf), &status);    
+    REGEX_ASSERT(status == U_REGEX_INVALID_STATE);
+    REGEX_ASSERT(len == 0);
+
+    uregex_close(icu_re);
+    utext_close(utext_pat);
+    utext_close(utext_txt);
 }
 
 #endif  /* !UCONFIG_NO_REGULAR_EXPRESSIONS  */
