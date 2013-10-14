@@ -266,7 +266,7 @@ public class TimeUnitFormat extends MeasureFormat {
                      // Since we now format the number ourselves, parseObject will likely give us back a String for
                      // the number. When this happens we must parse the formatted number ourselves.
                         try {
-                            temp = format.parse((String) tempObj.toString());
+                            temp = format.parse(tempObj.toString());
                         } catch (ParseException e) {
                             continue;
                         }
