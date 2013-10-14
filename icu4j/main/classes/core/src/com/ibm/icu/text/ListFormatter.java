@@ -53,13 +53,13 @@ final public class ListFormatter {
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        DURATION("duration"),
+        DURATION("unit"),
         /**
          * Style for durations in abbrevated form
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        DURATION_SHORT("duration-short");
+        DURATION_SHORT("unit-short");
         
         private final String name;
         
