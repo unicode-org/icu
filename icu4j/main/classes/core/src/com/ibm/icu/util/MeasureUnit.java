@@ -153,8 +153,8 @@ public class MeasureUnit implements Comparable<MeasureUnit>, Serializable {
                     String type = unitsRes.getKey();
                     int unitsSize = unitsRes.getSize();
                     for ( int index2 = 0; index2 < unitsSize; ++index2) {
-                        UResourceBundle unitNameRes = unitsRes.get(index2);
-                        if (unitNameRes.containsKey("other")) {
+                        ICUResourceBundle unitNameRes = (ICUResourceBundle)unitsRes.get(index2);
+                        if (unitNameRes.get("other") != null) {
                             addUnit(type, unitNameRes.getKey(), UNIT_FACTORY);
                         }
                     }
