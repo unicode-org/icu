@@ -2720,7 +2720,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
     int32_t     opType;                //    the opcode
     int32_t     opValue;               //    and the operand value.
 
-    #ifdef REGEX_RUN_DEBUG
+#ifdef REGEX_RUN_DEBUG
     if (fTraceDebug)
     {
         printf("MatchAt(startIdx=%ld)\n", startIdx);
@@ -2730,7 +2730,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
             if (c<32 || c>256) {
                 c = '.';
             }
-            REGEX_DUMP_DEBUG_PRINTF(("%c", c));
+            printf("%c", c);
 
             c = UTEXT_NEXT32(fPattern->fPattern);
         }
@@ -2748,7 +2748,7 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
         printf("\n");
         printf("\n");
     }
-    #endif
+#endif
 
     if (U_FAILURE(status)) {
         return;
@@ -2778,23 +2778,17 @@ void RegexMatcher::MatchAt(int64_t startIdx, UBool toEnd, UErrorCode &status) {
     //  One iteration of the loop per pattern operation performed.
     //
     for (;;) {
-#if 0
-        if (_heapchk() != _HEAPOK) {
-            fprintf(stderr, "Heap Trouble\n");
-        }
-#endif
-
         op      = (int32_t)pat[fp->fPatIdx];
         opType  = URX_TYPE(op);
         opValue = URX_VAL(op);
-        #ifdef REGEX_RUN_DEBUG
+#ifdef REGEX_RUN_DEBUG
         if (fTraceDebug) {
             UTEXT_SETNATIVEINDEX(fInputText, fp->fInputIdx);
             printf("inputIdx=%ld   inputChar=%x   sp=%3ld   activeLimit=%ld  ", fp->fInputIdx,
                 UTEXT_CURRENT32(fInputText), (int64_t *)fp-fStack->getBuffer(), fActiveLimit);
             fPattern->dumpOp(fp->fPatIdx);
         }
-        #endif
+#endif
         fp->fPatIdx++;
 
         switch (opType) {
@@ -4188,16 +4182,17 @@ breakFromLoop:
         fLastMatchEnd = fMatchEnd;
         fMatchStart   = startIdx;
         fMatchEnd     = fp->fInputIdx;
-        if (fTraceDebug) {
-            REGEX_RUN_DEBUG_PRINTF(("Match.  start=%ld   end=%ld\n\n", fMatchStart, fMatchEnd));
+    }
+
+#ifdef REGEX_RUN_DEBUG
+    if (fTraceDebug) {
+        if (isMatch) {
+            printf("Match.  start=%ld   end=%ld\n\n", fMatchStart, fMatchEnd);
+        } else {
+            printf("No match\n\n");
         }
     }
-    else
-    {
-        if (fTraceDebug) {
-            REGEX_RUN_DEBUG_PRINTF(("No match\n\n"));
-        }
-    }
+#endif
 
     fFrame = fp;                // The active stack frame when the engine stopped.
                                 //   Contains the capture group results that we need to
@@ -4228,8 +4223,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
     int32_t     opValue;               //    and the operand value.
 
 #ifdef REGEX_RUN_DEBUG
-    if (fTraceDebug)
-    {
+    if (fTraceDebug) {
         printf("MatchAt(startIdx=%d)\n", startIdx);
         printf("Original Pattern: ");
         UChar32 c = utext_next32From(fPattern->fPattern, 0);
@@ -4237,7 +4231,7 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
             if (c<32 || c>256) {
                 c = '.';
             }
-            REGEX_DUMP_DEBUG_PRINTF(("%c", c));
+            printf("%c", c);
 
             c = UTEXT_NEXT32(fPattern->fPattern);
         }
@@ -4287,12 +4281,6 @@ void RegexMatcher::MatchChunkAt(int32_t startIdx, UBool toEnd, UErrorCode &statu
     //  One iteration of the loop per pattern operation performed.
     //
     for (;;) {
-#if 0
-        if (_heapchk() != _HEAPOK) {
-            fprintf(stderr, "Heap Trouble\n");
-        }
-#endif
-
         op      = (int32_t)pat[fp->fPatIdx];
         opType  = URX_TYPE(op);
         opValue = URX_VAL(op);
@@ -5627,20 +5615,21 @@ breakFromLoop:
         fLastMatchEnd = fMatchEnd;
         fMatchStart   = startIdx;
         fMatchEnd     = fp->fInputIdx;
-        if (fTraceDebug) {
-            REGEX_RUN_DEBUG_PRINTF(("Match.  start=%ld   end=%ld\n\n", fMatchStart, fMatchEnd));
-        }
-    }
-    else
-    {
-        if (fTraceDebug) {
-            REGEX_RUN_DEBUG_PRINTF(("No match\n\n"));
-        }
     }
 
+#ifdef REGEX_RUN_DEBUG
+    if (fTraceDebug) {
+        if (isMatch) {
+            printf("Match.  start=%ld   end=%ld\n\n", fMatchStart, fMatchEnd);
+        } else {
+            printf("No match\n\n");
+        }
+    }
+#endif
+
     fFrame = fp;                // The active stack frame when the engine stopped.
-    //   Contains the capture group results that we need to
-    //    access later.
+                                //   Contains the capture group results that we need to
+                                //    access later.
 
     return;
 }
