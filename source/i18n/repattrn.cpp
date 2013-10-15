@@ -744,8 +744,7 @@ void   RegexPattern::dumpOp(int32_t index) const {
 }
 
 
-U_CAPI void  U_EXPORT2
-RegexPattern::dumpPattern() const {
+void RegexPattern::dumpPattern() const {
 #if defined(REGEX_DEBUG)
     int      index;
     int      i;
