@@ -63,7 +63,7 @@ LDFLAGS += $(LDFLAGSICUI18N)
 LIBS = $(LIBICUUC) $(DEFAULT_LIBS)
 
 OBJECTS = ucln_in.o \
-fmtable.o format.o msgfmt.o umsg.o numfmt.o unum.o decimfmt.o dcfmtsym.o \
+fmtable.o format.o msgfmt.o umsg.o numfmt.o unum.o decimfmt.o decimalformatpattern.o dcfmtsym.o \
 ucurr.o digitlst.o fmtable_cnv.o \
 choicfmt.o datefmt.o smpdtfmt.o reldtfmt.o dtfmtsym.o udat.o dtptngen.o udatpg.o \
 nfrs.o nfrule.o nfsubs.o rbnf.o numsys.o unumsys.o ucsdet.o \

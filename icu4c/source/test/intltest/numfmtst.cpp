@@ -131,6 +131,7 @@ void NumberFormatTest::runIndexedTest( int32_t index, UBool exec, const char* &n
   TESTCASE_AUTO(TestCustomCurrencySignAndSeparator);
   TESTCASE_AUTO(TestParseSignsAndMarks);
   TESTCASE_AUTO(Test10419RoundingWith0FractionDigits);
+  TESTCASE_AUTO(Test10468ApplyPattern);
   TESTCASE_AUTO_END;
 }
 
@@ -7318,5 +7319,26 @@ void NumberFormatTest::Test10419RoundingWith0FractionDigits() {
         }
     }
 }
+
+void NumberFormatTest::Test10468ApplyPattern() {
+    // Padding char of fmt is now 'a'
+    UErrorCode status = U_ZERO_ERROR;
+    DecimalFormat fmt("'I''ll'*a###.##", status);
+
+    if (fmt.getPadCharacterString() != UnicodeString("a")) {
+        errln("Padding character should be 'a'.");
+        return;
+    }
+
+    // Padding char of fmt ought to be '*' since that is the default and no
+    // explicit padding char is specified in the new pattern.
+    fmt.applyPattern("AA#,##0.00ZZ", status);
+
+    // Oops this still prints 'a' even though we changed the pattern. 
+    if (fmt.getPadCharacterString() != UnicodeString("*")) {
+        errln("applyPattern did not clear padding character.");
+    }
+}
+
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
