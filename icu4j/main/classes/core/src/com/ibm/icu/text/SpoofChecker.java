@@ -1753,7 +1753,9 @@ public class SpoofChecker {
      *   @param other the SpoofChecker being compared with.
      *   @return true if the two SpoofCheckers are equal.
      *   @internal
+     *   @deprecated This API is ICU internal only.
      */
+    @Override
     public boolean equals(Object other) {
         if (!(other instanceof SpoofChecker)) {return false; }
         SpoofChecker otherSC = (SpoofChecker)other;
@@ -1779,6 +1781,16 @@ public class SpoofChecker {
         return true;
      }
 
+    /**
+     * This is a stub implementation and not designed for generic use.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    @Override
+    public int hashCode() {
+        assert false;   // To make sure ICU implementation does not depend on this.
+        return 1234;    // Any arbitrary value - for now, using 1234.
+    }
 
     /*
      * Append the confusable skeleton transform for a single code point to a StringBuilder.
