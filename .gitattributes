@@ -73,6 +73,8 @@ icu4c/source/data/region/pool.res -text
 icu4c/source/data/zone/pool.res -text
 icu4c/source/extra/uconv/uconv.vcxproj -text
 icu4c/source/extra/uconv/uconv.vcxproj.filters -text
+icu4c/source/i18n/decimalformatpattern.cpp -text
+icu4c/source/i18n/decimalformatpattern.h -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
 icu4c/source/io/io.vcxproj -text

@@ -2163,14 +2163,6 @@ private:
                            FieldPositionHandler& handler,
                            UErrorCode &status) const;
 
-    // currency sign count
-    enum {
-        fgCurrencySignCountZero,
-        fgCurrencySignCountInSymbolFormat,
-        fgCurrencySignCountInISOFormat,
-        fgCurrencySignCountInPluralFormat
-    } CurrencySignCount;
-
     /**
      * Constants.
      */

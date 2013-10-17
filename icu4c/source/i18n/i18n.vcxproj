@@ -286,6 +286,7 @@
     <ClCompile Include="dcfmtsym.cpp" />
     <ClCompile Include="decContext.c" />
     <ClCompile Include="decfmtst.cpp" />
+    <ClCompile Include="decimalformatpattern.cpp" />
     <ClCompile Include="decimfmt.cpp" />
     <ClCompile Include="decNumber.c" />
     <ClCompile Include="digitlst.cpp" />
@@ -765,6 +766,7 @@
     </CustomBuild>
     <ClInclude Include="decContext.h" />
     <ClInclude Include="decfmtst.h" />
+    <ClInclude Include="decimalformatpattern.h" />
     <CustomBuild Include="unicode\decimfmt.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
 </Command>

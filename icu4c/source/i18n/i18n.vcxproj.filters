@@ -123,6 +123,9 @@
     <ClCompile Include="decfmtst.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="decimalformatpattern.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="decimfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -561,6 +564,9 @@
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="decfmtst.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
+    <ClInclude Include="decimalformatpattern.h">
       <Filter>formatting</Filter>
     </ClInclude>
     <ClInclude Include="decNumber.h">
