@@ -32,7 +32,7 @@ static UChar SECOND_PARAMETER[] = { 0x7b, 0x31, 0x7d };  // "{0}"
 static const char *STANDARD_STYLE = "standard";
 
 U_CDECL_BEGIN
-static UBool U_CALLCONV uprv_listformatter_cleanup() {
+UBool U_CALLCONV uprv_listformatter_cleanup() {
     delete listPatternHash;
     listPatternHash = NULL;
     return TRUE;
