@@ -39,7 +39,7 @@ U_NAMESPACE_END
 
 U_CDECL_BEGIN
 
-UBool U_CALLCONV locale_available_cleanup(void)
+static UBool U_CALLCONV locale_available_cleanup(void)
 {
     U_NAMESPACE_USE
 
@@ -104,7 +104,7 @@ static icu::UInitOnce _installedLocalesInitOnce;
 
 /* ### Get available **************************************************/
 
-UBool U_CALLCONV uloc_cleanup(void) {
+static UBool U_CALLCONV uloc_cleanup(void) {
     char ** temp;
 
     if (_installedLocales) {

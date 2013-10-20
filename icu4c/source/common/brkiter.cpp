@@ -277,7 +277,7 @@ static icu::ICULocaleService* gService = NULL;
  * Release all static memory held by breakiterator.
  */
 U_CDECL_BEGIN
-UBool U_CALLCONV breakiterator_cleanup(void) {
+static UBool U_CALLCONV breakiterator_cleanup(void) {
 #if !UCONFIG_NO_SERVICE
     if (gService) {
         delete gService;
