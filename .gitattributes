@@ -579,6 +579,13 @@ icu4j/manifest.stub -text
 icu4j/perf-tests/data/icuperf2report.xsl -text
 icu4j/samples/build.properties -text
 icu4j/samples/manifest.stub -text
+icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/es.res -text
+icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/res_index.res -text
+icu4j/samples/src/com/ibm/icu/samples/iuc/data/popmsg/root.res -text
+icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/es.res -text
+icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/mt.res -text
+icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/res_index.res -text
+icu4j/samples/src/com/ibm/icu/samples/iuc/data/reshello/root.res -text
 icu4j/tools/build/.settings/org.eclipse.core.resources.prefs -text
 icu4j/tools/build/icu4j28.api.gz -text
 icu4j/tools/build/icu4j30.api.gz -text
