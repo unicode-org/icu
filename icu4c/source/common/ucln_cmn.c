@@ -83,15 +83,6 @@ ucln_registerCleanup(ECleanupLibraryType type,
     }
 }
 
-static cleanupFunc *gCommonCleanupFuncs[] = {
-    breakiterator_cleanup,
-    uprv_listformatter_cleanup,
-    locale_available_cleanup,
-    uloc_cleanup
-};
-
-
-    
 U_CFUNC UBool ucln_lib_cleanup(void) {
     ECleanupLibraryType libType = UCLN_START;
     ECleanupCommonType commonFunc = UCLN_COMMON_START;
