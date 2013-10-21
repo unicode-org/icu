@@ -39,9 +39,6 @@ import com.ibm.icu.util.ULocale;
 public class MeasureUnitTest extends TestFmwk {
     
     private static final TimeUnitAmount[] _19m = {new TimeUnitAmount(19.0, TimeUnit.MINUTE)};
-    private static final TimeUnitAmount[] _19m_28s = {
-            new TimeUnitAmount(19.0, TimeUnit.MINUTE),
-            new TimeUnitAmount(28.0, TimeUnit.SECOND)};
     private static final TimeUnitAmount[] _1h_23_5s = {
             new TimeUnitAmount(1.0, TimeUnit.HOUR),
             new TimeUnitAmount(23.5, TimeUnit.SECOND)};
@@ -52,21 +49,11 @@ public class MeasureUnitTest extends TestFmwk {
             new TimeUnitAmount(1.0, TimeUnit.HOUR),
             new TimeUnitAmount(0.0, TimeUnit.MINUTE),
             new TimeUnitAmount(23.0, TimeUnit.SECOND)};
-    private static final TimeUnitAmount[] _5h_17m = {
-            new TimeUnitAmount(5.0, TimeUnit.HOUR),
-            new TimeUnitAmount(17.0, TimeUnit.MINUTE)};
     private static final TimeUnitAmount[] _2y_5M_3w_4d = {
             new TimeUnitAmount(2.0, TimeUnit.YEAR),
             new TimeUnitAmount(5.0, TimeUnit.MONTH),
             new TimeUnitAmount(3.0, TimeUnit.WEEK),
             new TimeUnitAmount(4.0, TimeUnit.DAY)};
-    private static final TimeUnitAmount[] _0h_0m_17s = {
-            new TimeUnitAmount(0.0, TimeUnit.HOUR),
-            new TimeUnitAmount(0.0, TimeUnit.MINUTE),
-            new TimeUnitAmount(17.0, TimeUnit.SECOND)};
-    private static final TimeUnitAmount[] _6h_56_92m = {
-            new TimeUnitAmount(6.0, TimeUnit.HOUR),
-            new TimeUnitAmount(56.92, TimeUnit.MINUTE)};
     private static final TimeUnitAmount[] _1m_59_9996s = {
             new TimeUnitAmount(1.0, TimeUnit.MINUTE),
             new TimeUnitAmount(59.9996, TimeUnit.SECOND)};
@@ -98,6 +85,7 @@ public class MeasureUnitTest extends TestFmwk {
                 {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, 4 days"}};
         
         // TODO(Travis Keep): We need to support numeric formatting. Either here or in TimeUnitFormat.
+        /*
         Object[][] numericData = {
                 {_1m_59_9996s, "1:59.9996"},
                 {_19m, "19 mins"},
@@ -109,6 +97,7 @@ public class MeasureUnitTest extends TestFmwk {
                 {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, 4 days"},
                 {_0h_0m_17s, "0:00:17"},
                 {_6h_56_92m, "6:56.92"}};
+       */
         
         NumberFormat nf = NumberFormat.getNumberInstance(ULocale.ENGLISH);
         nf.setMaximumFractionDigits(4);
