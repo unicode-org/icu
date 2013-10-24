@@ -820,6 +820,7 @@
         <property name="jacoco.out.dir" value="${out.dir}/jacoco"/>
         <property name="jacoco.exec.data.file" value="${jacoco.out.dir}/jacoco.exec"/>
         <property name="jacoco.report.html.zip" value="${jacoco.out.dir}/report_html.zip"/>
+        <property name="jacoco.report.xml" value="${jacoco.out.dir}/report.xml"/>
         <property name="jacoco.report.csv" value="${jacoco.out.dir}/report.csv"/>
 
         <delete dir="${jacoco.out.dir}"/>
@@ -866,6 +867,7 @@
             </structure>
 
             <html destfile="${jacoco.report.html.zip}"/>
+            <xml destfile="${jacoco.report.xml}"/>
             <csv destfile="${jacoco.report.csv}"/>
         </jacoco:report>
     </target>
