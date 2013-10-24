@@ -4,7 +4,9 @@
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 -->
-<project name="icu4j" default="jar" basedir=".">
+<project name="icu4j" default="jar" basedir="."
+    xmlns:jacoco="antlib:org.jacoco.ant">
+
     <property file="build-local.properties"/>
     <property file="build.properties"/>
 
@@ -809,7 +811,66 @@
         </javadoc>
     </target>
 
-    <!-- Code coverage target -->
+    <!-- JaCoCo code coverage target -->
+    <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath path="${env.JACOCO_DIR}/lib/jacocoant.jar"/>
+    </taskdef>
+
+    <target name="coverageJaCoCo" depends="jar, tests" description="Run the ICU4J unit tests and generate code coverage report">
+        <property name="jacoco.out.dir" value="${out.dir}/jacoco"/>
+        <property name="jacoco.exec.data.file" value="${jacoco.out.dir}/jacoco.exec"/>
+        <property name="jacoco.report.html.zip" value="${jacoco.out.dir}/report_html.zip"/>
+        <property name="jacoco.report.csv" value="${jacoco.out.dir}/report.csv"/>
+
+        <delete dir="${jacoco.out.dir}"/>
+        <mkdir dir="${jacoco.out.dir}"/>
+
+        <jacoco:coverage destfile="${jacoco.exec.data.file}">
+            <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
+                <arg value="-n"/>
+                <jvmarg line="${jvm_options} -ea -Djava.awt.headless=true"/>
+                <classpath>
+                    <pathelement location="${icu4j.jar.file}"/>
+                    <pathelement location="${icu4j-charset.jar.file}"/>
+                    <pathelement location="${icu4j.test-framework.jar}"/>
+                    <pathelement location="${icu4j.core-tests.jar}"/>
+                    <pathelement location="${icu4j.collate-tests.jar}"/>
+                    <pathelement location="${icu4j.charset-tests.jar}"/>
+                    <pathelement location="${icu4j.translit-tests.jar}"/>
+            </classpath>
+        </java>
+        </jacoco:coverage>
+
+        <jacoco:report>
+            <executiondata>
+                <file file="${jacoco.exec.data.file}"/>
+            </executiondata>
+
+            <structure name="ICU4J Project">
+                <classfiles>
+                    <fileset dir=".">
+                        <include name="${icu4j.jar.file}"/>
+                        <include name="${icu4j-charset.jar.file}"/>
+                    </fileset>
+                </classfiles>
+                <sourcefiles encoding="UTF-8">
+                    <fileset dir="${icu4j.core.dir}/src"/>
+                    <fileset dir="${icu4j.collate.dir}/src"/>
+                    <fileset dir="${icu4j.currdata.dir}/src"/>
+                    <fileset dir="${icu4j.langdata.dir}/src"/>
+                    <fileset dir="${icu4j.regiondata.dir}/src"/>
+                    <fileset dir="${icu4j.translit.dir}/src"/>
+
+                    <fileset dir="${icu4j.charset.dir}/src"/>
+                </sourcefiles>
+            </structure>
+
+            <html destfile="${jacoco.report.html.zip}"/>
+            <csv destfile="${jacoco.report.csv}"/>
+        </jacoco:report>
+    </target>
+
+    <!-- Clover code coverage target -->
     <property name="clover.out.dir" value="${out.dir}/clover"/>
     <property name="clover.jar" location="${env.CLOVER_DIR}/clover.jar"/>
     <taskdef resource="cloverlib.xml" classpath="${clover.jar}" onerror="ignore"/>
