@@ -192,18 +192,18 @@
             <arg line="${runcheck.arg}"/>
             <jvmarg line="${runcheck.jvmarg} -Djava.awt.headless=true"/>
             <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.collate.jar}"/>
-                <pathelement path="${icu4j.charset.jar}"/>
-                <pathelement path="${icu4j.currdata.jar}"/>
-                <pathelement path="${icu4j.langdata.jar}"/>
-                <pathelement path="${icu4j.regiondata.jar}"/>
-                <pathelement path="${icu4j.translit.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.core-tests.jar}"/>
-                <pathelement path="${icu4j.collate-tests.jar}"/> 
-                <pathelement path="${icu4j.charset-tests.jar}"/>
-                <pathelement path="${icu4j.translit-tests.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.collate.jar}"/>
+                <pathelement location="${icu4j.charset.jar}"/>
+                <pathelement location="${icu4j.currdata.jar}"/>
+                <pathelement location="${icu4j.langdata.jar}"/>
+                <pathelement location="${icu4j.regiondata.jar}"/>
+                <pathelement location="${icu4j.translit.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.core-tests.jar}"/>
+                <pathelement location="${icu4j.collate-tests.jar}"/> 
+                <pathelement location="${icu4j.charset-tests.jar}"/>
+                <pathelement location="${icu4j.translit-tests.jar}"/>
             </classpath>
         </java>
     </target>
@@ -225,18 +225,18 @@
             <arg line="${testarg}"/>
             <jvmarg line="${jvm_options} -Djava.awt.headless=true"/>
             <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.collate.jar}"/>
-                <pathelement path="${icu4j.charset.jar}"/>
-                <pathelement path="${icu4j.currdata.jar}"/>
-                <pathelement path="${icu4j.langdata.jar}"/>
-                <pathelement path="${icu4j.regiondata.jar}"/>
-                <pathelement path="${icu4j.translit.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.core-tests.jar}"/>
-                <pathelement path="${icu4j.collate-tests.jar}"/> 
-                <pathelement path="${icu4j.charset-tests.jar}"/>
-                <pathelement path="${icu4j.translit-tests.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.collate.jar}"/>
+                <pathelement location="${icu4j.charset.jar}"/>
+                <pathelement location="${icu4j.currdata.jar}"/>
+                <pathelement location="${icu4j.langdata.jar}"/>
+                <pathelement location="${icu4j.regiondata.jar}"/>
+                <pathelement location="${icu4j.translit.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.core-tests.jar}"/>
+                <pathelement location="${icu4j.collate-tests.jar}"/> 
+                <pathelement location="${icu4j.charset-tests.jar}"/>
+                <pathelement location="${icu4j.translit-tests.jar}"/>
             </classpath>
         </java>
     </target>
@@ -246,32 +246,32 @@
         <java classname="com.ibm.icu.dev.test.TestPackaging" fork="yes" failonerror="true">
             <arg line="-n -w"/>
             <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.charset.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.packaging-tests.jar}"/>
-                <pathelement path="${icu4j.regiondata.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.charset.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.packaging-tests.jar}"/>
+                <pathelement location="${icu4j.regiondata.jar}"/>
             </classpath>
         </java>
         <!-- language data but no region data -->
         <java classname="com.ibm.icu.dev.test.TestPackaging" fork="yes" failonerror="true">
             <arg line="-n -w"/>
             <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.charset.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.packaging-tests.jar}"/>
-                <pathelement path="${icu4j.langdata.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.charset.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.packaging-tests.jar}"/>
+                <pathelement location="${icu4j.langdata.jar}"/>
             </classpath>
         </java>
         <!-- neither region nor language data -->
         <java classname="com.ibm.icu.dev.test.TestPackaging" fork="yes" failonerror="true">
             <arg line="-n -w"/>
             <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.charset.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.packaging-tests.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.charset.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.packaging-tests.jar}"/>
             </classpath>
         </java>
     </target>
@@ -280,12 +280,12 @@
         <java classname="com.ibm.icu.dev.test.TestAllCore" fork="yes" failonerror="true">
             <arg line="-n"/>
             <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.currdata.jar}"/>
-                <pathelement path="${icu4j.langdata.jar}"/>
-                <pathelement path="${icu4j.regiondata.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.core-tests.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.currdata.jar}"/>
+                <pathelement location="${icu4j.langdata.jar}"/>
+                <pathelement location="${icu4j.regiondata.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.core-tests.jar}"/>
             </classpath>
         </java>
     </target>
@@ -294,16 +294,16 @@
         <java classname="com.ibm.icu.dev.test.TestAllCollate" fork="yes" failonerror="true">
             <arg line="-n"/>
             <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.collate.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.collate-tests.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.collate.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.collate-tests.jar}"/>
 
                 <!-- for now, collateCheck needs currdata, langdata and regiondata, because of GlobalizationPreferencesTest" -->
-                <pathelement path="${icu4j.currdata.jar}"/>
-                <pathelement path="${icu4j.langdata.jar}"/>
-                <pathelement path="${icu4j.regiondata.jar}"/>
-                <pathelement path="${icu4j.core-tests.jar}"/>
+                <pathelement location="${icu4j.currdata.jar}"/>
+                <pathelement location="${icu4j.langdata.jar}"/>
+                <pathelement location="${icu4j.regiondata.jar}"/>
+                <pathelement location="${icu4j.core-tests.jar}"/>
             </classpath>
         </java>
     </target>
@@ -312,10 +312,10 @@
         <java classname="com.ibm.icu.dev.test.TestAllTranslit" fork="yes" failonerror="true">
             <arg line="-n"/>
             <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.translit.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.translit-tests.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.translit.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.translit-tests.jar}"/>
             </classpath>
         </java>
     </target>
@@ -329,8 +329,8 @@
             <jvmarg line="-Djava.ext.dirs=${icu4j.core.dir}/${jar.dir}${path.separator}${icu4j.localespi.dir}/${jar.dir}${path.separator}${icu4j.collate.dir}/${jar.dir}${path.separator}${icu4j.currdata.dir}/${jar.dir}${path.separator}${icu4j.langdata.dir}/${jar.dir}${path.separator}${icu4j.regiondata.dir}/${jar.dir}${path.separator}${java.ext.dirs}"/>
             <arg value="-n"/>
             <classpath>
-                <pathelement path="${icu4j.localespi-tests.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.localespi-tests.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
             </classpath>
         </java>
     </target>
@@ -347,9 +347,9 @@
             <arg line="${securecheck.arg}"/>
             <jvmarg line="${securecheck.jvmarg}"/>
             <classpath>
-                <pathelement path="${icu4j.jar.file}"/>
-                <pathelement path="${icu4j-charset.jar.file}"/>
-                <pathelement path="${icu4jtests.jar.file}"/>
+                <pathelement location="${icu4j.jar.file}"/>
+                <pathelement location="${icu4j-charset.jar.file}"/>
+                <pathelement location="${icu4jtests.jar.file}"/>
             </classpath>
         </java>
     </target>
@@ -927,19 +927,19 @@
         <java classname="com.ibm.icu.dev.test.TestAll" fork="yes" failonerror="true">
             <arg value="-n"/>
             <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.collate.jar}"/>
-                <pathelement path="${icu4j.charset.jar}"/>
-                <pathelement path="${icu4j.currdata.jar}"/>
-                <pathelement path="${icu4j.langdata.jar}"/>
-                <pathelement path="${icu4j.regiondata.jar}"/>
-                <pathelement path="${icu4j.translit.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.core-tests.jar}"/>
-                <pathelement path="${icu4j.collate-tests.jar}"/>
-                <pathelement path="${icu4j.charset-tests.jar}"/>
-                <pathelement path="${icu4j.translit-tests.jar}"/>
-                <pathelement path="${clover.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.collate.jar}"/>
+                <pathelement location="${icu4j.charset.jar}"/>
+                <pathelement location="${icu4j.currdata.jar}"/>
+                <pathelement location="${icu4j.langdata.jar}"/>
+                <pathelement location="${icu4j.regiondata.jar}"/>
+                <pathelement location="${icu4j.translit.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.core-tests.jar}"/>
+                <pathelement location="${icu4j.collate-tests.jar}"/>
+                <pathelement location="${icu4j.charset-tests.jar}"/>
+                <pathelement location="${icu4j.translit-tests.jar}"/>
+                <pathelement location="${clover.jar}"/>
             </classpath>
         </java>
 
@@ -1116,15 +1116,15 @@
         <java classname="com.ibm.icu.dev.test.serializable.SerializableWriter" fork="yes" failonerror="true">
             <arg line="${serial.test.data.dir}"/>
             <classpath>
-                <pathelement path="${icu4j.core.jar}"/>
-                <pathelement path="${icu4j.collate.jar}"/>
-                <pathelement path="${icu4j.charset.jar}"/>
-                <pathelement path="${icu4j.currdata.jar}"/>
-                <pathelement path="${icu4j.langdata.jar}"/>
-                <pathelement path="${icu4j.regiondata.jar}"/>
-                <pathelement path="${icu4j.translit.jar}"/>
-                <pathelement path="${icu4j.test-framework.jar}"/>
-                <pathelement path="${icu4j.core-tests.jar}"/>
+                <pathelement location="${icu4j.core.jar}"/>
+                <pathelement location="${icu4j.collate.jar}"/>
+                <pathelement location="${icu4j.charset.jar}"/>
+                <pathelement location="${icu4j.currdata.jar}"/>
+                <pathelement location="${icu4j.langdata.jar}"/>
+                <pathelement location="${icu4j.regiondata.jar}"/>
+                <pathelement location="${icu4j.translit.jar}"/>
+                <pathelement location="${icu4j.test-framework.jar}"/>
+                <pathelement location="${icu4j.core-tests.jar}"/>
             </classpath>
         </java>
         <echo message="Note: The serialization compatibility test data files were"/>
@@ -1307,7 +1307,7 @@
             <arg value="-nothrow"/>
             <arg value="-nodata"/>
             <classpath>
-                <pathelement path="${module.jar}"/>
+                <pathelement location="${module.jar}"/>
                 <pathelement location="${module.tests.dir}"/>
             </classpath>
         </java>
