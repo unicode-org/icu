@@ -3,9 +3,36 @@
 // * Copyright (C) 2013 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
-// * Source File: <path>/xml/brkitr/en.xml
+// * Source File: <path>/common/segments/en.xml ../../xml/brkitr/en.xml
 // *
 // ***************************************************************************
 en{
-    Version{"1.1"}
+    Version{"2.0.92.29"}
+    exceptions{
+        SentenceBreak:array{
+            "Maj.",
+            "Mr.",
+            "Lt.Cdr.",
+            "Pvt.",
+            "Lt.",
+            "Hon.B.A.",
+            "exec.",
+            "Md.",
+            "Capt.",
+            "Col.",
+            "Prof.",
+            "Rev.",
+            "Ph.D.",
+            "pp.",
+            "Mrs.",
+            "PP.",
+            "Ms.",
+            "vs.",
+            "Sgt.",
+            "A.D.",
+            "Fri.",
+            "a.m.",
+            "Mt.",
+        }
+    }
 }
