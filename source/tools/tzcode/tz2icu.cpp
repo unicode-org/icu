@@ -1,7 +1,7 @@
 
 /*
 **********************************************************************
-* Copyright (c) 2003-2010, International Business Machines
+* Copyright (c) 2003-2013, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -1581,8 +1581,36 @@ int main(int argc, char *argv[]) {
     }
 
     // Create the country map
+    map<string, string> icuRegions;        // ICU's custom zone -> country override
     map<string, set<string> > countryMap;  // country -> set of zones
     map<string, string> reverseCountryMap; // zone -> country
+
+    try {
+        // Read icuregions file to collect ICU's own zone-region mapping data.
+        ifstream frg(ICU_REGIONS);
+        if (frg) {
+            string line;
+            while (getline(frg, line)) {
+                if (line[0] == '#') continue;
+
+                string zone, country;
+                istringstream is(line);
+                is >> zone >> country;
+                if (zone.size() == 0) continue;
+                if (country.size() < 2) {
+                    cerr << "Error: Can't parse " << line << " in " << ICU_REGIONS << endl;
+                    return 1;
+                }
+                icuRegions[zone] = country;
+            }
+        } else {
+            cout << "No custom region map [icuregions]" << endl;
+        }
+    } catch (const exception& error) {
+        cerr << "Error: While reading " << ICU_REGIONS << ": " << error.what() << endl;
+        return 1;
+    }
+
     try {
         ifstream f(zonetab.c_str());
         if (!f) {
@@ -1609,6 +1637,13 @@ int main(int argc, char *argv[]) {
                      << " in " << zonetab << endl;
                 return 1;
             }
+            if (icuRegions.find(zone) != icuRegions.end()) {
+                // Custom override
+                string customCountry = icuRegions[zone];
+                cout << "Region Mapping: custom override for " << zone
+                    << " " << country << " -> " << customCountry << endl;
+                country = customCountry;
+            }
             countryMap[country].insert(zone);
             reverseCountryMap[zone] = country;
             //cerr << (n+1) << ": " << country << " <=> " << zone << endl;
@@ -1619,6 +1654,20 @@ int main(int argc, char *argv[]) {
     } catch (const exception& error) {
         cerr << "Error: While reading " << zonetab << ": " << error.what() << endl;
         return 1;
+    }
+
+    // Merge ICU's own zone-region mapping data
+    for (map<string,string>::const_iterator i = icuRegions.begin();
+        i != icuRegions.end(); ++i) {
+        const string& zid(i->first);
+        if (reverseCountryMap.find(zid) != reverseCountryMap.end()) {
+            continue;
+        }
+        cout << "Region Mapping: custom data zone=" << zid
+            << ", region=" << i->second << endl;
+
+        reverseCountryMap[zid] = i->second;
+        countryMap[i->second].insert(zid);
     }
 
     // Merge ICU aliases into country map.  Don't merge any alias
