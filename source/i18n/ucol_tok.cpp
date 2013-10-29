@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 2001-2012, International Business Machines
+*   Copyright (C) 2001-2013, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -2256,6 +2256,16 @@ void ucol_tok_initTokenList(
                 int32_t importRulesLength = 0;
                 const UChar* importRules = importFunc(context, locale, type, &importRulesLength, status);
 
+                if (U_FAILURE(*status) || importRules==NULL) {
+                  /**
+                   * This seems to happen when genrb -R is used (#10043).
+                   * Make this an error, not a crash.
+                   */
+                  if(U_SUCCESS(*status)) {
+                    *status = U_MISSING_RESOURCE_ERROR;
+                  }
+                  return;
+                }
 #ifdef DEBUG_FOR_COLL_RULES
                 std::string s;
                 UnicodeString(importRules).toUTF8String(s);
