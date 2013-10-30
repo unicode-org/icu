@@ -2732,6 +2732,7 @@ public class SimpleDateFormat extends DateFormat {
             patternCharIndex == 15 /*'h' HOUR1_FIELD*/ ||
             (patternCharIndex == 2 /*'M' MONTH_FIELD*/ && count <= 2) ||
             (patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/ && count <= 2) ||
+            (patternCharIndex == 19 /*'e' DOW_LOCAL*/ && count <= 2) ||
             patternCharIndex == 1 /*'y' YEAR */ || patternCharIndex == 18 /*'Y' YEAR_WOY */ ||
             patternCharIndex == 30 /*'U' YEAR_NAME_FIELD, falls back to numeric */ ||
             (patternCharIndex == 0 /*'G' ERA */ && isChineseCalendar) ||
@@ -2916,15 +2917,31 @@ public class SimpleDateFormat extends DateFormat {
                 }
                 cal.set(Calendar.MILLISECOND, value);
                 return pos.getIndex();
+            case 19: // 'e' - DOW_LOCAL
+                if(count <= 2) { // i.e. e/ee
+                    cal.set(field, value);
+                    return pos.getIndex();
+                }
+                // else for eee-eeeeee, fall through to EEE-EEEEEE handling
+                //$FALL-THROUGH$ 
             case 9: { // 'E' - DAY_OF_WEEK
-                // Want to be able to parse at least wide, abbrev, short forms.
-                int newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.weekdays, null, cal); // try EEEE wide
-                if (newStart > 0) {
+                // Want to be able to parse at least wide, abbrev, short, and narrow forms.
+                int newStart = 0;
+                if ((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.weekdays, null, cal)) > 0) { // try EEEE wide
                     return newStart;
-                } else if ((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.shortWeekdays, null, cal)) > 0) { // try EEE abbrev
+                } 
+                if ((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.shortWeekdays, null, cal)) > 0) { // try EEE abbrev
                     return newStart;
-                } else if (formatData.shorterWeekdays != null) {
-                    return matchString(text, start, Calendar.DAY_OF_WEEK, formatData.shorterWeekdays, null, cal); // try EEEEEE short
+                } 
+                if (formatData.shorterWeekdays != null) {
+                    if((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.shorterWeekdays, null, cal)) > 0) { // try EEEEEE short
+                        return newStart;
+                    } 
+                }
+                if (formatData.narrowWeekdays != null) {
+                    if((newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.narrowWeekdays, null, cal)) > 0) { // try EEEEE narrow
+                        return newStart;
+                    }
                 }
                 return newStart;
             }
@@ -3133,8 +3150,7 @@ public class SimpleDateFormat extends DateFormat {
                 // case 11: // 'F' - DAY_OF_WEEK_IN_MONTH
                 // case 12: // 'w' - WEEK_OF_YEAR
                 // case 13: // 'W' - WEEK_OF_MONTH
-                // case 16: // 'K' - HOUR (0..11)
-                // case 19: // 'e' - DOW_LOCAL
+                // case 16: // 'K' - HOUR (0..11)                
                 // case 20: // 'u' - EXTENDED_YEAR
                 // case 21: // 'g' - JULIAN_DAY
                 // case 22: // 'A' - MILLISECONDS_IN_DAY
