@@ -1216,5 +1216,64 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
         }
         errln("No exception thrown at all for bad pattern!");
     }
+
+    public void TestT10239() {
+        
+        class TestDateFormatItem {
+            public String parseString;
+            public String pattern;
+            public String expectedResult;   // null indicates expected error
+            // Simple constructor
+            public TestDateFormatItem(String parString, String patt, String expResult) {
+                pattern = patt;
+                parseString = parString;
+                expectedResult = expResult;
+            }
+        };
+        
+        final TestDateFormatItem[] items = {
+        //                     parse String                 pattern                 expected result
+        new TestDateFormatItem("1 Oct 13 2013",             "e MMM dd yyyy",        "1 Oct 13 2013"),
+        new TestDateFormatItem("02 Oct 14 2013",            "ee MMM dd yyyy",       "02 Oct 14 2013"),
+        new TestDateFormatItem("Tue Oct 15 2013",           "eee MMM dd yyyy",      "Tue Oct 15 2013"),
+        new TestDateFormatItem("Wednesday  Oct 16 2013",    "eeee MMM dd yyyy",     "Wednesday Oct 16 2013"),
+        new TestDateFormatItem("Th Oct 17 2013",            "eeeeee MMM dd yyyy",   "Th Oct 17 2013"),
+        new TestDateFormatItem("Fr Oct 18 2013",            "EEEEEE MMM dd yyyy",   "Fr Oct 18 2013"),
+        new TestDateFormatItem("S Oct 19 2013",             "eeeee MMM dd yyyy",    "S Oct 19 2013"),
+        new TestDateFormatItem("S Oct 20 2013",             "EEEEE MMM dd yyyy",    "S Oct 20 2013"),
+        };
+
+        StringBuffer result = new StringBuffer();
+        Date d = new Date();
+        Calendar cal = GregorianCalendar.getInstance(TimeZone.getTimeZone("GMT"), Locale.US); 
+        SimpleDateFormat sdfmt = new SimpleDateFormat();
+        ParsePosition p = new ParsePosition(0);
+        for (TestDateFormatItem item: items) {
+            cal.clear();
+            sdfmt.setCalendar(cal);
+            sdfmt.applyPattern(item.pattern);
+            result.setLength(0);
+            p.setIndex(0);
+            p.setErrorIndex(-1);
+            d = sdfmt.parse(item.parseString, p);
+            if(item.expectedResult == null) {
+                if(p.getErrorIndex() != -1)
+                    continue;
+                else
+                    errln("error: unexpected parse success..."+item.parseString + " should have failed");
+            }
+            if(p.getErrorIndex() != -1) {
+                errln("error: parse error for string " +item.parseString + " against pattern " + item.pattern + " -- idx["+p.getIndex()+"] errIdx["+p.getErrorIndex()+"]");
+                continue;
+            }
+            cal.setTime(d);
+            result = sdfmt.format(cal, result, new FieldPosition(0));
+            if(!result.toString().equalsIgnoreCase(item.expectedResult)) {
+                errln("error: unexpected format result. expected - " + item.expectedResult + "  but result was - " + result);
+            } else {
+                logln("formatted results match! - " + result.toString());
+            }
+        }
+  }
     
 }
