@@ -4124,7 +4124,6 @@ icu4j/main/classes/core/src/com/ibm/icu/text/IdentifierInfo.java svneol=native#t
 icu4j/main/classes/core/src/com/ibm/icu/text/LanguageBreakEngine.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/LaoBreakEngine.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ListFormatter.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/classes/core/src/com/ibm/icu/text/ListFormatterData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/LocaleDisplayNames.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/MeasureFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/MessageFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
