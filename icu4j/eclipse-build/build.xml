@@ -1,7 +1,7 @@
 <!--
 /*
 *******************************************************************************
-* Copyright (C) 2010-2012, International Business Machines Corporation and    *
+* Copyright (C) 2010-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -268,6 +268,7 @@
       <fileset dir="${icu4j.core-tests.dir}/src"/>
       <fileset dir="${icu4j.collate-tests.dir}/src"/>
       <fileset dir="${icu4j.translit-tests.dir}/src"/>
+      <fileset dir="${icu4j.testall.dir}/src"/>
     </copy>
 
     <!-- icu test data -->

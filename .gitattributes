@@ -4930,7 +4930,6 @@ icu4j/main/tests/framework/manifest.stub -text
 icu4j/main/tests/framework/src/com/ibm/icu/dev/test/AbstractTestLog.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/test/ModuleTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/test/ResourceModule.java svneol=native#text/plain%3Bcharset%3Dutf-8
-icu4j/main/tests/framework/src/com/ibm/icu/dev/test/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/test/TestBoilerplate.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/test/TestDataModule.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/framework/src/com/ibm/icu/dev/test/TestFmwk.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4985,6 +4984,15 @@ icu4j/main/tests/packaging/.settings/org.eclipse.jdt.ui.prefs -text
 icu4j/main/tests/packaging/packaging-tests-build.launch -text
 icu4j/main/tests/packaging/src/com/ibm/icu/dev/test/TestLocaleNamePackaging.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/packaging/src/com/ibm/icu/dev/test/TestPackaging.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/testall/.classpath -text
+icu4j/main/tests/testall/.project -text
+icu4j/main/tests/testall/.settings/org.eclipse.core.resources.prefs -text
+icu4j/main/tests/testall/.settings/org.eclipse.jdt.core.prefs -text
+icu4j/main/tests/testall/.settings/org.eclipse.jdt.ui.prefs -text
+icu4j/main/tests/testall/build.properties -text
+icu4j/main/tests/testall/build.xml -text
+icu4j/main/tests/testall/manifest.stub -text
+icu4j/main/tests/testall/src/com/ibm/icu/dev/test/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/translit/.externalToolBuilders/copy-translit-test-data.launch -text
 icu4j/main/tests/translit/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/tests/translit/.settings/org.eclipse.jdt.core.prefs -text
