@@ -306,6 +306,17 @@
         <ant dir="${icu4j.translit-tests.dir}" inheritAll="false"/>
     </target>
 
+    <!-- testall -->
+    <path id="javac.classpathref.testall">
+        <pathelement location="${icu4j.core.jar}"/>
+        <pathelement location="${icu4j.test-framework.jar}"/>
+    </path>
+
+    <target name="_all.testall" depends="_all.core, _all.test-framework">
+        <ant dir="${icu4j.testall.dir}" inheritAll="false"/>
+    </target>
+
+
     <!-- build-tools -->
     <path id="javac.classpathref.build-tools">
         <pathelement location="${env.JAVA_HOME}/lib/tools.jar"/>
