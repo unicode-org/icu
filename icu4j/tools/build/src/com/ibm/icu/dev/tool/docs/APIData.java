@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2010, International Business Machines Corporation and    *
+* Copyright (C) 2004-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -141,7 +141,7 @@ public final class APIData {
         boolean internal = false;
         String path = "src/com/ibm/icu/dev/tool/docs/";
 
-        String fn = "icu4j341.api.gz";
+        String fn = "icu4j52.api3.gz";
         if (args.length == 0) {
             args = new String[] { "-file", fn };
         }

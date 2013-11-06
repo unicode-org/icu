@@ -1,6 +1,6 @@
 /**
  *******************************************************************************
- * Copyright (C) 2004-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -211,6 +211,7 @@ public class GatherAPIData {
             doDocs(cdoc.fields());
             doDocs(cdoc.constructors());
             doDocs(cdoc.methods());
+            doDocs(cdoc.enumConstants());
             // don't call this to iterate over inner classes,
             // root.classes already includes them
             // doDocs(cdoc.innerClasses());
@@ -361,7 +362,7 @@ public class GatherAPIData {
         }
 
         // final
-        if (doc.isFinal()) {
+        if (doc.isFinal() && !doc.isEnum()) {
             info.setFinal();
         } else {
             // default is non-final
@@ -375,7 +376,13 @@ public class GatherAPIData {
         } else if (doc.isConstructor()) {
             info.setConstructor();
         } else if (doc.isClass() || doc.isInterface()) {
-            info.setClass();
+            if (doc.isEnum()) {
+                info.setEnum();
+            } else {
+                info.setClass();
+            }
+        } else if (doc.isEnumConstant()) {
+            info.setEnumConstant();
         }
 
         info.setPackage(trimBase(doc.containingPackage().name()));
@@ -398,7 +405,7 @@ public class GatherAPIData {
             StringBuffer buf = new StringBuffer();
             if (cdoc.isClass()) {
                 buf.append("extends ");
-                buf.append(cdoc.superclass().qualifiedName());
+                buf.append(cdoc.superclassType().toString());
             }
             ClassDoc[] imp = cdoc.interfaces();
             if (imp != null && imp.length > 0) {

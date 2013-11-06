@@ -996,7 +996,7 @@
             </packageset>
             <doclet name="com.ibm.icu.dev.tool.docs.GatherAPIData" path="${icu4j.build-tools.jar}">
                 <param name="-name" value="ICU4J ${icu4j.impl.version}"/>
-                <param name="-output" value="${out.dir}/icu4j${api.report.version}.api2"/>
+                <param name="-output" value="${out.dir}/icu4j${api.report.version}.api3"/>
                 <param name="-internal"/>
                 <param name="-version"/>
                 <param name="-gzip"/>
@@ -1009,9 +1009,9 @@
                 classpath="${icu4j.build-tools.jar}"
                 failonerror="true">
             <arg value="-old:" />
-            <arg value="${icu4j.build-tools.dir}/icu4j${api.report.prev.version}.api2.gz" />
+            <arg value="${icu4j.build-tools.dir}/icu4j${api.report.prev.version}.api3.gz" />
             <arg value="-new:" />
-            <arg value="${out.dir}/icu4j${api.report.version}.api2.gz" />
+            <arg value="${out.dir}/icu4j${api.report.version}.api3.gz" />
             <arg value="-html" />
             <arg value="-out:" />
             <arg value="${out.dir}/icu4j_compare_${api.report.prev.version}_${api.report.version}.html" />
@@ -1070,7 +1070,7 @@
             <arg value="Draft"/>
             <arg value="-o"/>
             <arg value="${out.dir}/draftAPIs.html"/>
-            <arg value="${out.dir}/icu4j${api.report.version}.api2.gz" />
+            <arg value="${out.dir}/icu4j${api.report.version}.api3.gz" />
         </java>
     </target>
 

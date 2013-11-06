@@ -33,7 +33,7 @@ class APIInfo {
     public static final int SYN = 4, SYN_SYNCHRONIZED = 1;
     public static final int ABS = 5, ABS_ABSTRACT = 1;
     public static final int CAT = 6, CAT_CLASS = 0, CAT_FIELD = 1, CAT_CONSTRUCTOR = 2,
-      CAT_METHOD = 3;
+      CAT_METHOD = 3, CAT_ENUM = 4, CAT_ENUM_CONSTANT = 5;
     public static final int PAK = 7;
     public static final int CLS = 8;
     public static final int NAM = 9;
@@ -42,7 +42,7 @@ class APIInfo {
     public static final int NUM_TYPES = 11;
 
     // the separator between tokens in the data file
-    public int[] masks = { 0x7, 0x3, 0x1, 0x1, 0x1, 0x1, 0x3 };
+    public int[] masks = { 0x7, 0x3, 0x1, 0x1, 0x1, 0x1, 0x7 };
     public int[] shifts = { 0, 3, 5, 6, 7, 8, 9 };
 
     public static final char SEP = ';';
@@ -100,6 +100,8 @@ class APIInfo {
     public void setField() { setType(CAT, CAT_FIELD); }
     public void setConstructor() { setType(CAT, CAT_CONSTRUCTOR); }
     public void setMethod() { setType(CAT, CAT_METHOD); }
+    public void setEnum() { setType(CAT, CAT_ENUM); }
+    public void setEnumConstant() { setType(CAT, CAT_ENUM_CONSTANT); }
 
     public void setPackage(String val) { setType(PAK, val); }
     public void setClassName(String val) { setType(CLS, val); }
@@ -124,6 +126,8 @@ class APIInfo {
     public boolean isField() { return getVal(CAT) == CAT_FIELD; }
     public boolean isConstructor() { return getVal(CAT) == CAT_CONSTRUCTOR; }
     public boolean isMethod() { return getVal(CAT) == CAT_METHOD; }
+    public boolean isEnum() { return getVal(CAT) == CAT_ENUM; }
+    public boolean isEnumConstant() { return getVal(CAT) == CAT_ENUM_CONSTANT; }
 
     public String getPackageName() { return get(PAK, true); }
     public String getClassName() { return get(CLS, true); }
@@ -330,8 +334,8 @@ class APIInfo {
                     APIInfo rhi = (APIInfo)rhs;
                     int result = lhi.pack.compareTo(rhi.pack);
                     if (result == 0) {
-                        result = (lhi.getVal(CAT) == CAT_CLASS ? lhi.name : lhi.cls)
-                            .compareTo(rhi.getVal(CAT) == CAT_CLASS ? rhi.name : rhi.cls);
+                        result = (lhi.getVal(CAT) == CAT_CLASS || lhi.getVal(CAT) == CAT_ENUM ? lhi.name : lhi.cls)
+                            .compareTo(rhi.getVal(CAT) == CAT_CLASS || rhi.getVal(CAT) == CAT_ENUM ? rhi.name : rhi.cls);
                         if (result == 0) {
                             result = lhi.getVal(CAT)- rhi.getVal(CAT);
                             if (result == 0) {
@@ -435,7 +439,7 @@ class APIInfo {
         String xsig = sig;
         if (!detail) {
             final String ICUPACK = "com.ibm.icu.";
-            StringBuffer tbuf = new StringBuffer();
+            StringBuilder tbuf = new StringBuilder();
             for (int i = 0; i < sig.length();) {
                 int n = sig.indexOf(ICUPACK, i);
                 if (n == -1) {
@@ -466,7 +470,7 @@ class APIInfo {
                             color = "gray";
                         }
                         if (color != null) {
-                            s = "<span style='color:" + color + "'>" + s + "</span>";
+                            s = "<span style='color:" + color + "'>" + prepText(s, html) + "</span>";
                         }
                     }
                 }
@@ -483,46 +487,84 @@ class APIInfo {
             } else {
                 buf.append("class ");
             }
-        if (html) {
-        buf.append("<i>");
-        }
+            if (html) {
+                buf.append("<i>");
+            }
             if (cls.length() > 0) {
-                buf.append(cls);
+                buf.append(prepText(cls, html));
                 buf.append('.');
             }
-            buf.append(name);
-        if (html) {
-        buf.append("</i>");
-        }
+            buf.append(prepText(name, html));
+            if (html) {
+                buf.append("</i>");
+            }
             if (detail) {
                 buf.append(' ');
-                buf.append(sig);
+                buf.append(prepText(sig, html));
+            }
+            break;
+
+        case CAT_ENUM:
+            buf.append("enum ");
+            if (html) {
+                buf.append("<i>");
+            }
+            if (cls.length() > 0) {
+                buf.append(prepText(cls, html));
+                buf.append('.');
+            }
+            buf.append(prepText(name, html));
+            if (html) {
+                buf.append("</i>");
+            }
+            if (detail) {
+                buf.append(' ');
+                buf.append(prepText(sig, html));
             }
             break;
 
         case CAT_FIELD:
-            buf.append(xsig);
+        case CAT_ENUM_CONSTANT:
+            buf.append(prepText(xsig, html));
             buf.append(' ');
-            buf.append(name);
+            buf.append(prepText(name, html));
             break;
 
         case CAT_METHOD:
         case CAT_CONSTRUCTOR:
             int n = xsig.indexOf('(');
             if (n > 0) {
-                buf.append(xsig.substring(0, n));
+                buf.append(prepText(xsig.substring(0, n), html));
                 buf.append(' ');
             } else {
                 n = 0;
             }
-        if (html) {
-        buf.append("<i>" + name + "</i>");
-        } else {
-        buf.append(name);
-        }
-            buf.append(xsig.substring(n));
+            if (html) {
+                buf.append("<i>" + prepText(name, html) + "</i>");
+            } else {
+                buf.append(name);
+            }
+            buf.append(prepText(xsig.substring(n), html));
             break;
         }
+    }
+
+    private static String prepText(String text, boolean html) {
+        if (html && (text.indexOf('<') >= 0 || text.indexOf('>') >= 0)) {
+            StringBuilder buf = new StringBuilder();
+            for (int i = 0; i < text.length(); i++) {
+                char c = text.charAt(i);
+                if (c == '<') {
+                    buf.append("&lt;");
+                } else if (c == '>') {
+                    buf.append("&gt;");
+                } else {
+                    buf.append(c);
+                }
+            }
+            text = buf.toString();
+        }
+        return text;
     }
 
     public void println(PrintWriter pw, boolean detail, boolean html) {
@@ -551,7 +593,7 @@ class APIInfo {
         { "", "final" },
         { "", "synchronized" },
         { "", "abstract" },
-        { "class", "field", "constructor", "method"  },
+        { "class", "field", "constructor", "method", "enum", "enum constant"  },
         null,
         null,
         null,
@@ -566,7 +608,7 @@ class APIInfo {
         { "NF", "FN" },
         { "NS", "SY" },
         { "NA", "AB" },
-        { "L", "F", "C", "M" },
+        { "L", "F", "C", "M", "E", "K" },
         null,
         null,
         null,

@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2004-2012, International Business Machines Corporation and    *
+* Copyright (C) 2004-2013, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -470,7 +470,7 @@ public class ReportAPI {
                 clas = null;
             }
 
-            if (!info.isClass()) {
+            if (!info.isClass() && !info.isEnum()) {
                 String className = info.getClassName();
                 if (!className.equals(clas)) {
                     if (html) {
