@@ -5077,28 +5077,11 @@ icu4j/stylesheet.css svneol=native#text/css
 icu4j/stylesheet7.css svneol=native#text/css
 icu4j/tools/build/.settings/org.eclipse.core.resources.prefs -text
 icu4j/tools/build/README.txt svneol=native#text/plain
-icu4j/tools/build/icu4j28.api.gz -text svneol=unset#application/gzip
-icu4j/tools/build/icu4j30.api.gz -text svneol=unset#application/gzip
-icu4j/tools/build/icu4j32.api.gz -text svneol=unset#application/gzip
-icu4j/tools/build/icu4j34.api.gz -text svneol=unset#application/gzip
-icu4j/tools/build/icu4j341.api.gz -text svneol=unset#application/gzip
-icu4j/tools/build/icu4j342.api.gz -text svneol=unset#application/gzip
-icu4j/tools/build/icu4j343.api.gz -text svneol=unset#application/gzip
-icu4j/tools/build/icu4j36.api.gz -text
-icu4j/tools/build/icu4j38.api.gz -text
-icu4j/tools/build/icu4j381.api.gz -text
-icu4j/tools/build/icu4j400.api.gz -text
-icu4j/tools/build/icu4j401.api.gz -text
-icu4j/tools/build/icu4j42.api.gz -text
-icu4j/tools/build/icu4j421.api.gz -text
-icu4j/tools/build/icu4j44.api.gz -text
-icu4j/tools/build/icu4j44.api2.gz -text
-icu4j/tools/build/icu4j46.api2.gz -text
-icu4j/tools/build/icu4j48.api2.gz -text
-icu4j/tools/build/icu4j49.api2.gz -text
-icu4j/tools/build/icu4j50.api2.gz -text
-icu4j/tools/build/icu4j51.api2.gz -text
-icu4j/tools/build/icu4j52.api2.gz -text
+icu4j/tools/build/icu4j48.api3.gz -text
+icu4j/tools/build/icu4j49.api3.gz -text
+icu4j/tools/build/icu4j50.api3.gz -text
+icu4j/tools/build/icu4j51.api3.gz -text
+icu4j/tools/build/icu4j52.api3.gz -text
 icu4j/tools/build/manifest.stub -text
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/APIData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/tools/build/src/com/ibm/icu/dev/tool/docs/APIInfo.java svneol=native#text/plain%3Bcharset%3Dutf-8
