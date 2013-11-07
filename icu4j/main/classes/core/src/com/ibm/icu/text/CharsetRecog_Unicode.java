@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2012, International Business Machines Corporation and    *
+ * Copyright (C) 1996-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -24,6 +24,29 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
      */
     abstract CharsetMatch match(CharsetDetector det);
     
+    static int codeUnit16FromBytes(byte hi, byte lo) {
+        return ((hi & 0xff) << 8) | (lo & 0xff);
+    }
+    
+    // UTF-16 confidence calculation. Very simple minded, but better than nothing.
+    //   Any 8 bit non-control characters bump the confidence up. These have a zero high byte,
+    //     and are very likely to be UTF-16, although they could also be part of a UTF-32 code.
+    //   NULs are a contra-indication, they will appear commonly if the actual encoding is UTF-32.
+    //   NULs should be rare in actual text. 
+    static int adjustConfidence(int codeUnit, int confidence) {
+        if (codeUnit == 0) {
+            confidence -= 10;
+        } else if ((codeUnit >= 0x20 && codeUnit <= 0xff) || codeUnit == 0x0a) {
+            confidence += 10;
+        }
+        if (confidence < 0) {
+            confidence = 0;
+        } else if (confidence > 100) {
+            confidence = 100;
+        }
+        return confidence;
+    }
+    
     static class CharsetRecog_UTF_16_BE extends CharsetRecog_Unicode
     {
         String getName()
@@ -34,13 +57,26 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
         CharsetMatch match(CharsetDetector det)
         {
             byte[] input = det.fRawInput;
+            int confidence = 10;
             
-            if (input.length>=2 && ((input[0] & 0xFF) == 0xFE && (input[1] & 0xFF) == 0xFF)) {
-                int confidence = 100;
+            int bytesToCheck = Math.min(input.length, 30);
+            for (int charIndex=0; charIndex<bytesToCheck-1; charIndex+=2) {
+                int codeUnit = codeUnit16FromBytes(input[charIndex], input[charIndex + 1]);
+                if (charIndex == 0 && codeUnit == 0xFEFF) {
+                    confidence = 100;
+                    break;
+                }
+                confidence = adjustConfidence(codeUnit, confidence);
+                if (confidence == 0 || confidence == 100) {
+                    break;
+                }
+            }
+            if (bytesToCheck < 4 && confidence < 100) {
+                confidence = 0;
+            }
+            if (confidence > 0) {
                 return new CharsetMatch(det, this, confidence);
             }
-            
-            // TODO: Do some statistics to check for unsigned UTF-16BE
             return null;
         }
     }
@@ -55,19 +91,26 @@ abstract class CharsetRecog_Unicode extends CharsetRecognizer {
         CharsetMatch match(CharsetDetector det)
         {
             byte[] input = det.fRawInput;
+            int confidence = 10;
             
-            if (input.length >= 2 && ((input[0] & 0xFF) == 0xFF && (input[1] & 0xFF) == 0xFE))
-            {
-               // An LE BOM is present.
-               if (input.length>=4 && input[2] == 0x00 && input[3] == 0x00) {
-                   // It is probably UTF-32 LE, not UTF-16
-                   return null;
-               }
-               int confidence = 100;
-               return new CharsetMatch(det, this, confidence);
-            }        
-            
-            // TODO: Do some statistics to check for unsigned UTF-16LE
+            int bytesToCheck = Math.min(input.length, 30);
+            for (int charIndex=0; charIndex<bytesToCheck-1; charIndex+=2) {
+                int codeUnit = codeUnit16FromBytes(input[charIndex+1], input[charIndex]);
+                if (charIndex == 0 && codeUnit == 0xFEFF) {
+                    confidence = 100;
+                    break;
+                }
+                confidence = adjustConfidence(codeUnit, confidence);
+                if (confidence == 0 || confidence == 100) {
+                    break;
+                }
+            }
+            if (bytesToCheck < 4 && confidence < 100) {
+                confidence = 0;
+            }
+            if (confidence > 0) {
+                return new CharsetMatch(det, this, confidence);
+            }
             return null;
         }
     }
