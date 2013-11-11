@@ -886,11 +886,51 @@ public class DecimalFormat extends NumberFormat {
             addPadding(result, fieldPosition, prefixLen, suffixLen);
             return result;
         }
+        
+        int precision = precision(false);
+        
+        // This is to fix rounding for scientific notation. See ticket:10542.
+        // This code should go away when a permanent fix is done for ticket:9931.
+        //
+        // The problem: 
+        // DigitList does ROUND_HALF_EVEN only if the number of digits in the number exceeds the precision.
+        // Therefore if rounding mode is set to anything besides ROUND_HALF_EVEN, the results will be incorrect.
+        // The {@link #resetActualRounding} method addresses this problem, but its solution only works for fixed
+        // decimal numbers.
+        //
+        // The solution:
+        // This block of code only executes for scientific notation so it will not interfere with the
+        // previous fix in {@link #resetActualRounding} for fixed decimal numbers.
+        // Moreover this code only runs when there is rounding to be done (precision > 0) and when the
+        // rounding mode is something other than ROUND_HALF_EVEN.
+        // This block of code does the correct rounding of number in advance so that it will fit into
+        // the number of digits indicated by precision. In this way, we avoid using the default
+        // ROUND_HALF_EVEN behavior of DigitList. For example, if number = 0.003016 and roundingMode =
+        // ROUND_DOWN and precision = 3 then after this code executes, number = 0.00301 (3 significant digits)
+        if (useExponentialNotation && precision > 0 && roundingMode != BigDecimal.ROUND_HALF_EVEN) {
+           double adjNumber = number;
+           for (int i = 1; i < precision; i++) {
+               adjNumber *= 0.1;
+           }
+           double roundingInc = 1.0;
+           double roundingIncReciprocal = 1.0;
+           while (adjNumber < 1.0) {
+               roundingIncReciprocal *= 10;
+               adjNumber *= 10;
+           }
+           while (adjNumber >= 10.0) {
+               roundingInc *= 10;
+               roundingIncReciprocal = 0.0;
+               adjNumber *= 0.1;
+           }
+           number = DecimalFormat.round(number, roundingInc, roundingIncReciprocal, roundingMode, isNegative);
+        }
+        // End fix for ticket:10542
 
         // At this point we are guaranteed a nonnegative finite
         // number.
         synchronized (digitList) {
-            digitList.set(number, precision(false), !useExponentialNotation &&
+            digitList.set(number, precision, !useExponentialNotation &&
                           !areSignificantDigitsUsed());
             return subformat(number, result, fieldPosition, isNegative, false, parseAttr);
         }
@@ -956,7 +996,7 @@ public class DecimalFormat extends NumberFormat {
      * @param roundingInc
      *            the rounding increment
      * @param roundingIncReciprocal
-     *            if non-zero, is the
+     *            if non-zero, is the reciprocal of rounding inc.
      * @param mode
      *            a BigDecimal rounding mode
      * @param isNegative
@@ -5973,7 +6013,10 @@ public class DecimalFormat extends NumberFormat {
                 actualRoundingIncrementICU = byWidth.equals(BigDecimal.ONE) ? null : byWidth;
             }
         } else {
-            if (roundingMode == BigDecimal.ROUND_HALF_EVEN) {
+            if (roundingMode == BigDecimal.ROUND_HALF_EVEN || isScientificNotation()) {
+                // This rounding fix is irrelevant if mode is ROUND_HALF_EVEN as DigitList
+                // does ROUND_HALF_EVEN for us.  This rounding fix won't work at all for
+                // scientific notation.
                 actualRoundingIncrementICU = null;
             } else {
                 if (getMaximumFractionDigits() > 0) {
