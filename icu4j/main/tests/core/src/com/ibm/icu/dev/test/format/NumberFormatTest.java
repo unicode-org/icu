@@ -86,6 +86,61 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 {"-3.01E3", "-3.01E3", "-3.00E3", "3.01E3", "3.02E3", "3.02E3"},
                 {"-3.01E3", "-3.01E3", "-3.01E3", "3.02E3", "3.02E3", "3.02E3"}};
         verifyRounding(format, values, expected, roundingModes, descriptions);
+        values = new double[]{0.0, -0.0};
+        // The order of these expected values correspond to the order of roundingModes and the order of values.
+        expected = new String[][]{
+                {"0.00E0", "-0.00E0"},
+                {"0.00E0", "-0.00E0"},
+                {"0.00E0", "-0.00E0"},
+                {"0.00E0", "-0.00E0"},
+                {"0.00E0", "-0.00E0"},
+                {"0.00E0", "-0.00E0"},
+                {"0.00E0", "-0.00E0"}};
+        verifyRounding(format, values, expected, roundingModes, descriptions);
+        values = new double[]{1e25, 1e25 + 1e15, 1e25 - 1e15};
+        // The order of these expected values correspond to the order of roundingModes and the order of values.
+        expected = new String[][]{
+                {"1.00E25", "1.01E25", "1.00E25"},
+                {"1.00E25", "1.00E25", "9.99E24"},
+                {"1.00E25", "1.00E25", "9.99E24"},
+                {"1.00E25", "1.00E25", "1.00E25"},
+                {"1.00E25", "1.00E25", "1.00E25"},
+                {"1.00E25", "1.00E25", "1.00E25"},
+                {"1.00E25", "1.01E25", "1.00E25"}};
+        verifyRounding(format, values, expected, roundingModes, descriptions);
+        values = new double[]{-1e25, -1e25 + 1e15, -1e25 - 1e15};
+        // The order of these expected values correspond to the order of roundingModes and the order of values.
+        expected = new String[][]{
+                {"-1.00E25", "-9.99E24", "-1.00E25"},
+                {"-1.00E25", "-9.99E24", "-1.00E25"},
+                {"-1.00E25", "-1.00E25", "-1.01E25"},
+                {"-1.00E25", "-1.00E25", "-1.00E25"},
+                {"-1.00E25", "-1.00E25", "-1.00E25"},
+                {"-1.00E25", "-1.00E25", "-1.00E25"},
+                {"-1.00E25", "-1.00E25", "-1.01E25"}};
+        verifyRounding(format, values, expected, roundingModes, descriptions);
+        values = new double[]{1e-25, 1e-25 + 1e-35, 1e-25 - 1e-35};
+        // The order of these expected values correspond to the order of roundingModes and the order of values.
+        expected = new String[][]{
+                {"1.00E-25", "1.01E-25", "1.00E-25"},
+                {"1.00E-25", "1.00E-25", "9.99E-26"},
+                {"1.00E-25", "1.00E-25", "9.99E-26"},
+                {"1.00E-25", "1.00E-25", "1.00E-25"},
+                {"1.00E-25", "1.00E-25", "1.00E-25"},
+                {"1.00E-25", "1.00E-25", "1.00E-25"},
+                {"1.00E-25", "1.01E-25", "1.00E-25"}};
+        verifyRounding(format, values, expected, roundingModes, descriptions);
+        values = new double[]{-1e-25, -1e-25 + 1e-35, -1e-25 - 1e-35};
+        // The order of these expected values correspond to the order of roundingModes and the order of values.
+        expected = new String[][]{
+                {"-1.00E-25", "-9.99E-26", "-1.00E-25"},
+                {"-1.00E-25", "-9.99E-26", "-1.00E-25"},
+                {"-1.00E-25", "-1.00E-25", "-1.01E-25"},
+                {"-1.00E-25", "-1.00E-25", "-1.00E-25"},
+                {"-1.00E-25", "-1.00E-25", "-1.00E-25"},
+                {"-1.00E-25", "-1.00E-25", "-1.00E-25"},
+                {"-1.00E-25", "-1.00E-25", "-1.01E-25"}};
+        verifyRounding(format, values, expected, roundingModes, descriptions);
     }
 
     private void verifyRounding(DecimalFormat format, double[] values, String[][] expected, int[] roundingModes,
