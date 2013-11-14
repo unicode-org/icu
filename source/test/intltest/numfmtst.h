@@ -177,6 +177,7 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void TestParseSignsAndMarks();
     void Test10419RoundingWith0FractionDigits();
     void Test10468ApplyPattern();
+    void TestRoundingScientific10542();
 
  private:
     UBool testFormattableAsUFormattable(const char *file, int line, Formattable &f);
@@ -277,6 +278,16 @@ class NumberFormatTest: public CalendarTimeZoneTest {
     void checkRounding(DecimalFormat* df, double base, int iterations, double increment);
 
     double checkRound(DecimalFormat* df, double iValue, double lastParsed);
+
+    void verifyRounding(
+        DecimalFormat& format,
+        const double *values,
+        const char * const *expected,
+        const DecimalFormat::ERoundingMode *roundingModes,
+        const char * const *descriptions,
+        int32_t valueSize,
+        int32_t roundingModeSize);
+
 };
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
