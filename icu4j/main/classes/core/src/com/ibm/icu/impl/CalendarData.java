@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2004-2012, International Business Machines Corporation and    *
+ * Copyright (C) 2004-2013, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -9,6 +9,7 @@ package com.ibm.icu.impl;
 import java.util.ArrayList;
 import java.util.MissingResourceException;
 
+import com.ibm.icu.text.DateFormat;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.UResourceBundle;
 import com.ibm.icu.util.UResourceBundleIterator;
@@ -159,7 +160,50 @@ public class CalendarData {
 
         return list.toArray(new String[list.size()]);
     }
-
+    
+    /**
+     * Returns the default date-time pattern such as <code>{1}, {0}</code>.
+     * {1} is always the date and {0} is always the time.
+     */
+    public String getDateTimePattern() {
+        // this is a hack to get offset 8 from the dateTimePatterns array.
+        return _getDateTimePattern(-1);
+    }
+    
+    /**
+     * Returns the date-time pattern by style where style is one of the style fields defined
+     * in DateFormat. If date-time patterns by style are not available, it returns what
+     * {@link #getDateTimePattern()} would return.
+     * @param style the style e.g DateFormat.LONG.
+     * @return the pattern, e.g {1}, {0}.
+     */
+    public String getDateTimePattern(int style) {
+        // mask away high order bits such as the DateFormat.RELATIVE bit.
+        // We do it this way to avoid making this class depend on DateFormat. It makes this
+        // code more brittle, but it is no more brittle than how we access patterns by style.
+        return _getDateTimePattern(style & 7);
+    }
+    
+    private String _getDateTimePattern(int offset) {
+        String[] patterns = null;
+        try {
+            patterns = getDateTimePatterns();
+        } catch (MissingResourceException ignored) {
+            // ignore. patterns remains null.
+        }
+        if (patterns == null || patterns.length < 9) {
+            // Return hard-coded default. patterns array not available or it has too few
+            // elements.
+            return "{1} {0}";
+        }
+        if (patterns.length < 13) {
+            // Offset 8 contains default pattern if we don't have per style patterns.
+            return patterns[8];
+        }
+        // DateTimePatterns start at index 9 in the array.
+        return patterns[9 + offset];
+    }
+        
     public String[] getOverrides(){
         ICUResourceBundle bundle = get("DateTimePatterns");
         ArrayList<String> list = new ArrayList<String>();
