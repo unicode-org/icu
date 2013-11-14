@@ -4142,6 +4142,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/PluralRules.java svneol=native#text
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralRulesSerialProxy.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/PluralSamples.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/Quantifier.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/text/QuantityFormatter.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/RBBIDataWrapper.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RBBINode.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RBBIRuleBuilder.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4154,6 +4155,7 @@ icu4j/main/classes/core/src/com/ibm/icu/text/RBNFChinesePostProcessor.java svneo
 icu4j/main/classes/core/src/com/ibm/icu/text/RBNFPostProcessor.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RbnfLenientScanner.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/RbnfLenientScannerProvider.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/text/RelativeDateTimeFormatter.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/Replaceable.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ReplaceableContextIterator.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/text/ReplaceableString.java svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -4563,6 +4565,7 @@ icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/PluralRulesTest.java svneo
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RBNFParseTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RbnfRoundTripTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RbnfTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/RelativeDateTimeFormatterTest.java -text
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/SelectFormatAPITest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/SelectFormatUnitTest.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/tests/core/src/com/ibm/icu/dev/test/format/TestAll.java svneol=native#text/plain%3Bcharset%3Dutf-8
