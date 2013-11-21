@@ -281,12 +281,11 @@ public final class RelativeDateTimeFormatter {
      * @provisional
      */
     public static RelativeDateTimeFormatter getInstance(ULocale locale) {
-        CalendarData calData = new CalendarData(locale, null);
         RelativeDateTimeFormatterData data = cache.get(locale);
         return new RelativeDateTimeFormatter(
                 data.qualitativeUnitMap,
                 data.quantitativeUnitMap,
-                new MessageFormat(calData.getDateTimePattern()),
+                new MessageFormat(data.dateTimePattern),
                 PluralRules.forLocale(locale),
                 NumberFormat.getInstance(locale));
     }
@@ -369,9 +368,6 @@ public final class RelativeDateTimeFormatter {
             String current) {
         EnumMap<Direction, String> unitStrings =
                 new EnumMap<Direction, String>(Direction.class);
-        unitStrings.put(Direction.LAST, current);
-        unitStrings.put(Direction.THIS, current);
-        unitStrings.put(Direction.NEXT, current);
         unitStrings.put(Direction.PLAIN, current);
         qualitativeUnits.put(unit,  unitStrings);       
     }
@@ -428,13 +424,16 @@ public final class RelativeDateTimeFormatter {
     private static class RelativeDateTimeFormatterData {
         public RelativeDateTimeFormatterData(
                 EnumMap<AbsoluteUnit, EnumMap<Direction, String>> qualitativeUnitMap,
-                EnumMap<RelativeUnit, QuantityFormatter[]> quantitativeUnitMap) {
+                EnumMap<RelativeUnit, QuantityFormatter[]> quantitativeUnitMap,
+                String dateTimePattern) {
             this.qualitativeUnitMap = qualitativeUnitMap;
             this.quantitativeUnitMap = quantitativeUnitMap;
+            this.dateTimePattern = dateTimePattern;
         }
         
         public final EnumMap<AbsoluteUnit, EnumMap<Direction, String>> qualitativeUnitMap;
         public final EnumMap<RelativeUnit, QuantityFormatter[]> quantitativeUnitMap;
+        public final String dateTimePattern;  // Example: "{1}, {0}"
     }
     
     private static class Cache {
@@ -547,8 +546,11 @@ public final class RelativeDateTimeFormatter {
                     r.getWithFallback("fields/sun"),
                     dayOfWeekMap,
                     AbsoluteUnit.SUNDAY,
-                    qualitativeUnitMap);          
-            return new RelativeDateTimeFormatterData(qualitativeUnitMap, quantitativeUnitMap);
+                    qualitativeUnitMap);   
+            CalendarData calData = new CalendarData(
+                    ulocale, r.getStringWithFallback("calendar/default"));  
+            return new RelativeDateTimeFormatterData(
+                    qualitativeUnitMap, quantitativeUnitMap, calData.getDateTimePattern());
         }
 
         private void addTimeUnit(
@@ -615,8 +617,7 @@ public final class RelativeDateTimeFormatter {
             if (daysOfWeekBundle.getSize() != 7) {
                 throw new IllegalStateException(String.format("Expect 7 days in a week, got %d", daysOfWeekBundle.getSize()));
             }
-            // Assuming that days of week are always listed from Sunday.
-            // TODO(tkeep): Is this always true?
+            // Sunday always comes first in CLDR data.
             int idx = 0;
             dayOfWeekMap.put(AbsoluteUnit.SUNDAY, daysOfWeekBundle.getString(idx++));
             dayOfWeekMap.put(AbsoluteUnit.MONDAY, daysOfWeekBundle.getString(idx++));
@@ -628,7 +629,6 @@ public final class RelativeDateTimeFormatter {
             return dayOfWeekMap;
         }
     }
-    
 
     private static final Cache cache = new Cache();
 }
