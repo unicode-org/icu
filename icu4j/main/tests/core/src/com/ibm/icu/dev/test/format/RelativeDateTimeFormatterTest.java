@@ -6,8 +6,6 @@
  */
 package com.ibm.icu.dev.test.format;
 
-
-
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.RelativeDateTimeFormatter;
@@ -16,10 +14,6 @@ import com.ibm.icu.text.RelativeDateTimeFormatter.Direction;
 import com.ibm.icu.text.RelativeDateTimeFormatter.RelativeUnit;
 import com.ibm.icu.util.ULocale;
 
-/**
- * @author rocketman
- *
- */
 public class RelativeDateTimeFormatterTest extends TestFmwk {
     
     public static void main(String[] args) throws Exception {
