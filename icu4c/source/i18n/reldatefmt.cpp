@@ -21,6 +21,7 @@
 #include "cstring.h"
 #include "plurrule_impl.h"
 #include "ucln_in.h"
+#include "mutex.h"
 
 #include "sharedptr.h"
 
@@ -590,7 +591,7 @@ static UObject *U_CALLCONV createData(const char *localeId, UErrorCode &status) 
 static void U_CALLCONV cacheInit(UErrorCode &status) {
     U_ASSERT(gCache == NULL);
     ucln_i18n_registerCleanup(UCLN_I18N_RELDATEFMT, reldatefmt_cleanup);
-    gCache = new SimpleLRUCache(100, &gCacheMutex, &createData, status);
+    gCache = new SimpleLRUCache(100, &createData, status);
     if (U_FAILURE(status)) {
         delete gCache;
         gCache = NULL;
@@ -602,6 +603,7 @@ static void getFromCache(const char *locale, SharedPtr<RelativeDateTimeData>& pt
     if (U_FAILURE(status)) {
         return;
     }
+    Mutex lock(&gCacheMutex);
     gCache->get(locale, ptr, status);
 }
 

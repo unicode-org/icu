@@ -11,9 +11,6 @@
 #include "cstring.h"
 #include "intltest.h"
 #include "lrucache.h"
-#include "umutex.h"
-
-static UMutex gMutex = U_MUTEX_INITIALIZER;
 
 class CopyOnWriteForTesting : public UObject {
 public:
@@ -39,7 +36,7 @@ private:
 class LRUCacheForTesting : public LRUCache {
 public:
     LRUCacheForTesting(
-        int32_t maxSize, UMutex *mutex,
+        int32_t maxSize,
         const UnicodeString &dfs, UErrorCode &status);
     virtual ~LRUCacheForTesting() {
     }
@@ -50,9 +47,9 @@ private:
 };
 
 LRUCacheForTesting::LRUCacheForTesting(
-        int32_t maxSize, UMutex *mutex,
+        int32_t maxSize,
         const UnicodeString &dfs, UErrorCode &status) :
-    LRUCache(maxSize, mutex, status), defaultFormatStr() {
+    LRUCache(maxSize, status), defaultFormatStr() {
     if (U_FAILURE(status)) {
         return;
     }
@@ -104,7 +101,7 @@ void LRUCacheTest::runIndexedTest(int32_t index, UBool exec, const char* &name, 
 
 void LRUCacheTest::TestSharedPointer() {
     UErrorCode status = U_ZERO_ERROR;
-    LRUCacheForTesting cache(3, &gMutex, "little", status);
+    LRUCacheForTesting cache(3, "little", status);
     SharedPtr<CopyOnWriteForTesting> ptr;
     cache.get("boo", ptr, status);
     verifySharedPointer(ptr, "boo", "little");
@@ -130,12 +127,12 @@ void LRUCacheTest::TestSharedPointer() {
 
 void LRUCacheTest::TestErrorCallingConstructor() {
     UErrorCode status = U_MEMORY_ALLOCATION_ERROR;
-    LRUCacheForTesting cache(3, &gMutex, "little", status);
+    LRUCacheForTesting cache(3, "little", status);
 } 
 
 void LRUCacheTest::TestLRUCache() {
     UErrorCode status = U_ZERO_ERROR;
-    LRUCacheForTesting cache(3, &gMutex, "little", status);
+    LRUCacheForTesting cache(3, "little", status);
     SharedPtr<CopyOnWriteForTesting> ptr1;
     SharedPtr<CopyOnWriteForTesting> ptr2;
     SharedPtr<CopyOnWriteForTesting> ptr3;
@@ -224,7 +221,7 @@ void LRUCacheTest::TestLRUCache() {
 
 void LRUCacheTest::TestLRUCacheError() {
     UErrorCode status = U_ZERO_ERROR;
-    LRUCacheForTesting cache(3, &gMutex, "little", status);
+    LRUCacheForTesting cache(3, "little", status);
     SharedPtr<CopyOnWriteForTesting> ptr1;
     cache.get("error", ptr1, status);
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
