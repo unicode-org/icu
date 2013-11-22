@@ -68,8 +68,7 @@ public:
         UErrorCode &status) :
             LRUCache(maxSize, mutex, status), createFunc(cf) {
     }
-    virtual ~SimpleLRUCache() {
-    }
+    virtual ~SimpleLRUCache();
 protected:
     virtual UObject *create(const char *localeId, UErrorCode &status);
 private:
