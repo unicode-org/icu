@@ -324,7 +324,9 @@
     <ClCompile Include="plurrule.cpp" />
     <ClCompile Include="rbnf.cpp" />
     <ClCompile Include="rbtz.cpp" />
-    <ClCompile Include="reldatefmt.cpp" />
+    <ClCompile Include="reldatefmt.cpp">
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+    </ClCompile>
     <ClCompile Include="reldtfmt.cpp" />
     <ClCompile Include="selfmt.cpp" />
     <ClCompile Include="simpletz.cpp" />
