@@ -103,6 +103,9 @@
     <ClCompile Include="ucol_swp.cpp">
       <Filter>collation</Filter>
     </ClCompile>
+    <ClCompile Include="lrucache.cpp">
+      <Filter>collections</Filter>
+    </ClCompile>
     <ClCompile Include="propsvec.c">
       <Filter>collections</Filter>
     </ClCompile>
@@ -609,6 +612,9 @@
     <ClInclude Include="hash.h">
       <Filter>collections</Filter>
     </ClInclude>
+    <ClInclude Include="lrucache.h">
+      <Filter>collections</Filter>
+    </ClInclude>
     <ClInclude Include="propsvec.h">
       <Filter>collections</Filter>
     </ClInclude>
@@ -694,6 +700,9 @@
       <Filter>conversion</Filter>
     </ClInclude>
     <ClInclude Include="cmemory.h">
+      <Filter>data &amp; memory</Filter>
+    </ClInclude>
+    <ClInclude Include="sharedptr.h">
       <Filter>data &amp; memory</Filter>
     </ClInclude>
     <ClInclude Include="ucln.h">
