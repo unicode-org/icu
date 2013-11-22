@@ -61,6 +61,7 @@
 
 extern IntlTest *createCompactDecimalFormatTest();
 extern IntlTest *createGenderInfoTest();
+extern IntlTest *createRelativeDateTimeFormatterTest();
 
 #define TESTCLASS(id, TestClass)          \
     case id:                              \
@@ -157,6 +158,15 @@ void IntlTestFormat::runIndexedTest( int32_t index, UBool exec, const char* &nam
           }
           break;
         TESTCLASS(45,RegionTest);
+        case 46:
+          name = "RelativeDateTimeFormatterTest";
+          if (exec) {
+            logln("RelativeDateTimeFormatterTest test---");
+            logln((UnicodeString)"");
+            LocalPointer<IntlTest> test(createRelativeDateTimeFormatterTest());
+            callTest(*test, par);
+          }
+          break;
         default: name = ""; break; //needed to end loop
     }
     if (exec) {

@@ -142,6 +142,9 @@
     <ClCompile Include="ucaconf.cpp">
       <Filter>collation</Filter>
     </ClCompile>
+    <ClCompile Include="lrucachetest.cpp">
+      <Filter>collections</Filter>
+    </ClCompile>
     <ClCompile Include="uvectest.cpp">
       <Filter>collections</Filter>
     </ClCompile>
@@ -263,6 +266,9 @@
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="pptest.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
+    <ClCompile Include="reldatefmttest.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
     <ClCompile Include="sdtfmtts.cpp">
