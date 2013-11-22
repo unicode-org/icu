@@ -234,6 +234,9 @@
     <ClCompile Include="rbtz.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
+    <ClCompile Include="reldatefmt.cpp">
+      <Filter>formatting</Filter>
+    </ClCompile>
     <ClCompile Include="reldtfmt.cpp">
       <Filter>formatting</Filter>
     </ClCompile>
@@ -942,6 +945,9 @@
     <CustomBuild Include="unicode\rbtz.h">
       <Filter>formatting</Filter>
     </CustomBuild>
+    <ClInclude Include="unicode\reldatefmt.h">
+      <Filter>formatting</Filter>
+    </ClInclude>
     <CustomBuild Include="unicode\selfmt.h">
       <Filter>formatting</Filter>
     </CustomBuild>

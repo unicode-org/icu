@@ -26,6 +26,7 @@ as the functions are suppose to be called.
 It's usually best to have child dependencies called first. */
 typedef enum ECleanupI18NType {
     UCLN_I18N_START = -1,
+    UCLN_I18N_RELDATEFMT,
     UCLN_I18N_IDENTIFIER_INFO,
     UCLN_I18N_SPOOF,
     UCLN_I18N_TRANSLITERATOR,

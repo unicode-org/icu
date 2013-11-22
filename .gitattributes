@@ -7,7 +7,10 @@ icu4c/source/aclocal.m4 -text
 icu4c/source/allinone/icucheck.bat -text
 icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
+icu4c/source/common/lrucache.cpp -text
+icu4c/source/common/lrucache.h -text
 icu4c/source/common/rbbirpt.txt svneol=native#text/plain
+icu4c/source/common/sharedptr.h -text
 icu4c/source/data/brkitr/char.txt svneol=native#text/plain
 icu4c/source/data/brkitr/cjdict.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/brkitr/el.txt svneol=native#text/plain%3Bcharset%3Dutf-8
@@ -3483,6 +3486,8 @@ icu4c/source/i18n/decimalformatpattern.h -text
 icu4c/source/i18n/i18n.vcxproj -text
 icu4c/source/i18n/i18n.vcxproj.filters -text
 icu4c/source/i18n/regexcst.txt svneol=native#text/plain
+icu4c/source/i18n/reldatefmt.cpp -text
+icu4c/source/i18n/unicode/reldatefmt.h -text
 icu4c/source/io/io.vcxproj -text
 icu4c/source/io/io.vcxproj.filters -text
 icu4c/source/layout/layout.vcxproj -text
@@ -3583,6 +3588,8 @@ icu4c/source/test/hdrtst/dfiles.txt svneol=native#text/plain
 icu4c/source/test/hdrtst/pfiles.txt svneol=native#text/plain
 icu4c/source/test/intltest/intltest.vcxproj -text
 icu4c/source/test/intltest/intltest.vcxproj.filters -text
+icu4c/source/test/intltest/lrucachetest.cpp -text
+icu4c/source/test/intltest/reldatefmttest.cpp -text
 icu4c/source/test/iotest/iotest.vcxproj -text
 icu4c/source/test/iotest/iotest.vcxproj.filters -text
 icu4c/source/test/letest/cletest.vcxproj -text
