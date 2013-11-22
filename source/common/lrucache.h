@@ -12,7 +12,6 @@
 #define __LRU_CACHE_H__
 
 #include "unicode/uobject.h"
-#include "umutex.h"
 #include "sharedptr.h"
 
 struct UHashtable;
@@ -40,7 +39,7 @@ class U_COMMON_API LRUCache : public UObject {
     virtual ~LRUCache();
   protected:
     virtual UObject *create(const char *localeId, UErrorCode &status)=0;
-    LRUCache(int32_t maxSize, UMutex *mutex, UErrorCode &status);
+    LRUCache(int32_t maxSize, UErrorCode &status);
   private:
     LRUCache();
     LRUCache(const LRUCache &other);
@@ -50,7 +49,6 @@ class U_COMMON_API LRUCache : public UObject {
     CacheEntry2 *leastRecentlyUsedMarker;
     UHashtable *localeIdToEntries;
     int32_t maxSize;
-    UMutex *mutex;
 
     void moveToMostRecent(CacheEntry2 *cacheEntry);
     UBool init(const char *localeId, CacheEntry2 *cacheEntry);
@@ -63,10 +61,9 @@ class U_COMMON_API SimpleLRUCache : public LRUCache {
 public:
     SimpleLRUCache(
         int32_t maxSize,
-        UMutex *mutex,
         CreateFunc cf,
         UErrorCode &status) :
-            LRUCache(maxSize, mutex, status), createFunc(cf) {
+            LRUCache(maxSize, status), createFunc(cf) {
     }
     virtual ~SimpleLRUCache();
 protected:
