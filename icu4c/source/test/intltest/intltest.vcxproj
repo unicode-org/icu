@@ -317,7 +317,9 @@
     <ClCompile Include="plurfmts.cpp" />
     <ClCompile Include="plurults.cpp" />
     <ClCompile Include="pptest.cpp" />
-    <ClCompile Include="reldatefmttest.cpp" />
+    <ClCompile Include="reldatefmttest.cpp">
+      <DisableLanguageExtensions>false</DisableLanguageExtensions>
+    </ClCompile>
     <ClCompile Include="sdtfmtts.cpp" />
     <ClCompile Include="selfmts.cpp" />
     <ClCompile Include="tchcfmt.cpp" />
