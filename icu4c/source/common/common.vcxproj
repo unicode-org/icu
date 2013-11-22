@@ -371,7 +371,9 @@
     <ClCompile Include="locresdata.cpp" />
     <ClCompile Include="locutil.cpp">
     </ClCompile>
-    <ClCompile Include="lrucache.cpp" />
+    <ClCompile Include="lrucache.cpp">
+    <DisableLanguageExtensions>false</DisableLanguageExtensions>
+    </ClCompile>
     <ClCompile Include="resbund.cpp">
     </ClCompile>
     <ClCompile Include="resbund_cnv.cpp" />
