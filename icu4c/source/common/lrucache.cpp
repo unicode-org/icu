@@ -9,7 +9,6 @@
 */
 
 #include "lrucache.h"
-#include "mutex.h"
 #include "uhash.h"
 #include "cstring.h"
 
@@ -120,7 +119,6 @@ UBool LRUCache::contains(const char *localeId) const {
 
 
 void LRUCache::_get(const char *localeId, SharedPtr<UObject>& ptr, UErrorCode &status) {
-    Mutex lock(mutex);
     CacheEntry2 *entry = (CacheEntry2 *) uhash_get(localeIdToEntries, localeId);
     if (entry != NULL) {
         moveToMostRecent(entry);
@@ -172,12 +170,11 @@ void LRUCache::_get(const char *localeId, SharedPtr<UObject>& ptr, UErrorCode &s
     ptr = entry->cachedData;
 }
 
-LRUCache::LRUCache(int32_t size, UMutex *mtx, UErrorCode &status) :
+LRUCache::LRUCache(int32_t size, UErrorCode &status) :
         mostRecentlyUsedMarker(NULL),
         leastRecentlyUsedMarker(NULL),
         localeIdToEntries(NULL),
-        maxSize(size),
-        mutex(mtx) {
+        maxSize(size) {
     if (U_FAILURE(status)) {
         return;
     }
