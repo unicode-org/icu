@@ -25,7 +25,7 @@ U_NAMESPACE_BEGIN
 
 class CacheEntry2;
 
-class LRUCache : public UObject {
+class U_COMMON_API LRUCache : public UObject {
   public:
     template<typename T>
     void get(const char *localeId, SharedPtr<T> &ptr, UErrorCode &status) {
@@ -59,7 +59,7 @@ class LRUCache : public UObject {
 
 typedef UObject *(*CreateFunc)(const char *localeId, UErrorCode &status);
 
-class SimpleLRUCache : public LRUCache {
+class U_COMMON_API SimpleLRUCache : public LRUCache {
 public:
     SimpleLRUCache(
         int32_t maxSize,
