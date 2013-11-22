@@ -214,6 +214,9 @@ LRUCache::~LRUCache() {
     }
 }
 
+SimpleLRUCache::~SimpleLRUCache() {
+}
+
 UObject *SimpleLRUCache::create(const char *localeId, UErrorCode &status) {
     return createFunc(localeId, status);
 }
