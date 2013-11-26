@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005 - 2012, International Business Machines Corporation and  *
+* Copyright (C) 2005 - 2013, International Business Machines Corporation and  *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -85,8 +85,10 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
         } else if (numValid > 0 && numInvalid == 0) {
             confidence = 80;
         } else if (numValid == 0 && numInvalid == 0) {
-            // Plain ASCII.  
-            confidence = 10;            
+            // Plain ASCII. Confidence must be > 10, it's more likely than UTF-16, which
+            //              accepts ASCII with confidence = 10.
+            // TODO: add plain ASCII as an explicitly detected type.
+            confidence = 15;            
         } else if (numValid > numInvalid*10) {
             // Probably corruput utf-8 data.  Valid sequences aren't likely by chance.
             confidence = 25;

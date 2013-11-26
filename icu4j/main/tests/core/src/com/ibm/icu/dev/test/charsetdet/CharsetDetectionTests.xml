@@ -553,4 +553,9 @@ Conference Program
     <test-case id="bug-10532-utf-16" encodings="UTF-8 UTF-16BE UTF-16LE UTF-32BE UTF-32LE">
     foo 東京・銀座の歌舞伎座。４月に新調された４枚の緞帳のうち３枚は、京都の川島織物セルコンが織った朝日新聞デジタル会員（有料・無料）にご登録いただくと、様々な特典・サービスが受けられます。
     </test-case>
+    
+    <test-case id="bug-10532-ASCII" encodings="UTF-8 UTF-16BE UTF-16LE UTF-32BE UTF-32LE">
+    <!--  Note that plain 7 bit ASCII is detected as UTF-8 -->
+    ,1,,,5
+    </test-case>
 </charset-detection-tests>
