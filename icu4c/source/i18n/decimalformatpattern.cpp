@@ -7,6 +7,9 @@
 
 #include "uassert.h"
 #include "decimalformatpattern.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/dcfmtsym.h"
 #include "unicode/format.h"
 #include "unicode/utf16.h"
@@ -639,3 +642,5 @@ DecimalFormatPatternParser::applyPatternWithoutExpandAffix(
 }
 
 U_NAMESPACE_END
+
+#endif /* !UCONFIG_NO_FORMATTING */
