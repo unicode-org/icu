@@ -8,6 +8,9 @@
 #define _DECIMAL_FORMAT_PATTERN
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/uobject.h"
 #include "unicode/unistr.h"
 #include "digitlst.h"
@@ -92,4 +95,5 @@ class DecimalFormatPatternParser : UMemory {
 
 U_NAMESPACE_END
 
+#endif /* !UCONFIG_NO_FORMATTING */
 #endif
