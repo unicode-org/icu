@@ -13,6 +13,9 @@
 #define __RELDATEFMT_H
 
 #include "unicode/utypes.h"
+
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/locid.h"
 #include "sharedptr.h"
 
@@ -377,4 +380,5 @@ private:
 
 U_NAMESPACE_END
 
+#endif /* !UCONFIG_NO_FORMATTING */
 #endif
