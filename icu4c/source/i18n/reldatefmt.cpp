@@ -10,6 +10,8 @@
 
 #include "unicode/reldatefmt.h"
 
+#if !UCONFIG_NO_FORMATTING
+
 #include "unicode/localpointer.h"
 #include "unicode/plurrule.h"
 #include "unicode/msgfmt.h"
@@ -701,4 +703,6 @@ void RelativeDateTimeFormatter::setNumberFormat(const NumberFormat& nf) {
 }
 
 U_NAMESPACE_END
+
+#endif /* !UCONFIG_NO_FORMATTING */
 
