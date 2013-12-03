@@ -525,7 +525,7 @@ static void getDateTimePattern(
     if (size < 9) {
         // Oops, size is to small to access the index that we want, fallback
         // to a hard-coded value.
-        result = UnicodeString("{1} {0}");
+        result = UNICODE_STRING_SIMPLE("{1} {0}");
         return;
     }
     getStringByIndex(topLevel.getAlias(), 8, result, status);
@@ -667,7 +667,7 @@ UnicodeString& RelativeDateTimeFormatter::format(
     }
     UnicodeString result(*pattern);
     UnicodeString formattedNumber;
-    result.findAndReplace(UnicodeString("{0}"), ptr->numberFormat->format(quantity, formattedNumber));
+    result.findAndReplace(UNICODE_STRING_SIMPLE("{0}"), ptr->numberFormat->format(quantity, formattedNumber));
     return appendTo.append(result);
 }
 
