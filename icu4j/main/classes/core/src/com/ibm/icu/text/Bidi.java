@@ -113,7 +113,8 @@ import com.ibm.icu.lang.UProperty;
  * these special values are designed that way. Also, the implementation
  * assumes that MAX_EXPLICIT_LEVEL is odd.
  *
- * <ul><b>See Also:</b>
+ * <b>See Also:</b>
+ * <ul>
  * <li>{@link #LEVEL_DEFAULT_LTR}
  * <li>{@link #LEVEL_DEFAULT_RTL}
  * <li>{@link #LEVEL_OVERRIDE}
@@ -125,7 +126,8 @@ import com.ibm.icu.lang.UProperty;
  * Reordering mode values indicate which variant of the Bidi algorithm to
  * use.
  *
- * <ul><b>See Also:</b>
+ * <b>See Also:</b>
+ * <ul>
  * <li>{@link #setReorderingMode}
  * <li>{@link #REORDER_DEFAULT}
  * <li>{@link #REORDER_NUMBERS_SPECIAL}
@@ -138,7 +140,9 @@ import com.ibm.icu.lang.UProperty;
  *
  * <h3>Basic concept: Reordering Options</h3>
  * Reordering options can be applied during Bidi text transformations.
- * <ul><b>See Also:</b>
+ * 
+ * <b>See Also:</b>
+ * <ul>
  * <li>{@link #setReorderingOptions}
  * <li>{@link #OPTION_DEFAULT}
  * <li>{@link #OPTION_INSERT_MARKS}
@@ -1473,7 +1477,7 @@ public class Bidi {
      * <p>Note: calling this method after setting the reordering mode with
      * <code>setReorderingMode</code> will return <code>true</code> if the
      * reordering mode was set to
-     * <code>REORDER_INVERSE_NUMBERS_AS_L<code>, <code>false</code>
+     * <code>REORDER_INVERSE_NUMBERS_AS_L</code>, <code>false</code>
      * for all other values.</p>
      *
      * @return <code>true</code> if the <code>Bidi</code> object is set to
