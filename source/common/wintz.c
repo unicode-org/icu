@@ -17,7 +17,6 @@
 #include "cmemory.h"
 #include "cstring.h"
 
-#include "unicode/ustring.h"
 #include "unicode/ures.h"
 
 #   define WIN32_LEAN_AND_MEAN
@@ -250,7 +249,6 @@ uprv_detectWindowsTimeZone() {
     UErrorCode status = U_ZERO_ERROR;
     UResourceBundle* bundle = NULL;
     char* icuid = NULL;
-    UChar apiStd[MAX_LENGTH_ID];
     char apiStdName[MAX_LENGTH_ID];
     char regStdName[MAX_LENGTH_ID];
     char tmpid[MAX_LENGTH_ID];
@@ -279,8 +277,7 @@ uprv_detectWindowsTimeZone() {
 
     /* Convert the wchar_t* standard name to char* */
     uprv_memset(apiStdName, 0, sizeof(apiStdName));
-    u_strFromWCS(apiStd, MAX_LENGTH_ID, NULL, apiTZI.StandardName, -1, &status);
-    u_austrncpy(apiStdName, apiStd, sizeof(apiStdName) - 1);
+    wcstombs(apiStdName, apiTZI.StandardName, MAX_LENGTH_ID);
 
     tmpid[0] = 0;
 
