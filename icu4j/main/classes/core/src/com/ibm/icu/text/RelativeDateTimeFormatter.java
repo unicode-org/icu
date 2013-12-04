@@ -33,7 +33,7 @@ import com.ibm.icu.util.UResourceBundle;
  * involving one single unit. This API does not support relative dates
  * involving compound units.
  * e.g "in 5 days and 4 hours" nor does it support parsing.
- * This class is NOT thread-safe.
+ * This class is both immutable and thread-safe.
  * <p>
  * Here are some examples of use:
  * <blockquote>
@@ -277,6 +277,8 @@ public final class RelativeDateTimeFormatter {
     
     /**
      * Returns a RelativeDateTimeFormatter for a particular locale.
+     * 
+     * @param locale the locale.
      * @draft ICU 53
      * @provisional
      */
@@ -290,6 +292,25 @@ public final class RelativeDateTimeFormatter {
                 NumberFormat.getInstance(locale));
     }
     
+    /**
+     * Returns a RelativeDateTimeFormatter for a particular locale that uses a particular
+     * NumberFormat object.
+     * 
+     * @param locale the locale
+     * @param nf the number format object. It is defensively copied to ensure thread-safety
+     * and immutability of this class. 
+     * @draft ICU 53
+     * @provisional
+     */
+    public static RelativeDateTimeFormatter getInstance(ULocale locale, NumberFormat nf) {
+        RelativeDateTimeFormatterData data = cache.get(locale);
+        return new RelativeDateTimeFormatter(
+                data.qualitativeUnitMap,
+                data.quantitativeUnitMap,
+                new MessageFormat(data.dateTimePattern),
+                PluralRules.forLocale(locale),
+                (NumberFormat) nf.clone());
+    }
            
     /**
      * Formats a relative date with a quantity such as "in 5 days" or
@@ -309,7 +330,13 @@ public final class RelativeDateTimeFormatter {
         if (direction != Direction.LAST && direction != Direction.NEXT) {
             throw new IllegalArgumentException("direction must be NEXT or LAST");
         }
-        return getQuantity(unit, direction == Direction.NEXT).format(quantity, numberFormat, pluralRules);
+        // This class is thread-safe, yet numberFormat is not. To ensure thread-safety of this
+        // class we must guarantee that only one thread at a time uses our numberFormat.
+        synchronized (numberFormat) {
+            return getQuantity(
+                    unit, direction == Direction.NEXT).format(
+                            quantity, numberFormat, pluralRules);
+        }
     }
     
     /**
@@ -330,21 +357,6 @@ public final class RelativeDateTimeFormatter {
         }
         return this.qualitativeUnitMap.get(unit).get(direction);
     }
-    
-    /**
-     * Specify which NumberFormat object this object should use for
-     * formatting numbers. By default this object uses the default
-     * NumberFormat object for this object's locale.
-     * @param nf the NumberFormat object to use. This method makes
-     *  its own defensive copy of nf so that subsequent
-     *  changes to nf will not affect the operation of this object.
-     * @see #format(double, Direction, RelativeUnit)
-     * @draft ICU 53
-     * @provisional
-     */
-    public void setNumberFormat(NumberFormat nf) {
-        this.numberFormat = (NumberFormat) nf.clone();
-    }
 
     /**
      * Combines a relative date string and a time string in this object's
@@ -360,6 +372,20 @@ public final class RelativeDateTimeFormatter {
     public String combineDateAndTime(String relativeDateString, String timeString) {
         return this.combinedDateAndTime.format(
             new Object[]{timeString, relativeDateString}, new StringBuffer(), null).toString();
+    }
+    
+    /**
+     * Returns a copy of the NumberFormat this object is using.
+     * 
+     * @draft ICU 53
+     * @provisional
+     */
+    public NumberFormat getNumberFormat() {
+        // This class is thread-safe, yet numberFormat is not. To ensure thread-safety of this
+        // class we must guarantee that only one thread at a time uses our numberFormat.
+        synchronized (numberFormat) {
+            return (NumberFormat) numberFormat.clone();
+        }
     }
     
     private static void addQualitativeUnit(
