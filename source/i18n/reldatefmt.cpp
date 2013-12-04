@@ -610,13 +610,33 @@ static void getFromCache(const char *locale, SharedPtr<RelativeDateTimeData>& pt
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(UErrorCode& status) {
-  getFromCache(Locale::getDefault().getName(), ptr, status);
+    getFromCache(Locale::getDefault().getName(), ptr, status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(const Locale& locale, UErrorCode& status) {
     getFromCache(locale.getName(), ptr, status);
 }
 
+RelativeDateTimeFormatter::RelativeDateTimeFormatter(
+        const Locale& locale, NumberFormat *nfToAdopt, UErrorCode& status) {
+    getFromCache(locale.getName(), ptr, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    RelativeDateTimeData* wptr = ptr.readWrite();
+    if (wptr == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+    if (!wptr->numberFormat.adoptInstead(nfToAdopt)) {
+        status = U_MEMORY_ALLOCATION_ERROR;
+        return;
+    }
+}
+
+const NumberFormat& RelativeDateTimeFormatter::getNumberFormat() const {
+    return *ptr->numberFormat;
+}
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(const RelativeDateTimeFormatter& other) : ptr(other.ptr) {
 }
@@ -692,14 +712,6 @@ UnicodeString& RelativeDateTimeFormatter::combineDateAndTime(
     formattable[1].setString(relativeDateString);
     FieldPosition fpos(0);
     return ptr->combinedDateAndTime->format(formattable, 2, appendTo, fpos, status);
-}
-
-void RelativeDateTimeFormatter::setNumberFormat(const NumberFormat& nf) {
-    RelativeDateTimeData *wptr = ptr.readWrite();
-    NumberFormat *newNf = (NumberFormat *) nf.clone();
-    if (newNf != NULL && wptr != NULL) {
-        wptr->numberFormat.adoptInstead(newNf);
-    }
 }
 
 U_NAMESPACE_END

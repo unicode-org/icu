@@ -185,7 +185,7 @@ private:
     void TestSpanishNoQuantity();
     void TestFormatWithQuantityIllegalArgument();
     void TestFormatWithoutQuantityIllegalArgument();
-    void TestSetNumberFormat();
+    void TestCustomNumberFormat();
     void TestCombineDateAndTime();
     void RunTest(
             const Locale& locale,
@@ -235,7 +235,7 @@ void RelativeDateTimeFormatterTest::runIndexedTest(
     TESTCASE_AUTO(TestSpanishNoQuantity);
     TESTCASE_AUTO(TestFormatWithQuantityIllegalArgument);
     TESTCASE_AUTO(TestFormatWithoutQuantityIllegalArgument);
-    TESTCASE_AUTO(TestSetNumberFormat);
+    TESTCASE_AUTO(TestCustomNumberFormat);
     TESTCASE_AUTO(TestCombineDateAndTime);
     TESTCASE_AUTO_END;
 }
@@ -279,22 +279,21 @@ void RelativeDateTimeFormatterTest::TestFormatWithoutQuantityIllegalArgument() {
     VerifyIllegalArgument(fmt, UDAT_DIRECTION_THIS, UDAT_ABSOLUTE_NOW);
 }
 
-void RelativeDateTimeFormatterTest::TestSetNumberFormat() {
+void RelativeDateTimeFormatterTest::TestCustomNumberFormat() {
+    NumberFormat *nf;
     UErrorCode status = U_ZERO_ERROR;
-    RelativeDateTimeFormatter fmt("en", status);
-    if (U_FAILURE(status)) {
-        dataerrln("Failure creating format object - %s", u_errorName(status));
-        return;
+    {
+        RelativeDateTimeFormatter fmt("en", status);
+        if (U_FAILURE(status)) {
+            dataerrln(
+                    "Failure creating format object - %s", u_errorName(status));
+            return;
+        }
+        nf = (NumberFormat *) fmt.getNumberFormat().clone();
     }
-    LocalPointer<NumberFormat> numberFormat(NumberFormat::createInstance("en", status));
-    numberFormat->setMinimumFractionDigits(1);
-    numberFormat->setMaximumFractionDigits(1);
-    fmt.setNumberFormat(*numberFormat);
-
-    // Prove that we made a defensive copy.
-    numberFormat->setMinimumFractionDigits(3);
-    numberFormat->setMaximumFractionDigits(3);
-
+    nf->setMinimumFractionDigits(1);
+    nf->setMaximumFractionDigits(1);
+    RelativeDateTimeFormatter fmt("en", nf, status);
     RunTest(fmt, kEnglishDecimal, LENGTHOF(kEnglishDecimal), "en decimal digits");
 }
 

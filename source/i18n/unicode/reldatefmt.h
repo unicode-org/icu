@@ -236,7 +236,13 @@ class NumberFormat;
  * involving one single unit. This API does not support relative dates
  * involving compound units.
  * e.g "in 5 days and 4 hours" nor does it support parsing.
- * This class is NOT thread-safe.
+ * <p>
+ * This class is mostly thread safe and immutable with the following caveats:
+ * 1. The assignment operator violates Immutability. It must not be used
+ *    concurrently with other operations.
+ * 2. Caller must not hold onto adopted pointers.
+ * <p>
+ * This class is not intended for public subclassing.
  * <p>
  * Here are some examples of use:
  * <blockquote>
@@ -292,12 +298,24 @@ public:
      */
     RelativeDateTimeFormatter(UErrorCode& status);
 
-
     /**
      * Create RelativeDateTimeFormatter with given locale.
      * @draft ICU 53
      */
     RelativeDateTimeFormatter(const Locale& locale, UErrorCode& status);
+
+    /**
+     * Create RelativeDateTimeFormatter with given locale and NumberFormat.
+     * 
+     * @param locale the locale
+     * @param nfToAdopt Constructed object takes ownership of this pointer.
+     *   It is an error for caller to delete this pointer or change its
+     *   contents after calling this constructor.
+     * @status Any error is returned here.
+     * @draft ICU 53
+     */
+    RelativeDateTimeFormatter(
+        const Locale& locale, NumberFormat *nfToAdopt, UErrorCode& status);
 
     /**
      * Copy constructor.
@@ -365,14 +383,12 @@ public:
         UnicodeString& appendTo, UErrorCode& status) const;
 
     /**
-     * Specify which NumberFormat object this object should use for
-     * formatting numbers. By default this object uses the default
-     * NumberFormat object for this object's locale.
-     * @param nf the NumberFormat object to use.
-     * @see #format(double, Direction, RelativeUnit)
+     * Returns the NumberFormat this object is using.
+     *
      * @draft ICU 53
      */
-    void setNumberFormat(const NumberFormat& nf);
+    const NumberFormat& getNumberFormat() const;
+
 private:
     RelativeDateTimeFormatter();
     SharedPtr<icu::RelativeDateTimeData> ptr;
