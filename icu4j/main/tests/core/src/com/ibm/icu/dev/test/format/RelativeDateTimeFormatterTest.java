@@ -215,17 +215,21 @@ public class RelativeDateTimeFormatterTest extends TestFmwk {
         }
     }
     
-    public void TestSetNumberFormat() {
+    public void TestCustomNumberFormat() {
         ULocale loc = new ULocale("en_US");
         NumberFormat nf = NumberFormat.getInstance(loc);
         nf.setMinimumFractionDigits(1);
         nf.setMaximumFractionDigits(1);
-        RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(loc);
-        fmt.setNumberFormat(nf);
+        RelativeDateTimeFormatter fmt = RelativeDateTimeFormatter.getInstance(loc, nf);
         
         // Change nf after the fact to prove that we made a defensive copy
         nf.setMinimumFractionDigits(3);
         nf.setMaximumFractionDigits(3);
+        
+        // Change getNumberFormat to prove we made defensive copy going out.
+        fmt.getNumberFormat().setMinimumFractionDigits(5);
+        assertEquals(
+                "TestCustomNumberformat", 1, fmt.getNumberFormat().getMinimumFractionDigits());
         
         Object[][] data = {
             {0.0, Direction.NEXT, RelativeUnit.SECONDS, "in 0.0 seconds"},
