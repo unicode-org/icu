@@ -210,7 +210,7 @@ typedef enum UDateDirection {
      * Count of items in this enum.
      * @draft ICU 53
      */
-    UDAT_DIRECTION_UNIT_COUNT
+    UDAT_DIRECTION_COUNT
 } UDateDirection;
 
 

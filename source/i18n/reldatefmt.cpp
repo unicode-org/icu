@@ -55,7 +55,7 @@ static const char * const gPluralForms[] = {
 class QualitativeUnits : public UObject {
 public:
     QualitativeUnits() { }
-    UnicodeString data[UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_UNIT_COUNT];
+    UnicodeString data[UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_COUNT];
     virtual ~QualitativeUnits() {
     }
 private:
