@@ -3610,6 +3610,11 @@ icu4c/source/test/perf/charperf/charperf.vcxproj.filters -text
 icu4c/source/test/perf/collationperf/readme.html svneol=native#text/html
 icu4c/source/test/perf/collperf/collperf.vcxproj -text
 icu4c/source/test/perf/collperf/collperf.vcxproj.filters -text
+icu4c/source/test/perf/collperf2/CollPerf2_r.pl -text
+icu4c/source/test/perf/collperf2/Makefile.in -text
+icu4c/source/test/perf/collperf2/collperf2.cpp -text
+icu4c/source/test/perf/collperf2/collperf2.vcxproj -text
+icu4c/source/test/perf/collperf2/collperf2.vcxproj.filters -text
 icu4c/source/test/perf/convperf/convperf.vcxproj -text
 icu4c/source/test/perf/convperf/convperf.vcxproj.filters -text
 icu4c/source/test/perf/howExpensiveIs/readme.txt svneol=native#text/plain
