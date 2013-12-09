@@ -29,8 +29,8 @@ my $options = {
 my $p1, $p2;
 
 if ($OnWindows) {
-    $p1 = "cd ".$ICUPrevious."/bin && ".$ICUPathPrevious."/collperf/$WindowsPlatform/Release/collperf2.exe";
-    $p2 = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/collperf/$WindowsPlatform/Release/collperf2.exe";
+    $p1 = "cd ".$ICUPrevious."/bin && ".$ICUPathPrevious."/collperf2/$WindowsPlatform/Release/collperf2.exe";
+    $p2 = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/collperf2/$WindowsPlatform/Release/collperf2.exe";
 } else {
     $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."/source/lib:".$ICUPrevious."/source/tools/ctestfw ".$ICUPathPrevious."/collperf2/collperf2";
     $p2 = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."/source/tools/ctestfw ".$ICUPathLatest."/collperf2/collperf2";
