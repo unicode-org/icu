@@ -1325,6 +1325,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		test/perf/Makefile \
 		test/perf/collationperf/Makefile \
 		test/perf/collperf/Makefile \
+		test/perf/collperf2/Makefile \
 		test/perf/dicttrieperf/Makefile \
 		test/perf/ubrkperf/Makefile \
 		test/perf/charperf/Makefile \
@@ -1338,7 +1339,7 @@ AC_CONFIG_FILES([icudefs.mk \
 		test/perf/ustrperf/Makefile \
 		test/perf/utfperf/Makefile \
 		test/perf/utrie2perf/Makefile \
-                test/perf/leperf/Makefile \
+		test/perf/leperf/Makefile \
 		samples/Makefile samples/date/Makefile \
 		samples/cal/Makefile samples/layout/Makefile])
 AC_OUTPUT
