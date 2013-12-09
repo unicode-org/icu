@@ -1390,32 +1390,58 @@ static const TestContextItem textContextItems[] = {
     { NULL, NULL, (UDisplayContext)0, NULL }
 };
 
-static const UDate july022008 = 1215000001979.0;
+static const UChar today_enDefault[]     = { 0x74,0x6F,0x64,0x61,0x79,0 }; /* "today" */
+static const UChar today_enTitle[]       = { 0x54,0x6F,0x64,0x61,0x79,0 };  /* "Today" sentence-begin, uiListOrMenu, standalone */
+static const UChar yesterday_enDefault[] = { 0x79,0x65,0x73,0x74,0x65,0x72,0x64,0x61,0x79,0 }; /* "yesterday" */
+static const UChar yesterday_enTitle[]   = { 0x59,0x65,0x73,0x74,0x65,0x72,0x64,0x61,0x79,0 };  /* "Yesterday" sentence-begin, uiListOrMenu, standalone */
+static const UChar today_nbDefault[]     = { 0x69,0x20,0x64,0x61,0x67,0 }; /* "i dag" */
+static const UChar today_nbTitle[]       = { 0x49,0x20,0x64,0x61,0x67,0 };  /* "I dag" sentence-begin, standalone */
+static const UChar yesterday_nbDefault[] = { 0x69,0x20,0x67,0xE5,0x72,0 }; /* "i går" */
+static const UChar yesterday_nbTitle[]   = { 0x49,0x20,0x67,0xE5,0x72,0 };  /* "I går" sentence-begin,  standalone */
+
+typedef struct {
+    const char * locale;
+    UDisplayContext capitalizationContext;
+    const UChar * expectedFormatToday;
+    const UChar * expectedFormatYesterday;
+} TestRelativeContextItem;
+
+static const TestRelativeContextItem textContextRelativeItems[] = {
+    { "en", UDISPCTX_CAPITALIZATION_NONE,                   today_enDefault, yesterday_enDefault },
+#if !UCONFIG_NO_BREAK_ITERATION
+    { "en", UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, today_enDefault, yesterday_enDefault },
+    { "en", UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, today_enTitle, yesterday_enTitle },
+    { "en", UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,    today_enTitle, yesterday_enTitle },
+    { "en", UDISPCTX_CAPITALIZATION_FOR_STANDALONE,         today_enTitle, yesterday_enTitle },
+#endif
+    { "nb", UDISPCTX_CAPITALIZATION_NONE,                   today_nbDefault, yesterday_nbDefault },
+#if !UCONFIG_NO_BREAK_ITERATION
+    { "nb", UDISPCTX_CAPITALIZATION_FOR_MIDDLE_OF_SENTENCE, today_nbDefault, yesterday_nbDefault },
+    { "nb", UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE, today_nbTitle, yesterday_nbTitle },
+    { "nb", UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU,    today_nbDefault, yesterday_nbDefault },
+    { "nb", UDISPCTX_CAPITALIZATION_FOR_STANDALONE,         today_nbTitle, yesterday_nbTitle },
+#endif
+    { NULL, (UDisplayContext)0, NULL, NULL }
+};
+
+static const UChar zoneGMT[] = { 0x47,0x4D,0x54,0 }; /* "GMT" */
+static const UDate july022008 = 1215000000000.0;
 enum { kUbufMax = 64, kBbufMax = 3*kUbufMax };
 
 static void TestContext(void) {
-    const TestContextItem* textContextItemPtr = textContextItems;
-    for (; textContextItemPtr->locale != NULL; ++textContextItemPtr) {
+    const TestContextItem* textContextItemPtr;
+    const TestRelativeContextItem* textRelContextItemPtr;
+    for (textContextItemPtr = textContextItems; textContextItemPtr->locale != NULL; ++textContextItemPtr) {
         UErrorCode status = U_ZERO_ERROR;
-        UDateFormat* udfmt = udat_open(UDAT_NONE, UDAT_MEDIUM, textContextItemPtr->locale, NULL, 0, NULL, 0, &status);
-        if ( U_FAILURE(status) ) {
-            log_data_err("FAIL: udat_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
-        } else {
-            UDateTimePatternGenerator* udtpg = udatpg_open(textContextItemPtr->locale, &status);
-            if ( U_FAILURE(status) ) {
-                log_err("FAIL: udatpg_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
-            } else {
-                UChar ubuf[kUbufMax];
-                int32_t len = udatpg_getBestPattern(udtpg, textContextItemPtr->skeleton, -1, ubuf, kUbufMax, &status);
-                if ( U_FAILURE(status) ) {
-                    log_err("FAIL: udatpg_getBestPattern for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
-                } else {
-                    udat_applyPattern(udfmt, FALSE, ubuf, len);
+        UDateTimePatternGenerator* udtpg = udatpg_open(textContextItemPtr->locale, &status);
+        if ( U_SUCCESS(status) ) {
+            UChar ubuf[kUbufMax];
+            int32_t len = udatpg_getBestPattern(udtpg, textContextItemPtr->skeleton, -1, ubuf, kUbufMax, &status);
+            if ( U_SUCCESS(status) ) {
+                UDateFormat* udfmt = udat_open(UDAT_PATTERN, UDAT_PATTERN, textContextItemPtr->locale, zoneGMT, -1, ubuf, len, &status);
+                if ( U_SUCCESS(status) ) {
                     udat_setContext(udfmt, textContextItemPtr->capitalizationContext, &status);
-                    if ( U_FAILURE(status) ) {
-                        log_err("FAIL: udat_setContext for locale %s, capitalizationContext %d, status %s\n",
-                                textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, u_errorName(status) );
-                    } else {
+                    if ( U_SUCCESS(status) ) {
                         UDisplayContext getContext;
                         len = udat_format(udfmt, july022008, ubuf, kUbufMax, NULL, &status);
                         if ( U_FAILURE(status) ) {
@@ -1437,11 +1463,68 @@ static void TestContext(void) {
                             log_err("FAIL: udat_getContext for locale %s, capitalizationContext %d, got context %d\n",
                                     textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, (int)getContext );
                         }
+                    } else {
+                        log_err("FAIL: udat_setContext for locale %s, capitalizationContext %d, status %s\n",
+                                textContextItemPtr->locale, (int)textContextItemPtr->capitalizationContext, u_errorName(status) );
                     }
+                    udat_close(udfmt);
+                } else {
+                    log_data_err("FAIL: udat_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
                 }
-                udatpg_close(udtpg);
+            } else {
+                log_err("FAIL: udatpg_getBestPattern for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
             }
-            udat_close(udfmt);
+            udatpg_close(udtpg);
+        } else {
+            log_err("FAIL: udatpg_open for locale %s, status %s\n", textContextItemPtr->locale, u_errorName(status) );
+        }
+    }
+    for (textRelContextItemPtr = textContextRelativeItems; textRelContextItemPtr->locale != NULL; ++textRelContextItemPtr) {
+        UErrorCode status = U_ZERO_ERROR;
+        UCalendar* ucal = ucal_open(zoneGMT, -1, "root", UCAL_GREGORIAN, &status);
+        if ( U_SUCCESS(status) ) {
+            UDateFormat* udfmt = udat_open(UDAT_NONE, UDAT_LONG_RELATIVE, textRelContextItemPtr->locale, zoneGMT, -1, NULL, 0, &status);
+            if ( U_SUCCESS(status) ) {
+                udat_setContext(udfmt, textRelContextItemPtr->capitalizationContext, &status);
+                if ( U_SUCCESS(status) ) {
+					UDate yesterday, today = ucal_getNow();
+					UChar ubuf[kUbufMax];
+					char bbuf1[kBbufMax];
+					char bbuf2[kBbufMax];
+					int32_t len = udat_format(udfmt, today, ubuf, kUbufMax, NULL, &status);
+					if ( U_FAILURE(status) ) {
+						log_err("FAIL: udat_format today for locale %s, capitalizationContext %d, status %s\n",
+								textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext, u_errorName(status) );
+					} else if (u_strncmp(ubuf, textRelContextItemPtr->expectedFormatToday, kUbufMax) != 0) {
+						log_err("FAIL: udat_format today for locale %s, capitalizationContext %d, expected %s, got %s\n",
+								textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext,
+								u_austrncpy(bbuf1,textRelContextItemPtr->expectedFormatToday,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
+					}
+					status = U_ZERO_ERROR;
+					ucal_setMillis(ucal, today, &status);
+					ucal_add(ucal, UCAL_DATE, -1, &status);
+					yesterday = ucal_getMillis(ucal, &status);
+					if ( U_SUCCESS(status) ) {
+					    len = udat_format(udfmt, yesterday, ubuf, kUbufMax, NULL, &status);
+					    if ( U_FAILURE(status) ) {
+						    log_err("FAIL: udat_format yesterday for locale %s, capitalizationContext %d, status %s\n",
+								    textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext, u_errorName(status) );
+					    } else if (u_strncmp(ubuf, textRelContextItemPtr->expectedFormatYesterday, kUbufMax) != 0) {
+						    log_err("FAIL: udat_format yesterday for locale %s, capitalizationContext %d, expected %s, got %s\n",
+								    textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext,
+								    u_austrncpy(bbuf1,textRelContextItemPtr->expectedFormatYesterday,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
+					    }
+					}
+                } else {
+                    log_err("FAIL: udat_setContext relative for locale %s, capitalizationContext %d, status %s\n",
+                            textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext, u_errorName(status) );
+                }
+            } else {
+                log_data_err("FAIL: udat_open relative for locale %s, status %s\n", textRelContextItemPtr->locale, u_errorName(status) );
+            }
+            ucal_close(ucal);
+        } else {
+            log_data_err("FAIL: ucal_open for locale root, status %s\n", u_errorName(status) );
         }
     }
 }

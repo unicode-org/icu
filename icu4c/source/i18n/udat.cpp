@@ -984,21 +984,32 @@ udat_getLocaleByType(const UDateFormat *fmt,
 U_CAPI void U_EXPORT2
 udat_setContext(UDateFormat* fmt, UDisplayContext value, UErrorCode* status)
 {
-    verifyIsSimpleDateFormat(fmt, status);
     if (U_FAILURE(*status)) {
         return;
     }
-    ((SimpleDateFormat*)fmt)->setContext(value, *status);
+    if (dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))!=NULL) {
+        ((SimpleDateFormat*)fmt)->setContext(value, *status);
+    } else if (dynamic_cast<const RelativeDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))!=NULL) {
+        ((RelativeDateFormat*)fmt)->setContext(value, *status);
+    } else {
+        *status = U_ILLEGAL_ARGUMENT_ERROR;
+    }
+    return;
 }
 
 U_CAPI UDisplayContext U_EXPORT2
 udat_getContext(UDateFormat* fmt, UDisplayContextType type, UErrorCode* status)
 {
-    verifyIsSimpleDateFormat(fmt, status);
     if (U_FAILURE(*status)) {
         return (UDisplayContext)0;
     }
-    return ((SimpleDateFormat*)fmt)->getContext(type, *status);
+    if (dynamic_cast<const SimpleDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))!=NULL) {
+        return ((SimpleDateFormat*)fmt)->getContext(type, *status);
+    } else if (dynamic_cast<const RelativeDateFormat*>(reinterpret_cast<const DateFormat*>(fmt))!=NULL) {
+        return ((RelativeDateFormat*)fmt)->getContext(type, *status);
+    }
+    *status = U_ILLEGAL_ARGUMENT_ERROR;
+    return (UDisplayContext)0;
 }
 
 

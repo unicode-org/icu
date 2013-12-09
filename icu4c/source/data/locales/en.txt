@@ -858,6 +858,20 @@ en{
             }
         }
     }
+    contextTransforms{
+        calendar-field:intvector{
+            1,
+            1,
+        }
+        tense:intvector{
+            1,
+            1,
+        }
+        type:intvector{
+            1,
+            1,
+        }
+    }
     delimiters{
         alternateQuotationEnd{"’"}
         alternateQuotationStart{"‘"}

@@ -3876,6 +3876,10 @@ structLocale:table(nofallback){
     }
     defaultNumberingSystem{""}
     contextTransforms{
+        calendar-field:intvector{
+            2,
+            2,
+        }
         day-format-except-narrow:intvector{  
             2,
             2,
@@ -3917,6 +3921,10 @@ structLocale:table(nofallback){
             2,
         }
         type:intvector{  
+            2,
+            2,
+        }
+        unit-pattern:intvector{
             2,
             2,
         }
@@ -13279,7 +13287,7 @@ structLocale:table(nofallback){
                     "",
                 }
             }
-             intervalFormats{
+            intervalFormats{
                 H{
                     H{""}
                 }
