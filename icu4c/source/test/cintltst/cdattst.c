@@ -1487,38 +1487,39 @@ static void TestContext(void) {
             if ( U_SUCCESS(status) ) {
                 udat_setContext(udfmt, textRelContextItemPtr->capitalizationContext, &status);
                 if ( U_SUCCESS(status) ) {
-					UDate yesterday, today = ucal_getNow();
-					UChar ubuf[kUbufMax];
-					char bbuf1[kBbufMax];
-					char bbuf2[kBbufMax];
-					int32_t len = udat_format(udfmt, today, ubuf, kUbufMax, NULL, &status);
-					if ( U_FAILURE(status) ) {
-						log_err("FAIL: udat_format today for locale %s, capitalizationContext %d, status %s\n",
-								textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext, u_errorName(status) );
-					} else if (u_strncmp(ubuf, textRelContextItemPtr->expectedFormatToday, kUbufMax) != 0) {
-						log_err("FAIL: udat_format today for locale %s, capitalizationContext %d, expected %s, got %s\n",
-								textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext,
-								u_austrncpy(bbuf1,textRelContextItemPtr->expectedFormatToday,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
-					}
-					status = U_ZERO_ERROR;
-					ucal_setMillis(ucal, today, &status);
-					ucal_add(ucal, UCAL_DATE, -1, &status);
-					yesterday = ucal_getMillis(ucal, &status);
-					if ( U_SUCCESS(status) ) {
-					    len = udat_format(udfmt, yesterday, ubuf, kUbufMax, NULL, &status);
-					    if ( U_FAILURE(status) ) {
-						    log_err("FAIL: udat_format yesterday for locale %s, capitalizationContext %d, status %s\n",
-								    textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext, u_errorName(status) );
-					    } else if (u_strncmp(ubuf, textRelContextItemPtr->expectedFormatYesterday, kUbufMax) != 0) {
-						    log_err("FAIL: udat_format yesterday for locale %s, capitalizationContext %d, expected %s, got %s\n",
-								    textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext,
-								    u_austrncpy(bbuf1,textRelContextItemPtr->expectedFormatYesterday,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
-					    }
-					}
+                    UDate yesterday, today = ucal_getNow();
+                    UChar ubuf[kUbufMax];
+                    char bbuf1[kBbufMax];
+                    char bbuf2[kBbufMax];
+                    int32_t len = udat_format(udfmt, today, ubuf, kUbufMax, NULL, &status);
+                    if ( U_FAILURE(status) ) {
+                        log_err("FAIL: udat_format today for locale %s, capitalizationContext %d, status %s\n",
+                                textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext, u_errorName(status) );
+                    } else if (u_strncmp(ubuf, textRelContextItemPtr->expectedFormatToday, kUbufMax) != 0) {
+                        log_err("FAIL: udat_format today for locale %s, capitalizationContext %d, expected %s, got %s\n",
+                                textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext,
+                                u_austrncpy(bbuf1,textRelContextItemPtr->expectedFormatToday,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
+                    }
+                    status = U_ZERO_ERROR;
+                    ucal_setMillis(ucal, today, &status);
+                    ucal_add(ucal, UCAL_DATE, -1, &status);
+                    yesterday = ucal_getMillis(ucal, &status);
+                    if ( U_SUCCESS(status) ) {
+                        len = udat_format(udfmt, yesterday, ubuf, kUbufMax, NULL, &status);
+                        if ( U_FAILURE(status) ) {
+                            log_err("FAIL: udat_format yesterday for locale %s, capitalizationContext %d, status %s\n",
+                                    textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext, u_errorName(status) );
+                        } else if (u_strncmp(ubuf, textRelContextItemPtr->expectedFormatYesterday, kUbufMax) != 0) {
+                            log_err("FAIL: udat_format yesterday for locale %s, capitalizationContext %d, expected %s, got %s\n",
+                                    textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext,
+                                    u_austrncpy(bbuf1,textRelContextItemPtr->expectedFormatYesterday,kUbufMax), u_austrncpy(bbuf2,ubuf,kUbufMax) );
+                        }
+                    }
                 } else {
                     log_err("FAIL: udat_setContext relative for locale %s, capitalizationContext %d, status %s\n",
                             textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext, u_errorName(status) );
                 }
+                udat_close(udfmt);
             } else {
                 log_data_err("FAIL: udat_open relative for locale %s, status %s\n", textRelContextItemPtr->locale, u_errorName(status) );
             }
