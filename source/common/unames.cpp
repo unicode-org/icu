@@ -1440,6 +1440,8 @@ calcNameSetsLengths(UErrorCode *pErrorCode) {
     return TRUE;
 }
 
+U_NAMESPACE_END
+
 /* public API --------------------------------------------------------------- */
 
 U_CAPI int32_t U_EXPORT2
@@ -2085,8 +2087,6 @@ uchar_swapNames(const UDataSwapper *ds,
 
     return headerSize+(int32_t)offset;
 }
-
-U_NAMESPACE_END
 
 /*
  * Hey, Emacs, please set the following:
