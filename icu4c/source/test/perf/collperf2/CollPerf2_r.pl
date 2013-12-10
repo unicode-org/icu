@@ -70,7 +70,7 @@ my $dataFiles = {
         "TestNames_Latin.txt"
     ],
 
-    "de\@collation=phonebook",
+    "de\@collation=phonebook;strength=secondary",
     [
         "TestRandomWordsUDHR_de.txt"
     ],
@@ -119,12 +119,8 @@ my $dataFiles = {
 
     "ja\@strength=identical",
     [
+        "TestNames_Latin.txt",
         "TestNames_Japanese.txt"
-    ],
-
-    "ja\@strength=identical",
-    [
-        "TestNames_Latin.txt"
     ],
 
     "ko",
@@ -139,12 +135,8 @@ my $dataFiles = {
 
     "zh_Hans\@collation=pinyin",
     [
+        "TestNames_Latin.txt",
         "TestNames_Simplified_Chinese.txt"
-    ],
-
-    "zh_Hans\@collation=pinyin",
-    [
-        "TestNames_Latin.txt"
     ],
 
     "zh_Hant",
@@ -154,13 +146,9 @@ my $dataFiles = {
 
     "th\@normalization=on;alternate=shifted",
     [
+        "TestNames_Latin.txt",
         "TestNames_Thai.txt",
         "TestRandomWordsUDHR_th.txt"
-    ],
-
-    "th\@normalization=on;alternate=shifted",
-    [
-        "TestNames_Latin.txt"
     ],
 
     "ar",
