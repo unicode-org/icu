@@ -48,7 +48,7 @@ ICU_IEEE          = -Wc,'FLOAT(IEEE)' -DIEEE_754=0#M#
 endif
 
 ## Additional flags when building libraries and with threads
-THREADSCPPFLAGS = -D_OPEN_THREADS
+THREADSCPPFLAGS = -D_OPEN_THREADS=3
 
 # For a dynamically called DLL module to share access to the POSIX external
 # variables, with its caller, the DLL module must define these _SHR_* macros.

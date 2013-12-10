@@ -23,7 +23,7 @@
 U_NAMESPACE_BEGIN
 
 // Forward Declarations.
-void UnicodeSet_initInclusion(int32_t src, UErrorCode &status); /**< @internal */
+void U_CALLCONV UnicodeSet_initInclusion(int32_t src, UErrorCode &status); /**< @internal */
 
 class BMPSet;
 class ParsePosition;
@@ -1589,7 +1589,7 @@ private:
                               UnicodeString& rebuiltPat,
                               UErrorCode& ec);
 
-    friend void UnicodeSet_initInclusion(int32_t src, UErrorCode &status);
+    friend void U_CALLCONV UnicodeSet_initInclusion(int32_t src, UErrorCode &status);
     static const UnicodeSet* getInclusions(int32_t src, UErrorCode &status);
 
     /**

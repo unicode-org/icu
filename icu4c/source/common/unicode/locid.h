@@ -748,7 +748,7 @@ private:
     /**
      * @internal
      */
-    friend void locale_available_init();
+    friend void U_CALLCONV locale_available_init();
 };
 
 inline UBool
