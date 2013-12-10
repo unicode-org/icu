@@ -44,7 +44,8 @@ RelativeDateFormat::RelativeDateFormat(const RelativeDateFormat& other) :
  fTimePattern(other.fTimePattern), fCombinedFormat(NULL),
  fDateStyle(other.fDateStyle), fLocale(other.fLocale),
  fDayMin(other.fDayMin), fDayMax(other.fDayMax),
- fDatesLen(other.fDatesLen), fDates(NULL)
+ fDatesLen(other.fDatesLen), fDates(NULL),
+ fCapitalizationContext(other.fCapitalizationContext), fCombinedHasDateAtStart(other.fCombinedHasDateAtStart)
 {
     if(other.fDateTimeFormatter != NULL) {
         fDateTimeFormatter = (SimpleDateFormat*)other.fDateTimeFormatter->clone();
@@ -56,12 +57,14 @@ RelativeDateFormat::RelativeDateFormat(const RelativeDateFormat& other) :
         fDates = (URelativeString*) uprv_malloc(sizeof(fDates[0])*fDatesLen);
         uprv_memcpy(fDates, other.fDates, sizeof(fDates[0])*fDatesLen);
     }
+    fCapitalizationForRelativeUnits[0] = other.fCapitalizationForRelativeUnits[0];
+    fCapitalizationForRelativeUnits[1] = other.fCapitalizationForRelativeUnits[1];
 }
 
 RelativeDateFormat::RelativeDateFormat( UDateFormatStyle timeStyle, UDateFormatStyle dateStyle,
                                         const Locale& locale, UErrorCode& status) :
  DateFormat(), fDateTimeFormatter(NULL), fDatePattern(), fTimePattern(), fCombinedFormat(NULL),
- fDateStyle(dateStyle), fLocale(locale), fDatesLen(0), fDates(NULL),
+ fDateStyle(dateStyle), fLocale(locale), fDayMin(0), fDayMax(0), fDatesLen(0), fDates(NULL),
  fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE), fCombinedHasDateAtStart(FALSE)
 {
     if(U_FAILURE(status) ) {
