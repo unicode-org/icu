@@ -62,6 +62,6 @@ U_NAMESPACE_END
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
     UTRACE_ENTRY_OC(UTRACE_U_INIT);
-    umtx_initOnce(gICUInitOnce, &initData, *status);
+    icu::umtx_initOnce(icu::gICUInitOnce, &icu::initData, *status);
     UTRACE_EXIT_STATUS(*status);
 }
