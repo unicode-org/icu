@@ -7114,6 +7114,42 @@ static void TestCaseLevelBufferOverflow(void)
     }
 }
 
+/* Test for #10595 */
+static const UChar testJapaneseName[] = {0x4F50, 0x3005, 0x6728, 0x002C, 0x6B66, 0}; /* Sa sa Ki, Takeshi */
+#define KEY_PART_SIZE 16
+
+static void TestNextSortKeyPartJaIdentical(void)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    UCollator *coll;
+    uint8_t keyPart[KEY_PART_SIZE];
+    UCharIterator iter;
+    uint32_t state[2] = {0, 0};
+    int32_t keyPartLen;
+    
+    coll = ucol_open("ja", &status);
+    ucol_setAttribute(coll, UCOL_STRENGTH, UCOL_IDENTICAL, &status);
+    if (U_FAILURE(status)) {
+        log_err_status(status, "ERROR: in creation of Japanese collator with identical strength: %s\n", myErrorName(status));
+        return;
+    }
+
+    uiter_setString(&iter, testJapaneseName, 5);
+    keyPartLen = KEY_PART_SIZE;
+    while (keyPartLen == KEY_PART_SIZE) {
+        keyPartLen = ucol_nextSortKeyPart(coll, &iter, state, keyPart, KEY_PART_SIZE, &status);
+        if (U_FAILURE(status)) {
+            if(log_knownIssue("10595", "Ignoring an error returned by ucol_nextSortKeyPart")) {
+                status = U_ZERO_ERROR;
+                continue;
+            }
+            log_err_status(status, "ERROR: in iterating next sort key part: %s\n", myErrorName(status));
+            break;
+        }
+    }
+
+    ucol_close(coll);
+}
 
 #define TEST(x) addTest(root, &x, "tscoll/cmsccoll/" # x)
 
@@ -7224,6 +7260,7 @@ void addMiscCollTest(TestNode** root)
     TEST(TestReorderWithNumericCollation);
     
     TEST(TestCaseLevelBufferOverflow);
+    TEST(TestNextSortKeyPartJaIdentical);
 }
 
 #endif /* #if !UCONFIG_NO_COLLATION */
