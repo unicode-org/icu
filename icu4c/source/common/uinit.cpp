@@ -56,12 +56,15 @@ initData(UErrorCode &status)
 }
 
 U_NAMESPACE_END
+
+U_NAMESPACE_USE
+
 /*
  * ICU Initialization Function. Need not be called.
  */
 U_CAPI void U_EXPORT2
 u_init(UErrorCode *status) {
     UTRACE_ENTRY_OC(UTRACE_U_INIT);
-    icu::umtx_initOnce(icu::gICUInitOnce, &icu::initData, *status);
+    umtx_initOnce(gICUInitOnce, &initData, *status);
     UTRACE_EXIT_STATUS(*status);
 }
