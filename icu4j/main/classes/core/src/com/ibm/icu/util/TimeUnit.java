@@ -46,7 +46,7 @@ public class TimeUnit extends MeasureUnit {
     }
     
     private Object writeReplace() throws ObjectStreamException {
-        return new MeasureUnitProxy(type, code);
+        return new MeasureUnitProxy(type, subType);
     }
     
     // For backward compatibility only

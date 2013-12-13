@@ -13,7 +13,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -53,15 +53,15 @@ public class MeasureUnit implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    protected final String code;
+    protected final String subType;
     
     /**
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    protected MeasureUnit(String type, String code) {
+    protected MeasureUnit(String type, String subType) {
         this.type = type;
-        this.code = code;
+        this.subType = subType;
     }
     
     /**
@@ -82,7 +82,7 @@ public class MeasureUnit implements Serializable {
      * @provisional
      */
     public String getSubtype() {
-        return code;
+        return subType;
     }
     
     
@@ -93,7 +93,7 @@ public class MeasureUnit implements Serializable {
      */
     @Override
     public int hashCode() {
-        return 31 * type.hashCode() + code.hashCode();
+        return 31 * type.hashCode() + subType.hashCode();
     }
     
     /**
@@ -109,7 +109,7 @@ public class MeasureUnit implements Serializable {
             return false;
         }
         MeasureUnit c = (MeasureUnit) rhs;
-        return type.equals(c.type) && code.equals(c.code);
+        return type.equals(c.type) && subType.equals(c.subType);
     }
     
     /**
@@ -118,7 +118,7 @@ public class MeasureUnit implements Serializable {
      */
     @Override
     public String toString() {
-        return type + "-" + code;
+        return type + "-" + subType;
     }
     
     /**
@@ -128,7 +128,7 @@ public class MeasureUnit implements Serializable {
      * @provisional
      */
     public synchronized static Set<String> getAvailableTypes() {
-        return new HashSet<String>(cache.keySet());
+        return Collections.unmodifiableSet(cache.keySet());
     }
 
     /**
@@ -138,9 +138,12 @@ public class MeasureUnit implements Serializable {
      * @draft ICU 53
      * @provisional
      */
-    public synchronized static Collection<MeasureUnit> getAvailable(String type) {
+    public synchronized static Set<MeasureUnit> getAvailable(String type) {
         Map<String, MeasureUnit> units = cache.get(type);
-        return units == null ? null : new ArrayList<MeasureUnit>(units.values());
+        // Train users not to modify returned set from the start giving us more
+        // flexibility for implementation.
+        return units == null ? Collections.<MeasureUnit>emptySet()
+                : Collections.unmodifiableSet(new HashSet<MeasureUnit>(units.values()));
     }
 
     /**
@@ -156,7 +159,9 @@ public class MeasureUnit implements Serializable {
                 result.add(unit);
             }
         }
-        return result;
+        // Train users not to modify returned set from the start giving us more
+        // flexibility for implementation.
+        return Collections.unmodifiableSet(result);
     }
 
     /**
@@ -169,13 +174,13 @@ public class MeasureUnit implements Serializable {
      * @internal
      * @deprecated This API is ICU internal only.
      */
-    public static MeasureUnit internalGetInstance(String type, String code) {
-        if (type == null || code == null) {
-            throw new NullPointerException("Type and code must be non-null");
+    public static MeasureUnit internalGetInstance(String type, String subType) {
+        if (type == null || subType == null) {
+            throw new NullPointerException("Type and subType must be non-null");
         }
         if (!"currency".equals(type)) {
-            if (!ASCII.containsAll(type) || !ASCII_HYPHEN.containsAll(code)) {
-                throw new IllegalArgumentException("The type or code are invalid.");
+            if (!ASCII.containsAll(type) || !ASCII_HYPHEN.containsAll(subType)) {
+                throw new IllegalArgumentException("The type or subType are invalid.");
             }
         }
         Factory factory;
@@ -186,7 +191,7 @@ public class MeasureUnit implements Serializable {
         } else {
             factory = UNIT_FACTORY;
         }
-        return MeasureUnit.addUnit(type, code, factory);
+        return MeasureUnit.addUnit(type, subType, factory);
     }
 
     static final UnicodeSet ASCII = new UnicodeSet('a', 'z').freeze();
@@ -201,44 +206,27 @@ public class MeasureUnit implements Serializable {
          * @internal
          * @deprecated This API is ICU internal only.
          */
-        MeasureUnit create(String type, String code);
+        MeasureUnit create(String type, String subType);
     }
 
     private static Factory UNIT_FACTORY = new Factory() {
-        public MeasureUnit create(String type, String code) {
-            return new MeasureUnit(type, code);
+        public MeasureUnit create(String type, String subType) {
+            return new MeasureUnit(type, subType);
         }
     };
 
     static Factory CURRENCY_FACTORY = new Factory() {
-        public MeasureUnit create(String unusedType, String code) {
-            return new Currency(code);
+        public MeasureUnit create(String unusedType, String subType) {
+            return new Currency(subType);
         }
     };
     
     static Factory TIMEUNIT_FACTORY = new Factory() {
-        public MeasureUnit create(String type, String code) {
-           return new TimeUnit(type, code);
+        public MeasureUnit create(String type, String subType) {
+           return new TimeUnit(type, subType);
         }
     };
 
-
-    //    /**
-    //     * Register a unit for later use
-    //     * @param type the type, such as "length"
-    //     * @param code the code, such as "meter"
-    //     * @return the unit.
-    //     * @draft ICU 52
-    //     * @provisional This API might change or be removed in a future release.
-    //     */
-    //    public static synchronized MeasureUnit registerUnit(String type, String code) {
-    //        MeasureUnit result = getInstance(type, code);
-    //        if (result == null) {
-    //            result = addUnit(type, code, MY_FACTORY);
-    //        }
-    //        return result;
-    //    }
-    //
     static {
         // load all of the units for English, since we know that that is a superset.
         /**
@@ -411,18 +399,18 @@ public class MeasureUnit implements Serializable {
     /** Private **/
 
     private Object writeReplace() throws ObjectStreamException {
-        return new MeasureUnitProxy(type, code);
+        return new MeasureUnitProxy(type, subType);
     }
 
     static final class MeasureUnitProxy implements Externalizable {
         private static final long serialVersionUID = -3910681415330989598L;
 
         private String type;
-        private String code;
+        private String subType;
 
-        public MeasureUnitProxy(String type, String code) {
+        public MeasureUnitProxy(String type, String subType) {
             this.type = type;
-            this.code = code;
+            this.subType = subType;
         }
 
         // Must have public constructor, to enable Externalizable
@@ -432,14 +420,14 @@ public class MeasureUnit implements Serializable {
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeByte(0); // version
             out.writeUTF(type);
-            out.writeUTF(code);
+            out.writeUTF(subType);
             out.writeShort(0); // allow for more data.
         }
 
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
             /* byte version = */ in.readByte(); // version
             type = in.readUTF();
-            code = in.readUTF();
+            subType = in.readUTF();
             // allow for more data from future version
             int extra = in.readShort();
             if (extra > 0) {
@@ -449,7 +437,7 @@ public class MeasureUnit implements Serializable {
         }
 
         private Object readResolve() throws ObjectStreamException {
-            return MeasureUnit.internalGetInstance(type, code);
+            return MeasureUnit.internalGetInstance(type, subType);
         }
     }
 }

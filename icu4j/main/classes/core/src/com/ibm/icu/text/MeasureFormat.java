@@ -641,7 +641,7 @@ public class MeasureFormat extends UFormat {
 
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeByte(0); // version
-            out.writeObject(locale);
+            out.writeUTF(locale.toLanguageTag());
             out.writeObject(length);
             out.writeObject(numberFormat);
             out.writeByte(subClass);
@@ -651,10 +651,7 @@ public class MeasureFormat extends UFormat {
         @SuppressWarnings("unchecked")
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
             in.readByte(); // version.
-            locale = (ULocale) in.readObject();
-            if (locale == null) {
-                throw new InvalidObjectException("Missing locale.");
-            }
+            locale = ULocale.forLanguageTag(in.readUTF());
             length = (FormatWidth) in.readObject();
             if (length == null) {
                 throw new InvalidObjectException("Missing width.");

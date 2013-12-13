@@ -396,7 +396,7 @@ public class Currency extends MeasureUnit {
      * @stable ICU 2.2
      */
     public String getCurrencyCode() {
-        return code;
+        return subType;
     }
 
     /**
@@ -414,7 +414,7 @@ public class Currency extends MeasureUnit {
                     "currencyNumericCodes",
                     ICUResourceBundle.ICU_DATA_CLASS_LOADER);
             UResourceBundle codeMap = bundle.get("codeMap");
-            UResourceBundle numCode = codeMap.get(code);
+            UResourceBundle numCode = codeMap.get(subType);
             result = numCode.getInt();
         } catch (MissingResourceException e) {
             // fall through
@@ -503,7 +503,7 @@ public class Currency extends MeasureUnit {
         }
 
         CurrencyDisplayNames names = CurrencyDisplayNames.getInstance(locale);
-        return nameStyle == SYMBOL_NAME ? names.getSymbol(code) : names.getName(code);
+        return nameStyle == SYMBOL_NAME ? names.getSymbol(subType) : names.getName(subType);
     }
 
     /**
@@ -552,7 +552,7 @@ public class Currency extends MeasureUnit {
         }
         
         CurrencyDisplayNames names = CurrencyDisplayNames.getInstance(locale);
-        return names.getPluralName(code, pluralCount);
+        return names.getPluralName(subType, pluralCount);
     }
 
     /**
@@ -729,7 +729,7 @@ public class Currency extends MeasureUnit {
      */
     public int getDefaultFractionDigits() {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-        CurrencyDigits digits = info.currencyDigits(code);
+        CurrencyDigits digits = info.currencyDigits(subType);
         return digits.fractionDigits;
     }
 
@@ -741,7 +741,7 @@ public class Currency extends MeasureUnit {
      */
     public double getRoundingIncrement() {
         CurrencyMetaInfo info = CurrencyMetaInfo.getInstance();
-        CurrencyDigits digits = info.currencyDigits(code);
+        CurrencyDigits digits = info.currencyDigits(subType);
 
         int data1 = digits.roundingIncrement;
 
@@ -768,7 +768,7 @@ public class Currency extends MeasureUnit {
      * @stable ICU 2.2
      */
     public String toString() {
-        return code;
+        return subType;
     }
 
     /**
@@ -903,7 +903,7 @@ public class Currency extends MeasureUnit {
     }
     
     private Object writeReplace() throws ObjectStreamException {
-        return new MeasureUnitProxy(type, code);
+        return new MeasureUnitProxy(type, subType);
     }
 
     // For backward compatibility only
