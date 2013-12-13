@@ -7,7 +7,6 @@
 package com.ibm.icu.util;
 
 import java.io.ObjectStreamException;
-import java.io.Serializable;
 import java.lang.ref.SoftReference;
 import java.text.ParsePosition;
 import java.util.ArrayList;
@@ -53,7 +52,7 @@ import com.ibm.icu.util.ULocale.Category;
  * @author Alan Liu
  * @stable ICU 2.2
  */
-public class Currency extends MeasureUnit implements Serializable {
+public class Currency extends MeasureUnit {
     private static final long serialVersionUID = -5839973855554750484L;
     private static final boolean DEBUG = ICUDebug.enabled("currency");
 
@@ -245,7 +244,7 @@ public class Currency extends MeasureUnit implements Serializable {
             throw new IllegalArgumentException(
                     "The input currency code is not 3-letter alphabetic code.");
         }
-        return (Currency) MeasureUnit.addUnit("currency", theISOCode.toUpperCase(Locale.ENGLISH), CURRENCY_FACTORY);
+        return (Currency) MeasureUnit.internalGetInstance("currency", theISOCode.toUpperCase(Locale.ENGLISH));
     }
     
     
@@ -784,7 +783,7 @@ public class Currency extends MeasureUnit implements Serializable {
 
         // isoCode is kept for readResolve() and Currency class no longer
         // use it. So this statement actually does not have any effect.
-        isoCode = code; 
+        isoCode = theISOCode;
     }
 
     // POW10[i] = 10^i
@@ -914,6 +913,7 @@ public class Currency extends MeasureUnit implements Serializable {
     private final String isoCode;
 
     private Object readResolve() throws ObjectStreamException {
+        // The old isoCode field used to determine the currency.
         return Currency.getInstance(isoCode);
     }
 }
