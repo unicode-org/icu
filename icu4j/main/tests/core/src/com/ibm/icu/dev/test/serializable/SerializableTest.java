@@ -718,7 +718,7 @@ public class SerializableTest extends TestFmwk.TestGroup
         map.put("com.ibm.icu.text.PluralRules$FixedDecimal", new PluralRulesTest.FixedDecimalHandler());
         map.put("com.ibm.icu.util.MeasureUnit", new MeasureUnitTest.MeasureUnitHandler());
         map.put("com.ibm.icu.util.TimeUnit", new MeasureUnitTest.MeasureUnitHandler());
-        map.put("com.ibm.icu.text.GeneralMeasureFormat", new MeasureUnitTest.GeneralMeasureFormatHandler());
+        map.put("com.ibm.icu.text.MeasureFormat", new MeasureUnitTest.MeasureFormatHandler());
     }
     
     public SerializableTest()

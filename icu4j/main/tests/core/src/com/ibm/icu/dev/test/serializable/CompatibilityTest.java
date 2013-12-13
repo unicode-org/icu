@@ -132,6 +132,9 @@ public class CompatibilityTest extends TestFmwk
 
         {"ICU_50.1", "com.ibm.icu.text.PluralRules.dat"},
         {"ICU_51.1", "com.ibm.icu.text.PluralRules.dat"},
+        
+        // GeneralMeasureFormat was in technical preview, but is going away after ICU 52.1.
+        {"ICU_52.1", "com.ibm.icu.text.GeneralMeasureFormat.dat"},
 
         // RuleBasedNumberFormat
         {"ICU_3.6",     "com.ibm.icu.text.RuleBasedNumberFormat.dat"},
