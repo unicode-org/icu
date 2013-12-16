@@ -48,9 +48,17 @@ my $tests = {
     "ucol_getSortKey/len",          ["$p1,TestGetSortKey", "$p2,TestGetSortKey"],
     "ucol_getSortKey/null",         ["$p1,TestGetSortKeyNull", "$p2,TestGetSortKeyNull"],
 
-    "ucol_nextSortKeyPart/16_all",  ["$p1,TestNextSortKeyPart16", "$p2,TestNextSortKeyPart16"],
-    "ucol_nextSortKeyPart/32_all",  ["$p1,TestNextSortKeyPart32", "$p2,TestNextSortKeyPart32"],
-    "ucol_nextSortKeyPart/32_2",    ["$p1,TestNextSortKeyPart32_2", "$p2,TestNextSortKeyPart32_2"],
+    "ucol_nextSortKeyPart/4_all",   ["$p1,TestNextSortKeyPart_4All", "$p2,TestNextSortKeyPart_4All"],
+    "ucol_nextSortKeyPart/4x4",     ["$p1,TestNextSortKeyPart_4x4", "$p2,TestNextSortKeyPart_4x4"],
+    "ucol_nextSortKeyPart/4x8",     ["$p1,TestNextSortKeyPart_4x8", "$p2,TestNextSortKeyPart_4x8"],
+    "ucol_nextSortKeyPart/32_all",  ["$p1,TestNextSortKeyPart_32All", "$p2,TestNextSortKeyPart_32All"],
+    "ucol_nextSortKeyPart/32x2",    ["$p1,TestNextSortKeyPart_32x2", "$p2,TestNextSortKeyPart_32x2"],
+
+    "ucol_nextSortKeyPart/UTF8/4_all",  ["$p1,TestNextSortKeyPartUTF8_4All", "$p2,TestNextSortKeyPartUTF8_4All"],
+    "ucol_nextSortKeyPart/UTF8/4x4",    ["$p1,TestNextSortKeyPartUTF8_4x4", "$p2,TestNextSortKeyPartUTF8_4x4"],
+    "ucol_nextSortKeyPart/UTF8/4x8",    ["$p1,TestNextSortKeyPartUTF8_4x8", "$p2,TestNextSortKeyPartUTF8_4x8"],
+    "ucol_nextSortKeyPart/UTF8/32_all", ["$p1,TestNextSortKeyPartUTF8_32All", "$p2,TestNextSortKeyPartUTF8_32All"],
+    "ucol_nextSortKeyPart/UTF8/32x2",   ["$p1,TestNextSortKeyPartUTF8_32x2", "$p2,TestNextSortKeyPartUTF8_32x2"],
 
     "Collator::compare/len",                ["$p1,TestCppCompare", "$p2,TestCppCompare"],
     "Collator::compare/null",               ["$p1,TestCppCompareNull", "$p2,TestCppCompareNull"],

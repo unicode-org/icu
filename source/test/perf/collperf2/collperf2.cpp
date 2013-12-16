@@ -321,7 +321,7 @@ long GetSortKey::getOperationsPerIteration()
 }
 
 //
-// Test case taking a single test data array, calling ucol_nextSortKeyPart for each for the
+// Test case taking a single test data array in UTF-16, calling ucol_nextSortKeyPart for each for the
 // given buffer size
 //
 class NextSortKeyPart : public UPerfFunction
@@ -369,9 +369,13 @@ void NextSortKeyPart::call(UErrorCode* status)
         state[0] = 0;
         state[1] = 0;
         int32_t partLen = bufSize;
-        for (int32_t n = 0; partLen == bufSize && (maxIteration < 0 || n < maxIteration); n++) {
+        for (int32_t n = 0; U_SUCCESS(*status) && partLen == bufSize && (maxIteration < 0 || n < maxIteration); n++) {
             partLen = ucol_nextSortKeyPart(coll, &iter, state, part, bufSize, status);
             events++;
+        }
+        // Workaround for #10595
+        if (U_FAILURE(*status)) {
+            *status = U_ZERO_ERROR;
         }
     }
     free(part);
@@ -383,6 +387,77 @@ long NextSortKeyPart::getOperationsPerIteration()
 }
 
 long NextSortKeyPart::getEventsPerIteration()
+{
+    return events;
+}
+
+//
+// Test case taking a single test data array in UTF-8, calling ucol_nextSortKeyPart for each for the
+// given buffer size
+//
+class NextSortKeyPartUTF8 : public UPerfFunction
+{
+public:
+    NextSortKeyPartUTF8(const UCollator* coll, CA_char* source, int32_t bufSize, int32_t maxIteration = -1);
+    ~NextSortKeyPartUTF8();
+    virtual void call(UErrorCode* status);
+    virtual long getOperationsPerIteration();
+    virtual long getEventsPerIteration();
+
+private:
+    const UCollator *coll;
+    CA_char *source;
+    int32_t bufSize;
+    int32_t maxIteration;
+    long events;
+};
+
+// Note: maxIteration = -1 -> repeat until the end of collation key
+NextSortKeyPartUTF8::NextSortKeyPartUTF8(const UCollator* coll, CA_char* source, int32_t bufSize, int32_t maxIteration /* = -1 */)
+    :   coll(coll),
+        source(source),
+        bufSize(bufSize),
+        maxIteration(maxIteration),
+        events(0)
+{
+}
+
+NextSortKeyPartUTF8::~NextSortKeyPartUTF8()
+{
+}
+
+void NextSortKeyPartUTF8::call(UErrorCode* status)
+{
+    if (U_FAILURE(*status)) return;
+
+    uint8_t *part = (uint8_t *)malloc(bufSize);
+    uint32_t state[2];
+    UCharIterator iter;
+
+    events = 0;
+    for (int i = 0; i < source->count && U_SUCCESS(*status); i++) {
+        uiter_setUTF8(&iter, source->dataOf(i), source->lengthOf(i));
+        state[0] = 0;
+        state[1] = 0;
+        int32_t partLen = bufSize;
+        for (int32_t n = 0; U_SUCCESS(*status) && partLen == bufSize && (maxIteration < 0 || n < maxIteration); n++) {
+            partLen = ucol_nextSortKeyPart(coll, &iter, state, part, bufSize, status);
+            events++;
+        }
+        // Workaround for #10595
+        if (U_FAILURE(*status)) {
+            *status = U_ZERO_ERROR;
+        }
+    }
+    free(part);
+}
+
+long NextSortKeyPartUTF8::getOperationsPerIteration()
+{
+    return source->count;
+}
+
+long NextSortKeyPartUTF8::getEventsPerIteration()
 {
     return events;
 }
@@ -705,9 +780,19 @@ private:
     UPerfFunction* TestGetSortKey();
     UPerfFunction* TestGetSortKeyNull();
 
-    UPerfFunction* TestNextSortKeyPart16();
-    UPerfFunction* TestNextSortKeyPart32();
-    UPerfFunction* TestNextSortKeyPart32_2();
+    UPerfFunction* TestNextSortKeyPart_4All();
+    UPerfFunction* TestNextSortKeyPart_4x2();
+    UPerfFunction* TestNextSortKeyPart_4x4();
+    UPerfFunction* TestNextSortKeyPart_4x8();
+    UPerfFunction* TestNextSortKeyPart_32All();
+    UPerfFunction* TestNextSortKeyPart_32x2();
+
+    UPerfFunction* TestNextSortKeyPartUTF8_4All();
+    UPerfFunction* TestNextSortKeyPartUTF8_4x2();
+    UPerfFunction* TestNextSortKeyPartUTF8_4x4();
+    UPerfFunction* TestNextSortKeyPartUTF8_4x8();
+    UPerfFunction* TestNextSortKeyPartUTF8_32All();
+    UPerfFunction* TestNextSortKeyPartUTF8_32x2();
 
     UPerfFunction* TestCppCompare();
     UPerfFunction* TestCppCompareNull();
@@ -1059,20 +1144,28 @@ CollPerf2Test::runIndexedTest(int32_t index, UBool exec, const char *&name, char
         TESTCASE(6, TestGetSortKey);
         TESTCASE(7, TestGetSortKeyNull);
 
-        TESTCASE(8, TestNextSortKeyPart16);
-        TESTCASE(9, TestNextSortKeyPart32);
-        TESTCASE(10, TestNextSortKeyPart32_2);
+        TESTCASE(8, TestNextSortKeyPart_4All);
+        TESTCASE(9, TestNextSortKeyPart_4x4);
+        TESTCASE(10, TestNextSortKeyPart_4x8);
+        TESTCASE(11, TestNextSortKeyPart_32All);
+        TESTCASE(12, TestNextSortKeyPart_32x2);
 
-        TESTCASE(11, TestCppCompare);
-        TESTCASE(12, TestCppCompareNull);
-        TESTCASE(13, TestCppCompareSimilar);
+        TESTCASE(13, TestNextSortKeyPartUTF8_4All);
+        TESTCASE(14, TestNextSortKeyPartUTF8_4x4);
+        TESTCASE(15, TestNextSortKeyPartUTF8_4x8);
+        TESTCASE(16, TestNextSortKeyPartUTF8_32All);
+        TESTCASE(17, TestNextSortKeyPartUTF8_32x2);
 
-        TESTCASE(14, TestCppCompareUTF8);
-        TESTCASE(15, TestCppCompareUTF8Null);
-        TESTCASE(16, TestCppCompareUTF8Similar);
+        TESTCASE(18, TestCppCompare);
+        TESTCASE(19, TestCppCompareNull);
+        TESTCASE(20, TestCppCompareSimilar);
 
-        TESTCASE(17, TestCppGetCollationKey);
-        TESTCASE(18, TestCppGetCollationKeyNull);
+        TESTCASE(21, TestCppCompareUTF8);
+        TESTCASE(22, TestCppCompareUTF8Null);
+        TESTCASE(23, TestCppCompareUTF8Similar);
+
+        TESTCASE(24, TestCppGetCollationKey);
+        TESTCASE(25, TestCppGetCollationKeyNull);
 
     default:
             name = ""; 
@@ -1171,10 +1264,10 @@ UPerfFunction* CollPerf2Test::TestGetSortKeyNull()
     return testCase;
 }
 
-UPerfFunction* CollPerf2Test::TestNextSortKeyPart16()
+UPerfFunction* CollPerf2Test::TestNextSortKeyPart_4All()
 {
     UErrorCode status = U_ZERO_ERROR;
-    NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 16 /* bufSize */);
+    NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 4 /* bufSize */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
@@ -1182,7 +1275,29 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPart16()
     return testCase;
 }
 
-UPerfFunction* CollPerf2Test::TestNextSortKeyPart32()
+UPerfFunction* CollPerf2Test::TestNextSortKeyPart_4x4()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 4 /* bufSize */, 4 /* maxIteration */);
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestNextSortKeyPart_4x8()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 4 /* bufSize */, 8 /* maxIteration */);
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestNextSortKeyPart_32All()
 {
     UErrorCode status = U_ZERO_ERROR;
     NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 32 /* bufSize */);
@@ -1193,10 +1308,65 @@ UPerfFunction* CollPerf2Test::TestNextSortKeyPart32()
     return testCase;
 }
 
-UPerfFunction* CollPerf2Test::TestNextSortKeyPart32_2()
+UPerfFunction* CollPerf2Test::TestNextSortKeyPart_32x2()
 {
     UErrorCode status = U_ZERO_ERROR;
     NextSortKeyPart *testCase = new NextSortKeyPart(coll, getData16(status), 32 /* bufSize */, 2 /* maxIteration */);
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_4All()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    NextSortKeyPartUTF8 *testCase = new NextSortKeyPartUTF8(coll, getData8(status), 4 /* bufSize */);
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_4x4()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    NextSortKeyPartUTF8 *testCase = new NextSortKeyPartUTF8(coll, getData8(status), 4 /* bufSize */, 4 /* maxIteration */);
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_4x8()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    NextSortKeyPartUTF8 *testCase = new NextSortKeyPartUTF8(coll, getData8(status), 4 /* bufSize */, 8 /* maxIteration */);
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_32All()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    NextSortKeyPartUTF8 *testCase = new NextSortKeyPartUTF8(coll, getData8(status), 32 /* bufSize */);
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestNextSortKeyPartUTF8_32x2()
+{
+    UErrorCode status = U_ZERO_ERROR;
+    NextSortKeyPartUTF8 *testCase = new NextSortKeyPartUTF8(coll, getData8(status), 32 /* bufSize */, 2 /* maxIteration */);
     if (U_FAILURE(status)) {
         delete testCase;
         return NULL;
