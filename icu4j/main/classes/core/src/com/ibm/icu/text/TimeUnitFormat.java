@@ -147,13 +147,18 @@ public class TimeUnitFormat extends MeasureFormat {
         mf = MeasureFormat.getInstance(
                 locale, style == FULL_NAME ? FormatWidth.WIDE : FormatWidth.SHORT);
         this.style = style;
+        
+        // Needed for getLocale(ULocale.VALID_LOCALE)
+        setLocale(locale, locale);
         this.locale = locale;
         isReady = false;
     }
     
     private TimeUnitFormat(ULocale locale, int style, NumberFormat numberFormat) {
         this(locale, style);
-        setNumberFormat(numberFormat);
+        if (numberFormat != null) {
+            setNumberFormat((NumberFormat) numberFormat.clone());
+        }
     }
 
     /**
@@ -171,8 +176,11 @@ public class TimeUnitFormat extends MeasureFormat {
      * @stable ICU 4.0
      */
     public TimeUnitFormat setLocale(ULocale locale) {
-        if (locale != this.locale){ 
+        if (locale != this.locale){
             mf = mf.withLocale(locale);
+            
+            // Needed for getLocale(ULocale.VALID_LOCALE)
+            setLocale(locale, locale);
             this.locale = locale;
             isReady = false;
         }
@@ -325,6 +333,8 @@ public class TimeUnitFormat extends MeasureFormat {
             } else {
                 locale = ULocale.getDefault(Category.FORMAT);
             }
+            // Needed for getLocale(ULocale.VALID_LOCALE)
+            setLocale(locale, locale);
         }
         if (format == null) {
             format = NumberFormat.getNumberInstance(locale);
@@ -506,33 +516,68 @@ if ( searchPluralCount.equals("other") ) {
     // boilerplate code to make TimeUnitFormat otherwise follow the contract of
     // MeasureFormat
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public String formatMeasures(Measure... measures) {
         return mf.formatMeasures(measures);
     }
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public <T extends Appendable> T formatMeasure(
             Measure measure, T appendable, FieldPosition fieldPosition) {
         return mf.formatMeasure(measure, appendable, fieldPosition);
     }
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public <T extends Appendable> T formatMeasures(
             T appendable, FieldPosition fieldPosition, Measure... measures) {
         return mf.formatMeasures(appendable, fieldPosition, measures);
     }
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public MeasureFormat.FormatWidth getWidth() {
         return mf.getWidth();
     }
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public ULocale getLocale() {
         return mf.getLocale();
     }
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
+    @Override
+    public Object clone() {
+        TimeUnitFormat result = (TimeUnitFormat) super.clone();
+        result.format = (NumberFormat) format.clone();
+        return result;
+    }
+    
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public NumberFormat getNumberFormat() {
         return mf.getNumberFormat();
@@ -542,14 +587,18 @@ if ( searchPluralCount.equals("other") ) {
     
     // equals / hashcode
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public int hashCode() {
-        return getLocale().hashCode() + 911247101;
+        return mf.hashCode() + 911247101;
     }
     
     @Override
-    protected boolean equalsSameClass(MeasureFormat other) {
-        return getLocale().equals(other.getLocale());
+    boolean equalsSameClass(MeasureFormat other) {
+        return mf.equals(((TimeUnitFormat) other).mf);
     }
     
     // End equals / hashcode
