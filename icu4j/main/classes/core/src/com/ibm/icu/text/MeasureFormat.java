@@ -193,26 +193,6 @@ public class MeasureFormat extends UFormat {
     }
     
     /**
-     * Format a sequence of measures. Uses the ListFormatter unit lists.
-     * So, for example, one could format “3 feet, 2 inches”.
-     * Zero values are formatted (eg, “3 feet, 0 inches”). It is the caller’s
-     * responsibility to have the appropriate values in appropriate order,
-     * and using the appropriate Number values. Typically the units should be
-     * in descending order, with all but the last Measure having integer values
-     * (eg, not “3.2 feet, 2 inches”).
-     * 
-     * @param measures a sequence of one or more measures.
-     * @return the formatted string.
-     * @draft ICU 53
-     * @provisional
-     */
-    public String formatMeasures(Measure... measures) {
-        StringBuilder result = this.formatMeasures(
-                new StringBuilder(), new FieldPosition(0), measures);
-        return result.toString();
-    }
-    
-    /**
      * Able to format Collection&lt;? extends Measure&gt;, Measure[], and Measure
      * by delegating to formatMeasure or formatMeasures.
      * If the pos argument identifies a field used by the format
@@ -301,6 +281,26 @@ public class MeasureFormat extends UFormat {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+    
+    /**
+     * Format a sequence of measures. Uses the ListFormatter unit lists.
+     * So, for example, one could format “3 feet, 2 inches”.
+     * Zero values are formatted (eg, “3 feet, 0 inches”). It is the caller’s
+     * responsibility to have the appropriate values in appropriate order,
+     * and using the appropriate Number values. Typically the units should be
+     * in descending order, with all but the last Measure having integer values
+     * (eg, not “3.2 feet, 2 inches”).
+     * 
+     * @param measures a sequence of one or more measures.
+     * @return the formatted string.
+     * @draft ICU 53
+     * @provisional
+     */
+    public String formatMeasures(Measure... measures) {
+        StringBuilder result = this.formatMeasures(
+                new StringBuilder(), new FieldPosition(0), measures);
+        return result.toString();
     }
     
     /**
