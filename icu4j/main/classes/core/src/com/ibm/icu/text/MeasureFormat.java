@@ -81,7 +81,7 @@ import com.ibm.icu.util.UResourceBundle;
  * whatever units it is given
  * <p>
  * This class is immutable and thread-safe so long as its subclasses TimeUnitFormat and
- * CurrencyFormat are never used. Neither subclass is thread-safe and TimeUnitFormat is
+ * CurrencyFormat are never used. Neither subclass is thread-safe, and TimeUnitFormat is
  * mutable. Although this class has existing subclasses, this class does not support new
  * sub-classes.   
  *
@@ -366,7 +366,7 @@ public class MeasureFormat extends UFormat {
     }
     
     /**
-     * To MeasureFormats, a and b, are equal if and only if they have the same width,
+     * Two MeasureFormats, a and b, are equal if and only if they have the same width,
      * locale, and equal number formats.
      * @draft ICU 53
      * @provisional
