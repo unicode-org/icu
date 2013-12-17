@@ -563,16 +563,6 @@ if ( searchPluralCount.equals("other") ) {
         return mf.getLocale();
     }
     
-    /**
-     * @draft ICU 53
-     * @provisional
-     */
-    @Override
-    public Object clone() {
-        TimeUnitFormat result = (TimeUnitFormat) super.clone();
-        result.format = (NumberFormat) format.clone();
-        return result;
-    }
     
     /**
      * @draft ICU 53
@@ -583,25 +573,17 @@ if ( searchPluralCount.equals("other") ) {
         return mf.getNumberFormat();
     }
     
-    // End boilerplate.
-    
-    // equals / hashcode
-    
     /**
      * @draft ICU 53
      * @provisional
      */
     @Override
-    public int hashCode() {
-        return mf.hashCode() + 911247101;
+    public Object clone() {
+        TimeUnitFormat result = (TimeUnitFormat) super.clone();
+        result.format = (NumberFormat) format.clone();
+        return result;
     }
-    
-    @Override
-    boolean equalsSameClass(MeasureFormat other) {
-        return mf.equals(((TimeUnitFormat) other).mf);
-    }
-    
-    // End equals / hashcode
+    // End boilerplate.
     
     // Serialization
     

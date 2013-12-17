@@ -65,11 +65,8 @@ class CurrencyFormat extends MeasureFormat {
         }
         CurrencyAmount currency = (CurrencyAmount) obj;
             
-        // Since we extend MeasureFormat, we have to maintain thread-safety.
-        synchronized (fmt) {
-            fmt.setCurrency(currency.getCurrency());
-            return fmt.format(currency.getNumber(), toAppendTo, pos);
-        }
+        fmt.setCurrency(currency.getCurrency());
+        return fmt.format(currency.getNumber(), toAppendTo, pos);
     }
 
     /**
@@ -78,9 +75,7 @@ class CurrencyFormat extends MeasureFormat {
      */
     @Override
     public CurrencyAmount parseObject(String source, ParsePosition pos) {
-        synchronized (fmt) {
-            return fmt.parseCurrency(source, pos);
-        }
+        return fmt.parseCurrency(source, pos);
     }
     
     // boilerplate code to make CurrencyFormat otherwise follow the contract of
@@ -143,20 +138,6 @@ class CurrencyFormat extends MeasureFormat {
     }
     
     // End boilerplate.
-    
-    /**
-     * @draft ICU 53
-     * @provisional
-     */
-    @Override
-    public int hashCode() {
-        return mf.hashCode() + 154321962;
-    }
-    
-    @Override
-    boolean equalsSameClass(MeasureFormat other) {
-        return mf.equals(((CurrencyFormat) other).mf);
-    }
     
     // Serialization
     

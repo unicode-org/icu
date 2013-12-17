@@ -80,9 +80,10 @@ import com.ibm.icu.util.UResourceBundle;
  * This class does not do conversions from one unit to another. It simply formats
  * whatever units it is given
  * <p>
- * This class is immutable so long as no mutable subclass, namely TimeUnitFormat,
- * is used. Although this class has existing subclasses, this class does not
- * support new sub-classes.   
+ * This class is immutable and thread-safe so long as its subclasses TimeUnitFormat and
+ * CurrencyFormat are never used. Neither subclass is thread-safe and TimeUnitFormat is
+ * mutable. Although this class has existing subclasses, this class does not support new
+ * sub-classes.   
  *
  * @see com.ibm.icu.text.UFormat
  * @author Alan Liu
@@ -365,9 +366,8 @@ public class MeasureFormat extends UFormat {
     }
     
     /**
-     * For two MeasureFormat objects, a and b, to be equal, <code>a.getClass().equals(b.getClass())</code>
-     * <code>a.equalsSameClass(b)</code> must be true.
-     * 
+     * To MeasureFormats, a and b, are equal if and only if they have the same width,
+     * locale, and equal number formats.
      * @draft ICU 53
      * @provisional
      */
@@ -379,10 +379,11 @@ public class MeasureFormat extends UFormat {
         if (!(other instanceof MeasureFormat)) {
             return false;
         }
-        if (!getClass().equals(other.getClass())) {
-            return false;
-        }
-        return equalsSameClass((MeasureFormat) other);
+        MeasureFormat rhs = (MeasureFormat) other;
+        // A very slow but safe implementation.
+        return getWidth() == rhs.getWidth() 
+                && getLocale().equals(rhs.getLocale()) 
+                && getNumberFormat().equals(rhs.getNumberFormat());
     }
     
     /**
@@ -390,19 +391,11 @@ public class MeasureFormat extends UFormat {
      * @provisional
      */
     @Override
-    public int hashCode() {
-        return (numberFormat.hashCode() * 31 + getLocale().hashCode()) * 31 + length.hashCode();
+    public final int hashCode() {
+        // A very slow but safe implementation.
+        return (getLocale().hashCode() * 31 
+                + getNumberFormat().hashCode()) * 31 + getWidth().hashCode();
     }
-    
-    /**
-     * Returns true if this object is equal to other. The class of this and the class of other
-     * are guaranteed to be equal.
-     */
-    boolean equalsSameClass(MeasureFormat other) {
-        return objEquals(numberFormat,other.numberFormat)
-                && objEquals(getLocale(), other.getLocale()) && objEquals(length, other.length);        
-    }
-    
     
     /**
      * Get the format width this instance is using.
