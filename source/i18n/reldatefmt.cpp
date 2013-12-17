@@ -63,10 +63,46 @@ private:
     QualitativeUnits &operator=(const QualitativeUnits& other);
 };
 
+struct UnitPattern {
+    UnicodeString prefix;
+    UnicodeString suffix;
+    UBool prefixOnly;
+    UBool valid;
+
+    UnitPattern() : prefix(), suffix(), prefixOnly(FALSE), valid(FALSE) {
+    }
+
+    void set(const UnicodeString &patternStr) {
+        UnicodeString placeholder("{0}");
+        int32_t idx = patternStr.indexOf(placeholder);
+        valid = TRUE;
+        if (idx == -1) {
+            prefixOnly = TRUE;
+            prefix = patternStr;
+        } else {
+            prefixOnly = FALSE;
+            prefix = patternStr.tempSubStringBetween(0, idx);
+            suffix = patternStr.tempSubStringBetween(idx + placeholder.length());
+        }
+    }
+
+    UnicodeString& append(double quantity, const NumberFormat &nf, UnicodeString &appendTo) const {
+        if (!valid) {
+            return appendTo;
+        }
+        appendTo.append(prefix);
+        if (!prefixOnly) {
+            nf.format(quantity, appendTo);
+            appendTo.append(suffix);
+        }
+        return appendTo;
+    }
+};
+
 class QuantitativeUnits : public UObject {
 public:
     QuantitativeUnits() { }
-    UnicodeString data[UDAT_RELATIVE_UNIT_COUNT][2][MAX_PLURAL_FORMS];
+    UnitPattern data[UDAT_RELATIVE_UNIT_COUNT][2][MAX_PLURAL_FORMS];
     virtual ~QuantitativeUnits() {
     }
 private:
@@ -156,6 +192,21 @@ static void getString(
     result.setTo(TRUE, resStr, len);
 }
 
+static void getUnitPattern(
+        const UResourceBundle *resource, 
+        UnitPattern &result,
+        UErrorCode &status) {
+    if (U_FAILURE(status)) {
+        return;
+    }
+    UnicodeString rawPattern;
+    getString(resource, rawPattern, status);
+    if (U_FAILURE(status)) {
+        return;
+    }
+    result.set(rawPattern);
+}
+
 static void getStringByIndex(
         const UResourceBundle *resource, 
         int32_t idx,
@@ -232,7 +283,7 @@ static void addTimeUnit(
         int32_t pluralIndex = getPluralIndex(
                 ures_getKey(pluralBundle.getAlias()));
         if (pluralIndex != -1) {
-            getString(
+            getUnitPattern(
                     pluralBundle.getAlias(),
                     quantitativeUnits.data[relativeUnit][pastOrFuture][pluralIndex],
                     status);
@@ -678,17 +729,11 @@ UnicodeString& RelativeDateTimeFormatter::format(
         pluralIndex = 0;
     }
     int32_t bFuture = direction == UDAT_DIRECTION_NEXT ? 1 : 0;
-    const UnicodeString *pattern = &ptr->quantitativeUnits->data[unit][bFuture][pluralIndex];
-    if (pattern->isEmpty()) {
+    const UnitPattern *pattern = &ptr->quantitativeUnits->data[unit][bFuture][pluralIndex];
+    if (!pattern->valid) {
         pattern = &ptr->quantitativeUnits->data[unit][bFuture][0];
     }
-    if (pattern->isEmpty()) {
-        return appendTo;
-    }
-    UnicodeString result(*pattern);
-    UnicodeString formattedNumber;
-    result.findAndReplace(UNICODE_STRING_SIMPLE("{0}"), ptr->numberFormat->format(quantity, formattedNumber));
-    return appendTo.append(result);
+    return pattern->append(quantity, *ptr->numberFormat, appendTo);
 }
 
 UnicodeString& RelativeDateTimeFormatter::format(
