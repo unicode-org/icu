@@ -12,8 +12,10 @@ import java.util.Locale;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.math.BigDecimal;
+import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.text.TimeUnitFormat;
+import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.util.TimeUnit;
 import com.ibm.icu.util.TimeUnitAmount;
 import com.ibm.icu.util.ULocale;
@@ -112,6 +114,30 @@ public class TimeUnitTest extends TestFmwk {
         format = new TimeUnitFormat(new Locale("ja"));
         format.setNumberFormat(NumberFormat.getNumberInstance(new Locale("en")));
         formatParsing(format);
+    }
+    
+    public void TestClone() {
+        TimeUnitFormat tuf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.ABBREVIATED_NAME);
+        NumberFormat nf = NumberFormat.getInstance();
+        tuf.setNumberFormat(nf);
+        TimeUnitFormat tufClone = (TimeUnitFormat) tuf.clone();
+        tuf.setLocale(Locale.GERMAN);
+        assertEquals("", "1 hr", tufClone.format(new TimeUnitAmount(1, TimeUnit.HOUR)));
+    }
+    
+    public void TestEqHashCode() {
+        TimeUnitFormat tf = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);
+        MeasureFormat tfeq = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.FULL_NAME);
+        
+        MeasureFormat tfne = new TimeUnitFormat(ULocale.ENGLISH, TimeUnitFormat.ABBREVIATED_NAME);
+        MeasureFormat tfne2 = new TimeUnitFormat(ULocale.GERMAN, TimeUnitFormat.FULL_NAME);
+        verifyEqualsHashCode(tf, tfeq, tfne);
+        verifyEqualsHashCode(tf, tfeq, tfne2);
+    }
+    
+    public void TestGetLocale() {
+        TimeUnitFormat tf = new TimeUnitFormat(ULocale.GERMAN);
+        assertEquals("", ULocale.GERMAN, tf.getLocale(ULocale.VALID_LOCALE));
     }
 
     /*
@@ -352,5 +378,17 @@ public class TimeUnitTest extends TestFmwk {
         TimeUnitFormat tuf1 = new TimeUnitFormat();
         tuf1.setNumberFormat(NumberFormat.getInstance());
         tuf1.parseObject("", new ParsePosition(0));
+    }
+    
+    private void verifyEqualsHashCode(Object o, Object eq, Object ne) {
+        assertEquals("verifyEqualsHashCodeSame", o, o);
+        assertEquals("verifyEqualsHashCodeEq", o, eq);
+        assertNotEquals("verifyEqualsHashCodeNe", o, ne);
+        assertNotEquals("verifyEqualsHashCodeEqTrans", eq, ne);
+        assertEquals("verifyEqualsHashCodeHashEq", o.hashCode(), eq.hashCode());
+        
+        // May be a flaky test, but generally should be true.
+        // May need to comment this out later.
+        assertNotEquals("verifyEqualsHashCodeHashNe", o.hashCode(), ne.hashCode());
     }
 }

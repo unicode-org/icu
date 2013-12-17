@@ -38,8 +38,21 @@ class CurrencyFormat extends MeasureFormat {
     private transient final MeasureFormat mf;
 
     public CurrencyFormat(ULocale locale) {
+        // Needed for getLocale(ULocale.VALID_LOCALE).
+        setLocale(locale, locale);
         mf = MeasureFormat.getInstance(locale, FormatWidth.WIDE);
         fmt = NumberFormat.getCurrencyInstance(locale.toLocale());
+    }
+    
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
+    @Override
+    public Object clone() {
+        CurrencyFormat result = (CurrencyFormat) super.clone();
+        result.fmt = (NumberFormat) fmt.clone();
+        return result;
     }
 
     /**
@@ -73,33 +86,57 @@ class CurrencyFormat extends MeasureFormat {
     // boilerplate code to make CurrencyFormat otherwise follow the contract of
     // MeasureFormat
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public String formatMeasures(Measure... measures) {
         return mf.formatMeasures(measures);
     }
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public <T extends Appendable> T formatMeasure(
             Measure measure, T appendable, FieldPosition fieldPosition) {
         return mf.formatMeasure(measure, appendable, fieldPosition);
     }
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public <T extends Appendable> T formatMeasures(
             T appendable, FieldPosition fieldPosition, Measure... measures) {
         return mf.formatMeasures(appendable, fieldPosition, measures);
     }
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public MeasureFormat.FormatWidth getWidth() {
         return mf.getWidth();
     }
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public ULocale getLocale() {
         return mf.getLocale();
     }
     
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public NumberFormat getNumberFormat() {
         return mf.getNumberFormat();
@@ -107,15 +144,18 @@ class CurrencyFormat extends MeasureFormat {
     
     // End boilerplate.
     
-    
+    /**
+     * @draft ICU 53
+     * @provisional
+     */
     @Override
     public int hashCode() {
-        return getLocale().hashCode() + 154321962;
+        return mf.hashCode() + 154321962;
     }
     
     @Override
-    protected boolean equalsSameClass(MeasureFormat other) {
-        return getLocale().equals(other.getLocale());
+    boolean equalsSameClass(MeasureFormat other) {
+        return mf.equals(((CurrencyFormat) other).mf);
     }
     
     // Serialization

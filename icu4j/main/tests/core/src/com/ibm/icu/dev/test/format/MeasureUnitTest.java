@@ -28,6 +28,7 @@ import com.ibm.icu.text.DecimalFormat;
 import com.ibm.icu.text.MeasureFormat;
 import com.ibm.icu.text.MeasureFormat.FormatWidth;
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.text.TimeUnitFormat;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
@@ -299,6 +300,20 @@ public class MeasureUnitTest extends TestFmwk {
             // Expected
         }
     }
+    
+    public void testEqHashCode() {
+        MeasureFormat mf = MeasureFormat.getInstance(ULocale.CANADA, FormatWidth.SHORT);
+        MeasureFormat mfeq = MeasureFormat.getInstance(ULocale.CANADA, FormatWidth.SHORT);
+        MeasureFormat mfne = MeasureFormat.getInstance(ULocale.CANADA, FormatWidth.WIDE);
+        MeasureFormat mfne2 = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT);
+        verifyEqualsHashCode(mf, mfeq, mfne);
+        verifyEqualsHashCode(mf, mfeq, mfne2);
+    }
+    
+    public void testGetLocale() {
+        MeasureFormat mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.SHORT);
+        assertEquals("", ULocale.GERMAN, mf.getLocale(ULocale.VALID_LOCALE));
+    }
 
     static void generateConstants() {
         System.out.println("static final MeasureUnit");
@@ -382,6 +397,18 @@ public class MeasureUnitTest extends TestFmwk {
         }
       }
       return b.append(']').toString();
+    }
+    
+    private void verifyEqualsHashCode(Object o, Object eq, Object ne) {
+        assertEquals("verifyEqualsHashCodeSame", o, o);
+        assertEquals("verifyEqualsHashCodeEq", o, eq);
+        assertNotEquals("verifyEqualsHashCodeNe", o, ne);
+        assertNotEquals("verifyEqualsHashCodeEqTrans", eq, ne);
+        assertEquals("verifyEqualsHashCodeHashEq", o.hashCode(), eq.hashCode());
+        
+        // May be a flaky test, but generally should be true.
+        // May need to comment this out later.
+        assertNotEquals("verifyEqualsHashCodeHashNe", o.hashCode(), ne.hashCode());
     }
     
     public static class MeasureUnitHandler implements SerializableTest.Handler
