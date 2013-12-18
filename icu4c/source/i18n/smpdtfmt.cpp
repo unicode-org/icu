@@ -248,7 +248,7 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
       fOverrideList(NULL),
       fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
     initializeDefaultCentury();
 }
@@ -267,7 +267,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 {
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
     initializeDefaultCentury();
@@ -288,7 +288,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 {
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
     initializeDefaultCentury();
@@ -312,7 +312,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
 
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
@@ -335,7 +335,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
 
     initializeSymbols(fLocale, initializeCalendar(NULL,fLocale,status), status);
     initialize(fLocale, status);
@@ -361,7 +361,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
 
     initializeCalendar(NULL,fLocale,status);
     initialize(fLocale, status);
@@ -384,7 +384,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
 
     initializeCalendar(NULL, fLocale, status);
     initialize(fLocale, status);
@@ -405,7 +405,7 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
     fOverrideList(NULL),
     fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
     construct(timeStyle, dateStyle, fLocale, status);
     if(U_SUCCESS(status)) {
       initializeDefaultCentury();
@@ -446,7 +446,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
 
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
 
     initialize(fLocale, status);
     if(U_SUCCESS(status)) {
@@ -466,7 +466,7 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
     fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     UErrorCode status = U_ZERO_ERROR;
-    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
+    setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
     *this = other;
 }
 
@@ -1847,7 +1847,7 @@ SimpleDateFormat::parse(const UnicodeString& text, Calendar& cal, ParsePosition&
 
             abutPat = -1; // End of any abutting fields
             
-            if (! matchLiterals(fPattern, i, text, pos, getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status))) {
+            if (! matchLiterals(fPattern, i, text, pos, getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status), getBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, status))) {
                 status = U_PARSE_ERROR;
                 goto ExitParse;
             }
@@ -2129,7 +2129,8 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
                                       int32_t &patternOffset,
                                       const UnicodeString &text,
                                       int32_t &textOffset,
-                                      UBool lenient)
+                                      UBool whitespaceLenient,
+                                      UBool partialMatchLenient)
 {
     UBool inQuote = FALSE;
     UnicodeString literal;
@@ -2161,7 +2162,7 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
     int32_t p;
     int32_t t = textOffset;
     
-    if (lenient) {
+    if (whitespaceLenient) {
         // trim leading, trailing whitespace from
         // the literal text
         literal.trim();
@@ -2196,7 +2197,7 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
             // TODO: should we require internal spaces
             // in lenient mode? (There won't be any
             // leading or trailing spaces)
-            if (!lenient && t == tStart) {
+            if (!whitespaceLenient && t == tStart) {
                 // didn't find matching whitespace:
                 // an error in strict mode
                 return FALSE;
@@ -2212,7 +2213,7 @@ UBool SimpleDateFormat::matchLiterals(const UnicodeString &pattern,
         if (t >= text.length() || literal.charAt(p) != text.charAt(t)) {
             // Ran out of text, or found a non-matching character:
             // OK in lenient mode, an error in strict mode.
-            if (lenient) {
+            if (partialMatchLenient) {
                 if (t == textOffset && text.charAt(t) == 0x2e &&
                         isAfterNonNumericField(pattern, patternOffset)) {
                     // Lenient mode and the literal input text begins with a "." and
