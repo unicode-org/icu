@@ -1567,11 +1567,8 @@ void DateFormatRegressionTest::TestT10334(void) {
     format.applyPattern(pattern);
     ParsePosition pp(0);
     format.parse(text, pp);
-    int32_t errorIdx = pp.getErrorIndex();
-    if (errorIdx != -1) {
-        char buffer[256];
-        _snprintf(buffer, 256, "numeric parse error at[%d] on pattern char[%s]", errorIdx, &patternArray[errorIdx]);
-        errln(buffer);
+    if (pp.getErrorIndex() != -1) {
+        errln("numeric parse error");
     }
 
     status = U_ZERO_ERROR;
