@@ -530,16 +530,6 @@ if ( searchPluralCount.equals("other") ) {
      * @provisional
      */
     @Override
-    public <T extends Appendable> T formatMeasure(
-            Measure measure, T appendable, FieldPosition fieldPosition) {
-        return mf.formatMeasure(measure, appendable, fieldPosition);
-    }
-    
-    /**
-     * @draft ICU 53
-     * @provisional
-     */
-    @Override
     public <T extends Appendable> T formatMeasures(
             T appendable, FieldPosition fieldPosition, Measure... measures) {
         return mf.formatMeasures(appendable, fieldPosition, measures);

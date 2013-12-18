@@ -122,7 +122,7 @@ public class MeasureUnit implements Serializable {
     }
     
     /**
-     * Get all of the available units' types.
+     * Get all of the available units' types. Returned set is unmodifiable.
      * 
      * @draft ICU 53
      * @provisional
@@ -134,7 +134,7 @@ public class MeasureUnit implements Serializable {
     /**
      * For the given type, return the available units.
      * @param type the type
-     * @return the available units for type
+     * @return the available units for type. Returned set is unmodifiable.
      * @draft ICU 53
      * @provisional
      */
@@ -147,7 +147,7 @@ public class MeasureUnit implements Serializable {
     }
 
     /**
-     * Get all of the available units.
+     * Get all of the available units. Returned set is unmodifiable.
      *
      * @draft ICU 53
      * @provisional

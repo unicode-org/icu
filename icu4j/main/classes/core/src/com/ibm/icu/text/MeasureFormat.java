@@ -40,7 +40,7 @@ import com.ibm.icu.util.UResourceBundle;
  *
  * <p>To format a Measure object, first create a formatter
  * object using a MeasureFormat factory method.  Then use that
- * object's format, formatMeasure, or formatMeasures methods.
+ * object's format or formatMeasures methods.
  * 
  * Here is sample code:
  * <pre>
@@ -121,7 +121,7 @@ public class MeasureFormat extends UFormat {
      */
     // Be sure to update the toFormatWidth and fromFormatWidth() functions
     // when adding an enum value.
-    public static enum FormatWidth {
+    public enum FormatWidth {
         
         /**
          * Spell out everything.
@@ -194,10 +194,10 @@ public class MeasureFormat extends UFormat {
     
     /**
      * Able to format Collection&lt;? extends Measure&gt;, Measure[], and Measure
-     * by delegating to formatMeasure or formatMeasures.
-     * If the pos argument identifies a field used by the format
+     * by delegating to formatMeasures.
+     * If the pos argument identifies a NumberFormat field,
      * then its indices are set to the beginning and end of the first such field
-     * encountered.
+     * encountered. MeasureFormat itself does not supply any fields.
      * 
      * @param obj must be a Collection<? extends Measure>, Measure[], or Measure object.
      * @param toAppendTo Formatted string appended here.
@@ -239,49 +239,6 @@ public class MeasureFormat extends UFormat {
     public Measure parseObject(String source, ParsePosition pos) {
         throw new UnsupportedOperationException();
     }
-
-    
-    /**
-     * Formats a single measure and adds to appendable.
-     * If the fieldPosition argument identifies a field used by the format,
-     * then its indices are set to the beginning and end of the first such
-     * field encountered.
-     * 
-     * @param measure the measure to format
-     * @param appendable the formatted string appended here.
-     * @param fieldPosition Identifies a field in the formatted text.
-     * @return appendable.
-     * @see MeasureFormat#formatMeasures(Measure...)
-     * @draft ICU 53
-     * @provisional
-     */
-    public <T extends Appendable> T formatMeasure(
-            Measure measure, T appendable, FieldPosition fieldPosition) {
-        Number n = measure.getNumber();
-        MeasureUnit unit = measure.getUnit();        
-        UFieldPosition fpos = new UFieldPosition(fieldPosition.getFieldAttribute(), fieldPosition.getField());
-        StringBuffer formattedNumber = numberFormat.format(n, new StringBuffer(), fpos);
-        String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
-
-        Map<FormatWidth, Map<String, PatternData>> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
-        Map<String, PatternData> countToFormat = styleToCountToFormat.get(length);
-        PatternData messagePatternData = countToFormat.get(keyword);
-        try {
-            appendable.append(messagePatternData.prefix);
-            if (messagePatternData.suffix != null) { // there is a number (may not happen with, say, Arabic dual)
-                // Fix field position
-                if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
-                    fieldPosition.setBeginIndex(fpos.getBeginIndex() + messagePatternData.prefix.length());
-                    fieldPosition.setEndIndex(fpos.getEndIndex() + messagePatternData.prefix.length());
-                }
-                appendable.append(formattedNumber);
-                appendable.append(messagePatternData.suffix);
-            }
-            return appendable;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
     
     /**
      * Format a sequence of measures. Uses the ListFormatter unit lists.
@@ -305,9 +262,10 @@ public class MeasureFormat extends UFormat {
     
     /**
      * Formats a sequence of measures and adds to appendable.
-     * If the fieldPosition argument identifies a field used by the format,
-     * then its indices are set to the beginning and end of the first such
-     * field encountered.
+     * 
+     * If the fieldPosition argument identifies a NumberFormat field,
+     * then its indices are set to the beginning and end of the first such field
+     * encountered. MeasureFormat itself does not supply any fields.
      * 
      * @param appendable the formatted string appended here.
      * @param fieldPosition Identifies a field in the formatted text.
@@ -320,6 +278,14 @@ public class MeasureFormat extends UFormat {
     @SuppressWarnings("unchecked")
     public <T extends Appendable> T formatMeasures(
             T appendable, FieldPosition fieldPosition, Measure... measures) {
+        
+        // fast track for trivial cases
+        if (measures.length == 0) {
+            return (T) appendable;
+        }
+        if (measures.length == 1) {
+            return formatMeasure(measures[0], appendable, fieldPosition);
+        }
         
         // Zero out our field position so that we can tell when we find our field.
         FieldPosition fpos = new FieldPosition(fieldPosition.getFieldAttribute(), fieldPosition.getField());
@@ -566,6 +532,52 @@ public class MeasureFormat extends UFormat {
         return unitToStyleToCountToFormat;
     }
     
+    private <T extends Appendable> T formatMeasure(
+            Measure measure, T appendable, FieldPosition fieldPosition) {
+        Number n = measure.getNumber();
+        MeasureUnit unit = measure.getUnit();        
+        UFieldPosition fpos = new UFieldPosition(fieldPosition.getFieldAttribute(), fieldPosition.getField());
+        StringBuffer formattedNumber = numberFormat.format(n, new StringBuffer(), fpos);
+        String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
+
+        Map<FormatWidth, Map<String, PatternData>> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
+        Map<String, PatternData> countToFormat = styleToCountToFormat.get(length);
+        PatternData messagePatternData = countToFormat.get(keyword);
+        try {
+            appendable.append(messagePatternData.prefix);
+            if (messagePatternData.suffix != null) { // there is a number (may not happen with, say, Arabic dual)
+                // Fix field position
+                if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
+                    fieldPosition.setBeginIndex(fpos.getBeginIndex() + messagePatternData.prefix.length());
+                    fieldPosition.setEndIndex(fpos.getEndIndex() + messagePatternData.prefix.length());
+                }
+                appendable.append(formattedNumber);
+                appendable.append(messagePatternData.suffix);
+            }
+            return appendable;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    // Wrapper around NumberFormat that provides immutability and thread-safety.
+    private static final class ImmutableNumberFormat {
+        private NumberFormat nf;
+        
+        public ImmutableNumberFormat(NumberFormat nf) {
+            this.nf = (NumberFormat) nf.clone();
+        }
+        
+        public synchronized NumberFormat get() {
+            return (NumberFormat) nf.clone();
+        }
+        
+        public synchronized StringBuffer format(
+                Number n, StringBuffer buffer, FieldPosition pos) {
+            return nf.format(n, buffer, pos);
+        }
+    }
+    
     static final class PatternData {
         final String prefix;
         final String suffix;
@@ -702,24 +714,6 @@ public class MeasureFormat extends UFormat {
             return 2;
         default:
             throw new IllegalStateException("Unable to serialize Format Width " + fw);
-        }
-    }
-    
-    // Wrapper around NumberFormat that provides immutability and thread-safety.
-    private static final class ImmutableNumberFormat {
-        private NumberFormat nf;
-        
-        public ImmutableNumberFormat(NumberFormat nf) {
-            this.nf = (NumberFormat) nf.clone();
-        }
-        
-        public synchronized NumberFormat get() {
-            return (NumberFormat) nf.clone();
-        }
-        
-        public synchronized StringBuffer format(
-                Number n, StringBuffer buffer, FieldPosition pos) {
-            return nf.format(n, buffer, pos);
         }
     }
 }
