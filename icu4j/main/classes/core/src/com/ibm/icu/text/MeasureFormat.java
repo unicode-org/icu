@@ -16,9 +16,11 @@ import java.io.InvalidObjectException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.io.ObjectStreamException;
+import java.text.AttributedCharacterIterator;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.Collection;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -31,6 +33,7 @@ import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.Currency;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
+import com.ibm.icu.util.TimeZone;
 import com.ibm.icu.util.ULocale;
 import com.ibm.icu.util.ULocale.Category;
 import com.ibm.icu.util.UResourceBundle;
@@ -104,9 +107,23 @@ public class MeasureFormat extends UFormat {
     
     // Measure unit -> format width -> plural form -> pattern ("{0} meters")
     private final transient Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat;
+    
+    private final transient NumericFormatters numericFormatters;
 
-    static final SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>>> localeToUnitToStyleToCountToFormat
+    private static final SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>>> localeToUnitToStyleToCountToFormat
             = new SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>>>();
+  
+    private static final SimpleCache<ULocale, NumericFormatters> localeToNumericDurationFormatters
+            = new SimpleCache<ULocale,NumericFormatters>();
+    
+    private static final Map<MeasureUnit, Integer> hmsTo012 =
+            new HashMap<MeasureUnit, Integer>();
+    
+    static {
+        hmsTo012.put(MeasureUnit.HOUR, 0);
+        hmsTo012.put(MeasureUnit.MINUTE, 1);
+        hmsTo012.put(MeasureUnit.SECOND, 2);
+    }
     
     // For serialization: sub-class types.
     private static final int MEASURE_FORMAT = 0;
@@ -145,7 +162,17 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        NARROW("unitsNarrow");
+        NARROW("unitsNarrow"),
+        
+        /**
+         * Identical to NARROW except when formatMeasures is called with
+         * an hour and minute; minute and second; or hour, minute, and second Measures.
+         * In these cases formatMeasures formats as 5:37:23 instead of 5h, 37m, 23s.
+         * 
+         * @draft ICU 53
+         * @provisional
+         */
+        NUMERIC("unitsNarrow");
         
         // Be sure to update the toFormatWidth and fromFormatWidth() functions
         // when adding an enum value.
@@ -182,14 +209,27 @@ public class MeasureFormat extends UFormat {
      */
     public static MeasureFormat getInstance(ULocale locale, FormatWidth width, NumberFormat format) {
         PluralRules rules = PluralRules.forLocale(locale);
-        Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat; 
+        Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat;
+        NumericFormatters formatters = null;
         unitToStyleToCountToFormat = localeToUnitToStyleToCountToFormat.get(locale);
         if (unitToStyleToCountToFormat == null) {
             unitToStyleToCountToFormat = loadLocaleData(locale, rules);
             localeToUnitToStyleToCountToFormat.put(locale, unitToStyleToCountToFormat);
         }
+        if (width == FormatWidth.NUMERIC) {
+            formatters = localeToNumericDurationFormatters.get(locale);
+            if (formatters == null) {
+                formatters = loadNumericFormatters(locale);
+                localeToNumericDurationFormatters.put(locale, formatters);
+            }
+        }
         return new MeasureFormat(
-                locale, width, new ImmutableNumberFormat(format), rules, unitToStyleToCountToFormat);
+                locale,
+                width,
+                new ImmutableNumberFormat(format),
+                rules,
+                unitToStyleToCountToFormat,
+                formatters);
     }
     
     /**
@@ -278,13 +318,21 @@ public class MeasureFormat extends UFormat {
     @SuppressWarnings("unchecked")
     public <T extends Appendable> T formatMeasures(
             T appendable, FieldPosition fieldPosition, Measure... measures) {
-        
         // fast track for trivial cases
         if (measures.length == 0) {
             return (T) appendable;
         }
         if (measures.length == 1) {
             return formatMeasure(measures[0], appendable, fieldPosition);
+        }
+        
+        if (length == FormatWidth.NUMERIC) {
+            // If we have just hour, minute, or second follow the numeric
+            // track.
+            Number[] hms = toHMS(measures);
+            if (hms != null) {
+                return formatNumeric(hms, appendable);
+            }
         }
         
         // Zero out our field position so that we can tell when we find our field.
@@ -421,7 +469,8 @@ public class MeasureFormat extends UFormat {
                 this.length,
                 new ImmutableNumberFormat(format),
                 this.rules,
-                this.unitToStyleToCountToFormat);
+                this.unitToStyleToCountToFormat,
+                this.numericFormatters);
     }
     
     private MeasureFormat(
@@ -429,12 +478,14 @@ public class MeasureFormat extends UFormat {
             FormatWidth width,
             ImmutableNumberFormat format,
             PluralRules rules,
-            Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat) {
+            Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat,
+            NumericFormatters formatters) {
         setLocale(locale, locale);
         this.length = width;
         this.numberFormat = format;
         this.rules = rules;
         this.unitToStyleToCountToFormat = unitToStyleToCountToFormat;
+        this.numericFormatters = formatters;
     }
     
     /**
@@ -448,7 +499,36 @@ public class MeasureFormat extends UFormat {
         this.numberFormat = null;
         this.rules = null;
         this.unitToStyleToCountToFormat = null;
+        this.numericFormatters = null;
+    }
+    
+    static class NumericFormatters {
+        private DateFormat hourMinute;
+        private DateFormat minuteSecond;
+        private DateFormat hourMinuteSecond;
         
+        public NumericFormatters(
+                DateFormat hourMinute,
+                DateFormat minuteSecond,
+                DateFormat hourMinuteSecond) {
+            this.hourMinute = hourMinute;
+            this.minuteSecond = minuteSecond;
+            this.hourMinuteSecond = hourMinuteSecond;
+        }
+        
+        public DateFormat getHourMinute() { return hourMinute; }
+        public DateFormat getMinuteSecond() { return minuteSecond; }
+        public DateFormat getHourMinuteSecond() { return hourMinuteSecond; }
+    }
+    
+    private static NumericFormatters loadNumericFormatters(
+            ULocale locale) {
+        ICUResourceBundle r = (ICUResourceBundle)UResourceBundle.
+                getBundleInstance(ICUResourceBundle.ICU_BASE_NAME, locale);
+        return new NumericFormatters(
+                loadNumericDurationFormat(r, "hm"),
+                loadNumericDurationFormat(r, "ms"),
+                loadNumericDurationFormat(r, "hms"));
     }
     
     /**
@@ -576,6 +656,10 @@ public class MeasureFormat extends UFormat {
                 Number n, StringBuffer buffer, FieldPosition pos) {
             return nf.format(n, buffer, pos);
         }
+
+        public synchronized String format(Number number) {
+            return nf.format(number);
+        }
     }
     
     static final class PatternData {
@@ -603,6 +687,113 @@ public class MeasureFormat extends UFormat {
     
     Object toCurrencyProxy() {
         return new MeasureProxy(getLocale(), length, numberFormat.get(), CURRENCY_FORMAT);
+    }
+    
+    // type is one of "hm", "ms" or "hms"
+    private static DateFormat loadNumericDurationFormat(
+            ICUResourceBundle r, String type) {
+        r = r.getWithFallback(String.format("durationUnits/%s", type));
+        // We replace 'h' with 'H' because 'h' does not make sense in the context of durations.
+        DateFormat result = new SimpleDateFormat(r.getString().replace("h", "H"));
+        result.setTimeZone(TimeZone.GMT_ZONE);
+        return result;
+    }
+    
+    private static Number[] toHMS(Measure[] measures) {
+        Number[] result = new Number[3];
+        int count = 0;
+        for (Measure m : measures) {
+            Integer idx = hmsTo012.get(m.getUnit());
+            if (idx == null) {
+                return null;
+            }
+            if (result[idx.intValue()] != null) {
+                return null;
+            }
+            result[idx.intValue()] = m.getNumber();
+            count++;
+        }
+        if (count < 2) {
+            return null;
+        }
+        return result;
+    }
+    
+    private <T extends Appendable> T formatNumeric(Number[] hms, T appendable) {
+        int startIndex = -1;
+        int endIndex = -1;
+        for (int i = 0; i < hms.length; i++) {
+            if (hms[i] != null) {
+                endIndex = i;
+                if (startIndex == -1) {
+                    startIndex = endIndex;
+                }
+            } else {
+                hms[i] = Integer.valueOf(0);
+            }
+        }
+        long millis = (long) (((hms[0].doubleValue() * 60.0
+                + hms[1].doubleValue()) * 60.0
+                + hms[2].doubleValue()) * 1000.0);
+        Date d = new Date(millis);
+        if (startIndex == 0 && endIndex == 2) {
+            return formatNumeric(
+                    d, 
+                    numericFormatters.getHourMinuteSecond(),
+                    DateFormat.Field.SECOND,
+                    hms[endIndex],
+                    appendable);
+        }
+        if (startIndex == 1 && endIndex == 2) {
+            return formatNumeric(
+                    d, 
+                    numericFormatters.getMinuteSecond(),
+                    DateFormat.Field.SECOND,
+                    hms[endIndex],
+                    appendable);
+        }
+        if (startIndex == 0 && endIndex == 1) {
+            return formatNumeric(
+                    d, 
+                    numericFormatters.getHourMinute(),
+                    DateFormat.Field.MINUTE,
+                    hms[endIndex],
+                    appendable);
+        }
+        throw new IllegalStateException();
+    }
+    
+    private <T extends Appendable> T formatNumeric(
+            Date duration,
+            DateFormat formatter,
+            DateFormat.Field smallestField,
+            Number smallestAmount,
+            T appendable) {
+        // Format the smallest amount ahead of time.
+        String smallestAmountFormatted;
+        smallestAmountFormatted = numberFormat.format(smallestAmount);
+       
+        // Format the duration using the provided DateFormat object. The smallest
+        // field in this result will be missing the fractional part.
+        AttributedCharacterIterator iterator = formatter.formatToCharacterIterator(duration);
+       
+        // iterate through formatted text copying to 'builder' one character at a time.
+        // When we get to the smallest amount, skip over it and copy
+        // 'smallestAmountFormatted' to the builder instead.
+        for (iterator.first(); iterator.getIndex() < iterator.getEndIndex();) {
+            try {
+                if (iterator.getAttributes().containsKey(smallestField)) {
+                    appendable.append(smallestAmountFormatted);
+                    iterator.setIndex(iterator.getRunLimit(smallestField));
+                } else {
+                    appendable.append(iterator.current());
+                    iterator.next();
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return appendable;
     }
     
     private Object writeReplace() throws ObjectStreamException {
@@ -699,6 +890,8 @@ public class MeasureFormat extends UFormat {
             return FormatWidth.SHORT;
         case 2:
             return FormatWidth.NARROW;
+        case 3:
+            return FormatWidth.NUMERIC;
         default:
             return FormatWidth.WIDE;
         }
@@ -712,6 +905,8 @@ public class MeasureFormat extends UFormat {
             return 1;
         case NARROW:
             return 2;
+        case NUMERIC:
+            return 3;
         default:
             throw new IllegalStateException("Unable to serialize Format Width " + fw);
         }
