@@ -272,6 +272,7 @@ icu4j/main/classes/core/.settings/edu.umd.cs.findbugs.core.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.core.resources.prefs -text
 icu4j/main/classes/core/.settings/org.eclipse.jdt.core.prefs -text
 icu4j/main/classes/core/manifest.stub -text
+icu4j/main/classes/core/src/com/ibm/icu/impl/DontCareFieldPosition.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/QuantityFormatter.java -text
 icu4j/main/classes/core/src/com/ibm/icu/text/RelativeDateTimeFormatter.java -text
 icu4j/main/classes/currdata/.externalToolBuilders/copy-data-currdata.launch -text

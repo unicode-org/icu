@@ -515,7 +515,7 @@ if ( searchPluralCount.equals("other") ) {
     
     // boilerplate code to make TimeUnitFormat otherwise follow the contract of
     // MeasureFormat
-    
+
     /**
      * @draft ICU 53
      * @provisional

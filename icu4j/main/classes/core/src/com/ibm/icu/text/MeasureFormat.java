@@ -28,6 +28,7 @@ import java.util.Map.Entry;
 import java.util.MissingResourceException;
 import java.util.Set;
 
+import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.Currency;
@@ -239,6 +240,10 @@ public class MeasureFormat extends UFormat {
      * then its indices are set to the beginning and end of the first such field
      * encountered. MeasureFormat itself does not supply any fields.
      * 
+     * Calling a
+     * <code>formatMeasures</code> method is preferred over calling
+     * this method as they give better performance.
+     * 
      * @param obj must be a Collection<? extends Measure>, Measure[], or Measure object.
      * @param toAppendTo Formatted string appended here.
      * @pram pos Identifies a field in the formatted text.
@@ -296,7 +301,7 @@ public class MeasureFormat extends UFormat {
      */
     public String formatMeasures(Measure... measures) {
         StringBuilder result = this.formatMeasures(
-                new StringBuilder(), new FieldPosition(0), measures);
+                new StringBuilder(), DontCareFieldPosition.INSTANCE, measures);
         return result.toString();
     }
     
@@ -335,48 +340,29 @@ public class MeasureFormat extends UFormat {
             }
         }
         
-        // Zero out our field position so that we can tell when we find our field.
-        FieldPosition fpos = new FieldPosition(fieldPosition.getFieldAttribute(), fieldPosition.getField());
-        FieldPosition dummyPos = new FieldPosition(0);
-        
-        int fieldPositionFoundIndex = -1;
-        StringBuilder[] results = new StringBuilder[measures.length];
-        for (int i = 0; i < measures.length; ++i) {
-            if (fieldPositionFoundIndex == -1) {
-                results[i] = formatMeasure(measures[i], new StringBuilder(), fpos);
-                if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
-                    fieldPositionFoundIndex = i;    
-                }
-            } else {
-                results[i] = formatMeasure(measures[i], new StringBuilder(), dummyPos);
-            }
-        }
         ListFormatter listFormatter = ListFormatter.getInstance(getLocale(), 
                 length == FormatWidth.WIDE ? ListFormatter.Style.DURATION : ListFormatter.Style.DURATION_SHORT);
-        
-        // Fix up FieldPosition indexes if our field is found.
-        if (fieldPositionFoundIndex != -1) {
-            String listPattern = listFormatter.getPatternForNumItems(measures.length);
-            int positionInPattern = listPattern.indexOf("{" + fieldPositionFoundIndex + "}");
-            if (positionInPattern == -1) {
-                throw new IllegalStateException("Can't find position with ListFormatter.");
-            }
-            // Now we have to adjust our position in pattern
-            // based on the previous values.
-            for (int i = 0; i < fieldPositionFoundIndex; i++) {
-                positionInPattern += (results[i].length() - ("{" + i + "}").length());
-            }
-            fieldPosition.setBeginIndex(fpos.getBeginIndex() + positionInPattern);
-            fieldPosition.setEndIndex(fpos.getEndIndex() + positionInPattern);
-        }
+        String[] results = null;
+        if (fieldPosition == DontCareFieldPosition.INSTANCE) {
             
+            // Fast track: No field position.
+            results = new String[measures.length];
+            for (int i = 0; i < measures.length; i++) {
+                results[i] = formatMeasure(measures[i]);
+            }
+        } else {
+            
+            // Slow track: Have to calculate field position.
+            results = formatMeasuresSlowTrack(listFormatter, fieldPosition, measures);            
+        }
+                 
         // This is safe because appendable is of type T.
         try {
             return (T) appendable.append(listFormatter.format((Object[]) results));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-    }
+    }   
     
     /**
      * Two MeasureFormats, a and b, are equal if and only if they have the same width,
@@ -612,6 +598,12 @@ public class MeasureFormat extends UFormat {
         return unitToStyleToCountToFormat;
     }
     
+    private String formatMeasure(Measure measure) {
+        return formatMeasure(
+                measure, new StringBuilder(),
+                DontCareFieldPosition.INSTANCE).toString();
+    }
+    
     private <T extends Appendable> T formatMeasure(
             Measure measure, T appendable, FieldPosition fieldPosition) {
         Number n = measure.getNumber();
@@ -687,6 +679,43 @@ public class MeasureFormat extends UFormat {
     
     Object toCurrencyProxy() {
         return new MeasureProxy(getLocale(), length, numberFormat.get(), CURRENCY_FORMAT);
+    }
+    
+    private String[] formatMeasuresSlowTrack(ListFormatter listFormatter, FieldPosition fieldPosition,
+            Measure... measures) {
+        String[] results = new String[measures.length];
+        
+        // Zero out our field position so that we can tell when we find our field.
+        FieldPosition fpos = new FieldPosition(fieldPosition.getFieldAttribute(), fieldPosition.getField());
+        
+        int fieldPositionFoundIndex = -1;
+        for (int i = 0; i < measures.length; ++i) {
+            if (fieldPositionFoundIndex == -1) {
+                results[i] = formatMeasure(measures[i], new StringBuilder(), fpos).toString();
+                if (fpos.getBeginIndex() != 0 || fpos.getEndIndex() != 0) {
+                    fieldPositionFoundIndex = i;    
+                }
+            } else {
+                results[i] = formatMeasure(measures[i]);
+            }
+        }
+        
+        // Fix up FieldPosition indexes if our field is found.
+        if (fieldPositionFoundIndex != -1) {
+            String listPattern = listFormatter.getPatternForNumItems(measures.length);
+            int positionInPattern = listPattern.indexOf("{" + fieldPositionFoundIndex + "}");
+            if (positionInPattern == -1) {
+                throw new IllegalStateException("Can't find position with ListFormatter.");
+            }
+            // Now we have to adjust our position in pattern
+            // based on the previous values.
+            for (int i = 0; i < fieldPositionFoundIndex; i++) {
+                positionInPattern += (results[i].length() - ("{" + i + "}").length());
+            }
+            fieldPosition.setBeginIndex(fpos.getBeginIndex() + positionInPattern);
+            fieldPosition.setEndIndex(fpos.getEndIndex() + positionInPattern);
+        }
+        return results;
     }
     
     // type is one of "hm", "ms" or "hms"
