@@ -452,6 +452,8 @@ public abstract class DateFormat extends UFormat {
      * PARSE_ALLOW_WHITESPACE - indicates whitespace tolerance. Also included is trailing dot tolerance.
      * <br/>
      * PARSE_ALLOW_NUMERIC - indicates tolerance of numeric data when String data may be assumed. eg: YEAR_NAME_FIELD
+     * <br/>
+     * PRASE_PARTIAL_MATCH - indicates tolerance of partial matches against pattern literals
      * 
      * @internal ICU technology preview
      */
@@ -465,7 +467,12 @@ public abstract class DateFormat extends UFormat {
          * indicates tolerance of numeric data when String data may be assumed. eg: YEAR_NAME_FIELD 
          * @internal ICU technology preview
          */
-        PARSE_ALLOW_NUMERIC 
+        PARSE_ALLOW_NUMERIC, 
+        /**
+         * indicates tolerance of a partial literal match
+         * @draft ICU 53
+         */
+        PARSE_PARTIAL_MATCH
     };
     
     /**
@@ -1472,7 +1479,7 @@ public abstract class DateFormat extends UFormat {
         return calendar.isLenient();
     }
 
-    /**
+    /** 
      * set a boolean attribute for this instance. Aspects of DateFormat leniency are controlled by
      * boolean attributes. 
      * 

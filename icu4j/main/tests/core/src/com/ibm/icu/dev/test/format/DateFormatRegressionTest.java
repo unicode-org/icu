@@ -1275,5 +1275,80 @@ public class DateFormatRegressionTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
   }
-    
+  
+
+    public void TestT10334() {
+        String pattern = new String("'--: 'EEE-WW-MMMM-yyyy");
+        String text = new String("--mon-02-march-2011");
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+
+        format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH, false);      
+        try {
+            format.parse(text);
+            errln("parse partial match did NOT fail in strict mode!");
+        } catch (ParseException pe) {        
+            // expected
+        }
+
+        format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH, true);
+        try {
+            format.parse(text);
+        } catch (ParseException pe) {
+            errln("parse partial match failure in lenient mode: " + pe.getLocalizedMessage());
+        }
+
+        pattern = new String("YYYY MM dd");
+        text =    new String("2013 12 10");
+        format.applyPattern(pattern);
+        Date referenceDate = null;
+        try {
+            referenceDate = format.parse(text);            
+        } catch (ParseException pe) {
+            errln("unable to instantiate reference date: " + pe.getLocalizedMessage());
+        }
+
+        FieldPosition fp = new FieldPosition(0);
+        pattern = new String("YYYY LL dd ee cc qq QQ");
+        format.applyPattern(pattern);
+        StringBuffer formattedString = new StringBuffer(); 
+        formattedString = format.format(referenceDate, formattedString, fp);
+        logln("ref date: " + formattedString);
+
+
+        pattern = new String("YYYY LLL dd eee ccc qqq QQQ");
+        text = new String("2013 12 10 03 3 04 04");
+        format.applyPattern(pattern);
+        logln(format.format(referenceDate));
+        
+        format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC, true);
+        ParsePosition pp = new ParsePosition(0);
+        format.parse(text, pp);
+        int errorIdx = pp.getErrorIndex();
+        if (errorIdx != -1) {
+            
+            errln("numeric parse error at["+errorIdx+"] on char["+pattern.substring(errorIdx, errorIdx+1)+"] in pattern["+pattern+"]");
+        }
+
+        format.setBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC, false);
+        try {
+        format.parse(text);
+        errln("numeric parse did NOT fail in strict mode!");
+        } catch (ParseException pe) {
+            // expected
+        }
+        
+        /*
+         * test to verify new code (and improve code coverage) for normal quarter processing
+         */
+        text = new String("2013 Dec 10 Thu Thu Q4 Q4");
+        try {
+            format.parse(text);
+        } catch (ParseException pe) {
+            errln("normal quarter processing failed");
+        }
+
+
+
+    }
+
 }

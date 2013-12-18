@@ -2438,6 +2438,9 @@ public class SimpleDateFormat extends DateFormat {
                 } else if ((pch == ' ' || pch == '.') && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_WHITESPACE)) {
                     ++idx;
                     continue;
+                } else if (pos != originalPos && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_PARTIAL_MATCH)) {
+                    ++idx;
+                    continue;
                 }
                 break;
             }
@@ -2731,11 +2734,14 @@ public class SimpleDateFormat extends DateFormat {
         if (patternCharIndex == 4 /*'k' HOUR_OF_DAY1_FIELD*/ ||
             patternCharIndex == 15 /*'h' HOUR1_FIELD*/ ||
             (patternCharIndex == 2 /*'M' MONTH_FIELD*/ && count <= 2) ||
-            (patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/ && count <= 2) ||
-            (patternCharIndex == 19 /*'e' DOW_LOCAL*/ && count <= 2) ||
+            patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/ ||
+            patternCharIndex == 19 /*'e' DOW_LOCAL*/ ||
+            patternCharIndex == 25 /*'c' STAND_ALONE_DAY_OF_WEEK*/ ||
             patternCharIndex == 1 /*'y' YEAR */ || patternCharIndex == 18 /*'Y' YEAR_WOY */ ||
             patternCharIndex == 30 /*'U' YEAR_NAME_FIELD, falls back to numeric */ ||
             (patternCharIndex == 0 /*'G' ERA */ && isChineseCalendar) ||
+            patternCharIndex == 27 /* 'Q' - QUARTER*/ ||
+            patternCharIndex == 28 /* 'q' - STANDALONE QUARTER*/ ||
             patternCharIndex == 8 /*'S' FRACTIONAL_SECOND */ )
             {
                 // It would be good to unify this with the obeyCount logic below,
@@ -2764,7 +2770,8 @@ public class SimpleDateFormat extends DateFormat {
                     } else {
                         number = parseInt(text, pos, allowNegative,currentNumberFormat);
                     }
-                    if (number == null && patternCharIndex != 30) {
+                    if (number == null && !allowNumericFallback(patternCharIndex)) {
+                        // only return if pattern is NOT one that allows numeric fallback
                         return ~start;
                     }
                 }
@@ -2853,7 +2860,8 @@ public class SimpleDateFormat extends DateFormat {
                 return ~start;
             case 2: // 'M' - MONTH
             case 26: // 'L' - STAND_ALONE_MONTH
-                if (count <= 2) { // i.e., M/MM, L/LL
+                if (count <= 2 || (number != null && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC))) {
+                    // i.e., M/MM, L/LL or lenient & have a number
                     // Don't want to parse the month if it is a string
                     // while pattern uses numeric style: M/MM, L/LL.
                     // [We computed 'value' above.]
@@ -2918,7 +2926,8 @@ public class SimpleDateFormat extends DateFormat {
                 cal.set(Calendar.MILLISECOND, value);
                 return pos.getIndex();
             case 19: // 'e' - DOW_LOCAL
-                if(count <= 2) { // i.e. e/ee
+                if(count <= 2 || (number != null && (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC))) ) { 
+                    // i.e. e/ee or lenient and have a number
                     cal.set(field, value);
                     return pos.getIndex();
                 }
@@ -2946,6 +2955,11 @@ public class SimpleDateFormat extends DateFormat {
                 return newStart;
             }
             case 25: { // 'c' - STAND_ALONE_DAY_OF_WEEK
+                if(count == 1 || (number != null && (getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC))) ) { 
+                    // i.e. c or lenient and have a number
+                    cal.set(field, value);
+                    return pos.getIndex();
+                }
                 // Want to be able to parse at least wide, abbrev, short forms.
                 int newStart = matchString(text, start, Calendar.DAY_OF_WEEK, formatData.standaloneWeekdays, null, cal); // try cccc wide
                 if (newStart > 0) {
@@ -3100,7 +3114,8 @@ public class SimpleDateFormat extends DateFormat {
                 return ~start;
             }
             case 27: // 'Q' - QUARTER
-                if (count <= 2) { // i.e., Q or QQ.
+                if (count <= 2 || (number != null && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC))) { 
+                    // i.e., Q or QQ. or lenient & have number
                     // Don't want to parse the quarter if it is a string
                     // while pattern uses numeric style: Q or QQ.
                     // [We computed 'value' above.]
@@ -3121,7 +3136,8 @@ public class SimpleDateFormat extends DateFormat {
                 }
 
             case 28: // 'q' - STANDALONE QUARTER
-                if (count <= 2) { // i.e., q or qq.
+                if (count <= 2 || (number != null && getBooleanAttribute(DateFormat.BooleanAttribute.PARSE_ALLOW_NUMERIC))) { 
+                    // i.e., q or qq. or lenient & have number
                     // Don't want to parse the quarter if it is a string
                     // while pattern uses numeric style: q or qq.
                     // [We computed 'value' above.]
@@ -3170,6 +3186,22 @@ public class SimpleDateFormat extends DateFormat {
             }
     }
 
+    /**
+     * return true if the pattern specified by patternCharIndex is one that allows
+     * numeric fallback regardless of actual pattern size.
+     */
+    private boolean allowNumericFallback(int patternCharIndex) {
+        if (patternCharIndex == 26 /*'L' STAND_ALONE_MONTH*/ ||
+            patternCharIndex == 19 /*'e' DOW_LOCAL*/ ||
+            patternCharIndex == 25 /*'c' STAND_ALONE_DAY_OF_WEEK*/ ||
+            patternCharIndex == 30 /*'U' YEAR_NAME_FIELD*/ ||
+            patternCharIndex == 27 /* 'Q' - QUARTER*/ ||
+            patternCharIndex == 28 /* 'q' - STANDALONE QUARTER*/) {
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Parse an integer using numberFormat.  This method is semantically
      * const, but actually may modify fNumberFormat.

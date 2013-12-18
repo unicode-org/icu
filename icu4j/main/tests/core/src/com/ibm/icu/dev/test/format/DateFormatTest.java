@@ -4320,7 +4320,7 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
                 if(p.getErrorIndex() != -1)
                     continue;
                 else
-                    errln("error: unexpected parse success..."+item.parseString + " w/ lenient="+item.leniency+" should have faile");
+                    errln("error: unexpected parse success..."+item.parseString + " w/ lenient="+item.leniency+" should have failed");
             }
             if(p.getErrorIndex() != -1) {
                 errln("error: parse error for string " +item.parseString + " -- idx["+p.getIndex()+"] errIdx["+p.getErrorIndex()+"]");
@@ -4335,5 +4335,5 @@ public class DateFormatTest extends com.ibm.icu.dev.test.TestFmwk {
             }
         }
     }
-
+    
 }
