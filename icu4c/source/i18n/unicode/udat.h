@@ -852,6 +852,11 @@ typedef enum UDateFormatBooleanAttribute {
      */
     UDAT_PARSE_ALLOW_NUMERIC,
     /**
+     * indicates tolerance of a partial literal match
+     * @draft ICU 53
+     */
+    UDAT_PARSE_PARTIAL_MATCH,
+    /**
      * count boolean date format constants
      * @internal ICU technology preview
      */

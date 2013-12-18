@@ -1340,12 +1340,14 @@ private:
      * @param text the text being parsed
      * @param textOffset the starting offset into the text. On output
      *                   will be set to the offset of the character after the match
-     * @param lenient <code>TRUE</code> if the parse is lenient, <code>FALSE</code> otherwise.
+     * @param whitespaceLenient <code>TRUE</code> if whitespace parse is lenient, <code>FALSE</code> otherwise.
+     * @param partialMatchLenient <code>TRUE</code> if partial match parse is lenient, <code>FALSE</code> otherwise.
      *
      * @return <code>TRUE</code> if the literal text could be matched, <code>FALSE</code> otherwise.
      */
     static UBool matchLiterals(const UnicodeString &pattern, int32_t &patternOffset,
-                               const UnicodeString &text, int32_t &textOffset, UBool lenient);
+                               const UnicodeString &text, int32_t &textOffset, 
+                               UBool whitespaceLenient, UBool partialMatchLenient);
     
     /**
      * Private member function that converts the parsed date strings into
