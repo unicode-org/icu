@@ -3927,6 +3927,7 @@ icu4j/main/classes/core/src/com/ibm/icu/impl/CharacterIteratorWrapper.java svneo
 icu4j/main/classes/core/src/com/ibm/icu/impl/CurrencyData.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/DateNumberFormat.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/Differ.java svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4j/main/classes/core/src/com/ibm/icu/impl/DontCareFieldPosition.java -text
 icu4j/main/classes/core/src/com/ibm/icu/impl/Grego.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICUBinary.java svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4j/main/classes/core/src/com/ibm/icu/impl/ICUBinaryStream.java svneol=native#text/plain%3Bcharset%3Dutf-8

@@ -163,6 +163,11 @@ public class MeasureUnitTest extends TestFmwk {
             assertSame("Identity check", expected, actual);
         }
     }
+    
+    public void testFormatMeasureSingleArg() {
+        MeasureFormat mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
+        assertEquals("", "5 meters", mf.format(new Measure(5, MeasureUnit.METER)));
+    }
 
     public void testMultiples() {
         ULocale russia = new ULocale("ru");
