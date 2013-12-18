@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2012, International Business Machines Corporation and
+ * Copyright (c) 1997-2013, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -57,6 +57,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(26,Test5554)
         CASE(27,Test9237)
         CASE(28,TestParsing)
+        CASE(29,TestT10334)
         default: name = ""; break;
     }
 }
@@ -1523,6 +1524,63 @@ void DateFormatRegressionTest::TestParsing(void) {
     }
 
     delete cal;
+}
+
+void DateFormatRegressionTest::TestT10334(void) {
+    UErrorCode status = U_ZERO_ERROR;
+    UnicodeString pattern("'--: 'EEE-WW-MMMM-yyyy");
+    UnicodeString text("--mon-02-march-2011");
+    SimpleDateFormat format(pattern, status);
+
+    format.setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, FALSE, status);
+    format.parse(text, status);
+    if (!U_FAILURE(status)) {
+        errln("parse partial match did NOT fail in strict mode", u_errorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    format.setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, TRUE, status);
+    format.parse(text, status);
+    if (U_FAILURE(status)) {
+        errln("parse partial match failure in lenient mode", u_errorName(status));
+    }
+
+    status = U_ZERO_ERROR;
+    pattern = UnicodeString("YYYY MM dd");
+    text =    UnicodeString("2013 12 10");
+    format.applyPattern(pattern);
+    UDate referenceDate = format.parse(text, status);
+
+    FieldPosition fp(0);
+    UnicodeString formattedString("");
+    pattern = UnicodeString("YYYY LL dd ee cc qq QQ");
+    format.applyPattern(pattern);
+    format.format(referenceDate, formattedString, fp, status);
+    logln("ref date: " + formattedString);
+
+
+    char patternArray[] = "YYYY LLL dd eee ccc qqq QQQ";
+    pattern = UnicodeString(patternArray);
+    text = UnicodeString("2013 12 10 03 3 04 04");
+    status = U_ZERO_ERROR;
+    format.setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, TRUE, status);
+    format.applyPattern(pattern);
+    ParsePosition pp(0);
+    format.parse(text, pp);
+    int32_t errorIdx = pp.getErrorIndex();
+    if (errorIdx != -1) {
+        char buffer[256];
+        _snprintf(buffer, 256, "numeric parse error at[%d] on pattern char[%s]", errorIdx, &patternArray[errorIdx]);
+        errln(buffer);
+    }
+
+    status = U_ZERO_ERROR;
+    format.setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, FALSE, status);
+    format.parse(text, status);
+    if (!U_FAILURE(status)) {
+        errln("numeric parse did NOT fail in strict mode", u_errorName(status));
+    }
+
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
