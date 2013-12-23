@@ -265,6 +265,7 @@ nl{
         iu{"Inuktitut"}
         ja{"Japans"}
         jbo{"Lojban"}
+        jgo{"Ngomba"}
         jmc{"Machame"}
         jpr{"Judeo-Perzisch"}
         jrb{"Judeo-Arabisch"}
@@ -325,6 +326,7 @@ nl{
         lez{"Lezgisch"}
         lg{"Ganda"}
         li{"Limburgs"}
+        lkt{"Lakota"}
         ln{"Lingala"}
         lo{"Laotiaans"}
         lol{"Mongo"}
@@ -355,6 +357,7 @@ nl{
         mg{"Malagasisch"}
         mga{"Middeliers"}
         mgh{"Makhuwa-Meetto"}
+        mgo{"Meta'"}
         mh{"Marshallees"}
         mi{"Maori"}
         mic{"Mi'kmaq"}
@@ -451,6 +454,7 @@ nl{
         rm{"Reto-Romaans"}
         rn{"Kirundi"}
         ro{"Roemeens"}
+        ro_MD{"Moldavisch"}
         roa{"Romaanse taal"}
         rof{"Rombo"}
         rom{"Romani"}
@@ -949,7 +953,7 @@ nl{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles-romanisering"}
     }
-    Version{"2.0.93.8"}
+    Version{"2.0.95.37"}
     codePatterns{
         language{"Taal: {0}"}
         script{"Schrift: {0}"}

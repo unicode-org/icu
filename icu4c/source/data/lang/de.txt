@@ -265,6 +265,7 @@ de{
         iu{"Inuktitut"}
         ja{"Japanisch"}
         jbo{"Lojban"}
+        jgo{"Ngomba"}
         jmc{"Machame"}
         jpr{"Jüdisch-Persisch"}
         jrb{"Jüdisch-Arabisch"}
@@ -325,6 +326,7 @@ de{
         lez{"Lesgisch"}
         lg{"Ganda-Sprache"}
         li{"Limburgisch"}
+        lkt{"Lakota"}
         ln{"Lingala"}
         lo{"Laotisch"}
         lol{"Mongo"}
@@ -355,6 +357,7 @@ de{
         mg{"Malagassi-Sprache"}
         mga{"Mittelirisch"}
         mgh{"Makhuwa-Meetto"}
+        mgo{"Meta'"}
         mh{"Marschallesisch"}
         mi{"Maori"}
         mic{"Micmac-Sprache"}
@@ -451,6 +454,7 @@ de{
         rm{"Rätoromanisch"}
         rn{"Rundi-Sprache"}
         ro{"Rumänisch"}
+        ro_MD{"Moldauisch"}
         roa{"Romanische Sprache"}
         rof{"Rombo"}
         rom{"Romani"}
@@ -886,7 +890,7 @@ de{
         VALENCIA{"Valencianisch"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"Sprache: {0}"}
         script{"Schrift: {0}"}

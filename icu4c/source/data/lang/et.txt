@@ -258,6 +258,7 @@ et{
         iu{"inuktituti"}
         ja{"jaapani"}
         jbo{"lojbani"}
+        jgo{"ngomba"}
         jmc{"machame"}
         jpr{"juudipärsia"}
         jrb{"juudiaraabia"}
@@ -348,6 +349,7 @@ et{
         mg{"malagassi"}
         mga{"keskiiri"}
         mgh{"makhuwa-meetto"}
+        mgo{"meta'"}
         mh{"maršalli"}
         mi{"maoori"}
         mic{"mikmaki"}
@@ -443,6 +445,7 @@ et{
         rm{"retoromaani"}
         rn{"rundi"}
         ro{"rumeenia"}
+        ro_MD{"moldova"}
         roa{"romaani keel"}
         rof{"rombo"}
         rom{"mustlaskeel"}
@@ -860,7 +863,7 @@ et{
         VALENCIA{"valentsia"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"Keel: {0}"}
         script{"Skript: {0}"}

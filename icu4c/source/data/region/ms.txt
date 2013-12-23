@@ -231,7 +231,7 @@ ms{
         PN{"Kepulauan Pitcairn"}
         PR{"Puerto Rico"}
         PS{"Wilayah Palestin"}
-        PT{"Feringgi"}
+        PT{"Portugal"}
         PW{"Palau"}
         PY{"Paraguay"}
         QA{"Qatar"}
@@ -309,5 +309,5 @@ ms{
         PS{"Palestin"}
         US{"A.S"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.14"}
 }

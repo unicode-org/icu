@@ -147,7 +147,6 @@ sv{
                 }
             }
             symbols{
-                currencyDecimal{":"}
                 decimal{","}
                 exponential{"×10^"}
                 group{" "}
@@ -162,7 +161,7 @@ sv{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.66"}
     calendar{
         buddhist{
             eras{

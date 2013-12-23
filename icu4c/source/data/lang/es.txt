@@ -264,6 +264,7 @@ es{
         iu{"inuktitut"}
         ja{"japonés"}
         jbo{"lojban"}
+        jgo{"ngomba"}
         jmc{"machame"}
         jpr{"judeo-persa"}
         jrb{"judeo-árabe"}
@@ -451,6 +452,7 @@ es{
         rm{"retorrománico"}
         rn{"kiroundi"}
         ro{"rumano"}
+        ro_MD{"moldavo"}
         roa{"lengua romance"}
         rof{"rombo"}
         rom{"romaní"}
@@ -859,7 +861,7 @@ es{
         VALENCIA{"Valenciano"}
         WADEGILE{"Romanización Wade-Giles"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.64"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Dialecto: {0}"}

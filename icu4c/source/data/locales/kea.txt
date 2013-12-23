@@ -11,15 +11,15 @@
  */
 kea{
     AuxExemplarCharacters{
-        "[á à ă â å ä ã ā æ c ç é è ĕ ê ë ẽ ē h í ì ĭ î ï ĩ ī ñ ó ò ŏ ô ö õ ø ō œ q {"
-        "rr} ú ù ŭ û ü ũ ū w y ÿ]"
+        "[á à ă â å ä ã ā æ c ç é è ĕ ê ë ẽ ē í ì ĭ î ï ĩ ī {n\u0308} ó ò ŏ ô ö õ ø ō"
+        " œ q {rr} ú ù ŭ û ü ũ ū w ÿ]"
     }
     Ellipsis{
         final{"{0}…"}
         initial{"…{0}"}
         medial{"{0}…{1}"}
     }
-    ExemplarCharacters{"[a b d {dj} e f g i j k l {lh} m n {n\u0308} {nh} o p r s t {tx} u v x z]"}
+    ExemplarCharacters{"[a b d {dj} e f g h i j k l {lh} m n ñ {nh} o p r s t {tx} u v x y z]"}
     ExemplarCharactersIndex{"[A B D E F G H I J K L M N O P R S T U V X Z]"}
     LocaleScript{
         "Latn",
@@ -78,7 +78,7 @@ kea{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.15"}
     calendar{
         generic{
             DateTimePatterns{

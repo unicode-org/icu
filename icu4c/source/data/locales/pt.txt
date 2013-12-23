@@ -162,7 +162,7 @@ pt{
         }
         native{"latn"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.37"}
     calendar{
         buddhist{
             eras{
@@ -1181,6 +1181,10 @@ pt{
             1,
         }
         languages:intvector{
+            1,
+            1,
+        }
+        tense:intvector{
             1,
             1,
         }

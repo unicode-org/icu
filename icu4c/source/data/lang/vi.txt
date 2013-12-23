@@ -259,6 +259,7 @@ vi{
         iu{"Tiếng Inuktitut"}
         ja{"Tiếng Nhật"}
         jbo{"Tiếng Lojban"}
+        jgo{"Tiếng Ngomba"}
         jmc{"Tiếng Machame"}
         jpr{"Tiếng Judeo-Ba Tư"}
         jrb{"Tiếng Judeo-Ả Rập"}
@@ -348,6 +349,7 @@ vi{
         mg{"Tiếng Malagasy"}
         mga{"Tiếng Ai-len Trung cổ"}
         mgh{"Tiếng Makhuwa-Meetto"}
+        mgo{"Tiếng Meta'"}
         mh{"Tiếng Marshall"}
         mi{"Tiếng Maori"}
         mic{"Tiếng Micmac"}
@@ -444,6 +446,7 @@ vi{
         rm{"Tiếng Romansh"}
         rn{"Tiếng Rundi"}
         ro{"Tiếng Romania"}
+        ro_MD{"Tiếng Moldova"}
         roa{"Ngôn ngữ Roman"}
         rof{"Tiếng Rombo"}
         rom{"Tiếng Rumani"}
@@ -952,7 +955,7 @@ vi{
         VALENCIA{"Tiếng Valencia"}
         WADEGILE{"La Mã hóa Wade-Giles"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"Ngôn ngữ: {0}"}
         script{"Chữ viết: {0}"}
