@@ -609,6 +609,7 @@ Package::readPackage(const char *filename) {
                 exit(U_INVALID_FORMAT_ERROR);
             }
             memcpy(pkgPrefix, s, prefixLength);
+            pkgPrefix[prefixLength]=0;
             memcpy(prefix, s, ++prefixLength);  // include the /
         } else {
             // Use the package basename as prefix.
