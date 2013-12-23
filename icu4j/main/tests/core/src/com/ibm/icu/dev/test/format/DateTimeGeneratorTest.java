@@ -449,7 +449,7 @@ public class DateTimeGeneratorTest extends TestFmwk {
         new String[] {"MMMd", "13 \u044F\u043D\u0432."},
         new String[] {"MMMMd", "13 \u044F\u043D\u0432\u0430\u0440\u044F"},
         new String[] {"yQQQ", "1-\u0439 \u043A\u0432. 1999 \u0433."},
-        new String[] {"hhmm", "11:58 \u043F\u043E\u0441\u043B\u0435 \u043F\u043E\u043B\u0443\u0434\u043D\u044F"},
+        new String[] {"hhmm", "11:58 PM"},
         new String[] {"HHmm", "23:58"},
         new String[] {"jjmm", "23:58"},
         new String[] {"mmss", "58:59"},
