@@ -157,7 +157,7 @@ bg{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     calendar{
         generic{
             DateTimePatterns{
@@ -200,7 +200,6 @@ bg{
                 yyyy{"y 'г'. G"}
                 yyyyM{"M.y 'г'. G"}
                 yyyyMEd{"E, d.MM.y 'г'. G"}
-                yyyyMM{"MM.y G"}
                 yyyyMMM{"MMM y 'г'. G"}
                 yyyyMMMEd{"E, d MMM y 'г'. G"}
                 yyyyMMMM{"MMMM y 'г'. G"}
@@ -251,21 +250,21 @@ bg{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"H – H"}
+                    a{"h a – h a"}
                     h{"h-h a"}
                 }
                 hm{
-                    a{"H:mm – H:mm"}
+                    a{"h:mm a – h:mm a"}
                     h{"h:mm-h:mm a"}
                     m{"h:mm-h:mm a"}
                 }
                 hmv{
-                    a{"H:mm – H:mm v"}
+                    a{"h:mm a – h:mm a v"}
                     h{"h:mm-h:mm a v"}
                     m{"h:mm-h:mm a v"}
                 }
                 hv{
-                    a{"H – H v"}
+                    a{"h a – h a v"}
                     h{"h-h a v"}
                 }
                 y{
@@ -357,7 +356,6 @@ bg{
                 y{"y 'г'."}
                 yM{"M.y 'г'."}
                 yMEd{"E, d.MM.y 'г'."}
-                yMM{"MM.y 'г'."}
                 yMMM{"MMM y 'г'."}
                 yMMMEd{"E, d MMM y 'г'."}
                 yMMMM{"MMMM y 'г'."}
@@ -500,22 +498,22 @@ bg{
                 }
                 fallback{"{0} – {1}"}
                 h{
-                    a{"H – H"}
-                    h{"H – H"}
+                    a{"h a – h a"}
+                    h{"h-h a"}
                 }
                 hm{
-                    a{"H:mm – H:mm"}
-                    h{"H:mm – H:mm"}
-                    m{"H:mm – H:mm"}
+                    a{"h:mm a – h:mm a"}
+                    h{"h:mm-h:mm a"}
+                    m{"h:mm-h:mm a"}
                 }
                 hmv{
-                    a{"H:mm – H:mm v"}
-                    h{"H:mm – H:mm v"}
-                    m{"H:mm – H:mm v"}
+                    a{"h:mm a – h:mm a v"}
+                    h{"h:mm-h:mm a v"}
+                    m{"h:mm-h:mm a v"}
                 }
                 hv{
-                    a{"H – H v"}
-                    h{"H – H v"}
+                    a{"h a – h a v"}
+                    h{"h-h a v"}
                 }
                 y{
                     y{"y – y 'г'."}

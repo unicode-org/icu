@@ -164,7 +164,7 @@ tr{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.37"}
     calendar{
         buddhist{
             eras{
@@ -876,6 +876,12 @@ tr{
                     "Minguo",
                 }
             }
+        }
+    }
+    contextTransforms{
+        tense:intvector{
+            1,
+            1,
         }
     }
     delimiters{

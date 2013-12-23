@@ -264,6 +264,7 @@ ro{
         iu{"inuktitut"}
         ja{"japoneză"}
         jbo{"lojban"}
+        jgo{"ngomba"}
         jmc{"machame"}
         jpr{"iudeo-persană"}
         jrb{"iudeo-arabă"}
@@ -354,6 +355,7 @@ ro{
         mg{"malgașă"}
         mga{"irlandeză mijlocie"}
         mgh{"makhuwa-meetto"}
+        mgo{"meta'"}
         mh{"marshalleză"}
         mi{"maori"}
         mic{"micmac"}
@@ -450,6 +452,7 @@ ro{
         rm{"romanșă"}
         rn{"kirundi"}
         ro{"română"}
+        ro_MD{"moldovenească"}
         roa{"limbă romanică"}
         rof{"rombo"}
         rom{"romani"}
@@ -804,7 +807,7 @@ ro{
         SCOTLAND{"engleză standard scoțiană"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"Limbă: {0}"}
         script{"Scriere: {0}"}

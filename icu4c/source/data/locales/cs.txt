@@ -208,7 +208,7 @@ cs{
             }
         }
     }
-    Version{"2.0.92.98"}
+    Version{"2.0.95.37"}
     calendar{
         buddhist{
             eras{
@@ -832,6 +832,10 @@ cs{
         month-standalone-except-narrow:intvector{
             1,
             0,
+        }
+        tense:intvector{
+            1,
+            1,
         }
     }
     delimiters{

@@ -265,6 +265,7 @@ pl{
         iu{"inuktitut"}
         ja{"japoński"}
         jbo{"lojban"}
+        jgo{"ngombe"}
         jmc{"machame"}
         jpr{"judeoperski"}
         jrb{"judeoarabski"}
@@ -355,6 +356,7 @@ pl{
         mg{"malgaski"}
         mga{"średnioirlandzki"}
         mgh{"makua"}
+        mgo{"meta"}
         mh{"marshall"}
         mi{"maoryjski"}
         mic{"micmac"}
@@ -451,6 +453,7 @@ pl{
         rm{"retoromański"}
         rn{"rundi"}
         ro{"rumuński"}
+        ro_MD{"mołdawski"}
         roa{"romański"}
         rof{"rombo"}
         rom{"cygański"}
@@ -895,7 +898,7 @@ pl{
         VALENCIA{"walencki"}
         WADEGILE{"latynizacja Wade'a i Gilesa"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.37"}
     codePatterns{
         language{"Język: {0}"}
         script{"Pismo: {0}"}

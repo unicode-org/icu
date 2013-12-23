@@ -348,6 +348,7 @@ cs{
         mg{"malgaština"}
         mga{"irština (středověká)"}
         mgh{"makhuwa-meetto"}
+        mgo{"meta'"}
         mh{"maršálština"}
         mi{"maorština"}
         mic{"micmac"}
@@ -443,6 +444,7 @@ cs{
         rm{"rétorománština"}
         rn{"kirundština"}
         ro{"rumunština"}
+        ro_MD{"moldavština"}
         roa{"románské jazyky"}
         rof{"rombo"}
         rom{"romština"}
@@ -870,7 +872,7 @@ cs{
         SCOTLAND{"angličtina (Skotsko)"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.92.98"}
+    Version{"2.0.95.37"}
     codePatterns{
         language{"Jazyk: {0}"}
         script{"Písmo: {0}"}

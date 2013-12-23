@@ -187,7 +187,7 @@ ru{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.59"}
     calendar{
         buddhist{
             eras{
@@ -624,12 +624,12 @@ ru{
         }
         gregorian{
             AmPmMarkers{
-                "до полудня",
-                "после полудня",
+                "AM",
+                "PM",
             }
             AmPmMarkersNarrow{
-                "дп",
-                "пп",
+                "AM",
+                "PM",
             }
             DateTimePatterns{
                 "H:mm:ss zzzz",
@@ -1602,6 +1602,10 @@ ru{
             1,
         }
         script:intvector{
+            1,
+            1,
+        }
+        tense:intvector{
             1,
             1,
         }
