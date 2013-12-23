@@ -3131,8 +3131,8 @@ public class NumberFormatTest extends com.ibm.icu.dev.test.TestFmwk {
         String[] DATA = {
                 "es", "CO", "", "1.250,75",
                 "es", "CR", "", "1.250,75",
-                "es", "ES", "", "1\u00A0250,75",
-                "es", "GQ", "", "1\u00A0250,75",
+                "es", "ES", "", "1.250,75",
+                "es", "GQ", "", "1.250,75",
                 "es", "MX", "", "1,250.75",
                 "es", "US", "", "1,250.75",
                 "es", "VE", "", "1.250,75",
