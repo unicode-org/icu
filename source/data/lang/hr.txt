@@ -265,6 +265,7 @@ hr{
         iu{"inuktitut"}
         ja{"japanski"}
         jbo{"lojban"}
+        jgo{"ngomba"}
         jmc{"machame"}
         jpr{"judejsko-perzijski"}
         jrb{"judejsko-arapski"}
@@ -355,6 +356,7 @@ hr{
         mg{"malgaški"}
         mga{"irski, srednji"}
         mgh{"makhuwa-meetto"}
+        mgo{"meta'"}
         mh{"maršalski"}
         mi{"maorski"}
         mic{"micmac"}
@@ -451,6 +453,7 @@ hr{
         rm{"romanš"}
         rn{"rundi"}
         ro{"rumunjski"}
+        ro_MD{"moldavski"}
         roa{"romanski"}
         rof{"rombo"}
         rom{"romski"}
@@ -928,7 +931,7 @@ hr{
         VALENCIA{"valencijski"}
         WADEGILE{"Wade-Giles romanizacija"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.37"}
     codePatterns{
         language{"Jezik: {0}"}
         script{"Pismo: {0}"}

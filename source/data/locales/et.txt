@@ -157,7 +157,7 @@ et{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     calendar{
         generic{
             DateTimePatterns{
@@ -261,7 +261,7 @@ et{
                     m{"h:mm–h:mm a"}
                 }
                 hmv{
-                    a{"HH.mma–HH.mma v"}
+                    a{"h:mm a – h:mm a v"}
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
                 }
@@ -510,7 +510,7 @@ et{
                     m{"h:mm–h:mm a"}
                 }
                 hmv{
-                    a{"HH.mma–HH.mma v"}
+                    a{"h:mm a – h:mm a v"}
                     h{"h:mm–h:mm a v"}
                     m{"h:mm–h:mm a v"}
                 }

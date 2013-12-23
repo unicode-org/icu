@@ -164,7 +164,7 @@ nl{
             }
         }
     }
-    Version{"2.0.93.8"}
+    Version{"2.0.95.37"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -2058,6 +2058,10 @@ nl{
             1,
         }
         month-standalone-except-narrow:intvector{
+            1,
+            1,
+        }
+        tense:intvector{
             1,
             1,
         }

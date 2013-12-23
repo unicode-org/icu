@@ -265,6 +265,7 @@ ca{
         iu{"inuktitut"}
         ja{"japonès"}
         jbo{"lojban"}
+        jgo{"ngomba"}
         jmc{"machame"}
         jpr{"judeopersa"}
         jrb{"judeoàrab"}
@@ -325,6 +326,7 @@ ca{
         lez{"lesguià"}
         lg{"ganda"}
         li{"limburguès"}
+        lkt{"lakota"}
         ln{"lingala"}
         lo{"laosià"}
         lol{"mongo"}
@@ -355,6 +357,7 @@ ca{
         mg{"malgaix"}
         mga{"gaèlic irlandès mitjà"}
         mgh{"makhuwa-metto"}
+        mgo{"meta'"}
         mh{"marshallès"}
         mi{"maori"}
         mic{"micmac"}
@@ -451,6 +454,7 @@ ca{
         rm{"retoromànic"}
         rn{"rundi"}
         ro{"romanès"}
+        ro_MD{"moldau"}
         roa{"llengua romànica"}
         rof{"rombo"}
         rom{"romaní"}
@@ -960,7 +964,7 @@ ca{
         VALLADER{"baix engiadinès"}
         WADEGILE{"romanització Wade-Giles"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"Idioma: {0}"}
         script{"Escriptura: {0}"}

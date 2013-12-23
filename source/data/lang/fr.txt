@@ -326,6 +326,7 @@ fr{
         lez{"lezghien"}
         lg{"ganda"}
         li{"limbourgeois"}
+        lkt{"lakota"}
         ln{"lingala"}
         lo{"lao"}
         lol{"mongo"}
@@ -453,6 +454,7 @@ fr{
         rm{"romanche"}
         rn{"roundi"}
         ro{"roumain"}
+        ro_MD{"moldave"}
         roa{"langue romane"}
         rof{"rombo"}
         rom{"tzigane"}
@@ -898,7 +900,7 @@ fr{
         VALENCIA{"valencien"}
         WADEGILE{"Wade-Giles"}
     }
-    Version{"2.0.93.10"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"langue : {0}"}
         script{"écriture : {0}"}

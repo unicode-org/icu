@@ -181,7 +181,7 @@ root{
         }
         native{"latn"}
     }
-    Version{"2.0.93.8"}
+    Version{"2.0.95.34"}
     calendar{
         buddhist{
             AmPmMarkers:alias{"/LOCALE/calendar/gregorian/AmPmMarkers"}
@@ -1197,7 +1197,7 @@ root{
             dayNames:alias{"/LOCALE/calendar/gregorian/dayNames"}
             eras{
                 abbreviated{
-                    "SAKA",
+                    "Saka",
                 }
                 narrow:alias{"/LOCALE/calendar/indian/eras/abbreviated"}
                 wide:alias{"/LOCALE/calendar/indian/eras/abbreviated"}

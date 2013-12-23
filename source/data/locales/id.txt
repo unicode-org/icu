@@ -134,7 +134,7 @@ id{
             }
         }
     }
-    Version{"2.0.93.8"}
+    Version{"2.0.95.60"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -1803,6 +1803,12 @@ id{
                     "R.O.C.",
                 }
             }
+        }
+    }
+    contextTransforms{
+        tense:intvector{
+            1,
+            1,
         }
     }
     delimiters{

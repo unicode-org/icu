@@ -166,7 +166,7 @@ am{
         native{"latn"}
         traditional{"ethi"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     calendar{
         ethiopic{
             monthNames{
@@ -326,18 +326,18 @@ am{
             }
             intervalFormats{
                 H{
-                    H{"hh–hh a"}
+                    H{"HH–HH"}
                 }
                 Hm{
-                    H{"hh:mm–hh:mm a"}
-                    m{"hh:mm–hh:mm a"}
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
-                    H{"hh:mm–hh:mm a v"}
-                    m{"hh:mm–hh:mm a v"}
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
                 }
                 Hv{
-                    H{"hh–hh a v"}
+                    H{"HH–HH v"}
                 }
                 M{
                     M{"M–M"}
@@ -570,18 +570,18 @@ am{
             }
             intervalFormats{
                 H{
-                    H{"hh–hh a"}
+                    H{"HH–HH"}
                 }
                 Hm{
-                    H{"hh:mm–hh:mm a"}
-                    m{"hh:mm–hh:mm a"}
+                    H{"HH:mm–HH:mm"}
+                    m{"HH:mm–HH:mm"}
                 }
                 Hmv{
-                    H{"hh:mm–hh:mm a v"}
-                    m{"hh:mm–hh:mm a v"}
+                    H{"HH:mm–HH:mm v"}
+                    m{"HH:mm–HH:mm v"}
                 }
                 Hv{
-                    H{"hh–hh a v"}
+                    H{"HH–HH v"}
                 }
                 M{
                     M{"M–M"}

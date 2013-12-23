@@ -165,7 +165,7 @@ hi{
         }
         native{"deva"}
     }
-    Version{"2.0.92.96"}
+    Version{"2.0.95.34"}
     calendar{
         ethiopic{
             monthNames{
@@ -194,8 +194,8 @@ hi{
                 "h:mm:ss a z",
                 "h:mm:ss a",
                 "h:mm a",
-                "EEEE, d MMMM Gy",
-                "d MMMM Gy",
+                "EEEE, d MMMM G y",
+                "d MMMM G y",
                 "d MMM, G y",
                 "d-M-y G",
                 "{1}, {0}",
@@ -206,10 +206,10 @@ hi{
             }
             availableFormats{
                 Ed{"d E"}
-                Gy{"Gy"}
-                GyMMM{"MMM Gy"}
-                GyMMMEd{"E, d MMM Gy"}
-                GyMMMd{"d MMM Gy"}
+                Gy{"G y"}
+                GyMMM{"MMM G y"}
+                GyMMMEd{"E, d MMM G y"}
+                GyMMMd{"d MMM G y"}
                 H{"HH"}
                 Hm{"HH:mm"}
                 Hms{"HH:mm:ss"}
@@ -225,17 +225,17 @@ hi{
                 hm{"h:mm a"}
                 hms{"h:mm:ss a"}
                 ms{"mm:ss"}
-                y{"Gy"}
+                y{"G y"}
                 yyyy{"G y"}
                 yyyyM{"M/y GGGGG"}
                 yyyyMEd{"E, d/M/y G"}
-                yyyyMMM{"MMM Gy"}
-                yyyyMMMEd{"E, d MMM Gy"}
-                yyyyMMMd{"d MMM Gy"}
+                yyyyMMM{"MMM G y"}
+                yyyyMMMEd{"E, d MMM G y"}
+                yyyyMMMd{"d MMM G y"}
                 yyyyMMdd{"dd-MM-y G"}
                 yyyyMd{"d/M/y G"}
-                yyyyQQQ{"QQQ Gy"}
-                yyyyQQQQ{"QQQQ Gy"}
+                yyyyQQQ{"QQQ G y"}
+                yyyyQQQQ{"QQQQ G y"}
             }
             intervalFormats{
                 H{

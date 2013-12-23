@@ -265,6 +265,7 @@ id{
         iu{"Inuktitut"}
         ja{"Jepang"}
         jbo{"Lojban"}
+        jgo{"Ngomba"}
         jmc{"Machame"}
         jpr{"Ibrani-Persia"}
         jrb{"Ibrani-Arab"}
@@ -355,6 +356,7 @@ id{
         mg{"Malagasi"}
         mga{"Irlandia Abad Pertengahan"}
         mgh{"Makhuwa-Meetto"}
+        mgo{"meta'"}
         mh{"Marshall"}
         mi{"Maori"}
         mic{"Mikmak"}
@@ -451,6 +453,7 @@ id{
         rm{"Reto-Roman"}
         rn{"Rundi"}
         ro{"Rumania"}
+        ro_MD{"Moldavia"}
         roa{"Rumpun Bahasa Roman"}
         rof{"Rombo"}
         rom{"Romani"}
@@ -944,7 +947,7 @@ id{
         VALENCIA{"Valencia"}
         WADEGILE{"Wade-Giles Latin"}
     }
-    Version{"2.0.93.8"}
+    Version{"2.0.95.60"}
     codePatterns{
         language{"Bahasa: {0}"}
         script{"Skrip: {0}"}
