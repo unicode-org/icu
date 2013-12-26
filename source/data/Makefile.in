@@ -109,7 +109,7 @@ TOOLDIR=$(top_builddir)/tools
 .PHONY : all all-local all-recursive install install-local install-files	\
 install-recursive clean clean-local clean-recursive distclean		\
 distclean-local distclean-recursive dist dist-local dist-recursive	\
-check check-local check-recursive build-local clean-resindex build-dir icudata.jar	\
+check check-local check-recursive clean-resindex icudata.jar	\
 check-exhaustive
 
 ## Clear suffix list
@@ -139,6 +139,7 @@ clean-map:
 	-test -z *.map || $(RMV) *.map
 
 clean-local: cleanpackage cleanfiles clean-map
+	$(RMV) build-dir* build-local packagedata uni-core-data
 
 cleanfiles:
 	test -z "$(CLEANFILES)" || $(RMV) $(CLEANFILES)
@@ -186,6 +187,7 @@ endif
 else
 	$(INSTALL_DATA) $(ICUDATA_SOURCE_ARCHIVE) $(OUTDIR)
 endif
+	echo timestamp > $@
 
 ## Install ICU data.
 install-local: $(PKGDATA_LIST) ./icupkg.inc packagedata $(OS390INSTALL)
@@ -430,6 +432,7 @@ UNI_CORE_TARGET_DATA=$(UNI_CORE_DATA:%=$(BUILDDIR)/%)
 ifneq ($(INCLUDE_UNI_CORE_DATA),)
 MISC_FILES_LIST+=$(UNI_CORE_DATA)
 build-local: uni-core-data
+	echo timestamp > $@
 endif
 
 #####################################################
@@ -440,6 +443,7 @@ CLEANFILES = *~ icupkg.inc
 
 ifeq ($(ICUDATA_SOURCE_ARCHIVE),)
 build-local: build-dir $(SO_VERSION_DATA) $(ALL_FILES) $(PKGDATA_LIST) $(OS390LIST)
+	echo timestamp > $@
 $(PKGDATA_LIST): $(SRCLISTDEPS)
 	@echo "generating $@ (list of data files)"
 	@-$(RMV) $@
@@ -457,6 +461,7 @@ $(PKGDATA_LIST): $(SRCLISTDEPS)
 	done;
 else
 build-local: build-dir $(SO_VERSION_DATA) $(PKGDATA_LIST) $(OS390LIST)
+	echo timestamp > $@
 $(PKGDATA_LIST): $(SRCLISTDEPS) $(ICUDATA_SOURCE_ARCHIVE)
 ifneq ($(ICUDATA_SOURCE_IS_NATIVE_TARGET),YES)
 	@echo "Unpacking $(ICUDATA_SOURCE_ARCHIVE) and generating $@ (list of data files)"
@@ -471,6 +476,8 @@ endif
 $(BUILD_DIRS): build-dir
 
 build-dir:
+	@-$(RMV) $@
+	echo timestamp > $@.tmp
 	@list='$(BUILD_DIRS)'; \
 	for dir in $$list; do \
 	  if ! test -d $$dir; then \
@@ -478,6 +485,7 @@ build-dir:
 	    $(MKINSTALLDIRS) $(BUILD_DIRS); \
 	  fi; \
 	done
+	mv $@.tmp $@
 
 # The | is an order-only prerequisite. This helps when the -j option is used,
 # and we don't want the files to be built before the directories are built.
@@ -781,6 +789,7 @@ $(BUILDDIR)/$(INDEX_NAME).res: $(INDEX_FILE) $(TOOLBINDIR)/genrb$(TOOLEXEEXT)
 # when updating the Unicode data.
 uni-core-data: build-dir $(UNI_CORE_TARGET_DATA)
 	@echo Unicode .icu files built to $(BUILDDIR)
+	echo timestamp > $@
 
 # Build the ICU4J icudata.jar.
 # Command line:
