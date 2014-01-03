@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation
+ * Copyright (c) 1997-2014, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
 
@@ -2231,7 +2231,8 @@ void TimeZoneTest::TestGetRegion()
         {"Europe/Helsinki",                 "FI"},
         {"Europe/Mariehamn",                "AX"},  // Link Europe/Helsinki, but in zone.tab
         {"Asia/Riyadh",                     "SA"},
-        {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not in zone.tab
+        // tz file solar87 was removed from tzdata2013i
+        // {"Asia/Riyadh87",                   "001"}, // this should be "SA" actually, but not in zone.tab
         {"Etc/Unknown",                     0},  // CLDR canonical, but not a sysmte zone ID
         {"bogus",                           0},  // bogus
         {"GMT+08:00",                       0},  // a custom ID, not a system zone ID
