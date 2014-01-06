@@ -1,5 +1,5 @@
 /*
- *   Copyright (C) 1996-2013, International Business Machines
+ *   Copyright (C) 1996-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  */
 
@@ -1488,11 +1488,14 @@ public abstract class DateFormat extends UFormat {
      */
     public DateFormat setBooleanAttribute(BooleanAttribute key, boolean value) 
     {
-        if(booleanAttributes.contains(key) && value == false)
-            booleanAttributes.remove(key);
-        
-        if(value == true && !booleanAttributes.contains(key))
+        if(value)
+        {
             booleanAttributes.add(key);
+        }
+        else
+        {
+            booleanAttributes.remove(key);
+        }
         
         return this;
     }
