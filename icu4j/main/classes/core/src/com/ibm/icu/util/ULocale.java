@@ -1,6 +1,6 @@
 /*
 ******************************************************************************
-* Copyright (C) 2003-2013, International Business Machines Corporation and
+* Copyright (C) 2003-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 ******************************************************************************
 */
@@ -107,7 +107,7 @@ import com.ibm.icu.text.LocaleDisplayNames.DialectHandling;
  * @author Ram Viswanadha
  * @stable ICU 2.8
  */
-public final class ULocale implements Serializable {
+public final class ULocale implements Serializable, Comparable<ULocale> {
     // using serialver from jdk1.4.2_05
     private static final long serialVersionUID = 3715177670352309217L;
 
@@ -773,6 +773,85 @@ public final class ULocale implements Serializable {
             return localeID.equals(((ULocale)obj).localeID);
         }
         return false;
+    }
+
+    /**
+     * Compares two ULocale for ordering.
+     * <p><b>Note:</b> The order might change in future.</p>
+     * 
+     * @param other the ULocale to be compared.
+     * @return a negative integer, zero, or a positive integer as this ULocale is less than, equal to, or greater
+     * than the specified ULocale.
+     * @throws NullPointerException if <code>other</code> is null.
+     * 
+     * @draft ICU 53
+     * @provisional This API might change or be removed in a future release.
+     */
+    public int compareTo(ULocale other) {
+        if (this == other) {
+            return 0;
+        }
+
+        int cmp = 0;
+
+        // Language
+        cmp = getLanguage().compareTo(other.getLanguage());
+        if (cmp == 0) {
+            // Script
+            cmp = getScript().compareTo(other.getScript());
+            if (cmp == 0) {
+                // Region
+                cmp = getCountry().compareTo(other.getCountry());
+                if (cmp == 0) {
+                    // Variant
+                    cmp = getVariant().compareTo(other.getVariant());
+                    if (cmp == 0) {
+                        // Keywords
+                        Iterator<String> thisKwdItr = getKeywords();
+                        Iterator<String> otherKwdItr = other.getKeywords();
+
+                        if (thisKwdItr == null) {
+                            cmp = otherKwdItr == null ? 0 : -1;
+                        } else if (otherKwdItr == null) {
+                            cmp = 1;
+                        } else {
+                            // Both have keywords
+                            while (cmp == 0 && thisKwdItr.hasNext()) {
+                                if (!otherKwdItr.hasNext()) {
+                                    cmp = 1;
+                                    break;
+                                }
+                                // Compare keyword keys
+                                String thisKey = thisKwdItr.next();
+                                String otherKey = otherKwdItr.next();
+                                cmp = thisKey.compareTo(otherKey);
+                                if (cmp == 0) {
+                                    // Compare keyword values
+                                    String thisVal = getKeywordValue(thisKey);
+                                    String otherVal = other.getKeywordValue(otherKey);
+                                    if (thisVal == null) {
+                                        cmp = otherVal == null ? 0 : -1;
+                                    } else if (otherVal == null) {
+                                        cmp = 1;
+                                    } else {
+                                        cmp = thisVal.compareTo(otherVal);
+                                    }
+                                }
+                            }
+                            if (cmp == 0 && otherKwdItr.hasNext()) {
+                                cmp = -1;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // Normalize the result value:
+        // Note: String.compareTo() may return value other than -1, 0, 1.
+        // A value other than those are OK by the definition, but we don't want
+        // associate any semantics other than negative/zero/positive.
+        return (cmp < 0) ? -1 : ((cmp > 0) ? 1 : 0);
     }
 
     /**
