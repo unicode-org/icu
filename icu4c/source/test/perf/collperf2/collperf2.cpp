@@ -1,19 +1,23 @@
 /*
 **********************************************************************
-* Copyright (c) 2013, International Business Machines
+* Copyright (c) 2013-2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 */
 
 #include <string.h>
+#include "unicode/localpointer.h"
 #include "unicode/uperf.h"
 #include "unicode/ucol.h"
 #include "unicode/coll.h"
 #include "unicode/uiter.h"
+#include "unicode/ustring.h"
 #include "unicode/sortkey.h"
+#include "uarrsort.h"
 #include "uoptions.h"
+#include "ustr_imp.h"
 
-#define COMPATCT_ARRAY(CompactArrays, UNIT) \
+#define COMPACT_ARRAY(CompactArrays, UNIT) \
 struct CompactArrays{\
     CompactArrays(const CompactArrays & );\
     CompactArrays & operator=(const CompactArrays & );\
@@ -22,23 +26,23 @@ struct CompactArrays{\
     UNIT    * data; /*the real space to hold strings*/ \
     \
     ~CompactArrays(){free(index);free(data);} \
-    CompactArrays():data(NULL), index(NULL), count(0){ \
-    index = (int32_t *) realloc(index, sizeof(int32_t)); \
-    index[0] = 0; \
+    CompactArrays() : count(0), index(NULL), data(NULL) { \
+        index = (int32_t *) realloc(index, sizeof(int32_t)); \
+        index[0] = 0; \
     } \
     void append_one(int32_t theLen){ /*include terminal NULL*/ \
-    count++; \
-    index = (int32_t *) realloc(index, sizeof(int32_t) * (count + 1)); \
-    index[count] = index[count - 1] + theLen; \
-    data = (UNIT *) realloc(data, sizeof(UNIT) * index[count]); \
+        count++; \
+        index = (int32_t *) realloc(index, sizeof(int32_t) * (count + 1)); \
+        index[count] = index[count - 1] + theLen; \
+        data = (UNIT *) realloc(data, sizeof(UNIT) * index[count]); \
     } \
     UNIT * last(){return data + index[count - 1];} \
-    UNIT * dataOf(int32_t i){return data + index[i];} \
-    int32_t lengthOf(int i){return index[i+1] - index[i] - 1; } /*exclude terminating NULL*/  \
+    const UNIT * dataOf(int32_t i) const {return data + index[i];} \
+    int32_t lengthOf(int i) const {return index[i+1] - index[i] - 1; } /*exclude terminating NULL*/  \
 };
 
-COMPATCT_ARRAY(CA_uchar, UChar)
-COMPATCT_ARRAY(CA_char, char)
+COMPACT_ARRAY(CA_uchar, UChar)
+COMPACT_ARRAY(CA_char, char)
 
 #define MAX_TEST_STRINGS_FOR_PERMUTING 1000
 
@@ -50,19 +54,19 @@ COMPATCT_ARRAY(CA_char, char)
 class Strcoll : public UPerfFunction
 {
 public:
-    Strcoll(const UCollator* coll, CA_uchar* source, UBool useLen);
+    Strcoll(const UCollator* coll, const CA_uchar* source, UBool useLen);
     ~Strcoll();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
 
 private:
     const UCollator *coll;
-    CA_uchar *source;
+    const CA_uchar *source;
     UBool useLen;
     int32_t maxTestStrings;
 };
 
-Strcoll::Strcoll(const UCollator* coll, CA_uchar* source, UBool useLen)
+Strcoll::Strcoll(const UCollator* coll, const CA_uchar* source, UBool useLen)
     :   coll(coll),
         source(source),
         useLen(useLen)
@@ -110,19 +114,19 @@ long Strcoll::getOperationsPerIteration()
 class Strcoll_2 : public UPerfFunction
 {
 public:
-    Strcoll_2(const UCollator* coll, CA_uchar* source, CA_uchar* target, UBool useLen);
+    Strcoll_2(const UCollator* coll, const CA_uchar* source, const CA_uchar* target, UBool useLen);
     ~Strcoll_2();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
 
 private:
     const UCollator *coll;
-    CA_uchar *source;
-    CA_uchar *target;
+    const CA_uchar *source;
+    const CA_uchar *target;
     UBool useLen;
 };
 
-Strcoll_2::Strcoll_2(const UCollator* coll, CA_uchar* source, CA_uchar* target, UBool useLen)
+Strcoll_2::Strcoll_2(const UCollator* coll, const CA_uchar* source, const CA_uchar* target, UBool useLen)
     :   coll(coll),
         source(source),
         target(target),
@@ -162,19 +166,19 @@ long Strcoll_2::getOperationsPerIteration()
 class StrcollUTF8 : public UPerfFunction
 {
 public:
-    StrcollUTF8(const UCollator* coll, CA_char* source, UBool useLen);
+    StrcollUTF8(const UCollator* coll, const CA_char* source, UBool useLen);
     ~StrcollUTF8();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
 
 private:
     const UCollator *coll;
-    CA_char *source;
+    const CA_char *source;
     UBool useLen;
     int32_t maxTestStrings;
 };
 
-StrcollUTF8::StrcollUTF8(const UCollator* coll, CA_char* source, UBool useLen)
+StrcollUTF8::StrcollUTF8(const UCollator* coll, const CA_char* source, UBool useLen)
     :   coll(coll),
         source(source),
         useLen(useLen)
@@ -222,19 +226,19 @@ long StrcollUTF8::getOperationsPerIteration()
 class StrcollUTF8_2 : public UPerfFunction
 {
 public:
-    StrcollUTF8_2(const UCollator* coll, CA_char* source, CA_char* target, UBool useLen);
+    StrcollUTF8_2(const UCollator* coll, const CA_char* source, const CA_char* target, UBool useLen);
     ~StrcollUTF8_2();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
 
 private:
     const UCollator *coll;
-    CA_char *source;
-    CA_char *target;
+    const CA_char *source;
+    const CA_char *target;
     UBool useLen;
 };
 
-StrcollUTF8_2::StrcollUTF8_2(const UCollator* coll, CA_char* source, CA_char* target, UBool useLen)
+StrcollUTF8_2::StrcollUTF8_2(const UCollator* coll, const CA_char* source, const CA_char* target, UBool useLen)
     :   coll(coll),
         source(source),
         target(target),
@@ -273,18 +277,18 @@ long StrcollUTF8_2::getOperationsPerIteration()
 class GetSortKey : public UPerfFunction
 {
 public:
-    GetSortKey(const UCollator* coll, CA_uchar* source, UBool useLen);
+    GetSortKey(const UCollator* coll, const CA_uchar* source, UBool useLen);
     ~GetSortKey();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
 
 private:
     const UCollator *coll;
-    CA_uchar *source;
+    const CA_uchar *source;
     UBool useLen;
 };
 
-GetSortKey::GetSortKey(const UCollator* coll, CA_uchar* source, UBool useLen)
+GetSortKey::GetSortKey(const UCollator* coll, const CA_uchar* source, UBool useLen)
     :   coll(coll),
         source(source),
         useLen(useLen)
@@ -327,7 +331,7 @@ long GetSortKey::getOperationsPerIteration()
 class NextSortKeyPart : public UPerfFunction
 {
 public:
-    NextSortKeyPart(const UCollator* coll, CA_uchar* source, int32_t bufSize, int32_t maxIteration = -1);
+    NextSortKeyPart(const UCollator* coll, const CA_uchar* source, int32_t bufSize, int32_t maxIteration = -1);
     ~NextSortKeyPart();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
@@ -335,14 +339,14 @@ public:
 
 private:
     const UCollator *coll;
-    CA_uchar *source;
+    const CA_uchar *source;
     int32_t bufSize;
     int32_t maxIteration;
     long events;
 };
 
 // Note: maxIteration = -1 -> repeat until the end of collation key
-NextSortKeyPart::NextSortKeyPart(const UCollator* coll, CA_uchar* source, int32_t bufSize, int32_t maxIteration /* = -1 */)
+NextSortKeyPart::NextSortKeyPart(const UCollator* coll, const CA_uchar* source, int32_t bufSize, int32_t maxIteration /* = -1 */)
     :   coll(coll),
         source(source),
         bufSize(bufSize),
@@ -398,7 +402,7 @@ long NextSortKeyPart::getEventsPerIteration()
 class NextSortKeyPartUTF8 : public UPerfFunction
 {
 public:
-    NextSortKeyPartUTF8(const UCollator* coll, CA_char* source, int32_t bufSize, int32_t maxIteration = -1);
+    NextSortKeyPartUTF8(const UCollator* coll, const CA_char* source, int32_t bufSize, int32_t maxIteration = -1);
     ~NextSortKeyPartUTF8();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
@@ -406,14 +410,14 @@ public:
 
 private:
     const UCollator *coll;
-    CA_char *source;
+    const CA_char *source;
     int32_t bufSize;
     int32_t maxIteration;
     long events;
 };
 
 // Note: maxIteration = -1 -> repeat until the end of collation key
-NextSortKeyPartUTF8::NextSortKeyPartUTF8(const UCollator* coll, CA_char* source, int32_t bufSize, int32_t maxIteration /* = -1 */)
+NextSortKeyPartUTF8::NextSortKeyPartUTF8(const UCollator* coll, const CA_char* source, int32_t bufSize, int32_t maxIteration /* = -1 */)
     :   coll(coll),
         source(source),
         bufSize(bufSize),
@@ -470,19 +474,19 @@ long NextSortKeyPartUTF8::getEventsPerIteration()
 class CppCompare : public UPerfFunction
 {
 public:
-    CppCompare(const Collator* coll, CA_uchar* source, UBool useLen);
+    CppCompare(const Collator* coll, const CA_uchar* source, UBool useLen);
     ~CppCompare();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
 
 private:
     const Collator *coll;
-    CA_uchar *source;
+    const CA_uchar *source;
     UBool useLen;
     int32_t maxTestStrings;
 };
 
-CppCompare::CppCompare(const Collator* coll, CA_uchar* source, UBool useLen)
+CppCompare::CppCompare(const Collator* coll, const CA_uchar* source, UBool useLen)
     :   coll(coll),
         source(source),
         useLen(useLen)
@@ -529,19 +533,19 @@ long CppCompare::getOperationsPerIteration()
 class CppCompare_2 : public UPerfFunction
 {
 public:
-    CppCompare_2(const Collator* coll, CA_uchar* source, CA_uchar* target, UBool useLen);
+    CppCompare_2(const Collator* coll, const CA_uchar* source, const CA_uchar* target, UBool useLen);
     ~CppCompare_2();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
 
 private:
     const Collator *coll;
-    CA_uchar *source;
-    CA_uchar *target;
+    const CA_uchar *source;
+    const CA_uchar *target;
     UBool useLen;
 };
 
-CppCompare_2::CppCompare_2(const Collator* coll, CA_uchar* source, CA_uchar* target, UBool useLen)
+CppCompare_2::CppCompare_2(const Collator* coll, const CA_uchar* source, const CA_uchar* target, UBool useLen)
     :   coll(coll),
         source(source),
         target(target),
@@ -580,19 +584,19 @@ long CppCompare_2::getOperationsPerIteration()
 class CppCompareUTF8 : public UPerfFunction
 {
 public:
-    CppCompareUTF8(const Collator* coll, CA_char* source, UBool useLen);
+    CppCompareUTF8(const Collator* coll, const CA_char* source, UBool useLen);
     ~CppCompareUTF8();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
 
 private:
     const Collator *coll;
-    CA_char *source;
+    const CA_char *source;
     UBool useLen;
     int32_t maxTestStrings;
 };
 
-CppCompareUTF8::CppCompareUTF8(const Collator* coll, CA_char* source, UBool useLen)
+CppCompareUTF8::CppCompareUTF8(const Collator* coll, const CA_char* source, UBool useLen)
     :   coll(coll),
         source(source),
         useLen(useLen)
@@ -650,19 +654,19 @@ long CppCompareUTF8::getOperationsPerIteration()
 class CppCompareUTF8_2 : public UPerfFunction
 {
 public:
-    CppCompareUTF8_2(const Collator* coll, CA_char* source, CA_char* target, UBool useLen);
+    CppCompareUTF8_2(const Collator* coll, const CA_char* source, const CA_char* target, UBool useLen);
     ~CppCompareUTF8_2();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
 
 private:
     const Collator *coll;
-    CA_char *source;
-    CA_char *target;
+    const CA_char *source;
+    const CA_char *target;
     UBool useLen;
 };
 
-CppCompareUTF8_2::CppCompareUTF8_2(const Collator* coll, CA_char* source, CA_char* target, UBool useLen)
+CppCompareUTF8_2::CppCompareUTF8_2(const Collator* coll, const CA_char* source, const CA_char* target, UBool useLen)
     :   coll(coll),
         source(source),
         target(target),
@@ -707,18 +711,18 @@ long CppCompareUTF8_2::getOperationsPerIteration()
 class CppGetCollationKey : public UPerfFunction
 {
 public:
-    CppGetCollationKey(const Collator* coll, CA_uchar* source, UBool useLen);
+    CppGetCollationKey(const Collator* coll, const CA_uchar* source, UBool useLen);
     ~CppGetCollationKey();
     virtual void call(UErrorCode* status);
     virtual long getOperationsPerIteration();
 
 private:
     const Collator *coll;
-    CA_uchar *source;
+    const CA_uchar *source;
     UBool useLen;
 };
 
-CppGetCollationKey::CppGetCollationKey(const Collator* coll, CA_uchar* source, UBool useLen)
+CppGetCollationKey::CppGetCollationKey(const Collator* coll, const CA_uchar* source, UBool useLen)
     :   coll(coll),
         source(source),
         useLen(useLen)
@@ -743,6 +747,302 @@ long CppGetCollationKey::getOperationsPerIteration() {
     return source->count;
 }
 
+namespace {
+
+struct CollatorAndCounter {
+    CollatorAndCounter(const Collator& coll) : coll(coll), ucoll(NULL), counter(0) {}
+    CollatorAndCounter(const Collator& coll, const UCollator *ucoll)
+            : coll(coll), ucoll(ucoll), counter(0) {}
+    const Collator& coll;
+    const UCollator *ucoll;
+    int32_t counter;
+};
+
+int32_t U_CALLCONV
+UniStrCollatorComparator(const void* context, const void* left, const void* right) {
+    CollatorAndCounter& cc = *(CollatorAndCounter*)context;
+    const UnicodeString& leftString = **(const UnicodeString**)left;
+    const UnicodeString& rightString = **(const UnicodeString**)right;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    ++cc.counter;
+    return cc.coll.compare(leftString, rightString, errorCode);
+}
+
+}  // namespace
+
+class CollPerfFunction : public UPerfFunction {
+public:
+    CollPerfFunction(const Collator& coll, const UCollator *ucoll)
+            : coll(coll), ucoll(ucoll), ops(0) {}
+    virtual ~CollPerfFunction();
+    /** Calls call() to set the ops field, and returns that. */
+    virtual long getOperationsPerIteration();
+
+protected:
+    const Collator& coll;
+    const UCollator *ucoll;
+    int32_t ops;
+};
+
+CollPerfFunction::~CollPerfFunction() {}
+
+long CollPerfFunction::getOperationsPerIteration() {
+    UErrorCode errorCode = U_ZERO_ERROR;
+    call(&errorCode);
+    return U_SUCCESS(errorCode) ? ops : 0;
+}
+
+class UniStrCollPerfFunction : public CollPerfFunction {
+public:
+    UniStrCollPerfFunction(const Collator& coll, const UCollator *ucoll, const CA_uchar* data16)
+            : CollPerfFunction(coll, ucoll), d16(data16),
+              source(new UnicodeString*[d16->count]) {
+        for (int32_t i = 0; i < d16->count; ++i) {
+            source[i] = new UnicodeString(TRUE, d16->dataOf(i), d16->lengthOf(i));
+        }
+    }
+    virtual ~UniStrCollPerfFunction();
+
+protected:
+    const CA_uchar* d16;
+    UnicodeString** source;
+};
+
+UniStrCollPerfFunction::~UniStrCollPerfFunction() {
+    for (int32_t i = 0; i < d16->count; ++i) {
+        delete source[i];
+    }
+    delete[] source;
+}
+
+//
+// Test case sorting an array of UnicodeString pointers.
+//
+class UniStrSort : public UniStrCollPerfFunction {
+public:
+    UniStrSort(const Collator& coll, const UCollator *ucoll, const CA_uchar* data16)
+            : UniStrCollPerfFunction(coll, ucoll, data16),
+              dest(new UnicodeString*[d16->count]) {}
+    virtual ~UniStrSort();
+    virtual void call(UErrorCode* status);
+
+private:
+    UnicodeString** dest;  // aliases only
+};
+
+UniStrSort::~UniStrSort() {
+    delete[] dest;
+}
+
+void UniStrSort::call(UErrorCode* status) {
+    if (U_FAILURE(*status)) return;
+
+    CollatorAndCounter cc(coll);
+    int32_t count = d16->count;
+    memcpy(dest, source, count * sizeof(UnicodeString *));
+    uprv_sortArray(dest, count, (int32_t)sizeof(UnicodeString *),
+                   UniStrCollatorComparator, &cc, TRUE, status);
+    ops = cc.counter;
+}
+
+namespace {
+
+int32_t U_CALLCONV
+StringPieceCollatorComparator(const void* context, const void* left, const void* right) {
+    CollatorAndCounter& cc = *(CollatorAndCounter*)context;
+    const StringPiece& leftString = *(const StringPiece*)left;
+    const StringPiece& rightString = *(const StringPiece*)right;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    ++cc.counter;
+    return cc.coll.compareUTF8(leftString, rightString, errorCode);
+}
+
+int32_t U_CALLCONV
+StringPieceUCollatorComparator(const void* context, const void* left, const void* right) {
+    CollatorAndCounter& cc = *(CollatorAndCounter*)context;
+    const StringPiece& leftString = *(const StringPiece*)left;
+    const StringPiece& rightString = *(const StringPiece*)right;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    ++cc.counter;
+    return ucol_strcollUTF8(cc.ucoll,
+                            leftString.data(), leftString.length(),
+                            rightString.data(), rightString.length(), &errorCode);
+}
+
+}  // namespace
+
+class StringPieceCollPerfFunction : public CollPerfFunction {
+public:
+    StringPieceCollPerfFunction(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
+            : CollPerfFunction(coll, ucoll), d8(data8),
+              source(new StringPiece[d8->count]) {
+        for (int32_t i = 0; i < d8->count; ++i) {
+            source[i].set(d8->dataOf(i), d8->lengthOf(i));
+        }
+    }
+    virtual ~StringPieceCollPerfFunction();
+
+protected:
+    const CA_char* d8;
+    StringPiece* source;
+};
+
+StringPieceCollPerfFunction::~StringPieceCollPerfFunction() {
+    delete[] source;
+}
+
+class StringPieceSort : public StringPieceCollPerfFunction {
+public:
+    StringPieceSort(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
+            : StringPieceCollPerfFunction(coll, ucoll, data8),
+              dest(new StringPiece[d8->count]) {}
+    virtual ~StringPieceSort();
+
+protected:
+    StringPiece* dest;
+};
+
+StringPieceSort::~StringPieceSort() {
+    delete[] dest;
+}
+
+//
+// Test case sorting an array of UTF-8 StringPiece's with Collator::compareUTF8().
+//
+class StringPieceSortCpp : public StringPieceSort {
+public:
+    StringPieceSortCpp(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
+            : StringPieceSort(coll, ucoll, data8) {}
+    virtual ~StringPieceSortCpp();
+    virtual void call(UErrorCode* status);
+};
+
+StringPieceSortCpp::~StringPieceSortCpp() {}
+
+void StringPieceSortCpp::call(UErrorCode* status) {
+    if (U_FAILURE(*status)) return;
+
+    CollatorAndCounter cc(coll);
+    int32_t count = d8->count;
+    memcpy(dest, source, count * sizeof(StringPiece));
+    uprv_sortArray(dest, count, (int32_t)sizeof(StringPiece),
+                   StringPieceCollatorComparator, &cc, TRUE, status);
+    ops = cc.counter;
+}
+
+//
+// Test case sorting an array of UTF-8 StringPiece's with ucol_strcollUTF8().
+//
+class StringPieceSortC : public StringPieceSort {
+public:
+    StringPieceSortC(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
+            : StringPieceSort(coll, ucoll, data8) {}
+    virtual ~StringPieceSortC();
+    virtual void call(UErrorCode* status);
+};
+
+StringPieceSortC::~StringPieceSortC() {}
+
+void StringPieceSortC::call(UErrorCode* status) {
+    if (U_FAILURE(*status)) return;
+
+    CollatorAndCounter cc(coll, ucoll);
+    int32_t count = d8->count;
+    memcpy(dest, source, count * sizeof(StringPiece));
+    uprv_sortArray(dest, count, (int32_t)sizeof(StringPiece),
+                   StringPieceUCollatorComparator, &cc, TRUE, status);
+    ops = cc.counter;
+}
+
+//
+// Test case performing binary searches in a sorted array of UnicodeString pointers.
+//
+class UniStrBinSearch : public UniStrCollPerfFunction {
+public:
+    UniStrBinSearch(const Collator& coll, const UCollator *ucoll, const CA_uchar* data16)
+            : UniStrCollPerfFunction(coll, ucoll, data16) {}
+    virtual ~UniStrBinSearch();
+    virtual void call(UErrorCode* status);
+};
+
+UniStrBinSearch::~UniStrBinSearch() {}
+
+void UniStrBinSearch::call(UErrorCode* status) {
+    if (U_FAILURE(*status)) return;
+
+    CollatorAndCounter cc(coll);
+    int32_t count = d16->count;
+    for (int32_t i = 0; i < count; ++i) {
+        (void)uprv_stableBinarySearch((char *)source, count,
+                                      source + i, (int32_t)sizeof(UnicodeString *),
+                                      UniStrCollatorComparator, &cc);
+    }
+    ops = cc.counter;
+}
+
+class StringPieceBinSearch : public StringPieceCollPerfFunction {
+public:
+    StringPieceBinSearch(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
+            : StringPieceCollPerfFunction(coll, ucoll, data8) {}
+    virtual ~StringPieceBinSearch();
+};
+
+StringPieceBinSearch::~StringPieceBinSearch() {}
+
+//
+// Test case performing binary searches in a sorted array of UTF-8 StringPiece's
+// with Collator::compareUTF8().
+//
+class StringPieceBinSearchCpp : public StringPieceBinSearch {
+public:
+    StringPieceBinSearchCpp(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
+            : StringPieceBinSearch(coll, ucoll, data8) {}
+    virtual ~StringPieceBinSearchCpp();
+    virtual void call(UErrorCode* status);
+};
+
+StringPieceBinSearchCpp::~StringPieceBinSearchCpp() {}
+
+void StringPieceBinSearchCpp::call(UErrorCode* status) {
+    if (U_FAILURE(*status)) return;
+
+    CollatorAndCounter cc(coll);
+    int32_t count = d8->count;
+    for (int32_t i = 0; i < count; ++i) {
+        (void)uprv_stableBinarySearch((char *)source, count,
+                                      source + i, (int32_t)sizeof(StringPiece),
+                                      StringPieceCollatorComparator, &cc);
+    }
+    ops = cc.counter;
+}
+
+//
+// Test case performing binary searches in a sorted array of UTF-8 StringPiece's
+// with ucol_strcollUTF8().
+//
+class StringPieceBinSearchC : public StringPieceBinSearch {
+public:
+    StringPieceBinSearchC(const Collator& coll, const UCollator *ucoll, const CA_char* data8)
+            : StringPieceBinSearch(coll, ucoll, data8) {}
+    virtual ~StringPieceBinSearchC();
+    virtual void call(UErrorCode* status);
+};
+
+StringPieceBinSearchC::~StringPieceBinSearchC() {}
+
+void StringPieceBinSearchC::call(UErrorCode* status) {
+    if (U_FAILURE(*status)) return;
+
+    CollatorAndCounter cc(coll, ucoll);
+    int32_t count = d8->count;
+    for (int32_t i = 0; i < count; ++i) {
+        (void)uprv_stableBinarySearch((char *)source, count,
+                                      source + i, (int32_t)sizeof(StringPiece),
+                                      StringPieceUCollatorComparator, &cc);
+    }
+    ops = cc.counter;
+}
+
 
 class CollPerf2Test : public UPerfTest
 {
@@ -763,11 +1063,29 @@ private:
     CA_uchar* modData16;
     CA_char* modData8;
 
-    CA_uchar* getData16(UErrorCode &status);
-    CA_char* getData8(UErrorCode &status);
+    CA_uchar* sortedData16;
+    CA_char* sortedData8;
 
-    CA_uchar* getModData16(UErrorCode &status);
-    CA_char* getModData8(UErrorCode &status);
+    CA_uchar* randomData16;
+    CA_char* randomData8;
+
+    const CA_uchar* getData16(UErrorCode &status);
+    const CA_char* getData8(UErrorCode &status);
+
+    const CA_uchar* getModData16(UErrorCode &status);
+    const CA_char* getModData8(UErrorCode &status);
+
+    const CA_uchar* getSortedData16(UErrorCode &status);
+    const CA_char* getSortedData8(UErrorCode &status);
+
+    const CA_uchar* getRandomData16(UErrorCode &status);
+    const CA_char* getRandomData8(UErrorCode &status);
+
+    static CA_uchar* sortData16(
+            const CA_uchar* d16,
+            UComparator *cmp, const void *context,
+            UErrorCode &status);
+    static CA_char* getData8FromData16(const CA_uchar* d16, UErrorCode &status);
 
     UPerfFunction* TestStrcoll();
     UPerfFunction* TestStrcollNull();
@@ -805,6 +1123,13 @@ private:
     UPerfFunction* TestCppGetCollationKey();
     UPerfFunction* TestCppGetCollationKeyNull();
 
+    UPerfFunction* TestUniStrSort();
+    UPerfFunction* TestStringPieceSortCpp();
+    UPerfFunction* TestStringPieceSortC();
+
+    UPerfFunction* TestUniStrBinSearch();
+    UPerfFunction* TestStringPieceBinSearchCpp();
+    UPerfFunction* TestStringPieceBinSearchC();
 };
 
 CollPerf2Test::CollPerf2Test(int32_t argc, const char *argv[], UErrorCode &status) :
@@ -815,7 +1140,11 @@ CollPerf2Test::CollPerf2Test(int32_t argc, const char *argv[], UErrorCode &statu
     data16(NULL),
     data8(NULL),
     modData16(NULL),
-    modData8(NULL)
+    modData8(NULL),
+    sortedData16(NULL),
+    sortedData8(NULL),
+    randomData16(NULL),
+    randomData8(NULL)
 {
     if (U_FAILURE(status)) {
         return;
@@ -829,7 +1158,7 @@ CollPerf2Test::CollPerf2Test(int32_t argc, const char *argv[], UErrorCode &statu
     coll = ucol_open(locale, &status);
     collObj = Collator::createInstance(locale, status);
 
-    // Keyword support should be actually a part of ICU collator
+    // Keyword support should be actually a part of ICU collator, see ICU ticket #8260.
     char keyBuffer[256];
     UColAttributeValue val;
     if (uloc_getKeywordValue(locale, "strength", keyBuffer, sizeof(keyBuffer)/sizeof(keyBuffer[0]), &status)) {
@@ -963,11 +1292,15 @@ CollPerf2Test::~CollPerf2Test()
     delete data8;
     delete modData16;
     delete modData8;
+    delete sortedData16;
+    delete sortedData8;
+    delete randomData16;
+    delete randomData8;
 }
 
 #define MAX_NUM_DATA 10000
 
-CA_uchar* CollPerf2Test::getData16(UErrorCode &status)
+const CA_uchar* CollPerf2Test::getData16(UErrorCode &status)
 {
     if (U_FAILURE(status)) return NULL;
     if (data16) return data16;
@@ -990,8 +1323,7 @@ CA_uchar* CollPerf2Test::getData16(UErrorCode &status)
             continue; // skip empty/comment line
         } else {
             d16->append_one(len);
-            memcpy(d16->last(), line, len * sizeof(UChar));
-            d16->last()[len - 1] = NULL;
+            u_memcpy(d16->last(), line, len);
 
             numData++;
             if (numData >= MAX_NUM_DATA) break;
@@ -1007,66 +1339,29 @@ CA_uchar* CollPerf2Test::getData16(UErrorCode &status)
     return data16;
 }
 
-CA_char* CollPerf2Test::getData8(UErrorCode &status)
+const CA_char* CollPerf2Test::getData8(UErrorCode &status)
 {
     if (U_FAILURE(status)) return NULL;
     if (data8) return data8;
-
-    // UTF-16 -> UTF-8 conversion
-    CA_uchar* d16 = getData16(status);
-    UConverter *conv = ucnv_open("utf-8", &status);
-    if (U_FAILURE(status)) return NULL;
-
-    CA_char* d8 = new CA_char();
-    for (int32_t i = 0; i < d16->count; i++) {
-        int32_t s, t;
-
-        // get length in UTF-8
-        s = ucnv_fromUChars(conv, NULL, 0, d16->dataOf(i), d16->lengthOf(i), &status);
-        if (status == U_BUFFER_OVERFLOW_ERROR || status == U_ZERO_ERROR){
-            status = U_ZERO_ERROR;
-        } else {
-            break;
-        }
-        d8->append_one(s + 1); // plus terminal NULL
-
-        // convert to UTF-8
-        t = ucnv_fromUChars(conv, d8->last(), s, d16->dataOf(i), d16->lengthOf(i), &status);
-        if (U_FAILURE(status)) break;
-        if (t != s) {
-            status = U_INVALID_FORMAT_ERROR;
-            break;
-        }
-        d8->last()[s] = 0;
-    }
-    ucnv_close(conv);
-
-    if (U_SUCCESS(status)) {
-        data8 = d8;
-    } else {
-        delete d8;
-    }
-
-    return data8;
+    return data8 = getData8FromData16(getData16(status), status);
 }
 
-CA_uchar* CollPerf2Test::getModData16(UErrorCode &status)
+const CA_uchar* CollPerf2Test::getModData16(UErrorCode &status)
 {
     if (U_FAILURE(status)) return NULL;
     if (modData16) return modData16;
 
-    CA_uchar* d16 = getData16(status);
+    const CA_uchar* d16 = getData16(status);
     if (U_FAILURE(status)) return NULL;
 
     CA_uchar* modData16 = new CA_uchar();
 
     for (int32_t i = 0; i < d16->count; i++) {
-        UChar *s = d16->dataOf(i);
+        const UChar *s = d16->dataOf(i);
         int32_t len = d16->lengthOf(i) + 1; // including NULL terminator
 
         modData16->append_one(len);
-        memcpy(modData16->last(), s, len * sizeof(UChar));
-        modData16->last()[len - 1] = NULL;
+        u_memcpy(modData16->last(), s, len);
 
         // replacing the last character with a different character
         UChar *lastChar = &modData16->last()[len -2];
@@ -1074,7 +1369,7 @@ CA_uchar* CollPerf2Test::getModData16(UErrorCode &status)
             if (j >= d16->count) {
                 j = 0;
             }
-            UChar *s1 = d16->dataOf(j);
+            const UChar *s1 = d16->dataOf(j);
             UChar lastChar1 = s1[d16->lengthOf(j) - 1];
             if (*lastChar != lastChar1) {
                 *lastChar = lastChar1;
@@ -1086,91 +1381,184 @@ CA_uchar* CollPerf2Test::getModData16(UErrorCode &status)
     return modData16;
 }
 
-CA_char* CollPerf2Test::getModData8(UErrorCode &status)
+const CA_char* CollPerf2Test::getModData8(UErrorCode &status)
 {
     if (U_FAILURE(status)) return NULL;
     if (modData8) return modData8;
+    return modData8 = getData8FromData16(getModData16(status), status);
+}
 
-    // UTF-16 -> UTF-8 conversion
-    CA_uchar* md16 = getModData16(status);
-    UConverter *conv = ucnv_open("utf-8", &status);
+namespace {
+
+struct ArrayAndColl {
+    ArrayAndColl(const CA_uchar* a, const Collator& c) : d16(a), coll(c) {}
+    const CA_uchar* d16;
+    const Collator& coll;
+};
+
+int32_t U_CALLCONV
+U16CollatorComparator(const void* context, const void* left, const void* right) {
+    const ArrayAndColl& ac = *(const ArrayAndColl*)context;
+    const CA_uchar* d16 = ac.d16;
+    int32_t leftIndex = *(const int32_t*)left;
+    int32_t rightIndex = *(const int32_t*)right;
+    UErrorCode errorCode = U_ZERO_ERROR;
+    return ac.coll.compare(d16->dataOf(leftIndex), d16->lengthOf(leftIndex),
+                           d16->dataOf(rightIndex), d16->lengthOf(rightIndex),
+                           errorCode);
+}
+
+int32_t U_CALLCONV
+U16HashComparator(const void* context, const void* left, const void* right) {
+    const CA_uchar* d16 = (const CA_uchar*)context;
+    int32_t leftIndex = *(const int32_t*)left;
+    int32_t rightIndex = *(const int32_t*)right;
+    int32_t leftHash = ustr_hashUCharsN(d16->dataOf(leftIndex), d16->lengthOf(leftIndex));
+    int32_t rightHash = ustr_hashUCharsN(d16->dataOf(rightIndex), d16->lengthOf(rightIndex));
+    return leftHash < rightHash ? -1 : leftHash == rightHash ? 0 : 1;
+}
+
+}  // namespace
+
+const CA_uchar* CollPerf2Test::getSortedData16(UErrorCode &status) {
+    if (U_FAILURE(status)) return NULL;
+    if (sortedData16) return sortedData16;
+
+    ArrayAndColl ac(getData16(status), *collObj);
+    return sortedData16 = sortData16(ac.d16, U16CollatorComparator, &ac, status);
+}
+
+const CA_char* CollPerf2Test::getSortedData8(UErrorCode &status) {
+    if (U_FAILURE(status)) return NULL;
+    if (sortedData8) return sortedData8;
+    return sortedData8 = getData8FromData16(getSortedData16(status), status);
+}
+
+const CA_uchar* CollPerf2Test::getRandomData16(UErrorCode &status) {
+    if (U_FAILURE(status)) return NULL;
+    if (randomData16) return randomData16;
+
+    // Sort the strings by their hash codes, which should be a reasonably pseudo-random order.
+    const CA_uchar* d16 = getData16(status);
+    return randomData16 = sortData16(d16, U16HashComparator, d16, status);
+}
+
+const CA_char* CollPerf2Test::getRandomData8(UErrorCode &status) {
+    if (U_FAILURE(status)) return NULL;
+    if (randomData8) return randomData8;
+    return randomData8 = getData8FromData16(getRandomData16(status), status);
+}
+
+CA_uchar* CollPerf2Test::sortData16(const CA_uchar* d16,
+                                    UComparator *cmp, const void *context,
+                                    UErrorCode &status) {
     if (U_FAILURE(status)) return NULL;
 
-    CA_char* md8 = new CA_char();
-    for (int32_t i = 0; i < md16->count; i++) {
-        int32_t s, t;
+    LocalArray<int32_t> indexes(new int32_t[d16->count]);
+    for (int32_t i = 0; i < d16->count; ++i) {
+        indexes[i] = i;
+    }
+    uprv_sortArray(indexes.getAlias(), d16->count, 4, cmp, context, TRUE, &status);
+    if (U_FAILURE(status)) return NULL;
+
+    // Copy the strings in sorted order into a new array.
+    LocalPointer<CA_uchar> newD16(new CA_uchar());
+    for (int32_t i = 0; i < d16->count; i++) {
+        const UChar* s = d16->dataOf(i);
+        int32_t len = d16->lengthOf(i);
+        int32_t capacity = len + 1;  // including NULL terminator
+        newD16->append_one(capacity);
+        u_memcpy(newD16->last(), s, capacity);
+    }
+
+    if (U_SUCCESS(status)) {
+        return newD16.orphan();
+    } else {
+        return NULL;
+    }
+}
+
+CA_char* CollPerf2Test::getData8FromData16(const CA_uchar* d16, UErrorCode &status) {
+    if (U_FAILURE(status)) return NULL;
+
+    // UTF-16 -> UTF-8 conversion
+    LocalPointer<CA_char> d8(new CA_char());
+    for (int32_t i = 0; i < d16->count; i++) {
+        const UChar *s16 = d16->dataOf(i);
+        int32_t length16 = d16->lengthOf(i);
 
         // get length in UTF-8
-        s = ucnv_fromUChars(conv, NULL, 0, md16->dataOf(i), md16->lengthOf(i), &status);
+        int32_t length8;
+        u_strToUTF8(NULL, 0, &length8, s16, length16, &status);
         if (status == U_BUFFER_OVERFLOW_ERROR || status == U_ZERO_ERROR){
             status = U_ZERO_ERROR;
         } else {
             break;
         }
-        md8->append_one(s + 1); // plus terminal NULL
+        int32_t capacity8 = length8 + 1;  // plus terminal NULL
+        d8->append_one(capacity8);
 
         // convert to UTF-8
-        t = ucnv_fromUChars(conv, md8->last(), s, md16->dataOf(i), md16->lengthOf(i), &status);
+        u_strToUTF8(d8->last(), capacity8, NULL, s16, length16, &status);
         if (U_FAILURE(status)) break;
-        if (t != s) {
-            status = U_INVALID_FORMAT_ERROR;
-            break;
-        }
-        md8->last()[s] = 0;
     }
-    ucnv_close(conv);
 
     if (U_SUCCESS(status)) {
-        modData8 = md8;
+        return d8.orphan();
     } else {
-        delete md8;
+        return NULL;
     }
-
-    return modData8;
 }
 
 UPerfFunction*
 CollPerf2Test::runIndexedTest(int32_t index, UBool exec, const char *&name, char *par /*= NULL*/)
 {
-    switch (index) {
-        TESTCASE(0, TestStrcoll);
-        TESTCASE(1, TestStrcollNull);
-        TESTCASE(2, TestStrcollSimilar);
+    (void)par;
+    TESTCASE_AUTO_BEGIN;
 
-        TESTCASE(3, TestStrcollUTF8);
-        TESTCASE(4, TestStrcollUTF8Null);
-        TESTCASE(5, TestStrcollUTF8Similar);
+    TESTCASE_AUTO(TestStrcoll);
+    TESTCASE_AUTO(TestStrcollNull);
+    TESTCASE_AUTO(TestStrcollSimilar);
 
-        TESTCASE(6, TestGetSortKey);
-        TESTCASE(7, TestGetSortKeyNull);
+    TESTCASE_AUTO(TestStrcollUTF8);
+    TESTCASE_AUTO(TestStrcollUTF8Null);
+    TESTCASE_AUTO(TestStrcollUTF8Similar);
 
-        TESTCASE(8, TestNextSortKeyPart_4All);
-        TESTCASE(9, TestNextSortKeyPart_4x4);
-        TESTCASE(10, TestNextSortKeyPart_4x8);
-        TESTCASE(11, TestNextSortKeyPart_32All);
-        TESTCASE(12, TestNextSortKeyPart_32x2);
+    TESTCASE_AUTO(TestGetSortKey);
+    TESTCASE_AUTO(TestGetSortKeyNull);
 
-        TESTCASE(13, TestNextSortKeyPartUTF8_4All);
-        TESTCASE(14, TestNextSortKeyPartUTF8_4x4);
-        TESTCASE(15, TestNextSortKeyPartUTF8_4x8);
-        TESTCASE(16, TestNextSortKeyPartUTF8_32All);
-        TESTCASE(17, TestNextSortKeyPartUTF8_32x2);
+    TESTCASE_AUTO(TestNextSortKeyPart_4All);
+    TESTCASE_AUTO(TestNextSortKeyPart_4x4);
+    TESTCASE_AUTO(TestNextSortKeyPart_4x8);
+    TESTCASE_AUTO(TestNextSortKeyPart_32All);
+    TESTCASE_AUTO(TestNextSortKeyPart_32x2);
 
-        TESTCASE(18, TestCppCompare);
-        TESTCASE(19, TestCppCompareNull);
-        TESTCASE(20, TestCppCompareSimilar);
+    TESTCASE_AUTO(TestNextSortKeyPartUTF8_4All);
+    TESTCASE_AUTO(TestNextSortKeyPartUTF8_4x4);
+    TESTCASE_AUTO(TestNextSortKeyPartUTF8_4x8);
+    TESTCASE_AUTO(TestNextSortKeyPartUTF8_32All);
+    TESTCASE_AUTO(TestNextSortKeyPartUTF8_32x2);
 
-        TESTCASE(21, TestCppCompareUTF8);
-        TESTCASE(22, TestCppCompareUTF8Null);
-        TESTCASE(23, TestCppCompareUTF8Similar);
+    TESTCASE_AUTO(TestCppCompare);
+    TESTCASE_AUTO(TestCppCompareNull);
+    TESTCASE_AUTO(TestCppCompareSimilar);
 
-        TESTCASE(24, TestCppGetCollationKey);
-        TESTCASE(25, TestCppGetCollationKeyNull);
+    TESTCASE_AUTO(TestCppCompareUTF8);
+    TESTCASE_AUTO(TestCppCompareUTF8Null);
+    TESTCASE_AUTO(TestCppCompareUTF8Similar);
 
-    default:
-            name = ""; 
-            return NULL;
-    }
+    TESTCASE_AUTO(TestCppGetCollationKey);
+    TESTCASE_AUTO(TestCppGetCollationKeyNull);
+
+    TESTCASE_AUTO(TestUniStrSort);
+    TESTCASE_AUTO(TestStringPieceSortCpp);
+    TESTCASE_AUTO(TestStringPieceSortC);
+
+    TESTCASE_AUTO(TestUniStrBinSearch);
+    TESTCASE_AUTO(TestStringPieceBinSearchCpp);
+    TESTCASE_AUTO(TestStringPieceBinSearchC);
+
+    TESTCASE_AUTO_END;
     return NULL;
 }
 
@@ -1462,6 +1850,66 @@ UPerfFunction* CollPerf2Test::TestCppGetCollationKeyNull()
     return testCase;
 }
 
+UPerfFunction* CollPerf2Test::TestUniStrSort() {
+    UErrorCode status = U_ZERO_ERROR;
+    UPerfFunction *testCase = new UniStrSort(*collObj, coll, getRandomData16(status));
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestStringPieceSortCpp() {
+    UErrorCode status = U_ZERO_ERROR;
+    UPerfFunction *testCase = new StringPieceSortCpp(*collObj, coll, getRandomData8(status));
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestStringPieceSortC() {
+    UErrorCode status = U_ZERO_ERROR;
+    UPerfFunction *testCase = new StringPieceSortC(*collObj, coll, getRandomData8(status));
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestUniStrBinSearch() {
+    UErrorCode status = U_ZERO_ERROR;
+    UPerfFunction *testCase = new UniStrBinSearch(*collObj, coll, getSortedData16(status));
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestStringPieceBinSearchCpp() {
+    UErrorCode status = U_ZERO_ERROR;
+    UPerfFunction *testCase = new StringPieceBinSearchCpp(*collObj, coll, getSortedData8(status));
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
+UPerfFunction* CollPerf2Test::TestStringPieceBinSearchC() {
+    UErrorCode status = U_ZERO_ERROR;
+    UPerfFunction *testCase = new StringPieceBinSearchC(*collObj, coll, getSortedData8(status));
+    if (U_FAILURE(status)) {
+        delete testCase;
+        return NULL;
+    }
+    return testCase;
+}
+
 
 int main(int argc, const char *argv[])
 {
@@ -1480,5 +1928,3 @@ int main(int argc, const char *argv[])
     }
     return 0;
 }
-
-
