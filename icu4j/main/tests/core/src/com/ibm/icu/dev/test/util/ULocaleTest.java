@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- * Copyright (c) 2004-2013, International Business Machines
+ * Copyright (c) 2004-2014, International Business Machines
  * Corporation and others.  All Rights Reserved.
  **********************************************************************
  * Author: Alan Liu
@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
 import com.ibm.icu.lang.UCharacter;
@@ -4327,5 +4328,119 @@ public class ULocaleTest extends TestFmwk {
 
         // Restore back up
         Locale.setDefault(backupDefault);
+    }
+
+    //
+    // Test case for the behavior of Comparable implementation.
+    //
+    public void TestComparable() {
+        // Test strings used for creating ULocale objects.
+        // This list contains multiple different strings creating
+        // multiple equivalent locales.
+        final String[] localeStrings = {
+            "en",
+            "EN",
+            "en_US",
+            "en_GB",
+            "en_US_POSIX",
+            "en_us_posix",
+            "ar_EG",
+            "zh_Hans_CN",
+            "zh_Hant_TW",
+            "zh_Hans",
+            "zh_CN",
+            "zh_TW",
+            "th_TH@calendar=buddhist;numbers=thai",
+            "TH_TH@NUMBERS=thai;CALENDAR=buddhist",
+            "th_TH@calendar=buddhist",
+            "th_TH@calendar=gergorian",
+            "th_TH@numbers=latn",
+            "abc_def_ghi_jkl_opq",
+            "abc_DEF_ghi_JKL_opq",
+            "",
+            "und",
+            "This is a bogus locale ID",
+            "This is a BOGUS locale ID",
+            "en_POSIX",
+            "en__POSIX",
+        };
+
+        ULocale[] locales = new ULocale[localeStrings.length];
+        for (int i = 0; i < locales.length; i++) {
+            locales[i] = new ULocale(localeStrings[i]);
+        }
+
+        // compares all permutations
+        for (int i = 0; i < locales.length; i++) {
+            for (int j = i /* including the locale itself */; j < locales.length; j++) {
+                boolean eqls1 = locales[i].equals(locales[j]);
+                boolean eqls2 = locales[i].equals(locales[j]);
+
+                if (eqls1 != eqls2) {
+                    errln("FAILED: loc1.equals(loc2) and loc2.equals(loc1) return different results: loc1="
+                            + locales[i] + ", loc2=" + locales[j]);
+                }
+
+                int cmp1 = locales[i].compareTo(locales[j]);
+                int cmp2 = locales[j].compareTo(locales[i]);
+
+                if ((cmp1 == 0) != eqls1) {
+                    errln("FAILED: inconsistent equals and compareTo: loc1="
+                            + locales[i] + ", loc2=" + locales[j]);
+                }
+                if (cmp1 < 0 && cmp2 <= 0 || cmp1 > 0 && cmp2 >= 0 || cmp1 == 0 && cmp2 != 0) {
+                    errln("FAILED: loc1.compareTo(loc2) is inconsistent with loc2.compareTo(loc1): loc1="
+                            + locales[i] + ", loc2=" + locales[j]);
+                }
+            }
+        }
+
+        // Make sure ULocale objects can be sorted by the Java collection
+        // framework class without providing a Comparator, and equals/compareTo
+        // are consistent.
+
+        // The sorted locale list created from localeStrings above.
+        // Duplicated locales are removed and locale string is normalized
+        // (by the ULocale constructor).
+        final String[] sortedLocaleStrings = {
+            "",
+            "abc_DEF_GHI_JKL_OPQ",
+            "ar_EG",
+            "en",
+            "en__POSIX",
+            "en_GB",
+            "en_US",
+            "en_US_POSIX",
+            "th_TH@calendar=buddhist",
+            "th_TH@calendar=buddhist;numbers=thai",
+            "th_TH@calendar=gergorian",
+            "th_TH@numbers=latn",
+            "this is a bogus locale id",
+            "und",
+            "zh_CN",
+            "zh_TW",
+            "zh_Hans",
+            "zh_Hans_CN",
+            "zh_Hant_TW",
+        };
+
+        TreeSet<ULocale> sortedLocales = new TreeSet<ULocale>();
+        for (ULocale locale : locales) {
+            sortedLocales.add(locale);
+        }
+
+        // Check the number of unique locales
+        if (sortedLocales.size() != sortedLocaleStrings.length) {
+            errln("FAILED: Number of unique locales: " + sortedLocales.size() + ", expected: " + sortedLocaleStrings.length);
+        }
+
+        // Check the order
+        int i = 0;
+        for (ULocale loc : sortedLocales) {
+            if (!loc.toString().equals(sortedLocaleStrings[i++])) {
+                errln("FAILED: Sort order is incorrect for " + loc.toString());
+                break;
+            }
+        }
     }
 }
