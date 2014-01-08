@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-* Copyright (c) 2004-2013, International Business Machines
+* Copyright (c) 2004-2014, International Business Machines
 * Corporation and others.  All Rights Reserved.
 **********************************************************************
 * Author: Alan Liu
@@ -101,7 +101,7 @@ public class MeasureFormat extends UFormat {
     
     private final transient ImmutableNumberFormat numberFormat;
     
-    private final transient FormatWidth length;
+    private final transient FormatWidth formatWidth;
     
     // PluralRules is documented as being immutable which implies thread-safety.
     private final transient PluralRules rules;
@@ -147,7 +147,7 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        WIDE("units"), 
+        WIDE("units", ListFormatter.Style.DURATION), 
         
         /**
          * Abbreviate when possible.
@@ -155,7 +155,7 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        SHORT("unitsShort"), 
+        SHORT("unitsShort", ListFormatter.Style.DURATION_SHORT), 
         
         /**
          * Brief. Use only a symbol for the unit when possible.
@@ -163,7 +163,7 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        NARROW("unitsNarrow"),
+        NARROW("unitsNarrow", ListFormatter.Style.DURATION_SHORT),
         
         /**
          * Identical to NARROW except when formatMeasures is called with
@@ -173,42 +173,48 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        NUMERIC("unitsNarrow");
+        NUMERIC("unitsNarrow", ListFormatter.Style.DURATION_SHORT);
         
         // Be sure to update the toFormatWidth and fromFormatWidth() functions
         // when adding an enum value.
     
         final String resourceKey;
+        private final ListFormatter.Style listFormatterStyle;
     
-        private FormatWidth(String resourceKey) {
+        private FormatWidth(String resourceKey, ListFormatter.Style style) {
             this.resourceKey = resourceKey;
+            this.listFormatterStyle = style;
+        }
+        
+        ListFormatter.Style getListFormatterStyle() {
+            return listFormatterStyle;
         }
     }
     
     /**
-     * Create a format from the locale, length, and format.
+     * Create a format from the locale, formatWidth, and format.
      *
      * @param locale the locale.
-     * @param width hints how long formatted strings should be.
+     * @param formatWidth hints how long formatted strings should be.
      * @return The new MeasureFormat object.
      * @draft ICU 53
      * @provisional
      */
-    public static MeasureFormat getInstance(ULocale locale, FormatWidth width) {
-        return getInstance(locale, width, NumberFormat.getInstance(locale));
+    public static MeasureFormat getInstance(ULocale locale, FormatWidth formatWidth) {
+        return getInstance(locale, formatWidth, NumberFormat.getInstance(locale));
     }
     
     /**
-     * Create a format from the locale, length, and format.
+     * Create a format from the locale, formatWidth, and format.
      *
      * @param locale the locale.
-     * @param width hints how long formatted strings should be.
+     * @param formatWidth hints how long formatted strings should be.
      * @param format This is defensively copied.
      * @return The new MeasureFormat object.
      * @draft ICU 53
      * @provisional
      */
-    public static MeasureFormat getInstance(ULocale locale, FormatWidth width, NumberFormat format) {
+    public static MeasureFormat getInstance(ULocale locale, FormatWidth formatWidth, NumberFormat format) {
         PluralRules rules = PluralRules.forLocale(locale);
         Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat;
         NumericFormatters formatters = null;
@@ -217,7 +223,7 @@ public class MeasureFormat extends UFormat {
             unitToStyleToCountToFormat = loadLocaleData(locale, rules);
             localeToUnitToStyleToCountToFormat.put(locale, unitToStyleToCountToFormat);
         }
-        if (width == FormatWidth.NUMERIC) {
+        if (formatWidth == FormatWidth.NUMERIC) {
             formatters = localeToNumericDurationFormatters.get(locale);
             if (formatters == null) {
                 formatters = loadNumericFormatters(locale);
@@ -226,7 +232,7 @@ public class MeasureFormat extends UFormat {
         }
         return new MeasureFormat(
                 locale,
-                width,
+                formatWidth,
                 new ImmutableNumberFormat(format),
                 rules,
                 unitToStyleToCountToFormat,
@@ -331,7 +337,7 @@ public class MeasureFormat extends UFormat {
             return formatMeasure(measures[0], appendable, fieldPosition);
         }
         
-        if (length == FormatWidth.NUMERIC) {
+        if (formatWidth == FormatWidth.NUMERIC) {
             // If we have just hour, minute, or second follow the numeric
             // track.
             Number[] hms = toHMS(measures);
@@ -340,8 +346,8 @@ public class MeasureFormat extends UFormat {
             }
         }
         
-        ListFormatter listFormatter = ListFormatter.getInstance(getLocale(), 
-                length == FormatWidth.WIDE ? ListFormatter.Style.DURATION : ListFormatter.Style.DURATION_SHORT);
+        ListFormatter listFormatter = ListFormatter.getInstance(
+                getLocale(), formatWidth.getListFormatterStyle());
         String[] results = null;
         if (fieldPosition == DontCareFieldPosition.INSTANCE) {
             
@@ -365,7 +371,7 @@ public class MeasureFormat extends UFormat {
     }   
     
     /**
-     * Two MeasureFormats, a and b, are equal if and only if they have the same width,
+     * Two MeasureFormats, a and b, are equal if and only if they have the same formatWidth,
      * locale, and equal number formats.
      * @draft ICU 53
      * @provisional
@@ -402,7 +408,7 @@ public class MeasureFormat extends UFormat {
      * @provisional
      */
     public MeasureFormat.FormatWidth getWidth() {
-        return length;
+        return formatWidth;
     }
     
     /**
@@ -445,6 +451,7 @@ public class MeasureFormat extends UFormat {
         return getCurrencyFormat(ULocale.getDefault(Category.FORMAT));
     }
     
+    // This method changes the NumberFormat object as well to match the new locale.
     MeasureFormat withLocale(ULocale locale) {
         return MeasureFormat.getInstance(locale, getWidth());
     }
@@ -452,7 +459,7 @@ public class MeasureFormat extends UFormat {
     MeasureFormat withNumberFormat(NumberFormat format) {
         return new MeasureFormat(
                 getLocale(),
-                this.length,
+                this.formatWidth,
                 new ImmutableNumberFormat(format),
                 this.rules,
                 this.unitToStyleToCountToFormat,
@@ -461,27 +468,22 @@ public class MeasureFormat extends UFormat {
     
     private MeasureFormat(
             ULocale locale,
-            FormatWidth width,
+            FormatWidth formatWidth,
             ImmutableNumberFormat format,
             PluralRules rules,
             Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat,
             NumericFormatters formatters) {
         setLocale(locale, locale);
-        this.length = width;
+        this.formatWidth = formatWidth;
         this.numberFormat = format;
         this.rules = rules;
         this.unitToStyleToCountToFormat = unitToStyleToCountToFormat;
         this.numericFormatters = formatters;
     }
     
-    /**
-     * For backward compatibility only.
-     * @internal
-     * @deprecated
-     */
-    protected MeasureFormat() {
+    MeasureFormat() {
         // Make compiler happy by setting final fields to null.
-        this.length = null;
+        this.formatWidth = null;
         this.numberFormat = null;
         this.rules = null;
         this.unitToStyleToCountToFormat = null;
@@ -613,7 +615,7 @@ public class MeasureFormat extends UFormat {
         String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
 
         Map<FormatWidth, Map<String, PatternData>> styleToCountToFormat = unitToStyleToCountToFormat.get(unit);
-        Map<String, PatternData> countToFormat = styleToCountToFormat.get(length);
+        Map<String, PatternData> countToFormat = styleToCountToFormat.get(formatWidth);
         PatternData messagePatternData = countToFormat.get(keyword);
         try {
             appendable.append(messagePatternData.prefix);
@@ -674,11 +676,11 @@ public class MeasureFormat extends UFormat {
     }
     
     Object toTimeUnitProxy() {
-        return new MeasureProxy(getLocale(), length, numberFormat.get(), TIME_UNIT_FORMAT);
+        return new MeasureProxy(getLocale(), formatWidth, numberFormat.get(), TIME_UNIT_FORMAT);
     }
     
     Object toCurrencyProxy() {
-        return new MeasureProxy(getLocale(), length, numberFormat.get(), CURRENCY_FORMAT);
+        return new MeasureProxy(getLocale(), formatWidth, numberFormat.get(), CURRENCY_FORMAT);
     }
     
     private String[] formatMeasuresSlowTrack(ListFormatter listFormatter, FieldPosition fieldPosition,
@@ -827,25 +829,25 @@ public class MeasureFormat extends UFormat {
     
     private Object writeReplace() throws ObjectStreamException {
         return new MeasureProxy(
-                getLocale(), length, numberFormat.get(), MEASURE_FORMAT);
+                getLocale(), formatWidth, numberFormat.get(), MEASURE_FORMAT);
     }
     
     static class MeasureProxy implements Externalizable {
         private static final long serialVersionUID = -6033308329886716770L;
         
         private ULocale locale;
-        private FormatWidth length;
+        private FormatWidth formatWidth;
         private NumberFormat numberFormat;
         private int subClass;
         private HashMap<Object, Object> keyValues;
 
         public MeasureProxy(
                 ULocale locale,
-                FormatWidth length,
+                FormatWidth width,
                 NumberFormat numberFormat,
                 int subClass) {
             this.locale = locale;
-            this.length = length;
+            this.formatWidth = width;
             this.numberFormat = numberFormat;
             this.subClass = subClass;
             this.keyValues = new HashMap<Object, Object>();
@@ -858,7 +860,7 @@ public class MeasureFormat extends UFormat {
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeByte(0); // version
             out.writeUTF(locale.toLanguageTag());
-            out.writeByte(toFormatWidthOrdinal(length));
+            out.writeByte(toFormatWidthOrdinal(formatWidth));
             out.writeObject(numberFormat);
             out.writeByte(subClass);
             out.writeObject(keyValues);
@@ -868,7 +870,7 @@ public class MeasureFormat extends UFormat {
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
             in.readByte(); // version.
             locale = ULocale.forLanguageTag(in.readUTF());
-            length = fromFormatWidthOrdinal(in.readByte() & 0xFF);
+            formatWidth = fromFormatWidthOrdinal(in.readByte() & 0xFF);
             numberFormat = (NumberFormat) in.readObject();
             if (numberFormat == null) {
                 throw new InvalidObjectException("Missing number format.");
@@ -885,12 +887,12 @@ public class MeasureFormat extends UFormat {
         
         private TimeUnitFormat createTimeUnitFormat() throws InvalidObjectException {
             int style;
-            if (length == FormatWidth.WIDE) {
+            if (formatWidth == FormatWidth.WIDE) {
                 style = TimeUnitFormat.FULL_NAME;
-            } else if (length == FormatWidth.SHORT) {
+            } else if (formatWidth == FormatWidth.SHORT) {
                 style = TimeUnitFormat.ABBREVIATED_NAME;
             } else {
-                throw new InvalidObjectException("Bad width: " + length);
+                throw new InvalidObjectException("Bad width: " + formatWidth);
             }
             TimeUnitFormat result = new TimeUnitFormat(locale, style);
             result.setNumberFormat(numberFormat);
@@ -900,7 +902,7 @@ public class MeasureFormat extends UFormat {
         private Object readResolve() throws ObjectStreamException {
             switch (subClass) {
             case MEASURE_FORMAT:
-                return MeasureFormat.getInstance(locale, length, numberFormat);
+                return MeasureFormat.getInstance(locale, formatWidth, numberFormat);
             case TIME_UNIT_FORMAT:
                 return createTimeUnitFormat();
             case CURRENCY_FORMAT:
@@ -910,7 +912,9 @@ public class MeasureFormat extends UFormat {
             }
         }
     }
-    
+    // The next two methods must be maintained in lock step. 
+    // The int value associated with each FormatWidth value is the same for all time
+    // and must never change lest serialization breaks.
     private static FormatWidth fromFormatWidthOrdinal(int ordinal) {
         switch (ordinal) {
         case 0:
