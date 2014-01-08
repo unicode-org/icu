@@ -1,9 +1,30 @@
 #!/usr/bin/perl
 # ********************************************************************
 #  COPYRIGHT:
-#  Copyright (c) 2013, International Business Machines Corporation and
+#  Copyright (c) 2013-2014, International Business Machines Corporation and
 #  others. All Rights Reserved.
 # ********************************************************************
+
+# Variables need to be set in ../perldriver/Common.pl for where ICU is on your machine.
+# Copy Common.pl.template to Common.pl and modify it.
+#
+# Sample Common.pl "Settings by user" for a Linux out-of-source build:
+#
+# $ICULatestVersion = "collv2";
+# $ICUPreviousVersion = "52";
+#
+# $PerformanceDataPath = "/home/mscherer/svn.icudata/trunk/src/test/perf";
+#
+# $ICULatest = "/home/mscherer/svn.icu/collv2/bld";
+# $ICUPrevious = "/home/mscherer/svn.icu/trunk/bld";
+#
+# The first time around, you also need to
+#   source/test/perf/collperf2$ mkdir ../results
+# Then invoke
+#   source/test/perf/collperf2$ ./CollPerf2_r.pl
+#
+# Sample debug invocation:
+#   ~/svn.icu/trunk/dbg/test/perf/collperf2$ LD_LIBRARY_PATH=../../../lib:../../../tools/ctestfw ./collperf2 -t 5 -p 1  -L "de" -f /home/mscherer/svn.icudata/trunk/src/test/perf/collation/TestNames_Latin.txt TestStringPieceSort
 
 #use strict;
 
@@ -18,7 +39,7 @@ my $options = {
     "headers"=>"ICU".$ICUPreviousVersion." ICU".$ICULatestVersion,
     "operationIs"=>"Collator",
     "passes"=>"1",
-    "time"=>"5",
+    "time"=>"2",
     #"outputType"=>"HTML",
     "dataDir"=>$CollationDataPath,
     "outputDir"=>"../results"
@@ -32,8 +53,8 @@ if ($OnWindows) {
     $p1 = "cd ".$ICUPrevious."/bin && ".$ICUPathPrevious."/collperf2/$WindowsPlatform/Release/collperf2.exe";
     $p2 = "cd ".$ICULatest."/bin && ".$ICUPathLatest."/collperf2/$WindowsPlatform/Release/collperf2.exe";
 } else {
-    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."/source/lib:".$ICUPrevious."/source/tools/ctestfw ".$ICUPathPrevious."/collperf2/collperf2";
-    $p2 = "LD_LIBRARY_PATH=".$ICULatest."/source/lib:".$ICULatest."/source/tools/ctestfw ".$ICUPathLatest."/collperf2/collperf2";
+    $p1 = "LD_LIBRARY_PATH=".$ICUPrevious."/lib:".$ICUPrevious."/tools/ctestfw ".$ICUPrevious."/test/perf/collperf2/collperf2";
+    $p2 = "LD_LIBRARY_PATH=".$ICULatest."/lib:".$ICULatest."/tools/ctestfw ".$ICULatest."/test/perf/collperf2/collperf2";
 }
 
 my $tests = {
@@ -70,6 +91,14 @@ my $tests = {
 
     "Collator::getCollationKey/len",        ["$p1,TestCppGetCollationKey", "$p2,TestCppGetCollationKey"],
     "Collator::getCollationKey/null",       ["$p1,TestCppGetCollationKeyNull", "$p2,TestCppGetCollationKeyNull"],
+
+    "sort UnicodeString*[]: compare()",         ["$p1,TestUniStrSort", "$p2,TestUniStrSort"],
+    "sort StringPiece[]: compareUTF8()",        ["$p1,TestStringPieceSortCpp", "$p2,TestStringPieceSortCpp"],
+    "sort StringPiece[]: ucol_strcollUTF8()",   ["$p1,TestStringPieceSortC", "$p2,TestStringPieceSortC"],
+
+    "binary search UnicodeString*[]: compare()",        ["$p1,TestUniStrBinSearch", "$p2,TestUniStrBinSearch"],
+    "binary search StringPiece[]: compareUTF8()",       ["$p1,TestStringPieceBinSearchCpp", "$p2,TestStringPieceBinSearchCpp"],
+    "binary search StringPiece[]: ucol_strcollUTF8()",  ["$p1,TestStringPieceBinSearchC", "$p2,TestStringPieceBinSearchC"],
 };
 
 my $dataFiles = {
