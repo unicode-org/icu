@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/es.xml
@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/es.xml
  */
 es{
-    Version{"2.0.92.87"}
+    Version{"2.0.96.24"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abiyán"}
@@ -762,16 +762,25 @@ es{
             ld{"Hora de verano de Europa central"}
             lg{"Hora de Europa central"}
             ls{"Hora estándar de Europa central"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Hora de verano de Europa oriental"}
             lg{"Hora de Europa oriental"}
             ls{"Hora estándar de Europa oriental"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Hora de verano de Europa occidental"}
             lg{"Hora de Europa occidental"}
             ls{"Hora estándar de Europa occidental"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Hora de verano de las islas Malvinas"}
@@ -791,6 +800,7 @@ es{
         }
         "meta:GMT"{
             ls{"Hora del meridiano de Greenwich"}
+            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Hora de Galápagos"}

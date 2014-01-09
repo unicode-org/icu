@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ml.xml
@@ -367,7 +367,6 @@ ml{
         mnc{"മൻചു"}
         mni{"മണിപ്പൂരി"}
         mno{"മനോബോ ഭാഷ"}
-        mo{"മോൾഡാവിയൻ"}
         moh{"മോഹാക്"}
         mos{"മൊസ്സി"}
         mr{"മറാഠി"}
@@ -451,6 +450,7 @@ ml{
         rm{"റെയ്‌തോ-റോമൻസ്"}
         rn{"റുണ്ടി"}
         ro{"റുമേനിയൻ"}
+        ro_MD{"മോൾഡാവിയൻ"}
         roa{"റോമൻസ് ഭാഷ"}
         rof{"റോംബോ"}
         rom{"റോമനി"}
@@ -870,7 +870,7 @@ ml{
         POSIX{"കമ്പ്യൂട്ടർ"}
         REVISED{"പരിഷ്ക്കരിച്ച ലിപി"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"ഭാഷ: {0}"}
         script{"ലിപി: {0}"}

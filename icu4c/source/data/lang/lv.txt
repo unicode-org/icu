@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lv.xml
@@ -369,7 +369,6 @@ lv{
         mnc{"mandžūru"}
         mni{"manipūru"}
         mno{"manobu valodas"}
-        mo{"moldāvu"}
         moh{"mohauku"}
         mos{"mosu"}
         mr{"maratu"}
@@ -453,6 +452,7 @@ lv{
         rm{"retoromāņu"}
         rn{"rundu"}
         ro{"rumāņu"}
+        ro_MD{"moldāvu"}
         roa{"romāņu valoda"}
         rof{"rombo"}
         rom{"čigānu"}
@@ -830,7 +830,7 @@ lv{
         VALENCIA{"valensiešu"}
         WADEGILE{"Veida-Džailza romanizācija"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"Valoda: {0}"}
         script{"Rakstība: {0}"}

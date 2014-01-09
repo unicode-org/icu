@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/az.xml
@@ -316,7 +316,6 @@ az{
         mnc{"mançu dili"}
         mni{"manipüri dili"}
         mno{"manobo dili"}
-        mo{"moldavca"}
         moh{"moxak dili"}
         mos{"mosi dili"}
         mr{"marati"}
@@ -393,6 +392,7 @@ az{
         rm{"retoroman"}
         rn{"rundi dili"}
         ro{"rumın"}
+        ro_MD{"moldavca"}
         rom{"roman dili"}
         root{"rut dili"}
         ru{"rus"}
@@ -676,7 +676,7 @@ az{
             standard{"standart"}
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"Dil: {0}"}
         script{"Skript: {0}"}

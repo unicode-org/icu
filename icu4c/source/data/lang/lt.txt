@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lt.xml
@@ -367,7 +367,6 @@ lt{
         mnc{"manču"}
         mni{"manipuri"}
         mno{"manobo kalba"}
-        mo{"moldavų"}
         moh{"mohok"}
         mos{"mosi"}
         mr{"maratų"}
@@ -451,6 +450,7 @@ lt{
         rm{"retoromanų"}
         rn{"rundi"}
         ro{"rumunų"}
+        ro_MD{"moldavų"}
         roa{"romanų kalba"}
         rof{"rombo"}
         rom{"romų"}
@@ -898,7 +898,7 @@ lt{
         VALENCIA{"Valenciečiai"}
         WADEGILE{"Wade-Giles Romanization"}
     }
-    Version{"2.0.93.19"}
+    Version{"2.0.95.38"}
     codePatterns{
         language{"Kalba: {0}"}
         script{"Rašmenys: {0}"}

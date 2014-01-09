@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/supplementalData.xml
@@ -1799,7 +1799,7 @@ supplementalData:table(nofallback){
             "islamic-tbla",
         }
     }
-    cldrVersion{"24"}
+    cldrVersion{"25"}
     codeMappings{
         {
             "AA",
@@ -4500,7 +4500,9 @@ supplementalData:table(nofallback){
             }
             secondary{
                 territories{
+                    "CM",
                     "GN",
+                    "MR",
                     "SN",
                 }
             }
@@ -16581,7 +16583,7 @@ supplementalData:table(nofallback){
             86400000,
         }
         BY:intvector{
-            1,
+            2,
             1,
             7,
             0,

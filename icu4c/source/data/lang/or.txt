@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/or.xml
@@ -309,7 +309,6 @@ or{
         mnc{"ମାଞ୍ଚୁ"}
         mni{"ମଣିପୁରୀ"}
         mno{"ମନୋବୋ ଭାଷା"}
-        mo{"ମୋଲଡୋଭିଆନ୍"}
         moh{"ମୋହୌକ"}
         mos{"ମୋସି"}
         mr{"ମରାଠୀ"}
@@ -387,6 +386,7 @@ or{
         rm{"ରେହେଟୋ-ରୋମାନ୍ସ"}
         rn{"ରୁଣ୍ଡି"}
         ro{"ରୋମାନିଆନ୍"}
+        ro_MD{"ମୋଲଡୋଭିଆନ୍"}
         roa{"ରୋମାନ୍ସ ଭାଷା"}
         rom{"ରୋମାନି"}
         root{"ମୂଳ"}
@@ -650,5 +650,5 @@ or{
         Zyyy{"ସାଧାରଣ"}
         Zzzz{"ଅଞ୍ଜାତ କିମ୍ବା ଅବୈଧ ସ୍କ୍ରୀପ୍ଟ"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
 }

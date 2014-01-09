@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/en.xml
@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/en.xml
  */
 en{
-    Version{"2.0.92.87"}
+    Version{"2.0.96.5"}
     zoneStrings{
         "Africa:Sao_Tome"{
             ec{"São Tomé"}
@@ -474,6 +474,16 @@ en{
         }
         "meta:Mawson"{
             ls{"Mawson Time"}
+        }
+        "meta:Mexico_Northwest"{
+            ld{"Northwest Mexico Daylight Time"}
+            lg{"Northwest Mexico Time"}
+            ls{"Northwest Mexico Standard Time"}
+        }
+        "meta:Mexico_Pacific"{
+            ld{"Mexican Pacific Daylight Time"}
+            lg{"Mexican Pacific Time"}
+            ls{"Mexican Pacific Standard Time"}
         }
         "meta:Mongolia"{
             ld{"Ulan Bator Summer Time"}

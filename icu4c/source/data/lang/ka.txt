@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ka.xml
@@ -248,7 +248,6 @@ ka{
         mnc{"მანჯურიული"}
         mni{"მანიპური"}
         mno{"მანობო ენა"}
-        mo{"მოლდავური"}
         mr{"მარათჰი"}
         ms{"მალაიური"}
         mt{"მალტური"}
@@ -306,6 +305,7 @@ ka{
         rm{"რეტორომანული"}
         rn{"რუნდი"}
         ro{"რუმინული"}
+        ro_MD{"მოლდავური"}
         roa{"რომანული ენა"}
         rom{"ბოშური"}
         ru{"რუსული"}
@@ -603,7 +603,7 @@ ka{
             tibt{"ტიბეტური ციფრები"}
         }
     }
-    Version{"2.0.93.8"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"ენა: {0}"}
         script{"დამწერლობა: {0}"}

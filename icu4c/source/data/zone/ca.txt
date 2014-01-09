@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ca.xml
@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ca.xml
  */
 ca{
-    Version{"2.0.92.87"}
+    Version{"2.0.96.24"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -621,16 +621,25 @@ ca{
             ld{"Hora d'estiu del Centre d'Europa"}
             lg{"Hora del Centre d'Europa"}
             ls{"Hora estàndard del Centre d'Europa"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Hora d'estiu de l'Est d'Europa"}
             lg{"Hora de l'Est d'Europa"}
             ls{"Hora estàndard de l'Est d'Europa"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Hora d'estiu de l'Oest d'Europa"}
             lg{"Hora de l'Oest d'Europa"}
             ls{"Hora estàndard de l'Oest d'Europa"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Hora d'estiu de les illes Malvines"}
@@ -650,6 +659,7 @@ ca{
         }
         "meta:GMT"{
             ls{"Hora del Meridià de Greenwich"}
+            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Hora de Galápagos"}
