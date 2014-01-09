@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mt.xml
@@ -297,7 +297,6 @@ mt{
         mnc{"Manċurjan"}
         mni{"Manipuri"}
         mno{"Lingwi Manobo"}
-        mo{"Moldavjan"}
         moh{"Moħak"}
         mos{"Mossi"}
         mr{"Marati"}
@@ -371,6 +370,7 @@ mt{
         rm{"Reto-Romanz"}
         rn{"Rundi"}
         ro{"Rumen"}
+        ro_MD{"Moldavjan"}
         roa{"Romanz (Oħra)"}
         rom{"Żingaru"}
         root{"Għerq"}
@@ -531,7 +531,7 @@ mt{
     Variants{
         REVISED{"Ortografija Irriveda"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"Lingwa: {0}"}
         script{"Skritt: {0}"}

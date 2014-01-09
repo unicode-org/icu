@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ar.xml
@@ -357,7 +357,6 @@ ar{
         mnc{"المانشو"}
         mni{"المانيبري"}
         mno{"لغات مانوبو"}
-        mo{"المولدوفية"}
         moh{"الموهوك"}
         mos{"الموسي"}
         mr{"الماراثي"}

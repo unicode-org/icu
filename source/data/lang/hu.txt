@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hu.xml
@@ -369,7 +369,6 @@ hu{
         mnc{"mandzsu"}
         mni{"manipuri"}
         mno{"manobó nyelvek"}
-        mo{"moldvai"}
         moh{"mohawk"}
         mos{"moszi"}
         mr{"marathi"}
@@ -453,6 +452,7 @@ hu{
         rm{"réto-román"}
         rn{"kirundi"}
         ro{"román"}
+        ro_MD{"moldvai"}
         roa{"román nyelv"}
         rof{"rombo"}
         rom{"roma"}
@@ -916,7 +916,7 @@ hu{
         VALLADER{"Vallader"}
         WADEGILE{"Wade-Giles átírás"}
     }
-    Version{"2.0.93.17"}
+    Version{"2.0.96.25"}
     codePatterns{
         language{"Nyelv: {0}"}
         script{"Írásrendszer: {0}"}

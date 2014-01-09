@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh.xml
@@ -369,7 +369,6 @@ zh{
         mnc{"满文"}
         mni{"曼尼普里文"}
         mno{"马诺博语系"}
-        mo{"摩尔多瓦文"}
         moh{"摩霍克文"}
         mos{"莫西文"}
         mr{"马拉地文"}
@@ -453,6 +452,7 @@ zh{
         rm{"罗曼什文"}
         rn{"基隆迪文"}
         ro{"罗马尼亚文"}
+        ro_MD{"摩尔多瓦文"}
         roa{"其他拉丁语系"}
         rof{"兰博文"}
         rom{"吉普赛文"}
@@ -963,7 +963,7 @@ zh{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"WG 威氏拼音法"}
     }
-    Version{"2.0.93.8"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"语言：{0}"}
         script{"文字：{0}"}

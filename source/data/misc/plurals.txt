@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/plurals.xml, ordinals.xml
@@ -144,6 +144,7 @@ plurals:table(nofallback){
         rm{"set2"}
         ro{"set8"}
         rof{"set2"}
+        root{"set24"}
         ru{"set34"}
         rwk{"set2"}
         sah{"set24"}
@@ -260,6 +261,7 @@ plurals:table(nofallback){
         prg{"set36"}
         pt{"set36"}
         ro{"set37"}
+        root{"set36"}
         ru{"set36"}
         sh{"set36"}
         si{"set36"}

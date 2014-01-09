@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/sr.xml
@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/sr.xml
  */
 sr{
-    Version{"2.0.92.87"}
+    Version{"2.0.96.25"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Абиџан"}
@@ -1487,16 +1487,25 @@ sr{
             ld{"Средњеевропско летње рачунање времена"}
             lg{"Средњеевропско време"}
             ls{"Средњеевропско стандардно време"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Источноевропско летње рачунање времена"}
             lg{"Источноевропско време"}
             ls{"Источноевропско стандардно време"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Западноевропско летње рачунање времена"}
             lg{"Западноевропско време"}
             ls{"Западноевропско стандардно време"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Фолкландска Острва летње рачунање времена"}
@@ -1516,6 +1525,7 @@ sr{
         }
         "meta:GMT"{
             ls{"Гринвич средње време"}
+            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Галапагос време"}

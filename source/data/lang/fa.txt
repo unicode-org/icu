@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/fa.xml
@@ -321,7 +321,6 @@ fa{
         mnc{"مانچویی"}
         mni{"میته‌ای"}
         mno{"زبان مانوبو"}
-        mo{"مولداویایی"}
         moh{"موهاکی"}
         mos{"ماسیایی"}
         mr{"مراتی"}
@@ -396,6 +395,7 @@ fa{
         rm{"رومانش"}
         rn{"روندیایی"}
         ro{"رومانیایی"}
+        ro_MD{"مولداویایی"}
         roa{"زبان رومیایی"}
         rom{"رومانویی"}
         root{"ریشه"}
@@ -780,7 +780,7 @@ fa{
         SAAHO{"ساهویی"}
         SCOTLAND{"انگلیسی معیار اسکاتلند"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"زبان: {0}"}
         script{"خط: {0}"}

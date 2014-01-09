@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/bg.xml
@@ -329,7 +329,6 @@ bg{
         mnc{"манчжурски"}
         mni{"манипури"}
         mno{"манобо"}
-        mo{"молдовски"}
         moh{"мохавк"}
         mos{"моси"}
         mr{"марати"}
@@ -405,6 +404,7 @@ bg{
         rm{"реторомански"}
         rn{"рунди"}
         ro{"румънски"}
+        ro_MD{"молдовски"}
         roa{"романски"}
         rom{"цигански език"}
         root{"роот"}
@@ -811,7 +811,7 @@ bg{
         VALENCIA{"Валенсиански"}
         WADEGILE{"Уейд-Джайлс романизация"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"Език: {0}"}
         script{"Писменост: {0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ro.xml
@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/ro.xml
  */
 ro{
-    Version{"2.0.92.87"}
+    Version{"2.0.96.24"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis Abeba"}
@@ -529,16 +529,25 @@ ro{
             ld{"Ora de vară a Europei Centrale"}
             lg{"Ora Europei Centrale"}
             ls{"Ora standard a Europei Centrale"}
+            sd{"CEST"}
+            sg{"CET"}
+            ss{"CET"}
         }
         "meta:Europe_Eastern"{
             ld{"Ora de vară a Europei de Est"}
             lg{"Ora Europei de Est"}
             ls{"Ora standard a Europei de Est"}
+            sd{"EEST"}
+            sg{"EET"}
+            ss{"EET"}
         }
         "meta:Europe_Western"{
             ld{"Ora de vară a Europei de Vest"}
             lg{"Ora Europei de Vest"}
             ls{"Ora standard a Europei de Vest"}
+            sd{"WEST"}
+            sg{"WET"}
+            ss{"WET"}
         }
         "meta:Falkland"{
             ld{"Ora de vară din Insulele Falkland"}
@@ -558,6 +567,7 @@ ro{
         }
         "meta:GMT"{
             ls{"Ora de Greenwhich"}
+            ss{"GMT"}
         }
         "meta:Galapagos"{
             ls{"Ora din Galapagos"}

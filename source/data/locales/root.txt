@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/root.xml
@@ -120,6 +120,7 @@ root{
                 range{"{0}–{1}"}
             }
             patterns{
+                accountingFormat:alias{"/LOCALE/NumberElements/latn/patterns/currencyFormat"}
                 currencyFormat{"¤ #,##0.00"}
                 decimalFormat{"#,##0.###"}
                 percentFormat{"#,##0%"}

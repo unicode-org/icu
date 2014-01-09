@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/he.xml
@@ -368,7 +368,6 @@ he{
         mnc{"מנצ׳ו"}
         mni{"מניפורית"}
         mno{"שפת מנובו"}
-        mo{"מולדבית"}
         moh{"מוהוק"}
         mos{"מוסי"}
         mr{"מרטהי"}
@@ -452,6 +451,7 @@ he{
         rm{"רומאנש"}
         rn{"קירונדי"}
         ro{"רומנית"}
+        ro_MD{"מולדבית"}
         roa{"שפת רומאנס"}
         rof{"רומבו"}
         rom{"רומאנית"}
@@ -800,7 +800,7 @@ he{
         POSIX{"מחשב"}
         SCOTLAND{"אנגלית סקוטית סטנדרטית"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"שפה:‏ {0}"}
         script{"כתב: {0}"}

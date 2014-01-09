@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/lo.xml
@@ -352,7 +352,6 @@ lo{
         mnc{"ແມນຈູ"}
         mni{"ມານີພູຣິ"}
         mno{"ພາສາມາໂນໂບ"}
-        mo{"ໂມດາເວຍ"}
         moh{"ໂມຫາ"}
         mos{"ມອສຊີ"}
         mr{"ມາຣາທິ"}
@@ -436,6 +435,7 @@ lo{
         rm{"ໂຣແມນ"}
         rn{"ບຸລຸນດີ"}
         ro{"ໂຣແມນຽນ"}
+        ro_MD{"ໂມດາເວຍ"}
         roa{"ພາສາໂລມານ"}
         rof{"ຣົມໂບ"}
         rom{"ໂຣເມນີ"}
@@ -902,7 +902,7 @@ lo{
         VALLADER{"ວັລລາເດີ"}
         WADEGILE{"ການຖອດອັກສອນແບບເວດ-ໄຈລ໌"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

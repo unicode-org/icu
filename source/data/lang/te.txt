@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/te.xml
@@ -331,7 +331,6 @@ te{
         mnc{"మంచు"}
         mni{"మణిపూరి"}
         mno{"మనోబో భాష"}
-        mo{"మొల్డావియన్"}
         moh{"మోహుక్"}
         mos{"మోస్సి"}
         mr{"మరాఠీ"}
@@ -409,6 +408,7 @@ te{
         rm{"రోమన్ష్"}
         rn{"రండి"}
         ro{"రోమానియన్"}
+        ro_MD{"మొల్డావియన్"}
         roa{"రోమాన్స్ భాష"}
         rom{"రోమానీ"}
         root{"రూట్"}
@@ -802,7 +802,7 @@ te{
         REVISED{"సవరించబడిన వర్ణక్రమం"}
         WADEGILE{"వేడ్-గైల్స్ రోమనైజేషన్"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"భాష: {0}"}
         script{"లిపి: {0}"}
