@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hu.xml
@@ -168,7 +168,7 @@ hu{
             }
         }
     }
-    Version{"2.0.93.17"}
+    Version{"2.0.96.25"}
     calendar{
         buddhist{
             eras{
@@ -538,7 +538,7 @@ hu{
                 "H:mm",
                 "y. MMMM d., EEEE",
                 "y. MMMM d.",
-                "y MMM d",
+                "y. MMM d.",
                 "y. MM. dd.",
                 "{1} {0}",
                 "{1} {0}",

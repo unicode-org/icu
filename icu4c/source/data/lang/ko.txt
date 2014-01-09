@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ko.xml
@@ -364,7 +364,6 @@ ko{
         mnc{"만주어"}
         mni{"마니푸리어"}
         mno{"마노보어"}
-        mo{"몰도바어"}
         moh{"모호크어"}
         mos{"모시어"}
         mr{"마라티어"}
@@ -448,6 +447,7 @@ ko{
         rm{"레토로만어"}
         rn{"룬디어"}
         ro{"루마니아어"}
+        ro_MD{"몰도바어"}
         roa{"로망스어 (기타)"}
         rof{"롬보어"}
         rom{"집시어"}
@@ -919,7 +919,7 @@ ko{
         VAIDIKA{"바이디카"}
         VALLADER{"발라더"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"언어: {0}"}
         script{"스크립트: {0}"}

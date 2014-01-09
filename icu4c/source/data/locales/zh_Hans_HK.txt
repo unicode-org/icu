@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh_Hans_HK.xml
@@ -95,7 +95,7 @@ zh_Hans_HK{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.96.25"}
     calendar{
         buddhist{
             DateTimePatterns{
@@ -163,9 +163,13 @@ zh_Hans_HK{
             availableFormats{
                 HHmm{"HH:mm"}
                 M{"L"}
+                MEd{"E, d/M"}
                 MMM{"M月"}
                 MMMMdd{"M月d日"}
-                Md{"M-d"}
+                Md{"d/M"}
+                yyyyM{"M/yGGGGG"}
+                yyyyMEd{"E, d/M/yGGGGG"}
+                yyyyMd{"d/M/yGGGGG"}
             }
             intervalFormats{
                 Hmv{
@@ -219,9 +223,14 @@ zh_Hans_HK{
             availableFormats{
                 HHmm{"HH:mm"}
                 M{"L"}
+                MEd{"E, d/M"}
                 MMMMdd{"M月d日"}
-                Md{"M-d"}
-                yM{"y年M月"}
+                MMdd{"dd/MM"}
+                Md{"d/M"}
+                yM{"M/y"}
+                yMEd{"d/M/y（E）"}
+                yMM{"MM/y"}
+                yMd{"d/M/y"}
             }
             intervalFormats{
                 Hmv{

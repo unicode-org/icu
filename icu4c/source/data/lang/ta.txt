@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ta.xml
@@ -331,7 +331,6 @@ ta{
         mnc{"மன்சு"}
         mni{"மனிபூரி"}
         mno{"மனோபோ மொழி"}
-        mo{"மோல்டாவியன்"}
         moh{"மோஹாவ்க்"}
         mos{"மோஸ்ஸி"}
         mr{"மராத்தி"}
@@ -409,6 +408,7 @@ ta{
         rm{"ரோமென்ஸ்"}
         rn{"ருண்டி"}
         ro{"ரோமேனியன்"}
+        ro_MD{"மோல்டாவியன்"}
         roa{"ரோமன்ஸ் மொழி"}
         rom{"ரோமானி"}
         root{"ரூட்"}
@@ -799,7 +799,7 @@ ta{
         PINYIN{"பின்யின் ரோமானைசெஷன்"}
         WADEGILE{"வேட்-கைல்ஸ் ரோமனைஷேசன்"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"மொழி: {0}"}
         script{"எழுத்து: {0}"}

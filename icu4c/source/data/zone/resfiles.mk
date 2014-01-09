@@ -1,6 +1,6 @@
-# *   Copyright (C) 1998-2013, International Business Machines
+# *   Copyright (C) 1998-2014, International Business Machines
 # *   Corporation and others.  All Rights Reserved.
-ZONE_CLDR_VERSION = 24
+ZONE_CLDR_VERSION = 25
 # A list of txt's to build
 # Note:
 #
@@ -77,43 +77,44 @@ ZONE_SOURCE = af.txt agq.txt ak.txt am.txt\
  en_TC.txt en_TK.txt en_TO.txt en_TT.txt en_TV.txt\
  en_TZ.txt en_UG.txt en_VC.txt en_VG.txt en_VU.txt\
  en_WS.txt en_ZA.txt en_ZM.txt en_ZW.txt eo.txt\
- es.txt es_AR.txt es_BO.txt es_CL.txt es_CO.txt\
- es_CR.txt es_CU.txt es_DO.txt es_EC.txt es_GT.txt\
- es_HN.txt es_MX.txt es_NI.txt es_PA.txt es_PE.txt\
- es_PR.txt es_PY.txt es_SV.txt es_US.txt es_UY.txt\
- es_VE.txt et.txt eu.txt ewo.txt fa.txt\
- ff.txt fi.txt fil.txt fo.txt fr.txt\
- fr_CA.txt ga.txt gl.txt gsw.txt gu.txt\
- guz.txt gv.txt ha.txt ha_Latn.txt haw.txt\
- he.txt hi.txt hr.txt hu.txt hy.txt\
- id.txt ig.txt ii.txt is.txt it.txt\
- ja.txt jgo.txt jmc.txt ka.txt kab.txt\
- kam.txt kde.txt kea.txt khq.txt ki.txt\
- kk.txt kk_Cyrl.txt kkj.txt kl.txt kln.txt\
- km.txt kn.txt ko.txt ko_KP.txt kok.txt\
- ks.txt ks_Arab.txt ksb.txt ksf.txt kw.txt\
- ky.txt ky_Cyrl.txt lag.txt lg.txt lkt.txt\
- ln.txt lo.txt lt.txt lu.txt luo.txt\
- luy.txt lv.txt mas.txt mer.txt mfe.txt\
- mg.txt mgh.txt mgo.txt mk.txt ml.txt\
- mn.txt mn_Cyrl.txt mr.txt ms.txt ms_Latn.txt\
- mt.txt mua.txt my.txt naq.txt nb.txt\
- nd.txt ne.txt ne_IN.txt nl.txt nmg.txt\
- nn.txt nnh.txt nus.txt nyn.txt om.txt\
- or.txt pa.txt pa_Arab.txt pa_Guru.txt pl.txt\
- ps.txt pt.txt pt_AO.txt pt_CV.txt pt_GW.txt\
- pt_MO.txt pt_MZ.txt pt_PT.txt pt_ST.txt pt_TL.txt\
- rm.txt rn.txt ro.txt rof.txt ru.txt\
- rw.txt rwk.txt saq.txt sbp.txt seh.txt\
- ses.txt sg.txt shi.txt shi_Latn.txt shi_Tfng.txt\
- si.txt sk.txt sl.txt sn.txt so.txt\
- sq.txt sr.txt sr_Cyrl.txt sr_Latn.txt sv.txt\
- sv_FI.txt sw.txt swc.txt ta.txt ta_MY.txt\
- ta_SG.txt te.txt teo.txt th.txt ti.txt\
- to.txt tr.txt twq.txt tzm.txt tzm_Latn.txt\
- uk.txt ur.txt ur_IN.txt uz.txt uz_Arab.txt\
- uz_Cyrl.txt uz_Latn.txt vai.txt vai_Latn.txt vai_Vaii.txt\
- vi.txt vun.txt xog.txt yav.txt yo.txt\
- zgh.txt zh.txt zh_Hans.txt zh_Hans_HK.txt zh_Hans_MO.txt\
- zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt zu.txt
+ es.txt es_419.txt es_AR.txt es_BO.txt es_CL.txt\
+ es_CO.txt es_CR.txt es_CU.txt es_DO.txt es_EC.txt\
+ es_GT.txt es_HN.txt es_MX.txt es_NI.txt es_PA.txt\
+ es_PE.txt es_PR.txt es_PY.txt es_SV.txt es_US.txt\
+ es_UY.txt es_VE.txt et.txt eu.txt ewo.txt\
+ fa.txt ff.txt fi.txt fil.txt fo.txt\
+ fr.txt fr_CA.txt ga.txt gl.txt gsw.txt\
+ gu.txt guz.txt gv.txt ha.txt ha_Latn.txt\
+ haw.txt he.txt hi.txt hr.txt hu.txt\
+ hy.txt id.txt ig.txt ii.txt is.txt\
+ it.txt ja.txt jgo.txt jmc.txt ka.txt\
+ kab.txt kam.txt kde.txt kea.txt khq.txt\
+ ki.txt kk.txt kk_Cyrl.txt kkj.txt kl.txt\
+ kln.txt km.txt kn.txt ko.txt ko_KP.txt\
+ kok.txt ks.txt ks_Arab.txt ksb.txt ksf.txt\
+ kw.txt ky.txt ky_Cyrl.txt lag.txt lg.txt\
+ lkt.txt ln.txt lo.txt lt.txt lu.txt\
+ luo.txt luy.txt lv.txt mas.txt mer.txt\
+ mfe.txt mg.txt mgh.txt mgo.txt mk.txt\
+ ml.txt mn.txt mn_Cyrl.txt mr.txt ms.txt\
+ ms_Latn.txt mt.txt mua.txt my.txt naq.txt\
+ nb.txt nd.txt ne.txt ne_IN.txt nl.txt\
+ nmg.txt nn.txt nnh.txt nus.txt nyn.txt\
+ om.txt or.txt pa.txt pa_Arab.txt pa_Guru.txt\
+ pl.txt ps.txt pt.txt pt_AO.txt pt_CV.txt\
+ pt_GW.txt pt_MO.txt pt_MZ.txt pt_PT.txt pt_ST.txt\
+ pt_TL.txt rm.txt rn.txt ro.txt rof.txt\
+ ru.txt rw.txt rwk.txt saq.txt sbp.txt\
+ seh.txt ses.txt sg.txt shi.txt shi_Latn.txt\
+ shi_Tfng.txt si.txt sk.txt sl.txt sn.txt\
+ so.txt sq.txt sr.txt sr_Cyrl.txt sr_Latn.txt\
+ sv.txt sv_FI.txt sw.txt swc.txt ta.txt\
+ ta_MY.txt ta_SG.txt te.txt teo.txt th.txt\
+ ti.txt to.txt tr.txt twq.txt tzm.txt\
+ tzm_Latn.txt uk.txt ur.txt ur_IN.txt uz.txt\
+ uz_Arab.txt uz_Cyrl.txt uz_Latn.txt vai.txt vai_Latn.txt\
+ vai_Vaii.txt vi.txt vun.txt xog.txt yav.txt\
+ yo.txt zgh.txt zh.txt zh_Hans.txt zh_Hans_HK.txt\
+ zh_Hans_MO.txt zh_Hans_SG.txt zh_Hant.txt zh_Hant_HK.txt zh_Hant_MO.txt\
+ zu.txt
 

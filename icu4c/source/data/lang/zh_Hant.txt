@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh_Hant.xml
@@ -256,6 +256,7 @@ zh_Hant{
         iu{"因紐特文"}
         ja{"日文"}
         jbo{"邏輯文"}
+        jgo{"恩格姆巴文"}
         jmc{"馬恰美文"}
         jpr{"猶太教-波斯文"}
         jrb{"猶太阿拉伯文"}
@@ -346,6 +347,7 @@ zh_Hant{
         mg{"馬爾加什文"}
         mga{"中古愛爾蘭文"}
         mgh{"馬夸文"}
+        mgo{"美塔文"}
         mh{"馬紹爾文"}
         mi{"毛利文"}
         mic{"米克馬克文"}
@@ -358,7 +360,6 @@ zh_Hant{
         mnc{"滿族文"}
         mni{"曼尼普裡文"}
         mno{"馬諾博諸語言"}
-        mo{"摩爾多瓦文"}
         moh{"莫霍克文"}
         mos{"莫西文"}
         mr{"馬拉地文"}
@@ -440,6 +441,7 @@ zh_Hant{
         rm{"羅曼斯文"}
         rn{"隆迪文"}
         ro{"羅馬尼亞文"}
+        ro_MD{"摩爾多瓦文"}
         roa{"羅曼諸語言"}
         rof{"蘭博文"}
         rom{"吉普賽文"}
@@ -959,7 +961,7 @@ zh_Hant{
         VALLADER{"瑞士瓦勒德方言"}
         WADEGILE{"威妥瑪式拼音"}
     }
-    Version{"2.0.93.8"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"語言：{0}"}
         script{"文字：{0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/mr.xml
@@ -331,7 +331,6 @@ mr{
         mnc{"मान्चु"}
         mni{"मणिपुरी"}
         mno{"मनोबो भाषा"}
-        mo{"मोल्डाव्हियन"}
         moh{"मोहॉक"}
         mos{"मोस्सी"}
         mr{"मराठी"}
@@ -409,6 +408,7 @@ mr{
         rm{"रोमान्श"}
         rn{"रुन्दी"}
         ro{"रोमानियन"}
+        ro_MD{"मोल्डाव्हियन"}
         roa{"रोमांस भाषा"}
         rom{"रोमानी"}
         root{"रूट"}
@@ -799,7 +799,7 @@ mr{
         PINYIN{"पिनयिन रोमनायझेशन"}
         WADEGILE{"वादे-गिलेस रोमनायझेशन"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"भाषा: {0}"}
         script{"लिपी: {0}"}

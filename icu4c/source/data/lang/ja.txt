@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/ja.xml
@@ -259,6 +259,7 @@ ja{
         iu{"イヌクウティトット語"}
         ja{"日本語"}
         jbo{"ロジバン語"}
+        jgo{"ンゴンバ語"}
         jmc{"マチャメ語"}
         jpr{"ユダヤ・ペルシア語"}
         jrb{"ユダヤ・アラビア語"}
@@ -349,6 +350,7 @@ ja{
         mg{"マダガスカル語"}
         mga{"中期アイルランド語"}
         mgh{"マクア・ミート語"}
+        mgo{"メタ語"}
         mh{"マーシャル語"}
         mi{"マオリ語"}
         mic{"ミクマク語"}
@@ -361,7 +363,6 @@ ja{
         mnc{"満州語"}
         mni{"マニプリ語"}
         mno{"マノボ語族"}
-        mo{"モルダビア語"}
         moh{"モーホーク語"}
         mos{"モシ語"}
         mr{"マラーティー語"}
@@ -444,6 +445,7 @@ ja{
         rm{"ロマンシュ語"}
         rn{"ルンディ語"}
         ro{"ルーマニア語"}
+        ro_MD{"モルダビア語"}
         roa{"ロマンス諸語"}
         rof{"ロンボ語"}
         rom{"ロマーニー語"}
@@ -966,7 +968,7 @@ ja{
         VALLADER{"ヴァラダー"}
         WADEGILE{"ウェード式ローマ字表記法"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"言語: {0}"}
         script{"文字: {0}"}

@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/kn.xml
@@ -331,7 +331,6 @@ kn{
         mnc{"ಮಂಚು"}
         mni{"ಮಣಿಪುರಿ"}
         mno{"ಮನೋಬೋ ಭಾಷೆ"}
-        mo{"ಮಾಲ್ಡೀವಿಯನ್"}
         moh{"ಮೊಹಾವ್ಕ್"}
         mos{"ಮೊಸ್ಸಿ"}
         mr{"ಮರಾಠಿ"}
@@ -409,6 +408,7 @@ kn{
         rm{"ರೋಮ್ಯಾನ್ಸ್"}
         rn{"ರುಂಡಿ"}
         ro{"ರೊಮೇನಿಯನ್"}
+        ro_MD{"ಮಾಲ್ಡೀವಿಯನ್"}
         roa{"ರೋಮನ್ ಭಾಷೆ"}
         rom{"ರೋಮಾನಿ"}
         root{"ರೂಟ್"}
@@ -793,7 +793,7 @@ kn{
             vaii{"ವಾಯ್ ಅಂಕೆಗಳು"}
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"ಭಾಷೆ: {0}"}
         script{"ಸ್ಕ್ರಿಪ್ಟ್ : {0}"}

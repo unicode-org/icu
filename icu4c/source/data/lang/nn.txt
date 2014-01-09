@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/nn.xml
@@ -324,7 +324,6 @@ nn{
         mnc{"mandsju"}
         mni{"manipuri"}
         mno{"manobospråk"}
-        mo{"moldavisk"}
         moh{"mohawk"}
         mos{"mossi"}
         mr{"marathi"}
@@ -405,6 +404,7 @@ nn{
         rm{"retoromansk"}
         rn{"rundi"}
         ro{"rumensk"}
+        ro_MD{"moldavisk"}
         roa{"romansk språk"}
         rof{"rombo"}
         rom{"romani"}
@@ -730,7 +730,7 @@ nn{
         TARASK{"taraskievica-ortografi"}
         VALENCIA{"valensisk dialekt"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"Språk: {0}"}
         script{"Skrift: {0}"}

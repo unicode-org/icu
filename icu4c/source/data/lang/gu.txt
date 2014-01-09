@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/gu.xml
@@ -331,7 +331,6 @@ gu{
         mnc{"માન્ચુ"}
         mni{"મનિપૂરી"}
         mno{"મનોબો ભાષા"}
-        mo{"મોલડાવિયન"}
         moh{"મોહૌક"}
         mos{"મોસ્સી"}
         mr{"મરાઠી"}
@@ -409,6 +408,7 @@ gu{
         rm{"રોમાન્સ"}
         rn{"રૂન્દી"}
         ro{"રોમાનિયન"}
+        ro_MD{"મોલડાવિયન"}
         roa{"રોમાંસ ભાષા"}
         rom{"રોમાની"}
         root{"મૂલ"}
@@ -798,7 +798,7 @@ gu{
         PINYIN{"પિનયિન રોમનાઇઝેશન"}
         WADEGILE{"વેડ-ગિલ્સ રોમનાઇઝેશન"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.33"}
     codePatterns{
         language{"{0}"}
         script{"{0}"}

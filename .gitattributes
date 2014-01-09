@@ -2794,6 +2794,7 @@ icu4c/source/data/translit/tr_Lower.txt svneol=native#text/plain%3Bcharset%3Dutf
 icu4c/source/data/translit/tr_Title.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/translit/tr_Upper.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/translit/uz_Cyrl_uz_Latn.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/translit/yo_yo_BJ.txt -text
 icu4c/source/data/translit/zh_Latn_PINYIN_ru.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/unidata/CaseFolding.txt svneol=native#text/plain%3Bcharset%3DUS-ASCII
 icu4c/source/data/unidata/DerivedCoreProperties.txt svneol=native#text/plain
@@ -3173,6 +3174,7 @@ icu4c/source/data/zone/en_ZM.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/en_ZW.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/eo.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/es.txt svneol=native#text/plain%3Bcharset%3Dutf-8
+icu4c/source/data/zone/es_419.txt -text
 icu4c/source/data/zone/es_AR.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/es_BO.txt svneol=native#text/plain%3Bcharset%3Dutf-8
 icu4c/source/data/zone/es_CL.txt svneol=native#text/plain%3Bcharset%3Dutf-8

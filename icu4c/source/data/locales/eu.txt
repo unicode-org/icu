@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/eu.xml
@@ -160,7 +160,7 @@ eu{
             }
         }
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.96.25"}
     calendar{
         buddhist{
             eras{
@@ -216,9 +216,12 @@ eu{
                 yyyy{"G y"}
                 yyyyM{"G y/MM"}
                 yyyyMEd{"G y/MM/dd, EEEE"}
-                yyyyMMM{"G y('e')'ko' MMMM"}
-                yyyyMMMEd{"G y('e')'ko' MMMM d, EEEE"}
-                yyyyMMMd{"G y('e')'ko' MMMM d"}
+                yyyyMMM{"G y MMM"}
+                yyyyMMMEd{"G y MMM d, EEEE"}
+                yyyyMMMM{"G y('e')'ko' MMMM"}
+                yyyyMMMMEd{"G y('e')'ko' MMMM d, EEEE"}
+                yyyyMMMMd{"G y('e')'ko' MMMM d"}
+                yyyyMMMd{"G y MMM d"}
                 yyyyMd{"G y/MM/dd"}
                 yyyyQQQ{"G y QQQ"}
                 yyyyQQQQ{"G y('e')'ko' QQQQ"}
@@ -373,9 +376,12 @@ eu{
                 y{"y"}
                 yM{"y/M"}
                 yMEd{"y/M/d, E"}
-                yMMM{"y('e')'ko' MMM"}
-                yMMMEd{"y('e')'ko' MMM d, E"}
-                yMMMd{"y('e')'ko' MMM d"}
+                yMMM{"y MMM"}
+                yMMMEd{"y MMM d, E"}
+                yMMMM{"y('e')'ko' MMMM"}
+                yMMMMEd{"y('e')'ko' MMMM d, E"}
+                yMMMMd{"y('e')'ko' MMMM d"}
+                yMMMd{"y MMM d"}
                 yMd{"y/M/d"}
                 yQQQ{"y('e')'ko' QQQ"}
                 yQQQQ{"y('e')'ko' QQQQ"}

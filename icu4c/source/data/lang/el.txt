@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/el.xml
@@ -368,7 +368,6 @@ el{
         mnc{"Μαντσού"}
         mni{"Μανιπούρι"}
         mno{"Γλώσσα Μανόμπο"}
-        mo{"Μολδαβικά"}
         moh{"Μοχόκ"}
         mos{"Μόσι"}
         mr{"Μαράθι"}
@@ -452,6 +451,7 @@ el{
         rm{"Ρομανικά"}
         rn{"Ρούντι"}
         ro{"Ρουμανικά"}
+        ro_MD{"Μολδαβικά"}
         roa{"Ρομανική γλώσσα"}
         rof{"Ρόμπο"}
         rom{"Ρομανί"}
@@ -899,7 +899,7 @@ el{
         VALENCIA{"Βαλενθιανά"}
         WADEGILE{"Εκλατινισμένα Γουάντ-Γκιλς"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.95.37"}
     codePatterns{
         language{"Γλώσσα: {0}"}
         script{"Σύστημα γραφής: {0}"}

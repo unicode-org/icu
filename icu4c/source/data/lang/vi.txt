@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/vi.xml
@@ -362,7 +362,6 @@ vi{
         mnc{"Tiếng Manchu"}
         mni{"Tiếng Manipuri"}
         mno{"Ngôn ngữ Manobo"}
-        mo{"Tiếng Moldova"}
         moh{"Tiếng Mohawk"}
         mos{"Tiếng Mossi"}
         mr{"Tiếng Marathi"}
