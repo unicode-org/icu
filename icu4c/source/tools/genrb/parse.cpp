@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1998-2013, International Business Machines
+*   Copyright (C) 1998-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -17,6 +17,16 @@
 *   06/10/2001  Dominic Ludlam <dom@recoil.org> Rewritten
 *******************************************************************************
 */
+
+// Safer use of UnicodeString.
+#ifndef UNISTR_FROM_CHAR_EXPLICIT
+#   define UNISTR_FROM_CHAR_EXPLICIT explicit
+#endif
+
+// Less important, but still a good idea.
+#ifndef UNISTR_FROM_STRING_EXPLICIT
+#   define UNISTR_FROM_STRING_EXPLICIT explicit
+#endif
 
 #include "ucol_imp.h"
 #include "parse.h"
