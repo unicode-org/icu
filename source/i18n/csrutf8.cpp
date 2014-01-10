@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2005-2013, International Business Machines
+ *   Copyright (C) 2005-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -55,12 +55,7 @@ UBool CharsetRecog_UTF8::match(InputText* input, CharsetMatch *results) const {
             trailBytes = 3;
         } else {
             numInvalid += 1;
-
-            if (numInvalid > 5) {
-                break;
-            }
-
-            trailBytes = 0;
+            continue;
         }
 
         // Verify that we've got the right number of trail bytes in the sequence
