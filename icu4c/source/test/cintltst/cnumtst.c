@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -2339,6 +2339,7 @@ static void TestUNumberingSystem(void) {
                         itemPtr->locale, itemPtr->numsys, itemPtr->radix, itemPtr->isAlgorithmic, numsys, radix, isAlgorithmic);
             }
             ulen = unumsys_getDescription(unumsys, ubuf, kNumSysDescripBufMax, &status);
+            (void)ulen;   // Suppress variable not used warning.
             if ( U_FAILURE(status) || u_strcmp(ubuf, itemPtr->description) != 0 ) {
                 log_data_err("unumsys description for locale %s, description unexpected and/or status %\n", myErrorName(status));
             }

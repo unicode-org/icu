@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -1492,6 +1492,7 @@ static void TestContext(void) {
                     char bbuf1[kBbufMax];
                     char bbuf2[kBbufMax];
                     int32_t len = udat_format(udfmt, today, ubuf, kUbufMax, NULL, &status);
+                    (void)len;
                     if ( U_FAILURE(status) ) {
                         log_err("FAIL: udat_format today for locale %s, capitalizationContext %d, status %s\n",
                                 textRelContextItemPtr->locale, (int)textRelContextItemPtr->capitalizationContext, u_errorName(status) );

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2013, International Business Machines Corporation and
+* Copyright (C) 2007-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 ********************************************************************************
 
@@ -224,7 +224,7 @@ void PluralRulesTest::testAPI(/*char *par*/)
     for (int32_t i=0; i<LENGTHOF(fData); i++) {
         if ((newRules->select(fData[i])== KEYWORD_A) != isKeywordA[i]) {
              errln("File %s, Line %d, ERROR: plural rules for decimal fractions test failed!\n"
-                   "  number = %g, expected %s", __FILE__, __LINE__, fData[i], isKeywordA?"TRUE":"FALSE");
+                   "  number = %g, expected %s", __FILE__, __LINE__, fData[i], isKeywordA[i]?"TRUE":"FALSE");
         }
     }
 
