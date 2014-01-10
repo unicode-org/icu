@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -104,7 +104,6 @@ parseUCDFile(const char *filename,
 
 /* test data ---------------------------------------------------------------- */
 
-static const UChar  LAST_CHAR_CODE_IN_FILE = 0xFFFD;
 static const char tagStrings[] = "MnMcMeNdNlNoZsZlZpCcCfCsCoCnLuLlLtLmLoPcPdPsPePoSmScSkSoPiPf";
 static const int32_t tagValues[] =
     {

@@ -1,5 +1,5 @@
 /*
- * (C) Copyright IBM Corp. and others 1998-2013 - All Rights Reserved
+ * (C) Copyright IBM Corp. and others 1998-2014 - All Rights Reserved
  */
 
 #include "LETypes.h"
@@ -53,6 +53,7 @@ const le_int32 DefaultCharMapper::controlCharsCount = LE_ARRAY_SIZE(controlChars
 
 LEUnicode32 DefaultCharMapper::mapChar(LEUnicode32 ch) const
 {
+    (void)copyright;    // Suppress unused variable warning.
     if (fFilterControls) {
         le_int32 index = OpenTypeUtilities::search((le_uint32)ch, (le_uint32 *)controlChars, controlCharsCount);
 

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -3175,8 +3175,6 @@ TestEBCDICSwapLFNL() {
   /* test nothing... */
 }
 #endif
-
-static const UVersionInfo ICU_34 = {3,4,0,0};
 
 static void TestFromUCountPending(){
 #if !UCONFIG_NO_LEGACY_CONVERSION

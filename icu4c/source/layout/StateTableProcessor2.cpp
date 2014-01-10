@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp.  and others 1998-2013 - All Rights Reserved
+ * (C) Copyright IBM Corp.  and others 1998-2014 - All Rights Reserved
  *
  */
 
@@ -21,10 +21,17 @@ StateTableProcessor2::StateTableProcessor2()
 }
 
 StateTableProcessor2::StateTableProcessor2(const LEReferenceTo<MorphSubtableHeader2> &morphSubtableHeader, LEErrorCode &success)
-  : SubtableProcessor2(morphSubtableHeader, success), stateTableHeader(morphSubtableHeader, success),
-    stHeader(stateTableHeader, success, (const StateTableHeader2*)&stateTableHeader->stHeader),
-    nClasses(0), classTableOffset(0), stateArrayOffset(0), entryTableOffset(0), classTable(), format(0),
-    stateArray()
+  : SubtableProcessor2(morphSubtableHeader, success), 
+    dir(1),
+    format(0),
+    nClasses(0), 
+    classTableOffset(0), 
+    stateArrayOffset(0), 
+    entryTableOffset(0), 
+    classTable(), 
+    stateArray(),
+    stateTableHeader(morphSubtableHeader, success),
+    stHeader(stateTableHeader, success, (const StateTableHeader2*)&stateTableHeader->stHeader)
 {
   if (LE_FAILURE(success)) {
     return;

@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
 *
-*   Copyright (C) 1999-2013, International Business Machines
+*   Copyright (C) 1999-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 *******************************************************************************
@@ -78,9 +78,9 @@ utf8_countTrailBytes[256];
  * @internal
  */
 #define U8_COUNT_TRAIL_BYTES(leadByte) \
-    ((leadByte)<0xf0 ? \
-        ((leadByte)>=0xc0)+((leadByte)>=0xe0) : \
-        (leadByte)<0xfe ? 3+((leadByte)>=0xf8)+((leadByte)>=0xfc) : 0)
+    ((unsigned char)(leadByte)<0xf0 ? \
+        ((unsigned char)(leadByte)>=0xc0)+((unsigned char)(leadByte)>=0xe0) : \
+        (unsigned char)(leadByte)<0xfe ? 3+((unsigned char)(leadByte)>=0xf8)+((unsigned char)(leadByte)>=0xfc) : 0)
 
 /**
  * Counts the trail bytes for a UTF-8 lead byte of a valid UTF-8 sequence.
