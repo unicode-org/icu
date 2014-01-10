@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2013, International Business Machines Corporation and
+ * Copyright (c) 2001-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /********************************************************************************
@@ -851,7 +851,7 @@ static void Test_UChar_UTF8_API(void){
          * Test with an illegal lead byte that would be followed by more than 3 trail bytes.
          * See ticket #10371.
          */
-        static const char src[1]={ 0xf8 };
+        static const char src[1]={ (char)0xf8 };
         UChar out16[10];
         err=U_ZERO_ERROR;
         u_strFromUTF8(out16, LENGTHOF(out16), NULL, src, 1, &err);

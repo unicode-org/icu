@@ -837,7 +837,8 @@ static void TestConvert()
 
 
         /*Reads the BOM*/
-        fread(&BOM, sizeof(UChar), 1, ucs_file_in);
+        size_t numRead = fread(&BOM, sizeof(UChar), 1, ucs_file_in);
+        (void)numRead;
         if (BOM!=0xFEFF && BOM!=0xFFFE) 
         {
             log_err("File Missing BOM...Bailing!\n");
