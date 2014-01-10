@@ -1,5 +1,5 @@
 /*
-*   Copyright (C) 1996-2013, International Business Machines
+*   Copyright (C) 1996-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 */
 
@@ -6078,6 +6078,21 @@ public abstract class Calendar implements Serializable, Cloneable, Comparable<Ca
      */
     public String getType() {
         return "unknown";
+    }
+
+    /**
+     * Returns if two digit representation of year in this calendar type
+     * customarily implies a default century (i.e. 03 -> 2003).
+     * The default implementation returns <code>true</code>. A subclass may
+     * return <code>false</code> if such practice is not applicable (for example,
+     * Chinese calendar and Japanese calendar).
+     * 
+     * @return <code>true<code> if this calendar has a default century.
+     * @internal
+     * @deprecated This API is ICU internal only.
+     */
+    public boolean haveDefaultCentury() {
+        return true;
     }
 
     // -------- BEGIN ULocale boilerplate --------
