@@ -160,7 +160,8 @@ getCount(const UChar* source, int32_t srcLen,
     }
     int32_t retLen = pattern->split(src, stringArray, MAX_SPLIT_STRINGS, *status);
     
-    RegexMatcher matcher(UnicodeString(patternStrings[option]), UREGEX_DOTALL, *status);
+    UnicodeString patternString(patternStrings[option]);
+    RegexMatcher matcher(patternString, UREGEX_DOTALL, *status);
     if (U_FAILURE(*status)) {
         return 0;
     } 
@@ -199,7 +200,8 @@ getAt(const UChar* source, int32_t srcLen,
     }
     int32_t retLen = pattern->split(src, stringArray, MAX_SPLIT_STRINGS, *status);
     
-    RegexMatcher matcher(UnicodeString(patternStrings[option]), UREGEX_DOTALL, *status);
+    UnicodeString patternString(patternStrings[option]);
+    RegexMatcher matcher(patternString, UREGEX_DOTALL, *status);
     if (U_FAILURE(*status)) {
         return 0;
     } 
