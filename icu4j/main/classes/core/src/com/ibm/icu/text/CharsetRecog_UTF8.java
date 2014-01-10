@@ -1,6 +1,6 @@
 /**
 *******************************************************************************
-* Copyright (C) 2005 - 2013, International Business Machines Corporation and  *
+* Copyright (C) 2005 - 2014, International Business Machines Corporation and  *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -48,10 +48,7 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
                 trailBytes = 3;
             } else {
                 numInvalid++;
-                if (numInvalid > 5) {
-                    break;
-                }
-                trailBytes = 0;
+                continue;
             }
                 
             // Verify that we've got the right number of trail bytes in the sequence
@@ -70,7 +67,6 @@ class CharsetRecog_UTF8 extends CharsetRecognizer {
                     break;
                 }
             }
-                        
         }
         
         // Cook up some sort of confidence score, based on presense of a BOM
