@@ -2819,7 +2819,7 @@ public class SimpleDateFormat extends DateFormat {
                 /* Skip this for Chinese calendar, moved from ChineseDateFormat */
                 if ( override != null && (override.compareTo("hebr") == 0 || override.indexOf("y=hebr") >= 0) && value < 1000 ) {
                     value += HEBREW_CAL_CUR_MILLENIUM_START_YEAR;
-                } else if (count == 2 && (pos.getIndex() - start) == 2 && !isChineseCalendar && !cal.getType().equals("japanese")
+                } else if (count == 2 && (pos.getIndex() - start) == 2 && cal.haveDefaultCentury()
                     && UCharacter.isDigit(text.charAt(start))
                     && UCharacter.isDigit(text.charAt(start+1)))
                     {
