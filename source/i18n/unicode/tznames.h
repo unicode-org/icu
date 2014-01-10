@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2011-2013, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2011-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 #ifndef __TZNAMES_H
@@ -163,7 +163,7 @@ public:
      * Returns an instance of <code>TimeZoneDisplayNames</code> for the specified locale.
      *
      * @param locale The locale.
-     * @param status Recevies the status.
+     * @param status Receives the status.
      * @return An instance of <code>TimeZoneDisplayNames</code>
      * @stable ICU 50
      */
@@ -171,7 +171,7 @@ public:
 
     /**
      * Returns an enumeration of all available meta zone IDs.
-     * @param status Recevies the status.
+     * @param status Receives the status.
      * @return an enumeration object, owned by the caller.
      * @stable ICU 50
      */
@@ -180,7 +180,7 @@ public:
     /**
      * Returns an enumeration of all available meta zone IDs used by the given time zone.
      * @param tzID The canoical tiem zone ID.
-     * @param status Recevies the status.
+     * @param status Receives the status.
      * @return an enumeration object, owned by the caller.
      * @stable ICU 50
      */
