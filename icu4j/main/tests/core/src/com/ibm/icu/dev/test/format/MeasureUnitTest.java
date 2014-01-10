@@ -123,12 +123,24 @@ public class MeasureUnitTest extends TestFmwk {
                 {_6h_56_92m, "6:56.92"},
                 {_3h_5h, "3h, 5h"}};
         Object[][] fullDataDe = {
-                {_1m_59_9996s, "1 Minute und 59.9996 Sekunden"},
+                {_1m_59_9996s, "1 Minute und 59,9996 Sekunden"},
                 {_19m, "19 Minuten"},
-                {_1h_23_5s, "1 Stunde und 23.5 Sekunden"},
-                {_1h_23_5m, "1 Stunde und 23.5 Minuten"},
+                {_1h_23_5s, "1 Stunde und 23,5 Sekunden"},
+                {_1h_23_5m, "1 Stunde und 23,5 Minuten"},
                 {_1h_0m_23s, "1 Stunde, 0 Minuten und 23 Sekunden"},
                 {_2y_5M_3w_4d, "2 Jahre, 5 Monate, 3 Wochen und 4 Tage"}};
+        Object[][] numericDataDe = {
+                {_1m_59_9996s, "1:59,9996"},
+                {_19m, "19 Min."},
+                {_1h_23_5s, "1:00:23,5"},
+                {_1h_0m_23s, "1:00:23"},
+                {_1h_23_5m, "1:23,5"},
+                {_5h_17m, "5:17"},
+                {_19m_28s, "19:28"},
+                {_2y_5M_3w_4d, "2 J, 5 M, 3 W und 4 T"},
+                {_0h_0m_17s, "0:00:17"},
+                {_6h_56_92m, "6:56,92"},
+                {_3h_5h, "3 Std., 5 Std."}};
         
         NumberFormat nf = NumberFormat.getNumberInstance(ULocale.ENGLISH);
         nf.setMaximumFractionDigits(4);
@@ -138,8 +150,12 @@ public class MeasureUnitTest extends TestFmwk {
         verifyFormatPeriod("en SHORT", mf, abbrevData);
         mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.NUMERIC, nf);
         verifyFormatPeriod("en NUMERIC", mf, numericData);
+        nf = NumberFormat.getNumberInstance(ULocale.GERMAN);
+        nf.setMaximumFractionDigits(4);
         mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.WIDE, nf);
         verifyFormatPeriod("de FULL", mf, fullDataDe);
+        mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.NUMERIC, nf);
+        verifyFormatPeriod("de NUMERIC", mf, numericDataDe);
     }
     
 
