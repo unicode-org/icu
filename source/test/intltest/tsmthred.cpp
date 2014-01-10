@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1999-2013, International Business Machines Corporation and
+ * Copyright (c) 1999-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -629,7 +629,6 @@ UnicodeString showDifference(const UnicodeString& expected, const UnicodeString&
 
 const int kFormatThreadIterations = 100;  // # of iterations per thread
 const int kFormatThreadThreads    = 10;  // # of threads to spawn   
-const int kFormatThreadPatience   = 60;  // time in seconds to wait for all threads
 
 #if !UCONFIG_NO_FORMATTING
 

@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -1216,7 +1216,7 @@ TestJitterbug1098(){
          "&\\'<\\\\",
          "&\\\"<'\\'",
          "&'\"'<\\'",
-         '\0'
+         NULL
 
     };
     const UCollationResult results1098[] = {
