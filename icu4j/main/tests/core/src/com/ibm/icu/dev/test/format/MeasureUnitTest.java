@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 2013, International Business Machines Corporation and         *
+ * Copyright (C) 2013-2014, International Business Machines Corporation and         *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  */
@@ -401,6 +401,15 @@ public class MeasureUnitTest extends TestFmwk {
         checkStreamingEquality(Currency.getInstance("EUR"));
         checkStreamingEquality(MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.SHORT));
         checkStreamingEquality(MeasureFormat.getCurrencyFormat(ULocale.ITALIAN));
+    }
+    
+    public void TestSerialFormatWidthEnum() {
+        // FormatWidth enum values must map to the same ordinal values for all time in order for
+        // serialization to work.
+        assertEquals("FormatWidth.WIDE", 0, FormatWidth.WIDE.ordinal());
+        assertEquals("FormatWidth.SHORT", 1, FormatWidth.SHORT.ordinal());
+        assertEquals("FormatWidth.NARROW", 2, FormatWidth.NARROW.ordinal());
+        assertEquals("FormatWidth.NUMERIC", 3, FormatWidth.NUMERIC.ordinal());
     }
     
     public <T extends Serializable> void checkStreamingEquality(T item) {

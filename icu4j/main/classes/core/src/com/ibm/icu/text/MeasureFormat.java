@@ -860,7 +860,7 @@ public class MeasureFormat extends UFormat {
         public void writeExternal(ObjectOutput out) throws IOException {
             out.writeByte(0); // version
             out.writeUTF(locale.toLanguageTag());
-            out.writeByte(toFormatWidthOrdinal(formatWidth));
+            out.writeByte(formatWidth.ordinal());
             out.writeObject(numberFormat);
             out.writeByte(subClass);
             out.writeObject(keyValues);
@@ -912,36 +912,12 @@ public class MeasureFormat extends UFormat {
             }
         }
     }
-    // The next two methods must be maintained in lock step. 
-    // The int value associated with each FormatWidth value is the same for all time
-    // and must never change lest serialization breaks.
-    private static FormatWidth fromFormatWidthOrdinal(int ordinal) {
-        switch (ordinal) {
-        case 0:
-            return FormatWidth.WIDE;
-        case 1:
-            return FormatWidth.SHORT;
-        case 2:
-            return FormatWidth.NARROW;
-        case 3:
-            return FormatWidth.NUMERIC;
-        default:
-            return FormatWidth.WIDE;
-        }
-    }
     
-    private static int toFormatWidthOrdinal(FormatWidth fw) {
-        switch (fw) {
-        case WIDE:
-            return 0;
-        case SHORT:
-            return 1;
-        case NARROW:
-            return 2;
-        case NUMERIC:
-            return 3;
-        default:
-            throw new IllegalStateException("Unable to serialize Format Width " + fw);
+    private static FormatWidth fromFormatWidthOrdinal(int ordinal) {
+        FormatWidth[] values = FormatWidth.values();
+        if (ordinal < 0 || ordinal >= values.length) {
+            return FormatWidth.WIDE;
         }
+        return values[ordinal];
     }
 }
