@@ -32,6 +32,7 @@ import com.ibm.icu.impl.DontCareFieldPosition;
 import com.ibm.icu.impl.ICUResourceBundle;
 import com.ibm.icu.impl.SimpleCache;
 import com.ibm.icu.util.Currency;
+import com.ibm.icu.util.CurrencyAmount;
 import com.ibm.icu.util.Measure;
 import com.ibm.icu.util.MeasureUnit;
 import com.ibm.icu.util.TimeZone;
@@ -110,6 +111,8 @@ public class MeasureFormat extends UFormat {
     private final transient Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat;
     
     private final transient NumericFormatters numericFormatters;
+    
+    private final transient ImmutableNumberFormat currencyFormat;
 
     private static final SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>>> localeToUnitToStyleToCountToFormat
             = new SimpleCache<ULocale,Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>>>();
@@ -137,7 +140,7 @@ public class MeasureFormat extends UFormat {
      * @draft ICU 53
      * @provisional
      */
-    // Be sure to update the toFormatWidth and fromFormatWidth() functions
+    // Be sure to update MeasureUnitTest.TestSerialFormatWidthEnum
     // when adding an enum value.
     public enum FormatWidth {
         
@@ -147,7 +150,7 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        WIDE("units", ListFormatter.Style.DURATION), 
+        WIDE("units", ListFormatter.Style.DURATION, NumberFormat.PLURALCURRENCYSTYLE), 
         
         /**
          * Abbreviate when possible.
@@ -155,7 +158,7 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        SHORT("unitsShort", ListFormatter.Style.DURATION_SHORT), 
+        SHORT("unitsShort", ListFormatter.Style.DURATION_SHORT, NumberFormat.ISOCURRENCYSTYLE), 
         
         /**
          * Brief. Use only a symbol for the unit when possible.
@@ -163,7 +166,7 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        NARROW("unitsNarrow", ListFormatter.Style.DURATION_SHORT),
+        NARROW("unitsNarrow", ListFormatter.Style.DURATION_SHORT, NumberFormat.CURRENCYSTYLE),
         
         /**
          * Identical to NARROW except when formatMeasures is called with
@@ -173,21 +176,27 @@ public class MeasureFormat extends UFormat {
          * @draft ICU 53
          * @provisional
          */
-        NUMERIC("unitsNarrow", ListFormatter.Style.DURATION_SHORT);
+        NUMERIC("unitsNarrow", ListFormatter.Style.DURATION_SHORT, NumberFormat.CURRENCYSTYLE);
         
         // Be sure to update the toFormatWidth and fromFormatWidth() functions
         // when adding an enum value.
     
         final String resourceKey;
         private final ListFormatter.Style listFormatterStyle;
+        private final int currencyStyle;
     
-        private FormatWidth(String resourceKey, ListFormatter.Style style) {
+        private FormatWidth(String resourceKey, ListFormatter.Style style, int currencyStyle) {
             this.resourceKey = resourceKey;
             this.listFormatterStyle = style;
+            this.currencyStyle = currencyStyle;
         }
         
         ListFormatter.Style getListFormatterStyle() {
             return listFormatterStyle;
+        }
+        
+        int getCurrencyStyle() {
+            return currencyStyle;
         }
     }
     
@@ -230,13 +239,16 @@ public class MeasureFormat extends UFormat {
                 localeToNumericDurationFormatters.put(locale, formatters);
             }
         }
+        
         return new MeasureFormat(
                 locale,
                 formatWidth,
                 new ImmutableNumberFormat(format),
                 rules,
                 unitToStyleToCountToFormat,
-                formatters);
+                formatters,
+                new ImmutableNumberFormat(
+                        NumberFormat.getInstance(locale, formatWidth.getCurrencyStyle())));
     }
     
     /**
@@ -463,7 +475,8 @@ public class MeasureFormat extends UFormat {
                 new ImmutableNumberFormat(format),
                 this.rules,
                 this.unitToStyleToCountToFormat,
-                this.numericFormatters);
+                this.numericFormatters,
+                this.currencyFormat);
     }
     
     private MeasureFormat(
@@ -472,13 +485,15 @@ public class MeasureFormat extends UFormat {
             ImmutableNumberFormat format,
             PluralRules rules,
             Map<MeasureUnit, EnumMap<FormatWidth, Map<String, PatternData>>> unitToStyleToCountToFormat,
-            NumericFormatters formatters) {
+            NumericFormatters formatters,
+            ImmutableNumberFormat currencyFormat) {
         setLocale(locale, locale);
         this.formatWidth = formatWidth;
         this.numberFormat = format;
         this.rules = rules;
         this.unitToStyleToCountToFormat = unitToStyleToCountToFormat;
         this.numericFormatters = formatters;
+        this.currencyFormat = currencyFormat;
     }
     
     MeasureFormat() {
@@ -488,6 +503,7 @@ public class MeasureFormat extends UFormat {
         this.rules = null;
         this.unitToStyleToCountToFormat = null;
         this.numericFormatters = null;
+        this.currencyFormat = null;
     }
     
     static class NumericFormatters {
@@ -608,8 +624,20 @@ public class MeasureFormat extends UFormat {
     
     private <T extends Appendable> T formatMeasure(
             Measure measure, T appendable, FieldPosition fieldPosition) {
+        if (measure.getUnit() instanceof Currency) {
+            try {
+                appendable.append(
+                        currencyFormat.format(
+                                new CurrencyAmount(measure.getNumber(), (Currency) measure.getUnit()),
+                                new StringBuffer(),
+                                fieldPosition));
+                return appendable;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         Number n = measure.getNumber();
-        MeasureUnit unit = measure.getUnit();        
+        MeasureUnit unit = measure.getUnit(); 
         UFieldPosition fpos = new UFieldPosition(fieldPosition.getFieldAttribute(), fieldPosition.getField());
         StringBuffer formattedNumber = numberFormat.format(n, new StringBuffer(), fpos);
         String keyword = rules.select(new PluralRules.FixedDecimal(n.doubleValue(), fpos.getCountVisibleFractionDigits(), fpos.getFractionDigits()));
@@ -648,6 +676,11 @@ public class MeasureFormat extends UFormat {
         
         public synchronized StringBuffer format(
                 Number n, StringBuffer buffer, FieldPosition pos) {
+            return nf.format(n, buffer, pos);
+        }
+        
+        public synchronized StringBuffer format(
+                CurrencyAmount n, StringBuffer buffer, FieldPosition pos) {
             return nf.format(n, buffer, pos);
         }
 

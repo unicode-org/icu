@@ -122,6 +122,13 @@ public class MeasureUnitTest extends TestFmwk {
                 {_0h_0m_17s, "0:00:17"},
                 {_6h_56_92m, "6:56.92"},
                 {_3h_5h, "3h, 5h"}};
+        Object[][] fullDataDe = {
+                {_1m_59_9996s, "1 Minute und 59.9996 Sekunden"},
+                {_19m, "19 Minuten"},
+                {_1h_23_5s, "1 Stunde und 23.5 Sekunden"},
+                {_1h_23_5m, "1 Stunde und 23.5 Minuten"},
+                {_1h_0m_23s, "1 Stunde, 0 Minuten und 23 Sekunden"},
+                {_2y_5M_3w_4d, "2 Jahre, 5 Monate, 3 Wochen und 4 Tage"}};
         
         NumberFormat nf = NumberFormat.getNumberInstance(ULocale.ENGLISH);
         nf.setMaximumFractionDigits(4);
@@ -130,7 +137,9 @@ public class MeasureUnitTest extends TestFmwk {
         mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT, nf);
         verifyFormatPeriod("en SHORT", mf, abbrevData);
         mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.NUMERIC, nf);
-        verifyFormatPeriod("en NUMERIC", mf, numericData);   
+        verifyFormatPeriod("en NUMERIC", mf, numericData);
+        mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.WIDE, nf);
+        verifyFormatPeriod("de FULL", mf, fullDataDe);
     }
     
 
@@ -214,6 +223,33 @@ public class MeasureUnitTest extends TestFmwk {
                 "testGram",
                 "1 G",
                 mf.format(new Measure(1, MeasureUnit.G_FORCE)));
+    }
+    
+    public void testCurrencies() {
+        Measure USD_1 = new Measure(1.0, Currency.getInstance("USD"));
+        Measure USD_2 = new Measure(2.0, Currency.getInstance("USD"));
+        Measure USD_NEG_1 = new Measure(-1.0, Currency.getInstance("USD"));
+        MeasureFormat mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.WIDE);
+        assertEquals("Wide currency", "-1.00 US dollars", mf.format(USD_NEG_1));
+        assertEquals("Wide currency", "1.00 US dollars", mf.format(USD_1));
+        assertEquals("Wide currency", "2.00 US dollars", mf.format(USD_2));
+        mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT);
+        assertEquals("short currency", "-USD1.00", mf.format(USD_NEG_1));
+        assertEquals("short currency", "USD1.00", mf.format(USD_1));
+        assertEquals("short currency", "USD2.00", mf.format(USD_2));
+        mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.NARROW);
+        assertEquals("narrow currency", "-$1.00", mf.format(USD_NEG_1));
+        assertEquals("narrow currency", "$1.00", mf.format(USD_1));
+        assertEquals("narrow currency", "$2.00", mf.format(USD_2));
+        mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.NUMERIC);
+        assertEquals("numeric currency", "-$1.00", mf.format(USD_NEG_1));
+        assertEquals("numeric currency", "$1.00", mf.format(USD_1));
+        assertEquals("numeric currency", "$2.00", mf.format(USD_2));
+        
+        mf = MeasureFormat.getInstance(ULocale.JAPAN, FormatWidth.WIDE);
+        assertEquals("Wide currency", "-1.00 \u7C73\u30C9\u30EB", mf.format(USD_NEG_1));
+        assertEquals("Wide currency", "1.00 \u7C73\u30C9\u30EB", mf.format(USD_1));
+        assertEquals("Wide currency", "2.00 \u7C73\u30C9\u30EB", mf.format(USD_2));
     }
 
     public void testExamples() {
