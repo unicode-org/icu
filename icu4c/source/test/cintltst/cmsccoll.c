@@ -1,7 +1,7 @@
 
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 2001-2013, International Business Machines Corporation and
+ * Copyright (c) 2001-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /*******************************************************************************
@@ -1573,6 +1573,7 @@ static void TestChMove(void) {
 
 
 
+/*
 const static char impTest[][20] = {
   "\\u4e00",
     "a",
@@ -1581,6 +1582,7 @@ const static char impTest[][20] = {
     "B",
     "\\u4e01"
 };
+*/
 
 
 static void TestImplicitTailoring(void) {

@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *
-*   Copyright (C) 1997-2013, International Business Machines
+*   Copyright (C) 1997-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 *
 ******************************************************************************
@@ -2136,6 +2136,7 @@ u_versionToString(const UVersionInfo versionArray, char *versionString) {
 
 U_CAPI void U_EXPORT2
 u_getVersion(UVersionInfo versionArray) {
+    (void)copyright;   // Suppress unused variable warning from clang.
     u_versionFromString(versionArray, U_ICU_VERSION);
 }
 

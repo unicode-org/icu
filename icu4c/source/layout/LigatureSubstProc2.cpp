@@ -1,6 +1,6 @@
 /*
  *
- * (C) Copyright IBM Corp and Others. 1998-2013 - All Rights Reserved
+ * (C) Copyright IBM Corp and Others. 1998-2014 - All Rights Reserved
  *
  */
 
@@ -25,7 +25,7 @@ UOBJECT_DEFINE_RTTI_IMPLEMENTATION(LigatureSubstitutionProcessor2)
 LigatureSubstitutionProcessor2::LigatureSubstitutionProcessor2(const LEReferenceTo<MorphSubtableHeader2> &morphSubtableHeader, LEErrorCode &success)
   : StateTableProcessor2(morphSubtableHeader, success), 
   ligActionOffset(0),
-  ligatureSubstitutionHeader(morphSubtableHeader, success), componentOffset(0), ligatureOffset(0), entryTable()
+  componentOffset(0), ligatureOffset(0),  entryTable(), ligatureSubstitutionHeader(morphSubtableHeader, success)
 {
     if (LE_FAILURE(success)) return;
 
@@ -84,7 +84,7 @@ le_uint16 LigatureSubstitutionProcessor2::processStateEntry(LEGlyphStorage &glyp
         }
         
         do {
-            le_uint32 componentGlyph = componentStack[m--]; // pop off
+            le_int32 componentGlyph = componentStack[m--]; // pop off
 
             ap.addObject(success);
             action = SWAPL(*ap.getAlias());
@@ -95,7 +95,7 @@ le_uint16 LigatureSubstitutionProcessor2::processStateEntry(LEGlyphStorage &glyp
 
             offset = action & lafComponentOffsetMask;
             if (offset != 0) {
-                if(componentGlyph > glyphStorage.getGlyphCount()) {
+                if(componentGlyph > glyphStorage.getGlyphCount() || componentGlyph < 0) {
                   LE_DEBUG_BAD_FONT("preposterous componentGlyph");
                   currGlyph+= dir;
                   return nextStateIndex; // get out! bad font

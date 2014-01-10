@@ -1,6 +1,6 @@
 /*
 **********************************************************************
-*   Copyright (C) 2000-2012, International Business Machines
+*   Copyright (C) 2000-2014, International Business Machines
 *   Corporation and others.  All Rights Reserved.
 **********************************************************************
 *   file name:  ucnv2022.cpp
@@ -748,7 +748,7 @@ getKey_2022(char c,int32_t* key,int32_t* offset){
 
     while (hi != low)  /*binary search*/{
 
-        register int32_t mid = (hi+low) >> 1; /*Finds median*/
+        int32_t mid = (hi+low) >> 1; /*Finds median*/
 
         if (mid == oldmid)
             break;
