@@ -1,5 +1,5 @@
 /******************************************************************************
- *   Copyright (C) 2000-2013, International Business Machines
+ *   Copyright (C) 2000-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  *******************************************************************************
  *   file name:  pkgdata.cpp
@@ -1985,7 +1985,7 @@ static void loadLists(UPKGOptions *o, UErrorCode *status)
       if (cmdBuf[0] != 0) {
           uprv_strncat(cmdBuf, U_FILE_SEP_STRING, 1024);
       }
-      uprv_strncat(cmdBuf, cmd, 1024);
+      uprv_strncat(cmdBuf, cmd, 1023);
       
       if(verbose) {
         fprintf(stdout, "# Calling icu-config: %s\n", cmdBuf);

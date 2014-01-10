@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines
+ * Copyright (c) 1997-2014, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -4218,38 +4218,38 @@ void DateFormatTest::TestDateFormatLeniency() {
         { NULL,     true,       UnicodeString(""),              UnicodeString(""),                  UnicodeString("") }                
     };
     UErrorCode status = U_ZERO_ERROR;
-    Calendar* cal = Calendar::createInstance(status);
+    LocalPointer<Calendar> cal(Calendar::createInstance(status));
     if (U_FAILURE(status)) {
         dataerrln(UnicodeString("FAIL: Unable to create Calendar for default timezone and locale."));
-    } else {
-        cal->setTime(july022008, status);
-        const TestDateFormatLeniencyItem * itemPtr;
-        for (itemPtr = items; itemPtr->locale != NULL; itemPtr++ ) {
-                                            
-           Locale locale = Locale::createFromName(itemPtr->locale);
-           status = U_ZERO_ERROR;
-           ParsePosition pos(0);
-           SimpleDateFormat * sdmft = new SimpleDateFormat(itemPtr->pattern, locale, status);
-           if (U_FAILURE(status)) {
-               dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
-               continue;
-           }
-           sdmft->setLenient(itemPtr->leniency);
-           sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
-           /*UDate d = */sdmft->parse(itemPtr->parseString, pos);
-
-           delete sdmft;
-           if(pos.getErrorIndex() > -1)
-               if(itemPtr->expectedResult.length() != 0) {
-                 errln("error: unexpected error - " + itemPtr->parseString + " - error index " + pos.getErrorIndex() + " - leniency " + itemPtr->leniency);
-                 continue;
-               } else {
-                 continue;
-               }
-        }
+        return;
     }
-    delete cal;
+    cal->setTime(july022008, status);
+    const TestDateFormatLeniencyItem * itemPtr;
+    LocalPointer<SimpleDateFormat> sdmft;
+    for (itemPtr = items; itemPtr->locale != NULL; itemPtr++ ) {
+                                        
+       Locale locale = Locale::createFromName(itemPtr->locale);
+       status = U_ZERO_ERROR;
+       ParsePosition pos(0);
+       sdmft.adoptInstead(new SimpleDateFormat(itemPtr->pattern, locale, status));
+       if (U_FAILURE(status)) {
+           dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
+           continue;
+       }
+       sdmft->setLenient(itemPtr->leniency);
+       sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status).
+              setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
+       UDate d = sdmft->parse(itemPtr->parseString, pos); 
+       (void)d;
 
+       // TODO: Ticket 10625. Nothing here is checking the expected result when the parse succeeds.
+       
+       if ((pos.getErrorIndex() > -1) && (itemPtr->expectedResult.length() != 0)) {
+           errln("error: unexpected error - " + itemPtr->parseString + 
+                 " - error index " + pos.getErrorIndex() + 
+                 " - leniency " + itemPtr->leniency);
+       }
+    }
 }
 
 #endif /* #if !UCONFIG_NO_FORMATTING */

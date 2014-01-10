@@ -1,6 +1,6 @@
 /************************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation
+ * Copyright (c) 1997-2014, International Business Machines Corporation
  * and others. All Rights Reserved.
  ************************************************************************/
 #include "unicode/utypes.h"
@@ -2912,6 +2912,7 @@ void CalendarTest::TestHebrewMonthValidation() {
     // 5777 is NOT a lear year and does not have month Adar I
     pCal->set(5777, HebrewCalendar::ADAR_1, 1);
     d = pCal->getTime(status);
+    (void)d;
     if (status == U_ILLEGAL_ARGUMENT_ERROR) {
         logln("Info: U_ILLEGAL_ARGUMENT_ERROR, because 5777 Adar I 1 is not a valid date.");
     } else {

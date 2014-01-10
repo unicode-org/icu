@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 2008-2013, International Business Machines Corporation and
+ * Copyright (c) 2008-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -20,6 +20,8 @@
 #ifdef TUFMTTS_DEBUG
 #include <iostream>
 #endif
+
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 void TimeUnitTest::runIndexedTest( int32_t index, UBool exec, const char* &name, char* /*par*/ ) {
     if (exec) logln("TestSuite TimeUnitTest");
@@ -387,7 +389,7 @@ void TimeUnitTest::test10219Plurals() {
         dataerrln("generating NumberFormat Object failed: %s", u_errorName(status));
         return;
     }
-    for (int32_t i = 0; i < sizeof(expected) / sizeof(expected[0]); ++i) {
+    for (int32_t i = 0; i < LENGTHOF(expected); ++i) {
         nf->setMaximumFractionDigits(i);
         nf->setRoundingMode(DecimalFormat::kRoundDown);
         tuf.setNumberFormat(*nf, status);

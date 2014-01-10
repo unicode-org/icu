@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2013, International Business Machines
+ * Copyright (c) 1997-2014, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 /*****************************************************************************
@@ -2417,10 +2417,10 @@ static void TestStrcollNull(void) {
     const UChar u16han[] = {0x5c71, 0x5ddd, 0};
     const int32_t u16hanLen = 2;
 
-    const char u8asc[] = {0x49, 0x42, 0x4D, 0};
+    const char *u8asc = "\x49\x42\x4D";
     const int32_t u8ascLen = 3;
 
-    const char u8han[] = {0xE5, 0xB1, 0xB1, 0xE5, 0xB7, 0x9D, 0};
+    const char *u8han = "\xE5\xB1\xB1\xE5\xB7\x9D";
     const int32_t u8hanLen = 6;
 
     coll = ucol_open(NULL, &status);
