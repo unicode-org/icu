@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1996-2013, International Business Machines Corporation and
+ * Copyright (C) 1996-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  *******************************************************************************
  */
@@ -1289,7 +1289,7 @@ ucal_getTZDataVersion(UErrorCode* status);
  * @param resultCapacity    The capacity of the result buffer.
  * @param isSystemID        Receives if the given ID is a known system
      *                      timezone ID.
- * @param status    Recevies the status.  When the given timezone ID
+ * @param status    Receives the status.  When the given timezone ID
  *                  is neither a known system time zone ID nor a
  *                  valid custom timezone ID, U_ILLEGAL_ARGUMENT_ERROR
  *                  is set.

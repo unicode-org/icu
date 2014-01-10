@@ -1,5 +1,5 @@
 /*************************************************************************
-* Copyright (c) 1997-2013, International Business Machines Corporation
+* Copyright (c) 1997-2014, International Business Machines Corporation
 * and others. All Rights Reserved.
 **************************************************************************
 *
@@ -330,7 +330,7 @@ public:
      * @param id            The input time zone ID to be canonicalized.
      * @param canonicalID   Receives the canonical system time zone ID
      *                      or the custom time zone ID in normalized format.
-     * @param status        Recevies the status.  When the given time zone ID
+     * @param status        Receives the status.  When the given time zone ID
      *                      is neither a known system time zone ID nor a
      *                      valid custom time zone ID, U_ILLEGAL_ARGUMENT_ERROR
      *                      is set.
@@ -348,7 +348,7 @@ public:
      *                      or the custom time zone ID in normalized format.
      * @param isSystemID    Receives if the given ID is a known system
      *                      time zone ID.
-     * @param status        Recevies the status.  When the given time zone ID
+     * @param status        Receives the status.  When the given time zone ID
      *                      is neither a known system time zone ID nor a
      *                      valid custom time zone ID, U_ILLEGAL_ARGUMENT_ERROR
      *                      is set.

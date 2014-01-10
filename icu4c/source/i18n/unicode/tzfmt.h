@@ -1,7 +1,7 @@
 /*
 *******************************************************************************
-* Copyright (C) 2011-2013, International Business Machines Corporation and    *
-* others. All Rights Reserved.                                                *
+* Copyright (C) 2011-2014, International Business Machines Corporation and
+* others. All Rights Reserved.
 *******************************************************************************
 */
 #ifndef __TZFMT_H
@@ -302,7 +302,7 @@ public:
     /**
      * Creates an instance of <code>TimeZoneFormat</code> for the given locale.
      * @param locale The locale.
-     * @param status Recevies the status.
+     * @param status Receives the status.
      * @return An instance of <code>TimeZoneFormat</code> for the given locale,
      *          owned by the caller.
      * @stable ICU 50
