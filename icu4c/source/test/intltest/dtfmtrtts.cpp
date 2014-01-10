@@ -1,6 +1,6 @@
 /***********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation
+ * Copyright (c) 1997-2014, International Business Machines Corporation
  * and others. All Rights Reserved.
  ***********************************************************************/
  
@@ -27,8 +27,6 @@
 #ifndef INFINITE
 #define INFINITE 0
 #endif
-
-static const UVersionInfo ICU_452 = {4,5,2,0};
 
 // Define this to test just a single locale
 //#define TEST_ONE_LOC  "cs_CZ"

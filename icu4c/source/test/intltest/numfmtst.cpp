@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT:
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 /* Modification History:
@@ -42,8 +42,6 @@
 #define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof(array[0]))
 
 static const UChar EUR[] = {69,85,82,0}; // "EUR"
-static const UChar JPY[] = {0x4A, 0x50, 0x59, 0};
-static const UChar CNY[] = {0x43, 0x4E, 0x59, 0};
 static const UChar ISO_CURRENCY_USD[] = {0x55, 0x53, 0x44, 0}; // "USD"
 
 
@@ -2631,6 +2629,8 @@ void NumberFormatTest::expectPad(DecimalFormat& fmt, const UnicodeString& pat,
 // This test is flaky b/c the symbols for CNY and JPY are equivalent in this locale  - FIXME
 void NumberFormatTest::TestCompatibleCurrencies() {
 /*
+    static const UChar JPY[] = {0x4A, 0x50, 0x59, 0};
+    static const UChar CNY[] = {0x43, 0x4E, 0x59, 0};
     UErrorCode status = U_ZERO_ERROR;
     LocalPointer<NumberFormat> fmt(
         NumberFormat::createCurrencyInstance(Locale::getUS(), status));
