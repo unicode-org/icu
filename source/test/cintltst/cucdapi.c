@@ -1,5 +1,5 @@
 /********************************************************************
- * Copyright (c) 1997-2013, International Business Machines
+ * Copyright (c) 1997-2014, International Business Machines
  * Corporation and others. All Rights Reserved.
  ********************************************************************/
 
@@ -39,7 +39,7 @@ void TestUScriptCodeAPI(){
         "asfdasd", "5464", "12235",
         /* test the last index */
         "zyyy", "YI",
-        '\0'  
+        NULL  
         };
         UScriptCode expected[] ={
             /* locales should return */
@@ -68,7 +68,7 @@ void TestUScriptCodeAPI(){
 
         const int32_t capacity = 10;
 
-        for( ; testNames[i]!='\0'; i++){
+        for( ; testNames[i]!=NULL; i++){
             UScriptCode script[10]={USCRIPT_INVALID_CODE};
             uscript_getCode(testNames[i],script,capacity, &err);
             if( script[0] != expected[i]){
@@ -126,7 +126,7 @@ void TestUScriptCodeAPI(){
             /* test names */
             "Cyrillic","Deseret","Devanagari","Ethiopic","Georgian", 
             "Gothic",  "Greek",  "Gujarati", 
-             '\0'
+             NULL
         };
         i=0;
         while(i<sizeof(testAbbr)/sizeof(UScriptCode)){
@@ -165,7 +165,7 @@ void TestUScriptCodeAPI(){
             "Knda","Kana","Khmr","Laoo",
             "Latn",
             "Mlym", "Mong",
-             '\0'
+             NULL
         };
         i=0;
         while(i<sizeof(testAbbr)/sizeof(UScriptCode)){

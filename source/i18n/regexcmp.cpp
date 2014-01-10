@@ -1,7 +1,7 @@
 //
 //  file:  regexcmp.cpp
 //
-//  Copyright (C) 2002-2013 International Business Machines Corporation and others.
+//  Copyright (C) 2002-2014 International Business Machines Corporation and others.
 //  All Rights Reserved.
 //
 //  This file contains the ICU regular expression compiler, which is responsible
@@ -3937,6 +3937,7 @@ UnicodeSet *RegexCompile::scanProp() {
     if (U_FAILURE(*fStatus)) {
         return NULL;
     }
+    (void)chLowerP;   // Suppress compiler unused variable warning.
     U_ASSERT(fC.fChar == chLowerP || fC.fChar == chP);
     UBool negated = (fC.fChar == chP);
 

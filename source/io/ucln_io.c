@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2013, International Business Machines                   *
+* Copyright (C) 2001-2014, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -36,6 +36,7 @@ static UBool io_cleanup(void)
 {
     ECleanupIOType libType = UCLN_IO_START;
 
+    (void)copyright;  // Suppress unused variable warning.
     while (++libType<UCLN_IO_COUNT) {
         if (gCleanupFunctions[libType])
         {

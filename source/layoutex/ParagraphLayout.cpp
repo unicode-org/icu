@@ -1,6 +1,6 @@
 /*
  **********************************************************************
- *   Copyright (C) 2002-2013, International Business Machines
+ *   Copyright (C) 2002-2014, International Business Machines
  *   Corporation and others.  All Rights Reserved.
  **********************************************************************
  */
@@ -332,6 +332,7 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
         return;
     }
 
+    (void)copyright;  // Suppress unused variable warning.
     (void)fVertical;  // Suppress warning for unused field fVertical.
 
     // FIXME: should check the limit arrays for consistency...
@@ -359,7 +360,7 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     le_int32  styleCount = sizeof styleRunArrays / sizeof styleRunArrays[0];
     StyleRuns styleRuns(styleRunArrays, styleCount);
     LEErrorCode layoutStatus = LE_NO_ERROR;
-    
+
     fStyleRunCount = styleRuns.getRuns(NULL, NULL);
 
     fStyleRunLimits = LE_NEW_ARRAY(le_int32, fStyleRunCount);
@@ -427,7 +428,7 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     }
 
     // Make big arrays for the glyph widths, glyph-to-char and char-to-glyph maps,
-    // in logical order. (Both maps need an extra entry for the end of the text.) 
+    // in logical order. (Both maps need an extra entry for the end of the text.)
     //
     // For each layout get the positions and convert them into glyph widths, in
     // logical order. Get the glyph-to-char mapping, offset by starting index in the
@@ -437,7 +438,7 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
     fGlyphToCharMap    = LE_NEW_ARRAY(le_int32, fGlyphCount + 1);
     fCharToMinGlyphMap = LE_NEW_ARRAY(le_int32, fCharCount + 1);
     fCharToMaxGlyphMap = LE_NEW_ARRAY(le_int32, fCharCount + 1);
-    if ((fGlyphWidths == NULL) || (fGlyphToCharMap == NULL) || 
+    if ((fGlyphWidths == NULL) || (fGlyphToCharMap == NULL) ||
         (fCharToMinGlyphMap == NULL) || (fCharToMaxGlyphMap == NULL)) {
         status = LE_MEMORY_ALLOCATION_ERROR;
         return;
@@ -452,7 +453,7 @@ ParagraphLayout::ParagraphLayout(const LEUnicode chars[], le_int32 count,
 
         fStyleRunInfo[run].glyphs = LE_NEW_ARRAY(LEGlyphID, glyphCount);
         fStyleRunInfo[run].positions = LE_NEW_ARRAY(float, glyphCount * 2 + 2);
-        if ((fStyleRunInfo[run].glyphs == NULL) || 
+        if ((fStyleRunInfo[run].glyphs == NULL) ||
             (fStyleRunInfo[run].positions == NULL)) {
             status = LE_MEMORY_ALLOCATION_ERROR;
             return;
@@ -610,7 +611,7 @@ ParagraphLayout::~ParagraphLayout()
     }
 }
 
-    
+
 le_bool ParagraphLayout::isComplex(const LEUnicode chars[], le_int32 count)
 {
     UErrorCode scriptStatus = U_ZERO_ERROR;
@@ -1090,7 +1091,7 @@ void ParagraphLayout::appendRun(ParagraphLayout::Line *line, le_int32 run, le_in
     // previous run, even though this glyph may be in the middle of the
     // run.
     fVisualRunLastX -= fStyleRunInfo[run].positions[leftGlyph * 2];
- 
+
     // Make rightGlyph be the glyph just to the right of
     // the run's glyphs
     rightGlyph += 1;
@@ -1204,7 +1205,7 @@ le_int32 ParagraphLayout::Line::getWidth() const
 
     le_int32 glyphCount = lastRun->getGlyphCount();
     const float *positions = lastRun->getPositions();
-    
+
     return (le_int32) positions[glyphCount * 2];
 }
 

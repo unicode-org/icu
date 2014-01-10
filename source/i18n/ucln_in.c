@@ -1,7 +1,7 @@
 /*
 ******************************************************************************
 *                                                                            *
-* Copyright (C) 2001-2009, International Business Machines                   *
+* Copyright (C) 2001-2014, International Business Machines                   *
 *                Corporation and others. All Rights Reserved.                *
 *                                                                            *
 ******************************************************************************
@@ -30,6 +30,7 @@ static cleanupFunc *gCleanupFunctions[UCLN_I18N_COUNT];
 static UBool i18n_cleanup(void)
 {
     ECleanupI18NType libType = UCLN_I18N_START;
+    (void)copyright;   /* Suppress unused variable warning with clang. */
 
     while (++libType<UCLN_I18N_COUNT) {
         if (gCleanupFunctions[libType])
