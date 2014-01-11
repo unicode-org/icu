@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh_Hans_HK.xml
@@ -34,7 +34,7 @@ zh_Hans_HK{
     Variants{
         WADEGILE{"韦氏拼音罗马字"}
     }
-    Version{"2.0.92.87"}
+    Version{"2.0.96.25"}
     codePatterns{
         script{"语系：{0}"}
     }

@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/fr.xml
  */
 fr{
-    Version{"2.0.96.1"}
+    Version{"2.0.96.40"}
     zoneStrings{
         "Africa:Addis_Ababa"{
             ec{"Addis-Abeba"}
@@ -872,6 +872,16 @@ fr{
         }
         "meta:Mawson"{
             ls{"heure de Mawson"}
+        }
+        "meta:Mexico_Northwest"{
+            ld{"heure avancée du Nord-Ouest du Mexique"}
+            lg{"heure du Nord-Ouest du Mexique"}
+            ls{"heure normale du Nord-Ouest du Mexique"}
+        }
+        "meta:Mexico_Pacific"{
+            ld{"heure avancée du Pacifique mexicain"}
+            lg{"heure du Pacifique mexicain"}
+            ls{"heure normale du Pacifique mexicain"}
         }
         "meta:Mongolia"{
             ld{"heure avancée d’Oulan-Bator"}
