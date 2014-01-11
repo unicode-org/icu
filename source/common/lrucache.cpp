@@ -1,50 +1,33 @@
 /*
-*******************************************************************************
-* Copyright (C) 2013, International Business Machines Corporation and         
+******************************************************************************
+* Copyright (C) 2014, International Business Machines Corporation and         
 * others. All Rights Reserved.                                                
-*******************************************************************************
+******************************************************************************
 *                                                                             
 * File LRUCACHE.CPP                                                             
-*******************************************************************************
+******************************************************************************
 */
 
 #include "lrucache.h"
 #include "uhash.h"
 #include "cstring.h"
+#include "uassert.h"
 
 U_NAMESPACE_BEGIN
 
-// Named CacheEntry2 to avoid conflict with CacheEntry in serv.cpp
-// Don't know how to make truly private class that the linker can't see.
-class CacheEntry2 : public UMemory {
-public:
-    CacheEntry2 *moreRecent;
-    CacheEntry2 *lessRecent;
-    char *localeId;
-    SharedPtr<UObject> cachedData;
-    UErrorCode status;  // This is the error if any from creating cachedData.
+// TODO (Travis Keep): Consider building synchronization into this cache
+// instead of leaving synchronization up to the clients.
 
-    CacheEntry2();
-    ~CacheEntry2();
-
-    void unlink();
-    void uninit();
-    UBool init(const char *localeId, UObject *dataToAdopt, UErrorCode err);
-private:
-    CacheEntry2(const CacheEntry2& other);
-    CacheEntry2 &operator=(const CacheEntry2& other);
-};
-
-CacheEntry2::CacheEntry2() 
-    : moreRecent(NULL), lessRecent(NULL), localeId(NULL), cachedData(),
+LRUCache::CacheEntry::CacheEntry() 
+    : moreRecent(NULL), lessRecent(NULL), localeId(NULL), cachedData(NULL),
       status(U_ZERO_ERROR) {
 }
 
-CacheEntry2::~CacheEntry2() {
-    uninit();
+LRUCache::CacheEntry::~CacheEntry() {
+    reset();
 }
 
-void CacheEntry2::unlink() {
+void LRUCache::CacheEntry::unlink() {
     if (moreRecent != NULL) {
         moreRecent->lessRecent = lessRecent;
     }
@@ -55,8 +38,8 @@ void CacheEntry2::unlink() {
     lessRecent = NULL;
 }
 
-void CacheEntry2::uninit() {
-    cachedData.clear();
+void LRUCache::CacheEntry::reset() {
+    SharedObject::clearPtr(cachedData);
     status = U_ZERO_ERROR;
     if (localeId != NULL) {
         uprv_free(localeId);
@@ -64,23 +47,18 @@ void CacheEntry2::uninit() {
     localeId = NULL;
 }
 
-UBool CacheEntry2::init(const char *locId, UObject *dataToAdopt, UErrorCode err) {
-    uninit();
-    localeId = (char *) uprv_malloc(strlen(locId) + 1);
-    if (localeId == NULL) {
-        delete dataToAdopt;
-        return FALSE;
-    }
-    uprv_strcpy(localeId, locId);
-    if (!cachedData.adoptInstead(dataToAdopt)) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return TRUE;
-    }
+void LRUCache::CacheEntry::init(
+        char *adoptedLocId, SharedObject *dataToAdopt, UErrorCode err) {
+    U_ASSERT(localeId == NULL);
+    localeId = adoptedLocId;
+    SharedObject::copyPtr(dataToAdopt, cachedData);
     status = err;
-    return TRUE;
 }
 
-void LRUCache::moveToMostRecent(CacheEntry2 *entry) {
+void LRUCache::moveToMostRecent(LRUCache::CacheEntry *entry) {
+    if (entry->moreRecent == mostRecentlyUsedMarker) {
+        return;
+    }
     entry->unlink();
     entry->moreRecent = mostRecentlyUsedMarker;
     entry->lessRecent = mostRecentlyUsedMarker->lessRecent;
@@ -88,29 +66,10 @@ void LRUCache::moveToMostRecent(CacheEntry2 *entry) {
     mostRecentlyUsedMarker->lessRecent = entry;
 }
 
-UObject *LRUCache::safeCreate(const char *localeId, UErrorCode &status) {
-    UObject *result = create(localeId, status);
-
-    // Safe guard to ensure that some error is reported for missing data in
-    // case subclass forgets to set status.
-    if (result == NULL && U_SUCCESS(status)) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return NULL;
-    } 
-
-    // Safe guard to ensure that if subclass reports an error and returns
-    // data that we don't leak memory.
-    if (result != NULL && U_FAILURE(status)) {
-        delete result;
-        return NULL;
-    }
-    return result;
-}
-
-UBool LRUCache::init(const char *localeId, CacheEntry2 *entry) {
+void LRUCache::init(char *adoptedLocId, LRUCache::CacheEntry *entry) {
     UErrorCode status = U_ZERO_ERROR;
-    UObject *result = safeCreate(localeId, status);
-    return entry->init(localeId, result, status);
+    SharedObject *result = create(adoptedLocId, status);
+    entry->init(adoptedLocId, result, status);
 }
 
 UBool LRUCache::contains(const char *localeId) const {
@@ -118,56 +77,53 @@ UBool LRUCache::contains(const char *localeId) const {
 }
 
 
-void LRUCache::_get(const char *localeId, SharedPtr<UObject>& ptr, UErrorCode &status) {
-    CacheEntry2 *entry = (CacheEntry2 *) uhash_get(localeIdToEntries, localeId);
-    if (entry != NULL) {
-        moveToMostRecent(entry);
-    } else {
+const SharedObject *LRUCache::_get(const char *localeId, UErrorCode &status) {
+    // TODO (Travis Keep): Consider stripping irrelevant locale keywords.
+    LRUCache::CacheEntry *entry = (LRUCache::CacheEntry *) uhash_get(
+            localeIdToEntries, localeId);
+    if (entry == NULL) {
         // Its a cache miss.
 
         if (uhash_count(localeIdToEntries) < maxSize) {
-            entry = new CacheEntry2;
+            // Cache not full. There is room for a new entry.
+            entry = new LRUCache::CacheEntry;
+            if (entry == NULL) {
+                status = U_MEMORY_ALLOCATION_ERROR;
+                return NULL;
+            }
         } else {
+            // Cache full. Must evict an entry and re-use it.
             entry = leastRecentlyUsedMarker->moreRecent;
             uhash_remove(localeIdToEntries, entry->localeId);
             entry->unlink();
-            entry->uninit();
+            entry->reset();
         }
  
         // entry is an uninitialized, unlinked cache entry 
-        // or entry is null if memory could not be allocated.
-        if (entry != NULL) {
-            if (!init(localeId, entry)) {
-                delete entry;
-                entry = NULL;
-            }
+        char *dupLocaleId = uprv_strdup(localeId);
+        if (dupLocaleId == NULL) {
+            delete entry;
+            status = U_MEMORY_ALLOCATION_ERROR;
+            return NULL;
         }
+        init(dupLocaleId, entry);
 
-        // Entry is initialized, but unlinked or entry is null on
-        // memory allocation error.
-        if (entry != NULL) {
-            // Add to hashtable
-            uhash_put(localeIdToEntries, entry->localeId, entry, &status);
-            if (U_FAILURE(status)) {
-                delete entry;
-                entry = NULL;
-            }
-        }
-        if (entry != NULL) {
-            moveToMostRecent(entry);
+        // Entry is initialized, add to hashtable
+        uhash_put(localeIdToEntries, entry->localeId, entry, &status);
+        if (U_FAILURE(status)) {
+            delete entry;
+            return NULL;
         }
     }
-    if (entry == NULL) {
-        status = U_MEMORY_ALLOCATION_ERROR;
-        return;
-    }
 
-    // If we get here our data is cached.
+    // Re-link entry so that it is the most recent.
+    moveToMostRecent(entry);
+
     if (U_FAILURE(entry->status)) {
         status = entry->status;
-        return;
+        return NULL;
     }
-    ptr = entry->cachedData;
+    return entry->cachedData;
 }
 
 LRUCache::LRUCache(int32_t size, UErrorCode &status) :
@@ -178,8 +134,8 @@ LRUCache::LRUCache(int32_t size, UErrorCode &status) :
     if (U_FAILURE(status)) {
         return;
     }
-    mostRecentlyUsedMarker = new CacheEntry2;
-    leastRecentlyUsedMarker = new CacheEntry2;
+    mostRecentlyUsedMarker = new LRUCache::CacheEntry;
+    leastRecentlyUsedMarker = new LRUCache::CacheEntry;
     if (mostRecentlyUsedMarker == NULL || leastRecentlyUsedMarker == NULL) {
         delete mostRecentlyUsedMarker;
         delete leastRecentlyUsedMarker;
@@ -204,8 +160,8 @@ LRUCache::LRUCache(int32_t size, UErrorCode &status) :
 
 LRUCache::~LRUCache() {
     uhash_close(localeIdToEntries);
-    for (CacheEntry2 *i = mostRecentlyUsedMarker; i != NULL;) {
-        CacheEntry2 *next = i->lessRecent;
+    for (LRUCache::CacheEntry *i = mostRecentlyUsedMarker; i != NULL;) {
+        LRUCache::CacheEntry *next = i->lessRecent;
         delete i;
         i = next;
     }
@@ -214,7 +170,7 @@ LRUCache::~LRUCache() {
 SimpleLRUCache::~SimpleLRUCache() {
 }
 
-UObject *SimpleLRUCache::create(const char *localeId, UErrorCode &status) {
+SharedObject *SimpleLRUCache::create(const char *localeId, UErrorCode &status) {
     return createFunc(localeId, status);
 }
 
