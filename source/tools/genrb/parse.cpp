@@ -95,9 +95,8 @@ typedef struct {
     const char     *outputdir;
     uint32_t        outputdirLength;
     UBool           makeBinaryCollation;
+    UBool           omitCollationRules;
 } ParseState;
-
-static UBool gOmitCollationRules  = FALSE;
 
 typedef struct SResource *
 ParseResourceFunction(ParseState* state, char *tag, uint32_t startline, const struct UString* comment, UErrorCode *status);
@@ -333,7 +332,7 @@ parseUCARules(ParseState* state, char *tag, uint32_t startline, const struct USt
     }
     uprv_strcat(filename, cs);
 
-    if(gOmitCollationRules) {
+    if(state->omitCollationRules) {
         return res_none();
     }
 
@@ -781,7 +780,7 @@ static const UChar* importFromDataFile(void* context, const char* locale, const 
     }
 
     /* Parse the data into an SRBRoot */
-    data = parse(ucbuf, genrbdata->inputDir, genrbdata->outputDir, FALSE, status);
+    data = parse(ucbuf, genrbdata->inputDir, genrbdata->outputDir, FALSE, FALSE, status);
 
     root = data->fRoot;
     collations = resLookup(root, "collations");
@@ -1017,7 +1016,7 @@ addCollation(ParseState* state, struct SResource  *result, uint32_t startline, U
 #endif
             /* in order to achieve smaller data files, we can direct genrb */
             /* to omit collation rules */
-            if(gOmitCollationRules) {
+            if(state->omitCollationRules) {
                 bundle_closeString(state->bundle, member);
             } else {
                 table_add(result, member, line, status);
@@ -1849,7 +1848,7 @@ static struct {
     {"reserved", NULL, NULL}
 };
 
-void initParser(UBool omitCollationRules)
+void initParser()
 {
     U_STRING_INIT(k_type_string,    "string",    6);
     U_STRING_INIT(k_type_binary,    "binary",    6);
@@ -1868,8 +1867,6 @@ void initParser(UBool omitCollationRules)
     U_STRING_INIT(k_type_plugin_collation,      "process(collation)",        18);
     U_STRING_INIT(k_type_plugin_transliterator, "process(transliterator)",   23);
     U_STRING_INIT(k_type_plugin_dependency,     "process(dependency)",       19);
-
-    gOmitCollationRules = omitCollationRules;
 }
 
 static inline UBool isTable(enum EResourceType type) {
@@ -2049,8 +2046,8 @@ parseResource(ParseState* state, char *tag, const struct UString *comment, UErro
 
 /* parse the top-level resource */
 struct SRBRoot *
-parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UBool makeBinaryCollation,
-      UErrorCode *status)
+parse(UCHARBUF *buf, const char *inputDir, const char *outputDir,
+      UBool makeBinaryCollation, UBool omitCollationRules, UErrorCode *status)
 {
     struct UString    *tokenValue;
     struct UString    comment;
@@ -2074,6 +2071,7 @@ parse(UCHARBUF *buf, const char *inputDir, const char *outputDir, UBool makeBina
     state.outputdir       = outputDir;
     state.outputdirLength = (state.outputdir != NULL) ? (uint32_t)uprv_strlen(state.outputdir) : 0;
     state.makeBinaryCollation = makeBinaryCollation;
+    state.omitCollationRules = omitCollationRules;
 
     ustr_init(&comment);
     expect(&state, TOK_STRING, &tokenValue, &comment, NULL, status);
