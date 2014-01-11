@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/de.xml
@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/de.xml
  */
 de{
-    Version{"2.0.92.87"}
+    Version{"2.0.96.40"}
     zoneStrings{
         "Africa:Accra"{
             ec{"Akkra"}
@@ -771,6 +771,16 @@ de{
         }
         "meta:Mawson"{
             ls{"Mawson-Zeit"}
+        }
+        "meta:Mexico_Northwest"{
+            ld{"Mexiko Nordwestliche Zone-Sommerzeit"}
+            lg{"Mexiko Nordwestliche Zone-Zeit"}
+            ls{"Mexiko Nordwestliche Zone-Normalzeit"}
+        }
+        "meta:Mexico_Pacific"{
+            ld{"Mexiko Pazifikzone-Sommerzeit"}
+            lg{"Mexiko Pazifikzone-Zeit"}
+            ls{"Mexiko Pazifikzone-Normalzeit"}
         }
         "meta:Mongolia"{
             ld{"Ulaanbaatar-Sommerzeit"}

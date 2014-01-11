@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/hi.xml
@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/hi.xml
  */
 hi{
-    Version{"2.0.92.96"}
+    Version{"2.0.95.34"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"अबिदजान"}
