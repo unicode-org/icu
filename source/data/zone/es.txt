@@ -10,7 +10,7 @@
  * ICU <specials> source: <path>/common/main/es.xml
  */
 es{
-    Version{"2.0.96.24"}
+    Version{"2.0.96.40"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"Abiyán"}
@@ -958,6 +958,16 @@ es{
         }
         "meta:Mawson"{
             ls{"Hora de Mawson"}
+        }
+        "meta:Mexico_Northwest"{
+            ld{"Hora de verano del noroeste de México"}
+            lg{"Hora del noroeste de México"}
+            ls{"Hora estándar del noroeste de México"}
+        }
+        "meta:Mexico_Pacific"{
+            ld{"Hora de verano del Pacífico de México"}
+            lg{"Hora del Pacífico de México"}
+            ls{"Hora estándar del Pacífico de México"}
         }
         "meta:Mongolia"{
             ld{"Hora de verano de Ulán Bator"}

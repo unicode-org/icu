@@ -1,6 +1,6 @@
 ﻿// ***************************************************************************
 // *
-// * Copyright (C) 2013 International Business Machines
+// * Copyright (C) 2014 International Business Machines
 // * Corporation and others. All Rights Reserved.
 // * Tool: org.unicode.cldr.icu.NewLdml2IcuConverter
 // * Source File: <path>/common/main/zh_Hant.xml
@@ -11,7 +11,7 @@
  */
 zh_Hant{
     %%Parent{"root"}
-    Version{"2.0.93.8"}
+    Version{"2.0.96.40"}
     zoneStrings{
         "Africa:Abidjan"{
             ec{"阿比讓"}
@@ -1677,6 +1677,16 @@ zh_Hant{
         }
         "meta:Mawson"{
             ls{"莫森時間"}
+        }
+        "meta:Mexico_Northwest"{
+            ld{"墨西哥西北部夏令時間"}
+            lg{"墨西哥西北部時間"}
+            ls{"墨西哥西北部標準時間"}
+        }
+        "meta:Mexico_Pacific"{
+            ld{"墨西哥太平洋夏令時間"}
+            lg{"墨西哥太平洋時間"}
+            ls{"墨西哥太平洋標準時間"}
         }
         "meta:Mongolia"{
             ld{"烏蘭巴托夏令時間"}
