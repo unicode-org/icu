@@ -1,12 +1,12 @@
 /*
-********************************************************************************
-* Copyright (C) 2013, International Business Machines Corporation and
+*****************************************************************************
+* Copyright (C) 2014, International Business Machines Corporation and
 * others.
 * All Rights Reserved.
-********************************************************************************
+*****************************************************************************
 *
 * File RELDATEFMT.H
-********************************************************************************
+*****************************************************************************
 */
 
 #ifndef __RELDATEFMT_H
@@ -14,10 +14,14 @@
 
 #include "unicode/utypes.h"
 
+/**
+ * \file
+ * \brief C++ API: Formats relative dates such as "1 day ago" or "tomorrow"
+ */
+
 #if !UCONFIG_NO_FORMATTING
 
 #include "unicode/locid.h"
-#include "sharedptr.h"
 
 
 /**
@@ -234,7 +238,7 @@ class NumberFormat;
  * caller's responsibility to handle cut-off logic such as deciding between
  * displaying "in 7 days" or "in 1 week." This API supports relative dates
  * involving one single unit. This API does not support relative dates
- * involving compound units.
+ * involving compound units,
  * e.g "in 5 days and 4 hours" nor does it support parsing.
  * <p>
  * This class is mostly thread safe and immutable with the following caveats:
@@ -327,7 +331,8 @@ public:
      * Assignment operator.
      * @draft ICU 53
      */
-    RelativeDateTimeFormatter& operator=(const RelativeDateTimeFormatter& other);
+    RelativeDateTimeFormatter& operator=(
+            const RelativeDateTimeFormatter& other);
 
     /**
      * Destructor.
@@ -350,7 +355,12 @@ public:
      * @return appendTo
      * @draft ICU 53
      */
-    UnicodeString& format(double quantity, UDateDirection direction, UDateRelativeUnit unit, UnicodeString& appendTo, UErrorCode& status) const;
+    UnicodeString& format(
+            double quantity,
+            UDateDirection direction,
+            UDateRelativeUnit unit,
+            UnicodeString& appendTo,
+            UErrorCode& status) const;
 
     /**
      * Formats a relative date without a quantity.
@@ -364,7 +374,11 @@ public:
      * @return appendTo
      * @draft ICU 53
      */
-    UnicodeString& format(UDateDirection direction, UDateAbsoluteUnit unit, UnicodeString& appendTo, UErrorCode& status) const;
+    UnicodeString& format(
+            UDateDirection direction,
+            UDateAbsoluteUnit unit,
+            UnicodeString& appendTo,
+            UErrorCode& status) const;
 
     /**
      * Combines a relative date string and a time string in this object's
@@ -379,8 +393,10 @@ public:
      * @draft ICU 53
      */
     UnicodeString& combineDateAndTime(
-        const UnicodeString& relativeDateString, const UnicodeString& timeString,
-        UnicodeString& appendTo, UErrorCode& status) const;
+            const UnicodeString& relativeDateString,
+            const UnicodeString& timeString,
+            UnicodeString& appendTo,
+            UErrorCode& status) const;
 
     /**
      * Returns the NumberFormat this object is using.
@@ -391,7 +407,7 @@ public:
 
 private:
     RelativeDateTimeFormatter();
-    SharedPtr<icu::RelativeDateTimeData> ptr;
+    const RelativeDateTimeData* ptr;
 };
 
 U_NAMESPACE_END

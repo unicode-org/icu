@@ -244,6 +244,9 @@
     <ClCompile Include="cmemory.c">
       <Filter>data &amp; memory</Filter>
     </ClCompile>
+    <ClCompile Include="sharedobject.cpp">
+      <Filter>data &amp; memory</Filter>
+    </ClCompile>
     <ClCompile Include="ucln_cmn.c">
       <Filter>data &amp; memory</Filter>
     </ClCompile>
@@ -700,6 +703,9 @@
       <Filter>conversion</Filter>
     </ClInclude>
     <ClInclude Include="cmemory.h">
+      <Filter>data &amp; memory</Filter>
+    </ClInclude>
+    <ClInclude Include="sharedobject.h">
       <Filter>data &amp; memory</Filter>
     </ClInclude>
     <ClInclude Include="sharedptr.h">

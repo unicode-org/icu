@@ -1,11 +1,11 @@
 /*
-*******************************************************************************
-* Copyright (C) 2013, International Business Machines Corporation and         
+******************************************************************************
+* Copyright (C) 2014, International Business Machines Corporation and         
 * others. All Rights Reserved.                                                
-*******************************************************************************
+******************************************************************************
 *                                                                             
 * File RELDATEFMT.CPP                                                             
-*******************************************************************************
+******************************************************************************
 */
 
 #include "unicode/reldatefmt.h"
@@ -24,8 +24,12 @@
 #include "plurrule_impl.h"
 #include "ucln_in.h"
 #include "mutex.h"
+#include "charstr.h"
 
 #include "sharedptr.h"
+
+// Copied from uscript_props.cpp
+#define LENGTHOF(array) (int32_t)(sizeof(array)/sizeof((array)[0]))
 
 static icu::LRUCache *gCache = NULL;
 static UMutex gCacheMutex = U_MUTEX_INITIALIZER;
@@ -46,105 +50,77 @@ U_NAMESPACE_BEGIN
 
 // other must always be first.
 static const char * const gPluralForms[] = {
-        "other", "zero", "one", "two", "few", "many", NULL};
+        "other", "zero", "one", "two", "few", "many"};
 
-// Must be equal to number of plural forms just above.
-#define MAX_PLURAL_FORMS 6
+static const UChar gPlaceholder[] = { 0x7b, 0x30, 0x7d}; /* {0} */
 
-
-class QualitativeUnits : public UObject {
+class QualitativeUnits : public UMemory {
 public:
     QualitativeUnits() { }
     UnicodeString data[UDAT_ABSOLUTE_UNIT_COUNT][UDAT_DIRECTION_COUNT];
-    virtual ~QualitativeUnits() {
-    }
 private:
     QualitativeUnits(const QualitativeUnits &other);
     QualitativeUnits &operator=(const QualitativeUnits& other);
 };
 
 struct UnitPattern {
-    UnicodeString prefix;
-    UnicodeString suffix;
-    UBool prefixOnly;
-    UBool valid;
+    UnicodeString pattern;
+    int32_t offset;  // Offset of "{0}". -1 means no {0}.
+    UBool valid;  // True if initialize, false otherwise.
 
-    UnitPattern() : prefix(), suffix(), prefixOnly(FALSE), valid(FALSE) {
+    UnitPattern() : pattern(), offset(0), valid(FALSE) {
     }
 
     void set(const UnicodeString &patternStr) {
-        UnicodeString placeholder("{0}");
-        int32_t idx = patternStr.indexOf(placeholder);
+        pattern = patternStr;
+        offset = patternStr.indexOf(gPlaceholder, LENGTHOF(gPlaceholder), 0);
         valid = TRUE;
-        if (idx == -1) {
-            prefixOnly = TRUE;
-            prefix = patternStr;
-        } else {
-            prefixOnly = FALSE;
-            prefix = patternStr.tempSubStringBetween(0, idx);
-            suffix = patternStr.tempSubStringBetween(idx + placeholder.length());
-        }
     }
 
-    UnicodeString& append(double quantity, const NumberFormat &nf, UnicodeString &appendTo) const {
+    UnicodeString& append(
+            double quantity,
+            const NumberFormat &nf,
+            UnicodeString &appendTo) const {
         if (!valid) {
             return appendTo;
         }
-        appendTo.append(prefix);
-        if (!prefixOnly) {
-            nf.format(quantity, appendTo);
-            appendTo.append(suffix);
+        if (offset == -1) {
+            appendTo.append(pattern);
+            return appendTo;
         }
+        appendTo.append(pattern.tempSubStringBetween(0, offset));
+        nf.format(quantity, appendTo);
+        appendTo.append(pattern.tempSubStringBetween(
+                offset + LENGTHOF(gPlaceholder)));
         return appendTo;
     }
 };
 
-class QuantitativeUnits : public UObject {
+class QuantitativeUnits : public UMemory {
 public:
     QuantitativeUnits() { }
-    UnitPattern data[UDAT_RELATIVE_UNIT_COUNT][2][MAX_PLURAL_FORMS];
-    virtual ~QuantitativeUnits() {
-    }
+    UnitPattern data[UDAT_RELATIVE_UNIT_COUNT][2][LENGTHOF(gPluralForms)];
 private:
     QuantitativeUnits(const QuantitativeUnits &other);
     QuantitativeUnits &operator=(const QuantitativeUnits& other);
 };
 
-class RelativeDateTimeData : public UObject {
+class RelativeDateTimeData : public SharedObject {
 public:
-    RelativeDateTimeData() {
-    }
     SharedPtr<QualitativeUnits> qualitativeUnits;
     SharedPtr<QuantitativeUnits> quantitativeUnits;
     SharedPtr<MessageFormat> combinedDateAndTime;
     SharedPtr<PluralRules> pluralRules;
     SharedPtr<NumberFormat> numberFormat;
-    RelativeDateTimeData *clone() const {
-        return new RelativeDateTimeData(*this);
-    }
-    virtual ~RelativeDateTimeData() {
-    }
+    virtual ~RelativeDateTimeData();
 private:
-    RelativeDateTimeData(const RelativeDateTimeData &other);
     RelativeDateTimeData &operator=(const RelativeDateTimeData& other);
 };
 
-RelativeDateTimeData::RelativeDateTimeData(
-        const RelativeDateTimeData &other) :
-        qualitativeUnits(other.qualitativeUnits),
-        quantitativeUnits(other.quantitativeUnits),
-        combinedDateAndTime(other.combinedDateAndTime),
-        pluralRules(other.pluralRules),
-        numberFormat(other.numberFormat) {
+RelativeDateTimeData::~RelativeDateTimeData() {
 }
 
-static char *UnicodeString2Char(
-        const UnicodeString &source, char *buffer, int32_t bufCapacity) {
-    source.extract(0, source.length(), buffer, bufCapacity, US_INV);
-    return buffer;
-}
-
-static void getStringWithFallback(
+static UBool getStringWithFallback(
         const UResourceBundle *resource, 
         const char *key,
         UnicodeString &result,
@@ -153,18 +129,19 @@ static void getStringWithFallback(
     const UChar *resStr = ures_getStringByKeyWithFallback(
         resource, key, &len, &status);
     if (U_FAILURE(status)) {
-        return;
+        return FALSE;
     }
     result.setTo(TRUE, resStr, len);
+    return TRUE;
 }
 
-static void getOptionalStringWithFallback(
+static UBool getOptionalStringWithFallback(
         const UResourceBundle *resource, 
         const char *key,
         UnicodeString &result,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return;
+        return FALSE;
     }
     int32_t len = 0;
     const UChar *resStr = ures_getStringByKey(
@@ -172,42 +149,44 @@ static void getOptionalStringWithFallback(
     if (status == U_MISSING_RESOURCE_ERROR) {
         result.remove();
         status = U_ZERO_ERROR;
-        return;
+        return TRUE;
     }
     if (U_FAILURE(status)) {
-        return;
+        return FALSE;
     }
     result.setTo(TRUE, resStr, len);
+    return TRUE;
 }
 
-static void getString(
+static UBool getString(
         const UResourceBundle *resource, 
         UnicodeString &result,
         UErrorCode &status) {
     int32_t len = 0;
     const UChar *resStr = ures_getString(resource, &len, &status);
     if (U_FAILURE(status)) {
-        return;
+        return FALSE;
     }
     result.setTo(TRUE, resStr, len);
+    return TRUE;
 }
 
-static void getUnitPattern(
+static UBool getUnitPattern(
         const UResourceBundle *resource, 
         UnitPattern &result,
         UErrorCode &status) {
     if (U_FAILURE(status)) {
-        return;
+        return FALSE;
     }
     UnicodeString rawPattern;
-    getString(resource, rawPattern, status);
-    if (U_FAILURE(status)) {
-        return;
+    if (!getString(resource, rawPattern, status)) {
+        return FALSE;
     }
     result.set(rawPattern);
+    return TRUE;
 }
 
-static void getStringByIndex(
+static UBool getStringByIndex(
         const UResourceBundle *resource, 
         int32_t idx,
         UnicodeString &result,
@@ -216,9 +195,10 @@ static void getStringByIndex(
     const UChar *resStr = ures_getStringByIndex(
             resource, idx, &len, &status);
     if (U_FAILURE(status)) {
-        return;
+        return FALSE;
     }
     result.setTo(TRUE, resStr, len);
+    return TRUE;
 }
 
 static void addQualitativeUnit(
@@ -256,7 +236,8 @@ static void addQualitativeUnit(
 }
 
 static int32_t getPluralIndex(const char *pluralForm) {
-    for (int32_t i = 0; gPluralForms[i] != NULL; ++i) {
+    int32_t len = LENGTHOF(gPluralForms);
+    for (int32_t i = 0; i < len; ++i) {
         if (uprv_strcmp(pluralForm, gPluralForms[i]) == 0) {
             return i;
         }
@@ -283,11 +264,10 @@ static void addTimeUnit(
         int32_t pluralIndex = getPluralIndex(
                 ures_getKey(pluralBundle.getAlias()));
         if (pluralIndex != -1) {
-            getUnitPattern(
+            if (!getUnitPattern(
                     pluralBundle.getAlias(),
                     quantitativeUnits.data[relativeUnit][pastOrFuture][pluralIndex],
-                    status);
-            if (U_FAILURE(status)) {
+                    status)) {
                 return;
             }
         }
@@ -300,7 +280,8 @@ static void addTimeUnit(
         QuantitativeUnits &quantitativeUnits,
         UErrorCode &status) {
     LocalUResourceBundlePointer topLevel(
-            ures_getByKeyWithFallback(resource, "relativeTime", NULL, &status));
+            ures_getByKeyWithFallback(
+                    resource, "relativeTime", NULL, &status));
     if (U_FAILURE(status)) {
         return;
     }
@@ -357,8 +338,7 @@ static void addTimeUnit(
     }
     addTimeUnit(topLevel.getAlias(), relativeUnit, quantitativeUnits, status);
     UnicodeString unitName;
-    getStringWithFallback(topLevel.getAlias(), "dn", unitName, status);
-    if (U_FAILURE(status)) {
+    if (!getStringWithFallback(topLevel.getAlias(), "dn", unitName, status)) {
         return;
     }
     // TODO(Travis Keep): This is a hack to get around CLDR bug 6818.
@@ -401,8 +381,7 @@ static void readDaysOfWeek(
         return;
     }
     for (int32_t i = 0; i < size; ++i) {
-        getStringByIndex(topLevel.getAlias(), i, daysOfWeek[i], status);
-        if (U_FAILURE(status)) {
+        if (!getStringByIndex(topLevel.getAlias(), i, daysOfWeek[i], status)) {
             return;
         }
     }
@@ -428,7 +407,7 @@ static void addWeekDay(
             status);
 }
 
-static void load(
+static UBool load(
         const UResourceBundle *resource,
         QualitativeUnits &qualitativeUnits,
         QuantitativeUnits &quantitativeUnits,
@@ -543,46 +522,43 @@ static void load(
             UDAT_ABSOLUTE_SUNDAY,
             qualitativeUnits,
             status);
+    return U_SUCCESS(status);
 }
 
-static void getDateTimePattern(
+static UBool getDateTimePattern(
         const UResourceBundle *resource,
         UnicodeString &result,
         UErrorCode &status) {
     UnicodeString defaultCalendarName;
-    getStringWithFallback(
+    if (!getStringWithFallback(
             resource,
             "calendar/default",
             defaultCalendarName,
-            status);
-    if (U_FAILURE(status)) {
-        return;
+            status)) {
+        return FALSE;
     }
-    char calendarNameBuffer[128];
-    char pathBuffer[256];
-    sprintf(
-            pathBuffer,
-            "calendar/%s/DateTimePatterns",
-            UnicodeString2Char(
-                    defaultCalendarName,
-                    calendarNameBuffer,
-                    128));
+    CharString pathBuffer;
+    pathBuffer.append("calendar/", status)
+            .appendInvariantChars(defaultCalendarName, status)
+            .append("/DateTimePatterns", status);
     LocalUResourceBundlePointer topLevel(
-            ures_getByKeyWithFallback(resource, pathBuffer, NULL, &status));
+            ures_getByKeyWithFallback(
+                    resource, pathBuffer.data(), NULL, &status));
     if (U_FAILURE(status)) {
-        return;
+        return FALSE;
     }
     int32_t size = ures_getSize(topLevel.getAlias());
-    if (size < 9) {
+    if (size <= 8) {
         // Oops, size is to small to access the index that we want, fallback
         // to a hard-coded value.
         result = UNICODE_STRING_SIMPLE("{1} {0}");
-        return;
+        return TRUE;
     }
-    getStringByIndex(topLevel.getAlias(), 8, result, status);
+    return getStringByIndex(topLevel.getAlias(), 8, result, status);
 }
 
-static UObject *U_CALLCONV createData(const char *localeId, UErrorCode &status) {
+static SharedObject *U_CALLCONV createData(
+        const char *localeId, UErrorCode &status) {
     LocalUResourceBundlePointer topLevel(ures_open(NULL, localeId, &status));
     if (U_FAILURE(status)) {
         return NULL;
@@ -590,12 +566,17 @@ static UObject *U_CALLCONV createData(const char *localeId, UErrorCode &status) 
     LocalPointer<RelativeDateTimeData> result(new RelativeDateTimeData());
     LocalPointer<QualitativeUnits> qualitativeUnits(new QualitativeUnits());
     LocalPointer<QuantitativeUnits> quantitativeUnits(new QuantitativeUnits());
-    if (qualitativeUnits.getAlias() == NULL || quantitativeUnits.getAlias() == NULL) {
+    if (result.getAlias() == NULL
+            || qualitativeUnits.getAlias() == NULL
+            || quantitativeUnits.getAlias() == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
-    load(topLevel.getAlias(), *qualitativeUnits, *quantitativeUnits, status);
-    if (U_FAILURE(status)) {
+    if (!load(
+            topLevel.getAlias(),
+            *qualitativeUnits,
+            *quantitativeUnits,
+            status)) {
         return NULL;
     }
     if (!result->qualitativeUnits.adoptInstead(qualitativeUnits.orphan())) {
@@ -609,12 +590,16 @@ static UObject *U_CALLCONV createData(const char *localeId, UErrorCode &status) 
         
     
     UnicodeString dateTimePattern;
-    getDateTimePattern(topLevel.getAlias(), dateTimePattern, status);
+    if (!getDateTimePattern(topLevel.getAlias(), dateTimePattern, status)) {
+        return NULL;
+    }
+    LocalPointer<MessageFormat> mf(
+            new MessageFormat(dateTimePattern, localeId, status));
     if (U_FAILURE(status)) {
         return NULL;
     }
-    LocalPointer<MessageFormat> mf(new MessageFormat(dateTimePattern, localeId, status));
-    if (U_FAILURE(status)) {
+    if (mf.getAlias() == NULL) {
+        status = U_MEMORY_ALLOCATION_ERROR;
         return NULL;
     }
     if (!result->combinedDateAndTime.adoptInstead(mf.orphan())) {
@@ -651,7 +636,10 @@ static void U_CALLCONV cacheInit(UErrorCode &status) {
     }
 }
 
-static void getFromCache(const char *locale, SharedPtr<RelativeDateTimeData>& ptr, UErrorCode &status) {
+static void getFromCache(
+        const char *locale,
+        const RelativeDateTimeData *&ptr,
+        UErrorCode &status) {
     umtx_initOnce(gCacheInitOnce, &cacheInit, status);
     if (U_FAILURE(status)) {
         return;
@@ -660,21 +648,24 @@ static void getFromCache(const char *locale, SharedPtr<RelativeDateTimeData>& pt
     gCache->get(locale, ptr, status);
 }
 
-RelativeDateTimeFormatter::RelativeDateTimeFormatter(UErrorCode& status) {
+RelativeDateTimeFormatter::RelativeDateTimeFormatter(UErrorCode& status)
+        : ptr(NULL) {
     getFromCache(Locale::getDefault().getName(), ptr, status);
 }
 
-RelativeDateTimeFormatter::RelativeDateTimeFormatter(const Locale& locale, UErrorCode& status) {
+RelativeDateTimeFormatter::RelativeDateTimeFormatter(
+        const Locale& locale, UErrorCode& status) : ptr(NULL) {
     getFromCache(locale.getName(), ptr, status);
 }
 
 RelativeDateTimeFormatter::RelativeDateTimeFormatter(
-        const Locale& locale, NumberFormat *nfToAdopt, UErrorCode& status) {
+        const Locale& locale, NumberFormat *nfToAdopt, UErrorCode& status)
+        : ptr(NULL) {
     getFromCache(locale.getName(), ptr, status);
     if (U_FAILURE(status)) {
         return;
     }
-    RelativeDateTimeData* wptr = ptr.readWrite();
+    RelativeDateTimeData* wptr = SharedObject::copyOnWrite(ptr);
     if (wptr == NULL) {
         status = U_MEMORY_ALLOCATION_ERROR;
         return;
@@ -685,23 +676,26 @@ RelativeDateTimeFormatter::RelativeDateTimeFormatter(
     }
 }
 
-const NumberFormat& RelativeDateTimeFormatter::getNumberFormat() const {
-    return *ptr->numberFormat;
+RelativeDateTimeFormatter::RelativeDateTimeFormatter(
+        const RelativeDateTimeFormatter& other) : ptr(other.ptr) {
+    ptr->addRef();
 }
 
-RelativeDateTimeFormatter::RelativeDateTimeFormatter(const RelativeDateTimeFormatter& other) : ptr(other.ptr) {
-}
-
-RelativeDateTimeFormatter& RelativeDateTimeFormatter::operator=(const RelativeDateTimeFormatter& other) {
+RelativeDateTimeFormatter& RelativeDateTimeFormatter::operator=(
+        const RelativeDateTimeFormatter& other) {
     if (this != &other) {
-        ptr = other.ptr;
+        SharedObject::copyPtr(other.ptr, ptr);
     }
     return *this;
 }
 
 RelativeDateTimeFormatter::~RelativeDateTimeFormatter() {
+    ptr->removeRef();
 }
 
+const NumberFormat& RelativeDateTimeFormatter::getNumberFormat() const {
+    return *ptr->numberFormat;
+}
 
 UnicodeString& RelativeDateTimeFormatter::format(
         double quantity, UDateDirection direction, UDateRelativeUnit unit,
@@ -719,12 +713,13 @@ UnicodeString& RelativeDateTimeFormatter::format(
     if (decFmt != NULL) {
         dec = decFmt->getFixedDecimal(quantity, status);
     }
+    CharString buffer;
+    buffer.appendInvariantChars(ptr->pluralRules->select(dec), status);
     if (U_FAILURE(status)) {
         return appendTo;
     }
-    char buffer[256];
-    int32_t pluralIndex = getPluralIndex(
-            UnicodeString2Char(ptr->pluralRules->select(dec), buffer, 256));
+
+    int32_t pluralIndex = getPluralIndex(buffer.data());
     if (pluralIndex == -1) {
         pluralIndex = 0;
     }
@@ -752,11 +747,9 @@ UnicodeString& RelativeDateTimeFormatter::format(
 UnicodeString& RelativeDateTimeFormatter::combineDateAndTime(
     const UnicodeString& relativeDateString, const UnicodeString& timeString,
     UnicodeString& appendTo, UErrorCode& status) const {
-    Formattable formattable[2];
-    formattable[0].setString(timeString);
-    formattable[1].setString(relativeDateString);
+    Formattable args[2] = {timeString, relativeDateString};
     FieldPosition fpos(0);
-    return ptr->combinedDateAndTime->format(formattable, 2, appendTo, fpos, status);
+    return ptr->combinedDateAndTime->format(args, 2, appendTo, fpos, status);
 }
 
 U_NAMESPACE_END

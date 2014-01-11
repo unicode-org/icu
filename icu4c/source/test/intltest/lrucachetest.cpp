@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2013, International Business Machines Corporation and         *
+* Copyright (C) 2014, International Business Machines Corporation and         *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -11,25 +11,27 @@
 #include "cstring.h"
 #include "intltest.h"
 #include "lrucache.h"
+#include "sharedptr.h"
 
-class CopyOnWriteForTesting : public UObject {
+class CopyOnWriteForTesting : public SharedObject {
 public:
-    CopyOnWriteForTesting() : localeNamePtr(), formatStrPtr(), length(0) {
+    CopyOnWriteForTesting() : SharedObject(), localeNamePtr(), formatStrPtr(), length(0) {
     }
-    UObject *clone() const {
-        return new CopyOnWriteForTesting(*this);
-    }
-    virtual ~CopyOnWriteForTesting() {
-    }
-    SharedPtr<UnicodeString> localeNamePtr;
-    SharedPtr<UnicodeString> formatStrPtr;
-    int32_t length;
-private:
+
     CopyOnWriteForTesting(const CopyOnWriteForTesting &other) :
+        SharedObject(other),
         localeNamePtr(other.localeNamePtr),
         formatStrPtr(other.formatStrPtr),
         length(other.length) {
     }
+
+    virtual ~CopyOnWriteForTesting() {
+    }
+
+    SharedPtr<UnicodeString> localeNamePtr;
+    SharedPtr<UnicodeString> formatStrPtr;
+    int32_t length;
+private:
     CopyOnWriteForTesting &operator=(const CopyOnWriteForTesting &rhs);
 };
 
@@ -41,7 +43,7 @@ public:
     virtual ~LRUCacheForTesting() {
     }
 protected:
-    virtual UObject *create(const char *localeId, UErrorCode &status);
+    virtual SharedObject *create(const char *localeId, UErrorCode &status);
 private:
     SharedPtr<UnicodeString> defaultFormatStr;
 };
@@ -56,7 +58,7 @@ LRUCacheForTesting::LRUCacheForTesting(
     defaultFormatStr.adoptInstead(new UnicodeString(dfs));
 }
 
-UObject *LRUCacheForTesting::create(const char *localeId, UErrorCode &status) {
+SharedObject *LRUCacheForTesting::create(const char *localeId, UErrorCode &status) {
     if (uprv_strcmp(localeId, "error") == 0) {
         status = U_ILLEGAL_ARGUMENT_ERROR;
         return NULL;
@@ -79,14 +81,13 @@ private:
     void TestLRUCache();
     void TestLRUCacheError();
     void verifySharedPointer(
-            const SharedPtr<CopyOnWriteForTesting>& ptr,
+            const CopyOnWriteForTesting* ptr,
             const UnicodeString& name,
             const UnicodeString& format);
     void verifyString(
             const UnicodeString &expected, const UnicodeString &actual);
-    void verifyPtr(const void *expected, const void *actual);
     void verifyReferences(
-            const SharedPtr<CopyOnWriteForTesting>& ptr,
+            const CopyOnWriteForTesting* ptr,
             int32_t count, int32_t nameCount, int32_t formatCount);
 };
 
@@ -102,27 +103,28 @@ void LRUCacheTest::runIndexedTest(int32_t index, UBool exec, const char* &name, 
 void LRUCacheTest::TestSharedPointer() {
     UErrorCode status = U_ZERO_ERROR;
     LRUCacheForTesting cache(3, "little", status);
-    SharedPtr<CopyOnWriteForTesting> ptr;
+    const CopyOnWriteForTesting* ptr = NULL;
     cache.get("boo", ptr, status);
     verifySharedPointer(ptr, "boo", "little");
-    SharedPtr<CopyOnWriteForTesting> ptrCopy = ptr;
-    verifyPtr(ptr.readOnly(), ptrCopy.readOnly());
+    const CopyOnWriteForTesting* ptrCopy = ptr;
+    ptrCopy->addRef();
     {
-        SharedPtr<CopyOnWriteForTesting> ptrCopy2(ptrCopy);
+        const CopyOnWriteForTesting* ptrCopy2(ptrCopy);
+        ptrCopy2->addRef();
         verifyReferences(ptr, 4, 1, 2);
+        ptrCopy2->removeRef();
     }
     
-    // Test identity assignment
-    ptr = ptr;
-
     verifyReferences(ptr, 3, 1, 2);
-    verifyReferences(ptrCopy, 3, 1, 2);
-    *ptrCopy.readWrite()->localeNamePtr.readWrite() = UnicodeString("hi there");
-    *ptrCopy.readWrite()->formatStrPtr.readWrite() = UnicodeString("see you");
+    CopyOnWriteForTesting *wPtrCopy = SharedObject::copyOnWrite(ptrCopy);
+    *wPtrCopy->localeNamePtr.readWrite() = UnicodeString("hi there");
+    *wPtrCopy->formatStrPtr.readWrite() = UnicodeString("see you");
     verifyReferences(ptr, 2, 1, 2);
     verifyReferences(ptrCopy, 1, 1, 1);
     verifySharedPointer(ptr, "boo", "little");
     verifySharedPointer(ptrCopy, "hi there", "see you");
+    ptrCopy->removeRef();
+    ptr->removeRef();
 }
 
 void LRUCacheTest::TestErrorCallingConstructor() {
@@ -133,11 +135,11 @@ void LRUCacheTest::TestErrorCallingConstructor() {
 void LRUCacheTest::TestLRUCache() {
     UErrorCode status = U_ZERO_ERROR;
     LRUCacheForTesting cache(3, "little", status);
-    SharedPtr<CopyOnWriteForTesting> ptr1;
-    SharedPtr<CopyOnWriteForTesting> ptr2;
-    SharedPtr<CopyOnWriteForTesting> ptr3;
-    SharedPtr<CopyOnWriteForTesting> ptr4;
-    SharedPtr<CopyOnWriteForTesting> ptr5;
+    const CopyOnWriteForTesting* ptr1 = NULL;
+    const CopyOnWriteForTesting* ptr2 = NULL;
+    const CopyOnWriteForTesting* ptr3 = NULL;
+    const CopyOnWriteForTesting* ptr4 = NULL;
+    const CopyOnWriteForTesting* ptr5 = NULL;
     cache.get("foo", ptr1, status);
     cache.get("bar", ptr2, status);
     cache.get("baz", ptr3, status);
@@ -166,7 +168,8 @@ void LRUCacheTest::TestLRUCache() {
     verifyReferences(ptr5, 3, 1, 5);
 
     // This should delete foo data since it got evicted from cache.
-    ptr1.clear();
+    ptr1->removeRef();
+    ptr1 = NULL;
     // Reference count for little drops to 4 because foo data was deleted.
     verifyReferences(ptr5, 3, 1, 4);
 
@@ -186,7 +189,8 @@ void LRUCacheTest::TestLRUCache() {
 
     // Since bar was evicted, clearing its pointer should delete its data.
     // Notice that the reference count to 'little' dropped from 5 to 4.
-    ptr2.clear();
+    ptr2->removeRef();
+    ptr2 = NULL;
     verifyReferences(ptr5, 2, 1, 4);
     if (cache.contains("bar") || !cache.contains("full")) {
         errln("Unexpected 'bar' in cache.");
@@ -199,7 +203,8 @@ void LRUCacheTest::TestLRUCache() {
     verifyReferences(ptr5, 2, 1, 5);
 
     // since "full" was evicted, clearing its pointer should delete its data.
-    ptr4.clear();
+    ptr4->removeRef();
+    ptr4 = NULL;
     verifyReferences(ptr5, 2, 1, 4);
     if (cache.contains("full") || !cache.contains("baz")) {
         errln("Unexpected 'full' in cache.");
@@ -212,17 +217,23 @@ void LRUCacheTest::TestLRUCache() {
     verifyReferences(ptr5, 2, 1, 5);
 
     // since "baz" was evicted, clearing its pointer should delete its data.
-    ptr3.clear();
+    ptr3->removeRef();
+    ptr3 = NULL;
     verifyReferences(ptr5, 2, 1, 4);
     if (cache.contains("baz") || !cache.contains("new3")) {
         errln("Unexpected 'baz' in cache.");
     }
+    SharedObject::clearPtr(ptr1);
+    SharedObject::clearPtr(ptr2);
+    SharedObject::clearPtr(ptr3);
+    SharedObject::clearPtr(ptr4);
+    SharedObject::clearPtr(ptr5);
 }
 
 void LRUCacheTest::TestLRUCacheError() {
     UErrorCode status = U_ZERO_ERROR;
     LRUCacheForTesting cache(3, "little", status);
-    SharedPtr<CopyOnWriteForTesting> ptr1;
+    const CopyOnWriteForTesting *ptr1;
     cache.get("error", ptr1, status);
     if (status != U_ILLEGAL_ARGUMENT_ERROR) {
         errln("Expected an error.");
@@ -230,7 +241,7 @@ void LRUCacheTest::TestLRUCacheError() {
 }
 
 void LRUCacheTest::verifySharedPointer(
-        const SharedPtr<CopyOnWriteForTesting>& ptr,
+        const CopyOnWriteForTesting* ptr,
         const UnicodeString& name,
         const UnicodeString& format) {
     const UnicodeString *strPtr = ptr->localeNamePtr.readOnly();
@@ -245,14 +256,8 @@ void LRUCacheTest::verifyString(const UnicodeString &expected, const UnicodeStri
     }
 }
 
-void LRUCacheTest::verifyPtr(const void *expected, const void *actual) {
-    if (expected != actual) {
-       errln("Pointer mismatch.");
-    }
-}
-
-void LRUCacheTest::verifyReferences(const SharedPtr<CopyOnWriteForTesting>& ptr, int32_t count, int32_t nameCount, int32_t formatCount) {
-    int32_t actual = ptr.count();
+void LRUCacheTest::verifyReferences(const CopyOnWriteForTesting* ptr, int32_t count, int32_t nameCount, int32_t formatCount) {
+    int32_t actual = ptr->getRefCount();
     if (count != actual) {
         errln("Main reference count wrong: Expected %d, got %d", count, actual);
     }
