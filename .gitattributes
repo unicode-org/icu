@@ -55,6 +55,8 @@ icu4c/source/common/common.vcxproj -text
 icu4c/source/common/common.vcxproj.filters -text
 icu4c/source/common/lrucache.cpp -text
 icu4c/source/common/lrucache.h -text
+icu4c/source/common/sharedobject.cpp -text
+icu4c/source/common/sharedobject.h -text
 icu4c/source/common/sharedptr.h -text
 icu4c/source/data/curr/pool.res -text
 icu4c/source/data/in/coll/invuca.icu -text

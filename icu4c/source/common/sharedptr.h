@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2013, International Business Machines Corporation and         
+* Copyright (C) 2014, International Business Machines Corporation and         
 * others. All Rights Reserved.                                                
 *******************************************************************************
 *                                                                             
@@ -28,8 +28,8 @@ struct _AtomicInt : public UMemory {
  * SharedPtr makes the act of copying large objects cheap by deferring the
  * cost of the copy to the first write operation after the copy.
  *
- * A SharedPtr<T> instance can refer to no object or an object of type T where
- * T is a subclass of UObject. T must also have a clone() method that copies
+ * A SharedPtr<T> instance can refer to no object or an object of type T.
+ * T must have a clone() method that copies
  * the object and returns a pointer to the copy. Copy and assignment of
  * SharedPtr instances are cheap because they only involve copying or
  * assigning the SharedPtr instance, not the T object which could be large.
@@ -44,6 +44,9 @@ struct _AtomicInt : public UMemory {
  * management by reference counting their T objects. T objects that are
  * referenced by no SharedPtr<T> instances get deleted automatically.
  */
+
+// TODO (Travis Keep): Leave interface the same, but find a more efficient
+// implementation that is easier to understand.
 template<typename T>
 class SharedPtr {
 public:
@@ -61,13 +64,13 @@ public:
                 delete ptr;
                 ptr = NULL;
             } else {
-                umtx_storeRelease(refPtr->value, 1);
+                refPtr->value = 1;
             }
         }
     }
 
     /**
-     * Non-templated copy costructor. Needed to keep compiler from
+     * Non-templated copy constructor. Needed to keep compiler from
      * creating its own.
      */
     SharedPtr(const SharedPtr<T> &other) :
@@ -82,7 +85,7 @@ public:
      */
     template<typename U>
     SharedPtr(const SharedPtr<U> &other) :
-            ptr((T *) other.ptr), refPtr(other.refPtr) {
+            ptr(other.ptr), refPtr(other.refPtr) {
         if (refPtr != NULL) {
             umtx_atomic_inc(&refPtr->value);
         }
@@ -118,9 +121,7 @@ public:
     ~SharedPtr() {
         if (refPtr != NULL) {
             if (umtx_atomic_dec(&refPtr->value) == 0) {
-                // Cast to UObject to avoid compiler warnings about incomplete
-                // type T.
-                delete (UObject *) ptr;
+                delete ptr;
                 delete refPtr;
             }
         }
@@ -142,9 +143,9 @@ public:
     }
 
     /**
-     * clear makes this instance refer to no object.
+     * release makes this instance refer to no object.
      */
-    void clear() {
+    void release() {
         adoptInstead(NULL);
     }
 
@@ -205,7 +206,7 @@ public:
      */
     T *readWrite() {
         int32_t refCount = count();
-        if (refCount == 0 || refCount == 1) {
+        if (refCount <= 1) {
             return ptr;
         }
         T *result = (T *) ptr->clone();

@@ -1084,6 +1084,8 @@
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\include\unicode\%(Filename)%(Extension);%(Outputs)</Outputs>
     </CustomBuild>
+    <ClInclude Include="sharedobject.h" />
+    <ClCompile Include="sharedobject.cpp" />
     <ClInclude Include="sharedptr.h" />
     <CustomBuild Include="unicode\ucat.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">copy "%(FullPath)" ..\..\include\unicode
