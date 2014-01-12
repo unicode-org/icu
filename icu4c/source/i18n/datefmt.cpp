@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (C) 1997-2013, International Business Machines Corporation and    *
+ * Copyright (C) 1997-2014, International Business Machines Corporation and    *
  * others. All Rights Reserved.                                                *
  *******************************************************************************
  *
@@ -25,6 +25,7 @@
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
 #include "unicode/dtptngen.h"
+#include "unicode/udisplaycontext.h"
 #include "reldtfmt.h"
 
 #include "cstring.h"
@@ -42,7 +43,8 @@ U_NAMESPACE_BEGIN
 
 DateFormat::DateFormat()
 :   fCalendar(0),
-    fNumberFormat(0)
+    fNumberFormat(0),
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
 }
 
@@ -51,7 +53,8 @@ DateFormat::DateFormat()
 DateFormat::DateFormat(const DateFormat& other)
 :   Format(other),
     fCalendar(0),
-    fNumberFormat(0)
+    fNumberFormat(0),
+    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
 {
     *this = other;
 }
@@ -75,6 +78,7 @@ DateFormat& DateFormat::operator=(const DateFormat& other)
           fNumberFormat = NULL;
         }
         fBoolFlags = other.fBoolFlags;
+        fCapitalizationContext = other.fCapitalizationContext;
     }
     return *this;
 }
@@ -102,7 +106,8 @@ DateFormat::operator==(const Format& other) const
     return (this == fmt) ||
         (Format::operator==(other) &&
          fCalendar&&(fCalendar->isEquivalentTo(*fmt->fCalendar)) &&
-         (fNumberFormat && *fNumberFormat == *fmt->fNumberFormat));
+         (fNumberFormat && *fNumberFormat == *fmt->fNumberFormat) &&
+         (fCapitalizationContext == fmt->fCapitalizationContext) );
 }
 
 //----------------------------------------------------------------------
@@ -511,6 +516,36 @@ DateFormat::isLenient() const
     // fCalendar is rarely null
     return FALSE;
 }
+
+//----------------------------------------------------------------------
+
+
+void DateFormat::setContext(UDisplayContext value, UErrorCode& status)
+{
+    if (U_FAILURE(status))
+        return;
+    if ( (UDisplayContextType)((uint32_t)value >> 8) == UDISPCTX_TYPE_CAPITALIZATION ) {
+        fCapitalizationContext = value;
+    } else {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+   }
+}
+
+
+//----------------------------------------------------------------------
+
+
+UDisplayContext DateFormat::getContext(UDisplayContextType type, UErrorCode& status) const
+{
+    if (U_FAILURE(status))
+        return (UDisplayContext)0;
+    if (type != UDISPCTX_TYPE_CAPITALIZATION) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return (UDisplayContext)0;
+    }
+    return fCapitalizationContext;
+}
+
 
 //----------------------------------------------------------------------
 

@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2013, International Business Machines Corporation and
+* Copyright (C) 2007-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 */
@@ -45,7 +45,7 @@ RelativeDateFormat::RelativeDateFormat(const RelativeDateFormat& other) :
  fDateStyle(other.fDateStyle), fLocale(other.fLocale),
  fDayMin(other.fDayMin), fDayMax(other.fDayMax),
  fDatesLen(other.fDatesLen), fDates(NULL),
- fCapitalizationContext(other.fCapitalizationContext), fCombinedHasDateAtStart(other.fCombinedHasDateAtStart)
+ fCombinedHasDateAtStart(other.fCombinedHasDateAtStart)
 {
     if(other.fDateTimeFormatter != NULL) {
         fDateTimeFormatter = (SimpleDateFormat*)other.fDateTimeFormatter->clone();
@@ -65,7 +65,7 @@ RelativeDateFormat::RelativeDateFormat( UDateFormatStyle timeStyle, UDateFormatS
                                         const Locale& locale, UErrorCode& status) :
  DateFormat(), fDateTimeFormatter(NULL), fDatePattern(), fTimePattern(), fCombinedFormat(NULL),
  fDateStyle(dateStyle), fLocale(locale), fDayMin(0), fDayMax(0), fDatesLen(0), fDates(NULL),
- fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE), fCombinedHasDateAtStart(FALSE)
+ fCombinedHasDateAtStart(FALSE)
 {
     if(U_FAILURE(status) ) {
         return;
@@ -130,8 +130,7 @@ UBool RelativeDateFormat::operator==(const Format& other) const {
         return (fDateStyle==that->fDateStyle   &&
                 fDatePattern==that->fDatePattern   &&
                 fTimePattern==that->fTimePattern   &&
-                fLocale==that->fLocale   &&
-                fCapitalizationContext==that->fCapitalizationContext);
+                fLocale==that->fLocale );
     }
     return FALSE;
 }
@@ -144,6 +143,7 @@ UnicodeString& RelativeDateFormat::format(  Calendar& cal,
                                 
     UErrorCode status = U_ZERO_ERROR;
     UnicodeString relativeDayString;
+    UDisplayContext capitalizationContext = getContext(UDISPCTX_TYPE_CAPITALIZATION, status);
     
     // calculate the difference, in days, between 'cal' and now.
     int dayDiff = dayDifference(cal, status);
@@ -159,9 +159,9 @@ UnicodeString& RelativeDateFormat::format(  Calendar& cal,
     if ( relativeDayString.length() > 0 && !fDatePattern.isEmpty() && 
          (fTimePattern.isEmpty() || fCombinedFormat == NULL || fCombinedHasDateAtStart)) {
         // capitalize relativeDayString according to context for tense, set formatter no context
-        if ( fCapitalizationContext==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
-             (fCapitalizationContext==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU && fCapitalizationForRelativeUnits[0]) ||
-             (fCapitalizationContext==UDISPCTX_CAPITALIZATION_FOR_STANDALONE && fCapitalizationForRelativeUnits[1]) ) {
+        if ( capitalizationContext==UDISPCTX_CAPITALIZATION_FOR_BEGINNING_OF_SENTENCE ||
+             (capitalizationContext==UDISPCTX_CAPITALIZATION_FOR_UI_LIST_OR_MENU && fCapitalizationForRelativeUnits[0]) ||
+             (capitalizationContext==UDISPCTX_CAPITALIZATION_FOR_STANDALONE && fCapitalizationForRelativeUnits[1]) ) {
             // titlecase first word of relativeDayString, do like LocaleDisplayNamesImpl::adjustForUsageAndContext
             int32_t stopPos, stopPosLimit = 8;
             if ( stopPosLimit > len ) {
@@ -189,7 +189,7 @@ UnicodeString& RelativeDateFormat::format(  Calendar& cal,
         fDateTimeFormatter->setContext(UDISPCTX_CAPITALIZATION_NONE, status);
     } else {
         // set our context for the formatter
-        fDateTimeFormatter->setContext(fCapitalizationContext, status);
+        fDateTimeFormatter->setContext(capitalizationContext, status);
     }
 
     if (fDatePattern.isEmpty()) {
@@ -546,36 +546,6 @@ void RelativeDateFormat::loadDates(UErrorCode &status) {
     
     // the fDates[] array could be sorted here, for direct access.
 }
-
-//----------------------------------------------------------------------
-
-
-void RelativeDateFormat::setContext(UDisplayContext value, UErrorCode& status)
-{
-    if (U_FAILURE(status))
-        return;
-    if ( (UDisplayContextType)((uint32_t)value >> 8) == UDISPCTX_TYPE_CAPITALIZATION ) {
-        fCapitalizationContext = value;
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-   }
-}
-
-
-//----------------------------------------------------------------------
-
-
-UDisplayContext RelativeDateFormat::getContext(UDisplayContextType type, UErrorCode& status) const
-{
-    if (U_FAILURE(status))
-        return (UDisplayContext)0;
-    if (type != UDISPCTX_TYPE_CAPITALIZATION) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return (UDisplayContext)0;
-    }
-    return fCapitalizationContext;
-}
-
 
 //----------------------------------------------------------------------
 
