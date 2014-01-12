@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and    *
+* Copyright (C) 1997-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 *
@@ -245,8 +245,7 @@ SimpleDateFormat::SimpleDateFormat(UErrorCode& status)
       fSymbols(NULL),
       fTimeZoneFormat(NULL),
       fNumberFormatters(NULL),
-      fOverrideList(NULL),
-      fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+      fOverrideList(NULL)
 {
     setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
     construct(kShort, (EStyle) (kShort + kDateOffset), fLocale, status);
@@ -262,8 +261,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    fOverrideList(NULL)
 {
     fDateOverride.setToBogus();
     fTimeOverride.setToBogus();
@@ -283,8 +281,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    fOverrideList(NULL)
 {
     fDateOverride.setTo(override);
     fTimeOverride.setToBogus();
@@ -306,8 +303,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fLocale(locale),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    fOverrideList(NULL)
 {
 
     fDateOverride.setToBogus();
@@ -329,8 +325,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fLocale(locale),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    fOverrideList(NULL)
 {
 
     fDateOverride.setTo(override);
@@ -355,8 +350,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fSymbols(symbolsToAdopt),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    fOverrideList(NULL)
 {
 
     fDateOverride.setToBogus();
@@ -378,8 +372,7 @@ SimpleDateFormat::SimpleDateFormat(const UnicodeString& pattern,
     fSymbols(new DateFormatSymbols(symbols)),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    fOverrideList(NULL)
 {
 
     fDateOverride.setToBogus();
@@ -402,8 +395,7 @@ SimpleDateFormat::SimpleDateFormat(EStyle timeStyle,
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    fOverrideList(NULL)
 {
     setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
     construct(timeStyle, dateStyle, fLocale, status);
@@ -426,8 +418,7 @@ SimpleDateFormat::SimpleDateFormat(const Locale& locale,
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    fOverrideList(NULL)
 {
     if (U_FAILURE(status)) return;
     initializeSymbols(fLocale, initializeCalendar(NULL, fLocale, status),status);
@@ -462,8 +453,7 @@ SimpleDateFormat::SimpleDateFormat(const SimpleDateFormat& other)
     fSymbols(NULL),
     fTimeZoneFormat(NULL),
     fNumberFormatters(NULL),
-    fOverrideList(NULL),
-    fCapitalizationContext(UDISPCTX_CAPITALIZATION_NONE)
+    fOverrideList(NULL)
 {
     UErrorCode status = U_ZERO_ERROR;
     setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status).setBooleanAttribute(UDAT_PARSE_PARTIAL_MATCH, true, status);
@@ -498,8 +488,6 @@ SimpleDateFormat& SimpleDateFormat::operator=(const SimpleDateFormat& other)
         fLocale = other.fLocale;
     }
 
-    fCapitalizationContext = other.fCapitalizationContext;
-
     return *this;
 }
 
@@ -524,8 +512,7 @@ SimpleDateFormat::operator==(const Format& other) const
                 that->fSymbols       != NULL && // Check for pathological object
                 *fSymbols            == *that->fSymbols &&
                 fHaveDefaultCentury  == that->fHaveDefaultCentury &&
-                fDefaultCenturyStart == that->fDefaultCenturyStart &&
-                fCapitalizationContext == that->fCapitalizationContext);
+                fDefaultCenturyStart == that->fDefaultCenturyStart);
     }
     return FALSE;
 }
@@ -876,6 +863,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
     UChar prevCh = 0;
     int32_t count = 0;
     int32_t fieldNum = 0;
+    UDisplayContext capitalizationContext = getContext(UDISPCTX_TYPE_CAPITALIZATION, status);
 
     // loop through the pattern string character by character
     for (int32_t i = 0; i < fPattern.length() && U_SUCCESS(status); ++i) {
@@ -884,7 +872,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
         // Use subFormat() to format a repeated pattern character
         // when a different pattern or non-pattern character is seen
         if (ch != prevCh && count > 0) {
-            subFormat(appendTo, prevCh, count, fCapitalizationContext, fieldNum++, handler, *workCal, status);
+            subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, status);
             count = 0;
         }
         if (ch == QUOTE) {
@@ -912,7 +900,7 @@ SimpleDateFormat::_format(Calendar& cal, UnicodeString& appendTo,
 
     // Format the last item in the pattern, if any
     if (count > 0) {
-        subFormat(appendTo, prevCh, count, fCapitalizationContext, fieldNum++, handler, *workCal, status);
+        subFormat(appendTo, prevCh, count, capitalizationContext, fieldNum++, handler, *workCal, status);
     }
 
     if (calClone != NULL) {
@@ -3292,36 +3280,6 @@ void SimpleDateFormat::adoptCalendar(Calendar* calendarToAdopt)
   fSymbols=NULL;
   initializeSymbols(fLocale, fCalendar, status);  // we need new symbols
   initializeDefaultCentury();  // we need a new century (possibly)
-}
-
-
-//----------------------------------------------------------------------
-
-
-void SimpleDateFormat::setContext(UDisplayContext value, UErrorCode& status)
-{
-    if (U_FAILURE(status))
-        return;
-    if ( (UDisplayContextType)((uint32_t)value >> 8) == UDISPCTX_TYPE_CAPITALIZATION ) {
-        fCapitalizationContext = value;
-    } else {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-   }
-}
-
-
-//----------------------------------------------------------------------
-
-
-UDisplayContext SimpleDateFormat::getContext(UDisplayContextType type, UErrorCode& status) const
-{
-    if (U_FAILURE(status))
-        return (UDisplayContext)0;
-    if (type != UDISPCTX_TYPE_CAPITALIZATION) {
-        status = U_ILLEGAL_ARGUMENT_ERROR;
-        return (UDisplayContext)0;
-    }
-    return fCapitalizationContext;
 }
 
 
