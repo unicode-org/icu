@@ -1,5 +1,5 @@
 /*
-* Copyright (C) 1997-2013, International Business Machines Corporation and
+* Copyright (C) 1997-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -1083,31 +1083,6 @@ public:
      */
     virtual void adoptCalendar(Calendar* calendarToAdopt);
 
-    /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
-    /**
-     * Set a particular UDisplayContext value in the formatter, such as
-     * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.
-     * @param value The UDisplayContext value to set.
-     * @param status Input/output status. If at entry this indicates a failure
-     *               status, the function will do nothing; otherwise this will be
-     *               updated with any new status from the function. 
-     * @draft ICU 51
-     */
-    virtual void setContext(UDisplayContext value, UErrorCode& status);
-
-    /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
-    /**
-     * Get the formatter's UDisplayContext value for the specified UDisplayContextType,
-     * such as UDISPCTX_TYPE_CAPITALIZATION.
-     * @param type The UDisplayContextType whose value to return
-     * @param status Input/output status. If at entry this indicates a failure
-     *               status, the function will do nothing; otherwise this will be
-     *               updated with any new status from the function. 
-     * @return The UDisplayContextValue for the specified type.
-     * @draft ICU 51
-     */
-    virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
-
     /* Cannot use #ifndef U_HIDE_INTERNAL_API for the following methods since they are virtual */
     /**
      * Sets the TimeZoneFormat to be used by this date/time formatter.
@@ -1538,8 +1513,6 @@ private:
     NSOverride      *fOverrideList;
 
     UBool fHaveDefaultCentury;
-
-    UDisplayContext fCapitalizationContext;
 };
 
 inline UDate

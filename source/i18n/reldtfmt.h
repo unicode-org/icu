@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 2007-2013, International Business Machines Corporation and    *
+* Copyright (C) 2007-2014, International Business Machines Corporation and    *
 * others. All Rights Reserved.                                                *
 *******************************************************************************
 */
@@ -19,7 +19,6 @@
 
 #include "unicode/datefmt.h"
 #include "unicode/smpdtfmt.h"
-#include "unicode/udisplaycontext.h"
 
 U_NAMESPACE_BEGIN
 
@@ -233,30 +232,6 @@ public:
      */
     virtual const DateFormatSymbols* getDateFormatSymbols(void) const;
 
-    /**
-     * Set a particular UDisplayContext value in the formatter, such as
-     * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.
-     * @param value The UDisplayContext value to set.
-     * @param status Input/output status. If at entry this indicates a failure
-     *               status, the function will do nothing; otherwise this will be
-     *               updated with any new status from the function. 
-     * @internal
-     */
-    virtual void setContext(UDisplayContext value, UErrorCode& status);
-
-    /**
-     * Get the formatter's UDisplayContext value for the specified UDisplayContextType,
-     * such as UDISPCTX_TYPE_CAPITALIZATION.
-     * @param type The UDisplayContextType whose value to return
-     * @param status Input/output status. If at entry this indicates a failure
-     *               status, the function will do nothing; otherwise this will be
-     *               updated with any new status from the function. 
-     * @return The UDisplayContextValue for the specified type.
-     * @internal
-     */
-    virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
-
-
 private:
     SimpleDateFormat *fDateTimeFormatter;
     UnicodeString fDatePattern;
@@ -271,7 +246,6 @@ private:
     int32_t fDatesLen;    // Length of array
     URelativeString *fDates; // array of strings
 
-    UDisplayContext fCapitalizationContext;
     UBool fCapitalizationForRelativeUnits[2];
     UBool fCombinedHasDateAtStart;
 
