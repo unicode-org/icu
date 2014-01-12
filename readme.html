@@ -5,7 +5,7 @@
   <head>
     <title>ReadMe for ICU 53.0.1 development</title>
     <meta name="COPYRIGHT" content=
-    "Copyright (c) 1997-2013 IBM Corporation and others. All Rights Reserved." />
+    "Copyright (c) 1997-2014 IBM Corporation and others. All Rights Reserved." />
     <meta name="KEYWORDS" content=
     "ICU; International Components for Unicode; ICU4C; what's new; readme; read me; introduction; downloads; downloading; building; installation;" />
     <meta name="DESCRIPTION" content=
@@ -15,20 +15,20 @@
   </head>
 
   <body class="draft">
-    <h1>International Components for Unicode<br />
-     <abbr title="International Components for Unicode">ICU</abbr> 53.0.1 development ReadMe</
->
+    <h1>International Components for Unicode<br/>
+     <abbr title="International Components for Unicode">ICU</abbr> 53.0.1 development ReadMe</h1>
+
     <p><b>Note:</b> This is a development milestone release of ICU4C 53
     This milestone is intended for those wishing to get an early look at ICU 53 new features and API changes.
     It is not recommended for production use.</p>
     <!--<p><b>Note:</b> This is a release candidate version of ICU4C 53.
     It is not recommended for production use.</p>-->
 
-    <p>Last updated: 2013-Sep-30<br />
-     Copyright &copy; 1997-2013 International Business Machines Corporation and
+    <p>Last updated: 2014-Jan-11<br />
+     Copyright &copy; 1997-2014 International Business Machines Corporation and
     others. All Rights Reserved.</p>
     <!-- Remember that there is a copyright at the end too -->
-    <hr />
+    <hr/>
 
     <h2 class="TOC">Table of Contents</h2>
 
@@ -215,23 +215,15 @@
 
     <p>To see which APIs are new or changed in this release, view the <a href="APIChangeReport.html">ICU4C API Change Report</a>. </p>
 
-    <!-- ICU 52 items -->
-    <h3>DecimalFormat - two functions marked as const</h3>
+    <!-- ICU 53 items -->
+    <h3>A new ICU 53 item</h3>
     <p>
-      <tt>DecimalFormat::isScientificNotation</tt> and <tt>DecimalFormat::isExponentSignAlwaysShown</tt>
-      are now const member functions. DecimalFormat is not recommended for subclassing.
+      Item description
     </p>
 
-    <h3>CollationElementIterator protected methods became private</h3>
-    <p>The C++ CollationElementIterator (CEI) had two protected constructors
-    (called only by RuleBasedCollator CEI factory methods)
-    and a protected assignment operator.
-    The class documentation says "CollationElementIterator should not be subclassed",
-    and it cannot be subclassed effectively.
-    The protected methods were made private and might be removed altogether.
-    For details see <a href="http://bugs.icu-project.org/trac/ticket/10251">ticket #10251</a>.</p>
-    <!-- end ICU 52 items -->
+    <!-- end ICU 53 items -->
 
+    <h3></h3><!-- for a horizotal rule matching those at the beginning of each h3 -->
     <p>The following list concentrates on <em>changes that affect existing
     applications migrating from previous ICU releases</em>.
     For more news about this release, see the
@@ -1271,7 +1263,7 @@ ADDENVVAR ENVVAR(OUTPUTDIR) VALUE('<i>libraryname</i>') REPLACE(*YES)   </samp><
 <samp>ADDENVVAR ENVVAR(MAKE) VALUE('gmake') REPLACE(*YES)
 CHGJOB CCSID(37)</samp></pre></li>
 
-      <li>Fire up the QSH (all subsequent commands are run inside the qsh session.)</i>
+      <li>Fire up the QSH <i>(all subsequent commands are run inside the qsh session.)</i>
         <pre><samp>qsh</samp></pre>
       </li>
 
@@ -1288,7 +1280,7 @@ CHGJOB CCSID(37)</samp></pre></li>
       <li>Build the program ICULD which ICU will use for linkage.
         <pre><samp>cd icu/as_is/os400
 qsh bldiculd.sh
-cd ../../..</pre></samp>
+cd ../../..</samp></pre>
         </li>
 
       <li>Change into the 'source' directory, and configure ICU.  (See <a href="#HowToConfigureICU">configuration
@@ -1300,11 +1292,11 @@ cd ../../..</pre></samp>
       <li>Build ICU. <i>(Note: Do not use the -j option)</i> <pre><samp>gmake</samp></pre></li>
 
       <li>Test ICU. <pre><samp>gmake check</samp></pre>  
-        <smaller>(The <tt> QIBM_MULTI_THREADED=Y</tt> flag will be automatically applied to intltest -
+        (The <tt> QIBM_MULTI_THREADED=Y</tt> flag will be automatically applied to intltest -
           you can look at the <a href=
       "http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/apis/concept4.htm">
       iSeries Information Center</a> for more details regarding the running of multiple threads
-      on IBM i.)</smaller></li>
+      on IBM i.)</li>
     </ol>
 
       <!-- cross -->
@@ -1780,7 +1772,7 @@ gnumake</pre>
     </ul>
     <hr />
 
-    <p>Copyright &copy; 1997-2013 International Business Machines Corporation and
+    <p>Copyright &copy; 1997-2014 International Business Machines Corporation and
     others. All Rights Reserved.<br />
      IBM Globalization Center of Competency - San Jos&eacute;<br />
      4400 North First Street<br />
