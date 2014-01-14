@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and
+* Copyright (C) 1997-2014, International Business Machines Corporation and
 * others. All Rights Reserved.
 *******************************************************************************
 *
@@ -36,6 +36,7 @@
 #include "unicode/numsys.h"
 #include "unicode/rbnf.h"
 #include "unicode/localpointer.h"
+#include "unicode/udisplaycontext.h"
 #include "charstr.h"
 #include "winnmfmt.h"
 #include "uresimp.h"
@@ -1149,6 +1150,33 @@ void NumberFormat::getEffectiveCurrency(UChar* result, UErrorCode& ec) const {
         ucurr_forLocale(loc, result, 4, &ec);
     }
 }
+
+//----------------------------------------------------------------------
+
+
+void NumberFormat::setContext(UDisplayContext value, UErrorCode& status)
+{
+    if (U_FAILURE(status))
+        return;
+    if ( (UDisplayContextType)((uint32_t)value >> 8) == UDISPCTX_TYPE_CAPITALIZATION ) {
+        fCapitalizationContext = value;
+    } else {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+   }
+}
+
+
+UDisplayContext NumberFormat::getContext(UDisplayContextType type, UErrorCode& status) const
+{
+    if (U_FAILURE(status))
+        return (UDisplayContext)0;
+    if (type != UDISPCTX_TYPE_CAPITALIZATION) {
+        status = U_ILLEGAL_ARGUMENT_ERROR;
+        return (UDisplayContext)0;
+    }
+    return fCapitalizationContext;
+}
+
 
 // -------------------------------------
 // Creates the NumberFormat instance of the specified style (number, currency,
