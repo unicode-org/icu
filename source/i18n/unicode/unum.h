@@ -1,6 +1,6 @@
 /*
 *******************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and others.
+* Copyright (C) 1997-2014, International Business Machines Corporation and others.
 * All Rights Reserved.
 * Modification History:
 *
@@ -21,6 +21,7 @@
 #include "unicode/umisc.h"
 #include "unicode/parseerr.h"
 #include "unicode/uformattable.h"
+#include "unicode/udisplaycontext.h"
 
 /**
  * \file
@@ -1241,6 +1242,32 @@ U_STABLE const char* U_EXPORT2
 unum_getLocaleByType(const UNumberFormat *fmt,
                      ULocDataLocaleType type,
                      UErrorCode* status); 
+
+#ifndef U_HIDE_DRAFT_API
+/**
+ * Set a particular UDisplayContext value in the formatter, such as
+ * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.
+ * @param fmt The formatter for which to set a UDisplayContext value.
+ * @param value The UDisplayContext value to set.
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @draft ICU 53
+ */
+U_DRAFT void U_EXPORT2
+unum_setContext(UNumberFormat* fmt, UDisplayContext value, UErrorCode* status);
+
+/**
+ * Get the formatter's UDisplayContext value for the specified UDisplayContextType,
+ * such as UDISPCTX_TYPE_CAPITALIZATION.
+ * @param fmt The formatter to query.
+ * @param type The UDisplayContextType whose value to return
+ * @param status A pointer to an UErrorCode to receive any errors
+ * @return The UDisplayContextValue for the specified type.
+ * @draft ICU 53
+ */
+U_DRAFT UDisplayContext U_EXPORT2
+unum_getContext(const UNumberFormat *fmt, UDisplayContextType type, UErrorCode* status);
+
+#endif  /* U_HIDE_DRAFT_API */
 
 #endif /* #if !UCONFIG_NO_FORMATTING */
 

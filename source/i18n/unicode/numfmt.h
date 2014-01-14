@@ -1,6 +1,6 @@
 /*
 ********************************************************************************
-* Copyright (C) 1997-2013, International Business Machines Corporation and others.
+* Copyright (C) 1997-2014, International Business Machines Corporation and others.
 * All Rights Reserved.
 ********************************************************************************
 *
@@ -37,6 +37,7 @@
 #include "unicode/locid.h"
 #include "unicode/stringpiece.h"
 #include "unicode/curramt.h"
+#include "unicode/udisplaycontext.h"
 
 class NumberFormatTest;
 
@@ -916,6 +917,31 @@ public:
      */
     const UChar* getCurrency() const;
 
+    /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
+    /**
+     * Set a particular UDisplayContext value in the formatter, such as
+     * UDISPCTX_CAPITALIZATION_FOR_STANDALONE.
+     * @param value The UDisplayContext value to set.
+     * @param status Input/output status. If at entry this indicates a failure
+     *               status, the function will do nothing; otherwise this will be
+     *               updated with any new status from the function. 
+     * @draft ICU 53
+     */
+    virtual void setContext(UDisplayContext value, UErrorCode& status);
+
+    /* Cannot use #ifndef U_HIDE_DRAFT_API for the following draft method since it is virtual */
+    /**
+     * Get the formatter's UDisplayContext value for the specified UDisplayContextType,
+     * such as UDISPCTX_TYPE_CAPITALIZATION.
+     * @param type The UDisplayContextType whose value to return
+     * @param status Input/output status. If at entry this indicates a failure
+     *               status, the function will do nothing; otherwise this will be
+     *               updated with any new status from the function. 
+     * @return The UDisplayContextValue for the specified type.
+     * @draft ICU 53
+     */
+    virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
+
 public:
 
     /**
@@ -999,7 +1025,7 @@ private:
                                       UNumberFormatStyle style,
                                       UErrorCode& errorCode);
 
-    UBool      fGroupingUsed;
+    UBool       fGroupingUsed;
     int32_t     fMaxIntegerDigits;
     int32_t     fMinIntegerDigits;
     int32_t     fMaxFractionDigits;
@@ -1015,6 +1041,8 @@ private:
 
     // ISO currency code
     UChar      fCurrency[4];
+
+    UDisplayContext fCapitalizationContext;
 
     friend class ICUNumberFormatFactory; // access to makeInstance
     friend class ICUNumberFormatService;
