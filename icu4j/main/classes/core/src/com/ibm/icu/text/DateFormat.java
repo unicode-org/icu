@@ -448,14 +448,8 @@ public abstract class DateFormat extends UFormat {
     
     /**
      * boolean attributes
-     * <br/>
-     * PARSE_ALLOW_WHITESPACE - indicates whitespace tolerance. Also included is trailing dot tolerance.
-     * <br/>
-     * PARSE_ALLOW_NUMERIC - indicates tolerance of numeric data when String data may be assumed. eg: YEAR_NAME_FIELD
-     * <br/>
-     * PRASE_PARTIAL_MATCH - indicates tolerance of partial matches against pattern literals
      * 
-     * @internal ICU technology preview
+     * @draft ICU 53
      */
     public enum BooleanAttribute { 
         /** 
@@ -1455,36 +1449,74 @@ public abstract class DateFormat extends UFormat {
     /**
      * Specifies whether date/time parsing is to be lenient.  With
      * lenient parsing, the parser may use heuristics to interpret inputs that
-     * do not precisely match this object's format.  With strict parsing,
-     * inputs must match this object's format.
+     * do not precisely match this object's format.  Without lenient parsing,
+     * inputs must match this object's format more closely.
      * <br/><br/> 
-     * <b>Note:</b> This method is specific to the encapsulated Calendar object. DateFormat 
-     * leniency aspects are controlled by setBooleanAttribute.
-     * @param lenient when true, parsing is lenient
+     * <b>Note:</b> ICU 53 introduced finer grained control of leniency (and added 
+     * new control points) making the preferred method a combination of 
+     * setCalendarLenient() & setBooleanAttribute() calls. 
+     * This method supports prior functionality but may not support all 
+     * future leniency control & behavior of DateFormat. For control of pre 53 leniency,  
+     * Calendar and DateFormat whitespace & numeric tolerance, this method is safe to 
+     * use. However, mixing leniency control via this method and modification of the 
+     * newer attributes via setBooleanAttribute() may produce undesirable 
+     * results.
+     *
+     * @param lenient True specifies date/time interpretation to be lenient.
      * @see com.ibm.icu.util.Calendar#setLenient
      * @see #setBooleanAttribute(BooleanAttribute, boolean)
+     * @see #setCalendarLenient(boolean)
      * @stable ICU 2.0
      */
     public void setLenient(boolean lenient)
     {
         calendar.setLenient(lenient);
+        setBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC, lenient);
+        setBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE, lenient);
     }
 
     /**
-     * Returns whether date/time parsing in the encapsulated Calendar object is lenient.
+     * Returns whether both date/time parsing in the encapsulated Calendar object and DateFormat whitespace &
+     * numeric processing is lenient.
      * @stable ICU 2.0
      */
     public boolean isLenient()
     {
-        return calendar.isLenient();
+        return calendar.isLenient() 
+                && getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_NUMERIC)
+                && getBooleanAttribute(BooleanAttribute.PARSE_ALLOW_WHITESPACE);
     }
 
     /** 
-     * set a boolean attribute for this instance. Aspects of DateFormat leniency are controlled by
+     * Specifies whether date/time parsing in the encapsulated Calendar object should be lenient.  
+     * With lenient parsing, the parser may use heuristics to interpret inputs that
+     * do not precisely match this object's format.  Without lenient parsing,
+     * inputs must match this object's format more closely.
+     * @param lenient when true, Calendar parsing is lenient 
+     * @see com.ibm.icu.util.Calendar#setLenient 
+     * @draft ICU 53 
+     */ 
+    public void setCalendarLenient(boolean lenient)
+    {
+        calendar.setLenient(lenient);
+    }
+
+    
+    /** 
+     * Returns whether date/time parsing in the encapsulated Calendar object is lenient. 
+     * @draft ICU 53 
+     */ 
+    public boolean isCalendarLenient()
+    {
+        return calendar.isLenient();
+    }
+    
+    /** 
+     * Sets a boolean attribute for this instance. Aspects of DateFormat leniency are controlled by
      * boolean attributes. 
      * 
      * @see BooleanAttribute
-     * @internal ICU technology preview
+     * @draft ICU 53
      */
     public DateFormat setBooleanAttribute(BooleanAttribute key, boolean value) 
     {
@@ -1501,12 +1533,12 @@ public abstract class DateFormat extends UFormat {
     }
     
     /**
-     * get the current value for the specified BooleanAttribute for this instance
+     * Returns the current value for the specified BooleanAttribute for this instance
      *
      * if attribute is missing false is returned.
      * 
      * @see BooleanAttribute
-     * @internal ICU technology preview
+     * @draft ICU 53
      */
     public boolean getBooleanAttribute(BooleanAttribute key) 
     {
