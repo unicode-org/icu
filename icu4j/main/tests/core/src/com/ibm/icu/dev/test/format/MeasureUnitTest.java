@@ -15,10 +15,14 @@ import java.io.Serializable;
 import java.text.FieldPosition;
 import java.text.ParsePosition;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.ibm.icu.dev.test.TestFmwk;
@@ -102,12 +106,12 @@ public class MeasureUnitTest extends TestFmwk {
                 {_1h_0m_23s, "1 hr, 0 mins, 23 secs"},
                 {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, 4 days"}};
         Object[][] narrowData = {
-                {_1m_59_9996s, "1 min, 59.9996 secs"},
-                {_19m, "19 mins"},
-                {_1h_23_5s, "1 hr, 23.5 secs"},
-                {_1h_23_5m, "1 hr, 23.5 mins"},
-                {_1h_0m_23s, "1 hr, 0 mins, 23 secs"},
-                {_2y_5M_3w_4d, "2 yrs, 5 mths, 3 wks, 4 days"}};
+                {_1m_59_9996s, "1m, 59.9996s"},
+                {_19m, "19m"},
+                {_1h_23_5s, "1h, 23.5s"},
+                {_1h_23_5m, "1h, 23.5m"},
+                {_1h_0m_23s, "1h, 0m, 23s"},
+                {_2y_5M_3w_4d, "2y, 5m, 3w, 4d"}};
         
         
         Object[][] numericData = {
@@ -148,6 +152,8 @@ public class MeasureUnitTest extends TestFmwk {
         verifyFormatPeriod("en FULL", mf, fullData);
         mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.SHORT, nf);
         verifyFormatPeriod("en SHORT", mf, abbrevData);
+        mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.NARROW, nf);
+        verifyFormatPeriod("en NARROW", mf, narrowData);
         mf = MeasureFormat.getInstance(ULocale.ENGLISH, FormatWidth.NUMERIC, nf);
         verifyFormatPeriod("en NUMERIC", mf, numericData);
         nf = NumberFormat.getNumberInstance(ULocale.GERMAN);
@@ -407,13 +413,163 @@ public class MeasureUnitTest extends TestFmwk {
         MeasureFormat mf = MeasureFormat.getInstance(ULocale.GERMAN, FormatWidth.SHORT);
         assertEquals("", ULocale.GERMAN, mf.getLocale(ULocale.VALID_LOCALE));
     }
+    
+    static void generateCXXHConstants() {
+        Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
+        TreeMap<String, List<MeasureUnit>> allUnits = new TreeMap<String, List<MeasureUnit>>();
+        for (String type : MeasureUnit.getAvailableTypes()) {
+            ArrayList<MeasureUnit> units = new ArrayList<MeasureUnit>(MeasureUnit.getAvailable(type));
+            Collections.sort(
+                    units,
+                    new Comparator<MeasureUnit>() {
+
+                        public int compare(MeasureUnit o1, MeasureUnit o2) {
+                            return o1.getSubtype().compareTo(o2.getSubtype());
+                        }
+                        
+                    });
+            allUnits.put(type, units);
+        }
+        
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            String type = entry.getKey();
+            if (type.equals("currency")) {
+                continue;
+            }
+            for (MeasureUnit unit : entry.getValue()) {
+                String code = unit.getSubtype();
+                String name = toCamelCase(type, code);
+                if (seen.containsKey(name)) {
+                    System.out.println("\nCollision!!" + unit + ", " + seen.get(name));
+                } else {
+                    seen.put(name, unit);
+                }
+                System.out.println("    /** Constant for unit of " + type +
+                        ": " +
+                        code +
+                        " */");
+                System.out.printf("    static MeasureUnit *create%s(UErrorCode &status);\n\n", name);
+            }
+        }    
+    }
+    
+    static void generateCXXConstants() {
+        System.out.println("static final MeasureUnit");
+        Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
+        TreeMap<String, List<MeasureUnit>> allUnits = new TreeMap<String, List<MeasureUnit>>();
+        for (String type : MeasureUnit.getAvailableTypes()) {
+            ArrayList<MeasureUnit> units = new ArrayList<MeasureUnit>(MeasureUnit.getAvailable(type));
+            Collections.sort(
+                    units,
+                    new Comparator<MeasureUnit>() {
+
+                        public int compare(MeasureUnit o1, MeasureUnit o2) {
+                            return o1.getSubtype().compareTo(o2.getSubtype());
+                        }
+                        
+                    });
+            allUnits.put(type, units);
+        }
+        System.out.println("static const int32_t gOffsets[] = {");
+        int index = 0;
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            System.out.printf("    %d,\n", index);
+            index += entry.getValue().size();
+        }
+        System.out.printf("    %d\n", index);
+        System.out.println("};");
+        System.out.println();
+        System.out.println("static const int32_t gIndexes[] = {");
+        index = 0;
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            System.out.printf("    %d,\n", index);
+            if (!entry.getKey().equals("currency")) {
+                index += entry.getValue().size();
+            }
+        }
+        System.out.printf("    %d\n", index);
+        System.out.println("};");
+        System.out.println();
+        System.out.println("static const char *gTypes[] = {");
+        boolean first = true;
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            if (!first) {
+                System.out.println(",");
+            }
+            System.out.print("    \"" + entry.getKey() + "\"");
+            first = false;
+        }    
+        System.out.println();
+        System.out.println("};");
+        System.out.println();
+        System.out.println("static const char *gSubTypes[] = {");
+        first = true;
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            for (MeasureUnit unit : entry.getValue()) {
+                if (!first) {
+                    System.out.println(",");
+                }
+                System.out.print("    \"" + unit.getSubtype() + "\"");
+                first = false;
+            }
+        }    
+        System.out.println();
+        System.out.println("};");
+        System.out.println();
+        
+        int typeIdx = 0;
+        for (Map.Entry<String, List<MeasureUnit>> entry : allUnits.entrySet()) {
+            int subTypeIdx = 0;
+            String type = entry.getKey();
+            if (type.equals("currency")) {
+                typeIdx++;
+                continue;
+            }
+            for (MeasureUnit unit : entry.getValue()) {
+                String code = unit.getSubtype();
+                String name = toCamelCase(type, code);
+                if (seen.containsKey(name)) {
+                    System.out.println("\nCollision!!" + unit + ", " + seen.get(name));
+                } else {
+                    seen.put(name, unit);
+                }
+                System.out.printf("MeasureUnit *MeasureUnit::create%s(UErrorCode &status) {\n", name);
+                System.out.printf("    return MeasureUnit::create(%d, %d, status);\n", typeIdx, subTypeIdx);
+                System.out.println("}");
+                System.out.println();
+                subTypeIdx++;
+            }
+            typeIdx++;
+        }    
+    }
+
+    private static String toCamelCase(String type, String code) {
+        String result = code.replace("-", "");
+        result = result.substring(0, 1).toUpperCase(Locale.ENGLISH) + result.substring(1);
+        if (type.equals("angle")) {
+            if (code.equals("minute") || code.equals("second")) {
+                return "Arc" + result;
+            }
+        }
+        return result;
+    }
 
     static void generateConstants() {
         System.out.println("static final MeasureUnit");
         Map<String, MeasureUnit> seen = new HashMap<String, MeasureUnit>();
         boolean first = true;
         for (String type : new TreeSet<String>(MeasureUnit.getAvailableTypes())) {
-            for (MeasureUnit unit : MeasureUnit.getAvailable(type)) {
+            ArrayList<MeasureUnit> units = new ArrayList<MeasureUnit>(MeasureUnit.getAvailable(type));
+            Collections.sort(
+                    units,
+                    new Comparator<MeasureUnit>() {
+
+                        public int compare(MeasureUnit o1, MeasureUnit o2) {
+                            return o1.getSubtype().compareTo(o2.getSubtype());
+                        }
+                        
+                    });
+            for (MeasureUnit unit : units) {
                 String code = unit.getSubtype();
                 String name = code.toUpperCase(Locale.ENGLISH).replace("-", "_");
 
