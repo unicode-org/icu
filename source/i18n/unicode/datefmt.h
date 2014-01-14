@@ -581,25 +581,53 @@ public:
     static const Locale* U_EXPORT2 getAvailableLocales(int32_t& count);
 
     /**
-     * Returns true if the encapsulated Calendar object is set for lenient parsing.
+     * Returns whether both date/time parsing in the encapsulated Calendar object and DateFormat whitespace &
+     * numeric processing is lenient.
      * @stable ICU 2.0
      */
     virtual UBool isLenient(void) const;
 
     /**
-     * Specify whether or not date/time parsing is to be lenient. With lenient
-     * parsing, the parser may use heuristics to interpret inputs that do not
-     * precisely match this object's format. With strict parsing, inputs must
-     * match this object's format.
-     *
-     * Note: This method is specific to the encapsulated Calendar object.  DateFormat
-     * leniency aspects are controlled by setBooleanAttribute.
+     * Specifies whether date/time parsing is to be lenient.  With
+     * lenient parsing, the parser may use heuristics to interpret inputs that
+     * do not precisely match this object's format.  Without lenient parsing,
+     * inputs must match this object's format more closely.
+     * 
+     * Note: ICU 53 introduced finer grained control of leniency (and added 
+     * new control points) making the preferred method a combination of 
+     * setCalendarLenient() & setBooleanAttribute() calls. 
+     * This method supports prior functionality but may not support all 
+     * future leniency control & behavior of DateFormat. For control of pre 53 leniency,  
+     * Calendar and DateFormat whitespace & numeric tolerance, this method is safe to 
+     * use. However, mixing leniency control via this method and modification of the 
+     * newer attributes via setBooleanAttribute() may produce undesirable 
+     * results.
      *
      * @param lenient  True specifies date/time interpretation to be lenient.
      * @see Calendar::setLenient
-     * @stable ICU 2.0
+     * @stable ICU 2.0     
      */
     virtual void setLenient(UBool lenient);
+
+
+    /**
+     * Returns whether date/time parsing in the encapsulated Calendar object processing is lenient.
+     * @draft ICU 53
+     */
+    virtual UBool isCalendarLenient(void) const;
+
+
+    /**
+     * Specifies whether encapsulated Calendar date/time parsing is to be lenient.  With
+     * lenient parsing, the parser may use heuristics to interpret inputs that
+     * do not precisely match this object's format.  Without lenient parsing,
+     * inputs must match this object's format more closely.
+     * @param lenient when true, parsing is lenient
+     * @see com.ibm.icu.util.Calendar#setLenient
+     * @draft ICU 53
+     */
+    virtual void setCalendarLenient(UBool lenient);
+
 
     /**
      * Gets the calendar associated with this date/time formatter.
@@ -700,14 +728,14 @@ public:
     virtual UDisplayContext getContext(UDisplayContextType type, UErrorCode& status) const;
 
    /**
-     * Set an boolean attribute on this DateFormat.
+     * Sets an boolean attribute on this DateFormat.
      * May return U_UNSUPPORTED_ERROR if this instance does not support
      * the specified attribute.
      * @param attr the attribute to set
      * @param newvalue new value
      * @param status the error type
      * @return *this - for chaining (example: format.setAttribute(...).setAttribute(...) )
-     * @internal ICU technology preview
+     * @draft ICU 53
      */
 
     virtual DateFormat&  U_EXPORT2 setBooleanAttribute(UDateFormatBooleanAttribute attr,
@@ -715,13 +743,13 @@ public:
     									UErrorCode &status);
 
     /**
-     * Get an boolean from this DateFormat
+     * Returns a boolean from this DateFormat
      * May return U_UNSUPPORTED_ERROR if this instance does not support
      * the specified attribute.
      * @param attr the attribute to set
      * @param status the error type
      * @return the attribute value. Undefined if there is an error.
-     * @internal ICU technology preview
+     * @draft ICU 53
      */
     virtual UBool U_EXPORT2 getBooleanAttribute(UDateFormatBooleanAttribute attr, UErrorCode &status) const;
 

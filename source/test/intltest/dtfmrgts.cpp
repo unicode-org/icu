@@ -1,6 +1,6 @@
 /********************************************************************
  * COPYRIGHT: 
- * Copyright (c) 1997-2013, International Business Machines Corporation and
+ * Copyright (c) 1997-2014, International Business Machines Corporation and
  * others. All Rights Reserved.
  ********************************************************************/
 
@@ -58,6 +58,7 @@ DateFormatRegressionTest::runIndexedTest( int32_t index, UBool exec, const char*
         CASE(27,Test9237)
         CASE(28,TestParsing)
         CASE(29,TestT10334)
+        CASE(30,TestT10619)
         default: name = ""; break;
     }
 }
@@ -85,6 +86,7 @@ void DateFormatRegressionTest::Test4029195(void)
     pat = sdf->toPattern(pat);
     logln("pattern: " + pat);
     UnicodeString fmtd;
+
     FieldPosition pos(FieldPosition::DONT_CARE);
     fmtd = sdf->format(today, fmtd, pos);
     logln("today: " + fmtd);
@@ -1577,6 +1579,75 @@ void DateFormatRegressionTest::TestT10334(void) {
     if (!U_FAILURE(status)) {
         errln("numeric parse did NOT fail in strict mode", u_errorName(status));
     }
+
+}
+
+
+typedef struct {
+    const char * locale;
+    UBool leniency;
+    UnicodeString parseString;
+    UnicodeString pattern;
+    UnicodeString expectedResult;       // null indicates expected error
+} TestDateFormatLeniencyItem;
+
+
+void DateFormatRegressionTest::TestT10619(void) {
+    const UDate july022008 = 1215000001979.0;
+    const TestDateFormatLeniencyItem items[] = {
+        /*
+            new TestDateFormatLeniencyItem(true,       "2008-Jan 02",     "yyyy-LLL. dd",         "2008-Jan. 02"),
+            new TestDateFormatLeniencyItem(false,      "2008-Jan 03",     "yyyy-LLL. dd",         null),
+            new TestDateFormatLeniencyItem(true,       "2008-Jan--04",    "yyyy-MMM' -- 'dd",     "2008-Jan -- 04"),
+            new TestDateFormatLeniencyItem(false,      "2008-Jan--05",    "yyyy-MMM' -- 'dd",     null),
+            new TestDateFormatLeniencyItem(true,       "2008-12-31",      "yyyy-mm-dd",           "2008-12-31"),
+            new TestDateFormatLeniencyItem(false,      "6 Jan 05 2008",   "eee MMM dd yyyy",      null),
+            new TestDateFormatLeniencyItem(true,       "6 Jan 05 2008",   "eee MMM dd yyyy",      "Sat Jan 05 2008"),
+        */
+        //locale    leniency    parse String                    pattern                             expected result
+        { "en",     true,       UnicodeString("2008-07 02"),    UnicodeString("yyyy-LLLL dd"),      UnicodeString("2008-July 02") },
+        { "en",     false,      UnicodeString("2008-07 02"),    UnicodeString("yyyy-LLLL dd"),      UnicodeString("") },
+        { "en",     true,       UnicodeString("2008-Jan 02"),   UnicodeString("yyyy-LLL. dd"),      UnicodeString("2008-Jan 02") },
+        { "en",     false,      UnicodeString("2008-Jan 02"),   UnicodeString("yyyy-LLL. dd"),      UnicodeString("") },
+        { "en",     true,       UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("2008-Jan 02") },
+        { "en",     false,      UnicodeString("2008-Jan--02"),  UnicodeString("yyyy-MMM' -- 'dd"),  UnicodeString("") },
+        { "en",     true,       UnicodeString("6 Jan 05 2008"), UnicodeString("eee MMM dd yyyy"),   UnicodeString("Sat Jan 05 2008") },
+        { "en",     false,      UnicodeString("6 Jan 05 2008"), UnicodeString("eee MMM dd yyyy"),   UnicodeString("") },
+        // terminator
+        { NULL,     true,       UnicodeString(""),              UnicodeString(""),                  UnicodeString("") }                
+    };
+    UErrorCode status = U_ZERO_ERROR;
+    Calendar* cal = Calendar::createInstance(status);
+    if (U_FAILURE(status)) {
+        dataerrln(UnicodeString("FAIL: Unable to create Calendar for default timezone and locale."));
+    } else {
+        cal->setTime(july022008, status);
+        const TestDateFormatLeniencyItem * itemPtr;
+        for (itemPtr = items; itemPtr->locale != NULL; itemPtr++ ) {
+                                            
+           Locale locale = Locale::createFromName(itemPtr->locale);
+           status = U_ZERO_ERROR;
+           ParsePosition pos(0);
+           SimpleDateFormat * sdmft = new SimpleDateFormat(itemPtr->pattern, locale, status);
+           if (U_FAILURE(status)) {
+               dataerrln("Unable to create SimpleDateFormat - %s", u_errorName(status));
+               continue;
+           }
+           sdmft->setLenient(itemPtr->leniency);
+           sdmft->setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, itemPtr->leniency, status).setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, itemPtr->leniency, status);
+           /*UDate d = */sdmft->parse(itemPtr->parseString, pos);
+
+           delete sdmft;
+           if(pos.getErrorIndex() > -1)
+               if(itemPtr->expectedResult.length() != 0) {
+                 errln("error: unexpected error - " + itemPtr->parseString + " - error index " + pos.getErrorIndex() + " - leniency " + itemPtr->leniency);
+                 continue;
+               } else {
+                 continue;
+               }
+        }
+    }
+    delete cal;
 
 }
 

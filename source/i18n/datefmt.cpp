@@ -502,6 +502,9 @@ DateFormat::setLenient(UBool lenient)
 {
     if (fCalendar != NULL) {
         fCalendar->setLenient(lenient);
+        UErrorCode status = U_ZERO_ERROR;
+		setBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, true, status);
+        setBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, true, status);
     }
 }
 
@@ -511,11 +514,35 @@ UBool
 DateFormat::isLenient() const
 {
     if (fCalendar != NULL) {
+        UErrorCode status = U_ZERO_ERROR;
+        return fCalendar->isLenient()
+        	&& getBooleanAttribute(UDAT_PARSE_ALLOW_WHITESPACE, status)
+        	&& getBooleanAttribute(UDAT_PARSE_ALLOW_NUMERIC, status);
+    }
+    // fCalendar is rarely null
+    return FALSE;
+}
+
+void
+DateFormat::setCalendarLenient(UBool lenient)
+{
+    if (fCalendar != NULL) {
+        fCalendar->setLenient(lenient);
+    }
+}
+
+//----------------------------------------------------------------------
+
+UBool
+DateFormat::isCalendarLenient() const
+{
+    if (fCalendar != NULL) {
         return fCalendar->isLenient();
     }
     // fCalendar is rarely null
     return FALSE;
 }
+
 
 //----------------------------------------------------------------------
 
@@ -548,6 +575,7 @@ UDisplayContext DateFormat::getContext(UDisplayContextType type, UErrorCode& sta
 
 
 //----------------------------------------------------------------------
+
 
 DateFormat& 
 DateFormat::setBooleanAttribute(UDateFormatBooleanAttribute attr,
